@@ -8,11 +8,17 @@
    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/right-to-left.css" />
 [% END %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/multiple-select/jquery.multiple.select.js"></script>
+<link rel="stylesheet" type="text/css" href="[% interface %]/lib/jquery/plugins/multiple-select/multiple-select.css" />
 <script type="text/javascript">
 //<![CDATA[
     [% UNLESS ( searchfield ) %]$(document).ready(function(){
             $('#toolbar').fixFloat();
         });[% END %]
+
+    $(document).ready(function(){
+        $("select[multiple='multiple']").multipleSelect( { placeholder: _("Please select ...") } );
+    });
     // This is here because of its dependence on template variables, everything else should go in js/pages/preferences.js - jpw
     var to_highlight = "[% searchfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
     var search_jumped = [% IF ( search_jumped ) %]true[% ELSE %]false[% END %];
@@ -118,15 +124,7 @@
                     </select>
                     [% ELSIF ( CHUNK.type_multiple ) %]
                     <select name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% CHUNK.class or "choice" %]" multiple="multiple">
-                        [% FOREACH CHOICE IN CHUNK.CHOICES %]
-                        [% IF ( CHOICE.selected ) %]
-                        <option value="[% CHOICE.value %]" selected="selected">
-                        [% ELSE %]
-                        <option value="[% CHOICE.value %]">
-                        [% END %]
-                            [% CHOICE.text %]
-                        </option>
-                        [% END %]
+                        [% FOREACH CHOICE IN CHUNK.CHOICES %][% IF ( CHOICE.selected ) %]<option value="[% CHOICE.value %]" selected="selected">[% ELSE %]<option value="[% CHOICE.value %]">[% END %][% CHOICE.text %]</option>[% END %]
                     </select>
                     [% ELSIF ( CHUNK.type_textarea ) %]
 					<a class="expand-textarea" style="display: none" href="#">Click to Edit</a>
