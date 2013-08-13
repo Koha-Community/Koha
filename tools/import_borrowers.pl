@@ -58,7 +58,7 @@ use CGI;
 my (@errors, @feedback);
 my $extended = C4::Context->preference('ExtendedPatronAttributes');
 my $set_messaging_prefs = C4::Context->preference('EnhancedMessagingPreferences');
-my @columnkeys = C4::Members->columns;
+my @columnkeys = C4::Members::columns();
 if ($extended) {
     push @columnkeys, 'patron_attributes';
 }

@@ -11,7 +11,7 @@ BEGIN {
     use_ok('C4::Members');
 }
 
-my @borrowers_columns = C4::Members->columns;
+my @borrowers_columns = C4::Members::columns;
 ok(
     $#borrowers_columns > 1,
     'C4::Member->column returned a reasonable number of columns ('

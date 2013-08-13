@@ -698,22 +698,10 @@ sub GetMemberIssuesAndFines {
 
 =head2 columns
 
-  C4::Member->columns
+  my @columns = C4::Member::columns();
 
-=head3 USAGE
-
- use C4::Member;
- my @borrower_columns = C4::Member->columns;
-
-=head3 RETURNS
-
- The array of borrowers' table columns on success.
- An empty array on failure.
-
-=head3 NOTES
-
- This runs significantly faster than the previous code while
- being mostly SQL-agnostic.
+Returns an array of borrowers' table columns on success,
+and an empty array on failure.
 
 =cut
 
