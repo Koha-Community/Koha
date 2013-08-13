@@ -56,8 +56,6 @@ my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 $dbh->{PrintError} = 0;
 
-@$members = ( { borrowernumber => 19 } );
-
 $dbh->{AutoCommit} = 0; # use transactions to avoid partial deletes
 for my $member (@$members) {
     print "Trying to delete patron $member->{borrowernumber}... "
@@ -96,7 +94,7 @@ delete_patrons - This script deletes patrons
 
 =head1 SYNOPSIS
 
-delete_patrons.pl [-h -v -c] --not_borrowed_since=2013-07-21 --expired_before=2013-07-21 --category_code=CAT --branchcode=CPL
+delete_patrons.pl [-h -v -c] --not_borrowed_since=2013-07-21 --expired_before=2013-07-21 --category_code=CAT --library=CPL
 
 dates can be generated with `date -d '-3 month' "+%Y-%m-%d"`
 
@@ -122,7 +120,7 @@ Delete patrons with an account expired before this date.
 
 Delete patrons who have this category code.
 
-=item B<--branchcode>
+=item B<--library>
 
 Delete patrons in this library.
 
