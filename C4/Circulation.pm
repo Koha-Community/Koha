@@ -2604,12 +2604,13 @@ sub GetUpcomingDueIssues {
     my $dbh = C4::Context->dbh;
 
     my $statement = <<END_SQL;
-SELECT issues.*, items.itype as itemtype, items.homebranch, TO_DAYS( date_due )-TO_DAYS( NOW() ) as days_until_due, branches.branchemail
+SELECT issues.*, items.itype as itemtype, items.homebranch, DATE( date_due )-DATE( NOW() ) as days_until_due, branches.branchemail
 FROM issues 
 LEFT JOIN items USING (itemnumber)
 LEFT OUTER JOIN branches USING (branchcode)
 WHERE returndate is NULL
-HAVING days_until_due >= 0 AND days_until_due <= ?
+AND (DATE( date_due )-DATE( NOW() )) >= 0
+AND (DATE( date_due )-DATE( NOW() )) <= ?
 END_SQL
 
     my @bind_parameters = ( $params->{'days_in_advance'} );
