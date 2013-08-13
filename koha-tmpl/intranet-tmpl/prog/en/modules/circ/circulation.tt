@@ -1,3 +1,4 @@
+[% USE KohaBranchName %]
 [% USE KohaDates %]
 [% USE KohaAuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -514,7 +515,7 @@ function validate1(date) {
         [% END %]
 
         [% IF ( ITEMNOTSAMEBRANCH ) %]
-            <li>This item belongs to [% itemhomebranch %] and cannot be issued from this location.</li>
+            <li>This item belongs to [% itemhomebranch | $KohaBranchName %] and cannot be checked out from this location.</li>
         [% END %]
 
         [% IF ( USERBLOCKEDREMAINING ) %]
