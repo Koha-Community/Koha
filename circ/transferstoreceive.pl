@@ -89,7 +89,7 @@ foreach my $br ( keys %$branches ) {
             my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
             my $itemtypeinfo = getitemtypeinfo( (C4::Context->preference('item-level_itypes')) ? $gettitle->{'itype'} : $gettitle->{'itemtype'} );
 
-            $getransf{'datetransfer'} = format_date( $num->{'datesent'} );
+            $getransf{'datetransfer'} = $num->{'datesent'};
             $getransf{'itemtype'} = $itemtypeinfo ->{'description'};
 			foreach (qw(title author biblionumber itemnumber barcode homebranch holdingbranch itemcallnumber)) {
             	$getransf{$_} = $gettitle->{$_};

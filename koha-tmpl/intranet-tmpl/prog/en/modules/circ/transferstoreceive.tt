@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Transfers to your library</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -15,6 +16,9 @@ $(document).ready(function() {
     $("#transferst[% branchesloo.branchcode %]").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
             { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+        ],
+        "aoColumns": [
+            { "sType": "title-string" },{ "sType": "anti-the" },null,null,null,null
         ],
         "sDom": 't',
         "bPaginate": false
@@ -59,9 +63,9 @@ $(document).ready(function() {
                 [% ELSE %]
                 <tr>
                 [% END %]
-                    <td><p>[% reser.datetransfer %]</p> [% IF ( reser.messcompa ) %]<span class="error">Transfer is [% reser.diff %] days late</span>[% END %]</td>
-                    <td><span style="display:none;">[% reser.title |html %]</span><!-- invisible title for tablesorter -->
-                   [% INCLUDE 'biblio-default-view.inc' biblionumber = reser.biblionumber %][% reser.title |html %] [% IF ( reser.subtitle ) %] [% FOREACH subtitl IN reser.subtitle %][% subtitl.subfield %][% END %][% END %]</a> [% IF ( reser.author ) %]by [% reser.author %][% END %]
+                    <td><p><span title="[% reser.datetransfer %]">[% reser.datetransfer | $KohaDates %]</span></p> [% IF ( reser.messcompa ) %]<span class="error">Transfer is [% reser.diff %] days late</span>[% END %]</td>
+                    <td>
+                        [% INCLUDE 'biblio-default-view.inc' biblionumber = reser.biblionumber %][% reser.title |html %] [% IF ( reser.subtitle ) %] [% FOREACH subtitl IN reser.subtitle %][% subtitl.subfield %][% END %][% END %]</a> [% IF ( reser.author ) %]by [% reser.author %][% END %]
                             [% IF ( reser.itemtype ) %]&nbsp; (<b>[% reser.itemtype %]</b>)[% END %]
                             <br />Barcode: [% reser.barcode %]
                     </td>
