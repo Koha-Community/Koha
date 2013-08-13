@@ -230,8 +230,12 @@ $template->param(
 
 my $borrower = GetMember( 'borrowernumber' => $loggedinuser );
 my @budget_loop;
-my $periods = GetBudgetPeriods( { 'budget_period_active' => 1 } );
+my $periods = GetBudgetPeriods( );
 foreach my $period (@$periods) {
+    if ($period->{'budget_period_id'} == $budget->{'budget_period_id'}) {
+        $template->{'VARS'}->{'budget_period_description'} = $period->{'budget_period_description'};
+    }
+    next if $period->{'budget_period_locked'} || !$period->{'budget_period_description'};
     my $budget_hierarchy = GetBudgetHierarchy( $period->{'budget_period_id'} );
     my @funds;
     foreach my $r ( @{$budget_hierarchy} ) {
