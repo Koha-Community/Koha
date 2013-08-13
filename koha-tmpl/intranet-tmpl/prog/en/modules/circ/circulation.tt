@@ -1,3 +1,4 @@
+[% USE KohaBranchName %]
 [% USE KohaDates %]
 [% IF ( export_remove_fields OR export_with_csv_profile ) %]
    [% SET exports_enabled = 1 %]
@@ -521,7 +522,7 @@ function validate1(date) {
         [% END %]
 
         [% IF ( ITEMNOTSAMEBRANCH ) %]
-            <li>This item belongs to [% itemhomebranch %] and cannot be issued from this location.</li>
+            <li>This item belongs to [% itemhomebranch | $KohaBranchName %] and cannot be checked out from this location.</li>
         [% END %]
 
         [% IF ( USERBLOCKEDREMAINING ) %]
