@@ -9,7 +9,7 @@ use C4::Items;
 use C4::Members;
 use C4::Reserves;
 
-use Test::More tests => 30;
+use Test::More tests => 36;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -280,6 +280,44 @@ C4::Context->dbh->do("DELETE FROM borrowers WHERE cardnumber = '99999999999'");
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
     is( $renewokay, 0, 'Cannot renew, 0 renewals allowed');
     is( $error, 'too_many', 'Cannot renew, 0 renewals allowed (returned code is too_many)');
+
+}
+
+{
+    # GetUpcomingDueIssues tests
+    my $barcode  = 'R00000342';
+    my $barcode2 = 'R00000343';
+    my $branch   = 'MPL';
+
+    # Create a borrower
+    my %a_borrower_data = (
+        firstname =>  'Fridolyn',
+        surname => 'SOMERS',
+        categorycode => 'S',
+        branchcode => $branch,
+    );
+
+    my $a_borrower_borrowernumber = AddMember(%a_borrower_data);
+    my $a_borrower = GetMember( borrowernumber => $a_borrower_borrowernumber );
+
+    my $yesterday = DateTime->today(time_zone => C4::Context->tz())->add( days => -1 );
+    my $two_days_ahead = DateTime->today(time_zone => C4::Context->tz())->add( days => 2 );
+
+    my $datedue  = AddIssue( $a_borrower, $barcode, $yesterday );
+    my $datedue2 = AddIssue( $a_borrower, $barcode2, $two_days_ahead );
+
+    diag( "GetUpcomingDueIssues tests" );
+
+    for my $i(0..2) {
+        my $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => $i } );
+        is ( scalar( @$upcoming_dues ), 0, "No items due in less than two days ($i days in advance)" );
+    }
+
+    for my $i(3..5) {
+        my $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => $i } );
+        is ( scalar( @$upcoming_dues ), 1,
+            "Bug 9362: Only one item due in more than 2 days ($i days in advance)" );
+    }
 
 }
 
