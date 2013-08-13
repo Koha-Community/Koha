@@ -570,8 +570,6 @@ END_SQL
                 if (@misses) {
                     $verbose and warn "The following terms were not matched and replaced: \n\t" . join "\n\t", @misses;
                 }
-                $letter->{'content'} =~ s/\<[^<>]*?\>//g;    # Now that we've warned about them, remove them.
-                $letter->{'content'} =~ s/\<[^<>]*?\>//g;    # 2nd pass for the double nesting.
 
                 if ( !$nomail && scalar @emails_to_use ) {
                     C4::Letters::EnqueueLetter(
