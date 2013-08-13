@@ -17,48 +17,49 @@
 
 use Modern::Perl;
 use CGI;
+
 use C4::Auth;
-use C4::Serials;
 use C4::Acquisition;
 use C4::Output;
 use C4::Context;
 
-use Text::CSV::Encoded;
-use open qw/ :std :utf8 /;
+my $input = new CGI;
+my ($template, $loggedinuser, $cookie) = get_template_and_user({
+    template_name => "acqui/csv/lateorders.tt",
+    query => $input,
+    type => "intranet",
+    authnotrequired => 0,
+    flagsrequired => {acquisition => 'order_receive'},
+});
+my @ordernumbers = $input->param('ordernumber');
 
-my $csv = Text::CSV::Encoded->new ({
-        encoding    => undef,
-        quote_char  => '"',
-        escape_char => '"',
-        sep_char    => ',',
-        binary      => 1,
-    });
-
-my $query        = new CGI;
-my @ordernumbers = $query->param('ordernumber');
-
-print $query->header(
-    -type       => 'text/csv',
-    -attachment => "lateorders.csv",
-);
-
-print "LATE ORDERS\n\n";
-print "ORDER DATE,ESTIMATED DELIVERY DATE,VENDOR,INFORMATION,TOTAL COST,BASKET,CLAIMS COUNT,CLAIMED DATE\n";
-
+my @orders;
 for my $ordernumber ( @ordernumbers ) {
     my $order = GetOrder $ordernumber;
-    $csv->combine(
-        $order->{orderdate} . " (" . $order->{latesince} . " days)",
-        $order->{estimateddeliverydate},
-        $order->{supplier} . " (" . $order->{supplierid} . ") ",
-        $order->{title} . ( $order->{author} ? " Author: $order->{author}" : "" ) . ( $order->{publisher} ? " Published by: $order->{publisher}" : "" ),
-        $order->{unitpricesupplier} . "x" . $order->{quantity_to_receive} . " = " . $order->{subtotal} . " (" . $order->{budget} . ")",
-        $order->{basketname} . " (" . $order->{basketno} . ")",
-        $order->{claims_count},
-        $order->{claimed_date}
-    );
-    my $string = $csv->string;
-    print $string, "\n";
+    push @orders, {
+            orderdate => $order->{orderdate},
+            latesince => $order->{latesince},
+            estimateddeliverydate => $order->{estimateddeliverydate},
+            supplier => $order->{supplier},
+            supplierid => $order->{supplierid},
+            title => $order->{title},
+            author => $order->{author},
+            publisher => $order->{publisher},
+            unitpricesupplier => $order->{unitpricesupplier},
+            quantity_to_receive => $order->{quantity_to_receive},
+            subtotal => $order->{subtotal},
+            budget => $order->{budget},
+            basketname => $order->{basketname},
+            basketno => $order->{basketno},
+            claims_count => $order->{claims_count},
+            claimed_date => $order->{claimed_date},
+        }
+    ;
 }
 
-print ",,Total Number Late, " . scalar @ordernumbers . "\n";
+print $input->header(
+    -type       => 'text/csv',
+    -attachment => 'lateorders.csv',
+);
+$template->param( orders => \@orders );
+print $template->output;

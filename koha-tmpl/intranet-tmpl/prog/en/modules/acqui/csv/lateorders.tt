@@ -1,0 +1,8 @@
+[% USE KohaDates %]
+LATE ORDERS
+ORDER DATE,ESTIMATED DELIVERY DATE,VENDOR,INFORMATION,TOTAL COST,BASKET,CLAIMS COUNT,CLAIMED DATE
+
+[% FOREACH o IN orders %]"[% o.orderdate %] ([% o.latesince %] days)","[% o.estimateddeliverydate | $KohaDates %]","[% o.supplier (o.supplierid) %]","[% o.title %] [% IF o.author %]Author: [% o.author %].[% END %][% IF o.publisher %]Published by: [% o.publisher %].[% END %]","[% o.unitpricesupplier %] x [% o.quantity_to_receive %] = [% o.subtotal %] ([% o.budget %])","[% o.basketname %] ([% o.basketno %])","[% o.claims_count %]","[% o.claimed_date %]"
+[% END %]
+
+,,Total orders in late, [% orders.size %]
