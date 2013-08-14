@@ -80,8 +80,10 @@ my ($biblionumber2, $biblioitemnumber2) = AddBiblio(MARC::Record->new, '');
     }
 );
 
-my $grouped    = 0;
-my $orders = GetPendingOrders( $booksellerid, $grouped );
+my $orders = SearchOrders({
+    booksellerid => $booksellerid,
+    pending => 1
+});
 isa_ok( $orders, 'ARRAY' );
 
 C4::Acquisition::CloseBasket( $basketno );

@@ -162,8 +162,7 @@ for my $item ( @parcelitems ) {
     $item->{unitprice} = get_value_with_gst_params( $item->{unitprice}, $item->{gstrate}, $bookseller );
     $total = ( $item->{'unitprice'} ) * $item->{'quantityreceived'};
     $item->{'unitprice'} += 0;
-    my %line;
-    %line          = %{ $item };
+    my %line = %{ $item };
     my $ecost = get_value_with_gst_params( $line{ecost}, $line{gstrate}, $bookseller );
     $line{ecost} = sprintf( "%.2f", $ecost );
     $line{invoice} = $invoice->{invoicenumber};
@@ -207,13 +206,27 @@ if(!defined $invoice->{closedate}) {
     if($input->param('op') eq "search"){
         my $search   = $input->param('summaryfilter') || '';
         my $ean      = $input->param('eanfilter') || '';
-        my $basketno = $input->param('basketfilter') || '';
+        my $basketname = $input->param('basketfilter') || '';
         my $orderno  = $input->param('orderfilter') || '';
-        my $grouped;
-        my $owner;
-        $pendingorders = GetPendingOrders($booksellerid,$grouped,$owner,$basketno,$orderno,$search,$ean);
+        $pendingorders = SearchOrders({
+            booksellerid => $booksellerid,
+            basketname => $basketname,
+            ordernumber => $orderno,
+            search => $search,
+            ean => $ean,
+            pending => 1,
+        });
+        $template->param(
+            summaryfilter => $search,
+            eanfilter => $ean,
+            basketfilter => $basketname,
+            orderfilter => $orderno,
+        );
     }else{
-        $pendingorders = GetPendingOrders($booksellerid);
+        $pendingorders = SearchOrders({
+            booksellerid => $booksellerid,
+            pending => 1
+        });
     }
     my $countpendings = scalar @$pendingorders;
 

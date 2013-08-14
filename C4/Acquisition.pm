@@ -53,9 +53,9 @@ BEGIN {
         &ModBasketgroup &NewBasketgroup &DelBasketgroup &GetBasketgroup &CloseBasketgroup
         &GetBasketgroups &ReOpenBasketgroup
 
-        &NewOrder &DelOrder &ModOrder &GetPendingOrders &GetOrder &GetOrders &GetOrdersByBiblionumber
+        &NewOrder &DelOrder &ModOrder &GetOrder &GetOrders &GetOrdersByBiblionumber
         &GetLateOrders &GetOrderFromItemnumber
-        &SearchOrder &GetHistory &GetRecentAcqui
+        &SearchOrders &GetHistory &GetRecentAcqui
         &ModReceiveOrder &CancelReceipt
         &GetCancelledOrders &TransferOrder
         &GetLastOrderNotReceivedFromSubscriptionid &GetLastOrderReceivedFromSubscriptionid
@@ -827,96 +827,6 @@ sub GetBasketgroups {
 
 =head2 FUNCTIONS ABOUT ORDERS
 
-=cut
-
-#------------------------------------------------------------#
-
-=head3 GetPendingOrders
-
-$orders = &GetPendingOrders($supplierid,$grouped,$owner,$basketno,$ordernumber,$search,$ean);
-
-Finds pending orders from the bookseller with the given ID. Ignores
-completed and cancelled orders.
-
-C<$booksellerid> contains the bookseller identifier
-C<$owner> contains 0 or 1. 0 means any owner. 1 means only the list of orders entered by the user itself.
-C<$grouped> is a boolean that, if set to 1 will group all order lines of the same basket
-in a single result line
-C<$orders> is a reference-to-array; each element is a reference-to-hash.
-
-Used also by the filter in parcel.pl
-I have added:
-
-C<$ordernumber>
-C<$search>
-C<$ean>
-
-These give the value of the corresponding field in the aqorders table
-of the Koha database.
-
-Results are ordered from most to least recent.
-
-=cut
-
-sub GetPendingOrders {
-    my ($supplierid,$grouped,$owner,$basketno,$ordernumber,$search,$ean) = @_;
-    my $dbh = C4::Context->dbh;
-    my $strsth = "
-        SELECT ".($grouped?"count(*),":"")."aqbasket.basketno,
-               surname,firstname,biblio.*,biblioitems.isbn,
-               aqbasket.closedate, aqbasket.creationdate, aqbasket.basketname,
-               aqorders.*
-        FROM aqorders
-        LEFT JOIN aqbasket ON aqbasket.basketno=aqorders.basketno
-        LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
-        LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber
-        LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
-        WHERE (quantity > quantityreceived OR quantityreceived is NULL)
-        AND datecancellationprinted IS NULL";
-    my @query_params;
-    my $userenv = C4::Context->userenv;
-    if ( C4::Context->preference("IndependentBranches") ) {
-        if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
-            $strsth .= " AND (borrowers.branchcode = ?
-                        or borrowers.branchcode  = '')";
-            push @query_params, $userenv->{branch};
-        }
-    }
-    if ($supplierid) {
-        $strsth .= " AND aqbasket.booksellerid = ?";
-        push @query_params, $supplierid;
-    }
-    if($ordernumber){
-        $strsth .= " AND (aqorders.ordernumber=?)";
-        push @query_params, $ordernumber;
-    }
-    if($search){
-        $strsth .= " AND (biblio.title like ? OR biblio.author LIKE ? OR biblioitems.isbn like ?)";
-        push @query_params, ("%$search%","%$search%","%$search%");
-    }
-    if ($ean) {
-        $strsth .= " AND biblioitems.ean = ?";
-        push @query_params, $ean;
-    }
-    if ($basketno) {
-        $strsth .= " AND aqbasket.basketno=? ";
-        push @query_params, $basketno;
-    }
-    if ($owner) {
-        $strsth .= " AND aqbasket.authorisedby=? ";
-        push @query_params, $userenv->{'number'};
-    }
-    $strsth .= " group by aqbasket.basketno" if $grouped;
-    $strsth .= " order by aqbasket.basketno";
-    my $sth = $dbh->prepare($strsth);
-    $sth->execute( @query_params );
-    my $results = $sth->fetchall_arrayref({});
-    $sth->finish;
-    return $results;
-}
-
-#------------------------------------------------------------#
-
 =head3 GetOrders
 
   @orders = &GetOrders($basketnumber, $orderby);
@@ -1500,80 +1410,120 @@ sub CancelReceipt {
 
 #------------------------------------------------------------#
 
-=head3 SearchOrder
+=head3 SearchOrders
 
-@results = &SearchOrder($search, $biblionumber, $complete);
+@results = &SearchOrders({
+    ordernumber => $ordernumber,
+    search => $search,
+    biblionumber => $biblionumber,
+    ean => $ean,
+    booksellerid => $booksellerid,
+    basketno => $basketno,
+    owner => $owner,
+    pending => $pending
+});
 
 Searches for orders.
 
-C<$search> may take one of several forms: if it is an ISBN,
-C<&ordersearch> returns orders with that ISBN. If C<$search> is an
-order number, C<&ordersearch> returns orders with that order number
-and biblionumber C<$biblionumber>. Otherwise, C<$search> is considered
-to be a space-separated list of search terms; in this case, all of the
-terms must appear in the title (matching the beginning of title
-words).
+C<$owner> Finds order for the logged in user.
+C<$pending> Finds pending orders. Ignores completed and cancelled orders.
 
-If C<$complete> is C<yes>, the results will include only completed
-orders. In any case, C<&ordersearch> ignores cancelled orders.
 
-C<&ordersearch> returns an array.
-C<@results> is an array of references-to-hash with the following keys:
-
-=over 4
-
-=item C<author>
-
-=item C<seriestitle>
-
-=item C<branchcode>
-
-=item C<budget_id>
-
-=back
+C<@results> is an array of references-to-hash with the keys are fields
+from aqorders, biblio, biblioitems and aqbasket tables.
 
 =cut
 
-sub SearchOrder {
-#### -------- SearchOrder-------------------------------
-    my ( $ordernumber, $search, $ean, $supplierid, $basket ) = @_;
+sub SearchOrders {
+    my ( $params ) = @_;
+    my $ordernumber = $params->{ordernumber};
+    my $search = $params->{search};
+    my $ean = $params->{ean};
+    my $booksellerid = $params->{booksellerid};
+    my $basketno = $params->{basketno};
+    my $basketname = $params->{basketname};
+    my $basketgroupname = $params->{basketgroupname};
+    my $owner = $params->{owner};
+    my $pending = $params->{pending};
 
     my $dbh = C4::Context->dbh;
     my @args = ();
-    my $query =
-            "SELECT *
-            FROM aqorders
+    my $query = q{
+        SELECT aqbasket.basketno,
+               borrowers.surname,
+               borrowers.firstname,
+               biblio.*,
+               biblioitems.isbn,
+               biblioitems.biblioitemnumber,
+               aqbasket.closedate,
+               aqbasket.creationdate,
+               aqbasket.basketname,
+               aqorders.*
+        FROM aqorders
+            LEFT JOIN aqbasket ON aqorders.basketno = aqbasket.basketno
+            LEFT JOIN aqbasketgroups ON aqbasket.basketgroupid = aqbasketgroups.id
+            LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
             LEFT JOIN biblio ON aqorders.biblionumber=biblio.biblionumber
             LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
-            LEFT JOIN aqbasket ON aqorders.basketno = aqbasket.basketno
-                WHERE  (datecancellationprinted is NULL)";
+        WHERE (datecancellationprinted is NULL)
+    };
 
-    if($ordernumber){
-        $query .= " AND (aqorders.ordernumber=?)";
+    $query .= q{
+        AND (quantity > quantityreceived OR quantityreceived is NULL)
+    };
+
+    my $userenv = C4::Context->userenv;
+    if ( C4::Context->preference("IndependentBranches") ) {
+        if ( ( $userenv ) and ( $userenv->{flags} != 1 ) ) {
+            $query .= q{
+                AND (
+                    borrowers.branchcode = ?
+                    OR borrowers.branchcode  = ''
+                )
+            };
+            push @args, $userenv->{branch};
+        }
+    }
+
+    if ( $ordernumber ) {
+        $query .= ' AND (aqorders.ordernumber=?)';
         push @args, $ordernumber;
     }
-    if($search){
-        $query .= " AND (biblio.title like ? OR biblio.author LIKE ? OR biblioitems.isbn like ?)";
+    if( $search ) {
+        $query .= ' AND (biblio.title LIKE ? OR biblio.author LIKE ? OR biblioitems.isbn LIKE ?)';
         push @args, ("%$search%","%$search%","%$search%");
     }
-    if ($ean) {
-        $query .= " AND biblioitems.ean = ?";
+    if ( $ean ) {
+        $query .= ' AND biblioitems.ean = ?';
         push @args, $ean;
     }
-    if ($supplierid) {
-        $query .= "AND aqbasket.booksellerid = ?";
-        push @args, $supplierid;
+    if ( $booksellerid ) {
+        $query .= 'AND aqbasket.booksellerid = ?';
+        push @args, $booksellerid;
     }
-    if($basket){
-        $query .= "AND aqorders.basketno = ?";
-        push @args, $basket;
+    if( $basketno ) {
+        $query .= 'AND aqbasket.basketno = ?';
+        push @args, $basketno;
     }
+    if( $basketname ) {
+        $query .= 'AND aqbasket.basketname LIKE ?';
+        push @args, "%$basketname%";
+    }
+    if( $basketgroupname ) {
+        $query .= ' AND aqbasketgroups.name LIKE ?';
+        push @args, "%$basketgroupname%";
+    }
+
+    if ( $owner ) {
+        $query .= ' AND aqbasket.authorisedby=? ';
+        push @args, $userenv->{'number'};
+    }
+
+    $query .= ' ORDER BY aqbasket.basketno';
 
     my $sth = $dbh->prepare($query);
     $sth->execute(@args);
-    my $results = $sth->fetchall_arrayref({});
-    $sth->finish;
-    return $results;
+    return $sth->fetchall_arrayref({});
 }
 
 #------------------------------------------------------------#
@@ -2434,8 +2384,10 @@ sub GetInvoiceDetails {
     my $invoice = $sth->fetchrow_hashref;
 
     $query = qq{
-        SELECT aqorders.*, biblio.*
+        SELECT aqorders.*, biblio.*,
+        aqbasket.basketname
         FROM aqorders
+          LEFT JOIN aqbasket ON aqorders.basketno = aqbasket.basketno
           LEFT JOIN biblio ON aqorders.biblionumber = biblio.biblionumber
         WHERE invoiceid = ?
     };

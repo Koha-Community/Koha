@@ -91,7 +91,9 @@ $datereceived = $datereceived ? C4::Dates->new($datereceived, 'iso') : C4::Dates
 
 my $bookseller = GetBookSellerFromId($booksellerid);
 my $results;
-$results = SearchOrder($ordernumber) if $ordernumber;
+$results = SearchOrders({
+    ordernumber => $ordernumber
+}) if $ordernumber;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

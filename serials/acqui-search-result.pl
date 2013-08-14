@@ -45,7 +45,7 @@ use C4::Auth;
 use C4::Biblio;
 use C4::Output;
 use CGI;
-use C4::Acquisition;
+use C4::Acquisition qw( SearchOrders );
 use C4::Dates qw/format_date/;
 use C4::Bookseller qw( GetBookSeller );
 
@@ -66,7 +66,10 @@ my @suppliers = GetBookSeller($supplier);
 #build result page
 my $loop_suppliers = [];
 for my $s (@suppliers) {
-    my $orders = GetPendingOrders($s->{'id'});
+    my $orders = SearchOrders({
+        booksellerid => $s->{'id'},
+        pending => 1
+    });
 
     my $loop_basket = [];
     for my $ord ( @{$orders} ) {

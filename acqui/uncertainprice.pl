@@ -52,7 +52,7 @@ use C4::Output;
 use CGI;
 
 use C4::Bookseller qw/GetBookSellerFromId/;
-use C4::Acquisition qw/GetPendingOrders GetOrder ModOrder/;
+use C4::Acquisition qw/SearchOrders GetOrder ModOrder/;
 use C4::Biblio qw/GetBiblioData/;
 
 my $input=new CGI;
@@ -73,7 +73,12 @@ my $owner = $input->param('owner') || 0 ; # flag to see only "my" orders, or eve
 my $bookseller = &GetBookSellerFromId($booksellerid);
 
 #show all orders that have uncertain price for the bookseller
-my $pendingorders = &GetPendingOrders($booksellerid,0,$owner,$basketno);
+my $pendingorders = SearchOrders({
+    booksellerid => $booksellerid,
+    owner => $owner,
+    basketno => $basketno,
+    pending => 1,
+});
 my @orders;
 
 foreach my $order (@{$pendingorders}) {
