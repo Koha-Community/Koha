@@ -69,6 +69,14 @@ my $today        = C4::Dates->new();
 my @all_messages = @{ GetPrintMessages() };
 exit unless (@all_messages);
 
+## carriage return replaced by <br/> as output is html
+foreach my $message (@all_messages) {
+    local $_ = $message->{'content'};
+    s/\n/<br \/>/g;
+    s/\r//g;
+    $message->{'content'} = $_;
+}
+
 my $OUTPUT;
 
 if ($split) {
