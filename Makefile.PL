@@ -555,6 +555,10 @@ $config{ZEBRA_TOKENIZER_STMT} = $config{ZEBRA_TOKENIZER} eq 'icu'
     ? 'icuchain words-icu.xml'
     : 'charmap word-phrase-utf.chr';
 
+$config{ZEBRA_PTOKENIZER_STMT} = $config{ZEBRA_TOKENIZER} eq 'icu'
+    ? 'icuchain phrases-icu.xml'
+    : 'charmap word-phrase-utf.chr';
+
 my %test_suite_override_dirs = (
     KOHA_CONF_DIR  => ['etc'],
     ZEBRA_CONF_DIR => ['etc', 'zebradb'],

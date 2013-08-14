@@ -124,6 +124,7 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   '__ZEBRA_LANGUAGE__' => 'en',
   '__ZEBRA_TOKENIZER__' => 'chr',
   '__ZEBRA_TOKENIZER_STMT__' => 'charmap word-phrase-utf.chr',
+  '__ZEBRA_PTOKENIZER_STMT__' => 'charmap word-phrase-utf.chr',
   '__ZEBRA_AUTH_CFG__' => 'zebra-authorities.cfg',
   '__ZEBRA_BIB_CFG__' => 'zebra-biblios.cfg',
   '__AUTH_RETRIEVAL_CFG__' => 'retrieval-info-auth-grs1.xml',
