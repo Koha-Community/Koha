@@ -71,7 +71,7 @@ is_deeply(
     {
         operationid => $offline_id,
         userid      => 'User1',
-        branchcode  =>  $samplebranch1->{branchcode},
+        branchcode  => $samplebranch1->{branchcode},
         timestamp   => "0000-00-00 00:00:00",
         action      => 'Action1',
         barcode     => 'CODE',
@@ -80,16 +80,20 @@ is_deeply(
     },
     "GetOffline returns offlineoperation's informations"
 );
-is(GetOfflineOperation,undef,'GetOfflineOperation without parameters returns undef');
-is(GetOfflineOperation(-1),undef,'GetOfflineOperation with wrong parameters returns undef');
+is( GetOfflineOperation(), undef,
+    'GetOfflineOperation without parameters returns undef' );
+is( GetOfflineOperation(-1), undef,
+    'GetOfflineOperation with wrong parameters returns undef' );
 
 #Test GetOfflineOperations
 #TODO later: test GetOfflineOperations
 # Actually we cannot mock C4::Context->userenv in unit tests
 
 #Test DeleteOfflineOperation
-is (DeleteOfflineOperation($offline_id),'Deleted.','Offlineoperation has been deleted');
-#is (DeleteOfflineOperation, undef, 'DeleteOfflineOperation without id returns undef');
+is( DeleteOfflineOperation($offline_id),
+    'Deleted.', 'Offlineoperation has been deleted' );
+
+#is (DeleteOfflineOperation(), undef, 'DeleteOfflineOperation without id returns undef');
 #is (DeleteOfflineOperation(-1),undef, 'DeleteOfflineOperation with a wrong id returns undef');#FIXME
 
 #End transaction
