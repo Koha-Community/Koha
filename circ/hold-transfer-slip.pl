@@ -65,6 +65,7 @@ $template->param(
     plain => !$is_html,
     title => "Koha -- Circulation: Transfers",
     stylesheet => C4::Context->preference("SlipCSS"),
+    IntranetSlipPrinterJS => C4::Context->preference("IntranetSlipPrinterJS"),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
