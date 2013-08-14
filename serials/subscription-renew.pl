@@ -59,7 +59,7 @@ use C4::Serials;
 my $query = new CGI;
 my $dbh   = C4::Context->dbh;
 
-my $mode           = $query->param('mode');
+my $mode           = $query->param('mode') || q{};
 my $op             = $query->param('op') || q{};
 my $subscriptionid = $query->param('subscriptionid');
 my $done = 0;    # for after form has been submitted
@@ -99,7 +99,7 @@ $template->param(
     subscriptionid => $subscriptionid,
     bibliotitle    => $subscription->{bibliotitle},
     $op            => 1,
-    popup          => ($query->param('mode')eq "popup"),
+    popup          => ($mode eq 'popup'),
 );
 
 # Print the page
