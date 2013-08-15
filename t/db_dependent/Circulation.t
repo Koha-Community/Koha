@@ -124,6 +124,23 @@ is(
     'CircControl reset to its initial value'
 );
 
+# Set a simple circ policy
+$dbh->do('DELETE FROM issuingrules');
+$dbh->do(
+    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed,
+                                maxissueqty, issuelength, lengthunit,
+                                renewalsallowed, renewalperiod)
+      VALUES (?, ?, ?, ?,
+              ?, ?, ?,
+              ?, ?
+             )
+    },
+    {},
+    '*', '*', '*', 25,
+    20, 14, 'days',
+    1, 7
+);
+
 # Test C4::Circulation::ProcessOfflinePayment
 my $sth = C4::Context->dbh->prepare("SELECT COUNT(*) FROM accountlines WHERE amount = '-123.45' AND accounttype = 'Pay'");
 $sth->execute();
@@ -255,10 +272,10 @@ C4::Context->dbh->do("DELETE FROM borrowers WHERE cardnumber = '99999999999'");
     $reserveid = C4::Reserves::GetReserveId({ biblionumber => $biblionumber, itemnumber => $itemnumber, borrowernumber => $reserving_borrowernumber});
     CancelReserve({ reserve_id => $reserveid });
 
-
     diag("Too many renewals");
 
-    # FIXME: Check with circulation rules and renewalsallowed set properly configured
+    # set policy to forbid renewals
+    $dbh->do('UPDATE issuingrules SET renewalsallowed = 0');
 
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
     is( $renewokay, 0, 'Cannot renew, 0 renewals allowed');
