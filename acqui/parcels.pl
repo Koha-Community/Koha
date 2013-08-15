@@ -112,7 +112,7 @@ if ( $op and $op eq 'new' ) {
             supplierid    => $booksellerid,
             invoicenumber => $invoicenumber,
         );
-        if ( $#invoices > 0 ) {
+        if ( scalar @invoices > 0 ) {
             $template->{'VARS'}->{'duplicate_invoices'} = \@invoices;
             $template->{'VARS'}->{'invoicenumber'}      = $invoicenumber;
             $template->{'VARS'}->{'shipmentdate'}       = $shipmentdate;
