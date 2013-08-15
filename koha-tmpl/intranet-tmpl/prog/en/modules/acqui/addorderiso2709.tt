@@ -54,7 +54,7 @@
            <div class="yui-b">
              [% IF ( batch_details ) %]
                   <h1>Add orders from [% comments %]
-                    ([% file_name %] staged on [% upload_timestamp %])
+                    ([% file_name %] staged on [% upload_timestamp | $KohaDates with_hours => 1 %])
                   </h1>
                <div>
                    <form action="[% scriptname %]" method="post" name="import_biblios">
@@ -125,7 +125,7 @@
            </div>
         [% IF ( import_batch_id ) %]
             <div class="yui-b">
-            <h2>Import All</h2>
+            <h2>Import all</h2>
             <p>Import all the lines in the basket with the following parameters:</p>
             <form action="/cgi-bin/koha/acqui/addorderiso2709.pl" method="post" id="Aform">
                     <input type="hidden" name="op" value="import_records"/>
@@ -150,14 +150,18 @@
                     <div id="itemblock">
                         <ol>[% FOREACH iteminformatio IN item.iteminformation %]<li style="[% iteminformatio.hidden %];">
                             <div class="subfield_line" id="subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
-
-                                <label>[% iteminformatio.subfield %] - [% IF ( iteminformatio.mandatory ) %]<b>[% END %][% iteminformatio.marc_lib %][% IF ( iteminformatio.mandatory ) %] *</b>[% END %]</label>
+                                [% IF (iteminformatio.mandatory) %]
+                                    <label class="required">[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
+                                [% ELSE %]
+                                    <label>[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
+                                [% END %]
                                 [% iteminformatio.marc_value %]
                                 <input type="hidden" name="itemid" value="1" />
                                 <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield %]" />
                                 <input type="hidden" name="tag" value="[% iteminformatio.tag %]" />
                                 <input type="hidden" name="subfield" value="[% iteminformatio.subfield %]" />
                                 <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory %]" />
+                                [% IF ( iteminformatio.mandatory ) %] <span class="required">Required</span>[% END %]
                             </div></li>
                         [% END %]
                         </ol>
