@@ -96,7 +96,7 @@ foreach my $itemno (@data) {
 my $failedreturn = q{};
 foreach my $barcode (@barcodes) {
 
-    # check status before renewing issue
+    # check status before returning issue
 
     #System Preference Handling During Check-in In Patron Module
     my $itemnumber;
