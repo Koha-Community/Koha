@@ -53,6 +53,7 @@ use strict;
 use warnings;
 use C4::Auth;
 use C4::Biblio;
+use C4::Budgets;
 use C4::Output;
 use CGI;
 
@@ -62,7 +63,7 @@ use C4::Members qw/GetMember/;
 use C4::Context;
 
 my $query = CGI->new;
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {   template_name   => 'acqui/booksellers.tmpl',
         query           => $query,
         type            => 'intranet',
@@ -102,6 +103,18 @@ my $userenv = C4::Context::userenv;
 my $viewbaskets = C4::Context->preference('AcqViewBaskets');
 
 my $userbranch = $userenv->{branch};
+
+my $budgets = GetBudgetHierarchy;
+my $has_budgets = 0;
+foreach my $r (@{$budgets}) {
+    if (!defined $r->{budget_amount} || $r->{budget_amount} == 0) {
+        next;
+    }
+    next unless (CanUserUseBudget($loggedinuser, $r, $userflags));
+
+    $has_budgets = 1;
+    last;
+}
 
 #build result page
 my $loop_suppliers = [];
@@ -150,6 +163,7 @@ $template->param(
     loop_suppliers => $loop_suppliers,
     supplier       => ( $booksellerid || $supplier ),
     count          => $supplier_count,
+    has_budgets          => $has_budgets,
 );
 $template->{VARS}->{'allbaskets'} = $allbaskets;
 

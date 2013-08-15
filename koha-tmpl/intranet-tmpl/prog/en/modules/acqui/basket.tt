@@ -30,7 +30,7 @@
         updateColumnsVisibility(false);
         [% UNLESS ( closedate ) %]
             $('#addtoBasket').on('show', function () {
-               $(this).find(".modal-body").html($("#acqui_basket_add")[0].outerHTML);
+               $(this).find(".modal-body").html($(".acqui_basket_add")[0].outerHTML);
             });
         [% END %]
     });
