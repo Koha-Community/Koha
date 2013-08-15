@@ -19,8 +19,11 @@
 <script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>[% END %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery-ui-timepicker-addon.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/pages/circulation.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+var MSG_ADD_MESSAGE = _("Add a new message");
+var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
 [% IF ( UseTablesortForCirc && dateformat == 'metric' ) %]dt_add_type_uk_date();[% END %]
 [% IF ( borrowernumber ) %]if($.cookie("holdfor") != [% borrowernumber %]){ $.cookie("holdfor",null, { path: "/", expires: 0 }); }[% ELSE %]$.cookie("holdfor",null, { path: "/", expires: 0 });[% END %]
 [% UNLESS ( borrowernumber ) %][% UNLESS ( CGIselectborrower ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %][% END %]
@@ -79,56 +82,6 @@
             return printx_window('qslip'); }
         });[% END %]
 
-
-var allcheckboxes = $(".checkboxed");
-	$("#renew_all").click(function(){
-		$(allcheckboxes).checkCheckboxes(":input[name*=items]"); 
-		$(allcheckboxes).unCheckCheckboxes(":input[name*=barcodes]");
-	});
-	$("#CheckAllitems").click(function(){
-		$(allcheckboxes).checkCheckboxes(":input[name*=items]");
-		$(allcheckboxes).unCheckCheckboxes(":input[name*=barcodes]"); return false;
-	});
-    $("#CheckNoitems").click(function(){
-		$(allcheckboxes).unCheckCheckboxes(":input[name*=items]"); return false;
-	});
-	$("#CheckAllreturns").click(function(){
-		$(allcheckboxes).checkCheckboxes(":input[name*=barcodes]");
-		$(allcheckboxes).unCheckCheckboxes(":input[name*=items]"); return false;
-	});
-    $("#CheckNoreturns" ).click(function(){
-		$(allcheckboxes).unCheckCheckboxes(":input[name*=barcodes]"); return false;
-	});
-
-    $("#CheckAllexports").click(function(){
-        $(".checkboxed").checkCheckboxes(":input[name*=biblionumbers]");
-        $(".checkboxed").unCheckCheckboxes(":input[name*=items]");
-        return false;
-    });
-    $("#CheckNoexports").click(function(){
-        $(".checkboxed").unCheckCheckboxes(":input[name*=biblionumbers]");
-        return false;
-    });
-
-    $("#relrenew_all").click(function(){
-        $(allcheckboxes).checkCheckboxes(":input[name*=items]");
-        $(allcheckboxes).unCheckCheckboxes(":input[name*=barcodes]");
-    });
-    $("#relCheckAllitems").click(function(){
-        $(allcheckboxes).checkCheckboxes(":input[name*=items]");
-        $(allcheckboxes).unCheckCheckboxes(":input[name*=barcodes]"); return false;
-    });
-    $("#relCheckNoitems").click(function(){
-        $(allcheckboxes).unCheckCheckboxes(":input[name*=items]"); return false;
-    });
-    $("#relCheckAllreturns").click(function(){
-        $(allcheckboxes).checkCheckboxes(":input[name*=barcodes]");
-        $(allcheckboxes).unCheckCheckboxes(":input[name*=items]"); return false;
-    });
-    $("#relCheckNoreturns").click(function(){
-        $(allcheckboxes).unCheckCheckboxes(":input[name*=barcodes]"); return false;
-    });
-
     [% IF ( CAN_user_circulate_override_renewals ) %]
     [% IF ( AllowRenewalLimitOverride ) %]
     $( '#override_limit' ).click( function () {
@@ -140,102 +93,7 @@ var allcheckboxes = $(".checkboxed");
     } ).attr( 'checked', false );
     [% END %]
     [% END %]
-    // Clicking the table cell checks the checkbox inside it
-	$("td").click(function(e){
-		if(e.target.tagName.toLowerCase() == 'td'){
-           $(this).find("input:checkbox:visible").each( function() {
-                if($(this).attr("checked")){
-                    $(this).removeAttr("checked");
-                } else {
-                    $(this).attr("checked","checked");
-                    radioCheckBox($(this));
-                }
-           });
-        }
-	});
-    // prevent adjacent checkboxes from being checked simultaneously
-    function radioCheckBox(box){
-            box.parents("td").siblings().find("input:checkbox:visible").each(function(){
-                if($(this).attr("checked")){
-                    $(this).removeAttr("checked");
-                }
-             });
-     }
-
-	$("#messages ul").after("<a href=\"#\" id=\"addmessage\">"+_("Add a new message")+"</a>");
-	$("#borrower_messages .cancel").click(function(){
-		$("#add_message_form").hide();
-        $("#addmessage").show();
-	});
-	$("#addmessage").click(function (){
-        $(this).hide();
-		$("#add_message_form").show();
-	 });
-
-    $("input.radio").click(function(){
-        radioCheckBox($(this));
-    });
-
-    $("#newduedate").datetimepicker({
-        minDate: 1, // require that renewal date is after today
-        hour: 23,
-        minute: 59
-    });
-    $("#duedatespec").datetimepicker({
-        onClose: function(dateText, inst) { $("#barcode").focus(); },
-        hour: 23,
-        minute: 59
-    });
-    $("#export_submit").click(function(){
-        var export_format = $("#export_formats").val();
-        export_checkouts(export_format);
-        return false;
-    })
  });
-
-function export_checkouts(format) {
-    if ($("input:checkbox[name='biblionumbers'][checked]").length < 1){
-        alert(_("You must select a checkout to export"));
-        return;
-    }
-
-    $("input:checkbox[name='biblionumbers']").each( function(){
-        var input_item = $(this).siblings("input:checkbox");
-        if ( $(this).is(":checked") ) {
-            $(input_item).attr("checked", "checked");
-        } else {
-            $(input_item).attr("checked", "");
-        }
-    } );
-
-    if (format == 'iso2709_995') {
-        format = 'iso2709';
-        $("#dont_export_item").val(0);
-    } else if (format == 'iso2709') {
-        $("#dont_export_item").val(1);
-    } else {
-        [% UNLESS ( export_with_csv_profile ) %]
-            alert(_("You must define a csv profile for export (in tools>CSV export profiles) and fill the ExportWithCsvProfile system preference"));
-            return false;
-        [% END %]
-    }
-    document.issues.action="/cgi-bin/koha/tools/export.pl";
-    document.getElementById("export_format").value = format;
-    document.issues.submit();
-
-    /* Reset form action to its initial value */
-    document.issues.action="/cgi-bin/koha/reserve/renewscript.pl";
-
-};
-
-function validate1(date) {
-    var today = new Date();
-    if ( date < today ) {
-        return true;
-     } else {
-        return false;
-     }
-};
 //]]>
 </script>
 </head>
@@ -1025,7 +883,10 @@ No patron matched <span class="ex">[% message %]</span>
             <select name="export_formats" id="export_formats">
                 <option value="iso2709_995">ISO2709 with items</option>
                 <option value="iso2709">ISO2709 without items</option>
-                <option value="csv">CSV</option>
+                [% IF ( export_with_csv_profile ) %]
+                    <option value="csv">CSV</option>
+                [% END %]
+
             </select>
            <label for="export_remove_fields">Don't export fields:</label> <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% export_remove_fields %]" title="Use for iso2709 exports" />
             <input type="hidden" name="op" value="export" />
