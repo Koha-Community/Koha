@@ -62,7 +62,24 @@ $(document).ready(function(){
         "bKohaColumnsUseNames": true
     }, columns_settings);
 
+    var multiCopyControl = $("#add_multiple_copies_span");
+    var addMultipleBlock = $("#addmultiple");
+    var addSingleBlock = $("#addsingle");
+    multiCopyControl.hide();
+    $("#add_multiple_copies").on("click",function(e){
+        e.preventDefault;
+        addMultipleBlock.toggle();
+        addSingleBlock.toggle();
+        multiCopyControl.toggle();
+    });
+    $("#cancel_add_multiple").on("click",function(e){
+        e.preventDefault();
+        addMultipleBlock.toggle();
+        addSingleBlock.toggle();
+        multiCopyControl.toggle();
+    });
 });
+
 function Check(f) {
     var total_errors = CheckMandatorySubfields(f);
     if (total_errors==0) {
@@ -288,14 +305,19 @@ function confirm_deletion() {
 		when pressing the enter key, while in fact it is the first submit button that is validated, in our case the "add (single) item" button.
 		It is a bit tricky, but necessary in the sake of UI correctness.
     -->
-
-    <input type="submit" name="add_submit" value="Add item" onclick="return Check(this.form)" />
-    <input type="submit" name="add_duplicate_submit" value="Add &amp; duplicate" onclick="return Check(this.form)" />
-    <input type="submit" name="add_multiple_copies" value="Add multiple items" onclick="javascript:this.nextSibling.style.visibility='visible';document.f.number_of_copies.focus(); return false;" /><span id="add_multiple_copies_span" style="visibility:hidden">
-    <label for="number_of_copies">Number of items to add : </label>
-    <input type="text" id="number_of_copies" name="number_of_copies" value="" />
-	<input type="submit" id="add_multiple_copies_submit" name="add_multiple_copies_submit" value="Add" onclick="javascript:return Check(this.form) &amp;&amp; CheckMultipleAdd(this.form.number_of_copies.value);" />
+    <span id="addsingle">
+        <input type="submit" name="add_submit" value="Add item" onclick="return Check(this.form)" />
+        <input type="submit" name="add_duplicate_submit" value="Add &amp; duplicate" onclick="return Check(this.form)" />
     </span>
+    <span id="addmultiple">
+        <input type="button" name="add_multiple_copies" id="add_multiple_copies" value="Add multiple copies of this item" />
+    </span>
+    <fieldset id="add_multiple_copies_span">
+        <label for="number_of_copies">Number of copies of this item to add: </label>
+        <input type="text" id="number_of_copies" name="number_of_copies" value="" size="2" />
+        <input type="submit" id="add_multiple_copies_submit" name="add_multiple_copies_submit" value="Add" onclick="javascript:return Check(this.form) && CheckMultipleAdd(this.form.number_of_copies.value);" /> <a href="#" id="cancel_add_multiple" class="cancel">Cancel</a>
+        <div class="hint"><p>The barcode you enter will be incremented for each additional item.</p></div>
+    </fieldset>
 
     [% ELSE %]
     <input type="hidden" name="tag" value="[% itemtagfield %]" />
