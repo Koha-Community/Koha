@@ -331,7 +331,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 	$subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} > 4) || ($tagslib->{$tag}->{$subfield}->{hidden} < -4));
     # testing branch value if IndependentBranches.
 
-	my $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" );
+    my $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="255" );
 	my $attributes          = qq($attributes_no_value value="$value" );
 
 	if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {

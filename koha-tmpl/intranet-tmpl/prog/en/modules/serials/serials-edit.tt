@@ -236,8 +236,11 @@ $(document).ready(function() {
         <div id="item[% item.serialid %][% item.countitems %]" class="items">
         <ol>[% FOREACH iteminformatio IN item.iteminformation %]<li>
                <div class="subfield_line" style="[% iteminformatio.hidden %]" id="subfield[% item.serialid %][% item.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
-                              
-                <label>[% iteminformatio.subfield %] - [% IF ( iteminformatio.mandatory ) %]<b>[% END %][% iteminformatio.marc_lib %][% IF ( iteminformatio.mandatory ) %] *</b>[% END %]</label>
+                [% IF (iteminformatio.mandatory) %]
+                    <label class="required">[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
+                [% ELSE %]
+                    <label>[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
+                [% END %]
                 [% iteminformatio.marc_value %]
                 <input type="hidden" name="itemid" value="[% item.itemid %]" />
                 <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield %]" />
@@ -249,7 +252,7 @@ $(document).ready(function() {
                         <img src="[% interface %]/[% theme %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
                     </a>
                 [% END %]
-        
+                [% IF ( iteminformatio.mandatory ) %] <span class="required">Required</span>[% END %]
             </div></li>
         [% END %]</ol></div><!-- /iteminformation -->
         
@@ -344,8 +347,11 @@ $(document).ready(function() {
         <div id="item[% newserialloo.serialid %][% newserialloo.countitems %]" class="items">
         <ol>[% FOREACH iteminformatio IN newserialloo.iteminformation %]<li>
                <div class="subfield_line" style="[% iteminformatio.hidden %]" id="subfield[% newserialloo.serialid %][% newserialloo.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
-   
-                <label>[% iteminformatio.subfield %] - [% IF ( iteminformatio.mandatory ) %]<b>[% END %][% iteminformatio.marc_lib %][% IF ( iteminformatio.mandatory ) %] *</b>[% END %]</label>
+                [% IF (iteminformatio.mandatory) %]
+                    <label class="required">[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
+                [% ELSE %]
+                    <label>[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
+                [% END %]
                 [% iteminformatio.marc_value %]
                 <input type="hidden" name="itemid" value="[% newserialloo.itemid %]" />
                 <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield %]" />
@@ -357,6 +363,7 @@ $(document).ready(function() {
                         <img src="[% interface %]/[% theme %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
                     </a>
                 [% END %]
+                [% IF ( iteminformatio.mandatory ) %] <span class="required">Required</span>[% END %]
         </div>
        </li>[% END %]</ol>
         
