@@ -12,7 +12,7 @@ use C4::Context;
 
 use Data::Dumper;
 
-use Test::More tests => 18;
+use Test::More tests => 19;
 
 use C4::Branch;
 use C4::ItemType;
@@ -147,6 +147,7 @@ ok( $queue_item
  && $queue_item->{pickbranch} eq $borrower_branchcode
  && $queue_item->{holdingbranch} eq $least_cost_branch_code, "GetHoldsQueueItems" )
   or diag( "Expected item for pick $borrower_branchcode, hold $least_cost_branch_code, got ".Dumper($queue_item) );
+ok( exists($queue_item->{itype}), 'item type included in queued items list (bug 5825)' );
 
 # XXX All this tests are for borrower branch pick-up.
 # Maybe needs expanding to homebranch or holdingbranch pick-up.
