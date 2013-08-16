@@ -71,6 +71,7 @@ $(document).ready(function(){
         addMultipleBlock.toggle();
         addSingleBlock.toggle();
         multiCopyControl.toggle();
+        $('body,html').animate({ scrollTop: $('body').height() }, 100);
     });
     $("#cancel_add_multiple").on("click",function(e){
         e.preventDefault();
