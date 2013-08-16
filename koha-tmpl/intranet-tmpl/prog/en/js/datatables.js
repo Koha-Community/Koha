@@ -604,7 +604,7 @@ jQuery.fn.dataTableExt.oSort['callnumbers-asc']  = function(x,y) {
         y = y_array.shift();
 
         if ( !x ) { x = ""; }
-        if ( !y ) { y = ""; } 
+        if ( !y ) { y = ""; }
 
         return ((x < y) ? -1 : ((x > y) ?  1 : 0));
 };
@@ -631,7 +631,7 @@ jQuery.fn.dataTableExt.oSort['callnumbers-desc'] = function(x,y) {
         y = y_array.pop();
 
         if ( !x ) { x = ""; }
-        if ( !y ) { y = ""; } 
+        if ( !y ) { y = ""; }
 
         return ((x < y) ?  1 : ((x > y) ? -1 : 0));
 };
