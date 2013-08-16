@@ -450,7 +450,7 @@ my $indexes2z3950 = {
 };
 for (my $ii = 0; $ii < @operands; ++$ii)
 {
-    my $name = $indexes2z3950->{$indexes[$ii]};
+    my $name = $indexes2z3950->{$indexes[$ii] || 'kw'};
     if (defined $name && defined $operands[$ii])
     {
         $z3950par ||= {};
