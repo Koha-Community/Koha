@@ -2531,7 +2531,7 @@ sub AddMember_Opac {
     return ( $borrowernumber, $password );
 }
 
-=head2 AddEnroltmenFeeIfNeeded
+=head2 AddEnrolmentFeeIfNeeded
 
     AddEnrolmentFeeIfNeeded( $borrower->{categorycode}, $borrower->{borrowernumber} );
 
