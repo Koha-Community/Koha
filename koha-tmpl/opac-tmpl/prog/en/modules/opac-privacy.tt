@@ -20,13 +20,11 @@
     [% IF ( privacy_updated ) %]
         <div class="dialog message">Your privacy rules have been updated.</div>
     [% END %]
-
+    <div id="userprivacyrules" class="container">
     <h2>Privacy rule</h2>
     [% IF ( Ask_data ) %]
 		<p>We take great care in protecting your privacy. On this screen, you can define how long we keep your reading history.</p>
 		<p>Your options are: <p>
-		<form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-update-form">
-            <input type="hidden" name="op" value="update_privacy" />
             <ul id="opac-privacy-options-list">
                 <li class="privacy0">Forever: keep my reading history without limit. This is the option for users who want to keep track of what they are reading.</li>
                 <li class="privacy1">Default: keep my reading history according to local laws. This is the default option : the library will keep your reading history for the duration permitted by local laws.</li>
@@ -34,6 +32,9 @@
             </ul>
             <p id="note1">Please note that information on any book still checked-out must be kept by the library no matter which privacy option you choose.</p>
             <p id="note2">Please also note that the library staff can't update these values for you: it's your privacy!</p>
+    </div>
+    <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-update-form">
+            <input type="hidden" name="op" value="update_privacy" />
             <label for:"privacy">Please choose your privacy rule:</label>
             <select name="privacy">
                 [% IF ( privacy0 ) %]
