@@ -6,6 +6,7 @@
 use strict;
 use warnings;
 use C4::Context;
+use Koha::DateUtils qw(dt_from_string);
 
 use Test::More tests => 6;
 use DateTime::Format::MySQL;
@@ -110,12 +111,12 @@ SKIP:
 
                 my $query = 'UPDATE quotes SET timestamp = ? WHERE id = ?';
                 my $sth = C4::Context->dbh->prepare($query);
-                $sth->execute(DateTime::Format::MySQL->format_datetime(DateTime->now), $expected_quote->{'id'});
+                $sth->execute(DateTime::Format::MySQL->format_datetime( dt_from_string() ), $expected_quote->{'id'});
 
-                DateTime::Format::MySQL->format_datetime(DateTime->now) =~ m/(\d{4}-\d{2}-\d{2})/;
+                DateTime::Format::MySQL->format_datetime( dt_from_string() ) =~ m/(\d{4}-\d{2}-\d{2})/;
                 $expected_quote->{'timestamp'} = re("^$1");
 
-#        $expected_quote->{'timestamp'} = DateTime::Format::MySQL->format_datetime(DateTime->now);   # update the timestamp of expected quote data
+#        $expected_quote->{'timestamp'} = DateTime::Format::MySQL->format_datetime( dt_from_string() );   # update the timestamp of expected quote data
 
                 $quote = GetDailyQuote(); # this is the "default" mode of selection
                 cmp_deeply ($quote, $expected_quote, "Got a quote based on today's date.") or
