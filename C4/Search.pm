@@ -1950,8 +1950,8 @@ sub searchResults {
                                         $can_place_holds = 1;
                                     }
                                 }
-                            } elsif ( $item->{notforloan} < 0 ) {
-                                # item is not damaged and notforloan is < 0
+                            } elsif ( !$item->{notforloan} || $item->{notforloan} < 0 ) {
+                                # item is not damaged and item is either for loan or has notforloan < 0
                                 $can_place_holds = 1;
                             }
                         }
