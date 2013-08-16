@@ -4,7 +4,6 @@ use Modern::Perl;
 
 use Test::More tests => 41;
 use C4::Context;
-use DBI;
 use C4::Branch;
 use C4::Biblio;
 
@@ -46,7 +45,7 @@ $dbh->do(q|DELETE FROM categories|);
 $dbh->do(q|DELETE FROM branchcategories|);
 
 #Test CreateCollection
-my $collections     = GetCollections;
+my $collections     = GetCollections();
 my $countcollection = scalar(@$collections);
 
 is( CreateCollection( 'Collection1', 'Description1' ),
@@ -55,7 +54,7 @@ my $collection_id1 = $dbh->last_insert_id( undef, undef, 'collections', undef );
 is( CreateCollection( 'Collection2', 'Description2' ),
     1, "All parameters have been given - Collection 2 added" );
 my $collection_id2 = $dbh->last_insert_id( undef, undef, 'collections', undef );
-$collections = GetCollections;
+$collections = GetCollections();
 is(
     scalar(@$collections),
     $countcollection + 2,
@@ -69,14 +68,14 @@ is(
     'No Title Given',
     "The field description and title is missing"
 );
-$collections = GetCollections;
+$collections = GetCollections();
 is( scalar(@$collections), $countcollection + 2, "No collection added" );
 
 #FIXME, as the id is auto incremented, two similar Collections (same title /same description) can be created
 #$collection1 = CreateCollection('Collection1','Description1');
 
 #Test GetCollections
-$collection = GetCollections;
+$collection = GetCollections();
 is_deeply(
     $collections,
     [
@@ -297,7 +296,7 @@ is(
     'No Collection Id Given',
     "DeleteCollection without id"
 );
-$collections = GetCollections;
+$collections = GetCollections();
 is(
     scalar(@$collections),
     $countcollection + 0,
