@@ -264,7 +264,7 @@ sub fetch {
 
 =over 4
 
-$job->set($hashref);
+=item $job->set($hashref);
 
 =back
 
@@ -285,7 +285,7 @@ sub set {
 
 =over 4
 
-$job->get($hashref);
+=item $job->get($hashref);
 
 =back
 
