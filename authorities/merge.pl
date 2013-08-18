@@ -169,6 +169,8 @@ else {
                     frameworkselect => \@frameworkselect,
                     frameworkcode1  => $recordObj1->authtype,
                     frameworkcode2  => $recordObj2->authtype,
+                    frameworklabel1 => $frameworks->{$recordObj1->authtype}->{'authtypetext'},
+                    frameworklabel2 => $frameworks->{$recordObj2->authtype}->{'authtypetext'},
                 );
             }
         }

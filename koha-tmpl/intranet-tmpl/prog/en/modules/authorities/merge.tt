@@ -23,6 +23,11 @@ $(document).ready(function(){
     $.getJSON("/cgi-bin/koha/authorities/merge_ajax.pl", {frameworkcode : "[% framework %]" }, function(json) {
         tagslib = json;
     });
+
+    $('.preview-merge-reference').click(function (ev) {
+        ev.preventDefault();
+        newin=window.open($(this).attr('href'),'merge_reference', 'width=1000,height=600,toolbar=false,scrollbars=yes');
+    });
     [% PROCESS mergejs %]
 });
 
@@ -76,8 +81,8 @@ function changeFramework(fw) {
     <fieldset class="rows">
     <legend>Merge reference</legend>
     <ol>
-    <li class="radio"><input type="radio" value="[% recordid1 %]" checked="checked" id="mergereference1" name="mergereference" onclick="changeFramework('[% frameworkcode1 %]')" /><label for="mergereference1">[% title1 %] [% FOREACH subtitl1 IN subtitle1 %] [% subtitl1.subfield %][% END %] (<a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% recordid1 %]" title="MARC" rel="gb_page_center[600,500]">[% recordid1 %]</a>)</label></li>
-    <li class="radio"><input type="radio" value="[% recordid2 %]" id="mergereference2" name="mergereference" onclick="changeFramework('[% frameworkcode2 %]')" /><label for="mergereference2">[% title2 %] [% FOREACH subtitl2 IN subtitle2 %] [% subtitl2.subfield %][% END %] (<a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% recordid2 %]" title="MARC" rel="gb_page_center[600,500]">[% recordid2 %]</a>)</label></li>
+    <li class="radio"><input type="radio" value="[% recordid1 %]" checked="checked" id="mergereference1" name="mergereference" onclick="changeFramework('[% frameworkcode1 %]')" /><label for="mergereference1">[% title1 %] [% FOREACH subtitl1 IN subtitle1 %] [% subtitl1.subfield %][% END %] (<a href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid1 %]" title="MARC" class="preview-merge-reference" target="_blank">[% recordid1 %][% IF frameworklabel1 %] &mdash; [% frameworklabel1 %][% END %]</a>)</label></li>
+    <li class="radio"><input type="radio" value="[% recordid2 %]" id="mergereference2" name="mergereference" onclick="changeFramework('[% frameworkcode2 %]')" /><label for="mergereference2">[% title2 %] [% FOREACH subtitl2 IN subtitle2 %] [% subtitl2.subfield %][% END %] (<a href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid2 %]" title="MARC" class="preview-merge-reference" target="_blank">[% recordid2 %][% IF frameworklabel2 %] &mdash; [% frameworklabel2 %][% END %]</a>)</label></li>
 
     [% IF frameworkselect %]
           <li><label for="frameworkcode">Using framework:</label>
