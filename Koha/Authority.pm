@@ -6,7 +6,7 @@ package Koha::Authority;
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
+# Foundation; either version 3 of the License, or (at your option) any later
 # version.
 #
 # Koha is distributed in the hope that it will be useful, but WITHOUT ANY
@@ -50,6 +50,7 @@ __PACKAGE__->mk_accessors(qw( authid authtype ));
 Create a new Koha::Authority object based on the provided record.
 
 =cut
+
 sub new {
     my $class = shift;
     my $record = shift;
@@ -76,6 +77,7 @@ authorities in Koha are MARC records by definition. This is an
 unfortunate but unavoidable fact.
 
 =cut
+
 sub get_from_authid {
     my $class = shift;
     my $authid = shift;
@@ -113,6 +115,7 @@ sub get_from_authid {
 Create the Koha::Authority object associated with the provided authid.
 
 =cut
+
 sub get_from_breeding {
     my $class = shift;
     my $import_record_id = shift;
