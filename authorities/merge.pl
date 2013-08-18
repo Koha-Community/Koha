@@ -94,7 +94,7 @@ else {
         my $recordObj1 = Koha::Authority->get_from_authid($authid[0]) || Koha::Authority->new();
         my $recordObj2;
 
-        if ($mergereference eq 'breeding') {
+        if (defined $mergereference && $mergereference eq 'breeding') {
             $recordObj2 =  Koha::Authority->get_from_breeding($authid[1]) || Koha::Authority->new();
         } else {
             $recordObj2 =  Koha::Authority->get_from_authid($authid[1]) || Koha::Authority->new();
