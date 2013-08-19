@@ -90,11 +90,15 @@ Create a branch selector with the following code.
 
 =head3 in TEMPLATE
 
-    <select name="branch">
-        <option value="">Default</option>
-        <!-- TMPL_LOOP name="branchloop" -->
-        <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
-        <!-- /TMPL_LOOP -->
+    <select name="branch" id="branch">
+        <option value=""></option>
+            [% FOREACH branchloo IN branchloop %]
+                [% IF ( branchloo.selected ) %]
+                    <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
+                [% ELSE %]
+                    <option value="[% branchloo.value %]" >[% branchloo.branchname %]</option>
+                [% END %]
+            [% END %]
     </select>
 
 =head4 Note that you often will want to just use GetBranchesLoop, for exactly the example above.
