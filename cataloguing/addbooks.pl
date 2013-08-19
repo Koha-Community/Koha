@@ -73,9 +73,12 @@ if ($query) {
 
     my $QParser;
     $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
-    unless ($QParser) {
-        my ( $builterror,$builtquery,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(undef,\@operands);
-        $query = $builtquery;
+    my $builtquery;
+    if ($QParser) {
+        $builtquery = $query;
+    } else {
+        my ( $builterror,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type);
+        ( $builterror,$builtquery,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(undef,\@operands);
     }
 
     # find results
