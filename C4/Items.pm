@@ -751,12 +751,16 @@ Create a status selector with the following code
 
 =head3 in TEMPLATE
 
- <select name="statusloop">
-     <option value="">Default</option>
- <!-- TMPL_LOOP name="statusloop" -->
-     <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="statusname" --></option>
- <!-- /TMPL_LOOP -->
- </select>
+<select name="statusloop" id="statusloop">
+    <option value="">Default</option>
+    [% FOREACH statusloo IN statusloop %]
+        [% IF ( statusloo.selected ) %]
+            <option value="[% statusloo.value %]" selected="selected">[% statusloo.statusname %]</option>
+        [% ELSE %]
+            <option value="[% statusloo.value %]">[% statusloo.statusname %]</option>
+        [% END %]
+    [% END %]
+</select>
 
 =cut
 
