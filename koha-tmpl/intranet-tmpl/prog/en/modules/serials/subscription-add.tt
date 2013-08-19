@@ -1145,7 +1145,7 @@ $(document).ready(function() {
                 
         <li>
             <label for="periodicity" class="required">Frequency:</label>
-                <select name="periodicity" size="1" id="periodicity" onchange="javascript:document.getElementsByName('manualhist')[0].checked=(this.value==1); reset_num_pattern();">
+                <select name="periodicity" size="1" id="periodicity" onchange="document.getElementsByName('manualhist')[0].checked=(this.value==1); reset_num_pattern();">
                 <option value="" selected="selected">-- please choose --</option>
                 [% IF ( periodicity16 ) %]
                 <option value="16" selected="selected">Without periodicity</option>
@@ -1312,20 +1312,11 @@ $(document).ready(function() {
     <li><label for="numberingmethod">Numbering formula:</label> <input type="text" name="numberingmethod" id="numberingmethod" value="[% numberingmethod %]" />
     </li>
     </ol>
-	</fieldset>
 
-	<fieldset class="action">
-    <input type="button" class="action_test" value="Test prediction pattern" onclick="javascript:irregularity_check()" />
-    <input type="button" class="action_reset" value="Reset pattern" onclick="javascript:reset_pattern()" />
-    <input type="button" class="action_save"  value="Save subscription" onclick="Check(this.form)" accesskey="w" />
-	</fieldset>
-    <fieldset class="action">
-    <input type="button" class="action_advanced" value="Show/Hide advanced pattern" onclick="javascript:display_table()" />
-    </fieldset>
            <div id="basetable"  style="display: none;">
             <table class="small">
                 <tr><th colspan="4">Advanced prediction pattern</th></tr>
-				<tr>
+                <tr>
                     <th>&nbsp;</th>
                     <th>X</th>
                     <th>Y</th>
@@ -1381,6 +1372,22 @@ $(document).ready(function() {
                 </tr>
             </table>
         </div>
+
+    <fieldset class="action">
+        <input type="button" class="action_test" value="Test prediction pattern" onclick="irregularity_check()" />
+        <input type="button" class="action_reset" value="Reset pattern" onclick="reset_pattern()" />
+        <input type="button" class="action_advanced" value="Show/Hide advanced pattern" onclick="display_table()" />
+    </fieldset>
+    </fieldset>
+
+    <fieldset class="action">
+    <input type="button" class="action_save"  value="Save subscription" onclick="Check(this.form)" accesskey="w" />
+    [% IF ( subscriptionid ) %]
+       <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]" class="cancel">Cancel</a>
+    [% ELSE %]
+        <a href="/cgi-bin/koha/serials/serials-home.pl" class="cancel">Cancel</a>
+    [% END %]
+    </fieldset>
 
 </div>
 </div>
