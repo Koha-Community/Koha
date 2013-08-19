@@ -72,7 +72,7 @@ $(document).ready(function(){
         'iDisplayLength': 20,
         'aaSorting': [[ 1, "asc" ]],
         'aoColumnDefs': [
-            { 'bSortable': false, 'bSearchable':false, 'aTargets': [-1, -2, -3, -4] },
+            { 'bSortable': false, 'bSearchable':false, 'aTargets': [0, -1, -2, -3, -4] },
             { 'bSearchable': false, 'aTargets': [3, 4] }
         ],
         'oLanguage': {
@@ -87,16 +87,16 @@ $(document).ready(function(){
                 $(this).remove();
             }
         });
-        rtable.fnFilter('', 3);
         rtable.fnFilter('', 4);
-        rtable.fnSetColumnVis(3, true);
+        rtable.fnFilter('', 5);
         rtable.fnSetColumnVis(4, true);
+        rtable.fnSetColumnVis(5, true);
 
         var g_id = $(ui.tab).attr('id')
         var g_name = $(ui.tab).text();
         if (g_id && g_id.length > 0) {
-            rtable.fnFilter('^' + g_name + '$', 3, true, true, true, false);
-            rtable.fnSetColumnVis(3, false);
+            rtable.fnFilter('^' + g_name + '$', 4, true, true, true, false);
+            rtable.fnSetColumnVis(4, false);
             for(var i in group_subgroups[g_id]) {
                 $("#subgroup_filter").append(
                     '<option value="' + group_subgroups[g_id][i][0] + '">'
@@ -287,6 +287,7 @@ canned reports and writing custom SQL reports.</p>
         <table id="table_reports">
             <thead>
                 <tr>
+                    <th>&nbsp;</th>
                     <th>ID</th>
                     <th>Report name</th>
                     <th>Type</th>
@@ -304,7 +305,8 @@ canned reports and writing custom SQL reports.</p>
             <tbody>
                 [% FOREACH savedreport IN savedreports %]
                     [% UNLESS ( loop.odd ) %]<tr class="odd">[% ELSE %]<tr>[% END %]
-                        <td><label>[% savedreport.id %] <input type="checkbox" name="ids" value="[% savedreport.id %]" /></label></td>
+                        <td><input type="checkbox" name="ids" value="[% savedreport.id %]" /></td>
+                        <td><label for="ids">[% savedreport.id %]</label></td>
                         <td>
                             [% IF ( savedreport.report_name ) %]
                                 [% savedreport.report_name %]
