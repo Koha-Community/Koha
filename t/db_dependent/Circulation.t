@@ -9,7 +9,7 @@ use C4::Items;
 use C4::Members;
 use C4::Reserves;
 
-use Test::More tests => 36;
+use Test::More tests => 38;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -132,16 +132,19 @@ $dbh->do('DELETE FROM issuingrules');
 $dbh->do(
     q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed,
                                 maxissueqty, issuelength, lengthunit,
-                                renewalsallowed, renewalperiod)
+                                renewalsallowed, renewalperiod,
+                                fine, chargeperiod)
       VALUES (?, ?, ?, ?,
               ?, ?, ?,
+              ?, ?,
               ?, ?
              )
     },
     {},
     '*', '*', '*', 25,
     20, 14, 'days',
-    1, 7
+    1, 7,
+    .10, 1
 );
 
 # Test C4::Circulation::ProcessOfflinePayment
@@ -160,7 +163,7 @@ ok( $new_count == $original_count  + 1, 'ProcessOfflinePayment makes payment cor
 
 C4::Context->dbh->do("DELETE FROM accountlines WHERE borrowernumber IN ( SELECT borrowernumber FROM borrowers WHERE cardnumber = '99999999999' )");
 C4::Context->dbh->do("DELETE FROM borrowers WHERE cardnumber = '99999999999'");
-
+C4::Context->dbh->do("DELETE FROM accountlines");
 {
 # CanBookBeRenewed tests
 
@@ -177,16 +180,26 @@ C4::Context->dbh->do("DELETE FROM borrowers WHERE cardnumber = '99999999999'");
     my $barcode = 'R00000342';
     my $branch = 'MPL';
 
-    my ($item_bibnum, $item_bibitemnum, $itemnumber) =
-        AddItem({ homebranch => $branch,
-                  holdingbranch => $branch,
-                  barcode => $barcode, } , $biblionumber);
+    my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
+        {
+            homebranch       => $branch,
+            holdingbranch    => $branch,
+            barcode          => $barcode,
+            replacementprice => 12.00
+        },
+        $biblionumber
+    );
 
     my $barcode2 = 'R00000343';
-    my ($item_bibnum2, $item_bibitemnum2, $itemnumber2) =
-        AddItem({ homebranch => $branch,
-                  holdingbranch => $branch,
-                  barcode => $barcode2, } , $biblionumber);
+    my ( $item_bibnum2, $item_bibitemnum2, $itemnumber2 ) = AddItem(
+        {
+            homebranch       => $branch,
+            holdingbranch    => $branch,
+            barcode          => $barcode2,
+            replacementprice => 23.00
+        },
+        $biblionumber
+    );
 
     # Create 2 borrowers
     my %renewing_borrower_data = (
@@ -284,6 +297,39 @@ C4::Context->dbh->do("DELETE FROM borrowers WHERE cardnumber = '99999999999'");
     is( $renewokay, 0, 'Cannot renew, 0 renewals allowed');
     is( $error, 'too_many', 'Cannot renew, 0 renewals allowed (returned code is too_many)');
 
+    # Test WhenLostForgiveFine and WhenLostChargeReplacementFee
+    diag("WhenLostForgiveFine and WhenLostChargeReplacementFee");
+    C4::Context->set_preference('WhenLostForgiveFine','1');
+    C4::Context->set_preference('WhenLostChargeReplacementFee','1');
+
+    C4::Overdues::UpdateFine( $itemnumber, $renewing_borrower->{borrowernumber},
+        15.00, q{}, Koha::DateUtils::output_pref($datedue) );
+
+    LostItem( $itemnumber, 1 );
+
+    my $total_due = $dbh->selectrow_array(
+        'SELECT SUM( amountoutstanding ) FROM accountlines WHERE borrowernumber = ?',
+        undef, $renewing_borrower->{borrowernumber}
+    );
+
+    ok( $total_due == 12, 'Borrower only charged replacement fee with both WhenLostForgiveFine and WhenLostChargeReplacementFee enabled' );
+
+    C4::Context->dbh->do("DELETE FROM accountlines");
+
+    C4::Context->set_preference('WhenLostForgiveFine','0');
+    C4::Context->set_preference('WhenLostChargeReplacementFee','0');
+
+    C4::Overdues::UpdateFine( $itemnumber2, $renewing_borrower->{borrowernumber},
+        15.00, q{}, Koha::DateUtils::output_pref($datedue) );
+
+    LostItem( $itemnumber2, 1 );
+
+    $total_due = $dbh->selectrow_array(
+        'SELECT SUM( amountoutstanding ) FROM accountlines WHERE borrowernumber = ?',
+        undef, $renewing_borrower->{borrowernumber}
+    );
+
+    ok( $total_due == 15, 'Borrower only charged fine with both WhenLostForgiveFine and WhenLostChargeReplacementFee disabled' );
 }
 
 {
