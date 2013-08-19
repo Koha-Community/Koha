@@ -72,7 +72,7 @@ $(document).ready(function() {
     dofocus();
     [% IF ( patronid ) %]sco_init();[% END %]
     $("#loanTable").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aaSorting": [[ 2, "asc" ]],
+        "aaSorting": [ [2, "desc"], [0, "asc"] ],
         "aoColumnDefs": [
             { "aTargets": [ "nosort" ],"bSortable": false,"bSearchable": false },
             { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
