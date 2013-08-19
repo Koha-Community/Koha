@@ -7081,13 +7081,10 @@ if ( CheckVersion($DBversion) ) {
         UPDATE saved_sql SET savedsql = REPLACE(savedsql, 'wthdrawn', 'withdrawn')
     });
 
-    print "Upgrade to $DBversion done (Bug 10550 - Fix database typo wthdrawn)\n";
-    SetVersion($DBversion);
-}
+    $dbh->do(q{
+        UPDATE marc_subfield_structure SET kohafield = 'items.withdrawn' WHERE kohafield = 'items.wthdrawn'
+    });
 
-$DBversion = "3.13.00.XXX";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do("UPDATE marc_subfield_structure SET kohafield = 'items.withdrawn' WHERE kohafield = 'items.wthdrawn'");
     print "Upgrade to $DBversion done (Bug 10550 - Fix database typo wthdrawn)\n";
     SetVersion($DBversion);
 }
