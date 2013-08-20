@@ -196,6 +196,26 @@ $(document).ready(function() {
             [% ELSE %]
               <option value="4">Missing</option>
             [% END %]
+            [% IF ( serialslis.status41 ) %]
+              <option value="41" selected="selected">Missing (never received)</option>
+            [% ELSE %]
+              <option value="41">Missing (never received)</option>
+            [% END %]
+            [% IF ( serialslis.status42 ) %]
+              <option value="42" selected="selected">Missing (sold out)</option>
+            [% ELSE %]
+              <option value="42">Missing (sold out)</option>
+            [% END %]
+            [% IF ( serialslis.status43 ) %]
+              <option value="43" selected="selected">Missing (damaged)</option>
+            [% ELSE %]
+              <option value="43">Missing (damaged)</option>
+            [% END %]
+            [% IF ( serialslis.status44 ) %]
+              <option value="44" selected="selected">Missing (lost)</option>
+            [% ELSE %]
+              <option value="44">Missing (lost)</option>
+            [% END %]
             [% IF ( serialslis.status7 ) %]
               <option value="7" selected="selected">Claimed</option>
             [% ELSE %]
@@ -308,6 +328,26 @@ $(document).ready(function() {
                     <option value="4" selected="selected">Missing</option>
                   [% ELSE %]
                     <option value="4">Missing</option>
+                  [% END %]
+                  [% IF ( newserialloo.status41 ) %]
+                    <option value="41" selected="selected">Missing (never received)</option>
+                  [% ELSE %]
+                    <option value="41">Missing (never received)</option>
+                  [% END %]
+                  [% IF ( newserialloo.status42 ) %]
+                    <option value="42" selected="selected">Missing (sold out)</option>
+                  [% ELSE %]
+                    <option value="42">Missing (sold out)</option>
+                  [% END %]
+                  [% IF ( newserialloo.status43 ) %]
+                    <option value="43" selected="selected">Missing (damaged)</option>
+                  [% ELSE %]
+                    <option value="43">Missing (damaged)</option>
+                  [% END %]
+                  [% IF ( newserialloo.status44 ) %]
+                    <option value="44" selected="selected">Missing (lost)</option>
+                  [% ELSE %]
+                    <option value="44">Missing (lost)</option>
                   [% END %]
                   [% IF ( newserialloo.status7 ) %]
                     <option value="7" selected="selected">Claimed</option>

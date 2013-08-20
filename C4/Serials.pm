@@ -102,7 +102,7 @@ sub GetSuppliersWithLateIssues {
     WHERE id > 0
         AND (
             (planneddate < now() AND serial.status=1)
-            OR serial.STATUS = 3 OR serial.STATUS = 4
+            OR serial.STATUS IN (3, 4, 41, 42, 43, 44)
         )
         AND subscription.closed = 0
     ORDER BY name|;
@@ -425,7 +425,9 @@ sub PrepareSerialsData {
             }
         }
         $subs->{ "status" . $subs->{'status'} } = 1;
-        $subs->{"checked"}                      = $subs->{'status'} =~ /1|3|4|7/;
+        if ( grep { $_ == $subs->{status} } ( 1, 3, 4, 41, 42, 43, 44, 7 ) ) {
+            $subs->{"checked"} = 1;
+        }
 
         if ( $subs->{'year'} && $subs->{'year'} ne "" ) {
             $year = $subs->{'year'};
@@ -879,7 +881,7 @@ sub GetLatestSerials {
     my $strsth = "SELECT   serialid,serialseq, status, planneddate, publisheddate, notes
                         FROM     serial
                         WHERE    subscriptionid = ?
-                        AND      (status =2 or status=4)
+                        AND      status IN (2, 4, 41, 42, 43, 44)
                         ORDER BY publisheddate DESC LIMIT 0,$limit
                 ";
     my $sth = $dbh->prepare($strsth);
@@ -1248,8 +1250,10 @@ sub ModSerialStatus {
             if ( $status == 2 || ($oldstatus == 2 && $status != 2) ) {
                   _update_receivedlist($subscriptionid);
             }
-            if($status == 4 || $status == 5
-              || ($oldstatus == 4 && $status != 4)
+            if(  grep { $_ == $status } ( 4, 41, 42, 43, 44, 5 )
+              || (
+                  grep { $_ == $oldstatus } ( 4, 41, 42, 43, 44 )
+                  && ! grep { $_ == $status } ( 4, 41, 42, 43, 44 ) )
               || ($oldstatus == 5 && $status != 5)) {
                 _update_missinglist($subscriptionid);
             }
@@ -2030,7 +2034,7 @@ sub GetLateOrMissingIssues {
                 LEFT JOIN biblio        ON subscription.biblionumber=biblio.biblionumber
                 LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
                 WHERE subscription.subscriptionid = serial.subscriptionid 
-                AND (serial.STATUS = 4 OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3 OR serial.STATUS = 7))
+                AND (serial.STATUS IN (4, 41, 42, 43, 44) OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3 OR serial.STATUS = 7))
                 AND subscription.aqbooksellerid=$supplierid
                 $byserial
                 ORDER BY $order"
@@ -2047,7 +2051,7 @@ sub GetLateOrMissingIssues {
                 LEFT JOIN biblio ON subscription.biblionumber=biblio.biblionumber
                 LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
                 WHERE subscription.subscriptionid = serial.subscriptionid 
-                        AND (serial.STATUS = 4 OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3 OR serial.STATUS = 7))
+                        AND (serial.STATUS IN (4, 41, 42, 43, 44) OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3 OR serial.STATUS = 7))
                 $byserial
                 ORDER BY $order"
         );

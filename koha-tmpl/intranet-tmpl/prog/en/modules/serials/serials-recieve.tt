@@ -127,6 +127,26 @@ function barcode_check(){
 					[% ELSE %]
 						<option value="4">Missing</option>
 					[% END %]
+                    [% IF ( serialslis.status41 ) %]
+                      <option value="41" selected="selected">Missing (never received)</option>
+                    [% ELSE %]
+                      <option value="41">Missing (never received)</option>
+                    [% END %]
+                    [% IF ( serialslis.status42 ) %]
+                      <option value="42" selected="selected">Missing (sold out)</option>
+                    [% ELSE %]
+                      <option value="42">Missing (sold out)</option>
+                    [% END %]
+                    [% IF ( serialslis.status43 ) %]
+                      <option value="43" selected="selected">Missing (damaged)</option>
+                    [% ELSE %]
+                      <option value="43">Missing (damaged)</option>
+                    [% END %]
+                    [% IF ( serialslis.status44 ) %]
+                      <option value="44" selected="selected">Missing (lost)</option>
+                    [% ELSE %]
+                      <option value="44">Missing (lost)</option>
+                    [% END %]
 					[% IF ( serialslis.status5 ) %]
                         <option value="5" selected="selected">Not available</option>
 					[% ELSE %]
