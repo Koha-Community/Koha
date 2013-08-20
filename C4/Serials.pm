@@ -682,6 +682,10 @@ sub SearchSubscriptions {
         push @where_strs, "biblioitems.ean LIKE ?";
         push @where_args, "%$args->{ean}%";
     }
+    if ( $args->{callnumber} ) {
+        push @where_strs, "subscription.callnumber LIKE ?";
+        push @where_args, "%$args->{callnumber}%";
+    }
     if( $args->{publisher} ){
         push @where_strs, "biblioitems.publishercode LIKE ?";
         push @where_args, "%$args->{publisher}%";
@@ -693,6 +697,14 @@ sub SearchSubscriptions {
     if( $args->{branch} ){
         push @where_strs, "subscription.branchcode = ?";
         push @where_args, "$args->{branch}";
+    }
+    if ( $args->{location} ) {
+        push @where_strs, "subscription.location = ?";
+        push @where_args, "$args->{location}";
+    }
+    if ( $args->{expiration_date} ) {
+        push @where_strs, "subscription.enddate <= ?";
+        push @where_args, "$args->{expiration_date}";
     }
     if( defined $args->{closed} ){
         push @where_strs, "subscription.closed = ?";
