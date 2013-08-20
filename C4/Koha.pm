@@ -1064,7 +1064,11 @@ sub GetAuthorisedValues {
     if(@where_strings > 0) {
         $query .= " WHERE " . join(" AND ", @where_strings);
     }
-    $query .= " GROUP BY lib ORDER BY category, " . ($opac ? "lib_opac, lib" : "lib, lib_opac");
+    $query .= " GROUP BY lib";
+    $query .= ' ORDER BY category, ' . (
+                $opac ? 'COALESCE(lib_opac, lib)'
+                      : 'lib, lib_opac'
+              );
 
     my $sth = $dbh->prepare($query);
 
