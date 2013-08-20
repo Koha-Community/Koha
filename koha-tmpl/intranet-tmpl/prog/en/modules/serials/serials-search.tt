@@ -1,9 +1,11 @@
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% USE KohaDates %]
+[% USE KohaAuthorisedValues %]
 <title>Koha &rsaquo; Serials [% biblionumber %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
 [% INCLUDE 'datatables-strings.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
@@ -73,6 +75,10 @@
                 </li>
                 [% END %]
                 <li>
+                  <label for="callnumber">Callnumber:</label>
+                  <input type="text" id="callnumber" name="callnumber_filter" value="[% callnumber_filter %]" />
+                </li>
+                <li>
                   <label for="publisher">Publisher:</label>
                   <input type="text" id="publisher" name="publisher_filter" value="[% publisher_filter %]" />
                 </li>
@@ -92,6 +98,25 @@
                       [% END %]
                     [% END %]
                   </select>
+                </li>
+                [% IF locations %]
+                  <li>
+                    <label for="location">Location:</label>
+                    <select name="location_filter">
+                      <option value="">All</option>
+                      [% FOR loc IN locations %]
+                        [% IF loc.selected %]
+                          <option value="[% loc.authorised_value %]" selected="selected">[% loc.lib %]</option>
+                        [% ELSE %]
+                          <option value="[% loc.authorised_value %]">[% loc.lib %]</option>
+                        [% END %]
+                      [% END %]
+                    </select>
+                  </li>
+                [% END %]
+                <li>
+                  <label for="to">Expiration date:</label>
+                  <input type="text" id="to" name="expiration_date_filter" value="[% expiration_date_filter | $KohaDates %]" size="10" maxlength="10" class="datepickerto" />
                 </li>
               </ol>
               <input type="hidden" name="searched" value="1" />
@@ -118,6 +143,7 @@
                         <th>Title</th>
                         <th> Notes </th>
                         <th>Library</th>
+                        <th>Location</th>
                         <th>Call number</th>
                         <th>Expiration date</th>
                         [% IF ( routing && CAN_user_serials_routing ) %]
@@ -133,8 +159,9 @@
                       <td><input type="text" class="filter" data-column_num="1" placeholder="Search title" /></td>
                       <td><input type="text" class="filter" data-column_num="2" placeholder="Search notes" /></td>
                       <td><input type="text" class="filter" data-column_num="3" placeholder="Search library" /></td>
-                      <td><input type="text" class="filter" data-column_num="4" placeholder="Search callnumber" /></td>
-                      <td><input type="text" class="filter" data-column_num="5" placeholder="Search expiration date" /></td>
+                      <td><input type="text" class="filter" data-column_num="4" placeholder="Search location" /></td>
+                      <td><input type="text" class="filter" data-column_num="5" placeholder="Search callnumber" /></td>
+                      <td><input type="text" class="filter" data-column_num="6" placeholder="Search expiration date" /></td>
                       [% IF ( routing && CAN_user_serials_routing ) %]<td></td>[% END %]
                       <td></td>
                       <td></td>
@@ -155,6 +182,9 @@
                         </td>
                         <td>
                           [% IF ( subscription.branchcode ) %][% Branches.GetName( subscription.branchcode ) %][% END %]
+                        </td>
+                        <td>
+                          [% IF ( subscription.location ) %][% KohaAuthorisedValues.GetByCode( 'LOC', subscription.location ) %][% END %]
                         </td>
                         <td>
                           [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
@@ -203,6 +233,7 @@
                         <th>Title</th>
                         <th> Notes </th>
                         <th>Library</th>
+                        <th>Location</th>
                         <th>Call number</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
@@ -214,7 +245,8 @@
                       <td><input type="text" class="filter" data-column_num="1" placeholder="Search title" /></td>
                       <td><input type="text" class="filter" data-column_num="2" placeholder="Search notes" /></td>
                       <td><input type="text" class="filter" data-column_num="3" placeholder="Search library" /></td>
-                      <td><input type="text" class="filter" data-column_num="4" placeholder="Search callnumber" /></td>
+                      <td><input type="text" class="filter" data-column_num="4" placeholder="Search location" /></td>
+                      <td><input type="text" class="filter" data-column_num="5" placeholder="Search callnumber" /></td>
                       <td></td>
                       <td></td>
                     </tr>
@@ -237,6 +269,9 @@
                         </td>
                         <td>
                           [% IF ( subscription.branchcode ) %][% Branches.GetName( subscription.branchcode ) %][% END %]
+                        </td>
+                        <td>
+                          [% IF ( subscription.location ) %][% KohaAuthorisedValues.GetByCode( 'LOC', subscription.location ) %][% END %]
                         </td>
                         <td>
                           [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
@@ -295,6 +330,10 @@
                 </li>
                 [% END %]
                 <li>
+                  <label for="callnumber">Callnumber:</label>
+                  <input type="text" id="callnumber" name="callnumber_filter" value="[% callnumber_filter %]" />
+                </li>
+                <li>
                   <label for="publisher">Publisher:</label>
                   <input type="text" id="publisher" name="publisher_filter" value="[% publisher_filter %]" />
                 </li>
@@ -315,6 +354,26 @@
                     [% END %]
                   </select>
                 </li>
+                [% IF locations %]
+                  <li>
+                    <label for="location">Location:</label>
+                    <select name="location_filter">
+                      <option value="">All</option>
+                      [% FOR loc IN locations %]
+                        [% IF loc.selected %]
+                          <option value="[% loc.authorised_value %]" selected="selected">[% loc.lib %]</option>
+                        [% ELSE %]
+                          <option value="[% loc.authorised_value %]">[% loc.lib %]</option>
+                        [% END %]
+                      [% END %]
+                    </select>
+                  </li>
+                [% END %]
+                <li>
+                  <label for="to">Expiration date:</label>
+                  <input type="text" id="to" name="expiration_date_filter" value="[% expiration_date_filter | $KohaDates %]" size="10" maxlength="10" class="datepickerto" />
+                </li>
+
               </ol>
               <input type="hidden" name="searched" value="1" />
               <fieldset class="action">
