@@ -36,11 +36,17 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $suspend       = $query->param('suspend');
 my $suspend_until = $query->param('suspend_until') || undef;
+my $reserve_id    = $query->param('reserve_id');
 
-SuspendAll(
-    borrowernumber => $borrowernumber,
-    suspend        => $suspend,
-    suspend_until  => $suspend_until,
-);
+if ($reserve_id) {
+    ToggleSuspend( $reserve_id, $suspend_until );
+}
+else {
+    SuspendAll(
+        borrowernumber => $borrowernumber,
+        suspend        => $suspend,
+        suspend_until  => $suspend_until,
+    );
+}
 
 print $query->redirect("/cgi-bin/koha/opac-user.pl#opac-user-holds");

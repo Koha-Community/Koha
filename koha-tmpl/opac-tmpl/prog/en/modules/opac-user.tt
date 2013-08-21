@@ -47,7 +47,7 @@ var MSG_CONFIRM_RESUME_HOLDS  = _("Are you sure you want to resume all suspended
             $("#renewall").submit();
         });
         $("#checkoutst caption").append("<div id=\"renewcontrols\"><a id=\"renewselected_link\" href=\"#\">"+_("Renew selected")+"</a> <a id=\"renewall_link\" href=\"#\">"+_("Renew all")+"</a></div>");[% END %]
-        $( "#suspend_until" ).datepicker({ minDate: 1 }); // Require that "until date" be in the future
+        $( ".suspend-until" ).datepicker({ minDate: 1 }); // Require that "until date" be in the future
             });
 //]]>
 </script>
@@ -351,20 +351,28 @@ var MSG_CONFIRM_RESUME_HOLDS  = _("Are you sure you want to resume all suspended
         <div id="opac-user-holds">
         <table id="holdst">
         <caption>Holds <span class="count">([% reserves_count %] total)</span></caption>
-            <!-- RESERVES TABLE ROWS -->
-            <thead><tr>
+
+        <!-- RESERVES TABLE ROWS -->
+        <thead>
+            <tr>
                 <th>Title</th>
                 <th class="psort">Placed on</th>
-                [% IF OpacHoldNotes %]<th>Notes</th>[% END %]
-        <th>Expires on</th>
+                [% IF OpacHoldNotes %]
+                    <th>Notes</th>
+                [% END %]
+                <th>Expires on</th>
                 <th>Pick up location</th>
-		[% IF ( showpriority ) %]
-			<th>Priority</th>
-		[% END %]
+                [% IF ( showpriority ) %]
+                    <th>Priority</th>
+                [% END %]
                 <th>Status</th>
-        <th class="nosort">Modify</th>
-            </tr></thead>
-			<tbody>
+                <th class="nosort">Modify</th>
+                [% IF SuspendHoldsOpac %]
+                    <th class="nosort" >Suspend individual holds</th>
+                [% END %]
+            </tr>
+        </thead>
+        <tbody>
             [% FOREACH RESERVE IN RESERVES %]
            [% IF ( RESERVE.wait ) %]
                         [% IF ( RESERVE.atdestination ) %]
@@ -428,6 +436,27 @@ var MSG_CONFIRM_RESUME_HOLDS  = _("Are you sure you want to resume all suspended
 		[% END %]
 		</td>
 
+        [% IF SuspendHoldsOpac %]
+            <td>
+                [% IF ( RESERVE.cancelable ) %]
+                    <form action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
+                        <input type="hidden" name="reserve_id" value="[% RESERVE.reserve_id %]" />
+
+                        [% IF RESERVE.suspend %]
+                            <input type="submit" name="submit" value="Resume suspended hold" />
+                        [% ELSE %]
+                            <input type="submit" name="submit" class="icon delete cancel" value="Suspend hold" />
+
+                            [% IF AutoResumeSuspendedHolds %]
+                                <label for="suspend_until_[% RESERVE.reserve_id %]"> until </label>
+                                <input name="suspend_until" id="suspend_until_[% RESERVE.reserve_id %]" class="suspend-until" readonly="readonly" size="10" />
+                                <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('suspend_until_[% RESERVE.reserve_id %]').value='';return false;">Clear date</a>
+                            [% END %]
+                        [% END %]
+                    </form>
+                [% END %]
+            </td>
+        [% END %]
 
             </tr>
             [% END %]
@@ -442,7 +471,7 @@ var MSG_CONFIRM_RESUME_HOLDS  = _("Are you sure you want to resume all suspended
 
 	      [% IF AutoResumeSuspendedHolds %]
 	      <label for="suspend_until"> until </label>
-              <input name="suspend_until" id="suspend_until" readonly="readonly" size="10" />
+              <input name="suspend_until" id="suspend_until" class="suspend-until" readonly="readonly" size="10" />
               <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('suspend_until').value='';return false;">Clear date</a></p>
               [% END %]
             </form>
