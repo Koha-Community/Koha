@@ -28,7 +28,7 @@ $dbh->do(q|DELETE FROM saved_sql|);
 #Start tests
 
 #Test save_report
-my $count = scalar( keys get_saved_reports() );
+my $count = scalar( @{ get_saved_reports() } );
 is( $count, 0, "There is no report" );
 
 my @report_ids;
@@ -51,7 +51,7 @@ like( $report_ids[0], '/^\d+$/', "Save_report returns an id for first" );
 like( $report_ids[1], '/^\d+$/', "Save_report returns an id for second" );
 like( $report_ids[2], '/^\d+$/', "Save_report returns an id for third" );
 
-is( scalar( keys get_saved_reports() ),
+is( scalar( @{ get_saved_reports() } ),
     $count, "$count reports have been added" );
 
 #Test delete_report
@@ -60,12 +60,12 @@ is (delete_report(),undef, "Without id delete_report returns undef");
 is( delete_report( $report_ids[0] ), 1, "report 1 is deleted" );
 $count--;
 
-is( scalar( keys get_saved_reports() ), $count, "Report1 has been deleted" );
+is( scalar( @{ get_saved_reports() } ), $count, "Report1 has been deleted" );
 
 is( delete_report( $report_ids[1], $report_ids[2] ), 2, "report 2 and 3 are deleted" );
 $count -= 2;
 
-is( scalar( keys get_saved_reports() ),
+is( scalar( @{ get_saved_reports() } ),
     $count, "Report2 and report3 have been deleted" );
 
 #End transaction
