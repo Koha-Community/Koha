@@ -157,6 +157,7 @@
                                 <li>
                                 <fieldset>
                                 <legend>General settings</legend>
+                                <ol>
                                 <li>
                                     <label for="layout_name">Layout name</label>
                                     <input type="text" name="layout_name" id="layout_name" size="20" value="[% layout_name %]" />
@@ -195,11 +196,13 @@
                                     <input type="radio" name="guide_box" id="guide_box" value="0" checked="checked" />Off
                                     [% END %]
                                 </li>
+                                </ol>
                                 </fieldset>
                                 </li>
                                 <li>
                                     <fieldset>
                                     <legend>Text fields</legend>
+                                    <ol>
                                         <li>
                                             <fieldset>
                                             [% IF ( field_1 ) %]
@@ -208,6 +211,7 @@
                                             <legend><input type="checkbox" name="field_1_enable" id="field_1_enable" value="1" /> Field 1</legend>
                                             [% END %]
                                             <div id="field_1_select" style="display: none;">
+                                            <ol>
                                             <li>
                                                 <label for="field_1_text">Text</label>
                                                 <input type="text" name="field_1_text" id="field_1_text" size="60" value="[% field_1_text |html %]" />
@@ -249,6 +253,7 @@
                                                 <label for="field_1_lly">Lower left Y coordinate</label>
                                                 <input type="text" name="field_1_lly" id="field_1_lly" size="2" value="[% field_1_lly |html %]" />
                                             </li>
+                                            </ol>
                                             </div>
                                             </fieldset>
                                         </li>
@@ -260,6 +265,7 @@
                                             <legend><input type="checkbox" name="field_2_enable" id="field_2_enable" value="1" /> Field 2</legend>
                                             [% END %]
                                             <div id="field_2_select" style="display: none;">
+                                            <ol>
                                             <li>
                                                 <label for="field_2_text">Text</label>
                                                 <input type="text" name="field_2_text" id="field_2_text" size="60" value="[% field_2_text |html %]" />
@@ -301,6 +307,7 @@
                                                 <label for="field_2_lly">Lower left Y coordinate</label>
                                                 <input type="text" name="field_2_lly" id="field_2_lly" size="2" value="[% field_2_lly |html %]" />
                                             </li>
+                                            </ol>
                                             </div>
                                             </fieldset>
                                         </li>
@@ -312,6 +319,7 @@
                                             <legend><input type="checkbox" name="field_3_enable" id="field_3_enable" value="0" /> Field 3</legend>
                                             [% END %]
                                             <div id="field_3_select" style="display: none;">
+                                            <ol>
                                             <li>
                                                 <label for="field_3_text">Text</label>
                                                 <input type="text" name="field_3_text" id="field_3_text" size="60" value="[% field_3_text |html %]" />
@@ -353,13 +361,11 @@
                                                 <label for="field_3_lly">Lower left Y coordinate</label>
                                                 <input type="text" name="field_3_lly" id="field_3_lly" size="2" value="[% field_3_lly |html %]" />
                                             </li>
+                                            </ol>
                                             </div>
                                             </fieldset>
                                         </li>
-                                    </fieldset>
-                                </li>
-                                    </fieldset>
-                                </li>
+                                    </ol>
                                     </fieldset>
                                 </li>
                             </ol>
@@ -384,6 +390,7 @@
                         <li>
                             <fieldset>
                                 <legend>Barcode</legend>
+                                <ol>
                                 <li>
                                     <label for="barcode_print">Print card number as barcode</label>
                                     [% IF ( barcode_print ) %]
@@ -392,7 +399,9 @@
                                     <input type="checkbox" name="barcode_print" id="barcode_print" value="1" />
                                     [% END %]
                                 </li>
+                                </ol>
                                 <div id="barcode_param" style="display: none;">
+                                <ol>
                                 <li>
                                     <label for="barcode_llx">Lower left X coordinate</label>
                                     <input type="text" name="barcode_llx" id="barcode_llx" size="2" value="[% barcode_llx |html %]" />
@@ -421,15 +430,18 @@
                                     <input type="checkbox" name="barcode_text_print" id="barcode_text_print" value="1" />
                                     [% END %]
                                 </li>
+                                </ol>
                                 </div>
                             </fieldset>
                         </li>
                         <li>
                             <fieldset>
                             <legend>Images</legend>
+                                <ol>
                                 <li>
                                     <fieldset>
                                     <legend>Image 1</legend>
+                                    <ol>
                                     <li>
                                         <label for="image_1_image_source">Image source</label>
                                         <select name="image_1_image_source" id="image_1_image_source">
@@ -442,7 +454,9 @@
                                             [% END %]
                                         </select>
                                     </li>
+                                    </ol>
                                     <div id="image_1_image_name" style="display: none;">
+                                    <ol>
                                     <li>
                                         <label for="image_1_image_name">Image</label>
                                         <select name="image_1_image_name" id="image_1_image_name">
@@ -455,8 +469,10 @@
                                             [% END %]
                                         </select>
                                     </li>
+                                    </ol>
                                     </div>
                                     <div id="image_1_image_metrics" style="display: none;">
+                                    <ol>
                                     <li>
                                         <label for="image_1_Dx">Display height</label>
                                         <input type="text" name="image_1_Dx" id="image_1_Dx" size="2" value="[% image_1_Dx |html %]" />
@@ -469,6 +485,7 @@
                                         <label for="image_1_Ty">Lower left Y coordinate</label>
                                         <input type="text" name="image_1_Ty" id="image_1_Ty" size="2" value="[% image_1_Ty |html %]" />
                                     </li>
+                                    </ol>
                                     </div>
                                     <!-- These pdf image parameters are currently unused, but implimented and need to default to zero  -->
                                     <input type="hidden" name="image_1_Ox" value="0" /><!-- Ox,Oy should be set to 0 unless you want special effects  see http://www.adobe.com/devnet/pdf/pdf_reference.html ISO 32000-1 -->
@@ -480,6 +497,7 @@
                                 <li>
                                     <fieldset>
                                     <legend>Image 2</legend>
+                                    <ol>
                                     <li>
                                         <label for="image_2_image_source">Image source</label>
                                         <select name="image_2_image_source" id="image_2_image_source">
@@ -492,7 +510,9 @@
                                             [% END %]
                                         </select>
                                     </li>
+                                    </ol>
                                     <div id="image_2_image_name" style="display: none;">
+                                    <ol>
                                     <li>
                                         <label for="image_2_image_name">Image</label>
                                         <select name="image_2_image_name" id="image_2_image_name">
@@ -505,8 +525,10 @@
                                             [% END %]
                                         </select>
                                     </li>
+                                    </ol>
                                     </div>
                                     <div id="image_2_image_metrics" style="display: none;">
+                                    <ol>
                                     <li>
                                         <label for="image_2_Dx">Display height</label>
                                         <input type="text" name="image_2_Dx" id="image_2_Dx" size="2" value="[% image_2_Dx |html %]" />
@@ -519,6 +541,7 @@
                                         <label for="image_2_Ty">Lower left Y coordinate</label>
                                         <input type="text" name="image_2_Ty" id="image_2_Ty" size="2" value="[% image_2_Ty |html %]" />
                                     </li>
+                                    </ol>
                                     </div>
                                     <!-- These pdf image parameters are currently unused, but implimented and need to default to zero  -->
                                     <input type="hidden" name="image_2_Ox" value="0" /><!-- Ox,Oy should be set to 0 unless you want special effects  see http://www.adobe.com/devnet/pdf/pdf_reference.html ISO 32000-1 -->
@@ -527,6 +550,7 @@
                                     <input type="hidden" name="image_2_Sy" value="0" />
                                     </fieldset>
                                 </li>
+                                </ol>
                             </fieldset>
                         </li>
                     </ol>
