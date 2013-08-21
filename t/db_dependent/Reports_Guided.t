@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 12;
 
 use C4::Context;
 
@@ -30,45 +30,43 @@ $dbh->do(q|DELETE FROM saved_sql|);
 #Test save_report
 my $count = scalar( keys get_saved_reports() );
 is( $count, 0, "There is no report" );
-my $sample_report1 = {
-    borrowernumber => 1,
-    savedsql       => 'SQL1',
-    name           => 'Name1',
-    area           => 'area1',
-    group          => 'group1',
-    subgroup       => 'subgroup1',
-    type           => 'type1',
-    notes          => 'note1',
-    cache_expiry   => 'null',
-    public         => 'null'
-};
-my $sample_report2 = {
-    borrowernumber => 2,
-    savedsql       => 'SQL2',
-    name           => 'Name2',
-    area           => 'area2',
-    group          => 'group2',
-    subgroup       => 'subgroup2',
-    type           => 'type2',
-    notes          => 'note2',
-    cache_expiry   => 'null',
-    public         => 'null'
-};
-my $report_id1 = save_report($sample_report1);
-my $report_id2 = save_report($sample_report2);
-like( $report_id1, '/^\d+$/', "Save_report returns an id" );
-like( $report_id2, '/^\d+$/', "Save_report returns an id" );
+
+my @report_ids;
+for my $id ( 1 .. 3 ) {
+    push @report_ids, save_report({
+        borrowernumber => $id,
+        savedsql       => "SQL$id",
+        name           => "Name$id",
+        area           => "area$id",
+        group          => "group$id",
+        subgroup       => "subgroup$id",
+        type           => "type$id",
+        notes          => "note$id",
+        cache_expiry   => "null",
+        public         => "null"
+    });
+    $count++;
+}
+like( $report_ids[0], '/^\d+$/', "Save_report returns an id for first" );
+like( $report_ids[1], '/^\d+$/', "Save_report returns an id for second" );
+like( $report_ids[2], '/^\d+$/', "Save_report returns an id for third" );
+
 is( scalar( keys get_saved_reports() ),
-    $count + 2, "Report1 and report2 have been added" );
+    $count, "$count reports have been added" );
 
 #Test delete_report
-#It would be better if delete_report has return values
-delete_report( $report_id1, $report_id2 );
-is( scalar( keys get_saved_reports() ),
-    $count, "Report1 and report2 have been deleted" );
+is (delete_report(),undef, "Without id delete_report returns undef");
 
-#FIX ME: Currently, this test doesn't pass because delete_report doesn't test if one or more parameters are given
-#is (deleted_report(),undef, "Without id deleted_report returns undef");
+is( delete_report( $report_ids[0] ), 1, "report 1 is deleted" );
+$count--;
+
+is( scalar( keys get_saved_reports() ), $count, "Report1 has been deleted" );
+
+is( delete_report( $report_ids[1], $report_ids[2] ), 2, "report 2 and 3 are deleted" );
+$count -= 2;
+
+is( scalar( keys get_saved_reports() ),
+    $count, "Report2 and report3 have been deleted" );
 
 #End transaction
 $dbh->rollback;
