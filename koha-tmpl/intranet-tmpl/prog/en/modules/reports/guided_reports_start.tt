@@ -73,7 +73,8 @@ $(document).ready(function(){
         'aaSorting': [[ 1, "asc" ]],
         'aoColumnDefs': [
             { 'bSortable': false, 'bSearchable':false, 'aTargets': [0, -1, -2, -3, -4] },
-            { 'bSearchable': false, 'aTargets': [3, 4] }
+            { 'bSearchable': false, 'aTargets': [3, 4] },
+            { "aTargets": [ 1, 2 ], "sType": "natural"  }
         ],
         'oLanguage': {
             'sZeroRecords': _("No matching reports found")
