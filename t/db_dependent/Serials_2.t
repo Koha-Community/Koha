@@ -3,6 +3,8 @@ use Modern::Perl;
 
 use Test::More tests => 4;
 
+use MARC::Record;
+use C4::Biblio qw( AddBiblio );
 use_ok('C4::Serials');
 use_ok('C4::Budgets');
 
@@ -13,11 +15,16 @@ $dbh->{RaiseError} = 1;
 my $supplierlist=eval{GetSuppliersWithLateIssues()};
 ok(length($@)==0,"No SQL problem in GetSuppliersWithLateIssues");
 
-my $biblionumber = 1;
+my $record = MARC::Record->new();
+$record->append_fields(
+    MARC::Field->new( '952', '0', '0', a => 'CPL', b => 'CPL' )
+);
+my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio($record, '');
+
 my $budgetid;
 my $bpid = AddBudgetPeriod({
     budget_period_startdate => '01-01-2015',
-    budget_period_enddate   => '31-12-2015',
+    budget_period_enddate   => '12-31-2015',
     budget_description      => "budget desc"
 });
 
@@ -37,7 +44,7 @@ my $subscriptionid = NewSubscription(
     undef,      undef,  undef, undef, undef,      undef,         undef,  undef,
     undef,      undef,  undef, undef, undef,      undef,         undef,  1,
     "notes",    undef,  undef, undef, undef,      undef,         undef,  0,
-    "intnotes", 0,      undef, undef, 0,          undef,         '31-12-2013',
+    "intnotes", 0,      undef, undef, 0,          undef,         '12-31-2013',
 );
 die unless $subscriptionid;
 
