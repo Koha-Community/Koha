@@ -140,6 +140,21 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
             "iDisplayLength": 20,
             "sPaginationType": "four_button"
         }));
+        var reviewerField = $("#approver");
+        reviewerField.autocomplete({
+            source: "/cgi-bin/koha/circ/ysearch.pl",
+            minLength: 3,
+            select: function( event, ui ) {
+                reviewerField.val( ui.item.borrowernumber );
+                return false;
+            }
+        })
+        .data( "autocomplete" )._renderItem = function( ul, item ) {
+            return $( "<li></li>" )
+            .data( "item.autocomplete", item )
+            .append( "<a>" + item.surname + ", " + item.firstname + " (" + item.cardnumber + ") <small>" + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
+            .appendTo( ul );
+        };
 	});
 //]]>
 </script>
