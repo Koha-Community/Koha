@@ -97,6 +97,16 @@ sub _get_label_item {
     my $data1 = $sth1->fetchrow_hashref;
     $data->{'itemtype'} = $data1->{'description'};
     $data->{'itype'} = $data1->{'description'};
+    # add *_description fields
+    if ($data->{'homebranch'} || $data->{'holdingbranch'}){
+        require C4::Branch;
+        $data->{'homebranch_description'} = C4::Branch::GetBranchName($data->{'homebranch'}) if $data->{'homebranch'};
+        $data->{'holdingbranch_description'} = C4::Branch::GetBranchName($data->{'holdingbranch'}) if $data->{'holdingbranch'};
+    }
+    $data->{'ccode_description'} = C4::Biblio::GetAuthorisedValueDesc('','', $data->{'ccode'} ,'','','CCODE', 1) if $data->{'ccode'};
+    $data->{'location_description'} = C4::Biblio::GetAuthorisedValueDesc('','', $data->{'location'} ,'','','LOC', 1) if $data->{'location'};
+    $data->{'permanent_location_description'} = C4::Biblio::GetAuthorisedValueDesc('','', $data->{'permanent_location'} ,'','','LOC', 1) if $data->{'permanent_location'};
+
     $barcode_only ? return $data->{'barcode'} : return $data;
 }
 
