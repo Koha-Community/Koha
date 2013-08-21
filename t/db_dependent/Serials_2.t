@@ -246,6 +246,18 @@ is( C4::Serials::can_show_subscription($subscription_from_another_branch), 1,
 
 $schema->storage->txn_rollback;
 
+# GetPreviousSerialid
+my $serialid1 = NewIssue( 1, $subscriptionid, $biblionumber, 2 );
+my $serialid2 = NewIssue( 2, $subscriptionid, $biblionumber, 2 );
+my $serialid3 = NewIssue( 3, $subscriptionid, $biblionumber, 2 );
+
+is( GetPreviousSerialid( $subscriptionid ), $serialid2, "get previous serialid without parameter");
+is( GetPreviousSerialid( $subscriptionid, 1 ), $serialid2, "get previous serialid with 1" );
+is( GetPreviousSerialid( $subscriptionid, 2 ), $serialid1, "get previous serialid with 2" );
+is( GetPreviousSerialid( $subscriptionid, 3 ), undef, "get previous serialid with 3, does not exist" );
+
+$dbh->rollback;
+
 # C4::Context->userenv
 sub Mock_userenv {
     return $userenv;
