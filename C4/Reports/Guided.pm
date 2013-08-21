@@ -610,11 +610,10 @@ sub format_results {
 
 sub delete_report {
     my (@ids) = @_;
-        my $dbh = C4::Context->dbh;
-        my $query = 'DELETE FROM saved_sql WHERE id IN (' . join( ',', ('?') x @ids ) . ')';
-        my $sth = $dbh->prepare($query);
-        $sth->execute(@ids);
-        $sth->finish;
+    my $dbh = C4::Context->dbh;
+    my $query = 'DELETE FROM saved_sql WHERE id IN (' . join( ',', ('?') x @ids ) . ')';
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@ids);
 }
 
 my $SAVED_REPORTS_BASE_QRY = <<EOQ;
