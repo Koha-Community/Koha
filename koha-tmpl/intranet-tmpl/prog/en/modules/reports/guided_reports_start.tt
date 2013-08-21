@@ -129,7 +129,13 @@ $(document).ready(function(){
             alert(_("You must select one or more reports to delete"));
             return false;
         }
-        return confirm(_("Are you sure you want to delete the selected reports?"));
+        $(checkedItems).parents('tr').addClass("warn");
+        if( confirm(_("Are you sure you want to delete the selected reports?")) ) {
+            return true;
+        } else {
+            $(checkedItems).parents('tr').removeClass("warn");
+            return false;
+        }
     });
 [% END %]
 
