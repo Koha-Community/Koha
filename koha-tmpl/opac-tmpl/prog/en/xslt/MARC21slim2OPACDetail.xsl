@@ -546,7 +546,7 @@
         <xsl:if test="marc:datafield[substring(@tag, 1, 1) = '6']">
             <span class="results_summary subjects"><span class="label">Subject(s): </span>
             <xsl:for-each select="marc:datafield[substring(@tag, 1, 1) = '6']">
-            <a property="keywords">
+            <a>
             <xsl:choose>
             <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
                 <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
@@ -564,6 +564,7 @@
                 <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=su<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/><xsl:value-of select="marc:subfield[@code='a']"/><xsl:value-of select="$TracingQuotesRight"/></xsl:attribute>
             </xsl:otherwise>
             </xsl:choose>
+            <span property="keywords">
             <xsl:call-template name="chopPunctuation">
                 <xsl:with-param name="chopString">
                     <xsl:call-template name="subfieldSelect">
@@ -573,6 +574,7 @@
                     </xsl:call-template>
                 </xsl:with-param>
             </xsl:call-template>
+            </span>
             </a>
             <xsl:if test="marc:subfield[@code=9]">
                 <a class='authlink'>
