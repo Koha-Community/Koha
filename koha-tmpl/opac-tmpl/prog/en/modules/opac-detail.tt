@@ -1542,7 +1542,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
               </td>
             [% END %]
                [% IF ( itemdata_copynumber ) %]<td class="copynumber">[% ITEM_RESULT.copynumber %]</td>[% END %]
-              <td class="status" [% INCLUDE 'item-status-schema-org.inc' item = ITEM_RESULT %]>[% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
+              <td class="status">[% INCLUDE 'item-status-schema-org.inc' item = ITEM_RESULT %][% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
              [% IF ( itemdata_itemnotes ) %]<td class="notes" property="description">[% ITEM_RESULT.itemnotes %]</td>[% END %]
         <td class="date_due"><span title="[% ITEM_RESULT.datedue %]">[% ITEM_RESULT.datedue | $KohaDates %]</span></td>
         [% IF ( OPACShowBarcode ) %]<td class="barcode" property="serialNumber">[% ITEM_RESULT.barcode %]</td>[% END %]
