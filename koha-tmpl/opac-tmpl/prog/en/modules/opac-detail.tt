@@ -1511,9 +1511,11 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         [% IF ( ShowCourseReservesHeader ) %]<th id="item_coursereserves">Course reserves</th>[% END %]
         </tr></thead>
 	    <tbody>[% FOREACH ITEM_RESULT IN items %]
-      [% IF ITEM_RESULT.this_branch %]<tr class="highlight-row-detail">[% ELSE %]<tr>[% END %]
+      <tr[% IF ITEM_RESULT.this_branch %] class="highlight-row-detail"[% END %] vocab="http://schema.org/" typeof="Offer">
       [% IF ( item_level_itypes ) %]<td class="itype">[% UNLESS ( noItemTypeImages ) %][% IF ( ITEM_RESULT.imageurl ) %]<img src="[% ITEM_RESULT.imageurl %]" title="[% ITEM_RESULT.description %]" alt="[% ITEM_RESULT.description %]" />[% END %][% END %] [% ITEM_RESULT.description %]</td>[% END %]
-             <td class="location">
+             <td class="location" property="seller">
+                <link property="itemOffered" href="#record" />
+                <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
     [% UNLESS ( singleBranchMode ) %]
         <div class="[% ITEM_RESULT.branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]">
         [% IF ( ITEM_RESULT.branchurl ) %]
@@ -1527,23 +1529,23 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
     </td>
             [% IF ( itemdata_ccode ) %]<td class="collection">[% ITEM_RESULT.ccode %]</td>[% END %]
-        <td class="call_no">[% IF ( ITEM_RESULT.itemcallnumber ) %] [% ITEM_RESULT.itemcallnumber %][% IF ( OPACShelfBrowser ) %] (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber %]#[% tab %]">Browse shelf</a>)[% END %][% END %]</td>
+        <td class="call_no" property="sku">[% IF ( ITEM_RESULT.itemcallnumber ) %] [% ITEM_RESULT.itemcallnumber %][% IF ( OPACShelfBrowser ) %] (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber %]#[% tab %]">Browse shelf</a>)[% END %][% END %]</td>
             [% IF ( itemdata_enumchron ) %]<td class="vol_info">[% ITEM_RESULT.enumchron %]</td>[% END %]
             [% IF ( itemdata_uri ) %]<td class="url">
               [% IF ITEM_RESULT.uri %]
                 [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-                  <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | url %]&biblionumber=[% biblionumber |url %]&itemnumber=[% ITEM_RESULT.itemnumber | url %]"> Link to resource </a>
+                  <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | url %]&biblionumber=[% biblionumber |url %]&itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url"> Link to resource </a>
                 [% ELSE %]
-                  <a href="[% ITEM_RESULT.uri %]">[% ITEM_RESULT.uri %]</a>
+                  <a href="[% ITEM_RESULT.uri %]" property="url">[% ITEM_RESULT.uri %]</a>
                 [% END %]
               [% END %]
               </td>
             [% END %]
                [% IF ( itemdata_copynumber ) %]<td class="copynumber">[% ITEM_RESULT.copynumber %]</td>[% END %]
-              <td class="status">[% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
-             [% IF ( itemdata_itemnotes ) %]<td class="notes">[% ITEM_RESULT.itemnotes %]</td>[% END %]
+              <td class="status" [% INCLUDE 'item-status-schema-org.inc' item = ITEM_RESULT %]>[% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
+             [% IF ( itemdata_itemnotes ) %]<td class="notes" property="description">[% ITEM_RESULT.itemnotes %]</td>[% END %]
         <td class="date_due"><span title="[% ITEM_RESULT.datedue %]">[% ITEM_RESULT.datedue | $KohaDates %]</span></td>
-        [% IF ( OPACShowBarcode ) %]<td class="barcode">[% ITEM_RESULT.barcode %]</td>[% END %]
+        [% IF ( OPACShowBarcode ) %]<td class="barcode" property="serialNumber">[% ITEM_RESULT.barcode %]</td>[% END %]
         [% IF holds_count.defined || show_priority %]
         <td class="holds_count">
             [% IF holds_count.defined %] [% ITEM_RESULT.holds_count %] [% END %]
