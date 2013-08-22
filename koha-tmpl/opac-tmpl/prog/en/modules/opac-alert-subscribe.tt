@@ -12,8 +12,7 @@
 <div id="useralertsubscribe" class="container">    [% IF ( typeissue ) %]
         <h1 class="catalogue">Subscribe issue receive warning</h1>
             <form action="opac-alert-subscribe.pl" method="post">
-                <p>Do you want to receive an email when a new issue for this subscription arrives?</p>
-                [% bibliotitle %] [% IF ( notes ) %]([% notes %])[% END %] arrive ?</p>
+                <p>Do you want to receive an email when a new issue of [% bibliotitle %] [% IF ( notes ) %]([% notes %])[% END %] arrives?</p>
                 <input type="hidden" name="externalid" value="[% externalid %]">
                 <input type="hidden" name="alerttype" value="issue">
                 <input type="hidden" name="biblionumber" value="[% biblionumber %]">
