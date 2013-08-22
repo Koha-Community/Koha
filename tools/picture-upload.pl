@@ -349,7 +349,7 @@ sub handle_file {
             }
             else {
                 warn "Contents of $filename corrupted!";
-                #	$count{count}--;
+                #$count{count}--;
                 $filerrors{'CORERR'} = 1;
                 push my @filerrors, \%filerrors;
                 push @{ $count{filenames} },
