@@ -241,14 +241,25 @@ foreach my $report_id (@ARGV) {
             $message .= $csv->string() . "\n";
         }
     }
-
     if ($email){
-        my %mail = (
-            To      => $to,
-            From    => $from,
-            Subject => encode('utf8', $subject ),
-            Message => encode('utf8', $message )
-        );
+        my %mail;
+        if ($format eq 'html') {
+                $message = "<html><head><style>tr:nth-child(n+1) { background-color: #ccc;}</style></head><body>$message</body></html>";
+           %mail = (
+              To      => $to,
+              From    => $from,
+              'Content-Type' => 'text/html',
+              Subject => encode('utf8', $subject ),
+              Message => encode('utf8', $message )
+          );
+        } else {
+          %mail = (
+              To      => $to,
+              From    => $from,
+              Subject => encode('utf8', $subject ),
+              Message => encode('utf8', $message )
+          );
+        }
         sendmail(%mail) or carp 'mail not sent:' . $Mail::Sendmail::error;
     } else {
         print $message;
