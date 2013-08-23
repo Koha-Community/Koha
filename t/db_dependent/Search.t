@@ -12,7 +12,7 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 78;
+use Test::More tests => 79;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;
@@ -156,6 +156,9 @@ my $dbh = C4::Context->dbh;
 $dbh->{mock_add_resultset} = {
     sql     => 'SHOW COLUMNS FROM items',
     results => [
+        [ 'rows' ], # seems like $sth->rows is getting called
+                    # implicitly, so we need this to make
+                    # DBD::Mock return all of the results
         [ 'itemnumber' ], [ 'biblionumber' ], [ 'biblioitemnumber' ],
         [ 'barcode' ], [ 'dateaccessioned' ], [ 'booksellerid' ],
         [ 'homebranch' ], [ 'price' ], [ 'replacementprice' ],
@@ -505,6 +508,25 @@ warning_like {( undef, $results_hashref, $facets_loop ) =
 @newresults = searchResults('intranet', $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
     $results_hashref->{'biblioserver'}->{"RECORDS"});
 is($newresults[0]->{'alternateholdings_count'}, 1, 'Alternate holdings filled in correctly');
+
+
+## Regression test for Bug 10741
+
+# make one of the test items appear to be in transit
+my $circ_module = new Test::MockModule('C4::Circulation');
+$circ_module->mock('GetTransfers', sub {
+    my $itemnumber = shift;
+    if ($itemnumber == 11) {
+        return ('2013-07-19', 'MPL', 'CPL');
+    } else {
+        return;
+    }
+});
+
+($error, $results_hashref, $facets_loop) = getRecords("TEST12121212","TEST12121212",[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+@newresults = searchResults('intranet', $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
+    $results_hashref->{'biblioserver'}->{"RECORDS"});
+ok(!exists($newresults[0]->{norequests}), 'presence of a transit does not block hold request action (bug 10741)');
 
 END {
     if ($child) {
