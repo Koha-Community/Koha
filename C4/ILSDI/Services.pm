@@ -29,7 +29,6 @@ use C4::Biblio;
 use C4::Reserves qw(AddReserve CancelReserve GetReservesFromBiblionumber GetReservesFromBorrowernumber CanBookBeReserved CanItemBeReserved);
 use C4::Context;
 use C4::AuthoritiesMarc;
-use C4::ILSDI::Utility;
 use XML::Simple;
 use HTML::Entities;
 use CGI;
@@ -115,7 +114,7 @@ sub GetAvailability {
 
     foreach my $id ( split( / /, $cgi->param('id') ) ) {
         if ( $cgi->param('id_type') eq "item" ) {
-            my ( $biblionumber, $status, $msg, $location ) = Availability($id);
+            my ( $biblionumber, $status, $msg, $location ) = _availability($id);
 
             $out .= "  <dlf:record>\n";
             $out .= "    <dlf:bibliographic id=\"" . ( $biblionumber || $id ) . "\" />\n";
@@ -762,6 +761,40 @@ sub CancelHold {
     CancelReserve({ itemnumber => $itemnumber, borrowernumber => $borrowernumber });
 
     return { code => 'Canceled' };
+}
+
+=head2 _availability
+
+Returns, for an itemnumber, an array containing availability information.
+
+ my ($biblionumber, $status, $msg, $location) = _availability($id);
+
+=cut
+
+sub _availability {
+    my ($itemnumber) = @_;
+    my $item = GetItem( $itemnumber, undef, undef );
+
+    if ( not $item->{'itemnumber'} ) {
+        return ( undef, 'unknown', 'Error: could not retrieve availability for this ID', undef );
+    }
+
+    my $biblionumber = $item->{'biblioitemnumber'};
+    my $location     = GetBranchName( $item->{'holdingbranch'} );
+
+    if ( $item->{'notforloan'} ) {
+        return ( $biblionumber, 'not available', 'Not for loan', $location );
+    } elsif ( $item->{'onloan'} ) {
+        return ( $biblionumber, 'not available', 'Checked out', $location );
+    } elsif ( $item->{'itemlost'} ) {
+        return ( $biblionumber, 'not available', 'Item lost', $location );
+    } elsif ( $item->{'wthdrawn'} ) {
+        return ( $biblionumber, 'not available', 'Item withdrawn', $location );
+    } elsif ( $item->{'damaged'} ) {
+        return ( $biblionumber, 'not available', 'Item damaged', $location );
+    } else {
+        return ( $biblionumber, 'available', undef, $location );
+    }
 }
 
 1;
