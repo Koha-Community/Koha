@@ -19,13 +19,14 @@ package C4::Auth_with_ldap;
 
 use strict;
 #use warnings; FIXME - Bug 2505
-use Digest::MD5 qw(md5_base64);
+use Carp;
 
 use C4::Debug;
 use C4::Context;
 use C4::Members qw(AddMember changepassword);
 use C4::Members::Attributes;
 use C4::Members::AttributeTypes;
+use C4::Auth qw(hash_password checkpw_internal);
 use List::MoreUtils qw( any );
 use Net::LDAP;
 use Net::LDAP::Filter;
@@ -257,44 +258,43 @@ sub exists_local {
 }
 
 sub _do_changepassword {
-    my ($userid, $borrowerid, $digest) = @_;
+    my ($userid, $borrowerid, $password) = @_;
+
+    my $digest = hash_password($password);
+
     $debug and print STDERR "changing local password for borrowernumber=$borrowerid to '$digest'\n";
     changepassword($userid, $borrowerid, $digest);
 
-	# Confirm changes
-	my $sth = C4::Context->dbh->prepare("SELECT password,cardnumber FROM borrowers WHERE borrowernumber=? ");
-	$sth->execute($borrowerid);
-	if ($sth->rows) {
-		my ($md5password, $cardnum) = $sth->fetchrow;
-        ($digest eq $md5password) and return $cardnum;
-		warn "Password mismatch after update to cardnumber=$cardnum (borrowernumber=$borrowerid)";
-		return;
-	}
-	die "Unexpected error after password update to userid/borrowernumber: $userid / $borrowerid.";
+    my ($ok, $cardnum) = checkpw_internal(C4::Context->dbh, $userid, $password);
+    return $cardnum if $ok;
+
+    warn "Password mismatch after update to borrowernumber=$borrowerid";
+    return;
 }
 
 sub update_local {
-	my   $userid   = shift             or return;
-	my   $digest   = md5_base64(shift) or return;
-	my $borrowerid = shift             or return;
-	my $borrower   = shift             or return;
-	my @keys = keys %$borrower;
-	my $dbh = C4::Context->dbh;
-	my $query = "UPDATE  borrowers\nSET     " . 
-		join(',', map {"$_=?"} @keys) .
-		"\nWHERE   borrowernumber=? "; 
-	my $sth = $dbh->prepare($query);
-	if ($debug) {
-		print STDERR $query, "\n",
-			join "\n", map {"$_ = '" . $borrower->{$_} . "'"} @keys;
-		print STDERR "\nuserid = $userid\n";
-	}
-	$sth->execute(
-		((map {$borrower->{$_}} @keys), $borrowerid)
-	);
+    my $userid     = shift or croak "No userid";
+    my $password   = shift or croak "No password";
+    my $borrowerid = shift or croak "No borrowerid";
+    my $borrower   = shift or croak "No borrower record";
 
-	# MODIFY PASSWORD/LOGIN
-	_do_changepassword($userid, $borrowerid, $digest);
+    my @keys = keys %$borrower;
+    my $dbh = C4::Context->dbh;
+    my $query = "UPDATE  borrowers\nSET     " .
+        join(',', map {"$_=?"} @keys) .
+        "\nWHERE   borrowernumber=? ";
+    my $sth = $dbh->prepare($query);
+    if ($debug) {
+        print STDERR $query, "\n",
+            join "\n", map {"$_ = '" . $borrower->{$_} . "'"} @keys;
+        print STDERR "\nuserid = $userid\n";
+    }
+    $sth->execute(
+        ((map {$borrower->{$_}} @keys), $borrowerid)
+    );
+
+    # MODIFY PASSWORD/LOGIN
+    _do_changepassword($userid, $borrowerid, $password);
 }
 
 1;
