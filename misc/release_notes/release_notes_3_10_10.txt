@@ -1,0 +1,351 @@
+RELEASE NOTES FOR KOHA 3.10.10
+24 ago 2013
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.10.10 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.10.10.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+
+Koha 3.10.10 is a bugfix/maintenance release.
+
+
+It includes 3 enhancements and 39 bugfixes.
+
+
+Enhancements in 3.10.10
+======================
+
+Acquisitions
+----------
+	10514	Add item link on acquisitions add item is too small
+
+MARC Bibliographic data support
+----------
+	5858	Update default MARC21 framework to Update No. 16 (April 2013)
+
+Packaging
+----------
+	10411	Add cache control headers to static resources in the apache config
+
+
+Critical bugs fixed in 3.10.10
+======================
+
+
+Acquisitions
+----------
+	10088	critical	Software error when filling a basket with staged record
+
+Authentication
+----------
+	10384	major	Software error when LDAP connexion fails
+
+Circulation
+----------
+	10490	major	Overdue fines cap (amount) in circulation rules is saved incorrectly (rounded)
+
+I18N/L10N
+----------
+	10560	major	No way to disable english
+
+OPAC
+----------
+	6553	major	Parentheses in corporate author break tracings
+
+Reports
+----------
+	6898	major	Circulation librarians can't run overdues without reports permissions
+
+Serials
+----------
+	9902	major	Item subfields not populating
+
+
+Other bugs fixed in 3.10.10
+======================
+
+
+About
+----------
+	7143	trivial	Bug for tracking changes to the about page
+
+Acquisitions
+----------
+	4907	normal	Suggestions "organize by" menu doesn't reflect current choice
+	10475	normal	Item form in acquisition not hiding subfields properly
+	10504	normal	C4::Acquisition::ModOrderItem is unused
+	10556	normal	Deliverytime is not inserted on adding a supplier
+	10258	minor	Remove erroneous call to haspermission in basket.pl
+	10535	minor	By default sort funds by name
+
+Architecture, internals, and plumbing
+----------
+	10527	normal	C4::Branch::get_branch_code_from_name is useless
+
+Authentication
+----------
+	10029	normal	CAS authentication fails in OPAC reserve
+
+Cataloging
+----------
+	9113	normal	Batch modification removes +
+	9533	normal	Batch item modification should ignore defaults
+	9353	minor	Missing subfields on MARC21 frameworks
+	9770	minor	C4::ClassSortRoutine::Dewey can pad the wrong part of a call number internally
+	10448	minor	Changing framework when cataloguing clears all fields
+	10428	trivial	Undefined check in add additem.pl
+
+Installation and upgrade (command-line installer)
+----------
+	10548	trivial	Koha_perl_deps.pl miscounts dependencies displayed
+
+Lists
+----------
+	5894	normal	Adding multiple items from a cart to a list shows only the first title
+
+Notices
+----------
+	10127	normal	Printoverdues.sh should tar only pdf files
+
+OPAC
+----------
+	8911	minor	Docs/history.txt file missing for about.pl
+	10510	minor	OPAC's renew selected link has glitchy icon
+
+Patrons
+----------
+	246	    normal	Can we add a "postal code" for borowers
+	10507	trivial	Typo when warning about creating duplicate patron attribute
+
+Serials
+----------
+	10484	normal	Serials-edit.pl not checking for barcode field before checking for barcode subfield
+	10563	normal	Link to edit subscription from 'check expiraton' page is broken
+
+Templates
+----------
+	10497	normal	Star ratings not showing right in ccsr detail
+	10170	minor	Non translatable strings in manage-marc-import (actions and table values)
+	10422	minor	Remove references to unused and non-existent wizard.css
+	9519	trivial	Wrong language code for Italian in the advanced search language limitations
+	10189	trivial	French values in cataloging plugins for unimarc 128b and 128c fields
+	10346	trivial	"Add multiple copies" should be labelled "Add multiple items"
+	10494	trivial	KohaBranchName sends useless warnings to log if supplied library code is null or not present
+
+Test Suite
+----------
+	10289	normal	UT: Reserves.t needs to create its own data
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+The Koha manual is maintained in DocBook.The home page for Koha 
+documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, English and Spanish versions
+of the Koha manual are available:
+
+     http://manual.koha-community.org/3.10/en/
+     http://es.koha-community.org/manual/3.10/es/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+  * Arabic (97%)
+  * Armenian (99%)
+  * Chinese (China) (65%)
+  * Chinese (Taiwan) (100%)
+  * Danish (100%)
+  * English (New Zealand) (97%)
+  * French (95%)
+  * French (Canada) (66%)
+  * German (100%)
+  * German (Switzerland) (94%)
+  * Greek (60%)
+  * Italian (100%)
+  * Kurdish (86%)
+  * Norwegian Bokmål (62%)
+  * Portuguese (97%)
+  * Portuguese (Brazil) (97%)
+  * Slovak (100%)
+  * Spanish (100%)
+  * Turkish (100%)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.10.10 is
+
+  Release Manager:       Paul Poulain <paul.poulain@biblibre.com>
+  Documentation Manager: Nicole C Engard <nengard@gmail.com>
+  Installation Documentation Managers:
+                         Samuel Desseaux <samuel.desseaux@ecp.fr>
+                         Mason James <mtj@kohaaloha.com>
+  Translation Manager:   Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>
+  QA Team:               Chris Cormack <chrisc@catalyst.net.nz>
+                         Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>,
+                         Jonathan Druart <jonathan.druart@biblibre.com>,
+                         Brendan Gallagher <brendan@bywatersolutions.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+                         Mason James <mtj@kohaaloha.com>
+                         Paul Poulain <paul.poulain@biblibre.com>
+  Bug Wranglers:         Magnus Enger <magnus@enger.priv.no>
+  Packaging Manager:     Robin Sheat <robin@catalyst.net.nz>
+  Live CD Manager:       Nguyen Quoc Uy <nguyenquocuy_1102@yahoo.com>
+  VM Manager:            Samuel Desseaux <samuel.desseaux@ecp.fr>
+
+  Release Maintainer (3.8.x): Chris Hall <chrish@catalyst.net.nz>
+  Release Maintainer (3.10.x): Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  Release Maintainer (3.12.x): Tomás Cohen Arazi <tomascohen@gmail.com>
+
+
+Credits
+======================
+
+We thank the following individuals who contributed patches to Koha 3.10.10.
+  *      1	Tomas Cohen Arazi
+  *      1	Colin Campbell
+  *      8	Galen Charlton
+  *      1	David Cook
+  *      1	Chris Cormack
+  *      5	Jonathan Druart
+  *      2	Jason Etheridge
+  *      3	Katrin Fischer
+  *      1	Chris Hall
+  *      3	Kyle M Hall
+  *      9	Bernardo Gonzalez Kriegel
+  *      1	Sonia LEMAIRE
+  *      6	Owen Leonard
+  *      1	Sophie Meynieux
+  *      1	Liz Rea
+  *      1	Marcel de Rooy
+  *      6	Fridolyn SOMERS
+  *      1	Mathieu Saby
+  *      1	Adrien Saurat
+  *      2	Robin Sheat
+  *      1	Mark Tompsett
+  *      1	Marc Veron
+
+We thank the following companies who contributed patches to Koha 3.10.10
+  *       6 ACPL                                                                                          
+  *       3 BSZ BW                                                                                         
+  *      14 BibLibre                                                                                    
+  *       1 BigBallOfWax                                                                          
+  *       3 ByWater-Solutions                                                                   
+  *       4 Catalyst                                                                                 
+  *      10 Equinox                                                                                   
+  *       1 PTFS-Europe                                                                              
+  *       1 Prosentient Systems
+  *       1 Rijksmuseum                                                                               
+  *       1 Université Rennes 2
+  *      11 unidentified
+  *       1 veron.ch
+
+We also especially thank the following individuals who tested patches
+for Koha 3.10.10.
+  *      46 Tomas Cohen Arazi
+  *       4 Jared Camins-Esakov
+  *      55 Galen Charlton
+  *       1 David Cook
+  *      21 Chris Cormack
+  *       5 Jonathan Druart
+  *       2 Nicole C. Engard
+  *       2 Jason Etheridge
+  *      26 Katrin Fischer
+  *      16 Kyle M Hall
+  *       2 Mason James
+  *      52 Bernardo Gonzalez Kriegel
+  *       3 Owen Leonard
+  *       2 Liz Rea
+  *       6 Marcel de Rooy
+  *       1 Paola Rossi
+  *       1 Mathieu Saby
+  *       1 Silvia Simonetti
+  *       3 Srdjan
+  *       1 Mirko Tietgen
+  *       1 Cedric Vita
+
+We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is 3.10.x.
+
+The last Koha release was 3.12.03, which was released on July 23, 2013.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+He rau ringa e oti ai.
+(Many hands finish the work)
+
