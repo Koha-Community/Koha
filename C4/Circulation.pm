@@ -3317,8 +3317,8 @@ sub GetOfflineOperations {
 }
 
 sub GetOfflineOperation {
-	my $operationid = shift;
-	return unless $operationid;
+    my $operationid = shift;
+    return unless $operationid;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT * FROM pending_offline_operations WHERE operationid=?");
     $sth->execute( $operationid );
