@@ -204,7 +204,7 @@ $categories = GetBranchCategories;
 is( scalar( keys $categories ), $count_cat + 3, "Two categories added" );
 delete $cat1->{add};
 delete $cat2->{add};
-delete %new_category{add};
+delete $new_category{add};
 is_deeply($categories, [ $cat1,$cat2,\%new_category ], 'retrieve all expected library categories (bug 10515)');
 
 #test GetBranchCategory
