@@ -21,8 +21,8 @@ use C4::Koha;
 use C4::Members;
 use C4::Reserves;
 use C4::Branch qw(GetBranchName);
-use Digest::MD5 qw(md5_base64);
 use C4::Items qw( GetBarcodeFromItemnumber GetItemnumbersForBiblio);
+use C4::Auth qw(checkpw_hash);
 
 our $VERSION = 3.07.00.049;
 
@@ -40,7 +40,7 @@ sub new {
     }
     $kp = GetMemberDetails($kp->{borrowernumber});
     $debug and warn "new Patron (GetMemberDetails): " . Dumper($kp);
-    my $pw        = $kp->{password};  ### FIXME - md5hash -- deal with .
+    my $pw        = $kp->{password};
     my $flags     = $kp->{flags};     # or warn "Warning: No flags from patron object for '$patron_id'";
     my $debarred  = defined($kp->{flags}->{DBARRED});
     $debug and warn sprintf("Debarred = %s : ", ($debarred||'undef')) . Dumper(%{$kp->{flags}});
@@ -189,11 +189,13 @@ sub AUTOLOAD {
 
 sub check_password {
     my ($self, $pwd) = @_;
-    my $md5pwd = $self->{password};
+    defined $pwd or return 0;                  # you gotta give me something (at least ''), or no deal
+
+    my $hashed_pwd = $self->{password};
+    defined $hashed_pwd or return $pwd eq '';  # if the record has a NULL password, accept '' as match
+
     # warn sprintf "check_password for %s: '%s' vs. '%s'",($self->{name}||''),($self->{password}||''),($pwd||'');
-    (defined $pwd   ) or return 0;        # you gotta give me something (at least ''), or no deal
-    (defined $md5pwd) or return($pwd eq '');    # if the record has a NULL password, accept '' as match
-    return (md5_base64($pwd) eq $md5pwd);
+    return checkpw_hash($pwd, $hashed_pwd);
 }
 
 # A few special cases, not in AUTOLOADed %fields
