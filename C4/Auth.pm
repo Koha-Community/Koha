@@ -48,7 +48,8 @@ BEGIN {
     $debug       = $ENV{DEBUG};
     @ISA         = qw(Exporter);
     @EXPORT      = qw(&checkauth &get_template_and_user &haspermission &get_user_subpermissions);
-    @EXPORT_OK   = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &get_all_subpermissions &get_user_subpermissions
+    @EXPORT_OK   = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &checkpw_internal &checkpw_hash
+                      &get_all_subpermissions &get_user_subpermissions
                       ParseSearchHistoryCookie hash_password
                    );
     %EXPORT_TAGS = ( EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)] );
@@ -1552,8 +1553,8 @@ sub generate_salt {
 
 
 sub checkpw {
-
     my ( $dbh, $userid, $password, $query ) = @_;
+
     if ($ldap) {
         $debug and print STDERR "## checkpw - checking LDAP\n";
         my ($retval,$retcard,$retuserid) = checkpw_ldap(@_);    # EXTERNAL AUTH
@@ -1563,13 +1564,18 @@ sub checkpw {
     if ($cas && $query && $query->param('ticket')) {
         $debug and print STDERR "## checkpw - checking CAS\n";
     # In case of a CAS authentication, we use the ticket instead of the password
-    my $ticket = $query->param('ticket');
+        my $ticket = $query->param('ticket');
         my ($retval,$retcard,$retuserid) = checkpw_cas($dbh, $ticket, $query);    # EXTERNAL AUTH
         ($retval) and return ($retval,$retcard,$retuserid);
-    return 0;
+        return 0;
     }
 
-    # INTERNAL AUTH
+    return checkpw_internal(@_)
+}
+
+sub checkpw_internal {
+    my ( $dbh, $userid, $password ) = @_;
+
     my $sth =
       $dbh->prepare(
 "select password,cardnumber,borrowernumber,userid,firstname,surname,branchcode,flags from borrowers where userid=?"
@@ -1580,14 +1586,7 @@ sub checkpw {
             $surname, $branchcode, $flags )
           = $sth->fetchrow;
 
-        # check what encryption algorithm was implemented: Bcrypt - if the hash starts with '$2' it is Bcrypt else md5
-        my $hash;
-        if ( substr($stored_hash,0,2) eq '$2') {
-            $hash = hash_password($password, $stored_hash);
-        } else {
-            $hash = md5_base64($password);
-        }
-        if ( $hash eq $stored_hash and $stored_hash ne "!") {
+        if ( checkpw_hash($password, $stored_hash) ) {
 
             C4::Context->set_userenv( "$borrowernumber", $userid, $cardnumber,
                 $firstname, $surname, $branchcode, $flags );
@@ -1604,15 +1603,7 @@ sub checkpw {
             $surname, $branchcode, $flags )
           = $sth->fetchrow;
 
-        # check what encryption algorithm was implemented: Bcrypt - if the hash starts with '$2' it is Bcrypt else md5
-        my $hash;
-        if ( substr($stored_hash,0,2) eq '$2') {
-            $hash = hash_password($password, $stored_hash);
-        } else {
-            $hash = md5_base64($password);
-        }
-
-        if ( $hash eq $stored_hash ) {
+        if ( checkpw_hash($password, $stored_hash) ) {
 
             C4::Context->set_userenv( $borrowernumber, $userid, $cardnumber,
                 $firstname, $surname, $branchcode, $flags );
@@ -1637,6 +1628,21 @@ sub checkpw {
         return 2;
     }
     return 0;
+}
+
+sub checkpw_hash {
+    my ( $password, $stored_hash ) = @_;
+
+    return if $stored_hash eq '!';
+
+    # check what encryption algorithm was implemented: Bcrypt - if the hash starts with '$2' it is Bcrypt else md5
+    my $hash;
+    if ( substr($stored_hash,0,2) eq '$2') {
+        $hash = hash_password($password, $stored_hash);
+    } else {
+        $hash = md5_base64($password);
+    }
+    return $hash eq $stored_hash;
 }
 
 =head2 getuserflags
