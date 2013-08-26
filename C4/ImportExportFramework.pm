@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use XML::LibXML;
 use XML::LibXML::XPathContext;
-use Digest::MD5 qw(md5_base64);
+use Digest::MD5 qw();
 use POSIX qw(strftime);
 
 use C4::Context;
