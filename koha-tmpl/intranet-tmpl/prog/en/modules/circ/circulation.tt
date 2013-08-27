@@ -557,8 +557,18 @@ No patron matched <span class="ex">[% message %]</span>
 
             [% IF ( userdebarred ) %]
                <li class="blocker">
-                   <span class="circ-hlt"> Restricted:</span> Patron's account is restricted [% IF (userdebarreddate ) %] until [% userdebarreddate %] [% END %] [% IF (debarredcomment ) %] with the comment "[% debarredcomment %]"[% END %]
-                   <a href="#reldebarments" onclick="$('#debarments-tab-link').click()">View restrictions</a>
+                   <span class="circ-hlt"> Restricted:</span> Patron's account is restricted
+
+                   [% IF ( userdebarreddate ) %]
+                       until [% userdebarreddate %]
+                   [% END %]
+
+                   [% IF ( debarredcomment ) %]
+                       with the explanation: <br/><i>[% debarredcomment | html_line_break %]</i>
+                   [% END %]
+
+                   <br/>
+                   <a class="btn btn-small" href="#reldebarments" onclick="$('#debarments-tab-link').click()"><i class="icon-ban-circle"></i> View restrictions</a>
                </li>
             [% END %]
 
