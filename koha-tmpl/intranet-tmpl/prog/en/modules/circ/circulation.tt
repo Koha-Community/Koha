@@ -1,4 +1,4 @@
-[% USE KohaBranchName %]
+[% USE Branches %]
 [% USE KohaDates %]
 [% IF ( export_remove_fields OR export_with_csv_profile ) %]
    [% SET exports_enabled = 1 %]
@@ -405,7 +405,7 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
         [% END %]
 
         [% IF ( ITEMNOTSAMEBRANCH ) %]
-            <li>This item belongs to [% itemhomebranch | $KohaBranchName %] and cannot be checked out from this location.</li>
+            <li>This item belongs to [% Branches.GetName( itemhomebranch ) %] and cannot be checked out from this location.</li>
         [% END %]
 
         [% IF ( USERBLOCKEDREMAINING ) %]
