@@ -1,5 +1,5 @@
 [% USE ItemTypes %]
-[% USE KohaAuthorisedValues %]
+[% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Holds queue</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -77,7 +77,7 @@ $(document).ready(function() {
                                          [% IF ( itemsloo.size ) %][% itemsloo.size %][% END %] [% IF ( itemsloo.isbn ) %]ISBN: [% itemsloo.isbn %][% END %]</p>
 			</div>
 			</td>
-            <td class="hq-collection">[% KohaAuthorisedValues.GetByCode( 'CCODE', itemsloo.ccode ) %]</td>
+            <td class="hq-collection">[% AuthorisedValues.GetByCode( 'CCODE', itemsloo.ccode ) %]</td>
             <td class="hq-itemtype">[% ItemTypes.GetDescription( itemsloo.itype ) %]</td>
             <td class="hq-callnumber">[% itemsloo.location %] [% itemsloo.itemcallnumber %]</td>
             <td class="hq-copynumber">[% itemsloo.copynumber %]</td>
