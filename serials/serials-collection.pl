@@ -23,6 +23,7 @@ use strict;
 use warnings;
 use CGI;
 use C4::Auth;
+use C4::Branch qw/GetBranchName/;
 use C4::Koha;
 use C4::Dates qw/format_date/;
 use C4::Serials;
@@ -112,6 +113,11 @@ if (@subscriptionid){
     $subs->{ "status" . $subs->{'status'} } = 1;
     $subs->{startdate}     = format_date( $subs->{startdate} );
     $subs->{histstartdate} = format_date( $subs->{histstartdate} );
+
+    if ( defined $subs->{ branchcode } ) {
+        $subs->{ branchname } = GetBranchName( $subs->{ branchcode } );
+    }
+
     if ( !defined $subs->{enddate} || $subs->{enddate} eq '0000-00-00' ) {
         $subs->{enddate} = '';
     }
