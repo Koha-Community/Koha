@@ -64,7 +64,7 @@ $dbh->do('DELETE FROM branchcategories');
 
 # Start test
 
-my $count = GetBranchesCount;
+my $count = GetBranchesCount();
 like( $count, '/^\d+$/', "the count is a number" );
 
 #add 2 branches
@@ -112,12 +112,12 @@ is( ModBranch($b2), undef, 'the field add is missing' );
 
 $b2->{add} = 1;
 ModBranch($b2);
-is( GetBranchesCount, $count + 2, "two branches added" );
+is( GetBranchesCount(), $count + 2, "two branches added" );
 
 #Test DelBranch
 
 is( DelBranch( $b2->{branchcode} ), 1,          "One row affected" );
-is( GetBranchesCount,               $count + 1, "branch BRB deleted" );
+is( GetBranchesCount(),             $count + 1, "branch BRB deleted" );
 
 #Test GetBranchName
 is( GetBranchName( $b1->{branchcode} ),
@@ -130,9 +130,9 @@ $b1->{issuing}       = undef;    # Not used in DB
 is_deeply( $branchdetail, $b1, 'branchdetail is right' );
 
 #Test Getbranches
-my $branches = GetBranches;
+my $branches = GetBranches();
 is( scalar( keys %$branches ),
-    GetBranchesCount, "GetBranches returns the right number of branches" );
+    GetBranchesCount(), "GetBranches returns the right number of branches" );
 
 #Test ModBranch
 
@@ -157,15 +157,15 @@ $b1 = {
 };
 
 ModBranch($b1);
-is( GetBranchesCount, $count + 1,
+is( GetBranchesCount(), $count + 1,
     "A branch has been modified, no new branch added" );
 $branchdetail = GetBranchDetail( $b1->{branchcode} );
 $b1->{issuing} = undef;
 is_deeply( $branchdetail, $b1 , "GetBranchDetail gives the details of BRA");
 
 #Test categories
-my $categories = GetBranchCategories;
-my $count_cat  = scalar( keys $categories );
+my $categories = GetBranchCategories();
+my $count_cat  = scalar( @$categories );
 
 my $cat1 = {
     add              => 1,
@@ -200,8 +200,8 @@ ModBranchCategoryInfo({
 ModBranchCategoryInfo($cat1);
 ModBranchCategoryInfo($cat2);
 
-$categories = GetBranchCategories;
-is( scalar( keys $categories ), $count_cat + 3, "Two categories added" );
+$categories = GetBranchCategories();
+is( scalar( @$categories ), $count_cat + 3, "Two categories added" );
 delete $cat1->{add};
 delete $cat2->{add};
 delete $new_category{add};
@@ -218,8 +218,8 @@ is_deeply($category, \%new_category, 'fetched newly added library category');
 my $del = DelBranchCategory( $cat2->{categorycode} );
 is( $del, 1, 'One row affected' );
 
-$categories = GetBranchCategories;
-is( scalar( keys $categories ), $count_cat + 2, "Category  CAT2 deleted" );
+$categories = GetBranchCategories();
+is( scalar( @$categories ), $count_cat + 2, "Category  CAT2 deleted" );
 
 my $cat2detail = GetBranchCategory( $cat2->{categorycode} );
 is( $cat2detail, undef, 'CAT2 doesnt exist' );
@@ -234,7 +234,7 @@ like( $check1, '/^\d+$/', "CheckBranchCategorycode returns a number" );
 
 $b2->{CAT1} = 1;
 ModBranch($b2);
-is( GetBranchesCount, $count + 2, 'BRB added' );
+is( GetBranchesCount(), $count + 2, 'BRB added' );
 is(
     CheckBranchCategorycode( $cat1->{categorycode} ),
     $check1 + 1,
@@ -255,8 +255,8 @@ $b2->{categories} = \@cat;
 is_deeply( @$b2info[0], $b2, 'BRB has the category CAT1' );
 
 ModBranchCategoryInfo({add => 1,%$cat2});
-$categories = GetBranchCategories;
-is( scalar( keys $categories ), $count_cat + 3, "Two categories added" );
+$categories = GetBranchCategories();
+is( scalar( @$categories ), $count_cat + 3, "Two categories added" );
 $b2 = {
     branchcode     => 'BRB',
     branchname     => 'BranchB',
@@ -345,7 +345,7 @@ is_deeply($categories, [ {%$cat1}, {%$cat2},{ %new_category, selected => 1 } ], 
 
 #Test GetBranchesLoop
 my $loop = GetBranchesLoop;
-is( scalar(@$loop), GetBranchesCount, 'There is the right number of branches' );
+is( scalar(@$loop), GetBranchesCount(), 'There is the right number of branches' );
 
 # End transaction
 $dbh->rollback;
