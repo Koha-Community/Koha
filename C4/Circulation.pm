@@ -3262,15 +3262,17 @@ sub CreateBranchTransferLimit {
 
 =head2 DeleteBranchTransferLimits
 
-DeleteBranchTransferLimits($frombranch);
+    my $result = DeleteBranchTransferLimits($frombranch);
 
-Deletes all the branch transfer limits for one branch
+Deletes all the library transfer limits for one library.  Returns the
+number of limits deleted, 0e0 if no limits were deleted, or undef if
+no arguments are supplied.
 
 =cut
 
 sub DeleteBranchTransferLimits {
     my $branch = shift;
-    return unless $branch;
+    return unless defined $branch;
     my $dbh    = C4::Context->dbh;
     my $sth    = $dbh->prepare("DELETE FROM branch_transfer_limits WHERE fromBranch = ?");
     return $sth->execute($branch);
