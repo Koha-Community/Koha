@@ -3251,7 +3251,7 @@ $code is either itemtype or collection code depending on what the pref BranchTra
 
 sub CreateBranchTransferLimit {
    my ( $toBranch, $fromBranch, $code ) = @_;
-   return unless ($toBranch && $fromBranch);
+   return unless defined($toBranch) && defined($fromBranch);
    my $limitType = C4::Context->preference("BranchTransferLimitsType");
    
    my $dbh = C4::Context->dbh;
