@@ -207,11 +207,9 @@
 	    <select id="statusfilter" onchange="filterByStatus();">
             <option value="all" selected="selected">(All)</option>
             <option value="expected">Expected</option>
-            <option value="arrived">Arrived</option>
             <option value="late">Late</option>
             <option value="missing">Missing</option>
             <option value="claimed">Claimed</option>
-            <option value="stopped">Stopped</option>
 	    </select>
 	</li>
 	
@@ -286,11 +284,9 @@
                         </td>
                         <td>
                             [% IF ( missingissue.status1 ) %]<span class="status-expected">Expected</span>[% END %]
-                            [% IF ( missingissue.status2 ) %]<span class="status-arrived">Arrived</span>[% END %]
                             [% IF ( missingissue.status3 ) %]<span class="status-late">Late</span>[% END %]
                             [% IF ( missingissue.status4 ) %]<span class="status-missing">Missing</span>[% END %]
                             [% IF ( missingissue.status7 ) %]<span class="status-claimed">Claimed</span>[% END %]
-                            [% IF ( missingissue.status8 ) %]<span class="status-stopped">Stopped</span>[% END %]
                         </td>
                         <td class="planneddate">
                         [% missingissue.planneddate %]
