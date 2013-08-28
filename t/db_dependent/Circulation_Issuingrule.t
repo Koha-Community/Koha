@@ -279,15 +279,6 @@ is_deeply(
     "GetIssuingCharge returns issuingrule1's informations"
 );
 
-#FIX ME: Currently, GetIssuingRule without parameters returns an issuingrule with branchcode -> *,categorycode -> *, itemtype -> *
-#is_deeply ( GetIssuingRule(),{$sampleissuingrule1,$sampleissuingrule2,$sampleissuingrule3},"Without parameters, GetIssuingRule returns all the issuingrule");
-
-#FIX ME: Currently, GetIssuingRule with only one parameter returns an issuingrule with branchcode -> *,categorycode -> *, itemtype -> *
-#is_deeply(GetIssuingRule($samplecat->{categorycode}),{$sampleissuingrule1,$sampleissuingrule2,$sampleissuingrule3},"GetIssuingRule with a categorycode returns all the issuingrules of this category");
-
-#FIX ME: Currently, GetIssuingRule with only two parameters returns an issuingrule with branchcode -> *,categorycode -> *, itemtype -> *
-#is_deeply(GetIssuingRule($samplecat->{categorycode},'BOOK'),{$sampleissuingrule1,$sampleissuingrule2},"GetIssuingRule with a categorycode and'Book' returns all the issuingrules of this category and the itemtype = book");
-
 #Test GetLoanLength
 is_deeply(
     C4::Circulation::GetLoanLength(
@@ -345,13 +336,6 @@ is_deeply(
     ],
     "GetHardDueDate returns the duedate and the duedatecompare"
 );
-
-#FIXME: Currently, with wrong parameters GetHardDueDate returns '' because GetIssuingrule returns wrong value
-#@hardduedate = C4::Circulation::GetHardDueDate(-1,-1,-1);
-#is_deeply(\@hardduedate,[undef,undef],"GetHardDueDate with wrong parameters returns undef");
-#FIXME: Currently, without parameter GetHardDueDate returns '' because GetIssuingrule returns wrong value
-#@hardduedate = C4::Circulation::GetHardDueDate();
-#is_deeply(\@hardduedate,[undef,undef],"GetHardDueDate without parameter returns undef");
 
 #End transaction
 $dbh->rollback;
