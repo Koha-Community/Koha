@@ -393,7 +393,11 @@ sub get_template_and_user {
         my $opac_search_limit = $ENV{'OPAC_SEARCH_LIMIT'};
         my $opac_limit_override = $ENV{'OPAC_LIMIT_OVERRIDE'};
         my $opac_name = '';
-        if (($opac_search_limit && $opac_search_limit =~ /branch:(\w+)/ && $opac_limit_override) || ($in->{'query'}->param('limit') && $in->{'query'}->param('limit') =~ /branch:(\w+)/)){
+        if (
+	    ($opac_limit_override && $opac_search_limit && $opac_search_limit =~ /branch:(\w+)/) ||
+	    ($in->{'query'}->param('limit') && $in->{'query'}->param('limit') =~ /branch:(\w+)/) ||
+	    ($in->{'query'}->param('multibranchlimit') && $in->{'query'}->param('multibranchlimit') =~ /multibranchlimit-(\w+)/)
+        ) {
             $opac_name = $1;   # opac_search_limit is a branch, so we use it.
         } elsif ( $in->{'query'}->param('multibranchlimit') ) {
             $opac_name = $in->{'query'}->param('multibranchlimit');
