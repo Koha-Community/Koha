@@ -2311,12 +2311,12 @@ Returns a hashref
 
 sub GetOpenIssue {
   my ( $itemnumber ) = @_;
-
+  return unless $itemnumber;
   my $dbh = C4::Context->dbh;  
   my $sth = $dbh->prepare( "SELECT * FROM issues WHERE itemnumber = ? AND returndate IS NULL" );
   $sth->execute( $itemnumber );
-  my $issue = $sth->fetchrow_hashref();
-  return $issue;
+  return $sth->fetchrow_hashref();
+
 }
 
 =head2 GetItemIssues
