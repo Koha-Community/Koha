@@ -369,6 +369,7 @@ sub GetFullSubscription {
             aqbooksellers.name as aqbooksellername,
             biblio.title as bibliotitle,
             subscription.branchcode AS branchcode,
+            branches.branchname AS branchname,
             subscription.subscriptionid AS subscriptionid |;
     if (   C4::Context->preference('IndependantBranches')
         && C4::Context->userenv
@@ -378,15 +379,19 @@ sub GetFullSubscription {
       , ((subscription.branchcode <>\"" . C4::Context->userenv->{'branch'} . "\") and subscription.branchcode <>\"\" and subscription.branchcode IS NOT NULL) as cannotedit ";
     }
     $query .= qq|
-  FROM      serial 
-  LEFT JOIN subscription ON 
-          (serial.subscriptionid=subscription.subscriptionid )
-  LEFT JOIN aqbooksellers on subscription.aqbooksellerid=aqbooksellers.id 
-  LEFT JOIN biblio on biblio.biblionumber=subscription.biblionumber 
-  WHERE     serial.subscriptionid = ? 
-  ORDER BY year DESC,
-          IF(serial.publisheddate="00-00-0000",serial.planneddate,serial.publisheddate) DESC,
-          serial.subscriptionid
+        FROM serial
+        LEFT JOIN subscription ON
+            ( serial.subscriptionid = subscription.subscriptionid )
+        LEFT JOIN aqbooksellers ON
+            ( subscription.aqbooksellerid = aqbooksellers.id )
+        LEFT JOIN biblio ON
+            ( biblio.biblionumber = subscription.biblionumber )
+        LEFT JOIN branches ON
+            ( subscription.branchcode = branches.branchcode )
+        WHERE serial.subscriptionid = ?
+        ORDER BY year DESC,
+            IF(serial.publisheddate="00-00-0000",serial.planneddate,serial.publisheddate) DESC,
+            serial.subscriptionid
           |;
     $debug and warn "GetFullSubscription query: $query";
     my $sth = $dbh->prepare($query);

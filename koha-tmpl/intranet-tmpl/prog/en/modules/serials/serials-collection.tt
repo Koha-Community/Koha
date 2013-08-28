@@ -175,7 +175,7 @@ $(document).ready(function() {
                 [% IF ( subscription.numberpattern7 ) %]
                     None of the above
                 [% END %]</td>
-            <td> [% subscription.branchcode %]</td>
+            <td> [% subscription.branchname %]</td>
             <td> [% subscription.callnumber %]</td>
         <td> [% subscription.notes %]
             [% UNLESS subscription.closed %]
@@ -311,7 +311,7 @@ $(document).ready(function() {
                     [% serial.notes %]
                 </td>
                 <td>
-                    [% serial.branchcode %]
+                    [% serial.branchname %]
                 </td>
                 [% IF ( routing ) %]
                 <td>
