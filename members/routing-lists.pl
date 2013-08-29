@@ -128,7 +128,7 @@ $template->param(
     RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 
-my ($picture, $dberror) = GetPatronImage($borrower->{'cardnumber'});
+my ($picture, $dberror) = GetPatronImage($borrower->{'borrowernumber'});
 $template->param( picture => 1 ) if $picture;
 
 output_html_with_http_headers $query, $cookie, $template->output;

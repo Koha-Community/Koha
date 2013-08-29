@@ -47,7 +47,7 @@ my ($template, $loggedinuser, $cookie)
 				});
 
 $template->param( $borrower );
-my ($picture, $dberror) = GetPatronImage($borrower->{'cardnumber'});
+my ($picture, $dberror) = GetPatronImage($borrower->{'borrowernumber'});
 $template->param( picture => 1 ) if $picture;
 
 # Getting the messages

@@ -200,7 +200,7 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
         borrower => $borrower, );
 
     if (C4::Context->preference('OPACpatronimages')) {
-        my ($image, $dberror) = GetPatronImage($borrower->{cardnumber});
+        my ($image, $dberror) = GetPatronImage($borrower->{borrowernumber});
         if ($image) {
             $template->param(
                 display_patron_image => 1

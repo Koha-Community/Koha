@@ -356,7 +356,7 @@ if($userenv->{flags} % 2 == 1){
 # check to see if patron's image exists in the database
 # basically this gives us a template var to condition the display of
 # patronimage related interface on
-my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
+my ($picture, $dberror) = GetPatronImage($data->{'borrowernumber'});
 $template->param( picture => 1 ) if $picture;
 
 my $branch=C4::Context->userenv->{'branch'};

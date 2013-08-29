@@ -89,7 +89,7 @@ if ( $newpassword  && !scalar(@errors) ) {
     }
 	
 $template->param( adultborrower => 1 ) if ( $bor->{'category_type'} eq 'A' );
-my ($picture, $dberror) = GetPatronImage($bor->{'cardnumber'});
+my ($picture, $dberror) = GetPatronImage($bor->{'borrowernumber'});
 $template->param( picture => 1 ) if $picture;
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {

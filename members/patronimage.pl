@@ -31,7 +31,7 @@ $|=1;
 
 my $DEBUG = 0;
 my $data = new CGI;
-my $cardnumber;
+my $borrowernumber;
 
 =head1 NAME
 
@@ -39,24 +39,24 @@ patronimage.pl - Script for retrieving and formatting Koha patron images for dis
 
 =head1 SYNOPSIS
 
-<img src="patronimage.pl?crdnum= />
+<img src="patronimage.pl?borrowernumber= />
 
 =head1 DESCRIPTION
 
-This script, when called from within HTML and passed a valid patron cardnumber, will retrieve the image data associated with that cardnumber if one exists, format it in proper HTML format and pass it back to be displayed.
+This script, when called from within HTML and passed a valid patron borrowernumber, will retrieve the image data associated with that borrowernumber if one exists, format it in proper HTML format and pass it back to be displayed.
 
 =cut
 
-if ($data->param('crdnum')) {
-    $cardnumber = $data->param('crdnum');
+if ($data->param('borrowernumber')) {
+    $borrowernumber = $data->param('borrowernumber');
 } else {
-    $cardnumber = shift;
+    $borrowernumber = shift;
 }
 
 
-warn "Cardnumber passed in: $cardnumber" if $DEBUG;
+warn "Borrowernumber passed in: $borrowernumber" if $DEBUG;
 
-my ($imagedata, $dberror) = GetPatronImage($cardnumber);
+my ($imagedata, $dberror) = GetPatronImage($borrowernumber);
 
 if ($dberror) {
     warn "Database Error!";
@@ -70,7 +70,7 @@ if ($imagedata) {
     print $data->header (-type => $imagedata->{'mimetype'}, -'Cache-Control' => 'no-store', -Content_Length => length ($imagedata->{'imagefile'})), $imagedata->{'imagefile'};
     exit;
 } else {
-    warn "No image exists for $cardnumber";
+    warn "No image exists for $borrowernumber";
     exit;
 }
 

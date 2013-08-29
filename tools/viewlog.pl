@@ -72,7 +72,7 @@ if ($src eq 'circ') {   # if we were called from circulation, use the circulatio
     use C4::Members;
     my $borrowernumber = $object;
     my $data = GetMember('borrowernumber'=>$borrowernumber);
-    my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
+    my ($picture, $dberror) = GetPatronImage($data->{'borrowernumber'});
     $template->param( picture => 1 ) if $picture;
     
     $template->param(   menu            => 1,

@@ -37,9 +37,8 @@ my %cookies = fetch CGI::Cookie;
 my $sessid = $cookies{'CGISESSID'}->value;
 my ($auth_status, $auth_sessid) = check_cookie_auth($sessid, $needed_flags);
 my $borrowernumber = C4::Context->userenv->{'number'};
-my $cardnumber = C4::Context->userenv->{'cardnumber'};
 
-my ($imagedata, $dberror) = GetPatronImage($cardnumber);
+my ($imagedata, $dberror) = GetPatronImage($borrowernumber);
 
 if ($dberror) {
     print $query->header(status => '500 internal error');

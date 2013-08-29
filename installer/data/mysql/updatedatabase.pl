@@ -7216,6 +7216,51 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(qq{
+        DELETE FROM patronimage WHERE NOT EXISTS (SELECT * FROM borrowers WHERE borrowers.cardnumber = patronimage.cardnumber)
+    });
+
+    $dbh->do(qq{
+        ALTER TABLE patronimage ADD borrowernumber INT( 11 ) NULL FIRST
+    });
+
+    $dbh->{AutoCommit} = 0;
+    $dbh->{RaiseError} = 1;
+
+    eval {
+        $dbh->do(qq{
+            UPDATE patronimage LEFT JOIN borrowers USING ( cardnumber ) SET patronimage.borrowernumber = borrowers.borrowernumber
+        });
+        $dbh->commit();
+    };
+
+    if ($@) {
+        print "Upgrade to $DBversion done (Bug 10636 - patronimage should have borrowernumber as PK, not cardnumber) failed! Transaction aborted because $@\n";
+        eval { $dbh->rollback };
+    }
+    else {
+        $dbh->do(qq{
+            ALTER TABLE patronimage DROP FOREIGN KEY patronimage_fk1
+        });
+        $dbh->do(qq{
+            ALTER TABLE patronimage DROP PRIMARY KEY, ADD PRIMARY KEY( borrowernumber )
+        });
+        $dbh->do(qq{
+            ALTER TABLE patronimage DROP cardnumber
+        });
+        $dbh->do(qq{
+            ALTER TABLE patronimage ADD FOREIGN KEY ( borrowernumber ) REFERENCES borrowers ( borrowernumber ) ON DELETE CASCADE ON UPDATE CASCADE
+        });
+
+        print "Upgrade to $DBversion done (Bug 10636 - patronimage should have borrowernumber as PK, not cardnumber)\n";
+        SetVersion($DBversion);
+    }
+
+    $dbh->{AutoCommit} = 1;
+    $dbh->{RaiseError} = 0;
+}
 
 
 =head1 FUNCTIONS

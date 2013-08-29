@@ -248,7 +248,7 @@ if ($borrower->{cardnumber}) {
 
     );
     if (C4::Context->preference('ShowPatronImageInWebBasedSelfCheck')) {
-        my ($image, $dberror) = GetPatronImage($borrower->{cardnumber});
+        my ($image, $dberror) = GetPatronImage($borrower->{borrowernumber});
         if ($image) {
             $template->param(
                 display_patron_image => 1,

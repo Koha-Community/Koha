@@ -91,7 +91,7 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
-my ($picture, $dberror) = GetPatronImage($borrower->{'cardnumber'});
+my ($picture, $dberror) = GetPatronImage($borrower->{'borrowernumber'});
 $template->param( picture => 1 ) if $picture;
 
 $template->param(

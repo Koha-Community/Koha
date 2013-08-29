@@ -83,7 +83,7 @@ my $data=$sth->fetchrow_hashref;
 if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'}){
     #   print $input->header;
 
-    my ($picture, $dberror) = GetPatronImage($bor->{'cardnumber'});
+    my ($picture, $dberror) = GetPatronImage($bor->{'borrowernumber'});
     $template->param( picture => 1 ) if $picture;
 
     $template->param(borrowernumber => $member,

@@ -765,7 +765,7 @@ if ($stickyduedate) {
     $session->param( 'stickyduedate', $duedatespec );
 }
 
-my ($picture, $dberror) = GetPatronImage($borrower->{'cardnumber'});
+my ($picture, $dberror) = GetPatronImage($borrower->{'borrowernumber'});
 $template->param( picture => 1 ) if $picture;
 
 # get authorised values with type of BOR_NOTES

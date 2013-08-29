@@ -103,7 +103,7 @@ if (! $limit){
 }
 
 
-my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
+my ($picture, $dberror) = GetPatronImage($data->{'borrowernumber'});
 $template->param( picture => 1 ) if $picture;
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {

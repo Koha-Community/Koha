@@ -92,7 +92,7 @@ foreach my $accountline ( @{$accts}) {
 
 $template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' );
 
-my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
+my ($picture, $dberror) = GetPatronImage($data->{'borrowernumber'});
 $template->param( picture => 1 ) if $picture;
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {

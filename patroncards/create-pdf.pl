@@ -145,7 +145,7 @@ foreach my $item (@{$items}) {
                     next PROCESS_IMAGES;
                 }
                 elsif ($images->{$_}->{'data_source'}->[0]->{'image_source'} eq 'patronimages') {
-                    ($image_data, $error) = GetPatronImage($card_number);
+                    ($image_data, $error) = GetPatronImage($borrower_number);
                     warn sprintf('No image exists for borrower number %s.', $borrower_number) if !$image_data;
                     next PROCESS_IMAGES if !$image_data;
                 }

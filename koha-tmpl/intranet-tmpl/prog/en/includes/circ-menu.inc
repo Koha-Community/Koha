@@ -7,7 +7,7 @@
 <ul class="patronbriefinfo">
 [% IF ( patronimages ) %]
 [% IF ( picture ) %]
-<li><img src="/cgi-bin/koha/members/patronimage.pl?crdnum=[% cardnumber | uri %]" id="patronimage" alt="[% firstname %] [% surname %] ([% cardnumber %])" border="0" style="max-width : 140px; margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC; width:auto !important; width:130px;" /></li>
+<li><img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% borrowernumber | uri %]" id="patronimage" alt="[% firstname %] [% surname %] ([% cardnumber %])" border="0" style="max-width : 140px; margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC; width:auto !important; width:130px;" /></li>
 [% ELSE %]
 <li id="patronbasics"><img src="[% interface %]/[% theme %]/img/patron-blank.png" alt="[% firstname %] [% surname %] ([% cardnumber %])" border="0" style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /></li>
 [% END %]

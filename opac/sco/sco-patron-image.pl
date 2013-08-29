@@ -33,9 +33,9 @@ unless (C4::Context->preference('ShowPatronImageInWebBasedSelfCheck')) {
     exit;
 }
 
-my ($cardnumber) = C4::Service->require_params('cardnumber');
+my ($borrowernumber) = C4::Service->require_params('borrowernumber');
 
-my ($imagedata, $dberror) = GetPatronImage($cardnumber);
+my ($imagedata, $dberror) = GetPatronImage($borrowernumber);
 
 if ($dberror) {
     print $query->header(status => '500 internal error');
