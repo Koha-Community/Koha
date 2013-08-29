@@ -33,8 +33,10 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Branch;
 use C4::Context;
+use C4::Koha qw( GetAuthorisedValues );
 use C4::Output;
 use C4::Serials;
+use Koha::AdditionalField;
 
 use Koha::DateUtils;
 
@@ -75,6 +77,18 @@ if ( $op and $op eq "close" ) {
     }
 }
 
+
+my $additional_fields = Koha::AdditionalField->all( { table => 'subscription', searchable => 1 } );
+my $additional_field_filters;
+for my $field ( @$additional_fields ) {
+    if ( my $filter_value = $query->param('additional_field_' . $field->{name} . '_filter') ) {
+        $additional_field_filters->{ $field->{name} } = $filter_value;
+    }
+    if ( $field->{authorised_value_category} ) {
+        $field->{authorised_value_choices} = GetAuthorisedValues( $field->{authorised_value_category} );
+    }
+}
+
 my $expiration_date_dt = $expiration_date ? dt_from_string( $expiration_date ) : undef;
 my @subscriptions;
 if ($searched){
@@ -88,6 +102,7 @@ if ($searched){
             publisher    => $publisher,
             bookseller   => $bookseller,
             branch       => $branch,
+            additional_fields => [ map{ { name => $_, value => $additional_field_filters->{$_}} } keys %$additional_field_filters ],
             location     => $location,
             expiration_date => $expiration_date_dt,
         }
@@ -141,6 +156,8 @@ $template->param(
     branches_loop => \@branches_loop,
     done_searched => $searched,
     routing       => $routing,
+    additional_field_filters => $additional_field_filters,
+    additional_fields_for_subscription => $additional_fields,
     marcflavour   => (uc(C4::Context->preference("marcflavour")))
 );
 

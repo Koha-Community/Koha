@@ -30,4 +30,5 @@
             Manage numbering patterns
         </a>
     </li>
+    <li><a href="/cgi-bin/koha/serials/add_fields.pl">Add subscription fields</a></li>
 </ul>

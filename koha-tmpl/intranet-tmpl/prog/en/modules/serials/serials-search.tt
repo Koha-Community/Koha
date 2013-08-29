@@ -20,6 +20,7 @@
     } ) );
 
     var csrlt = $("#csrlt").dataTable($.extend(true, {}, dataTablesDefaults, {
+        // FIXME sort function of additional_fields!
         "sPaginationType": "four_button",
         "aoColumnDefs": [
             { 'bSortable': false, 'aTargets': [ 'NoSort' ] },
@@ -116,6 +117,21 @@
                   <label for="to">Expires before:</label>
                   <input type="text" id="to" name="expiration_date_filter" value="[% expiration_date_filter | $KohaDates %]" size="10" maxlength="10" class="datepickerto" />
                 </li>
+                [% FOR field IN additional_fields_for_subscription %]
+                  <li>
+                    <label for="additional_field_[% field.id %]"> [% field.name %]: </label>
+                    [% IF field.authorised_value_choices %]
+                      <select id="additional_field_[% field.id %]" name="additional_field_[% field.id %]_filter">
+                        <option value="">All</option>
+                        [% FOREACH av IN field.authorised_value_choices %]
+                          <option value="[% av.authorised_value %]">[% av.lib %]</option>
+                        [% END %]
+                      </select>
+                    [% ELSE %]
+                      <input id="additional_field_[% field.id %]" type="text" value="[% additional_fields.${field.name} %]" name="additional_field_[% field.id %]_filter" />
+                    [% END %]
+                  </li>
+                [% END %]
               </ol>
               <input type="hidden" name="searched" value="1" />
               <fieldset class="action">
@@ -144,6 +160,9 @@
                         <th>Location</th>
                         <th>Call number</th>
                         <th class="title-string">Expiration date</th>
+                        [% FOR field IN additional_fields_for_subscription %]
+                          <th>[% field.name %]</th>
+                        [% END %]
                         <th class="NoSort">Actions</th>
                     </tr>
                   </thead>
@@ -156,6 +175,9 @@
                       <td><input type="text" class="dt-filter" data-column_num="4" placeholder="Search location" /></td>
                       <td><input type="text" class="dt-filter" data-column_num="5" placeholder="Search callnumber" /></td>
                       <td><input type="text" class="dt-filter" data-column_num="6" placeholder="Search expiration date" /></td>
+                      [% FOR field IN additional_fields_for_subscription %]
+                        <td><input type="text" class="dt-filter" data-column_num="[% loop.count + 6 %]" placeholder="Search [% field.name %]" /></td>
+                      [% END %]
                       <td></td>
                     </tr>
                   </tfoot>
@@ -188,6 +210,14 @@
                                 <span title="0000-00-00"></span>
                             [% END %]
                         </td>
+
+                        [% FOR field IN additional_fields_for_subscription %]
+                          [% IF field.authorised_value_category %]
+                            <td>[% AuthorisedValues.GetByCode( field.authorised_value_category, subscription.additional_fields.${field.name} ) %]</td>
+                          [% ELSE %]
+                            <td>[% subscription.additional_fields.${field.name} %]</td>
+                          [% END %]
+                        [% END %]
 
                         <td>
                             <div class="dropdown">
@@ -237,6 +267,7 @@
             <div id="closed">
               [% IF closedsubscriptions %]
                 <table id="csrlt">
+                <!-- FIXME add additional_fields for closed subs -->
                   <thead>
                     <tr>
                         <th>ISSN</th>
@@ -245,6 +276,9 @@
                         <th>Library</th>
                         <th>Location</th>
                         <th>Call number</th>
+                        [% FOR field IN additional_fields_for_subscription %]
+                          <th>[% field.name %]</th>
+                        [% END %]
                         <th class="NoSort">Actions</th>
                     </tr>
                   </thead>
@@ -256,6 +290,9 @@
                       <td><input type="text" class="dt-filter" data-column_num="3" placeholder="Search library" /></td>
                       <td><input type="text" class="dt-filter" data-column_num="4" placeholder="Search location" /></td>
                       <td><input type="text" class="dt-filter" data-column_num="5" placeholder="Search callnumber" /></td>
+                      [% FOR field IN additional_fields_for_subscription %]
+                        <td><input type="text" class="dt-filter" data-column_num="[% loop.count + 5 %]" placeholder="Search [% field.name %]" /></td>
+                      [% END %]
                       <td></td>
                     </tr>
                   </tfoot>
@@ -284,6 +321,13 @@
                         <td>
                           [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
                         </td>
+                        [% FOR field IN additional_fields_for_subscription %]
+                          [% IF field.authorised_value_category %]
+                            <td>[% KohaAuthorisedValues.GetByCode( field.authorised_value_category, subscription.additional_fields.${field.name} ) %]</td>
+                          [% ELSE %]
+                            <td>[% subscription.additional_fields.${field.name} %]</td>
+                          [% END %]
+                        [% END %]
                         <td>
                             <div class="dropdown">
                                 <a class="btn btn-mini dropdown-toggle" id="closedsubactions[% subscription.subscriptionid %]" role="button" data-toggle="dropdown" href="#">
@@ -394,6 +438,25 @@
                   <input type="text" id="to" name="expiration_date_filter" value="[% expiration_date_filter | $KohaDates %]" size="10" maxlength="10" class="datepickerto" />
                 </li>
 
+                [% FOR field IN additional_fields_for_subscription %]
+                  <li>
+                    <label for="additional_field_[% field.id %]ID"> [% field.name %]: </label>
+                    [% IF field.authorised_value_choices %]
+                      <select id="additional_field_[% field.id %]" name="additional_field_[% field.id %]_filter">
+                        <option value="">All</option>
+                        [% FOREACH av IN field.authorised_value_choices %]
+                          [% IF av.authorised_value == additional_field_filters.${field.name} %]
+                            <option value="[% av.authorised_value %]" selected="selected">[% av.lib %]</option>
+                          [% ELSE %]
+                            <option value="[% av.authorised_value %]">[% av.lib %]</option>
+                          [% END %]
+                        [% END %]
+                      </select>
+                    [% ELSE %]
+                      <input id="additional_field_[% field.id %]" type="text" value="[% additional_field_filters.${field.name} %]" name="additional_field_[% field.id %]_filter" />
+                    [% END %]
+                  </li>
+                [% END %]
               </ol>
               <input type="hidden" name="searched" value="1" />
               <fieldset class="action">

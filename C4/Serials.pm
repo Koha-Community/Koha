@@ -558,7 +558,17 @@ subscription expiration date.
 sub SearchSubscriptions {
     my ( $args ) = @_;
 
-    my $query = q{
+    my $additional_fields = $args->{additional_fields} // [];
+    my $matching_record_ids_for_additional_fields = [];
+    if ( @$additional_fields ) {
+        $matching_record_ids_for_additional_fields = Koha::AdditionalField->get_matching_record_ids({
+                fields => $args->{additional_fields},
+                tablename => 'subscription',
+        });
+        return () unless @$matching_record_ids_for_additional_fields;
+    }
+
+    my $query = q|
         SELECT
             subscription.notes AS publicnotes,
             subscriptionhistory.*,
@@ -573,13 +583,15 @@ sub SearchSubscriptions {
             LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
             LEFT JOIN biblioitems ON biblioitems.biblionumber = subscription.biblionumber
             LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
-    };
+    |;
+    $query .= q| WHERE 1|;
     my @where_strs;
     my @where_args;
     if( $args->{biblionumber} ) {
         push @where_strs, "biblio.biblionumber = ?";
         push @where_args, $args->{biblionumber};
     }
+
     if( $args->{title} ){
         my @words = split / /, $args->{title};
         my (@strs, @args);
@@ -628,8 +640,14 @@ sub SearchSubscriptions {
         push @where_strs, "subscription.closed = ?";
         push @where_args, "$args->{closed}";
     }
+
     if(@where_strs){
-        $query .= " WHERE " . join(" AND ", @where_strs);
+        $query .= ' AND ' . join(' AND ', @where_strs);
+    }
+    if ( @$additional_fields ) {
+        $query .= ' AND subscriptionid IN ('
+            . join( ', ', @$matching_record_ids_for_additional_fields )
+        . ')';
     }
 
     $query .= " ORDER BY " . $args->{orderby} if $args->{orderby};
@@ -637,12 +655,17 @@ sub SearchSubscriptions {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
     $sth->execute(@where_args);
-    my $results = $sth->fetchall_arrayref( {} );
-    $sth->finish;
+    my $results =  $sth->fetchall_arrayref( {} );
 
     for my $subscription ( @$results ) {
         $subscription->{cannotedit} = not can_edit_subscription( $subscription );
         $subscription->{cannotdisplay} = not can_show_subscription( $subscription );
+
+        my $additional_field_values = Koha::AdditionalField->fetch_all_values({
+            record_id => $subscription->{subscriptionid},
+            tablename => 'subscription'
+        });
+        $subscription->{addition_fields} = $additional_field_values->{$subscription->{subscriptionid}};
     }
 
     return @$results;
