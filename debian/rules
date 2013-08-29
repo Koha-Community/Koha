@@ -103,3 +103,7 @@ override_dh_auto_install:
 	xsltproc --output $(TMP)/debian/tmp_docbook/ \
 	    /usr/share/xml/docbook/stylesheet/docbook-xsl/manpages/docbook.xsl \
 	    debian/docs/*.xml
+
+override_dh_compress:
+	# exclude history.txt from compression as about.pl needs it uncompressed
+	dh_compress --exclude=history.txt
