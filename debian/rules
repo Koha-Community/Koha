@@ -6,7 +6,7 @@ TMP = $(CURDIR)/debian/tmp
 export PERL_MM_USE_DEFAULT=1
 
 %:
-	dh $@ --fail-missing
+	dh $@ --fail-missing --with bash-completion
 
 override_dh_gencontrol:
 	debian/bd-to-depends >> debian/koha-common.substvars
