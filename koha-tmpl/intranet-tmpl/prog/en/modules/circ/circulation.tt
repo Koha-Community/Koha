@@ -575,7 +575,7 @@ No patron matched <span class="ex">[% message %]</span>
                 [% IF ( charges_is_blocker ) %]
                     Checkouts are <span class="circ-hlt">BLOCKED</span> because fine balance is <span class="circ-hlt">OVER THE LIMIT</span>.
                 [% END %]
-            Make <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrowernumber %]">Payment</a></li>
+            <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrowernumber %]">Make payment</a></li>
 			[% END %]
 
         	[% IF ( credits ) %]
