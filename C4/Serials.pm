@@ -31,6 +31,7 @@ use C4::Log;    # logaction
 use C4::Debug;
 use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
+use Koha::AdditionalField;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -316,7 +317,16 @@ sub GetSubscription {
     my $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
     my $subscription = $sth->fetchrow_hashref;
+
     $subscription->{cannotedit} = not can_edit_subscription( $subscription );
+
+    # Add additional fields to the subscription into a new key "additional_fields"
+    my $additional_field_values = Koha::AdditionalField->fetch_all_values({
+            tablename => 'subscription',
+            record_id => $subscriptionid,
+    });
+    $subscription->{additional_fields} = $additional_field_values->{$subscriptionid};
+
     return $subscription;
 }
 

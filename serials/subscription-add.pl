@@ -32,6 +32,7 @@ use C4::Serials;
 use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
 use C4::Letters;
+use Koha::AdditionalField;
 use Carp;
 
 #use Smart::Comments;
@@ -151,6 +152,16 @@ my $locations_loop = GetAuthorisedValues("LOC",$subs->{'location'});
 $template->param(branchloop => $branchloop,
     locations_loop=>$locations_loop,
 );
+
+
+my $additional_fields = Koha::AdditionalField->all( { table => 'subscription' } );
+for my $field ( @$additional_fields ) {
+    if ( $field->{authorised_value_category} ) {
+        $field->{authorised_value_choices} = GetAuthorisedValues( $field->{authorised_value_category} );
+    }
+}
+$template->param( additional_fields_for_subscription => $additional_fields );
+
 # prepare template variables common to all $op conditions:
 if ($op!~/^mod/) {
     my $letters = get_letter_loop();
@@ -333,6 +344,16 @@ sub redirect_add_subscription {
         $skip_serialseq
     );
 
+    my $additional_fields = Koha::AdditionalField->all( { table => 'subscription' } );
+    my @additional_field_values;
+    for my $field ( @$additional_fields ) {
+        my $af = Koha::AdditionalField->new({ id => $field->{id} });
+        $af->{values} = {
+            $subscriptionid => $query->param('additional_fields_' . $field->{name})
+        };
+        $af->insert_values;
+    }
+
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
     return;
 }
@@ -407,6 +428,26 @@ sub redirect_mod_subscription {
         $opacdisplaycount, $graceperiod, $location, $enddate, $subscriptionid,
         $skip_serialseq
     );
+
+    my $additional_fields = Koha::AdditionalField->all( { table => 'subscription' } );
+    my @additional_field_values;
+    for my $field ( @$additional_fields ) {
+        my $af = Koha::AdditionalField->new({ id => $field->{id} })->fetch;
+        if ( $af->{marcfield} ) {
+            my $record = GetMarcBiblio( $biblionumber, 1 );
+            my ( $field, $subfield ) = split /\$/, $af->{marcfield};
+            next unless $field and $subfield;
+            my $value = $record->subfield( $field, $subfield );
+            $af->{values} = {
+                $subscriptionid => $value
+            };
+        } else {
+            $af->{values} = {
+                $subscriptionid => $query->param('additional_fields_' . $field->{name})
+            };
+        }
+        $af->insert_values;
+    }
 
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
     return;

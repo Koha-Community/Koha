@@ -139,6 +139,14 @@ if ( defined $subscriptionid ) {
     }
 }
 
+my $additional_fields = Koha::AdditionalField->all( { tablename => 'subscription' } );
+for my $field ( @$additional_fields ) {
+    if ( $field->{authorised_value_category} ) {
+        $field->{authorised_value_choices} = GetAuthorisedValues( $field->{authorised_value_category} );
+    }
+}
+$template->param( additional_fields_for_subscription => $additional_fields );
+
 $template->param(
     subscriptionid => $subscriptionid,
     serialslist => \@serialslist,
