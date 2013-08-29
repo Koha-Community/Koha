@@ -1,0 +1,178 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Serials &rsaquo; Manage new fields for subscriptions
+  [% IF op == "list" %] &rsaquo; List of fields
+  [% ELSIF op == "add_form" %]
+    [% IF field %] &rsaquo; Modify field
+    [% ELSE %] &rsaquo; Add field
+    [% END %]
+  [% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+  $(document).ready(function(){
+
+    $("#fieldst").dataTable($.extend(true, {}, dataTablesDefaults, {
+        'bAutoWidth': false,
+        'sDom': 't<"bottom pager"ilpf>',
+        'sPaginationType': 'four_button',
+        'aLengthMenu': [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+        'iDisplayLength': 20,
+        'aaSorting': [[ 0, "asc" ]],
+    }));
+
+    $(".confirmdelete").click(function(){
+      return confirm(_("Are you sure you want to delete this field?"));
+    });
+
+    $("#add_field").on('submit', function(){
+        if ( $("#marcfield").val().length > 0
+            && $("select[name='authorised_value_category']" ).val().length > 0 ) {
+            alert("You cannot select an authorised value category and a marcfield");
+            return false;
+        }
+        return true;
+    });
+  });
+//]]>
+</script>
+</head>
+
+<body id="ser_add_fields" class="ser">
+  [% INCLUDE 'header.inc' %]
+  [% INCLUDE 'serials-search.inc' %]
+
+  <div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Manage new fields for subscriptions
+  </div>
+
+  <div id="doc3" class="yui-t2">
+  <div id="bd">
+  <div id="yui-main">
+  <div class="yui-b">
+  [% IF op == 'list' %]
+    <div id="toolbar" class="btn-toolbar">
+      <a class="btn btn-small" id="newfields" href="/cgi-bin/koha/serials/add_fields.pl?op=add_form"><i class="icon-plus"></i> New fields</a>
+    </div>
+  [% END %]
+
+  [% IF messages %]
+    [% FOR message IN messages %]
+      [% IF message.code == 'insert' %]
+        [% IF message.number > 0 %]
+          <div class="dialog message">The field has been inserted</div>
+        [% ELSE %]
+          <div class="dialog alert">The field has not been inserted (name still exist?)</div>
+        [% END %]
+      [% ELSIF message.code == 'update' %]
+        [% IF message.number > 0 %]
+          <div class="dialog message">The field has been updated</div>
+        [% ELSE %]
+          <div class="dialog alert">The field has not been updated (name still exist?)</div>
+        [% END %]
+      [% ELSIF message.code == 'delete' %]
+        [% IF message.number > 0 %]
+          <div class="dialog message">The field has been deleted</div>
+        [% ELSE %]
+          <div class="dialog alert">The field has not been deleted</div>
+        [% END %]
+      [% END %]
+    [% END %]
+  [% END %]
+
+  [% IF op == 'list' %]
+    <h3>Additional fields for subscriptions</h3>
+    [% IF fields %]
+      <table id="fieldst">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Authorised value category</th>
+            <th>Marc field</th>
+            <th>Searchable</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          [% FOR field IN fields %]
+            <tr>
+              <td>[% field.name %]</td>
+              <td>[% field.authorised_value_category %]</td>
+              <td>[% field.marcfield %]</td>
+              <td>
+                [% IF field.searchable %]Yes[% ELSE %]No[% END %]
+              </td>
+              <td>
+                <a href="/cgi-bin/koha/serials/add_fields.pl?op=add_form&amp;field_id=[% field.id %]" title="Edit this field">Edit</a>
+                <a class="confirmdelete" href="/cgi-bin/koha/serials/add_fields.pl?op=delete&amp;field_id=[% field.id %]" title="Delete this field">Delete</a>
+              </td>
+            </tr>
+          [% END %]
+        </tbody>
+      </table>
+    [% ELSE %]
+      There is no field defined.
+    [% END %]
+  [% ELSIF op == 'add_form' %]
+    [% IF field %]
+      <h3>Modify field</h3>
+    [% ELSE %]
+      <h3>Add field</h3>
+    [% END %]
+    <form action="/cgi-bin/koha/serials/add_fields.pl" name="add_form" id="add_field" method="post">
+      <fieldset class="rows">
+        <ol>
+          <li>
+            <label for="name" class="required">Name: </label>
+            <input type="text" name="name" id="name" value="[% field.name | html %]" />
+          </li>
+          <li>
+            <label for="av">Authorised value category: </label>
+            <select name="authorised_value_category">
+              <option value="">None</option>
+              [% FOR category IN categories %]
+                [% IF field.authorised_value_category == category %]
+                  <option value="[% category %]" selected="selected">[% category %]</option>
+                [% ELSE %]
+                  <option value="[% category %]">[% category %]</option>
+                [% END %]
+              [% END %]
+            </select>
+          </li>
+          <li>
+            <label for="marcfield">Marc field: </label>
+            <input type="text" name="marcfield" id="marcfield" value="[% field.marcfield| html %]" />
+          </li>
+          <li>
+            <label for="searchable">Searchable: </label>
+            [% IF field.searchable %]
+              <input type="checkbox" name="searchable" id="searchable" checked="checked" />
+            [% ELSE %]
+              <input type="checkbox" name="searchable" id="searchable" />
+            [% END %]
+          </li>
+        </ol>
+      </fieldset>
+      <fieldset class="action">
+        [% IF field %]
+          <input type="hidden" name="field_id" value="[% field.id %]" />
+        [% END %]
+        <input type="hidden" name="op" value="add" />
+        <input type="submit" value="Save" />
+        <a href="/cgi-bin/koha/serials/add_fields.pl" class="cancel">Cancel</a>
+      </fieldset>
+    </form>
+  [% END %]
+
+  </div>
+  </div>
+
+<div class="yui-b">
+[% INCLUDE 'serials-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
