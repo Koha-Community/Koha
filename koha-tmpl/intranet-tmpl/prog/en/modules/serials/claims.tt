@@ -1,6 +1,7 @@
 [% USE Branches %]
 
 [% INCLUDE 'doc-head-open.inc' %]
+[% USE KohaAuthorisedValues %]
     <title>Koha &rsaquo; Serials &rsaquo; Claims</title>
     [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
@@ -8,8 +9,9 @@
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
+    var sTable;
 	 $(document).ready(function() {
-         var sTable = $("#claimst").dataTable($.extend(true, {}, dataTablesDefaults, {
+         sTable = $("#claimst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sDom": 't',
                 "aoColumnDefs": [
                     { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
@@ -18,6 +20,7 @@
                 ],
             "bPaginate": false
         }));
+        sTable.fnAddFilters("filter", "200");
 	    $('#supplierid').change(function() {
     	    $('#claims').submit();
 	    });
@@ -50,13 +53,6 @@
         return false;
         });
 
-        $("#titlefilter").keyup( function () {
-            sTable.fnFilter( this.value, 3 ); // 3 is position of title column
-        } );
-
-        $("#branchfilter").keyup(function() {
-            sTable.fnFilter( this.value, 2 ); // 2 is the position of the author column
-	    });
 	 });
 
 	// Checks if the form can be sent (at least one checkbox must be checked)
@@ -66,36 +62,6 @@
 		return false;
 	    }
 	}
-
-    // Filter by status
-    function filterByStatus() {
-        selectedStatus = $("#statusfilter").val();
-        if (selectedStatus == "all") {
-            clearFilters();
-        } else {
-            $("table#claimst tbody tr").hide();
-            $("table#claimst tbody tr").each( function() {
-                if ( $(this).find("span.status-" + selectedStatus).size() > 0 ) {
-                    $(this).show();
-                }
-            });
-        }
-    }
-
-    // Filter by branch
-    function filterByBranch() {
-        selectedBranch = $("#branchfilter").val();
-        if (selectedBranch == "all") {
-            clearFilters();
-        } else {
-            $("table#claimst tbody tr").hide();
-            $("table#claimst tbody tr").each( function() {
-                if ( $(this).find("span.branch-" + selectedBranch).size() > 0 ) {
-                    $(this).show();
-                }
-            });
-        }
-    }
 
 	// Filter by date
 	function filterByDate() {
@@ -144,6 +110,7 @@
 	// Clears filters : shows everything
 	function clearFilters() {
 	    $("table#claimst tbody tr").show();
+
 	}
 
 //]]>
@@ -209,43 +176,14 @@
 	
 	<ol>
 	<li>
-	    <label for="statusfilter">Status : </label>
-	    <select id="statusfilter" onchange="filterByStatus();">
-            <option value="all" selected="selected">(All)</option>
-            <option value="expected">Expected</option>
-            <option value="late">Late</option>
-            <option value="missing">Missing</option>
-            <option value="missing_never_received">Missing (never received)</option>
-            <option value="missing_sold_out">Missing (sold out)</option>
-            <option value="missing_damaged">Missing (damaged)</option>
-            <option value="missing_lost">Missing (lost)</option>
-            <option value="claimed">Claimed</option>
-	    </select>
-	</li>
-	
-	<li>
-	    <label for="titlefilter">Title : </label>
-        <input id="titlefilter" type="text" />
-    </li>
-    <li>
-	    <label for="branchfilter">Library: </label>
-	    <select id="branchfilter" onchange="filterByBranch();">
-            <option value="all" selected="selected">(All)</option>
-            [% FOREACH branchloo IN branchloop %]
-                <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
-            [% END %]
-        </select>
-	</li>
-	
-	<li>
         <label for="from">From:</label>
         <input type="text" name="begindate" id="from" value="[% begindate %]" size="10" maxlength="10" class="datepickerfrom" />
         <label for="to" style="float:none;">To:</label>
         <input type="text" name="enddate" id="to" value="[% enddate %]" size="10" maxlength="10" class="datepickerto" />
         <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
 	    <input type="button" value="OK" onclick="filterByDate();" />
-        </li>
-	
+    </li>
+
 	<li>
         <input type="reset" value="Clear filters" onclick="clearFilters();" />
 	</li>
@@ -268,13 +206,31 @@
                         <th class="title-string">Since</th>
                         <th>Claims count</th>
                         <th class="title-string">Claim date</th>
+                        [% FOR field IN additional_fields_for_subscription %]
+                          <th>[% field.name %]</th>
+                        [% END %]
                     </tr>
                 </thead>
+                <tfoot>
+                  <tr>
+                    <td></td>
+                    <td><input type="text" class="filter" data-column_num="1" placeholder="Search vendor" /></td>
+                    <td><input type="text" class="filter" data-column_num="2" placeholder="Search library" /></td>
+                    <td><input type="text" class="filter" data-column_num="3" placeholder="Search title" /></td>
+                    <td><input type="text" class="filter" data-column_num="4" placeholder="Search ISSN" /></td>
+                    <td><input type="text" class="filter" data-column_num="5" placeholder="Search issue number" /></td>
+                    <td><input type="text" class="filter" data-column_num="6" placeholder="Search status" /></td>
+                    <td><input type="text" class="filter" data-column_num="7" placeholder="Search since" /></td>
+                    <td><input type="text" class="filter" data-column_num="8" placeholder="Search claim count" /></td>
+                    <td><input type="text" class="filter" data-column_num="9" placeholder="Search claim date" /></td>
+                    [% FOR field IN additional_fields_for_subscription %]
+                      <td><input type="text" class="filter" data-column_num="[% loop.count + 9 %]" placeholder="Search [% field.name %]" /></td>
+                    [% END %]
+                  </tr>
+                </tfoot>
                 <tbody>[% FOREACH missingissue IN missingissues %]
                     <tr>
-                        <td>
-                            <input type="checkbox" name="serialid" value="[% missingissue.serialid %]" />
-                        </td>
+                        <td><input type="checkbox" name="serialid" value="[% missingissue.serialid %]" /></td>
                         <td>[% missingissue.name %]</td>
                         <td>
                             <span class="branch-[% missingissue.branchcode %]">[% Branches.GetName( missingissue.branchcode ) %]</span>
@@ -309,6 +265,13 @@
                                 <span title="0000-00-00"></span>
                             [% END %]
                         </td>
+                        [% FOR field IN additional_fields_for_subscription %]
+                          [% IF field.authorised_value_category %]
+                            <td>[% KohaAuthorisedValues.GetByCode( field.authorised_value_category, missingissue.additional_fields.${field.name} ) %]</td>
+                          [% ELSE %]
+                            <td>[% missingissue.additional_fields.${field.name} %]</td>
+                          [% END %]
+                        [% END %]
                     </tr>
                 [% END %]</tbody>
             </table>

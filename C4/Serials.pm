@@ -1910,6 +1910,7 @@ sub GetLateOrMissingIssues {
     return unless ( $supplierid or $serialid );
 
     my $dbh = C4::Context->dbh;
+
     my $sth;
     my $byserial = '';
     if ($serialid) {
@@ -1969,6 +1970,13 @@ sub GetLateOrMissingIssues {
             $line->{claimdate}   = format_date( $line->{claimdate} );
         }
         $line->{"status".$line->{status}}   = 1;
+
+        my $additional_field_values = Koha::AdditionalField->fetch_all_values({
+            record_id => $line->{subscriptionid},
+            tablename => 'subscription'
+        });
+        %$line = ( %$line, additional_fields => $additional_field_values->{$line->{subscriptionid}} );
+
         push @issuelist, $line;
     }
     return @issuelist;

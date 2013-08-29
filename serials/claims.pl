@@ -27,6 +27,8 @@ use C4::Output;
 use C4::Context;
 use C4::Letters;
 use C4::Branch;    # GetBranches GetBranchesLoop
+use C4::Koha qw( GetAuthorisedValues );
+use Koha::AdditionalField;
 use C4::Csv qw( GetCsvProfiles );
 
 my $input = CGI->new;
@@ -53,6 +55,13 @@ for my $s (@{$supplierlist} ) {
     $s->{count} = scalar  GetLateOrMissingIssues($s->{id});
     if ($supplierid && $s->{id} == $supplierid) {
         $s->{selected} = 1;
+    }
+}
+
+my $additional_fields = Koha::AdditionalField->all( { table => 'subscription', searchable => 1 } );
+for my $field ( @$additional_fields ) {
+    if ( $field->{authorised_value_category} ) {
+        $field->{authorised_value_choices} = GetAuthorisedValues( $field->{authorised_value_category} );
     }
 }
 
@@ -93,6 +102,7 @@ $template->param(
         supplierid => $supplierid,
         claimletter => $claimletter,
         branchloop   => $branchloop,
+        additional_fields_for_subscription => $additional_fields,
         csv_profiles => C4::Csv::GetCsvProfiles( "sql" ),
         letters => $letters,
         (uc(C4::Context->preference("marcflavour"))) => 1
