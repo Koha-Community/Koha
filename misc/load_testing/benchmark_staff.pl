@@ -76,13 +76,17 @@ my $cookie_jar = HTTP::Cookies->new();
 my $cookie;
 $ua->cookie_jar($cookie_jar);
 my $resp = $ua->post( "$baseurl"."/svc/authentication" , {userid =>$user, password => $password} );
-if( $resp->is_success ) {
+if( $resp->is_success and $resp->content =~ m|<status>ok</status>| ) {
     $cookie_jar->extract_cookies( $resp );
     $cookie = $cookie_jar->as_string;
     unless ($short_print) {
         print "Authentication successful\n";
         print "Auth:\n $resp->content" if $debug;
     }
+} elsif ( $resp->is_success ) {
+    die "Authentication failure: bad login/password";
+} else {
+    die "Authentication failure: \n\t" . $resp->status_line;
 }
 
 # remove some unnecessary garbage from the cookie
