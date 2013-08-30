@@ -160,11 +160,10 @@ if ( $op eq "do_search" ) {
         from           => $from,
         to             => $to,
         numbers        => \@numbers,
-        authtypecode   => $authtypecode,
-        value_mainstr  => $query->param('value_mainstr') || "", 
-        value_main     => $query->param('value_main') || "",
-        value_any      => $query->param('value_any') || "",
-        value_match    => $query->param('value_match') || "",
+        operator_mainstr => ( @operator > 0 && $operator[0] ) ? $operator[0] : '',
+        operator_main    => ( @operator > 1 && $operator[1] ) ? $operator[1] : '',
+        operator_any     => ( @operator > 2 && $operator[2] ) ? $operator[2] : '',
+        operator_match   => ( @operator > 3 && $operator[3] ) ? $operator[3] : '',
     );
 } else {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -183,6 +182,7 @@ if ( $op eq "do_search" ) {
 }
 
 $template->param(
+    op            => $op,
     value_mainstr => $query->param('value_mainstr') || "", 
     value_main    => $query->param('value_main') || "",
     value_any     => $query->param('value_any') || "",
