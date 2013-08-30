@@ -8385,6 +8385,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        ALTER TABLE search_history ADD COLUMN type VARCHAR(255) NOT NULL DEFAULT 'biblio' AFTER query_cgi
+    |);
+    print "Upgrade to $DBversion done (Bug 10807 - Add db field search_history.type)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

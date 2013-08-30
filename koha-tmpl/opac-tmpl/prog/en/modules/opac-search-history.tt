@@ -6,19 +6,21 @@
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-	var MSG_CONFIRM_DELETE_HISTORY = _("Are you sure you want to delete your search history?");
-         $(document).ready(function() {
-		// We show table ordered by descending dates by default
-		// (so that the more recent query is shown first)
-            $(".historyt").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aaSorting": [[ 0, "desc" ]],
-                "aoColumns": [
-                    { "sType": "title-string" },
-                    null,
-                    null
-                ]
-            }));
-        });
+var MSG_CONFIRM_DELETE_HISTORY = _("Are you sure you want to delete your search history?");
+$(document).ready(function() {
+    // We show table ordered by descending dates by default
+    // (so that the more recent query is shown first)
+    $(".historyt").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aaSorting": [[ 0, "desc" ]],
+        "aoColumns": [
+            { "sType": "title-string" },
+            null,
+            null
+        ]
+    }));
+
+    $('#tabs').tabs();
+});
 //]]>
 
 </script>
@@ -34,68 +36,151 @@
    <div id="bd">
 [% INCLUDE 'masthead.inc' %]
 
-	<div id="yui-main">
-<div class="yui-b"><div class="yui-g">
-        <div id="searchhistory" class="container">
-	<h1>Search history</h1>
-	[% IF ( recentSearches ) %]<form action="/cgi-bin/koha/opac-search-history.pl" method="get"><input type="hidden" name="action" value="delete" /><input type="submit" class="deleteshelf" value="Delete your search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" /></form>[% ELSE %][% IF ( previousSearches ) %]<form action="/cgi-bin/koha/opac-search-history.pl" method="get"><input type="hidden" name="action" value="delete" /><input type="submit" class="deleteshelf" value="Delete your search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" /></form>[% END %][% END %]
+<div id="yui-main">
+  <div class="yui-b">
+    <div class="yui-g">
+      <h1>Search history</h1>
+      <div id="tabs" class="toptabs">
+        <ul>
+          <li><a href="#biblio_tab">Biblio</a></li>
+          <li><a href="#authority_tab">Authority</a></li>
+        </ul>
+        <div id="biblio_tab">
+          [% IF ( current_biblio_searches ) %]
+            <h2>Current session</h2>
+            <form action="/cgi-bin/koha/opac-search-history.pl" method="get">
+              <input type="hidden" name="action" value="delete" />
+              <input type="hidden" name="previous" value="0" />
+              <input type="hidden" name="type" value="biblio" />
+              <input type="submit" class="deleteshelf" value="Delete your current biblio history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" />
+            </form>
+            <table class="historyt">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Search</th>
+                  <th>Results</th>
+                </tr>
+              </thead>
+              <tbody>
+              [% FOREACH s IN current_biblio_searches %]
+                <tr>
+                  <td><span title="[% s.time %]">[% s.time |$KohaDates with_hours => 1 %]</span></td>
+                  <td><a href="/cgi-bin/koha/opac-search.pl?[% s.query_cgi |html %]">[% s.query_desc |html %]</a></td>
+                  <td>[% s.total %]</td>
+                </tr>
+              [% END %]
+              </tbody>
+            </table>
+          [% END %]
 
-	    [% IF ( recentSearches ) %]
-	    <table class="historyt">
-	    [% IF ( previousSearches ) %]
-	    <caption>Current session</caption>
-	    [% END %]
-		<thead>
-		    <tr><th>Date</th><th>Search</th><th>Results</th></tr>
-		</thead>
-		<tbody>
-		    [% FOREACH recentSearche IN recentSearches %]
-		    <tr>
-            <td><span title="[% recentSearche.time %]">[% recentSearche.time %]</span></td>
-			<td><a href="/cgi-bin/koha/opac-search.pl?[% recentSearche.query_cgi |html %]">[% recentSearche.query_desc |html %]</a></td>
-			<td>[% recentSearche.total %]</td>
-		    </tr>
-		    [% END %]
-		</tbody>
-	    </table>
-	    [% END %]
+          [% IF ( previous_biblio_searches ) %]
+            <h2>Previous sessions</h2>
+            <form action="/cgi-bin/koha/opac-search-history.pl" method="get">
+              <input type="hidden" name="action" value="delete" />
+              <input type="hidden" name="previous" value="1" />
+              <input type="hidden" name="type" value="biblio" />
+              <input type="submit" class="deleteshelf" value="Delete your previous biblio search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" />
+            </form>
+            <table class="historyt">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Search</th>
+                  <th>Results</th>
+                </tr>
+              </thead>
+              <tbody>
+              [% FOREACH s IN previous_biblio_searches %]
+                <tr>
+                  <td><span title="[% s.time %]">[% s.time |$KohaDates with_hours => 1 %]</span></td>
+                  <td><a href="/cgi-bin/koha/opac-search.pl?[% s.query_cgi |html %]">[% s.query_desc |html %]</a></td>
+                  <td>[% s.total %]</td>
+                </tr>
+              [% END %]
+              </tbody>
+            </table>
+          [% END %]
 
-	    [% IF ( previousSearches ) %]
-	    <table class="historyt">
-	    <caption>Previous sessions</caption>
-		<thead>
-		    <tr><th>Date</th><th>Search</th><th>Results</th></tr>
-		</thead>
-		<tbody>
-		    [% FOREACH previousSearche IN previousSearches %]
-		    <tr>
-            <td><span title="[% previousSearche.time %]">[% previousSearche.time |$KohaDates with_hours => 1 %]</span></td>
-			<td><a href="/cgi-bin/koha/opac-search.pl?[% previousSearche.query_cgi |html %]">[% previousSearche.query_desc |html %]</a></td>
-			<td>[% previousSearche.total %]</td>
-		    </tr>
-		    [% END %]
-		</tbody>
-	    </table>
-	    [% END %]
+        <div id="authority_tab">
+          [% IF ( current_authority_searches ) %]
+            <h2>Current session</h2>
+            <form action="/cgi-bin/koha/opac-search-history.pl" method="get">
+              <input type="hidden" name="action" value="delete" />
+              <input type="hidden" name="previous" value="0" />
+              <input type="hidden" name="type" value="authority" />
+              <input type="submit" class="deleteshelf" value="Delete your current authority search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" />
+            </form>
+            <table class="historyt">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Search</th>
+                  <th>Results</th>
+                </tr>
+              </thead>
+              <tbody>
+              [% FOREACH s IN current_authority_searches %]
+                <tr>
+                  <td><span title="[% s.time %]">[% s.time %]</span></td>
+                  <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi |html %]">[% s.query_desc |html %]</a></td>
+                  <td>[% s.total %]</td>
+                </tr>
+              [% END %]
+              </tbody>
+            </table>
+          [% END %]
 
-[% IF ( recentSearches ) %][% ELSE %][% IF ( previousSearches ) %][% ELSE %]<p>Your search history is empty.</p>[% END %][% END %]
+          [% IF ( previous_authority_searches ) %]
+            <h2>Previous sessions</h2>
+            <form action="/cgi-bin/koha/opac-search-history.pl" method="get">
+              <input type="hidden" name="action" value="delete" />
+              <input type="hidden" name="previous" value="1" />
+              <input type="hidden" name="type" value="authority" />
+              <input type="submit" class="deleteshelf" value="Delete your previous authority search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" />
+            </form>
+            <table class="historyt">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Search</th>
+                  <th>Results</th>
+                </tr>
+              </thead>
+              <tbody>
+              [% FOREACH s IN previous_authority_searches %]
+                <tr>
+                  <td><span title="[% s.time %]">[% s.time |$KohaDates with_hours => 1 %]</span></td>
+                  <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi |html %]">[% s.query_desc |html %]</a></td>
+                  <td>[% s.total %]</td>
+                </tr>
+              [% END %]
+              </tbody>
+            </table>
+          [% END %]
 
-     </div>
-     </div>
-     </div>
-     </div>
+          [% IF !current_authority_searches && !previous_authority_searches %]
+            <p>Your authority search history is empty.</p>
+          [% END %]
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 [% IF ( OpacNav ) %]
-<div class="yui-b"><div id="leftmenus" class="container">
-[% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-</div></div>
+  <div class="yui-b">
+    <div id="leftmenus" class="container">
+      [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
+    </div>
+  </div>
 [% ELSIF ( loggedinusername ) %]
-<div class="yui-b"><div id="leftmenus" class="container">
-[% INCLUDE 'navigation.inc' IsPatronPage=1 %]
-</div></div>
-[% ELSE %]
+  <div class="yui-b">
+    <div id="leftmenus" class="container">
+      [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
+    </div>
+  </div>
 [% END %]
-
 
 </div>
 [% INCLUDE 'opac-bottom.inc' %]

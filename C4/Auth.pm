@@ -20,7 +20,7 @@ package C4::Auth;
 use strict;
 use warnings;
 use Digest::MD5 qw(md5_base64);
-use JSON qw/encode_json decode_json/;
+use JSON qw/encode_json/;
 use URI::Escape;
 use CGI::Session;
 
@@ -28,6 +28,7 @@ require Exporter;
 use C4::Context;
 use C4::Templates;    # to get the template
 use C4::Branch; # GetBranches
+use C4::Search::History;
 use C4::VirtualShelves;
 use Koha::AuthUtils qw(hash_password);
 use POSIX qw/strftime/;
@@ -49,7 +50,6 @@ BEGIN {
     @EXPORT      = qw(&checkauth &get_template_and_user &haspermission &get_user_subpermissions);
     @EXPORT_OK   = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &checkpw_internal &checkpw_hash
                       &get_all_subpermissions &get_user_subpermissions
-                      ParseSearchHistorySession SetSearchHistorySession
                    );
     %EXPORT_TAGS = ( EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)] );
     $ldap        = C4::Context->config('useldapserver') || 0;
@@ -128,11 +128,6 @@ More information on the C<gettemplate> sub can be found in the
 Output.pm module.
 
 =cut
-
-my $SEARCH_HISTORY_INSERT_SQL =<<EOQ;
-INSERT INTO search_history(userid, sessionid, query_desc, query_cgi, total, time            )
-VALUES                    (     ?,         ?,          ?,         ?,          ?, FROM_UNIXTIME(?))
-EOQ
 
 sub get_template_and_user {
 
@@ -256,26 +251,34 @@ sub get_template_and_user {
 
             # If at least one search has already been performed
             if ($sth->fetchrow_array > 0) {
-            # We show the link in opac
-            $template->param(ShowOpacRecentSearchLink => 1);
+                # We show the link in opac
+                $template->param( EnableOpacSearchHistory => 1 );
             }
 
             # And if there are searches performed when the user was not logged in,
             # we add them to the logged-in search history
-            my @recentSearches = ParseSearchHistorySession($in->{'query'});
+            my @recentSearches = C4::Search::History::get_from_session({ cgi => $in->{'query'} });
             if (@recentSearches) {
-                my $sth = $dbh->prepare($SEARCH_HISTORY_INSERT_SQL);
+                my $dbh = C4::Context->dbh;
+
+                my $query = q{
+                    INSERT INTO search_history(userid, sessionid, query_desc, query_cgi, type,  total, time )
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                };
+
+                my $sth = $dbh->prepare($query);
                 $sth->execute( $borrowernumber,
-                           $in->{'query'}->cookie("CGISESSID"),
-                           $_->{'query_desc'},
-                           $_->{'query_cgi'},
-                           $_->{'total'},
-                           $_->{'time'},
+                           $in->{query}->cookie("CGISESSID"),
+                           $_->{query_desc},
+                           $_->{query_cgi},
+                           $_->{type} || 'biblio',
+                           $_->{total},
+                           $_->{time},
                         ) foreach @recentSearches;
 
                 # clear out the search history from the session now that
                 # we've saved it to the database
-                SetSearchHistorySession($in->{'query'}, []);
+                C4::Search::History::set_to_session({ cgi => $in->{'query'}, search_history => [] });
             }
         }
     }
@@ -292,9 +295,9 @@ sub get_template_and_user {
      # Anonymous opac search history
      # If opac search history is enabled and at least one search has already been performed
      if (C4::Context->preference('EnableOpacSearchHistory')) {
-        my @recentSearches = ParseSearchHistorySession($in->{'query'});
+        my @recentSearches = C4::Search::History::get_from_session({ cgi => $in->{'query'} });
         if (@recentSearches) {
-            $template->param(ShowOpacRecentSearchLink => 1);
+            $template->param(EnableOpacSearchHistory => 1);
         }
      }
 
@@ -1789,27 +1792,6 @@ sub getborrowernumber {
         }
     }
     return 0;
-}
-
-sub ParseSearchHistorySession {
-    my $cgi = shift;
-    my $sessionID = $cgi->cookie('CGISESSID');
-    return () unless $sessionID;
-    my $session = get_session($sessionID);
-    return () unless $session and $session->param('search_history');
-    my $obj = eval { decode_json(uri_unescape($session->param('search_history'))) };
-    return () unless defined $obj;
-    return () unless ref $obj eq 'ARRAY';
-    return @{ $obj };
-}
-
-sub SetSearchHistorySession {
-    my ($cgi, $search_history) = @_;
-    my $sessionID = $cgi->cookie('CGISESSID');
-    return () unless $sessionID;
-    my $session = get_session($sessionID);
-    return () unless $session;
-    $session->param('search_history', uri_escape(encode_json($search_history)));
 }
 
 END { }    # module clean-up code here (global destructor)

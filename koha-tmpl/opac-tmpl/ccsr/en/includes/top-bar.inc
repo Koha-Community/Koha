@@ -60,7 +60,7 @@
                     <li><span class="members">Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername">[% FOREACH USER_INF IN USER_INFO %][% USER_INF.title %] [% USER_INF.firstname %] [% USER_INF.surname %][% END %]</span></a></span></li>
 
                 [% END %]
-                [% IF ( ShowOpacRecentSearchLink ) %]
+                [% IF ( EnableOpacSearchHistory ) %]
                     <li><a href="/cgi-bin/koha/opac-search-history.pl" title="View your search history">Search history</a></li>
                 [% END %]
  [% IF ( loggedinusername ) %]<li>[% IF persona %]<a class="logout" id="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1" onclick='navigator.id.logout();'>[% ELSE %]<a class="logout" id="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1">[% END %]Log Out</a></li>[% END %]

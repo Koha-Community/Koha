@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2009 BibLibre SARL
+# Copyright 2013 BibLibre SARL
 #
 # This file is part of Koha.
 #
@@ -17,18 +17,17 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
-use C4::Auth qw(:DEFAULT get_session ParseSearchHistorySession SetSearchHistorySession);
+use C4::Auth qw(:DEFAULT get_session);
 use CGI;
-use JSON qw/decode_json encode_json/;
 use C4::Context;
 use C4::Output;
 use C4::Log;
 use C4::Items;
 use C4::Debug;
 use C4::Dates;
+use C4::Search::History;
 use URI::Escape;
 use POSIX qw(strftime);
 
@@ -36,100 +35,116 @@ use POSIX qw(strftime);
 my $cgi = new CGI;
 
 # Getting the template and auth
-my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => "opac-search-history.tmpl",
-                                query => $cgi,
-                                type => "opac",
-                                authnotrequired => 1,
-                                flagsrequired => {borrowers => 1},
-                                debug => 1,
-                                });
+my ($template, $loggedinuser, $cookie) = get_template_and_user(
+    {
+        template_name => "opac-search-history.tmpl",
+        query => $cgi,
+        type => "opac",
+        authnotrequired => 1,
+        flagsrequired => {borrowers => 1},
+        debug => 1,
+    }
+);
+
+my $type = $cgi->param('type');
+my $action = $cgi->param('action') || q{};
+my $previous = $cgi->param('previous');
 
 # If the user is not logged in, we deal with the session
-if (!$loggedinuser) {
-
+unless ( $loggedinuser ) {
     # Deleting search history
     if ($cgi->param('action') && $cgi->param('action') eq 'delete') {
         # Deleting session's search history
-        SetSearchHistorySession($cgi, []);
+        my $type = $cgi->param('type');
+        my @searches = ();
+        if ( $type ) {
+            @searches = C4::Search::History::get_from_session({ cgi => $cgi });
+            @searches = map { $_->{type} ne $type ? $_ : () } @searches;
+        }
+        C4::Search::History::set_to_session({ cgi => $cgi, search_history => \@searches });
 
         # Redirecting to this same url so the user won't see the search history link in the header
         my $uri = $cgi->url();
         print $cgi->redirect(-uri => $uri);
     # Showing search history
     } else {
+        # Getting the searches from session
+        my @current_searches = C4::Search::History::get_from_session({
+            cgi => $cgi,
+        });
 
-        my @recentSearches = ParseSearchHistorySession($cgi);
-	    if (@recentSearches) {
+        my @current_biblio_searches = map {
+            $_->{type} eq 'biblio' ? $_ : ()
+        } @current_searches;
 
-		# As the dates are stored as unix timestamps, let's do some formatting
-		foreach my $asearch (@recentSearches) {
+        my @current_authority_searches = map {
+            $_->{type} eq 'authority' ? $_ : ()
+        } @current_searches;
 
-		    # We create an iso date from the unix timestamp
-		    my $isodate = strftime "%Y-%m-%d", localtime($asearch->{'time'});
-
-		    # We also get the time of the day from the unix timestamp
-		    my $time = strftime " %H:%M:%S", localtime($asearch->{'time'});
-
-		    # And we got our human-readable date : 
-            $asearch->{'time'} = $isodate . $time;
-		}
-
-		$template->param(recentSearches => \@recentSearches);
-	    }
+        $template->param(
+            current_biblio_searches => \@current_biblio_searches,
+            current_authority_searches => \@current_authority_searches,
+        );
     }
 } else {
-# And if the user is logged in, we deal with the database
-   
+    # And if the user is logged in, we deal with the database
     my $dbh = C4::Context->dbh;
 
     # Deleting search history
-    if ($cgi->param('action') && $cgi->param('action') eq 'delete') {
-	my $query = "DELETE FROM search_history WHERE userid = ?";
-	my $sth   = $dbh->prepare($query);
-	$sth->execute($loggedinuser);
-
-	# Redirecting to this same url so the user won't see the search history link in the header
-	my $uri = $cgi->url();
-	print $cgi->redirect($uri);
-
+    if ( $action eq 'delete' ) {
+        my $sessionid = defined $previous
+            ? $cgi->cookie("CGISESSID")
+            : q{};
+        C4::Search::History::delete(
+            {
+                userid => $loggedinuser,
+                sessionid => $sessionid,
+                type => $type,
+                previous => $previous
+            }
+        );
+        # Redirecting to this same url so the user won't see the search history link in the header
+        my $uri = $cgi->url();
+        print $cgi->redirect($uri);
 
     # Showing search history
     } else {
+        my $current_searches = C4::Search::History::get({
+            userid => $loggedinuser,
+            sessionid => $cgi->cookie("CGISESSID")
+        });
+        my @current_biblio_searches = map {
+            $_->{type} eq 'biblio' ? $_ : ()
+        } @$current_searches;
 
-	my $date = C4::Dates->new();
-	my $dateformat = $date->DHTMLcalendar() . " %H:%i:%S"; # Current syspref date format + standard time format
+        my @current_authority_searches = map {
+            $_->{type} eq 'authority' ? $_ : ()
+        } @$current_searches;
 
-	# Getting the data with date format work done by mysql
-    my $query = "SELECT userid, sessionid, query_desc, query_cgi, total, time FROM search_history WHERE userid = ? AND sessionid = ?";
-	my $sth   = $dbh->prepare($query);
-	$sth->execute($loggedinuser, $cgi->cookie("CGISESSID"));
-	my $searches = $sth->fetchall_arrayref({});
-	$template->param(recentSearches => $searches);
-	
-	# Getting searches from previous sessions
-	$query = "SELECT COUNT(*) FROM search_history WHERE userid = ? AND sessionid != ?";
-	$sth   = $dbh->prepare($query);
-	$sth->execute($loggedinuser, $cgi->cookie("CGISESSID"));
+        my $previous_searches = C4::Search::History::get({
+            userid => $loggedinuser,
+            sessionid => $cgi->cookie("CGISESSID"),
+            previous => 1
+        });
 
-	# If at least one search from previous sessions has been performed
-        if ($sth->fetchrow_array > 0) {
-        $query = "SELECT userid, sessionid, query_desc, query_cgi, total, time FROM search_history WHERE userid = ? AND sessionid != ?";
-	    $sth   = $dbh->prepare($query);
-	    $sth->execute($loggedinuser, $cgi->cookie("CGISESSID"));
-    	    my $previoussearches = $sth->fetchall_arrayref({});
-    	    $template->param(previousSearches => $previoussearches);
-	
-	}
+        my @previous_biblio_searches = map {
+            $_->{type} eq 'biblio' ? $_ : ()
+        } @$previous_searches;
 
-	$sth->finish;
+        my @previous_authority_searches = map {
+            $_->{type} eq 'authority' ? $_ : ()
+        } @$previous_searches;
 
+        $template->param(
+            current_biblio_searches => \@current_biblio_searches,
+            current_authority_searches => \@current_authority_searches,
+            previous_biblio_searches => \@previous_biblio_searches,
+            previous_authority_searches => \@previous_authority_searches,
 
+        );
     }
-
 }
 
 $template->param(searchhistoryview => 1);
 
 output_html_with_http_headers $cgi, $cookie, $template->output;
-
-

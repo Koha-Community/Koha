@@ -12,7 +12,7 @@
   [% IF ( OpacPasswordChange ) %]
     [% IF ( passwdview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/opac-passwd.pl">change my password</a></li>
   [% END %]
-  [% IF ( ShowOpacRecentSearchLink ) %]
+  [% IF EnableOpacSearchHistory %]
   [% IF ( searchhistoryview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/opac-search-history.pl">my search history</a></li>
   [% END %]
   [% IF ( opacreadinghistory ) %]

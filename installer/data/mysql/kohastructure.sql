@@ -1910,6 +1910,7 @@ CREATE TABLE IF NOT EXISTS `search_history` ( -- patron's opac search history
   `sessionid` varchar(32) NOT NULL, -- a system generated session id
   `query_desc` varchar(255) NOT NULL, -- the search that was performed
   `query_cgi` text NOT NULL, -- the string to append to the search url to rerun the search
+  `type` varchar(255) NOT NULL DEFAULT 'biblio', -- search type, must be 'biblio' or 'authority'
   `total` int(11) NOT NULL, -- the total of results found
   `time` timestamp NOT NULL default CURRENT_TIMESTAMP, -- the date and time the search was run
   KEY `userid` (`userid`),

@@ -42,9 +42,10 @@ for ( $searchengine ) {
 }
 
 use C4::Output;
-use C4::Auth qw(:DEFAULT get_session ParseSearchHistorySession SetSearchHistorySession);
+use C4::Auth qw(:DEFAULT get_session);
 use C4::Languages qw(getLanguages);
 use C4::Search;
+use C4::Search::History;
 use C4::Biblio;  # GetBiblioData
 use C4::Koha;
 use C4::Tags qw(get_tags);
@@ -616,38 +617,36 @@ for (my $i=0;$i<@servers;$i++) {
 
         # Opac search history
         if (C4::Context->preference('EnableOpacSearchHistory')) {
-            my @recentSearches = ParseSearchHistorySession($cgi);
+            unless ( $offset ) {
+                my $path_info = $cgi->url(-path_info=>1);
+                my $query_cgi_history = $cgi->url(-query=>1);
+                $query_cgi_history =~ s/^$path_info\?//;
+                $query_cgi_history =~ s/;/&/g;
+                my $query_desc_history = join ", ", grep { defined $_ } $query_desc, $limit_desc;
 
-            # Adding the new search if needed
-            my $path_info = $cgi->url(-path_info=>1);
-            my $query_cgi_history = $cgi->url(-query=>1);
-            $query_cgi_history =~ s/^$path_info\?//;
-            $query_cgi_history =~ s/;/&/g;
-            my $query_desc_history = join ", ", grep { defined $_ } $query_desc, $limit_desc;
-
-            if (!$borrowernumber || $borrowernumber eq '') {
-                # To the session (the user is not logged in)
-                if (!$offset) {
-                    push @recentSearches, {
-                                "query_desc" => Encode::decode_utf8($query_desc_history) || "unknown",
-                                "query_cgi"  => Encode::decode_utf8($query_cgi_history)  || "unknown",
-                                "time"       => time(),
-                                "total"      => $total
-                              };
-                    $template->param(ShowOpacRecentSearchLink => 1);
-                }
-
-                shift @recentSearches if (@recentSearches > 15);
-                SetSearchHistorySession($cgi, \@recentSearches);
-            }
-            else {
-                # To the database (the user is logged in)
-                if (!$offset) {
-                    AddSearchHistory($borrowernumber, $cgi->cookie("CGISESSID"), $query_desc_history, $query_cgi_history, $total);
-                    $template->param(ShowOpacRecentSearchLink => 1);
+                unless ( $borrowernumber ) {
+                    my $new_searches = C4::Search::History::add_to_session({
+                            cgi => $cgi,
+                            query_desc => $query_desc_history,
+                            query_cgi => $query_cgi_history,
+                            total => $total,
+                            type => "biblio",
+                    });
+                } else {
+                    # To the session (the user is logged in)
+                    C4::Search::History::add({
+                        userid => $borrowernumber,
+                        sessionid => $cgi->cookie("CGISESSID"),
+                        query_desc => $query_desc_history,
+                        query_cgi => $query_cgi_history,
+                        total => $total,
+                        type => "biblio",
+                    });
                 }
             }
+            $template->param( EnableOpacSearchHistory => 1 );
         }
+
         ## If there's just one result, redirect to the detail page
         if ($total == 1 && $format ne 'rss2'
         && $format ne 'opensearchdescription' && $format ne 'atom') {

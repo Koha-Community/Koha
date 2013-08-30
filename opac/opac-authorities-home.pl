@@ -22,6 +22,7 @@ use strict;
 use warnings;
 
 use CGI;
+
 use C4::Auth;
 
 use C4::Context;
@@ -29,6 +30,7 @@ use C4::Auth;
 use C4::Output;
 use C4::AuthoritiesMarc;
 use C4::Koha;    # XXX subfield_is_koha_internal_p
+use C4::Search::History;
 
 my $query        = new CGI;
 my $op           = $query->param('op') || '';
@@ -129,6 +131,37 @@ if ( $op eq "do_search" ) {
         my @usedauths = grep { $_->{used} > 0 } @$results;
         $results = \@usedauths;
     }
+
+    # Opac search history
+    if (C4::Context->preference('EnableOpacSearchHistory')) {
+        unless ( $startfrom ) {
+            my $path_info = $query->url(-path_info=>1);
+            my $query_cgi_history = $query->url(-query=>1);
+            $query_cgi_history =~ s/^$path_info\?//;
+            $query_cgi_history =~ s/;/&/g;
+
+            unless ( $loggedinuser ) {
+                my $new_search = C4::Search::History::add_to_session({
+                        cgi => $query,
+                        query_desc => $value[0],
+                        query_cgi => $query_cgi_history,
+                        total => $total,
+                        type => "authority",
+                });
+            } else {
+                # To the session (the user is logged in)
+                C4::Search::History::add({
+                    userid => $loggedinuser,
+                    sessionid => $query->cookie("CGISESSID"),
+                    query_desc => $value[0],
+                    query_cgi => $query_cgi_history,
+                    total => $total,
+                    type => "authority",
+                });
+            }
+        }
+    }
+
     $template->param( result => $results ) if $results;
     $template->param( FIELDS => \@fields );
     $template->param( orderby => $orderby );

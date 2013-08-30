@@ -68,7 +68,6 @@ This module provides searching functions for Koha's bibliographic databases
   &searchResults
   &getRecords
   &buildQuery
-  &AddSearchHistory
   &GetDistinctValues
   &enabled_staff_search_views
   &PurgeSearchHistory
@@ -2221,28 +2220,6 @@ sub enabled_staff_search_views
 		can_view_ISBD			=> C4::Context->preference('viewISBD'),			# 1 if the staff search allows the ISBD view
 		can_view_labeledMARC	=> C4::Context->preference('viewLabeledMARC'),	# 1 if the staff search allows the Labeled MARC view
 	);
-}
-
-sub AddSearchHistory{
-	my ($borrowernumber,$session,$query_desc,$query_cgi, $total)=@_;
-    my $dbh = C4::Context->dbh;
-
-    # Add the request the user just made
-    my $sql = "INSERT INTO search_history(userid, sessionid, query_desc, query_cgi, total, time) VALUES(?, ?, ?, ?, ?, NOW())";
-    my $sth   = $dbh->prepare($sql);
-    $sth->execute($borrowernumber, $session, $query_desc, $query_cgi, $total);
-	return $dbh->last_insert_id(undef, 'search_history', undef,undef,undef);
-}
-
-sub GetSearchHistory{
-	my ($borrowernumber,$session)=@_;
-    my $dbh = C4::Context->dbh;
-
-    # Add the request the user just made
-    my $query = "SELECT FROM search_history WHERE (userid=? OR sessionid=?)";
-    my $sth   = $dbh->prepare($query);
-	$sth->execute($borrowernumber, $session);
-    return  $sth->fetchall_hashref({});
 }
 
 sub PurgeSearchHistory{
