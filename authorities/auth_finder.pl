@@ -27,64 +27,76 @@ use C4::Auth;
 use C4::Context;
 use C4::AuthoritiesMarc;
 use C4::Acquisition;
-use C4::Koha;    # XXX subfield_is_koha_internal_p
+use C4::Koha;
 
 my $query        = new CGI;
-my $op           = $query->param('op');
-my $authtypecode = $query->param('authtypecode');
-my $index        = $query->param('index');
-my $tagid        = $query->param('tagid');
-my $resultstring = $query->param('result');
-my $relationship = $query->param('relationship');
-my $dbh          = C4::Context->dbh;
+my $op           = $query->param('op') || '';
+my $authtypecode = $query->param('authtypecode') || '';
+my $index        = $query->param('index') || '';
+my $tagid        = $query->param('tagid') || '';
+my $source       = $query->param('source') || '';
+my $relationship = $query->param('relationship') || '';
 
-my $startfrom = $query->param('startfrom');
-$startfrom = 0 if ( !defined $startfrom );
-my ( $template, $loggedinuser, $cookie );
-my $resultsperpage;
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => ( $op eq 'do_search' )
+        ? 'authorities/searchresultlist-auth.tt'
+        : 'authorities/auth_finder.tt',
+        query           => $query,
+        type            => 'intranet',
+        authnotrequired => 0,
+        flagsrequired   => { catalogue => 1 },
+    }
+);
 
-my $authtypes = getauthtypes;
+# Authority types loop
+my $authtypes = C4::Koha::getauthtypes();
 my @authtypesloop;
 foreach my $thisauthtype ( keys %$authtypes ) {
     my %row = (
         value        => $thisauthtype,
-        selected     => ($thisauthtype eq $authtypecode),
+        selected     => ( $thisauthtype eq $authtypecode ),
         authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
         index        => $index,
     );
     push @authtypesloop, \%row;
 }
 
-$op ||= q{};
+# If search form posted
 if ( $op eq "do_search" ) {
     my @marclist  = $query->param('marclist');
     my @and_or    = $query->param('and_or');
     my @excluding = $query->param('excluding');
     my @operator  = $query->param('operator');
-    my @value     = ($query->param('value_mainstr')||undef, $query->param('value_main')||undef, $query->param('value_any')||undef, $query->param('value_match')||undef);
-    my $orderby   = $query->param('orderby');
-
-    $resultsperpage = $query->param('resultsperpage');
-    $resultsperpage = 20 if ( !defined $resultsperpage );
+    my @value     = (
+        $query->param('value_mainstr') || undef,
+        $query->param('value_main')    || undef,
+        $query->param('value_any')     || undef,
+        $query->param('value_match')   || undef
+    );
+    my $orderby        = $query->param('orderby')        || '';
+    my $startfrom      = $query->param('startfrom')      || 0;
+    my $resultsperpage = $query->param('resultsperpage') || 20;
 
     my ( $results, $total ) =
       SearchAuthorities( \@marclist, \@and_or, \@excluding, \@operator, \@value,
         $startfrom * $resultsperpage,
-        $resultsperpage, $authtypecode, $orderby);
+        $resultsperpage, $authtypecode, $orderby );
 
     # If an authority heading is repeated, add an arrayref to those repetions
     # First heading -- Second heading
-    for my $heading ( @$results ) {
+    for my $heading (@$results) {
         my @repets = split / -- /, $heading->{summary};
         if ( @repets > 1 ) {
             my @repets_loop;
-            for (my $i = 0; $i < @repets; $i++) {
+            for ( my $i = 0 ; $i < @repets ; $i++ ) {
                 push @repets_loop,
-                    { index => $index, repet => $i+1, value => $repets[$i] };
+                  { index => $index, repet => $i + 1, value => $repets[$i] };
             }
             $heading->{repets} = \@repets_loop;
         }
     }
+
     # multi page display gestion
     my $displaynext = 0;
     my $displayprev = $startfrom;
@@ -94,9 +106,8 @@ if ( $op eq "do_search" ) {
 
     my @field_data = ();
 
-    my @marclist_ini =
-      $query->param('marclist')
-      ; # get marclist again, as the previous one has been modified by catalogsearch (mainentry replaced by field name
+# get marclist again, as the previous one has been modified by catalogsearch (mainentry replaced by field name)
+    my @marclist_ini = $query->param('marclist');
     for ( my $i = 0 ; $i <= $#marclist ; $i++ ) {
         push @field_data, { term => "marclist",  val => $marclist_ini[$i] };
         push @field_data, { term => "and_or",    val => $and_or[$i] };
@@ -104,13 +115,16 @@ if ( $op eq "do_search" ) {
         push @field_data, { term => "operator",  val => $operator[$i] };
     }
 
-    push @field_data, { term => "value_mainstr", val => $query->param('value_mainstr') || "" };
-    push @field_data, { term => "value_main",    val => $query->param('value_main')    || "" };
-    push @field_data, { term => "value_any",     val => $query->param('value_any')     || ""};
-    push @field_data, { term => "value_match",   val => $query->param('value_match')   || ""};
+    push @field_data,
+      { term => "value_mainstr", val => $query->param('value_mainstr') || "" };
+    push @field_data,
+      { term => "value_main", val => $query->param('value_main') || "" };
+    push @field_data,
+      { term => "value_any", val => $query->param('value_any') || "" };
+    push @field_data,
+      { term => "value_match", val => $query->param('value_match') || "" };
 
     my @numbers = ();
-
     if ( $total > $resultsperpage ) {
         for ( my $i = 1 ; $i < $total / $resultsperpage + 1 ; $i++ ) {
             if ( $i < 16 ) {
@@ -129,72 +143,55 @@ if ( $op eq "do_search" ) {
 
     my $from = $startfrom * $resultsperpage + 1;
     my $to;
-
     if ( $total < ( ( $startfrom + 1 ) * $resultsperpage ) ) {
         $to = $total;
     }
     else {
         $to = ( ( $startfrom + 1 ) * $resultsperpage );
     }
-    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {
-            template_name   => "authorities/searchresultlist-auth.tt",
-            query           => $query,
-            type            => 'intranet',
-            authnotrequired => 0,
-            flagsrequired   => { catalogue => 1 },
-        }
-    );
 
     $template->param( result => $results ) if $results;
     $template->param(
-        orderby      => $orderby,
-        startfrom      => $startfrom,
-    displaynext    => $displaynext,
-    displayprev    => $displayprev,
-    resultsperpage => $resultsperpage,
-    startfromnext  => $startfrom + 1,
-    startfromprev  => $startfrom - 1,
-        searchdata     => \@field_data,
-        total          => $total,
-        from           => $from,
-        to             => $to,
-        numbers        => \@numbers,
-        operator_mainstr => ( @operator > 0 && $operator[0] ) ? $operator[0] : '',
-        operator_main    => ( @operator > 1 && $operator[1] ) ? $operator[1] : '',
-        operator_any     => ( @operator > 2 && $operator[2] ) ? $operator[2] : '',
-        operator_match   => ( @operator > 3 && $operator[3] ) ? $operator[3] : '',
+        orderby          => $orderby,
+        startfrom        => $startfrom,
+        displaynext      => $displaynext,
+        displayprev      => $displayprev,
+        resultsperpage   => $resultsperpage,
+        startfromnext    => $startfrom + 1,
+        startfromprev    => $startfrom - 1,
+        searchdata       => \@field_data,
+        total            => $total,
+        from             => $from,
+        to               => $to,
+        numbers          => \@numbers,
+        operator_mainstr => ( @operator > 0 && $operator[0] )
+        ? $operator[0]
+        : '',
+        operator_main  => ( @operator > 1 && $operator[1] ) ? $operator[1] : '',
+        operator_any   => ( @operator > 2 && $operator[2] ) ? $operator[2] : '',
+        operator_match => ( @operator > 3 && $operator[3] ) ? $operator[3] : '',
     );
-} else {
-    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {
-            template_name   => "authorities/auth_finder.tt",
-            query           => $query,
-            type            => 'intranet',
-            authnotrequired => 0,
-            flagsrequired   => { catalogue => 1 },
-        }
-    );
+}
+else {
 
-    $template->param(
-        resultstring => $resultstring,
-    );
+    # special case for UNIMARC field 210c builder
+    my $resultstring = $query->param('result') || '';
+    $template->param( resultstring => $resultstring, );
 }
 
 $template->param(
     op            => $op,
-    value_mainstr => $query->param('value_mainstr') || "", 
-    value_main    => $query->param('value_main') || "",
-    value_any     => $query->param('value_any') || "",
-    value_match   => $query->param('value_match') || "",
+    value_mainstr => $query->param('value_mainstr') || '',
+    value_main    => $query->param('value_main') || '',
+    value_any     => $query->param('value_any') || '',
+    value_match   => $query->param('value_match') || '',
     tagid         => $tagid,
     index         => $index,
     authtypesloop => \@authtypesloop,
     authtypecode  => $authtypecode,
+    source        => $source,
+    relationship  => $relationship,
 );
-
-$template->{VARS}->{source} = $query->param('source') || '';
-$template->{VARS}->{relationship} = $query->param('relationship') || '';
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;
