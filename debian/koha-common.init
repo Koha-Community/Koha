@@ -70,6 +70,75 @@ do_reload() {
     koha-start-sip $(koha-list --enabled)
 }
 
+#
+# Function that checks zebrasrv is running for the specified instance
+#
+is_zebra_running()
+{
+    local instancename=$1
+
+    if daemon --name="$instancename-koha-zebra" \
+            --user="$instancename-koha.$instancename-koha" \
+            --running ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+#
+# Function that checks SIP server is running for the specified instance
+#
+is_sip_running()
+{
+    local instancename=$1
+
+    if daemon --name="$instancename-koha-sip" \
+            --pidfiles="/var/run/koha/$instancename" \
+            --user="$instancename-koha.$instancename-koha" \
+            --running ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+#
+# Function that shows the status of the zebrasrv daemon for
+# enabled instances
+#
+zebra_status()
+{
+    for instance in $(koha-list --enabled); do
+
+        log_daemon_msg "Zebra server running for instace $instance"
+
+        if is_zebra_running $instance ; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    done
+}
+
+#
+# Function that shows the status of the SIP server daemon for
+# enabled instances
+#
+sip_status()
+{
+    for instance in $(koha-list --enabled --sip); do
+
+        log_daemon_msg "SIP server running for instace $instance"
+
+        if is_sip_running $instance ; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    done
+}
+
 case "$1" in
   start)
 	[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
@@ -108,13 +177,12 @@ case "$1" in
 		;;
 	esac
 	;;
-# TODO: Implement this. It should check every daemon is running
-#  status)
-#        status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
-#        ;;
+  status)
+        zebra_status
+        sip_status
+        ;;
   *)
-    #echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload|status}" >&2
-    echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
+    echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload|status}" >&2
 	exit 3
 	;;
 esac
