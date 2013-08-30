@@ -1,0 +1,77 @@
+#!/usr/bin/perl
+
+# Copyright 2013 Universidad Nacional de Cordoba
+#                Tomas Cohen Arazi
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+use Modern::Perl;
+
+use CGI;
+use C4::Auth qw/check_cookie_auth/;
+use C4::Images;
+use JSON qw/to_json/;
+
+my $input = new CGI;
+
+my ( $auth_status, $sessionID ) =
+        check_cookie_auth(
+            $input->cookie('CGISESSID'),
+            { tools => 'upload_local_cover_images' } );
+
+if ( $auth_status ne "ok" ) {
+    exit 0;
+}
+
+my $action       = $input->param('action');
+my $biblionumber = $input->param('biblionumber');
+my @imagenumbers = $input->param('imagenumber');
+
+# Array to store the reponse JSON
+my $response = [];
+
+if ( $action eq "delete" ) {
+    # Build a hash of valid imagenumbers fr the given biblionumber
+    my %valid_imagenumbers = map {$_ => 1} ListImagesForBiblio($biblionumber);
+
+    foreach my $imagenumber ( @imagenumbers ) {
+        if ( exists( $valid_imagenumbers{ $imagenumber } ) ) {
+            DelImage($imagenumber);
+            push @$response, {
+                imagenumber => $imagenumber,
+                deleted => 1
+            };
+        } else {
+            push @$response, {
+                imagenumber => $imagenumber,
+                deleted => 0,
+                error => "MSG_INVALID_IMAGENUMBER"
+            };
+        }
+    }
+} else {
+    # invalid action
+    exit 0;
+}
+
+binmode STDOUT, ":encoding(UTF-8)";
+print $input->header(
+    -type => 'application/json',
+    -charset => 'UTF-8'
+);
+
+print to_json( $response );
