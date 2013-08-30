@@ -89,7 +89,6 @@ if ($searched){
 if ($routing) {
     for my $subscription ( @subscriptions) {
         $subscription->{routingedit} = check_routing( $subscription->{subscriptionid} );
-        $subscription->{branchname} = GetBranchName ( $subscription->{branchcode} );
     }
 }
 

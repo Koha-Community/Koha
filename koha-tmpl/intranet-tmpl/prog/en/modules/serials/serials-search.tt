@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% USE KohaDates %]
 <title>Koha &rsaquo; Serials [% biblionumber %]</title>
@@ -153,7 +154,7 @@
                         [% IF ( subscription.internalnotes ) %]([% subscription.internalnotes %])[% END %]
                         </td>
                         <td>
-                          [% IF ( subscription.branchname ) %][% subscription.branchname %][% END %]
+                          [% IF ( subscription.branchcode ) %][% Branches.GetName( subscription.branchcode ) %][% END %]
                         </td>
                         <td>
                           [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
@@ -235,7 +236,7 @@
                           [% IF ( subscription.internalnotes ) %]([% subscription.internalnotes %])[% END %]
                         </td>
                         <td>
-                          [% IF ( subscription.branchname ) %][% subscription.branchname %][% END %]
+                          [% IF ( subscription.branchcode ) %][% Branches.GetName( subscription.branchcode ) %][% END %]
                         </td>
                         <td>
                           [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
