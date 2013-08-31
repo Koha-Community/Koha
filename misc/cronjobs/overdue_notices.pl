@@ -60,7 +60,7 @@ overdue_notices.pl
    -max          <days>           maximum days overdue to deal with
    -library      <branchname>     only deal with overdues from this library (repeatable : several libraries can be given)
    -csv          <filename>       populate CSV file
-   -html         <filename>       Output html to file
+   -html         <directory>      Output html to a file in the given directory
    -itemscontent <list of fields> item information in templates
    -borcat       <categorycode>   category code that must be included
    -borcatout    <categorycode>   category code that must be excluded
@@ -113,6 +113,8 @@ overdues that could not be emailed are sent in CSV format to the admin.
 Produces html data. if patron does not have a mail address or
 -n (no mail) flag is set, an html file is generated in the specified
 directory. This can be downloaded or futher processed by library staff.
+The file will be called notices-YYYY-MM-DD.html and placed in the directory
+specified.
 
 =item B<-itemscontent>
 
