@@ -73,6 +73,11 @@
                         <a class="toplinks" href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a>
                     </li>
                     [% END %]
+                    [% IF EnableSearchHistory %]
+                    <li>
+                        <a class="toplinks" href="/cgi-bin/koha/catalogue/search-history.pl">Search history</a>
+                    </li>
+                    [% END %]
                     <li>
                         <a id="logout" class="toplinks" href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log out</a>
                     </li>

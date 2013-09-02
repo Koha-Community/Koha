@@ -107,6 +107,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('EasyAnalyticalRecords','0','','If on, display in the catalogue screens tools to easily setup analytical record relationships','YesNo'),
 ('emailLibrarianWhenHoldIsPlaced','0',NULL,'If ON, emails the librarian whenever a hold is placed','YesNo'),
 ('EnableBorrowerFiles','0',NULL,'If enabled, allows librarians to upload and attach arbitrary files to a borrower record.','YesNo'),
+('EnableSearchHistory','0','','Enable or disable search history','YesNo'),
 ('EnableOpacSearchHistory','1','YesNo','Enable or disable opac search history',''),
 ('EnhancedMessagingPreferences','0','','If ON, allows patrons to select to receive additional messages about items due or nearly due.','YesNo'),
 ('expandedSearchOption','0',NULL,'If ON, set advanced search to be expanded by default','YesNo'),

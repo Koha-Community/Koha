@@ -31,6 +31,7 @@ use C4::AuthoritiesMarc;
 use C4::Acquisition;
 use C4::Koha;    # XXX subfield_is_koha_internal_p
 use C4::Biblio;
+use C4::Search::History;
 
 my $query = new CGI;
 my $dbh   = C4::Context->dbh;
@@ -97,6 +98,7 @@ if ( $op eq "do_search" ) {
         $orderby
     );
 
+
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "authorities/searchresultlist.tmpl",
@@ -107,6 +109,25 @@ if ( $op eq "do_search" ) {
             debug           => 1,
         }
     );
+
+    # search history
+    if (C4::Context->preference('EnableSearchHistory')) {
+        if ( $startfrom == 1) {
+            my $path_info = $query->url(-path_info=>1);
+            my $query_cgi_history = $query->url(-query=>1);
+            $query_cgi_history =~ s/^$path_info\?//;
+            $query_cgi_history =~ s/;/&/g;
+
+            C4::Search::History::add({
+                userid => $loggedinuser,
+                sessionid => $query->cookie("CGISESSID"),
+                query_desc => $value,
+                query_cgi => $query_cgi_history,
+                total => $total,
+                type => "authority",
+            });
+        }
+    }
 
     $template->param(
         marclist       => $marclist,

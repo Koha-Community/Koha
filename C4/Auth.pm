@@ -279,6 +279,8 @@ sub get_template_and_user {
                 # we've saved it to the database
                 C4::Search::History::set_to_session({ cgi => $in->{'query'}, search_history => [] });
             }
+        } elsif ( $in->{type} eq 'intranet' and C4::Context->preference('EnableSearchHistory') ) {
+            $template->param( EnableSearchHistory => 1 );
         }
     }
     else {    # if this is an anonymous session, setup to display public lists...

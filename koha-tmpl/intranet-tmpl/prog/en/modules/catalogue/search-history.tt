@@ -1,0 +1,178 @@
+[% USE Koha %]
+[% USE KohaDates %]
+<title>Koha &rsaquo; Catalog &rsaquo; History search</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+var MSG_CONFIRM_DELETE_HISTORY = _("Are you sure you want to delete your search history?");
+$(document).ready(function() {
+    // We show table ordered by descending dates by default
+    // (so that the more recent query is shown first)
+    $(".historyt").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aaSorting": [[ 0, "desc" ]],
+        "aoColumns": [
+            { "sType": "title-string" },
+            null,
+            null
+        ]
+    }));
+
+    $('#tabs').tabs();
+});
+//]]>
+
+</script>
+</head>
+<body id="catalogue_search-history" class="catalogue">
+
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs">
+  <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; History search
+</div>
+
+<div id="doc3" class="yui-t2">
+
+<div id="bd">
+  <div id="yui-main">
+    <div class="yui-b">
+      <h1>Search history</h1>
+      <div id="tabs" class="toptabs">
+        <ul>
+          <li><a href="#biblio_tab">Biblio</a></li>
+          <li><a href="#authority_tab">Authority</a></li>
+        </ul>
+        <div id="biblio_tab">
+          [% IF ( current_biblio_searches ) %]
+            <h2>Current session</h2>
+            <form action="/cgi-bin/koha/catalogue/search-history.pl" method="get">
+              <input type="hidden" name="action" value="delete" />
+              <input type="hidden" name="previous" value="0" />
+              <input type="hidden" name="type" value="biblio" />
+              <input type="submit" class="deleteshelf" value="Delete your current biblio history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" />
+            </form>
+            <table class="historyt">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Search</th>
+                  <th>Results</th>
+                </tr>
+              </thead>
+              <tbody>
+              [% FOREACH s IN current_biblio_searches %]
+                <tr>
+                  <td><span title="[% s.time %]">[% s.time |$KohaDates with_hours => 1 %]</span></td>
+                  <td><a href="/cgi-bin/koha/catalogue/search.pl?[% s.query_cgi |html %]">[% s.query_desc |html %]</a></td>
+                  <td>[% s.total %]</td>
+                </tr>
+              [% END %]
+              </tbody>
+            </table>
+          [% END %]
+
+          [% IF ( previous_biblio_searches ) %]
+            <h2>Previous sessions</h2>
+            <form action="/cgi-bin/koha/catalogue/search-history.pl" method="get">
+              <input type="hidden" name="action" value="delete" />
+              <input type="hidden" name="previous" value="1" />
+              <input type="hidden" name="type" value="biblio" />
+              <input type="submit" class="deleteshelf" value="Delete your previous biblio search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" />
+            </form>
+            <table class="historyt">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Search</th>
+                  <th>Results</th>
+                </tr>
+              </thead>
+              <tbody>
+              [% FOREACH s IN previous_biblio_searches %]
+                <tr>
+                  <td><span title="[% s.time %]">[% s.time |$KohaDates with_hours => 1 %]</span></td>
+                  <td><a href="/cgi-bin/koha/catalogue/search.pl?[% s.query_cgi |html %]">[% s.query_desc |html %]</a></td>
+                  <td>[% s.total %]</td>
+                </tr>
+              [% END %]
+              </tbody>
+            </table>
+          [% END %]
+
+          [% IF !current_biblio_searches && !previous_biblio_searches %]
+            <p>Your biblio search history is empty.</p>
+          [% END %]
+        </div>
+
+        <div id="authority_tab">
+          [% IF ( current_authority_searches ) %]
+            <h2>Current session</h2>
+            <form action="/cgi-bin/koha/catalogue/search-history.pl" method="get">
+              <input type="hidden" name="action" value="delete" />
+              <input type="hidden" name="previous" value="0" />
+              <input type="hidden" name="type" value="authority" />
+              <input type="submit" class="deleteshelf" value="Delete your current authority search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" />
+            </form>
+            <table class="historyt">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Search</th>
+                  <th>Results</th>
+                </tr>
+              </thead>
+              <tbody>
+              [% FOREACH s IN current_authority_searches %]
+                <tr>
+                  <td><span title="[% s.time %]">[% s.time |$KohaDates with_hours => 1 %]</span></td>
+                  <td><a href="/cgi-bin/koha/authorities/authorities-home.pl?[% s.query_cgi |html %]">[% s.query_desc |html %]</a></td>
+                  <td>[% s.total %]</td>
+                </tr>
+              [% END %]
+              </tbody>
+            </table>
+          [% END %]
+
+          [% IF ( previous_authority_searches ) %]
+            <h2>Previous sessions</h2>
+            <form action="/cgi-bin/koha/catalogue/search-history.pl" method="get">
+              <input type="hidden" name="action" value="delete" />
+              <input type="hidden" name="previous" value="1" />
+              <input type="hidden" name="type" value="authority" />
+              <input type="submit" class="deleteshelf" value="Delete your previous authority search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" />
+            </form>
+            <table class="historyt">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Search</th>
+                  <th>Results</th>
+                </tr>
+              </thead>
+              <tbody>
+              [% FOREACH s IN previous_authority_searches %]
+                <tr>
+                  <td><span title="[% s.time %]">[% s.time |$KohaDates with_hours => 1 %]</span></td>
+                  <td><a href="/cgi-bin/koha/authorities/authorities-home.pl?[% s.query_cgi |html %]">[% s.query_desc |html %]</a></td>
+                  <td>[% s.total %]</td>
+                </tr>
+              [% END %]
+              </tbody>
+            </table>
+          [% END %]
+
+          [% IF !current_authority_searches && !previous_authority_searches %]
+            <p>Your authority search history is empty.</p>
+          [% END %]
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

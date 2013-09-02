@@ -152,6 +152,7 @@ use URI::Escape;
 use POSIX qw(ceil floor);
 use String::Random;
 use C4::Branch; # GetBranches
+use C4::Search::History;
 
 my $DisplayMultiPlaceHold = C4::Context->preference("DisplayMultiPlaceHold");
 # create a new CGI object
@@ -159,7 +160,6 @@ my $DisplayMultiPlaceHold = C4::Context->preference("DisplayMultiPlaceHold");
 use CGI qw('-no_undef_params');
 my $cgi = new CGI;
 
-my ($template,$borrowernumber,$cookie);
 my $lang = C4::Templates::getlanguage($cgi, 'intranet');
 # decide which template to use
 my $template_name;
@@ -173,7 +173,7 @@ else {
     $template_type = 'advsearch';
 }
 # load the template
-($template, $borrowernumber, $cookie) = get_template_and_user({
+my ($template, $borrowernumber, $cookie) = get_template_and_user({
     template_name => $template_name,
     query => $cgi,
     type => "intranet",
@@ -652,6 +652,29 @@ for (my $i=0;$i<@servers;$i++) {
         # no hits
         else {
             $template->param(searchdesc => 1,query_desc => $query_desc,limit_desc => $limit_desc);
+        }
+
+        # Search history
+        if (C4::Context->preference('EnableSearchHistory')) {
+            unless ( $offset ) {
+                my $path_info = $cgi->url(-path_info=>1);
+                my $query_cgi_history = $cgi->url(-query=>1);
+                $query_cgi_history =~ s/^$path_info\?//;
+                $query_cgi_history =~ s/;/&/g;
+                my $query_desc_history = $query_desc;
+                $query_desc_history .= ", $limit_desc"
+                    if $limit_desc;
+
+                C4::Search::History::add({
+                    userid => $borrowernumber,
+                    sessionid => $cgi->cookie("CGISESSID"),
+                    query_desc => $query_desc_history,
+                    query_cgi => $query_cgi_history,
+                    total => $total,
+                    type => "biblio",
+                });
+            }
+            $template->param( EnableSearchHistory => 1 );
         }
 
     } # end of the if local

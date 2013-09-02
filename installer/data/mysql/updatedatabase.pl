@@ -8394,6 +8394,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('EnableSearchHistory','1','','Enable or disable search history','YesNo')
+    |);
+    print "Upgrade to $DBversion done (MT12541: Add EnableSearchHistory syspref)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
