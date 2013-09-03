@@ -257,7 +257,7 @@ function loadPatron(barcode) {
         $('#oldissuest tbody').empty();
         issuesidx.each(function (item) {
             $('#oldissues').show();
-            $('#oldissuest tbody').append("<tr><td>" + item.value.date_due + "</td><td>" + item.value.barcode + "</td><td>" + item.value.title + "</td><td>" + item.value.itype + "</td><td>" + item.value.issuedate + "</td><td>" + item.value.issuebranch + "</td><td>" + item.value.callnumber + "</td><td>" + "" + "</td></tr>");
+            $('#oldissuest tbody').append("<tr><td>" + item.value.date_due + "</td><td>" + item.value.title + "</td><td>" + item.value.barcode + "</td><td>" + item.value.itype + "</td><td>" + item.value.issuedate + "</td><td>" + item.value.issuebranch + "</td><td>" + item.value.callnumber + "</td><td>" + "" + "</td></tr>");
             $('.checkout-count').text(parseInt($('.checkout-count').text()) + 1);
         }, barcode);
     });
@@ -311,7 +311,7 @@ function recordFine(amount) {
     kohadb.recordTransaction(trans, function () {
         $('#session-payments').show();
         $('#session-payments tbody').prepend('<tr><td>' + amount + '</td><td>' + $.datepicker.formatDate(dateformat, timestamp) + timestamp.toTimeString() + '</td></tr>');
-        $('.fine-amount').text(parseInt($('.fine-amount').text) - amount);
+        $('.fine-amount').text(parseInt($('.fine-amount').text()) - amount);
     });
 }
 
