@@ -22,6 +22,7 @@ use C4::Members;
 use C4::Reserves;
 use C4::Branch qw(GetBranchName);
 use Digest::MD5 qw(md5_base64);
+use C4::Items qw( GetBarcodeFromItemnumber GetItemnumbersForBiblio);
 
 our $VERSION = 3.07.00.049;
 
@@ -91,8 +92,8 @@ sub new {
         screen_msg      => 'Greetings from Koha. ' . $kp->{opacnote},
         print_line      => '',
         items           => [],
-        hold_items      => $flags->{WAITING}{itemlist},
-        overdue_items   => $flags->{ODUES}{itemlist},
+        hold_items      => $flags->{WAITING}->{itemlist},
+        overdue_items   => $flags->{ODUES}->{itemlist},
         fine_items      => [],
         recall_items    => [],
         unavail_holds   => [],
@@ -114,8 +115,7 @@ sub new {
     }
 
     # FIXME: populate fine_items recall_items
-#   $ilspatron{hold_items}    = (GetReservesFromBorrowernumber($kp->{borrowernumber},'F'));
-    $ilspatron{unavail_holds} = [(GetReservesFromBorrowernumber($kp->{borrowernumber}))];
+    $ilspatron{unavail_holds} = _get_outstanding_holds($kp->{borrowernumber});
     $ilspatron{items} = GetPendingIssues($kp->{borrowernumber});
     $self = \%ilspatron;
     $debug and warn Dumper($self);
@@ -248,12 +248,25 @@ sub x_items {
     my $self      = shift;
     my $array_var = shift or return;
     my ($start, $end) = @_;
-    $self->{$array_var} or return [];
-    $start = 1 unless defined($start);
-    $end   = scalar @{$self->{$array_var}} unless defined($end);
-    # syslog("LOG_DEBUG", "$array_var: start = %d, end = %d; items(%s)", $start, $end, join(', ', @{$self->{items}}));
 
-    return [@{$self->{$array_var}}[$start-1 .. $end-1]];
+    my $item_list = [];
+    if ($self->{$array_var}) {
+        if ($start && $start > 1) {
+            --$start;
+        }
+        else {
+            $start = 0;
+        }
+        if ( $end && $end < @{$self->{$array_var}} ) {
+        }
+        else {
+            $end = @{$self->{$array_var}};
+            --$end;
+        }
+        @{$item_list} = @{$self->{$array_var}}[ $start .. $end ];
+
+    }
+    return $item_list;
 }
 
 #
@@ -261,7 +274,11 @@ sub x_items {
 #
 sub hold_items {
     my $self = shift;
-    return $self->x_items('hold_items', @_);
+    my $item_arr = $self->x_items('hold_items', @_);
+    foreach my $item (@{$item_arr}) {
+        $item->{barcode} = GetBarcodeFromItemnumber($item->{itemnumber});
+    }
+    return $item_arr;
 }
 
 sub overdue_items {
@@ -363,6 +380,24 @@ sub _get_address {
         }
     }
     return $address;
+}
+
+sub _get_outstanding_holds {
+    my $borrowernumber = shift;
+    my @hold_array = grep { !defined $_->{found} || $_->{found} ne 'W'} GetReservesFromBorrowernumber($borrowernumber);
+    foreach my $h (@hold_array) {
+        my $item;
+        if ($h->{itemnumber}) {
+            $item = $h->{itemnumber};
+        }
+        else {
+            # We need to return a barcode for the biblio so the client
+            # can request the biblio info
+            $item = ( GetItemnumbersForBiblio($h->{biblionumber}) )[0];
+        }
+        $h->{barcode} = GetBarcodeFromItemnumber($item);
+    }
+    return \@hold_array;
 }
 
 1;
