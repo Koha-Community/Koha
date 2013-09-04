@@ -50,6 +50,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'upload_local_cover_images', 'Eigene Coverbilder hochladen'),
    (13, 'manage_patron_lists', 'Benutzerlisten anlegen, bearbeiten und löschen'),
    (13, 'marc_modification_templates', 'Templates für MARC-Modifikationen verwalten'),
+   (13, 'records_batchdel', 'Perform batch deletion of records (biblios or authorities)'),
    (15, 'check_expiration', 'Ablauf eines Abonnements prüfen'),
    (15, 'claim_serials', 'Fehlende Hefte reklamieren'),
    (15, 'create_subscription', 'Neue Abonnements anlegen'),
