@@ -1,6 +1,17 @@
 [% USE KohaAuthorisedValues %]
 
-[% IF ( item.datedue ) %]
+[% IF ( item.itemlost ) %]
+    [% av_lib_include = KohaAuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) %]
+    [% IF ( av_lib_include ) %]
+        [% av_lib_include %]
+    [% ELSE %]
+        [% IF ( item.lostimageurl ) %]
+            <img src="[% item.lostimageurl %]" alt="[% item.lostimagelabel %]" title="[% item.lostimagelabel %]">
+        [% ELSE %]
+            Item lost
+        [% END %]
+    [% END %]
+[% ELSIF ( item.datedue ) %]
     [% IF ( OPACShowCheckoutName ) %]
         Checked out to [% item.cardnumber %] [% item.firstname %] [% item.surname %]
     [% ELSE %]
@@ -13,17 +24,6 @@
     On hold
 [% ELSIF ( item.withdrawn ) %]
     Item withdrawn
-[% ELSIF ( item.itemlost ) %]
-    [% av_lib_include = KohaAuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) %]
-    [% IF ( av_lib_include ) %]
-        [% av_lib_include %]
-    [% ELSE %]
-        [% IF ( item.lostimageurl ) %]
-            <img src="[% item.lostimageurl %]" alt="[% item.lostimagelabel %]" title="[% item.lostimagelabel %]">
-        [% ELSE %]
-            Item lost
-        [% END %]
-    [% END %]
 [% ELSIF ( item.itemnotforloan ) %]
     [% IF ( item.notforloanvalueopac ) %]
         [% item.notforloanvalueopac %] [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac %])</span>[% END %]
