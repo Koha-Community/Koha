@@ -101,6 +101,12 @@ function placeHold () {
         [% END %]
         </ul>
     </div>
+    <div class="btn-group">
+        <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#" id="actioncart"><i class="icon-play"></i> Actions <span class="caret"></span> </a>
+        <ul class="dropdown-menu">
+            <li><a href="/cgi-bin/koha/tools/batch_delete_records.pl?op=list&amp;bib_list=[% bib_list %]&amp;type=biblio">Delete</a></li>
+        </ul>
+    </div>
     <a class="btn btn-small" href="basket.pl" onclick="printBasket(); return false;"><i class="icon-print"></i> Print</a>
     <a class="btn btn-small" href="basket.pl" onclick="delBasket('popup'); return false;"><i class="icon-trash"></i> Empty and close</a>
     <a class="btn btn-small close" href="basket.pl"><i class="icon-remove-sign"></i> Hide window</a>

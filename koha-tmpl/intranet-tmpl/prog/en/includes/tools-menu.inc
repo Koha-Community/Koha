@@ -56,6 +56,9 @@
     [% IF ( CAN_user_tools_items_batchmod ) %]
 	<li><a href="/cgi-bin/koha/tools/batchMod.pl">Batch item modification</a></li>
     [% END %]
+    [% IF CAN_user_tools_records_batchdel %]
+      <li><a href="/cgi-bin/koha/tools/batch_delete_records.pl">Batch record deletion</a></li>
+    [% END %]
     [% IF ( CAN_user_tools_export_catalog ) %]
     <li><a href="/cgi-bin/koha/tools/export.pl">Export data</a></li>
     [% END %]
