@@ -99,6 +99,9 @@ sub new {
             my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday) = gmtime( time );
             $until = sprintf( "%.4d-%.2d-%.2d", $year+1900, $mon+1,$mday );
         }
+        #Add times to the arguments, when necessary, so they correctly match against the DB timestamps
+        $from .= 'T00:00:00Z' if length($from) == 10;
+        $until .= 'T23:59:59Z' if length($until) == 10;
         $offset = $args{ offset } || 0;
         $set = $args{set};
     }
@@ -108,12 +111,21 @@ sub new {
     $self->{ from            } = $from;
     $self->{ until           } = $until;
     $self->{ set             } = $set;
+    $self->{ from_arg        } = _strip_UTC_designators($from);
+    $self->{ until_arg       } = _strip_UTC_designators($until);
 
     $self->resumptionToken(
         join( '/', $metadata_prefix, $offset, $from, $until, $set ) );
     $self->cursor( $offset );
 
     return $self;
+}
+
+sub _strip_UTC_designators {
+    my ( $timestamp ) = @_;
+    $timestamp =~ s/T/ /g;
+    $timestamp =~ s/Z//g;
+    return $timestamp;
 }
 
 # __END__ C4::OAI::ResumptionToken
@@ -320,14 +332,14 @@ sub new {
         FROM biblioitems
     ";
     $sql .= " JOIN oai_sets_biblios ON biblioitems.biblionumber = oai_sets_biblios.biblionumber " if defined $set;
-    $sql .= " WHERE DATE(timestamp) >= ? AND DATE(timestamp) <= ? ";
+    $sql .= " WHERE timestamp >= ? AND timestamp <= ? ";
     $sql .= " AND oai_sets_biblios.set_id = ? " if defined $set;
     $sql .= "
         LIMIT " . ($max+1) . "
         OFFSET $token->{offset}
     ";
     my $sth = $dbh->prepare( $sql );
-    my @bind_params = ($token->{'from'}, $token->{'until'});
+    my @bind_params = ($token->{'from_arg'}, $token->{'until_arg'});
     push @bind_params, $set->{'id'} if defined $set;
     $sth->execute( @bind_params );
 
@@ -477,7 +489,7 @@ sub new {
         FROM biblioitems
     ";
     $sql .= " JOIN oai_sets_biblios ON biblioitems.biblionumber = oai_sets_biblios.biblionumber " if defined $set;
-    $sql .= " WHERE DATE(timestamp) >= ? AND DATE(timestamp) <= ? ";
+    $sql .= " WHERE timestamp >= ? AND timestamp <= ? ";
     $sql .= " AND oai_sets_biblios.set_id = ? " if defined $set;
     $sql .= "
         LIMIT " . ($max + 1) . "
@@ -485,7 +497,7 @@ sub new {
     ";
 
     my $sth = $dbh->prepare( $sql );
-    my @bind_params = ($token->{'from'}, $token->{'until'});
+    my @bind_params = ($token->{'from_arg'}, $token->{'until_arg'});
     push @bind_params, $set->{'id'} if defined $set;
     $sth->execute( @bind_params );
 
