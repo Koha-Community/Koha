@@ -32,10 +32,10 @@ $(document).ready(function() {
             null,
             null,
             null,
-            null,
-            { "sType": "num-html" },
-            { "sType": "num-html" },
-            null
+            { "sType": "title-numeric" },
+            { "sType": "title-numeric" },
+            { "sType": "title-numeric" },
+            { "sType": "title-numeric" }
         ],
         'sDom': 't',
         'bPaginate': false,
@@ -154,10 +154,10 @@ $(document).ready(function() {
                     [% END %]
                 </td>
                 <td>[% loop_budge.budget_branchname %]</td>
-                <td class="data">[% loop_budge.budget_amount %]</td>
-                <td class="data"><a href="ordered.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_ordered %]</a></td>
-                <td class="data"><a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_spent %]</a></td>
-                <td class="data">[% loop_budge.budget_avail %]</td>
+                <td class="data"><span title="[% loop_budge.budget_amount %]">[% loop_budge.formatted_budget_amount %]</span></td>
+                <td class="data"><span title="[% loop_budge.budget_ordered %]"><a href="ordered.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.formatted_budget_ordered %]</a></span></td>
+                <td class="data"><span title="[% loop_budge.budget_spent %]"><a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.formatted_budget_spent %]</span></a></td>
+                <td class="data"><span title="[% loop_budge.budget_avail %]">[% loop_budge.formatted_budget_avail %]</td>
             </tr>
         [% ELSE %]
             <tr class="b_inactive">
@@ -177,10 +177,10 @@ $(document).ready(function() {
                     [% END %]
                 </td>
                 <td>[% loop_budge.budget_branchname %]</td>
-                <td class="data">[% loop_budge.budget_amount %]</td>
-                <td class="data"><a href="ordered.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_ordered %]</a></td>
-                <td class="data"><a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_spent %]</a></td>
-                <td class="data">[% loop_budge.budget_avail %]</td>
+                <td class="data"><span title="[% loop_budge.budget_amount %]">[% loop_budge.formatted_budget_amount %]</span></td>
+                <td class="data"><span title="[% loop_budge.budget_ordered %]"><a href="ordered.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.formatted_budget_ordered %]</a></span></td>
+                <td class="data"><span title="[% loop_budge.budget_spent %]"><a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.formatted_budget_spent %]</span></a></td>
+                <td class="data"><span title="[% loop_budge.budget_avail %]">[% loop_budge.formatted_budget_avail %]</td>
             </tr>
         [% END %]
         [% END %]

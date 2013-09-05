@@ -135,7 +135,7 @@ foreach my $budget ( @{$budget_arr} ) {
     }
 
     for my $field (qw( budget_amount budget_spent budget_ordered budget_avail ) ) {
-        $budget->{$field} = $num_formatter->format_price( $budget->{$field} );
+        $budget->{"formatted_$field"} = $num_formatter->format_price( $budget->{$field} );
     }
 
     push @budget_loop, $budget;
