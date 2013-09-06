@@ -111,7 +111,12 @@ if ($member || keys %$patron) {
         $member = output_pref(dt_from_string($member), 'iso', undef, 1);
     }
 
-    my $search_scope = ( $quicksearch ? "field_start_with" : "start_with" );
+    my $searchtype = $input->param('searchtype');
+    my $search_scope =
+        $quicksearch ? "field_start_with"
+      : $searchtype  ? $searchtype
+      :                "start_with";
+
     ($results) = Search( $member || $patron, \@orderby, undef, undef, \@searchfields, $search_scope );
 }
 
