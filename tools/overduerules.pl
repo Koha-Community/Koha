@@ -27,6 +27,7 @@ use C4::Koha;
 use C4::Branch;
 use C4::Letters;
 use C4::Members;
+use C4::Overdues;
 
 our $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -44,11 +45,11 @@ sub blank_row {
     for my $rp (@rule_params) {
         for my $n (1 .. 3) {
             my $key   = "${rp}${n}-$category_code";
-            
+
             if (utf8::is_utf8($key)) {
               utf8::encode($key);
             }
-            
+
             my $value = $input->param($key);
             if ($value) {
                 return 0;
@@ -84,6 +85,18 @@ if ($op eq 'save') {
     my $sth_insert = $dbh->prepare("INSERT INTO overduerules (branchcode,categorycode, delay1,letter1,debarred1, delay2,letter2,debarred2, delay3,letter3,debarred3) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
     my $sth_update=$dbh->prepare("UPDATE overduerules SET delay1=?, letter1=?, debarred1=?, delay2=?, letter2=?, debarred2=?, delay3=?, letter3=?, debarred3=? WHERE branchcode=? AND categorycode=?");
     my $sth_delete=$dbh->prepare("DELETE FROM overduerules WHERE branchcode=? AND categorycode=?");
+    my $sth_insert_mtt = $dbh->prepare("
+        INSERT INTO overduerules_transport_types(
+            branchcode, categorycode, letternumber, message_transport_type
+        ) VALUES (
+            ?, ?, ?, ?
+        )
+    ");
+    my $sth_delete_mtt = $dbh->prepare("
+        DELETE FROM overduerules_transport_types
+        WHERE branchcode = ? AND categorycode = ?
+    ");
+
     foreach my $key (@names){
             # ISSUES
             if ($key =~ /(delay|letter|debarred)([1-3])-(.*)/) {
@@ -166,6 +179,15 @@ if ($op eq 'save') {
                             ($temphash{$bor}->{"debarred3"}?$temphash{$bor}->{"debarred3"}:0)
                             );
                     }
+
+                    $sth_delete_mtt->execute( $branch, $bor );
+                    for my $letternumber ( 1..3 ) {
+                        my @mtt = $input->param( "mtt${letternumber}-$bor" );
+                        next unless @mtt;
+                        for my $mtt ( @mtt ) {
+                            $sth_insert_mtt->execute( $branch, $bor, $letternumber, $mtt);
+                        }
+                    }
                 }
         }
     }
@@ -185,19 +207,21 @@ my $countletters = keys %{$letters};
 
 my @line_loop;
 
+my $message_transport_types = C4::Letters::GetMessageTransportTypes();
+my ( @first, @second, @third );
 for my $data (@categories) {
-    my %row = (
-        overduename => $data->{'categorycode'},
-        line        => $data->{'description'}
-    );
     if (%temphash and not $input_saved){
         # if we managed to save the form submission, don't
         # reuse %temphash, but take the values from the
         # database - this makes it easier to identify
         # bugs where the form submission was not correctly saved
-        for (my $i=1;$i<=3;$i++){
-            $row{"delay$i"}=$temphash{$data->{'categorycode'}}->{"delay$i"};
-            $row{"debarred$i"}=$temphash{$data->{'categorycode'}}->{"debarred$i"};
+        for my $i ( 1..3 ){
+            my %row = (
+                overduename => $data->{'categorycode'},
+                line        => $data->{'description'}
+            );
+            $row{delay}=$temphash{$data->{'categorycode'}}->{"delay$i"};
+            $row{debarred}=$temphash{$data->{'categorycode'}}->{"debarred$i"};
             if ($countletters){
                 my @letterloop;
                 foreach my $thisletter (sort { $letters->{$a} cmp $letters->{$b} } keys %$letters) {
@@ -212,10 +236,26 @@ for my $data (@categories) {
                                     );
                     push @letterloop, \%letterrow;
                 }
-                $row{"letterloop$i"}=\@letterloop;
+                $row{letterloop}=\@letterloop;
             } else {
-                $row{"noletter"}=1;
-                $row{"letter$i"}=$temphash{$data->{'categorycode'}}->{"letter$i"};
+                $row{noletter}=1;
+                $row{letter}=$temphash{$data->{'categorycode'}}->{"letter$i"};
+            }
+            my @selected_mtts = @{ GetOverdueMessageTransportTypes( $branch, $data->{'categorycode'}, $i) };
+            my @mtts;
+            for my $mtt ( @$message_transport_types ) {
+                push @mtts, {
+                    value => $mtt,
+                    selected => ( grep {/$mtt/} @selected_mtts ) ? 1 : 0 ,
+                }
+            }
+            $row{message_transport_types} = \@mtts;
+            if ( $i == 1 ) {
+                push @first, \%row;
+            } elsif ( $i == 2 ) {
+                push @second, \%row;
+            } else {
+                push @third, \%row;
             }
         }
     } else {
@@ -223,7 +263,11 @@ for my $data (@categories) {
         my $sth2=$dbh->prepare("SELECT * from overduerules WHERE branchcode=? AND categorycode=?");
         $sth2->execute($branch,$data->{'categorycode'});
         my $dat=$sth2->fetchrow_hashref;
-        for (my $i=1;$i<=3;$i++){
+        for my $i ( 1..3 ){
+            my %row = (
+                overduename => $data->{'categorycode'},
+                line        => $data->{'description'}
+            );
             if ($countletters){
                 my @letterloop;
                 foreach my $thisletter (sort { $letters->{$a} cmp $letters->{$b} } keys %$letters) {
@@ -237,19 +281,57 @@ for my $data (@categories) {
                                     );
                     push @letterloop, \%letterrow;
                 }
-                $row{"letterloop$i"}=\@letterloop;
+                $row{letterloop}=\@letterloop;
             } else {
-                $row{"noletter"}=1;
-                if ($dat->{"letter$i"}){$row{"letter$i"}=$dat->{"letter$i"};}
+                $row{noletter}=1;
+                if ($dat->{"letter$i"}){$row{letter}=$dat->{"letter$i"};}
             }
-            if ($dat->{"delay$i"}){$row{"delay$i"}=$dat->{"delay$i"};}
-            if ($dat->{"debarred$i"}){$row{"debarred$i"}=$dat->{"debarred$i"};}
+            if ($dat->{"delay$i"}){$row{delay}=$dat->{"delay$i"};}
+            if ($dat->{"debarred$i"}){$row{debarred}=$dat->{"debarred$i"};}
+            my @selected_mtts = @{ GetOverdueMessageTransportTypes( $branch, $data->{'categorycode'}, $i) };
+            my @mtts;
+            for my $mtt ( @$message_transport_types ) {
+                push @mtts, {
+                    value => $mtt,
+                    selected => ( grep {/$mtt/} @selected_mtts ) ? 1 : 0 ,
+                }
+            }
+            $row{message_transport_types} = \@mtts;
+            if ( $i == 1 ) {
+                push @first, \%row;
+            } elsif ( $i == 2 ) {
+                push @second, \%row;
+            } else {
+                push @third, \%row;
+            }
+
         }
     }
-    push @line_loop,\%row;
 }
 
-$template->param(table=> \@line_loop,
-                branchloop => $branchloop,
-                branch => $branch);
+my @tabs = (
+    {
+        id => 'first',
+        number => 1,
+        values => \@first,
+    },
+    {
+        id => 'second',
+        number => 2,
+        values => \@second,
+    },
+    {
+        id => 'third',
+        number => 3,
+        values => \@third,
+    },
+);
+
+$template->param(
+    table => ( @first or @second or @third ? 1 : 0 ),
+    branchloop => $branchloop,
+    branch => $branch,
+    tabs => \@tabs,
+    message_transport_types => $message_transport_types,
+);
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -4,12 +4,17 @@
 
 <script type="text/javascript">
 //<![CDATA[
+var tab_map = { "1" : _("First"), "2" : _("Second"), "3" : _("Third")};
 $(document).ready(function() {
-        $('#selectlibrary').find("input:submit").hide();
-        $('#branch').change(function() {
-                $('#selectlibrary').submit();
-        });
-        $('#rulestabs').tabs();
+    $('#selectlibrary').find("input:submit").hide();
+    $('#branch').change(function() {
+            $('#selectlibrary').submit();
+    });
+    $("li>a.tab").each( function(){
+        var id = $(this).attr("data-number");
+        $(this).html(tab_map[id]);
+    } );
+    $('#rulestabs').tabs();
 });
 //]]>
 </script>
@@ -72,131 +77,72 @@ $(document).ready(function() {
                     [% IF ( datasaved ) %]<div class="dialog message">INPUT SAVED</div> [% END %]
 
   <div id="rulestabs" class="toptabs">
-	<ul class="ui-tabs-nav">
-      <li><a href="#first">First</a></li>
-      <li><a href="#second">Second</a></li>
-      <li><a href="#third">Third</a></li>
-	</ul>
-
-<div id="first"><table>
-                    <tr><th>&nbsp;</th><th scope="col">Delay</th><th scope="col">First letter</th><th scope="col">Restrict</th></tr>
-                    [% FOREACH tabl IN table %]
-                     [% UNLESS ( loop.odd ) %]
-                                <tr class="highlight">
-                            [% ELSE %]
-                                <tr>
-                            [% END %]
-                            <th scope="row">[% tabl.line %]</th>
-<td>
-                                <input type="text" name="delay1-[% tabl.overduename %]" size="5" value="[% tabl.delay1 %]" />
-                            </td>
-<td>
-                            [% IF ( tabl.noletter ) %]
-                                <input type="text" name="letter1-[% tabl.overduename %]" value="[% tabl.letter1 %]" />
-                            [% ELSE %]
-                                <select name="letter1-[% tabl.overduename %]">
-                                    <option value="">No notice</option>
-                                    [% FOREACH letterloop IN tabl.letterloop1 %]
-                                        [% IF ( letterloop.selected ) %]
-                                            <option value="[% letterloop.value %]" selected="selected">[% letterloop.lettername %]</option>
-                                        [% ELSE %]
-                                            <option value="[% letterloop.value %]">[% letterloop.lettername %]</option>
-                                        [% END %]
-                                    [% END %]
-                                </select>
-                            [% END %]
-                            </td>
-<td>
-                                [% IF ( tabl.debarred1 ) %]
-                                    <input type="checkbox" name="debarred1-[% tabl.overduename %]" checked="checked" value="1" />
-                                [% ELSE %]
-                                    <input type="checkbox" name="debarred1-[% tabl.overduename %]" value="1" />
-                                [% END %]
-                            </td>
-							</tr>
-							[% END %]
-							</table>
-</div>
-
-<div id="second"><table>
-                    <tr><th>&nbsp;</th><th scope="col">Delay</th><th scope="col">Second letter</th><th scope="col">Restrict</th></tr>
-                    [% FOREACH tabl IN table %]
-                     [% UNLESS ( loop.odd ) %]
-                                <tr class="highlight">
-                            [% ELSE %]
-                                <tr>
-                            [% END %]
-                            <th scope="row">[% tabl.line %]</th>
-<td>
-                                <input type="text" name="delay2-[% tabl.overduename %]" size="5" value="[% tabl.delay2 %]" />
-                            </td>
-<td>
-                            [% IF ( tabl.noletter ) %]
-                                <input type="text" name="letter2-[% tabl.overduename %]" value="[% tabl.letter2 %]" />
-                            [% ELSE %]
-                                <select name="letter2-[% tabl.overduename %]">
-                                    <option value="">No notice</option>
-                                        [% FOREACH letterloop IN tabl.letterloop2 %]
-                                            [% IF ( letterloop.selected ) %]
-                                                <option value="[% letterloop.value %]" selected="selected">[% letterloop.lettername %]</option>
-                                            [% ELSE %]
-                                                <option value="[% letterloop.value %]">[% letterloop.lettername %]</option>
-                                            [% END %]
-                                        [% END %]
-                                </select>
-                            [% END %]
-                            </td>
-<td>
-                                [% IF ( tabl.debarred2 ) %]
-                                    <input type="checkbox" name="debarred2-[% tabl.overduename %]" checked="checked" value="1" />
-                                [% ELSE %]
-                                    <input type="checkbox" name="debarred2-[% tabl.overduename %]" value="1" />
-                                [% END %]
-                            </td>
-							</tr>
-							[% END %]
-							</table>
-</div>
-
-<div id="third"><table>
-                    <tr><th>&nbsp;</th><th scope="col">Delay</th><th scope="col">Third letter</th><th scope="col">Restrict</th></tr>
-                    [% FOREACH tabl IN table %]
-                     [% UNLESS ( loop.odd ) %]
-                                <tr class="highlight">
-                            [% ELSE %]
-                                <tr>
-                            [% END %]
-                            <th scope="row">[% tabl.line %]</th>
-<td>
-                                <input type="text" name="delay3-[% tabl.overduename %]" size="5" value="[% tabl.delay3 %]" />
-                            </td>
-<td>
-                            [% IF ( tabl.noletter ) %]
-                                <input type="text" name="letter3-[% tabl.overduename %]" value="[% tabl.letter3 %]" />
-                            [% ELSE %]
-                                <select name="letter3-[% tabl.overduename %]">
-                                    <option value="">No notice</option>
-                                    [% FOREACH letterloop IN tabl.letterloop3 %]
-                                        [% IF ( letterloop.selected ) %]
-                                            <option value="[% letterloop.value %]" selected="selected">[% letterloop.lettername %]</option>
-                                        [% ELSE %]
-                                            <option value="[% letterloop.value %]">[% letterloop.lettername %]</option>
-                                        [% END %]
-                                    [% END %]
-                                </select>
-                            [% END %]
-                            </td>
-<td>
-                                [% IF ( tabl.debarred3 ) %]
-                                    <input type="checkbox" name="debarred3-[% tabl.overduename %]" checked="checked" value="1" />
-                                [% ELSE %]
-                                    <input type="checkbox" name="debarred3-[% tabl.overduename %]" value="1" />
-                                [% END %]
-                            </td>
-                        </tr>
+    <ul class="ui-tabs-nav">
+      [% FOR tab IN tabs %]
+          <li><a href="#[% tab.id %]" class="tab [% tab.id %]" data-number="[% tab.number %]"></a></li>
+      [% END %]
+    </ul>
+    [% FOR tab IN tabs %]
+      <div id="[% tab.id %]">
+        <table>
+          <thead>
+            <tr>
+              <th>&nbsp;</th>
+              <th scope="col">Delay</th>
+              <th scope="col">Letter</th>
+              <th scope="col">Restrict</th>
+              [% FOREACH mtt IN message_transport_types %]
+                <th scpre="col">[% mtt %]</th>
+              [% END %]
+            </tr>
+          </thead>
+          <tbody>
+          [% FOREACH value IN tab.values %]
+            <tr>
+              <th scope="row">[% value.line %]</th>
+              <td>
+              <input type="text" name="delay[% tab.number %]-[% value.overduename %]" size="5" value="[% value.delay %]" />
+              </td>
+              <td>
+              [% IF ( value.noletter ) %]
+                <input type="text" name="letter[% tab.number %]-[% value.overduename %]" value="[% value.letter %]" />
+              [% ELSE %]
+                <select name="letter[% tab.number %]-[% value.overduename %]">
+                  <option value="">No notice</option>
+                  [% FOREACH letterloop IN value.letterloop %]
+                    [% IF ( letterloop.selected ) %]
+                      <option value="[% letterloop.value %]" selected="selected">[% letterloop.lettername %]</option>
+                    [% ELSE %]
+                      <option value="[% letterloop.value %]">[% letterloop.lettername %]</option>
                     [% END %]
-                </table>
-</div>
+                  [% END %]
+                </select>
+              [% END %]
+              </td>
+              <td>
+              [% IF ( value.debarred ) %]
+                <input type="checkbox" name="debarred[% tab.number %]-[% value.overduename %]" checked="checked" value="1" />
+              [% ELSE %]
+                <input type="checkbox" name="debarred[% tab.number %]-[% value.overduename %]" value="1" />
+              [% END %]
+              </td>
+              [% FOREACH mtt IN value.message_transport_types %]
+                <td>
+                  [% IF mtt.selected %]
+                    <input type="checkbox" name="mtt[% tab.number %]-[% value.overduename %]" value="[% mtt.value %]" checked="checked" />
+                  [% ELSE %]
+                    <input type="checkbox" name="mtt[% tab.number %]-[% value.overduename %]" value="[% mtt.value %]" />
+                  [% END %]
+                </td>
+              [% END %]
+            </tr>
+          [% END %]
+          </tbody>
+        </table>
+      </div>
+    [% END %]
+
+
 </div>
 
                 <fieldset class="action"><input type="submit" value="Save changes" /></fieldset>
