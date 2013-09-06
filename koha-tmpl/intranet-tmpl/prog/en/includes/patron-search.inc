@@ -20,6 +20,8 @@
                 <option value='phone,phonepro,B_phone,altcontactphone,mobile'>Phone number</option>
                 <option value='streettype,address,address2,city,state,zipcode,country'>Street Address</option>
                 <option value='dateofbirth'>Date of birth</option>
+                <option value='sort1'>Sort field 1</option>
+                <option value='sort2'>Sort field 2</option>
             </select>
             <script type="text/javascript">
                 [% SET dateformat = Koha.Preference('dateformat') %]
