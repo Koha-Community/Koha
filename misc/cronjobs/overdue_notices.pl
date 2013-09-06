@@ -39,7 +39,7 @@ use C4::Context;
 use C4::Dates qw/format_date/;
 use C4::Debug;
 use C4::Letters;
-use C4::Overdues qw(GetFine);
+use C4::Overdues qw(GetFine GetOverdueMessageTransportTypes);
 use C4::Budgets qw(GetCurrency);
 
 use Koha::Borrower::Debarments qw(AddUniqueDebarment);
@@ -454,6 +454,7 @@ END_SQL
     # my $outfile = 'overdues_' . ( $mybranch || $branchcode || 'default' );
     while ( my $overdue_rules = $rqoverduerules->fetchrow_hashref ) {
       PERIOD: foreach my $i ( 1 .. 3 ) {
+            my $print_sent = 0; # We never sent a print notice
 
             $verbose and warn "branch '$branchcode', pass $i\n";
             my $mindays = $overdue_rules->{"delay$i"};    # the notice will be sent after mindays days (grace period)
@@ -475,7 +476,7 @@ END_SQL
             # <date> <itemcount> <firstname> <lastname> <address1> <address2> <address3> <city> <postcode> <country>
 
             my $borrower_sql = <<'END_SQL';
-SELECT distinct(issues.borrowernumber), firstname, surname, address, address2, city, zipcode, country, email, emailpro, B_email
+SELECT distinct(issues.borrowernumber), firstname, surname, address, address2, city, zipcode, country, email, emailpro, B_email, smsalertnumber
 FROM   issues,borrowers,categories
 WHERE  issues.borrowernumber=borrowers.borrowernumber
 AND    borrowers.categorycode=categories.categorycode
@@ -571,63 +572,80 @@ END_SQL
                 }
                 $sth2->finish;
 
-                $letter = parse_letter(
-                    {   letter_code     => $overdue_rules->{"letter$i"},
-                        borrowernumber  => $borrowernumber,
-                        branchcode      => $branchcode,
-                        items           => \@items,
-                        substitute      => {    # this appears to be a hack to overcome incomplete features in this code.
-                                            bib             => $branch_details->{'branchname'}, # maybe 'bib' is a typo for 'lib<rary>'?
-                                            'items.content' => $titles,
-                                            'count'         => $itemcount,
-                                           }
-                    }
-                );
-                unless ($letter) {
-                    $verbose and warn "Message '$overdue_rules->{letter$i}' content not found";
+                my @message_transport_types = @{ GetOverdueMessageTransportTypes( $branchcode, $overdue_rules->{categorycode}, $i) };
+                @message_transport_types = @{ GetOverdueMessageTransportTypes( q{}, $overdue_rules->{categorycode}, $i) }
+                    unless @message_transport_types;
 
-                    # might as well skip while PERIOD, no other borrowers are going to work.
-                    # FIXME : Does this mean a letter must be defined in order to trigger a debar ?
-                    next PERIOD;
-                }
-                
-                if ( $exceededPrintNoticesMaxLines ) {
-                  $letter->{'content'} .= "List too long for form; please check your account online for a complete list of your overdue items.";
-                }
+                for my $mtt ( @message_transport_types ) {
 
-                my @misses = grep { /./ } map { /^([^>]*)[>]+/; ( $1 || '' ); } split /\</, $letter->{'content'};
-                if (@misses) {
-                    $verbose and warn "The following terms were not matched and replaced: \n\t" . join "\n\t", @misses;
-                }
-
-                if ( !$nomail && scalar @emails_to_use ) {
-                    C4::Letters::EnqueueLetter(
-                        {   letter                 => $letter,
-                            borrowernumber         => $borrowernumber,
-                            message_transport_type => 'email',
-                            from_address           => $admin_email_address,
-                            to_address             => join(',', @emails_to_use),
+                    my $letter = parse_letter(
+                        {   letter_code     => $overdue_rules->{"letter$i"},
+                            borrowernumber  => $borrowernumber,
+                            branchcode      => $branchcode,
+                            items           => \@items,
+                            substitute      => {    # this appears to be a hack to overcome incomplete features in this code.
+                                                bib             => $branch_details->{'branchname'}, # maybe 'bib' is a typo for 'lib<rary>'?
+                                                'items.content' => $titles,
+                                                'count'         => $itemcount,
+                                               },
+                            message_transport_type => $mtt,
                         }
                     );
-                } else {
-                    # if not sent by email then print
-                    push @output_chunks,
-                      prepare_letter_for_printing(
-                        {   letter         => $letter,
-                            borrowernumber => $borrowernumber,
-                            firstname      => $data->{'firstname'},
-                            lastname       => $data->{'surname'},
-                            address1       => $data->{'address'},
-                            address2       => $data->{'address2'},
-                            city           => $data->{'city'},
-                            postcode       => $data->{'zipcode'},
-                            country        => $data->{'country'},
-                            email          => $notice_email,
-                            itemcount      => $itemcount,
-                            titles         => $titles,
-                            outputformat   => defined $csvfilename ? 'csv' : defined $htmlfilename ? 'html' : defined $text_filename ? 'text' : '',
+                    unless ($letter) {
+                        $verbose and warn "Message '$overdue_rules->{letter$i}' content not found";
+
+                        # might as well skip while PERIOD, no other borrowers are going to work.
+                        # FIXME : Does this mean a letter must be defined in order to trigger a debar ?
+                        next PERIOD;
+                    }
+
+                    if ( $exceededPrintNoticesMaxLines ) {
+                      $letter->{'content'} .= "List too long for form; please check your account online for a complete list of your overdue items.";
+                    }
+
+                    my @misses = grep { /./ } map { /^([^>]*)[>]+/; ( $1 || '' ); } split /\</, $letter->{'content'};
+                    if (@misses) {
+                        $verbose and warn "The following terms were not matched and replaced: \n\t" . join "\n\t", @misses;
+                    }
+
+                    if ($nomail) {
+                        push @output_chunks,
+                          prepare_letter_for_printing(
+                          {   letter         => $letter,
+                              borrowernumber => $borrowernumber,
+                              firstname      => $data->{'firstname'},
+                              lastname       => $data->{'surname'},
+                              address1       => $data->{'address'},
+                              address2       => $data->{'address2'},
+                              city           => $data->{'city'},
+                              postcode       => $data->{'zipcode'},
+                              country        => $data->{'country'},
+                              email          => $notice_email,
+                              itemcount      => $itemcount,
+                              titles         => $titles,
+                              outputformat   => defined $csvfilename ? 'csv' : defined $htmlfilename ? 'html' : defined $text_filename ? 'text' : '',
+                            }
+                          );
+                    } else {
+                        if ( ($mtt eq 'email' and not scalar @emails_to_use) or ($mtt eq 'sms' and not $data->{smsalertnumber}) ) {
+                            # email or sms is requested but not exist, do a print.
+                            $mtt = 'print';
                         }
-                      );
+                        unless ( $mtt eq 'print' and $print_sent == 1 ) {
+                            # Just sent a print if not already done.
+                            C4::Letters::EnqueueLetter(
+                                {   letter                 => $letter,
+                                    borrowernumber         => $borrowernumber,
+                                    message_transport_type => $mtt,
+                                    from_address           => $admin_email_address,
+                                    to_address             => join(',', @emails_to_use),
+                                }
+                            );
+                            # A print notice should be sent only once per overdue level.
+                            # Without this check, a print could be sent twice or more if the library checks sms and email and print and the patron has no email or sms number.
+                            $print_sent = 1 if $mtt eq 'print';
+                        }
+                    }
                 }
             }
             $sth->finish;
@@ -763,6 +781,7 @@ sub parse_letter {
         tables => \%tables,
         substitute => $substitute,
         repeat => { item => \@item_tables },
+        message_transport_type => $params->{message_transport_type},
     );
 }
 
@@ -792,6 +811,7 @@ sub prepare_letter_for_printing {
     }
 
     my $return;
+    chomp $params->{titles};
     if ( exists $params->{'outputformat'} && $params->{'outputformat'} eq 'csv' ) {
         if ($csv->combine(
                 $params->{'firstname'}, $params->{'lastname'}, $params->{'address1'},  $params->{'address2'}, $params->{'postcode'},
