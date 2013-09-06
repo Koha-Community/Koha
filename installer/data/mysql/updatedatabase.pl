@@ -8243,6 +8243,63 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+
+
+
+
+
+$DBversion = "3.15.00.XXX";
+if ( CheckVersion($DBversion) ) {
+
+    $dbh->do( q{
+        ALTER TABLE letter ADD COLUMN message_transport_type VARCHAR(20) NOT NULL DEFAULT 'email' AFTER content
+    } );
+
+    $dbh->do( q{
+        ALTER TABLE letter ADD CONSTRAINT message_transport_type_fk FOREIGN KEY (message_transport_type) REFERENCES message_transport_types(message_transport_type);
+    } );
+
+    $dbh->do( q{
+        ALTER TABLE letter DROP PRIMARY KEY, ADD PRIMARY KEY (`module`,`code`,`branchcode`, message_transport_type);
+    } );
+
+    $dbh->do( q{
+        CREATE TABLE overduerules_transport_types(
+            id INT(11) NOT NULL AUTO_INCREMENT,
+            branchcode varchar(10) NOT NULL DEFAULT '',
+            categorycode VARCHAR(10) NOT NULL DEFAULT '',
+            letternumber INT(1) NOT NULL DEFAULT 1,
+            message_transport_type VARCHAR(20) NOT NULL DEFAULT 'email',
+            PRIMARY KEY (id),
+            CONSTRAINT overduerules_fk FOREIGN KEY (branchcode, categorycode) REFERENCES overduerules (branchcode, categorycode) ON DELETE CASCADE ON UPDATE CASCADE,
+            CONSTRAINT mtt_fk FOREIGN KEY (message_transport_type) REFERENCES message_transport_types (message_transport_type) ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    } );
+
+    my $sth = $dbh->prepare( q{
+        SELECT * FROM overduerules;
+    } );
+
+    $sth->execute;
+    my $sth_insert_mtt = $dbh->prepare( q{
+        INSERT INTO overduerules_transport_types (branchcode, categorycode, letternumber, message_transport_type) VALUES ( ?, ?, ?, ? )
+    } );
+    while ( my $row = $sth->fetchrow_hashref ) {
+        my $branchcode = $row->{branchcode};
+        my $categorycode = $row->{categorycode};
+        for my $letternumber ( 1 .. 3 ) {
+            next unless $row->{"letter$letternumber"};
+            $sth_insert_mtt->execute(
+                $branchcode, $categorycode, $letternumber, 'email'
+            );
+        }
+    }
+
+    print "Upgrade done (Bug 9016: Adds the association table overduerules_transport_types)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

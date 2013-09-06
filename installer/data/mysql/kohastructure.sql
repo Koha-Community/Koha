@@ -1354,7 +1354,10 @@ CREATE TABLE `letter` ( -- table for all notice templates in Koha
   `is_html` tinyint(1) default 0, -- does this notice or slip use HTML (1 for yes, 0 for no)
   `title` varchar(200) NOT NULL default '', -- subject line of the notice
   `content` text, -- body text for the notice or slip
-  PRIMARY KEY  (`module`,`code`, `branchcode`)
+  `message_transport_type` varchar(20) NOT NULL DEFAULT 'email', -- transport type for this notice
+  PRIMARY KEY  (`module`,`code`, `branchcode`, `message_transport_type`),
+  CONSTRAINT `message_transport_type_fk` FOREIGN KEY (`message_transport_type`)
+  REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -2546,6 +2549,22 @@ DROP TABLE IF EXISTS `message_transport_types`;
 CREATE TABLE `message_transport_types` (
   `message_transport_type` varchar(20) NOT NULL,
   PRIMARY KEY  (`message_transport_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `overduerules_transport_types`
+--
+
+DROP TABLE IF EXISTS `overduerules_transport_types`;
+CREATE TABLE overduerules_transport_types(
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `branchcode` varchar(10) NOT NULL DEFAULT '',
+    `categorycode` VARCHAR(10) NOT NULL DEFAULT '',
+    `letternumber` INT(1) NOT NULL DEFAULT 1,
+    `message_transport_type` VARCHAR(20) NOT NULL DEFAULT 'email',
+    PRIMARY KEY (id),
+    CONSTRAINT overduerules_fk FOREIGN KEY (branchcode, categorycode) REFERENCES overduerules (branchcode, categorycode) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT mtt_fk FOREIGN KEY (message_transport_type) REFERENCES message_transport_types (message_transport_type) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
