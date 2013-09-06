@@ -3,6 +3,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
+<script type="text/javascript" src="[% interface %]/[% theme %]/en/lib/jquery/plugins/jquery.insertatcaret.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
@@ -23,6 +24,33 @@ $(document).ready(function() {
             return true;
       });
     [% END %]
+
+    $("#submit").click( function(event) {
+        $("fieldset.mtt").each( function(){
+            var title = $(this).find('input[name="title"]').val();
+            var content = $(this).find('textarea[name="content"]').val();
+            if (
+                    ( title.length == 0 && content.length > 0 )
+                 || ( title.length > 0 && content.length == 0 )
+            ) {
+                var mtt = $(this).find('input[name="message_transport_type"]').val();
+                alert("You must specify a title and a content for " + mtt);
+                event.preventDefault();
+            }
+        } );
+        return true;
+    });
+
+    var sms_limit = 160;
+    $("#content_sms").on("keyup", function(){
+        var length = $(this).val().length;
+        $("#sms_counter").html(length + "/" + sms_limit);
+        if ( length  > sms_limit ) {
+            $("#sms_counter").css("color", "red");
+        } else {
+            $("#sms_counter").css("color", "black");
+        }
+    });
 }); 
 [% IF ( add_form ) %]
 	
@@ -49,61 +77,25 @@ $(document).ready(function() {
 		}
 		return true;
 		}
+        function insertValueQuery(mtt_id) {
+            var fieldset = $("#" + mtt_id);
+            var myQuery = $(fieldset).find('textarea[name="content"]');
+            var myListBox = $(fieldset).find('select[name="SQLfieldname"]');
 
-		function Check(f) {
-			var ok=1;
-			var _alertString="";
-			var alertString2;
-/*			if (!(isNotNull(window.document.Aform.code))) {
-				_alertString += "\n- " + _("Code missing");
-			}*/
-/*			if (!(isNotNull(window.document.Aform.name))) {
-				_alertString += "\n- " + _("Name missing");
-			}*/
-			if (_alertString.length==0) {
-				document.Aform.submit();
-			} else {
-				alertString2  = _("Form not submitted because of the following problem(s)");
-				alertString2 += "\n------------------------------------------------------------------------------------\n";
-				alertString2 += _alertString;
-				alert(alertString2);
-			}
-		}
-		// GPL code coming from PhpMyAdmin
-		function insertValueQuery() {
-			var myQuery = document.Aform.content;
-			var myListBox = document.Aform.SQLfieldname;
-		
-			if(myListBox.options.length > 0) {
-				var chaineAj = "";
-				var NbSelect = 0;
-				for(var i=0; i<myListBox.options.length; i++) {
-					if (myListBox.options[i].selected){
-						NbSelect++;
-						if (NbSelect > 1)
-							chaineAj += ", ";
-						chaineAj += myListBox.options[i].value;
-					}
-				}
-		
-				//IE support
-				if (document.selection) {
-					myQuery.focus();
-					sel = document.selection.createRange();
-					sel.text = chaineAj;
-					document.Aform.insert.focus();
-				}
-				//MOZILLA/NETSCAPE support
-				else if (document.Aform.content.selectionStart || document.Aform.content.selectionStart == "0") {
-					var startPos = document.Aform.content.selectionStart;
-					var endPos = document.Aform.content.selectionEnd;
-					var chaineSql = document.Aform.content.value;
-					myQuery.value = chaineSql.substring(0, startPos) +'<<'+ chaineAj+'>>' + chaineSql.substring(endPos, chaineSql.length);
-				} else {
-					myQuery.value += chaineAj;
-				}
-			}
-		}
+            if($(myListBox).find('option').length > 0) {
+                var chaineAj = "";
+                var NbSelect = 0;
+                $(myListBox).find('option').each( function (){
+                    if ( $(this).attr('selected') ) {
+                        NbSelect++;
+                        if (NbSelect > 1)
+                            chaineAj += ", ";
+                        chaineAj += $(this).val();
+                    }
+                } );
+                $(myQuery).insertAtCaret(chaineAj);
+            }
+        }
 	[% END %]
 		//]]>
 		</script>
@@ -153,75 +145,72 @@ $(document).ready(function() {
             </select>
             [% END %]
         [% END %]
-
-[% IF ( letter ) %]
-        <table id="lettert">
-		<thead><tr>
-			<th>Library</th>
-			<th>Module</th>
-			<th>Code</th>
-			<th>Name</th>
-            <th>Copy notice</th>
-			<th>&nbsp;</th>
-			<th>&nbsp;</th>
-		</tr></thead>
-		<tbody>
-    [% FOREACH lette IN letter %]
-        [% can_edit = lette.branchcode || !independant_branch %]
-        [% UNLESS ( loop.odd ) %]
-			<tr class="highlight">
-        [% ELSE %]
-			<tr>
-        [% END %]
-				<td>[% IF ( lette.branchname ) %][% lette.branchname %][% ELSE %](All libraries)[% END %]</td>
-				<td>[% lette.module %]</td>
-				<td>[% lette.code %]</td>
-				<td>[% lette.name %]</td>
-				<td style="white-space: nowrap">
-        [% IF !independant_branch || !lette.branchcode %]
-                    <form method="post" action="/cgi-bin/koha/tools/letter.pl">
+        [% IF letter %]
+          <table id="lettert">
+            <thead>
+              <tr>
+                <th>Library</th>
+                <th>Module</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Copy notice</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              [% FOREACH lette IN letter %]
+                [% can_edit = lette.branchcode || !independant_branch %]
+                <tr>
+                  <td>[% IF lette.branchname %][% lette.branchname %][% ELSE %](All libraries)[% END %]</td>
+                  <td>[% lette.module %]</td>
+                  <td>[% lette.code %]</td>
+                  <td>[% lette.name %]</td>
+                  <td style="white-space: nowrap">
+                    [% IF !independant_branch || !lette.branchcode %]
+                      <form method="post" action="/cgi-bin/koha/tools/letter.pl">
                         <input type="hidden" name="op" value="copy" />
-				        <input type="hidden" name="oldbranchcode" value="[% lette.branchcode %]" />
+                        <input type="hidden" name="oldbranchcode" value="[% lette.branchcode %]" />
                         <input type="hidden" name="module" value="[% lette.module %]" />
                         <input type="hidden" name="code" value="[% lette.code %]" />
-            [% IF independant_branch %]
-                        <input type="hidden" name="branchcode" value="[% independant_branch %]" />
-            [% ELSE %]
-                        [% select_for_copy %]
-            [% END %]
+                        [% IF independant_branch %]
+                          <input type="hidden" name="branchcode" value="[% independant_branch %]" />
+                        [% ELSE %]
+                          [% select_for_copy %]
+                        [% END %]
                         <input type="submit" value="Copy" />
-                    </form>
-        [% END %]
-                </td>
-                <td>
-        [% IF can_edit %]
-                    <a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;branchcode=[% lette.branchcode %]&amp;module=[% lette.module %]&amp;code=[% lette.code %]">Edit</a>
-        [% END %]
-				</td>
-				<td>
-        [% IF !lette.protected && can_edit %]
-					<a href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;branchcode=[%lette.branchcode %]&amp;module=[% lette.module %]&amp;code=[% lette.code %]">Delete</a>
-        [% END %]
-				</td>
-			</tr>
-    [% END %]
-        </tbody>
-		</table>
-[% ELSE %]
-    <div class="dialog message">
-        [% IF ( branchcode ) %]
-           <p>There are no notices for this library.</p>
+                      </form>
+                    [% END %]
+                  </td>
+                  <td>
+                    [% IF can_edit %]
+                      <a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;branchcode=[% lette.branchcode %]&amp;module=[% lette.module %]&amp;code=[% lette.code %]">Edit</a>
+                    [% END %]
+                  </td>
+                  <td>
+                    [% IF !lette.protected && can_edit %]
+                      <a href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;branchcode=[%lette.branchcode %]&amp;module=[% lette.module %]&amp;code=[% lette.code %]">Delete</a>
+                    [% END %]
+                  </td>
+                </tr>
+              [% END %]
+            </tbody>
+          </table>
         [% ELSE %]
-            <p>There are no notices.</p>
+          <div class="dialog message">
+          [% IF ( branchcode ) %]
+             <p>There are no notices for this library.</p>
+          [% ELSE %]
+              <p>There are no notices.</p>
+          [% END %]
+          </div>
         [% END %]
-    </div>
-[% END %]
 [% END %]
 
 	
 [% IF ( add_form ) %]
 <h1>[% IF ( modify ) %]Modify notice[% ELSE %]Add notice[% END %]</h1>
-		<form action="?" name="Aform" method="post">
+          <form name="Aform" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="op" id="op" value="add_validate" />
 		<input type="hidden" name="checked" value="0" />
 		[% IF ( modify ) %]
@@ -249,45 +238,45 @@ $(document).ready(function() {
 				<label for="module">Koha module:</label>
 				<input type="hidden" name="oldmodule" value="[% module %]" />
 		[% IF ( modify ) %]<select name="module" id="module">[% END %] [% IF ( adding ) %] <select name="module" id="module" onchange="javascript:window.location.href = unescape(window.location.pathname)+'?op=add_form&amp;module='+this.value+'&amp;content='+window.document.forms['Aform'].elements['content'].value;">[% END %]
-                                    [% IF ( catalogue ) %]
-                                    <option value="catalogue" selected="selected">Catalog</option>
+                                    [% IF ( module == "catalogue" ) %]
+                                      <option value="catalogue" selected="selected">Catalog</option>
                                     [% ELSE %]
-                                    <option value="catalogue" >Catalog</option>
+                                      <option value="catalogue" >Catalog</option>
                                     [% END %]
-                                    [% IF ( circulation ) %]
-                                    <option value="circulation" selected="selected">Circulation</option>
+                                    [% IF ( module == "circulation" ) %]
+                                      <option value="circulation" selected="selected">Circulation</option>
                                     [% ELSE %]
-                                    <option value="circulation">Circulation</option>
+                                      <option value="circulation">Circulation</option>
                                     [% END %]
-                                    [% IF ( claimacquisition ) %]
-                                    <option value="claimacquisition" selected="selected">Claim acquisition</option>
+                                    [% IF ( module == "claimacquisition" ) %]
+                                      <option value="claimacquisition" selected="selected">Claim acquisition</option>
                                     [% ELSE %]
-                                    <option value="claimacquisition">Claim acquisition</option>
+                                      <option value="claimacquisition">Claim acquisition</option>
                                     [% END %]
-                                    [% IF ( claimissues ) %]
-                                    <option value="claimissues" selected="selected">Claim serial issue</option>
+                                    [% IF ( module == "claimissues" ) %]
+                                      <option value="claimissues" selected="selected">Claim serial issue</option>
                                     [% ELSE %]
-                                    <option value="claimissues">Claim serial issue</option>
+                                      <option value="claimissues">Claim serial issue</option>
                                     [% END %]
-                                    [% IF ( reserves ) %]
-                                    <option value="reserves" selected="selected">Holds</option>
+                                    [% IF ( module == "reserves" ) %]
+                                      <option value="reserves" selected="selected">Holds</option>
                                     [% ELSE %]
-                                    <option value="reserves">Holds</option>
+                                      <option value="reserves">Holds</option>
                                     [% END %]
-                                    [% IF ( members ) %]
-                                    <option value="members" selected="selected">Members</option>
+                                    [% IF ( module == "members" ) %]
+                                      <option value="members" selected="selected">Members</option>
                                     [% ELSE %]
-                                    <option value="members">Members</option>
+                                      <option value="members">Members</option>
                                     [% END %]
-                                    [% IF ( serial ) %]
-                                    <option value="serial" selected="selected">Serials (routing list)</option>
+                                    [% IF ( module == "serial" ) %]
+                                      <option value="serial" selected="selected">Serials (routing list)</option>
                                     [% ELSE %]
-                                    <option value="serial">Serials (routing list)</option>
+                                      <option value="serial">Serials (routing list)</option>
                                     [% END %]
-                                    [% IF ( suggestions ) %]
-                                    <option value="suggestions" selected="selected">Suggestions</option>
+                                    [% IF ( module == "suggestions" ) %]
+                                      <option value="suggestions" selected="selected">Suggestions</option>
                                     [% ELSE %]
-                                    <option value="suggestions">Suggestions</option>
+                                      <option value="suggestions">Suggestions</option>
                                     [% END %]
 				</select>
 			</li>
@@ -297,33 +286,49 @@ $(document).ready(function() {
 		<li>
 			<label for="name">Name:</label><input type="text" id="name" name="name" size="60" value="[% name %]" />
 		</li>
-		<li>
-            <label for="is_html">HTML message:</label>
-      [% IF is_html %]
-      <input type="checkbox" id="is_html" name="is_html" value="1" checked />
-      [% ELSE %]
-      <input type="checkbox" id="is_html" name="is_html" value="1" />
-      [% END %]
-		</li>
-		<li>
-            <label for="title">Message subject:</label><input type="text" id="title" name="title" size="60" value="[% title %]" />
-		</li>
-		<li>
-            <label for="SQLfieldname">Message body:</label>
-		</li>
-		<li>
-		<table>
-		<tr><td><select name="SQLfieldname" id="SQLfieldname" size="9">
-			[% FOREACH SQLfieldnam IN SQLfieldname %]
-				<option value="[% SQLfieldnam.value %]">[% SQLfieldnam.text %]</option>
-			[% END %]
-		</select></td><td><input type="button" name="insert" value="&gt;&gt;" onclick="insertValueQuery()" title="Insert" /></td><td><textarea name="content" cols="80" rows="15">[% content %]</textarea></td></tr></table>
 
-		</li>
-		</ol>
-                [% IF code.search('DGST') %] <span class="overdue">Warning, this is a template for a Digest, as such, any references to branch data ( e.g. branches.branchname ) will refer to the borrower's home branch.</span> [% END %]
+        [% FOREACH letter IN letters %]
+          <li>
+            <fieldset class="rows mtt" id="[% letter.message_transport_type %]">
+              <legend>[% letter.message_transport_type %]</legend>
+              <ol>
+                <li>
+                  <input type="hidden" name="message_transport_type" value="[% letter.message_transport_type %]" />
+                  <label for="is_html_[% letter.message_transport_type %]">HTML message:</label>
+                  [% IF letter.is_html %]
+                    <input type="checkbox" name="is_html_[% letter.message_transport_type %]" id="is_html_[% letter.message_transport_type %]" value="1" checked="checked" />
+                  [% ELSE %]
+                    <input type="checkbox" name="is_html_[% letter.message_transport_type %]" id="is_html_[% letter.message_transport_type %]" value="1" />
+                  [% END %]
+                </li>
+                <li>
+                  <label for="title">Message subject:</label><input type="text" id="title" name="title" size="60" value="[% letter.title %]" />
+                </li>
+                <li>
+                  <label for="SQLfieldname">Message body: [% IF letter.message_transport_type == 'sms' %]<span id="sms_counter">[% letter.content.length %]/160</span>[% END %]</label>
+                  <table>
+                    <tr>
+                      <td>
+                        <select name="SQLfieldname" multiple="multiple" size="9">
+                          [% FOREACH SQLfieldnam IN SQLfieldname %]
+                            <option value="[% SQLfieldnam.value %]">[% SQLfieldnam.text %]</option>
+                          [% END %]
+                        </select>
+                      </td>
+                      <td><input type="button" name="insert" value="&gt;&gt;" onclick="insertValueQuery('[% letter.message_transport_type %]')" title="Insert" /></td>
+                      <td><textarea name="content" id="content_[% letter.message_transport_type %]" cols="80" rows="15">[% letter.content %]</textarea></td>
+                    </tr>
+                  </table>
+                </li>
+              </ol>
+            </fieldset>
+          </li>
+        [% END %]
+        </ol>
+
+        [% IF code.search('DGST') %] <span class="overdue">Warning, this is a template for a Digest, as such, any references to branch data ( e.g. branches.branchname ) will refer to the borrower's home branch.</span> [% END %]
 		</fieldset>
-		<fieldset class="action"><input type="button" value="Submit" onclick="Check(this.form)" class="button" /> <a class="cancel" href="/cgi-bin/koha/tools/letter.pl">Cancel</a></fieldset>
+          <fieldset class="action"><input type="submit" id="submit" value="Submit" class="button" /> <a class="cancel" href="/cgi-bin/koha/tools/letter.pl">Cancel</a></fieldset>
       <input type="hidden" name="searchfield" value="[% searchfield %]" />
 		</form>
 [% END %]
@@ -358,6 +363,7 @@ $(document).ready(function() {
 		<input type="hidden" name="branchcode" value="[% branchcode %]" />
 		<input type="hidden" name="code" value="[% code %]" />
 		<input type="hidden" name="module" value="[% module %]" />
+        <input type="hidden" name="message_transport_type" value="*" />
                 <input type="submit" value="Yes, delete" class="approve" />
 				</form>
 

@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use C4::Context;
 use C4::Letters;
@@ -31,7 +31,9 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
-$dbh->do('DELETE FROM message_queue');
+$dbh->do(q|DELETE FROM letter|);
+$dbh->do(q|DELETE FROM message_queue|);
+$dbh->do(q|DELETE FROM message_transport_types|);
 
 my $borrowernumber = AddMember(
     firstname    => 'Jane',
@@ -39,6 +41,13 @@ my $borrowernumber = AddMember(
     categorycode => 'PT',
     branchcode   => 'CPL',
 );
+
+$dbh->do(q|
+    INSERT INTO message_transport_types( message_transport_type ) VALUES ('email'), ('phone'), ('print'), ('sms')
+|);
+
+my $mtts = C4::Letters::GetMessageTransportTypes();
+is_deeply( $mtts, ['email', 'phone', 'print', 'sms'], 'GetMessageTransportTypes returns all values' );
 
 my $message_id = C4::Letters::EnqueueLetter({
     borrowernumber         => $borrowernumber,

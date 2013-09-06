@@ -43,7 +43,7 @@ BEGIN {
     $VERSION = 3.07.00.049;
 	@ISA = qw(Exporter);
 	@EXPORT = qw(
-	&GetLetters &GetPreparedLetter &GetWrappedLetter &addalert &getalert &delalert &findrelatedto &SendAlerts &GetPrintMessages
+       &GetLetters &GetPreparedLetter &GetWrappedLetter &addalert &getalert &delalert &findrelatedto &SendAlerts &GetPrintMessages &GetMessageTransportTypes
 	);
 }
 
@@ -98,20 +98,19 @@ $template->param(LETTERLOOP => \@letterloop);
 sub GetLetters {
 
     # returns a reference to a hash of references to ALL letters...
-    my $cat = shift;
+    my ( $cat, $message_transport_type ) = @_;
+    $message_transport_type ||= 'email';
     my %letters;
     my $dbh = C4::Context->dbh;
     my $sth;
-    if (defined $cat) {
-        my $query = "SELECT * FROM letter WHERE module = ? ORDER BY name";
-        $sth = $dbh->prepare($query);
-        $sth->execute($cat);
-    }
-    else {
-        my $query = "SELECT * FROM letter ORDER BY name";
-        $sth = $dbh->prepare($query);
-        $sth->execute;
-    }
+    my $query = q{
+        SELECT * FROM letter WHERE
+    };
+    $query .= q{ module = ? AND } if defined $cat;
+    $query .= q{ message_transport_type = ? ORDER BY name};
+    $sth = $dbh->prepare($query);
+    $sth->execute((defined $cat ? $cat : ()), $message_transport_type);
+
     while ( my $letter = $sth->fetchrow_hashref ) {
         $letters{ $letter->{'code'} } = $letter->{'name'};
     }
@@ -125,7 +124,8 @@ sub GetLetters {
 #        short-term fix, our will work.
 our %letter;
 sub getletter {
-    my ( $module, $code, $branchcode ) = @_;
+    my ( $module, $code, $branchcode, $message_transport_type ) = @_;
+    $message_transport_type ||= 'email';
 
 
     if ( C4::Context->preference('IndependentBranches')
@@ -136,17 +136,22 @@ sub getletter {
     }
     $branchcode //= '';
 
-    if ( my $l = $letter{$module}{$code}{$branchcode} ) {
+    if ( my $l = $letter{$module}{$code}{$branchcode}{$message_transport_type} ) {
         return { %$l }; # deep copy
     }
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("select * from letter where module=? and code=? and (branchcode = ? or branchcode = '') order by branchcode desc limit 1");
-    $sth->execute( $module, $code, $branchcode );
+    my $sth = $dbh->prepare(q{
+        SELECT *
+        FROM letter
+        WHERE module=? AND code=? AND (branchcode = ? OR branchcode = '') AND message_transport_type = ?
+        ORDER BY branchcode DESC LIMIT 1
+    });
+    $sth->execute( $module, $code, $branchcode, $message_transport_type );
     my $line = $sth->fetchrow_hashref
       or return;
     $line->{'content-type'} = 'text/html; charset="UTF-8"' if $line->{is_html};
-    $letter{$module}{$code}{$branchcode} = $line;
+    $letter{$module}{$code}{$branchcode}{$message_transport_type} = $line;
     return { %$line };
 }
 
@@ -448,7 +453,7 @@ sub GetPreparedLetter {
     my $letter_code = $params{letter_code} or croak "No letter_code";
     my $branchcode  = $params{branchcode} || '';
 
-    my $letter = getletter( $module, $letter_code, $branchcode )
+    my $letter = getletter( $module, $letter_code, $branchcode, $params{message_transport_type} )
         or warn( "No $module $letter_code letter"),
             return;
 
@@ -840,6 +845,28 @@ ENDSQL
     my $sth = $dbh->prepare( $statement );
     my $result = $sth->execute( @query_params );
     return $sth->fetchall_arrayref({});
+}
+
+=head2 GetMessageTransportTypes
+
+  my @mtt = GetMessageTransportTypes();
+
+  returns a list of hashes
+
+=cut
+
+sub GetMessageTransportTypes {
+    my $dbh = C4::Context->dbh();
+    my $sth = $dbh->prepare("
+        SELECT message_transport_type
+        FROM message_transport_types
+        ORDER BY message_transport_type
+    ");
+    $sth->execute;
+    my @mtts = map{
+        $_->[0]
+    } @{ $sth->fetchall_arrayref() };
+    return \@mtts;
 }
 
 =head2 _add_attachements
