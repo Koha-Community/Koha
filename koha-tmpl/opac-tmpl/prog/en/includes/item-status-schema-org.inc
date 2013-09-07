@@ -1,5 +1,3 @@
-[% USE KohaAuthorisedValues %]
-
 [% IF ( item.damaged or item.datedue or item.itemlost or item.transfertwhen or item.waiting ) %]
     <link property="availability" href="http://schema.org/OutOfStock" />
 [% ELSIF ( item.withdrawn ) %]
