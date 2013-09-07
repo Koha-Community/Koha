@@ -563,6 +563,9 @@ for (my $i=0;$i<@servers;$i++) {
             exit;
         }
 
+        # set up parameters if user wishes to re-run the search
+        # as a Z39.50 search
+        $template->param (z3950_search_params => C4::Search::z3950_search_args($z3950par || $query_desc));
 
         if ($hits) {
             $template->param(total => $hits);
@@ -575,7 +578,6 @@ for (my $i=0;$i<@servers;$i++) {
             $template->param(limit_desc => $limit_desc);
             $template->param(offset     => $offset);
             $template->param(DisplayMultiPlaceHold => $DisplayMultiPlaceHold);
-            $template->param (z3950_search_params => C4::Search::z3950_search_args($query_desc));
             if ($query_desc || $limit_desc) {
                 $template->param(searchdesc => 1);
             }
@@ -650,7 +652,6 @@ for (my $i=0;$i<@servers;$i++) {
         # no hits
         else {
             $template->param(searchdesc => 1,query_desc => $query_desc,limit_desc => $limit_desc);
-            $template->param (z3950_search_params => C4::Search::z3950_search_args($z3950par || $query_desc));
         }
 
     } # end of the if local
