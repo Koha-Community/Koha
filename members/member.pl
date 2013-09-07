@@ -23,8 +23,7 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use C4::Auth;
 use C4::Output;
 use CGI;
@@ -35,9 +34,9 @@ use Koha::DateUtils;
 use File::Basename;
 
 my $input = new CGI;
-my $quicksearch = $input->param('quicksearch');
-my $startfrom = $input->param('startfrom')||1;
-my $resultsperpage = $input->param('resultsperpage')||C4::Context->preference("PatronsPerPage")||20;
+my $quicksearch = $input->param('quicksearch') || '';
+my $startfrom = $input->param('startfrom') || 1;
+my $resultsperpage = $input->param('resultsperpage') || C4::Context->preference("PatronsPerPage") || 20;
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "members/member.tmpl",
@@ -60,7 +59,7 @@ my @branchloop;
 
 foreach (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
   my $selected;
-  $selected = 1 if $branches->{$_}->{branchcode} eq $$patron{branchcode};
+  $selected = 1 if $patron->{branchcode} && $branches->{$_}->{branchcode} eq $patron->{branchcode};
   my %row = ( value => $_,
         selected => $selected,
         branchname => $branches->{$_}->{branchname},
@@ -85,8 +84,8 @@ if ($AddPatronLists=~/code/){
     $categories[0]->{'first'}=1;
 }  
 
-my $member=$input->param('member');
-my $orderbyparams=$input->param('orderby');
+my $member=$input->param('member') || '';
+my $orderbyparams=$input->param('orderby') || '';
 my @orderby;
 if ($orderbyparams){
 	my @orderbyelt=split(/,/,$orderbyparams);
@@ -104,7 +103,7 @@ my $to   = $from + $resultsperpage;
 
 my ($count,$results);
 if ($member || keys %$patron) {
-    my $searchfields = $input->param('searchfields');
+    my $searchfields = $input->param('searchfields') || '';
     my @searchfields = $searchfields ? split( ',', $searchfields ) : ( "firstname", "surname", "othernames", "cardnumber", "userid", "email" );
 
     if ( $searchfields eq "dateofbirth" ) {
@@ -139,7 +138,7 @@ my $index=$from;
 foreach my $borrower(@$results[$from..$to-1]){
   #find out stats
   my ($od,$issue,$fines)=GetMemberIssuesAndFines($$borrower{'borrowernumber'});
-
+  $fines ||= 0;
   $$borrower{'dateexpiry'}= C4::Dates->new($$borrower{'dateexpiry'},'iso')->output('syspref');
 
   my %row = (
