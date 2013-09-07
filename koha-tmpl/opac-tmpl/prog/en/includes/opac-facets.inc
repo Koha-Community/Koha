@@ -30,6 +30,7 @@
 </ul>
 </div>
 <div id="opacresultssidebar">
+[% OPACResultsSidebar %]
 </div>
 [% END %]
 [% END %]
