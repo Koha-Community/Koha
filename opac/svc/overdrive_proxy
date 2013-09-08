@@ -49,7 +49,6 @@ my $token;
 if ( !IsOverDriveEnabled() || !( $token = GetOverDriveToken() ) ) {
     print $query->header(
         -status => '400 Bad Request',
-        -content
     );
 
     print to_json({
