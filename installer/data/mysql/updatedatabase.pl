@@ -7067,7 +7067,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.13.00.016";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         ALTER TABLE items CHANGE wthdrawn withdrawn TINYINT( 1 ) NOT NULL DEFAULT  '0'
