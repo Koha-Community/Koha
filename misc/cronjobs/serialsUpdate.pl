@@ -94,7 +94,7 @@ my $sth = $dbh->prepare(
        serial.serialid,
        serial.serialseq,
        serial.planneddate,
-       serial.publisheddate
+       serial.publisheddate,
        subscription.subscriptionid
      FROM serial 
      LEFT JOIN subscription 
