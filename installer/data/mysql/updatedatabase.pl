@@ -7104,8 +7104,8 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "XXX";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+$DBversion = "3.13.00.018";
+if ( CheckVersion($DBversion) ) {
     $dbh->do(qq{DROP TABLE IF EXISTS aqorders_transfers;});
     $dbh->do(qq{
         CREATE TABLE aqorders_transfers (
@@ -7118,7 +7118,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
           CONSTRAINT aqorders_transfers_ordernumber_to FOREIGN KEY (ordernumber_to) REFERENCES aqorders (ordernumber) ON DELETE SET NULL ON UPDATE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
     });
-    print "Upgrade to $DBversion done (Add aqorders_transfers table)\n";
+    print "Upgrade to $DBversion done (Bug 5349: Add aqorders_transfers table)\n";
     SetVersion($DBversion);
 }
 
