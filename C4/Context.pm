@@ -542,8 +542,8 @@ sub preference {
     my $self = shift;
     my $var  = shift;    # The system preference to return
 
-    if ($use_syspref_cache && exists $sysprefs{$var}) {
-        return $sysprefs{$var};
+    if ($use_syspref_cache && exists $sysprefs{lc $var}) {
+        return $sysprefs{lc $var};
     }
 
     my $dbh  = C4::Context->dbh or return 0;
@@ -559,10 +559,10 @@ sub preference {
             WHERE   variable = ?
             LIMIT   1
         };
-        $value = $dbh->selectrow_array( $sql, {}, $var );
+        $value = $dbh->selectrow_array( $sql, {}, lc $var );
     }
 
-    $sysprefs{$var} = $value;
+    $sysprefs{lc $var} = $value;
     return $value;
 }
 
