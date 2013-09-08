@@ -133,8 +133,7 @@ $template->param(
                 table_loop              => $table,
                 duplicate_message       => $duplicate_message,
                 duplicate_count         => $duplicate_count,
-                error                   => ($errstr ? 1 : 0),
-                $errstr                 => 1,
+                error                   => $errstr,
                 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

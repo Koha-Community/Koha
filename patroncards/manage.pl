@@ -101,8 +101,7 @@ my $table = html_table($display_columns->{$card_element}, $db_rows);
 
 $template->param(print => 1) if ($card_element eq 'batch');
 $template->param(
-                error           => ($errstr ? 1 : 0),
-                $errstr         => 1,
+                error           => $errstr,
 );
 $template->param(
                 op              => $op,

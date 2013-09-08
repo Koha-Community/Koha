@@ -54,8 +54,7 @@ if ($op eq 'upload') {
             SOURCE_FILE => $source_file,
             IMAGE_NAME => $image_name,
             TABLE => $table,
-            error => 1,
-            $errstr => 1,
+            error => $errstr,
         );
     }
     else {
@@ -69,8 +68,7 @@ if ($op eq 'upload') {
                 SOURCE_FILE => $source_file,
                 IMAGE_NAME => $image_name,
                 TABLE => $table,
-                error => 1,
-                $errstr => 1,
+                error => $errstr,
             );
         }
         else {
@@ -87,8 +85,7 @@ if ($op eq 'upload') {
                     SOURCE_FILE => $source_file,
                     IMAGE_NAME => $image_name,
                     TABLE => $table,
-                    error => 1,
-                    $errstr => 1,
+                    error => $errstr,
                     image_limit => $image_limit,
                 );
             }
@@ -120,8 +117,7 @@ elsif ($op eq 'delete') {
             DELETE_SUCCESSFULL => 0,
             IMAGE_IDS => join(', ', @image_ids),
             TABLE => $table,
-            error => 1,
-            $errstr => 1,
+            error => $errstr,
             image_ids => join(',',@image_ids),
         );
     }
@@ -149,8 +145,7 @@ else { # to trap unsupported operations
         SOURCE_FILE => $source_file,
         IMAGE_NAME => $image_name,
         TABLE => $table,
-        error => 1,
-        $errstr => 1,
+        error => $errstr,
     );
 }
 
