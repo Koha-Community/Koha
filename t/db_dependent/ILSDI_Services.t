@@ -72,7 +72,6 @@ my $borrower = GetMember( borrowernumber => $borrowernumber );
     is($reply->{'id'}, $borrowernumber, "userid is not case sensitive - Patron authenticated");
     is($reply->{'code'}, undef, "Error code undef");
 
-TODO: { local: $TODO = "Can't use cardnumber for authentication with ILS-DI yet.";
     $query->param('username',$borrower->{'cardnumber'});
     $reply = C4::ILSDI::Services::AuthenticatePatron($query);
     is($reply->{'id'}, $borrowernumber, "cardnumber and password - Patron authenticated");
@@ -88,6 +87,6 @@ TODO: { local: $TODO = "Can't use cardnumber for authentication with ILS-DI yet.
     $reply = C4::ILSDI::Services::AuthenticatePatron($query);
     is($reply->{'code'}, 'PatronNotFound', "non-existing cardnumer/userid - PatronNotFound");
     is($reply->{'id'}, undef, "id undef");
-    }
 
 }
+
