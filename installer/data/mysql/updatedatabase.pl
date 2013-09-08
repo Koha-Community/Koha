@@ -7089,8 +7089,8 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.13.00.XXX";
-if(CheckVersion($DBversion)) {
+$DBversion = "3.13.00.017";
+if ( CheckVersion($DBversion) ) {
     $dbh->do(
 "INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('OverDriveClientKey','','Client key for OverDrive integration','30','Free')"
     );
