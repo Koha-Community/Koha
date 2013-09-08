@@ -34,6 +34,7 @@ use XML::Simple;
 use HTML::Entities;
 use CGI;
 use DateTime;
+use C4::Auth;
 
 =head1 NAME
 
