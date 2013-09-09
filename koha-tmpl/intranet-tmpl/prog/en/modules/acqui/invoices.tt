@@ -9,14 +9,11 @@
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
-    [% IF (dateformat == 'metric') %]
-        dt_add_type_uk_date();
-    [% END %]
     $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
-        bInfo: false,
-        bPaginate: false,
-        bFilter: false,
         sDom: "t",
+        "aoColumns": [
+            null,null,{ "sType": "title-string" },null,null,null,null
+        ],
         aoColumnDefs: [
             { "bSortable": false, "aTargets": [6] }
         ]
@@ -59,7 +56,9 @@ $(document).ready(function() {
                   <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% invoice.booksellerid %]">[% invoice.suppliername %]</a></td>
                   <td>
                     [% IF invoice.billingdate %]
-                      [% invoice.billingdate | $KohaDates %]
+                      <span title="[% invoice.billingdate %]">[% invoice.billingdate | $KohaDates %]</span>
+                    [% ELSE %]
+                      <span title="0000-00-00"></span>
                     [% END %]
                   </td>
                   <td>[% invoice.receivedbiblios %]</td>
