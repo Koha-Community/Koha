@@ -188,7 +188,6 @@ sub add_form {
     }
     else { # initialize the new fields
         for my $mtt ( @$message_transport_types ) {
-            $mtt = $mtt->{message_transport_type};
             push @letter_loop, {
                 message_transport_type => $mtt,
             }
