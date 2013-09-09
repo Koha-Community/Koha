@@ -613,7 +613,7 @@ sub _parseletter {
         my @waitingdate = split /-/, $values->{'waitingdate'};
 
         my $dt = dt_from_string();
-        $dt->add( days => C4::Context->preference('ReservesMaxPickUpDelay') );
+        $dt->add( days => C4::Context->preference('ReservesMaxPickUpDelay') || 0);
         $values->{'expirationdate'} = output_pref( $dt, undef, 1 );
 
         $values->{'waitingdate'} = output_pref( dt_from_string( $values->{'waitingdate'} ), undef, 1 );
