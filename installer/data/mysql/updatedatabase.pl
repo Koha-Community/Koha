@@ -8294,6 +8294,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
