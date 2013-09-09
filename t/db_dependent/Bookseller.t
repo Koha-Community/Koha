@@ -160,12 +160,12 @@ is( $bookseller1fromid->{basketcount}, 2, 'Supplier1 has 2 baskets' );
 
 #Test subscriptioncount
 my $dt_today    = dt_from_string;
-my $today       = output_pref( $dt_today, 'iso', '24hr', 1 );
+my $today       = output_pref({ dt => $dt_today, dateformat => 'iso', timeformat => '24hr', dateonly => 1 });
 
 my $dt_today1 = dt_from_string;
 my $dur5 = DateTime::Duration->new( days => -5 );
 $dt_today1->add_duration($dur5);
-my $daysago5 = output_pref( $dt_today1, 'iso', '24hr', 1 );
+my $daysago5 = output_pref({ dt => $dt_today1, dateformat => 'iso', timeformat => '24hr', dateonly => 1 });
 
 my $budgetperiod = C4::Budgets::AddBudgetPeriod({
     budget_period_startdate => $daysago5,
@@ -355,7 +355,7 @@ my $basket2info = {
 my $dt_today2 = dt_from_string;
 my $dur10 = DateTime::Duration->new( days => -10 );
 $dt_today2->add_duration($dur10);
-my $daysago10 = output_pref( $dt_today2, 'iso', '24hr', 1 );
+my $daysago10 = output_pref({ dt => $dt_today2, dateformat => 'iso', timeformat => '24hr', dateonly => 1 });
 my $basket3info = {
     basketno  => $sample_basket3,
     closedate => $daysago10,
@@ -516,7 +516,7 @@ isnt( exists( $suppliers{$id_supplier4} ), 1, "Supplier4 hasnt late orders" );
 my $dt_today3 = dt_from_string;
 my $dur4 = DateTime::Duration->new( days => -4 );
 $dt_today3->add_duration($dur4);
-my $daysago4 = output_pref( $dt_today3, 'iso', '24hr', 1 );
+my $daysago4 =  output_pref({ dt => $dt_today3, dateformat => 'iso', timeformat => '24hr', dateonly => 1 });
 %suppliers =
   C4::Bookseller::GetBooksellersWithLateOrders( undef, $daysago4, undef );
 
