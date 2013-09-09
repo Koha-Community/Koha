@@ -3,11 +3,11 @@
 # This Koha test module is a stub!
 # Add more tests here!!!
 
-use strict;
-use warnings;
+use Modern::Perl;
+use DBI;
 use Test::MockModule;
-use Test::More tests => 2;
-
+use Test::More tests => 4;
+use t::lib::Mocks;
 my $module = new Test::MockModule('C4::Context');
 $module->mock(
     '_new_dbh',
@@ -32,3 +32,13 @@ $dbh->{mock_add_resultset} = $mock_letters;
 my $letters = C4::Letters::GetLetters();
 
 is( $letters->{ISBN}, 'book', 'HASH ref of ISBN is book' );
+
+# Regression test for bug 10843
+# $dt->add takes a scalar, not undef
+my $letter;
+t::lib::Mocks::mock_preference('ReservesMaxPickUpDelay', undef);
+$letter = C4::Letters::_parseletter( undef, 'reserves', {waitingdate => "2013-01-01"} );
+is( ref($letter), 'HASH');
+t::lib::Mocks::mock_preference('ReservesMaxPickUpDelay', 1);
+$letter = C4::Letters::_parseletter( undef, 'reserves', {waitingdate => "2013-01-01"} );
+is( ref($letter), 'HASH');
