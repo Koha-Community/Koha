@@ -178,6 +178,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('LocalCoverImages','0','1','Display local cover images on intranet details pages.','YesNo'),
 ('ManInvInNoissuesCharge','1',NULL,'MANUAL_INV charges block checkouts (added to noissuescharge).','YesNo'),
 ('MARCAuthorityControlField008','|| aca||aabn           | a|a     d',NULL,'Define the contents of MARC21 authority control field 008 position 06-39','Textarea'),
+('MarcFieldsToOrder','',NULL,'Set the mapping values for a new order line created from a marcrecord (staged file). In a YAML format.','textarea'),
 ('MARCOrgCode','OSt','','Define MARC Organization Code for MARC21 records - http://www.loc.gov/marc/organizations/orgshome.html','free'),
 ('MaxFine',NULL,'','Maximum fine a patron can have for all late returns at one moment. Single item caps are specified in the circulation rules matrix.','Integer'),
 ('MaxItemsForBatch','1000',NULL,'Max number of items record to process in a batch (modification or deletion)','Integer'),

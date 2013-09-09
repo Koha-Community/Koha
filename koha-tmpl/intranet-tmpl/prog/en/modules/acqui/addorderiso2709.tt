@@ -96,7 +96,7 @@
 
         $("#Aform").on("submit", function(){
             if ( $("input:checkbox[name='import_record_id']:checked").length < 1 ) {
-                alert("There is no record selected");
+                alert(_("There is no record selected"));
                 return false;
             }
 
@@ -107,7 +107,7 @@
                 }
             });
             if ( error > 0 ) {
-                alert(error + " quantity values are not filled or not a number");
+                alert(error + " " + _("quantity values are not filled or not a number"));
                 return false;
             }
 
@@ -268,7 +268,7 @@
                                 </li>
                                 <li>
                                     [% IF ( close ) %]
-                                        <span class="label">Budget: </span>
+                                        <span class="label">Fund: </span>
                                         <input type="hidden" size="20" name="budget_id" id="budget_id" value="[% budget_id %]" />[% Budget_name %]
                                     [% ELSE %]
                                         <li>
@@ -284,7 +284,7 @@
                                             </select>
                                         </li>
                                         <li>
-                                            <label for="all_budget_id">Budget: </label>
+                                            <label for="all_budget_id">Fund: </label>
                                             <select id="all_budget_id" size="1" name="all_budget_id">
                                             [% FOREACH budget_loo IN budget_loop %]
                                                 [% IF ( budget_loo.b_sel ) %]
