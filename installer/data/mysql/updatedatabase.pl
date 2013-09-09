@@ -8295,6 +8295,26 @@ if ( CheckVersion($DBversion) ) {
 }
 
 
+
+
+
+
+$DBversion = "3.15.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        UPDATE message_transports SET letter_code='HOLD' WHERE letter_code='HOLD_PHONE' OR letter_code='HOLD_PRINT'
+    |);
+    $dbh->do(q|
+        UPDATE letter SET code='HOLD', message_transport_type='print' WHERE code='HOLD_PRINT'
+    |);
+    $dbh->do(q|
+        UPDATE letter SET code='HOLD', message_transport_type='phone' WHERE code='HOLD_PHONE'
+    |);
+    print "Upgrade to $DBversion done (Bug 10845: Multi transport types for holds)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

@@ -70,7 +70,7 @@ my $type_module_map = {
 my $type_notice_map = {
     'PREOVERDUE' => 'PREDUE_PHONE',
     'OVERDUE'    => 'OVERDUE_PHONE',
-    'RESERVE'    => 'HOLD_PHONE',
+    'RESERVE'    => 'HOLD',
 };
 
 GetOptions(
@@ -133,7 +133,8 @@ foreach my $type (@types) {
             tables      => {
                 borrowers   => $issues->{'borrowernumber'},
                 biblio      => $issues->{'biblionumber'},
-                biblioitems => $issues->{'biblionumber'}
+                biblioitems => $issues->{'biblionumber'},
+                message_transport_type => 'phone',
             },
         );
 

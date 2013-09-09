@@ -1890,15 +1890,11 @@ sub _koha_notify_reserve {
     
     # Try to get the borrower's email address
     my $to_address = C4::Members::GetNoticeEmailAddress($borrowernumber);
-    
-    my $letter_code;
-    my $print_mode = 0;
-    my $messagingprefs;
-    if ( $to_address || $borrower->{'smsalertnumber'} ) {
-        $messagingprefs = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrowernumber, message_name => 'Hold_Filled' } );
-    } else {
-        $print_mode = 1;
-    }
+
+    my $messagingprefs = C4::Members::Messaging::GetMessagingPreferences( {
+            borrowernumber => $borrowernumber,
+            message_name => 'Hold_Filled'
+    } );
 
     my $sth = $dbh->prepare("
         SELECT *
@@ -1925,43 +1921,23 @@ sub _koha_notify_reserve {
         substitute => { today => C4::Dates->new()->output() },
     );
 
-
-    if ( $print_mode ) {
-        $letter_params{ 'letter_code' } = 'HOLD_PRINT';
-        my $letter =  C4::Letters::GetPreparedLetter ( %letter_params ) or die "Could not find a letter called '$letter_params{'letter_code'}' in the 'reserves' module";
+    my $print_sent = 0;
+    while ( my ( $mtt, $letter_code ) = each %{ $messagingprefs->{transports} } ) {
+        if ( ($mtt eq 'email' and not $to_address) or ($mtt eq 'sms' and not $borrower->{smsalertnumber}) ) {
+            # email or sms is requested but not exist, do a print.
+            $mtt = 'print';
+        }
+        $letter_params{letter_code} = $letter_code;
+        $letter_params{message_transport_type} = $mtt;
+        my $letter =  C4::Letters::GetPreparedLetter ( %letter_params )
+            or die "Could not find a letter called '$letter_params{'letter_code'}' in the 'reserves' module";
 
         C4::Letters::EnqueueLetter( {
             letter => $letter,
             borrowernumber => $borrowernumber,
-            message_transport_type => 'print',
+            from_address => $admin_email_address,
+            message_transport_type => $mtt,
         } );
-        
-        return;
-    }
-
-    if ( $to_address && defined $messagingprefs->{transports}->{'email'} ) {
-        $letter_params{ 'letter_code' } = $messagingprefs->{transports}->{'email'};
-        my $letter =  C4::Letters::GetPreparedLetter ( %letter_params ) or die "Could not find a letter called '$letter_params{'letter_code'}' in the 'reserves' module";
-
-        C4::Letters::EnqueueLetter(
-            {   letter                 => $letter,
-                borrowernumber         => $borrowernumber,
-                message_transport_type => 'email',
-                from_address           => $admin_email_address,
-            }
-        );
-    }
-
-    if ( $borrower->{'smsalertnumber'} && defined $messagingprefs->{transports}->{'sms'} ) {
-        $letter_params{ 'letter_code' } = $messagingprefs->{transports}->{'sms'};
-        my $letter =  C4::Letters::GetPreparedLetter ( %letter_params ) or die "Could not find a letter called '$letter_params{'letter_code'}' in the 'reserves' module";
-
-        C4::Letters::EnqueueLetter(
-            {   letter                 => $letter,
-                borrowernumber         => $borrowernumber,
-                message_transport_type => 'sms',
-            }
-        );
     }
 }
 
