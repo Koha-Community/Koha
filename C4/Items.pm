@@ -30,6 +30,7 @@ use MARC::Record;
 use C4::ClassSource;
 use C4::Log;
 use List::MoreUtils qw/any/;
+use YAML qw/Load/;
 use Data::Dumper; # used as part of logging item record changes, not just for
                   # debugging; so please don't remove this
 
@@ -1629,6 +1630,7 @@ sub GetHiddenItemnumbers {
     my @resultitems;
 
     my $yaml = C4::Context->preference('OpacHiddenItems');
+    return () if (! $yaml =~ /\S/ );
     $yaml = "$yaml\n\n"; # YAML is anal on ending \n. Surplus does not hurt
     my $hidingrules;
     eval {
