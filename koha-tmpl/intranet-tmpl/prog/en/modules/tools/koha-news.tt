@@ -23,6 +23,8 @@
 [% END %]
 <script language="javascript" type="text/javascript" src="[% interface %]/lib/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript">//<![CDATA[
+var MSG_CONFIRM_DELETE_NEWS  = _("Are you sure you want to delete the selected news?");
+
 tinyMCE.init({
     mode : "textareas",
     theme : "advanced",
@@ -130,7 +132,7 @@ Edit News Item[% ELSE %]Add News Item[% END %][% ELSE %]News[% END %]</div>
         </form>
         </div>
         [% IF ( opac_news_count ) %]
-        <form name="del_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" onsubmit="return confirm('Are you sure you want to delete the selected news?')">
+        <form name="del_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" onsubmit='return confirm(MSG_CONFIRM_DELETE_NEWS)'>
                 <table id="newst">
                    <thead> <tr>
                         <th>&nbsp;</th>
