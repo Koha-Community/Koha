@@ -457,7 +457,8 @@ sub _isbn_replace {
 
 ImportBreedingAuth($marcrecords,$overwrite_auth,$filename,$encoding,$z3950random,$batch_type);
 
-TODO description
+    ImportBreedingAuth imports MARC records in the reservoir (import_records table).
+    ImportBreedingAuth is based on the ImportBreeding subroutine.
 
 =cut
 
@@ -485,10 +486,6 @@ sub ImportBreedingAuth {
         # Normalize the record so it doesn't have separated diacritics
         SetUTF8Flag($marcrecord);
 
-#         warn "$i : $marcarray[$i]";
-        # FIXME - currently this does nothing
-        my @warnings = $marcrecord->warnings();
-
         if (scalar($marcrecord->fields()) == 0) {
             $notmarcrecord++;
         } else {
@@ -509,10 +506,6 @@ sub ImportBreedingAuth {
 
             if ($duplicateauthid && $overwrite_auth ne 2) {
                 #If the authority record exists and $overwrite_auth doesn't equal 2, then mark it as already in the DB
-                #FIXME: What does $overwrite_auth = 2 even mean?
-
-                #FIXME: Should we bother with $overwrite_auth values? Currently, the hard-coded $overwrite_auth value is 2, which means the database gets filled with import_records...
-                #^^ of course, we might not want to reject records if their control number/heading exist in the db or breeding/import pool...as we might be wanting to update existing authority records...
                 $alreadyindb++;
             } else {
                 if ($controlnumber && $heading) {
@@ -520,11 +513,9 @@ sub ImportBreedingAuth {
                     ($breedingid) = $searchbreeding->fetchrow;
                 }
                 if ($breedingid && $overwrite_auth eq '0') {
-                    #FIXME: What does $overwrite_auth = 0 even mean?
                     $alreadyinfarm++;
                 } else {
                     if ($breedingid && $overwrite_auth eq '1') {
-                        #FIXME: What does $overwrite_auth = 1 even mean?
                         ModAuthorityInBatch($breedingid, $marcrecord);
                     } else {
                         my $import_id = AddAuthToBatch($batch_id, $imported, $marcrecord, $encoding, $z3950random);
