@@ -15,21 +15,30 @@ function reloadPage(p) {
         $("#profile_type").change(function(){
             if ( $(this).find("option:selected").val() == "marc" ) {
                 $("#csvnew li.marc_specific").show();
+                $("#new_profile_marc_content").attr("required", "required");
                 $("#csvnew li.sql_specific").hide();
+                $("#new_profile_sql_content").removeAttr("required");
             } else {
                 $("#csvnew li.marc_specific").hide();
+                $("#new_profile_marc_content").removeAttr("required");
                 $("#csvnew li.sql_specific").show();
+                $("#new_profile_sql_content").attr("required", "required");
             }
         });
         $("#modify_profile_type").change(function(){
             if ( $(this).find("option:selected").val() == "marc" ) {
                 $("#csvedit li.marc_specific").show();
+                $("#modify_profile_marc_content").attr("required", "required");
                 $("#csvedit li.sql_specific").hide();
+                $("#modify_profile_sql_content").removeAttr("required");
             } else {
                 $("#csvedit li.marc_specific").hide();
+                $("#modify_profile_marc_content").removeAttr("required");
                 $("#csvedit li.sql_specific").show();
+                $("#modify_profile_sql_content").attr("required", "required");
             }
         });
+        $("#profile_type").change();
         $("#modify_profile_type").change();
      });
 //]]>
@@ -79,7 +88,7 @@ function reloadPage(p) {
 						<fieldset class="rows">
                           <ol>
                             <li><label for="profile_name" class="required">Profile name: </label>
-						    <input type="text" id="profile_name" name="profile_name" /></li>
+						    <input type="text" id="profile_name" name="profile_name" required="required" /></li>
 
                             <li>
                               <label for="profile_type" class="required">Profile type: </label>
@@ -143,14 +152,14 @@ function reloadPage(p) {
 						    </select></li>
 
 
-                            <li class="marc_specific"><label for="new_profile_marc_content">Profile MARC fields: </label>
-                            <textarea cols="50" rows="2" name="profile_marc_content" id="new_profile_marc_content"></textarea>
+                            <li class="marc_specific"><label for="new_profile_marc_content" class="required">Profile MARC fields: </label>
+						    <textarea cols="50" rows="2" name="profile_marc_content" id="new_profile_marc_content"></textarea>
 						    <p>You have to define which fields or subfields you want to export, separated by pipes.</p>
                             <p>You can also use your own headers (instead of the ones from Koha) by prefixing the field number with an header, followed by the equal sign.</p>
 						    <p>Example: Personal name=200|Entry element=210$a|300|009</p>
 						    </li>
                             <li class="sql_specific">
-                              <label for="new_profile_sql_content">Profile SQL fields: </label>
+                              <label for="new_profile_sql_content" class="required">Profile SQL fields: </label>
                               <textarea cols="50" rows="2" name="profile_sql_content" id="new_profile_sql_content"></textarea>
                               <p>You have to define which fields you want to export, separated by pipes.</p>
                               <p>You can also use your own headers (instead of the ones from Koha) by prefixing the field name with an header, followed by the equal sign.</p>
@@ -170,7 +179,7 @@ function reloadPage(p) {
 				      	    <form action="/cgi-bin/koha/tools/csv-profiles.pl" method="post">
 						<fieldset class="rows">
                             <ol>
-                            <li><label for="modify_profile_name">Profile name: </label>
+                            <li><label for="modify_profile_name" class="required">Profile name: </label>
 						    <select id="modify_profile_name" name="profile_name" onchange="javascript:reloadPage(this)">
 							<option value="0">-- Choose One --</option>
 							[% FOREACH existing_profile IN existing_profiles %]
@@ -183,7 +192,7 @@ function reloadPage(p) {
 						    </select></li>
 
                             <li>
-                              <label for="modify_profile_type">Profile type: </label>
+                              <label for="modify_profile_type" class="required">Profile type: </label>
                               <select id="modify_profile_type" name="profile_type">
                                 <option value="marc">MARC</option>
                                 [% IF selected_profile_type == "sql" %]
@@ -343,11 +352,11 @@ function reloadPage(p) {
 							[% END %]
 						    </select></li>
 
-                            <li class="marc_specific"><label for="modify_profile_marc_content">Profile MARC fields: </label>
-                            <textarea cols="50" rows="2" name="profile_marc_content" id="modify_profile_marc_content">[% selected_profile_content %]</textarea></li>
+                            <li class="marc_specific"><label for="modify_profile_marc_content" class="required">Profile MARC fields: </label>
+						    <textarea cols="50" rows="2" name="profile_marc_content" id="modify_profile_marc_content">[% selected_profile_content %]</textarea></li>
 
                             <li class="sql_specific">
-                              <label for="modify_profile_sql_content">Profile SQL fields: </label>
+                              <label for="modify_profile_sql_content" class="required">Profile SQL fields: </label>
                               <textarea cols="50" rows="2" name="profile_sql_content" id="modify_profile_sql_content">[% selected_profile_content %]</textarea>
                             </li>
 
