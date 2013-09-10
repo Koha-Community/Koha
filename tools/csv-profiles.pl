@@ -67,30 +67,34 @@ $template->param(encodings => \@encodings_loop);
 
 my $profile_name        = $input->param("profile_name");
 my $profile_description = $input->param("profile_description");
-my $profile_content     = $input->param("profile_content");
 my $csv_separator       = $input->param("csv_separator");
 my $field_separator     = $input->param("field_separator");
 my $subfield_separator  = $input->param("subfield_separator");
 my $encoding            = $input->param("encoding");
+my $type                = $input->param("profile_type");
 my $action              = $input->param("action");
 my $delete              = $input->param("delete");
 my $id                  = $input->param("id");
 if ($delete) { $action = "delete"; }
 
+my $profile_content = $type eq "marc"
+    ? $input->param("profile_marc_content")
+    : $input->param("profile_sql_content");
+
 if ($profile_name && $profile_content && $action) {
     my $rows;
 
     if ($action eq "create") {
-	my $query = "INSERT INTO export_format(export_format_id, profile, description, marcfields, csv_separator, field_separator, subfield_separator, encoding) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)";
+	my $query = "INSERT INTO export_format(export_format_id, profile, description, content, csv_separator, field_separator, subfield_separator, encoding, type) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)";
 	my $sth   = $dbh->prepare($query);
-	$rows  = $sth->execute($profile_name, $profile_description, $profile_content, $csv_separator, $field_separator, $subfield_separator, $encoding);
+	$rows  = $sth->execute($profile_name, $profile_description, $profile_content, $csv_separator, $field_separator, $subfield_separator, $encoding, $type);
     
     }
 
     if ($action eq "edit") {
-	my $query = "UPDATE export_format SET description=?, marcfields=?, csv_separator=?, field_separator=?, subfield_separator=?, encoding=? WHERE export_format_id=? LIMIT 1";
+	my $query = "UPDATE export_format SET description=?, content=?, csv_separator=?, field_separator=?, subfield_separator=?, encoding=?, type=? WHERE export_format_id=? LIMIT 1";
 	my $sth   = $dbh->prepare($query);
-	$rows  = $sth->execute($profile_description, $profile_content, $csv_separator, $field_separator, $subfield_separator, $encoding, $profile_name);
+	$rows  = $sth->execute($profile_description, $profile_content, $csv_separator, $field_separator, $subfield_separator, $encoding, $type, $profile_name);
     }
 
     if ($action eq "delete") {
@@ -108,7 +112,7 @@ if ($profile_name && $profile_content && $action) {
 
     # If a profile has been selected for modification
     if ($id) {
-	my $query = "SELECT export_format_id, profile, description, marcfields, csv_separator, field_separator, subfield_separator, encoding FROM export_format WHERE export_format_id = ?";
+	my $query = "SELECT export_format_id, profile, description, content, csv_separator, field_separator, subfield_separator, encoding, type FROM export_format WHERE export_format_id = ?";
 	my $sth;
 	$sth = $dbh->prepare($query);
 
@@ -118,11 +122,12 @@ if ($profile_name && $profile_content && $action) {
 	    selected_profile_id          => $selected_profile->[0],
 	    selected_profile_name        => $selected_profile->[1],
 	    selected_profile_description => $selected_profile->[2],
-	    selected_profile_marcfields  => $selected_profile->[3],
+	    selected_profile_content     => $selected_profile->[3],
 	    selected_csv_separator       => $selected_profile->[4],
 	    selected_field_separator     => $selected_profile->[5],
 	    selected_subfield_separator  => $selected_profile->[6],
-	    selected_encoding            => $selected_profile->[7]
+        selected_encoding            => $selected_profile->[7],
+        selected_profile_type        => $selected_profile->[8]
 	);
 
     }

@@ -461,7 +461,7 @@ sub marcrecord2csv {
     $csv->sep_char($csvseparator);
 
     # Getting the marcfields
-    my $marcfieldslist = $profile->{marcfields};
+    my $marcfieldslist = $profile->{content};
 
     # Getting the marcfields as an array
     my @marcfieldsarray = split('\|', $marcfieldslist);

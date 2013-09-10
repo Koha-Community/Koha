@@ -7192,6 +7192,24 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+
+
+
+
+
+
+$DBversion = "3.13.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{
+        ALTER TABLE export_format ADD type VARCHAR(255) DEFAULT 'marc' AFTER encoding
+    });
+    $dbh->do(q{
+        ALTER TABLE export_format CHANGE marcfields content mediumtext NOT NULL
+    });
+    print "Upgrade to $DBversion done (Bug 10853: Add new field export_format.type and rename export_format.marcfields with export_format.content)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

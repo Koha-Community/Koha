@@ -922,11 +922,12 @@ CREATE TABLE `export_format` (
   `export_format_id` int(11) NOT NULL auto_increment,
   `profile` varchar(255) NOT NULL,
   `description` mediumtext NOT NULL,
-  `marcfields` mediumtext NOT NULL,
+  `content` mediumtext NOT NULL,
   `csv_separator` varchar(2) NOT NULL,
   `field_separator` varchar(2) NOT NULL,
   `subfield_separator` varchar(2) NOT NULL,
   `encoding` varchar(255) NOT NULL,
+  `type` varchar(255) DEFAULT 'marc',
   PRIMARY KEY  (`export_format_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Used for CSV export';
 

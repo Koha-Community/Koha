@@ -43,11 +43,15 @@ $VERSION = 3.07.00.049;
 
 # Returns all informations about csv profiles
 sub GetCsvProfiles {
+    my ( $type ) = @_;
     my $dbh = C4::Context->dbh;
     my $query = "SELECT * FROM export_format";
+    if ( $type ) {
+        $query .= " WHERE type = ?";
+    }
 
     $sth = $dbh->prepare($query);
-    $sth->execute;
+    $sth->execute( $type ? $type : () );
 
     $sth->fetchall_arrayref({});
 
@@ -82,12 +86,12 @@ sub GetMarcFieldsForCsv {
 
     my ($id) = @_;
     my $dbh = C4::Context->dbh;
-    my $query = "SELECT marcfields FROM export_format WHERE export_format_id=?";
+    my $query = "SELECT content FROM export_format WHERE export_format_id=?";
 
     $sth = $dbh->prepare($query);
     $sth->execute($id);
 
-    return ($sth->fetchrow_hashref)->{marcfields};
+    return ($sth->fetchrow_hashref)->{content};
     
  
 }
