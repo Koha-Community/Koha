@@ -1,16 +1,15 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; Checkout history for [% title |html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" href="[% themelang %]/css/datatables.css" />
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript" id="js">
 $(document).ready(function() {
-    [% IF (dateformat == 'metric') %]
-        dt_add_type_uk_date();
-    [% END %]
     $("#table_issues").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumns": [
+                null,null,null,null,{ "sType": "title-string" },{ "sType": "title-string" },{ "sType": "title-string" }
+            ],
             "aaSorting": [[ 4, "desc" ]]
         })
     );
@@ -61,25 +60,25 @@ $(document).ready(function() {
                         &nbsp;
                     [% END %]</td>
                 <td>[% IF ( issue.renewals ) %]
-                        Yes[% IF ( issue.lastreneweddate ) %], <small>last on: [% issue.lastreneweddate %]</small>
+                        Yes[% IF ( issue.lastreneweddate ) %], <small>last on: [% issue.lastreneweddate |$KohaDates with_hours => 1  %]</small>
                             [% END %]
                     [% ELSE %]
                         No
                     [% END %]</td>
                 <td>[% IF ( issue.issuedate ) %]
-                        [% issue.issuedate %]
+                        <span title="[% issue.issuedate %]">[% issue.issuedate |$KohaDates with_hours => 1  %]</span>
                     [% ELSE %]
-                        &nbsp;
+                        <span title="0000-00-00"></span>
                     [% END %]</td>
                 <td>[% IF ( issue.date_due ) %]
-                        [% issue.date_due %]
+                        <span title="[% issue.date_due %]">[% issue.date_due |$KohaDates with_hours => 1  %]</span>
                     [% ELSE %]
-                        &nbsp;
+                        <span title="0000-00-00"></span>
                     [% END %]</td>
                 <td>[% IF ( issue.returndate ) %]
-                        [% issue.returndate %]
+                        <span title="[% issue.returndate %]">[% issue.returndate |$KohaDates with_hours => 1  %]</span>
                     [% ELSE %]
-                        &nbsp;
+                        <span title="0000-00-00"></span>
                     [% END %]</td>
            </tr>
         [% END %]

@@ -26,7 +26,6 @@ use C4::Output;
 use C4::Circulation;    # GetBiblioIssues
 use C4::Biblio;    # GetBiblio GetBiblioFromItemNumber
 use C4::Search;		# enabled_staff_search_views
-use Koha::DateUtils;
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -67,12 +66,7 @@ if ($itemnumber){
                %{$biblio},
 	);
 } 
-foreach (@{$issues}){
-	$_->{date_due}   = format_sqldatetime($_->{date_due});
-	$_->{issuedate}  = format_sqldatetime($_->{issuedate});
-	$_->{returndate} = format_sqldatetime($_->{returndate});
-	$_->{lastreneweddate} = format_sqldatetime($_->{lastreneweddate});
-}
+
 $template->param(
     total        => scalar @$issues,
     issues       => $issues,

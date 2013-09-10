@@ -22,7 +22,7 @@
     Details for [% title |html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]
   [% END %]
 </title>
-[% INCLUDE 'doc-head-close.inc' %]<script type="text/JavaScript" language="JavaScript">
+[% INCLUDE 'doc-head-close.inc' %]<script type="text/JavaScript">
 //<![CDATA[
 // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
 function verify_images() {
@@ -91,15 +91,13 @@ function verify_images() {
 //]]>
 </script>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
+[% INCLUDE 'datatables.inc' %]
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
 [% INCLUDE 'browser-strings.inc' %]
 <!--[if lt IE 9]>
 <script type="text/javascript" src="[% interface %]/lib/shims/json2.min.js"></script>
 <![endif]-->
 <script type="text/javascript" src="[% interface %]/js/browser.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript">
 //<![CDATA[
     var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
