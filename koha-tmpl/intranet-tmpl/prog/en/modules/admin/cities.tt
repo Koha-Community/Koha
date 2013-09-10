@@ -2,9 +2,7 @@
 <title>Koha &rsaquo; Administration &rsaquo; [% IF ( add_form ) %]Cities &rsaquo; [% IF ( cityid ) %] Modify city[% ELSE %] New city[% END %][% ELSE %][% IF ( delete_confirm ) %]Cities &rsaquo; Confirm deletion of city[% ELSE %] Cities[% END %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
     function Check(f) {
