@@ -15,116 +15,70 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI;
 use C4::Auth;
 use C4::Serials;
 use C4::Acquisition;
 use C4::Output;
 use C4::Context;
+use C4::Csv qw( GetCsvProfile );
 
-# use Date::Manip;
 use Text::CSV_XS;
-
-
-# &Date_Init("DateFormat=non-US"); # set non-USA date, eg:19/08/2005
-
-
-my $csv = Text::CSV_XS->new(
-        {
-            'quote_char'  => '"',
-            'escape_char' => '"',
-            'sep_char'    => ',',
-            'binary'      => 1
-        }
-    );
-
 
 my $query = new CGI;
 my $supplierid = $query->param('supplierid');
-my @serialid = $query->param('serialid');
+my @serialids = $query->param('serialid');
 my $op = $query->param('op') || q{};
-my $serialidcount = @serialid;
 
-my @loop1;
-my @lateissues;
-if($op ne 'claims'){
-    @lateissues = GetLateIssues($supplierid);
-    for my $issue (@lateissues){
-        push @loop1,
-      [ $issue->{'name'}, $issue->{'title'}, $issue->{'serialseq'}, $issue->{'planneddate'},];
-    }
+my $csv_profile_id = $query->param('csv_profile');
+my $csv_profile = C4::Csv::GetCsvProfile( $csv_profile_id );
+die "There is no valid csv profile given" unless $csv_profile;
+
+my $csv = Text::CSV_XS->new({
+    'quote_char'  => '"',
+    'escape_char' => '"',
+    'sep_char'    => $csv_profile->{csv_separator},
+    'binary'      => 1
+});
+
+my $content = $csv_profile->{content};
+my ( @headers, @fields );
+while ( $content =~ /
+    ([^=]+) # header
+    =
+    ([^\|]+) # fieldname (table.row or row)
+    \|? /gxms
+) {
+    push @headers, $1;
+    my $field = $2;
+    $field =~ s/[^\.]*\.?//; # Remove the table name if exists.
+    push @fields, $field;
 }
-my $totalcount2 = 0;
-my @loop2;
-my @missingissues;
-for (my $k=0;$k<@serialid;$k++){
-    @missingissues = GetLateOrMissingIssues($supplierid, $serialid[$k]);
 
-    for (my $j=0;$j<@missingissues;$j++){
-	my @rows2 = ($missingissues[$j]->{'name'},          # lets build up a row
-	             $missingissues[$j]->{'title'},
-                     $missingissues[$j]->{'serialseq'},
-                     $missingissues[$j]->{'planneddate'},
-                     );
-        push (@loop2, \@rows2);
+my @rows;
+for my $serialid ( @serialids ) {
+    my @missingissues = GetLateOrMissingIssues($supplierid, $serialid);
+    my $issue = $missingissues[0];
+    my @row;
+    for my $field ( @fields ) {
+        push @row, $issue->{$field};
     }
-    $totalcount2 += scalar @missingissues;
+    push @rows, \@row;
+
     # update claim date to let one know they have looked at this missing item
-    updateClaim($serialid[$k]);
-}
-
-my $heading ='';
-my $filename ='';
-if($supplierid){
-    if($missingissues[0]->{'name'}){ # if exists display supplier name in heading for neatness
-	# not necessarily needed as the name will appear in supplier column also
-        $heading = "FOR $missingissues[0]->{'name'}";
-	$filename = "_$missingissues[0]->{'name'}";
-    }
+    updateClaim($serialid);
 }
 
 print $query->header(
-        -type       => 'application/vnd.ms-excel',
-        -attachment => "claims".$filename.".csv",
-    );
+    -type       => 'plain/text',
+    -attachment => "serials-claims.csv",
+);
 
-if($op ne 'claims'){
-    print "LATE ISSUES ".$heading."\n\n";
-    print "SUPPLIER,TITLE,ISSUE NUMBER,LATE SINCE\n";
+print join( $csv_profile->{csv_separator}, @headers ) . "\n";
 
-    for my $row ( @loop1 ) {
-
-        $csv->combine(@$row);
-        my $string = $csv->string;
-        print $string, "\n";
-    }
-
-    print ",,,,,,,\n\n";
-}
-if($serialidcount == 1){
-    print "MISSING ISSUE ".$heading."\n\n";
-} else {
-    print "MISSING ISSUES ".$heading."\n\n";
-}
-print "SUPPLIER,TITLE,ISSUE NUMBER,LATE SINCE\n";
-
-for my $row ( @loop2 ) {
-
-        $csv->combine(@$row);
-        my $string = $csv->string;
-        print $string, "\n";
-    }
-
-print ",,,,,,,\n";
-print ",,,,,,,\n";
-if($op ne 'claims'){
-    my $count = scalar @lateissues;
-    print ",,Total Number Late, $count\n";
-}
-if($serialidcount == 1){
-
-} else {
-    print ",,Total Number Missing, $totalcount2\n";
+for my $row ( @rows ) {
+    $csv->combine(@$row);
+    my $string = $csv->string;
+    print $string, "\n";
 }

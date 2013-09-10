@@ -7204,6 +7204,30 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+$DBversion = "3.13.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO export_format( profile, description, content, csv_separator, type ) VALUES ( "issues to claim", "default csv export for issues claims", "SUPPLIER=aqbooksellers.name|TITLE=subscription.title|ISSUE NUMBER=serial.serialseq|LATE SINCE=serial.planneddate", ",", "sql" )
+    });
+    print "Upgrade to $DBversion done (Bug 10854: Add the default csv profile for claiming issues)\n";
+    SetVersion($DBversion);
+}
+
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

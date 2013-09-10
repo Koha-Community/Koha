@@ -14,7 +14,7 @@
          var sTable = $("#claimst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sDom": 't',
             "aoColumnDefs": [
-                { "aTargets": [ 0,1,-1 ], "bSortable": false, "bSearchable": false }
+                { "aTargets": [ 0,1 ], "bSortable": false, "bSearchable": false }
             ],
             "bPaginate": false
         }));
@@ -25,7 +25,6 @@
 
 	    // Checkboxes : Select All / None
 	    $("span.checkall").html("<input type=\"checkbox\" name=\"CheckAll\"> "+_("Check All")+"</input>");
-	    $("span.exportSelected").html("<a id=\"ExportSelected\" href=\"/cgi-bin/koha/serials/claims.pl\"> "+_("Export selected items data") +"<\/a>");
 
         $("#CheckAll").click(function() {
             $("#claimst tr:visible :checkbox").attr('checked', $("#CheckAll").is(':checked'));
@@ -46,6 +45,7 @@
 		for (var i = 0; i < selected.length; i++) {
 		    url += '&amp;serialid=' + selected[i].value;
 		}
+        url += '&amp;csv_profile=' + $("#csv_profile_for_export option:selected").val();
 		// And redirecting to the CSV page
 		location.href = url;
 		return false;
@@ -261,7 +261,6 @@
                     <th>Status</th>
                     <th>Since</th>
                     <th>Claim date</th>
-                <th>Begin claim</th>
                 </tr></thead>
                 <tbody>[% FOREACH missingissue IN missingissues %]
                     <tr>
@@ -294,13 +293,21 @@
                         <td>
                         [% missingissue.claimdate %]
                         </td>
-                        <td>
-                            <a href="/cgi-bin/koha/serials/lateissues-excel.pl?supplierid=[% missingissue.supplieri %]&amp;serialid=[% missingissue.serialid %]&amp;op=claims">Export item data</a>
-                        </td>
                     </tr>
                 [% END %]</tbody>
             </table>
-	     <p><span class="exportSelected"></span></p>
+
+        [% IF csv_profiles %]
+          <p>
+            <span class="exportSelected"><a id="ExportSelected" href="/cgi-bin/koha/serials/claims.pl">Export selected items data</a></span>
+            using the following csv profile:
+            <select id="csv_profile_for_export">
+              [% FOR csv IN csv_profiles %]
+                <option value="[% csv.export_format_id %]">[% csv.profile %]</option>
+               [% END %]
+            </select>
+          </p>
+        [% END %]
 
 [% IF ( letter ) %]
         <fieldset class="action"> <label for="letter_code">Select notice:</label>

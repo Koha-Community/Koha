@@ -28,6 +28,7 @@ use C4::Bookseller qw( GetBookSeller );
 use C4::Context;
 use C4::Letters;
 use C4::Branch;    # GetBranches GetBranchesLoop
+use C4::Csv qw( GetCsvProfiles );
 
 my $input = CGI->new;
 
@@ -98,6 +99,7 @@ $template->param(
         claimletter => $claimletter,
         supplierloop => \@supplierinfo,
         branchloop   => $branchloop,
+        csv_profiles => C4::Csv::GetCsvProfiles( "sql" ),
         (uc(C4::Context->preference("marcflavour"))) => 1
         );
 output_html_with_http_headers $input, $cookie, $template->output;
