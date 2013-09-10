@@ -263,6 +263,8 @@ foreach my $r (@{$budgets}) {
     push @{$budget_loop}, {
         b_id  => $r->{budget_id},
         b_txt => $r->{budget_name},
+        b_sort1_authcat => $r->{'sort1_authcat'},
+        b_sort2_authcat => $r->{'sort2_authcat'},
         b_active => $r->{budget_period_active},
         b_sel => ( $r->{budget_id} == $budget_id ) ? 1 : 0,
     };
@@ -277,37 +279,8 @@ if ($close) {
 
 }
 
-my $CGIsort1;
-if ($budget) {    # its a mod ..
-    if ( defined $budget->{'sort1_authcat'} ) {    # with custom  Asort* planning values
-        $CGIsort1 = GetAuthvalueDropbox( $budget->{'sort1_authcat'}, $data->{'sort1'} );
-    }
-} elsif(@{$budgets}){
-    $CGIsort1 = GetAuthvalueDropbox(  @$budgets[0]->{'sort1_authcat'}, '' );
-}
-
-# if CGIsort is successfully fetched, the use it
-# else - failback to plain input-field
-if ($CGIsort1) {
-    $template->param( CGIsort1 => $CGIsort1 );
-} else {
-    $template->param( sort1 => $data->{'sort1'} );
-}
-
-my $CGIsort2;
-if ($budget) {
-    if ( defined $budget->{'sort2_authcat'} ) {
-        $CGIsort2 = GetAuthvalueDropbox(  $budget->{'sort2_authcat'}, $data->{'sort2'} );
-    }
-} elsif(@{$budgets}) {
-    $CGIsort2 = GetAuthvalueDropbox(  @$budgets[0]->{sort2_authcat}, '' );
-}
-
-if ($CGIsort2) {
-    $template->param( CGIsort2 => $CGIsort2 );
-} else {
-    $template->param( sort2 => $data->{'sort2'} );
-}
+$template->param( sort1 => $data->{'sort1'} );
+$template->param( sort2 => $data->{'sort2'} );
 
 if (C4::Context->preference('AcqCreateItem') eq 'ordering' && !$ordernumber) {
     # Check if ACQ framework exists

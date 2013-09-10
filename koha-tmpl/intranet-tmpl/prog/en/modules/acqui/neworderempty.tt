@@ -141,6 +141,24 @@ $(document).ready(function()
                 $('#budget_id .b_inactive').remove();
             }
         });
+
+        $("#budget_id").change(function(){
+            var destination_sort1 = $(this).parents('fieldset.rows').find('input[name="sort1"]');
+            var sort1_authcat = $(this).find("option:selected").attr('data-sort1-authcat');
+            var sort1 = $(destination_sort1).val() || "";
+            if ( destination_sort1.length < 1 ) {
+                destination_sort1 = $(this).parents('fieldset.rows').find('select[name="sort1"]');
+            }
+            var destination_sort2 = $(this).parents('fieldset.rows').find('input[name="sort2"]');
+            var sort2_authcat = $(this).find("option:selected").attr('data-sort2-authcat');
+            var sort2 = $(destination_sort2).val() || "";
+            if ( destination_sort2.length < 1 ) {
+                destination_sort2 = $(this).parents('fieldset.rows').find('select[name="sort2"]');
+            }
+            getAuthValueDropbox( 'sort1', sort1_authcat, destination_sort1, sort1 );
+            getAuthValueDropbox( 'sort2', sort2_authcat, destination_sort2, sort2 );
+        });
+        $("#budget_id").change();
     });
 //]]>
 </script>
@@ -414,14 +432,14 @@ $(document).ready(function()
                     <input type="hidden" name="budget_id" id="budget_id" value="[% budget_id %]" />[% Budget_name %]
                 [% ELSE %]
                 <label class="required" for="budget_id">Fund: </label>
-                <select id="budget_id" onchange="fetchSortDropbox(this.form)" size="1" name="budget_id">
+                <select id="budget_id" size="1" name="budget_id">
                         <option value="">Select a fund</option>
                 [% FOREACH budget_loo IN budget_loop %]
                     [% IF ( budget_loo.b_sel ) %]
-                        <option value="[% budget_loo.b_id %]" selected="selected">[% budget_loo.b_txt %]</option>
+                        <option value="[% budget_loo.b_id %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]">[% budget_loo.b_txt %]</option>
                     [% ELSE %]
-                        [% IF ( budget_loo.b_active ) %]<option value="[% budget_loo.b_id %]">[% budget_loo.b_txt %]</option>
-                        [% ELSE %]<option value="[% budget_loo.b_id %]" class="b_inactive">[% budget_loo.b_txt %] (inactive)</option>
+                        [% IF ( budget_loo.b_active ) %]<option value="[% budget_loo.b_id %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]">[% budget_loo.b_txt %]</option>
+                        [% ELSE %]<option value="[% budget_loo.b_id %]" class="b_inactive" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]">[% budget_loo.b_txt %] (inactive)</option>
                         [% END %]
                     [% END %]
                 [% END %]
@@ -544,39 +562,10 @@ $(document).ready(function()
             </li>
             <li><div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
                 <label for="sort1">Statistic 1: </label>
-                <span id="sort1_zone">
-                [% IF CGIsort1 %]
-                    <select id="sort1" size="1" name="sort1">
-                    [% FOREACH sort_opt IN CGIsort1 %]
-                       [% IF sort_opt.default %]
-                          <option value="[% sort_opt.value %]" selected="selected">[% sort_opt.label %]</option>
-                        [% ELSE %]
-                          <option value="[% sort_opt.value %]">[% sort_opt.label %]</option>
-                        [% END %]
-                    [% END %]
-                    </select>
-                [% ELSE %]
-                    <input type="text" id="sort1" size="20" name="sort1" value="[% sort1 %]" />
-                [% END %]
-                </span>
-            </li>
+                <input id="sort1" type="text" id="sort1" size="20" name="sort1" value="[% sort1 %]" />
             <li>
                 <label for="sort2">Statistic 2: </label>
-                <span id="sort2_zone">
-                [% IF CGIsort2 %]
-                    <select id="sort2" size="1" name="sort2">
-                    [% FOREACH sort_opt IN CGIsort2 %]
-                       [% IF sort_opt.default %]
-                          <option value="[% sort_opt.value %]" selected="selected">[% sort_opt.label %]</option>
-                        [% ELSE %]
-                          <option value="[% sort_opt.value %]">[% sort_opt.label %]</option>
-                        [% END %]
-                    [% END %]
-                    </select>
-                [% ELSE %]
-                    <input type="text" id="sort2" size="20" name="sort2" value="[% sort2 %]" />
-                [% END %]
-                </span>
+                <input id="sort2" type="text" id="sort2" size="20" name="sort2" value="[% sort2 %]" />
             </li>
         </ol>
     </fieldset>
