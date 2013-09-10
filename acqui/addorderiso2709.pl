@@ -492,7 +492,14 @@ sub add_matcher_list {
 sub get_infos_syspref {
     my ($record, $field_list) = @_;
     my $syspref = C4::Context->preference('MarcFieldsToOrder');
-    my $yaml = YAML::Load($syspref);
+    $syspref = "$syspref\n\n"; # YAML is anal on ending \n. Surplus does not hurt
+    my $yaml = eval {
+        YAML::Load($syspref);
+    };
+    if ( $@ ) {
+        warn "Unable to parse MarcFieldsToOrder syspref : $@";
+        return ();
+    }
     my $r;
     for my $field_name ( @$field_list ) {
         my @fields = split /\|/, $yaml->{$field_name};
