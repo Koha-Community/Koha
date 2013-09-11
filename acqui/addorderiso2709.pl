@@ -306,9 +306,14 @@ foreach my $r ( @{$budgets_hierarchy} ) {
         b_txt => $r->{budget_name},
         b_sort1_authcat => $r->{'sort1_authcat'},
         b_sort2_authcat => $r->{'sort2_authcat'},
+        b_active => $r->{budget_period_active},
         b_sel => ( $r->{budget_id} == $budget_id ) ? 1 : 0,
       };
 }
+
+@{$budget_loop} =
+  sort { uc( $a->{b_txt}) cmp uc( $b->{b_txt}) } @{$budget_loop};
+
 $template->param( budget_loop    => $budget_loop,);
 
 output_html_with_http_headers $input, $cookie, $template->output;
