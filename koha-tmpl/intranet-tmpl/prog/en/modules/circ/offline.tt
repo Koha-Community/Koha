@@ -439,6 +439,8 @@ window.addEventListener('load', function(e) {
 $(document).ready(function () {
     kohadb.initialize();
 
+    $('ul[aria-labelledby="drop3"]').html('<li><a class="toplinks">You cannot change your branch or logout while using offline circulation</a></li>');
+
     // Returns code
     $('#checkin-form, #checkin_search form').submit(function (event) {
         event.preventDefault();
