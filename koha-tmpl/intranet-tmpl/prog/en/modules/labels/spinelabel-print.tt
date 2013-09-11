@@ -27,9 +27,9 @@
 		</body>
 	[% ELSE %]
 		[% IF ( autoprint ) %]
-			<body id="labels_spinelabel-print" class="tools labels" onLoad="window.print()">
+            <body id="labels_spinelabel-print" class="tools labels" onload="window.print()">
 		[% ELSE %]	
-			<body>
+            <body id="labels_spinelabel-print" class="tools labels">
 		[% END %] 
 			<span id="spinelabel" class="label">
 				[% content %]
