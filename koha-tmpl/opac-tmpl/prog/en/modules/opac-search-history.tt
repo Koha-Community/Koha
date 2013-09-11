@@ -19,7 +19,7 @@ $(document).ready(function() {
         ]
     }));
 
-    $('#tabs').tabs();
+    [% IF Koha.Preference( 'OpacAuthorities' ) == 1 %]$('#tabs').tabs();[% END %]
 });
 //]]>
 
@@ -40,11 +40,13 @@ $(document).ready(function() {
   <div class="yui-b">
     <div class="yui-g">
       <h1>Search history</h1>
-      <div id="tabs" class="toptabs">
-        <ul>
-          <li><a href="#biblio_tab">Biblio</a></li>
-          <li><a href="#authority_tab">Authority</a></li>
-        </ul>
+      [% IF Koha.Preference( 'OpacAuthorities' ) == 1 %]
+        <div id="tabs" class="toptabs">
+          <ul>
+            <li><a href="#biblio_tab">Catalog</a></li>
+            <li><a href="#authority_tab">Authority</a></li>
+          </ul>
+      [% END %]
         <div id="biblio_tab">
           [% IF ( current_biblio_searches ) %]
             <h2>Current session</h2>
@@ -52,7 +54,7 @@ $(document).ready(function() {
               <input type="hidden" name="action" value="delete" />
               <input type="hidden" name="previous" value="0" />
               <input type="hidden" name="type" value="biblio" />
-              <input type="submit" class="deleteshelf" value="Delete your current biblio history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" />
+              <input type="submit" class="deleteshelf" value="Delete your current catalog history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" />
             </form>
             <table class="historyt">
               <thead>
@@ -80,7 +82,7 @@ $(document).ready(function() {
               <input type="hidden" name="action" value="delete" />
               <input type="hidden" name="previous" value="1" />
               <input type="hidden" name="type" value="biblio" />
-              <input type="submit" class="deleteshelf" value="Delete your previous biblio search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" />
+              <input type="submit" class="deleteshelf" value="Delete your previous catalog search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" />
             </form>
             <table class="historyt">
               <thead>
@@ -102,6 +104,13 @@ $(document).ready(function() {
             </table>
           [% END %]
 
+          [% IF !current_biblio_searches && !previous_biblio_searches %]
+            <p>Your catalog search history is empty.</p>
+          [% END %]
+        </div>
+
+
+      [% IF Koha.Preference( 'OpacAuthorities' ) == 1 %]
         <div id="authority_tab">
           [% IF ( current_authority_searches ) %]
             <h2>Current session</h2>
@@ -164,6 +173,7 @@ $(document).ready(function() {
           [% END %]
         </div>
       </div>
+        [% END %]
     </div>
   </div>
 </div>
