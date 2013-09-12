@@ -107,7 +107,7 @@
                 }
             });
             if ( error > 0 ) {
-                alert(error + " " + _("quantity values are not filled or not a number"));
+                alert(error + " " + _("quantity values are not filled in or are not numbers"));
                 return false;
             }
 
@@ -141,7 +141,7 @@
                 <div id="tabs" class="toptabs">
                   <ul>
                     <li><a href="#records_to_import">Select to import</a></li>
-                    <li><a href="#items_info" class="items_info">Items information</a></li>
+                    <li><a href="#items_info" class="items_info">Item information</a></li>
                     <li><a href="#accounting_details">Default accounting details</a></li>
                   </ul>
 
@@ -216,11 +216,11 @@
                                 [% END %]
                             </li>
                             <li class="sort1">
-                                <label for="sort1_record_[% biblio.import_record_id %]">Planning value1: </label>
+                                <label for="sort1_record_[% biblio.import_record_id %]">Planning value 1: </label>
                                 <input id="sort1_record_[% biblio.import_record_id %]" type="text" id="sort1" size="20" name="sort1" value="[% biblio.sort1 %]" />
                             </li>
                             <li class="sort2">
-                                <label for="sort2_record_[% biblio.import_record_id %]">Planning value2: </label>
+                                <label for="sort2_record_[% biblio.import_record_id %]">Planning value 2: </label>
                                 <input id="sort2_record_[% biblio.import_record_id %]" type="text" id="sort2" size="20" name="sort2" value="[% biblio.sort2 %]" />
                             </li>
                           </ol>
@@ -228,7 +228,7 @@
                         [% END %]
                       </div>
                       <div id="items_info">
-                        <h2>Items information</h2>
+                        <h2>Item information</h2>
                         <p>Import all the checked items in the basket with the following parameters:</p>
 
                         [% IF ( items ) %]
@@ -314,7 +314,7 @@
                                 </li>
                                 <li>
                                     <div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
-                                    <label for="sort1">Planning value1: </label>
+                                    <label for="sort1">Planning value 1: </label>
                                     [% IF CGIsort1 %]
                                         <select id="all_sort1" size="1" name="all_sort1">
                                         [% FOREACH sort_opt IN CGIsort1 %]
@@ -331,7 +331,7 @@
                                 </li>
                                 <li>
                                   <span id="sort2_zone">
-                                    <label for="sort2">Planning value2: </label>
+                                    <label for="sort2">Planning value 2: </label>
                                     [% IF CGIsort2 %]
                                         <select id="all_sort2" size="1" name="all_sort1">
                                         [% FOREACH sort_opt IN CGIsort2 %]
