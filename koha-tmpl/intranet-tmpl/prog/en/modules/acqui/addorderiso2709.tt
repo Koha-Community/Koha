@@ -165,7 +165,8 @@
                               <input type="checkbox" name="import_record_id" id="record_[% biblio.import_record_id %]" value="[% biblio.import_record_id %]" />
                               <span class="citation">[% biblio.citation %]</span>
                             </label>
-                            ( Show <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% biblio.import_record_id %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% biblio.import_record_id %]" title="MARC" rel="gb_page_center[600,500]">Card</a> )
+                            ( Show <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% biblio.import_record_id %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% biblio.import_record_id %]" title="Card" rel="gb_page_center[600,500]">Card</a> ; <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;breedingid=[% biblio.import_record_id %]&amp;import_batch_id=[% biblio.import_batch_id %]&amp;biblionumber=[% biblio.match_biblionumber %]">Add order</a> )
+
 
                           </legend>
                           <input type="hidden" value="[% biblio.rrp %]" name="rrp" />
