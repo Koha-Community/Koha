@@ -546,6 +546,30 @@ for (my $i=0;$i<@servers;$i++) {
         my @newresults = searchResults('intranet', $query_desc, $hits, $results_per_page, $offset, $scan,
                                        $results_hashref->{$server}->{"RECORDS"});
         $total = $total + $results_hashref->{$server}->{"hits"};
+
+        # Search history
+        if (C4::Context->preference('EnableSearchHistory')) {
+            unless ( $offset ) {
+                my $path_info = $cgi->url(-path_info=>1);
+                my $query_cgi_history = $cgi->url(-query=>1);
+                $query_cgi_history =~ s/^$path_info\?//;
+                $query_cgi_history =~ s/;/&/g;
+                my $query_desc_history = $query_desc;
+                $query_desc_history .= ", $limit_desc"
+                    if $limit_desc;
+
+                C4::Search::History::add({
+                    userid => $borrowernumber,
+                    sessionid => $cgi->cookie("CGISESSID"),
+                    query_desc => $query_desc_history,
+                    query_cgi => $query_cgi_history,
+                    total => $total,
+                    type => "biblio",
+                });
+            }
+            $template->param( EnableSearchHistory => 1 );
+        }
+
         ## If there's just one result, redirect to the detail page
         if ($total == 1) {         
             my $biblionumber = $newresults[0]->{biblionumber};
@@ -652,29 +676,6 @@ for (my $i=0;$i<@servers;$i++) {
         # no hits
         else {
             $template->param(searchdesc => 1,query_desc => $query_desc,limit_desc => $limit_desc);
-        }
-
-        # Search history
-        if (C4::Context->preference('EnableSearchHistory')) {
-            unless ( $offset ) {
-                my $path_info = $cgi->url(-path_info=>1);
-                my $query_cgi_history = $cgi->url(-query=>1);
-                $query_cgi_history =~ s/^$path_info\?//;
-                $query_cgi_history =~ s/;/&/g;
-                my $query_desc_history = $query_desc;
-                $query_desc_history .= ", $limit_desc"
-                    if $limit_desc;
-
-                C4::Search::History::add({
-                    userid => $borrowernumber,
-                    sessionid => $cgi->cookie("CGISESSID"),
-                    query_desc => $query_desc_history,
-                    query_cgi => $query_cgi_history,
-                    total => $total,
-                    type => "biblio",
-                });
-            }
-            $template->param( EnableSearchHistory => 1 );
         }
 
     } # end of the if local
