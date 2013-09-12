@@ -25,4 +25,5 @@ values
 ('email'),
 ('print'),
 ('sms'),
-('feed');
+('feed'),
+('phone');
