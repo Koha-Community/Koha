@@ -502,6 +502,7 @@ sub get_infos_syspref {
     }
     my $r;
     for my $field_name ( @$field_list ) {
+        next unless exists $yaml->{$field_name};
         my @fields = split /\|/, $yaml->{$field_name};
         for my $field ( @fields ) {
             my ( $f, $sf ) = split /\$/, $field;

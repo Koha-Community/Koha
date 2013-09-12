@@ -3,16 +3,17 @@ use warnings;
 use Test::More tests => 22;
 
 BEGIN {use_ok('C4::Budgets') }
+use C4::Context;
 use C4::Dates;
 use C4::Context;
 
 use YAML;
-
-my $dbh = C4::Context->dbh();
+my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
-$dbh->do('DELETE FROM aqbudgetperiods');
+$dbh->do(q|DELETE FROM aqbudgetperiods|);
+$dbh->do(q|DELETE FROM aqbudgets|);
 
 #
 # Budget Periods :
@@ -134,3 +135,4 @@ ok($budgets->[0]->{budget_name} lt $budgets->[1]->{budget_name}, 'default sort o
 ok($del_status=DelBudget($budget_id),
     "DelBudget returned $del_status");
 
+$dbh->rollback;

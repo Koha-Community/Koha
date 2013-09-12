@@ -71,11 +71,11 @@
             if ( $(this).is(':checked') ) {
                 $(container).addClass("selected");
                 $(container).removeClass("unselected");
-                $(container).find("ol").toggle();
+                $(container).find("ol").toggle(true);
             } else {
                 $(container).addClass("unselected");
                 $(container).removeClass("selected");
-                $(container).find("ol").toggle();
+                $(container).find("ol").toggle(false);
             }
         } );
 
@@ -113,12 +113,12 @@
 
             return disableUnchecked($(this));
         });
+        $('#tabs').tabs();
     });
 
     function disableUnchecked(form){
         $("div.biblio.unselected").each(function(){
-            $(this).find('select').attr('disabled', 'disabled');
-            $(this).find('input').attr('disabled', 'disabled');
+            $(this).remove();
         });
         return 1;
     }
@@ -137,11 +137,17 @@
                 <h1>Add orders from [% comments %]
                     ([% file_name %] staged on [% upload_timestamp | $KohaDates with_hours => 1 %])
                 </h1>
-                <div>
+                <form action="/cgi-bin/koha/acqui/addorderiso2709.pl" method="post" id="Aform">
+                <div id="tabs" class="toptabs">
+                  <ul>
+                    <li><a href="#records_to_import">Select to import</a></li>
+                    <li><a href="#items_info" class="items_info">Items information</a></li>
+                    <li><a href="#accounting_details">Default accounting details</a></li>
+                  </ul>
+
                   <div id="records_to_import">
                     <span class="checkall"><a id="checkAll" href="#">Check All</a></span>
                     <span class="uncheckall"><a id="unCheckAll" href="#">Uncheck All</a></span>
-                    <form action="/cgi-bin/koha/acqui/addorderiso2709.pl" method="post" id="Aform">
                         <input type="hidden" name="op" value="import_records"/>
                         <input type="hidden" name="basketno" value="[% basketno %]" />
                         <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
@@ -153,7 +159,7 @@
                         [% END %]
 
                         [% FOREACH biblio IN biblio_list %]
-                        <fieldset class="biblio unselected rows">
+                        <fieldset class="biblio unselected rows" style="float:none;">
                           <legend>
                             <label for="record_[% biblio.import_record_id %]" style="width:auto;">
                               <input type="checkbox" name="import_record_id" id="record_[% biblio.import_record_id %]" value="[% biblio.import_record_id %]" />
@@ -221,12 +227,12 @@
                         </fieldset>
                         [% END %]
                       </div>
-                      <div id="import_all">
-                        <h2>Import all</h2>
-                        <p>Import all the lines in the basket with the following parameters:</p>
+                      <div id="items_info">
+                        <h2>Items information</h2>
+                        <p>Import all the checked items in the basket with the following parameters:</p>
 
                         [% IF ( items ) %]
-                        <fieldset class="rows">
+                        <fieldset class="rows" style="float:none;">
                             <legend>Item</legend>
                             [% IF ( NoACQframework ) %]
                                 <div class="dialog message">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</div>
@@ -258,8 +264,9 @@
                             [% END %] <!-- /items -->
                         </fieldset>
                         [% END %] <!-- items -->
-
-                        <fieldset class="rows">
+                      </div>
+                      <div id="accounting_details">
+                        <fieldset class="rows" style="float:none;">
                             <legend>Accounting details</legend>
                             <ol>
                                 <li>
@@ -342,11 +349,12 @@
                                 </li>
                             </ol>
                         </fieldset>
-                        <fieldset class="action">
-                            <input type="submit" value="Save" /><a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Cancel</a>
-                        </fieldset>
+                      </div>
+                      </div>
 
-                        </div>
+                      <fieldset class="action">
+                          <input type="submit" value="Save" /><a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Cancel</a>
+                      </fieldset>
                     </form>
                 [% ELSE %]
                 <div>
