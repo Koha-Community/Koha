@@ -67,11 +67,12 @@ my $booksellerid       = $query->param('booksellerid');
 my $supplier = {};
 if ($booksellerid) {
     $supplier = GetBookSellerFromId($booksellerid);
-    foreach ( keys $supplier ) {
+    foreach ( keys %{$supplier} ) {
         $template->{'VARS'}->{$_} = $supplier->{$_};
     }
     $template->{'VARS'}->{'booksellerid'} = $booksellerid;
 }
+$template->{'VARS'}->{'contacts'} = C4::Bookseller::Contact->new() unless $template->{'VARS'}->{'contacts'};
 
 #build array for currencies
 if ( $op eq 'display' ) {

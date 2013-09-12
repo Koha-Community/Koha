@@ -8641,20 +8641,30 @@ if ( CheckVersion($DBversion) ) {
         fax varchar(100) default NULL,
         email varchar(100) default NULL,
         notes mediumtext,
-        rank SMALLINT default 0,
+        claimacquisition BOOLEAN NOT NULL DEFAULT 0,
+        claimissues BOOLEAN NOT NULL DEFAULT 0,
+        acqprimary BOOLEAN NOT NULL DEFAULT 0,
+        serialsprimary BOOLEAN NOT NULL DEFAULT 0,
         booksellerid int(11) not NULL,
         PRIMARY KEY  (id),
-        CONSTRAINT booksellerid_fk2 FOREIGN KEY (booksellerid)
+        CONSTRAINT booksellerid_aqcontacts_fk FOREIGN KEY (booksellerid)
             REFERENCES aqbooksellers (id) ON DELETE CASCADE ON UPDATE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
     $dbh->do("INSERT INTO aqcontacts (name, position, phone, altphone, fax,
-            email, notes, booksellerid)
+            email, notes, booksellerid, claimacquisition, claimissues, acqprimary, serialsprimary)
         SELECT contact, contpos, contphone, contaltphone, contfax, contemail,
-            contnotes, id FROM aqbooksellers;");
+            contnotes, id, 1, 1, 1, 1 FROM aqbooksellers;");
     $dbh->do("ALTER TABLE aqbooksellers DROP COLUMN contact,
         DROP COLUMN contpos, DROP COLUMN contphone,
         DROP COLUMN contaltphone, DROP COLUMN contfax,
         DROP COLUMN contemail, DROP COLUMN contnotes;");
+    $dbh->do("UPDATE letter SET content = replace(content, '<<aqbooksellers.contact>>', '<<aqcontacts.name>>')");
+    $dbh->do("UPDATE letter SET content = replace(content, '<<aqbooksellers.contpos>>', '<<aqcontacts.position>>')");
+    $dbh->do("UPDATE letter SET content = replace(content, '<<aqbooksellers.contphone>>', '<<aqcontacts.phone>>')");
+    $dbh->do("UPDATE letter SET content = replace(content, '<<aqbooksellers.contaltphone>>', '<<aqcontacts.altphone>>')");
+    $dbh->do("UPDATE letter SET content = replace(content, '<<aqbooksellers.contfax>>', '<<aqcontacts.contfax>>')");
+    $dbh->do("UPDATE letter SET content = replace(content, '<<aqbooksellers.contemail>>', '<<aqcontacts.contemail>>')");
+    $dbh->do("UPDATE letter SET content = replace(content, '<<aqbooksellers.contnotes>>', '<<aqcontacts.contnotes>>')");
     print "Upgrade to $DBversion done (Bug 10402: Move bookseller contacts to separate table)\n";
     SetVersion($DBversion);
 }

@@ -63,10 +63,21 @@ Contact's e-mail address.
 
 Notes about contact.
 
-=item rank
+=item claimacquisition
 
-Ranking of the contact so that the contact can be given the correct
-priority in display.
+Whether the contact should receive acquisitions claims.
+
+=item claimissues
+
+Whether the contact should receive serials claims.
+
+=item acqprimary
+
+Whether the contact is the primary contact for acquisitions.
+
+=item serialsprimary
+
+Whether the contact is the primary contact for serials.
 
 =item bookseller
 
@@ -81,7 +92,7 @@ use C4::Context;
 
 use base qw(Class::Accessor);
 
-__PACKAGE__->mk_accessors(qw(id name position phone altphone fax email notes rank bookseller));
+__PACKAGE__->mk_accessors(qw(id name position phone altphone fax email notes claimacquisition claimissues acqprimary serialsprimary bookseller));
 
 =head1 METHODS
 
@@ -152,12 +163,19 @@ sub save {
     my ($self) = @_;
 
     my $query;
-    my @params = ($self->name, $self->position, $self->phone, $self->altphone, $self->fax, $self->email, $self->notes, $self->rank, $self->bookseller);
+    my @params = (
+        $self->name,  $self->position,
+        $self->phone, $self->altphone,
+        $self->fax,   $self->email,
+        $self->notes, $self->acqprimary ? 1 : 0,
+        $self->serialsprimary ? 1 : 0, $self->claimacquisition ? 1 : 0,
+        $self->claimissues ? 1 : 0, $self->bookseller
+    );
     if ($self->id) {
-        $query = 'UPDATE aqcontacts SET name = ?, position = ?, phone = ?, altphone = ?, fax = ?, email = ?, notes = ?, rank = ?, booksellerid = ? WHERE id = ?;';
+        $query = 'UPDATE aqcontacts SET name = ?, position = ?, phone = ?, altphone = ?, fax = ?, email = ?, notes = ?, acqprimary = ?, serialsprimary = ?, claimacquisition = ?, claimissues = ?, booksellerid = ? WHERE id = ?;';
         push @params, $self->id;
     } else {
-        $query = 'INSERT INTO aqcontacts (name, position, phone, altphone, fax, email, notes, rank, booksellerid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);';
+        $query = 'INSERT INTO aqcontacts (name, position, phone, altphone, fax, email, notes, acqprimary, serialsprimary, claimacquisition, claimissues, booksellerid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);';
     }
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);

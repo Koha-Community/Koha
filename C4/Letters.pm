@@ -326,13 +326,23 @@ sub SendAlerts {
           $dbh->prepare("select * from aqbooksellers where id=?");
         $sthbookseller->execute( $dataorders->[0]->{booksellerid} );
         my $databookseller = $sthbookseller->fetchrow_hashref;
+        my $addressee =  $type eq 'claimacquisition' ? 'acqprimary' : 'serialsprimary';
+        my $sthcontact =
+          $dbh->prepare("SELECT * FROM aqcontacts WHERE booksellerid=? AND $type=1 ORDER BY $addressee DESC");
+        $sthcontact->execute( $dataorders->[0]->{booksellerid} );
+        my $datacontact = $sthcontact->fetchrow_hashref;
 
         my @email;
+        my @cc;
         push @email, $databookseller->{bookselleremail} if $databookseller->{bookselleremail};
-        push @email, $databookseller->{contemail}       if $databookseller->{contemail};
+        push @email, $datacontact->{email}           if ( $datacontact && $datacontact->{email} );
         unless (@email) {
             warn "Bookseller $dataorders->[0]->{booksellerid} without emails";
             return { error => "no_email" };
+        }
+        my $addlcontact;
+        while ($addlcontact = $sthcontact->fetchrow_hashref) {
+            push @cc, $addlcontact->{email} if ( $addlcontact && $addlcontact->{email} );
         }
 
         my $userenv = C4::Context->userenv;
@@ -343,6 +353,7 @@ sub SendAlerts {
             tables => {
                 'branches'    => $userenv->{branch},
                 'aqbooksellers' => $databookseller,
+                'aqcontacts'    => $datacontact,
             },
             repeat => $dataorders,
             want_librarian => 1,
@@ -351,6 +362,7 @@ sub SendAlerts {
         # ... then send mail
         my %mail = (
             To => join( ',', @email),
+            Cc             => join( ',', @cc),
             From           => $userenv->{emailaddress},
             Subject        => Encode::encode( "utf8", "" . $letter->{title} ),
             Message        => Encode::encode( "utf8", "" . $letter->{content} ),
@@ -363,7 +375,7 @@ sub SendAlerts {
             $type eq 'claimissues' ? "CLAIM ISSUE" : "ACQUISITION CLAIM",
             undef,
             "To="
-                . $databookseller->{contemail}
+                . join( ',', @email )
                 . " Title="
                 . $letter->{title}
                 . " Content="

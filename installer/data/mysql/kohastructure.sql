@@ -2974,10 +2974,13 @@ CREATE TABLE aqcontacts (
   fax varchar(100) default NULL,  -- contact's fax number
   email varchar(100) default NULL, -- contact's email address
   notes mediumtext, -- notes related to the contact
-  rank SMALLINT default 0, -- display rank for the contact
+  claimacquisition BOOLEAN NOT NULL DEFAULT 0, -- should this contact receive acquisitions claims
+  claimissues BOOLEAN NOT NULL DEFAULT 0, -- should this contact receive serial claims
+  acqprimary BOOLEAN NOT NULL DEFAULT 0, -- is this the primary contact for acquisitions messages
+  serialsprimary BOOLEAN NOT NULL DEFAULT 0, -- is this the primary contact for serials messages
   booksellerid int(11) not NULL,
   PRIMARY KEY  (id),
-  CONSTRAINT booksellerid_fk2 FOREIGN KEY (booksellerid)
+  CONSTRAINT booksellerid_aqcontacts_fk FOREIGN KEY (booksellerid)
        REFERENCES aqbooksellers (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

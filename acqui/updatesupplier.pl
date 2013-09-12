@@ -37,10 +37,12 @@ All informations regarding this supplier are listed on input parameter.
 Here is the list :
 
 supplier, id, company, company_postal, physical, company_phone,
-physical, company_phone, company_fax, website, company_contact_name,
-company_contact_position, contact_phone, contact_phone_2, contact_fax,
-company_email, contact_notes, notes, status, publishers_imprints,
-list_currency, gst, list_gst, invoice_gst, discount, gstrate.
+physical, company_phone, company_fax, website, company_email, notes,
+status, publishers_imprints, list_currency, gst, list_gst, invoice_gst,
+discount, gstrate, contact_name, contact_position, contact_phone,
+contact_altphone, contact_fax, contact_email, contact_notes,
+contact_claimacquisition, contact_claimissues, contact_acqprimary,
+contact_serialsprimary.
 
 =cut
 
@@ -102,14 +104,14 @@ $data{'active'}=$input->param('status');
 my @contacts;
 my %contact_info;
 
-foreach (qw(id name position phone altphone fax email notes)) {
+foreach (qw(id name position phone altphone fax email notes claimacquisition claimissues acqprimary serialsprimary)) {
     $contact_info{$_} = [ $input->param('contact_' . $_) ];
 }
 
 for my $cnt (0..scalar(@{$contact_info{'id'}})) {
     my %contact;
     my $real_contact;
-    foreach (qw(id name position phone altphone fax email notes)) {
+    foreach (qw(id name position phone altphone fax email notes claimacquisition claimissues acqprimary serialsprimary)) {
         $contact{$_} = $contact_info{$_}->[$cnt];
         $real_contact = 1 if $contact{$_};
     }

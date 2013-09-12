@@ -15,8 +15,37 @@
         <li><label for="contact_email[% contact.id %]">Email: </label>
             <input type="text" size="40" id="contact_email[% contact.id %]" name="contact_email" value="[% contact.email %]" /></li>
         <li><label for="contact_notes[% contact.id %]">Notes: </label>
-            <textarea id="contact_notes[% contact.id %]" name="contact_notes" cols="40" rows="4">[% contnotes %]</textarea></li>
-        [% IF contact.id %]<li><button class="btn" class="delete-contact"><i class="icon-remove"></i> Delete contact</li>[% END %]
+            <textarea id="contact_notes[% contact.id %]" name="contact_notes" cols="40" rows="4">[% contact.notes %]</textarea></li>
+        <li><label for="contact_acqprimary[% contact.id %]">Primary acquisitions contact</label>
+            [% IF contact.acqprimary %]
+                <input type="checkbox" id="contact_acqprimary[% contact.id %]" class="contact_acqprimary" checked="checked"></input>
+            [% ELSE %]
+                <input type="checkbox" id="contact_acqprimary[% contact.id %]" class="contact_acqprimary"></input>
+            [% END %]
+            <input type="hidden" class="contact_acqprimary_hidden" name="contact_acqprimary" value="[% contact.acqprimary %]"></input>
+        <li><label for="contact_serialsprimary[% contact.id %]">Primary serials contact</label>
+            [% IF contact.serialsprimary %]
+                <input type="checkbox" id="contact_serialsprimary[% contact.id %]" class="contact_serialsprimary" checked="checked"></input>
+            [% ELSE %]
+                <input type="checkbox" id="contact_serialsprimary[% contact.id %]" class="contact_serialsprimary"></input>
+            [% END %]
+            <input type="hidden" class="contact_serialsprimary_hidden" name="contact_serialsprimary" value="[% contact.serialsprimary %]"></input>
+        <li><label for="contact_claimacquisition[% contact.id %]">Contact about late orders?</label>
+            [% IF contact.claimacquisition %]
+                <input type="checkbox" id="contact_claimacquisition[% contact.id %]" class="contact_claimacquisition" checked="checked"></input>
+            [% ELSE %]
+                <input type="checkbox" id="contact_claimacquisition[% contact.id %]" class="contact_claimacquisition"></input>
+            [% END %]
+            <input type="hidden" class="contact_claimacquisition_hidden" name="contact_claimacquisition" value="[% contact.claimacquisition %]"></input>
+        <li><label for="contact_claimissues[% contact.id %]">Contact about late issues?</label>
+            [% IF contact.claimissues %]
+                <input type="checkbox" id="contact_claimissues[% contact.id %]" class="contact_claimissues" checked="checked"></input>
+            [% ELSE %]
+                <input type="checkbox" id="contact_claimissues[% contact.id %]" class="contact_claimissues"></input>
+            [% END %]
+            <input type="hidden" class="contact_claimissues_hidden" name="contact_claimissues" value="[% contact.claimissues %]"></input>
+        </li>
+        [% IF contact.id %]<li><button class="btn delete-contact"><i class="icon-remove"></i> Delete contact</li>[% END %]
     </ol>
 [% END %]
 
@@ -31,6 +60,18 @@
     [% END %]
     [% IF ( contact.notes ) %]
         <p><span class="label">Notes: </span>[% contact.notes %]</p>
+    [% END %]
+    [% IF ( contact.acqprimary ) %]
+        <p><span class="label">Primary acquisitions contact</span></p>
+    [% END %]
+    [% IF ( contact.serialsprimary ) %]
+        <p><span class="label">Primary serials contact</span></p>
+    [% END %]
+    [% IF ( contact.claimacquisition ) %]
+        <p><span class="label">Receives claims for late orders</span></p>
+    [% END %]
+    [% IF ( contact.claimissues ) %]
+        <p><span class="label">Receives claims for late issues</span></p>
     [% END %]
 [% END %]
 
@@ -59,13 +100,18 @@ function add_contact() {
         $(this).attr('for', $(this).attr('for') + '_' + timestamp);
     });
     $(new_contact).insertBefore(this);
+    if ($('.supplier-contact').length === 2) { // First contact
+        $.each(['.contact_acqprimary', '.contact_serialsprimary', '.contact_claimacquisition', '.contact_claimissues'], function (idx, checkbox) {
+            $(checkbox, new_contact).click();
+        });
+    }
     $('input[name="contact_name"]', new_contact).focus();
     return false;
 }
 
-function delete_contact() {
-    $(this).parents('fieldset').delete();
-    return false;
+function delete_contact(ev) {
+    $(this).parents('.supplier-contact').remove();
+    ev.preventDefault();
 }
 
  $(document).ready(function() {
@@ -76,8 +122,32 @@ function delete_contact() {
         ],
         'sDom': 't'
     } ) );
-    $('.delete-contact').click(delete_contact);
+    $('body').on('click', '.delete-contact', null, delete_contact);
     $('#add-contact').click(add_contact);
+    $('body').on('click', '.contact_acqprimary', null, function () {
+        if ($(this).attr('checked') === 'checked') {
+            $('.contact_acqprimary').filter(':checked').not(this).removeAttr('checked');
+            $('.contact_acqprimary_hidden').each(function () {
+                $(this).val('0');
+            });
+        }
+        $(this).next('.contact_acqprimary_hidden').val('1');
+    });
+    $('body').on('click', '.contact_serialsprimary', null, function () {
+        if ($(this).attr('checked') === 'checked') {
+            $('.contact_serialsprimary').filter(':checked').not(this).removeAttr('checked');
+            $('.contact_serialsprimary_hidden').each(function () {
+                $(this).val('0');
+            });
+        }
+        $(this).next('.contact_serialsprimary_hidden').val($(this).attr('checked') === 'checked' ? '1' : '0');
+    });
+    $('body').on('click', '.contact_claimacquisition', null, function () {
+        $(this).next('.contact_claimacquisition_hidden').val($(this).attr('checked') === 'checked' ? '1' : '0');
+    });
+    $('body').on('click', '.contact_claimissues', null, function () {
+        $(this).next('.contact_claimissues_hidden').val($(this).attr('checked') === 'checked' ? '1' : '0');
+    });
  });
 //]]>
 </script>

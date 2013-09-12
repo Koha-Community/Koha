@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 72;
+use Test::More tests => 85;
 use Test::MockModule;
 use C4::Context;
 use Koha::DateUtils;
@@ -51,13 +51,6 @@ my $sample_supplier1 = {
     accountnumber => 'accountnumber1',
     fax           => 'fax1',
     url           => 'url1',
-    contact       => 'contact1',
-    contpos       => 'contpos1',
-    contphone     => 'contphone1',
-    contfax       => 'contefax1',
-    contaltphone  => 'contaltphone1',
-    contemail     => 'contemail1',
-    contnotes     => 'contnotes1',
     active        => 1,
     gstreg        => 1,
     listincgst    => 1,
@@ -78,13 +71,6 @@ my $sample_supplier2 = {
     accountnumber => 'accountnumber2',
     fax           => 'fax2',
     url           => 'url2',
-    contact       => 'contact2',
-    contpos       => 'contpos2',
-    contphone     => 'contphone2',
-    contfax       => 'contefax2',
-    contaltphone  => 'contaltphone2',
-    contemail     => 'contemail2',
-    contnotes     => 'contnotes2',
     active        => 1,
     gstreg        => 1,
     listincgst    => 1,
@@ -92,7 +78,7 @@ my $sample_supplier2 = {
     gstrate       => '2.0000',
     discount      => '2.0000',
     notes         => 'notes2',
-    deliverytime  => 2,
+    deliverytime  => 2
 };
 
 my $id_supplier1 = C4::Bookseller::AddBookseller($sample_supplier1);
@@ -230,13 +216,6 @@ $sample_supplier2 = {
     accountnumber => 'accountnumber2 modified',
     fax           => 'fax2 modified',
     url           => 'url2 modified',
-    contact       => 'contact2 modified',
-    contpos       => 'contpos2 modified',
-    contphone     => 'contphone2 modified',
-    contfax       => 'contefax2 modified',
-    contaltphone  => 'contaltphone2 modified',
-    contemail     => 'contemail2 modified',
-    contnotes     => 'contnotes2 modified',
     active        => 1,
     gstreg        => 1,
     listincgst    => 1,
@@ -277,13 +256,6 @@ my $sample_supplier3 = {
     accountnumber => 'accountnumber3',
     fax           => 'fax3',
     url           => 'url3',
-    contact       => 'contact3',
-    contpos       => 'contpos3',
-    contphone     => 'contphone3',
-    contfax       => 'contefax3',
-    contaltphone  => 'contaltphone3',
-    contemail     => 'contemail3',
-    contnotes     => 'contnotes3',
     active        => 1,
     gstreg        => 1,
     listincgst    => 1,
@@ -304,13 +276,6 @@ my $sample_supplier4 = {
     accountnumber => 'accountnumber4',
     fax           => 'fax4',
     url           => 'url4',
-    contact       => 'contact4',
-    contpos       => 'contpos4',
-    contphone     => 'contphone4',
-    contfax       => 'contefax4',
-    contaltphone  => 'contaltphone4',
-    contemail     => 'contemail4',
-    contnotes     => 'contnotes4',
     active        => 1,
     gstreg        => 1,
     listincgst    => 1,
@@ -716,7 +681,7 @@ my $booksellerid = C4::Bookseller::AddBookseller(
     ]
 );
 
-my @booksellers = C4::Bookseller::GetBookSeller('my vendor');
+@booksellers = C4::Bookseller::GetBookSeller('my vendor');
 ok(
     ( grep { $_->{'id'} == $booksellerid } @booksellers ),
     'GetBookSeller returns correct record when passed a name'
@@ -777,7 +742,7 @@ sub field_filter {
         'bookselleremail', 'booksellerfax',
         'booksellerurl',   'othersupplier',
         'currency',        'invoiceprice',
-        'listprice'
+        'listprice',       'contacts'
       )
     {
 

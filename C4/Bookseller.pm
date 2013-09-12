@@ -248,7 +248,7 @@ sub ModBookseller {
             discount=?,notes=?,gstrate=?,deliverytime=?
         WHERE id=?';
     my $sth = $dbh->prepare($query);
-    return $sth->execute(
+    my $cnt = $sth->execute(
         $data->{'name'},         $data->{'address1'},
         $data->{'address2'},     $data->{'address3'},
         $data->{'address4'},     $data->{'postal'},
@@ -278,7 +278,7 @@ sub ModBookseller {
     }
     $sth = $dbh->prepare($contactquery);
     $sth->execute(@contactparams);
-    return;
+    return $cnt;
 }
 
 =head2 DelBookseller

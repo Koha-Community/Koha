@@ -18,17 +18,30 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use Test::More tests => 45;
+use Test::More tests => 56;
+use Test::MockModule;
 
 use MARC::Record;
-use C4::Biblio qw( AddBiblio );
-use C4::Context;
-use C4::Letters;
-use C4::Members;
-use C4::Branch;
-use Koha::DateUtils qw( dt_from_string output_pref );
+
+my %mail;
+my $module = new Test::MockModule('Mail::Sendmail');
+$module->mock(
+    'sendmail',
+    sub {
+        warn "Fake sendmail";
+        %mail = @_;
+    }
+);
+
+use_ok('C4::Context');
+use_ok('C4::Members');
+use_ok('C4::Branch');
+use_ok('C4::Acquisition');
+use_ok('C4::Biblio');
+use_ok('C4::Bookseller');
+use_ok('C4::Letters');
 use t::lib::Mocks;
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 my $dbh = C4::Context->dbh;
 
@@ -115,7 +128,6 @@ is(
     'failed',
     'message marked failed if tried to send SMS message for borrower with no smsalertnumber set (bug 11208)'
 );
-
 
 # GetLetters
 my $letters = C4::Letters::GetLetters();
@@ -259,5 +271,69 @@ $prepared_letter = GetPreparedLetter((
 ));
 $my_content_letter = qq|This is a SMS for an $substitute->{status}|;
 is( $prepared_letter->{content}, $my_content_letter, 'GetPreparedLetter returns the content correctly' );
+
+$dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('claimacquisition','TESTACQCLAIM','Acquisition Claim','Item Not Received','<<aqbooksellers.name>>|<<aqcontacts.name>>|<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered)</order>');});
+
+my $booksellerid = C4::Bookseller::AddBookseller(
+    {
+        name => "my vendor",
+        address1 => "bookseller's address",
+        phone => "0123456",
+        active => 1,
+        deliverytime => 5,
+    },
+    [
+        { name => 'John Smith',  phone => '0123456x1', claimacquisition => 1 },
+        { name => 'Leo Tolstoy', phone => '0123456x2', claimissues => 1 },
+    ]
+);
+my $basketno = NewBasket($booksellerid, 1);
+
+my $budgetid = C4::Budgets::AddBudget({
+    budget_code => "budget_code_test_letters",
+    budget_name => "budget_name_test_letters",
+});
+
+my $ordernumber;
+my $bib = MARC::Record->new();
+if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+    $bib->append_fields(
+        MARC::Field->new('200', ' ', ' ', a => 'Silence in the library'),
+    );
+} else {
+    $bib->append_fields(
+        MARC::Field->new('245', ' ', ' ', a => 'Silence in the library'),
+    );
+}
+
+my ($biblionumber, $biblioitemnumber) = AddBiblio($bib, '');
+( undef, $ordernumber ) = C4::Acquisition::NewOrder(
+    {
+        basketno => $basketno,
+        quantity => 1,
+        biblionumber => $biblionumber,
+        budget_id => $budgetid,
+    }
+);
+
+C4::Acquisition::CloseBasket( $basketno );
+my $err;
+eval {
+    warn "This test may issue a warning. Please ignore it.\n";
+    $err = SendAlerts( 'claimacquisition', [ $ordernumber ], 'TESTACQCLAIM' );
+};
+is($err->{'error'}, 'no_email', "Trying to send an alert when there's no e-mail results in an error");
+
+my $bookseller = C4::Bookseller::GetBookSellerFromId($booksellerid);
+$bookseller->{'contacts'}->[0]->email('testemail@mydomain.com');
+C4::Bookseller::ModBookseller($bookseller);
+$bookseller = C4::Bookseller::GetBookSellerFromId($booksellerid);
+
+eval {
+    $err = SendAlerts( 'claimacquisition', [ $ordernumber ], 'TESTACQCLAIM' );
+};
+is($err, 1, "Successfully sent claim");
+is($mail{'To'}, 'testemail@mydomain.com');
+is($mail{'Message'}, 'my vendor|John Smith|<order>Ordernumber ' . $ordernumber . ' (Silence in the library) (1 ordered)</order>', 'Claim notice text constructed successfully');
 
 $dbh->rollback;
