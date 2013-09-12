@@ -19,6 +19,7 @@ find({
         return if $m =~ /SIP/; # SIP modules will not load clean
         return if $m =~ /C4::VirtualShelves$/; # Requires a DB
         return if $m =~ /C4::Auth$/; # DB
+        return if $m =~ /C4::ILSDI::Services/; # DB
         return if $m =~ /C4::Tags$/; # DB
         return if $m =~ /C4::Service/; # DB
         return if $m =~ /C4::Auth_with_cas/; # DB
