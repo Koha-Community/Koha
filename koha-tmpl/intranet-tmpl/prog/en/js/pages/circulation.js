@@ -133,7 +133,9 @@ function validate1(date) {
 
 // prevent adjacent checkboxes from being checked simultaneously
 function radioCheckBox(box){
-    if($(this).attr("checked")){
-        $(this).removeAttr("checked");
-    }
+    box.parents("td").siblings().find("input:checkbox:visible").each(function(){
+        if($(this).attr("checked")){
+            $(this).removeAttr("checked");
+        }
+    });
  }
