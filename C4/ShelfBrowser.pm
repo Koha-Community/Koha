@@ -171,7 +171,7 @@ sub GetNearbyItems {
 
     my @prev_items = @{
         $dbh->selectall_arrayref(
-            $prev_query . $query_cond . ' ORDER BY cn_sort DESC, itemnumber LIMIT ?',
+            $prev_query . $query_cond . ' ORDER BY cn_sort DESC, itemnumber DESC LIMIT ?',
             { Slice => {} },
             ( @params, $gap )
         )

@@ -67,7 +67,7 @@
                 <td rowspan="2" style="width:20px;">
                   [% IF shelfbrowser_next_item %]
                     <div id="browser_next">
-                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% shelfbrowser_prev_item.biblionumber %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_prev_item.itemnumber %]#shelfbrowser">Next</a>
+                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% shelfbrowser_next_item.biblionumber %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_next_item.itemnumber %]#shelfbrowser">Next</a>
                     </div>
                   [% END %]
                 </td>
