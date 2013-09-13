@@ -9,7 +9,7 @@
 
 [% BLOCK list_permissions %]
     <li>
-        <label for="permissions">Permissions: </label>
+        <label for="allow_add">Permissions: </label>
         <select name="allow_add" id="allow_add">
             [% IF allow_add %]<option value="0">Do not allow</option>[% ELSE %]<option value="0" selected="selected">Do not allow</option>[% END %]
             [% IF allow_add %]<option value="1" selected="selected">Allow</option>[% ELSE %]<option value="1">Allow</option>[% END %]
@@ -543,8 +543,8 @@
                                             [% END %]
                                         </select>
                                     </li>
-                                    <li>
-                                        [% IF (OpacAllowPublicListCreation) %]
+                                    [% IF (OpacAllowPublicListCreation) %]
+                                        <li>
                                             <label for="category">Category:</label>
                                             <select name="category" id="category">
                                                 [% IF ( category1 ) %]
@@ -558,14 +558,21 @@
                                                     <option value="2">Public</option>
                                                 [% END %]
                                             </select>
-                                        [% END %]
-                                    </li>
-                                    [% INCLUDE list_permissions %]
+                                        </li>
+                                        [% INCLUDE list_permissions %]
+                                    [% END %]
                                 </ol>
+                                [% UNLESS ( OpacAllowPublicListCreation ) %]
+                                    [% IF ( category2 ) %]
+                                        <input type="hidden" name="category" value="2" />
+                                    [% ELSE %]
+                                        <input type="hidden" name="category" value="1" />
+                                    [% END %]
+                                [% END %]
                             </fieldset>
 
                             <fieldset class="action">
-                                <input type="submit" value="Save" class="submit" />
+                                <input type="submit" value="Save" class="btn" />
                                 [% IF ( showprivateshelves ) %]
                                     <a class="cancel" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=[% shelfnumber %]&amp;display=privateshelves">Cancel</a>
                                 [% ELSE %]
@@ -750,16 +757,19 @@
                                             </select>
                                         </li>
                                         <li>
-                                        <label for="category">Category:</label>
-                                            <select name="category" id="category">
-                                                <option value="1">Private</option>
-                                                [% IF (OpacAllowPublicListCreation) %]
-                                                    <option value="2">Public</option>
-                                                [% END %]
-                                            </select>
-                                        </li>
-                                        [% INCLUDE list_permissions %]
+                                        [% IF (OpacAllowPublicListCreation) %]
+                                            <label for="category">Category:</label>
+                                                <select name="category" id="category">
+                                                    <option value="1">Private</option>
+                                                        <option value="2">Public</option>
+                                                </select>
+                                            </li>
+                                            [% INCLUDE list_permissions %]
+                                        [% END %]
                                     </ol>
+                                    [% UNLESS (OpacAllowPublicListCreation) %]
+                                        <input type="hidden" name="category" value="1" />
+                                    [% END %]
                                 </fieldset>
                                 <fieldset class="action">
                                     <input type="submit" onclick="Check(this.form); return false;" value="Save" class="btn" />
