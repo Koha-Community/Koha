@@ -634,7 +634,7 @@ sub get_matches {
         next if scalar(@source_keys) == 0;
 
         @source_keys = C4::Koha::GetVariationsOfISBNs(@source_keys)
-          if ( $matchpoint->{index} eq 'isbn'
+          if ( $matchpoint->{index} =~ /^isbn$/i
             && C4::Context->preference('AggressiveMatchOnISBN') );
 
         # build query
