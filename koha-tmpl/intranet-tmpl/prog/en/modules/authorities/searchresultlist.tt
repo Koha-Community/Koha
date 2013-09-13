@@ -67,7 +67,9 @@ function searchauthority() {
 [% UNLESS ( isEDITORS ) %]
       <th>Used in</th>
 [% END %]
-      <th>Delete</th>
+    [% IF ( CAN_user_editauthorities ) %]
+      <th>&nbsp;</th>
+    [% END %]
     </tr>
 [% FOREACH resul IN result %]
     [% UNLESS ( loop.odd ) %]
@@ -79,14 +81,17 @@ function searchauthority() {
       <td><a href="detail.pl?authid=[% resul.authid %]">Details</a></td>
   [% UNLESS ( resul.isEDITORS ) %]
       <td>
-        <a href="../catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% resul.authid %]" class="button">[% resul.used %] biblio(s)</a>
+        <a href="../catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% resul.authid %]" class="button">[% resul.used %] records(s)</a>
       </td>
   [% END %]
-      <td>
-  [% UNLESS ( resul.used ) %]
-        <a href="javascript:confirm_deletion([% resul.authid %])">Delete</a>
-  [% END %]
-      </td>
+      [% IF ( CAN_user_editauthorities ) %]
+          <td>
+              <a href="/cgi-bin/koha/authorities/authorities.pl?authid=[% resul.authid %]">Edit</a>
+              [% UNLESS ( resul.used ) %]
+                   | <a href="javascript:confirm_deletion([% resul.authid %])">Delete</a>
+              [% END %]
+          </td>
+      [% END %]
     </tr>
 [% END %]
   </table>
