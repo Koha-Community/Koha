@@ -9,14 +9,19 @@
 
 //]]>
 </script>
+
+[% IF ( authid || CAN_user_editauthorities) %]
+
 <div id="toolbar" class="btn-toolbar">
 
 [% IF ( authid ) %]
-    <div class="btn-group"><a class="btn btn-small" id="editAuth" href="authorities.pl?authid=[% authid %]"><i class="icon-pencil"></i> Edit</a></div>
-    [% UNLESS ( count ) %]
-        <div class="btn-group"><a href="#" class="btn btn-small" id="delAuth"><i class="icon-remove"></i> Delete</a></div>
+    [% IF ( CAN_user_editauthorities ) %]
+        <div class="btn-group"><a class="btn btn-small" id="editAuth" href="authorities.pl?authid=[% authid %]"><i class="icon-pencil"></i> Edit</a></div>
+        <div class="btn-group"><a class="btn btn-small" id="dupAuth" href="authorities.pl?authid=[% authid %]&amp;op=duplicate"><i class="icon-copy"></i> Duplicate</a></div>
+        [% UNLESS ( count ) %]
+            <div class="btn-group"><a href="#" class="btn btn-small" id="delAuth"><i class="icon-remove"></i> Delete</a></div>
+        [% END %]
     [% END %]
-    <div class="btn-group"><a class="btn btn-small" id="dupAuth" href="authorities.pl?authid=[% authid %]&amp;op=duplicate"><i class="icon-copy"></i> Duplicate</a></div>
 
     <div class="btn-group">
         <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-download-alt"></i> Save
@@ -31,6 +36,7 @@
     </div>
 [% END %]
 
+[% IF ( CAN_user_editauthorities ) %]
     <div class="btn-group">
         <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-plus"></i> New authority
         <span class="caret"></span>
@@ -41,4 +47,7 @@
             [% END %]
         </ul>
     </div>
+[% END %]
 </div>
+
+[% END %]

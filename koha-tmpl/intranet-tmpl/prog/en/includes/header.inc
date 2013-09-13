@@ -18,9 +18,7 @@
                             [% IF ( CAN_user_acquisition ) %]
                             <li><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></li>
                             [% END %]
-                            [% IF ( CAN_user_editauthorities ) %]
                             <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
-                            [% END %]
                             [% IF ( CAN_user_serials ) %]
                             <li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li>
                             [% END %]
