@@ -1,9 +1,14 @@
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE Koha %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Check in [% title |html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+
+[% INCLUDE 'calendar.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery-ui-timepicker-addon.js"></script>
+
 <script type="text/javascript">
 //<![CDATA[
 function Dopop(link) {
@@ -11,6 +16,11 @@ function Dopop(link) {
     $("#barcode").focus();
 }
 $(document).ready(function () {
+    $("#return_date_override").datetimepicker({
+        onClose: function(dateText, inst) { $("#barcode").focus(); },
+        hour: 23,
+        minute: 59
+    });
     $("#exemptcheck").change(function () {
         if (this.checked == true) {
             $("#barcode").addClass("alert");
@@ -25,9 +35,15 @@ $(document).ready(function () {
         if (this.checked == true) {
             $("#barcode").addClass("alert");
             $("#dropboxmode").show();
+
+            $("#return_date_override_fields :input").attr("disabled", true);
+            $("#return_date_override").datetimepicker("disable");
         } else {
             $("#barcode").removeClass("alert");
             $("#dropboxmode").hide();
+
+            $("#return_date_override_fields :input").attr("disabled", false);
+            $("#return_date_override").datetimepicker("enable");
         }
         $("#barcode").focus();
     });
@@ -392,6 +408,23 @@ $(document).ready(function () {
 			<input name="barcode" id="barcode" size="14" class="focus"/>
 			[% END %]
             <input type="submit" class="submit" value="Submit" />
+
+            [% IF Koha.Preference('SpecifyReturnDate') %]
+                <div class="date-select" id="return_date_override_fields">
+                    <div class="hint">Specify return date [% INCLUDE 'date-format.inc' %]: </div>
+
+                    <input type="text" size="13" id="return_date_override" name="return_date_override" value="[% return_date_override %]" readonly="readonly" />
+
+                    <label for="return_date_override_remember"> Remember for next check in:</label>
+                    [% IF ( return_date_override_remember ) %]
+                        <input type="checkbox" id="return_date_override_remember" onclick="this.form.barcode.focus();" name="return_date_override_remember" checked="checked" />
+                    [% ELSE %]
+                        <input type="checkbox" id="return_date_override_remember" onclick="this.form.barcode.focus();" name="return_date_override_remember" />
+                    [% END %]
+
+                    <input type="button" class="action" id="cleardate" value="Clear" name="cleardate" onclick="this.checked = false; this.form.return_date_override.value = ''; this.form.return_date_override_remember.checked = false; this.form.barcode.focus(); return false;" />
+            </div>
+        [% END %]
             [% FOREACH inputloo IN inputloop %]
                 <input type="hidden" name="ri-[% inputloo.counter %]" value="[% inputloo.barcode %]" />
                 <input type="hidden" name="dd-[% inputloo.counter %]" value="[% inputloo.duedate %]" />

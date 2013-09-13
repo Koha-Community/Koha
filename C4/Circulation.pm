@@ -1634,7 +1634,7 @@ sub GetBranchItemRule {
 =head2 AddReturn
 
   ($doreturn, $messages, $iteminformation, $borrower) =
-      &AddReturn($barcode, $branch, $exemptfine, $dropbox);
+      &AddReturn($barcode, $branch, $exemptfine, $dropbox, $returndate);
 
 Returns a book.
 
@@ -1652,6 +1652,9 @@ yesterday, or the last non-holiday as defined in C4::Calendar .  If
 overdue charges are applied and C<$dropbox> is true, the last charge
 will be removed.  This assumes that the fines accrual script has run
 for _today_.
+
+=item C<$return_date> allows the default return date to be overridden
+by the given return date.
 
 =back
 
@@ -1706,7 +1709,7 @@ patron who last borrowed the book.
 =cut
 
 sub AddReturn {
-    my ( $barcode, $branch, $exemptfine, $dropbox ) = @_;
+    my ( $barcode, $branch, $exemptfine, $dropbox, $return_date ) = @_;
 
     if ($branch and not GetBranchDetail($branch)) {
         warn "AddReturn error: branch '$branch' not found.  Reverting to " . C4::Context->userenv->{'branch'};
@@ -1779,7 +1782,7 @@ sub AddReturn {
     # case of a return of document (deal with issues and holdingbranch)
     my $today = DateTime->now( time_zone => C4::Context->tz() );
     if ($doreturn) {
-    my $datedue = $issue->{date_due};
+        my $datedue = $issue->{date_due};
         $borrower or warn "AddReturn without current borrower";
 		my $circControlBranch;
         if ($dropbox) {
@@ -1788,36 +1791,48 @@ sub AddReturn {
             # FIXME: check issuedate > returndate, factoring in holidays
             #$circControlBranch = _GetCircControlBranch($item,$borrower) unless ( $item->{'issuedate'} eq C4::Dates->today('iso') );;
             $circControlBranch = _GetCircControlBranch($item,$borrower);
-        $issue->{'overdue'} = DateTime->compare($issue->{'date_due'}, $today ) == -1 ? 1 : 0;
+            $issue->{'overdue'} = DateTime->compare($issue->{'date_due'}, $today ) == -1 ? 1 : 0;
         }
 
         if ($borrowernumber) {
-            if( C4::Context->preference('CalculateFinesOnReturn') && $issue->{'overdue'}){
-            # we only need to calculate and change the fines if we want to do that on return
-            # Should be on for hourly loans
+            if ( ( C4::Context->preference('CalculateFinesOnReturn') && $issue->{'overdue'} ) || $return_date ) {
+                # we only need to calculate and change the fines if we want to do that on return
+                # Should be on for hourly loans
                 my $control = C4::Context->preference('CircControl');
                 my $control_branchcode =
                     ( $control eq 'ItemHomeLibrary' ) ? $item->{homebranch}
                   : ( $control eq 'PatronLibrary' )   ? $borrower->{branchcode}
                   :                                     $issue->{branchcode};
 
+                my $date_returned =
+                  $return_date ? dt_from_string($return_date) : $today;
+
                 my ( $amount, $type, $unitcounttotal ) =
                   C4::Overdues::CalcFine( $item, $borrower->{categorycode},
-                    $control_branchcode, $datedue, $today );
+                    $control_branchcode, $datedue, $date_returned );
 
                 $type ||= q{};
 
-                if ( $amount > 0
-                    && C4::Context->preference('finesMode') eq 'production' )
-                {
-                    C4::Overdues::UpdateFine( $issue->{itemnumber},
-                        $issue->{borrowernumber},
-                        $amount, $type, output_pref($datedue) );
+                if ( C4::Context->preference('finesMode') eq 'production' ) {
+                    if ( $amount > 0 ) {
+                        C4::Overdues::UpdateFine( $issue->{itemnumber},
+                            $issue->{borrowernumber},
+                            $amount, $type, output_pref($datedue) );
+                    }
+                    elsif ($return_date) {
+
+                       # Backdated returns may have fines that shouldn't exist,
+                       # so in this case, we need to drop those fines to 0
+
+                        C4::Overdues::UpdateFine( $issue->{itemnumber},
+                            $issue->{borrowernumber},
+                            0, $type, output_pref($datedue) );
+                    }
                 }
             }
 
             MarkIssueReturned( $borrowernumber, $item->{'itemnumber'},
-                $circControlBranch, '', $borrower->{'privacy'} );
+                $circControlBranch, $return_date, $borrower->{'privacy'} );
 
             # FIXME is the "= 1" right?  This could be the borrower hash.
             $messages->{'WasReturned'} = 1;

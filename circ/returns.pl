@@ -186,6 +186,30 @@ my $calendar    = Koha::Calendar->new( branchcode => $userenv_branch );
 #dropbox: get last open day (today - 1)
 my $today       = DateTime->now( time_zone => C4::Context->tz());
 my $dropboxdate = $calendar->addDate($today, -1);
+
+my $return_date_override = $query->param('return_date_override');
+my $return_date_override_remember =
+  $query->param('return_date_override_remember');
+if ($return_date_override) {
+    if ( C4::Context->preference('SpecifyReturnDate') ) {
+        if ( $return_date_override =~ C4::Dates->regexp('syspref') ) {
+
+            # Save the original format if we are remembering for this series
+            $template->param(
+                return_date_override          => $return_date_override,
+                return_date_override_remember => 1
+            ) if ($return_date_override_remember);
+
+            my $dt = dt_from_string($return_date_override);
+            $return_date_override =
+              DateTime::Format::MySQL->format_datetime($dt);
+        }
+    }
+    else {
+        $return_date_override = q{};
+    }
+}
+
 if ($dotransfer){
 # An item has been returned to a branch other than the homebranch, and the librarian has chosen to initiate a transfer
     my $transferitem = $query->param('transferitem');
@@ -222,7 +246,7 @@ if ($barcode) {
 # save the return
 #
     ( $returned, $messages, $issueinformation, $borrower ) =
-      AddReturn( $barcode, $userenv_branch, $exemptfine, $dropboxmode);     # do the return
+      AddReturn( $barcode, $userenv_branch, $exemptfine, $dropboxmode, $return_date_override );
     my $homeorholdingbranchreturn = C4::Context->preference('HomeOrHoldingBranchReturn');
     $homeorholdingbranchreturn ||= 'homebranch';
 
