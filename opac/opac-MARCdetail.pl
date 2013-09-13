@@ -53,6 +53,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Acquisition;
 use C4::Koha;
+use List::MoreUtils qw/any/;
 
 my $query = new CGI;
 
@@ -77,6 +78,7 @@ if (scalar @all_items >= 1) {
 
 my $itemtype     = &GetFrameworkCode($biblionumber);
 my $tagslib      = &GetMarcStructure( 0, $itemtype );
+my ($tag_itemnumber,$subtag_itemnumber) = &GetMarcFromKohaField('items.itemnumber',$itemtype);
 my $biblio = GetBiblioData($biblionumber);
 $biblionumber = $biblio->{biblionumber};
 my $record = GetMarcBiblio($biblionumber, 1);
@@ -238,6 +240,9 @@ my %witness
 my @big_array;
 foreach my $field (@fields) {
     next if ( $field->tag() < 10 );
+    next if ( ( $field->tag() eq $tag_itemnumber ) &&
+              ( any { $field->subfield($subtag_itemnumber) eq $_ }
+                   @items2hide) );
     my @subf = $field->subfields;
     my %this_row;
 
