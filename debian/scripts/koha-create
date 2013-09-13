@@ -343,6 +343,10 @@ EOF`
 
     echo $usage
     die $MSG
+else
+    # Unset memcached-related variables
+    MEMCACHED_SERVERS=""
+    MEMCACHED_PREFIX=""
 fi
 
 opacdomain="$OPACPREFIX$name$OPACSUFFIX$DOMAIN"
