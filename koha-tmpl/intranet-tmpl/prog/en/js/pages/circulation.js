@@ -80,14 +80,9 @@ $(document).ready(function() {
     // Clicking the table cell checks the checkbox inside it
     $("td").on("click",function(e){
         if(e.target.tagName.toLowerCase() == 'td'){
-           $(this).find("input:checkbox:visible").each( function() {
-                if($(this).attr("checked")){
-                    $(this).removeAttr("checked");
-                } else {
-                    $(this).attr("checked","checked");
-                    radioCheckBox($(this));
-                }
-           });
+          $(this).find("input:checkbox:visible").each( function() {
+            $(this).click();
+          });
         }
     });
 });
@@ -133,9 +128,7 @@ function validate1(date) {
 
 // prevent adjacent checkboxes from being checked simultaneously
 function radioCheckBox(box){
-    box.parents("td").siblings().find("input:checkbox:visible").each(function(){
-        if($(this).attr("checked")){
-            $(this).removeAttr("checked");
-        }
+    box.parents("td").siblings().find("input:checkbox.radio").each(function(){
+        $(this).removeAttr("checked");
     });
  }
