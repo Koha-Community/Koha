@@ -367,7 +367,7 @@ $(document).ready(function () {
     [% ELSE %]
         <div class="dialog message">
     [% END %]
-            <p class="problem">[% checkinmsg %]</p>
+            <p class="problem">[% checkinmsg | html_line_break %]</p>
         </div>
 [% END%]
 

@@ -230,7 +230,7 @@ Item types administration
          </li>
       <li>
           <label for="checkinmsg">Check in message: </label>
-          <input type="text" id="checkinmsg" name="checkinmsg" size="48" value="[% checkinmsg %]" />
+          <textarea id="checkinmsg" name="checkinmsg" cols="55" rows="5">[% checkinmsg %]</textarea>
       </li>
       <li>
           <label for="checkinmsgtype">Check in message type: </label>
@@ -323,7 +323,7 @@ Item types administration
       [% loo.rentalcharge %]
     [% END %]
     </td>
-    <td>[% loo.checkinmsg %]</td>
+    <td>[% loo.checkinmsg | html_line_break %]</td>
     <td>
       <a href="[% loo.script_name %]?op=add_form&amp;itemtype=[% loo.itemtype |html %]">Edit</a>
       <a href="[% loo.script_name %]?op=delete_confirm&amp;itemtype=[% loo.itemtype |html %]">Delete</a>
