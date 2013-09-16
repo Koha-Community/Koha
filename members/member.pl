@@ -125,6 +125,8 @@ if ($results) {
 		@$results = grep { $_->{$field} eq $patron->{$field} } @$results; 
 	}
     $count = scalar(@$results);
+} else {
+    $count = 0;
 }
 
 if($count == 1){
