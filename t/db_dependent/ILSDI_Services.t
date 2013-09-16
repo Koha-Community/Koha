@@ -38,7 +38,7 @@ unless ( GetBorrowercategory('UT') ) {
 }
 
 # Create branch
-unless ( GetBranchDetail('DEMO') ) {
+unless ( GetBranchDetail('UT') ) {
     $dbh->do("INSERT INTO branches (branchcode,branchname) VALUES ('UT','Unit test library');");
 }
 
