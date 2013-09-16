@@ -766,8 +766,8 @@ sub prepare_letter_for_printing {
     } elsif ( exists $params->{'outputformat'} && $params->{'outputformat'} eq 'html' ) {
       $return = "<pre>\n";
       my $content = $params->{'letter'}->{'content'};
-      $content=~s/\n/<br \/>/g;
-      $content=~s/\r//g;
+      $content =~ s/\n/<br \/>/g;
+      $content =~ s/\r//g;
       $return .= "$content\n";
       $return .= "\n</pre>\n";
     } else {
