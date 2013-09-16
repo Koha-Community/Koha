@@ -160,7 +160,6 @@ if ($op eq ""){
     my @quantities = $input->param('quantity');
     my @prices = $input->param('price');
     my @budgets_id = $input->param('budget_id');
-    my @rrp = $input->param('rrp');
     my @discount = $input->param('discount');
     my @sort1 = $input->param('sort1');
     my @sort2 = $input->param('sort2');
@@ -174,7 +173,6 @@ if ($op eq ""){
         my $biblionumber=$#$match > -1?$match->[0]->{'biblionumber'}:0;
         my $c_quantity = shift( @quantities ) || GetMarcQuantity($marcrecord, C4::Context->preference('marcflavour') ) || 1;
         my $c_budget_id = shift( @budgets_id ) || $input->param('all_budget_id') || $budget_id;
-        my $c_rrp = shift( @rrp ); # rrp include tax
         my $c_discount = shift ( @discount);
         $c_discount = $c_discount / 100 if $c_discount > 100;
         my $c_sort1 = shift( @sort1 ) || $input->param('all_sort1') || '';
@@ -406,11 +404,10 @@ sub import_biblios_list {
         );
         my ( $marcblob, $encoding ) = GetImportRecordMarc( $biblio->{'import_record_id'} );
         my $marcrecord = MARC::Record->new_from_usmarc($marcblob) || die "couldn't translate marc information";
-        my $infos = get_infos_syspref($marcrecord, ['price', 'quantity', 'budget_code', 'rrp', 'discount', 'sort1', 'sort2']);
+        my $infos = get_infos_syspref($marcrecord, ['price', 'quantity', 'budget_code', 'discount', 'sort1', 'sort2']);
         my $price = $infos->{price};
         my $quantity = $infos->{quantity};
         my $budget_code = $infos->{budget_code};
-        my $rrp = $infos->{rrp};
         my $discount = $infos->{discount};
         my $sort1 = $infos->{sort1};
         my $sort2 = $infos->{sort2};
@@ -424,7 +421,6 @@ sub import_biblios_list {
         $cellrecord{price} = $price || '';
         $cellrecord{quantity} = $quantity || '';
         $cellrecord{budget_id} = $budget_id || '';
-        $cellrecord{rrp} = $rrp || '';
         $cellrecord{discount} = $discount || '';
         $cellrecord{sort1} = $sort1 || '';
         $cellrecord{sort2} = $sort2 || '';
