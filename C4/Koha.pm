@@ -712,7 +712,7 @@ sub getFacets {
             {
                 idx  => 'location',
                 label => 'Location',
-                tags        => [ qw/ 995c / ],
+                tags        => [ qw/ 995e / ],
             }
             ];
 
