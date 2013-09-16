@@ -643,11 +643,17 @@ function verify_images() {
                     [% IF ( volinfo ) %]
                         <td class="enumchron">
                             [% IF ( itemdata_enumchron ) %]
-                                [% IF ( item.enumchron ) %]
+                                [% IF item.enumchron && item.serialseq %]
                                     [% item.enumchron %]
-                                    [% IF ( item.serialseq ) %] -- [% END %]
+                                    [% IF ( item.serialseq &&
+                                            item.enumchron!=item.serialseq ) %]
+                                       -- [% item.serialseq %]
+                                    [% END %]
+                                [% ELSIF item.enumchron %]
+                                    [% item.enumchron %]
+                                [% ELSIF item.serialseq %]
+                                    [% item.serialseq %]
                                 [% END %]
-                                [% item.serialseq %]
                                 [% IF ( item.publisheddate ) %] ([% item.publisheddate %])[% END %]
                             [% END %]
                         </td>
