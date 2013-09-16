@@ -7122,7 +7122,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.13.00.019";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("ALTER TABLE itemtypes ADD COLUMN checkinmsg VARCHAR(255) AFTER summary;");
     $dbh->do("ALTER TABLE itemtypes ADD COLUMN checkinmsgtype CHAR(16) DEFAULT 'message' NOT NULL AFTER checkinmsg;");
