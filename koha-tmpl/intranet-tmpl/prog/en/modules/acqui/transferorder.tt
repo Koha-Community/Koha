@@ -1,6 +1,9 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Transfer order</title>
 [% INCLUDE 'doc-head-close.inc' %]
+    <style type="text/css">
+    #custom-doc { width:44.46em;*width:43.39em;min-width:578px; margin:auto; text-align:left; }
+    </style>
 [% IF transferred %]
     <script type="text/javascript">
     //<![CDATA[
@@ -10,14 +13,32 @@
     </script>
 [% END %]
 </head>
-<body>
+<body id="order_transfer_page">
 
-<div id="doc3" class="yui-t2">
-<div id="bd">
-<div id="yui-main">
-    <div class="yui-b">
+<div id="custom-doc" class="yui-t7">
+   <div id="bd">
+    <div class="yui-g">
+        [% IF ( bookselleridfrom ) %]
+            <h3>Search for a vendor to transfer to</h3>
+        [% ELSE %]
+            <h3>Search for a vendor to transfer from</h3>
+        [% END %]
+        <form method="get" action="transferorder.pl">
+            <fieldset>
+            <input type="hidden" name="op" value="do_search" />
+            [% IF ( ordernumber ) %]
+                <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
+            [% END %]
+            [% IF ( bookselleridfrom ) %]
+                <input type="hidden" name="bookselleridfrom" value="[% bookselleridfrom %]" />
+            [% END %]
+            <label for="query">Vendor:</label>
+            <input type="text" name="query" />
+            <input type="submit" value="Search" />
+            </fieldset>
+        </form>
         [% IF ( show_baskets ) %]
-            <h1>Baskets for [% booksellertoname %]</h1>
+            <h3>Baskets for [% booksellertoname %]</h3>
             [% IF ( basketsloop ) %]
                 <table>
                     <thead>
@@ -42,7 +63,7 @@
             [% END %]
         [% END %]
         [% IF ( ordersloop ) %]
-            <h1>Orders for [% booksellerfromname %]</h1>
+            <h3>Orders for [% booksellerfromname %]</h3>
             <table>
                 <thead>
                     <th>Order</th>
@@ -67,9 +88,9 @@
         [% END %]
         [% IF ( do_search ) %]
             [% IF ( bookselleridfrom ) %]
-                <h1>Choose a vendor to transfer to</h1>
+                <h3>Choose a vendor to transfer to</h3>
             [% ELSE %]
-                <h1>Choose a vendor to transfer from</h1>
+                <h3>Choose a vendor to transfer from</h3>
             [% END %]
             [% IF ( booksellersloop ) %]
                 <table>
@@ -90,28 +111,9 @@
                 <p>No results found.</p>
             [% END %]
         [% END %]
-        [% IF ( search_form ) %]
-            [% IF ( bookselleridfrom ) %]
-                <h1>Search for a vendor to transfer to</h1>
-            [% ELSE %]
-                <h1>Search for a vendor to transfer from</h1>
-            [% END %]
-            <form method="get" action="transferorder.pl">
-                <input type="hidden" name="op" value="do_search" />
-                [% IF ( ordernumber ) %]
-                    <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
-                [% END %]
-                [% IF ( bookselleridfrom ) %]
-                    <input type="hidden" name="bookselleridfrom" value="[% bookselleridfrom %]" />
-                [% END %]
-                <label for="query">Vendor:</label>
-                <input type="text" name="query" />
-                <input type="submit" value="Search" />
-            </form>
-        [% END %]
-    </div>
 </div>
 
+<div id="closewindow"><a href="#" class="close">Cancel</a></div>
 </div>
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]

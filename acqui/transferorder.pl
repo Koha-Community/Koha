@@ -122,10 +122,6 @@ if( $basketno && $ordernumber) {
             do_search => 1,
             booksellersloop => \@booksellers,
         );
-    } else {
-        $template->param(
-            search_form => 1,
-        );
     }
 }
 
