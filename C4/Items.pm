@@ -1617,11 +1617,11 @@ sub GetBarcodeFromItemnumber {
 
 =head2 GetHiddenItemnumbers
 
-=over 4
+    my @itemnumbers_to_hide = GetHiddenItemnumbers(@items);
 
-$result = GetHiddenItemnumbers(@items);
-
-=back
+Given a list of items it checks which should be hidden from the OPAC given
+the current configuration. Returns a list of itemnumbers corresponding to
+those that should be hidden.
 
 =cut
 
