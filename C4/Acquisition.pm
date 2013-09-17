@@ -1470,7 +1470,7 @@ sub SearchOrders {
 
     $query .= q{
         AND (quantity > quantityreceived OR quantityreceived is NULL)
-    };
+    } if $pending;
 
     my $userenv = C4::Context->userenv;
     if ( C4::Context->preference("IndependentBranches") ) {
