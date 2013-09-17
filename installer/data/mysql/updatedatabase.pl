@@ -7131,8 +7131,8 @@ if ( CheckVersion($DBversion) ) {
 }
 
 
-$DBversion = "3.13.00.XXX";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+$DBversion = "3.13.00.020";
+if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('WhenLostForgiveFine','0',NULL,'If ON, Forgives the fines on an item when it is lost.','YesNo')");
     $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('WhenLostChargeReplacementFee','1',NULL,'If ON, Charge the replacement price when a patron loses an item.','YesNo')");
     print "Upgrade to $DBversion done (Bug 7639: system preferences to forgive fines on lost items)\n";
