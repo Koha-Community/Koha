@@ -984,7 +984,7 @@
             </a>
             <xsl:if test="marc:subfield[@code=9]">
                 <a class='authlink'>
-                    <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid="<xsl:value-of select="marc:subfield[@code=9]"/>"</xsl:attribute>
+                    <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
                     <img style="vertical-align:middle" height="15" width="15" src="/opac-tmpl/prog/images/filefind.png"/>
                 </a>
             </xsl:if>
