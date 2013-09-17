@@ -1,6 +1,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; [% title |html %] [% IF ( author ) %] by [% author %][% END %] (Record #[% biblionumber %]) &rsaquo; Items</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/cataloging.js"></script>
 [% INCLUDE 'browser-strings.inc' %]
 <!--[if lt IE 9]>
@@ -30,6 +32,16 @@ $(document).ready(function(){
 			$(this).append("<span class=\"linktools\"><a href=\"/cgi-bin/koha/cataloguing/additem.pl?op=edititem&frameworkcode=[% frameworkcode %]&biblionumber=[% biblionumber %]&itemnumber="+num_rowid+"#edititem\">" + _("Edit item") + "</a> <a href=\"/cgi-bin/koha/cataloguing/additem.pl?op=delitem&frameworkcode=[% frameworkcode %]&biblionumber=[% biblionumber %]&itemnumber="+num_rowid+"\" onclick=\"confirm_deletion([% biblionumber %],"+num_rowid+"); return false;\">" + _("Delete item") + "</a></span>");
 		}
 		});
+
+    var itemst = $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+          { "aTargets": [ 0, 1 ], "bSortable": false, "bSearchable": false },
+        ],
+        'bPaginate': false,
+        'bInfo': false,
+        "bAutoWidth": false
+    } ) );
+
 });
 function active(numlayer)
 {
@@ -122,15 +134,18 @@ $(document).ready(function() {
 <div id="cataloguing_additem_itemlist">
     [% IF ( item_loop ) %]
         <div>
-        <table>
+        <table id="itemst">
+          <thead>
             <tr>
-                <th colspan="2">&nbsp;</th>
+                <th>&nbsp;</th>
                 [% FOREACH item_header_loo IN item_header_loop %]
                     <th>
                         [% item_header_loo.header_value %]
                     </th>
                 [% END %]
             </tr>
+          </thead>
+          <tbody>
                 [% FOREACH item_loo IN item_loop %]
                     [% IF ( item_loo.itemnumber == itemnumber) %]
                         [% IF item_loo.nomod %]
@@ -145,15 +160,28 @@ $(document).ready(function() {
                             <tr id="row[% item_loo.itemnumber %]" class="editable">
                         [% END %]
                     [% END %]
-                    [% IF ( item_loo.nomod ) %] <td colspan="2">&nbsp;</td>[% ELSE %][% IF ( item_loo.hostitemflag ) %]<td><a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.hostbiblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit in host</a></td>
-<td><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblionumber %]&amp;hostitemnumber=[% item_loo.itemnumber %]">Delink</a></td>
-[% ELSE %]<td><a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit</a></td>
-                    <td>[% IF ( item_loo.countanalytics ) %]<a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=% item_loo.itemnumber %]">View analytics</a>[% ELSE %]<a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]" onclick="confirm_deletion([% biblionumber %],[% item_loo.itemnumber %]); return false;">Delete</a>[% END %]</td>[% END %][% END %]
+                    [% IF ( item_loo.nomod ) %]
+                      <td>&nbsp;</td>
+                    [% ELSE %]
+                      <td>
+                        [% IF ( item_loo.hostitemflag ) %]
+                          <a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.hostbiblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit in host</a><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblionumber %]&amp;hostitemnumber=[% item_loo.itemnumber %]">Delink</a>
+                        [% ELSE %]
+                          <a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit</a>
+                          [% IF ( item_loo.countanalytics ) %]
+                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=% item_loo.itemnumber %]">View analytics</a>
+                          [% ELSE %]
+                            <a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]" onclick="confirm_deletion([% biblionumber %],[% item_loo.itemnumber %]); return false;">Delete</a>
+                          [% END %]
+                        [% END %]
+                      </td>
+                    [% END %]
                 [% FOREACH item_valu IN item_loo.item_value %]
                     <td>[% item_valu.field |html %]</td>
                 [% END %]
                 </tr>
                 [% END %]
+          </tbody>
         </table>
         </div>
     [% END %]
