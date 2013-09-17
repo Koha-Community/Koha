@@ -87,7 +87,7 @@
       $(document).ready(function(){
         $(".close_shelf").click(function(e){
             e.preventDefault();
-            $("#shelfbrowser").hide();
+            $("#shelfbrowser").toggle();
         });
         [% IF shelfbrowser_prev_item.itemnumber %]
           $("#browser_previous a").click(function(e){

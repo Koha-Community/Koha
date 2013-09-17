@@ -1540,12 +1540,23 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
     </td>
             [% IF ( itemdata_ccode ) %]<td class="collection">[% ITEM_RESULT.ccode %]</td>[% END %]
-        <td class="call_no" property="sku">[% IF ( ITEM_RESULT.itemcallnumber ) %] [% ITEM_RESULT.itemcallnumber %][% IF ( OPACShelfBrowser ) %] (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber %]#[% tab %]">Browse shelf</a>)[% END %][% END %]</td>
+        <td class="call_no" property="sku">
+            [% IF ( ITEM_RESULT.itemcallnumber ) %]
+                [% ITEM_RESULT.itemcallnumber %]
+                [% IF ( OPACShelfBrowser ) %]
+                    [% IF ( ITEM_RESULT.itemnumber == starting_itemnumber ) %]
+                        (<a class="close_shelf" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber %]#[% tab %]">Browse shelf</a>)
+                    [% ELSE %]
+                        (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber %]#[% tab %]">Browse shelf</a>)
+                    [% END %]
+                [% END %]
+            [% END %]
+        </td>
             [% IF ( itemdata_enumchron ) %]<td class="vol_info">[% ITEM_RESULT.enumchron %]</td>[% END %]
             [% IF ( itemdata_uri ) %]<td class="url">
               [% IF ITEM_RESULT.uri %]
                 [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-                  <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | url %]&biblionumber=[% biblionumber |url %]&itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url"> Link to resource </a>
+                  <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | url %]&amp;biblionumber=[% biblionumber |url %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url"> Link to resource </a>
                 [% ELSE %]
                   <a href="[% ITEM_RESULT.uri %]" property="url">[% ITEM_RESULT.uri %]</a>
                 [% END %]

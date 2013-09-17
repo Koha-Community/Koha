@@ -931,6 +931,7 @@ if (C4::Context->preference("OPACShelfBrowser")) {
         my $nearby = GetNearbyItems($starting_itemnumber);
 
         $template->param(
+            starting_itemnumber => $starting_itemnumber,
             starting_homebranch => $nearby->{starting_homebranch}->{description},
             starting_location => $nearby->{starting_location}->{description},
             starting_ccode => $nearby->{starting_ccode}->{description},
