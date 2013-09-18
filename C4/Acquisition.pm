@@ -2187,6 +2187,8 @@ sub GetHistory {
     my $basketgroupname = $params{basketgroupname};
     my $budget = $params{budget};
     my $orderstatus = $params{orderstatus};
+    my $biblionumber = $params{biblionumber};
+    my $get_canceled_order = $params{get_canceled_order} || 0;
 
     my @order_loop;
     my $total_qty         = 0;
@@ -2239,9 +2241,15 @@ sub GetHistory {
 
     $query .= " WHERE 1 ";
 
-    $query .= " AND (datecancellationprinted is NULL or datecancellationprinted='0000-00-00') " if $orderstatus ne 'cancelled';
+    $query .= " AND (datecancellationprinted is NULL or datecancellationprinted='0000-00-00') "
+        if not $get_canceled_order or ( defined $orderstatus and $orderstatus ne 'cancelled' );
 
     my @query_params  = ();
+
+    if ( $biblionumber ) {
+        $query .= " AND biblio.biblionumber = ?";
+        push @query_params, $biblionumber;
+    }
 
     if ( $title ) {
         $query .= " AND biblio.title LIKE ? ";
