@@ -22,6 +22,17 @@ $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 # Setup Test------------------------
+
+# Add branches if not existing
+foreach my $addbra ('CPL', 'FPL', 'RPL') {
+    $dbh->do("INSERT INTO branches (branchcode,branchname) VALUES (?,?)", undef, ($addbra,"$addbra branch")) unless GetBranchName($addbra);
+}
+
+# Add categories if not existing
+foreach my $addcat ('S', 'PT') {
+    $dbh->do("INSERT INTO categories (categorycode,hidelostitems,category_type) VALUES (?,?,?)",undef,($addcat, 0, $addcat eq 'S'? 'S': 'A')) unless GetBorrowercategory($addcat);
+}
+
 # Helper biblio.
 diag("\nCreating biblio instance for testing.");
 my $bib = MARC::Record->new();
@@ -32,6 +43,7 @@ $bib->append_fields(
 );
 my ($bibnum, $bibitemnum);
 ($bibnum, $title, $bibitemnum) = AddBiblio($bib, '');
+
 # Helper item for that biblio.
 diag("Creating item instance for testing.");
 my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL' } , $bibnum);
@@ -199,3 +211,5 @@ is( $messages->{ResFound}->{borrowernumber},
 is( $messages->{ResFound}->{borrowernumber},
     $requesters{'RPL'},
     'for generous library, its items fill first hold request in line (bug 10272)');
+
+$dbh->rollback;
