@@ -1,6 +1,7 @@
 INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
 ('AcqCreateItem','ordering','ordering|receiving|cataloguing','Define when the item is created : when ordering, when receiving, or in cataloguing module','Choice'),
 ('AcqItemSetSubfieldsWhenReceived','0','','This syspref set a status for item when items are created when receiving (e.g. 995\$o=5)','Free'),
+('AcquisitionDetails', '1', '', 'Hide/Show acquisition details on the biblio detail page.', 'YesNo'),
 ('AcqViewBaskets','user','user|branch|all','Define which baskets a user is allowed to view: his own only, any within his branch or all','Choice'),
 ('AcqWarnOnDuplicateInvoice','0','','Warn librarians when they try to create a duplicate invoice','YesNo'),
 ('AddPatronLists','categorycode','categorycode|category_type','Allow user to choose what list to pick up from when adding patrons','Choice'),
