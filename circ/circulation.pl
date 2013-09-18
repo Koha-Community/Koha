@@ -25,6 +25,8 @@
 use strict;
 use warnings;
 use CGI;
+use DateTime;
+use DateTime::Duration;
 use C4::Output;
 use C4::Print;
 use C4::Auth qw/:DEFAULT get_session haspermission/;
@@ -334,13 +336,15 @@ if ($barcode) {
         }
     }
 
-    delete $question->{'DEBT'} if ($debt_confirmed);
-    foreach my $impossible ( keys %$error ) {
-        $template->param(
-            $impossible => $$error{$impossible},
-            IMPOSSIBLE  => 1
-        );
-        $blocker = 1;
+    unless( $query->param('inhouse_use') and C4::Context->preference("In-House Use Force") ) {
+        delete $question->{'DEBT'} if ($debt_confirmed);
+        foreach my $impossible ( keys %$error ) {
+            $template->param(
+                $impossible => $$error{$impossible},
+                IMPOSSIBLE  => 1
+            );
+            $blocker = 1;
+        }
     }
     if( !$blocker || $force_allow_issue ){
         my $confirm_required = 0;
@@ -356,13 +360,15 @@ if ($barcode) {
                     $needsconfirmation => $$question{$needsconfirmation},
                     getTitleMessageIteminfo => $getmessageiteminfo->{'title'},
                     getBarcodeMessageIteminfo => $getmessageiteminfo->{'barcode'},
-                    NEEDSCONFIRMATION  => 1
+                    NEEDSCONFIRMATION  => 1,
+                    inhouse_use => $query->param('inhouse_use'),
                 );
                 $confirm_required = 1;
             }
         }
         unless($confirm_required) {
-            AddIssue( $borrower, $barcode, $datedue, $cancelreserve, undef, undef, $session->param('auto_renew') );
+            my $inhouse_use = $query->param('inhouse_use');
+            AddIssue( $borrower, $barcode, $datedue, $cancelreserve, undef, undef, { inhouse_use => $inhouse_use, auto_renew => $session->param('auto_renew') } );
             $session->clear('auto_renew');
             $inprocess = 1;
         }
@@ -594,6 +600,9 @@ $template->param(
     export_with_csv_profile   => C4::Context->preference("ExportWithCsvProfile"),
     canned_bor_notes_loop     => $canned_notes,
     debarments                => GetDebarments({ borrowernumber => $borrowernumber }),
+    todaysdate                => dt_from_string()->set(hour => 23)->set(minute => 59),
+    inhouse_use_feature       => C4::Context->preference("In-House Use"),
+    inhouse_use_forced        => C4::Context->preference("In-House Use Force"),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -8949,6 +8949,28 @@ if ( CheckVersion($DBversion) ) {
         ADD COLUMN cancellationreason TEXT DEFAULT NULL AFTER datecancellationprinted
     ");
     print "Upgrade to $DBversion done (Bug 7162: Add aqorders.cancellationreason)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.17.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences
+            (variable,value,explanation,options,type)
+            VALUES('In-House use','0','Enable/Disable the in-house use feature','','YesNo');
+    });
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences
+            (variable,value,explanation,options,type)
+            VALUES('In-House use Force','0','Enable/Disable the in-house for all cases (Even if a user is debarred, etc.)','','YesNo');
+    });
+    $dbh->do(q{
+        ALTER TABLE issues ADD COLUMN inhouse_use INT(1) NOT NULL DEFAULT 0 AFTER issuedate;
+    });
+    $dbh->do(q{
+        ALTER TABLE old_issues ADD COLUMN inhouse_use INT(1) NOT NULL DEFAULT 0 AFTER issuedate;
+    });
+    print "Upgrade to $DBversion done (Bug 10860: Add new system preference In-House use + fields [old_]issues.inhouse_use)\n";
     SetVersion($DBversion);
 }
 

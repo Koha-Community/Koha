@@ -215,6 +215,11 @@ $(document).ready(function() {
                             title += " - <span class='" + span_class + "'>" + oObj.itemnotes + "</span>"
                         }
 
+                        var inhouse_use = '';
+                        if ( oObj.inhouse_use == 1 ) {
+                            inhouse_use += " <span class='inhouse_use'>(" + INHOUSE_USE + ")</span>";
+                        }
+
                         title += " "
                               + "<a href='/cgi-bin/koha/catalogue/moredetail.pl?biblionumber="
                               + oObj.biblionumber
@@ -224,7 +229,8 @@ $(document).ready(function() {
                               + oObj.itemnumber
                               + "'>"
                               + oObj.barcode
-                              + "</a>";
+                              + "</a>"
+                              + inhouse_use;
 
                         return title;
                     }
@@ -305,14 +311,13 @@ $(document).ready(function() {
                                 +  "<input type='checkbox' class='renew' id='renew_" + oObj.itemnumber + "' name='renew' value='" + oObj.itemnumber +"'/>"
                                 +  "</span>";
 
-                        if ( oObj.renewals_remaining ) {
+                        if ( oObj.renewals_remaining && inhouse_use == 0 ) {
                             content += "<span class='renewals'>("
                                     + RENEWALS_REMAINING.format( oObj.renewals_remaining, oObj.renewals_allowed )
                                     + ")</span>";
                         }
 
                         content += "</span>";
-
 
                         return content;
                     }
@@ -437,6 +442,11 @@ $(document).ready(function() {
                                 title += " - <span class='" + span_class + "'>" + oObj.itemnotes + "</span>"
                             }
 
+                            var inhouse_use = '';
+                            if ( oObj.inhouse_use == 1 ) {
+                                inhouse_use += " <span class='inhouse_use'>("+INHOUSE_USE+")</span>";
+                            }
+
                             title += " "
                                   + "<a href='/cgi-bin/koha/catalogue/moredetail.pl?biblionumber="
                                   + oObj.biblionumber
@@ -446,7 +456,8 @@ $(document).ready(function() {
                                   + oObj.itemnumber
                                   + "'>"
                                   + oObj.barcode
-                                  + "</a>";
+                                  + "</a>"
+                                  + inhouse_use;
 
                             return title;
                         }

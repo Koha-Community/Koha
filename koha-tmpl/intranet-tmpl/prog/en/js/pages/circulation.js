@@ -46,6 +46,10 @@ $(document).ready(function() {
         return false;
     });
 
+    toggle_inhouse_use();
+    $("#inhouse_use").click(function(){
+        toggle_inhouse_use();
+    });
 });
 
 function export_checkouts(format) {

@@ -586,9 +586,17 @@ function verify_images() {
                     <td class="status">
 
                         [% IF ( item.datedue ) %]
+                          [% IF inhouse_use %]
+                            <span>Currently in local use
+                          [% ELSE %]
                             <span class="datedue">Checked out
+                          [% END %]
                                 [% UNLESS ( item.NOTSAMEBRANCH ) %]
+                                  [% IF inhouse_use %]
+                                    by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.borrowernumber %]">
+                                  [% ELSE %]
                                     to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.borrowernumber %]">
+                                  [% END %]
                                         [% IF ( item.hidepatronname ) %]
                                             [% item.cardnumber %]
                                         [% ELSE %]

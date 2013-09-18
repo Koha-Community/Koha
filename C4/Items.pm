@@ -1299,6 +1299,10 @@ sub GetItemsInfo {
            holding.branchname,
            holding.opac_info as holding_branch_opac_info,
            home.opac_info as home_branch_opac_info
+    ";
+    $query .= ", issues.inhouse_use"
+        if C4::Context->preference("In-House Use");
+    $query .= "
      FROM items
      LEFT JOIN branches AS holding ON items.holdingbranch = holding.branchcode
      LEFT JOIN branches AS home ON items.homebranch=home.branchcode
@@ -1306,6 +1310,8 @@ sub GetItemsInfo {
      LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
      LEFT JOIN itemtypes   ON   itemtypes.itemtype         = "
      . (C4::Context->preference('item-level_itypes') ? 'items.itype' : 'biblioitems.itemtype');
+    $query .= " LEFT JOIN issues ON issues.itemnumber = items.itemnumber"
+        if C4::Context->preference("In-House Use");
     $query .= " WHERE items.biblionumber = ? ORDER BY home.branchname, items.enumchron, LPAD( items.copynumber, 8, '0' ), items.dateaccessioned DESC" ;
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);

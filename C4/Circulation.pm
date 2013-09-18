@@ -1188,9 +1188,13 @@ AddIssue does the following things :
 =cut
 
 sub AddIssue {
-    my ( $borrower, $barcode, $datedue, $cancelreserve, $issuedate, $sipmode, $auto_renew ) = @_;
+    my ( $borrower, $barcode, $datedue, $cancelreserve, $issuedate, $sipmode, $params ) = @_;
+    my $inhouse_use = $params->{inhouse_use};
+    my $auto_renew = $params->{auto_renew};
     my $dbh = C4::Context->dbh;
-	my $barcodecheck=CheckValidBarcode($barcode);
+    my $barcodecheck=CheckValidBarcode($barcode);
+    $inhouse_use = ( $inhouse_use ? 1 : 0 );
+
     if ($datedue && ref $datedue ne 'DateTime') {
         $datedue = dt_from_string($datedue);
     }
@@ -1264,8 +1268,8 @@ sub AddIssue {
         my $sth =
           $dbh->prepare(
                 "INSERT INTO issues
-                    (borrowernumber, itemnumber,issuedate, date_due, branchcode, auto_renew)
-                VALUES (?,?,?,?,?,?)"
+                    (borrowernumber, itemnumber,issuedate, date_due, branchcode, inhouse_use, auto_renew)
+                VALUES (?,?,?,?,?,?,?)"
           );
         unless ($datedue) {
             my $itype = ( C4::Context->preference('item-level_itypes') ) ? $biblio->{'itype'} : $biblio->{'itemtype'};
@@ -1273,12 +1277,14 @@ sub AddIssue {
 
         }
         $datedue->truncate( to => 'minute');
+
         $sth->execute(
             $borrower->{'borrowernumber'},      # borrowernumber
             $item->{'itemnumber'},              # itemnumber
             $issuedate->strftime('%Y-%m-%d %H:%M:00'), # issuedate
             $datedue->strftime('%Y-%m-%d %H:%M:00'),   # date_due
             C4::Context->userenv->{'branch'},   # branchcode
+            $inhouse_use,
             $auto_renew ? 1 : 0                 # automatic renewal
         );
         if ( C4::Context->preference('ReturnToShelvingCart') ) { ## ReturnToShelvingCart is on, anything issued should be taken off the cart.
@@ -1320,7 +1326,7 @@ sub AddIssue {
         # Record the fact that this book was issued.
         &UpdateStats({
                       branch => C4::Context->userenv->{'branch'},
-                      type => 'issue',
+                      type => ( $inhouse_use ? 'inhouse_use' : 'issue' ),
                       amount => $charge,
                       other => ($sipmode ? "SIP-$sipmode" : ''),
                       itemnumber => $item->{'itemnumber'},

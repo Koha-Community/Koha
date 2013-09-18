@@ -1128,6 +1128,7 @@ CREATE TABLE `issues` ( -- information related to check outs or issues
   `auto_renew` BOOLEAN default FALSE, -- automatic renewal
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
   `issuedate` datetime default NULL, -- date the item was checked out or issued
+  `inhouse_use` int(1) NOT NULL default 0, -- in house use flag
   KEY `issuesborridx` (`borrowernumber`),
   KEY `itemnumber_idx` (`itemnumber`),
   KEY `branchcode_idx` (`branchcode`),
@@ -1601,6 +1602,7 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
   `auto_renew` BOOLEAN default FALSE, -- automatic renewal
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
   `issuedate` datetime default NULL, -- date the item was checked out or issued
+  `inhouse_use` int(1) NOT NULL default 0, -- in house use flag
   KEY `old_issuesborridx` (`borrowernumber`),
   KEY `old_issuesitemidx` (`itemnumber`),
   KEY `branchcode_idx` (`branchcode`),
