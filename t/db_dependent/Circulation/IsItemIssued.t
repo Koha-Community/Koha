@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use C4::Biblio;
 use C4::Circulation;
@@ -30,7 +30,10 @@ my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, '' );
 my ( undef, undef, $itemnumber ) = AddItem( { homebranch => 'CPL', holdingbranch => 'CPL', barcode => 'i_dont_exist' }, $biblionumber );
 my $item = GetItem( $itemnumber );
 
-is ( IsItemIssued( $item->{itemnumber} ), 1, "Item is issued" );
+is ( IsItemIssued( $item->{itemnumber} ), 0, "item is not on loan at first" );
+
+AddIssue($borrower, 'i_dont_exist');
+is ( IsItemIssued( $item->{itemnumber} ), 1, "item is now on loan" );
 
 $dbh->rollback;
 
