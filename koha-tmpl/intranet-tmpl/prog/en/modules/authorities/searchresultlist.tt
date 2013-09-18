@@ -80,7 +80,7 @@ function searchauthority() {
     [% ELSE %]
     <tr data-authid="[% resul.authid %]">
     [% END %]
-      <td>[% PROCESS authresult summary=resul.summary link="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&marclist=any&operator=contains&orderby=HeadingAsc&value=" %]</td>
+      <td>[% PROCESS authresult summary=resul.summary %]</td>
       <td><a href="detail.pl?authid=[% resul.authid %]">Details</a></td>
   [% UNLESS ( resul.isEDITORS ) %]
       <td>
