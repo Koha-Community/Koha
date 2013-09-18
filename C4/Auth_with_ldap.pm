@@ -112,26 +112,46 @@ sub checkpw_ldap {
 	#$debug and $db->debug(5);
     my $userldapentry;
 
-  if ( $ldap->{auth_by_bind} ) {
-    # Perform an anonymous bind
-    my $res = $db->bind;
-    if ( $res->code ) {
-      $debug and warn "Anonymous LDAP bind failed: ". description($res);
-      return 0;
-    }
+    if ( $ldap->{auth_by_bind} ) {
+        my $principal_name;
+        if ( $ldap->{anonymous_bind} ) {
 
-    # Perform a LDAP search for the given username
-    my $search = search_method($db, $userid) or return 0;   # warnings are in the sub
-    $userldapentry = $search->shift_entry;
+            # Perform an anonymous bind
+            my $res = $db->bind;
+            if ( $res->code ) {
+                warn "Anonymous LDAP bind failed: " . description($res);
+                return 0;
+            }
 
-    # Perform a LDAP bind for the given username using the matched DN
-    $res = $db->bind( $userldapentry->dn, password => $password );
-    if ( $res->code ) {
-      $debug and warn "LDAP bind failed as kohauser $userid: ". description($res);
-      return 0;
-    }
+            # Perform a LDAP search for the given username
+            my $search = search_method( $db, $userid )
+              or return 0;    # warnings are in the sub
+            $userldapentry = $search->shift_entry;
+            $principal_name = $userldapentry->dn;
+        }
+        else {
+            $principal_name = $ldap->{principal_name};
+            if ( $principal_name and $principal_name =~ /\%/ ) {
+                $principal_name = sprintf( $principal_name, $userid );
+            }
+            else {
+                $principal_name = $userid;
+            }
+        }
 
-  } else {
+        # Perform a LDAP bind for the given username using the matched DN
+        my $res = $db->bind( $principal_name, password => $password );
+        if ( $res->code ) {
+            warn "LDAP bind failed as kohauser $userid: " . description($res);
+            return 0;
+        }
+        if ( !defined($userldapentry)
+            && ( $config{update} or $config{replicate} ) )
+        {
+            my $search = search_method( $db, $userid ) or return 0;
+            $userldapentry = $search->shift_entry;
+        }
+    } else {
 		my $res = ($config{anonymous}) ? $db->bind : $db->bind($ldapname, password=>$ldappassword);
 		if ($res->code) {		# connection refused
 			warn "LDAP bind failed as ldapuser " . ($ldapname || '[ANONYMOUS]') . ": " . description($res);
@@ -415,6 +435,8 @@ Example XML stanza for LDAP configuration in KOHA_CONF.
     <update>1</update>             <!-- update existing users in Koha database -->
     <auth_by_bind>0</auth_by_bind> <!-- set to 1 to authenticate by binding instead of
                                         password comparison, e.g., to use Active Directory -->
+    <anonymous_bind>0</anonymous_bind> <!-- set to 1 if users should be searched using
+                                            an anonymous bind, even when auth_by_bind is on -->
     <mapping>                  <!-- match koha SQL field names to your LDAP record field names -->
       <firstname    is="givenname"      ></firstname>
       <surname      is="sn"             ></surname>
