@@ -83,6 +83,7 @@ sub new {
     $self->{'progress'} = 0;
     $self->{'status'} = "running";
     $self->{'jobID'} = Digest::MD5::md5_hex(Digest::MD5::md5_hex(time().{}.rand().{}.$$));
+    $self->{'extra_values'} = {};
 
     bless $self, $class;
     $self->_serialize();
@@ -276,16 +277,17 @@ These variables can be retrieved using the get method.
 sub set {
     my ($self, $hashref) = @_;
     while ( my ($k, $v) = each %$hashref ) {
-        $self->{$k} = $v;
+        $self->{extra_values}->{$k} = $v;
     }
     $self->_serialize();
+    return;
 }
 
 =head2 get
 
 =over 4
 
-=item $job->get($hashref);
+=item $value = $job->get($key);
 
 =back
 
@@ -295,7 +297,7 @@ Get a variable which has been previously stored with the set method.
 
 sub get {
     my ($self, $key) = @_;
-    return $self->{$key};
+    return $self->{extra_values}->{$key};
 }
 
 1;
