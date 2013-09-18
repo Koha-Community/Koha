@@ -437,6 +437,10 @@ Example XML stanza for LDAP configuration in KOHA_CONF.
                                         password comparison, e.g., to use Active Directory -->
     <anonymous_bind>0</anonymous_bind> <!-- set to 1 if users should be searched using
                                             an anonymous bind, even when auth_by_bind is on -->
+    <principal_name>%s@my_domain.com</principal_name>
+                                   <!-- optional, for auth_by_bind: a printf format to make userPrincipalName from koha userid.
+                                        Not used with anonymous_bind. -->
+
     <mapping>                  <!-- match koha SQL field names to your LDAP record field names -->
       <firstname    is="givenname"      ></firstname>
       <surname      is="sn"             ></surname>
