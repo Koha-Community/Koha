@@ -1,4 +1,6 @@
 [% BLOCK showreference %]
+    [% SET authidurl = '/cgi-bin/koha/opac-authoritiesdetail.pl?authid=' %]
+    [% SET searchurl = '/cgi-bin/koha/opac-authorities-home.pl?op=do_search&type=opac&operatorc=contains&marclistc=mainentry&and_orc=and&orderby=HeadingAsc&value=' %]
     [% IF marcflavour == 'UNIMARC' %]
         [% SWITCH type %]
         [% CASE 'broader' %]
@@ -11,24 +13,39 @@
             <span class="RT">RT: [% heading | html %]</span>
         [% END %]
     [% ELSE %]
-        [% IF ( label ) %]<span class="label">[% SWITCH label %]
-        [% CASE 'see also:' %]see also:
-        [% CASE 'used for/see from:' %]used for/see from:
-        [% END %]</span>[% END %]
-        <span class="heading">
-        [% IF ( linkpath && search ) %]<a href="[% link | url %][% search | url %]">[% heading | html %]</a>
-        [% ELSE %][% heading | html %][% END %]
+        <span class="label">
+        [% IF ( type=='seefrom' ) %]
+            used for/see from:
+        [% ELSIF  ( type=='seealso' ) %]
+            see also:
+        [% END %]
         </span>
-        [% UNLESS ( type=='seefrom' || type=='seealso' ) %]<span class="type">[% SWITCH type %]
-        [% CASE 'earlier' %](Earlier heading)
-        [% CASE 'later' %](Later heading)
-        [% CASE 'acronym' %](Acronym)
-        [% CASE 'musical' %](Musical composition)
-        [% CASE 'broader' %](Broader heading)
-        [% CASE 'narrower' %](Narrower heading)
-        [% CASE 'parent' %](Immediate parent body)
-        [% CASE %][% IF type %]([% type | html %])[% END %]
-        [% END %]</span>[% END %]
+        <span class="heading">
+        [% IF ( type=='seealso' ) %]
+            [% IF ( authid ) %]
+            <a href="[% authidurl | url %][% authid | url %]">[% heading | html %]</a>
+            [% ELSE %]
+            <a href="[% searchurl | url %][% heading | html %]">[% heading | html %]</a>
+            [% END %]
+        [% ELSE %]
+            [% heading | html %]
+        [% END %]
+        </span>
+        [% UNLESS ( type=='seefrom' || type=='seealso' ) %]
+        <span class="type">
+            [% SWITCH type %]
+            [% CASE 'earlier' %](Earlier heading)
+            [% CASE 'later' %](Later heading)
+            [% CASE 'acronym' %](Acronym)
+            [% CASE 'musical' %](Musical composition)
+            [% CASE 'broader' %](Broader heading)
+            [% CASE 'narrower' %](Narrower heading)
+            [% CASE 'parent' %](Immediate parent body)
+            [% CASE %][% IF type %]([% type | html %])
+            [% END %]
+        [% END %]
+        </span>
+        [% END %]
     [% END %]
 [% END %]
 [% BLOCK authresult %]
@@ -76,14 +93,21 @@
             [% IF ( summary.seefrom ) %]
                 [% FOREACH seefro IN summary.seefrom %]
                     <div class="seefrom authref">
-                    [% PROCESS showreference heading=seefro.heading label="used for/see from:" type=seefro.type search='' %]
+                    [% PROCESS showreference
+                        heading=seefro.heading
+                        type=seefro.type
+                    %]
                     </div>
                 [% END %]
             [% END %]
             [% IF ( summary.seealso ) %]
                 [% FOREACH seeals IN summary.seealso %]
                     <div class="seealso authref">
-                    [% PROCESS showreference heading=seeals.heading label="see also:" type=seeals.type linkpath=link search=seeals.search %]
+                    [% PROCESS showreference
+                        heading=seeals.heading
+                        type=seeals.type
+                        authid=seeals.authid
+                    %]
                     </div>
                 [% END %]
             [% END %]
