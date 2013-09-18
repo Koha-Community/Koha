@@ -2,14 +2,17 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 16;
 use MARC::Record;
+use DateTime::Duration;
 
 use C4::Branch;
 use C4::Biblio;
 use C4::Items;
 use C4::Members;
 use C4::Circulation;
+
+use Koha::DateUtils;
 
 BEGIN {
     use_ok('C4::Reserves');
@@ -211,5 +214,53 @@ is( $messages->{ResFound}->{borrowernumber},
 is( $messages->{ResFound}->{borrowernumber},
     $requesters{'RPL'},
     'for generous library, its items fill first hold request in line (bug 10272)');
+
+# Tests for bug 9761 (ConfirmFutureHolds): new CheckReserves lookahead parameter, and corresponding change in AddReturn
+# Note that CheckReserve uses its lookahead parameter and does not check ConfirmFutureHolds pref (it should be passed if needed like AddReturn does)
+# Test 9761a: Add a reserve without date, CheckReserve should return it
+$resdate= undef; #defaults to today in AddReserve
+$expdate= undef; #no expdate
+$dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
+AddReserve('CPL',  $requesters{'CPL'}, $bibnum,
+           $constraint, $bibitems,  1, $resdate, $expdate, $notes,
+           $title,      $checkitem, $found);
+($status)=CheckReserves($itemnumber,undef,undef);
+is( $status, 'Reserved', 'CheckReserves returns reserve without lookahead');
+($status)=CheckReserves($itemnumber,undef,7);
+is( $status, 'Reserved', 'CheckReserves also returns reserve with lookahead');
+
+# Test 9761b: Add a reserve with future date, CheckReserve should not return it
+$dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
+C4::Context->set_preference('AllowHoldDateInFuture', 1);
+$resdate= dt_from_string();
+$resdate->add_duration(DateTime::Duration->new(days => 4));
+$resdate=output_pref($resdate);
+$expdate= undef; #no expdate
+AddReserve('CPL',  $requesters{'CPL'}, $bibnum,
+           $constraint, $bibitems,  1, $resdate, $expdate, $notes,
+           $title,      $checkitem, $found);
+($status)=CheckReserves($itemnumber,undef,undef);
+is( $status, '', 'CheckReserves returns no future reserve without lookahead');
+
+# Test 9761c: Add a reserve with future date, CheckReserve should return it if lookahead is high enough
+($status)=CheckReserves($itemnumber,undef,3);
+is( $status, '', 'CheckReserves returns no future reserve with insufficient lookahead');
+($status)=CheckReserves($itemnumber,undef,4);
+is( $status, 'Reserved', 'CheckReserves returns future reserve with sufficient lookahead');
+
+# Test 9761d: Check ResFound message of AddReturn for future hold
+# Note that AddReturn is in Circulation.pm, but this test really pertains to reserves; AddReturn uses the ConfirmFutureHolds pref when calling CheckReserves
+# In this test we do not need an issued item; it is just a 'checkin'
+C4::Context->set_preference('ConfirmFutureHolds', 0);
+(my $doreturn, $messages)= AddReturn('97531','CPL');
+is($messages->{ResFound}//'', '', 'AddReturn does not care about future reserve when ConfirmFutureHolds is off');
+C4::Context->set_preference('ConfirmFutureHolds', 3);
+($doreturn, $messages)= AddReturn('97531','CPL');
+is(exists $messages->{ResFound}?1:0, 0, 'AddReturn ignores future reserve beyond ConfirmFutureHolds days');
+C4::Context->set_preference('ConfirmFutureHolds', 7);
+($doreturn, $messages)= AddReturn('97531','CPL');
+is(exists $messages->{ResFound}?1:0, 1, 'AddReturn considers future reserve within ConfirmFutureHolds days');
+
+# End of tests for bug 9761 (ConfirmFutureHolds)
 
 $dbh->rollback;
