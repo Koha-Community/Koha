@@ -110,7 +110,27 @@ $template->param( skip_confirm_reopen => 1) if $confirm_pref eq '2';
 
 if ( $op eq 'delete_confirm' ) {
     my $basketno = $query->param('basketno');
-    DelBasket($basketno);
+    my $delbiblio = $query->param('delbiblio');
+    my @orders = GetOrders($basketno);
+#Delete all orders included in that basket, and all items received.
+    foreach my $myorder (@orders){
+        DelOrder($myorder->{biblionumber},$myorder->{ordernumber});
+        warn "suppression de ".$myorder->{biblionumber}.'  '.$myorder->{ordernumber};
+    }
+# if $delbiblio = 1, delete the records if possible
+    if ((defined $delbiblio)and ($delbiblio ==1)){
+        foreach my $myorder (@orders){
+            my $biblionumber = $myorder->{'biblionumber'};
+            my $countbiblio = CountBiblioInOrders($biblionumber);
+            my $ordernumber = $myorder->{'ordernumber'};
+            my @subscriptions = GetSubscriptionsId ($biblionumber);
+            my $itemcount = GetItemsCount($biblionumber);
+            DelBiblio($myorder->{biblionumber}) if ($countbiblio == 0 && $itemcount == 0 && !(@subscriptions));
+        warn "suppression de la notice ".$myorder->{biblionumber}};
+    }
+
+ # delete the basket
+    DelBasket($basketno,);
     $template->param( delete_confirmed => 1 );
 } elsif ( !$bookseller ) {
     $template->param( NO_BOOKSELLER => 1 );
