@@ -528,6 +528,7 @@
 
         <div id="history">
         <h2>Koha history timeline</h2>
+    [% IF ! timeline_read_error %]
         <table style="cursor:pointer">
         <thead>
         <tr>
@@ -544,6 +545,11 @@
             </tr>
         [% END %]
         </table>
+    [% ELSE %]
+        <div class="dialog alert">
+            Could not read the history.txt file. Please make sure &lt;docdir&gt; is correctly defined in koha-conf.xml.
+        </div>
+    [% END %]
         </div>
 
     </div>
