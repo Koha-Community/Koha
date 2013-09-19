@@ -145,7 +145,15 @@ $template->param( table => $table );
 ## Koha time line code
 
 #get file location
-my $docdir = C4::Context->config('docdir');
+my $docdir;
+if ( defined C4::Context->config('docdir') ) {
+    $docdir = C4::Context->config('docdir');
+} else {
+    # if no <docdir> is defined in koha-conf.xml, use the default location
+    # this is a work-around to stop breakage on upgraded Kohas, bug 8911
+    $docdir = C4::Context->config('intranetdir') . '/docs';
+}
+
 open( my $file, "<", "$docdir" . "/history.txt" );
 my $i = 0;
 
