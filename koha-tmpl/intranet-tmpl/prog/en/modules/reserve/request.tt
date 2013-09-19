@@ -600,17 +600,26 @@ function checkMultiHold() {
           <input type="hidden" name="borrowernumber" value="[% reserveloo.borrowernumber %]" />
           <input type="hidden" name="biblionumber" value="[% reserveloo.biblionumber %]" />
           <select name="rank-request">
-    [% IF ( reserveloo.wait ) %]
-        [% IF ( reserveloo.intransit ) %]
-            <option value="T" selected="selected">In transit</option>
-        [% ELSE %]
-            <option value="W" selected="selected">Waiting</option>
-        [% END %]
-    [% END %]
-	[% IF ( CAN_user_reserveforothers_modify_holds_priority ) %][% FOREACH optionloo IN reserveloo.optionloop %]
-        [% IF ( optionloo.selected ) %]<option value="[% optionloo.num %]" selected="selected">[% optionloo.num %]</option>[% ELSE %]<option value="[% optionloo.num %]">[% optionloo.num %]</option>[% END %]
-        [% END %][% ELSE %]<option value=""></option>[% END %]
-            <option value="del">del</option>
+              [% IF ( reserveloo.wait ) %]
+                  [% IF ( reserveloo.intransit ) %]
+                      <option value="T" selected="selected">In transit</option>
+                  [% ELSE %]
+                      <option value="W" selected="selected">Waiting</option>
+                  [% END %]
+              [% END %]
+
+              [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
+                  [% FOREACH optionloo IN reserveloo.optionloop %]
+                      [% IF ( optionloo.selected ) %]
+                          <option value="[% optionloo.num %]" selected="selected">[% optionloo.num %]</option>
+                      [% ELSE %]
+                          <option value="[% optionloo.num %]">[% optionloo.num %]</option>
+                      [% END %]
+                  [% END %]
+              [% ELSIF !reserveloo.wait %]
+                  <option value="[% reserveloo.priority %]" selected="selected">[% reserveloo.priority %]</option>
+              [% END %]
+              <option value="del">del</option>
           </select>
         </td>
 
