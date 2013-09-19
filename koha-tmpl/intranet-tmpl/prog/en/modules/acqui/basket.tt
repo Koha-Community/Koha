@@ -352,15 +352,16 @@
                                     <p>[<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]">Add note</a>]</p>
                                 [% END %]
                         </td>
-                        <td class="number gste [% IF books_loo.rrpgste.search('^0.00') %]error[% END %]">[% books_loo.rrpgste %]</td>
-                        <td class="number gste [% IF books_loo.ecostgste.search('^0.00') %]error[% END %]">[% books_loo.ecostgste %]</td>
-                        <td class="number gsti [% IF books_loo.rrpgsti.search('^0.00') %]error[% END %]">[% books_loo.rrpgsti %]</td>
-                        <td class="number gsti [% IF books_loo.ecostgsti.search('^0.00') %]error[% END %]">[% books_loo.ecostgsti %]</td>
-                        <td class="number [% IF books_loo.quantity.search('^0.00') %]error[% END %]">[% books_loo.quantity %]</td>
-                        <td class="number gste [% IF books_loo.totalgste.search('^0.00') %]error[% END %]">[% books_loo.totalgste %]</td>
-                        <td class="number gsti [% IF books_loo.totalgsti.search('^0.00') %]error[% END %]">[% books_loo.totalgsti %]</td>
-                        <td class="number [% IF books_loo.gstgsti.search('^0.00') %]error[% END %]">[% books_loo.gstgsti %]</td>
-                        <td class="number [% IF books_loo.gstvalue.search('^0.00') %]error[% END %]">[% books_loo.gstvalue %]</td>
+                        [% SET zero_regex = "^0{1,}\.?0{1,}[^1-9]" %] [%# 0 or 0.0 or 0.00 or 00 or 00.0 or 00.00 or 0.000 ... %]
+                        <td class="number gste [% IF books_loo.rrpgste.search(zero_regex) %]error[% END %]">[% books_loo.rrpgste %]</td>
+                        <td class="number gste [% IF books_loo.ecostgste.search(zero_regex) %]error[% END %]">[% books_loo.ecostgste %]</td>
+                        <td class="number gsti [% IF books_loo.rrpgsti.search(zero_regex) %]error[% END %]">[% books_loo.rrpgsti %]</td>
+                        <td class="number gsti [% IF books_loo.ecostgsti.search(zero_regex) %]error[% END %]">[% books_loo.ecostgsti %]</td>
+                        <td class="number [% IF books_loo.quantity.search(zero_regex) %]error[% END %]">[% books_loo.quantity %]</td>
+                        <td class="number gste [% IF books_loo.totalgste.search(zero_regex) %]error[% END %]">[% books_loo.totalgste %]</td>
+                        <td class="number gsti [% IF books_loo.totalgsti.search(zero_regex) %]error[% END %]">[% books_loo.totalgsti %]</td>
+                        <td class="number [% IF books_loo.gstgsti.search(zero_regex) %]error[% END %]">[% books_loo.gstgsti %]</td>
+                        <td class="number [% IF books_loo.gstvalue.search(zero_regex) %]error[% END %]">[% books_loo.gstvalue %]</td>
                         <td>[% books_loo.budget_name %]</td>
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
