@@ -62,6 +62,9 @@ function verify_images() {
                         $('#imagenumber-' + this.imagenumber).remove();
                     }
                 });
+            },
+            error: function(data) {
+                alert(_("An error occurred on deleting this image"));
             }
         });
 
@@ -70,7 +73,7 @@ function verify_images() {
     $(document).ready(function() {
         $('#bibliodetails').tabs();
         $('#search-form').focus();
-        $('.thumbnails > li > a > span').click(function() {
+        $('.thumbnails > li > a > span.remove').click(function() {
             var result = confirm(_("Are you sure you want to delete this cover image?"));
 
             if ( result == true ) {
@@ -728,8 +731,10 @@ function verify_images() {
     [% IF image %]
         <li id="imagenumber-[% image %]">
             <a class="thumbnail" href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber %]&amp;imagenumber=[% image %]">
-                <img alt="" src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image %]" />
-                <span class="remove">&times;</span>
+                <img alt="remove this image" src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image %]" />
+                [% IF CAN_user_tools_upload_local_cover_images %]
+                  <span class="remove" title="remove this image">&times;</span>
+                [% END %]
             </a>
         </li>
     [% END %]
