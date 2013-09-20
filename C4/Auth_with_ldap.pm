@@ -26,7 +26,6 @@ use C4::Context;
 use C4::Members qw(AddMember changepassword);
 use C4::Members::Attributes;
 use C4::Members::AttributeTypes;
-use C4::Utils qw( :all );
 use List::MoreUtils qw( any );
 use Net::LDAP;
 use Net::LDAP::Filter;
@@ -203,10 +202,8 @@ sub ldap_entry_2_hash {
 	my %memberhash;
 	$userldapentry->exists('uid');	# This is bad, but required!  By side-effect, this initializes the attrs hash. 
 	if ($debug) {
-		print STDERR "\nkeys(\%\$userldapentry) = " . join(', ', keys %$userldapentry), "\n", $userldapentry->dump();
 		foreach (keys %$userldapentry) {
 			print STDERR "\n\nLDAP key: $_\t", sprintf('(%s)', ref $userldapentry->{$_}), "\n";
-			hashdump("LDAP key: ",$userldapentry->{$_});
 		}
 	}
 	my $x = $userldapentry->{attrs} or return;
