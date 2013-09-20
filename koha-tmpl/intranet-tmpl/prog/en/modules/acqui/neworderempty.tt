@@ -383,7 +383,7 @@ $(document).ready(function()
       [% END %][%# UNLESS subscriptionid %]
     [% END %][%# IF (AcqCreateItemOrdering) %]
     <fieldset class="rows">
-        <legend>Accounting details</legend>
+        <legend>Accounting details [% close %]</legend>
         <ol>
             <li>
                 [% IF ( close ) %]
@@ -445,10 +445,10 @@ $(document).ready(function()
             <li>
                 [% IF ( close ) %]
                     <span class="label">Vendor price: </span>
-                    <input type="hidden" name="listprice" id="listprice" value="[% listprice %]" />[% listprice %]
+                    <input type="hidden" name="listprice" id="listprice" value="[% listprice %]" />[% listprice %] [% IF (listincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
                 [% ELSE %]
                 <label for="listprice">Vendor price: </label>
-                    <input type="text" size="20" name="listprice" id="listprice" value="[% listprice %]" onchange="updateCosts()" />
+                    <input type="text" size="20" name="listprice" id="listprice" value="[% listprice %]" onchange="updateCosts()" /> [% IF (listincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
                 [% END %]
             </li>
             [% UNLESS ( close ) %]
@@ -501,19 +501,19 @@ $(document).ready(function()
             <li>
                 [% IF ( close ) %]
                     <span class="label">Replacement cost: </span>
-                    <input type="hidden" name="rrp" id="rrp" value="[% rrp %]" />[% rrp %]
+                    <input type="hidden" name="rrp" id="rrp" value="[% rrp %]" />[% rrp %]  (adjusted for [% cur_active %], [% IF (listincgst == 1) %]tax inc.[% ELSE %]tax exc.[% END %])
                 [% ELSE %]
                     <label for="rrp">Replacement cost: </label>
-                    <input type="text" size="20" name="rrp" id="rrp" value="[% rrp %]" /> (adjusted for [% cur_active %])
+                    <input type="text" size="20" name="rrp" id="rrp" value="[% rrp %]" /> (adjusted for [% cur_active %], [% IF (listincgst == 1) %]tax inc.[% ELSE %]tax exc.[% END %])
                 [% END %]
             </li>
             <li>
                 [% IF ( close ) %]
                     <label for="ecost">Budgeted cost: </label>
-                    <input type="text" size="20" name="ecost" id="ecost" value="[% ecost %]" readonly="readonly"  />
+                    <input type="text" size="20" name="ecost" id="ecost" value="[% ecost %]" readonly="readonly"  /> [% IF (listincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
                 [% ELSE %]
                     <label for="ecost">Budgeted cost: </label>
-                    <input type="text" size="20" name="ecost" id="ecost" value="[% ecost %]" />
+                    <input type="text" size="20" name="ecost" id="ecost" value="[% ecost %]" /> [% IF (listincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
                 [% END %]
             </li>
             <li>
@@ -528,10 +528,10 @@ $(document).ready(function()
             <li>
                 [% IF ( close ) %]
                     <label for="unitprice">Actual cost: </label>
-                    <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice %]" readonly="readonly" />
+                    <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice %]" readonly="readonly" /> [% IF (invoiceincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
                 [% ELSE %]
                     <label for="unitprice">Actual cost: </label>
-                    <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice %]" />
+                    <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice %]" /> [% IF (invoiceincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
                 [% END %]
             </li>
             <li>
