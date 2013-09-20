@@ -49,6 +49,9 @@ if (   $help
 
 $terminator = ( $terminator eq 'CR' ) ? $CR : $CRLF;
 
+# Set perl to expect the same record terminator it is sending
+$/ = $terminator;
+
 my ( $sec, $min, $hour, $day, $month, $year ) = localtime(time);
 $year += 1900;
 my $transaction_date = "$year$month$day    $hour$min$sec";
