@@ -16,7 +16,6 @@ BEGIN {
 			ok($ret = $ENV{$_}, "ENV{$_} = $ret");
 		}
 		use_ok('C4::Context');
-		use_ok('C4::Utils', qw/ :all /);
 }
 
 ok($koha = C4::Context->new,  'C4::Context->new');
@@ -30,21 +29,16 @@ ok(
 );
 my @keys = keys %$koha;
 diag("Number of keys in \%\$koha: " . scalar @keys); 
-our $width = 0;
+my $width = 0;
 if (ok(@keys)) { 
-	$width = maxwidth(@keys);
-	$debug and diag "widest key is $width";
+    $width = (sort {$a <=> $b} map {length} @keys)[-1];
+    $debug and diag "widest key is $width";
 }
 foreach (sort @keys) {
 	ok(exists $koha->{$_}, 
 		'$koha->{' . sprintf('%' . $width . 's', $_)  . '} exists '
 		. ((defined $koha->{$_}) ? "and is defined." : "but is not defined.")
 	);
-}
-diag "Examining defined key values.";
-foreach (grep {defined $koha->{$_}} sort @keys) {
-	print "\n";
-	hashdump('$koha->{' . sprintf('%' . $width . 's', $_)  . '}', $koha->{$_});
 }
 ok($config = $koha->{config}, 'Getting $koha->{config} ');
 
