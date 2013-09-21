@@ -246,7 +246,7 @@ sub checkauth {
           new CGI::Session( "driver:File;serializer:yaml", $sessionID,
             { Directory => '/tmp' } );
         if ( $session->param('cardnumber') ) {
-            C4::Context::set_userenv(
+            C4::Context->set_userenv(
                 $session->param('number'),
                 $session->param('id'),
                 $session->param('cardnumber'),
@@ -308,7 +308,7 @@ sub checkauth {
            #Only superlibrarian should have access to this page.
            #Since if it is a user, it is supposed that there is a borrower table
            #And thus that data structure is loaded.
-                my $hash = C4::Context::set_userenv(
+                my $hash = C4::Context->set_userenv(
                     0,                           0,
                     C4::Context->config('user'), C4::Context->config('user'),
                     C4::Context->config('user'), "",
@@ -412,7 +412,7 @@ sub checkpw {
             C4::Context->config('user'),
             C4::Context->config('user'),
             C4::Context->config('user'),
-            "", 1
+            "", "NO_LIBRARY_SET", 1
         );
         return 2;
     }

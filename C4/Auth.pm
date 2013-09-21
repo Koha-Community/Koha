@@ -752,7 +752,7 @@ sub checkauth {
         my $s_userid = '';
         if ($session) {
             $s_userid = $session->param('id') // '';
-            C4::Context::set_userenv(
+            C4::Context->set_userenv(
                 $session->param('number'),       $s_userid,
                 $session->param('cardnumber'),   $session->param('firstname'),
                 $session->param('surname'),      $session->param('branch'),
@@ -1084,7 +1084,7 @@ sub checkauth {
                 if ($persona) {
                     $session->param( 'persona', 1 );
                 }
-                C4::Context::set_userenv(
+                C4::Context->set_userenv(
                     $session->param('number'),       $session->param('id'),
                     $session->param('cardnumber'),   $session->param('firstname'),
                     $session->param('surname'),      $session->param('branch'),
@@ -1333,7 +1333,7 @@ sub check_api_auth {
         my $session = get_session($sessionID);
         C4::Context->_new_userenv($sessionID);
         if ($session) {
-            C4::Context::set_userenv(
+            C4::Context->set_userenv(
                 $session->param('number'),       $session->param('id'),
                 $session->param('cardnumber'),   $session->param('firstname'),
                 $session->param('surname'),      $session->param('branch'),
@@ -1505,7 +1505,7 @@ sub check_api_auth {
                 $session->param( 'ip',           $session->remote_addr() );
                 $session->param( 'lasttime',     time() );
             }
-            C4::Context::set_userenv(
+            C4::Context->set_userenv(
                 $session->param('number'),       $session->param('id'),
                 $session->param('cardnumber'),   $session->param('firstname'),
                 $session->param('surname'),      $session->param('branch'),
@@ -1586,7 +1586,7 @@ sub check_cookie_auth {
     my $session   = get_session($sessionID);
     C4::Context->_new_userenv($sessionID);
     if ($session) {
-        C4::Context::set_userenv(
+        C4::Context->set_userenv(
             $session->param('number'),       $session->param('id'),
             $session->param('cardnumber'),   $session->param('firstname'),
             $session->param('surname'),      $session->param('branch'),
@@ -1733,35 +1733,35 @@ sub checkpw_internal {
 
     my $sth =
       $dbh->prepare(
-        "select password,cardnumber,borrowernumber,userid,firstname,surname,branchcode,flags from borrowers where userid=?"
+        "select password,cardnumber,borrowernumber,userid,firstname,surname,borrowers.branchcode,branches.branchname,flags from borrowers join branches on borrowers.branchcode=branches.branchcode where userid=?"
       );
     $sth->execute($userid);
     if ( $sth->rows ) {
         my ( $stored_hash, $cardnumber, $borrowernumber, $userid, $firstname,
-            $surname, $branchcode, $flags )
+            $surname, $branchcode, $branchname, $flags )
           = $sth->fetchrow;
 
         if ( checkpw_hash( $password, $stored_hash ) ) {
 
             C4::Context->set_userenv( "$borrowernumber", $userid, $cardnumber,
-                $firstname, $surname, $branchcode, $flags );
+                $firstname, $surname, $branchcode, $branchname, $flags );
             return 1, $cardnumber, $userid;
         }
     }
     $sth =
       $dbh->prepare(
-        "select password,cardnumber,borrowernumber,userid, firstname,surname,branchcode,flags from borrowers where cardnumber=?"
+        "select password,cardnumber,borrowernumber,userid,firstname,surname,borrowers.branchcode,branches.branchname,flags from borrowers join branches on borrowers.branchcode=branches.branchcode where cardnumber=?"
       );
     $sth->execute($userid);
     if ( $sth->rows ) {
         my ( $stored_hash, $cardnumber, $borrowernumber, $userid, $firstname,
-            $surname, $branchcode, $flags )
+            $surname, $branchcode, $branchname, $flags )
           = $sth->fetchrow;
 
         if ( checkpw_hash( $password, $stored_hash ) ) {
 
             C4::Context->set_userenv( $borrowernumber, $userid, $cardnumber,
-                $firstname, $surname, $branchcode, $flags );
+                $firstname, $surname, $branchcode, $branchname, $flags );
             return 1, $cardnumber, $userid;
         }
     }

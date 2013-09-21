@@ -21,7 +21,7 @@ use Test::More tests => 26;
 use t::lib::Mocks;
 
 C4::Context->_new_userenv(123456);
-C4::Context->set_userenv(1,'kmkale' , 1, 'kk1' , 'IMS', 0, 'kmkale@anantcorp.com');
+C4::Context->set_userenv(1,'kmkale' , 1, 'km', 'kale' , 'IMS', 'IMS Branch DEscription', 0, 'kmkale@anantcorp.com');
 
 BEGIN {
     # Mock the DB connexion and C4::Context

@@ -95,7 +95,7 @@ is(
 
 # Now, set a userenv
 C4::Context->_new_userenv('xxx');
-C4::Context::set_userenv(0,0,0,'firstname','surname', 'MPL', 'Midway Public Library', '', '', '');
+C4::Context->set_userenv(0,0,0,'firstname','surname', 'MPL', 'Midway Public Library', '', '', '');
 is(C4::Context->userenv->{branch}, 'MPL', 'userenv set');
 
 # Userenv set, PickupLibrary

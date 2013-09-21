@@ -1086,9 +1086,10 @@ sub userenv {
 
 =head2 set_userenv
 
-  C4::Context->set_userenv($usernum, $userid, $usercnum, $userfirstname, 
-                  $usersurname, $userbranch, $userflags, $emailaddress, $branchprinter,
-                  $persona);
+  C4::Context->set_userenv($usernum, $userid, $usercnum,
+                           $userfirstname, $usersurname,
+                           $userbranch, $branchname, $userflags,
+                           $emailaddress, $branchprinter, $persona);
 
 Establish a hash of user environment variables.
 
@@ -1098,6 +1099,7 @@ set_userenv is called in Auth.pm
 
 #'
 sub set_userenv {
+    shift @_;
     my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $branchname, $userflags, $emailaddress, $branchprinter, $persona, $shibboleth)=
     map { Encode::is_utf8( $_ ) ? $_ : Encode::decode('UTF-8', $_) } # CGI::Session doesn't handle utf-8, so we decode it here
     @_;
