@@ -118,7 +118,7 @@ function reloadPage(p) {
 						    </select>
                             </li>
 
-						    <li class="marc_specific"><label for="new_subfield_separator">Subfield separator: </label>
+                            <li class="marc_specific"><label for="new_subfield_separator">Subfield separator: </label>
 						    <select name="subfield_separator" id="new_subfield_separator">
 							<option value=":">Colon (:)</option>
 							<option value=",">Comma (,)</option>
@@ -131,7 +131,7 @@ function reloadPage(p) {
 						    </select>
                             </li>
 					
-						    <li class="marc_specific"><label for="new_encoding">Encoding: </label>
+                            <li class="marc_specific"><label for="new_encoding">Encoding: </label>
 						    <select name="encoding" id="new_encoding">
 							[% FOREACH encoding IN encodings %]
                                 [% IF ( encoding.encoding == 'utf8' ) %]
@@ -144,7 +144,7 @@ function reloadPage(p) {
 
 
                             <li class="marc_specific"><label for="new_profile_marc_content">Profile MARC fields: </label>
-						    <textarea cols="50" rows="2" name="profile_marc_content" id="new_profile_marc_content"></textarea>
+                            <textarea cols="50" rows="2" name="profile_marc_content" id="new_profile_marc_content"></textarea>
 						    <p>You have to define which fields or subfields you want to export, separated by pipes.</p>
                             <p>You can also use your own headers (instead of the ones from Koha) by prefixing the field number with an header, followed by the equal sign.</p>
 						    <p>Example: Personal name=200|Entry element=210$a|300|009</p>
@@ -238,7 +238,7 @@ function reloadPage(p) {
 								[% END %]
                             </select></li>
 
-						    <li class="marc_specific"><label for="field_separator">Field separator: </label>
+                            <li class="marc_specific"><label for="field_separator">Field separator: </label>
 						    <select name="field_separator" id="field_separator">
                                 <option value=":">Colon (:)</option>
 
@@ -285,7 +285,7 @@ function reloadPage(p) {
 						    </select></li>
 
 
-						    <li class="marc_specific"><label for="subfield_separator">Subfield separator: </label>
+                            <li class="marc_specific"><label for="subfield_separator">Subfield separator: </label>
 						    <select name="subfield_separator" id="subfield_separator">
                                 <option value=":">Colon (:)</option>
 
@@ -332,7 +332,7 @@ function reloadPage(p) {
 	
 						    </select></li>
 
-						    <li class="marc_specific"><label for="encoding">Encoding: </label>
+                            <li class="marc_specific"><label for="encoding">Encoding: </label>
 						    <select name="encoding" id="encoding">
 							[% FOREACH encoding IN encodings %]
                                 [% IF ( selected_encoding == encoding.encoding ) %]
@@ -344,7 +344,7 @@ function reloadPage(p) {
 						    </select></li>
 
                             <li class="marc_specific"><label for="modify_profile_marc_content">Profile MARC fields: </label>
-						    <textarea cols="50" rows="2" name="profile_marc_content" id="modify_profile_marc_content">[% selected_profile_content %]</textarea></li>
+                            <textarea cols="50" rows="2" name="profile_marc_content" id="modify_profile_marc_content">[% selected_profile_content %]</textarea></li>
 
                             <li class="sql_specific">
                               <label for="modify_profile_sql_content">Profile SQL fields: </label>

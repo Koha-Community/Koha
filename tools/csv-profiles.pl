@@ -85,16 +85,16 @@ if ($profile_name && $profile_content && $action) {
     my $rows;
 
     if ($action eq "create") {
-	my $query = "INSERT INTO export_format(export_format_id, profile, description, content, csv_separator, field_separator, subfield_separator, encoding, type) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)";
+    my $query = "INSERT INTO export_format(export_format_id, profile, description, content, csv_separator, field_separator, subfield_separator, encoding, type) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)";
 	my $sth   = $dbh->prepare($query);
-	$rows  = $sth->execute($profile_name, $profile_description, $profile_content, $csv_separator, $field_separator, $subfield_separator, $encoding, $type);
+    $rows  = $sth->execute($profile_name, $profile_description, $profile_content, $csv_separator, $field_separator, $subfield_separator, $encoding, $type);
     
     }
 
     if ($action eq "edit") {
-	my $query = "UPDATE export_format SET description=?, content=?, csv_separator=?, field_separator=?, subfield_separator=?, encoding=?, type=? WHERE export_format_id=? LIMIT 1";
+    my $query = "UPDATE export_format SET description=?, content=?, csv_separator=?, field_separator=?, subfield_separator=?, encoding=?, type=? WHERE export_format_id=? LIMIT 1";
 	my $sth   = $dbh->prepare($query);
-	$rows  = $sth->execute($profile_description, $profile_content, $csv_separator, $field_separator, $subfield_separator, $encoding, $type, $profile_name);
+    $rows  = $sth->execute($profile_description, $profile_content, $csv_separator, $field_separator, $subfield_separator, $encoding, $type, $profile_name);
     }
 
     if ($action eq "delete") {
@@ -112,7 +112,7 @@ if ($profile_name && $profile_content && $action) {
 
     # If a profile has been selected for modification
     if ($id) {
-	my $query = "SELECT export_format_id, profile, description, content, csv_separator, field_separator, subfield_separator, encoding, type FROM export_format WHERE export_format_id = ?";
+    my $query = "SELECT export_format_id, profile, description, content, csv_separator, field_separator, subfield_separator, encoding, type FROM export_format WHERE export_format_id = ?";
 	my $sth;
 	$sth = $dbh->prepare($query);
 
@@ -122,7 +122,7 @@ if ($profile_name && $profile_content && $action) {
 	    selected_profile_id          => $selected_profile->[0],
 	    selected_profile_name        => $selected_profile->[1],
 	    selected_profile_description => $selected_profile->[2],
-	    selected_profile_content     => $selected_profile->[3],
+        selected_profile_content     => $selected_profile->[3],
 	    selected_csv_separator       => $selected_profile->[4],
 	    selected_field_separator     => $selected_profile->[5],
 	    selected_subfield_separator  => $selected_profile->[6],
