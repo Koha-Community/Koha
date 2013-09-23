@@ -35,21 +35,21 @@
                // We need to use "input[name=serialid]:checked" instead of "input:checked". Otherwise, the "check all" box will pass the value of "on" as a serialid, which produces a SQL error.
              var selected = $("input[name=serialid]:checked");
 
-		if (selected.length == 0) {
-			alert(_("Please select at least one item to export."));
-			return false;
-		}
-		
-		// Building the url from currently checked boxes
-		var url = '/cgi-bin/koha/serials/lateissues-export.pl?supplierid=&amp;op=claims';
-		for (var i = 0; i < selected.length; i++) {
-		    url += '&amp;serialid=' + selected[i].value;
-		}
+        if (selected.length == 0) {
+            alert(_("Please select at least one item to export."));
+            return false;
+        }
+
+        // Building the url from currently checked boxes
+        var url = '/cgi-bin/koha/serials/lateissues-export.pl?supplierid=&amp;op=claims';
+        for (var i = 0; i < selected.length; i++) {
+            url += '&amp;serialid=' + selected[i].value;
+        }
         url += '&amp;csv_profile=' + $("#csv_profile_for_export option:selected").val();
-		// And redirecting to the CSV page
-		location.href = url;
-		return false;
-	    });	
+        // And redirecting to the CSV page
+        location.href = url;
+        return false;
+        });
 
         $("#titlefilter").keyup( function () {
             sTable.fnFilter( this.value, 3 ); // 3 is position of title column
