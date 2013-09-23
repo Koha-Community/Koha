@@ -21,7 +21,8 @@ use Modern::Perl;
 use Test::More tests => 6;
 
 use C4::Context;
-use_ok('C4::Search', qw/AddSearchHistory PurgeSearchHistory/); # GetSearchHistory is not exported
+use_ok('C4::Search', qw/PurgeSearchHistory/); # GetSearchHistory is not exported
+use C4::Search::History;
 
 # Start transaction
 my $dbh = C4::Context->dbh;
@@ -36,10 +37,10 @@ is(_get_history_count(), 0, 'starting off with nothing in search_history');
 # since the search_history table doesn't have an auto_increment
 # column, it appears that the value of $dbh->last_insert_id() is
 # useless for determining if the insert failed.
-AddSearchHistory(12345, 'session_1', 'query_desc_1', 'query_cgi_1', 5);
-AddSearchHistory(12345, 'session_1', 'query_desc_2', 'query_cgi_2', 6);
-AddSearchHistory(12345, 'session_1', 'query_desc_3', 'query_cgi_3', 7);
-AddSearchHistory(56789, 'session_2', 'query_desc_4', 'query_cgi_4', 8);
+C4::Search::History::add({userid => 12345, sessionid => 'session_1', query_desc => 'query_desc_1', query_cgi => 'query_cgi_1', total => 5});
+C4::Search::History::add({userid => 12345, sessionid => 'session_1', query_desc => 'query_desc_2', query_cgi => 'query_cgi_3', total => 6});
+C4::Search::History::add({userid => 12345, sessionid => 'session_1', query_desc => 'query_desc_3', query_cgi => 'query_cgi_3', total => 7});
+C4::Search::History::add({userid => 56789, sessionid => 'session_2', query_desc => 'query_desc_4', query_cgi => 'query_cgi_4', total => 8});
 is(_get_history_count(), 4, 'successfully added four search_history rows');
 
 # We're not testing GetSearchHistory at present because it is broken...
