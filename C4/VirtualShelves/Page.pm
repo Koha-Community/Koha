@@ -458,7 +458,7 @@ sub shelfpage {
         shelvesloopall                                                     => [ ( @shelvesloop, @shelveslooppriv ) ],
         numberCanManage                                                    => $numberCanManage,
         "BiblioDefaultView" . C4::Context->preference("BiblioDefaultView") => 1,
-        csv_profiles                                                       => GetCsvProfilesLoop()
+        csv_profiles                                                       => GetCsvProfilesLoop('marc')
     );
     if (   $shelfnumber
         or $shelves

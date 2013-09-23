@@ -121,7 +121,7 @@ my $resultsarray = \@results;
 
 $template->param(
     BIBLIO_RESULTS => $resultsarray,
-    csv_profiles => GetCsvProfilesLoop(),
+    csv_profiles => GetCsvProfilesLoop('marc'),
     bib_list => $bib_list,
 );
 

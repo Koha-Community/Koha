@@ -94,7 +94,7 @@ if ( ShelfPossibleAction( (defined($borrowernumber) ? $borrowernumber : -1), $sh
         print $output;
 
     } else {
-        $template->param(csv_profiles => GetCsvProfilesLoop());
+        $template->param(csv_profiles => GetCsvProfilesLoop('marc'));
         $template->param(shelfid => $shelfid); 
         output_html_with_http_headers $query, $cookie, $template->output;
     }

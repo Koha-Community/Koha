@@ -98,12 +98,17 @@ sub GetMarcFieldsForCsv {
 
 # Returns informations aboout csv profiles suitable for html templates
 sub GetCsvProfilesLoop {
-   # List of existing profiles
+    my ( $type ) = @_;
+    # List of existing profiles
     my $dbh = C4::Context->dbh;
     my $sth;
     my $query = "SELECT export_format_id, profile FROM export_format";
+    if ( $type ) {
+        $query .= " WHERE type = ?";
+    }
+
     $sth = $dbh->prepare($query);
-    $sth->execute();
+    $sth->execute( $type ? $type : () );
     return $sth->fetchall_arrayref({});
 
 }
