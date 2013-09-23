@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 19;
+use Test::More tests => 25;
 use Test::Warn;
 use URI::Escape;
 use List::Util qw( shuffle );
@@ -150,10 +150,62 @@ $ids = [ shuffle map { $_->{id} } @$all ];
 C4::Search::History::delete({ id => [ @$ids[0..4] ] });
 $all = C4::Search::History::get({ userid => $userid });
 is( scalar(@$all), 4, 'There are 4 searches after calling delete with 5 ids' );
+
+delete_all( $userid );
+
+# Test delete with interval
+add( $userid, $current_sessionid, $previous_sessionid, $total, $query_cgi_b, $query_cgi_a );
+C4::Search::History::delete({
+    userid => $userid,
+    interval => 10,
+});
+$all = C4::Search::History::get({userid => $userid});
+is( scalar(@$all), 9, 'There are still 9 searches after calling delete with an interval = 10 days' );
+C4::Search::History::delete({
+    userid => $userid,
+    interval => 6,
+});
+$all = C4::Search::History::get({userid => $userid});
+is( scalar(@$all), 8, 'There are still 8 searches after calling delete with an interval = 6 days' );
+C4::Search::History::delete({
+    userid => $userid,
+    interval => 2,
+});
+$all = C4::Search::History::get({userid => $userid});
+is( scalar(@$all), 2, 'There are still 2 searches after calling delete with an interval = 2 days' );
+delete_all( $userid );
+
+add( $userid, $current_sessionid, $previous_sessionid, $total, $query_cgi_b, $query_cgi_a );
+C4::Search::History::delete({
+    userid => $userid,
+    interval => 5,
+    type => 'biblio',
+});
+$all = C4::Search::History::get({userid => $userid});
+is( scalar(@$all), 8, 'There are still 9 searches after calling delete with an interval = 5 days for biblio' );
+C4::Search::History::delete({
+    userid => $userid,
+    interval => 5,
+    type => 'authority',
+});
+$all = C4::Search::History::get({userid => $userid});
+is( scalar(@$all), 6, 'There are still 6 searches after calling delete with an interval = 5 days for authority' );
+C4::Search::History::delete({
+    userid => $userid,
+    interval => -1,
+});
+$all = C4::Search::History::get({userid => $userid});
+is( scalar(@$all), 0, 'There is no search after calling delete with an interval = -1 days' );
+
 delete_all( $userid );
 
 sub add {
     my ( $userid, $current_session_id, $previous_sessionid, $total, $query_cgi_b, $query_cgi_a ) = @_;
+
+    my $days_ago_2 = dt_from_string()->add_duration( DateTime::Duration->new( days => -2 ) );
+    my $days_ago_4 = dt_from_string()->add_duration( DateTime::Duration->new( days => -4 ) );
+    my $days_ago_6 = dt_from_string()->add_duration( DateTime::Duration->new( days => -6 ) );
+    my $days_ago_8 = dt_from_string()->add_duration( DateTime::Duration->new( days => -8 ) );
 
     my $query_desc_b1_p = q{first previous biblio search};
     my $first_previous_biblio_search = {
@@ -163,6 +215,7 @@ sub add {
         query_cgi => $query_cgi_b,
         total => $total,
         type => 'biblio',
+        time => $days_ago_2,
     };
 
     my $query_desc_a1_p = q{first previous authority search};
@@ -173,6 +226,7 @@ sub add {
         query_cgi => $query_cgi_a,
         total => $total,
         type => 'authority',
+        time => $days_ago_2,
     };
 
     my $query_desc_b2_p = q{second previous biblio search};
@@ -183,6 +237,7 @@ sub add {
         query_cgi => $query_cgi_b,
         total => $total,
         type => 'biblio',
+        time => $days_ago_4,
     };
 
     my $query_desc_a2_p = q{second previous authority search};
@@ -193,6 +248,7 @@ sub add {
         query_cgi => $query_cgi_a,
         total => $total,
         type => 'authority',
+        time => $days_ago_4,
     };
 
 
@@ -205,6 +261,7 @@ sub add {
         query_cgi => $query_cgi_b,
         total => $total,
         type => 'biblio',
+        time => $days_ago_4,
     };
 
     my $query_desc_a1_c = q{first current authority search};
@@ -215,6 +272,7 @@ sub add {
         query_cgi => $query_cgi_a,
         total => $total,
         type => 'authority',
+        time => $days_ago_4,
     };
 
     my $query_desc_b2_c = q{second current biblio search};
@@ -225,6 +283,7 @@ sub add {
         query_cgi => $query_cgi_b,
         total => $total,
         type => 'biblio',
+        time => $days_ago_6,
     };
 
     my $query_desc_a2_c = q{second current authority search};
@@ -235,6 +294,7 @@ sub add {
         query_cgi => $query_cgi_a,
         total => $total,
         type => 'authority',
+        time => $days_ago_6,
     };
 
     my $query_desc_a3_c = q{third current authority search};
@@ -245,6 +305,7 @@ sub add {
         query_cgi => $query_cgi_a,
         total => $total,
         type => 'authority',
+        time => $days_ago_8,
     };
 
 

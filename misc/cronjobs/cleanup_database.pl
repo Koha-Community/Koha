@@ -243,7 +243,7 @@ if ($pLogs) {
 
 if ($pSearchhistory) {
     print "Purging records older than $pSearchhistory from search_history.\n" if $verbose;
-    PurgeSearchHistory($pSearchhistory);
+    C4::Search::History::delete({ interval => $pSearchhistory });
     print "Done with purging search_history.\n" if $verbose;
 }
 

@@ -69,7 +69,6 @@ This module provides searching functions for Koha's bibliographic databases
   &buildQuery
   &GetDistinctValues
   &enabled_staff_search_views
-  &PurgeSearchHistory
 );
 
 # make all your functions, whether exported or not;
@@ -2425,13 +2424,6 @@ sub enabled_staff_search_views
 		can_view_ISBD			=> C4::Context->preference('viewISBD'),			# 1 if the staff search allows the ISBD view
 		can_view_labeledMARC	=> C4::Context->preference('viewLabeledMARC'),	# 1 if the staff search allows the Labeled MARC view
 	);
-}
-
-sub PurgeSearchHistory{
-    my ($pSearchhistory)=@_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("DELETE FROM search_history WHERE time < DATE_SUB( NOW(), INTERVAL ? DAY )");
-    $sth->execute($pSearchhistory) or die $dbh->errstr;
 }
 
 =head2 z3950_search_args

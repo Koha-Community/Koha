@@ -18,6 +18,7 @@ sub add {
     my $query_cgi  = $params->{query_cgi};
     my $total      = $params->{total} // 0;
     my $type       = $params->{type} || 'biblio';
+    my $time       = $params->{time};
 
     my $dbh = C4::Context->dbh;
 
@@ -26,12 +27,12 @@ sub add {
         INSERT INTO search_history(
             userid, sessionid, query_desc, query_cgi, type, total, time
         ) VALUES(
-            ?, ?, ?, ?, ?, ?, NOW()
+            ?, ?, ?, ?, ?, ?, ?
         )
     };
     my $sth = $dbh->prepare($query);
     $sth->execute( $userid, $sessionid, $query_desc, $query_cgi, $type,
-        $total );
+        $total, $time );
 }
 
 sub add_to_session {
@@ -66,6 +67,7 @@ sub delete {
     my $sessionid = $params->{sessionid};
     my $type      = $params->{type}     || q{};
     my $previous  = $params->{previous} || 0;
+    my $interval  = $params->{interval} || 0;
 
     unless ( ref( $id ) ) {
         $id = $id ? [ $id ] : [];
@@ -99,12 +101,17 @@ sub delete {
     $query .= q{ AND type = ?}
       if $type;
 
+    # FIXME DATE_SUB is a Mysql-ism. Postgres uses: datefield - INTERVAL '6 months'
+    $query .= q{ AND time < DATE_SUB( NOW(), INTERVAL ? DAY )}
+        if $interval;
+
     $dbh->do(
         $query, {},
         ( @$id ? ( @$id ) : () ),
         ( $userid ? $userid : () ),
         ( $sessionid ? $sessionid : () ),
-        ( $type      ? $type      : () )
+        ( $type      ? $type      : () ),
+        ( $interval  ? $interval  : () ),
     );
 }
 
