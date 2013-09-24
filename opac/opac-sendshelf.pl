@@ -21,7 +21,7 @@ use strict;
 use warnings;
 
 use CGI;
-use Encode qw(encode);
+use Encode;
 use Carp;
 
 use Mail::Sendmail;
@@ -91,12 +91,14 @@ if ( $email ) {
 
         my @items = GetItemsInfo( $biblionumber );
 
+        $dat->{ISBN}           = GetMarcISBN($record, $marcflavour);
         $dat->{MARCNOTES}      = $marcnotesarray;
         $dat->{MARCSUBJCTS}    = $marcsubjctsarray;
         $dat->{MARCAUTHORS}    = $marcauthorsarray;
         $dat->{'biblionumber'} = $biblionumber;
         $dat->{ITEM_RESULTS}   = \@items;
         $dat->{subtitle}       = $subtitle;
+        $dat->{HASAUTHORS}     = $dat->{'author'} || @$marcauthorsarray;
 
         $iso2709 .= $record->as_usmarc();
 
@@ -120,25 +122,18 @@ if ( $email ) {
 
     # Getting template result
     my $template_res = $template2->output();
-    my $body;
 
     # Analysing information and getting mail properties
-    if ( $template_res =~ /<SUBJECT>\n(.*)\n<END_SUBJECT>/s ) {
-        $mail{'subject'} = $1;
-    }
-    else { $mail{'subject'} = "no subject"; }
+    $mail{'subject'} = $template_res =~ /<SUBJECT>\n(.*)\n?<END_SUBJECT>/s
+        ? $1 : "no subject";
 
-    my $email_header = "";
-    if ( $template_res =~ /<HEADER>\n(.*)\n<END_HEADER>/s ) {
-        $email_header = $1;
-    }
+    my ($email_header) = $template_res =~ /<HEADER>\n(.*)\n?<END_HEADER>/s;
 
-    my $email_file = "basket.txt";
-    if ( $template_res =~ /<FILENAME>\n(.*)\n<END_FILENAME>/s ) {
-        $email_file = $1;
-    }
+    my $email_file = $template_res =~ /<FILENAME>\n(.*)\n?<END_FILENAME>/s
+        ? $1
+        : "list.txt";
 
-    if ( $template_res =~ /<MESSAGE>\n(.*)\n<END_MESSAGE>/s ) { $body = encode_qp($1); }
+    my ($body) = $template_res =~ /<MESSAGE>\n(.*)\n?<END_MESSAGE>/s;
 
     my $boundary = "====" . time() . "====";
 
@@ -150,15 +145,16 @@ if ( $email ) {
 
     $mail{body} = <<END_OF_BODY;
 $boundary
+MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
 $email_header
 $body
 $boundary
-Content-Type: application/octet-stream; name="shelf.iso2709"
+Content-Type: application/octet-stream; name="list.iso2709"
 Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="shelf.iso2709"
+Content-Disposition: attachment; filename="list.iso2709"
 
 $isofile
 $boundary--
