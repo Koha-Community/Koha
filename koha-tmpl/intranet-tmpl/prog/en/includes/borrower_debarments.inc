@@ -1,7 +1,7 @@
 <script type="text/javascript">
    //<![CDATA[
         $(document).ready(function(e){
-            $("#remove_restriction").on("click",function(){
+            $("div#reldebarments .remove_restriction").on("click",function(){
                 return confirm(_("Remove restriction?"));
             });
             var mrform = $("#manual_restriction_form");
@@ -44,7 +44,7 @@
                         <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
                         [% IF ( CAN_user_borrowers )%]
                             <td>
-                                <a id="remove_restriction" href="/cgi-bin/koha/members/mod_debarment.pl?borrowernumber=[% borrowernumber %]&amp;borrower_debarment_id=[% d.borrower_debarment_id %]&amp;action=del">
+                                <a class="remove_restriction" href="/cgi-bin/koha/members/mod_debarment.pl?borrowernumber=[% borrowernumber %]&amp;borrower_debarment_id=[% d.borrower_debarment_id %]&amp;action=del">
                                     Remove
                                 </a>
                             </td>
