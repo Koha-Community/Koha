@@ -2,7 +2,16 @@
 
 set -e
 
+NAME="koha-common"
+# Default to "no"
+AUTOMATIC_TRANSLATIONS_UPDATE="no"
+
 . /usr/share/debconf/confmodule
+
+# Read configuration variable file if it is present
+if [ -r /etc/default/$NAME ]; then
+    . /etc/default/$NAME
+fi
 
 conf=/etc/mysql/koha-common.cnf
 if [ ! -e "$conf" ] && [ ! -L "$conf" ]
@@ -13,6 +22,30 @@ fi
 #DEBHELPER#
 
 koha-upgrade-schema $(koha-list)
+
+if [ "$AUTOMATIC_TRANSLATIONS_UPDATE" = "yes" ]; then
+    for lang in $(koha-translate --list | grep -v -x "en"); do
+        if koha-translate --update $lang; then
+            echo "Updated the $lang translations."
+        else
+            cat <<EOF
+ERROR: an error was found when updating '$lang' translations. Please manually
+run 'koha-translate --update $lang'. Run man koha-translate for more options.
+EOF
+        fi
+    done
+else
+    # no auto-update, check update needed and warn if needed
+    if koha-translate --list | grep -v -q -x "en"; then
+        # translations installed, update needed
+        cat <<EOF
+Warning: template translations are not set to be automatically updated.
+Please manually run 'koha-translate --update lang_code' to update them.
+
+You can run 'koha-translate --list' to get a list of the installed translations codes.
+EOF
+    fi
+fi
 
 db_stop
 
