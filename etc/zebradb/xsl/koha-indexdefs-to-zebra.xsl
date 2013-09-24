@@ -253,6 +253,8 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     </xsl:template>
 
     <xsl:template name="handle-one-index-subfields">
+        <xsl:variable name="offset"><xsl:value-of select="@offset"/></xsl:variable>
+        <xsl:variable name="length"><xsl:value-of select="@length"/></xsl:variable>
         <xsl:variable name="indexes">
             <xsl:call-template name="get-target-indexes"/>
         </xsl:variable>
@@ -265,7 +267,22 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
                     </xsl:attribute>
                     <z:index>
                         <xsl:attribute name="name"><xsl:value-of select="normalize-space($indexes)"/></xsl:attribute>
-                        <xslo:value-of select="."/>
+                        <xslo:value-of>
+                            <xsl:attribute name="select">
+                                <xsl:choose>
+                                    <xsl:when test="@length">
+                                        <xsl:text>substring(., </xsl:text>
+                                        <xsl:value-of select="$offset + 1" />
+                                        <xsl:text>, </xsl:text>
+                                        <xsl:value-of select="$length"/>
+                                        <xsl:text>)</xsl:text>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:text>.</xsl:text>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:attribute>
+                        </xslo:value-of>
                     </z:index>
                 </xslo:if>
             </xslo:for-each>
