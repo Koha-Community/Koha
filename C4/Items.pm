@@ -35,6 +35,7 @@ use DateTime::Format::MySQL;
 use Data::Dumper; # used as part of logging item record changes, not just for
                   # debugging; so please don't remove this
 use Koha::DateUtils qw/dt_from_string/;
+use Koha::Database;
 
 use Koha::Database;
 
@@ -473,6 +474,7 @@ sub _build_default_values_for_mod_marc {
         location                 => undef,
         permanent_location       => undef,
         materials                => undef,
+        new                      => undef,
         notforloan               => 0,
         # paidfor => undef, # commented, see bug 12817
         price                    => undef,
@@ -2198,7 +2200,8 @@ sub _koha_new_item {
             enumchron           = ?,
             more_subfields_xml  = ?,
             copynumber          = ?,
-            stocknumber         = ?
+            stocknumber         = ?,
+            new                 = ?
           ";
     my $sth = $dbh->prepare($query);
     my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
@@ -2242,6 +2245,7 @@ sub _koha_new_item {
             $item->{'more_subfields_xml'},
             $item->{'copynumber'},
             $item->{'stocknumber'},
+            $item->{'new'},
     );
 
     my $itemnumber;
@@ -3134,5 +3138,95 @@ sub PrepareItemrecordDisplay {
         'iteminformation' => \@loop_data
     };
 }
+
+=head2 columns
+
+  my @columns = C4::Items::columns();
+
+Returns an array of items' table columns on success,
+and an empty array on failure.
+
+=cut
+
+sub columns {
+    my $rs = Koha::Database->new->schema->resultset('Item');
+    return $rs->result_source->columns;
+}
+
+=head2 biblioitems_columns
+
+  my @columns = C4::Items::biblioitems_columns();
+
+Returns an array of biblioitems' table columns on success,
+and an empty array on failure.
+
+=cut
+
+sub biblioitems_columns {
+    my $rs = Koha::Database->new->schema->resultset('Biblioitem');
+    return $rs->result_source->columns;
+}
+
+sub ToggleNewStatus {
+    my ( $params ) = @_;
+    my @rules = @{ $params->{rules} };
+    my $report_only = $params->{report_only};
+
+    my $dbh = C4::Context->dbh;
+    my @errors;
+    my @item_columns = map { "items.$_" } C4::Items::columns;
+    my @biblioitem_columns = map { "biblioitems.$_" } C4::Items::biblioitems_columns;
+    my $report;
+    for my $rule ( @rules ) {
+        my $age = $rule->{age};
+        my $conditions = $rule->{conditions};
+        my $substitutions = $rule->{substitutions};
+        my @params;
+
+        my $query = q|
+            SELECT items.biblionumber, items.itemnumber
+            FROM items
+            LEFT JOIN biblioitems ON biblioitems.biblionumber = items.biblionumber
+            WHERE 1
+        |;
+        for my $condition ( @$conditions ) {
+            if (
+                 grep {/^$condition->{field}$/} @item_columns
+              or grep {/^$condition->{field}$/} @biblioitem_columns
+            ) {
+                if ( $condition->{value} =~ /\|/ ) {
+                    my @values = split /\|/, $condition->{value};
+                    $query .= qq| AND $condition->{field} IN (|
+                        . join( ',', ('?') x scalar @values )
+                        . q|)|;
+                    push @params, @values;
+                } else {
+                    $query .= qq| AND $condition->{field} = ?|;
+                    push @params, $condition->{value};
+                }
+            }
+        }
+        if ( defined $age ) {
+            $query .= q| AND TO_DAYS(NOW()) - TO_DAYS(dateaccessioned) >= ? |;
+            push @params, $age;
+        }
+        my $sth = $dbh->prepare($query);
+        $sth->execute( @params );
+        while ( my $values = $sth->fetchrow_hashref ) {
+            my $biblionumber = $values->{biblionumber};
+            my $itemnumber = $values->{itemnumber};
+            my $item = C4::Items::GetItem( $itemnumber );
+            for my $substitution ( @$substitutions ) {
+                next unless $substitution->{field};
+                C4::Items::ModItem( {$substitution->{field} => $substitution->{value}}, $biblionumber, $itemnumber )
+                    unless $report_only;
+                push @{ $report->{$itemnumber} }, $substitution;
+            }
+        }
+    }
+
+    return $report;
+}
+
 
 1;

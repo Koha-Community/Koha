@@ -129,6 +129,11 @@
       <dd>Modify a batch of records (biblios or authorities)</dd>
     [% END %]
 
+    [% IF ( CAN_user_tools_items_batchmod ) %]
+      <dt><a href="/cgi-bin/koha/tools/automatic_item_modification_by_age.pl">Automatic item modifications by age</a></dt>
+      <dd>Define rules to modify items by age</dd>
+    [% END %]
+
     [% IF ( CAN_user_tools_export_catalog ) %]
     <dt><a href="/cgi-bin/koha/tools/export.pl">Export data</a></dt>
     <dd>Export bibliographic, holdings, and authority records</dd>
