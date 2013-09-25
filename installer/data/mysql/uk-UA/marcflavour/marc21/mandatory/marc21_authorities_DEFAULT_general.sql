@@ -1433,38 +1433,6 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '688', 'a', 0, 0, 'Примітка до історії застосування', 'Примітка до історії застосування', 6, 0, '', NULL, NULL, 0, NULL, 0);
 
 INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '68a', '', 1, 'HISTORY NOTE [CLASSIFICATION FORMAT]', 'HISTORY NOTE [CLASSIFICATION FORMAT]', NULL);
-INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
- ('', '', '68a', '2', 0, 1, 'Номер видання', 'Номер видання',           0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68a', '5', 0, 1, 'Організація, яка застосовує поле', 'Організація, яка застосовує поле', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68a', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68a', '8', 0, 0, 'Номер зв’язку та порядковий номер', 'Номер зв’язку та порядковий номер', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68a', 'a', 0, 1, 'New number--Single number or beginning number of span', 'New number--Single number or beginning number of span', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68a', 'b', 0, 1, 'Previous number--Single number or beginning number of span', 'Previous number--Single number or beginning number of span', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68a', 'c', 0, 1, 'Класифікаційний індекс-ending number of span', 'Класифікаційний індекс-ending number of span', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68a', 'd', 0, 0, 'Date of implementation of authoritative agency', 'Date of implementation of authoritative agency', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68a', 'e', 0, 0, 'Local implementation date', 'Local implementation date', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68a', 'f', 0, 0, 'Title and publication date', 'Title and publication date', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68a', 'i', 0, 1, 'Пояснювальний текст', 'Пояснювальний текст', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68a', 't', 0, 1, 'Topic', 'Topic',                           0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68a', 'z', 0, 1, 'Table identification', 'Table identification', 0, 0, '', NULL, NULL, 0, NULL, 0);
-
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '68b', '', 1, 'RELATIONSHIP TO SOURCE NOTE [CLASSIFICATION FORMAT]', 'RELATIONSHIP TO SOURCE NOTE [CLASSIFICATION FORMAT]', NULL);
-INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
- ('', '', '68b', '2', 0, 1, 'Номер видання', 'Номер видання',           0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68b', '5', 0, 1, 'Організація, яка застосовує поле', 'Організація, яка застосовує поле', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68b', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68b', '8', 0, 0, 'Номер зв’язку та порядковий номер', 'Номер зв’язку та порядковий номер', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68b', 'a', 0, 1, 'Number in edition described in field 084--Single number or beginning number of span', 'Number in edition described in field 084--Single number or beginning number of span', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68b', 'b', 0, 1, 'Number in primary source edition--Single number or beginning number of span', 'Number in primary source edition--Single number or beginning number of span', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68b', 'c', 0, 1, 'Ending number of span', 'Ending number of span', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68b', 'i', 0, 1, 'Пояснювальний текст', 'Пояснювальний текст', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68b', 'o', 0, 1, 'Number where Вказівкиs are found--Single number or beginning number of span', 'Number where Вказівкиs are found--Single number or beginning number of span', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68b', 't', 0, 1, 'Topic', 'Topic',                           0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', '', '68b', 'z', 0, 1, 'Table identification', 'Table identification', 0, 0, '', NULL, NULL, 0, NULL, 0);
-
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '700', '', 1, 'ESTABLISHED HEADING LINKING ENTRY--Ім’я особи', 'ESTABLISHED HEADING LINKING ENTRY--Ім’я особи', NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', '', '700', '0', 0, 1, 'Контрольний номер запису', 'Контрольний номер запису', 7, 0, '', NULL, NULL, 0, NULL, 0),
