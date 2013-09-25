@@ -2171,8 +2171,11 @@ sub ReserveSlip {
 
 #   return unless ( C4::Context->boolean_preference('printreserveslips') );
 
-    my $reserve = GetReserveInfo($borrowernumber,$biblionumber )
-      or return;
+    my $reserve_id = GetReserveId({
+        biblionumber => $biblionumber,
+        borrowernumber => $borrowernumber
+    }) or return;
+    my $reserve = GetReserveInfo($reserve_id) or return;
 
     return  C4::Letters::GetPreparedLetter (
         module => 'circulation',

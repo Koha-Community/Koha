@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 16;
+use Test::More tests => 17;
 use MARC::Record;
 use DateTime::Duration;
 
@@ -262,5 +262,8 @@ C4::Context->set_preference('ConfirmFutureHolds', 7);
 is(exists $messages->{ResFound}?1:0, 1, 'AddReturn considers future reserve within ConfirmFutureHolds days');
 
 # End of tests for bug 9761 (ConfirmFutureHolds)
+
+my $letter = ReserveSlip('CPL', $requesters{'CPL'}, $bibnum);
+ok(defined($letter), 'can successfully generate hold slip (bug 10949)');
 
 $dbh->rollback;
