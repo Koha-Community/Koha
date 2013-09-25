@@ -7139,7 +7139,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion ="3.13.00.XXX";
+$DBversion ="3.13.00.021";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('ConfirmFutureHolds','0','Number of days for confirming future holds','','Integer');");
     print "Upgrade to $DBversion done (Bug 9761: Add ConfirmFutureHolds pref)\n";
