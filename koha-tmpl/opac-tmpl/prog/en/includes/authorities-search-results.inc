@@ -11,7 +11,10 @@
             <span class="RT">RT: [% heading | html %]</span>
         [% END %]
     [% ELSE %]
-        [% IF ( label ) %]<span class="label">[% label | html %]</span>[% END %]
+        [% IF ( label ) %]<span class="label">[% SWITCH label %]
+        [% CASE 'see also:' %]see also:
+        [% CASE 'used for/see from:' %]used for/see from:
+        [% END %]</span>[% END %]
         <span class="heading">
         [% IF ( linkpath && search ) %]<a href="[% link | url %][% search | url %]">[% heading | html %]</a>
         [% ELSE %][% heading | html %][% END %]
