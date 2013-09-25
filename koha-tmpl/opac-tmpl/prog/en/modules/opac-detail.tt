@@ -537,7 +537,18 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
     <div id="bookcover">
     [% IF ( OPACLocalCoverImages ) %]<div style="block" title="[% biblionumber |url %]" class="[% biblionumber %]" id="local-thumbnail-preview"></div>[% END %]
-    [% IF ( OPACAmazonCoverImages ) %][% IF ( OPACurlOpenInNewWindow ) %]<a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link" target="_blank"><img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="Cover image" /></a>[% ELSE %]<a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="Cover image" /></a>[% END %][% END %]
+    [% IF ( OPACAmazonCoverImages ) %]
+        [% IF ( OPACurlOpenInNewWindow ) %]
+            <a href="http://www.amazon[% AmazonTld %]/dp/[% normalized_isbn %]" target="_blank">
+        [% ELSE %]
+            <a href="http://www.amazon[% AmazonTld %]/dp/[% normalized_isbn %]">
+        [% END %]
+        [% IF ( using_https ) %]
+            <img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="Cover image" /></a>
+        [% ELSE %]
+            <img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="Cover image" /></a>
+        [% END %]
+    [% END %]
 
     [% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( content_identifier_exists ) %][% IF ( using_https ) %]
     <img src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn %]/[% SyndeticsCoverImageSize %].GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% normalized_upc %]&amp;oclc=[% normalized_oclc %]" alt="" class="thumbnail" />
