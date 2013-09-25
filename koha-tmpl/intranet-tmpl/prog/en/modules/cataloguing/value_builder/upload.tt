@@ -4,7 +4,7 @@
 <head>
     <title>Upload plugin</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <script type="text/javascript" src="/intranet-tmpl/lib/jquery/jquery.js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/jquery.js"></script>
     <link rel="stylesheet" type="text/css" href="[% themelang %]/css/staff-global.css" />
 
 </head>
@@ -56,7 +56,7 @@
 
         [% IF (error_upload_path_not_configured) %]
           <h2>Configuration error</h2>
-          <p>Configuration variable 'uploadPath' is not configured.</p>
+          <p>Configuration variable 'upload_path' is not configured.</p>
           <p>Please configure it in your koha-conf.xml</p>
         [% ELSE %]
           <h2>Please select the file to upload : </h2>

@@ -20,7 +20,7 @@ $tcm->upload_file(
 my $cgi = $tcm->create_cgi;
 
 my $tempdir = tempdir(CLEANUP => 1);
-t::lib::Mocks::mock_config('uploadPath', $tempdir);
+t::lib::Mocks::mock_config('upload_path', $tempdir);
 
 my $testfilename = $cgi->param('testfile');
 my $testfile_fh = $cgi->upload('testfile');

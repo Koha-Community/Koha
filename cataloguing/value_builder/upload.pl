@@ -108,7 +108,7 @@ sub plugin {
             }
         }
     } else {
-        my $upload_path = C4::Context->config('uploadPath');
+        my $upload_path = C4::Context->config('upload_path');
         if ($upload_path) {
             my $filefield = CGI::filefield(
                 -name => 'uploaded_file',
@@ -141,7 +141,7 @@ sub plugin {
 # Build a hierarchy of directories
 sub finddirs {
     my $base = shift;
-    my $upload_path = C4::Context->config('uploadPath');
+    my $upload_path = C4::Context->config('upload_path');
     my $found = 0;
     my @dirs;
     my @files = glob("$base/*");
@@ -175,7 +175,7 @@ Two system preference are used:
 
 =over 4
 
-=item * uploadPath: the real absolute path where files will be stored
+=item * upload_path: the real absolute path where files will be stored
 
 =item * OPACBaseURL: for building URLs to be stored in MARC
 
