@@ -39,6 +39,7 @@ my $noshadow;
 my $want_help;
 my $as_xml;
 my $process_zebraqueue;
+my $process_zebraqueue_skip_deletes;
 my $do_not_clear_zebraqueue;
 my $length;
 my $where;
@@ -67,6 +68,7 @@ my $result = GetOptions(
     'x'             => \$as_xml,
     'y'             => \$do_not_clear_zebraqueue,
     'z'             => \$process_zebraqueue,
+    'skip-deletes'  => \$process_zebraqueue_skip_deletes,
     'where:s'       => \$where,
     'length:i'      => \$length,
     'offset:i'      => \$offset,
@@ -314,7 +316,7 @@ sub index_records {
     my ($record_type, $directory, $skip_export, $skip_index, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt, $server_dir) = @_;
 
     my $num_records_exported = 0;
-    my $records_deleted;
+    my $records_deleted = {};
     my $need_reset = check_zebra_dirs($server_dir);
     if ($need_reset) {
         print "$0: found broken zebra server directories: forcing a rebuild\n";
@@ -333,15 +335,20 @@ sub index_records {
         mkdir "$directory" unless (-d $directory);
         mkdir "$directory/$record_type" unless (-d "$directory/$record_type");
         if ($process_zebraqueue) {
-            my $entries = select_zebraqueue_records($record_type, 'deleted');
-            mkdir "$directory/del_$record_type" unless (-d "$directory/del_$record_type");
-            $records_deleted = generate_deleted_marc_records($record_type, $entries, "$directory/del_$record_type", $as_xml);
-            mark_zebraqueue_batch_done($entries);
+            my $entries;
+
+            unless ( $process_zebraqueue_skip_deletes ) {
+                $entries = select_zebraqueue_records($record_type, 'deleted');
+                mkdir "$directory/del_$record_type" unless (-d "$directory/del_$record_type");
+                $records_deleted = generate_deleted_marc_records($record_type, $entries, "$directory/del_$record_type", $as_xml);
+                mark_zebraqueue_batch_done($entries);
+            }
+
             $entries = select_zebraqueue_records($record_type, 'updated');
             mkdir "$directory/upd_$record_type" unless (-d "$directory/upd_$record_type");
-            $num_records_exported = export_marc_records_from_list($record_type,
-                                                                  $entries, "$directory/upd_$record_type", $as_xml, $noxml, $records_deleted);
+            $num_records_exported = export_marc_records_from_list($record_type,$entries, "$directory/upd_$record_type", $as_xml, $noxml, $records_deleted);
             mark_zebraqueue_batch_done($entries);
+
         } else {
             my $sth = select_all_records($record_type);
             $num_records_exported = export_marc_records_from_sth($record_type, $sth, "$directory/$record_type", $as_xml, $noxml, $nosanitize);
@@ -845,6 +852,10 @@ Parameters:
                             records marked in the zebraqueue
                             table.  Cannot be used with -r
                             or -s.
+
+    --skip-deletes          select only updated records marked
+                            in the zebraqueue table, not deletes.
+                            Only effective with -z.
 
     -r                      clear Zebra index before
                             adding records to index. Implies -w.
