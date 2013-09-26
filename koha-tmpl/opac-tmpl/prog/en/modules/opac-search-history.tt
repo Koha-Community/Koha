@@ -51,7 +51,7 @@
 		<tbody>
 		    [% FOREACH recentSearche IN recentSearches %]
 		    <tr>
-            <td><span title="[% recentSearche.time %]">[% recentSearche.time |$KohaDates with_hours => 1 %]</span></td>
+            <td><span title="[% recentSearche.time %]">[% recentSearche.time %]</span></td>
 			<td><a href="/cgi-bin/koha/opac-search.pl?[% recentSearche.query_cgi |html %]">[% recentSearche.query_desc |html %]</a></td>
 			<td>[% recentSearche.total %]</td>
 		    </tr>
