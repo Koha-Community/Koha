@@ -20,7 +20,7 @@
 use strict;
 use warnings;
 
-use C4::Auth qw(:DEFAULT get_session ParseSearchHistoryCookie);
+use C4::Auth qw(:DEFAULT get_session ParseSearchHistorySession SetSearchHistorySession);
 use CGI;
 use JSON qw/decode_json encode_json/;
 use C4::Context;
@@ -49,22 +49,17 @@ if (!$loggedinuser) {
 
     # Deleting search history
     if ($cgi->param('action') && $cgi->param('action') eq 'delete') {
-	# Deleting cookie's content 
-	my $recentSearchesCookie = $cgi->cookie(
-	    -name => 'KohaOpacRecentSearches',
-	    -value => encode_json([]),
-	    -expires => ''
-	    );
+        # Deleting cookie's content
+        SetSearchHistorySession($cgi, []);
 
-	# Redirecting to this same url with the cookie in the headers so it's deleted immediately
-	my $uri = $cgi->url();
-	print $cgi->redirect(-uri => $uri,
-			     -cookie => $recentSearchesCookie);
+        # Redirecting to this same url with the cookie in the headers so it's deleted immediately
+        my $uri = $cgi->url();
+        print $cgi->redirect(-uri => $uri);
 
     # Showing search history
     } else {
 
-        my @recentSearches = ParseSearchHistoryCookie($cgi);
+        my @recentSearches = ParseSearchHistorySession($cgi);
 	    if (@recentSearches) {
 
 		# As the dates are stored as unix timestamps, let's do some formatting
