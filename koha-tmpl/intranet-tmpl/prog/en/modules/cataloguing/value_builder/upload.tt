@@ -7,18 +7,32 @@
     <script type="text/javascript" src="[% interface %]/lib/jquery/jquery.js"></script>
     <link rel="stylesheet" type="text/css" href="[% themelang %]/css/staff-global.css" />
     <script type="text/javascript">
-      function _(s) { return s; }
-      $(document).ready(function() {
+      function ValidateForm() {
+        var filename = document.forms["UploadForm"]["uploaded_file"].value;
+        var selected = 0;
+        var value;
         $('form').each(function() {
-          $(this).submit(function() {
-            var value = $(this).find('input[type="radio"][name="dir"]:checked').val();
-            if (!value) {
-              alert(_("Please select the destination of file"));
-              return false;
-            }
-          });
-        })
-      });
+          value = $(this).find('input[type="radio"][name="dir"]:checked').val();
+          if (value) {
+            selected = 1;
+          }
+        });
+        if (!filename && !selected) {
+          alert("Please select a file and its destination.");
+          return false;
+        }
+        else if (!filename) {
+          alert("Please select a file to upload.");
+          return false;
+        }
+        else if (!selected) {
+          alert("Please select a file destination.");
+          return false;
+        }
+        else {
+          return true;
+        }
+      }
     </script>
 
 </head>
@@ -73,17 +87,28 @@
           <p>Configuration variable 'upload_path' is not configured.</p>
           <p>Please configure it in your koha-conf.xml</p>
         [% ELSE %]
+          [% IF (error_nothing_selected) %]
+              <p class="error">Error: You have to choose the file to upload and select where to upload the file.</p>
+          [% END %]
+          [% IF (error_no_file_selected) %]
+              <p class="error">Error: You have to choose the file to upload.</p>
+          [% END %]
           [% IF (error_no_dir_selected) %]
-              <p class="error">Error: You have to select the destination of uploaded file.<p>
+              <p class="error">Error: You have to select where to upload the file.</p>
+          [% END %]
+          [% IF (dangling) %]
+              <p class="error">Error: The URL has no file to retrieve.</p>
           [% END %]
           <h2>Please select the file to upload : </h2>
-          <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl">
+          <form name="UploadForm" method="post" enctype="multipart/form-data" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl" onsubmit="return ValidateForm()">
               [% filefield %]
-              <h3>Choose where to upload file</h3>
+              <h3>Choose where to upload the file</h3>
               [% INCLUDE list_dirs dirs = dirs_tree %]
+              <input type="hidden" name="from_popup" value="1" />
               <input type="hidden" name="plugin_name" value="upload.pl" />
               <input type="hidden" name="index" value="[% index %]" />
-              <input type="submit">
+              <input type="submit" value="Upload file">
+              <input type="button" value="Cancel" onclick="window.close();" />
           </form>
         [% END %]
     [% END %]

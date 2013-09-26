@@ -46,10 +46,15 @@ sub plugin_javascript {
 
         function Clic$function_name(index) {
             var id = document.getElementById(index).value;
+            var IsFileUploadUrl=0;
+            if (id.match(/opac-retrieve-file/)) {
+                IsFileUploadUrl=1;
+            }
             if(id.match(/id=([0-9a-f]+)/)){
                 id = RegExp.\$1;
             }
-            window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=upload.pl&index=\"+index+\"&id=\"+id, 'upload', 'width=600,height=400,toolbar=false,scrollbars=no');
+            var newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=upload.pl&index=\"+index+\"&id=\"+id+\"&from_popup=0\"+\"&IsFileUploadUrl=\"+IsFileUploadUrl, 'upload', 'width=600,height=400,toolbar=false,scrollbars=no');
+            newin.focus();
 
         }
     </script>
@@ -64,10 +69,16 @@ sub plugin {
     my $id = $input->param('id');
     my $delete = $input->param('delete');
     my $uploaded_file = $input->param('uploaded_file');
-
-    my $template_name = ($id || $delete)
-                    ? "upload_delete_file.tt"
-                    : "upload.tt";
+    my $from_popup = $input->param('from_popup');
+    my $isfileuploadurl = $input->param('IsFileUploadUrl');
+    my $dangling = C4::UploadedFiles::DanglingEntry($id,$isfileuploadurl);
+    my $template_name;
+    if ($delete || ($id && ($dangling==0 || $dangling==1))) {
+        $template_name = "upload_delete_file.tt";
+    }
+    else {
+        $template_name = "upload.tt";
+    }
 
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {   template_name   => "cataloguing/value_builder/$template_name",
@@ -78,6 +89,10 @@ sub plugin {
             debug           => 1,
         }
     );
+
+    if ($dangling==2) {
+        $template->param( dangling => 1 );
+    }
 
     # Dealing with the uploaded file
     my $dir = $input->param('dir');
@@ -97,14 +112,14 @@ sub plugin {
         } else {
             $template->param(error => 1);
         }
-    } elsif ($delete || $id) {
+    } elsif ($delete || ($id && ($dangling==0 || $dangling==1))) {
         # If there's already a file uploaded for this field,
         # We handle its deletion
         if ($delete) {
-            if(C4::UploadedFiles::DelUploadedFile($id)) {;
-                $template->param(success => 1);
-            } else {
+            if(C4::UploadedFiles::DelUploadedFile($id)==0) {;
                 $template->param(error => 1);
+            } else {
+                $template->param(success => 1);
             }
         }
     } else {
@@ -129,14 +144,21 @@ sub plugin {
             $template->param( error_upload_path_not_configured => 1 );
         }
 
+        if (!$uploaded_file && !$dir && $from_popup) {
+            $template->param(error_nothing_selected => 1);
+        }
+        elsif (!$uploaded_file && $dir) {
+            $template->param(error_no_file_selected => 1);
+        }
         if ($uploaded_file and not $dir) {
             $template->param(error_no_dir_selected => 1);
         }
+
     }
 
     $template->param(
         index => $index,
-        id => $id
+        id => $id,
     );
 
     output_html_with_http_headers $input, $cookie, $template->output;

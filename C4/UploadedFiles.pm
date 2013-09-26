@@ -183,44 +183,109 @@ sub UploadFile {
     return;
 }
 
+=head2 DanglingEntry
+
+    C4::UploadedFiles::DanglingEntry($id,$isfileuploadurl);
+
+Determine if a entry is dangling.
+
+Returns: 2 == no db entry
+         1 == no file
+         0 == both a file and db entry.
+        -1 == N/A (undef id / non-file-upload URL)
+
+=cut
+
+sub DanglingEntry {
+    my ($id,$isfileuploadurl) = @_;
+    my $retval;
+
+    if (defined($id)) {
+        my $file = GetUploadedFile($id);
+        if($file) {
+            my $file_path = $file->{filepath};
+            my $file_deleted = 0;
+            unless( -f $file_path ) {
+                $retval = 1;
+            } else {
+                $retval = 0;
+            }
+        }
+        else {
+            if ( $isfileuploadurl ) {
+                $retval = 2;
+            }
+            else {
+                $retval = -1;
+            }
+        }
+    }
+    else {
+        $retval = -1;
+    }
+    return $retval;
+}
+
 =head2 DelUploadedFile
 
     C4::UploadedFiles::DelUploadedFile($id);
 
 Remove a previously uploaded file, given its id.
 
-Returns a false value if an error occurs.
+Returns: 1 == file deleted
+         0 == file not deleted
+         -1== no file to delete / no meaninful id passed
 
 =cut
 
 sub DelUploadedFile {
     my ($id) = @_;
+    my $retval;
 
-    my $file = GetUploadedFile($id);
-    if($file) {
-        my $file_path = $file->{filepath};
-        my $file_deleted = 0;
-        unless( -f $file_path ) {
-            warn "Id $file->{id} is in database but not in filesystem, removing id from database";
-            $file_deleted = 1;
-        } else {
-            if(unlink $file_path) {
+    if ($id) {
+        my $file = GetUploadedFile($id);
+        if($file) {
+            my $file_path = $file->{filepath};
+            my $file_deleted = 0;
+            unless( -f $file_path ) {
+                warn "Id $file->{id} is in database but not in filesystem, removing id from database";
                 $file_deleted = 1;
+            } else {
+                if(unlink $file_path) {
+                    $file_deleted = 1;
+                }
+            }
+
+            unless($file_deleted) {
+                warn "File $file_path cannot be deleted: $!";
+            }
+
+            my $dbh = C4::Context->dbh;
+            my $query = qq{
+                DELETE FROM uploaded_files
+                WHERE id = ?
+            };
+            my $sth = $dbh->prepare($query);
+            my $numrows = $sth->execute($id);
+            # if either a DB entry or file was deleted,
+            # then clearly we have a deletion.
+            if ($numrows>0 || $file_deleted==1) {
+                $retval = 1;
+            }
+            else {
+                $retval = 0;
             }
         }
-
-        unless($file_deleted) {
-            warn "File $file_path cannot be deleted: $!";
+        else {
+            warn "There was no file for id=($id)";
+            $retval = -1;
         }
-
-        my $dbh = C4::Context->dbh;
-        my $query = qq{
-            DELETE FROM uploaded_files
-            WHERE id = ?
-        };
-        my $sth = $dbh->prepare($query);
-        return $sth->execute($id);
     }
+    else {
+        warn "DelUploadFile called with no id.";
+        $retval = -1;
+    }
+    return $retval;
 }
 
 1;

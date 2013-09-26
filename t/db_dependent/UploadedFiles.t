@@ -3,7 +3,7 @@
 use Modern::Perl;
 use File::Temp qw/ tempdir /;
 use Test::CGI::Multipart;
-use Test::More tests => 11;
+use Test::More tests => 15;
 
 use t::lib::Mocks;
 
@@ -35,7 +35,17 @@ foreach my $key (qw(id filename filepath dir)) {
 
 ok(-e $file->{filepath}, "File $file->{filepath} exists");
 
-ok(C4::UploadedFiles::DelUploadedFile($id), "DelUploadedFile($id) returned true");
+ok(C4::UploadedFiles::DanglingEntry()==-1, "DanglingEntry() returned -1 as expected.");
+ok(C4::UploadedFiles::DanglingEntry($id)==0, "DanglingEntry($id) returned 0 as expected.");
+unlink ($file->{filepath});
+ok(C4::UploadedFiles::DanglingEntry($id)==1, "DanglingEntry($id) returned 1 as expected.");
+
+open my $fh,">",($file->{filepath});
+print $fh "";
+close $fh;
+
+ok(C4::UploadedFiles::DelUploadedFile($id)==1, "DelUploadedFile($id) returned 1.");
+ok(C4::UploadedFiles::DelUploadedFile($id)==-1, "DelUploadedFile($id) returned -1 as expected.");
 ok(! -e $file->{filepath}, "File $file->{filepath} does not exist anymore");
 
 is(C4::UploadedFiles::UploadFile($testfilename, '../', $testfile_fh->handle), undef, 'UploadFile with $dir containing ".." return undef');
