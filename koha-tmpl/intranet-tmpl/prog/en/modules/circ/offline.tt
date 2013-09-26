@@ -23,10 +23,10 @@ var ALERT_ITEM_WITHDRAWN = _("Item has been withdrawn (transaction recorded anyw
 var ALERT_ITEM_RESTRICTED = _("Item is restricted (transaction recorded anyway)");
 var ALERT_ITEM_LOST = _("Item has been lost (transaction recorded anyway)");
 var ALERT_NO_MATCHING_PATRON = _("No patron cardnumber in offline database (proceeding anyway): ");
-var ALERT_PATRON_GONE_NO_ADDRESS = _("Patron's address is in doubt (transaction recorded anyway)");
+var ALERT_PATRON_GONE_NO_ADDRESS = _("Patron's address is in doubt (proceeding anyway)");
 var ALERT_PATRON_CARD_LOST = _("Patron's card is lost");
 var ALERT_PATRON_EXPIRED = _("Patron's card is expired");
-var ALERT_PATRON_BLOCKED_TEMPORARY = _("Patron has had overdue items and is restricted for: ");
+var ALERT_PATRON_BLOCKED_TEMPORARY = _("Patron has had overdue items and is restricted until: ");
 var ALERT_PATRON_RESTRICTED = _("Patron is restricted");
 var ALERT_PATRON_FINE = _("Patron has outstanding fines: ");
 var ALERT_PATRON_FINE_OVER_LIMIT = _("Patron fines are over limit: ");
@@ -328,10 +328,13 @@ function checkPatronAlerts(cardnumber, patron) {
         }
         if (patron.debarred !== null) {
             if (patron.debarred != '9999-12-31') {
-                alerts.push(ALERT_PATRON_BLOCKED_TEMPORARY + $.datepicker.formatDate(dateformat, patron.debarred));
+                alerts.push(ALERT_PATRON_BLOCKED_TEMPORARY + $.datepicker.formatDate(dateformat, new Date(patron.debarred)));
             } else {
                 alerts.push(ALERT_PATRON_RESTRICTED);
             }
+        }
+        if (new Date(patron.dateexpiry) < new Date()) {
+            alerts.push(ALERT_PATRON_EXPIRED + ' (' + $.datepicker.formatDate(dateformat, new Date(patron.dateexpiry)) + ')');
         }
         if (parseInt(patron.fine) > [% maxoutstanding %]) {
             alerts.push(ALERT_PATRON_FINE_OVER_LIMIT + patron.fine);
