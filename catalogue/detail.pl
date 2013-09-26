@@ -221,8 +221,7 @@ foreach my $item (@items) {
     }
 
     # checking for holds
-    my ($reservedate,$reservedfor,$expectedAt,undef,$wait) = GetReservesFromItemnumber($item->{itemnumber}, 1); #second parameter: all dates
-        # all dates will include a future item level hold or a future wait
+    my ($reservedate,$reservedfor,$expectedAt,undef,$wait) = GetReservesFromItemnumber($item->{itemnumber});
     my $ItemBorrowerReserveInfo = GetMemberDetails( $reservedfor, 0);
     
     if (C4::Context->preference('HidePatronName')){

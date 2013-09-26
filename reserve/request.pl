@@ -328,7 +328,7 @@ foreach my $biblionumber (@biblionumbers) {
             }
 
             # checking reserve
-            my ($reservedate,$reservedfor,$expectedAt,$reserve_id,$wait) = GetReservesFromItemnumber($itemnumber,1); #alldates parameter to include future holds/waits
+            my ($reservedate,$reservedfor,$expectedAt,$reserve_id,$wait) = GetReservesFromItemnumber($itemnumber);
             my $ItemBorrowerReserveInfo = GetMember( borrowernumber => $reservedfor );
 
             if ( defined $reservedate ) {

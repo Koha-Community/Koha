@@ -99,7 +99,7 @@ foreach my $br ( keys %$branches ) {
             $getransf{'subtitle'} = GetRecordValue('subtitle', $record, GetFrameworkCode($gettitle->{'biblionumber'}));
 
             # we check if we have a reserv for this transfer
-            my @checkreserv = GetReservesFromItemnumber($num->{'itemnumber'},1 ); #alldate parameter for future holds and waits
+            my @checkreserv = GetReservesFromItemnumber($num->{'itemnumber'});
             if ( $checkreserv[0] ) {
                 my $getborrower = GetMemberDetails( $checkreserv[1] );
                 $getransf{'borrowernum'}       = $getborrower->{'borrowernumber'};

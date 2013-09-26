@@ -431,7 +431,7 @@ foreach my $biblioNum (@biblionumbers) {
         }
 
         # checking reserve
-        my ($reservedate,$reservedfor,$expectedAt,undef,$wait) = GetReservesFromItemnumber($itemNum,1); #with alldates parameter include future item level holds and waits
+        my ($reservedate,$reservedfor,$expectedAt,undef,$wait) = GetReservesFromItemnumber($itemNum);
         my $ItemBorrowerReserveInfo = GetMemberDetails( $reservedfor, 0);
 
         # the item could be reserved for this borrower vi a host record, flag this

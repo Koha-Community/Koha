@@ -358,26 +358,24 @@ sub GetReservesFromBiblionumber {
 
 =head2 GetReservesFromItemnumber
 
- ( $reservedate, $borrowernumber, $branchcode, $reserve_id, $waitingdate ) = GetReservesFromItemnumber($itemnumber, $all_dates);
+ ( $reservedate, $borrowernumber, $branchcode, $reserve_id, $waitingdate ) = GetReservesFromItemnumber($itemnumber);
 
 Get the first reserve for a specific item number (based on priority). Returns the abovementioned values for that reserve.
 
-all_dates is an optional parameter, telling Koha to include or exclude future holds
+The routine does not look at future reserves (read: item level holds), but DOES include future waits (a confirmed future hold).
 
 =cut
 
 sub GetReservesFromItemnumber {
-    my ( $itemnumber, $all_dates ) = @_;
+    my ( $itemnumber ) = @_;
     my $dbh   = C4::Context->dbh;
     my $query = "
     SELECT reservedate,borrowernumber,branchcode,reserve_id,waitingdate
     FROM   reserves
-    WHERE  itemnumber=?
+    WHERE  itemnumber=? AND ( reservedate <= CURRENT_DATE() OR
+           waitingdate IS NOT NULL )
+    ORDER BY priority
     ";
-    unless ( $all_dates ) {
-	$query .= " AND reservedate <= CURRENT_DATE()";
-    }
-    $query .= ' ORDER BY priority';
     my $sth_res = $dbh->prepare($query);
     $sth_res->execute($itemnumber);
     my ( $reservedate, $borrowernumber,$branchcode, $reserve_id, $wait ) = $sth_res->fetchrow_array;
