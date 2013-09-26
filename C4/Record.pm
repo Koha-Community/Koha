@@ -652,29 +652,19 @@ sub marc2bibtex {
     # Authors
     my $author;
     my @texauthors;
-    my ( $mintag, $maxtag, $fields_filter );
-    if ( $marcflavour eq "UNIMARC" ) {
-        $mintag        = "700";
-        $maxtag        = "712";
-        $fields_filter = '7..';
-    }
-    else {
-        $mintag        = "700";
-        $maxtag        = "720";
-        $fields_filter = '7..';
-    }
-    foreach my $field ( $record->field($fields_filter) ) {
-        next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
+    my @authorFields = ('100','110','111','700','710','711');
+    @authorFields = ('700','701','702','710','711','721') if ( $marcflavour eq "UNIMARC" );
+
+    foreach my $field ( @authorFields ) {
         # author formatted surname, firstname
         my $texauthor = '';
         if ( $marcflavour eq "UNIMARC" ) {
-            $texauthor = join ', ',
-              ( $field->subfield('a'), $field->subfield('b') );
-        }
-        else {
-            $texauthor = $field->subfield('a');
-        }
-        push @texauthors, $texauthor if $texauthor;
+           $texauthor = join ', ',
+           ( $record->subfield($field,"a"), $record->subfield($field,"b") );
+       } else {
+           $texauthor = $record->subfield($field,"a");
+       }
+       push @texauthors, $texauthor if $texauthor;
     }
     $author = join ' and ', @texauthors;
 
@@ -726,7 +716,7 @@ sub marc2bibtex {
     }
 
     $tex .= "\@book{";
-    $tex .= join(",\n", $id, map { $bh{$_} ? qq(\t$_ = "$bh{$_}") : () } keys %bh);
+    $tex .= join(",\n", $id, map { $bh{$_} ? qq(\t$_ = {$bh{$_}}) : () } keys %bh);
     $tex .= "\n}\n";
 
     return $tex;
