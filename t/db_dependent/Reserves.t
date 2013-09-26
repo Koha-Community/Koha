@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 20;
+use Test::More tests => 23;
 use MARC::Record;
 use DateTime::Duration;
 
@@ -290,6 +290,32 @@ is(
 
 my $letter = ReserveSlip('CPL', $requesters{'CPL'}, $bibnum);
 ok(defined($letter), 'can successfully generate hold slip (bug 10949)');
+
+# Tests for bug 9788: Does GetReservesFromItemnumber return a future wait?
+# 9788a: GetReservesFromItemnumber does not return future next available hold
+$dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
+C4::Context->set_preference('ConfirmFutureHolds', 2);
+C4::Context->set_preference('AllowHoldDateInFuture', 1);
+$resdate= dt_from_string();
+$resdate->add_duration(DateTime::Duration->new(days => 2));
+$resdate=output_pref($resdate);
+AddReserve('CPL',  $requesters{'CPL'}, $bibnum,
+           $constraint, $bibitems,  1, $resdate, $expdate, $notes,
+           $title,      $checkitem, $found);
+my @results= GetReservesFromItemnumber($itemnumber);
+is(defined $results[3]?1:0, 0, 'GetReservesFromItemnumber does not return a future next available hold');
+# 9788b: GetReservesFromItemnumber does not return future item level hold
+$dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
+AddReserve('CPL',  $requesters{'CPL'}, $bibnum,
+           $constraint, $bibitems,  1, $resdate, $expdate, $notes,
+           $title,      $itemnumber, $found); #item level hold
+@results= GetReservesFromItemnumber($itemnumber);
+is(defined $results[3]?1:0, 0, 'GetReservesFromItemnumber does not return a future item level hold');
+# 9788c: GetReservesFromItemnumber returns future wait (confirmed future hold)
+ModReserveAffect( $itemnumber,  $requesters{'CPL'} , 0); #confirm hold
+@results= GetReservesFromItemnumber($itemnumber);
+is(defined $results[3]?1:0, 1, 'GetReservesFromItemnumber returns a future wait (confirmed future hold)');
+# End of tests for bug 9788
 
 $dbh->rollback;
 
