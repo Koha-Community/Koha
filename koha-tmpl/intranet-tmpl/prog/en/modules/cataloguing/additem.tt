@@ -165,7 +165,7 @@ $(document).ready(function() {
                     [% ELSE %]
                       <td>
                         [% IF ( item_loo.hostitemflag ) %]
-                          <a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.hostbiblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit in host</a><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblionumber %]&amp;hostitemnumber=[% item_loo.itemnumber %]">Delink</a>
+                          <a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.hostbiblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit in host</a> &nbsp; <a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblionumber %]&amp;hostitemnumber=[% item_loo.itemnumber %]">Delink</a>
                         [% ELSE %]
                           <a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit</a>
                           [% IF ( item_loo.countanalytics ) %]
