@@ -1262,7 +1262,7 @@ sub GetMarcBiblio {
     my $biblionumber = shift;
     my $embeditems   = shift || 0;
     my $dbh          = C4::Context->dbh;
-    my $sth          = $dbh->prepare("SELECT marcxml FROM biblioitems WHERE biblionumber=? ");
+    my $sth          = $dbh->prepare("SELECT * FROM biblioitems WHERE biblionumber=? ");
     $sth->execute($biblionumber);
     my $row     = $sth->fetchrow_hashref;
     my $marcxml = StripNonXmlChars( $row->{'marcxml'} );
@@ -1274,8 +1274,8 @@ sub GetMarcBiblio {
         if ($@) { warn " problem with :$biblionumber : $@ \n$marcxml"; }
         return unless $record;
 
-        C4::Biblio::_koha_marc_update_bib_ids($record, '', $biblionumber, $biblionumber);
-	C4::Biblio::EmbedItemsInMarcBiblio($record, $biblionumber) if ($embeditems);
+        C4::Biblio::_koha_marc_update_bib_ids($record, '', $biblionumber, $row->{biblioitemnumber});
+        C4::Biblio::EmbedItemsInMarcBiblio($record, $biblionumber) if ($embeditems);
 
         return $record;
     } else {
