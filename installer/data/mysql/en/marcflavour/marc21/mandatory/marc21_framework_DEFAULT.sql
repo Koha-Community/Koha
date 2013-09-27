@@ -7,10 +7,8 @@
 --                    guided by Paul POULAIN
 --                      by thd for LibLime
 --
---           Revised to Update No. 16 (April 2013)
+--           Revised to Update No. 17 (September 2013)
 -- *************************************************************
-
-
 
 
 -- ******************************************************
@@ -534,6 +532,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('015', '6', 'Linkage', 'Linkage', 0, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('015', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('015', 'a', 'National bibliography number', 'National bibliography number', 1, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
+		('015', 'q', 'Qualifying information', 'Qualifying information', 1, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
         ('015', 'z', 'Canceled/invalid national bibliography number', 'Canceled/invalid national bibliography number', 1, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('016', '2', 'Source', 'Source', 0, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
 		('016', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
@@ -555,6 +554,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('020', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('020', 'a', 'International Standard Book Number', 'International Standard Book Number', 0, 0, 'biblioitems.isbn', 0, '', '', '', 0, 0, '', '', '', NULL),
 		('020', 'c', 'Terms of availability', 'Terms of availability', 0, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
+		('020', 'q', 'Qualifying information', 'Qualifying information', 1, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
         ('020', 'z', 'Canceled/invalid ISBN', 'Canceled/invalid ISBN', 1, 0, '', 0, '', '', '', 0, -1, '', '', '', NULL),
 		('022', '2', 'Source', 'Source', 0, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
 		('022', '6', 'Linkage', 'Linkage', 0, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
@@ -572,6 +572,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('024', 'b', 'Additional codes following the standard number [OBSOLETE]', 'Additional codes following the standard number [OBSOLETE]', 0, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('024', 'c', 'Terms of availability', 'Terms of availability', 0, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
 		('024', 'd', 'Additional codes following the standard number or code', 'Additional codes following the standard number or code', 0, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
+		('024', 'q', 'Qualifying information', 'Qualifying information', 1, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
 		('024', 'z', 'Canceled/invalid standard number or code', 'Canceled/invalid standard number or code', 1, 0, '', 0, '', '', '', 0, -1, '', '', '', NULL),
 		('025', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('025', 'a', 'Overseas acquisition number', 'Overseas acquisition number', 1, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
@@ -587,6 +588,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('027', '6', 'Linkage', 'Linkage', 0, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('027', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('027', 'a', 'Standard technical report number', 'Standard technical report number', 0, 0, '', 0, '', '', '', 0, -1, '', '', '', NULL),
+		('027', 'q', 'Qualifying information', 'Qualifying information', 1, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
 		('027', 'z', 'Canceled/invalid number', 'Canceled/invalid number', 1, 0, '', 0, '', '', '', 0, -1, '', '', '', NULL),
 		('028', '6', 'Linkage', 'Linkage', 0, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('028', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
@@ -3011,6 +3013,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('800', '4', 'Relator code', 'Relator code', 1, 0, '', 8, '', '', '', NULL, -1, '', '', '', NULL),
         ('800', '5', 'Institution to which field applies', 'Institution to which field applies', 1, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
 		('800', '6', 'Linkage', 'Linkage', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
+		('800', '7', 'Control subfield', 'Control subfield', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
 		('800', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
 		('800', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 8, '', '', '', 0, -5, '', '', '', NULL),
 		('800', 'a', 'Personal name', 'Personal name', 0, 0, '', 8, '', 'PERSO_NAME', '', NULL, -1, '', '', '', NULL),
@@ -3041,6 +3044,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('810', '4', 'Relator code', 'Relator code', 1, 0, '', 8, '', '', '', NULL, -1, '', '', '', NULL),
         ('810', '5', 'Institution to which field applies', 'Institution to which field applies', 1, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
 		('810', '6', 'Linkage', 'Linkage', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
+		('810', '7', 'Control subfield', 'Control subfield', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
 		('810', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
 		('810', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 8, '', '', '', 0, -5, '', '', '', NULL),
 		('810', 'a', 'Corporate name or jurisdiction name as entry element', 'Corporate name or jurisdiction name as entry element', 0, 0, '', 8, '', 'CORPO_NAME', '', NULL, -1, '', '', '', NULL),
@@ -3069,6 +3073,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('811', '4', 'Relator code', 'Relator code', 1, 0, NULL, 8, NULL, NULL, '', NULL, -1, '', '', '', NULL),
         ('811', '5', 'Institution to which field applies', 'Institution to which field applies', 1, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
 		('811', '6', 'Linkage', 'Linkage', 0, 0, NULL, 8, NULL, NULL, '', NULL, -6, '', '', '', NULL),
+		('811', '7', 'Control subfield', 'Control subfield', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
 		('811', '8', 'Field link and sequence number ', 'Field link and sequence number ', 1, 0, NULL, 8, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('811', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 8, '', '', '', 0, -5, '', '', '', NULL),
 		('811', 'a', 'Meeting name or jurisdiction name as entry element', 'Meeting name or jurisdiction name as entry element', 0, 0, NULL, 8, NULL, 'MEETI_NAME', '', NULL, -1, '', '', '', NULL),
@@ -3095,6 +3100,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
         ('830', '3', 'Materials specified', 'Materials specified', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
         ('830', '5', 'Institution to which field applies', 'Institution to which field applies', 1, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
 		('830', '6', 'Linkage', 'Linkage', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
+		('830', '7', 'Control subfield', 'Control subfield', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
 		('830', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
 		('830', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 8, '', '', '', 0, -5, '', '', '', NULL),
 		('830', 'a', 'Uniform title', 'Uniform title', 0, 0, '', 8, '', 'UNIF_TITLE', '', NULL, -1, '', '', '', NULL),

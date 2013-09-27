@@ -1,7 +1,7 @@
 -- *******************************************************
 --   KOHA  MARC 21 STANDARD DEFAULT AUTHORITY FRAMEWORKS
 --
---        Revised to Update No. 16 (april 2013)
+--        Revised to Update No. 17 (September 2013)
 -- *******************************************************
 
 -- ******************************************************
@@ -285,6 +285,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '016', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '020', 'a', 'International Standard Book Number', 'International Standard Book Number', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '020', 'c', 'Terms of availability', 'Terms of availability', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '020', 'q', 'Qualifying information', 'Qualifying information', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '020', 'z', 'Canceled/invalid ISBN', 'Canceled/invalid ISBN', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '020', '6', 'Linkage', 'Linkage', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '020', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -298,6 +299,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '024', 'a', 'Standard number or code', 'Standard number or code', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '024', 'c', 'Terms of availability', 'Terms of availability', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '024', 'd', 'Additional codes following the standard number or code', 'Additional codes following the standard number or code', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '024', 'q', 'Qualifying information', 'Qualifying information', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '024', 'z', 'Canceled/invalid standard number or code', 'Canceled/invalid standard number or code', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '024', '2', 'Source of number or code', 'Source of number or code', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '024', '6', 'Linkage', 'Linkage', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
