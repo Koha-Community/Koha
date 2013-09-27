@@ -228,7 +228,7 @@ if ($op eq ""){
             $price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
             $price = $num->unformat_number($price);
             $orderinfo{gstrate} = $bookseller->{gstrate};
-            my $c = $c_discount ? $c_discount / 100 : $bookseller->{discount} / 100;
+            my $c = $c_discount ? $c_discount : $bookseller->{discount} / 100;
             if ( $bookseller->{listincgst} ) {
                 if ( $c_discount ) {
                     $orderinfo{ecost} = $price;
