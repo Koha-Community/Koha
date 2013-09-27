@@ -108,7 +108,6 @@
         if (!changeSelection(newCopiesRowId, true)) {
             return false;
         }
-        $(".copiesrow:not(" + newCopiesRowId + ")").hide();
 
         // Show the specific copy table for this radio button.
         $(newCopiesRowId).show();
@@ -126,7 +125,7 @@
         }
 
         // Hide the copies table row
-        $(".copiesrow").hide();
+        $(newCopiesRowId).hide();
     });
 
     // When 'Place Hold' button is clicked
@@ -182,12 +181,7 @@
         e.preventDefault();
         toggleLink = $(this);
         var optionsID = this.id.replace("toggle-hold-options-","");
-        var copiesRow = $("#copiesrow_"+optionsID)
         $("#hold-options-"+optionsID).toggle(0, function() {
-            if( copiesRow.is(':visible') ){
-                $("#reqany_"+optionsID).prop("checked",true);
-                copiesRow.hide();
-            }
             toggleLink.text($(this).is(':visible') ? _("Hide options") : _("Show more options"));
         });
     });
@@ -468,9 +462,6 @@
                             [% END %]
                         [% END %]
                 </ul>
-            </div>
-                </fieldset>
-                <br style="clear:both" />
                   [% IF ( OPACItemHolds ) %]
                   [% IF ( bibitemloo.holdable ) %]
 
@@ -552,6 +543,8 @@
                   [% END %]<!-- bib_available -->
 
                   [% END %]<!-- OPACItemHolds -->
+            </div>
+                </fieldset>
                 [% END %]
 
               [% END %] <!-- if message -->
