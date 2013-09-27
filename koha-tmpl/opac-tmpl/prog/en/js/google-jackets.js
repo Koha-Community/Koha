@@ -51,7 +51,7 @@ KOHA.Google = {
                  if (typeof(book.thumbnail_url) != "undefined") {
                      var img = document.createElement("img");
                      img.src = book.thumbnail_url;
-                     $(this).append(img);
+                     $(this).empty().append(img);
                      var re = /^gbs-thumbnail-preview/;
                      if ( re.exec($(this).attr("id")) ) {
                          $(this).append(
@@ -67,7 +67,7 @@ KOHA.Google = {
                      var message = document.createElement("span");
                      $(message).attr("class","no-image");
                      $(message).html(NO_GOOGLE_JACKET);
-                     $(this).append(message);
+                     $(this).empty().append(message);
                  }
              });
          }

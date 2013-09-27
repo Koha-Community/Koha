@@ -100,6 +100,15 @@
                 },
                 success: function(data){
                     $("#shelfbrowser").replaceWith(data);
+                    [% IF ( GoogleJackets ) %]
+                      KOHA.Google.GetCoverFromIsbn([% covernewwindow %]);
+                    [% END %]
+                    [% IF OpenLibraryCovers %]
+                      KOHA.OpenLibrary.GetCoverFromIsbn();
+                    [% END %]
+                    [% IF OPACLocalCoverImages %]
+                      KOHA.LocalCover.GetCoverFromBibnumber(true);
+                    [% END %]
                 }
             });
           });
@@ -115,6 +124,15 @@
                 },
                 success: function(data){
                     $("#shelfbrowser").replaceWith(data);
+                    [% IF ( GoogleJackets ) %]
+                      KOHA.Google.GetCoverFromIsbn([% covernewwindow %]);
+                    [% END %]
+                    [% IF OpenLibraryCovers %]
+                      KOHA.OpenLibrary.GetCoverFromIsbn();
+                    [% END %]
+                    [% IF OPACLocalCoverImages %]
+                      KOHA.LocalCover.GetCoverFromBibnumber(true);
+                    [% END %]
                 }
             });
           });

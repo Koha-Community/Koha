@@ -39,9 +39,9 @@ KOHA.LocalCover = {
                         if (uselink) {
                             var a = $("<a />").attr('href', '/cgi-bin/koha/opac-imageviewer.pl?biblionumber=' + $(mydiv).attr("class"));
                             $(a).append(img);
-                            $(mydiv).append(a);
+                            $(mydiv).empty().append(a);
                         } else {
-                            $(mydiv).append(img);
+                            $(mydiv).empty().append(img);
                         }
                         $(mydiv).children('.no-image').remove();
                     }
