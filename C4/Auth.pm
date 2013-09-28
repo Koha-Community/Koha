@@ -1486,6 +1486,8 @@ sub hash_password {
     use C4::Auth;
     my $salt = C4::Auth::generate_salt($strength, $length);
 
+=over
+
 =item strength
 
 For general password salting a C<$strength> of C<weak> is recommend,
@@ -1493,8 +1495,6 @@ For generating a server-salt a C<$strength> of C<strong> is recommended
 
 'strong' uses /dev/random which may block until sufficient entropy is acheived.
 'weak' uses /dev/urandom and is non-blocking.
-
-=back
 
 =item length
 
