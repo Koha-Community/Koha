@@ -41,6 +41,8 @@ C<$supplier> is the string with which we search for a supplier
 
 =back
 
+=over 4
+
 =item id or booksellerid
 
 The id of the supplier whose baskets we will display
