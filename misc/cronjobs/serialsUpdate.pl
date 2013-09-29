@@ -39,7 +39,7 @@ use Pod::Usage;
 
 =head1 NAME
 
-serialsUpdate.pl - change status of serials that are late
+serialsUpdate.pl - change status of serial issues that are late
 
 =head1 SYNOPSIS
 
@@ -49,10 +49,10 @@ serialsUpdate.pl [ -h | -m ][ -v ] -c ][ --note "you are late" ][ --no-note ]
    --h --help -?   Brief help message
    --man           Full documentation
    --verbose -v    Verbose mode
-   -c              Confirm : without this option, the script will report the concerned serials
-                   without modifying database
-   --note          Note set to concerned serials, by default "Automatically set to late"
-   --no-note       Do not set a note one concerned serials
+   -c              Confirm: without this option, the script will report on affected serial
+                   issues without modifying database
+   --note          Note set on affected serial issues, by default "Automatically set to late"
+   --no-note       Do not set a note on affected serial issues
 
 =cut
 
@@ -129,7 +129,7 @@ while ( my $issue = $sth->fetchrow_hashref ) {
                     $issue->{planneddate}, $issue->{publisheddate},
                     3, $note );
                 $verbose
-                  and print "Serial id=" . $issue->{serialid} . " update\n";
+                  and print "Serial issue with id=" . $issue->{serialid} . " updated\n";
             }
         }
         else {
