@@ -57,36 +57,48 @@ $dbh->{RaiseError} = 1;
 $dbh->{PrintError} = 0;
 
 $dbh->{AutoCommit} = 0; # use transactions to avoid partial deletes
+my $deleted = 0;
 for my $member (@$members) {
     print "Trying to delete patron $member->{borrowernumber}... "
       if $verbose;
+
+    my $borrowernumber = $member->{borrowernumber};
+    my $flags = C4::Members::patronflags( $member );
+    if ( my $charges = $flags->{CHARGES}{amount} ) {
+        say "Failed to delete patron $borrowernumber: patron has $charges in fines";
+        next;
+    }
+
     eval {
-        C4::Members::MoveMemberToDeleted( $member->{borrowernumber} )
+        C4::Members::MoveMemberToDeleted( $borrowernumber )
           if $confirm;
     };
     if ($@) {
-        say "Failed to delete patron $member->{borrowernumber}, cannot move it: ($@)";
+        say "Failed to delete patron $borrowernumber, cannot move it: ($@)";
         $dbh->rollback;
         next;
     }
     eval {
-        C4::VirtualShelves::HandleDelBorrower( $member->{borrowernumber} )
+        C4::VirtualShelves::HandleDelBorrower( $borrowernumber )
           if $confirm;
     };
     if ($@) {
-        say "Failed to delete patron $member->{borrowernumber}, error handling its lists: ($@)";
+        say "Failed to delete patron $borrowernumber, error handling its lists: ($@)";
         $dbh->rollback;
         next;
     }
-    eval { C4::Members::DelMember( $member->{borrowernumber} ) if $confirm; };
+    eval { C4::Members::DelMember( $borrowernumber ) if $confirm; };
     if ($@) {
-        say "Failed to delete patron $member->{borrowernumber}: $@)";
+        say "Failed to delete patron $borrowernumber: $@)";
         $dbh->rollback;
         next;
     }
     $dbh->commit;
+    $deleted++;
     say "OK" if $verbose;
 }
+
+say "$deleted patrons deleted";
 
 =head1 NAME
 
@@ -112,7 +124,7 @@ Print a brief help message
 
 Delete patrons who have not borrowed since this date.
 
-=item B<--expired_date>
+=item B<--expired_before>
 
 Delete patrons with an account expired before this date.
 
