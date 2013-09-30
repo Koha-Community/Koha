@@ -89,7 +89,7 @@ sub new {
     my ($metadata_prefix, $offset, $from, $until, $set);
     if ( $args{ resumptionToken } ) {
         ($metadata_prefix, $offset, $from, $until, $set)
-            = split( ':', $args{resumptionToken} );
+            = split( '/', $args{resumptionToken} );
     }
     else {
         $metadata_prefix = $args{ metadataPrefix };
@@ -110,7 +110,7 @@ sub new {
     $self->{ set             } = $set;
 
     $self->resumptionToken(
-        join( ':', $metadata_prefix, $offset, $from, $until, $set ) );
+        join( '/', $metadata_prefix, $offset, $from, $until, $set ) );
     $self->cursor( $offset );
 
     return $self;
