@@ -298,15 +298,14 @@
             </table>
 
         [% IF csv_profiles %]
-          <p>
-            <span class="exportSelected"><a id="ExportSelected" href="/cgi-bin/koha/serials/claims.pl">Export selected items data</a></span>
-            using the following csv profile:
+          <fieldset class="action">
+            <label for="csv_code">Select CSV profile:</label>
             <select id="csv_profile_for_export">
               [% FOR csv IN csv_profiles %]
                 <option value="[% csv.export_format_id %]">[% csv.profile %]</option>
                [% END %]
             </select>
-          </p>
+            <span class="exportSelected"><a id="ExportSelected" href="/cgi-bin/koha/serials/claims.pl">Export selected items data</a></span>
         [% END %]
 
 [% IF ( letter ) %]
