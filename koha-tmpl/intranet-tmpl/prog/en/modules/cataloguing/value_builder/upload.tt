@@ -6,6 +6,20 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script type="text/javascript" src="[% interface %]/lib/jquery/jquery.js"></script>
     <link rel="stylesheet" type="text/css" href="[% themelang %]/css/staff-global.css" />
+    <script type="text/javascript">
+      function _(s) { return s; }
+      $(document).ready(function() {
+        $('form').each(function() {
+          $(this).submit(function() {
+            var value = $(this).find('input[type="radio"][name="dir"]:checked').val();
+            if (!value) {
+              alert(_("Please select the destination of file"));
+              return false;
+            }
+          });
+        })
+      });
+    </script>
 
 </head>
 <body>
@@ -59,6 +73,9 @@
           <p>Configuration variable 'upload_path' is not configured.</p>
           <p>Please configure it in your koha-conf.xml</p>
         [% ELSE %]
+          [% IF (error_no_dir_selected) %]
+              <p class="error">Error: You have to select the destination of uploaded file.<p>
+          [% END %]
           <h2>Please select the file to upload : </h2>
           <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl">
               [% filefield %]

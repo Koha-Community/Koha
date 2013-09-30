@@ -80,9 +80,9 @@ sub plugin {
     );
 
     # Dealing with the uploaded file
-    if ($uploaded_file) {
+    my $dir = $input->param('dir');
+    if ($uploaded_file and $dir) {
         my $fh = $input->upload('uploaded_file');
-        my $dir = $input->param('dir');
 
         $id = C4::UploadedFiles::UploadFile($uploaded_file, $dir, $fh->handle);
         if($id) {
@@ -127,6 +127,10 @@ sub plugin {
             );
         } else {
             $template->param( error_upload_path_not_configured => 1 );
+        }
+
+        if ($uploaded_file and not $dir) {
+            $template->param(error_no_dir_selected => 1);
         }
     }
 
