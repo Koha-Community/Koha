@@ -7311,7 +7311,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     my $return_count;
     $dbh->do("ALTER TABLE aqorders ADD COLUMN orderstatus varchar(16) DEFAULT 'new' AFTER parent_ordernumber");
     $dbh->do("UPDATE aqorders SET orderstatus='ordered' WHERE basketno IN (SELECT basketno FROM aqbasket WHERE closedate IS NOT NULL)");
-    $dbh->do("UPDATE aqorders SET orderstatus='partial' WHERE quantity > quantityreceived AND quantityreceived > 0");
+    $dbh->do("UPDATE aqorders SET orderstatus='partial' WHERE quantity > quantityreceived AND ordernumber IN ( SELECT parent_ordernumber FROM ( SELECT DISTINCT(parent_ordernumber) FROM aqorders WHERE ordernumber != parent_ordernumber) AS aq )");
     $dbh->do("UPDATE aqorders SET orderstatus='complete' WHERE quantity=quantityreceived");
     $dbh->do("UPDATE aqorders SET orderstatus='cancelled' WHERE datecancellationprinted IS NOT NULL");
     print "Upgrade to $DBversion done (Bug 5336: Add the new column aqorders.orderstatus)\n";
