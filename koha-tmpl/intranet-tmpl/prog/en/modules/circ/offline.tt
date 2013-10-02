@@ -172,6 +172,7 @@ function uploadTransaction(transaction) {
                 "action" : transaction.value.action,
                 "barcode" : transaction.value.barcode,
                 "cardnumber" : transaction.value.cardnumber,
+                "amount" : transaction.value.amount,
                 "pending" : true,
               },
     });
@@ -441,6 +442,7 @@ window.addEventListener('load', function(e) {
 
 $(document).ready(function () {
     kohadb.initialize();
+    $('#header_search #circ_search .tip').text(_("Enter patron card number:"));
 
     $('ul[aria-labelledby="drop3"]').html('<li><a class="toplinks">You cannot change your branch or logout while using offline circulation</a></li>');
 

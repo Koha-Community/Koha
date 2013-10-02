@@ -40,6 +40,7 @@ if ($status eq 'ok') { # if authentication is ok
     my $timestamp  = $cgi->param('timestamp')  || '';
     my $action     = $cgi->param('action')     || '';
     my $barcode    = $cgi->param('barcode')    || '';
+    my $amount     = $cgi->param('amount')     || 0;
     $barcode    =~ s/^\s+//;
     $barcode    =~ s/\s+$//;
     my $cardnumber = $cgi->param('cardnumber') || '';
@@ -54,6 +55,7 @@ if ($status eq 'ok') { # if authentication is ok
             $action,
             $barcode,
             $cardnumber,
+            $amount
         );
     } else {
         $result = ProcessOfflineOperation(
@@ -64,6 +66,7 @@ if ($status eq 'ok') { # if authentication is ok
                 'action'      => $action,
                 'barcode'     => $barcode,
                 'cardnumber'  => $cardnumber,
+                'amount'      => $amount
             }
         );
     }
