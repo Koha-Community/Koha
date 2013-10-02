@@ -149,7 +149,10 @@ $template->param(
     basketgroupname         => $basketgroupname,
     from_placed_on          => $from_date,
     to_placed_on            => $to_date,
+    orderstatus             => $orderstatus,
+    budget_id               => $budget,
     bp_loop                 => $bp_loop,
+    search_done             => $do_search,
     debug                   => $debug || $input->param('debug') || 0,
     uc(C4::Context->preference("marcflavour")) => 1
 );

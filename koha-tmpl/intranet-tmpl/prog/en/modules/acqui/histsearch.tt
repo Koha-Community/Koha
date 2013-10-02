@@ -51,12 +51,36 @@
         <li>
             <label for="orderstatus">Order status: </label>
             <select name="orderstatus" id="orderstatus">
-                <option value=""></option>
-                <option value="new">New orders</option>
-                <option value="ordered">Pending orders</option>
-                <option value="partial">Partially received orders</option>
-                <option value="complete">Received orders</option>
-                <option value="cancelled">Cancelled orders</option>
+                [% IF orderstatus == "" %]
+                  <option value=""></option>
+                [% ELSE %]
+                  <option value="" selected="selected"></option>
+                [% END %]
+                [% IF orderstatus == "new" %]
+                  <option value="new" selected="selected">New</option>
+                [% ELSE %]
+                  <option value="new">New</option>
+                [% END %]
+                [% IF orderstatus == "ordered" %]
+                  <option value="ordered" selected="selected">Pending</option>
+                [% ELSE %]
+                  <option value="ordered">Pending</option>
+                [% END %]
+                [% IF orderstatus == "partial" %]
+                  <option value="partial" selected="selected">Partially received</option>
+                [% ELSE %]
+                  <option value="partial">Partially received</option>
+                [% END %]
+                [% IF orderstatus == "complete" %]
+                  <option value="complete" selected="selected">Received</option>
+                [% ELSE %]
+                  <option value="complete">Received</option>
+                [% END %]
+                [% IF orderstatus == "cancelled" %]
+                  <option value="cancelled" selected="selected">Cancelled</option>
+                [% ELSE %]
+                  <option value="cancelled">Cancelled</option>
+                [% END %]
             </select>
         </li>
         <li>
@@ -66,7 +90,11 @@
                 [% FOREACH bp_loo IN bp_loop %]
                     <optgroup label="[% bp_loo.budget_period_description %]">
                     [% FOREACH h_loo IN bp_loo.hierarchy %]
+                      [% IF h_loo.budget_id == budget_id %]
+                        <option type="text" value="[% h_loo.budget_id %]" branchcode="[% h_loo.budget_branchcode %]" selected="selected">
+                      [% ELSE %]
                         <option type="text" value="[% h_loo.budget_id %]" branchcode="[% h_loo.budget_branchcode %]">
+                      [% END %]
                             [% h_loo.budget_display_name %]
                         </option>
                     [% END %]
@@ -94,6 +122,7 @@
             <thead>
 			<tr>
                 <th>Order line (parent)</th>
+                <th>Status</th>
 				<th>Basket</th>
 				<th>Basket group</th>
                 <th>Invoice number</th>
@@ -101,7 +130,6 @@
 				<th>Vendor</th>
 				<th>Placed on</th>
 				<th>Received on</th>
-                <th>Status</th>
                 <th>Quantity received</th>
                 <th>Pending order</th>
 				<th>Unit cost</th>
@@ -114,6 +142,15 @@
                     <td>
                         [% order.ordernumber %]
                         [% IF order.ordernumber != order.parent_ordernumber %]([% order.parent_ordernumber %])[% END %]
+                    </td>
+                    <td>
+                        [% SWITCH order.orderstatus %]
+                            [% CASE 'new' %]New
+                            [% CASE 'ordered' %]Pending
+                            [% CASE 'partial' %]Partially received
+                            [% CASE 'complete' %]Received
+                            [% CASE 'cancelled' %]Cancelled
+                        [% END %]
                     </td>
                     <td>[% order.basketname %] (<a href="basket.pl?basketno=[% order.basketno %]">[% order.basketno %]</a>)</td>
                     <td>
@@ -140,15 +177,6 @@
                             [% order.datereceived | $KohaDates %]
                         [% END %]
                     </td>
-                    <td>
-                        [% SWITCH order.orderstatus %]
-                            [% CASE 'new' %]New orders
-                            [% CASE 'ordered' %]Pending orders
-                            [% CASE 'partial' %]Partially received orders
-                            [% CASE 'complete' %]Received orders
-                            [% CASE 'cancelled' %]Cancelled orders
-                        [% END %]
-                    </td>
                     <td>[% order.quantityreceived %]</td>
                     <td>[% order.quantity %]</td>
                     <td>[% order.ecost %]</td>
@@ -156,8 +184,11 @@
                 </tr>
             [% END %]
             </tbody>
-		</table>
-	</div>[% ELSE %][% END %]
+        </table>
+    </div>
+    [% ELSIF search_done %]
+      There is no order for this search.
+    [% END %]
 
 </div>
 </div>
