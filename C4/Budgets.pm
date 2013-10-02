@@ -981,37 +981,6 @@ sub ConvertCurrency {
     return ( $price / $cur );
 }
 
-=head2 _columns
-
-returns an array containing fieldname followed by PRI as value if PRIMARY Key
-
-=cut
-
-sub _columns(;$) {
-	my $tablename=shift||"aqbudgets";
-    return @{C4::Context->dbh->selectcol_arrayref("SHOW columns from $tablename",{Columns=>[1,4]})};
-}
-
-sub _filter_fields{
-	my $budget=shift;
-	my $tablename=shift;
-    my @keys; 
-	my @values;
-	my %columns= _columns($tablename);
-	#Filter Primary Keys of table
-    my $elements=join "|",grep {$columns{$_} ne "PRI"} keys %columns;
-	foreach my $field (grep {/\b($elements)\b/} keys %$budget){
-		$$budget{$field}=format_date_in_iso($$budget{$field}) if ($field=~/date/ && $$budget{$field} !~C4::Dates->regexp("iso"));
-		my $strkeys= " $field = ? ";
-		if ($field=~/branch/){
-			$strkeys="( $strkeys OR $field='' OR $field IS NULL) ";
-		}
-		push @values, $$budget{$field};
-		push @keys, $strkeys;
-	}
-	return (\@keys,\@values);
-}
-
 END { }    # module clean-up code here (global destructor)
 
 1;
