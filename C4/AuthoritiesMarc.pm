@@ -906,6 +906,8 @@ sub BuildSummary {
         # for MARC21, the authority type summary displays a label meant for
         # display
         if (C4::Context->preference('marcflavour') ne 'UNIMARC') {
+            $summary{label} = $authref->{summary};
+        } else {
             $summary{summary} = $authref->{summary};
         }
     }
@@ -940,35 +942,37 @@ sub BuildSummary {
 #         suit the MARC21 version, so for now the "templating"
 #         feature will be enabled only for UNIMARC for backwards
 #         compatibility.
-    if ($summary_template and C4::Context->preference('marcflavour') eq 'UNIMARC') {
-        my @fields = $record->fields();
-#             $reported_tag = '$9'.$result[$counter];
-        my @repets;
-        foreach my $field (@fields) {
-            my $tag = $field->tag();
-            my $tagvalue = $field->as_string();
-            my $localsummary= $summary_template;
-            $localsummary =~ s/\[(.?.?.?.?)$tag\*(.*?)\]/$1$tagvalue$2\[$1$tag$2\]/g;
-            if ($tag<10) {
-                if ($tag eq '001') {
-                    $reported_tag.='$3'.$field->data();
-                }
-            } else {
-                my @subf = $field->subfields;
-                for my $i (0..$#subf) {
-                    my $subfieldcode = $subf[$i][0];
-                    my $subfieldvalue = $subf[$i][1];
-                    my $tagsubf = $tag.$subfieldcode;
-                    $localsummary =~ s/\[(.?.?.?.?)$tagsubf(.*?)\]/$1$subfieldvalue$2\[$1$tagsubf$2\]/g;
-                }
-            }
-            if ($localsummary ne $summary_template) {
-                $localsummary =~ s/\[(.*?)\]//g;
-                $localsummary =~ s/\n/<br>/g;
-                push @repets, $localsummary;
-            }
+    if ($summary{summary} and C4::Context->preference('marcflavour') eq 'UNIMARC') {
+        my @matches = ($summary{summary} =~ m/\[(.*?)(\d{3})([\*a-z0-9])(.*?)\]/g);
+        my (@textbefore, @tag, @subtag, @textafter);
+        for(my $i = 0; $i < scalar @matches; $i++){
+            push @textbefore, $matches[$i] if($i%4 == 0);
+            push @tag,        $matches[$i] if($i%4 == 1);
+            push @subtag,     $matches[$i] if($i%4 == 2);
+            push @textafter,  $matches[$i] if($i%4 == 3);
         }
-        $summary{repets} = \@repets;
+        for(my $i = scalar @tag; $i >= 0; $i--){
+            my $textbefore = $textbefore[$i] || '';
+            my $tag = $tag[$i] || '';
+            my $subtag = $subtag[$i] || '';
+            my $textafter = $textafter[$i] || '';
+            my $value = '';
+            my $field = $record->field($tag);
+            if ( $field ) {
+                if($subtag eq '*') {
+                    if($tag < 10) {
+                        $value = $textbefore . $field->data() . $textafter;
+                    }
+                } else {
+                    my @subfields = $field->subfield($subtag);
+                    if(@subfields > 0) {
+                        $value = $textbefore . join (" - ", @subfields) . $textafter;
+                    }
+                }
+            }
+            $summary{summary} =~ s/\[\Q$textbefore$tag$subtag$textafter\E\]/$value/;
+        }
+        $summary{summary} =~ s/\\n/<br \/>/g;
     }
     my @authorized;
     my @notes;

@@ -50,13 +50,12 @@
 [% END # / BLOCK showreference %]
 
 [% BLOCK authresult %]
-    [% IF ( summary.summary ) %][% summary.summary | html %]:[% END %]
-    <div class="authres_repet">
-        [% FOREACH repet IN summary.repets %]
-            <span>[% repet | html %]</span>
-            [% UNLESS loop.last %] | [% END %]
-        [% END %]
-    </div>
+    [% IF ( summary.label ) %][% summary.label | html %]:[% END %]
+    [% IF summary.summary %]
+        <div class="authority-summary">
+            [% summary.summary %]
+        </div>
+    [% END %]
     [% UNLESS ( summary.summaryonly ) %]
         <div class="authorizedheading">
             [% FOREACH authorize IN summary.authorized %]

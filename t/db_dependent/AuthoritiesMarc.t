@@ -61,6 +61,8 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
+t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
+
 is(BuildAuthHierarchies(3, 1), '1,2,3', "Built linked authtrees hierarchy string");
 
 my $expectedhierarchy = [ [ {
@@ -135,7 +137,7 @@ my $expected_marc21_summary = {
                    }
                  ],
     'seefrom' => [],
-    'summary' => 'Geographic Name',
+    'label' => 'Geographic Name',
     'type' => 'Geographic Name'
 };
 is_deeply(
@@ -178,9 +180,7 @@ my $expected_unimarc_name_summary = {
     'otherscript' => [],
     'seealso' => [],
     'seefrom' => [],
-    'repets' => [
-        'Fossey, Brigitte'
-    ],
+    'summary' => 'Fossey, Brigitte',
     'type' => 'Auteur'
 };
 
