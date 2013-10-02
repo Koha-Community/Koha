@@ -429,5 +429,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('XSLTResultsDisplay','default','','Enable XSL stylesheet control over results page display on intranet','Free'),
 ('yuipath','local','local|http://yui.yahooapis.com/2.5.1/build','Insert the path to YUI libraries, choose local if you use koha offline','Choice'),
 ('z3950AuthorAuthFields','701,702,700',NULL,'Define the MARC biblio fields for Personal Name Authorities to fill biblio.author','free'),
-('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo')
+('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo'),
+('AdvancedSearchLanguages','','','ISO 639-2 codes of languages you wish to see appear as an Advanced search option.  Example: eng|fre|ita','Textarea')
 ;

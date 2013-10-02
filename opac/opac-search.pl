@@ -43,7 +43,7 @@ for ( $searchengine ) {
 
 use C4::Output;
 use C4::Auth qw(:DEFAULT get_session ParseSearchHistorySession SetSearchHistorySession);
-use C4::Languages qw(getAllLanguages);
+use C4::Languages qw(getLanguages);
 use C4::Search;
 use C4::Biblio;  # GetBiblioData
 use C4::Koha;
@@ -198,7 +198,7 @@ $template->param(
 );
 
 # load the language limits (for search)
-my $languages_limit_loop = getAllLanguages($lang);
+my $languages_limit_loop = getLanguages($lang, 1);
 $template->param(search_languages_loop => $languages_limit_loop,);
 
 # load the Type stuff

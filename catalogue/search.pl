@@ -144,7 +144,7 @@ use C4::Context;
 use C4::Output;
 use C4::Auth qw(:DEFAULT get_session);
 use C4::Search;
-use C4::Languages qw(getAllLanguages);
+use C4::Languages qw(getLanguages);
 use C4::Koha;
 use C4::Members qw(GetMember);
 use C4::VirtualShelves;
@@ -339,7 +339,7 @@ if ( $template_type eq 'advsearch' ) {
                       search_boxes_loop => \@search_boxes_array);
 
     # load the language limits (for search)
-    my $languages_limit_loop = getAllLanguages($lang);
+    my $languages_limit_loop = getLanguages($lang, 1);
     $template->param(search_languages_loop => $languages_limit_loop,);
 
     # Expanded search options in advanced search:

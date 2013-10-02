@@ -7154,6 +7154,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+<<<<<<< HEAD
 $DBversion = "3.13.00.023";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("ALTER TABLE borrowers CHANGE password password VARCHAR(60);");
@@ -7165,6 +7166,12 @@ $DBversion = "3.13.00.024";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{ALTER TABLE z3950servers ADD COLUMN recordtype VARCHAR(45) NOT NULL DEFAULT 'biblio' AFTER description;});
     print "Upgrade to $DBversion done (Bug 10096 - Add a Z39.50 interface for authority searching)\n";
+}
+
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('AdvancedSearchLanguages','','','ISO 639-2 codes of languages you wish to see appear as an Advanced search option.  Example: eng|fra|ita','Textarea')");
+    print "Upgrade to $DBversion done (Bug 10986: system preferences to limit languages in Advanced search )\n";
     SetVersion ($DBversion);
 }
 

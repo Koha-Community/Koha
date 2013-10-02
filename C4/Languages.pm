@@ -43,9 +43,10 @@ BEGIN {
     @EXPORT = qw(
         &getFrameworkLanguages
         &getTranslatedLanguages
+        &getLanguages
         &getAllLanguages
     );
-    @EXPORT_OK = qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages get_bidi regex_lang_subtags language_get_description accept_language);
+    @EXPORT_OK = qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages getLanguages get_bidi regex_lang_subtags language_get_description accept_language);
     $DEBUG = 0;
 }
 
@@ -178,14 +179,31 @@ Returns a reference to an array of hashes:
 =cut
 
 sub getAllLanguages {
+    return getLanguages(shift);
+}
+
+=head2 getLanguages
+
+Returns a reference to an array of hashes.
+Extracted from getAllLanguages to limit effect on the code base.
+This new function (name) will allow for more arguments to customize the values returned.
+
+- If no parameter is passed to the function, it returns english languages names
+- If a $lang parameter conforming to RFC4646 syntax is passed, the function returns languages names translated in $lang
+  If a language name is not translated in $lang in database, the function returns english language name
+- If $isFiltered is set to true, only the detail of the languages selected in system preferences AdvanceSearchLanguages is returned.
+
+=cut
+
+sub getLanguages {
     my $lang = shift;
-# if no parameter is passed to the function, it returns english languages names
-# if a $lang parameter conforming to RFC4646 syntax is passed, the function returns languages names translated in $lang
-# if a language name is not translated in $lang in database, the function returns english language name
+    my $isFiltered = shift;
+
     my @languages_loop;
     my $dbh=C4::Context->dbh;
     my $default_language = 'en';
     my $current_language = $default_language;
+    my $language_list=C4::Context->preference("AdvancedSearchLanguages") if $isFiltered;
     if ($lang) {
         $current_language = regex_lang_subtags($lang)->{'language'};
     }
@@ -226,7 +244,9 @@ sub getAllLanguages {
                 $language_subtag_registry->{language_description} = $language_descriptions->{description};
             }
         }
-        push @languages_loop, $language_subtag_registry;
+        if ( !$language_list || index (  $language_list, $language_subtag_registry->{ iso639_2_code } ) >= 0) {
+            push @languages_loop, $language_subtag_registry;
+        }
     }
     return \@languages_loop;
 }
