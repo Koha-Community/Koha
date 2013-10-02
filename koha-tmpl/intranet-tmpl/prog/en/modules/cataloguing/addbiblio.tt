@@ -87,11 +87,11 @@ function PopupZ3950() {
     } 
 }
 
-function PopupMARCFieldDoc(field, blocknumber) {
+function PopupMARCFieldDoc(field) {
     [% IF ( marcflavour == 'MARC21' ) %]
         _MARC21FieldDoc(field);
     [% ELSIF ( marcflavour == 'UNIMARC' ) %]
-        _UNIMARCFieldDoc(field, blocknumber);
+        _UNIMARCFieldDoc(field);
     [% END %]
 }
 
@@ -105,21 +105,24 @@ function _MARC21FieldDoc(field) {
     }
 }
 
-function _UNIMARCFieldDoc(field, blocknumber) {
+function _UNIMARCFieldDoc(field) {
     /* http://archive.ifla.org/VI/3/p1996-1/ is an outdated version of UNIMARC, but
        seems to be the only version available that can be linked to per tag.  More recent
        versions of the UNIMARC standard are available on the IFLA website only as
        PDFs!
     */
-    if(field == 0) {
-        window.open("http://archive.ifla.org/VI/3/p1996-1/uni.htm");
-    } else if (field < 100) {
-        window.open("http://archive.ifla.org/VI/3/p1996-1/uni"+blocknumber+".htm#b" + ("000"+field).slice(-3));
-    } else if (field < 900) {
-        window.open("http://archive.ifla.org/VI/3/p1996-1/uni"+blocknumber+".htm#" + ("000"+field).slice(-3));
+    var url;
+    if (field == 0) {
+        url = "http://archive.ifla.org/VI/3/p1996-1/uni.htm";
     } else {
-        window.open("http://archive.ifla.org/VI/3/p1996-1/uni9.htm");
+        var first = field.substring(0,1);
+        url = "http://archive.ifla.org/VI/3/p1996-1/uni" + first + ".htm#";
+        if (first == 0) url = url + "b";
+        url = first == 9
+              ? "http://archive.ifla.org/VI/3/p1996-1/uni9.htm"
+              : url + field;
     }
+    window.open(url);
 }
 
 /*
@@ -443,7 +446,7 @@ function Changefwk(FwkList) {
                 <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;">[% innerloo.tag %]</a>
             [% ELSE %]
                 <span class="tagnum" title="[% innerloo.tag_lib %]">[% innerloo.tag %]
-                [% IF marcflavour != 'NORMARC' %]<a href="#" class="marcdocs" onclick="PopupMARCFieldDoc('[% innerloo.tag %]', [% BIG_LOO.number %]); return false;">&nbsp;?</a>[% END %]
+                [% IF marcflavour != 'NORMARC' %]<a href="#" class="marcdocs" onclick="PopupMARCFieldDoc('[% innerloo.tag %]'); return false;">&nbsp;?</a>[% END %]
                 </span>
             [% END %]
                 [% IF ( innerloo.fixedfield ) %]
