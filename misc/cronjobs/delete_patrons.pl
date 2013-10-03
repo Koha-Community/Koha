@@ -106,11 +106,14 @@ delete_patrons - This script deletes patrons
 
 =head1 SYNOPSIS
 
-delete_patrons.pl [-h -v -c] --not_borrowed_since=2013-07-21 --expired_before=2013-07-21 --category_code=CAT --library=CPL
+delete_patrons.pl [-h|--help] [-v|--verbose] [-c|--confirm] [--not_borrowed_since=DATE] [--expired_before=DATE] [--category_code=CAT] [--library=LIBRARY]
 
-dates can be generated with `date -d '-3 month' "+%Y-%m-%d"`
+Dates should be in ISO format, e.g., 2013-07-19, and can be generated
+with `date -d '-3 month' "+%Y-%m-%d"`.
 
-Options are cumulatives.
+The options to select the patron records to delete are cumulative.  For
+example, supplying both --expired_before and --library specifies that
+that patron records must meet both conditions to be selected for deletion.
 
 =head1 OPTIONS
 
@@ -138,7 +141,9 @@ Delete patrons in this library.
 
 =item B<-c|--confirm>
 
-Without this flag set, this script will do nothing.
+This flag must be provided in order for the script to actually
+delete patron records.  If it is not supplied, the script will
+only report on the patron records it would have deleted.
 
 =item B<-v|--verbose>
 
