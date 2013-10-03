@@ -688,7 +688,10 @@ sub BatchCommitItems {
 
     my $dbh = C4::Context->dbh;
 
-    my ( $num_items_added, $num_items_errored, $num_items_replaced ) = 0;
+    my $num_items_added = 0;
+    my $num_items_errored = 0;
+    my $num_items_replaced = 0;
+
     my $sth = $dbh->prepare( "
         SELECT import_items_id, import_items.marcxml, encoding
         FROM import_items
