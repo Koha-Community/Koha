@@ -1845,6 +1845,8 @@ CGI(3)
 
 C4::Output(3)
 
+Crypt::Eksblowfish::Bcrypt(3)
+
 Digest::MD5(3)
 
 =cut
