@@ -7155,7 +7155,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.13.00.023";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("ALTER TABLE borrowers CHANGE password password VARCHAR(60);");
     print "Upgrade to $DBversion done (Bug 9611 upgrading password storage system)\n";
