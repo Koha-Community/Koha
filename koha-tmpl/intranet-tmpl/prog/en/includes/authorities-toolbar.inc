@@ -54,7 +54,7 @@
         </ul>
     </div>
     <div class="btn-group">
-        <a class="btn btn-small" id="z3950submit" href="#"><i class="icon-search"></i> Z39.50 search</a>
+        <a class="btn btn-small" id="z3950submit" href="#"><i class="icon-search"></i> New from Z39.50</a>
     </div>
 [% END %]
 </div>
