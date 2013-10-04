@@ -181,7 +181,7 @@ sub checkin {
     $circ->item($item = new ILS::Item $item_id);
 
     if ($item) {
-        $circ->do_checkin($current_loc);
+        $circ->do_checkin($current_loc, $return_date);
     } else {
         $circ->alert(1);
         $circ->alert_type(99);

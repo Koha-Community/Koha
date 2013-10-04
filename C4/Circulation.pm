@@ -1780,7 +1780,8 @@ sub AddReturn {
     }
 
     # case of a return of document (deal with issues and holdingbranch)
-    my $today = DateTime->now( time_zone => C4::Context->tz() );
+    my $today = dt_from_string( $return_date, 'iso' );
+
     if ($doreturn) {
         my $datedue = $issue->{date_due};
         $borrower or warn "AddReturn without current borrower";

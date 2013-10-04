@@ -16,6 +16,7 @@ use C4::Circulation;
 use C4::Reserves qw( ModReserveAffect );
 use C4::Items qw( ModItemTransfer );
 use C4::Debug;
+use Koha::DateUtils;
 
 use parent qw(ILS::Transaction);
 
@@ -47,12 +48,26 @@ sub new {
 sub do_checkin {
     my $self = shift;
     my $branch = shift;
+    my $return_date = shift;
     if (!$branch) {
         $branch = 'SIP2';
     }
     my $barcode = $self->{item}->id;
+
+    $return_date =   substr( $return_date, 0, 4 )
+                   . '-'
+                   . substr( $return_date, 4, 2 )
+                   . '-'
+                   . substr( $return_date, 6, 2 )
+                   . q{ }
+                   . substr( $return_date, 12, 2 )
+                   . ':'
+                   . substr( $return_date, 14, 2 )
+                   . ':'
+                   . substr( $return_date, 16, 2 );
+
     $debug and warn "do_checkin() calling AddReturn($barcode, $branch)";
-    my ($return, $messages, $iteminformation, $borrower) = AddReturn($barcode, $branch);
+    my ($return, $messages, $iteminformation, $borrower) = AddReturn($barcode, $branch, undef, undef, $return_date);
     $self->alert(!$return);
     # ignoring messages: NotIssued, IsPermanent, WasLost, WasTransfered
 
