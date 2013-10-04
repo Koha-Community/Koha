@@ -358,19 +358,22 @@ if ( $op eq "export" ) {
                 }
 
                 if ($export_remove_fields) {
-                    my @fields = split " ", $export_remove_fields;
-                    foreach (@fields) {
-                        /^(\d*)(\w)?$/;
-                        my $field    = $1;
-                        my $subfield = $2;
+                    for my $f ( split / /, $export_remove_fields ) {
+                        if ( $f =~ m/^(\d{3})(.)?$/ ) {
+                            my ( $field, $subfield ) = ( $1, $2 );
 
-                        # skip if this record doesn't have this field
-                        next if not defined $record->field($field);
-                        if ($subfield) {
-                            $record->field($field)->delete_subfields($subfield);
-                        }
-                        else {
-                            $record->delete_field( $record->field($field) );
+                            # skip if this record doesn't have this field
+                            if ( defined $record->field($field) ) {
+                                if ( defined $subfield ) {
+                                    my @tags = $record->field($field);
+                                    foreach my $t (@tags) {
+                                        $t->delete_subfields($subfield);
+                                    }
+                                }
+                                else {
+                                    $record->delete_fields($field);
+                                }
+                            }
                         }
                     }
                 }
