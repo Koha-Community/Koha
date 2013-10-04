@@ -32,6 +32,9 @@ packages. Installing from packages is not the same as installing
 from source. These are not your recommended instructions for
 production servers.
 
+For instructions on how to install Koha on Ubuntu from packages, please
+consult http://wiki.koha-community.org/wiki/Koha_on_ubuntu_-_packages
+
 To help assist with the development and improvement of Koha,
 continue with these instructions and read more about version
 control using git! See USEFUL REFERENCE LINKS below.
@@ -45,7 +48,7 @@ when installing from source.
 NOTATION
 =================================================================
 
-Commands are indented by 4 spaces, and should be relately obvious
+Commands are indented by 4 spaces, and should be relatively obvious
 as commands. Commands may have blank lines between them to
 indicate that you should not just copy and paste the entire block
 of commands.
@@ -77,8 +80,8 @@ scope of this document. Consult your system administrator,
 network administrator, or IT Department for assistance as needed.
 
 These instructions assume you created a user account with your
-login in credentials and not one called koha. This is to prevent
-the system user koha from having more permissions than it should.
+login credentials and not one called 'koha'. This is to prevent
+the system user 'koha' from having more permissions than it should.
 
 
 ADD A KOHA COMMUNITY REPOSITORY
@@ -141,14 +144,14 @@ Downloading Source Via Tarball
     tar xvf koha-latest.tar.gz
     ls
 
-NOTE: You need to cd into the koha directory, but since the
+NOTE: You need to cd into the Koha directory, but since the
 version changes, you'll know by the ls command what it is.
 
 IF YOU ARE DOING A DEV INSTALLATION:
 Downloading Source Via Git
 =================================================================
 
-Please see the following wiki page, following the instructions up
+Please see the following wiki page and follow the instructions up
 to and including "git checkout -b mywork origin".
 http://wiki.koha-community.org/wiki/Version_Control_Using_Git
 
@@ -188,7 +191,7 @@ https://help.ubuntu.com/community/MysqlPasswordReset
 
     CREATE DATABASE kohadata;
 
-The koha database has now been created with the name kohadata.
+The Koha database has now been created with the name kohadata.
 
 Create User and Grant Permissions
 =================================================================
@@ -201,8 +204,8 @@ CHOICE FOR THE {PASSWORD}'S IN THE FOLLOWING COMMANDS:
     FLUSH PRIVILEGES;
     QUIT
 
-The koha administrative user has now been created with the name
-koha and the password of your choosing.
+The Koha administrative user has now been created with the name
+'koha' and the password of your choosing.
 
 
 CONFIGURE KOHA
@@ -212,11 +215,11 @@ User/Group Environment Variables
 =================================================================
 
 IF YOU ARE DOING A STANDARD INSTALLATION, then create a
-separate koha system user:
+separate 'koha' system user:
     sudo adduser koha
 
 There is no need to set the following environment variables,
-because koha is the default account to use.
+because 'koha' is the default account to use.
 
 IF YOU ARE DOING A DEV INSTALLATION, then create some
 environment variables for the process to pick up and use later:
@@ -307,7 +310,7 @@ PRE-WEB INSTALL SETUP
 Ubuntu MySQL Security Tweak
 =================================================================
 
-There is a security risk in Ubuntu's MySQL default set up. Type
+There is a security risk in Ubuntu's MySQL default setup. Type
 the following commands:
     mysql -u root -p
 
@@ -421,8 +424,8 @@ the following command:
 Enable Modules and Site
 =================================================================
 
-Now enable the apache modules this config needs, enable koha's
-configuration, and restart apache.
+Now enable the Apache modules this config needs, enable Koha's
+virtual host configuration, and restart Apache.
     sudo a2enmod rewrite
     sudo a2enmod deflate
     sudo a2ensite koha
@@ -432,7 +435,7 @@ configuration, and restart apache.
 SETUP ZEBRA
 =================================================================
 
-The zebra process send responses to search requests sent by Koha
+The Zebra process send responses to search requests sent by Koha
 or Z39.50/SRU/SRW clients.
 
 The user you run Zebra as will be the only user with write
@@ -508,7 +511,7 @@ fields). Arrows also work.
     lynx http://127.0.1.1:8080/
 
 
-SETUP YOUR LIBRARY IN KOHA
+SET UP YOUR LIBRARY IN KOHA
 =================================================================
 
 After the web install, you should be redirected to:
@@ -521,7 +524,7 @@ Follow these steps:
   under the Basic Parameters heading.
 - Click New Library and enter your information into the form.
 - Click Submit.
-Your Library is now setup in Koha.
+Your library is now set up in Koha.
 
 Take the time to read the documentation to do other necessary
 setup tasks such as creating a patron, and importing or entering
