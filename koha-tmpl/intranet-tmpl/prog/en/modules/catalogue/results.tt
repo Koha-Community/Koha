@@ -19,9 +19,9 @@ function verify_images() {
             w = this.width;
             h = this.height;
             if ((w == 1) || (h == 1)) {
-                this.src = 'http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+                this.src = 'https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
             } else if ((this.complete != null) && (!this.complete)) {
-                this.src = 'http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+                this.src = 'https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
             }
         }
     });
@@ -447,7 +447,7 @@ var holdForPatron = function () {
                                     [% END %]
                                     [% IF ( AmazonCoverImages ) %]
                                         <a class="p1" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
-                                            <img src="[% IF ( SEARCH_RESULT.normalized_isbn ) %]http://images.amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn %].01.TZZZZZZZ.jpg[% ELSE %]http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif[% END %]" alt="" class="thumbnail" />
+                                            <img src="[% IF ( SEARCH_RESULT.normalized_isbn ) %]https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn %].01.TZZZZZZZ.jpg[% ELSE %]https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif[% END %]" alt="" class="thumbnail" />
                                         </a>
                                     [% END %]
                                 </td>
