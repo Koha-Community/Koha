@@ -8142,6 +8142,13 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do("ALTER TABLE aqorders CHANGE notes order_internalnote MEDIUMTEXT;");
     $dbh->do("ALTER TABLE aqorders ADD COLUMN order_vendornote MEDIUMTEXT AFTER order_internalnote;");
     print "Upgrade to $DBversion done (Bug 9416 - In each order, add a new note made for the vendor)\n";
+   SetVersion ($DBversion);
+}
+
+$DBversion ="3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('NoLoginInstructions', '<h5>Don''t have a password yet?</h5> <p> If you don''t have a password yet, stop by the circulation desk the next time you''re in the library. We''ll happily set one up for you.</p> <h5>Don''t have a library card?</h5> <p> If you don''t have a library card, stop by your local library to sign up.  </p>', '60|10', 'Instructions when a person is not connected', 'Textarea')");
+    print "Upgrade to $DBversion done (Bug 10951: Add NoLoginInstructions pref)\n";
     SetVersion($DBversion);
 }
 
