@@ -16,7 +16,7 @@
         var form = document.f_pop;
         h4_result = document.getElementById("h4_result");
         tr_result = document.getElementById("tr_result");
-        objXmlControlField = new xmlControlField('[% tagfield %]', 'f_pop', document.getElementById('material_type'), document.getElementById('table_material_types'), 'h4_result', 'tr_result', '', '[% themelang %]');
+        objXmlControlField = new xmlControlField('[% tagfield %]', 'f_pop', document.getElementById('material_type'), document.getElementById('table_material_types'), 'h4_result', 'tr_result', '', '[% themelang %]', '[% marcflavour %]');
         objXmlControlField.loadXmlValues();
         renderResult(tr_result, (form.result.value != "")?form.result.value:returnValueParam("result"));
         [% END %]
