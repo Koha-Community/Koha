@@ -522,7 +522,9 @@
                         [% IF (SeparateHoldings) %]
                             <li><a href="#otherholdings">Other holdings ( [% otheritemloop.size || 0 %] )</a></li>
                         [% END %]
-                        <li id="tab_descriptions"> <a href="#descriptions">Title notes</a></li>
+                        [% IF ( MARCNOTES || notes || ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY )) %]
+                            <li id="tab_descriptions"> <a href="#descriptions">Title notes</a></li>
+                        [% END %]
                         [% IF ( SYNDETICS_TOC ) %]
                             <li id="tab_toc"> <a href="#toc">TOC</a></li>
                         [% END %]
@@ -661,28 +663,30 @@
                         </div>
                     [% END # / SeparateHoldings %]
 
-                    <div id="descriptions">
-                        <div class="content_set">
+                    [% IF ( MARCNOTES || notes || ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY )) %]
+                        <div id="descriptions">
+                            <div class="content_set">
 
-                        [% IF ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY ) %]
-                            <h4>Enhanced descriptions from Syndetics:</h4>
-                            <p>[% SYNDETICS_SUMMARY %]</p>
-                        [% END %]
-
-                        [% IF ( MARCNOTES ) %]
-                            <div id="marcnotes">
-                            [% FOREACH MARCNOTE IN MARCNOTES %]
-                                <p>[% MARCNOTE.marcnote FILTER html_line_break %]</p>
+                            [% IF ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY ) %]
+                                <h4>Enhanced descriptions from Syndetics:</h4>
+                                <p>[% SYNDETICS_SUMMARY %]</p>
                             [% END %]
+
+                            [% IF ( MARCNOTES ) %]
+                                <div id="marcnotes">
+                                [% FOREACH MARCNOTE IN MARCNOTES %]
+                                    <p>[% MARCNOTE.marcnote FILTER html_line_break %]</p>
+                                [% END %]
+                                </div>
+                            [% ELSE %]
+                                [% IF ( notes ) %]
+                                    <p>[% notes %]</p>
+                                [% END %]
+                            [% END %]
+
                             </div>
-                        [% ELSE %]
-                            [% IF ( notes ) %]
-                                <p>[% notes %]</p>
-                            [% END %]
-                        [% END %]
-
-                        </div>
-                    </div> <!-- / #descriptions -->
+                        </div> <!-- / #descriptions -->
+                    [% END # / IF MARCNOTES || notes %]
 
                     [% IF ( SyndeticsEnabled ) %]
                         [% IF ( SyndeticsTOC && SYNDETICS_TOC ) %]
