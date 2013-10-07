@@ -25,15 +25,23 @@
                                 <p>
                                     [% IF ( expanded_options ) %]
                                         [% IF ( search_box.boolean ) %]
-                                        <select class="span1" name="op">
-                                            <option value="and" selected="selected">and</option>
-                                            <option value="or">or</option>
-                                            <option value="not">not</option>
-                                        </select>
+                                            <select name="op">
+                                                <option value="and" selected="selected">and</option>
+                                                <option value="or">or</option>
+                                                <option value="not">not</option>
+                                            </select>
                                         [% END %]
+                                    [% ELSE %]
+                                        <label for="search-field_[% loop.index %]">
+                                            [% IF loop.index == 0 %]
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            [% ELSE %]
+                                                and
+                                            [% END %]
+                                        </label>
                                     [% END %]
                                     [% IF ( expanded_options ) %][% left_content %][% END %]
-                                    <select name="idx">
+                                    <select name="idx" id="search-field_[% loop.index %]">
                                         <option value="kw">Keyword</option>
                                         <option value="su,wrdl">Subject</option>
                                         [% IF ( expanded_options ) %]
@@ -142,7 +150,7 @@
                             </div> <!-- / #advsearch-[% advsearchloo.advanced_search_type %] -->
                         [% END # / FOREACH advancedsearchesloop %]
                     </div> <!-- / #advsearches -->
-                </div>
+                </div> <!-- / .span12 -->
 
                 <div class="row-fluid">
                     <div class="span3">
@@ -329,9 +337,6 @@
                         </div> <!-- / .span4 -->
                     </div> <!-- / .row-fluid -->
                 [% END # / IF expanded_options %]
-
-                    </div> <!-- /BOOLEAN SEARCH OPTIONS -->
-                </div> <!-- / .span12 -->
             </div> <!-- / .row-fluid -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
@@ -344,11 +349,9 @@
                         [% PROCESS searchbuttons %]
                         <!-- /SEARCH BUTTONS -->
                     </div>
-                </form>
-            </div> <!-- / .span12 -->
+                </div> <!-- / .span12 -->
             </div> <!-- / .row-fluid -->
         </div> <!-- / .container-fluid -->
-
 </form>
 
 [% INCLUDE 'opac-bottom.inc' %]
