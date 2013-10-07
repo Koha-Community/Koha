@@ -168,7 +168,7 @@ function changeH4Result(form, h4_result, tr_result, pos, value)
 (function()
 {
 
-    xmlControlField = function(tagfield, form_id, select, table, h4_result, tr_result, idMaterial, themelang)
+    xmlControlField = function(tagfield, form_id, select, table, h4_result, tr_result, idMaterial, themelang, marcflavour)
     {
         this.tagfield = tagfield;
         this.idMaterial = idMaterial;
@@ -179,6 +179,7 @@ function changeH4Result(form, h4_result, tr_result, pos, value)
         this.h4_result = h4_result;
         this.tr_result = tr_result;
         this.themelang = themelang;
+        this.marcflavour = marcflavour.toLowerCase();
     };//xmlControlField
 
 
@@ -205,7 +206,7 @@ function changeH4Result(form, h4_result, tr_result, pos, value)
         {
             this.xmlDoc = $.ajax({
                 type: "GET",
-                url: this.themelang + "/data/marc21_field_" + this.tagfield + ".xml",
+                url: this.themelang + "/data/" + this.marcflavour + "_field_" + this.tagfield + ".xml",
                 dataType: "xml",
                 async: false
             }).responseXML;
