@@ -1106,89 +1106,120 @@
 
 [% BLOCK items_table %]
     <table class="holdingst table table-bordered table-striped">
-        <thead><tr>
-            [% IF ( item_level_itypes ) %]<th id="item_itemtype" class="itype">Item type</th>[% END %]
-            <th id="item_location">Location</th>
-            [% IF ( itemdata_ccode ) %]<th id="item_ccode" class="collection">Collection</th>[% END %]
-            <th id="item_callnumber" class="call_no">Call number</th>
-            [% IF ( itemdata_enumchron ) %]<th id="item_enumchron" class="vol_info">Vol info</th>[% END %]
-            [% IF ( itemdata_uri ) %]<th id="item_url" class="url">url</th>[% END %]
-            [% IF ( itemdata_copynumber ) %]<th id="item_copy" class="copynumber">Copy</th>[% END %]
-            <th id="item_status" class="status">Status</th>
-            [% IF ( itemdata_itemnotes ) %]<th id="item_notes" class="notes">Notes</th>[% END %]
-            <th id="item_datedue" class="date_due">Date due</th>
-            [% IF ( OPACShowBarcode ) %]<th id="item_barcode" class="barcode">Barcode</th>[% END %]
-        [% IF holds_count.defined %]
-            <th>Item holds</th>
-        [% ELSIF show_priority %]
-            <th>Item hold queue priority</th>
-        [% END %]
-        [% IF ( ShowCourseReservesHeader ) %]<th id="item_coursereserves">Course reserves</th>[% END %]
-        </tr></thead>
-        <tbody>[% FOREACH ITEM_RESULT IN items %]
-      [% IF ITEM_RESULT.this_branch %]<tr class="highlight-row-detail">[% ELSE %]<tr>[% END %]
-      [% IF ( item_level_itypes ) %]<td class="itype">[% UNLESS ( noItemTypeImages ) %][% IF ( ITEM_RESULT.imageurl ) %]<img src="[% ITEM_RESULT.imageurl %]" title="[% ITEM_RESULT.description %]" alt="[% ITEM_RESULT.description %]" />[% END %][% END %] [% ITEM_RESULT.description %]</td>[% END %]
-             <td class="location">
-    [% UNLESS ( singleBranchMode ) %]
-        <div class="[% ITEM_RESULT.branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]">
-        [% IF ( ITEM_RESULT.branchurl ) %]
-            <a href="[% ITEM_RESULT.branchurl %]" title="">[% ITEM_RESULT.branchname %]</a>
-        [% ELSE %]
-            <span title="">[% ITEM_RESULT.branchname %]</span>
-        [% END %]
-            <div class="branch-info-tooltip">[% ITEM_RESULT.branch_opac_info %]</div>
-        </div>
-    [% END %]
-    <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
-    </td>
-            [% IF ( itemdata_ccode ) %]<td class="collection">[% ITEM_RESULT.ccode %]</td>[% END %]
-        <td class="call_no">[% IF ( ITEM_RESULT.itemcallnumber ) %] [% ITEM_RESULT.itemcallnumber %][% IF ( OPACShelfBrowser ) %] (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber %]#[% tab %]">Browse shelf</a>)[% END %][% END %]</td>
-            [% IF ( itemdata_enumchron ) %]<td class="vol_info">[% ITEM_RESULT.enumchron %]</td>[% END %]
-            [% IF ( itemdata_uri ) %]<td class="url">
-              [% IF ITEM_RESULT.uri %]
-                [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-                  <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | url %]&biblionumber=[% biblionumber |url %]&itemnumber=[% ITEM_RESULT.itemnumber | url %]"> Link to resource </a>
-                [% ELSE %]
-                  <a href="[% ITEM_RESULT.uri %]">[% ITEM_RESULT.uri %]</a>
-                [% END %]
-              [% END %]
-              </td>
-            [% END %]
-               [% IF ( itemdata_copynumber ) %]<td class="copynumber">[% ITEM_RESULT.copynumber %]</td>[% END %]
-              <td class="status">[% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
-             [% IF ( itemdata_itemnotes ) %]<td class="notes">[% ITEM_RESULT.itemnotes %]</td>[% END %]
-        <td class="date_due"><span title="[% ITEM_RESULT.datedue %]">[% ITEM_RESULT.datedue | $KohaDates %]</span></td>
-        [% IF ( OPACShowBarcode ) %]<td class="barcode">[% ITEM_RESULT.barcode %]</td>[% END %]
-        [% IF holds_count.defined || show_priority %]
-        <td class="holds_count">
-            [% IF holds_count.defined %] [% ITEM_RESULT.holds_count %] [% END %]
-            [% IF ITEM_RESULT.priority %]
+        <thead>
+            <tr>
+                [% IF ( item_level_itypes ) %]<th id="item_itemtype" class="itype">Item type</th>[% END %]
+                <th id="item_location">Location</th>
+                [% IF ( itemdata_ccode ) %]<th id="item_ccode" class="collection">Collection</th>[% END %]
+                <th id="item_callnumber" class="call_no">Call number</th>
+                [% IF ( itemdata_enumchron ) %]<th id="item_enumchron" class="vol_info">Vol info</th>[% END %]
+                [% IF ( itemdata_uri ) %]<th id="item_url" class="url">url</th>[% END %]
+                [% IF ( itemdata_copynumber ) %]<th id="item_copy" class="copynumber">Copy</th>[% END %]
+                <th id="item_status" class="status">Status</th>
+                [% IF ( itemdata_itemnotes ) %]<th id="item_notes" class="notes">Notes</th>[% END %]
+                <th id="item_datedue" class="date_due">Date due</th>
+                [% IF ( OPACShowBarcode ) %]<th id="item_barcode" class="barcode">Barcode</th>[% END %]
                 [% IF holds_count.defined %]
-                (priority [% ITEM_RESULT.priority %])
+                    <th>Item holds</th>
+                [% ELSIF show_priority %]
+                    <th>Item hold queue priority</th>
+                [% END %]
+                [% IF ( ShowCourseReservesHeader ) %]<th id="item_coursereserves">Course reserves</th>[% END %]
+            </tr>
+        </thead>
+        <tbody>
+            [% FOREACH ITEM_RESULT IN items %]
+                [% IF ITEM_RESULT.this_branch %]
+                  <tr class="highlight-row-detail" vocab="http://schema.org/" typeof="Offer">
                 [% ELSE %]
-                [% ITEM_RESULT.priority %]
+                  <tr vocab="http://schema.org/" typeof="Offer">
                 [% END %]
-            [% END %]
-                </td>
-        [% END %]
-        [% IF ShowCourseReservesHeader %]
-            <td>
-                [% IF ITEM_RESULT.course_reserves %]
-                    [% FOREACH r IN ITEM_RESULT.course_reserves %]
-                        <p>
-                            <a href="opac-course-details.pl?course_id=[% r.course.course_id %]">
-                                [% r.course.course_name %]
-                                <!--[% IF r.course.course_number %] [% r.course.course_number %] [% END %]-->
-                                [% IF r.course.section %] [% r.course.section %] [% END %]
-                                [% IF r.course.term %] [% AuthorisedValues.GetByCode( 'TERM', r.course.term ) %] [% END %]
-                            </a>
-                        </p>
+                    [% IF ( item_level_itypes ) %]
+                        <td class="itype">
+                            [% UNLESS ( noItemTypeImages ) %]
+                                [% IF ( ITEM_RESULT.imageurl ) %]
+                                    <img src="[% ITEM_RESULT.imageurl %]" title="[% ITEM_RESULT.description %]" alt="[% ITEM_RESULT.description %]" />
+                                [% END %]
+                            [% END %]
+                            [% ITEM_RESULT.description %]
+                        </td>
                     [% END %]
-                [% END %]
-            </td>
-        [% END %]
-        </tr>
-        [% END %]</tbody>
+                    <td class="location" property="seller">
+                    <link property="itemOffered" href="#record" />
+                    <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
+                        [% UNLESS ( singleBranchMode ) %]
+                            <div class="[% ITEM_RESULT.branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]">
+                            [% IF ( ITEM_RESULT.branchurl ) %]
+                                <a href="[% ITEM_RESULT.branchurl %]" title="">[% ITEM_RESULT.branchname %]</a>
+                            [% ELSE %]
+                                <span title="">[% ITEM_RESULT.branchname %]</span>
+                            [% END %]
+                                <div class="branch-info-tooltip">[% ITEM_RESULT.branch_opac_info %]</div>
+                            </div>
+                        [% END %]
+                        <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
+                    </td>
+                    [% IF ( itemdata_ccode ) %]
+                        <td class="collection">[% ITEM_RESULT.ccode %]</td>
+                    [% END %]
+                    <td class="call_no" property="sku">
+                        [% IF ( ITEM_RESULT.itemcallnumber ) %]
+                            [% ITEM_RESULT.itemcallnumber %]
+                            [% IF ( OPACShelfBrowser ) %]
+                                (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber %]#[% tab %]">Browse shelf</a>)
+                            [% END %]
+                        [% END %]
+                    </td>
+                    [% IF ( itemdata_enumchron ) %]
+                        <td class="vol_info">[% ITEM_RESULT.enumchron %]</td>
+                    [% END %]
+                    [% IF ( itemdata_uri ) %]
+                        <td class="url">
+                            [% IF ITEM_RESULT.uri %]
+                                [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
+                                    <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | url %]&amp;biblionumber=[% biblionumber |url %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url"> Link to resource </a>
+                                [% ELSE %]
+                                    <a href="[% ITEM_RESULT.uri %]" property="url">[% ITEM_RESULT.uri %]</a>
+                                [% END %]
+                            [% END %]
+                        </td>
+                    [% END %]
+                    [% IF ( itemdata_copynumber ) %]<td class="copynumber">[% ITEM_RESULT.copynumber %]</td>[% END %]
+                    <td class="status">[% INCLUDE 'item-status-schema-org.inc' item = ITEM_RESULT %][% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
+                    [% IF ( itemdata_itemnotes ) %]<td class="notes" property="description">[% ITEM_RESULT.itemnotes %]</td>[% END %]
+                    <td class="date_due"><span title="[% ITEM_RESULT.datedue %]">[% ITEM_RESULT.datedue | $KohaDates %]</span></td>
+                    [% IF ( OPACShowBarcode ) %]<td class="barcode" property="serialNumber">[% ITEM_RESULT.barcode %]</td>[% END %]
+                    [% IF holds_count.defined || show_priority %]
+                        <td class="holds_count">
+                            [% IF holds_count.defined %] [% ITEM_RESULT.holds_count %] [% END %]
+                            [% IF ITEM_RESULT.priority %]
+                                [% IF holds_count.defined %]
+                                    (priority [% ITEM_RESULT.priority %])
+                                [% ELSE %]
+                                    [% ITEM_RESULT.priority %]
+                                [% END %]
+                            [% END %]
+                        </td>
+                    [% END %]
+                    [% IF ShowCourseReservesHeader %]
+                        <td>
+                            [% IF ITEM_RESULT.course_reserves %]
+                                [% FOREACH r IN ITEM_RESULT.course_reserves %]
+                                    <p>
+                                        <a href="opac-course-details.pl?course_id=[% r.course.course_id %]">
+                                        [% r.course.course_name %]
+                                        <!--[% IF r.course.course_number %] [% r.course.course_number %] [% END %]-->
+                                        [% IF r.course.section %] [% r.course.section %] [% END %]
+                                        [% IF r.course.term %] [% AuthorisedValues.GetByCode( 'TERM', r.course.term ) %] [% END %]
+                                        </a>
+                                    </p>
+                                [% END %]
+                            [% END %]
+                        </td>
+                    [% END  # /IF ShowCourseReservesHeader %]
+                </tr>
+            [% END %]
+        </tbody>
     </table>
 [% END %][%# end of items_table block %]
 
