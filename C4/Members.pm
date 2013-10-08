@@ -97,6 +97,7 @@ BEGIN {
         &GetBorrowersWithIssuesHistoryOlderThan
 
         &GetExpiryDate
+        &GetUpcomingMembershipExpires
 
         &AddMessage
         &DeleteMessage
@@ -1482,6 +1483,28 @@ sub GetExpiryDate {
     }else{
         return $enrolments->{enrolmentperioddate};
     }
+}
+
+=head2 GetUpcomingMembershipExpires
+
+  my $upcoming_mem_expires = GetUpcomingMembershipExpires();
+
+=cut
+
+sub GetUpcomingMembershipExpires {
+    my $dbh = C4::Context->dbh;
+    my $days = C4::Context->preference("MembershipExpiryDaysNotice");
+    my $query = "
+        SELECT borrowers.*, categories.description,
+        branches.branchname, branches.branchemail FROM borrowers
+        LEFT JOIN branches on borrowers.branchcode = branches.branchcode
+        LEFT JOIN categories on borrowers.categorycode = categories.categorycode
+        WHERE dateexpiry = DATE_ADD(CURDATE(),INTERVAL $days DAY);
+    ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute;
+    my $results = $sth->fetchall_arrayref({});
+    return $results;
 }
 
 =head2 GetborCatFromCatType
