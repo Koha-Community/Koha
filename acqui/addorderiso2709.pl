@@ -329,9 +329,9 @@ sub import_batches_list {
 
     my @list = ();
     foreach my $batch (@$batches) {
-        if ($batch->{'import_status'} eq "staged") {
+        if ( $batch->{'import_status'} =~ /^staged$|^reverted$/ ) {
             # check if there is at least 1 line still staged
-            my $stagedList=GetImportRecordsRange($batch->{'import_batch_id'}, undef, undef, 'staged');
+            my $stagedList=GetImportRecordsRange($batch->{'import_batch_id'}, undef, undef, $batch->{import_status});
             if (scalar @$stagedList) {
                 push @list, {
                         import_batch_id => $batch->{'import_batch_id'},
@@ -356,7 +356,8 @@ sub import_batches_list {
 sub import_biblios_list {
     my ($template, $import_batch_id) = @_;
     my $batch = GetImportBatch($import_batch_id,'staged');
-    my $biblios = GetImportRecordsRange($import_batch_id,'','','staged');
+    return () unless $batch and $batch->{import_status} =~ /^staged$|^reverted$/;
+    my $biblios = GetImportRecordsRange($import_batch_id,'','',$batch->{import_status});
     my @list = ();
 
     foreach my $biblio (@$biblios) {
