@@ -63,6 +63,13 @@ Administration:
                   yes: Require
                   no: "Don't require"
             - staff to log in from a computer in the IP address range <a href="/cgi-bin/koha/admin/branches.pl">specified by their library</a> (if any).
+        -
+            - pref: SessionRestrictionByIP
+              default: 0
+              choices:
+                  yes: Enable
+                  no: "Disable"
+            - Check for Change in Remote IP address for Session Security. Disable when remote ip address changes frequently.
         # PostgreSQL is supported by CGI::Session but not by Koha.
         -
             - Store login session information

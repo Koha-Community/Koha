@@ -1161,6 +1161,7 @@ sub checkauth {
         INPUTS                                => \@inputs,
         casAuthentication                     => C4::Context->preference("casAuthentication"),
         shibbolethAuthentication              => $shib,
+        SessionRestrictionByIP                => C4::Context->preference("SessionRestrictionByIP"),
         suggestion                            => C4::Context->preference("suggestion"),
         virtualshelves                        => C4::Context->preference("virtualshelves"),
         LibraryName                           => "" . C4::Context->preference("LibraryName"),
@@ -1351,7 +1352,7 @@ sub check_api_auth {
                 $userid    = undef;
                 $sessionID = undef;
                 return ( "expired", undef, undef );
-            } elsif ( $ip ne $ENV{'REMOTE_ADDR'} ) {
+            } elsif ( C4::Context->preference('SessionRestrictionByIP') && $ip ne $ENV{'REMOTE_ADDR'} ) {
 
                 # IP address changed
                 $session->delete();
@@ -1603,8 +1604,8 @@ sub check_cookie_auth {
             C4::Context->_unset_userenv($sessionID);
             $userid    = undef;
             $sessionID = undef;
-            return ( "expired", undef );
-        } elsif ( $ip ne $ENV{'REMOTE_ADDR'} ) {
+            return ("expired", undef);
+        } elsif ( C4::Context->preference('SessionRestrictionByIP') && $ip ne $ENV{'REMOTE_ADDR'} ) {
 
             # IP address changed
             $session->delete();
