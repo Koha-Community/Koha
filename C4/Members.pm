@@ -39,7 +39,7 @@ use DateTime;
 use DateTime::Format::DateParse;
 use Koha::DateUtils;
 use Text::Unaccent qw( unac_string );
-use C4::Auth qw(hash_password);
+use Koha::AuthUtils qw(hash_password);
 
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 

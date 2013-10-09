@@ -8,6 +8,7 @@ use strict;
 use warnings;
 
 use C4::Auth;
+use Koha::AuthUtils;
 use C4::Output;
 use C4::Context;
 use C4::Members;
@@ -55,7 +56,7 @@ my $minpw = C4::Context->preference('minPasswordLength');
 push(@errors,'SHORTPASSWORD') if( $newpassword && $minpw && (length($newpassword) < $minpw ) );
 
 if ( $newpassword  && !scalar(@errors) ) {
-    my $digest=C4::Auth::hash_password($input->param('newpassword'));
+    my $digest=Koha::AuthUtils::hash_password($input->param('newpassword'));
     my $uid = $input->param('newuserid');
     my $dbh=C4::Context->dbh;
     if (changepassword($uid,$member,$digest)) {

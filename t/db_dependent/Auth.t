@@ -8,8 +8,9 @@ use Modern::Perl;
 use CGI;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 4;
+use Test::More tests => 6;
 use C4::Members;
+use Koha::AuthUtils qw/hash_password/;
 
 BEGIN {
         use_ok('C4::Auth');
@@ -105,5 +106,11 @@ $dbh->{RaiseError} = 1;
     ok( ( any { $_->name eq 'KohaOpacLanguage' and $_->value eq 'en' } @$cookies ),
         'BZ9735: invalid language, then default to en');
 }
+
+my $hash1 = hash_password('password');
+my $hash2 = hash_password('password');
+
+ok(C4::Auth::checkpw_hash('password', $hash1), 'password validates with first hash');
+ok(C4::Auth::checkpw_hash('password', $hash2), 'password validates with second hash');
 
 $dbh->rollback;

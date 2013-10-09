@@ -23,14 +23,13 @@ use Digest::MD5 qw(md5_base64);
 use JSON qw/encode_json decode_json/;
 use URI::Escape;
 use CGI::Session;
-use Crypt::Eksblowfish::Bcrypt qw(bcrypt en_base64);
-use Fcntl qw/O_RDONLY/; # O_RDONLY is used in generate_salt
 
 require Exporter;
 use C4::Context;
 use C4::Templates;    # to get the template
 use C4::Branch; # GetBranches
 use C4::VirtualShelves;
+use Koha::AuthUtils qw(hash_password);
 use POSIX qw/strftime/;
 use List::MoreUtils qw/ any /;
 
@@ -50,7 +49,7 @@ BEGIN {
     @EXPORT      = qw(&checkauth &get_template_and_user &haspermission &get_user_subpermissions);
     @EXPORT_OK   = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &checkpw_internal &checkpw_hash
                       &get_all_subpermissions &get_user_subpermissions
-                      ParseSearchHistoryCookie hash_password
+                      ParseSearchHistoryCookie
                    );
     %EXPORT_TAGS = ( EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)] );
     $ldap        = C4::Context->config('useldapserver') || 0;
@@ -1487,91 +1486,6 @@ sub get_session {
     }
     return $session;
 }
-
-# Using Bcrypt method for hashing. This can be changed to something else in future, if needed.
-sub hash_password {
-    my $password = shift;
-
-    # Generate a salt if one is not passed
-    my $settings = shift;
-    unless( defined $settings ){ # if there are no settings, we need to create a salt and append settings
-    # Set the cost to 8 and append a NULL
-        $settings = '$2a$08$'.en_base64(generate_salt('weak', 16));
-    }
-    # Encrypt it
-    return bcrypt($password, $settings);
-}
-
-=head2 generate_salt
-
-    use C4::Auth;
-    my $salt = C4::Auth::generate_salt($strength, $length);
-
-=over
-
-=item strength
-
-For general password salting a C<$strength> of C<weak> is recommend,
-For generating a server-salt a C<$strength> of C<strong> is recommended
-
-'strong' uses /dev/random which may block until sufficient entropy is acheived.
-'weak' uses /dev/urandom and is non-blocking.
-
-=item length
-
-C<$length> is a positive integer which specifies the desired length of the returned string
-
-=back
-
-=cut
-
-
-# the implementation of generate_salt is loosely based on Crypt::Random::Provider::File
-sub generate_salt {
-    # strength is 'strong' or 'weak'
-    # length is number of bytes to read, positive integer
-    my ($strength, $length) = @_;
-
-    my $source;
-
-    if( $length < 1 ){
-        die "non-positive strength of '$strength' passed to C4::Auth::generate_salt\n";
-    }
-
-    if( $strength eq "strong" ){
-        $source = '/dev/random'; # blocking
-    } else {
-        unless( $strength eq 'weak' ){
-            warn "unsuppored strength of '$strength' passed to C4::Auth::generate_salt, defaulting to 'weak'\n";
-        }
-        $source = '/dev/urandom'; # non-blocking
-    }
-
-    sysopen SOURCE, $source, O_RDONLY
-        or die "failed to open source '$source' in C4::Auth::generate_salt\n";
-
-    # $bytes is the bytes just read
-    # $string is the concatenation of all the bytes read so far
-    my( $bytes, $string ) = ("", "");
-
-    # keep reading until we have $length bytes in $strength
-    while( length($string) < $length ){
-        # return the number of bytes read, 0 (EOF), or -1 (ERROR)
-        my $return = sysread SOURCE, $bytes, $length - length($string);
-
-        # if no bytes were read, keep reading (if using /dev/random it is possible there was insufficient entropy so this may block)
-        next unless $return;
-        if( $return == -1 ){
-            die "error while reading from $source in C4::Auth::generate_salt\n";
-        }
-
-        $string .= $bytes;
-    }
-
-    close SOURCE;
-    return $string;
-}
-
 
 sub checkpw {
     my ( $dbh, $userid, $password, $query ) = @_;
