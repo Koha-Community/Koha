@@ -448,7 +448,6 @@ sub MapItemsToHoldRequests {
                     $itemnumber = $item->{itemnumber};
                     last;
                 }
-                $itemnumber ||= $holding_branch_items->[0]->{itemnumber};
             }
             else {
                 warn "No transport costs for $pickup_branch";
