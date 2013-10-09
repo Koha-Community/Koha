@@ -197,7 +197,6 @@ is(C4::Circulation::DeleteBranchTransferLimits('B'),'0E0',"With a wrong id Delet
 #Test DeleteTransfer
 is( C4::Circulation::DeleteTransfer($item_id1),
     1, "A the item1's transfer has been deleted" );
-#FIXME :The following tests should pass but don't because currently the routine DeleteTransfer returns nothing
 is(C4::Circulation::DeleteTransfer(),undef,"Without itemid DeleteTransfer returns undef");
 is(C4::Circulation::DeleteTransfer(-1),'0E0',"with a wrong itemid DeleteTranfer returns 0E0");
 
