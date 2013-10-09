@@ -84,15 +84,19 @@ my $test4xml=qq(<?xml version="1.0" encoding="UTF-8"?>
 
 is ($mods, $test4xml, "testing marc2mosxml");
 
+$marc->append_fields(MARC::Field->new(
+    '100', ' ', ' ', a => 'Rowling, J.K.'
+));
 my $field = MARC::Field->new('245','','','a' => "Harry potter");
 $marc->append_fields($field);
 
 #my $endnote=marc2endnote($marc->as_usmarc);
 #print $endnote;
 
-my $bibtex=marc2bibtex($marc);
-my $test5xml=qq(\@book{,
-	title = "Harry potter"
+my $bibtex=marc2bibtex($marc, 'testID');
+my $test5xml=qq(\@book{testID,
+	author = {Rowling, J.K.},
+	title = {Harry potter}
 }
 );
 
