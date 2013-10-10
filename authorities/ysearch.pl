@@ -48,14 +48,8 @@ if ( $auth_status ne "ok" ) {
     exit 0;
 }
 
-    my $searchstr = $query->param('term');
+    my @value      = $query->param('term');
     my $searchtype = $query->param('querytype');
-    my @value;
-    given ($searchtype) {
-        when (/^marclist$/)      { @value = (undef, undef, $searchstr); }
-        when (/^mainentry$/)     { @value = (undef, $searchstr, undef); }
-        when (/^mainmainentry$/) { @value = ($searchstr, undef, undef); }
-    }
     my @marclist  = ($searchtype);
     my $authtypecode = $query->param('authtypecode');
     my @and_or    = $query->param('and_or');
