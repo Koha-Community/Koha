@@ -9,6 +9,17 @@ use File::Spec;
 
 my $source = File::Spec->rel2abs('.');
 my $destination = $ARGV[0];
+my $marc_type = $ARGV[1] || 'marc21';
+my $indexing_mode = $ARGV[2] || 'grs1';
+
+$ENV{__ZEBRA_MARC_FORMAT__} = $marc_type;
+if ($indexing_mode eq 'dom') {
+    $ENV{__ZEBRA_BIB_CFG__} = 'zebra-biblios-dom.cfg';
+    $ENV{__BIB_RETRIEVAL_CFG__} = 'retrieval-info-bib-dom.xml';
+} else {
+    $ENV{__ZEBRA_BIB_CFG__} = 'zebra-biblios.cfg';
+    $ENV{__BIB_RETRIEVAL_CFG__} = 'retrieval-info-bib-grs1.xml';
+}
 
 make_path("$destination/var/lock/zebradb");
 make_path("$destination/var/lock/zebradb/biblios");
