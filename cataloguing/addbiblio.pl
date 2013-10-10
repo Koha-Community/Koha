@@ -865,7 +865,7 @@ if ( $op eq "addbiblio" ) {
         my $oldbibnum;
         my $oldbibitemnum;
         if (C4::Context->preference("BiblioAddsAuthorities")){
-          my ($countlinked,$countcreated)=BiblioAutoLink($record,$frameworkcode);
+            BiblioAutoLink( $record, $frameworkcode );
         } 
         if ( $is_a_modif ) {
             ModBiblioframework( $biblionumber, $frameworkcode ); 
