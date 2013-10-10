@@ -269,9 +269,11 @@ att 9990    Call-Number
 # positions of Marc21 008 (1 byte)
 # construction : 88+XX where XX is a position (00 to 39)
 #              : 88+4X for multi-position index (ex : 8840 = ff8-18-21)
-# naming scheme : sometime ff8-XX, sometime a name in english (tpubdate, audience, Modified-code, lf, bio)
+# naming scheme : sometime ff8-XX, sometime a name in english (tpubdate,
+#                 audience, Modified-code, lf, bio)
 
-# Indexes common to Marc21 and UNIMARC :
+## Indexes common to Marc21 and UNIMARC :
+
 # Marc21 008/06 : Type of publication date (see UNIMARC 100/08)
 att 8806    tpubdate
 # Marc21 008/22 : Target Audience (see UNIMARC 100/17-19)
@@ -279,31 +281,53 @@ att 8822    ta
 # Marc21 008/38 : Modified Record code (see UNIMARC : 100/21)
 att 8838    Modified-code
 
-# Indexes slightly different in Marc21 and UNIMARC (different meanings according to the type of the record => don't match a single UNIMARC field)
-# Marc21 008/18 : For Serials, frequency (see UNIMARC 110/1). For Books, Illustrations (see UNIMARC 100/0-3). For Maps, relief. For Music, Form of Composition. For Visual Materials, Running time.
+## Indexes slightly different in Marc21 and UNIMARC (different meanings
+## according to the type of the record => don't match a single UNIMARC field)
+
+# Marc21 008/18 : For Serials, frequency (see UNIMARC 110/1). For Books,
+# Illustrations (see UNIMARC 100/0-3). For Maps, relief. For Music, 
+# Form of Composition. For Visual Materials, Running time.
 att 8818    ff8-18
-# Marc21 008/18-21 : For Books, Illustrations (see UNIMARC 100/0-3). For Maps, relief. For Music (18-19), Form of Composition. For Visual Materials (18-20), Running time. For Serials (18), frequency
+# Marc21 008/18-21 : For Books, Illustrations (see UNIMARC 100/0-3).
+# For Maps, relief. For Music (18-19), Form of Composition. For Visual
+# Materials (18-20), Running time. For Serials (18), frequency
 att 8840    ff8-18-21
-# Marc21 008/24-27 : For Books, Nature of contents (see  UNIMARC 105/4-7), for and Serials (24 only), Nature of contents (see UNIMARC 110/3). For Computer Files (26 only), type of file. For Music, Accompanying matter. For Maps (25 only), type of cartographic material
+# Marc21 008/24-27 : For Books, Nature of contents (see  UNIMARC
+# 105/4-7), for and Serials (24 only), Nature of contents (see UNIMARC
+# 110/3). For Computer Files (26 only), type of file. For Music,
+# Accompanying matter. For Maps (25 only), type of cartographic material
 # att 8841    ff8-24-27
 # use ctype for 008/24-27
-# Marc21 008/19 : For Serials, Regularity (see UNIMARC 110/2). For Music, Form of composition. For Books, illustrations. For Visual Materials, Running time
+# Marc21 008/19 : For Serials, Regularity (see UNIMARC 110/2). For Music,
+# Form of composition. For Books, illustrations. For Visual Materials,
+# Running time
 att 8819    ff8-19
-# Marc21 008/21 : For Serials, Type of serial (see UNIMARC 110/0). For Music, Music parts. For Maps, relief
+# Marc21 008/21 : For Serials, Type of serial (see UNIMARC 110/0). For
+# Music, Music parts. For Maps, relief
 att 8821    ff8-21
-# Marc21 008/23 : For Books, Serials, Music, Mixed Materials, Computer files, Form of Item (see UNIMARC 106$a). For Maps, Projection
+# Marc21 008/23 : For Books, Serials, Music, Mixed Materials, Computer
+# files, Form of Item (see UNIMARC 106$a). For Maps, Projection
 att 8823    ff8-23
-# Marc21 008/28 : Government publication (see UNIMARC 100/20). except for Music, Accompanying matter
+# Marc21 008/28 : Government publication (see UNIMARC 100/20). except
+# for Music, Accompanying matter
 att 8828    ff8-28
-# Marc21 008/29 : For Books and Serials, Conference code (see UNIMARC 105/8 and 110/7). For Maps and Visual Materials, Form of item
+# Marc21 008/29 : For Books and Serials, Conference code (see UNIMARC
+# 105/8 and 110/7). For Maps and Visual Materials, Form of item
 att 8829    ff8-29
-# Marc21 008/30 : For Books, Festchrift indicator (see UNIMARC 105/9). For Music, Literary text for sound recordings
+# Marc21 008/30 : For Books, Festchrift indicator (see UNIMARC 105/9).
+# For Music, Literary text for sound recordings
 att 8830    ff8-30
-# Marc21 008/31 : For Books and Maps, Index indicator (see UNIMARC 105/10). For Music, Literary text for sound recordings
+# Marc21 008/31 : For Books and Maps, Index indicator (see UNIMARC
+# 105/10). For Music, Literary text for sound recordings
 att 8831    ff8-31
-# Marc21 008/33 : For Books, Literary form (see UNIMARC : 105/11). For Serials, Script of title (see UNIMARC 100/34-35). For Music, Transposition and arrangement. For Visual Materials, Type of visual materials. For Maps, Special format characteristics
+# Marc21 008/33 : For Books, Literary form (see UNIMARC : 105/11).
+# For Serials, Script of title (see UNIMARC 100/34-35). For Music,
+# Transposition and arrangement. For Visual Materials, Type of visual
+# materials. For Maps, Special format characteristics
 att 8833    lf
-# Marc21 008/34 : For Books, Biography (see UNIMARC 105/12). For Maps, Special format characteristics. For Serials, Entry convention. For Visual Materials, Technique.
+# Marc21 008/34 : For Books, Biography (see UNIMARC 105/12). For Maps,
+# Special format characteristics. For Serials, Entry convention. For
+# Visual Materials, Technique.
 att 8834    bio
 
 ## positions of Marc21 007 (1 byte)
