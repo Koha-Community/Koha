@@ -26,6 +26,25 @@ use DBI;
 our $child;
 our $datadir;
 
+sub index_sample_records_and_launch_zebra {
+    my ($datadir, $indexing_mode, $marc_type) = @_;
+
+    my $sourcedir = dirname(__FILE__) . "/data";
+    unlink("$datadir/zebra.log");
+    my $zebra_bib_cfg = ($indexing_mode eq 'dom') ? 'zebra-biblios-dom.cfg' : 'zebra-biblios.cfg';
+    system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn  -g iso2709 -d biblios init");
+    system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn   -g iso2709 -d biblios update $sourcedir/${marc_type}/zebraexport/biblio");
+    system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn  -g iso2709 -d biblios commit");
+
+    $child = fork();
+    if ($child == 0) {
+        exec("zebrasrv -f $datadir/etc/koha-conf.xml -v none,request -l $datadir/zebra.log");
+        exit;
+    }
+
+    sleep(1);
+}
+
 sub cleanup {
     if ($child) {
         kill 9, $child;
@@ -41,104 +60,121 @@ END {
     cleanup();
 }
 
-sub run_search_tests {
+our $QueryStemming = 0;
+our $QueryAutoTruncate = 0;
+our $QueryWeightFields = 0;
+our $QueryFuzzy = 0;
+our $QueryRemoveStopwords = 0;
+our $UseQueryParser = 0;
+our $marcflavour = 'MARC21';
+our $contextmodule = new Test::MockModule('C4::Context');
+$contextmodule->mock('_new_dbh', sub {
+    my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
+    || die "Cannot create handle: $DBI::errstr\n";
+    return $dbh });
+$contextmodule->mock('preference', sub {
+    my ($self, $pref) = @_;
+    if ($pref eq 'marcflavour') {
+        return $marcflavour;
+    } elsif ($pref eq 'QueryStemming') {
+        return $QueryStemming;
+    } elsif ($pref eq 'QueryAutoTruncate') {
+        return $QueryAutoTruncate;
+    } elsif ($pref eq 'QueryWeightFields') {
+        return $QueryWeightFields;
+    } elsif ($pref eq 'QueryFuzzy') {
+        return $QueryFuzzy;
+    } elsif ($pref eq 'QueryRemoveStopwords') {
+        return $QueryRemoveStopwords;
+    } elsif ($pref eq 'UseQueryParser') {
+        return $UseQueryParser;
+    } elsif ($pref eq 'maxRecordsForFacets') {
+        return 20;
+    } elsif ($pref eq 'FacetLabelTruncationLength') {
+        return 20;
+    } elsif ($pref eq 'OpacHiddenItems') {
+        return '';
+    } elsif ($pref eq 'AlternateHoldingsField') {
+        return '490av';
+    } else {
+        warn "The syspref $pref was requested but I don't know what to say; this indicates that the test requires updating"
+            unless $pref =~ m/(XSLT|item|branch|holding|image)/i;
+        return 0;
+    }
+});
+$contextmodule->mock('queryparser', sub {
+    my $QParser     = Koha::QueryParser::Driver::PQF->new();
+    $QParser->load_config("$datadir/etc/searchengine/queryparser.yaml");
+    return $QParser;
+});
+
+sub mock_marcfromkohafield {
+    my $marc_type = shift;
+    if ($marc_type eq 'marc21') {
+        $contextmodule->mock('marcfromkohafield', sub {
+            my %hash = (
+                '' => {
+                    'biblio.biblionumber' => [ '999', 'c' ],
+                    'items.barcode' => ['952', 'p' ],
+                    'items.booksellerid' => ['952', 'e' ],
+                    'items.ccode' => ['952', '8' ],
+                    'items.cn_sort' => ['952', '6' ],
+                    'items.cn_source' => ['952', '2' ],
+                    'items.coded_location_qualifier' => ['952', 'f' ],
+                    'items.copynumber' => ['952', 't' ],
+                    'items.damaged' => ['952', '4' ],
+                    'items.dateaccessioned' => ['952', 'd' ],
+                    'items.datelastborrowed' => ['952', 's' ],
+                    'items.datelastseen' => ['952', 'r' ],
+                    'items.enumchron' => ['952', 'h' ],
+                    'items.holdingbranch' => ['952', 'b' ],
+                    'items.homebranch' => ['952', 'a' ],
+                    'items.issues' => ['952', 'l' ],
+                    'items.itemcallnumber' => ['952', 'o' ],
+                    'items.itemlost' => ['952', '1' ],
+                    'items.itemnotes' => ['952', 'z' ],
+                    'items.itemnumber' => ['952', '9' ],
+                    'items.itype' => ['952', 'y' ],
+                    'items.location' => ['952', 'c' ],
+                    'items.materials' => ['952', '3' ],
+                    'items.nonpublicnote' => ['952', 'x' ],
+                    'items.notforloan' => ['952', '7' ],
+                    'items.onloan' => ['952', 'q' ],
+                    'items.price' => ['952', 'g' ],
+                    'items.renewals' => ['952', 'm' ],
+                    'items.replacementprice' => ['952', 'v' ],
+                    'items.replacementpricedate' => ['952', 'w' ],
+                    'items.reserves' => ['952', 'n' ],
+                    'items.restricted' => ['952', '5' ],
+                    'items.stack' => ['952', 'j' ],
+                    'items.uri' => ['952', 'u' ],
+                    'items.withdrawn' => ['952', '0' ]
+                    }
+                );
+                return \%hash;
+        });
+    }
+}
+
+sub run_marc21_search_tests {
     my $indexing_mode = shift;
     $datadir = tempdir();
     system(dirname(__FILE__) . "/zebra_config.pl $datadir marc21 $indexing_mode");
-    my $sourcedir = dirname(__FILE__) . "/data";
 
-    my $QueryStemming = 0;
-    my $QueryAutoTruncate = 0;
-    my $QueryWeightFields = 0;
-    my $QueryFuzzy = 0;
-    my $QueryRemoveStopwords = 0;
-    my $UseQueryParser = 0;
-    my $contextmodule = new Test::MockModule('C4::Context');
-    $contextmodule->mock('_new_dbh', sub {
-        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-        || die "Cannot create handle: $DBI::errstr\n";
-        return $dbh });
-    $contextmodule->mock('preference', sub {
-        my ($self, $pref) = @_;
-        if ($pref eq 'marcflavour') {
-            return 'MARC21';
-        } elsif ($pref eq 'QueryStemming') {
-            return $QueryStemming;
-        } elsif ($pref eq 'QueryAutoTruncate') {
-            return $QueryAutoTruncate;
-        } elsif ($pref eq 'QueryWeightFields') {
-            return $QueryWeightFields;
-        } elsif ($pref eq 'QueryFuzzy') {
-            return $QueryFuzzy;
-        } elsif ($pref eq 'QueryRemoveStopwords') {
-            return $QueryRemoveStopwords;
-        } elsif ($pref eq 'UseQueryParser') {
-            return $UseQueryParser;
-        } elsif ($pref eq 'maxRecordsForFacets') {
-            return 20;
-        } elsif ($pref eq 'FacetLabelTruncationLength') {
-            return 20;
-        } elsif ($pref eq 'OpacHiddenItems') {
-            return '';
-        } elsif ($pref eq 'AlternateHoldingsField') {
-            return '490av';
-        } else {
-            warn "The syspref $pref was requested but I don't know what to say; this indicates that the test requires updating"
-                unless $pref =~ m/(XSLT|item|branch|holding|image)/i;
-            return 0;
-        }
-    });
-    $contextmodule->mock('marcfromkohafield', sub {
-        my %hash = (
-            '' => {
-                'biblio.biblionumber' => [ '999', 'c' ],
-                'items.barcode' => ['952', 'p' ],
-                'items.booksellerid' => ['952', 'e' ],
-                'items.ccode' => ['952', '8' ],
-                'items.cn_sort' => ['952', '6' ],
-                'items.cn_source' => ['952', '2' ],
-                'items.coded_location_qualifier' => ['952', 'f' ],
-                'items.copynumber' => ['952', 't' ],
-                'items.damaged' => ['952', '4' ],
-                'items.dateaccessioned' => ['952', 'd' ],
-                'items.datelastborrowed' => ['952', 's' ],
-                'items.datelastseen' => ['952', 'r' ],
-                'items.enumchron' => ['952', 'h' ],
-                'items.holdingbranch' => ['952', 'b' ],
-                'items.homebranch' => ['952', 'a' ],
-                'items.issues' => ['952', 'l' ],
-                'items.itemcallnumber' => ['952', 'o' ],
-                'items.itemlost' => ['952', '1' ],
-                'items.itemnotes' => ['952', 'z' ],
-                'items.itemnumber' => ['952', '9' ],
-                'items.itype' => ['952', 'y' ],
-                'items.location' => ['952', 'c' ],
-                'items.materials' => ['952', '3' ],
-                'items.nonpublicnote' => ['952', 'x' ],
-                'items.notforloan' => ['952', '7' ],
-                'items.onloan' => ['952', 'q' ],
-                'items.price' => ['952', 'g' ],
-                'items.renewals' => ['952', 'm' ],
-                'items.replacementprice' => ['952', 'v' ],
-                'items.replacementpricedate' => ['952', 'w' ],
-                'items.reserves' => ['952', 'n' ],
-                'items.restricted' => ['952', '5' ],
-                'items.stack' => ['952', 'j' ],
-                'items.uri' => ['952', 'u' ],
-                'items.withdrawn' => ['952', '0' ]
-                }
-            );
-            return \%hash;
-    });
-    $contextmodule->mock('queryparser', sub {
-        my $QParser     = Koha::QueryParser::Driver::PQF->new();
-        $QParser->load_config("$datadir/etc/searchengine/queryparser.yaml");
-        return $QParser;
-    });
+    mock_marcfromkohafield('marc21');
     my $context = new C4::Context("$datadir/etc/koha-conf.xml");
     $context->set_context();
 
     use_ok('C4::Search');
+
+    # set search syspreferences to a known starting point
+    $QueryStemming = 0;
+    $QueryAutoTruncate = 0;
+    $QueryWeightFields = 0;
+    $QueryFuzzy = 0;
+    $QueryRemoveStopwords = 0;
+    $UseQueryParser = 0;
+    $marcflavour = 'MARC21';
 
     foreach my $string ("Leçon","modèles") {
         my @results=C4::Search::_remove_stopwords($string,"kw");
@@ -228,19 +264,7 @@ sub run_search_tests {
         'VM' => { 'imageurl' => 'bridge/dvd.gif', 'summary' => '', 'itemtype' => 'VM', 'description' => 'Visual Materials' },
     );
 
-    unlink("$datadir/zebra.log");
-    my $zebra_bib_cfg = ($indexing_mode eq 'dom') ? 'zebra-biblios-dom.cfg' : 'zebra-biblios.cfg';
-    system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn  -g iso2709 -d biblios init");
-    system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn   -g iso2709 -d biblios update $sourcedir/zebraexport/biblio");
-    system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn  -g iso2709 -d biblios commit");
-
-    $child = fork();
-    if ($child == 0) {
-        exec("zebrasrv -f $datadir/etc/koha-conf.xml -v none,request -l $datadir/zebra.log");
-        exit;
-    }
-
-    sleep(1);
+    index_sample_records_and_launch_zebra($datadir, $indexing_mode, 'marc21');
 
     my ($biblionumber, $title);
     my $record = MARC::Record->new;
@@ -647,7 +671,7 @@ sub run_search_tests {
     cleanup();
 }
 
-run_search_tests('grs1');
-run_search_tests('dom');
+run_marc21_search_tests('grs1');
+run_marc21_search_tests('dom');
 
 1;
