@@ -12,7 +12,7 @@
             [% IF ( record.record_type == 'biblio' ) %]
                 <td class="highlight" colspan="4">Matches biblio [% record_lis.match_id %] (score = [% record_lis.match_score %]): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% record_lis.match_id %]">[% record_lis.match_citation %]</a></td>
             [% ELSIF ( record.record_type == 'auth' ) %]
-                <td class="highlight" colspan="4">Matches authority [% record_lis.match_id %] (score = [% record_lis.match_score %]): <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% record_lis.match_id %]">[% record_lis.match_citation %]</a>
+                <td class="highlight" colspan="4">Matches authority [% record_lis.match_id %] (score = [% record_lis.match_score %]): <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% record_lis.match_id %]">[% record_lis.match_citation %]</a> |
         <a href="/cgi-bin/koha/authorities/merge.pl?mergereference=breeding&authid=[% record_lis.match_id %]&authid=[% record_lis.import_record_id %]">Merge</a>
                 </td>
             [% END %]
