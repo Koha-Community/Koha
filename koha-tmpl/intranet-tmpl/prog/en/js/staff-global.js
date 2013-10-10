@@ -8,9 +8,9 @@ function _(s) { return s; } // dummy function for gettext
 
     $(".close").click(function(){ window.close(); });
 
-    if($("#header_search #checkin_search").length > 0){ $(document).bind('keydown','Alt+r',function (){ $("#header_search").tabs("select","#checkin_search"); $("#ret_barcode").focus(); }); } else { $(document).bind('keydown','Alt+r',function (){ location.href="/cgi-bin/koha/circ/returns.pl"; }); }
-    if($("#header_search #circ_search").length > 0){ $(document).bind('keydown','Alt+u',function (){ $("#header_search").tabs("select","#circ_search"); $("#findborrower").focus(); }); } else { $(document).bind('keydown','Alt+u',function(){ location.href="/cgi-bin/koha/circ/circulation.pl"; }); }
-    if($("#header_search #catalog_search").length > 0){ $(document).bind('keydown','Alt+q',function (){ $("#header_search").tabs("select","#catalog_search"); $("#search-form").focus(); }); } else { $(document).bind('keydown','Alt+q',function(){ location.href="/cgi-bin/koha/catalogue/search.pl"; }); }
+    if($("#header_search #checkin_search").length > 0){ shortcut.add('Alt+r',function (){ $("#header_search").tabs("select","#checkin_search"); $("#ret_barcode").focus(); }); } else { shortcut.add('Alt+r',function (){ location.href="/cgi-bin/koha/circ/returns.pl"; }); }
+    if($("#header_search #circ_search").length > 0){ shortcut.add('Alt+u',function (){ $("#header_search").tabs("select","#circ_search"); $("#findborrower").focus(); }); } else { shortcut.add('Alt+u',function(){ location.href="/cgi-bin/koha/circ/circulation.pl"; }); }
+    if($("#header_search #catalog_search").length > 0){ shortcut.add('Alt+q',function (){ $("#header_search").tabs("select","#catalog_search"); $("#search-form").focus(); }); } else { shortcut.add('Alt+q',function(){ location.href="/cgi-bin/koha/catalogue/search.pl"; }); }
 
     $(".focus").focus();
     $(".validated").validate();
