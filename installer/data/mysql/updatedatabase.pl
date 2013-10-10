@@ -7176,7 +7176,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
    SetVersion ($DBversion);
 }
 
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.13.00.026";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         ALTER TABLE auth_subfield_structure ADD COLUMN defaultvalue TEXT DEFAULT NULL AFTER frameworkcode
