@@ -1466,7 +1466,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     </z:index>
   </xslo:template>
   <xslo:template mode="index_data_field" match="marc:datafield[@tag='028']">
-    <z:index name="Number-music-publisher:w Identifier-standard:w">
+    <z:index name="Identifier-publisher-for-music:w Identifier-standard:w">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
           <xslo:if test="position() &gt; 1">
