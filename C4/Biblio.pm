@@ -250,6 +250,10 @@ sub AddBiblio {
     my $frameworkcode   = shift;
     my $options         = @_ ? shift : undef;
     my $defer_marc_save = 0;
+    if (!$record) {
+        carp('AddBiblio called with undefined record');
+        return;
+    }
     if ( defined $options and exists $options->{'defer_marc_save'} and $options->{'defer_marc_save'} ) {
         $defer_marc_save = 1;
     }
@@ -299,11 +303,16 @@ in the C<biblio> and C<biblioitems> tables, as well as
 which fields are used to store embedded item, biblioitem,
 and biblionumber data for indexing.
 
+Returns 1 on success 0 on failure
+
 =cut
 
 sub ModBiblio {
     my ( $record, $biblionumber, $frameworkcode ) = @_;
-    croak "No record" unless $record;
+    if (!$record) {
+        carp 'No record passed to ModBiblio';
+        return 0;
+    }
 
     if ( C4::Context->preference("CataloguingLog") ) {
         my $newrecord = GetMarcBiblio($biblionumber);
@@ -473,11 +482,17 @@ sub DelBiblio {
 
 Automatically links headings in a bib record to authorities.
 
+Returns the number of headings changed
+
 =cut
 
 sub BiblioAutoLink {
     my $record        = shift;
     my $frameworkcode = shift;
+    if (!$record) {
+        carp('Undefined record passed to BiblioAutoLink');
+        return 0;
+    }
     my ( $num_headings_changed, %results );
 
     my $linker_module =
@@ -485,7 +500,7 @@ sub BiblioAutoLink {
     unless ( can_load( modules => { $linker_module => undef } ) ) {
         $linker_module = 'C4::Linker::Default';
         unless ( can_load( modules => { $linker_module => undef } ) ) {
-            return 0, 0;
+            return 0;
         }
     }
 
@@ -522,6 +537,10 @@ sub LinkBibHeadingsToAuthorities {
     my $frameworkcode = shift;
     my $allowrelink = shift;
     my %results;
+    if (!$bib) {
+        carp 'LinkBibHeadingsToAuthorities called on undefined bib record';
+        return ( 0, {});
+    }
     require C4::Heading;
     require C4::AuthoritiesMarc;
 
@@ -671,6 +690,11 @@ Get MARC fields from a keyword defined in fieldmapping table.
 
 sub GetRecordValue {
     my ( $field, $record, $frameworkcode ) = @_;
+
+    if (!$record) {
+        carp 'GetRecordValue called with undefined record';
+        return;
+    }
     my $dbh = C4::Context->dbh;
 
     my $sth = $dbh->prepare('SELECT fieldcode, subfieldcode FROM fieldmapping WHERE frameworkcode = ? AND field = ?');
@@ -1302,7 +1326,8 @@ sub GetCOinSBiblio {
 
     # get the coin format
     if ( ! $record ) {
-	return;
+        carp 'GetCOinSBiblio called with undefined record';
+        return;
     }
     my $pos7 = substr $record->leader(), 7, 1;
     my $pos6 = substr $record->leader(), 6, 1;
@@ -1443,10 +1468,20 @@ sub GetCOinSBiblio {
 =head2 GetMarcPrice
 
 return the prices in accordance with the Marc format.
+
+returns 0 if no price found
+returns undef if called without a marc record or with
+an unrecognized marc format
+
 =cut
 
 sub GetMarcPrice {
     my ( $record, $marcflavour ) = @_;
+    if (!$record) {
+        carp 'GetMarcPrice called on undefined record';
+        return;
+    }
+
     my @listtags;
     my $subfield;
     
@@ -1518,10 +1553,19 @@ sub MungeMarcPrice {
 return the quantity of a book. Used in acquisition only, when importing a file an iso2709 from a bookseller
 Warning : this is not really in the marc standard. In Unimarc, Electre (the most widely used bookseller) use the 969$a
 
+returns 0 if no quantity found
+returns undef if called without a marc record or with
+an unrecognized marc format
+
 =cut
 
 sub GetMarcQuantity {
     my ( $record, $marcflavour ) = @_;
+    if (!$record) {
+        carp 'GetMarcQuantity called on undefined record';
+        return;
+    }
+
     my @listtags;
     my $subfield;
     
@@ -1608,6 +1652,10 @@ Get the control number / record Identifier from the MARC record and return it.
 
 sub GetMarcControlnumber {
     my ( $record, $marcflavour ) = @_;
+    if (!$record) {
+        carp 'GetMarcControlnumber called on undefined record';
+        return;
+    }
     my $controlnumber = "";
     # Control number or Record identifier are the same field in MARC21, UNIMARC and NORMARC
     # Keep $marcflavour for possible later use
@@ -1631,6 +1679,10 @@ ISBNs stored in different fields depending on MARC flavour
 
 sub GetMarcISBN {
     my ( $record, $marcflavour ) = @_;
+    if (!$record) {
+        carp 'GetMarcISBN called on undefined record';
+        return;
+    }
     my $scope;
     if ( $marcflavour eq "UNIMARC" ) {
         $scope = '010';
@@ -1672,6 +1724,10 @@ ISSNs are stored in different fields depending on MARC flavour
 
 sub GetMarcISSN {
     my ( $record, $marcflavour ) = @_;
+    if (!$record) {
+        carp 'GetMarcISSN called on undefined record';
+        return;
+    }
     my $scope;
     if ( $marcflavour eq "UNIMARC" ) {
         $scope = '011';
@@ -1697,6 +1753,10 @@ The note are stored in different fields depending on MARC flavour
 
 sub GetMarcNotes {
     my ( $record, $marcflavour ) = @_;
+    if (!$record) {
+        carp 'GetMarcNotes called on undefined record';
+        return;
+    }
     my $scope;
     if ( $marcflavour eq "UNIMARC" ) {
         $scope = '3..';
@@ -1741,6 +1801,10 @@ The subjects are stored in different fields depending on MARC flavour
 
 sub GetMarcSubjects {
     my ( $record, $marcflavour ) = @_;
+    if (!$record) {
+        carp 'GetMarcSubjects called on undefined record';
+        return;
+    }
     my ( $mintag, $maxtag, $fields_filter );
     if ( $marcflavour eq "UNIMARC" ) {
         $mintag = "600";
@@ -1826,6 +1890,10 @@ The authors are stored in different fields depending on MARC flavour
 
 sub GetMarcAuthors {
     my ( $record, $marcflavour ) = @_;
+    if (!$record) {
+        carp 'GetMarcAuthors called on undefined record';
+        return;
+    }
     my ( $mintag, $maxtag, $fields_filter );
 
     # tagslib useful for UNIMARC author reponsabilities
@@ -1914,6 +1982,10 @@ Assumes web resources (not uncommon in MARC21 to omit resource type ind)
 
 sub GetMarcUrls {
     my ( $record, $marcflavour ) = @_;
+    if (!$record) {
+        carp 'GetMarcUrls called on undefined record';
+        return;
+    }
 
     my @marcurls;
     for my $field ( $record->field('856') ) {
@@ -1969,6 +2041,11 @@ The series are stored in different fields depending on MARC flavour
 
 sub GetMarcSeries {
     my ( $record, $marcflavour ) = @_;
+    if (!$record) {
+        carp 'GetMarcSeries called on undefined record';
+        return;
+    }
+
     my ( $mintag, $maxtag, $fields_filter );
     if ( $marcflavour eq "UNIMARC" ) {
         $mintag = "225";
@@ -2038,6 +2115,11 @@ Get all host records (773s MARC21, 461 UNIMARC) from the MARC record and returns
 
 sub GetMarcHosts {
     my ( $record, $marcflavour ) = @_;
+    if (!$record) {
+        carp 'GetMarcHosts called on undefined record';
+        return;
+    }
+
     my ( $tag,$title_subf,$bibnumber_subf,$itemnumber_subf);
     $marcflavour ||="MARC21";
     if ( $marcflavour eq "MARC21" || $marcflavour eq "NORMARC" ) {
@@ -2481,12 +2563,19 @@ our $inverted_field_map;
 Extract data from a MARC bib record into a hashref representing
 Koha biblio, biblioitems, and items fields. 
 
+If passed an undefined record will log the error and return an empty
+hash_ref
+
 =cut
 
 sub TransformMarcToKoha {
     my ( $dbh, $record, $frameworkcode, $limit_table ) = @_;
 
-    my $result;
+    my $result = {};
+    if (!defined $record) {
+        carp('TransformMarcToKoha called with undefined record');
+        return $result;
+    }
     $limit_table = $limit_table || 0;
     $frameworkcode = '' unless defined $frameworkcode;
 
@@ -2799,7 +2888,10 @@ if $itemnumbers is defined, only specified itemnumbers are embedded
 
 sub EmbedItemsInMarcBiblio {
     my ($marc, $biblionumber, $itemnumbers) = @_;
-    croak "No MARC record" unless $marc;
+    if ( !$marc ) {
+        carp 'EmbedItemsInMarcBiblio: No MARC record passed';
+        return;
+    }
 
     $itemnumbers = [] unless defined $itemnumbers;
 
@@ -3262,6 +3354,10 @@ sub ModBiblioMarc {
     # pass the MARC::Record to this function, and it will create the records in
     # the marc field
     my ( $record, $biblionumber, $frameworkcode ) = @_;
+    if ( !$record ) {
+        carp 'ModBiblioMarc passed an undefined record';
+        return;
+    }
 
     # Clone record as it gets modified
     $record = $record->clone();
@@ -3623,6 +3719,10 @@ Removes all nsb/nse chars from a record
 
 sub RemoveAllNsb {
     my $record = shift;
+    if (!$record) {
+        carp 'RemoveAllNsb called with undefined record';
+        return;
+    }
 
     SetUTF8Flag($record);
 
