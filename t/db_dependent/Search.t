@@ -12,7 +12,7 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 162;
+use Test::More tests => 172;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;
@@ -112,7 +112,7 @@ sub mock_marcfromkohafield {
     my $marc_type = shift;
     if ($marc_type eq 'marc21') {
         $contextmodule->mock('marcfromkohafield', sub {
-            my %hash = (
+            return {
                 '' => {
                     'biblio.biblionumber' => [ '999', 'c' ],
                     'items.barcode' => ['952', 'p' ],
@@ -150,8 +150,7 @@ sub mock_marcfromkohafield {
                     'items.uri' => ['952', 'u' ],
                     'items.withdrawn' => ['952', '0' ]
                     }
-                );
-                return \%hash;
+                };
         });
     }
 }
@@ -671,7 +670,44 @@ sub run_marc21_search_tests {
     cleanup();
 }
 
+sub run_unimarc_search_tests {
+    my $indexing_mode = shift;
+    $datadir = tempdir();
+    system(dirname(__FILE__) . "/zebra_config.pl $datadir unimarc $indexing_mode");
+
+    mock_marcfromkohafield('unimarc');
+    my $context = new C4::Context("$datadir/etc/koha-conf.xml");
+    $context->set_context();
+
+    use_ok('C4::Search');
+
+    # set search syspreferences to a known starting point
+    $QueryStemming = 0;
+    $QueryAutoTruncate = 0;
+    $QueryWeightFields = 0;
+    $QueryFuzzy = 0;
+    $QueryRemoveStopwords = 0;
+    $UseQueryParser = 0;
+    $marcflavour = 'UNIMARC';
+
+    index_sample_records_and_launch_zebra($datadir, $indexing_mode, 'unimarc');
+
+    my ( $error, $marcresults, $total_hits ) = SimpleSearch("ti=Järnvägarnas efterfrågan och den svenska industrin", 0, 10);
+    is($total_hits, 1, 'UNIMARC title search');
+    ( $error, $marcresults, $total_hits ) = SimpleSearch("ta=u", 0, 10);
+    is($total_hits, 1, 'UNIMARC target audience = u');
+    ( $error, $marcresults, $total_hits ) = SimpleSearch("ta=k", 0, 10);
+    is($total_hits, 4, 'UNIMARC target audience = k');
+    ( $error, $marcresults, $total_hits ) = SimpleSearch("ta=m", 0, 10);
+    is($total_hits, 3, 'UNIMARC target audience = m');
+
+    cleanup();
+}
+
 run_marc21_search_tests('grs1');
 run_marc21_search_tests('dom');
+
+run_unimarc_search_tests('grs1');
+run_unimarc_search_tests('dom');
 
 1;
