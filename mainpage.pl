@@ -55,11 +55,9 @@ $template->param(
     koha_news_count => $koha_news_count
 );
 
-my $branch =
-  C4::Context->preference("IndependentBranches")
-  && !$flags->{'superlibrarian'}
-  ? C4::Context->userenv()->{'branch'}
-  : undef;
+my $branch = $flags->{'superlibrarian'}
+  ? undef
+  : C4::Context->userenv()->{'branch'};
 
 my $pendingcomments    = numberofreviews(0);
 my $pendingtags        = get_count_by_tag_status(0);
