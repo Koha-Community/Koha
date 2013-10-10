@@ -12,7 +12,7 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 174;
+use Test::More tests => 194;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;
@@ -23,6 +23,10 @@ use File::Temp qw/ tempdir /;
 use File::Path;
 use DBI;
 
+# work around spurious wide character warnings
+binmode Test::More->builder->output, ":utf8";
+binmode Test::More->builder->failure_output, ":utf8";
+
 our $child;
 our $datadir;
 
@@ -31,10 +35,18 @@ sub index_sample_records_and_launch_zebra {
 
     my $sourcedir = dirname(__FILE__) . "/data";
     unlink("$datadir/zebra.log");
-    my $zebra_bib_cfg = ($indexing_mode eq 'dom') ? 'zebra-biblios-dom.cfg' : 'zebra-biblios.cfg';
-    system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn  -g iso2709 -d biblios init");
-    system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn   -g iso2709 -d biblios update $sourcedir/${marc_type}/zebraexport/biblio");
-    system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn  -g iso2709 -d biblios commit");
+    if (-f "$sourcedir/${marc_type}/zebraexport/biblio/exported_records") {
+        my $zebra_bib_cfg = ($indexing_mode eq 'dom') ? 'zebra-biblios-dom.cfg' : 'zebra-biblios.cfg';
+        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn  -g iso2709 -d biblios init");
+        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn   -g iso2709 -d biblios update $sourcedir/${marc_type}/zebraexport/biblio");
+        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn  -g iso2709 -d biblios commit");
+    }
+    if (-f "$sourcedir/${marc_type}/zebraexport/authority/exported_records") {
+        my $zebra_auth_cfg = ($indexing_mode eq 'dom') ? 'zebra-authorities-dom.cfg' : 'zebra-authorities.cfg';
+        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_auth_cfg  -v none,fatal,warn  -g iso2709 -d authorities init");
+        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_auth_cfg  -v none,fatal,warn   -g iso2709 -d authorities update $sourcedir/${marc_type}/zebraexport/authority");
+        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_auth_cfg  -v none,fatal,warn  -g iso2709 -d authorities commit");
+    }
 
     $child = fork();
     if ($child == 0) {
@@ -96,6 +108,8 @@ $contextmodule->mock('preference', sub {
         return '';
     } elsif ($pref eq 'AlternateHoldingsField') {
         return '490av';
+    } elsif ($pref eq 'authoritysep') {
+        return '--';
     } else {
         warn "The syspref $pref was requested but I don't know what to say; this indicates that the test requires updating"
             unless $pref =~ m/(XSLT|item|branch|holding|image)/i;
@@ -667,6 +681,21 @@ sub run_marc21_search_tests {
         like($query, qr/$match/, $message);
     }
 
+    # authority records
+    use_ok('C4::AuthoritiesMarc');
+    $UseQueryParser = 0;
+
+    my ($auths, $count) = SearchAuthorities(
+        ['mainentry'], ['and'], [''], ['starts'],
+        ['shakespeare'], 0, 10, '', '', 1
+    );
+    is($count, 1, 'MARC21 authorities: one hit on mainentry starts with "shakespeare"');
+    ($auths, $count) = SearchAuthorities(
+        ['match'], ['and'], [''], ['contains'],
+        ['沙士北亞威廉姆'], 0, 10, '', '', 1
+    );
+    is($count, 1, 'MARC21 authorities: one hit on match contains "沙士北亞威廉姆"');
+
     cleanup();
 }
 
@@ -702,6 +731,41 @@ sub run_unimarc_search_tests {
     is($total_hits, 3, 'UNIMARC target audience = m');
     ( $error, $marcresults, $total_hits ) = SimpleSearch("item=EXCLU DU PRET", 0, 10);
     is($total_hits, 1, 'UNIMARC generic item index (bug 10037)');
+
+    # authority records
+    use_ok('C4::AuthoritiesMarc');
+    $UseQueryParser = 0;
+
+    my ($auths, $count) = SearchAuthorities(
+        ['mainentry'], ['and'], [''], ['contains'],
+        ['wil'], 0, 10, '', '', 1
+    );
+    is($count, 11, 'UNIMARC authorities: hits on mainentry contains "wil"');
+    ($auths, $count) = SearchAuthorities(
+        ['match'], ['and'], [''], ['contains'],
+        ['wil'], 0, 10, '', '', 1
+    );
+    is($count, 11, 'UNIMARC authorities: hits on match contains "wil"');
+    ($auths, $count) = SearchAuthorities(
+        ['mainentry'], ['and'], [''], ['contains'],
+        ['michel'], 0, 20, '', '', 1
+    );
+    is($count, 14, 'UNIMARC authorities: hits on mainentry contains "michel"');
+    ($auths, $count) = SearchAuthorities(
+        ['mainmainentry'], ['and'], [''], ['exact'],
+        ['valley'], 0, 20, '', '', 1
+    );
+    is($count, 1, 'UNIMARC authorities: hits on mainmainentry = "valley"');
+    ($auths, $count) = SearchAuthorities(
+        ['mainmainentry'], ['and'], [''], ['exact'],
+        ['vall'], 0, 20, '', '', 1
+    );
+    is($count, 0, 'UNIMARC authorities: no hits on mainmainentry = "vall"');
+    ($auths, $count) = SearchAuthorities(
+        ['Any'], ['and'], [''], ['starts'],
+        ['jean'], 0, 30, '', '', 1
+    );
+    is($count, 24, 'UNIMARC authorities: hits on any starts with "jean"');
 
     cleanup();
 }
