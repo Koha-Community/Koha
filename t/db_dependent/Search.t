@@ -12,7 +12,7 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 172;
+use Test::More tests => 174;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;
@@ -700,6 +700,8 @@ sub run_unimarc_search_tests {
     is($total_hits, 4, 'UNIMARC target audience = k');
     ( $error, $marcresults, $total_hits ) = SimpleSearch("ta=m", 0, 10);
     is($total_hits, 3, 'UNIMARC target audience = m');
+    ( $error, $marcresults, $total_hits ) = SimpleSearch("item=EXCLU DU PRET", 0, 10);
+    is($total_hits, 1, 'UNIMARC generic item index (bug 10037)');
 
     cleanup();
 }
