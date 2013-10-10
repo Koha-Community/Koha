@@ -10,7 +10,7 @@
 [% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS %]</style>[% END %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/jquery-ui.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.hotkeys.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/shortcut.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.highlight-3.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.qtip.js"></script>
