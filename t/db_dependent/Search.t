@@ -12,7 +12,7 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 158;
+use Test::More tests => 162;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;
@@ -275,6 +275,11 @@ sub run_search_tests {
 
     ( $error, $marcresults, $total_hits ) = SimpleSearch("kw=book", 0, 10);
     is($total_hits, 101, "SimpleSearch handles simple CCL");
+
+    ( $error, $marcresults, $total_hits ) = SimpleSearch("Music-number=49631-2", 0, 10);
+    is($total_hits, 1, "SimpleSearch on music publisher number works (bug 8252)");
+    ( $error, $marcresults, $total_hits ) = SimpleSearch("Identifier-publisher-for-music=49631-2", 0, 10);
+    is($total_hits, 1, "SimpleSearch on music publisher number works using Identifier-publisher-for-music (bug 8252)");
 
     # Testing getRecords
 
