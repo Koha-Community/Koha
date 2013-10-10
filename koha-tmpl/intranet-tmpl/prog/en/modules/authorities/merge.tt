@@ -3,6 +3,8 @@
 <title>Koha &rsaquo; Cataloging &rsaquo; Merging records</title>
 [% INCLUDE 'greybox.inc' %]
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/merge-record.js"></script>
+[% INCLUDE 'merge-record-strings.inc' %]
 <style type="text/css">
 div.record ul, div.record li { float:none; display:block; }
 div#result { margin-top: 1em; }
@@ -28,7 +30,9 @@ $(document).ready(function(){
         ev.preventDefault();
         newin=window.open($(this).attr('href'),'merge_reference', 'width=1000,height=600,toolbar=false,scrollbars=yes');
     });
-    [% PROCESS mergejs %]
+
+    // Creating tabs
+    $("#tabs").tabs();
 });
 
 
