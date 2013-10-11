@@ -54,7 +54,6 @@ BEGIN {
 
     # to get something
     push @EXPORT, qw(
-      &Get
       &GetBiblio
       &GetBiblioData
       &GetBiblioItemData
@@ -133,7 +132,6 @@ BEGIN {
     # Others functions
     push @EXPORT, qw(
       &TransformMarcToKoha
-      &TransformHtmlToMarc2
       &TransformHtmlToMarc
       &TransformHtmlToXml
       prepare_host_field
