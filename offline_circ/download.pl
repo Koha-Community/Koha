@@ -39,7 +39,8 @@ my $patrons_query = q{SELECT
     borrowers.borrowernumber, cardnumber, surname, firstname, title,
     othernames, initials, streetnumber, streettype, address, address2, city,
     state, zipcode, country, email, phone, mobile, fax, dateofbirth, branchcode,
-    categorycode, dateenrolled, dateexpiry, gonenoaddress, lost, debarred,
+    categorycode, dateenrolled, dateexpiry, COALESCE(gonenoaddress, 0) AS gonenoaddress,
+    COALESCE(lost, 0) AS lost, debarred,
     debarredcomment, SUM(accountlines.amountoutstanding) AS fine
     FROM borrowers
     LEFT JOIN accountlines ON borrowers.borrowernumber=accountlines.borrowernumber
