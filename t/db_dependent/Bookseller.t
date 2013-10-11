@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 63;
+use Test::More tests => 64;
 use C4::Context;
 use Koha::DateUtils;
 use DateTime::Duration;
@@ -181,7 +181,12 @@ my $id_budget = AddBudget({
     budget_active      => 1,
     budget_period_id   => $budgetperiod
 });
-my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
+my $bib = MARC::Record->new();
+$bib->append_fields(
+    MARC::Field->new('245', ' ', ' ', a => 'Journal of ethnology'),
+    MARC::Field->new('500', ' ', ' ', a => 'bib notes'),
+);
+my ($biblionumber, $biblioitemnumber) = AddBiblio($bib, '');
 $bookseller1fromid = C4::Bookseller::GetBookSellerFromId($id_supplier1);
 is( $bookseller1fromid->{subscriptioncount},
     0, 'Supplier1 has 0 subscription' );
@@ -194,11 +199,15 @@ my $id_subscription1 = C4::Serials::NewSubscription(
     undef,      undef,         undef,         undef,
     undef,      undef,         undef,         undef,
     undef,      undef,         undef,         1,
-    "notes",    undef,         undef,         undef,
+    "subscription notes",    undef,         undef,         undef,
     undef,      undef,         undef,         0,
     "intnotes", 0,             undef,         undef,
     0,          undef,         '31-12-2013',
 );
+
+my @subscriptions = SearchSubscriptions({biblionumber => $biblionumber});
+is($subscriptions[0]->{publicnotes}, 'subscription notes', 'subscription search results include public notes (bug 10689)');
+
 my $id_subscription2 = C4::Serials::NewSubscription(
     undef,      "",            $id_supplier1, undef,
     $id_budget, $biblionumber, '01-01-2013',  undef,
@@ -208,7 +217,7 @@ my $id_subscription2 = C4::Serials::NewSubscription(
     undef,      undef,         undef,         undef,
     undef,      undef,         undef,         undef,
     undef,      undef,         undef,         1,
-    "notes",    undef,         undef,         undef,
+    "subscription notes",    undef,         undef,         undef,
     undef,      undef,         undef,         0,
     "intnotes", 0,             undef,         undef,
     0,          undef,         '31-12-2013',
