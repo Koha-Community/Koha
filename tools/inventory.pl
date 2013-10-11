@@ -296,7 +296,7 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
         -attachment => 'inventory.csv',
     );
 
-    my $columns_def_hashref = C4::Reports::Guided::_get_column_defs();
+    my $columns_def_hashref = C4::Reports::Guided::_get_column_defs($input);
     foreach my $key ( keys %$columns_def_hashref ) {
         my $initkey = $key;
         $key =~ s/[^\.]*\.//;
