@@ -7192,14 +7192,8 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-
-
-
-
-
-
-$DBversion = "3.13.00.XXX";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+$DBversion = "3.13.00.028";
+if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         ALTER TABLE export_format ADD type VARCHAR(255) DEFAULT 'marc' AFTER encoding
     });
