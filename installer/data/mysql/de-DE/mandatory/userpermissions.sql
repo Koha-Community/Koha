@@ -43,6 +43,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'moderate_tags', 'Von Benutzern vergebene Tags moderieren'),
    (13, 'rotating_collections', 'Wandernde Sammlungen verwalten'),
    (13, 'upload_local_cover_images', 'Eigene Coverbilder hochladen'),
+   (13, 'manage_patron_lists', 'Add, edit and delete patron lists and their contents'),
    (15, 'check_expiration', 'Ablauf eines Abonnements prüfen'),
    (15, 'claim_serials', 'Fehlende Hefte reklamieren'),
    (15, 'create_subscription', 'Neues Abonnement anlegen'),

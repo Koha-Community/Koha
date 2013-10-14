@@ -7297,6 +7297,11 @@ if ( CheckVersion($DBversion) ) {
           ADD CONSTRAINT patron_list_patrons_ibfk_2 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE;
     });
 
+    $dbh->do(q{
+        INSERT INTO permissions (module_bit, code, description) VALUES
+        (13, 'manage_patron_lists', 'Add, edit and delete patron lists and their contents')
+    });
+
     print "Upgrade to $DBversion done (Bug 10565 - Add a 'Patron List' feature for storing and manipulating collections of patrons)\n";
     SetVersion($DBversion);
 }

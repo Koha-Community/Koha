@@ -63,6 +63,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'moderate_tags', 'Behandle tagger fra lånere'),
    (13, 'rotating_collections', 'Administrere roterende samlinger'),
    (13, 'upload_local_cover_images', 'Laste opp lokale omslagsbilder'),
+   (13, 'manage_patron_lists', 'Add, edit and delete patron lists and their contents'),
    (15, 'check_expiration', 'Sjekke utløpsdato for et periodikum'),
    (15, 'claim_serials', 'Purre manglende tidsskrifthefter'),
    (15, 'create_subscription', 'Opprette abonnementer'),

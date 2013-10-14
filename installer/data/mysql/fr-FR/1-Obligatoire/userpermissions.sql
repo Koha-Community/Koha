@@ -43,6 +43,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'items_batchmod', 'Modifier les exemplaires par lot'),
    (13, 'items_batchdel', 'Supprimer les exemplaires par lot'),
    (13, 'upload_local_cover_images', 'Téléchargement des images de couverture'),
+   (13, 'manage_patron_lists', 'Add, edit and delete patron lists and their contents'),
    (15, 'check_expiration', 'Contrôler l''expiration d''un périodique'),
    (15, 'claim_serials', 'Réclamer les périodiques manquants'),
    (15, 'create_subscription', 'Créer de nouveaux abonnements'),

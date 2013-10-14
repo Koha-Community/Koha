@@ -110,10 +110,13 @@ function CheckForm() {
                     [% END %]
 
                     [% IF ( resultsloop ) %]
+                    [% IF (CAN_user_tools_manage_patron_lists) %]
                     <form id="add-patrons-to-list-form" method="post" action="member.pl" onsubmit="return CheckForm()">
+                    [% END %]
                         <div id="searchheader">
                             <h3>Results [% from %] to [% to %] of [% numresults %] found for [% IF ( member ) %]'<span class="ex">[% member %]</span>'[% END %][% IF ( surname ) %]'<span class="ex">[% surname %]</span>'[% END %]</h3>
 
+                            [% IF (CAN_user_tools_manage_patron_lists) %]
                             <div>
                                 <a href="javascript:void(0)" onclick="$('.selection').prop('checked', true)">Select all</a>
                                 |
@@ -149,13 +152,16 @@ function CheckForm() {
                                     <input id="add_to_patron_list_submit" type="submit" class="submit" value="Save">
                                 </span>
                             </div>
+                            [% END %]
                         </div>
 						<div class="searchresults">
 
 							<table id="memberresultst">
 							<thead>
 							<tr>
+                            [% IF (CAN_user_tools_manage_patron_lists) %]
                             <th>&nbsp</th>
+                            [% END %]
 							<th>Card</th>
 							<th>Name</th>
 							<th>Cat</th>
@@ -178,7 +184,9 @@ function CheckForm() {
 							<tr>
 							[% END %]
 							[% END %]
+                            [% IF (CAN_user_tools_manage_patron_lists) %]
                             <td><input type="checkbox" class="selection" name="borrowernumber" value="[% resultsloo.borrowernumber %]" /></td>
+                            [% END %]
 							<td>[% resultsloo.cardnumber %]</td>
                             <td style="white-space: nowrap;">
                             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resultsloo.borrowernumber %]">
@@ -206,7 +214,9 @@ function CheckForm() {
 							</table>
 							<div class="pages">[% IF ( multipage ) %][% paginationbar %][% END %]</div>
 						</div>
+                    [% IF (CAN_user_tools_manage_patron_lists) %]
                     </form>
+                    [% END %]
                     [% ELSE %]
                         [% IF ( searching ) %]
                             <div class="dialog alert">No results found</div>
