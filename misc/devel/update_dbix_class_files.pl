@@ -1,28 +1,46 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
-use C4::Context;
+# This file is part of Koha.
+#
+# Copyright (C) 2012 ByWater Solutions
+# Copyright (C) 2013 Equinox Software, Inc.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
 use DBIx::Class::Schema::Loader qw/ make_schema_at /;
 use Getopt::Long;
 
 my $path = "./";
+my $db_driver = 'mysql';
+my $db_host = 'localhost';
+my $db_port = '3306';
+my $db_name = '';
+my $db_user = '';
+my $db_passwd = '';
 GetOptions(
-    "path=s" => \$path,
-    );
-my $context = new C4::Context;
-my $db_driver;
-if ($context->config("db_scheme")){
-    $db_driver=C4::Context->db_scheme2dbi($context->config("db_scheme"));
-}else{
-    $db_driver="mysql";
-}
+    "path=s"      => \$path,
+    "db_driver=s" => \$db_driver,
+    "db_host=s"   => \$db_host,
+    "db_port=s"   => \$db_port,
+    "db_name=s"   => \$db_name,
+    "db_user=s"   => \$db_user,
+    "db_passwd=s" => \$db_passwd,
+);
 
-
-my $db_name   = $context->config("database");
-my $db_host   = $context->config("hostname");
-my $db_port   = $context->config("port") || '';
-my $db_user   = $context->config("user");
-my $db_passwd = $context->config("pass");
-
-make_schema_at("Koha::Schema", {debug => 1, dump_directory => $path}, ["DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",$db_user, $db_passwd ]);
+make_schema_at(
+    "Koha::Schema",
+    {debug => 1, dump_directory => $path},
+    ["DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",$db_user, $db_passwd ]
+);
