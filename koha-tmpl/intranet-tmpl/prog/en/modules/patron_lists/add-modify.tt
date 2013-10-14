@@ -27,12 +27,24 @@ function CheckForm() {
 
 <div class="yui-t7">
     <div class="yui-main">
-        <h1>New patron list</h1>
+        <h1>
+            [% IF list.patron_list_id %]
+                Modify patron list
+            [% ELSE %]
+                New patron list
+            [% END %]
+        </h1>
 
         <form method="post" onsubmit="return CheckForm()">
             <fieldset class="rows">
 
-                <legend>Create a new patron list</legend>
+                <legend>
+                    [% IF list.patron_list_id %]
+                    Modify patron list
+                    [% ELSE %]
+                    Create a new patron list
+                    [% END %]
+                </legend>
 
                 <ol>
                     <li>
