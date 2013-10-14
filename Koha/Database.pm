@@ -32,8 +32,6 @@ Koha::Database
 
 =cut
 
-$ENV{'DBIC_DONT_VALIDATE_RELS'} = 1; # FIXME once the DBIx schema has its schema adjusted we should remove this
-
 use Modern::Perl;
 use Carp;
 use C4::Context;

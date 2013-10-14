@@ -12,8 +12,8 @@ use File::Spec;
 use Test::More;
 use English qw(-no_match_vars);
 
-my @all_koha_dirs = qw( acqui admin authorities basket C4 catalogue cataloguing circ debian errors
-labels members misc offline_circ opac patroncards reports reserve reviews rotating_collections
+my @all_koha_dirs = qw( acqui admin authorities basket C4 catalogue cataloguing circ course_reserves debian errors
+labels members misc offline_circ opac patroncards patron_lists reports reserve reviews rotating_collections
 serials sms suggestion t tags test tools virtualshelves Koha);
 
 my @dirs = qw( acqui admin authorities basket catalogue cataloguing circ debian errors labels
