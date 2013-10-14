@@ -7262,7 +7262,7 @@ if ( CheckVersion($DBversion) ) {
     $dbh->{RaiseError} = 0;
 }
 
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.13.00.031";
 if ( CheckVersion($DBversion) ) {
 
     $dbh->do(q{
