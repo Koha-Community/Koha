@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::TagsApproval;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::TagsApproval
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::TagsApproval
+=head1 TABLE: C<tags_approval>
 
 =cut
 
@@ -34,6 +38,7 @@ __PACKAGE__->table("tags_approval");
 =head2 date_approved
 
   data_type: 'datetime'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 approved_by
@@ -56,12 +61,27 @@ __PACKAGE__->add_columns(
   "approved",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "date_approved",
-  { data_type => "datetime", is_nullable => 1 },
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "approved_by",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "weight_total",
   { data_type => "integer", default_value => 1, is_nullable => 0 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</term>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("term");
 
 =head1 RELATIONS
@@ -78,7 +98,12 @@ __PACKAGE__->belongs_to(
   "approved_by",
   "Koha::Schema::Result::Borrower",
   { borrowernumber => "approved_by" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
 );
 
 =head2 tags_indexes
@@ -97,8 +122,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0C4z7rRUg2mcdmdrUOGcYw
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TcnMQQTB5F8hjyLoJ7VBHQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::ImportItem;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::ImportItem
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::ImportItem
+=head1 TABLE: C<import_items>
 
 =cut
 
@@ -82,6 +86,17 @@ __PACKAGE__->add_columns(
   "import_error",
   { data_type => "mediumtext", is_nullable => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</import_items_id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("import_items_id");
 
 =head1 RELATIONS
@@ -98,12 +113,12 @@ __PACKAGE__->belongs_to(
   "import_record",
   "Koha::Schema::Result::ImportRecord",
   { import_record_id => "import_record_id" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2PCGat+VP/DjjEe+G0gb3Q
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xJd76DD3iljc4uFm7iZeLQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

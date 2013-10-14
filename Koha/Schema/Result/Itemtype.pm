@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Itemtype;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Itemtype
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Itemtype
+=head1 TABLE: C<itemtypes>
 
 =cut
 
@@ -53,6 +57,19 @@ __PACKAGE__->table("itemtypes");
   data_type: 'text'
   is_nullable: 1
 
+=head2 checkinmsg
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+=head2 checkinmsgtype
+
+  data_type: 'char'
+  default_value: 'message'
+  is_nullable: 0
+  size: 16
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -68,7 +85,27 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 200 },
   "summary",
   { data_type => "text", is_nullable => 1 },
+  "checkinmsg",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
+  "checkinmsgtype",
+  {
+    data_type => "char",
+    default_value => "message",
+    is_nullable => 0,
+    size => 16,
+  },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</itemtype>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("itemtype");
 
 =head1 RELATIONS
@@ -104,8 +141,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:U4zQb4FXeB0GE8+Kyp9X1Q
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BmFEWUxi2Ha50Hv6nQhDKQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

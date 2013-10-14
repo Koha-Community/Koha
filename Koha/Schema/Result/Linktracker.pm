@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Linktracker;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Linktracker
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Linktracker
+=head1 TABLE: C<linktracker>
 
 =cut
 
@@ -48,6 +52,7 @@ __PACKAGE__->table("linktracker");
 =head2 timeclicked
 
   data_type: 'datetime'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =cut
@@ -64,13 +69,28 @@ __PACKAGE__->add_columns(
   "url",
   { data_type => "text", is_nullable => 1 },
   "timeclicked",
-  { data_type => "datetime", is_nullable => 1 },
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6e2s/DzzRjvXXrusUC4TZg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4Ox7j2FHewUd09dX9i+T6w
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

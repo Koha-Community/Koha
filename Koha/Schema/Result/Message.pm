@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Message;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Message
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Message
+=head1 TABLE: C<messages>
 
 =cut
 
@@ -50,6 +54,7 @@ __PACKAGE__->table("messages");
 =head2 message_date
 
   data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
 
@@ -68,16 +73,28 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 0 },
   "message_date",
   {
-    data_type     => "timestamp",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable   => 0,
+    is_nullable => 0,
   },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</message_id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("message_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fEt+ILa1HzB4aXmXkk8XXg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iq+Uo9eMnkDgUQsRR6VFUA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

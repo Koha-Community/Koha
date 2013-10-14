@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Subscriptionroutinglist;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Subscriptionroutinglist
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Subscriptionroutinglist
+=head1 TABLE: C<subscriptionroutinglist>
 
 =cut
 
@@ -54,7 +58,33 @@ __PACKAGE__->add_columns(
   "subscriptionid",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</routingid>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("routingid");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<subscriptionid>
+
+=over 4
+
+=item * L</subscriptionid>
+
+=item * L</borrowernumber>
+
+=back
+
+=cut
+
 __PACKAGE__->add_unique_constraint("subscriptionid", ["subscriptionid", "borrowernumber"]);
 
 =head1 RELATIONS
@@ -71,7 +101,7 @@ __PACKAGE__->belongs_to(
   "borrowernumber",
   "Koha::Schema::Result::Borrower",
   { borrowernumber => "borrowernumber" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 =head2 subscriptionid
@@ -86,12 +116,12 @@ __PACKAGE__->belongs_to(
   "subscriptionid",
   "Koha::Schema::Result::Subscription",
   { subscriptionid => "subscriptionid" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qzF+UEtZnlyDm5KBWgAODw
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AK595c56vgTa7ZjwZjberw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

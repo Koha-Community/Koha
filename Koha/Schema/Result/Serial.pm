@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Serial;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Serial
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Serial
+=head1 TABLE: C<serial>
 
 =cut
 
@@ -55,6 +59,7 @@ __PACKAGE__->table("serial");
 =head2 planneddate
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 notes
@@ -65,11 +70,13 @@ __PACKAGE__->table("serial");
 =head2 publisheddate
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 claimdate
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 routingnotes
@@ -91,16 +98,27 @@ __PACKAGE__->add_columns(
   "status",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "planneddate",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "notes",
   { data_type => "text", is_nullable => 1 },
   "publisheddate",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "claimdate",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "routingnotes",
   { data_type => "text", is_nullable => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</serialid>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("serialid");
 
 =head1 RELATIONS
@@ -121,8 +139,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6kL+JePSa/pT8Fvyrp2xow
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xloe1BJrVD7sU07AnA4P2g
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

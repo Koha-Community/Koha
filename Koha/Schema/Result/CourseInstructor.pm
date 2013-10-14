@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::CourseInstructor;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::CourseInstructor
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::CourseInstructor
+=head1 TABLE: C<course_instructors>
 
 =cut
 
@@ -39,24 +43,22 @@ __PACKAGE__->add_columns(
   "borrowernumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
-__PACKAGE__->set_primary_key("course_id", "borrowernumber");
 
-=head1 RELATIONS
+=head1 PRIMARY KEY
 
-=head2 course
+=over 4
 
-Type: belongs_to
+=item * L</course_id>
 
-Related object: L<Koha::Schema::Result::Course>
+=item * L</borrowernumber>
+
+=back
 
 =cut
 
-__PACKAGE__->belongs_to(
-  "course",
-  "Koha::Schema::Result::Course",
-  { course_id => "course_id" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
-);
+__PACKAGE__->set_primary_key("course_id", "borrowernumber");
+
+=head1 RELATIONS
 
 =head2 borrowernumber
 
@@ -70,12 +72,27 @@ __PACKAGE__->belongs_to(
   "borrowernumber",
   "Koha::Schema::Result::Borrower",
   { borrowernumber => "borrowernumber" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+=head2 course
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Course>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "course",
+  "Koha::Schema::Result::Course",
+  { course_id => "course_id" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zPwefIbI2Pz0pX03KpS1eQ
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dIemqF/uRWLNN4IMCHZxRA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

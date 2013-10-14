@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Issue;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Issue
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Issue
+=head1 TABLE: C<issues>
 
 =cut
 
@@ -34,6 +38,7 @@ __PACKAGE__->table("issues");
 =head2 date_due
 
   data_type: 'datetime'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 branchcode
@@ -51,11 +56,13 @@ __PACKAGE__->table("issues");
 =head2 returndate
 
   data_type: 'datetime'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 lastreneweddate
 
   data_type: 'datetime'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 return
@@ -72,12 +79,14 @@ __PACKAGE__->table("issues");
 =head2 timestamp
 
   data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
 
 =head2 issuedate
 
   data_type: 'datetime'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =cut
@@ -88,27 +97,44 @@ __PACKAGE__->add_columns(
   "itemnumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "date_due",
-  { data_type => "datetime", is_nullable => 1 },
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "branchcode",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "issuingbranch",
   { data_type => "varchar", is_nullable => 1, size => 18 },
   "returndate",
-  { data_type => "datetime", is_nullable => 1 },
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "lastreneweddate",
-  { data_type => "datetime", is_nullable => 1 },
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "return",
   { data_type => "varchar", is_nullable => 1, size => 4 },
   "renewals",
   { data_type => "tinyint", is_nullable => 1 },
   "timestamp",
   {
-    data_type     => "timestamp",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable   => 0,
+    is_nullable => 0,
   },
   "issuedate",
-  { data_type => "datetime", is_nullable => 1 },
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
 );
 
 =head1 RELATIONS
@@ -125,7 +151,12 @@ __PACKAGE__->belongs_to(
   "borrowernumber",
   "Koha::Schema::Result::Borrower",
   { borrowernumber => "borrowernumber" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
 );
 
 =head2 itemnumber
@@ -140,12 +171,17 @@ __PACKAGE__->belongs_to(
   "itemnumber",
   "Koha::Schema::Result::Item",
   { itemnumber => "itemnumber" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uZUDWDGWOkC3oCOyMaG1sg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZEh31EKBmURMKxDxI+H3EA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Virtualshelve;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Virtualshelve
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Virtualshelve
+=head1 TABLE: C<virtualshelves>
 
 =cut
 
@@ -52,6 +56,7 @@ __PACKAGE__->table("virtualshelves");
 =head2 lastmodified
 
   data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
 
@@ -88,9 +93,10 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 16 },
   "lastmodified",
   {
-    data_type     => "timestamp",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable   => 0,
+    is_nullable => 0,
   },
   "allow_add",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
@@ -99,9 +105,40 @@ __PACKAGE__->add_columns(
   "allow_delete_other",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</shelfnumber>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("shelfnumber");
 
 =head1 RELATIONS
+
+=head2 owner
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "owner",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "owner" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
 
 =head2 virtualshelfcontents
 
@@ -133,24 +170,9 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 owner
 
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Borrower>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "owner",
-  "Koha::Schema::Result::Borrower",
-  { borrowernumber => "owner" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GitYLGGw2F/bqc511p2oTg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WdBpWgSdrE0l13vKgDRcGg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::AuthHeader;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::AuthHeader
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::AuthHeader
+=head1 TABLE: C<auth_header>
 
 =cut
 
@@ -36,11 +40,13 @@ __PACKAGE__->table("auth_header");
 =head2 datecreated
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 datemodified
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 origincode
@@ -82,9 +88,9 @@ __PACKAGE__->add_columns(
   "authtypecode",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
   "datecreated",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "datemodified",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "origincode",
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "authtrees",
@@ -96,11 +102,22 @@ __PACKAGE__->add_columns(
   "marcxml",
   { data_type => "longtext", is_nullable => 0 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</authid>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("authid");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NVcyurExTIYMqdmRcU0hSA
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Z7KMl3JNWUJlOte5CD25Dw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Aqbookseller;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Aqbookseller
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Aqbookseller
+=head1 TABLE: C<aqbooksellers>
 
 =cut
 
@@ -272,24 +276,20 @@ __PACKAGE__->add_columns(
   "deliverytime",
   { data_type => "integer", is_nullable => 1 },
 );
-__PACKAGE__->set_primary_key("id");
 
-=head1 RELATIONS
+=head1 PRIMARY KEY
 
-=head2 aqbaskets
+=over 4
 
-Type: has_many
+=item * L</id>
 
-Related object: L<Koha::Schema::Result::Aqbasket>
+=back
 
 =cut
 
-__PACKAGE__->has_many(
-  "aqbaskets",
-  "Koha::Schema::Result::Aqbasket",
-  { "foreign.booksellerid" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
+__PACKAGE__->set_primary_key("id");
+
+=head1 RELATIONS
 
 =head2 aqbasketgroups
 
@@ -306,34 +306,19 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 listprice
+=head2 aqbaskets
 
-Type: belongs_to
+Type: has_many
 
-Related object: L<Koha::Schema::Result::Currency>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "listprice",
-  "Koha::Schema::Result::Currency",
-  { currency => "listprice" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-=head2 invoiceprice
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Currency>
+Related object: L<Koha::Schema::Result::Aqbasket>
 
 =cut
 
-__PACKAGE__->belongs_to(
-  "invoiceprice",
-  "Koha::Schema::Result::Currency",
-  { currency => "invoiceprice" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
+__PACKAGE__->has_many(
+  "aqbaskets",
+  "Koha::Schema::Result::Aqbasket",
+  { "foreign.booksellerid" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 aqcontracts
@@ -366,9 +351,49 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 invoiceprice
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Rie+pN0FWfYl8iqGV+svZQ
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Currency>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "invoiceprice",
+  "Koha::Schema::Result::Currency",
+  { currency => "invoiceprice" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 listprice
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Currency>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "listprice",
+  "Koha::Schema::Result::Currency",
+  { currency => "listprice" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Pqq5chHLUwm5Ss5CCQBL2g
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

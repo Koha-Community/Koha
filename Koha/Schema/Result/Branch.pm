@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Branch;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Branch
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Branch
+=head1 TABLE: C<branches>
 
 =cut
 
@@ -154,6 +158,17 @@ __PACKAGE__->add_columns(
   "opac_info",
   { data_type => "text", is_nullable => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</branchcode>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("branchcode");
 
 =head1 RELATIONS
@@ -353,21 +368,6 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 items_homebranches
-
-Type: has_many
-
-Related object: L<Koha::Schema::Result::Item>
-
-=cut
-
-__PACKAGE__->has_many(
-  "items_homebranches",
-  "Koha::Schema::Result::Item",
-  { "foreign.homebranch" => "self.branchcode" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 items_holdingbranches
 
 Type: has_many
@@ -380,6 +380,21 @@ __PACKAGE__->has_many(
   "items_holdingbranches",
   "Koha::Schema::Result::Item",
   { "foreign.holdingbranch" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 items_homebranches
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Item>
+
+=cut
+
+__PACKAGE__->has_many(
+  "items_homebranches",
+  "Koha::Schema::Result::Item",
+  { "foreign.homebranch" => "self.branchcode" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -428,9 +443,19 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 categorycodes
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BS/6xtFAoMSKsXho4IXXjQ
+Type: many_to_many
+
+Composing rels: L</branchrelations> -> categorycode
+
+=cut
+
+__PACKAGE__->many_to_many("categorycodes", "branchrelations", "categorycode");
+
+
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7TY0QNDQkB33iQeLAgo1qg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

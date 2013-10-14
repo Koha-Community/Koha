@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::SocialData;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::SocialData
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::SocialData
+=head1 TABLE: C<social_data>
 
 =cut
 
@@ -75,11 +79,22 @@ __PACKAGE__->add_columns(
   "num_scores",
   { data_type => "integer", is_nullable => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</isbn>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("isbn");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jj5Z4o+iItaaMj9+9ZptTg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Medc/ZzPVp5Eq+adFoqQoA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

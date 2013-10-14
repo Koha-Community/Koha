@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Virtualshelfshare;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Virtualshelfshare
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Virtualshelfshare
+=head1 TABLE: C<virtualshelfshares>
 
 =cut
 
@@ -46,6 +50,7 @@ __PACKAGE__->table("virtualshelfshares");
 =head2 sharedate
 
   data_type: 'datetime'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =cut
@@ -60,26 +65,26 @@ __PACKAGE__->add_columns(
   "invitekey",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "sharedate",
-  { data_type => "datetime", is_nullable => 1 },
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
 );
-__PACKAGE__->set_primary_key("id");
 
-=head1 RELATIONS
+=head1 PRIMARY KEY
 
-=head2 shelfnumber
+=over 4
 
-Type: belongs_to
+=item * L</id>
 
-Related object: L<Koha::Schema::Result::Virtualshelve>
+=back
 
 =cut
 
-__PACKAGE__->belongs_to(
-  "shelfnumber",
-  "Koha::Schema::Result::Virtualshelve",
-  { shelfnumber => "shelfnumber" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
-);
+__PACKAGE__->set_primary_key("id");
+
+=head1 RELATIONS
 
 =head2 borrowernumber
 
@@ -93,12 +98,32 @@ __PACKAGE__->belongs_to(
   "borrowernumber",
   "Koha::Schema::Result::Borrower",
   { borrowernumber => "borrowernumber" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 shelfnumber
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Virtualshelve>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "shelfnumber",
+  "Koha::Schema::Result::Virtualshelve",
+  { shelfnumber => "shelfnumber" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wbmtFrbzS+jaFaiZRZ0uwg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Eu/4NPwsXI+UMs5QWVsUmA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Z3950server;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Z3950server
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Z3950server
+=head1 TABLE: C<z3950servers>
 
 =cut
 
@@ -90,7 +94,7 @@ __PACKAGE__->table("z3950servers");
 
   data_type: 'enum'
   default_value: 'primary'
-  extra: {list => ["primary","secondary",""]}
+  extra: {list => ["primary","secondary"]}
   is_nullable: 0
 
 =head2 type
@@ -109,6 +113,13 @@ __PACKAGE__->table("z3950servers");
 
   data_type: 'text'
   is_nullable: 0
+
+=head2 recordtype
+
+  data_type: 'varchar'
+  default_value: 'biblio'
+  is_nullable: 0
+  size: 45
 
 =cut
 
@@ -141,7 +152,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "enum",
     default_value => "primary",
-    extra => { list => ["primary", "secondary", ""] },
+    extra => { list => ["primary", "secondary"] },
     is_nullable => 0,
   },
   "type",
@@ -155,12 +166,30 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "description",
   { data_type => "text", is_nullable => 0 },
+  "recordtype",
+  {
+    data_type => "varchar",
+    default_value => "biblio",
+    is_nullable => 0,
+    size => 45,
+  },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3D8BWcZZVQlK8zrPw4GTtQ
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:j/AgGQDMyR5wm1wooSYYDw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

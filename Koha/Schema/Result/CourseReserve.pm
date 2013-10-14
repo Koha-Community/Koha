@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::CourseReserve;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::CourseReserve
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::CourseReserve
+=head1 TABLE: C<course_reserves>
 
 =cut
 
@@ -49,6 +53,7 @@ __PACKAGE__->table("course_reserves");
 =head2 timestamp
 
   data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
 
@@ -67,12 +72,39 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "timestamp",
   {
-    data_type     => "timestamp",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable   => 0,
+    is_nullable => 0,
   },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</cr_id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("cr_id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<pseudo_key>
+
+=over 4
+
+=item * L</course_id>
+
+=item * L</ci_id>
+
+=back
+
+=cut
+
 __PACKAGE__->add_unique_constraint("pseudo_key", ["course_id", "ci_id"]);
 
 =head1 RELATIONS
@@ -89,12 +121,12 @@ __PACKAGE__->belongs_to(
   "course",
   "Koha::Schema::Result::Course",
   { course_id => "course_id" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LUZRTXuhywezgITcSqqDJQ
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9KuuUyFReuw+PAlLW84yXQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

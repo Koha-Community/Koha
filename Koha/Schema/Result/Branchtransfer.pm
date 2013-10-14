@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Branchtransfer;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Branchtransfer
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Branchtransfer
+=head1 TABLE: C<branchtransfers>
 
 =cut
 
@@ -29,6 +33,7 @@ __PACKAGE__->table("branchtransfers");
 =head2 datesent
 
   data_type: 'datetime'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 frombranch
@@ -42,6 +47,7 @@ __PACKAGE__->table("branchtransfers");
 =head2 datearrived
 
   data_type: 'datetime'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 tobranch
@@ -68,7 +74,11 @@ __PACKAGE__->add_columns(
     is_nullable    => 0,
   },
   "datesent",
-  { data_type => "datetime", is_nullable => 1 },
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "frombranch",
   {
     data_type => "varchar",
@@ -78,7 +88,11 @@ __PACKAGE__->add_columns(
     size => 10,
   },
   "datearrived",
-  { data_type => "datetime", is_nullable => 1 },
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "tobranch",
   {
     data_type => "varchar",
@@ -105,22 +119,7 @@ __PACKAGE__->belongs_to(
   "frombranch",
   "Koha::Schema::Result::Branch",
   { branchcode => "frombranch" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-=head2 tobranch
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Branch>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "tobranch",
-  "Koha::Schema::Result::Branch",
-  { branchcode => "tobranch" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 =head2 itemnumber
@@ -135,12 +134,27 @@ __PACKAGE__->belongs_to(
   "itemnumber",
   "Koha::Schema::Result::Item",
   { itemnumber => "itemnumber" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+=head2 tobranch
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Branch>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "tobranch",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "tobranch" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ojdZ8a0zDyBQi7MaMtCSuQ
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NPbH+5o2BVPj8yeoUqEavw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

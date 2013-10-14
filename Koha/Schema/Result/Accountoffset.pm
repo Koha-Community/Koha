@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Accountoffset;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Accountoffset
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Accountoffset
+=head1 TABLE: C<accountoffsets>
 
 =cut
 
@@ -47,6 +51,7 @@ __PACKAGE__->table("accountoffsets");
 =head2 timestamp
 
   data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
 
@@ -68,9 +73,10 @@ __PACKAGE__->add_columns(
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "timestamp",
   {
-    data_type     => "timestamp",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable   => 0,
+    is_nullable => 0,
   },
 );
 
@@ -88,12 +94,12 @@ __PACKAGE__->belongs_to(
   "borrowernumber",
   "Koha::Schema::Result::Borrower",
   { borrowernumber => "borrowernumber" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EgbEZx495kZ40/HqRcPXfA
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OTfcUiJCPb5aU/gjqAb/bA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

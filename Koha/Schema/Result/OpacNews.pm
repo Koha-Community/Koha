@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::OpacNews;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::OpacNews
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::OpacNews
+=head1 TABLE: C<opac_news>
 
 =cut
 
@@ -49,12 +53,14 @@ __PACKAGE__->table("opac_news");
 =head2 timestamp
 
   data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
 
 =head2 expirationdate
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 number
@@ -80,20 +86,32 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 25 },
   "timestamp",
   {
-    data_type     => "timestamp",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable   => 0,
+    is_nullable => 0,
   },
   "expirationdate",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "number",
   { data_type => "integer", is_nullable => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</idnew>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("idnew");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8SrbfmWUXmR8I47YLpPUrQ
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0tkil0XyRwcT+abM2XoADw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

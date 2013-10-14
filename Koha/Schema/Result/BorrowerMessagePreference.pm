@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::BorrowerMessagePreference;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::BorrowerMessagePreference
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::BorrowerMessagePreference
+=head1 TABLE: C<borrower_message_preferences>
 
 =cut
 
@@ -78,54 +82,20 @@ __PACKAGE__->add_columns(
   "wants_digest",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</borrower_message_preference_id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("borrower_message_preference_id");
 
 =head1 RELATIONS
-
-=head2 borrowernumber
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Borrower>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "borrowernumber",
-  "Koha::Schema::Result::Borrower",
-  { borrowernumber => "borrowernumber" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-=head2 message_attribute
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::MessageAttribute>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "message_attribute",
-  "Koha::Schema::Result::MessageAttribute",
-  { message_attribute_id => "message_attribute_id" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-=head2 categorycode
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Category>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "categorycode",
-  "Koha::Schema::Result::Category",
-  { categorycode => "categorycode" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
-);
 
 =head2 borrower_message_transport_preferences
 
@@ -144,9 +114,83 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 borrowernumber
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dP6LspN4dP65EGfApx6xIw
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "borrowernumber",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "borrowernumber" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 categorycode
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Category>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "categorycode",
+  "Koha::Schema::Result::Category",
+  { categorycode => "categorycode" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 message_attribute
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::MessageAttribute>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "message_attribute",
+  "Koha::Schema::Result::MessageAttribute",
+  { message_attribute_id => "message_attribute_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 message_transport_types
+
+Type: many_to_many
+
+Composing rels: L</borrower_message_transport_preferences> -> message_transport_type
+
+=cut
+
+__PACKAGE__->many_to_many(
+  "message_transport_types",
+  "borrower_message_transport_preferences",
+  "message_transport_type",
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hd5sPnxGi5332WmzqCus8A
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

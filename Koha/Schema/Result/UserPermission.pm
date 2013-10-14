@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::UserPermission;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::UserPermission
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::UserPermission
+=head1 TABLE: C<user_permissions>
 
 =cut
 
@@ -75,7 +79,7 @@ __PACKAGE__->belongs_to(
   "borrowernumber",
   "Koha::Schema::Result::Borrower",
   { borrowernumber => "borrowernumber" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 =head2 permission
@@ -90,12 +94,17 @@ __PACKAGE__->belongs_to(
   "permission",
   "Koha::Schema::Result::Permission",
   { code => "code", module_bit => "module_bit" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uj0+AqPSrddrRPjAEbeDUA
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9dMAYxSmVQ1cVKxmnMiMkg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::OaiSetsBiblio;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::OaiSetsBiblio
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::OaiSetsBiblio
+=head1 TABLE: C<oai_sets_biblios>
 
 =cut
 
@@ -39,6 +43,19 @@ __PACKAGE__->add_columns(
   "set_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</biblionumber>
+
+=item * L</set_id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("biblionumber", "set_id");
 
 =head1 RELATIONS
@@ -55,7 +72,7 @@ __PACKAGE__->belongs_to(
   "biblionumber",
   "Koha::Schema::Result::Biblio",
   { biblionumber => "biblionumber" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 =head2 set
@@ -70,12 +87,12 @@ __PACKAGE__->belongs_to(
   "set",
   "Koha::Schema::Result::OaiSet",
   { id => "set_id" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UkR8n4x6yZOGCMP10KvnRg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Zl0mhAt8isigZay80Ie6jA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

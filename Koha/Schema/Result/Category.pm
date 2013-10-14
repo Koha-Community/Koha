@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Category;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Category
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Category
+=head1 TABLE: C<categories>
 
 =cut
 
@@ -39,6 +43,7 @@ __PACKAGE__->table("categories");
 =head2 enrolmentperioddate
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 upperagelimit
@@ -107,7 +112,7 @@ __PACKAGE__->add_columns(
   "enrolmentperiod",
   { data_type => "smallint", is_nullable => 1 },
   "enrolmentperioddate",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "upperagelimit",
   { data_type => "smallint", is_nullable => 1 },
   "dateofbirthrequired",
@@ -129,6 +134,17 @@ __PACKAGE__->add_columns(
   "category_type",
   { data_type => "varchar", default_value => "A", is_nullable => 0, size => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</categorycode>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("categorycode");
 
 =head1 RELATIONS
@@ -209,8 +225,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rQnbpUtXD6tNSnSGpowcaw
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lert5/PnaztNZ9rmoGc2Gg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

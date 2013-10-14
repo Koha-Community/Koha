@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::CourseItem;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::CourseItem
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::CourseItem
+=head1 TABLE: C<course_items>
 
 =cut
 
@@ -66,6 +70,7 @@ __PACKAGE__->table("course_items");
 =head2 timestamp
 
   data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
 
@@ -93,12 +98,37 @@ __PACKAGE__->add_columns(
   },
   "timestamp",
   {
-    data_type     => "timestamp",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable   => 0,
+    is_nullable => 0,
   },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</ci_id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("ci_id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<itemnumber>
+
+=over 4
+
+=item * L</itemnumber>
+
+=back
+
+=cut
+
 __PACKAGE__->add_unique_constraint("itemnumber", ["itemnumber"]);
 
 =head1 RELATIONS
@@ -115,7 +145,12 @@ __PACKAGE__->belongs_to(
   "holdingbranch",
   "Koha::Schema::Result::Branch",
   { branchcode => "holdingbranch" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
 );
 
 =head2 itemnumber
@@ -130,12 +165,12 @@ __PACKAGE__->belongs_to(
   "itemnumber",
   "Koha::Schema::Result::Item",
   { itemnumber => "itemnumber" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BAqW3ImuEzBoIMWAeM12qA
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iVWZfUWcPfrLdLdvjyvbow
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

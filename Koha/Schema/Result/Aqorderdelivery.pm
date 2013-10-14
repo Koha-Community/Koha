@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Aqorderdelivery;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Aqorderdelivery
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Aqorderdelivery
+=head1 TABLE: C<aqorderdelivery>
 
 =cut
 
@@ -22,6 +26,7 @@ __PACKAGE__->table("aqorderdelivery");
 =head2 ordernumber
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 deliverynumber
@@ -50,7 +55,7 @@ __PACKAGE__->table("aqorderdelivery");
 
 __PACKAGE__->add_columns(
   "ordernumber",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "deliverynumber",
   { data_type => "smallint", default_value => 0, is_nullable => 0 },
   "deliverydate",
@@ -62,8 +67,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LOGL7qHtUGwgWbKJ1HguXA
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hS/Ww/p7nHWiHNumkBifiQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

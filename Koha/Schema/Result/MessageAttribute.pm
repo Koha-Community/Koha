@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::MessageAttribute;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::MessageAttribute
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::MessageAttribute
+=head1 TABLE: C<message_attributes>
 
 =cut
 
@@ -48,7 +52,31 @@ __PACKAGE__->add_columns(
   "takes_days",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</message_attribute_id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("message_attribute_id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<message_name>
+
+=over 4
+
+=item * L</message_name>
+
+=back
+
+=cut
+
 __PACKAGE__->add_unique_constraint("message_name", ["message_name"]);
 
 =head1 RELATIONS
@@ -84,8 +112,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nJqtM1tc/ouojD5I8+qg0A
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:N033AvWwG2CDBDuTj2unqQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

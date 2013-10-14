@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Item;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Item
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Item
+=head1 TABLE: C<items>
 
 =cut
 
@@ -47,6 +51,7 @@ __PACKAGE__->table("items");
 =head2 dateaccessioned
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 booksellerid
@@ -76,16 +81,19 @@ __PACKAGE__->table("items");
 =head2 replacementpricedate
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 datelastborrowed
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 datelastseen
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 stack
@@ -111,7 +119,7 @@ __PACKAGE__->table("items");
   default_value: 0
   is_nullable: 0
 
-=head2 wthdrawn
+=head2 withdrawn
 
   data_type: 'tinyint'
   default_value: 0
@@ -169,6 +177,7 @@ __PACKAGE__->table("items");
 =head2 timestamp
 
   data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
 
@@ -187,6 +196,7 @@ __PACKAGE__->table("items");
 =head2 onloan
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 cn_source
@@ -263,7 +273,7 @@ __PACKAGE__->add_columns(
   "barcode",
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "dateaccessioned",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "booksellerid",
   { data_type => "mediumtext", is_nullable => 1 },
   "homebranch",
@@ -273,11 +283,11 @@ __PACKAGE__->add_columns(
   "replacementprice",
   { data_type => "decimal", is_nullable => 1, size => [8, 2] },
   "replacementpricedate",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "datelastborrowed",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "datelastseen",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "stack",
   { data_type => "tinyint", is_nullable => 1 },
   "notforloan",
@@ -286,7 +296,7 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "itemlost",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
-  "wthdrawn",
+  "withdrawn",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "itemcallnumber",
   { data_type => "varchar", is_nullable => 1, size => 255 },
@@ -308,16 +318,17 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "timestamp",
   {
-    data_type     => "timestamp",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable   => 0,
+    is_nullable => 0,
   },
   "location",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "permanent_location",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "onloan",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "cn_source",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "cn_sort",
@@ -339,7 +350,31 @@ __PACKAGE__->add_columns(
   "stocknumber",
   { data_type => "varchar", is_nullable => 1, size => 32 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</itemnumber>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("itemnumber");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<itembarcodeidx>
+
+=over 4
+
+=item * L</barcode>
+
+=back
+
+=cut
+
 __PACKAGE__->add_unique_constraint("itembarcodeidx", ["barcode"]);
 
 =head1 RELATIONS
@@ -357,6 +392,21 @@ __PACKAGE__->has_many(
   "Koha::Schema::Result::Accountline",
   { "foreign.itemnumber" => "self.itemnumber" },
   { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 biblioitemnumber
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Biblioitem>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "biblioitemnumber",
+  "Koha::Schema::Result::Biblioitem",
+  { biblioitemnumber => "biblioitemnumber" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 =head2 branchtransfers
@@ -419,34 +469,24 @@ __PACKAGE__->might_have(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 issues
-
-Type: has_many
-
-Related object: L<Koha::Schema::Result::Issue>
-
-=cut
-
-__PACKAGE__->has_many(
-  "issues",
-  "Koha::Schema::Result::Issue",
-  { "foreign.itemnumber" => "self.itemnumber" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-=head2 biblioitemnumber
+=head2 holdingbranch
 
 Type: belongs_to
 
-Related object: L<Koha::Schema::Result::Biblioitem>
+Related object: L<Koha::Schema::Result::Branch>
 
 =cut
 
 __PACKAGE__->belongs_to(
-  "biblioitemnumber",
-  "Koha::Schema::Result::Biblioitem",
-  { biblioitemnumber => "biblioitemnumber" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  "holdingbranch",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "holdingbranch" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
 );
 
 =head2 homebranch
@@ -461,22 +501,27 @@ __PACKAGE__->belongs_to(
   "homebranch",
   "Koha::Schema::Result::Branch",
   { branchcode => "homebranch" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
 );
 
-=head2 holdingbranch
+=head2 issues
 
-Type: belongs_to
+Type: has_many
 
-Related object: L<Koha::Schema::Result::Branch>
+Related object: L<Koha::Schema::Result::Issue>
 
 =cut
 
-__PACKAGE__->belongs_to(
-  "holdingbranch",
-  "Koha::Schema::Result::Branch",
-  { branchcode => "holdingbranch" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
+__PACKAGE__->has_many(
+  "issues",
+  "Koha::Schema::Result::Issue",
+  { "foreign.itemnumber" => "self.itemnumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 old_issues
@@ -540,8 +585,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:f3HngbnArIKegakzHgcFBg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JV1Q/UVlKQ6QgVFMGBIZCw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

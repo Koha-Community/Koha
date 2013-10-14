@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::AuthorisedValuesBranch;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::AuthorisedValuesBranch
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::AuthorisedValuesBranch
+=head1 TABLE: C<authorised_values_branches>
 
 =cut
 
@@ -55,7 +59,12 @@ __PACKAGE__->belongs_to(
   "av",
   "Koha::Schema::Result::AuthorisedValue",
   { id => "av_id" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
 );
 
 =head2 branchcode
@@ -70,12 +79,17 @@ __PACKAGE__->belongs_to(
   "branchcode",
   "Koha::Schema::Result::Branch",
   { branchcode => "branchcode" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yPaKXjOzZX76bddoMqxKmA
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:k6hCbzMVZ1VRsubvdrZMYQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

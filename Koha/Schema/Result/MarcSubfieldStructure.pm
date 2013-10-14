@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::MarcSubfieldStructure;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::MarcSubfieldStructure
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::MarcSubfieldStructure
+=head1 TABLE: C<marc_subfield_structure>
 
 =cut
 
@@ -168,11 +172,26 @@ __PACKAGE__->add_columns(
   "maxlength",
   { data_type => "integer", default_value => 9999, is_nullable => 0 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</frameworkcode>
+
+=item * L</tagfield>
+
+=item * L</tagsubfield>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("frameworkcode", "tagfield", "tagsubfield");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6UMADnf1NRqg+kxGn1LdrQ
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4JgqkPKFNSQ90hTeeb30ow
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

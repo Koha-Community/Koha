@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Matchpoint;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Matchpoint
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Matchpoint
+=head1 TABLE: C<matchpoints>
 
 =cut
 
@@ -56,6 +60,17 @@ __PACKAGE__->add_columns(
   "score",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</matchpoint_id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("matchpoint_id");
 
 =head1 RELATIONS
@@ -90,6 +105,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 matcher
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::MarcMatcher>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "matcher",
+  "Koha::Schema::Result::MarcMatcher",
+  { matcher_id => "matcher_id" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
 =head2 matcher_matchpoints
 
 Type: has_many
@@ -120,24 +150,9 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 matcher
 
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::MarcMatcher>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "matcher",
-  "Koha::Schema::Result::MarcMatcher",
-  { matcher_id => "matcher_id" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ltzMXDHk2L7ECkLUrGXyzA
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KvZ0QM+OoJ+xaUKdkPGASg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

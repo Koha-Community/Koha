@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::PrintersProfile;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::PrintersProfile
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::PrintersProfile
+=head1 TABLE: C<printers_profile>
 
 =cut
 
@@ -122,15 +126,45 @@ __PACKAGE__->add_columns(
     size => 15,
   },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</profile_id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("profile_id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<printername>
+
+=over 4
+
+=item * L</printer_name>
+
+=item * L</template_id>
+
+=item * L</paper_bin>
+
+=item * L</creator>
+
+=back
+
+=cut
+
 __PACKAGE__->add_unique_constraint(
   "printername",
   ["printer_name", "template_id", "paper_bin", "creator"],
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1hyMy9lC23Te5l2gW++DVA
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GJid4zfVF0MmMnUn3xyVbA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

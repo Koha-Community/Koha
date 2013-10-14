@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Suggestion;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Suggestion
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Suggestion
+=head1 TABLE: C<suggestions>
 
 =cut
 
@@ -34,6 +38,7 @@ __PACKAGE__->table("suggestions");
 =head2 suggesteddate
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   default_value: '0000-00-00'
   is_nullable: 0
 
@@ -45,6 +50,7 @@ __PACKAGE__->table("suggestions");
 =head2 manageddate
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 acceptedby
@@ -55,6 +61,7 @@ __PACKAGE__->table("suggestions");
 =head2 accepteddate
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 rejectedby
@@ -65,6 +72,7 @@ __PACKAGE__->table("suggestions");
 =head2 rejecteddate
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 status
@@ -105,6 +113,7 @@ __PACKAGE__->table("suggestions");
 =head2 date
 
   data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
 
@@ -206,19 +215,24 @@ __PACKAGE__->add_columns(
   "suggestedby",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "suggesteddate",
-  { data_type => "date", default_value => "0000-00-00", is_nullable => 0 },
+  {
+    data_type => "date",
+    datetime_undef_if_invalid => 1,
+    default_value => "0000-00-00",
+    is_nullable => 0,
+  },
   "managedby",
   { data_type => "integer", is_nullable => 1 },
   "manageddate",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "acceptedby",
   { data_type => "integer", is_nullable => 1 },
   "accepteddate",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "rejectedby",
   { data_type => "integer", is_nullable => 1 },
   "rejecteddate",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "status",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
   "note",
@@ -233,9 +247,10 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "date",
   {
-    data_type     => "timestamp",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable   => 0,
+    is_nullable => 0,
   },
   "volumedesc",
   { data_type => "varchar", is_nullable => 1, size => 255 },
@@ -270,11 +285,22 @@ __PACKAGE__->add_columns(
   "total",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</suggestionid>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("suggestionid");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FCZjU1DjqLCAcw+dSjpP/w
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CQRbWbu5MBouyD67ArSRNw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

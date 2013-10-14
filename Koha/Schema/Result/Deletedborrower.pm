@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Deletedborrower;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Deletedborrower
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Deletedborrower
+=head1 TABLE: C<deletedborrowers>
 
 =cut
 
@@ -187,6 +191,7 @@ __PACKAGE__->table("deletedborrowers");
 =head2 dateofbirth
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 branchcode
@@ -206,11 +211,13 @@ __PACKAGE__->table("deletedborrowers");
 =head2 dateenrolled
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 dateexpiry
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 gonenoaddress
@@ -226,6 +233,7 @@ __PACKAGE__->table("deletedborrowers");
 =head2 debarred
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 debarredcomment
@@ -453,21 +461,21 @@ __PACKAGE__->add_columns(
   "b_phone",
   { data_type => "mediumtext", is_nullable => 1 },
   "dateofbirth",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "branchcode",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
   "categorycode",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
   "dateenrolled",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "dateexpiry",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "gonenoaddress",
   { data_type => "tinyint", is_nullable => 1 },
   "lost",
   { data_type => "tinyint", is_nullable => 1 },
   "debarred",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "debarredcomment",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "contactname",
@@ -527,8 +535,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1D2zAd8OsHXZ2s9cEVevug
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yA/UeNpbYIUrX/iWsF0NLw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

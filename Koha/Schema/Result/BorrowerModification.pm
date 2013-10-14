@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::BorrowerModification;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::BorrowerModification
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::BorrowerModification
+=head1 TABLE: C<borrower_modifications>
 
 =cut
 
@@ -22,6 +26,7 @@ __PACKAGE__->table("borrower_modifications");
 =head2 timestamp
 
   data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
 
@@ -200,6 +205,7 @@ __PACKAGE__->table("borrower_modifications");
 =head2 dateofbirth
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 branchcode
@@ -217,11 +223,13 @@ __PACKAGE__->table("borrower_modifications");
 =head2 dateenrolled
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 dateexpiry
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 gonenoaddress
@@ -237,6 +245,7 @@ __PACKAGE__->table("borrower_modifications");
 =head2 debarred
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 debarredcomment
@@ -402,9 +411,10 @@ __PACKAGE__->table("borrower_modifications");
 __PACKAGE__->add_columns(
   "timestamp",
   {
-    data_type     => "timestamp",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable   => 0,
+    is_nullable => 0,
   },
   "verification_token",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
@@ -471,21 +481,21 @@ __PACKAGE__->add_columns(
   "b_phone",
   { data_type => "mediumtext", is_nullable => 1 },
   "dateofbirth",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "branchcode",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "categorycode",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "dateenrolled",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "dateexpiry",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "gonenoaddress",
   { data_type => "tinyint", is_nullable => 1 },
   "lost",
   { data_type => "tinyint", is_nullable => 1 },
   "debarred",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "debarredcomment",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "contactname",
@@ -543,11 +553,24 @@ __PACKAGE__->add_columns(
   "privacy",
   { data_type => "integer", is_nullable => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</verification_token>
+
+=item * L</borrowernumber>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:F50fjkEjqHuyl7zaEDV+3A
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:11X5o3u4/EqPRVbQdtAuOA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

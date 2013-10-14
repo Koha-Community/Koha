@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::RepeatableHoliday;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::RepeatableHoliday
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::RepeatableHoliday
+=head1 TABLE: C<repeatable_holidays>
 
 =cut
 
@@ -77,11 +81,22 @@ __PACKAGE__->add_columns(
   "description",
   { data_type => "text", is_nullable => 0 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9CaAbUmcE7O8TT5NZivX1Q
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:15Ot3jdlgFpmCbVgUDqZRg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Statistic;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Statistic
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Statistic
+=head1 TABLE: C<statistics>
 
 =cut
 
@@ -22,6 +26,7 @@ __PACKAGE__->table("statistics");
 =head2 datetime
 
   data_type: 'datetime'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 branch
@@ -90,7 +95,11 @@ __PACKAGE__->table("statistics");
 
 __PACKAGE__->add_columns(
   "datetime",
-  { data_type => "datetime", is_nullable => 1 },
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "branch",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "proccode",
@@ -116,8 +125,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JYb2c/mWBks4WwV/WDm5RA
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:THELVmdFFi1RCI4DfqwGIw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

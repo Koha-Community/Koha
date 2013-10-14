@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Branchrelation;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Branchrelation
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Branchrelation
+=head1 TABLE: C<branchrelations>
 
 =cut
 
@@ -55,6 +59,19 @@ __PACKAGE__->add_columns(
     size => 10,
   },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</branchcode>
+
+=item * L</categorycode>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("branchcode", "categorycode");
 
 =head1 RELATIONS
@@ -71,7 +88,7 @@ __PACKAGE__->belongs_to(
   "branchcode",
   "Koha::Schema::Result::Branch",
   { branchcode => "branchcode" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 =head2 categorycode
@@ -86,12 +103,12 @@ __PACKAGE__->belongs_to(
   "categorycode",
   "Koha::Schema::Result::Branchcategory",
   { categorycode => "categorycode" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VFoJV/KyMCVH7/fD5bSY/w
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lBOq8k+wurbp633kbi8tVg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

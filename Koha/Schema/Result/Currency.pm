@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Currency;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Currency
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Currency
+=head1 TABLE: C<currency>
 
 =cut
 
@@ -35,6 +39,7 @@ __PACKAGE__->table("currency");
 =head2 timestamp
 
   data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
 
@@ -58,33 +63,30 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 5 },
   "timestamp",
   {
-    data_type     => "timestamp",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable   => 0,
+    is_nullable => 0,
   },
   "rate",
   { data_type => "float", is_nullable => 1, size => [15, 5] },
   "active",
   { data_type => "tinyint", is_nullable => 1 },
 );
-__PACKAGE__->set_primary_key("currency");
 
-=head1 RELATIONS
+=head1 PRIMARY KEY
 
-=head2 aqbooksellers_listprices
+=over 4
 
-Type: has_many
+=item * L</currency>
 
-Related object: L<Koha::Schema::Result::Aqbookseller>
+=back
 
 =cut
 
-__PACKAGE__->has_many(
-  "aqbooksellers_listprices",
-  "Koha::Schema::Result::Aqbookseller",
-  { "foreign.listprice" => "self.currency" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
+__PACKAGE__->set_primary_key("currency");
+
+=head1 RELATIONS
 
 =head2 aqbooksellers_invoiceprices
 
@@ -101,9 +103,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 aqbooksellers_listprices
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6SWDTY33KjtpW71Elgs69g
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Aqbookseller>
+
+=cut
+
+__PACKAGE__->has_many(
+  "aqbooksellers_listprices",
+  "Koha::Schema::Result::Aqbookseller",
+  { "foreign.listprice" => "self.currency" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1fpLJHtP0bseXVfytxii5Q
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

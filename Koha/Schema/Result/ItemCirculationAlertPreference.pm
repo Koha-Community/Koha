@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::ItemCirculationAlertPreference;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::ItemCirculationAlertPreference
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::ItemCirculationAlertPreference
+=head1 TABLE: C<item_circulation_alert_preferences>
 
 =cut
 
@@ -63,11 +67,22 @@ __PACKAGE__->add_columns(
   "notification",
   { data_type => "varchar", is_nullable => 0, size => 16 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:u0W8zw5k/6shlotWbr/5UA
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1JO3F3Wc1jjqKR3jzx2eiw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

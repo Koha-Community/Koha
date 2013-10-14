@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Aqbudgetperiod;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Aqbudgetperiod
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Aqbudgetperiod
+=head1 TABLE: C<aqbudgetperiods>
 
 =cut
 
@@ -28,11 +32,13 @@ __PACKAGE__->table("aqbudgetperiods");
 =head2 budget_period_startdate
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 0
 
 =head2 budget_period_enddate
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 0
 
 =head2 budget_period_active
@@ -75,9 +81,9 @@ __PACKAGE__->add_columns(
   "budget_period_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "budget_period_startdate",
-  { data_type => "date", is_nullable => 0 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 0 },
   "budget_period_enddate",
-  { data_type => "date", is_nullable => 0 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 0 },
   "budget_period_active",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
   "budget_period_description",
@@ -91,11 +97,22 @@ __PACKAGE__->add_columns(
   "sort2_authcat",
   { data_type => "varchar", is_nullable => 1, size => 10 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</budget_period_id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("budget_period_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MKnUsWU+v4zWADuLVahIuQ
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SaTTCao0N80iDL8pgf5k1A
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Course;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Course
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Course
+=head1 TABLE: C<courses>
 
 =cut
 
@@ -29,7 +33,7 @@ __PACKAGE__->table("courses");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 20
+  size: 80
 
 =head2 course_number
 
@@ -53,7 +57,7 @@ __PACKAGE__->table("courses");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 20
+  size: 80
 
 =head2 staff_note
 
@@ -81,6 +85,7 @@ __PACKAGE__->table("courses");
 =head2 timestamp
 
   data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
 
@@ -90,7 +95,7 @@ __PACKAGE__->add_columns(
   "course_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "department",
-  { data_type => "varchar", is_nullable => 1, size => 20 },
+  { data_type => "varchar", is_nullable => 1, size => 80 },
   "course_number",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "section",
@@ -98,7 +103,7 @@ __PACKAGE__->add_columns(
   "course_name",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "term",
-  { data_type => "varchar", is_nullable => 1, size => 20 },
+  { data_type => "varchar", is_nullable => 1, size => 80 },
   "staff_note",
   { data_type => "mediumtext", is_nullable => 1 },
   "public_note",
@@ -114,11 +119,23 @@ __PACKAGE__->add_columns(
   },
   "timestamp",
   {
-    data_type     => "timestamp",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable   => 0,
+    is_nullable => 0,
   },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</course_id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("course_id");
 
 =head1 RELATIONS
@@ -153,9 +170,19 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 borrowernumbers
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SN5SfQi+SbfPr069wck64w
+Type: many_to_many
+
+Composing rels: L</course_instructors> -> borrowernumber
+
+=cut
+
+__PACKAGE__->many_to_many("borrowernumbers", "course_instructors", "borrowernumber");
+
+
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:crKCFQ80qo2p885ebiBfnw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

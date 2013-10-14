@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::TransportCost;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::TransportCost
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::TransportCost
+=head1 TABLE: C<transport_cost>
 
 =cut
 
@@ -57,6 +61,19 @@ __PACKAGE__->add_columns(
   "disable_transfer",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</frombranch>
+
+=item * L</tobranch>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("frombranch", "tobranch");
 
 =head1 RELATIONS
@@ -73,7 +90,7 @@ __PACKAGE__->belongs_to(
   "frombranch",
   "Koha::Schema::Result::Branch",
   { branchcode => "frombranch" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 =head2 tobranch
@@ -88,12 +105,12 @@ __PACKAGE__->belongs_to(
   "tobranch",
   "Koha::Schema::Result::Branch",
   { branchcode => "tobranch" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xaYbVRwPFyhljmGybBzTqA
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gMs7dT/xK4ClGqQEHI7HOQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

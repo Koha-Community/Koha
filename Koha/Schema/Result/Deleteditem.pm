@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Deleteditem;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Deleteditem
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Deleteditem
+=head1 TABLE: C<deleteditems>
 
 =cut
 
@@ -46,6 +50,7 @@ __PACKAGE__->table("deleteditems");
 =head2 dateaccessioned
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 booksellerid
@@ -74,16 +79,19 @@ __PACKAGE__->table("deleteditems");
 =head2 replacementpricedate
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 datelastborrowed
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 datelastseen
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 stack
@@ -109,7 +117,7 @@ __PACKAGE__->table("deleteditems");
   default_value: 0
   is_nullable: 0
 
-=head2 wthdrawn
+=head2 withdrawn
 
   data_type: 'tinyint'
   default_value: 0
@@ -166,6 +174,7 @@ __PACKAGE__->table("deleteditems");
 =head2 timestamp
 
   data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
 
@@ -184,6 +193,7 @@ __PACKAGE__->table("deleteditems");
 =head2 onloan
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 cn_source
@@ -261,7 +271,7 @@ __PACKAGE__->add_columns(
   "barcode",
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "dateaccessioned",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "booksellerid",
   { data_type => "mediumtext", is_nullable => 1 },
   "homebranch",
@@ -271,11 +281,11 @@ __PACKAGE__->add_columns(
   "replacementprice",
   { data_type => "decimal", is_nullable => 1, size => [8, 2] },
   "replacementpricedate",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "datelastborrowed",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "datelastseen",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "stack",
   { data_type => "tinyint", is_nullable => 1 },
   "notforloan",
@@ -284,7 +294,7 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "itemlost",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
-  "wthdrawn",
+  "withdrawn",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "itemcallnumber",
   { data_type => "varchar", is_nullable => 1, size => 255 },
@@ -306,16 +316,17 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "timestamp",
   {
-    data_type     => "timestamp",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable   => 0,
+    is_nullable => 0,
   },
   "location",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "permanent_location",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "onloan",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "cn_source",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "cn_sort",
@@ -339,11 +350,22 @@ __PACKAGE__->add_columns(
   "marc",
   { data_type => "longblob", is_nullable => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</itemnumber>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dQeILHSwObg9anjIGL+5vA
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dfUPy7ijJ/uh9+0AqKjSBw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

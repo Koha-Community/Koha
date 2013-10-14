@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::DefaultBranchCircRule;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::DefaultBranchCircRule
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::DefaultBranchCircRule
+=head1 TABLE: C<default_branch_circ_rules>
 
 =cut
 
@@ -54,6 +58,17 @@ __PACKAGE__->add_columns(
   "returnbranch",
   { data_type => "varchar", is_nullable => 1, size => 15 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</branchcode>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("branchcode");
 
 =head1 RELATIONS
@@ -70,12 +85,12 @@ __PACKAGE__->belongs_to(
   "branchcode",
   "Koha::Schema::Result::Branch",
   { branchcode => "branchcode" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yCrCqkdVhV80/WtxZPK6Kw
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Uw1Y82CgbAY8ndLOucN70g
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

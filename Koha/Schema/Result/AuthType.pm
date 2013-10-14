@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::AuthType;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::AuthType
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::AuthType
+=head1 TABLE: C<auth_types>
 
 =cut
 
@@ -57,6 +61,17 @@ __PACKAGE__->add_columns(
   "summary",
   { data_type => "mediumtext", is_nullable => 0 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</authtypecode>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("authtypecode");
 
 =head1 RELATIONS
@@ -77,8 +92,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:n40JCBQ6mHTaHDRGG8mk2w
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sy0+bAJuYz5t9OVCq0Vo8Q
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

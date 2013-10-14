@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Aqinvoice;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Aqinvoice
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Aqinvoice
+=head1 TABLE: C<aqinvoices>
 
 =cut
 
@@ -39,16 +43,19 @@ __PACKAGE__->table("aqinvoices");
 =head2 shipmentdate
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 billingdate
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 closedate
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 shipmentcost
@@ -73,49 +80,30 @@ __PACKAGE__->add_columns(
   "booksellerid",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "shipmentdate",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "billingdate",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "closedate",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "shipmentcost",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "shipmentcost_budgetid",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</invoiceid>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("invoiceid");
 
 =head1 RELATIONS
-
-=head2 booksellerid
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Aqbookseller>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "booksellerid",
-  "Koha::Schema::Result::Aqbookseller",
-  { id => "booksellerid" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-=head2 shipmentcost_budgetid
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Aqbudget>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "shipmentcost_budgetid",
-  "Koha::Schema::Result::Aqbudget",
-  { budget_id => "shipmentcost_budgetid" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
-);
 
 =head2 aqorders
 
@@ -132,9 +120,44 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 booksellerid
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:O5JnKjtyloB4VdJzZMpQng
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Aqbookseller>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "booksellerid",
+  "Koha::Schema::Result::Aqbookseller",
+  { id => "booksellerid" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+=head2 shipmentcost_budgetid
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Aqbudget>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "shipmentcost_budgetid",
+  "Koha::Schema::Result::Aqbudget",
+  { budget_id => "shipmentcost_budgetid" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nV0lYm2w4xX8cwVmTVF3YQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

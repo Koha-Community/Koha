@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Systempreference;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Systempreference
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Systempreference
+=head1 TABLE: C<systempreferences>
 
 =cut
 
@@ -61,11 +65,22 @@ __PACKAGE__->add_columns(
   "type",
   { data_type => "varchar", is_nullable => 1, size => 20 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</variable>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("variable");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qx8G91nKoJnDCDAMLg0ZUg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WalVf/kVVNRcfYely910iQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

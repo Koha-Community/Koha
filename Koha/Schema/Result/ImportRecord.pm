@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::ImportRecord;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::ImportRecord
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::ImportRecord
+=head1 TABLE: C<import_records>
 
 =cut
 
@@ -46,12 +50,14 @@ __PACKAGE__->table("import_records");
 =head2 upload_timestamp
 
   data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
 
 =head2 import_date
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 marc
@@ -121,12 +127,13 @@ __PACKAGE__->add_columns(
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "upload_timestamp",
   {
-    data_type     => "timestamp",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable   => 0,
+    is_nullable => 0,
   },
   "import_date",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "marc",
   { data_type => "longblob", is_nullable => 0 },
   "marcxml",
@@ -172,6 +179,17 @@ __PACKAGE__->add_columns(
   "z3950random",
   { data_type => "varchar", is_nullable => 1, size => 40 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</import_record_id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("import_record_id");
 
 =head1 RELATIONS
@@ -189,6 +207,21 @@ __PACKAGE__->has_many(
   "Koha::Schema::Result::ImportAuth",
   { "foreign.import_record_id" => "self.import_record_id" },
   { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 import_batch
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::ImportBatch>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "import_batch",
+  "Koha::Schema::Result::ImportBatch",
+  { import_batch_id => "import_batch_id" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 =head2 import_biblios
@@ -236,24 +269,9 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 import_batch
 
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::ImportBatch>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "import_batch",
-  "Koha::Schema::Result::ImportBatch",
-  { import_batch_id => "import_batch_id" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4BPw0d87+uhdeHd0DnL6Ng
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:e71umJ0QmfPBvlxmzbClng
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

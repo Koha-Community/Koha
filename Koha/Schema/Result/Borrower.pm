@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::Borrower;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::Borrower
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::Borrower
+=head1 TABLE: C<borrowers>
 
 =cut
 
@@ -187,6 +191,7 @@ __PACKAGE__->table("borrowers");
 =head2 dateofbirth
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 branchcode
@@ -208,11 +213,13 @@ __PACKAGE__->table("borrowers");
 =head2 dateenrolled
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 dateexpiry
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 gonenoaddress
@@ -228,6 +235,7 @@ __PACKAGE__->table("borrowers");
 =head2 debarred
 
   data_type: 'date'
+  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 debarredcomment
@@ -289,7 +297,7 @@ __PACKAGE__->table("borrowers");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 30
+  size: 60
 
 =head2 flags
 
@@ -455,7 +463,7 @@ __PACKAGE__->add_columns(
   "b_phone",
   { data_type => "mediumtext", is_nullable => 1 },
   "dateofbirth",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "branchcode",
   {
     data_type => "varchar",
@@ -473,15 +481,15 @@ __PACKAGE__->add_columns(
     size => 10,
   },
   "dateenrolled",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "dateexpiry",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "gonenoaddress",
   { data_type => "tinyint", is_nullable => 1 },
   "lost",
   { data_type => "tinyint", is_nullable => 1 },
   "debarred",
-  { data_type => "date", is_nullable => 1 },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "debarredcomment",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "contactname",
@@ -503,7 +511,7 @@ __PACKAGE__->add_columns(
   "sex",
   { data_type => "varchar", is_nullable => 1, size => 1 },
   "password",
-  { data_type => "varchar", is_nullable => 1, size => 30 },
+  { data_type => "varchar", is_nullable => 1, size => 60 },
   "flags",
   { data_type => "integer", is_nullable => 1 },
   "userid",
@@ -539,7 +547,31 @@ __PACKAGE__->add_columns(
   "privacy",
   { data_type => "integer", default_value => 1, is_nullable => 0 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</borrowernumber>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("borrowernumber");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<cardnumber>
+
+=over 4
+
+=item * L</cardnumber>
+
+=back
+
+=cut
+
 __PACKAGE__->add_unique_constraint("cardnumber", ["cardnumber"]);
 
 =head1 RELATIONS
@@ -634,21 +666,6 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 categorycode
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Category>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "categorycode",
-  "Koha::Schema::Result::Category",
-  { categorycode => "categorycode" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
 =head2 branchcode
 
 Type: belongs_to
@@ -661,7 +678,22 @@ __PACKAGE__->belongs_to(
   "branchcode",
   "Koha::Schema::Result::Branch",
   { branchcode => "branchcode" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+=head2 categorycode
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Category>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "categorycode",
+  "Koha::Schema::Result::Category",
+  { categorycode => "categorycode" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 =head2 course_instructors
@@ -795,7 +827,7 @@ Related object: L<Koha::Schema::Result::Patronimage>
 __PACKAGE__->might_have(
   "patronimage",
   "Koha::Schema::Result::Patronimage",
-  { "foreign.cardnumber" => "self.cardnumber" },
+  { "foreign.borrowernumber" => "self.borrowernumber" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -949,9 +981,29 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 budgets
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RZG8l5yFKXZzsAY8CenNeA
+Type: many_to_many
+
+Composing rels: L</aqbudgetborrowers> -> budget
+
+=cut
+
+__PACKAGE__->many_to_many("budgets", "aqbudgetborrowers", "budget");
+
+=head2 courses
+
+Type: many_to_many
+
+Composing rels: L</course_instructors> -> course
+
+=cut
+
+__PACKAGE__->many_to_many("courses", "course_instructors", "course");
+
+
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RTqzsubViQ3dHnXCUKqgNg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
