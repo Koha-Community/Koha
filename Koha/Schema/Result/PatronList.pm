@@ -1,17 +1,21 @@
+use utf8;
 package Koha::Schema::Result::PatronList;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Koha::Schema::Result::PatronList
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-
-=head1 NAME
-
-Koha::Schema::Result::PatronList
+=head1 TABLE: C<patron_lists>
 
 =cut
 
@@ -47,9 +51,35 @@ __PACKAGE__->add_columns(
   "owner",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</patron_list_id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("patron_list_id");
 
 =head1 RELATIONS
+
+=head2 owner
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "owner",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "owner" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
 
 =head2 patron_list_patrons
 
@@ -66,24 +96,9 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 owner
 
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Borrower>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "owner",
-  "Koha::Schema::Result::Borrower",
-  { borrowernumber => "owner" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-07-10 10:39:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XegvNUkfR/cYwxlLLX3h3A
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 21:34:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iWNlXRM+XvkJMlnu4F0xKw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
