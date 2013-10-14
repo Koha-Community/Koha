@@ -273,10 +273,11 @@ sub _get_language_dirs {
         next if $lang_string =~/^\./;
         next if $lang_string eq 'all';
         next if $lang_string =~/png$/;
+        next if $lang_string =~/js$/;
         next if $lang_string =~/css$/;
         next if $lang_string =~/CVS$/;
         next if $lang_string =~/\.txt$/i;     #Don't read the readme.txt !
-        next if $lang_string =~/img|images|famfam|sound|pdf/;
+        next if $lang_string =~/img|images|famfam|js|less|lib|sound|pdf/;
         push @lang_strings, $lang_string;
     }
         return (@lang_strings);

@@ -1,0 +1,151 @@
+[% USE Koha %]
+[% PROCESS 'opac-authorities.inc' %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Authority search &rsaquo; [% summary.mainentry %][% IF authtypetext %] ([% authtypetext %])[% END %]
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="opac-authoritiesdetail" class="scrollto">
+[% INCLUDE 'masthead.inc' %]
+
+    <div class="main">
+        <ul class="breadcrumb">
+            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="#">[% summary.mainentry %][% IF authtypetext %] ([% authtypetext %])[% END %]</a></li>
+        </ul>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                [% IF ( OpacNav || OpacNavBottom ) %]
+                    <div class="span2">
+                        <div id="navigation">
+                            [% INCLUDE 'navigation.inc' %]
+                        </div>
+                    </div>
+                    <div class="span10">
+                [% ELSE %]
+                    <div class="span12">
+                [% END %]
+                    <div id="userauthdetails" class="maincontent">
+                        <div id="views">
+                            <span class="view">
+                                <span id="Normalview">Normal view</span>
+                            </span>
+                            <span class="view">
+                                <a id="MARCview" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid %]&amp;marc=1">MARC view</a>
+                            </span>
+                        </div>
+
+                        [% IF ( displayhierarchy ) %]
+                            <div id="hierarchies">
+                                [% PROCESS showhierarchy trees = loophierarchies %]
+                            </div>
+                        [% END %]
+
+                        <h1>[% summary.mainentry %][% IF authtypetext %] ([% authtypetext %])[% END %]</h1>
+
+                        <div class="usedin">
+                            Used in <a href="opac-search.pl?type=opac&amp;q=[% authid %]&amp;idx=an,phr">[% count %] records</a>
+                        </div>
+
+                        <div class="authstanza">
+                            [% FOREACH authorize IN summary.authorized %]
+                                <div class="heading authorized auth[% seefro.field %]">
+                                    <span class="label">Preferred form: </span>
+                                    <span class="authorized">[% authorize.heading %]</span>
+                                </div>
+                            [% END %]
+                            [% PROCESS otherscript headings=summary.otherscript wantcategory='preferred' %]
+                        </div>
+
+                        [% IF summary.seefrom.size %]
+                            <div class="authstanza seefrom">
+                                <div class="authstanzaheading">Used for/see from:</div>
+                                <ul class="seefrom">
+                                    [% FOREACH seefro IN summary.seefrom %]
+                                        <li class="heading seefrom auth[% seefro.field %]">
+                                            [% IF seefro.type && seefro.type != 'seefrom' %]
+                                                <span class="label">[% PROCESS authtypelabel type=seefro.type | trim %]:</span>
+                                            [% END %]
+                                            <span class="seefrom">[% PROCESS authheadingdisplay heading=seefro.heading search=seefrosearch authid=seefro.authid %]</span>
+                                        </li>
+                                    [% END %]
+                                    [% PROCESS otherscript headings=summary.otherscript wantcategory='seefrom' %]
+                                </ul>
+                            </div>
+                        [% END %]
+
+                        [% IF summary.seealso.size %]
+                            <div class="authstanza seealso">
+                                <div class="authstanzaheading">See also:</div>
+                                <ul class="seelso">
+                                    [% FOREACH seeals IN summary.seealso %]
+                                        <li class="heading seealso auth[% seeals.field %]">
+                                            [% IF seeals.type && seeals.type != 'seealso' %]
+                                                <span class="label">[% PROCESS authtypelabel type=seeals.type | trim %]:</span>
+                                            [% END %]
+                                            <span class="seealso">[% PROCESS authheadingdisplay heading=seeals.heading search=seeals.search authid=seeals.authid %]</span>
+                                        </li>
+                                    [% END %]
+                                    [% PROCESS otherscript headings=summary.otherscript wantcategory='seealso' %]
+                                </ul>
+                            </div>
+                        [% END %]
+
+                        [% IF marcflavour == 'UNIMARC' && summary.otherscript %]
+                            <div class="authstanza">
+                                <div class="authstanzaheading">Other forms:</div>
+                                <ul>
+                                    [% FOREACH otherscrip IN summary.otherscript %]
+                                        <li>
+                                            [% PROCESS language lang=otherscrip.lang | trim %]:
+                                            <span class="otherscript">[% otherscrip.term %]</span>
+                                        </li>
+                                    [% END %]
+                                </ul>
+                            </div>
+                        [% END %]
+
+                        <div id="authdescriptions" class="toptabs">
+                            <ul>
+                                <li id="tab_descriptions" class="ui-tabs-selected"><a href="#descriptions">Notes</a></li>
+                            </ul>
+                            <div id="descriptions">
+                                <div class="content_set">
+                                    [% FOREACH note IN summary.notes %]
+                                        <p class="note auth[% note.field %]">[% note.note %]</p>
+                                    [% END %]
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- / .#userauthdetails -->
+                </div> <!-- / .span10/12 -->
+            </div> <!-- / .row-fluid -->
+        </div> <!-- / .container-fluid -->
+    </div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %]
+[% IF ( displayhierarchy ) %]
+    <script type="text/javascript" src="/opac-tmpl/lib/jquery/plugins/jquery.jstree.js"></script>
+[% END %]
+<script type="text/javascript">
+    //<![CDATA[
+        $(document).ready(function() {
+            $('#authdescriptions').tabs();
+            [% IF ( displayhierarchy ) %]
+                var current_nodes = [];
+                $('.currentauth').each(function() {
+                    current_nodes.push('#' + $(this).parent().parents('li:first').attr('id'));
+                    });
+                $('#hierarchies').jstree({
+                        "plugins": [ "themes", "html_data"],
+                        "themes": { "theme": "classic",
+                                    "icons": false },
+                        "core": { "initially_open": current_nodes }
+                    });
+            [% END %]
+        });
+    //]]>
+</script>
+[% END %]

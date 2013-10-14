@@ -1,0 +1,89 @@
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Authority search
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="opac-authorities" class="scrollto">
+[% INCLUDE 'masthead.inc' %]
+
+    <div class="main">
+        <ul class="breadcrumb">
+            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="#">Authority search</a></li>
+        </ul>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                [% IF ( OpacNav || OpacNavBottom ) %]
+                    <div class="span2">
+                        <div id="navigation">
+                            [% INCLUDE 'navigation.inc' %]
+                        </div>
+                    </div>
+                    <div class="span10">
+                [% ELSE %]
+                    <div class="span12">
+                [% END %]
+                    <div id="userauthhome" class="maincontent">
+                        <form name="f" action="/cgi-bin/koha/opac-authorities-home.pl" method="get">
+                            <input type="hidden" name="op" value="do_search" />
+                            <input type="hidden" name="type" value="opac" />
+                            <fieldset class="rows">
+                                <legend>Authority search</legend>
+                                <ol>
+                                    <li>
+                                        <label for="authtypecode">Authority type: </label>
+                                        <select name="authtypecode" id="authtypecode">
+                                            [% FOREACH authtypesloo IN authtypesloop %]
+                                                [% IF ( authtypesloo.selected ) %]
+                                                    <option value="[% authtypesloo.value %]" selected="selected">[% authtypesloo.authtypetext %]</option>
+                                                [% ELSE %]
+                                                    <option value="[% authtypesloo.value %]"> [% authtypesloo.authtypetext %]</option>
+                                                [% END %]
+                                            [% END %]
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <label for="anywhere">Search options:</label>
+                                        <select name="operator" id="anywhere">
+                                            <option value="contains">contains</option>
+                                            <option value="start">starts with</option>
+                                            <option value="is">is exactly</option>
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <label for="value">Term(s):</label>
+                                        <input type="text" name="value" id="value" value="[% value %]" />
+                                    </li>
+                                    <li>
+                                        <label for="marclist">Where:</label>
+                                        <select name="marclist" id="marclist">
+                                            <option value="any" selected="selected">in keyword</option>
+                                            <option value="match">in any heading</option>
+                                            <option value="mainentry">in main entry</option>
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <input type="hidden" name="and_or" value="and" />
+                                        <input type="hidden" name="excluding" value="" />
+                                        <label for="orderby">Order by: </label>
+                                        <select name="orderby" id="orderby">
+                                            <option value="">None</option>
+                                            <option value="HeadingAsc" selected="selected">Heading ascendant</option>
+                                            <option value="HeadingDsc">Heading descendant</option>
+                                        </select>
+                                    </li>
+                                </ol>
+                            </fieldset>
+                            <fieldset class="action">
+                                <input type="submit" value="Submit" class="btn" />
+                            </fieldset>
+                        </form>
+                    </div> <!-- / #userauthhome -->
+                </div> <!-- / .span10/12 -->
+            </div> <!-- / .row-fluid -->
+        </div> <!-- / .container-fluid -->
+    </div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %][% END %]

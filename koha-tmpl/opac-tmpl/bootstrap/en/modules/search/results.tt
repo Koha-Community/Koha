@@ -1,0 +1,109 @@
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
+[% IF ( searchdesc ) %]
+    Results of search [% IF ( query_desc ) %]for '[% query_desc | html%]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]
+[% ELSE %]
+    You did not specify any search criteria.
+[% END %]
+[% INCLUDE 'doc-head-close.inc' %]
+<link rel="alternate" type="application/rss+xml" title="[% LibraryName |html %] Search RSS Feed" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;count=[% countrss |html %]&amp;sort_by=acqdate_dsc&amp;format=rss2" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/jquery.rating.css" />
+
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#bookbag_form').find("input").hide();
+    $('#sort_by').change(function() {
+        $('#bookbag_form').submit();
+    });
+  } );
+</script>
+</head>
+
+<body id="results">
+  <div id="doc3" class="yui-t1">
+    <div id="bd">
+
+[% INCLUDE 'masthead.inc' %]
+
+
+    <div id="yui-main">
+    <div class="yui-b">
+    <div id="userresults" class="container">
+
+[% IF ( query_error ) %]
+<div class="dialog alert">
+    <h4>Error:</h4>
+    [% query_error %]
+</div>
+[% END %]
+
+<!-- Search Results Table -->
+[% IF ( total ) %]
+  <div class="num_of_results">
+    We have [% total %] results for your search
+  </div>
+  <div class="searchresults">
+    <form action="/cgi-bin/koha/opac-search.pl" method="get" name="bookbag_form" id="bookbag_form">
+      <!-- TABLE RESULTS START -->
+      <table>
+        <thead>
+          <tr>
+            <th colspan="5" class="resultscontrol">
+              <div class="resort">
+                <form method="get" id="sortbyform">
+                  [% FOREACH param IN follower_params %]
+                    [% UNLESS param.var == 'sort_by' %]
+                      <input type="hidden" name='[% param.var |html %]' value='[% param.val %]' />
+                    [% END %]
+                  [% END %]
+                  <label for="sort_by">Sort By: </label>
+                  <select id="sort_by" name="sort_by">
+                    [% INCLUDE 'search/resort_form.inc' %]
+                  </select>
+                  <input type="submit" value="Go" />
+                </form>
+              </div>
+              <div class="cartlist">
+                <!-- checkall, clearall are now needed for placehold -->
+                <span class="checkall"></span>
+                <span class="clearall"></span>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <!-- Actual Search Results -->
+        <tbody>
+          [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
+            <tr>
+              <td>
+                <input type="checkbox" id="bib[% SEARCH_RESULT.biblionumber %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber %]" /> <label for="bib[% SEARCH_RESULT.biblionumber %]"></label>
+              </td>
+              <td>
+                <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]" title="View details for this title">[% SEARCH_RESULT.title |html %]</a>
+                by <a href="/cgi-bin/koha/opac-search.pl?q=author:[% SEARCH_RESULT.author |url %]" title="Search for works by this author" class="author">[% SEARCH_RESULT.author %]</a>
+              </td>
+            </tr>
+          [% END %]
+        </tbody>
+      </table>
+    </form>
+  </div>
+  [% INCLUDE 'search/page-numbers.inc' %]
+[% END %]
+</div>
+</div>
+</div>
+
+<div class="yui-b">
+  <div class="container">
+    [% INCLUDE 'search/facets.inc' %]
+  </div>
+</div>
+
+</div>
+
+[% INCLUDE 'opac-bottom.inc' %]

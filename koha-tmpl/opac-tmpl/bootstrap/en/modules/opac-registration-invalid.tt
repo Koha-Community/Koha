@@ -1,0 +1,41 @@
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="opac-confirmation-pending">
+[% INCLUDE 'masthead.inc' %]
+
+    <div class="main">
+        <ul class="breadcrumb">
+            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="#">Register a new account</a></li>
+        </ul>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                [% IF ( OpacNav ) %]
+                    <div class="span2">
+                        <div id="opacnav">
+                            [% INCLUDE 'navigation.inc' %]
+                        </div>
+                    </div>
+                    <div class="span10">
+                [% ELSE %]
+                    <div class="span12">
+                [% END %]
+                    <div id="reistration-confirmation-error">
+                        <div class="alert">
+                            <h1>Registration invalid!</h1>
+
+                            <p>There were problems processing your registration. Please contact your library for help.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %][% END %]

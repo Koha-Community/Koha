@@ -1,0 +1,133 @@
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Images for: [% biblio.title |html %]
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %]
+    <style type="text/css">
+    #largeCoverImg {
+        border : 1px solid #CCCCCC;
+        display : block;
+        margin : auto;
+        padding : 1em;
+    }
+    #thumbnails {
+        text-align : center;
+    }
+    #thumbnails a img {
+        border : 2px solid #8EB3E7;
+    }
+    img.thumbnail {
+        display : block;
+        float : none;
+        margin : .3em 0;
+        padding : .5em;
+    }
+
+    #thumbnails a img.selected {
+        border-color: black;
+        cursor : default;
+        opacity:0.4;
+        filter:alpha(opacity=40); /* For IE8 and earlier */
+    }
+    </style>
+[% END %]
+</head>
+<body id="opac-imageviewer">
+[% INCLUDE 'masthead.inc' %]
+
+    <div class="main">
+        <ul class="breadcrumb">
+            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+            <li>
+                [% IF ( BiblioDefaultViewmarc ) %]
+                    <a href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblionumber |url %]">
+                [% ELSE %]
+                    [% IF ( BiblioDefaultViewisbd ) %]
+                        <a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblionumber |url %]">
+                    [% ELSE %]
+                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber |url %]">
+                    [% END %]
+                [% END %][% biblio.title %]</a> <span class="divider">&rsaquo;</span>
+            </li>
+            <li><a href="#">Images</a></li>
+        </ul>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                [% IF ( OpacNav || OpacNavBottom ) %]
+                    <div class="span2">
+                        <div id="navigation">
+                            [% INCLUDE 'navigation.inc' %]
+                        </div>
+                    </div>
+                    <div class="span10">
+                [% ELSE %]
+                    <div class="span12">
+                [% END %]
+                    <div class="row-fluid">
+                        <div class="span9">
+                            <h1 class="title">Images for
+                                [% IF ( BiblioDefaultViewmarc ) %]
+                                    <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblionumber |url %]" title="View details for this title">
+                                [% ELSE %]
+                                    [% IF ( BiblioDefaultViewisbd ) %]
+                                        <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblionumber |url %]" title="View details for this title">
+                                    [% ELSE %]
+                                        <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber |url %]" title="View details for this title">
+                                    [% END %]
+                                [% END %][% biblio.title %]</a> [% biblio.author %]
+                            </h1>
+                        </div> <!-- / .span9 -->
+                    </div> <!-- / .row-fluid -->
+
+                    <div class="row-fluid">
+                        <div class="span9">
+                            <div id="imageviewer">
+                                <div id="largeCover">
+                                    <img id="largeCoverImg" alt="" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% imagenumber %]" />
+                                </div>
+                            </div> <!-- / #imageviewer -->
+                        </div> <!-- / .span12 -->
+
+                        [% IF OPACLocalCoverImages == 1 %]
+                            <div class="span3">
+                                <div id="thumbnails">
+                                    [% FOREACH img IN images %]
+                                        [% IF img %]
+                                            <a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber %]&amp;imagenumber=[% img %]" onclick="showCover([% img %]); return false;">
+                                            [% IF ( imagenumber == img ) %]
+                                                <img class="thumbnail selected" id="[% img %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail"/>
+                                            [% ELSE %]
+                                                <img class="thumbnail" id="[% img %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail"/>
+                                            [% END %]
+                                            </a>
+                                        [% END %]
+                                    [% END %]
+                                </div>
+                            </div>
+                        [% ELSE %]
+                            Unfortunately, images are not enabled for this catalog at this time.
+                        [% END %]
+                    </div> <!-- / .row-fluid -->
+                </div> <!-- / .span10/12 -->
+            </div> <!-- / .row-fluid -->
+        </div> <!-- / .container-fluid -->
+    </div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %]
+<script type="text/javascript">
+    //<![CDATA[
+        $(document).ready(function(){
+            $("#largeCoverImg").attr("src","[% interface %]/[% theme %]/images/loading.gif");
+            showCover([% imagenumber %]);
+        });
+
+        function showCover(img) {
+            $('.thumbnail').attr('class', 'thumbnail');
+            $('#largeCoverImg').attr('src', '/cgi-bin/koha/opac-image.pl?imagenumber=' + img);
+            $('#' + img + '.thumbnail').attr('class', 'thumbnail selected');
+        }
+    //]]>
+</script>
+[% END %]

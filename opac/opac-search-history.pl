@@ -36,8 +36,7 @@ use POSIX qw(strftime);
 my $cgi = new CGI;
 
 # Getting the template and auth
-my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "opac-search-history.tmpl",
+my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => "opac-search-history.tmpl",
                                 query => $cgi,
                                 type => "opac",
                                 authnotrequired => 1,
@@ -74,15 +73,11 @@ if (!$loggedinuser) {
 		    # We create an iso date from the unix timestamp
 		    my $isodate = strftime "%Y-%m-%d", localtime($asearch->{'time'});
 
-		    # So we can create a C4::Dates object, to get the date formatted according to the dateformat syspref
-		    my $date = C4::Dates->new($isodate, "iso");
-		    my $sysprefdate = $date->output("syspref");
-		    
 		    # We also get the time of the day from the unix timestamp
 		    my $time = strftime " %H:%M:%S", localtime($asearch->{'time'});
 
 		    # And we got our human-readable date : 
-		    $asearch->{'time'} = $sysprefdate . $time;
+            $asearch->{'time'} = $isodate . $time;
 		}
 
 		$template->param(recentSearches => \@recentSearches);

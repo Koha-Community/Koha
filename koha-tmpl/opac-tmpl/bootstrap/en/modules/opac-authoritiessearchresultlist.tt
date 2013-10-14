@@ -1,0 +1,114 @@
+[% USE Koha %]
+[% PROCESS 'opac-authorities.inc' %]
+[% PROCESS 'authorities-search-results.inc' %]
+[% pagination = BLOCK %]
+    <div class="pagination">
+        <ul>
+            [% IF ( displayprev ) %]
+                <li>
+                    <a href="opac-authorities-home.pl?startfrom=[% startfromprev %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode %]&amp;orderby=[% orderby %]">
+                        &laquo;
+                    </a>
+                </li>
+            [% END %]
+            [% FOREACH number IN numbers %]
+                [% IF ( number.highlight ) %]
+                    <li class="active"><a href="#">[% number.number %]</a></li>
+                [% ELSE %]
+                    <li><a href="opac-authorities-home.pl?startfrom=[% number.startfrom %]&amp;[% FOREACH searchdat IN number.searchdata %][% searchdat.term %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode %]&amp;orderby=[% orderby %]">[% number.number %]</a></li>
+                [% END %]
+            [% END %]
+            [% IF ( displaynext ) %]
+                <li>
+                    <a href="opac-authorities-home.pl?startfrom=[% startfromnext %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term %]=[% searchdat.val |url %]&amp;[% END %]&amp;resultsperpage=[% resultsperpage %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode %]&amp;orderby=[% orderby %]">&raquo;</a>
+                </li>
+            [% END %]
+        </ul>
+    </div> <!-- / #pages -->
+[% END %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; [% IF ( total ) %]Authority search result[% ELSE %]No results found[% END %]
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="opac-authoritiesresultlist" class="scrollto">
+[% INCLUDE 'masthead.inc' %]
+
+    <div class="main">
+        <ul class="breadcrumb">
+            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="#">Results</a></li>
+        </ul>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                [% IF ( OpacNav || OpacNavBottom ) %]
+                    <div class="span2">
+                        <div id="navigation">
+                            [% INCLUDE 'navigation.inc' %]
+                        </div>
+                    </div>
+                    <div class="span10">
+                [% ELSE %]
+                    <div class="span12">
+                [% END %]
+                    <div id="userauthsearchresults" class="maincontent">
+                        <h1>Authority search results</h1>
+
+                        [% pagination %]
+
+                        <div id="results">
+                            [% IF ( total ) %]
+                                [% IF ( countfuzzy ) %]
+                                    <b>Showing [% resultcount %] of about [% total %] results</b>
+                                [% ELSE %]
+                                    <b>Results [% from %] to [% to %] of [% total %]</b>
+                                [% END %]
+                            [% ELSE %]
+                                No results found.
+                            [% END %]
+                        </div>
+
+                        [% IF ( total ) %]
+                            <div class="searchresults">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Authorized headings</th>
+                                            <th>Type of heading</th>
+                                            [% UNLESS ( isEDITORS ) %]
+                                                <th>Biblio records</th>
+                                            [% END %]
+                                            <th>Full heading</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        [% FOREACH resul IN result %]
+                                            <tr>
+                                                <td>[% PROCESS authresult summary=resul.summary link="/cgi-bin/koha/opac-authorities-home.pl?op=do_search&type=opac&operatorc=contains&marclistc=mainentry&and_orc=and&orderby=HeadingAsc&valuec=" %]</td>
+                                                <td>[% resul.authtype %]</td>
+                                                [% UNLESS ( resul.isEDITORS ) %]
+                                                    <td>
+                                                         <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an=[% resul.authid %]">[% resul.used %] biblios</a>
+                                                    </td>
+                                                [% END %]
+                                                <td>
+                                                    <a href="opac-authoritiesdetail.pl?authid=[% resul.authid %]">View full heading</a>
+                                                </td>
+                                            </tr>
+                                        [% END %]
+                                    </tbody>
+                                </table>
+                            </div> <!-- / .searchresults -->
+
+                            [% pagination %]
+
+                        [% END # / IF total %]
+                    </div> <!-- / #userauthsearchresults -->
+                </div> <!-- / .span10/12 -->
+            </div> <!-- / .row-fluid -->
+        </div> <!-- / .container-fluid -->
+    </div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %][% END %]

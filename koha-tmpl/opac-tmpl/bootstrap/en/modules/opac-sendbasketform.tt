@@ -1,0 +1,51 @@
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Sending your cart
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="addtolist" class="popup">
+    <div class="main">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div id="usersendbasket">
+                        [% IF ( email_add ) %]
+
+                            [% IF ( SENT ) %]
+                                <h1>Message sent</h1>
+                                <div class="dialog dialog-success">
+                                    <p>The cart was sent to: [% email_add %]</p>
+                                </div>
+                                <p><a class="focus close" href="#">Close window</a></p>
+                            [% END %]
+
+                            [% IF ( error ) %]
+                                <div class="alert">
+                                    <p>There was an error sending the cart.</p>
+                                </div>
+                            [% END %]
+
+                        [% ELSE %]
+                            <h1>Sending your cart</h1>
+                            <form action="[% url %]" method="post" id="sendbasketform">
+                                <fieldset>
+                                    <label for="email_add">Email address:</label>
+                                    <input type="text" id="email_add" name="email_add" size="43" class="focus" />
+                                    <label for="comment">Comment:</label>
+                                    <textarea id="comment" name="comment" rows="4" cols="40"></textarea>
+                                    <input type="hidden" name="bib_list" value="[% bib_list %]" />
+                                </fieldset>
+                                <fieldset class="action">
+                                    <input type="submit" class="btn" value="Send" />
+                                    <a class="cancel close" href="#">Cancel</a>
+                                </fieldset>
+                            </form>
+
+                        [% END # / IF email_add %]
+                    </div> <!-- / #usersendbasket -->
+                </div> <!-- / .span12 -->
+            </div> <!-- / .row-fluid -->
+        </div> <!-- / .container-fluid -->
+    </div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' is_popup=1 %]
+[% BLOCK jsinclude %][% END %]

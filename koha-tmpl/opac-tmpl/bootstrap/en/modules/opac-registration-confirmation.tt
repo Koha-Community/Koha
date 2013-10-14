@@ -1,0 +1,85 @@
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="opac-main">
+[% INCLUDE 'masthead.inc' %]
+
+    <div class="main">
+        <ul class="breadcrumb">
+            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="#">Registration complete</a></li>
+        </ul>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                [% IF ( OpacNav || OpacNavBottom ) %]
+                    <div class="span2">
+                        <div id="navigation">
+                            [% INCLUDE 'navigation.inc' %]
+                        </div>
+                    </div>
+                [% END %]
+
+                [% IF ( OpacNav ||  OpacNavBottom ) %]
+                    <div class="span7">
+                [% ELSE %]
+                    <div class="span9">
+                [% END %]
+
+                    <div id="registration-complete">
+                        <h1>Registration Complete!</h1>
+
+                        <p>You have successfully registered your new account. To log in, use the following credentials:</p>
+
+                        <p>Username: [% borrower.userid %]</p>
+                        <p>Password: [% password_cleartext %]</p>
+
+                        <p>For your convenience, the login box on this page has been pre-filled with this data. Please log in[% IF OpacPasswordChange %] and change your password[% END %].</p>
+
+                        <div id="PatronSelfRegistrationAdditionalInstructions">[% PatronSelfRegistrationAdditionalInstructions %]</div>
+                    </div>
+
+                </div> <!-- / .span7/9 -->
+
+                    [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) || OpacNavRight ) %]
+                        <div class="span3">
+                            [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                                [% UNLESS ( loggedinusername ) %]
+                                    [% UNLESS ( casAuthentication ) %]
+                                        <div id="login">
+                                            <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
+                                                <input type="hidden" name="koha_login_context" value="opac" />
+                                                <fieldset class="brief">
+                                                    <legend>Log in to your account:</legend>
+                                                    <label for="userid">Login:</label><input type="text" id="userid" size="10" name="userid" value="[% borrower.userid %]" />
+                                                    <label for="password">Password:</label><input type="password" id="password" size="10" name="password" value="[% password_cleartext %]" />
+                                                <fieldset class="action">
+                                                    <input type="submit" value="Log in" class="btn" />
+                                                </fieldset>
+                                                [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]<div id="patronregistration"><p>Don't have an account? <a href="/cgi-bin/koha/opac-memberentry.pl">Register here.</a></p></div>[% END %]
+                                                </fieldset>
+                                            </form>
+                                        </div> <!-- /#login -->
+                                    [% END # /casAuthentication %]
+                                    [% IF persona %]
+                                        <a href="#" class="persona-button" id="browserid" ><span>Sign in with your email</span></a>
+                                    [% END # /persona %]
+                                [% END # / loggedinusername %]
+                            [% END # /opacuserlogin %]
+                            [% IF ( OpacNavRight ) %]
+                                <div id="opacnavright">
+                                    [% OpacNavRight %]
+                                </div>
+                            [% END # /OpacNavRight %]
+                        </div> <!-- / .span3 -->
+                    [% END # /opacuserlogin || OpacNavRight %]
+
+            </div> <!-- /.row-fluid -->
+        </div> <!-- /.container-fluid -->
+    </div> <!-- /.main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %][% END %]

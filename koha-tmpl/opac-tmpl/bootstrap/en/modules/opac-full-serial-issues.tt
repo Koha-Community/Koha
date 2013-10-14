@@ -1,0 +1,274 @@
+[% USE Koha %]
+[% USE KohaDates %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Full subscription history for [% bibliotitle %]
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %]
+    <style type="text/css">
+        #search-facets fieldset { border: 0; margin: 0;padding:0;}#search-facets ol{padding:.3em;}#search-facets li {list-style-type:none;padding:4px 4px;}#search-facets label{font-weight:bold;display:block;margin:.2em 0;}#search-facets fieldset.action {padding-left:4px;margin:.3em;}div.tabsub { clear:both;}#subtabs a { display:block;float:left;border:1px solid #CCC;padding:.2em .4em;margin:.3em;text-decoration:none;font-size:115%;}#subtabs strong { display:block; float: left; font-size:115%;padding:.2em .4em; margin: 0.3em 0;}#subtabs { margin-top : 1em; }a.currentsubtab { background-color:#FFC;}
+    </style>
+[% END %]
+</head>
+<body id="opac-full-serial-issues" class="scrollto">
+[% INCLUDE 'masthead.inc' %]
+
+    <div class="main">
+        <ul class="breadcrumb">
+            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Details for [% bibliotitle %]</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="#">Full subscription history</a></li>
+        </ul>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span2">
+                    <div id="searchfacetscontainer">
+                        <div id="search-facets">
+                            <h4>Refine your search</h4>
+                            <form action="/cgi-bin/koha/opac-serial-issues.pl" id="filterform">
+                                <fieldset>
+                                    <label for="libraryfilter">Library : </label>
+                                    <select id="libraryfilter" name="libraryfilter" style="width:10em;"></select>
+
+                                    <label for="subscriptionidfilter">Subscription : </label>
+                                    <select id="subscriptionidfilter" name="subscriptionfilter" style="width:10em;" disabled="disabled"></select>
+                                </fieldset>
+                                <fieldset class="action">
+                                    <input type="reset" id="reset" class="btn" value="Clear" />
+                                </fieldset>
+                            </form>
+                        </div> <!-- / #search-facets -->
+                    </div> <!-- / #searchfacetscontainer -->
+                    <div id="navigation">
+                        [% INCLUDE 'navigation.inc' %]
+                    </div>
+                </div> <!-- / .span2 -->
+                <div class="span10">
+                    <div id="fullserialissues" class="maincontent">
+                        [% UNLESS ( popup ) %]
+                            <h2>Full subscription history for [% bibliotitle %]</h2>
+                            <div id="views">
+                                <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Normal view</a></span>
+                                <span class="view"><a id="Briefhistory" href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=[% biblionumber %]&amp;selectview=small">Brief history</a></span>
+                                <span class="view"><span id="Fullhistory">Full history</span></span>
+                            </div>
+                        [% END %]
+
+                        <div id="subtabs">
+                            <strong>Show year: </strong>
+                            [% FOREACH year IN years %]
+                                [% IF ( year.year ) %]
+                                    <a class="tabsubs" href="#" onclick="showlayer([% year.year %]); return false;">[% year.year %]</a>
+                                [% END %]
+                            [% END %]
+                        </div>
+
+                        [% FOREACH year IN years %]
+                            [% IF loop.first %]
+                                <div class="yeardata tabsub" id="show[% year.year %]" style="display:block">
+                            [% ELSE %]
+                                <div class="yeardata tabsub" id="show[% year.year %]" style="display:none">
+                            [% END %]
+                                <table class="subscriptionstclass table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Library</th>
+                                            <th>Notes</th>
+                                            <th>Date received</th>
+                                            <th>Number</th>
+                                            <th>Status</th>
+                                            <th>Subscription</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        [% FOREACH serial IN year.serials %]
+                                            <tr>
+                                                <td>
+                                                    [% IF ( serial.publisheddate ) %]
+                                                        <span title="[% serial.publisheddate %]">[% serial.publisheddate | $KohaDates %]</span>
+                                                    [% ELSE %]
+                                                        &nbsp;
+                                                    [% END %]
+                                                </td>
+                                                <td class="libraryfilterclass">[% serial.branchcode %]</td>
+                                                <td>[% serial.notes %]</td>
+                                                <td>
+                                                    [% IF ( serial.status2 && serial.planneddate ) %]
+                                                        <span title="[% serial.planneddate %]">[% serial.planneddate | $KohaDates %]</span>
+                                                    [% ELSE %]
+                                                        <span title="9999-12-31">&nbsp;</span>
+                                                    [% END %]
+                                                </td>
+                                                <td>[% serial.serialseq %]</td>
+                                                <td>
+                                                    [% IF ( serial.status1 ) %]Expected[% END %]
+                                                    [% IF ( serial.status2 ) %]Arrived[% END %]
+                                                    [% IF ( serial.status3 ) %]Late[% END %]
+                                                    [% IF ( serial.status4 ) %]Missing[% END %]
+                                                    [% IF ( serial.status5 ) %]Not available[% END %]
+                                                    [% IF ( serial.status6 ) %]Delete[% END %]
+                                                    [% IF ( serial.status7 ) %]Claimed[% END %]
+                                                    [% IF ( serial.status8 ) %]Stopped[% END %]
+                                                </td>
+                                                <td class="subscriptionidfilterclass">[% serial.subscriptionid %]</td>
+                                            </tr>
+                                        [% END %]
+                                    </tbody>
+                                </table>
+                            </div> <!-- / .yeardata tabsub -->
+                        [% END # / FOREACH year %]
+                    </div> <!-- / #fullserialissues -->
+                </div> <!-- / .span10 -->
+            </div> <!-- / .row-fluid -->
+        </div> <!-- / .container-fluid -->
+    </div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %]
+[% INCLUDE 'datatables.inc' %]
+<script type="text/javascript">
+    //<![CDATA[
+        $(document).ready(function(){
+            showlayer([% yearmin %]);
+            $("a.tabsubs:first").addClass("currentsubtab");
+            $("#filterform").submit(function(){
+                filterByLibrary();
+                return false;
+            });
+            $("#libraryfilter").change(function(){
+                filterByLibrary();
+            });
+            $("#subscriptionidfilter").change(function(){
+                filterBySubscriptionId();
+            });
+            $("#reset").click(function(){
+                clearFilters();
+            });
+            $("a.tabsubs").click(function(){
+                $("a.tabsubs").removeClass("currentsubtab");
+                $(this).addClass("currentsubtab");
+            });
+            $(".subscriptionstclass").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aaSorting": [[ 0, "desc" ]],
+                "aoColumns": [
+                    { "sType": "title-string" },
+                    null,
+                    null,
+                    { "sType": "title-string" },
+                    null,
+                    null,
+                    null
+                ]
+            }));
+        });
+
+        // Filters initialization
+        function initFilters() {
+            // Deleting everything from the library filter
+            $("#libraryfilter option").remove();
+
+            // Getting each branchcode from the currently displayed tab
+            var subarray = [];
+            $("div#" + currentYear + " table.subscriptionstclass tbody tr:visible td.libraryfilterclass").each(function() {
+                if (subarray.indexOf($(this).text()) == -1) { subarray.push($(this).text()); }
+            });
+
+            // Setting the option values with branchcodes
+            $("#libraryfilter").append('<option value="all">(All)</option>');
+            for (var i = 0; i < subarray.length; i++) {
+                $("#libraryfilter").append('<option value="' + subarray[i] + '">' + subarray[i] + '</option>');
+            }
+        }
+
+        // Filter by Library
+        function filterByLibrary() {
+
+            selectedStatus = $("#libraryfilter").val();
+
+            // Reset the filters but keeps the selected library
+            clearFilters(true);
+
+            if (selectedStatus != 'all') {
+
+                // We hide everything
+            $("table.subscriptionstclass tbody tr").hide();
+
+            // Then show the lines that match the currently selected library
+            $("table.subscriptionstclass tbody tr td.libraryfilterclass:contains(" + selectedStatus + ")").parent().show();
+
+
+            // We then prepare the subscription filter :
+
+            // Getting subscription id's for the selected library
+            var subarray = [];
+            $("div#" + currentYear + " table.subscriptionstclass tbody tr:visible td.subscriptionidfilterclass").each(function() {
+                if (subarray.indexOf($(this).text()) == -1) { subarray.push($(this).text()); }
+            });
+            // Setting the option values with subscription id's
+            $("#subscriptionidfilter").append('<option value="all">(All)</option>');
+            for (var i = 0; i < subarray.length; i++) {
+                $("#subscriptionidfilter").append('<option value="' + subarray[i] + '">' + subarray[i] + '</option>');
+            }
+
+            // Subscription filtering is now ready
+            $("#subscriptionidfilter").removeAttr("disabled");
+            }
+        }
+
+        // Filter by subscription id
+        function filterBySubscriptionId() {
+
+            selectedSubscription = $("#subscriptionidfilter").val();
+            selectedLibrary      = $("#libraryfilter").val();
+
+            if (selectedSubscription == "all") {
+            clearFilters(true);
+            filterByLibrary();
+            } else {
+
+            // We hide everything
+            $("table.subscriptionstclass tbody tr").hide();
+
+            // Then show the lines that match the currently selected library
+            $("table.subscriptionstclass tbody tr td.libraryfilterclass:contains(" + selectedLibrary + ")").parent().show();
+
+            // Then hide the lines where the subscription id does not match the selected one
+            $("table.subscriptionstclass tbody tr td.subscriptionidfilterclass").not(
+                $("table.subscriptionstclass tbody tr td.subscriptionidfilterclass:contains(" + selectedSubscription + ")")
+            ).parent().hide();
+            }
+        }
+
+        // Clears filters : reset everything
+        // (Though preserves the selected library if the keeplibrary parameter is set to true)
+        function clearFilters(keeplibrary) {
+
+            // Show all content
+            $("table.subscriptionstclass tbody tr").show();
+
+            // Remove old subscription options
+            $("#subscriptionidfilter option").remove();
+            $("#subscriptionidfilter option").append('<option value="all">(All)</option>');
+            $("#subscriptionidfilter").attr("disabled", "disabled");
+
+            if (keeplibrary != true) {
+            // Reinit library options
+            initFilters();
+            $("#libraryfilter option[value=all]").attr("selected", "selected");
+            }
+        }
+        function showlayer(numlayer){
+            $(".yeardata").each(function(){
+                ong = $(this).attr("id");
+                if(ong == "show"+numlayer){
+                    $(this).show();
+                    currentYear = ong;
+                } else  {
+                    $(this).hide();
+                }
+            });
+            clearFilters();
+        }
+    //]]>
+</script>
+[% END %]

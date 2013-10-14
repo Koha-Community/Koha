@@ -1,0 +1,265 @@
+input.search_init {
+    color: #999999;
+}
+.sorting_asc {
+    padding-right: 19px;
+    background: url("../../img/asc.gif") no-repeat scroll right center #EEEEEE;
+}
+.sorting_desc {
+    padding-right: 19px;
+    background: url("../../img/desc.gif") no-repeat scroll right center #EEEEEE;
+}
+.sorting {
+    padding-right: 19px;
+    background: url("../../img/ascdesc.gif") no-repeat scroll right center #EEEEEE;
+}
+.sorting_asc_disabled {
+    padding-right: 19px;
+    background: url("../../img/datatables/sort_asc_disabled.png") no-repeat scroll right center #EEEEEE;
+}
+.sorting_desc_disabled {
+    padding-right: 19px;
+    background: url("../../img/datatables/sort_desc_disabled.png") no-repeat scroll right center #EEEEEE;
+}
+.sorting_disabled {
+    padding-right: 19px;
+    background-color: #EEEEEE;
+}
+
+div.top {clear : both; }
+
+div.top.pager,
+div.bottom.pager {
+    background-color : #E5E5E5;
+    padding : 0;
+}
+
+div.bottom.pager div.dataTables_paginate.paging_full_numbers,
+div.bottom.pager div.dataTables_paginate.paging_four_button {
+    border-right-width : 0;
+}
+
+div.dataTables_filter,
+div.dataTables_length,
+div.dataTables_info,
+div.dataTables_paginate {
+    float: left;
+    padding : .3em .5em .3em .5em;
+
+}
+div.dataTables_length {
+    border-right : 1px solid #686868;
+    line-height:1.9em;
+}
+div.dataTables_info {
+    border-right : 1px solid #AAA;
+    line-height:1.9em;
+}
+div.dataTables_length,
+div.dataTables_filter {
+    border-left : 1px solid #FFF;
+}
+div.dataTables_filter {
+    line-height : 1.9em;
+}
+div.dataTables_paginate {
+    background-color : #F4F4F4;
+    font-size: 110%;
+    padding : 0;
+}
+
+.paging_full_numbers span.paginate_button,
+.paging_full_numbers span.paginate_active {
+    border-right : 1px solid #AAA;
+    border-left : 1px solid #FFF;
+    display : block;
+    float : left;
+    line-height:1.6em;
+    padding: .3em .7em;
+    cursor: pointer;
+}
+
+.paging_full_numbers span.paginate_button {
+    color : #0000CC;
+}
+.paging_full_numbers span.paginate_button.first {
+    background-image : url('../../img/first.png');
+    background-repeat: no-repeat;
+    background-position : 2px center;
+    padding-left : 2em;
+}
+.paging_full_numbers span.paginate_button.previous {
+    background-image : url('../../img/prev.png');
+    background-repeat: no-repeat;
+    background-position : 2px center;
+    padding-left : 2em;
+}
+.paging_full_numbers span.paginate_button.next {
+    background-image : url('../../img/next.png');
+    background-repeat: no-repeat;
+    background-position : right center;
+    padding-right : 2em;
+}
+.paging_full_numbers span.paginate_button.last {
+    background-image : url('../../img/last.png');
+    background-repeat: no-repeat;
+    background-position : right center;
+    border-right : 1px solid #686868;
+    padding-right : 2em;
+}
+div.bottom.pager .paging_full_numbers span.paginate_button.last {
+    border-right-width : 0;
+}
+.paging_full_numbers span.paginate_active {
+    background-color : #FFFFEA;
+    color : #000;
+    font-weight: bold;
+}
+
+.paging_full_numbers span.paginate_button:hover {
+    background-color: #FFC;
+}
+
+.paging_full_numbers span.paginate_button.paginate_button_disabled {
+    color : #666;
+}
+
+/* Two-button version */
+
+div.dataTables_paginate.paging_two_button,
+div.dataTables_paginate.paging_four_button {
+    background-color : transparent;
+    border-right : 1px solid #686868;
+    border-left : 1px solid #FFF;
+    line-height : 1.8em;
+}
+.paginate_disabled_first,
+.paginate_enabled_first,
+.paginate_disabled_previous,
+.paginate_enabled_previous,
+.paginate_disabled_next,
+.paginate_enabled_next,
+.paginate_disabled_last,
+.paginate_enabled_last {
+    float: left;
+    height: 16px;
+    margin: .5em;
+    width: 16px;
+}
+.paginate_disabled_first {
+    background-image: url("../../img/first-disabled.png");
+}
+.paginate_enabled_first {
+    background-image: url("../../img/first.png");
+    cursor: pointer;
+}
+.paginate_disabled_previous {
+    background-image: url("../../img/prev-disabled.png");
+}
+.paginate_enabled_previous {
+    background-image: url("../../img/prev.png");
+    cursor: pointer;
+}
+.paginate_disabled_next {
+    background-image: url("../../img/next-disabled.png");
+}
+.paginate_enabled_next {
+    background-image: url("../../img/next.png");
+    cursor: pointer;
+}
+.paginate_disabled_last {
+    background-image: url("../../img/last-disabled.png");
+}
+.paginate_enabled_last {
+    background-image: url("../../img/last.png");
+    cursor: pointer;
+}
+
+
+/*
+table.display {
+    width: 100%;
+}
+table.display thead th {
+    border-bottom: 1px solid black;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 3px 18px 3px 10px;
+}
+.dataTables_wrapper {
+    clear: both;
+    position: relative;
+}
+.dataTables_processing {
+    background-color: white;
+    border: 1px solid #DDDDDD;
+    color: #999999;
+    font-size: 14px;
+    height: 30px;
+    left: 50%;
+    margin-left: -125px;
+    margin-top: -15px;
+    padding: 14px 0 2px;
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    width: 250px;
+}
+.dataTables_info {
+    float: left;
+    width: 60%;
+}
+.dataTables_paginate {
+    float: right;
+    text-align: right;
+    width: 44px;
+}
+.paging_full_numbers {
+    height: 22px;
+    line-height: 22px;
+    width: 400px;
+}
+.paging_full_numbers span.paginate_button,
+     .paging_full_numbers span.paginate_active {
+    border: 1px solid #aaa;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    padding: 2px 5px;
+    margin: 0 3px;
+    cursor: pointer;
+    *cursor: hand;
+}
+
+.paging_full_numbers span.paginate_button {
+    background-color: #ddd;
+}
+
+.paging_full_numbers span.paginate_button:hover {
+    background-color: #ccc;
+}
+
+.paging_full_numbers span.paginate_active {
+    background-color: #99B3FF;
+}
+.paginate_disabled_previous, .paginate_enabled_previous, .paginate_disabled_next, .paginate_enabled_next {
+    float: left;
+    height: 19px;
+    margin-left: 3px;
+    width: 19px;
+}
+.paginate_disabled_previous {
+    background-image: url("../../img/datatables/back_disabled.jpg");
+}
+.paginate_enabled_previous {
+    background-image: url("../../img/datatables/back_enabled.jpg");
+}
+.paginate_disabled_next {
+    background-image: url("../../img/datatables/forward_disabled.jpg");
+}
+.paginate_enabled_next {
+    background-image: url("../../img/datatables/forward_enabled.jpg");
+}
+.spacer {
+    clear: both;
+    height: 20px;
+}

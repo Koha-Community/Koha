@@ -1,0 +1,54 @@
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Download list[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="opac-downloadlist" class="popup">
+    <div class="main">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div id="userdownloadshelf">
+                        [% UNLESS ( invalidlist ) %]
+
+                            [% IF ( format ) %]
+                                <div class="alert alert-info">
+                                    <p>Your download should begin automatically.</p>
+                                </div>
+                            [% ELSE %]
+                                <h1>Download list</h1>
+                                <form method="post" action="/cgi-bin/koha/opac-downloadshelf.pl">
+                                    <fieldset>
+                                        <select name="format" id="format">
+                                            <option value="">-- Choose format --</option>
+                                            <option value="ris">RIS (Zotero, EndNote, others)</option>
+                                            <option value="bibtex">BibTeX</option>
+                                            <option value="iso2709">MARC</option>
+                                            [% FOREACH csv_profile IN csv_profiles %]
+                                            <option value="[% csv_profile.export_format_id %]">CSV - [% csv_profile.profile %]</option>
+                                            [% END %]
+                                        </select>
+                                    </fieldset>
+
+                                    <fieldset class="action">
+                                        <input type="hidden" name="shelfid" value="[% shelfid | html %]" />
+                                        <input type="submit" name="save" class="btn" value="Go" />
+                                        <a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% shelfid %]" class="cancel close">Cancel</a>
+                                    </fieldset>
+                                </form>
+
+                            [% END # / IF format %]
+
+                        [% ELSE %]
+
+                            <div class="alert">
+                                <p>You do not have permission to download this list.</p>
+                            </div>
+
+                        [% END # / invalidlist %]
+
+                    </div> <!-- / #userdownloadshelf -->
+                </div> <!-- / .span10 -->
+            </div> <!-- / .row-fluid -->
+        </div> <!-- / .container-fluid -->
+    </div> <!-- / .main -->
+[% INCLUDE 'opac-bottom.inc' is_popup=1 %]
+[% BLOCK jsinclude %][% END %]

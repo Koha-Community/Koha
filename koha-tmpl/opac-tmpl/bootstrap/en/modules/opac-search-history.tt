@@ -1,0 +1,108 @@
+[% USE Koha %]
+[% USE KohaDates %]
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your search history
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="opac-search-history" class="scrollto">
+[% INCLUDE 'masthead.inc' %]
+
+<div class="main">
+    <ul class="breadcrumb">
+        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+        [% IF ( loggedinusername ) %]
+            <li><a href="#">Your search history</a></li>
+        [% ELSE %]
+            <li><a href="#">Search history</a></li>
+        [% END %]
+    </ul>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            [% IF ( OpacNav||loggedinusername ) %]
+                <div class="span2">
+                    <div id="navigation">
+                        [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
+                    </div>
+                </div>
+                <div class="span10">
+            [% ELSE %]
+                <div class="span12">
+            [% END %]
+
+                <div id="searchhistory" class="maincontent">
+                    <h1>Search history</h1>
+                        [% IF ( recentSearches ) %]<form action="/cgi-bin/koha/opac-search-history.pl" method="get"><input type="hidden" name="action" value="delete" /><input type="submit" class="btn btn-danger" value="Delete your search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" /></form>[% ELSE %][% IF ( previousSearches ) %]<form action="/cgi-bin/koha/opac-search-history.pl" method="get"><input type="hidden" name="action" value="delete" /><input type="submit" class="btn btn-danger" value="Delete your search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" /></form>[% END %][% END %]
+
+                        [% IF ( recentSearches ) %]
+                            <table class="historyt table table-bordered table-condensed table-striped">
+                            [% IF ( previousSearches ) %]
+                                <caption>Current session</caption>
+                            [% END %]
+                                <thead>
+                                    <tr><th>Date</th><th>Search</th><th>Results</th></tr>
+                                </thead>
+                                <tbody>
+                                [% FOREACH recentSearche IN recentSearches %]
+                                    <tr>
+                                        <td><span title="[% recentSearche.time %]">[% recentSearche.time |$KohaDates with_hours => 1 %]</span></td>
+                                        <td><a href="/cgi-bin/koha/opac-search.pl?[% recentSearche.query_cgi |html %]">[% recentSearche.query_desc |html %]</a></td>
+                                        <td>[% recentSearche.total %]</td>
+                                    </tr>
+                                [% END %]
+                                </tbody>
+                            </table>
+                        [% END %]
+
+                        [% IF ( previousSearches ) %]
+                        <table class="historyt table table-bordered table-condensed table-striped">
+                            <caption>Previous sessions</caption>
+                            <thead>
+                                <tr><th>Date</th><th>Search</th><th>Results</th></tr>
+                            </thead>
+                            <tbody>
+                                [% FOREACH previousSearche IN previousSearches %]
+                                    <tr>
+                                        <td><span title="[% previousSearche.time %]">[% previousSearche.time |$KohaDates with_hours => 1 %]</span></td>
+                                        <td><a href="/cgi-bin/koha/opac-search.pl?[% previousSearche.query_cgi |html %]">[% previousSearche.query_desc |html %]</a></td>
+                                        <td>[% previousSearche.total %]</td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                        [% END %]
+
+                        [% UNLESS ( recentSearches ) %]
+                           [% UNLESS ( previousSearches ) %]
+                                <p>Your search history is empty.</p>
+                            [% END %]
+                        [% END %]
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %]
+[% INCLUDE 'datatables.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+    var MSG_CONFIRM_DELETE_HISTORY = _("Are you sure you want to delete your search history?");
+         $(document).ready(function() {
+            // We show table ordered by descending dates by default
+            // (so that the more recent query is shown first)
+            $(".historyt").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aaSorting": [[ 0, "desc" ]],
+                "aoColumns": [
+                    { "sType": "title-string" },
+                    null,
+                    null
+                ]
+            }));
+        });
+//]]>
+
+</script>
+[% END %]

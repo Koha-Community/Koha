@@ -1,0 +1,102 @@
+[% INCLUDE 'doc-head-open.inc' %][% LibraryNameTitle or "Koha online" %] catalog &rsaquo; Comments on [% title |html %]
+<style type="text/css">
+  #custom-doc { width:37.08em;*width:36.16em;min-width:485px; margin:1em auto; text-align:left; }
+</style>
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="comment" class="popup">
+    <div class="main">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div id="userreview">
+                        [% IF ( cgi_debug ) %]
+                            <div class="debug">CGI debug is on.</div>
+                        [% END %]
+                        [% IF ( ERRORS ) %]
+                            <div class="alert">
+                                [% FOREACH ERROR IN ERRORS %]
+                                    [% IF ( ERROR.scrubbed ) %]
+                                        <p>Note: your comment contained illegal markup code. It has been saved with the markup removed, as below. You can edit the comment further, or cancel to retain the comment as is.</p>
+                                    [% END %]
+
+                                    [% IF ( ERROR.scrubbed_all ) %]
+                                        <p>Error!  Your comment was entirely illegal markup code.  It has NOT been added.</p>
+                                    [% END %]
+
+                                    [% IF ( ERROR.empty ) %]
+                                        <p>Error!  You cannot add an empty comment.  Please add content or cancel.</p>
+                                    [% END %]
+                                [% END # / FOREACH ERROR %]
+                                [% IF ( WINDOW_CLOSE ) %]
+                                    Note: this window will close automatically in 5 seconds.
+                                [% END %]
+                            </div>
+                        [% END # / ERRORs %]
+
+                        <h1>Comments on <i>[% title |html %] [% subtitle %]</i></h1>
+                        [% IF ( author ) %]<h3>[% author |html %]</h3>[% END %]
+                        <form id="reviewf" action="/cgi-bin/koha/opac-review.pl[% IF ( cgi_debug ) %]?debug=1[% END %]" method="post">
+                            <input type="hidden" name="biblionumber" value="[% biblionumber | html%]" />
+                            [% IF ( reviewid ) %]<input type="hidden" name="reviewid" value="[% reviewid | html%]" />[% END %]
+                            <fieldset>
+                                <textarea id="review" name="review" cols="60" rows="8">[% review %]</textarea>
+                            </fieldset>
+                            <p>Note: Your comment must be approved by a librarian. </p>
+                            <fieldset class="action">
+                                <input type="submit" class="btn" value="Submit and close this window" />
+                                <a class="cancel close" href="#">Cancel</a>
+                            </fieldset>
+                        </form>
+                    </div> <!-- / #usersendshelfform -->
+                </div> <!-- / .span12 -->
+            </div> <!-- / .row-fluid -->
+        </div> <!-- / .container-fluid -->
+    </div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' is_popup=1 %]
+[% BLOCK jsinclude %]
+<script type="text/javascript">
+    //<![CDATA[
+         $(document).ready(function() {
+            var inject_old = function(comment) {
+                [% IF ( reviewid ) %]
+                [% IF ( cgi_debug ) %]alert(_("injecting OLD comment: ")+comment);[% END %]
+                parent.opener.$('#c[% reviewid %] p').prev("small").prev("h5").html(_("Your edited comment (preview, pending approval)"));
+                parent.opener.$('#c[% reviewid %] p').html(comment);
+                parent.opener.$('#c[% reviewid %] p').append(" <a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=[% biblionumber | uri %]&amp;reviewid=[% reviewid | uri%]\');\">"+_("Edit")+"<\/a>");
+                [% END %]
+                return 1;
+            };
+            var inject_new = function(comment) {
+                [% IF ( cgi_debug ) %]alert(_("injecting NEW comment: ") +comment);[% END %]
+                parent.opener.$('#newcomment').attr("class","yours");
+                parent.opener.$('#newcomment').html(
+                    "<h5>" + _("Your comment (preview, pending approval)") + "<\/h5>" +
+                    "<p>"+comment+"<\/p>" +
+                    "<a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=[% biblionumber |uri%]\');\">"+_("Edit")+"<\/a><\/p>"
+                );
+                parent.opener.$("#addcomment").prev("p").remove();
+                parent.opener.$("#addcomment").remove();
+            };
+            [% IF ( clean_review ) %]
+                var clean_review = "[% clean_review |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";        // TMPL var must not contain " quotes.
+                [% IF ( reviewid ) %]
+                inject_old(clean_review);
+                [% ELSE %]
+                inject_new(clean_review);
+                [% END %]
+            [% END %]
+            [% IF ( WINDOW_CLOSE ) %]
+                [% IF ( ERRORS ) %]
+                    // flash this page, then close.  Change warning in template if you change this value.
+                    setTimeout("window.close()",5000);
+                [% ELSE %]
+                    window.close();
+                [% END %]
+            [% END %]
+        });
+    //]]>
+</script>
+[% END %]

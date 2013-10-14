@@ -1,0 +1,79 @@
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Change your password
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="opac-passwd">
+[% INCLUDE 'masthead.inc' %]
+
+<div class="main">
+    <ul class="breadcrumb">
+        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="/cgi-bin/koha/opac-user.pl">[% firstname %] [% surname %]</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="#">Change your password</a></li>
+    </ul>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span2">
+                <div id="navigation">
+                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
+                </div>
+            </div>
+            <div class="span10">
+                <div id="userpasswd">
+                    <h3>Change your password </h3>
+
+                    [% IF ( Error_messages ) %]
+                        <div class="alert">
+                            <h3>There was a problem with your submission</h3>
+                            <p>
+                                [% IF ( PassMismatch ) %]
+                                Passwords do not match.  Please re-type your new password.
+                                [% END %]
+                                [% IF ( ShortPass ) %]
+                                Your new password must be at least [% minpasslen %] characters long.
+                                [% END %]
+                                [% IF ( WrongPass ) %]
+                                Your current password was entered incorrectly.  If this problem persists, please ask a librarian to re-set your password for you.
+                                [% END %]
+                            </p>
+                        </div>
+                    [% END # /IF Error_messages %]
+
+                    [% IF ( OpacPasswordChange ) %]
+                        [% IF ( Ask_data ) %]
+                            <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="post">
+                                <fieldset>
+                                    [% UNLESS ( ShortPass ) %]<div class="alert alert-info">Your password must be at least [% minpasslen %] characters long.</div>[% END %]
+                                    <label for="Oldkey">Current password:</label> <input type="password" id="Oldkey" size="25"  name="Oldkey" />
+                                    <label for="Newkey">New password:</label> <input type="password" id="Newkey"  size="25"  name="Newkey" />
+                                    <label for="Confirm">Re-type new password:</label> <input type="password"  id="Confirm" size="25" name="Confirm" />
+                                </fieldset>
+                                <fieldset class="action"><input type="submit" value="Submit changes" class="btn" /> <a href="/cgi-bin/koha/opac-user.pl" class="cancel">Cancel</a></fieldset>
+                            </form>
+                        [% END # /IF Ask_data %]
+                    [% ELSE %]
+                        <div class="alert">You can't change your password.</div>
+                    [% END # /IF OpacPasswordChange %]
+
+                    [% IF ( password_updated ) %]
+                        <div class="alert alert-success">
+                            <h1>Password updated</h1>
+                            Your password has been changed
+                        </div>
+                        <form action="/cgi-bin/koha/opac-user.pl" method="post">
+                            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                            <p><input type="submit" class="btn" value="Return to your record" /></p>
+                        </form>
+                    [% END # /IF password_updated %]
+                </div> <!-- / #userpasswd -->
+            </div> <!-- / .span10 -->
+        </div> <!-- / .row-fluid -->
+    </div> <!-- / .container-fluid -->
+</div> <!-- / .main -->
+
+
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %][% END %]
