@@ -48,7 +48,7 @@ KOHA.OpenLibrary = {
                     var img = document.createElement("img");
                     if (is_opacdetail) {
                         img.src = book.cover.medium;
-                        $(this).append(img);
+                        $(this).empty().append(img);
                         $(this).append('<div class="results_summary">' + '<a href="' + book.url + '">Preview</a></div>');
                     } else {
                         img.src = book.cover.medium;
