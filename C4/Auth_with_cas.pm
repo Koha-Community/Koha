@@ -67,6 +67,7 @@ sub logout_cas {
     my ($query) = @_;
     my ( $cas, $uri ) = _get_cas_and_service($query);
     print $query->redirect( $cas->logout_url($uri));
+    print $query->redirect( $cas->logout_url(url => $uri));
 }
 
 # Login to CAS
