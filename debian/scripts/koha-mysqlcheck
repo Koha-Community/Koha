@@ -1,0 +1,48 @@
+#!/bin/bash
+#
+# koha-mysqlcheck: run mysqlcheck on the database of the specified Koha instance.
+# Copyright 2013 Magnus Enger Librioech
+# Based on koha-mysql, which is Copyright 2011  Catalyst IT, Ltd
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+
+umask 0077
+
+die() {
+    echo "$@" 1>&2
+    exit 1
+}
+
+# Parse command line.
+if [ $# -lt 1 ]; then
+    die "Usage: $0 [options] instancename"
+fi
+
+# Separate any arguments from the instance name
+array=($@)
+len=${#array[@]}
+name=${array[$len-1]}
+args=${array[@]:0:$len-1}
+
+kohaconfig="/etc/koha/sites/$name/koha-conf.xml"
+
+mysqlhost="$( xmlstarlet sel -t -v 'yazgfs/config/hostname' $kohaconfig )"
+mysqldb="$(   xmlstarlet sel -t -v 'yazgfs/config/database' $kohaconfig )"
+mysqluser="$( xmlstarlet sel -t -v 'yazgfs/config/user'     $kohaconfig )"
+mysqlpass="$( xmlstarlet sel -t -v 'yazgfs/config/pass'     $kohaconfig )"
+
+mysqlcheck --host="$mysqlhost" --user="$mysqluser" --password="$mysqlpass" \
+    $args "$mysqldb"

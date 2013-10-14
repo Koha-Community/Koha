@@ -1,0 +1,44 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-mysqlcheck</title>
+<info>
+<productname>Koha</productname> is the first free software library automation package.
+<author>
+  <orgname>The Koha Community</orgname>
+  <uri>http://koha-community.org/</uri>
+</author>
+</info>
+
+<refentry xml:id="koha-mysqlcheck">
+
+  <refmeta>
+    <refentrytitle>koha-mysqlcheck</refentrytitle>
+    <manvolnum>8</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>koha-mysqlcheck</refname>
+    <refpurpose>Run <command>mysqlcheck</command> on the database of the specified Koha instance.</refpurpose>
+    <refclass>UNIX/Linux</refclass>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>koha-mysqlcheck</command> <arg><option>...</option></arg> <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1><title>Description</title>
+  <para>Run <command>mysqlcheck</command> on the database of the specified Koha instance.</para>
+  <para>Any arguments provided before the name of the instance are passed directly to <command>mysqlcheck</command>. This means that all the operations of <command>mysqlcheck</command> are available through this script.</para>
+  </refsect1>
+
+  <refsect1><title>See also</title>
+  <simplelist type="inline">
+    <member><command>mysqlcheck(1)</command></member>
+    <member><command>koha-mysql(8)</command></member>
+  </simplelist>
+  </refsect1>
+
+</refentry>
+
+</article>
