@@ -70,8 +70,7 @@ The functions in this module deal with branches.
   $branches = &GetBranches();
 
 Returns informations about ALL branches, IndependentBranches Insensitive.
-GetBranchInfo() returns the same information without the problems of this function 
-(namespace collision, mainly).
+GetBranchInfo() returns the same information.
 
 Create a branch selector with the following code.
 
@@ -106,38 +105,32 @@ Create a branch selector with the following code.
 =cut
 
 sub GetBranches {
-    my ($onlymine)=@_;
+    my ($onlymine) = @_;
+
     # returns a reference to a hash of references to ALL branches...
     my %branches;
     my $dbh = C4::Context->dbh;
     my $sth;
-    my $query="SELECT * FROM branches";
+    my $query = "SELECT * FROM branches";
     my @bind_parameters;
-    if ($onlymine && C4::Context->userenv && C4::Context->userenv->{branch}){
-      $query .= ' WHERE branchcode = ? ';
-      push @bind_parameters, C4::Context->userenv->{branch};
+    if ( $onlymine && C4::Context->userenv && C4::Context->userenv->{branch} ) {
+        $query .= ' WHERE branchcode = ? ';
+        push @bind_parameters, C4::Context->userenv->{branch};
     }
-        $query.=" ORDER BY branchname";
+    $query .= " ORDER BY branchname";
     $sth = $dbh->prepare($query);
-    $sth->execute( @bind_parameters );
+    $sth->execute(@bind_parameters);
 
-    my $nsth = $dbh->prepare(
-        "SELECT categorycode FROM branchrelations WHERE branchcode = ?"
-    );  # prepare once, outside while loop
+    my $relations_sth =
+      $dbh->prepare("SELECT branchcode,categorycode FROM branchrelations");
+    $relations_sth->execute();
+    my %relations;
+    while ( my $rel = $relations_sth->fetchrow_hashref ) {
+        push @{ $relations{ $rel->{branchcode} } }, $rel->{categorycode};
+    }
 
     while ( my $branch = $sth->fetchrow_hashref ) {
-        $nsth->execute( $branch->{'branchcode'} );
-        while ( my ($cat) = $nsth->fetchrow_array ) {
-            # FIXME - This seems wrong. It ought to be
-            # $branch->{categorycodes}{$cat} = 1;
-            # otherwise, there's a namespace collision if there's a
-            # category with the same name as a field in the 'branches'
-            # table (i.e., don't create a category called "issuing").
-            # In addition, the current structure doesn't really allow
-            # you to list the categories that a branch belongs to:
-            # you'd have to list keys %$branch, and remove those keys
-            # that aren't fields in the "branches" table.
-         #   $branch->{$cat} = 1;
+        foreach my $cat ( @{ $relations{ $branch->{branchcode} } } ) {
             $branch->{category}{$cat} = 1;
         }
         $branches{ $branch->{'branchcode'} } = $branch;
