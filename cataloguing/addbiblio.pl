@@ -820,6 +820,7 @@ if ($hostbiblionumber) {
 if ($parentbiblio) {
     my $marcflavour = C4::Context->preference('marcflavour');
     $record = MARC::Record->new();
+    SetMarcUnicodeFlag($record, $marcflavour);
     my $hostfield = prepare_host_field($parentbiblio,$marcflavour);
     if ($hostfield) {
         $record->append_fields($hostfield);
