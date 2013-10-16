@@ -153,20 +153,16 @@ if ($quantityrec > $origquantityrec ) {
     }
 }
 
-update_item( $_ ) foreach GetItemnumbersFromOrder( $ordernumber );
-
-print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid");
-
-################################ End of script ################################
-
-sub update_item {
-    my ( $itemnumber ) = @_;
-
-    ModItem( {
+ModItem(
+    {
         booksellerid         => $booksellerid,
         dateaccessioned      => $datereceived,
         price                => $unitprice,
         replacementprice     => $rrp,
         replacementpricedate => $datereceived,
-    }, $biblionumber, $itemnumber );
-}
+    },
+    $biblionumber,
+    $_
+) foreach GetItemnumbersFromOrder($ordernumber);
+
+print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid");
