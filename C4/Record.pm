@@ -310,9 +310,9 @@ sub _transformWithStylesheet {
     my $xslt = XML::LibXSLT->new();
     my $source = $parser->parse_string($xmlrecord);
     my $style_doc = $parser->parse_file($xslfile);
-    my $stylesheet = $xslt->parse_stylesheet($style_doc);
-    my $results = $stylesheet->transform($source);
-    my $newxmlrecord = $stylesheet->output_string($results);
+    my $style_sheet = $xslt->parse_stylesheet($style_doc);
+    my $results = $style_sheet->transform($source);
+    my $newxmlrecord = $style_sheet->output_string($results);
     return ($newxmlrecord);
 }
 
