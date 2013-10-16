@@ -18,10 +18,6 @@ sub new {
         my $o = lc $o_name;
         $self->{$o} = $options{$o_name};
     }
-    if ( exists $options{TEST_MODE} ) {
-        $self->_mockinit();
-        return $self;
-    }
     if ( !defined $self->{branchcode} ) {
         croak 'No branchcode argument passed to Koha::Calendar->new';
     }
@@ -295,31 +291,6 @@ sub hours_between {
 
     return $duration;
 
-}
-
-sub _mockinit {
-    my $self = shift;
-    $self->{weekly_closed_days} = [ 1, 0, 0, 0, 0, 0, 0 ];    # Sunday only
-    $self->{day_month_closed_days} = { 6 => { 16 => 1, } };
-    my $dates = [];
-    $self->{exception_holidays} =
-      DateTime::Set->from_datetimes( dates => $dates );
-    my $special = DateTime->new(
-        year      => 2011,
-        month     => 6,
-        day       => 1,
-        time_zone => 'Europe/London',
-    );
-    push @{$dates}, $special;
-    $self->{single_holidays} = DateTime::Set->from_datetimes( dates => $dates );
-
-    # if not defined, days_mode defaults to 'Calendar'
-    if ( !defined($self->{days_mode}) ) {
-        $self->{days_mode} = 'Calendar';
-    }
-
-    $self->{test} = 1;
-    return;
 }
 
 sub set_daysmode {
