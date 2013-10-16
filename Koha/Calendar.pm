@@ -48,6 +48,21 @@ sub _init {
           1;
     }
 
+    $self->{days_mode}       = C4::Context->preference('useDaysMode');
+    $self->{test}            = 0;
+    return;
+}
+
+
+our ( $exception_holidays, $single_holidays );
+sub exception_holidays {
+    my ( $self ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $branch = $self->{branchcode};
+    if ( $exception_holidays ) {
+        $self->{exception_holidays} = $exception_holidays;
+        return $exception_holidays;
+    }
     my $exception_holidays_sth = $dbh->prepare(
 'SELECT day, month, year FROM special_holidays WHERE branchcode = ? AND isexception = 1'
     );
@@ -64,12 +79,23 @@ sub _init {
     }
     $self->{exception_holidays} =
       DateTime::Set->from_datetimes( dates => $dates );
+    $exception_holidays = $self->{exception_holidays};
+    return $exception_holidays;
+}
 
+sub single_holidays {
+    my ( $self ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $branch = $self->{branchcode};
+    if ( $single_holidays ) {
+        $self->{single_holidays} = $single_holidays;
+        return $single_holidays;
+    }
     my $single_holidays_sth = $dbh->prepare(
 'SELECT day, month, year FROM special_holidays WHERE branchcode = ? AND isexception = 0'
     );
     $single_holidays_sth->execute( $branch );
-    $dates = [];
+    my $dates = [];
     while ( my ( $day, $month, $year ) = $single_holidays_sth->fetchrow ) {
         push @{$dates},
           DateTime->new(
@@ -80,11 +106,9 @@ sub _init {
           )->truncate( to => 'day' );
     }
     $self->{single_holidays} = DateTime::Set->from_datetimes( dates => $dates );
-    $self->{days_mode}       = C4::Context->preference('useDaysMode');
-    $self->{test}            = 0;
-    return;
+    $single_holidays = $self->{single_holidays};
+    return $single_holidays;
 }
-
 sub addDate {
     my ( $self, $startdate, $add_duration, $unit ) = @_;
 
@@ -184,7 +208,7 @@ sub is_holiday {
 
     $localdt->truncate( to => 'day' );
 
-    if ( $self->{exception_holidays}->contains($localdt) ) {
+    if ( $self->exception_holidays->contains($localdt) ) {
         # exceptions are not holidays
         return 0;
     }
@@ -204,7 +228,7 @@ sub is_holiday {
         return 1;
     }
 
-    if ( $self->{single_holidays}->contains($localdt) ) {
+    if ( $self->single_holidays->contains($localdt) ) {
         return 1;
     }
 
@@ -313,7 +337,7 @@ sub clear_weekly_closed_days {
 sub add_holiday {
     my $self = shift;
     my $new_dt = shift;
-    my @dt = $self->{single_holidays}->as_list;
+    my @dt = $self->single_holidays->as_list;
     push @dt, $new_dt;
     $self->{single_holidays} =
       DateTime::Set->from_datetimes( dates => \@dt );
