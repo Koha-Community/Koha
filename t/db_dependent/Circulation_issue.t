@@ -50,12 +50,12 @@ $dbh->do(q|DELETE FROM issuingrules|);
 #Add Dates
 
 my $dt_today    = dt_from_string;
-my $today       = output_pref( $dt_today, 'iso', '24hr', 1 );
+my $today       = output_pref({ dt => $dt_today, dateformat => 'iso', timeformat => '24hr', dateonly => 1 });
 
 my $dt_today2 = dt_from_string;
 my $dur10 = DateTime::Duration->new( days => -10 );
 $dt_today2->add_duration($dur10);
-my $daysago10 = output_pref( $dt_today2, 'iso', '24hr', 1 );
+my $daysago10 = output_pref({ dt => $dt_today2, dateformat => 'iso', timeformat => '24hr', dateonly => 1 });
 
 #Add branch and category
 my $samplebranch1 = {
