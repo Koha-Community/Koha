@@ -859,6 +859,7 @@ sub _build_weighted_query {
           "Title-cover,ext,r1=\"$operand\"";    # exact title-cover
         $weighted_query .= " or ti,ext,r2=\"$operand\"";    # exact title
         $weighted_query .= " or Title-cover,phr,r3=\"$operand\"";    # phrase title
+        $weighted_query .= " or ti,wrdl,r4=\"$operand\"";    # words in title
           #$weighted_query .= " or any,ext,r4=$operand";               # exact any
           #$weighted_query .=" or kw,wrdl,r5=\"$operand\"";            # word list any
         $weighted_query .= " or wrdl,fuzzy,r8=\"$operand\""
