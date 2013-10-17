@@ -4,8 +4,15 @@ use Test::More tests=>20;
 
 BEGIN {use_ok('C4::Budgets') }
 use C4::Dates;
+use C4::Context;
 
 use YAML;
+
+my $dbh = C4::Context->dbh();
+$dbh->{AutoCommit} = 0;
+$dbh->{RaiseError} = 1;
+
+$dbh->do('DELETE FROM aqbudgetperiods');
 
 #
 # Budget Periods :
