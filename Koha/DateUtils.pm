@@ -99,13 +99,12 @@ $date_string = output_pref( $dt );
 Returns a string containing the time & date formatted as per the C4::Context setting,
 or C<undef> if C<undef> was provided.
 
-A second parameter allows overriding of the syspref value. This is for testing only
-In usage use the DateTime objects own methods for non standard formatting
-
-A third parameter allows overriding of the TimeFormat syspref value
-
-A fourth parameter allows to specify if the output format contains the hours and minutes.
-If it is not defined, the default value is 0;
+This routine can either be passed a DateTime object or or a hashref.  If it is
+passed a hashref, the expected keys are a mandatory 'dt' for the DateTime,
+an optional 'dateformat' to override the dateformat system preference, an
+optional 'timeformat' to override the TimeFormat system preference value,
+and an optional 'dateonly' to specify that only the formatted date string
+should be returned without the time.
 
 =cut
 
@@ -160,14 +159,19 @@ sub output_pref {
 
 =head2 output_pref_due
 
-$date_string = output_pref({ dt => $dt [, dateformat => $date_format, timeformat => $time_format, dateonly => 0|1 ] });
+$date_string = output_pref_due({ dt => $dt [, dateformat => $date_format, timeformat => $time_format, dateonly => 0|1 ] });
+$date_string = output_pref_due($dt);
 
 Returns a string containing the time & date formatted as per the C4::Context setting
 
-A second parameter allows overriding of the syspref value. This is for testing only
-In usage use the DateTime objects own methods for non standard formatting
+This routine can either be passed a DateTime object or or a hashref.  If it is
+passed a hashref, the expected keys are a mandatory 'dt' for the DateTime,
+an optional 'dateformat' to override the dateformat system preference, an
+optional 'timeformat' to override the TimeFormat system preference value,
+and an optional 'dateonly' to specify that only the formatted date string
+should be returned without the time.
 
-This is effectivelyt a wrapper around output_pref for due dates
+This is effectively a wrapper around output_pref for due dates;
 the time portion is stripped if it is '23:59'
 
 =cut
