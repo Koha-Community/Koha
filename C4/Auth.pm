@@ -658,7 +658,7 @@ sub checkauth {
             $userid   = $session->param('id');
             $sessiontype = $session->param('sessiontype') || '';
         }
-        if ( ( ($query->param('koha_login_context')) && ($query->param('userid') ne $session->param('id')) )
+        if ( ( ($query->param('koha_login_context')) && ($query->param('userid') ne ($session->param('id') // '')) )
           || ( $cas && $query->param('ticket') ) ) {
             #if a user enters an id ne to the id in the current session, we need to log them in...
             #first we need to clear the anonymous session...
@@ -730,11 +730,12 @@ sub checkauth {
             -value    => $session->id,
             -HttpOnly => 1
         );
-    $userid = $query->param('userid');
+        $userid = $query->param('userid');
+        my $pki_field = C4::Context->preference('AllowPKIAuth') // 'None';
         if (   ( $cas && $query->param('ticket') )
             || $userid
-            || ( my $pki_field = C4::Context->preference('AllowPKIAuth') ) ne
-            'None' || $persona )
+            || $pki_field ne 'None'
+            || $persona )
         {
             my $password = $query->param('password');
 
