@@ -134,6 +134,7 @@ if ( $email ) {
         : "list.txt";
 
     my ($body) = $template_res =~ /<MESSAGE>\n(.*)\n?<END_MESSAGE>/s;
+    $body = encode_qp($body);
 
     my $boundary = "====" . time() . "====";
 
