@@ -56,6 +56,15 @@ Your list : [% shelfname %]
             </span><br/>
             [% END %]
 
+            [% IF ( BIBLIO_RESULT.ISBN && BIBLIO_RESULT.size > 0 ) %]
+            <span>
+                ISBN: [% FOREACH isbn IN BIBLIO_RESULT.ISBN %]
+                          [% isbn.marcisbn %]
+                          [% UNLESS ( loop.last ) %]; [% END %]
+                      [% END %]
+            </span><br/>
+            [% END %]
+
             [% IF BIBLIO_RESULT.publishercode %]
             <span>
                 Published by: [% BIBLIO_RESULT.publishercode %]
