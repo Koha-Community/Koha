@@ -6,6 +6,7 @@ use DateTime::TimeZone;
 
 use C4::Context;
 use Test::More tests => 31;
+use Test::MockModule;
 
 BEGIN { use_ok('Koha::DateUtils'); }
 
@@ -24,6 +25,14 @@ $dt->set_hour(12);
 $dt->set_minute(0);
 
 my $date_string;
+
+my $module_context = new Test::MockModule('C4::Context');
+$module_context->mock(
+    'preference',
+    sub {
+        return 'us';
+    }
+);
 
 my $dateformat = C4::Context->preference('dateformat');
 cmp_ok  output_pref({ dt => $dt, dateformat => $dateformat }),
