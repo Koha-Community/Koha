@@ -118,14 +118,32 @@ if ( $op eq 'delete_confirm' ) {
     }
 # if $delbiblio = 1, delete the records if possible
     if ((defined $delbiblio)and ($delbiblio ==1)){
+        my @cannotdelbiblios ;
         foreach my $myorder (@orders){
             my $biblionumber = $myorder->{'biblionumber'};
             my $countbiblio = CountBiblioInOrders($biblionumber);
             my $ordernumber = $myorder->{'ordernumber'};
-            my @subscriptions = GetSubscriptionsId ($biblionumber);
+            my $subscriptions = scalar GetSubscriptionsId ($biblionumber);
             my $itemcount = GetItemsCount($biblionumber);
-            DelBiblio($myorder->{biblionumber}) if ($countbiblio == 0 && $itemcount == 0 && !(@subscriptions));
+            my $error;
+            if ($countbiblio == 0 && $itemcount == 0 && $subscriptions == 0) {
+                $error = DelBiblio($myorder->{biblionumber}) }
+            else {
+                push @cannotdelbiblios, {biblionumber=> ($myorder->{biblionumber}),
+                                         title=> $myorder->{'title'},
+                                         author=> $myorder->{'author'},
+                                         countbiblio=> $countbiblio,
+                                         itemcount=>$itemcount,
+                                         subscriptions=>$subscriptions};
+            }
+            if ($error) {
+                push @cannotdelbiblios, {biblionumber=> ($myorder->{biblionumber}),
+                                         title=> $myorder->{'title'},
+                                         author=> $myorder->{'author'},
+                                         othererror=> $error};
+            }
         }
+        $template->param( cannotdelbiblios => \@cannotdelbiblios );
     }
  # delete the basket
     DelBasket($basketno,);
