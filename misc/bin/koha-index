@@ -1,0 +1,79 @@
+#!/usr/bin/perl
+
+package Main;
+
+use Modern::Perl;
+use utf8;
+use Koha::Indexer::Indexing;
+use Pod::Usage;
+
+my $indexer = Koha::Indexer::Indexing->new_with_options();
+if ( $indexer->help ) {
+    pod2usage( -verbose => 99 );
+    exit;
+}
+$indexer->run();
+
+
+__END__
+
+=pod
+
+=head1 SYNOPSIS
+
+ koha-index
+
+ koha-index --verbose
+
+ koha-index --source biblio --select queue
+
+ koha-index --source authority --select all
+
+ koha-index --select queue --directory /tmp/koha-index-mylib --keep
+
+=head1 DESCRIPTION
+
+Index queued biblio/autority record, or reindex the whole DB. Koha standard
+environment variables must ne set appropriately: KOHA_CONF and PERL5LIB.
+
+=head1 OPTIONS
+
+=over
+
+=item --source
+
+Select records to be indexed: C<biblio> or C<authority>. If not specified,
+biblio by default.
+
+=item --select
+
+Select record to be indexed: C<all> or C<queue>. If not specified, C<all> is
+selected. If C<all> is selected, zebra database is reset before indexing.
+
+=item --directory
+
+Directory where records to be indexed by Zebra are exported. If not specified,
+a direcory named C<koha-index> is used, and if necessary created, in the
+current directory. In this directory, sub-directories are created containing
+records to be updated or deleted by Zebra. If those subdirectories already
+exist, they are first emptied. The export directory tree is kept after zebra
+indexing.
+
+=item --keep
+
+Keep the directory, and its content, where biblio/authority records have been
+exported.
+
+=item --verbose
+
+Increase the amount of logging. Normally only warnings and errors from the
+indexing are shown.
+
+=back
+
+=head1 SEE ALSO
+
+=for :list
+* L<koha-index-daemon>
+
+=cut
