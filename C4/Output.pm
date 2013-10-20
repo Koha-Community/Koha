@@ -255,7 +255,7 @@ sub pagination_bar {
 
 =item output_with_http_headers
 
-   &output_with_http_headers($query, $cookie, $data, $content_type[, $status])
+   &output_with_http_headers($query, $cookie, $data, $content_type[, $status[, $extra_options]])
 
 Outputs $data with the appropriate HTTP headers,
 the authentication cookie $cookie and a Content-Type specified in
@@ -267,11 +267,17 @@ $content_type is one of the following: 'html', 'js', 'json', 'xml', 'rss', or 'a
 
 $status is an HTTP status message, like '403 Authentication Required'. It defaults to '200 OK'.
 
+$extra_options is hashref.  If the key 'force_no_caching' is present and has
+a true value, the HTTP headers include directives to force there to be no
+caching whatsoever.
+
 =cut
 
 sub output_with_http_headers {
-    my ( $query, $cookie, $data, $content_type, $status ) = @_;
+    my ( $query, $cookie, $data, $content_type, $status, $extra_options ) = @_;
     $status ||= '200 OK';
+
+    $extra_options //= {};
 
     my %content_type_map = (
         'html' => 'text/html',
@@ -285,13 +291,17 @@ sub output_with_http_headers {
     );
 
     die "Unknown content type '$content_type'" if ( !defined( $content_type_map{$content_type} ) );
+    my $cache_policy = 'no-cache';
+    $cache_policy .= ', no-store, max-age=0' if $extra_options->{force_no_caching};
     my $options = {
         type    => $content_type_map{$content_type},
         status  => $status,
         charset => 'UTF-8',
         Pragma          => 'no-cache',
-        'Cache-Control' => 'no-cache',
+        'Cache-Control' => $cache_policy,
     };
+    $options->{expires} = 'now' if $extra_options->{force_no_caching};
+
     $options->{cookie} = $cookie if $cookie;
     if ($content_type eq 'html') {  # guaranteed to be one of the content_type_map keys, else we'd have died
         $options->{'Content-Style-Type' } = 'text/css';
@@ -308,8 +318,8 @@ sub output_with_http_headers {
 }
 
 sub output_html_with_http_headers {
-    my ( $query, $cookie, $data, $status ) = @_;
-    output_with_http_headers( $query, $cookie, $data, 'html', $status );
+    my ( $query, $cookie, $data, $status, $extra_options ) = @_;
+    output_with_http_headers( $query, $cookie, $data, 'html', $status, $extra_options );
 }
 
 
