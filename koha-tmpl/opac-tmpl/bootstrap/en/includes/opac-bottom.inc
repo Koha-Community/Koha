@@ -57,9 +57,9 @@
                                     [% ELSE %]
                                         [% IF ( languages_loo.group_enabled ) %]
                                             [% IF ( languages_loo.current ) %]
-                                                <li class="morelang"><p>[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]</p></li>
+                                                <li class="active"><p class="navbar-text">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]</p></li>
                                             [% ELSE %]
-                                                <li class="morelang"><a href="/cgi-bin/koha/opac-changelanguage.pl?language=[% languages_loo.rfc4646_subtag %]">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]</a></li>
+                                                <li><a href="/cgi-bin/koha/opac-changelanguage.pl?language=[% languages_loo.rfc4646_subtag %]">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]</a></li>
                                             [% END %]
                                         [% END # / IF languages_loo.current %]
                                     [% END # / IF ( languages_loo.plural ) %]
