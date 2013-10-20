@@ -17,7 +17,7 @@ $(document).ready(function(){
             $(".btn-group").removeClass("open");
         });[% END %]
     [% END %]
-
+    $("#updatechild, #patronflags, #renewpatron, #deletepatron").tooltip();
     $("#exportcheckins").click(function(){
         export_barcodes();
         $(".btn-group").removeClass("open");
@@ -133,22 +133,22 @@ function searchToHold(){
                 [% IF ( CAN_user_borrowers ) %]
                     <li><a id="renewpatron" href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;cardnumber=[% cardnumber %]&amp;destination=[% destination %]&amp;reregistration=y">Renew patron</a></li>
                 [% ELSE %]
-                    <li class="disabled"><a id="renewpatron" href="#">Renew patron</a></li>
+                    <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to renew patrons" id="renewpatron" href="#">Renew patron</a></li>
                 [% END %]
                 [% IF ( CAN_user_permissions ) %]
                     <li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=[% borrowernumber %]">Set permissions</a></li>
                 [% ELSE %]
-                    <li class="disabled"><a id="patronflags" href="#">Set permissions</a></li>
+                    <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to set permissions" id="patronflags" href="#">Set permissions</a></li>
                 [% END %]
                 [% IF ( CAN_user_borrowers ) %]
                     <li><a id="deletepatron" href="#">Delete</a></li>
                 [% ELSE %]
-                    <li class="disabled"><a id="deletepatron" href="#">Delete</a></li>
+                    <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to delete patrons" id="deletepatron" href="#">Delete</a></li>
                 [% END %]
                 [% IF ( is_child ) %]
                     <li><a id="updatechild" href="#">Update child to adult patron</a></li>
                 [% ELSE %]
-                    <li class="disabled"><a id="updatechild" href="#">Update child to adult patron</a></li></li>
+                    <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="Patron is an adult" id="updatechild" href="#">Update child to adult patron</a></li></li>
                 [% END %]
                 <li><a id="exportcheckins" href="#">Export today's checked in barcodes</a></li>
             </ul>
