@@ -1,13 +1,14 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Koha %]
+[% USE Borrowers %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Check in [% title |html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 [% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery-ui-timepicker-addon.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min.js"></script>
 
 <script type="text/javascript">
 //<![CDATA[
@@ -18,9 +19,33 @@ function Dopop(link) {
 $(document).ready(function () {
     $("#return_date_override").datetimepicker({
         onClose: function(dateText, inst) { $("#barcode").focus(); },
+        defaultDate: -1,
         hour: 23,
-        minute: 59
+        minute: 59,
+        maxDate: 0
     });
+    $("#return_date_override").on("blur", function() {
+            check_valid_return_date();
+    });
+    $("#checkin-form").submit(function( event ) {
+        if ( !check_valid_return_date() ) {
+            event.preventDefault();
+        }
+    });
+
+    function check_valid_return_date() {
+        if ( $("#return_date_override").val() ) {
+            var datetime = DateTime_from_syspref( $("#return_date_override").val() );
+            var now = new Date();
+            if ( !datetime || datetime > now ) {
+                alert("Invalid return date/time!");
+                $("#return_date_override").val("")
+                return false;
+            }
+        }
+        return true;
+    }
+
     $("#exemptcheck").change(function () {
         if (this.checked == true) {
             $("#barcode").addClass("alert");
@@ -102,6 +127,17 @@ $(document).ready(function () {
     </div>
 [% END %]
 
+<!-- Patron is restricted and checkin was backdated -->
+[% IF return_date_override && Borrowers.IsDebarred( borrower ) %]
+    <div id="restricted_backdated" class="dialog message">
+        <h3>
+            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber %]">
+                [% borrower.firstname %] [% borrower.surname %]
+            </a>
+            is retricted. Please verify this patron should still be restricted.
+        </h3>
+    </div>
+[% END %]
 
 [% IF ( wrongbranch ) %]
 <div class="dialog alert"><h3>Cannot check in</h3><p>This item must be checked in at its home library. <strong>NOT CHECKED IN</strong></p>
@@ -395,7 +431,7 @@ $(document).ready(function () {
     </div>
 </div>
 	<div class="yui-g">
-    <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off" >
+    <form id="checkin-form" method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off" >
     <div class="yui-u first">
             <fieldset>
 	<legend>Check in</legend>
@@ -413,7 +449,7 @@ $(document).ready(function () {
                 <div class="date-select" id="return_date_override_fields">
                     <div class="hint">Specify return date [% INCLUDE 'date-format.inc' %]: </div>
 
-                    <input type="text" size="13" id="return_date_override" name="return_date_override" value="[% return_date_override %]" readonly="readonly" />
+                    <input type="text" size="13" id="return_date_override" name="return_date_override" value="[% return_date_override %]" />
 
                     <label for="return_date_override_remember"> Remember for next check in:</label>
                     [% IF ( return_date_override_remember ) %]

@@ -8350,7 +8350,7 @@ if ( CheckVersion($DBversion) ) {
         INSERT INTO systempreferences
             (variable,value,explanation,options,type)
         VALUES
-            ('SpecifyReturnDate',1,'Define whether to display \"Specify Return Date\" form in Circulation','','YesNo')
+            ('SpecifyReturnDate',0,'Define whether to display \"Specify Return Date\" form in Circulation','','YesNo')
     });
     print "Upgrade to $DBversion done (Bug 10694 - Allow arbitrary backdating of returns)\n";
     SetVersion($DBversion);
