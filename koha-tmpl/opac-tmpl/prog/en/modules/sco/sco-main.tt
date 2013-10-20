@@ -11,8 +11,17 @@
 <script type="text/javascript" src="[% themelang %]/lib/jquery/jquery-ui.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">//<![CDATA[
+function mungeHistory() {
+    // prevent back button from allowing form resubmission
+    if (history && history.pushState) {
+        history.replaceState(null, document.title, window.location.href);
+    }
+}
+var mainTimeout;
 function sco_init() {
-    setTimeout("location.href='/cgi-bin/koha/sco/sco-main.pl?op=logout';",[% SelfCheckTimeout %]);
+    mainTimeout = setTimeout(function() {
+        location.href = '/cgi-bin/koha/sco/sco-main.pl?op=logout';
+    }, [% SelfCheckTimeout %]);
 }
 function dofocus() {    // named function req'd for body onload event by some FF and IE7 security models
     // alert("dofocus called");
@@ -90,6 +99,7 @@ $(document).ready(function() {
 //]]>
 $(document).ready(function(){
     $("#logout_form").submit(function(){
+        clearTimeout(mainTimeout);
         if(confirm("Would you like to print a receipt?")){
             window.open("/cgi-bin/koha/sco/printslip.pl?borrowernumber=[% borrowernumber %]&amp;print=qslip");
         }
@@ -105,7 +115,7 @@ $(document).ready(function(){
 [% IF ( SCOUserCSS ) %]<style type="text/css">[% SCOUserCSS %]</style>[% END %]
 
 </head>
-<body onload="dofocus();">
+<body onload="dofocus();" onunload="mungeHistory();">
 
 <div id="doc" class="yui-t7">
 
