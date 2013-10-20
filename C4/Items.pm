@@ -2315,6 +2315,9 @@ Exported function (core API) for deleting an item record in Koha if there no cur
 
 sub DelItemCheck {
     my ( $dbh, $biblionumber, $itemnumber ) = @_;
+
+    $dbh ||= C4::Context->dbh;
+
     my $error;
 
         my $countanalytics=GetAnalyticsCount($itemnumber);
