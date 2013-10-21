@@ -345,6 +345,7 @@ sub excessive_fines {
 }
 
 sub holds_blocked_by_excessive_fees {
+    my $self = shift;
     return ( $self->fee_amount
           && $self->fee_amount > C4::Context->preference("maxoutstanding") );
 }
