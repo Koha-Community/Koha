@@ -1,237 +1,420 @@
-/* Adjust text directions */
-body,
-body #doc,
-#doc2,
-#doc3,
-#doc4,
-.yui-t1,
-.yui-t2,
-.yui-t3,
-.yui-t4,
-.yui-t5,
-.yui-t6,
-.yui-t7
-{
-   text-align:right;
-   direction: rtl;
+.popup {
+  padding-right: 0;
+  padding-left: 0;
 }
-
-caption,
-table#marc th
-{
-   text-align: right;
+a.cancel {
+  padding-right: 1em;
 }
-
-/* Swap floats */
-
-
-body#advsearch #cartmenulink,
-body#advsearch #listsmenulink,
-#renewcontrols,
-.commentline .avatar,
-.resort,
-.yui-t1 #yui-main,
-.yui-t2 #yui-main,
-.yui-t3 #yui-main
-{
-   float: left;
+h1#libraryname {
+  float: right !important;
 }
-.ui-tabs .ui-tabs-nav li,
-div.lang,
+caption {
+  text-align: right;
+}
+#basketcount span {
+  margin: 0 .9em 0 0;
+}
+#koha_url p {
+  float: left;
+}
+.actions a {
+  /* List contents remove from list link */
+
+}
+.actions a.hold {
+  margin-left: 1em;
+  padding-right: 21px;
+}
+.actions a.addtocart {
+  margin-left: 1em;
+  padding-right: 20px;
+}
+.actions a.addtoshelf {
+  margin-left: 1em;
+  padding-right: 20px;
+}
+.actions a.addtolist {
+  margin-left: 1em;
+  padding-right: 20px;
+}
+.actions a.tag_add {
+  margin-left: 1em;
+  padding-right: 20px;
+}
+.actions a.removefromlist {
+  margin-left: 1em;
+  padding-right: 15px;
+}
+.ui-tabs .ui-tabs-nav li {
+  margin-left: .4em;
+}
+.statictabs li {
+  float: right;
+  margin-left: 0.4em;
+}
+.statictabs li a {
+  float: right;
+}
+#bookcover .no-image {
+  margin-left: 10px;
+}
+th.sum {
+  text-align: left;
+}
+th[scope=row] {
+  text-align: left;
+}
+fieldset.rows {
+  float: right;
+  clear: right;
+}
 fieldset.rows label,
-fieldset.rows span.label,
-#auth,
-#bookcover,
-.left,
-.nav_results ul.pg_menu li,
-.ui-tabs-nav li,
-.yui-g div.first,
-.yui-gc div.first,
-.yui-gc div.first div.first,
-.yui-gd div.first,
-.yui-ge div.first,
-.yui-gf div.first,
-.yui-t1 .yui-b
-{
-   float: right;
+fieldset.rows .label {
+  float: right;
+  margin-left: 1em;
+  text-align: left;
 }
-
-h1#libraryname
-{
-   float: right !important;
+fieldset.rows ol.lradio label {
+  margin-left: 0;
 }
-
-#fluid-offset
-{
-   float: none;
+fieldset.rows ol.lradio label.lradio {
+  float: right;
+  margin-left: 1em;
 }
-
-/* Adjust margins, padding, alignment and table-element widths */
-
-div#menu li a
-{
-   margin-left: -1px;
+fieldset.rows li {
+  float: right;
+  clear: right;
 }
-
-.yui-t1 #yui-main,
-.yui-t1 #yui-main .yui-b,
-.yui-t2 #yui-main,
-.yui-t3 #yui-main
-{
-   margin-left: 0;
+fieldset.rows li.lradio {
+  padding-right: 8.5em;
 }
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6
-{
-   margin-left: 0.5em;
+fieldset.rows li.lradio label {
+  margin: 0 1em 0 0;
 }
-
-.results_summary .label
-{
-   margin-left: 0.5em;
+div.rows {
+  float: right;
+  clear: right;
 }
-
-
-ul.pg_menu li,
-.author,
-.nav_results
-{
-   margin-right: 0.5em;
+div.rows span.label {
+  float: right;
+  margin-left: 1em;
+  text-align: right;
 }
-
-#usershowreviews
-{
-   margin-right: 15em;
+div.rows ol {
+  margin-right: 0;
+  padding: .5em 0 0 1em;
 }
-
-#moresearches
-{
-   margin: .6em 10em .3em 0;
+div.rows li {
+  float: right;
+  clear: right;
 }
-
-#menu ul
-{
-   padding-left:0;
+div.rows ul li {
+  margin-right: 7.3em;
 }
-
-#custom-doc,
-#opac-main-search
-{
-   padding-right: 2em;
+div.rows ul li:first-child {
+  margin-right: 0;
 }
-
-.nav_results .l_Results a
-{
-   padding: 8px 3px 8px 28px;
+.toolbar {
+  padding: 3px 5px 5px 3px;
 }
-
-body#advsearch #moresearches
-{
-   clear:none;
+.toolbar label {
+  margin-right: .5em;
 }
-
-span.koha_url
-{
-   left: 2em;
-   right:auto;
+.toolbar .hold,
+.toolbar #tagsel_tag {
+  padding-right: 28px;
 }
-
-.yui-u first
-{
-   right: 15em;
+.toolbar li a {
+  border-right: 1px solid #e8e8e8;
 }
-
-table#marc td:first-child
-{
-   width: 15em;
+.toolbar li:first-child a {
+  border-right: 0;
 }
-
-.yui-t1 #yui-main,
-.yui-t2 #yui-main,
-.yui-t3 #yui-main {
-   width: 80%;
+.toolbar ul {
+  padding-right: 0;
 }
-
-/* Borders */
-
-div#menu {
-   border-right: 0;
-   border-left: 1px solid #979797;
+#basket .toolbar {
+  padding: 7px 9px 9px 5px;
 }
-
-#menu ul li.active a {
-   border-left: 0;
-   border-right: 1px solid #979797;
+#selections-toolbar {
+  padding-right: 10px;
 }
-
-/* flip over breadcrumb image */
-
-h3 img {
-        -moz-transform: scaleX(-1);
-        -o-transform: scaleX(-1);
-        -webkit-transform: scaleX(-1);
-        transform: scaleX(-1);
-        filter: FlipH;
-        -ms-filter: "FlipH";
+#tagsel_span input.submit,
+#tagsel_tag {
+  padding-right: 25px;
 }
-
-
-#moresearches {
-    clear: right;
+#tagsel_span input.disabled,
+#tagsel_span input.disabled:hover,
+#tagsel_span input.hold.disabled,
+#tagsel_span input.hold.disabled:hover,
+#selections-toolbar input.hold.disabled,
+#selections-toolbar input.hold.disabled:hover,
+#selections-toolbar a.disabled,
+#selections-toolbar a.disabled:hover {
+  padding-right: 23px;
 }
-
-#cartmenulink, #listsmenulink {
-    float: right;
-    margin-right: 1em;
-    margin-left: 0em;
+#views {
+  padding: 0 0.2em 0.2em 2em;
 }
-
-#listsmenulink {
-
-    background-image: url("../images/sprite.png"), -moz-linear-gradient(center top , rgb(215, 229, 255) 0%, rgb(177, 203, 255) 50%, rgb(159, 191, 255) 100%);
-
-    background-position: -5px -287px, left top;
-
-    padding-left: 20px;
+#bibliodescriptions,
+#isbdcontents {
+  clear: right;
 }
-#listsmenulink:hover {
-    background-position: -5px -287px, left top;
+#bookcover {
+  float: right;
 }
-
-#cartmenulink {
-    padding-right: 30px;
-    background-position: 20px -256px, left top;
-    padding-left: 13px;
+#bookcover .no-image {
+  margin-left: 10px;
 }
-#cartmenulink:hover {
-    background-position: 20px -256px, left top;
+#bookcover img {
+  margin: 0 0 1em 1em;
 }
-.lang {
-float:right;
-
+/* pagination */
+.results-pagination {
+  right: -1px;
 }
-.morelang,
-li.more {
-float:right;
+.back {
+  float: left;
 }
-
-ul#i18nMenu li {
-    border-right: 1px solid rgb(204, 204, 204);
+.pagination_list ul {
+  padding-right: 0px;
 }
-div.rating-cancel, div.star-rating {
-    float: right;
+.pagination_list li a {
+  padding-right: 0px;
 }
-
-
-#shelfbrowser #browser_previous {
-    background-position: -9px -1051px;
+.pagination_list .li_pag_index {
+  float: right;
+  padding-left: 10px;
+  text-align: left;
 }
-
-#shelfbrowser #browser_next {
-    background-position: -9px -1001px;
+.pg_menu li.back_results a {
+  border-right: 1px solid #D0D0D0;
+  border-left: 1px solid #D0D0D0;
+}
+.pg_menu li a,
+.pg_menu li span {
+  float: right;
+}
+#listResults li {
+  margin-left: 1px;
+}
+/* nav */
+.nav_pages .close_pagination {
+  padding-left: 10px;
+  left: 3px;
+}
+.nav_pages li {
+  float: right;
+}
+.nav_pages li ul {
+  float: right;
+}
+#format,
+#furthersearches {
+  padding-right: 35px;
+}
+.highlight_controls {
+  float: right;
+}
+a.addtocart {
+  padding-right: 35px;
+}
+a.addtoshelf {
+  padding-right: 35px;
+}
+a.brief {
+  padding-right: 27px;
+}
+a.detail {
+  padding-right: 27px;
+}
+a.download {
+  padding-right: 20px;
+}
+a.editshelf {
+  padding-right: 26px;
+}
+a.empty {
+  padding-right: 30px;
+}
+a.hide {
+  padding-right: 26px;
+}
+a.highlight_toggle {
+  padding-right: 35px;
+}
+a.hold,
+input.hold {
+  padding-right: 23px;
+}
+a.incart {
+  padding-right: 35px;
+}
+a.new {
+  padding-right: 23px;
+}
+a.print-small {
+  padding-right: 30px;
+}
+a.print-large {
+  padding-right: 35px;
+}
+a.removeitems,
+a.deleteshelf {
+  padding-right: 25px;
+}
+a.reserve {
+  padding-right: 35px;
+}
+a.send {
+  padding-right: 28px;
+}
+a.tag_add {
+  padding-right: 27px;
+}
+input.editshelf {
+  padding-right: 29px;
+}
+.newshelf {
+  padding-right: 28px;
+}
+.deleteshelf {
+  padding-right: 25px;
+}
+#login4tags {
+  padding-right: 20px;
+}
+.tag_results_input {
+  margin-right: 1em;
+}
+#social_networks span {
+  float: right;
+  margin: .5em .5em .5em 0 !important;
+}
+#social_networks div {
+  float: right !important;
+  margin: .5em .2em .5em 0 !important;
+}
+#marc td,
+#marc th {
+  text-align: right;
+}
+#marc .results_summary {
+  clear: right;
+}
+#plainmarc th {
+  text-align: right;
+}
+#renewcontrols {
+  float: left;
+}
+.authstanza li {
+  margin-right: 0.5em;
+}
+#didyoumean {
+  text-align: right;
+}
+.authlink {
+  padding-right: 0.25em;
+}
+#search-facets h4 a,
+#menu h4 a {
+  border-radius: 8px 0 0 8px;
+}
+#menu {
+  border: 0 solid #D8D8D8;
+  border-left-width: 1px;
+}
+#menu li a {
+  border-radius: 0 5px 5px 0;
+  margin-left: -1px;
+}
+#menu li.active a {
+  border-left-width: 0;
+  border-right-width: 1px;
+}
+/* Search results add to cart (lists disabled) */
+.addto a.addtocart {
+  padding-right: 33px;
+}
+.searchresults a.highlight_toggle {
+  padding: 0 21px 0 10px;
+}
+.commentline .avatar {
+  float: left;
+  padding-right: .5em;
+}
+span.sep {
+  padding: 0 .5em 0 .2em;
+}
+/* style for PM-generated pagination bar */
+.pages span:first-child,
+.pages a:first-child {
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.pages span:last-child,
+.pages a:last-child {
+  border-width: 1px 0 1px 1px;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+.pages .inactive,
+.pages .currentPage,
+.pages a {
+  border-width: 1px 0 1px 1px;
+  float: right;
+}
+.pages a[rel='last'] {
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+.close {
+  left: auto;
+}
+/* Redefine a new style for Bootstrap's class "close" since we use that already */
+/* Use <a class="closebtn" href="#">&times;</a> */
+.alert .closebtn {
+  left: -21px;
+}
+.closebtn {
+  float: left;
+}
+#logo {
+  float: right !important;
+}
+/* Class to be added to toolbar when it starts being fixed at the top of the screen*/
+.floating {
+  -webkit-box-shadow: 0px 0px 2px 3px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 0px 2px 3px rgba(0, 0, 0, 0.4);
+}
+.table .sorting_asc {
+  padding-left: 19px;
+  background: url("../images/asc.gif") no-repeat scroll left center #ecede6;
+}
+.table .sorting_desc {
+  padding-left: 19px;
+  background: url("../images/desc.gif") no-repeat scroll left center #ecede6;
+}
+.table .sorting {
+  padding-left: 19px;
+  background: url("../images/ascdesc.gif") no-repeat scroll left center #ecede6;
+}
+.table .nosort,
+.table .nosort.sorting_asc,
+.table .nosort.sorting_desc,
+.table .nosort.sorting {
+  padding-left: 19px;
+}
+.tags ul {
+  margin-right: 0;
+}
+.coverimages {
+  float: left;
+}
+#i18nMenu {
+  margin-right: 1em;
+}
+#overdrive-results {
+  padding-right: 1em;
 }
