@@ -6,7 +6,7 @@
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
+# Foundation; either version 3 of the License, or (at your option) any later
 # version.
 #
 # Koha is distributed in the hope that it will be useful, but WITHOUT ANY
@@ -45,7 +45,8 @@ my $barcode        = $cgi->param('barcode');
 my $override_limit = $cgi->param('override_limit');
 my $override_holds = $cgi->param('override_holds');
 
-my ( $item, $issue, $borrower, $error );
+my ( $item, $issue, $borrower );
+my $error = q{};
 
 if ($barcode) {
     $item = $schema->resultset("Item")->single( { barcode => $barcode } );
@@ -57,8 +58,8 @@ if ($barcode) {
         if ($issue) {
 
             $borrower = $issue->borrower();
-
-            if ( $borrower->debarred() lt dt_from_string()->ymd() ) {
+            
+            if ( ( $borrower->debarred() || q{} ) lt dt_from_string()->ymd() ) {
                 my $can_renew;
                 ( $can_renew, $error ) =
                   CanBookBeRenewed( $borrower->borrowernumber(),
