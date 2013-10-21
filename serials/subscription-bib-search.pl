@@ -70,7 +70,6 @@ $startfrom=0 unless $startfrom;
 my ($template, $loggedinuser, $cookie);
 my $resultsperpage;
 
-my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
 my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
 
 my $query = $input->param('q');
@@ -87,23 +86,12 @@ if ($op eq "do_search" && $query) {
         }
     );
 
-    # add the itemtype limit if applicable
+    # add the limits if applicable
     my $itemtypelimit = $input->param('itemtypelimit');
-    if ( $itemtypelimit ) {
-        my $QParser;
-        $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
-        my $op;
-        if ($QParser) {
-            $op = '&&';
-        } else {
-            $op = 'and';
-        }
-        if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
-            $query .= " $op $itype_or_itemtype:$itemtypelimit";
-        } else {
-            $query .= " $op $advanced_search_types:$itemtypelimit";
-        }
-    }
+    my $ccodelimit = $input->param('ccodelimit');
+    my $op = C4::Context->preference('UseQueryParser') ? '&&' : 'and';
+    $query .= " $op $itype_or_itemtype:$itemtypelimit" if $itemtypelimit;
+    $query .= " $op ccode:$ccodelimit" if $ccodelimit;
     $debug && warn $query;
     $resultsperpage= $input->param('resultsperpage');
     $resultsperpage = 20 if(!defined $resultsperpage);
@@ -200,50 +188,34 @@ else {
                 flagsrequired => {catalogue => 1, serials => '*'},
                 debug => 1,
                 });
+
     # load the itemtypes
-    my $itemtypes = GetItemTypes;
+    my $itemtypes = GetItemTypes();
     my @itemtypesloop;
-    if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
-	# load the itemtypes
-	my $itemtypes = GetItemTypes;
-	my $selected=1;
-	my $cnt;
 	foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
 	    my %row =(
 			code => $thisitemtype,
-			selected => $selected,
 			description => $itemtypes->{$thisitemtype}->{'description'},
 		    );
-	    $selected = 0 if ($selected) ;
 	    push @itemtypesloop, \%row;
 	}
 
-
-    } else {
-	my $advsearchtypes = GetAuthorisedValues($advanced_search_types);
-	my $cnt;
-	my $selected=1;
-	for my $thisitemtype (sort {$a->{'lib'} cmp $b->{'lib'}} @$advsearchtypes) {
+    # load Collection Codes
+	my $authvalues = GetAuthorisedValues('CCODE');
+	my @ccodesloop;
+	for my $thisauthvalue (sort {$a->{'lib'} cmp $b->{'lib'}} @$authvalues) {
 	    my %row =(
-		    number=>$cnt++,
-		    ccl => $advanced_search_types,
-		    code => $thisitemtype->{authorised_value},
-		    selected => $selected,
-		    description => $thisitemtype->{'lib'},
-		    count5 => $cnt % 4,
-		    imageurl=> getitemtypeimagelocation( 'intranet', $thisitemtype->{'imageurl'} ),
+		    code => $thisauthvalue->{'authorised_value'},
+		    description => $thisauthvalue->{'lib'},
 		);
-	    push @itemtypesloop, \%row;
+	    push @ccodesloop, \%row;
 	}
-    }
 
-
-    if ($op eq "do_search") {
-       $template->param("no_query" => 1);
-    } else {
-       $template->param("no_query" => 0);
-    }
-    $template->param(itemtypeloop => \@itemtypesloop);
+    $template->param(
+        itemtypeloop => \@itemtypesloop,
+        ccodeloop    => \@ccodesloop,
+        no_query     => $op eq "do_search" ? 1 : 0,
+    );
 }
 # Print the page
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -14,28 +14,41 @@
 <form name="f" action="/cgi-bin/koha/serials/subscription-bib-search.pl" method="get">
     <input type="hidden" name="op" value="do_search" />
     <input type="hidden" name="type" value="intranet" />
-	<fieldset class="rows">
-	<ol>
-    <li><label for="q">Keyword: </label>
-    <input type="text" id="q"  name="q" /></li>
-    
-    <!-- ITEMTYPE LIMITS -->
-        <li><label for="itemtypelimit">Limit type to: </label>
-        <select name="itemtypelimit" id="itemtypelimit">
-	    <option value="">All</option>
-        [% FOREACH itemtypeloo IN itemtypeloop %]
-            <option value="[% itemtypeloo.code %]">
-                [% itemtypeloo.description |html %]
-            </option>
-        [% END %]
-        </select>
+    <fieldset class="brief">
+    <ol>
+        <li>
+            <label for="q">Keyword: </label>
+            <input type="text" id="q"  name="q" />
         </li>
-    <!-- /ITEMTYPE LIMITS -->
-	</ol>
-</fieldset>
-<fieldset class="action"><input type="submit" value="Search" /></fieldset>
-
-
+        <li>
+            <label for="itemtypelimit">Limit item type to: </label>
+            <select name="itemtypelimit" id="itemtypelimit">
+                <option value="">All</option>
+                [%- FOREACH itemtypeloo IN itemtypeloop %]
+                <option value="[% itemtypeloo.code %]">
+                    [% itemtypeloo.description |html %]
+                </option>
+                [%- END %]
+            </select>
+        </li>
+        [%- IF ccodeloop %]
+        <li>
+            <label for="ccodelimit">Limit collection code to: </label>
+            <select name="ccodelimit" id="ccodelimit">
+                <option value="">All</option>
+                [%- FOREACH ccodeloo IN ccodeloop %]
+                <option value="[% ccodeloo.code %]">
+                    [% ccodeloo.description |html %]
+                </option>
+                [%- END %]
+            </select>
+        </li>
+        [%- END %]
+    </ol>
+    </fieldset>
+    <fieldset class="action">
+        <input type="submit" value="Search" />
+    </fieldset>
 </form>
 
 </div>
