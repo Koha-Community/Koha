@@ -266,10 +266,17 @@ sub SearchAuthorities {
         
         ##Here we have to extract MARC record and $authid from ZEBRA AUTHORITIES
         my $rec=$oAResult->record($counter);
-        my $marcdata=$rec->raw();
-        my $authrecord;
         my $separator=C4::Context->preference('authoritysep');
-        $authrecord = MARC::File::USMARC::decode($marcdata);
+        my $authrecord = C4::Search::new_record_from_zebra(
+            'authorityserver',
+            $rec->raw()
+        );
+
+        if ( !defined $authrecord or !defined $authrecord->field('001') ) {
+            $counter++;
+            next;
+        }
+
         my $authid=$authrecord->field('001')->data();
         my %newline;
         $newline{authid} = $authid;
@@ -847,15 +854,18 @@ sub FindDuplicateAuthority {
     my $query='at:'.$authtypecode.' ';
     my $filtervalues=qr([\001-\040\!\'\"\`\#\$\%\&\*\+,\-\./:;<=>\?\@\(\)\{\[\]\}_\|\~]);
     if ($record->field($auth_tag_to_report)) {
-      foreach ($record->field($auth_tag_to_report)->subfields()) {
-        $_->[1]=~s/$filtervalues/ /g; $query.= " $op he:\"".$_->[1]."\"" if ($_->[0]=~/[A-z]/);
-      }
+        foreach ($record->field($auth_tag_to_report)->subfields()) {
+            $_->[1]=~s/$filtervalues/ /g; $query.= " $op he:\"".$_->[1]."\"" if ($_->[0]=~/[A-z]/);
+        }
     }
     my ($error, $results, $total_hits) = C4::Search::SimpleSearch( $query, 0, 1, [ "authorityserver" ] );
     # there is at least 1 result => return the 1st one
     if (!defined $error && @{$results} ) {
-      my $marcrecord = MARC::File::USMARC::decode($results->[0]);
-      return $marcrecord->field('001')->data,BuildSummary($marcrecord,$marcrecord->field('001')->data,$authtypecode);
+        my $marcrecord = C4::Search::new_record_from_zebra(
+            'authorityserver',
+            $results->[0]
+        );
+        return $marcrecord->field('001')->data,BuildSummary($marcrecord,$marcrecord->field('001')->data,$authtypecode);
     }
     # no result, returns nothing
     return;
@@ -1452,13 +1462,15 @@ sub merge {
     }
     my $z=0;
     while ( $z<$count ) {
-        my $rec;
-        $rec=$oResult->record($z);
-        my $marcdata = $rec->raw();
-        my $marcrecordzebra= MARC::Record->new_from_usmarc($marcdata);
+        my $marcrecordzebra = C4::Search::new_record_from_zebra(
+            'biblioserver',
+            $oResult->record($z)->raw()
+        );
         my ( $biblionumbertagfield, $biblionumbertagsubfield ) = &GetMarcFromKohaField( "biblio.biblionumber", '' );
-        my $i = ($biblionumbertagfield < 10) ? $marcrecordzebra->field($biblionumbertagfield)->data : $marcrecordzebra->subfield($biblionumbertagfield, $biblionumbertagsubfield);
-        my $marcrecorddb=GetMarcBiblio($i);
+        my $i = ($biblionumbertagfield < 10)
+            ? $marcrecordzebra->field( $biblionumbertagfield )->data
+            : $marcrecordzebra->subfield( $biblionumbertagfield, $biblionumbertagsubfield );
+        my $marcrecorddb = GetMarcBiblio($i);
         push @reccache, $marcrecorddb;
         $z++;
     }

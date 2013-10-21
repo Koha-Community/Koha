@@ -240,7 +240,7 @@ RECORD: while (  ) {
         die "unable to search the database for duplicates : $error" if ( defined $error );
         $debug && warn "$query $server : $totalhits";
         if ( $results && scalar(@$results) == 1 ) {
-            my $marcrecord = MARC::File::USMARC::decode( $results->[0] );
+            my $marcrecord = C4::Search::new_record_from_zebra( $server, $results->[0] );
             SetUTF8Flag($marcrecord);
             $id = GetRecordId( $marcrecord, $tagid, $subfieldid );
             if ( $authorities && $marcFlavour ) {

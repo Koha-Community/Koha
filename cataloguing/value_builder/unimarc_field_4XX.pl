@@ -390,7 +390,7 @@ sub plugin {
              $i++
            )
          {
-            my $record = MARC::Record::new_from_usmarc( $results->[$i] );
+            my $record = C4::Search::new_record_from_zebra( 'biblioserver', $results->[$i] );
             my $rechash = TransformMarcToKoha( $dbh, $record );
             my $pos;
             my $countitems;

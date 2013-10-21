@@ -67,7 +67,7 @@ sub _get_biblio_from_xisbn {
     my ( $errors, $results, $total_hits ) = C4::Search::SimpleSearch( "nb=$xisbn", 0, 1 );
     return unless ( !$errors && scalar @$results );
 
-    my $record = MARC::Record::new_from_usmarc( $results->[0] );
+    my $record = C4::Search::new_record_from_zebra( 'biblioserver', $results->[0] );
     my $biblionumber = C4::Biblio::get_koha_field_from_marc('biblio', 'biblionumber', $record, '');
     return unless $biblionumber;
 

@@ -457,7 +457,7 @@ our $PERL_DEPS = {
     'MARC::Record' => {
         'usage'    => 'Core',
         'required' => '1',
-        'min_ver'  => '2'
+        'min_ver'  => '2.0.6'
     },
     'Locale::Currency::Format' => {
         'usage'    => 'Core',
@@ -482,7 +482,7 @@ our $PERL_DEPS = {
     'MARC::File::XML' => {
         'usage'    => 'Core',
         'required' => '1',
-        'min_ver'  => '0.88'
+        'min_ver'  => '1.0.1'
     },
     'XML::SAX::Writer' => {
         'usage'    => 'Core',

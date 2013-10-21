@@ -111,7 +111,7 @@ if (defined $error) {
 my @results;
 
 foreach my $result ( @{$marcresults} ) {
-    my $marcrecord = MARC::File::USMARC::decode( $result );
+    my $marcrecord = C4::Search::new_record_from_zebra( 'biblioserver', $result );
     my $biblio = TransformMarcToKoha( C4::Context->dbh, $marcrecord, '' );
 
     $biblio->{booksellerid} = $booksellerid;

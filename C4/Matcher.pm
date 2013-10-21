@@ -696,7 +696,7 @@ sub get_matches {
     if ($self->{'record_type'} eq 'biblio') {
         require C4::Biblio;
         foreach my $marcblob (keys %matches) {
-            my $target_record = MARC::Record->new_from_usmarc($marcblob);
+            my $target_record = C4::Search::new_record_from_zebra('biblioserver',$marcblob);
             my $record_number;
             my $result = C4::Biblio::TransformMarcToKoha(C4::Context->dbh, $target_record, '');
             $record_number = $result->{'biblionumber'};

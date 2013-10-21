@@ -144,8 +144,11 @@ sub FindDuplicate {
     my @results;
     if (!defined $error) {
         foreach my $possible_duplicate_record (@{$searchresults}) {
-            my $marcrecord =
-            MARC::Record->new_from_usmarc($possible_duplicate_record);
+            my $marcrecord = new_record_from_zebra(
+                'biblioserver',
+                $possible_duplicate_record
+            );
+
             my $result = TransformMarcToKoha( $dbh, $marcrecord, '' );
 
             # FIXME :: why 2 $biblionumber ?
@@ -289,10 +292,11 @@ sub SimpleSearch {
             }
 
             for my $j ( $first_record .. $last_record ) {
-                my $record =
+                my $record = eval {
                   $tmpresults[ $i - 1 ]->record( $j - 1 )->raw()
                   ;    # 0 indexed
-                push @{$results}, $record;
+                };
+                push @{$results}, $record if defined $record;
             }
         }
     );
@@ -446,6 +450,7 @@ sub getRecords {
                 else {
                     $times = $size;
                 }
+
                 for ( my $j = $offset ; $j < $times ; $j++ ) {
                     my $records_hash;
                     my $record;
@@ -488,7 +493,6 @@ sub getRecords {
                     # not an index scan
                     else {
                         $record = $results[ $i - 1 ]->record($j)->raw();
-
                         # warn "RECORD $j:".$record;
                         $results_hash->{'RECORDS'}[$j] = $record;
                     }
@@ -503,39 +507,37 @@ sub getRecords {
                       $size > $facets_maxrecs ? $facets_maxrecs : $size;
                     for my $facet (@$facets) {
                         for ( my $j = 0 ; $j < $jmax ; $j++ ) {
-                            my $render_record =
-                              $results[ $i - 1 ]->record($j)->render();
+
+                            my $marc_record = new_record_from_zebra (
+                                    'biblioserver',
+                                    $results[ $i - 1 ]->record($j)->raw()
+                            );
+
+                            if ( ! defined $marc_record ) {
+                                warn "ERROR DECODING RECORD - $@: " .
+                                    $results[ $i - 1 ]->record($j)->raw();
+                                next;
+                            }
+
                             my @used_datas = ();
+
                             foreach my $tag ( @{ $facet->{tags} } ) {
 
                                 # avoid first line
                                 my $tag_num = substr( $tag, 0, 3 );
-                                my $letters = substr( $tag, 3 );
-                                my $field_pattern =
-                                  '\n' . $tag_num . ' ([^z][^\n]+)';
-                                $field_pattern = '\n' . $tag_num . ' ([^\n]+)'
-                                  if ( int($tag_num) < 10 );
-                                my @field_tokens =
-                                  ( $render_record =~ /$field_pattern/g );
-                                foreach my $field_token (@field_tokens) {
-                                    my @subf = ( $field_token =~
-                                          /\$([a-zA-Z0-9]) ([^\$]+)/g );
-                                    my @values;
-                                    for ( my $i = 0 ; $i < @subf ; $i += 2 ) {
-                                        if ( $letters =~ $subf[$i] ) {
-                                            my $value = $subf[ $i + 1 ];
-                                            $value =~ s/^ *//;
-                                            $value =~ s/ *$//;
-                                            push @values, $value;
-                                        }
-                                    }
-                                    my $data = join( $facet->{sep}, @values );
+                                my $subfield_letters = substr( $tag, 3 );
+                                # Removed when as_string fixed
+                                my @subfields = $subfield_letters =~ /./sg;
+
+                                my @fields = $marc_record->field($tag_num);
+                                foreach my $field (@fields) {
+                                    my $data = $field->as_string( $subfield_letters, $facet->{sep} );
+
                                     unless ( $data ~~ @used_datas ) {
-                                        $facets_counter->{ $facet->{idx} }
-                                          ->{$data}++;
                                         push @used_datas, $data;
+                                        $facets_counter->{ $facet->{idx} }->{$data}++;
                                     }
-                                }    # fields
+                                } # fields
                             }    # field codes
                         }    # records
                         $facets_info->{ $facet->{idx} }->{label_value} =
@@ -1700,16 +1702,28 @@ sub searchResults {
         $times = $hits;	 # FIXME: if $hits is undefined, why do we want to equal it?
     }
 
-	my $marcflavour = C4::Context->preference("marcflavour");
+    my $marcflavour = C4::Context->preference("marcflavour");
     # We get the biblionumber position in MARC
     my ($bibliotag,$bibliosubf)=GetMarcFromKohaField('biblio.biblionumber','');
 
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
-        my $marcrecord = eval { MARC::File::USMARC::decode( $marcresults->[$i] ); };
-        if ( $@ ) {
-            warn "ERROR DECODING RECORD - $@: " . $marcresults->[$i];
-            next;
+
+        my $marcrecord;
+        if ($scan) {
+            # For Scan searches we built USMARC data
+            $marcrecord = MARC::Record->new_from_usmarc( $marcresults->[$i]);
+        } else {
+            # Normal search, render from Zebra's output
+            $marcrecord = new_record_from_zebra(
+                'biblioserver',
+                $marcresults->[$i]
+            );
+
+            if ( ! defined $marcrecord ) {
+                warn "ERROR DECODING RECORD - $@: " . $marcresults->[$i];
+                next;
+            }
         }
 
         my $fw = $scan
@@ -2379,6 +2393,43 @@ sub _ZOOM_event_loop {
     }
 }
 
+=head2 new_record_from_zebra
+
+Given raw data from a Zebra result set, return a MARC::Record object
+
+This helper function is needed to take into account all the involved
+system preferences and configuration variables to properly create the
+MARC::Record object.
+
+If we are using GRS-1, then the raw data we get from Zebra should be USMARC
+data. If we are using DOM, then it has to be MARCXML.
+
+=cut
+
+sub new_record_from_zebra {
+
+    my $server   = shift;
+    my $raw_data = shift;
+    # Set the default indexing modes
+    my $index_mode = ( $server eq 'biblioserver' )
+                        ? C4::Context->config('zebra_bib_index_mode') // 'grs1'
+                        : C4::Context->config('zebra_auth_index_mode') // 'dom';
+
+    my $marc_record =  eval {
+        if ( $index_mode eq 'dom' ) {
+            MARC::Record->new_from_xml( $raw_data, 'UTF-8' );
+        } else {
+            MARC::Record->new_from_usmarc( $raw_data );
+        }
+    };
+
+    if ($@) {
+        return;
+    } else {
+        return $marc_record;
+    }
+
+}
 
 END { }    # module clean-up code here (global destructor)
 

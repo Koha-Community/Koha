@@ -309,7 +309,7 @@ if ($barcode) {
             foreach my $hit ( @{$results} ) {
                 my $chosen =
                   TransformMarcToKoha( C4::Context->dbh,
-                    MARC::Record->new_from_usmarc($hit) );
+                    C4::Search::new_record_from_zebra('biblioserver',$hit) );
 
                 # offer all barcodes individually
                 foreach my $barcode ( sort split(/\s*\|\s*/, $chosen->{barcode}) ) {
