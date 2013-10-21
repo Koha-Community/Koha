@@ -305,6 +305,12 @@
        [% SET estimated_total = 0 %]
 
        [% FOREACH loop_receive IN loop_received %]
+           [% IF (funds.${ loop_receive.budget.budget_name }.estimated == '') %]
+              [% SET funds.${ loop_receive.budget.budget_name }.estimated = 0 %]
+           [% END %]
+           [% IF (funds.${ loop_receive.budget.budget_name }.actual == '') %]
+              [% SET funds.${ loop_receive.budget.budget_name }.actual = 0 %]
+           [% END %]
            [% SET estimated_total = estimated_total + ( loop_receive.ecost * loop_receive.quantityreceived ) %]
            [% SET funds.${ loop_receive.budget.budget_name }.estimated = funds.${ loop_receive.budget.budget_name }.estimated + ( loop_receive.ecost * loop_receive.quantityreceived )%]
            [% SET funds.${ loop_receive.budget.budget_name }.actual = funds.${ loop_receive.budget.budget_name }.actual + loop_receive.total %]
