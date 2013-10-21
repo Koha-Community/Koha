@@ -8,7 +8,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 41;
+use Test::More tests => 44;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -85,6 +85,7 @@ my $orders = SearchOrders({
     pending => 1
 });
 isa_ok( $orders, 'ARRAY' );
+is(scalar(@$orders), 3, 'retrieved 3 pending orders');
 
 C4::Acquisition::CloseBasket( $basketno );
 my @lateorders = GetLateOrders(0);
@@ -128,5 +129,21 @@ my $firstorder = $orders->[0];
 for my $field ( @expectedfields ) {
     ok( exists( $firstorder->{ $field } ), "This order has a $field field" );
 }
+
+# fake receiving the order
+ModOrder({
+    ordernumber      => $firstorder->{ordernumber},
+    biblionumber     => $firstorder->{biblionumber},
+    quantityreceived => $firstorder->{quantity},
+});
+my $pendingorders = SearchOrders({
+    booksellerid => $booksellerid,
+    pending => 1
+});
+is(scalar(@$pendingorders), 2, 'retrieved 2 pending orders after receiving on one (bug 10723)');
+my $allorders = SearchOrders({
+    booksellerid => $booksellerid,
+});
+is(scalar(@$allorders), 3, 'retrieved all 3 orders even after after receiving on one (bug 10723)');
 
 $dbh->rollback;
