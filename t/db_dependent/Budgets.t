@@ -92,10 +92,6 @@ ok($budget_id=AddBudget(
 #| budget_owner_id        | int(11)       | YES  |     | NULL              |       | 
 #| budget_permission      | int(1)        | YES  |     | 0                 |       | 
 
-C4::Context::dbh->do('INSERT INTO aqorders ( ordernumber, budget_id ) VALUES ( 987654321, ? )', {}, ( $budget_id ) );
-ok( GetBudgetByOrderNumber( '987654321' )->{'budget_id'} eq $budget_id, "GetBudgetByOrderNumber returns valid data" );
-C4::Context::dbh->do('DELETE FROM aqorders WHERE ordernumber = 987654321');
-
 my $budget;
 ok($budget=GetBudget($budget_id) ,"GetBudget OK");
 $$budget{budget_permission}=1;

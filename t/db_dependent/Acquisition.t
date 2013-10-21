@@ -8,7 +8,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 59;
+use Test::More tests => 60;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -86,6 +86,8 @@ my $orders = SearchOrders({
 });
 isa_ok( $orders, 'ARRAY' );
 is(scalar(@$orders), 3, 'retrieved 3 pending orders');
+
+ok( GetBudgetByOrderNumber($ordernumber1)->{'budget_id'} eq $budgetid, "GetBudgetByOrderNumber returns expected budget" );
 
 C4::Acquisition::CloseBasket( $basketno );
 my @lateorders = GetLateOrders(0);
