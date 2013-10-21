@@ -39,20 +39,20 @@
          }
         else if (countorders > 0){
             [% IF ( CAN_user_acquisition_order_manage ) %]
-                is_confirmed = confirm( _("Warning: This record is used in")+" "+ countorders + " " +_("order(s). Deleting it could cause serious issues on acquisition module.\nAre you sure you want to delete this record?") );
+                is_confirmed = confirm( _("Warning: This record is used in")+" "+ countorders + " " +_("order(s). Deleting it could cause serious issues on acquisition module. Are you sure you want to delete this record?") );
             [% ELSE %]
-                is_confirmed = alert( countorders + " " +_("order(s) are using this record.\nYou need order managing permissions to delete this record.") );
+                is_confirmed = alert( countorders + " " +_("order(s) are using this record. You need order managing permissions to delete this record.") );
             [% END %]
         }
         else if (countdeletedorders > 0){
              [% IF ( CAN_user_acquisition_order_manage ) %]
-                 is_confirmed = confirm( countdeletedorders + " " +_("deleted order(s) are using this record.\nAre you sure you want to delete this record?") );
+                 is_confirmed = confirm( countdeletedorders + " " +_("deleted order(s) are using this record. Are you sure you want to delete this record?") );
              [% ELSE %]
-                 is_confirmed = alert( countdeletedorders + " " +_("deleted order(s) are using this record.\nYou need order managing permissions to delete this record.") );
+                 is_confirmed = alert( countdeletedorders + " " +_("deleted order(s) are using this record. You need order managing permissions to delete this record.") );
              [% END %]
         }
         else if ( holdcount > 0 ) {
-            is_confirmed = confirm( holdcount + " " + _("holds(s) for this record.\nAre you sure you want to delete this record?"));
+            is_confirmed = confirm( holdcount + " " + _("holds(s) for this record. Are you sure you want to delete this record?"));
         } else {
             is_confirmed = confirm(_("Are you sure you want to delete this record?"));
         }
