@@ -11,7 +11,7 @@
 [% IF facets_loo.facets.size > 0 %]
 	<li id="[% facets_loo.type_id %]">
 [% facets_loo.type_label %]
-[% IF ( facets_loo.type_label_Authors ) %]Authors[% END %]
+[% IF ( facets_loo.type_label_Authors ) %]<span id = "facet-authors">Authors</span>[% END %]
 [% IF ( facets_loo.type_label_Titles ) %]Titles[% END %]
 [% IF ( facets_loo.type_label_Topics ) %]<span id = "facet-topics">Topics</span>[% END %]
 [% IF ( facets_loo.type_label_Places ) %]Places[% END %]
