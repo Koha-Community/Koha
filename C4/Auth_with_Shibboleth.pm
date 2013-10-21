@@ -22,6 +22,7 @@ use warnings;
 
 use C4::Debug;
 use C4::Context;
+use Carp;
 use CGI;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
@@ -64,11 +65,13 @@ sub get_login_shib {
     # Shibboleth attributes are mapped into http environmement variables,
     # so we're getting the login of the user this way
 
-    my $shibbolethLoginAttribute = C4::Context->preference('shibbolethLoginAttribute');
-    $debug and warn "shibbolethLoginAttribute value: $shibbolethLoginAttribute";
+    my $shib = C4::Context->config('shibboleth') or croak 'No <shibboleth> in koha-conf.xml';
+
+    my $shibbolethLoginAttribute = $shib->{'userid'};
+    $debug and warn "shibboleth->userid value: $shibbolethLoginAttribute";
     $debug and warn "$shibbolethLoginAttribute value: " . $ENV{$shibbolethLoginAttribute};
 
-    return $ENV{$shibbolethLoginAttribute};
+    return $ENV{$shibbolethLoginAttribute} || '';
 }
 
 # Checks for password correctness
@@ -79,6 +82,8 @@ sub checkpw_shib {
     my ( $dbh, $userid ) = @_;
     my $retnumber;
     $debug and warn "User Shibboleth-authenticated as: $userid";
+
+    my $shib = C4::Context->config('shibboleth') or croak 'No <shibboleth> in koha-conf.xml';
 
     # Does it match one of our users ?
     my $sth = $dbh->prepare("select cardnumber from borrowers where userid=?");

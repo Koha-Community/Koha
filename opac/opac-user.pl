@@ -74,8 +74,7 @@ for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
 my $patronupdate = $query->param('patronupdate');
 my $canrenew = 1;
 
-my $shibbolethAuthentication = C4::Context->preference('shibbolethAuthentication');
-$template->param( shibbolethAuthentication => $shibbolethAuthentication );
+$template->param( shibbolethAuthentication => C4::Context->config('useshibboleth') );
 
 # get borrower information ....
 my ( $borr ) = GetMemberDetails( $borrowernumber );

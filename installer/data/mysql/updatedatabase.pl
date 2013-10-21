@@ -8800,15 +8800,6 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
-$DBversion = "XXX";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('shibbolethAuthentication','','','Enable or disable Shibboleth authentication','YesNo')");
-    $dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('shibbolethLoginAttribute','','','Which shibboleth user attribute should be used to match koha user login?','')");
-    print "Upgrade to $DBversion done (Adds shibbolethAuthentication and shibbolethLoginAttribute preferences)\n";
-    SetVersion ($DBversion);
-}
-
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

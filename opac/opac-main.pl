@@ -44,8 +44,7 @@ $template->param(
     casAuthentication   => $casAuthentication,
 );
 
-my $shibbolethAuthentication = C4::Context->preference('shibbolethAuthentication');
-$template->param( shibbolethAuthentication => $shibbolethAuthentication);
+$template->param( shibbolethAuthentication => C4::Context->config('useshibboleth') );
 
 # display news
 # use cookie setting for language, bug default to syspref if it's not set

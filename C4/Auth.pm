@@ -55,7 +55,7 @@ BEGIN {
     %EXPORT_TAGS = ( EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)] );
     $ldap        = C4::Context->config('useldapserver') || 0;
     $cas         = C4::Context->preference('casAuthentication');
-    $shib        = C4::Context->preference('shibbolethAuthentication');
+    $shib        = C4::Context->config('useshibboleth') || 0;
     $caslogout   = C4::Context->preference('casLogout');
     require C4::Auth_with_cas;             # no import
     require C4::Auth_with_Shibboleth;
@@ -825,7 +825,7 @@ sub checkauth {
             || $userid
             || $shib
             || $pki_field ne 'None'
-	    || $persona )
+            || $persona )
         {
             my $password = $query->param('password');
 
@@ -1083,7 +1083,7 @@ sub checkauth {
         login                => 1,
         INPUTS               => \@inputs,
         casAuthentication    => C4::Context->preference("casAuthentication"),
-        shibbolethAuthentication => C4::Context->preference("shibbolethAuthentication"),
+        shibbolethAuthentication => $shib,
         suggestion           => C4::Context->preference("suggestion"),
         virtualshelves       => C4::Context->preference("virtualshelves"),
         LibraryName          => "" . C4::Context->preference("LibraryName"),
@@ -1601,11 +1601,6 @@ sub checkpw {
         # In case of a Shibboleth authentication, we expect a shibboleth user attribute
         # (defined in the shibbolethLoginAttribute) tto contain the login of the
         # shibboleth-authenticated user
-
-        # Shibboleth attributes are mapped into http environmement variables,
-        # so we're getting the login of the user this way
-        my $attributename = C4::Context->preference('shibbolethLoginAttribute');
-        my $attributevalue = $ENV{$attributename};
 
         # Then, we check if it matches a valid koha user
         if ($shib_login) {
