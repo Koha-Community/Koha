@@ -101,7 +101,10 @@ if( $basketno && $ordernumber) {
     );
 } elsif ( $bookselleridfrom && !defined $ordernumber) {
     # Show pending orders
-    my $pendingorders = GetPendingOrders($bookselleridfrom);
+    my $pendingorders = SearchOrders({
+        booksellerid => $bookselleridfrom,
+        pending      => 1,
+    });
     my $orderscount = scalar @$pendingorders;
     my @ordersloop = ();
     for( my $i = 0 ; $i < $orderscount ; $i++ ){
