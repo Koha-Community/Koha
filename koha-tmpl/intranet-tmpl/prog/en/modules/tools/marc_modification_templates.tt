@@ -257,6 +257,12 @@ function setSelectByValue( selectId, value ) {
     <div id="yui-main">
         <div class="yui-b">
             <h2>MARC modification templates</h2>
+            
+            [% IF error %]
+                [% IF error == 'no_from_field' %]
+                    <div class="dialog message">Error: no field value specified.</div>
+                [% END %]
+            [% END %]
 
             [% IF ( TemplatesLoop ) %]
 
@@ -355,7 +361,9 @@ function setSelectByValue( selectId, value ) {
                                         [% IF ( ActionsLoo.conditional_comparison_equals ) %] matches [% END %]
                                         [% IF ( ActionsLoo.conditional_comparison_not_equals ) %] does not match [% END %]
 
-                                        [% IF ( ActionsLoo.conditional_regex ) %] RegEx m/[% END %]<strong>[% ActionsLoo.conditional_value %]/</strong>
+                                        [% IF ( ActionsLoo.conditional_regex ) %] RegEx m/[% END %]
+                                        <strong>[% ActionsLoo.conditional_value %]</strong>
+                                        [% IF ( ActionsLoo.conditional_regex ) %]/[% END %]
                                     [% END %]
                                 </td>
                                 <td>[% ActionsLoo.description %]</td>
