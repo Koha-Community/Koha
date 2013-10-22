@@ -37,7 +37,16 @@
             }
         [% END %]
         $("#dateofbirth").datepicker({ maxDate: "-1D" });
-        $("#entryform").preventDoubleFormSubmit();
+        $("#entryform").validate({
+            submitHandler: function(form) {
+                $("body, form input[type='submit'], form button[type='submit'], form a").addClass('waiting');
+                if (form.beenSubmitted)
+                    return false;
+                else
+                    form.beenSubmitted = true;
+                    form.submit();
+                }
+        });
     });
 
     function clear_entry(node) {
