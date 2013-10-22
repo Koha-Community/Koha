@@ -47,6 +47,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'rotating_collections', 'Gestisci le collezioni circolanti (rotating collections)'),
    (13, 'upload_local_cover_images', 'Carica copertine in locale'),
    (13, 'manage_patron_lists', 'Add, edit and delete patron lists and their contents'),
+   (13, 'marc_modification_templates', 'Manage marc modification templates'),
    (15, 'check_expiration', 'Controlla la scadenza di una risora in continuazione'),
    (15, 'claim_serials', 'Richiedi i fascicoli non arrivati'),
    (15, 'create_subscription', 'Crea un nuovo abbonamento'),

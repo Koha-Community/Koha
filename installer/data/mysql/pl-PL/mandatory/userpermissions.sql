@@ -42,6 +42,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'items_batchdel', 'Perform batch deletion of items'),
    (13, 'manage_csv_profiles', 'Manage CSV export profiles'),
    (13, 'moderate_tags', 'Moderate patron tags'),
+   (13, 'marc_modification_templates', 'Manage marc modification templates'),
    (16, 'execute_reports', 'Execute SQL reports'),
    (13, 'rotating_collections', 'Manage rotating collections'),
    (13, 'upload_local_cover_images', 'Upload local cover images'),

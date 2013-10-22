@@ -26,6 +26,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'delete_anonymize_patrons', 'Supprimer les anciens adhérents et anonymiser l''historique des prêts (supprime l''historique des prêts des lecteurs'),
    (13, 'batch_upload_patron_images', 'Charger sur le serveur les images des adhérents par lot ou un par un'),
    (13, 'schedule_tasks', 'Planifier les tâches à exécuter'),
+   (13, 'marc_modification_templates', 'Manage marc modification templates'),
    (11, 'vendors_manage', 'Gérer les fournisseurs'),
    (11, 'contracts_manage', 'Gérer les contrats'),
    (11, 'period_manage', 'Gérer les périodes'),
