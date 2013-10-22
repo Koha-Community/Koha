@@ -18,7 +18,7 @@ my $location_code;
 my $patron_identifier;
 my $patron_password;
 
-my $terminator;
+my $terminator = q{};
 
 GetOptions(
     "a|address|host|hostaddress=s" => \$host,              # sip server ip
@@ -43,7 +43,7 @@ if (   $help
     || !$patron_identifier
     || !$patron_password )
 {
-    print help();
+    print &help();
     exit();
 }
 
