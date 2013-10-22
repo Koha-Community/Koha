@@ -24,6 +24,7 @@
             "aoColumns": [
                 { "sType": "num-html" },
                 { "sType": "num-html" },
+                { "sType": "num-html" },
                 { "sType": "html" },
                 null,
                 null,
@@ -39,6 +40,7 @@
         ).columnFilter({
             sPlaceHolder: "head:after",
             aoColumns: [
+                { type: "text" },
                 { type: "text" },
                 { type: "text" },
                 { type: "text" },
@@ -204,6 +206,7 @@
         <thead>
           <tr>
             <th>Basket search</th>
+            <th>Basket group search</th>
             <th>Order line search</th>
             <th>Summary search</th>
             <th>&nbsp;</th>
@@ -216,6 +219,7 @@
           </tr>
           <tr>
             <th>Basket</th>
+            <th>Basket group</th>
             <th>Order line</th>
             <th>Summary</th>
             <th>View record</th>
@@ -231,6 +235,13 @@
         [% FOREACH loop_order IN loop_orders %]
             <tr>
                 <td class="basketfilterclass">[% loop_order.basketname %] (<a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_order.basketno %]">[% loop_order.basketno %]</a>)</td>
+                <td>
+                  [% IF loop_order.basketgroupid %]
+                    [% loop_order.basketgroupname %] (<a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% loop_order.booksellerid %]">[% loop_order.basketgroupid %]</a>)
+                  [% ELSE %]
+                    No basket group
+                  [% END %]
+                </td>
                 <td class="orderfilterclass"><a href="neworderempty.pl?ordernumber=[% loop_order.ordernumber %]&amp;booksellerid=[% loop_order.booksellerid %]">[% loop_order.ordernumber %]</a></td>
                 <td class="summaryfilterclass">
                   <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loop_order.biblionumber %]">[% loop_order.title |html %]</a>
@@ -321,6 +332,7 @@
         <thead>
 	    <tr>
                 <th>Basket</th>
+                <th>Basket group</th>
                 <th>Order Line</th>
                 <th>Holds</th>
                 <th>Summary</th>
@@ -345,19 +357,19 @@
             </tr>
         [% END %]
         <tr>
-            <th colspan="9" class="total">Total tax exc.</th>
+            <th colspan="10" class="total">Total tax exc.</th>
             <th>[% total_gste %]</th>
             <th></th>
         </tr>
         [% FOREACH book_foot IN book_foot_loop %]
             <tr>
-                <th colspan="9">Total (GST [% book_foot.gstrate * 100 | format ("%.1f") %]%)</th>
+                <th colspan="10">Total (GST [% book_foot.gstrate * 100 | format ("%.1f") %]%)</th>
                 <th>[% book_foot.value %]</th>
                 <th></th>
             </tr>
         [% END %]
         <tr>
-            <th colspan="9" class="total">Total tax inc.</th>
+            <th colspan="10" class="total">Total tax inc.</th>
             <th>[% total_gsti %]</th>
             <th></th>
         </tr>
@@ -366,6 +378,13 @@
         [% FOREACH loop_receive IN loop_received %]
             <tr>
                 <td>[% loop_receive.basketname %] (<a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_receive.basketno %]">[% loop_receive.basketno %]</a>)</td>
+                <td>
+                  [% IF loop_order.basketgroupid %]
+                    [% loop_receive.basketgroupname %] (<a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% loop_receive.booksellerid %]">[% loop_receive.basketgroupid %]</a>)
+                  [% ELSE %]
+                    No basket group
+                  [% END %]
+                </td>
                 <td><a href="neworderempty.pl?ordernumber=[% loop_receive.ordernumber %]&amp;booksellerid=[% booksellerid %]">[% loop_receive.ordernumber %]</a></td>
                 <td>
                   [% IF loop_receive.holds > 0 %]
