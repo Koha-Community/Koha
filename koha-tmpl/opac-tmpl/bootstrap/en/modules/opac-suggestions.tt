@@ -127,14 +127,14 @@
                                 [% END %]
                                 <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="myform">
                                     <input type="hidden" name="op" value="delete_confirm" />
-                                    <div id="toolbar" class="toolbar list-actions">
+                                    <div id="toolbar" class="toolbar clearfix">
                                         [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
                                             <a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>
                                         [% END %]
                                     </div>
 
                                     [% IF ( loggedinusername ) %]
-                                        <div id="selections-toolbar" class="toolbar list-actions">
+                                        <div id="selections-toolbar" class="toolbar">
                                               <span class="checkall"></span> <span class="clearall"></span> <span class="sep">|</span>
                                               <span class="links"><span id="selections">Select suggestions to: </span>
                                               <span id="removeitems"></span>
