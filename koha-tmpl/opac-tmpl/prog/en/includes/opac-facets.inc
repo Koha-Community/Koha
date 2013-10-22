@@ -15,7 +15,7 @@
 [% IF ( facets_loo.type_label_Topics ) %]<span id="facet-topics">Topics</span>[% END %]
 [% IF ( facets_loo.type_label_Places ) %]<span id="facet-places">Places</span>[% END %]
 [% IF ( facets_loo.type_label_Series ) %]<span id="facet-series">Series</span>[% END %]
-[% IF ( facets_loo.type_label_ItemTypes ) %]Item types[% END %]
+[% IF ( facets_loo.type_label_ItemTypes ) %]<span id="facet-itypes">Item types</span>[% END %]
 [% UNLESS ( singleBranchMode ) %]
 [% IF ( facets_loo.type_label_Libraries ) %]Libraries[% END %]
 [% END %]
