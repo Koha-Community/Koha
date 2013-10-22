@@ -1486,22 +1486,6 @@ sub _isbn_cleanup {
     return;
 }
 
-=head2 Log( $message );
-
-  Writes data to /tmp/koha.log.
-
-  This is useful for debugging forked processes
-  that do not write to the apache error log
-
-=cut
-
-sub Log {
-  my ($data) = @_;
-  warn $data;
-  open my $fh, '>>', '/tmp/koha.log';
-  print $fh "$data\n";
-  close $fh;
-}
 1;
 
 __END__

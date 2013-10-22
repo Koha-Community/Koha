@@ -31,7 +31,7 @@ our $debug = 0;
 
 =head1 NAME
 
-SimpleMARC - Perl modle for making simple MARC record alterations.
+SimpleMARC - Perl module for making simple MARC record alterations.
 
 =head1 SYNOPSIS
 
@@ -74,13 +74,11 @@ at your option, any later version of Perl 5 you may have available.
 
 sub copy_field {
   my ( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n, $dont_erase ) = @_;
-  C4::Koha::Log( "C4::SimpleMARC::copy_field( '$record', '$fromFieldName', '$fromSubfieldName', '$toFieldName', '$toSubfieldName', '$regex', '$n' )" ) if $debug;
 
   if ( ! ( $record && $fromFieldName && $toFieldName ) ) { return; }
 
   my @values = read_field( $record, $fromFieldName, $fromSubfieldName );
   @values = ( $values[$n-1] ) if ( $n );
-  C4::Koha::Log( "@values = read_field( $record, $fromFieldName, $fromSubfieldName )" ) if $debug >= 3;
 
   if ( $regex and $regex->{search} ) {
     $regex->{modifiers} //= q||;
@@ -91,7 +89,6 @@ sub copy_field {
             if grep {/$modifier/} @available_modifiers;
     }
     foreach my $value ( @values ) {
-      C4::Koha::Log( "\$value =~ s/$regex->{search}/$regex->{replace}/$modifiers" ) if ( $debug >= 3 );
         for ( $modifiers ) {
           when ( /^(ig|gi)$/ ) {
             $value =~ s/$regex->{search}/$regex->{replace}/ig;
@@ -127,7 +124,6 @@ sub copy_field {
 
 sub update_field {
   my ( $record, $fieldName, $subfieldName, $dont_erase, @values ) = @_;
-  C4::Koha::Log( "C4::SimpleMARC::update_field( $record, $fieldName, $subfieldName, $dont_erase, @values )" ) if $debug;
 
   if ( ! ( $record && $fieldName ) ) { return; }
 
@@ -186,7 +182,6 @@ sub update_field {
 
 sub read_field {
   my ( $record, $fieldName, $subfieldName, $n ) = @_;
-  C4::Koha::Log( "C4::SimpleMARC::read_field( '$record', '$fieldName', '$subfieldName', '$n' )" ) if $debug;
 
   my @fields = $record->field( $fieldName );
 
@@ -215,7 +210,6 @@ sub read_field {
 
 sub field_exists {
   my ( $record, $fieldName, $subfieldName ) = @_;
-  C4::Koha::Log( "C4::SimpleMARC::field_exists( $record, $fieldName, $subfieldName )" ) if $debug;
 
   if ( ! $record ) { return; }
 
@@ -226,7 +220,6 @@ sub field_exists {
     $return = $record->field( $fieldName ) && 1;
   }
 
-  C4::Koha::Log( "C4:SimpleMARC::field_exists: Returning '$return'" ) if $debug >= 2;
   return $return;
 }
 
@@ -247,7 +240,6 @@ sub field_exists {
 sub field_equals {
   my ( $record, $value, $fieldName, $subfieldName, $regex, $n ) = @_;
   $n = 1 unless ( $n ); ## $n defaults to first field of a repeatable field series
-  C4::Koha::Log( "C4::SimpleMARC::field_equals( '$record', '$value', '$fieldName', '$subfieldName', '$regex', '$n')" ) if $debug;
 
   if ( ! $record ) { return; }
 
@@ -255,7 +247,6 @@ sub field_equals {
   my $field_value = $field_values[$n-1];
 
   if ( $regex ) {
-    C4::Koha::Log( "Testing '$field_value' =~ m/$value/" ) if $debug >= 3;
     return $field_value =~ m/$value/;
   } else {
     return $field_value eq $value;
@@ -277,7 +268,6 @@ sub field_equals {
 
 sub move_field {
   my ( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n ) = @_;
-  C4::Koha::Log( "C4::SimpleMARC::move_field( '$record', '$fromFieldName', '$fromSubfieldName', '$toFieldName', '$toSubfieldName', '$regex', '$n' )" ) if $debug;
   copy_field( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n , 'dont_erase' );
   delete_field( $record, $fromFieldName, $fromSubfieldName, $n );
 }
@@ -295,7 +285,6 @@ sub move_field {
 
 sub delete_field {
   my ( $record, $fieldName, $subfieldName, $n ) = @_;
-  C4::Koha::Log( "C4::SimpleMARC::delete_field( '$record', '$fieldName', '$subfieldName', '$n' )" ) if $debug;
 
   my @fields = $record->field( $fieldName );
 

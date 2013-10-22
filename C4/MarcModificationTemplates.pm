@@ -17,11 +17,6 @@ package C4::MarcModificationTemplates;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-## NOTE:
-## Parts of this module are used from cgi scripts that are detached from apache before
-## execution. For this reason, the C4::Koha::Log function has been used to capture
-## output for debugging purposes.
-
 use Modern::Perl;
 
 use DateTime;
@@ -78,7 +73,6 @@ files telling Koha what fields to insert data into.
 
 sub GetModificationTemplates {
   my ( $template_id ) = @_;
-  C4::Koha::Log("C4::MarcModificationTemplates::GetModificationTemplates( $template_id )") if DEBUG;
   warn("C4::MarcModificationTemplates::GetModificationTemplates( $template_id )") if DEBUG;
 
   my $dbh = C4::Context->dbh;
@@ -185,7 +179,6 @@ sub GetModificationTemplateAction {
 sub GetModificationTemplateActions {
   my ( $template_id ) = @_;
 
-  C4::Koha::Log( "C4::MarcModificationTemplates::GetModificationTemplateActions( $template_id )" ) if DEBUG;
   warn( "C4::MarcModificationTemplates::GetModificationTemplateActions( $template_id )" ) if DEBUG;
 
   my $dbh = C4::Context->dbh;
@@ -197,7 +190,6 @@ sub GetModificationTemplateActions {
     push( @actions, $action );
   }
 
-  C4::Koha::Log( Data::Dumper::Dumper( @actions ) ) if DEBUG > 4;
   warn( Data::Dumper::Dumper( @actions ) ) if DEBUG > 4;
 
   return @actions;
@@ -241,10 +233,6 @@ sub AddModificationTemplateAction {
     $description
   ) = @_;
 
-  C4::Koha::Log( "C4::MarcModificationTemplates::AddModificationTemplateAction( $template_id, $action,
-                    $field_number, $from_field, $from_subfield, $field_value, $to_field, $to_subfield,
-                    $to_regex_search, $to_regex_replace, $to_regex_modifiers, $conditional, $conditional_field, $conditional_subfield, $conditional_comparison,
-                    $conditional_value, $conditional_regex, $description )" ) if DEBUG;
   warn( "C4::MarcModificationTemplates::AddModificationTemplateAction( $template_id, $action,
                     $field_number, $from_field, $from_subfield, $field_value, $to_field, $to_subfield,
                     $to_regex_search, $to_regex_replace, $to_regex_modifiers, $conditional, $conditional_field, $conditional_subfield, $conditional_comparison,
@@ -485,7 +473,6 @@ sub MoveModificationTemplateAction {
 
 sub ModifyRecordsWithTemplate {
   my ( $template_id, $batch ) = @_;
-  C4::Koha::Log( "C4::MarcModificationTemplates::ModifyRecordsWithTemplate( $template_id, $batch )" ) if DEBUG;
   warn( "C4::MarcModificationTemplates::ModifyRecordsWithTemplate( $template_id, $batch )" ) if DEBUG;
 
   while ( my $record = $batch->next() ) {
@@ -504,9 +491,7 @@ sub ModifyRecordsWithTemplate {
 
 sub ModifyRecordWithTemplate {
     my ( $template_id, $record ) = @_;
-    C4::Koha::Log( "C4::MarcModificationTemplates::ModifyRecordWithTemplate( $template_id, $record )" ) if DEBUG;
     warn( "C4::MarcModificationTemplates::ModifyRecordWithTemplate( $template_id, $record )" ) if DEBUG;
-    C4::Koha::Log( "Unmodified Record:\n" . $record->as_formatted() ) if DEBUG >= 10;
     warn( "Unmodified Record:\n" . $record->as_formatted() ) if DEBUG >= 10;
 
     my $current_date = DateTime->now()->ymd();
@@ -607,7 +592,6 @@ sub ModifyRecordWithTemplate {
             }
         }
 
-        C4::Koha::Log( $record->as_formatted() ) if DEBUG >= 10;
         warn( $record->as_formatted() ) if DEBUG >= 10;
     }
 }
