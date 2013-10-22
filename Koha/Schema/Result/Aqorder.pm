@@ -226,6 +226,13 @@ __PACKAGE__->table("aqorders");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 orderstatus
+
+  data_type: 'varchar'
+  default_value: 'new'
+  is_nullable: 1
+  size: 16
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -304,6 +311,13 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "parent_ordernumber",
   { data_type => "integer", is_nullable => 1 },
+  "orderstatus",
+  {
+    data_type => "varchar",
+    default_value => "new",
+    is_nullable => 1,
+    size => 16,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -446,8 +460,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:C8LjmTtbnozNV2pA0sCbtg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-22 13:37:51
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+bznx/vy8sLxOYDBZkwycw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
