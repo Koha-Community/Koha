@@ -117,6 +117,18 @@ my ($template, $loggedinuser, $cookie)
                  debug => 1,
 });
 
+my $op = $input->param('op') // '';
+
+# process cancellation first so that list of
+# orders to display is calculated after
+if ($op eq 'cancelreceipt') {
+    my $ordernumber = $input->param('ordernumber');
+    my $parent_ordernumber = CancelReceipt($ordernumber);
+    unless($parent_ordernumber) {
+        $template->param(error_cancelling_receipt => 1);
+    }
+}
+
 my $invoiceid = $input->param('invoiceid');
 my $invoice;
 $invoice = GetInvoiceDetails($invoiceid) if $invoiceid;
@@ -128,16 +140,6 @@ unless( $invoiceid and $invoice->{invoiceid} ) {
     );
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;
-}
-
-my $op = $input->param('op') // '';
-
-if ($op eq 'cancelreceipt') {
-    my $ordernumber = $input->param('ordernumber');
-    my $parent_ordernumber = CancelReceipt($ordernumber);
-    unless($parent_ordernumber) {
-        $template->param(error_cancelling_receipt => 1);
-    }
 }
 
 my $booksellerid = $invoice->{booksellerid};
@@ -203,7 +205,7 @@ push @book_foot_loop, map { $_ } values %foot;
 my @loop_orders = ();
 if(!defined $invoice->{closedate}) {
     my $pendingorders;
-    if($input->param('op') eq "search"){
+    if($op eq "search"){
         my $search   = $input->param('summaryfilter') || '';
         my $ean      = $input->param('eanfilter') || '';
         my $basketname = $input->param('basketfilter') || '';
