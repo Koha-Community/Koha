@@ -1076,7 +1076,6 @@ The following keys are used: "biblionumber", "title", "basketno", "quantity", "n
 
 sub NewOrder {
     my $orderinfo = shift;
-    my $parent_ordernumber = shift;
 
     my $dbh = C4::Context->dbh;
     my @params;
