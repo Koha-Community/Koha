@@ -141,7 +141,7 @@ function clearFormElements(divId) {
 }
 
 function confirmDelete() {
-    var agree = confirm("Are you sure you wish to delete this template?");
+    var agree = confirm(_("Are you sure you wish to delete this template?"));
     return agree;
 }
 
@@ -187,10 +187,10 @@ function editAction( mmta_id, ordering, action, field_number, from_field, from_s
     document.getElementById('description').value = description;
 
     window.modaction_legend_innerhtml = document.getElementById('modaction_legend').innerhtml;
-    document.getElementById('modaction_legend').innerhtml = "Edit Action " + ordering;
+    document.getElementById('modaction_legend').innerhtml = _("Edit action") + ordering;
 
     window.action_submit_value = document.getElementById('action_submit').value;
-    document.getElementById('action_submit').value = "Update Action";
+    document.getElementById('action_submit').value = _("Update action");
 
     show('cancel_edit');
 }
@@ -287,7 +287,7 @@ function setSelectByValue( selectId, value ) {
                         <caption>Actions for this template</caption>
 
                         <tr>
-                            <th>Change Order</th>
+                            <th>Change order</th>
                             <th>Order</th>
                             <th>Action</th>
                             <th>Description</th>
@@ -298,19 +298,19 @@ function setSelectByValue( selectId, value ) {
                         [% FOREACH ActionsLoo IN ActionsLoop %]
                             <tr>
                                 <td style="white-space:nowrap;">
-                                    <a title="Move Action Up" href="marc_modification_templates.pl?op=move_action&amp;where=up&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
+                                    <a title="Move action up" href="marc_modification_templates.pl?op=move_action&amp;where=up&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
                                     <img src="[% interface %]/[% theme %]/img/go-up.png" border="0" alt="Go up" />
                                         </a>
 
-                                <a title="Move Action To Top" href="marc_modification_templates.pl?op=move_action&amp;where=top&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
+                                <a title="Move action to top" href="marc_modification_templates.pl?op=move_action&amp;where=top&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
                                     <img src="[% interface %]/[% theme %]/img/go-top.png" border="0" alt="Go top" />
                                         </a>
 
-                                        <a title="Move Action To Bottom" href="marc_modification_templates.pl?op=move_action&amp;where=bottom&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
+                                        <a title="Move action to bottom" href="marc_modification_templates.pl?op=move_action&amp;where=bottom&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
                                     <img src="[% interface %]/[% theme %]/img/go-bottom.png" border="0" alt="Go bottom" />
                                         </a>
 
-                                        <a title="Move Action Down" href="marc_modification_templates.pl?op=move_action&amp;where=down&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
+                                        <a title="Move action down" href="marc_modification_templates.pl?op=move_action&amp;where=down&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
                                     <img src="[% interface %]/[% theme %]/img/go-down.png" border="0" alt="Go down" />
                                         </a>
                                 </td>
@@ -391,7 +391,7 @@ function setSelectByValue( selectId, value ) {
                 <form method="post" action="/cgi-bin/koha/tools/marc_modification_templates.pl" id="add_action" >
                     <a name="modaction"></a>
                     <fieldset>
-                        <legend id="modaction_legend">Add A New Action</legend>
+                        <legend id="modaction_legend">Add a new action</legend>
 
                         <select name="action" id="action" onchange="onActionChange(this);">
                             <option value="delete_field">Delete</option>
@@ -468,7 +468,7 @@ function setSelectByValue( selectId, value ) {
                         <input type="text" name="description" id="description" size="60" />
 
                         <br/><br/>
-                        <input id="action_submit" type="submit" value="Add Action" /> <a href="#modaction" id="cancel_edit" onclick="cancelEditAction();" style="display:none;">Cancel</a>
+                        <input id="action_submit" type="submit" value="Add action" /> <a href="#modaction" id="cancel_edit" onclick="cancelEditAction();" style="display:none;">Cancel</a>
 
                     </fieldset>
                 </form>

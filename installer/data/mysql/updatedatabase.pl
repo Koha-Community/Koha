@@ -7686,7 +7686,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.13.00.XXX";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("CREATE TABLE IF NOT EXISTS marc_modification_templates (
               template_id int(11) NOT NULL auto_increment,
@@ -7724,7 +7724,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
     $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ('13', 'marc_modification_templates', 'Manage marc modification templates')");
 
-    print "Upgrade to $DBversion done ( Added tables for MARC Modification Framework )\n";
+    print "Upgrade to $DBversion done ( Bug 8015: Added tables for MARC Modification Framework )\n";
     SetVersion($DBversion);
 }
 

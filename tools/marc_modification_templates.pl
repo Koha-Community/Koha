@@ -32,7 +32,7 @@ my $template_id = $cgi->param('template_id');
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({
-            template_name => "tools/marc_modification_templates.tmpl",
+            template_name => "tools/marc_modification_templates.tt",
             query => $cgi,
             type => "intranet",
             authnotrequired => 0,
