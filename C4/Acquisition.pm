@@ -1678,6 +1678,8 @@ sub SearchOrders {
                aqbasket.closedate,
                aqbasket.creationdate,
                aqbasket.basketname,
+               aqbasketgroups.id as basketgroupid,
+               aqbasketgroups.name as basketgroupname,
                aqorders.*
         FROM aqorders
             LEFT JOIN aqbasket ON aqorders.basketno = aqbasket.basketno
