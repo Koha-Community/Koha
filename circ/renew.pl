@@ -65,7 +65,7 @@ if ($barcode) {
                   CanBookBeRenewed( $borrower->borrowernumber(),
                     $item->itemnumber(), $override_limit );
 
-                if ( $error eq 'on_reserve' ) {
+                if ( $error && ($error eq 'on_reserve') ) {
                     if ($override_holds) {
                         $can_renew = 1;
                         $error     = undef;
