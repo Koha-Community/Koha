@@ -145,7 +145,7 @@ sub recordpayment {
     my $usth = $dbh->prepare(
         "INSERT INTO accountlines
   (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding,manager_id)
-  VALUES (?,?,now(),?,'Payment,thanks','Pay',?,?)"
+  VALUES (?,?,now(),?,'','Pay',?,?)"
     );
     $usth->execute( $borrowernumber, $nextaccntno, 0 - $data, 0 - $amountleft, $manager_id );
 
@@ -207,7 +207,7 @@ sub makepayment {
         my $udp = 		
             $dbh->prepare(
                 "UPDATE accountlines
-                    SET amountoutstanding = 0, description = 'Payment,thanks'
+                    SET amountoutstanding = 0
                     WHERE accountlines_id = ?
                 "
             );
@@ -230,7 +230,7 @@ sub makepayment {
             $dbh->prepare( 
                 "INSERT 
                     INTO accountlines (borrowernumber, accountno, date, amount, itemnumber, description, accounttype, amountoutstanding, manager_id, note)
-                    VALUES ( ?, ?, now(), ?, ?, 'Payment,thanks', 'Pay', 0, ?, ?)"
+                    VALUES ( ?, ?, now(), ?, ?, '', 'Pay', 0, ?, ?)"
             );
         $ins->execute($borrowernumber, $nextaccntno, $payment, $data->{'itemnumber'}, $manager_id, $payment_note);
     }
@@ -412,23 +412,6 @@ sub manualinvoice {
     my $accountno  = getnextacctno($borrowernumber);
     my $amountleft = $amount;
 
-    if ( $type eq 'N' ) {
-        $desc .= " New Card";
-    }
-    if ( $type eq 'F' ) {
-        $desc .= " Fine";
-    }
-    if ( $type eq 'A' ) {
-        $desc .= " Account Management fee";
-    }
-    if ( $type eq 'M' ) {
-        $desc .= " Sundry";
-    }
-
-    if ( $type eq 'L' && $desc eq '' ) {
-
-        $desc = " Lost Item";
-    }
     if (   ( $type eq 'L' )
         or ( $type eq 'F' )
         or ( $type eq 'A' )
@@ -657,7 +640,7 @@ sub recordpayment_selectaccts {
     # create new line
     $sql = 'INSERT INTO accountlines ' .
     '(borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding,manager_id,note) ' .
-    q|VALUES (?,?,now(),?,'Payment,thanks','Pay',?,?,?)|;
+    q|VALUES (?,?,now(),?,'','Pay',?,?,?)|;
     $dbh->do($sql,{},$borrowernumber, $nextaccntno, 0 - $amount, 0 - $amountleft, $manager_id, $note );
     UpdateStats( $branch, 'payment', $amount, '', '', '', $borrowernumber, $nextaccntno );
 

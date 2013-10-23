@@ -7773,6 +7773,25 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE accountlines
+        SET description = ''
+        WHERE description IN (
+            ' New Card',
+            ' Fine',
+            ' Sundry',
+            'Writeoff',
+            ' Account Management fee',
+            'Payment,thanks', 'Payment,thanks - ',
+            ' Lost Item'
+        )
+    });
+    print "Upgrade to $DBversion done (Bug 2546: Update fine descriptions)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
