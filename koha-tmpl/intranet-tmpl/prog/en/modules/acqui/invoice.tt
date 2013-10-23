@@ -151,13 +151,14 @@
                 <tr>
                   <td>
                     [% IF order.biblionumber %]
-                      <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber %]">[% order.title %]</a>
+                      <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber %]">[% order.title |html %]</a>
                       [% IF ( order.author ) %]
                         <br /><em>by</em> [% order.author %]
                       [% END %]
                     [% ELSE %]
                       <em>Deleted bibliographic record, can't find title</em>
                     [% END %]
+                    [% IF ( order.isbn ) %] &ndash; [% order.isbn %][% END %]
                     [% IF ( order.publishercode ) %]
                       <br/>[% order.publishercode %]
                         [% IF order.publicationyear > 0 %]
