@@ -218,7 +218,6 @@
 <input type="hidden" name="BorrowerMandatoryField" value="[% BorrowerMandatoryField %]" />
 <input type="hidden" name="category_type" value="[% category_type %]" />
 <input type="hidden" name="updtype" value="[% updtype %]" />
-<input type="hidden" name="select_roadtype" value="[% select_roadtype %]" />
 <input type="hidden" name="destination" value="[% destination %]" />
 <input type="hidden" name="check_member" value="[% check_member %]" />
 <input type="hidden" name="borrowernumber" value="[% IF ( opduplicate ) %][% ELSE %][% borrowernumber %][% END %]" />
@@ -456,7 +455,7 @@
     </li>
         [% END %]
         [% UNLESS nostreettype %]
-    [% IF ( road_cgipopup ) %]
+    [% IF roadtypes %]
       <li>
       [% IF ( mandatorystreettype ) %]
       <label for="streettype" class="required">
@@ -464,7 +463,16 @@
       <label for="streettype">
       [% END %]
       Street type: </label>
-      [% roadpopup %]
+      <select name="streettype">
+        <option value=""></option>
+        [% FOR roadtype IN roadtypes %]
+          [% IF roadtype.selected %]
+            <option value="[% roadtype.authorised_value %]" selected="selected">[% roadtype.lib %]</option>
+          [% ELSE %]
+            <option value="[% roadtype.authorised_value %]">[% roadtype.lib %]</option>
+          [% END %]
+        [% END %]
+      </select>
 	  [% IF ( mandatorystreettype ) %]<span class="required">Required</span>[% END %]
       </li>
     [% END %] 

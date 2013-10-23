@@ -101,8 +101,8 @@ if ($borrowernumber) {
 
 
 # Computes full borrower address
-my (undef, $roadttype_hashref) = &GetRoadTypes();
-my $address = $borrower->{'streetnumber'}.' '.$roadttype_hashref->{$borrower->{'streettype'}}.' '.$borrower->{'address'};
+my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{streettype} );
+my $address = $borrower->{'streetnumber'} . " $roadtype " . $borrower->{'address'};
 
 $template->param(
 

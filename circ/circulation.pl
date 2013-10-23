@@ -686,7 +686,7 @@ if($bor_messages_loop){ $template->param(flagged => 1 ); }
 # Computes full borrower address
 my @fulladdress;
 push @fulladdress, $borrower->{'streetnumber'} if ( $borrower->{'streetnumber'} );
-push @fulladdress, &GetRoadTypeDetails( $borrower->{'streettype'} ) if ( $borrower->{'streettype'} );
+push @fulladdress, C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{'streettype'} ) if ( $borrower->{'streettype'} );
 push @fulladdress, $borrower->{'address'} if ( $borrower->{'address'} );
 
 my $fast_cataloging = 0;
