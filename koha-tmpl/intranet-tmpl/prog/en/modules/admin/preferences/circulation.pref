@@ -546,6 +546,21 @@ Circulation:
                   yes: Allow
                   no: "Don't allow"
             - a patron to place a hold on a record where the patron already has one or more items attached to that record checked out.
+        -
+            - pref: LocalHoldsPriority
+              choices:
+                  yes: Give
+                  no: "Don't give"
+            - priority for filling holds to patrons whose
+            - pref: LocalHoldsPriorityPatronControl
+              choices:
+                  PickupLibrary: "pickup library"
+                  HomeLibrary: "home library"
+            - matches the item's
+            - pref: LocalHoldsPriorityItemControl
+              choices:
+                  homebranch: "home library"
+                  holdingbranch: "holding library"
     Fines Policy:
         -
             - Calculate fines based on days overdue
