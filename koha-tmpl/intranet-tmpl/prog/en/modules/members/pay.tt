@@ -112,7 +112,20 @@ function enableCheckboxActions(){
     <input type="hidden" name="notify_level[% line.accountno %]" value="[% line.notify_level %]" />
     <input type="hidden" name="totals[% line.accountno %]" value="[% line.totals %]" />
     </td>
-    <td>[% line.description %] ([% line.title |html_entity %])</td>
+    <td>
+        [% SWITCH line.accounttype %]
+          [% CASE 'Pay' %]Payment,thanks
+          [% CASE 'N' %]New Card
+          [% CASE 'F' %]Fine
+          [% CASE 'A' %]Account management fee
+          [% CASE 'M' %]Sundry
+          [% CASE 'L' %]Lost Item
+          [% CASE 'W' %]Writeoff
+          [% CASE %][% line.accounttype %]
+        [%- END -%]
+        [%- IF line.description %], [% line.description %][% END %]
+        [% IF line.title %]([% line.title |html_entity %])[% END %]
+    </td>
     <td><input type="text" name="payment_note_[% line.accountno %]" /></td>
     <td>[% line.accounttype %]</td>
     <td>[% line.notify_id %]</td>
