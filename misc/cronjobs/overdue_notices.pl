@@ -34,6 +34,8 @@ use Pod::Usage;
 use Text::CSV_XS;
 use Locale::Currency::Format 1.28;
 use Encode;
+use DateTime;
+use DateTime::Duration;
 
 use C4::Context;
 use C4::Dates qw/format_date/;
@@ -41,6 +43,7 @@ use C4::Debug;
 use C4::Letters;
 use C4::Overdues qw(GetFine GetOverdueMessageTransportTypes);
 use C4::Budgets qw(GetCurrency);
+use Koha::DateUtils;
 
 use Koha::Borrower::Debarments qw(AddUniqueDebarment);
 use Koha::DateUtils;
@@ -290,7 +293,7 @@ my $listall = 0;
 my $itemscontent = join( ',', qw( date_due title barcode author itemnumber ) );
 my @myborcat;
 my @myborcatout;
-my $date;
+my ( $date_input, $today );
 
 GetOptions(
     'help|?'         => \$help,
@@ -305,7 +308,7 @@ GetOptions(
     'itemscontent=s' => \$itemscontent,
     'list-all'       => \$listall,
     't|triggered'    => \$triggered,
-    'date'           => \$date,
+    'date=s'         => \$date_input,
     'borcat=s'       => \@myborcat,
     'borcatout=s'    => \@myborcatout,
     'email=s'        => \@emails,
@@ -355,13 +358,19 @@ if (@branchcodes) {
     }
 }
 my $date_to_run;
-if ($date){
-    $date=$dbh->quote($date);
-    $date_to_run = dt_from_string($date);
+my $date;
+if ( $date_input ){
+    $date = $dbh->quote($date);
+    eval {
+        $date_to_run = dt_from_string( $date_input );
+    };
+    die "$date_input is not a valid date, aborting!"
+        if $@ or not $date_to_run;
+
 }
 else {
     $date="NOW()";
-    $date_to_run = DateTime->now( time_zone => C4::Context->tz() );
+    $date_to_run = dt_from_string();
 }
 
 # these are the fields that will be substituted into <<item.content>>
@@ -466,13 +475,16 @@ END_SQL
     while ( my $overdue_rules = $rqoverduerules->fetchrow_hashref ) {
       PERIOD: foreach my $i ( 1 .. 3 ) {
 
-            $verbose and warn "branch '$branchcode', pass $i\n";
+            $verbose and warn "branch '$branchcode', categorycode = $overdue_rules->{categorycode} pass $i\n";
+
             my $mindays = $overdue_rules->{"delay$i"};    # the notice will be sent after mindays days (grace period)
             my $maxdays = (
                   $overdue_rules->{ "delay" . ( $i + 1 ) }
                 ? $overdue_rules->{ "delay" . ( $i + 1 ) } - 1
                 : ($MAX)
             );                                            # issues being more than maxdays late are managed somewhere else. (borrower probably suspended)
+
+            next unless defined $mindays;
 
             if ( !$overdue_rules->{"letter$i"} ) {
                 $verbose and warn "No letter$i code for branch '$branchcode'";
@@ -571,7 +583,7 @@ END_SQL
                 my $letter = C4::Letters::getletter( 'circulation', $overdue_rules->{"letter$i"}, $branchcode );
 
                 unless ($letter) {
-                    $verbose and warn "Message '$overdue_rules->{letter$i}' content not found";
+                    $verbose and warn qq|Message '$overdue_rules->{"letter$i"}' content not found|;
 
                     # might as well skip while PERIOD, no other borrowers are going to work.
                     # FIXME : Does this mean a letter must be defined in order to trigger a debar ?
@@ -591,9 +603,9 @@ END_SQL
                     );
                     $verbose and warn "debarring $borr\n";
                 }
-#                my @params = ($listall ? ( $borrowernumber , 1 , $MAX ) : ( $borrowernumber, $mindays, $maxdays ));
                 my @params = ($borrowernumber);
                 $verbose and warn "STH2 PARAMS: borrowernumber = $borrowernumber";
+
                 $sth2->execute(@params);
                 my $itemcount = 0;
                 my $titles = "";
@@ -671,7 +683,7 @@ END_SQL
                         }
                     );
                     unless ($letter) {
-                        $verbose and warn "Message '$overdue_rules->{letter$i}' content not found";
+                        $verbose and warn qq|Message '$overdue_rules->{"letter$i"}' content not found|;
                         # this transport doesn't have a configured notice, so try another
                         next;
                     }
