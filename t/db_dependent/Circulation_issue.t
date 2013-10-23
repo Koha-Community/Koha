@@ -10,7 +10,7 @@ use C4::Circulation;
 use C4::Items;
 use C4::Context;
 
-use Test::More tests => 24;
+use Test::More tests => 25;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -193,7 +193,7 @@ my $sth = $dbh->prepare($query);
 $sth->execute;
 my $countissue = $sth -> fetchrow_array;
 is ($countissue ,0, "there is no issue");
-my $datedue1 = C4::Circulation::AddIssue( $borrower_1, "code", $daysago10,0, $today, '' );
+my $datedue1 = C4::Circulation::AddIssue( $borrower_1, 'barcode_1', $daysago10,0, $today, '' );
 like(
     $datedue1,
     qr/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/,
@@ -207,8 +207,7 @@ my $issue_id2 = $dbh->last_insert_id( undef, undef, 'issues', undef );
 
 $sth->execute;
 $countissue = $sth -> fetchrow_array;
-#FIXME: Currently AddIssue doesn't add correctly issues
-#is ($countissue,2,"2 issues have been added");
+is ($countissue,1,"1 issues have been added");
 
 #Test AddIssuingCharge
 $query = " SELECT count(*) FROM accountlines";
@@ -271,8 +270,8 @@ is_deeply(
 @renewcount = C4::Circulation::GetRenewCount($borrower_id1, $item_id1);
 is_deeply(
     \@renewcount,
-    [ 0, undef, 0 ], # FIXME Need to be fixed
-    "Without issuing rules and with a valid parameter, renewcount = 0, renewsallowed = undef, renewsleft = 0"
+    [ 2, undef, 0 ],
+    "Without issuing rules and with a valid parameter, renewcount = 2, renewsallowed = undef, renewsleft = 0"
 );
 
 #With something in DB
@@ -296,8 +295,8 @@ is_deeply(
 @renewcount = C4::Circulation::GetRenewCount($borrower_id1, $item_id1);
 is_deeply(
     \@renewcount,
-    [ 0, 0, 0 ],
-    "With issuing rules (renewal disallowed) and with a valid parameter, Getrenewcount returns renewcount = 0, renewsallowed = 0, renewsleft = 0"
+    [ 2, 0, 0 ],
+    "With issuing rules (renewal disallowed) and with a valid parameter, Getrenewcount returns renewcount = 2, renewsallowed = 0, renewsleft = 0"
 );
 
 # Add a default rule: renewal is allowed
@@ -319,7 +318,7 @@ is_deeply(
 @renewcount = C4::Circulation::GetRenewCount($borrower_id1, $item_id1);
 is_deeply(
     \@renewcount,
-    [ 0, 3, 3 ],
+    [ 2, 3, 1 ],
     "With issuing rules (renewal allowed) and with a valid parameter, Getrenewcount of item1 returns 3 renews left"
 );
 
@@ -328,8 +327,8 @@ AddRenewal( $borrower_id1, $item_id1, $samplebranch1->{branchcode},
 @renewcount = C4::Circulation::GetRenewCount($borrower_id1, $item_id1);
 is_deeply(
     \@renewcount,
-    [ 1, 3, 2 ],
-    "With issuing rules (renewal allowed, 2 remaining) and with a valid parameter, Getrenewcount of item1 returns 2 renews left"
+    [ 3, 3, 0 ],
+    "With issuing rules (renewal allowed, 1 remaining) and with a valid parameter, Getrenewcount of item1 returns 0 renews left"
 );
 
 

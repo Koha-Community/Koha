@@ -2494,12 +2494,6 @@ sub CanBookBeRenewed {
         $error = "on_reserve";
     }
 
-    if ( ( $issuingrule->{renewalsallowed} > $itemissue->{renewals} ) || $override_limit ) {
-        $renewokay = 1;
-    } else {
-        $error = "too_many";
-    }
-
     return ( $renewokay, $error );
 }
 
