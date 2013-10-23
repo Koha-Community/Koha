@@ -79,24 +79,8 @@ my $pendingorders = SearchOrders({
     basketno => $basketno,
     pending => 1,
 });
-my @orders;
+my @orders = grep { $_->{'uncertainprice'} } @$pendingorders;
 
-foreach my $order (@{$pendingorders}) {
-    if ( $order->{'uncertainprice'} ) {
-        my $bibdata = &GetBiblioData($order->{'biblionumber'});
-        $order->{'bibisbn'} = $bibdata->{'isbn'};
-        $order->{'bibpublishercode'} = $bibdata->{'publishercode'};
-        $order->{'bibpublicationyear'} = $bibdata->{'publicationyear'};
-        $order->{'bibtitle'} = $bibdata->{'title'};
-        $order->{'bibauthor'} = $bibdata->{'author'};
-        $order->{'surname'} = $order->{'surname'};
-        $order->{'firstname'} = $order->{'firstname'};
-        my $order_as_from_db=GetOrder($order->{ordernumber});
-        $order->{'quantity'} = $order_as_from_db->{'quantity'};
-        $order->{'listprice'} = $order_as_from_db->{'listprice'};
-        push(@orders, $order);
-    }
-}
 if ( $op eq 'validate' ) {
     $template->param( validate => 1);
     my $count = scalar(@orders);
