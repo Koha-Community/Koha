@@ -18,6 +18,7 @@ use Data::Dumper;
 use HTTP::Cookies;
 use C4::Context;
 use C4::Debug;
+use C4::Members qw ( GetMember );
 use URI::Escape;
 
 my ($help, $steps, $baseurl, $max_tries, $user, $password,$short_print);
@@ -88,6 +89,9 @@ if( $resp->is_success and $resp->content =~ m|<status>ok</status>| ) {
 } else {
     die "Authentication failure: \n\t" . $resp->status_line;
 }
+
+die "You cannot use the database administrator account to launch this script"
+    unless defined C4::Members::GetMember(userid => $user);
 
 # remove some unnecessary garbage from the cookie
 $cookie =~ s/ path_spec; discard; version=0//;
