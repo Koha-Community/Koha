@@ -209,9 +209,7 @@ function validate1(date) {
      [% UNLESS ( I ) %][% IF ( othernames ) %]&ldquo;[% othernames %]&rdquo;[% END %]
 
 <p class="address">[% streetnumber %]
-        [% IF ( roaddetails ) %]
-         [% roaddetails %]
-        [% END %]
+        [% IF roadtype %][% roadtype %][% END %]
         [% address %]<br />
         [% IF ( address2 ) %][% address2 %]<br />[% END %]
     	[% IF ( city ) %][% city %][% END %] 

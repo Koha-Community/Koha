@@ -7984,6 +7984,38 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->{AutoCommit} = 0;
+    $dbh->{RaiseError} = 1;
+
+    my $av_added = $dbh->do(q|
+        INSERT INTO authorised_values(category, authorised_value, lib, lib_opac)
+            SELECT 'ROADTYPE', roadtypeid, road_type, road_type
+            FROM roadtype;
+    |);
+
+    my $rt_deleted = $dbh->do(q|
+        DELETE FROM roadtype
+    |);
+
+    if ( $av_added == $rt_deleted or $rt_deleted eq "0E0" ) {
+        $dbh->do(q|
+            DROP TABLE roadtype;
+        |);
+        $dbh->commit;
+        print "Upgrade to $DBversion done (Bug 7372: Move road types from the roadtype table to the ROADTYPE authorised values)\n";
+        SetVersion($DBversion);
+    } else {
+        print "Upgrade to $DBversion failed (Bug 7372: Move road types from the roadtype table to the ROADTYPE authorised values.\nTransaction aborted because $@\n)";
+        $dbh->rollback;
+    }
+
+    $dbh->{AutoCommit} = 1;
+    $dbh->{RaiseError} = 0;
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

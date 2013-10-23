@@ -204,7 +204,6 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
         qr/^nodouble$/,
         qr/^op$/,
         qr/^save$/,
-        qr/^select_roadtype$/,
         qr/^updtype$/,
         qr/^SMSnumber$/,
         qr/^setting_extended_patron_attributes$/,
@@ -549,17 +548,8 @@ if (@{$city_arrayref} ) {
     }
 }
   
-my $default_roadtype;
-$default_roadtype=$data{'streettype'} ;
-my($roadtypeid,$road_type)=GetRoadTypes();
-  $template->param( road_cgipopup => 1) if ($roadtypeid );
-my $roadpopup = CGI::popup_menu(-name=>'streettype',
-        -id => 'streettype',
-        -values=>$roadtypeid,
-        -labels=>$road_type,
-        -override => 1,
-        -default=>$default_roadtype
-        );  
+my $roadtypes = C4::Koha::GetAuthorisedValues( 'ROADTYPE', $data{streettype} );
+$template->param( roadtypes => $roadtypes);
 
 my $default_borrowertitle = '';
 unless ( $op eq 'duplicate' ) { $default_borrowertitle=$data{'title'} }
@@ -731,7 +721,6 @@ $template->param(
   ethcatpopup => $ethcatpopup,
   relshiploop => \@relshipdata,
   city_loop => $city_arrayref,
-  roadpopup => $roadpopup,  
   borrotitlepopup => $borrotitlepopup,
   guarantorinfo   => $guarantorinfo,
   flagloop  => \@flagdata,

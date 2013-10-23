@@ -243,7 +243,7 @@ my $relissue    = [];
 if ( @borrowernumbers ) {
     $relissue    = GetPendingIssues(@borrowernumbers);
 }
-my $roaddetails = &GetRoadTypeDetails( $data->{'streettype'} );
+my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
 my $today       = DateTime->now( time_zone => C4::Context->tz);
 $today->truncate(to => 'day');
 my @borrowers_with_issues;
@@ -406,7 +406,7 @@ $template->param(
     detailview => 1,
     AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
     CANDELETEUSER    => $candeleteuser,
-    roaddetails     => $roaddetails,
+    roadtype        => $roadtype,
     borrowernumber  => $borrowernumber,
     othernames      => $data->{'othernames'},
     categoryname    => $data->{'description'},

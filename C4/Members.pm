@@ -71,8 +71,6 @@ BEGIN {
 
         &GetAge
         &GetCities
-        &GetRoadTypes
-        &GetRoadTypeDetails
         &GetSortDetails
         &GetTitles
 
@@ -1860,48 +1858,6 @@ EOF
     return 0;
 }
 
-=head2 GetRoadTypes (OUEST-PROVENCE)
-
-  ($idroadtypearrayref, $roadttype_hashref) = &GetRoadTypes();
-
-Looks up the different road type . Returns two
-elements: a reference-to-array, which lists the id_roadtype
-codes, and a reference-to-hash, which maps the road type of the road .
-
-=cut
-
-sub GetRoadTypes {
-    my $dbh   = C4::Context->dbh;
-    my $query = qq|
-SELECT roadtypeid,road_type 
-FROM roadtype 
-ORDER BY road_type|;
-    my $sth = $dbh->prepare($query);
-    $sth->execute();
-    my %roadtype;
-    my @id;
-
-    #    insert empty value to create a empty choice in cgi popup
-
-    while ( my $data = $sth->fetchrow_hashref ) {
-
-        push @id, $data->{'roadtypeid'};
-        $roadtype{ $data->{'roadtypeid'} } = $data->{'road_type'};
-    }
-
-#test to know if the table contain some records if no the function return nothing
-    my $id = @id;
-    if ( $id eq 0 ) {
-        return ();
-    }
-    else {
-        unshift( @id, "" );
-        return ( \@id, \%roadtype );
-    }
-}
-
-
-
 =head2 GetTitles (OUEST-PROVENCE)
 
   ($borrowertitle)= &GetTitles();
@@ -1999,29 +1955,6 @@ sub GetHideLostItemsPreference {
     $sth->execute($borrowernumber);
     my $hidelostitems = $sth->fetchrow;    
     return $hidelostitems;    
-}
-
-=head2 GetRoadTypeDetails (OUEST-PROVENCE)
-
-  ($roadtype) = &GetRoadTypeDetails($roadtypeid);
-
-Returns the description of roadtype
-C<&$roadtype>return description of road type
-C<&$roadtypeid>this is the value of roadtype s
-
-=cut
-
-sub GetRoadTypeDetails {
-    my ($roadtypeid) = @_;
-    my $dbh          = C4::Context->dbh;
-    my $query        = qq|
-SELECT road_type 
-FROM roadtype 
-WHERE roadtypeid=?|;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($roadtypeid);
-    my $roadtype = $sth->fetchrow;
-    return ($roadtype);
 }
 
 =head2 GetBorrowersToExpunge
