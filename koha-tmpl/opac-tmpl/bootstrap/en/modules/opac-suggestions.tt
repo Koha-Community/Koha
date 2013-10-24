@@ -280,11 +280,19 @@
           enableCheckboxActions();
         });
         $("#removeitems").html("<a href=\"#\" class=\"removeitems tag_hides disabled\">"+_("Delete")+"</a>")
-        .click(function(){
+        .click(function(e){
+          e.preventDefault();
           $("#myform").submit();
           return false;
         });
         enableCheckboxActions();
+        $("#myform").on('submit', function() {
+          if ( $("input:checked").size() < 1 ) {
+            alert(MSG_NO_RECORD_SELECTED);
+            return false;
+          }
+          return true;
+        });
         [% END %]
     });
 
