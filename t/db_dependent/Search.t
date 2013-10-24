@@ -12,7 +12,7 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 198;
+use Test::More tests => 200;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;

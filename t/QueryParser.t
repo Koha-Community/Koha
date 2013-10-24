@@ -44,9 +44,7 @@ my $desired_config = {
   'field_mappings' => {
     'author' => {
       'personal' => {
-        'aliases' => [
-          'personal'
-        ],
+        'aliases' => [ ],
         'bib1_mapping' => {
           'biblioserver' => {
             '1' => '1004'
