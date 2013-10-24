@@ -275,7 +275,7 @@ sub SearchAuthorities {
         $newline{authid} = $authid;
         if ( !$skipmetadata ) {
             my $summary =
-              BuildSummary( $authrecord, $authid, $authtypecode );
+              BuildSummary( $authrecord, $authid, GetAuthTypeCode($authid) );
             my $query_auth_tag =
 "SELECT auth_tag_to_report FROM auth_types WHERE authtypecode=?";
             my $sth = $dbh->prepare($query_auth_tag);
