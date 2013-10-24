@@ -121,7 +121,10 @@ sub TransformPrefsToHTML {
     my $tab = $data->{ $title };
     $tab = { '' => $tab } if ( ref( $tab ) eq 'ARRAY' );
 
-    my @override_syspref_names = split( /,/, $ENV{"OVERRIDE_SYSPREF_NAMES"} );
+    my @override_syspref_names;
+    if ( $ENV{OVERRIDE_SYSPREF_NAMES} ) {
+        @override_syspref_names = split /,/, $ENV{OVERRIDE_SYSPREF_NAMES};
+    }
 
     foreach my $group ( sort keys %$tab ) {
         if ( $group ) {
