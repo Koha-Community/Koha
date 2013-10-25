@@ -22,4 +22,5 @@ koha-foreach --enabled /usr/share/koha/bin/cronjobs/holds/cancel_expired_holds.p
 koha-foreach --enabled /usr/share/koha/bin/cronjobs/services_throttle.pl > /dev/null 2>&1
 koha-foreach --enabled /usr/share/koha/bin/cronjobs/cleanup_database.pl --sessions --zebraqueue 10
 koha-foreach --enabled --noemail /usr/share/koha/bin/cronjobs/cleanup_database.pl --mail
+koha-foreach --enabled /usr/share/koha/bin/cronjobs/holds/auto_unsuspend_holds.pl > /dev/null 2>&1
 koha-run-backups --days 2 --output /var/spool/koha
