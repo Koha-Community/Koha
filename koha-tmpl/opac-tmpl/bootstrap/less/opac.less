@@ -745,6 +745,9 @@ fieldset {
             margin-bottom : 1em;
         }
     }
+    table {
+        font-size: 100%;
+    }
 }
 
 div.rows+div.rows {
@@ -2224,6 +2227,42 @@ td img {
     #browser_next {
         background-position: -9px -1057px;
     }
+}
+
+#holds {
+    margin : 0 auto;
+    max-width: 800px;
+}
+.holdrow {
+    clear : both;
+    padding: 0 1em 1em 1em;
+    border-bottom:1px solid #CCC;
+    margin-bottom:.5em;
+    fieldset {
+        border : 0;
+        margin : 0;
+        float: none;
+        .label {
+            font-size: 14px;
+        }
+    }
+    label {
+        display: inline;
+    }
+}
+.hold-options {
+    clear : both;
+}
+.toggle-hold-options {
+    background-color: #eee;
+    clear : both;
+    display : block;
+    font-weight : bold;
+    margin: 1em 0;
+    padding: .5em;
+}
+.copiesrow {
+    clear : both;
 }
 
 @import "responsive.less";

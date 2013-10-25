@@ -13,9 +13,8 @@
         <li><a href="#">Placing a hold</a></li>
     </ul>
 
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span12">
+    <div class="container">
+
                 <div id="holds">
                     [% IF ( message ) %]
                         [% IF ( GNA ) %]
@@ -93,6 +92,7 @@
                                 [% END %]
                             </h3>
                         [% END # / UNLESS none_available %]
+
                         [% IF (RESERVE_CHARGE) %]
                             <div class="alert" id="reserve_fee">
                                 There is a charge of [% RESERVE_CHARGE %] for placing this hold
@@ -104,295 +104,265 @@
                             <!-- These values are set dynamically by js -->
                             <input type="hidden" name="biblionumbers" id="biblionumbers"/>
                             <input type="hidden" name="selecteditems" id="selections"/>
-
                             <div id="bigloop">
-                                <table id="bibitemloop" class="table table-bordered table-striped">
-                                    [% UNLESS ( none_available ) %]
-                                        <tr>
-                                            <th>Hold</th>
-                                            <th>Title</th>
-                                            [% UNLESS ( item_level_itypes ) %]
-                                                <th>Item type</th>
-                                            [% END %]
 
-                                            [% IF showholds && showpriority %]
-                                                <th>Holds and priority</th>
-                                            [% ELSIF showholds %]
-                                                <th>Holds</th>
-                                            [% ELSIF showpriority %]
-                                                <th>Priority</th>
-                                            [% END %]
-
-                                            [% IF ( reserve_in_future ) %]
-                                                <th>Hold starts on date</th>
-                                            [% END %]
-
-                                            [% IF ( OpacHoldNotes ) %]
-                                                <th>Notes</th>
-                                            [% END %]
-
-                                            <th>Hold not needed after</th>
-                                            [% IF ( OPACItemHolds ) %]
-                                                <th id="place_on_hdr" style="display:none">Place on</th>
-                                            [% END %]
-
-                                            [% UNLESS ( singleBranchMode ) %]
-                                                [% IF ( choose_branch ) %]
-                                                    <th>Pickup location</th>
-                                                [% END %]
-                                            [% END %]
-                                        </tr>
-                                    [% ELSE %]
-                                        <tr><th colspan="[% itemtable_colspan + 1 %]">Title</th></tr>
-                                    [% END # / UNLESS none_available%]
-
-                                    [% FOREACH bibitemloo IN bibitemloop %]
-                                        <tr>
+                                [% FOREACH bibitemloo IN bibitemloop %]
+                                    <div class="holdrow">
+                                        <p>
                                             [% IF ( bibitemloo.holdable ) %]
-                                                <td class="hold">
-                                                    <input class="reserve_mode" name="reserve_mode" type="hidden" value="single"/>
-                                                    <input class="single_bib" name="single_bib" type="hidden" value="[% bibitemloo.biblionumber %]"/>
-                                                    <span class="confirmjs_hold" title="[% bibitemloo.biblionumber %]"></span>
-                                                    <span class="confirm_nonjs">
-                                                        <input type="radio" class="confirmbox checkitem_[% bibitemloo.biblionumber %]" name="checkitem_[% bibitemloo.biblionumber %]" checked="checked" id="checkitem_[% bibitemloo.biblionumber %]" value="any" />
-                                                        <label class="confirm_label" for="checkitem_[% bibitemloo.biblionumber %]">Next available copy</label>
-                                                    </span>
-                                                </td>
-                                            [% ELSE %]
-                                                [% UNLESS ( none_available ) %]
-                                                    <td class="hold">&nbsp;</td>
-                                                [% END %]
-                                            [% END # / IF biblioloo.holdable %]
+                                                <input class="reserve_mode" name="reserve_mode" type="hidden" value="single"/>
+                                                <input class="single_bib" name="single_bib" type="hidden" value="[% bibitemloo.biblionumber %]"/>
+                                                <span class="confirmjs_hold" title="[% bibitemloo.biblionumber %]" style="padding:.3em"></span>
+                                                <span class="confirm_nonjs">
+                                                    <input type="radio" class="confirmbox checkitem [% bibitemloo.biblionumber %]" name="[% bibitemloo.biblionumber %]" checked="checked" id="single_[% bibitemloo.biblionumber %]" value="any" />
+                                                    <label class="confirm_label" for="single_[% bibitemloo.biblionumber %]">Place a hold on </label>
+                                                </span>
+                                            [% END # / bibitemloo.holdable %]
 
-                                            [% IF ( bibitemloo.holdable ) %]
-                                                <td class="title">
+                                            <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% bibitemloo.biblionumber %]">
+                                                [% bibitemloo.title |html %]
+                                                [% IF ( bibitemloo.subtitle ) %]
+                                                    [% FOREACH subtitl IN bibitemloo.subtitle %]
+                                                        [% subtitl.subfield %]
+                                                    [% END %]
+                                                [% END %]
+                                            </a>
+                                            [% IF ( bibitemloo.author ) %],  by [% bibitemloo.author %][% END %]
+                                        </p>
+
+                                        [% UNLESS ( bibitemloo.holdable ) %]
+                                            [% IF ( bibitemloo.already_reserved ) %]
+                                                <div class="alert">You have already requested this title.</div>
                                             [% ELSE %]
-                                                <td class="title" colspan="[% itemtable_colspan + 1 %]">
-                                            [% END %]
-                                                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% bibitemloo.biblionumber %]">[% bibitemloo.title |html %][% IF ( bibitemloo.subtitle ) %] [% FOREACH subtitl IN bibitemloo.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
-                                                [% IF ( bibitemloo.author ) %],  by [% bibitemloo.author %][% END %]
-                                                [% UNLESS ( bibitemloo.holdable ) %]
-                                                    [% IF ( bibitemloo.already_reserved ) %]
-                                                        <div class="hold-message">You have already requested this title.</div>
+                                                [% UNLESS ( bibitemloo.bib_available ) %]
+                                                    <div class="alert">No available items.</div>
+                                                [% ELSE %]
+                                                    [% IF ( bibitemloo.already_patron_possession ) %]
+                                                        <div class="alert">This title cannot be requested because it's already in your possession.</div>
                                                     [% ELSE %]
-                                                        [% UNLESS ( bibitemloo.bib_available ) %]
-                                                            <div class="hold-message">No available items.</div>
-                                                        [% ELSE %]
-                                                            [% IF ( bibitemloo.already_patron_possession ) %]
-                                                                <div class="hold-message">This title cannot be requested because it's already in your possession.</div>
-                                                            [% ELSE %]
-                                                                <div class="hold-message">This title cannot be requested.</div>
-                                                            [% END %]
-                                                        [% END # / UNLESS biblioitemloo.bib_available %]
-                                                    [% END # / IF bibitemloo.already_reserved %]
-                                                [% END # / UNLESS bibitemloo.holdable %]
-                                                </td>
-                                                [% IF ( bibitemloo.holdable ) %]
+                                                        <div class="alert">This title cannot be requested.</div>
+                                                    [% END %]
+                                                [% END # / UNLESS bibitemloo.bib_available %]
+                                            [% END # / IF bibitemloo.already_reserved %]
+                                        [% END # / UNLESS bibitemloo.holdable %]
+
+                                        [% IF ( bibitemloo.holdable ) %]
+                                            <fieldset class="rows">
+                                                <ul>
                                                     <!-- HOLDABLE -->
                                                     [% UNLESS ( item_level_itypes ) %]
-                                                        <td class="itype">
+                                                        <li class="itype">
+                                                            <span class="label">Item type: </span>
                                                             [% IF ( bibitemloo.imageurl ) %]<img src="[% bibitemloo.imageurl %]" alt="" />[% END %]
                                                             [% bibitemloo.description %]
-                                                        </td>
+                                                        </li>
                                                     [% END %]
+
                                                     [% IF showholds || showpriority %]
-                                                        <td class="priority">
+                                                        <li class="priority">
+                                                            <span class="label">Holds and priority: </span>
                                                             [% IF showpriority %] [% bibitemloo.rank %] [% END %]
                                                             [% IF showholds && showpriority %] out of [% END %]
                                                             [% IF showholds %] [% bibitemloo.reservecount %] [% END %]
-                                                        </td>
-                                                    [% END %]
-                                                    [% IF ( reserve_in_future ) %]
-                                                        <td class="reserve_date">
-                                                            <input name="reserve_date_[% bibitemloo.biblionumber %]" id="from" size="10" class="datepickerfrom"/>
-                                                            <p><a href="#" class="clearfield">Clear date</a></p>
-                                                        </td>
-                                                    [% END # / IF reserve_in_future %]
-
-                                                    [% IF ( OpacHoldNotes && bibitemloo.holdable ) %]
-                                                        <td><input type="button" id="shownotes_[% bibitemloo.biblionumber %]" class="btn shownotes" value="Show notes"/></td>
+                                                        </li>
                                                     [% END %]
 
-                                                    <td class="expiration_date">
-                                                        <input name="expiration_date_[% bibitemloo.biblionumber %]" id="to" size="10" class="datepickerto" />
-                                                        <p><a href="#" class="clearfield">Clear date</a></p>
-                                                    </td>
 
-                                                    [% IF ( OPACItemHolds ) %]
-                                                        <!-- ITEM HOLDS -->
-                                                        <td class="place_on_type" style="display:none">
-                                                            <label for="reqany_[% bibitemloo.biblionumber %]">
-                                                            [% UNLESS ( bibitemloo.holdable ) %]
-                                                                <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]" id="reqany_[% bibitemloo.biblionumber %]" class="selectany" value="Any" disabled="disabled" />
-                                                            [% ELSE %]
-                                                                <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]" id="reqany_[% bibitemloo.biblionumber %]" class="selectany" value="Any" checked="checked" />
-                                                            [% END %]
-                                                            Next available copy
-                                                            </label>
-                                                            <label for="reqspecific_[% bibitemloo.biblionumber %]">
-                                                            [% UNLESS ( bibitemloo.holdable ) %]
-                                                                <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]" id="reqspecific_[% bibitemloo.biblionumber %]" class="selectspecific" disabled="disabled" value="Specific" />
-                                                            [% ELSE %]
-                                                                <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]" id="reqspecific_[% bibitemloo.biblionumber %]" class="selectspecific" value="Specific" />
-                                                            [% END %]
-                                                            A specific copy
-                                                            </label>
-                                                        </td>
-                                                    [% END # / IF OPACItemHolds %]
-                                                [% END # / IF bibitemloo.holdable %]
-
-                                                [% UNLESS ( singleBranchMode ) %]
-                                                    [% IF ( bibitemloo.holdable && choose_branch ) %]
-                                                        <td class="branch">
-                                                            [% UNLESS ( bibitemloo.holdable ) %]
-                                                                <select name="branch" id="branch_[% bibitemloo.biblionumber %]" disabled="disabled">
-                                                                [% FOREACH branchloo IN bibitemloo.branchloop %]
-                                                                    [% IF ( branchloo.selected ) %]
-                                                                        <option value="[% branchloo.branchcode %]" selected="selected">[% branchloo.branchname %]</option>
-                                                                    [% ELSE %]
-                                                                        <option value="[% branchloo.branchcode %]">[% branchloo.branchname %]</option>
-                                                                    [% END %]
-                                                                [% END %]
-                                                                </select>
-                                                            [% ELSE %]
-                                                                <select name="branch" id="branch_[% bibitemloo.biblionumber %]">
-                                                                [% FOREACH branchloo IN bibitemloo.branchloop %]
-                                                                    [% IF ( branchloo.selected ) %]
-                                                                        <option value="[% branchloo.branchcode %]" selected="selected">[% branchloo.branchname %]</option>
-                                                                    [% ELSE %]
-                                                                        <option value="[% branchloo.branchcode %]">[% branchloo.branchname %]</option>
-                                                                    [% END %]
-                                                                [% END %]
-                                                                </select>
-                                                            [% END # / UNLESS bibitemloo.holdable %]
-                                                        </td>
-                                                    [% END %]
-                                                [% END # / UNLESS singleBranchMode %]
-                                        </tr>
-
-                                        [% IF ( OpacHoldNotes && bibitemloo.holdable ) %]
-                                            <tr class="notesrow" id="notesrow_[% bibitemloo.biblionumber %]">
-                                                <td>&nbsp;</td>
-                                                <td colspan="[% itemtable_colspan - 2 %]">
-                                                    <label for="notes_[% bibitemloo.biblionumber %]">Hold notes:</label>&nbsp;
-                                                    <span id="forcenotesreason_[% bibitemloo.biblionumber %]" class="forcenotesreason"></span>
-                                                    <textarea id="notes_[% bibitemloo.biblionumber %]" name="notes_[% bibitemloo.biblionumber %]">[% bibitemloo.holdnotes %]</textarea>
-                                                    <input type="hidden" id="notesmandatory_[% bibitemloo.biblionumber %]" value="[% bibitemloo.mandatorynotes %]"/>
-                                                </td>
-                                            </tr>
-                                        [% END %]
-
-                                        [% IF ( OPACItemHolds && bibitemloo.holdable ) %]
-                                            <tr class="copiesrow" id="copiesrow_[% bibitemloo.biblionumber %]">
-                                                <td>&nbsp;</td>
-                                                <td colspan="[% itemtable_colspan - 2 %]">
-                                                    <table class="table table-bordered table-striped">
-                                                        <caption>Select a specific copy:</caption>
-                                                        <tr>
-                                                            <th>Copy</th>
-                                                            [% IF ( item_level_itypes ) %]
-                                                              <th>Item type</th>
-                                                            [% END %]
-                                                            <th>Barcode</th>
-                                                            [% UNLESS ( singleBranchMode ) %]
-                                                              <th>Home library</th>
-                                                              <th>Last location</th>
-                                                            [% END %]
-                                                            <th>Call number</th>
-                                                            [% IF ( itemdata_enumchron ) %]
-                                                              <th>Vol info</th>
-                                                            [% END %]
-                                                            <th>Information</th>
-                                                        </tr>
-
-                                                        [% FOREACH itemLoo IN bibitemloo.itemLoop %]
-                                                            <tr class="[% itemLoo.backgroundcolor %]">
-                                                                <td class="copy">
-                                                                    [% IF ( itemLoo.available ) %]
-                                                                        <input type="radio" class="checkitem checkitem_[% bibitemloo.biblionumber %]" name="checkitem_[% bibitemloo.biblionumber %]" value="[% itemLoo.itemnumber %]" />
-                                                                    [% ELSE %]
-                                                                        <input disabled="disabled" type="radio" class="checkitem" name="checkitem" value="[% itemLoo.itemnumber %]" />
-                                                                        <img src="/opac-tmpl/lib/famfamfam/silk/cross.png" alt="Cannot be put on hold" title="Cannot be put on hold" />
-                                                                    [% END %]
-                                                                    [% IF ( itemLoo.copynumber ) %]
-                                                                        [% itemLoo.copynumber %]
-                                                                    [% END %]
-                                                                </td>
-                                                                [% IF ( item_level_itypes ) %]
-                                                                    <td class="itype">
-                                                                        [% UNLESS ( noItemTypeImages ) %]
-                                                                            [% IF ( itemLoo.imageurl ) %]
-                                                                                <img src="[% itemLoo.imageurl %]" alt="" />
+                                                    [% UNLESS ( singleBranchMode ) %]
+                                                        [% IF ( bibitemloo.holdable && choose_branch ) %]
+                                                            <li class="branch">
+                                                                <label for="branch_[% bibitemloo.biblionumber %]">Pick up location:</label>
+                                                                [% UNLESS ( bibitemloo.holdable ) %]
+                                                                    <select name="branch" id="branch_[% bibitemloo.biblionumber %]" disabled="disabled">
+                                                                        [% FOREACH branchloo IN bibitemloo.branchloop %]
+                                                                            [% IF ( branchloo.selected ) %]
+                                                                                <option value="[% branchloo.branchcode %]" selected="selected">[% branchloo.branchname %]</option>
+                                                                            [% ELSE %]
+                                                                                <option value="[% branchloo.branchcode %]">[% branchloo.branchname %]</option>
                                                                             [% END %]
                                                                         [% END %]
-                                                                        [% itemLoo.description %]
-                                                                    </td>
+                                                                    </select>
+                                                                [% ELSE %]
+                                                                    <select name="branch" id="branch_[% bibitemloo.biblionumber %]">
+                                                                        [% FOREACH branchloo IN bibitemloo.branchloop %]
+                                                                            [% IF ( branchloo.selected ) %]
+                                                                                <option value="[% branchloo.branchcode %]" selected="selected">[% branchloo.branchname %]</option>
+                                                                            [% ELSE %]
+                                                                                <option value="[% branchloo.branchcode %]">[% branchloo.branchname %]</option>
+                                                                            [% END %]
+                                                                        [% END %]
+                                                                    </select>
+                                                                [% END # / UNLESS bibitemloo.holdable %]
+                                                            </li>
+                                                        [% END # / IF bibitemloo.holdable && choose_branch %]
+                                                    [% END # / UNLESS singleBranchMode %]
+                                                </ul>
+
+                                                <a class="toggle-hold-options" id="toggle-hold-options-[% bibitemloo.biblionumber %]" style="display:none;" href="#">Show more options</a>
+
+                                                <div id="hold-options-[% bibitemloo.biblionumber %]" class="hold-options">
+
+                                                    <ul>
+                                                        [% IF ( reserve_in_future ) %]
+                                                            <li>
+                                                                <label for="from[% bibitemloo.biblionumber %]">Hold starts on date:</label>
+                                                                <input name="reserve_date_[% bibitemloo.biblionumber %]" id="from[% bibitemloo.biblionumber %]" size="10" class="holddatefrom"/>
+                                                                <span class="date-format from" data-biblionumber="[% bibitemloo.biblionumber %]">[% INCLUDE 'date-format.inc' %]</span>
+                                                            </li>
+                                                        [% END %]
+
+                                                        <li>
+                                                            <label for="to[% bibitemloo.biblionumber %]">Hold not needed after:</label>
+                                                            <input name="expiration_date_[% bibitemloo.biblionumber %]" id="to[% bibitemloo.biblionumber %]" size="10" class="holddateto" />
+                                                            <span class="date-format to" data-biblionumber="[% bibitemloo.biblionumber %]">[% INCLUDE 'date-format.inc' %]</span>
+                                                        </li>
+
+                                                        [% IF ( OpacHoldNotes ) %]
+                                                            <li>
+                                                                <div class="notesrow" id="notesrow_[% bibitemloo.biblionumber %]">
+                                                                    <label for="holdnotes[% bibitemloo.biblionumber %]">Hold notes:</label>
+                                                                    <span id="forcenotesreason_[% bibitemloo.biblionumber %]" class="forcenotesreason"></span>
+                                                                    <textarea id="holdnotes[% bibitemloo.biblionumber %]" rows="2" cols="30" name="notes_[% bibitemloo.biblionumber %]">[% bibitemloo.holdnotes %]</textarea>
+                                                                    <input type="hidden" id="notesmandatory_[% bibitemloo.biblionumber %]" value="[% bibitemloo.mandatorynotes %]"/>
+                                                                </div>
+                                                            </li>
+                                                        [% END # / IF OpacHoldNotes %]
+
+                                                        [% IF ( OPACItemHolds ) %]
+                                                            <!-- ITEM HOLDS -->
+                                                            <li class="lradio">
+                                                                <label class="radio inline" for="reqany_[% bibitemloo.biblionumber %]">Next available copy</label>
+                                                                [% UNLESS ( bibitemloo.holdable ) %]
+                                                                    <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]" id="reqany_[% bibitemloo.biblionumber %]" class="selectany" value="Any" disabled="disabled" />
+                                                                [% ELSE %]
+                                                                    <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]" id="reqany_[% bibitemloo.biblionumber %]" class="selectany" value="Any" checked="checked" />
                                                                 [% END %]
-                                                                <td class="barcode">[% itemLoo.barcode %]</td>
+
+                                                                <label class="radio inline" for="reqspecific_[% bibitemloo.biblionumber %]">A specific copy</label>
+                                                                [% UNLESS ( bibitemloo.holdable ) %]
+                                                                    <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]" id="reqspecific_[% bibitemloo.biblionumber %]" class="selectspecific" disabled="disabled" value="Specific" />
+                                                                [% ELSE %]
+                                                                    <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]" id="reqspecific_[% bibitemloo.biblionumber %]" class="selectspecific" value="Specific" />
+                                                                [% END %]
+                                                            </li>
+                                                        [% END # / IF OPACItemHolds %]
+                                                    </ul>
+
+                                                    [% IF ( OPACItemHolds ) %]
+                                                        <table class="copiesrow table table-bordered table-striped" id="copiesrow_[% bibitemloo.biblionumber %]">
+                                                            <caption>Select a specific copy:</caption>
+                                                            <tr>
+                                                                <th>Copy</th>
+                                                                [% IF ( item_level_itypes ) %]
+                                                                    <th>Item type</th>
+                                                                [% END %]
+                                                                <th>Barcode</th>
                                                                 [% UNLESS ( singleBranchMode ) %]
-                                                                    <td class="homebranch">[% itemLoo.homeBranchName %]</td>
-                                                                    <td class="holdingbranch">[% itemLoo.holdingBranchName %]</td>
+                                                                    <th>Home library</th>
+                                                                    <th>Last location</th>
                                                                 [% END %]
-                                                                <td class="call_no">[% itemLoo.callNumber %]</td>
+                                                                <th>Call number</th>
                                                                 [% IF ( itemdata_enumchron ) %]
-                                                                    <td class="vol_info">[% itemLoo.enumchron %]</td>
+                                                                    <th>Vol info</th>
                                                                 [% END %]
-                                                                <td class="information">
-                                                                    [% IF ( itemLoo.dateDue ) %]
-                                                                        <span class="checkedout">Due [% itemLoo.dateDue %]</span>
-                                                                    [% ELSIF ( itemLoo.transfertwhen ) %]
-                                                                        <span class="intransit">In transit from [% itemLoo.transfertfrom %] to [% itemLoo.transfertto %] since [% itemLoo.transfertwhen %]</span>
-                                                                    [% END %]
-                                                                    [% IF ( itemLoo.message ) %]
-                                                                        <span class="lost">Unavailable (lost or missing)</span>
-                                                                    [% END %]
-                                                                    [% IF ( itemLoo.notforloan ) %]
-                                                                        <span class="notforloan">Not for loan ([% itemLoo.notforloanvalue %])</span>
-                                                                    [% END %]
-                                                                    [% IF ( itemLoo.reservedate ) %]
-                                                                        <span class="waiting">
-                                                                            [% IF ( itemLoo.waitingdate ) %]
-                                                                                Waiting
-                                                                            [% ELSE %]
-                                                                                On hold
-                                                                            [% END %]
-                                                                            for patron
-                                                                            [% IF ( itemLoo.waitingdate ) %]
-                                                                                at
-                                                                            [% ELSE %]
-                                                                                expected at
-                                                                            [% END %]
-                                                                            [% itemLoo.ExpectedAtLibrary %] since
-                                                                            [% IF ( itemLoo.waitingdate ) %]
-                                                                                [% itemLoo.waitingdate %]
-                                                                            [% ELSE %]
-                                                                                [% IF ( itemLoo.reservedate ) %]
-                                                                                    [% itemLoo.reservedate %]
-                                                                                [% END %]
-                                                                            [% END %].
-                                                                        </span>
-                                                                    [% ELSE %]
-                                                                        <span class="notonhold">Not on hold</span>
-                                                                    [% END # / IF itemLoo.reservedate %]&nbsp;
-                                                                </td>
+                                                                <th>Information</th>
                                                             </tr>
-                                                        [% END # / FOREACH itemLoo %]
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        [% END # / IF OPACItemHolds && bibitemloo.holdable %]
-                                    [% END # / FOREACH bibitemloo %]
-                                </table> <!-- / #bibitemloop -->
-                            </div><!-- / #bigloop -->
+
+                                                            [% FOREACH itemLoo IN bibitemloo.itemLoop %]
+                                                                <tr class="[% itemLoo.backgroundcolor %]">
+                                                                    <td class="copy">
+                                                                        [% IF ( itemLoo.available ) %]
+                                                                            <input type="radio" class="checkitem checkitem_[% bibitemloo.biblionumber %]" name="checkitem_[% bibitemloo.biblionumber %]" value="[% itemLoo.itemnumber %]" />
+                                                                        [% ELSE %]
+                                                                            <input disabled="disabled" type="radio" class="checkitem" name="checkitem" value="[% itemLoo.itemnumber %]" />
+                                                                            <img src="[% interface %]/lib/famfamfam/silk/cross.png" alt="Cannot be put on hold" title="Cannot be put on hold" />
+                                                                        [% END %]
+
+                                                                        [% IF ( itemLoo.copynumber ) %]
+                                                                            [% itemLoo.copynumber %]
+                                                                        [% END %]
+                                                                    </td>
+
+                                                                    [% IF ( item_level_itypes ) %]
+                                                                        <td class="itype">
+                                                                            [% UNLESS ( noItemTypeImages ) %]
+                                                                                [% IF ( itemLoo.imageurl ) %]
+                                                                                    <img src="[% itemLoo.imageurl %]" alt="" />
+                                                                                [% END %]
+                                                                            [% END %]
+                                                                            [% itemLoo.description %]
+                                                                        </td>
+                                                                    [% END %]
+
+                                                                    <td class="barcode">[% itemLoo.barcode %]</td>
+                                                                    [% UNLESS ( singleBranchMode ) %]
+                                                                        <td class="homebranch">[% itemLoo.homeBranchName %]</td>
+                                                                        <td class="holdingbranch">[% itemLoo.holdingBranchName %]</td>
+                                                                    [% END %]
+                                                                    <td class="call_no">[% itemLoo.callNumber %]</td>
+                                                                    [% IF ( itemdata_enumchron ) %]
+                                                                        <td class="vol_info">[% itemLoo.enumchron %]</td>
+                                                                    [% END %]
+                                                                    <td class="information">
+                                                                        [% IF ( itemLoo.dateDue ) %]
+                                                                            <span class="checkedout">Due [% itemLoo.dateDue %]</span>
+                                                                        [% ELSIF ( itemLoo.transfertwhen ) %]
+                                                                            <span class="intransit">In transit from [% itemLoo.transfertfrom %] to [% itemLoo.transfertto %] since [% itemLoo.transfertwhen %]</span>
+                                                                        [% END %]
+
+                                                                        [% IF ( itemLoo.message ) %]
+                                                                            <span class="lost">Unavailable (lost or missing)</span>
+                                                                        [% END %]
+
+                                                                        [% IF ( itemLoo.notforloan ) %]
+                                                                            <span class="notforloan">Not for loan ([% itemLoo.notforloanvalue %])</span>
+                                                                        [% END %]
+
+                                                                        [% IF ( itemLoo.reservedate ) %]
+                                                                            <span class="waiting">
+                                                                                [% IF ( itemLoo.waitingdate ) %]
+                                                                                    Waiting
+                                                                                [% ELSE %]
+                                                                                    On hold
+                                                                                [% END %]
+                                                                                for patron
+                                                                                [% IF ( itemLoo.waitingdate ) %]
+                                                                                    at
+                                                                                [% ELSE %]
+                                                                                    expected at
+                                                                                [% END %]
+                                                                                [% itemLoo.ExpectedAtLibrary %] since
+                                                                                [% IF ( itemLoo.waitingdate ) %]
+                                                                                    [% itemLoo.waitingdate %]
+                                                                                [% ELSE %]
+                                                                                    [% IF ( itemLoo.reservedate ) %]
+                                                                                        [% itemLoo.reservedate %]
+                                                                                    [% END %]
+                                                                                [% END %].
+                                                                            </span>
+                                                                        [% ELSE %]
+                                                                            <span class="notonhold">Not on hold</span>
+                                                                        [% END # / IF ( itemLoo.reservedate )%]
+                                                                    </td>
+                                                                </tr>
+                                                            [% END # / FOREACH itemLoo IN bibitemloo.itemLoop%]
+                                                        </table> <!-- / #copiesrow_[% bibitemloo.biblionumber %] -->
+                                                    [% END # / IF ( OPACItemHolds )%]
+                                                </div> <!-- / #hold-options-[% bibitemloo.biblionumber %] -->
+                                            </fieldset>
+                                        [% END # / IF ( bibitemloo.holdable ) %]
+                                    </div> <!-- / .holdrow -->
+                                [% END # / FOREACH bibitemloo IN bibitemloop %]
+                            </div><!-- #bigloop -->
+
                             [% UNLESS ( none_available ) %]
                                 <input type="submit" value="Place hold" class="btn placehold" />
                             [% END %]
+
                         </form>
                     [% END # / UNLESS message %]
                 </div> <!-- / #holds -->
-            </div> <!-- / .span12 -->
-        </div> <!-- / .row-fluid -->
-    </div> <!-- / .container-fluid -->
+    </div> <!-- / .container -->
 </div> <!-- / .main -->
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
@@ -424,7 +394,6 @@
         });
         // Hides all 'specific copy' table rows on load.
         $(".copiesrow").hide();
-        $(".notesrow").hide();
 
         // Insert reasons for forced hold notes
         $(".forcenotesreason").each(function(){
@@ -437,20 +406,37 @@
 
         $("#place_on_hdr").show();
         $(".place_on_type").show();
+        $("#place_on_hdr,.place_on_type,.toggle-hold-options").show();
+        $(".hold-options").hide();
+        $(".holddatefrom,.holddateto").prop("readOnly", true);
+
+        $(".date-format").each(function(){
+            if($(this).hasClass("to")){ var op = "to"; }
+            if($(this).hasClass("from")){ var op = "from"; }
+            var bibNum = $(this).data("biblionumber");
+            $(this).html("<a href=\"#\" class=\"clear-date\" data-op=\"" + op + "\" id=\"clear" + bibNum + "\">" + _("Clear date") + "</a>");
+        });
+
+        $(".clear-date").on("click",function(e){
+            e.preventDefault();
+            var fieldID = this.id.replace("clear","");
+            var op = $(this).data("op");
+            $("#" + op + fieldID).val("");
+        });
 
         // Replace non-JS single-selection with multi-selection capability.
         $(".reserve_mode").val("multi");
         $(".confirm_nonjs").remove();
         $(".confirmjs_hold").each(function(){
             var bib = $(this).attr("title");
-            var html = "<input type =\"checkbox\" class=\"confirmjs\" checked=\"checked\"";
-            html += "value=\"" + bib + "\"/>";
+            var html = "<label><input type =\"checkbox\" class=\"confirmjs\" checked=\"checked\"";
+            html += "value=\"" + bib + "\"/> " + _("Place a hold on") + " </label> ";
             $(this).html(html);
         });
         $(".confirmjs_nohold").each(function(){
             var bib = $(this).attr("title");
-            var html = "<input type =\"checkbox\" class=\"confirmjs\" disabled=\"disabled\"";
-            html += "value=\"" + bib + "\"/>";
+            var html = "<label><input type =\"checkbox\" class=\"confirmjs\" disabled=\"disabled\"";
+            html += "value=\"" + bib + "\"/>" + _("Place a hold on: ") + "</label>";
             $(this).html(html);
         });
 
@@ -485,7 +471,6 @@
             if (!changeSelection(newCopiesRowId, true)) {
                 return false;
             }
-            $(".copiesrow:not(" + newCopiesRowId + ")").hide();
 
             // Show the specific copy table for this radio button.
             $(newCopiesRowId).show();
@@ -502,15 +487,8 @@
             }
 
             // Hide the copies table row
-            $(".copiesrow").hide();
+            $(newCopiesRowId).hide();
         });
-
-        // Show or hide holds notes
-        $(".shownotes").click(function(){
-            biblioNum = suffixOf($(this).attr("id"), "_");
-            $("#notesrow_"+biblioNum).toggle();
-        });
-
 
         // When 'Place Hold' button is clicked
         $(".placehold").click(function(){
@@ -561,6 +539,35 @@
 
             return true;
         });
+
+        $(".toggle-hold-options").on("click",function(e){
+            e.preventDefault();
+            toggleLink = $(this);
+            var optionsID = this.id.replace("toggle-hold-options-","");
+            $("#hold-options-"+optionsID).toggle(0, function() {
+                toggleLink.text($(this).is(':visible') ? _("Hide options") : _("Show more options"));
+            });
+        });
+
+        [% FOREACH bibitemloo IN bibitemloop %]
+            [% IF ( bibitemloo.holdable ) %]
+                // http://jqueryui.com/demos/datepicker/#date-range
+                var dates[% bibitemloo.biblionumber %] = $( "#from[% bibitemloo.biblionumber %], #to[% bibitemloo.biblionumber %]" ).datepicker({
+                    minDate: 1,
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    onSelect: function( selectedDate ) {
+                        var option = this.id == "from[% bibitemloo.biblionumber %]" ? "minDate" : "maxDate",
+                            instance = $( this ).data( "datepicker" );
+                            date = $.datepicker.parseDate(
+                                instance.settings.dateFormat ||
+                                $.datepicker._defaults.dateFormat,
+                                selectedDate, instance.settings );
+                        dates[% bibitemloo.biblionumber %].not( this ).datepicker( "option", option, date );
+                    }
+                });
+            [% END %]
+        [% END %]
 
  });
 // ]]>
