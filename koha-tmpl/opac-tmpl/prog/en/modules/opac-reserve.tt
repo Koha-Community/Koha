@@ -460,8 +460,8 @@
                                 </li>
 
                             [% END %]
-                        [% END %]
                 </ul>
+                        [% END %]
                   [% IF ( OPACItemHolds ) %]
                   [% IF ( bibitemloo.holdable ) %]
 
@@ -540,11 +540,12 @@
                         </table>
                     </div>
 
+                </fieldset>
+                  [% END %]<!-- OPACItemHolds -->
+
                   [% END %]<!-- bib_available -->
 
-                  [% END %]<!-- OPACItemHolds -->
             </div>
-                </fieldset>
                 [% END %]
 
               [% END %] <!-- if message -->
