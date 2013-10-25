@@ -165,4 +165,4 @@ ModItem(
     $_
 ) foreach GetItemnumbersFromOrder($new_ordernumber);
 
-print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid");
+print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid&sticky_filters=1");

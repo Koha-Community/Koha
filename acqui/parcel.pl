@@ -71,6 +71,7 @@ use C4::Reserves qw/GetReservesFromBiblionumber/;
 use JSON;
 
 my $input=new CGI;
+my $sticky_filters = $input->param('sticky_filters') || 0;
 
 sub get_value_with_gst_params {
     my $value = shift;
@@ -214,12 +215,21 @@ push @book_foot_loop, map { $_ } values %foot;
 my @loop_orders = ();
 unless( defined $invoice->{closedate} ) {
     my $pendingorders;
-    if($op eq "search"){
-        my $search   = $input->param('summaryfilter') || '';
-        my $ean      = $input->param('eanfilter') || '';
-        my $basketname = $input->param('basketfilter') || '';
-        my $orderno  = $input->param('orderfilter') || '';
-        my $basketgroupname = $input->param('basketgroupnamefilter') || '';
+    if ( $op eq "search" or $sticky_filters ) {
+        my ( $search, $ean, $basketname, $orderno, $basketgroupname );
+        if ( $sticky_filters ) {
+            $search = $input->cookie("filter_parcel_summary");
+            $ean = $input->cookie("filter_parcel_ean");
+            $basketname = $input->cookie("filter_parcel_basketname");
+            $orderno = $input->cookie("filter_parcel_orderno");
+            $basketgroupname = $input->cookie("filter_parcel_basketgroupname");
+        } else {
+            $search   = $input->param('summaryfilter') || '';
+            $ean      = $input->param('eanfilter') || '';
+            $basketname = $input->param('basketfilter') || '';
+            $orderno  = $input->param('orderfilter') || '';
+            $basketgroupname = $input->param('basketgroupnamefilter') || '';
+        }
         $pendingorders = SearchOrders({
             booksellerid => $booksellerid,
             basketname => $basketname,
@@ -324,5 +334,6 @@ $template->param(
     total_quantity       => $total_quantity,
     total_gste           => sprintf( "%.2f", $total_gste ),
     total_gsti           => sprintf( "%.2f", $total_gsti ),
+    sticky_filters       => $sticky_filters,
 );
 output_html_with_http_headers $input, $cookie, $template->output;

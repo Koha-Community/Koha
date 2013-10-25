@@ -6,11 +6,14 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
 [% INCLUDE 'greybox.inc' %]
 <script type="text/javascript">
 //<![CDATA[
 
     dt_overwrite_html_sorting_localeCompare();
+
+    var sticky_filters = [% sticky_filters %];
 
     $(document).ready(function(){
       if ( $("#pendingt").length ) {
@@ -80,6 +83,21 @@
             "sPaginationType": "four_button"
         } ) );
       }
+
+      // Keep filters from finishreceive.pl to parcel.pl
+      $.cookie("filter_parcel_summary", $("#summaryfilter").val());
+      $.cookie("filter_parcel_basketname", $("#basketfilter").val());
+      $.cookie("filter_parcel_orderno", $("#orderfilter").val());
+      $.cookie("filter_parcel_basketgroupname", $("#basketgroupnamefilter").val());
+      $.cookie("filter_parcel_ean", $("#eanfilter").val());
+
+      $("#filterform").on('submit', function(){
+        $.cookie("filter_parcel_summary", $("#summaryfilter").val());
+        $.cookie("filter_parcel_basketname", $("#basketfilter").val());
+        $.cookie("filter_parcel_orderno", $("#orderfilter").val());
+        $.cookie("filter_parcel_basketgroupname", $("#basketgroupnamefilter").val());
+        $.cookie("filter_parcel_ean", $("#eanfilter").val());
+      });
 
     });
 
