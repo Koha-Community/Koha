@@ -100,7 +100,7 @@ elsif ( $op && $op eq 'delete' ) {
 
 
 my $details = GetInvoiceDetails($invoiceid);
-my ($bookseller) = GetBookSellerFromId($details->{supplierid});
+my $bookseller = GetBookSellerFromId($details->{booksellerid});
 my @orders_loop = ();
 my $orders = $details->{'orders'};
 my $qty_total;
