@@ -361,7 +361,13 @@
             <tr>
                 <td>[% loop_receive.basketname %] (<a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_receive.basketno %]">[% loop_receive.basketno %]</a>)</td>
                 <td><a href="neworderempty.pl?ordernumber=[% loop_receive.ordernumber %]&amp;booksellerid=[% booksellerid %]">[% loop_receive.ordernumber %]</a></td>
-                <td>[% IF loop_receive.holds %]<span class="error"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% loop_receive.biblionumber %]">[% loop_receive.holds %]</a></span>[% END %]</td>
+                <td>
+                  [% IF loop_receive.holds > 0 %]
+                    <span class="error"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% loop_receive.biblionumber %]">[% loop_receive.holds %]</a></span>
+                  [% ELSE %]
+                    0
+                  [% END %]
+                </td>
                 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loop_receive.biblionumber %]">[% loop_receive.title |html %]</a>
                 [% IF ( loop_receive.author ) %] / [% loop_receive.author %][% END %]
                 [% IF ( loop_receive.isbn ) %] - [% loop_receive.isbn %][% END %]

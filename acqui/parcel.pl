@@ -149,8 +149,8 @@ my $gst = $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
 my $datereceived = C4::Dates->new();
 
 my $cfstr         = "%.2f";                                                           # currency format string -- could get this from currency table.
-my @parcelitems   = @{ $invoice->{orders} };
-my $countlines    = scalar @parcelitems;
+my @orders        = @{ $invoice->{orders} };
+my $countlines    = scalar @orders;
 my $totalprice    = 0;
 my $totalquantity = 0;
 my $total;
@@ -161,21 +161,25 @@ my $total_quantity = 0;
 my $total_gste = 0;
 my $total_gsti = 0;
 
-for my $item ( @parcelitems ) {
-    $item->{unitprice} = get_value_with_gst_params( $item->{unitprice}, $item->{gstrate}, $bookseller );
-    $total = ( $item->{'unitprice'} ) * $item->{'quantityreceived'};
-    $item->{'unitprice'} += 0;
-    my %line = %{ $item };
+for my $order ( @orders ) {
+    $order->{unitprice} = get_value_with_gst_params( $order->{unitprice}, $order->{gstrate}, $bookseller );
+    $total = ( $order->{unitprice} ) * $order->{quantityreceived};
+    $order->{'unitprice'} += 0;
+    my %line = %{ $order };
     my $ecost = get_value_with_gst_params( $line{ecost}, $line{gstrate}, $bookseller );
     $line{ecost} = sprintf( "%.2f", $ecost );
     $line{invoice} = $invoice->{invoicenumber};
     $line{total} = sprintf($cfstr, $total);
     $line{booksellerid} = $invoice->{booksellerid};
-    my ($count) = &GetReservesFromBiblionumber($line{biblionumber},undef,$item->{itemnumber});
-    $line{holds} = $count;
+    $line{holds} = 0;
+    my @itemnumbers = GetItemnumbersFromOrder( $order->{ordernumber} );
+    for my $itemnumber ( @itemnumbers ) {
+        my ( $count ) = &GetReservesFromBiblionumber($line{biblionumber}, undef, $itemnumber);
+        $line{holds} += $count;
+    }
     $line{budget} = GetBudgetByOrderNumber( $line{ordernumber} );
-    $totalprice += $item->{'unitprice'};
-    $line{unitprice} = sprintf( $cfstr, $item->{'unitprice'} );
+    $totalprice += $order->{unitprice};
+    $line{unitprice} = sprintf( $cfstr, $order->{unitprice} );
     my $gste = get_gste( $line{total}, $line{gstrate}, $bookseller );
     my $gst = get_gst( $line{total}, $line{gstrate}, $bookseller );
     $foot{$line{gstrate}}{gstrate} = $line{gstrate};
@@ -191,7 +195,7 @@ for my $item ( @parcelitems ) {
 
     if ( $line{parent_ordernumber} != $line{ordernumber} ) {
         if ( grep { $_->{ordernumber} == $line{parent_ordernumber} }
-            @parcelitems
+            @orders
             )
         {
             $line{cannot_cancel} = 1;
@@ -202,7 +206,7 @@ for my $item ( @parcelitems ) {
     $line{budget_name} = $budget->{'budget_name'};
 
     push @loop_received, \%line;
-    $totalquantity += $item->{'quantityreceived'};
+    $totalquantity += $order->{quantityreceived};
 
 }
 push @book_foot_loop, map { $_ } values %foot;
