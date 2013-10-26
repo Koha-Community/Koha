@@ -2,31 +2,44 @@
 
 <h1>Z39.50 Servers</h1>
 
-<p>Koha has a powerful copy cataloging tool. Using Koha you can connect to any Z39.50 target that is publicly available or that you have the log in information to.</p>
+<p>Z39.50 is a client–server protocol for searching and retrieving information from remote computer databases, in short it's a tool used for copy cataloging. Using Koha you can connect to any Z39.50 target that is publicly available or that you have the log in information to and copy both bibliographic and/or authority records from that source.</p>
 
-<p>Koha comes with a default list of Z39.50 targets set up that you can add to, edit or delete.</p>
+<p>Koha comes with a default list of Z39.50 targets set up that you can add to, edit or delete</p>
 
-<p>To find additional targets you use IndexData's IRSpy: <a href="http://irspy.indexdata.com">http://irspy.indexdata.com</a></p>
+<p>To find additional targets you use IndexData's IRSpy: <a href="http://irspy.indexdata.com/" target="_top">http://irspy.indexdata.com</a></p>
 
 <h2>Add a Z39.50 Target</h2>
+
 <ul>
-   <li>From the main Z39.50 page, click 'New Z39.50 Server'
+	<li>From the main Z39.50 page, click 'New Z39.50 Server'
 <ul>
-	<li>Userid and Password are only required for servers that are password protected</li>
+	<li>'Z39.50 server' should be populated with a name that will help you identify the source (such as the library name).</li>
+	<li>'Hostname' will be the address to the Z39.50 target.</li>
+	<li>'Port' tells Koha what port to listen on to get results from this target.</li>
+	<li>'Userid' and 'Password' are only required for servers that are password protected.</li>
+	<li>Check the 'Checked' box if you want this target to always be selected by default.</li>
+	<li>'Rank' lets you enter where in the list you'd like this target to appear.
+<ul>
+	<li>If this is left blank the targets will be in alphabetical order.</li>
+</ul>
+</li>
+	<li>'Syntax' is the MARC flavor you use.</li>
+	<li>'Encoding' tells the system how to read special characters.</li>
+	<li>'Timeout' is helpful for targets that take a long while. You can set the timeout so that it doesn't keep trying the target if results aren't found in a reasonable amount of time.</li>
+	<li>'Record type' lets you define if this is a bibliographic or an authority target.</li>
 </ul>
 </li>
 </ul>
 
-<h2>Suggested Z39.50 Targets</h2>
+<h2>Suggested Bibliographic Z39.50 Targets</h2>
 
 <p>The following targets have been used successfully by other Koha libraries (in the Americas):</p>
-
 <ul>
 	<li>CUYAHOGA COUNTY PUBLIC webcat.cuyahoga.lib.oh.us:210 INNOPAC</li>
 	<li>GREATER SUDBURY PUBLIC 216.223.90.51:210 INNOPAC</li>
 	<li>HALIFAX PUBLIC catalogue.halifaxpubliclibraries.ca:210 horizon</li>
 	<li>HALTON HILLS PUBLIC cat.hhpl.on.ca:210 halton_hills</li>
-	<li>LIBRARY OF CONGRESS lx2.loc.gov:210 LCDB</li>
+	<li>LIBRARY OF CONGRESS lx2.loc.gov: 210 LCDB</li>
 	<li>LONDON PUBLIC LIBRARY catalogue.londonpubliclibrary.ca:210 INNOPAC</li>
 	<li>MANITOBA PUBLIC library.gov.mb.ca:210 horizon</li>
 	<li>MILTON PL cat.mpl.on.ca:210 horizon</li>
@@ -36,6 +49,15 @@
 	<li>VANCOUVER PUBLIC LIBRARY z3950.vpl.ca:210 Horizon</li>
 </ul>
 
-<p><strong>See the full documentation for Z39.50 Servers in the <a href="http://manual.koha-community.org/3.12/en/additionaladmin.html#z3950admin">manual</a> (online).</strong></p>
+<h2>Suggested Authority Z39.50 Targets</h2>
+
+<p>The following targets have been used successfully by other Koha libraries:</p>
+
+<ul>
+	<li>LIBRARIESAUSTRALIA AUTHORITIES z3950-test.librariesaustralia.nla.gov.au:210 AuthTraining Userid: ANLEZ / Password: z39.50</li>
+	<li>LIBRARY OF CONGRESS NAME AUTHORITIES lx2.loc.gov:210 NAF</li>
+	<li>LIBRARY OF CONGRESS SUBJECT AUTHORITIES lx2.loc.gov:210 SAF</li>
+</ul>
+<p><strong>See the full documentation for Z39.50 Servers in the <a href="http://manual.koha-community.org/3.14/en/additionaladmin.html#z3950admin">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
