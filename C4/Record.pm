@@ -702,13 +702,13 @@ sub marc2bibtex {
 	    author    => $author,
 	    title     => $record->subfield("245", "a") || "",
 	    editor    => $record->subfield("260", "f") || "",
-	    publisher => $record->subfield("260", "b") || "",
-	    year      => $record->subfield("260", "c") || $record->subfield("260", "g") || "",
+        publisher => $record->subfield("264", "b") || $record->subfield("260", "b") || "",
+        year      => $record->subfield("264", "c") || $record->subfield("260", "c") || $record->subfield("260", "g") || "",
 
 	    # Optional
 	    # unimarc to marc21 specification says not to convert 200$v to marc21
 	    series  =>  $record->subfield("490", "a") || "",
-	    address =>  $record->subfield("260", "a") || "",
+        address =>  $record->subfield("264", "a") || $record->subfield("260", "a") || "",
 	    edition =>  $record->subfield("250", "a") || "",
 	    note    =>  $record->subfield("500", "a") || "",
 	    url     =>  $record->subfield("856", "u") || ""

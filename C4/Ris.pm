@@ -209,7 +209,12 @@ sub marc2ris {
 	    &print_pubinfo($record->field('210'));
 	}
 	else { ## marc21, ukmarc
-	    &print_pubinfo($record->field('260'));
+            if ($record->field('264')) {
+                 &print_pubinfo($record->field('264'));
+            }
+            else {
+            &print_pubinfo($record->field('260'));
+            }
 	}
 
 	## 6XX fields contain KW candidates. We add all of them to a
@@ -252,7 +257,7 @@ sub marc2ris {
 	elsif ($intype eq "ukmarc") {
 	    foreach ('500', '501', '502', '503', '504', '505', '506', '508', '514', '515', '516', '521', '524', '525', '528', '530', '531', '532', '533', '534', '535', '537', '538', '540', '541', '542', '544', '554', '555', '556', '557', '561', '563', '580', '583', '584', '586') {
 		&pool_subx(\@notepool, $_, $record->field($_));
-	    }
+        }
 	}
 	else { ## assume marc21
 	    foreach ('500', '501', '502', '504', '505', '506', '507', '508', '510', '511', '513', '514', '515', '516', '518', '521', '522', '524', '525', '526', '530', '533', '534', '535') {
@@ -642,7 +647,7 @@ sub print_pubinfo {
     my($pubinfofield) = @_;
 
     if (!$pubinfofield) {
-	print "<marc>no publication information found (260)\r\n" if $marcprint;
+    print "<marc>no publication information found (260/264)\r\n" if $marcprint;
 	warn("no publication information found") if $marcprint;
     }
     else {
