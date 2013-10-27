@@ -101,7 +101,7 @@ function highlightOn() {
     for (x in q_array) {
         q_array[x] = q_array[x].replace(/\w*:([\w])/, "$1");
         q_array[x] = q_array[x].toLowerCase();
-        var myStopwords = "[% Koha.Preference('OpacHighlightedStopWords') %]".toLowerCase().split('|');
+        var myStopwords = "[% Koha.Preference('HighlightedStopWords') %]".toLowerCase().split('|');
         if ( (q_array[x].length > 0) && ($.inArray(q_array[x], myStopwords) == -1) ) {
             $(".title").highlight(q_array[x]);
             $(".author").highlight(q_array[x]);
