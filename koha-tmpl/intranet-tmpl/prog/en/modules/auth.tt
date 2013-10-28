@@ -16,7 +16,14 @@
 <div id="login">
 <h1><a href="http://koha-community.org">Koha</a></h1>
 [% IF ( nopermission ) %]
-<div id="login_error"><strong>Error:</strong> You do not have permission to access this page. <a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Click to log out</a></div>
+<div id="login_error">
+    <strong>Error:</strong>
+    You do not have permission to access this page.
+</div>
+<div id="onerror_actions">
+    <a href="javascript:window.history.back()" class="button">Previous page</a>
+    <a href="/cgi-bin/koha/mainpage.pl?logout.x=1" class="button">Log out</a>
+</div>
 [% END %]
 
 [% IF ( timed_out ) %]
