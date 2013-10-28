@@ -27,7 +27,7 @@ use base 'Exporter';
 use version; our $VERSION = qv('1.0.0');
 
 our @EXPORT = (
-    qw( dt_from_string output_pref format_sqldatetime output_pref_due format_sqlduedatetime)
+    qw( dt_from_string output_pref format_sqldatetime )
 );
 
 =head1 DateUtils
@@ -154,31 +154,6 @@ sub output_pref {
 
 }
 
-=head2 output_pref_due
-
-$date_string = output_pref_due({ dt => $dt [, dateformat => $date_format, timeformat => $time_format, dateonly => 0|1 ] });
-$date_string = output_pref_due($dt);
-
-Returns a string containing the time & date formatted as per the C4::Context setting
-
-This routine can either be passed a DateTime object or or a hashref.  If it is
-passed a hashref, the expected keys are a mandatory 'dt' for the DateTime,
-an optional 'dateformat' to override the dateformat system preference, an
-optional 'timeformat' to override the TimeFormat system preference value,
-and an optional 'dateonly' to specify that only the formatted date string
-should be returned without the time.
-
-This is effectively a wrapper around output_pref for due dates;
-the time portion is stripped if it is '23:59'
-
-=cut
-
-sub output_pref_due {
-    my $disp_str = output_pref(@_);
-    $disp_str =~ s/ 23:59//;
-    return $disp_str;
-}
-
 =head2 format_sqldatetime
 
 $string = format_sqldatetime( $string_as_returned_from_db );
@@ -199,34 +174,6 @@ sub format_sqldatetime {
         return q{} unless $dt;
         $dt->truncate( to => 'minute' );
         return output_pref({
-            dt => $dt,
-            dateformat => $force_pref,
-            timeformat => $force_time,
-            dateonly => $dateonly
-        });
-    }
-    return q{};
-}
-
-=head2 format_sqlduedatetime
-
-$string = format_sqldatetime( $string_as_returned_from_db );
-
-a convenience routine for calling dt_from_string and formatting the result
-with output_pref_due as it is a frequent activity in scripts
-
-=cut
-
-sub format_sqlduedatetime {
-    my $str        = shift;
-    my $force_pref = shift;    # if testing we want to override Context
-    my $force_time = shift;
-    my $dateonly   = shift;
-
-    if ( defined $str && $str =~ m/^\d{4}-\d{2}-\d{2}/ ) {
-        my $dt = dt_from_string( $str, 'sql' );
-        $dt->truncate( to => 'minute' );
-        return output_pref_due({
             dt => $dt,
             dateformat => $force_pref,
             timeformat => $force_time,
