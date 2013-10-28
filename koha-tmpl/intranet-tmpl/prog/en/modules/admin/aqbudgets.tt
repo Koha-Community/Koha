@@ -276,11 +276,42 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
 
     <td>[% budge.budget_code_indent %]</td>
     <td>[% budge.budget_name %]</td>
-    <td class="data">[% budge.budget_amount %] </td>
-    <td class="data">[% budge.budget_ordered %]</td>
-    <td class="data">[% budge.total_ordered %]</td>
-    <td class="data">[% budge.budget_spent %] </td>
-    <td class="data">[% budge.total_spent %]</td>
+    <td class="data">
+      [% IF budge.budget_parent_id %]
+        <span style="color:grey">[% budge.budget_amount %]</span>
+      [% ELSE %]
+        [% budge.budget_amount %]
+      [% END %]
+    </td>
+    <td class="data">
+      [% IF budge.budget_parent_id %]
+        <span style="color:grey">[% budge.budget_ordered %]</span>
+      [% ELSE %]
+        [% budge.budget_ordered %]
+      [% END %]
+    </td>
+    <td class="data">
+      [% IF budge.budget_parent_id %]
+        <span style="color:grey">[% budge.total_ordered %]</span>
+      [% ELSE %]
+        [% budge.total_ordered %]
+      [% END %]
+    </td>
+    <td class="data">
+      [% IF budge.budget_parent_id %]
+        <span style="color:grey">[% budge.budget_spent %]</span>
+      [% ELSE %]
+        [% budge.budget_spent %]
+      [% END %]
+    </td>
+    <td class="data">
+      [% IF budge.budget_parent_id %]
+        <span style="color:grey">[% budge.total_spent %]</span>
+      [% ELSE %]
+        [% budge.total_spent %]
+      [% END %]
+    </td>
+
 
     [% BLOCK colorcellvalue %]
         [% IF (value > 0) %]
