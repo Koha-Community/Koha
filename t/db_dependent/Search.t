@@ -12,7 +12,7 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 194;
+use Test::More tests => 196;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;
@@ -451,6 +451,12 @@ sub run_marc21_search_tests {
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 2, "getRecords generated multi-faceted search matched right number of records");
 
+    ( $error, $query, $simple_query, $query_cgi,
+    $query_desc, $limit, $limit_cgi, $limit_desc,
+    $stopwords_removed, $query_type ) = buildQuery([], [ 'NEKLS' ], [ 'Code-institution' ], [], [], 0, 'en');
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    is($results_hashref->{biblioserver}->{hits}, 12,
+       'search using index whose name contains "ns" returns expected results (bug 10271)');
 
     # FIXME: the availability limit does not actually work, so for the moment we
     # are just checking that it behaves consistently
