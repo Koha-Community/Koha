@@ -834,23 +834,27 @@ sub get_sql {
 }
 
 sub _get_column_defs {
-	my ($cgi) = @_;
-	my %columns;
-	my $columns_def_file = "columns.def";
-	my $htdocs = C4::Context->config('intrahtdocs');                       
-	my $section='intranet';
-    my ($theme, $lang, $availablethemes) = C4::Templates::themelanguage($htdocs, $columns_def_file, $section,$cgi);
+    my ($cgi) = @_;
+    my %columns;
+    my $columns_def_file = "columns.def";
+    my $htdocs = C4::Context->config('intrahtdocs');
+    my $section = 'intranet';
 
-	my $full_path_to_columns_def_file="$htdocs/$theme/$lang/$columns_def_file";    
-	open (COLUMNS,$full_path_to_columns_def_file);
-	while (my $input = <COLUMNS>){
-		chomp $input;
-		my @row =split(/\t/,$input);
-		$columns{$row[0]}= $row[1];
-	}
+    # We need the theme and the lang
+    # Since columns.def is not in the modules directory, we cannot sent it for the $tmpl var
+    my ($theme, $lang, $availablethemes) = C4::Templates::themelanguage($htdocs, 'about.tt', $section, $cgi);
 
-	close COLUMNS;
-	return \%columns;
+    my $full_path_to_columns_def_file="$htdocs/$theme/$lang/$columns_def_file";
+    open (my $fh, $full_path_to_columns_def_file);
+    while ( my $input = <$fh> ){
+        chomp $input;
+        if ( $input =~ m|<field name="(.*)">(.*)</field>| ) {
+            my ( $field, $translation ) = ( $1, $2 );
+            $columns{$field} = $translation;
+        }
+    }
+    close $fh;
+    return \%columns;
 }
 
 =head2 build_authorised_value_list($authorised_value)
