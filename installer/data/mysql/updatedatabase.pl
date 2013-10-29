@@ -7330,8 +7330,8 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "XXX";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+$DBversion = "3.13.00.033";
+if ( CheckVersion($DBversion) ) {
     $dbh->do(qq|
         DROP TABLE IF EXISTS subscription_frequencies
     |);
@@ -7579,7 +7579,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
         }
     }
 
-    print "Upgrade to $DBversion done (Add subscription_frequencies and subscription_numberpatterns tables)\n";
+    print "Upgrade to $DBversion done (Bug 7688: add subscription_frequencies and subscription_numberpatterns tables)\n";
     SetVersion($DBversion);
 }
 
