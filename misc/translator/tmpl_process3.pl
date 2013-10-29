@@ -242,7 +242,7 @@ usage_error('You must at least specify input and string list filenames.')
     if !$in_dir || !defined $str_file;
 
 # Type match defaults to *.tt plus *.inc if not specified
-$type = "tt|inc|xsl|xml" if !defined($type);
+$type = "tt|inc|xsl|xml|def" if !defined($type);
 
 # Check the inputs for being directories
 usage_error("$in_dir: Input must be a directory.\n"
