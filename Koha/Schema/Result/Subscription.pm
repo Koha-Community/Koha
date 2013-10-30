@@ -86,23 +86,15 @@ __PACKAGE__->table("subscription");
 
 =head2 periodicity
 
-  data_type: 'tinyint'
-  default_value: 0
+  data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
 
-=head2 dow
+=head2 countissuesperunit
 
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 1
-  size: 100
-
-=head2 numberingmethod
-
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 1
-  size: 100
+  data_type: 'integer'
+  default_value: 1
+  is_nullable: 0
 
 =head2 notes
 
@@ -116,72 +108,9 @@ __PACKAGE__->table("subscription");
   is_nullable: 0
   size: 100
 
-=head2 add1
-
-  data_type: 'integer'
-  default_value: 0
-  is_nullable: 1
-
-=head2 every1
-
-  data_type: 'integer'
-  default_value: 0
-  is_nullable: 1
-
-=head2 whenmorethan1
-
-  data_type: 'integer'
-  default_value: 0
-  is_nullable: 1
-
-=head2 setto1
-
-  data_type: 'integer'
-  is_nullable: 1
-
 =head2 lastvalue1
 
   data_type: 'integer'
-  is_nullable: 1
-
-=head2 add2
-
-  data_type: 'integer'
-  default_value: 0
-  is_nullable: 1
-
-=head2 every2
-
-  data_type: 'integer'
-  default_value: 0
-  is_nullable: 1
-
-=head2 whenmorethan2
-
-  data_type: 'integer'
-  default_value: 0
-  is_nullable: 1
-
-=head2 setto2
-
-  data_type: 'integer'
-  is_nullable: 1
-
-=head2 lastvalue2
-
-  data_type: 'integer'
-  is_nullable: 1
-
-=head2 add3
-
-  data_type: 'integer'
-  default_value: 0
-  is_nullable: 1
-
-=head2 every3
-
-  data_type: 'integer'
-  default_value: 0
   is_nullable: 1
 
 =head2 innerloop1
@@ -190,27 +119,15 @@ __PACKAGE__->table("subscription");
   default_value: 0
   is_nullable: 1
 
+=head2 lastvalue2
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =head2 innerloop2
 
   data_type: 'integer'
   default_value: 0
-  is_nullable: 1
-
-=head2 innerloop3
-
-  data_type: 'integer'
-  default_value: 0
-  is_nullable: 1
-
-=head2 whenmorethan3
-
-  data_type: 'integer'
-  default_value: 0
-  is_nullable: 1
-
-=head2 setto3
-
-  data_type: 'integer'
   is_nullable: 1
 
 =head2 lastvalue3
@@ -218,11 +135,11 @@ __PACKAGE__->table("subscription");
   data_type: 'integer'
   is_nullable: 1
 
-=head2 issuesatonce
+=head2 innerloop3
 
-  data_type: 'tinyint'
-  default_value: 1
-  is_nullable: 0
+  data_type: 'integer'
+  default_value: 0
+  is_nullable: 1
 
 =head2 firstacquidate
 
@@ -241,6 +158,12 @@ __PACKAGE__->table("subscription");
   data_type: 'text'
   is_nullable: 1
 
+=head2 skip_serialseq
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =head2 letter
 
   data_type: 'varchar'
@@ -249,9 +172,15 @@ __PACKAGE__->table("subscription");
 
 =head2 numberpattern
 
-  data_type: 'tinyint'
-  default_value: 0
+  data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
+
+=head2 locale
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 80
 
 =head2 distributedto
 
@@ -281,12 +210,6 @@ __PACKAGE__->table("subscription");
   default_value: (empty string)
   is_nullable: 0
   size: 10
-
-=head2 hemisphere
-
-  data_type: 'tinyint'
-  default_value: 0
-  is_nullable: 1
 
 =head2 lastbranch
 
@@ -360,63 +283,39 @@ __PACKAGE__->add_columns(
   "numberlength",
   { data_type => "integer", default_value => 0, is_nullable => 1 },
   "periodicity",
-  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
-  "dow",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 100 },
-  "numberingmethod",
-  { data_type => "varchar", default_value => "", is_nullable => 1, size => 100 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "countissuesperunit",
+  { data_type => "integer", default_value => 1, is_nullable => 0 },
   "notes",
   { data_type => "mediumtext", is_nullable => 1 },
   "status",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 100 },
-  "add1",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
-  "every1",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
-  "whenmorethan1",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
-  "setto1",
-  { data_type => "integer", is_nullable => 1 },
   "lastvalue1",
   { data_type => "integer", is_nullable => 1 },
-  "add2",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
-  "every2",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
-  "whenmorethan2",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
-  "setto2",
-  { data_type => "integer", is_nullable => 1 },
-  "lastvalue2",
-  { data_type => "integer", is_nullable => 1 },
-  "add3",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
-  "every3",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
   "innerloop1",
   { data_type => "integer", default_value => 0, is_nullable => 1 },
+  "lastvalue2",
+  { data_type => "integer", is_nullable => 1 },
   "innerloop2",
   { data_type => "integer", default_value => 0, is_nullable => 1 },
-  "innerloop3",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
-  "whenmorethan3",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
-  "setto3",
-  { data_type => "integer", is_nullable => 1 },
   "lastvalue3",
   { data_type => "integer", is_nullable => 1 },
-  "issuesatonce",
-  { data_type => "tinyint", default_value => 1, is_nullable => 0 },
+  "innerloop3",
+  { data_type => "integer", default_value => 0, is_nullable => 1 },
   "firstacquidate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "manualhistory",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "irregularity",
   { data_type => "text", is_nullable => 1 },
+  "skip_serialseq",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "letter",
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "numberpattern",
-  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "locale",
+  { data_type => "varchar", is_nullable => 1, size => 80 },
   "distributedto",
   { data_type => "text", is_nullable => 1 },
   "internalnotes",
@@ -427,8 +326,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "", is_nullable => 1, size => 80 },
   "branchcode",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
-  "hemisphere",
-  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
   "lastbranch",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "serialsadditems",
@@ -476,6 +373,46 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 numberpattern
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::SubscriptionNumberpattern>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "numberpattern",
+  "Koha::Schema::Result::SubscriptionNumberpattern",
+  { id => "numberpattern" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 periodicity
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::SubscriptionFrequency>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "periodicity",
+  "Koha::Schema::Result::SubscriptionFrequency",
+  { id => "periodicity" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 subscriptionroutinglists
 
 Type: has_many
@@ -492,8 +429,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pzAIpQKBqHodOb1Q4/xIfg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-30 02:42:01
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JoTdms86n/xfPo8YUnDHUQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
