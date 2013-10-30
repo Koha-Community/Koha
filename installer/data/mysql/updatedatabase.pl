@@ -7583,7 +7583,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.13.00.034";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("
         ALTER TABLE `import_batches`
