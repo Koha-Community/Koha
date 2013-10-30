@@ -82,7 +82,7 @@ __PACKAGE__->table("import_batches");
 
   data_type: 'enum'
   default_value: 'always_add'
-  extra: {list => ["always_add","add_only_for_matches","add_only_for_new","ignore"]}
+  extra: {list => ["always_add","add_only_for_matches","add_only_for_new","ignore","replace"]}
   is_nullable: 0
 
 =head2 import_status
@@ -163,6 +163,7 @@ __PACKAGE__->add_columns(
         "add_only_for_matches",
         "add_only_for_new",
         "ignore",
+        "replace",
       ],
     },
     is_nullable => 0,
@@ -234,8 +235,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BJP/3AecpTwJUqkidgha7w
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-30 03:46:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4UfJtTeAzzsuBycjsn2foQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
