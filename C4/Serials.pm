@@ -1979,7 +1979,7 @@ name,title,planneddate,serialseq,serial.subscriptionid from tables : subscriptio
 sub GetLateOrMissingIssues {
     my ( $supplierid, $serialid, $order ) = @_;
 
-    return unless ($supplierid);
+    return unless ( $supplierid or $serialid );
 
     my $dbh = C4::Context->dbh;
     my $sth;
