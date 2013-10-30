@@ -238,6 +238,7 @@ unless( defined $invoice->{closedate} ) {
             ean => $ean,
             basketgroupname => $basketgroupname,
             pending => 1,
+            ordered => 1,
         });
         $template->param(
             summaryfilter => $search,
@@ -249,7 +250,7 @@ unless( defined $invoice->{closedate} ) {
     }else{
         $pendingorders = SearchOrders({
             booksellerid => $booksellerid,
-            pending => 1
+            ordered => 1
         });
     }
     my $countpendings = scalar @$pendingorders;

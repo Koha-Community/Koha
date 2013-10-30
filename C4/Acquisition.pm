@@ -1654,6 +1654,7 @@ sub SearchOrders {
     my $basketgroupname = $params->{basketgroupname};
     my $owner = $params->{owner};
     my $pending = $params->{pending};
+    my $ordered = $params->{ordered};
 
     my $dbh = C4::Context->dbh;
     my @args = ();
@@ -1680,9 +1681,14 @@ sub SearchOrders {
         WHERE (datecancellationprinted is NULL)
     };
 
-    $query .= q{
-        AND (quantity > quantityreceived OR quantityreceived is NULL)
-    } if $pending;
+    if ( $pending ) {
+        $query .= q{ AND (quantity > quantityreceived OR quantityreceived is NULL)};
+    }
+    if ( $ordered ) {
+        $query .= q{ AND (quantity > quantityreceived OR quantityreceived is NULL)}
+            unless $pending;
+        $query .= q{ AND aqorders.orderstatus IN ( "ordered", "partial" )};
+    }
 
     my $userenv = C4::Context->userenv;
     if ( C4::Context->preference("IndependentBranches") ) {
