@@ -136,6 +136,12 @@ for my $vendor (@suppliers) {
                 $basket->{authorisedby_firstname} = $member->{firstname};
                 $basket->{authorisedby_surname} = $member->{surname};
             }
+            if ($basket->{basketgroupid}) {
+                my $basketgroup = C4::Acquisition::GetBasketgroup($basket->{basketgroupid});
+                if ($basketgroup) {
+                    $basket->{basketgroup} = $basketgroup;
+                }
+            }
             push @{$loop_basket}, $basket; 
         }
     }
