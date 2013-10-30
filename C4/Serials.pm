@@ -1459,7 +1459,7 @@ sub ModSubscription {
 =head2 NewSubscription
 
 $subscriptionid = &NewSubscription($auser,branchcode,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
-    $startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
+    $startdate,$periodicity,$numberlength,$weeklength,$monthlength,
     $lastvalue1,$innerloop1,$lastvalue2,$innerloop2,$lastvalue3,$innerloop3,
     $status, $notes, $letter, $firstacquidate, $irregularity, $numberpattern,
     $callnumber, $hemisphere, $manualhistory, $internalnotes, $serialsadditems,

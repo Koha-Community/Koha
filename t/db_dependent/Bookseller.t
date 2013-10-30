@@ -190,38 +190,28 @@ my ($biblionumber, $biblioitemnumber) = AddBiblio($bib, '');
 $bookseller1fromid = C4::Bookseller::GetBookSellerFromId($id_supplier1);
 is( $bookseller1fromid->{subscriptioncount},
     0, 'Supplier1 has 0 subscription' );
-my $id_subscription1 = C4::Serials::NewSubscription(
-    undef,      "",            $id_supplier1, undef,
-    $id_budget, $biblionumber, '01-01-2013',  undef,
-    undef,      undef,         undef,         undef,
-    undef,      undef,         undef,         undef,
-    undef,      undef,         undef,         undef,
-    undef,      undef,         undef,         undef,
-    undef,      undef,         undef,         undef,
-    undef,      undef,         undef,         1,
-    "subscription notes",    undef,         undef,         undef,
-    undef,      undef,         undef,         0,
-    "intnotes", 0,             undef,         undef,
-    0,          undef,         '31-12-2013',
+
+my $id_subscription1 = NewSubscription(
+    undef,      "",     $id_supplier1, undef, $id_budget, $biblionumber,
+    '01-01-2013',undef, undef, undef,  undef,
+    undef,      undef,  undef, undef, undef, undef,
+    1,          "subscription notes",undef, '01-01-2013', undef, undef,
+    undef,       undef,  0,    "intnotes",  0,
+    undef, undef, 0,          undef,         '31-12-2013', 0
 );
 
 my @subscriptions = SearchSubscriptions({biblionumber => $biblionumber});
 is($subscriptions[0]->{publicnotes}, 'subscription notes', 'subscription search results include public notes (bug 10689)');
 
-my $id_subscription2 = C4::Serials::NewSubscription(
-    undef,      "",            $id_supplier1, undef,
-    $id_budget, $biblionumber, '01-01-2013',  undef,
-    undef,      undef,         undef,         undef,
-    undef,      undef,         undef,         undef,
-    undef,      undef,         undef,         undef,
-    undef,      undef,         undef,         undef,
-    undef,      undef,         undef,         undef,
-    undef,      undef,         undef,         1,
-    "subscription notes",    undef,         undef,         undef,
-    undef,      undef,         undef,         0,
-    "intnotes", 0,             undef,         undef,
-    0,          undef,         '31-12-2013',
+my $id_subscription2 = NewSubscription(
+    undef,      "",     $id_supplier1, undef, $id_budget, $biblionumber,
+    '01-01-2013',undef, undef, undef,  undef,
+    undef,      undef,  undef, undef, undef, undef,
+    1,          "subscription notes",undef, '01-01-2013', undef, undef,
+    undef,       undef,  0,    "intnotes",  0,
+    undef, undef, 0,          undef,         '31-12-2013', 0
 );
+
 $bookseller1fromid = C4::Bookseller::GetBookSellerFromId($id_supplier1);
 is( $bookseller1fromid->{subscriptioncount},
     2, 'Supplier1 has 2 subscriptions' );
@@ -371,19 +361,13 @@ ModBasket($basket3info);
 ModBasket($basket4info);
 
 #Add 1 subscription
-my $id_subscription3 = C4::Serials::NewSubscription(
-    undef,      "",            $id_supplier3, undef,
-    $id_budget, $biblionumber, '01-01-2013',  undef,
-    undef,      undef,         undef,         undef,
-    undef,      undef,         undef,         undef,
-    undef,      undef,         undef,         undef,
-    undef,      undef,         undef,         undef,
-    undef,      undef,         undef,         undef,
-    undef,      undef,         undef,         1,
-    "notes",    undef,         undef,         undef,
-    undef,      undef,         undef,         0,
-    "intnotes", 0,             undef,         undef,
-    0,          undef,         '31-12-2013',
+my $id_subscription3 = NewSubscription(
+    undef,      "",     $id_supplier1, undef, $id_budget, $biblionumber,
+    '01-01-2013',undef, undef, undef,  undef,
+    undef,      undef,  undef, undef, undef, undef,
+    1,          "subscription notes",undef, '01-01-2013', undef, undef,
+    undef,       undef,  0,    "intnotes",  0,
+    undef, undef, 0,          undef,         '31-12-2013', 0
 );
 
 #Add 4 orders

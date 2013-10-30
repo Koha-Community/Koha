@@ -44,12 +44,12 @@ my $budget_id = AddBudget({
 });
 
 my $subscriptionid = NewSubscription(
-    undef,      "",     undef, undef, $budget_id, $biblionumber, '01-01-2013',undef,
-    undef,      undef,  undef, undef, undef,      undef,         undef,  undef,
-    undef,      undef,  undef, undef, undef,      undef,         undef,  undef,
-    undef,      undef,  undef, undef, undef,      undef,         undef,  1,
-    "notes",    undef,  undef, undef, undef,      undef,         undef,  0,
-    "intnotes", 0,      undef, undef, 0,          undef,         '31-12-2013',
+    undef,      "",     undef, undef, $budget_id, $biblionumber,
+    '01-01-2013',undef, undef, undef,  undef,
+    undef,      undef,  undef, undef, undef, undef,
+    1,          "notes",undef, '01-01-2013', undef, undef,
+    undef,       undef,  0,    "intnotes",  0,
+    undef, undef, 0,          undef,         '31-12-2013', 0
 );
 die unless $subscriptionid;
 
