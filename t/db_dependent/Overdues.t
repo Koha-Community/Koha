@@ -1,11 +1,13 @@
 #!/usr/bin/perl;
 
 use Modern::Perl;
-use Test::More;# tests => 3;
+use Test::More tests => 16;
 
 use C4::Context;
+use C4::Branch;
 use_ok('C4::Overdues');
 can_ok('C4::Overdues', 'GetOverdueMessageTransportTypes');
+can_ok('C4::Overdues', 'GetBranchcodesWithOverdueRules');
 
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
@@ -73,5 +75,50 @@ is_deeply( $mtts, ['email', 'sms'], 'GetOverdueMessageTransportTypes: second ove
 $mtts = C4::Overdues::GetOverdueMessageTransportTypes('', 'PT', 3);
 is_deeply( $mtts, ['print', 'sms', 'email'], 'GetOverdueMessageTransportTypes: third overdue is by print, sms and email for PT (default). With print in first.' );
 
+# Test GetBranchcodesWithOverdueRules
+$dbh->do(q|DELETE FROM overduerules|);
+$dbh->do(q|
+    INSERT INTO overduerules
+        ( branchcode,categorycode, delay1,letter1,debarred1, delay2,letter2,debarred2, delay3,letter3,debarred3 )
+        VALUES
+        ( '', '', 1, 'LETTER_CODE1', 1, 5, 'LETTER_CODE2', 1, 10, 'LETTER_CODE3', 1 )
+|);
 
-done_testing;
+my $all_branches = C4::Branch::GetBranches;
+my @branchcodes = keys %$all_branches;
+
+my @overdue_branches = C4::Overdues::GetBranchcodesWithOverdueRules();
+is_deeply( [ sort @overdue_branches ], [ sort @branchcodes ], 'If a default rule exists, all branches should be returned' );
+
+$dbh->do(q|
+    INSERT INTO overduerules
+        ( branchcode,categorycode, delay1,letter1,debarred1, delay2,letter2,debarred2, delay3,letter3,debarred3 )
+        VALUES
+        ( 'CPL', '', 1, 'LETTER_CODE1', 1, 5, 'LETTER_CODE2', 1, 10, 'LETTER_CODE3', 1 )
+|);
+
+@overdue_branches = C4::Overdues::GetBranchcodesWithOverdueRules();
+is_deeply( [ sort @overdue_branches ], [ sort @branchcodes ], 'If a default rule exists and a specific rule exists, all branches should be returned' );
+
+$dbh->do(q|DELETE FROM overduerules|);
+$dbh->do(q|
+    INSERT INTO overduerules
+        ( branchcode,categorycode, delay1,letter1,debarred1, delay2,letter2,debarred2, delay3,letter3,debarred3 )
+        VALUES
+        ( 'CPL', '', 1, 'LETTER_CODE1', 1, 5, 'LETTER_CODE2', 1, 10, 'LETTER_CODE3', 1 )
+|);
+
+@overdue_branches = C4::Overdues::GetBranchcodesWithOverdueRules();
+is_deeply( \@overdue_branches, ['CPL'] , 'If only a specific rule exist, only 1 branch should be returned' );
+
+$dbh->do(q|DELETE FROM overduerules|);
+$dbh->do(q|
+    INSERT INTO overduerules
+        ( branchcode,categorycode, delay1,letter1,debarred1, delay2,letter2,debarred2, delay3,letter3,debarred3 )
+        VALUES
+        ( 'CPL', '', 1, 'LETTER_CODE1_CPL', 1, 5, 'LETTER_CODE2_CPL', 1, 10, 'LETTER_CODE3_CPL', 1 ),
+        ( 'MPL', '', 1, 'LETTER_CODE1_MPL', 1, 5, 'LETTER_CODE2_MPL', 1, 10, 'LETTER_CODE3_MPL', 1 )
+|);
+
+@overdue_branches = C4::Overdues::GetBranchcodesWithOverdueRules();
+is_deeply( \@overdue_branches, ['CPL', 'MPL'] , 'If only 2 specific rules exist, 2 branches should be returned' );

@@ -756,14 +756,18 @@ returns a list of branch codes for branches with overdue rules defined.
 
 sub GetBranchcodesWithOverdueRules {
     my $dbh               = C4::Context->dbh;
-    my $rqoverduebranches = $dbh->prepare("SELECT DISTINCT branchcode FROM overduerules WHERE delay1 IS NOT NULL AND branchcode <> '' ORDER BY branchcode");
-    $rqoverduebranches->execute;
-    my @branches = map { shift @$_ } @{ $rqoverduebranches->fetchall_arrayref };
-    if (!$branches[0]) {
-       my $availbranches = C4::Branch::GetBranches();
-       @branches = keys %$availbranches;
+    my $branchcodes = $dbh->selectcol_arrayref(q|
+        SELECT DISTINCT(branchcode)
+        FROM overduerules
+        WHERE delay1 IS NOT NULL
+        ORDER BY branchcode
+    |);
+    if ( $branchcodes->[0] eq '' ) {
+        # If a default rule exists, all branches should be returned
+        my $availbranches = C4::Branch::GetBranches();
+        return keys %$availbranches;
     }
-    return @branches;
+    return @$branchcodes;
 }
 
 =head2 CheckItemNotify
