@@ -45,12 +45,14 @@ my $input_file = "";
 my $batch_comment = "";
 my $want_help = 0;
 my $no_replace ;
+my $item_action = 'always_add';
 
 my $result = GetOptions(
     'encoding:s'    => \$encoding,
     'file:s'        => \$input_file,
     'match|match-bibs:s'  => \$match,
     'add-items'     => \$add_items,
+    'item-action:s' => \$item_action,
     'no-replace'    => \$no_replace,
     'comment:s'     => \$batch_comment,
     'authorities'   => \$authorities,
@@ -117,7 +119,7 @@ sub process_batch {
         # set default record overlay behavior
         SetImportBatchOverlayAction($batch_id, ($no_replace) ? 'ignore' : 'replace');
         SetImportBatchNoMatchAction($batch_id, 'create_new');
-        SetImportBatchItemAction($batch_id, 'always_add');
+        SetImportBatchItemAction($batch_id, $item_action);
         print "... looking for matches with records already in database\n";
         $num_with_matches = BatchFindDuplicates($batch_id, $matcher, 10, 100, \&print_progress_and_commit);
         print "... finished looking for matches\n";
@@ -186,6 +188,10 @@ Parameters:
     --add-items             use this option to specify that
                             item data is embedded in the MARC
                             bibs and should be parsed.
+    --item-action           action to take if --add-items is specifed;
+                            choices are 'always_add',
+                            'add_only_for_matches', 'add_only_for_new',
+                            'ignore', or 'replace'
     --no-replace            overlay action for record: default is to
                             replace extant with the imported record.
     --comment <comment>     optional comment to describe
