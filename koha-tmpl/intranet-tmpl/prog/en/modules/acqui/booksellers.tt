@@ -102,6 +102,7 @@ $(document).ready(function() {
                                     <th>Items expected</th>
                                     <th>Created by</th>
                                     <th>Date</th>
+                                    <th>Basket group</th>
                                     <th>Closed</th>
                                     <th>&nbsp;</th>
                                 </tr>
@@ -123,6 +124,16 @@ $(document).ready(function() {
                                             [% basket.authorisedby_surname %]
                                         </td>
                                         <td><span title="[% basket.creationdate %]">[% basket.creationdate | $KohaDates %]</span></td>
+                                        <td>
+                                          [% IF basket.basketgroup %]
+                                            [% basketgroup = basket.basketgroup %]
+                                            [% IF basketgroup.closed %]
+                                              [% basketgroup.name %] (closed)
+                                            [% ELSE %]
+                                              <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=[% basket.booksellerid %]&basketgroupid=[% basketgroup.id %]">[% basketgroup.name %]</a>
+                                            [% END %]
+                                          [% END %]
+                                        </td>
                                         <td>
                                             [% IF ( basket.closedate ) %]
                                                 <span title="[% basket.closedate %]">[% basket.closedate | $KohaDates %]</span>
