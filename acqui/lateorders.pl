@@ -66,7 +66,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 });
 
 my $booksellerid = $input->param('booksellerid') || undef; # we don't want "" or 0
-my $delay        = $input->param('delay');
+my $delay        = $input->param('delay') // 0;
 
 # Get the "date from" param if !defined is today
 my $estimateddeliverydatefrom = $input->param('estimateddeliverydatefrom');
