@@ -495,7 +495,8 @@ sub ModifyRecordWithTemplate {
     warn( "Unmodified Record:\n" . $record->as_formatted() ) if DEBUG >= 10;
 
     my $current_date = DateTime->now()->ymd();
-    my $branchcode = C4::Context->userenv->{branch};
+    my $branchcode = '';
+    $branchcode = C4::Context->userenv->{branch} if C4::Context->userenv;
 
     my @actions = GetModificationTemplateActions( $template_id );
 
