@@ -7608,7 +7608,9 @@ CREATE TABLE borrower_debarments (
   created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   updated timestamp NULL DEFAULT NULL,
   PRIMARY KEY (borrower_debarment_id),
-  KEY borrowernumber (borrowernumber)
+  KEY borrowernumber (borrowernumber) ,
+  CONSTRAINT `borrower_debarments_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
+    ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
     });
 
