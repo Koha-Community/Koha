@@ -45,7 +45,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('autoMemberNum','1','','If ON, patron number is auto-calculated','YesNo'),
 ('AutoRemoveOverduesRestrictions','0',NULL,'Defines whether an OVERDUES debarment should be lifted automatically if all overdue items are returned by the patron.','YesNo'),
 ('AutoResumeSuspendedHolds','1',NULL,'Allow suspended holds to be automatically resumed by a set date.','YesNo'),
-('AutoSelfCheckAllowed','0','For corporate and special libraries which want web-based self-check available from any PC without the need for a manual staff login. Most libraries will want to leave this turned off. If on, requires self-check ID and password to be entered in AutoSelfCheckID and AutoSelfCheckPass sysprefs.','YesNo'),
+('AutoSelfCheckAllowed','0','','For corporate and special libraries which want web-based self-check available from any PC without the need for a manual staff login. Most libraries will want to leave this turned off. If on, requires self-check ID and password to be entered in AutoSelfCheckID and AutoSelfCheckPass sysprefs.','YesNo'),
 ('AutoSelfCheckID','','','Staff ID with circulation rights to be used for automatic web-based self-check. Only applies if AutoSelfCheckAllowed syspref is turned on.','free'),
 ('AutoSelfCheckPass','','','Password to be used for automatic web-based self-check. Only applies if AutoSelfCheckAllowed syspref is turned on.','free'),
 ('Babeltheque','0','','Turn ON Babeltheque content  - See babeltheque.com to subscribe to this service','YesNo'),
