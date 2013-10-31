@@ -7595,7 +7595,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion ="3.13.00.XXX";
+$DBversion ="3.13.00.035";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
 CREATE TABLE borrower_debarments (
