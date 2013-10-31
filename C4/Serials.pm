@@ -711,8 +711,9 @@ sub SearchSubscriptions {
     for my $subscription ( @$results ) {
         $subscription->{cannotedit} = not can_edit_subscription( $subscription );
         $subscription->{cannotdisplay} =
-            ( C4::Context->preference("IndependentBranches")
-                and $subscription->{branchcode} ne C4::Context->userenv->{'branch'} ) ? 1 : 0;
+            ( C4::Context->preference("IndependentBranches") &&
+              C4::Context->userenv &&
+              $subscription->{branchcode} ne C4::Context->userenv->{'branch'} ) ? 1 : 0;
     }
 
     return @$results;
