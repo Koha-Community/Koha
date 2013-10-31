@@ -7653,7 +7653,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.13.00.039";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("
         ALTER TABLE aqbasket ADD branch varchar(10) default NULL
