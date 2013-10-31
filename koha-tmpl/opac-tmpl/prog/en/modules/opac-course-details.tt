@@ -59,7 +59,7 @@
                             <td>[% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) %]</td>
                             <td>[% cr.item.itemcallnumber %]</td>
                             <td>[% cr.item.copynumber %]</td>
-                            <td>[% INCLUDE 'item-status.inc' item = cr.item %]</td>
+                            <td>[% INCLUDE 'item-status.inc' item=cr.item issue=cr.issue %]</td>
                             <td>[% cr.issue.date_due | $KohaDates %]</td>
                             <td>[% cr.public_note %]</td>
                         </tr>

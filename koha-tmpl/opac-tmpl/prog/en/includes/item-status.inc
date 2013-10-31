@@ -11,7 +11,7 @@
             Item lost
         [% END %]
     [% END %]
-[% ELSIF ( item.datedue ) %]
+[% ELSIF ( item.datedue || issue.date_due ) %]
     [% IF ( OPACShowCheckoutName ) %]
         Checked out to [% item.cardnumber %] [% item.firstname %] [% item.surname %]
     [% ELSE %]
