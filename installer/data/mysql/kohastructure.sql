@@ -315,6 +315,27 @@ CREATE TABLE `borrower_attributes` ( -- values of custom patron fields known as 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `borrower_debarments`
+--
+
+DROP TABLE IF EXISTS `borrower_debarments`;
+CREATE TABLE borrower_debarments (
+  borrower_debarment_id int(11) NOT NULL AUTO_INCREMENT,
+  borrowernumber int(11) NOT NULL,
+  expiration date DEFAULT NULL,
+  `type` enum('SUSPENSION','OVERDUES','MANUAL') NOT NULL DEFAULT 'MANUAL',
+  `comment` text,
+  manager_id int(11) DEFAULT NULL,
+  created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  updated timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (borrower_debarment_id),
+  KEY borrowernumber (borrowernumber),
+  CONSTRAINT `borrower_debarments_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+
+--
 -- Table structure for table `branch_item_rules`
 --
 
