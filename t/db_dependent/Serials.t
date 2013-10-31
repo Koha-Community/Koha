@@ -9,14 +9,66 @@ use YAML;
 use CGI;
 use C4::Serials;
 use C4::Serials::Frequency;
+use C4::Serials::Numberpattern;
 use C4::Debug;
+use C4::Bookseller;
+use C4::Biblio;
+use C4::Budgets;
 use Test::More tests => 35;
 
 BEGIN {
     use_ok('C4::Serials');
 }
 
-my $subscriptionid = 1;
+my $dbh = C4::Context->dbh;
+
+# Start transaction
+$dbh->{AutoCommit} = 0;
+$dbh->{RaiseError} = 1;
+
+my $booksellerid = C4::Bookseller::AddBookseller(
+    {
+        name => "my vendor",
+        address1 => "bookseller's address",
+        phone => "0123456",
+        active => 1
+    }
+);
+
+my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
+
+my $budgetid;
+my $bpid = AddBudgetPeriod({
+    budget_period_startdate => '01-01-2015',
+    budget_period_enddate   => '12-31-2015',
+    budget_description      => "budget desc"
+});
+
+my $budget_id = AddBudget({
+    budget_code        => "ABCD",
+    budget_amount      => "123.132",
+    budget_name        => "Périodiques",
+    budget_notes       => "This is a note",
+    budget_description => "Serials",
+    budget_active      => 1,
+    budget_period_id   => $bpid
+});
+
+my $frequency_id = AddSubscriptionFrequency({ description => "Test frequency 1" });
+my $pattern_id = AddSubscriptionNumberpattern({
+    label => 'Test numberpattern 1',
+    numberingmethod => '{X}'
+});
+
+my $subscriptionid = NewSubscription(
+    undef,      "",     undef, undef, $budget_id, $biblionumber,
+    '2013-01-01', $frequency_id, undef, undef,  undef,
+    undef,      undef,  undef, undef, undef, undef,
+    1,          "notes",undef, '2013-01-01', undef, $pattern_id,
+    undef,       undef,  0,    "intnotes",  0,
+    undef, undef, 0,          undef,         '2013-12-31', 0
+);
+
 my $subscriptioninformation = GetSubscription( $subscriptionid );
 
 my @subscriptions = GetSubscriptions( $$subscriptioninformation{bibliotitle} );
@@ -52,7 +104,7 @@ if (not $frequency->{unit}) {
     )} );
 }
 my $expirationdate = GetExpirationDate($subscriptionid) ;
-ok( $expirationdate, "not NULL" );
+ok( $expirationdate, "expiration date is not NULL" );
 
 is(C4::Serials::GetLateIssues(), undef, 'test getting late issues');
 
@@ -127,3 +179,5 @@ is(C4::Serials::getsupplierbyserialid(),undef, 'test getting supplier idea');
 is(C4::Serials::check_routing(), undef, 'test checking route');
 
 is(C4::Serials::addroutingmember(),undef, 'test adding route member');
+
+$dbh->rollback;
