@@ -606,6 +606,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 aqbasketusers
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Aqbasketuser>
+
+=cut
+
+__PACKAGE__->has_many(
+  "aqbasketusers",
+  "Koha::Schema::Result::Aqbasketuser",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 aqbudgetborrowers
 
 Type: has_many
@@ -1026,6 +1041,16 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 basketnoes
+
+Type: many_to_many
+
+Composing rels: L</aqbasketusers> -> basketno
+
+=cut
+
+__PACKAGE__->many_to_many("basketnoes", "aqbasketusers", "basketno");
+
 =head2 budgets
 
 Type: many_to_many
@@ -1047,8 +1072,8 @@ Composing rels: L</course_instructors> -> course
 __PACKAGE__->many_to_many("courses", "course_instructors", "course");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-31 01:30:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eZfDBeShjI29Q8P6Z8CQNA
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-31 16:31:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:z4kW3xYX1CyrwvGdZu32nA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

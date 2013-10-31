@@ -99,6 +99,13 @@ __PACKAGE__->table("aqbasket");
   is_nullable: 1
   size: 10
 
+=head2 branch
+
+  data_type: 'varchar'
+  is_foreign_key: 1
+  is_nullable: 1
+  size: 10
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -133,6 +140,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "billingplace",
   { data_type => "varchar", is_nullable => 1, size => 10 },
+  "branch",
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
 );
 
 =head1 PRIMARY KEY
@@ -148,6 +157,21 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("basketno");
 
 =head1 RELATIONS
+
+=head2 aqbasketusers
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Aqbasketuser>
+
+=cut
+
+__PACKAGE__->has_many(
+  "aqbasketusers",
+  "Koha::Schema::Result::Aqbasketuser",
+  { "foreign.basketno" => "self.basketno" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 =head2 aqorders
 
@@ -199,6 +223,26 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 branch
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Branch>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "branch",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "branch" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 contractnumber
 
 Type: belongs_to
@@ -219,9 +263,19 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 borrowernumbers
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:b4UNvDyA6jbgcTsaasbKYA
+Type: many_to_many
+
+Composing rels: L</aqbasketusers> -> borrowernumber
+
+=cut
+
+__PACKAGE__->many_to_many("borrowernumbers", "aqbasketusers", "borrowernumber");
+
+
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-31 16:31:18
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TCssMGPEqtE0MZ5INCufoA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -173,6 +173,21 @@ __PACKAGE__->set_primary_key("branchcode");
 
 =head1 RELATIONS
 
+=head2 aqbaskets
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Aqbasket>
+
+=cut
+
+__PACKAGE__->has_many(
+  "aqbaskets",
+  "Koha::Schema::Result::Aqbasket",
+  { "foreign.branch" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 authorised_values_branches
 
 Type: has_many
@@ -454,8 +469,8 @@ Composing rels: L</branchrelations> -> categorycode
 __PACKAGE__->many_to_many("categorycodes", "branchrelations", "categorycode");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7TY0QNDQkB33iQeLAgo1qg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-31 16:31:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PKoXMUUg0NUf/xVDBkPOqQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
