@@ -636,6 +636,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 borrower_debarments
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::BorrowerDebarment>
+
+=cut
+
+__PACKAGE__->has_many(
+  "borrower_debarments",
+  "Koha::Schema::Result::BorrowerDebarment",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 borrower_files
 
 Type: has_many
@@ -1032,8 +1047,8 @@ Composing rels: L</course_instructors> -> course
 __PACKAGE__->many_to_many("courses", "course_instructors", "course");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 21:34:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MW1ML4Sc1swrZCYxL/yMzA
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-31 01:30:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eZfDBeShjI29Q8P6Z8CQNA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
