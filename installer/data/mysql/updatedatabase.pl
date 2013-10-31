@@ -7626,7 +7626,7 @@ INSERT IGNORE INTO systempreferences (variable,value,explanation,type) VALUES
     SetVersion($DBversion);
 }
 
-$DBversion = "XXX";
+$DBversion = "3.13.00.036";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(qq{
         INSERT INTO systempreferences (variable, value, explanation, options, type)
