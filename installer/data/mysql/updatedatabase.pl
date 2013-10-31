@@ -7636,7 +7636,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.13.00.037";
 if ( CheckVersion($DBversion) ) {
     #add phone if it is not there already (explains the ignore option)
     $dbh->do("
