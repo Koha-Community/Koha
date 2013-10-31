@@ -2805,6 +2805,7 @@ Return 1 if the subscription is editable by the current logged user (or a given 
 
 sub can_edit_subscription {
     my ( $subscription, $userid ) = @_;
+    return 0 unless C4::Context->userenv;
     my $flags = C4::Context->userenv->{flags};
     $userid ||= C4::Context->userenv->{'id'};
     my $independent_branches = C4::Context->preference('IndependentBranches');

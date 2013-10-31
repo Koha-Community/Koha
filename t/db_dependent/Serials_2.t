@@ -1,16 +1,19 @@
 #!/usr/bin/perl
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use MARC::Record;
+
 use C4::Biblio qw( AddBiblio );
+use C4::Context;
 use_ok('C4::Serials');
 use_ok('C4::Budgets');
 
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
+
 
 my $supplierlist=eval{GetSuppliersWithLateIssues()};
 ok(length($@)==0,"No SQL problem in GetSuppliersWithLateIssues");
@@ -39,16 +42,19 @@ my $budget_id = AddBudget({
 });
 
 my $subscriptionid = NewSubscription(
-    undef,      "",     undef, undef, $budget_id, $biblionumber, '01-01-2013',undef,
-    undef,      undef,  undef, undef, undef,      undef,         undef,  undef,
-    undef,      undef,  undef, undef, undef,      undef,         undef,  undef,
-    undef,      undef,  undef, undef, undef,      undef,         undef,  1,
-    "notes",    undef,  undef, undef, undef,      undef,         undef,  0,
-    "intnotes", 0,      undef, undef, 0,          undef,         '12-31-2013',
+    undef,      "",     undef, undef, $budget_id, $biblionumber,
+    '2013-01-01', undef, undef, undef,  undef,
+    undef,      undef,  undef, undef, undef, undef,
+    1,          "notes",undef, '2013-01-01', undef, undef,
+    undef,       undef,  0,    "intnotes",  0,
+    undef, undef, 0,          undef,         '2013-12-31', 0
 );
 die unless $subscriptionid;
 
-# Can edit a subscription
+
+my $subscription = GetSubscription( $subscriptionid );
+is( C4::Serials::can_edit_subscription($subscription), 0, "cannot edit a subscription without userenv set");
+
 my @USERENV = (
     1,
     'test',
@@ -62,9 +68,9 @@ my @USERENV = (
 
 C4::Context->_new_userenv ('DUMMY_SESSION_ID');
 C4::Context->set_userenv ( @USERENV );
-my $userenv = C4::Context->userenv;
 
-my $subscription = GetSubscription( $subscriptionid );
+# Can edit a subscription
+my $userenv = C4::Context->userenv;
 
 is( C4::Serials::can_edit_subscription($subscription), 1, "User can edit a subscription with an empty branchcode");
 #TODO add UT when C4::Auth->set_permissions (or setuserflags) will exist.
