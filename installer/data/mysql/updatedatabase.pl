@@ -7686,7 +7686,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.13.00.040";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("CREATE TABLE IF NOT EXISTS marc_modification_templates (
               template_id int(11) NOT NULL auto_increment,
