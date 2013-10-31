@@ -145,6 +145,10 @@ CAN_user_serials_create_subscription ) %]
             <li><a id="edititems" href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber %]">Edit items</a></li>
             [% END %]
 
+            [% IF ( CAN_user_tools_items_batchmod ) %]<li><a href="/cgi-bin/koha/tools/batchMod.pl?op=show&amp;biblionumber=[% biblionumber %]&amp;src=CATALOGUING">Edit items in batch</a></li>[% END %]
+
+            [% IF ( CAN_user_tools_items_batchdel ) %]<li><a href="/cgi-bin/koha/tools/batchMod.pl?del=1&amp;op=show&amp;biblionumber=[% biblionumber %]&amp;src=CATALOGUING">Delete items in a batch</a></li>[% END %]
+
             [% IF ( CAN_user_editcatalogue_edit_items ) %]<li><a href="/cgi-bin/koha/cataloguing/moveitem.pl?biblionumber=[% biblionumber %]">Attach item</a></li>[% END %]
 
             [% IF ( EasyAnalyticalRecords ) %][% IF ( CAN_user_editcatalogue_edit_items ) %]<li><a href="/cgi-bin/koha/cataloguing/linkitem.pl?biblionumber=[% biblionumber %]">Link to host item</a>[% END %][% END %]
