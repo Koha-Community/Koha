@@ -122,7 +122,9 @@ sub TransformPrefsToHTML {
     $tab = { '' => $tab } if ( ref( $tab ) eq 'ARRAY' );
 
     my @override_syspref_names;
-    if ( $ENV{OVERRIDE_SYSPREF_NAMES} ) {
+    if ( exists($ENV{OVERRIDE_SYSPREF_NAMES}) &&
+         defined($ENV{OVERRIDE_SYSPREF_NAMES})
+       ) {
         @override_syspref_names = split /,/, $ENV{OVERRIDE_SYSPREF_NAMES};
     }
 
