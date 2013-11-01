@@ -566,7 +566,7 @@ for my $itm (@items) {
 
     # get collection code description, too
     my $ccode = $itm->{'ccode'};
-    $itm->{'ccode'} = $collections->{$ccode} if ( defined($collections) && exists( $collections->{$ccode} ) );
+    $itm->{'ccode'} = $collections->{$ccode} if defined($ccode) && $collections && exists( $collections->{$ccode} );
     my $copynumber = $itm->{'copynumber'};
     $itm->{'copynumber'} = $copynumbers->{$copynumber} if ( defined($copynumbers) && defined($copynumber) && exists( $copynumbers->{$copynumber} ) );
     if ( defined $itm->{'location'} ) {
