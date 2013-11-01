@@ -148,7 +148,11 @@ my $allorders = SearchOrders({
 });
 is(scalar(@$allorders), 3, 'retrieved all 3 orders even after after receiving on one (bug 10723)');
 
-my $invoiceid = AddInvoice(invoicenumber => 'invoice', booksellerid => 1, unknown => "unknown");
+my $invoiceid = AddInvoice(
+    invoicenumber => 'invoice',
+    booksellerid => $booksellerid,
+    unknown => "unknown"
+);
 
 my ($datereceived, $new_ordernumber) = ModReceiveOrder(
     $biblionumber2,
