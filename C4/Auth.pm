@@ -650,6 +650,7 @@ sub checkauth {
     # This parameter is the name of the CAS server we want to authenticate against,
     # when using authentication against multiple CAS servers, as configured in Auth_cas_servers.yaml
     my $casparam = $query->param('cas');
+    my $q_userid = $query->param('userid') // '';
 
     if ( $userid = $ENV{'REMOTE_USER'} ) {
             # Using Basic Authentication, no cookies required
@@ -669,9 +670,11 @@ sub checkauth {
         my $session = get_session($sessionID);
         C4::Context->_new_userenv($sessionID);
         my ($ip, $lasttime, $sessiontype);
+        my $s_userid = '';
         if ($session){
+            $s_userid = $session->param('id') // '';
             C4::Context::set_userenv(
-                $session->param('number'),       $session->param('id'),
+                $session->param('number'),       $s_userid,
                 $session->param('cardnumber'),   $session->param('firstname'),
                 $session->param('surname'),      $session->param('branch'),
                 $session->param('branchname'),   $session->param('flags'),
@@ -684,14 +687,14 @@ sub checkauth {
             $debug and printf STDERR "AUTH_SESSION: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
             $ip       = $session->param('ip');
             $lasttime = $session->param('lasttime');
-            $userid   = $session->param('id');
+            $userid   = $s_userid;
             $sessiontype = $session->param('sessiontype') || '';
         }
-        if ( ( ($query->param('koha_login_context')) && ($query->param('userid') ne ($session->param('id') // '')) )
+        if ( ( $query->param('koha_login_context') && ($q_userid ne $s_userid) )
           || ( $cas && $query->param('ticket') ) ) {
             #if a user enters an id ne to the id in the current session, we need to log them in...
             #first we need to clear the anonymous session...
-            $debug and warn "query id = " . $query->param('userid') . " but session id = " . $session->param('id');
+            $debug and warn "query id = $q_userid but session id = $s_userid";
             $session->flush;      
             $session->delete();
             C4::Context->_unset_userenv($sessionID);
@@ -711,7 +714,7 @@ sub checkauth {
         logout_cas($query);
         }
         }
-        elsif ( $lasttime < time() - $timeout ) {
+        elsif ( !$lasttime || ($lasttime < time() - $timeout) ) {
             # timed logout
             $info{'timed_out'} = 1;
             $session->delete() if $session;
@@ -759,8 +762,12 @@ sub checkauth {
             -value    => $session->id,
             -HttpOnly => 1
         );
-        $userid = $query->param('userid');
-        my $pki_field = C4::Context->preference('AllowPKIAuth') // 'None';
+        $userid = $q_userid;
+        my $pki_field = C4::Context->preference('AllowPKIAuth');
+        if (! defined($pki_field) ) {
+            print STDERR "ERROR: Missing system preference AllowPKIAuth.\n";
+            $pki_field = 'None';
+        }
         if (   ( $cas && $query->param('ticket') )
             || $userid
             || $pki_field ne 'None'
@@ -835,7 +842,7 @@ sub checkauth {
                 my $retuserid;
                 ( $return, $cardnumber, $retuserid ) =
                   checkpw( $dbh, $userid, $password, $query );
-                $userid = $retuserid if ( $retuserid ne '' );
+                $userid = $retuserid if ( $retuserid );
         }
         if ($return) {
                #_session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},(strftime '%c', localtime));
