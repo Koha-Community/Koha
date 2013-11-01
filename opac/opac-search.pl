@@ -623,7 +623,7 @@ for (my $i=0;$i<@servers;$i++) {
             my $query_cgi_history = $cgi->url(-query=>1);
             $query_cgi_history =~ s/^$path_info\?//;
             $query_cgi_history =~ s/;/&/g;
-            my $query_desc_history = "$query_desc, $limit_desc";
+            my $query_desc_history = join ", ", grep { defined $_ } $query_desc, $limit_desc;
 
             if (!$borrowernumber || $borrowernumber eq '') {
                 # To a cookie (the user is not logged in)
