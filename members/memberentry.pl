@@ -797,7 +797,7 @@ sub patron_attributes_form {
         };
         if (exists $attr_hash{$attr_type->code()}) {
             foreach my $attr (@{ $attr_hash{$attr_type->code()} }) {
-                my $newentry = { map { $_ => $entry->{$_} } %$entry };
+                my $newentry = { %$entry };
                 $newentry->{value} = $attr->{value};
                 $newentry->{password} = $attr->{password};
                 $newentry->{use_dropdown} = 0;
@@ -811,7 +811,7 @@ sub patron_attributes_form {
             }
         } else {
             $i++;
-            my $newentry = { map { $_ => $entry->{$_} } %$entry };
+            my $newentry = { %$entry };
             if ($attr_type->authorised_value_category()) {
                 $newentry->{use_dropdown} = 1;
                 $newentry->{auth_val_loop} = GetAuthorisedValues($attr_type->authorised_value_category());
