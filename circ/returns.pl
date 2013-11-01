@@ -49,7 +49,8 @@ use Koha::Calendar;
 
 my $query = new CGI;
 
-if (!C4::Context->userenv){
+my $userenv = C4::Context->userenv;
+if (!$userenv){
     my $sessionID = $query->cookie("CGISESSID");
     my $session = get_session($sessionID);
     if ($session->param('branch') eq 'NO_LIBRARY_SET'){
@@ -74,11 +75,10 @@ my ( $template, $librarian, $cookie ) = get_template_and_user(
 #Global vars
 my $branches = GetBranches();
 my $printers = GetPrinters();
+my $userenv_branch = $userenv->{'branch'} // '';
+my $printer = $userenv->{'branchprinter'} // '';
 
-my $printer = C4::Context->userenv ? C4::Context->userenv->{'branchprinter'} : "";
 my $overduecharges = (C4::Context->preference('finesMode') && C4::Context->preference('finesMode') ne 'off');
-
-my $userenv_branch = C4::Context->userenv->{'branch'} || '';
 #
 # Some code to handle the error if there is no branch or printer setting.....
 #
@@ -274,7 +274,7 @@ if ($barcode) {
 
         if ( C4::Context->preference("FineNotifyAtCheckin") ) {
             my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrower->{'borrowernumber'} );
-            if ($fines > 0) {
+            if ($fines && $fines > 0) {
                 $template->param( fines => sprintf("%.2f",$fines) );
                 $template->param( fineborrowernumber => $borrower->{'borrowernumber'} );
             }
@@ -544,11 +544,18 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
     }
     push @riloop, \%ri;
 }
+my ($genbrname, $genprname);
+if (my $b = $branches->{$userenv_branch}) {
+    $genbrname = $b->{'branchname'};
+}
+if (my $p = $printers->{$printer}) {
+    $genprname = $p->{'printername'};
+}
 $template->param(
     riloop         => \@riloop,
-    genbrname      => $branches->{$userenv_branch}->{'branchname'},
-    genprname      => $printers->{$printer}->{'printername'},
-    branchname     => $branches->{$userenv_branch}->{'branchname'},
+    genbrname      => $genbrname,
+    genprname      => $genprname,
+    branchname     => $genbrname,
     printer        => $printer,
     errmsgloop     => \@errmsgloop,
     exemptfine     => $exemptfine,

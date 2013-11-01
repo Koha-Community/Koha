@@ -485,7 +485,7 @@ sub build_issue_data {
         ($it->{'charge'}, $it->{'itemtype_charge'}) = GetIssuingCharges(
             $it->{'itemnumber'}, $it->{'borrowernumber'}
         );
-        $it->{'charge'} = sprintf("%.2f", $it->{'charge'});
+        $it->{'charge'} = sprintf("%.2f", $it->{'charge'}) if defined $it->{'charge'};
         my ($can_renew, $can_renew_error) = CanBookBeRenewed( 
             $it->{'borrowernumber'},$it->{'itemnumber'}
         );
