@@ -291,6 +291,7 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
     eval {use Text::CSV};
     my $csv = Text::CSV->new or
             die Text::CSV->error_diag ();
+    binmode STDOUT, ":encoding(UTF-8)";
     print $input->header(
         -type       => 'text/csv',
         -attachment => 'inventory.csv',
@@ -300,7 +301,7 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
     foreach my $key ( keys %$columns_def_hashref ) {
         my $initkey = $key;
         $key =~ s/[^\.]*\.//;
-        $columns_def_hashref->{$initkey}=NormalizeString($columns_def_hashref->{$initkey});
+        $columns_def_hashref->{$initkey}=NormalizeString($columns_def_hashref->{$initkey} // '');
         $columns_def_hashref->{$key} = $columns_def_hashref->{$initkey};
     }
 
