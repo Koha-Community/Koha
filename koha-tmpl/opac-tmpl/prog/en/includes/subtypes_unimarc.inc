@@ -15,7 +15,7 @@
     </select>
     </p>
     <p>
-    <label>Print</label>
+    <label>Physical presentation</label>
         <select name="limit" class="subtype">
             <option value="" selected="selected" >Any</option>
             <option value="ff8-23:r">regular print</option>
