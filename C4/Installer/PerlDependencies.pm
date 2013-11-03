@@ -607,6 +607,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '2.13',
     },
+    'Moo' => {
+        'usage'    => 'Core',
+        'required' => '0',
+        'min_ver'  => '1',
+    },
     'String::Random' => {
         'usage'    => 'OpacSelfRegistration',
         'required' => '1',
@@ -751,6 +756,11 @@ our $PERL_DEPS = {
         'usage'    => 'Tests',
         'required' => '0',
         'min_ver'  => '0.0.3',
+    },
+    'XML::Writer' => {
+        'usage'    => 'Command line scripts',
+        'required' => '0',
+        'min_ver'  => '0.614',
     },
 };
 
