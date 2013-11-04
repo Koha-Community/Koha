@@ -186,7 +186,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('NewItemsDefaultLocation','','','If set, all new items will have a location of the given Location Code ( Authorized Value type LOC )',''),
 ('noissuescharge','5','','Define maximum amount withstanding before check outs are blocked','Integer'),
 ('noItemTypeImages','0',NULL,'If ON, disables item-type images','YesNo'),
-('NoLoginInstructions', '<h5>Don\'t have a password yet?</h5> <p> If you don\'t have a password yet, stop by the circulation desk the next time you\'re in the library. We\'ll happily set one up for you.</p> <h5>Don\'t have a library card?</h5> <p> If you don\'t have a library card, stop by your local library to sign up.  </p>', '60|10', 'Instructions when a person is not connected', 'Textarea'),
+('NoLoginInstructions', '', '60|10', 'Instructions when a person is not connected', 'Textarea'),
 ('NotesBlacklist','',NULL,'List of notes fields that should not appear in the title notes/description separator of details','free'),
 ('NoticeCSS','',NULL,'Notices CSS url.','free'),
 ('NotifyBorrowerDeparture','30',NULL,'Define number of days before expiry where circulation is warned about patron account expiry','Integer'),
