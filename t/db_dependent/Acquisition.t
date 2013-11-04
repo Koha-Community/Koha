@@ -8,7 +8,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 60;
+use Test::More tests => 62;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -86,6 +86,9 @@ my $orders = SearchOrders({
 });
 isa_ok( $orders, 'ARRAY' );
 is(scalar(@$orders), 3, 'retrieved 3 pending orders');
+
+ok( exists( @$orders[0]->{basketgroupid} ), "SearchOrder: The basketgroupid key exists" );
+ok( exists( @$orders[0]->{basketgroupname} ), "SearchOrder: The basketgroupname key exists" );
 
 ok( GetBudgetByOrderNumber($ordernumber1)->{'budget_id'} eq $budgetid, "GetBudgetByOrderNumber returns expected budget" );
 
