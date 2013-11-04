@@ -127,7 +127,9 @@
                         &nbsp;
                     [% END %]
                 </li>
-                [% IF ITEM_DAT.itemlost_on %]<li><span class="label">Lost on:</span>[% ITEM_DAT.itemlost_on | $KohaDates %] &nbsp;</li>[% END %]
+                [% IF ITEM_DAT.itemlost != "" && ITEM_DAT.itemlost_on %]
+                    <li><span class="label">Lost on:</span>[% ITEM_DAT.itemlost_on | $KohaDates %] &nbsp;</li>
+                [% END %]
             [% END %]
             [% IF ( ITEM_DAT.itemdamagedloop ) %]
             <li><span class="label">Damaged status:</span>
