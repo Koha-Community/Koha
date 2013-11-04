@@ -29,13 +29,14 @@
       [% IF ( sort_by ) %]
         [% SET url = url _ "&amp;sort_by=" _ sort_by %]
       [% END %]
+      [% facet.facet_link_value = BLOCK %][% facet.facet_link_value | uri %][% END %]
       [% IF facet.active %]
         [% SET url = url _ "&amp;nolimit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
         <span class="facet-label">[% facet.facet_label_value %]</span>
-        [<a href="[% url |url %]" title="Remove facet [% facet.facet_link_value | html %]">x</a>]
+        [<a href="[% url %]" title="Remove facet [% facet.facet_title_value | html %]">x</a>]
       [% ELSE %]
         [% SET url = url _ "&amp;limit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
-        <span class="facet-label"><a href="[% url | url %]" title="[% facet.facet_title_value |html %]">[% facet.facet_label_value %]</a></span>
+        <span class="facet-label"><a href="[% url %]" title="[% facet.facet_title_value |html %]">[% facet.facet_label_value %]</a></span>
         [% IF ( displayFacetCount ) %]
           <span class="facet-count"> ([% facet.facet_count %])</span>
         [% END %]

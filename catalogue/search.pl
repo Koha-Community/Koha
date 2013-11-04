@@ -154,6 +154,8 @@ use String::Random;
 use C4::Branch; # GetBranches
 use C4::Search::History;
 
+use URI::Escape;
+
 my $DisplayMultiPlaceHold = C4::Context->preference("DisplayMultiPlaceHold");
 # create a new CGI object
 # FIXME: no_undef_params needs to be tested
@@ -515,7 +517,7 @@ for my $this_cgi ( split('&',$limit_cgi) ) {
     my $input_name = $1;
     my $input_value = $2;
     $input_name =~ s/=$//;
-    push @limit_inputs, { input_name => $input_name, input_value => $input_value };
+    push @limit_inputs, { input_name => $input_name, input_value => uri_unescape($input_value) };
 }
 $template->param ( LIMIT_INPUTS => \@limit_inputs );
 

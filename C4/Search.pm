@@ -1557,7 +1557,7 @@ sub buildQuery {
             $group_OR_limits{$k} .= " or " if $group_OR_limits{$k};
             $limit_desc      .= " or " if $group_OR_limits{$k};
             $group_OR_limits{$k} .= "$this_limit";
-            $limit_cgi       .= "&limit=$this_limit";
+            $limit_cgi       .= "&limit=" . uri_escape($this_limit);
             $limit_desc      .= " $this_limit";
         }
 
@@ -1565,7 +1565,7 @@ sub buildQuery {
         else {
             $limit .= " and " if $limit || $query;
             $limit      .= "$this_limit";
-            $limit_cgi  .= "&limit=$this_limit";
+            $limit_cgi  .= "&limit=" . uri_escape($this_limit);
             if ($this_limit =~ /^branch:(.+)/) {
                 my $branchcode = $1;
                 my $branchname = GetBranchName($branchcode);
