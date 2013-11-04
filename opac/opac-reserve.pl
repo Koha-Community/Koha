@@ -447,7 +447,7 @@ foreach my $biblioNum (@biblionumbers) {
             $itemLoopIter->{ReservedForFirstname}      = $ItemBorrowerReserveInfo->{'firstname'};
             $itemLoopIter->{ExpectedAtLibrary}         = $expectedAt;
             #waiting status
-            $itemLoopIter->{waitingdate} = format_date($wait) if $wait;
+            $itemLoopIter->{waitingdate} = $wait;
         }
 
         $itemLoopIter->{notforloan} = $itemInfo->{notforloan};

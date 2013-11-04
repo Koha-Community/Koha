@@ -338,7 +338,7 @@ foreach my $biblionumber (@biblionumbers) {
                 $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
                 $item->{ReservedForFirstname}     = $ItemBorrowerReserveInfo->{'firstname'};
                 $item->{ExpectedAtLibrary}     = $branches->{$expectedAt}{branchname};
-                $item->{waitingdate} = format_date($wait) if $wait;
+                $item->{waitingdate} = $wait;
             }
 
             # Management of the notforloan document

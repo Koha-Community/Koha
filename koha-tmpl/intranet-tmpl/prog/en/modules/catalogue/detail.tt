@@ -1,4 +1,5 @@
 [% USE AuthorisedValues %]
+[% USE KohaDates %]
 
 [% ShowCourseReserves = 0 %]
 [% IF UseCourseReserves %]
@@ -620,7 +621,7 @@ function verify_images() {
                             [% END %]
                             [% item.ExpectedAtLibrary %]
                             [% IF ( item.waitingdate ) %]
-                                since [% item.waitingdate %]
+                                since [% item.waitingdate | $KohaDates %]
                             [% ELSE %]
                                 [% IF ( item.reservedate ) %]
                                     (placed [% item.reservedate %])
