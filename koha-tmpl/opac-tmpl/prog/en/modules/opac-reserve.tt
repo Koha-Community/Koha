@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %][% LibraryNameTitle or "Koha online" %] catalog &rsaquo;  Placing a hold
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
@@ -529,7 +530,7 @@
                                   <span class="waiting">[% IF ( itemLoo.waitingdate ) %]Waiting[% ELSE %]On hold[% END %] for patron
                                     [% IF ( itemLoo.waitingdate ) %]at[% ELSE %]expected at[% END %] [% itemLoo.ExpectedAtLibrary %]
                                     since
-                                    [% IF ( itemLoo.waitingdate ) %][% itemLoo.waitingdate %][% ELSE %][% IF ( itemLoo.reservedate ) %][% itemLoo.reservedate %][% END %][% END %].
+                                    [% IF ( itemLoo.waitingdate ) %][% itemLoo.waitingdate | $KohaDates %][% ELSE %][% IF ( itemLoo.reservedate ) %][% itemLoo.reservedate %][% END %][% END %].
                                   </span>
                                 [% ELSE %]
                                   <span class="notonhold">Not on hold</span>

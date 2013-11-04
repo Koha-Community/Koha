@@ -372,7 +372,7 @@ sub GetReservesFromItemnumber {
     my $query = "
     SELECT reservedate,borrowernumber,branchcode,reserve_id,waitingdate
     FROM   reserves
-    WHERE  itemnumber=? AND ( reservedate <= CURRENT_DATE() OR
+    WHERE  itemnumber=? AND ( reservedate <= CAST(now() AS date) OR
            waitingdate IS NOT NULL )
     ORDER BY priority
     ";

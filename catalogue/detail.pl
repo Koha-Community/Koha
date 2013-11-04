@@ -249,7 +249,7 @@ foreach my $item (@items) {
         $item->{ExpectedAtLibrary}      = $branches->{$expectedAt}{branchname};
         $item->{Reservedcardnumber}             = $ItemBorrowerReserveInfo->{'cardnumber'};
         # Check waiting status
-        $item->{waitingdate} = format_date($wait) if $wait;
+        $item->{waitingdate} = $wait;
     }
 
 
