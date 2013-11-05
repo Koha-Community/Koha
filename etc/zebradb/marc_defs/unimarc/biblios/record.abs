@@ -76,14 +76,15 @@ melm 071$a    Identifier-publisher-for-music:w,Identifier-standard:w
 melm 071$z    Identifier-publisher-for-music:w,Identifier-standard:w
 melm 071$b	    Publisher,Publisher:p
 # UPC
-melm 072$a  	UPC:w,Identifier-standard:w
-melm 072$z  	UPC:w,Identifier-standard:w
+melm 072$a  	Identifier-standard:w
+melm 072$z  	Identifier-standard:w
 # EAN
 melm 073$a	    EAN:w,Identifier-standard:w
 melm 073$z	    EAN:w,Identifier-standard:w
 
 ############ ITEM TYPE ##################
 # FIXME index 200$b only in Material-type ?
+# FIXME in standard installations, 200$b should probably NOT be indexed
 melm 200$b      itemtype:w,itemtype:p,itype:w,itype:p,Material-type:w,Material-type:p
 melm 995$r      itemtype:w,itemtype:p,itype:w,itype:p
 
@@ -102,7 +103,7 @@ melm 995$r      itemtype:w,itemtype:p,itype:w,itype:p
 # Character Set (Mandatory)             4                       26-29
 # additional Character Set              4                       28-33
 # Script of title                       2                       34-35
-melm 100$a     tpubdate:s:range(data,8,1),ta:w:range(data,17,1),ta:w:range(data,18,1),ta:w:range(data,19,1),Modified-code:n:range(data,21,1),char-encoding:n:range(data,26,2),char-encoding:n:range(data,28,2),char-encoding:n:range(data,30,2),script-Title:n:range(data,34,2)
+melm 100$a     tpubdate:s:range(data,8,1),pubdate:n:range(data,9,4),pubdate:y:range(data,9,4),pubdate:s:range(data,9,4),pubdate:n:range(data,13,4),pubdate:y:range(data,13,4),ta:w:range(data,17,1),ta:w:range(data,18,1),ta:w:range(data,19,1),Modified-code:n:range(data,21,1),char-encoding:n:range(data,26,2),char-encoding:n:range(data,28,2),char-encoding:n:range(data,30,2),script-Title:n:range(data,34,2)
 melm 101$a     ln
 melm 101$c     language-original
 melm 102$a     Country-publication
@@ -198,17 +199,21 @@ melm 205        Title,Title:p
 
 ########## MATERIAL SPECIFIC AREA #################
 # TODO 206
-melm 207    Serials,Serials:p
-melm 208    Printed-music,Printed-music:p
-melm 230$a      Electronic-ressource
+# 207 do not index
+# 208
+melm 208$a    Material-type:w,Material-type:p
+melm 208$d    Material-type:w,Material-type:p
+# Uncomment to index this field
+# melm 230$a  Electronic-ressource
 
 ########## PUBLISHER #################
-melm 210$a    pl,pl:p
+#melm 210$a    pl,pl:p
 melm 210$c    Publisher,Publisher:p
-melm 210$d    pubdate:n,pubdate:y,pubdate:s
+melm 210$d    pubdate:n,pubdate:y
 
 ########## DESCRIPTION #################
-melm 215        Extent
+# Uncomment to index this field
+# melm 215        Extent
 
 ########## SERIES #################
 melm 225$a      Title-series,Title-series:p
@@ -235,7 +240,7 @@ melm 302$a    Note,Note:p
 # Notes Pertaining to Descriptive Information
 melm 303$a    Note,Note:p
 # Notes Pertaining to Title and Statement of Responsibility
-melm 304$a    Note,Note:p
+melm 304$a    Note,Note:p,Title:w,Title:p
 # Notes Pertaining to Edition and Bibliographic History
 melm 305$a    Note,Note:p
 # Notes Pertaining to Publication, Distribution, etc.
@@ -253,15 +258,18 @@ melm 312$a    Note,Note:p
 # Notes Pertaining to Subject Access
 melm 313$a    Note,Note:p
 # Notes Pertaining to Intellectual Responsability (in Sudoc catalogue, may contains the 4th, 5th etc. authors)
-melm 314$a    Note,Note:p
+melm 314$a    Note,Note:p,Author:w,Author:p
 # Notes Pertaining to Material (or Type of Publication) Specific Information
 melm 315$a    Note,Note:p
 # Note Relating to the Copy in Hand (ancient books)
+# Do not index $u,$5
 melm 316$a    Note,Note:p
 # Provenance Note (ancient books)
+# Do not index $u,$5
 melm 317$a    Note,Note:p
 # Action Note
-melm 318$a    Note,Note:p
+# Do not index this note (useless for the public)
+# melm 318    Note,Note:p
 # Internal Bibliographies/Indexes Note
 melm 320$a    Note,Note:p
 # External Indexes/Abstracts/References Note
@@ -277,9 +285,23 @@ melm 325$a    Note,Note:p
 # Frequency Statement Note (Serials)
 melm 326$a    Note,Note:p
 # Contents Note
-melm 327$a    Note,Note:p
+melm 327$a    Note,Note:p,Title:w,Title:p
+melm 327$b    Note,Note:p,Title:w,Title:p
+melm 327$c    Note,Note:p,Title:w,Title:p
+melm 327$d    Note,Note:p,Title:w,Title:p
+melm 327$e    Note,Note:p,Title:w,Title:p
+melm 327$f    Note,Note:p,Title:w,Title:p
+melm 327$g    Note,Note:p,Title:w,Title:p
+melm 327$h    Note,Note:p,Title:w,Title:p
+melm 327$i    Note,Note:p,Title:w,Title:p
 # Dissertation note
-melm 328    Note,Note:p
+# Do not index $z ("Commercial edition : ")
+melm 328$a    Note,Note:p,Dissertation-information:w,Dissertation-information:p
+melm 328$b    Note,Note:p,Dissertation-information:w,Dissertation-information:p
+melm 328$c    Note,Note:p,Dissertation-information:w,Dissertation-information:p
+melm 328$d    Note,Note:p,Dissertation-information:w,Dissertation-information:p
+melm 328$e    Note,Note:p,Dissertation-information:w,Dissertation-information:p
+melm 328$t    Note,Note:p,Dissertation-information:w,Dissertation-information:p,Title:w,Title:p
 # Summary or Abstract
 melm 330$a    Abstract:w,Note:w,Abstract:p,Note:p
 # Preferred Citation of Described Materials
@@ -287,18 +309,34 @@ melm 332$a    Note,Note:p
 # Users/Intended Audience Note
 melm 333$a    Note,Note:p
 # Awards note
+# Do not index $u,$z
 melm 334$a    Note,Note:p
+melm 334$b    Note,Note:p
+melm 334$c    Note,Note:p
+melm 334$d    Note,Note:p
 # Type of electronic ressource note
 melm 336$a    Note,Note:p
 # System requirements note
 melm 337$a    Note,Note:p
 # Acquisition Information Note
 melm 345$a    Note,Note:p
+# Table of contents note (Used in french libraries)
+# Do not index $u,v,p
+# Uncomment to index as note and title
+# melm 359$a    Note,Note:p,Title:w,Title:p
+# melm 359$b    Note,Note:p,Title:w,Title:p
+# melm 359$c    Note,Note:p,Title:w,Title:p
+# melm 359$d    Note,Note:p,Title:w,Title:p
+# melm 359$e    Note,Note:p,Title:w,Title:p
+# melm 359$f    Note,Note:p,Title:w,Title:p
+# melm 359$g    Note,Note:p,Title:w,Title:p
+# melm 359$h    Note,Note:p,Title:w,Title:p
+# melm 359$i    Note,Note:p,Title:w,Title:p
 
 ############## 4XX - LINKING ##################
 # All 4XX indexed as Title, except for 410
 melm 410$t    Title-series,Title-series:p
-melm 411$t    Title,Title:p
+melm 411$t    Title-series,Title-series:p
 melm 412$t    Title,Title:p
 melm 413$t    Title,Title:p
 melm 421$t    Title,Title:p
@@ -330,11 +368,11 @@ melm 454$t    Title,Title:p
 melm 455$t    Title,Title:p
 melm 456$t    Title,Title:p
 # FIXME Warning : field used by Koha for analytics, but also in Sudoc network
-melm 461$t    Title,Title-host:w,title-host:p
+melm 461$t    Title,Title:p,Host-item:w,Host-item:p
 melm 462$t    Title,Title:p
 melm 463$t    Title,Title:p
 # FIXME Warning : field used by Koha for analytics, but also in Sudoc network
-melm 464$t    Title,Title-host:w,title-host:p,Title:p
+melm 464$t    Title,Title:p,Host-item:w,Host-item:p
 melm 470$t    Title,Title:p
 melm 481$t    Title,Title:p
 melm 482$t    Title,Title:p
@@ -343,39 +381,6 @@ melm 488$t    Title,Title:p
 # Linking ids (Koha analytics)
 # FIXME Warning : field used by Koha for analytics, but also in Sudoc network
 melm 461$9    Host-Item-Number
-
-#FIXME Fields 400, 401, 403, 414, 415, 416, 417, 418, 419, 420 are not defined in Unimarc, but may be used by some libraries.
-melm 400$t    Title,Title:p
-melm 401$t    Title,Title:p
-melm 403$t    Title,Title:p,Title-Uniform,Title-Uniform:p
-melm 414$t    Title,Title:p
-melm 415$t    Title,Title:p
-melm 416$t    Title,Title:p
-melm 417$t    Title,Title:p
-melm 418$t    Title,Title:p
-melm 419$t    Title,Title:p
-melm 420$t    Title,Title:p
-
-melm 400$d    pubdate:n
-melm 401$d    pubdate:n
-melm 403$d    pubdate:n
-melm 410$d    pubdate:n
-melm 412$d    pubdate:n
-melm 413$d    pubdate:n
-melm 414$d    pubdate:n
-melm 415$d    pubdate:n
-melm 416$d    pubdate:n
-melm 417$d    pubdate:n
-melm 418$d    pubdate:n
-melm 419$d    pubdate:n
-melm 420$d    pubdate:n
-melm 430$d    pubdate:n
-melm 431$d    pubdate:n
-melm 432$d    pubdate:n
-melm 440$d    pubdate:n
-melm 441$d    pubdate:n
-melm 445$d    pubdate:n
-melm 461$d    pubdate:n
 
 ############## 5XX - TITLES ##################
 melm 500$9    Koha-Auth-Number,Koha-Auth-Number:n
@@ -435,19 +440,6 @@ melm 616$9      Koha-Auth-Number,Koha-Auth-Number:n
 melm 617$9      Koha-Auth-Number,Koha-Auth-Number:n
 melm 620$9      Koha-Auth-Number,Koha-Auth-Number:n
 melm 621$9      Koha-Auth-Number,Koha-Auth-Number:n
-# melm 626$9      Koha-Auth-Number,Koha-Auth-Number:n
-# melm 660$9      Koha-Auth-Number,Koha-Auth-Number:n
-# melm 661$9      Koha-Auth-Number,Koha-Auth-Number:n
-
-#FIXME Fields 603, 630, 631, 632, 633, 634, 635, 636, 646 are not defined in Unimarc, but may be used by some libraries.
-melm 603$9      Koha-Auth-Number,Koha-Auth-Number:n
-melm 630$9      Koha-Auth-Number,Koha-Auth-Number:n
-melm 631$9      Koha-Auth-Number,Koha-Auth-Number:n
-melm 632$9      Koha-Auth-Number,Koha-Auth-Number:n
-melm 633$9      Koha-Auth-Number,Koha-Auth-Number:n
-melm 634$9      Koha-Auth-Number,Koha-Auth-Number:n
-melm 635$9      Koha-Auth-Number,Koha-Auth-Number:n
-melm 636$9      Koha-Auth-Number,Koha-Auth-Number:n
 
 melm 600$a              Personal-name,Personal-name:p,Subject,Subject:p
 melm 600                Subject,Subject:p
@@ -473,17 +465,6 @@ melm 621                Subject,Subject:p
 # Chronological coverage code. Probably not useful
 # melm 661                Subject,Subject:p
 
-#FIXME Fields 603, 630, 631, 632, 633, 634, 635, 636, 646 are not defined in Unimarc, but may be used by some libraries.
-melm 603      Subject,Subject:p
-melm 630      Subject,Subject:p
-melm 631      Subject,Subject:p
-melm 632      Subject,Subject:p
-melm 633      Subject,Subject:p
-melm 634      Subject,Subject:p
-melm 635      Subject,Subject:p
-melm 636      Subject,Subject:p
-melm 646      Subject,Subject:p
-
 ########### CLASSIFICATIONS (67x/68x) ##################
 # PRECIS
 melm 670		Subject-precis:w,Subject-precis:p
@@ -496,7 +477,6 @@ melm 680$b		LC-call-number:s
 melm 680		LC-call-number:w,LC-call-number:p
 # Other class numbers // see Marc21 084
 melm 686		Local-classification:w,Local-classification:p
-
 
 ############## KOHA ITEM INFORMATION (based on 995) ###############
 # Koha specific : $1, $2, $3
