@@ -375,6 +375,15 @@ field_mappings:
       aliases:
         - datelastseen
       label: Datelastseen
+    dissertation-information:
+      bib1_mapping:
+        biblioserver:
+          1: 1056
+      enabled: 1
+      index: dissertation-information
+      aliases:
+        - dissertation-information
+      label: Dissertation-information
     dt-bks:
       bib1_mapping:
         biblioserver:
@@ -423,7 +432,7 @@ field_mappings:
     ean:
       bib1_mapping:
         biblioserver:
-          1: EAN
+          1: 1214
       enabled: 1
       index: ean
       aliases:
@@ -1240,7 +1249,7 @@ filter_mappings:
   acqdate:
     bib1_mapping:
       biblioserver:
-        1: Date-of-acquisition
+        1: 32
         4: 4
         target_syntax_callback: date_filter_target_callback
     enabled: 1
@@ -1257,7 +1266,7 @@ filter_mappings:
   pubdate:
     bib1_mapping:
       biblioserver:
-        1: pubdate
+        1: 31
         4: 4
         target_syntax_callback: date_filter_target_callback
     enabled: 1
