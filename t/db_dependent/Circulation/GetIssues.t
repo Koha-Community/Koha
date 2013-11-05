@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More;
+use Test::More tests => 10;
 use Test::MockModule;
 use C4::Biblio;
 use C4::Items;
@@ -15,6 +15,8 @@ use MARC::Record;
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
+
+$dbh->do(q|DELETE FROM issues|);
 
 my $branchcode;
 my $branch_created;
@@ -82,4 +84,10 @@ is(scalar @$issues, 1, "The other is an item from biblio $biblionumber2");
 $issues = C4::Circulation::GetIssues({itemnumber => $itemnumber2});
 is(scalar @$issues, 0, "No one has issued the second item of biblio $biblionumber2");
 
-done_testing;
+my $onsite_checkouts = GetPendingOnSiteCheckouts;
+is( scalar @$onsite_checkouts, 0, "No pending on-site checkouts" );
+
+my $itemnumber4 = AddItem({ barcode => '0104', %item_branch_infos }, $biblionumber1);
+AddIssue( $borrower, '0104', undef, undef, undef, undef, { onsite_checkout => 1 } );
+$onsite_checkouts = GetPendingOnSiteCheckouts;
+is( scalar @$onsite_checkouts, 1, "There is 1 pending on-site checkout" );

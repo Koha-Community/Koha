@@ -73,6 +73,7 @@ BEGIN {
 		&barcodedecode
         &LostItem
         &ReturnLostItem
+        &GetPendingOnSiteCheckouts
 	);
 
 	# subs to deal with issuing a book
@@ -3909,6 +3910,36 @@ sub GetAgeRestriction {
 }
 
 1;
+
+=head2 GetPendingOnSiteCheckouts
+
+=cut
+
+sub GetPendingOnSiteCheckouts {
+    my $dbh = C4::Context->dbh;
+    return $dbh->selectall_arrayref(q|
+        SELECT
+          items.barcode,
+          items.biblionumber,
+          items.itemnumber,
+          items.itemnotes,
+          items.itemcallnumber,
+          items.location,
+          issues.date_due,
+          issues.branchcode,
+          biblio.author,
+          biblio.title,
+          borrowers.firstname,
+          borrowers.surname,
+          borrowers.cardnumber,
+          borrowers.borrowernumber
+        FROM items
+        LEFT JOIN issues ON items.itemnumber = issues.itemnumber
+        LEFT JOIN biblio ON items.biblionumber = biblio.biblionumber
+        LEFT JOIN borrowers ON issues.borrowernumber = borrowers.borrowernumber
+        WHERE issues.onsite_checkout = 1
+    |, { Slice => {} } );
+}
 
 __END__
 
