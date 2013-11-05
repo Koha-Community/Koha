@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 23;
+use Test::More tests => 25;
 use MARC::Record;
 use DateTime::Duration;
 
@@ -316,6 +316,16 @@ ModReserveAffect( $itemnumber,  $requesters{'CPL'} , 0); #confirm hold
 @results= GetReservesFromItemnumber($itemnumber);
 is(defined $results[3]?1:0, 1, 'GetReservesFromItemnumber returns a future wait (confirmed future hold)');
 # End of tests for bug 9788
+
+# Tests for CalculatePriority (bug 8918)
+my $p = C4::Reserves::CalculatePriority($bibnum2);
+is($p, 4, 'CalculatePriority  should now return priority 4');
+AddReserve('CPL',  $requesters{'CPL'}, $bibnum2,
+           $constraint, $bibitems,  $p, undef, $expdate, $notes,
+           $title,      $checkitem, $found);
+$p = C4::Reserves::CalculatePriority($bibnum2);
+is($p, 5, 'CalculatePriority should now return priority 5');
+# End of tests for bug 8918
 
 $dbh->rollback;
 
