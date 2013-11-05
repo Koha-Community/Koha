@@ -94,11 +94,12 @@
         var orderst = $("#orders").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sPaginationType": "four_button",
             [% IF ( active ) %]
-              [% UNLESS ( closedate ) %]
                 "aoColumnDefs": [
-                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                    [% UNLESS ( closedate ) %]
+                        { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                    [% END %]
+                    { "sType": "anti-the", "aTargets": [ "anti-the" ] }
                 ],
-              [% END %]
             [% END %]
         } ) );
         var cancelledorderst = $("#cancelledorderst").dataTable($.extend(true, {}, dataTablesDefaults, {
@@ -393,7 +394,7 @@
                 <thead>
                     <tr>
                         <th>No.</th>
-                        <th>Order</th>
+                        <th class="anti-the">Order</th>
                         <th class="gste">RRP tax exc.</th>
                         <th class="gste">ecost tax exc.</th>
                         <th class="gsti">RRP tax inc.</th>
