@@ -27,7 +27,10 @@
             bInfo: false,
             bPaginate: false,
             bFilter: false,
-            sDom: "t"
+            sDom: "t",
+            "aoColumnDefs": [
+                { "sType": "anti-the", "aTargets": [ "anti-the" ] }
+            ]
         }));
 [% IF ( (Koha.Preference('AcqEnableFiles')) && files ) %]
         $("#invoice_files_table").dataTable($.extend(true, {}, dataTablesDefaults, {
@@ -131,7 +134,7 @@
           <table id="orderst">
             <thead>
               <tr>
-                <th>Summary</th>
+                <th class="anti-the">Summary</th>
                 <th>Library</th>
                 <th class="gste">Actual cost tax exc.</th>
                 <th class="gsti">Actual cost tax inc.</th>
