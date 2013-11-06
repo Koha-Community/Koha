@@ -916,7 +916,7 @@ sub _get_unsent_messages {
 
     my $dbh = C4::Context->dbh();
     my $statement = << 'ENDSQL';
-SELECT mq.message_id, mq.borrowernumber, mq.subject, mq.content, mq.message_transport_type, mq.status, mq.time_queued, mq.from_address, mq.to_address, mq.content_type, b.branchcode
+SELECT mq.message_id, mq.borrowernumber, mq.subject, mq.content, mq.message_transport_type, mq.status, mq.time_queued, mq.from_address, mq.to_address, mq.content_type, b.branchcode, mq.letter_code
   FROM message_queue mq
   LEFT JOIN borrowers b ON b.borrowernumber = mq.borrowernumber
  WHERE status = ?
@@ -1024,11 +1024,32 @@ $content
 EOS
 }
 
+sub _is_duplicate {
+    my ( $message ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $count = $dbh->selectrow_array(q|
+        SELECT COUNT(*)
+        FROM message_queue
+        WHERE message_transport_type = ?
+        AND borrowernumber = ?
+        AND letter_code = ?
+        AND CAST(time_queued AS date) = CAST(? AS date)
+        AND status="sent"
+    |, {}, $message->{message_transport_type}, $message->{borrowernumber}, $message->{letter_code}, $message->{time_queued} );
+    return $count;
+}
+
 sub _send_message_by_sms {
     my $message = shift or return;
     my $member = C4::Members::GetMember( 'borrowernumber' => $message->{'borrowernumber'} );
 
     unless ( $member->{smsalertnumber} ) {
+        _set_message_status( { message_id => $message->{'message_id'},
+                               status     => 'failed' } );
+        return;
+    }
+
+    if ( _is_duplicate( $message ) ) {
         _set_message_status( { message_id => $message->{'message_id'},
                                status     => 'failed' } );
         return;
