@@ -468,9 +468,9 @@ sub calculate {
     foreach my $row (@loopline) {
         foreach my $col (@loopcol) {
             $debug and warn " init table : $row->{rowtitle} ( $row->{rowtitle_display} ) / $col->{coltitle} ( $col->{coltitle_display} )  ";
-            $table{ $row->{rowtitle} }->{ $col->{coltitle} } = 0;
+            table_set(\%table, $row->{rowtitle}, $col->{coltitle}, 0);
         }
-        $table{ $row->{rowtitle} }->{totalrow} = 0;
+        table_set(\%table, $row->{rowtitle}, 'totalrow', 0);
     }
 
     # preparing calculation
@@ -574,14 +574,12 @@ sub calculate {
         ($debug) and warn "filling table $row / $col / $value ";
         unless ( defined $col ) {
             $emptycol = 1;
-            $col      = "zzEMPTY";
         }
         unless ( defined $row ) {
             $emptyrow = 1;
-            $row      = "zzEMPTY";
         }
-        $table{$row}->{$col}     += $value;
-        $table{$row}->{totalrow} += $value;
+        table_inc(\%table, $row, $col, $value);
+        table_inc(\%table, $row, 'totalrow', $value);
         $grantotal               += $value;
     }
     push @loopcol,  { coltitle => "NULL", coltitle_display => 'NULL' } if ($emptycol);
@@ -593,7 +591,7 @@ sub calculate {
         #@loopcol ensures the order for columns is common with column titles
         # and the number matches the number of columns
         foreach my $col (@loopcol) {
-            my $value = $table{ null_to_zzempty( $row->{rowtitle} ) }->{ null_to_zzempty( $col->{coltitle} ) };
+            my $value = table_get(\%table, $row->{rowtitle}, $col->{coltitle});
             push @loopcell, { value => $value };
         }
         my $rowtitle = ( $row->{rowtitle} eq "NULL" ) ? "zzEMPTY" : $row->{rowtitle};
@@ -601,14 +599,14 @@ sub calculate {
           { 'rowtitle_display' => $row->{rowtitle_display},
             'rowtitle'         => $rowtitle,
             'loopcell'         => \@loopcell,
-            'totalrow'         => $table{$rowtitle}->{totalrow}
+            'totalrow'         => table_get(\%table, $rowtitle, 'totalrow'),
           };
     }
     for my $col (@loopcol) {
         my $total = 0;
         foreach my $row (@looprow) {
-            $total += $table{ null_to_zzempty( $row->{rowtitle} ) }->{ null_to_zzempty( $col->{coltitle} ) };
-            $debug and warn "value added " . $table{ $row->{rowtitle} }->{ $col->{coltitle} } . "for line " . $row->{rowtitle};
+            $total += table_get(\%table, $row->{rowtitle}, $col->{coltitle});
+            $debug and warn "value added " . table_get(\%table, $row->{rowtitle}, $col->{coltitle}) . "for line " . $row->{rowtitle};
         }
         push @loopfooter, { 'totalcol' => $total };
     }
@@ -633,6 +631,24 @@ sub null_to_zzempty ($) {
 	defined($string)    or  return 'zzEMPTY';
 	($string eq "NULL") and return 'zzEMPTY';
 	return $string;		# else return the valid value
+}
+
+sub table_set {
+    my ($table, $row, $col, $val) = @_;
+
+    $table->{ null_to_zzempty(lc($row)) }->{ null_to_zzempty(lc($col)) } = $val;
+}
+
+sub table_get {
+    my ($table, $row, $col) = @_;
+
+    return $table->{ null_to_zzempty(lc($row)) }->{ null_to_zzempty(lc($col)) };
+}
+
+sub table_inc {
+    my ($table, $row, $col, $inc) = @_;
+
+    $table->{ null_to_zzempty(lc($row)) }->{ null_to_zzempty(lc($col)) } += $inc;
 }
 
 1;
