@@ -581,6 +581,18 @@ $template->param ( QUERY_INPUTS => \@query_inputs );
 ## parse the limit_cgi string and put it into a form suitable for <input>s
 my @limit_inputs = $limit_cgi ? _input_cgi_parse($limit_cgi) : ();
 
+# OpenURL
+my @OpenURL_itypes;
+if (C4::Context->preference('OPACShowOpenURL')) {
+    @OpenURL_itypes = split( /\s/, C4::Context->preference('OPACOpenURLItemTypes') );
+    $template->param(
+        OPACShowOpenURL => 1,
+        OpenURLResolverURL => C4::Context->preference('OpenURLResolverURL'),
+        OpenURLText => C4::Context->preference('OpenURLText'),
+        OpenURLImageLocation => C4::Context->preference('OpenURLImageLocation')
+    );
+}
+
 $template->param ( LIMIT_INPUTS => \@limit_inputs );
 $template->param ( OPACResultsSidebar => C4::Context->preference('OPACResultsSidebar'));
 

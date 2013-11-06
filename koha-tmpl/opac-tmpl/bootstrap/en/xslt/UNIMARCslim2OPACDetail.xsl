@@ -443,6 +443,56 @@
       </xsl:for-each>
     </span>
   </xsl:if>
+
+  <!-- OpenURL -->
+  <xsl:variable name="OPACShowOpenURL" select="marc:sysprefs/marc:syspref[@name='OPACShowOpenURL']" />
+  <xsl:variable name="OpenURLImageLocation" select="marc:sysprefs/marc:syspref[@name='OpenURLImageLocation']" />
+  <xsl:variable name="OpenURLText" select="marc:sysprefs/marc:syspref[@name='OpenURLText']" />
+  <xsl:variable name="OpenURLResolverURL" select="marc:variables/marc:variable[@name='OpenURLResolverURL']" />
+
+  <xsl:if test="$OPACShowOpenURL = 1 and $OpenURLResolverURL != ''">
+    <xsl:variable name="openurltext">
+      <xsl:choose>
+        <xsl:when test="$OpenURLText != ''">
+          <xsl:value-of select="$OpenURLText" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>OpenURL</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <span class="results_summary"><a>
+      <xsl:attribute name="href">
+        <xsl:value-of select="$OpenURLResolverURL" />
+      </xsl:attribute>
+      <xsl:attribute name="title">
+        <xsl:value-of select="$openurltext" />
+      </xsl:attribute>
+      <xsl:attribute name="class">
+        <xsl:text>OpenURL</xsl:text>
+      </xsl:attribute>
+      <xsl:if test="$OPACURLOpenInNewWindow='1'">
+        <xsl:attribute name="target">
+          <xsl:text>_blank</xsl:text>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="$OpenURLImageLocation != ''">
+          <img>
+            <xsl:attribute name="src">
+              <xsl:value-of select="$OpenURLImageLocation" />
+            </xsl:attribute>
+          </img>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$openurltext" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </a></span>
+  </xsl:if>
+  <!-- End of OpenURL -->
+
 </xsl:template>
 
     <xsl:template name="nameABCDQ">

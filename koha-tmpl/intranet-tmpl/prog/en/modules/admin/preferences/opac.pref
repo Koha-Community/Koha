@@ -120,6 +120,8 @@ OPAC:
                   yes: Include
                   no: "Don't include"
             - "COinS / OpenURL / Z39.88 in OPAC search results.  <br/>Warning: Enabling this feature will slow OPAC search response times."
+            - "<br/>If you want to display a link to an OpenURL resolver, look at the following system preferences:"
+            - "<br/><code>OpenURLResolverURL</code>, <code>OPACShowOpenURL</code>, <code>OPACOpenURLItemTypes</code>, <code>OpenURLText<code>, <code>OpenURLImageLocation</code>"
         -
             - pref: OPACShowUnusedAuthorities
               choices:
@@ -533,6 +535,33 @@ OPAC:
               type: textarea
               syntax: text/html
               class: code
+    OpenURL:
+        -
+            - 'Complete URL of OpenURL resolver (starting with <code>http://</code> or <code>https://</code>):'
+            - pref: OpenURLResolverURL
+              class: url
+        -
+            - 'Text of OpenURL links (or image title if OpenURLImageLocation is defined):'
+            - pref: OpenURLText
+        -
+            - 'Location of image for OpenURL links:'
+            - pref: OpenURLImageLocation
+              class: url
+            - '<br />Can be an absolute URL starting with <code>http://</code> or'
+            - '<code>https://</code> or a relative URL'
+            - '<br />Examples:'
+            - '<br />- <code>http://www.example.com/img/openurl.png</code>'
+            - '<br />- <code>/opac-tmpl/bootstrap/images/OpenURL.png</code>'
+        -
+            - pref: OPACShowOpenURL
+              choices:
+                  yes: Enable
+                  no: Disable
+            - 'display of OpenURL link in OPAC search results and detail page.'
+        -
+            - 'List of item type codes (separated by spaces) for those you want to show the OpenURL link:'
+            - pref: OPACOpenURLItemTypes
+            - '<br />'
     Policy:
         -
             - pref: SearchMyLibraryFirst

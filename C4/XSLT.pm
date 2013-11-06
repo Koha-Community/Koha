@@ -171,7 +171,9 @@ sub get_xslt_sysprefs {
                               OPACItemLocation DisplayIconsXSLT
                               AlternateHoldingsField AlternateHoldingsSeparator
                               TrackClicks opacthemes IdRef OpacSuppression
-                              OPACResultsLibrary / )
+                              OPACResultsLibrary OPACShowOpenURL
+                              OpenURLResolverURL OpenURLImageLocation
+                              OpenURLText / )
     {
         my $sp = C4::Context->preference( $syspref );
         next unless defined($sp);
@@ -188,7 +190,7 @@ sub get_xslt_sysprefs {
 }
 
 sub XSLTParse4Display {
-    my ( $biblionumber, $orig_record, $xslsyspref, $fixamps, $hidden_items, $sysxml, $xslfilename, $lang ) = @_;
+    my ( $biblionumber, $orig_record, $xslsyspref, $fixamps, $hidden_items, $sysxml, $xslfilename, $lang, $variables ) = @_;
 
     $sysxml ||= C4::Context->preference($xslsyspref);
     $xslfilename ||= C4::Context->preference($xslsyspref);
@@ -243,8 +245,23 @@ sub XSLTParse4Display {
     my $itemsxml  = buildKohaItemsNamespace($biblionumber, $hidden_items);
     my $xmlrecord = $record->as_xml(C4::Context->preference('marcflavour'));
 
-    $xmlrecord =~ s/\<\/record\>/$itemsxml$sysxml\<\/record\>/;
-    if ($fixamps) { # We need to correct the HTML entities that Zebra outputs
+    $variables ||= {};
+    if (C4::Context->preference('OPACShowOpenURL')) {
+        my ($biblio) = GetBiblioItemByBiblioNumber($biblionumber);
+        my @itypes = split( /\s/, C4::Context->preference('OPACOpenURLItemTypes') );
+        if (grep /^$biblio->{itemtype}$/, @itypes) {
+            $variables->{OpenURLResolverURL} =
+              C4::Biblio::GetOpenURLResolverURL($orig_record);
+        }
+    }
+    my $varxml = "<variables>\n";
+    while (my ($key, $value) = each %$variables) {
+        $varxml .= "<variable name=\"$key\">$value</variable>\n";
+    }
+    $varxml .= "</variables>\n";
+
+    $xmlrecord =~ s/\<\/record\>/$itemsxml$sysxml$varxml\<\/record\>/;
+    if ($fixamps) { # We need to correct the ampersand entities that Zebra outputs
         $xmlrecord =~ s/\&amp;amp;/\&amp;/g;
         $xmlrecord =~ s/\&amp\;lt\;/\&lt\;/g;
         $xmlrecord =~ s/\&amp\;gt\;/\&gt\;/g;

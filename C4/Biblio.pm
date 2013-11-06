@@ -88,6 +88,8 @@ use MARC::File::USMARC;
 use MARC::File::XML;
 use POSIX qw(strftime);
 use Module::Load::Conditional qw(can_load);
+use URI;
+use URI::Escape; # GetCOinSBiblio
 
 use C4::Koha;
 use C4::Log;    # logaction
@@ -1246,45 +1248,44 @@ sub GetCOinSBiblio {
         carp 'GetCOinSBiblio called with undefined record';
         return;
     }
+
     my $pos7 = substr $record->leader(), 7, 1;
     my $pos6 = substr $record->leader(), 6, 1;
     my $mtx;
     my $genre;
     my ( $aulast, $aufirst ) = ( '', '' );
-    my $oauthors  = '';
-    my $title     = '';
-    my $subtitle  = '';
+    my @authors;
+    my $title;
+    my $hosttitle;
     my $pubyear   = '';
     my $isbn      = '';
     my $issn      = '';
     my $publisher = '';
     my $pages     = '';
-    my $titletype = 'b';
+    my $titletype = '';
 
     # For the purposes of generating COinS metadata, LDR/06-07 can be
     # considered the same for UNIMARC and MARC21
-    my $fmts6;
-    my $fmts7;
-    %$fmts6 = (
-                'a' => 'book',
-                'b' => 'manuscript',
-                'c' => 'book',
-                'd' => 'manuscript',
-                'e' => 'map',
-                'f' => 'map',
-                'g' => 'film',
-                'i' => 'audioRecording',
-                'j' => 'audioRecording',
-                'k' => 'artwork',
-                'l' => 'document',
-                'm' => 'computerProgram',
-                'o' => 'document',
-                'r' => 'document',
-            );
-    %$fmts7 = (
-                    'a' => 'journalArticle',
-                    's' => 'journal',
-              );
+    my $fmts6 = {
+        'a' => 'book',
+        'b' => 'manuscript',
+        'c' => 'book',
+        'd' => 'manuscript',
+        'e' => 'map',
+        'f' => 'map',
+        'g' => 'film',
+        'i' => 'audioRecording',
+        'j' => 'audioRecording',
+        'k' => 'artwork',
+        'l' => 'document',
+        'm' => 'computerProgram',
+        'o' => 'document',
+        'r' => 'document',
+    };
+    my $fmts7 = {
+        'a' => 'journalArticle',
+        's' => 'journal',
+    };
 
     $genre = $fmts6->{$pos6} ? $fmts6->{$pos6} : 'book';
 
@@ -1295,6 +1296,7 @@ sub GetCOinSBiblio {
     ##### We must transform mtx to a valable mtx and document type ####
     if ( $genre eq 'book' ) {
             $mtx = 'book';
+            $titletype = 'b';
     } elsif ( $genre eq 'journal' ) {
             $mtx = 'journal';
             $titletype = 'j';
@@ -1306,26 +1308,25 @@ sub GetCOinSBiblio {
             $mtx = 'dc';
     }
 
-    $genre = ( $mtx eq 'dc' ) ? "&amp;rft.type=$genre" : "&amp;rft.genre=$genre";
-
     if ( C4::Context->preference("marcflavour") eq "UNIMARC" ) {
 
         # Setting datas
         $aulast  = $record->subfield( '700', 'a' ) || '';
         $aufirst = $record->subfield( '700', 'b' ) || '';
-        $oauthors = "&amp;rft.au=$aufirst $aulast";
+        push @authors, "$aufirst $aulast" if ($aufirst or $aulast);
 
         # others authors
         if ( $record->field('200') ) {
             for my $au ( $record->field('200')->subfield('g') ) {
-                $oauthors .= "&amp;rft.au=$au";
+                push @authors, $au;
             }
         }
-        $title =
-          ( $mtx eq 'dc' )
-          ? "&amp;rft.title=" . $record->subfield( '200', 'a' )
-          : "&amp;rft.title=" . $record->subfield( '200', 'a' ) . "&amp;rft.btitle=" . $record->subfield( '200', 'a' );
-        $pubyear   = $record->subfield( '210', 'd' ) || '';
+
+        $title     = $record->subfield( '200', 'a' );
+        my $subfield_210d = $record->subfield('210', 'd');
+        if ($subfield_210d and $subfield_210d =~ /(\d{4})/) {
+            $pubyear = $1;
+        }
         $publisher = $record->subfield( '210', 'c' ) || '';
         $isbn      = $record->subfield( '010', 'a' ) || '';
         $issn      = $record->subfield( '011', 'a' ) || '';
@@ -1335,34 +1336,24 @@ sub GetCOinSBiblio {
 
         # Setting datas
         if ( $record->field('100') ) {
-            $oauthors .= "&amp;rft.au=" . $record->subfield( '100', 'a' );
+            push @authors, $record->subfield( '100', 'a' );
         }
 
         # others authors
         if ( $record->field('700') ) {
             for my $au ( $record->field('700')->subfield('a') ) {
-                $oauthors .= "&amp;rft.au=$au";
+                push @authors, $au;
             }
         }
-        $title = "&amp;rft." . $titletype . "title=" . $record->subfield( '245', 'a' );
-        $subtitle = $record->subfield( '245', 'b' ) || '';
-        $title .= $subtitle;
+        $title = $record->subfield( '245', 'a' ) . $record->subfield( '245', 'b' );
         if ($titletype eq 'a') {
             $pubyear   = $record->field('008') || '';
             $pubyear   = substr($pubyear->data(), 7, 4) if $pubyear;
             $isbn      = $record->subfield( '773', 'z' ) || '';
             $issn      = $record->subfield( '773', 'x' ) || '';
-            if ($mtx eq 'journal') {
-                $title    .= "&amp;rft.title=" . ( $record->subfield( '773', 't' ) || $record->subfield( '773', 'a') || q{} );
-            } else {
-                $title    .= "&amp;rft.btitle=" . ( $record->subfield( '773', 't' ) || $record->subfield( '773', 'a') || q{} );
-            }
-            foreach my $rel ($record->subfield( '773', 'g' )) {
-                if ($pages) {
-                    $pages .= ', ';
-                }
-                $pages .= $rel;
-            }
+            $hosttitle = $record->subfield( '773', 't' ) || $record->subfield( '773', 'a') || q{};
+            my @rels = $record->subfield( '773', 'g' );
+            $pages = join(', ', @rels);
         } else {
             $pubyear   = $record->subfield( '260', 'c' ) || '';
             $publisher = $record->subfield( '260', 'b' ) || '';
@@ -1371,14 +1362,61 @@ sub GetCOinSBiblio {
         }
 
     }
-    my $coins_value =
-"ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A$mtx$genre$title&amp;rft.isbn=$isbn&amp;rft.issn=$issn&amp;rft.aulast=$aulast&amp;rft.aufirst=$aufirst$oauthors&amp;rft.pub=$publisher&amp;rft.date=$pubyear&amp;rft.pages=$pages";
-    $coins_value =~ s/(\ |&[^a])/\+/g;
-    $coins_value =~ s/\"/\&quot\;/g;
 
-#<!-- TMPL_VAR NAME="ocoins_format" -->&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" -->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.pages=<!-- TMPL_VAR NAME="pages" -->&amp;rft.isbn=<!-- TMPL_VAR NAME=amazonisbn -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place" -->&amp;rft.pub=<!-- TMPL_VAR NAME="publishercode" -->&amp;rft.edition=<!-- TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series" -->&amp;rft.genre="
+    my @params = (
+        [ 'ctx_ver', 'Z39.88-2004' ],
+        [ 'rft_val_fmt', "info:ofi/fmt:kev:mtx:$mtx" ],
+        [ ($mtx eq 'dc' ? 'rft.type' : 'rft.genre'), $genre ],
+        [ "rft.${titletype}title", $title ],
+    );
+
+    # rft.title is authorized only once, so by checking $titletype
+    # we ensure that rft.title is not already in the list.
+    if ($hosttitle and $titletype) {
+        push @params, [ 'rft.title', $hosttitle ];
+    }
+
+    push @params, (
+        [ 'rft.isbn', $isbn ],
+        [ 'rft.issn', $issn ],
+    );
+
+    # If it's a subscription, these informations have no meaning.
+    if ($genre ne 'journal') {
+        push @params, (
+            [ 'rft.aulast', $aulast ],
+            [ 'rft.aufirst', $aufirst ],
+            (map { [ 'rft.au', $_ ] } @authors),
+            [ 'rft.pub', $publisher ],
+            [ 'rft.date', $pubyear ],
+            [ 'rft.pages', $pages ],
+        );
+    }
+
+    my $coins_value = join( '&amp;',
+        map { $$_[1] ? $$_[0] . '=' . uri_escape_utf8( $$_[1] ) : () } @params );
 
     return $coins_value;
+}
+
+sub GetOpenURLResolverURL {
+    my ($record) = @_;
+
+    my $coins = GetCOinSBiblio($record);
+    my $OpenURLResolverURL = C4::Context->preference('OpenURLResolverURL');
+
+    if ($OpenURLResolverURL) {
+        my $uri = URI->new($OpenURLResolverURL);
+
+        if (not defined $uri->query) {
+            $OpenURLResolverURL .= '?';
+        } else {
+            $OpenURLResolverURL .= '&amp;';
+        }
+        $OpenURLResolverURL .= $coins;
+    }
+
+    return $OpenURLResolverURL;
 }
 
 
