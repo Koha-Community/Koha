@@ -348,7 +348,13 @@ if ( ($op eq 'modify' || $op eq 'insert' || $op eq 'save'|| $op eq 'duplicate') 
     }
 }
 
-if ( ( defined $input->param('SMSnumber') ) && ( $input->param('SMSnumber') ne $newdata{'mobile'} ) ) {
+if (
+        defined $input->param('SMSnumber')
+    &&  (
+           $input->param('SMSnumber') eq ""
+        or $input->param('SMSnumber') ne $newdata{'mobile'}
+        )
+) {
     $newdata{smsalertnumber} = $input->param('SMSnumber');
 }
 
