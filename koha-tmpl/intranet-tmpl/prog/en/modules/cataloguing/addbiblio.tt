@@ -91,6 +91,10 @@
             PopupZ3950();
         });
 
+        $("#linkerbutton").click(function(){
+            AutomaticLinker();
+        });
+
         $("#saverecord").click(function(){
             $(".btn-group").removeClass("open");
             onOption();
@@ -177,8 +181,240 @@
         var onOption = function () {
             return Check();
         }
-    [% END %]
+[% END %]
 
+function confirmnotdup(redirect){
+    $("#confirm_not_duplicate").attr("value","1");
+    $("#redirect").attr("value",redirect);
+    Check();
+}
+
+function Dopop(link,i) {
+    defaultvalue = document.getElementById(i).value;
+    window.open(link+"&result="+defaultvalue,"valuebuilder",'width=700,height=550,toolbar=false,scrollbars=yes');
+}
+
+/**
+ * this function open a popup to search on z3950 server.
+ */
+function PopupZ3950() {
+    var strQuery = GetZ3950Terms();
+    if(strQuery){
+        window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=[% biblionumber | html %]"+strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+    }
+}
+
+/**
+* this function append button for create new authority if not found
+*/
+
+function addCreateAuthorityButton(tag_subfield_line, heading, tag_index) {
+    var title = _("Create authority");
+    var elem = $('<a href="#" title="' + title + '"><i class="fa fa-plus-circle"></i></a>');
+    tag_subfield_line.append(elem);
+    var tag_subfield_line_a = $('.subfield_line[id^=subfield' + heading.tag + 'a]').eq(tag_index);
+    var subfield_a = tag_subfield_line_a.children('.input_marceditor').eq(0);
+    var index = subfield_a.attr('id');
+    elem.click(function() {
+        var popup = window.open("", "new_auth_popup",'fullscreen,toolbar=false,scrollbars=yes');
+        if(popup !== null) {
+            // Create a new form that will be POSTed in the new window
+            var form = $('<form>').attr({
+            method: 'post',
+            action: "../authorities/authorities.pl",
+            target: "new_auth_popup"
+            });
+            //add the authtypecode
+            form.append($('<input>').attr({
+                type: 'hidden',
+                name: 'authtypecode',
+                value: heading.auth_type
+            }));
+            form.append($('<input>').attr({
+                type: 'hidden',
+                name: 'tagreport',
+                value: heading.tag_to_report
+            }));
+            form.append($('<input>').attr({
+                type: 'hidden',
+                name: 'tagbiblio',
+                value: heading.tag
+            }));
+            form.append($('<input>').attr({
+                type: 'hidden',
+                name: 'index',
+                value: index
+            }));
+            $('.tag[id^=tag_' + heading.tag + '_]').eq(tag_index).find(':input').each(function(){
+                form.append($('<input>').attr({
+                    type: 'hidden',
+                    name: this.name.split('_',4).join(''),
+                    value: $(this).val()
+                }));
+            });
+
+            $('body').append(form);
+            form.submit();
+            form.remove();
+        }
+        return false;
+    });
+
+}
+
+/**
+ * Updates the authid for every heading field
+ * Adds visual feedback for the changes made on the form.
+ */
+function updateHeadingLinks(links) {
+    var current_tag = '';
+    var tag_index = 0;
+
+    // Delete the old message dialog and create a new one
+    $('#autolinker_dialog').remove();
+    var message_dialog = $('<div id="autolinker_dialog" class="dialog"><strong>' + _("Automatic authority link results:") + '</strong><ul></ul></div>');
+    var message_dialog_ul = message_dialog.find('ul');
+
+    $.each(links, function(index, heading) {
+        if(current_tag == heading.tag) {
+            tag_index++;
+        }
+        else {
+            current_tag = heading.tag;
+            tag_index = 0;
+        }
+
+        // Find the $9 field to update
+        var tag_subfield_line = $('.subfield_line[id^=subfield' + heading.tag + '9]').eq(tag_index);
+        var subfield = tag_subfield_line.children('.input_marceditor').eq(0);
+
+        // Delete the old status if one exists
+        tag_subfield_line.children('.subfield_status').remove();
+
+        // If the field wasn't modified. Skip it.
+        if(heading.status == 'UNCHANGED') {
+            return;
+        }
+
+
+        // Make the subfield line visible and update its value
+        tag_subfield_line.show();
+        subfield.val(heading.authid);
+
+        // Add the new status
+        var image = '<i class="fa fa-close no_matching_authority" </i> ';
+        var message = '';
+        var field_class = 'no_matching_authority_field';
+        switch(heading.status) {
+            case 'LOCAL_FOUND':
+                image = '<i class="fa fa-check matching_authority"</i> ';
+                message = _("A matching authority was found in the local database.");
+                field_class = 'matching_authority_field';
+                break;
+            case 'CREATED':
+                image = '<i class="fa fa-check matching_authority"></i> ';
+                message = _("No matching authority found. A new authority was created automatically.");
+                field_class = 'matching_authority_field';
+                break;
+            case 'MULTIPLE_MATCH':
+                message = _("More than one local match found. Possibly a duplicate authority!");
+                break;
+            case 'NONE_FOUND':
+                message = _("No matching authority found.");
+                break;
+            default:
+                message = heading.status;
+                break;
+        }
+
+        subfield[0].classList.add(field_class);
+        tag_subfield_line.find('i').each(function() {
+            this.remove();
+        });
+        tag_subfield_line.append(image);
+
+        // Add the message to the dialog
+        message_dialog_ul.append('<li><strong>' + heading.tag + '</strong> - ' + message + '</li>');
+
+        // Add a link to create a new authority if none was found
+        if(heading.status == 'NONE_FOUND' && tag_subfield_line.find('i').length == 1) {
+            addCreateAuthorityButton(tag_subfield_line, heading , tag_index);
+        }
+    });
+
+    if(message_dialog.find('li').length == 0) {
+        message_dialog_ul.append("<li>" + _("No authority link was changed.") + "</li>");
+    }
+    $('#addbibliotabs').before(message_dialog);
+}
+
+/**
+ * Use an ajax request to automatically find authority links for the current record
+ */
+function AutomaticLinker() {
+    // Show the Loading overlay
+    $("#loading").show();
+
+    // Remove fields that are completely empty
+    $('#f').find('.tag').each(function() {
+        var empty = true;
+        $(this).find('.input_marceditor').each(function() {
+            if($(this).val() != '') {
+                empty = false;
+                return false;
+            }
+        });
+        if(empty) {
+            UnCloneField($(this).attr('id'));
+        }
+    });
+
+    // Get all the form values to post via AJAX
+    var form_data = {};
+    $('#f').find(':input').each(function(){
+        form_data[this.name] = $(this).val();
+    });
+    delete form_data[''];
+
+    // Send the data to automatic_linker.pl
+    $.ajax({
+        url:'/cgi-bin/koha/svc/cataloguing/automatic_linker.pl',
+        type:'post',
+        data: form_data,
+        dataType: 'json',
+        error: function(xhr) {
+            alert("Error : \n" + xhr.responseText);
+        },
+        success: function(json) {
+            switch(json.status) {
+                case 'UNAUTHORIZED':
+                    alert(_("Error : You do not have the permissions necessary to use this functionality."));
+                    break;
+                case 'OK':
+                    updateHeadingLinks(json.links);
+                    break;
+            }
+        },
+        complete: function() {
+            $("#loading").hide();
+        }
+    });
+}
+
+
+function PopupMARCFieldDoc(field) {
+    [% IF Koha.Preference('marcfielddocurl') %]
+        var docurl = "[% Koha.Preference('marcfielddocurl').replace('"','&quot;') | html %]";
+        docurl = docurl.replace("{MARC}", "[% marcflavour | html %]");
+        docurl = docurl.replace("{FIELD}", ""+field);
+        docurl = docurl.replace("{LANG}", "[% lang | html %]");
+        window.open(docurl);
+    [% ELSIF ( marcflavour == 'MARC21' ) %]
+        _MARC21FieldDoc(field);
+    [% ELSIF ( marcflavour == 'UNIMARC' ) %]
+        _UNIMARCFieldDoc(field);
+    [% END %]
+}
     function confirmnotdup(redirect){
         $("#confirm_not_duplicate").attr("value","1");
         $("#redirect").attr("value",redirect);
@@ -586,6 +822,9 @@
                             <div class="btn-group"><a class="btn btn-default" href="#" id="z3950search"><i class="fa fa-search"></i> Replace record via Z39.50/SRU search</a></div>
                         [% ELSE %]
                             <div class="btn-group"><a class="btn btn-default" href="#" id="z3950search"><i class="fa fa-search"></i> Z39.50/SRU search</a></div>
+                        [% END %]
+                        [% IF ( CAN_user_editauthorities ) %]
+                            <div class="btn-group"><a class="btn btn-default" href="#" id="linkerbutton"><i class="fa fa-refresh"></i> Link authorities automatically</a></div>
                         [% END %]
                     [% END %]
 

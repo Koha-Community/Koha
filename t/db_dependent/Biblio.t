@@ -732,7 +732,7 @@ subtest 'ModBiblio called from linker test' => sub {
 };
 
 subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
-    plan tests => 6;
+    plan tests => 12;
 
     # Set up mocks to ensure authorities are generated
     my $biblio_mod = Test::MockModule->new( 'C4::Linker::Default' );
@@ -766,6 +766,20 @@ subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
         "The generated record contains the correct subfields"
     );
 
+    #Add test for this case using verbose
+    my ( $num_headings_changed, $results ) = LinkBibHeadingsToAuthorities($linker, $record, "",undef, 1);
+    my $details = $results->{details};
+    is( $num_headings_changed, 1, 'We changed the one we passed' );
+    is( $results->{details}->[0]->{status}, 'CREATED', "We added an authority record for the heading using verbose");
+
+    # Now we check the authority record itself
+    my $authority = GetAuthority($results->{details}->[0]->{authid});
+
+    is( $authority->field('150')->as_string(),
+         "Beach city Weirdness Fiction Books 21st Century Fish Stew Pizza",
+         "The generated record contains the correct subfields when using verbose"
+    );
+
     # Example series link with volume and punctuation
     $record = MARC::Record->new();
     $field = MARC::Field->new('800','','','a' => 'Tolkien, J. R. R.', 'q' => '(John Ronald Reuel),', 'd' => '1892-1973.', 't' => 'Lord of the rings ;', 'v' => '1');
@@ -784,6 +798,18 @@ subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
     is( $authority->field('100')->as_string(),
         "Tolkien, J. R. R. (John Ronald Reuel), 1892-1973. Lord of the rings",
         "The generated record contains the correct subfields"
+    );
+
+    # The same exemple With verbose
+    ( $num_headings_changed, $results ) = LinkBibHeadingsToAuthorities($linker, $record, "",undef, 1);
+    is( $num_headings_changed, 1, 'We changed the one we passed' );
+    is( $results->{details}->[0]->{status}, 'CREATED', "We added an authority record for the heading using verbose");
+
+    # Now we check the authority record itself
+    my $authority = GetAuthority($results->{details}->[0]->{authid});
+    is( $authority->field('100')->as_string(),
+         "Tolkien, J. R. R. (John Ronald Reuel), 1892-1973. Lord of the rings",
+         "The generated record contains the correct subfields"
     );
 };
 

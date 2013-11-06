@@ -1,11 +1,11 @@
 /* global __ total_pages */
 //z3950_search.js for Authorities, Bib records and Acquisitions module
-function Import(Breeding, recordid, AuthType, FrameworkCode) {
+function Import(Breeding, recordid, AuthType, FrameworkCode, index) {
 
     if ( AuthType == false ) {
         opener.document.location="../cataloguing/addbiblio.pl?biblionumber="+recordid+"&z3950=1&frameworkcode="+FrameworkCode+"&breedingid="+Breeding;
     } else {
-        opener.document.location="../authorities/authorities.pl?breedingid="+Breeding+"&authtypecode="+AuthType+"&authid="+recordid;
+        opener.document.location="../authorities/authorities.pl?breedingid="+Breeding+"&authtypecode="+AuthType+"&authid="+recordid+"&index="+index;
     }
     window.close();
     return false;
@@ -141,10 +141,11 @@ $( document ).ready( function() {
         var data_authid = $( this ).data( "authid" );
         var data_biblionumber = $( this ).data( "biblionumber" );
         var data_frameworkcode = $( this ).data( "frameworkcode" );
+        var data_index = $( this ).data( "index" );
         if ( data_headingcode == undefined ) {
             Import( data_breedingid, data_biblionumber, false , data_frameworkcode );
         } else {
-            Import( data_breedingid, data_authid, data_headingcode );
+            Import( data_breedingid, data_authid, data_headingcode, "", data_index );
         }
         return false;
     });

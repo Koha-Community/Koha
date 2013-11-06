@@ -499,6 +499,7 @@ Returns the number of headings changed
 sub BiblioAutoLink {
     my $record        = shift;
     my $frameworkcode = shift;
+    my $verbose = shift;
     if (!$record) {
         carp('Undefined record passed to BiblioAutoLink');
         return 0;
@@ -516,15 +517,15 @@ sub BiblioAutoLink {
 
     my $linker = $linker_module->new(
         { 'options' => C4::Context->preference("LinkerOptions") } );
-    my ( $headings_changed, undef ) =
-      LinkBibHeadingsToAuthorities( $linker, $record, $frameworkcode, C4::Context->preference("CatalogModuleRelink") || '' );
+    my ( $headings_changed, $results ) =
+      LinkBibHeadingsToAuthorities( $linker, $record, $frameworkcode, C4::Context->preference("CatalogModuleRelink") || '', $verbose );
     # By default we probably don't want to relink things when cataloging
-    return $headings_changed;
+    return $headings_changed, $results;
 }
 
 =head2 LinkBibHeadingsToAuthorities
 
-  my $num_headings_changed, %results = LinkBibHeadingsToAuthorities($linker, $marc, $frameworkcode, [$allowrelink]);
+  my $num_headings_changed, %results = LinkBibHeadingsToAuthorities($linker, $marc, $frameworkcode, [$allowrelink, $verbose]);
 
 Links bib headings to authority records by checking
 each authority-controlled field in the C<MARC::Record>
@@ -547,6 +548,7 @@ sub LinkBibHeadingsToAuthorities {
     my $frameworkcode = shift;
     my $allowrelink = shift;
     my $tagtolink     = shift;
+    my $verbose = shift;
     my %results;
     if (!$bib) {
         carp 'LinkBibHeadingsToAuthorities called on undefined bib record';
@@ -554,7 +556,6 @@ sub LinkBibHeadingsToAuthorities {
     }
     require C4::Heading;
     require C4::AuthoritiesMarc;
-
     $allowrelink = 1 unless defined $allowrelink;
     my $num_headings_changed = 0;
     foreach my $field ( $bib->fields() ) {
@@ -570,6 +571,7 @@ sub LinkBibHeadingsToAuthorities {
         if ( defined $current_link && (!$allowrelink || !C4::Context->preference('LinkerRelink')) )
         {
             $results{'linked'}->{ $heading->display_form() }++;
+            push(@{$results{'details'}}, { tag => $field->tag(), authid => $current_link, status => 'UNCHANGED'}) if $verbose;
             next;
         }
 
@@ -577,17 +579,23 @@ sub LinkBibHeadingsToAuthorities {
         if ($authid) {
             $results{ $fuzzy ? 'fuzzy' : 'linked' }
               ->{ $heading->display_form() }++;
-            next if defined $current_link and $current_link == $authid;
+            if(defined $current_link and $current_link == $authid) {
+                push(@{$results{'details'}}, { tag => $field->tag(), authid => $current_link, status => 'UNCHANGED'}) if $verbose;
+                next;
+            }
 
             $field->delete_subfield( code => '9' ) if defined $current_link;
             $field->add_subfields( '9', $authid );
             $num_headings_changed++;
+            push(@{$results{'details'}}, { tag => $field->tag(), authid => $authid, status => 'LOCAL_FOUND'}) if $verbose;
         }
         else {
+            my $authority_type = Koha::Authority::Types->find( $heading->auth_type() );
             if ( defined $current_link
                 && (!$allowrelink || C4::Context->preference('LinkerKeepStale')) )
             {
                 $results{'fuzzy'}->{ $heading->display_form() }++;
+                push(@{$results{'details'}}, { tag => $field->tag(), authid => $current_link, status => 'UNCHANGED'}) if $verbose;
             }
             elsif ( C4::Context->preference('AutoCreateAuthorities') ) {
                 if ( _check_valid_auth_link( $current_link, $field ) ) {
@@ -663,24 +671,29 @@ sub LinkBibHeadingsToAuthorities {
                     $num_headings_changed++;
                     $linker->update_cache($heading, $authid);
                     $results{'added'}->{ $heading->display_form() }++;
+                    push(@{$results{'details'}}, { tag => $field->tag(), authid => $authid, status => 'CREATED'}) if $verbose;
                 }
             }
             elsif ( defined $current_link ) {
                 if ( _check_valid_auth_link( $current_link, $field ) ) {
                     $results{'linked'}->{ $heading->display_form() }++;
+                    push(@{$results{'details'}}, { tag => $field->tag(), authid => $authid, status => 'UNCHANGED'}) if $verbose;
                 }
                 else {
                     $field->delete_subfield( code => '9' );
                     $num_headings_changed++;
                     $results{'unlinked'}->{ $heading->display_form() }++;
+                    push(@{$results{'details'}}, { tag => $field->tag(), authid => undef, status => 'NONE_FOUND', auth_type => $heading->auth_type(), tag_to_report => $authority_type->auth_tag_to_report}) if $verbose;
                 }
             }
             else {
                 $results{'unlinked'}->{ $heading->display_form() }++;
+                push(@{$results{'details'}}, { tag => $field->tag(), authid => undef, status => 'NONE_FOUND', auth_type => $heading->auth_type(), tag_to_report => $authority_type->auth_tag_to_report}) if $verbose;
             }
         }
 
     }
+    push(@{$results{'details'}}, { tag => '', authid => undef, status => 'UNCHANGED'}) unless %results;
     return $num_headings_changed, \%results;
 }
 

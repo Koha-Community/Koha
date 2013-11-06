@@ -42,6 +42,7 @@ my $subjectsubdiv       = $input->param('subjectsubdiv');
 my $srchany       = $input->param('srchany');
 my $op            = $input->param('op')||'';
 my $page            = $input->param('current_page') || 1;
+my $index =$input->param('index');
 $page = $input->param('goto_page') if $input->param('changepage_goto');
 my $controlnumber    = $input->param('controlnumber');
 
@@ -65,6 +66,7 @@ $template->param(
     srchany      => $srchany,
     authid => $authid,
     controlnumber => $controlnumber,
+    index => $index,
 );
 
 if ( $op ne "do_search" ) {
@@ -74,6 +76,7 @@ if ( $op ne "do_search" ) {
     $template->param(
         serverloop   => $serverloop,
         opsearch     => "search",
+        index        => $index,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;

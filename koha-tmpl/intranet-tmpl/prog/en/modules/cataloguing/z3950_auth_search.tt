@@ -20,6 +20,7 @@
         <form method="post" action="z3950_auth_search.pl" name="f" class="checkboxed">
         <input type="hidden" name="op" id="op" value="do_search" />
         <input type="hidden" name="authid" value="[% authid | html %]" />
+        <input type="hidden" name="index" value="[% index | html %]" />
             <div class="row">
             <div class="col-xs-6">
                 <fieldset class="rows">
@@ -94,7 +95,7 @@
                     </a>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="cataloguesearchactions[% breeding_loo.breedingid | html %]">
                         <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" class="previewMARC"><i class="fa fa-eye"></i> MARC preview</a></li>
-                        <li><a href="#" class="import_record" data-breedingid="[% breeding_loo.breedingid | html %]" data-heading_code="[% breeding_loo.heading_code | html %]" data-authid="[% breeding_loo.authid | html %]"><i class="fa fa-download"></i> Import</a></li>
+                        <li><a href="#" class="import_record" data-breedingid="[% breeding_loo.breedingid | html %]" data-heading_code="[% breeding_loo.heading_code | html %]" data-authid="[% breeding_loo.authid | html %]" data-index="[% index | html %]" ><i class="fa fa-download"></i> Import</a></li>
                     </ul>
                 </div>
             </td>

@@ -187,6 +187,9 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
             for( j = 0 ; j < inputs.length ; j++ ) {
                 if(inputs[j].getAttribute("id") && inputs[j].getAttribute("id").match(/^tag_/) ){
                     inputs[j].value = "";
+
+                    //Remove the color added by the automatic linker
+                    $(inputs[j]).css({backgroundColor:""});
                 }
             }
             var textareas = divs[i].getElementsByTagName('textarea');
@@ -195,6 +198,8 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                     textareas[j].value = "";
                 }
             }
+            // Remove the status icons added by the automatic linker
+            $(divs[i]).find('.subfield_status').remove();
             if( inputs.length > 0 ){
                 inputs[0].setAttribute('id',inputs[0].getAttribute('id')+new_key);
                 inputs[0].setAttribute('name',inputs[0].getAttribute('name')+new_key);

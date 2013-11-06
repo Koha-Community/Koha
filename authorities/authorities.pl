@@ -289,6 +289,9 @@ sub create_input {
 
         }
     }
+    if ($cgi->param('tagreport') && $subfield_data{tag} == $cgi->param('tagreport')) {
+        $subfield_data{marc_value}{value} = $cgi->param('tag'. $cgi->param('tagbiblio') . 'subfield' . $subfield_data{subfield});
+    }
     $subfield_data{'index_subfield'} = $index_subfield;
     return \%subfield_data;
 }
@@ -576,7 +579,7 @@ my ($template, $loggedinuser, $cookie)
                             flagsrequired => {editauthorities => 1},
                             debug => 1,
                             });
-$template->param(nonav   => $nonav,index=>$myindex,authtypecode=>$authtypecode,breedingid=>$breedingid,);
+$template->param(nonav   => $nonav,index=>$myindex,authtypecode=>$authtypecode,breedingid=>$breedingid);
 
 $tagslib = GetTagsLabels(1,$authtypecode);
 $mandatory_z3950 = GetMandatoryFieldZ3950($authtypecode);

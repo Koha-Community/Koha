@@ -44,8 +44,10 @@
                 var whichfield;
                 try {
                     whichfield = opener.opener.document.getElementById(index_start);
+                    autolinker_dialog = opener.opener.document.getElementById("autolinker_dialog");
                 } catch(e) {
-                    return;
+                    whichfield = opener.document.getElementById(index_start);
+                    autolinker_dialog = opener.document.getElementById("autolinker_dialog");
                 }
                 var field_start = whichfield.parentNode.parentNode.parentNode.parentNode;
 
@@ -138,6 +140,7 @@
                     [% ELSE %]
                         if(code.value=='9'){
                             subfield.value = "[% To.json(authid) | $raw %]";
+                            subfield.className = subfield.className.replace("no_matching_authority_field", "matching_authority_field");
                             break;
                         }
                     [% END %]
@@ -145,6 +148,20 @@
                 }
             [% END %]
 
+            //Delete create authority button and status
+            var linkinfos = field_start.getElementsByTagName('i');
+            for (index = linkinfos.length - 1; index >= 0; index--) {
+                linkinfos[index].parentNode.removeChild(linkinfos[index]);
+            }
+            //Change message autolinker_dialog
+            var subfield_dialog = $(autolinker_dialog).children('ul').children('li');
+            for (index = subfield_dialog.length - 1; index >= 0; index--){
+                var tag_field = field_start.id.split("_")[1];
+                if (subfield_dialog[index].innerHTML.indexOf(tag_field) !== -1 ){
+                    subfield_dialog[index].innerHTML = subfield_dialog[index].innerHTML.replace(_("No matching authority found."), _("No matching authority found. A new authority was created or imported"));
+                    break;
+                }
+            }
             opener.close();
             window.close();
             return false;
