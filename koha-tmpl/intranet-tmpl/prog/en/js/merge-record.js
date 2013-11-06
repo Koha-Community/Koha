@@ -2,126 +2,145 @@
  * Merging 2 source records into a destination record
  */
 
-/**
- * Check or uncheck a field or subfield in a source record
- * @param pField the checkbox clicked
- */
-function toggleField(pField) {
+function build_target_record($sources) {
+  var target_record = {};
 
-    // Getting the key of the clicked checkbox
-    var ckid   = $(pField).attr("id");
-    var tab    = ckid.split('_');
-    var source = tab[1]; // From which record the click came from
-    var key    = tab[2];
-    var type   = $(pField).attr("class");
+  $sources.find('.record input[type="checkbox"].fieldpick:checked').each(function() {
+    var $checkbox = $(this);
+    var $li = $checkbox.parent();
+    var field = $checkbox.parent().find("span.field").text();
 
-    // Getting field/subfield
-    var field;
-    var subfield;
-    if (type == "subfieldpick") {
-        field = $(pField).parent().parent().parent().find("span.field").text();
-        subfield = $(pField).parent().find("span.subfield").text();
-    } else {
-        field = $(pField).parent().find("span.field").text();
+    if (!(field in target_record)) {
+      target_record[field] = [];
     }
+    target_record[field].push({
+      'id' : $li.attr('id'),
+      'tag' : field,
+      'subfields' : []
+    });
+  });
 
-    // If the field has just been checked
-    if (pField.checked) {
+  $sources.find('.record input[type="checkbox"].subfieldpick:checked').each(function() {
+    var $checkbox = $(this);
+    var $li = $checkbox.parent();
+    var $field_li = $li.parents('li');
+    var field = $field_li.find('span.field').text();
+    var subfield = $li.find('span.subfield').text();
 
-        // We check for repeatability
-        var canbeadded = true;
-        if (type == "subfieldpick") {
-            var repeatable = 1;
-            var alreadyexists = 0;
-            if (tagslib[field] && tagslib[field][subfield]) {
-                // Note : we can't use the dot notation here (tagslib.021) because the key is a number
-                repeatable = tagslib[field][subfield].repeatable;
-                // TODO : Checking for subfields
-            }
-        } else {
-            if (tagslib[field]) {
-                repeatable = tagslib[field].repeatable;
-                alreadyexists = $("#resultul span.field:contains(" + field + ")");
-                if (repeatable == 0 && alreadyexists.length != 0) {
-                    canbeadded = false;
-                }
-            }
+    var target_field;
+    if (field in target_record) {
+      for (i in target_record[field]) {
+        if (target_record[field][i].id == $field_li.attr('id')) {
+          target_field = target_record[field][i];
         }
-
-        // If the field is not repeatable, we check if it already exists in the result table
-        if (canbeadded == false) {
-            alert(MSG_MERGEREC_ALREADY_EXISTS);
-            pField.checked = 0;
-        } else {
-
-            // Cloning the field or subfield we picked
-            var clone = $(pField).parent().clone();
-
-            // Removing the checkboxes from it
-            $(clone).find("input.subfieldpick, input.fieldpick").each(function() {
-                $(this).remove();
-            });
-
-            // If we are a subfield
-            if (type == "subfieldpick") {
-                // then we need to find who is our parent field...
-                fieldkey = $(pField).parent().parent().parent().attr("id");
-
-                // Find where to add the subfield
-
-                // First, check if the field is not already in the destination record
-                if ($("#resultul li#" + fieldkey).length > 0) {
-
-                    // If so, we add our field to it
-                    $("#resultul li#" + fieldkey + " ul").append(clone);
-                } else {
-
-                    // If not, we add the subfield to the first matching field
-                    var where = 0;
-                    $("#resultul li span.field").each(function() {
-                        if ($(this).text() == field) {
-                            where = this;
-                            return false; // break each()
-                        }
-                    });
-
-                    // If there is no matching field in the destination record
-                    if (where == 0) {
-
-                        // TODO:
-                        // We select the whole field and removing non-selected subfields, instead of...
-
-                        // Alerting the user
-                        alert(MSG_MERGEREC_SUBFIELD.format(field));
-                        pField.checked = false;
-                    } else {
-                        $(where).nextAll("ul").append(clone);
-                    }
-
-                }
-
-            } else {
-                // If we are a field
-                var where = 0;
-                // Find a greater field to add before
-                $("#resultul li span.field").each(function() {
-                    if ($(this).text() > field) {
-                        where = this;
-                        return false; // break each()
-                    }
-                });
-                if (where) {
-                    $(where).parent().before(clone);
-                } else {
-                    // No greater field, add to the end
-                    $("#resultul").append(clone);
-                }
-            }
-        }
-    } else {
-        // Else, we remove it from the results tab
-        $("ul#resultul li#k" + key).remove();
+      }
+      if (!target_field) {
+        target_field = target_record[field][0];
+      }
     }
+    if (target_field) {
+      target_field.subfields.push({
+        'id' : $li.attr('id'),
+        'code' : subfield
+      });
+    } else {
+      $field_li.find('input.fieldpick').attr('checked', true);
+      target_record[field] = [{
+        'id' : $field_li.attr('id'),
+        'tag' : field,
+        'subfields' : [{
+          'id' : $li.attr('id'),
+          'code' : subfield
+        }]
+      }];
+    }
+  });
+
+  return target_record;
+}
+
+function field_can_be_added($sources, $li) {
+  target_record = build_target_record($sources);
+
+  var tag = $li.find('span.field').text();
+  var repeatable = true;
+  if (tag in tagslib) {
+    repeatable = (tagslib[tag].repeatable != 0) ? true : false;
+  }
+
+  if ((!repeatable) && (tag in target_record)) {
+    alert(MSG_MERGEREC_ALREADY_EXISTS);
+    return false;
+  }
+
+  return true;
+}
+
+function subfield_can_be_added($sources, $li) {
+  target_record = build_target_record($sources);
+
+  var $field_li = $li.parents('li');
+  var tag = $field_li.find('span.field').text();
+  var code = $li.find('span.subfield').text();
+
+  var repeatable = true;
+  if (tag in tagslib && code in tagslib[tag]) {
+    repeatable = (tagslib[tag][code].repeatable != 0) ? true : false;
+  }
+
+  if (!repeatable) {
+    var target_field;
+    if (tag in target_record) {
+      for (i in target_record[tag]) {
+        if (target_record[tag][i].id == $field_li.attr('id')) {
+          target_field = target_record[tag][i];
+        }
+      }
+      if (!target_field) {
+        target_field = target_record[tag][0];
+      }
+    }
+    if (target_field) {
+      for (i in target_field.subfields) {
+        var subfield = target_field.subfields[i];
+        if (code == subfield.code) {
+          alert(MSG_MERGEREC_SUBFIELD_ALREADY_EXISTS);
+          return false;
+        }
+      }
+    }
+  }
+
+  return true;
+}
+
+function rebuild_target($sources, $target) {
+  target_record = build_target_record($sources);
+
+  $target.empty();
+  var keys = $.map(target_record, function(elem, idx) { return idx }).sort();
+  for (k in keys) {
+    var tag = keys[k];
+    var fields = target_record[tag];
+    for (i in fields) {
+      var field = fields[i];
+      if (field.subfields.length > 0) {
+        var $field_clone = $('#' + field.id).clone();
+        $field_clone.find('ul').empty();
+        $field_clone.find('.fieldpick').remove();
+        $target.append($field_clone);
+
+        for (j in field.subfields) {
+          var subfield = field.subfields[j];
+          var $subfield_clone = $('#' + subfield.id).clone();
+          $subfield_clone.find('.subfieldpick').remove();
+          $field_clone.find('ul').append($subfield_clone);
+        }
+      } else {
+        $('#' + field.id).find('input.fieldpick').attr('checked', false);
+      }
+    }
+  }
 }
 
 /*
@@ -130,16 +149,24 @@ function toggleField(pField) {
 $(document).ready(function(){
     // When a field is checked / unchecked
     $('input.fieldpick').click(function() {
-        toggleField(this);
         // (un)check all subfields
         var ischecked = this.checked;
+        if (ischecked && !field_can_be_added($('#tabs'), $(this).parent())) {
+          return false;
+        }
+
         $(this).parent().find("input.subfieldpick").each(function() {
             this.checked = ischecked;
         });
+        rebuild_target($('#tabs'), $('#resultul'));
     });
 
     // When a field or subfield is checked / unchecked
     $("input.subfieldpick").click(function() {
-        toggleField(this);
+      var ischecked = this.checked;
+      if (ischecked && !subfield_can_be_added($('#tabs'), $(this).parent())) {
+        return false;
+      }
+      rebuild_target($('#tabs'), $('#resultul'));
     });
 });

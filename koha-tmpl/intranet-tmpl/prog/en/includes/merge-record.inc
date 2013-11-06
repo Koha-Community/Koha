@@ -69,34 +69,7 @@
 <div id="result">
     <h2>Destination record</h2>
     <div style="border:1px solid #E8E8E8;padding:1em;margin-top:2em;">
-        <ul id="resultul">
-          [% FOREACH field IN ref_record.display %]
-            [% IF field.tag != biblionumbertag %]
-              <li id="k[% field.key %]">
-                <span class="field">[% field.tag %]</span>
-                <input type="hidden" name="tag_[% field.tag %]_indicator1_[% field.key %]" value="[% field.indicator1 %]" />
-                <input type="hidden" name="tag_[% field.tag %]_indicator2_[% field.key %]" value="[% field.indicator2 %]" />
-                [% IF ( field.value ) %]
-                  / [% field.value %]
-                  <input type="hidden" name="tag_[% field.tag %]_code_00_[% field.key %]" value="00" />
-                  <input type="hidden" name="tag_[% field.tag %]_subfield_00_[% field.key %]" value="[% field.value |html%]" />
-                [% END %]
-
-                [% IF ( field.subfield ) %]
-                  <ul>
-                    [% FOREACH subfield IN field.subfield %]
-                      <li id="k[% subfield.subkey %]">
-                        <span class="subfield">[% subfield.subtag %]</span> / [% subfield.value %]
-                        <input type="hidden" name="tag_[% field.tag %]_code_[% subfield.subtag %]_[% field.key %]_[% subfield.subkey %]" value="[% subfield.subtag %]" />
-                        <input type="hidden" name="tag_[% field.tag %]_subfield_[% subfield.subtag %]_[% field.key %]_[% subfield.subkey %]" value="[% subfield.value |html%]" />
-                      </li>
-                    [% END %]
-                  </ul>
-                [% END %]
-              </li>
-            [% END %]
-          [% END %]
-        </ul>
-</div>
+        <ul id="resultul"></ul>
+    </div>
 </div> <!-- // #result -->
 [% END %]
