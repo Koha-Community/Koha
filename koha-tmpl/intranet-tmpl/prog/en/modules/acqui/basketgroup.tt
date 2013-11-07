@@ -149,7 +149,7 @@ function submitForm(form) {
     [% ELSE %]
     <div class="btn-group"><a href="[% script_name %]?op=delete&amp;basketgroupid=[% basketgroupid %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="delbutton"><i class="icon-remove"></i> Delete basket group</a></div>
     [% END %]
-    [% IF (name && closedgb) %]
+    [% IF (name && closedbg) %]
         <h1>Basket group [% name %] ([% basketgroupid %]) for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername |html %]</a></h1>
     [% ELSIF (name) %]
         <h1>Edit basket group [% name %] ([% basketgroupid %]) for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername |html %]</a></h1>
