@@ -203,7 +203,7 @@ sub getLanguages {
     my $dbh=C4::Context->dbh;
     my $default_language = 'en';
     my $current_language = $default_language;
-    my $language_list=C4::Context->preference("AdvancedSearchLanguages") if $isFiltered;
+    my $language_list = $isFiltered ? C4::Context->preference("AdvancedSearchLanguages") : undef;
     if ($lang) {
         $current_language = regex_lang_subtags($lang)->{'language'};
     }

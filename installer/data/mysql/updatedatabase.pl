@@ -7154,7 +7154,6 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-<<<<<<< HEAD
 $DBversion = "3.13.00.023";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("ALTER TABLE borrowers CHANGE password password VARCHAR(60);");
@@ -7745,7 +7744,7 @@ if(CheckVersion($DBversion)) {
     $dbh->do(q{
         INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AcqItemSetSubfieldsWhenReceived','','Set subfields for item when items are created when receiving (e.g. o=5|a="foo bar")','','Free');
     });
-    print "Upgrade to $DBversion done (Added AcqItemSetSubfieldsWhenReceived syspref)\n";
+    print "Upgrade to $DBversion done (Bug 10986: Added AcqItemSetSubfieldsWhenReceived syspref)\n";
     SetVersion($DBversion);
 }
 
