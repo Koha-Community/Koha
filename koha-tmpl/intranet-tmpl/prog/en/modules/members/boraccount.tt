@@ -1,6 +1,32 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Account for [% INCLUDE 'patron-title.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/datatables.css" />
+<script type="text/javascript" src="/intranet-tmpl/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
+<script type="text/javascript" id="js">$(document).ready(function() {
+ $(document).ready(function() {
+    var txtActivefilter = _('Filter paid transactions');
+    var txtInactivefilter = _('Show all transactions');
+    var table_account_fines = $("#table_account_fines").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "sPaginationType": "four_button",
+        "iDisplayLength" : 25
+    }));
+    $('<button id="filter_transacs">'+txtActivefilter+'</button>').appendTo($("#table_account_fines_filter"));
+    $('#filter_transacs').click(function() {
+        if ($(this).hasClass('filtered')) {
+            var filteredValue = '';
+            $('#filter_transacs').text(txtActivefilter);
+        } else { //Not filtered. Let's do it!
+            var filteredValue = '^((?!0.00).*)$'; //Filter not matching 0.00 http://stackoverflow.com/a/406408
+            $('#filter_transacs').text(txtInactivefilter);
+        }
+        table_account_fines.fnFilter(filteredValue, 4, true, false);
+        $(this).toggleClass('filtered');
+    });
+ });
+}); </script>
 </head>
 <body id="pat_borraccount" class="pat">
 [% INCLUDE 'header.inc' %]
@@ -26,8 +52,8 @@
 </ul>
 <div class="tabs-container">
 <!-- The table with the account items -->
-<table>
-  <tr>
+<table id="table_account_fines">
+    <thead>
   	<th>Date</th>
     <th>Description of charges</th>
     <th>Note</th>
@@ -37,7 +63,7 @@
     <th>&nbsp;</th>
     [% END %]
     <th>Print</th>
-  </tr>
+    </thead>
 
 	<!-- FIXME: Shouldn't hardcode dollar signs, since Euro or Pound might be needed -->
   [% FOREACH account IN accounts %]
