@@ -128,6 +128,7 @@ if (@subscriptionid){
     my $numberpattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subs->{numberpattern});
     $subs->{frequency} = $frequency;
     $subs->{numberpattern} = $numberpattern;
+    $subs->{'hasRouting'} = check_routing($subscriptionid);
     push @$subscriptiondescs,$subs;
     my $tmpsubscription= GetFullSubscription($subscriptionid);
     @subscriptioninformation=(@$tmpsubscription,@subscriptioninformation);

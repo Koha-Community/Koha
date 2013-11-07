@@ -140,7 +140,11 @@ $(document).ready(function() {
         [% IF ( routing && CAN_user_serials_routing ) %]
         <td>
             [% UNLESS subscription.closed %]
-                <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]">Edit routing list</a>
+                [% IF ( subscription.hasRouting ) %]
+                    <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]">Edit routing list</a>
+                [% ELSE %]
+                    <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=new">Create routing list</a>
+                [% END %]
             [% END %]
         </td>
         [% END %]
