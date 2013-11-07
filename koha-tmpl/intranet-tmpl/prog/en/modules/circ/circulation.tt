@@ -75,11 +75,11 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
                 $( '.renewals-allowed' ).hide(); $( '.renewals-disabled' ).show();
             }
         } ).attr( 'checked', false );
-        [% END %][% IF ( CircAutoPrintQuickSlip ) %]
+        [% END %][% IF !( CircAutoPrintQuickSlip == 'clear' ) %]
         // listen submit to trigger qslip on empty checkout
         $('#mainform').bind('submit',function() {
           if ($('#barcode').val() == '') {
-            return printx_window('qslip'); }
+            return printx_window( '[% CircAutoPrintQuickSlip %]' ); }
         });[% END %]
 
     [% IF ( CAN_user_circulate_override_renewals ) %]
