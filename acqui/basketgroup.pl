@@ -29,7 +29,7 @@ basketgroup.pl
 =head1 DESCRIPTION
 
  This script lets the user group (closed) baskets into basket groups for easier order management. Note that the grouped baskets have to be from the same bookseller and
- have to be closed.
+ have to be closed to be printed or exported.
 
 =head1 CGI PARAMETERS
 
@@ -294,11 +294,29 @@ sub printbasketgrouppdf{
 }
 
 my $op = $input->param('op') || 'display';
+# possible values of $op :
+# - add : adds a new basketgroup, or edit an open basketgroup, or display a closed basketgroup
+# - mod_basket : modify an individual basket of the basketgroup
+# - validate :  FIXME dead code
+# - closeandprint : close and print an closed basketgroup in pdf. called by clicking on "Close and print" button in closed basketgroups list
+# - print : print a closed basketgroup. called by clicking on "Print" button in closed basketgroups list
+# - export : export in CSV a closed basketgroup. called by clicking on "Export" button in closed basketgroups list
+# - delete : delete an open basketgroup. called by clicking on "Delete" button in open basketgroups list
+# - reopen : reopen a closed basketgroup. called by clicking on "Reopen" button in closed basketgroup list
+# - attachbasket : save a modified basketgroup, or creates a new basketgroup when a basket is closed. called from basket page
+# - display : display the list of all basketgroups for a vendor
 my $booksellerid = $input->param('booksellerid');
 $template->param(booksellerid => $booksellerid);
 
 if ( $op eq "add" ) {
+#
+# if no param('basketgroupid') is not defined, adds a new basketgroup
+# else, edit (if it is open) or display (if it is close) the basketgroup basketgroupid
+# the template will know if basketgroup must be displayed or edited, depending on the value of closed key
+#
     if(! $booksellerid){
+# Unknown bookseller
+# FIXME : ungroupedlist does not seem to be used in this file nor in template
         $template->param( ungroupedlist => 1);
         my @booksellers = GetBookSeller('');
        for (my $i=0; $i < scalar @booksellers; $i++) {
@@ -315,6 +333,7 @@ if ( $op eq "add" ) {
             }
         }
     } else {
+# Known bookseller
         my $basketgroupid = $input->param('basketgroupid');
         my $billingplace;
         my $deliveryplace;
@@ -338,8 +357,10 @@ if ( $op eq "add" ) {
             $billingplace  = $basketgroup->{billingplace};
             $deliveryplace = $basketgroup->{deliveryplace};
             $freedeliveryplace = $basketgroup->{freedeliveryplace};
+            $template->param( closedbg => ($basketgroup ->{'closed'}) ? 1 : 0);
+        } else {
+            $template->param( closedbg => 0);
         }
-
         # determine default billing and delivery places depending on librarian homebranch and existing basketgroup data
         my $borrower = GetMember( ( 'borrowernumber' => $loggedinuser ) );
         $billingplace  = $billingplace  || $borrower->{'branchcode'};
@@ -349,23 +370,27 @@ if ( $op eq "add" ) {
         $template->param( billingplaceloop => $branches );
         $branches = C4::Branch::GetBranchesLoop( $deliveryplace );
         $template->param( deliveryplaceloop => $branches );
-
         $template->param( booksellerid => $booksellerid );
     }
+    # the template will display a unique basketgroup
     $template->param(grouping => 1);
     my $basketgroups = &GetBasketgroups($booksellerid);
     my $bookseller = &GetBookSellerFromId($booksellerid);
     my $baskets = &GetBasketsByBookseller($booksellerid);
-
     displaybasketgroups($basketgroups, $bookseller, $baskets);
 } elsif ($op eq 'mod_basket') {
-#we want to modify an individual basket's group
+#
+# edit an individual basket contained in this basketgroup
+#
   my $basketno=$input->param('basketno');
   my $basketgroupid=$input->param('basketgroupid');
   ModBasket( { basketno => $basketno,
                          basketgroupid => $basketgroupid } );
   print $input->redirect("basket.pl?basketno=" . $basketno);
 } elsif ($op eq 'validate') {
+#
+#  FIXME dead code
+#
     if(! $booksellerid){
         $template->param( booksellererror => 1);
     } else {
@@ -374,7 +399,7 @@ if ( $op eq "add" ) {
     my $baskets = parseinputbaskets($booksellerid);
     my ($basketgroups, $newbasketgroups) = parseinputbasketgroups($booksellerid, $baskets);
     foreach my $nbgid (keys %$newbasketgroups){
-#javascript just picks an ID that's higher than anything else, the ID might not be correct..chenge it and change all the basket's basketgroupid as well
+#javascript just picks an ID that's higher than anything else, the ID might not be correct..change it and change all the basket's basketgroupid as well
         my $bgid = NewBasketgroup($newbasketgroups->{$nbgid});
         ${$newbasketgroups->{$nbgid}}->{'id'} = $bgid;
         ${$newbasketgroups->{$nbgid}}->{'oldid'} = $nbgid;
@@ -400,21 +425,28 @@ if ( $op eq "add" ) {
     $basketgroups = &GetBasketgroups($booksellerid);
     my $bookseller = &GetBookSellerFromId($booksellerid);
     $baskets = &GetBasketsByBookseller($booksellerid);
+    # keep ungroupedbaskets
 
     displaybasketgroups($basketgroups, $bookseller, $baskets);
 } elsif ( $op eq 'closeandprint') {
+#
+# close an open basketgroup and generates a pdf
+#
     my $basketgroupid = $input->param('basketgroupid');
-    
     CloseBasketgroup($basketgroupid);
-    
     printbasketgrouppdf($basketgroupid);
     exit;
 }elsif ($op eq 'print'){
+#
+# print a closed basketgroup
+#
     my $basketgroupid = $input->param('basketgroupid');
-    
     printbasketgrouppdf($basketgroupid);
     exit;
 }elsif ( $op eq "export" ) {
+#
+# export a closed basketgroup in csv
+#
     my $basketgroupid = $input->param('basketgroupid');
     print $input->header(
         -type       => 'text/csv',
@@ -423,20 +455,25 @@ if ( $op eq "add" ) {
     print GetBasketGroupAsCSV( $basketgroupid, $input );
     exit;
 }elsif( $op eq "delete"){
+#
+# delete an closed basketgroup
+#
     my $basketgroupid = $input->param('basketgroupid');
     DelBasketgroup($basketgroupid);
-    print $input->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' . $booksellerid);
-    
+    print $input->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' . $booksellerid.'&amp;listclosed=1');
 }elsif ( $op eq 'reopen'){
+#
+# reopen a closed basketgroup
+#
     my $basketgroupid   = $input->param('basketgroupid');
     my $booksellerid    = $input->param('booksellerid');
-    
     ReOpenBasketgroup($basketgroupid);
-        
-    print $input->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' . $booksellerid . '#closed');
-    
+    my $redirectpath = ((defined $input->param('mode'))&& ($input->param('mode') eq 'singlebg')) ?'/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;basketgroupid='.$basketgroupid.'&amp;booksellerid='.$booksellerid : '/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' .$booksellerid.'&amp;listclosed=1';
+    print $input->redirect($redirectpath);
 } elsif ( $op eq 'attachbasket') {
-    
+#
+# save a modified basketgroup, or creates a new basketgroup when a basket is closed. called from basket page
+#
     # Getting parameters
     my $basketgroup       = {};
     my @baskets           = $input->param('basket');
@@ -447,9 +484,9 @@ if ( $op eq "add" ) {
     my $deliveryplace     = $input->param('deliveryplace');
     my $freedeliveryplace = $input->param('freedeliveryplace');
     my $deliverycomment   = $input->param('deliverycomment');
-    my $close             = $input->param('close') ? 1 : 0;
-    # If we got a basketgroupname, we create a basketgroup
+    my $closedbg          = $input->param('closedbg') ? 1 : 0;
     if ($basketgroupid) {
+    # If we have a basketgroupid we edit the basketgroup
         $basketgroup = {
               name              => $basketgroupname,
               id                => $basketgroupid,
@@ -458,13 +495,14 @@ if ( $op eq "add" ) {
               deliveryplace     => $deliveryplace,
               freedeliveryplace => $freedeliveryplace,
               deliverycomment   => $deliverycomment,
-              closed            => $close,
+              closed            => $closedbg,
         };
         ModBasketgroup($basketgroup);
-        if($close){
-            
+        if($closedbg){
+# FIXME
         }
     }else{
+    # we create a new basketgroup (whith a closed basket)
         $basketgroup = {
             name              => $basketgroupname,
             booksellerid      => $booksellerid,
@@ -473,22 +511,22 @@ if ( $op eq "add" ) {
             deliveryplace     => $deliveryplace,
             freedeliveryplace => $freedeliveryplace,
             deliverycomment   => $deliverycomment,
-            closed            => $close,
+            closed            => $closedbg,
         };
         $basketgroupid = NewBasketgroup($basketgroup);
     }
-   
-    my $url = '/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' . $booksellerid;
-    $url .= "&closed=1" if ($input->param("closed")); 
-    print $input->redirect($url);
+    my $redirectpath = ((defined $input->param('mode')) && ($input->param('mode') eq 'singlebg')) ?'/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;basketgroupid='.$basketgroupid.'&amp;booksellerid='.$booksellerid : '/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' . $booksellerid;
+    $redirectpath .=  "&amp;listclosed=1" if $closedbg ;
+    print $input->redirect($redirectpath );
     
 }else{
+# no param : display the list of all basketgroups for a given vendor
     my $basketgroups = &GetBasketgroups($booksellerid);
     my $bookseller = &GetBookSellerFromId($booksellerid);
     my $baskets = &GetBasketsByBookseller($booksellerid);
 
     displaybasketgroups($basketgroups, $bookseller, $baskets);
 }
-$template->param(closed => $input->param("closed"));
+$template->param(listclosed => ((defined $input->param('listclosed')) && ($input->param('listclosed') eq '1'))? 1:0 );
 #prolly won't use all these, maybe just use print, the rest can be done inside validate
 output_html_with_http_headers $input, $cookie, $template->output;
