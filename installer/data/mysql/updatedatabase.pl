@@ -7756,6 +7756,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("UPDATE systempreferences SET value='clear' where variable = 'CircAutoPrintQuickSlip' and value = '0'");
+    $dbh->do("UPDATE systempreferences SET value='qslip' where variable = 'CircAutoPrintQuickSlip' and value = '1'");
+    $dbh->do("UPDATE systempreferences SET explanation = 'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window, Display a print slip window or Clear the screen.', type = 'Choice' where variable = 'CircAutoPrintQuickSlip'");
+    print "Upgrade to $DBversion done (Bug 11040: Add option to print full slip when checking out a null barcode)";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
