@@ -7,7 +7,7 @@ package Sip;
 use strict;
 use warnings;
 use Exporter;
-
+use Encode;
 use Sys::Syslog qw(syslog);
 use POSIX qw(strftime);
 use Socket qw(:crlf);
@@ -209,10 +209,12 @@ sub read_SIP_packet {
 #
 
 sub write_msg {
-    my ($self, $msg, $file, $terminator) = @_;
+    my ($self, $msg, $file, $terminator, $encoding) = @_;
 
     $terminator ||= q{};
     $terminator = ( $terminator eq 'CR' ) ? $CR : $CRLF;
+
+    $msg = encode($encoding, $msg) if ( $encoding );
 
     my $cksum;
 
