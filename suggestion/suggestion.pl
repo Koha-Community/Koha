@@ -395,7 +395,6 @@ foreach my $field ( qw(managedby acceptedby suggestedby budgetid) ) {
 
 $template->param(
     %hashlists,
-    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     borrowernumber           => $input->param('borrowernumber'),
     SuggestionStatuses       => GetAuthorisedValues('SUGGEST_STATUS'),
 );
