@@ -345,7 +345,7 @@ C4::Context->dbh->do("DELETE FROM borrowers WHERE cardnumber = '99999999999'");
 
     # Bug 11218 - Due notices not generated - GetUpcomingDueIssues needs to select due today items as well
 
-    $datedue2 = AddIssue( $a_borrower, $barcode3, $today );
+    my $datedue3 = AddIssue( $a_borrower, $barcode3, $today );
 
     $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => -1 } );
     is ( scalar ( @$upcoming_dues), 0, "Overdues can not be selected" );
