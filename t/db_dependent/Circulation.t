@@ -386,7 +386,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     }
 
     #days_in_advance needs to be inclusive, so 1 matches items due tomorrow, 0 items due today etc.
-        $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => 2 } );
+    $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => 2 } );
     is ( scalar ( @$upcoming_dues), 1, "Only one item due in 2 days or less" );
 
     for my $i(3..5) {
