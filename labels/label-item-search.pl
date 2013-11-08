@@ -97,7 +97,7 @@ if ( $op eq "do_search" ) {
             $ccl_query .= "acqdate(-" . $dateto->output("iso") . ')';
         } else {
             $ccl_query .= ' and ' if ( $ccl_textbox || $datefrom );
-            $ccl_query .= "acqdate,st-date-normalized,le=" . $datefrom->output("iso");
+            $ccl_query .= "acqdate,st-date-normalized,le=" . $dateto->output("iso");
         }
     }
 
