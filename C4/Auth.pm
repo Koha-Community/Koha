@@ -1544,6 +1544,7 @@ sub checkpw {
         $debug and print STDERR "## checkpw - checking CAS\n";
     # In case of a CAS authentication, we use the ticket instead of the password
         my $ticket = $query->param('ticket');
+        $query->delete('ticket'); # remove ticket to come back to original URL
         my ($retval,$retcard,$retuserid) = checkpw_cas($dbh, $ticket, $query);    # EXTERNAL AUTH
         ($retval) and return ($retval,$retcard,$retuserid);
         return 0;
