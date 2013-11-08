@@ -2433,7 +2433,7 @@ FROM issues
 LEFT JOIN items USING (itemnumber)
 LEFT OUTER JOIN branches USING (branchcode)
 WHERE returndate is NULL
-HAVING days_until_due > 0 AND days_until_due < ?
+HAVING days_until_due >= 0 AND days_until_due <= ?
 END_SQL
 
     my @bind_parameters = ( $params->{'days_in_advance'} );

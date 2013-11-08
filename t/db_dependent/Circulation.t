@@ -9,7 +9,7 @@ use C4::Items;
 use C4::Members;
 use C4::Reserves;
 
-use Test::More tests => 38;
+use Test::More tests => 44;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -336,7 +336,27 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     # GetUpcomingDueIssues tests
     my $barcode  = 'R00000342';
     my $barcode2 = 'R00000343';
+    my $barcode3 = 'R00000344';
     my $branch   = 'MPL';
+
+    #Create another record
+    my $biblio2 = MARC::Record->new();
+    my $title2 = 'Something is worng here';
+    $biblio2->append_fields(
+        MARC::Field->new('100', ' ', ' ', a => 'Anonymous'),
+        MARC::Field->new('245', ' ', ' ', a => $title2),
+    );
+    my ($biblionumber2, $biblioitemnumber2) = AddBiblio($biblio2, '');
+
+    #Create third item
+    AddItem(
+        {
+            homebranch       => $branch,
+            holdingbranch    => $branch,
+            barcode          => $barcode3
+        },
+        $biblionumber2
+    );
 
     # Create a borrower
     my %a_borrower_data = (
@@ -351,22 +371,51 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 
     my $yesterday = DateTime->today(time_zone => C4::Context->tz())->add( days => -1 );
     my $two_days_ahead = DateTime->today(time_zone => C4::Context->tz())->add( days => 2 );
+    my $today = DateTime->today(time_zone => C4::Context->tz());
 
     my $datedue  = AddIssue( $a_borrower, $barcode, $yesterday );
     my $datedue2 = AddIssue( $a_borrower, $barcode2, $two_days_ahead );
 
+    my $upcoming_dues;
+
     diag( "GetUpcomingDueIssues tests" );
 
-    for my $i(0..2) {
-        my $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => $i } );
-        is ( scalar( @$upcoming_dues ), 0, "No items due in less than two days ($i days in advance)" );
+    for my $i(0..1) {
+        $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => $i } );
+        is ( scalar( @$upcoming_dues ), 0, "No items due in less than one day ($i days in advance)" );
     }
 
+    #days_in_advance needs to be inclusive, so 1 matches items due tomorrow, 0 items due today etc.
+    $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => 2 } );
+    is ( scalar ( @$upcoming_dues), 1, "Only one item due in 2 days or less" );
+
     for my $i(3..5) {
-        my $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => $i } );
+        $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => $i } );
         is ( scalar( @$upcoming_dues ), 1,
             "Bug 9362: Only one item due in more than 2 days ($i days in advance)" );
     }
+
+    # Bug 11218 - Due notices not generated - GetUpcomingDueIssues needs to select due today items as well
+
+    my $datedue3 = AddIssue( $a_borrower, $barcode3, $today );
+
+    $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => -1 } );
+    is ( scalar ( @$upcoming_dues), 0, "Overdues can not be selected" );
+
+    $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => 0 } );
+    is ( scalar ( @$upcoming_dues), 1, "1 item is due today" );
+
+    $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => 1 } );
+    is ( scalar ( @$upcoming_dues), 1, "1 item is due today, none tomorrow" );
+
+    $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => 2 }  );
+    is ( scalar ( @$upcoming_dues), 2, "2 items are due withing 2 days" );
+
+    $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => 3 } );
+    is ( scalar ( @$upcoming_dues), 2, "2 items are due withing 2 days" );
+
+    $upcoming_dues = C4::Circulation::GetUpcomingDueIssues();
+    is ( scalar ( @$upcoming_dues), 2, "days_in_advance is 7 in GetUpcomingDueIssues if not provided" );
 
 }
 
