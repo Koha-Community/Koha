@@ -911,7 +911,7 @@ sub RemoveNotifyLine {
 
     my $message_transport_types = GetOverdueMessageTransportTypes( $branchcode, $categorycode, $letternumber);
 
-    return a arrayref with message_transport_type for given branchcode, categorycode and letternumber(1,2 or 3)
+    return a arrayref with all message_transport_type for given branchcode, categorycode and letternumber(1,2 or 3)
 
 =cut
 sub GetOverdueMessageTransportTypes {

@@ -14,10 +14,19 @@ $dbh->{RaiseError} = 1;
 $dbh->do(q|DELETE FROM letter|);
 $dbh->do(q|DELETE FROM message_queue|);
 $dbh->do(q|DELETE FROM message_transport_types|);
+$dbh->do(q|DELETE FROM overduerules|);
 $dbh->do(q|DELETE FROM overduerules_transport_types|);
 
 $dbh->do(q|
     INSERT INTO message_transport_types( message_transport_type ) VALUES ('email'), ('phone'), ('print'), ('sms')
+|);
+
+$dbh->do(q|
+    INSERT INTO overduerules ( branchcode, categorycode ) VALUES
+    ('CPL', 'PT'),
+    ('CPL', 'YA'),
+    ('', 'PT'),
+    ('', 'YA')
 |);
 
 $dbh->do(q|
@@ -53,7 +62,7 @@ is_deeply( $mtts, ['sms'], 'GetOverdueMessageTransportTypes: second overdue is b
 $mtts = C4::Overdues::GetOverdueMessageTransportTypes('CPL', 'PT', 3);
 is_deeply( $mtts, ['email'], 'GetOverdueMessageTransportTypes: third overdue is by email for PT (CPL)' );
 
-my $mtts = C4::Overdues::GetOverdueMessageTransportTypes('', 'PT', 1);
+$mtts = C4::Overdues::GetOverdueMessageTransportTypes('', 'PT', 1);
 is_deeply( $mtts, ['email'], 'GetOverdueMessageTransportTypes: first overdue is by email for PT (default)' );
 
 $mtts = C4::Overdues::GetOverdueMessageTransportTypes('', 'PT', 2);
