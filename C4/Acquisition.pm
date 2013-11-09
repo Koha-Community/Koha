@@ -1027,6 +1027,7 @@ biblio, and biblioitems tables in the Koha database.
 
 sub GetOrders {
     my ( $basketno, $orderby ) = @_;
+    return () unless $basketno;
     my $dbh   = C4::Context->dbh;
     my $query  ="
         SELECT biblio.*,biblioitems.*,
