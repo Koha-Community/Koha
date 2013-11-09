@@ -115,7 +115,7 @@ jQuery.fn.dataTableExt.oApi.fnAddFilters = function ( oSettings, sClass, iDelay 
     var table = this;
     this.fnSetFilteringDelay(iDelay);
     var filterTimerId = null;
-    $("input."+sClass).keyup(function(event) {
+    $(table).find("input."+sClass).keyup(function(event) {
       if (blacklist_keys.indexOf(event.keyCode) != -1) {
         return this;
       }else if ( event.keyCode == '13' ) {
