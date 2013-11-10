@@ -155,7 +155,13 @@ sub recordpayment {
     $usth->execute( $borrowernumber, $nextaccntno, 0 - $data, $paytype, 0 - $amountleft, $manager_id );
     $usth->finish;
 
-    UpdateStats( $branch, 'payment', $data, '', '', '', $borrowernumber, $nextaccntno );
+    UpdateStats({
+                branch => $branch,
+                type =>'payment',
+                amount => $data,
+                borrowernumber => $borrowernumber,
+                accountno => $nextaccntno }
+    );
 
     if ( C4::Context->preference("FinesLog") ) {
         $accdata->{'amountoutstanding_new'} = $newamtos;
@@ -266,12 +272,13 @@ sub makepayment {
         }));
     }
 
-
-    # FIXME - The second argument to &UpdateStats is supposed to be the
-    # branch code.
-    # UpdateStats is now being passed $accountno too. MTJ
-    UpdateStats( $user, 'payment', $amount, '', '', '', $borrowernumber,
-        $accountno );
+    UpdateStats({
+                branch => $user,
+                type => 'payment',
+                amount => $amount,
+                borrowernumber => $borrowernumber,
+                accountno => $accountno}
+    );
 
     #check to see what accounttype
     if ( $data->{'accounttype'} eq 'Rep' || $data->{'accounttype'} eq 'L' ) {
@@ -648,7 +655,13 @@ sub recordpayment_selectaccts {
     '(borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding,manager_id,note) ' .
     q|VALUES (?,?,now(),?,'','Pay',?,?,?)|;
     $dbh->do($sql,{},$borrowernumber, $nextaccntno, 0 - $amount, 0 - $amountleft, $manager_id, $note );
-    UpdateStats( $branch, 'payment', $amount, '', '', '', $borrowernumber, $nextaccntno );
+    UpdateStats({
+                branch => $branch,
+                type => 'payment',
+                amount => $amount,
+                borrowernumber => $borrowernumber,
+                accountno => $nextaccntno}
+    );
 
     if ( C4::Context->preference("FinesLog") ) {
         logaction("FINES", 'CREATE',$borrowernumber,Dumper({
@@ -709,7 +722,13 @@ sub makepartialpayment {
     $dbh->do(  $insert, undef, $borrowernumber, $nextaccntno, $amount,
         "Payment, thanks - $user", 'Pay', $data->{'itemnumber'}, $manager_id, $payment_note);
 
-    UpdateStats( $user, 'payment', $amount, '', '', '', $borrowernumber, $accountno );
+    UpdateStats({
+                branch => $user,
+                type => 'payment',
+                amount => $amount,
+                borrowernumber => $borrowernumber,
+                accountno => $accountno}
+    );
 
     if ( C4::Context->preference("FinesLog") ) {
         logaction("FINES", 'CREATE',$borrowernumber,Dumper({
@@ -793,7 +812,12 @@ sub WriteOffFee {
         }));
     }
 
-    UpdateStats( $branch, 'writeoff', $amount, q{}, q{}, q{}, $borrowernumber );
+    UpdateStats({
+                branch => $branch,
+                type => 'writeoff',
+                amount => $amount,
+                borrowernumber => $borrowernumber}
+    );
 
 }
 

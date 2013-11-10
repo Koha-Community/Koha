@@ -740,7 +740,14 @@ sub CanBookBeIssued {
     #
     if ( $borrower->{'category_type'} eq 'X' && (  $item->{barcode}  )) { 
     	# stats only borrower -- add entry to statistics table, and return issuingimpossible{STATS} = 1  .
-        &UpdateStats(C4::Context->userenv->{'branch'},'localuse','','',$item->{'itemnumber'},$item->{'itemtype'},$borrower->{'borrowernumber'}, undef, $item->{'ccode'});
+        &UpdateStats({
+                     branch => C4::Context->userenv->{'branch'},
+                     type => 'localuse',
+                     itemnumber => $item->{'itemnumber'},
+                     itemtype => $item->{'itemtype'},
+                     borrowernumber => $borrower->{'borrowernumber'},
+                     ccode => $item->{'ccode'}}
+                    );
         ModDateLastSeen( $item->{'itemnumber'} );
         return( { STATS => 1 }, {});
     }
@@ -1299,11 +1306,15 @@ sub AddIssue {
         }
 
         # Record the fact that this book was issued.
-        &UpdateStats(
-            C4::Context->userenv->{'branch'},
-            'issue', $charge,
-            ($sipmode ? "SIP-$sipmode" : ''), $item->{'itemnumber'},
-            $item->{'itype'}, $borrower->{'borrowernumber'}, undef, $item->{'ccode'}
+        &UpdateStats({
+                      branch => C4::Context->userenv->{'branch'},
+                      type => 'issue',
+                      amount => $charge,
+                      other => ($sipmode ? "SIP-$sipmode" : ''),
+                      itemnumber => $item->{'itemnumber'},
+                      itemtype => $item->{'itype'},
+                      borrowernumber => $borrower->{'borrowernumber'},
+                      ccode => $item->{'ccode'}}
         );
 
         # Send a checkout slip.
@@ -1721,7 +1732,7 @@ sub AddReturn {
     my $biblio;
     my $doreturn       = 1;
     my $validTransfert = 0;
-    my $stat_type = 'return';    
+    my $stat_type = 'return';
 
     # get information on item
     my $itemnumber = GetItemnumberFromBarcode( $barcode );
@@ -1937,13 +1948,15 @@ sub AddReturn {
         $messages->{'ResFound'} = $resrec;
     }
 
-    # update stats?
     # Record the fact that this book was returned.
-    UpdateStats(
-        $branch, $stat_type, '0', '',
-        $item->{'itemnumber'},
-        $biblio->{'itemtype'},
-        $borrowernumber, undef, $item->{'ccode'}
+    # FIXME itemtype should record item level type, not bibliolevel type
+    UpdateStats({
+                branch => $branch,
+                type => $stat_type,
+                itemnumber => $item->{'itemnumber'},
+                itemtype => $biblio->{'itemtype'},
+                borrowernumber => $borrowernumber,
+                ccode => $item->{'ccode'}}
     );
 
     # Send a check-in slip. # NOTE: borrower may be undef.  probably shouldn't try to send messages then.
@@ -2774,7 +2787,14 @@ sub AddRenewal {
     }
 
     # Log the renewal
-    UpdateStats( $branch, 'renew', $charge, '', $itemnumber, $item->{itype}, $borrowernumber, undef, $item->{'ccode'});
+    UpdateStats({branch => $branch,
+                type => 'renew',
+                amount => $charge,
+                itemnumber => $itemnumber,
+                itemtype => $item->{itype},
+                borrowernumber => $borrowernumber,
+                ccode => $item->{'ccode'}}
+                );
 	return $datedue;
 }
 
