@@ -404,9 +404,15 @@ sub _filter_hash{
     my $elements=join "|",@columns_filtered;
 	foreach my $field (grep {/\b($elements)\b/} keys %$filter_input){
 		## supposed to be a hash of simple values, hashes of arrays could be implemented
-		$filter_input->{$field}=format_date_in_iso($filter_input->{$field})
-          if $columns->{$field}{Type}=~/date/ &&
-             ($filter_input->{$field} && $filter_input->{$field} !~C4::Dates->regexp("iso"));
+        if ( $columns->{$field}{Type}=~/date/ ) {
+            if ( defined $filter_input->{$field} ) {
+                if ( $filter_input->{$field} eq q{} ) {
+                    $filter_input->{$field} = undef;
+                } elsif ( $filter_input->{$field} !~ C4::Dates->regexp("iso") ) {
+                    $filter_input->{$field} = format_date_in_iso($filter_input->{$field});
+                }
+            }
+        }
 		my ($tmpkeys, $localvalues)=_Process_Operands($filter_input->{$field},"$tablename.$field",$searchtype,$columns);
 		if (@$tmpkeys){
 			push @values, @$localvalues;
