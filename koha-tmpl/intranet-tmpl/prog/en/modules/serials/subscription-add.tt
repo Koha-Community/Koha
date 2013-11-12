@@ -256,24 +256,24 @@ function testPredictionPattern() {
     var error = 0;
     var error_msg = "";
     if(frequencyid == undefined || frequencyid == ""){
-        error_msg += _("- Frequency is not defined\n");
+        error_msg += _("- Frequency is not defined") + "\n";
         error ++;
     }
     acquidate = $("#acqui_date").val();
     if(acquidate == undefined || acquidate == ""){
-        error_msg += _("- First publication date is not defined\n");
+        error_msg += _("- First publication date is not defined") + "\n";
         error ++;
     }
     [% IF (more_than_one_serial) %]
       var nextacquidate = $("#nextacquidate").val();
       if(nextacquidate == undefined || nextacquidate == ""){
-        error_msg += _("- Next issue publication date is not defined\n");
+        error_msg += _("- Next issue publication date is not defined") + "\n";
         error ++;
       }
     [% END %]
 
     if(error){
-        alert(_("Cannot test prediction pattern for the following reason(s):\n\n")
+        alert(_("Cannot test prediction pattern for the following reason(s):") + "\n\n"
             + error_msg);
         return false;
     }

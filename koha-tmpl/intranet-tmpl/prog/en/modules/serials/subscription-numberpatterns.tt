@@ -11,16 +11,16 @@
       var error = 0;
       var error_msg = "";
       if(frequencyid == undefined || frequencyid == "") {
-          error_msg += _("- Frequency is not defined\n");
+          error_msg += _("- Frequency is not defined") + "\n";
           error ++;
       }
       if(firstacquidate == undefined || firstacquidate == "") {
-          error_msg += _("- First publication date is not defined\n");
+          error_msg += _("- First publication date is not defined") + "\n";
           error ++;
       }
 
       if(error){
-          alert(_("Cannot test prediction pattern for the following reason(s):\n\n")
+          alert(_("Cannot test prediction pattern for the following reason(s):") + "\n\n"
               + error_msg);
           return false;
       }
