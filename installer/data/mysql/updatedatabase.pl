@@ -7912,6 +7912,18 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q{
+        UPDATE systempreferences
+        SET explanation = 'Upon receiving items, update their subfields if they were created when placing an order (e.g. o=5|a="foo bar")'
+        WHERE variable = "AcqItemSetSubfieldsWhenReceived"
+    });
+    print "Upgrade to $DBversion done (Bug 11237: Update explanation for AcqItemSetSubfieldsWhenReceived syspref)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
