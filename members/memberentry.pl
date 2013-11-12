@@ -104,7 +104,11 @@ foreach my $d ( @debarments_to_remove ) {
 if ( $input->param('add_debarment') ) {
 
     my $expiration = $input->param('debarred_expiration');
-    $expiration = $expiration ? output_pref( dt_from_string($expiration), 'iso' ) : undef;
+    $expiration =
+      $expiration
+      ? output_pref(
+        { 'dt' => dt_from_string($expiration), 'dateformat' => 'iso' } )
+      : undef;
 
     AddUniqueDebarment(
         {
