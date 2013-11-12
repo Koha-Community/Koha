@@ -21,10 +21,14 @@
     [% END %]
     $(document).ready(function() {
         var srlt = $("#files").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumns": [
+                null,null,null,{ "sType": "title-string" },null,null
+            ],
             "aoColumnDefs": [
                 { "aTargets": [ 5 ], "bSortable": false, "bSearchable": false },
             ],
-            "sPaginationType": "four_button"
+            "sPaginationType": "four_button",
+            "aaSorting": []
         } ) );
 
         $("form#Aform").submit(function() {
@@ -111,7 +115,7 @@
                         <td>[% batch_lis.file_name %]</td>
                        <td>[% batch_lis.comments %]</td>
                        <td>[% batch_lis.import_status %]</td>
-                       <td>[% batch_lis.staged_date | $KohaDates %] [% batch_lis.staged_hour %]</td>
+                       <td><span title="[% batch_lis.staged_date %]">[% batch_lis.staged_date | $KohaDates %]</span></td>
                        <td>[% batch_lis.num_biblios %]</td>
                        <td><a href="[% batch_lis.scriptname %]?import_batch_id=[% batch_lis.import_batch_id %]&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]">Add orders</a></td>
                      </tr>
