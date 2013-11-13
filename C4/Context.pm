@@ -687,14 +687,11 @@ C<$auth> whether this connection has rw access (1) or just r access (0 or NULL)
 =cut
 
 sub Zconn {
-    my $self=shift;
-    my $server=shift;
-    my $async=shift;
-    my $auth=shift;
-    my $piggyback=shift;
-    my $syntax=shift;
-    if ( defined($context->{"Zconn"}->{$server}) && (0 == $context->{"Zconn"}->{$server}->errcode()) ) {
-        return $context->{"Zconn"}->{$server};
+    my ($self, $server, $async, $auth, $piggyback, $syntax) = @_;
+
+    my $cache_key = join ('::', (map { $_ // '' } ($server, $async, $auth, $piggyback, $syntax)));
+    if ( defined($context->{"Zconn"}->{$cache_key}) && (0 == $context->{"Zconn"}->{$cache_key}->errcode()) ) {
+        return $context->{"Zconn"}->{$cache_key};
     # No connection object or it died. Create one.
     }else {
         # release resources if we're closing a connection and making a new one
@@ -703,12 +700,12 @@ sub Zconn {
         # and make a new one, particularly for a batch job.  However, at
         # first glance it does not look like there's a way to easily check
         # the basic health of a ZOOM::Connection
-        $context->{"Zconn"}->{$server}->destroy() if defined($context->{"Zconn"}->{$server});
+        $context->{"Zconn"}->{$cache_key}->destroy() if defined($context->{"Zconn"}->{$cache_key});
 
-        $context->{"Zconn"}->{$server} = &_new_Zconn($server,$async,$auth,$piggyback,$syntax);
-        $context->{ Zconn }->{ $server }->option(
+        $context->{"Zconn"}->{$cache_key} = &_new_Zconn($server,$async,$auth,$piggyback,$syntax);
+        $context->{ Zconn }->{$cache_key}->option(
             preferredRecordSyntax => C4::Context->preference("marcflavour") );
-        return $context->{"Zconn"}->{$server};
+        return $context->{"Zconn"}->{$cache_key};
     }
 }
 
