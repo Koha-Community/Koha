@@ -6935,7 +6935,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.12.06.001";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("DELETE from auth_tag_structure WHERE tagfield IN ('68a','68b')");
     $dbh->do("DELETE from auth_subfield_structure WHERE tagfield IN ('68a','68b')");
