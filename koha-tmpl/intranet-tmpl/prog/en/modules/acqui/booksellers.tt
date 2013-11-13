@@ -116,7 +116,12 @@ $(document).ready(function() {
                                     [% END %]
                                         <td>[% basket.basketno %]</td>
                                         <td>[% basket.basketname %]</td>
-                                        <td>[% basket.total_items %]</td>
+                                        <td>
+                                            [% basket.total_items %]
+                                            [% IF basket.total_items_cancelled %]
+                                                ([% basket.total_items_cancelled %] cancelled)
+                                            [% END %]
+                                        </td>
                                         <td>[% basket.total_biblios %]</td>
                                         <td>[% basket.expected_items %]</td>
                                         <td>

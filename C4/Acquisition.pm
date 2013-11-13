@@ -635,6 +635,9 @@ sub GetBasketsInfosByBookseller {
     my $query = qq{
         SELECT aqbasket.*,
           SUM(aqorders.quantity) AS total_items,
+          SUM(
+            IF ( aqorders.orderstatus = 'cancelled', aqorders.quantity, 0 )
+          ) AS total_items_cancelled,
           COUNT(DISTINCT aqorders.biblionumber) AS total_biblios,
           SUM(
             IF(aqorders.datereceived IS NULL
