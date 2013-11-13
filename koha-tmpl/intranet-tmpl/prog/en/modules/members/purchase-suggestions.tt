@@ -8,15 +8,14 @@
 </title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
     $(document).ready(function() {
         $("#suggestions").dataTable($.extend(true, {}, dataTablesDefaults, {
             'bPaginate': false,
             'bFilter': false,
             'bInfo': false,
+            'sDom': 't'
         } ));
     });
 </script>
@@ -44,7 +43,8 @@
                     <a class="btn" id="newsuggestion" href="/cgi-bin/koha/suggestion/suggestion.pl?op=add&suggestedby=[% borrowernumber %]&redirect=purchase_suggestions&borrowernumber=[% borrowernumber %]"><i class="icon-plus"></i> New purchase suggestion</a>
                 </div>
 
-                <table id="suggestions">
+                [% IF suggestions %]
+                  <table id="suggestions">
                     <thead>
                         <tr>
                           <th>Summary</th>
@@ -98,7 +98,10 @@
                             </tr>
                         [% END %]
                     </tbody>
-                </table>
+                  </table>
+                [% ELSE %]
+                  There is no purchase suggestion for this patron.
+                [% END %]
             </div>
         </div>
     </div>
