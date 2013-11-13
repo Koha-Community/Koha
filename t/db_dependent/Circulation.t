@@ -242,8 +242,7 @@ C4::Context->dbh->do("DELETE FROM borrowers WHERE cardnumber = '99999999999'");
     is( $renewokay, 0, '(Bug 10663) Cannot renew, reserved');
     is( $error, 'on_reserve', '(Bug 10663) Cannot renew, reserved (returned error is on_reserve)');
 
-    my $reserveid = C4::Reserves::GetReserveId({ biblionumber => $biblionumber, borrowernumber => $reserving_borrowernumber});
-    CancelReserve({ reserve_id => $reserveid });
+    CancelReserve( $biblionumber, undef, $reserving_borrowernumber );
 
 
     diag("Item-level hold, renewal test");
@@ -269,8 +268,7 @@ C4::Context->dbh->do("DELETE FROM borrowers WHERE cardnumber = '99999999999'");
 
     # FIXME: Add more for itemtype not for loan etc.
 
-    $reserveid = C4::Reserves::GetReserveId({ biblionumber => $biblionumber, itemnumber => $itemnumber, borrowernumber => $reserving_borrowernumber});
-    CancelReserve({ reserve_id => $reserveid });
+    CancelReserve( $biblionumber, $itemnumber, $reserving_borrowernumber );
 
     diag("Too many renewals");
 
