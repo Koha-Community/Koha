@@ -67,6 +67,9 @@ KOHA_CRON_PATH = /usr/share/koha/bin/cronjobs
 # Cancel expired holds
 0 1 * * *  __KOHA_USER__ $KOHA_CRON_PATH/holds/cancel_expired_holds.pl >/dev/null 2>&1
 
+# Auto unsuspend holds
+0 1 * * *  __KOHA_USER__ $KOHA_CRON_PATH/holds/auto_unsuspend_holds.pl > /dev/null 2>&1
+
 # Update popularity counts for biblio records
 0 2 * * *  __KOHA_USER__ $KOHA_CRON_PATH/update_totalissues.pl --commit=1000 --use-stats --incremental --interval=1d >/dev/null 2>&1
 
