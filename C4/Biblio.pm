@@ -2305,6 +2305,8 @@ $auth_type contains :
 
 sub TransformHtmlToXml {
     my ( $tags, $subfields, $values, $indicator, $ind_tag, $auth_type ) = @_;
+    # NOTE: The parameter $ind_tag is NOT USED -- BZ 11247
+
     my $xml = MARC::File::XML::header('UTF-8');
     $xml .= "<record>\n";
     $auth_type = C4::Context->preference('marcflavour') unless $auth_type;
