@@ -271,6 +271,9 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   KEY `branchcode` (`branchcode`),
   KEY `userid` (`userid`),
   KEY `guarantorid` (`guarantorid`),
+  KEY `surname_idx` (`surname`(255)),
+  KEY `firstname_idx` (`firstname`(255)),
+  KEY `othernames_idx` (`othernames`(255)),
   CONSTRAINT `borrowers_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`),
   CONSTRAINT `borrowers_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
