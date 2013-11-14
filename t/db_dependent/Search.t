@@ -12,7 +12,7 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 196;
+use Test::More tests => 200;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;
@@ -457,6 +457,19 @@ sub run_marc21_search_tests {
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 12,
        'search using index whose name contains "ns" returns expected results (bug 10271)');
+
+    $UseQueryParser = 1;
+    ( $error, $query, $simple_query, $query_cgi,
+    $query_desc, $limit, $limit_cgi, $limit_desc,
+    $stopwords_removed, $query_type ) = buildQuery([], [ 'book' ], [ 'kw' ], [], [], 0, 'en');
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    is($results_hashref->{biblioserver}->{hits}, 101, "Search for 'book' with index set to 'kw' returns 101 hits");
+    ( $error, $query, $simple_query, $query_cgi,
+    $query_desc, $limit, $limit_cgi, $limit_desc,
+    $stopwords_removed, $query_type ) = buildQuery([ 'and' ], [ 'book', 'another' ], [ 'kw', 'kw' ], [], [], 0, 'en');
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    is($results_hashref->{biblioserver}->{hits}, 1, "Search for 'kw:book && kw:another' returns 1 hit");
+    $UseQueryParser = 0;
 
     # FIXME: the availability limit does not actually work, so for the moment we
     # are just checking that it behaves consistently
