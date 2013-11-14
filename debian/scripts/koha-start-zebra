@@ -77,6 +77,13 @@ start_zebra_instance()
 
     if is_enabled $instancename; then
         echo "Starting Zebra server for $instancename"
+        touch "/var/log/koha/$instancename/zebra-error.log" \
+            "/var/log/koha/$instancename/zebra.log" \
+            "/var/log/koha/$instancename/zebra-output.log"
+        chown "$instancename-koha:$instancename-koha" \
+            "/var/log/koha/$instancename/zebra-error.log" \
+            "/var/log/koha/$instancename/zebra.log" \
+            "/var/log/koha/$instancename/zebra-output.log"
         daemon \
             --name="$instancename-koha-zebra" \
             --errlog="/var/log/koha/$instancename/zebra-error.log" \
