@@ -12,7 +12,7 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 200;
+use Test::More tests => 204;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;
@@ -494,7 +494,7 @@ sub run_marc21_search_tests {
     $stopwords_removed, $query_type ) = buildQuery([], [ 'pqf=@attr 1=_ALLRECORDS @attr 2=103 ""' ], [], [], [], 0, 'en');
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
-    is($results_hashref->{biblioserver}->{hits}, 178, "getRecords on _ALLRECORDS PQF returned all records");
+    is($results_hashref->{biblioserver}->{hits}, 179, "getRecords on _ALLRECORDS PQF returned all records");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
@@ -620,6 +620,14 @@ sub run_marc21_search_tests {
     @newresults = searchResults('intranet', $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
         $results_hashref->{'biblioserver'}->{"RECORDS"});
     ok(!exists($newresults[0]->{norequests}), 'presence of a transit does not block hold request action (bug 10741)');
+
+    ## Regression test for bug 10684
+    ( undef, $results_hashref, $facets_loop ) =
+        getRecords('ti:punctuation', 'punctuation', [], [ 'biblioserver' ], '19', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+    is($results_hashref->{biblioserver}->{hits}, 1, "search for ti:punctuation returned expected number of records");
+    @newresults = searchResults('intranet', $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 20, 0, 0,
+        $results_hashref->{'biblioserver'}->{"RECORDS"});
+    is(scalar(@newresults), 0, 'a record that cannot be parsed by MARC::Record is simply skipped (bug 10684)');
 
     # Testing exploding indexes
     my $term;
