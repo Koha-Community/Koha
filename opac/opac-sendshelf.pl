@@ -21,7 +21,7 @@ use strict;
 use warnings;
 
 use CGI;
-use Encode;
+use Encode qw(decode encode);
 use Carp;
 
 use Mail::Sendmail;
@@ -122,19 +122,32 @@ if ( $email ) {
 
     # Getting template result
     my $template_res = $template2->output();
+    my $body;
 
     # Analysing information and getting mail properties
-    $mail{'subject'} = $template_res =~ /<SUBJECT>\n(.*)\n?<END_SUBJECT>/s
-        ? $1 : "no subject";
+    if ( $template_res =~ /<SUBJECT>(.*)<END_SUBJECT>/s ) {
+        $mail{subject} = $1;
+        $mail{subject} =~ s|\n?(.*)\n?|$1|;
+    }
+    else { $mail{'subject'} = "no subject"; }
 
-    my ($email_header) = $template_res =~ /<HEADER>\n(.*)\n?<END_HEADER>/s;
+    my $email_header = "";
+    if ( $template_res =~ /<HEADER>(.*)<END_HEADER>/s ) {
+        $email_header = $1;
+        $email_header =~ s|\n?(.*)\n?|$1|;
+    }
 
-    my $email_file = $template_res =~ /<FILENAME>\n(.*)\n?<END_FILENAME>/s
-        ? $1
-        : "list.txt";
+    my $email_file = "list.txt";
+    if ( $template_res =~ /<FILENAME>(.*)<END_FILENAME>/s ) {
+        $email_file = $1;
+        $email_file =~ s|\n?(.*)\n?|$1|;
+    }
 
-    my ($body) = $template_res =~ /<MESSAGE>\n(.*)\n?<END_MESSAGE>/s;
-    $body = encode_qp($body);
+    if ( $template_res =~ /<MESSAGE>(.*)<END_MESSAGE>/s ) {
+        $body = $1;
+        $body =~ s|\n?(.*)\n?|$1|;
+        $body = encode("UTF-8", encode_qp($body));
+    }
 
     my $boundary = "====" . time() . "====";
 
