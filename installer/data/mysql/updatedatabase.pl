@@ -7743,6 +7743,14 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.043";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES('SearchEngine','Zebra','Solr|Zebra','Search Engine','Choice')");
+    print "Upgrade to $DBversion done (Bug 11196: Add system preference SearchEngine if missing )\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
