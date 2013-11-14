@@ -131,8 +131,9 @@ if ( $email_add ) {
     }
 
     if ( $template_res =~ /<MESSAGE>(.*)<END_MESSAGE>/s ) {
-        $body = encode_qp($1);
+        $body = $1;
         $body =~ s|\n?(.*)\n?|$1|;
+        $body = encode("UTF-8", encode_qp($body));
     }
 
     my $boundary = "====" . time() . "====";
