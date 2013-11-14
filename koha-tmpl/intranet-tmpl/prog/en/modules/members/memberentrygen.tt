@@ -59,7 +59,7 @@
         });
         $("#cancel_manual_restriction").on("click",function(e){
             $('#debarred_expiration').val('');
-            $('#add_debarment').prop('checked', false);
+            $('#add_debarment').val(0);
             $('#debarred_comment').val('');
             mrlink.show();
             mrform.hide();
@@ -1221,11 +1221,11 @@
                 [% END %]
                     <p><a href="#" id="add_manual_restriction">Add manual restriction</a></p>
                     <fieldset id="manual_restriction_form">
-                        <input type="hidden" id="add_debarment" name="add_debarment" value="1" />
+                        <input type="hidden" id="add_debarment" name="add_debarment" value="0" />
                         <legend>Add manual restriction</legend>
                         <ol>
-                            <li><label for="debarred_comment">Comment: </label><input type="text" id="debarred_comment" name="debarred_comment" onchange="$('#add_debarment').prop('checked', true);" /></li>
-                            <li><label for="debarred_expiration">Expiration: </label><input name="debarred_expiration" id="debarred_expiration" size="10" readonly="readonly" value="" class="datepicker" onchange="$('#add_debarment').prop('checked', true);" />
+                            <li><label for="debarred_comment">Comment: </label><input type="text" id="debarred_comment" name="debarred_comment" onchange="$('#add_debarment').val(1);" /></li>
+                            <li><label for="debarred_expiration">Expiration: </label><input name="debarred_expiration" id="debarred_expiration" size="10" readonly="readonly" value="" class="datepicker" onchange="$('#add_debarment').val(1);" />
                                     <a href='javascript:void(0)' onclick="$('#debarred_expiration').val('');">Clear date</a></li>
 
                         </ol>
