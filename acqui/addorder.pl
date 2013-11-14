@@ -307,8 +307,8 @@ if ( $orderinfo->{quantity} ne '0' ) {
             my $xml = TransformHtmlToXml( $itemhash{$item}->{'tags'},
                                     $itemhash{$item}->{'subfields'},
                                     $itemhash{$item}->{'field_values'},
-                                    $itemhash{$item}->{'ind_tag'},
                                     $itemhash{$item}->{'indicator'},
+                                    $itemhash{$item}->{'ind_tag'},
                                     'ITEM');
             my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
             my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$$orderinfo{biblionumber});

@@ -279,7 +279,7 @@ if ($op eq ""){
             push @{ $item->{field_values} }, $field_values[0];
             push @{ $item->{ind_tag} },      $ind_tag[0];
             push @{ $item->{indicator} },    $indicator[0];
-            my $xml = TransformHtmlToXml( \@tags, \@subfields, \@field_values, \@ind_tag, \@indicator );
+            my $xml = TransformHtmlToXml( \@tags, \@subfields, \@field_values, \@indicator, \@ind_tag );
             my $record = MARC::Record::new_from_xml( $xml, 'UTF-8' );
             for (my $qtyloop=1;$qtyloop <= $c_quantity;$qtyloop++) {
                 my ( $biblionumber, $bibitemnum, $itemnumber ) = AddItemFromMarc( $record, $biblionumber );
