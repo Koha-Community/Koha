@@ -149,8 +149,9 @@ if ($quantityrec > $origquantityrec ) {
             my $xml = TransformHtmlToXml( $itemhash{$item}->{'tags'},
                                           $itemhash{$item}->{'subfields'},
                                           $itemhash{$item}->{'field_values'},
+                                          $itemhash{$item}->{'indicator'},
                                           $itemhash{$item}->{'ind_tag'},
-                                          $itemhash{$item}->{'indicator'},'ITEM');
+                                          'ITEM' );
             my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
             my (undef,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$biblionumber);
             $order->add_item( $itemnumber );
