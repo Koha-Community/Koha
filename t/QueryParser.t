@@ -25,6 +25,7 @@ is($QParser->target_syntax('biblioserver', 'keyword|publisher:smith'), '@attr 1=
 is($QParser->target_syntax('biblioserver', 'ti:"little engine that could"'), '@attr 1=4 @attr 4=1 "little engine that could"', 'phrase query');
 is($QParser->target_syntax('biblioserver', 'keyword|titlekw:smith'), '@attr 1=4 @attr 9=20 @attr 2=102 @attr 4=6 "smith"', 'relevance-bumped query');
 is($QParser->target_syntax('biblioserver', 'au:smith && johnson'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 1=1003 @attr 4=6 "johnson"', 'query with boolean &&');
+is($QParser->target_syntax('biblioserver', 'au:smith && ti:johnson'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 1=4 @attr 4=6 "johnson"', 'query with boolean &&');
 is($QParser->target_syntax('biblioserver', 'au:smith pubdate(-2008)'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 4=4 @attr 1=pubdate @attr 2=2 "2008"', 'keyword search with pubdate limited to -2008');
 is($QParser->target_syntax('biblioserver', 'au:smith pubdate(2008-)'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 4=4 @attr 1=pubdate @attr 2=4 "2008"', 'keyword search with pubdate limited to 2008-');
 is($QParser->target_syntax('biblioserver', 'au:smith pubdate(2008)'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 4=4 @attr 1=pubdate "2008"', 'keyword search with pubdate limited to 2008');
@@ -43,9 +44,7 @@ my $desired_config = {
   'field_mappings' => {
     'author' => {
       'personal' => {
-        'aliases' => [
-          'personal'
-        ],
+        'aliases' => [ ],
         'bib1_mapping' => {
           'biblioserver' => {
             '1' => '1004'

@@ -111,7 +111,6 @@ sub add_bib1_field_map {
     my ($self, $class, $field, $server, $attributes) = @_;
 
     $self->add_search_field( $class => $field );
-    $self->add_search_field_alias( $class => $field => $field );
     return $self->_add_field_mapping($self->bib1_field_map, $class, $field, $server, $attributes);
 }
 
@@ -542,14 +541,9 @@ sub initialize {
                     $self->add_bib1_field_map(
                         $class => $field => $server => $bib1_mapping );
                 }
-                $self->add_search_field_alias( $class => $field =>
-                      $field_mappings->{$class}->{$field}->{'index'} );
                 foreach my $alias (
                     @{ $field_mappings->{$class}->{$field}->{'aliases'} } )
                 {
-                    next
-                      if ( $alias eq
-                        $field_mappings->{$class}->{$field}->{'index'} );
                     $self->add_search_field_alias( $class => $field => $alias );
                 }
             }
