@@ -1699,7 +1699,12 @@ sub searchResults {
 
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
-        my $marcrecord = MARC::File::USMARC::decode( $marcresults->[$i] );
+        my $marcrecord = eval { MARC::File::USMARC::decode( $marcresults->[$i] ); };
+        if ( $@ ) {
+            warn "ERROR DECODING RECORD - $@: " . $marcresults->[$i];
+            next;
+        }
+
         my $fw = $scan
              ? undef
              : $bibliotag < 10
