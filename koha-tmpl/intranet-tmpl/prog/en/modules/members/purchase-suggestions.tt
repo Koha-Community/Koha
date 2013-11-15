@@ -1,11 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons &rsaquo;
-[% IF ( unknowuser ) %]
-    Patron does not exist
-[% ELSE %]
-    Purchase suggestions for [% INCLUDE 'patron-title.inc' %]
-[% END %]
-</title>
+<title>Koha &rsaquo; Patrons &rsaquo; Purchase suggestions for [% INCLUDE 'patron-title.inc' %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
@@ -28,7 +22,7 @@
 <div id="breadcrumbs">
          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
-&rsaquo; [% IF ( unknowuser ) %]Patron does not exist[% ELSE %]Purchase suggestions for [% firstname %] [% surname %] ([% cardnumber %])[% END %]
+&rsaquo; Purchase suggestions for [% INCLUDE 'patron-title.inc' %]
 </div>
 
 <div id="doc3" class="yui-t1">
