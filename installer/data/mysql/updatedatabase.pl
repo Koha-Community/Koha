@@ -8005,6 +8005,13 @@ if ( CheckVersion($DBversion) ) {
     $dbh->{RaiseError} = 0;
 }
 
+$DBversion = "3.15.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES('OpacMaxItemsToDisplay','50','','Max items to display at the OPAC on a biblio detail','Integer')");
+    print "Upgrade to $DBversion done (Bug 11256: Add system preference OpacMaxItemsToDisplay)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

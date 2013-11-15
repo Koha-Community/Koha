@@ -561,7 +561,15 @@ if ($currentbranch and C4::Context->preference('OpacSeparateHoldings')) {
     $template->param(SeparateHoldings => 1);
 }
 my $separatebranch = C4::Context->preference('OpacSeparateHoldingsBranch');
-for my $itm (@items) {
+my $viewallitems = $query->param('viewallitems');
+my $max_items_to_display = C4::Context->preference('OpacMaxItemsToDisplay') // 50;
+if ( not $viewallitems and @items > $max_items_to_display ) {
+    $template->param(
+        too_many_items => 1,
+        items_count => scalar( @items ),
+    );
+} else {
+  for my $itm (@items) {
     $itm->{holds_count} = $item_reserves{ $itm->{itemnumber} };
     $itm->{priority} = $priority{ $itm->{itemnumber} };
     $norequests = 0
@@ -616,6 +624,7 @@ for my $itm (@items) {
     } else {
         push @itemloop, $itm;
     }
+  }
 }
 
 # Display only one tab if one items list is empty
@@ -624,17 +633,6 @@ if (scalar(@itemloop) == 0 || scalar(@otheritemloop) == 0) {
     if (scalar(@itemloop) == 0) {
         @itemloop = @otheritemloop;
     }
-}
-
-# If there is a lot of items, and the user has not decided
-# to view them all yet, we first warn him
-# TODO: The limit of 50 could be a syspref
-my $viewallitems = $query->param('viewallitems');
-if (scalar(@itemloop) >= 50 && !$viewallitems) {
-    $template->param('lotsofholdingsitems' => 1);
-}
-if (scalar(@otheritemloop) >= 50 && !$viewallitems) {
-    $template->param('lotsofothersholdingsitems' => 1);
 }
 
 ## get notes and subjects from MARC record

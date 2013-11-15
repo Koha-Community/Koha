@@ -938,7 +938,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
 <ul>   
     [% IF ( defaulttab == 'holdings' ) %]<li id="tab_holdings" class="ui-tabs-selected">[% ELSE %]<li id="tab_holdings">[% END %]
-        <a href="#holdings">[% IF SeparateHoldings %][% LoginBranchname %] holdings[% ELSE %]Holdings[% END %] ( [% itemloop.size || 0 %] )</a>
+        <a href="#holdings">[% IF SeparateHoldings %][% LoginBranchname %] holdings[% ELSE %]Holdings[% END %][% UNLESS too_many_items %]  ( [% itemloop.size || 0 %] )[% END %]</a>
     </li>
     [% IF (SeparateHoldings) %]
         <li><a href="#otherholdings">Other holdings ( [% otheritemloop.size || 0 %] )</a></li>
@@ -1038,12 +1038,10 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
 
 <div id="holdings">
-[% IF ( itemloop.size ) %]
-    [% IF ( lotsofholdingsitems ) %]
-        <p>This record has many physical items. <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]&amp;viewallitems=1#holdings">Click here to view them all.</a></p>
-    [% ELSE %]
-        [% INCLUDE items_table items=itemloop tab="holdings" %]
-    [% END %]
+[% IF too_many_items %]
+    <p>This record has many physical items ([% items_count %]). <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]&amp;viewallitems=1">Click here to view them all.</a></p>
+[% ELSIF ( itemloop.size ) %]
+    [% INCLUDE items_table items=itemloop tab="holdings" %]
     [% IF holds_count.defined || priority %]
     <div id="bib_holds">
         [% IF holds_count.defined %]
@@ -1075,12 +1073,8 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
 [% IF (SeparateHoldings) %]
     <div id="otherholdings">
-        [% IF (otheritemloop.size) %]
-            [% IF lotsofothersholdingsitems %]
-                <p>This record has many physical items. <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]&amp;viewallitems=1#otherholdings">Click here to view them all.</a></p>
-            [% ELSE %]
-                [% INCLUDE items_table items=otheritemloop tab="otherholdings" %]
-            [% END %]
+        [% IF otheritemloop.size %]
+            [% INCLUDE items_table items=otheritemloop tab="otherholdings" %]
         [% ELSE %]
             No other items.
         [% END %]
