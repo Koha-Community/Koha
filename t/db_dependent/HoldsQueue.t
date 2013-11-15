@@ -12,7 +12,7 @@ use C4::Context;
 
 use Data::Dumper;
 
-use Test::More tests => 20;
+use Test::More tests => 21;
 
 
 use C4::Branch;
@@ -287,8 +287,9 @@ $dbh->do("DELETE FROM default_circ_rules");
 $dbh->do("INSERT INTO default_circ_rules ( holdallowed ) VALUES ( 1 )");
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
-ok( @$holds_queue == 1, "Holds queue filling correct number for default holds policy 'from home library'" );
-ok( $holds_queue->[0]->{cardnumber} eq 'CARDNUMBER1', "Holds queue filling correct hold for default holds policy 'from home library'");
+ok( @$holds_queue == 2, "Holds queue filling correct number for default holds policy 'from home library'" );
+ok( $holds_queue->[0]->{cardnumber} eq 'CARDNUMBER1', "Holds queue filling 1st correct hold for default holds policy 'from home library'");
+ok( $holds_queue->[1]->{cardnumber} eq 'CARDNUMBER2', "Holds queue filling 2nd correct hold for default holds policy 'from home library'");
 
 $dbh->do("DELETE FROM default_circ_rules");
 $dbh->do("INSERT INTO default_circ_rules ( holdallowed ) VALUES ( 2 )");
