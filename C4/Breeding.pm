@@ -108,7 +108,7 @@ sub ImportBreeding {
             # if isbn found and biblio does not exist, add it. If isbn found and biblio exists, 
             # overwrite or ignore depending on user choice
             # drop every "special" char : spaces, - ...
-            $oldbiblio->{isbn} = C4::Koha::_isbn_cleanup($oldbiblio->{isbn}); # FIXME C4::Koha::_isbn_cleanup should be public
+            $oldbiblio->{isbn} = C4::Koha::GetNormalizedISBN($oldbiblio->{isbn});
             # search if biblio exists
             my $biblioitemnumber;
             if ($oldbiblio->{isbn}) {
@@ -172,6 +172,9 @@ sub BreedingSearch {
     my ($query,@bind);
     my $sth;
     my @results;
+
+    # normalise ISBN like at import
+    $isbn = C4::Koha::GetNormalizedISBN($isbn);
 
     $query = "SELECT import_record_id, file_name, isbn, title, author
               FROM  import_biblios 

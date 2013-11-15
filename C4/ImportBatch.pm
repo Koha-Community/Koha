@@ -1399,7 +1399,7 @@ sub _add_biblio_fields {
     my ($title, $author, $isbn, $issn) = _parse_biblio_fields($marc_record);
     my $dbh = C4::Context->dbh;
     # FIXME no controlnumber, originalsource
-    $isbn = C4::Koha::_isbn_cleanup($isbn); # FIXME C4::Koha::_isbn_cleanup should be made public
+    $isbn = C4::Koha::GetNormalizedISBN($isbn);
     my $sth = $dbh->prepare("INSERT INTO import_biblios (import_record_id, title, author, isbn, issn) VALUES (?, ?, ?, ?, ?)");
     $sth->execute($import_record_id, $title, $author, $isbn, $issn);
     $sth->finish();

@@ -116,7 +116,9 @@ if ($query) {
 #check is on isbn legnth 13 for new isbn and 10 for old isbn
     my ( $title, $isbn );
     if ($query=~/\d/) {
-        my $querylength = length $query;
+        my $clean_query = $query;
+        $clean_query =~ s/-//g; # remove hyphens
+        my $querylength = length $clean_query;
         if ( $querylength == 13 || $querylength == 10 ) {
             $isbn = $query;
         }
