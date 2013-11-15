@@ -200,7 +200,7 @@ elsif ( $op eq 'delete_confirm' ) {
     my $sth = $dbh->prepare('
         SELECT COUNT(*) AS total FROM (
             SELECT itemtype AS t FROM biblioitems
-            UNION
+            UNION ALL
             SELECT itype AS t FROM items
         ) AS tmp
         WHERE tmp.t=?
