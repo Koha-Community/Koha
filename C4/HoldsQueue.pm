@@ -427,7 +427,6 @@ sub MapItemsToHoldRequests {
                 }
             }
             $holdingbranch = $pickup_branch;
-            $itemnumber ||= $holding_branch_items->[0]->{itemnumber};
         }
         elsif ($transport_cost_matrix) {
             $pull_branches = [keys %items_by_branch];
@@ -462,6 +461,7 @@ sub MapItemsToHoldRequests {
                 $holdingbranch ||= $branch;
                 foreach my $item (@$holding_branch_items) {
                     next if $pickup_branch ne $item->{homebranch};
+                    next if ( $item->{holdallowed} == 1 && $item->{homebranch} ne $request->{borrowerbranch} );
 
                     $itemnumber = $item->{itemnumber};
                     $holdingbranch = $branch;
@@ -471,7 +471,7 @@ sub MapItemsToHoldRequests {
 
             unless ( $itemnumber ) {
                 foreach my $current_item ( @{ $items_by_branch{$holdingbranch} } ) {
-                    if ( $holdingbranch && ( $current_item->{holdallowed} == 2 || $pickup_branch eq $current_item->{homebranch} ) ) {
+                    if ( $holdingbranch && ( $current_item->{holdallowed} == 2 || $request->{borrowerbranch} eq $current_item->{homebranch} ) ) {
                         $itemnumber = $current_item->{itemnumber};
                         last; # quit this loop as soon as we have a suitable item
                     }
