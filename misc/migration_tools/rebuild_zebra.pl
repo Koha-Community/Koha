@@ -115,6 +115,19 @@ if ($noshadow) {
     $noshadow = ' -n ';
 }
 
+if ($daemon_mode) {
+    # incompatible flags handled above: help, reset, and do_not_clear_zebraqueue
+    if ($skip_export or $keep_export or $skip_index or
+          $where or $length or $offset) {
+        my $msg = "Cannot specify -s, -k, -I, -where, -length, or -offset with -daemon.\n";
+        $msg   .= "Please do '$0 --help' to see usage.\n";
+        die $msg;
+    }
+    $authorities = 1;
+    $biblios = 1;
+    $process_zebraqueue = 1;
+}
+
 #  -v is for verbose, which seems backwards here because of how logging is set
 #    on the CLI of zebraidx.  It works this way.  The default is to not log much
 if ($verbose_logging >= 2) {
@@ -207,6 +220,8 @@ sub do_one_pass {
 }
 
 # Check the zebra update queue and return true if there are records to process
+# This routine will handle each of -ab, -a, or -b, but in practice we force
+# -ab when in daemon mode.
 sub zebraqueue_not_empty {
     my $where_str;
 
@@ -735,6 +750,11 @@ Parameters:
                             SQL query.  This allows for near realtime update of
                             the zebra search index with low system overhead.
                             Use -sleep to control the checking interval.
+
+                            Daemon mode implies -z, -a, -b.  The program will
+                            refuse to start if options are present that do not
+                            make sense while running as an incremental update
+                            daemon (e.g. -r or -offset).
 
     -sleep 10               Seconds to sleep between checks of the zebraqueue
                             table in daemon mode.  The default is 5 seconds.
