@@ -25,6 +25,9 @@ VALUES( 'opac', 'i', 'en', 'OPAC');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'opac', 'i', 'fr', 'OPAC');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'opac', 'i', 'de', 'OPAC');
+
 -- Staff Client
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'intranet', 'i', 'Staff Client','2005-10-16');
@@ -35,6 +38,9 @@ VALUES( 'intranet', 'i', 'en', 'Staff Client');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'intranet', 'i', 'fr', '????');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'intranet', 'i', 'de', 'Dienstoberfläche');
+
 -- Theme (t)
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'prog', 't', 'Prog','2005-10-16');
@@ -44,6 +50,9 @@ VALUES( 'prog', 't', 'en', 'Prog');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'prog', 't', 'fr', 'Prog');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'prog', 't', 'de', 'Prog');
 
 -- LANGUAGES
 
@@ -283,7 +292,7 @@ INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'el', 'language', 'fr', 'Grec Moderne (Après 1453)');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES( 'el', 'language', 'de', 'Griechisch (Nach 1453)');
+VALUES( 'el', 'language', 'de', 'Griechisch (Moern [1453- ]');
 
 -- Hebrew
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -453,6 +462,10 @@ VALUES( 'gl', 'language', 'en', 'Galician');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'gl', 'language', 'fr', 'Galicien');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'gl', 'language', 'de', 'Galicisch');
+
 
 -- Norwegian (bokmål)
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -781,6 +794,9 @@ VALUES( 'Arab', 'script','en', 'Arabic');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'Arab', 'script','fr', 'Arabic');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'Arab', 'script', 'de', 'Arabisch');
+
 -- Cyrillic
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'Cyrl', 'script', 'Cyrillic','2005-10-16');
@@ -793,6 +809,10 @@ VALUES( 'Cyrl', 'script', 'en', 'Cyrillic');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'Cyrl', 'script', 'fr', 'Cyrillic');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'Cyrl', 'script', 'de', 'Kyrillisch');
+
 
 -- Greek
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -807,6 +827,10 @@ VALUES( 'Grek', 'script', 'en', 'Greek');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'Grek', 'script', 'fr', 'Greek');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'Grek', 'script', 'de', 'Griechisch');
+
+
 -- Han - Simplified
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'Hans', 'script', 'Han (Simplified variant)','2005-10-16');
@@ -820,6 +844,10 @@ VALUES( 'Hans', 'script', 'en', 'Han (Simplified variant)');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'Hans', 'script', 'fr', 'Han (Simplified variant)');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'Hans', 'script', 'de', 'Han (Vereinfachte Variante)');
+
+
 -- Han - Traditional
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'Hant', 'script', 'Han (Traditional variant)','2005-10-16');
@@ -829,6 +857,9 @@ VALUES ( 'Hant', 'script', 'Hant', 'Han (Traditional variant)');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'Hant', 'script', 'en', 'Han (Traditional variant)');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'Hant', 'script', 'de', 'Han (Traditionelle Variante)');
 
 -- Hebrew
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -840,6 +871,9 @@ VALUES ( 'Hebr', 'script', 'Hebr', 'Hebrew');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'Hebr', 'script', 'en', 'Hebrew');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'Hebr', 'script', 'de', 'Hebräisch');
+
 -- Lao
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'Laoo', 'script', 'Lao','2005-10-16');
@@ -849,6 +883,10 @@ VALUES ( 'Laoo', 'script', 'lo', 'Lao');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'Laoo', 'script', 'en', 'Lao');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'Laoo', 'script', 'en', 'Laotisch');
+
 
 -- REGIONS
 -- Canada
