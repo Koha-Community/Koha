@@ -1,5 +1,5 @@
 <SUBJECT>
-Your List : [% shelfname %]
+Your list: [% shelfname %]
 <END_SUBJECT>
 
 [% USE HtmlToText %]
@@ -13,7 +13,7 @@ Your List : [% shelfname %]
     <p>Here is your list called [% shelfname %], sent from our online catalog.</p>
 
     <p>Please note that the attached file is a MARC bibliographic records file
-    which can be imported into a Personal Bibliographic Software like EndNote,
+    which can be imported into personal bibliographic software like EndNote,
     Reference Manager or ProCite.</p>
     <hr/>
 [% END %]
@@ -134,7 +134,7 @@ Your List : [% shelfname %]
             [% END %]
             [% IF ( BIBLIO_RESULT.url ) %]
             <span>
-                URL: [% BIBLIO_RESULT.url %]
+                URL: [% BIBLIO_RESULT.url |url %]
             </span>
             [% END %]
             </p>
@@ -162,5 +162,4 @@ Your List : [% shelfname %]
     </ol>
 
 [% END %]
-
 <END_MESSAGE>
