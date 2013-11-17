@@ -6,7 +6,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 22;
+use Test::More tests => 23;
 use Data::Dumper;
 
 BEGIN {
@@ -59,6 +59,7 @@ my %data = (
     surname => $SURNAME,
     categorycode => $CATEGORYCODE,
     branchcode => $BRANCHCODE,
+    dateofbirth => ''
 );
 
 my $addmem=AddMember(%data);
@@ -73,6 +74,8 @@ ok ( $member->{firstname}    eq $FIRSTNAME    &&
      $member->{branchcode}   eq $BRANCHCODE
      , "Got member")
   or diag("Mismatching member details: ".Dumper(\%data, $member));
+
+ok($member->{dateofbirth} eq '', "Empty dates handled correctly");
 
 $member->{firstname} = $CHANGED_FIRSTNAME;
 $member->{email}     = $EMAIL;
@@ -166,7 +169,7 @@ is ($notice_email, $EMAIL, "GetNoticeEmailAddress returns correct value when Aut
 C4::Context->set_preference( 'AutoEmailPrimaryAddress', 'emailpro' );
 C4::Context->clear_syspref_cache();
 
-my $notice_email = GetNoticeEmailAddress($member->{'borrowernumber'});
+$notice_email = GetNoticeEmailAddress($member->{'borrowernumber'});
 is ($notice_email, $EMAILPRO, "GetNoticeEmailAddress returns correct value when AutoEmailPrimaryAddress is emailpro");
 
 
