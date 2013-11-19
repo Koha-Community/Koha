@@ -384,6 +384,26 @@ else
     MEMCACHED_PREFIX=""
 fi
 
+# Are we root? If not, the mod_rewrite check will fail and be confusing, so
+# we look into this first.
+if [[ $UID -ne 0 ]]
+then
+    die "This script must be run with root privileges."
+fi
+
+# Check that mod_rewrite is installed so we can bail out if it's not.
+if ! /usr/sbin/apachectl -M 2> /dev/null | grep -q 'rewrite_module'
+then
+    cat 1>&2  <<EOM
+
+Koha requires mod_rewrite to be enabled within Apache in order to run.
+Typically this can be enabled with:
+
+    sudo a2enmod rewrite
+EOM
+    die
+fi
+
 opacdomain="$OPACPREFIX$name$OPACSUFFIX$DOMAIN"
 intradomain="$INTRAPREFIX$name$INTRASUFFIX$DOMAIN"
 
