@@ -2450,6 +2450,7 @@ sub AddClaim {
 
     my @invoices = GetInvoices(
         invoicenumber => $invoicenumber,
+        supplierid => $supplierid,
         suppliername => $suppliername,
         shipmentdatefrom => $shipmentdatefrom, # ISO format
         shipmentdateto => $shipmentdateto, # ISO format
@@ -2494,6 +2495,8 @@ sub GetInvoices {
         FROM aqinvoices
           LEFT JOIN aqbooksellers ON aqbooksellers.id = aqinvoices.booksellerid
           LEFT JOIN aqorders ON aqorders.invoiceid = aqinvoices.invoiceid
+          LEFT JOIN aqbasket ON aqbasket.basketno=aqorders.basketno
+          LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
           LEFT JOIN biblio ON aqorders.biblionumber = biblio.biblionumber
           LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
           LEFT JOIN subscription ON biblio.biblionumber = subscription.biblionumber
@@ -2514,11 +2517,11 @@ sub GetInvoices {
         push @bind_args, "%$args{suppliername}%";
     }
     if($args{shipmentdatefrom}) {
-        push @bind_strs, " aqinvoices.shipementdate >= ? ";
+        push @bind_strs, " aqinvoices.shipmentdate >= ? ";
         push @bind_args, $args{shipmentdatefrom};
     }
     if($args{shipmentdateto}) {
-        push @bind_strs, " aqinvoices.shipementdate <= ? ";
+        push @bind_strs, " aqinvoices.shipmentdate <= ? ";
         push @bind_args, $args{shipmentdateto};
     }
     if($args{billingdatefrom}) {
@@ -2530,27 +2533,27 @@ sub GetInvoices {
         push @bind_args, $args{billingdateto};
     }
     if($args{isbneanissn}) {
-        push @bind_strs, " (biblioitems.isbn LIKE ? OR biblioitems.ean LIKE ? OR biblioitems.issn LIKE ? ) ";
+        push @bind_strs, " (biblioitems.isbn LIKE CONCAT('%', ?, '%') OR biblioitems.ean LIKE CONCAT('%', ?, '%') OR biblioitems.issn LIKE CONCAT('%', ?, '%') ) ";
         push @bind_args, $args{isbneanissn}, $args{isbneanissn}, $args{isbneanissn};
     }
     if($args{title}) {
-        push @bind_strs, " biblio.title LIKE ? ";
+        push @bind_strs, " biblio.title LIKE CONCAT('%', ?, '%') ";
         push @bind_args, $args{title};
     }
     if($args{author}) {
-        push @bind_strs, " biblio.author LIKE ? ";
+        push @bind_strs, " biblio.author LIKE CONCAT('%', ?, '%') ";
         push @bind_args, $args{author};
     }
     if($args{publisher}) {
-        push @bind_strs, " biblioitems.publishercode LIKE ? ";
+        push @bind_strs, " biblioitems.publishercode LIKE CONCAT('%', ?, '%') ";
         push @bind_args, $args{publisher};
     }
     if($args{publicationyear}) {
-        push @bind_strs, " biblioitems.publicationyear = ? ";
-        push @bind_args, $args{publicationyear};
+        push @bind_strs, " ((biblioitems.publicationyear LIKE CONCAT('%', ?, '%')) OR (biblio.copyrightdate LIKE CONCAT('%', ?, '%'))) ";
+        push @bind_args, $args{publicationyear}, $args{publicationyear};
     }
     if($args{branchcode}) {
-        push @bind_strs, " aqorders.branchcode = ? ";
+        push @bind_strs, " borrowers.branchcode = ? ";
         push @bind_args, $args{branchcode};
     }
 
