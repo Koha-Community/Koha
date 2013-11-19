@@ -1681,7 +1681,9 @@ sub searchResults {
     while ( ( my $column ) = $sth2->fetchrow ) {
         my ( $tagfield, $tagsubfield ) =
           &GetMarcFromKohaField( "items." . $column, "" );
-        $subfieldstosearch{$column} = $tagsubfield;
+        if ( defined $tagsubfield ) {
+            $subfieldstosearch{$column} = $tagsubfield;
+        }
     }
 
     # handle which records to actually retrieve
