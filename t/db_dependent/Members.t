@@ -75,7 +75,7 @@ ok ( $member->{firstname}    eq $FIRSTNAME    &&
      , "Got member")
   or diag("Mismatching member details: ".Dumper(\%data, $member));
 
-ok($member->{dateofbirth} eq '', "Empty dates handled correctly");
+is($member->{dateofbirth}, undef, "Empty dates handled correctly");
 
 $member->{firstname} = $CHANGED_FIRSTNAME;
 $member->{email}     = $EMAIL;
