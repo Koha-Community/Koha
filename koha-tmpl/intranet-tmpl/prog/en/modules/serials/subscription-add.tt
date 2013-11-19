@@ -706,10 +706,12 @@ $(document).ready(function() {
                                         <label for="locale">Locale</label>
                                         <select id="locale" name="locale">
                                             <option value=""></option>
-                                            [% FOREACH locale IN locales %]
-                                                <option value="[% locale %]">
-                                                    [% locale %]
-                                                </option>
+                                            [% FOREACH l IN locales %]
+                                                [% IF l == locale %]
+                                                    <option value="[% l %]" selected="selected">[% l %]</option>
+                                                [% ELSE %]
+                                                    <option value="[% l %]">[% l %]</option>
+                                                [% END %]
                                             [% END %]
                                         </select>
                                         <span class="hint">If empty, system locale is used</span>
