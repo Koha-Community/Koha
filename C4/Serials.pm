@@ -23,8 +23,9 @@ use Modern::Perl;
 use C4::Auth qw(haspermission);
 use C4::Context;
 use C4::Dates qw(format_date format_date_in_iso);
+use DateTime;
 use Date::Calc qw(:all);
-use POSIX qw(strftime setlocale LC_TIME);
+use POSIX qw(strftime);
 use C4::Biblio;
 use C4::Log;    # logaction
 use C4::Debug;
@@ -2693,43 +2694,38 @@ num_type can take :
 sub _numeration {
     my ($value, $num_type, $locale) = @_;
     $value ||= 0;
-    my $initlocale = setlocale(LC_TIME);
-    if($locale and $locale ne $initlocale) {
-        $locale = setlocale(LC_TIME, $locale);
-    }
-    $locale ||= $initlocale;
-    my $string;
     $num_type //= '';
+    $locale ||= 'en';
+    my $string;
     given ($num_type) {
         when (/^dayname$/) {
-              $value = $value % 7;
-              $string = POSIX::strftime("%A",0,0,0,0,0,0,$value);
+            # 1970-06-01 was a monday
+            $value = $value % 7;
+            my $dt = DateTime->new(
+                year    => 1970,
+                month   => 6,
+                day     => $value + 1,
+                locale  => $locale,
+            );
+            $string = $dt->strftime("%A");
         }
         when (/^monthname$/) {
-              $value = $value % 12;
-              $string = POSIX::strftime("%B",0,0,0,1,$value,0,0,0,0);
+            $value = $value % 12;
+            my $dt = DateTime->new(
+                year    => 1970,
+                month   => $value + 1,
+                locale  => $locale,
+            );
+            $string = $dt->strftime("%B");
         }
         when (/^season$/) {
-              my $seasonlocale = ($locale)
-                               ? (substr $locale,0,2)
-                               : "en";
-              my %seasons=(
-                 "en" =>
-                    [qw(Spring Summer Fall Winter)],
-                 "fr"=>
-                    [qw(Printemps Été Automne Hiver)],
-              );
+              my @seasons= qw( Spring Summer Fall Winter );
               $value = $value % 4;
-              $string = ($seasons{$seasonlocale})
-                      ? $seasons{$seasonlocale}->[$value]
-                      : $seasons{'en'}->[$value];
+              $string = $seasons[$value];
         }
         default {
             $string = $value;
         }
-    }
-    if($locale ne $initlocale) {
-        setlocale(LC_TIME, $initlocale);
     }
     return $string;
 }

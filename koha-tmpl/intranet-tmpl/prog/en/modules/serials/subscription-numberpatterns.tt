@@ -228,7 +228,7 @@ function show_blocking_subs() {
                   <select id="locale" name="locale">
                       <option value=""></option>
                       [% FOREACH locale IN locales %]
-                        <option value="[% locale %]">[% locale %]</option>
+                        <option value="[% locale.language %]">[% locale.description %]</option>
                       [% END %]
                     </select>
                   <span class="hint">If empty, English is used</span>

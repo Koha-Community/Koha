@@ -256,7 +256,17 @@ $(document).ready(function() {
                     </span>
                 </td>
                 <td>
-                    [% serial.serialseq %]
+                    [% IF ( matches = serial.serialseq.match('Spring(.*)') ) %]
+                        Spring[% matches.join("") %]
+                    [% ELSIF ( matches = serial.serialseq.match('Summer(.*)') ) %]
+                        Summer[% matches.join("") %]
+                    [% ELSIF ( matches = serial.serialseq.match('Fall(.*)') ) %]
+                        Fall[% matches.join("") %]
+                    [% ELSIF ( matches = serial.serialseq.match('Winter(.*)') ) %]
+                        Winter[% matches.join("") %]
+                    [% ELSE %]
+                        [% serial.serialseq %]
+                    [% END %]
                 </td>
                 <td>
                     [% IF ( serial.status1 ) %]Expected[% END %]

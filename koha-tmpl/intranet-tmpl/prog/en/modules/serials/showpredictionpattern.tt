@@ -56,7 +56,19 @@
   <tbody>
     [% FOREACH prediction IN predictions_loop %]
       <tr>
-        <td>[% prediction.number %]</td>
+        <td>
+            [% IF ( matches = prediction.number.match('Spring(.*)') ) %]
+                Spring[% matches.join("") %]
+            [% ELSIF ( matches = prediction.number.match('Summer(.*)') ) %]
+                Summer[% matches.join("") %]
+            [% ELSIF ( matches = prediction.number.match('Fall(.*)') ) %]
+                Fall[% matches.join("") %]
+            [% ELSIF ( matches = prediction.number.match('Winter(.*)') ) %]
+                Winter[% matches.join("") %]
+            [% ELSE %]
+                [% prediction.number %]
+            [% END %]
+        </td>
         <td>
           [% IF (prediction.publicationdate) %]
             [% prediction.publicationdate | $KohaDates %]
