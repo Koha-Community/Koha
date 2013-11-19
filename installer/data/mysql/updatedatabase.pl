@@ -8021,6 +8021,22 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q{
+        ALTER TABLE `action_logs`
+            DROP KEY timestamp,
+            ADD KEY `timestamp_idx` (`timestamp`),
+            ADD KEY `user_idx` (`user`),
+            ADD KEY `module_idx` (`module`(255)),
+            ADD KEY `action_idx` (`action`(255)),
+            ADD KEY `object_idx` (`object`),
+            ADD KEY `info_idx` (`info`(255))
+    });
+    print "Upgrade to $DBversion done (Bug 3445: Add indexes to action_logs table)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
