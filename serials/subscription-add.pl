@@ -213,15 +213,14 @@ if ($op eq 'addsubscription') {
     }
     $template->param(numberpatterns => \@numberpatternloop);
 
-    # Get installed locales
-    # FIXME this will not work with all environments.
-    # If call to locale fails, @locales will be an empty array, which is fine.
-    my @locales = map {
-        chomp;
-        # we don't want POSIX and C locales
-        /^C|^POSIX$/ ? () : $_
-    } `locale -a`;
-    $template->param(locales => \@locales);
+    my $languages = [ map {
+        {
+            language => $_->{language},
+            description => $_->{native_description} || $_->{language}
+        }
+    } @{ C4::Languages::getTranslatedLanguages() } ];
+
+    $template->param( locales => $languages );
 
     output_html_with_http_headers $query, $cookie, $template->output;
 }

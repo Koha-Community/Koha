@@ -105,17 +105,18 @@ if($op && ($op eq 'new' || $op eq 'modify')) {
     my @frequencies = GetSubscriptionFrequencies();
     my @subtypes;
     push @subtypes, { value => $_ } for (qw/ issues weeks months /);
-    my @locales = map {
-        chomp;
-        /^C|^POSIX$/ ? () : $_
-    } `locale -a`;
+    my $languages = [ map {
+        {
+            language => $_->{language},
+            description => $_->{native_description} || $_->{language}
+        }
+    } @{ C4::Languages::getTranslatedLanguages() } ];
 
     $template->param(
         $op => 1,
         frequencies_loop => \@frequencies,
         subtypes_loop => \@subtypes,
-        locales => \@locales,
-        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+        locales => $languages,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;

@@ -693,14 +693,14 @@ $(document).ready(function() {
                                         <select id="locale" name="locale">
                                             <option value=""></option>
                                             [% FOREACH l IN locales %]
-                                                [% IF l == locale %]
-                                                    <option value="[% l %]" selected="selected">[% l %]</option>
+                                                [% IF l.language == locale %]
+                                                    <option value="[% l.language %]" selected="selected">[% l.description %]</option>
                                                 [% ELSE %]
-                                                    <option value="[% l %]">[% l %]</option>
+                                                    <option value="[% l.language %]">[% l.description %]</option>
                                                 [% END %]
                                             [% END %]
                                         </select>
-                                        <span class="hint">If empty, system locale is used</span>
+                                        <span class="hint">If empty, English is used</span>
                                     </li>
                                     <li id="more_options">
                                         <table id="moreoptionst">
