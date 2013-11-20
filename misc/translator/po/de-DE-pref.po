@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 3.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2013-10-09 08:47+0000\n"
-"Last-Translator: Katrin <katrin.fischer@bsz-bw.de>\n"
+"PO-Revision-Date: 2013-11-08 11:36+0100\n"
+"Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-community.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -44,12 +44,16 @@ msgid "acquisitions.pref#AcqCreateItem# receiving an order."
 msgstr "Zugang/Inventarisierung."
 
 # Acquisitions > Policy
+msgid "acquisitions.pref#AcqItemSetSubfieldsWhenReceived# Set subfields for item when items are created when receiving (e.g. o=5|a=\"foo bar\")"
+msgstr "Aktualisiere die Felder im Exemplardatensatz bei Zugang, wenn Exemplare während der Bestellung angelegt wurden (Beispiel: o=5|\"foo bar\")"
+
+# Acquisitions > Policy
 msgid "acquisitions.pref#AcqViewBaskets# Show baskets"
 msgstr "Zeige die Bestellungen beim Lieferanten,"
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#AcqViewBaskets# created by staff member."
-msgstr "die vom angemeldeten Benutzer erstellt wurden."
+msgid "acquisitions.pref#AcqViewBaskets# created or managed by staff member."
+msgstr "die vom angemeldeten Benutzer erfasst oder verwaltet wurden."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqViewBaskets# from staff member's library."
@@ -61,15 +65,15 @@ msgstr "die, unabhängig vom Benutzer, in Koha erfasst wurden."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqWarnOnDuplicateInvoice# Do not warn"
-msgstr ""
+msgstr "Warne nicht"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqWarnOnDuplicateInvoice# Warn"
-msgstr ""
+msgstr "Warne"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqWarnOnDuplicateInvoice# when the librarian tries to create an invoice with a duplicate number."
-msgstr ""
+msgstr "wenn ein Bibliotheksmitarbeiter versucht eine Rechnung mit einer bereits vorhandenen Rechnungsnummer anzulegen."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#BasketConfirmations# When closing or reopening a basket,"
@@ -197,15 +201,15 @@ msgstr "einige"
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# Don't prevent"
-msgstr ""
+msgstr "Erlaube,"
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# Prevent"
-msgstr ""
+msgstr "Erlaube nicht,"
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# staff (but not superlibrarians) from modifying objects (holds, items, patrons, etc.) belonging to other libraries."
-msgstr ""
+msgstr "dass Bibliotheksmitarbeiter (mit Ausnahme von 'Superlibrarians') Objekte (Vormerkungen, Exemplare, Benutzer, etc.) einer anderen Bibliothek verändern."
 
 # Administration > Interface options
 msgid "admin.pref#KohaAdminEmailAddress# Use"
@@ -877,7 +881,7 @@ msgstr "Ausleihparameter"
 
 # Circulation > Course Reserves
 msgid "circulation.pref Course Reserves"
-msgstr ""
+msgstr "Semesterapparate"
 
 # Circulation > Fines Policy
 msgid "circulation.pref Fines Policy"
@@ -1025,15 +1029,15 @@ msgstr "dass Mitarbeiter Ausleihsperren übergehen und nicht ausleihbare Exempla
 
 # Circulation > Interface
 msgid "circulation.pref#AllowOfflineCirculation# Do not enable"
-msgstr ""
+msgstr "Deaktiviere"
 
 # Circulation > Interface
 msgid "circulation.pref#AllowOfflineCirculation# Enable"
-msgstr ""
+msgstr "Aktiviere"
 
 # Circulation > Interface
 msgid "circulation.pref#AllowOfflineCirculation# offline circulation on regular circulation computers. (NOTE: This system preference does not affect the Firefox plugin or the desktop application)"
-msgstr ""
+msgstr "die Offline-Verbuchung in der Dienstoberfläche an normalen Ausleihstationen. (Hinweis: Dieser Systemparameter hat keinen Einfluss auf die Verwendung des Firefox-Plugins oder der Desktop-Anwendung)."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowOnShelfHolds# Allow"
@@ -1093,15 +1097,27 @@ msgstr "Rückgaben durch Benutzer am web-basierten Selbstausleihsystem."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowTooManyOverride# Allow"
-msgstr ""
+msgstr "Erlaube,"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowTooManyOverride# Don't allow"
-msgstr ""
+msgstr "Erlaube nicht,"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowTooManyOverride# staff to override and check out items when the patron has reached the maximum number of allowed checkouts."
-msgstr ""
+msgstr "dass Bibliotheksmitarbeiter Ausleihen trotzdem durchführen können, auch wenn der Benutzer die maximal mögliche Anzahl an Ausleihen erreicht hat."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AutoRemoveOverduesRestrictions# Do"
+msgstr "Entferne"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AutoRemoveOverduesRestrictions# Do not"
+msgstr "Entferne nicht"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AutoRemoveOverduesRestrictions# allow OVERDUES restrictions triggered by sent notices to be cleared automatically when all overdue items are returned by a patron."
+msgstr "automatisch die OVERDUES-Sperre, die durch den Versand von Mahnungen gesetzt wurde, wenn alle überfälligen Medien vom Benutzer zurückgegeben wurden."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AutoResumeSuspendedHolds# Allow"
@@ -1225,11 +1241,11 @@ msgstr "der Bibliothek, in der das Exemplar entliehen wurde."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ConfirmFutureHolds# Confirm future hold requests (starting no later than"
-msgstr ""
+msgstr "Erlaube die Bereitstellung von Vormerkungen mit einem Vormerkdatum in der Zukunft (welches nicht später ist als "
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ConfirmFutureHolds# days from now) at checkin time. Note that this number of days will be used too in calculating the default end date for the Holds to pull-report. But it does not interfere with issuing, renewing or transferring books."
-msgstr ""
+msgstr " Tage ab heute) zum Zeitpunkt der Rückgabe. Bitte beachten Sie, dass das hieraus errechnete Datum dann auch in der Liste der zu bearbeitenden Vormerkungen verwendet wird. Dies hat keinen Einfluss auf die Ausleihe, Verlängerungen oder Transporte."
 
 # Circulation > Interface
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
@@ -1329,7 +1345,7 @@ msgstr "Setze das voreingestellte Startdatum für die Liste der Vormerkungen auf
 
 # Circulation > Interface
 msgid "circulation.pref#HoldsToPullStartDate# day(s) ago. Note that the default end date is controlled by preference ConfirmFutureHolds."
-msgstr ""
+msgstr "Tage. Bitte beachten Sie, dass das Enddatum durch den Systemparameter ConfirmFutureHolds definiert werden kann."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#HomeOrHoldingBranch# Use the checkout and fines rules of"
@@ -1745,15 +1761,15 @@ msgstr "Tansport- und Rückgaberegeln basierend auf"
 
 # Circulation > Course Reserves
 msgid "circulation.pref#UseCourseReserves# Don't use"
-msgstr ""
+msgstr "Deaktiviere"
 
 # Circulation > Course Reserves
 msgid "circulation.pref#UseCourseReserves# Use"
-msgstr ""
+msgstr "Aktiviere"
 
 # Circulation > Course Reserves
 msgid "circulation.pref#UseCourseReserves# course reserves"
-msgstr ""
+msgstr "das Modul zur Verwaltung von Semesterapparaten."
 
 # Circulation > Interface
 msgid "circulation.pref#UseTablesortForCirc# Don't enable"
@@ -1805,27 +1821,27 @@ msgstr "das web-basierte Selbstverbuchungssystem (verfügbar unter: /cgi-bin/koh
 
 # Circulation > Fines Policy
 msgid "circulation.pref#WhenLostChargeReplacementFee# Charge"
-msgstr ""
+msgstr "Berechne"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#WhenLostChargeReplacementFee# Don't Charge"
-msgstr ""
+msgstr "Berechne nicht"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#WhenLostChargeReplacementFee# the replacement price when a patron loses an item."
-msgstr ""
+msgstr "den Buchersatzpreis, wenn ein Benutzer ein Exemplar verloren meldet."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#WhenLostForgiveFine# Don't Forgive"
-msgstr ""
+msgstr "Erlasse nicht"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#WhenLostForgiveFine# Forgive"
-msgstr ""
+msgstr "Erlasse"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#WhenLostForgiveFine# the fines on an item when it is lost."
-msgstr ""
+msgstr "die Mahngebühren auf einem Exemplar, wenn dieses auf Verloren gesetzt wird."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#canreservefromotherbranches# Allow"
@@ -1901,15 +1917,15 @@ msgstr "Gebühren (wenn der Cronjob <code>misc/cronjobs/fines.pl</code> ausgefü
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"
-msgstr ""
+msgstr "Deaktiviere"
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Enable"
-msgstr ""
+msgstr "Aktiviere"
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# the automatic use of a keyword catalog search if the phrase entered as a barcode on the checkout page does not turn up any results during an item barcode search."
-msgstr ""
+msgstr "die automatische Stichwortsuche im Katalog, wenn der als Mediennummer eingegebene Begriff keinen Treffer mit einer Barcodesuche erzielt."
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeInputFilter# Convert from CueCat form"
@@ -2101,7 +2117,7 @@ msgstr "Open Library"
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref OverDrive"
-msgstr ""
+msgstr "OverDrive"
 
 # Enhanced Content > Plugins
 msgid "enhanced_content.pref Plugins"
@@ -2473,23 +2489,23 @@ msgstr "Cover von Open Library in den Trefferlisten und Detailansichten des OPAC
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveClientKey# ."
-msgstr ""
+msgstr "."
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveClientKey# Include OverDrive availability information with the client key"
-msgstr ""
+msgstr "Zeige Verfügbarkeitsinformationen aus OverDrive mit dem Client Key"
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveClientKey# and client secret"
-msgstr ""
+msgstr "und dem Client Secret"
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveLibraryID# ."
-msgstr ""
+msgstr "an."
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveLibraryID# Show items from the OverDrive catalog of library #"
-msgstr ""
+msgstr "Zeige die Exemplare aus dem OverDrive-Katalog für Bibliothek #"
 
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref#SyndeticsAuthorNotes# Don't show"
@@ -3477,15 +3493,15 @@ msgstr "der Suchbegriffe, die vom Benutzer gesucht wurden, in der Trefferliste u
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Allow"
-msgstr ""
+msgstr "Erlaube,"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Do not allow"
-msgstr ""
+msgstr "Erlaube nicht,"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# users to add a note when placing a hold."
-msgstr ""
+msgstr "dass Benutzer eine Vormerknotiz beim Setzen einer Vormerkung eintragen."
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# Show"
@@ -4899,6 +4915,18 @@ msgstr "Zeige"
 msgid "staff_client.pref#StaffAuthorisedValueImages# images for <a href=\"/cgi-bin/koha/admin/authorised_values.pl\">authorized values</a> (such as lost statuses and locations) in search results."
 msgstr "Bilder für <a href=\"/cgi-bin/koha/admin/authorised_values.pl\">normierte Werte</a> (Zum Beispiel: Verloren-Status und Standorte) in den Trefferlisten."
 
+# Staff Client > Options
+msgid "staff_client.pref#StaffDetailItemSelection# Disable"
+msgstr "Deaktiviere"
+
+# Staff Client > Options
+msgid "staff_client.pref#StaffDetailItemSelection# Enable"
+msgstr "Aktiviere"
+
+# Staff Client > Options
+msgid "staff_client.pref#StaffDetailItemSelection# item selection in record detail page."
+msgstr "die Auswahlmöglichkeit von Exemplaren in der Detailansicht."
+
 # Staff Client > Appearance
 msgid "staff_client.pref#XSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"\">Leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" for the default one</li><li>put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language"
 msgstr "<br />Optionen:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"\">Frei lassen</a> für \"kein XSLT\"</li><li>\"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" für das Standard-XSLT-Stylesheet</li><li>Pfad für ein anderes XSLT-Stylesheet</li><li>URL für ein externes XSLT-Stylesheet</li></ul>{langcode} wird in der Pfadangabe mit dem Sprachcode der gewählten Anzeigesprache ersetzt"
@@ -4937,19 +4965,19 @@ msgstr "Warenkorb in der Dienstoberfläche."
 
 # Staff Client > Appearance
 msgid "staff_client.pref#intranetcolorstylesheet# Include the additional CSS stylesheet"
-msgstr ""
+msgstr "Verwende zusätzlich das CSS-Stylesheet"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#intranetcolorstylesheet# to override specified settings from the default stylesheet (leave blank to disable.) Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root."
-msgstr ""
+msgstr "um Angaben im Standardstylesheet zu überschreiben (frei lassen, wenn nicht verwendet). Geben Sie nur einen Dateinamen, einen vollständigen lokalen Pfad oder eine vollständige URL beginnend mit <code>http://</code> an (wenn die Datei auf einem entfernten Server liegt). Bitte beachten Sie, dass wenn nur ein Dateiname eingegeben wird, die CSS-Datei in allen Template-Verzeichnissen der aktiven Sprachen abgelegt werden muss. Eine vollständige Pfadangabe beginnt in Ihrem HTTP-Wurzelverzeichnis."
 
 # Staff Client > Appearance
 msgid "staff_client.pref#intranetstylesheet# Use the CSS stylesheet"
-msgstr ""
+msgstr "Verwende das CSS-Stylesheet"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#intranetstylesheet# on all pages in the staff interface, instead of the default css (used when leaving this field blank). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root."
-msgstr ""
+msgstr "auf allen Seiten der Dienstoberfläche, anstelle des Standard-CSS-Stylesheets (frei lassen, wenn nicht verwendet). Geben Sie nur einen Dateinamen, einen vollständigen lokalen Pfad oder eine vollständige URL beginnend mit <code>http://</code> an (wenn die Datei auf einem entfernten Server liegt). Bitte beachten Sie, dass wenn nur ein Dateiname eingegeben wird, die CSS-Datei in allen Template-Verzeichnissen der aktiven Sprachen abgelegt werden muss. Eine vollständige Pfadangabe beginnt in Ihrem HTTP-Wurzelverzeichnis."
 
 # Staff Client > Appearance
 msgid "staff_client.pref#intranetuserjs# Include the following JavaScript on all pages in the staff client:"
