@@ -122,7 +122,12 @@ $(document).ready(function() {
                                                 ([% basket.total_items_cancelled %] cancelled)
                                             [% END %]
                                         </td>
-                                        <td>[% basket.total_biblios %]</td>
+                                        <td>
+                                            [% basket.total_biblios %]
+                                            [% IF basket.total_biblios_cancelled %]
+                                                ([% basket.total_biblios_cancelled %] cancelled)
+                                            [% END %]
+                                        </td>
                                         <td>[% basket.expected_items %]</td>
                                         <td>
                                             [% basket.authorisedby_firstname %]
