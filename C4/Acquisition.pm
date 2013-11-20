@@ -632,7 +632,7 @@ sub GetBasketsInfosByBookseller {
     return unless $supplierid;
 
     my $dbh = C4::Context->dbh;
-    my $query = qq{
+    my $query = q{
         SELECT aqbasket.*,
           SUM(aqorders.quantity) AS total_items,
           SUM(
@@ -648,14 +648,30 @@ sub GetBasketsInfosByBookseller {
         FROM aqbasket
           LEFT JOIN aqorders ON aqorders.basketno = aqbasket.basketno
         WHERE booksellerid = ?};
-    if(!$allbaskets) {
+
+    unless ( $allbaskets ) {
         $query.=" AND (closedate IS NULL OR (aqorders.quantity > aqorders.quantityreceived AND datecancellationprinted IS NULL))";
     }
     $query.=" GROUP BY aqbasket.basketno";
 
     my $sth = $dbh->prepare($query);
     $sth->execute($supplierid);
-    return $sth->fetchall_arrayref({});
+    my $baskets = $sth->fetchall_arrayref({});
+
+    # Retrieve the number of biblios cancelled
+    my $cancelled_biblios = $dbh->selectall_hashref( q|
+        SELECT COUNT(DISTINCT(biblionumber)) AS total_biblios_cancelled, aqbasket.basketno
+        FROM aqbasket
+        LEFT JOIN aqorders ON aqorders.basketno = aqbasket.basketno
+        WHERE booksellerid = ?
+        AND aqorders.orderstatus = 'cancelled'
+        GROUP BY aqbasket.basketno
+    |, 'basketno', {}, $supplierid );
+    map {
+        $_->{total_biblios_cancelled} = $cancelled_biblios->{$_->{basketno}}{total_biblios_cancelled} || 0
+    } @$baskets;
+
+    return $baskets;
 }
 
 =head3 GetBasketUsers
