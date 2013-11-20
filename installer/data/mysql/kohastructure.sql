@@ -917,7 +917,6 @@ CREATE TABLE `deleteditems` (
   `enumchron` text default NULL, -- serial enumeration/chronology for the item (MARC21 952$h)
   `copynumber` varchar(32) default NULL, -- copy number (MARC21 952$t)
   `stocknumber` varchar(32) default NULL, -- inventory number (MARC21 952$i)
-  `marc` longblob, -- unused in Koha
   PRIMARY KEY  (`itemnumber`),
   KEY `delitembarcodeidx` (`barcode`),
   KEY `delitemstocknumberidx` (`stocknumber`),
