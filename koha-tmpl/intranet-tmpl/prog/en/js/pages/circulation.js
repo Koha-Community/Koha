@@ -22,7 +22,6 @@ $(document).ready(function() {
 
     $("#CheckAllexports").on("click",function(){
         allcheckboxes.checkCheckboxes(":input[name*=biblionumbers]");
-        allcheckboxes.unCheckCheckboxes(":input[name*=items]");
         return false;
     });
     $("#CheckNoexports").on("click",function(){
