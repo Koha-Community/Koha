@@ -31,6 +31,11 @@ use Getopt::Long;
 use IO::File;
 use Pod::Usage;
 
+my $localcust= $FindBin::Bin.'/LocalChanges.pm';
+$localcust= -e $localcust? $localcust: undef;
+require $localcust if $localcust;
+$localcust=\&customize if $localcust;
+
 use open qw( :std :encoding(UTF-8) );
 binmode( STDOUT, ":encoding(UTF-8)" );
 my ( $input_marc_file, $number, $offset) = ('',0,0);
@@ -52,7 +57,7 @@ GetOptions(
     't|test' => \$test_parameter,
     's' => \$skip_marc8_conversion,
     'c:s' => \$char_encoding,
-    'v:s' => \$verbose,
+    'v:i' => \$verbose,
     'fk' => \$fk_off,
     'm:s' => \$format,
     'l:s' => \$logfile,
@@ -204,9 +209,10 @@ RECORD: while (  ) {
     # skip if we get an empty record (that is MARC valid, but will result in AddBiblio failure
     last unless ( $record );
     $i++;
-    print ".";
-    print "\n$i" unless $i % 100;
-    
+    if( ($verbose//1)==1 ) { #no dot for verbose==2
+        print "." . ( $i % 100==0 ? "\n$i" : '' );
+    }
+
     # transcode the record to UTF8 if needed & applicable.
     if ($record->encoding() eq 'MARC-8' and not $skip_marc8_conversion) {
         # FIXME update condition
@@ -218,6 +224,7 @@ RECORD: while (  ) {
         }
     }
     SetUTF8Flag($record);
+    &$localcust($record) if $localcust;
     my $isbn;
     # remove trailing - in isbn (only for biblios, of course)
     if ($biblios && $cleanisbn) {
@@ -461,6 +468,7 @@ RECORD: while (  ) {
         }
         $dbh->commit() if (0 == $i % $commitnum);
     }
+    print $record->as_formatted()."\n" if ($verbose//0)==2;
     last if $i == $number;
 }
 $dbh->commit();
