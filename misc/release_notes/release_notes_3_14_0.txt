@@ -1,5 +1,5 @@
-RELEASE NOTES FOR KOHA 3.14.0-beta
-01 Nov 2013
+RELEASE NOTES FOR KOHA 3.14.0
+21 Nov 2013
 ========================================================================
 
 Koha is the first free and open source software library automation package 
@@ -9,9 +9,9 @@ The website for the Koha project is
 
     http://koha-community.org/
 
-Koha 3.14.0-beta can be downloaded from:
+Koha 3.14.0 can be downloaded from:
 
-    http://download.koha-community.org/koha-3.14.00-beta.tar.gz
+    http://download.koha-community.org/koha-3.14.00.tar.gz
 
 Installation instructions can be found at:
 
@@ -20,34 +20,45 @@ Installation instructions can be found at:
     OR in the INSTALL files that come in the tarball
 
 
-Koha 3.14.0-beta is a major release, that comes with many new features.
+Koha 3.14.0 is a major release, that comes with many new features.
+
+Among the major chances is the introduction of a new default public catalog
+theme called "Bootstrap".  The Bootstrap theme offers a responsive
+design for the public catalog, supporting both desktop browsers and mobile
+devices.  New installations of Koha 3.14.0 will use the Bootstrap theme
+by default.
+
+The 'prog' and 'CCSR' public catalog themes are deprecated as of the release
+of Koha 3.14.0.  Existing Koha sites are encouraged to switch to the Bootstrap
+theme as soon as convenient.  The 'prog' and 'CCSR' OPAC themes are
+slated to be completely removed in the second major release of Koha after
+3.14.0, i.e., in the release currently contemplated for November 2014.
+
+It includes 13 features, 161 enhancements and 471 bugfixes.
 
 
-It includes 13 features, 161 enhancements and 456 bugfixes.
-
-
-New features in 3.14.0-beta
+New features in 3.14.0
 ======================
 
 Acquisitions
 ----------
-	5336	Acq history search
+	5336	Order history search (search and UI enhancements)
 	8015	Add MARC Modifications Templates
 	10401	Add ability to merge invoices
 
 Cataloging
 ----------
-	5202	Merge authority records
-	7131	Way to overlay items in in marc import
+	5202	Add ability to merge authority records
+	7131	Teach MARC import how to overlay items
 
 Circulation
 ----------
 	10240	Offline circulation using HTML5 and IndexedDB
-	10493	Add renewal script
+	10493	Add tool for renewing loans by scanning item barcodes
 
 Hold requests
 ----------
-	8215	Add Course Reserves
+	8215	Add Course Reserves module
 
 OPAC
 ----------
@@ -63,19 +74,19 @@ Staff Client
 
 System Administration
 ----------
-	9998	Import/export and compare system preferences
+	9998	New tool for import/export and compare system preferences
 
 Z39.50 / SRU / OpenSearch Servers
 ----------
-	10096	Add a Z39.50 interface for authority searching
+	10096	Add cataloging tool for seaching authority records via Z39.50
 
 
-Enhancements in 3.14.0-beta
+Enhancements in 3.14.0
 ======================
 
 Acquisitions
 ----------
-	5349	Moving an order
+	5349	Add ability to move orders from one vendor to another
 	7295	List of librarian managing a basket
 	7298	Export late orders, with # of claims and claim dates
 	8037	Add holds and funds to items already received in parcel.pl
@@ -83,12 +94,12 @@ Acquisitions
 	9505	Acqui/invoices.pl contains an unnecessary loop
 	9744	Add a column Fund name on the home page of acquisitions
 	9806	Show more information on basketgroups lists
-	9822	No alert appears on adding an order to a basket if the budget has exceeded
-	9987	Biblioitemnumber is useless for orders.
+	9822	Display an alert when an order to a basket if the budget has been exceeded
+	9987	Remove DB field aqorders.biblioitemnunmber
 	10366	Alert librarian if an invoice number is duplicated
 	10390	Add ability to delete unused invoices
 	10403	Add ability to set fund/budget on receipt
-	10514	Add item link on acquisitions add item is too small
+	10514	improve visibility of Add item link on new order form
 	10723	GetPendingOrders and SearchOrders can be merged
 	10724	Search by basket group on the parcel page
 	10725	Add filters on the pending orders table
@@ -99,15 +110,15 @@ Architecture, internals, and plumbing
 	9370	Use Library::CallNumber::LC when splitting LC call numbers for spine labels
 	9755	Record merge code needs to be refactored
 	10206	Add Koha TT Plugin
-	10291	Misleading Variable names in batchMod.pl
+	10291	improve misleading variable names in batchMod.pl
 	10325	Allow system preferences to be overridable from koha-httpd.conf
 	10426	Remove unused sub GetCcodes from C4::Koha
-	10610	Sysprefs.sql is really boring to rebase
-	10681	Inappropriate uses of finish() in C4::Circulation.pm
-	10682	Inappropriate uses of finish() in C4::Reserve.pm
-	10685	Inappropriate uses of finish() in C4::Accounts.pm
-	10927	C4::Utils becomes useless
-	11058	Compile time warning issued by C4/Record.pm
+	10610	alphabetize sysprefs.sql
+	10681	remove inappropriate uses of finish() in C4::Circulation.pm
+	10682	remove inappropriate uses of finish() in C4::Reserve.pm
+	10685	remove inappropriate uses of finish() in C4::Accounts.pm
+	10927	remove disused C4::Utils module
+	11058	fix compile time warning issued by C4/Record.pm
 
 Authentication
 ----------
@@ -115,7 +126,7 @@ Authentication
 
 Cataloging
 ----------
-	7883	Save and continue editing
+	7883	add ability to save and continue editing bib records
 	7892	On staged marc record management open in tab
 	9044	Allow to select items on catalogue/detail.pl and trigger actions
 	9282	Authorities auto-completion in mainmainentry
@@ -123,10 +134,10 @@ Cataloging
 	9747	Sort issue for the z3950 results
 	10182	Save and continue editing should be improved
 	10488	New MARC21 authority tags and subfields should be propagated to non-default frameworks
-	10600	Duplicate authority
+	10600	add ability to edit new authority record by duplicating existing one
 	10602	Set a default value for authorities
 	10678	Allow framework selection when creating from Z39.50
-	10901	Filters is needed on the add item page
+	10901	add filters to the table on the add item page
 	10962	Update MARC21 frameworks to Update Nr. 17 (September 2013)
 	11037	C4::Biblio exports non-existent subroutines
 
@@ -139,7 +150,7 @@ Circulation
 	10370	Adding barcode on circulation print page
 	10380	Output_pref should use a hashref for parameters
 	10513	Light up a warning/message when returning a chosen item type.
-	10785	Dropbox should be book drop
+	10785	change 'Dropbox' labels to 'Book drop'
 
 Command-line Utilities
 ----------
@@ -203,7 +214,7 @@ OPAC
 	7813	Add ability to delete local cover images
 	8600	Remove search terms in advanced search
 	8712	We should use WAI-ARIA guidelines to help with accessibility -OMNIBUS bug
-	9549	Local Cover are not displayed in the Shelf Browser.
+	9549	display local covers in the shelf browser.
 	9735	Choose language using URL parameters in any page
 	10100	OPAC News dates need an CSS handle (class)
 	10245	OPAC items table CSS classes
@@ -220,7 +231,7 @@ OPAC
 
 Packaging
 ----------
-	8507	Koha-create should be updated to use DOM indexing for bib
+	8507	Koha-create should be updated to use DOM indexing for bibs by default
 	9250	Provide commands to allow handling of SIP servers in the packages
 	10367	Allow packages to work on debian wheezy
 	10411	Add cache control headers to static resources in the apache config
@@ -265,7 +276,7 @@ Staff Client
 ----------
 	9456	Add callnumber column to the cart
 	9507	Some code used to prevent form from being unexpectedly submitted is duplicated
-	9728	XISBN use simple search instead of SQL
+	9728	XISBN now uses simple search instead of SQL
 	10356	Adding date published to catalogue detail page
 	10365	Using published date on routing slips
 	11099	Label in Staff Client - series on facets not easily css selectable
@@ -299,7 +310,7 @@ Templates
 	10803	"Make payment" in circ is not easily translatable
 	10850	Give Quick spine label template page its own id
 	11106	Label item type facet in staff client
-	11107	Label  in staff client - authors on facets not easily accessible
+	11107	Label in staff client - authors on facets not easily accessible
 
 Test Suite
 ----------
@@ -322,7 +333,7 @@ translate.koha-community.org
 	9161	Translate only specific files
 
 
-Critical bugs fixed in 3.14.0-beta
+Critical bugs fixed in 3.14.0
 ======================
 
 (this list include all bugfixes since the previous major version. Most of them have already been fixed in maintainance releases)
@@ -334,6 +345,7 @@ Acquisitions
 	10736	critical	AcqWarnOnDuplicateInvoice doesn't warn for duplications - just triplications+
 	7228	major	Can't order more than 1 when importing all from staged file
 	7593	major	Merging bib records loses connection to order line
+	8854	major	Invoice filters don't all work
 	10641	major	GetBooksellerWithLateOrders in C4::Bookseller.pm has some incoherences
 
 Architecture, internals, and plumbing
@@ -412,6 +424,10 @@ MARC Bibliographic record staging/import
 ----------
 	9839	major	When importing MARC records, item record not created even when set to "always add"
 
+Notices
+----------
+	11218	critical	Due notices broken / not generated
+
 OPAC
 ----------
 	8368	critical	List email broken for non english templates
@@ -434,7 +450,10 @@ Packaging
 
 Patrons
 ----------
+	11216	blocker	Patron modification creates indefinite manual restriction
 	6506	critical	Deleting patron history missing errors
+	11221	major	New patrons are created with invalid dateofbirth value if field is left empty
+	11240	major	Adding a restriction does not save the date
 
 Reports
 ----------
@@ -447,6 +466,8 @@ Searching
 	8746	major	Rebuild_zebra_sliced.sh don't work where Record length of 106041 is larger than the MARC spec allows
 	9961	major	Truncation and QueryAutoTruncate not working properly with new QueryParser
 	10281	major	Search domains do not seem to work
+	11137	major	QueryParser can ignore parts of a Boolean search after the first
+	11196	major	SearchEngine pref not in sysprefs.sql
 
 Serials
 ----------
@@ -473,7 +494,7 @@ Z39.50 / SRU / OpenSearch Servers
 	9986	major	Two fixes on Z3950 Search
 
 
-Other bugs fixed in 3.14.0-beta
+Other bugs fixed in 3.14.0
 ======================
 
 (this list include all bugfixes since the previous major version. Most of them have already been fixed in maintainance releases)
@@ -535,6 +556,8 @@ Architecture, internals, and plumbing
 	11015	normal	Copyright headers are missing in some packages
 	11123	normal	2 routines are unused in C4::Account
 	11135	normal	Parsing of OVERRIDE_SYSPREF_NAMES logs warnings
+	11204	normal	Pendingreserves should use datatables.inc
+	11205	normal	The datatables filters don't work when several tables exist
 	10054	minor	When SingleBranchMode is enabled, allow superlibrarians to set logged in library
 	10143	minor	Fix FSF address in license headers
 	10650	minor	Export merge-record.inc javascript into a file
@@ -545,6 +568,7 @@ Architecture, internals, and plumbing
 	10156	trivial	Fix usr/bin/perl path for get_report_social_data.pl
 	10305	trivial	_increment_barcode is called twice
 	10771	trivial	Three disused scripts in misc/cronjobs/stats should be removed
+	11269	trivial	Latest MARC::Record makes visible some wrong usage of field->subfield in C4::Search
 
 Authentication
 ----------
@@ -603,6 +627,7 @@ Command-line Utilities
 	10326	minor	Bulkmarcimport.pl turns off  CataloguingLog sys pref
 	9671	trivial	Fines.pl cronjob help lists wrong values for finesmode syspref
 	10810	trivial	Fix synopsis for -html option to overdue_notices.pl
+	11185	trivial	Check-url-quick.pl fails
 
 Course reserves
 ----------
@@ -759,6 +784,7 @@ Packaging
 	10084	minor	YUI path wrong in CCSR theme with packages
 	10379	minor	Koha-rebuild-zebra gets noisy if no instances are defined
 	10574	minor	Remove the message about upgrading to 3.4
+	10670	minor	/etc/init.d/koha-common fails to start zebra due to log permission problem
 	10617	trivial	Init script cleanup
 	10645	trivial	Missing zebra languages in koha-create manpage
 
@@ -792,10 +818,12 @@ Searching
 	9830	normal	Some UNIMARC item indexes could be broken whith Queryweightfields syspref
 	10037	normal	Fix item index in UNIMARC DOM indexing
 	10578	normal	Escaping CGI breaks results sort feature (librarian's interface)
+	10684	normal	Koha search dies on undecodable records
 	10741	normal	Can not place a hold on an item in transit and for loan
 	9588	minor	Weighted search query with index
 	10271	minor	An index containing ns or nb does not work
 	10704	trivial	Search term highlighting doesn't work beyond the first results page
+	11159	trivial	Small typo in catalogue/results.tt
 
 Serials
 ----------
@@ -832,6 +860,7 @@ Staff Client
 System Administration
 ----------
 	10103	minor	UniqueItemFields is missing from sysprefs.sql
+	11163	minor	Wrong itemtype usage count when deleting an itemtype
 	10038	trivial	Doubled 'default' entry when creating a new authority type
 	10690	trivial	Warn about trailing slashes in description of OPACBaseURL and staffClientBaseURL
 
@@ -960,7 +989,7 @@ Z39.50 / SRU / OpenSearch Servers
 	10458	trivial	Remove obsolete Z3950 module and test
 
 
-New sysprefs in 3.14.0-beta
+New sysprefs in 3.14.0
 ======================
 
   * AcqItemSetSubfieldsWhenReceived
@@ -989,6 +1018,13 @@ System requirements
     * Perl 5.10 is required
     * Zebra is required
 
+    Koha 3.14.0 has the following new Perl module dependencies as
+    compared to Koha 3.12.0:
+
+    * Crypt::Eksblowfish::Bcrypt
+    * DBIx::Class
+    * DBIx::Class::Schema::Loader
+    * Library::CallNumber::LC
 
 Documentation
 ======================
@@ -1016,27 +1052,28 @@ interface are available in this release for the following languages:
 
 
   * English (USA)
-  * Arabic (85%)
-  * Armenian (94%)
-  * Chinese (China) (93%)
-  * Chinese (Taiwan) (96%)
-  * Czech (99%)
-  * Danish (94%)
-  * English (New Zealand) (87%)
-  * French (95%)
-  * French (Canada) (92%)
-  * German (94%)
-  * German (Switzerland) (93%)
-  * Greek (53%)
-  * Italian (95%)
-  * Kurdish (75%)
-  * Norwegian Bokmål (62%)
-  * Portuguese (94%)
-  * Portuguese (Brazil) (87%)
+  * Arabic (83%)
+  * Armenian (93%)
+  * Chinese (China) (100%)
+  * Chinese (Taiwan) (100%)
+  * Czech (100%)
+  * Danish (91%)
+  * English (New Zealand) (85%)
+  * French (100%)
+  * French (Canada) (90%)
+  * German (100%)
+  * German (Switzerland) (100%)
+  * Greek (52%)
+  * Italian (94%)
+  * Kurdish (73%)
+  * Norwegian Bokmål (61%)
+  * Polish (60%)
+  * Portuguese (92%)
+  * Portuguese (Brazil) (85%)
   * Slovak (100%)
   * Spanish (100%)
-  * Swedish (92%)
-  * Turkish (98%)
+  * Swedish (90%)
+  * Turkish (97%)
 
 
 Partial translations are available for various other languages.
@@ -1058,7 +1095,7 @@ The most up-to-date translations can be found at:
 Release Team
 ======================
 
-The release team for Koha 3.14.0-beta is
+The release team for Koha 3.14.0 is
 
   Release Manager:       Galen Charlton <gmc@esilibrary.com>
   Documentation Manager: Nicole C Engard <nengard@gmail.com>
@@ -1088,14 +1125,14 @@ Credits
 ======================
 
 We thank the following libraries who are known to have sponsored
-new features in Koha 3.14.0-beta:
+new features in Koha 3.14.0:
   * CCSR
   * Kultur i Halland - Regionbibliotek
   * Universidad Nacional de Cordoba
   * Universidad Nacional de Córdoba
 
-We thank the following individuals who contributed patches to Koha 3.14.0-beta.
-  *     54	Tomas Cohen Arazi
+We thank the following individuals who contributed patches to Koha 3.14.0.
+  *     56	Tomas Cohen Arazi
   *      1	Edmund Balnaves
   *      1	Stefano Bargioni
   *      4	D Ruth Bavousett
@@ -1104,32 +1141,32 @@ We thank the following individuals who contributed patches to Koha 3.14.0-beta.
   *     18	Colin Campbell
   *      1	Barry Cannon
   *      3	Frédérick Capovilla
-  *    287	Galen Charlton
+  *    311	Galen Charlton
   *      1	Katherine Chisholm
   *     16	David Cook
-  *     14	Chris Cormack
+  *     16	Chris Cormack
   *      2	Christophe Croullebois
   *      3	Elliott Davis
-  *      4	Frédéric Demians
+  *      5	Frédéric Demians
   *      3	Srikanth Dhondi
-  *    149	Jonathan Druart
-  *     31	Nicole Engard
+  *    155	Jonathan Druart
+  *     32	Nicole Engard
   *     16	Magnus Enger
   *      2	Jason Etheridge
   *      1	Jonathan Field
-  *     36	Katrin Fischer
+  *     39	Katrin Fischer
   *      1	Connor Fraser
   *      2	Amit Gupta
   *      4	Chris Hall
-  *     97	Kyle M Hall
+  *     98	Kyle M Hall
   *      1	Gab Hikaka
   *      1	Kristina D.C. Hoeppner
   *      2	Mason James
-  *      5	Srdjan Jankovic
+  *      6	Srdjan Jankovic
   *      6	Janusz Kaczmarek
   *      2	Peter Crellan Kelly
   *      1	Rafal Kopaczka
-  *     22	Bernardo Gonzalez Kriegel
+  *     23	Bernardo Gonzalez Kriegel
   *      3	Ketan Kulkarni
   *      1	Sonia LEMAIRE
   *    140	Owen Leonard
@@ -1138,6 +1175,7 @@ We thank the following individuals who contributed patches to Koha 3.14.0-beta.
   *      1	Matthias Meusburger
   *      6	Sophie Meynieux
   *      1	Jonet Moore
+  *      2	Dobrica Pavlinusic
   *      6	Paul Poulain
   *      4	Karam Qubsi
   *      1	Meenakshi R
@@ -1146,7 +1184,7 @@ We thank the following individuals who contributed patches to Koha 3.14.0-beta.
   *      1	Martin Renvoize
   *      1	David Roberts
   *     54	Marcel de Rooy
-  *     44	Fridolyn SOMERS
+  *     45	Fridolyn SOMERS
   *     21	Mathieu Saby
   *      3	Adrien Saurat
   *      4	Dan Scott
@@ -1163,15 +1201,15 @@ We thank the following individuals who contributed patches to Koha 3.14.0-beta.
   *      1	raewyn adams
   *      3	root
 
-We thank the following companies who contributed patches to Koha 3.14.0-beta
+We thank the following companies who contributed patches to Koha 3.14.0
   *     140 ACPL                                                                                          
-  *      36 BSZ BW                                                                                         
-  *     262 BibLibre                                                                                    
-  *       8 BigBallOfWax                                                                          
-  *     131 ByWater-Solutions                                                                   
+  *      39 BSZ BW                                                                                         
+  *     269 BibLibre                                                                                    
+  *       9 BigBallOfWax                                                                          
+  *     133 ByWater-Solutions                                                                   
   *     190 C & P Bibliography                                                                    
-  *      40 Catalyst                                                                                 
-  *     289 Equinox                                                                                   
+  *      42 Catalyst                                                                                 
+  *     313 Equinox                                                                                   
   *       2 KohaAloha                                                                                  
   *       3 Libeo                                                                                          
   *      16 Libriotech                                                                                 
@@ -1180,7 +1218,7 @@ We thank the following companies who contributed patches to Koha 3.14.0-beta
   *      17 Prosentient Systems
   *      54 Rijksmuseum                                                                               
   *       1 Software.coop                                                                             
-  *       4 Tamil                                                                                           
+  *       5 Tamil                                                                                           
   *       2 Université Jean Moulin Lyon 3
   *      21 Université Rennes 2
   *       1 Xercode                                                                                       
@@ -1195,13 +1233,14 @@ We thank the following companies who contributed patches to Koha 3.14.0-beta
   *       1 oslo.ie
   *       1 poczta.onet.pl
   *       1 pusc.it
+  *       2 rot13.org                                                                                      
   *       1 tpk.govt.nz
-  *     105 unidentified
+  *     108 unidentified
   *       3 veron.ch
   *       1 yahoo.com
 
 We also especially thank the following individuals who tested patches
-for Koha 3.14.0-beta.
+for Koha 3.14.0.
   *       1 Koha Team Lyon 3
   *       5 Koha Team Amu
   *      14 Pierre Angot
@@ -1219,28 +1258,28 @@ for Koha 3.14.0-beta.
   *       1 Brendan
   *       2 Corinne Bulac
   *     208 Jared Camins-Esakov
-  *    1097 Galen Charlton
+  *    1130 Galen Charlton
   *       1 Mickey Coalwell
   *      15 David Cook
-  *     223 Chris Cormack
+  *     226 Chris Cormack
   *       5 Frédéric Demians
-  *     231 Jonathan Druart
+  *     241 Jonathan Druart
   *       3 Frederic Durand
   *       1 Dani Elder
   *      26 Nicole C. Engard
   *      15 Magnus Enger
   *       2 Jason Etheridge
   *       1 Vitor Fernandes
-  *     382 Katrin Fischer
-  *       8 Brendan Gallagher
-  *     225 Kyle M Hall
+  *     386 Katrin Fischer
+  *      13 Brendan Gallagher
+  *     230 Kyle M Hall
   *       2 Alex Hatley
   *       1 JD@TeTakere
   *      30 Mason James
   *       2 Ulrich Kleiber
-  *     143 Bernardo Gonzalez Kriegel
+  *     144 Bernardo Gonzalez Kriegel
   *      13 Leila
-  *      77 Owen Leonard
+  *      79 Owen Leonard
   *      10 Julian Maurice
   *       7 Melia Meggs
   *       1 Josef Moravec
@@ -1249,19 +1288,19 @@ for Koha 3.14.0-beta.
   *       1 Maxime Pelletier
   *      19 Paul Poulain
   *       1 MJ Ray
-  *      14 Liz Rea
+  *      17 Liz Rea
   *       6 Campbell Reid-Tait
-  *      75 Marcel de Rooy
+  *      79 Marcel de Rooy
   *       9 Paola Rossi
   *      18 Mathieu Saby
   *       3     Signed-off-by:Mathieu Saby
   *       1 Adrien Saurat
   *       4 Dan Scott
-  *      17 Robin Sheat
+  *      18 Robin Sheat
   *       1 Silvia Simonetti
   *      65 Srdjan
   *      21 Mirko Tietgen
-  *       8 Mark Tompsett
+  *       9 Mark Tompsett
   *       5 Ed Veal
   *       4 Marc Veron
   *      11 Cedric Vita
@@ -1287,7 +1326,7 @@ version of Koha can be retrieved by checking out the master branch of
 
     git://git.koha-community.org/koha.git
 
-The branch for this version of Koha and future bugfixes in this release line is master.
+The branch for this version of Koha and future bugfixes in this release line is 3.14.x.
 
 
 Bugs and feature requests
@@ -1302,4 +1341,4 @@ tracker at
 He rau ringa e oti ai.
 (Many hands finish the work)
 
-##### Autogenerated release notes updated last on 01 Nov 2013 15:03:12 Z #####
+##### Autogenerated release notes updated last on 21 Nov 2013 00:54:32 Z #####
