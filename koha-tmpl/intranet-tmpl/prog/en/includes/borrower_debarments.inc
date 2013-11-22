@@ -39,7 +39,16 @@
             <tbody>
                 [% FOREACH d IN debarments %]
                     <tr>
-                        <td>[% d.type %]</td>
+                        <td>
+                            [% SWITCH d.type %]
+                                [% CASE 'MANUAL' %]
+                                    Manual
+                                [% CASE 'OVERDUES' %]
+                                    Overdues
+                                [% CASE 'SUSPENSION' %]
+                                    Suspension
+                            [% END %]
+                        </td>
                         <td>[% d.comment %]</td>
                         <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
                         [% IF ( CAN_user_borrowers )%]
