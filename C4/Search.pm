@@ -426,7 +426,7 @@ sub getRecords {
                 warn "Ignoring unrecognized sort '$sort' requested" if $sort_by;
             }
         }
-        if ($sort_by && !$scan) {
+        if ( $sort_by && !$scan && $results[$i] ) {
             if ( $results[$i]->sort( "yaz", $sort_by ) < 0 ) {
                 warn "WARNING sort $sort_by failed";
             }
