@@ -388,7 +388,7 @@ if ($op eq 'add_form') {
 #	my $sth=$dbh->prepare("replace auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl)
 #									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
     my $sth_insert = $dbh->prepare("insert into auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl,defaultvalue)
-                                    values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                                    values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
     my $sth_update = $dbh->prepare("update auth_subfield_structure set authtypecode=?, tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, kohafield=?, tab=?, seealso=?, authorised_value=?, frameworkcode=?, value_builder=?, hidden=?, isurl=?, defaultvalue=?
                                     where authtypecode=? and tagfield=? and tagsubfield=?");
 	my @tagsubfield	= $input->param('tagsubfield');
