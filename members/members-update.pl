@@ -42,9 +42,10 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 );
 
 my $branch =
-  $flags->{'superlibrarian'}
-  ? undef
-  : C4::Context->userenv()->{'branch'};
+  C4::Context->preference("IndependentBranchesPatronModifications")
+  && !$flags->{'superlibrarian'}
+  ? C4::Context->userenv()->{'branch'}
+  : undef;
 
 my $pending_modifications =
   Koha::Borrower::Modifications->GetPendingModifications($branch);

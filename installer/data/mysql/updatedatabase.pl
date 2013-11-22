@@ -11237,6 +11237,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.XXX";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+        VALUES ('IndependentBranchesPatronModifications',0,'Show only modification request for the logged in branch','','YesNo')
+    });
+    print "Upgrade to $DBversion done (Bug 10904 - would like to limit patron update request management by branch)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.

@@ -164,6 +164,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ImageLimit','5','','Limit images stored in the database by the Patron Card image manager to this number.','Integer'),
 ('IncludeSeeFromInSearches','0','','Include see-from references in searches.','YesNo'),
 ('IndependentBranches','0',NULL,'If ON, increases security between libraries','YesNo'),
+('IndependentBranchesPatronModifications',0, NULL, 'Show only modification request for the logged in branch','YesNo'),
 ('OnSiteCheckouts','0','','Enable/Disable the on-site checkouts feature','YesNo'),
 ('OnSiteCheckoutsForce','0','','Enable/Disable the on-site for all cases (Even if a user is debarred, etc.)','YesNo'),
 ('InProcessingToShelvingCart','0','','If set, when any item with a location code of PROC is \'checked in\', it\'s location code will be changed to CART.','YesNo'),
