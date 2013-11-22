@@ -1,0 +1,396 @@
+RELEASE NOTES FOR KOHA 3.12.7
+22 Nov 2013
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.12.7 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.12.07.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+
+Koha 3.12.7 is a bugfix/maintenance release.
+
+
+It includes 8 enhancements and 42 bugfixes.
+
+
+Enhancements in 3.12.7
+======================
+
+OPAC
+----------
+	7813	Add ability to delete local cover images
+
+Packaging
+----------
+	10622	Add --sip and --nosip switches to koha-list
+	10624	Koha-common.init should implement the 'status' option switch
+
+Patrons
+----------
+	9372	Automatic carriage return in message_queue where content_type is html
+	10894	ID required for mainaddress fieldset in create new patron
+
+Serials
+----------
+	10570	Show internal note from subscription in results on check expiration page
+
+Templates
+----------
+	10803	"Make payment" in circ is not easily translatable
+
+Tools
+----------
+	9618	Add support for intranetuserjs to labels/spinelabel-print.pl
+
+
+Critical bugs fixed in 3.12.7
+======================
+
+
+Architecture, internals, and plumbing
+----------
+	9299	major	For loop in Auth_with_ldap.pm requires an extended patron attribute to be set or LDAP logins fail
+	10897	major	T/ILSDI_Services.t is db dependent
+
+Authentication
+----------
+	10925	major	LDAP Auth fails if DEBUG is enable
+
+Circulation
+----------
+	10016	critical	SelfCheckTimeout not logging patron out
+	10663	critical	Holds never block renewals
+
+Notices
+----------
+	11218	critical	Due notices broken / not generated
+
+Serials
+----------
+	10430	major	Status filter not working in serial claims when translated
+
+
+Other bugs fixed in 3.12.7
+======================
+
+
+Acquisitions
+----------
+	8821	normal	Receive shipment page should hide inactive funds like new order form does
+	10847	trivial	Open external link to website of a vendor in new tab/window
+
+Architecture, internals, and plumbing
+----------
+	10872	minor	C4::Items GetHiddenItems fix and optimization
+	10305	trivial	_increment_barcode is called twice
+	11269	trivial	Latest MARC::Record makes visible some wrong usage of field->subfield in C4::Search
+
+Browser compatibility
+----------
+	10376	normal	Printing cart does not work under IE9
+
+Cataloging
+----------
+	11054	normal	Creating a child record has problems with accented Latin characters
+	10331	trivial	Little errors in unimarc_field_4XX.pl (punctuation)
+	10687	trivial	Delete erroneous tags 68a and 68b on default MARC21 auth framework
+
+Circulation
+----------
+	10027	normal	Fine details not showing when printing a fine
+	9943	minor	Pay fines page "Pay selected" button give invalid amount when nothing is selected
+
+Command-line Utilities
+----------
+	10810	trivial	Fix synopsis for -html option to overdue_notices.pl
+
+Developer documentation
+----------
+	10967	trivial	POD ERROR in acqui/booksellers.pl
+
+Documentation
+----------
+	7764	normal	INSTALL.ubuntu needs to be updated
+
+Hold requests
+----------
+	10731	minor	IntranetSlipPrinterJS is not working for hold slips
+
+I18N/L10N
+----------
+	10948	normal	Some strings in the authority result list turned out untranslatable
+	7478	minor	Template/translation problem in catalogue_out.tt
+	8070	minor	<pre> block produced by showmarc.pl really not good in RTL languages
+	10841	minor	Edit/Delete item context links in items table are not translatable
+	10871	trivial	Confirmation message for deleting news entries is not translatable
+
+Notices
+----------
+	10720	normal	Substitution term in overdue notices shouldn't be removed even if they don't match
+
+OPAC
+----------
+	10619	normal	Sco.css missing for CCSR OPAC templates
+	10564	minor	Use OPACURLOpenInNewWindow in UNIMARCslim2OPACResults.xsl
+
+Packaging
+----------
+	10617	trivial	Init script cleanup
+
+Patrons
+----------
+	10924	normal	Contact note not updating via opac
+
+Reports
+----------
+	10718	normal	Items with no checkouts report does not work
+
+Searching
+----------
+	5645	normal	Z39.50 search from search results not parsing query correctly
+	10684	normal	Koha search dies on undecodable records
+
+Serials
+----------
+	10689	minor	Public note does not appear in subscriptions search
+
+SIP2
+----------
+	9531	normal	Make SIP2 message terminator configurable via SIPconfig.xml
+	10817	normal	SIPserver does not return holds info when requested
+
+Staff Client
+----------
+	10911	normal	Records with 880 fields have broken details links in intranet search results using XSLT.
+
+Templates
+----------
+	10888	normal	Don't hide authorities module from users without permission to edit authorities
+	10465	trivial	Reference to fields 780 and 785 in UNIMARC XSLT should be removed
+
+Web services
+----------
+	10667	normal	ILS-DI: AuthenticatePatron should also work with cardnumber
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+The Koha manual is maintained in DocBook.The home page for Koha 
+documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.12/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+  * Arabic (89%)
+  * Armenian (100%)
+  * Chinese (China) (100%)
+  * Chinese (Taiwan) (99%)
+  * Czech (100%)
+  * Danish (99%)
+  * English (New Zealand) (92%)
+  * French (100%)
+  * French (Canada) (97%)
+  * German (100%)
+  * German (Switzerland) (99%)
+  * Greek (54%)
+  * Italian (99%)
+  * Kurdish (78%)
+  * Norwegian Bokmål (64%)
+  * Polish (73%)
+  * Portuguese (100%)
+  * Portuguese (Brazil) (92%)
+  * Slovak (99%)
+  * Spanish (100%)
+  * Swedish (97%)
+  * Turkish (99%)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.12.7 is
+
+  Release Manager:       Jared Camins-Esakov <jcamins@cpbibliography.com>
+  Documentation Manager: Nicole C Engard <nengard@gmail.com>
+  Installation Documentation Managers:
+                         Samuel Desseaux <samuel.desseaux@ecp.fr>
+                         Mason James <mtj@kohaaloha.com>
+  Translation Manager:   Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>
+  QA Team:               Chris Cormack <chrisc@catalyst.net.nz>
+                         Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>
+                         Jonathan Druart <jonathan.druart@biblibre.com>
+                         Brendan Gallagher <brendan@bywatersolutions.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+                         Mason James <mtj@kohaaloha.com>
+                         Paul Poulain <paul.poulain@biblibre.com>
+  Bug Wranglers:         Magnus Enger <magnus@enger.priv.no>
+  Packaging Manager:     Robin Sheat <robin@catalyst.net.nz>
+  Live CD Manager:       Vimal Kumar V.
+  VM Manager:            Samuel Desseaux <samuel.desseaux@ecp.fr>
+
+  Release Maintainer (3.8.x): Chris Hall <chrish@catalyst.net.nz>
+  Release Maintainer (3.10.x): Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  Release Maintainer (3.12.x): Tomás Cohen Arazi <tomascohen@gmail.com>
+
+Credits
+======================
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.12.7:
+  * Universidad Nacional de Cordoba
+
+We thank the following individuals who contributed patches to Koha 3.12.7.
+  *      8	Tomas Cohen Arazi
+  *      1	D Ruth Bavousett
+  *      1	Jared Camins-Esakov
+  *      2	Colin Campbell
+  *     13	Galen Charlton
+  *      4	Jonathan Druart
+  *      2	Magnus Enger
+  *     11	Katrin Fischer
+  *      8	Kyle M Hall
+  *      1	Srdjan Jankovic
+  *      1	Janusz Kaczmarek
+  *      1	Bernardo Gonzalez Kriegel
+  *      1	Ketan Kulkarni
+  *      7	Owen Leonard
+  *      2	Sophie Meynieux
+  *      1	David Roberts
+  *      1	Marcel de Rooy
+  *      6	Fridolyn SOMERS
+  *      1	Mathieu Saby
+  *      2	Mark Tompsett
+
+We thank the following companies who contributed patches to Koha 3.12.7
+  *       7 ACPL                                                                                          
+  *      11 BSZ BW                                                                                         
+  *      12 BibLibre                                                                                    
+  *       8 ByWater-Solutions                                                                   
+  *       1 C & P Bibliography                                                                    
+  *       1 Catalyst                                                                                 
+  *      13 Equinox                                                                                   
+  *       2 Libriotech                                                                                 
+  *       3 PTFS-Europe                                                                              
+  *       1 Rijksmuseum                                                                               
+  *       1 Université Rennes 2
+  *       1 carvingit.com
+  *      13 unidentified
+
+We also especially thank the following individuals who tested patches
+for Koha 3.12.7.
+  *       2 Nuño López Ansótegui
+  *      75 Tomas Cohen Arazi
+  *      71 Galen Charlton
+  *       1 David Cook
+  *       9 Chris Cormack
+  *       1 Frédéric Demians
+  *      13 Jonathan Druart
+  *       1 Magnus Enger
+  *      25 Katrin Fischer
+  *       2 Brendan Gallagher
+  *       9 Kyle M Hall
+  *       4 Mason James
+  *      14 Bernardo Gonzalez Kriegel
+  *       7 Owen Leonard
+  *       1 Melia Meggs
+  *       1 Josef Moravec
+  *       4 Liz Rea
+  *       2 Campbell Reid-Tait
+  *       4 Marcel de Rooy
+  *       2 Paola Rossi
+  *       1 Mathieu Saby
+  *       1 Adrien Saurat
+  *       4 Robin Sheat
+  *       2 Srdjan
+  *       1 Mark Tompsett
+  *       2 Ed Veal
+  *       1 Marc Veron
+
+We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is 3.12.x.
+
+The last Koha release was 3.12.17, which was released on October 28, 2013.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+He rau ringa e oti ai.
+(Many hands finish the work)
+
+##### Autogenerated release notes updated last on 22 Nov 2013 17:27:37 Z #####
