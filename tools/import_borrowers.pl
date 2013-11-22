@@ -46,6 +46,7 @@ use C4::Members;
 use C4::Members::Attributes qw(:all);
 use C4::Members::AttributeTypes;
 use C4::Members::Messaging;
+use Koha::Borrower::Debarments;
 
 use Text::CSV;
 # Text::CSV::Unicode, even in binary mode, fails to parse lines with these diacriticals:
@@ -269,6 +270,26 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
                 $template->param('lastinvalid'=>$borrower{'surname'}.' / '.$borrowernumber);
                 next LINE;
             }
+            if ( $borrower{debarred} ) {
+                # Check to see if this debarment already exists
+                my $debarrments = GetDebarments(
+                    {
+                        borrowernumber => $borrowernumber,
+                        expiration     => $borrower{debarred},
+                        comment        => $borrower{debarredcomment}
+                    }
+                );
+                # If it doesn't, then add it!
+                unless (@$debarrments) {
+                    AddDebarment(
+                        {
+                            borrowernumber => $borrowernumber,
+                            expiration     => $borrower{debarred},
+                            comment        => $borrower{debarredcomment}
+                        }
+                    );
+                }
+            }
             if ($extended) {
                 if ($ext_preserve) {
                     my $old_attributes = GetBorrowerAttributes($borrowernumber);
@@ -285,13 +306,26 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
                 $borrower{'cardnumber'} = fixup_cardnumber(undef);
             }
             if ($borrowernumber = AddMember(%borrower)) {
+
+                if ( $borrower{debarred} ) {
+                    AddDebarment(
+                        {
+                            borrowernumber => $borrowernumber,
+                            expiration     => $borrower{debarred},
+                            comment        => $borrower{debarredcomment}
+                        }
+                    );
+                }
+
                 if ($extended) {
                     SetBorrowerAttributes($borrowernumber, $patron_attributes);
                 }
+
                 if ($set_messaging_prefs) {
                     C4::Members::Messaging::SetMessagingPreferencesFromDefaults({ borrowernumber => $borrowernumber,
                                                                                   categorycode => $borrower{categorycode} });
                 }
+
                 $imported++;
                 $template->param('lastimported'=>$borrower{'surname'}.' / '.$borrowernumber);
             } else {

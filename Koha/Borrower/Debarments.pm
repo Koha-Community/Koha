@@ -44,7 +44,7 @@ Koha::Borrower::Debarments - Module for managing borrower debarments
 
 =head2 GetDebarments
 
-my $arrayref = GetDebarments( $borrowernumber, { key => $value } );
+my $arrayref = GetDebarments({ borrowernumber => $borrowernumber [, key => $value ] );
 
 =cut
 
