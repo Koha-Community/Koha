@@ -69,8 +69,8 @@
         <p><label for="categorycode">Category: </label><select name="categorycode" id="categorycode">
                 <option value="">Any</option>[% FOREACH categorie IN categories %]
                 [% IF ( categorie.selected ) %]
-                <option value="[% categorie.categorycode %]" selected="selected">[% categorie.description %]</option>[% ELSE %]
-                <option value="[% categorie.categorycode %]">[% categorie.description %]</option>[% END %]
+                <option value="[% categorie.categorycode %]" selected="selected">[% categorie.description |html_entity %]</option>[% ELSE %]
+                <option value="[% categorie.categorycode %]">[% categorie.description |html_entity %]</option>[% END %]
                 [% END %]</select></p>
       [% END %]
   </div>
