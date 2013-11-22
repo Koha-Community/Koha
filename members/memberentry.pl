@@ -110,7 +110,7 @@ if ( $input->param('add_debarment') ) {
         { 'dt' => dt_from_string($expiration), 'dateformat' => 'iso' } )
       : undef;
 
-    AddUniqueDebarment(
+    AddDebarment(
         {
             borrowernumber => $borrowernumber,
             type           => 'MANUAL',
