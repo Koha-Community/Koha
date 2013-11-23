@@ -59,9 +59,9 @@ usage(0) if ($help);
 
 my $output_directory = $ARGV[0];
 
-if ( !$output_directory || !-d $output_directory ) {
+if ( !$output_directory || !-d $output_directory || !-w $output_directory ) {
     print STDERR
-"Error: You must specify a valid directory to dump the print notices in.\n";
+"Error: You must specify a valid and writeable directory to dump the print notices in.\n";
     usage(1);
 }
 
@@ -87,9 +87,10 @@ if ($split) {
 
     foreach my $branchcode ( keys %messages_by_branch ) {
         my @messages = @{ $messages_by_branch{$branchcode} };
-        open $OUTPUT, '>',
-          File::Spec->catdir( $output_directory,
+        my $output_file = File::Spec->catdir( $output_directory,
             "holdnotices-" . $today->output('iso') . "-$branchcode.html" );
+        open $OUTPUT, '>', $output_file
+            or die "Could not open $output_file: $!";
 
         my $template =
           C4::Templates::gettemplate( 'batch/print-notices.tmpl', 'intranet',
@@ -112,9 +113,11 @@ if ($split) {
     }
 }
 else {
-    open $OUTPUT, '>',
-      File::Spec->catdir( $output_directory,
+    my $output_file = File::Spec->catdir( $output_directory,
         "holdnotices-" . $today->output('iso') . ".html" );
+    open $OUTPUT, '>', $output_file
+        or die "Could not open $output_file: $!";
+
 
     my $template =
       C4::Templates::gettemplate( 'batch/print-notices.tmpl', 'intranet',
