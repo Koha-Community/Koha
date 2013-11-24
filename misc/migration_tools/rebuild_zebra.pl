@@ -83,12 +83,6 @@ if( not defined $run_as_root and $run_user eq 'root') {
     die $msg;
 }
 
-if (not $biblios and not $authorities) {
-    my $msg = "Must specify -b or -a to reindex bibs or authorities\n";
-    $msg   .= "Please do '$0 --help' to see usage.\n";
-    die $msg;
-}
-
 if ( !$as_xml and $nosanitize ) {
     my $msg = "Cannot specify both -no_xml and -nosanitize\n";
     $msg   .= "Please do '$0 --help' to see usage.\n";
@@ -127,6 +121,13 @@ if ($daemon_mode) {
     $biblios = 1;
     $process_zebraqueue = 1;
 }
+
+if (not $biblios and not $authorities) {
+    my $msg = "Must specify -b or -a to reindex bibs or authorities\n";
+    $msg   .= "Please do '$0 --help' to see usage.\n";
+    die $msg;
+}
+
 
 #  -v is for verbose, which seems backwards here because of how logging is set
 #    on the CLI of zebraidx.  It works this way.  The default is to not log much
