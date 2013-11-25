@@ -31,11 +31,6 @@ use Getopt::Long;
 use IO::File;
 use Pod::Usage;
 
-my $localcust= $FindBin::Bin.'/LocalChanges.pm';
-$localcust= -e $localcust? $localcust: undef;
-require $localcust if $localcust;
-$localcust=\&customize if $localcust;
-
 use open qw( :std :encoding(UTF-8) );
 binmode( STDOUT, ":encoding(UTF-8)" );
 my ( $input_marc_file, $number, $offset) = ('',0,0);
@@ -44,6 +39,7 @@ my ( $insert, $filters, $update, $all, $yamlfile, $authtypes, $append );
 my $cleanisbn = 1;
 my ($sourcetag,$sourcesubfield,$idmapfl, $dedup_barcode);
 my $framework = '';
+my $localcust;
 
 $|=1;
 
@@ -79,6 +75,7 @@ GetOptions(
     'yaml:s'        => \$yamlfile,
     'dedupbarcode' => \$dedup_barcode,
     'framework=s' => \$framework,
+    'custom:s'    => \$localcust,
 );
 $biblios ||= !$authorities;
 $insert  ||= !$update;
@@ -92,6 +89,24 @@ if ($all) {
 if ($version || ($input_marc_file eq '')) {
     pod2usage( -verbose => 2 );
     exit;
+}
+
+if(defined $localcust) { #local customize module
+    if(!-e $localcust) {
+        $localcust= $localcust||'LocalChanges'; #default name
+        $localcust=~ s/^.*\/([^\/]+)$/$1/; #extract file name only
+        $localcust=~ s/\.pm$//;           #remove extension
+        my $fqcust= $FindBin::Bin."/$localcust.pm"; #try migration_tools dir
+        if(-e $fqcust) {
+            $localcust= $fqcust;
+        }
+        else {
+            print "WARNING: customize module $localcust.pm not found!\n";
+            exit;
+        }
+    }
+    require $localcust if $localcust;
+    $localcust=\&customize if $localcust;
 }
 
 my $dbh = C4::Context->dbh;
@@ -747,6 +762,14 @@ is useful when something has set barcodes to be a biblio ID, or similar
 This is the code for the framework that the requested records will have attached
 to them when they are created. If not specified, then the default framework
 will be used.
+
+=item B<-custom>=I<MODULE>
+
+This parameter allows you to use a local module with a customize subroutine
+that is called for each MARC record.
+If no filename is passed, LocalChanges.pm is assumed to be in the
+migration_tools subdirectory. You may pass an absolute file name or a file name
+from the migration_tools directory.
 
 =back
 
