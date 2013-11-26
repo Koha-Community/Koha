@@ -24,7 +24,7 @@
      <opensearch:totalResults>[% total %]</opensearch:totalResults>
      <opensearch:startIndex>[% offset %]</opensearch:startIndex>
      [% IF ( results_per_page ) %]
-       <opensearch:itemsPerPage>[% results_per_page %]</opensearch:itemsPerPage>
+       <opensearch:itemsPerPage>[% results_per_page |html %]</opensearch:itemsPerPage>
      [% ELSE %]
        <opensearch:itemsPerPage>20</opensearch:itemsPerPage>
      [% END %]
