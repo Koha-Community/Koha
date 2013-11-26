@@ -28,8 +28,11 @@ find(
         open my $fh, $_ or die "Could not open $_: $!";
         my @lines = sort grep /\_\(\'/, <$fh>;
         push @files, { name => "$_", lines => \@lines } if @lines;
-    },
-    ( "./koha-tmpl/opac-tmpl/prog/en", "./koha-tmpl/intranet-tmpl/prog/en" )
+    },qw#
+    ./koha-tmpl/opac-tmpl/prog/en
+    ./koha-tmpl/opac-tmpl/bootstrap/en
+    ./koha-tmpl/intranet-tmpl/prog/en
+    #
 );
 
 ok( !@files, "Files do not contain single quotes _(' " )

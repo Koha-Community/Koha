@@ -1467,17 +1467,17 @@
               }, function (data) {
 
                 if (data.auth_status != 'ok') {
-                  window.alert(_('Your CGI session cookie is not current. Please refresh the page and try again.'));
+                  window.alert(_("Your CGI session cookie is not current. Please refresh the page and try again."));
                 } else {
                   $("#rating_value").val(data.rating_value);
 
                   if (data.rating_value) {
-                    $("#rating_value_text").text(_('your rating: ') + data.rating_value + ', ');
+                    $("#rating_value_text").text(_("your rating: ") + data.rating_value + ", ");
                   } else {
                     $("#rating_value_text").text('');
                   }
 
-                  $("#rating_text").text(_('average rating: ') + data.rating_avg_int + ' (' + data.rating_total + ' ' + _("votes") + ')');
+                  $("#rating_text").text(_("average rating: ") + data.rating_avg_int + " (" + data.rating_total + ' ' + _("votes") + ")");
 
                 }
               }, "json");
