@@ -6,9 +6,9 @@
                 <ul>
                     <li>
                         [% IF ( available ) %]
-                            Showing only <strong>available</strong> items. <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |uri %][% limit_cgi_not_availablity %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |uri %][% END %]">Show all items</a>
+                            Showing only <strong>available</strong> items. <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |url %][% limit_cgi_not_availablity %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]">Show all items</a>
                         [% ELSE %]
-                            <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |uri %][% limit_cgi |uri %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |uri %][% END %]&amp;limit=available">Limit to currently available items.</a>
+                            <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |url %][% limit_cgi |url %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]&amp;limit=available">Limit to currently available items.</a>
                         [% END %]
                     </li>
                 </ul>
@@ -31,7 +31,7 @@
                         <ul>
                             [% FOREACH facet IN facets_loo.facets %]
                                 <li>
-                                    <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |uri %][% limit_cgi |uri %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |uri %][% END %]&amp;limit=[% facet.type_link_value |uri %]:[% facet.facet_link_value |uri %]" title="[% facet.facet_title_value |html %]">[% facet.facet_label_value %]</a>
+                                    <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |url %][% limit_cgi |url %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]&amp;limit=[% facet.type_link_value |url %]:[% facet.facet_link_value |url %]" title="[% facet.facet_title_value |html %]">[% facet.facet_label_value %]</a>
                                     [% IF ( displayFacetCount ) %]
                                         ([% facet.facet_count %])
                                     [% END %]
@@ -39,8 +39,8 @@
                             [% END %]
                             [% IF ( facets_loo.expandable ) %]
                                 <li class="showmore">
-                                    <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |uri %][% limit_cgi |uri %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |uri %][% END %][% IF ( offset ) %]
-                                            &amp;offset=[% offset |uri %][% END %]&amp;expand=[% facets_loo.expand |uri %]#[% facets_loo.type_id |uri %]">Show more</a>
+                                    <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |url %][% limit_cgi |url %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %][% IF ( offset ) %]
+                                            &amp;offset=[% offset |url %][% END %]&amp;expand=[% facets_loo.expand |url %]#[% facets_loo.type_id |url %]">Show more</a>
                                 </li>
                             [% END %]
                         </ul>
