@@ -17,7 +17,8 @@
         var pendingt = $("#pendingt").dataTable($.extend(true, {}, dataTablesDefaults, {
             "bStateSave": true,
             "iCookieDuration": 60*60*24*1000, // 1000 days
-            "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+            "iDisplayLength": 10,
+            "aLengthMenu": [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, "All"]],
             "aoColumnDefs": [
                 { "aTargets": [ 4, 9, 10 ], "bSortable": false, "bSearchable": false },
             ],
@@ -59,7 +60,8 @@
         var receivedt = $("#receivedt").dataTable($.extend(true, {}, dataTablesDefaults, {
             "bStateSave": true,
             "iCookieDuration": 60*60*24*1000, // 1000 days
-            "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+            "iDisplayLength": 10,
+            "aLengthMenu": [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, "All"]],
             "aoColumnDefs": [
                 { "aTargets": [ 5, -1 ], "bSortable": false, "bSearchable": false },
             ],
