@@ -1473,6 +1473,7 @@ sub merge {
     }  
     # BulkEdit marc records
     # May be used as a template for a bulkedit field  
+    my $overwrite = C4::Context->preference( 'AuthorityMergeMode' ) eq 'strict';
     foreach my $marcrecord(@reccache){
         my $update = 0;
         foreach my $tagfield (@tags_using_authtype){
@@ -1490,7 +1491,7 @@ sub merge {
                 }
 		$exclude='['.$exclude.']';
 #		add subfields in $field not included in @record_to
-		my @restore= grep {$_->[0]!~/$exclude/} $field->subfields();
+        my @restore= $overwrite ? () : grep {$_->[0]!~/$exclude/} $field->subfields();
                 foreach my $subfield (@restore) {
                    $field_to->add_subfields($subfield->[0] =>$subfield->[1]);
 		}
