@@ -192,7 +192,8 @@ sub build_authorized_values_list {
             "select itemtype,description from itemtypes order by description");
         $sth->execute;
         push @authorised_values, ""
-          unless ( $tagslib->{$tag}->{$subfield}->{defaultvalue} and $tagslib->{$tag}->{$subfield}->{mandatory} );
+          unless ( $tagslib->{$tag}->{$subfield}->{mandatory}
+            && ( $value || $tagslib->{$tag}->{$subfield}->{defaultvalue} ) );
           
         my $itemtype;
         
@@ -229,7 +230,8 @@ sub build_authorized_values_list {
         );
 
         push @authorised_values, ""
-          unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+          unless ( $tagslib->{$tag}->{$subfield}->{mandatory}
+            && ( $value || $tagslib->{$tag}->{$subfield}->{defaultvalue} ) );
 
         while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
             push @authorised_values, $value;
