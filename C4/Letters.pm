@@ -620,6 +620,14 @@ sub _parseletter {
 
         $val = GetAuthorisedValueByCode ('ROADTYPE', $val, 0) if $table=~/^borrowers$/ && $field=~/^streettype$/;
         my $replacedby   = defined ($val) ? $val : '';
+        if ( $replacedby and $replacedby =~ m|^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$| ) {
+            # If the value is XXXX-YY-ZZ[ AA:BB:CC] we assume it is a date
+            my $dateonly = defined $1 ? 1 : 0;
+            eval {
+                $replacedby = output_pref({ dt => dt_from_string( $replacedby ), dateonly => $dateonly });
+            };
+            warn "$replacedby seems to be a date but an error occurs on generating it ($@)" if $@;
+        }
         ($letter->{title}  ) and do {
             $letter->{title}   =~ s/$replacetablefield/$replacedby/g;
             $letter->{title}   =~ s/$replacefield/$replacedby/g;
