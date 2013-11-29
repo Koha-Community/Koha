@@ -22,7 +22,6 @@ use warnings;
 
 use C4::Debug;
 use C4::Context;
-use C4::Utils qw( :all );
 use CGI;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
@@ -40,7 +39,7 @@ my $protocol = "https://";
 # Logout from Shibboleth
 sub logout_shib {
     my ($query) = @_;
-    my $uri = $protocol . $ENV{'SERVER_NAME'};
+    my $uri = $protocol . C4::Context->preference('OPACBaseURL');
     print $query->redirect( $uri . "/Shibboleth.sso/Logout?return=$uri" );
 }
 
@@ -48,8 +47,11 @@ sub logout_shib {
 sub login_shib_url {
 
     my ($query) = @_;
-    my $param = $protocol . $ENV{'SERVER_NAME'} . $query->script_name();
-    my $uri = $protocol . $ENV{'SERVER_NAME'} . "/Shibboleth.sso/Login?target=$param";
+    my $param = $protocol . C4::Context->preference('OPACBaseURL') . $query->script_name();
+    if ( $query->query_string() ) {
+        $param = $param . '%3F' . $query->query_string();
+    }
+    my $uri = $protocol . C4::Context->preference('OPACBaseURL') . "/Shibboleth.sso/Login?target=$param";
     return $uri;
 }
 
