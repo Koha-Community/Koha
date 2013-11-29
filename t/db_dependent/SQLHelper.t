@@ -10,7 +10,7 @@ use YAML;
 use C4::Debug;
 use C4::SQLHelper qw(:all);
 
-use Test::More tests => 20;
+use Test::More tests => 21;
 
 use_ok('C4::SQLHelper');
 
@@ -63,3 +63,8 @@ $status=DeleteInTable("borrowers",{borrowernumber=>$borrtmp});
 ok($status>0 && !($@), "DeleteInTable OK");
 $status=DeleteInTable("branches", {branchcode => 'ZZZZ'});
 ok($status>0 && !($@), "DeleteInTable (branch) OK");
+
+my @biblio_columns = C4::SQLHelper::GetColumns('biblio');
+my @expected_columns = qw(biblionumber frameworkcode author title unititle notes
+    serial seriestitle copyrightdate timestamp datecreated abstract);
+is_deeply([sort @biblio_columns], [sort @expected_columns], "GetColumns('biblio') returns all columns of biblio table");

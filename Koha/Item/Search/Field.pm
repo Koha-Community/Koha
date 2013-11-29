@@ -19,6 +19,8 @@ sub AddItemSearchField {
     my ( $name, $label, $tagfield, $tagsubfield, $av_category ) =
       @$field{qw(name label tagfield tagsubfield authorised_values_category)};
 
+    return unless ($name and $label and $tagfield);
+
     my $dbh = C4::Context->dbh;
     my $query = q{
         INSERT INTO items_search_fields (name, label, tagfield, tagsubfield, authorised_values_category)
@@ -35,6 +37,8 @@ sub ModItemSearchField {
 
     my ( $name, $label, $tagfield, $tagsubfield, $av_category ) =
       @$field{qw(name label tagfield tagsubfield authorised_values_category)};
+
+    return unless ($name and $label and $tagfield);
 
     my $dbh = C4::Context->dbh;
     my $query = q{

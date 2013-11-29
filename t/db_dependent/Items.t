@@ -40,6 +40,8 @@ subtest 'General Add, Get and Del tests' => sub {
     $dbh->{RaiseError} = 1;
 
     # Create a biblio instance for testing
+    diag("Creating biblio instance for testing.");
+    C4::Context->set_preference('marcflavour', 'MARC21');
     my ($bibnum, $bibitemnum) = get_biblio();
 
     # Add an item.
@@ -76,7 +78,16 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     $dbh->{RaiseError} = 1;
 
     # Create a new biblio
+    C4::Context->set_preference('marcflavour', 'MARC21');
     my ($biblionumber, $biblioitemnumber) = get_biblio();
+
+    # Add branches if they don't exist
+    if (not defined GetBranchDetail('CPL')) {
+        ModBranch({add => 1, branchcode => 'CPL', branchname => 'Centerville'});
+    }
+    if (not defined GetBranchDetail('MPL')) {
+        ModBranch({add => 1, branchcode => 'MPL', branchname => 'Midway'});
+    }
 
     # Add two items
     my ($item1_bibnum, $item1_bibitemnum, $item1_itemnumber) = AddItem(
@@ -213,6 +224,118 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
     C4::Context->set_preference( 'item-level_itypes', 1 );
     ok( $item->effective_itemtype() eq 'ITEM_LEVEL', '$item->itemtype() returns items.itype when item-level_itypes is disabled' );
 
+    $dbh->rollback;
+};
+
+subtest 'SearchItems test' => sub {
+    plan tests => 10;
+
+    # Start transaction
+    $dbh->{AutoCommit} = 0;
+    $dbh->{RaiseError} = 1;
+
+    C4::Context->set_preference('marcflavour', 'MARC21');
+    my ($biblionumber) = get_biblio();
+
+    # Add branches if they don't exist
+    if (not defined GetBranchDetail('CPL')) {
+        ModBranch({add => 1, branchcode => 'CPL', branchname => 'Centerville'});
+    }
+    if (not defined GetBranchDetail('MPL')) {
+        ModBranch({add => 1, branchcode => 'MPL', branchname => 'Midway'});
+    }
+
+    my (undef, $initial_items_count) = SearchItems(undef, {rows => 1});
+
+    # Add two items
+    my (undef, undef, $item1_itemnumber) = AddItem({
+        homebranch => 'CPL',
+        holdingbranch => 'CPL',
+    }, $biblionumber);
+    my (undef, undef, $item2_itemnumber) = AddItem({
+        homebranch => 'MPL',
+        holdingbranch => 'MPL',
+    }, $biblionumber);
+
+    my ($items, $total_results);
+
+    ($items, $total_results) = SearchItems();
+    is($total_results, $initial_items_count + 2, "Created 2 new items");
+    is(scalar @$items, $total_results, "SearchItems() returns all items");
+
+    ($items, $total_results) = SearchItems(undef, {rows => 1});
+    is($total_results, $initial_items_count + 2);
+    is(scalar @$items, 1, "SearchItems(undef, {rows => 1}) returns only 1 item");
+
+    # Search all items where homebranch = 'CPL'
+    my $filter = {
+        field => 'homebranch',
+        query => 'CPL',
+        operator => '=',
+    };
+    ($items, $total_results) = SearchItems($filter);
+    ok($total_results > 0, "There is at least one CPL item");
+    my $all_items_are_CPL = 1;
+    foreach my $item (@$items) {
+        if ($item->{homebranch} ne 'CPL') {
+            $all_items_are_CPL = 0;
+            last;
+        }
+    }
+    ok($all_items_are_CPL, "All items returned by SearchItems are from CPL");
+
+    # Search all items where homebranch != 'CPL'
+    $filter = {
+        field => 'homebranch',
+        query => 'CPL',
+        operator => '!=',
+    };
+    ($items, $total_results) = SearchItems($filter);
+    ok($total_results > 0, "There is at least one non-CPL item");
+    my $all_items_are_not_CPL = 1;
+    foreach my $item (@$items) {
+        if ($item->{homebranch} eq 'CPL') {
+            $all_items_are_not_CPL = 0;
+            last;
+        }
+    }
+    ok($all_items_are_not_CPL, "All items returned by SearchItems are not from CPL");
+
+    # Search all items where biblio title (245$a) is like 'Silence in the %'
+    $filter = {
+        field => 'marc:245$a',
+        query => 'Silence in the %',
+        operator => 'like',
+    };
+    ($items, $total_results) = SearchItems($filter);
+    ok($total_results >= 2, "There is at least 2 items with a biblio title like 'Silence in the %'");
+
+    # Search all items where biblio title is 'Silence in the library'
+    # and homebranch is 'CPL'
+    $filter = {
+        conjunction => 'AND',
+        filters => [
+            {
+                field => 'marc:245$a',
+                query => 'Silence in the %',
+                operator => 'like',
+            },
+            {
+                field => 'homebranch',
+                query => 'CPL',
+                operator => '=',
+            },
+        ],
+    };
+    ($items, $total_results) = SearchItems($filter);
+    my $found = 0;
+    foreach my $item (@$items) {
+        if ($item->{itemnumber} == $item1_itemnumber) {
+            $found = 1;
+            last;
+        }
+    }
+    ok($found, "item1 found");
 
     $dbh->rollback;
 };

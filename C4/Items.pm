@@ -2689,12 +2689,13 @@ sub _SearchItems_build_where_fragment {
 
 =head2 SearchItems
 
-    my ($items, $total) = SearchItemsByField($filters, $params);
+    my ($items, $total) = SearchItems($filter, $params);
 
 Perform a search among items
 
-$filters is a reference to an array of filters, where each filter is a hash with
-the following keys:
+$filter is a reference to a hash which can be a filter, or a combination of filters.
+
+A filter has the following keys:
 
 =over 2
 
@@ -2706,7 +2707,15 @@ the following keys:
 
 =back
 
-A logical AND is used to combine filters.
+A combination of filters hash the following keys:
+
+=over 2
+
+=item * conjunction: 'AND' or 'OR'
+
+=item * filters: array ref of filters
+
+=back
 
 $params is a reference to a hash that can contain the following parameters:
 
