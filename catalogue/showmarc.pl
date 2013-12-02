@@ -50,6 +50,10 @@ if ($importid) {
 else {
     $record =GetMarcBiblio($biblionumber);
 }
+if(!ref $record) {
+    print $input->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
 
 if($view eq 'card') {
     my $themelang =  '/' . C4::Templates::_current_language();
