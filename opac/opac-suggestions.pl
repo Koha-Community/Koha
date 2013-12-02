@@ -27,6 +27,7 @@ use C4::Output;
 use C4::Suggestions;
 use C4::Koha;
 use C4::Dates;
+use C4::Scrubber;
 
 my $input           = new CGI;
 my $allsuggestions  = $input->param('showall');
@@ -77,8 +78,13 @@ if ( $op eq "add_confirm" ) {
 		#some suggestion are answering the request Donot Add
 	}
 	else {
+		my $scrubber = C4::Scrubber->new();
+		foreach my $suggest (keys %$suggestion){
+		    $suggestion->{$suggest} = $scrubber->scrub($suggestion->{$suggest});
+		}
 		$$suggestion{'suggesteddate'}=C4::Dates->today;
 		$$suggestion{'branchcode'}= $input->param('branch') || C4::Context->userenv->{"branch"};
+
 		&NewSuggestion($suggestion);
 		# empty fields, to avoid filter in "SearchSuggestion"
 		$$suggestion{$_}='' foreach qw<title author publishercode copyrightdate place collectiontitle isbn STATUS>;
