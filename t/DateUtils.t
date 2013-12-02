@@ -5,7 +5,7 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 27;
+use Test::More tests => 31;
 use Test::MockModule;
 
 BEGIN { use_ok('Koha::DateUtils'); }
@@ -108,3 +108,23 @@ cmp_ok( $formatted, 'eq', '16/06/2011 12:00', 'format_sqldatetime conversion' );
 $formatted = format_sqldatetime( undef, 'metric' );
 cmp_ok( $formatted, 'eq', q{},
     'format_sqldatetime formats undef as empty string' );
+
+# Test the as_due_date parameter
+$dt = DateTime->new(
+    year       => 2013,
+    month      => 12,
+    day        => 11,
+    hour       => 23,
+    minute     => 59,
+);
+$date_string = output_pref({ dt => $dt, dateformat => 'metric', timeformat => '24hr', as_due_date => 1 });
+cmp_ok $date_string, 'eq', '11/12/2013', 'as_due_date with hours and timeformat 24hr';
+
+$date_string = output_pref({ dt => $dt, dateformat => 'metric', timeformat => '24hr', dateonly => 1, as_due_date => 1});
+cmp_ok $date_string, 'eq', '11/12/2013', 'as_due_date without hours and timeformat 24hr';
+
+$date_string = output_pref({ dt => $dt, dateformat => 'metric', timeformat => '12hr', as_due_date => 1 });
+cmp_ok $date_string, 'eq', '11/12/2013', 'as_due_date with hours and timeformat 12hr';
+
+$date_string = output_pref({ dt => $dt, dateformat => 'metric', timeformat => '12hr', dateonly => 1, as_due_date => 1});
+cmp_ok $date_string, 'eq', '11/12/2013', 'as_due_date without hours and timeformat 12hr';
