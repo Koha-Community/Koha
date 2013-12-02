@@ -200,16 +200,16 @@ $.tablesorter.addParser({
                 </td>[% END %]
                 <td>
                     <p><strong>[% suggestions_loo.title |html %]</strong></p>
-                    <p>[% IF ( suggestions_loo.author ) %][% suggestions_loo.author %],[% END %]
-                        [% IF ( suggestions_loo.copyrightdate ) %] - [% suggestions_loo.copyrightdate %],[% END %] 
-                        [% IF ( suggestions_loo.publishercode ) %] - [% suggestions_loo.publishercode %][% END %]
-                        [% IF ( suggestions_loo.place ) %]([% suggestions_loo.place %])[% END %]
-                        [% IF ( suggestions_loo.collectiontitle ) %] , [% suggestions_loo.collectiontitle %][% END %]
+                    <p>[% IF ( suggestions_loo.author ) %][% suggestions_loo.author |html %],[% END %]
+                        [% IF ( suggestions_loo.copyrightdate ) %] - [% suggestions_loo.copyrightdate |html %],[% END %]
+                        [% IF ( suggestions_loo.publishercode ) %] - [% suggestions_loo.publishercode |html %][% END %]
+                        [% IF ( suggestions_loo.place ) %]([% suggestions_loo.place |html %])[% END %]
+                        [% IF ( suggestions_loo.collectiontitle ) %] , [% suggestions_loo.collectiontitle |html%][% END %]
                         [% IF ( suggestions_loo.itemtype ) %] - [% suggestions_loo.itemtype %][% END %]
                     </p>
                 </td>
                 <td>
-                    [% suggestions_loo.note %]
+                    [% suggestions_loo.note |html %]
                 </td>
                 [% IF ( OPACViewOthersSuggestions ) %]<td>
                     [% IF ( suggestions_loo.branchcodesuggestedby ) %][% suggestions_loo.branchcodesuggestedby %][% ELSE %]&nbsp;[% END %]
@@ -224,7 +224,7 @@ $.tablesorter.addParser({
                     [% IF ( suggestions_loo.ORDERED ) %]Ordered by the library[% END %]
                     [% IF ( suggestions_loo.REJECTED ) %]Suggestion declined [% END %]
                     [% IF ( suggestions_loo.AVAILABLE ) %]Available in the library[% END %]
-                    [% IF ( suggestions_loo.reason ) %]([% suggestions_loo.reason %])[% END %]
+                    [% IF ( suggestions_loo.reason ) %]([% suggestions_loo.reason | html %])[% END %]
                 </td>
             </tr>
         [% END %]
