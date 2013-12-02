@@ -54,6 +54,10 @@ if ($importid) {
 else {
     $record =GetMarcBiblio($biblionumber);
 }
+if(!ref $record) {
+    print $input->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
 
 if ($view eq 'card' || $view eq 'html') {
     my $xmlrecord= $importid? $record->as_xml(): GetXmlBiblio($biblionumber);
