@@ -93,7 +93,7 @@ s/(\d{4})(\d{2})(\d{2})\s+(\d{2})(\d{2})(\d{2})/$1-$2-$3T$4:$5:$6/;
 
 =head2 output_pref
 
-$date_string = output_pref({ dt => $dt [, dateformat => $date_format, timeformat => $time_format, dateonly => 0|1 ] });
+$date_string = output_pref({ dt => $dt [, dateformat => $date_format, timeformat => $time_format, dateonly => 0|1, as_due_date => 0|1 ] });
 $date_string = output_pref( $dt );
 
 Returns a string containing the time & date formatted as per the C4::Context setting,
@@ -110,12 +110,13 @@ should be returned without the time.
 
 sub output_pref {
     my $params = shift;
-    my ( $dt, $force_pref, $force_time, $dateonly );
+    my ( $dt, $force_pref, $force_time, $dateonly, $as_due_date );
     if ( ref $params eq 'HASH' ) {
         $dt         = $params->{dt};
         $force_pref = $params->{dateformat};         # if testing we want to override Context
         $force_time = $params->{timeformat};
         $dateonly   = $params->{dateonly} || 0;    # if you don't want the hours and minutes
+        $as_due_date = $params->{as_due_date} || 0; # don't display the hours and minutes if eq to 23:59 or 11:59 (depending the TimeFormat value)
     } else {
         $dt = $params;
     }
@@ -129,29 +130,35 @@ sub output_pref {
 
     my $time_format = $force_time || C4::Context->preference('TimeFormat');
     my $time = ( $time_format eq '12hr' ) ? '%I:%M %p' : '%H:%M';
-
+    my $date;
     if ( $pref =~ m/^iso/ ) {
-        return $dateonly
+        $date = $dateonly
           ? $dt->strftime("%Y-%m-%d")
           : $dt->strftime("%Y-%m-%d $time");
     }
     elsif ( $pref =~ m/^metric/ ) {
-        return $dateonly
+        $date = $dateonly
           ? $dt->strftime("%d/%m/%Y")
           : $dt->strftime("%d/%m/%Y $time");
     }
     elsif ( $pref =~ m/^us/ ) {
-
-        return $dateonly
+        $date = $dateonly
           ? $dt->strftime("%m/%d/%Y")
           : $dt->strftime("%m/%d/%Y $time");
     }
     else {
-        return $dateonly
+        $date = $dateonly
           ? $dt->strftime("%Y-%m-%d")
           : $dt->strftime("%Y-%m-%d $time");
     }
 
+    if ( $as_due_date ) {
+        $time_format eq '12hr'
+            ? $date =~ s| 11:59 PM$||
+            : $date =~ s| 23:59$||;
+    }
+
+    return $date;
 }
 
 =head2 format_sqldatetime
