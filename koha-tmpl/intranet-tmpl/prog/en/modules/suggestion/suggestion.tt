@@ -187,12 +187,12 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
       <legend>Bibliographic information</legend>
       <ol>
         <li><span class="label">Title:</span>[% title |html %]</li>
-        <li><span class="label">Author:</span>[% author %]</li>
-        <li><span class="label">Copyright date:</span>[% copyrightdate %]</li>
-        <li><span class="label">ISBN or ISSN or other standard number:</span>[% isbn %]</li>
-        <li><span class="label">Publisher:</span>[% publishercode %]</li>
-        <li><span class="label">Publication place:</span>[% place %]</li>
-        <li><span class="label">Collection title:</span>[% collectiontitle %]</li>
+        <li><span class="label">Author:</span>[% author |html %]</li>
+        <li><span class="label">Copyright date:</span>[% copyrightdate |html %]</li>
+        <li><span class="label">ISBN or ISSN or other standard number:</span>[% isbn |html %]</li>
+        <li><span class="label">Publisher:</span>[% publishercode |html %]</li>
+        <li><span class="label">Publication place:</span>[% place |html %]</li>
+        <li><span class="label">Collection title:</span>[% collectiontitle |html %]</li>
         <li><span class="label">Document type:</span>
             [% FOREACH itemtypeloo IN itemtypeloop %]
                 [% IF ( itemtypeloo.selected ) %][% itemtypeloo.description %][% END %]
@@ -205,7 +205,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
             [% END %]
           </li>
         [% END %]
-        <li><span class="label">Notes:</span>[% note %]</li>
+        <li><span class="label">Notes:</span>[% note |html %]</li>
       </ol>
     </fieldset>
     <fieldset class="rows"> <legend>Suggestion management</legend>
@@ -488,9 +488,9 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
                         [% suggestions_loo.title |html %][% IF ( suggestions_loo.author ) %], by [% suggestions_loo.author %][% END %]</a>
                     [<a href="suggestion.pl?suggestionid=[% suggestions_loo.suggestionid %]&amp;op=edit" title="suggestion" >edit</a>]
                     <br />
-                    [% IF ( suggestions_loo.copyrightdate ) %]&copy; [% suggestions_loo.copyrightdate %] [% END %]
-                        [% IF ( suggestions_loo.volumedesc ) %]; Volume:<i>[% suggestions_loo.volumedesc %]</i> [% END %]
-                        [% IF ( suggestions_loo.isbn ) %]; ISBN:<i>[% suggestions_loo.isbn %]</i> [% END %][% IF ( suggestions_loo.publishercode ) %]; Published by [% suggestions_loo.publishercode %] [% END %][% IF ( suggestions_loo.publicationyear ) %] in <i>[% suggestions_loo.publicationyear %]</i> [% END %][% IF ( suggestions_loo.place ) %] in <i>[% suggestions_loo.place %]</i> [% END %][% IF ( suggestions_loo.collectiontitle ) %]; [% suggestions_loo.collectiontitle %] [% END %][% IF ( suggestions_loo.itemtype ) %]; [% suggestions_loo.itemtype %] [% END %]<br />[% IF ( suggestions_loo.note ) %]<span class="note">[% suggestions_loo.note %]</span>[% END %]
+                    [% IF ( suggestions_loo.copyrightdate ) %]&copy; [% suggestions_loo.copyrightdate |html %] [% END %]
+                        [% IF ( suggestions_loo.volumedesc ) %]; Volume:<i>[% suggestions_loo.volumedesc |html %]</i> [% END %]
+                        [% IF ( suggestions_loo.isbn ) %]; ISBN:<i>[% suggestions_loo.isbn |html %]</i> [% END %][% IF ( suggestions_loo.publishercode ) %]; Published by [% suggestions_loo.publishercode |html %] [% END %][% IF ( suggestions_loo.publicationyear ) %] in <i>[% suggestions_loo.publicationyear |html %]</i> [% END %][% IF ( suggestions_loo.place ) %] in <i>[% suggestions_loo.place |html %]</i> [% END %][% IF ( suggestions_loo.collectiontitle ) %]; [% suggestions_loo.collectiontitle |html %] [% END %][% IF ( suggestions_loo.itemtype ) %]; [% suggestions_loo.itemtype |html %] [% END %]<br />[% IF ( suggestions_loo.note ) %]<span class="note">[% suggestions_loo.note |html%]</span>[% END %]
                 </td>
                 <td>
                     [% IF ( suggestions_loo.emailsuggestedby ) %]<a href="mailto:[% suggestions_loo.emailsuggestedby %]">[% END %][% suggestions_loo.surnamesuggestedby %][% IF ( suggestions_loo.firstnamesuggestedby ) %], [% suggestions_loo.firstnamesuggestedby %][% END %] [% IF ( suggestions_loo.emailsuggestedby ) %]</a>[% END %]
