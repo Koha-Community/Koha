@@ -71,8 +71,8 @@ my ($template, $loggedinuser, $cookie)
                  });
 
 # Does the user have a limited item edition permission?
-my $uid = GetMember( borrowernumber => $loggedinuser )->{userid} if ($loggedinuser) ;
-my $limitededition = haspermission($uid,  {'tools' => 'items_limited_batchmod'}) if ($uid);
+my $uid = $loggedinuser ? GetMember( borrowernumber => $loggedinuser )->{userid} : undef;
+my $limitededition = $uid ? haspermission($uid,  {'tools' => 'items_limited_batchmod'}) : undef;
 # In case user is a superlibrarian, edition is not limited
 $limitededition = 0 if ($limitededition != 0 && $limitededition->{'superlibrarian'} eq 1);
 

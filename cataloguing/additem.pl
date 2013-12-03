@@ -369,8 +369,8 @@ my ($template, $loggedinuser, $cookie)
 
 
 # Does the user have a limited item edition permission?
-my $uid = GetMember( borrowernumber => $loggedinuser )->{userid} if ($loggedinuser) ;
-my $limitededition = haspermission($uid,  {'editcatalogue' => 'limited_item_edition'}) if ($uid);
+my $uid = $loggedinuser ? GetMember( borrowernumber => $loggedinuser )->{userid} : undef;
+my $limitededition = $uid ? haspermission($uid,  {'editcatalogue' => 'limited_item_edition'}) : undef;
 # In case user is a superlibrarian, edition is not limited
 $limitededition = 0 if ($limitededition != 0 && $limitededition->{'superlibrarian'} eq 1);
 
@@ -833,7 +833,7 @@ foreach my $tag ( keys %{$tagslib}){
             my $subfield_data = generate_subfield_form($tag, $subtag, $value, $tagslib, $tagslib->{$tag}->{$subtag}, $branches, $today_iso, $biblionumber, $temp, \@loop_data, $i, $limitededition);
             push (@loop_data, $subfield_data);
             $i++;
-        } 
+        }
   }
 }
 @loop_data = sort {$a->{subfield} cmp $b->{subfield} } @loop_data;
