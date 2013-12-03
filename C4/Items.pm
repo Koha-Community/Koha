@@ -649,11 +649,6 @@ sub DelItem {
     my $record = GetMarcBiblio($biblionumber);
     ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
 
-    # backup the record
-    my $copy2deleted = $dbh->prepare("UPDATE deleteditems SET marc=? WHERE itemnumber=?");
-    $copy2deleted->execute( $record->as_usmarc(), $itemnumber );
-    # This last update statement makes that the timestamp column in deleteditems is updated too. If you remove these lines, please add a line to update the timestamp separately. See Bugzilla report 7146 and Biblio.pm (DelBiblio).
-
     #search item field code
     logaction("CATALOGUING", "DELETE", $itemnumber, "item") if C4::Context->preference("CataloguingLog");
 }
