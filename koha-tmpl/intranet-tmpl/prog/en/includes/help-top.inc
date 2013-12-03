@@ -10,7 +10,7 @@
 [% END %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/jquery-ui.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/shortcut.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/shortcut/shortcut.js"></script>
 <!-- yui js --> 
 <script type="text/javascript" src="[% yuipath %]/utilities/utilities.js"></script> 
 <script type="text/javascript" src="[% yuipath %]/button/button-min.js"></script> 
