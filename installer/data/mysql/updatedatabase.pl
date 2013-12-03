@@ -8225,6 +8225,24 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = '3.15.00.XXX';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT INTO  systempreferences (
+            variable,
+            value,
+            options,
+            explanation,
+            type
+            )
+        VALUES (
+            'DisplayLibraryFacets',  'holdingbranch',  'home|holding|both',  'Defines which library facets to display.',  'Choice'
+        );
+    });
+    print "Upgrade to $DBversion done (Bug 11334 - Add facet for home library)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

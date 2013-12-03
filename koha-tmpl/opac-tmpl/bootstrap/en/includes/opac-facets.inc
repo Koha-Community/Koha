@@ -25,10 +25,10 @@
                         [% IF facets_loo.type_label_Series %]<h5 id="facet-series">Series</h5>[% END %]
                         [% IF facets_loo.type_label_ItemTypes %]<h5 id="facet-itemtypes">Item types</h5>[% END %]
                         [% UNLESS singleBranchMode %]
-                          [% IF facets_loo.type_label_Libraries %]<h5 id="facet-libraries">Libraries</h5>[% END %]
+                          [% IF ( facets_loo.type_label_HomeLibrary ) %]Home libraries[% END %]
+                          [% IF ( facets_loo.type_label_HoldingLibrary ) %]Holding libraries[% END %]
                         [% END %]
                         [% IF facets_loo.type_label_Location %]<h5 id="facet-locations">Locations</h5>[% END %]
-
                         <ul>
                             [% FOREACH facet IN facets_loo.facets %]
                                 <li>

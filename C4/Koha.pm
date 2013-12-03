@@ -716,15 +716,36 @@ sub getFacets {
             }
             ];
 
-            my $library_facet;
-            unless ( C4::Context->preference("singleBranchMode") || GetBranchesCount() == 1 ) {
-                $library_facet = {
-                    idx  => 'branch',
-                    label => 'Libraries',
-                    tags        => [ qw/ 995b / ],
-                };
+            unless ( C4::Context->preference("singleBranchMode")
+                || GetBranchesCount() == 1 )
+            {
+                my $DisplayLibraryFacets = C4::Context->preference('DisplayLibraryFacets');
+                if (   $DisplayLibraryFacets eq 'both'
+                    || $DisplayLibraryFacets eq 'holding' )
+                {
+                    push(
+                        @$facets,
+                        {
+                            idx   => 'holdingbranch',
+                            label => 'HoldingLibrary',
+                            tags  => [qw / 995b /],
+                        }
+                    );
+                }
+
+                if (   $DisplayLibraryFacets eq 'both'
+                    || $DisplayLibraryFacets eq 'home' )
+                {
+                push(
+                    @$facets,
+                    {
+                        idx   => 'homebranch',
+                        label => 'HomeLibrary',
+                        tags  => [qw / 995a /],
+                    }
+                );
+                }
             }
-            push( @$facets, $library_facet );
     }
     else {
         $facets = [
@@ -777,15 +798,36 @@ sub getFacets {
             },
             ];
 
-            my $library_facet;
-            unless ( C4::Context->preference("singleBranchMode") || GetBranchesCount() == 1 ) {
-                $library_facet = {
-                    idx  => 'branch',
-                    label => 'Libraries',
-                    tags        => [ qw / 952b / ],
-                };
+            unless ( C4::Context->preference("singleBranchMode")
+                || GetBranchesCount() == 1 )
+            {
+                my $DisplayLibraryFacets = C4::Context->preference('DisplayLibraryFacets');
+                if (   $DisplayLibraryFacets eq 'both'
+                    || $DisplayLibraryFacets eq 'holding' )
+                {
+                    push(
+                        @$facets,
+                        {
+                            idx   => 'holdingbranch',
+                            label => 'HoldingLibrary',
+                            tags  => [qw / 952b /],
+                        }
+                    );
+                }
+
+                if (   $DisplayLibraryFacets eq 'both'
+                    || $DisplayLibraryFacets eq 'home' )
+                {
+                push(
+                    @$facets,
+                    {
+                        idx   => 'homebranch',
+                        label => 'HomeLibrary',
+                        tags  => [qw / 952a /],
+                    }
+                );
+                }
             }
-            push( @$facets, $library_facet );
     }
     return $facets;
 }
