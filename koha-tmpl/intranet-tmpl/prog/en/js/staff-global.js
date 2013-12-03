@@ -13,7 +13,9 @@ function _(s) { return s; } // dummy function for gettext
     if($("#header_search #catalog_search").length > 0){ shortcut.add('Alt+q',function (){ $("#header_search").tabs("select","#catalog_search"); $("#search-form").focus(); }); } else { shortcut.add('Alt+q',function(){ location.href="/cgi-bin/koha/catalogue/search.pl"; }); }
 
     $(".focus").focus();
-    $(".validated").validate();
+    $(".validated").each(function() {
+        $(this).validate();
+    });
 
     $("#logout").on("click",function(){
         logOut();
