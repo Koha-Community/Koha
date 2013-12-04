@@ -1062,11 +1062,9 @@
                </xsl:when>
                <xsl:otherwise>
                    <xsl:for-each select="$available_items[generate-id() = generate-id(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch))[1])]">
-                               <xsl:choose>
-                                   <xsl:when test="$singleBranchMode=0">
-                                       <xsl:value-of select="items:homebranch"/>
-                                   </xsl:when>
-                               </xsl:choose>
+                       <xsl:if test="$singleBranchMode=0">
+                           <xsl:value-of select="items:homebranch"/>
+                       </xsl:if>
                    <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber and $OPACItemLocation='callnum'"> [<xsl:value-of select="items:itemcallnumber"/>]</xsl:if>
                                <xsl:text> (</xsl:text>
                                <xsl:value-of select="count(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch)))"/>
@@ -1086,11 +1084,9 @@
                         <b><xsl:text>Copies available for reference: </xsl:text></b>
                         <xsl:variable name="reference_items" select="key('item-by-status', 'reference')"/>
                         <xsl:for-each select="$reference_items[generate-id() = generate-id(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch))[1])]">
-                            <xsl:choose>
-                                <xsl:when test="$singleBranchMode=0">
-                                    <xsl:value-of select="items:homebranch"/>
-                                </xsl:when>
-                            </xsl:choose>
+                            <xsl:if test="$singleBranchMode=0">
+                                <xsl:value-of select="items:homebranch"/>
+                            </xsl:if>
                             <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"> [<xsl:value-of select="items:itemcallnumber"/>]</xsl:if>
                             <xsl:text> (</xsl:text>
                             <xsl:value-of select="count(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch)))"/>
