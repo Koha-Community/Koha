@@ -141,7 +141,7 @@ my $dat = &GetBiblioData($biblionumber);
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
-my @subscriptions       = GetSubscriptions( $dat->{title}, $dat->{issn}, undef, $biblionumber );
+my @subscriptions       = SearchSubscriptions({ biblionumber => $biblionumber, orderby => 'title' });
 my @subs;
 
 foreach my $subscription (@subscriptions) {

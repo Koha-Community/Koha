@@ -121,7 +121,7 @@ my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my $dbh = C4::Context->dbh;
 my $dat                 = TransformMarcToKoha( $dbh, $record );
 
-my @subscriptions       = GetSubscriptions( $dat->{title}, $dat->{issn}, undef, $biblionumber );
+my @subscriptions       = SearchSubscriptions({ biblionumber => $biblionumber, orderby => 'title' });
 my @subs;
 foreach my $subscription (@subscriptions) {
     my %cell;

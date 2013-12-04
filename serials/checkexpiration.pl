@@ -70,7 +70,7 @@ my $issn  = $query->param('issn');
 my $date  = format_date_in_iso($query->param('date'));
 
 if ($date) {
-    my @subscriptions = GetSubscriptions( $title, $issn );
+    my @subscriptions = SearchSubscriptions({ title => $title, issn => $issn, orderby => 'title' });
     my @subscriptions_loop;
 
     foreach my $subscription ( @subscriptions ) {

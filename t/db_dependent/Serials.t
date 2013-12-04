@@ -85,16 +85,16 @@ my $subscription_history = C4::Serials::GetSubscriptionHistoryFromSubscriptionId
 is( $subscription_history->{opacnote}, '', 'NewSubscription should not set subscriptionhistory opacnotes' );
 is( $subscription_history->{librariannote}, '', 'NewSubscription should not set subscriptionhistory librariannotes' );
 
-my @subscriptions = GetSubscriptions( $$subscriptioninformation{bibliotitle} );
+my @subscriptions = SearchSubscriptions({string => $subscriptioninformation->{bibliotitle}, orderby => 'title' });
 isa_ok( \@subscriptions, 'ARRAY' );
 
-@subscriptions = GetSubscriptions( undef, $$subscriptioninformation{issn} );
+@subscriptions = SearchSubscriptions({ issn => $subscriptioninformation->{issn}, orderby => 'title' });
 isa_ok( \@subscriptions, 'ARRAY' );
 
-@subscriptions = GetSubscriptions( undef, undef, $$subscriptioninformation{ean} );
+@subscriptions = SearchSubscriptions({ ean => $subscriptioninformation->{ean}, orderby => 'title' });
 isa_ok( \@subscriptions, 'ARRAY' );
 
-@subscriptions = GetSubscriptions( undef, undef, undef, $$subscriptioninformation{bibnum} );
+@subscriptions = SearchSubscriptions({ biblionumber => $subscriptioninformation->{bibnum}, orderby => 'title' });
 isa_ok( \@subscriptions, 'ARRAY' );
 
 my $frequency = GetSubscriptionFrequency($subscriptioninformation->{periodicity});

@@ -530,7 +530,7 @@ my $copynumbers = GetKohaAuthorisedValues('items.copynumber',$dat->{'frameworkco
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
-my @subscriptions       = GetSubscriptions($dat->{'title'}, $dat->{'issn'}, $ean, $biblionumber );
+my @subscriptions       = SearchSubscriptions({ biblionumber => $biblionumber, orderby => 'title' });
 
 my @subs;
 $dat->{'serial'}=1 if $subscriptionsnumber;

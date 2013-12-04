@@ -39,7 +39,7 @@ BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
-      &NewSubscription    &ModSubscription    &DelSubscription    &GetSubscriptions
+      &NewSubscription    &ModSubscription    &DelSubscription
       &GetSubscription    &CountSubscriptionFromBiblionumber      &GetSubscriptionsFromBiblionumber
       &SearchSubscriptions
       &GetFullSubscriptionsFromBiblionumber   &GetFullSubscription &ModSubscriptionHistory
@@ -496,85 +496,6 @@ sub GetFullSubscriptionsFromBiblionumber {
     return $subscriptions;
 }
 
-=head2 GetSubscriptions
-
-@results = GetSubscriptions($title,$ISSN,$ean,$biblionumber);
-this function gets all subscriptions which have title like $title,ISSN like $ISSN,EAN like $ean and biblionumber like $biblionumber.
-return:
-a table of hashref. Each hash containt the subscription.
-
-=cut
-
-sub GetSubscriptions {
-    my ( $string, $issn, $ean, $biblionumber ) = @_;
-
-    #return unless $title or $ISSN or $biblionumber;
-    my $dbh = C4::Context->dbh;
-    my $sth;
-    my $sql = qq(
-            SELECT subscriptionhistory.*, subscription.*, biblio.title,biblioitems.issn,biblio.biblionumber
-            FROM   subscription
-            LEFT JOIN subscriptionhistory USING(subscriptionid)
-            LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
-            LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
-    );
-    my @bind_params;
-    my $sqlwhere = q{};
-    if ($biblionumber) {
-        $sqlwhere = "   WHERE biblio.biblionumber=?";
-        push @bind_params, $biblionumber;
-    }
-    if ($string) {
-        my @sqlstrings;
-        my @strings_to_search;
-        @strings_to_search = map { "%$_%" } split( / /, $string );
-        foreach my $index (qw(biblio.title subscription.callnumber subscription.location subscription.notes subscription.internalnotes)) {
-            push @bind_params, @strings_to_search;
-            my $tmpstring = "AND $index LIKE ? " x scalar(@strings_to_search);
-            $debug && warn "$tmpstring";
-            $tmpstring =~ s/^AND //;
-            push @sqlstrings, $tmpstring;
-        }
-        $sqlwhere .= ( $sqlwhere ? " AND " : " WHERE " ) . "((" . join( ") OR (", @sqlstrings ) . "))";
-    }
-    if ($issn) {
-        my @sqlstrings;
-        my @strings_to_search;
-        @strings_to_search = map { "%$_%" } split( / /, $issn );
-        foreach my $index ( qw(biblioitems.issn subscription.callnumber)) {
-            push @bind_params, @strings_to_search;
-            my $tmpstring = "OR $index LIKE ? " x scalar(@strings_to_search);
-            $debug && warn "$tmpstring";
-            $tmpstring =~ s/^OR //;
-            push @sqlstrings, $tmpstring;
-        }
-        $sqlwhere .= ( $sqlwhere ? " AND " : " WHERE " ) . "((" . join( ") OR (", @sqlstrings ) . "))";
-    }
-    if ($ean) {
-        my @sqlstrings;
-        my @strings_to_search;
-        @strings_to_search = map { "$_" } split( / /, $ean );
-        foreach my $index ( qw(biblioitems.ean) ) {
-            push @bind_params, @strings_to_search;
-            my $tmpstring = "OR $index = ? " x scalar(@strings_to_search);
-            $debug && warn "$tmpstring";
-            $tmpstring =~ s/^OR //;
-            push @sqlstrings, $tmpstring;
-        }
-        $sqlwhere .= ( $sqlwhere ? " AND " : " WHERE " ) . "((" . join( ") OR (", @sqlstrings ) . "))";
-    }
-
-    $sql .= "$sqlwhere ORDER BY title";
-    $debug and warn "GetSubscriptions query: $sql params : ", join( " ", @bind_params );
-    $sth = $dbh->prepare($sql);
-    $sth->execute(@bind_params);
-    my $subscriptions = $sth->fetchall_arrayref( {} );
-    for my $subscription ( @$subscriptions ) {
-        $subscription->{cannotedit} = not can_edit_subscription( $subscription );
-    }
-    return @$subscriptions;
-}
-
 =head2 SearchSubscriptions
 
   @results = SearchSubscriptions($args);
@@ -604,14 +525,15 @@ subscription expiration date.
 sub SearchSubscriptions {
     my ( $args ) = @_;
 
-    my $query = qq{
+    my $query = q{
         SELECT
             subscription.notes AS publicnotes,
-            subscription.*,
             subscriptionhistory.*,
+            subscription.*,
             biblio.notes AS biblionotes,
             biblio.title,
             biblio.author,
+            biblio.biblionumber,
             biblioitems.issn
         FROM subscription
             LEFT JOIN subscriptionhistory USING(subscriptionid)
@@ -676,6 +598,8 @@ sub SearchSubscriptions {
     if(@where_strs){
         $query .= " WHERE " . join(" AND ", @where_strs);
     }
+
+    $query .= " ORDER BY " . $args->{orderby} if $args->{orderby};
 
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
