@@ -89,9 +89,14 @@ sub new {
             suffix => '-i-opac-t-prog-v-3006000.po',
         },
         {
-            name   => 'Intranet prog',
+            name   => 'Intranet prog UI',
             dir    => $context->config('intrahtdocs') . '/prog',
             suffix => '-i-staff-t-prog-v-3006000.po',
+        },
+        {
+            name   => 'Intranet prog help',
+            dir    => $context->config('intrahtdocs') . '/prog/en/modules/help',
+            suffix => '-staff-help.po',
         },
     ];
 
@@ -330,13 +335,18 @@ sub install_tmpl {
             "    To  : $trans->{dir}/$self->{lang}\n",
             "    With: $self->{path_po}/$self->{lang}$trans->{suffix}\n"
                 if $self->{verbose};
-        my $lang_dir = "$trans->{dir}/$self->{lang}";
+
+        my $trans_dir = ( $trans->{name} =~ /help/ )?"$trans->{dir}":"$trans->{dir}/en/";
+        my $lang_dir  = ( $trans->{name} =~ /help/ )?"$trans->{dir}":"$trans->{dir}/$self->{lang}";
+        $lang_dir =~ s|/en/|/$self->{lang}/|;
         mkdir $lang_dir unless -d $lang_dir;
+        my $excludes  = ( $trans->{name} =~ /UI/   )?"-x 'help'":"";
+
         system
             "$self->{process} install " .
-            "-i $trans->{dir}/en/ " .
-            "-o $trans->{dir}/$self->{lang} ".
-            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r " .
+            "-i $trans_dir " .
+            "-o $lang_dir  ".
+            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r $excludes" .
             (
                 @$files
                     ? '-f ' . join ' -f ', @$files
@@ -358,10 +368,14 @@ sub update_tmpl {
                 if $self->{verbose};
         my $lang_dir = "$trans->{dir}/$self->{lang}";
         mkdir $lang_dir unless -d $lang_dir;
+
+        my $trans_dir = ( $trans->{name} =~ /help/ )?"$trans->{dir}":"$trans->{dir}/en/";
+        my $excludes  = ( $trans->{name} =~ /UI/   )?"-x 'help'":"";
+
         system
             "$self->{process} update " .
-            "-i $trans->{dir}/en/ " .
-            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r " .
+            "-i $trans_dir " .
+            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r $excludes" .
             (
                 @$files
                     ? '-f ' . join ' -f ', @$files
@@ -393,10 +407,14 @@ sub create_tmpl {
             "    From: $trans->{dir}/en/\n",
             "    To  : $self->{path_po}/$self->{lang}$trans->{suffix}\n"
                 if $self->{verbose};
+
+        my $trans_dir = ( $trans->{name} =~ /help/ )?"$trans->{dir}":"$trans->{dir}/en/";
+        my $excludes  = ( $trans->{name} =~ /UI/   )?"-x 'help'":"";
+
         system
             "$self->{process} create " .
-            "-i $trans->{dir}/en/ " .
-            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r " .
+            "-i $trans_dir " .
+            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r $excludes" .
             (
                 @$files
                     ? '-f ' . join ' -f ', @$files
