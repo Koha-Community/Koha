@@ -2253,11 +2253,14 @@ sub DelItemCheck {
 
 
     # check that there is no issue on this item before deletion.
-    my $sth=$dbh->prepare("select * from issues i where i.itemnumber=?");
+    my $sth = $dbh->prepare(q{
+        SELECT COUNT(*) FROM issues
+        WHERE itemnumber = ?
+    });
     $sth->execute($itemnumber);
+    my ($onloan) = $sth->fetchrow;
 
     my $item = GetItem($itemnumber);
-    my $onloan=$sth->fetchrow;
 
     if ($onloan){
         $error = "book_on_loan" 
@@ -2270,9 +2273,13 @@ sub DelItemCheck {
     }
 	else{
         # check it doesnt have a waiting reserve
-        $sth=$dbh->prepare("SELECT * FROM reserves WHERE (found = 'W' or found = 'T') AND itemnumber = ?");
+        $sth = $dbh->prepare(q{
+            SELECT COUNT(*) FROM reserves
+            WHERE (found = 'W' OR found = 'T')
+            AND itemnumber = ?
+        });
         $sth->execute($itemnumber);
-        my $reserve=$sth->fetchrow;
+        my ($reserve) = $sth->fetchrow;
         if ($reserve){
             $error = "book_reserved";
         } elsif ($countanalytics > 0){
