@@ -58,7 +58,7 @@ for my $s (@{$supplierlist} ) {
     }
 }
 
-my $additional_fields = Koha::AdditionalField->all( { table => 'subscription', searchable => 1 } );
+my $additional_fields = Koha::AdditionalField->all( { tablename => 'subscription', searchable => 1 } );
 for my $field ( @$additional_fields ) {
     if ( $field->{authorised_value_category} ) {
         $field->{authorised_value_choices} = GetAuthorisedValues( $field->{authorised_value_category} );

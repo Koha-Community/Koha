@@ -97,6 +97,7 @@ sub insert_values {
     my $dbh = C4::Context->dbh;
     local $dbh->{RaiseError} = 1;
     while ( my ( $record_id, $value ) = each %{$self->{values}} ) {
+        next unless defined $value;
         my $updated = $dbh->do(q|
             UPDATE additional_field_values
             SET value = ?
@@ -135,7 +136,7 @@ sub fetch_values {
 
 sub all {
     my ( $class, $args ) = @_;
-    die "BAD CALL: Don't use fetch_all_values as a static method"
+    die "BAD CALL: Don't use fetch_all_values as an instance method"
         if ref $class and UNIVERSAL::can($class,'can');
     my $tablename = $args->{tablename};
     my $searchable = $args->{searchable};
@@ -172,7 +173,7 @@ sub all {
 
 sub fetch_all_values {
     my ( $class, $args ) = @_;
-    die "BAD CALL: Don't use fetch_all_values as a static method"
+    die "BAD CALL: Don't use fetch_all_values as an instance method"
         if ref $class and UNIVERSAL::can($class,'can');
 
     my $record_id = $args->{record_id};
@@ -199,11 +200,12 @@ sub fetch_all_values {
 
 sub get_matching_record_ids {
     my ( $class, $args ) = @_;
-    die "BAD CALL: Don't use fetch_all_values as a static method"
+    die "BAD CALL: Don't use fetch_all_values as an instance method"
         if ref $class and UNIVERSAL::can($class,'can');
 
     my $fields = $args->{fields} // [];
     my $tablename = $args->{tablename};
+    my $exact_match = $args->{exact_match} // 1;
     return [] unless @$fields;
 
     my $dbh = C4::Context->dbh;
@@ -222,13 +224,13 @@ sub get_matching_record_ids {
                     WHERE afv.field_id = af.id
                     AND af.name = ?
                     AND af.tablename = ?
-                    AND value = ?
+                    AND value LIKE ?
                 ) AS field$i USING (id)
             WHERE field$i.id IS NOT NULL
         ) AS values$i |;
         $subquery .= ' USING (record_id)' if $i > 1;
         push @subqueries, $subquery;
-        push @args, $field->{name}, $tablename, $field->{value};
+        push @args, $field->{name}, $tablename, ( $exact_match ? $field->{value} : "%$field->{value}%" );
     }
     $query .= join( ' LEFT JOIN ', @subqueries ) . ' WHERE 1';
     for my $j ( 1 .. $i ) {

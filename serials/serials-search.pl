@@ -78,10 +78,11 @@ if ( $op and $op eq "close" ) {
 }
 
 
-my $additional_fields = Koha::AdditionalField->all( { table => 'subscription', searchable => 1 } );
+my $additional_fields = Koha::AdditionalField->all( { tablename => 'subscription', searchable => 1 } );
 my $additional_field_filters;
 for my $field ( @$additional_fields ) {
-    if ( my $filter_value = $query->param('additional_field_' . $field->{name} . '_filter') ) {
+    my $filter_value = $query->param('additional_field_' . $field->{id} . '_filter');
+    if ( defined ( $filter_value ) ) {
         $additional_field_filters->{ $field->{name} } = $filter_value;
     }
     if ( $field->{authorised_value_category} ) {

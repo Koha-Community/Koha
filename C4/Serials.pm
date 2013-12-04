@@ -562,8 +562,9 @@ sub SearchSubscriptions {
     my $matching_record_ids_for_additional_fields = [];
     if ( @$additional_fields ) {
         $matching_record_ids_for_additional_fields = Koha::AdditionalField->get_matching_record_ids({
-                fields => $args->{additional_fields},
+                fields => $additional_fields,
                 tablename => 'subscription',
+                exact_match => 0,
         });
         return () unless @$matching_record_ids_for_additional_fields;
     }
@@ -665,7 +666,7 @@ sub SearchSubscriptions {
             record_id => $subscription->{subscriptionid},
             tablename => 'subscription'
         });
-        $subscription->{addition_fields} = $additional_field_values->{$subscription->{subscriptionid}};
+        $subscription->{additional_fields} = $additional_field_values->{$subscription->{subscriptionid}};
     }
 
     return @$results;

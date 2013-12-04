@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 34;
+use Test::More tests => 37;
 
 use C4::Context;
 use Koha::AdditionalField;
@@ -104,6 +104,8 @@ use C4::Acquisition;
 use C4::Biblio;
 use C4::Budgets;
 use C4::Serials;
+use C4::Serials::Frequency;
+use C4::Serials::Numberpattern;
 
 my $booksellerid = C4::Bookseller::AddBookseller(
     {
@@ -118,7 +120,7 @@ my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
 my $budgetid;
 my $bpid = AddBudgetPeriod({
     budget_period_startdate => '01-01-2015',
-    budget_period_enddate   => '12-31-2015',
+    budget_period_enddate   => '01-01-2016',
     budget_description      => "budget desc"
 });
 
@@ -132,22 +134,28 @@ my $budget_id = AddBudget({
     budget_period_id   => $bpid
 });
 
+my $frequency_id = AddSubscriptionFrequency({ description => "Test frequency 1" });
+my $pattern_id = AddSubscriptionNumberpattern({
+    label => 'Test numberpattern 1',
+    numberingmethod => '{X}'
+});
+
 my $subscriptionid1 = NewSubscription(
-    undef,      "",     undef, undef, $budget_id, $biblionumber, '01-01-2013',undef,
-    undef,      undef,  undef, undef, undef,      undef,         undef,  undef,
-    undef,      undef,  undef, undef, undef,      undef,         undef,  undef,
-    undef,      undef,  undef, undef, undef,      undef,         undef,  1,
-    "notes",    undef,  undef, undef, undef,      undef,         undef,  0,
-    "intnotes", 0,      undef, undef, 0,          undef,         '31-12-2013',
+    undef,      "",     undef, undef, $budget_id, $biblionumber,
+    '2013-01-01', $frequency_id, undef, undef,  undef,
+    undef,      undef,  undef, undef, undef, undef,
+    1,          "notes",undef, '2013-01-01', undef, $pattern_id,
+    undef,       undef,  0,    "intnotes",  0,
+    undef, undef, 0,          undef,         '2013-01-01', 0
 );
 
 my $subscriptionid2 = NewSubscription(
-    undef,      "",     undef, undef, $budget_id, $biblionumber, '01-01-2013',undef,
-    undef,      undef,  undef, undef, undef,      undef,         undef,  undef,
-    undef,      undef,  undef, undef, undef,      undef,         undef,  undef,
-    undef,      undef,  undef, undef, undef,      undef,         undef,  1,
-    "notes",    undef,  undef, undef, undef,      undef,         undef,  0,
-    "intnotes", 0,      undef, undef, 0,          undef,         '31-12-2013',
+    undef,      "",     undef, undef, $budget_id, $biblionumber,
+    '2013-01-01', $frequency_id, undef, undef,  undef,
+    undef,      undef,  undef, undef, undef, undef,
+    1,          "notes",undef, '2013-01-01', undef, $pattern_id,
+    undef,       undef,  0,    "intnotes",  0,
+    undef, undef, 0,          undef,         '2013-01-01', 0
 );
 
 # insert
@@ -267,5 +275,20 @@ $exists = grep /$subscriptionid2/, @$matching_record_ids;
 is ( $exists, 1, "get_matching_record_ids: field common: common_value matches subscription2 too" );
 $exists = grep /not_existent_id/, @$matching_record_ids;
 is ( $exists, 0, "get_matching_record_ids: field common: common_value does not inexistent id" );
+
+$fields = [
+    {
+        name => 'common',
+        value => q|common|,
+    }
+];
+$matching_record_ids = Koha::AdditionalField->get_matching_record_ids({ tablename => 'subscription', fields => $fields, exact_match => 0 });
+$exists = grep /$subscriptionid1/, @$matching_record_ids;
+is ( $exists, 1, "get_matching_record_ids: field common: common% matches subscription1" );
+$exists = grep /$subscriptionid2/, @$matching_record_ids;
+is ( $exists, 1, "get_matching_record_ids: field common: common% matches subscription2 too" );
+$exists = grep /not_existent_id/, @$matching_record_ids;
+is ( $exists, 0, "get_matching_record_ids: field common: common% does not inexistent id" );
+
 
 $dbh->rollback;

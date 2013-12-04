@@ -859,9 +859,9 @@ $(document).ready(function() {
                                   <ol>
                                     [% FOR field IN additional_fields_for_subscription %]
                                       <li>
-                                        <label for="additional_fields_[% field.name %]"> [% field.name %]: </label>
+                                        <label for="additional_field_[% field.id %]"> [% field.name %]: </label>
                                         [% IF field.authorised_value_choices %]
-                                          <select name="additional_fields_[% field.name %]">
+                                          <select name="additional_field_[% field.id %]" id="additional_field_[% field.id %]">
                                             [% FOREACH av IN field.authorised_value_choices %]
                                               [% IF av.authorised_value == additional_fields.${field.name} %]
                                                 <option value="[% av.authorised_value %]" selected="selected">[% av.lib %]</option>
@@ -872,10 +872,10 @@ $(document).ready(function() {
                                           </select> (Authorised values for [% field.authorised_value_category %])
                                         [% ELSE %]
                                           [% IF field.marcfield %]
-                                            <input type="text" value="[% additional_fields.${field.name} %]" name="additional_fields_[% field.name %]" readonly="readonly" />
+                                            <input type="text" value="[% additional_fields.${field.name} %]" id="additional_field_[% field.id %]" name="additional_field_[% field.id %]" readonly="readonly" />
                                             This value will be filled with the [% field.marcfield %] subfield of the selected biblio.
                                           [% ELSE %]
-                                            <input type="text" value="[% additional_fields.${field.name} %]" name="additional_fields_[% field.name %]" />
+                                            <input type="text" value="[% additional_fields.${field.name} %]" id="additional_field_[% field.id %]" name="additional_field_[% field.id %]" />
                                           [% END %]
                                         [% END %]
                                       </li>
