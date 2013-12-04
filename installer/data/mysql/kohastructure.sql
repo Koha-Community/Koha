@@ -3540,6 +3540,37 @@ CREATE TABLE discharges (
   CONSTRAINT borrower_discharges_ibfk1 FOREIGN KEY (borrower) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Table structure for table additional_fields
+-- This table add the ability to add new fields for a record
+--
+
+CREATE TABLE `additional_fields` (
+  `id` int(11) NOT NULL AUTO_INCREMENT, -- primary key identifier
+  `tablename` varchar(255) NOT NULL DEFAULT '', -- tablename of the new field
+  `name` varchar(255) NOT NULL DEFAULT '', -- name of the field
+  `authorised_value_category` varchar(16) NOT NULL DEFAULT '', -- is an authorised value category
+  `marcfield` varchar(16) NOT NULL DEFAULT '', -- contains the marc field to copied into the record
+  `searchable` tinyint(1) NOT NULL DEFAULT '0', -- is the field searchable?
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `fields_uniq` (`tablename`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Table structure for table additional_field_values
+-- This table store values for additional fields
+--
+
+CREATE TABLE `additional_field_values` (
+  `id` int(11) NOT NULL AUTO_INCREMENT, -- primary key identifier
+  `field_id` int(11) NOT NULL, -- foreign key references additional_fields(id)
+  `record_id` int(11) NOT NULL, -- record_id
+  `value` varchar(255) NOT NULL DEFAULT '', -- value for this field
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `field_record` (`field_id`,`record_id`),
+  CONSTRAINT `afv_fk` FOREIGN KEY (`field_id`) REFERENCES `additional_fields` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
