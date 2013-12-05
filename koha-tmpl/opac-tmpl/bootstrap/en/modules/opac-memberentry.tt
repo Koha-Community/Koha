@@ -68,7 +68,7 @@
                                         [% ELSE %]
                                             <label for="borrower_branchcode">
                                         [% END %]
-                                        Home Library:</label>
+                                        Home library:</label>
 
                                         <select id="borrower_branchcode" name="borrower_branchcode">
                                             [% FOREACH b IN branches %]
@@ -100,7 +100,7 @@
                                 <legend id="identity_legend">Identity</legend>
 
                                 <ol>
-                                    [% UNLESS hidden.defined('title') %]
+                                    [% UNLESS hidden.defined('title') || !member_titles %]
                                         <li>
                                             [% IF mandatory.defined('title') %]
                                                 <label for="borrower_title" class="required">
