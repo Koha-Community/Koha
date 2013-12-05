@@ -59,7 +59,7 @@ $template->param(
     action            => $action,
     hidden            => GetHiddenFields(),
     mandatory         => GetMandatoryFields($action),
-    member_titles     => GetTitles(),
+    member_titles     => GetTitles() || undef,
     branches          => GetBranchesLoop(),
     OPACPatronDetails => C4::Context->preference('OPACPatronDetails'),
 );
