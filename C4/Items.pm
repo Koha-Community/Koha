@@ -2336,6 +2336,7 @@ sub _koha_delete_item {
     my $query = "INSERT INTO deleteditems SET ";
     my @bind  = ();
     foreach my $key ( keys %$data ) {
+        next if ( $key eq 'timestamp' ); # timestamp will be set by db
         $query .= "$key = ?,";
         push( @bind, $data->{$key} );
     }
