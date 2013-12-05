@@ -8519,6 +8519,13 @@ if (CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if(CheckVersion($DBversion)) {
+    $dbh->do("ALTER TABLE categories ADD default_privacy ENUM( 'default', 'never', 'forever' ) NOT NULL DEFAULT 'default' AFTER category_type");
+    print "Upgrade to $DBversion done (Bug 6254 - can't set patron privacy by default)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

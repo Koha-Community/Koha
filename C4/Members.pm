@@ -41,6 +41,7 @@ use Koha::DateUtils;
 use Koha::Borrower::Debarments qw(IsDebarred);
 use Text::Unaccent qw( unac_string );
 use Koha::AuthUtils qw(hash_password);
+use Koha::Database;
 
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -835,6 +836,15 @@ sub AddMember {
     unless ( $data{'dateenrolled'} ) {
         $data{'dateenrolled'} = C4::Dates->new()->output("iso");
     }
+
+    my $patron_category =
+      Koha::Database->new()->schema()->resultset('Category')
+      ->find( $data{'categorycode'} );
+    $data{'privacy'} =
+        $patron_category->default_privacy() eq 'default' ? 1
+      : $patron_category->default_privacy() eq 'never'   ? 2
+      : $patron_category->default_privacy() eq 'forever' ? 0
+      :                                                    undef;
 
     # create a disabled account if no password provided
     $data{'password'} = ($data{'password'})? hash_password($data{'password'}) : '!';

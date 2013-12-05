@@ -467,6 +467,7 @@ CREATE TABLE `categories` ( -- this table shows information related to Koha patr
   `hidelostitems` tinyint(1) NOT NULL default '0', -- are lost items shown to this category (1 for yes, 0 for no)
   `category_type` varchar(1) NOT NULL default 'A', -- type of Koha patron (Adult, Child, Professional, Organizational, Statistical, Staff)
   `BlockExpiredPatronOpacActions` tinyint(1) NOT NULL default '-1', -- wheither or not a patron of this category can renew books or place holds once their card has expired. 0 means they can, 1 means they cannot, -1 means use syspref BlockExpiredPatronOpacActions
+  `default_privacy` ENUM( 'default', 'never', 'forever' ) NOT NULL DEFAULT 'default', -- Default privacy setting for this patron category
   PRIMARY KEY  (`categorycode`),
   UNIQUE KEY `categorycode` (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

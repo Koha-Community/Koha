@@ -45,6 +45,7 @@ use C4::Branch;
 use C4::Output;
 use C4::Dates;
 use C4::Form::MessagingPreferences;
+use Koha::Database;
 
 sub StringSearch  {
 	my ($searchstring,$type)=@_;
@@ -125,23 +126,28 @@ if ($op eq 'add_form') {
         };
     }
 
-	$template->param(description        => $data->{'description'},
-				enrolmentperiod         => $data->{'enrolmentperiod'},
-                         enrolmentperioddate     => $data->{'enrolmentperioddate'},
-				upperagelimit           => $data->{'upperagelimit'},
-				dateofbirthrequired     => $data->{'dateofbirthrequired'},
-                         enrolmentfee            => sprintf("%.2f",$data->{'enrolmentfee'} || 0),
-				overduenoticerequired   => $data->{'overduenoticerequired'},
-				issuelimit              => $data->{'issuelimit'},
-                         reservefee              => sprintf("%.2f",$data->{'reservefee'} || 0),
-                                hidelostitems           => $data->{'hidelostitems'},
-				category_type           => $data->{'category_type'},
-                SMSSendDriver => C4::Context->preference("SMSSendDriver"),
-                TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"),
-				"type_".$data->{'category_type'} => 1,
-                branches_loop           => \@branches_loop,
-                BlockExpiredPatronOpacActions => $data->{'BlockExpiredPatronOpacActions'},
-				);
+    $template->param(
+        description         => $data->{'description'},
+        enrolmentperiod     => $data->{'enrolmentperiod'},
+        enrolmentperioddate => $data->{'enrolmentperioddate'},
+        upperagelimit       => $data->{'upperagelimit'},
+        dateofbirthrequired => $data->{'dateofbirthrequired'},
+        enrolmentfee        => sprintf( "%.2f", $data->{'enrolmentfee'} || 0 ),
+        overduenoticerequired => $data->{'overduenoticerequired'},
+        issuelimit            => $data->{'issuelimit'},
+        reservefee            => sprintf( "%.2f", $data->{'reservefee'} || 0 ),
+        hidelostitems         => $data->{'hidelostitems'},
+        category_type         => $data->{'category_type'},
+        SMSSendDriver         => C4::Context->preference("SMSSendDriver"),
+        TalkingTechItivaPhone =>
+          C4::Context->preference("TalkingTechItivaPhoneNotification"),
+        "type_" . $data->{'category_type'} => 1,
+        branches_loop                      => \@branches_loop,
+        BlockExpiredPatronOpacActions =>
+          $data->{'BlockExpiredPatronOpacActions'},
+        default_privacy => $data->{'default_privacy'},
+    );
+
     if (C4::Context->preference('EnhancedMessagingPreferences')) {
         C4::Form::MessagingPreferences::set_form_values({ categorycode => $categorycode } , $template);
     }
@@ -169,7 +175,8 @@ if ($op eq 'add_form') {
                     hidelostitems=?,
                     overduenoticerequired=?,
                     category_type=?,
-                    BlockExpiredPatronOpacActions=?
+                    BlockExpiredPatronOpacActions=?,
+                    default_privacy=?
                 WHERE categorycode=?"
             );
             $sth->execute(
@@ -185,6 +192,7 @@ if ($op eq 'add_form') {
                     'overduenoticerequired',
                     'category_type',
                     'block_expired',
+                    'default_privacy',
                     'categorycode'
                 )
             );
@@ -219,7 +227,8 @@ if ($op eq 'add_form') {
                 hidelostitems,
                 overduenoticerequired,
                 category_type,
-                BlockExpiredPatronOpacActions
+                BlockExpiredPatronOpacActions,
+                default_privacy
             )
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
         $sth->execute(
@@ -235,7 +244,8 @@ if ($op eq 'add_form') {
                 'hidelostitems',
                 'overduenoticerequired',
                 'category_type',
-                'block_expired'
+                'block_expired',
+                'default_privacy',
             )
         );
         $sth->finish;
@@ -252,40 +262,14 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
+    my $schema = Koha::Database->new()->schema();
 	$template->param(delete_confirm => 1);
 
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select count(*) as total from borrowers where categorycode=?");
-	$sth->execute($categorycode);
-	my $total = $sth->fetchrow_hashref;
-	$sth->finish;
-	$template->param(total => $total->{'total'});
-	
-        my $sth2=$dbh->prepare("SELECT * FROM categories WHERE categorycode=?");
-	$sth2->execute($categorycode);
-	my $data=$sth2->fetchrow_hashref;
-	$sth2->finish;
-	if ($total->{'total'} >0) {
-		$template->param(totalgtzero => 1);
-	}
-
-    if ($data->{'enrolmentperioddate'} && $data->{'enrolmentperioddate'} eq '0000-00-00') {
-        $data->{'enrolmentperioddate'} = undef;
-    }
-        $template->param(       description             => $data->{'description'},
-                                enrolmentperiod         => $data->{'enrolmentperiod'},
-                                enrolmentperioddate     => $data->{'enrolmentperioddate'},
-                                upperagelimit           => $data->{'upperagelimit'},
-                                dateofbirthrequired     => $data->{'dateofbirthrequired'},
-                                enrolmentfee            =>  sprintf("%.2f",$data->{'enrolmentfee'} || 0),
-                                overduenoticerequired   => $data->{'overduenoticerequired'},
-                                issuelimit              => $data->{'issuelimit'},
-                                reservefee              =>  sprintf("%.2f",$data->{'reservefee'} || 0),
-                                hidelostitems           => $data->{'hidelostitems'},
-                                category_type           => $data->{'category_type'},
-                                BlockExpiredPatronOpacActions => $data->{'BlockExpiredPatronOpacActions'},
-                                );
-													# END $OP eq DELETE_CONFIRM
+    my $count = $schema->resultset('Borrower')->search( { categorycode => $categorycode } )->count();
+    my $category = $schema->resultset('Category')->find($categorycode);
+    $category->enrolmentperioddate( C4::Dates::format_date( $category->enrolmentperioddate() ) );
+    $template->param( category => $category, patrons_in_category => $count );
+# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
@@ -329,6 +313,7 @@ if ($op eq 'add_form') {
                         reservefee              => sprintf("%.2f",$results->[$i]{'reservefee'} || 0),
                                 hidelostitems           => $results->[$i]{'hidelostitems'},
 				category_type           => $results->[$i]{'category_type'},
+            default_privacy       => $results->[$i]{'default_privacy'},
                 "type_".$results->[$i]{'category_type'} => 1,
                 branches                => \@selected_branches,
         );

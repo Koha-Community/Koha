@@ -2,7 +2,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Patron categories &rsaquo; [% IF ( add_form ) %][% IF ( categorycode ) %]Modify category '[% categorycode |html %]'[% ELSE %]New category[% END %][% END %]
 [% IF ( add_validate ) %]Data recorded[% END %]
-[% IF ( delete_confirm ) %][% IF ( totalgtzero ) %]Cannot delete: category [% categorycode |html %] in use[% ELSE %]Confirm deletion of category '[% categorycode |html %]'[% END %][% END %]
+[% IF ( delete_confirm ) %][% IF ( patrons_in_category > 0 ) %]Cannot delete: category [% categorycode |html %] in use[% ELSE %]Confirm deletion of category '[% categorycode |html %]'[% END %][% END %]
 [% IF ( delete_confirmed ) %]Category deleted[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
@@ -99,7 +99,7 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a> &rsaquo; [% IF ( categorycode ) %]Modify category '[% categorycode |html %]'[% ELSE %]New category[% END %][% END %]
 [% IF ( add_validate ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a> &rsaquo; Data recorded[% END %]
-[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a> &rsaquo; [% IF ( totalgtzero ) %]Cannot delete: Category [% categorycode |html %] in use[% ELSE %]Confirm deletion of category '[% categorycode |html %]'[% END %][% END %]
+[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a> &rsaquo; [% IF ( patrons_in_category > 0 ) %]Cannot delete: Category [% categorycode |html %] in use[% ELSE %]Confirm deletion of category '[% categorycode |html %]'[% END %][% END %]
 [% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a> &rsaquo; Category deleted[% END %]
 [% IF ( else ) %]Patron categories[% END %]</div>
 
@@ -186,7 +186,7 @@
               [% END %]
             [% END %]
         </select>
-        <span>Select All if this category type must to be displayed all the time. Otherwise select librairies you want to associate with this value.
+        <span>Select <i>All branches</i> if this category type must to be displayed all the time. Otherwise select libraries you want to associate with this value.
         </span>
     </li>
     <li><label for="block_expired">Block expired patrons</label>
@@ -213,6 +213,26 @@
             Choose whether patrons of this category be blocked from public catalog actions such as renewing and placing holds when their cards have expired.   
         </span>
     </li>
+    <li>
+        <label for="default_privacy">Default privacy: </label>
+        <select id="default_privacy" name="default_privacy">
+            [% SWITCH default_privacy %]
+            [% CASE 'forever' %]
+                <option value="default">Default</option>
+                <option value="never">Never</option>
+                <option value="forever" selected="selected">Forever</option>
+            [% CASE 'never' %]
+                <option value="default">Default</option>
+                <option value="never" selected="selected">Never</option>
+                <option value="forever">Forever</option>
+            [% CASE %]
+                <option value="default" selected="selected">Default</option>
+                <option value="never">Never</option>
+                <option value="forever">Forever</option>
+            [% END %]
+        </select>
+        <span>Controls how long a patrons checkout history is kept for new patrons of this category. "Never" anonymizes checkouts on return, and "Forever" keeps a patron's checkout history indefinitely. When set to "Default", the amount of history kept is controlled by the cronjob <i>batch_anonymise.pl</i> which should be set up by your system administrator.</span>
+    </li>
     </ol>
 </fieldset>
 
@@ -232,16 +252,18 @@
 	<form action="[% script_name %]" method="post">
 		<input type="submit" value="OK" />
 	</form>
-
 [% END %]
 
 [% IF ( delete_confirm ) %]
-	
-    	<form action="[% script_name %]" method="post">
-	<fieldset><legend>    	
-	[% IF ( totalgtzero ) %]
-	Category [% categorycode |html %] is in use.  Deletion not possible![% ELSE %]
-Confirm deletion of category [% categorycode |html %][% END %]</legend>
+    <form action="[% script_name %]" method="post">
+        <fieldset>
+            <legend>
+                [% IF ( patrons_in_category > 0 ) %]
+                    Category [% categorycode |html %] is in use.  Deletion not possible!
+                [% ELSE %]
+                    Confirm deletion of category [% categorycode |html %]
+                [% END %]
+            </legend>
 
 [% IF ( totalgtzero ) %]<div class="dialog alert"><strong>This category is used [% total %] times</strong>. Deletion not possible</div>[% END %]
 	<table>
@@ -262,6 +284,19 @@ Confirm deletion of category [% categorycode |html %][% END %]</legend>
 	<tr><th scope="row">Receives overdue notices: </th><td>[% IF ( overduenoticerequired ) %]Yes[% ELSE %]No[% END %]</td></tr>
 	<tr><th scope="row">Lost items in staff client</th><td>[% IF ( hidelostitems ) %]Hidden by default[% ELSE %]Shown[% END %]</td></tr>
 	<tr><th scope="row">Hold fee: </th><td>[% reservefee %]</td></tr>
+                <tr>
+                    <th scope="row">Default privacy: </th>
+                    <td>
+                        [% SWITCH category.default_privacy %]
+                        [% CASE 'default' %]
+                            Default
+                        [% CASE 'never' %]
+                            Never
+                        [% CASE 'forever' %]
+                            Forever
+                        [% END %]
+                    </td>
+                </tr>
 </table>
 		<fieldset class="action">[% IF ( totalgtzero ) %]
 <input type="submit" value="OK" /></form>
@@ -309,6 +344,7 @@ Confirm deletion of category [% categorycode |html %][% END %]</legend>
             <th scope="col">Messaging</th>
             [% END %]
             <th scope="col">Branches limitations</th>
+            <th scope="col">Default privacy</th>
             <th scope="col">&nbsp; </th>
             <th scope="col">&nbsp; </th>
         </tr>
@@ -380,6 +416,16 @@ Confirm deletion of category [% categorycode |html %][% END %]</legend>
                                 </span>
                             [% ELSE %]
                                 No limitation
+                            [% END %]
+                        </td>
+                        <td>
+                            [% SWITCH loo.default_privacy %]
+                            [% CASE 'default' %]
+                                Default
+                            [% CASE 'never' %]
+                                Never
+                            [% CASE 'forever' %]
+                                Forever
                             [% END %]
                         </td>
                         <td><a href="[% loo.script_name %]?op=add_form&amp;categorycode=[% loo.categorycode |uri %]">Edit</a></td>
