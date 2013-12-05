@@ -8012,6 +8012,15 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES('MaxItemsForBatch','1000',NULL,'Max number of items record to process in a batch (modification or deletion)','Integer')
+    |);
+    print "Upgrade to $DBversion done (Bug 11343: Add system preference MaxItemsForBatch )\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

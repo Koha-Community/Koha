@@ -177,6 +177,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('MARCAuthorityControlField008','|| aca||aabn           | a|a     d',NULL,'Define the contents of MARC21 authority control field 008 position 06-39','Textarea'),
 ('MARCOrgCode','OSt','','Define MARC Organization Code for MARC21 records - http://www.loc.gov/marc/organizations/orgshome.html','free'),
 ('MaxFine',NULL,'','Maximum fine a patron can have for all late returns at one moment. Single item caps are specified in the circulation rules matrix.','Integer'),
+('MaxItemsForBatch','1000',NULL,'Max number of items record to process in a batch (modification or deletion)','Integer'),
 ('maxItemsInSearchResults','20',NULL,'Specify the maximum number of items to display for each result on a page of results','free'),
 ('maxoutstanding','5','','maximum amount withstanding to be able make holds','Integer'),
 ('maxRecordsForFacets','20',NULL,NULL,'Integer'),
