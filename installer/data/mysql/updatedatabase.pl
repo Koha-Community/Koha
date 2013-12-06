@@ -7797,7 +7797,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.15.00.004";
 if ( CheckVersion($DBversion) ) {
     if ( C4::Context->preference("marcflavour") eq 'MARC21' ) {
         $dbh->do(qq{
