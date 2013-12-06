@@ -42,10 +42,10 @@ my $short_psec="|-\n|ON\n";
 
 if ($help || !$baseurl || !$user || !$password) {
     print <<EOF
-This script runs a benchmark of the staff interface. It benchmark 6 different pages:
+This script runs a benchmark of the staff interface. It benchmarks 6 different pages:
 \t1- the staff main page
 \t2- the catalog detail page, with a random biblionumber
-\t3- the catalog search page, using a term retrieved from one of the 10 first title/author in the database
+\t3- the catalog search page, using a term retrieved from one of the 10 first titles/authors in the database
 \t4- the patron detail page, with a random borrowernumber
 \t5- the patron search page, searching for "Jean"
 \t6- the circulation itself, doing check-out and check-in of random items to random patrons
@@ -125,8 +125,8 @@ $sth->execute;
 my ($title,$author);
 my @searchwords;
 while (($title,$author)=$sth->fetchrow) {
-    push @searchwords,split / /, $author;
-    push @searchwords,split / /, $title;
+    push @searchwords,split / /, $author//'';
+    push @searchwords,split / /, $title//'';
 }
 
 $sth = $dbh->prepare("select max(itemnumber) from items");
@@ -139,7 +139,7 @@ unless ($short_print) {
     print "--------------\n";
     print "Koha STAFF benchmarking utility\n";
     print "--------------\n";
-    print "Benchmarking with $max_tries occurences of each operation and $concurrency concurrent sessions \n";
+    print "Benchmarking with $max_tries occurrences of each operation and $concurrency concurrent sessions \n";
 }
 #
 # the global benchmark we do at the end...
