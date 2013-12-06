@@ -43,4 +43,9 @@ sub GetByCode {
     return encode( 'UTF-8', GetAuthorisedValueByCode( $category, $code, $opac ) );
 }
 
+sub Get {
+    my ( $self, $category, $selected, $opac ) = @_;
+    return GetAuthorisedValues( $category, $selected, $opac );
+}
+
 1;

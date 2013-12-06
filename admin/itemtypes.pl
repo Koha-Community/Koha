@@ -121,6 +121,7 @@ if ( $op eq 'add_form' ) {
         checkinmsgtype  => $data->{'checkinmsgtype'},
         imagesets       => $imagesets,
         remote_image    => $remote_image,
+        sip_media_type  => $data->{sip_media_type},
     );
 
     # END $OP eq ADD_FORM
@@ -145,6 +146,7 @@ elsif ( $op eq 'add_validate' ) {
                  , summary = ?
                  , checkinmsg = ?
                  , checkinmsgtype = ?
+                 , sip_media_type = ?
             WHERE itemtype = ?
         ';
         $sth = $dbh->prepare($query2);
@@ -162,15 +164,16 @@ elsif ( $op eq 'add_validate' ) {
             $input->param('summary'),
             $input->param('checkinmsg'),
             $input->param('checkinmsgtype'),
+            $input->param('sip_media_type'),
             $input->param('itemtype')
         );
     }
     else {    # add a new itemtype & not modif an old
         my $query = "
             INSERT INTO itemtypes
-                (itemtype,description,rentalcharge, notforloan, imageurl, summary, checkinmsg, checkinmsgtype)
+                (itemtype,description,rentalcharge, notforloan, imageurl, summary, checkinmsg, checkinmsgtype, sip_media_type)
             VALUES
-                (?,?,?,?,?,?,?,?);
+                (?,?,?,?,?,?,?,?,?);
             ";
         my $sth = $dbh->prepare($query);
 		my $image = $input->param('image');
@@ -185,6 +188,7 @@ elsif ( $op eq 'add_validate' ) {
             $input->param('summary'),
             $input->param('checkinmsg'),
             $input->param('checkinmsgtype'),
+            $input->param('sip_media_type'),
         );
     }
 

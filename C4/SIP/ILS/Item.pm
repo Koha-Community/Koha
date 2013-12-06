@@ -21,6 +21,7 @@ use C4::Items;
 use C4::Circulation;
 use C4::Members;
 use C4::Reserves;
+use Koha::Database;
 
 our $VERSION = 3.07.00.049;
 
@@ -86,7 +87,10 @@ sub new {
     $item->{permanent_location}= $item->{homebranch};
     $item->{'collection_code'} = $item->{ccode};
     $item->{  'call_number'  } = $item->{itemcallnumber};
-    # $item->{'destination_loc'}  =  ?
+
+    my $it = C4::Context->preference('item-level_itypes') ? $item->{itype} : $item->{itemtype};
+    my $itemtype = Koha::Database->new()->schema()->resultset('Itemtype')->find( $it );
+    $item->{sip_media_type} = $itemtype->sip_media_type() if $itemtype;
 
 	# check if its on issue and if so get the borrower
 	my $issue = GetItemIssue($item->{'itemnumber'});

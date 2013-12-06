@@ -1,21 +1,17 @@
-use utf8;
 package Koha::Schema::Result::Itemtype;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
-
-=head1 NAME
-
-Koha::Schema::Result::Itemtype
-
-=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-=head1 TABLE: C<itemtypes>
+
+=head1 NAME
+
+Koha::Schema::Result::Itemtype
 
 =cut
 
@@ -70,6 +66,13 @@ __PACKAGE__->table("itemtypes");
   is_nullable: 0
   size: 16
 
+=head2 sip_media_type
+
+  data_type: 'varchar'
+  default_value: (empty string)
+  is_nullable: 0
+  size: 3
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -94,18 +97,9 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 16,
   },
+  "sip_media_type",
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 3 },
 );
-
-=head1 PRIMARY KEY
-
-=over 4
-
-=item * L</itemtype>
-
-=back
-
-=cut
-
 __PACKAGE__->set_primary_key("itemtype");
 
 =head1 RELATIONS
@@ -141,8 +135,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BmFEWUxi2Ha50Hv6nQhDKQ
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-12-09 08:22:44
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uGDyscA28BOAzCTb2gBcCg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

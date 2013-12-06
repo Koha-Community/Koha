@@ -8202,6 +8202,29 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q{
+        ALTER TABLE itemtypes ADD sip_media_type VARCHAR( 3 ) DEFAULT NULL
+    });
+    $dbh->do(q{
+        INSERT INTO authorised_values (category, authorised_value, lib) VALUES
+         ('SIP_MEDIA_TYPE', '000', 'Other'),
+         ('SIP_MEDIA_TYPE', '001', 'Book'),
+         ('SIP_MEDIA_TYPE', '002', 'Magazine'),
+         ('SIP_MEDIA_TYPE', '003', 'Bound journal'),
+         ('SIP_MEDIA_TYPE', '004', 'Audio tape'),
+         ('SIP_MEDIA_TYPE', '005', 'Video tape'),
+         ('SIP_MEDIA_TYPE', '006', 'CD/CDROM'),
+         ('SIP_MEDIA_TYPE', '007', 'Diskette'),
+         ('SIP_MEDIA_TYPE', '008', 'Book with deskette'),
+         ('SIP_MEDIA_TYPE', '009', 'Book with cd'),
+         ('SIP_MEDIA_TYPE', '010', 'Book with audio tape')
+    });
+    print "Upgrade to $DBversion done (Bug 11351 - Add support for SIP2 media type)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

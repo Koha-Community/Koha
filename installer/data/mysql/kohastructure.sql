@@ -1242,6 +1242,7 @@ CREATE TABLE `itemtypes` ( -- defines the item types
   summary text, -- information from the summary field, may include HTML
   checkinmsg VARCHAR(255), -- message that is displayed when an item with the given item type is checked in
   checkinmsgtype CHAR(16) DEFAULT 'message' NOT NULL, -- type (CSS class) for the checkinmsg, can be "alert" or "message"
+  sip_media_type VARCHAR(3) DEFAULT NULL, -- SIP2 protocol media type for this itemtype
   PRIMARY KEY  (`itemtype`),
   UNIQUE KEY `itemtype` (`itemtype`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
