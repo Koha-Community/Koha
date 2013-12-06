@@ -699,6 +699,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.008',
     },
+    'HTTPD::Bench::ApacheBench' => {
+        'usage'    => 'Load testing',
+        'required' => '0',
+        'min_ver'  => '0.73',
+    },
 };
 
 1;
