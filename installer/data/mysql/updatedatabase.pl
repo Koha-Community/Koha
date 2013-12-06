@@ -7800,25 +7800,27 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.15.00.XXX";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do(qq{
-        INSERT IGNORE INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory,
-        kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link,
-        defaultvalue) VALUES
-        ('015', 'q', 'Qualifying information', 'Qualifying information', 1, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
-        ('020', 'q', 'Qualifying information', 'Qualifying information', 1, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
-        ('024', 'q', 'Qualifying information', 'Qualifying information', 1, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
-        ('027', 'q', 'Qualifying information', 'Qualifying information', 1, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
-        ('800', '7', 'Control subfield', 'Control subfield', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
-        ('810', '7', 'Control subfield', 'Control subfield', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
-        ('811', '7', 'Control subfield', 'Control subfield', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
-        ('830', '7', 'Control subfield', 'Control subfield', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL);
-    });
-    $dbh->do(qq{
-        INSERT IGNORE INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable,
-        mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid, kohafield, frameworkcode) VALUES
-        ('', '020', 'q', 'Qualifying information', 'Qualifying information', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-        ('', '024', 'q', 'Qualifying information', 'Qualifying information', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', '');
-    });
+    if ( C4::Context->preference("marcflavour") eq 'MARC21' ) {
+        $dbh->do(qq{
+            INSERT IGNORE INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory,
+            kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link,
+            defaultvalue) VALUES
+            ('015', 'q', 'Qualifying information', 'Qualifying information', 1, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
+            ('020', 'q', 'Qualifying information', 'Qualifying information', 1, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
+            ('024', 'q', 'Qualifying information', 'Qualifying information', 1, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
+            ('027', 'q', 'Qualifying information', 'Qualifying information', 1, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
+            ('800', '7', 'Control subfield', 'Control subfield', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
+            ('810', '7', 'Control subfield', 'Control subfield', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
+            ('811', '7', 'Control subfield', 'Control subfield', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
+            ('830', '7', 'Control subfield', 'Control subfield', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL);
+        });
+        $dbh->do(qq{
+            INSERT IGNORE INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable,
+            mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid, kohafield, frameworkcode) VALUES
+            ('', '020', 'q', 'Qualifying information', 'Qualifying information', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+            ('', '024', 'q', 'Qualifying information', 'Qualifying information', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', '');
+        });
+    }
     print "Upgrade to $DBversion done (Bug 10970 - Update MARC21 frameworks to Update Nr. 17 - DB update)\n";
     SetVersion($DBversion);
 }
