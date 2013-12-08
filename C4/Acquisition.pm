@@ -474,7 +474,7 @@ sub DelBasket {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
     $sth->execute($basketno);
-    $sth->finish;
+    return;
 }
 
 #------------------------------------------------------------#
@@ -515,7 +515,7 @@ sub ModBasket {
     my $sth = $dbh->prepare($query);
     $sth->execute(@params);
 
-    $sth->finish;
+    return;
 }
 
 #------------------------------------------------------------#
@@ -564,9 +564,8 @@ sub ModBasketHeader {
         my $query2 ="UPDATE aqbasket SET contractnumber=? WHERE basketno=?";
         my $sth2 = $dbh->prepare($query2);
         $sth2->execute($contractnumber,$basketno);
-        $sth2->finish;
     }
-    $sth->finish;
+    return;
 }
 
 #------------------------------------------------------------#
@@ -609,9 +608,7 @@ sub GetBasketsByBookseller {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
     $sth->execute($booksellerid);
-    my $results = $sth->fetchall_arrayref({});
-    $sth->finish;
-    return $results
+    return $sth->fetchall_arrayref({});
 }
 
 =head3 GetBasketsInfosByBookseller
@@ -680,7 +677,6 @@ sub GetBasketUsers {
     my $sth = $dbh->prepare($query);
     $sth->execute($basketno);
     my $results = $sth->fetchall_arrayref( {} );
-    $sth->finish();
 
     my @borrowernumbers;
     foreach (@$results) {
@@ -712,7 +708,6 @@ sub ModBasketUsers {
     };
     my $sth = $dbh->prepare($query);
     $sth->execute($basketno);
-    $sth->finish();
 
     $query = qq{
         INSERT INTO aqbasketusers (basketno, borrowernumber)
@@ -722,6 +717,7 @@ sub ModBasketUsers {
     foreach my $basketuser_id (@basketusers_ids) {
         $sth->execute($basketno, $basketuser_id);
     }
+    return;
 }
 
 =head3 CanUserManageBasket
@@ -822,9 +818,7 @@ sub GetBasketsByBasketgroup {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
     $sth->execute($basketgroupid);
-    my $results = $sth->fetchall_arrayref({});
-    $sth->finish;
-    return $results
+    return $sth->fetchall_arrayref({});
 }
 
 #------------------------------------------------------------#
@@ -936,10 +930,9 @@ sub ModBasketgroup {
         $sth = $dbh->prepare("UPDATE aqbasket SET basketgroupid=? WHERE basketno=?");
         foreach my $basketno (@{$basketgroupinfo->{'basketlist'}}) {
             $sth->execute($basketgroupinfo->{'id'}, $basketno);
-            $sth->finish;
         }
     }
-    $sth->finish;
+    return;
 }
 
 #------------------------------------------------------------#
@@ -965,7 +958,7 @@ sub DelBasketgroup {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
     $sth->execute($basketgroupid);
-    $sth->finish;
+    return;
 }
 
 #------------------------------------------------------------#
@@ -984,13 +977,13 @@ Returns a reference to the hash containing all infermation about the basketgroup
 sub GetBasketgroup {
     my $basketgroupid = shift;
     die "basketgroup id is required to edit a basketgroup" unless $basketgroupid;
-    my $query = "SELECT * FROM aqbasketgroups WHERE id=?";
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($basketgroupid);
-    my $result = $sth->fetchrow_hashref;
-    $sth->finish;
-    return $result
+    my $result_set = $dbh->selectall_arrayref(
+        'SELECT * FROM aqbasketgroups WHERE id=?',
+        { Slice => {} },
+        $basketgroupid
+    );
+    return $result_set->[0];    # id is unique
 }
 
 #------------------------------------------------------------#
@@ -1053,11 +1046,10 @@ sub GetOrders {
 
     $orderby = "biblioitems.publishercode,biblio.title" unless $orderby;
     $query .= " ORDER BY $orderby";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($basketno);
-    my $results = $sth->fetchall_arrayref({});
-    $sth->finish;
-    return @$results;
+    my $result_set =
+      $dbh->selectall_arrayref( $query, { Slice => {} }, $basketno );
+    return @{$result_set};
+
 }
 
 #------------------------------------------------------------#
@@ -1088,11 +1080,10 @@ sub GetOrdersByBiblionumber {
             LEFT JOIN biblioitems      ON biblioitems.biblionumber =biblio.biblionumber
         WHERE   aqorders.biblionumber=?
     ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($biblionumber);
-    my $results = $sth->fetchall_arrayref({});
-    $sth->finish;
-    return @$results;
+    my $result_set =
+      $dbh->selectall_arrayref( $query, { Slice => {} }, $biblionumber );
+    return @{$result_set};
+
 }
 
 #------------------------------------------------------------#
@@ -1144,12 +1135,11 @@ sub GetOrder {
                 LEFT JOIN aqbooksellers       ON aqbasket.booksellerid = aqbooksellers.id
                 WHERE aqorders.basketno = aqbasket.basketno
                     AND ordernumber=?};
-    my $sth= $dbh->prepare($query);
-    $sth->execute($ordernumber);
-    my $data = $sth->fetchrow_hashref;
-    $data->{orderdate} = format_date( $data->{orderdate} );
-    $sth->finish;
-    return $data;
+    my $result_set =
+      $dbh->selectall_arrayref( $query, { Slice => {} }, $ordernumber );
+
+    # result_set assumed to contain 1 match
+    return $result_set->[0];
 }
 
 =head3 GetLastOrderNotReceivedFromSubscriptionid
@@ -1171,10 +1161,11 @@ sub GetLastOrderNotReceivedFromSubscriptionid {
             AND aqorders.datereceived IS NULL
         LIMIT 1
     |;
-    my $sth = $dbh->prepare( $query );
-    $sth->execute( $subscriptionid );
-    my $order = $sth->fetchrow_hashref;
-    return $order;
+    my $result_set =
+      $dbh->selectall_arrayref( $query, { Slice => {} }, $subscriptionid );
+
+    # result_set assumed to contain 1 match
+    return $result_set->[0];
 }
 
 =head3 GetLastOrderReceivedFromSubscriptionid
@@ -1205,10 +1196,11 @@ sub GetLastOrderReceivedFromSubscriptionid {
         ORDER BY ordernumber DESC
         LIMIT 1
     |;
-    my $sth = $dbh->prepare( $query );
-    $sth->execute( $subscriptionid, $subscriptionid );
-    my $order = $sth->fetchrow_hashref;
-    return $order;
+    my $result_set =
+      $dbh->selectall_arrayref( $query, { Slice => {} }, $subscriptionid );
+
+    # result_set assumed to contain 1 match
+    return $result_set->[0];
 
 }
 
@@ -1345,11 +1337,10 @@ sub ModOrder {
     }
 
     $query .= "timestamp=NOW()  WHERE  ordernumber=?";
-#   push(@params, $specorderinfo{'ordernumber'});
     push(@params, $orderinfo->{'ordernumber'} );
     $sth = $dbh->prepare($query);
     $sth->execute(@params);
-    $sth->finish;
+    return;
 }
 
 #------------------------------------------------------------#
@@ -1458,13 +1449,13 @@ sub ModReceiveOrder {
                         );
     }
 
-    my $sth=$dbh->prepare("
-        SELECT * FROM   aqorders
-        WHERE           biblionumber=? AND aqorders.ordernumber=?");
+    my $result_set = $dbh->selectall_arrayref(
+q{SELECT * FROM aqorders WHERE biblionumber=? AND aqorders.ordernumber=?},
+        { Slice => {} }, $biblionumber, $ordernumber
+    );
 
-    $sth->execute($biblionumber,$ordernumber);
-    my $order = $sth->fetchrow_hashref();
-    $sth->finish();
+    # we assume we have a unique order
+    my $order = $result_set->[0];
 
     my $new_ordernumber = $ordernumber;
     if ( $order->{quantity} > $quantrec ) {
@@ -1472,7 +1463,7 @@ sub ModReceiveOrder {
         # without received items (the quantity is decreased),
         # the second part is a new order line with quantity=quantityrec
         # (entirely received)
-        $sth=$dbh->prepare("
+        my $sth=$dbh->prepare("
             UPDATE aqorders
             SET quantity = ?,
                 orderstatus = 'partial'
@@ -1480,8 +1471,6 @@ sub ModReceiveOrder {
         ");
 
         $sth->execute($order->{quantity} - $quantrec, $ordernumber);
-
-        $sth->finish;
 
         delete $order->{'ordernumber'};
         $order->{'budget_id'} = ( $budget_id || $order->{'budget_id'} );
@@ -1502,12 +1491,11 @@ sub ModReceiveOrder {
             }
         }
     } else {
-        $sth=$dbh->prepare("update aqorders
+        my $sth=$dbh->prepare("update aqorders
                             set quantityreceived=?,datereceived=?,invoiceid=?,
                                 unitprice=?,rrp=?,ecost=?,budget_id=?,orderstatus='complete'
                             where biblionumber=? and ordernumber=?");
         $sth->execute($quantrec,$datereceived,$invoiceid,$cost,$rrp,$ecost,$budget_id,$biblionumber,$ordernumber);
-        $sth->finish;
     }
     return ($datereceived, $new_ordernumber);
 }
@@ -1770,12 +1758,11 @@ sub DelOrder {
     ";
     my $sth = $dbh->prepare($query);
     $sth->execute( $bibnum, $ordernumber );
-    $sth->finish;
     my @itemnumbers = GetItemnumbersFromOrder( $ordernumber );
     foreach my $itemnumber (@itemnumbers){
-    	C4::Items::DelItem( $dbh, $bibnum, $itemnumber );
+        C4::Items::DelItem( $dbh, $bibnum, $itemnumber );
     }
-    
+    return;
 }
 
 =head3 TransferOrder
@@ -1901,16 +1888,12 @@ sub GetParcel {
         }
     }
     $strsth .= " ORDER BY aqbasket.basketno";
-    # ## parcelinformation : $strsth
-    my $sth = $dbh->prepare($strsth);
-    $sth->execute( @query_params );
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-    # ## countparcelbiblio: scalar(@results)
-    $sth->finish;
+    my $result_set = $dbh->selectall_arrayref(
+        $strsth,
+        { Slice => {} },
+        @query_params);
 
-    return @results;
+    return @{$result_set};
 }
 
 #------------------------------------------------------------#
@@ -1998,8 +1981,7 @@ sub GetParcels {
 
     $sth->execute( @query_params );
     my $results = $sth->fetchall_arrayref({});
-    $sth->finish;
-    return @$results;
+    return @{$results};
 }
 
 #------------------------------------------------------------#
@@ -2387,14 +2369,9 @@ sub GetContracts {
             WHERE booksellerid=?
                 AND contractenddate >= CURDATE( )";
     }
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $booksellerid );
-    my @results;
-    while (my $data = $sth->fetchrow_hashref ) {
-        push(@results, $data);
-    }
-    $sth->finish;
-    return @results;
+    my $result_set =
+      $dbh->selectall_arrayref( $query, { Slice => {} }, $booksellerid );
+    return @{$result_set};
 }
 
 #------------------------------------------------------------#
