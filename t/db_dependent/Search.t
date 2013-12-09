@@ -12,7 +12,7 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 224;
+use Test::More tests => 232;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;
@@ -40,6 +40,12 @@ sub index_sample_records_and_launch_zebra {
         system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn  -g iso2709 -d biblios init");
         system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn   -g iso2709 -d biblios update $sourcedir/${marc_type}/zebraexport/biblio");
         system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn  -g iso2709 -d biblios commit");
+    }
+    # ... and add large bib records, if present
+    if (-f "$sourcedir/${marc_type}/zebraexport/large_biblio_${indexing_mode}/exported_records.xml") {
+        my $zebra_bib_cfg = ($indexing_mode eq 'dom') ? 'zebra-biblios-dom.cfg' : 'zebra-biblios.cfg';
+        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn   -g marcxml -d biblios update $sourcedir/${marc_type}/zebraexport/large_biblio_${indexing_mode}");
+        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn  -g marcxml -d biblios commit");
     }
     if (-f "$sourcedir/${marc_type}/zebraexport/authority/exported_records") {
         my $zebra_auth_cfg = ($indexing_mode eq 'dom') ? 'zebra-authorities-dom.cfg' : 'zebra-authorities.cfg';
@@ -227,7 +233,11 @@ sub run_marc21_search_tests {
                 '020' => {
                     'sfs' => { 'a' => [ [ 'biblioitems', 'isbn' ] ] },
                     'list' => [ [ 'a', 'biblioitems', 'isbn' ] ]
-                }
+                },
+                '500' => {
+                    'sfs' => { 'a' => [ [ 'biblioitems', 'notes' ] ] },
+                    'list' => [ [ 'a', 'biblioitems', 'notes' ] ]
+                },
             }
         );
         return \%hash;
@@ -499,7 +509,7 @@ sub run_marc21_search_tests {
     $stopwords_removed, $query_type ) = buildQuery([], [ 'pqf=@attr 1=_ALLRECORDS @attr 2=103 ""' ], [], [], [], 0, 'en');
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
-    is($results_hashref->{biblioserver}->{hits}, 179, "getRecords on _ALLRECORDS PQF returned all records");
+    is($results_hashref->{biblioserver}->{hits}, 180, "getRecords on _ALLRECORDS PQF returned all records");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
@@ -775,6 +785,15 @@ sub run_marc21_search_tests {
     );
     is($count, 1, 'MARC21 authorities: one hit on match contains "沙士北亞威廉姆" (QP)');
 
+    # retrieve records that are larger than the MARC limit of 99,999 octets
+    ( undef, $results_hashref, $facets_loop ) =
+        getRecords('ti:marc the large record', '', [], [ 'biblioserver' ], '20', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+    is($results_hashref->{biblioserver}->{hits}, 1, "can do a search that retrieves an over-large bib record (bug 11096)");
+    @newresults = searchResults('opac', $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 10, 0, 0,
+        $results_hashref->{'biblioserver'}->{"RECORDS"});
+    is($newresults[0]->{title}, 'Marc the Large Record', 'able to render over-large bib record (bug 11096)');
+    is($newresults[0]->{biblionumber}, '300', 'able to render over-large bib record (bug 11096)');
+    like($newresults[0]->{notes}, qr/This is large note #550/, 'able to render over-large bib record (bug 11096)');
 
     cleanup();
 }
