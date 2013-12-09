@@ -796,6 +796,7 @@ sub GetOverduesForBranch {
     my $dbh = C4::Context->dbh;
     my $select = "
     SELECT
+            borrowers.cardnumber,
             borrowers.borrowernumber,
             borrowers.surname,
             borrowers.firstname,

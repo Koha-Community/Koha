@@ -48,7 +48,9 @@
                             <br />Barcode : [% overduesloo.barcode %]
                     </td>
                     <td>
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overduesloo.borrowernumber %]">[% overduesloo.borrowersurname %], [% overduesloo.borrowerfirstname %]</a><br />[% overduesloo.borrowerphone %]<br />
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overduesloo.borrowernumber %]">[% overduesloo.borrowersurname %], [% overduesloo.borrowerfirstname %]</a>
+                        <br />[% overduesloo.cardnumber %]
+                        <br />[% overduesloo.borrowerphone %]<br />
                     [% IF ( overduesloo.borroweremail ) %]<a href="mailto:[% overduesloo.borroweremail %]?subject=Overdue: [% overduesloo.title |html %]">
                     [% overduesloo.borroweremail %]</a>[% END %]
                     </td>
@@ -126,7 +128,9 @@
                             </p>
                         </td>
                         <td>
-                            <p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% todayoverduesloo.borrowernumber %]">[% todayoverduesloo.borrowersurname %] &nbsp; [% todayoverduesloo.borrowerfirstname %]</a><br />[% todayoverduesloo.borrowerphone %]<br />
+                            <p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% todayoverduesloo.borrowernumber %]">[% todayoverduesloo.borrowersurname %] &nbsp; [% todayoverduesloo.borrowerfirstname %]</a>
+                            <br />[% todayoverduesloo.cardnumber %]<br />
+                            <br />[% todayoverduesloo.borrowerphone %]<br />
                         [% IF ( todayoverduesloo.borroweremail ) %]<a href="mailto:[% todayoverduesloo.borroweremail %]?subject=Overdue: [% todayoverduesloo.title |html %]">
                         [% todayoverduesloo.borroweremail %]</a>[% END %]
                             </p>
