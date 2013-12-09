@@ -7937,6 +7937,13 @@ if (CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if (CheckVersion($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences ( variable, value, options, explanation, type ) VALUES
+        ('OpacSuggestionManagedBy',1,'','Show the name of the staff member who managed a suggestion in OPAC','YesNo');");
+    print "Upgrade to $DBversion done (Bug 10907: Add OpacSuggestionManagedBy system preference)\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 

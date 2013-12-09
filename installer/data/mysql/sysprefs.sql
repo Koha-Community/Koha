@@ -272,6 +272,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OPACShowUnusedAuthorities','1','','Show authorities that are not being used in the OPAC.','YesNo'),
 ('opacsmallimage','','','Enter a complete URL to an image to replace the default Koha logo','free'),
 ('OpacStarRatings','all','disable|all|details',NULL,'Choice'),
+('OpacSuggestionManagedBy',1,'','Show the name of the staff member who managed a suggestion in OPAC','YesNo'),
 ('OpacSuppression','0','','Turn ON the OPAC Suppression feature, requires further setup, ask your system administrator for details','YesNo'),
 ('OpacSuppressionByIPRange','','','Restrict the suppression to IP adresses outside of the IP range','free'),
 ('opacthemes','bootstrap','','Define the current theme for the OPAC interface.','Themes'),

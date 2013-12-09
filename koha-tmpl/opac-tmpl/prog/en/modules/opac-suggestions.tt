@@ -177,7 +177,7 @@
             <th>Summary</th>
             <th>Note</th>
             [% IF ( OPACViewOthersSuggestions ) %]<th>Suggested for</th>[% END %]
-            <th>Managed by</th>
+            [% IF Koha.Preference( 'OpacSuggestionManagedBy' ) == 1 %]<th>Managed by</th>[% END %]
             <th>Status</th>
         </tr></thead>
         <tbody>[% FOREACH suggestions_loo IN suggestions_loop %]
@@ -203,9 +203,11 @@
                 [% IF ( OPACViewOthersSuggestions ) %]<td>
                     [% IF ( suggestions_loo.branchcodesuggestedby ) %][% suggestions_loo.branchcodesuggestedby %][% ELSE %]&nbsp;[% END %]
                 </td>[% END %]
+                [% IF Koha.Preference( 'OpacSuggestionManagedBy' ) == 1 %]
                 <td>
 					[% IF ( suggestions_loo.surnamemanagedby ) %][% suggestions_loo.surnamemanagedby %][% IF ( suggestions_loo.firstnamemanagedby ) %],[% END %] [% suggestions_loo.firstnamemanagedby %][% ELSE %]&nbsp;[% END %]
                 </td>
+                [% END %]
                 <td>
                     [% IF    ( suggestions_loo.ASKED ) %]Requested
                     [% ELSIF ( suggestions_loo.CHECKED ) %]Checked by the library
