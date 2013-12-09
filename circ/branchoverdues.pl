@@ -129,6 +129,7 @@ foreach my $num (@getoverdues) {
     $overdueforbranch{'itemcallnumber'}    = $num->{'itemcallnumber'};
     $overdueforbranch{'borrowernumber'}    = $num->{'borrowernumber'};
     $overdueforbranch{'itemnumber'}        = $num->{'itemnumber'};
+    $overdueforbranch{'cardnumber'}        = $num->{'cardnumber'};
 
     # now we add on the template, the differents values of notify_level
     # FIXME: numerical comparison, not string eq.
