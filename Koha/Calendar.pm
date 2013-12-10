@@ -54,6 +54,11 @@ sub _init {
 }
 
 
+# FIXME: use of package-level variables for caching the holiday
+# lists breaks persistance engines.  As of 2013-12-10, the RM
+# is allowing this with the expectation that prior to release of
+# 3.16, bug 8089 will be fixed and we can switch the caching over
+# to Koha::Cache.
 our ( $exception_holidays, $single_holidays );
 sub exception_holidays {
     my ( $self ) = @_;
