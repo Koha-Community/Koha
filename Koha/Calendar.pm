@@ -341,6 +341,7 @@ sub add_holiday {
     push @dt, $new_dt;
     $self->{single_holidays} =
       DateTime::Set->from_datetimes( dates => \@dt );
+    $single_holidays = $self->{single_holidays};
 
     return;
 }
