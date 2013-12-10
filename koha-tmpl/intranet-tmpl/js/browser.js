@@ -5,7 +5,10 @@ KOHA.browser = function (searchid, biblionumber) {
     this.searchid = searchid;
 
     if (me.searchid) {
-        me.searchCookie = JSON.parse($.cookie(searchid));
+        var cookie = $.cookie(searchid)
+        if (cookie) {
+            me.searchCookie = JSON.parse(cookie);
+        }
     }
 
     var browseRecords = function (searchid, movement) {
