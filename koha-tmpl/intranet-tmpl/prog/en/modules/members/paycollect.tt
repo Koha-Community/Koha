@@ -99,9 +99,16 @@
 <ol>
 
     <li>
-        <label for="paid">Collect from patron: </label>
-            <!-- default to paying all -->
-        <input name="paid" id="paid" value="[% amountoutstanding | html %]"  type="text" />
+        <label for="paid">Amount paid: </label>
+        <input name="paid" id="paid" value="[% amountoutstanding | $Price %]"/>
+    </li>
+    <li>
+        <label for="collected">Collect from patron: </label>
+        <input id="collected" value="[% amountoutstanding | $Price %]"/>
+    </li>
+    <li>
+        <label>Change to give: </label>
+        <span id="change">0.00</span>
     </li>
     [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
     [% IF payment_types %]
@@ -192,13 +199,20 @@
             <span class="debit">[% total | format('%.2f') %]</span>
         </li>
     <li>
+        <label for="paid">Amount paid :</label>
+        <input name="paid" id="paid" value="[% total | $Price %]"/>
+    </li>
+    <li>
         [% IF type == 'writeoff' %]
-            <label for="paid">Writeoff amount: </label>
+            <label for="collected">Writeoff amount: </label>
         [% ELSE %]
-            <label for="paid">Collect from patron: </label>
+            <label for="collected">Collect from patron: </label>
         [% END %]
-        <!-- default to paying all -->
-        <input name="paid" id="paid" value="[% total | format('%.2f') %]" type="text" />
+        <input id="collected" value="[% total | $Price %]"/>
+    </li>
+    <li>
+        <label>Change to give: </label>
+        <span id="change">0.00</span>
     </li>
     [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
     [% IF payment_types %]
@@ -236,14 +250,54 @@
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
      </div> <!-- /.row -->
 
+<!-- Modal -->
+<a class="hidden" href="#confirm_change_form" data-toggle="modal"></a>
+<div id="confirm_change_form" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Amount collected higher than paid</h3>
+            </div>
+            <div class="modal-body">
+                <p>The amount collected from the patron is higher than the amount paid.</p>
+                <p>The change to give is <b><span id="modal_change">0.00</span></b>.</p>
+                <p>Do you still confirm the payment?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default approve" id="modal_submit" type="button"><i class="fa fa-check"></i> Yes</button>
+                <button class="btn btn-default deny cancel" href="#" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
         $(document).ready(function() {
+            var forms = $('#payindivfine, #payfine');
+            var change = $('#change')[0];
+
             $('#payindivfine, #payfine').preventDoubleFormSubmit();
-            $("#paid").on("change",function(){
+            $("#paid, #collected").on("change",function() {
                 moneyFormat( this );
+                if (change != undefined) {
+                    updateChangeValues();
+                }
+            });
+
+            if (change != undefined) {
+                forms.bind('submit', function(e) {
+                    if (change.innerHTML > 0.00) {
+                        e.preventDefault();
+                        $('a[href="#confirm_change_form"]').click();
+                    }
+                });
+            }
+
+            $('#modal_submit').click(function() {
+                forms[0].submit();
             });
         });
 
@@ -312,6 +366,20 @@
             }
 
             textObj.value = dolAmount + "." + decAmount;
+        }
+
+        function updateChangeValues() {
+            var change = $('#change')[0];
+            change.innerHTML = Math.round(($('#collected')[0].value - $('#paid')[0].value) * 100) / 100;
+            if (change.innerHTML <= 0) {
+                change.innerHTML = "0.00";
+            } else {
+                change.value = change.innerHTML;
+                moneyFormat(change);
+                change.innerHTML = change.value;
+            }
+
+            $('#modal_change').html(change.innerHTML);
         }
     </script>
 [% END %]
