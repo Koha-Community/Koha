@@ -48,7 +48,7 @@
 <h1>Circulation history</h1>
 
 [% IF is_anonymous %]
-    <div class="dialog alert">This is the anonymous patron.</div>
+    <div class="dialog alert">This is the anonymous patron, so no circulation history is displayed. To get a list of anonymized loans, please run a report.</div>
 [% ELSIF ( !loop_reading ) %]
     <div class="dialog message">This patron has no circulation history.</div>
 [% ELSE %]
