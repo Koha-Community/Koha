@@ -5,7 +5,7 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 8;
+use Test::More tests => 10;
 
 BEGIN { use_ok('Koha::Calendar'); }
 BEGIN { use_ok('C4::Calendar'); }
@@ -43,3 +43,13 @@ is( $koha_calendar->is_holiday($sunday),    1, 'Sunday is a closed day' );
 is( $koha_calendar->is_holiday($monday),    0, 'Monday is not a closed day' );
 is( $koha_calendar->is_holiday($christmas), 1, 'Christmas is a closed day' );
 is( $koha_calendar->is_holiday($newyear), 1, 'New Years day is a closed day' );
+
+my $custom_holiday = DateTime->new(
+    year  => 2013,
+    month => 11,
+    day   => 12,
+);
+is( $koha_calendar->is_holiday($custom_holiday), 0, '2013-11-10 does not start off as a holiday' );
+$koha_calendar->add_holiday($custom_holiday);
+is( $koha_calendar->is_holiday($custom_holiday), 1, 'able to add holiday for testing' );
+
