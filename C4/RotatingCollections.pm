@@ -326,7 +326,7 @@ sub AddItemToCollection {
   my $dbh = C4::Context->dbh;
 
   my $sth;
-  $sth = $dbh->prepare("INSERT INTO collections_tracking ( ctId, colId, itemnumber ) 
+  $sth = $dbh->prepare("INSERT INTO collections_tracking ( collections_tracking_id, colId, itemnumber )
                         VALUES ( NULL, ?, ? )");
   $sth->execute( $colId, $itemnumber ) or return ( 0, 3, $sth->errstr() );
 

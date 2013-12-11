@@ -487,10 +487,10 @@ CREATE TABLE collections (
 --
 DROP TABLE IF EXISTS collections_tracking;
 CREATE TABLE collections_tracking (
-  ctId integer(11) NOT NULL auto_increment,
+  collections_tracking_id integer(11) NOT NULL auto_increment,
   colId integer(11) NOT NULL DEFAULT 0 comment 'collections.colId',
   itemnumber integer(11) NOT NULL DEFAULT 0 comment 'items.itemnumber',
-  PRIMARY KEY (ctId)
+  PRIMARY KEY (collections_tracking_id)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8;
 
 --
