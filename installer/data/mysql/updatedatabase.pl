@@ -7825,6 +7825,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        ALTER TABLE collections_tracking CHANGE ctId collections_tracking_id integer(11) NOT NULL auto_increment;
+    });
+    print "Upgrade to $DBversion done (Bug 11384) - change name of collections_tracker.ctId column)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
