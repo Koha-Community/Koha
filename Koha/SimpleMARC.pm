@@ -73,11 +73,19 @@ at your option, any later version of Perl 5 you may have available.
 =cut
 
 sub copy_field {
-  my ( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n, $dont_erase ) = @_;
+  my ( $params ) = @_;
+  my $record = $params->{record};
+  my $fromFieldName = $params->{from_field};
+  my $fromSubfieldName = $params->{from_subfield};
+  my $toFieldName = $params->{to_field};
+  my $toSubfieldName = $params->{to_subfield};
+  my $regex = $params->{regex};
+  my $n = $params->{n};
+  my $dont_erase = $params->{dont_erase};
 
   if ( ! ( $record && $fromFieldName && $toFieldName ) ) { return; }
 
-  my @values = read_field( $record, $fromFieldName, $fromSubfieldName );
+  my @values = read_field({ record => $record, field => $fromFieldName, subfield => $fromSubfieldName });
   @values = ( $values[$n-1] ) if ( $n );
 
   if ( $regex and $regex->{search} ) {
@@ -103,7 +111,7 @@ sub copy_field {
         }
     }
   }
-  update_field( $record, $toFieldName, $toSubfieldName, $dont_erase, @values );
+  update_field({ record => $record, field => $toFieldName, subfield => $toSubfieldName, dont_erase => $dont_erase, values => \@values });
 }
 
 =head2 update_field
@@ -121,7 +129,12 @@ sub copy_field {
 =cut
 
 sub update_field {
-  my ( $record, $fieldName, $subfieldName, $dont_erase, @values ) = @_;
+  my ( $params ) = @_;
+  my $record = $params->{record};
+  my $fieldName = $params->{field};
+  my $subfieldName = $params->{subfield};
+  my $dont_erase = $params->{dont_erase};
+  my @values = @{ $params->{values} };
 
   if ( ! ( $record && $fieldName ) ) { return; }
 
@@ -179,7 +192,11 @@ sub update_field {
 =cut
 
 sub read_field {
-  my ( $record, $fieldName, $subfieldName, $n ) = @_;
+  my ( $params ) = @_;
+  my $record = $params->{record};
+  my $fieldName = $params->{field};
+  my $subfieldName = $params->{subfield};
+  my $n = $params->{n};
 
   my @fields = $record->field( $fieldName );
 
@@ -207,7 +224,10 @@ sub read_field {
 =cut
 
 sub field_exists {
-  my ( $record, $fieldName, $subfieldName ) = @_;
+  my ( $params ) = @_;
+  my $record = $params->{record};
+  my $fieldName = $params->{field};
+  my $subfieldName = $params->{subfield};
 
   if ( ! $record ) { return; }
 
@@ -236,12 +256,18 @@ sub field_exists {
 =cut
 
 sub field_equals {
-  my ( $record, $value, $fieldName, $subfieldName, $regex, $n ) = @_;
+  my ( $params ) = @_;
+  my $record = $params->{record};
+  my $value = $params->{value};
+  my $fieldName = $params->{field};
+  my $subfieldName = $params->{subfield};
+  my $regex = $params->{regex};
+  my $n = $params->{n};
   $n = 1 unless ( $n ); ## $n defaults to first field of a repeatable field series
 
   if ( ! $record ) { return; }
 
-  my @field_values = read_field( $record, $fieldName, $subfieldName, $n );
+  my @field_values = read_field({ record => $record, field => $fieldName, subfield => $subfieldName, n => $n });
   my $field_value = $field_values[$n-1];
 
   if ( $regex ) {
@@ -265,9 +291,17 @@ sub field_equals {
 =cut
 
 sub move_field {
-  my ( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n ) = @_;
-  copy_field( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n , 'dont_erase' );
-  delete_field( $record, $fromFieldName, $fromSubfieldName, $n );
+  my ( $params ) = @_;
+  my $record = $params->{record};
+  my $fromFieldName = $params->{from_field};
+  my $fromSubfieldName = $params->{from_subfield};
+  my $toFieldName = $params->{to_field};
+  my $toSubfieldName = $params->{to_subfield};
+  my $regex = $params->{regex};
+  my $n = $params->{n};
+
+  copy_field({ record => $record, from_field => $fromFieldName, from_subfield => $fromSubfieldName, to_field => $toFieldName, to_subfield => $toSubfieldName, regex => $regex, n => $n , dont_erase => 1 });
+  delete_field({ record => $record, field => $fromFieldName, subfield => $fromSubfieldName, n => $n });
 }
 
 =head2 delete_field
@@ -282,7 +316,11 @@ sub move_field {
 =cut
 
 sub delete_field {
-  my ( $record, $fieldName, $subfieldName, $n ) = @_;
+  my ( $params ) = @_;
+  my $record = $params->{record};
+  my $fieldName = $params->{field};
+  my $subfieldName = $params->{subfield};
+  my $n = $params->{n};
 
   my @fields = $record->field( $fieldName );
 
