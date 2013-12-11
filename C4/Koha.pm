@@ -29,6 +29,7 @@ use Koha::DateUtils qw(dt_from_string);
 use Memoize;
 use DateTime::Format::MySQL;
 use autouse 'Data::Dumper' => qw(Dumper);
+use DBI qw(:sql_types);
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK $DEBUG);
 
@@ -1455,11 +1456,14 @@ sub GetDailyQuote {
         my $range = ($sth->fetchrow_array)[0];
         if ($range > 1) {
             # chose a random id within that range if there is more than one quote
-            my $id = int(rand($range));
+            my $offset = int(rand($range));
             # grab it
-            $query = 'SELECT * FROM quotes WHERE id = ?;';
+            $query = 'SELECT * FROM quotes ORDER BY id LIMIT 1 OFFSET ?';
             $sth = C4::Context->dbh->prepare($query);
-            $sth->execute($id);
+            # see http://www.perlmonks.org/?node_id=837422 for why
+            # we're being verbose and using bind_param
+            $sth->bind_param(1, $offset, SQL_INTEGER);
+            $sth->execute();
         }
         else {
             $query = 'SELECT * FROM quotes;';
