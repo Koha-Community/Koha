@@ -675,8 +675,15 @@ for (my $i=0;$i<@servers;$i++) {
 } #/end of the for loop
 #$template->param(FEDERATED_RESULTS => \@results_array);
 
-$template->{'VARS'}->{'searchid'} = $cgi->param('searchid')
-  || String::Random::random_string('ssssssss');
+if ($cgi->param('searchid')) {
+       $template->{'VARS'}->{'searchid'} = $cgi->param('searchid');
+}
+else {
+  my $dt = DateTime->now(time_zone  => 'local');
+ #We are generating a clean numeric datetime representation so we can easily compare them using the default javascript lexigraphic sorter.
+      $template->{'VARS'}->{'searchid'} = 'scs_'.$dt->ymd('').$dt->hms(''); #scs == Staff Client
+}
+
 my $gotonumber = $cgi->param('gotoNumber');
 if ($gotonumber eq 'last' || $gotonumber eq 'first') {
     $template->{'VARS'}->{'gotoNumber'} = $gotonumber;
