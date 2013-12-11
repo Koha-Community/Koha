@@ -1,4 +1,13 @@
 [% BLOCK showreference %]
+<!--
+    Parameters:
+    heading: the heading itself
+    linkType: currently 'seefrom' or 'seealso', controls the label for the entry
+    type:
+    authid: if it is a linked authority, its authid
+-->
+    [% SET authidurl = '/cgi-bin/koha/opac-authoritiesdetail.pl?authid=' %]
+    [% SET searchurl = '/cgi-bin/koha/opac-authorities-home.pl?op=do_search&type=opac&operator=contains&marclist=mainentry&and_or=and&orderby=HeadingAsc&value=' %]
     [% IF marcflavour == 'UNIMARC' %]
         [% SWITCH type %]
             [% CASE 'broader' %]
@@ -11,10 +20,22 @@
               <span class="RT">RT: [% heading | html %]</span>
         [% END %]
     [% ELSE %]
-        [% IF ( label ) %]<span class="label">[% label | html %]</span>[% END %]
+        <span class="label">
+        [% IF ( linkType=='seefrom' ) %]
+            used for/see from:
+        [% ELSIF ( linkType=='seealso' ) %]
+            see also:
+        [% END %]
         <span class="heading">
-            [% IF ( linkpath && search ) %]<a href="[% link | url %][% search | url %]">[% heading | html %]</a>
-            [% ELSE %][% heading | html %][% END %]
+        [% IF ( linkType=='seealso' ) %]
+            [% IF ( authid ) %]
+            <a href="[% authidurl | url %][% authid | url %]">[% heading | html %]</a>
+            [% ELSE %]
+            <a href="[% searchurl | url %][% heading | html %]">[% heading | html %]</a>
+            [% END %]
+        [% ELSE %]
+            [% heading | html %]
+        [% END %]
         </span>
         [% UNLESS ( type=='seefrom' || type=='seealso' ) %]
             <span class="type">
@@ -53,7 +74,7 @@
             [% IF summary.seealso %]
                 <div class="authres_seealso">
                     [% FOREACH see IN summary.seealso %]
-                        [% PROCESS showreference heading=see.heading label="" type=see.type search='' %]
+                        [% PROCESS showreference heading=see.heading linkType="" type=see.type search='' %]
                         [% IF ! loop.last %] ; [% END %]
                     [% END %]
                 </div>
@@ -71,14 +92,23 @@
             [% IF ( summary.seefrom ) %]
                 [% FOREACH seefro IN summary.seefrom %]
                     <div class="seefrom authref">
-                    [% PROCESS showreference heading=seefro.heading label="used for/see from:" type=seefro.type search='' %]
+                    [% PROCESS showreference
+                        heading=seefro.heading
+                        linkType='seefrom'
+                        type=seefro.type
+                    %]
                     </div>
                 [% END %]
             [% END %]
             [% IF ( summary.seealso ) %]
                 [% FOREACH seeals IN summary.seealso %]
                     <div class="seealso authref">
-                    [% PROCESS showreference heading=seeals.heading label="see also:" type=seeals.type linkpath=link search=seeals.search %]
+                    [% PROCESS showreference
+                        heading=seeals.heading
+                        linkType='seealso'
+                        type=seeals.type
+                        authid=seeals.authid
+                    %]
                     </div>
                 [% END %]
             [% END %]

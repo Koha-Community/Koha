@@ -1,4 +1,11 @@
 [% BLOCK showreference %]
+<!--
+    Parameters:
+    heading: the heading itself
+    linkType: currently 'seefrom' or 'seealso', controls the label for the entry
+    type:
+    authid: if it is a linked authority, its authid
+-->
     [% SET authidurl = '/cgi-bin/koha/authorities/detail.pl?authid=' %]
     [% SET searchurl = '/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&marclist=any&operator=contains&orderby=HeadingAsc&value=' %]
 
@@ -15,14 +22,14 @@
         [% END %]
     [% ELSE %]
         <span class="label">
-        [% IF ( type=='seefrom' ) %]
+        [% IF ( linkType=='seefrom' ) %]
             used for/see from:
-        [% ELSIF  ( type=='seealso' ) %]
+        [% ELSIF  ( linkType=='seealso' ) %]
             see also:
         [% END %]
         </span>
         <span class="heading">
-        [% IF ( type=='seealso' ) %]
+        [% IF ( linkType=='seealso' ) %]
             [% IF ( authid ) %]
             <a href="[% authidurl | url %][% authid | url %]">[% heading | html %]</a>
             [% ELSE %]
@@ -68,7 +75,7 @@
           [% IF summary.seefrom %]
             <div class="authres_seefrom">
             [% FOREACH see IN summary.seefrom %]
-              [% PROCESS showreference heading=see.heading label="" type=see.type search='' %]
+              [% PROCESS showreference heading=see.heading linkType="" type=see.type search='' %]
               [% IF ! loop.last %] ; [% END %]
             [% END %]
             </div>
@@ -76,7 +83,7 @@
             [% IF summary.seealso %]
               <div class="authres_seealso">
               [% FOREACH see IN summary.seealso %]
-                 [% PROCESS showreference heading=see.heading label="" type=see.type search='' %]
+                 [% PROCESS showreference heading=see.heading linkType="" type=see.type search='' %]
                  [% IF ! loop.last %] ; [% END %]
               [% END %]
               </div>
@@ -96,6 +103,7 @@
                     <div class="seefrom authref">
                     [% PROCESS showreference
                         heading=seefro.heading
+                        linkType='seefrom'
                         type=seefro.type
                         authid=seefro.authid
                     %]
@@ -107,6 +115,7 @@
                     <div class="seealso authref">
                     [% PROCESS showreference
                         heading=seeals.heading
+                        linkType='seealso'
                         type=seeals.type
                         authid=seeals.authid
                     %]
