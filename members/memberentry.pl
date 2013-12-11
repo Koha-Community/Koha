@@ -293,9 +293,14 @@ if ($op eq 'save' || $op eq 'insert'){
     # If the cardnumber is blank, treat it as null.
     $newdata{'cardnumber'} = undef if $newdata{'cardnumber'} =~ /^\s*$/;
 
-    if (checkcardnumber($newdata{cardnumber},$newdata{borrowernumber})){ 
-        push @errors, 'ERROR_cardnumber';
-    } 
+    if (my $error_code = checkcardnumber($newdata{cardnumber},$newdata{borrowernumber})){
+        push @errors, $error_code == 1
+            ? 'ERROR_cardnumber_already_exists'
+            : $error_code == 2
+                ? 'ERROR_cardnumber_length'
+                : ()
+    }
+
     if ($newdata{dateofbirth} && $dateofbirthmandatory) {
         my $age = GetAge($newdata{dateofbirth});
         my $borrowercategory=GetBorrowercategory($newdata{'categorycode'});   
@@ -711,23 +716,13 @@ if(defined($data{'contacttitle'})){
   $template->param("contacttitle_" . $data{'contacttitle'} => "SELECTED");
 }
 
-if ( my $cardnumber_length = C4::Context->preference('CardnumberLength') ) {
-    my ( $min, $max );
-    # Is integer and length match
-    if ( $cardnumber_length =~ m|^\d+$| ) {
-        $min = $max = $cardnumber_length;
-    }
-    # Else assuming it is a range
-    elsif ( $cardnumber_length =~ m|(\d+),(\d*)| ) {
-        $min = $1;
-        $max = $2 || 16; # borrowers.cardnumber is a varchar(16)
-    }
-    if ( defined $min ) {
-        $template->param(
-            minlength_cardnumber => $min,
-            maxlength_cardnumber => $max
-        );
-    }
+
+my ( $min, $max ) = C4::Members::get_cardnumber_length();
+if ( defined $min ) {
+    $template->param(
+        minlength_cardnumber => $min,
+        maxlength_cardnumber => $max
+    );
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;

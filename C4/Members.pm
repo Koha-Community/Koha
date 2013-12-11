@@ -1341,25 +1341,32 @@ sub checkcardnumber {
 
     return 1 if $sth->fetchrow_hashref;
 
-    if ( my $length = C4::Context->preference('CardnumberLength') ) {
-        # Is integer and length match
-        if (
-            $length =~ m|^\d+$|
-                and length $cardnumber == $length
-        ) {
-            return 0
-        }
-        # Else assuming it is a range
-        else {
-            my $qr = qr|^\d{$length}$|;
-            return 0
-                if $cardnumber =~ $qr;
-        }
-        return 1
-    }
+    my ( $min_length, $max_length ) = get_cardnumber_length();
+    return 2
+        if length $cardnumber > $max_length
+        or length $cardnumber < $min_length;
+
     return 0;
 }
 
+sub get_cardnumber_length {
+    my ( $min, $max ) = ( 1, 16 ); # borrowers.cardnumber is a varchar(16)
+    if ( my $cardnumber_length = C4::Context->preference('CardnumberLength') ) {
+        # Is integer and length match
+        if ( $cardnumber_length =~ m|^\d+$| ) {
+            $min = $max = $cardnumber_length
+                if $cardnumber_length >= $min
+                    and $cardnumber_length <= $max;
+        }
+        # Else assuming it is a range
+        elsif ( $cardnumber_length =~ m|(\d*),(\d*)| ) {
+            $min = $1 if $1 and $min < $1;
+            $max = $2 if $2 and $max > $2;
+        }
+
+    }
+    return ( $min, $max );
+}
 
 =head2 getzipnamecity (OUEST-PROVENCE)
 
