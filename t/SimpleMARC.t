@@ -269,7 +269,7 @@ subtest 'update_field' => sub {
 subtest 'copy_field' => sub {
     plan tests              => 2;
     subtest 'copy subfield' => sub {
-        plan tests => 15;
+        plan tests => 18;
         my $record = new_record;
         $record->append_fields(
             MARC::Field->new(
@@ -547,10 +547,63 @@ subtest 'copy_field' => sub {
             [ '2001-06-25', '2001-06-25' ],
             'copy 952$d into others 952 field'
         );
+
+        copy_field(
+            {
+                record        => $record,
+                from_field    => '111',
+                from_subfield => '1',
+                to_field      => '999',
+                to_subfield   => '9'
+            }
+        );
+        my @fields_9999 =
+          read_field( { record => $record, field => '999', subfield => '9' } );
+        is_deeply( \@fields_9999, [],
+            'copy a nonexistent subfield does not create a new one' );
+
+        $record = new_record;
+        copy_field(
+            {
+                record        => $record,
+                from_field    => 245,
+                from_subfield => 'a',
+                to_field      => 245,
+                to_subfield   => 'a',
+                regex         => { search => '^', replace => 'BEGIN ' }
+            }
+        );
+        is_deeply(
+            read_field(
+                { record => $record, field => '245', subfield => 'a' }
+            ),
+            'BEGIN The art of computer programming',
+            'Update a subfield: add a string at the beginning'
+        );
+
+        $record = new_record;
+        copy_field(
+            {
+                record        => $record,
+                from_field    => 245,
+                from_subfield => 'a',
+                to_field      => 245,
+                to_subfield   => 'a',
+                regex         => { search => '$', replace => ' END' }
+            }
+        );
+        is_deeply(
+            read_field(
+                { record => $record, field => '245', subfield => 'a' }
+            ),
+            'The art of computer programming END',
+            'Update a subfield: add a string at the end'
+        );
+
     };
 
     subtest 'copy field' => sub {
-        plan tests => 11;
+        plan tests => 12;
         my $record = new_record;
         $record->append_fields(
             MARC::Field->new(
@@ -648,6 +701,17 @@ subtest 'copy_field' => sub {
             [ '4242423918', 'CD' ],
             "copy all with regex: second original fields has been copied"
         );
+        copy_field(
+            {
+                record     => $record,
+                from_field => '111',
+                to_field   => '999',
+            }
+        );
+        my @fields_9999 =
+          read_field( { record => $record, field => '999', subfield => '9' } );
+        is_deeply( \@fields_9999, [],
+            'copy a nonexistent field does not create a new one' );
     };
 };
 
@@ -655,7 +719,7 @@ subtest 'copy_field' => sub {
 subtest 'move_field' => sub {
     plan tests              => 2;
     subtest 'move subfield' => sub {
-        plan tests => 6;
+        plan tests => 7;
         my $record = new_record;
         my ( @fields_952d, @fields_952c, @fields_954c, @fields_954p );
         $record->append_fields(
@@ -726,10 +790,24 @@ subtest 'move_field' => sub {
             [ '3010023917', '3010023917' ],
             'Now 2 954$p exist'
         );
+
+        move_field(
+            {
+                record        => $record,
+                from_field    => '111',
+                from_subfield => '1',
+                to_field      => '999',
+                to_subfield   => '9'
+            }
+        );
+        my @fields_9999 =
+          read_field( { record => $record, field => '999', subfield => '9' } );
+        is_deeply( \@fields_9999, [],
+            'move a nonexistent subfield does not create a new one' );
     };
 
     subtest 'move field' => sub {
-        plan tests => 8;
+        plan tests => 9;
 
         # move_field - fields
         my $record = new_record;
@@ -807,6 +885,19 @@ subtest 'move_field' => sub {
             [ '3010023917', 'DVD' ],
             "use a regex, second original fields has been copied"
         );
+
+        move_field(
+            {
+                record     => $record,
+                from_field => '111',
+                to_field   => '999',
+            }
+        );
+        my @fields_9999 =
+          read_field( { record => $record, field => '999', subfield => '9' } );
+        is_deeply( \@fields_9999, [],
+            'move a nonexistent field does not create a new one' );
+
     };
 };
 
