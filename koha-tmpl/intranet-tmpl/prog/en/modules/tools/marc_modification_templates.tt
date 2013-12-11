@@ -12,8 +12,28 @@ $(document).ready(function() {
     $("span.match_regex_prefix" ).hide();
     $("span.match_regex_suffix" ).hide();
 
-    $("#conditional_field,#from_field").change(function(){
-        updateWarnings(); // For 3.14.x branches only, if bug 11319 is not pushed into
+    $("#add_action").submit(function(){
+        var action = $("#action").val();
+        if ( action == 'move_field' || action == 'copy_field' ) {
+            if ( $("#from_subfield").val().length != $("#to_subfield").val().length ) {
+                alert(_("Both subfield values should be filled or empty."));
+                return false;
+            }
+            if ( $("#to_field").val().length <= 0 ) {
+                alert(_("The destination should be filled."));
+                return false;
+            }
+        }
+        if ( action == 'update_field' ) {
+            if ( $("#from_subfield").val().length <= 0 ) {
+                alert(_("The source subfield should be filled for update."));
+                return false;
+            }
+        }
+        if ( $("#from_field").val().length <= 0 ) {
+            alert(_("The source field should be filled."));
+            return false;
+        }
     });
 });
 //]]>
@@ -431,14 +451,14 @@ function setSelectByValue( selectId, value ) {
                             </select>
                         </span>
 
-                        field(s) <input type="text" name="from_field" id="from_field" size="3" maxlength="3" /> <input type="text" name="from_subfield" id="from_subfield" size="1" maxlength="1" />
+                        field(s) <input type="text" name="from_field" id="from_field" size="3" maxlength="3" /> <input type="text" name="from_subfield" id="from_subfield" size="1" maxlength="1" title="let blank for the entire field" />
 
                         <span name="with_value_block" id="with_value_block" style="display:none;">
                             with value <input type="text" name="field_value" id="field_value" />
                         </span>
 
                         <span name="to_field_block" id="to_field_block" style="display:none;">
-                            to field <input type="text" name="to_field" id="to_field" size="3" maxlength="3" /> <input type="text" name="to_subfield" id="to_subfield" size="1" maxlength="1" />
+                            to field <input type="text" name="to_field" id="to_field" size="3" maxlength="3" /> <input type="text" name="to_subfield" id="to_subfield" size="1" maxlength="1" title="let blank for the entire field" />
 
                             <span name="to_field_regex_block" id="to_field_regex_block">
                                 <sup>
