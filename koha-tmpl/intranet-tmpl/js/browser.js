@@ -40,6 +40,19 @@ KOHA.browser = function (searchid, biblionumber) {
                 pagelen: newresults.length,
                 results: newresults
             };
+
+            //Bug_11369 Cleaning up excess searchCookies to prevent cookie overflow in the browser memory.
+            var allVisibleCookieKeys = Object.keys( $.cookie() );
+            var scsCookieKeys = $.grep( allVisibleCookieKeys,
+                function(elementOfArray, indexInArray) {
+                    return ( elementOfArray.search(/^scs_\d/) != -1 ); //We are looking for specifically staff client searchCookies.
+                }
+            );
+            if (scsCookieKeys.length >= 10) {
+                scsCookieKeys.sort(); //Make sure they are in order, oldest first!
+                $.removeCookie( scsCookieKeys[0], { path: '/' } );
+            }
+            //EO Bug_11369
         }
         $.cookie(me.searchid, JSON.stringify(me.searchCookie), { path: '/' });
         $(document).ready(function () {
