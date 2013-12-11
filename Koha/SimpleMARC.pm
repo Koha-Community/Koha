@@ -73,111 +73,151 @@ at your option, any later version of Perl 5 you may have available.
 =cut
 
 sub copy_field {
-  my ( $params ) = @_;
-  my $record = $params->{record};
-  my $fromFieldName = $params->{from_field};
-  my $fromSubfieldName = $params->{from_subfield};
-  my $toFieldName = $params->{to_field};
-  my $toSubfieldName = $params->{to_subfield};
-  my $regex = $params->{regex};
-  my $n = $params->{n};
-  my $dont_erase = $params->{dont_erase};
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fromFieldName = $params->{from_field};
+    my $fromSubfieldName = $params->{from_subfield};
+    my $toFieldName = $params->{to_field};
+    my $toSubfieldName = $params->{to_subfield};
+    my $regex = $params->{regex};
+    my $n = $params->{n};
 
-  if ( ! ( $record && $fromFieldName && $toFieldName ) ) { return; }
+    if ( ! ( $record && $fromFieldName && $toFieldName ) ) { return; }
 
-  my @values = read_field({ record => $record, field => $fromFieldName, subfield => $fromSubfieldName });
-  @values = ( $values[$n-1] ) if ( $n );
 
-  if ( $regex and $regex->{search} ) {
-    $regex->{modifiers} //= q||;
-    my @available_modifiers = qw( i g );
-    my $modifiers = q||;
-    for my $modifier ( split //, $regex->{modifiers} ) {
-        $modifiers .= $modifier
-            if grep {/$modifier/} @available_modifiers;
+    if ( not $fromSubfieldName or $fromSubfieldName eq ''
+      or not $toSubfieldName or $toSubfieldName eq ''
+    ) {
+        _copy_field({
+            record => $record,
+            from_field => $fromFieldName,
+            to_field => $toFieldName,
+            regex => $regex,
+            n => $n
+        });
+    } else {
+        _copy_subfield({
+            record => $record,
+            from_field => $fromFieldName,
+            from_subfield => $fromSubfieldName,
+            to_field => $toFieldName,
+            to_subfield => $toSubfieldName,
+            regex => $regex,
+            n => $n
+        });
     }
-    foreach my $value (@values) {
-        if ( $modifiers =~ m/^(ig|gi)$/ ) {
-            $value =~ s/$regex->{search}/$regex->{replace}/ig;
-        }
-        elsif ( $modifiers eq 'i' ) {
-            $value =~ s/$regex->{search}/$regex->{replace}/i;
-        }
-        elsif ( $modifiers eq 'g' ) {
-            $value =~ s/$regex->{search}/$regex->{replace}/g;
-        }
-        else {
-            $value =~ s/$regex->{search}/$regex->{replace}/;
-        }
-    }
-  }
-  update_field({ record => $record, field => $toFieldName, subfield => $toSubfieldName, dont_erase => $dont_erase, values => \@values });
+
 }
 
-=head2 update_field
+sub _copy_field {
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fromFieldName = $params->{from_field};
+    my $toFieldName = $params->{to_field};
+    my $regex = $params->{regex};
+    my $n = $params->{n};
 
-  update_field( $record, $fieldName, $subfieldName, $dont_erase, $value[, $value,[ $value ... ] ] );
+    _copy_move_field({
+        record => $record,
+        from_field => $fromFieldName,
+        to_field => $toFieldName,
+        regex => $regex,
+        n => $n
+    });
+}
 
-  Updates a field with the given value, creating it if neccessary.
+sub _copy_subfield {
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fromFieldName = $params->{from_field};
+    my $fromSubfieldName = $params->{from_subfield};
+    my $toFieldName = $params->{to_field};
+    my $toSubfieldName = $params->{to_subfield};
+    my $regex = $params->{regex};
+    my $n = $params->{n};
 
-  If multiple values are supplied, they will be used to update a list of repeatable fields
-  until either the fields or the values are all used.
+    my @values = read_field({ record => $record, field => $fromFieldName, subfield => $fromSubfieldName });
+    @values = ( $values[$n-1] ) if ( $n );
+    _modify_values({ values => \@values, regex => $regex });
 
-  If a single value is supplied for a repeated field, that value will be used to update
-  each of the repeated fields.
-
-=cut
+    update_field({ record => $record, field => $toFieldName, subfield => $toSubfieldName, values => \@values });
+}
 
 sub update_field {
-  my ( $params ) = @_;
-  my $record = $params->{record};
-  my $fieldName = $params->{field};
-  my $subfieldName = $params->{subfield};
-  my $dont_erase = $params->{dont_erase};
-  my @values = @{ $params->{values} };
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fieldName = $params->{field};
+    my $subfieldName = $params->{subfield};
+    my @values = @{ $params->{values} };
 
-  if ( ! ( $record && $fieldName ) ) { return; }
+    if ( ! ( $record && $fieldName ) ) { return; }
 
-  my $i = 0;
-  my $field;
-  if ( $subfieldName ) {
+    if ( not $subfieldName or $subfieldName eq '' ) {
+        # FIXME I'm not sure the actual implementation is correct.
+        die "This action is not implemented yet";
+        #_update_field({ record => $record, field => $fieldName, values => \@values });
+    } else {
+        _update_subfield({ record => $record, field => $fieldName, subfield => $subfieldName, values => \@values });
+    }
+}
+
+sub _update_field {
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fieldName = $params->{field};
+    my @values = @{ $params->{values} };
+
+    my $i = 0;
     if ( my @fields = $record->field( $fieldName ) ) {
-      unless ( $dont_erase ) {
         @values = ($values[0]) x scalar( @fields )
-          if @values == 1;
+            if @values == 1;
         foreach my $field ( @fields ) {
-          $field->update( "$subfieldName" => $values[$i++] );
+            $field->update( $values[$i++] );
         }
-      }
-      if ( $i <= scalar ( @values ) - 1 ) {
-        foreach my $field ( @fields ) {
-          foreach my $j ( $i .. scalar( @values ) - 1) {
-            $field->add_subfields( "$subfieldName" => $values[$j] );
-          }
-        }
-      }
     } else {
-      ## Field does not exist, create it.
-      foreach my $value ( @values ) {
-        $field = MARC::Field->new( $fieldName, '', '', "$subfieldName" => $values[$i++] );
-        $record->append_fields( $field );
-      }
+        ## Field does not exists, create it
+        if ( $fieldName < 10 ) {
+            foreach my $value ( @values ) {
+                my $field = MARC::Field->new( $fieldName, $value );
+                $record->append_fields( $field );
+            }
+        } else {
+            warn "Invalid operation, trying to add a new field without subfield";
+        }
     }
-  } else { ## No subfield
+}
+
+sub _update_subfield {
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fieldName = $params->{field};
+    my $subfieldName = $params->{subfield};
+    my @values = @{ $params->{values} };
+    my $dont_erase = $params->{dont_erase};
+    my $i = 0;
+
     if ( my @fields = $record->field( $fieldName ) ) {
-      @values = ($values[0]) x scalar( @fields )
-        if @values == 1;
-      foreach my $field ( @fields ) {
-        $field->update( $values[$i++] );
-      }
+        unless ( $dont_erase ) {
+            @values = ($values[0]) x scalar( @fields )
+                if @values == 1;
+            foreach my $field ( @fields ) {
+                $field->update( "$subfieldName" => $values[$i++] );
+            }
+        }
+        if ( $i <= scalar ( @values ) - 1 ) {
+            foreach my $field ( @fields ) {
+                foreach my $j ( $i .. scalar( @values ) - 1) {
+                    $field->add_subfields( "$subfieldName" => $values[$j] );
+                }
+            }
+        }
     } else {
-      ## Field does not exists, create it
-      foreach my $value ( @values ) {
-        $field = MARC::Field->new( $fieldName, $value );
-        $record->append_fields( $field );
-      }
+        ## Field does not exist, create it.
+        foreach my $value ( @values ) {
+            my $field = MARC::Field->new( $fieldName, '', '', "$subfieldName" => $values[$i++] );
+            $record->append_fields( $field );
+        }
     }
-  }
 }
 
 =head2 read_field
@@ -192,27 +232,70 @@ sub update_field {
 =cut
 
 sub read_field {
-  my ( $params ) = @_;
-  my $record = $params->{record};
-  my $fieldName = $params->{field};
-  my $subfieldName = $params->{subfield};
-  my $n = $params->{n};
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fieldName = $params->{field};
+    my $subfieldName = $params->{subfield};
+    my $n = $params->{n};
 
-  my @fields = $record->field( $fieldName );
+    if ( not $subfieldName or $subfieldName eq '' ) {
+        _read_field({ record => $record, field => $fieldName, n => $n });
+    } else {
+        _read_subfield({ record => $record, field => $fieldName, subfield => $subfieldName, n => $n });
+    }
+}
 
-  return map { $_->data() } @fields unless $subfieldName;
+sub _read_field {
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fieldName = $params->{field};
+    my $n = $params->{n};
 
-  my @subfields;
-  foreach my $field ( @fields ) {
-    my @sf = $field->subfield( $subfieldName );
-    push( @subfields, @sf );
-  }
+    my @fields = $record->field( $fieldName );
 
-  if ( $n ) {
-    return $subfields[$n-1];
-  } else {
-    return @subfields;
-  }
+    return unless @fields;
+
+    return map { $_->data() } @fields
+        if $fieldName < 10;
+
+    my @values;
+    if ( $n ) {
+        if ( $n <= scalar( @fields ) ) {
+            for my $sf ( $fields[$n - 1]->subfields ) {
+                push @values, $sf->[1];
+            }
+        }
+    } else {
+        foreach my $field ( @fields ) {
+            for my $sf ( $field->subfields ) {
+                push @values, $sf->[1];
+            }
+        }
+    }
+
+    return @values;
+}
+
+sub _read_subfield {
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fieldName = $params->{field};
+    my $subfieldName = $params->{subfield};
+    my $n = $params->{n};
+
+    my @fields = $record->field( $fieldName );
+
+    return unless @fields;
+
+    my @values;
+    foreach my $field ( @fields ) {
+        my @sf = $field->subfield( $subfieldName );
+        push( @values, @sf );
+    }
+
+    return $n
+        ? $values[$n-1]
+        : @values;
 }
 
 =head2 field_exists
@@ -291,22 +374,83 @@ sub field_equals {
 =cut
 
 sub move_field {
-  my ( $params ) = @_;
-  my $record = $params->{record};
-  my $fromFieldName = $params->{from_field};
-  my $fromSubfieldName = $params->{from_subfield};
-  my $toFieldName = $params->{to_field};
-  my $toSubfieldName = $params->{to_subfield};
-  my $regex = $params->{regex};
-  my $n = $params->{n};
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fromFieldName = $params->{from_field};
+    my $fromSubfieldName = $params->{from_subfield};
+    my $toFieldName = $params->{to_field};
+    my $toSubfieldName = $params->{to_subfield};
+    my $regex = $params->{regex};
+    my $n = $params->{n};
 
-  copy_field({ record => $record, from_field => $fromFieldName, from_subfield => $fromSubfieldName, to_field => $toFieldName, to_subfield => $toSubfieldName, regex => $regex, n => $n , dont_erase => 1 });
-  delete_field({ record => $record, field => $fromFieldName, subfield => $fromSubfieldName, n => $n });
+    if ( not $fromSubfieldName or $fromSubfieldName eq ''
+        or not $toSubfieldName or $toSubfieldName eq ''
+    ) {
+        _move_field({
+            record => $record,
+            from_field => $fromFieldName,
+            to_field => $toFieldName,
+            regex => $regex,
+            n => $n,
+        });
+    } else {
+        _move_subfield({
+            record => $record,
+            from_field => $fromFieldName,
+            from_subfield => $fromSubfieldName,
+            to_field => $toFieldName,
+            to_subfield => $toSubfieldName,
+            regex => $regex,
+            n => $n,
+        });
+    }
 }
 
-=head2 delete_field
+sub _move_field {
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fromFieldName = $params->{from_field};
+    my $toFieldName = $params->{to_field};
+    my $regex = $params->{regex};
+    my $n = $params->{n};
+    _copy_move_field({
+        record => $record,
+        from_field => $fromFieldName,
+        to_field => $toFieldName,
+        regex => $regex,
+        n => $n,
+        action => 'move',
+    });
+}
 
-  delete_field( $record, $fieldName[, $subfieldName [, $n ] ] );
+sub _move_subfield {
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fromFieldName = $params->{from_field};
+    my $fromSubfieldName = $params->{from_subfield};
+    my $toFieldName = $params->{to_field};
+    my $toSubfieldName = $params->{to_subfield};
+    my $regex = $params->{regex};
+    my $n = $params->{n};
+
+    # Copy
+    my @values = read_field({ record => $record, field => $fromFieldName, subfield => $fromSubfieldName });
+    @values = ( $values[$n-1] ) if $n;
+    _modify_values({ values => \@values, regex => $regex });
+    _update_subfield({ record => $record, field => $toFieldName, subfield => $toSubfieldName, dont_erase => 1, values => \@values });
+
+    # And delete
+    _delete_subfield({
+        record => $record,
+        field => $fromFieldName,
+        subfield => $fromSubfieldName,
+        n => $n,
+    });
+}
+
+=head2 _delete_field
+
+  _delete_field( $record, $fieldName[, $subfieldName [, $n ] ] );
 
   Deletes the given field.
 
@@ -316,26 +460,109 @@ sub move_field {
 =cut
 
 sub delete_field {
-  my ( $params ) = @_;
-  my $record = $params->{record};
-  my $fieldName = $params->{field};
-  my $subfieldName = $params->{subfield};
-  my $n = $params->{n};
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fieldName = $params->{field};
+    my $subfieldName = $params->{subfield};
+    my $n = $params->{n};
 
-  my @fields = $record->field( $fieldName );
-
-  @fields = ( $fields[$n-1] ) if ( $n );
-
-  if ( @fields && !$subfieldName ) {
-    foreach my $field ( @fields ) {
-      $record->delete_field( $field );
+    if ( not $subfieldName or $subfieldName eq '' ) {
+        _delete_field({ record => $record, field => $fieldName, n => $n });
+    } else {
+        _delete_subfield({ record => $record, field => $fieldName, subfield => $subfieldName, n => $n });
     }
-  } elsif ( @fields && $subfieldName ) {
-    foreach my $field ( @fields ) {
-      $field->delete_subfield( code => $subfieldName );
-    }
-  }
 }
 
+sub _delete_field {
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fieldName = $params->{field};
+    my $n = $params->{n};
+
+    my @fields = $record->field( $fieldName );
+
+    @fields = ( $fields[$n-1] ) if ( $n );
+    foreach my $field ( @fields ) {
+        $record->delete_field( $field );
+    }
+}
+
+sub _delete_subfield {
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fieldName = $params->{field};
+    my $subfieldName = $params->{subfield};
+    my $n = $params->{n};
+
+    my @fields = $record->field( $fieldName );
+
+    @fields = ( $fields[$n-1] ) if ( $n );
+
+    foreach my $field ( @fields ) {
+        $field->delete_subfield( code => $subfieldName );
+    }
+}
+
+
+sub _copy_move_field {
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fromFieldName = $params->{from_field};
+    my $toFieldName = $params->{to_field};
+    my $regex = $params->{regex};
+    my $n = $params->{n};
+    my $action = $params->{action} || 'copy';
+
+    my @fields = $record->field( $fromFieldName );
+    if ( $n and $n <= scalar( @fields ) ) {
+        @fields = ( $fields[$n - 1] );
+    }
+
+    for my $field ( @fields ) {
+        my $new_field = $field->clone;
+        $new_field->{_tag} = $toFieldName; # Should be replaced by set_tag, introduced by MARC::Field 2.0.4
+        if ( $regex and $regex->{search} ) {
+            for my $subfield ( $new_field->subfields ) {
+                my $value = $subfield->[1];
+                ( $value ) = _modify_values({ values => [ $value ], regex => $regex });
+                $new_field->update( $subfield->[0], $value );
+            }
+        }
+        $record->append_fields( $new_field );
+        $record->delete_field( $field )
+            if $action eq 'move';
+    }
+}
+
+sub _modify_values {
+    my ( $params ) = @_;
+    my $values = $params->{values};
+    my $regex = $params->{regex};
+
+    if ( $regex and $regex->{search} ) {
+        $regex->{modifiers} //= q||;
+        my @available_modifiers = qw( i g );
+        my $modifiers = q||;
+        for my $modifier ( split //, $regex->{modifiers} ) {
+            $modifiers .= $modifier
+                if grep {/$modifier/} @available_modifiers;
+        }
+        foreach my $value ( @$values ) {
+            if ( $modifiers =~ m/^(ig|gi)$/ ) {
+                $value =~ s/$regex->{search}/$regex->{replace}/ig;
+            }
+            elsif ( $modifiers eq 'i' ) {
+                $value =~ s/$regex->{search}/$regex->{replace}/i;
+            }
+            elsif ( $modifiers eq 'g' ) {
+                $value =~ s/$regex->{search}/$regex->{replace}/g;
+            }
+            else {
+                $value =~ s/$regex->{search}/$regex->{replace}/;
+            }
+        }
+    }
+    return @$values;
+}
 1;
 __END__
