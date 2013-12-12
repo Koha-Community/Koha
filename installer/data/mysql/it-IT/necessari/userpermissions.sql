@@ -52,6 +52,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'rotating_collections', 'Gestisci le collezioni circolanti (rotating collections)'),
    (13, 'upload_local_cover_images', 'Carica copertine in locale'),
    (13, 'manage_patron_lists', 'Aggiungi, modifica e cancella le liste utenti e i loro contenuti'),
+   (13, 'records_batchmod', 'Perform batch modification of records (biblios or authorities)'),
    (13, 'marc_modification_templates', 'Gestisci le modifiche sulle griglie di catalogazione MARC'),
    (13, 'records_batchdel', 'Perform batch deletion of records (bibliographic or authority)'),
    (15, 'check_expiration', 'Controlla la scadenza di una risora in continuazione'),

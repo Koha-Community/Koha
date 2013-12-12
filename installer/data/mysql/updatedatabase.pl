@@ -9793,6 +9793,17 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        INSERT INTO permissions (module_bit, code, description) VALUES
+          (13, 'records_batchmod', 'Perform batch modification of records (biblios or authorities)')
+    |);
+    print "Upgrade to $DBversion done (Bug 11395: Add permission tools_records_batchmod)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

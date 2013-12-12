@@ -54,6 +54,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'manage_patron_lists', 'Dodawanie, modyfikacja i usuwanie list użytkowników i ich zawartości'),
    (13, 'marc_modification_templates', 'Zarządzanie szablonami modyfikacji marc'),
    (13, 'records_batchdel', 'Grupowe usuwanie rekordów (bibliograficznych lub haseł wzorcowych)'),
+   (13, 'records_batchmod', 'Perform batch modification of records (biblios or authorities)'),
    (15, 'check_expiration', 'Sprawdzanie daty wygaśnięcia prenumeraty'),
    (15, 'claim_serials', 'Składanie reklamacji na brakujący numer'),
    (15, 'create_subscription', 'Tworzenie nowej prenumeraty'),
