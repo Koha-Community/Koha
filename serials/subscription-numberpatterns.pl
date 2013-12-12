@@ -105,12 +105,13 @@ if($op && ($op eq 'new' || $op eq 'modify')) {
     my @frequencies = GetSubscriptionFrequencies();
     my @subtypes;
     push @subtypes, { value => $_ } for (qw/ issues weeks months /);
+
     my $languages = [ map {
         {
-            language => $_->{language},
-            description => $_->{native_description} || $_->{language}
+            language => $_->{iso639_2_code},
+            description => $_->{language_description} || $_->{language}
         }
-    } @{ C4::Languages::getTranslatedLanguages() } ];
+    } @{ C4::Languages::getAllLanguages() } ];
 
     $template->param(
         $op => 1,

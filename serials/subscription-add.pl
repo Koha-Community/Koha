@@ -215,10 +215,10 @@ if ($op eq 'addsubscription') {
 
     my $languages = [ map {
         {
-            language => $_->{language},
-            description => $_->{native_description} || $_->{language}
+            language => $_->{iso639_2_code},
+            description => $_->{language_description} || $_->{language}
         }
-    } @{ C4::Languages::getTranslatedLanguages() } ];
+    } @{ C4::Languages::getAllLanguages() } ];
 
     $template->param( locales => $languages );
 
