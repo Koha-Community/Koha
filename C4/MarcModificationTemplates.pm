@@ -626,6 +626,8 @@ sub ModifyRecordWithTemplate {
 
         warn( $record->as_formatted() ) if DEBUG >= 10;
     }
+
+    return;
 }
 1;
 __END__

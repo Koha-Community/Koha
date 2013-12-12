@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 77;
+use Test::More tests => 78;
 
 use_ok("MARC::Field");
 use_ok("MARC::Record");
@@ -208,12 +208,10 @@ is( AddModificationTemplateAction(
 
 my $record = new_record();
 
-ModifyRecordWithTemplate( $template_id, $record );
+is( ModifyRecordWithTemplate( $template_id, $record ), undef, "The ModifyRecordWithTemplate returns undef" );
 
 my $expected_record = expected_record();
 is_deeply( $record, $expected_record, "Record modification as expected");
-
-done_testing;
 
 sub new_record {
     my $record = MARC::Record->new;
