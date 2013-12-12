@@ -1,0 +1,53 @@
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Copyright (C) 2013 BibLibre
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+use CGI;
+use C4::Auth qw( get_template_and_user );
+use C4::Biblio qw( GetMarcBiblio );
+use C4::MarcModificationTemplates qw( ModifyRecordWithTemplate );
+use C4::Output qw( output_html_with_http_headers );
+use Koha::Authority;
+
+my $query = CGI->new();
+my $record_id = $query->param('record_id');
+my $record_type = $query->param('record_type') || 'biblio';
+my $mmtid = $query->param('mmtid'); # Marc modification template id
+
+my $record;
+if ( $record_type eq 'biblio' ) {
+    $record = GetMarcBiblio( $record_id );
+} else {
+    my $authority = Koha::Authority->get_from_authid( $record_id );
+    $record = $authority->record;
+}
+
+if ( $mmtid ) {
+    ModifyRecordWithTemplate( $mmtid, $record );
+}
+
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
+    template_name   => "catalogue/showmarc.tt",
+    query           => $query,
+    type            => "intranet",
+    authnotrequired => 1,
+});
+
+$template->param( MARC_FORMATTED => $record->as_formatted );
+output_html_with_http_headers $query, $cookie, $template->output;
