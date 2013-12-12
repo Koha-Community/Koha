@@ -276,6 +276,7 @@ if ( $op eq 'add_form' ) {
         my %row_data;    # get a fresh hash for the row data
         $row_data{'new_subfield'} = 1;
         $row_data{'subfieldcode'} = '';
+        $row_data{'maxlength'} = 9999;
 
         $row_data{tab} = CGI::scrolling_list(
             -name   => 'tab',
