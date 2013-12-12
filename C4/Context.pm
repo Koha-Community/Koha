@@ -293,20 +293,20 @@ sub memcached {
     }
 }
 
-# db_scheme2dbi
-# Translates the full text name of a database into de appropiate dbi name
-# 
+=head2 db_schema2dbi
+
+    my $dbd_driver_name = C4::Context::db_schema2dbi($scheme);
+
+This routines translates a database type to part of the name
+of the appropriate DBD driver to use when establishing a new
+database connection.  It recognizes 'mysql' and 'Pg'; if any
+other scheme is supplied it defaults to 'mysql'.
+
+=cut
+
 sub db_scheme2dbi {
-    my $name = shift;
-    # for instance, we support only mysql, so don't care checking
-    return "mysql";
-    for ($name) {
-# FIXME - Should have other databases. 
-        if (/mysql/) { return("mysql"); }
-        if (/Postgres|Pg|PostgresSQL/) { return("Pg"); }
-        if (/oracle/) { return("Oracle"); }
-    }
-    return;         # Just in case
+    my $scheme = shift // '';
+    return $scheme eq 'Pg' ? $scheme : 'mysql';
 }
 
 sub import {
@@ -794,12 +794,7 @@ sub _new_dbh
 
     ## $context
     ## correct name for db_schme        
-    my $db_driver;
-    if ($context->config("db_scheme")){
-        $db_driver=db_scheme2dbi($context->config("db_scheme"));
-    }else{
-        $db_driver="mysql";
-    }
+    my $db_driver = db_scheme2dbi($context->config("db_scheme"));
 
     my $db_name   = $context->config("database");
     my $db_host   = $context->config("hostname");

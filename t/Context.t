@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use DBI;
-use Test::More tests => 6;
+use Test::More tests => 10;
 use Test::MockModule;
 
 BEGIN {
@@ -30,3 +30,8 @@ $userenv->{flags} = 421;
 $is_super_librarian = eval{ C4::Context::IsSuperLibrarian() };
 is ( $@, q||, "IsSuperLibrarian does not log an error if userenv is defined" );
 is ( $is_super_librarian, 1, "With flag=1, it is a super librarian" );
+
+is(C4::Context::db_scheme2dbi('mysql'), 'mysql', 'ask for mysql, get mysql');
+is(C4::Context::db_scheme2dbi('Pg'),    'Pg',    'ask for Pg, get Pg');
+is(C4::Context::db_scheme2dbi('xxx'),   'mysql', 'ask for unsupported DBMS, get mysql');
+is(C4::Context::db_scheme2dbi(),        'mysql', 'ask for nothing, get mysql');

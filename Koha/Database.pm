@@ -45,14 +45,8 @@ __PACKAGE__->mk_accessors(qw( ));
 # database connection from the data given in the current context, and
 # returns it.
 sub _new_schema {
-    my $db_driver;
     my $context = C4::Context->new();
-    if ( $context->config("db_scheme") ) {
-        $db_driver = $context->db_scheme2dbi( $context->config("db_scheme") );
-    }
-    else {
-        $db_driver = "mysql";
-    }
+    my $db_driver = C4::Context::db_scheme2dbi($context->config("db_scheme"));
 
     my $db_name   = $context->config("database");
     my $db_host   = $context->config("hostname");
