@@ -7756,7 +7756,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.14.00.001";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("UPDATE systempreferences SET value='clear' where variable = 'CircAutoPrintQuickSlip' and value = '0'");
     $dbh->do("UPDATE systempreferences SET value='qslip' where variable = 'CircAutoPrintQuickSlip' and value = '1'");
