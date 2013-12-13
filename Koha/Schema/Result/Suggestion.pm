@@ -39,7 +39,6 @@ __PACKAGE__->table("suggestions");
 
   data_type: 'date'
   datetime_undef_if_invalid: 1
-  default_value: '0000-00-00'
   is_nullable: 0
 
 =head2 managedby
@@ -215,12 +214,7 @@ __PACKAGE__->add_columns(
   "suggestedby",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "suggesteddate",
-  {
-    data_type => "date",
-    datetime_undef_if_invalid => 1,
-    default_value => "0000-00-00",
-    is_nullable => 0,
-  },
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 0 },
   "managedby",
   { data_type => "integer", is_nullable => 1 },
   "manageddate",
@@ -299,8 +293,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("suggestionid");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CQRbWbu5MBouyD67ArSRNw
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-12-13 01:10:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LJoqZVAeoZ0ra2BKxXRQMQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
