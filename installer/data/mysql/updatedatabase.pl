@@ -7766,7 +7766,7 @@ if ( CheckVersion($DBversion) ) {
 }
 
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.14.00.002";
 if(CheckVersion($DBversion)) {
     $dbh->do("ALTER TABLE deleteditems MODIFY materials text;");
     print "Upgrade to $DBversion done (Bug 11275: alter deleteditems.materials from varchar(10) to text)\n";
