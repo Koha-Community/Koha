@@ -2241,8 +2241,9 @@ sub GetHistory {
 
     $query .= " WHERE 1 ";
 
-    $query .= " AND (datecancellationprinted is NULL or datecancellationprinted='0000-00-00') "
-        if not $get_canceled_order or ( defined $orderstatus and $orderstatus ne 'cancelled' );
+    unless ($get_canceled_order or (defined $orderstatus and $orderstatus eq 'cancelled')) {
+        $query .= " AND (datecancellationprinted is NULL or datecancellationprinted='0000-00-00') ";
+    }
 
     my @query_params  = ();
 
