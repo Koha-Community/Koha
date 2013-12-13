@@ -252,6 +252,8 @@ sub AddReserve {
 
     $res = GetReserve( $reserve_id );
 
+    Return the current reserve or the old reserve.
+
 =cut
 
 sub GetReserve {
@@ -261,8 +263,7 @@ sub GetReserve {
     my $query = "SELECT * FROM reserves WHERE reserve_id = ?";
     my $sth = $dbh->prepare( $query );
     $sth->execute( $reserve_id );
-    my $res = $sth->fetchrow_hashref();
-    return $res;
+    return $sth->fetchrow_hashref();
 }
 
 =head2 GetReservesFromBiblionumber
@@ -1008,6 +1009,8 @@ sub CancelReserve {
 
     my $dbh = C4::Context->dbh;
 
+    my $reserve = GetReserve( $reserve_id );
+
     my $query = "
         UPDATE reserves
         SET    cancellationdate = now(),
@@ -1034,7 +1037,10 @@ sub CancelReserve {
     $sth->execute( $reserve_id );
 
     # now fix the priority on the others....
-    _FixPriority( $reserve_id );
+    _FixPriority({
+        reserve_id   => $reserve_id,
+        biblionumber => $reserve->{biblionumber},
+    });
 }
 
 =head2 ModReserve
@@ -1092,28 +1098,7 @@ sub ModReserve {
 
     my $dbh = C4::Context->dbh;
     if ( $rank eq "del" ) {
-        my $query = "
-            UPDATE reserves
-            SET    cancellationdate=now()
-            WHERE  reserve_id = ?
-        ";
-        my $sth = $dbh->prepare($query);
-        $sth->execute( $reserve_id );
-        $query = "
-            INSERT INTO old_reserves
-            SELECT *
-            FROM   reserves 
-            WHERE  reserve_id = ?
-        ";
-        $sth = $dbh->prepare($query);
-        $sth->execute( $reserve_id );
-        $query = "
-            DELETE FROM reserves 
-            WHERE  reserve_id = ?
-        ";
-        $sth = $dbh->prepare($query);
-        $sth->execute( $reserve_id );
-        
+        CancelReserve({ reserve_id => $reserve_id });
     }
     elsif ($rank =~ /^\d+/ and $rank > 0) {
         my $query = "
@@ -1132,7 +1117,7 @@ sub ModReserve {
             }
         }
 
-        _FixPriority( $reserve_id, $rank );
+        _FixPriority({ reserve_id => $reserve_id, rank =>$rank });
     }
 }
 
@@ -1199,7 +1184,7 @@ sub ModReserveFill {
     # now fix the priority on the others (if the priority wasn't
     # already sorted!)....
     unless ( $priority == 0 ) {
-        _FixPriority( $reserve_id );
+        _FixPriority({ reserve_id => $reserve_id });
     }
 }
 
@@ -1343,7 +1328,7 @@ sub ModReserveMinusPriority {
     my $sth_upd = $dbh->prepare($query);
     $sth_upd->execute( $itemnumber, $reserve_id );
     # second step update all others reservs
-    _FixPriority( $reserve_id, '0');
+    _FixPriority({ reserve_id => $reserve_id, rank => '0' });
 }
 
 =head2 GetReserveInfo
@@ -1496,15 +1481,15 @@ sub AlterPriority {
 
       my $priority = $reserve->{'priority'};
       $priority = $where eq 'up' ? $priority - 1 : $priority + 1;
-      _FixPriority( $reserve_id, $priority )
+      _FixPriority({ reserve_id => $reserve_id, rank => $priority })
 
     } elsif ( $where eq 'top' ) {
 
-      _FixPriority( $reserve_id, '1' )
+      _FixPriority({ reserve_id => $reserve_id, rank => '1' })
 
     } elsif ( $where eq 'bottom' ) {
 
-      _FixPriority( $reserve_id, '999999' )
+      _FixPriority({ reserve_id => $reserve_id, rank => '999999' });
 
     }
 }
@@ -1525,7 +1510,7 @@ sub ToggleLowestPriority {
     my $sth = $dbh->prepare( "UPDATE reserves SET lowestPriority = NOT lowestPriority WHERE reserve_id = ?");
     $sth->execute( $reserve_id );
     
-    _FixPriority( $reserve_id, '999999' );
+    _FixPriority({ reserve_id => $reserve_id, rank => '999999' });
 }
 
 =head2 ToggleSuspend
@@ -1618,7 +1603,7 @@ sub SuspendAll {
 
 =head2 _FixPriority
 
-  &_FixPriority( $reserve_id, $rank, $ignoreSetLowestRank);
+  &_FixPriority({ reserve_id => $reserve_id, rank => $rank, ignoreSetLowestRank => $ignoreSetLowestRank });
 
 Only used internally (so don't export it)
 Changed how this functions works #
@@ -1630,10 +1615,18 @@ in new priority rank
 =cut 
 
 sub _FixPriority {
-    my ( $reserve_id, $rank, $ignoreSetLowestRank ) = @_;
+    my ( $params ) = @_;
+    my $reserve_id = $params->{reserve_id};
+    my $rank = $params->{rank};
+    my $ignoreSetLowestRank = $params->{ignoreSetLowestRank};
+    my $biblionumber = $params->{biblionumber};
+
     my $dbh = C4::Context->dbh;
 
-    my $res = GetReserve( $reserve_id );
+    unless ( $biblionumber ) {
+        my $res = GetReserve( $reserve_id );
+        $biblionumber = $res->{biblionumber};
+    }
 
     if ( $rank eq "del" ) {
          CancelReserve({ reserve_id => $reserve_id });
@@ -1661,7 +1654,7 @@ sub _FixPriority {
         ORDER BY priority ASC
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $res->{'biblionumber'} );
+    $sth->execute( $biblionumber );
     while ( my $line = $sth->fetchrow_hashref ) {
         push( @priority,     $line );
     }
@@ -1703,7 +1696,11 @@ sub _FixPriority {
     
     unless ( $ignoreSetLowestRank ) {
       while ( my $res = $sth->fetchrow_hashref() ) {
-        _FixPriority( $res->{'reserve_id'}, '999999', 1 );
+        _FixPriority({
+            reserve_id => $res->{'reserve_id'},
+            rank => '999999',
+            ignoreSetLowestRank => 1
+        });
       }
     }
 }
