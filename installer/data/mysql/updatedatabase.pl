@@ -7824,17 +7824,12 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
-
-
-
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.15.00.005";
 if ( CheckVersion($DBversion) ) {
    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('AcquisitionDetails', '1', '', 'Hide/Show acquisition details on the biblio detail page.', 'YesNo');");
-   print "Upgrade to $DBversion done (Bug 8230: Add AcquisitionDetails)\n";
+   print "Upgrade to $DBversion done (Bug 8230: Add AcquisitionDetails system preference)\n";
    SetVersion ($DBversion);
 }
-
 
 =head1 FUNCTIONS
 
