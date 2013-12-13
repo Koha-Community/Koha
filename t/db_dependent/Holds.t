@@ -1,13 +1,12 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use t::lib::Mocks;
 use C4::Context;
 use C4::Branch;
 
-use Test::More tests => 22;
+use Test::More tests => 25;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
@@ -214,6 +213,71 @@ ok(
     CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber),
     '... unless canreservefromotherbranches is ON (bug 2394)'
 );
+
+# Regression test for bug 11336
+($bibnum, $title, $bibitemnum) = create_helper_biblio();
+my ( $hold1, $hold2 );
+($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL' } , $bibnum);
+AddReserve(
+    $branch,
+    $borrowernumbers[0],
+    $bibnum,
+    'a',
+    '',
+    1,
+);
+
+my $reserveid1 = C4::Reserves::GetReserveId(
+    {
+        biblionumber => $bibnum,
+        borrowernumber => $borrowernumbers[0]
+    }
+);
+
+($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL' } , $bibnum);
+AddReserve(
+    $branch,
+    $borrowernumbers[1],
+    $bibnum,
+    'a',
+    '',
+    2,
+);
+my $reserveid2 = C4::Reserves::GetReserveId(
+    {
+        biblionumber => $bibnum,
+        borrowernumber => $borrowernumbers[1]
+    }
+);
+
+CancelReserve({ reserve_id => $reserveid1 });
+
+$reserve2 = GetReserve( $reserveid2 );
+is( $reserve2->{priority}, 1, "After cancelreserve, the 2nd reserve becomes the first on the waiting list" );
+
+($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL' } , $bibnum);
+AddReserve(
+    $branch,
+    $borrowernumbers[0],
+    $bibnum,
+    'a',
+    '',
+    2,
+);
+my $reserveid3 = C4::Reserves::GetReserveId(
+    {
+        biblionumber => $bibnum,
+        borrowernumber => $borrowernumbers[0]
+    }
+);
+
+my $reserve3 = GetReserve( $reserveid3 );
+is( $reserve3->{priority}, 2, "New reserve for patron 0, the reserve has a priority = 2" );
+
+ModReserve({ reserve_id => $reserveid2, rank => 'del' });
+$reserve3 = GetReserve( $reserveid3 );
+is( $reserve3->{priority}, 1, "After ModReserve, the 3rd reserve becomes the first on the waiting list" );
+
 
 # Helper method to set up a Biblio.
 sub create_helper_biblio {
