@@ -113,7 +113,6 @@ else {
     }
     
     $template->param(
-        $lang           => 1,
         opac_news       => $opac_news,
         opac_news_count => $opac_news_count,
 		);
