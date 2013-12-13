@@ -1,7 +1,7 @@
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% USE KohaDates %]
-[% USE KohaAuthorisedValues %]
+[% USE AuthorisedValues %]
 <title>Koha &rsaquo; Serials [% biblionumber %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
@@ -184,7 +184,7 @@
                           [% IF ( subscription.branchcode ) %][% Branches.GetName( subscription.branchcode ) %][% END %]
                         </td>
                         <td>
-                          [% IF ( subscription.location ) %][% KohaAuthorisedValues.GetByCode( 'LOC', subscription.location ) %][% END %]
+                          [% IF ( subscription.location ) %][% AuthorisedValues.GetByCode( 'LOC', subscription.location ) %][% END %]
                         </td>
                         <td>
                           [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
@@ -271,7 +271,7 @@
                           [% IF ( subscription.branchcode ) %][% Branches.GetName( subscription.branchcode ) %][% END %]
                         </td>
                         <td>
-                          [% IF ( subscription.location ) %][% KohaAuthorisedValues.GetByCode( 'LOC', subscription.location ) %][% END %]
+                          [% IF ( subscription.location ) %][% AuthorisedValues.GetByCode( 'LOC', subscription.location ) %][% END %]
                         </td>
                         <td>
                           [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
