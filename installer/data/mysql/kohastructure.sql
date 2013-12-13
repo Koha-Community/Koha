@@ -2147,7 +2147,7 @@ DROP TABLE IF EXISTS `suggestions`;
 CREATE TABLE `suggestions` ( -- purchase suggestions
   `suggestionid` int(8) NOT NULL auto_increment, -- unique identifier assigned automatically by Koha
   `suggestedby` int(11) NOT NULL default 0, -- borrowernumber for the person making the suggestion, foreign key linking to the borrowers table
-  `suggesteddate` date NOT NULL default 0, -- date the suggestion was submitted
+  `suggesteddate` date NOT NULL, -- date the suggestion was submitted
   `managedby` int(11) default NULL, -- borrowernumber for the librarian managing the suggestion, foreign key linking to the borrowers table
   `manageddate` date default NULL, -- date the suggestion was updated
    acceptedby INT(11) default NULL, -- borrowernumber for the librarian who accepted the suggestion, foreign key linking to the borrowers table

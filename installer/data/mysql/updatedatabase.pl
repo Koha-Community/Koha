@@ -7859,6 +7859,15 @@ if ( CheckVersion($DBversion) ) {
         ALTER TABLE collections_tracking CHANGE ctId collections_tracking_id integer(11) NOT NULL auto_increment;
     });
     print "Upgrade to $DBversion done (Bug 11384) - change name of collections_tracker.ctId column)\n";
+   SetVersion ($DBversion);
+}
+
+$DBversion = "3.15.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        ALTER TABLE suggestions MODIFY suggesteddate DATE NOT NULL
+    });
+    print "Upgrade to $DBversion done (Bug 11391) - drop default value on suggestions.suggesteddate column)\n";
     SetVersion($DBversion);
 }
 
