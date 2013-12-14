@@ -628,13 +628,27 @@ sub GetSubscriptions {
 
 =head2 SearchSubscriptions
 
-@results = SearchSubscriptions($args);
-$args is a hashref. Its keys can be contained: title, issn, ean, publisher, bookseller and branchcode
+  @results = SearchSubscriptions($args);
 
-this function gets all subscriptions which have title like $title, ISSN like $issn, EAN like $ean, publisher like $publisher, bookseller like $bookseller AND branchcode eq $branch.
+This function returns a list of hashrefs, one for each subscription
+that meets the conditions specified by the $args hashref.
 
-return:
-a table of hashref. Each hash containt the subscription.
+The valid search fields are:
+
+  biblionumber
+  title
+  issn
+  ean
+  callnumber
+  location
+  publisher
+  bookseller
+  branch
+  expiration_date
+  closed
+
+The expiration_date search field is special; it specifies the maximum
+subscription expiration date.
 
 =cut
 
