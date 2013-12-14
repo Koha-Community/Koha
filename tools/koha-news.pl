@@ -7,6 +7,7 @@
 # Casta�eda, Carlos Sebastian - seba3c@yahoo.com.ar - Physics Library UNLP Argentina
 # Modified to include news to KOHA intranet - tgarip@neu.edu.tr NEU library -Cyprus
 # Copyright 2000-2002 Katipo Communications
+# Copyright (C) 2013    Mark Tompsett
 #
 # Koha is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -117,4 +118,5 @@ else {
         opac_news_count => $opac_news_count,
 		);
 }
+$template->param( lang => $lang );
 output_html_with_http_headers $cgi, $cookie, $template->output;

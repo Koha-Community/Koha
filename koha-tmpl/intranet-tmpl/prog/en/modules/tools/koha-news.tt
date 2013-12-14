@@ -64,23 +64,43 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
 
 [% UNLESS ( add_form ) %]
 <div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-small" id="newentry" href="/cgi-bin/koha/tools/koha-news.pl?op=add_form"><i class="icon-plus"></i> New entry</a>
+    <a class="btn btn-small" id="newentry" href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&lang=[% lang %]"><i class="icon-plus"></i> New entry</a>
 </div>
 [% END %]
 
 [% IF ( add_form ) %]
+    [% IF ( op == 'add' ) %][% default_lang = lang %]
+    [% ELSE %][% default_lang = new_detail.lang %]
+    [% END %]
         <form name="add_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" >
             <input type="hidden" name="op" value="[% op %]" />
             <input type="hidden" name="id" value="[% id %]" />
 			<fieldset class="rows">
             <legend>OPAC and Koha news</legend>
            <ol> <li>
-            <label for="lang">Display location</label>
+            <label for="lang">([% new_detail.lang %])([% lang %])Display location</label>
             <select id="lang" name="lang">
-                <option value="koha">Librarian interface</option>
-                [% IF ( slip ) %]<option value="slip" selected="selected">Slip</option>[% ELSE %]<option value="slip">Slip</option>[% END %]
+                [% IF ( default_lang == "" ) %]
+                <option value=""     selected>All</option>
+                [% ELSE %]
+                <option value=""             >All</option>
+                [% END %]
+                [% IF ( default_lang == "koha" ) %]
+                <option value="koha" selected>Librarian interface</option>
+                [% ELSE %]
+                <option value="koha"         >Librarian interface</option>
+                [% END %]
+                [% IF ( default_lang == "slip" ) %]
+                <option value="slip" selected>Slip</option>
+                [% ELSE %]
+                <option value="slip"         >Slip</option>
+                [% END %]
                 [% FOREACH lang_lis IN lang_list %]
-                    [% IF ( lang_lis.selected ) %]<option value="[% lang_lis.language %]" selected="selected">OPAC ([% lang_lis.language %])</option>[% ELSE %]<option value="[% lang_lis.language %]">OPAC ([% lang_lis.language %])</option>[% END %]
+                [% IF ( lang_lis.language == default_lang ) %]
+                    <option value="[% lang_lis.language %]" selected>OPAC ([% lang_lis.language %])</option>
+                [% ELSE %]
+                    <option value="[% lang_lis.language %]"         >OPAC ([% lang_lis.language %])</option>
+                [% END %]
                 [% END %]
             </select>
             </li>
@@ -118,17 +138,27 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
         <form name="add_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" >
             <label for="lang">Display location:</label>
             <select name="lang" id="lang">
-            <option value="">All</option>
-            <option value="koha">Librarian interface</option>
-	    <option value="slip">Slip</option>
+            [% IF ( lang == "" ) %]
+            <option value=""     selected>All</option>
+            [% ELSE %]
+            <option value=""             >All</option>
+            [% END %]
+            [% IF ( lang == "koha" ) %]
+            <option value="koha" selected>Librarian interface</option>
+            [% ELSE %]
+            <option value="koha"         >Librarian interface</option>
+            [% END %]
+            [% IF ( lang == "slip" ) %]
+            <option value="slip" selected>Slip</option>
+            [% ELSE %]
+            <option value="slip"         >Slip</option>
+            [% END %]
                 [% FOREACH lang_lis IN lang_list %]
-                    [% IF ( lang_lis.selected ) %]
-                        <option value="[% lang_lis.language %]" selected="selected">
-                    [% ELSE %]
-                        <option value="[% lang_lis.language %]">
-                    [% END %]
-                        OPAC ([% lang_lis.language %])
-                    </option>
+                [% IF ( lang_lis.language == lang ) %]
+                    <option value="[% lang_lis.language %]" selected>OPAC ([% lang_lis.language %])</option>
+                [% ELSE %]
+                    <option value="[% lang_lis.language %]">OPAC ([% lang_lis.language %])</option>
+                [% END %]
                 [% END %]
             </select>
             <input type="submit" class="button" value="Filter" />
@@ -156,15 +186,16 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                             <td>
                                 <input type="checkbox" name="ids" value="[% opac_new.idnew %]" />
                             </td>
-                            <td>[% IF ( opac_new.lang == 'koha' ) %]
-			            Librarian interface
-                                 [% ELSE %]
-                                    [% IF ( opac_new.lang == 'slip' ) %]
-				        Slip
-                                    [% ELSE %]
-                                        OPAC
-				    [% END %]
-				 [% END %]
+                            <td>[% SWITCH opac_new.lang %]
+                                [%   CASE "koha" %]
+                                    Librarian interface
+                                [%   CASE "slip" %]
+                                    Slip
+                                [%   CASE "" %]
+                                    All
+                                [%   CASE %]
+                                    OPAC ([% opac_new.lang %])
+                                [% END %]
                              </td>
 
                             <td>[% opac_new.number %]</td>
