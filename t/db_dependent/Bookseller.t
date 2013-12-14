@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 64;
+use Test::More tests => 69;
 use C4::Context;
 use Koha::DateUtils;
 use DateTime::Duration;
@@ -196,8 +196,8 @@ my $id_subscription1 = NewSubscription(
     '01-01-2013',undef, undef, undef,  undef,
     undef,      undef,  undef, undef, undef, undef,
     1,          "subscription notes",undef, '01-01-2013', undef, undef,
-    undef,       undef,  0,    "intnotes",  0,
-    undef, undef, 0,          undef,         '31-12-2013', 0
+    undef, 'CALL ABC',  0,    "intnotes",  0,
+    undef, undef, 0,          undef,         '2013-11-30', 0
 );
 
 my @subscriptions = SearchSubscriptions({biblionumber => $biblionumber});
@@ -208,8 +208,8 @@ my $id_subscription2 = NewSubscription(
     '01-01-2013',undef, undef, undef,  undef,
     undef,      undef,  undef, undef, undef, undef,
     1,          "subscription notes",undef, '01-01-2013', undef, undef,
-    undef,       undef,  0,    "intnotes",  0,
-    undef, undef, 0,          undef,         '31-12-2013', 0
+    undef, 'CALL DEF',  0,    "intnotes",  0,
+    undef, undef, 0,          undef,         '2013-07-31', 0
 );
 
 $bookseller1fromid = C4::Bookseller::GetBookSellerFromId($id_supplier1);
@@ -367,8 +367,19 @@ my $id_subscription3 = NewSubscription(
     undef,      undef,  undef, undef, undef, undef,
     1,          "subscription notes",undef, '01-01-2013', undef, undef,
     undef,       undef,  0,    "intnotes",  0,
-    undef, undef, 0,          undef,         '31-12-2013', 0
+    undef, undef, 0,          'LOCA',         '2013-12-31', 0
 );
+
+@subscriptions = SearchSubscriptions({expiration_date => '2013-12-31'});
+is(scalar(@subscriptions), 3, 'search for subscriptions by expiration date');
+@subscriptions = SearchSubscriptions({expiration_date => '2013-08-15'});
+is(scalar(@subscriptions), 1, 'search for subscriptions by expiration date');
+@subscriptions = SearchSubscriptions({callnumber => 'CALL'});
+is(scalar(@subscriptions), 2, 'search for subscriptions by call number');
+@subscriptions = SearchSubscriptions({callnumber => 'DEF'});
+is(scalar(@subscriptions), 1, 'search for subscriptions by call number');
+@subscriptions = SearchSubscriptions({location => 'LOCA'});
+is(scalar(@subscriptions), 1, 'search for subscriptions by location');
 
 #Add 4 orders
 my ( $ordernumber1, $ordernumber2, $ordernumber3, $ordernumber4 );
