@@ -56,6 +56,7 @@ my $ecost            = $input->param('ecost');
 my $rrp              = $input->param('rrp');
 my $note             = $input->param("note");
 my $order            = GetOrder($ordernumber);
+my $new_ordernumber  = $ordernumber;
 
 #need old recievedate if we update the order, parcel.pl only shows the right parcel this way FIXME
 if ($quantityrec > $origquantityrec ) {
@@ -82,7 +83,6 @@ if ($quantityrec > $origquantityrec ) {
         }
     }
 
-    my $new_ordernumber = $ordernumber;
     # save the quantity received.
     if ( $quantityrec > 0 ) {
         ($datereceived, $new_ordernumber) = ModReceiveOrder(
@@ -149,6 +149,6 @@ ModItem(
     },
     $biblionumber,
     $_
-) foreach GetItemnumbersFromOrder($ordernumber);
+) foreach GetItemnumbersFromOrder($new_ordernumber);
 
 print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid");
