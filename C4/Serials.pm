@@ -1442,7 +1442,7 @@ $subscriptionid = &NewSubscription($auser,branchcode,$aqbooksellerid,$cost,$aqbu
     $startdate,$periodicity,$numberlength,$weeklength,$monthlength,
     $lastvalue1,$innerloop1,$lastvalue2,$innerloop2,$lastvalue3,$innerloop3,
     $status, $notes, $letter, $firstacquidate, $irregularity, $numberpattern,
-    $callnumber, $hemisphere, $manualhistory, $internalnotes, $serialsadditems,
+    $locale, $callnumber, $manualhistory, $internalnotes, $serialsadditems,
     $staffdisplaycount, $opacdisplaycount, $graceperiod, $location, $enddate, $skip_serialseq);
 
 Create a new subscription with value given on input args.
