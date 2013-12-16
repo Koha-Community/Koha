@@ -38,13 +38,13 @@ use Carp;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
-	require Exporter;
-	# set the version for version checking
+    require Exporter;
+    # set the version for version checking
     $VERSION = 3.07.00.049;
-	@ISA = qw(Exporter);
-	@EXPORT = qw(
-       &GetLetters &GetPreparedLetter &GetWrappedLetter &addalert &getalert &delalert &findrelatedto &SendAlerts &GetPrintMessages &GetMessageTransportTypes
-	);
+    @ISA = qw(Exporter);
+    @EXPORT = qw(
+        &GetLetters &GetPreparedLetter &GetWrappedLetter &addalert &getalert &delalert &findrelatedto &SendAlerts &GetPrintMessages &GetMessageTransportTypes
+    );
 }
 
 =head1 NAME

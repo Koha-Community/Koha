@@ -210,7 +210,7 @@ $(document).ready(function() {
 	
 [% IF ( add_form ) %]
 <h1>[% IF ( modify ) %]Modify notice[% ELSE %]Add notice[% END %]</h1>
-          <form name="Aform" method="post" enctype="multipart/form-data">
+        <form name="Aform" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="op" id="op" value="add_validate" />
 		<input type="hidden" name="checked" value="0" />
 		[% IF ( modify ) %]
@@ -327,12 +327,12 @@ $(document).ready(function() {
         </ol>
 
         [% IF code.search('DGST') %] <span class="overdue">Warning, this is a template for a Digest, as such, any references to branch data ( e.g. branches.branchname ) will refer to the borrower's home branch.</span> [% END %]
-		</fieldset>
-          <fieldset class="action"><input type="submit" id="submit" value="Submit" class="button" /> <a class="cancel" href="/cgi-bin/koha/tools/letter.pl">Cancel</a></fieldset>
+        </fieldset>
+        <fieldset class="action"><input type="submit" id="submit" value="Submit" class="button" /> <a class="cancel" href="/cgi-bin/koha/tools/letter.pl">Cancel</a></fieldset>
       <input type="hidden" name="searchfield" value="[% searchfield %]" />
-		</form>
+    </form>
 [% END %]
-	
+
 [% IF ( add_validate ) %]
 	Data recorded
 	<form action="[% action %]" method="post">

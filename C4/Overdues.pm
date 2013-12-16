@@ -914,6 +914,7 @@ sub RemoveNotifyLine {
     return a arrayref with all message_transport_type for given branchcode, categorycode and letternumber(1,2 or 3)
 
 =cut
+
 sub GetOverdueMessageTransportTypes {
     my ( $branchcode, $categorycode, $letternumber ) = @_;
     return unless $categorycode and $letternumber;
