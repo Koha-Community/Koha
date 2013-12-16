@@ -54,14 +54,15 @@ mysqldump --databases --host="$mysqlhost" \
 chown "root:$name-koha" "$dbdump"
 chmod g+r "$dbdump"
 
+instancefile="$name.conf"
 
 # Dump configs, logs, etc.
 metadump="$backupdir/$name-$date.tar.gz"
 echo "* configs, logs to $metadump"
 tar -C / -czf "$metadump" \
     "etc/koha/sites/$name" \
-    "etc/apache2/sites-available/$name" \
-    "etc/apache2/sites-enabled/$name" \
+    "etc/apache2/sites-available/$instancefile" \
+    "etc/apache2/sites-enabled/$instancefile" \
     "var/lib/koha/$name" \
     "var/log/koha/$name"
 

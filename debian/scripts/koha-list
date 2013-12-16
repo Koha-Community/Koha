@@ -28,9 +28,10 @@ die()
 is_enabled()
 {
     local instancename=$1
+    local instancefile="/etc/apache2/sites-available/$instancename.conf"
 
     if grep '^[[:space:]]*Include /etc/koha/apache-shared-disable.conf' \
-            "/etc/apache2/sites-available/$instancename" > /dev/null
+            "$instancefile" > /dev/null
     then
         return 1
     else

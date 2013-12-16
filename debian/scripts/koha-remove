@@ -68,8 +68,11 @@ eof
     
     # If the daemon is not running already, we don't want to fail this loop. So bin the result code if this fails.
     koha-stop-zebra $name || /bin/true
-    [ -f "/etc/apache2/sites-available/$name" ]  && \
-        rm "/etc/apache2/sites-available/$name"
+
+    instancefile="$name.conf"
+
+    [ -f "/etc/apache2/sites-available/$instancefile" ]  && \
+        rm "/etc/apache2/sites-available/$instancefile"
     [ -f "/etc/koha/sites/$name/koha-conf.xml" ] && \
         rm "/etc/koha/sites/$name/koha-conf.xml"
     [ -f "/etc/koha/sites/$name/zebra-biblios.cfg" ] && \

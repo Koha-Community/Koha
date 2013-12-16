@@ -34,13 +34,14 @@ warn()
 is_enabled()
 {
     local instancename=$1
+    local instancefile="/etc/apache2/sites-available/$instancename.conf"
 
     if ! is_instance $instancename; then
         return 1
     fi
 
     if grep -q '^[[:space:]]*Include /etc/koha/apache-shared-disable.conf' \
-            "/etc/apache2/sites-available/$instancename" ; then
+            "$instancefile" ; then
         return 1
     else
         return 0
@@ -63,10 +64,11 @@ is_instance()
 enable_instance()
 {
     local instancename=$1
+    local instancefile="/etc/apache2/sites-available/$instancename.conf"
 
     if ! is_enabled $instancename; then
         sed -i 's:^\(\s*Include /etc/koha/apache-shared-disable.conf\)$:#\1:' \
-            "/etc/apache2/sites-available/$instancename"
+            "$instancefile"
         return 0
     else
         return 1

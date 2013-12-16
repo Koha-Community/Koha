@@ -123,6 +123,50 @@ getinstancemysqldatabase() {
     xmlstarlet sel -t -v 'yazgfs/config/database' "/etc/koha/sites/$1/koha-conf.xml"
 }
 
+check_apache_config()
+{
+
+    # Check that mpm_itk is installed and enabled
+    if ! /usr/sbin/apachectl -M 2> /dev/null | grep -q 'mpm_itk'; then
+        # Check Apache version
+        APACHE_DISABLE_MPM_MSG=""
+        if /usr/sbin/apache2ctl -v | grep -q "Server version: Apache/2.4"; then
+            # mpm_event or mpm_worker need to be disabled first. mpm_itk depends
+            # on mpm_prefork, which is enabled if needed. See
+            # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=734865
+            if /usr/sbin/apachectl -M 2> /dev/null | grep -q 'mpm_event'; then
+                APACHE_DISABLE_MPM_MSG=" sudo a2dismod mpm_event ;"
+            elif /usr/sbin/apachectl -M 2> /dev/null | grep -q 'mpm_worker'; then
+                APACHE_DISABLE_MPM_MSG=" sudo a2dismod mpm_worker ;"
+            # else mpm_prefork: a2enmod mpm_itk works
+            fi
+        # else Apache 2.2: a2enmod mpm_itk works
+        fi
+
+        cat 1>&2  <<EOM
+
+Koha requires mpm_itk to be enabled within Apache in order to run.
+Typically this can be enabled with:
+
+   $APACHE_DISABLE_MPM_MSG sudo a2enmod mpm_itk
+EOM
+
+        die
+    fi
+
+    # Check that mod_rewrite is installed and enabled.
+    if ! /usr/sbin/apachectl -M 2> /dev/null | grep -q 'rewrite_module'; then
+        cat 1>&2  <<EOM
+
+Koha requires mod_rewrite to be enabled within Apache in order to run.
+Typically this can be enabled with:
+
+    sudo a2enmod rewrite
+EOM
+        die
+    fi
+}
+
 set_biblios_indexing_mode()
 {
     local indexing_mode=$1
@@ -373,7 +417,7 @@ elif [ "$CLO_MEMCACHED_SERVERS" != "" ] || \
 
 Error: you provided memcached configuration switches but memcached is not enabled.
 Please set USE_MEMCACHED="yes" on /etc/koha/koha-sites.conf or use the
---use-memcached optio switch to enable it.
+--use-memcached option switch to enable it.
 
 EOF`
 
@@ -391,18 +435,8 @@ then
     die "This script must be run with root privileges."
 fi
 
-# Check that mod_rewrite is installed so we can bail out if it's not.
-if ! /usr/sbin/apachectl -M 2> /dev/null | grep -q 'rewrite_module'
-then
-    cat 1>&2  <<EOM
-
-Koha requires mod_rewrite to be enabled within Apache in order to run.
-Typically this can be enabled with:
-
-    sudo a2enmod rewrite
-EOM
-    die
-fi
+# Check everything is ok with Apache, die otherwise
+check_apache_config
 
 opacdomain="$OPACPREFIX$name$OPACSUFFIX$DOMAIN"
 intradomain="$INTRAPREFIX$name$INTRASUFFIX$DOMAIN"
@@ -493,7 +527,7 @@ eof
 
     # Generate and install Apache site-available file and log dir.
     generate_config_file apache-site.conf.in \
-        "/etc/apache2/sites-available/$name"
+        "/etc/apache2/sites-available/$name.conf"
     mkdir "/var/log/koha/$name"
     chown "$username:$username" "/var/log/koha/$name"
 
