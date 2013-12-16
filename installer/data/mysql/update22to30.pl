@@ -3443,7 +3443,7 @@ my $DBversion = "3.00.00.000";
                 $dbh->do($sql);
                 if ($dbh->err) {
                     print "====================
-    An error occured during :
+    An error occurred during :
     \t$sql
     It probably means there is something wrong in your DB : a row ($table.$row->{key}) refers to a value in $row->{foreigntable}.$row->{foreignkey} that does not exist. solve the problem and run updater again (or just the previous SQL statement).
     You can find those values with select
