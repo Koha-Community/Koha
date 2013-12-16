@@ -41,7 +41,24 @@ $(document).ready(function() {
   }));
 
   $("#mainformsubmit").click(function(){
-    return submitBackgroundJob(document.getElementById("process"));
+    if ( $("#marc_modification_template_id").val() > 0 ) {
+      return submitBackgroundJob(document.getElementById("process"));
+    }
+    alert(_("Please select a modification template."));
+    return false;
+  });
+
+  $("#marc_modification_template_id").change(function(){
+    var url = "/cgi-bin/koha/svc/records/preview?"
+    var mmtid = $(this).val();
+    $("a.preview").each(function(){
+      $(this).attr("href", url + "record_type=" + $(this).attr("data-record_type") + "&record_id=" + $(this).attr("data-record_id") + "&mmtid=" + mmtid);
+    });
+  });
+
+  $("a.preview").click(function(){
+    // Equivalent to rel="gb_page_center[600,500]"
+    return GB_showCenter(_("Preview MARC"), this.href , 600, 500);
   });
 
 });
@@ -138,12 +155,23 @@ $(document).ready(function() {
     </form>
   [% ELSIF view == 'list' %]
     [% IF records %]
-      [% IF recordtype == 'biblio' %]
-        <div id="toolbar">
-          <a id="selectall" href="#">Select All</a>
-          | <a id="clearall" href="#">Clear All</a>
-        </div>
-        <form action="/cgi-bin/koha/tools/batch_record_modification.pl" method="post" id="process">
+      <form action="/cgi-bin/koha/tools/batch_record_modification.pl" method="post" id="process">
+        <label for="marc_modification_template_id" class="required">Modify record using the following template: </label>
+        <select name="marc_modification_template_id" id="marc_modification_template_id" required="required">
+          <option value="">Select a template</option>
+          [% FOREACH mmt IN MarcModificationTemplatesLoop %]
+            [% IF mmt.selected %]
+              <option value="[% mmt.template_id %]" selected="selected">[% mmt.name %]</option>
+            [% ELSE %]
+              <option value="[% mmt.template_id %]">[% mmt.name %]</option>
+            [% END %]
+          [% END %]
+        </select>
+        [% IF recordtype == 'biblio' %]
+          <div id="toolbar">
+            <a id="selectall" href="#">Select All</a>
+            | <a id="clearall" href="#">Clear All</a>
+          </div>
           <table id="biblios" class="records">
             <thead>
               <tr>
@@ -159,19 +187,17 @@ $(document).ready(function() {
                   <td><input type="checkbox" name="record_id" value="[% biblio.biblionumber %]" data-items="[% biblio.itemnumbers.size %]" data-issues="[% biblio.issues_count %]" data-reserves="[% biblio.reserves.size %]" /></td>
                   <td>[% biblio.biblionumber %]</td>
                   <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber %]">[% biblio.title %]</a></td>
-                  <td><a href="/cgi-bin/koha/svc/records/preview?record_type=biblio&record_id=[% biblio.biblionumber %]&mmtid=[% mmtid %]" title="MARC preview" rel="gb_page_center[600,500]">Preview MARC</a>
-
+                  <td><a href="/cgi-bin/koha/svc/records/preview?record_type=biblio&record_id=[% biblio.biblionumber %]&mmtid=[% mmtid %]" class="preview" data-record_type="biblio" data-record_id="[% biblio.biblionumber %]" data-mmtid="[% mmtid %]" title="Preview MARC" >Preview MARC</a>
                 </tr>
               [% END %]
             </tbody>
           </table>
           <div class="note">Reminder: this action will modify all selected biblios!</div>
-      [% ELSE %]
-        <div id="toolbar">
-          <a id="selectall" href="#">Select All</a>
-          | <a id="clearall" href="#">Clear All</a>
-        </div>
-        <form action="/cgi-bin/koha/tools/batch_record_modification.pl" method="post" id="process">
+        [% ELSE %]
+          <div id="toolbar">
+            <a id="selectall" href="#">Select All</a>
+            | <a id="clearall" href="#">Clear All</a>
+          </div>
           <table id="authorities" class="records">
             <thead>
               <tr>
@@ -187,20 +213,19 @@ $(document).ready(function() {
                   <td><input type="checkbox" name="record_id" value="[% authority.authid %]" data-usage="[% authority.count_usage %]" /></td>
                   <td><a href="/cgi-bin/koha/authorities/detail.pl?authid=[% authority.authid %]">[% authority.authid %]</a></td>
                   <td>[% PROCESS authresult summary=authority.summary %]</td>
-                  <td><a href="/cgi-bin/koha/svc/records/preview?record_type=authority&record_id=[% authority.authid %]&mmtid=[% mmtid %]" title="MARC preview" rel="gb_page_center[600,500]">Preview MARC</a>
+                  <td><a href="/cgi-bin/koha/svc/records/preview?record_type=authority&record_id=[% authority.authid %]&mmtid=[% mmtid %]" class="preview" data-record_type="authority" data-record_id="[% authority.authid %]" data-mmtid="[% mmtid %]" title="Preview MARC" rel="gb_page_center[600,500]">Preview MARC</a>
                 </tr>
               [% END %]
             </tbody>
           </table>
           <div class="note">Reminder: this action will modify all selected authorities!</div>
-      [% END %]
+        [% END %]
         <fieldset class="action">
           <input type="hidden" name="op" value="modify" />
           <input type="hidden" name="recordtype" value="[% recordtype %]" />
           <input type="button" id="mainformsubmit" value="Modify selected records" class="button" />
           <input type="hidden" name="runinbackground" id="runinbackground" value="" />
           <input type="hidden" name="completedJobID" id="completedJobID" value="" />
-          <input type="hidden" name="marc_modification_template_id" value="[% mmtid %]" />
           <a class="cancel" href="/cgi-bin/koha/tools/batch_record_modification.pl">Cancel</a>
         </fieldset>
         <div id="jobpanel">

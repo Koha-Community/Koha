@@ -65,7 +65,7 @@ if ( $completedJobID ) {
     exit;
 }
 
-my @templates = GetModificationTemplates();
+my @templates = GetModificationTemplates( $mmtid );
 unless ( @templates ) {
     $op = 'error';
     $template->param(
@@ -91,7 +91,6 @@ if ( $op eq 'form' ) {
     # Display the form
     $template->param(
         view => 'form',
-        MarcModificationTemplatesLoop => \@templates,
     );
 } elsif ( $op eq 'list' ) {
     # List all records to process
@@ -256,6 +255,7 @@ if ( $op eq 'form' ) {
 $template->param(
     messages => \@messages,
     recordtype => $recordtype,
+    MarcModificationTemplatesLoop => \@templates,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
