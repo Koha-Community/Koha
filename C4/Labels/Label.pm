@@ -62,6 +62,8 @@ sub _check_params {
 
 sub _guide_box {
     my ( $llx, $lly, $width, $height ) = @_;
+    return unless ( defined $llx and defined $lly and
+                    defined $width and defined $height );
     my $obj_stream = "q\n";                            # save the graphic state
     $obj_stream .= "0.5 w\n";                          # border line width
     $obj_stream .= "1.0 0.0 0.0  RG\n";                # border color red
