@@ -20,7 +20,7 @@ use strict;
 use warnings;
 
 use CGI;
-use C4::Acquisition qw( GetHistory GetItemnumbersFromOrder );
+use C4::Acquisition qw( GetHistory );
 use C4::Auth;
 use C4::Dates qw/format_date/;
 use C4::Koha;
@@ -167,16 +167,12 @@ foreach my $subscription (@subscriptions) {
 
 
 # Get acquisition details
-my ( $orders, $qty, $price, $received ) = C4::Acquisition::GetHistory( biblionumber => $biblionumber, get_canceled_order => 1 );
-if ( C4::Context->preference('AcqCreateItem') eq 'ordering' ) {
-    for my $order ( @$orders ) {
-        $order->{itemnumbers} = [ C4::Acquisition::GetItemnumbersFromOrder( $order->{ordernumber} ) ];
-    }
+if ( C4::Context->preference('AcquisitionDetails') ) {
+    my ( $orders, $qty, $price, $received ) = C4::Acquisition::GetHistory( biblionumber => $biblionumber, get_canceled_order => 1 );
+    $template->param(
+        orders => $orders,
+    );
 }
-$template->param(
-    orders => $orders,
-    AcquisitionDetails => C4::Context->preference('AcquisitionDetails'),
-);
 
 if ( defined $dat->{'itemtype'} ) {
     $dat->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $dat->{itemtype} }{imageurl} );

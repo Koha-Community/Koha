@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
@@ -256,7 +257,7 @@ function verify_images() {
             table.before(link);
             deactivate_filters(id);
         }
-        [% IF AcquisitionDetails %]
+        [% IF Koha.Preference('AcquisitionDetails') %]
             $("#orders").dataTable($.extend(true, {}, dataTablesDefaults, {
                 'sDom': 't',
                 'bPaginate': false,
@@ -496,7 +497,7 @@ function verify_images() {
     [% END %]
 [% IF ( MARCNOTES || notes ) %]<li><a href="#description">Descriptions</a></li>[% END %]
 [% IF ( subscriptionsnumber ) %]<li><a href="#subscriptions">Subscriptions</a></li>[% END %]
-[% IF AcquisitionDetails %]<li><a href="#acq_details">Acquisition details</a></li>[% END %]
+[% IF Koha.Preference('AcquisitionDetails') %]<li><a href="#acq_details">Acquisition details</a></li>[% END %]
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="#editions">Editions</a></li>[% END %][% END %]
 [% IF ( LocalCoverImages ) %][% IF ( localimages || CAN_user_tools_upload_local_cover_images ) %]<li><a href="#images">Images</a></li>[% END %][% END %]
 [% IF ( HTML5MediaEnabled ) %][% IF ( HTML5MediaSets ) %]<li><a href="#html5media">Play media</a></li>[% END %][% END %]
@@ -825,7 +826,7 @@ function verify_images() {
 </div>
 [% END %]
 
-[% IF AcquisitionDetails %]
+[% IF Koha.Preference('AcquisitionDetails') %]
 <div id="acq_details">
   [% IF orders %]
     <table id="orders">
@@ -837,7 +838,7 @@ function verify_images() {
           <th>Creation date</th>
           <th>Receive date</th>
           <th>Status</th>
-          <th>Quantity / items</th>
+          <th>Quantity</th>
         </tr>
       </thead>
       <tbody>
@@ -869,17 +870,7 @@ function verify_images() {
                 [% CASE 'cancelled' %]Cancelled
               [% END %]
             </td>
-            <td>
-              [% order.quantity %]
-              [% IF order.itemnumbers.size > 0 && order.orderstatus != 'cancelled' %]
-                (
-                  [% FOR itemnumber IN order.itemnumbers %]
-                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber %]#item[% itemnumber %]">[% itemnumber %]</a>
-                    [%- UNLESS loop.last %],[% END %]
-                  [% END %]
-                )
-              [% END %]
-            </th>
+            <td>[% order.quantity %]</th>
           </tr>
       [% END %]
       </tbody>
