@@ -20,7 +20,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 6;
+use Test::More tests => 10;
 
 BEGIN {
     use_ok('C4::Labels::Label');
@@ -36,7 +36,17 @@ is_deeply($parsed_fields, $expected_fields, '"callnumber" in label layout alias 
 
 is(C4::Labels::Label::_check_params(),"0",'test checking parameters');
 
-ok(C4::Labels::Label::_guide_box(), 'test guide box with nothing entered');
+my ($llx,$lly,$width,$height) = ( 0, 0, 10, 10 );
+ok(!defined C4::Labels::Label::_guide_box(),
+        "Test guide box with undefined parameters returns undef");
+ok(!defined C4::Labels::Label::_guide_box(undef,$lly,$width,$height),
+        "Test guide box with undefined 'x' coordinate returns undef");
+ok(!defined C4::Labels::Label::_guide_box($llx,undef,$width,$height),
+        "Test guide box with undefined 'y' coordinate returns undef");
+ok(!defined C4::Labels::Label::_guide_box($llx,$lly,undef,$height),
+        "Test guide box with undefined 'width' returns undef");
+ok(!defined C4::Labels::Label::_guide_box($llx,$lly,$width,undef),
+        "Test guide box with undefined 'height' returns undef");
 
 ok(C4::Labels::Label::_get_text_fields(), 'test getting textx fields');
 
