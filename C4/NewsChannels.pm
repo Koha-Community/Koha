@@ -51,7 +51,6 @@ sub add_opac_new {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("INSERT INTO opac_news (title, new, lang, expirationdate, timestamp, number) VALUES (?,?,?,?,?,?)");
     $sth->execute($title, $new, $lang, $expirationdate, $timestamp, $number);
-    $sth->finish;
     return 1;
 }
 
@@ -69,7 +68,6 @@ sub upd_opac_new {
         WHERE idnew = ?
     ");
     $sth->execute($title, $new, $lang, $expirationdate, $timestamp,$number,$idnew);
-    $sth->finish;
     return 1;
 }
 
@@ -79,7 +77,6 @@ sub del_opac_new {
         my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare("DELETE FROM opac_news WHERE idnew IN ($ids)");
         $sth->execute();
-        $sth->finish;
         return 1;
     } else {
         return 0;
@@ -95,7 +92,6 @@ sub get_opac_new {
     $data->{$data->{'lang'}} = 1 if defined $data->{lang};
     $data->{expirationdate} = format_date($data->{expirationdate});
     $data->{timestamp}      = format_date($data->{timestamp});
-    $sth->finish;
     return $data;
 }
 
