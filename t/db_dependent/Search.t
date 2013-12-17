@@ -12,7 +12,7 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 82;
+use Test::More tests => 84;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;
@@ -460,6 +460,24 @@ $stopwords_removed, $query_type ) = buildQuery([], [ 'medic' ], [ 'kw' ], [], []
 
 ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
 is($results_hashref->{biblioserver}->{hits}, 5, "Search for 'medic' returns matches  with automatic truncation on");
+$QueryStemming = $QueryFuzzy = $QueryRemoveStopwords = $QueryAutoTruncate = 0;
+$QueryWeightFields = 1;
+( $error, $query, $simple_query, $query_cgi,
+$query_desc, $limit, $limit_cgi, $limit_desc,
+$stopwords_removed, $query_type ) = buildQuery([], [ 'web application' ], [ 'kw' ], [], [], 0, 'en');
+($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+is($results_hashref->{biblioserver}->{hits}, 1, "Search for 'web application' returns one hit with QueryWeightFields on");
+
+( $error, $query, $simple_query, $query_cgi,
+$query_desc, $limit, $limit_cgi, $limit_desc,
+$stopwords_removed, $query_type ) = buildQuery([], [ 'web "application' ], [ 'kw' ], [], [], 0, 'en');
+($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+is($results_hashref->{biblioserver}->{hits}, 1, "Search for 'web \"application' returns one hit with QueryWeightFields on (bug 7518)");
+
+$QueryStemming = $QueryWeightFields = $QueryFuzzy = $QueryRemoveStopwords = $QueryAutoTruncate = 0;
+( $error, $query, $simple_query, $query_cgi,
+$query_desc, $limit, $limit_cgi, $limit_desc,
+$stopwords_removed, $query_type ) = buildQuery([], [ 'medic' ], [ 'kw' ], [], [], 0, 'en');
 
 ( $error, $query, $simple_query, $query_cgi,
 $query_desc, $limit, $limit_cgi, $limit_desc,
