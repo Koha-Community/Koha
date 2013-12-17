@@ -1,7 +1,7 @@
 [% USE Branches %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-[% USE KohaAuthorisedValues %]
+[% USE AuthorisedValues %]
     <title>Koha &rsaquo; Serials &rsaquo; Claims</title>
     [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
@@ -267,7 +267,7 @@
                         </td>
                         [% FOR field IN additional_fields_for_subscription %]
                           [% IF field.authorised_value_category %]
-                            <td>[% KohaAuthorisedValues.GetByCode( field.authorised_value_category, missingissue.additional_fields.${field.name} ) %]</td>
+                            <td>[% AuthorisedValues.GetByCode( field.authorised_value_category, missingissue.additional_fields.${field.name} ) %]</td>
                           [% ELSE %]
                             <td>[% missingissue.additional_fields.${field.name} %]</td>
                           [% END %]

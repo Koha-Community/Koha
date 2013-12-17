@@ -1,5 +1,5 @@
 [% USE Branches %]
-[% USE KohaAuthorisedValues %]
+[% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Details for subscription #[% subscriptionid %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -135,7 +135,7 @@ $(document).ready(function() {
               <li>
                 <span class="label">[% field.name %]:</span>
                 [% IF field.authorised_value_category %]
-                  [% KohaAuthorisedValues.GetByCode( field.authorised_value_category, additional_fields.${field.name} ) %]
+                  [% AuthorisedValues.GetByCode( field.authorised_value_category, additional_fields.${field.name} ) %]
                 [% ELSE %]
                   [% additional_fields.${field.name} %]
                 [% END %]
