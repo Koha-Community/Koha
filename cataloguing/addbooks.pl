@@ -82,7 +82,7 @@ if ($query) {
     }
 
     # find results
-    my ( $error, $marcresults, $total_hits ) = SimpleSearch($query, $results_per_page * ($page - 1), $results_per_page);
+    my ( $error, $marcresults, $total_hits ) = SimpleSearch($builtquery, $results_per_page * ($page - 1), $results_per_page);
 
     if ( defined $error ) {
         $template->param( error => $error );
