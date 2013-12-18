@@ -35,18 +35,21 @@ $(document).ready(function() {
             return false;
         }
     });
+
+    $("#conditional_field,#from_field").change(function(){
+        updateAllEvery();
+    });
 });
 //]]>
 </script>
 
 <script>
-
-function updateWarnings(){
+function updateAllEvery(){
     if ( $("#conditional_field").is(":visible") ) {
         if ( $("#conditional_field").val() == $("#from_field").val() && $("#from_field").val().length > 0 ) {
-            $("#warning_multivalued").show();
+            $("#field_number option[value='0']").html(_("Every"));
         } else {
-            $("#warning_multivalued").hide();
+            $("#field_number option[value='0']").html(_("All"));
         }
     }
 }
