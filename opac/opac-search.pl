@@ -614,7 +614,6 @@ for (my $i=0;$i<@servers;$i++) {
         }
 
         # Opac search history
-        my $newsearchcookie;
         if (C4::Context->preference('EnableOpacSearchHistory')) {
             my @recentSearches = ParseSearchHistorySession($cgi);
 
@@ -638,11 +637,10 @@ for (my $i=0;$i<@servers;$i++) {
                 }
 
                 shift @recentSearches if (@recentSearches > 15);
-                # Pushing the cookie back
                 SetSearchHistorySession($cgi, \@recentSearches);
             }
             else {
-                # To the session (the user is logged in)
+                # To the database (the user is logged in)
                 if (!$offset) {
                     AddSearchHistory($borrowernumber, $cgi->cookie("CGISESSID"), $query_desc_history, $query_cgi_history, $total);
                     $template->param(ShowOpacRecentSearchLink => 1);
