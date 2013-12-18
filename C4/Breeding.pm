@@ -349,7 +349,7 @@ sub Z3950Search {
             my ($error)= $oConnection[$k]->error_x(); #ignores errmsg, addinfo, diagset
             if ($error) {
                 if ($error =~ m/^(10000|10007)$/ ) {
-                    push(@errconn, { 'server' => $serverinfo[$k]->{host} } );
+                    push(@errconn, { server => $serverinfo[$k]->{host}, error => $error } );
                 }
             }
             else {
