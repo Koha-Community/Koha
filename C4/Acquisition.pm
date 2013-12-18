@@ -2096,6 +2096,9 @@ sub GetLateOrders {
     SELECT aqbasket.basketno,
         aqorders.ordernumber,
         DATE(aqbasket.closedate)  AS orderdate,
+        aqbasket.basketname       AS basketname,
+        aqbasket.basketgroupid    AS basketgroupid,
+        aqbasketgroups.name       AS basketgroupname,
         aqorders.rrp              AS unitpricesupplier,
         aqorders.ecost            AS unitpricelib,
         aqorders.claims_count     AS claims_count,
@@ -2116,6 +2119,7 @@ sub GetLateOrders {
         LEFT JOIN aqbudgets           ON aqorders.budget_id          = aqbudgets.budget_id,
         aqbasket LEFT JOIN borrowers  ON aqbasket.authorisedby       = borrowers.borrowernumber
         LEFT JOIN aqbooksellers       ON aqbasket.booksellerid       = aqbooksellers.id
+        LEFT JOIN aqbasketgroups      ON aqbasket.basketgroupid      = aqbasketgroups.id
         WHERE aqorders.basketno = aqbasket.basketno
         AND ( datereceived = ''
             OR datereceived IS NULL

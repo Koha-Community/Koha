@@ -117,6 +117,9 @@ $(document).ready(function() {
             <th>Information</th>
             <th>Total cost</th>
             <th>Basket</th>
+            <th>Basket group</th>
+            <th>Branch</th>
+            <th>Fund</th>
             <th>Claims count</th>
             <th>Claimed date</th>
         </tr>
@@ -154,14 +157,16 @@ $(document).ready(function() {
             <td>
                    [% lateorder.unitpricesupplier %]x[% lateorder.quantity %] = 
                    [% lateorder.subtotal %]
-                    <p title="budget">[% lateorder.budget %]</p>
             </td>
             <td>
-                 <p><a href="basket.pl?basketno=[% lateorder.basketno %]" title="basket">
-                        [% lateorder.basketno %]
-                 	</a>
-                 </p>
-                 <p title="branch">[% lateorder.branch %]</p>
+                <a href="basket.pl?basketno=[% lateorder.basketno %]" title="basket">[% lateorder.basketname %] ([% lateorder.basketno %])</a>
+            </td>
+            <td>
+                <a href="basketgroup.pl?op=add&booksellerid=[% lateorder.supplierid %]&basketgroupid=[% lateorder.basketgroupid %]" title="basketgroup">[% lateorder.basketgroupname %] ([% lateorder.basketgroupid %])</a>
+            </td>
+            <td>[% lateorder.branch %]
+            </td>
+            <td>[% lateorder.budget %]
             </td>
             <td>[% lateorder.claims_count %]</td>
             <td>[% lateorder.claimed_date %]</td>
@@ -172,7 +177,7 @@ $(document).ready(function() {
         <tr>
             <th colspan="5">Total</th>
             <th>[% total %]</th>
-            <th colspan="3">&nbsp;</th>
+            <th colspan="6">&nbsp;</th>
         </tr>
       </tfoot>
     </table>
