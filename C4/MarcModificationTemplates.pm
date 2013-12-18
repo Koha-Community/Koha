@@ -526,54 +526,55 @@ sub ModifyRecordWithTemplate {
         }
 
         my $do = 1;
+        my $field_numbers = [ $field_number ];
         if ( $conditional ) {
             if ( $conditional_comparison eq 'exists' ) {
-                my $exists = field_exists({
-                        record =>$record,
+                $field_numbers = field_exists({
+                        record => $record,
                         field => $conditional_field,
                         subfield => $conditional_subfield,
                     });
                 $do = $conditional eq 'if'
-                    ? $exists
-                    : not $exists;
+                    ? @$field_numbers
+                    : not @$field_numbers;
             }
             elsif ( $conditional_comparison eq 'not_exists' ) {
-                my $exists = field_exists({
+                $field_numbers = field_exists({
                         record => $record,
                         field => $conditional_field,
                         subfield => $conditional_subfield
                     });
                 $do = $conditional eq 'if'
-                    ? not $exists
-                    : $exists;
+                    ? not @$field_numbers
+                    : @$field_numbers;
             }
             elsif ( $conditional_comparison eq 'equals' ) {
-                my $equals = field_equals({
+                $field_numbers = field_equals({
                     record => $record,
                     value => $conditional_value,
                     field => $conditional_field,
                     subfield => $conditional_subfield,
-                    regex => $conditional_regex
                 });
                 $do = $conditional eq 'if'
-                    ? $equals
-                    : not $equals;
+                    ? @$field_numbers
+                    : not @$field_numbers;
             }
             elsif ( $conditional_comparison eq 'not_equals' ) {
-                my $equals = field_equals({
+                $field_numbers = field_equals({
                     record => $record,
-                    value => $conditional_value,
                     field => $conditional_field,
-                    subfield => $conditional_subfield,
-                    regex => $conditional_regex
+                    subfield => $conditional_subfield
                 });
                 $do = $conditional eq 'if'
-                    ? not $equals
-                    : $equals;
+                    ? not @$field_numbers
+                    : @$field_numbers;
             }
         }
 
         if ( $do ) {
+            @$field_numbers = ( $field_number )
+                if $from_field ne $to_subfield
+                    and $field_number;
             if ( $action eq 'copy_field' ) {
                 copy_field({
                     record => $record,
@@ -586,16 +587,16 @@ sub ModifyRecordWithTemplate {
                         replace => $to_regex_replace,
                         modifiers => $to_regex_modifiers
                     },
-                    n => $field_number,
+                    field_numbers => $field_numbers,
                 });
             }
-
             elsif ( $action eq 'update_field' ) {
                 update_field({
                     record => $record,
                     field => $from_field,
                     subfield => $from_subfield,
                     values => [ $field_value ],
+                    field_numbers => $field_numbers,
                 });
             }
             elsif ( $action eq 'move_field' ) {
@@ -610,7 +611,7 @@ sub ModifyRecordWithTemplate {
                         replace => $to_regex_replace,
                         modifiers => $to_regex_modifiers
                     },
-                    n => $field_number,
+                    field_numbers => $field_numbers,
                 });
             }
             elsif ( $action eq 'delete_field' ) {
@@ -618,7 +619,7 @@ sub ModifyRecordWithTemplate {
                     record => $record,
                     field => $from_field,
                     subfield => $from_subfield,
-                    n => $field_number,
+                    field_numbers => $field_numbers,
                 });
             }
         }

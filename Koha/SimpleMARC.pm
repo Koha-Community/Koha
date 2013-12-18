@@ -80,7 +80,7 @@ sub copy_field {
     my $toFieldName = $params->{to_field};
     my $toSubfieldName = $params->{to_subfield};
     my $regex = $params->{regex};
-    my $n = $params->{n};
+    my $field_numbers = $params->{field_numbers} // [];
 
     if ( ! ( $record && $fromFieldName && $toFieldName ) ) { return; }
 
@@ -93,7 +93,7 @@ sub copy_field {
             from_field => $fromFieldName,
             to_field => $toFieldName,
             regex => $regex,
-            n => $n
+            field_numbers => $field_numbers,
         });
     } else {
         _copy_subfield({
@@ -103,7 +103,7 @@ sub copy_field {
             to_field => $toFieldName,
             to_subfield => $toSubfieldName,
             regex => $regex,
-            n => $n
+            field_numbers => $field_numbers,
         });
     }
 
@@ -115,14 +115,14 @@ sub _copy_field {
     my $fromFieldName = $params->{from_field};
     my $toFieldName = $params->{to_field};
     my $regex = $params->{regex};
-    my $n = $params->{n};
+    my $field_numbers = $params->{field_numbers} // [];
 
     _copy_move_field({
         record => $record,
         from_field => $fromFieldName,
         to_field => $toFieldName,
         regex => $regex,
-        n => $n
+        field_numbers => $field_numbers,
     });
 }
 
@@ -134,10 +134,12 @@ sub _copy_subfield {
     my $toFieldName = $params->{to_field};
     my $toSubfieldName = $params->{to_subfield};
     my $regex = $params->{regex};
-    my $n = $params->{n};
+    my $field_numbers = $params->{field_numbers} // [];
 
     my @values = read_field({ record => $record, field => $fromFieldName, subfield => $fromSubfieldName });
-    @values = ( $values[$n-1] ) if ( $n );
+    if ( @$field_numbers ) {
+        @values = map { $_ <= @values ? $values[ $_ - 1 ] : () } @$field_numbers;
+    }
     _modify_values({ values => \@values, regex => $regex });
 
     update_field({ record => $record, field => $toFieldName, subfield => $toSubfieldName, values => \@values });
@@ -149,6 +151,7 @@ sub update_field {
     my $fieldName = $params->{field};
     my $subfieldName = $params->{subfield};
     my @values = @{ $params->{values} };
+    my $field_numbers = $params->{field_numbers} // [];
 
     if ( ! ( $record && $fieldName ) ) { return; }
 
@@ -157,7 +160,7 @@ sub update_field {
         die "This action is not implemented yet";
         #_update_field({ record => $record, field => $fieldName, values => \@values });
     } else {
-        _update_subfield({ record => $record, field => $fieldName, subfield => $subfieldName, values => \@values });
+        _update_subfield({ record => $record, field => $fieldName, subfield => $subfieldName, values => \@values, field_numbers => $field_numbers });
     }
 }
 
@@ -194,9 +197,16 @@ sub _update_subfield {
     my $subfieldName = $params->{subfield};
     my @values = @{ $params->{values} };
     my $dont_erase = $params->{dont_erase};
+    my $field_numbers = $params->{field_numbers} // [];
     my $i = 0;
 
-    if ( my @fields = $record->field( $fieldName ) ) {
+    my @fields = $record->field( $fieldName );
+
+    if ( @$field_numbers ) {
+        @fields = map { $_ <= @fields ? $fields[ $_ - 1 ] : () } @$field_numbers;
+    }
+
+    if ( @fields ) {
         unless ( $dont_erase ) {
             @values = ($values[0]) x scalar( @fields )
                 if @values == 1;
@@ -236,12 +246,12 @@ sub read_field {
     my $record = $params->{record};
     my $fieldName = $params->{field};
     my $subfieldName = $params->{subfield};
-    my $n = $params->{n};
+    my $field_numbers = $params->{field_numbers} // [];
 
     if ( not $subfieldName or $subfieldName eq '' ) {
-        _read_field({ record => $record, field => $fieldName, n => $n });
+        _read_field({ record => $record, field => $fieldName, field_numbers => $field_numbers });
     } else {
-        _read_subfield({ record => $record, field => $fieldName, subfield => $subfieldName, n => $n });
+        _read_subfield({ record => $record, field => $fieldName, subfield => $subfieldName, field_numbers => $field_numbers });
     }
 }
 
@@ -249,7 +259,7 @@ sub _read_field {
     my ( $params ) = @_;
     my $record = $params->{record};
     my $fieldName = $params->{field};
-    my $n = $params->{n};
+    my $field_numbers = $params->{field_numbers} // [];
 
     my @fields = $record->field( $fieldName );
 
@@ -259,10 +269,12 @@ sub _read_field {
         if $fieldName < 10;
 
     my @values;
-    if ( $n ) {
-        if ( $n <= scalar( @fields ) ) {
-            for my $sf ( $fields[$n - 1]->subfields ) {
-                push @values, $sf->[1];
+    if ( @$field_numbers ) {
+        for my $field_number ( @$field_numbers ) {
+            if ( $field_number <= scalar( @fields ) ) {
+                for my $sf ( $fields[$field_number - 1]->subfields ) {
+                    push @values, $sf->[1];
+                }
             }
         }
     } else {
@@ -281,7 +293,7 @@ sub _read_subfield {
     my $record = $params->{record};
     my $fieldName = $params->{field};
     my $subfieldName = $params->{subfield};
-    my $n = $params->{n};
+    my $field_numbers = $params->{field_numbers} // [];
 
     my @fields = $record->field( $fieldName );
 
@@ -293,16 +305,18 @@ sub _read_subfield {
         push( @values, @sf );
     }
 
-    return $n
-        ? $values[$n-1]
-        : @values;
+    if ( @values and @$field_numbers ) {
+        @values = map { $_ <= @values ? $values[ $_ - 1 ] : () } @$field_numbers;
+    }
+
+    return @values;
 }
 
 =head2 field_exists
 
-  $bool = field_exists( $record, $fieldName[, $subfieldName ]);
+  @field_numbers = field_exists( $record, $fieldName[, $subfieldName ]);
 
-  Returns true if the field exits, false otherwise.
+  Returns the field numbers or an empty array.
 
 =cut
 
@@ -314,27 +328,29 @@ sub field_exists {
 
   if ( ! $record ) { return; }
 
-  my $return = 0;
-  if ( $fieldName && $subfieldName ) {
-    $return = $record->field( $fieldName ) && $record->subfield( $fieldName, $subfieldName );
-  } elsif ( $fieldName ) {
-    $return = $record->field( $fieldName ) && 1;
+  my @field_numbers = ();
+  my $current_field_number = 1;
+  for my $field ( $record->field( $fieldName ) ) {
+    if ( $subfieldName ) {
+      push @field_numbers, $current_field_number
+        if $field->subfield( $subfieldName );
+    } else {
+      push @field_numbers, $current_field_number;
+    }
+    $current_field_number++;
   }
 
-  return $return;
+  return \@field_numbers;
 }
 
 =head2 field_equals
 
-  $bool = field_equals( $record, $value, $fieldName[, $subfieldName[, $regex [, $n ] ] ]);
+  $bool = field_equals( $record, $value, $fieldName[, $subfieldName[, $regex ] ]);
 
   Returns true if the field equals the given value, false otherwise.
 
   If a regular expression ( $regex ) is supplied, the value will be compared using
   the given regex. Example: $regex = 'sought_text'
-
-  If $n is passed, the Nth field of a repeatable series will be used for comparison.
-  Set $n to 1 or leave empty for a non-repeatable field.
 
 =cut
 
@@ -345,19 +361,32 @@ sub field_equals {
   my $fieldName = $params->{field};
   my $subfieldName = $params->{subfield};
   my $regex = $params->{regex};
-  my $n = $params->{n};
-  $n = 1 unless ( $n ); ## $n defaults to first field of a repeatable field series
 
   if ( ! $record ) { return; }
 
-  my @field_values = read_field({ record => $record, field => $fieldName, subfield => $subfieldName, n => $n });
-  my $field_value = $field_values[$n-1];
+  my @field_numbers = ();
+  my $current_field_number = 1;
+  FIELDS: for my $field ( $record->field( $fieldName ) ) {
+    my @subfield_values = $subfieldName
+        ? $field->subfield( $subfieldName )
+        : map { $_->[1] } $field->subfields;
 
-  if ( $regex ) {
-    return $field_value =~ m/$value/;
-  } else {
-    return $field_value eq $value;
+    SUBFIELDS: for my $subfield_value ( @subfield_values ) {
+      if (
+          (
+              $regex and $subfield_value =~ m/$value/
+          ) or (
+              $subfield_value eq $value
+          )
+      ) {
+          push @field_numbers, $current_field_number;
+          last SUBFIELDS;
+      }
+    }
+    $current_field_number++;
   }
+
+  return \@field_numbers;
 }
 
 =head2 move_field
@@ -381,7 +410,7 @@ sub move_field {
     my $toFieldName = $params->{to_field};
     my $toSubfieldName = $params->{to_subfield};
     my $regex = $params->{regex};
-    my $n = $params->{n};
+    my $field_numbers = $params->{field_numbers} // [];
 
     if ( not $fromSubfieldName or $fromSubfieldName eq ''
         or not $toSubfieldName or $toSubfieldName eq ''
@@ -391,7 +420,7 @@ sub move_field {
             from_field => $fromFieldName,
             to_field => $toFieldName,
             regex => $regex,
-            n => $n,
+            field_numbers => $field_numbers,
         });
     } else {
         _move_subfield({
@@ -401,7 +430,7 @@ sub move_field {
             to_field => $toFieldName,
             to_subfield => $toSubfieldName,
             regex => $regex,
-            n => $n,
+            field_numbers => $field_numbers,
         });
     }
 }
@@ -412,13 +441,14 @@ sub _move_field {
     my $fromFieldName = $params->{from_field};
     my $toFieldName = $params->{to_field};
     my $regex = $params->{regex};
-    my $n = $params->{n};
+    my $field_numbers = $params->{field_numbers} // [];
+
     _copy_move_field({
         record => $record,
         from_field => $fromFieldName,
         to_field => $toFieldName,
         regex => $regex,
-        n => $n,
+        field_numbers => $field_numbers,
         action => 'move',
     });
 }
@@ -431,11 +461,13 @@ sub _move_subfield {
     my $toFieldName = $params->{to_field};
     my $toSubfieldName = $params->{to_subfield};
     my $regex = $params->{regex};
-    my $n = $params->{n};
+    my $field_numbers = $params->{field_numbers} // [];
 
     # Copy
     my @values = read_field({ record => $record, field => $fromFieldName, subfield => $fromSubfieldName });
-    @values = ( $values[$n-1] ) if $n;
+    if ( @$field_numbers ) {
+        @values = map { $_ <= @values ? $values[ $_ - 1 ] : () } @$field_numbers;
+    }
     _modify_values({ values => \@values, regex => $regex });
     _update_subfield({ record => $record, field => $toFieldName, subfield => $toSubfieldName, dont_erase => 1, values => \@values });
 
@@ -444,7 +476,7 @@ sub _move_subfield {
         record => $record,
         field => $fromFieldName,
         subfield => $fromSubfieldName,
-        n => $n,
+        field_numbers => $field_numbers,
     });
 }
 
@@ -464,12 +496,12 @@ sub delete_field {
     my $record = $params->{record};
     my $fieldName = $params->{field};
     my $subfieldName = $params->{subfield};
-    my $n = $params->{n};
+    my $field_numbers = $params->{field_numbers} // [];
 
     if ( not $subfieldName or $subfieldName eq '' ) {
-        _delete_field({ record => $record, field => $fieldName, n => $n });
+        _delete_field({ record => $record, field => $fieldName, field_numbers => $field_numbers });
     } else {
-        _delete_subfield({ record => $record, field => $fieldName, subfield => $subfieldName, n => $n });
+        _delete_subfield({ record => $record, field => $fieldName, subfield => $subfieldName, field_numbers => $field_numbers });
     }
 }
 
@@ -477,11 +509,13 @@ sub _delete_field {
     my ( $params ) = @_;
     my $record = $params->{record};
     my $fieldName = $params->{field};
-    my $n = $params->{n};
+    my $field_numbers = $params->{field_numbers} // [];
 
     my @fields = $record->field( $fieldName );
 
-    @fields = ( $fields[$n-1] ) if ( $n );
+    if ( @$field_numbers ) {
+        @fields = map { $_ <= @fields ? $fields[ $_ - 1 ] : () } @$field_numbers;
+    }
     foreach my $field ( @fields ) {
         $record->delete_field( $field );
     }
@@ -492,11 +526,13 @@ sub _delete_subfield {
     my $record = $params->{record};
     my $fieldName = $params->{field};
     my $subfieldName = $params->{subfield};
-    my $n = $params->{n};
+    my $field_numbers = $params->{field_numbers} // [];
 
     my @fields = $record->field( $fieldName );
 
-    @fields = ( $fields[$n-1] ) if ( $n );
+    if ( @$field_numbers ) {
+        @fields = map { $_ <= @fields ? $fields[ $_ - 1 ] : () } @$field_numbers;
+    }
 
     foreach my $field ( @fields ) {
         $field->delete_subfield( code => $subfieldName );
@@ -510,12 +546,12 @@ sub _copy_move_field {
     my $fromFieldName = $params->{from_field};
     my $toFieldName = $params->{to_field};
     my $regex = $params->{regex};
-    my $n = $params->{n};
+    my $field_numbers = $params->{field_numbers};
     my $action = $params->{action} || 'copy';
 
     my @fields = $record->field( $fromFieldName );
-    if ( $n and $n <= scalar( @fields ) ) {
-        @fields = ( $fields[$n - 1] );
+    if ( @$field_numbers ) {
+        @fields = map { $_ <= @fields ? $fields[ $_ - 1 ] : () } @$field_numbers;
     }
 
     for my $field ( @fields ) {
