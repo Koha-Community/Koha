@@ -245,7 +245,9 @@ RECORD: while (  ) {
             $id = GetRecordId( $marcrecord, $tagid, $subfieldid );
             if ( $authorities && $marcFlavour ) {
                 #Skip if authority in database is the same as the on in database
-                if ( $marcrecord->field('005')->data >= $record->field('005')->data ) {
+                if ( $marcrecord->field('005') && $record->field('005') &&
+                     $marcrecord->field('005')->data && $record->field('005')->data &&
+                     $marcrecord->field('005')->data >= $record->field('005')->data ) {
                     if ($yamlfile) {
                         $yamlhash->{$originalid}->{'authid'} = $id;
 
