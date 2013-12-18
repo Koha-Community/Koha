@@ -27,17 +27,22 @@ use C4::Context;
 use C4::AuthoritiesMarc;
 use Getopt::Long;
 
-my ($test,@authtypes);
+my @authtypes;
 my $want_help = 0;
+my $test = 0;
 GetOptions(
-    'aut|authtypecode:s'    => \@authtypes,
-    't'    => \$test,
-    'h|help'        => \$want_help
+    'aut|authtypecode:s' => \@authtypes,
+    't|test'             => \$test,
+    'h|help'             => \$want_help
 );
 
 if ($want_help) {
     print_usage();
     exit 0;
+}
+
+if ($test) {
+    print "testing only, authorities will not be deleted.\n";
 }
 
 my $dbh=C4::Context->dbh;
@@ -88,7 +93,7 @@ This script will parse all authoritiestypes given as parameter, and remove autho
 warning : there is no individual confirmation !
 parameters
     --aut|authtypecode TYPE       the list of authtypes to check
-    --t|test                      test mode, don't delete really, just count
+    --test or -t                  test mode, don't delete really, just count
     --help or -h                  show this message.
 
 _USAGE_
