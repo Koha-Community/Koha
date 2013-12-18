@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 74;
+use Test::More tests => 77;
 
 use_ok("MARC::Field");
 use_ok("MARC::Record");
@@ -146,8 +146,16 @@ my @USERENV = (
 C4::Context->_new_userenv ('DUMMY_SESSION_ID');
 C4::Context->set_userenv ( @USERENV );
 
-$template_id = AddModificationTemplate("template_name");
+$template_id = AddModificationTemplate("new_template_test");
 like( $template_id, qr|^\d+$|, "new template returns an id" );
+
+is( AddModificationTemplateAction(
+    $template_id, 'delete_field', 0,
+    '245', '', '', '', '', '',
+    '', '', '',
+    'if', '245', 'a', 'equals', 'Bad title', '',
+    'Delete field 245 if 245$a eq "Bad title"'
+), 1, 'Add first action: delete field 245 if 245$a eq "Bad title"');
 
 is( AddModificationTemplateAction(
     $template_id, 'copy_field', 0,
@@ -155,7 +163,7 @@ is( AddModificationTemplateAction(
     '', '', '',
     '', '', '', '', '', '',
     'copy field 245$a to 246$a'
-), 1, 'Add first action: copy 245$a to 246$a');
+), 1, 'Add second action: copy 245$a to 246$a');
 
 is( AddModificationTemplateAction(
     $template_id, 'delete_field', 0,
@@ -163,7 +171,7 @@ is( AddModificationTemplateAction(
     '', '', '',
     'if', '650', '9', 'equals', '462', '',
     'Delete field 650$a if 650$9=462'
-), 1, 'Add second action: delete field 650$a if 650$9=462');
+), 1, 'Add third action: delete field 650$a if 650$9=462');
 
 is( AddModificationTemplateAction(
     $template_id, 'update_field', 0,
@@ -171,7 +179,7 @@ is( AddModificationTemplateAction(
     '', '', '',
     'unless', '650', '9', 'equals', '42', '',
     'Update field 952$p with "3010023917_updated" if 650$9 != 42'
-), 1, 'Add third action: update field 952$p with "3010023917_updated" if 650$9 != 42');
+), 1, 'Add fourth action: update field 952$p with "3010023917_updated" if 650$9 != 42');
 
 is( AddModificationTemplateAction(
     $template_id, 'move_field', 0,
@@ -179,7 +187,24 @@ is( AddModificationTemplateAction(
     '', '', '',
     'if', '952', 'c', 'equals', '^GEN', '1',
     'Move field 952$d to 952$e if 952$c =~ /^GE/'
-), 1, 'Add fourth action: move field 952$d to 952$e if 952$c =~ /^GE/');
+), 1, 'Add fifth action: move field 952$d to 952$e if 952$c =~ /^GE/');
+
+is( AddModificationTemplateAction(
+    $template_id, 'update_field', 0,
+    '650', 'a', 'Computer algorithms.', '', '', '',
+    '', '', '',
+    'if', '650', '9', 'equals', '499', '',
+    'Update field 650$a with "Computer algorithms." to 651 if 650$9 == 499'
+), 1, 'Add sixth action: update field 650$a with "Computer algorithms." if 650$9 == 499');
+
+is( AddModificationTemplateAction(
+    $template_id, 'move_field', 0,
+    '650', '', '', '651', '', '',
+    '', '', '',
+    'if', '650', '9', 'equals', '499', '',
+    'Move field 650 to 651 if 650$9 == 499'
+), 1, 'Add seventh action: move field 650 to 651 if 650$9 == 499');
+
 
 my $record = new_record();
 
@@ -205,9 +230,19 @@ sub new_record {
             c => 'Donald E. Knuth.',
         ),
         MARC::Field->new(
+            245, '1', '4',
+            a => 'field to remove',
+            c => 'Donald E. Knuth.',
+        ),
+        MARC::Field->new(
             650, ' ', '0',
             a => 'Computer programming.',
             9 => '462',
+        ),
+        MARC::Field->new(
+            650, ' ', '0',
+            a => 'Computer programming.',
+            9 => '499',
         ),
         MARC::Field->new(
             952, ' ', ' ',
@@ -249,6 +284,11 @@ sub expected_record {
         MARC::Field->new(
             246, '', ' ',
             a => 'The art of computer programming',
+        ),
+        MARC::Field->new(
+            651, ' ', '0',
+            a => 'Computer algorithms.',
+            9 => '499',
         ),
     );
     $record->append_fields(@fields);
