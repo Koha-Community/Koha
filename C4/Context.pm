@@ -1242,10 +1242,14 @@ sub tz {
 =cut
 
 sub IsSuperLibrarian {
-    my $userenv = C4::Context->userenv
-      || carp("C4::Context->userenv not defined!");
+    my $userenv = C4::Context->userenv;
 
-    return $userenv->{flags} % 2 == 1;
+    unless ( $userenv and exists $userenv->{flags} ) {
+      carp("C4::Context->userenv not defined!");
+      return 0;
+    }
+
+    return $userenv->{flags} % 2;
 }
 
 1;
