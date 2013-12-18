@@ -2637,7 +2637,8 @@ sub PrepareItemrecordDisplay {
                 $subfield_data{mandatory}  = $tagslib->{$tag}->{$subfield}->{mandatory};
                 $subfield_data{repeatable} = $tagslib->{$tag}->{$subfield}->{repeatable};
                 $subfield_data{hidden}     = "display:none"
-                  if $tagslib->{$tag}->{$subfield}->{hidden};
+                  if ( ( $tagslib->{$tag}->{$subfield}->{hidden} > 4 )
+                    || ( $tagslib->{$tag}->{$subfield}->{hidden} < -4 ) );
                 my ( $x, $defaultvalue );
                 if ($itemrecord) {
                     ( $x, $defaultvalue ) = _find_value( $tag, $subfield, $itemrecord );
