@@ -44,18 +44,17 @@ my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => 
                                 debug => 1,
                                 });
 
-# If the user is not logged in, we deal with the cookie
+# If the user is not logged in, we deal with the session
 if (!$loggedinuser) {
 
     # Deleting search history
     if ($cgi->param('action') && $cgi->param('action') eq 'delete') {
-        # Deleting cookie's content
+        # Deleting session's search history
         SetSearchHistorySession($cgi, []);
 
-        # Redirecting to this same url with the cookie in the headers so it's deleted immediately
+        # Redirecting to this same url so the user won't see the search history link in the header
         my $uri = $cgi->url();
         print $cgi->redirect(-uri => $uri);
-
     # Showing search history
     } else {
 

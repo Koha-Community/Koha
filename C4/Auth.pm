@@ -260,7 +260,7 @@ sub get_template_and_user {
             $template->param(ShowOpacRecentSearchLink => 1);
             }
 
-            # And if there's a cookie with searches performed when the user was not logged in,
+            # And if there are searches performed when the user was not logged in,
             # we add them to the logged-in search history
             my @recentSearches = ParseSearchHistorySession($in->{'query'});
             if (@recentSearches) {
