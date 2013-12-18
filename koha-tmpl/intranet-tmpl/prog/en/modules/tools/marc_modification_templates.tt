@@ -11,11 +11,26 @@ $(document).ready(function() {
     });
     $("span.match_regex_prefix" ).hide();
     $("span.match_regex_suffix" ).hide();
+
+    $("#conditional_field,#from_field").change(function(){
+        updateWarnings(); // For 3.14.x branches only, if bug 11319 is not pushed into
+    });
 });
 //]]>
 </script>
 
 <script>
+
+function updateWarnings(){
+    if ( $("#conditional_field").is(":visible") ) {
+        if ( $("#conditional_field").val() == $("#from_field").val() && $("#from_field").val().length > 0 ) {
+            $("#warning_multivalued").show();
+        } else {
+            $("#warning_multivalued").hide();
+        }
+    }
+}
+
 function onActionChange(selectObj) {
     // get the index of the selected option
     var idx = selectObj.selectedIndex;
@@ -400,6 +415,7 @@ function setSelectByValue( selectId, value ) {
                     <a name="modaction"></a>
                     <fieldset>
                         <legend id="modaction_legend">Add a new action</legend>
+                        <div id="warning_multivalued" style="color:red; display:none;">You have chosen a condition on the same field as the original field. If your records contain multivalued fields it is highly recommended not to do that.</div>
 
                         <select name="action" id="action" onchange="onActionChange(this);">
                             <option value="delete_field">Delete</option>
