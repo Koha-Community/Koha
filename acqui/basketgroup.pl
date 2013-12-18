@@ -70,69 +70,6 @@ our ($template, $loggedinuser, $cookie)
 			     debug => 1,
                 });
 
-sub parseinputbaskets {
-    my $booksellerid = shift;
-    my $baskets = &GetBasketsByBookseller($booksellerid);
-    for(my $i=0; $i < scalar @$baskets; ++$i) {
-        if( @$baskets[$i] && ! @$baskets[$i]->{'closedate'} ) {
-            splice(@$baskets, $i, 1);
-            --$i;
-        }
-    }
-    foreach my $basket (@$baskets){
-#perl DBI uses value "undef" for the mysql "NULL" value, so i need to check everywhere where $basket->{'basketgroupid'} is used for undef ☹
-        $basket->{'basketgroupid'} = $input->param($basket->{'basketno'}.'-group') || undef;
-    }
-    return $baskets;
-}
-
-
-
-sub parseinputbasketgroups {
-    my $booksellerid = shift;
-    my $baskets = shift;
-    my $basketgroups = &GetBasketgroups($booksellerid);
-    my $newbasketgroups;
-    foreach my $basket (@$baskets){
-        my $basketgroup;
-        my $i = 0;
-        my $exists;
-        if(! $basket->{'basketgroupid'} || $basket->{'basketgroupid'} == 0){
-            $exists = "true";
-        } else {
-            foreach my $basketgroup (@$basketgroups){
-                if($basket->{'basketgroupid'} == $basketgroup->{'id'}){
-                    $exists = "true";
-                    push(@{$basketgroup->{'basketlist'}}, $basket->{'basketno'});
-                    last;
-                }
-            }
-        }
-        if (! $exists){
-#if the basketgroup doesn't exist yet
-            $basketgroup = $newbasketgroups->{$basket->{'basketgroupid'}} || undef;
-            $basketgroup->{'booksellerid'} = $booksellerid;
-        } else {
-            while($i < scalar @$basketgroups && @$basketgroups[$i]->{'id'} != $basket->{'basketgroupid'}){
-                ++$i;
-            }
-            $basketgroup = @$basketgroups[$i];
-        }
-        $basketgroup->{'id'}=$basket->{'basketgroupid'};
-        $basketgroup->{'name'}=$input->param('basketgroup-'.$basketgroup->{'id'}.'-name') || "";
-        $basketgroup->{'closed'}= $input->param('basketgroup-'.$basketgroup->{'id'}.'-closed');
-        push(@{$basketgroup->{'basketlist'}}, $basket->{'basketno'});
-        if (! $exists){
-            $newbasketgroups->{$basket->{'basketgroupid'}} = $basketgroup;
-        } else {
-            if($basketgroup->{'id'}){
-                @$basketgroups[$i] = $basketgroup;
-            }
-        }
-    }
-    return($basketgroups, $newbasketgroups);
-}
-
 sub BasketTotal {
     my $basketno = shift;
     my $bookseller = shift;
@@ -297,7 +234,6 @@ my $op = $input->param('op') || 'display';
 # possible values of $op :
 # - add : adds a new basketgroup, or edit an open basketgroup, or display a closed basketgroup
 # - mod_basket : modify an individual basket of the basketgroup
-# - validate :  FIXME dead code
 # - closeandprint : close and print an closed basketgroup in pdf. called by clicking on "Close and print" button in closed basketgroups list
 # - print : print a closed basketgroup. called by clicking on "Print" button in closed basketgroups list
 # - export : export in CSV a closed basketgroup. called by clicking on "Export" button in closed basketgroups list
@@ -387,47 +323,6 @@ if ( $op eq "add" ) {
   ModBasket( { basketno => $basketno,
                          basketgroupid => $basketgroupid } );
   print $input->redirect("basket.pl?basketno=" . $basketno);
-} elsif ($op eq 'validate') {
-#
-#  FIXME dead code
-#
-    if(! $booksellerid){
-        $template->param( booksellererror => 1);
-    } else {
-        $template->param( booksellerid => $booksellerid );
-    }
-    my $baskets = parseinputbaskets($booksellerid);
-    my ($basketgroups, $newbasketgroups) = parseinputbasketgroups($booksellerid, $baskets);
-    foreach my $nbgid (keys %$newbasketgroups){
-#javascript just picks an ID that's higher than anything else, the ID might not be correct..change it and change all the basket's basketgroupid as well
-        my $bgid = NewBasketgroup($newbasketgroups->{$nbgid});
-        ${$newbasketgroups->{$nbgid}}->{'id'} = $bgid;
-        ${$newbasketgroups->{$nbgid}}->{'oldid'} = $nbgid;
-    }
-    foreach my $basket (@$baskets){
-#if the basket was added to a new basketgroup, first change the groupid to the groupid of the basket in mysql, because it contains the id from javascript otherwise.
-        if ( $basket->{'basketgroupid'} && $newbasketgroups->{$basket->{'basketgroupid'}} ){
-            $basket->{'basketgroupid'} = ${$newbasketgroups->{$basket->{'basketgroupid'}}}->{'id'};
-        }
-        ModBasket($basket);
-    }
-    foreach my $basketgroup (@$basketgroups){
-        if(! $basketgroup->{'id'}){
-            foreach my $basket (@{$basketgroup->{'baskets'}}){
-                if($input->param('basket'.$basket->{'basketno'}.'changed')){
-                    ModBasket($basket);
-                }
-            }
-        } elsif ($input->param('basketgroup-'.$basketgroup->{'id'}.'-changed')){
-            ModBasketgroup($basketgroup);
-        }
-    }
-    $basketgroups = &GetBasketgroups($booksellerid);
-    my $bookseller = &GetBookSellerFromId($booksellerid);
-    $baskets = &GetBasketsByBookseller($booksellerid);
-    # keep ungroupedbaskets
-
-    displaybasketgroups($basketgroups, $bookseller, $baskets);
 } elsif ( $op eq 'closeandprint') {
 #
 # close an open basketgroup and generates a pdf
