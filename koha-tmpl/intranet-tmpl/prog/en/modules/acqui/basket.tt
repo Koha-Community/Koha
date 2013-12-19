@@ -346,7 +346,11 @@
                         <li>
                           <span class="label">Basket group:</span>
                           [% IF basketgroup.closed %]
-                            [% basketgroup.name %] (closed)
+                              [% IF ( CAN_user_acquisition_group_manage ) %]
+                                  <a href="basketgroup.pl?op=add&booksellerid=[% booksellerid %]&basketgroupid=[% basketgroup.id %]" title="basketgroup">[% basketgroup.name %] (closed)</a>
+                              [% ELSE %]
+                                  [% basketgroup.name %] (closed)
+                              [% END %]
                           [% ELSIF ( ! CAN_user_acquisition_group_manage ) %]
                             [%- IF basketgroup.name -%]
                                 [% basketgroup.name %]
