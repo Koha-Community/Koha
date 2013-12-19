@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 12;
 use C4::Koha qw( GetDailyQuote );
 use DateTime::Format::MySQL;
 use Koha::DateUtils qw(dt_from_string);
@@ -63,5 +63,15 @@ cmp_ok($quote->{'id'}, '==', $expected_quote->{'id'}, "Id is correct");
 is($quote->{'quote'}, $expected_quote->{'quote'}, "Quote is correct");
 is($quote->{'timestamp'}, $expected_quote->{'timestamp'}, "Timestamp $timestamp is correct");
 
+$dbh->do(q|DELETE FROM quotes|);
+$quote = eval {GetDailyQuote();};
+is( $@, '', 'GetDailyQuote does not die if no quote exist' );
+is_deeply( $quote, {}, 'GetDailyQuote return an empty hashref is no quote exist'); # Is it what we expect?
+$dbh->do(q|INSERT INTO `quotes` VALUES
+    (6,'George Washington','To be prepared for war is one of the most effectual means of preserving peace.','0000-00-00 00:00:00')
+|);
+
+$quote = GetDailyQuote();
+is( $quote->{id}, 6, ' GetDailyQuote returns the only existing quote' );
 
 $dbh->rollback;
