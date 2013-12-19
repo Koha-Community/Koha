@@ -77,20 +77,8 @@ function Check_page2(){
           return false;
       }
     [% END %]
-    if($("#frequency").val().length == 0){
-        alert(_("You must choose a frequency"));
-        return false;
-    }
-    if($("input[name='startdate']").val().length == 0){
-        alert(_("You must choose a start date"));
-        return false;
-    }
     if($("#sublength").val().length == 0 && $("input[name='enddate']").val().length == 0){
         alert(_("You must choose a subscription length or an end date."));
-        return false;
-    }
-    if($("#numberpattern").val().length == 0){
-        alert(_("You must choose a numbering pattern"));
         return false;
     }
     if(advancedpatternlocked == 0){
@@ -109,7 +97,7 @@ function frequencyload(){
     $.getJSON("subscription-frequency.pl",{"frequency_id":document.f.frequency.value,ajax:'true'},
         function(freqdata){
             globalfreqdata=freqdata;
-            if ( globalfreqdata.unit.length == 0 ) {
+            if ( globalfreqdata.unit && globalfreqdata.unit.length == 0 ) {
                 var option = $("#subtype option[value='issues']");
                 $(option).attr('selected', 'selected');
                 $("#subtype option[value!='issues']").attr('disabled', 'disabled')
@@ -473,7 +461,7 @@ $(document).ready(function() {
     <div id="bd">
         <div class="yui-g">
             <h1>[% IF ( modify ) %] Modify subscription for <i>[% bibliotitle |html %]</i>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
-            <form method="post" name="f" action="/cgi-bin/koha/serials/subscription-add.pl">
+            <form method="post" name="f" action="/cgi-bin/koha/serials/subscription-add.pl" class="validated" onsubmit="return Check_page2();" >
                 [% IF ( modify ) %]
                     <input type="hidden" name="op" value="modsubscription" />
                     <input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
@@ -634,9 +622,9 @@ $(document).ready(function() {
                                 <legend>Serials planning</legend>
                                 <ol>
                                     <li>
-                                        <label for="firstacquidate">First issue publication date: (*)</label>
+                                        <label for="firstacquidate" class="required">First issue publication date:</label>
                                         [% UNLESS (more_than_one_serial) %]
-                                          <input type="text" size="10" id="acqui_date" name="firstacquidate" value="[% firstacquidate | $KohaDates %]" class="datepicker" readonly="readonly"/>
+                                          <input type="text" size="10" id="acqui_date" name="firstacquidate" value="[% firstacquidate | $KohaDates %]" class="datepicker required" required="required" />
                                         [% ELSE %]
                                           [% firstacquidate | $KohaDates %]
                                           <input type="hidden" size="10" id="acqui_date" name="firstacquidate" value="[% firstacquidate | $KohaDates %]"/>
@@ -645,12 +633,12 @@ $(document).ready(function() {
                                     [% IF (more_than_one_serial) %]
                                       <li>
                                         <label for="nextacquidate">Next issue publication date:</label>
-                                        <input type="text" size="10" id="nextacquidate" name="nextacquidate" value="[% nextacquidate | $KohaDates %]" class="datepicker" readonly="readonly"/>
+                                        <input type="text" size="10" id="nextacquidate" name="nextacquidate" value="[% nextacquidate | $KohaDates %]" class="datepicker" />
                                       </li>
                                     [% END %]
                                     <li>
-                                        <label for="frequency">Frequency: (*)</label>
-                                        <select name="frequency" size="1" id="frequency">
+                                        <label for="frequency" class="required">Frequency:</label>
+                                        <select name="frequency" size="1" id="frequency" class="required" required="required">
                                             <option value="">-- please choose --</option>
                                             [% FOREACH frequency IN frequencies %]
                                                 [% IF (frequency.selected) %]
@@ -680,16 +668,16 @@ $(document).ready(function() {
                                         <input type="hidden" name="issuelengthcount">
                                     </li>
                                     <li>
-                                        <label for="startdate"> Subscription start date: (*)</label>
-                                        <input type="text" size="10" id="from" name="startdate" value="[% startdate | $KohaDates %]" class="datepickerfrom" readonly="readonly"/>
+                                        <label for="startdate" class="required"> Subscription start date:</label>
+                                        <input type="text" size="10" id="from" name="startdate" value="[% startdate | $KohaDates %]" class="datepickerfrom required" required="required" />
                                     </li>
                                     <li>
                                         <label for="enddate">Subscription end date:</label>
-                                        <input type="text" size="10" id="to" name="enddate" value="[% enddate | $KohaDates %]" class="datepickerto" readonly="readonly"/>
+                                        <input type="text" size="10" id="to" name="enddate" value="[% enddate | $KohaDates %]" class="datepickerto" />
                                     </li>
                                     <li>
-                                        <label for="numberpattern">Numbering pattern:</label>
-                                        <select name="numbering_pattern" size="1" id="numberpattern">
+                                        <label for="numberpattern" class="required">Numbering pattern:</label>
+                                        <select name="numbering_pattern" size="1" id="numberpattern" class="required" required="required">
                                             <option value="">-- please choose --</option>
                                             [% FOREACH numberpattern IN numberpatterns %]
                                                 [% IF (numberpattern.selected) %]
@@ -751,8 +739,8 @@ $(document).ready(function() {
                                     <li><a style="cursor:pointer" onclick="toggleAdvancedPattern();">Show/Hide advanced pattern</a></li>
                                     <div id="advancedpredictionpattern" style="display:none">
                                       <li>
-                                        <label for="patternname">Pattern name: (*)</label>
-                                        <input id="patternname" name="patternname" type="text" readonly="readonly" />
+                                        <label for="patternname" class="required">Pattern name:</label>
+                                        <input id="patternname" name="patternname" type="text" readonly="readonly" class="required" required="required" />
                                       </li>
                                       <li>
                                         <label for="numberingmethod">Numbering formula:</label>
@@ -838,7 +826,7 @@ $(document).ready(function() {
                             <fieldset class="action">
                                 <input type="button" value="<< Previous" onclick="show_page_1();" style="float:left;"/>
                                 <input id="testpatternbutton" type="button" value="Test prediction pattern" onclick="testPredictionPattern();" />
-                                <input type="button" value="Save subscription" onclick="if (Check_page2()) submit();" style="float:right;" accesskey="w" />
+                                <input type="submit" value="Save subscription" style="float:right;" accesskey="w" />
                             </fieldset>
                         </div>
                     </div>
