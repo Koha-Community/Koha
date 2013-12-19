@@ -7843,7 +7843,7 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.15.00.007";
 if ( CheckVersion($DBversion) ) {
    $dbh->do("ALTER TABLE items ADD itemlost_on DATETIME NULL AFTER itemlost");
    $dbh->do("ALTER TABLE items ADD withdrawn_on DATETIME NULL AFTER withdrawn");
