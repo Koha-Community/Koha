@@ -1642,13 +1642,16 @@ CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have b
 DROP TABLE IF EXISTS `opac_news`;
 CREATE TABLE `opac_news` ( -- data from the news tool
   `idnew` int(10) unsigned NOT NULL auto_increment, -- unique identifier for the news article
+  `branchcode` varchar(10) default NULL, -- branch code users to create branch specific news, NULL is every branch.
   `title` varchar(250) NOT NULL default '', -- title of the news article
   `new` text NOT NULL, -- the body of your news article
   `lang` varchar(25) NOT NULL default '', -- location for the article (koha is the staff client, slip is the circulation receipt and language codes are for the opac)
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP, -- pulibcation date and time
   `expirationdate` date default NULL, -- date the article is set to expire or no longer be visible
   `number` int(11) default NULL, -- the order in which this article appears in that specific location
-  PRIMARY KEY  (`idnew`)
+  PRIMARY KEY  (`idnew`),
+  CONSTRAINT opac_news_branchcode_ibfk FOREIGN KEY (branchcode) REFERENCES branches (branchcode)
+    ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

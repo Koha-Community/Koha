@@ -8083,6 +8083,21 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if (CheckVersion($DBversion)) {
+    $dbh->do(q{
+        ALTER TABLE opac_news ADD branchcode varchar(10) DEFAULT NULL
+                                  AFTER idnew,
+                              ADD CONSTRAINT opac_news_branchcode_ibfk
+                                  FOREIGN KEY (branchcode)
+                                  REFERENCES branches (branchcode)
+                                  ON DELETE CASCADE ON UPDATE CASCADE;
+    });
+    print "Upgrade to $DBversion done (Bug 7567: Add branchcode to opac_news)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
