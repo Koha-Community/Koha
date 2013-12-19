@@ -1,5 +1,12 @@
 [% USE KohaAuthorisedValues %]
 
+[%#-
+This include takes two parameters: an item structure
+and an optional loan (issue) structure.  The issue
+structure is used by course reserves pages, which do
+not use an API to fetch items that populates item.datedue.
+-%]
+
 [% IF ( item.itemlost ) %]
     [% av_lib_include = KohaAuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) %]
     [% IF ( av_lib_include ) %]
