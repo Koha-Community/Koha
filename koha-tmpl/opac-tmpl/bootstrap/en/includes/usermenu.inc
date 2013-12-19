@@ -41,7 +41,7 @@
                 <a href="/cgi-bin/koha/opac-passwd.pl">change your password</a></li>
             [% END %]
 
-            [% IF ( ShowOpacRecentSearchLink ) %]
+            [% IF EnableOpacSearchHistory %]
                 [% IF ( searchhistoryview ) %]
                     <li class="active">
                 [% ELSE %]

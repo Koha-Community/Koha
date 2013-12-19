@@ -30,55 +30,144 @@
             [% ELSE %]
                 <div class="span12">
             [% END %]
-
                 <div id="searchhistory" class="maincontent">
                     <h1>Search history</h1>
-                        [% IF ( recentSearches ) %]<form action="/cgi-bin/koha/opac-search-history.pl" method="get"><input type="hidden" name="action" value="delete" /><input type="submit" class="btn btn-danger" value="Delete your search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" /></form>[% ELSE %][% IF ( previousSearches ) %]<form action="/cgi-bin/koha/opac-search-history.pl" method="get"><input type="hidden" name="action" value="delete" /><input type="submit" class="btn btn-danger" value="Delete your search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" /></form>[% END %][% END %]
 
-                        [% IF ( recentSearches ) %]
-                            <table class="historyt table table-bordered table-condensed table-striped">
-                            [% IF ( previousSearches ) %]
-                                <caption>Current session</caption>
-                            [% END %]
-                                <thead>
-                                    <tr><th>Date</th><th>Search</th><th>Results</th></tr>
-                                </thead>
-                                <tbody>
-                                [% FOREACH recentSearche IN recentSearches %]
-                                    <tr>
-                                        <td><span title="[% recentSearche.time %]">[% recentSearche.time |$KohaDates with_hours => 1 %]</span></td>
-                                        <td><a href="/cgi-bin/koha/opac-search.pl?[% recentSearche.query_cgi |html %]">[% recentSearche.query_desc |html %]</a></td>
-                                        <td>[% recentSearche.total %]</td>
-                                    </tr>
-                                [% END %]
-                                </tbody>
-                            </table>
-                        [% END %]
-
-                        [% IF ( previousSearches ) %]
-                        <table class="historyt table table-bordered table-condensed table-striped">
-                            <caption>Previous sessions</caption>
+                    [% IF Koha.Preference( 'OpacAuthorities' ) == 1 %]
+                      <div id="tabs" class="toptabs">
+                        <ul>
+                          <li><a href="#biblio_tab">Catalog</a></li>
+                          <li><a href="#authority_tab">Authority</a></li>
+                        </ul>
+                    [% END %]
+                      <div id="biblio_tab">
+                        [% IF ( current_biblio_searches ) %]
+                          <h2>Current session</h2>
+                          <form action="/cgi-bin/koha/opac-search-history.pl" method="get">
+                            <input type="hidden" name="action" value="delete" />
+                            <input type="hidden" name="previous" value="0" />
+                            <input type="hidden" name="type" value="biblio" />
+                            <input type="submit" class="deleteshelf" value="Delete your current catalog history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" />
+                          </form>
+                          <table class="historyt table table-bordered table-condensed table-striped">
                             <thead>
-                                <tr><th>Date</th><th>Search</th><th>Results</th></tr>
+                              <tr>
+                                <th>Date</th>
+                                <th>Search</th>
+                                <th>Results</th>
+                              </tr>
                             </thead>
                             <tbody>
-                                [% FOREACH previousSearche IN previousSearches %]
-                                    <tr>
-                                        <td><span title="[% previousSearche.time %]">[% previousSearche.time |$KohaDates with_hours => 1 %]</span></td>
-                                        <td><a href="/cgi-bin/koha/opac-search.pl?[% previousSearche.query_cgi |html %]">[% previousSearche.query_desc |html %]</a></td>
-                                        <td>[% previousSearche.total %]</td>
-                                    </tr>
-                                [% END %]
+                            [% FOREACH s IN current_biblio_searches %]
+                              <tr>
+                                <td><span title="[% s.time %]">[% s.time |$KohaDates with_hours => 1 %]</span></td>
+                                <td><a href="/cgi-bin/koha/opac-search.pl?[% s.query_cgi |html %]">[% s.query_desc |html %]</a></td>
+                                <td>[% s.total %]</td>
+                              </tr>
+                            [% END %]
                             </tbody>
-                        </table>
+                          </table>
                         [% END %]
 
-                        [% UNLESS ( recentSearches ) %]
-                           [% UNLESS ( previousSearches ) %]
-                                <p>Your search history is empty.</p>
+                        [% IF ( previous_biblio_searches ) %]
+                          <h2>Previous sessions</h2>
+                          <form action="/cgi-bin/koha/opac-search-history.pl" method="get">
+                            <input type="hidden" name="action" value="delete" />
+                            <input type="hidden" name="previous" value="1" />
+                            <input type="hidden" name="type" value="biblio" />
+                            <input type="submit" class="deleteshelf" value="Delete your previous catalog search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" />
+                          </form>
+                          <table class="historyt table table-bordered table-condensed table-striped">
+                            <thead>
+                              <tr>
+                                <th>Date</th>
+                                <th>Search</th>
+                                <th>Results</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            [% FOREACH s IN previous_biblio_searches %]
+                              <tr>
+                                <td><span title="[% s.time %]">[% s.time |$KohaDates with_hours => 1 %]</span></td>
+                                <td><a href="/cgi-bin/koha/opac-search.pl?[% s.query_cgi |html %]">[% s.query_desc |html %]</a></td>
+                                <td>[% s.total %]</td>
+                              </tr>
                             [% END %]
+                            </tbody>
+                          </table>
                         [% END %]
-                     </div>
+
+                        [% IF !current_biblio_searches && !previous_biblio_searches %]
+                          <p>Your catalog search history is empty.</p>
+                        [% END %]
+                      </div>
+
+
+                    [% IF Koha.Preference( 'OpacAuthorities' ) == 1 %]
+                      <div id="authority_tab">
+                        [% IF ( current_authority_searches ) %]
+                          <h2>Current session</h2>
+                          <form action="/cgi-bin/koha/opac-search-history.pl" method="get">
+                            <input type="hidden" name="action" value="delete" />
+                            <input type="hidden" name="previous" value="0" />
+                            <input type="hidden" name="type" value="authority" />
+                            <input type="submit" class="deleteshelf" value="Delete your current authority search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" />
+                          </form>
+                          <table class="historyt table table-bordered table-condensed table-striped">
+                            <thead>
+                              <tr>
+                                <th>Date</th>
+                                <th>Search</th>
+                                <th>Results</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            [% FOREACH s IN current_authority_searches %]
+                              <tr>
+                                <td><span title="[% s.time %]">[% s.time |$KohaDates with_hours => 1 %]</span></td>
+                                <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi |html %]">[% s.query_desc |html %]</a></td>
+                                <td>[% s.total %]</td>
+                              </tr>
+                            [% END %]
+                            </tbody>
+                          </table>
+                        [% END %]
+
+                        [% IF ( previous_authority_searches ) %]
+                          <h2>Previous sessions</h2>
+                          <form action="/cgi-bin/koha/opac-search-history.pl" method="get">
+                            <input type="hidden" name="action" value="delete" />
+                            <input type="hidden" name="previous" value="1" />
+                            <input type="hidden" name="type" value="authority" />
+                            <input type="submit" class="deleteshelf" value="Delete your previous authority search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" />
+                          </form>
+                          <table class="historyt table table-bordered table-condensed table-striped">
+                            <thead>
+                              <tr>
+                                <th>Date</th>
+                                <th>Search</th>
+                                <th>Results</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            [% FOREACH s IN previous_authority_searches %]
+                              <tr>
+                                <td><span title="[% s.time %]">[% s.time |$KohaDates with_hours => 1 %]</span></td>
+                                <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi |html %]">[% s.query_desc |html %]</a></td>
+                                <td>[% s.total %]</td>
+                              </tr>
+                            [% END %]
+                            </tbody>
+                          </table>
+                        [% END %]
+
+                        [% IF !current_authority_searches && !previous_authority_searches %]
+                          <p>Your authority search history is empty.</p>
+                        [% END %]
+                      </div>
+                    </div>
+                    [% END %]
+                    </div>
                 </div>
             </div>
         </div>
@@ -102,6 +191,8 @@
                 ]
             }));
         });
+
+    [% IF Koha.Preference( 'OpacAuthorities' ) == 1 %]$('#tabs').tabs();[% END %]
 //]]>
 
 </script>
