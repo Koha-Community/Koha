@@ -26,6 +26,18 @@ use Encode qw{encode decode};
 
 use C4::Koha;
 
+=pod
+
+To use, first, include the line '[% USE AuthorisedValues %]' at the top
+of the template to enable the plugin.
+
+Now, in a template, you can get the description for an authorised value with
+the following TT code: [% AuthorisedValues.GetByCode( 'CATEGORY', 'AUTHORISED_VALUE_CODE', 'IS_OPAC' ) %]
+
+The parameters are identical to those used by the subroutine C4::Koha::GetAuthorisedValueByCode.
+
+=cut
+
 sub GetByCode {
     my ( $self, $category, $code, $opac ) = @_;
     return encode( 'UTF-8', GetAuthorisedValueByCode( $category, $code, $opac ) );

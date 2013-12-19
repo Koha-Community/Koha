@@ -1,5 +1,5 @@
-[% USE KohaAuthorisedValues %]
 [% USE Branches %]
+[% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions  &rsaquo;
     [% IF ( op_save ) %]
@@ -452,7 +452,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
                 [% ELSE %][% suggestion.suggestiontypelabel %][% END %]
             [% ELSE %]
                 [% IF ( suggestion.suggestiontype ) %]
-                    [% KohaAuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.suggestiontype ) %]
+                    [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.suggestiontype ) %]
                 [% ELSE %]
                     No name
                 [% END %]
@@ -519,8 +519,8 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
                         Rejected
                     [% ELSIF ( suggestions_loo.CHECKED ) %]
                         Checked
-                    [% ELSIF KohaAuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS ) %]
-                        [% KohaAuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS ) %]
+                    [% ELSIF AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS ) %]
+                        [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS ) %]
                     [% END %]
 
                     [% IF ( suggestions_loo.reason ) %]

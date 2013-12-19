@@ -1,4 +1,4 @@
-[% USE KohaAuthorisedValues %]
+[% USE AuthorisedValues %]
 
 [%#-
 This include takes two parameters: an item structure
@@ -40,7 +40,7 @@ not use an API to fetch items that populates item.datedue.
 [% ELSIF ( item.notforloan_per_itemtype ) %]
     Not for loan [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac %])</span>[% END %]
 [% ELSIF ( item.damaged ) %]
-    [% av_lib_include = KohaAuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 ) %]
+    [% av_lib_include = AuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 ) %]
     [% IF av_lib_include %]
         [% av_lib_include %]
     [% ELSE %]

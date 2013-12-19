@@ -3,7 +3,7 @@
 [% IF ( export_remove_fields OR export_with_csv_profile ) %]
    [% SET exports_enabled = 1 %]
 [% END %]
-[% USE KohaAuthorisedValues %]
+[% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET destination = "circ" %]
 <title>Koha &rsaquo; Circulation
@@ -229,7 +229,7 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
     [% IF ( itemtype_notforloan ) %]
         Item type is normally not for loan.
     [% ELSIF ( item_notforloan ) %]
-        [% item_notforloan_lib = KohaAuthorisedValues.GetByCode( authvalcode_notforloan, item_notforloan, 0 ) %]
+        [% item_notforloan_lib = AuthorisedValues.GetByCode( authvalcode_notforloan, item_notforloan, 0 ) %]
         Item is normally not for loan [% IF (item_notforloan_lib) %]([% item_notforloan_lib %])[% END %].
     [% END %]
         Check out anyway?
@@ -362,7 +362,7 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
             [% IF ( itemtype_notforloan ) %]
                 Item type not for loan.
             [% ELSIF ( item_notforloan ) %]
-                [% item_notforloan_lib = KohaAuthorisedValues.GetByCode( authvalcode_notforloan, item_notforloan, 0 ) %]
+                [% item_notforloan_lib = AuthorisedValues.GetByCode( authvalcode_notforloan, item_notforloan, 0 ) %]
                 Item not for loan [% IF (item_notforloan_lib) %]([% item_notforloan_lib %])[% END %].
             [% END %]
             </li>
@@ -712,10 +712,10 @@ No patron matched <span class="ex">[% message %]</span>
         <span title="[% todayissue.dd_sort %]">[% todayissue.dd %]</span>
 
             [% IF ( todayissue.itemlost ) %]
-                <span class="lost">[% KohaAuthorisedValues.GetByCode( 'LOST', todayissue.itemlost ) %]</span>
+                <span class="lost">[% AuthorisedValues.GetByCode( 'LOST', todayissue.itemlost ) %]</span>
             [% END %]
             [% IF ( todayissue.damaged ) %]
-                <span class="dmg">[% KohaAuthorisedValues.GetByCode( 'DAMAGED', todayissue.damaged ) %]</span>
+                <span class="dmg">[% AuthorisedValues.GetByCode( 'DAMAGED', todayissue.damaged ) %]</span>
             [% END %]
         </td>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% todayissue.biblionumber %]&amp;type=intra"><strong>[% todayissue.title |html %][% FOREACH subtitl IN todayissue.subtitle %] [% subtitl.subfield %][% END %]</strong></a>[% IF ( todayissue.author ) %], by [% todayissue.author %][% END %][% IF ( todayissue.itemnotes ) %]- <span class="circ-hlt">[% todayissue.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% todayissue.biblionumber %]&amp;itemnumber=[% todayissue.itemnumber %]#item[% todayissue.itemnumber %]">[% todayissue.barcode %]</a></td>
@@ -799,10 +799,10 @@ No patron matched <span class="ex">[% message %]</span>
         <span title="[% previssue.dd_sort %]">[% previssue.dd %]</span>
 
             [% IF ( previssue.itemlost ) %]
-                <span class="lost">[% KohaAuthorisedValues.GetByCode( 'LOST', previssue.itemlost ) %]</span>
+                <span class="lost">[% AuthorisedValues.GetByCode( 'LOST', previssue.itemlost ) %]</span>
             [% END %]
             [% IF ( previssue.damaged ) %]
-                <span class="dmg">[% KohaAuthorisedValues.GetByCode( 'DAMAGED', previssue.damaged ) %]</span>
+                <span class="dmg">[% AuthorisedValues.GetByCode( 'DAMAGED', previssue.damaged ) %]</span>
             [% END %]
         </td>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% previssue.biblionumber %]&amp;type=intra"><strong>[% previssue.title |html %][% FOREACH subtitl IN previssue.subtitle %] [% subtitl.subfield %][% END %]</strong></a>[% IF ( previssue.author ) %], by [% previssue.author %][% END %] [% IF ( previssue.itemnotes ) %]- [% previssue.itemnotes %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% previssue.biblionumber %]&amp;itemnumber=[% previssue.itemnumber %]#item[% previssue.itemnumber %]">[% previssue.barcode %]</a></td>
@@ -940,10 +940,10 @@ No patron matched <span class="ex">[% message %]</span>
             <span title="[% relissue.dd_sort %]">[% relissue.dd %]</span></td>
 
             [% IF ( relissue.itemlost ) %]
-                <span class="lost">[% KohaAuthorisedValues.GetByCode( 'LOST', relissue.itemlost ) %]</span>
+                <span class="lost">[% AuthorisedValues.GetByCode( 'LOST', relissue.itemlost ) %]</span>
             [% END %]
             [% IF ( relissue.damaged ) %]
-                <span class="dmg">[% KohaAuthorisedValues.GetByCode( 'DAMAGED', relissue.damaged ) %]</span>
+                <span class="dmg">[% AuthorisedValues.GetByCode( 'DAMAGED', relissue.damaged ) %]</span>
             [% END %]
         </td>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relissue.biblionumber %]&amp;type=intra"><strong>[% relissue.title |html %][% FOREACH subtitl IN relissue.subtitle %] [% subtitl.subfield %][% END %]</strong></a>[% IF ( relissue.author ) %], by [% relissue.author %][% END %][% IF ( relissue.itemnotes ) %]- <span class="circ-hlt">[% relissue.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relissue.biblionumber %]&amp;itemnumber=[% relissue.itemnumber %]#item[% relissue.itemnumber %]">[% relissue.barcode %]</a></td>
