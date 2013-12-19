@@ -119,11 +119,23 @@ __PACKAGE__->table("items");
   default_value: 0
   is_nullable: 0
 
+=head2 itemlost_on
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =head2 withdrawn
 
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
+
+=head2 withdrawn_on
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
 
 =head2 itemcallnumber
 
@@ -296,8 +308,20 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "itemlost",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "itemlost_on",
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "withdrawn",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "withdrawn_on",
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "itemcallnumber",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "coded_location_qualifier",
@@ -585,8 +609,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JV1Q/UVlKQ6QgVFMGBIZCw
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-12-19 06:29:02
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:h6fPG62SifJ5T8QKPZNBBw
 
 __PACKAGE__->belongs_to(
     "biblio",
