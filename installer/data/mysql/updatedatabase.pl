@@ -9793,7 +9793,6 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
-
 $DBversion = "3.19.00.013";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
@@ -9822,6 +9821,15 @@ if ( CheckVersion($DBversion) ) {
     |);
     print "Upgrade to $DBversion done (Bug 12648: Add letter ACQ_NOTIF_ON_RECEIV )\n";
     SetVersion ($DBversion);
+}
+
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        ALTER TABLE search_history ADD COLUMN id INT(11) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY(id);
+    |);
+    print "Upgrade to $DBversion done (Bug 11430 - Add primary key for search_history)\n";
+    SetVersion($DBversion);
 }
 
 =head1 FUNCTIONS
