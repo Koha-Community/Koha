@@ -1192,6 +1192,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <p>Subscription from: [% subscription.histstartdate | $KohaDates %] to:[% IF ( subscription.histenddate ) %] [% subscription.histenddate | $KohaDates %] [% ELSE %] now (current)[% END %]</p>
     [% IF ( subscription.missinglist ) %]<p>Missing issues: [% subscription.missinglist %] </p>[% END %]
     [% IF ( subscription.opacnote ) %]<p>[% subscription.opacnote FILTER html_line_break %]</p>[% END %]
+    [% IF ( subscription.callnumber ) %]<p>Callnumber: [% subscription.callnumber %]</p>[% END %]
 [% IF ( subscription.latestserials ) %]
     <p> The [% subscription.opacdisplaycount %] latest issues for this subscription:</p>
     <table>

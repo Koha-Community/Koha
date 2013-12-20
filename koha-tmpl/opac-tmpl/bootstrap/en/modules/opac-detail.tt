@@ -778,6 +778,9 @@
                                 [% IF ( subscription.opacnote ) %]
                                     <p>[% subscription.opacnote FILTER html_line_break %]</p>
                                 [% END %]
+                                [% IF ( subscription.callnumber ) %]
+                                  <p>Callnumber: [% subscription.callnumber %]</p>
+                                [% END %]
                                 [% IF ( subscription.latestserials ) %]
                                     <p> The [% subscription.opacdisplaycount %] latest issues for this subscription:</p>
                                     <table class="table table-bordered table-striped">
