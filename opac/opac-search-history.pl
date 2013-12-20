@@ -53,13 +53,21 @@ my $previous = $cgi->param('previous');
 # If the user is not logged in, we deal with the session
 unless ( $loggedinuser ) {
     # Deleting search history
-    if ($cgi->param('action') && $cgi->param('action') eq 'delete') {
+    if ( $action eq 'delete') {
         # Deleting session's search history
+        my @id = $cgi->param('id');
+        my $all = not scalar( @id );
+
         my $type = $cgi->param('type');
         my @searches = ();
-        if ( $type ) {
+        unless ( $all ) {
             @searches = C4::Search::History::get_from_session({ cgi => $cgi });
-            @searches = map { $_->{type} ne $type ? $_ : () } @searches;
+            if ( $type ) {
+                @searches = map { $_->{type} ne $type ? $_ : () } @searches;
+            }
+            if ( @id ) {
+                @searches = map { my $search = $_; ( grep {/^$search->{id}$/} @id ) ? () : $_ } @searches;
+            }
         }
         C4::Search::History::set_to_session({ cgi => $cgi, search_history => \@searches });
 
@@ -92,17 +100,20 @@ unless ( $loggedinuser ) {
 
     # Deleting search history
     if ( $action eq 'delete' ) {
-        my $sessionid = defined $previous
-            ? $cgi->cookie("CGISESSID")
-            : q{};
-        C4::Search::History::delete(
-            {
-                userid => $loggedinuser,
-                sessionid => $sessionid,
-                type => $type,
-                previous => $previous
-            }
-        );
+        my @id = $cgi->param('id');
+        if ( @id ) {
+            C4::Search::History::delete(
+                {
+                    id => [ $cgi->param('id') ],
+                }
+            );
+        } else {
+            C4::Search::History::delete(
+                {
+                   userid => $loggedinuser,
+                }
+            );
+        }
         # Redirecting to this same url so the user won't see the search history link in the header
         my $uri = $cgi->url();
         print $cgi->redirect($uri);
