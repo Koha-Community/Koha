@@ -2,8 +2,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 16;
+use Test::More tests => 18;
 use URI::Escape;
+use List::Util qw( shuffle );
 
 use C4::Context;
 my $dbh = C4::Context->dbh;
@@ -125,6 +126,27 @@ add( $userid, $current_sessionid, $previous_sessionid, $total, $query_cgi_b, $qu
 C4::Search::History::delete({});
 $all = C4::Search::History::get({userid => $userid});
 is( scalar(@$all), 9, 'There are still 9 searches after calling delete without userid' );
+delete_all( $userid );
+
+# Delete (with a given id)
+add( $userid, $current_sessionid, $previous_sessionid, $total, $query_cgi_b, $query_cgi_a );
+$all = C4::Search::History::get({ userid => $userid });
+# Delete 5 searches
+my $ids = [ shuffle map { $_->{id} } @$all ];
+for my $id ( @$ids[ 0 .. 4 ] ) {
+    C4::Search::History::delete({ id => $id });
+}
+$all = C4::Search::History::get({ userid => $userid });
+is( scalar(@$all), 4, 'There are 4 searches after calling 5 times delete with id' );
+delete_all( $userid );
+
+add( $userid, $current_sessionid, $previous_sessionid, $total, $query_cgi_b, $query_cgi_a );
+$all = C4::Search::History::get({ userid => $userid });
+# Delete 5 searches
+$ids = [ shuffle map { $_->{id} } @$all ];
+C4::Search::History::delete({ id => [ @$ids[0..4] ] });
+$all = C4::Search::History::get({ userid => $userid });
+is( scalar(@$all), 4, 'There are 4 searches after calling delete with 5 ids' );
 delete_all( $userid );
 
 sub add {
