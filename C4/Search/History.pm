@@ -42,15 +42,18 @@ sub add_to_session {
     my $total      = $params->{total};
     my $type       = $params->{type}                              || 'biblio';
 
+    # To a cookie (the user is not logged in)
+    my $now = dt_from_string;
+    my $id = $now->year . $now->month . $now->day . $now->hour . $now->minute . $now->second . int(rand(100));
     my @recent_searches = get_from_session( { cgi => $cgi } );
-    push @recent_searches,
-      {
+    push @recent_searches, {
         query_desc => $query_desc,
         query_cgi  => $query_cgi,
         total      => "$total",
         type       => $type,
-        time       => output_pref( { dt => dt_from_string(), dateformat => 'iso', timeformat => '24hr' } ),
-      };
+        time       => output_pref( { dt => $now, dateformat => 'iso', timeformat => '24hr' } ),
+        id         => $id,
+    };
 
     shift @recent_searches if ( @recent_searches > 15 );
     set_to_session( { cgi => $cgi, search_history => \@recent_searches } );
@@ -58,21 +61,33 @@ sub add_to_session {
 
 sub delete {
     my ($params)  = @_;
+    my $id        = $params->{id};
     my $userid    = $params->{userid};
     my $sessionid = $params->{sessionid};
     my $type      = $params->{type}     || q{};
     my $previous  = $params->{previous} || 0;
 
-    unless ($userid) {
-        warn "ERROR: userid is required for history search";
+    unless ( ref( $id ) ) {
+        $id = $id ? [ $id ] : [];
+    }
+
+    unless ( $userid or @$id ) {
+        warn "ERROR: userid or id is required for history deletion";
         return;
     }
 
     my $dbh   = C4::Context->dbh;
     my $query = q{
         DELETE FROM search_history
-        WHERE userid = ?
+        WHERE 1
     };
+
+    $query .= q{ AND id IN ( } . join( q{,}, (q{?}) x @$id ) . q{ )}
+        if @$id;
+
+    $query .= q{
+        AND userid = ?
+    } if $userid;
 
     if ($sessionid) {
         $query .=
@@ -85,20 +100,56 @@ sub delete {
       if $type;
 
     $dbh->do(
-        $query, {}, $userid,
+        $query, {},
+        ( @$id ? ( @$id ) : () ),
+        ( $userid ? $userid : () ),
         ( $sessionid ? $sessionid : () ),
         ( $type      ? $type      : () )
     );
 }
 
+sub delete_from_cookie {
+    my ($params) = @_;
+    my $cookie   = $params->{cookie};
+    my $id       = $params->{id};
+
+    return unless $cookie;
+
+    unless ( ref( $id ) ) {
+        $id = $id ? [ $id ] : [];
+    }
+    return unless @$id;
+
+    my @searches;
+    if ( $cookie ){
+        $cookie = uri_unescape( $cookie );
+        if (decode_json( $cookie )) {
+            @searches = @{decode_json( $cookie )}
+        }
+    }
+
+    @searches = map {
+        my $search = $_;
+        ( grep { $_ != $search->{id} } @$id ) ? $search : ()
+    } @searches;
+
+    return uri_escape( encode_json( \@searches ) );
+
+}
+
 sub get {
     my ($params)  = @_;
+    my $id        = $params->{id};
     my $userid    = $params->{userid};
     my $sessionid = $params->{sessionid};
     my $type      = $params->{type};
     my $previous  = $params->{previous};
 
-    unless ($userid) {
+    unless ( ref( $id ) ) {
+        $id = $id ? [ $id ] : [];
+    }
+
+    unless ( $userid or @$id ) {
         warn "ERROR: userid is required for history search";
         return;
     }
@@ -106,8 +157,15 @@ sub get {
     my $query = q{
         SELECT *
         FROM search_history
-        WHERE userid = ?
+        WHERE 1
     };
+
+    $query .= q{ AND id IN ( } . join( q{,}, (q{?}) x @$id ) . q{ )}
+        if @$id;
+
+    $query .= q{
+        AND userid = ?
+    } if $userid;
 
     if ($sessionid) {
         $query .=
@@ -122,7 +180,8 @@ sub get {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
     $sth->execute(
-        $userid,
+        ( @$id ? ( @$id ) : () ),
+        ( $userid ? $userid : () ),
         ( $sessionid ? $sessionid : () ),
         ( $type      ? $type      : () )
     );
