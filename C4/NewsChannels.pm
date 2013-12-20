@@ -125,7 +125,12 @@ sub del_opac_new {
 sub get_opac_new {
     my ($idnew) = @_;
     my $dbh = C4::Context->dbh;
-    my $query = q{ SELECT * FROM opac_news WHERE idnew = ? };
+    my $query = q{
+                  SELECT opac_news.*,branches.branchname
+                  FROM opac_news LEFT JOIN branches
+                      ON opac_news.branchcode=branches.branchcode
+                  WHERE opac_news.idnew = ?;
+                };
     my $sth = $dbh->prepare($query);
     $sth->execute($idnew);
     my $data = $sth->fetchrow_hashref;
@@ -136,13 +141,23 @@ sub get_opac_new {
 }
 
 sub get_opac_news {
-    my ($limit, $lang) = @_;
+    my ($limit, $lang, $branchcode) = @_;
     my @values;
     my $dbh = C4::Context->dbh;
-    my $query = q{ SELECT *, timestamp AS newdate FROM opac_news };
+    my $query = q{
+                  SELECT opac_news.*, branches.branchname,
+                         timestamp AS newdate
+                  FROM opac_news LEFT JOIN branches
+                      ON opac_news.branchcode=branches.branchcode
+                };
+    $query = ' WHERE 1';
     if ($lang) {
-        $query.= " WHERE (lang='' OR lang=?)";
+        $query .= " AND (opac_news.lang='' OR opac_news.lang=?)";
         push @values,$lang;
+    }
+    if ($branchcode) {
+        $query .= ' AND (opac_news.branchcode IS NULL OR opac_news.branchcode=?)';
+        push @values,$branchcode;
     }
     $query.= ' ORDER BY timestamp DESC ';
     #if ($limit) {
@@ -163,14 +178,15 @@ sub get_opac_news {
 
 =head2 GetNewsToDisplay
 
-    $news = &GetNewsToDisplay($lang);
+    $news = &GetNewsToDisplay($lang,$branch);
     C<$news> is a ref to an array which containts
-    all news with expirationdate > today or expirationdate is null.
+    all news with expirationdate > today or expirationdate is null
+    that is applicable for a given branch.
 
 =cut
 
 sub GetNewsToDisplay {
-    my ($lang) = @_;
+    my ($lang,$branch) = @_;
     my $dbh = C4::Context->dbh;
     # SELECT *,DATE_FORMAT(timestamp, '%d/%m/%Y') AS newdate
     my $query = q{
@@ -183,13 +199,14 @@ sub GetNewsToDisplay {
      )
      AND   `timestamp` < CURRENT_DATE()+1
      AND   (lang = '' OR lang = ?)
+     AND   (branchcode IS NULL OR branchcode = ?)
      ORDER BY number
     }; # expirationdate field is NOT in ISO format?
        # timestamp has HH:mm:ss, CURRENT_DATE generates 00:00:00
        #           by adding 1, that captures today correctly.
     my $sth = $dbh->prepare($query);
     $lang = $lang // q{};
-    $sth->execute($lang);
+    $sth->execute($lang,$branch);
     my @results;
     while ( my $row = $sth->fetchrow_hashref ){
         $row->{newdate} = format_date($row->{newdate});

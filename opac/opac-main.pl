@@ -2,26 +2,27 @@
 
 # This file is part of Koha.
 #
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
+# Parts Copyright (C) 2013  Mark Tompsett
 #
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
 #
-# You should have received a copy of the GNU General Public License along
-# with Koha; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI;
 use C4::Auth;    # get_template_and_user
 use C4::Output;
-use C4::NewsChannels;    # get_opac_news
+use C4::NewsChannels;    # GetNewsToDisplay
 use C4::Languages qw(getTranslatedLanguages accept_language);
 use C4::Koha qw( GetDailyQuote );
 
@@ -48,7 +49,11 @@ $template->param(
 # use cookie setting for language, bug default to syspref if it's not set
 my ($theme, $news_lang, $availablethemes) = C4::Templates::themelanguage(C4::Context->config('opachtdocs'),'opac-main.tt','opac',$input);
 
-my $all_koha_news   = &GetNewsToDisplay($news_lang);
+my $homebranch;
+if (C4::Context->userenv) {
+    $homebranch = C4::Context->userenv->{'branch'};
+}
+my $all_koha_news   = &GetNewsToDisplay($news_lang,$homebranch);
 my $koha_news_count = scalar @$all_koha_news;
 
 my $quote = GetDailyQuote();   # other options are to pass in an exact quote id or select a random quote each pass... see perldoc C4::Koha

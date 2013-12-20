@@ -33,6 +33,7 @@ use C4::Output;
 use C4::NewsChannels;
 use C4::Languages qw(getTranslatedLanguages);
 use Date::Calc qw/Date_to_Days Today/;
+use C4::Branch qw/GetBranches/;
 
 my $cgi = new CGI;
 
@@ -43,6 +44,10 @@ my $expirationdate = format_date_in_iso($cgi->param('expirationdate'));
 my $timestamp      = format_date_in_iso($cgi->param('timestamp'));
 my $number         = $cgi->param('number');
 my $lang           = $cgi->param('lang');
+my $branchcode     = $cgi->param('branch');
+# Foreign Key constraints work with NULL, not ''
+# NULL = All branches.
+$branchcode = undef if (defined($branchcode) && $branchcode eq '');
 
 my $new_detail = get_opac_new($id);
 
@@ -68,9 +73,13 @@ foreach my $language ( @$tlangs ) {
       };
 }
 
-$template->param( lang_list => \@lang_list );
+my $branches = GetBranches;
 
-my $op = $cgi->param('op');
+$template->param( lang_list   => \@lang_list,
+                  branch_list => $branches,
+                  branchcode  => $branchcode );
+
+my $op = $cgi->param('op') // '';
 
 if ( $op eq 'add_form' ) {
     $template->param( add_form => 1 );
@@ -94,6 +103,7 @@ elsif ( $op eq 'add' ) {
                       expirationdate => $expirationdate,
                       timestamp      => $timestamp,
                       number         => $number,
+                      branchcode     => $branchcode,
                   };
     add_opac_new( $parameters );
     print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl");
@@ -107,6 +117,7 @@ elsif ( $op eq 'edit' ) {
                       expirationdate => $expirationdate,
                       timestamp      => $timestamp,
                       number         => $number,
+                      branchcode     => $branchcode,
                   };
     upd_opac_new( $parameters );
     print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl");
@@ -119,7 +130,7 @@ elsif ( $op eq 'del' ) {
 
 else {
 
-    my ( $opac_news_count, $opac_news ) = &get_opac_news( undef, $lang );
+    my ( $opac_news_count, $opac_news ) = &get_opac_news( undef, $lang, $branchcode );
     
     foreach my $new ( @$opac_news ) {
         next unless $new->{'expirationdate'};

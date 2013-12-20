@@ -78,7 +78,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
 			<fieldset class="rows">
             <legend>OPAC and Koha news</legend>
            <ol> <li>
-            <label for="lang">([% new_detail.lang %])([% lang %])Display location</label>
+            <label for="lang">Display location</label>
             <select id="lang" name="lang">
                 [% IF ( default_lang == "" ) %]
                 <option value=""     selected>All</option>
@@ -103,6 +103,23 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                 [% END %]
                 [% END %]
             </select>
+            </li>
+            <li>
+                <label for="branch">Library: </label>
+                <select id="branch" name="branch">
+                [% IF ( new_detail.branchcode == '' ) %]
+                    <option value="" selected>All Libraries</option>
+                [% ELSE %]
+                    <option value=""         >All Libraries</option>
+                [% END %]
+                [% FOREACH branch_item IN branch_list %]
+                [% IF ( branch_item.value.branchcode == new_detail.branchcode ) %]
+                    <option value="[% branch_item.value.branchcode %]" selected>[% branch_item.value.branchname %]</option>
+                [% ELSE %]
+                    <option value="[% branch_item.value.branchcode %]">[% branch_item.value.branchname %]</option>
+                [% END %]
+                [% END %]
+                </select>
             </li>
             <li>
                 <label for="title">Title: </label>
@@ -157,7 +174,26 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                 [% IF ( lang_lis.language == lang ) %]
                     <option value="[% lang_lis.language %]" selected>OPAC ([% lang_lis.language %])</option>
                 [% ELSE %]
-                    <option value="[% lang_lis.language %]">OPAC ([% lang_lis.language %])</option>
+                    <option value="[% lang_lis.language %]"         >OPAC ([% lang_lis.language %])</option>
+                [% END %]
+                [% END %]
+            </select>
+            <label for="branch">Library: </label>
+            <select id="branch" name="branch">
+                [% IF ( branchcode == "" ) %]
+                <option value="" selected>All Libraries</option>
+                [% ELSE %]
+                <option value=""         >All Libraries</option>
+                [% END %]
+                [% FOREACH branch_item IN branch_list %]
+                [% IF ( branch_item.value.branchcode == branchcode ) %]
+                    <option value="[% branch_item.value.branchcode %]"
+                            selected>[% branch_item.value.branchname %]
+                    </option>
+                [% ELSE %]
+                    <option value="[% branch_item.value.branchcode %]"
+                                    >[% branch_item.value.branchname %]
+                    </option>
                 [% END %]
                 [% END %]
             </select>
@@ -170,6 +206,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                    <thead> <tr>
                         <th>&nbsp;</th>
                         <th>Location</th>
+                        <th>Library</th>
                         <th>Number</th>
                         <th>Creation date</th>
                         <th>Expiration date</th>
@@ -197,7 +234,10 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                                     OPAC ([% opac_new.lang %])
                                 [% END %]
                              </td>
-
+                            <td>[% IF ( opac_new.branchcode == "" ) -%]
+                                All Libraries
+                                [% ELSE %][% opac_new.branchname %]
+                                [% END %]</td>
                             <td>[% opac_new.number %]</td>
                             <td><span title="[% opac_new.newdate %]">[% opac_new.newdate | $KohaDates %]</span></td>
                             <td><span title="[% opac_new.expirationdate %]">[% opac_new.expirationdate | $KohaDates %] [% IF ( opac_new.expired ) %](<span class="expired">expired</span>)[% END %]</span></td>

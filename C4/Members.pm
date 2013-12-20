@@ -2345,7 +2345,7 @@ sub IssueSlip {
             'news' => [ map {
                 $_->{'timestamp'} = $_->{'newdate'};
                 { opac_news => $_ }
-            } @{ GetNewsToDisplay("slip") } ],
+            } @{ GetNewsToDisplay("slip",$branch) } ],
         );
     }
 
