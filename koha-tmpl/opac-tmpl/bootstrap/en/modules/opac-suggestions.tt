@@ -202,7 +202,7 @@
                                                         [% ELSIF ( suggestions_loo.ORDERED ) %]Ordered by the library
                                                         [% ELSIF ( suggestions_loo.REJECTED ) %]Suggestion declined
                                                         [% ELSIF ( suggestions_loo.AVAILABLE ) %]Available in the library
-                                                        [% ELSE %] [% KohaAuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) %] [% END %]
+                                                        [% ELSE %] [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) %] [% END %]
                                                     </td>
                                                 </tr>
                                             [% END # / FOREACH suggestions_loo %]
