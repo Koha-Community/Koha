@@ -124,7 +124,11 @@ function rebuild_target($sources, $target) {
     var fields = target_record[tag];
     for (i in fields) {
       var field = fields[i];
-      if (field.subfields.length > 0) {
+      if (parseInt(tag) < 10) {
+        var $field_clone = $('#' + field.id).clone();
+        $field_clone.find('.fieldpick').remove();
+        $target.append($field_clone);
+      } else if (field.subfields.length > 0) {
         var $field_clone = $('#' + field.id).clone();
         $field_clone.find('ul').empty();
         $field_clone.find('.fieldpick').remove();
@@ -137,7 +141,7 @@ function rebuild_target($sources, $target) {
           $field_clone.find('ul').append($subfield_clone);
         }
       } else {
-        $('#' + field.id).find('input.fieldpick').attr('checked', false);
+        $('#' + field.id).find('input.fieldpick').removeAttr('checked');
       }
     }
   }
@@ -149,12 +153,16 @@ function rebuild_target($sources, $target) {
 $(document).ready(function(){
     // When a field is checked / unchecked
     $('input.fieldpick').click(function() {
-        // (un)check all subfields
         var ischecked = this.checked;
-        if (ischecked && !field_can_be_added($('#tabs'), $(this).parent())) {
-          return false;
+        if (ischecked) {
+          $(this).removeAttr('checked');
+          if (!field_can_be_added($('#tabs'), $(this).parent())) {
+            return false;
+          }
+          $(this).attr('checked', 'checked');
         }
 
+        // (un)check all subfields
         $(this).parent().find("input.subfieldpick").each(function() {
             this.checked = ischecked;
         });
@@ -164,8 +172,12 @@ $(document).ready(function(){
     // When a field or subfield is checked / unchecked
     $("input.subfieldpick").click(function() {
       var ischecked = this.checked;
-      if (ischecked && !subfield_can_be_added($('#tabs'), $(this).parent())) {
-        return false;
+      if (ischecked) {
+        $(this).removeAttr('checked');
+        if (!subfield_can_be_added($('#tabs'), $(this).parent())) {
+          return false;
+        }
+        $(this).attr('checked', 'checked');
       }
       rebuild_target($('#tabs'), $('#resultul'));
     });
