@@ -1,7 +1,7 @@
 [% USE AuthorisedValues %]
 
 [% IF ( item.itemlost ) %]
-    [% av_lib_include = KohaAuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) %]
+    [% av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) %]
     [% IF ( av_lib_include ) %]
         [% av_lib_include %]
     [% ELSE %]

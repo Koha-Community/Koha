@@ -1,4 +1,4 @@
-[% USE KohaAuthorisedValues %]
+[% USE AuthorisedValues %]
 
 [% IF ( item.datedue ) %]
     [% IF ( OPACShowCheckoutName ) %]
@@ -14,7 +14,7 @@
 [% ELSIF ( item.withdrawn ) %]
     Item withdrawn
 [% ELSIF ( item.itemlost ) %]
-    [% av_lib_include = KohaAuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) %]
+    [% av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) %]
     [% IF ( av_lib_include ) %]
         [% av_lib_include %]
     [% ELSE %]
@@ -33,7 +33,7 @@
 [% ELSIF ( item.notforloan_per_itemtype ) %]
     Not for loan [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac %])</span>[% END %]
 [% ELSIF ( item.damaged ) %]
-    [% av_lib_include = KohaAuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 ) %]
+    [% av_lib_include = AuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 ) %]
     [% IF av_lib_include %]
         [% av_lib_include %]
     [% ELSE %]
