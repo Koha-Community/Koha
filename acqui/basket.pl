@@ -189,9 +189,6 @@ if ( $op eq 'delete_confirm' ) {
         address3             => $bookseller->{'address3'},
         address4             => $bookseller->{'address4'},
       );
-} elsif ($op eq 'attachbasket' && $template->{'VARS'}->{'CAN_user_acquisition_group_manage'} == 1) {
-      print $query->redirect('/cgi-bin/koha/acqui/basketgroup.pl?basketno=' . $basket->{'basketno'} . '&op=attachbasket&booksellerid=' . $booksellerid);
-    # check if we have to "close" a basket before building page
 } elsif ($op eq 'export') {
     print $query->header(
         -type       => 'text/csv',
