@@ -2841,8 +2841,6 @@ sub EmbedItemsInMarcBiblio {
     my ($marc, $biblionumber) = @_;
     croak "No MARC record" unless $marc;
 
-    $itemnumbers = [] unless defined $itemnumbers;
-
     my $frameworkcode = GetFrameworkCode($biblionumber);
     _strip_item_fields($marc, $frameworkcode);
 
