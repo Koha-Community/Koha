@@ -261,9 +261,9 @@ function verify_images() {
                 'sDom': 't',
                 'bPaginate': false,
                 'bAutoWidth': false,
-                "aaSorting": [[ 2, "desc" ]],
+                "aaSorting": [[ 3, "desc" ]],
                 "aoColumnDefs": [
-                    { "aTargets": [ 2, 3 ], "sType": "title-string" }
+                    { "aTargets": [ 3, 4 ], "sType": "title-string" }
                 ]
             }));
 
@@ -831,6 +831,7 @@ function verify_images() {
     <table id="orders">
       <thead>
         <tr>
+          <th>Basket group</th>
           <th>Basket</th>
           <th>Order number</th>
           <th>Creation date</th>
@@ -842,10 +843,19 @@ function verify_images() {
       <tbody>
       [% FOR order IN orders %]
           <tr>
+            <td>
+            [% IF (order.basketgroupid) %]
+                [% IF CAN_user_acquisition_group_manage %]
+                    <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=[% order.id %]&basketgroupid=[% order.basketgroupid %]">[% order.groupname %] ([% order.basketgroupid %])</a>
+                [% ELSE %]
+                    [% order.groupname %] ([% order.basketgroupid %])
+                [% END %]
+            [% END %]
+            </td>
             <td>[% IF CAN_user_acquisition_order_manage %]
-                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% order.basketno %]">[% order.basketname %]</a>
+                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% order.basketno %]">[% order.basketname %] ([% order.basketno %])</a>
             [% ELSE %]
-                [% order.basketname %]
+                [% order.basketname %] ([% order.basketno %])
             [% END %]</td>
             <td>[% order.ordernumber %]</td>
             <td><span title="[% order.creationdate %]">[% order.creationdate | $KohaDates%]</span></td>
