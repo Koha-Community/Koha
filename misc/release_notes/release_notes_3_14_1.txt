@@ -1,0 +1,372 @@
+RELEASE NOTES FOR KOHA 3.14.1
+23 déc. 2013
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.14.1 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.14.01.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+
+Koha 3.14.1 is a bugfix/maintenance release.
+
+
+It includes 11 enhancements and 30 bugfixes.
+
+
+Enhancements in 3.14.1
+======================
+
+Authentication
+----------
+	11146	Show a go back link on no permission page
+
+Circulation
+----------
+	11040	Add option to print regular slip to CircAutoPrintQuickSlip
+
+Documentation
+----------
+	11238	The version of the manual online link should be dynamically updated
+
+OPAC
+----------
+	11104	Label in opac topics in facets not easily css selectable
+	11105	Label - opac - places on facets not easily css selectable
+	11304	Bootstrap OPAC detail page doesn't display holding tabs properly
+
+Serials
+----------
+	10809	Use template branches plugin in serials search
+
+Staff Client
+----------
+	11101	Item Type label in OPAC not easily css selectable.
+	11333	Use jQuery validator plugin for CSV profile forms
+
+Templates
+----------
+	7484	Keeping typed values when searching for authorities
+
+Tools
+----------
+	2693	Tagging: Add filter by name
+
+
+Critical bugs fixed in 3.14.1
+======================
+
+
+Acquisitions
+----------
+	11322	critical	Suggestion "notes" field should be sanitized or escaped
+
+Cataloging
+----------
+	6435	major	[ENH] Added daemon mode parameters to rebuild_zebra.pl
+	11286	major	Bug 10602 prevents to create new subfields in authorities
+
+I18N/L10N
+----------
+	2546	major	Description of charges: string hardcoded
+
+OPAC
+----------
+	11307	critical	Potential XSS attack vector in opac rss feed
+	11341	critical	XSS attack vector in facets in OPAC - prog theme
+
+
+Other bugs fixed in 3.14.1
+======================
+
+
+About
+----------
+	7143	trivial	Bug for tracking changes to the about page
+
+Acquisitions
+----------
+	7791	normal	Deleting basket should not delete all existing orders without warning
+	11059	normal	Not possible to sort staged dates in metric format
+	11111	normal	The basket group is not displayed on the parcel page
+	11171	normal	The basket group is not displayed on the supplier list page
+
+Architecture, internals, and plumbing
+----------
+	11035	normal	Replace shortcut plugin jquery.hotkeys.min.js
+	11061	normal	Koha::Calendar::_mock_init is unused
+	11077	trivial	Correct silent warnings in C4/Auth.pm
+
+Database
+----------
+	11275	normal	Make deleteditems.materials of type text
+
+Label printing
+----------
+	11222	normal	A regression on label-item-search.pl done by Bug 9239
+
+OPAC
+----------
+	11183	normal	Warnings in opac
+	11308	normal	RSS feed is slightly broken in bootstrap theme
+	11242	minor	Fix opac-MARCdetail.pl bizarre ordering of data and noisy warnings
+
+Patrons
+----------
+	11207	normal	Impossibility to remove a sms number
+	11283	normal	Restriction type is not translatable
+	11125	minor	Remove Problematic Logic from Patron Messaging Preferences Form
+
+Serials
+----------
+	11091	normal	Limits in catalog search when creating subscription
+	11265	normal	Problems with locale saving/editing on serial subscriptions
+	11214	minor	Allow create routing list in serial collection page
+
+System Administration
+----------
+	7491	normal	Description for item-level_itypes is misleading
+
+Templates
+----------
+	2310	normal	Delete grayed out w/out explanation
+
+Tools
+----------
+	5031	normal	CSV export profile form doesn't indicate that profile marcfields are required
+	10996	normal	Cannot exclude numeric subfields on export
+	11245	normal	Typo in modborrowers.tt javascript string
+
+
+New sysprefs in 3.14.1
+======================
+
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+The Koha manual is maintained in DocBook.The home page for Koha 
+documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.14/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+  * Arabic (83%)
+  * Armenian (99%)
+  * Chinese (China) (99%)
+  * Chinese (Taiwan) (100%)
+  * Czech (99%)
+  * Danish (91%)
+  * English (New Zealand) (85%)
+  * French (99%)
+  * French (Canada) (90%)
+  * German (100%)
+  * German (Switzerland) (99%)
+  * Greek (53%)
+  * Italian (96%)
+  * Kurdish (73%)
+  * Norwegian Bokmål (60%)
+  * Polish (61%)
+  * Portuguese (99%)
+  * Portuguese (Brazil) (91%)
+  * Slovak (100%)
+  * Spanish (99%)
+  * Swedish (90%)
+  * Turkish (99%)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.14.1 is
+
+  Release Manager:       Galen Charlton <gmc@esilibrary.com>
+  Documentation Manager: Nicole C Engard <nengard@gmail.com>
+  Installation Documentation Managers:
+                         Samuel Desseaux <samuel.desseaux@ecp.fr>
+                         Mason James <mtj@kohaaloha.com>
+  Translation Manager:   Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>
+  QA Team:               Chris Cormack <chrisc@catalyst.net.nz>
+                         Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>,
+                         Jonathan Druart <jonathan.druart@biblibre.com>,
+                         Brendan Gallagher <brendan@bywatersolutions.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+                         Mason James <mtj@kohaaloha.com>
+                         Paul Poulain <paul.poulain@biblibre.com>
+  Bug Wranglers:         Magnus Enger <magnus@enger.priv.no>
+  Packaging Manager:     Robin Sheat <robin@catalyst.net.nz>
+  Live CD Manager:       Nguyen Quoc Uy <nguyenquocuy_1102@yahoo.com>
+  VM Manager:            Samuel Desseaux <samuel.desseaux@ecp.fr>
+
+  Release Maintainer (3.8.x): Chris Hall <chrish@catalyst.net.nz>
+  Release Maintainer (3.10.x): Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  Release Maintainer (3.12.x): Tomás Cohen Arazi <tomascohen@gmail.com>
+  Release Maintainer (3.14.x): Fridolin SOMERS <fridolin.somers@biblibre.com>
+
+Credits
+======================
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.14.1:
+  * Universidad Nacional de Cordoba
+
+We thank the following individuals who contributed patches to Koha 3.14.1.
+  *      1	Tomas Cohen Arazi
+  *      2	Blou
+  *      1	Colin Campbell
+  *      7	Galen Charlton
+  *      7	Chris Cormack
+  *      1	Frédéric Demians
+  *     11	Jonathan Druart
+  *      1	Rachel Dustin
+  *      1	Kyle M Hall
+  *      1	Tim Hannah
+  *      2	Srdjan Jankovic
+  *      2	Doug Kingston
+  *      1	Bernardo Gonzalez Kriegel
+  *      2	Owen Leonard
+  *      1	Sophie Meynieux
+  *      2	Marcel de Rooy
+  *      3	Fridolin SOMERS
+  *      9	Fridolyn SOMERS
+  *      3	Mathieu Saby
+  *      1	Claire Stent
+  *      1	Zeno Tajoli
+  *      1	Lyon3 Team
+  *      1	Peggy Thrasher
+  *      1	Mark Tompsett
+
+We thank the following companies who contributed patches to Koha 3.14.1
+  *       2 ACPL
+  *      24 BibLibre
+  *       3 BigBallOfWax
+  *       1 ByWater-Solutions
+  *       6 Catalyst
+  *       7 Equinox
+  *       1 PTFS-Europe
+  *       2 Rijksmuseum
+  *       1 Tamil
+  *       1 Université Jean Moulin Lyon 3
+  *       3 Université Rennes 2
+  *       1 cineca.it
+  *       1 dover.nh.gov
+  *       2 inlibro.com
+  *       1 massey.ac.nz
+  *       2 randomnotes.org
+  *       5 unidentified
+
+We also especially thank the following individuals who tested patches
+for Koha 3.14.1.
+  *       1 Koha team AMU
+  *       1 Pierre Angot
+  *       2 Tomas Cohen Arazi
+  *       1 Petter Goksoyr Asen
+  *      60 Galen Charlton
+  *       4 David Cook
+  *       5 Chris Cormack
+  *      12 Jonathan Druart
+  *      26 Katrin Fischer
+  *       1 Brendan Gallagher
+  *      15 Kyle M Hall
+  *       5 Bernardo Gonzalez Kriegel
+  *       8 Owen Leonard
+  *       2 David Noe
+  *       1 Liz Rea
+  *       3 Martin Renvoize
+  *       7 Marcel de Rooy
+  *       2 Paola Rossi
+  *      60 Fridolin SOMERS
+  *       1 Fridolyn SOMERS
+  *       1 Garming Sam
+  *       1 Srdjan
+  *       5 Mark Tompsett
+  *       1 Ed Veal
+  *       2 Cedric Vita
+
+We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is 3.14.x.
+
+The last Koha release was 3.14.0, which was released on November 21, 2013.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+He rau ringa e oti ai.
+(Many hands finish the work)
+
+##### Autogenerated release notes updated last on 23 déc. 2013 16:01:59 Z #####
