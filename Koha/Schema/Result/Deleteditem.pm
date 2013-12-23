@@ -253,11 +253,6 @@ __PACKAGE__->table("deleteditems");
   is_nullable: 1
   size: 32
 
-=head2 marc
-
-  data_type: 'longblob'
-  is_nullable: 1
-
 =cut
 
 __PACKAGE__->add_columns(
@@ -346,8 +341,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "stocknumber",
   { data_type => "varchar", is_nullable => 1, size => 32 },
-  "marc",
-  { data_type => "longblob", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -363,8 +356,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-11-27 17:52:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VssrrcYczPsiDBrtbsipIw
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-12-23 16:39:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ji1W0q5g5xTw1J89cjVlWw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
