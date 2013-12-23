@@ -255,9 +255,7 @@
         <input type="hidden" name="order" value="[% order %]" />
          <table id="claimst">
                 <thead><tr>
-                    [% IF ( letter ) %]
                     <th><input type="checkbox" id="CheckAll"></th>
-                    [% END %]
                     <th>Vendor</th>
                     <th>Library</th>
                     <th>Title</th>
@@ -268,11 +266,9 @@
                 </tr></thead>
                 <tbody>[% FOREACH missingissue IN missingissues %]
                     <tr>
-                        [% IF ( letter ) %]
-                            <td>
-                    <input type="checkbox" name="serialid" value="[% missingissue.serialid %]" />
-                            </td>
-                        [% END %]
+                        <td>
+                            <input type="checkbox" name="serialid" value="[% missingissue.serialid %]" />
+                        </td>
                         <td>
                         [% missingissue.name %]
                         </td>
