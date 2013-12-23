@@ -230,7 +230,7 @@ sub get_matching_record_ids {
         ) AS values$i |;
         $subquery .= ' USING (record_id)' if $i > 1;
         push @subqueries, $subquery;
-        push @args, $field->{name}, $tablename, ( $exact_match ? $field->{value} : "%$field->{value}%" );
+        push @args, $field->{name}, $tablename, ( ( $exact_match or $field->{authorised_value_category} ) ? $field->{value} : "%$field->{value}%" );
     }
     $query .= join( ' LEFT JOIN ', @subqueries ) . ' WHERE 1';
     for my $j ( 1 .. $i ) {

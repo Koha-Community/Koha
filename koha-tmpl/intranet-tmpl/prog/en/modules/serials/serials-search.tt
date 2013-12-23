@@ -445,7 +445,7 @@
                       <select id="additional_field_[% field.id %]" name="additional_field_[% field.id %]_filter">
                         <option value="">All</option>
                         [% FOREACH av IN field.authorised_value_choices %]
-                          [% IF av.authorised_value == additional_field_filters.${field.name} %]
+                          [% IF av.authorised_value == additional_field_filters.${field.name}.value %]
                             <option value="[% av.authorised_value %]" selected="selected">[% av.lib %]</option>
                           [% ELSE %]
                             <option value="[% av.authorised_value %]">[% av.lib %]</option>
@@ -453,7 +453,7 @@
                         [% END %]
                       </select>
                     [% ELSE %]
-                      <input id="additional_field_[% field.id %]" type="text" value="[% additional_field_filters.${field.name} %]" name="additional_field_[% field.id %]_filter" />
+                      <input id="additional_field_[% field.id %]" type="text" value="[% additional_field_filters.${field.name}.value %]" name="additional_field_[% field.id %]_filter" />
                     [% END %]
                   </li>
                 [% END %]

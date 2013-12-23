@@ -82,8 +82,11 @@ my $additional_fields = Koha::AdditionalField->all( { tablename => 'subscription
 my $additional_field_filters;
 for my $field ( @$additional_fields ) {
     my $filter_value = $query->param('additional_field_' . $field->{id} . '_filter');
-    if ( defined ( $filter_value ) ) {
-        $additional_field_filters->{ $field->{name} } = $filter_value;
+    if ( defined $filter_value and $filter_value ne q|| ) {
+        $additional_field_filters->{ $field->{name} } = {
+            value => $filter_value,
+            authorised_value_category => $field->{authorised_value_category},
+        };
     }
     if ( $field->{authorised_value_category} ) {
         $field->{authorised_value_choices} = GetAuthorisedValues( $field->{authorised_value_category} );
@@ -103,7 +106,7 @@ if ($searched){
             publisher    => $publisher,
             bookseller   => $bookseller,
             branch       => $branch,
-            additional_fields => [ map{ { name => $_, value => $additional_field_filters->{$_}} } keys %$additional_field_filters ],
+            additional_fields => [ map{ { name => $_, value => $additional_field_filters->{$_}{value}, authorised_value_category => $additional_field_filters->{$_}{authorised_value_category} } } keys %$additional_field_filters ],
             location     => $location,
             expiration_date => $expiration_date_dt,
         }
