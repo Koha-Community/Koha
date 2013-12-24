@@ -52,7 +52,7 @@ $context->set_preference( 'ThingISBN', 1 );
 $context->set_preference( 'XISBN', 0 );
 my $results_thingisbn = C4::XISBN::get_xisbns($isbn1);
 is( $results_thingisbn->[0]->{biblionumber},
-    $biblionumber2,
+    $biblionumber3,
     "Gets correct biblionumber from a book with a similar isbn using ThingISBN." );
 
 $context->set_preference( 'ThingISBN', 0 );
