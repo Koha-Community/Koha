@@ -86,6 +86,7 @@ elsif ( $op eq 'update' ) {
     my $borcat = GetBorrowercategory($catcode);
     $member->{'category_type'} = $borcat->{'category_type'};
     $member->{'description'}   = $borcat->{'description'};
+    delete $member->{password};
     ModMember(%$member);
 
     if (  $catcode_multi ) {
