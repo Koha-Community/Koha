@@ -5,21 +5,24 @@
 
 use Modern::Perl;
 
-# use Test::Class::Load qw ( t/db_dependent/ );
 use Test::More tests => 5;
 use MARC::Record;
 use C4::Biblio;
 use C4::XISBN;
-use Data::Dumper;
 use C4::Context;
+use Test::MockModule;
 
 BEGIN {
     use_ok('C4::XISBN');
 }
 
-# Avoid "redefined subroutine" warnings
-local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
-*C4::Search::SimpleSearch = \&Mock_SimpleSearch;
+my $dbh = C4::Context->dbh;
+$dbh->{RaiseError} = 1;
+$dbh->{AutoCommit} = 0;
+
+my $search_module = new Test::MockModule('C4::Search');
+
+$search_module->mock('SimpleSearch', \&Mock_SimpleSearch );
 
 my $context = C4::Context->new;
 
@@ -61,11 +64,6 @@ my $results_xisbn = C4::XISBN::get_xisbns($isbn1);
 is( $results_xisbn->[0]->{biblionumber},
     $biblionumber3,
     "Gets correct biblionumber from a book with a similar isbn using XISBN." );
-
-# clean up after ourselves
-DelBiblio($biblionumber1);
-DelBiblio($biblionumber2);
-DelBiblio($biblionumber3);
 
 # Util subs
 
