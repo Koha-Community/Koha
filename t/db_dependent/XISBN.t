@@ -5,20 +5,20 @@
 
 use Modern::Perl;
 
-# use Test::Class::Load qw ( t/db_dependent/ );
 use Test::More tests => 5;
 use MARC::Record;
 use C4::Biblio;
 use C4::XISBN;
-use Data::Dumper;
 use C4::Context;
+use Test::MockModule;
 
 BEGIN {
     use_ok('C4::XISBN');
 }
 
-# KohaTest::clear_test_database();
-# KohaTest::create_test_database();
+my $dbh = C4::Context->dbh;
+$dbh->{RaiseError} = 1;
+$dbh->{AutoCommit} = 0;
 
 my $context = C4::Context->new;
 
@@ -61,11 +61,6 @@ is( $results_xisbn->[0]->{biblionumber},
     $biblionumber3,
     "Gets correct biblionumber from a book with a similar isbn using XISBN." );
 
-# clean up after ourselves
-DelBiblio($biblionumber1);
-DelBiblio($biblionumber2);
-DelBiblio($biblionumber3);
-
 # Util subs
 
 # Add new biblio with isbn and return biblionumber
@@ -79,3 +74,4 @@ sub _add_biblio_with_isbn {
     return $biblionumber;
 }
 
+$dbh->rollback;
