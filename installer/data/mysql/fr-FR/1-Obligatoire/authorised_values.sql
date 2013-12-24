@@ -7,8 +7,8 @@ INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES 
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('SUGGEST','Onéreux','Document trop onéreux');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('SUGGEST','Poldoc','Document ne correspondant pas à notre politique d''acquisition');
 -- OPAC Suggestions reasons
-INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('OPAC_SUG','damaged','L''exemplaire de la bibliothèque est endommagé','L''exemplaire de la bibliothèque est endommagdé');
-INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('OPAC_SUG','bestseller','Bestseller','Bestseller');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('OPAC_SUG','damaged','L''exemplaire de la bibliothèque est endommagé');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('OPAC_SUG','bestseller','Bestseller');
 -- Report groups
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('REPORT_GROUP', 'CIRC', 'Circulation');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('REPORT_GROUP', 'CAT', 'Catalogue');
@@ -21,7 +21,7 @@ INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES 
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('LOST','3','Perdu et remboursé');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('LOST','4','Introuvable');
 -- damaged status of an item
-INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('DAMAGED','1','Endommagdé');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('DAMAGED','1','Endommagé');
 -- Status codes
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '0', 'Empruntable');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '1', 'Exclu du prêt');
