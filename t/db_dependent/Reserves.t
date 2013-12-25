@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 18;
+use Test::More tests => 20;
 use MARC::Record;
 use DateTime::Duration;
 
@@ -270,7 +270,15 @@ is(exists $messages->{ResFound}?1:0, 1, 'AddReturn considers future reserve with
 # End of tests for bug 9761 (ConfirmFutureHolds)
 
 # test marking a hold as captured
+my $hold_notice_count = count_hold_print_messages();
 ModReserveAffect($itemnumber, $requesters{'CPL'}, 0);
+my $new_count = count_hold_print_messages();
+is($new_count, $hold_notice_count + 1, 'patron notified when item set to waiting');
+
+# test that duplicate notices aren't generated
+ModReserveAffect($itemnumber, $requesters{'CPL'}, 0);
+$new_count = count_hold_print_messages();
+is($new_count, $hold_notice_count + 1, 'patron not notified a second time (bug 11445)');
 
 # avoiding the not_same_branch error
 t::lib::Mocks::mock_preference('IndependentBranches', 0);
@@ -284,3 +292,10 @@ my $letter = ReserveSlip('CPL', $requesters{'CPL'}, $bibnum);
 ok(defined($letter), 'can successfully generate hold slip (bug 10949)');
 
 $dbh->rollback;
+
+sub count_hold_print_messages {
+    my $message_count = $dbh->selectall_arrayref(q{
+        SELECT COUNT(*) FROM message_queue WHERE letter_code = 'HOLD_PRINT'
+    });
+    return $message_count->[0]->[0];
+}
