@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 2;
+use Test::More tests => 5;
 
 use C4::Biblio;
 use C4::Circulation;
@@ -34,6 +34,21 @@ is ( IsItemIssued( $item->{itemnumber} ), 0, "item is not on loan at first" );
 
 AddIssue($borrower, 'i_dont_exist');
 is ( IsItemIssued( $item->{itemnumber} ), 1, "item is now on loan" );
+
+is(
+    DelItemCheck($dbh, $biblionumber, $itemnumber),
+    'book_on_loan',
+    'item that is on loan cannot be deleted',
+);
+
+AddReturn('i_dont_exist', 'CPL');
+is ( IsItemIssued( $item->{itemnumber} ), 0, "item has been returned" );
+
+is(
+    DelItemCheck($dbh, $biblionumber, $itemnumber),
+    1,
+    'item that is not on loan can be deleted',
+);
 
 $dbh->rollback;
 
