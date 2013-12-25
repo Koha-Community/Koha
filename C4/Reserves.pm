@@ -1257,7 +1257,12 @@ sub ModReserveAffect {
 
     # get request - need to find out if item is already
     # waiting in order to not send duplicate hold filled notifications
-    my $request = GetReserveInfo($borrowernumber, $biblionumber);
+    my $reserve_id = GetReserveId({
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+    });
+    return unless defined $reserve_id;
+    my $request = GetReserveInfo($reserve_id);
     my $already_on_shelf = ($request && $request->{found} eq 'W') ? 1 : 0;
 
     # If we affect a reserve that has to be transfered, don't set to Waiting
