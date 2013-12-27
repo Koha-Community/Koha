@@ -7878,11 +7878,10 @@ if(CheckVersion($DBversion)) {
     SetVersion ($DBversion);
 }
 
-
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.15.00.011";
 if(CheckVersion($DBversion)) {
     $dbh->do("UPDATE marc_subfield_structure SET maxlength=9999 WHERE maxlength IS NULL OR maxlength=0;");
-    print "Upgrade to $DBversion done (Bug 8018: new subfields have a default max length of zero)\n";
+    print "Upgrade to $DBversion done (Bug 8018: set 9999 as default max length for subfields)\n";
     SetVersion($DBversion);
 }
 
