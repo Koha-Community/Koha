@@ -131,7 +131,7 @@ sub GetBooksellersWithLateOrders {
     if ( defined $delay && $delay >= 0 ) {
         $query .= " AND (closedate <= DATE_SUB(CAST(now() AS date),INTERVAL ? + COALESCE(aqbooksellers.deliverytime,0) DAY)) ";
         push @query_params, $delay;
-    } elsif ( $delay < 0 ){
+    } elsif ( $delay && $delay < 0 ){
         warn 'WARNING: GetBooksellerWithLateOrders is called with a negative value';
         return;
     }
