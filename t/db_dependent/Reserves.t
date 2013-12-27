@@ -11,6 +11,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Members;
 use C4::Circulation;
+use t::lib::Mocks;
 
 use Koha::DateUtils;
 
@@ -271,10 +272,12 @@ is(exists $messages->{ResFound}?1:0, 1, 'AddReturn considers future reserve with
 # test marking a hold as captured
 ModReserveAffect($itemnumber, $requesters{'CPL'}, 0);
 
+# avoiding the not_same_branch error
+t::lib::Mocks::mock_preference('IndependentBranches', 0);
 is(
     DelItemCheck($dbh, $bibnum, $itemnumber),
     'book_reserved',
-    'item that is capture to fill a hold cannot be deleted',
+    'item that is captured to fill a hold cannot be deleted',
 );
 
 my $letter = ReserveSlip('CPL', $requesters{'CPL'}, $bibnum);
