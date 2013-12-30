@@ -145,7 +145,7 @@ sub BasketTotal {
             $total = $total * ( $gst / 100 +1);
         }
     }
-    $total .= $bookseller->{invoiceprice} // 0;
+    $total .= " " . ($bookseller->{invoiceprice} // 0);
     return $total;
 }
 
