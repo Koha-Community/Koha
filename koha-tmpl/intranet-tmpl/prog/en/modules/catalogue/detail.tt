@@ -841,11 +841,7 @@ function verify_images() {
       <tbody>
       [% FOR order IN orders %]
           <tr>
-            <td>[% IF CAN_user_acquisition_order_manage %]
-                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% order.basketno %]">[% order.basketname %]</a>
-            [% ELSE %]
-                [% order.basketname %]
-            [% END %]</td>
+            <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% order.basketno %]">[% order.basketname %]</a></td>
             <td>[% order.ordernumber %]</td>
             <td><span title="[% order.creationdate %]">[% order.creationdate | $KohaDates%]</span></td>
             <td><span title="[% order.datereceived %]">[% order.datereceived | $KohaDates%]</span></td>
