@@ -112,7 +112,7 @@ else {
     print "\nLogin Failed!\n";
 }
 
-sub help() {
+sub help {
     print
 q/
 sip_cli_emulator.pl - SIP command line emulator
