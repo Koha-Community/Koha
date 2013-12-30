@@ -2142,19 +2142,10 @@ params:
   title
   author
   name
-  isbn
-  ean
   from_placed_on
   to_placed_on
   basket                  - search both basket name and number
   booksellerinvoicenumber 
-  basketgroupname
-  budget
-  orderstatus (note that orderstatus '' will retrieve orders
-               of any status except cancelled)
-  biblionumber
-  get_canceled_order (if set to a true value, cancelled orders will
-                      be included)
 
 returns:
     $order_loop is a list of hashrefs that each look like this:
