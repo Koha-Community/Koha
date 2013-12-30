@@ -175,7 +175,7 @@ foreach my $item (@items){
     if (C4::Context->preference("IndependentBranches")) {
         #verifying rights
         my $userenv = C4::Context->userenv();
-        unless (($userenv->{'flags'} == 1) or ($userenv->{'branch'} eq $item->{'homebranch'})) {
+        unless (C4::Context->IsSuperLibrarian() or ($userenv->{'branch'} eq $item->{'homebranch'})) {
                 $item->{'nomod'}=1;
         }
     }
