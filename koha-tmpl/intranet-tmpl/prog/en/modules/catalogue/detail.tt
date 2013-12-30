@@ -847,11 +847,11 @@ function verify_images() {
             <td><span title="[% order.datereceived %]">[% order.datereceived | $KohaDates%]</span></td>
             <td>
               [% SWITCH order.orderstatus %]
-                [% CASE 'new' %]New
-                [% CASE 'ordered' %]Ordered
-                [% CASE 'partial' %]Partial
-                [% CASE 'complete' %]Complete
-                [% CASE 'cancelled' %]Cancelled
+                [% CASE '0' %]New
+                [% CASE '1' %]Ordered
+                [% CASE '2' %]Partial
+                [% CASE '3' %]Complete
+                [% CASE '4' %]Deleted
               [% END %]
             </td>
             <td>
