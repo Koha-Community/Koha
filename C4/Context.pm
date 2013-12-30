@@ -1252,8 +1252,11 @@ sub IsSuperLibrarian {
     my $userenv = C4::Context->userenv;
 
     unless ( $userenv and exists $userenv->{flags} ) {
-      carp("C4::Context->userenv not defined!");
-      return 0;
+        # If we reach this without a user environment,
+        # assume that we're running from a command-line script,
+        # and act as a superlibrarian.
+        carp("C4::Context->userenv not defined!");
+        return 1;
     }
 
     return $userenv->{flags} % 2;
