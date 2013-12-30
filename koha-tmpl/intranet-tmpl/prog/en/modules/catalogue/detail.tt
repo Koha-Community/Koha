@@ -831,7 +831,7 @@ function verify_images() {
       <thead>
         <tr>
           <th>Basket</th>
-          <th>Order number</th>
+          <th>Ordernumber</th>
           <th>Creation date</th>
           <th>Receive date</th>
           <th>Status</th>
@@ -860,7 +860,7 @@ function verify_images() {
             </td>
             <td>
               [% order.quantity %]
-              [% IF order.itemnumbers.size > 0 && order.orderstatus != 'cancelled' %]
+              [% IF order.itemnumbers.size > 0 && order.orderstatus != '4' %]
                 (
                   [% FOR itemnumber IN order.itemnumbers %]
                     <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber %]#item[% itemnumber %]">[% itemnumber %]</a>
