@@ -1,4 +1,3 @@
-[% USE KohaDates %]
 [% USE AuthorisedValues %]
 
 [% ShowCourseReserves = 0 %]
@@ -255,18 +254,6 @@ function verify_images() {
             table.before(link);
             deactivate_filters(id);
         }
-        [% IF AcquisitionDetails %]
-            $("#orders").dataTable($.extend(true, {}, dataTablesDefaults, {
-                'sDom': 't',
-                'bPaginate': false,
-                'bAutoWidth': false,
-                "aaSorting": [[ 2, "desc" ]],
-                "aoColumnDefs": [
-                    { "aTargets": [ 2, 3 ], "sType": "title-string" }
-                ]
-            }));
-
-        [% END %]
     });
 //]]>
 </script>
@@ -495,7 +482,6 @@ function verify_images() {
     [% END %]
 [% IF ( MARCNOTES || notes ) %]<li><a href="#description">Descriptions</a></li>[% END %]
 [% IF ( subscriptionsnumber ) %]<li><a href="#subscriptions">Subscriptions</a></li>[% END %]
-[% IF AcquisitionDetails %]<li><a href="#acq_details">Acquisition details</a></li>[% END %]
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="#editions">Editions</a></li>[% END %][% END %]
 [% IF ( LocalCoverImages ) %][% IF ( localimages || CAN_user_tools_upload_local_cover_images ) %]<li><a href="#images">Images</a></li>[% END %][% END %]
 [% IF ( HTML5MediaEnabled ) %][% IF ( HTML5MediaSets ) %]<li><a href="#html5media">Play media</a></li>[% END %][% END %]
@@ -821,57 +807,6 @@ function verify_images() {
     [% END %]
 </div>
 </div>
-</div>
-[% END %]
-
-[% IF AcquisitionDetails %]
-<div id="acq_details">
-  [% IF orders %]
-    <table id="orders">
-      <thead>
-        <tr>
-          <th>Basket</th>
-          <th>Ordernumber</th>
-          <th>Creation date</th>
-          <th>Receive date</th>
-          <th>Status</th>
-          <th>Quantity / items</th>
-        </tr>
-      </thead>
-      <tbody>
-      [% FOR order IN orders %]
-          <tr>
-            <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% order.basketno %]">[% order.basketname %]</a></td>
-            <td>[% order.ordernumber %]</td>
-            <td><span title="[% order.creationdate %]">[% order.creationdate | $KohaDates%]</span></td>
-            <td><span title="[% order.datereceived %]">[% order.datereceived | $KohaDates%]</span></td>
-            <td>
-              [% SWITCH order.orderstatus %]
-                [% CASE '0' %]New
-                [% CASE '1' %]Ordered
-                [% CASE '2' %]Partial
-                [% CASE '3' %]Complete
-                [% CASE '4' %]Deleted
-              [% END %]
-            </td>
-            <td>
-              [% order.quantity %]
-              [% IF order.itemnumbers.size > 0 && order.orderstatus != '4' %]
-                (
-                  [% FOR itemnumber IN order.itemnumbers %]
-                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber %]#item[% itemnumber %]">[% itemnumber %]</a>
-                    [%- UNLESS loop.last %],[% END %]
-                  [% END %]
-                )
-              [% END %]
-            </th>
-          </tr>
-      [% END %]
-      </tbody>
-    </table>
-  [% ELSE %]
-    There is no order for this biblio.
-  [% END %]
 </div>
 [% END %]
 

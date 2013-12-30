@@ -20,7 +20,6 @@ use strict;
 use warnings;
 
 use CGI;
-use C4::Acquisition qw( GetHistory GetItemnumbersFromOrder );
 use C4::Auth;
 use C4::Dates qw/format_date/;
 use C4::Koha;
@@ -44,6 +43,8 @@ use Koha::DateUtils;
 use C4::HTML5Media;
 use C4::CourseReserves qw(GetItemCourseReservesInfo);
 use C4::Acquisition qw(GetOrdersByBiblionumber);
+
+# use Smart::Comments;
 
 my $query = CGI->new();
 
@@ -164,19 +165,6 @@ foreach my $subscription (@subscriptions) {
       GetLatestSerials( $subscription->{subscriptionid}, $serials_to_display );
     push @subs, \%cell;
 }
-
-
-# Get acquisition details
-my ( $orders, $qty, $price, $received ) = C4::Acquisition::GetHistory( biblionumber => $biblionumber, get_canceled_order => 1 );
-if ( C4::Context->preference('AcqCreateItem') eq 'ordering' ) {
-    for my $order ( @$orders ) {
-        $order->{itemnumbers} = [ C4::Acquisition::GetItemnumbersFromOrder( $order->{ordernumber} ) ];
-    }
-}
-$template->param(
-    orders => $orders,
-    AcquisitionDetails => C4::Context->preference('AcquisitionDetails'),
-);
 
 if ( defined $dat->{'itemtype'} ) {
     $dat->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $dat->{itemtype} }{imageurl} );
