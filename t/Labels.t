@@ -20,7 +20,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 BEGIN {
     use_ok('C4::Labels::Label');
@@ -47,6 +47,18 @@ ok(!defined C4::Labels::Label::_guide_box($llx,$lly,undef,$height),
         "Test guide box with undefined 'width' returns undef");
 ok(!defined C4::Labels::Label::_guide_box($llx,$lly,$width,undef),
         "Test guide box with undefined 'height' returns undef");
+is(
+    C4::Labels::Label::_guide_box($llx, $lly, $width, $height),
+    'q
+0.5 w
+1.0 0.0 0.0  RG
+1.0 1.0 1.0  rg
+0 0 10 10 re
+B
+Q
+',
+    'Return guide box if all four parameters are defined'
+);
 
 ok(C4::Labels::Label::_get_text_fields(), 'test getting textx fields');
 
