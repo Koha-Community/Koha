@@ -698,7 +698,7 @@ foreach my $field (@fields) {
         if (($field->tag eq $branchtagfield) && ($subfieldcode eq $branchtagsubfield) && C4::Context->preference("IndependentBranches")) {
             #verifying rights
             my $userenv = C4::Context->userenv();
-            unless (($userenv->{'flags'} == 1) or (($userenv->{'branch'} eq $subfieldvalue))){
+            unless (C4::Context->IsSuperLibrarian() or (($userenv->{'branch'} eq $subfieldvalue))){
                 $this_row{'nomod'} = 1;
             }
         }

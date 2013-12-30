@@ -505,7 +505,7 @@ sub BuildItemsData{
                 if ($itembranchcode && C4::Context->preference("IndependentBranches")) {
 						#verifying rights
 						my $userenv = C4::Context->userenv();
-						unless (($userenv->{'flags'} == 1) or (($userenv->{'branch'} eq $itembranchcode))){
+                        unless (C4::Context->IsSuperLibrarian() or (($userenv->{'branch'} eq $itembranchcode))){
 								$this_row{'nomod'}=1;
 						}
 				}
