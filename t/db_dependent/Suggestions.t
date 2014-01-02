@@ -9,10 +9,11 @@ use Data::Dumper;
 
 use C4::Suggestions;
 
-use Test::More tests =>9;
+use Test::More tests =>12;
 
 BEGIN {
     use_ok('C4::Suggestions');
+    use_ok('C4::Koha');
 }
 
 my ($suggestionid, $suggestion, $status, $biblionumber);
@@ -26,3 +27,12 @@ ok($suggestion= GetSuggestionFromBiblionumber( $biblionumber ), "GetSuggestionFr
 ok($suggestion= GetSuggestionInfoFromBiblionumber( $biblionumber ), "GetSuggestionInfoFromBiblionumber OK");
 ok(@{SearchSuggestion( {STATUS=>'STALLED'} )}>0, "SearchSuggestion Status OK");
 
+## Bug 11466, making sure GetSupportList() returns itemtypes, even if AdvancedSearchTypes has multiple values
+C4::Context->set_preference("AdvancedSearchTypes", 'itemtypes|loc|ccode');
+my $itemtypes = C4::Koha::GetSupportList();
+ok(scalar @$itemtypes, "Purchase suggestion itemtypes collected, multiple AdvancedSearchTypes");
+
+C4::Context->set_preference("AdvancedSearchTypes", 'itemtypes');
+$itemtypes = C4::Koha::GetSupportList();
+ok(scalar @$itemtypes, "Purchase suggestion itemtypes collected, default AdvancedSearchTypes");
+##EO Bug 11466

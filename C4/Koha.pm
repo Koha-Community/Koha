@@ -189,7 +189,7 @@ build a HTML select with the following code :
 
 sub GetSupportList{
 	my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
-	if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {  
+    if (!$advanced_search_types or $advanced_search_types =~ /itemtypes/) {
 		my $query = qq|
 			SELECT *
 			FROM   itemtypes
