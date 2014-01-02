@@ -124,31 +124,28 @@ sub output_pref {
     my $time_format = $force_time || C4::Context->preference('TimeFormat');
     my $time = ( $time_format eq '12hr' ) ? '%I:%M %p' : '%H:%M';
 
-    given ($pref) {
-        when (/^iso/) {
-            return $dateonly
-                ? $dt->strftime("%Y-%m-%d")
-                : $dt->strftime("%Y-%m-%d $time");
-        }
-        when (/^metric/) {
-            return $dateonly
-                ? $dt->strftime("%d/%m/%Y")
-                : $dt->strftime("%d/%m/%Y $time");
-        }
-        when (/^us/) {
-
-            return $dateonly
-                ? $dt->strftime("%m/%d/%Y")
-                : $dt->strftime("%m/%d/%Y $time");
-        }
-        default {
-            return $dateonly
-                ? $dt->strftime("%Y-%m-%d")
-                : $dt->strftime("%Y-%m-%d $time");
-        }
-
+    if ( $pref =~ m/^iso/ ) {
+        return $dateonly
+          ? $dt->strftime("%Y-%m-%d")
+          : $dt->strftime("%Y-%m-%d $time");
     }
-    return;
+    elsif ( $pref =~ m/^metric/ ) {
+        return $dateonly
+          ? $dt->strftime("%d/%m/%Y")
+          : $dt->strftime("%d/%m/%Y $time");
+    }
+    elsif ( $pref =~ m/^us/ ) {
+
+        return $dateonly
+          ? $dt->strftime("%m/%d/%Y")
+          : $dt->strftime("%m/%d/%Y $time");
+    }
+    else {
+        return $dateonly
+          ? $dt->strftime("%Y-%m-%d")
+          : $dt->strftime("%Y-%m-%d $time");
+    }
+
 }
 
 =head2 output_pref_due
