@@ -35,6 +35,8 @@ $dbh->{AutoCommit} = 0;
 $dbh->do(q|DELETE FROM aqorders|);
 $dbh->do(q|DELETE FROM aqbasket|);
 $dbh->do(q|DELETE FROM aqbooksellers|);
+$dbh->do(q|DELETE FROM subscription|);
+
 #Test AddBookseller
 my $count            = scalar( C4::Bookseller::GetBookSeller('') );
 my $sample_supplier1 = {
