@@ -10,6 +10,7 @@ use Koha::DateUtils;
 use DateTime::Duration;
 
 use Test::More tests => 19;
+use Test::Deep;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -140,13 +141,10 @@ is(CreateBranchTransferLimit(undef,$samplebranch2->{branchcode}),undef,
 #is(CreateBranchTransferLimit(-1,-1,'CODE'),0,"With wrong CreateBranchTransferLimit returns 0 - No transfertlimit added");
 
 #Test GetTransfers
-my $dt_today = dt_from_string( undef, 'sql', undef );
-my $today = $dt_today->strftime("%Y-%m-%d %H:%M:%S");
-
 my @transfers = GetTransfers($item_id1);
-is_deeply(
+cmp_deeply(
     \@transfers,
-    [ $today, $samplebranch1->{branchcode}, $samplebranch2->{branchcode} ],
+    [ re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'), $samplebranch1->{branchcode}, $samplebranch2->{branchcode} ],
     "Transfers of the item1"
 );    #NOTE: Only the first transfer is returned
 @transfers = GetTransfers;
@@ -159,17 +157,17 @@ is_deeply( \@transfers, [],
 #Test GetTransfersFromTo
 my @transferfrom1to2 = GetTransfersFromTo( $samplebranch1->{branchcode},
     $samplebranch2->{branchcode} );
-is_deeply(
+cmp_deeply(
     \@transferfrom1to2,
     [
         {
             itemnumber => $item_id1,
-            datesent   => $today,
+            datesent   => re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'),
             frombranch => $samplebranch1->{branchcode}
         },
         {
             itemnumber => $item_id2,
-            datesent   => $today,
+            datesent   => re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'),
             frombranch => $samplebranch1->{branchcode}
         }
     ],
