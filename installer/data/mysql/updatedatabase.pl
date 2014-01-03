@@ -7834,7 +7834,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.14.01.003";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         ALTER TABLE suggestions MODIFY suggesteddate DATE NOT NULL
