@@ -266,19 +266,19 @@ sub dt_build_query_dates {
 
     It calls dt_build_query_dates or dt_build_query_simple fonction of $type.
 
-    $type can be 'simple' or 'rage_dates'.
+    $type can contain 'simple' or 'rage_dates'.
+    if $type is not matched it returns undef
 
 =cut
 sub dt_build_query {
     my ( $type, @params ) = @_;
-    given ( $type ) {
-        when ( /simple/ ) {
-            return dt_build_query_simple( @params );
-        }
-        when ( /range_dates/ ) {
-            return dt_build_query_dates( @params );
-        }
+    if ( $type =~ m/simple/ ) {
+        return dt_build_query_simple(@params);
     }
+    elsif ( $type =~ m/range_dates/ ) {
+        return dt_build_query_dates(@params);
+    }
+    return;
 }
 
 1;
