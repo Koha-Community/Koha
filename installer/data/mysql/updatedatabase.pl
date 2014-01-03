@@ -7825,7 +7825,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.14.01.002";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         ALTER TABLE collections_tracking CHANGE ctId collections_tracking_id integer(11) NOT NULL auto_increment;
