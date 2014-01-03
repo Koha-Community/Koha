@@ -7843,7 +7843,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.14.01.004";
 if(CheckVersion($DBversion)) {
     $dbh->do("ALTER TABLE deleteditems DROP COLUMN marc");
     print "Upgrade to $DBversion done (Bug 6331: Obsolete marc column in deleteditems)\n";
