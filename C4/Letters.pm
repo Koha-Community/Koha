@@ -454,7 +454,7 @@ sub GetPreparedLetter {
     my $mtt         = $params{message_transport_type} || 'email';
 
     my $letter = getletter( $module, $letter_code, $branchcode, $mtt )
-        or warn( "No template $mtt for $module $letter_code letter"),
+        or warn( "No $module $letter_code letter transported by " . $mtt ),
             return;
 
     my $tables = $params{tables};
