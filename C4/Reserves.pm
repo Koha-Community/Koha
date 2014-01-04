@@ -252,7 +252,7 @@ sub AddReserve {
 
     $res = GetReserve( $reserve_id );
 
-    Return the current reserve or the old reserve.
+    Return the current reserve.
 
 =cut
 
