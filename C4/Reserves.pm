@@ -1037,10 +1037,7 @@ sub CancelReserve {
     $sth->execute( $reserve_id );
 
     # now fix the priority on the others....
-    _FixPriority({
-        reserve_id   => $reserve_id,
-        biblionumber => $reserve->{biblionumber},
-    });
+    _FixPriority({ biblionumber => $reserve->{biblionumber} });
 }
 
 =head2 ModReserve
@@ -1184,7 +1181,7 @@ sub ModReserveFill {
     # now fix the priority on the others (if the priority wasn't
     # already sorted!)....
     unless ( $priority == 0 ) {
-        _FixPriority({ reserve_id => $reserve_id });
+        FixPriority({ reserve_id => $reserve_id });
     }
 }
 
@@ -1327,7 +1324,7 @@ sub ModReserveMinusPriority {
     ";
     my $sth_upd = $dbh->prepare($query);
     $sth_upd->execute( $itemnumber, $reserve_id );
-    # second step update all others reservs
+    # second step update all others reserves
     _FixPriority({ reserve_id => $reserve_id, rank => '0' });
 }
 
@@ -1603,21 +1600,43 @@ sub SuspendAll {
 
 =head2 _FixPriority
 
-  &_FixPriority({ reserve_id => $reserve_id, rank => $rank, ignoreSetLowestRank => $ignoreSetLowestRank });
+  _FixPriority({
+    reserve_id => $reserve_id,
+    [rank => $rank,]
+    [ignoreSetLowestRank => $ignoreSetLowestRank]
+  });
 
-Only used internally (so don't export it)
-Changed how this functions works #
-Now just gets an array of reserves in the rank order and updates them with
-the array index (+1 as array starts from 0)
-and if $rank is supplied will splice item from the array and splice it back in again
-in new priority rank
+  or
 
-=cut 
+  _FixPriority({ biblionumber => $biblionumber});
+
+This routine adjusts the priority of a hold request and holds
+on the same bib.
+
+In the first form, where a reserve_id is passed, the priority of the
+hold is set to supplied rank, and other holds for that bib are adjusted
+accordingly.  If the rank is "del", the hold is cancelled.  If no rank
+is supplied, all of the holds on that bib have their priority adjusted
+as if the second form had been used.
+
+In the second form, where a biblionumber is passed, the holds on that
+bib (that are not captured) are sorted in order of increasing priority,
+then have reserves.priority set so that the first non-captured hold
+has its priority set to 1, the second non-captured hold has its priority
+set to 2, and so forth.
+
+In both cases, holds that have the lowestPriority flag on are have their
+priority adjusted to ensure that they remain at the end of the line.
+
+Note that the ignoreSetLowestRank parameter is meant to be used only
+when _FixPriority calls itself.
+
+=cut
 
 sub _FixPriority {
     my ( $params ) = @_;
     my $reserve_id = $params->{reserve_id};
-    my $rank = $params->{rank};
+    my $rank = $params->{rank} // '';
     my $ignoreSetLowestRank = $params->{ignoreSetLowestRank};
     my $biblionumber = $params->{biblionumber};
 
