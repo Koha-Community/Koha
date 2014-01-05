@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha [% END %] &rsaquo; Self checkout </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -90,8 +91,10 @@ $(document).ready(function() {
     }));
     $("#logout_form").submit(function(){
         clearTimeout(mainTimeout);
+   [% IF Koha.Preference('SelfCheckReceiptPrompt') %]
         if(confirm("Would you like to print a receipt?")){
             window.open("/cgi-bin/koha/sco/printslip.pl?borrowernumber=[% borrowernumber %]&amp;print=qslip");
+   [%END %]
         }
         return true;
     });
