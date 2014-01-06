@@ -44,6 +44,7 @@ $scriptname --help|-h
     -i | --install        Install the specified language translations
     -u | --update         Update the specified language translations
     -r | --remove         Remove the specified language translations
+    -v | --verbose        Be more verbose on the translation process
     -h | --help           Display this help message
 
 EOF
@@ -82,7 +83,12 @@ print_installed()
 
 install_lang()
 {
-    lang=$1
+    local lang=$1
+    local translate_opts=""
+
+    if [ "$verbose" = "yes" ]; then
+        translate_opts="--verbose"
+    fi
 
     if [ "$lang" != "" ]; then
 
@@ -97,7 +103,7 @@ install_lang()
                 # Check po files are present
                 check_lang_po_files $lang
                 env PERL5LIB="$KOHA_LIB_DIR:$TRANSLATE_DIR" KOHA_CONF="$KOHA_CONF_FILE"\
-                    $PERL_CMD $TRANSLATE_DIR/translate install $lang
+                    $PERL_CMD $TRANSLATE_DIR/translate install $translate_opts $lang
             fi
         else
             die "Error: the selected language is not currently available."
@@ -195,9 +201,10 @@ PERL_CMD=`which perl`
 list_all=""
 op=""
 language=""
+verbose="no"
 
 # We accept at most 2 parameters
-[ $# -ge 1 ] && [ $# -le 3 ] || ( usage ; die "Error: wrong parameters" )
+[ $# -ge 1 ] && [ $# -le 4 ] || ( usage ; die "Error: wrong parameters" )
 
 # Read parameters
 while [ $# -gt 0 ]; do
@@ -223,6 +230,9 @@ while [ $# -gt 0 ]; do
             shift ;;
         -a|--available)
             list_all=1
+            shift ;;
+        -v|--verbose)
+            verbose="yes"
             shift ;;
         -*)
             usage
