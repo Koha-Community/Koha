@@ -88,21 +88,19 @@ sub copy_field {
         $modifiers .= $modifier
             if grep {/$modifier/} @available_modifiers;
     }
-    foreach my $value ( @values ) {
-        for ( $modifiers ) {
-          when ( /^(ig|gi)$/ ) {
+    foreach my $value (@values) {
+        if ( $modifiers =~ m/^(ig|gi)$/ ) {
             $value =~ s/$regex->{search}/$regex->{replace}/ig;
-          }
-          when ( /^i$/ ) {
+        }
+        elsif ( $modifiers eq 'i' ) {
             $value =~ s/$regex->{search}/$regex->{replace}/i;
-          }
-          when ( /^g$/ ) {
+        }
+        elsif ( $modifiers eq 'g' ) {
             $value =~ s/$regex->{search}/$regex->{replace}/g;
-          }
-          default {
+        }
+        else {
             $value =~ s/$regex->{search}/$regex->{replace}/;
-          }
-      }
+        }
     }
   }
   update_field( $record, $toFieldName, $toSubfieldName, $dont_erase, @values );
