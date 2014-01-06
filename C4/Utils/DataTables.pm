@@ -264,9 +264,9 @@ sub dt_build_query_dates {
 
     This function takes a value and a list of parameters.
 
-    It calls dt_build_query_dates or dt_build_query_simple fonction of $type.
+    It calls dt_build_query_dates or dt_build_query_simple function of $type.
 
-    $type can contain 'simple' or 'rage_dates'.
+    $type can contain 'simple' or 'range_dates'.
     if $type is not matched it returns undef
 
 =cut
