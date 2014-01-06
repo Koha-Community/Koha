@@ -58,6 +58,8 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
    --merged           purged completed entries from need_merge_authorities.
    --import DAYS      purge records from import tables older than DAYS days.
                       Defaults to 60 days if no days specified.
+   --z3950            purge records from import tables that are the result
+                      of z39.50 searches
    --logs DAYS        purge entries from action_logs older than DAYS days.
                       Defaults to 180 days if no days specified.
    --searchhistory DAYS  purge entries from search_history older than DAYS days.
@@ -66,7 +68,11 @@ USAGE
     exit $_[0];
 }
 
-my ( $help, $sessions, $sess_days, $verbose, $zebraqueue_days, $mail, $purge_merged, $pImport, $pLogs, $pSearchhistory);
+my (
+    $help,            $sessions,       $sess_days,    $verbose,
+    $zebraqueue_days, $mail,           $purge_merged, $pImport,
+    $pLogs,           $pSearchhistory, $pZ3950
+);
 
 GetOptions(
     'h|help'       => \$help,
@@ -77,6 +83,7 @@ GetOptions(
     'zebraqueue:i' => \$zebraqueue_days,
     'merged'       => \$purge_merged,
     'import:i'     => \$pImport,
+    'z3950'        => \$pZ3950,
     'logs:i'       => \$pLogs,
     'searchhistory:i' => \$pSearchhistory,
 ) || usage(1);
@@ -94,7 +101,15 @@ if ($help) {
     usage(0);
 }
 
-if ( !( $sessions || $zebraqueue_days || $mail || $purge_merged || $pImport || $pLogs || $pSearchhistory ) ) {
+unless ( $sessions
+    || $zebraqueue_days
+    || $mail
+    || $purge_merged
+    || $pImport
+    || $pLogs
+    || $pSearchhistory
+    || $pZ3950 )
+{
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
 }
@@ -172,6 +187,12 @@ if($pImport) {
     print "Done with purging import tables.\n" if $verbose;
 }
 
+if($pZ3950) {
+    print "Purging z39.50 records from import tables.\n" if $verbose;
+    PurgeZ3950();
+    print "Done with purging z39.50 records from import tables.\n" if $verbose;
+}
+
 if($pLogs) {
     print "Purging records from action_logs.\n" if $verbose;
     $sth = $dbh->prepare("DELETE FROM action_logs WHERE timestamp < date_sub(curdate(), interval ? DAY)");
@@ -231,4 +252,12 @@ sub PurgeImportTables {
  WHERE re.import_record_id IS NULL AND
  ba.upload_timestamp < date_sub(curdate(), interval ? DAY)");
     $sth->execute($pImport) or die $dbh->errstr;
+}
+
+
+sub PurgeZ3950 {
+    $sth = $dbh->prepare(q{
+        DELETE FROM import_batches WHERE batch_type = 'z3950'
+    });
+    $sth->execute() or die $dbh->errstr;
 }
