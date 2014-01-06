@@ -690,16 +690,16 @@ sub checkauth {
             #first we need to clear the anonymous session...
             $debug and warn "query id = $q_userid but session id = $s_userid";
             $anon_search_history = $session->param('search_history');
-            $session->flush;
             $session->delete();
+            $session->flush;
             C4::Context->_unset_userenv($sessionID);
             $sessionID = undef;
             $userid = undef;
         }
         elsif ($logout) {
             # voluntary logout the user
-            $session->flush;
             $session->delete();
+            $session->flush;
             C4::Context->_unset_userenv($sessionID);
             #_session_log(sprintf "%20s from %16s logged out at %30s (manually).\n", $userid,$ip,(strftime "%c",localtime));
             $sessionID = undef;
@@ -712,7 +712,10 @@ sub checkauth {
         elsif ( !$lasttime || ($lasttime < time() - $timeout) ) {
             # timed logout
             $info{'timed_out'} = 1;
-            $session->delete() if $session;
+            if ($session) {
+                $session->delete();
+                $session->flush;
+            }
             C4::Context->_unset_userenv($sessionID);
             #_session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid,$ip,(strftime "%c",localtime));
             $userid    = undef;
@@ -724,6 +727,7 @@ sub checkauth {
             $info{'newip'}        = $ENV{'REMOTE_ADDR'};
             $info{'different_ip'} = 1;
             $session->delete();
+            $session->flush;
             C4::Context->_unset_userenv($sessionID);
             #_session_log(sprintf "%20s from %16s logged out at %30s (ip changed to %16s).\n", $userid,$ip,(strftime "%c",localtime), $info{'newip'});
             $sessionID = undef;
@@ -1201,6 +1205,7 @@ sub check_api_auth {
             if ( $lasttime < time() - $timeout ) {
                 # time out
                 $session->delete();
+                $session->flush;
                 C4::Context->_unset_userenv($sessionID);
                 $userid    = undef;
                 $sessionID = undef;
@@ -1208,6 +1213,7 @@ sub check_api_auth {
             } elsif ( $ip ne $ENV{'REMOTE_ADDR'} ) {
                 # IP address changed
                 $session->delete();
+                $session->flush;
                 C4::Context->_unset_userenv($sessionID);
                 $userid    = undef;
                 $sessionID = undef;
@@ -1224,6 +1230,7 @@ sub check_api_auth {
                     return ("ok", $cookie, $sessionID);
                 } else {
                     $session->delete();
+                    $session->flush;
                     C4::Context->_unset_userenv($sessionID);
                     $userid    = undef;
                     $sessionID = undef;
@@ -1440,6 +1447,7 @@ sub check_cookie_auth {
         if ( $lasttime < time() - $timeout ) {
             # time out
             $session->delete();
+            $session->flush;
             C4::Context->_unset_userenv($sessionID);
             $userid    = undef;
             $sessionID = undef;
@@ -1447,6 +1455,7 @@ sub check_cookie_auth {
         } elsif ( $ip ne $ENV{'REMOTE_ADDR'} ) {
             # IP address changed
             $session->delete();
+            $session->flush;
             C4::Context->_unset_userenv($sessionID);
             $userid    = undef;
             $sessionID = undef;
@@ -1458,6 +1467,7 @@ sub check_cookie_auth {
                 return ("ok", $sessionID);
             } else {
                 $session->delete();
+                $session->flush;
                 C4::Context->_unset_userenv($sessionID);
                 $userid    = undef;
                 $sessionID = undef;
