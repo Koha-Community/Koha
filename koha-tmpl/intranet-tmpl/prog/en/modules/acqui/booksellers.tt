@@ -87,7 +87,9 @@ $(document).ready(function() {
                             (inactive)
                         [% END %]
                     [% END %]
+                        [% IF ( supplier.loop_basket.size ) %]
                     <a class="btn btn-small" href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% supplier.booksellerid %]"><i class="icon-inbox"></i> Receive shipment</a>
+                        [% END %]
                 </span>
                 <div class="baskets">
                     [% IF ( supplier.loop_basket.size ) %]
