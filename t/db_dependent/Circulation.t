@@ -9,7 +9,7 @@ use C4::Items;
 use C4::Members;
 use C4::Reserves;
 
-use Test::More tests => 44;
+use Test::More tests => 45;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -201,6 +201,17 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         $biblionumber
     );
 
+    my $barcode3 = 'R00000346';
+    my ( $item_bibnum3, $item_bibitemnum3, $itemnumber3 ) = AddItem(
+        {
+            homebranch       => $branch,
+            holdingbranch    => $branch,
+            barcode          => $barcode3,
+            replacementprice => 23.00
+        },
+        $biblionumber
+    );
+
     # Create 2 borrowers
     my %renewing_borrower_data = (
         firstname =>  'John',
@@ -259,8 +270,14 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is( $error, 'on_reserve', '(Bug 10663) Cannot renew, reserved (returned error is on_reserve)');
 
     my $reserveid = C4::Reserves::GetReserveId({ biblionumber => $biblionumber, borrowernumber => $reserving_borrowernumber});
-    CancelReserve({ reserve_id => $reserveid });
-
+    my $reserving_borrower = GetMember( borrowernumber => $reserving_borrowernumber );
+    AddIssue($reserving_borrower, $barcode3);
+    my $reserve = $dbh->selectrow_hashref(
+        'SELECT * FROM old_reserves WHERE reserve_id = ?',
+        { Slice => {} },
+        $reserveid
+    );
+    is($reserve->{found}, 'F', 'hold marked completed when checking out item that fills it');
 
     diag("Item-level hold, renewal test");
     AddReserve(
