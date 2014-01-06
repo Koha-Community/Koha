@@ -556,7 +556,7 @@ sub ModItem {
     # item status is possible
     ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
 
-    logaction("CATALOGUING", "MODIFY", $itemnumber, Dumper($item)) if C4::Context->preference("CataloguingLog");
+    logaction("CATALOGUING", "MODIFY", $itemnumber, "item ".Dumper($item)) if C4::Context->preference("CataloguingLog");
 }
 
 =head2 ModItemTransfer
