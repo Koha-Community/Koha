@@ -547,49 +547,59 @@ sub ModifyRecordWithTemplate {
         );
 
         my $do = 1;
-        if ( $conditional ) {
-            for ( $conditional_comparison ) {
-                when ( /^exists$/ ) {
-                    my $exists = field_exists( $record, $conditional_field, $conditional_subfield );
-                    $do = $conditional eq 'if'
-                        ? $exists
-                        : not $exists;
-                }
-                when ( /^not_exists$/ ) {
-                    my $exists = field_exists( $record, $conditional_field, $conditional_subfield );
-                    $do = $conditional eq 'if'
-                        ? not $exists
-                        : $exists;
-                }
-                when ( /^equals$/ ) {
-                    my $equals = field_equals( $record, $conditional_value, $conditional_field, $conditional_subfield, $conditional_regex );
-                    $do = $conditional eq 'if'
-                        ? $equals
-                        : not $equals;
-                }
-                when ( /^not_equals$/ ) {
-                    my $equals = field_equals( $record, $conditional_value, $conditional_field, $conditional_subfield, $conditional_regex );
-                    $do = $conditional eq 'if'
-                        ? not $equals
-                        : $equals;
-                }
+        if ($conditional) {
+            if ( $conditional_comparison eq 'exists' ) {
+                my $exists = field_exists( $record, $conditional_field,
+                    $conditional_subfield );
+                $do =
+                    $conditional eq 'if'
+                  ? $exists
+                  : not $exists;
+            }
+            elsif ( $conditional_comparison eq 'not_exists' ) {
+                my $exists = field_exists( $record, $conditional_field,
+                    $conditional_subfield );
+                $do =
+                  $conditional eq 'if'
+                  ? not $exists
+                  : $exists;
+            }
+            elsif ( $conditional_comparison eq 'equals' ) {
+                my $equals = field_equals(
+                    $record,            $conditional_value,
+                    $conditional_field, $conditional_subfield,
+                    $conditional_regex
+                );
+                $do =
+                    $conditional eq 'if'
+                  ? $equals
+                  : not $equals;
+            }
+            elsif ( $conditional_comparison eq 'not_equals' ) {
+                my $equals = field_equals(
+                    $record,            $conditional_value,
+                    $conditional_field, $conditional_subfield,
+                    $conditional_regex
+                );
+                $do =
+                  $conditional eq 'if'
+                  ? not $equals
+                  : $equals;
             }
         }
 
-        if ( $do ) {
-            for ( $action ) {
-                when ( /^copy_field$/ ) {
-                    copy_field( @params );
-                }
-                when ( /^update_field$/ ) {
-                    update_field( @params );
-                }
-                when ( /^move_field$/ ) {
-                    move_field( @params );
-                }
-                when ( /^delete_field$/ ) {
-                    delete_field( @params );
-                }
+        if ($do) {
+            if ( $action eq 'copy_field' ) {
+                copy_field(@params);
+            }
+            elsif ( $action eq 'update_field' ) {
+                update_field(@params);
+            }
+            elsif ( $action eq 'move_field' ) {
+                move_field(@params);
+            }
+            elsif ( $action eq 'delete_field' ) {
+                delete_field(@params);
             }
         }
 
