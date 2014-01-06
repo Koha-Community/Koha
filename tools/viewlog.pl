@@ -124,6 +124,28 @@ if ($do_it) {
 	    $result->{'biblioitemnumber'}=$item->{'biblionumber'};		
         $result->{'barcode'}=$item->{'barcode'};
 	}
+    #always add firstname and surname for librarian/user
+    if ($result->{'user'}){
+        my $userdetails = C4::Members::GetMemberDetails($result->{'user'});
+        if ($userdetails->{'firstname'}){
+            $result->{'userfirstname'} = $userdetails->{'firstname'};
+        }
+        if ($userdetails->{'surname'}){
+            $result->{'usersurname'} = $userdetails->{'surname'};
+        }
+    }
+    #add firstname and surname for borrower, when using the CIRCULATION, MEMBERS, FINES
+    if ($result->{module} eq "CIRCULATION" || $result->{module} eq "MEMBERS" || $result->{module} eq "FINES"){
+        if($result->{'object'}){
+            my $borrowerdetails = C4::Members::GetMemberDetails($result->{'object'});
+            if ($borrowerdetails->{'firstname'}){
+            $result->{'borrowerfirstname'} = $borrowerdetails->{'firstname'};
+            }
+            if ($borrowerdetails->{'surname'}){
+                $result->{'borrowersurname'} = $borrowerdetails->{'surname'};
+            }
+        }
+    }
     }
     
     if ( $output eq "screen" ) {

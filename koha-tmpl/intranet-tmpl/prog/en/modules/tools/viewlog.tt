@@ -127,13 +127,13 @@
                                 <tr>
                                     <td>[% loopro.timestamp %]</td>
                                     <td>
-                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.user %]" title="display detail for this librarian."> [% loopro.user %] </a>
+                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.user %]" title="display detail for this librarian."> [% IF ( loopro.userfirstname ) || ( loopro.usersurname ) %][% loopro.userfirstname %] [% loopro.usersurname %] [% END %][% loopro.user %] </a>
                                     </td>
                                     <td>[% loopro.module %]</td>
                                     <td>[% loopro.action %]</td>
                                     <td>
                                         [% IF ( loopro.module == 'MEMBERS' ) || ( loopro.module == 'CIRCULATION' ) || ( loopro.module == 'FINES' ) %]
-                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object %]" title="Display member details."> [% IF ( loopro.object ) %]Member [% loopro.object %][% END %] </a>
+                                             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object %]" title="Display member details."> [% IF ( loopro.object ) %][% IF ( loopro.borrowerfirstname ) || ( loopro.borrowersurname ) %][% loopro.borrowerfirstname %] [% loopro.borrowersurname %] [% ELSE %]Member [% END %][% loopro.object %][% END %] </a>
                                         [% ELSE %]
                                                 [% IF ( loopro.module == 'CATALOGUING' ) %]
                                                     [% IF ( loopro.info.substr(0, 4) == 'item' ) %]
