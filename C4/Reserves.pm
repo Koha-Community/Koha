@@ -1181,7 +1181,7 @@ sub ModReserveFill {
     # now fix the priority on the others (if the priority wasn't
     # already sorted!)....
     unless ( $priority == 0 ) {
-        FixPriority({ reserve_id => $reserve_id });
+        _FixPriority({ reserve_id => $reserve_id });
     }
 }
 
