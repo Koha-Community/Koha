@@ -739,7 +739,7 @@ sub ModAuthority {
 	"VALUES (?,?)";
       $dbh->do($sqlinsert,undef,($authid,0));
   }
-  logaction( "AUTHORITIES", "MODIFY", $authid, "BEFORE=>" . $oldrecord->as_formatted ) if C4::Context->preference("AuthoritiesLog");
+  logaction( "AUTHORITIES", "MODIFY", $authid, "authority BEFORE=>" . $oldrecord->as_formatted ) if C4::Context->preference("AuthoritiesLog");
   return $authid;
 }
 

@@ -151,7 +151,7 @@ if ($fileID) {
                             $filename =~ s/^\s+//;
                             $filename =~ s/\s+$//;
                             if (C4::Context->preference("CataloguingLog")) {
-                                logaction('CATALOGUING', 'MODIFY', $biblionumber, "cover image: $filename");
+                                logaction('CATALOGUING', 'MODIFY', $biblionumber, "biblio cover image: $filename");
                             }
                             my $srcimage = GD::Image->new("$dir/$filename");
                             if ( defined $srcimage ) {
