@@ -7885,7 +7885,7 @@ if(CheckVersion($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.15.00.012";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         INSERT INTO permissions (module_bit, code, description) VALUES ( 1, 'force_checkout', 'Force checkout if a limitation exists')
@@ -7908,7 +7908,7 @@ if ( CheckVersion($DBversion) ) {
             WHERE borrowers.flags & (1 << 1)
     });
 
-    print "Upgrade to $DBversion done (Bug 10863 - Add permission force_checkout and manage_restrictions)\n";
+    print "Upgrade to $DBversion done (Bug 10863 - Add permissions force_checkout and manage_restrictions)\n";
     SetVersion($DBversion);
 }
 
