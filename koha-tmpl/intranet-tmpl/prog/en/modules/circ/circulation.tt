@@ -318,18 +318,22 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
     <input type="submit" class="approve" value="Yes, Check Out (Y)" accesskey="y" />
     [% END %]
 </form>
+[% END %]
 
 <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
-    [% IF ( RENEW_ISSUE ) %]
-    <input type="submit" class="deny" value="No, Don't Renew (N)" accesskey="n" />
+    [% IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
+        [% IF ( RENEW_ISSUE ) %]
+        <input type="submit" class="deny" value="No, Don't Renew (N)" accesskey="n" />
+        [% ELSE %]
+        <input type="submit" class="deny" value="No, Don't Check Out (N)" accesskey="n" />
+        [% END %]
     [% ELSE %]
-    <input type="submit" class="deny" value="No, Don't Check Out (N)" accesskey="n" />
+        <input type="submit" class="deny" value="Continue" />
     [% END %]
 </form>
-[% END %]
 
 </div></div>
 [% END %] <!-- NEEDSCONFIRMATION -->
