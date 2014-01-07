@@ -7891,7 +7891,7 @@ if ( CheckVersion($DBversion) ) {
         INSERT INTO permissions (module_bit, code, description) VALUES ( 1, 'force_checkout', 'Force checkout if a limitation exists')
     });
     $dbh->do(q{
-        INSERT INTO permissions (module_bit, code, description) VALUES ( 1, 'manage_restrictions', 'Lift restriction for restricted accounts')
+        INSERT INTO permissions (module_bit, code, description) VALUES ( 1, 'manage_restrictions', 'Manage restrictions for accounts')
     });
     $dbh->do(q{
         INSERT INTO user_permissions (borrowernumber, module_bit, code)
