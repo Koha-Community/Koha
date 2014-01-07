@@ -32,6 +32,10 @@ use Koha::Cache;
 my $query  = CGI->new();
 my $report_id = $query->param('id');
 my $report_name = $query->param('name');
+my $report_annotation = $query->param('annotated');
+
+my $report_rec = get_saved_report( $report_name ? { 'name' => $report_name } : { 'id' => $report_id } );
+if (!$report_rec) { die "There is no such report.\n"; }
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -52,12 +56,17 @@ if ($cache_active) {
 }
 
 unless ($json_text) {
-    my $report_rec = get_saved_report($report_name ? { 'name' => $report_name } : { 'id' => $report_id });
     my $offset = 0;
     my $limit  = C4::Context->preference("SvcMaxReportRows") || 10;
     my ( $sth, $errors ) = execute_query( $report_rec->{savedsql}, $offset, $limit );
     if ($sth) {
-        my $lines     = $sth->fetchall_arrayref;
+        my $lines;
+        if ($report_annotation) {
+            $lines = $sth->fetchall_arrayref({});
+        }
+        else {
+            $lines = $sth->fetchall_arrayref;
+        }
         $json_text = to_json($lines);
 
         if ($cache_active) {
