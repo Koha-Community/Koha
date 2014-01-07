@@ -556,6 +556,7 @@ for (my $i=0;$i<@servers;$i++) {
             @newresults = searchResults('opac', $query_desc, $hits, $results_per_page, $offset, $scan,
                                         $results_hashref->{$server}->{"RECORDS"});
         }
+    $hits = 0 unless @newresults;
 
         foreach my $res (@newresults) {
 
@@ -610,7 +611,7 @@ for (my $i=0;$i<@servers;$i++) {
         }
 
         if ($results_hashref->{$server}->{"hits"}){
-            $total = $total + $results_hashref->{$server}->{"hits"};
+            $total = $total + $hits;
         }
 
         # Opac search history
