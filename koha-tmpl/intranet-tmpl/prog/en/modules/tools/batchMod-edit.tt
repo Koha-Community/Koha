@@ -94,6 +94,9 @@ $(document).ready(function(){
      <input type="hidden" name="runinbackground" id="runinbackground" value="" />
      <input type="hidden" name="completedJobID" id="completedJobID" value="" />
      <input type="hidden" name="src" id="src" value="[% src %]" />
+     [% IF biblionumber %]
+        <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber %]" />
+     [% END %]
 
 [% IF ( item_loop ) %]
   [% IF show %]
@@ -204,7 +207,9 @@ $(document).ready(function(){
 [% END %]
 [% ELSE %] <!-- // show -->
 <fieldset class="action">
-[% IF src %]
+[% IF src == 'CATALOGUING' # from catalogue/detail.pl > Edit items in a batch%]
+   <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]">Done</a>
+[% ELSIF src %]
    <a href="[% src %]">Done</a>
 [% ELSE %]
    <a href="/cgi-bin/koha/tools/batchMod.pl">Done</a>
