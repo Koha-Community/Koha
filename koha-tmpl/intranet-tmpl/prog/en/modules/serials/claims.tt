@@ -263,6 +263,7 @@
                     <th>Vendor</th>
                     <th>Library</th>
                     <th>Title</th>
+                    <th>ISSN</th>
                     <th>Issue number</th>
                     <th>Status</th>
                     <th>Since</th>
@@ -281,6 +282,9 @@
                         </td>
                         <td>
                         <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% missingissue.subscriptionid %]">[% missingissue.title |html %]</a>
+                        </td>
+                        <td>
+                          [% missingissue.issn %]
                         </td>
                         <td>
                         [% missingissue.serialseq %]

@@ -2027,12 +2027,13 @@ sub GetLateOrMissingIssues {
         $sth = $dbh->prepare(
             "SELECT
                 serialid,      aqbooksellerid,        name,
-                biblio.title,  planneddate,           serialseq,
+                biblio.title,  biblioitems.issn,      planneddate,    serialseq,
                 serial.status, serial.subscriptionid, claimdate,
                 subscription.branchcode
             FROM      serial 
                 LEFT JOIN subscription  ON serial.subscriptionid=subscription.subscriptionid 
                 LEFT JOIN biblio        ON subscription.biblionumber=biblio.biblionumber
+                LEFT JOIN biblioitems   ON subscription.biblionumber=biblioitems.biblionumber
                 LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
                 WHERE subscription.subscriptionid = serial.subscriptionid 
                 AND (serial.STATUS IN (4, 41, 42, 43, 44) OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3 OR serial.STATUS = 7))
