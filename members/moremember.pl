@@ -520,6 +520,7 @@ sub build_issue_data {
         $row{"norenew_reason_$renewerror"} = 1 if $renewerror;
         $row{renew_failed}  = $renew_failed{ $issue->{itemnumber} };
         $row{return_failed} = $return_failed{ $issue->{barcode} };
+        ($row{'renewcount'},$row{'renewsallowed'},$row{'renewsleft'}) = C4::Circulation::GetRenewCount($issue->{'borrowernumber'},$issue->{'itemnumber'}); #Add renewal count to item data display
         push( @{$localissue}, \%row );
     }
     return $localissue;

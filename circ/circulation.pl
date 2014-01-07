@@ -513,6 +513,7 @@ sub build_issue_data {
         } else {
             (!$relatives) ? push @previousissues, $it : push @relprevissues, $it;
         }
+        ($it->{'renewcount'},$it->{'renewsallowed'},$it->{'renewsleft'}) = C4::Circulation::GetRenewCount($it->{'borrowernumber'},$it->{'itemnumber'}); #Add renewal count to item data display
     }
 }
 

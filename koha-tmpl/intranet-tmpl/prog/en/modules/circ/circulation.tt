@@ -766,6 +766,9 @@ No patron matched <span class="ex">[% message %]</span>
         [% ELSE %]
             <input type="checkbox" class="radio" name="items[]" value="[% todayissue.itemnumber %]" />
         [% END %]
+            [% IF ( todayissue.renewsallowed ) %]
+                <span class="renewals">([% todayissue.renewsleft %] of [% todayissue.renewsallowed %] renewals remaining)</span>
+            [% END %]
         [% ELSE %]
             [% IF ( todayissue.can_confirm ) %]<span class="renewals-allowed" style="display: none">
                 <input type="checkbox" name="all_items[]" value="[% todayissue.itemnumber %]" checked="checked" style="display: none;" />
@@ -775,6 +778,9 @@ No patron matched <span class="ex">[% message %]</span>
                     <input type="checkbox" class="radio" name="items[]" value="[% todayissue.itemnumber %]" />
                 [% END %]
                 </span>
+                [% IF ( todayissue.renewsallowed ) %]
+                    <span class="renewals">([% todayissue.renewsleft %] of [% todayissue.renewsallowed %] renewals remaining)</span>
+                [% END %]
                 <span class="renewals-disabled">
             [% END %]
 		[% IF ( todayissue.renew_error_on_reserve ) %]
@@ -855,6 +861,9 @@ No patron matched <span class="ex">[% message %]</span>
         [% ELSE %]
             <input type="checkbox" class="radio" name="items[]" value="[% previssue.itemnumber %]" />
         [% END %]
+            [% IF ( previssue.renewsallowed ) %]
+                <span class="renewals">([% previssue.renewsleft %] of [% previssue.renewsallowed %] renewals remaining)</span>
+            [% END %]
         [% ELSE %]
             [% IF ( previssue.can_confirm ) %]<span class="renewals-allowed" style="display: none">
                 <input type="checkbox" name="all_items[]" value="[% previssue.itemnumber %]" checked="checked" style="display: none;" />
@@ -864,6 +873,9 @@ No patron matched <span class="ex">[% message %]</span>
                     <input type="checkbox" class="radio" name="items[]" value="[% previssue.itemnumber %]" />
                 [% END %]
                 </span>
+                [% IF ( previssue.renewsallowed ) %]
+                    <span class="renewals">([% previssue.renewsleft %] of [% previssue.renewsallowed %] renewals remaining)</span>
+                [% END %]
                 <span class="renewals-disabled">
             [% END %]
 		[% IF ( previssue.renew_error_on_reserve ) %]

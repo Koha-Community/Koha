@@ -500,6 +500,9 @@ function validate1(date) {
                         <input type="checkbox" name="items[]" value="[% issueloo.itemnumber %]" />
                     [% END %]
                     </span>
+                    [% IF ( issueloo.renewsallowed ) %]
+                        <span class="renewals">([% issueloo.renewsleft %] of [% issueloo.renewsallowed %] renewals remaining)</span>
+                    [% END %]
                     <span class="renewals-disabled">
                 [% END %]
                 [% IF ( issueloo.norenew_reason_on_reserve ) %]
@@ -518,6 +521,9 @@ function validate1(date) {
             [% ELSE %]
             <input type="checkbox" name="items[]" value="[% issueloo.itemnumber %]" onclick="uncheck_sibling(this);" />
             [% END %]
+                [% IF ( issueloo.renewsallowed ) %]
+                    <span class="renewals">([% issueloo.renewsleft %] of [% issueloo.renewsallowed %] renewals remaining)</span>
+                [% END %]
             [% END %]
             </td>
       [% END %]
