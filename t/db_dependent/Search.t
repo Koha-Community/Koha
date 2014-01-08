@@ -12,7 +12,10 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 232;
+# work around spurious wide character warnings
+use open ':std', ':encoding(utf8)';
+
+use Test::More tests => 4;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;
@@ -22,10 +25,6 @@ use Test::Warn;
 use File::Temp qw/ tempdir /;
 use File::Path;
 use DBI;
-
-# work around spurious wide character warnings
-binmode Test::More->builder->output, ":utf8";
-binmode Test::More->builder->failure_output, ":utf8";
 
 our $child;
 our $datadir;
@@ -788,12 +787,12 @@ sub run_marc21_search_tests {
     # retrieve records that are larger than the MARC limit of 99,999 octets
     ( undef, $results_hashref, $facets_loop ) =
         getRecords('ti:marc the large record', '', [], [ 'biblioserver' ], '20', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
-    is($results_hashref->{biblioserver}->{hits}, 1, "can do a search that retrieves an over-large bib record (bug 11096)");
+    is($results_hashref->{biblioserver}->{hits}, 1, "Can do a search that retrieves an over-large bib record (bug 11096)");
     @newresults = searchResults('opac', $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 10, 0, 0,
         $results_hashref->{'biblioserver'}->{"RECORDS"});
-    is($newresults[0]->{title}, 'Marc the Large Record', 'able to render over-large bib record (bug 11096)');
-    is($newresults[0]->{biblionumber}, '300', 'able to render over-large bib record (bug 11096)');
-    like($newresults[0]->{notes}, qr/This is large note #550/, 'able to render over-large bib record (bug 11096)');
+    is($newresults[0]->{title}, 'Marc the Large Record', 'Able to render the title for over-large bib record (bug 11096)');
+    is($newresults[0]->{biblionumber}, '300', 'Over-large bib record has the correct biblionumber (bug 11096)');
+    like($newresults[0]->{notes}, qr/This is large note #550/, 'Able to render the notes field for over-large bib record (bug 11096)');
 
     cleanup();
 }
@@ -869,10 +868,24 @@ sub run_unimarc_search_tests {
     cleanup();
 }
 
-run_marc21_search_tests('grs1');
-run_marc21_search_tests('dom');
+subtest 'MARC21 + GRS-1' => sub {
+    plan tests => 103;
+    run_marc21_search_tests('grs1');
+};
 
-run_unimarc_search_tests('grs1');
-run_unimarc_search_tests('dom');
+subtest 'MARC21 + DOM' => sub {
+    plan tests => 103;
+    run_marc21_search_tests('dom');
+};
+
+subtest 'UNIMARC + GRS-1' => sub {
+    plan tests => 13;
+    run_unimarc_search_tests('grs1');
+};
+
+subtest 'UNIMARC + DOM' => sub {
+    plan tests => 13;
+    run_unimarc_search_tests('dom');
+};
 
 1;
