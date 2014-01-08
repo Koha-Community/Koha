@@ -8236,7 +8236,7 @@ if ( CheckVersion($DBversion) ) {
             type
             )
         VALUES (
-            'DisplayLibraryFacets',  'holdingbranch',  'home|holding|both',  'Defines which library facets to display.',  'Choice'
+            'DisplayLibraryFacets',  'holding',  'home|holding|both',  'Defines which library facets to display.',  'Choice'
         );
     });
     print "Upgrade to $DBversion done (Bug 11334 - Add facet for home library)\n";

@@ -99,7 +99,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('DisplayClearScreenButton','0','','If set to ON, a clear screen button will appear on the circulation page.','YesNo'),
 ('displayFacetCount','0',NULL,NULL,'YesNo'),
 ('DisplayIconsXSLT','1','','If ON, displays the format, audience, and material type icons in XSLT MARC21 results and detail pages.','YesNo'),
-('DisplayLibraryFacets',  'holdingbranch',  'home|holding|both',  'Defines which library facets to display.',  'Choice'),
+('DisplayLibraryFacets',  'holding',  'home|holding|both',  'Defines which library facets to display.',  'Choice'),
 ('DisplayMultiPlaceHold','1','','Display the ability to place multiple holds or not','YesNo'),
 ('DisplayOPACiconsXSLT','1','','If ON, displays the format, audience, and material type icons in XSLT MARC21 results and detail pages in the OPAC.','YesNo'),
 ('dontmerge','1',NULL,'If ON, modifying an authority record will not update all associated bibliographic records immediately, ask your system administrator to enable the merge_authorities.pl cron job','YesNo'),
