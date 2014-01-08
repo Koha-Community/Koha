@@ -12,6 +12,9 @@ my $destination = $ARGV[0];
 my $marc_type = $ARGV[1] || 'marc21';
 my $indexing_mode = $ARGV[2] || 'grs1';
 
+$ENV{__BIB_INDEX_MODE__} = $indexing_mode;
+$ENV{__AUTH_INDEX_MODE__} = $indexing_mode;
+
 $ENV{__ZEBRA_MARC_FORMAT__} = $marc_type;
 if ($indexing_mode eq 'dom') {
     $ENV{__ZEBRA_BIB_CFG__} = 'zebra-biblios-dom.cfg';
