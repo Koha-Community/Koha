@@ -12,7 +12,7 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 208;
+use Test::More tests => 212;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;
@@ -177,6 +177,11 @@ sub run_marc21_search_tests {
     mock_marcfromkohafield('marc21');
     my $context = new C4::Context("$datadir/etc/koha-conf.xml");
     $context->set_context();
+
+    is($context->config('zebra_bib_index_mode'),$indexing_mode,
+        "zebra_bib_index_mode is properly set to '$indexing_mode' in the created koha-conf.xml file (BZ11499)");
+    is($context->config('zebra_auth_index_mode'),$indexing_mode,
+        "zebra_auth_index_mode is properly set to '$indexing_mode' in the created koha-conf.xml file (BZ11499)");
 
     use_ok('C4::Search');
 
