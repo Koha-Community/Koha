@@ -480,6 +480,9 @@
                                             [% END %]
                                             <th>Status</th>
                                             <th class="nosort">Modify</th>
+                                            [% IF SuspendHoldsOpac %]
+                                                 <th class="nosort" >Suspend individual holds</th>
+                                            [% END %]
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -557,9 +560,30 @@
                                                     <form action="/cgi-bin/koha/opac-modrequest.pl" method="post">
                                                     <input type="hidden" name="biblionumber" value="[% RESERVE.biblionumber %]" />
                                                     <input type="hidden" name="reserve_id" value="[% RESERVE.reserve_id %]" />
-                                                    <button type="submit" name="submit" class="btn btn-mini btn-danger" onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);">Cancel</button></form>
+                                                    <button type="submit" name="submit" class="btn btn-danger" onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);"><i class="icon-remove icon-white"></i> Cancel</button></form>
                                                 [% END %]
                                             </td>
+                                             [% IF SuspendHoldsOpac %]
+                                                 <td>
+                                                     [% IF ( RESERVE.cancelable ) %]
+                                                         <form class="form-inline" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
+                                                             <input type="hidden" name="reserve_id" value="[% RESERVE.reserve_id %]" />
+                                     
+                                                             [% IF RESERVE.suspend %]
+                                                                 <button class="btn" type="submit" name="submit"><i class="icon-play"></i> Resume suspended hold</button>
+                                                             [% ELSE %]
+                                                                 <button class="btn" type="submit" name="submit"><i class="icon-pause"></i> Suspend hold</button>
+                                     
+                                                                 [% IF AutoResumeSuspendedHolds %]
+                                                                     <label for="suspend_until_[% RESERVE.reserve_id %]"> until </label>
+                                                                     <input name="suspend_until" id="suspend_until_[% RESERVE.reserve_id %]" class="suspend-until" readonly="readonly" size="10" />
+                                                                     <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('suspend_until_[% RESERVE.reserve_id %]').value='';return false;">Clear date</a>
+                                                                 [% END %]
+                                                             [% END %]
+                                                         </form>
+                                                     [% END %]
+                                                 </td>
+                                             [% END %]
                                         </tr>
                                     [% END # /FOREACH RESERVES %]
                                 </tbody>
@@ -567,20 +591,21 @@
 
                             [% IF SuspendHoldsOpac %]
                                 <div>
-                                    <form action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
-                                        <input type="submit" name="submit" class="btn" value="Suspend all holds" onclick="return confirmDelete(MSG_CONFIRM_SUSPEND_HOLDS);" />
+                                    <form class="form-inline" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
+                                        <button type="submit" name="submit" class="btn" onclick="return confirmDelete(MSG_CONFIRM_SUSPEND_HOLDS);"><i class="icon-pause"></i> Suspend all holds</button>
                                         <input type="hidden" name="suspend" value="1" />
 
                                         [% IF AutoResumeSuspendedHolds %]
                                             <label for="suspend_until"> until </label>
-                                            <input name="suspend_until" id="suspend_until" readonly="readonly" size="10" />
+                                            <input name="suspend_until" id="suspend_until" class="suspend-until" readonly="readonly" size="10" />
                                             <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('suspend_until').value='';return false;">Clear date</a>
                                         [% END %]
                                     </form>
                                 </div>
+                                <br/>
                                 <div>
                                     <form action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
-                                        <input type="submit" name="submit" class="btn" value="Resume all suspended holds" onclick="return confirmDelete(MSG_CONFIRM_RESUME_HOLDS);" />
+                                        <button type="submit" name="submit" class="btn" onclick="return confirmDelete(MSG_CONFIRM_RESUME_HOLDS);"><i class="icon-play"></i> Resume all suspended holds</button>
                                         <input type="hidden" name="suspend" value="0" />
                                     </form>
                                 </div>
@@ -644,7 +669,7 @@
                 });
                 $("#checkoutst caption").append("<div id=\"renewcontrols\"><a id=\"renewselected_link\" href=\"#\">"+_("Renew selected")+"</a> <a id=\"renewall_link\" href=\"#\">"+_("Renew all")+"</a></div>");
             [% END %]
-            $( "#suspend_until" ).datepicker({ minDate: 1 }); // Require that "until date" be in the future
+            $( ".suspend-until" ).datepicker({ minDate: 1 }); // Require that "until date" be in the future
         });
         //]]>
     </script>
