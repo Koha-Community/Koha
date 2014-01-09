@@ -1,4 +1,4 @@
-[% IF ( opacfacets && facets_loop ) %]
+[% IF ( opacfacets && facets_loop && total ) %]
     <div id="search-facets">
         <h4><a href="#" class="menu-collapse-toggle">Refine your search</a></h4>
         <ul class="menu-collapse">

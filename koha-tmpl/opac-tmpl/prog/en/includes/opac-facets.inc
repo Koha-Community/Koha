@@ -1,4 +1,4 @@
-[% IF ( opacfacets ) %]
+[% IF ( opacfacets ) && total %]
 [% IF ( facets_loop ) %]
 <div id="search-facets">
 <h4>Refine your search</h4>
