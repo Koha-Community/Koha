@@ -652,6 +652,34 @@ $(document).ready(function() {
                                     </select>
                                 </li>
                                 <li>
+                                    <label for="itemtype">Item type:</label>
+                                    <select name="itemtype" id="itemtype">
+                                        <option value=""></option>
+                                        [% FOREACH type IN typeloop %]
+                                            [% IF ( type.selected ) %]
+                                                <option value="[% type.code %]" selected="selected">[% type.value %]</option>
+                                            [% ELSE %]
+                                                <option value="[% type.code %]">[% type.value %]</option>
+                                            [% END %]
+                                        [% END %]
+                                    </select>
+                                </li>
+                                [%IF makePreviousSerialAvailable %]
+                                <li>
+                                    <label for="previousitemtype">Previous item type:</label>
+                                    <select name="previousitemtype" id="previousitemtype">
+                                            <option value=""></option>
+                                        [% FOREACH previous IN previoustypeloop %]
+                                            [% IF ( previous.selected ) %]
+                                                <option value="[% previous.code %]" selected="selected">[% previous.value %]</option>
+                                            [% ELSE %]
+                                                <option value="[% previous.code %]">[% previous.value %]</option>
+                                            [% END %]
+                                        [% END %]
+                                    </select>
+                                </li>
+                                [% END %]
+                                    <li>
                                     <label for="graceperiod">Grace period:</label>
                                     <input type="text" name="graceperiod" id="graceperiod" value="[% graceperiod %]" size="5"/> day(s)
                                 </li>

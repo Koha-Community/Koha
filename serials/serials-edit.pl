@@ -93,6 +93,7 @@ if ( scalar(@subscriptionids) == 1 && index( $subscriptionids[0], q|,| ) > 0 ) {
 }
 my @errors;
 my @errseq;
+my $dbh   = C4::Context->dbh;
 
 # If user comes from subscription details
 unless (@serialids) {
@@ -250,6 +251,29 @@ if ( $op and $op eq 'serialchangestatus' ) {
                 $notes[$i]
             );
         }
+        my $makePreviousSerialAvailable = C4::Context->preference('makePreviousSerialAvailable');
+        if ($makePreviousSerialAvailable && $serialids[$i] ne "NEW") {
+            # We already have created the new expected serial at this point, so we get the second previous serial
+            my $previous = GetPreviousSerialid($subscriptionids[$i]);
+            if ($previous) {
+
+                # Getting the itemnumber matching the serialid
+                my $query = "SELECT itemnumber FROM serialitems WHERE serialid=?";
+                my $sth = $dbh->prepare($query);
+                $sth->execute($previous);
+                my @row = $sth->fetchrow_array;
+                if ($row[0]) {
+                    my $itemnumber = $row[0];
+
+                    # Getting the itemtype to set from the database
+                    my $subscriptioninfos = GetSubscription($subscriptionids[$i]);
+
+                    # Changing the status to "available" and the itemtype according to the previousitemtype db field
+                    ModItem({notforloan => 0, itype => $subscriptioninfos->{'previousitemtype'} }, undef, $itemnumber);
+                }
+            }
+        }
+
     }
     my @moditems = $query->multi_param('moditem');
     if ( scalar(@moditems) ) {

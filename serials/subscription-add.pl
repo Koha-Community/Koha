@@ -141,7 +141,23 @@ for my $field ( @$additional_fields ) {
 }
 $template->param( additional_fields_for_subscription => $additional_fields );
 
+my $typeloop = GetItemTypes();
+
+my @typearg =
+    map { { code => $_, value => $typeloop->{$_}{'description'}, selected => ( ( $subs->{itemtype} and $_ eq $subs->{itemtype} ) ? "selected=\"selected\"" : "" ), } } sort keys %{$typeloop};
+my @previoustypearg =
+    map { { code => $_, value => $typeloop->{$_}{'description'}, selected => ( ( $subs->{previousitemtype} and $_ eq $subs->{previousitemtype} ) ? "selected=\"selected\"" : "" ), } } sort keys %{$typeloop};
+
+$template->param(
+    branchloop               => $branchloop,
+    typeloop                 => \@typearg,
+    previoustypeloop         => \@previoustypearg,
+    locations_loop=>$locations_loop,
+);
+
 # prepare template variables common to all $op conditions:
+$template->param('makePreviousSerialAvailable' => 1) if (C4::Context->preference('makePreviousSerialAvailable'));
+
 if ($op!~/^mod/) {
     my $letters = get_letter_loop();
     $template->param( letterloop => $letters );
@@ -301,6 +317,8 @@ sub redirect_add_subscription {
     my $staffdisplaycount = $query->param('staffdisplaycount');
     my $opacdisplaycount  = $query->param('opacdisplaycount');
     my $location          = $query->param('location');
+    my $itemtype          = $query->param('itemtype');
+    my $previousitemtype  = $query->param('previousitemtype');
     my $skip_serialseq    = $query->param('skip_serialseq');
 
     my $startdate      = output_pref( { str => scalar $query->param('startdate'),      dateonly => 1, dateformat => 'iso' } );
@@ -378,6 +396,8 @@ sub redirect_mod_subscription {
 	my $opacdisplaycount = $query->param('opacdisplaycount');
     my $graceperiod     = $query->param('graceperiod') || 0;
     my $location = $query->param('location');
+    my $itemtype          = $query->param('itemtype');
+    my $previousitemtype  = $query->param('previousitemtype');
     my $skip_serialseq    = $query->param('skip_serialseq');
 
     # Guess end date
@@ -405,7 +425,7 @@ sub redirect_mod_subscription {
         $status, $biblionumber, $callnumber, $notes, $letter,
         $manualhistory, $internalnotes, $serialsadditems, $staffdisplaycount,
         $opacdisplaycount, $graceperiod, $location, $enddate, $subscriptionid,
-        $skip_serialseq
+        $skip_serialseq, $itemtype, $previousitemtype
     );
 
     my $additional_fields = Koha::AdditionalField->all( { tablename => 'subscription' } );

@@ -76,6 +76,7 @@ BEGIN {
       &ReNewSubscription  &GetLateOrMissingIssues
       &GetSerialInformation                   &AddItem2Serial
       &PrepareSerialsData &GetNextExpected    &ModNextExpected
+      &GetPreviousSerialid
 
       &GetSuppliersWithLateIssues             &getsupplierbyserialid
       &GetDistributedTo   &SetDistributedTo
@@ -805,6 +806,39 @@ sub GetLatestSerials {
     return \@serials;
 }
 
+=head2 GetPreviousSerialid
+
+$serialid = GetPreviousSerialid($subscriptionid, $nth)
+get the $nth's previous serial for the given subscriptionid
+return :
+the serialid
+
+=cut
+
+sub GetPreviousSerialid {
+    my ( $subscriptionid, $nth ) = @_;
+    $nth ||= 1;
+    my $dbh = C4::Context->dbh;
+    my $return = undef;
+
+    # Status 2: Arrived
+    my $strsth = "SELECT   serialid
+                        FROM     serial
+                        WHERE    subscriptionid = ?
+                        AND      status = 2
+                        ORDER BY serialid DESC LIMIT $nth,1
+                ";
+    my $sth = $dbh->prepare($strsth);
+    $sth->execute($subscriptionid);
+    my @serials;
+    my $line = $sth->fetchrow_hashref;
+    $return = $line->{'serialid'} if ($line);
+
+    return $return;
+}
+
+
+
 =head2 GetDistributedTo
 
 $distributedto=GetDistributedTo($subscriptionid)
@@ -1306,7 +1340,8 @@ sub ModSubscription {
     $lastvalue2, $innerloop2, $lastvalue3, $innerloop3, $status,
     $biblionumber, $callnumber, $notes, $letter, $manualhistory,
     $internalnotes, $serialsadditems, $staffdisplaycount, $opacdisplaycount,
-    $graceperiod, $location, $enddate, $subscriptionid, $skip_serialseq
+    $graceperiod, $location, $enddate, $subscriptionid, $skip_serialseq,
+    $itemtype, $previousitemtype
     ) = @_;
 
     my $dbh   = C4::Context->dbh;
@@ -1319,7 +1354,7 @@ sub ModSubscription {
             callnumber=?, notes=?, letter=?, manualhistory=?,
             internalnotes=?, serialsadditems=?, staffdisplaycount=?,
             opacdisplaycount=?, graceperiod=?, location = ?, enddate=?,
-            skip_serialseq=?
+            skip_serialseq=?, itemtype=?, previousitemtype=?
         WHERE subscriptionid = ?";
 
     my $sth = $dbh->prepare($query);
@@ -1333,6 +1368,7 @@ sub ModSubscription {
         $letter,          ($manualhistory ? $manualhistory : 0),
         $internalnotes, $serialsadditems, $staffdisplaycount, $opacdisplaycount,
         $graceperiod,     $location,       $enddate,        $skip_serialseq,
+        $itemtype,        $previousitemtype,
         $subscriptionid
     );
     my $rows = $sth->rows;
@@ -1348,7 +1384,8 @@ $subscriptionid = &NewSubscription($auser,branchcode,$aqbooksellerid,$cost,$aqbu
     $lastvalue1,$innerloop1,$lastvalue2,$innerloop2,$lastvalue3,$innerloop3,
     $status, $notes, $letter, $firstacquidate, $irregularity, $numberpattern,
     $locale, $callnumber, $manualhistory, $internalnotes, $serialsadditems,
-    $staffdisplaycount, $opacdisplaycount, $graceperiod, $location, $enddate, $skip_serialseq);
+    $staffdisplaycount, $opacdisplaycount, $graceperiod, $location, $enddate,
+    $skip_serialseq, $itemtype, $previousitemtype);
 
 Create a new subscription with value given on input args.
 
@@ -1365,7 +1402,7 @@ sub NewSubscription {
     $innerloop3, $status, $notes, $letter, $firstacquidate, $irregularity,
     $numberpattern, $locale, $callnumber, $manualhistory, $internalnotes,
     $serialsadditems, $staffdisplaycount, $opacdisplaycount, $graceperiod,
-    $location, $enddate, $skip_serialseq
+    $location, $enddate, $skip_serialseq, $itemtype, $previousitemtype
     ) = @_;
     my $dbh = C4::Context->dbh;
 
@@ -1378,8 +1415,9 @@ sub NewSubscription {
             lastvalue3, innerloop3, status, notes, letter, firstacquidate,
             irregularity, numberpattern, locale, callnumber,
             manualhistory, internalnotes, serialsadditems, staffdisplaycount,
-            opacdisplaycount, graceperiod, location, enddate, skip_serialseq)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            opacdisplaycount, graceperiod, location, enddate, skip_serialseq,
+            itemtype, previousitemtype)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         |;
     my $sth = $dbh->prepare($query);
     $sth->execute(
@@ -1389,7 +1427,8 @@ sub NewSubscription {
         $lastvalue3, $innerloop3, $status, $notes, $letter,
         $firstacquidate, $irregularity, $numberpattern, $locale, $callnumber,
         $manualhistory, $internalnotes, $serialsadditems, $staffdisplaycount,
-        $opacdisplaycount, $graceperiod, $location, $enddate, $skip_serialseq
+        $opacdisplaycount, $graceperiod, $location, $enddate, $skip_serialseq,
+        $itemtype, $previousitemtype
     );
 
     my $subscriptionid = $dbh->{'mysql_insertid'};
