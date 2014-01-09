@@ -65,6 +65,8 @@ is( $results_xisbn->[0]->{biblionumber},
     $biblionumber3,
     "Gets correct biblionumber from a book with a similar isbn using XISBN." );
 
+$dbh->rollback;
+
 # Util subs
 
 # Add new biblio with isbn and return biblionumber
