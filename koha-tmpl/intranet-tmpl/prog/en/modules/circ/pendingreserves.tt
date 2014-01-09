@@ -43,7 +43,11 @@ $(document).ready(function() {
   $("#homebranchfilter").each( function () {
       $(this).html( createSelect( holdst.fnGetColumnData(4) ) );
       $('select', this).change( function () {
-          holdst.fnFilter( $(this).val(), 4 );
+          var filter_value = $(this).val();
+          if(filter_value){
+                filter_value = "(^|>)"+filter_value+"($|<)";
+          }
+          holdst.fnFilter( filter_value, 4, true );
       } );
   } );
   $("#itypefilter").each( function () {
