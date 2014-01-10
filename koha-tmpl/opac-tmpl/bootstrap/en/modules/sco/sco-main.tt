@@ -357,12 +357,12 @@
 
             $("#logout_form").submit(function(){
                 clearTimeout(mainTimeout);
-            [% IF Koha.Preference('SelfCheckReceiptPrompt') %]
-                if(confirm("Would you like to print a receipt?")){
-                    window.open("/cgi-bin/koha/sco/printslip.pl?borrowernumber=[% borrowernumber %]&amp;print=qslip");
-     [% END %]
+                [% IF Koha.Preference('SelfCheckReceiptPrompt') %]
+                    if(confirm("Would you like to print a receipt?")){
+                        window.open("/cgi-bin/koha/sco/printslip.pl?borrowernumber=[% borrowernumber %]&amp;print=qslip");
+                    }
+                [% END %]
 
-                }
                 return true;
             });
     });
