@@ -625,7 +625,7 @@ __PACKAGE__->belongs_to(
 );
 
 use C4::Context;
-sub itemtype {
+sub effective_itemtype {
     my ( $self ) = @_;
 
     if ( C4::Context->preference('item-level_itypes') ) {
