@@ -197,7 +197,20 @@
                                         [% IF ( table_loo.header_fields ) %]
                                         <tr>
                                         [% FOREACH header_field IN table_loo.header_fields %]
-                                            <th>[% header_field.field_label %]</th>
+                                            [% SWITCH header_field.field_label -%]
+                                                [% CASE "Label Number" -%]
+                                                    <th>Label number</th>
+                                                [% CASE "Summary" -%]
+                                                    <th>Summary</th>
+                                                [% CASE "Item Type" %]
+                                                    <th>Item type</th>
+                                                [% CASE "Barcode" %]
+                                                    <th>Barcode</th>
+                                                [% CASE "Select" -%]
+                                                    <th>Select</th>
+                                                [% CASE %]
+                                                    <th>[% header_field.field_label %]</th>
+                                            [% END -%]
                                         [% END %]
                                         </tr>
                                         [% ELSE %]
