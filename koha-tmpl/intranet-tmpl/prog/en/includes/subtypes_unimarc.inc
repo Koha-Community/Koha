@@ -29,7 +29,7 @@
             <option value="ff8-23:h">hand-written</option>
             <option value="ff8-23:i">multimedia</option>
             <option value="ff8-23:j">mini-print</option>
-            <option value="ff8-23:s">electronic ressource</option>
+            <option value="ff8-23:s">electronic resource</option>
             <option value="ff8-23:t">microform</option>
             <option value="ff8-23:z">other form of textual material</option>
 		</select>
