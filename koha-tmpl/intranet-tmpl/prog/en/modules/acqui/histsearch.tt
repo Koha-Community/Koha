@@ -47,6 +47,16 @@
             <label for="basketgroupname">Basket group:</label>
             <input type="text" name="basketgroupname" id="basketgroupname" value="[% basketgroupname %]" />
         </li>
+        <li>
+          <label for="ordernumber">Order no.:</label>
+          <input type="text" name="ordernumber" id="ordernumber" value="[% ordernumber %]" />
+          [% IF search_children_too %]
+            <input type="checkbox" name="search_children_too" id="search_children_too" value="1" checked="checked" />
+          [% ELSE %]
+            <input type="checkbox" name="search_children_too" id="search_children_too" value="1" />
+          [% END %]
+          <label class="yesno" for="search_children_too">Display children too.</label>
+        </li>
 
         <li>
             <label for="orderstatus">Order status: </label>

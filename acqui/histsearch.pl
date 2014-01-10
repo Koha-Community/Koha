@@ -74,6 +74,8 @@ my $from_placed_on          = C4::Dates->new($input->param('from'));
 my $to_placed_on            = C4::Dates->new($input->param('to'));
 my $budget                  = $input->param( 'budget' );
 my $orderstatus             = $input->param( 'orderstatus' );
+my $ordernumber             = $input->param( 'ordernumber' );
+my $search_children_too     = $input->param( 'search_children_too' );
 
 if ( not $input->param('from') ) {
     # FIXME Dirty but we can't sent a Date::Calc to C4::Dates ?
@@ -117,6 +119,8 @@ if ($do_search) {
         basketgroupname => $basketgroupname,
         budget => $budget,
         orderstatus => $orderstatus,
+        ordernumber => $ordernumber,
+        search_children_too => $search_children_too,
     );
 }
 
@@ -147,6 +151,8 @@ $template->param(
     basket                  => $basket,
     booksellerinvoicenumber => $booksellerinvoicenumber,
     basketgroupname         => $basketgroupname,
+    ordernumber             => $ordernumber,
+    search_children_too     => $search_children_too,
     from_placed_on          => $from_date,
     to_placed_on            => $to_date,
     orderstatus             => $orderstatus,

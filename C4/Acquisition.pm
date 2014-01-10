@@ -2262,6 +2262,8 @@ sub GetHistory {
     my $orderstatus = $params{orderstatus};
     my $biblionumber = $params{biblionumber};
     my $get_canceled_order = $params{get_canceled_order} || 0;
+    my $ordernumber = $params{ordernumber};
+    my $search_children_too = $params{search_children_too} || 0;
 
     my @order_loop;
     my $total_qty         = 0;
@@ -2388,6 +2390,17 @@ sub GetHistory {
         $query .= " AND aqbasketgroups.name LIKE ? ";
         push @query_params, "%$basketgroupname%";
     }
+
+    if ($ordernumber) {
+        $query .= " AND (aqorders.ordernumber = ? ";
+        push @query_params, $ordernumber;
+        if ($search_children_too) {
+            $query .= " OR aqorders.parent_ordernumber = ? ";
+            push @query_params, $ordernumber;
+        }
+        $query .= ") ";
+    }
+
 
     if ( C4::Context->preference("IndependentBranches") ) {
         unless ( C4::Context->IsSuperLibrarian() ) {
