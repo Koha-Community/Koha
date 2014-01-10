@@ -55,10 +55,13 @@ if ( C4::Branch::onlymine ) {
     }
 } else {
     foreach (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %{$branches}) {
+        my $selected = 0;
+        $selected = 1 if $branch and $branch eq $_;
         push @branchloop, {
-            value      => $_,
-            selected   => ($branches->{$_}->{branchcode} eq $branch),
+            value => $_,
+            branchcode => $_,
             branchname => $branches->{$_}->{branchname},
+            selected => $selected
         };
     }
 }
