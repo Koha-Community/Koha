@@ -22,7 +22,7 @@
 </script>
 
 <div id="reldebarments">
-    [% IF ( debarments.size < 1 ) %]
+    [% IF ( not debarments.defined || debarments.size < 1 ) %]
         <p>Patron is currently unrestricted.</p>
     [% ELSE %]
         <table>

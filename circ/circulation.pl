@@ -660,7 +660,7 @@ $amountold =~ s/^.*\$//;    # remove upto the $, if any
 
 my ( $total, $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
 
-if ( $borrower->{'category_type'} eq 'C') {
+if ( $borrowernumber && $borrower->{'category_type'} eq 'C') {
     my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
     my $cnt = scalar(@$catcodes);
     $template->param( 'CATCODE_MULTI' => 1) if $cnt > 1;
@@ -737,7 +737,7 @@ $template->param(
     relprevissues		=> \@relprevissues,
     displayrelissues		=> $displayrelissues,
     inprocess         => $inprocess,
-    is_child          => ($borrower->{'category_type'} eq 'C'),
+    is_child          => ($borrowernumber && $borrower->{'category_type'} eq 'C'),
     circview => 1,
     soundon           => C4::Context->preference("SoundOn"),
     fast_cataloging   => $fast_cataloging,
