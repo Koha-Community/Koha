@@ -289,7 +289,7 @@ if ($barcode) {
                     $waiting_holds++;
                 }
             } 
-            if ($waiting_holds > 0) {
+            if ($waiting_holds && $waiting_holds > 0) {
                 $template->param(
                     waiting_holds       => $waiting_holds,
                     holdsborrowernumber => $borrower->{'borrowernumber'},
