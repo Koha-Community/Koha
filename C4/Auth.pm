@@ -273,6 +273,9 @@ sub get_template_and_user {
                            $_->{'time'},
                         ) foreach @recentSearches;
 
+                # clear out the search history from the session now that
+                # we've saved it to the database
+                SetSearchHistorySession($in->{'query'}, []);
             }
         }
     }
