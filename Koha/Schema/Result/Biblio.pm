@@ -331,6 +331,10 @@ __PACKAGE__->many_to_many("sets", "oai_sets_biblios", "set");
 # Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0//8OGf7OteNnwT03g4QsA
 
+__PACKAGE__->belongs_to(
+    "biblioitem",
+    "Koha::Schema::Result::Biblioitem",
+    { "foreign.biblionumber" => "self.biblionumber" }
+);
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

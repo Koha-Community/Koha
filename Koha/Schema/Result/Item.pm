@@ -618,4 +618,21 @@ __PACKAGE__->belongs_to(
     { "foreign.biblionumber" => "self.biblionumber" }
 );
 
+__PACKAGE__->belongs_to(
+  "biblioitem",
+  "Koha::Schema::Result::Biblioitem",
+  { biblioitemnumber => "biblioitemnumber" },
+);
+
+use C4::Context;
+sub itemtype {
+    my ( $self ) = @_;
+
+    if ( C4::Context->preference('item-level_itypes') ) {
+        return $self->itype();
+    } else {
+        return $self->biblioitem()->itemtype();
+    }
+}
+
 1;

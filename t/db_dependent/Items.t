@@ -20,6 +20,7 @@ use Modern::Perl;
 
 use MARC::Record;
 use C4::Biblio;
+use Koha::Database;
 
 use Test::More tests => 3;
 
@@ -138,6 +139,42 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     @items = ();
     @hidden = GetHiddenItemnumbers( @items );
     ok( scalar @hidden == 0, "Empty items list, no item hidden");
+
+    $dbh->rollback;
+};
+
+subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
+
+    plan tests => 2;
+
+    # Start transaction
+    $dbh->{AutoCommit} = 0;
+    $dbh->{RaiseError} = 1;
+
+    my $schema = Koha::Database->new()->schema();
+
+    my $biblio =
+    $schema->resultset('Biblio')->create(
+        {
+            title       => "Test title",
+            biblioitems => [
+                {
+                    itemtype => 'BIB_LEVEL',
+                    items    => [ { itype => "ITEM_LEVEL" } ]
+                }
+            ]
+        }
+    );
+
+    my $biblioitem = $biblio->biblioitem();
+    my ( $item ) = $biblioitem->items();
+
+    C4::Context->set_preference( 'item-level_itypes', 0 );
+    ok( $item->itemtype() eq 'BIB_LEVEL', '$item->itemtype() returns biblioitem.itemtype when item-level_itypes is disabled' );
+
+    C4::Context->set_preference( 'item-level_itypes', 1 );
+    ok( $item->itemtype() eq 'ITEM_LEVEL', '$item->itemtype() returns items.itype when item-level_itypes is disabled' );
+
 
     $dbh->rollback;
 };
