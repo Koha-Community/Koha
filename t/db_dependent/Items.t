@@ -169,11 +169,11 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
     my $biblioitem = $biblio->biblioitem();
     my ( $item ) = $biblioitem->items();
 
-    $schema->resultset('Systempreference')->update_or_create({ variable => 'item-level_itypes', value => 0 });
-    ok( $item->effective_itemtype() eq 'BIB_LEVEL', '$item->itemtype() returns biblioitem.itemtype when item-level_itypes is disabled' );
+    C4::Context->set_preference( 'item-level_itypes', 0 );
+    ok( $item->itemtype() eq 'BIB_LEVEL', '$item->itemtype() returns biblioitem.itemtype when item-level_itypes is disabled' );
 
-    $schema->resultset('Systempreference')->update_or_create({ variable => 'item-level_itypes', value => 1 });
-    ok( $item->effective_itemtype() eq 'ITEM_LEVEL', '$item->itemtype() returns items.itype when item-level_itypes is disabled' );
+    C4::Context->set_preference( 'item-level_itypes', 1 );
+    ok( $item->itemtype() eq 'ITEM_LEVEL', '$item->itemtype() returns items.itype when item-level_itypes is disabled' );
 
 
     $dbh->rollback;
