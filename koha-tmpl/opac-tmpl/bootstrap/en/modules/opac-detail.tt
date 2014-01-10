@@ -1024,14 +1024,16 @@
                         </div>
                         <ul class="pg_menu clearfix">
                             <li class="left_results">
-                                [% IF ( previous ) %]<a href="[% previous |url %]" title="See: [% IF ( previousTitle ) %][% previousTitle |html %][% ELSE %]previous biblio[% END %]">&laquo; Previous</a>
+                                [% IF ( previousBiblionumber ) %]
+                                    <a href="opac-detail.pl?biblionumber=[% previousBiblionumber %][% IF ( query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]" title="See: [% IF ( previousTitle ) %][% previousTitle |html %][% ELSE %]previous biblio[% END %]">&laquo; Previous</a>
                                 [% ELSE %]
                                     <span>Previous</span>
                                 [% END %]
                             </li>
                             <li class="back_results"><a href="opac-search.pl?[% busc |url %]" title="Back to the results search list">Back to results</a></li>
                             <li class="right_results">
-                                [% IF ( next ) %]<a href="[% next %]" title="See: [% IF ( nextTitle ) %][% nextTitle |html %][% ELSE %]next biblio[% END %]">Next &raquo;</a>
+                                [% IF ( nextBiblionumber ) %]
+                                    <a href="opac-detail.pl?biblionumber=[% nextBiblionumber %][% IF ( query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]" title="See: [% IF ( nextTitle ) %][% nextTitle |html %][% ELSE %]next biblio[% END %]">Next &raquo;</a>
                                 [% ELSE %]
                                     <span>Next</span>
                                 [% END %]
@@ -1255,7 +1257,12 @@
         var pag_index_ini = [% indexPag %];
         [% IF ( listResults ) %]
             [% FOREACH listResult IN listResults %]
-                arrPagination[[% listResult.index %]] = {url:"[% listResult.url %]", title:"[% listResult.title|remove('\n')|html %]", author:"[% listResult.author|html %]", biblionumber:[% listResult.biblionumber %]};
+                arrPagination[[% listResult.index %]] = {
+                    url:"[% listResult.url %][% IF ( listResult.url && query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]",
+                    title:"[% listResult.title|remove('\n')|html %]",
+                    author:"[% listResult.author|html %]",
+                    biblionumber:[% listResult.biblionumber %]
+                };
            [% END %]
         [% END %]
     [% END %]

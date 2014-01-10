@@ -374,20 +374,21 @@ if ($session->param('busc')) {
         my $newbusc = rebuildBuscParam(\%arrParamsBusc);
         $session->param("busc" => $newbusc);
     }
-    my ($previous, $next, $dataBiblioPaging);
+    my ($numberBiblioPaging, $dataBiblioPaging);
     # Previous biblio
-    if ($paging{'previous'}->{biblionumber}) {
-        $previous = 'opac-detail.pl?biblionumber=' . $paging{'previous'}->{biblionumber}  . '&query_desc=' . $query->param('query_desc');
-        $dataBiblioPaging = GetBiblioData($paging{'previous'}->{biblionumber});
+    $numberBiblioPaging = $paging{'previous'}->{biblionumber};
+    if ($numberBiblioPaging) {
+        $template->param( 'previousBiblionumber' => $numberBiblioPaging );
+        $dataBiblioPaging = GetBiblioData($numberBiblioPaging);
         $template->param('previousTitle' => $dataBiblioPaging->{'title'}) if ($dataBiblioPaging);
     }
     # Next biblio
-    if ($paging{'next'}->{biblionumber}) {
-        $next = 'opac-detail.pl?biblionumber=' . $paging{'next'}->{biblionumber} . '&query_desc=' . $query->param('query_desc');
-        $dataBiblioPaging = GetBiblioData($paging{'next'}->{biblionumber});
+    $numberBiblioPaging = $paging{'next'}->{biblionumber};
+    if ($numberBiblioPaging) {
+        $template->param( 'nextBiblionumber' => $numberBiblioPaging );
+        $dataBiblioPaging = GetBiblioData($numberBiblioPaging);
         $template->param('nextTitle' => $dataBiblioPaging->{'title'}) if ($dataBiblioPaging);
     }
-    $template->param('previous' => $previous, 'next' => $next);
     # Partial list of biblio results
     my @listResults;
     for (my $j = 0; $j < @arrBiblios; $j++) {
