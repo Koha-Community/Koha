@@ -1,10 +1,23 @@
 modules:
-  module_name:
-    page_name:
-      table_id:
+  admin:
+    currency:
+      currencies-table:
         -
-          columnname: my_column_name
-        -
-          columnname: my_other_column_name
+          columnname: currency
           cannot_be_toggled: 1
           cannot_be_modified: 1
+        -
+          columnname: rate
+          cannot_be_toggled: 1
+          cannot_be_modified: 1
+        -
+          columnname: symbol
+        -
+          columnname: iso_code
+          is_hidden: 1
+        -
+          columnname: last_updated
+        -
+          columnname: active
+        -
+          columnname: actions
