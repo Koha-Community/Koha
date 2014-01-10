@@ -560,7 +560,7 @@
                                                     <form action="/cgi-bin/koha/opac-modrequest.pl" method="post">
                                                     <input type="hidden" name="biblionumber" value="[% RESERVE.biblionumber %]" />
                                                     <input type="hidden" name="reserve_id" value="[% RESERVE.reserve_id %]" />
-                                                    <button type="submit" name="submit" class="btn btn-danger" onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);"><i class="icon-remove icon-white"></i> Cancel</button></form>
+                                                    <button type="submit" name="submit" class="btn btn-mini btn-danger" onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);"><i class="icon-remove icon-white"></i> Cancel</button></form>
                                                 [% END %]
                                             </td>
                                              [% IF SuspendHoldsOpac %]
@@ -570,9 +570,9 @@
                                                              <input type="hidden" name="reserve_id" value="[% RESERVE.reserve_id %]" />
                                      
                                                              [% IF RESERVE.suspend %]
-                                                                 <button class="btn" type="submit" name="submit"><i class="icon-play"></i> Resume suspended hold</button>
+                                                                 <button class="btn btn-mini" type="submit" name="submit"><i class="icon-play"></i> Resume suspended hold</button>
                                                              [% ELSE %]
-                                                                 <button class="btn" type="submit" name="submit"><i class="icon-pause"></i> Suspend hold</button>
+                                                                 <button class="btn btn-mini" type="submit" name="submit"><i class="icon-pause"></i> Suspend hold</button>
                                      
                                                                  [% IF AutoResumeSuspendedHolds %]
                                                                      <label for="suspend_until_[% RESERVE.reserve_id %]"> until </label>
