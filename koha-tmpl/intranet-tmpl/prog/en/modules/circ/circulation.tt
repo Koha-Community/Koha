@@ -766,7 +766,7 @@ No patron matched <span class="ex">[% message %]</span>
         [% ELSE %]
             <input type="checkbox" class="radio" name="items[]" value="[% todayissue.itemnumber %]" />
         [% END %]
-            [% IF ( todayissue.renewsallowed ) %]
+            [% IF todayissue.renewsallowed && todayissue.renewsleft %]
                 <span class="renewals">([% todayissue.renewsleft %] of [% todayissue.renewsallowed %] renewals remaining)</span>
             [% END %]
         [% ELSE %]
@@ -778,7 +778,7 @@ No patron matched <span class="ex">[% message %]</span>
                     <input type="checkbox" class="radio" name="items[]" value="[% todayissue.itemnumber %]" />
                 [% END %]
                 </span>
-                [% IF ( todayissue.renewsallowed ) %]
+                [% IF todayissue.renewsallowed && todayissue.renewsleft %]
                     <span class="renewals">([% todayissue.renewsleft %] of [% todayissue.renewsallowed %] renewals remaining)</span>
                 [% END %]
                 <span class="renewals-disabled">
@@ -861,7 +861,7 @@ No patron matched <span class="ex">[% message %]</span>
         [% ELSE %]
             <input type="checkbox" class="radio" name="items[]" value="[% previssue.itemnumber %]" />
         [% END %]
-            [% IF ( previssue.renewsallowed ) %]
+            [% IF previssue.renewsallowed && previssue.renewsleft %]
                 <span class="renewals">([% previssue.renewsleft %] of [% previssue.renewsallowed %] renewals remaining)</span>
             [% END %]
         [% ELSE %]
@@ -873,7 +873,7 @@ No patron matched <span class="ex">[% message %]</span>
                     <input type="checkbox" class="radio" name="items[]" value="[% previssue.itemnumber %]" />
                 [% END %]
                 </span>
-                [% IF ( previssue.renewsallowed ) %]
+                [% IF previssue.renewsallowed && previssue.renewsleft %]
                     <span class="renewals">([% previssue.renewsleft %] of [% previssue.renewsallowed %] renewals remaining)</span>
                 [% END %]
                 <span class="renewals-disabled">
