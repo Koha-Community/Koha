@@ -65,9 +65,9 @@ $dbh->{RaiseError} = 1;
     C4::Context->set_preference('opaclanguages','en,es-ES');
     C4::Context->set_preference('language','en,es-ES');
 
-    # we need a session cookie and have some anonymous search history
+    # we need a session cookie
     $ENV{"SERVER_PORT"} = 80;
-    $ENV{"HTTP_COOKIE"} = 'CGISESSID=nirvana; KohaOpacRecentSearches=%255B%257B%2522time%2522%253A1378313124%252C%2522query_cgi%2522%253A%2522idx%253D%2526q%253Dhistory%2526branch_group_limit%253D%2522%252C%2522total%2522%253A3%252C%2522query_desc%2522%253A%2522kw%252Cwrdl%253A%2520history%252C%2520%2522%257D%252C%257B%2522time%2522%253A1378313137%252C%2522query_cgi%2522%253A%2522idx%253D%2526q%253D%2525D8%2525B9%2525D8%2525B1%2525D8%2525A8%2525D9%25258A%25252F%2525D8%2525B9%2525D8%2525B1%2525D8%2525A8%2525D9%252589%2526branch_group_limit%253D%2522%252C%2522total%2522%253A2%252C%2522query_desc%2522%253A%2522kw%252Cwrdl%253A%2520%25D8%25B9%25D8%25B1%25D8%25A8%25D9%258A%252F%25D8%25B9%25D8%25B1%25D8%25A8%25D9%2589%252C%2520%2522%257D%255D';
+    $ENV{"HTTP_COOKIE"} = 'CGISESSID=nirvana';
 
     my $query = new CGI;
     $query->param('language','es-ES');
