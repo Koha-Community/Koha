@@ -1,3 +1,4 @@
+[% USE KohaDates -%]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Patron categories &rsaquo; [% IF ( add_form ) %][% IF ( categorycode ) %]Modify category '[% categorycode |html %]'[% ELSE %]New category[% END %][% END %]
 [% IF ( add_validate ) %]Data recorded[% END %]
@@ -151,7 +152,7 @@
 	<li><label for="enrolmentperiod" style="width:6em;">In months: </label>
 		<input type="text" name="enrolmentperiod" id="enrolmentperiod" size="3" maxlength="3" value="[% IF ( enrolmentperiod ) %][% enrolmentperiod %][% END %]" /> months</li>
 	<li><label for="enrolmentperioddate" style="width:6em;">Until date: </label>
-        <input type="text" name="enrolmentperioddate" id="enrolmentperioddate" value="[% enrolmentperioddate %]" />
+        <input type="text" name="enrolmentperioddate" id="enrolmentperioddate" value="[% enrolmentperioddate | $KohaDates %]" />
 		<div id="enrolmentmessage" class="hint" style="margin-left:0;">Cannot have "months" and "until date" at the same time</div>
 	</li>
 	</ol>

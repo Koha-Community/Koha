@@ -49,8 +49,10 @@ use C4::Form::MessagingPreferences;
 sub StringSearch  {
 	my ($searchstring,$type)=@_;
 	my $dbh = C4::Context->dbh;
+        $searchstring //= '';
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
+        push @data,q{} if $#data==-1;
 	my $count=@data;
 	my $sth=$dbh->prepare("Select * from categories where (description like ?) order by category_type,description,categorycode");
 	$sth->execute("$data[0]%");
@@ -67,7 +69,7 @@ my $input = new CGI;
 my $searchfield=$input->param('description');
 my $script_name="/cgi-bin/koha/admin/categorie.pl";
 my $categorycode=$input->param('categorycode');
-my $op = $input->param('op');
+my $op = $input->param('op') // '';
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "admin/categorie.tmpl",
@@ -106,7 +108,10 @@ if ($op eq 'add_form') {
         $sth->finish;
     }
 
-    $data->{'enrolmentperioddate'} = undef if ($data->{'enrolmentperioddate'} eq '0000-00-00');
+    if ($data->{'enrolmentperioddate'} && $data->{'enrolmentperioddate'} eq '0000-00-00') {
+        $data->{'enrolmentperioddate'} = undef;
+    }
+    $data->{'category_type'} //= '';
 
     my $branches = GetBranches;
     my @branches_loop;
@@ -121,13 +126,13 @@ if ($op eq 'add_form') {
 
 	$template->param(description        => $data->{'description'},
 				enrolmentperiod         => $data->{'enrolmentperiod'},
-				enrolmentperioddate     => C4::Dates::format_date($data->{'enrolmentperioddate'}),
+                         enrolmentperioddate     => $data->{'enrolmentperioddate'},
 				upperagelimit           => $data->{'upperagelimit'},
 				dateofbirthrequired     => $data->{'dateofbirthrequired'},
-				enrolmentfee            => sprintf("%.2f",$data->{'enrolmentfee'}),
+                         enrolmentfee            => sprintf("%.2f",$data->{'enrolmentfee'} || 0),
 				overduenoticerequired   => $data->{'overduenoticerequired'},
 				issuelimit              => $data->{'issuelimit'},
-				reservefee              => sprintf("%.2f",$data->{'reservefee'}),
+                         reservefee              => sprintf("%.2f",$data->{'reservefee'} || 0),
                                 hidelostitems           => $data->{'hidelostitems'},
 				category_type           => $data->{'category_type'},
                 SMSSendDriver => C4::Context->preference("SMSSendDriver"),
@@ -202,15 +207,18 @@ if ($op eq 'add_form') {
 		$template->param(totalgtzero => 1);
 	}
 
+    if ($data->{'enrolmentperioddate'} && $data->{'enrolmentperioddate'} eq '0000-00-00') {
+        $data->{'enrolmentperioddate'} = undef;
+    }
         $template->param(       description             => $data->{'description'},
                                 enrolmentperiod         => $data->{'enrolmentperiod'},
-                                enrolmentperioddate     => C4::Dates::format_date($data->{'enrolmentperioddate'}),
+                                enrolmentperioddate     => $data->{'enrolmentperioddate'},
                                 upperagelimit           => $data->{'upperagelimit'},
                                 dateofbirthrequired     => $data->{'dateofbirthrequired'},
-                                enrolmentfee            =>  sprintf("%.2f",$data->{'enrolmentfee'}),
+                                enrolmentfee            =>  sprintf("%.2f",$data->{'enrolmentfee'} || 0),
                                 overduenoticerequired   => $data->{'overduenoticerequired'},
                                 issuelimit              => $data->{'issuelimit'},
-                                reservefee              =>  sprintf("%.2f",$data->{'reservefee'}),
+                                reservefee              =>  sprintf("%.2f",$data->{'reservefee'} || 0),
                                 hidelostitems           => $data->{'hidelostitems'},
                                 category_type           => $data->{'category_type'},
                                 );
@@ -240,17 +248,22 @@ if ($op eq 'add_form') {
         while ( my $branch = $sth->fetchrow_hashref ) {
             push @selected_branches, $branch;
         }
+        my $enrolmentperioddate = $results->[$i]{'enrolmentperioddate'};
+    if ($enrolmentperioddate && $enrolmentperioddate eq '0000-00-00') {
+        $enrolmentperioddate = undef;
+    }
+    $results->[$i]{'category_type'} //= '';
 		my %row = (
 		        categorycode            => $results->[$i]{'categorycode'},
 				description             => $results->[$i]{'description'},
 				enrolmentperiod         => $results->[$i]{'enrolmentperiod'},
-				enrolmentperioddate     => C4::Dates::format_date($results->[$i]{'enrolmentperioddate'}),
+                        enrolmentperioddate     => $enrolmentperioddate,
 				upperagelimit           => $results->[$i]{'upperagelimit'},
 				dateofbirthrequired     => $results->[$i]{'dateofbirthrequired'},
-				enrolmentfee            => sprintf("%.2f",$results->[$i]{'enrolmentfee'}),
+                        enrolmentfee            => sprintf("%.2f",$results->[$i]{'enrolmentfee'} || 0),
 				overduenoticerequired   => $results->[$i]{'overduenoticerequired'},
 				issuelimit              => $results->[$i]{'issuelimit'},
-				reservefee              => sprintf("%.2f",$results->[$i]{'reservefee'}),
+                        reservefee              => sprintf("%.2f",$results->[$i]{'reservefee'} || 0),
                                 hidelostitems           => $results->[$i]{'hidelostitems'},
 				category_type           => $results->[$i]{'category_type'},
                 "type_".$results->[$i]{'category_type'} => 1,
