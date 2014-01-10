@@ -154,8 +154,10 @@ my $session = get_session($query->cookie("CGISESSID"));
 my %paging = (previous => {}, next => {});
 if ($session->param('busc')) {
     use C4::Search;
+    use URI::Escape;
 
     # Rebuild the string to store on session
+    # param value is URI encoded and params separator is HTML encode (&amp;)
     sub rebuildBuscParam
     {
         my $arrParamsBusc = shift;
@@ -166,13 +168,13 @@ if ($session->param('busc')) {
             if ($_ =~ /^(?:query|listBiblios|newlistBiblios|query_type|simple_query|total|offset|offsetSearch|next|previous|count|expand|scan)/) {
                 if (defined($arrParamsBusc->{$_})) {
                     $pasarParams .= '&amp;' if ($j);
-                    $pasarParams .= $_ . '=' . $arrParamsBusc->{$_};
+                    $pasarParams .= $_ . '=' . uri_escape( $arrParamsBusc->{$_} );
                     $j++;
                 }
             } else {
                 for my $value (@{$arrParamsBusc->{$_}}) {
                     $pasarParams .= '&amp;' if ($j);
-                    $pasarParams .= $_ . '=' . $value;
+                    $pasarParams .= $_ . '=' . uri_escape($value);
                     $j++;
                 }
             }
@@ -234,12 +236,12 @@ if ($session->param('busc')) {
     for (@arrBusc) {
         ($key, $value) = split(/=/, $_, 2);
         if ($key =~ /^(?:query|listBiblios|newlistBiblios|query_type|simple_query|next|previous|total|offset|offsetSearch|count|expand|scan)/) {
-            $arrParamsBusc{$key} = $value;
+            $arrParamsBusc{$key} = uri_unescape($value);
         } else {
             unless (exists($arrParamsBusc{$key})) {
                 $arrParamsBusc{$key} = [];
             }
-            push @{$arrParamsBusc{$key}}, $value;
+            push @{$arrParamsBusc{$key}}, uri_unescape($value);
         }
     }
     my $searchAgain = 0;
@@ -312,7 +314,7 @@ if ($session->param('busc')) {
     for (@arrBusc) {
         unless ($_ =~ /^(?:query|listBiblios|newlistBiblios|query_type|simple_query|next|previous|total|count|offsetSearch)/) {
             $buscParam .= '&amp;' unless ($j == 0);
-            $buscParam .= $_;
+            $buscParam .= $_; # string already URI encoded
             $j++;
         }
     }
