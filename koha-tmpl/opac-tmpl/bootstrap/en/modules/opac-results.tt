@@ -704,7 +704,7 @@ $(document).ready(function(){
 
     var param1 = "";
     [% IF ( ( Koha.Preference( 'opacbookbag' ) == 1 ) || ( Koha.Preference( 'virtualshelves' ) == 1 ) || loggedinusername ) %]
-    param1 += "<span id=\"selections\">Select titles to: </span>";
+    param1 += "<span id=\"selections\">"+_("Select titles to: ")+"</span>";
     [% END %]
 
 [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
