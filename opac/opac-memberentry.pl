@@ -26,6 +26,7 @@ use C4::Output;
 use C4::Members;
 use Koha::Borrower::Modifications;
 use C4::Branch qw(GetBranchesLoop);
+use C4::Scrubber;
 
 my $cgi = new CGI;
 my $dbh = C4::Context->dbh;
@@ -276,12 +277,13 @@ sub CheckMandatoryFields {
 sub ParseCgiForBorrower {
     my ($cgi) = @_;
 
+    my $scrubber = C4::Scrubber->new();
     my %borrower;
 
     foreach ( $cgi->param ) {
         if ( $_ =~ '^borrower_' ) {
             my ($key) = substr( $_, 9 );
-            $borrower{$key} = $cgi->param($_);
+            $borrower{$key} = $scrubber->scrub( $cgi->param($_) );
         }
     }
 
