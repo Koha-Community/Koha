@@ -12,7 +12,7 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 212;
+use Test::More tests => 216;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;
@@ -741,6 +741,20 @@ sub run_marc21_search_tests {
         ['沙士北亞威廉姆'], 0, 10, '', '', 1
     );
     is($count, 1, 'MARC21 authorities: one hit on match contains "沙士北亞威廉姆"');
+
+    $UseQueryParser = 1;
+
+    ($auths, $count) = SearchAuthorities(
+        ['mainentry'], ['and'], [''], ['starts'],
+        ['shakespeare'], 0, 10, '', '', 1
+    );
+    is($count, 1, 'MARC21 authorities: one hit on mainentry starts with "shakespeare" (QP)');
+    ($auths, $count) = SearchAuthorities(
+        ['match'], ['and'], [''], ['contains'],
+        ['沙士北亞威廉姆'], 0, 10, '', '', 1
+    );
+    is($count, 1, 'MARC21 authorities: one hit on match contains "沙士北亞威廉姆" (QP)');
+
 
     cleanup();
 }
