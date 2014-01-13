@@ -238,7 +238,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpacHiddenItems','','','This syspref allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations.','Textarea'),
 ('OpacHighlightedWords','1','','If Set, then queried words are higlighted in OPAC','YesNo'),
 ('OpacHoldNotes','0','','Show hold notes on OPAC','YesNo'),
-('OPACItemHolds','yes','no|yes|force','Allow OPAC users to place hold on specific items. If No, users can only request next available copy. If Yes, users can choose between next available and specific copy. If Force, users *must* choose a specific copy.','Choice'),
+('OPACItemHolds','1','0|1|force','Allow OPAC users to place hold on specific items. If No, users can only request next available copy. If Yes, users can choose between next available and specific copy. If Force, users *must* choose a specific copy.','Choice'),
 ('OpacItemLocation','callnum','callnum|ccode|location','Show the shelving location of items in the opac','Choice'),
 ('OPACItemsResultsDisplay','0','','If OFF : show only the status of items in result list.If ON : show full location of items (branch+location+callnumber) as in staff interface','YesNo'),
 ('OpacKohaUrl','1',NULL,'Show \'Powered by Koha\' text on OPAC footer.',NULL),
