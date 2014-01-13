@@ -6,9 +6,12 @@
 use strict;
 use warnings;
 
-use Test::More tests => 1;
+use Test::More tests => 3;
 
 BEGIN {
         use_ok('C4::Log');
 }
 
+ok( my $hash=GetLogStatus(),"Testing GetLogStatus");
+
+ok( $hash->{BorrowersLog}, 'Testing hash is non empty');
