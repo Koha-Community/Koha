@@ -402,6 +402,9 @@ $(document).ready(function () {
                     [% IF ( errmsgloo.debarred ) %]
                         <p class="problem"><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% errmsgloo.debarborrowernumber %]">[% errmsgloo.debarname %]([% errmsgloo.debarcardnumber %])</a> is now debarred until [% errmsgloo.debarred | $KohaDates %] </p>
                     [% END %]
+                    [% IF ( errmsgloo.prevdebarred ) %]
+                        <p class="problem"><b>Reminder: </b>Patron was earlier restricted until [% errmsgloo.prevdebarred | $KohaDates %]</p>
+                    [% END %]
             [% END %]
 [% IF ( soundon ) %]
 <audio src="[% interface %]/[% theme %]/sound/critical.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>

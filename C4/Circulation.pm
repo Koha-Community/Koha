@@ -1888,10 +1888,21 @@ sub AddReturn {
         defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $item->{itemnumber}...) failed!";  # zero is OK, check defined
         
         if ( $issue->{overdue} && $issue->{date_due} ) {
-# fix fine days
-            my $debardate =
-              _debar_user_on_return( $borrower, $item, $issue->{date_due}, $today );
-            $messages->{Debarred} = $debardate if ($debardate);
+        # fix fine days
+            my ($debardate,$reminder) = _debar_user_on_return( $borrower, $item, $issue->{date_due}, $today );
+            if ($reminder){
+                $messages->{'PrevDebarred'} = $debardate;
+            } else {
+                $messages->{'Debarred'} = $debardate if $debardate;
+            }
+        # there's no overdue on the item but borrower had been previously debarred
+        } elsif ( $issue->{date_due} and $borrower->{'debarred'} ) {
+             my $borrower_debar_dt = dt_from_string( $borrower->{debarred} );
+             $borrower_debar_dt->truncate(to => 'day');
+             my $today_dt = $today->clone()->truncate(to => 'day');
+             if ( DateTime->compare( $borrower_debar_dt, $today_dt ) != -1 ) {
+                 $messages->{'PrevDebarred'} = $borrower->{'debarred'};
+             }
         }
     }
 
@@ -2083,7 +2094,10 @@ sub _debar_user_on_return {
                 expiration     => $new_debar_dt->ymd(),
                 type           => 'SUSPENSION',
             });
-
+            # if borrower was already debarred but does not get an extra debarment
+            if ( $borrower->{debarred} eq Koha::Borrower::Debarments::IsDebarred($borrower->{borrowernumber}) ) {
+                    return ($borrower->{debarred},1);
+            }
             return $new_debar_dt->ymd();
         }
     }
