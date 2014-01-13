@@ -91,8 +91,12 @@ foreach my $branchfrom ( @branchloop ) {
                 if ( my $cell = $cost_matrix->{$tocode}{$fromcode} ) {
                     $from_to_input_def{value} = $cell->{cost};
                     $from_to_input_def{disabled} = 1 if $cell->{disable_transfer};
+                } else {
+                    # matrix has been previously initialized, but a branch referenced here was created afterward.
+                    $from_to_input_def{disabled} = 1;
                 }
             } else {
+                # First time initializing the matrix
                 $from_to_input_def{disabled} = 1;
             }
         }
