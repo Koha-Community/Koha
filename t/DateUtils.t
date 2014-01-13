@@ -5,7 +5,7 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 31;
+use Test::More tests => 32;
 use Test::MockModule;
 
 BEGIN { use_ok('Koha::DateUtils'); }
@@ -66,6 +66,10 @@ cmp_ok $date_string, 'eq', '16/06/2011 12:00', 'metric output';
 
 $date_string = output_pref({ dt => $dt, dateformat => 'metric', timeformat => 'notime', dateonly => 1 });
 cmp_ok $date_string, 'eq', '16/06/2011', 'metric output (date only)';
+
+$date_string = output_pref({ dt => $dt, dateformat => 'metric', timeformat => '24hr' });
+cmp_ok $date_string, 'eq', '16/06/2011 12:00',
+  'output_pref preserves non midnight HH:SS';
 
 my $dear_dirty_dublin = DateTime::TimeZone->new( name => 'Europe/Dublin' );
 my $new_dt = dt_from_string( '16/06/2011', 'metric', $dear_dirty_dublin );
