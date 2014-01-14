@@ -18,16 +18,16 @@
             [% FOREACH facets_loo IN facets_loop %]
                 [% IF facets_loo.facets.size > 0 %]
                     <li id="[% facets_loo.type_id %]">
-                        <h5>[% IF ( facets_loo.type_label_Authors ) %]Authors[% END %]
-                                            [% IF ( facets_loo.type_label_Titles ) %]Titles[% END %]
-                                            [% IF ( facets_loo.type_label_Topics ) %]Topics[% END %]
-                                            [% IF ( facets_loo.type_label_Places ) %]Places[% END %]
-                                            [% IF ( facets_loo.type_label_Series ) %]Series[% END %]
-                                            [% IF ( facets_loo.type_label_ItemTypes ) %]Item types[% END %]
+                        <h5>[% IF ( facets_loo.type_label_Authors ) %]<span id="facets-Authors">Authors</span>[% END %]
+                                            [% IF ( facets_loo.type_label_Titles ) %]<span id="facets-Titles">Titles</span>[% END %]
+                                            [% IF ( facets_loo.type_label_Topics ) %]<span id="facets-Topics">Topics</span>[% END %]
+                                            [% IF ( facets_loo.type_label_Places ) %]<span id="facets-Places">Places</span>[% END %]
+                                            [% IF ( facets_loo.type_label_Series ) %]<span id="facets-Series">Series</span>[% END %]
+                                            [% IF ( facets_loo.type_label_ItemTypes ) %]<span id="facets-Itemtypes">Item types</span>[% END %]
                                             [% UNLESS ( singleBranchMode ) %]
-                                                [% IF ( facets_loo.type_label_Libraries ) %]Libraries[% END %]
+                                                [% IF ( facets_loo.type_label_Libraries ) %]<span id="facets-Libraries">Libraries</span>[% END %]
                                             [% END %]
-                                            [% IF ( facets_loo.type_label_Location ) %]Locations[% END %]</h5>
+                                            [% IF ( facets_loo.type_label_Location ) %]<span id="facets-Locations">Locations</span>[% END %]</h5>
                         <ul>
                             [% FOREACH facet IN facets_loo.facets %]
                                 <li>
