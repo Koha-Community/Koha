@@ -122,7 +122,6 @@ if ( $run_report ) {
             GROUP_CONCAT(DISTINCT items.copynumber
                     ORDER BY items.itemnumber SEPARATOR '<br/>') l_copynumber,
             items.itemnumber,
-            notes,
             notificationdate,
             reminderdate,
             max(priority) as priority,
@@ -181,7 +180,6 @@ if ( $run_report ) {
                 itemcallnumber  => $data->{l_itemcallnumber},
                 enumchron       => $data->{l_enumchron},
                 copyno          => $data->{l_copynumber},
-                notes           => $data->{notes},
                 notificationdate=> $data->{notificationdate},
                 reminderdate    => $data->{reminderdate},
                 count           => $data->{icount},
