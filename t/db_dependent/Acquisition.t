@@ -8,7 +8,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 72;
+use Test::More tests => 76;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -838,6 +838,14 @@ is( $neworder->{'quantity'}, 2, '2 items on new order' );
 is( $neworder->{'quantityreceived'},
     2, 'Splitting up order received items on new order' );
 is( $neworder->{'budget_id'}, $budgetid, 'Budget on new order is unchanged' );
+
+is( $neworder->{ordernumber}, $new_ordernumber, 'Split: test ordernumber' );
+is( $neworder->{parent_ordernumber}, $ordernumbers[1], 'Split: test parent_ordernumber' );
+
+my ( $orders ) = GetHistory( ordernumber => $ordernumbers[1] );
+is( scalar( @$orders ), 1, 'GetHistory with a given ordernumber returns 1 order' );
+( $orders ) = GetHistory( ordernumber => $ordernumbers[1], search_children_too => 1 );
+is( scalar( @$orders ), 2, 'GetHistory with a given ordernumber and search_children_too set returns 2 orders' );
 
 my $budgetid2 = C4::Budgets::AddBudget(
     {
