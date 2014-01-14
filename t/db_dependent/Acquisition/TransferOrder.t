@@ -2,13 +2,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 8;
 use C4::Context;
 use C4::Acquisition;
 use C4::Biblio;
 use C4::Items;
 use C4::Bookseller;
 use C4::Budgets;
+use Koha::DateUtils;
 use MARC::Record;
 
 my $dbh = C4::Context->dbh;
@@ -56,7 +57,7 @@ my $itemnumber = AddItem({}, $biblionumber);
 my ( undef, $ordernumber ) = C4::Acquisition::NewOrder(
     {
         basketno => $basketno1,
-        quantity => 24,
+        quantity => 2,
         biblionumber => $biblionumber,
         budget_id => $budget->{budget_id},
     }
@@ -76,5 +77,11 @@ is(scalar GetOrders($basketno1), 0, "0 order in basket1");
 is(scalar GetOrders($basketno2), 1, "1 order in basket2");
 ($order) = GetOrders($basketno2);
 is(scalar GetItemnumbersFromOrder($order->{ordernumber}), 1, "1 item in basket2's order");
+
+ModReceiveOrder( $biblionumber, $newordernumber, 2, undef, undef, undef, undef, undef, undef, dt_from_string );
+CancelReceipt( $newordernumber );
+$order = GetOrder( $newordernumber );
+is ( $order->{ordernumber}, $newordernumber, 'Regression test Bug 11549: After a transfer, receive and cancel the receive should be possible.' );
+is ( $order->{basketno}, $basketno2, 'Regression test Bug 11549: The order still exist in the basket where the transfer has been done.');
 
 $dbh->rollback;
