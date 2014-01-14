@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 11;
 use C4::Context;
 use C4::Acquisition;
 use C4::Biblio;
@@ -77,6 +77,13 @@ is(scalar GetOrders($basketno1), 0, "0 order in basket1");
 is(scalar GetOrders($basketno2), 1, "1 order in basket2");
 ($order) = GetOrders($basketno2);
 is(scalar GetItemnumbersFromOrder($order->{ordernumber}), 1, "1 item in basket2's order");
+
+# Bug 11552
+my $orders = SearchOrders({ ordernumber => $newordernumber });
+is ( scalar( @$orders ), 1, 'SearchOrders returns 1 order with newordernumber' );
+$orders = SearchOrders({ ordernumber => $ordernumber });
+is ( scalar( @$orders ), 1, 'SearchOrders returns 1 order with [old]ordernumber' );
+is ( $orders->[0]->{ordernumber}, $newordernumber, 'SearchOrders returns newordernumber if [old]ordernumber is given' );
 
 ModReceiveOrder({
     biblionumber => $biblionumber,
