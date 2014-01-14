@@ -1805,7 +1805,7 @@ sub TransferOrder {
     my $dbh = C4::Context->dbh;
     my ($query, $sth, $rv);
 
-    $query = qq{
+    $query = q{
         UPDATE aqorders
         SET datecancellationprinted = CAST(NOW() AS date)
         WHERE ordernumber = ?
@@ -1824,7 +1824,7 @@ sub TransferOrder {
         WHERE ordernumber = ?
     }, {}, $newordernumber );
 
-    $query = qq{
+    $query = q{
         UPDATE aqorders_items
         SET ordernumber = ?
         WHERE ordernumber = ?
