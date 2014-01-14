@@ -99,7 +99,7 @@ my $strsth =
         		ORDER BY items.itemnumber SEPARATOR '<br/>') as l_location,
         GROUP_CONCAT(DISTINCT items.itype 
         		ORDER BY items.itemnumber SEPARATOR '<br/>') as l_itype,
-        notes,
+
         reserves.found,
         biblio.title,
         biblio.author,
@@ -141,7 +141,6 @@ while ( my $data = $sth->fetchrow_hashref ) {
             title            => $data->{title},
             subtitle            => $data->{subtitle},
             author           => $data->{author},
-            notes            => $data->{notes},
             itemnum          => $data->{itemnumber},
             biblionumber     => $data->{biblionumber},
             holdingbranch    => $data->{holdingbranch},
