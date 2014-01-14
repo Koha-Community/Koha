@@ -424,15 +424,6 @@
             }
         });
 
-        [% FOREACH bibitemloo IN bibitemloop %]
-          [% IF bibitemloo.holdable %]
-            [% IF OPACItemHolds == 'force' %]
-              $("#copiesrow_[% bibitemloo.biblionumber %]").show();
-            [% END %]
-          [% END %]
-        [% END %]
-
-
         // click on a first td check the confirmjs checkbox
         $("td.hold").click(function(e){
           if(e.target.tagName.toLowerCase() == 'td'){
@@ -445,6 +436,14 @@
 
         // Hides all 'specific copy' table rows on load.
         $(".copiesrow").hide();
+
+        [% FOREACH bibitemloo IN bibitemloop %]
+          [% IF bibitemloo.holdable %]
+            [% IF OPACItemHolds == 'force' %]
+              $("#copiesrow_[% bibitemloo.biblionumber %]").show();
+            [% END %]
+          [% END %]
+        [% END %]
 
         // Insert reasons for forced hold notes
         $(".forcenotesreason").each(function(){
