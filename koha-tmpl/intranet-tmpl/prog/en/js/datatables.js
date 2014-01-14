@@ -23,7 +23,8 @@ var dataTablesDefaults = {
         "sSearch"           : window.MSG_DT_SEARCH || "Search:",
         "sZeroRecords"      : window.MSG_DT_ZERO_RECORDS || "No matching records found"
     },
-    "sDom": '<"top pager"ilpf>t<"bottom pager"ip>'
+    "sDom": '<"top pager"ilpf>t<"bottom pager"ip>',
+    "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, window.MSG_DT_ALL || "All"]]
 };
 
 

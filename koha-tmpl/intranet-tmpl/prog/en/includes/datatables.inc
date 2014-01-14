@@ -14,6 +14,7 @@
     var MSG_DT_PROCESSING = _("Processing...");
     var MSG_DT_SEARCH = _("Search:");
     var MSG_DT_ZERO_RECORDS = _("No matching records found");
+    var MSG_DT_ALL = _("All");
     var CONFIG_EXCLUDE_ARTICLES_FROM_SORT = _("a an the");
 //]]>
 </script>
