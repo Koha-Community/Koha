@@ -627,9 +627,16 @@ END_SQL
                 print @output_chunks;
         }
         # Generate the content of the csv with headers
-        my $content = join(";", qw(title name surname address1 address2 zipcode city country email itemcount itemsinfo due_date issue_date)) . "\n";
+        my $content;
+        if ( defined $csvfilename ) {
+            my $delimiter = C4::Context->preference('delimiter') // ';';
+            $content = join($delimiter, qw(title name surname address1 address2 zipcode city country email itemcount itemsinfo due_date issue_date)) . "\n";
+        }
+        else {
+            $content = "";
+        }
         $content .= join( "\n", @output_chunks );
-            
+
         my $attachment = {
             filename => defined $csvfilename ? 'attachment.csv' : 'attachment.txt',
             type => 'text/plain',
