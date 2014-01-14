@@ -8,7 +8,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 64;
+use Test::More tests => 66;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -224,5 +224,10 @@ $order3 = GetOrder( $ordernumber3 );
 is($order3->{'quantityreceived'}, 2, 'Order not split up');
 is($order3->{'quantity'}, 2, '2 items on order');
 is($order3->{'budget_id'}, $budgetid2, 'Budget has changed');
+
+my $nonexistent_order = GetOrder();
+is( $nonexistent_order, undef, 'GetOrder returns undef if no ordernumber is given' );
+$nonexistent_order = GetOrder( 424242424242 );
+is( $nonexistent_order, undef, 'GetOrder returns undef if a nonexistent ordernumber is given' );
 
 $dbh->rollback;

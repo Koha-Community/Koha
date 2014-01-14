@@ -1101,6 +1101,8 @@ C<$order> are fields from the biblio, biblioitems, aqorders tables of the Koha d
 
 sub GetOrder {
     my ($ordernumber) = @_;
+    return unless $ordernumber;
+
     my $dbh      = C4::Context->dbh;
     my $query = qq{SELECT
                 aqorders.*,
