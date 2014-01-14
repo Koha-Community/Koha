@@ -1818,6 +1818,12 @@ sub TransferOrder {
     my $newordernumber;
     (undef, $newordernumber) = NewOrder($order);
 
+    $dbh->do( q{
+        UPDATE aqorders
+        SET parent_ordernumber = ordernumber
+        WHERE ordernumber = ?
+    }, {}, $newordernumber );
+
     $query = qq{
         UPDATE aqorders_items
         SET ordernumber = ?
