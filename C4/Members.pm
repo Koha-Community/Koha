@@ -2330,7 +2330,7 @@ sub GetBorrowersWithEmail {
 }
 
 
-=head2 AddEnrolmentFeeIfNeeded
+=head2 AddEnroltmenFeeIfNeeded
 
     AddEnrolmentFeeIfNeeded( $borrower->{categorycode}, $borrower->{borrowernumber} );
 
