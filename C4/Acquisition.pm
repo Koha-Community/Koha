@@ -1747,6 +1747,14 @@ sub SearchOrders {
             LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
             LEFT JOIN biblio ON aqorders.biblionumber=biblio.biblionumber
             LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
+    };
+
+    # If we search on ordernumber, we retrieve the transfered order is a transfer has been done.
+    $query .= q{
+            LEFT JOIN aqorders_transfers ON aqorders_transfers.ordernumber_to = aqorders.ordernumber
+    } if $ordernumber;
+
+    $query .= q{
         WHERE (datecancellationprinted is NULL)
     };
 
@@ -1771,8 +1779,8 @@ sub SearchOrders {
     }
 
     if ( $ordernumber ) {
-        $query .= ' AND (aqorders.ordernumber=?)';
-        push @args, $ordernumber;
+        $query .= ' AND ( aqorders.ordernumber = ? OR aqorders_transfers.ordernumber_from = ? ) ';
+        push @args, ( $ordernumber, $ordernumber );
     }
     if( $search ) {
         $query .= ' AND (biblio.title LIKE ? OR biblio.author LIKE ? OR biblioitems.isbn LIKE ?)';
