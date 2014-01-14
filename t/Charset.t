@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 BEGIN {
     use_ok('C4::Charset');
 }
@@ -18,3 +18,5 @@ ok(!utf8::is_utf8($octets), "verify that IsStringUTF8ish does not magically turn
 
 $octets = "a\xc2" . "c";
 ok(!IsStringUTF8ish($octets), "verify octets are not valid UTF-8");
+
+ok(!SetUTF8Flag(), 'Testing SetUTF8Flag' );
