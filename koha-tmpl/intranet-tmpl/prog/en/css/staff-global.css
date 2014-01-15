@@ -2081,7 +2081,7 @@ div#acqui_order_supplierlist > div.supplier > div.baskets {
     list-style:none;
 }
 
-.ui-tabs-nav .ui-tabs-selected a,
+.ui-tabs-nav .ui-tabs-active a,
 .ui-tabs-nav a:hover,
 .ui-tabs-nav a:focus,
 .ui-tabs-nav a:active,
@@ -2090,9 +2090,10 @@ div#acqui_order_supplierlist > div.supplier > div.baskets {
     outline: 0 none;
 }
 
-.ui-tabs .ui-tabs-nav li.ui-tabs-selected {
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
     background-color : #FFF;
     border : 1px solid #B9D8D9;
+    border-bottom-width: 0;
 }
 
 .ui-widget,
@@ -2122,8 +2123,9 @@ ul.ui-tabs-nav li {
     background: #E6F0F2 none;
     border: 1px solid #B9D8D9;
     margin-right : .4em;
+    top: 1px;
 }
-.ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
+.ui-tabs .ui-tabs-nav li.ui-tabs-active a {
     color : #000;
     font-weight : bold;
 }
@@ -2132,7 +2134,7 @@ ul.ui-tabs-nav li {
     background : #EDF4F5 none;
 }
 
-.ui-tabs .ui-tabs-nav li.ui-tabs-selected.ui-state-hover {
+.ui-tabs .ui-tabs-nav li.ui-tabs-active.ui-state-hover {
     background : #FFF none;
 }
 
@@ -2179,7 +2181,7 @@ ul.ui-tabs-nav li {
 .statictabs ul li {
     background: none repeat scroll 0 0 #E6F0F2;
     border: 1px solid #B9D8D9;
-    border-bottom: 0 none !important;
+    border-bottom: 0 none;
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
     float: left;
@@ -2223,6 +2225,7 @@ ul.ui-tabs-nav li {
     cursor: text;
     background: none repeat scroll 0 0 transparent;
     outline: 0 none;
+    top : 1px;
 }
 
 .statictabs .tabs-container {
@@ -2241,18 +2244,20 @@ ul.ui-tabs-nav li {
     margin-left: 1em;
 }
 #header_search ul.ui-tabs-nav li.ui-state-default {
-    border: 0 !important;
-    background : transparent none; top: 0;
+    border: 0;
+    background : transparent none;
+    top: 0;
 }
 #header_search ul.ui-tabs-nav li.ui-state-default a {
     padding : .3em .6em;
 }
-#header_search ul.ui-tabs-nav li.ui-tabs-selected {
+#header_search ul.ui-tabs-nav li.ui-tabs-active {
+    border : 1px solid #85CA11;
+    border-top-width: 0;
+    top: -2px;
     background-color : #FFFFF1;
-    border: 1px solid #85CA11 !important;
-    border-top: 0 !important; top: -1px;
 }
-#header_search ul.ui-tabs-nav li.ui-tabs-selected a {
+#header_search ul.ui-tabs-nav li.ui-tabs-active a {
     text-decoration: none;
 }
 #header_search .ui-corner-top {
