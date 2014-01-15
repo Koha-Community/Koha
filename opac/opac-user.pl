@@ -144,6 +144,7 @@ $template->param(   BORROWER_INFO     => \@bordat,
                     surname           => $borr->{surname},
                     showname          => $borr->{showname},
                     RENEW_ERROR       => $renew_error,
+                    borrower          => $borr,
                 );
 
 #get issued items ....
