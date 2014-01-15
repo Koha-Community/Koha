@@ -7130,31 +7130,12 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
 $DBversion = "3.13.00.020";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('WhenLostForgiveFine','0',NULL,'If ON, Forgives the fines on an item when it is lost.','YesNo')");
     $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('WhenLostChargeReplacementFee','1',NULL,'If ON, Charge the replacement price when a patron loses an item.','YesNo')");
     print "Upgrade to $DBversion done (Bug 7639: system preferences to forgive fines on lost items)\n";
     SetVersion($DBversion);
-}
-
-
-$DBversion = "3.13.00.XXX";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    $dbh->do("
-        INSERT INTO systempreferences (variable,value,explanation,options,type)
-        VALUES (
-            'BlockExpiredPatronOpacActions',
-            '1',
-            'Set whether an expired patron can perform opac actions such as placing holds or renew books, can be overridden on a per patron-type basis',
-            NULL,
-            'YesNo'
-        )
-    ");
-    $dbh->do("ALTER TABLE `categories` ADD COLUMN `BlockExpiredPatronOpacActions` TINYINT(1) DEFAULT -1 NOT NULL AFTER category_type");
-    print "Upgraded to $DBversion done (Bug 6739 - expired patrons not blocked from opac actions)\n";
-    SetVersion ($DBversion);
 }
 
 $DBversion ="3.13.00.021";
@@ -8386,6 +8367,24 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Added isocode to the currency table)\n";
     SetVersion($DBversion);
 }
+
+$DBversion = "3.15.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("
+        INSERT INTO systempreferences (variable,value,explanation,options,type)
+        VALUES (
+            'BlockExpiredPatronOpacActions',
+            '1',
+            'Set whether an expired patron can perform opac actions such as placing holds or renew books, can be overridden on a per patron-type basis',
+            NULL,
+            'YesNo'
+        )
+    ");
+    $dbh->do("ALTER TABLE `categories` ADD COLUMN `BlockExpiredPatronOpacActions` TINYINT(1) DEFAULT -1 NOT NULL AFTER category_type");
+    print "Upgraded to $DBversion done (Bug 6739 - expired patrons not blocked from opac actions)\n";
+    SetVersion ($DBversion);
+}
+
 
 =head1 FUNCTIONS
 
