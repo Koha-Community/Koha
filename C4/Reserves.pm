@@ -1921,12 +1921,9 @@ sub _koha_notify_reserve {
         substitute => { today => C4::Dates->new()->output() },
     );
 
-    my $print_sent = 0;
-    while ( my ( $mtt, $letter_code ) = each %{ $messagingprefs->{transports} } ) {
-        if ( ($mtt eq 'email' and not $to_address) or ($mtt eq 'sms' and not $borrower->{smsalertnumber}) ) {
-            # email or sms is requested but not exist, do a print.
-            $mtt = 'print';
-        }
+    my $notification_sent = 0; #Keeping track if a Hold_filled message is sent. If no message can be sent, then default to a print message.
+    my $send_notification = sub {
+        my ( $mtt, $letter_code ) = (@_);
         $letter_params{letter_code} = $letter_code;
         $letter_params{message_transport_type} = $mtt;
         my $letter =  C4::Letters::GetPreparedLetter ( %letter_params )
@@ -1938,7 +1935,21 @@ sub _koha_notify_reserve {
             from_address => $admin_email_address,
             message_transport_type => $mtt,
         } );
+    };
+    
+    while ( my ( $mtt, $letter_code ) = each %{ $messagingprefs->{transports} } ) {
+        if ( ($mtt eq 'email' and not $to_address) or ($mtt eq 'sms' and not $borrower->{smsalertnumber}) ) {
+            # email or sms is requested but not exist
+            next;
+        }
+        &$send_notification($mtt, $letter_code);
+        $notification_sent++;
     }
+    #Making sure that a print notification is sent if no other transport types can be utilized.
+    if (! $notification_sent) {
+        &$send_notification('print', 'HOLD');
+    }
+    
 }
 
 =head2 _ShiftPriorityByDateAndPriority
