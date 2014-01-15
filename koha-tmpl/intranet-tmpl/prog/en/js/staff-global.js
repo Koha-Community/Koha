@@ -4,7 +4,7 @@ if ( KOHA === undefined ) var KOHA = {};
 function _(s) { return s; } // dummy function for gettext
 
  $(document).ready(function() {
-    $('#header_search').tabs().bind('tabsshow', function(e, ui) { $('#header_search > div:not(.ui-tabs-hide)').find('input').eq(0).focus(); });
+    $('#header_search').tabs().on( "tabsactivate", function(e, ui) { $(this).find("div:visible").find('input').eq(0).focus(); });
 
     $(".close").click(function(){ window.close(); });
 
