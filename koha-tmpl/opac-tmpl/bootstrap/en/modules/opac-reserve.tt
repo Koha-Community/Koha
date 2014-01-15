@@ -77,6 +77,10 @@
                             <div id="bad_data" class="alert">ERROR: Internal error: incomplete hold request.</div>
                         [% END %]
 
+                        [% IF ( expired_patron ) %]
+                            <div id="expired_patron" class="alert"><strong>Sorry</strong>, you cannot place holds because your library card has expired.</p><p>Please contact your librarian if you wish to renew your card.</div>
+                        [% END %]
+
                     [% ELSE %]
 
                         [% IF ( none_available ) %]

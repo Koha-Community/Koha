@@ -57,7 +57,25 @@
 
                     [% IF ( BORROWER_INF.warnexpired ) %]
                         <div class="alert" id="warnexpired">
-                            <strong>Please note:</strong><span> Your card has expired. Please contact the library for more information.</span>
+                            <strong>Please note: </strong><span>Your account has expired as of [% BORROWER_INF.warnexpired | $KohaDates %]. Please contact the library if you wish to renew your account.</span>
+                        </div>
+                    [% END %]
+
+                    [% IF ( RENEW_ERROR ) %]
+                        <div class="dialog alert">
+                            <strong>Please note:</strong>
+                            <span>
+                                Your account renewal failed because of the following:
+                                [% FOREACH error IN RENEW_ERROR.split('\|') %]
+                                    [% IF error == 'card_expired' %]
+                                        Your account has expired. Please contact the library for more information.
+                                    [% ELSIF error == 'too_many' %]
+                                        You have renewed this item the maximum number of times allowed.
+                                    [% ELSIF error == 'on_reserve' %]
+                                        This item is on hold for another patron.
+                                    [% END %]
+                                [% END %]
+                            </span>
                         </div>
                     [% END %]
 
@@ -115,7 +133,7 @@
                                                     <th>Barcode</th>
                                                 [% END %]
                                                     <th>Call No.</th>
-                                                [% IF ( OpacRenewalAllowed ) %]
+                                                [% IF ( OpacRenewalAllowed && !( borrower.is_expired && borrower.BlockExpiredPatronOpacActions ) ) %]
                                                     <th class="nosort">Renew</th>
                                                 [% END %]
                                                 [% IF ( OPACFinesTab ) %]
@@ -201,7 +219,7 @@
                                                     <span class="tdlabel">Call number:</span>
                                                     [% ISSUE.itemcallnumber %]
                                                 </td>
-                                                [% IF ( OpacRenewalAllowed ) %]
+                                                [% IF ( OpacRenewalAllowed && !( borrower.is_expired && borrower.BlockExpiredPatronOpacActions ) ) %]
                                                     <td class="renew">
                                                     [% IF ( ISSUE.status ) %]
                                                         [% IF ( canrenew ) %]
@@ -235,12 +253,12 @@
                                         [% END # /FOREACH ISSUES %]
                                     </tbody>
                                 </table>
-                                [% IF ( canrenew && !userdebarred && OpacRenewalAllowed ) %]
+                                [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( borrower.is_expired && borrower.BlockExpiredPatronOpacActions ) ) %]
                                     <input type="submit" class="btn" value="Renew selected" />
                                 [% END %]
                                 </form>
 
-                                [% IF ( canrenew && !userdebarred && OpacRenewalAllowed ) %]
+                                [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( borrower.is_expired && borrower.BlockExpiredPatronOpacActions ) ) %]
                                 <form id="renewall" action="/cgi-bin/koha/opac-renew.pl" method="post">
                                     <input type="hidden" name="from" value="opac_user" />
                                     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
@@ -657,7 +675,7 @@
         var MSG_CONFIRM_SUSPEND_HOLDS = _("Are you sure you want to suspend all holds?");
         var MSG_CONFIRM_RESUME_HOLDS  = _("Are you sure you want to resume all suspended holds?");
 
-        $(function() {
+        $(document).ready(function(){
             $('#opac-user-views').tabs();
             $(".js-show").show();
             $(".js-hide").hide();
@@ -698,8 +716,11 @@
                     e.preventDefault();
                     $("#renewall").submit();
                 });
-                $("#checkoutst caption").append("<div id=\"renewcontrols\"><a id=\"renewselected_link\" href=\"#\">"+_("Renew selected")+"</a> <a id=\"renewall_link\" href=\"#\">"+_("Renew all")+"</a></div>");
+                [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( borrower.is_expired && borrower.BlockExpiredPatronOpacActions ) ) %]
+                    $("#checkoutst caption").append("<div id=\"renewcontrols\"><a id=\"renewselected_link\" href=\"#\">"+_("Renew selected")+"</a> <a id=\"renewall_link\" href=\"#\">"+_("Renew all")+"</a></div>");
+                [% END %]
             [% END %]
+
             $( ".suspend-until" ).datepicker({ minDate: 1 }); // Require that "until date" be in the future
         });
         //]]>
