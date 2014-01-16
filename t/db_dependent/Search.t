@@ -12,7 +12,7 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 216;
+use Test::More tests => 224;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;
@@ -737,6 +737,16 @@ sub run_marc21_search_tests {
     );
     is($count, 1, 'MARC21 authorities: one hit on mainentry starts with "shakespeare"');
     ($auths, $count) = SearchAuthorities(
+        ['mainentry'], ['and'], [''], ['starts'],
+        ['shakespeare'], 0, 10, '', 'HeadingAsc', 1
+    );
+    is($count, 1, 'MARC21 authorities: one hit on mainentry starts with "shakespeare" sorted by heading ascending');
+    ($auths, $count) = SearchAuthorities(
+        ['mainentry'], ['and'], [''], ['starts'],
+        ['shakespeare'], 0, 10, '', 'HeadingDsc', 1
+    );
+    is($count, 1, 'MARC21 authorities: one hit on mainentry starts with "shakespeare" sorted by heading descending');
+    ($auths, $count) = SearchAuthorities(
         ['match'], ['and'], [''], ['contains'],
         ['沙士北亞威廉姆'], 0, 10, '', '', 1
     );
@@ -749,6 +759,16 @@ sub run_marc21_search_tests {
         ['shakespeare'], 0, 10, '', '', 1
     );
     is($count, 1, 'MARC21 authorities: one hit on mainentry starts with "shakespeare" (QP)');
+    ($auths, $count) = SearchAuthorities(
+        ['mainentry'], ['and'], [''], ['starts'],
+        ['shakespeare'], 0, 10, '', 'HeadingAsc', 1
+    );
+    is($count, 1, 'MARC21 authorities: one hit on mainentry starts with "shakespeare" sorted by heading ascending (QP)');
+    ($auths, $count) = SearchAuthorities(
+        ['mainentry'], ['and'], [''], ['starts'],
+        ['shakespeare'], 0, 10, '', 'HeadingDsc', 1
+    );
+    is($count, 1, 'MARC21 authorities: one hit on mainentry starts with "shakespeare" sorted by heading descending (QP)');
     ($auths, $count) = SearchAuthorities(
         ['match'], ['and'], [''], ['contains'],
         ['沙士北亞威廉姆'], 0, 10, '', '', 1

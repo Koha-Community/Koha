@@ -221,7 +221,7 @@ sub SearchAuthorities {
             $qpquery = $1;
         }
 
-        $qpquery .= " #$sortby";
+        $qpquery .= " #$sortby" unless $sortby eq '';
 
         $QParser->parse( $qpquery );
         $query = $QParser->target_syntax('authorityserver');
