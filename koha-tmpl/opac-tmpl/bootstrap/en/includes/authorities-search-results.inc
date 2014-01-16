@@ -1,11 +1,11 @@
 [% BLOCK showreference %]
-<!--
+[%#
     Parameters:
     heading: the heading itself
     linkType: currently 'seefrom' or 'seealso', controls the label for the entry
     type:
     authid: if it is a linked authority, its authid
--->
+%]
     [% SET authidurl = '/cgi-bin/koha/opac-authoritiesdetail.pl?authid=' %]
     [% SET searchurl = '/cgi-bin/koha/opac-authorities-home.pl?op=do_search&type=opac&operator=contains&marclist=mainentry&and_or=and&orderby=HeadingAsc&value=' %]
     [% IF marcflavour == 'UNIMARC' %]
