@@ -2276,11 +2276,18 @@ $template->param ( MYLOOP => C4::Search::z3950_search_args($searchscalar) )
 
 sub z3950_search_args {
     my $bibrec = shift;
-    my $isbn = Business::ISBN->new($bibrec);
+
+    my $isbn_string = ref( $bibrec ) ? $bibrec->{title} : $bibrec;
+    my $isbn = Business::ISBN->new( $isbn_string );
 
     if (defined $isbn && $isbn->is_valid)
     {
-        $bibrec = { isbn => $bibrec } if !ref $bibrec;
+        if ( ref($bibrec) ) {
+            $bibrec->{isbn} = $isbn_string;
+            $bibrec->{title} = undef;
+        } else {
+            $bibrec = { isbn => $isbn_string };
+        }
     }
     else {
         $bibrec = { title => $bibrec } if !ref $bibrec;
