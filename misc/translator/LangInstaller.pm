@@ -349,7 +349,7 @@ sub install_tmpl {
             "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r $excludes" .
             (
                 @$files
-                    ? '-f ' . join ' -f ', @$files
+                    ? ' -f ' . join ' -f ', @$files
                     : ''
             )
     }
@@ -378,7 +378,7 @@ sub update_tmpl {
             "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r $excludes" .
             (
                 @$files
-                    ? '-f ' . join ' -f ', @$files
+                    ? ' -f ' . join ' -f ', @$files
                     : ''
             )
     }
@@ -417,7 +417,7 @@ sub create_tmpl {
             "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r $excludes" .
             (
                 @$files
-                    ? '-f ' . join ' -f ', @$files
+                    ? ' -f ' . join ' -f ', @$files
                     : ''
             )
     }
