@@ -7919,7 +7919,14 @@ if(CheckVersion($DBversion)) {
         SET explanation = 'Upon receiving items, update their subfields if they were created when placing an order (e.g. o=5|a="foo bar")'
         WHERE variable = "AcqItemSetSubfieldsWhenReceived"
     });
-    print "Upgrade to $DBversion done (Bug 11237: Update explanation for AcqItemSetSubfieldsWhenReceived syspref)\n";
+
+    $dbh->do(q{
+        UPDATE systempreferences
+        SET value = ''
+        WHERE variable = "AcqItemSetSubfieldsWhenReceived"
+            AND value = "0"
+    });
+    print "Upgrade to $DBversion done (Bug 11237: Update explanation and default value for AcqItemSetSubfieldsWhenReceived syspref)\n";
     SetVersion($DBversion);
 }
 
