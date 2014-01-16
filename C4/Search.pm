@@ -36,6 +36,7 @@ use URI::Escape;
 use Business::ISBN;
 use MARC::Record;
 use MARC::Field;
+use Encode qw/decode_utf8/;
 use utf8;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
@@ -503,8 +504,8 @@ sub getRecords {
                       $size > $facets_maxrecs ? $facets_maxrecs : $size;
                     for my $facet (@$facets) {
                         for ( my $j = 0 ; $j < $jmax ; $j++ ) {
-                            my $render_record =
-                              $results[ $i - 1 ]->record($j)->render();
+                            my $render_record = decode_utf8(
+                              $results[ $i - 1 ]->record($j)->render());
                             my @used_datas = ();
                             foreach my $tag ( @{ $facet->{tags} } ) {
 
