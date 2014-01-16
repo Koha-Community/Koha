@@ -83,7 +83,7 @@
                 </div>
             [% END %]
         [% ELSE %]
-            [% IF ( summary.seefrom ) %]
+            [% IF ( summary.seefrom.size >= 1 ) %]
                     <span class="seefrom">used for/see from:</span>
                 [% FOREACH seefro IN summary.seefrom %]
                     <div class="seefrom authref">
@@ -95,7 +95,7 @@
                     </div>
                 [% END %]
             [% END %]
-            [% IF ( summary.seealso ) %]
+            [% IF ( summary.seealso.size >= 1 ) %]
                     <span class="seealso">see also:</span>
                 [% FOREACH seeals IN summary.seealso %]
                     <div class="seealso authref">
