@@ -498,7 +498,7 @@ sub GetBudgetHierarchy {
     my @bind_params;
     my $dbh   = C4::Context->dbh;
     my $query = qq|
-                    SELECT aqbudgets.*, aqbudgetperiods.budget_period_active
+                    SELECT aqbudgets.*, aqbudgetperiods.budget_period_active, aqbudgetperiods.budget_period_description
                     FROM aqbudgets 
                     JOIN aqbudgetperiods USING (budget_period_id)|;
                         

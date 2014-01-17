@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Funds[% IF ( add_form ) %] &rsaquo; [% IF ( budget_id ) %]Modify fund[% IF ( budget_name ) %] '[% budget_name %]'[% END %][% ELSE %]Add fund [% END %][% END %]</title>
+<title>Koha &rsaquo; Administration &rsaquo; Funds[% IF op == 'add_form' %] &rsaquo; [% IF ( budget_id ) %]Modify fund[% IF ( budget_name ) %] '[% budget_name %]'[% END %][% ELSE %]Add fund [% END %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">
 //<![CDATA[
@@ -10,8 +10,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
 </script>
 
 <script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
-
-[% IF ( add_form ) %]
+[% IF op == 'add_form' %]
 <script type="text/javascript">
 //<![CDATA[
 
@@ -143,58 +142,65 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
     }
 //]]>
 </script>
-[% ELSE %]
-    [% IF ( notree ) %]
-        <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
-        [% INCLUDE 'datatables.inc' %]
-    [% ELSE %]
-        <link href="[% themelang %]/lib/jquery/plugins/treetable/stylesheets/jquery.treeTable.css" rel="stylesheet" type="text/css" />
-        <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/treetable/jquery.treeTable.min.js"></script>
-    [% END %]
-
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.qtip.js"></script>
+[% ELSIF op == 'list' %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+    [% INCLUDE 'datatables.inc' %]
+    <link href="[% interface %]/lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/treetable/jquery.treetable.js"></script>
 
 <script type="text/javascript">
 //<![CDATA[
     //
     $(document).ready(function() {
-        var tooltipcontent = $(".tooltipcontent");
-        tooltipcontent.hide();
+        var oTable = $("#budgeth").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "fnDrawCallback": function ( oSettings ) {
+                if ( oSettings.aiDisplay.length == 0 )
+                {
+                    return;
+                }
 
-        $(".tooltiped td").each(function (){
-            contentelem = $(this).parent().children().filter(".tooltipcontent");
-            if(contentelem.html() != ""){
-            $(this).qtip({
-                content: contentelem.html(),
-                show: "mouseover",
-                hide: "mouseout",
-                style: {
-                    name: "light",
-                    tip: "bottomLeft",
-                    border: {
-                        radius: 5,
-                        color: "#356CA1"
-                    }
-                },
-                position: {
-                    corner: {
-                        target: "topRight",
-                        tooltip: "bottomRight"
+                var nTrs = $('#budgeth tbody tr');
+                var iColspan = nTrs[0].getElementsByTagName('td').length;
+                var sLastGroup = "";
+                for ( var i=0 ; i<nTrs.length ; i++ )
+                {
+                    var iDisplayIndex = oSettings._iDisplayStart + i;
+                    var sGroup = oSettings.aoData[ oSettings.aiDisplay[iDisplayIndex] ]._aData[0];
+                    if ( sGroup != sLastGroup )
+                    {
+                        var nGroup = document.createElement( 'tr' );
+                        var nCell = document.createElement( 'td' );
+                        nCell.colSpan = iColspan;
+                        nCell.className = "group";
+                        nCell.innerHTML = sGroup;
+                        nGroup.appendChild( nCell );
+                        nTrs[i].parentNode.insertBefore( nGroup, nTrs[i] );
+                        sLastGroup = sGroup;
                     }
                 }
-            });
-            }
+            },
+            "aoColumnDefs": [
+                { "bVisible": false, "aTargets": [ 0 ] }
+            ],
+            "aaSortingFixed": [[ 0, 'asc' ]],
+            "aaSorting": [[ 1, 'asc' ]],
+            'bSort': false,
+            'bPaginate': false,
+            "bAutoWidth": false
+        }));
+
+        $(oTable).treetable({
+            expandable: true
         });
-        [% IF ( notree ) %]
-            $("#budgeth").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                ],
-                "sPaginationType": "four_button"
-            }));
-        [% ELSE %]
-        $("#budgeth").treeTable();
-        [% END %]
+        $(oTable).treetable('expandAll');
+        $("#expand_all").click(function(e){
+            e.preventDefault();
+            $(oTable).treetable('expandAll');
+        });
+        $("#collapse_all").click(function(e){
+            e.preventDefault();
+            $(oTable).treetable('collapseAll');
+        });
 
         $("#filterbutton").click(function() {
             $("#fundfilters").slideToggle(0);
@@ -210,9 +216,14 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
 [% INCLUDE 'budgets-admin-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo; [% IF ( else ) %]Funds for '[% budget_period_description %]'[% END %][% IF ( add_form ) %]
-    <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">Funds</a> &rsaquo; [% IF ( budget_id ) %]Modify fund[% IF ( budget_name ) %] '[% budget_name %]'[% END %][% ELSE %]Add fund[% END %][% END %]  [% IF ( delete_confirm ) %]
-    <a href="/cgi-bin/koha/admin/aqbudgets.pl">Funds</a> &rsaquo; Delete fund?[% END %]</div>
+    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo; [% IF op == 'list' %][% IF budget_period_id %]Funds for '[% budget_period_description %]'[% ELSE %]All funds[% END %][% END %]
+    [% IF op == 'add_form' %]
+      <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">Funds</a> &rsaquo; [% IF ( budget_id ) %]Modify fund[% IF ( budget_name ) %] '[% budget_name %]'[% END %][% ELSE %]Add fund[% END %]
+    [% END %]
+    [% IF op == 'delete_confirm' %]
+      <a href="/cgi-bin/koha/admin/aqbudgets.pl">Funds</a> &rsaquo; Delete fund?
+    [% END %]
+</div>
 
 <div id="doc3" class="yui-t2">
 <div id="bd">
@@ -220,7 +231,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
 <div class="yui-b" id="content">
 
 
-[% UNLESS ( delete_confirm ) %][% INCLUDE 'budgets-admin-toolbar.inc' %][% END %]
+[% UNLESS op == 'delete_confirm' %][% INCLUDE 'budgets-admin-toolbar.inc' %][% END %]
 
 [% IF (error_not_authorised_to_modify) %]
     <div class="error">
@@ -228,17 +239,28 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
     </div>
 [% END %]
 
-[% IF ( else ) %]
+[% IF op == 'list' %]
 
-<h1>Funds for '[% budget_period_description %]'</h1>
+<h1>
+  [% IF budget_period_id %]
+    Funds for '[% budget_period_description %]'
+  [% ELSE %]
+    All funds
+  [% END %]
+</h1>
 
 [% INCLUDE 'budgets-active-currency.inc' %]
 
-[% IF ( budget ) %]
+[% IF budgets %]
 
 <table id="budgeth">
+    <caption>
+        <span class="actions"><a href="#" id="expand_all">Expand all</a>
+        | <a href="#" id="collapse_all">Collapse all</a></span>
+    </caption>
     <thead>
         <tr>
+            <th>Budget period description</th>
             <th>Fund code</th>
             <th>Fund name</th>
             <th>Base-level allocated</th>
@@ -248,12 +270,12 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
             <th>Total spent</th>
             <th>Base-level available</th>
             <th>Total available</th>
-            <th class="tooltipcontent">&nbsp;</th>
             <th>Actions</th>
         </tr>
     </thead>
-<tfoot>
+    <tfoot>
     <tr>
+    <th></th>
     <th colspan="2" style="text-align: left;" nowrap="nowrap">Period allocated [% IF ( budget_period_total ) %][% budget_period_total %][% END %]  </th>
     <th nowrap="nowrap" class="data"> [% period_alloc_total %]</th>
     <th></th>
@@ -261,54 +283,49 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
     <th></th>
     <th class="data">[% spent_total %]</th>
     <th></th>
-    <th class="tooltipcontent"></th>
     <th class="data">[% available_total %]</th>
     <th></th>
     </tr>
     </tfoot>
     <tbody>
-        [% FOREACH budge IN budget %]
-    [% IF ( budge.toggle ) %]
-    <tr id="node-[% budge.budget_id %]" class="highlight[% IF ( budge.budget_parent_id ) %] child-of-node-[% budge.budget_parent_id %][% END %] tooltiped">
-    [% ELSE %]
-    <tr id="node-[% budge.budget_id %]" class="tooltiped [% IF ( budge.budget_parent_id ) %] child-of-node-[% budge.budget_parent_id %][% END %]">
-    [% END %]
-
-    <td>[% budge.budget_code_indent %]</td>
-    <td>[% budge.budget_name %]</td>
+    [% FOREACH budget IN budgets %]
+    <tr data-tt-id="[% budget.budget_id %]" [% IF ( budget.budget_parent_id ) %]data-tt-parent-id="[% budget.budget_parent_id %]"[% END %]>
+    <td>Budget [% budget.budget_period_description %]</td>
+    <td>[% budget.budget_code_indent %]</td>
+    <td>[% budget.budget_name %]</td>
     <td class="data">
-      [% IF budge.budget_parent_id %]
-        <span class="child_fund_amount">[% budge.budget_amount %]</span>
+      [% IF budget.budget_parent_id %]
+        <span class="child_fund_amount">[% budget.budget_amount %]</span>
       [% ELSE %]
-        [% budge.budget_amount %]
+        [% budget.budget_amount %]
       [% END %]
     </td>
     <td class="data">
-      [% IF budge.budget_parent_id %]
-        <span class="child_fund_amount">[% budge.budget_ordered %]</span>
+      [% IF budget.budget_parent_id %]
+        <span class="child_fund_amount">[% budget.budget_ordered %]</span>
       [% ELSE %]
-        [% budge.budget_ordered %]
+        [% budget.budget_ordered %]
       [% END %]
     </td>
     <td class="data">
-      [% IF budge.budget_parent_id %]
-        <span class="child_fund_amount">[% budge.total_ordered %]</span>
+      [% IF budget.budget_parent_id %]
+        <span class="child_fund_amount">[% budget.total_ordered %]</span>
       [% ELSE %]
-        [% budge.total_ordered %]
+        [% budget.total_ordered %]
       [% END %]
     </td>
     <td class="data">
-      [% IF budge.budget_parent_id %]
-        <span class="child_fund_amount">[% budge.budget_spent %]</span>
+      [% IF budget.budget_parent_id %]
+        <span class="child_fund_amount">[% budget.budget_spent %]</span>
       [% ELSE %]
-        [% budge.budget_spent %]
+        [% budget.budget_spent %]
       [% END %]
     </td>
     <td class="data">
-      [% IF budge.budget_parent_id %]
-        <span class="child_fund_amount">[% budge.total_spent %]</span>
+      [% IF budget.budget_parent_id %]
+        <span class="child_fund_amount">[% budget.total_spent %]</span>
       [% ELSE %]
-        [% budge.total_spent %]
+        [% budget.total_spent %]
       [% END %]
     </td>
 
@@ -335,32 +352,18 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
         </span>
     [% END %]
     <td class="data">
-        [% INCLUDE colorcellvalue value=budge.budget_remaining text=budge.budget_remaining_display parent=budge.budget_parent_id %]
+        [% INCLUDE colorcellvalue value=budget.budget_remaining text=budget.budget_remaining_display parent=budget.budget_parent_id %]
     </td>
     <td class="data">
-        [% INCLUDE colorcellvalue value=budge.total_remaining text=budge.total_remaining_display parent=budge.budget_parent_id %]
+        [% INCLUDE colorcellvalue value=budget.total_remaining text=budget.total_remaining_display parent=budget.budget_parent_id %]
     </td>
-
-    <td class="tooltipcontent">[% IF ( budge.budget_owner_id ) %]<strong>Owner: </strong><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% budge.budget_owner_id %]">[% budge.budget_owner_name %]</a>[% END %]
-        [% IF ( budge.budget_branchcode ) %]<br /><strong>Library: </strong>[% budge.budget_branchcode %][% END %]
-        [% IF ( budge.budget_notes ) %]<br /><strong>Notes: </strong>[% budge.budget_notes %][% END %]
-        [% IF ( budge.budget_hierarchy ) %]
-            <ul class="budget_hierarchy">[% FOREACH budget_hierarch IN budge.budget_hierarchy %]
-                [% IF ( budget_hierarch.element_id ) %]
-                    <li><a href="?op=add_form&amp;budget_id=[% budget_hierarch.element_id %]&amp;budget_period_id=[% budget_hierarch.budget_period_id %]">[% budget_hierarch.element_name %]</a></li>
-                [% ELSE %]
-                    <li><strong>[% budget_hierarch.element_name %] : </strong></li>
-                [% END %]
-                [% END %]
-            </ul>
-        [% END %]</td>
-    [% IF ( budge.budget_lock ) %]
+    [% IF ( budget.budget_lock ) %]
         <td> <span style="color: gray;"> Edit Delete </span> </td>
     [% ELSE %]
         <td>
-            <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budge.budget_id %]&amp;budget_period_id=[% budge.budget_period_id %]" >Edit</a>
-            <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=delete_confirm&amp;budget_id=[% budge.budget_id %]&amp;budget_period_id=[% budge.budget_period_id %]">Delete</a>
-            <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_parent_id=[% budge.budget_id %]&amp;budget_period_id=[% budge.budget_period_id %]">Add child fund</a>
+            <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]" >Edit</a>
+            <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=delete_confirm&amp;budget_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]">Delete</a>
+            <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_parent_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]">Add child fund</a>
         </td>
     [% END %]
     </tr>
@@ -372,12 +375,11 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
     No fund found
 [% END %]
 
-[% IF ( pagination_bar ) %]<div class="pages">[% pagination_bar %]</div>[% END %]
-[% END %] <!-- else -->
+[% END %] <!-- list -->
 
 <!-- ********************************************************************************************** -->
 <!-- create add/mod entry form -->
-[% IF ( add_form && !error_not_authorised_to_modify ) %]
+[% IF op == 'add_form' && !error_not_authorised_to_modify %]
 <form action="/cgi-bin/koha/admin/aqbudgets.pl" name="Aform" method="post">
     <fieldset class="rows">
     <legend>[% IF ( budget_id ) %]Modify[% ELSE %]Add[% END %] Fund
@@ -559,7 +561,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
 
 [% END %] <!-- add_form -->
 
-[% IF ( delete_confirm ) %]
+[% IF op == 'delete_confirm' %]
 <div class="dialog alert"> <h3>Delete fund [% budget_name %]?</h3>
 <table>
     <tr>
@@ -568,14 +570,14 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
     </tr>
 </table>
 
-<form action="[% action %]" method="post">
+<form action="/cgi-bin/koha/admin/aqbudgets.pl" method="post">
     <input type="hidden" name="op" value="delete_confirmed" />
     <input type="hidden" name="budget_id" value="[% budget_id %]" />
     <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
     <input type="submit" value="Delete" class="approve" />
 </form>
 
-<form action="[% action %]" method="get">
+<form action="/cgi-bin/koha/admin/aqbudgets.pl" method="get">
     <input type="submit" class="deny" value="Cancel" />
 </form>
 </div>
@@ -584,7 +586,8 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
 </div>
 </div>
 <div class="yui-b">
-[% IF ( else ) %]<form action="/cgi-bin/koha/admin/aqbudgets.pl" method="get">
+[% IF op == 'list' %]
+  <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="get">
     <a href="#" id="filterbutton">Filters</a>
     <fieldset class="brief" id="fundfilters">
     <h4>Fund filters</h4>
@@ -609,10 +612,25 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
                 <input type="checkbox" id="show_mine"  name="show_mine" value="1" />
         [% END %]
         </li>
+
+        [% IF periods %]
+          <li>
+            <label for="periods">Budget:</label>
+            <select id="periods" name="budget_period_id">
+              <option value="">All budgets</option>
+              [% FOR period IN periods %]
+                [% IF budget_period_id && period.budget_period_id == budget_period_id %]
+                  <option value="[% period.budget_period_id %]" selected="selected">[% period.budget_period_description %]</option>
+                [% ELSE %]
+                  <option value="[% period.budget_period_id %]">[% period.budget_period_description %]</option>
+                [% END %]
+              [% END %]
+            </select>
+          </li>
+        [% END %]
         </ol>
 
-        <input type="hidden" name="show" value="1" />
-        <input type="hidden"  name="budget_period_id" value="[% budget_period_id %]" />
+        <input type="hidden" name="op" value="list" />
         <input type="submit" class="submit" name="filter" value="Go" />
     </fieldset>
 </form>[% END %]

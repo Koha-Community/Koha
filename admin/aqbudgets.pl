@@ -36,13 +36,12 @@ use C4::Context;
 use C4::Output;
 use C4::Koha;
 use C4::Debug;
-#use POSIX qw(locale_h);
 
 my $input = new CGI;
 my $dbh     = C4::Context->dbh;
 
 my ($template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(
-    {   template_name   => "admin/aqbudgets.tmpl",
+    {   template_name   => "admin/aqbudgets.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
@@ -56,40 +55,35 @@ $template->param( symbol => $cur->{symbol},
                   currency => $cur->{currency}
                );
 
-my $op = $input->param('op') // '';
+my $op = $input->param('op') || 'list';
 
-# see if the user want to see all budgets or only owned ones
-my $show_mine    = 1; #SHOW BY DEFAULT
-my $show         = $input->param('show') // 0; # SET TO 1, BY A FORM SUMBIT
-$show_mine       = $input->param('show_mine') if $show == 1;
+# see if the user want to see all budgets or only owned ones by default
+my $show_mine = $input->param('show_mine') // 1;
 
 # IF USER DOESNT HAVE PERM FOR AN 'ADD', THEN REDIRECT TO THE DEFAULT VIEW...
 if (not defined $template->{VARS}->{'CAN_user_acquisition_budget_add_del'}
     and $op eq 'add_form')
 {
-    $op = '';
+    $op = 'list';
 }
 my $num=FormatNumber;
 
-my $script_name               = "/cgi-bin/koha/admin/aqbudgets.pl";
 my $budget_hash               = $input->Vars;
 my $budget_id                 = $$budget_hash{budget_id};
+my $budget_period_id          = $input->param('budget_period_id');
 my $budget_permission         = $input->param('budget_permission');
 my $filter_budgetbranch       = $input->param('filter_budgetbranch') // '';
 my $filter_budgetname         = $input->param('filter_budgetname');
 #filtering non budget keys
 delete $$budget_hash{$_} foreach grep {/filter|^op$|show/} keys %$budget_hash;
 
-$template->param(
-    notree => ($filter_budgetbranch or $show_mine)
-);
 # ' ------- get periods stuff ------------------'
 # IF PERIODID IS DEFINED,  GET THE PERIOD - ELSE JUST GET THE ACTIVE PERIOD BY DEFAULT
-my $period = GetBudgetPeriod($$budget_hash{budget_period_id});
+my $period;
+if ( $budget_period_id ) {
+    $period = GetBudgetPeriod( $budget_period_id );
+}
 
-$template->param(
-	%$period
-);
 # ------- get periods stuff ------------------
 
 # USED FOR PERMISSION COMPARISON LATER
@@ -98,12 +92,9 @@ my $user                = GetMemberDetails($borrower_id);
 my $user_branchcode     = $user->{'branchcode'};
 
 $template->param(
-    action      => $script_name,
-    script_name => $script_name,
     show_mine   => $show_mine,
-    $op || else => 1,
+    op  => $op,
 );
-
 
 # retrieve branches
 my ( $budget, );
@@ -119,7 +110,8 @@ foreach my $thisbranch (keys %$branches) {
     push @branchloop2, \%row;
 }
 
-$template->param(auth_cats_loop => GetBudgetAuthCats($$period{budget_period_id}) );
+$template->param(auth_cats_loop => GetBudgetAuthCats( $budget_period_id ))
+    if $budget_period_id;
 
 # Used to create form to add or  modify a record
 if ($op eq 'add_form') {
@@ -216,7 +208,6 @@ if ($op eq 'add_form') {
 
     # if no buget_id is passed then its an add
     $template->param(
-        add_validate                  => 1,
         budget_parent_id    		  => $budget_parent->{'budget_id'},
         budget_parent_name    		  => $budget_parent->{'budget_name'},
         branchloop_select         => \@branchloop_select,
@@ -238,33 +229,36 @@ if ($op eq 'add_form') {
     );
                                                     # END $OP eq DELETE_CONFIRM
 # called by delete_confirm, used to effectively confirm deletion of data in DB
-}  else{
-    if ( $op eq 'delete_confirmed' ) {
-        my $rc = DelBudget($budget_id);
-    }elsif( $op eq 'add_validate' ) {
-        my @budgetusersid;
-        if (defined $$budget_hash{'budget_users_ids'}){
-            @budgetusersid = split(':', $budget_hash->{'budget_users_ids'});
-        }
+} elsif ( $op eq 'delete_confirmed' ) {
+    my $rc = DelBudget($budget_id);
+    $op = 'list';
+} elsif( $op eq 'add_validate' ) {
+    my @budgetusersid;
+    if (defined $$budget_hash{'budget_users_ids'}){
+        @budgetusersid = split(':', $budget_hash->{'budget_users_ids'});
+    }
 
-        if ( defined $$budget_hash{budget_id} ) {
-            if (CanUserModifyBudget($borrowernumber, $budget_hash->{budget_id},
-                $staffflags)
-            ) {
-                ModBudget( $budget_hash );
-                ModBudgetUsers($budget_hash->{budget_id}, @budgetusersid);
-            }
-            else {
-                $template->param(error_not_authorised_to_modify => 1);
-            }
-        } else {
-            AddBudget( $budget_hash );
+    if ( defined $$budget_hash{budget_id} ) {
+        if (CanUserModifyBudget($borrowernumber, $budget_hash->{budget_id},
+            $staffflags)
+        ) {
+            ModBudget( $budget_hash );
             ModBudgetUsers($budget_hash->{budget_id}, @budgetusersid);
         }
+        else {
+            $template->param(error_not_authorised_to_modify => 1);
+        }
+    } else {
+        AddBudget( $budget_hash );
+        ModBudgetUsers($budget_hash->{budget_id}, @budgetusersid);
     }
+    $op = 'list';
+}
+
+if ( $op eq 'list' ) {
     my $branches = GetBranches();
     $template->param(
-        budget_id                 => $budget_id,
+        budget_id => $budget_id,
         %$period,
     );
 
@@ -273,8 +267,6 @@ if ($op eq 'add_form') {
             C4::Context->userenv->{branchcode}, $show_mine ? $borrower_id : '')
     };
 
-    my $toggle = 0;
-    my @loop;
     my $period_total = 0;
     my ($period_alloc_total, $spent_total, $ordered_total, $available_total) = (0,0,0,0);
 
@@ -344,11 +336,8 @@ if ($op eq 'add_form') {
         push  @budget_hierarchy, { element_name => $period->{"budget_period_description"} };
         @budget_hierarchy = reverse(@budget_hierarchy);
 
-        push( @loop, {  %{$budget},
-                        branchname  => $branches->{ $budget->{branchcode} }->{branchname},
-                        budget_hierarchy => \@budget_hierarchy,
-                    }
-        );
+        $budget->{branchname} = $branches->{ $budget->{branchcode} }->{branchname};
+        $budget->{budget_hierarchy} = \@budget_hierarchy;
     }
 
     my $budget_period_total = $period->{budget_period_total};
@@ -357,9 +346,12 @@ if ($op eq 'add_form') {
         $_ = $num->format_price($_);
     }
 
+    my $periods = GetBudgetPeriods();
+
     $template->param(
-        else                   => 1,
-        budget                 => \@loop,
+        op                     => 'list',
+        budgets                => \@budgets,
+        periods                => $periods,
         budget_period_total    => $budget_period_total,
         period_alloc_total     => $period_alloc_total,
         spent_total            => $spent_total,
@@ -368,6 +360,6 @@ if ($op eq 'add_form') {
         branchloop             => \@branchloop2,
     );
 
-} #---- END $OP eq DEFAULT
+} #---- END list
 
 output_html_with_http_headers $input, $cookie, $template->output;
