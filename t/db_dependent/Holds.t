@@ -6,7 +6,7 @@ use t::lib::Mocks;
 use C4::Context;
 use C4::Branch;
 
-use Test::More tests => 25;
+use Test::More tests => 29;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
@@ -277,6 +277,14 @@ is( $reserve3->{priority}, 2, "New reserve for patron 0, the reserve has a prior
 ModReserve({ reserve_id => $reserveid2, rank => 'del' });
 $reserve3 = GetReserve( $reserveid3 );
 is( $reserve3->{priority}, 1, "After ModReserve, the 3rd reserve becomes the first on the waiting list" );
+
+ModItem({ damaged => 1 }, $item_bibnum, $itemnumber);
+C4::Context->set_preference( 'AllowHoldsOnDamagedItems', 1 );
+ok( CanItemBeReserved( $borrowernumbers[0], $itemnumber), "Patron can reserve damaged item with AllowHoldsOnDamagedItems enabled" );
+ok( defined( ( CheckReserves($itemnumber) )[1] ), "Hold can be trapped for damaged item with AllowHoldsOnDamagedItems enabled" );
+C4::Context->set_preference( 'AllowHoldsOnDamagedItems', 0 );
+ok( !CanItemBeReserved( $borrowernumbers[0], $itemnumber), "Patron cannot reserve damaged item with AllowHoldsOnDamagedItems disabled" );
+ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for damaged item with AllowHoldsOnDamagedItems disabled" );
 
 
 # Helper method to set up a Biblio.
