@@ -404,6 +404,7 @@
             <table id="orders">
                 <thead>
                     <tr>
+                        <th>No.</th>
                         <th>Order</th>
                         <th class="gste">RRP tax exc.</th>
                         <th class="gste">ecost tax exc.</th>
@@ -426,6 +427,7 @@
                 <tfoot>
                 [% FOREACH foot_loo IN book_foot_loop %]
                     <tr>
+                        <th></th>
                         <th>Total (GST [% foot_loo.gstgsti %])</th>
                         <th class="gste">&nbsp;</th>
                         <th class="gste">&nbsp;</th>
@@ -446,6 +448,7 @@
                     </tr>
                 [% END %]
                 <tr>
+                    <th></th>
                     <th>Total ([% currency %])</th>
                     <th class="gste">&nbsp;</th>
                     <th class="gste">&nbsp;</th>
@@ -469,7 +472,11 @@
                 [% FOREACH books_loo IN books_loop %]
                     [% IF ( books_loo.order_received ) %]<tr class="disabled">[% ELSE %][% IF ( books_loo.toggle ) %]<tr class="highlight">[% ELSE %]<tr>[% END %][% END %]
                         <td>
-                            <p>[% IF ( books_loo.order_received ) %] (rcvd)[% END %]
+                            [% books_loo.ordernumber %]
+                        </td>
+                        <td>
+                            <p>
+                                [% IF ( books_loo.order_received ) %] (rcvd)[% END %]
                                 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% books_loo.biblionumber %]">[% books_loo.title |html %]</a> by [% books_loo.author %]
                                 <br />
                                 [% IF ( books_loo.isbn ) %] - [% books_loo.isbn %][% END %]
@@ -562,6 +569,7 @@
             <table id="cancelledorderst">
               <thead>
                 <tr>
+                  <th>No.</th>
                   <th>Order</th>
                   <th class="gste">RRP tax exc.</th>
                   <th class="gste">ecost tax exc.</th>
@@ -578,6 +586,9 @@
               <tbody>
                 [% FOREACH order IN cancelledorders_loop %]
                   <tr style="color:grey">
+                    <td>
+                        [% order.ordernumber %]
+                    </td>
                     <td>
                       <p>
                         [% IF ( order.order_received ) %] (rcvd)[% END %]
