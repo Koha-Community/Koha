@@ -1814,15 +1814,10 @@ sub TransferOrder {
     $rv = $sth->execute($ordernumber);
 
     delete $order->{'ordernumber'};
+    delete $order->{parent_ordernumber};
     $order->{'basketno'} = $basketno;
     my $newordernumber;
     (undef, $newordernumber) = NewOrder($order);
-
-    $dbh->do( q{
-        UPDATE aqorders
-        SET parent_ordernumber = ordernumber
-        WHERE ordernumber = ?
-    }, {}, $newordernumber );
 
     $query = q{
         UPDATE aqorders_items
