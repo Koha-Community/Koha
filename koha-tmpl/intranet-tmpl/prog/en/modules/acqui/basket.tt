@@ -345,6 +345,9 @@
                         <ol>
                         <li>
                           <span class="label">Basket group:</span>
+                          [% IF basketgroup.id and not basketgroup.name %]
+                            [% SET basketgroup.name = "Basket group no. " _ basketgroup.id %]
+                          [% END %]
                           [% IF basketgroup.closed %]
                               [% IF ( CAN_user_acquisition_group_manage ) %]
                                   <a href="basketgroup.pl?op=add&booksellerid=[% booksellerid %]&basketgroupid=[% basketgroup.id %]" title="basketgroup">[% basketgroup.name %] (closed)</a>
@@ -352,7 +355,7 @@
                                   [% basketgroup.name %] (closed)
                               [% END %]
                           [% ELSIF ( ! CAN_user_acquisition_group_manage ) %]
-                            [%- IF basketgroup.name -%]
+                            [%- IF basketgroup.id -%]
                                 [% basketgroup.name %]
                             [%- ELSE -%]
                                 No group
