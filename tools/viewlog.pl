@@ -115,7 +115,7 @@ if ($do_it) {
     @data=@$results;
     my $total = scalar @data;
     foreach my $result (@data){
-	if ($result->{'info'} eq 'item'||$result->{module} eq "CIRCULATION"){
+	if (substr($result->{'info'}, 0, 4) eq 'item' || $result->{module} eq "CIRCULATION"){
 	    # get item information so we can create a working link
         my $itemnumber=$result->{'object'};
         $itemnumber=$result->{'info'} if ($result->{module} eq "CIRCULATION");
