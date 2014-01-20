@@ -405,6 +405,11 @@ sub get_template_and_user {
         } elsif (C4::Context->preference("SearchMyLibraryFirst") && C4::Context->userenv && C4::Context->userenv->{'branch'}) {
             $opac_name = C4::Context->userenv->{'branch'};
         }
+        # FIXME Under Plack the CGI->https method always returns 'OFF' ($using_https will be set to 0 in this case)
+        my $opac_base_url = C4::Context->preference("OPACBaseURL"); #FIXME uses $using_https below as well
+        if (!$opac_base_url){
+            $opac_base_url = $ENV{'SERVER_NAME'} . ($ENV{'SERVER_PORT'} eq ($using_https ? "443" : "80") ? '' : ":$ENV{'SERVER_PORT'}");
+        }
         $template->param(
             opaccolorstylesheet       => C4::Context->preference("opaccolorstylesheet"),
             AnonSuggestions           => "" . C4::Context->preference("AnonSuggestions"),
@@ -425,8 +430,7 @@ sub get_template_and_user {
             OPACMobileUserCSS         => "". C4::Context->preference("OPACMobileUserCSS"),
             OPACViewOthersSuggestions => "" . C4::Context->preference("OPACViewOthersSuggestions"),
             OpacAuthorities           => C4::Context->preference("OpacAuthorities"),
-            OPACBaseURL               => ($in->{'query'}->https() ? "https://" : "http://") . $ENV{'SERVER_NAME'} .
-                   ($ENV{'SERVER_PORT'} eq ($in->{'query'}->https() ? "443" : "80") ? '' : ":$ENV{'SERVER_PORT'}"),
+            OPACBaseURL               => ($using_https ? "https://" : "http://") . $opac_base_url,
             opac_css_override         => $ENV{'OPAC_CSS_OVERRIDE'},
             opac_search_limit         => $opac_search_limit,
             opac_limit_override       => $opac_limit_override,
