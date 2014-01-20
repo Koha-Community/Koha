@@ -7,7 +7,13 @@
         });
 
         $("#z3950submit").click(function(){
-            window.open("/cgi-bin/koha/cataloguing/z3950_auth_search.pl","z3950search",'width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+            [% IF ( authid ) %]
+                if (confirm(_("Please note that this Z39.50 search could replace the current record."))){
+                    window.open("/cgi-bin/koha/cataloguing/z3950_auth_search.pl?authid=[% authid %]","z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+                }
+            [% ELSE %]
+                window.open("/cgi-bin/koha/cataloguing/z3950_auth_search.pl","z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+            [% END %]
             return false;
         });
 

@@ -323,6 +323,27 @@ sub CreateKey {
     return int(rand(1000000));
 }
 
+=item GetMandatoryFieldZ3950
+
+    This function return an hashref which containts all mandatory field
+    to search with z3950 server.
+
+=cut
+
+sub GetMandatoryFieldZ3950($){
+    my $authtypecode = shift;
+
+    #Tags guessed (see GuessAuthTypeCode from AuthoritiesMarc.pm)
+
+    return {
+        '100'.'a' => 'authorpersonal',
+        '110'.'a' => 'authorcorp',
+        '111'.'a' => 'authormeetingcon',
+        '130'.'a' => 'uniformtitle',
+        '150'.'a' => 'topic',
+    };
+}
+
 sub build_tabs {
     my ( $template, $record, $dbh, $encoding,$input ) = @_;
 
@@ -562,6 +583,8 @@ my ($template, $loggedinuser, $cookie)
 $template->param(nonav   => $nonav,index=>$myindex,authtypecode=>$authtypecode,breedingid=>$breedingid,);
 
 $tagslib = GetTagsLabels(1,$authtypecode);
+$mandatory_z3950 = GetMandatoryFieldZ3950($authtypecode);
+
 my $record=-1;
 my $encoding="";
 if (($authid) && !($breedingid)){

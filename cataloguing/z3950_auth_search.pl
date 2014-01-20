@@ -29,6 +29,7 @@ use C4::Koha;
 my $input        = new CGI;
 my $dbh          = C4::Context->dbh;
 my $error         = $input->param('error');
+my $authid  = $input->param('authid') || 0;
 my $nameany     = $input->param('nameany');
 my $authorany     = $input->param('authorany');
 my $authorcorp     = $input->param('authorcorp');
@@ -61,6 +62,7 @@ $template->param(
     subject      => $subject,
     subjectsubdiv   => $subjectsubdiv,
     srchany      => $srchany,
+    authid => $authid,
 );
 
 if ( $op ne "do_search" ) {
@@ -97,6 +99,7 @@ my $pars= {
         subject => $subject,
         subjectsubdiv => $subjectsubdiv,
         srchany => $srchany,
+        authid => $authid,
 };
 Z3950SearchAuth($pars, $template);
 output_html_with_http_headers $input, $cookie, $template->output;

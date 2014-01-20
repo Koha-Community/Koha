@@ -520,6 +520,7 @@ sub Z3950SearchAuth {
     my $subject= $pars->{subject};
     my $subjectsubdiv= $pars->{subjectsubdiv};
     my $srchany= $pars->{srchany};
+    my $authid= $pars->{authid};
 
     my $show_next       = 0;
     my $total_pages     = 0;
@@ -672,11 +673,12 @@ sub Z3950SearchAuth {
                             $row_data{server}       = $servername[$k];
                             $row_data{breedingid}   = $breedingid;
                             $row_data{heading}      = $heading;
+                            $row_data{authid}       = $authid;
                             $row_data{heading_code}      = $heading_authtype_code;
                             push( @breeding_loop, \%row_data );
                         }
                         else {
-                            push(@breeding_loop,{'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1});
+                            push(@breeding_loop,{'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'authid'=>-1});
                         }
                     }
                 }    #if $numresults
