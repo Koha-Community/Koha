@@ -416,6 +416,11 @@
         var copiesRowId = null;
         var wasSpecific = false;
         var lastCopiesRowId = null;
+
+        $(".toggle-hold-options").show();
+        $(".hold-options").hide();
+        $(".holddatefrom,.holddateto").prop("readOnly", true);
+
         $(".checkitem").parent().click(function(e){
             if(e.target.tagName.toLowerCase() == 'td'){
                 $(this).find("input.checkitem").each( function() {
@@ -434,12 +439,22 @@
           }
         });
 
+        $(".toggle-hold-options").on("click",function(e){
+            e.preventDefault();
+            toggleLink = $(this);
+            var optionsID = this.id.replace("toggle-hold-options-","");
+            $("#hold-options-"+optionsID).toggle(0, function() {
+                toggleLink.text($(this).is(':visible') ? _("Hide options") : _("Show more options"));
+            });
+        });
+
         // Hides all 'specific copy' table rows on load.
         $(".copiesrow").hide();
 
-        [% FOREACH bibitemloo IN bibitemloop %]
-          [% IF bibitemloo.holdable %]
-            [% IF OPACItemHolds == 'force' %]
+        [% IF OPACItemHolds == 'force' %]
+          [% FOREACH bibitemloo IN bibitemloop %]
+            [% IF bibitemloo.holdable %]
+              $("#toggle-hold-options-[% bibitemloo.biblionumber %]").click();
               $("#copiesrow_[% bibitemloo.biblionumber %]").show();
             [% END %]
           [% END %]
@@ -453,10 +468,6 @@
                 $(this).html(ForceHoldNotesReasons[j-1]);
             }
         });
-
-        $(".toggle-hold-options").show();
-        $(".hold-options").hide();
-        $(".holddatefrom,.holddateto").prop("readOnly", true);
 
         $(".date-format").each(function(){
             if($(this).hasClass("to")){ var op = "to"; }
@@ -509,8 +520,9 @@
             $(".selectany").attr("checked", "checked");
         [% END %]
 
-        // If we can choose a specific item, we preselect the first one
-        [% IF OPACItemHolds =="1" or OPACItemHolds == 'force' %]
+        // If the user is *allowed* to choose a specific item
+        // The first one is preselected
+        [% IF OPACItemHolds =="1" %]
             $("table.copiesrow").each(function(){
                 var id = suffixOf($(this).attr("id"), "_");
                 select_first_available(id);
@@ -594,15 +606,6 @@
             $("#biblionumbers").val(biblionumbers);
 
             return true;
-        });
-
-        $(".toggle-hold-options").on("click",function(e){
-            e.preventDefault();
-            toggleLink = $(this);
-            var optionsID = this.id.replace("toggle-hold-options-","");
-            $("#hold-options-"+optionsID).toggle(0, function() {
-                toggleLink.text($(this).is(':visible') ? _("Hide options") : _("Show more options"));
-            });
         });
 
         [% FOREACH bibitemloo IN bibitemloop %]
