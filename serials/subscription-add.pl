@@ -345,14 +345,7 @@ sub redirect_add_subscription {
     );
 
     my $additional_fields = Koha::AdditionalField->all( { tablename => 'subscription' } );
-    my @additional_field_values;
-    for my $field ( @$additional_fields ) {
-        my $af = Koha::AdditionalField->new({ id => $field->{id} });
-        $af->{values} = {
-            $subscriptionid => $query->param('additional_field_' . $field->{id})
-        } if defined $query->param('additional_field_' . $field->{id});
-        $af->insert_values;
-    }
+    insert_additional_fields( $additional_fields, $biblionumber, $subscriptionid );
 
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
     return;
@@ -430,25 +423,32 @@ sub redirect_mod_subscription {
     );
 
     my $additional_fields = Koha::AdditionalField->all( { tablename => 'subscription' } );
-    my @additional_field_values;
-    for my $field ( @$additional_fields ) {
-        my $af = Koha::AdditionalField->new({ id => $field->{id} })->fetch;
-        if ( $af->{marcfield} ) {
-            my $record = GetMarcBiblio( $biblionumber, 1 );
-            my ( $field, $subfield ) = split /\$/, $af->{marcfield};
-            next unless $field and $subfield;
-            my $value = $record->subfield( $field, $subfield );
-            $af->{values} = {
-                $subscriptionid => $value
-            };
-        } else {
-            $af->{values} = {
-                $subscriptionid => $query->param('additional_field_' . $field->{id})
-            };
-        }
-        $af->insert_values;
-    }
+    insert_additional_fields( $additional_fields, $biblionumber, $subscriptionid );
 
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
     return;
+}
+
+sub insert_additional_fields {
+    my ( $additional_fields, $biblionumber, $subscriptionid ) = @_;
+    my @additional_field_values;
+    my $record = GetMarcBiblio( $biblionumber, 1 );
+    for my $field ( @$additional_fields ) {
+        my $af = Koha::AdditionalField->new({ id => $field->{id} })->fetch;
+        if ( $af->{marcfield} ) {
+            my ( $field, $subfield ) = split /\$/, $af->{marcfield};
+            $af->{values} = undef;
+            if ( $field and $subfield ) {
+                my $value = $record->subfield( $field, $subfield );
+                $af->{values} = {
+                    $subscriptionid => $value
+                };
+            }
+        } else {
+            $af->{values} = {
+                $subscriptionid => $query->param('additional_field_' . $field->{id})
+            } if defined $query->param('additional_field_' . $field->{id});
+        }
+        $af->insert_values;
+    }
 }
