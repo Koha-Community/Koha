@@ -622,7 +622,7 @@ sub _parseletter {
         my $replacedby   = defined ($val) ? $val : '';
         if ( $replacedby and $replacedby =~ m|^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$| ) {
             # If the value is XXXX-YY-ZZ[ AA:BB:CC] we assume it is a date
-            my $dateonly = defined $1 ? 1 : 0;
+            my $dateonly = defined $1 ? 0 : 1; #$1 refers to the capture group wrapped in parentheses. In this case, that's the hours, minutes, seconds.
             eval {
                 $replacedby = output_pref({ dt => dt_from_string( $replacedby ), dateonly => $dateonly });
             };
