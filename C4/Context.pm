@@ -1251,7 +1251,7 @@ sub IsSuperLibrarian {
         return 1;
     }
 
-    return $userenv->{flags} % 2;
+    return ($userenv->{flags}//0) % 2;
 }
 
 1;
