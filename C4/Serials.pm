@@ -425,7 +425,7 @@ sub PrepareSerialsData {
             }
         }
         $subs->{ "status" . $subs->{'status'} } = 1;
-        if ( grep { $_ == $subs->{status} } ( 1, 3, 4, 41, 42, 43, 44, 7 ) ) {
+        if ( grep { $_ == $subs->{status} } qw( 1 3 4 41 42 43 44 7 ) ) {
             $subs->{"checked"} = 1;
         }
 
@@ -1250,10 +1250,11 @@ sub ModSerialStatus {
             if ( $status == 2 || ($oldstatus == 2 && $status != 2) ) {
                   _update_receivedlist($subscriptionid);
             }
-            if(  grep { $_ == $status } ( 4, 41, 42, 43, 44, 5 )
+            my @missing_statuses = qw( 4 41 42 43 44 );
+            if ( (  grep { $_ == $status } ( @missing_statuses, 5 ) )
               || (
-                  grep { $_ == $oldstatus } ( 4, 41, 42, 43, 44 )
-                  && ! grep { $_ == $status } ( 4, 41, 42, 43, 44 ) )
+                  ( grep { $_ == $oldstatus } @missing_statuses )
+                  && ! ( grep { $_ == $status } @missing_statuses ) )
               || ($oldstatus == 5 && $status != 5)) {
                 _update_missinglist($subscriptionid);
             }
