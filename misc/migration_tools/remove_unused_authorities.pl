@@ -46,16 +46,13 @@ if ($test) {
 }
 
 my $dbh=C4::Context->dbh;
-@authtypes or @authtypes = qw( NC );
 my $thresholdmin=0;
 my $thresholdmax=0;
 my @results;
 # prepare the request to retrieve all authorities of the requested types
-my $rqselect = $dbh->prepare(
-    qq{SELECT * from auth_header where authtypecode IN (}
-    . join(",",map{$dbh->quote($_)}@authtypes)
-    . ")"
-);
+my $rqsql = "SELECT * from auth_header where 1";
+$rqsql .= " AND authtypecode IN (".join(",",map{$dbh->quote($_)}@authtypes).")" if @authtypes;
+my $rqselect = $dbh->prepare($rqsql);
 $|=1;
 
 $rqselect->execute;
@@ -89,7 +86,7 @@ sub print_usage {
     print <<_USAGE_;
 $0: Removes unused authorities.
 
-This script will parse all authoritiestypes given as parameter, and remove authorities without any biblio attached.
+This script will parse all authoritiestypes (or only those given as parameter), and remove authorities without any biblio attached.
 warning : there is no individual confirmation !
 parameters
     --aut|authtypecode TYPE       the list of authtypes to check
