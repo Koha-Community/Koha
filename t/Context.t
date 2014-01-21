@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use DBI;
-use Test::More tests => 6;
+use Test::More tests => 8;
 use Test::MockModule;
 
 BEGIN {
@@ -30,3 +30,8 @@ $userenv->{flags} = 421;
 $is_super_librarian = eval{ C4::Context::IsSuperLibrarian() };
 is ( $@, q||, "IsSuperLibrarian does not log an error if userenv is defined" );
 is ( $is_super_librarian, 1, "With flag=1, it is a super librarian" );
+
+$userenv->{flags} = undef;
+$is_super_librarian = eval{ C4::Context::IsSuperLibrarian() };
+is ( $@, q||, "IsSuperLibrarian does not log an error if \$userenv->{flags} is undefined" );
+is ( $is_super_librarian, 0, "With flag=0, it is not a super librarian" );
