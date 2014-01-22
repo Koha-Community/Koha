@@ -64,6 +64,7 @@ overdue_notices.pl
    -library      <branchname>     only deal with overdues from this library (repeatable : several libraries can be given)
    -csv          <filename>       populate CSV file
    -html         <directory>      Output html to a file in the given directory
+   -text         <directory>      Output plain text to a file in the given directory
    -itemscontent <list of fields> item information in templates
    -borcat       <categorycode>   category code that must be included
    -borcatout    <categorycode>   category code that must be excluded
@@ -117,6 +118,14 @@ Produces html data. if patron does not have a mail address or
 -n (no mail) flag is set, an html file is generated in the specified
 directory. This can be downloaded or futher processed by library staff.
 The file will be called notices-YYYY-MM-DD.html and placed in the directory
+specified.
+
+=item B<-text>
+
+Produces plain text data. if patron does not have a mail address or
+-n (no mail) flag is set, a text file is generated in the specified
+directory. This can be downloaded or futher processed by library staff.
+The file will be called notices-YYYY-MM-DD.txt and placed in the directory
 specified.
 
 =item B<-itemscontent>
@@ -274,6 +283,7 @@ my @emails_to_use;    # Emails to use for messaging
 my @emails;           # Emails given in command-line parameters
 my $csvfilename;
 my $htmlfilename;
+my $text_filename;
 my $triggered = 0;
 my $listall = 0;
 my $itemscontent = join( ',', qw( date_due title barcode author itemnumber ) );
@@ -290,6 +300,7 @@ GetOptions(
     'library=s'      => \@branchcodes,
     'csv:s'          => \$csvfilename,    # this optional argument gets '' if not supplied.
     'html:s'         => \$htmlfilename,    # this optional argument gets '' if not supplied.
+    'text:s'         => \$text_filename,    # this optional argument gets '' if not supplied.
     'itemscontent=s' => \$itemscontent,
     'list-all'       => \$listall,
     't|triggered'    => \$triggered,
@@ -375,26 +386,34 @@ if ( defined $csvfilename ) {
 }
 
 @branches = @overduebranches unless @branches;
-our $html_fh;
+our $fh;
 if ( defined $htmlfilename ) {
   if ( $htmlfilename eq '' ) {
-    $html_fh = *STDOUT;
+    $fh = *STDOUT;
   } else {
     my $today = DateTime->now(time_zone => C4::Context->tz );
-    open $html_fh, ">",File::Spec->catdir ($htmlfilename,"notices-".$today->ymd().".html");
+    open $fh, ">",File::Spec->catdir ($htmlfilename,"notices-".$today->ymd().".html");
   }
   
-  print $html_fh "<html>\n";
-  print $html_fh "<head>\n";
-  print $html_fh "<style type='text/css'>\n";
-  print $html_fh "pre {page-break-after: always;}\n";
-  print $html_fh "pre {white-space: pre-wrap;}\n";
-  print $html_fh "pre {white-space: -moz-pre-wrap;}\n";
-  print $html_fh "pre {white-space: -o-pre-wrap;}\n";
-  print $html_fh "pre {word-wrap: break-work;}\n";
-  print $html_fh "</style>\n";
-  print $html_fh "</head>\n";
-  print $html_fh "<body>\n";
+  print $fh "<html>\n";
+  print $fh "<head>\n";
+  print $fh "<style type='text/css'>\n";
+  print $fh "pre {page-break-after: always;}\n";
+  print $fh "pre {white-space: pre-wrap;}\n";
+  print $fh "pre {white-space: -moz-pre-wrap;}\n";
+  print $fh "pre {white-space: -o-pre-wrap;}\n";
+  print $fh "pre {word-wrap: break-work;}\n";
+  print $fh "</style>\n";
+  print $fh "</head>\n";
+  print $fh "<body>\n";
+}
+elsif ( defined $text_filename ) {
+  if ( $text_filename eq '' ) {
+    $fh = *STDOUT;
+  } else {
+    my $today = DateTime->now(time_zone => C4::Context->tz );
+    open $fh, ">",File::Spec->catdir ($text_filename,"notices-".$today->ymd().".txt");
+  }
 }
 
 foreach my $branchcode (@branches) {
@@ -606,7 +625,7 @@ END_SQL
                             email          => $notice_email,
                             itemcount      => $itemcount,
                             titles         => $titles,
-                            outputformat   => defined $csvfilename ? 'csv' : defined $htmlfilename ? 'html' : '',
+                            outputformat   => defined $csvfilename ? 'csv' : defined $htmlfilename ? 'html' : defined $text_filename ? 'text' : '',
                         }
                       );
                 }
@@ -620,7 +639,10 @@ END_SQL
             print $csv_fh @output_chunks;        
         }
         elsif ( defined $htmlfilename ) {
-            print $html_fh @output_chunks;        
+            print $fh @output_chunks;        
+        }
+        elsif ( defined $text_filename ) {
+            print $fh @output_chunks;        
         }
         elsif ($nomail){
                 local $, = "\f";    # pagebreak
@@ -665,9 +687,11 @@ if ($csvfilename) {
 }
 
 if ( defined $htmlfilename ) {
-  print $html_fh "</body>\n";
-  print $html_fh "</html>\n";
-  close $html_fh;
+  print $fh "</body>\n";
+  print $fh "</html>\n";
+  close $fh;
+} elsif ( defined $text_filename ) {
+  close $fh;
 }
 
 =head1 INTERNAL METHODS
