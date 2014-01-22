@@ -21,15 +21,18 @@ use Pod::Usage;
 use Getopt::Long;
 use C4::Log;
 
+use File::Basename qw( dirname );
 use Koha::DateUtils;
 
-my ( $stylesheet, $help, $split, $html, $csv, @letter_codes );
+my ( $stylesheet, $help, $split, $html, $csv, $ods, $delimiter, @letter_codes );
 
 GetOptions(
     'h|help'  => \$help,
     's|split' => \$split,
     'html'    => \$html,
     'csv'     => \$csv,
+    'ods'     => \$ods,
+    'd|delimiter:s' => \$delimiter,
     'letter_code:s' => \@letter_codes,
 ) || pod2usage(1);
 
@@ -45,7 +48,7 @@ if ( !$output_directory || !-d $output_directory || !-w $output_directory ) {
 }
 
 # Default value is html
-$html = 1 unless $html or $csv;
+$html = 1 if not $html and not $csv and not $ods;
 
 if ( $csv and @letter_codes != 1 ) {
     pod2usage({
@@ -53,6 +56,15 @@ if ( $csv and @letter_codes != 1 ) {
         -msg => qq{\nIt is not consistent to use --csv without one (and only one) letter_code\n},
     });
 }
+
+if ( $ods and @letter_codes != 1 ) {
+    pod2usage({
+        -exitval => 1,
+        -msg => qq{\nIt is not consistent to use --ods without one (and only one) letter_code\n},
+    });
+}
+
+$delimiter ||= q|,|;
 
 cronlogaction();
 
@@ -68,27 +80,51 @@ my @all_messages = @{ GetPrintMessages() };
 } @all_messages;
 exit unless @all_messages;
 
-## carriage return replaced by <br/> as output is html
-foreach my $message (@all_messages) {
-    local $_ = $message->{'content'};
-    s/\n/<br \/>/g;
-    s/\r//g;
-    $message->{'content'} = $_;
+my ( $html_filenames, $csv_filenames, $ods_filenames );
+$csv_filenames = print_notices({
+    messages => \@all_messages,
+    split => $split,
+    output_directory => $output_directory,
+    format => 'csv',
+}) if $csv;
+
+$ods_filenames = print_notices({
+    messages => \@all_messages,
+    split => $split,
+    output_directory => $output_directory,
+    format => 'ods',
+}) if $ods;
+
+if ( $html ) {
+    ## carriage return replaced by <br/> as output is html
+    foreach my $message (@all_messages) {
+        local $_ = $message->{'content'};
+        s/\n/<br \/>/g;
+        s/\r//g;
+        $message->{'content'} = $_;
+    }
+
+    $html_filenames = print_notices({
+        messages => \@all_messages,
+        split => $split,
+        output_directory => $output_directory,
+        format => 'html',
+    });
 }
 
-print_notices_html({ messages => \@all_messages, split => $split })
-    if $html;
-
-print_notices_csv({ messages => \@all_messages, split => $split })
-    if $csv;
-
-sub print_notices_html {
+sub print_notices {
     my ( $params ) = @_;
 
     my $messages = $params->{messages};
     my $split = $params->{split};
+    my $output_directory = $params->{output_directory};
+    my $format = $params->{format} // 'html';
 
-    my $messages_by_branch;
+    die "Format $format is not known"
+        unless $format =~ m[^html$|^csv$|^ods$];
+
+    my ( @filenames, $messages_by_branch );
+
     if ( $split ) {
         foreach my $message (@$messages) {
             push( @{ $messages_by_branch->{ $message->{'branchcode'} } }, $message );
@@ -99,24 +135,26 @@ sub print_notices_html {
 
     while ( my ( $branchcode, $branch_messages ) = each %$messages_by_branch ) {
         my $filename = $split
-            ? 'holdnotices-' . $today->output('iso') . "-$branchcode.html"
-            : 'holdnotices-' . $today->output('iso') . ".html";
+            ? 'holdnotices-' . $today->output('iso') . "-$branchcode.$format"
+            : 'holdnotices-' . $today->output('iso') . ".$format";
 
-        my $template =
-          C4::Templates::gettemplate( 'batch/print-notices.tt', 'intranet',
-            new CGI );
-
-        $template->param(
-            stylesheet => C4::Context->preference("NoticeCSS"),
-            today      => $today->output(),
-            messages   => $branch_messages,
-        );
-
-        my $output_file = File::Spec->catdir( $output_directory, $filename )
-        open my $OUTPUT, '>', $output_file
-            or die "Could not open $output_file: $!";
-        print $OUTPUT $template->output;
-        close $OUTPUT;
+        my $filepath = File::Spec->catdir( $output_directory, $filename );
+        if ( $format eq 'html' ) {
+            generate_html({
+                messages => $branch_messages,
+                filepath => $filepath,
+            });
+        } elsif ( $format eq 'csv' ) {
+            generate_csv ({
+                messages => $branch_messages,
+                filepath => $filepath,
+            });
+        } elsif ( $format eq 'ods' ) {
+            generate_ods ({
+                messages => $branch_messages,
+                filepath => $filepath,
+            });
+        }
 
         foreach my $message ( @$branch_messages ) {
             C4::Letters::_set_message_status(
@@ -125,59 +163,108 @@ sub print_notices_html {
                     status => 'sent'
                 }
             );
-            $message->{status} = 'sent';
+        }
+        push @filenames, $filename;
+    }
+    return \@filenames;
+}
+
+sub generate_html {
+    my ( $params ) = @_;
+    my $messages = $params->{messages};
+    my $filepath = $params->{filepath};
+
+    my $template =
+      C4::Templates::gettemplate( 'batch/print-notices.tt', 'intranet',
+        new CGI );
+
+    $template->param(
+        stylesheet => C4::Context->preference("NoticeCSS"),
+        today      => $today->output(),
+        messages   => $messages,
+    );
+
+    open my $OUTPUT, '>', $filepath
+        or die "Could not open $filepath: $!";
+    print $OUTPUT $template->output;
+    close $OUTPUT;
+}
+
+sub generate_csv {
+    my ( $params ) = @_;
+    my $messages = $params->{messages};
+    my $filepath = $params->{filepath};
+
+    open my $OUTPUT, '>', $filepath
+        or die "Could not open $filepath: $!";
+    my ( @csv_lines, $headers );
+    foreach my $message ( @$messages ) {
+        my @lines = split /\n/, $message->{content};
+        chomp for @lines;
+
+        # We don't have headers, get them
+        unless ( $headers ) {
+            $headers = $lines[0];
+            say $OUTPUT Encode::encode( 'UTF8', $headers );
+        }
+
+        shift @lines;
+        for my $line ( @lines ) {
+            next if $line =~ /^\s$/;
+            say $OUTPUT Encode::encode( 'UTF8', $line );
         }
     }
 }
 
-sub print_notices_csv {
+sub generate_ods {
     my ( $params ) = @_;
-
     my $messages = $params->{messages};
-    my $split = $params->{split};
+    my $filepath = $params->{filepath};
 
-    my $messages_by_branch;
-    if ( $split ) {
-        foreach my $message (@$messages) {
-            push( @{ $messages_by_branch->{ $message->{'branchcode'} } }, $message );
-        }
-    } else {
-        $messages_by_branch->{all_branches} = $messages;
-    }
+    use OpenOffice::OODoc;
+    my $tmpdir = dirname $filepath;
+    odfWorkingDirectory( $tmpdir );
+    my $container = odfContainer( $filepath, create => 'spreadsheet' );
+    my $doc = odfDocument (
+        container => $container,
+        part      => 'content'
+    );
+    my $table = $doc->getTable(0);
 
-    while ( my ( $branchcode, $branch_messages ) = each %$messages_by_branch ) {
-        my $filename = $split
-            ? 'holdnotices-' . $today->output('iso') . "-$branchcode.csv"
-            : 'holdnotices-' . $today->output('iso') . ".csv";
+    my @headers;
+    my ( $nb_rows, $nb_cols ) = ( scalar(@$messages), 0 );
+    foreach my $message ( @$messages ) {
+        my @lines = split /\n/, $message->{content};
+        chomp for @lines;
 
-        open my $OUTPUT, '>', File::Spec->catdir( $output_directory, $filename );
-        my ( @csv_lines, $headers );
-        foreach my $message ( @$branch_messages ) {
-            my @lines = split /\n/, $message->{content};
+        # We don't have headers, get them
+        unless ( @headers ) {
+            @headers = split $delimiter, $lines[0];
 
-            # We don't have headers, get them
-            unless ( $headers ) {
-                $headers = $lines[0];
-                chomp $headers;
-                say $OUTPUT $headers;
+            $nb_cols = @headers;
+            $doc->expandTable( $table, $nb_rows + 1, $nb_cols );
+            my $row = $doc->getRow( $table, 0 );
+            my $j = 0;
+            for my $header ( @headers ) {
+                $doc->cellValue( $row, $j, Encode::encode( 'UTF8', $header ) );
+                $j++;
             }
-
-            shift @lines;
-            for my $line ( @lines ) {
-                chomp $line;
-                next if $line =~ /^\s$/;
-                say $OUTPUT $line;
-            }
-
-            C4::Letters::_set_message_status(
-                {
-                    message_id => $message->{'message_id'},
-                    status => 'sent'
-                }
-            ) if $message->{status} ne 'sent';
         }
-        close $OUTPUT;
+
+        shift @lines; # remove headers
+        my $i = 1;
+        for my $line ( @lines ) {
+            my $row_data = split $delimiter, $line;
+            my $row = $doc->getRow( $table, $i );
+            # Note scalar(@$row_data) should be equal to $nb_cols
+            for ( my $j = 0 ; $j < scalar(@$row_data) ; $j++ ) {
+                my $value = Encode::encode( 'UTF8', $row_data->[$j] );
+                $doc->cellValue( $row, $j, $value );
+            }
+            $i++;
+        }
     }
+    $doc->save();
 }
 
 =head1 NAME
@@ -186,11 +273,11 @@ gather_print_notices - Print waiting print notices
 
 =head1 SYNOPSIS
 
-gather_print_notices output_directory [-s|--split] [--html] [--csv] [--letter_code=LETTER_CODE] [-h|--help]
+gather_print_notices output_directory [-s|--split] [--html] [--csv] [--ods] [--letter_code=LETTER_CODE] [-h|--help]
 
 Will print all waiting print notices to the output_directory.
 
-The generated filename will be holdnotices-TODAY.[csv|html] or holdnotices-TODAY-BRANCHCODE.[csv|html] if the --split parameter is given.
+The generated filename will be holdnotices-TODAY.[csv|html|ods] or holdnotices-TODAY-BRANCHCODE.[csv|html|ods] if the --split parameter is given.
 
 =head1 OPTIONS
 
@@ -202,23 +289,29 @@ Define the output directory where the files will be generated.
 
 =item B<-s|--split>
 
-Split messages into separate file by borrower home library to OUTPUT_DIRECTORY/notices-CURRENT_DATE-BRANCHCODE.[csv|html]
+Split messages into separate file by borrower home library to OUTPUT_DIRECTORY/notices-CURRENT_DATE-BRANCHCODE.[csv|html|ods]
 
 =item B<--html>
 
-Generate the print notices in a html file (default if --html and --csv are not given).
+Generate the print notices in a html file (default if --html, --csv and ods are not given).
 
 =item B<--csv>
 
 Generate the print notices in a csv file.
 If you use this parameter, the template should contain 2 lines.
-The first one the the csv headers and the second one the value list.
+The first one the csv headers and the second one the value list.
 
 For example:
 cardnumber:patron:email:item
 <<borrowers.cardnumber>>:<<borrowers.firstname>> <<borrowers.surname>>:<<borrowers.email>>:<<items.barcode>>
 
 You have to combine this option without one (and only one) letter_code.
+
+=item B<--ods>
+
+Generate the print notices in a ods file.
+
+This is the same as the csv parameter but using csv2odf to generate an ods file instead of a csv file.
 
 =item B<--letter_code>
 
