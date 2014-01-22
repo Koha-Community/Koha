@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2013-12-01 11:05+0000\n"
+"PO-Revision-Date: 2014-01-17 18:30+0000\n"
 "Last-Translator: msaby <mathieu.saby@univ-rennes2.fr>\n"
 "Language-Team: French (France) (http://www.transifex.com/projects/p/koha/language/fr_FR/)\n"
 "Language: fr\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1385895917.0\n"
+"X-POOTLE-MTIME: 1389983417.0\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -359,7 +359,7 @@ msgstr "Autorités"
 
 # Authorities > General
 msgid "authorities.pref General"
-msgstr "Général"
+msgstr "Généralités"
 
 # Authorities > Linker
 msgid "authorities.pref Linker"
@@ -383,7 +383,7 @@ msgstr "Lors de l'édition des notices"
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# authority records that are missing (BiblioAddsAuthorities must be set to \"allow\" for this to have any effect)."
-msgstr "les notices autorités qui manquent (BiblioAddsAuthorities doit être positionné sur \"créer\" pour que ce soit pris en compte)."
+msgstr "les notices d'autorité manquantes (BiblioAddsAuthorities doit être positionné sur \"créer\" pour prendre en compte cette préférence)."
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# do not generate"
@@ -419,7 +419,7 @@ msgstr "Ne pas recréer"
 
 # Authorities > Linker
 msgid "authorities.pref#CatalogModuleRelink# automatically relink headings that have previously been linked when saving records in the cataloging module."
-msgstr "automatiquement le lien des vedettes liées préalablement à l'enregistrement des notices dans le module catalogage"
+msgstr "automatiquement le lien entre notice bibliographique et d'autorité lorsqu'une notice bibliographique contenant une vedette liée à une autorité est modifiée dans le module catalogage."
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
@@ -451,7 +451,7 @@ msgstr "Utiliser le module"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerModule# linker module for matching headings to authority records."
-msgstr "du créateur de liens pour faire les correspondances entre vedettes et notices autorités."
+msgstr "du créateur de liens pour faire les correspondances entre vedettes et notices d'autorité."
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerOptions# (separate options with |)"
@@ -475,11 +475,11 @@ msgstr "le lien pour les vedettes qui sont déjà liées à une notice autorité
 
 # Authorities > General
 msgid "authorities.pref#MARCAuthorityControlField008# Use the following text for the contents of MARC authority control field 008 position 06-39 (fixed length data elements). Do NOT include the date (position 00-05)."
-msgstr "Utiliser le texte suivant pour le contenu du champ MARC21 fixe 008 position 06-30. Ne pas inclure la date (position 00-05)."
+msgstr "Utiliser ce texte comme contenu du champ 008 position 06-39 (données de longueur fixe) dans les notices d'autorité MARC21. Ne pas inclure la date (position 00-05)."
 
 # Authorities > General
 msgid "authorities.pref#UNIMARCAuthorityField100# Use the following text for the contents of UNIMARC authority field 100 position (fixed length data elements). Do NOT include the date (position 00-05)."
-msgstr "Utiliser le texte suivant pour le contenu du champ 100 des notices d'autorités UNIMARC. NE PAS inclure la date (position 00-05)."
+msgstr "Utiliser le texte suivant pour le contenu du champ 100 des notices d'autorités UNIMARC. NE PAS inclure la date (position 00-07)."
 
 # Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Don't use"
@@ -503,7 +503,7 @@ msgstr "Ne pas mettre à jour automatiquement"
 
 # Authorities > General
 msgid "authorities.pref#dontmerge# automatically update attached biblios when changing an authority record. If this is off, please ask your administrator to enable the merge_authority.pl cronjob."
-msgstr "les notices biblio à la modification d'une notice autorité. Si vous souhaitez la mise à jour, demander à votre administrateur d'installer le script merge_authority.pl en cron"
+msgstr "les notices bibliographiques liées à une autorité quand on la modifie. Si vous souhaitez la mise à jour, demander à votre administrateur d'installer le script merge_authority.pl en cron"
 
 # Cataloging
 msgid "cataloguing.pref"
@@ -599,7 +599,7 @@ msgstr "Ne pas regrouper"
 
 # Cataloging > Display
 msgid "cataloguing.pref#LabelMARCView# collapse repeated tags of the same type into one tag entry on the display."
-msgstr "les zones de même type qui sont répétées en une seule zone à l'affichage."
+msgstr "les champs identiques répétés sous un entête unique à l'affichage."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#MARCOrgCode# Fill in the <a href=\"http://www.loc.gov/marc/organizations/orgshome.html\">MARC organization code</a>"
@@ -619,11 +619,11 @@ msgstr "Quand des exemplaires sont créés, leur donner la localisation temporai
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesBlacklist# Don't show these"
-msgstr "Ne pas afficher ces"
+msgstr "Ne pas afficher les champs de notes"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesBlacklist# note fields in title notes separator (OPAC record details) and in the description separator (Staff client record details). The fields should appear separated with commas and according with the Koha MARC format (eg 3.. for UNIMARC, 5.. for MARC21)"
-msgstr "Champs note dans le titre (affichage détaillé de la notice à l'OPAC) et dans la description (affichage détaillé de la notice dans l'interface professionnelle). Les champs doivent apparaître séparés par des virgules et selon le format MARC de Koha (par exemple 3 .. pour UNIMARC, 5 .. pour MARC21)"
+msgstr "dans les onglets 'Note' de l'OPAC et 'Description' de l'interface professionnelle (en affichage détaillé). Les champs saisis doivent être  séparés par des virgules et conformes au format MARC utilisé (par exemple 3 .. pour UNIMARC, 5 .. pour MARC21)"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# (Leave blank if not used. Define a range like <code>192.168.</code>.)"
@@ -643,7 +643,7 @@ msgstr "Restreindre la suppression aux adresses IP en dehors de la plage d'IP"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# items marked as suppressed from OPAC search results. Note that you must have the <code>Suppress</code> index set up in Zebra and at least one suppressed item, or your searches will be broken."
-msgstr "à l'OPAC les documents marqués comme supprimés. Notez que vous devez avoir configuré l'index <code>Suppress</code> de Zebra et avoir au moins un exemplaire marqué comme supprimé, sinon la recherche à l'OPAC ne fonctionnera absolument pas."
+msgstr "à l'OPAC les documents marqués comme supprimés. Notez que vous devez avoir configuré l'index <code>Suppress</code> de Zebra et avoir au moins un document marqué comme supprimé, sinon la recherche à l'OPAC ne fonctionnera absolument pas."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#PrefillItem# When a new item is added,"
@@ -651,11 +651,11 @@ msgstr "Quand un exemplaire est ajouté,"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#PrefillItem# the new item is not prefilled with last created item values."
-msgstr "le nouvel exemplaire n'est pas pré-rempli avec les valeurs du dernier article créé."
+msgstr "le pré-renseigner avec les valeurs du dernier exemplaire créé."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#PrefillItem# the new item is prefilled with last created item values."
-msgstr "le nouvel exemplaire est pré-rempli avec les valeurs du dernier exemplaire créé."
+msgstr "ne pas le pré-renseigner avec les valeurs du dernier exemplaire créé."
 
 # Cataloging > Display
 msgid "cataloguing.pref#SeparateHoldings# Don't separate"
@@ -719,7 +719,7 @@ msgstr "sur la page de détail des notices bibliographiques un bouton pour impri
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToUseWhenPrefill# Define a list of subfields to use when prefilling items (separated by space)"
-msgstr "Définir une liste de sous-champs à utiliser quand les exemplaires pré-remplis (séparés par un espace)"
+msgstr "Définir une liste de sous-champs à utiliser si les exemplaires sont pré-renseignés (séparés par un espace)"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#UNIMARCField100Language# Use the languague (ISO 690-2)"
@@ -811,7 +811,7 @@ msgstr "Utiliser le type de document de niveau"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#item-level_itypes# as the authoritative item type (for determining circulation and fines rules, for displaying an item type icon on either opac detail or results page, etc)."
-msgstr ""
+msgstr "pour définir les règles de circulation et d'amendes, choisir l'icône à afficher à l'OPAC et à l'interface pro, etc."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#item-level_itypes# biblio record"
@@ -827,7 +827,7 @@ msgstr "Recopier les sous-champs MARC"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)<br />Examples: <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
-msgstr "dans la cote de l'exemplaire. (Il peut y avoir plusieurs sous-champs ; par exemple <code>082ab</code> examinera les sous-champs a et b de la zone 082)<br />Exemples: <strong>Dewey</strong>: <code>082ab</code> ou <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> ou <code>090ab</code>; <strong>depuis la notice d'exemplaire</strong>: <code>852hi</code>"
+msgstr "dans la cote de l'exemplaire. (Il peut y avoir plusieurs sous-champs ; par exemple <code>082ab</code> examinera les sous-champs a et b de la zone 082)<br />Exemples en MARC21: <strong>Dewey</strong>: <code>082ab</code> ou <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> ou <code>090ab</code>; <strong>depuis la notice d'exemplaire OCLC</strong>: <code>852hi</code>. Exemple en UNIMARC:<strong>Dewey</strong>:<code>676a</code>"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
@@ -859,11 +859,11 @@ msgstr "Ne pas copier"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#z3950NormalizeAuthor# authors from the UNIMARC"
-msgstr "les auteurs (UNIMARC) des zones"
+msgstr "les auteurs des champs UNIMARC"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#z3950NormalizeAuthor# tags (separated by commas) to the correct author tags when importing a record using Z39.50."
-msgstr "(séparées par des virgules) dans les champs MARC appropriées lors de l'import de notice via Z39.50."
+msgstr "(séparées par des virgules) dans les champs appropriées lors de l'import de notice via Z39.50."
 
 # Circulation
 msgid "circulation.pref"
@@ -871,7 +871,7 @@ msgstr "Circulation"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref Checkin Policy"
-msgstr "Politique d'enregistrement"
+msgstr "Politique de retour"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref Checkout Policy"
@@ -907,7 +907,7 @@ msgstr "Empêche les usagers avec les valeurs suivantes de public cible d'emprun
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionOverride# Allow"
-msgstr "Autoriser"
+msgstr "Permettre"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionOverride# Don't allow"
@@ -915,7 +915,7 @@ msgstr "Interdire"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionOverride# staff to check out an item with age restriction."
-msgstr "à l'équipe de prêter un document avec une limite d'âge."
+msgstr "au personnel de prêter un document avec une limite d'âge."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllFinesNeedOverride# Don't require"
@@ -995,11 +995,11 @@ msgstr "Autoriser"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnPatronsPossessions# Don't allow"
-msgstr "Interdire"
+msgstr "Ne pas autoriser"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnPatronsPossessions# a patron to place a hold on a record where the patron already has one or more items attached to that record checked out."
-msgstr "un usager de faire une réservation sur une notice sur laquelle ce lecteur a déjà un ou plusieurs exemplaires rattachés en prêt."
+msgstr "un adhérent à réserver un document s'il a déjà en prêt un exemplaire rattaché à cette notice."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckout# Allow"
@@ -1011,7 +1011,7 @@ msgstr "Ne pas permettre"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
-msgstr "Prêts d'exemplaires réservés pour quelqu'un d'autre. Si activé, ne génère pas d'avertissement RESERVE_WAITING et RESERVED. Ceci permet le prêt en libre service de ces documents."
+msgstr "de prêter des exemplaires réservés pour d'autres adhérents. Si activé, ne génère pas d'avertissement RESERVE_WAITING ou RESERVED. Permet le prêt en libre service de ces documents."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowNotForLoanOverride# Allow"
@@ -1063,23 +1063,23 @@ msgstr "d'outrepasser manuellement les limites de renouvellement et de forcer le
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowReturnToBranch# Allow materials to be returned to"
-msgstr "Permettre à l'ouvrage d'être rendu à"
+msgstr "Permettre le retour des documents à"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowReturnToBranch# either the library the item is from or the library it was checked out from."
-msgstr "la bibliothèque d'origine de l'exemplaire ou à la bibliothèque où il a été emprunté."
+msgstr "la bibliothèque d'appartenance de l'exemplaire ou à la bibliothèque où il a été emprunté."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowReturnToBranch# only the library the item is from."
-msgstr "seulement la bibliothèque à laquelle il appartient"
+msgstr "seulement à la bibliothèque d'appartenance de l'exemplaire"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowReturnToBranch# only the library the item was checked out from."
-msgstr "seulement la bibliothèque où l'exemplaire a été emprunté."
+msgstr "seulement à la bibliothèque où l'exemplaire a été emprunté."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowReturnToBranch# to any library."
-msgstr "n'importe quelle bibliothèque."
+msgstr "à n'importe quelle bibliothèque."
 
 # Circulation > Self Checkout
 msgid "circulation.pref#AllowSelfCheckReturns# Allow"
@@ -1115,7 +1115,7 @@ msgstr "Ne pas permettre"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AutoRemoveOverduesRestrictions# allow OVERDUES restrictions triggered by sent notices to be cleared automatically when all overdue items are returned by a patron."
-msgstr "que les suspensions de retard déclenchées par l'envoi de messages soient automatiquement supprimées lorsque tous les documents levées une fois tous les documents en retard rendus par un adhérent."
+msgstr "que les suspensions de retard déclenchées par l'envoi de messages soient automatiquement supprimées une fois tous les documents en retard rendus par un adhérent."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AutoResumeSuspendedHolds# Allow"
@@ -1127,7 +1127,7 @@ msgstr "Ne pas permettre"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AutoResumeSuspendedHolds# suspended holds to be automatically resumed by a set date."
-msgstr "de réactiver automatiquement les réservations suspendues en saisissant une date"
+msgstr "de réactiver automatiquement les réservations suspendues en saisissant une date."
 
 # Circulation > Self Checkout
 msgid "circulation.pref#AutoSelfCheckAllowed# ."
@@ -1171,7 +1171,7 @@ msgstr "Ne pas bloquer"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#BlockReturnOfWithdrawnItems# returning of items that have been withdrawn."
-msgstr "retourner les exemplaires qui ont été retirés des collections."
+msgstr "le retour des exemplaires qui ont été retirés des collections."
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#CalculateFinesOnReturn# <br /><b>NOTE If you are doing hourly loans then you should have this on.</b>"
@@ -1195,7 +1195,7 @@ msgstr "."
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# When an empty barcode field is submitted in circulation"
-msgstr "Quand le champ barcode vide est validé en circulation"
+msgstr "Lorsqu'un code à barres vide est saisi dans le module circulation"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# clear the screen"
@@ -1203,11 +1203,11 @@ msgstr "réinitialiser l'écran"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# open a print quick slip window"
-msgstr "ouvrir une fenêtre d'impression rapide de ticket"
+msgstr "ouvrir une fenêtre pour imprimer un ticket rapide"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# open a print slip window"
-msgstr ""
+msgstr "ouvrir une fenêtre pour imprimer un ticket"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutocompl# Don't try"
@@ -1271,7 +1271,7 @@ msgstr "Activer"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#DisplayMultiPlaceHold# the ability to place holds on multiple biblio from the search results"
-msgstr "la possibilité de faire des réservations sur plusieurs notices bibliographiques en résultat de recherche."
+msgstr "la possibilité de réserver plusieurs notices bibliographiques à partir des résultats d'une recherche."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
@@ -1391,7 +1391,7 @@ msgstr "."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#IssueLostItem# When issuing an item that has been marked as lost, "
-msgstr "Lors de l'émission d'un exemplaire qui a été marqué comme perdu, "
+msgstr "Lors du prêt d'un exemplaire qui a été marqué comme perdu, "
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#IssueLostItem# display a message"
@@ -1403,7 +1403,7 @@ msgstr "ne rien faire"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#IssueLostItem# require confirmation"
-msgstr "demander confirmation"
+msgstr "demander une confirmation"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#IssuingInProcess# Don't prevent"
@@ -1427,7 +1427,7 @@ msgstr "Inclure"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ManInvInNoissuesCharge# MANUAL_INV charges when summing up charges for noissuescharge."
-msgstr "prix lors de l'addition des prix pour noissuescharge."
+msgstr "les sommes MANUAL_INV  lors de l'addition des prix pour noissuescharge."
 
 # Circulation > Interface
 msgid "circulation.pref#NoticeCSS# Include the stylesheet at"
@@ -1479,7 +1479,7 @@ msgstr "Ne pas bloquer"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OverduesBlockCirc# when checking out to a borrower that has overdues outstanding"
-msgstr "quand un prêt est fait à un adhérent qui détient des documents en retards."
+msgstr "quand un prêt est fait à un adhérent qui détient des documents en retard."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
@@ -1515,7 +1515,7 @@ msgstr "les frais de perte d'un exemplaire à l'emprunteur quand l'exemplaire pe
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#RenewalPeriodBase# When renewing checkouts, base the new due date on"
-msgstr "En renouvellement, calculer la nouvelle date de retour à partir de"
+msgstr "Lors du renouvellement des prêts, calculer la nouvelle date de retour à partir de"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#RenewalPeriodBase# the current date."
@@ -1595,7 +1595,7 @@ msgstr "Demander"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ReturnBeforeExpiry# patrons to return books before their accounts expire (by restricting due dates to before the patron's expiration date)."
-msgstr "aux adhérents de rendre leurs livres avant la date d'expiration de leur carte de bibliothèque. Les dates de retour seront toujours antérieures à l'expiration du compte des adhérents."
+msgstr "aux adhérents de rendre leurs documents avant la date d'expiration de leur carte de bibliothèque. Les dates de retour seront toujours antérieures à l'expiration du compte des adhérents."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ReturnToShelvingCart# Don't move"
@@ -1759,7 +1759,7 @@ msgstr "type de document"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#UseBranchTransferLimits# library transfer limits based on"
-msgstr "les limites de transfert entre sites basées sur"
+msgstr "les limites de transfert entre sites basées sur le"
 
 # Circulation > Course Reserves
 msgid "circulation.pref#UseCourseReserves# Don't use"
@@ -1791,7 +1791,7 @@ msgstr "Ne pas utiliser"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#UseTransportCostMatrix# Transport Cost Matrix for calculating optimal holds filling between branches."
-msgstr "Matrice de coût de transport pour compléter le calcul optimal des réservations entre sites."
+msgstr "la matrice de coût de transport pour compléter le calcul optimal des réservations entre sites."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#UseTransportCostMatrix# Use"
@@ -4135,7 +4135,7 @@ msgstr "Les champs suivants <a href='http://schema.koha-community.org/tables/bor
 
 # Patrons
 msgid "patrons.pref#BorrowerRenewalPeriodBase# When renewing borrowers, base the new expiry date on"
-msgstr "Au renouvellement d'un adhérent, baser la durée du renouvellement sur"
+msgstr "Lors du renouvellement du compte d'un adhérent, calculer la durée du renouvellement en s'appuyant sur"
 
 # Patrons
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current date."
@@ -4143,7 +4143,7 @@ msgstr "la date du jour"
 
 # Patrons
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current membership expiry date."
-msgstr "l'actuelle date d'expiration du compte"
+msgstr "l'ancienne date d'expiration du compte"
 
 # Patrons
 msgid "patrons.pref#BorrowerUnwantedField# (separate columns with |)"
@@ -4159,7 +4159,7 @@ msgstr "(liste de valeurs séparées par |)"
 
 # Patrons
 msgid "patrons.pref#BorrowersTitles# Borrowers can have the following titles:"
-msgstr "Les adhérents peuvent avoir les titres suivants :"
+msgstr "Les adhérents peuvent avoir les titres de civilité suivants :"
 
 # Patrons
 msgid "patrons.pref#EnableBorrowerFiles# Do"

@@ -14,9 +14,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha\n"
-"POT-Creation-Date: 2013-12-17 00:05-0300\n"
-"PO-Revision-Date: 2013-11-19 12:26+0100\n"
-"Last-Translator: Mathieu Saby <mathieu.saby@univ-rennes2.fr>\n"
+"POT-Creation-Date: 2014-01-17 22:20-0300\n"
+"PO-Revision-Date: 2014-01-14 19:50+0000\n"
+"Last-Translator: msaby <mathieu.saby@univ-rennes2.fr>\n"
 "Language-Team: French (France) (http://www.transifex.com/projects/p/koha/"
 "language/fr_FR/)\n"
 "Language: fr\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1384728946.0\n"
+"X-POOTLE-MTIME: 1389729018.0\n"
 
 #. %1$s:  BORROWER_INF.debarredcomment 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:68
@@ -733,10 +733,11 @@ msgstr "%s"
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:94
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:96
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:99
+#: opac-tmpl/bootstrap/en/includes/item-status-schema-org.inc:1
+#: opac-tmpl/bootstrap/en/includes/item-status-schema-org.inc:2
 #: opac-tmpl/bootstrap/en/includes/item-status-schema-org.inc:4
 #: opac-tmpl/bootstrap/en/includes/item-status-schema-org.inc:6
 #: opac-tmpl/bootstrap/en/includes/item-status-schema-org.inc:8
-#: opac-tmpl/bootstrap/en/includes/item-status-schema-org.inc:10
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:5
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:7
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:9
@@ -2157,7 +2158,6 @@ msgstr "%s %s"
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:17
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:25
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:59
-#: opac-tmpl/bootstrap/en/includes/item-status-schema-org.inc:1
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:44
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:51
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:59
@@ -2987,7 +2987,7 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
-#. %3$s:  av_lib_include = KohaAuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 ) 
+#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 ) 
 #. %4$s:  IF av_lib_include 
 #. %5$s:  av_lib_include 
 #. %6$s:  ELSE 
@@ -3320,7 +3320,7 @@ msgstr "%s %s %s (%s) %s %s %s %s %s "
 msgid "%s %s %s ; %s %s "
 msgstr "%s %s %s ; %s %s "
 
-#. %1$s:  USE KohaAuthorisedValues 
+#. %1$s:  USE AuthorisedValues 
 #. %2$s:  IF ( item.datedue ) 
 #. %3$s:  IF ( OPACShowCheckoutName ) 
 #. %4$s:  item.cardnumber 
@@ -3335,7 +3335,7 @@ msgstr "%s %s %s ; %s %s "
 #. %13$s:  ELSIF ( item.waiting ) 
 #. %14$s:  ELSIF ( item.withdrawn ) 
 #. %15$s:  ELSIF ( item.itemlost ) 
-#. %16$s:  av_lib_include = KohaAuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
+#. %16$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
 #. %17$s:  IF ( av_lib_include ) 
 #. %18$s:  av_lib_include 
 #. %19$s:  ELSE 
@@ -5967,7 +5967,7 @@ msgstr "%sPrivée%s %sPublique%s "
 #. %5$s:  ELSIF ( suggestions_loo.REJECTED ) 
 #. %6$s:  ELSIF ( suggestions_loo.AVAILABLE ) 
 #. %7$s:  ELSE 
-#. %8$s:  KohaAuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) 
+#. %8$s:  AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) 
 #. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:198
 #, c-format
@@ -10528,7 +10528,7 @@ msgid ""
 "objects that contain the authority records. The function user may request a "
 "specific metadata schema for the record objects."
 msgstr ""
-"En fonction d'une liste d'identifiant de notices d'autorités, retourne une "
+"En fonction d'une liste d'identifiants de notices d'autorités, retourne une "
 "liste de notices qui contiennent ces autorités. On peut demander un format "
 "de métadonnées spécifiques en retour."
 

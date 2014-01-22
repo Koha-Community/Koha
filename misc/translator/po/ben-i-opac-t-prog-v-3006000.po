@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-12-17 00:25-0300\n"
+"POT-Creation-Date: 2014-01-17 22:42-0300\n"
 "PO-Revision-Date: 2013-12-16 20:31+0000\n"
 "Last-Translator: mubassir <mahsandu@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -236,9 +236,9 @@ msgstr "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 #: opac-tmpl/prog/en/modules/opac-account.tt:34
 #: opac-tmpl/prog/en/modules/opac-account.tt:40
 #: opac-tmpl/prog/en/modules/opac-account.tt:41
-#: opac-tmpl/prog/en/modules/opac-account.tt:43
-#: opac-tmpl/prog/en/modules/opac-account.tt:44
-#: opac-tmpl/prog/en/modules/opac-account.tt:45
+#: opac-tmpl/prog/en/modules/opac-account.tt:55
+#: opac-tmpl/prog/en/modules/opac-account.tt:56
+#: opac-tmpl/prog/en/modules/opac-account.tt:57
 #: opac-tmpl/prog/en/modules/opac-showreviews-rss.tt:6
 #: opac-tmpl/prog/en/modules/opac-showreviews-rss.tt:8
 #: opac-tmpl/prog/en/modules/opac-showreviews-rss.tt:13
@@ -864,10 +864,11 @@ msgstr "%s"
 #: opac-tmpl/prog/en/includes/opac-facets.inc:25
 #: opac-tmpl/prog/en/includes/opac-facets.inc:32
 #: opac-tmpl/prog/en/includes/usermenu.inc:33
+#: opac-tmpl/prog/en/includes/item-status-schema-org.inc:1
+#: opac-tmpl/prog/en/includes/item-status-schema-org.inc:2
 #: opac-tmpl/prog/en/includes/item-status-schema-org.inc:4
 #: opac-tmpl/prog/en/includes/item-status-schema-org.inc:6
 #: opac-tmpl/prog/en/includes/item-status-schema-org.inc:8
-#: opac-tmpl/prog/en/includes/item-status-schema-org.inc:10
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:5
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:7
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:9
@@ -1071,11 +1072,11 @@ msgstr "%s"
 #: opac-tmpl/prog/en/modules/opac-results.tt:771
 #: opac-tmpl/prog/en/modules/opac-account.tt:9
 #: opac-tmpl/prog/en/modules/opac-account.tt:40
-#: opac-tmpl/prog/en/modules/opac-account.tt:46
-#: opac-tmpl/prog/en/modules/opac-account.tt:50
-#: opac-tmpl/prog/en/modules/opac-account.tt:52
-#: opac-tmpl/prog/en/modules/opac-account.tt:59
-#: opac-tmpl/prog/en/modules/opac-account.tt:63
+#: opac-tmpl/prog/en/modules/opac-account.tt:58
+#: opac-tmpl/prog/en/modules/opac-account.tt:62
+#: opac-tmpl/prog/en/modules/opac-account.tt:64
+#: opac-tmpl/prog/en/modules/opac-account.tt:71
+#: opac-tmpl/prog/en/modules/opac-account.tt:75
 #: opac-tmpl/prog/en/modules/opac-showreviews-rss.tt:1
 #: opac-tmpl/prog/en/modules/opac-showreviews-rss.tt:8
 #: opac-tmpl/prog/en/modules/opac-showreviews-rss.tt:33
@@ -2041,6 +2042,7 @@ msgstr "%s %%] %s "
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:130
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
 #: opac-tmpl/prog/en/includes/opac-facets.inc:16
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/includes/usermenu.inc:4
 #: opac-tmpl/prog/en/includes/usermenu.inc:6
 #: opac-tmpl/prog/en/includes/usermenu.inc:8
@@ -2188,7 +2190,6 @@ msgstr "%s %s"
 #: opac-tmpl/prog/en/includes/opac-facets.inc:8
 #: opac-tmpl/prog/en/includes/opac-facets.inc:27
 #: opac-tmpl/prog/en/includes/opac-facets.inc:34
-#: opac-tmpl/prog/en/includes/item-status-schema-org.inc:1
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:41
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:48
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:56
@@ -2779,9 +2780,9 @@ msgid "%s %s %s %s %s %s "
 msgstr "%s %s %s %s %s %s "
 
 #. For the first occurrence,
-#. %1$s:  USE KohaAuthorisedValues 
+#. %1$s:  USE AuthorisedValues 
 #. %2$s:  IF ( item.itemlost ) 
-#. %3$s:  av_lib_include = KohaAuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
+#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
 #. %4$s:  IF ( av_lib_include ) 
 #. %5$s:  av_lib_include 
 #. %6$s:  ELSE 
@@ -2887,7 +2888,7 @@ msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
-#. %3$s:  av_lib_include = KohaAuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 ) 
+#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 ) 
 #. %4$s:  IF av_lib_include 
 #. %5$s:  av_lib_include 
 #. %6$s:  ELSE 
@@ -3259,7 +3260,7 @@ msgid "%s %s %s%s%s"
 msgstr "%s %s %s %s (%s)"
 
 #. %1$s:  USE Koha 
-#. %2$s:  USE KohaAuthorisedValues 
+#. %2$s:  USE AuthorisedValues 
 #. %3$s:  INCLUDE 'doc-head-open.inc' 
 #. %4$s:  IF ( LibraryNameTitle ) 
 #. %5$s:  LibraryNameTitle 
@@ -3522,6 +3523,18 @@ msgstr "%s %s %s %s (%s)"
 msgid "%s %s %s(%s)%s %s "
 msgstr "%s %s %s %s (%s) "
 
+#. %1$s:  END 
+#. %2$s:  UNLESS ( singleBranchMode ) 
+#. %3$s:  IF ( facets_loo.type_label_Libraries ) 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  IF ( facets_loo.type_label_Location ) 
+#. %7$s:  END 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "%s %s %sLibraries%s %s %sLocations%s "
+msgstr "%s%s %s%s%s%s%s %s %s%s %s%s%s %s. %s%s %s, %s%s %s %s%s %s "
+
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
 #. %3$s:  value.count 
@@ -3732,7 +3745,6 @@ msgstr "%s%s &rsaquo; ILS-DI %s "
 #. %3$s:  UNLESS ( SEARCH_RESULT.norequests ) 
 #. %4$s:  IF ( opacuserlogin ) 
 #: opac-tmpl/prog/en/modules/opac-results.tt:497
-#: opac-tmpl/prog/en/modules/opac-account.tt:42
 #: opac-tmpl/prog/en/modules/opac-detail.tt:545
 #, fuzzy, c-format
 msgid "%s %s%s%s"
@@ -4108,26 +4120,36 @@ msgid "%s %s: %s %s ; %s %s "
 msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  END 
-#. %2$s:  IF ( facets_loo.type_label_ItemTypes ) 
-#. %3$s:  END 
-#. %4$s:  UNLESS ( singleBranchMode ) 
-#. %5$s:  IF ( facets_loo.type_label_Libraries ) 
-#. %6$s:  END 
-#. %7$s:  END 
-#. %8$s:  IF ( facets_loo.type_label_Location ) 
-#. %9$s:  END 
-#: opac-tmpl/prog/en/includes/opac-facets.inc:17
-#, fuzzy, c-format
-msgid "%s %sItem types%s %s %sLibraries%s %s %sLocations%s "
-msgstr "%s%s %s%s%s%s%s %s %s%s %s%s%s %s. %s%s %s, %s%s %s %s%s %s "
-
-#. %1$s:  END 
 #. %2$s:  IF ( WINDOW_CLOSE ) 
 #. %3$s:  END 
 #: opac-tmpl/prog/en/modules/opac-review.tt:62
 #, c-format
 msgid "%s %sNote: this window will close automatically in 5 seconds%s "
 msgstr "%s %sবিদ্রঃ এটি মাত্র ৫ সেকেন্ডের মধ্যে স্বয়ংক্রিয়ভাবে বন্ধ হবে %s "
+
+#. %1$s:  SWITCH ACCOUNT_LINE.accounttype 
+#. %2$s:  CASE 'Pay' 
+#. %3$s:  CASE 'N' 
+#. %4$s:  CASE 'F' 
+#. %5$s:  CASE 'A' 
+#. %6$s:  CASE 'M' 
+#. %7$s:  CASE 'L' 
+#. %8$s:  CASE 'W' 
+#. %9$s:  CASE 
+#. %10$s:  ACCOUNT_LINE.accounttype 
+#. %11$s: - END -
+#. %12$s: - IF ACCOUNT_LINE.description 
+#. %13$s:  ACCOUNT_LINE.description 
+#. %14$s:  END 
+#. %15$s:  IF line.title 
+#. %16$s:  line.title |html_entity 
+#. %17$s:  END 
+#: opac-tmpl/prog/en/modules/opac-account.tt:42
+#, c-format
+msgid ""
+"%s %sPayment,thanks %sNew Card %sFine %sAccount management fee %sSundry "
+"%sLost Item %sWriteoff %s%s %s %s, %s%s %s(%s)%s "
+msgstr ""
 
 #. %1$s:  IF (render=='standalone') 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -4776,8 +4798,8 @@ msgstr "%s %s %s %s (%s) "
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
 #: opac-tmpl/prog/en/modules/opac-results.tt:728
 #: opac-tmpl/prog/en/modules/opac-results.tt:755
-#: opac-tmpl/prog/en/modules/opac-account.tt:44
-#: opac-tmpl/prog/en/modules/opac-account.tt:45
+#: opac-tmpl/prog/en/modules/opac-account.tt:56
+#: opac-tmpl/prog/en/modules/opac-account.tt:57
 #: opac-tmpl/prog/en/modules/opac-showreviews-rss.tt:13
 #: opac-tmpl/prog/en/modules/opac-messaging.tt:40
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:13
@@ -5802,7 +5824,7 @@ msgstr ""
 #. %5$s:  ELSIF ( suggestions_loo.REJECTED ) 
 #. %6$s:  ELSIF ( suggestions_loo.AVAILABLE ) 
 #. %7$s:  ELSE 
-#. %8$s:  KohaAuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) 
+#. %8$s:  AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) 
 #. %9$s:  END 
 #. %10$s:  IF ( suggestions_loo.reason ) 
 #. %11$s:  suggestions_loo.reason |html 
@@ -6825,13 +6847,9 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:426
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:579
-#, fuzzy, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
-
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:1030
 #, fuzzy, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
+msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:257
@@ -10507,6 +10525,11 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-detail.tt:737
 #, c-format
 msgid "Item type: "
+msgstr ""
+
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, c-format
+msgid "Item types"
 msgstr ""
 
 #. SCRIPT
@@ -15465,7 +15488,7 @@ msgstr ""
 msgid "You have checked out too many items and can't check out any more. %s "
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-account.tt:52
+#: opac-tmpl/prog/en/modules/opac-account.tt:64
 #, c-format
 msgid "You have no fines or charges"
 msgstr ""
@@ -18610,3 +18633,5 @@ msgstr ""
 #, c-format
 msgid "• "
 msgstr ""
+
+#, fuzzy
