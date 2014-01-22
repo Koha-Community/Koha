@@ -54,8 +54,12 @@ if ($action eq 'export' && $input->request_method() eq 'GET') {
     my $strXml = '';
     my $format = $input->param('type_export_' . $frameworkcode);
     ExportFramework($frameworkcode, \$strXml, $format);
+
     if ($format eq 'csv') {
         # CSV file
+
+        # Correctly set the encoding to output plain text in UTF-8
+        binmode(STDOUT,':encoding(UTF-8)');
         print $input->header(-type => 'application/vnd.ms-excel', -attachment => 'export_' . $frameworkcode . '.csv');
         print $strXml;
     } elsif ($format eq 'excel') {
