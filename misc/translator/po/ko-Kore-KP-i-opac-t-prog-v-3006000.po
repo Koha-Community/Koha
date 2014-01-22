@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-12-17 23:59-0300\n"
+"POT-Creation-Date: 2014-01-20 10:31-0300\n"
 "PO-Revision-Date: 2008-03-22 21:11+0200\n"
 "Last-Translator: translate.koha.org\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -1961,6 +1961,8 @@ msgstr "%s%s 환영합니다"
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:51
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:126
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
+#: opac-tmpl/prog/en/includes/opac-facets.inc:16
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/includes/usermenu.inc:4
 #: opac-tmpl/prog/en/includes/usermenu.inc:6
 #: opac-tmpl/prog/en/includes/usermenu.inc:8
@@ -3385,6 +3387,18 @@ msgstr "%3$s의 %1$s에 대한 %2$s결과"
 msgid "%s %s %s(%s)%s %s "
 msgstr "%s%s 환영합니다"
 
+#. %1$s:  END 
+#. %2$s:  UNLESS ( singleBranchMode ) 
+#. %3$s:  IF ( facets_loo.type_label_Libraries ) 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  IF ( facets_loo.type_label_Location ) 
+#. %7$s:  END 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "%s %s %sLibraries%s %s %sLocations%s "
+msgstr "%3$s의 %1$s에 대한 %2$s결과"
+
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
 #. %3$s:  value.count 
@@ -3984,22 +3998,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "%s %sSearch suggestions"
 msgstr "구매희망사항 검색"
-
-#. %1$s:  END 
-#. %2$s:  IF ( facets_loo.type_label_Series ) 
-#. %3$s:  END 
-#. %4$s:  IF ( facets_loo.type_label_ItemTypes ) 
-#. %5$s:  END 
-#. %6$s:  UNLESS ( singleBranchMode ) 
-#. %7$s:  IF ( facets_loo.type_label_Libraries ) 
-#. %8$s:  END 
-#. %9$s:  END 
-#. %10$s:  IF ( facets_loo.type_label_Location ) 
-#. %11$s:  END 
-#: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, fuzzy, c-format
-msgid "%s %sSeries%s %sItem types%s %s %sLibraries%s %s %sLocations%s "
-msgstr "%3$s의 %1$s에 대한 %2$s결과"
 
 #. %1$s:  END 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -6650,13 +6648,9 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:426
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:537
-#, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-msgstr ""
-
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
 #, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
+msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 msgstr ""
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:257
@@ -10266,6 +10260,11 @@ msgstr "항목(자료)유형"
 msgid "Item type: "
 msgstr "항목(자료)유형"
 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "Item types"
+msgstr "항목(자료)유형"
+
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 #, fuzzy
@@ -13208,6 +13207,7 @@ msgstr "연속간행물"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:65
 #: opac-tmpl/prog/en/includes/masthead.inc:67
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:229
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:76
 #: opac-tmpl/prog/en/modules/opac-results.tt:378
@@ -18009,7 +18009,7 @@ msgstr "주"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:405
 #, fuzzy, c-format
 msgid "title"
-msgstr "표제"
+msgstr "title"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:664
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:678
@@ -18342,5 +18342,3 @@ msgstr ""
 #, c-format
 msgid "• "
 msgstr ""
-
-#, fuzzy

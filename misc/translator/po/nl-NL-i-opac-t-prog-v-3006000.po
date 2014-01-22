@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-12-18 00:11-0300\n"
+"POT-Creation-Date: 2014-01-20 10:44-0300\n"
 "PO-Revision-Date: 2012-09-26 10:36+0200\n"
 "Last-Translator: ntenbrug <n.ten.brug@rijksmuseum.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1964,6 +1964,8 @@ msgstr "%s %%] %s "
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:51
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:126
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
+#: opac-tmpl/prog/en/includes/opac-facets.inc:16
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/includes/usermenu.inc:4
 #: opac-tmpl/prog/en/includes/usermenu.inc:6
 #: opac-tmpl/prog/en/includes/usermenu.inc:8
@@ -3406,6 +3408,20 @@ msgstr "%s %s %s%s%sGeen titel%s %s, %s%s"
 msgid "%s %s %s(%s)%s %s "
 msgstr "%s %s %s(%s)%s %s "
 
+#. %1$s:  END 
+#. %2$s:  UNLESS ( singleBranchMode ) 
+#. %3$s:  IF ( facets_loo.type_label_Libraries ) 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  IF ( facets_loo.type_label_Location ) 
+#. %7$s:  END 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "%s %s %sLibraries%s %s %sLocations%s "
+msgstr ""
+"%sAuteurs%s %sTitels%s %sOnderwerpen%s %sPlaatsen%s %sReeks%s %s "
+"%sBibliotheken%s %s "
+
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
 #. %3$s:  value.count 
@@ -4014,24 +4030,6 @@ msgstr "%s %sNoot: dit venster zal automatisch sluiten in 5 seconden%s "
 #, fuzzy, c-format
 msgid "%s %sSearch suggestions"
 msgstr "%s%sMijn %s%sAankoopsuggesties"
-
-#. %1$s:  END 
-#. %2$s:  IF ( facets_loo.type_label_Series ) 
-#. %3$s:  END 
-#. %4$s:  IF ( facets_loo.type_label_ItemTypes ) 
-#. %5$s:  END 
-#. %6$s:  UNLESS ( singleBranchMode ) 
-#. %7$s:  IF ( facets_loo.type_label_Libraries ) 
-#. %8$s:  END 
-#. %9$s:  END 
-#. %10$s:  IF ( facets_loo.type_label_Location ) 
-#. %11$s:  END 
-#: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, fuzzy, c-format
-msgid "%s %sSeries%s %sItem types%s %s %sLibraries%s %s %sLocations%s "
-msgstr ""
-"%sAuteurs%s %sTitels%s %sOnderwerpen%s %sPlaatsen%s %sReeks%s %s "
-"%sBibliotheken%s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -6957,13 +6955,9 @@ msgstr "/ "
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:426
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:537
-#, fuzzy, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-msgstr "/cgi-bin/koha/opac-detail.pl?biblionumber="
-
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
 #, fuzzy, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
+msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 msgstr "/cgi-bin/koha/opac-detail.pl?biblionumber="
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:257
@@ -10611,6 +10605,11 @@ msgstr "Type item:"
 msgid "Item type: "
 msgstr "Type item: "
 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "Item types"
+msgstr "Type item"
+
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "Items in your cart: "
@@ -13571,6 +13570,7 @@ msgstr "Tijdschriften"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:65
 #: opac-tmpl/prog/en/includes/masthead.inc:67
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:229
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:76
 #: opac-tmpl/prog/en/modules/opac-results.tt:378
@@ -18447,7 +18447,7 @@ msgstr "theses "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:405
 #, c-format
 msgid "title"
-msgstr "titel"
+msgstr "title"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:664
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:678
@@ -18787,3 +18787,4 @@ msgstr ""
 msgid "• "
 msgstr "• "
 
+#, fuzzy

@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-12-17 23:52-0300\n"
-"PO-Revision-Date: 2013-11-22 10:49+0000\n"
+"POT-Creation-Date: 2014-01-20 10:24-0300\n"
+"PO-Revision-Date: 2013-12-24 10:24+0000\n"
 "Last-Translator: vfernandes <vfernandes@keep.pt>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1385117365.0\n"
+"X-POOTLE-MTIME: 1387880675.0\n"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:529
@@ -1961,6 +1961,8 @@ msgstr "%s %%] %s "
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:51
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:126
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
+#: opac-tmpl/prog/en/includes/opac-facets.inc:16
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/includes/usermenu.inc:4
 #: opac-tmpl/prog/en/includes/usermenu.inc:6
 #: opac-tmpl/prog/en/includes/usermenu.inc:8
@@ -2730,13 +2732,13 @@ msgstr "%s %s %s %s %s %s %s "
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:87
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]"
 "Greek (to 1453) %s%s %s %s "
 msgstr ""
-"%s%s %s %s %s %s %s %%]Inglês %s %%]Francês %s %%]Italiano %s %%]Alemão %s "
-"%%]Espanhol %s%s %s %s "
+"%s %s %s %s %s %s %s %s %%]Hebreu %s %%]Árabe %s %%]Grego (moderno) %s %%]"
+"Grego (até 1453) %s%s %s %s"
 
 #. %1$s:  END 
 #. %2$s:  IF ( singleBranchMode ) 
@@ -2891,9 +2893,9 @@ msgstr "%s %s %s %s (%s)"
 #. %5$s:  END 
 #. %6$s:  INCLUDE shelfbrowser tab='otherholdings' 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1048
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s No other items. %s %s "
-msgstr "%s %s %s Sem outros exemplares. %s %s "
+msgstr "%s %s %s %s Sem outros exemplares. %s %s "
 
 #. %1$s:  IF showpriority 
 #. %2$s:  bibitemloo.rank 
@@ -3414,6 +3416,20 @@ msgstr "%s %s %s%s%sSem título%s %s, %s%s"
 msgid "%s %s %s(%s)%s %s "
 msgstr "%s %s %s(%s)%s %s "
 
+#. %1$s:  END 
+#. %2$s:  UNLESS ( singleBranchMode ) 
+#. %3$s:  IF ( facets_loo.type_label_Libraries ) 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  IF ( facets_loo.type_label_Location ) 
+#. %7$s:  END 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "%s %s %sLibraries%s %s %sLocations%s "
+msgstr ""
+"%s %sColecções%s %sTipos de documentos%s %s %sBibliotecas%s %s %sLocalizações"
+"%s"
+
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
 #. %3$s:  value.count 
@@ -3549,9 +3565,11 @@ msgstr "%s %s enviou um carrinho do nosso catálogo online."
 #. %2$s:  surname 
 #. %3$s:  shelfname 
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s sent you from our online catalog, the virtual shelf called : %s."
-msgstr "%s %s enviou um carrinho do nosso catálogo online."
+msgstr ""
+"%s %s enviou-lhe a partir do nosso catálogo online, a prateleira virtual "
+"chamada : %s"
 
 #. %1$s:  added_count 
 #. %2$s:  IF ( added_count ==1 ) 
@@ -4032,24 +4050,6 @@ msgstr "%s %sNota: esta janela irá fechar automaticamente em 5 segundos%s "
 #, c-format
 msgid "%s %sSearch suggestions"
 msgstr "%s %sSugestões de pesquisa"
-
-#. %1$s:  END 
-#. %2$s:  IF ( facets_loo.type_label_Series ) 
-#. %3$s:  END 
-#. %4$s:  IF ( facets_loo.type_label_ItemTypes ) 
-#. %5$s:  END 
-#. %6$s:  UNLESS ( singleBranchMode ) 
-#. %7$s:  IF ( facets_loo.type_label_Libraries ) 
-#. %8$s:  END 
-#. %9$s:  END 
-#. %10$s:  IF ( facets_loo.type_label_Location ) 
-#. %11$s:  END 
-#: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, fuzzy, c-format
-msgid "%s %sSeries%s %sItem types%s %s %sLibraries%s %s %sLocations%s "
-msgstr ""
-"%sAutores%s %sTitulos%s %sTópicos%s %sLocais%s %sColecções%s %sTipos de "
-"documento%s %s %sBibliotecas%s %s %sLocalizações%s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -5578,9 +5578,9 @@ msgstr "%sConta suspensa %s %s"
 #. %4$s:  END 
 #. %5$s:  IF ( facets_loo.type_label_Topics ) 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:12
-#, fuzzy, c-format
+#, c-format
 msgid "%sAuthors%s %sTitles%s %s"
-msgstr "%s%s %s%s%s%s"
+msgstr "%sAutores%s %sTítulos%s %s"
 
 #. %1$s:  IF ( latestserial.status1 ) 
 #. %2$s:  ELSE 
@@ -7016,14 +7016,10 @@ msgstr "/ "
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:426
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:537
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
 #, c-format
 msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
-#, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
-msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:257
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:196
@@ -8968,9 +8964,9 @@ msgid "Copyright date"
 msgstr "Data dos direitos de autor"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid "Copyright date:"
-msgstr "Data dos direitos de autor"
+msgstr "Data dos direitos de autor:"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.copyrightdate 
@@ -9346,12 +9342,12 @@ msgstr "Não notificar"
 #. %3$s:  notes 
 #. %4$s:  END 
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Do you want to receive an email when a new issue of %s %s(%s)%s arrives?"
 msgstr ""
 "Quer receber uma mensagem de correio electrónico quando chegar um novo "
-"fascículo desta assinatura?"
+"fascículo de %s %s(%s)%s?"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:508
 #, c-format
@@ -10444,9 +10440,9 @@ msgstr "ISBN: %s "
 #. %4$s:  END 
 #. %5$s:  END 
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:60
-#, fuzzy, c-format
+#, c-format
 msgid "ISBN: %s %s %s; %s %s "
-msgstr "%s %s %s ; %s %s "
+msgstr "ISBN: %s %s %s; %s %s"
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:383
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:148
@@ -10687,6 +10683,11 @@ msgstr "Tipo de documento:"
 #, c-format
 msgid "Item type: "
 msgstr "Tipo de documento: "
+
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "Item types"
+msgstr "Tipo de documento"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -12471,9 +12472,9 @@ msgid "Placed on"
 msgstr "Colocada em"
 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, fuzzy, c-format
+#, c-format
 msgid "Places"
-msgstr "Colocar em"
+msgstr "Locais"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:238
 #, c-format
@@ -13668,6 +13669,7 @@ msgstr "Periódicos"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:65
 #: opac-tmpl/prog/en/includes/masthead.inc:67
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:229
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:76
 #: opac-tmpl/prog/en/modules/opac-results.tt:378
@@ -14045,9 +14047,9 @@ msgid "Standard number"
 msgstr "Número normalizado"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
-#, fuzzy, c-format
+#, c-format
 msgid "Standard number (ISBN, ISSN or other):"
-msgstr "Número Standard (ISBN, ISSN ou Outro):"
+msgstr "Número standard (ISBN, ISSN ou outro):"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:368
 #, c-format
@@ -14247,9 +14249,8 @@ msgstr "Enviar o seu pedido de actualização"
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:139
-#, fuzzy
 msgid "Submit your suggestion"
-msgstr "Enviar a Sua Sugestão"
+msgstr "Enviar a sua sugestão"
 
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tt:13
 #, c-format
@@ -15079,7 +15080,7 @@ msgstr "Nível de topo"
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
 #, c-format
 msgid "Topics"
-msgstr ""
+msgstr "Tópicos"
 
 #: opac-tmpl/prog/en/modules/opac-account.tt:33
 #, c-format
@@ -18585,7 +18586,7 @@ msgstr "teses "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:405
 #, c-format
 msgid "title"
-msgstr "título"
+msgstr "title"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:664
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:678
@@ -18926,4 +18927,3 @@ msgstr ""
 msgid "• "
 msgstr "• "
 
-# Alterado por Ricardo Dias Marques em 28-Mai-2009

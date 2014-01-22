@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-12-18 00:03-0300\n"
+"POT-Creation-Date: 2014-01-20 10:36-0300\n"
 "PO-Revision-Date: 2010-07-30 09:33+1300\n"
 "Last-Translator: Chris <chris@bigballofwax.co.nz>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1963,6 +1963,8 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:51
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:126
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
+#: opac-tmpl/prog/en/includes/opac-facets.inc:16
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/includes/usermenu.inc:4
 #: opac-tmpl/prog/en/includes/usermenu.inc:6
 #: opac-tmpl/prog/en/includes/usermenu.inc:8
@@ -3387,6 +3389,18 @@ msgstr ""
 msgid "%s %s %s(%s)%s %s "
 msgstr ""
 
+#. %1$s:  END 
+#. %2$s:  UNLESS ( singleBranchMode ) 
+#. %3$s:  IF ( facets_loo.type_label_Libraries ) 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  IF ( facets_loo.type_label_Location ) 
+#. %7$s:  END 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, c-format
+msgid "%s %s %sLibraries%s %s %sLocations%s "
+msgstr ""
+
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
 #. %3$s:  value.count 
@@ -3985,22 +3999,6 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/svc/suggestion.tt:1
 #, c-format
 msgid "%s %sSearch suggestions"
-msgstr ""
-
-#. %1$s:  END 
-#. %2$s:  IF ( facets_loo.type_label_Series ) 
-#. %3$s:  END 
-#. %4$s:  IF ( facets_loo.type_label_ItemTypes ) 
-#. %5$s:  END 
-#. %6$s:  UNLESS ( singleBranchMode ) 
-#. %7$s:  IF ( facets_loo.type_label_Libraries ) 
-#. %8$s:  END 
-#. %9$s:  END 
-#. %10$s:  IF ( facets_loo.type_label_Location ) 
-#. %11$s:  END 
-#: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, c-format
-msgid "%s %sSeries%s %sItem types%s %s %sLibraries%s %s %sLocations%s "
 msgstr ""
 
 #. %1$s:  END 
@@ -6642,13 +6640,9 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:426
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:537
-#, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-msgstr ""
-
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
 #, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
+msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 msgstr ""
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:257
@@ -10231,6 +10225,11 @@ msgstr ""
 msgid "Item type: "
 msgstr ""
 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, c-format
+msgid "Item types"
+msgstr ""
+
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "Items in your cart: "
@@ -13126,6 +13125,7 @@ msgstr ""
 
 #: opac-tmpl/prog/en/includes/masthead.inc:65
 #: opac-tmpl/prog/en/includes/masthead.inc:67
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:229
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:76
 #: opac-tmpl/prog/en/modules/opac-results.tt:378
@@ -17875,7 +17875,7 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:405
 #, c-format
 msgid "title"
-msgstr ""
+msgstr "title"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:664
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:678

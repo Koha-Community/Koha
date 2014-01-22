@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-18 00:19-0300\n"
-"PO-Revision-Date: 2013-12-05 07:54+0000\n"
-"Last-Translator: Ugur <ugurbulgan@sdu.edu.tr>\n"
+"POT-Creation-Date: 2014-01-20 10:52-0300\n"
+"PO-Revision-Date: 2014-01-22 12:53+0000\n"
+"Last-Translator: onur <sonure@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1386230092.0\n"
+"X-POOTLE-MTIME: 1390395197.0\n"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:529
@@ -1963,6 +1963,8 @@ msgstr "%s %%] %s  "
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:51
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:126
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
+#: opac-tmpl/prog/en/includes/opac-facets.inc:16
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/includes/usermenu.inc:4
 #: opac-tmpl/prog/en/includes/usermenu.inc:6
 #: opac-tmpl/prog/en/includes/usermenu.inc:8
@@ -2732,13 +2734,13 @@ msgstr "%s %s %s %s %s %s %s "
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:87
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]"
 "Greek (to 1453) %s%s %s %s "
 msgstr ""
-"%s%s %s %s %s %s %s %%]İngilizce %s %%]Fransızca %s %%]İtalyanca %s %%]"
-"Almanca %s %%]İspanyolca %s%s %s %s"
+"%s %s %s %s %s %s %s %s %%]İbranice %s %%]Arapça %s %%]Yunanca (çağdaş) %s "
+"%%]Yunanca (1453’e kadar) %s%s %s %s"
 
 #. %1$s:  END 
 #. %2$s:  IF ( singleBranchMode ) 
@@ -2893,9 +2895,9 @@ msgstr "%s %s %s %s (%s)"
 #. %5$s:  END 
 #. %6$s:  INCLUDE shelfbrowser tab='otherholdings' 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1048
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s No other items. %s %s "
-msgstr "%s %s %s Başka materyal yok. %s %s"
+msgstr "%s %s %s %s Başka materyal yok. %s %s"
 
 #. %1$s:  IF showpriority 
 #. %2$s:  bibitemloo.rank 
@@ -3414,6 +3416,18 @@ msgstr "%s %s %s%s%sEseradı yok%s %s, %s%s"
 msgid "%s %s %s(%s)%s %s "
 msgstr "%s %s %s(%s)%s %s "
 
+#. %1$s:  END 
+#. %2$s:  UNLESS ( singleBranchMode ) 
+#. %3$s:  IF ( facets_loo.type_label_Libraries ) 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  IF ( facets_loo.type_label_Location ) 
+#. %7$s:  END 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, c-format
+msgid "%s %s %sLibraries%s %s %sLocations%s "
+msgstr "%s %s %sKütüphaneler%s %s %sKonumlar%s"
+
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
 #. %3$s:  value.count 
@@ -3549,9 +3563,9 @@ msgstr "%s %s çevrimiçi kataloğumuzdan size bir kart gönderildi."
 #. %2$s:  surname 
 #. %3$s:  shelfname 
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s sent you from our online catalog, the virtual shelf called : %s."
-msgstr "%s %s çevrimiçi kataloğumuzdan size bir kart gönderildi."
+msgstr "%s %s size sanal raf adlı çevrimiçi kataloğumuzdan gönderildi: %s."
 
 #. %1$s:  added_count 
 #. %2$s:  IF ( added_count ==1 ) 
@@ -4028,24 +4042,6 @@ msgstr "%s %sNot: Bu pencere 5 saniye içinde otomatik olarak kapanacaktır%s"
 #, c-format
 msgid "%s %sSearch suggestions"
 msgstr "%s %sArama önerileri"
-
-#. %1$s:  END 
-#. %2$s:  IF ( facets_loo.type_label_Series ) 
-#. %3$s:  END 
-#. %4$s:  IF ( facets_loo.type_label_ItemTypes ) 
-#. %5$s:  END 
-#. %6$s:  UNLESS ( singleBranchMode ) 
-#. %7$s:  IF ( facets_loo.type_label_Libraries ) 
-#. %8$s:  END 
-#. %9$s:  END 
-#. %10$s:  IF ( facets_loo.type_label_Location ) 
-#. %11$s:  END 
-#: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, fuzzy, c-format
-msgid "%s %sSeries%s %sItem types%s %s %sLibraries%s %s %sLocations%s "
-msgstr ""
-"%sYazarlar%s %sBaşlıklar%s %sKonular%s %sYerler%s %sSeriler%s %sMateryal "
-"türleri%s %s %sKütüphaneler%s %s %sKonumlar%s   "
 
 #. %1$s:  END 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -5560,9 +5556,9 @@ msgstr "%sHesap Donduruldu %s %s"
 #. %4$s:  END 
 #. %5$s:  IF ( facets_loo.type_label_Topics ) 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:12
-#, fuzzy, c-format
+#, c-format
 msgid "%sAuthors%s %sTitles%s %s"
-msgstr "%s%s %s%s%s%s"
+msgstr "%sYazarlar %s %sEser adları%s %s"
 
 #. %1$s:  IF ( latestserial.status1 ) 
 #. %2$s:  ELSE 
@@ -6983,14 +6979,10 @@ msgstr "/"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:426
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:537
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
 #, c-format
 msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
-#, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
-msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:257
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:196
@@ -8922,9 +8914,9 @@ msgid "Copyright date"
 msgstr "Telif tarihi"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid "Copyright date:"
-msgstr "Telif tarihi"
+msgstr "Telif hakkı tarihi:"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.copyrightdate 
@@ -9294,11 +9286,12 @@ msgstr "Bildirmeyin"
 #. %3$s:  notes 
 #. %4$s:  END 
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Do you want to receive an email when a new issue of %s %s(%s)%s arrives?"
 msgstr ""
-"Bu derginin yeni bir sayısı geldiğinde e-posta gönderilmesini ister misiniz?"
+"%s %s(%s)%s  dergisinin yeni sayısı geldiğinde e-posta almak  istiyor "
+"musunuz?"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:508
 #, c-format
@@ -10385,9 +10378,9 @@ msgstr "ISBN: %s "
 #. %4$s:  END 
 #. %5$s:  END 
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:60
-#, fuzzy, c-format
+#, c-format
 msgid "ISBN: %s %s %s; %s %s "
-msgstr "%s %s %s ; %s %s "
+msgstr "ISBN: %s %s %s; %s %s"
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:383
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:148
@@ -10627,6 +10620,11 @@ msgstr "Materyal türü:"
 #, c-format
 msgid "Item type: "
 msgstr "Materyal türü:"
+
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, c-format
+msgid "Item types"
+msgstr "Materyal türleri"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -12384,9 +12382,9 @@ msgid "Placed on"
 msgstr "Üzerinde"
 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, fuzzy, c-format
+#, c-format
 msgid "Places"
-msgstr "Üzerine"
+msgstr "Yerler"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:238
 #, c-format
@@ -13568,6 +13566,7 @@ msgstr "Süreli Yayınlar"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:65
 #: opac-tmpl/prog/en/includes/masthead.inc:67
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:229
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:76
 #: opac-tmpl/prog/en/modules/opac-results.tt:378
@@ -13943,9 +13942,9 @@ msgid "Standard number"
 msgstr "Standart numara"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
-#, fuzzy, c-format
+#, c-format
 msgid "Standard number (ISBN, ISSN or other):"
-msgstr "Standard Numara (ISBN, ISSN veya Diğer):"
+msgstr "Standard numara (ISBN, ISSN veya Diğer):"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:368
 #, c-format
@@ -14145,9 +14144,8 @@ msgstr "Güncelleştirme isteğinizi gönderin "
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:139
-#, fuzzy
 msgid "Submit your suggestion"
-msgstr "Önerilerinizi Gönderin"
+msgstr "Önerinizi gönderin"
 
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tt:13
 #, c-format
@@ -14960,7 +14958,7 @@ msgstr "En üst düzey"
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
 #, c-format
 msgid "Topics"
-msgstr ""
+msgstr "Konular"
 
 #: opac-tmpl/prog/en/modules/opac-account.tt:33
 #, c-format
@@ -18422,7 +18420,7 @@ msgstr "tezler"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:405
 #, c-format
 msgid "title"
-msgstr "eser adı"
+msgstr "title"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:664
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:678
@@ -18755,4 +18753,3 @@ msgstr ""
 #, c-format
 msgid "• "
 msgstr "•"
-

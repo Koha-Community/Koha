@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Paul Vilhan<paul.vilhan@gmail.com>, 2012, 2013.
+# Paul Vilhan<paul.vilhan@gmail.com>, 2012, 2013, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: KOHA3 OPAC\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-18 00:04-0300\n"
-"PO-Revision-Date: 2013-10-21 22:34+0000\n"
+"POT-Creation-Date: 2014-01-20 10:36-0300\n"
+"PO-Revision-Date: 2014-01-22 12:27+0000\n"
 "Last-Translator: siracide <paul.vilhan@gmail.com>\n"
 "Language-Team: Paul\n"
 "Language: sk\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.0\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1382394883.0\n"
+"X-POOTLE-MTIME: 1390393636.0\n"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:529
@@ -1964,6 +1964,8 @@ msgstr "%s %%] %s "
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:51
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:126
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
+#: opac-tmpl/prog/en/includes/opac-facets.inc:16
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/includes/usermenu.inc:4
 #: opac-tmpl/prog/en/includes/usermenu.inc:6
 #: opac-tmpl/prog/en/includes/usermenu.inc:8
@@ -2733,13 +2735,13 @@ msgstr "%s %s %s %s %s %s %s "
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:87
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]"
 "Greek (to 1453) %s%s %s %s "
 msgstr ""
-"%s%s %s %s %s %s %s %%]anglicky %s %%]francúzsky %s %%]taliansky %s %%]"
-"nemecky %s %%]španielsky %s%s %s %s "
+"%s %s %s %s %s %s %s %s %%]hebrejsky %s %%]arabsky %s %%]grécky (moderná) %s "
+"%%]grécky (do 1453) %s%s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( singleBranchMode ) 
@@ -2893,9 +2895,9 @@ msgstr "%s %s %s %s (%s)"
 #. %5$s:  END 
 #. %6$s:  INCLUDE shelfbrowser tab='otherholdings' 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1048
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s No other items. %s %s "
-msgstr "%s %s %s Žiadne ďalšie exempláre. %s %s "
+msgstr "%s %s %s %s Žiadne ďalšie exempláre. %s %s "
 
 #. %1$s:  IF showpriority 
 #. %2$s:  bibitemloo.rank 
@@ -3410,6 +3412,18 @@ msgstr "%s %s %s%s%sBez názvu%s %s, %s%s"
 msgid "%s %s %s(%s)%s %s "
 msgstr "%s %s %s(%s)%s %s "
 
+#. %1$s:  END 
+#. %2$s:  UNLESS ( singleBranchMode ) 
+#. %3$s:  IF ( facets_loo.type_label_Libraries ) 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  IF ( facets_loo.type_label_Location ) 
+#. %7$s:  END 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, c-format
+msgid "%s %s %sLibraries%s %s %sLocations%s "
+msgstr "%s %s %sKnižnice%s %s %sLokácie%s "
+
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
 #. %3$s:  value.count 
@@ -3545,9 +3559,10 @@ msgstr "%s %s vám poslal(a) košík z nášho online katalógu."
 #. %2$s:  surname 
 #. %3$s:  shelfname 
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s sent you from our online catalog, the virtual shelf called : %s."
-msgstr "%s %s vám poslal(a) košík z nášho online katalógu."
+msgstr ""
+"%s %s vám z nášho online katalógu poslal(a) virtuálnu poličku s názvom : %s."
 
 #. %1$s:  added_count 
 #. %2$s:  IF ( added_count ==1 ) 
@@ -4024,24 +4039,6 @@ msgid "%s %sSearch suggestions"
 msgstr "%s %sHľadanie návrhov"
 
 #. %1$s:  END 
-#. %2$s:  IF ( facets_loo.type_label_Series ) 
-#. %3$s:  END 
-#. %4$s:  IF ( facets_loo.type_label_ItemTypes ) 
-#. %5$s:  END 
-#. %6$s:  UNLESS ( singleBranchMode ) 
-#. %7$s:  IF ( facets_loo.type_label_Libraries ) 
-#. %8$s:  END 
-#. %9$s:  END 
-#. %10$s:  IF ( facets_loo.type_label_Location ) 
-#. %11$s:  END 
-#: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, fuzzy, c-format
-msgid "%s %sSeries%s %sItem types%s %s %sLibraries%s %s %sLocations%s "
-msgstr ""
-"%sAutori%s %sTituly%s %sTémy%s %sMiesta%s %sEdície%s %sTypy exemplárov%s %s "
-"%sKnižnice%s %s %sLokácie%s "
-
-#. %1$s:  END 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:234
 #, c-format
@@ -4062,9 +4059,9 @@ msgstr "%s %sexemplár%sexemplárov%s"
 #. %3$s:  CASE 'used for/see from:' 
 #. %4$s:  END 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:14
-#, fuzzy, c-format
+#, c-format
 msgid "%s %ssee also: %sused for/see from: %s"
-msgstr "Použitý na/viď od:"
+msgstr "%s %sviď aj: %spoužitý na/viď od: %s"
 
 #. %1$s:  END 
 #. %2$s:  UNLESS ( loop.last ) 
@@ -5554,9 +5551,9 @@ msgstr "%sÚčet je zablokovaný %s %s"
 #. %4$s:  END 
 #. %5$s:  IF ( facets_loo.type_label_Topics ) 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:12
-#, fuzzy, c-format
+#, c-format
 msgid "%sAuthors%s %sTitles%s %s"
-msgstr "%s%s %s%s%s%s"
+msgstr "%sAutori%s %sTituly%s %s"
 
 #. %1$s:  IF ( latestserial.status1 ) 
 #. %2$s:  ELSE 
@@ -6974,14 +6971,10 @@ msgstr "/ "
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:426
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:537
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
 #, c-format
 msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
-#, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
-msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:257
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:196
@@ -8909,9 +8902,9 @@ msgid "Copyright date"
 msgstr "Dátum copyrightu"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid "Copyright date:"
-msgstr "Dátum copyrightu"
+msgstr "Dátum copyrightu:"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.copyrightdate 
@@ -9284,10 +9277,10 @@ msgstr "Neoznamovať"
 #. %3$s:  notes 
 #. %4$s:  END 
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Do you want to receive an email when a new issue of %s %s(%s)%s arrives?"
-msgstr "Želáte si dostať E-mail, keď dôjde nové číslo tohto periodika?"
+msgstr "Želáte si dostať E-mail, keď dôjde nové číslo %s %s(%s)%s?"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:508
 #, c-format
@@ -10368,9 +10361,9 @@ msgstr "ISBN: %s "
 #. %4$s:  END 
 #. %5$s:  END 
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:60
-#, fuzzy, c-format
+#, c-format
 msgid "ISBN: %s %s %s; %s %s "
-msgstr "%s %s %s ; %s %s "
+msgstr "ISBN: %s %s %s; %s %s "
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:383
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:148
@@ -10609,6 +10602,11 @@ msgstr "Typ exemplára:"
 #, c-format
 msgid "Item type: "
 msgstr "Typ exemplára: "
+
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, c-format
+msgid "Item types"
+msgstr "Typy exemplárov"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -12364,9 +12362,9 @@ msgid "Placed on"
 msgstr "Zadaný"
 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, fuzzy, c-format
+#, c-format
 msgid "Places"
-msgstr "Vybrať"
+msgstr "Miesta"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:238
 #, c-format
@@ -13547,6 +13545,7 @@ msgstr "seriály"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:65
 #: opac-tmpl/prog/en/includes/masthead.inc:67
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:229
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:76
 #: opac-tmpl/prog/en/modules/opac-results.tt:378
@@ -13922,7 +13921,7 @@ msgid "Standard number"
 msgstr "Štandardné číslo"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
-#, fuzzy, c-format
+#, c-format
 msgid "Standard number (ISBN, ISSN or other):"
 msgstr "Štandardné číslo (ISBN, ISSN alebo iné):"
 
@@ -14123,7 +14122,6 @@ msgstr "Pošlite žiadosť o aktualizáciu"
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:139
-#, fuzzy
 msgid "Submit your suggestion"
 msgstr "Pošlite Váš návrh"
 
@@ -14937,7 +14935,7 @@ msgstr "Najvyššia úroveň"
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
 #, c-format
 msgid "Topics"
-msgstr ""
+msgstr "Témy"
 
 #: opac-tmpl/prog/en/modules/opac-account.tt:33
 #, c-format
@@ -18391,7 +18389,7 @@ msgstr "záverečné práce "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:405
 #, c-format
 msgid "title"
-msgstr "názov"
+msgstr "title"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:664
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:678
@@ -18492,9 +18490,10 @@ msgid "url"
 msgstr "url"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:391
-#, fuzzy, c-format
+#, c-format
 msgid "user's login identifier (userid or cardnumber)"
-msgstr "identifikátor užívateľského prihlásenia"
+msgstr ""
+"identifikátor užívateľského prihlásenia (id užívateľa alebo číslo preukazu)"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:393
 #, c-format
@@ -18724,4 +18723,3 @@ msgstr ""
 #, c-format
 msgid "• "
 msgstr "• "
-

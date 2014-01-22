@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.10\n"
-"POT-Creation-Date: 2013-12-18 00:02-0300\n"
+"POT-Creation-Date: 2014-01-20 10:34-0300\n"
 "PO-Revision-Date: 2013-01-11 13:32+0100\n"
 "Last-Translator: Hugo Agud <hagud@orex.es>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-community."
@@ -1959,6 +1959,8 @@ msgstr "%s %%] %s "
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:51
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:126
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
+#: opac-tmpl/prog/en/includes/opac-facets.inc:16
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/includes/usermenu.inc:4
 #: opac-tmpl/prog/en/includes/usermenu.inc:6
 #: opac-tmpl/prog/en/includes/usermenu.inc:8
@@ -3401,6 +3403,20 @@ msgstr "%s %s %s%s%sSense títol%s %s, %s%s"
 msgid "%s %s %s(%s)%s %s "
 msgstr "%s %s %s(%s)%s %s "
 
+#. %1$s:  END 
+#. %2$s:  UNLESS ( singleBranchMode ) 
+#. %3$s:  IF ( facets_loo.type_label_Libraries ) 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  IF ( facets_loo.type_label_Location ) 
+#. %7$s:  END 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "%s %s %sLibraries%s %s %sLocations%s "
+msgstr ""
+"%sAutors%s %sTítols%s %sMatèries%s %sLlocs%s %sSeries%s %sTipus d'exemplar%s "
+"%s %sBiblioteques%s %s %sLocalitzacions%s "
+
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
 #. %3$s:  value.count 
@@ -4012,24 +4028,6 @@ msgstr "%s %sNota: aquesta finestra es tancarà automàticament en 5 segons%s "
 #, c-format
 msgid "%s %sSearch suggestions"
 msgstr "%s %sSuggeriments de compra"
-
-#. %1$s:  END 
-#. %2$s:  IF ( facets_loo.type_label_Series ) 
-#. %3$s:  END 
-#. %4$s:  IF ( facets_loo.type_label_ItemTypes ) 
-#. %5$s:  END 
-#. %6$s:  UNLESS ( singleBranchMode ) 
-#. %7$s:  IF ( facets_loo.type_label_Libraries ) 
-#. %8$s:  END 
-#. %9$s:  END 
-#. %10$s:  IF ( facets_loo.type_label_Location ) 
-#. %11$s:  END 
-#: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, fuzzy, c-format
-msgid "%s %sSeries%s %sItem types%s %s %sLibraries%s %s %sLocations%s "
-msgstr ""
-"%sAutors%s %sTítols%s %sMatèries%s %sLlocs%s %sSeries%s %sTipus d'exemplar%s "
-"%s %sBiblioteques%s %s %sLocalitzacions%s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -6954,13 +6952,9 @@ msgstr "/ "
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:426
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:537
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
 #, c-format
 msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
-#, fuzzy, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
 msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:257
@@ -10603,6 +10597,11 @@ msgstr "Tipus d'ítem:"
 msgid "Item type: "
 msgstr "Tipus d'ítem: "
 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "Item types"
+msgstr "Tipus d'ítem"
+
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "Items in your cart: "
@@ -13554,6 +13553,7 @@ msgstr "Publicacions periòdiques"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:65
 #: opac-tmpl/prog/en/includes/masthead.inc:67
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:229
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:76
 #: opac-tmpl/prog/en/modules/opac-results.tt:378
@@ -18398,7 +18398,7 @@ msgstr "tesi"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:405
 #, c-format
 msgid "title"
-msgstr "títol"
+msgstr "title"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:664
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:678
@@ -18733,3 +18733,4 @@ msgstr ""
 msgid "• "
 msgstr "• "
 
+#, fuzzy

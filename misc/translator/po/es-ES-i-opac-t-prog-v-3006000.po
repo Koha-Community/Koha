@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.12\n"
-"POT-Creation-Date: 2013-12-17 23:49-0300\n"
-"PO-Revision-Date: 2013-12-18 14:01+0000\n"
+"POT-Creation-Date: 2014-01-20 10:21-0300\n"
+"PO-Revision-Date: 2014-01-21 14:31+0000\n"
 "Last-Translator: Tomás <tomascohen@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-"
 "community.org>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1387375317.0\n"
+"X-POOTLE-MTIME: 1390314701.0\n"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:529
@@ -1960,6 +1960,8 @@ msgstr "%s %%] %s "
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:51
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:126
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
+#: opac-tmpl/prog/en/includes/opac-facets.inc:16
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/includes/usermenu.inc:4
 #: opac-tmpl/prog/en/includes/usermenu.inc:6
 #: opac-tmpl/prog/en/includes/usermenu.inc:8
@@ -2734,8 +2736,8 @@ msgid ""
 "%s %s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]"
 "Greek (to 1453) %s%s %s %s "
 msgstr ""
-"%s %s %s %s %s %s %s %s %%]Hebreo %s %%]Árabe %s %%]Griego (moderno) %s %%"
-"]Griego (hasta 1453) %s%s %s %s "
+"%s %s %s %s %s %s %s %s %%]Hebreo %s %%]Árabe %s %%]Griego (moderno) %s %%]"
+"Griego (hasta 1453) %s%s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( singleBranchMode ) 
@@ -3410,6 +3412,18 @@ msgstr "%s %s %s%s%sSin título%s %s, %s%s"
 msgid "%s %s %s(%s)%s %s "
 msgstr "%s %s %s(%s)%s %s "
 
+#. %1$s:  END 
+#. %2$s:  UNLESS ( singleBranchMode ) 
+#. %3$s:  IF ( facets_loo.type_label_Libraries ) 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  IF ( facets_loo.type_label_Location ) 
+#. %7$s:  END 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, c-format
+msgid "%s %s %sLibraries%s %s %sLocations%s "
+msgstr "%s %s %sBibliotecas%s %s %sUbicaciones%s "
+
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
 #. %3$s:  value.count 
@@ -4030,23 +4044,6 @@ msgstr "%s %sNota: esta ventana se cerrará automáticamente en 5 segundos%s "
 #, c-format
 msgid "%s %sSearch suggestions"
 msgstr "%s %sSugerencias de compra"
-
-#. %1$s:  END 
-#. %2$s:  IF ( facets_loo.type_label_Series ) 
-#. %3$s:  END 
-#. %4$s:  IF ( facets_loo.type_label_ItemTypes ) 
-#. %5$s:  END 
-#. %6$s:  UNLESS ( singleBranchMode ) 
-#. %7$s:  IF ( facets_loo.type_label_Libraries ) 
-#. %8$s:  END 
-#. %9$s:  END 
-#. %10$s:  IF ( facets_loo.type_label_Location ) 
-#. %11$s:  END 
-#: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, c-format
-msgid "%s %sSeries%s %sItem types%s %s %sLibraries%s %s %sLocations%s "
-msgstr ""
-"%s %sSeries%s %sTipos de material%s %s %sBibliotecas%s %s %sUbicaciones%s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -6985,14 +6982,10 @@ msgstr "/ "
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:426
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:537
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
 #, c-format
 msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
-#, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
-msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:257
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:196
@@ -9298,8 +9291,8 @@ msgstr "No notificar"
 msgid ""
 "Do you want to receive an email when a new issue of %s %s(%s)%s arrives?"
 msgstr ""
-"¿Desea recibir un email cuando recibamos un nuevo número de la suscripción %"
-"s %s(%s)%s?"
+"¿Desea recibir un email cuando recibamos un nuevo número de la suscripción "
+"%s %s(%s)%s?"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:508
 #, c-format
@@ -10629,6 +10622,11 @@ msgstr "Tipo de ítem:"
 #, c-format
 msgid "Item type: "
 msgstr "Tipo de ítem: "
+
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, c-format
+msgid "Item types"
+msgstr "Tipos de ítem"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -13568,6 +13566,7 @@ msgstr "Seriadas"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:65
 #: opac-tmpl/prog/en/includes/masthead.inc:67
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:229
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:76
 #: opac-tmpl/prog/en/modules/opac-results.tt:378

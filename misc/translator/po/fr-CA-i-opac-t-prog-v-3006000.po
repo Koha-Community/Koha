@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr-FR-i-opac-t-prog-v-3000000\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-17 23:56-0300\n"
-"PO-Revision-Date: 2013-12-16 21:12+0000\n"
+"POT-Creation-Date: 2014-01-20 10:28-0300\n"
+"PO-Revision-Date: 2014-01-15 15:05+0000\n"
 "Last-Translator: Marjorie <marjorie.barry-vila@ccsr.qc.ca>\n"
 "Language-Team: Français <kde-i18n-doc@kde.org>\n"
 "Language: fr_CA\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1387228376.0\n"
+"X-POOTLE-MTIME: 1389798319.0\n"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:529
@@ -1967,6 +1967,8 @@ msgstr "%s %%] %s "
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:51
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:126
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
+#: opac-tmpl/prog/en/includes/opac-facets.inc:16
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/includes/usermenu.inc:4
 #: opac-tmpl/prog/en/includes/usermenu.inc:6
 #: opac-tmpl/prog/en/includes/usermenu.inc:8
@@ -2857,13 +2859,13 @@ msgstr ""
 #. %12$s:  INCLUDE 'doc-head-close.inc' 
 #. %13$s:  INCLUDE 'calendar.inc' 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s%s%sKoha online%s catalog &rsaquo; %sUpdate your personal "
 "details%sRegister a new account%s %s %s "
 msgstr ""
-"%s %s %s %s%s%sCatalogue Koha en ligne%s &rsaquo; %sMettre à jour vos "
-"informations personnelles%sCréer un nouveau compte%s %s %s "
+"%s %s %s %s%s%s%sKoha en ligne%s catalogue &rsaquo; Détails de: %s%s, %s%s "
+"%s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -3071,7 +3073,7 @@ msgid ""
 "%s %s %s Checked out to %s %s %s %s Checked out %s %s In transit from %s to "
 "%s since %s %s On hold %s Item withdrawn %s %s %s %s %s %s "
 msgstr ""
-"%s %s %s Prêté à %s %s %s %s En prêt %s %s En transit de %s vers %s Depuis "
+"%s %s %s Prêté à %s %s %s %s En prêt %s %s En transit de %s vers %s depuis "
 "%s %s Réservé %s Exemplaire perdu %s %s %s %s %s %s "
 
 #. %1$s:  END 
@@ -3417,6 +3419,20 @@ msgstr "%s %s %s%s%sPas de titre%s %s, %s%s"
 #, c-format
 msgid "%s %s %s(%s)%s %s "
 msgstr "%s %s %s(%s)%s %s "
+
+#. %1$s:  END 
+#. %2$s:  UNLESS ( singleBranchMode ) 
+#. %3$s:  IF ( facets_loo.type_label_Libraries ) 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  IF ( facets_loo.type_label_Location ) 
+#. %7$s:  END 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "%s %s %sLibraries%s %s %sLocations%s "
+msgstr ""
+"%sAuteurs%s %sTitres%s %sNoms communs%s %sLieux%s %sCollections%s %sTypes de "
+"documents%s %s %sSites%s %s %sLocalisations%s "
 
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
@@ -4038,24 +4054,6 @@ msgid "%s %sSearch suggestions"
 msgstr "%s %sSuggestions de recherche"
 
 #. %1$s:  END 
-#. %2$s:  IF ( facets_loo.type_label_Series ) 
-#. %3$s:  END 
-#. %4$s:  IF ( facets_loo.type_label_ItemTypes ) 
-#. %5$s:  END 
-#. %6$s:  UNLESS ( singleBranchMode ) 
-#. %7$s:  IF ( facets_loo.type_label_Libraries ) 
-#. %8$s:  END 
-#. %9$s:  END 
-#. %10$s:  IF ( facets_loo.type_label_Location ) 
-#. %11$s:  END 
-#: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, fuzzy, c-format
-msgid "%s %sSeries%s %sItem types%s %s %sLibraries%s %s %sLocations%s "
-msgstr ""
-"%sAuteurs%s %sTitres%s %sNoms communs%s %sLieux%s %sCollections%s %sTypes de "
-"documents%s %s %sSites%s %s %sLocalisations%s "
-
-#. %1$s:  END 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:234
 #, c-format
@@ -4669,7 +4667,7 @@ msgstr "%s décroissant"
 #: opac-tmpl/prog/en/modules/opac-user.tt:114
 #, c-format
 msgid "%s more than "
-msgstr "%s plus de"
+msgstr "%s plus de "
 
 #. For the first occurrence,
 #. %1$s:  count 
@@ -5819,8 +5817,7 @@ msgstr "%sCette notice n'a pas d'exemplaire.%s "
 msgid ""
 "%sWaiting%sOn hold%s for patron %sat%sexpected at%s %s since %s%s%s%s%s%s%s. "
 msgstr ""
-"%sAttendu%sRéservé%s par l'adhérent %sà%sattendu à%s %s depuis %s%s%s%s%s%s"
-"%s. "
+"%sAttendu%sRéservé%s par l'usager %sà%sattendu à%s %s depuis %s%s%s%s%s%s%s. "
 
 #. For the first occurrence,
 #. %1$s:  IF ( ISSUE.charges ) 
@@ -6898,8 +6895,8 @@ msgid ""
 ", you cannot renew your books online. Please pay your fines if you wish to "
 "renew your books."
 msgstr ""
-", vous pouvez renouveler vos documents en ligne. Merci de payer vos amendes "
-"si vous voulez renouveler vos documents."
+", vous ne pouvez pas renouveler vos documents en ligne. Merci de payer vos "
+"amendes si vous voulez renouveler vos documents."
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:21
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:25
@@ -7006,13 +7003,9 @@ msgstr "/ "
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:426
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:537
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
 #, c-format
 msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
-#, fuzzy, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
 msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:257
@@ -7412,7 +7405,7 @@ msgstr "= "
 #: opac-tmpl/prog/en/modules/opac-registration-email-sent.tt:16
 #, c-format
 msgid "A confirmation email has been sent to the email address "
-msgstr "Un courriel de confirmation a été envoyé à cette adresse"
+msgstr "Un courriel de confirmation a été envoyé à cette adresse "
 
 #
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:254
@@ -8519,7 +8512,7 @@ msgstr "CancelRecall"
 #: opac-tmpl/prog/en/modules/ilsdi.tt:668
 #, c-format
 msgid "Cancels an active hold request for the patron."
-msgstr "Annule une réservation sur le compte de l'adhérent."
+msgstr "Annule une réservation sur le compte de l'usager."
 
 #. IMG
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:451
@@ -9351,7 +9344,7 @@ msgstr "Pas encore de mot de passe ?"
 #: opac-tmpl/prog/en/modules/opac-main.tt:61
 #, c-format
 msgid "Don't have an account? "
-msgstr "Vous n'avez pas compte ?"
+msgstr "Vous n'avez pas de compte ?"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
@@ -9642,7 +9635,7 @@ msgstr "Erreur ! l'opération d'ajout a échoué"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "Error! You cannot delete the tag"
-msgstr "Erreur ! Vous ne pouvez pas supprimer le tag"
+msgstr "Erreur ! Vous ne pouvez pas supprimer le mot-clé"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -10555,7 +10548,7 @@ msgstr "En transit ("
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:475
 #, c-format
 msgid "In transit from %s, to %s, since %s"
-msgstr "En transit de %s vers %s, le %s"
+msgstr "En transit de %s vers %s, depuis le %s"
 
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:25
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -10662,6 +10655,11 @@ msgstr "Type de document&nbsp;: "
 #, c-format
 msgid "Item type: "
 msgstr "Type de document&nbsp;: "
+
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "Item types"
+msgstr "Type de document"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -11042,7 +11040,7 @@ msgstr " Genre littéraire"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:4
 msgid "Loading"
-msgstr "Chargement"
+msgstr "Chargement en cours"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/datatables-strings.inc:1
@@ -12918,7 +12916,7 @@ msgstr "Enregister un nouveau compte"
 #: opac-tmpl/prog/en/modules/opac-main.tt:61
 #, c-format
 msgid "Register here."
-msgstr "Enregistrer ici."
+msgstr "Créer un compte ici."
 
 #: opac-tmpl/prog/en/modules/opac-registration-confirmation.tt:15
 #, c-format
@@ -13609,6 +13607,7 @@ msgstr "Périodiques"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:65
 #: opac-tmpl/prog/en/includes/masthead.inc:67
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:229
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:76
 #: opac-tmpl/prog/en/modules/opac-results.tt:378
@@ -13800,7 +13799,7 @@ msgstr "Documents similaires"
 #: opac-tmpl/prog/en/modules/opac-user.tt:114
 #, c-format
 msgid "Since you have "
-msgstr "Depuis que vous avez "
+msgstr "Vous avez des"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:158
 #, c-format
@@ -14610,8 +14609,8 @@ msgid ""
 msgstr ""
 "L'abonnement actuel a commencé le %s et paraît tou(te)s les %s jours %s %s "
 "semaines %s %s 2 semaines %s %s 3 semaines %s %s mois %s %s 2 mois %s %s 3 "
-"mois %s %s 4 months %s %s trimestres %s %s 2 trimestres %s %s ans %s %s 2 "
-"ans %s %s le lundi %s %s le mardi %s %s le mercredi %s %s le jeudi %s %s le "
+"mois %s %s 4 mois %s %s trimestres %s %s 2 trimestres %s %s ans %s %s 2 ans "
+"%s %s le lundi %s %s le mardi %s %s le mercredi %s %s le jeudi %s %s le "
 "vendredi %s %s le samedi %s %s le dimanche %s pour %s%s fascicules%s %s%s "
 "semaines%s %s%s mois%s "
 
@@ -15242,7 +15241,7 @@ msgstr "Utilisé pour/voir:"
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:47
 #, c-format
 msgid "Used in "
-msgstr "Used in "
+msgstr "Utilisé dans"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:321
 #, c-format
@@ -15601,7 +15600,7 @@ msgstr "Vous n'avez pas de prêt en cours."
 #: opac-tmpl/prog/en/modules/opac-user.tt:245
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
-msgstr "Vos amendes et frais s'élevent à&nbsp;:&nbsp;:"
+msgstr "Vos amendes et frais s’élèvent à&nbsp;:"
 
 #: opac-tmpl/prog/en/modules/opac-downloadshelf.tt:39
 #, c-format
@@ -15750,7 +15749,7 @@ msgid ""
 "confirmation email."
 msgstr ""
 "Votre compte ne sera pas activé tant que vous n'aurez pas cliqué sur le lien "
-"fourni dans le mail de confirmation."
+"fourni dans le courriel de confirmation."
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:97
 #, c-format
@@ -15761,7 +15760,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-user.tt:90
 #, c-format
 msgid "Your card will expire on "
-msgstr "Votre compte arrive à expiration le"
+msgstr "Votre carte expirera le "
 
 #: opac-tmpl/prog/en/modules/opac-sendbasket.tt:1
 #, c-format
@@ -17976,7 +17975,7 @@ msgstr "digitale reformatée "
 #: opac-tmpl/prog/en/modules/opac-auth.tt:90
 #, c-format
 msgid "register here"
-msgstr "enregistrer ici"
+msgstr "Créer un compte ici"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:166
 #, c-format
@@ -18121,7 +18120,7 @@ msgstr "se"
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:529
 #, c-format
 msgid "search"
-msgstr "chercher"
+msgstr "recherche"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:108
 #, fuzzy, c-format
@@ -18194,7 +18193,8 @@ msgstr ""
 #, c-format
 msgid "shows your account to be clear, please contact the library."
 msgstr ""
-"que votre compte est sur le point d'être supprimé, contactez la bibliothèque."
+"indique que votre compte est sur le point d'être supprimé, contactez la "
+"bibliothèque."
 
 #. %1$s:  RESERVE.datesent | $KohaDates 
 #. %2$s:  ELSIF ( RESERVE.suspend ) 
@@ -18207,7 +18207,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-user.tt:406
 #, c-format
 msgid "since %s %s Suspended %s until %s %s %s Pending %s %s "
-msgstr "depuis %s %s Suspendu %s jusqu'à %s %s %s En attente %s %s "
+msgstr "depuis %s %s Suspendu %s jusqu'au %s %s %s En attente %s %s "
 
 #: opac-tmpl/prog/en/modules/maintenance.tt:24
 #, c-format
@@ -18484,7 +18484,7 @@ msgstr "thèses "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:405
 #, c-format
 msgid "title"
-msgstr "titres"
+msgstr "title"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:664
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:678
@@ -18738,7 +18738,7 @@ msgstr "Jeune adulte"
 #: opac-tmpl/prog/en/modules/opac-user.tt:105
 #, c-format
 msgid "your account page"
-msgstr "votre page de compte"
+msgstr "votre compte"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-detail.tt:24
@@ -18818,3 +18818,4 @@ msgstr ""
 msgid "• "
 msgstr "• "
 
+#, fuzzy

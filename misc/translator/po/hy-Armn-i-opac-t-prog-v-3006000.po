@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-12-18 00:17-0300\n"
-"PO-Revision-Date: 2013-11-18 18:27+0000\n"
+"POT-Creation-Date: 2014-01-20 10:50-0300\n"
+"PO-Revision-Date: 2013-12-24 10:54+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hy\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1384799244.0\n"
+"X-POOTLE-MTIME: 1387882489.0\n"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:529
@@ -1963,6 +1963,8 @@ msgstr "%s %%] %s "
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:51
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:126
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
+#: opac-tmpl/prog/en/includes/opac-facets.inc:16
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/includes/usermenu.inc:4
 #: opac-tmpl/prog/en/includes/usermenu.inc:6
 #: opac-tmpl/prog/en/includes/usermenu.inc:8
@@ -2732,13 +2734,13 @@ msgstr "%s %s %s %s %s %s %s "
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:87
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]"
 "Greek (to 1453) %s%s %s %s "
 msgstr ""
-"%s%s %s %s %s %s %s %%]Անգլերեն %s %%]Ֆրանսերեն %s %%]Իտալերեն %s %%]"
-"Գերմաներեն %s %%]Իսպաներեն %s%s %s %s "
+"%s %s %s %s %s %s %s %s %%]Եբրայերեն %s %%]Արաբերեն %s %%]Հուներեն "
+"(ժամանակակից) %s %%]Հուներեն (մինչ 1453) %s%s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( singleBranchMode ) 
@@ -2893,9 +2895,9 @@ msgstr "%s %s %s %s (%s)"
 #. %5$s:  END 
 #. %6$s:  INCLUDE shelfbrowser tab='otherholdings' 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1048
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s No other items. %s %s "
-msgstr "%s %s %s Այկ նյութեր չկան։ %s %s "
+msgstr "%s %s %s %s Այլ նյութեր չկան։ %s %s "
 
 #. %1$s:  IF showpriority 
 #. %2$s:  bibitemloo.rank 
@@ -3413,6 +3415,20 @@ msgstr "%s %s %s%s%sԱնվերնագիր%s %s, %s%s"
 msgid "%s %s %s(%s)%s %s "
 msgstr "%s %s %s(%s)%s %s "
 
+#. %1$s:  END 
+#. %2$s:  UNLESS ( singleBranchMode ) 
+#. %3$s:  IF ( facets_loo.type_label_Libraries ) 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  IF ( facets_loo.type_label_Location ) 
+#. %7$s:  END 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "%s %s %sLibraries%s %s %sLocations%s "
+msgstr ""
+"%s %sՄատենաշարեր%s %sՆյութերի տեսակներ%s %s %sԳրադարաններ%s %s "
+"%sՏեղաբաշխումներ%s "
+
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
 #. %3$s:  value.count 
@@ -3548,9 +3564,11 @@ msgstr "%s %s քեզ ուղարկվել է սայլակ մեր առցանց քա
 #. %2$s:  surname 
 #. %3$s:  shelfname 
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s sent you from our online catalog, the virtual shelf called : %s."
-msgstr "%s %s քեզ ուղարկվել է սայլակ մեր առցանց քարտարանից։"
+msgstr ""
+"%s %s քեզ ուղարկվել է մեր առցանց քարտարանից, վիրտուալ դարակ որ կոչվում է : "
+"%s."
 
 #. %1$s:  added_count 
 #. %2$s:  IF ( added_count ==1 ) 
@@ -4027,24 +4045,6 @@ msgstr "%s %sՆշում: այս պատուհանը 5 վայրկյանի ընթա
 #, c-format
 msgid "%s %sSearch suggestions"
 msgstr "%s %sՈրոնման առաջարկներ"
-
-#. %1$s:  END 
-#. %2$s:  IF ( facets_loo.type_label_Series ) 
-#. %3$s:  END 
-#. %4$s:  IF ( facets_loo.type_label_ItemTypes ) 
-#. %5$s:  END 
-#. %6$s:  UNLESS ( singleBranchMode ) 
-#. %7$s:  IF ( facets_loo.type_label_Libraries ) 
-#. %8$s:  END 
-#. %9$s:  END 
-#. %10$s:  IF ( facets_loo.type_label_Location ) 
-#. %11$s:  END 
-#: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, fuzzy, c-format
-msgid "%s %sSeries%s %sItem types%s %s %sLibraries%s %s %sLocations%s "
-msgstr ""
-"%sՀեղինակներ%s %sՎերնագրեր%s %sԽորագրեր%s %sՎայրեր%s %sՄատենաշարեր%s "
-"%sՆյութի տեսակներ%s %s %sԳրադարաններ%s %s %sՏեղաբաշխումներ%s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -5558,9 +5558,9 @@ msgstr "%sՀաշիվը սառեցված է %s %s"
 #. %4$s:  END 
 #. %5$s:  IF ( facets_loo.type_label_Topics ) 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:12
-#, fuzzy, c-format
+#, c-format
 msgid "%sAuthors%s %sTitles%s %s"
-msgstr "%s%s %s%s%s%s"
+msgstr "%sՀեղինակներ%s %sՎերնագրեր%s %s"
 
 #. %1$s:  IF ( latestserial.status1 ) 
 #. %2$s:  ELSE 
@@ -6979,14 +6979,10 @@ msgstr "/ "
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:426
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:537
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
 #, c-format
 msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
-#, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
-msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:257
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:196
@@ -8915,9 +8911,9 @@ msgid "Copyright date"
 msgstr "Արտոնագրման ամսաթիվ"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid "Copyright date:"
-msgstr "Արտոնագրման ամսաթիվ"
+msgstr "Արտոնագրման ամսաթիվ։"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.copyrightdate 
@@ -9291,12 +9287,10 @@ msgstr "Մի հիշեցրու"
 #. %3$s:  notes 
 #. %4$s:  END 
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Do you want to receive an email when a new issue of %s %s(%s)%s arrives?"
-msgstr ""
-"Ցանկանու՞մ ես ստանալ էլ փոստ երբ այս բաժանորդագրության համար նոր նյութ է "
-"ստացված։"
+msgstr "Ցանկանու՞մ ես ստանալ էլ փոստ երբ նոր նյութ է %s %s(%s)%s ստացված։"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:508
 #, c-format
@@ -10382,9 +10376,9 @@ msgstr "ISBN: %s "
 #. %4$s:  END 
 #. %5$s:  END 
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:60
-#, fuzzy, c-format
+#, c-format
 msgid "ISBN: %s %s %s; %s %s "
-msgstr "%s %s %s ; %s %s "
+msgstr "ISBN: %s %s %s; %s %s "
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:383
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:148
@@ -10621,6 +10615,11 @@ msgstr "Նյութի տեսակ: "
 #, c-format
 msgid "Item type: "
 msgstr "Նյութի տեսակ: "
+
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "Item types"
+msgstr "Նյութի տեսակ"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -12375,9 +12374,9 @@ msgid "Placed on"
 msgstr "Տեղադրված է"
 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, fuzzy, c-format
+#, c-format
 msgid "Places"
-msgstr "Տեղադրի"
+msgstr "Վայրեր"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:238
 #, c-format
@@ -13559,6 +13558,7 @@ msgstr "Պարբերականներ"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:65
 #: opac-tmpl/prog/en/includes/masthead.inc:67
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:229
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:76
 #: opac-tmpl/prog/en/modules/opac-results.tt:378
@@ -13935,9 +13935,9 @@ msgid "Standard number"
 msgstr "Ստանդարտ համար"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
-#, fuzzy, c-format
+#, c-format
 msgid "Standard number (ISBN, ISSN or other):"
-msgstr "Ստանդարտ համար (ISBN, ISSN այլ):"
+msgstr "Ստանդարտ համար (ISBN, ISSN կամ այլ):"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:368
 #, c-format
@@ -14137,7 +14137,6 @@ msgstr "Գրանցիր թարմացման առաջարկությունը"
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:139
-#, fuzzy
 msgid "Submit your suggestion"
 msgstr "Գրանցիր քո առաջարկությունը"
 
@@ -14951,7 +14950,7 @@ msgstr "Վերին աստիճան"
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
 #, c-format
 msgid "Topics"
-msgstr ""
+msgstr "Թեմաներ"
 
 #: opac-tmpl/prog/en/modules/opac-account.tt:33
 #, c-format
@@ -18407,7 +18406,7 @@ msgstr "թեզեր "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:405
 #, c-format
 msgid "title"
-msgstr "վերնագիր"
+msgstr "title"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:664
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:678

@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-12-18 00:07-0300\n"
+"POT-Creation-Date: 2014-01-20 10:39-0300\n"
 "PO-Revision-Date: 2013-02-18 04:51+0200\n"
 "Last-Translator: munro <munro@dsty.ac.jp>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
@@ -1961,6 +1961,8 @@ msgstr "%s %%] %s "
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:51
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:126
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
+#: opac-tmpl/prog/en/includes/opac-facets.inc:16
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/includes/usermenu.inc:4
 #: opac-tmpl/prog/en/includes/usermenu.inc:6
 #: opac-tmpl/prog/en/includes/usermenu.inc:8
@@ -3500,6 +3502,33 @@ msgstr "%s %s %s%s%sタイトルなし%s %s %s%s"
 msgid "%s %s %s(%s)%s %s "
 msgstr "%s %s %s(%s)%s %s"
 
+# %1$s: IF ( facets_loo.type_label_Authors )
+# %2$s: END
+# %3$s: IF ( facets_loo.type_label_Titles )
+# %4$s: END
+# %5$s: IF ( facets_loo.type_label_Topics )
+# %6$s: END
+# %7$s: IF ( facets_loo.type_label_Places )
+# %8$s: END
+# %9$s: IF ( facets_loo.type_label_Series )
+# %10$s: END
+# %11$s: UNLESS ( singleBranchMode )
+# %12$s: IF ( facets_loo.type_label_Libraries )
+# %13$s: END
+# %14$s: END
+#. %1$s:  END 
+#. %2$s:  UNLESS ( singleBranchMode ) 
+#. %3$s:  IF ( facets_loo.type_label_Libraries ) 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  IF ( facets_loo.type_label_Location ) 
+#. %7$s:  END 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "%s %s %sLibraries%s %s %sLocations%s "
+msgstr ""
+"%s著者%s %sタイトル%s %sトピック%s %s場所%s %sシリーズ%s %s %s図書館%s %s "
+
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
 #. %3$s:  value.count 
@@ -4153,37 +4182,6 @@ msgstr "%s %s注釈: このウィンドウは 5 秒で自動的に閉じます%s
 #, fuzzy, c-format
 msgid "%s %sSearch suggestions"
 msgstr "%s%s私の%s%s購入の提案"
-
-# %1$s: IF ( facets_loo.type_label_Authors )
-# %2$s: END
-# %3$s: IF ( facets_loo.type_label_Titles )
-# %4$s: END
-# %5$s: IF ( facets_loo.type_label_Topics )
-# %6$s: END
-# %7$s: IF ( facets_loo.type_label_Places )
-# %8$s: END
-# %9$s: IF ( facets_loo.type_label_Series )
-# %10$s: END
-# %11$s: UNLESS ( singleBranchMode )
-# %12$s: IF ( facets_loo.type_label_Libraries )
-# %13$s: END
-# %14$s: END
-#. %1$s:  END 
-#. %2$s:  IF ( facets_loo.type_label_Series ) 
-#. %3$s:  END 
-#. %4$s:  IF ( facets_loo.type_label_ItemTypes ) 
-#. %5$s:  END 
-#. %6$s:  UNLESS ( singleBranchMode ) 
-#. %7$s:  IF ( facets_loo.type_label_Libraries ) 
-#. %8$s:  END 
-#. %9$s:  END 
-#. %10$s:  IF ( facets_loo.type_label_Location ) 
-#. %11$s:  END 
-#: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, fuzzy, c-format
-msgid "%s %sSeries%s %sItem types%s %s %sLibraries%s %s %sLocations%s "
-msgstr ""
-"%s著者%s %sタイトル%s %sトピック%s %s場所%s %sシリーズ%s %s %s図書館%s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -7491,13 +7489,9 @@ msgstr "/ "
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:426
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:537
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
 #, c-format
 msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
-#, fuzzy, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
 msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:257
@@ -11146,6 +11140,11 @@ msgstr "館所蔵の型式"
 msgid "Item type: "
 msgstr "館所蔵の型式"
 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "Item types"
+msgstr "館所蔵の型式"
+
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 #, fuzzy
@@ -14086,6 +14085,7 @@ msgstr "定期刊行物："
 
 #: opac-tmpl/prog/en/includes/masthead.inc:65
 #: opac-tmpl/prog/en/includes/masthead.inc:67
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:229
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:76
 #: opac-tmpl/prog/en/modules/opac-results.tt:378
@@ -18901,7 +18901,7 @@ msgstr "付注"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:405
 #, fuzzy, c-format
 msgid "title"
-msgstr "題名"
+msgstr "title"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:664
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:678
@@ -19237,91 +19237,5 @@ msgstr ""
 #, c-format
 msgid "• "
 msgstr ""
-
-#, fuzzy
-
-# %1$s: IF ( comment )
-# %2$s: comment
-# %3$s: END
-# %4$s: FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS
-# %5$s: BIBLIO_RESULT.title
-# %6$s: IF ( BIBLIO_RESULT.subtitle.size )
-# %7$s: FOREACH subtitle IN BIBLIO_RESULT.subtitle
-# %8$s: subtitle.subfield
-# %9$s: END
-# %10$s: END
-# %11$s: IF ( BIBLIO_RESULT.author )
-# %12$s: BIBLIO_RESULT.author
-# %13$s: END
-# %14$s: IF ( BIBLIO_RESULT.MARCAUTHORS.size )
-# %15$s: FOREACH MARCAUTHOR IN BIBLIO_RESULT.MARCAUTHORS
-# %16$s: FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP
-# %17$s: MARCAUTHOR_SUBFIELDS_LOO.separator
-# %18$s: MARCAUTHOR_SUBFIELDS_LOO.value
-# %19$s: END
-# %20$s: UNLESS ( loop.last )
-# %21$s: ELSE
-# %22$s: END
-# %23$s: END
-# %24$s: END
-# %25$s: IF ( BIBLIO_RESULT.ISBN )
-# %26$s: BIBLIO_RESULT.ISBN
-# %27$s: END
-# %28$s: IF ( BIBLIO_RESULT.publishercode )
-# %29$s: BIBLIO_RESULT.publishercode
-# %30$s: END
-# %31$s: IF ( BIBLIO_RESULT.publicationyear )
-# %32$s: END
-# %33$s: BIBLIO_RESULT.publicationyear
-# %34$s: IF ( BIBLIO_RESULT.pages )
-# %35$s: END
-# %36$s: BIBLIO_RESULT.pages
-# %37$s: IF ( BIBLIO_RESULT.size )
-# %38$s: END
-# %39$s: BIBLIO_RESULT.size
-# %40$s: IF ( BIBLIO_RESULT.collection )
-# %41$s: BIBLIO_RESULT.seriestitle
-# %42$s: END
-# %43$s: IF ( BIBLIO_RESULT.subject )
-# %44$s: BIBLIO_RESULT.subject
-# %45$s: END
-# %46$s: IF ( BIBLIO_RESULT.copyrightdate )
-# %47$s: BIBLIO_RESULT.copyrightdate
-# %48$s: END
-# %49$s: IF ( BIBLIO_RESULT.notes )
-# %50$s: BIBLIO_RESULT.notes
-# %51$s: END
-# %52$s: IF ( BIBLIO_RESULT.unititle )
-# %53$s: BIBLIO_RESULT.unititle
-# %54$s: END
-# %55$s: IF ( BIBLIO_RESULT.serial )
-# %56$s: BIBLIO_RESULT.serial
-# %57$s: END
-# %58$s: IF ( BIBLIO_RESULT.dewey )
-# %59$s: BIBLIO_RESULT.dewey
-# %60$s: END
-# %61$s: IF ( BIBLIO_RESULT.classification )
-# %62$s: BIBLIO_RESULT.classification
-# %63$s: END
-# %64$s: IF ( BIBLIO_RESULT.lccn )
-# %65$s: BIBLIO_RESULT.lccn
-# %66$s: END
-# %67$s: IF ( BIBLIO_RESULT.url )
-# %68$s: BIBLIO_RESULT.url
-# %69$s: END
-# %70$s: IF ( OPACBaseURL )
-# %71$s: OPACBaseURL
-# %72$s: BIBLIO_RESULT.biblionumber |url
-# %73$s: END
-# %74$s: FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS
-# %75$s: ITEM_RESULT.branchname
-# %76$s: ITEM_RESULT.location
-# %77$s: IF ( ITEM_RESULT.itemcallnumber )
-# %78$s: ITEM_RESULT.itemcallnumber
-# %79$s: END
-# %80$s: ITEM_RESULT.barcode
-# %81$s: END
-# %82$s: END
-#, fuzzy
 
 #, fuzzy

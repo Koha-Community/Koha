@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-12-18 00:03-0300\n"
-"PO-Revision-Date: 2013-12-03 17:24+0000\n"
+"POT-Creation-Date: 2014-01-20 10:35-0300\n"
+"PO-Revision-Date: 2014-01-14 14:52+0000\n"
 "Last-Translator: Hans <hans.supply@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: nl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1386091456.0\n"
+"X-POOTLE-MTIME: 1389711175.0\n"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:529
@@ -1962,6 +1962,8 @@ msgstr "%s %%] %s "
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:51
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:126
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
+#: opac-tmpl/prog/en/includes/opac-facets.inc:16
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/includes/usermenu.inc:4
 #: opac-tmpl/prog/en/includes/usermenu.inc:6
 #: opac-tmpl/prog/en/includes/usermenu.inc:8
@@ -2731,13 +2733,13 @@ msgstr "%s %s %s %s %s %s %s "
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:87
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]"
 "Greek (to 1453) %s%s %s %s "
 msgstr ""
-"%s%s %s %s %s %s %s %%]Engels %s %%]Frans %s %%]Italiaans %s %%]Duits %s %%]"
-"Spaans %s%s %s %s "
+"%s %s %s %s %s %s %s %s %%]Hebreeuws %s %%]Arabisch %s %%]Grieks (modern) %s "
+"%%]Grieks (tot 1453) %s%s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( singleBranchMode ) 
@@ -2892,9 +2894,9 @@ msgstr "%s %s %s %s (%s)"
 #. %5$s:  END 
 #. %6$s:  INCLUDE shelfbrowser tab='otherholdings' 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1048
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s No other items. %s %s "
-msgstr "%s %s %s Geen andere items. %s %s "
+msgstr "%s %s %s %s Geen andere items. %s %s "
 
 #. %1$s:  IF showpriority 
 #. %2$s:  bibitemloo.rank 
@@ -3410,6 +3412,18 @@ msgstr "%s %s %s%s%sGeen titel%s %s, %s%s"
 msgid "%s %s %s(%s)%s %s "
 msgstr "%s %s %s(%s)%s %s "
 
+#. %1$s:  END 
+#. %2$s:  UNLESS ( singleBranchMode ) 
+#. %3$s:  IF ( facets_loo.type_label_Libraries ) 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  IF ( facets_loo.type_label_Location ) 
+#. %7$s:  END 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "%s %s %sLibraries%s %s %sLocations%s "
+msgstr "%s %sReeksen%s %sItem types%s %s %sBibliotheken%s %s %sLocaties%s "
+
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
 #. %3$s:  value.count 
@@ -3545,9 +3559,11 @@ msgstr "%s %s stuurde een mandje uit onze online catalogus."
 #. %2$s:  surname 
 #. %3$s:  shelfname 
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s sent you from our online catalog, the virtual shelf called : %s."
-msgstr "%s %s stuurde een mandje uit onze online catalogus."
+msgstr ""
+"%s %s stuurde u uit onze online catalogus, de virtuele boekenplank genaamd: "
+"%s."
 
 #. %1$s:  added_count 
 #. %2$s:  IF ( added_count ==1 ) 
@@ -3835,9 +3851,9 @@ msgstr "%s %s%s%s%sKoha online%s catalogus &rsaquo; Populairste titels %s "
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:1
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Serials %s "
-msgstr "%s%s%s%sKoha online%s catalogus &rsaquo; Reeksen %s "
+msgstr "%s %s%s%s%sKoha online%s catalogus &rsaquo; Reeksen %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3848,11 +3864,11 @@ msgstr "%s%s%s%sKoha online%s catalogus &rsaquo; Reeksen %s "
 #. %7$s:  bibliotitle 
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s%s%s%sKoha online%s catalog &rsaquo; Subscription information for %s %s "
 msgstr ""
-"%s%s%s%sKoha online%s catalogus &rsaquo; Abonnementinformatie voor %s %s "
+"%s %s%s%s%sKoha online%s catalogus &rsaquo; Abonnementsinformatie voor %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3862,9 +3878,9 @@ msgstr ""
 #. %6$s:  END 
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Your privacy management %s "
-msgstr "%s%s%s%sKoha online%s catalogus &rsaquo; Uw privaat managment %s"
+msgstr "%s %s%s%s%sKoha online%s catalogus &rsaquo; Uw privacy management %s "
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -4024,24 +4040,6 @@ msgid "%s %sSearch suggestions"
 msgstr "%s %sDoorzoek suggesties"
 
 #. %1$s:  END 
-#. %2$s:  IF ( facets_loo.type_label_Series ) 
-#. %3$s:  END 
-#. %4$s:  IF ( facets_loo.type_label_ItemTypes ) 
-#. %5$s:  END 
-#. %6$s:  UNLESS ( singleBranchMode ) 
-#. %7$s:  IF ( facets_loo.type_label_Libraries ) 
-#. %8$s:  END 
-#. %9$s:  END 
-#. %10$s:  IF ( facets_loo.type_label_Location ) 
-#. %11$s:  END 
-#: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, fuzzy, c-format
-msgid "%s %sSeries%s %sItem types%s %s %sLibraries%s %s %sLocations%s "
-msgstr ""
-"%sAuteurs%s %sTitels%s %sOnderwerpen%s %sPlaatsen%s %sReeksen%s %sItem types"
-"%s %s %sBibliotheken%s %s %sPlaatsen%s "
-
-#. %1$s:  END 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:234
 #, c-format
@@ -4062,9 +4060,9 @@ msgstr "%s %sitem%sitem(s)%s"
 #. %3$s:  CASE 'used for/see from:' 
 #. %4$s:  END 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:14
-#, fuzzy, c-format
+#, c-format
 msgid "%s %ssee also: %sused for/see from: %s"
-msgstr "Gebruikt voor/zie vanaf:"
+msgstr "%s %szie ook: %sgebruikt voor/zie vanaf: %s"
 
 #. %1$s:  END 
 #. %2$s:  UNLESS ( loop.last ) 
@@ -4079,9 +4077,9 @@ msgstr "%s %s|%s %s "
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:67
-#, fuzzy, c-format
+#, c-format
 msgid "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s and %s "
-msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Deel van de titel"
+msgstr "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s en %s "
 
 #. %1$s:  IF ( SYNDETICS_TO.p ) 
 #. %2$s:  SYNDETICS_TO.p 
@@ -4596,9 +4594,9 @@ msgstr ""
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s [%% UNLESS hidden.defined('branchcode') %%] "
-msgstr "[%% UNLESS hidden.defined('branchcode') %%] "
+msgstr "%s [%% UNLESS hidden.defined('branchcode') %%] "
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:355
@@ -5554,9 +5552,9 @@ msgstr "%sAccount geblokkeerd %s %s"
 #. %4$s:  END 
 #. %5$s:  IF ( facets_loo.type_label_Topics ) 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:12
-#, fuzzy, c-format
+#, c-format
 msgid "%sAuthors%s %sTitles%s %s"
-msgstr "%s%s %s%s%s%s"
+msgstr "%sAuteurs%s %sTitels%s %s"
 
 #. %1$s:  IF ( latestserial.status1 ) 
 #. %2$s:  ELSE 
@@ -5927,26 +5925,26 @@ msgid "&lt;&lt; Previous"
 msgstr "&lt;&lt; Vorige"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:400
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;AuthenticatePatron&gt; "
 "&lt;id&gt;419&lt;/id&gt; &lt;/AuthenticatePatron&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
-"AuthenticatePatron&gt; &lt;id&gt;419&lt;/id&gt; &lt;/AuthenticatePatron&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;AuthenticatePatron&gt; "
+"&lt;id&gt;419&lt;/id&gt; &lt;/AuthenticatePatron&gt;"
 
 # Reservering verwijderen
 #: opac-tmpl/prog/en/modules/ilsdi.tt:681
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;CancelHold&gt; &lt;"
 "message&gt;Canceled&lt;/message&gt; &lt;/CancelHold&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;CancelHold&gt; "
-"&lt;message&gt;Canceled&lt;/message&gt; &lt;/CancelHold&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;CancelHold&gt; &lt;"
+"message&gt;Canceled&lt;/message&gt; &lt;/CancelHold&gt;"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:430
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;GetPatronInfo&gt; &lt;"
 "category_type&gt;A&lt;/category_type&gt; &lt;categorycode&gt;ADUEXT&lt;/"
@@ -6018,8 +6016,8 @@ msgid ""
 "frameworkcode&gt; &lt;datelastborrowed&gt;2008-08-23&lt;/"
 "datelastborrowed&gt; &lt;/loan&gt; &lt;/loans&gt; &lt;/GetPatronInfo&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetPatronInfo&gt; "
-"&lt;category_type&gt;A&lt;/category_type&gt; &lt;categorycode&gt;ADUEXT&lt;/"
+"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;GetPatronInfo&gt; &lt;"
+"category_type&gt;A&lt;/category_type&gt; &lt;categorycode&gt;ADUEXT&lt;/"
 "categorycode&gt; &lt;borrowernumber&gt;419&lt;/borrowernumber&gt; &lt;"
 "lost&gt;0&lt;/lost&gt; &lt;branchcode&gt;BIB&lt;/branchcode&gt; &lt;"
 "amountoutstanding&gt;6&lt;/amountoutstanding&gt; &lt;description&gt;Adulte "
@@ -6089,19 +6087,18 @@ msgstr ""
 "datelastborrowed&gt; &lt;/loan&gt; &lt;/loans&gt; &lt;/GetPatronInfo&gt;"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:549
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;GetPatronStatus&gt; "
 "&lt;expiry&gt;2010-03-04&lt;/expiry&gt; &lt;status&gt;0&lt;/status&gt; &lt;"
 "type&gt;ADUEXT&lt;/type&gt; &lt;/GetPatronStatus&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
-"GetPatronStatus&gt; &lt;expiry&gt;2010-03-04&lt;/expiry&gt; &lt;"
-"status&gt;0&lt;/status&gt; &lt;type&gt;ADUEXT&lt;/type&gt; &lt;/"
-"GetPatronStatus&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;GetPatronStatus&gt; "
+"&lt;expiry&gt;2010-03-04&lt;/expiry&gt; &lt;status&gt;0&lt;/status&gt; &lt;"
+"type&gt;ADUEXT&lt;/type&gt; &lt;/GetPatronStatus&gt;"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:117
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;GetRecords&gt; &lt;"
 "record&gt; &lt;biblioitemnumber&gt;1&lt;/biblioitemnumber&gt; &lt;"
@@ -6211,8 +6208,8 @@ msgid ""
 "dateaccessioned&gt; &lt;/item&gt; &lt;/items&gt; &lt;/record&gt; &lt;"
 "record&gt;RecordNotFound&lt;/record&gt; &lt;/GetRecords&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetRecords&gt; "
-"&lt;record&gt; &lt;biblioitemnumber&gt;1&lt;/biblioitemnumber&gt; &lt;"
+"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;GetRecords&gt; &lt;"
+"record&gt; &lt;biblioitemnumber&gt;1&lt;/biblioitemnumber&gt; &lt;"
 "isbn&gt;9782862749198&lt;/isbn&gt; &lt;marcxml&gt; &lt;?xml version=\"1.0\" "
 "encoding=\"UTF-8\" ?&gt; &lt;record xmlns:xsi=\"http://www.w3.org/2001/"
 "XMLSchema-instance\" xsi:schemaLocation=\"http://www.loc.gov/MARC21/slim "
@@ -6320,52 +6317,52 @@ msgstr ""
 "record&gt;RecordNotFound&lt;/record&gt; &lt;/GetRecords&gt;"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:572
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;GetServices&gt; &lt;"
 "AvailableFor&gt;title level hold&lt;/AvailableFor&gt; &lt;AvailableFor&gt;"
 "item level hold&lt;/AvailableFor&gt; &lt;/GetServices&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetServices&gt; "
-"&lt;AvailableFor&gt;title level hold&lt;/AvailableFor&gt; &lt;"
-"AvailableFor&gt;item level hold&lt;/AvailableFor&gt; &lt;/GetServices&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;GetServices&gt; &lt;"
+"AvailableFor&gt;title level hold&lt;/AvailableFor&gt; &lt;AvailableFor&gt;"
+"item level hold&lt;/AvailableFor&gt; &lt;/GetServices&gt;"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:627
 #: opac-tmpl/prog/en/modules/ilsdi.tt:658
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;HoldTitle&gt; &lt;"
 "title&gt;(les) galères de l'Orfèvre&lt;/title&gt; &lt;"
 "date_available&gt;2009-05-11&lt;/date_available&gt; &lt;pickup_location&gt;"
 "Bibliothèque Jean-Prunier&lt;/pickup_location&gt; &lt;/HoldTitle&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;HoldTitle&gt; &lt;"
+"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;HoldTitle&gt; &lt;"
 "title&gt;(les) galères de l'Orfèvre&lt;/title&gt; &lt;"
 "date_available&gt;2009-05-11&lt;/date_available&gt; &lt;pickup_location&gt;"
 "Bibliothèque Jean-Prunier&lt;/pickup_location&gt; &lt;/HoldTitle&gt;"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:379
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;LookupPatron&gt; &lt;"
 "id&gt;419&lt;/id&gt; &lt;/LookupPatron&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;LookupPatron&gt; "
-"&lt;id&gt;419&lt;/id&gt; &lt;/LookupPatron&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;LookupPatron&gt; &lt;"
+"id&gt;419&lt;/id&gt; &lt;/LookupPatron&gt;"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:596
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;RenewLoan&gt; &lt;"
 "success&gt;0&lt;/success&gt; &lt;renewals&gt;5&lt;/renewals&gt; &lt;"
 "date_due&gt;2009-05-11&lt;/date_due&gt; &lt;/RenewLoan&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;RenewLoan&gt; &lt;"
+"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;RenewLoan&gt; &lt;"
 "success&gt;0&lt;/success&gt; &lt;renewals&gt;5&lt;/renewals&gt; &lt;"
 "date_due&gt;2009-05-11&lt;/date_due&gt; &lt;/RenewLoan&gt;"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;dlf:collection xmlns:"
 "dlf=\"http://diglib.org/ilsdi/1.1\" xmlns:xsi=\"http://www.w3.org/2001/"
@@ -6390,8 +6387,8 @@ msgid ""
 "dlf:availabilitymsg&gt; &lt;/dlf:simpleavailability&gt; &lt;/dlf:item&gt; "
 "&lt;/dlf:items&gt; &lt;/dlf:record&gt; &lt;/dlf:collection&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;dlf:collection "
-"xmlns:dlf=\"http://diglib.org/ilsdi/1.1\" xmlns:xsi=\"http://www.w3.org/2001/"
+"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;dlf:collection xmlns:"
+"dlf=\"http://diglib.org/ilsdi/1.1\" xmlns:xsi=\"http://www.w3.org/2001/"
 "XMLSchema-instance\" xsi:schemaLocation=\"http://diglib.org/ilsdi/1.1 http://"
 "diglib.org/architectures/ilsdi/schemas/1.1/dlfexpanded.xsd\"&gt; &lt;dlf:"
 "record&gt; &lt;dlf:bibliographic id=\"1\" /&gt; &lt;dlf:items&gt; &lt;dlf:"
@@ -6980,14 +6977,10 @@ msgstr "/ "
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:426
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:537
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
 #, c-format
 msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:987
-#, c-format
-msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
-msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid=\""
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:257
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:196
@@ -8920,9 +8913,9 @@ msgid "Copyright date"
 msgstr "Copyrightdatum"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid "Copyright date:"
-msgstr "Copyrightdatum"
+msgstr "Copyrightdatum:"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.copyrightdate 
@@ -9296,11 +9289,11 @@ msgstr "Verwittig niet"
 #. %3$s:  notes 
 #. %4$s:  END 
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Do you want to receive an email when a new issue of %s %s(%s)%s arrives?"
 msgstr ""
-"Wilt u een mail ontvangen telkens er een nieuw nummer voor dit abonnement "
+"Wilt u een mail ontvangen telkens er een nieuw nummer van %s %s(%s)%s "
 "verschijnt?"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:508
@@ -10388,9 +10381,9 @@ msgstr "ISBN: %s "
 #. %4$s:  END 
 #. %5$s:  END 
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:60
-#, fuzzy, c-format
+#, c-format
 msgid "ISBN: %s %s %s; %s %s "
-msgstr "%s %s %s ; %s %s "
+msgstr "ISBN: %s %s %s; %s %s "
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:383
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:148
@@ -10633,6 +10626,11 @@ msgstr "Itemtype:"
 #, c-format
 msgid "Item type: "
 msgstr "Itemtype: "
+
+#: opac-tmpl/prog/en/includes/opac-facets.inc:18
+#, fuzzy, c-format
+msgid "Item types"
+msgstr "Item type"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -12398,9 +12396,9 @@ msgid "Placed on"
 msgstr "Geplaatst op"
 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:16
-#, fuzzy, c-format
+#, c-format
 msgid "Places"
-msgstr "Plaats op"
+msgstr "Plaatsen"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:238
 #, c-format
@@ -13581,6 +13579,7 @@ msgstr "Tijdschriften"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:65
 #: opac-tmpl/prog/en/includes/masthead.inc:67
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:229
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:76
 #: opac-tmpl/prog/en/modules/opac-results.tt:378
@@ -13957,7 +13956,7 @@ msgid "Standard number"
 msgstr "Standaardnummer"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
-#, fuzzy, c-format
+#, c-format
 msgid "Standard number (ISBN, ISSN or other):"
 msgstr "Standaardnummer (ISBN, ISSN en andere):"
 
@@ -14159,7 +14158,6 @@ msgstr "Voer uw bijwerkingsverzoek in"
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:139
-#, fuzzy
 msgid "Submit your suggestion"
 msgstr "Voer uw suggestie in"
 
@@ -14972,7 +14970,7 @@ msgstr "Hoogste niveau"
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
 #, c-format
 msgid "Topics"
-msgstr ""
+msgstr "Onderwerpen"
 
 #: opac-tmpl/prog/en/modules/opac-account.tt:33
 #, c-format
@@ -16377,9 +16375,8 @@ msgstr "beschikbaar online "
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-detail.tt:24
-#, fuzzy
 msgid "average rating:"
-msgstr "gemiddelde score: %s (%s stemmen)"
+msgstr "gemiddelde waardering:"
 
 #. %1$s:  rating_avg_int 
 #. %2$s:  rating_total 
@@ -16470,9 +16467,8 @@ msgstr "bristolkarton"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-detail.tt:24
-#, fuzzy
 msgid "by"
-msgstr "door "
+msgstr "door"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:452
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:144
@@ -16572,9 +16568,9 @@ msgid "coats of arms"
 msgstr "wapenschilden"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:102
-#, fuzzy, c-format
+#, c-format
 msgid "coauthor"
-msgstr "Co-auteur"
+msgstr "coauteur"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:178
 #, c-format
@@ -16634,9 +16630,9 @@ msgid "contains biographical data"
 msgstr "bevat biografische data"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:114
-#, fuzzy, c-format
+#, c-format
 msgid "corporate_coauthor"
-msgstr "Corporatieve auteur (Co-auteur)"
+msgstr "corporatieve_coauteur"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:96
 #, c-format
@@ -16644,9 +16640,9 @@ msgid "corporate_main_author"
 msgstr "corporate_main_author"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:120
-#, fuzzy, c-format
+#, c-format
 msgid "corporate_secondary_author"
-msgstr "Secundaire auteur"
+msgstr "corporate_secondary_author"
 
 # vertalen?
 #. SPAN
@@ -16803,9 +16799,9 @@ msgid "earth moon globe"
 msgstr "wereld maanbol"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:186
-#, fuzzy, c-format
+#, c-format
 msgid "edition"
-msgstr "Edities"
+msgstr "uitgave"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:96
 #, c-format
@@ -17367,9 +17363,9 @@ msgid "magneto-optical disc "
 msgstr "magneetoptische schijf "
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:90
-#, fuzzy, c-format
+#, c-format
 msgid "main_author"
-msgstr "Belangrijkste auteur"
+msgstr "main_author"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:550
@@ -17710,9 +17706,9 @@ msgstr "of "
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:83
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:72
-#, fuzzy, c-format
+#, c-format
 msgid "original_title"
-msgstr "Origineel kunstwerk"
+msgstr "original_title"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:110
 #, c-format
@@ -17836,9 +17832,9 @@ msgstr "afbeelding "
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:95
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:84
-#, fuzzy, c-format
+#, c-format
 msgid "piece_analytic_level"
-msgstr "Stuk-analytisch niveau"
+msgstr "piece_analytic_level"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:202
@@ -18090,9 +18086,9 @@ msgid "search"
 msgstr "zoek"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:108
-#, fuzzy, c-format
+#, c-format
 msgid "secondary_author"
-msgstr "Secundaire auteur"
+msgstr "secondary_author"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:230
 #, c-format
@@ -18105,9 +18101,9 @@ msgid "serial"
 msgstr "tijdschrift"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:230
-#, fuzzy, c-format
+#, c-format
 msgid "series"
-msgstr "reeksen "
+msgstr "reeksen"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:574
 #, c-format
@@ -18116,9 +18112,9 @@ msgstr "reeksen "
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:89
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:78
-#, fuzzy, c-format
+#, c-format
 msgid "set_level"
-msgstr "Set level"
+msgstr "set_level"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:43
 #, c-format
@@ -18520,14 +18516,14 @@ msgid "unAPI"
 msgstr "unAPI"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:132
-#, fuzzy, c-format
+#, c-format
 msgid "uniform_conventional_heading"
-msgstr "Eenvormige conventionele hoofding"
+msgstr "uniform_conventional_heading"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:126
-#, fuzzy, c-format
+#, c-format
 msgid "uniform_title"
-msgstr "Uniforme titels:"
+msgstr "uniform_title"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:14
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:169
@@ -18552,9 +18548,9 @@ msgid "url"
 msgstr "url"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:391
-#, fuzzy, c-format
+#, c-format
 msgid "user's login identifier (userid or cardnumber)"
-msgstr "gebruikers aanmeldsymbool"
+msgstr "gebruikers aanmeldsymbool (gebruikersnaam of kaartnummer)"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:393
 #, c-format
