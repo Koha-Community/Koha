@@ -120,6 +120,17 @@
                 <tr><th scope="row"><b>Warning</b> </th><td>No active currency is defined. Please go to <a href="/cgi-bin/koha/admin/currency.pl">Administration &gt; Currencies and exchange rates</a> and mark one currency as active.</td></tr>
             [% END %]
         </table>
+        [% ELSIF xml_config_warnings.size %]
+        <table>
+            <caption>XML configuration file</caption>
+        [% FOREACH config_entry IN xml_config_warnings %]
+            [% IF config_entry.error == 'zebra_bib_index_mode_warn' %]
+            <tr><th scope="row"><b>Warning</b> </th><td>The &lt;zebra_bib_index_mode&gt; entry is missing in your configuration file. It should be set to <strong>dom</strong> or <strong>grs1</strong>. It will default to <strong>grs1</strong> but this could change in the future.</td></tr>
+            [% ELSIF config_entry.error == 'zebra_auth_index_mode_warn' %]
+            <tr><th scope="row"><b>Warning</b> </th><td>The &lt;zebra_auth_index_mode&gt; entry is missing in your configuration file. It should be set to <strong>dom</strong> or <strong>grs1</strong>. It will default to <strong>dom</strong> but this could change in the future.</td></tr>
+            [% END %]
+        [% END %]
+        </table>
         [% ELSE %]
             <p>No warnings</p>
         [% END %]

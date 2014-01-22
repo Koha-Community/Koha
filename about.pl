@@ -78,6 +78,19 @@ my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
 my $warnIsRootUser   = (! $loggedinuser);
 
 my $warnNoActiveCurrency = (! defined C4::Budgets->GetCurrency());
+my @xml_config_warnings;
+
+if ( ! defined C4::Context->config('zebra_bib_index_mode') ) {
+    push @xml_config_warnings, {
+        error => 'zebra_bib_index_mode_warn'
+    };
+}
+
+if ( ! defined C4::Context->config('zebra_auth_index_mode') ) {
+    push @xml_config_warnings, {
+        error => 'zebra_auth_index_mode_warn'
+    };
+}
 
 $template->param(
     kohaVersion   => $kohaVersion,
@@ -96,6 +109,7 @@ $template->param(
     errZebraConnection => $errZebraConnection,
     warnIsRootUser => $warnIsRootUser,
     warnNoActiveCurrency => $warnNoActiveCurrency,
+    xml_config_warnings => \@xml_config_warnings,
 );
 
 my @components = ();
