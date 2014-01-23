@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2013-12-17 00:09-0300\n"
+"POT-Creation-Date: 2014-01-17 22:25-0300\n"
 "PO-Revision-Date: 2013-12-19 22:01+0000\n"
 "Last-Translator: kosmous <kvisitor@gnugr.org>\n"
 "Language-Team: Koha Language Team <koha-translate@lists.koha.org>\n"
@@ -724,10 +724,11 @@ msgstr "%s"
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:94
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:96
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:99
+#: opac-tmpl/bootstrap/en/includes/item-status-schema-org.inc:1
+#: opac-tmpl/bootstrap/en/includes/item-status-schema-org.inc:2
 #: opac-tmpl/bootstrap/en/includes/item-status-schema-org.inc:4
 #: opac-tmpl/bootstrap/en/includes/item-status-schema-org.inc:6
 #: opac-tmpl/bootstrap/en/includes/item-status-schema-org.inc:8
-#: opac-tmpl/bootstrap/en/includes/item-status-schema-org.inc:10
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:5
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:7
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:9
@@ -2148,7 +2149,6 @@ msgstr "%s %s"
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:17
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:25
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:59
-#: opac-tmpl/bootstrap/en/includes/item-status-schema-org.inc:1
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:44
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:51
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:59
@@ -2907,8 +2907,8 @@ msgid ""
 "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s%s%sKoha online%s "
 "catalog &rsaquo; Details for: %s%s, %s%s %s %s %s"
 msgstr ""
-"%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s%s%sOnline κατάλογος%"
-"s Koha &rsaquo; Λεπτομερή στοιχεία για: %s%s, %s%s %s %s %s"
+"%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s%s%sOnline κατάλογος"
+"%s Koha &rsaquo; Λεπτομερή στοιχεία για: %s%s, %s%s %s %s %s"
 
 #. %1$s:  IF ( itemsloo.place ) 
 #. %2$s:  itemsloo.place 
@@ -2978,7 +2978,7 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
-#. %3$s:  av_lib_include = KohaAuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 ) 
+#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 ) 
 #. %4$s:  IF av_lib_include 
 #. %5$s:  av_lib_include 
 #. %6$s:  ELSE 
@@ -3060,11 +3060,11 @@ msgstr "%s %s %s%s%sΚανένας τίτλος%s %s, %s%s"
 #. %9$s:  END 
 #. %10$s:  END # / IF print_basket 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:72
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "%s %s %s %s %s%s %s %s%s %s "
 msgstr ""
-"%s %s%s%sKoha%s κατάλογος &rsaquo; %s Αποτελέσματα αναζήτησης %sγια '%s'%s%"
-"s&nbsp;με περιορισμό (ούς):&nbsp;'%s'%s %s Δε διευκρινίσατε κανένα κριτήριο "
+"%s %s%s%sKoha%s κατάλογος &rsaquo; %s Αποτελέσματα αναζήτησης %sγια '%s'%s"
+"%s&nbsp;με περιορισμό (ούς):&nbsp;'%s'%s %s Δε διευκρινίσατε κανένα κριτήριο "
 "αναζήτησης. %s %s %s %s "
 
 #. %1$s:  USE Koha 
@@ -3305,7 +3305,7 @@ msgstr "%s %s %s (%s) %s %s %s %s %s "
 msgid "%s %s %s ; %s %s "
 msgstr "%s %s %s ; %s %s "
 
-#. %1$s:  USE KohaAuthorisedValues 
+#. %1$s:  USE AuthorisedValues 
 #. %2$s:  IF ( item.datedue ) 
 #. %3$s:  IF ( OPACShowCheckoutName ) 
 #. %4$s:  item.cardnumber 
@@ -3320,7 +3320,7 @@ msgstr "%s %s %s ; %s %s "
 #. %13$s:  ELSIF ( item.waiting ) 
 #. %14$s:  ELSIF ( item.withdrawn ) 
 #. %15$s:  ELSIF ( item.itemlost ) 
-#. %16$s:  av_lib_include = KohaAuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
+#. %16$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
 #. %17$s:  IF ( av_lib_include ) 
 #. %18$s:  av_lib_include 
 #. %19$s:  ELSE 
@@ -5880,7 +5880,7 @@ msgstr "%sΙδιωτική%s %sΔημόσια%s "
 #. %5$s:  ELSIF ( suggestions_loo.REJECTED ) 
 #. %6$s:  ELSIF ( suggestions_loo.AVAILABLE ) 
 #. %7$s:  ELSE 
-#. %8$s:  KohaAuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) 
+#. %8$s:  AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) 
 #. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:198
 #, fuzzy, c-format
