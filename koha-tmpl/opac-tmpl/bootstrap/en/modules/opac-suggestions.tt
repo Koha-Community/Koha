@@ -148,7 +148,7 @@
                                                 <th>Summary</th>
                                                 <th>Note</th>
                                                 [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]<th>Suggested for</th>[% END %]
-                                                [% IF Koha.Preference( 'OpacSuggestionManagedBy' ) == 1 %]<th>Managed by</th>[% END %]
+                                                [% IF Koha.Preference( 'OpacSuggestionManagedBy' ) %]<th>Managed by</th>[% END %]
                                                 <th>Status</th>
                                             </tr>
                                         </thead>
@@ -186,7 +186,7 @@
                                                             [% END %]
                                                         </td>
                                                     [% END %]
-                                                    [% IF Koha.Preference( 'OpacSuggestionManagedBy' ) == 1 %]
+                                                    [% IF Koha.Preference( 'OpacSuggestionManagedBy' ) %]
                                                     <td>
                                                         [% IF ( suggestions_loo.surnamemanagedby ) %]
                                                             <span class="tdlabel">Managed by:</span>
@@ -262,7 +262,7 @@
                 { "sType": "anti-the" },
                 null,
                 [% IF ( OPACViewOthersSuggestions ) %]null,[% END %]
-                null,
+                [% IF Koha.Preference( 'OpacSuggestionManagedBy' ) %]null,[% END %]
                 null
             ]
         }));
