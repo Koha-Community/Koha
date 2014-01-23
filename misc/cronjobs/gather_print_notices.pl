@@ -22,6 +22,7 @@ use C4::Log;
 
 use File::Basename qw( dirname );
 use Koha::DateUtils;
+use MIME::Lite;
 
 my (
     $stylesheet,
@@ -33,6 +34,7 @@ my (
     $delimiter,
     @letter_codes,
     $send,
+    @emails,
 );
 
 $send = 1;
@@ -45,6 +47,7 @@ GetOptions(
     'd|delimiter:s' => \$delimiter,
     'letter_code:s' => \@letter_codes,
     'send!'         => \$send,
+    'e|email:s'     => \@emails,
 ) || pod2usage(1);
 
 pod2usage(0) if $help;
@@ -121,6 +124,22 @@ if ( $html ) {
         output_directory => $output_directory,
         format => 'html',
     });
+}
+
+if ( @emails ) {
+    my $files = {
+        html => $html_filenames,
+        csv  => $csv_filenames,
+        ods  => $ods_filenames,
+    };
+    for my $email ( @emails ) {
+        send_files({
+            directory => $output_directory,
+            files => $files,
+            to => $email,
+            from => C4::Context->preference('KohaAdminEmailAddress'), # Should be replaced if bug 8000 is pushed
+        });
+    }
 }
 
 sub print_notices {
@@ -280,13 +299,56 @@ sub generate_ods {
     $doc->save();
 }
 
+sub send_files {
+    my ( $params ) = @_;
+    my $directory = $params->{directory};
+    my $files = $params->{files};
+    my $to = $params->{to};
+    my $from = $params->{from};
+    return unless $to and $from;
+
+    my $mail = MIME::Lite->new(
+        From     => $from,
+        To       => $to,
+        Subject  => 'Print notices for ' . $today->output(),
+        Type     => 'multipart/mixed',
+    );
+
+    while ( my ( $type, $filenames ) = each %$files ) {
+        for my $filename ( @$filenames ) {
+            my $mimetype = $type eq 'html'
+                ? 'text/html'
+                : $type eq 'csv'
+                    ? 'text/csv'
+                    : $type eq 'ods'
+                        ? 'application/vnd.oasis.opendocument.spreadsheet'
+                        : undef;
+
+            next unless $mimetype;
+
+            my $filepath = File::Spec->catdir( $directory, $filename );
+
+            next unless $filepath or -f $filepath;
+
+            $mail->attach(
+              Type     => $mimetype,
+              Path     => $filepath,
+              Filename => $filename,
+              Encoding => 'base64',
+            );
+        }
+    }
+
+    $mail->send;
+}
+
 =head1 NAME
 
 gather_print_notices - Print waiting print notices
 
 =head1 SYNOPSIS
 
-gather_print_notices output_directory [-s|--split] [--html] [--csv] [--ods] [--letter_code=LETTER_CODE] [-h|--help]
+gather_print_notices output_directory [-s|--split] [--html] [--csv] [--ods] [--letter_code=LETTER_CODE] [-e|--email=your_email@example.org] [-h|--help]
 
 Will print all waiting print notices to the output_directory.
 
@@ -336,6 +398,10 @@ This is the same as the csv parameter but using csv2odf to generate an ods file 
 
 Filter print messages by letter_code.
 Several letter_code parameters can be given.
+
+=item B<-e|--email>
+
+E-mail address to send generated files.
 
 =item B<-h|--help>
 
