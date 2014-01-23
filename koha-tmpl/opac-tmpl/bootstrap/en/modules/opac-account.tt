@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% SET ENABLE_OPAC_PAYMENTS = Koha.Preference('EnablePayPalOpacPayments') %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your fines and charges</title>
@@ -26,12 +27,29 @@
             </div>
             <div class="span10">
                 <div id="useraccount" class="maincontent">
+
+                    [% IF message %]
+                        <div class="alert alert-info">
+                            [% IF message == 'valid_payment' %]
+                                <p>Your payment of $[% message_value %] has been processed sucessfully!</p>
+                            [% ELSIF message == 'duplicate_payment' %]
+                                <p>A payment with the transaction id <i>[% message_value %]</i> has already been posted to an account.</p>
+                                <p>Please contact a librarian for details.</p>
+                            [% ELSIF message == 'invalid_payment' %]
+                                <p>The transaction id <i>[% message_value %]</i> for this payment is invalid.</p>
+                                <p>Please contact a librarian for details.</p>
+                            [% END %]
+                        </div>
+                    [% END %]
+
                     <h3>Fines and charges</h3>
 
                     [% IF ( ACCOUNT_LINES ) %]
+                        <form method="post" action="opac-account-pay.pl" class="form-horizontal">
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
+                                    [% IF ENABLE_OPAC_PAYMENTS %]<th>&nbsp;</th>[% END %]
                                     <th>Date</th>
                                     <th>Description</th>
                                     <th>Fine amount</th>
@@ -41,7 +59,12 @@
 
                             <tfoot>
                             <tr>
-                                <th class="sum" colspan="3">Total due</th>
+                                [%- IF ENABLE_OPAC_PAYMENTS -%]
+                                    [%- SET COLSPAN = 4 -%]
+                                [%- ELSE -%]
+                                    [%- SET COLSPAN = 3 -%]
+                                [%- END -%]
+                                <th class="sum" colspan="[% COLSPAN %]">Total due</th>
                                 <td class="sum">[% total %]</td>
                             </tr>
                             </tfoot>
@@ -49,6 +72,13 @@
                             <tbody>
                                 [% FOREACH ACCOUNT_LINE IN ACCOUNT_LINES %]
                                     [% IF ( ACCOUNT_LINE.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+                                        [% IF ENABLE_OPAC_PAYMENTS %]
+                                            <td>
+                                                [% IF ACCOUNT_LINE.amountoutstanding > 0 %]
+                                                    <input name="accountline" type="checkbox" class="checkbox-pay" id="checkbox-pay-[% ACCOUNT_LINE.accountlines_id %]" value="[% ACCOUNT_LINE.accountlines_id %]">
+                                                [% END %]
+                                            </td>
+                                        [% END %]
                                         <td>[% ACCOUNT_LINE.date | $KohaDates %]</td>
                                         <td>
                                             [% SWITCH ACCOUNT_LINE.accounttype %]
@@ -82,6 +112,33 @@
                             </tbody>
 
                         </table>
+
+                            [% IF ENABLE_OPAC_PAYMENTS %]
+                                <fieldset>
+                                    <legend>Pay selected fines and charges</legend>
+                                        <span class="help-block"><h3>Payment method</h3></span>
+                                        <div class="control-group">
+                                            <label class="radio">
+                                                <input type="radio" name="payment_method" id="payment_method-paypal" value="paypal" checked="checked">
+                                                <!-- PayPal Logo --><a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700'); return false;"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_SbyPP_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark"></a><!-- PayPal Logo -->
+                                            </label>
+                                        </div>
+                                        <!-- look to the future
+                                        <div class="control-group">
+                                            <label class="radio">
+                                                <input type="radio" name="payment_method" id="payment_method-paypal" value="paypal" checked="checked">
+                                                PayPal
+                                            </label>
+                                        </div>
+                                        -->
+
+                                        <div class="control-group">
+                                            <input type="hidden" id="payment-amount" name="payment_amount" value="0" />
+                                            <button id="submit-pay" type="submit" class="btn" disabled="disabled">Make payment</button>
+                                        </div>
+                                </fieldset>
+                            [% END %]
+                        </form>
                     [% ELSE %]
                         <h4>You have no fines or charges</h4>
                     [% END %]
@@ -92,4 +149,12 @@
 </div> <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+<script type="text/javascript">
+$( document ).ready(function() {
+    $('.checkbox-pay').change( function() {
+        $("#submit-pay").prop('disabled', ! $('.checkbox-pay:checked').length );
+    });
+});
+</script>
+[% END %]
