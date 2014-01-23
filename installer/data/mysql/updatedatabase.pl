@@ -7930,10 +7930,10 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.15.00.014";
 if (CheckVersion($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('SelfCheckReceiptPrompt', '1', 'NULL', 'If ON, print receipt dialog pops up when self checkout is finished.', 'YesNo');");
-    print "Upgrade to $DBversion done (Bug 11415: add system preference for self checkout receipt print)\n";
+    print "Upgrade to $DBversion done (Bug 11415: add system preference for automatic self checkout receipt printing)\n";
     SetVersion($DBversion);
 }
 
