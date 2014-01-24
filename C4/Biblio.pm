@@ -19,8 +19,7 @@ package C4::Biblio;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use Carp;
 
 use Encode qw( decode is_utf8 );
