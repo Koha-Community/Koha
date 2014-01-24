@@ -24,7 +24,8 @@ var dataTablesDefaults = {
         "sZeroRecords"      : window.MSG_DT_ZERO_RECORDS || "No matching records found"
     },
     "sDom": '<"top pager"ilpf>t<"bottom pager"ip>',
-    "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, window.MSG_DT_ALL || "All"]]
+    "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, window.MSG_DT_ALL || "All"]],
+    "iDisplayLength": 20
 };
 
 
