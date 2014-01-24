@@ -134,7 +134,6 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   "__PAZPAR2_PORT__" => '11002',
   "__INSTALL_MODE__" => 'standard',
   "__INSTALL_BASE__" => '/usr/share/koha',
-  "__INSTALL_ZEBRA__" => 'yes',
   "__INSTALL_SRU__" => 'yes',
   "__INSTALL_PAZPAR2__" => 'no',
   "__PAZPAR2_TOGGLE_XML_PRE__" => '<!--',
