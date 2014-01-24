@@ -78,8 +78,5 @@ $template->{VARS}->{'norequests'}   = $norequests;
 $template->param(C4::Search::enabled_staff_search_views);
 $template->{VARS}->{'biblio'} = $biblio;
 
-my $holds = C4::Reserves::GetReservesFromBiblionumber({ biblionumber => $biblionumber, all_dates => 1 });
-my $holdcount = scalar( @$holds );
-$template->param( holdcount => $holdcount, holds => $holds );
 
 output_html_with_http_headers $query, $cookie, $template->output;
