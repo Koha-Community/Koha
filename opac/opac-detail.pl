@@ -539,7 +539,7 @@ for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
 }
 my $has_hold;
 if ( $show_holds_count || $show_priority) {
-    my $reserves = GetReservesFromBiblionumber({ biblionumber => $biblionumber });
+    my $reserves = GetReservesFromBiblionumber({ biblionumber => $biblionumber, all_dates => 1 });
     $template->param( holds_count  => scalar( @$reserves ) ) if $show_holds_count;
     foreach (@$reserves) {
         $item_reserves{ $_->{itemnumber} }++ if $_->{itemnumber};

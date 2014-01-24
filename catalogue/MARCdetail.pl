@@ -336,8 +336,5 @@ $template->param (
     searchid            => $query->param('searchid'),
 );
 
-my $holds = C4::Reserves::GetReservesFromBiblionumber({ biblionumber => $biblionumber, all_dates => 1 });
-my $holdcount = scalar( @$holds );
-$template->param( holdcount => $holdcount, holds => $holds );
 
 output_html_with_http_headers $query, $cookie, $template->output;
