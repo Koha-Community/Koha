@@ -7953,6 +7953,27 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q{
+        UPDATE systempreferences
+        SET explanation = 'Define the contents of UNIMARC authority control field 100 position 08-35'
+        WHERE variable = "UNIMARCAuthorityField100"
+    });
+    $dbh->do(q{
+        UPDATE systempreferences
+        SET explanation = 'Define the contents of MARC21 authority control field 008 position 06-39'
+        WHERE variable = "MARCAuthorityControlField008"
+    });
+    $dbh->do(q{
+        UPDATE systempreferences
+        SET explanation = 'Define MARC Organization Code for MARC21 records - http://www.loc.gov/marc/organizations/orgshome.html'
+        WHERE variable = "MARCOrgCode"
+    });
+    print "Upgrade to $DBversion done (Bug 11611 - fix possible confusion between UNIMARC and MARC21 in some sysprefs)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
