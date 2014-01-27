@@ -47,8 +47,6 @@ $(document).ready(function(){
             <td>[% branchloo.branchname %]</td>
             <td>[% branchloo.issues %]</td>
             <td>[% IF ( branchloo.seen ) %]
-                    <span style="display:none;">[% branchloo.seen %][% branchloo.seentime %]</span>
-                    <!-- invisible span for eventual use by tablesorter -->
                     [% branchloo.seen %] [% branchloo.seentime %]
                 [% ELSE %]
                     <span>Never</span>
