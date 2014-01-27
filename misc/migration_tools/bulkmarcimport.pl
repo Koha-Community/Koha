@@ -53,7 +53,7 @@ GetOptions(
     't|test' => \$test_parameter,
     's' => \$skip_marc8_conversion,
     'c:s' => \$char_encoding,
-    'v:i' => \$verbose,
+    'v:+' => \$verbose,
     'fk' => \$fk_off,
     'm:s' => \$format,
     'l:s' => \$logfile,
@@ -102,7 +102,7 @@ if(defined $localcust) { #local customize module
         }
         else {
             print "WARNING: customize module $localcust.pm not found!\n";
-            exit;
+            exit 1;
         }
     }
     require $localcust if $localcust;
