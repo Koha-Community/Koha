@@ -7864,7 +7864,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.14.02.001";
 if(CheckVersion($DBversion)) {
     $dbh->do(q{
         ALTER TABLE `borrowers`
