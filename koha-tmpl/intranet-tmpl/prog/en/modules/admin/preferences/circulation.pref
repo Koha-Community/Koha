@@ -363,6 +363,13 @@ Circulation:
                   no: "Don't"
             - calculate and update overdue charges when an item is returned.
             - <br /><b>NOTE If you are doing hourly loans then you should have this on.</b>
+        -
+            - pref: UpdateNotForLoanStatusOnCheckin
+              type: textarea
+              class: code
+            - This is a list of value pairs. When an item is checked in, if the not for loan value on the left matches the items not for loan value
+            - "it will be updated to the right-hand value. E.g. '-1: 0' will cause an item that was set to 'Ordered' to now be available for loan."
+            - Each pair of values should be on a separate line.
     Holds Policy:
         -
             - pref: AllowHoldPolicyOverride

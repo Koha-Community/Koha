@@ -1756,6 +1756,25 @@ sub AddReturn {
 
     my $borrowernumber = $borrower->{'borrowernumber'} || undef;    # we don't know if we had a borrower or not
 
+    my $yaml = C4::Context->preference('UpdateNotForLoanStatusOnCheckin');
+    if ($yaml) {
+        $yaml = "$yaml\n\n";  # YAML is anal on ending \n. Surplus does not hurt
+        my $rules;
+        eval { $rules = YAML::Load($yaml); };
+        if ($@) {
+            warn "Unable to parse UpdateNotForLoanStatusOnCheckin syspref : $@";
+        }
+        else {
+            foreach my $key ( keys %$rules ) {
+                if ( $item->{notforloan} eq $key ) {
+                    ModItem( { notforloan => $rules->{$key} }, undef, $itemnumber );
+                    last;
+                }
+            }
+        }
+    }
+
+
     # check if the book is in a permanent collection....
     # FIXME -- This 'PE' attribute is largely undocumented.  afaict, there's no user interface that reflects this functionality.
     if ( $hbr ) {
