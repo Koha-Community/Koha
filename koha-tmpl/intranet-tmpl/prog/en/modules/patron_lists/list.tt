@@ -27,10 +27,17 @@ $(document).ready(function() {
         .append( "<a>" + item.surname + ", " + item.firstname + " (" + item.cardnumber + ") <small>" + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
         .appendTo( ul );
     };
+
+    $("body").on("click",".removePatron",function(e){
+        e.preventDefault();
+        var divid = $(this).parent().attr("id");
+        var cardnumber = divid.replace("borrower_","");
+        RemovePatron(cardnumber);
+    });
 });
 
 function AddPatron( name, cardnumber ) {
-    div = "<div id='borrower_" + cardnumber + "'>" + name + " ( <a href='javascript:void()' onclick='RemovePatron(" + cardnumber + ");'> Remove </a> ) <input type='hidden' name='patrons_to_add' value='" + cardnumber + "' /></div>";
+    div = "<div id='borrower_" + cardnumber + "'>" + name + " ( <a href='#' class='removePatron'> " + _("Remove") + " </a> ) <input type='hidden' name='patrons_to_add' value='" + cardnumber + "' /></div>";
     $('#patrons_to_add').append( div );
 
     $('#find_patron').val('').focus();
