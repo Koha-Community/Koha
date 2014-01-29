@@ -49,7 +49,9 @@ use Data::Dumper;
 use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::Borrower::Debarments;
+use Koha::Database;
 use Carp;
+use List::MoreUtils qw( uniq );
 use Date::Calc qw(
   Today
   Today_and_Now
@@ -2640,6 +2642,58 @@ sub CanBookBeRenewed {
       or return;
 
     my ( $resfound, $resrec, undef ) = C4::Reserves::CheckReserves($itemnumber);
+
+    # This item can fill one or more unfilled reserve, can those unfilled reserves
+    # all be filled by other available items?
+    if ( $resfound
+        && C4::Context->preference('AllowRenewalIfOtherItemsAvailable') )
+    {
+        my $schema = Koha::Database->new()->schema();
+
+        # Get all other items that could possibly fill reserves
+        my @itemnumbers = $schema->resultset('Item')->search(
+            {
+                biblionumber => $resrec->{biblionumber},
+                onloan       => undef,
+                -not         => { itemnumber => $itemnumber }
+            },
+            { columns => 'itemnumber' }
+        )->get_column('itemnumber')->all();
+
+        # Get all other reserves that could have been filled by this item
+        my @borrowernumbers;
+        while (1) {
+            my ( $reserve_found, $reserve, undef ) =
+              C4::Reserves::CheckReserves( $itemnumber, undef, undef,
+                \@borrowernumbers );
+
+            if ($reserve_found) {
+                push( @borrowernumbers, $reserve->{borrowernumber} );
+            }
+            else {
+                last;
+            }
+        }
+
+        # If the count of the union of the lists of reservable items for each borrower
+        # is equal or greater than the number of borrowers, we know that all reserves
+        # can be filled with available items. We can get the union of the sets simply
+        # by pushing all the elements onto an array and removing the duplicates.
+        my @reservable;
+        foreach my $b (@borrowernumbers) {
+            foreach my $i (@itemnumbers) {
+                if ( CanItemBeReserved( $b, $i ) ) {
+                    push( @reservable, $i );
+                }
+            }
+        }
+
+        @reservable = uniq(@reservable);
+
+        if ( @reservable >= @borrowernumbers ) {
+            $resfound = 0;
+        }
+    }
 
     return ( 0, "on_reserve" ) if $resfound;    # '' when no hold was found
 

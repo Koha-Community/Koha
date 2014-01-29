@@ -41,7 +41,7 @@ use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::Database;
 
-use List::MoreUtils qw( firstidx );
+use List::MoreUtils qw( firstidx any );
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -918,7 +918,7 @@ table in the Koha database.
 =cut
 
 sub CheckReserves {
-    my ( $item, $barcode, $lookahead_days) = @_;
+    my ( $item, $barcode, $lookahead_days, $ignore_borrowers) = @_;
     my $dbh = C4::Context->dbh;
     my $sth;
     my $select;
@@ -973,7 +973,7 @@ sub CheckReserves {
     return if  ( $notforloan_per_item > 0 ) or $notforloan_per_itemtype;
 
     # Find this item in the reserves
-    my @reserves = _Findgroupreserve( $bibitem, $biblio, $itemnumber, $lookahead_days);
+    my @reserves = _Findgroupreserve( $bibitem, $biblio, $itemnumber, $lookahead_days, $ignore_borrowers);
 
     # $priority and $highest are used to find the most important item
     # in the list returned by &_Findgroupreserve. (The lower $priority,
@@ -1857,7 +1857,7 @@ sub _FixPriority {
 
 =head2 _Findgroupreserve
 
-  @results = &_Findgroupreserve($biblioitemnumber, $biblionumber, $itemnumber, $lookahead);
+  @results = &_Findgroupreserve($biblioitemnumber, $biblionumber, $itemnumber, $lookahead, $ignore_borrowers);
 
 Looks for an item-specific match first, then for a title-level match, returning the
 first match found.  If neither, then we look for a 3rd kind of match based on
@@ -1874,7 +1874,7 @@ C<biblioitemnumber>.
 =cut
 
 sub _Findgroupreserve {
-    my ( $bibitem, $biblio, $itemnumber, $lookahead) = @_;
+    my ( $bibitem, $biblio, $itemnumber, $lookahead, $ignore_borrowers) = @_;
     my $dbh   = C4::Context->dbh;
 
     # TODO: consolidate at least the SELECT portion of the first 2 queries to a common $select var.
@@ -1907,7 +1907,8 @@ sub _Findgroupreserve {
     $sth->execute($itemnumber, $lookahead||0);
     my @results;
     if ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
+        push( @results, $data )
+          unless any{ $data->{borrowernumber} eq $_ } @$ignore_borrowers ;
     }
     return @results if @results;
     
@@ -1940,7 +1941,8 @@ sub _Findgroupreserve {
     $sth->execute($itemnumber, $lookahead||0);
     @results = ();
     if ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
+        push( @results, $data )
+          unless any{ $data->{borrowernumber} eq $_ } @$ignore_borrowers ;
     }
     return @results if @results;
 
@@ -1974,7 +1976,8 @@ sub _Findgroupreserve {
     $sth->execute( $biblio, $bibitem, $itemnumber, $lookahead||0);
     @results = ();
     while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
+        push( @results, $data )
+          unless any{ $data->{borrowernumber} eq $_ } @$ignore_borrowers ;
     }
     return @results;
 }

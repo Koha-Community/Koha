@@ -404,6 +404,12 @@ Circulation:
             - Each pair of values should be on a separate line.
     Holds Policy:
         -
+            - pref: AllowRenewalIfOtherItemsAvailable
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - a patron to renew an item with unfilled holds if other available items can fill that hold.
+        -
             - pref: AllowHoldPolicyOverride
               choices:
                   yes: Allow

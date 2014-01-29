@@ -9470,6 +9470,16 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if (CheckVersion($DBversion)) {
+    $dbh->do(q{
+        INSERT INTO systempreferences ( variable, value, options, explanation, type ) VALUES
+        ('AllowRenewalIfOtherItemsAvailable','0',NULL,'If enabled, allow a patron to renew an item with unfilled holds if other available items can fill that hold.','YesNo')
+    });
+    print "Upgrade to $DBversion done (Bug 11634 - Allow renewal of item with unfilled holds if other available items can fill those holds)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
