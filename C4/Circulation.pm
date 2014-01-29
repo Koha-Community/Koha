@@ -982,30 +982,29 @@ sub CanBookBeIssued {
     if (($markers)&&($bibvalues))
     {
         # Split $bibvalues to something like FSK 16 or PEGI 6
-        my @values = split ' ', $bibvalues;
+        my @values = split ' ', uc($bibvalues);
 
         # Search first occurence of one of the markers
-        my @markers = split /\|/, $markers;
+        my @markers = split /\|/, uc($markers);
         my $index = 0;
-        my $take = -1;
+        my $restrictionyear = 0;
         for my $value (@values) {
             $index ++;
             for my $marker (@markers) {
                 $marker =~ s/^\s+//; #remove leading spaces
                 $marker =~ s/\s+$//; #remove trailing spaces
-                if (uc($marker) eq uc($value)) {
-                    $take = $index;
+                if ($marker eq $value) {
+                    if ($index <= $#values) {
+                        $restrictionyear += $values[$index];
+                    }
+                    last;
+                } elsif ($value =~ /^\Q$marker\E(\d+)$/) {
+                    # Perhaps it is something like "K16" (as in Finland)
+                    $restrictionyear += $1;
                     last;
                 }
             }
-            if ($take > -1) {
-                last;
-            }
-        }
-        # Index points to the next value
-        my $restrictionyear = 0;
-        if (($take <= $#values) && ($take >= 0)){
-            $restrictionyear += $values[$take];
+            last if ($restrictionyear > 0);
         }
 
         if ($restrictionyear > 0) {
