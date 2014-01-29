@@ -43,7 +43,7 @@
             source: "/cgi-bin/koha/circ/ysearch.pl",
             minLength: 3,
             select: function( event, ui ) {
-                AddInstructor( ui.item.firstname + " " + ui.item.surname, ui.item.cardnumber );
+                AddInstructor( ui.item.surname + ", " + ui.item.firstname, ui.item.cardnumber );
                 return false;
             }
         })
@@ -54,17 +54,32 @@
             .appendTo( ul );
         };
 
+        if ( ! $('#instructors').html() ) {
+            $('#course_instructors').hide();
+        }
+
+        $("body").on("click",".removeInstructor",function(e){
+            e.preventDefault();
+            var divid = $(this).parent().attr("id");
+            var cardnumber = divid.replace("borrower_","");
+            RemoveInstructor(cardnumber);
+        });
     });
 
     function AddInstructor( name, cardnumber ) {
-        div = "<div id='borrower_" + cardnumber + "'>" + name + " ( <a href='#' onclick='RemoveInstructor(" + cardnumber + ");return false;'> Remove </a> ) <input type='hidden' name='instructors' value='" + cardnumber + "' /></div>";
+        div = "<div id='borrower_" + cardnumber + "'>" + name + " ( <a href='#' class='removeInstructor'> " + _("Remove")+ " </a> ) <input type='hidden' name='instructors' value='" + cardnumber + "' /></div>";
         $('#instructors').append( div );
 
         $('#find_instructor').val('').focus();
+        $('#course_instructors').show();
     }
 
     function RemoveInstructor( cardnumber ) {
         $( '#borrower_' + cardnumber ).remove();
+
+        if ( ! $('#instructors').html() ) {
+            $('#course_instructors').hide( 800 );
+        }
     }
 
     //]]>
@@ -143,15 +158,9 @@
                         <li>
                             <span class="label">Instructors:</span>
 
-                            <fieldset>
-                                 <div id="instructors">
-                                     [% FOREACH i IN instructors %]
-                                         <div id="borrower_[% i.cardnumber %]">
-                                             [% i.surname %], [% i.firstname %] ( <a href='#' onclick='RemoveInstructor( [% i.cardnumber %] );'> Remove </a> )
-                                             <input type='hidden' name='instructors' value='[% i.cardnumber %]' />
-                                         </div>
-                                     [% END %]
-                                 </div>
+                            <fieldset id="course_instructors">
+                                 <div id="instructors">[% FOREACH i IN instructors %]<div id="borrower_[% i.cardnumber %]">[% i.surname %], [% i.firstname %] ( <a href="#" class="removeInstructor"> Remove </a> )
+                                             <input type='hidden' name='instructors' value='[% i.cardnumber %]' /></div>[% END %]</div>
                             </fieldset>
 
                             <fieldset>
