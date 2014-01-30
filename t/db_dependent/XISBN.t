@@ -31,8 +31,9 @@ my ( $isbn_tag, $isbn_subfield ) =
 my $isbn1 = '0590353403';
 # ThingISBN match : Silent Wing, First Edition 1998
 my $isbn2 = '0684843897';
-# XISBN match : Harry Potter and the Philosopher's Stone, Magic ed. 2000
-my $isbn3 = '1551923963';
+# XISBN match : Harry Potter and the Sorcerer's Stone,
+# 1. Scholastic mass market paperback printing1.
+my $isbn3 = '043936213X';
 
 my $biblionumber1 = _add_biblio_with_isbn($isbn1);
 my $biblionumber2 = _add_biblio_with_isbn($isbn2);
