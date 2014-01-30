@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 25;
+use Test::More tests => 31;
 use MARC::Record;
 use DateTime::Duration;
 
@@ -319,12 +319,44 @@ is(defined $results[3]?1:0, 1, 'GetReservesFromItemnumber returns a future wait 
 
 # Tests for CalculatePriority (bug 8918)
 my $p = C4::Reserves::CalculatePriority($bibnum2);
-is($p, 4, 'CalculatePriority  should now return priority 4');
+is($p, 4, 'CalculatePriority should now return priority 4');
+$resdate=undef;
 AddReserve('CPL',  $requesters{'CPL'}, $bibnum2,
-           $constraint, $bibitems,  $p, undef, $expdate, $notes,
+           $constraint, $bibitems,  $p, $resdate, $expdate, $notes,
            $title,      $checkitem, $found);
 $p = C4::Reserves::CalculatePriority($bibnum2);
 is($p, 5, 'CalculatePriority should now return priority 5');
+#some tests on bibnum
+$dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
+$p = C4::Reserves::CalculatePriority($bibnum);
+is($p, 1, 'CalculatePriority should now return priority 1');
+#add a new reserve and confirm it to waiting
+AddReserve('CPL',  $requesters{'CPL'}, $bibnum,
+           $constraint, $bibitems,  $p, $resdate, $expdate, $notes,
+           $title,      $itemnumber, $found);
+$p = C4::Reserves::CalculatePriority($bibnum);
+is($p, 2, 'CalculatePriority should now return priority 2');
+ModReserveAffect( $itemnumber,  $requesters{'CPL'} , 0);
+$p = C4::Reserves::CalculatePriority($bibnum);
+is($p, 1, 'CalculatePriority should now return priority 1');
+#add another biblio hold, no resdate
+AddReserve('CPL',  $requesters{'CPL'}, $bibnum,
+           $constraint, $bibitems,  $p, $resdate, $expdate, $notes,
+           $title,      $checkitem, $found);
+$p = C4::Reserves::CalculatePriority($bibnum);
+is($p, 2, 'CalculatePriority should now return priority 2');
+#add another future hold
+C4::Context->set_preference('AllowHoldDateInFuture', 1);
+$resdate= dt_from_string();
+$resdate->add_duration(DateTime::Duration->new(days => 1));
+AddReserve('CPL',  $requesters{'CPL'}, $bibnum,
+           $constraint, $bibitems,  $p, output_pref($resdate), $expdate, $notes,
+           $title,      $checkitem, $found);
+$p = C4::Reserves::CalculatePriority($bibnum);
+is($p, 2, 'CalculatePriority should now still return priority 2');
+#calc priority with future resdate
+$p = C4::Reserves::CalculatePriority($bibnum, $resdate);
+is($p, 3, 'CalculatePriority should now return priority 3');
 # End of tests for bug 8918
 
 $dbh->rollback;
