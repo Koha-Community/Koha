@@ -96,6 +96,10 @@ else {
     $budget_period_unalloc = $period->{'budget_period_total'} - $period_sum->{'sum'} if $period->{'budget_period_total'};
 }
 
+$total                 = sprintf( "%.2f", $total );
+$sub_unalloc           = sprintf( "%.2f", $sub_unalloc );
+$budget_period_unalloc = sprintf( "%.2f", $budget_period_unalloc );
+
 if ( $parent_id) {
     if ( ($total > $sub_unalloc ) && $sub_unalloc )  {
         $returncode = 1;
