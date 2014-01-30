@@ -270,12 +270,20 @@ sub GetReserve {
 
   my $reserves = GetReservesFromBiblionumber({
     biblionumber => $biblionumber,
-    itemnumber => $itemnumber,
-    all_dates => 1|0
+    [ itemnumber => $itemnumber, ]
+    [ all_dates => 1|0 ]
   });
 
 This function gets the list of reservations for one C<$biblionumber>,
 returning an arrayref pointing to the reserves for C<$biblionumber>.
+
+By default, only reserves whose start date falls before the current
+time are returned.  To return all reserves, including future ones,
+the C<all_dates> parameter can be included and set to a true value.
+
+If the C<itemnumber> parameter is supplied, reserves must be targeted
+to that item or not targeted to any item at all; otherwise, they
+are excluded from the list.
 
 =cut
 
