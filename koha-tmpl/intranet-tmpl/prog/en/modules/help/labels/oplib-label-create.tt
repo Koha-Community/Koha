@@ -1,0 +1,113 @@
+[% INCLUDE 'help-top.inc' %]
+
+<h1>Print label sheet editor</h1>
+
+<p>
+For an overview of how to operate this feature, see this <a href="/tutorials/screencasts/oplib-label-editor.mp4">screencast</a>.<br/>
+The screencast is a .mp4-video, so not all browsers can play it directly. Try downloading it first by right clicking the link and choosing "save as". Then play with your favourite video player.
+</p>
+
+<h2> * Dots per inch * </h2>
+<p>Dots per inch instruct the printer to scale the sheet to certain precision.
+   Basically this means that at a value of 100, 100 pixels on your screen would take one inch on the printable medium.
+   If you decrease dpi to 50, 100 pixels on your screen should take 2 inches on the printed medium.
+   If you increase dpi to 200, 100 pixels on your screen should take half of an inch on the printed medium.
+</p>
+<h3>Implementation specifics</h3>
+<p>Due to the limitations in the Koha's PDF-printing library, dpi can currently only be used to scale the label sheet's element dimensions and positions.
+   So when printing pdfs, the dpi only affects the positioning and size of the elements, not the size of the printable text or barcodes.
+   This is simply a convenience to have more space on the screen to work with miniscule details, bu decreasing the dpi-value.
+</p>
+
+<h2> * DataSource * </h2>
+
+<p>To print a label element we must know what to print. DataSource answers that question.</p>
+
+<h3>Available DataSource selectors</h3>
+
+<h4>database tables</h4>
+<p>See the <a href="http://schema.koha-community.org/">Koha database schema</a> for available tables and columns.
+   Currently the following tables are available for DataSource selectors
+</p>
+<ul>
+    <li>
+        item, maps to the items-table, all columns are available
+    </li>
+    <li>
+        biblio, maps to the biblio-table, all columns are available
+    </li>
+    <li>
+        biblioitems, maps to the biblioitems-table, all columns are available
+    </li>
+    <li>
+        homebranch, maps to the branches-table, all columns are available
+    </li>
+</ul>
+
+<h4>MARC-selectors</h4>
+<p>Also one can make direct references to MARC subfields using a standard notation, eg. <i>245$a && 100$a || 110$a || 111$a || 024$a</i></p>
+
+<h4>Text</h4>
+<p>You can put plain text to the labels by adding the desired text inside single or double parenthesis, eg. "text to add", 'ID:' </p>
+<h3>DataSource functions</h3>
+
+<p>These are small program snippets which select more complex pieces of source data for printing. It is relatively easy to add more,
+   so ask your friendly administrator for them. Click the source data function's title to display more information on what it does.
+</p>
+
+<h3>DataSource examples</h3>
+
+<table>
+    <tr>
+        <td>
+            Get MARC subfield 020$c
+        </td>
+        <td>
+            020$c
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Get MARC subfield 020$a and 020$b or 020$c and 245$a and 245$b
+        </td>
+        <td>
+            020$a and 020$b or 020$c and 245$a and 245$b (easy isn't it :) )
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Get the signum using a data source function
+        </td>
+        <td>
+            signum() (you should get this by clicking the '+'-button by the data source function name)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Get the Item's homebranch's branchname or branchcode
+        </td>
+        <td>
+            homebranch.branchname or homebranch.branchcode
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Get the Item's barcode
+        </td>
+        <td>
+            item.barcode
+        </td>
+    </tr>
+</table>
+
+    </li>
+</ul>
+
+<h2> * Custom attributes * </h2>
+<p>Some DataSource-functions and -formatters can accept custom attributes.<br/>
+   Custom attributes are passed as key=value pairs, eg:<br/>
+   <em>key=value, lord=rings, lady=chatterley</em><br/>
+   See the function description for possible custom attributes.
+</p>
+
+[% INCLUDE 'help-bottom.inc' %]

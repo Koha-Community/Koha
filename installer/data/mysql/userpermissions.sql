@@ -85,5 +85,9 @@ INSERT INTO permissions (module, code, description) VALUES
    ( 'lists',           'delete_public_lists', 'Delete public lists'),
    ( 'clubs',           'edit_templates', 'Create and update club templates'),
    ( 'clubs',           'edit_clubs', 'Create and update clubs'),
-   ( 'clubs',           'enroll', 'Enroll patrons in clubs')
+   ( 'clubs',           'enroll', 'Enroll patrons in clubs'),
+   ( 'labels',          'sheets_get',                                  'Allow viewing all label sheets'),
+   ( 'labels',          'sheets_new',                                  'Allow creating all label sheets'),
+   ( 'labels',          'sheets_mod',                                  'Allow modifying all label sheets'),
+   ( 'labels',          'sheets_del',                                  'Allow deleting all label sheets')
 ;

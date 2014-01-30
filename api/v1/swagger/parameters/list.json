@@ -1,0 +1,18 @@
+{
+  "listnamePathParam": {
+    "name": "listname",
+    "in": "path",
+    "description": "list name",
+    "required": true,
+    "type": "string"
+  },
+  "listContent": {
+    "name": "listContent",
+    "description": "The list article",
+    "in": "body",
+    "required": true,
+    "schema" : {
+      "$ref": "../definitions/list.json"
+    }
+  }
+}

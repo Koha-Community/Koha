@@ -165,6 +165,11 @@
     <dd>Perform inventory of your catalog</dd>
     [% END %]
 
+    [% IF ( CAN_user_catalogue ) %]
+    <dt><a href="/cgi-bin/koha/labels/oplib-label-create.pl">Label printer</a></dt>
+    <dd>Print labels and spine labels</dd>
+    [% END %]
+
     [% IF ( CAN_user_tools_label_creator ) %]
     <dt><a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a></dt>
     <dd>Create printable labels and barcodes from catalog data</dd>

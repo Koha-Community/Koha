@@ -137,6 +137,24 @@ CREATE TABLE `authorised_values` ( -- stores values for authorized values catego
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
+-- Table structure for table `label_sheets`
+--
+
+DROP TABLE IF EXISTS `label_sheets`;
+CREATE TABLE `label_sheets` ( -- stores Item label positioning and styling sheets in a condensed format
+  `id`   int(11) NOT NULL, -- identifier for one branch of sheets. Can have many versions
+  `name` varchar(100) NOT NULL,
+  `author` int(11) DEFAULT NULL, -- biblionumber of the author who last modified this
+  `version` float(4,1) NOT NULL, -- version of this sheet
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- latest modification time
+  `sheet` MEDIUMTEXT NOT NULL, -- the monster sheet, containing item-slots, regions and elements
+  KEY  (`id`),
+  UNIQUE KEY `id_version` (`id`, `version`),
+  KEY `name` (`name`),
+  CONSTRAINT `labshet_authornumber` FOREIGN KEY (`author`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `biblio`
 --
 

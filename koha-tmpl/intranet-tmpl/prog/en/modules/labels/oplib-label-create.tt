@@ -1,0 +1,178 @@
+    [% INCLUDE 'doc-head-open.inc' %]
+    <title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; Label printer</title>
+    [% INCLUDE 'doc-head-close.inc' %]
+    [% INCLUDE 'greybox.inc' %]
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="[% interface %]/prog/css/Labels/labels.css">
+</head>
+<body id="labels_label-edit-batch" class="tools labels">
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+    <div id="breadcrumbs">
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+        <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
+        Label printer
+    </div>
+    <div id="doc3" class="yui-t1">
+        <div id="bd">
+            <div id="yui-main">
+
+                <div class="yui-b" id="manage-label-batches">
+                    <div class="yui-g">
+                      <div id="labelPrinter">
+                          <form>
+                              [% IF badBarcodeErrors %]
+                              <div class="alert">
+                                  The following barcodes couldn't be found or their shelving location is faulty:
+                                  <br />
+                                  <b>
+                                  [% FOREACH bc IN badBarcodeErrors %]
+                                      [% bc %]
+                                  [% END %]
+                                  </b>
+                                  <br />
+                                  Please correct the faulty barcodes
+                              </div>
+                              [% END %]
+                              <div>
+                                  <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
+                                  <ol><li>
+                                  <label for="barcode">Add by barcode(s):
+                                      <br /> <span class="hint">One barcode per line.</span>
+                                      <br /> <span class="hint">Add an empty row for stickers that need to be skipped.</span>
+                                      <br />
+                                      <br /> <input type="submit" id="printLabels" value="Print us!">
+                                      <br />
+                                      <br /> <span class="hint">If you have trouble printing the .pdf, make sure you are printing the .pdf as is, without any scaling. You should adjust margins only if non-scaling printing doesn't work.</span>
+                                      [% IF barcodesTextArea %]
+                                      <input value="Empty label list" id="flushPrintLabels" type="submit">
+                                      <br /> <span class="hint">If you have added Items to the label printing list, you can clear the list with this button.</span>
+                                      [% END %]
+
+                                  </label>
+                                  <textarea rows="30" cols="20" id="barcodes" tabindex="1" class="focus">[% barcodesTextArea %]</textarea>
+                                  </li><li>
+                                      <label for="leftMargin">Left margin
+                                          <br /> <span class="hint">Should be between -20 and 20.</span>
+                                      </label>
+                                      <input type="number" id="leftMargin" size="3" min="-20" max="20" require [% IF margins.left %] value="[% margins.left %]" [% END %] />
+                                  </li><li>
+                                      <label for="topMargin">Top margin
+                                          <br /> <span class="hint">Should be between -20 and 20.</span>
+                                      </label>
+                                      <input type="number" id="topMargin" size="3" min="-20" max="20" require [% IF margins.top %] value="[% margins.top %]" [% END %] />
+                                  </li></ol>
+                                  </fieldset>
+                              </div>
+                          </form>
+                      </div>
+                      <div id="sheetEditor">
+                          <div id="sheetContainer"></div>
+                          <div id="sheetControls" class="controlGroup">
+                            <div id="generalControls">
+                              <h4>General</h4>
+                              <div id="regionDeleter" class="button">Delete</div>
+                              <div id="saveSheet" class="button">Save</div>
+                              <div id="closeEditor" class="button">Return</div>
+                            </div>
+                            <div id="regionControls">
+
+                            </div>
+                            <div id="elementControls">
+                              <h4>Elements</h4>
+                              <div id="elementDispenser" class="button elementDispenser">Add</div>
+                            </div>
+                          </div>
+                          <div id="regionsDispenser" class="controlGroup">
+
+                          </div>
+                          <div id="sheetEditorConfig" class="controlGroup">
+                              <input type="number" id="sc_dpi"/><label for="sc_dpi">Dots per inch</label>
+                          </div>
+
+                          <div id="selectionControls" class="controlGroup">
+                            <ul>
+                              <li>
+                                <input type="text" size="15" id="sc_name" placeholder="Name"/>
+                              </li>
+                              <li>
+                                <input type="checkbox" id="sc_boundingBox"/><label for="boundingBox">Draw bounding box</label>
+                              </li>
+                              <li>
+                                <input type="color" id="sc_colour"/><label for="sc_colour">Colour</label>
+                              </li>
+                              <li>
+                                <input type="number" id="sc_fontSize" placeholder="Font size"/>
+                                <label for="sc_font">Font size</label>
+                              </li>
+                              <li class="selectBox">
+                                <select id="sc_dataFormat">
+                                </select>
+                                <div id="dataFormatDoc" class="comment">
+                                    [% INCLUDE 'labels/data-source-formatter-documentation.inc' %]
+                                </div>
+                              </li>
+                              <li>
+                                <select id="sc_font">
+                                    [% FOREACH id IN fonts.keys.sort %]
+                                        <option value="[% id %]">[% fonts.$id.name %]</option>
+                                    [% END %]
+                                </select>
+                              </li>
+                              <li>
+                                <input type="text" size="15" id="sc_dataSource" placeholder="Data source"/>
+                              </li>
+                              <li>
+                                <input type="text" size="15" id="sc_customAttr" placeholder="Custom attributes"/>
+                              </li>
+                              <li>
+                                <div id="dataSourceFunctionDocs">
+                                    [% INCLUDE 'labels/data-source-function-documentation.inc' %]
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                      </div>
+                    </div>[%# yui-g %]
+                </div>[%# yui-b %]
+
+            </div>[%# yui-main %]
+
+            <div class="yui-b">
+                <div id="sheetListContainer"></div>
+            </div>[%# yui-b %]
+        </div>
+
+        [% INCLUDE 'labels/translations.inc' %]
+        [%# This should be given from a global js-context! %]
+        <script>
+            var loggedinuser = [% loggedinuserJSON %];
+            var Permissions = { labels: { sheets_mod: "[% CAN_user_labels_sheets_mod %]",
+                                        sheets_new: "[% CAN_user_labels_sheets_new %]",
+                                        sheets_del: "[% CAN_user_labels_sheets_del %]",
+                                        sheets_get: "[% CAN_user_labels_sheets_get %]"
+                                      }
+                            };
+            var cachedSheetId = [% sheetId %];
+            var dataSourceFunctions = [% dataSourceFunctions %];
+            var dataFormatFunctions = [% dataFormatFunctions %];
+            if (! loggedinuser.borrowernumber) alert("Logged in user is unknown. This editor doesn't work. Are you logged in with the database administrator account? Try logging in again with your own credentials.");
+        </script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script src="[% interface %]/lib/tinycolor.js"></script>
+        <script src="[% interface %]/prog/js/Labels.js"></script>
+        <script src="[% interface %]/prog/js/Labels/GUI.js"></script>
+        <script src="[% interface %]/prog/js/Labels/PrintLabelsList.js"></script>
+        <script src="[% interface %]/prog/js/labels.js"></script>
+
+<script>
+    Labels.PrintLabelsList.createFlushButton("#flushPrintLabels", function () {
+        return {
+            borrowernumber: parseInt('[% USER_INFO.borrowernumber %]', 10),
+            biblionumber: 1,
+            itemnumber: 1,
+            listname: 'labels printing'
+        };
+    });
+</script>
+    [% INCLUDE 'intranet-bottom.inc' %]

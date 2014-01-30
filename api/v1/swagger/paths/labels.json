@@ -1,0 +1,253 @@
+{
+  "/labels/sheets": {
+    "get": {
+      "x-mojo-to": "Labels::Sheets#list",
+      "operationId": "listSheets",
+      "tags": ["labels"],
+      "produces": [
+        "application/json"
+      ],
+      "summary": "Get a list of label positioning sheets.",
+      "description": "Not designed for external use. Use this to see the structure of the sheet-objects.",
+      "responses": {
+        "200": {
+          "description": "A list of sheets",
+          "schema": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+          }
+        },
+        "404": {
+          "description": "No sheets in Koha",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "labels": "sheets_get"
+        }
+      }
+    },
+    "post": {
+      "x-mojo-to": "Labels::Sheets#create",
+      "operationId": "createSheet",
+      "tags": ["labels"],
+      "produces": [
+        "text/plain"
+      ],
+      "summary": "Create a new label positioning sheet",
+      "parameters": [
+        {
+          "name": "sheet",
+          "in": "formData",
+          "description": "A JSON object of the sheet, containing the items, regions and elements.",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "responses": {
+        "201": {
+          "description": "The created sheet",
+          "schema": { "type": "string" }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "labels": "sheets_new"
+        }
+      }
+    },
+    "put": {
+      "x-mojo-to": "Labels::Sheets#update",
+      "operationId": "updateSheet",
+      "tags": ["labels"],
+      "produces": [
+        "application/json"
+      ],
+      "summary": "Modify a label positioning sheet",
+      "parameters": [
+        {
+          "name": "sheet",
+          "in": "formData",
+          "description": "A JSON object of the sheet, containing the items, regions and elements.",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "responses": {
+        "201": {
+          "description": "The modified sheet",
+          "schema": { "type" : "string" }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "404": {
+          "description": "Sheet not found",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "labels": "sheets_mod"
+        }
+      }
+    }
+  },
+  "/labels/sheets/version": {
+    "get": {
+      "x-mojo-to": "Labels::Sheets#list_sheet_versions",
+      "operationId": "listSheetVersions",
+      "tags": ["labels"],
+      "produces": [
+        "application/json"
+      ],
+      "summary": "Get a list of label positioning sheet ids and versions.",
+      "responses": {
+        "200": {
+          "description": "A list of sheet ids and versions",
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "version"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "version": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "No sheets in Koha",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "labels": "sheets_get"
+        }
+      }
+    }
+  },
+  "/labels/sheets/{sheet_identifier}/{sheet_version}": {
+    "delete": {
+      "x-mojo-to": "Labels::Sheets#delete",
+      "operationId": "deleteSheet",
+      "tags": ["labels"],
+      "parameters": [
+        { "$ref": "../parameters.json#/sheet_identifierPathParam" },
+        { "$ref": "../parameters.json#/sheet_versionPathParam" }
+      ],
+      "produces": [
+        ""
+      ],
+      "summary": "Delete a label positioning sheet",
+      "description": "By default only deletes the newest version, exposing the older version.",
+      "responses": {
+       "204": {
+          "description": "Deleting the message succeeded.",
+          "schema": {
+            "type": "object"
+          }
+        },
+        "404": {
+          "description": "Sheet not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "labels": "sheets_del"
+        }
+      }
+    },
+    "get": {
+      "x-mojo-to": "Labels::Sheets#get",
+      "operationId": "getSheet",
+      "tags": ["labels"],
+      "parameters": [
+        { "$ref": "../parameters.json#/sheet_identifierPathParam" },
+	      { "$ref": "../parameters.json#/sheet_versionPathParam" }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "summary": "Get a label positioning sheet",
+      "responses": {
+        "200": {
+          "description": "The sheet",
+          "schema": {
+            "type" : "object"
+          }
+        },
+        "404": {
+          "description": "Sheet not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "labels": "sheets_get"
+        }
+      }
+    }
+  }
+}

@@ -367,6 +367,7 @@ my $input        = new CGI;
 my $error        = $input->param('error');
 my $biblionumber = $input->param('biblionumber');
 my $itemnumber   = $input->param('itemnumber');
+my $addToPrintLabelsList = $input->param('addToPrintLabelsList');
 my $op           = $input->param('op');
 my $hostitemnumber = $input->param('hostitemnumber');
 my $marcflavour  = C4::Context->preference("marcflavour");
@@ -484,6 +485,29 @@ if ($op eq "additem") {
             set_item_default_location($oldbibitemnum);
             my $err = C4::Biblio::UpdateDatereceived($biblionumber);
             push @errors, $err if $err;
+            if ($addToPrintLabelsList) {
+                my $shelf = Koha::Virtualshelves->find( { owner => $loggedinuser, shelfname => 'labels printing'} );
+                if (!$shelf) {
+                    $shelf = eval { Koha::Virtualshelf->new( {
+                        shelfname => 'labels printing',
+                        category => 1,
+                        owner => $loggedinuser,
+                        sortfield => undef,
+                        allow_add => 0,
+                        allow_delete_own => 1,
+                        allow_delete_other => 0,
+                        } )->store; };
+                }
+                my $content = Koha::Virtualshelfcontent->new(
+                    {
+                        shelfnumber => $shelf->shelfnumber,
+                        biblionumber => $biblionumber,
+                        borrowernumber => $loggedinuser,
+                        flags => $oldbibitemnum,
+                    }
+                )->store;
+
+            }
 
             # Pushing the last created item cookie back
             if ($prefillitem && defined $record) {
@@ -690,6 +714,28 @@ if ($op eq "additem") {
         push @errors,"barcode_not_unique";
     } else {
         ModItemFromMarc($itemtosave,$biblionumber,$itemnumber);
+        if ($addToPrintLabelsList) {
+            my $shelf = Koha::Virtualshelves->find( { owner => $loggedinuser, shelfname => 'labels printing'} );
+            if (!$shelf) {
+                $shelf = eval { Koha::Virtualshelf->new( {
+                    shelfname => 'labels printing',
+                    category => 1,
+                    owner => $loggedinuser,
+                    sortfield => undef,
+                    allow_add => 0,
+                    allow_delete_own => 1,
+                    allow_delete_other => 0,
+                    } )->store; };
+            }
+	    my $content = Koha::Virtualshelfcontent->new(
+                    {
+                        shelfnumber => $shelf->shelfnumber,
+                        biblionumber => $biblionumber,
+                        borrowernumber => $loggedinuser,
+                        flags => $itemnumber,
+                    }
+            )->store;
+        }
         $itemnumber="";
     }
   my $item = GetItem( $itemnumber );

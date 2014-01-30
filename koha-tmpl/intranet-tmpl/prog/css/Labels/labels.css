@@ -1,0 +1,160 @@
+#resizable {
+  width: 100px;
+  height: 100px;
+  background: #ccc;
+}
+.button {
+    width: 30px;
+    height: 30px;
+    background: #999;
+    margin: 2px;
+    text-align: center;
+    border-radius: 5px;
+    border: #3E90D8 solid 3px;
+    z-index: 10001;
+}
+.button:hover {
+    background:azure;
+}
+.region {
+    width: 50px;
+    height: 50px;
+    background: #abc;
+    position: absolute;
+}
+.region .itemnumber {
+    font-weight: bold;
+    background-color: rgb(153, 0, 0);
+}
+.element {
+    width: 30px;
+    height: 30px;
+    background: #aff;
+    position: absolute;
+    text-align: center;
+}
+.staged {
+    background: #faa;
+}
+.deployed {
+    background: #afa;
+}
+.activeTarget {
+    box-shadow: 0px 0px 5px 5px #555;
+}
+.exceptionTarget {
+    background: #a55;
+}
+.sheet {
+    position: absolute;
+    left: 180px;
+    top: 0;
+    width: 200px;
+    height: 125px;
+    background: #999;
+    color: #fff;
+    padding: 10px;
+    z-index: 10000;
+}
+.controlGroup {
+    margin: 5px;
+}
+#sheetEditor {
+    position: relative;
+    display: none;
+    width: 170px;
+}
+#sheetEditor input[type="number"] {
+    width: 70px;
+    color: black;
+}
+#sheetEditor .dataFormat {
+    font-size: 50%;
+}
+#sheetEditor .selectBox {
+    border: solid 1px gray;
+    border-radius: 3px;
+}
+#sheetEditor .selectBox label {
+    font-weight: bold;
+}
+#sheetEditor .selectBox .comment {
+    background-color: white;
+    border-radius: 3px;
+    border: 1px solid;
+    padding: 5px;
+    margin: 3px;
+}
+#sheetEditorTooltip {
+    position: absolute;
+    min-width: 50px;
+    top: -12px;
+    left: 250px;
+    background-color: #4D4D4D;
+    padding: 0px 5px;
+    color: white;
+    white-space: nowrap;
+    font-size: 80%;
+}
+#sheetContainer {
+    position: absolute;
+    top:20px;
+}
+#regionsDispenser {
+  float:left;
+}
+#sheetControls {
+  float:left;
+}
+#regionsDispenser .button {
+    float:left;
+}
+#generalControls .button {
+    float:left
+}
+#sheetEditorConfig {
+  clear:left;
+  float:left;
+  display: none;
+}
+#selectionControls {
+    display: none;
+    clear:left;
+    float:left;
+    width: 100%;
+}
+#selectionControls ul {
+    padding: 0px;
+}
+#selectionControls ul li {
+    padding: 0px;
+    list-style: none;
+}
+#sheetListContainer button {
+    padding: 0px;
+}
+.sheetListNode .title {
+    font-weight: bold;
+}
+.sheetListNode .author {
+
+}
+.sheetListNode .version::before {
+    content: "v.";
+}
+.sheetListNode .version {
+    font-style: italic;
+}
+#dataSourceFunctionDocs h5 {
+    display: inline;
+}
+#dataSourceFunctionDocs .comment {
+    display: none;
+}
+#dataSourceFunctionDocs .addButton {
+  width: 20px;
+  height: 20px;
+  margin: 0px;
+  padding: 0px;
+  font-size: 10px;
+}

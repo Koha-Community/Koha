@@ -1,0 +1,54 @@
+{
+  "/lists/{listname}/contents": {
+    "post": {
+      "x-mojo-to": "Lists::Contents#add",
+      "operationId": "addToList",
+      "tags": ["lists"],
+      "parameters": [
+        { "$ref": "../parameters.json#/listnamePathParam" },
+        { "$ref": "../parameters.json#/listContent" }
+      ],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "The list article",
+          "schema": { "$ref": "../definitions.json#/listContent" }
+        },
+        "404": {
+          "description": "The given list doesn't exist",
+          "schema": { "$ref": "../definitions.json#/error" }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "catalogue": "*"
+        }
+      }
+    },
+    "delete": {
+      "x-mojo-to": "Lists::Contents#delete",
+      "operationId": "deleteContents",
+      "tags": ["lists"],
+      "parameters": [
+        { "$ref": "../parameters.json#/listnamePathParam" },
+        { "$ref": "../parameters.json#/listContent" }
+      ],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "All list articles are deleted",
+          "schema": { "$ref": "../definitions.json#/listContent" }
+        },
+        "404": {
+          "description": "The given list doesn't exist",
+          "schema": { "$ref": "../definitions.json#/error" }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "catalogue": "*"
+        }
+      }
+    }
+  }
+}

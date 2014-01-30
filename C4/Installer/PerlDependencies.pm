@@ -29,6 +29,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.09'
     },
+    'Text::ParseWords' => {
+        'usage'        => 'Core',
+        'required'     => '1',
+        'min_ver'      => '3.28'
+    },
     'Storable' => {
         'usage'    => 'Core',
         'required' => '1',
@@ -591,6 +596,11 @@ our $PERL_DEPS = {
         'usage'    => 'Core',
         'required' => '1',
         'min_ver'  => '0.09',
+    },
+    'DateTime::Format::RFC3339' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '1.2.0',
     },
     'Template::Plugin::HtmlToText' => {
         'usage'    => 'Core',

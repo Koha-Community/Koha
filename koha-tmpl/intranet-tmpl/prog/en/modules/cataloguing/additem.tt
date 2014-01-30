@@ -340,7 +340,9 @@ function confirm_deletion() {
     <input type="hidden" name="subfield" value="[% itemtagsubfield %]" />
     <input type="hidden" name="field_value" value="[% itemnumber %]" />
     <input type="submit" value="Save changes" onclick="return Check(this.form)" />
-    [% END %]</fieldset>
+    [% END %]
+    <div><input type="checkbox" name="addToPrintLabelsList" value="addToPrintLabelsList"/><label for="addToPrintLabelsList">Add to print label list</label></div>
+    </fieldset>
     
     [%# Fields for fast cataloging %]
     <input type="hidden" name="circborrowernumber" value="[% circborrowernumber %]" />
