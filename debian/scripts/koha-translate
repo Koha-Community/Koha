@@ -71,14 +71,15 @@ print_available()
 {
     # Loop over only one opac theme
     for i in $( ls $PO_DIR | grep opac-t-prog ); do
-        echo `basename $i -i-opac-t-prog-v-3006000.po`
+        echo `basename $i -i-opac-t-prog-v-3006000.po` | \
+            grep -v -x -e en
     done
 }
 
 print_installed()
 {
     ls $KOHA_INSTALL_DIR/opac/htdocs/opac-tmpl/prog/ | \
-        grep -v -e images -e itemtypeimg
+        grep -v -e images -e itemtypeimg -x -e en
 }
 
 install_lang()
