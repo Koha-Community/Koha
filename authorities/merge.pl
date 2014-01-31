@@ -68,6 +68,7 @@ if ($merge) {
             require C4::ImportBatch;
             C4::ImportBatch::SetImportRecordStatus( $recordid2, 'imported' );
         } else {
+            C4::AuthoritiesMarc::merge( $recordid2, GetAuthority($recordid2), $recordid1, $record );
             $error = (DelAuthority($recordid2) == 0);
         }
         push @errors, $error if ($error);
