@@ -469,7 +469,7 @@
                         <table class="copiesrow" id="copiesrow_[% bibitemloo.biblionumber %]">
                           <caption>Select a specific item:</caption>
                           <tr>
-                            <th>Copy</th>
+                            <th>Copy number</th>
                             [% IF ( item_level_itypes ) %]
                               <th>Item type</th>
                             [% END %]
@@ -487,7 +487,7 @@
 
                           [% FOREACH itemLoo IN bibitemloo.itemLoop %]
                             <tr class="[% itemLoo.backgroundcolor %]">
-                              <td class="copy">
+                              <td class="copynumber">
                                 [% IF ( itemLoo.available ) %]
                                   <input type="radio" class="checkitem checkitem_[% bibitemloo.biblionumber %]" name="checkitem_[% bibitemloo.biblionumber %]"
                                          value="[% itemLoo.itemnumber %]" />
