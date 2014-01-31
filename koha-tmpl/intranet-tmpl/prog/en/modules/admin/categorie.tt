@@ -243,7 +243,7 @@ Confirm deletion of category [% categorycode |html %][% END %]</legend>
 			[% IF ( enrolmentperiod ) %]
 				[% enrolmentperiod %] months
 			[% ELSE %]
-				until [% enrolmentperioddate %]
+				until [% enrolmentperioddate | $KohaDates %]
 			[% END %]
 		</td>
 	</tr>
@@ -323,7 +323,7 @@ Confirm deletion of category [% categorycode |html %][% END %]</legend>
                         	[% IF ( loo.enrolmentperiod ) %]
                         		[% loo.enrolmentperiod %] months
                         	[% ELSE %]
-                        		until [% loo.enrolmentperioddate %]
+                        		until [% loo.enrolmentperioddate | $KohaDates %]
                         	[% END %]
                         
                         </td>
