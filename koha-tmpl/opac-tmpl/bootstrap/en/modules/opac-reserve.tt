@@ -232,14 +232,14 @@
                                                         [% IF ( OPACItemHolds ) %]
                                                             <!-- ITEM HOLDS -->
                                                             <li class="lradio">
-                                                                <label class="radio inline" for="reqany_[% bibitemloo.biblionumber %]">Next available copy</label>
+                                                                <label class="radio inline" for="reqany_[% bibitemloo.biblionumber %]">Next available item</label>
                                                                 [% UNLESS ( bibitemloo.holdable ) %]
                                                                     <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]" id="reqany_[% bibitemloo.biblionumber %]" class="selectany" value="Any" disabled="disabled" />
                                                                 [% ELSE %]
                                                                     <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]" id="reqany_[% bibitemloo.biblionumber %]" class="selectany" value="Any" checked="checked" />
                                                                 [% END %]
 
-                                                                <label class="radio inline" for="reqspecific_[% bibitemloo.biblionumber %]">A specific copy</label>
+                                                                <label class="radio inline" for="reqspecific_[% bibitemloo.biblionumber %]">A specific item</label>
                                                                 [% UNLESS ( bibitemloo.holdable ) %]
                                                                     <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]" id="reqspecific_[% bibitemloo.biblionumber %]" class="selectspecific" disabled="disabled" value="Specific" />
                                                                 [% ELSE %]
@@ -251,7 +251,7 @@
 
                                                     [% IF ( OPACItemHolds ) %]
                                                         <table class="copiesrow table table-bordered table-striped" id="copiesrow_[% bibitemloo.biblionumber %]">
-                                                            <caption>Select a specific copy:</caption>
+                                                            <caption>Select a specific item:</caption>
                                                             <tr>
                                                                 <th>Copy</th>
                                                                 [% IF ( item_level_itypes ) %]
@@ -370,9 +370,9 @@
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
 // <![CDATA[
-    var MSG_NO_COPY_SELECTED = _("Expecting a specific copy selection.");
+    var MSG_NO_ITEM_SELECTED = _("Expecting a specific item selection.");
     var ForceHoldNotesReasons=new Array(
-       _("This title consists of multiple volumes/parts. Please indicate which part you need. Clicking on specific copy information may be helpful."),
+       _("This title consists of multiple volumes/parts. Please indicate which part you need. Clicking on specific item information may be helpful."),
        "*** Add a new reason above this line ***" );
        // NOTE: Do not renumber reasons; this will affect use of existing ones.
 
@@ -452,7 +452,7 @@
                     // Find the selected copy
                     var item = $(".checkitem_" + biblioNum + ":checked");
                     if ($(item).size() == 0) {
-                        alert(MSG_NO_COPY_SELECTED);
+                        alert(MSG_NO_ITEM_SELECTED);
                         return false;
                     }
                 }
@@ -531,7 +531,7 @@
             });
 
             if (badBib) {
-                alert(MSG_NO_COPY_SELECTED);
+                alert(MSG_NO_ITEM_SELECTED);
                 return false;
             }
 

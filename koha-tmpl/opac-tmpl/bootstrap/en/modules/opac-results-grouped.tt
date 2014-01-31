@@ -202,7 +202,7 @@ href="/cgi-bin/koha/opac-rss.pl?[% query_cgi %][% limit_cgi |html %]" />
                                                             [% END %]
                                                             <p class="availability">
                                                                 [% IF ( GROUP_RESULT.available_items_loop ) %]
-                                                                    <span class="available"><strong>Copies available at:</strong>
+                                                                    <span class="available"><strong>Items available at:</strong>
                                                                         [% FOREACH available_items_loo IN GROUP_RESULT.available_items_loop %]
                                                                             [% IF ( available_items_loo.branchname ) %][% available_items_loo.branchname %][% END %]
                                                                             [% IF ( OPACItemsResultsDisplay ) %]
