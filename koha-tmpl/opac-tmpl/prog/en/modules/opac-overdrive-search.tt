@@ -19,7 +19,7 @@ function fetch_availability( prod, $tr ) {
         function ( data ) {
             if ( data.error ) return;
 
-            $availability_summary.html( '<span class="label">' + _("Copies available:") + ' </span><span class="available"><strong>' +  data.copiesAvailable + '</strong> ' + _("out of") + ' ' + data.copiesOwned + '</span>' );
+            $availability_summary.html( '<span class="label">' + _("Items available:") + ' </span><span class="available"><strong>' +  data.copiesAvailable + '</strong> ' + _("out of") + ' ' + data.copiesOwned + '</span>' );
 
             if ( data.numberOfHolds ) {
                 $availability_summary.find( '.available' ).append( ', ' + _("waiting holds:") + ' <strong>' + data.numberOfHolds + '</strong>' );
