@@ -38,7 +38,7 @@ INSERT INTO matchpoint_component_norms (matchpoint_component_id, sequence, norm_
 
 INSERT INTO marc_matchers (code, description, record_type, threshold)
     VALUES ('KohaBiblio', '999$c', 'biblio', 1000);
-INSERT INTO matchpoints (matcher_id, search_index, score) SELECT MAX(matcher_id), 'Local-Number', 1000 FROM marc_matchers;
+INSERT INTO matchpoints (matcher_id, search_index, score) SELECT MAX(matcher_id), 'local-number', 1000 FROM marc_matchers;
 INSERT INTO matcher_matchpoints SELECT MAX(matcher_id), MAX(matchpoint_id) FROM matchpoints;
 INSERT INTO matchpoint_components (matchpoint_id, sequence, tag, subfields)
     SELECT MAX(matchpoint_id), 1, '999', 'c' FROM matchpoints;
