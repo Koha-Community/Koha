@@ -243,7 +243,7 @@ function checkMultiHold() {
           <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>already has a hold</strong> on this item </li>
         [% END %]
         [% IF ( none_available ) %]
-          <li> <strong>No copies are available</strong> to be placed on hold</li>
+          <li> <strong>No items are available</strong> to be placed on hold</li>
         [% END %]
         [% IF ( alreadypossession ) %]
           <li> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>is already in possession</strong> of one item</li>
@@ -344,7 +344,7 @@ function checkMultiHold() {
 	</li>
 
         [% UNLESS ( multi_hold ) %]
-          <li> <label for="requestany">Place a hold on the next available copy </label>
+          <li> <label for="requestany">Place a hold on the next available item </label>
                <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
                <input type="hidden" name="biblioitem" value="[% biblioitemnumber %]" />
                <input type="hidden" name="alreadyreserved" value="[% alreadyreserved %]" />
@@ -374,7 +374,7 @@ function checkMultiHold() {
           </ol>
 
         <table id="requestspecific">
-        <caption>Place a hold on a specific copy</caption>
+        <caption>Place a hold on a specific item</caption>
 		<tr>
             <th>Hold</th>
             [% IF ( item_level_itypes ) %]
@@ -523,7 +523,7 @@ function checkMultiHold() {
               <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>already has a hold</strong> on this item </li>
           [% END %]
           [% IF ( biblioloo.none_avail ) %]
-              <li> <strong>No copies are available</strong> to be placed on hold</li>
+              <li> <strong>No items are available</strong> to be placed on hold</li>
           [% END %]
 
             [% IF ( biblioloo.alreadyres ) %]
