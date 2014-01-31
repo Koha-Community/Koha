@@ -315,10 +315,12 @@ if ($barcode) {
                     C4::Search::new_record_from_zebra('biblioserver',$hit) );
 
                 # offer all barcodes individually
-                foreach my $barcode ( sort split(/\s*\|\s*/, $chosen->{barcode}) ) {
-                    my %chosen_single = %{$chosen};
-                    $chosen_single{barcode} = $barcode;
-                    push( @options, \%chosen_single );
+                if ( $chosen->{barcode} ) {
+                    foreach my $barcode ( sort split(/\s*\|\s*/, $chosen->{barcode}) ) {
+                        my %chosen_single = %{$chosen};
+                        $chosen_single{barcode} = $barcode;
+                        push( @options, \%chosen_single );
+                    }
                 }
             }
             $template->param( options => \@options );
