@@ -1767,6 +1767,7 @@ sub AddReturn {
         else {
             foreach my $key ( keys %$rules ) {
                 if ( $item->{notforloan} eq $key ) {
+                    $messages->{'NotForLoanStatusUpdated'} = { from => $item->{notforloan}, to => $rules->{$key} };
                     ModItem( { notforloan => $rules->{$key} }, undef, $itemnumber );
                     last;
                 }

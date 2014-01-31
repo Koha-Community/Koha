@@ -2,6 +2,7 @@
 [% USE Branches %]
 [% USE Koha %]
 [% USE Borrowers %]
+[% USE AuthorisedValues %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Check in [% title |html %]</title>
@@ -371,6 +372,13 @@ $(document).ready(function () {
     <div class="dialog alert">
         <h3>Check in message</h3>
         [% FOREACH errmsgloo IN errmsgloop %]
+                    [% IF ( errmsgloo.NotForLoanStatusUpdated ) %]
+                        <p class="problem">
+                            Not for loan status updated
+                            from <strong>[% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.from ) %]</strong>
+                            to <strong>[% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.to ) %]</strong>
+                        </p>
+                    [% END %]
                     [% IF ( errmsgloo.badbarcode ) %]
                         <p class="problem">No item with barcode: [% errmsgloo.msg %]</p>
                     [% END %]
