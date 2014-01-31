@@ -7945,7 +7945,7 @@ if (CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.15.00.016";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE biblioitems CHANGE url url TEXT NULL DEFAULT NULL");
     $dbh->do("ALTER TABLE deletedbiblioitems CHANGE url url TEXT NULL DEFAULT NULL");
