@@ -41,6 +41,13 @@ sub get_link {
     return $self->{'default_linker'}->get_link( $heading, 'first' );
 }
 
+sub update_cache {
+    my $self        = shift;
+    my $heading     = shift;
+    my $authid      = shift;
+    $self->{'default_linker'}->update_cache( $heading, $authid );
+}
+
 sub flip_heading {
     my $self    = shift;
     my $heading = shift;

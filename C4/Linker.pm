@@ -35,6 +35,9 @@ the match is "fuzzy" (the semantics of "fuzzy" are up to the individual plugin).
 In order to handle authority limits, get_link should always end with:
     return $self->SUPER::_handle_auth_limit($authid), $fuzzy;
 
+B<update_cache ($heading, $authid)> - updates internal linker cache for
+$heading with $authid of a new created authotiry record
+
 B<flip_heading ($field)> - return a MARC::Field object with the heading flipped
 to the preferred form.
 

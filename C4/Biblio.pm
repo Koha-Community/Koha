@@ -634,6 +634,7 @@ sub LinkBibHeadingsToAuthorities {
                         $heading->auth_type() );
                     $field->add_subfields( '9', $authid );
                     $num_headings_changed++;
+                    $linker->update_cache($heading, $authid);
                     $results{'added'}->{ $heading->display_form() }++;
                 }
             }

@@ -79,6 +79,18 @@ sub get_link {
     return $self->SUPER::_handle_auth_limit($authid), $fuzzy;
 }
 
+sub update_cache {
+    my $self        = shift;
+    my $heading     = shift;
+    my $authid      = shift;
+    my $search_form = $heading->search_form();
+    my $fuzzy = 0;
+
+    $self->{'cache'}->{$search_form}->{'cached'} = 1;
+    $self->{'cache'}->{$search_form}->{'authid'} = $authid;
+    $self->{'cache'}->{$search_form}->{'fuzzy'}  = $fuzzy;
+}
+
 sub flip_heading {
     my $self    = shift;
     my $heading = shift;
