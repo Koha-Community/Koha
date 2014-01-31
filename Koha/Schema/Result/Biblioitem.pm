@@ -166,9 +166,8 @@ __PACKAGE__->table("biblioitems");
 
 =head2 url
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_nullable: 1
-  size: 255
 
 =head2 cn_source
 
@@ -280,7 +279,7 @@ __PACKAGE__->add_columns(
   "marc",
   { data_type => "longblob", is_nullable => 1 },
   "url",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "text", is_nullable => 1 },
   "cn_source",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "cn_class",
@@ -344,8 +343,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Vyrs9pWYoqhWJw+cRy1EVg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-01-31 15:58:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4tm44zYP5ZPJo/xINVgHVg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
