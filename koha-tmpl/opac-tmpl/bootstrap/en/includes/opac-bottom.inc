@@ -108,7 +108,7 @@
     //<![CDATA[
     var MSG_CONFIRM_AGAIN = _("Warning: Cannot be undone. Please confirm once again")
     var MSG_DELETE_SEARCH_HISTORY = _("Are you sure you want to delete your search history?");
-    [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
+    [% IF Koha.Preference( 'opacbookbag' ) == 1 or Koha.Preference( 'virtualshelves' ) == 1 %]
         var MSG_BASKET_EMPTY = _("Your cart is currently empty");
         var MSG_RECORD_IN_BASKET = _("The item is already in your cart");
         var MSG_RECORD_ADDED = _("The item has been added to your cart");
@@ -122,10 +122,7 @@
         var MSG_ITEM_IN_CART = _("In your cart");
         var MSG_IN_YOUR_CART = _("Items in your cart: ");
         var MSG_ITEM_NOT_IN_CART = _("Add to your cart");
-    [% ELSE %]
-        [% IF Koha.Preference( 'virtualshelves' ) == 1 %]
-            var MSG_NO_RECORD_SELECTED = _("No item was selected");
-        [% END %]
+        var MSG_NO_RECORD_SELECTED = _("No item was selected");
     [% END %]
     [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) %]
         var MSG_TAGS_DISABLED = _("Sorry, tags are not enabled on this system.");
