@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Late orders</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -166,13 +167,15 @@ $(document).ready(function() {
                 [% END %]
             </td>
             <td>
-                [% IF ( CAN_user_acquisition_group_manage ) %]
-                    <a href="basketgroup.pl?op=add&booksellerid=[% lateorder.supplierid %]&basketgroupid=[% lateorder.basketgroupid %]" title="basketgroup">[% lateorder.basketgroupname %] ([% lateorder.basketgroupid %])</a>
-                [% ELSE %]
-                    [% lateorder.basketgroupname %] ([% lateorder.basketgroupid %])</a>
+                [% IF ( lateorder.basketgroupid ) %]
+                    [% IF ( CAN_user_acquisition_group_manage ) %]
+                        <a href="basketgroup.pl?op=add&booksellerid=[% lateorder.supplierid %]&basketgroupid=[% lateorder.basketgroupid %]" title="basketgroup">[% lateorder.basketgroupname %] ([% lateorder.basketgroupid %])</a>
+                    [% ELSE %]
+                        [% lateorder.basketgroupname %] ([% lateorder.basketgroupid %])</a>
+                    [% END %]
                 [% END %]
             </td>
-            <td>[% lateorder.branch %]
+            <td>[% Branches.GetName( lateorder.branch ) %]
             </td>
             <td>[% lateorder.budget %]
             </td>
