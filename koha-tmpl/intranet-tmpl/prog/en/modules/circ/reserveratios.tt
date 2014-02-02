@@ -85,7 +85,8 @@
             <td><p>[% reserveloo.location %]</p></td>
             <td><p>[% reserveloo.itype %]</p></td>
             <td><p>[% reserveloo.listcall %]</p></td>
-            <td>[% IF ( reserveloo.thisratio_atleast1 ) %]<p><b>[% reserveloo.ratiocalc %] to order</b></p>[% END %]</td>
+            <td>[% IF ( reserveloo.thisratio_atleast1 ) %]<p>[% IF ( CAN_user_acquisition && basketno && booksellerid ) %]<!-- [% reserveloo.ratiocalc %] --><a href="/cgi-bin/koha/acqui/neworderempty.pl?biblionumber=[% reserveloo.biblionumber %]&amp;booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;rr_quantity_to_order=[% reserveloo.ratiocalc %]">[% END %]<b>[% reserveloo.ratiocalc %] to order</b>[% IF ( CAN_user_acquisition && basketno && booksellerid ) %]</a>[% END %]
+            [% IF ( reserveloo.pendingorders ) %]<br><b>[% reserveloo.pendingorders %] pending</b>[% END %]</p>[% END %]</td>
         </tr>
       [% END %]
       </tbody>
@@ -117,6 +118,10 @@
 
 <fieldset class="action"><input type="submit" value="Go" class="submit"/></fieldset>
 </fieldset>
+[% IF ( CAN_user_acquisition && basketno && booksellerid ) %]
+<input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+<input type="hidden" name="basketno" value="[% basketno %]" />
+[% END %]
 </form>
 
 </div>
