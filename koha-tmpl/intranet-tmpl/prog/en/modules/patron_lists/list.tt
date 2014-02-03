@@ -1,6 +1,6 @@
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Patron lists &rsaquo; New list</title>
+<title>Koha &rsaquo; Tools &rsaquo; Patron lists &rsaquo; [% list.name %] &rsaquo; Add patrons</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -11,7 +11,14 @@
 $(document).ready(function() {
     $('#patrons_to_add_fieldset').hide();
 
-    $('#patron-list-table').dataTable($.extend(true, {}, dataTablesDefaults));
+        $('#patron-list-table').dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumns": [
+                null,null,null,null,null,null,null,{ "sType": "title-string" },null
+            ],
+            "aoColumnDefs": [
+                { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+            ]
+        } ));
 
     $( "#find_patron" ).autocomplete({
         source: "/cgi-bin/koha/circ/ysearch.pl",
@@ -33,6 +40,36 @@ $(document).ready(function() {
         var divid = $(this).parent().attr("id");
         var cardnumber = divid.replace("borrower_","");
         RemovePatron(cardnumber);
+    });
+
+    var checkBoxes = $("input[type='checkbox']","#patron-list-table");
+
+    $("#CheckAll").click(function(e){
+        e.preventDefault();
+        checkBoxes.each(function(){
+            $(this).prop("checked",1);
+        });
+    });
+    $("#CheckNone").click(function(e){
+        e.preventDefault();
+        checkBoxes.each(function(){
+            $(this).prop("checked",0);
+        });
+    });
+
+    $("#remove_patrons").submit(function(){
+        var checkedItems = $("input:checked");
+        if ($(checkedItems).size() == 0) {
+            alert(_("You must select one or more patrons to remove"));
+            return false;
+        }
+        $(checkedItems).parents('tr').addClass("warn");
+        if( confirm(_("Are you sure you want to remove the selected patrons?")) ) {
+            return true;
+        } else {
+            $(checkedItems).parents('tr').removeClass("warn");
+            return false;
+        }
     });
 });
 
@@ -60,13 +97,13 @@ function RemovePatron( cardnumber ) {
 <body>
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="lists.pl">Patron lists</a> &rsaquo; Add patrons</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="lists.pl">Patron lists</a> &rsaquo; <a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% list.id %]">[% list.name %]</a> &rsaquo; Add patrons</div>
 
 <div class="yui-t7">
     <div class="yui-main">
         <h1>[% list.name %]</h1>
 
-        <form action="list.pl" method="post">
+        <form action="list.pl" id="add_patrons" method="post">
             <fieldset>
                 <legend>Add patrons</legend>
 
@@ -77,19 +114,31 @@ function RemovePatron( cardnumber ) {
                 <fieldset id="patrons_to_add_fieldset">
                     <legend>Patrons to be added</legend>
                     <div id="patrons_to_add"></div>
+
+                    <fieldset class="action">
+                        <input type="hidden" name="patron_list_id" value="[% list.patron_list_id %]" />
+                        <input type="submit" value="Add patrons" />
+                        <a href="lists.pl" class="cancel">Cancel</a>
+                    </fieldset>
                 </fieldset>
 
             </fieldset>
+        </form>
 
-            <p>
-                <input type="submit" class="btn" value="Update" />
-                <a href="lists.pl" class="cancel">Cancel</a>
-            </p>
+        <form action="list.pl" id="remove_patrons" method="post">
+
+            <div id="searchheader">
+                <span class="checkall"><a id="CheckAll" href="#">Select all</a></span> |
+                <span class="clearall"><a id="CheckNone" href="#">Clear all</a></span> |
+                <div class="btn-group">
+                    <button class="btn btn-mini list-remove" type="submit"><i class="icon-remove-sign"></i> Remove selected</button>
+                </div>
+            </div>
 
             <table id="patron-list-table">
                 <thead>
                     <tr>
-                        <th><i title="Remove patron from list" class="icon-trash"></i></th>
+                        <th>&nbsp;</th>
                         <th>Card</th>
                         <th>Firstname</th>
                         <th>Surname</th>
@@ -121,7 +170,7 @@ function RemovePatron( cardnumber ) {
                             </td>
                             <td>[% p.borrowernumber.categorycode.description %] ([% p.borrowernumber.categorycode.categorycode %])</td>
                             <td>[% p.borrowernumber.branchcode.branchname %]</td>
-                            <td>[% p.borrowernumber.dateexpiry | $KohaDates %]</td>
+                            <td><span title="[% p.borrowernumber.dateexpiry %]">[% p.borrowernumber.dateexpiry | $KohaDates %]</span></td>
                             <td>[% p.borrowernumber.borrowernotes %]</td>
                         </tr>
                     [% END %]
@@ -129,8 +178,7 @@ function RemovePatron( cardnumber ) {
             </table>
 
             <input type="hidden" name="patron_list_id" value="[% list.patron_list_id %]" />
-            <input type="submit" class="btn" value="Update" />
-            <a href="lists.pl" class="cancel">Cancel</a>
+            <input type="submit" value="Remove selected patrons" />
         </form>
     </div>
 </div>
