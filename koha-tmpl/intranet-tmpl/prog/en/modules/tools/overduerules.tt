@@ -92,7 +92,22 @@ $(document).ready(function() {
               <th scope="col">Letter</th>
               <th scope="col">Restrict</th>
               [% FOREACH mtt IN message_transport_types %]
-                <th scpre="col">[% mtt %]</th>
+                <th scpre="col">
+                  [% SWITCH mtt %]
+                  [% CASE 'email' %]
+                    email
+                  [% CASE 'print' %]
+                    print
+                  [% CASE 'sms' %]
+                    sms
+                  [% CASE 'feed' %]
+                    feed
+                  [% CASE 'phone' %]
+                    phone
+                  [% CASE %]
+                    [% letter.message_transport_type %]
+                  [% END %]
+                </th>
               [% END %]
             </tr>
           </thead>

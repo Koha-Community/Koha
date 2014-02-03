@@ -34,7 +34,9 @@ $(document).ready(function() {
                  || ( title.length > 0 && content.length == 0 )
             ) {
                 var mtt = $(this).find('input[name="message_transport_type"]').val();
-                alert("You must specify a title and a content for " + mtt);
+                var msg = _("You must specify a title and a content for %s");
+                msg = msg.replace( "%s", mtt );
+                alert(msg)
                 event.preventDefault();
             }
         } );
@@ -290,7 +292,22 @@ $(document).ready(function() {
         [% FOREACH letter IN letters %]
           <li>
             <fieldset class="rows mtt" id="[% letter.message_transport_type %]">
-              <legend>[% letter.message_transport_type %]</legend>
+              <legend>
+                [% SWITCH letter.message_transport_type %]
+                [% CASE 'email' %]
+                  email
+                [% CASE 'print' %]
+                  print
+                [% CASE 'sms' %]
+                  sms
+                [% CASE 'feed' %]
+                  feed
+                [% CASE 'phone' %]
+                  phone
+                [% CASE %]
+                  [% letter.message_transport_type %]
+                [% END %]
+              </legend>
               <ol>
                 <li>
                   <input type="hidden" name="message_transport_type" value="[% letter.message_transport_type %]" />
