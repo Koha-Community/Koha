@@ -8,7 +8,11 @@
 <script type="text/javascript">
 //<![CDATA[
     $(document).ready(function() {
-        $('#patron-lists-table').dataTable($.extend(true, {}, dataTablesDefaults));
+        $('#patron-lists-table').dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
+            ]
+        } ));
     });
 
     function ConfirmDelete( list ) {
@@ -49,17 +53,17 @@
                         <td>[% l.name %]</td>
                         <td>[% l.patron_list_patrons.size || 0 %]</td>
                         <td>
-                            <a class="btn" href="list.pl?patron_list_id=[% l.patron_list_id %]">
+                            <a class="btn btn-mini" href="list.pl?patron_list_id=[% l.patron_list_id %]">
                                 <i class="icon-plus-sign"></i> Add patrons <i class="icon-user"></i>
                             </a>
                         </td>
                         <td>
-                            <a class="btn" href="add-modify.pl?patron_list_id=[% l.patron_list_id %]">
+                            <a class="btn btn-mini" href="add-modify.pl?patron_list_id=[% l.patron_list_id %]">
                                 <i class="icon-edit"></i> Edit
                             </a>
                         </td>
                         <td>
-                            <a class="btn" href="delete.pl?patron_list_id=[% l.patron_list_id %]" onclick='return ConfirmDelete("[% l.name | html %]")'>
+                            <a class="btn btn-mini" href="delete.pl?patron_list_id=[% l.patron_list_id %]" onclick='return ConfirmDelete("[% l.name | html %]")'>
                                 <i class="icon-trash"></i> Delete
                             </a>
                         </td>
