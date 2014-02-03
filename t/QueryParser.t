@@ -26,10 +26,10 @@ is($QParser->target_syntax('biblioserver', 'ti:"little engine that could"'), '@a
 is($QParser->target_syntax('biblioserver', 'keyword|titlekw:smith'), '@attr 1=4 @attr 9=20 @attr 2=102 @attr 4=6 "smith"', 'relevance-bumped query');
 is($QParser->target_syntax('biblioserver', 'au:smith && johnson'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 1=1003 @attr 4=6 "johnson"', 'query with boolean &&');
 is($QParser->target_syntax('biblioserver', 'au:smith && ti:johnson'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 1=4 @attr 4=6 "johnson"', 'query with boolean &&');
-is($QParser->target_syntax('biblioserver', 'au:smith pubdate(-2008)'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 4=4 @attr 1=pubdate @attr 2=2 "2008"', 'keyword search with pubdate limited to -2008');
-is($QParser->target_syntax('biblioserver', 'au:smith pubdate(2008-)'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 4=4 @attr 1=pubdate @attr 2=4 "2008"', 'keyword search with pubdate limited to 2008-');
-is($QParser->target_syntax('biblioserver', 'au:smith pubdate(2008)'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 4=4 @attr 1=pubdate "2008"', 'keyword search with pubdate limited to 2008');
-is($QParser->target_syntax('biblioserver', 'au:smith pubdate(1980,2008)'), '@and @attr 1=1003 @attr 4=6 "smith" @or @attr 4=4 @attr 1=pubdate "1980" @attr 4=4 @attr 1=pubdate "2008"', 'keyword search with pubdate limited to 1980, 2008');
+is($QParser->target_syntax('biblioserver', 'au:smith pubdate(-2008)'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 4=4 @attr 1=31 @attr 2=2 "2008"', 'keyword search with pubdate limited to -2008');
+is($QParser->target_syntax('biblioserver', 'au:smith pubdate(2008-)'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 4=4 @attr 1=31 @attr 2=4 "2008"', 'keyword search with pubdate limited to 2008-');
+is($QParser->target_syntax('biblioserver', 'au:smith pubdate(2008)'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 4=4 @attr 1=31 "2008"', 'keyword search with pubdate limited to 2008');
+is($QParser->target_syntax('biblioserver', 'au:smith pubdate(1980,2008)'), '@and @attr 1=1003 @attr 4=6 "smith" @or @attr 4=4 @attr 1=31 "1980" @attr 4=4 @attr 1=31 "2008"', 'keyword search with pubdate limited to 1980, 2008');
 is($QParser->target_syntax('biblioserver', 'au:smith #acqdate_dsc'), '@or @attr 1=32 @attr 7=1 0 @attr 1=1003 @attr 4=6 "smith"', 'keyword search sorted by acqdate descending');
 is($QParser->bib1_mapping_by_attr('field', 'biblioserver', {'1' => '1004'})->{'field'}, 'personal', 'retrieve field by attr');
 is($QParser->bib1_mapping_by_attr_string('field', 'biblioserver', '@attr 1=1004')->{'field'}, 'personal', 'retrieve field by attrstring');
