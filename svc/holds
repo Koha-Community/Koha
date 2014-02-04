@@ -1,0 +1,144 @@
+#!/usr/bin/perl
+
+# Copyright 2014 ByWater Solutions
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+use Modern::Perl;
+
+use CGI;
+use JSON qw(to_json);
+
+use C4::Auth qw(check_cookie_auth);
+use C4::Biblio qw(GetMarcBiblio GetFrameworkCode GetRecordValue );
+use C4::Branch qw(GetBranchName);
+use C4::Charset;
+use C4::Circulation qw(GetTransfers);
+use C4::Context;
+
+use Koha::Database;
+use Koha::DateUtils;
+
+my $input = new CGI;
+
+my ( $auth_status, $sessionID ) =
+  check_cookie_auth( $input->cookie('CGISESSID'),
+    { circulate => 'circulate_remaining_permissions' } );
+
+if ( $auth_status ne "ok" ) {
+    exit 0;
+}
+
+my $branch = C4::Context->userenv->{'branch'};
+
+my $schema = Koha::Database->new()->schema();
+
+my @sort_columns =
+  qw/reservedate title itemcallnumber barcode expirationdate priority/;
+
+my $borrowernumber    = $input->param('borrowernumber');
+my $offset            = $input->param('iDisplayStart');
+my $results_per_page  = $input->param('iDisplayLength');
+my $sorting_direction = $input->param('sSortDir_0') || 'desc';
+my $sorting_column    = $sort_columns[ $input->param('iSortCol_0') ]
+  || 'reservedate';
+
+binmode STDOUT, ":encoding(UTF-8)";
+print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
+
+my $holds_rs = $schema->resultset('Reserve')->search(
+    { borrowernumber => $borrowernumber },
+    {
+        prefetch => { 'item'                => 'biblio' },
+        order_by => { "-$sorting_direction" => $sorting_column }
+    }
+);
+
+my $borrower;
+my @holds;
+while ( my $h = $holds_rs->next() ) {
+    my $item = $h->item();
+
+    my $biblionumber = $h->biblio()->biblionumber();
+
+    my $hold = {
+        DT_RowId       => $h->reserve_id(),
+        biblionumber   => $biblionumber,
+        title          => $h->biblio()->title(),
+        author         => $h->biblio()->author(),
+        reserve_id     => $h->reserve_id(),
+        reservedate    => $h->reservedate(),
+        expirationdate => $h->expirationdate(),
+        suspend        => $h->suspend(),
+        suspend_until  => $h->suspend_until(),
+        found          => $h->found(),
+        waiting        => $h->found() eq 'W',
+        waiting_at     => $h->branchcode()->branchname(),
+        waiting_here   => $h->branchcode()->branchcode() eq $branch,
+        priority       => $h->priority(),
+        subtitle       => GetRecordValue(
+            'subtitle', GetMarcBiblio($biblionumber),
+            GetFrameworkCode($biblionumber)
+        ),
+        reservedate_formatted => $h->reservedate() ? output_pref(
+            { dt => dt_from_string( $h->reservedate() ), dateonly => 1 }
+          )
+        : q{},
+        suspend_until_formatted => $h->suspend_until() ? output_pref(
+            { dt => dt_from_string( $h->suspend_until() ), dateonly => 1 }
+          )
+        : q{},
+        expirationdate_formatted => $h->expirationdate() ? output_pref(
+            { dt => dt_from_string( $h->expirationdate() ), dateonly => 1 }
+          )
+        : q{},
+    };
+
+    $hold->{transfered}     = 0;
+    $hold->{not_transfered} = 0;
+
+    if ($item) {
+        $hold->{itemnumber}     = $item->itemnumber();
+        $hold->{barcode}        = $item->barcode();
+        $hold->{itemtype}       = $item->effective_itemtype();
+        $hold->{itemcallnumber} = $item->itemcallnumber() || q{};
+
+        my ( $transferred_when, $transferred_from, $transferred_to ) =
+          GetTransfers( $item->itemnumber() );
+        if ($transferred_when) {
+            $hold->{color}       = 'transferred';
+            $hold->{transferred} = 1;
+            $hold->{date_sent} = output_pref( dt_from_string($transferred_when) );
+            $hold->{from_branch} = GetBranchName($transferred_from);
+        }
+        elsif ( $item->holdingbranch()->branchcode() ne
+            $h->branchcode()->branchcode() )
+        {
+            $hold->{not_transferred}    = 1;
+            $hold->{not_transferred_by} = $h->branchcode()->branchname();
+        }
+    }
+
+    push( @holds, $hold );
+}
+
+my $data;
+$data->{'iTotalRecords'}        = scalar @holds;
+$data->{'iTotalDisplayRecords'} = scalar @holds;
+$data->{'sEcho'}                = $input->param('sEcho') || undef;
+$data->{'aaData'}               = \@holds;
+
+print to_json($data);

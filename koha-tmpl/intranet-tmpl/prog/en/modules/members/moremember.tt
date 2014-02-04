@@ -9,13 +9,29 @@
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/en/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'strings.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min.js"></script>
 [% INCLUDE 'timepicker.inc' %]
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.rowGrouping.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/checkouts.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/holds.js"></script>
 <script type="text/JavaScript">
 //<![CDATA[
+/* Set some variable needed in circulation.js */
+var interface = "[% interface %]";
+var theme = "[% theme %]";
+var borrowernumber = "[% borrowernumber %]";
+var branchcode = "[% branch %]";
+var exports_enabled = "[% exports_enabled %]";
+var AllowRenewalLimitOverride = [% CAN_user_circulate_override_renewals && AllowRenewalLimitOverride %];
+var relatives_borrowernumbers = new Array();
+[% FOREACH b IN relatives_borrowernumbers %]
+    relatives_borrowernumbers.push("[% b %]");
+[% END %]
+
 $(document).ready(function() {
     $('#finesholdsissues').tabs({
         // Correct table sizing for tables hidden in tabs
@@ -25,25 +41,11 @@ $(document).ready(function() {
             if ( oTable.length > 0 ) {
                 oTable.fnAdjustColumnSizing();
             }
+        },
+        "activate": function( event, ui ) {
+            $('#'+ui.newTab.context.id).click();
         }
     } );
-    $("#issuest").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "sDom": 't',
-        "aoColumnDefs": [
-            { "aTargets": [ -1,-2 ], "bSortable": false, "bSearchable": false }
-        ],
-        "aoColumns": [
-            { "sType": "title-string" },{ "sType": "anti-the" },null,{ "sType": "title-string" },null,null,null,null,null,null
-        ],
-        "bPaginate": false
-    }));
-    $("#relissuest").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "sDom": 't',
-        "aoColumns": [
-            { "sType": "title-string" },{ "sType": "anti-the" },null,{ "sType": "title-string" },null,null,null,null,null
-        ],
-        "bPaginate": false
-    }));
     $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
         "sDom": 't',
         "aoColumnDefs": [
@@ -66,42 +68,7 @@ $(document).ready(function() {
         }
         return confirm(_("Are you sure you want to replace the current patron image? This cannot be undone."));
 	});[% END %]
-	$("#renew_all"      ).click(function(){ $(".checkboxed").checkCheckboxes(":input[name*=items]"   ); $(".checkboxed").unCheckCheckboxes(":input[name*=barcodes]"); });
-	$("#CheckAllitems"  ).click(function(){ $(".checkboxed").checkCheckboxes(":input[name*=items]"   ); $(".checkboxed").unCheckCheckboxes(":input[name*=barcodes]"); return false; });
-    $("#CheckNoitems"   ).click(function(){ $(".checkboxed").unCheckCheckboxes(":input[name*=items]"); return false; });
-	$("#CheckAllreturns").click(function(){ $(".checkboxed").checkCheckboxes(":input[name*=barcodes]"); $(".checkboxed").unCheckCheckboxes(":input[name*=items]"); return false; });
-    $("#CheckNoreturns" ).click(function(){ $(".checkboxed").unCheckCheckboxes(":input[name*=barcodes]"); return false; });
 
-    $("#relrenew_all"      ).click(function(){ $(".checkboxed").checkCheckboxes(":input[name*=items]"   ); $(".checkboxed").unCheckCheckboxes(":input[name*=barcodes]"); });
-    $("#relCheckAllitems"  ).click(function(){ $(".checkboxed").checkCheckboxes(":input[name*=items]"   ); $(".checkboxed").unCheckCheckboxes(":input[name*=barcodes]"); return false; });
-    $("#relCheckNoitems"   ).click(function(){ $(".checkboxed").unCheckCheckboxes(":input[name*=items]"); return false; });
-    $("#relCheckAllreturns").click(function(){ $(".checkboxed").checkCheckboxes(":input[name*=barcodes]"); $(".checkboxed").unCheckCheckboxes(":input[name*=items]"); return false; });
-    $("#relCheckNoreturns" ).click(function(){ $(".checkboxed").unCheckCheckboxes(":input[name*=barcodes]"); return false; });
-
-
-    [% IF ( CAN_user_circulate_override_renewals ) %]
-    [% IF ( AllowRenewalLimitOverride ) %]
-    $( '#override_limit' ).click( function () {
-        if ( this.checked ) {
-           $( '.renewals-allowed' ).show(); $( '.renewals-disabled' ).hide();
-        } else {
-           $( '.renewals-allowed' ).hide(); $( '.renewals-disabled' ).show();
-        }
-    } ).attr( 'checked', false );
-    [% END %]
-    [% END %]
-	$("td").click(function(e){
-		if(e.target.tagName.toLowerCase() == 'td'){
-           $(this).find("input:checkbox").each( function() {
-               $(this).attr('checked', !$(this).attr('checked'));
-			   if($(this).attr('checked')){
-                    $(this).parent().siblings().find("input:checkbox").each(function(){
-                       if($(this).attr('checked')){ $(this).removeAttr('checked'); }
-                   });
-			   }
-           });
-		}
-	});
     $("#suspend_until").datepicker({ minDate: 1 }); // require that hold suspended until date is after today
     $("#newduedate").datetimepicker({
         minDate: 1, // require that renewal date is after today
@@ -424,190 +391,102 @@ function validate1(date) {
 
 <div id="finesholdsissues" class="toptabs">
     <ul>
-        <li><a href="#checkedout">[% issueloop.size %] Checkout(s)</a></li>
-    [% IF relissueloop.size %]
-        <li><a href="#relissues">Relatives' Checkouts</a></li>
-    [% END %]
+        <li><a href="#checkouts">[% issueloop.size %] Checkout(s)</a></li>
+        [% IF relatives_issues_count %]
+            <li><a href="#relatives-issues" id="relatives-issues-tab">Relatives' checkouts</a></li>
+        [% END %]
         <li><a href="#finesandcharges">Fines &amp; Charges</a></li>
-        <li>[% IF ( countreserv ) %]
-            <a href="#onhold">[% countreserv %] Hold(s)</a>    [% ELSE %]
-            <a href="#onhold">0 Holds</a>
-    [% END %]</li>
+        <li>
+            [% IF ( holds_count ) %]
+                <a href="#reserves" id="holds-tab">[% holds_count %] Hold(s)</a>
+            [% ELSE %]
+                <a href="#reserves" id="holds-tab">0 Holds</a>
+            [% END %]
+        </li>
         <li><a id="debarments-tab-link" href="#reldebarments">[% debarments.size %] Restrictions</a></li>
     </ul>
 
-    <form action="/cgi-bin/koha/reserve/renewscript.pl" method="post" class="checkboxed">
-    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-    <input type="hidden" name="branch" value="[% branch %]" />
-<div id="checkedout">
-    [% IF ( issueloop ) %]
-    <table id="issuest">
-    <thead>
-        <tr>
-            <th scope="col">Due date</th>
-            <th scope="col">Title</th>
-            <th scope="col">Item type</th>
-            <th scope="col">Checked out on</th> 
-            <th scope="col">Checked out from</th> 
-            <th scope="col">Call no.</th>
-            <th scope="col">Charge</th>
-            <th scope="col">Price</th>
-            <th scope="col">Renew <p class="column-tool"><a href="#" id="CheckAllitems">select all</a> | <a href="#" id="CheckNoitems">none</a></p></th>
-            <th scope="col">Check in <p class="column-tool"><a href="#" id="CheckAllreturns">select all</a> | <a href="#" id="CheckNoreturns">none</a></p></th>
-        </tr></thead>
-        [% INCLUDE 'checkouts-table-footer.inc' %]
-       <tbody>
-       [% FOREACH issueloo IN issueloop %]
+    <div id="checkouts">
+        [% IF ( issuecount ) %]
+            <form name="issues" action="/cgi-bin/koha/tools/export.pl" method="post" class="checkboxed">
+                <table id="issues-table" style="width: 100% !Important;">
+                    <thead>
+                        <tr>
+                            <th scope="col">&nbsp;</th>
+                            <th scope="col">Due date</th>
+                            <th scope="col">Due date</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Item type</th>
+                            <th scope="col">Checked out on</th>
+                            <th scope="col">Checked out from</th>
+                            <th scope="col">Call no</th>
+                            <th scope="col">Charge</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Renew <p class="column-tool"><a href="#" id="CheckAllRenewals">select all</a> | <a href="#" id="UncheckAllRenewals">none</a></p></th>
+                            <th scope="col">Check in <p class="column-tool"><a href="#" id="CheckAllCheckins">select all</a> | <a href="#" id="UncheckAllCheckins">none</a></p></th>
+                            <th scope="col">Export <p class="column-tool"><a href="#" id="CheckAllExports">select all</a> | <a href="#" id="UncheckAllExports">none</a></p></th>
+                        </tr>
+                    </thead>
+                    [% INCLUDE 'checkouts-table-footer.inc' %]
+                </table>
 
-          [% IF ( issueloo.overdue ) %]
-          <tr class="problem">
-          [% ELSE %]
-          <tr>
-          [% END %]
-          [% IF ( issueloo.red ) %]
-              <td class="od">
-          [% ELSE %]
-            <td>
-          [% END %]
-                <span title="[% issueloo.date_due %]">[% issueloo.date_due | $KohaDates %]</span>
-                [% IF ( issueloo.itemlost ) %]
-                                        <span class="lost">[% issueloo.itemlost %]</span>
+                [% IF ( issuecount ) %]
+                    <fieldset class="action">
+                        [% IF ( CAN_user_circulate_override_renewals ) %]
+                            [% IF ( AllowRenewalLimitOverride ) %]
+                                <label for="override_limit">Override renewal limit:</label>
+                                <input type="checkbox" name="override_limit" id="override_limit" value="1" />
+                            [% END %]
+                        [% END %]
+                        <button class="btn" id="RenewCheckinChecked"><i class="icon-check"></i> Renew or return checked items</button>
+                        <button class="btn" id="RenewAll"><i class="icon-book"></i> Renew all</button>
+                    </fieldset>
+
+                    [% IF ( exports_enabled ) %]
+                        <fieldset>
+                            <label for="export_formats"><b>Export checkouts using format:</b></label>
+                            <select name="export_formats" id="export_formats">
+                                <option value="iso2709_995">ISO2709 with items</option>
+                                <option value="iso2709">ISO2709 without items</option>
+                                [% IF ( export_with_csv_profile ) %]
+                                    <option value="csv">CSV</option>
+                                [% END %]
+                            </select>
+
+                           <label for="export_remove_fields">Don't export fields:</label> <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% export_remove_fields %]" title="Use for iso2709 exports" />
+                            <input type="hidden" name="op" value="export" />
+                            <input type="hidden" id="export_format" name="format" value="iso2709" />
+                            <input type="hidden" id="dont_export_item" name="dont_export_item" value="0" />
+                            <input type="hidden" id="record_type" name="record_type" value="bibs" />
+                            <button class="btn btn-small" id="export_submit"><i class="icon-download-alt"></i> Export</button>
+                        </fieldset>
                     [% END %]
-                [% IF ( issueloo.damaged ) %]
-                                        <span class="dmg">[% issueloo.itemdamaged %]</span>
                 [% END %]
-</td>
-            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% issueloo.biblionumber %]"><strong>[% issueloo.title |html %][% FOREACH subtitl IN issueloo.subtitle %] [% subtitl.subfield %][% END %]</strong></a>[% IF ( issueloo.author ) %], by [% issueloo.author %][% END %] [% IF ( issueloo.publishercode ) %]; [% issueloo.publishercode %] [% END %] [% IF ( issueloo.publicationyear ) %], [% issueloo.publicationyear %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% issueloo.biblionumber %]&amp;itemnumber=[% issueloo.itemnumber %]#item[% issueloo.itemnumber %]">[% issueloo.barcode %]</a></td>
-<td>[% UNLESS ( noItemTypeImages ) %] [% IF ( issueloo.itemtype_image ) %]<img src="[% issueloo.itemtype_image %]" alt="" />[% END %][% END %][% issueloo.itemtype_description %]</td>
-            <td><span title="[% issueloo.issuedate %]">[% issueloo.issuedate | $KohaDates%]</span></td>
-            <td>[% issueloo.issuingbranchname %]</td>
-            <td>[% issueloo.itemcallnumber %]</td>
-            <td>[% issueloo.charge %]</td>
-            <td>[% issueloo.replacementprice %]</td>
-      [% IF ( issueloo.renew_failed ) %]
-            <td class="problem">Renewal Failed</td>
-      [% ELSE %]
-            <td><span style="padding: 0 1em;">[% IF ( issueloo.renewals ) %][% issueloo.renewals %][% ELSE %]0[% END %]</span>
-            [% IF ( issueloo.norenew ) %]
-                [% IF ( issueloo.can_confirm ) %]<span class="renewals-allowed" style="display: none">
-                    <input type="checkbox" name="all_items[]" value="[% issueloo.itemnumber %]" checked="checked" style="display: none;" />
-                    [% IF ( issueloo.od ) %]
-                        <input type="checkbox" name="items[]" value="[% issueloo.itemnumber %]" checked="checked" />
-                    [% ELSE %]
-                        <input type="checkbox" name="items[]" value="[% issueloo.itemnumber %]" />
-                    [% END %]
-                    </span>
-                    [% IF issueloo.renewsallowed && issueloo.renewsleft && !issueloo.norenew_reason_too_soon %]
-                        <span class="renewals">([% issueloo.renewsleft %] of [% issueloo.renewsallowed %] renewals remaining)</span>
-                    [% END %]
-                    <span class="renewals-disabled">
-                [% END %]
-                [% IF ( issueloo.norenew_reason_on_reserve ) %]
-                    <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% issueloo.biblionumber %]">On Hold</a>
-                [% ELSIF ( issueloo.norenew_reason_too_many ) %]
-                    Not renewable
-                [% ELSIF ( issueloo.norenew_reason_too_soon ) %]
-                    No renewal before [% issueloo.soonestrenewdate %]
-                    <span class="renewals">([% issueloo.renewsleft %] of [% issueloo.renewsallowed %] renewals remaining)</span>
-                [% END %]
-                [% IF ( issueloo.can_confirm ) %]
-                    </span>
-                [% END %]
-            [% ELSE %]
-            <input type="checkbox" name="all_items[]" value="[% issueloo.itemnumber %]" checked="checked" style="display: none;" />
-            [% IF ( issueloo.red ) %]
-            <input type="checkbox" name="items[]" value="[% issueloo.itemnumber %]" checked="checked" onclick="uncheck_sibling(this);" />
-            [% ELSE %]
-            <input type="checkbox" name="items[]" value="[% issueloo.itemnumber %]" onclick="uncheck_sibling(this);" />
-            [% END %]
-                [% IF issueloo.renewsallowed && issueloo.renewsleft %]
-                    <span class="renewals">([% issueloo.renewsleft %] of [% issueloo.renewsallowed %] renewals remaining)</span>
-                [% END %]
-            [% END %]
-            </td>
-      [% END %]
-      [% IF ( issueloo.return_failed ) %]
-            <td class="problem">Check-in failed</td>
-      [% ELSE %]
-        [% IF ( issueloo.norenew_reason_on_reserve ) %]
-            <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% issueloo.biblionumber %]">On hold</a></td>
+            </form>
         [% ELSE %]
-            <td><input type="checkbox" name="barcodes[]"  value="[% issueloo.barcode %]" onclick="uncheck_sibling(this);" />
-                <input type="checkbox" name="all_barcodes[]" value="[% issueloo.barcode %]" checked="checked" style="display: none;" />
-            </td>
+            <p>Patron has nothing checked out.</p>
         [% END %]
-      [% END %]
-        </tr>
-  [% END %]
-        </tbody>
+    </div>
+
+[% IF ( relatives_issues_count ) %]
+    <div id="relatives-issues">
+        <table id="relatives-issues-table" style="width: 100% !Important;">
+            <thead>
+                <tr>
+                    <th scope="col">Due date</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Item type</th>
+                    <th scope="col">Checked out on</th>
+                    <th scope="col">Checked out from</th>
+                    <th scope="col">Call no</th>
+                    <th scope="col">Charge</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Patron</th>
+                </tr>
+            </thead>
         </table>
-        <fieldset class="action">
-        [% IF ( CAN_user_circulate_override_renewals ) %]
-        [% IF ( AllowRenewalLimitOverride ) %]
-        <label for="override_limit">Override renewal limit:</label>
-        <input type="checkbox" name="override_limit" id="override_limit" value="1" />
-        [% END %]
-        [% END %]
-        <input type="submit" name="renew_checked" value="Renew or return checked items" />
-        <input type="submit" id="renew_all" name="renew_all" value="Renew all" />
-        </fieldset>
-    [% ELSE %]<p>Patron has nothing checked out.</p>
-[% END %]
-</div>
-
-
-[% IF relissueloop %]
-<div id="relissues">
- <table id="relissuest">
-    <thead>
-    <tr>
-            <th scope="col">Due date</th>
-            <th scope="col">Title</th>
-            <th scope="col">Item type</th>
-            <th scope="col">Checked out on</th> 
-            <th scope="col">Checked out from</th>
-            <th scope="col">Call no.</th>
-            <th scope="col">Charge</th>
-            <th scope="col">Price</th>
-            <th scope="col">Patron</th>
-        </tr>
-    </thead>
-       <tbody>
-       [% FOREACH relissueloo IN relissueloop %]
-
-          [% IF ( relissueloo.overdue ) %]
-          <tr class="problem">
-          [% ELSE %]
-          <tr>
-          [% END %]
-          [% IF ( relissueloo.red ) %]
-            <td class="od">
-          [% ELSE %]
-            <td>
-          [% END %]
-                <span title="[% relissueloo.date_due %]">[% relissueloo.date_due | $KohaDates %]</span>
-                [% IF ( relissueloo.itemlost ) %]
-                                        <span class="lost">[% relissueloo.itemlost %]</span>
-                    [% END %]
-                [% IF ( relissueloo.damaged ) %]
-                                        <span class="dmg">[% relissueloo.itemdamaged %]</span>
-                [% END %]
-</td>
-            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relissueloo.biblionumber %]"><strong>[% relissueloo.title |html %][% FOREACH subtitl IN relissueloo.subtitle %] [% subtitl.subfield %][% END %]</strong></a>[% IF relissueloo.author %], by [% relissueloo.author %][% END %] [% IF relissueloo.publishercode %]; [% relissueloo.publishercode %] [% END %] [% IF relissueloo.publicationyear %], [% relissueloo.publicationyear %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relissueloo.biblionumber %]&amp;itemnumber=[% relissueloo.itemnumber %]#item[% relissueloo.itemnumber %]">[% relissueloo.barcode %]</a></td>
-<td>[% UNLESS ( noItemTypeImages ) %] [% IF ( relissueloo.itemtype_image ) %]<img src="[% relissueloo.itemtype_image %]" alt="" />[% END %][% END %][% relissueloo.itemtype_description %]</td>
-            <td><span title="[% relissueloo.issuedate %]">[% relissueloo.issuedate | $KohaDates %]</span></td>
-            <td>[% relissueloo.issuingbranchname %]</td>
-        <td>[% relissueloo.itemcallnumber %]</td>
-        <td>[% relissueloo.charge %]</td>
-        <td>[% relissueloo.replacementprice %]</td>
-        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relissueloo.borrowernumber %]">[% relissueloo.firstname %] [% relissueloo.surname %] ([% relissueloo.cardnumber %])</a></td>
-        </tr>
-  [% END %]
-        </tbody>
-       </table>
     </div>
 [% END %]
-    </form>
 
 <div id="finesandcharges">
     [% IF ( totaldue_raw ) %]
@@ -619,59 +498,27 @@ function validate1(date) {
 
 [% INCLUDE borrower_debarments.inc %]
 
-<div id="onhold">
-[% IF ( reservloop ) %]
-<form action="/cgi-bin/koha/reserve/modrequest.pl" method="post">
-	<input type="hidden" name="from" value="borrower" />
-	<table id="holdst">
-		<thead><tr>
-			<th>Hold date</th>
-			<th>Title</th>
-            <th>Call number</th>
-			<th>Barcode</th>
-            <th>Expiration</th>
-			<th>Priority</th>
-			<th>Delete?</th>
-			<th>&nbsp;</th>
-		</tr></thead>
-		<tbody>[% FOREACH reservloo IN reservloop %]
-		<tr class="[% reservloo.color %]">
-            <td><span title="[% reservloo.reservedate %]">[% reservloo.reservedate | $KohaDates %]</span></td>
-            <td>
-                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% reservloo.biblionumber %]">[% reservloo.title |html %][% FOREACH subtitl IN reservloo.subtitle %] [% subtitl.subfield %][% END %]</a>[% IF ( reservloo.author ) %], by [% reservloo.author %][% END %]
-            </td>
-            <td>[% reservloo.itemcallnumber %]</td>
-            <td>[% IF ( reservloo.waiting ) %]
-                <em>Item is <strong>waiting</strong></em>
-                [% END %]
-                [% IF ( reservloo.transfered ) %]
-                <em>Item <strong>in transit</strong> from
-                [% reservloo.frombranch %] since [% reservloo.datesent %] </em>
-                [% END %]
+<div id="reserves">
+[% IF ( holds_count ) %]
+    <form action="/cgi-bin/koha/reserve/modrequest.pl" method="post">
+        <input type="hidden" name="from" value="circ" />
+        <table id="holds-table" style="width: 100% !Important;">
+            <thead>
+                <tr>
+                    <th>Hold date</th>
+                    <th>Title</th>
+                    <th>Call number</th>
+                    <th>Barcode</th>
+                    <th>Expiration</th>
+                    <th>Priority</th>
+                    <th>Delete?</th>
+                </tr>
+            </thead>
+        </table>
 
-                [% IF ( reservloo.nottransfered ) %]
-                <em>Item hasn't been transferred yet from [% reservloo.nottransferedby %]</em>
-                [% END %]
-                [% IF ( reservloo.barcodereserv ) %]
-                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% reservloo.biblionumber %]">[% reservloo.barcodereserv %]</a>
-                [% END %]
-            </td>
-            <td>[% reservloo.expirationdate | $KohaDates %]</td>
-            <td>[% IF ( reservloo.waitingposition ) %]<strong>[% reservloo.waitingposition %]</strong>[% END %]</td>
-            <td><select name="rank-request">
-                    <option value="n">No</option>
-                    <option value="del">Yes</option>
-                </select>
-                <input type="hidden" name="biblionumber" value="[% reservloo.biblionumber %]" />
-                <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-                <input type="hidden" name="reserve_id" value="[% reservloo.reserve_id %]" />
-            </td>
-            <td>[% IF ( reservloo.suspend ) %]Suspended [% IF ( reservloo.suspend_until ) %] until [% reservloo.suspend_until | $KohaDates %][% END %][% END %]</td>
-        </tr>
-		[% END %]</tbody>
-    </table>
-
-        <fieldset class="action"><input type="submit" class="cancel" name="submit" value="Cancel marked holds" /></fieldset>
+        <fieldset class="action">
+            <input type="submit" class="cancel" name="submit" value="Cancel marked holds" />
+        </fieldset>
     </form>
 
     [% IF SuspendHoldsIntranet %]

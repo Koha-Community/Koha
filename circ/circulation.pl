@@ -42,6 +42,7 @@ use CGI::Session;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Borrower::Debarments qw(GetDebarments IsDebarred);
 use Koha::DateUtils;
+use Koha::Database;
 
 use Date::Calc qw(
   Today
@@ -96,14 +97,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
 
 my $branches = GetBranches();
 
-my @failedrenews = $query->param('failedrenew');    # expected to be itemnumbers 
-our %renew_failed = ();
-for (@failedrenews) { $renew_failed{$_} = 1; }
-
-my @failedreturns = $query->param('failedreturn');
-our %return_failed = ();
-for (@failedreturns) { $return_failed{$_} = 1; }
-
 my $findborrower = $query->param('findborrower') || q{};
 $findborrower =~ s|,| |g;
 my $borrowernumber = $query->param('borrowernumber');
@@ -119,10 +112,6 @@ if (C4::Context->preference("AutoLocation") != 1) {
 
 if (C4::Context->preference("DisplayClearScreenButton")) {
     $template->param(DisplayClearScreenButton => 1);
-}
-
-if (C4::Context->preference("UseTablesortForCirc")) {
-    $template->param(UseTablesortForCirc => 1);
 }
 
 my $barcode        = $query->param('barcode') || q{};
@@ -360,9 +349,8 @@ if ($barcode) {
         }
     }
     
-    # FIXME If the issue is confirmed, we launch another time GetMemberIssuesAndFines, now display the issue count after issue 
-    my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrowernumber );
-    $template->param( issuecount   => $issue );
+    my ( $od, $issue, $fines ) = GetMemberIssuesAndFines($borrowernumber);
+    $template->param( issuecount => $issue );
 }
 
 # reload the borrower info for the sake of reseting the flags.....
@@ -374,193 +362,12 @@ if ($borrowernumber) {
 # BUILD HTML
 # show all reserves of this borrower, and the position of the reservation ....
 if ($borrowernumber) {
+    $template->param(
+        holds_count => Koha::Database->new()->schema()->resultset('Reserve')
+          ->count( { borrowernumber => $borrowernumber } ) );
 
-    # new op dev
-    # now we show the status of the borrower's reservations
-    my @borrowerreserv = GetReservesFromBorrowernumber($borrowernumber );
-    my @reservloop;
-    my @WaitingReserveLoop;
-    
-    foreach my $num_res (@borrowerreserv) {
-        my %getreserv;
-        my %getWaitingReserveInfo;
-        my $getiteminfo  = GetBiblioFromItemNumber( $num_res->{'itemnumber'} );
-        my $itemtypeinfo = getitemtypeinfo( (C4::Context->preference('item-level_itypes')) ? $getiteminfo->{'itype'} : $getiteminfo->{'itemtype'} );
-        my ( $transfertwhen, $transfertfrom, $transfertto ) =
-          GetTransfers( $num_res->{'itemnumber'} );
-
-        $getreserv{waiting}       = 0;
-        $getreserv{transfered}    = 0;
-        $getreserv{nottransfered} = 0;
-
-        $getreserv{reservedate}    = format_date( $num_res->{'reservedate'} );
-        $getreserv{reserve_id}  = $num_res->{'reserve_id'};
-        $getreserv{title}          = $getiteminfo->{'title'};
-        $getreserv{subtitle}       = GetRecordValue('subtitle', GetMarcBiblio($getiteminfo->{biblionumber}), GetFrameworkCode($getiteminfo->{biblionumber}));
-        $getreserv{itemtype}       = $itemtypeinfo->{'description'};
-        $getreserv{author}         = $getiteminfo->{'author'};
-        $getreserv{barcodereserv}  = $getiteminfo->{'barcode'};
-        $getreserv{itemcallnumber} = $getiteminfo->{'itemcallnumber'};
-        $getreserv{biblionumber}   = $getiteminfo->{'biblionumber'};
-        $getreserv{waitingat}      = GetBranchName( $num_res->{'branchcode'} );
-        $getreserv{suspend}        = $num_res->{'suspend'};
-        $getreserv{suspend_until}  = $num_res->{'suspend_until'};
-        #         check if we have a waiting status for reservations
-        if ( $num_res->{'found'} && $num_res->{'found'} eq 'W' ) {
-            $getreserv{color}   = 'reserved';
-            $getreserv{waiting} = 1;
-#     genarate information displaying only waiting reserves
-        $getWaitingReserveInfo{title}        = $getiteminfo->{'title'};
-        $getWaitingReserveInfo{biblionumber} = $getiteminfo->{'biblionumber'};
-        $getWaitingReserveInfo{itemtype}     = $itemtypeinfo->{'description'};
-        $getWaitingReserveInfo{author}       = $getiteminfo->{'author'};
-        $getWaitingReserveInfo{itemcallnumber} = $getiteminfo->{'itemcallnumber'};
-        $getWaitingReserveInfo{reservedate}  = format_date( $num_res->{'reservedate'} );
-        $getWaitingReserveInfo{waitingat}    = GetBranchName( $num_res->{'branchcode'} );
-        $getWaitingReserveInfo{waitinghere}  = 1 if $num_res->{'branchcode'} eq $branch;
-        }
-        #         check transfers with the itemnumber foud in th reservation loop
-        if ($transfertwhen) {
-            $getreserv{color}      = 'transfered';
-            $getreserv{transfered} = 1;
-            $getreserv{datesent}   = format_date($transfertwhen);
-            $getreserv{frombranch} = GetBranchName($transfertfrom);
-        } elsif ($getiteminfo->{'holdingbranch'} ne $num_res->{'branchcode'}) {
-            $getreserv{nottransfered}   = 1;
-            $getreserv{nottransferedby} = GetBranchName( $getiteminfo->{'holdingbranch'} );
-        }
-
-#         if we don't have a reserv on item, we put the biblio infos and the waiting position
-        if ( $getiteminfo->{'title'} eq '' ) {
-            my $getbibinfo = GetBiblioData( $num_res->{'biblionumber'} );
-
-            $getreserv{color}           = 'inwait';
-            $getreserv{title}           = $getbibinfo->{'title'};
-            $getreserv{subtitle}        = GetRecordValue('subtitle', GetMarcBiblio($num_res->{biblionumber}), GetFrameworkCode($num_res->{biblionumber}));
-            $getreserv{nottransfered}   = 0;
-            $getreserv{itemtype}        = $itemtypeinfo->{'description'};
-            $getreserv{author}          = $getbibinfo->{'author'};
-            $getreserv{biblionumber}    = $num_res->{'biblionumber'};
-        }
-        $getreserv{waitingposition} = $num_res->{'priority'};
-        $getreserv{expirationdate} = $num_res->{'expirationdate'};
-        push( @reservloop, \%getreserv );
-
-#         if we have a reserve waiting, initiate waitingreserveloop
-        if ($getreserv{waiting} == 1) {
-        push (@WaitingReserveLoop, \%getWaitingReserveInfo)
-        }
-      
-    }
-
-    # return result to the template
-    $template->param( 
-        countreserv => scalar @reservloop,
-        reservloop  => \@reservloop ,
-        WaitingReserveLoop  => \@WaitingReserveLoop,
-    );
     $template->param( adultborrower => 1 ) if ( $borrower->{'category_type'} eq 'A' );
 }
-
-# make the issued books table.
-my $todaysissues = '';
-my $previssues   = '';
-our @todaysissues   = ();
-our @previousissues = ();
-our @relissues      = ();
-our @relprevissues  = ();
-my $displayrelissues;
-
-our $totalprice = 0;
-
-sub build_issue_data {
-    my $issueslist = shift;
-    my $relatives = shift;
-
-    # split in 2 arrays for today & previous
-    foreach my $it ( @$issueslist ) {
-        my $itemtypeinfo = getitemtypeinfo( (C4::Context->preference('item-level_itypes')) ? $it->{'itype'} : $it->{'itemtype'} );
-
-        # set itemtype per item-level_itype syspref - FIXME this is an ugly hack
-        $it->{'itemtype'} = ( C4::Context->preference( 'item-level_itypes' ) ) ? $it->{'itype'} : $it->{'itemtype'};
-
-        ($it->{'charge'}, $it->{'itemtype_charge'}) = GetIssuingCharges(
-            $it->{'itemnumber'}, $it->{'borrowernumber'}
-        );
-        $it->{'charge'} = sprintf("%.2f", $it->{'charge'}) if defined $it->{'charge'};
-        my ($can_renew, $can_renew_error) = CanBookBeRenewed( 
-            $it->{'borrowernumber'},$it->{'itemnumber'}
-        );
-        $it->{"renew_error_${can_renew_error}"} = 1 if defined $can_renew_error;
-        my $restype = C4::Reserves::GetReserveStatus( $it->{'itemnumber'} );
-        $it->{'can_renew'} = $can_renew;
-        $it->{'can_confirm'} = !$can_renew && !$restype;
-        $it->{'renew_error'} = ( $restype eq "Waiting" or $restype eq "Reserved" ) ? 1 : 0;
-        $it->{'checkoutdate'} = C4::Dates->new($it->{'issuedate'},'iso')->output('syspref');
-        $it->{'issuingbranchname'} = GetBranchName($it->{'branchcode'});
-
-        $totalprice += $it->{'replacementprice'} || 0;
-        $it->{'itemtype'} = $itemtypeinfo->{'description'};
-        $it->{'itemtype_image'} = $itemtypeinfo->{'imageurl'};
-        $it->{'dd_sort'} = $it->{'date_due'};
-        $it->{'dd'} = output_pref($it->{'date_due'});
-        $it->{'displaydate_sort'} = $it->{'issuedate'};
-        $it->{'displaydate'} = output_pref($it->{'issuedate'});
-        #$it->{'od'} = ( $it->{'date_due'} lt $todaysdate ) ? 1 : 0 ;
-        $it->{'od'} = $it->{'overdue'};
-        $it->{'subtitle'} = GetRecordValue('subtitle', GetMarcBiblio($it->{biblionumber}), GetFrameworkCode($it->{biblionumber}));
-        $it->{'renew_failed'} = $renew_failed{$it->{'itemnumber'}};
-        $it->{'return_failed'} = $return_failed{$it->{'barcode'}};
-
-        if ( ( $it->{'issuedate'} && $it->{'issuedate'} gt $todaysdate )
-          || ( $it->{'lastreneweddate'} && $it->{'lastreneweddate'} gt $todaysdate ) ) {
-            (!$relatives) ? push @todaysissues, $it : push @relissues, $it;
-        } else {
-            (!$relatives) ? push @previousissues, $it : push @relprevissues, $it;
-        }
-        ($it->{'renewcount'},$it->{'renewsallowed'},$it->{'renewsleft'}) = C4::Circulation::GetRenewCount($it->{'borrowernumber'},$it->{'itemnumber'}); #Add renewal count to item data display
-
-        $it->{'soonestrenewdate'} = output_pref(
-            C4::Circulation::GetSoonestRenewDate(
-                $it->{borrowernumber}, $it->{itemnumber}
-            )
-        );
-    }
-}
-
-if ($borrower) {
-
-    # Getting borrower relatives
-    my @relborrowernumbers = GetMemberRelatives($borrower->{'borrowernumber'});
-    #push @borrowernumbers, $borrower->{'borrowernumber'};
-
-    # get each issue of the borrower & separate them in todayissues & previous issues
-    my $issueslist = GetPendingIssues($borrower->{'borrowernumber'});
-    my $relissueslist = [];
-    if ( @relborrowernumbers ) {
-        $relissueslist = GetPendingIssues(@relborrowernumbers);
-    }
-
-    build_issue_data($issueslist, 0);
-    build_issue_data($relissueslist, 1);
-  
-    $displayrelissues = scalar($relissueslist);
-
-    if ( C4::Context->preference( "todaysIssuesDefaultSortOrder" ) eq 'asc' ) {
-        @todaysissues   = sort { $a->{'timestamp'} cmp $b->{'timestamp'} } @todaysissues;
-    }
-    else {
-        @todaysissues   = sort { $b->{'timestamp'} cmp $a->{'timestamp'} } @todaysissues;
-    }
-
-    if ( C4::Context->preference( "previousIssuesDefaultSortOrder" ) eq 'asc' ){
-        @previousissues = sort { $a->{'date_due'} cmp $b->{'date_due'} } @previousissues;
-    }
-    else {
-        @previousissues = sort { $b->{'date_due'} cmp $a->{'date_due'} } @previousissues;
-    }
-}
-
 
 my @values;
 my %labels;
@@ -694,6 +501,11 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
+my @relatives = GetMemberRelatives( $borrower->{'borrowernumber'} );
+my $relatives_issues_count =
+  Koha::Database->new()->schema()->resultset('Issue')
+  ->count( { borrowernumber => \@relatives } );
+
 $template->param(
     lib_messages_loop => $lib_messages_loop,
     bor_messages_loop => $bor_messages_loop,
@@ -731,13 +543,7 @@ $template->param(
     duedatespec       => $duedatespec,
     message           => $message,
     CGIselectborrower => $CGIselectborrower,
-    totalprice        => sprintf('%.2f', $totalprice),
     totaldue          => sprintf('%.2f', $total),
-    todayissues       => \@todaysissues,
-    previssues        => \@previousissues,
-    relissues			=> \@relissues,
-    relprevissues		=> \@relprevissues,
-    displayrelissues		=> $displayrelissues,
     inprocess         => $inprocess,
     is_child          => ($borrowernumber && $borrower->{'category_type'} eq 'C'),
     circview => 1,
@@ -748,6 +554,8 @@ $template->param(
     SuspendHoldsIntranet => C4::Context->preference('SuspendHoldsIntranet'),
     AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
     RoutingSerials => C4::Context->preference('RoutingSerials'),
+    relatives_issues_count => $relatives_issues_count,
+    relatives_borrowernumbers => \@relatives,
 );
 
 # save stickyduedate to session

@@ -423,7 +423,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('UseICU','0','1','Tell Koha if ICU indexing is in use for Zebra or not.','YesNo'),
 ('UseKohaPlugins','0','','Enable or disable the ability to use Koha Plugins.','YesNo'),
 ('UseQueryParser','0',NULL,'If enabled, try to use QueryParser for queries.','YesNo'),
-('UseTablesortForCirc','0','','If on, use the JQuery tablesort function on the list of current borrower checkouts on the circulation page.  Note that the use of this function may slow down circ for patrons with may checkouts.','YesNo'),
 ('UseTransportCostMatrix','0','','Use Transport Cost Matrix when filling holds','YesNo'),
 ('viewISBD','1','','Allow display of ISBD view of bibiographic records','YesNo'),
 ('viewLabeledMARC','0','','Allow display of labeled MARC view of bibiographic records','YesNo'),
