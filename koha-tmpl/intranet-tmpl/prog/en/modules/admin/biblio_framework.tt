@@ -79,7 +79,7 @@ $(document).ready(function() {
 
         $('input.input_import').change( function() {
             var filename = $(this).val();
-            if ( ! /(?:\.csv|\.sql|\.ods|\.xml)$/.test(filename)) {
+            if ( ! /(?:\.csv|\.ods|\.xml)$/.test(filename)) {
                 $(this).css("background-color","yellow");
                 alert(_("Please select an ods or xml file"));
                 $(this).val("");
@@ -93,7 +93,7 @@ $(document).ready(function() {
         $('form.form_import').submit(function() {
             var id = $(this).attr('id');
             var obj = $('#' + id + ' input:file');
-            if (/(?:\.csv|\.sql|\.ods|\.xml)$/.test(obj.val())) {
+            if (/(?:\.csv|\.ods|\.xml)$/.test(obj.val())) {
                 if (confirm(_("Do you really want to import the framework fields and subfields? This will overwrite the current configuration. For safety reasons please use the export option to make a backup"))) {
                     var frameworkcode = $('#' + id + ' input:hidden[name=frameworkcode]').val();
                     $('#importing_' + frameworkcode).find("span").html(_("Importing to framework:")+"<strong>" + frameworkcode + "</strong><br />" +_("Importing from file:")+"<i>" + obj.val().replace(new RegExp("^.+[/\\\\]"),"") + "</i>");
@@ -109,7 +109,7 @@ $(document).ready(function() {
                     return false;
             }
             obj.css("background-color","yellow");
-            alert(_("Please select an spreadsheet (csv, ods, xml) or sql file"));
+            alert(_("Please select an spreadsheet (csv, ods, xml) file"));
             obj.val("");
             obj.css("background-color","white");
             return false;
@@ -185,8 +185,8 @@ $(document).ready(function() {
         <th>&nbsp;</th>
         <th>Edit</th>
         <th>Delete</th>
-        <th title="Export framework structure (fields, subfields) to a spreadsheet file (.csv, .xml, .ods) or SQL file">Export</th>
-        <th title="Import framework structure (fields, subfields) from a spreadsheet file (.csv, .xml, .ods) or SQL file">Import</th>
+        <th title="Export framework structure (fields, subfields) to a spreadsheet file (.csv, .xml, .ods)">Export</th>
+        <th title="Import framework structure (fields, subfields) from a spreadsheet file (.csv, .xml, .ods)">Import</th>
     </tr>
     <tr>
         <td>&nbsp;</td>
@@ -194,7 +194,7 @@ $(document).ready(function() {
         <td><a href="marctagstructure.pl?frameworkcode=[% frameworkcode %]">MARC structure</a></td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
-        <td><div class="import_export"><a class="import_export_fw" href="#" title="Export [% frameworkcode %] framework structure (fields, subfields) to a spreadsheet file (.csv, .xml, .ods) or SQL file">Export</a>
+        <td><div class="import_export"><a class="import_export_fw" href="#" title="Export [% frameworkcode %] framework structure (fields, subfields) to a spreadsheet file (.csv, .xml, .ods)">Export</a>
             <div class="import_export_options">
                 <form action="import_export_framework.pl" name="form_[% frameworkcode %]" method="get" target="_blank"  class="form_export">
                     <fieldset class="rows">
@@ -204,7 +204,6 @@ $(document).ready(function() {
                         <li><label for="csv_type_export_[% frameworkcode %]">Export to CSV spreadsheet</label><input type="radio" name="type_export_[% frameworkcode %]" value="csv" id="csv_type_export_[% frameworkcode %]" checked="checked" /></li>
                         <li><label for="xml_type_export_[% frameworkcode %]">Export to Excel with XML format, compatible with OpenOffice/LibreOffice as well</label><input type="radio" name="type_export_[% frameworkcode %]" value="excel" id="xml_type_export_[% frameworkcode %]" /></li>
                         <li><label for="ods_type_export_[% frameworkcode %]">Export to OpenDocument spreadsheet format</label><input type="radio" name="type_export_[% frameworkcode %]" value="ods" id="ods_type_export_[% frameworkcode %]" /></li>
-                        <li><label for="sql_type_export_[% frameworkcode %]">Export to SQL</label><input type="radio" name="type_export_[% frameworkcode %]" value="sql" id="sql_type_export_[% frameworkcode %]" /></li>
                     </ol>
                     </fieldset>
                     <fieldset class="action"><input type="submit" href="#" value="Export" title="Export to a spreadsheet" /> <a href="#" class="import_export_close cancel">Cancel</a> </fieldset>
@@ -212,11 +211,11 @@ $(document).ready(function() {
             </div>
             </div>
         </td>
-        <td><div class="import_export"><a href="#" class="import_export_fw" title="Import [% frameworkcode %] framework structure (fields, subfields) from a spreadsheet file (.csv, .xml, .ods) or SQL file">Import</a>
+        <td><div class="import_export"><a href="#" class="import_export_fw" title="Import [% frameworkcode %] framework structure (fields, subfields) from a spreadsheet file (.csv, .xml, .ods)">Import</a>
             <div class="import_export_options">
                 <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_[% frameworkcode %]" id="form_i_[% frameworkcode %]" method="post" enctype="multipart/form-data" class="form_import">
                     <fieldset class="rows">
-                    <legend>Import [% frameworkcode %] framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods) or SQL file</legend>
+                    <legend>Import [% frameworkcode %] framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)</legend>
                     <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
                     <input type="hidden" name="action" value="import" />
                     <ol>
@@ -241,7 +240,7 @@ $(document).ready(function() {
             <td><a href="[% loo.script_name %]?op=add_form&amp;frameworkcode=[% loo.frameworkcode |html %]">Edit</a></td>
             <td><a href="[% loo.script_name %]?op=delete_confirm&amp;frameworkcode=[% loo.frameworkcode |html %]">Delete</a></td>
             <td>
-            <div class="import_export"><a class="import_export_fw" href="#" title="Export [% loo.frameworkcode %] framework structure (fields and subfields) to a spreadsheet file (.csv, .xml, .ods) or SQL file">Export</a>
+            <div class="import_export"><a class="import_export_fw" href="#" title="Export [% loo.frameworkcode %] framework structure (fields and subfields) to a spreadsheet file (.csv, .xml, .ods)">Export</a>
                 <div class="import_export_options">
                     <form action="import_export_framework.pl" name="form_[% loo.frameworkcode %]" method="get" target="_blank" class="form_export">
                         <fieldset class="rows">
@@ -251,7 +250,6 @@ $(document).ready(function() {
                             <li><label for="csv_type_export_[% loo.frameworkcode %][% loop.count %]">Export to CSV spreadsheet</label><input type="radio" name="type_export_[% loo.frameworkcode %]" value="csv" id="csv_type_export_[% loo.frameworkcode %][% loop.count %]" checked="checked" /></li>
                             <li><label for="xml_type_export_[% loo.frameworkcode %][% loop.count %]">Export to Excel as XML format, compatible with OpenOffice/LibreOffice as well</label><input type="radio" name="type_export_[% loo.frameworkcode %]" value="excel" id="xml_type_export_[% loo.frameworkcode %][% loop.count %]" /></li>
                             <li><label for="ods_type_export_[% loo.frameworkcode %][% loop.count %]">Export to OpenDocument spreadsheet format</label><input type="radio" name="type_export_[% loo.frameworkcode %]" value="ods" id="ods_type_export_[% loo.frameworkcode %][% loop.count %]" /></li>
-                            <li><label for="sql_type_export_[% loo.frameworkcode %][% loop.count %]">Export to SQL</label><input type="radio" name="type_export_[% loo.frameworkcode %]" value="sql" id="sql_type_export_[% loo.frameworkcode %][% loop.count %]" /></li>
                         </ol>
                         </fieldset>
                         <fieldset class="action"><input type="submit" href="#" value="Export" title="Export to a spreadsheet" /> <a href="#" class="cancel import_export_close">Cancel</a> </fieldset>
@@ -259,11 +257,11 @@ $(document).ready(function() {
                 </div>
                 </div>
             </td>
-            <td><div class="import_export"><a class="import_export_fw" href="#" title="Import [% loo.frameworkcode %] framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods) or SQL file">Import</a>
+            <td><div class="import_export"><a class="import_export_fw" href="#" title="Import [% loo.frameworkcode %] framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)">Import</a>
             <div class="import_export_options">
                 <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_[% loo.frameworkcode %]" id="form_i_[% loo.frameworkcode %]" method="post" enctype="multipart/form-data" class="form_import">
                     <fieldset class="rows">
-                    <legend>Import [% frameworkcode %] framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods) or SQL file</legend>
+                    <legend>Import [% frameworkcode %] framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)</legend>
                     <input type="hidden" name="frameworkcode" value="[% loo.frameworkcode %]" />
                     <input type="hidden" name="action" value="import" />
                     <ol>

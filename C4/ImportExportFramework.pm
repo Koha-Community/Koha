@@ -230,8 +230,8 @@ sub ExportFramework
             }
         }
 
-        if (_export_table('marc_tag_structure', $dbh, ($mode eq 'csv' || $mode eq 'sql')?$xmlStrRef:$dom, ($mode eq 'ods')?$elementSS:$root, $frameworkcode, $mode)) {
-            if (_export_table('marc_subfield_structure', $dbh, ($mode eq 'csv' || $mode eq 'sql')?$xmlStrRef:$dom, ($mode eq 'ods')?$elementSS:$root, $frameworkcode, $mode)) {
+        if (_export_table('marc_tag_structure', $dbh, ($mode eq 'csv')?$xmlStrRef:$dom, ($mode eq 'ods')?$elementSS:$root, $frameworkcode, $mode)) {
+            if (_export_table('marc_subfield_structure', $dbh, ($mode eq 'csv')?$xmlStrRef:$dom, ($mode eq 'ods')?$elementSS:$root, $frameworkcode, $mode)) {
                 $$xmlStrRef = $dom->toString(1) if ($mode eq 'ods' || $mode eq 'excel');
                 return 1;
             }
@@ -249,54 +249,12 @@ sub _export_table
     my ($table, $dbh, $dom, $root, $frameworkcode, $mode) = @_;
     if ($mode eq 'csv') {
         _export_table_csv($table, $dbh, $dom, $root, $frameworkcode);
-    } elsif ($mode eq 'sql') {
-        _export_table_sql($table, $dbh, $dom, $root, $frameworkcode);
     } elsif ($mode eq 'ods') {
         _export_table_ods($table, $dbh, $dom, $root, $frameworkcode);
     } else {
         _export_table_excel($table, $dbh, $dom, $root, $frameworkcode);
     }
 }
-
-
-# Export the mysql table to an sql file
-sub _export_table_sql
-{
-    my ($table, $dbh, $strSQL, $root, $frameworkcode) = @_;
-
-    eval {
-        # First row with the name of the columns
-        my $query = 'SHOW COLUMNS FROM ' . $table;
-        my $sth = $dbh->prepare($query);
-        $sth->execute();
-        my @fields = ();
-        while (my $hashRef = $sth->fetchrow_hashref) {
-            push @fields, $hashRef->{Field};
-        }
-        my $fields = join(',', @fields);
-        $$strSQL .= 'DELETE FROM ' . $table . ' WHERE frameworkcode=' . $dbh->quote($frameworkcode) . ';';
-        $$strSQL .= chr(10);
-        # Populate rows with the data from mysql
-        $query = 'SELECT * FROM ' . $table . ' WHERE frameworkcode=?';
-        $sth = $dbh->prepare($query);
-        $sth->execute($frameworkcode);
-        while (my $hashRef = $sth->fetchrow_hashref) {
-            $$strSQL .= 'INSERT INTO ' . $table . ' (' . $fields . ') VALUES (';
-            for (@fields) {
-                $$strSQL .= $dbh->quote($hashRef->{$_}) . ',';
-            }
-            chop $$strSQL;
-            $$strSQL .= ');' . chr(10);
-        }
-        $$strSQL .= chr(10) . chr(10);
-    };
-    if ($@) {
-        $debug and warn "Error _export_table_sql $@\n";
-        return 0;
-    }
-    return 1;
-}#_export_table_sql
-
 
 # Export the mysql table to an csv file
 sub _export_table_csv
@@ -675,7 +633,7 @@ sub ImportFramework
     my $dbh = C4::Context->dbh;
     if (-r $filename && $dbh) {
         my $extension = '';
-        if ($filename =~ /\.(csv|ods|xml|sql)$/i) {
+        if ($filename =~ /\.(csv|ods|xml)$/i) {
             $extension = lc($1);
         } else {
             unlink ($filename) if ($deleteFilename); # remove temporary file
@@ -699,20 +657,14 @@ sub ImportFramework
                     open($dom, '<', $filename);
                 }
                 if ($dom) {
-                    # For sql we execute the line
-                    if ($extension eq 'sql') {
-                        _parseSQLLine($dbh, $dom, $frameworkcode);
-                        $ok = 0;
-                    } else {
-                        # Process both tables
-                        my $numDeleted = 0;
-                        my $numDeletedAux = 0;
-                        if (($numDeletedAux = _import_table($dbh, 'marc_tag_structure', $frameworkcode, $dom, ['frameworkcode', 'tagfield'], $extension)) >= 0) {
+                    # Process both tables
+                    my $numDeleted = 0;
+                    my $numDeletedAux = 0;
+                    if (($numDeletedAux = _import_table($dbh, 'marc_tag_structure', $frameworkcode, $dom, ['frameworkcode', 'tagfield'], $extension)) >= 0) {
+                        $numDeleted += $numDeletedAux if ($numDeletedAux > 0);
+                        if (($numDeletedAux = _import_table($dbh, 'marc_subfield_structure', $frameworkcode, $dom, ['frameworkcode', 'tagfield', 'tagsubfield'], $extension)) >= 0) {
                             $numDeleted += $numDeletedAux if ($numDeletedAux > 0);
-                            if (($numDeletedAux = _import_table($dbh, 'marc_subfield_structure', $frameworkcode, $dom, ['frameworkcode', 'tagfield', 'tagsubfield'], $extension)) >= 0) {
-                                $numDeleted += $numDeletedAux if ($numDeletedAux > 0);
-                                $ok = ($numDeleted > 0)?$numDeleted:0;
-                            }
+                            $ok = ($numDeleted > 0)?$numDeleted:0;
                         }
                     }
                 } else {
@@ -722,7 +674,7 @@ sub ImportFramework
             if ($@) {
                 $debug and warn "Error ImportFramework $@\n";
             } else {
-                if ($extension eq 'sql' || $extension eq 'csv') {
+                if ($extension eq 'csv') {
                     close($dom) if ($dom);
                 }
             }
@@ -743,155 +695,6 @@ sub ImportFramework
     }
     return $ok;
 }#ImportFramework
-
-
-# Parse the sql statement to see if the frameworkcode is correct
-# We're checking only the delete and insert SQL commands generated in the export process
-sub _parseSQLLine
-{
-    my ($dbh, $dom, $frameworkcode) = @_;
-
-    my $parser;
-    eval {
-        require SQL::Statement;
-        $parser = SQL::Parser->new('AnyData');
-        $parser->{RaiseError}=1;
-        $parser->{PrintError}=0;
-    };
-    my $literalEscape = (C4::Context->config("db_scheme") eq 'mysql')?'\\':'\'';
-    my $line;
-    my $numLines = 0;
-    while (<$dom>) {
-        s/[\r\n]+$//;
-        $line = $_;
-        # we don't want to execute any sql statement, only the ones dealing with frameworks
-        next unless ($line =~ /^\s*(?i:DELETE\s+FROM|INSERT\s+INTO)\s+(?:marc_tag_structure|marc_subfield_structure)/);
-        $numLines++;
-        # We check if the frameworkcode is the same, if not we change it
-        unless ($line =~ /'$frameworkcode'/) {
-            my $error = 0;
-            if ($parser) {
-                eval {
-                    $line = substr($line, 0 ,-1) if ($line =~ /;$/);
-                    my $stmt = SQL::Statement->new($line, $parser);
-                    my $where = $stmt->where();
-                    if ($where && $where->op() eq '=' && $line =~ /^\s*DELETE/) {
-                        $line =~ s/frameworkcode='.*?'/frameworkcode='$frameworkcode';/ unless ($_ =~ /frameworkcode='$frameworkcode'/);
-                    } else {
-                        my @arrFields;
-                        my @arrValues;
-                        my $table;
-                        # Due to lacking of backward compatibility
-                        if ($parser->VERSION < 1.30) {
-                            $table = lc($stmt->tables(0)->name());
-                            @arrFields = map{lc($_->name)} $stmt->columns;
-                            @arrValues = $stmt->row_values();
-                        } else {
-                            $table = $stmt->tables(0)->name();
-                            @arrValues = $stmt->row_values(0);
-                            my @aux = $stmt->column_defs();
-                            for (@{$aux[0]}) {
-                                push @arrFields, $_->{value};
-                            }
-                        }
-                        if (scalar(@arrFields) == scalar(@arrValues)) {
-                            my $j = 0;
-                            my $modified = 0;
-                            for (@arrFields) {
-                                if ($_ eq 'frameworkcode' && $arrValues[$j] ne $frameworkcode) {
-                                    $arrValues[$j] = $dbh->quote($frameworkcode);
-                                    $modified = 1;
-                                } else {
-                                    $arrValues[$j] = $dbh->quote($arrValues[$j]);
-                                }
-                                $j++;
-                            }
-                            $line = 'INSERT INTO ' . $table . ' (' . join(',', @arrFields) . ') VALUES (' . join(',', @arrValues) . ');' if ($modified);
-                        }
-                    }
-                };
-                $error = 1 if ($@);
-            } else {
-                $error = 1;
-            }
-            if ($error) {
-                $line .= ';' unless ($line =~ /;$/);
-                if ($line =~ /^\s*DELETE/) {
-                    $line =~ s/frameworkcode='.*?'/frameworkcode='$frameworkcode'/ unless ($_ =~ /frameworkcode='$frameworkcode'/);
-                } elsif ($line =~ /^\s*INSERT\s+INTO\s+(.*?)\s+\((.*?frameworkcode.*?)\)\s+VALUES\s+\((.+)\)\s*;\s*$/) {
-                    my $table = $1;
-                    my $fields = $2;
-                    my $values = $3;
-                    my @arrFields = split(/\s*,\s*/, $fields);
-                    my @arrValues;
-                    if ($values) {
-                        _parseSQLInsertValues($values, $literalEscape, \@arrValues);
-                    }
-                    if (scalar(@arrFields) == scalar(@arrValues)) {
-                        my $modified = 0;
-                        for (my $i=0; $i < @arrFields; $i++) {
-                            if ($arrFields[$i] eq 'frameworkcode' && $arrValues[$i]->{value} ne $frameworkcode) {
-                                $arrValues[$i]->{value} = $dbh->quote($frameworkcode);
-                                $modified = 1;
-                            } elsif ($arrValues[$i]->{literal}) {
-                                $arrValues[$i]->{value} = $dbh->quote($arrValues[$i]->{value});
-                            }
-                        }
-                        if ($modified) {
-                            $line = "INSERT INTO $table ($fields) VALUES (" . join(',', map {$_->{value}} @arrValues) . ');';
-                        }
-                    }
-                }
-            }
-        }
-        eval {
-            $dbh->do($line);
-        };
-    }
-}#_parseSQLLine
-
-
-# Simple sub to get the values from the insert sentence
-sub _parseSQLInsertValues
-{
-    my ($values, $literalEscape, $arrValues) = @_;
-
-    my ($posBegin, $posLiteral, $currentPos, $lengthValues, $currentChar);
-    $lengthValues = length($values);
-    $currentPos = 0;
-    while ($currentPos < $lengthValues) {
-        $currentChar = substr($values, $currentPos++, 1);
-        next if ($currentChar =~ /^\s$/);
-        next if ($posBegin && $currentChar !~ /^[,']$/);
-        unless ($posBegin) {
-            if ($currentChar eq '\'') {
-                $posBegin = $currentPos;
-                $posLiteral = $posBegin;
-            } else {
-                $posBegin = $currentPos -1;
-            }
-        } else {
-            if ($currentChar eq ',') {
-                unless ($posLiteral) {
-                    push @$arrValues, {literal => 0, value => substr($values, $posBegin, $currentPos -(1 + $posBegin))};
-                    $posBegin = undef;
-                }
-            } elsif ($currentChar eq '\'' && $posLiteral) {
-                next if ($literalEscape eq '\\' && substr($values, $currentPos -2, 1) eq $literalEscape);
-                if ($literalEscape eq '\'' && substr($values, $currentPos, 1) eq $literalEscape) {
-                    $currentPos++;
-                    next;
-                }
-                push @$arrValues, {literal => 1 , value => substr($values, $posBegin, $currentPos -( 1 + $posBegin))};
-                $currentPos++ if (substr($values, $currentPos, 1) eq ',');
-                $posBegin = undef;
-                $posLiteral = undef;
-            } # We shouldn't get to here if the sql sentence is correct
-        }
-   }
-   push @$arrValues, {literal => ($posLiteral)?1:0, value => substr($values, $posBegin, $currentPos - $posBegin)} if ($posBegin);
-}#_parseSQLInsertValues
-
 
 # Open (uncompress) ods file and return the content.xml file
 sub _openODS
