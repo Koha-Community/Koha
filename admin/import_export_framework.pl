@@ -21,10 +21,30 @@
 use strict;
 use warnings;
 use CGI;
+use CGI::Cookie;
 use C4::Context;
+use C4::Auth qw/check_cookie_auth/;
 use C4::ImportExportFramework;
 
+my %cookies = CGI::Cookie->fetch();
+my $authenticated = 0;
+my ($auth_status, $sessionID);
+if (exists $cookies{'CGISESSID'}) {
+    ($auth_status, $sessionID) = check_cookie_auth(
+        $cookies{'CGISESSID'}->value,
+        { parameters => 'parameters_remaining_permissions' },
+    );
+}
+if ($auth_status eq 'ok') {
+    $authenticated = 1;
+}
+
 my $input = new CGI;
+
+unless ($authenticated) {
+    print $input->header(-type => 'text/plain', -status => '403 Forbidden');
+    exit 0;
+}
 
 my $frameworkcode = $input->param('frameworkcode') || '';
 my $action = $input->param('action') || 'export';
