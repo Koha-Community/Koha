@@ -58,10 +58,6 @@ if ($action eq 'export' && $input->request_method() eq 'GET') {
         # CSV file
         print $input->header(-type => 'application/vnd.ms-excel', -attachment => 'export_' . $frameworkcode . '.csv');
         print $strXml;
-    } elsif ($format eq 'sql') {
-        # SQL file
-        print $input->header(-type => 'text/plain', -attachment => 'export_' . $frameworkcode . '.sql');
-        print $strXml;
     } elsif ($format eq 'excel') {
         # Excel-xml file
         print $input->header(-type => 'application/excel', -attachment => 'export_' . $frameworkcode . '.xml');
@@ -79,7 +75,7 @@ if ($action eq 'export' && $input->request_method() eq 'GET') {
     my $fieldname = 'file_import_' . $frameworkcode;
     my $filename = $input->param($fieldname);
     # upload the input file
-    if ($filename && $filename =~ /\.(csv|ods|xml|sql)$/i) {
+    if ($filename && $filename =~ /\.(csv|ods|xml)$/i) {
         my $extension = $1;
         my $uploadFd = $input->upload($fieldname);
         if ($uploadFd && !$input->cgi_error) {

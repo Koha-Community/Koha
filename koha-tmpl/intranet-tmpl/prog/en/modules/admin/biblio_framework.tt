@@ -76,7 +76,7 @@ function Check(f) {
 
         $('input.input_import').change( function() {
             var filename = $(this).val();
-            if ( ! /(?:\.csv|\.sql|\.ods|\.xml)$/.test(filename)) {
+            if ( ! /(?:\.csv|\.ods|\.xml)$/.test(filename)) {
                 $(this).css("background-color","yellow");
                 alert(_("Please select an ods or xml file"));
                 $(this).val("");
@@ -90,7 +90,7 @@ function Check(f) {
         $('form.form_import').submit(function() {
             var id = $(this).attr('id');
             var obj = $('#' + id + ' input:file');
-            if (/(?:\.csv|\.sql|\.ods|\.xml)$/.test(obj.val())) {
+            if (/(?:\.csv|\.ods|\.xml)$/.test(obj.val())) {
                 if (confirm(_("Do you really want to import the framework fields and subfields? This will overwrite the current configuration. For safety reasons please use the export option to make a backup"))) {
                     var frameworkcode = $('#' + id + ' input:hidden[name=frameworkcode]').val();
                     $('#importing_' + frameworkcode).find("span").html(_("Importing to framework:")+"<strong>" + frameworkcode + "</strong>. " +_("Importing from file:")+"<i>" + obj.val().replace(new RegExp("^.+[/\\\\]"),"") + "</i>");
@@ -107,7 +107,7 @@ function Check(f) {
                     return false;
             }
             obj.css("background-color","yellow");
-            alert(_("Please select an spreadsheet (csv, ods, xml) or sql file"));
+            alert(_("Please select an spreadsheet (csv, ods, xml) file"));
             obj.val("");
             obj.css("background-color","white");
             return false;
@@ -184,8 +184,8 @@ function Check(f) {
         <th>&nbsp;</th>
         <th>Edit</th>
         <th>Delete</th>
-        <th title="Export framework structure (fields, subfields) to a spreadsheet file (.csv, .xml, .ods) or SQL file">Export</th>
-        <th title="Import framework structure (fields, subfields) from a spreadsheet file (.csv, .xml, .ods) or SQL file">Import</th>
+        <th title="Export framework structure (fields, subfields) to a spreadsheet file (.csv, .xml, .ods)">Export</th>
+        <th title="Import framework structure (fields, subfields) from a spreadsheet file (.csv, .xml, .ods)">Import</th>
     </tr>
     <tr>
         <td>&nbsp;</td>
@@ -210,7 +210,6 @@ function Check(f) {
                             <p><label for="csv_type_export_[% frameworkcode %]"><input type="radio" name="type_export_[% frameworkcode %]" value="csv" id="csv_type_export_[% frameworkcode %]" checked="checked" /> Export to CSV spreadsheet</label></p>
                             <p><label for="xml_type_export_[% frameworkcode %]"><input type="radio" name="type_export_[% frameworkcode %]" value="excel" id="xml_type_export_[% frameworkcode %]" /> Export to Excel with XML format, compatible with OpenOffice/LibreOffice as well</label></p>
                             <p><label for="ods_type_export_[% frameworkcode %]"><input type="radio" name="type_export_[% frameworkcode %]" value="ods" id="ods_type_export_[% frameworkcode %]" /> Export to OpenDocument spreadsheet format</label></p>
-                            <p><label for="sql_type_export_[% frameworkcode %]"><input type="radio" name="type_export_[% frameworkcode %]" value="sql" id="sql_type_export_[% frameworkcode %]" /> Export to SQL</label></p>
 
                         </fieldset>
                     </div>
@@ -230,7 +229,7 @@ function Check(f) {
             <div class="modal hide" id="importModal_[% frameworkcode %][% loop.count %]" tabindex="-1" role="dialog" aria-labelledby="importLabelexportModal_[% frameworkcode %][% loop.count %]" aria-hidden="true">
                 <div class="modal-header">
                     <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="importLabelexportModal_[% frameworkcode %][% loop.count %]">Import default framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods) or SQL file</h3>
+                    <h3 id="importLabelexportModal_[% frameworkcode %][% loop.count %]">Import default framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)</h3>
                 </div>
                 <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_[% frameworkcode %]" id="form_i_[% frameworkcode %]" method="post" enctype="multipart/form-data" class="form_import">
                     <div class="modal-body">
@@ -275,7 +274,6 @@ function Check(f) {
                                 <p><label for="csv_type_export_[% loo.frameworkcode %][% loop.count %]"><input type="radio" name="type_export_[% loo.frameworkcode %]" value="csv" id="csv_type_export_[% loo.frameworkcode %][% loop.count %]" checked="checked" /> Export to CSV spreadsheet</label></p>
                                 <p><label for="xml_type_export_[% loo.frameworkcode %][% loop.count %]"><input type="radio" name="type_export_[% loo.frameworkcode %]" value="excel" id="xml_type_export_[% loo.frameworkcode %][% loop.count %]" /> Export to Excel with XML format, compatible with OpenOffice/LibreOffice as well</label></p>
                                 <p><label for="ods_type_export_[% loo.frameworkcode %][% loop.count %]"><input type="radio" name="type_export_[% loo.frameworkcode %]" value="ods" id="ods_type_export_[% loo.frameworkcode %][% loop.count %]" /> Export to OpenDocument spreadsheet format</label></p>
-                                <p><label for="sql_type_export_[% loo.frameworkcode %][% loop.count %]"><input type="radio" name="type_export_[% loo.frameworkcode %]" value="sql" id="sql_type_export_[% loo.frameworkcode %][% loop.count %]" /> Export to SQL</label></p>
 
                             </fieldset>
                         </div>
@@ -294,7 +292,7 @@ function Check(f) {
                 <div class="modal hide" id="importModal_[% loo.frameworkcode %][% loop.count %]" tabindex="-1" role="dialog" aria-labelledby="importLabelexportModal_[% loo.frameworkcode %][% loop.count %]" aria-hidden="true">
                     <div class="modal-header">
                         <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="importLabelexportModal_[% loo.frameworkcode %][% loop.count %]">Import [% loo.frameworkcode %] framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods) or SQL file</h3>
+                        <h3 id="importLabelexportModal_[% loo.frameworkcode %][% loop.count %]">Import [% loo.frameworkcode %] framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)</h3>
                     </div>
                     <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_[% loo.frameworkcode %]" id="form_i_[% loo.frameworkcode %]" method="post" enctype="multipart/form-data" class="form_import">
                         <div class="modal-body">
