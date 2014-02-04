@@ -1,0 +1,69 @@
+#!/usr/bin/perl
+
+# Copyright 2014 ByWater Solutions
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+use Modern::Perl;
+
+use CGI;
+use JSON qw(to_json);
+
+use C4::Circulation;
+use C4::Context;
+use C4::Auth qw(check_cookie_auth);
+
+use Koha::DateUtils qw(output_pref_due dt_from_string);
+
+my $input = new CGI;
+
+my ( $auth_status, $sessionID ) =
+  check_cookie_auth( $input->cookie('CGISESSID'),
+    { circulate => 'circulate_remaining_permissions' } );
+
+if ( $auth_status ne "ok" ) {
+    exit 0;
+}
+
+binmode STDOUT, ":encoding(UTF-8)";
+print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
+
+my $itemnumber     = $input->param('itemnumber');
+my $borrowernumber = $input->param('borrowernumber');
+my $override_limit = $input->param('override_limit');
+my $branchcode     = $input->param('branchcode')
+  || C4::Context->userenv->{'branch'};
+my $date_due;
+if ( $input->param('date_due') ) {
+    $date_due = dt_from_string( $input->param('date_due') );
+    $date_due->set_hour(23);
+    $date_due->set_minute(59);
+}
+
+my $data;
+$data->{itemnumber} = $itemnumber;
+$data->{borrowernumber} = $borrowernumber;
+$data->{branchcode} = $branchcode;
+
+( $data->{renew_okay}, $data->{error} ) =
+  CanBookBeRenewed( $borrowernumber, $itemnumber, $override_limit );
+
+if ( $data->{renew_okay} ) {
+    $date_due = AddRenewal( $borrowernumber, $itemnumber, $branchcode, $date_due );
+    $data->{date_due} = output_pref_due( $date_due );
+}
+
+print to_json($data);

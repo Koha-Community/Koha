@@ -1,57 +1,22 @@
 $(document).ready(function() {
+    $("#CheckAllExports").on("click",function(){
+        $(".export:visible").attr("checked", "checked" );
+        return false;
+    });
+    $("#UncheckAllExports").on("click",function(){
+        $(".export:visible").removeAttr("checked");
+        return false;
+    });
+
     $('#patronlists').tabs();
-    var allcheckboxes = $(".checkboxed");
-    $("#renew_all").on("click",function(){
-        allcheckboxes.checkCheckboxes(":input[name*=items]");
-        allcheckboxes.unCheckCheckboxes(":input[name*=barcodes]");
-    });
-    $("#CheckAllitems").on("click",function(){
-        allcheckboxes.checkCheckboxes(":input[name*=items]");
-        allcheckboxes.unCheckCheckboxes(":input[name*=barcodes]"); return false;
-    });
-    $("#CheckNoitems").on("click",function(){
-        allcheckboxes.unCheckCheckboxes(":input[name*=items]"); return false;
-    });
-    $("#CheckAllreturns").on("click",function(){
-        allcheckboxes.checkCheckboxes(":input[name*=barcodes]");
-        allcheckboxes.unCheckCheckboxes(":input[name*=items]"); return false;
-    });
-    $("#CheckNoreturns" ).on("click",function(){
-        allcheckboxes.unCheckCheckboxes(":input[name*=barcodes]"); return false;
-    });
 
-    $("#CheckAllexports").on("click",function(){
-        allcheckboxes.checkCheckboxes(":input[name*=biblionumbers]");
-        return false;
-    });
-    $("#CheckNoexports").on("click",function(){
-        allcheckboxes.unCheckCheckboxes(":input[name*=biblionumbers]");
-        return false;
-    });
-
-    $("#relrenew_all").on("click",function(){
-        allcheckboxes.checkCheckboxes(":input[name*=items]");
-        allcheckboxes.unCheckCheckboxes(":input[name*=barcodes]");
-    });
-    $("#relCheckAllitems").on("click",function(){
-        allcheckboxes.checkCheckboxes(":input[name*=items]");
-        allcheckboxes.unCheckCheckboxes(":input[name*=barcodes]"); return false;
-    });
-    $("#relCheckNoitems").on("click",function(){
-        allcheckboxes.unCheckCheckboxes(":input[name*=items]"); return false;
-    });
-    $("#relCheckAllreturns").on("click",function(){
-        allcheckboxes.checkCheckboxes(":input[name*=barcodes]");
-        allcheckboxes.unCheckCheckboxes(":input[name*=items]"); return false;
-    });
-    $("#relCheckNoreturns").on("click",function(){
-        allcheckboxes.unCheckCheckboxes(":input[name*=barcodes]"); return false;
-    });
     $("#messages ul").after("<a href=\"#\" id=\"addmessage\">"+MSG_ADD_MESSAGE+"</a>");
+
     $("#borrower_messages .cancel").on("click",function(){
         $("#add_message_form").hide();
         $("#addmessage").show();
     });
+
     $("#addmessage").on("click",function(){
         $(this).hide();
         $("#add_message_form").show();
@@ -76,14 +41,7 @@ $(document).ready(function() {
         export_checkouts(export_format);
         return false;
     });
-    // Clicking the table cell checks the checkbox inside it
-    $("td").on("click",function(e){
-        if(e.target.tagName.toLowerCase() == 'td'){
-          $(this).find("input:checkbox:visible").each( function() {
-            $(this).click();
-          });
-        }
-    });
+
 });
 
 function export_checkouts(format) {
@@ -107,13 +65,9 @@ function export_checkouts(format) {
     } else if (format == 'iso2709') {
         $("#dont_export_item").val(1);
     }
-    document.issues.action="/cgi-bin/koha/tools/export.pl";
+
     document.getElementById("export_format").value = format;
     document.issues.submit();
-
-    /* Reset form action to its initial value */
-    document.issues.action="/cgi-bin/koha/reserve/renewscript.pl";
-
 }
 
 function validate1(date) {
@@ -124,10 +78,3 @@ function validate1(date) {
         return false;
      }
 }
-
-// prevent adjacent checkboxes from being checked simultaneously
-function radioCheckBox(box){
-    box.parents("td").siblings().find("input:checkbox.radio").each(function(){
-        $(this).removeAttr("checked");
-    });
- }

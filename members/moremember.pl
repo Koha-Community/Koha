@@ -2,6 +2,7 @@
 
 # Copyright 2000-2002 Katipo Communications
 # Copyright 2010 BibLibre
+# Copyright 2014 ByWater Solutions
 #
 # This file is part of Koha.
 #
@@ -56,6 +57,7 @@ use Koha::Borrower::Debarments qw(GetDebarments IsDebarred);
 #use Data::Dumper;
 use DateTime;
 use Koha::DateUtils;
+use Koha::Database;
 
 use vars qw($debug);
 
@@ -68,14 +70,6 @@ my $dbh = C4::Context->dbh;
 my $input = CGI->new;
 $debug or $debug = $input->param('debug') || 0;
 my $print = $input->param('print');
-my $override_limit = $input->param("override_limit") || 0;
-my @failedrenews = $input->param('failedrenew');
-my @failedreturns = $input->param('failedreturn');
-my $error = $input->param('error');
-my %renew_failed;
-for my $renew (@failedrenews) { $renew_failed{$renew} = 1; }
-my %return_failed;
-for my $failedret (@failedreturns) { $return_failed{$failedret} = 1; }
 
 my $template_name;
 my $quickslip = 0;
@@ -115,8 +109,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 my $borrowernumber = $input->param('borrowernumber');
 
-#start the page and read in includes
-my $data           = GetMember( 'borrowernumber' => $borrowernumber );
+my ( $od, $issue, $fines ) = GetMemberIssuesAndFines($borrowernumber);
+$template->param( issuecount => $issue );
+
+my $data = GetMember( 'borrowernumber' => $borrowernumber );
 
 if ( not defined $data ) {
     $template->param (unknowuser => 1);
@@ -125,8 +121,6 @@ if ( not defined $data ) {
 }
 
 my $category_type = $data->{'category_type'};
-
-### $category_type
 
 $debug and printf STDERR "dates (enrolled,expiry,birthdate) raw: (%s, %s, %s)\n", map {$data->{$_}} qw(dateenrolled dateexpiry dateofbirth);
 foreach (qw(dateenrolled dateexpiry dateofbirth)) {
@@ -251,14 +245,11 @@ if ( C4::Context->preference('OPACPrivacy') ) {
     $template->param( "privacy".$data->{'privacy'} => 1);
 }
 
-# current issues
-#
-my @borrowernumbers = GetMemberRelatives($borrowernumber);
-my $issue       = GetPendingIssues($borrowernumber);
-my $relissue    = [];
-if ( @borrowernumbers ) {
-    $relissue    = GetPendingIssues(@borrowernumbers);
-}
+my @relatives = GetMemberRelatives($borrowernumber);
+my $relatives_issues_count =
+  Koha::Database->new()->schema()->resultset('Issue')
+  ->count( { borrowernumber => \@relatives } );
+
 my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
 my $today       = DateTime->now( time_zone => C4::Context->tz);
 $today->truncate(to => 'day');
@@ -266,85 +257,13 @@ my @borrowers_with_issues;
 my $overdues_exist = 0;
 my $totalprice = 0;
 
-my @issuedata = build_issue_data($issue);
-my @relissuedata = build_issue_data($relissue);
-
-
 ### ###############################################################################
 # BUILD HTML
 # show all reserves of this borrower, and the position of the reservation ....
 if ($borrowernumber) {
-
-    # new op dev
-    # now we show the status of the borrower's reservations
-    my @borrowerreserv = GetReservesFromBorrowernumber($borrowernumber );
-    my @reservloop;
-    foreach my $num_res (@borrowerreserv) {
-        my %getreserv;
-        my $getiteminfo  = GetBiblioFromItemNumber( $num_res->{'itemnumber'} );
-        my $itemtypeinfo = getitemtypeinfo( $getiteminfo->{'itemtype'} );
-        my ( $transfertwhen, $transfertfrom, $transfertto ) =
-            GetTransfers( $num_res->{'itemnumber'} );
-
-        foreach (qw(waiting transfered nottransfered)) {
-            $getreserv{$_} = 0;
-        }
-        $getreserv{reservedate}  = $num_res->{'reservedate'};
-        foreach (qw(biblionumber title author itemcallnumber )) {
-            $getreserv{$_} = $getiteminfo->{$_};
-        }
-        $getreserv{barcodereserv}  = $getiteminfo->{'barcode'};
-        $getreserv{itemtype}  = $itemtypeinfo->{'description'};
-
-        # check if we have a waitin status for reservations
-        if ( defined $num_res->{found} and $num_res->{'found'} eq 'W' ) {
-            $getreserv{color}   = 'reserved';
-            $getreserv{waiting} = 1;
-        }
-
-        # check transfers with the itemnumber foud in th reservation loop
-        if ($transfertwhen) {
-            $getreserv{color}      = 'transfered';
-            $getreserv{transfered} = 1;
-            $getreserv{datesent}   = C4::Dates->new($transfertwhen, 'iso')->output('syspref') or die "Cannot get new($transfertwhen, 'iso') from C4::Dates";
-            $getreserv{frombranch} = GetBranchName($transfertfrom);
-        }
-
-        if ( ( $getiteminfo->{'holdingbranch'} ne $num_res->{'branchcode'} )
-            and not $transfertwhen )
-        {
-            $getreserv{nottransfered}   = 1;
-            $getreserv{nottransferedby} =
-                GetBranchName( $getiteminfo->{'holdingbranch'} );
-        }
-        $getreserv{title}          = $getiteminfo->{'title'};
-        $getreserv{subtitle}       = GetRecordValue('subtitle', GetMarcBiblio($getiteminfo->{biblionumber}), GetFrameworkCode($getiteminfo->{biblionumber}));
-
-# 		if we don't have a reserv on item, we put the biblio infos and the waiting position
-        if ( $getiteminfo->{'title'} eq '' ) {
-            my $getbibinfo = GetBiblioData( $num_res->{'biblionumber'} );
-            my $getbibtype = getitemtypeinfo( $getbibinfo->{'itemtype'} );
-            $getreserv{color}           = 'inwait';
-            $getreserv{title}           = $getbibinfo->{'title'};
-            $getreserv{subtitle}        = GetRecordValue('subtitle', GetMarcBiblio($num_res->{biblionumber}), GetFrameworkCode($num_res->{biblionumber}));
-            $getreserv{nottransfered}   = 0;
-            $getreserv{itemtype}        = $getbibtype->{'description'};
-            $getreserv{author}          = $getbibinfo->{'author'};
-            $getreserv{biblionumber}  = $num_res->{'biblionumber'};	
-        }
-        $getreserv{waitingposition} = $num_res->{'priority'};
-        $getreserv{suspend} = $num_res->{'suspend'};
-        $getreserv{suspend_until} = $num_res->{'suspend_until'};
-        $getreserv{expirationdate} = $num_res->{'expirationdate'};
-        $getreserv{reserve_id} = $num_res->{'reserve_id'};
-
-        push( @reservloop, \%getreserv );
-    }
-
-    # return result to the template
-    $template->param( reservloop => \@reservloop,
-        countreserv => scalar @reservloop,
-	 );
+    $template->param(
+        holds_count => Koha::Database->new()->schema()->resultset('Reserve')
+          ->count( { borrowernumber => $borrowernumber } ) );
 }
 
 # current alert subscriptions
@@ -435,13 +354,9 @@ $template->param(
     totalprice      => sprintf("%.2f", $totalprice),
     totaldue        => sprintf("%.2f", $total),
     totaldue_raw    => $total,
-    issueloop       => @issuedata,
-    relissueloop    => @relissuedata,
     overdues_exist  => $overdues_exist,
-    error           => $error,
     StaffMember     => ($category_type eq 'S'),
     is_child        => ($category_type eq 'C'),
-#   reserveloop     => \@reservedata,
     samebranch     => $samebranch,
     quickslip		  => $quickslip,
     activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
@@ -450,100 +365,8 @@ $template->param(
     RoutingSerials => C4::Context->preference('RoutingSerials'),
     debarments => GetDebarments({ borrowernumber => $borrowernumber }),
     PatronsPerPage => C4::Context->preference("PatronsPerPage") || 20,
+    relatives_issues_count => $relatives_issues_count,
+    relatives_borrowernumbers => \@relatives,
 );
-$template->param( $error => 1 ) if $error;
 
 output_html_with_http_headers $input, $cookie, $template->output;
-
-sub build_issue_data {
-    my $issues = shift;
-
-    my $localissue;
-
-    foreach my $issue ( @{$issues} ) {
-
-        # Getting borrower details
-        my $memberdetails = GetMemberDetails( $issue->{borrowernumber} );
-        $issue->{borrowername} =
-          $memberdetails->{firstname} . ' ' . $memberdetails->{surname};
-        $issue->{cardnumber} = $memberdetails->{cardnumber};
-        my $issuedate;
-        if ($issue->{issuedate} ) {
-           $issuedate = $issue->{issuedate}->clone();
-        }
-        $issue->{subtitle} = GetRecordValue('subtitle', GetMarcBiblio($issue->{biblionumber}), GetFrameworkCode($issue->{biblionumber}));
-        $issue->{issuingbranchname} = GetBranchName($issue->{branchcode});
-        my %row          = %{$issue};
-        $totalprice += $issue->{replacementprice};
-
-        # item lost, damaged loops
-        if ( $row{'itemlost'} ) {
-            my $fw       = GetFrameworkCode( $issue->{biblionumber} );
-            my $category = GetAuthValCode( 'items.itemlost', $fw );
-            my $lostdbh  = C4::Context->dbh;
-            my $sth      = $lostdbh->prepare(
-"select lib from authorised_values where category=? and authorised_value =? "
-            );
-            $sth->execute( $category, $row{'itemlost'} );
-            my $loststat = $sth->fetchrow;
-            if ($loststat) {
-                $row{'itemlost'} = $loststat;
-            }
-        }
-        if ( $row{'damaged'} ) {
-            my $fw         = GetFrameworkCode( $issue->{biblionumber} );
-            my $category   = GetAuthValCode( 'items.damaged', $fw );
-            my $damageddbh = C4::Context->dbh;
-            my $sth        = $damageddbh->prepare(
-"select lib from authorised_values where category=? and authorised_value =? "
-            );
-            $sth->execute( $category, $row{'damaged'} );
-            my $damagedstat = $sth->fetchrow;
-            if ($damagedstat) {
-                $row{'itemdamaged'} = $damagedstat;
-            }
-        }
-
-        # end lost, damaged
-        if ( $issue->{overdue} ) {
-            $overdues_exist = 1;
-            $row{red} = 1;
-        }
-        if ($issuedate) {
-            $issuedate->truncate( to => 'day' );
-            if ( DateTime->compare( $issuedate, $today ) == 0 ) {
-                $row{today} = 1;
-            }
-        }
-
-        #find the charge for an item
-        my ( $charge, $itemtype ) =
-          GetIssuingCharges( $issue->{itemnumber}, $borrowernumber );
-
-        my $itemtypeinfo = getitemtypeinfo($itemtype);
-        $row{'itemtype_description'} = $itemtypeinfo->{description};
-        $row{'itemtype_image'}       = $itemtypeinfo->{imageurl};
-
-        $row{'charge'} = sprintf( "%.2f", $charge );
-
-        my ( $renewokay, $renewerror ) =
-          CanBookBeRenewed( $borrowernumber, $issue->{itemnumber},
-            $override_limit );
-        $row{'norenew'} = !$renewokay;
-        $row{'can_confirm'} = ( !$renewokay && $renewerror ne 'on_reserve' );
-        $row{"norenew_reason_$renewerror"} = 1 if $renewerror;
-        $row{renew_failed}  = $renew_failed{ $issue->{itemnumber} };
-        $row{return_failed} = $return_failed{ $issue->{barcode} };
-        ($row{'renewcount'},$row{'renewsallowed'},$row{'renewsleft'}) = C4::Circulation::GetRenewCount($issue->{'borrowernumber'},$issue->{'itemnumber'}); #Add renewal count to item data display
-
-        $row{'soonestrenewdate'} = output_pref(
-            C4::Circulation::GetSoonestRenewDate(
-                $issue->{borrowernumber},
-                $issue->{itemnumber}
-            )
-        );
-
-        push( @{$localissue}, \%row );
-    }
-    return $localissue;
-}
