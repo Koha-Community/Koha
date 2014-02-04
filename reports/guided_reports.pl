@@ -17,10 +17,12 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-
+use Modern::Perl;
 use CGI qw/-utf8/;
-use Text::CSV;
+use Text::CSV::Encoded;
 use URI::Escape;
+use File::Temp;
+use File::Basename qw( dirname );
 use C4::Reports::Guided;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
@@ -764,37 +766,84 @@ elsif ($phase eq 'Run this report'){
 }
 
 elsif ($phase eq 'Export'){
-    binmode STDOUT, ':encoding(UTF-8)';
 
 	# export results to tab separated text or CSV
 	my $sql    = $input->param('sql');  # FIXME: use sql from saved report ID#, not new user-supplied SQL!
     my $format = $input->param('format');
 	my ($sth, $q_errors) = execute_query($sql);
     unless ($q_errors and @$q_errors) {
-        print $input->header(       -type => 'application/octet-stream',
-                                    -attachment=>"reportresults.$format"
-                            );
+        my ( $type, $content );
         if ($format eq 'tab') {
-            print join("\t", header_cell_values($sth)), "\n";
+            $type = 'application/octet-stream';
+            $content .= join("\t", header_cell_values($sth)) . "\n";
             while (my $row = $sth->fetchrow_arrayref()) {
-                print join("\t", @$row), "\n";
+                $content .= join("\t", @$row) . "\n";
             }
         } else {
-            my $csv = Text::CSV->new({binary => 1});
-            $csv or die "Text::CSV->new({binary => 1}) FAILED: " . Text::CSV->error_diag();
-            if ($csv->combine(header_cell_values($sth))) {
-                print $csv->string(), "\n";
-            } else {
-                push @$q_errors, { combine => 'HEADER ROW: ' . $csv->error_diag() } ;
-            }
-            while (my $row = $sth->fetchrow_arrayref()) {
-                if ($csv->combine(@$row)) {
-                    print $csv->string(), "\n"; 
+            my $delimiter = C4::Context->preference('delimiter') || ',';
+            if ( $format eq 'csv' ) {
+                $type = 'application/csv';
+                my $csv = Text::CSV::Encoded->new({ encoding_out => 'utf8', sep_char => $delimiter});
+                $csv or die "Text::CSV::Encoded->new({binary => 1}) FAILED: " . Text::CSV::Encoded->error_diag();
+                if ($csv->combine(header_cell_values($sth))) {
+                    $content .= $csv->string(). "\n";
                 } else {
-                    push @$q_errors, { combine => $csv->error_diag() } ;
+                    push @$q_errors, { combine => 'HEADER ROW: ' . $csv->error_diag() } ;
+                }
+                while (my $row = $sth->fetchrow_arrayref()) {
+                    if ($csv->combine(@$row)) {
+                        $content .= $csv->string() . "\n";
+                    } else {
+                        push @$q_errors, { combine => $csv->error_diag() } ;
+                    }
                 }
             }
+            elsif ( $format eq 'ods' ) {
+                $type = 'application/vnd.oasis.opendocument.spreadsheet';
+                my $ods_fh = File::Temp->new( UNLINK => 0 );
+                my $ods_filepath = $ods_fh->filename;
+
+                use OpenOffice::OODoc;
+                my $tmpdir = dirname $ods_filepath;
+                odfWorkingDirectory( $tmpdir );
+                my $container = odfContainer( $ods_filepath, create => 'spreadsheet' );
+                my $doc = odfDocument (
+                    container => $container,
+                    part      => 'content'
+                );
+                my $table = $doc->getTable(0);
+                my @headers = header_cell_values( $sth );
+                my $rows = $sth->fetchall_arrayref();
+                my ( $nb_rows, $nb_cols ) = ( scalar(@$rows), scalar(@{$rows->[0]}) );
+                $doc->expandTable( $table, $nb_rows, $nb_cols );
+
+                my $row = $doc->getRow( $table, 0 );
+                my $j = 0;
+                for my $header ( @headers ) {
+                    $doc->cellValue( $row, $j, $header );
+                    $j++;
+                }
+                for ( my $i = 1; $i < $nb_rows +1 ; $i++ ) {
+                    $row = $doc->getRow( $table, $i );
+                    for ( my $j = 0 ; $j < $nb_cols ; $j++ ) {
+                        # FIXME Bug 11944
+                        my $value = Encode::encode( 'UTF8', $rows->[$i - 1][$j] );
+                        $doc->cellValue( $row, $j, $value );
+                    }
+                }
+                $doc->save();
+                binmode(STDOUT);
+                open $ods_fh, '<', $ods_filepath;
+                $content .= $_ while <$ods_fh>;
+                unlink $ods_filepath;
+            }
         }
+        print $input->header(
+            -type => $type,
+            -attachment=>"reportresults.$format"
+        );
+        print $content;
+
         foreach my $err (@$q_errors, @errors) {
             print "# ERROR: " . (map {$_ . ": " . $err->{$_}} keys %$err) . "\n";
         }   # here we print all the non-fatal errors at the end.  Not super smooth, but better than nothing.
@@ -852,6 +901,7 @@ sub header_cell_values {
     my $sth = shift or return ();
     my @cols;
     foreach my $c (@{$sth->{NAME}}) {
+        # TODO in Bug 11944
         #FIXME apparently DBI still needs a utf8 fix for this?
         utf8::decode($c);
         push @cols, $c;
