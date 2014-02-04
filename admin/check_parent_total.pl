@@ -61,19 +61,12 @@ my ($sub_unalloc , $period_sum, $budget_period_unalloc);
 
 if ($parent) {
     my $query = "  SELECT SUM(budget_amount) as sum FROM aqbudgets where budget_parent_id = ? ";
-    my $sth   = $dbh->prepare($query);
     my @sql_params;
-    push @sql_params, $parent->{'budget_id'} ;
-    if ($budget_id){
-        $query.=qq| and budget_id <> ? |;
-        push @sql_params,$budget_id;
-    }
-    $sth->execute( @sql_params );
+    my $sth   = $dbh->prepare($query);
+    $sth->execute( $parent->{'budget_id'} );
     my $sum = $sth->fetchrow_hashref;
     $sth->finish;
-    
     $sub_unalloc = $parent->{'budget_amount'} - $sum->{sum};
-        
 #    TRICKY.. , IF THE PARENT IS THE CURRENT PARENT  - THEN SUBSTRACT CURRENT BUDGET FROM TOTAL
     $sub_unalloc           += $budget->{'budget_amount'} if ( $budget->{'budget_parent_id'} == $parent_id ) ;
 }
