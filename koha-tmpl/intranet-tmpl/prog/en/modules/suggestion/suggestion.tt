@@ -72,7 +72,6 @@ $(document).ready(function() {
         e.preventDefault();
 	});
 	$("#other_reason[% suggestion.suggestiontype %]").hide();
-    $("input[name*=other_reason[% suggestion.suggestiontype %]]").focus(function(){ $(this).val(""); });
     $("#reason[% suggestion.suggestiontype %]").change(function(){
 	    if($(this).val() == "other"){
 			$(this).hide();
@@ -576,7 +575,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
             </select>
 
             <span id="other_reason[% suggestion.suggestiontype %]">
-                <input type="text" size="31" id="select-other_reason[% suggestion.suggestiontype %]" name="other_reason[% suggestion.suggestiontype %]" value="please note your reason here..." />
+                <input type="text" size="31" id="select-other_reason[% suggestion.suggestiontype %]" name="other_reason[% suggestion.suggestiontype %]" placeholder="please note your reason here..." />
                 <a href="#back[% suggestion.suggestiontype %]">Cancel</a>
             </span>
 
