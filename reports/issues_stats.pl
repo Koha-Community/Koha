@@ -313,23 +313,23 @@ sub calculate {
     if($line_attribute_type) {
         $strsth = "SELECT attribute FROM borrower_attributes WHERE code = '$line_attribute_type' ";
     } else {
-        $strsth = "SELECT distinctrow $linefield FROM statistics, ";
+        $strsth = "SELECT distinctrow $linefield FROM statistics ";
 
         # get stats on items if ccode or location, otherwise borrowers.
         $strsth .=
           ( $linesource eq 'items' )
-          ? " items     WHERE (statistics.itemnumber=items.itemnumber) "
-          : " borrowers WHERE (statistics.borrowernumber=borrowers.borrowernumber) ";
+          ? " LEFT JOIN items ON (statistics.itemnumber = items.itemnumber) "
+          : " LEFT JOIN borrowers ON (statistics.borrowernumber = borrowers.borrowernumber) ";
     }
-    $strsth .= " AND $line is not null ";
+    $strsth .= " WHERE $line is not null ";
 
     if ( $line =~ /datetime/ ) {
         if ( $linefilter[1] and ( $linefilter[0] ) ) {
             $strsth .= " AND $line between ? AND ? ";
         } elsif ( $linefilter[1] ) {
-            $strsth .= " AND $line < ? ";
+            $strsth .= " AND $line <= ? ";
         } elsif ( $linefilter[0] ) {
-            $strsth .= " AND $line > ? ";
+            $strsth .= " AND $line >= ? ";
         }
         $strsth .= " AND type ='" . $type . "' "                    if $type;
         $strsth .= " AND   dayname(datetime) ='" . $daysel . "' "   if $daysel;
@@ -342,8 +342,10 @@ sub calculate {
     $debug and warn $strsth;
     push @loopfilter, { crit => 'SQL =', sql => 1, filter => $strsth };
     my $sth = $dbh->prepare($strsth);
-    if ( (@linefilter) and ( $linefilter[1] ) ) {
-        $sth->execute( $linefilter[0], $linefilter[1] );
+    if ( (@linefilter) and ($linefilter[0]) and ($linefilter[1]) ) {
+        $sth->execute( $linefilter[0], $linefilter[1] . " 23:59:59" );
+    } elsif ( $linefilter[1] ) {
+        $sth->execute( $linefilter[1] . " 23:59:59" );
     } elsif ( $linefilter[0] ) {
         $sth->execute( $linefilter[0] );
     } else {
@@ -399,23 +401,23 @@ sub calculate {
     if($column_attribute_type) {
         $strsth2 = "SELECT attribute FROM borrower_attributes WHERE code = '$column_attribute_type' ";
     } else {
-        $strsth2 = "SELECT distinctrow $colfield FROM statistics, ";
+        $strsth2 = "SELECT distinctrow $colfield FROM statistics ";
 
         # get stats on items if ccode or location, otherwise borrowers.
         $strsth2 .=
           ( $colsource eq 'items' )
-          ? "items     WHERE (statistics.itemnumber=items.itemnumber) "
-          : "borrowers WHERE (statistics.borrowernumber=borrowers.borrowernumber) ";
+          ? "LEFT JOIN items ON (statistics.itemnumber = items.itemnumber) "
+          : "LEFT JOIN borrowers ON (statistics.borrowernumber = borrowers.borrowernumber) ";
     }
-    $strsth2 .= " AND $column IS NOT NULL ";
+    $strsth2 .= " WHERE $column IS NOT NULL ";
 
     if ( $column =~ /datetime/ ) {
         if ( ( $colfilter[1] ) and ( $colfilter[0] ) ) {
             $strsth2 .= " AND $column BETWEEN ? AND ? ";
         } elsif ( $colfilter[1] ) {
-            $strsth2 .= " AND $column < ? ";
+            $strsth2 .= " AND $column <= ? ";
         } elsif ( $colfilter[0] ) {
-            $strsth2 .= " AND $column > ? ";
+            $strsth2 .= " AND $column >= ? ";
         }
         $strsth2 .= " AND                type ='". $type     ."' " if $type;
         $strsth2 .= " AND   dayname(datetime) ='". $daysel   ."' " if $daysel;
@@ -429,8 +431,10 @@ sub calculate {
     $debug and warn $strsth2;
     push @loopfilter, { crit => 'SQL =', sql => 1, filter => $strsth2 };
     my $sth2 = $dbh->prepare($strsth2);
-    if ( (@colfilter) and ( $colfilter[1] ) ) {
-        $sth2->execute( $colfilter[0], $colfilter[1] );
+    if ( (@colfilter) and ($colfilter[0]) and ($colfilter[1]) ) {
+        $sth2->execute( $colfilter[0], $colfilter[1] . " 23:59:59" );
+    } elsif ( $colfilter[1] ) {
+        $sth2->execute( $colfilter[1] . " 23:59:59" );
     } elsif ( $colfilter[0] ) {
         $sth2->execute( $colfilter[0] );
     } else {
@@ -594,12 +598,11 @@ sub calculate {
             my $value = table_get(\%table, $row->{rowtitle}, $col->{coltitle});
             push @loopcell, { value => $value };
         }
-        my $rowtitle = ( $row->{rowtitle} eq "NULL" ) ? "zzEMPTY" : $row->{rowtitle};
         push @looprow,
           { 'rowtitle_display' => $row->{rowtitle_display},
-            'rowtitle'         => $rowtitle,
+            'rowtitle'         => $row->{rowtitle},
             'loopcell'         => \@loopcell,
-            'totalrow'         => table_get(\%table, $rowtitle, 'totalrow'),
+            'totalrow'         => table_get(\%table, $row->{rowtitle}, 'totalrow'),
           };
     }
     for my $col (@loopcol) {
@@ -626,11 +629,14 @@ sub calculate {
     return [ ( \%globalline ) ];
 }
 
-sub null_to_zzempty ($) {
-	my $string = shift;
-	defined($string)    or  return 'zzEMPTY';
-	($string eq "NULL") and return 'zzEMPTY';
-	return $string;		# else return the valid value
+sub null_to_zzempty {
+    my $string = shift;
+
+    if (!defined($string) or $string eq '' or uc($string) eq 'NULL') {
+        return 'zzEMPTY';
+    }
+
+    return $string;
 }
 
 sub table_set {

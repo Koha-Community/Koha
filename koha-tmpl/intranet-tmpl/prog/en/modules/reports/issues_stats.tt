@@ -69,7 +69,7 @@
                     <tr>
                         <td>[% loopro.rowtitle_display or "UNKNOWN VALUE" |html %]</td>
                     [% FOREACH loopcel IN loopro.loopcell %]
-						<td>[% loopcel.value %]</td>
+						<td>[% loopcel.value || 0 %]</td>
                     [% END %]
 						<td>[% loopro.totalrow %]</td>
                     </tr>
