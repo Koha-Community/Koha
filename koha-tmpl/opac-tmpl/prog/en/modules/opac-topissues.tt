@@ -72,11 +72,15 @@ function Dopop(link) {
                 <tbody>[% FOREACH results_loo IN results_loop %]
                     <tr>
                         <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% results_loo.biblionumber %]">[% results_loo.title |html %]</a><p>[% results_loo.author %]
-                        [% IF ( results_loo.publicationyear ) %] - [% results_loo.publicationyear %][% END %]
                         [% IF ( results_loo.publishercode ) %]- [% results_loo.publishercode %][% END %] [% IF ( results_loo.seriestitle ) %]([% results_loo.seriestitle %])[% END %]
-                        [% IF ( results_loo.place ) %] ; [% results_loo.place %][% END %]
+                        [% IF ( results_loo.place ) %][% results_loo.place %][% END %]
+                        [% IF ( results_loo.publicationyear ) %]
+                            [% results_loo.publicationyear %]
+                        [% ELSIF ( results_loo.copyrightdate ) %]
+                            [% results_loo.copyrightdate %]
+                        [% END %]
                         [% IF ( results_loo.pages ) %] - [% results_loo.pages %][% END %]
-                        [% IF ( results_loo.size ) %] ; [% results_loo.size %][% END %]</p>
+                        [% IF ( results_loo.size ) %][% results_loo.size %][% END %]</p>
                         </td>
                         <td>[% results_loo.description %]</td>
                         <td>[% results_loo.tot %]</td>

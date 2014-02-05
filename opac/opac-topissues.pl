@@ -81,8 +81,8 @@ if($advanced_search_types eq 'ccode'){
     $whereclause .= ' AND authorised_values.authorised_value='.$dbh->quote($itemtype) if $itemtype;
     $query = "SELECT datecreated, biblio.biblionumber, title,
                     author, sum( items.issues ) AS tot, biblioitems.itemtype,
-                    biblioitems.publishercode,biblioitems.publicationyear,
-                    authorised_values.lib as description
+                    biblioitems.publishercode, biblioitems.place, biblioitems.publicationyear, biblio.copyrightdate,
+                    authorised_values.lib as description, biblioitems.pages, biblioitems.size
                     FROM biblio
                     LEFT JOIN items USING (biblionumber)
                     LEFT JOIN biblioitems USING (biblionumber)
@@ -107,8 +107,8 @@ if($advanced_search_types eq 'ccode'){
     }
     $query = "SELECT datecreated, biblio.biblionumber, title,
                     author, sum( items.issues ) AS tot, biblioitems.itemtype,
-                    biblioitems.publishercode,biblioitems.publicationyear,
-                    itemtypes.description
+                    biblioitems.publishercode, biblioitems.place, biblioitems.publicationyear, biblio.copyrightdate,
+                    itemtypes.description, biblioitems.pages, biblioitems.size
                     FROM biblio
                     LEFT JOIN items USING (biblionumber)
                     LEFT JOIN biblioitems USING (biblionumber)
