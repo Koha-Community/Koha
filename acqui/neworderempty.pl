@@ -354,7 +354,7 @@ $template->param(
 
 # get option values for gist syspref
 my @gst_values = map {
-    option => $_
+    option => $_ + 0.0
 }, split( '\|', C4::Context->preference("gist") );
 
 $template->param(
