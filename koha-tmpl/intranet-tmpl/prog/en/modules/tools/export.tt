@@ -6,6 +6,17 @@
 //<![CDATA[
 $(document).ready(function() {
     $('#exporttype').tabs();
+
+    $("li.csv_profiles").hide();
+
+    $("#bibs select[name='output_format']").on('change', function(){
+        var format = $(this).val();
+        if ( format == 'csv' ) {
+            $("#bibs li.csv_profiles").show();
+        } else {
+            $("#bibs li.csv_profiles").hide();
+        }
+    });
 });
 //]]>
 </script>
@@ -123,8 +134,16 @@ $(document).ready(function() {
             <select id="output_format" name="output_format">
                 <option value="iso2709">marc</option>
                 <option value="xml">xml</option>
+                <option value="csv">csv</option>
             </select>
-            
+        </li>
+        <li class="csv_profiles">
+            <label for="bibs_csv_profile">CSV profile: </label>
+            <select id="bibs_csv_profile" name="csv_profile">
+                [% FOR csv_profile IN csv_profiles %]
+                    <option value="[% csv_profile.export_format_id %]">[% csv_profile.profile %]</option>
+                [% END %]
+            </select>
         </li>
         <li>
         <label for="filename">File name:</label><input id="filename" type="text" name="filename" value="koha.mrc" />

@@ -48,6 +48,10 @@ my $output_format = $query->param("format") || $query->param("output_format") ||
 # Checks if the script is called from commandline
 my $commandline = not defined $ENV{GATEWAY_INTERFACE};
 
+
+# @biblionumbers is only use for csv export from circulation.pl
+my @biblionumbers = uniq $query->param("biblionumbers");
+
 if ( $commandline ) {
 
     # Getting parameters
@@ -149,10 +153,21 @@ my %branchmap = map { $_ => 1 } @branch; # for quick lookups
 my $backupdir = C4::Context->config('backupdir');
 
 if ( $op eq "export" ) {
-    if ( $output_format eq "iso2709" or $output_format eq "xml" ) {
+    if (
+        $output_format eq "iso2709"
+            or $output_format eq "xml"
+            or (
+                $output_format eq 'csv'
+                    and not @biblionumbers
+            )
+    ) {
         my $charset  = 'utf-8';
         my $mimetype = 'application/octet-stream';
-        binmode STDOUT, ':encoding(UTF-8)';
+
+        binmode STDOUT, ':encoding(UTF-8)'
+            if $filename =~ m/\.gz$/
+                or $filename =~ m/\.bz2$/;
+
         if ( $filename =~ m/\.gz$/ ) {
             $mimetype = 'application/x-gzip';
             $charset  = '';
@@ -166,7 +181,7 @@ if ( $op eq "export" ) {
         print $query->header(
             -type       => $mimetype,
             -charset    => $charset,
-            -attachment => $filename
+            -attachment => $filename,
         ) unless ($commandline);
 
         $record_type = $query->param("record_type") unless ($commandline);
@@ -415,7 +430,7 @@ if ( $op eq "export" ) {
                     print MARC::File::XML::record($record);
                     print "\n";
                 }
-                else {
+                elsif ( $output_format eq 'iso2709' ) {
                     my $errorcount_on_decode = eval { scalar(MARC::File::USMARC->decode( $record->as_usmarc )->warnings()) };
                     if ($errorcount_on_decode or $@){
                         warn $@ if $@;
@@ -430,15 +445,25 @@ if ( $op eq "export" ) {
             print MARC::File::XML::footer();
             print "\n";
         }
+        if ( $output_format eq 'csv' ) {
+            my $csv_profile_id = $query->param('csv_profile')
+                || GetCsvProfileId( C4::Context->preference('ExportWithCsvProfile') );
+            my $output =
+              marc2csv( \@recordids,
+                $csv_profile_id );
+
+            print $output;
+        }
 
         exit;
     }
     elsif ( $output_format eq "csv" ) {
         my @biblionumbers = uniq $query->param("biblionumbers");
         my @itemnumbers   = $query->param("itemnumbers");
+        my $csv_profile_id = $query->param('csv_profile') || GetCsvProfileId( C4::Context->preference('ExportWithCsvProfile') );
         my $output =
           marc2csv( \@biblionumbers,
-            GetCsvProfileId( C4::Context->preference('ExportWithCsvProfile') ),
+            $csv_profile_id,
             \@itemnumbers, );
         print $query->header(
             -type                        => 'application/octet-stream',
@@ -512,6 +537,7 @@ else {
         itemtypeloop             => \@itemtypesloop,
         authtypeloop             => \@authtypesloop,
         export_remove_fields     => C4::Context->preference("ExportRemoveFields"),
+        csv_profiles             => C4::Csv::GetCsvProfiles('marc'),
     );
 
     output_html_with_http_headers $query, $cookie, $template->output;
