@@ -769,7 +769,7 @@ sub GetSerials {
     my @serials;
     my $query = "SELECT serialid,serialseq, status, publisheddate, planneddate,notes, routingnotes
                         FROM   serial
-                        WHERE  subscriptionid = ? AND status NOT IN (2,4,5) 
+                        WHERE  subscriptionid = ? AND status NOT IN (2, 4, 41, 42, 43, 44, 5)
                         ORDER BY IF(publisheddate<>'0000-00-00',publisheddate,planneddate) DESC";
     my $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
@@ -790,7 +790,7 @@ sub GetSerials {
     $query = "SELECT   serialid,serialseq, status, planneddate, publisheddate,notes, routingnotes
        FROM     serial
        WHERE    subscriptionid = ?
-       AND      (status in (2,4,5))
+       AND      (status in (2, 4, 41, 42, 43, 44, 5))
        ORDER BY IF(publisheddate<>'0000-00-00',publisheddate,planneddate) DESC
       ";
     $sth = $dbh->prepare($query);
@@ -1161,13 +1161,13 @@ sub _update_missinglist {
     my $subscriptionid = shift;
 
     my $dbh = C4::Context->dbh;
-    my @missingserials = GetSerials2($subscriptionid, "4,5");
+    my @missingserials = GetSerials2($subscriptionid, "4,41,42,43,44,5");
     my $missinglist;
-    foreach (@missingserials) {
-        if($_->{'status'} == 4) {
-            $missinglist .= $_->{'serialseq'} . "; ";
-        } elsif($_->{'status'} == 5) {
-            $missinglist .= "not issued " . $_->{'serialseq'} . "; ";
+    foreach my $missingserial (@missingserials) {
+        if ( grep { $_ == $missingserial->{status} } qw( 4 41 42 43 44 ) ) {
+            $missinglist .= $missingserial->{'serialseq'} . "; ";
+        } elsif($missingserial->{'status'} == 5) {
+            $missinglist .= "not issued " . $missingserial->{'serialseq'} . "; ";
         }
     }
     $missinglist =~ s/; $//;
