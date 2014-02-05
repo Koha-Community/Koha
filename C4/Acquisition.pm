@@ -32,6 +32,7 @@ use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Invoices;
 use Koha::Acquisition::Orders;
+use Koha::AdditionalFieldValue;
 use Koha::Biblios;
 use Koha::Exceptions;
 use Koha::Items;
@@ -1880,7 +1881,7 @@ sub TransferOrder {
     my $order = Koha::Acquisition::Orders->find( $ordernumber ) or return;
     return if $order->datereceived;
 
-    $order = $order->unblessed;
+    my $orderhash = $order->unblessed;
 
     my $basket = GetBasket($basketno);
     return unless $basket;
@@ -1896,11 +1897,12 @@ sub TransferOrder {
     $sth = $dbh->prepare($query);
     $rv = $sth->execute('cancelled', $ordernumber);
 
-    delete $order->{'ordernumber'};
-    delete $order->{parent_ordernumber};
-    $order->{'basketno'} = $basketno;
+    delete $orderhash->{ordernumber};
+    delete $orderhash->{parent_ordernumber};
+    $orderhash->{basketno} = $basketno;
 
-    my $newordernumber = Koha::Acquisition::Order->new($order)->store->ordernumber;
+    my $neworder = Koha::Acquisition::Order->new($orderhash);
+    my $newordernumber = $neworder->store->ordernumber;
 
     $query = q{
         UPDATE aqorders_items
@@ -1916,6 +1918,15 @@ sub TransferOrder {
     };
     $sth = $dbh->prepare($query);
     $sth->execute($ordernumber, $newordernumber);
+
+    # Copy additional fields values
+    foreach my $afv ($order->additional_field_values->as_list) {
+        Koha::AdditionalFieldValue->new({
+            field_id => $afv->field_id,
+            record_id => $newordernumber,
+            value => $afv->value,
+        })->store;
+    }
 
     return $newordernumber;
 }

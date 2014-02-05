@@ -46,8 +46,36 @@ sub set_additional_fields {
 
     $self->additional_field_values->delete;
 
+    my $biblionumber;
+    my $record;
+    my $record_updated;
+    if ($self->_result->has_column('biblionumber')) {
+        $biblionumber = $self->biblionumber;
+    }
+
     foreach my $additional_field (@$additional_fields) {
+        my $field = Koha::AdditionalFields->find($additional_field->{id});
         my $value = $additional_field->{value};
+
+        if ($biblionumber and $field->marcfield) {
+            require Koha::Biblios;
+            $record //= Koha::Biblios->find($biblionumber)->metadata->record;
+
+            my ($tag, $subfield) = split /\$/, $field->marcfield;
+            my $marc_field = $record->field($tag);
+            if ($field->marcfield_mode eq 'get') {
+                $value = $marc_field ? $marc_field->subfield($subfield) : '';
+            } elsif ($field->marcfield_mode eq 'set') {
+                if ($marc_field) {
+                    $marc_field->update($subfield => $value);
+                } else {
+                    $marc_field = MARC::Field->new($tag, '', '', $subfield => $value);
+                    $record->append_fields($marc_field);
+                }
+                $record_updated = 1;
+            }
+        }
+
         if (defined $value) {
             my $field_value = Koha::AdditionalFieldValue->new({
                 field_id => $additional_field->{id},
@@ -55,6 +83,10 @@ sub set_additional_fields {
                 value => $value,
             })->store;
         }
+    }
+
+    if ($record_updated) {
+        C4::Biblio::ModBiblio($record, $biblionumber);
     }
 }
 

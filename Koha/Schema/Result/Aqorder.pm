@@ -892,6 +892,23 @@ __PACKAGE__->belongs_to(
   },
 );
 
+__PACKAGE__->has_many(
+  "additional_field_values",
+  "Koha::Schema::Result::AdditionalFieldValue",
+  sub {
+    my ($args) = @_;
+
+    return {
+        "$args->{foreign_alias}.record_id" => { -ident => "$args->{self_alias}.ordernumber" },
+
+        # TODO Add column additional_field_values.tablename to avoid subquery ?
+        "$args->{foreign_alias}.field_id" =>
+            { -in => \'(SELECT id FROM additional_fields WHERE tablename = "aqorders")' },
+    };
+  },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 sub koha_objects_class {
     'Koha::Acquisition::Orders';
 }

@@ -51,6 +51,7 @@ if ( $op eq 'add' ) {
     my $name = $input->param('name') // q{};
     my $authorised_value_category = $input->param('authorised_value_category') // q{};
     my $marcfield = $input->param('marcfield') // q{};
+    my $marcfield_mode = $input->param('marcfield_mode') // 'get';
     my $searchable = $input->param('searchable') ? 1 : 0;
     if ( $field_id and $name ) {
         my $updated = 0;
@@ -60,6 +61,7 @@ if ( $op eq 'add' ) {
                 name => $name,
                 authorised_value_category => $authorised_value_category,
                 marcfield => $marcfield,
+                marcfield_mode => $marcfield_mode,
                 searchable => $searchable,
             });
             $updated = $af->store ? 1 : 0;
@@ -76,6 +78,7 @@ if ( $op eq 'add' ) {
                 name => $name,
                 authorised_value_category => $authorised_value_category,
                 marcfield => $marcfield,
+                marcfield_mode => $marcfield_mode,
                 searchable => $searchable,
             });
             $inserted = $af->store ? 1 : 0;

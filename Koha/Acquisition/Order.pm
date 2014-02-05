@@ -36,7 +36,7 @@ use Koha::Number::Price;
 use Koha::Patrons;
 use Koha::Subscriptions;
 
-use base qw(Koha::Object);
+use base qw(Koha::Object Koha::Object::Mixin::AdditionalFields);
 
 =head1 NAME
 

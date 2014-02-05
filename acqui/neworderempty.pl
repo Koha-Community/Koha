@@ -100,6 +100,7 @@ use Koha::Patrons;
 use Koha::RecordProcessor;
 use Koha::Subscriptions;
 use Koha::UI::Form::Builder::Biblio;
+use Koha::AdditionalFields;
 
 our $input           = CGI->new;
 my $booksellerid    = $input->param('booksellerid');	# FIXME: else ERROR!
@@ -414,6 +415,29 @@ my $quantity = $input->param('rr_quantity_to_order') ?
       $input->param('rr_quantity_to_order') :
       $data->{'quantity'};
 $quantity //= 0;
+
+# Get additional fields
+my $record;
+my @additional_fields = Koha::AdditionalFields->search({ tablename => 'aqorders' })->as_list;
+my %additional_field_values;
+if ($ordernumber) {
+    my $order = Koha::Acquisition::Orders->find($ordernumber);
+    foreach my $value ($order->additional_field_values->as_list) {
+        $additional_field_values{$value->field_id} = $value->value;
+    }
+} elsif ( $biblionumber ) {
+    foreach my $af (@additional_fields) {
+        if ($af->marcfield) {
+            $record //= Koha::Biblios->find($biblionumber)->metadata->record;
+            my ($field, $subfield) = split /\$/, $af->marcfield;
+            $additional_field_values{$af->id} = $record->subfield($field, $subfield);
+        }
+    }
+}
+$template->param(
+    additional_fields => \@additional_fields,
+    additional_field_values => \%additional_field_values,
+);
 
 # fill template
 $template->param(

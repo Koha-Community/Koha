@@ -139,6 +139,8 @@ use Koha::Acquisition::Baskets;
 use C4::Barcodes;
 use Koha::DateUtils qw( dt_from_string );
 
+use Koha::AdditionalFields;
+
 ### "-------------------- addorder.pl ----------"
 
 # FIXME: This needs to do actual error checking and possibly return user to the same form,
@@ -367,6 +369,19 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
     my $order_users_ids = $input->param('users_ids');
     my @order_users = split( /:/, $order_users_ids );
     ModOrderUsers( $order->ordernumber, @order_users );
+
+    # Retrieve and save additional fields values
+    my @additional_fields = Koha::AdditionalFields->search({ tablename => 'aqorders' })->as_list;
+    my @additional_field_values;
+    foreach my $af (@additional_fields) {
+        my $id = $af->id;
+        my $value = $input->param("additional_field_$id");
+        push @additional_field_values, {
+            id => $id,
+            value => $value,
+        };
+    }
+    $order->set_additional_fields(\@additional_field_values);
 
     # now, add items if applicable
     if ($basket->effective_create_items eq 'ordering') {

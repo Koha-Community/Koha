@@ -11,6 +11,25 @@ use Modern::Perl;
 use base qw(Koha::Object);
 
 use C4::Context;
+use Koha::MarcSubfieldStructures;
+
+sub effective_authorised_value_category {
+    my ($self) = @_;
+
+    my $category = $self->authorised_value_category;
+    unless ($category) {
+        if ($self->marcfield) {
+            my ($tag, $subfield) = split /\$/, $self->marcfield;
+
+            my $mss = Koha::MarcSubfieldStructures->find('', $tag, $subfield);
+            if ($mss) {
+                $category = $mss->authorised_value;
+            }
+        }
+    }
+
+    return $category;
+}
 
 sub _type { 'AdditionalField' }
 

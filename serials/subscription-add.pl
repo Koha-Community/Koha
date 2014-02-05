@@ -365,16 +365,9 @@ sub redirect_add_subscription {
 
     my @additional_fields;
     my $biblio = Koha::Biblios->find($biblionumber);
-    my $record = $biblio->metadata->record({ embed_items => 1 });
     my $subscription_fields = Koha::AdditionalFields->search({ tablename => 'subscription' });
     while ( my $field = $subscription_fields->next ) {
         my $value = $query->param('additional_field_' . $field->id);
-        if ($field->marcfield) {
-            my ($field, $subfield) = split /\$/, $field->marcfield;
-            if ( $record and $field and $subfield ) {
-                $value = $record->subfield( $field, $subfield );
-            }
-        }
         push @additional_fields, {
             id => $field->id,
             value => $value,
@@ -485,16 +478,9 @@ sub redirect_mod_subscription {
 
     my @additional_fields;
     my $biblio = Koha::Biblios->find($biblionumber);
-    my $record = $biblio->metadata->record({ embed_items => 1 });
     my $subscription_fields = Koha::AdditionalFields->search({ tablename => 'subscription' });
     while ( my $field = $subscription_fields->next ) {
         my $value = $query->param('additional_field_' . $field->id);
-        if ($field->marcfield) {
-            my ($field, $subfield) = split /\$/, $field->marcfield;
-            if ( $record and $field and $subfield ) {
-                $value = $record->subfield( $field, $subfield );
-            }
-        }
         push @additional_fields, {
             id => $field->id,
             value => $value,

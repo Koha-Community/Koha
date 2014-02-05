@@ -11,7 +11,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
-[% marcfield_tables = ['subscription'] %]
+[% marcfield_tables = ['subscription', 'aqorders'] %]
 [% searchable_tables = ['subscription', 'aqbasket', 'aqinvoices'] %]
 [% show_marcfield = marcfield_tables.grep('^' _ tablename _ '$').size ? 1 : 0 %]
 [% show_searchable = searchable_tables.grep('^' _ tablename _ '$').size ? 1 : 0 %]
@@ -105,6 +105,7 @@
             <ul>
                 [% IF CAN_user_acquisition_order_manage %]
                     [% WRAPPER table_option value="aqbasket" %]<span>Order baskets</span>[% END %]
+                    [% WRAPPER table_option value="aqorders" %]<span>Order lines</span>[% END %]
                 [% END %]
                 [% IF CAN_user_acquisition_edit_invoices %]
                     [% WRAPPER table_option value="aqinvoices" %]<span>Invoices</span>[% END %]
@@ -132,6 +133,7 @@
                             <th>Authorized value category</th>
                             [% IF show_marcfield %]
                                 <th>MARC field</th>
+                                <th>MARC field mode</th>
                             [% END %]
                             [% IF show_searchable %]
                                 <th>Searchable</th>
@@ -146,6 +148,12 @@
                                 <td>[% field.authorised_value_category | html %]</td>
                                 [% IF show_marcfield %]
                                     <td>[% field.marcfield | html %]</td>
+                                    <td>
+                                        [% SWITCH field.marcfield_mode %]
+                                            [% CASE 'get' %]Get value from MARC record
+                                            [% CASE 'set' %]Save value to MARC record
+                                        [% END %]
+                                    </td>
                                 [% END %]
                                 [% IF show_searchable %]
                                     <td>
@@ -189,6 +197,22 @@
                         <li>
                             <label for="marcfield">MARC field: </label>
                             <input type="text" name="marcfield" id="marcfield" value="[% field.marcfield | html %]" />
+                        </li>
+                        <li>
+                            <label for="marcfield_mode">MARC field mode: </label>
+                            <select id="marcfield_mode" name="marcfield_mode">
+                                [% IF field.marcfield_mode == 'get' %]
+                                    <option value="get" selected>Get value from MARC record (not modifiable)</option>
+                                [% ELSE %]
+                                    <option value="get">Get value from MARC record (not modifiable)</option>
+                                [% END %]
+
+                                [% IF field.marcfield_mode == 'set' %]
+                                    <option value="set" selected>Save value to MARC record</option>
+                                [% ELSE %]
+                                    <option value="set">Save value to MARC record</option>
+                                [% END %]
+                            </select>
                         </li>
                     [% END %]
                     [% IF show_searchable %]

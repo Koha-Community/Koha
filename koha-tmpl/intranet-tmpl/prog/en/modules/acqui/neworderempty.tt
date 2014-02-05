@@ -4,6 +4,7 @@
 [% USE KohaDates %]
 [% USE Price %]
 [% USE ItemTypes %]
+[% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( ordernumber ) %]Modify order details (line #[% ordernumber | html %])[% ELSE %]New order[% END %] &rsaquo; Basket [% basketno | html %] &rsaquo; Acquisitions &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -697,6 +698,9 @@
             </li>
         </ol>
     </fieldset>
+
+    [% INCLUDE 'additional-fields-entry.inc' available = additional_fields values = additional_field_values %]
+
     <fieldset class="action">
         <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
         <input type="submit" class="btn btn-primary" value="Save" />
