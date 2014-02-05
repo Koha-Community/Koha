@@ -10,6 +10,22 @@ body {
     /* The html and body elements cannot have any padding or margin. */
 }
 
+.no-js {
+    .dateformat {
+        display: inline;
+        white-space: nowrap;
+    }
+    .modal-body {
+        padding: 0;
+    }
+}
+
+.js {
+    .dateformat {
+        display: none;
+    }
+}
+
 /* Wrapper for page content to push down footer */
 #wrap {
     min-height: 100%;
@@ -119,6 +135,15 @@ legend {
 
 table, td {
     background-color: #FFF;
+}
+
+td {
+    .btn {
+        white-space: nowrap;
+    }
+    .btn-link {
+        padding: 0;
+    }
 }
 
 #advsearches,
@@ -2313,6 +2338,17 @@ a.reviewlink:visited {
 
 .idbresult img {
     padding-right: 6px;
+}
+
+.js-show {
+    display: none;
+}
+
+.modal-nojs {
+    .modal-header,
+    .modal-footer {
+        display: none;
+    }
 }
 
 @import "responsive.less";
