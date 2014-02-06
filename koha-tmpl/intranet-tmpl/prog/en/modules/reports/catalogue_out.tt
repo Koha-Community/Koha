@@ -1,4 +1,3 @@
-[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Items with no checkouts</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -73,7 +72,7 @@
                         <td>[% IF ( loopro.itemcallnumber ) %][% loopro.itemcallnumber %][% ELSE %]No call number[% END %]</td>
                         <td>[% IF ( loopro.barcode ) %][% loopro.barcode %][% ELSE %]No barcode[% END %]</td>
                         <td><p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber %]">[% IF ( loopro.title ) %][% loopro.title %][% ELSE %]NO TITLE[% END %]</a> [% IF ( loopro.author ) %] by [% loopro.author %][% END %]</p>
-                            [% IF ( loopro.branch ) %]at [% Branches.GetName( loopro.branch ) %][% END %]
+                            [% IF ( loopro.branch ) %]at [% loopro.branch %][% END %]
 						</td>
 					</tr>
 				[% END %]
