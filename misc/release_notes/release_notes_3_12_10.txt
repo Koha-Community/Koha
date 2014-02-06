@@ -1,0 +1,210 @@
+RELEASE NOTES FOR KOHA 3.12.10
+06 Feb 2014
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.12.10 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.12.10.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+
+Koha 3.12.10 is a security release and fixes four security bugs:
+
+* bug 11660: tools/pdfViewer.pl could be used to read arbitrary
+             files on the server
+* bug 11661: the staff interface help editor could be used to
+             modify or create arbitrary files on the server with
+             the privileges of the Apache user
+* bug 11662: member-picupload.pl could be used to write to
+             arbitrary files on the server with the privileges of
+             the Apache user
+* bug 11666: the MARC framework import/export function did not
+             require authentication, and could be used to perform
+             unexpected SQL commands
+
+The fix for bug 11666 removes SQL as a supported format for
+importing or exporting MARC frameworks.
+
+We recommend that you upgrade immediately to get the fixes for
+these security issues.  However, if you are not able to perform
+the upgrade right away, you can mitigate against the issues by
+performing the following actions:
+
+* deleting the pdfViewer.pl script
+* deleting the member-picupload.pl script
+* making edithelp.pl not be executable, e.g., by doing
+  "chmod a-x edithelp.pl"
+* making import_export_framework.pl not be executable, which will
+  disable the MARC framework import and export functionality.
+
+Our thanks to John Lightsey <john@nixnuts.net> for finding and
+reporting the issues.
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+The Koha manual is maintained in DocBook.The home page for Koha 
+documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.12/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+  * Arabic (89%)
+  * Armenian (99%)
+  * Chinese (China) (99%)
+  * Chinese (Taiwan) (99%)
+  * Czech (100%)
+  * Danish (99%)
+  * English (New Zealand) (91%)
+  * French (99%)
+  * French (Canada) (97%)
+  * German (100%)
+  * German (Switzerland) (99%)
+  * Greek (54%)
+  * Italian (100%)
+  * Kurdish (78%)
+  * Norwegian Bokmål (63%)
+  * Polish (99%)
+  * Portuguese (100%)
+  * Portuguese (Brazil) (91%)
+  * Slovak (99%)
+  * Spanish (100%)
+  * Swedish (97%)
+  * Turkish (100%)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.12.10 is
+
+  Release Manager:       Jared Camins-Esakov <jcamins@cpbibliography.com>
+  Documentation Manager: Nicole C Engard <nengard@gmail.com>
+  Installation Documentation Managers:
+                         Samuel Desseaux <samuel.desseaux@ecp.fr>
+                         Mason James <mtj@kohaaloha.com>
+  Translation Manager:   Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>
+  QA Team:               Chris Cormack <chrisc@catalyst.net.nz>
+                         Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>
+                         Jonathan Druart <jonathan.druart@biblibre.com>
+                         Brendan Gallagher <brendan@bywatersolutions.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+                         Mason James <mtj@kohaaloha.com>
+                         Paul Poulain <paul.poulain@biblibre.com>
+  Bug Wranglers:         Magnus Enger <magnus@enger.priv.no>
+  Packaging Manager:     Robin Sheat <robin@catalyst.net.nz>
+  Live CD Manager:       Vimal Kumar V.
+  VM Manager:            Samuel Desseaux <samuel.desseaux@ecp.fr>
+
+  Release Maintainer (3.8.x): Chris Hall <chrish@catalyst.net.nz>
+  Release Maintainer (3.10.x): Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  Release Maintainer (3.12.x): Tomás Cohen Arazi <tomascohen@gmail.com>
+  Release Maintainer (3.14.x): Fridolin Somers <fridolin.somers@biblibre.com>
+
+
+Credits
+======================
+
+We thank the following individuals who contributed patches to Koha 3.12.10.
+  *      3	Galen Charlton
+  *      2	Chris Cormack
+
+We thank the following companies who contributed patches to Koha 3.12.10
+  *       2 BigBallOfWax                                                                          
+  *       3 Equinox                                                                                   
+
+We also especially thank the following individuals who tested patches
+for Koha 3.12.10.
+  *       7 Tomas Cohen Arazi
+  *      10 Galen Charlton
+  *       1 Chris Cormack
+  *       1 Jonathan Druart
+  *       4 Katrin Fischer
+
+We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is 3.12.x.
+
+The last Koha release was 3.12.9, which was released on November 21, 2013.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+He rau ringa e oti ai.
+(Many hands finish the work)
+
+##### Autogenerated release notes updated last on 06 Feb 2014 14:39:26 Z #####
