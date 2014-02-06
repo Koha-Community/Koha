@@ -231,10 +231,10 @@ sub calculate {
         }
     }
 
+    @$filters[13] = C4::Dates->new(@$filters[13])->output('iso') if @$filters[13];
     @$filters[14] = C4::Dates->new(@$filters[14])->output('iso') if @$filters[14];
     @$filters[15] = C4::Dates->new(@$filters[15])->output('iso') if @$filters[15];
     @$filters[16] = C4::Dates->new(@$filters[16])->output('iso') if @$filters[16];
-    @$filters[17] = C4::Dates->new(@$filters[17])->output('iso') if @$filters[17];
 
     my @linefilter;
     $linefilter[0] = @$filters[0] if ( $line =~ /items\.itemcallnumber/ );
