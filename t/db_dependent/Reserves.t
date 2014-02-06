@@ -51,6 +51,8 @@ $bib->append_fields(
     MARC::Field->new('245', ' ', ' ', a => $title),
 );
 my ($bibnum, $bibitemnum);
+# If marcflavour is UNIMARC, AddBiblio fails and all following tests fail too.
+C4::Context->set_preference('marcflavour', 'MARC21');
 ($bibnum, $title, $bibitemnum) = AddBiblio($bib, '');
 
 # Helper item for that biblio.
