@@ -101,10 +101,6 @@
 [% ELSE %]
 
 	<form method="post" action="/cgi-bin/koha/reports/catalogue_stats.pl">
-	<input type="hidden" name="Filter" /> <input type="hidden" name="Filter" />
-	[% UNLESS ( haslccn ) %]
-	<input type="hidden" name="Filter" /> <input type="hidden" name="Filter" />
-	[% END %]
 	<fieldset class="rows">
 	<legend>Catalog statistics</legend>
 	<table>
@@ -117,52 +113,26 @@
 			</tr>
 		</thead>
 		<tbody>
-			[% IF ( haslccn ) %]
-					<tr>
-                    <td>LoC classification</td>
-					<td><input type="radio" name="Line" value="lccn" /></td>
-					<td><input type="radio" name="Column" value="lccn" /></td>
-					<td> <label for="locFrom">From</label> <input type="text" name="Filter" id="locFrom" /> <label for="locTo">To</label> <input type="text" name="Filter" id="locTo" /></td>
-				</tr>
-					<tr>
-					<td>&nbsp;</td>
-					<td colspan="2"><select name="lccndigits" id="lccndigits">
-						<option value=""> </option>
-						<option value ="1">1</option>
-						<option value ="2">2</option>
-						<option value ="3">3</option>
-						<option value ="4">4</option>
-						<option value ="5">5</option>
-						</select>
-						<label for="lccndigits">characters</label>
-					</td>
-					<td>&nbsp;</td>
-				</tr>
-			[% END %]
-			[% IF ( hascote ) %]
-			  <tr>
-                    <td>Koha full call number</td>
-					<td><input type="radio" name="Line" value="items.itemcallnumber" /></td>
-					<td><input type="radio" name="Column" value="items.itemcallnumber" /></td>
-                    <td><label for="callnoFrom">From</label> <input type="text" name="Filter" id="callnoFrom" /> <label for="callnoTo">To</label> <input type="text" name="Filter" id="callnoTo" /></td>
-				</tr>
-			 <tr>
-					<td>&nbsp;</td>
-					<td colspan="2"><select name="cotedigits" id="cotedigits">
-						<option value=""> </option>
-						<option value ="1">1</option>
-						<option value ="2">2</option>
-						<option value ="3">3</option>
-						<option value ="4">4</option>
-						<option value ="5">5</option>
-						</select>
-						<label for="cotedigits">characters</label> 
-					</td>
-					<td>&nbsp;</td>
-				</tr>
-				[% ELSE %]
-				<tr><td colspan="4"><input type="hidden" name="Filter" /> <input type="hidden" name="Filter" /></td></tr>
-			[% END %]
+      <tr>
+        <td>Koha full call number</td>
+        <td><input type="radio" name="Line" value="items.itemcallnumber" /></td>
+        <td><input type="radio" name="Column" value="items.itemcallnumber" /></td>
+        <td><label for="callnoFrom">From</label> <input type="text" name="Filter" id="callnoFrom" /> <label for="callnoTo">To</label> <input type="text" name="Filter" id="callnoTo" /></td>
+      </tr>
+     <tr>
+        <td>&nbsp;</td>
+        <td colspan="2"><select name="cotedigits" id="cotedigits">
+          <option value=""> </option>
+          <option value ="1">1</option>
+          <option value ="2">2</option>
+          <option value ="3">3</option>
+          <option value ="4">4</option>
+          <option value ="5">5</option>
+          </select>
+          <label for="cotedigits">characters</label>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
 			 <tr>
                 <td>Item type</td>
 				<td><input type="radio" name="Line" value="[% item_itype %]" /></td>

@@ -46,8 +46,6 @@ my $line        = $input->param("Line");
 my $column      = $input->param("Column");
 my $cellvalue      = $input->param("Cellvalue"); # one of 'items', 'biblios', 'deleteditems'
 my @filters     = $input->param("Filter");
-my $deweydigits = $input->param("deweydigits");
-my $lccndigits  = $input->param("lccndigits");
 my $cotedigits  = $input->param("cotedigits");
 my $output      = $input->param("output");
 my $basename    = $input->param("basename");
@@ -76,7 +74,7 @@ my ($template, $borrowernumber, $cookie)
 				});
 $template->param(do_it => $do_it);
 if ($do_it) {
-    my $results = calculate( $line, $column, $cellvalue, $deweydigits, $lccndigits, $cotedigits, \@filters );
+    my $results = calculate( $line, $column, $cellvalue, $cotedigits, \@filters );
     if ( $output eq "screen" ) {
         $template->param( mainloop => $results );
         output_html_with_http_headers $input, $cookie, $template->output;
@@ -119,34 +117,6 @@ if ($do_it) {
 	my $count=0;
 	my $req;
 	my @select;
-	# FIXME: no such field "dewey"
-	# $req = $dbh->prepare("select count(dewey) from biblioitems ");
-	# $req->execute;
-	my $hasdewey = 0;
-
-# (rch) biblioitems.lccn is mapped to lccn MARC21 010$a in default framework.
-# This is not the LC Classification.  It's the Control Number.
-# So I'm just going to remove this bit.  Call Number is handled in itemcallnumber.
-#
-	my $haslccn = 0;
-#	$req = $dbh->prepare( "select count(lccn) from biblioitems ");
-#	$req->execute;
-#	my $hlghtlccn;
-#	while (my ($value) =$req->fetchrow) {
-#		$hlghtlccn = !($hasdewey);
-#		$haslccn =1 if (($value>2) and (! $haslccn));
-#		$count++ if (($value) and (! $haslccn));
-#		push @select, $value;
-#	}
-#   my $CGIlccn = {
-#       values   => \@select,
-#   };
-
-# No need to test for data here.  If you don't have itemcallnumbers, you probably know it.
-# FIXME: Hardcoding to 5 chars on itemcallnum. 
-#
-    my $hascote = 1;
-    my $highcote = 5;
 
     my $itemtypes = GetItemTypes( style => 'array' );
 
@@ -183,9 +153,6 @@ if ($do_it) {
     my @mime  = ( map { +{type =>$_} } (split /[;:]/, 'CSV') ); # FIXME translation
 
     $template->param(
-        hasdewey     => $hasdewey,
-        haslccn      => $haslccn,
-        hascote      => $hascote,
         itemtypes    => $itemtypes,
         CGIBranch    => GetBranchesLoop( C4::Context->userenv->{'branch'} ),
         locationloop => \@locations,
@@ -202,7 +169,7 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 
 sub calculate {
-    my ( $line, $column, $cellvalue, $deweydigits, $lccndigits, $cotedigits, $filters ) = @_;
+    my ( $line, $column, $cellvalue, $cotedigits, $filters ) = @_;
     my @mainloop;
     my @loopfooter;
     my @loopcol;
@@ -235,104 +202,88 @@ sub calculate {
     my @loopfilter;
     for ( my $i = 0 ; $i <= @$filters ; $i++ ) {
         my %cell;
-        if ( defined @$filters[$i] and @$filters[$i] ne '' and $i != 15 ) {
-            if ( ( ( $i == 1 ) or ( $i == 3 ) or ( $i == 5 ) or ( $i == 9 ) ) and ( @$filters[ $i - 1 ] ) ) {
+        if ( defined @$filters[$i] and @$filters[$i] ne '' and $i != 11 ) {
+            if ( ( ( $i == 1 ) or ( $i == 5 ) ) and ( @$filters[ $i - 1 ] ) ) {
                 $cell{err} = 1 if ( @$filters[$i] < @$filters[ $i - 1 ] );
             }
             $cell{filter} .= @$filters[$i];
             $cell{crit} .=
-                ( $i == 0 )  ? "Dewey Classification From"
-              : ( $i == 1 )  ? "Dewey Classification To"
-              : ( $i == 2 )  ? "Lccn Classification From"
-              : ( $i == 3 )  ? "Lccn Classification To"
-              : ( $i == 4 )  ? "Item CallNumber From"
-              : ( $i == 5 )  ? "Item CallNumber To"
-              : ( $i == 6 )  ? "Item type"
-              : ( $i == 7 )  ? "Publisher"
-              : ( $i == 8 )  ? "Publication year From"
-              : ( $i == 9 )  ? "Publication year To"
-              : ( $i == 10 ) ? "Library"
-              : ( $i == 11 ) ? "Shelving Location"
-              : ( $i == 12 ) ? "Collection Code"
-              : ( $i == 13 ) ? "Status"
-              : ( $i == 14 ) ? "Materials"
-              : ( $i == 16 and $filters->[15] == 0 ) ? "Barcode (not like)"
-              : ( $i == 16 and $filters->[15] == 1 ) ? "Barcode (like)"
-              : ( $i == 17 ) ? "Acquired date from"
-              : ( $i == 18 ) ? "Acquired date to"
-              : ( $i == 19 ) ? "Removed date from"
-              : ( $i == 20 ) ? "Removed date to"
+                ( $i == 0 )  ? "Item CallNumber From"
+              : ( $i == 1 )  ? "Item CallNumber To"
+              : ( $i == 2 )  ? "Item type"
+              : ( $i == 3 )  ? "Publisher"
+              : ( $i == 4 )  ? "Publication year From"
+              : ( $i == 5 )  ? "Publication year To"
+              : ( $i == 6 ) ? "Library"
+              : ( $i == 7 ) ? "Shelving Location"
+              : ( $i == 8 ) ? "Collection Code"
+              : ( $i == 9 ) ? "Status"
+              : ( $i == 10 ) ? "Materials"
+              : ( $i == 12 and $filters->[11] == 0 ) ? "Barcode (not like)"
+              : ( $i == 12 and $filters->[11] == 1 ) ? "Barcode (like)"
+              : ( $i == 13 ) ? "Acquired date from"
+              : ( $i == 14 ) ? "Acquired date to"
+              : ( $i == 15 ) ? "Removed date from"
+              : ( $i == 16 ) ? "Removed date to"
               :                '';
 
             push @loopfilter, \%cell;
         }
     }
 
-    @$filters[18] = C4::Dates->new(@$filters[18])->output('iso') if @$filters[18];
-    @$filters[19] = C4::Dates->new(@$filters[19])->output('iso') if @$filters[19];
-    @$filters[20] = C4::Dates->new(@$filters[20])->output('iso') if @$filters[20];
-    @$filters[21] = C4::Dates->new(@$filters[21])->output('iso') if @$filters[21];
+    @$filters[14] = C4::Dates->new(@$filters[14])->output('iso') if @$filters[14];
+    @$filters[15] = C4::Dates->new(@$filters[15])->output('iso') if @$filters[15];
+    @$filters[16] = C4::Dates->new(@$filters[16])->output('iso') if @$filters[16];
+    @$filters[17] = C4::Dates->new(@$filters[17])->output('iso') if @$filters[17];
 
     my @linefilter;
-    $linefilter[0] = @$filters[0] if ( $line =~ /dewey/ );
-    $linefilter[1] = @$filters[1] if ( $line =~ /dewey/ );
-    $linefilter[0] = @$filters[2] if ( $line =~ /lccn/ );
-    $linefilter[1] = @$filters[3] if ( $line =~ /lccn/ );
-    $linefilter[0] = @$filters[4] if ( $line =~ /items\.itemcallnumber/ );
-    $linefilter[1] = @$filters[5] if ( $line =~ /items\.itemcallnumber/ );
+    $linefilter[0] = @$filters[0] if ( $line =~ /items\.itemcallnumber/ );
+    $linefilter[1] = @$filters[1] if ( $line =~ /items\.itemcallnumber/ );
     if ( C4::Context->preference('item-level_itypes') ) {
-        $linefilter[0] = @$filters[6] if ( $line =~ /items\.itype/ );
+        $linefilter[0] = @$filters[2] if ( $line =~ /items\.itype/ );
     } else {
-        $linefilter[0] = @$filters[6] if ( $line =~ /itemtype/ );
+        $linefilter[0] = @$filters[2] if ( $line =~ /itemtype/ );
     }
-    $linefilter[0] = @$filters[7] if ( $line =~ /publishercode/ );
-    $linefilter[0] = @$filters[8] if ( $line =~ /publicationyear/ );
-    $linefilter[1] = @$filters[9] if ( $line =~ /publicationyear/ );
+    $linefilter[0] = @$filters[3] if ( $line =~ /publishercode/ );
+    $linefilter[0] = @$filters[4] if ( $line =~ /publicationyear/ );
+    $linefilter[1] = @$filters[5] if ( $line =~ /publicationyear/ );
 
-    $linefilter[0] = @$filters[10] if ( $line =~ /items\.homebranch/ );
-    $linefilter[0] = @$filters[11] if ( $line =~ /items\.location/ );
-    $linefilter[0] = @$filters[12] if ( $line =~ /items\.ccode/ );
-    $linefilter[0] = @$filters[13] if ( $line =~ /items\.notforloan/ );
-    $linefilter[0] = @$filters[14] if ( $line =~ /items\.materials/ );
-    $linefilter[0] = @$filters[17] if ( $line =~ /items\.dateaccessioned/ );
-    $linefilter[1] = @$filters[18] if ( $line =~ /items\.dateaccessioned/ );
-    $linefilter[0] = @$filters[19] if ( $line =~ /deleteditems\.timestamp/ );
-    $linefilter[1] = @$filters[20] if ( $line =~ /deleteditems\.timestamp/ );
+    $linefilter[0] = @$filters[6] if ( $line =~ /items\.homebranch/ );
+    $linefilter[0] = @$filters[7] if ( $line =~ /items\.location/ );
+    $linefilter[0] = @$filters[8] if ( $line =~ /items\.ccode/ );
+    $linefilter[0] = @$filters[9] if ( $line =~ /items\.notforloan/ );
+    $linefilter[0] = @$filters[10] if ( $line =~ /items\.materials/ );
+    $linefilter[0] = @$filters[13] if ( $line =~ /items\.dateaccessioned/ );
+    $linefilter[1] = @$filters[14] if ( $line =~ /items\.dateaccessioned/ );
+    $linefilter[0] = @$filters[15] if ( $line =~ /deleteditems\.timestamp/ );
+    $linefilter[1] = @$filters[16] if ( $line =~ /deleteditems\.timestamp/ );
 
     my @colfilter;
-    $colfilter[0] = @$filters[0] if ( $column =~ /dewey/ );
-    $colfilter[1] = @$filters[1] if ( $column =~ /dewey/ );
-    $colfilter[0] = @$filters[2] if ( $column =~ /lccn/ );
-    $colfilter[1] = @$filters[3] if ( $column =~ /lccn/ );
-    $colfilter[0] = @$filters[4] if ( $column =~ /items\.itemcallnumber/ );
-    $colfilter[1] = @$filters[5] if ( $column =~ /items\.itemcallnumber/ );
+    $colfilter[0] = @$filters[0] if ( $column =~ /items\.itemcallnumber/ );
+    $colfilter[1] = @$filters[1] if ( $column =~ /items\.itemcallnumber/ );
     if ( C4::Context->preference('item-level_itypes') ) {
-        $colfilter[0] = @$filters[6] if ( $column =~ /items\.itype/ );
+        $colfilter[0] = @$filters[2] if ( $column =~ /items\.itype/ );
     } else {
-        $colfilter[0] = @$filters[6] if ( $column =~ /itemtype/ );
+        $colfilter[0] = @$filters[2] if ( $column =~ /itemtype/ );
     }
-    $colfilter[0] = @$filters[7]  if ( $column =~ /publishercode/ );
-    $colfilter[0] = @$filters[8]  if ( $column =~ /publicationyear/ );
-    $colfilter[1] = @$filters[9]  if ( $column =~ /publicationyear/ );
-    $colfilter[0] = @$filters[10] if ( $column =~ /items\.homebranch/ );
-    $colfilter[0] = @$filters[11] if ( $column =~ /items\.location/ );
-    $colfilter[0] = @$filters[12] if ( $column =~ /items\.ccode/ );
-    $colfilter[0] = @$filters[13] if ( $column =~ /items\.notforloan/ );
-    $colfilter[0] = @$filters[14] if ( $column =~ /items\.materials/ );
-    $colfilter[0] = @$filters[17] if ( $column =~ /items.dateaccessioned/ );
-    $colfilter[1] = @$filters[18] if ( $column =~ /items\.dateaccessioned/ );
-    $colfilter[0] = @$filters[19] if ( $column =~ /deleteditems\.timestamp/ );
-    $colfilter[1] = @$filters[20] if ( $column =~ /deleteditems\.timestamp/ );
+    $colfilter[0] = @$filters[3]  if ( $column =~ /publishercode/ );
+    $colfilter[0] = @$filters[4]  if ( $column =~ /publicationyear/ );
+    $colfilter[1] = @$filters[5]  if ( $column =~ /publicationyear/ );
+    $colfilter[0] = @$filters[6] if ( $column =~ /items\.homebranch/ );
+    $colfilter[0] = @$filters[7] if ( $column =~ /items\.location/ );
+    $colfilter[0] = @$filters[8] if ( $column =~ /items\.ccode/ );
+    $colfilter[0] = @$filters[9] if ( $column =~ /items\.notforloan/ );
+    $colfilter[0] = @$filters[10] if ( $column =~ /items\.materials/ );
+    $colfilter[0] = @$filters[13] if ( $column =~ /items.dateaccessioned/ );
+    $colfilter[1] = @$filters[14] if ( $column =~ /items\.dateaccessioned/ );
+    $colfilter[0] = @$filters[15] if ( $column =~ /deleteditems\.timestamp/ );
+    $colfilter[1] = @$filters[16] if ( $column =~ /deleteditems\.timestamp/ );
 
     # 1st, loop rows.
     my $origline = $line;
     $line =~ s/^items\./deleteditems./ if($cellvalue eq "deleteditems");
     my $linefield;
-    if ( ( $line =~ /dewey/ ) and ($deweydigits) ) {
-        $linefield = "left($line,$deweydigits)";
-    } elsif ( ( $line =~ /lccn/ ) and ($lccndigits) ) {
-        $linefield = "left($line,$lccndigits)";
-    } elsif ( ( $line =~ /itemcallnumber/ ) and ($cotedigits) ) {
+    if ( ( $line =~ /itemcallnumber/ ) and ($cotedigits) ) {
         $linefield = "left($line,$cotedigits)";
     } elsif ( $line =~ /^deleteditems\.timestamp$/ ) {
         $linefield = "DATE($line)";
@@ -394,11 +345,7 @@ sub calculate {
     my $origcolumn = $column;
     $column =~ s/^items\./deleteditems./ if($cellvalue eq "deleteditems");
     my $colfield;
-    if ( ( $column =~ /dewey/ ) and ($deweydigits) ) {
-        $colfield = "left($column,$deweydigits)";
-    } elsif ( ( $column =~ /lccn/ ) and ($lccndigits) ) {
-        $colfield = "left($column,$lccndigits)";
-    } elsif ( ( $column =~ /itemcallnumber/ ) and ($cotedigits) ) {
+    if ( ( $column =~ /itemcallnumber/ ) and ($cotedigits) ) {
         $colfield = "left($column,$cotedigits)";
     } elsif ( $column =~ /^deleteditems\.timestamp$/ ) {
         $colfield = "DATE($column)";
@@ -484,87 +431,71 @@ sub calculate {
 
     if ( @$filters[0] ) {
         @$filters[0] =~ s/\*/%/g;
-        $strcalc .= " AND dewey >" . @$filters[0];
+        $strcalc .= " AND $itemstable.itemcallnumber >=" . $dbh->quote( @$filters[0] );
     }
+
     if ( @$filters[1] ) {
         @$filters[1] =~ s/\*/%/g;
-        $strcalc .= " AND dewey <" . @$filters[1];
+        $strcalc .= " AND $itemstable.itemcallnumber <=" . $dbh->quote( @$filters[1] );
     }
+
     if ( @$filters[2] ) {
         @$filters[2] =~ s/\*/%/g;
-        $strcalc .= " AND lccn >" . @$filters[2];
+        $strcalc .= " AND " . ( C4::Context->preference('item-level_itypes') ? "$itemstable.itype" : 'biblioitems.itemtype' ) . " LIKE '" . @$filters[2] . "'";
     }
+
     if ( @$filters[3] ) {
         @$filters[3] =~ s/\*/%/g;
-        $strcalc .= " AND lccn <" . @$filters[3];
+        @$filters[3] .= "%" unless @$filters[3] =~ /%/;
+        $strcalc .= " AND biblioitems.publishercode LIKE \"" . @$filters[3] . "\"";
     }
     if ( @$filters[4] ) {
         @$filters[4] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.itemcallnumber >=" . $dbh->quote( @$filters[4] );
+        $strcalc .= " AND " .
+        (C4::Context->preference('marcflavour') eq 'UNIMARC' ? 'publicationyear' : 'copyrightdate')
+        . ">" . @$filters[4];
     }
-
     if ( @$filters[5] ) {
         @$filters[5] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.itemcallnumber <=" . $dbh->quote( @$filters[5] );
+        $strcalc .= " AND " .
+        (C4::Context->preference('marcflavour') eq 'UNIMARC' ? 'publicationyear' : 'copyrightdate')
+        . "<" . @$filters[5];
     }
-
     if ( @$filters[6] ) {
         @$filters[6] =~ s/\*/%/g;
-        $strcalc .= " AND " . ( C4::Context->preference('item-level_itypes') ? "$itemstable.itype" : 'biblioitems.itemtype' ) . " LIKE '" . @$filters[6] . "'";
+        $strcalc .= " AND $itemstable.homebranch LIKE '" . @$filters[6] . "'";
     }
-
     if ( @$filters[7] ) {
         @$filters[7] =~ s/\*/%/g;
-        @$filters[7] .= "%" unless @$filters[7] =~ /%/;
-        $strcalc .= " AND biblioitems.publishercode LIKE \"" . @$filters[7] . "\"";
+        $strcalc .= " AND $itemstable.location LIKE '" . @$filters[7] . "'";
     }
     if ( @$filters[8] ) {
         @$filters[8] =~ s/\*/%/g;
-        $strcalc .= " AND " .
-        (C4::Context->preference('marcflavour') eq 'UNIMARC' ? 'publicationyear' : 'copyrightdate')
-        . ">" . @$filters[8];
+        $strcalc .= " AND $itemstable.ccode  LIKE '" . @$filters[8] . "'";
     }
-    if ( @$filters[9] ) {
+    if ( defined @$filters[9] and @$filters[9] ne '' ) {
         @$filters[9] =~ s/\*/%/g;
-        $strcalc .= " AND " .
-        (C4::Context->preference('marcflavour') eq 'UNIMARC' ? 'publicationyear' : 'copyrightdate')
-        . "<" . @$filters[9];
+        $strcalc .= " AND $itemstable.notforloan  LIKE '" . @$filters[9] . "'";
     }
-    if ( @$filters[10] ) {
+    if ( defined @$filters[10] and @$filters[10] ne '' ) {
         @$filters[10] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.homebranch LIKE '" . @$filters[10] . "'";
+        $strcalc .= " AND $itemstable.materials  LIKE '" . @$filters[10] . "'";
     }
-    if ( @$filters[11] ) {
-        @$filters[11] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.location LIKE '" . @$filters[11] . "'";
-    }
-    if ( @$filters[12] ) {
-        @$filters[12] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.ccode  LIKE '" . @$filters[12] . "'";
-    }
-    if ( defined @$filters[13] and @$filters[13] ne '' ) {
+    if ( @$filters[13] ) {
         @$filters[13] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.notforloan  LIKE '" . @$filters[13] . "'";
+        $strcalc .= " AND $itemstable.dateaccessioned >= '@$filters[13]' ";
     }
-    if ( defined @$filters[14] and @$filters[14] ne '' ) {
+    if ( @$filters[14] ) {
         @$filters[14] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.materials  LIKE '" . @$filters[14] . "'";
+        $strcalc .= " AND $itemstable.dateaccessioned <= '@$filters[14]' ";
     }
-    if ( @$filters[17] ) {
-        @$filters[17] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.dateaccessioned >= '@$filters[17]' ";
+    if ( $cellvalue eq 'deleteditems' and @$filters[15] ) {
+        @$filters[15] =~ s/\*/%/g;
+        $strcalc .= " AND DATE(deleteditems.timestamp) >= '@$filters[15]' ";
     }
-    if ( @$filters[18] ) {
-        @$filters[18] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.dateaccessioned <= '@$filters[18]' ";
-    }
-    if ( $cellvalue eq 'deleteditems' and @$filters[19] ) {
-        @$filters[19] =~ s/\*/%/g;
-        $strcalc .= " AND DATE(deleteditems.timestamp) >= '@$filters[19]' ";
-    }
-    if ( $cellvalue eq 'deleteditems' and @$filters[20] ) {
-        @$filters[20] =~ s/\*/%/g;
-        $strcalc .= " AND DATE(deleteditems.timestamp) <= '@$filters[20]' ";
+    if ( $cellvalue eq 'deleteditems' and @$filters[16] ) {
+        @$filters[16] =~ s/\*/%/g;
+        $strcalc .= " AND DATE(deleteditems.timestamp) <= '@$filters[16]' ";
     }
     $strcalc .= " group by $linefield, $colfield order by $linefield,$colfield";
     $debug and warn "SQL: $strcalc";
