@@ -23,6 +23,8 @@ use strict;
 #use warnings; FIXME - Bug 2505
 use Date::Calc qw/Today Date_to_Days/;
 use Date::Manip qw/UnixDate/;
+use List::MoreUtils qw( uniq );
+
 use C4::Circulation;
 use C4::Context;
 use C4::Accounts;
@@ -928,6 +930,12 @@ sub GetOverdueMessageTransportTypes {
     while ( my $mtt = $sth->fetchrow ) {
         push @mtts, $mtt;
     }
+
+    # Put 'print' in first if exists
+    # It avoid to sent a print notice with an email or sms template is no email or sms is defined
+    @mtts = uniq( 'print', @mtts )
+        if grep {/^print$/} @mtts;
+
     return \@mtts;
 }
 

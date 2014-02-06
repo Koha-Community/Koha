@@ -38,6 +38,8 @@ $dbh->do(q|
     ('', 'PT', 1, 'email'),
     ('', 'PT', 2, 'email'),
     ('', 'PT', 2, 'sms'),
+    ('', 'PT', 3, 'sms'),
+    ('', 'PT', 3, 'email'),
     ('', 'PT', 3, 'print'),
     ('', 'YA', 2, 'sms')
 |);
@@ -69,7 +71,7 @@ $mtts = C4::Overdues::GetOverdueMessageTransportTypes('', 'PT', 2);
 is_deeply( $mtts, ['email', 'sms'], 'GetOverdueMessageTransportTypes: second overdue is by email and sms for PT (default)' );
 
 $mtts = C4::Overdues::GetOverdueMessageTransportTypes('', 'PT', 3);
-is_deeply( $mtts, ['print'], 'GetOverdueMessageTransportTypes: third overdue is by print for PT (default)' );
+is_deeply( $mtts, ['print', 'sms', 'email'], 'GetOverdueMessageTransportTypes: third overdue is by print, sms and email for PT (default). With print in first.' );
 
 
 done_testing;
