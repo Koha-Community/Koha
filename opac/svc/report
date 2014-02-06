@@ -60,5 +60,8 @@ unless ($json_text) {
     }
 }
 
-print $query->header;
+print $query->header(
+    -charset    => 'UTF-8',
+    -type       => 'application/json'
+);
 print $json_text;
