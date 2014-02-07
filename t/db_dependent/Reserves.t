@@ -46,13 +46,19 @@ foreach my $addcat ('S', 'PT') {
 diag("\nCreating biblio instance for testing.");
 my $bib = MARC::Record->new();
 my $title = 'Silence in the library';
-$bib->append_fields(
-    MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
-    MARC::Field->new('245', ' ', ' ', a => $title),
-);
+if( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
+    $bib->append_fields(
+        MARC::Field->new('600', '', '1', a => 'Moffat, Steven'),
+        MARC::Field->new('200', '', '', a => $title),
+    );
+}
+else {
+    $bib->append_fields(
+        MARC::Field->new('100', '', '', a => 'Moffat, Steven'),
+        MARC::Field->new('245', '', '', a => $title),
+    );
+}
 my ($bibnum, $bibitemnum);
-# If marcflavour is UNIMARC, AddBiblio fails and all following tests fail too.
-C4::Context->set_preference('marcflavour', 'MARC21');
 ($bibnum, $title, $bibitemnum) = AddBiblio($bib, '');
 
 # Helper item for that biblio.
