@@ -1,10 +1,9 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Holds awaiting pickup</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/en/css/datatables.css" />
-<script type="text/javascript" src="[% interface %]/[% theme %]/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/en/js/datatables.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
 [% IF (dateformat == 'metric') %]
@@ -16,6 +15,9 @@ dt_add_type_uk_date();
         $("#holdst,#holdso").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
                 { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+            ],
+            "aoColumns": [
+                { "sType": "title-string" },{ "sType": "anti-the" },null,null,null,null,null
             ],
             "sPaginationType": "four_button"
         }));
@@ -89,7 +91,7 @@ dt_add_type_uk_date();
                </tr></thead>
                <tbody>[% FOREACH reserveloo IN reserveloop %]
                 <tr>
-                    <td><p>[% reserveloo.waitingdate %]</p></td>
+                    <td><span title="[% reserveloo.waitingdate %]">[% reserveloo.waitingdate | $KohaDates %]</span></td>
                     <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
                         [% reserveloo.title |html %] [% reserveloo.subtitle |html %]
                         </a>
@@ -149,7 +151,7 @@ dt_add_type_uk_date();
                </tr></thead>
                <tbody>[% FOREACH overloo IN overloop %]
                     <tr>
-                        <td><p>[% overloo.waitingdate %]</p></td>
+                        <td><p><span title="[% overloo.waitingdate %]">[% overloo.waitingdate | $KohaDates %]</span></p></td>
                         <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overloo.biblionumber %][% overloo.title |html %] [% overloo.subtitle |html %]
                         </a>
                             [% UNLESS ( item_level_itypes ) %][% IF ( overloo.itemtype ) %]&nbsp; (<b>[% overloo.itemtype %]</b>)[% END %][% END %]
