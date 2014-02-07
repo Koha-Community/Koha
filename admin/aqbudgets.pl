@@ -139,8 +139,7 @@ if ($op eq 'add_form') {
     my @values;
     my $hier = GetBudgetHierarchy($$period{budget_period_id});
     foreach my $r (@$hier) {
-        $r->{budget_code_indent} =~ s/&nbsp;/\~/g;    #
-        $labels{"$r->{budget_id}"} = $r->{budget_code_indent};
+        $labels{"$r->{budget_id}"} = $r->{budget_code};
         push @values, $r->{budget_id};
     }
     push @values, '';

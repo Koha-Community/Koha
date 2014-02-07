@@ -520,72 +520,36 @@ sub GetBudgetHierarchy {
 	$debug && warn $query,join(",",@bind_params);
 	my $sth = $dbh->prepare($query);
 	$sth->execute(@bind_params);
-	my $results = $sth->fetchall_arrayref({});
-	my @res     = @$results;
-	my $i = 0;
-	while (1) {
-		my $depth_cnt = 0;
-		foreach my $r (@res) {
-			my @child;
-			# look for children
-			$r->{depth} = '0' if !defined $r->{budget_parent_id};
-			foreach my $r2 (@res) {
-				if (defined $r2->{budget_parent_id}
-					&& $r2->{budget_parent_id} == $r->{budget_id}) {
-					push @child, $r2->{budget_id};
-					$r2->{depth} = ($r->{depth} + 1) if defined $r->{depth};
-				}
-			}
-			$r->{child} = \@child if scalar @child > 0;    # add the child
-			$depth_cnt++ if !defined $r->{'depth'};
-		}
-		last if ($depth_cnt == 0 || $i == 100);
-		$i++;
-	}
 
-	# look for top parents 1st
-	my (@sort, $depth_count);
-	($i, $depth_count) = 0;
-	while (1) {
-		my $children = 0;
-		foreach my $r (@res) {
-			if ($r->{depth} == $depth_count) {
-				$children++ if (ref $r->{child} eq 'ARRAY');
+    my %links;
+    # create hash with budget_id has key
+    while ( my $data = $sth->fetchrow_hashref ) {
+        $links{ $data->{'budget_id'} } = $data;
+    }
 
-				# find the parent id element_id and insert it after
-				my $i2 = 0;
-				my $parent;
-				if ($depth_count > 0) {
+    # link child to parent
+    my @first_parents;
+    foreach ( sort keys %links ) {
+        my $child = $links{$_};
+        if ( $child->{'budget_parent_id'} ) {
+            my $parent = $links{ $child->{'budget_parent_id'} };
+            if ($parent) {
+                unless ( $parent->{'children'} ) {
+                    # init child arrayref
+                    $parent->{'children'} = [];
+                }
+                # add as child
+                push @{ $parent->{'children'} }, $child;
+            }
+        } else {
+            push @first_parents, $child;
+        }
+    }
 
-					# add indent
-					my $depth = $r->{depth} * 2;
-					$r->{budget_code_indent} = $r->{budget_code};
-					$r->{budget_name_indent} = $r->{budget_name};
-					foreach my $r3 (@sort) {
-						if ($r3->{budget_id} == $r->{budget_parent_id}) {
-							$parent = $i2;
-							last;
-						}
-						$i2++;
-					}
-				} else {
-					$r->{budget_code_indent} = $r->{budget_code};
-					$r->{budget_name_indent} = $r->{budget_name};
-				}
-                
-				if (defined $parent) {
-					splice @sort, ($parent + 1), 0, $r;
-				} else {
-					push @sort, $r;
-				}
-			}
-
-			$i++;
-		}    # --------------foreach
-		$depth_count++;
-		last if $children == 0;
-	}
-
+    my @sort = ();
+    foreach my $first_parent (@first_parents) {
+        _add_budget_children(\@sort, $first_parent);
+    }
 
     foreach my $budget (@sort) {
         $budget->{budget_spent}   = GetBudgetSpent( $budget->{budget_id} );
@@ -594,6 +558,18 @@ sub GetBudgetHierarchy {
         $budget->{total_ordered} = GetBudgetHierarchyOrdered( $budget->{budget_id} );
     }
     return \@sort;
+}
+
+# Recursive method to add a budget and its chidren to an array
+sub _add_budget_children {
+    my $res = shift;
+    my $budget = shift;
+    push @$res, $budget;
+    my $children = $budget->{'children'} || [];
+    return unless @$children; # break recursivity
+    foreach my $child (@$children) {
+        _add_budget_children($res, $child);
+    }
 }
 
 # -------------------------------------------------------------------

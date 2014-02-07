@@ -74,8 +74,6 @@ my @budget_loop;
 foreach my $budget ( @{$budget_arr} ) {
     next unless (CanUserUseBudget($loggedinuser, $budget, $userflags));
 
-    $budget->{budget_code_indent} =~ s/\ /\&nbsp\;/g;
-
     $budget->{'budget_branchname'} =
       GetBranchName( $budget->{'budget_branchcode'} );
 
