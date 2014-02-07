@@ -29,9 +29,7 @@
 [% END %]
 [% IF ( op_else ) %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 // <![CDATA[
@@ -57,6 +55,9 @@ $(document).ready(function() {
     $(".sorted").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
             { "aTargets": [ 0, -1, -2 ], "bSortable": false, "bSearchable": false },
+        ],
+        "aoColumns": [
+            null,{ "sType": "anti-the" },null,null,null,null,null
         ],
         "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
         "iDisplayLength": 20,
