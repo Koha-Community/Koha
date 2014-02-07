@@ -49,7 +49,7 @@
                 <li>Your lists</li>
             [% END %]
         [% ELSIF ( category2 ) %]
-            [% IF ( viewshelf ) %]
+            [% IF ( viewshelf || edit ) %]
                 <li><a href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves">Public lists</a></li>
             [% ELSE %]
                 <li>Public lists</li>
@@ -61,7 +61,7 @@
                 <li>Your lists</li>
             [% END %]
         [% ELSIF ( showpublicshelves ) %]
-            [% IF ( viewshelf || edit ) %]
+            [% IF ( viewshelf || edit || shelves ) %]
                 <li><a href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves">Public lists</a></li>
             [% ELSE %]
                 <li>Public lists</li>
@@ -462,6 +462,30 @@
                             [% END %]
 
                         [% ELSE %]
+                            <div id="toolbar" class="toolbar clearfix">
+                                <div class="list-actions">
+                                    <a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?shelves=1">New list</a> <span class="sep"></span>
+                                    [% IF ( manageshelf ) %]
+                                        <span class="sep">|</span>
+                                        <form method="get" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
+                                            <input type="hidden" name="op" value="modif" />
+                                            <input type="hidden" name="display" value="viewshelf" />
+                                            <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
+                                            <input type="submit" class="editshelf" value="Edit list" />
+                                        </form>
+
+                                        <form method="post" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
+                                            <input type="hidden" value="1" name="shelves"/>
+                                            <input type="hidden" value="1" name="DEL-[% shelfnumber %]"/>
+                                            [% IF ( showprivateshelves ) %]
+                                                <input type="hidden" name="display" value="privateshelves"/>
+                                            [% END %]
+                                            <input type="submit" class="deleteshelf" value="Delete list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
+                                        </form>
+                                    [% END # / IF manageshelf %]
+                                </div> <!-- / .list-actions -->
+                            </div> <!-- / #toolbar -->
+
                             <div class="alert alert-info">
                                 This list is empty.
                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
@@ -486,12 +510,12 @@
                     [% END %]
 
                     [% IF ( edit ) %]
-                        <h3><a href="/cgi-bin/koha/opac-shelves.pl">Lists</a> &#8674; <a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% shelfnumber %]"><em>[% shelfname |html %]</em></a> &#8674; Editing</h3>
                         <form method="post" action="/cgi-bin/koha/opac-shelves.pl">
                             <input type="hidden" name="op" value="modifsave" />
                             <input type="hidden" name="display" value="[% display %]" />
                             <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
                             <fieldset class="rows">
+                                <legend>Editing <em>[% shelfname |html %]</em></legend>
                                 <ol>
                                     <li><label for="shelfname">List name: </label><input type="text" id="shelfname" name="shelfname" maxlength="255" value="[% shelfname |html %]" /></li>
                                     <li>
