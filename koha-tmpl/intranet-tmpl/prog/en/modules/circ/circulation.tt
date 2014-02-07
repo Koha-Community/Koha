@@ -14,9 +14,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 [% IF ( UseTablesortForCirc ) %]<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>[% END %]
+[% INCLUDE 'datatables.inc' %][% END %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min.js"></script>
 [% INCLUDE 'timepicker.inc' %]
@@ -47,7 +45,7 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
                 { "aTargets": [ -1, -2[% IF ( exports_enabled ) %], -3[% END %] ], "bSortable": false, "bSearchable": false }
             ],
             "aoColumns": [
-                { "sType": "title-string" },{ "sType": "html" },null,{ "sType": "title-string" },null,null,null,null,null,null[% IF ( exports_enabled ) %],null[% END %]
+                { "sType": "title-string" },{ "sType": "anti-the" },null,{ "sType": "title-string" },null,null,null,null,null,null[% IF ( exports_enabled ) %],null[% END %]
             ],
             "bPaginate": false
         }));
@@ -56,7 +54,7 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
             "sDom": 't',
             "aaSorting": [],
             "aoColumns": [
-                { "sType": "title-string" },{ "sType": "html" },null,{ "sType": "title-string" },null,null,null,null,{ "sType": "html" }
+                { "sType": "title-string" },{ "sType": "anti-the" },null,{ "sType": "title-string" },null,null,null,null,{ "sType": "html" }
             ],
             "bPaginate": false
         }));

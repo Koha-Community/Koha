@@ -3,9 +3,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
      $(document).ready(function() {
@@ -19,7 +17,8 @@
         $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aaSorting": [ [0,'desc'], [3,'asc'] ],
             "aoColumnDefs": [
-                { "aTargets": [ 8 ], "sType": "natural" }
+                { "aTargets": [ 8 ], "sType": "natural" },
+                { "aTargets": [ 3 ], "sType": "anti-the" }
             ],
             "aoColumns": [
                 null,
