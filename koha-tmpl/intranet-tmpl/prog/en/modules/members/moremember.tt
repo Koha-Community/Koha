@@ -9,10 +9,8 @@
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/en/css/datatables.css" />
-<script type="text/javascript" src="[% interface %]/[% theme %]/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/en/js/datatables.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery-ui-timepicker-addon.js"></script>
 <script type="text/JavaScript">
@@ -34,14 +32,14 @@ $(document).ready(function() {
             { "aTargets": [ -1,-2 ], "bSortable": false, "bSearchable": false }
         ],
         "aoColumns": [
-            { "sType": "title-string" },null,null,{ "sType": "title-string" },null,null,null,null,null,null
+            { "sType": "title-string" },{ "sType": "anti-the" },null,{ "sType": "title-string" },null,null,null,null,null,null
         ],
         "bPaginate": false
     }));
     $("#relissuest").dataTable($.extend(true, {}, dataTablesDefaults, {
         "sDom": 't',
         "aoColumns": [
-            { "sType": "title-string" },null,null,{ "sType": "title-string" },null,null,null,null,null
+            { "sType": "title-string" },{ "sType": "anti-the" },null,{ "sType": "title-string" },null,null,null,null,null
         ],
         "bPaginate": false
     }));
@@ -51,7 +49,7 @@ $(document).ready(function() {
             { "aTargets": [ -1,-2 ], "bSortable": false, "bSearchable": false }
         ],
         "aoColumns": [
-            { "sType": "title-string" },null,null,null,null,null,null,null
+            { "sType": "title-string" },{ "sType": "anti-the" },null,null,null,null,null,null
         ],
         "bPaginate": false
     }));
