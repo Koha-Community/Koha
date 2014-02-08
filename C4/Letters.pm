@@ -998,12 +998,7 @@ EOS
 sub _send_message_by_sms {
     my $message = shift or return;
     my $member = C4::Members::GetMember( 'borrowernumber' => $message->{'borrowernumber'} );
-
-    unless ( $member->{smsalertnumber} ) {
-        _set_message_status( { message_id => $message->{'message_id'},
-                               status     => 'failed' } );
-        return;
-    }
+    return unless $member->{'smsalertnumber'};
 
     my $success = C4::SMS->send_sms( { destination => $member->{'smsalertnumber'},
                                        message     => $message->{'content'},
