@@ -94,8 +94,7 @@ if($do_it){
     my @datas;
 
     while(my $row = $sth->fetchrow_hashref){
-        $row->{'enddate'} = format_date(GetExpirationDate($row->{'subscriptionid'}));
-        $row->{'startdate'} = format_date($row->{'startdate'});
+        $row->{'enddate'} = GetExpirationDate($row->{'subscriptionid'});
         $row->{expired} = HasSubscriptionExpired($row->{subscriptionid});
         push @datas, $row if (
             $expired
