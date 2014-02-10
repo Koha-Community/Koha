@@ -126,7 +126,6 @@ our %letter;
 sub getletter {
     my ( $module, $code, $branchcode ) = @_;
 
-    $branchcode ||= '';
 
     if ( C4::Context->preference('IndependentBranches')
             and $branchcode
@@ -134,6 +133,7 @@ sub getletter {
 
         $branchcode = C4::Context->userenv->{'branch'};
     }
+    $branchcode //= '';
 
     if ( my $l = $letter{$module}{$code}{$branchcode} ) {
         return { %$l }; # deep copy
