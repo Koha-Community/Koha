@@ -254,7 +254,7 @@ then
     . /etc/koha/koha-sites.conf
 fi
 
-[ $# -ge 2 ] && [ $# -le 16 ] || ( usage ; die "Error: wrong parameters" )
+[ $# -ge 1 ] && [ $# -le 16 ] || ( usage ; die "Error: wrong parameters" )
 
 TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,use-memcached,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,database:,adminuser:,memcached-servers:,memcached-prefix:, \
      -n "$0" -- "$@"`
