@@ -1,19 +1,20 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; News</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 [% IF ( opac_news_count ) %]
-    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/en/css/datatables.css" />
-    <script type="text/javascript" src="[% interface %]/[% theme %]/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-    [% INCLUDE 'datatables-strings.inc' %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/en/js/datatables.js"></script>
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+    [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">//<![CDATA[
-    [% IF (dateformat == 'metric') %]dt_add_type_uk_date();[% END %]
     $(document).ready(function() {
         $("#newst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sDom": 't',
             "aoColumnDefs": [
                 { "aTargets": [ 0,-1,-2 ], "bSortable": false, "bSearchable": false }
+            ],
+            "aoColumns": [
+                null,null,null,{ "sType": "title-string" },{ "sType": "title-string" },null,null,null
             ],
             "bPaginate": false
         }));
@@ -52,7 +53,7 @@ tinyMCE.init({
 [% INCLUDE 'cat-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% IF ( add_form ) %]<a href="/cgi-bin/koha/tools/koha-news.pl">News</a> &rsaquo; [% IF ( id ) %]
-Edit News Item[% ELSE %]Add News Item[% END %][% ELSE %]News[% END %]</div>
+Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
 
 [% IF ( add_form ) %]<div id="doc" class="yui-t7">[% ELSE %]<div id="doc3" class="yui-t2">[% END %]
    <div id="bd">
@@ -165,8 +166,8 @@ Edit News Item[% ELSE %]Add News Item[% END %][% ELSE %]News[% END %]</div>
                              </td>
 
                             <td>[% opac_new.number %]</td>
-                            <td>[% opac_new.newdate %]</td>
-                            <td>[% opac_new.expirationdate %] [% IF ( opac_new.expired ) %](<span class="expired">expired</span>)[% END %]</td>
+                            <td><span title="[% opac_new.newdate %]">[% opac_new.newdate | $KohaDates %]</span></td>
+                            <td><span title="[% opac_new.expirationdate %]">[% opac_new.expirationdate | $KohaDates %] [% IF ( opac_new.expired ) %](<span class="expired">expired</span>)[% END %]</span></td>
                             <td>[% opac_new.title %]</td>
                            <td>
                                 [% opac_new.new %]
