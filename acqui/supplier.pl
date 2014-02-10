@@ -137,7 +137,7 @@ if ( $op eq 'display' ) {
 
     # get option values from gist syspref
     my @gst_values = map {
-        option => $_
+        option => $_ + 0.0
     }, split( '\|', C4::Context->preference("gist") );
 
     $template->param(
