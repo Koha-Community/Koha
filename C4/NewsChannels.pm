@@ -116,8 +116,6 @@ sub get_opac_news {
     my $count = 0;
     while (my $row = $sth->fetchrow_hashref) {
         if ((($limit) && ($count < $limit)) || (!$limit)) {
-            $row->{'newdate'} = format_date($row->{'newdate'});
-            $row->{'expirationdate'} = format_date($row->{'expirationdate'});
             push @opac_news, $row;
         }
         $count++;
