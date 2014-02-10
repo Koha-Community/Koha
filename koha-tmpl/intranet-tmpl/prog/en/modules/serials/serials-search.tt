@@ -3,12 +3,10 @@
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
 <title>Koha &rsaquo; Serials [% biblionumber %]</title>
-<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
  $(document).ready(function() {
@@ -16,9 +14,18 @@
         dt_add_type_uk_date();
     [% END %]
     var osrlt = $("#osrlt").dataTable($.extend(true, {}, dataTablesDefaults, {
-
-        "aoColumnDefs": [
-            { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
+        [% IF ( routing && CAN_user_serials_routing ) %]
+            "aoColumnDefs": [
+                { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
+            ],
+        [% ELSE %]
+            "aoColumnDefs": [
+                { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+            ],
+        [% END %]
+        "aoColumns": [
+            null,{ "sType": "anti-the" },null,null,null,{ "sType": "title-string" },
+            [% IF ( routing && CAN_user_serials_routing ) %],null[% END %],null,null
         ],
         "sPaginationType": "four_button"
     } ) );
@@ -26,6 +33,9 @@
     var csrlt = $("#csrlt").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
             { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+        ],
+        "aoColumns": [
+            null,{ "sType": "anti-the" },null,null,null,null,null,null
         ],
         "sPaginationType": "four_button"
     } ) );
@@ -190,7 +200,11 @@
                           [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
                         </td>
                         <td>
-                          [% IF ( subscription.enddate ) %][% subscription.enddate | $KohaDates %][% END %]
+                            [% IF ( subscription.enddate ) %]
+                                <span title="[% subscription.enddate %]">[% subscription.enddate | $KohaDates %]</span>
+                            [% ELSE %]
+                                <span title="0000-00-00"></span>
+                            [% END %]
                         </td>
                         [% IF ( routing && CAN_user_serials_routing ) %]
                         <td>

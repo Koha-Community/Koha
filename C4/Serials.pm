@@ -2056,9 +2056,11 @@ sub GetLateOrMissingIssues {
     while ( my $line = $sth->fetchrow_hashref ) {
 
         if ($line->{planneddate} && $line->{planneddate} !~/^0+\-/) {
+            $line->{planneddateISO} = $line->{planneddate};
             $line->{planneddate} = format_date( $line->{planneddate} );
         }
         if ($line->{claimdate} && $line->{claimdate} !~/^0+\-/) {
+            $line->{claimdateISO} = $line->{claimdate};
             $line->{claimdate}   = format_date( $line->{claimdate} );
         }
         $line->{"status".$line->{status}}   = 1;
