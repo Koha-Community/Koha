@@ -22,6 +22,7 @@ use warnings;
 
 use MARC::Charset qw/marc8_to_utf8/;
 use Text::Iconv;
+use C4::Context;
 use C4::Debug;
 use Unicode::Normalize;
 
