@@ -3,22 +3,28 @@
 <title>Koha &rsaquo; Tools &rsaquo; Batch patron modification</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/en/css/datatables.css" />
-<script type="text/javascript" src="[% interface %]/[% theme %]/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/en/js/datatables.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-    [% IF (dateformat == 'metric') %]dt_add_type_uk_date();[% END %]
         var patron_attributes_lib = new Array();
         var patron_attributes_values = new Array();
         $(document).ready(function() {
             [% IF borrowers %]
                 $("#borrowerst").dataTable($.extend(true, {}, dataTablesDefaults, {
                     "sDom": 't',
-                    "aoColumnDefs": [
-                        { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false }
-                    ],
+                    [% IF ( op == 'show_results' ) %]
+                        "aoColumns": [
+                            null,null,null,null,null,{ "sType": "title-string" },{ "sType": "title-string" }[% FOREACH attrh IN attributes_header %],null[% END %]
+                        ],
+                    [% ELSE %]
+                        "aoColumnDefs": [
+                            { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+                        ],
+                        "aoColumns": [
+                            null,null,null,null,null,null,{ "sType": "title-string" },{ "sType": "title-string" }[% FOREACH attrh IN attributes_header %],null[% END %]
+                        ],
+                    [% END %]
                     "bPaginate": false
                 }));
                 $("#selectallbutton").click(function() {
@@ -209,7 +215,7 @@
                     <form name="f" action="modborrowers.pl" method="post">
                         <input type="hidden" name="op" value="do" />
                         [% IF ( borrowers ) %]
-                            <div id="toolbar"><a id="selectallbutton" href="#">Select All</a> | <a id="clearallbutton" href="#">Clear All</a></div>
+                            <div id="toolbar"><a id="selectallbutton" href="#">Select all</a> | <a id="clearallbutton" href="#">Clear all</a></div>
                         [% END %]
                     [% END %]
                         [% IF borrowers %]
@@ -223,7 +229,7 @@
                                                 [% END %]
                                                 <th>Card number</th>
                                                 <th>Surname</th>
-                                                <th>Firstname</th>
+                                                <th>First name</th>
                                                 <th>Library</th>
                                                 <th>Category</th>
                                                 <th>Registration date</th>
@@ -244,8 +250,8 @@
                                                     <td>[% borrower.firstname %]</td>
                                                     <td>[% borrower.branchname %]</td>
                                                     <td>[% borrower.categorycode %]</td>
-                                                    <td>[% borrower.dateenrolled | $KohaDates %]</td>
-                                                    <td>[% borrower.dateexpiry | $KohaDates %]</td>
+                                                    <td><span title="[% borrower.dateenrolled %]">[% borrower.dateenrolled | $KohaDates %]</span></td>
+                                                    <td><span title="[% borrower.dateexpiry %]">[% borrower.dateexpiry | $KohaDates %]</span></td>
                                                     [% FOREACH pa IN borrower.patron_attributes %]
                                                         [% IF ( pa.code ) %]
                                                             <td>[% pa.code %]=[% pa.value %]</td>
@@ -262,7 +268,7 @@
 
                             [% IF ( op == 'show' ) %]
                             <div id="cataloguing_additem_newitem">
-                                <h2>Edit Patrons</h2>
+                                <h2>Edit patrons</h2>
                                 <div class="hint">Checking the box right next the label will disable the entry and delete the values of that field on all selected patrons</div>
                                 <fieldset class="rows" id="fields_list">
                                     <ol>
