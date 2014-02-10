@@ -673,7 +673,6 @@ sub get_saved_reports {
     $query .= " ORDER by date_created";
     
     my $result = $dbh->selectall_arrayref($query, {Slice => {}}, @args);
-    $_->{date_created} = format_date($_->{date_created}) foreach @$result;
 
     return $result;
 }

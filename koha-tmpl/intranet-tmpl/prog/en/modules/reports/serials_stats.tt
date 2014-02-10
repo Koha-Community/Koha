@@ -1,20 +1,22 @@
+[% USE KohaDates %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Serials subscriptions stats</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">
 	.sql {display: none;}
 </style>
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/en/css/datatables.css" />
-<script type="text/javascript" src="[% interface %]/[% theme %]/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/en/js/datatables.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 	//<![CDATA[
-        [% IF (dateformat == 'metric') %]dt_add_type_uk_date();[% END %]
 		$(document).ready(function() {
             $("#resulttable").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "sDom": 't',
-                "bPaginate": false
+                "bPaginate": false,
+                "aoColumns": [
+                    null,{ "sType": "anti-the" },null,null,null,{ "sType": "title-string" },{ "sType": "title-string" },null
+                ],
             }));
     	});
 	//]]>
@@ -49,13 +51,13 @@
 		<tbody>
 			<tr>
 				[% FOREACH data IN datas %]
-					<td>[% data.name %]</td>
-					<td>[% data.title |html %]</td>
+                    <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% data.aqbooksellerid %]">[% data.name %]</a></td>
+                    <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% data.subscriptionid %]">[% data.title |html %]</a></td>
 					<td>[% data.subscriptionid %]</td>
-					<td>[% data.branchcode %]</td>
+                    <td>[% Branches.GetName( data.branchcode ) %]</td>
 					<td>[% data.callnumber %]</td>
-					<td>[% data.startdate %]</td>
-					<td>[% data.enddate %]</td>
+                    <td><span title="[% data.startdate %]">[% data.startdate | $KohaDates %]</span></td>
+                    <td><span title="[% data.enddate %]">[% data.enddate | $KohaDates %]</span></td>
                     <td>
                         [% IF data.closed %]
                             Closed
@@ -80,7 +82,7 @@
 					Vendor:
 			    </label>
 				<select name="bookseller" id="bookseller">
-					<option value="">Any Vendor</option>
+                    <option value="">Any vendor</option>
     				[% FOREACH bookseller IN booksellers %]
 						<option value="[% bookseller.aqbooksellerid %]">[% bookseller.name %]</option>
 					[% END %]
