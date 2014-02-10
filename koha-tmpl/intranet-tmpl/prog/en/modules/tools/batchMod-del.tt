@@ -3,10 +3,8 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/background-job-progressbar.js"></script>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/pages/batchMod.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
@@ -77,7 +75,7 @@ for( x=0; x<allColumns.length; x++ ){
      [% END %]
 
 [% IF ( item_loop ) %]
-	[% IF ( show ) %]<div id="toolbar"><a id="selectallbutton" href="#">Select All</a> | <a id="clearallbutton" href="#">Clear All</a></div>[% END %]
+    [% IF ( show ) %]<div id="toolbar"><a id="selectallbutton" href="#">Select all</a> | <a id="clearallbutton" href="#">Clear all</a></div>[% END %]
 	<div id="cataloguing_additem_itemlist">
 
 	<p id="selections"><strong>Show/hide columns:</strong> <span class="selected"><input type="checkbox" checked="checked" id="showall"/><label for="showall">Show all columns</label></span> <span><input type="checkbox" id="hideall"/><label for="hideall">Hide all columns</label></span>
@@ -90,14 +88,14 @@ for( x=0; x<allColumns.length; x++ ){
 		    <thead>
 			<tr>
 			    [% IF ( show ) %]<th>&nbsp;</th>[% END %]
-		        <th>Title</th>
+                <th class="anti-the">Title</th>
 			    [% FOREACH item_header_loo IN item_header_loop %]
 			    <th> [% item_header_loo.header_value %] </th>
 			    [% END %]
 			</tr>
 		    </thead>
 		    <tbody>
-		    [% FOREACH item_loo IN item_loop %] <tr> [% IF ( show ) %][% IF ( item_loo.nomod ) %] <td class="error">Cannot Edit</td>[% ELSE %]<td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber %]" id="row[% item_loo.itemnumber %]" checked="checked" /></td>[% END %][% END %]
+            [% FOREACH item_loo IN item_loop %] <tr> [% IF ( show ) %][% IF ( item_loo.nomod ) %] <td class="error">Cannot edit</td>[% ELSE %]<td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber %]" id="row[% item_loo.itemnumber %]" checked="checked" /></td>[% END %][% END %]
 		    <td><label for="row[% item_loo.itemnumber %]"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber %]">[% item_loo.title %]</a>[% IF ( item_loo.author ) %], by [% item_loo.author %][% END %]</label></td>
 			[% FOREACH item_valu IN item_loo.item_value %] <td>[% item_valu.field |html %]</td> 
 					[% END %] </tr>

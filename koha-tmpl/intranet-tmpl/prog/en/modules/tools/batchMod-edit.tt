@@ -4,11 +4,9 @@
 <script type="text/javascript" src="[% themelang %]/js/background-job-progressbar.js"></script>
 <script type="text/javascript" src="[% themelang %]/js/cataloging.js"></script>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
-<script type="text/javascript" src="[% themelang %]/js/pages/batchMod.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/pages/batchMod.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 
@@ -115,7 +113,7 @@ $(document).ready(function(){
       <thead>
     <tr>
         <th>&nbsp;</th>
-        <th>Title</th>
+        <th class="anti-the">Title</th>
         [% FOREACH item_header_loo IN item_header_loop %]
         <th> [% item_header_loo.header_value %] </th>
         [% END %] 
@@ -126,7 +124,7 @@ $(document).ready(function(){
               <tr>
                 [% IF show %]
                   [% IF item_loo.nomod %]
-                    <td class="error">Cannot Edit</td>
+                    <td class="error">Cannot edit</td>
                   [% ELSE %]
                     <td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber %]" id="row[% item_loo.itemnumber %]" checked="checked" data-is-onloan="[% item_loo.onloan %]" /></td>
                   [% END %]
