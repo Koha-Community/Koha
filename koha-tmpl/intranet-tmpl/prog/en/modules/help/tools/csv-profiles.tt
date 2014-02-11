@@ -52,6 +52,91 @@
 
 <p>Your CSV Profiles will appear on the export list or cart menu under the 'Download' button in both the staff client and the OPAC</p>
 
+<h3>Template Toolkit tags</h3>
+[% TAGS [- -] %]
+<p>You can use Template Toolkit tags in order to build complex CSV files.</p>
+<p>To access to the field list of the current record, you have to use the 'fields' variables (which is a hashref).</p>
+<p>All fields of the record is content into this variable in a "field tag name" key.</p>
+<p>In order to manage multi-valuated field and subfields, the field and subfields are stored into an arrayref</p>
+<p>For example, the following MARC record:</p>
+<pre>
+008 - FIXED-LENGTH DATA ELEMENTS--GENERAL INFORMATION
+  @ 140211b xxu||||| |||| 00| 0 eng d
+
+100 ## - MAIN ENTRY--PERSONAL NAME
+  a Personal name My author
+
+245 ## - TITLE STATEMENT
+  a Title My first title
+  a Title My second title
+  b Remainder of title My remainder
+
+245 ## - TITLE STATEMENT
+  a Title My third title
+</pre>
+<p>will be stored into the following structure:</p>
+<pre>
+{
+    fields =&gt; {
+                008 =&gt; [
+                        "140211b xxu||||| |||| 00| 0 eng d"
+                ],
+                100 =&gt; [
+                            {
+                                a =&gt; [
+                                    "My author"
+                                ]
+                            }
+                ]
+                245 =&gt; [
+                            {
+                                a =&gt; [
+                                    "My first title",
+                                    "My second title"
+                                ],
+                                b =&gt; [
+                                    "My remainder"
+                                ]
+                            },
+                            {
+                                a =&gt; [
+                                    "My third title"
+                                ]
+                            }
+                ]
+    }
+}
+</pre>
+<p>The indicators can be accessible using the 'indicator' key.</p>
+<p>Example: [% fields.245.0.indicator.1 %] is the indicator 1 for the first 245 field.</p>
+
+<p>Some examples:</p>
+<ul>
+  <li>Display all 245$a and 245$c into the same column:
+    <p>
+    [% FOREACH field IN fields.245 %]
+        [% field.a %] [% field.c %]
+    [% END %]
+    </p>
+  </li>
+  <li>Display 650$a if indicator 2 for 650 is set
+    <p>
+    Subject=[% FOREACH field IN fields.650 %][% IF field.indicator.2 %][% field.a.0 %][% END %][% END %]
+    </p>
+  </li>
+  <li>Display the language from the control field 008
+    <p>
+    Language=[% fields.008.0.substr( 28, 3 ) %]
+    </p>
+  </li>
+  <li>Display the first subfield a for first field 245 if indicator 1 for field 100 is set
+    <p>
+    Title=[% IF fields.100.0.indicator.1 %][% fields.245.0.a.0 %][% END %]
+    </p>
+  </li>
+</ul>
+<p>Note that the authorized values won't be replaced by their descriptions.</p>
+
 <p><strong>See the full documentation for CSV Profiles in the <a href="http://manual.koha-community.org/[% helpVersion %]/en/csvprofiles.html">manual</a> (online).</strong></p>
 
-[% INCLUDE 'help-bottom.inc' %]
+[- INCLUDE 'help-bottom.inc' -]
