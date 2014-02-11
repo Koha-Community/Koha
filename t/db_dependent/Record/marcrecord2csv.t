@@ -1,7 +1,7 @@
 #!/usr/bin/perl;
 
 use Modern::Perl;
-use Test::More tests => 4;
+use Test::More tests => 8;
 use Test::MockModule;
 use MARC::Record;
 use MARC::Field;
@@ -46,6 +46,38 @@ is( $csv_output, q["TITLE STATEMENT"|"SUBJECT ADDED ENTRY--TOPICAL TERM"
 $csv_output = C4::Record::marcrecord2csv( $biblionumber, $csv_profile_id_2, 0, $csv );
 is( $csv_output, q["The art of computer programming,Donald E. Knuth.,0;The art of another title,Donald E. Knuth. II,1"|"Computer programming.,462;Computer algorithms.,499"
 ], q|normal way: headers are not display if not needed| );
+
+$csv_content = q(Title and author=[% FOREACH field IN fields.245 %][% field.a.0 %] [% field.c.0 %][% END %]|Subject=650$a);
+my $csv_profile_id_3 = insert_csv_profile({ csv_content => $csv_content });
+
+$csv_output = C4::Record::marcrecord2csv( $biblionumber, $csv_profile_id_3, 1, $csv );
+is( $csv_output, q["Title and author"|Subject
+"The art of computer programming Donald E. Knuth.The art of another title Donald E. Knuth. II"|"Computer programming.,Computer algorithms."
+], q|TT way: display all 245$a and 245$c| );
+
+$csv_content = q(Subject=[% FOREACH field IN fields.650 %][% IF field.indicator.2 %][% field.a.0 %][% END %][% END %]);
+my $csv_profile_id_4 = insert_csv_profile({ csv_content => $csv_content });
+
+$csv_output = C4::Record::marcrecord2csv( $biblionumber, $csv_profile_id_4, 1, $csv );
+is( $csv_output, q[Subject
+"Computer programming."
+], q|TT way: display 650$a if indicator 2 for 650 is set| );
+
+$csv_content = q|Language=[% fields.008.0.substr( 28, 3 ) %]|;
+my $csv_profile_id_5 = insert_csv_profile({ csv_content => $csv_content });
+
+$csv_output = C4::Record::marcrecord2csv( $biblionumber, $csv_profile_id_5, 1, $csv );
+is( $csv_output, q[Language
+eng
+], q|TT way: export language from the control field 008| );
+
+$csv_content = q|Title=[% IF fields.100.0.indicator.1 %][% fields.245.0.a.0 %][% END %]|;
+my $csv_profile_id_6 = insert_csv_profile({ csv_content => $csv_content });
+
+$csv_output = C4::Record::marcrecord2csv( $biblionumber, $csv_profile_id_6, 1, $csv );
+is( $csv_output, q[Title
+"The art of computer programming"
+], q|TT way: display first subfield a for first field 245 if indicator 1 for field 100 is set| );
 
 sub insert_csv_profile {
     my ( $params ) = @_;
