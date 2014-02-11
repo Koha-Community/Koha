@@ -33,6 +33,7 @@ use C4::Csv; #marc2csv
 use C4::Koha; #marc2csv
 use C4::XSLT ();
 use YAML; #marcrecords2csv
+use Template;
 use Text::CSV::Encoded; #marc2csv
 
 use vars qw($VERSION @ISA @EXPORT);
@@ -420,14 +421,13 @@ C<$itemnumbers> a list of itemnumbers to export
 
 =cut
 
-
 sub marcrecord2csv {
     my ($biblio, $id, $header, $csv, $fieldprocessing, $itemnumbers) = @_;
     my $output;
 
     # Getting the record
     my $record = GetMarcBiblio($biblio);
-    next unless $record;
+    return unless $record;
     C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblio, $itemnumbers );
     # Getting the framework
     my $frameworkcode = GetFrameworkCode($biblio);
@@ -460,108 +460,149 @@ sub marcrecord2csv {
     my @marcfieldsarray = split('\|', $marcfieldslist);
 
    # Separating the marcfields from the user-supplied headers
-    my @marcfields;
+    my @csv_structures;
     foreach (@marcfieldsarray) {
         my @result = split('=', $_);
-        if (scalar(@result) == 2) {
-           push @marcfields, { header => $result[0], field => $result[1] }; 
+        my $content = ( @result == 2 )
+            ? $result[1]
+            : $result[0];
+        my @fields;
+        while ( $content =~ m|(\d{3})\$?(.)?|g ) {
+            my $fieldtag = $1;
+            my $subfieldtag = $2 || undef;
+            push @fields, { fieldtag => $fieldtag, subfieldtag => $subfieldtag };
+        }
+        if ( @result == 2) {
+           push @csv_structures, { header => $result[0], content => $content, fields => \@fields };
         } else {
-           push @marcfields, { field => $result[0] }
+           push @csv_structures, { content => $content, fields => \@fields }
         }
     }
 
-    # If we have to insert the headers
-    if ($header) {
-	my @marcfieldsheaders;
-	my $dbh   = C4::Context->dbh;
+    my ( @marcfieldsheaders, @csv_rows );
+    my $dbh = C4::Context->dbh;
 
-	# For each field or subfield
-	foreach (@marcfields) {
-
-	    my $field = $_->{field};
-        # Remove any blank char that might have unintentionally insered into the tag name
-        $field =~ s/\s+//g; 
-
-	    # If we have a user-supplied header, we use it
-	    if (exists $_->{header}) {
-		    push @marcfieldsheaders, $_->{header};
-	    } else {
-		# If not, we get the matching tag name from koha
-		if (index($field, '$') > 0) {
-		    my ($fieldtag, $subfieldtag) = split('\$', $field);
-		    my $query = "SELECT liblibrarian FROM marc_subfield_structure WHERE tagfield=? AND tagsubfield=?";
-		    my $sth = $dbh->prepare($query);
-		    $sth->execute($fieldtag, $subfieldtag);
-		    my @results = $sth->fetchrow_array();
-		    push @marcfieldsheaders, $results[0];
-		} else {
-		    my $query = "SELECT liblibrarian FROM marc_tag_structure WHERE tagfield=?";
-		    my $sth = $dbh->prepare($query);
-		    $sth->execute($field);
-		    my @results = $sth->fetchrow_array();
-		    push @marcfieldsheaders, $results[0];
-		}
-	    }
-	}
-	$csv->combine(@marcfieldsheaders);
-	$output = $csv->string() . "\n";	
-    }
-
-    # For each marcfield to export
-    my @fieldstab;
-    foreach (@marcfields) {
-	my $marcfield = $_->{field};
-	# If it is a subfield
-	if (index($marcfield, '$') > 0) {
-	    my ($fieldtag, $subfieldtag) = split('\$', $marcfield);
-	    my @fields = $record->field($fieldtag);
-	    my @tmpfields;
-
-	    # For each field
-	    foreach my $field (@fields) {
-
-		# We take every matching subfield
-		my @subfields = $field->subfield($subfieldtag);
-		foreach my $subfield (@subfields) {
-
-		    # Getting authorised value
-		    my $authvalues = GetKohaAuthorisedValuesFromField($fieldtag, $subfieldtag, $frameworkcode, undef);
-		    push @tmpfields, (defined $authvalues->{$subfield}) ? $authvalues->{$subfield} : $subfield;
-		}
-	    }
-	    push (@fieldstab, join($subfieldseparator, @tmpfields));  		
-	# Or a field
-	} else {
-	    my @fields = ($record->field($marcfield));
-	    my $authvalues = GetKohaAuthorisedValuesFromField($marcfield, undef, $frameworkcode, undef);
-
-        my @valuesarray;
-        foreach (@fields) {
-            my $value;
-
-            # If it is a control field
-            if ($_->is_control_field) {
-                $value = defined $authvalues->{$_->as_string} ? $authvalues->{$_->as_string} : $_->as_string;
-            } else {
-                # If it is a field, we gather all subfields, joined by the subfield separator
-                my @subvaluesarray;
-                my @subfields = $_->subfields;
-                foreach my $subfield (@subfields) {
-                    push (@subvaluesarray, defined $authvalues->{$subfield->[1]} ? $authvalues->{$subfield->[1]} : $subfield->[1]);
-                }
-                $value = join ($subfieldseparator, @subvaluesarray);
+    my $field_list;
+    for my $field ( $record->fields ) {
+        my $fieldtag = $field->tag;
+        my $values;
+        if ( $field->is_control_field ) {
+            $values = $field->data();
+        } else {
+            $values->{indicator}{1} = $field->indicator(1);
+            $values->{indicator}{2} = $field->indicator(2);
+            for my $subfield ( $field->subfields ) {
+                my $subfieldtag = $subfield->[0];
+                my $value = $subfield->[1];
+                push @{ $values->{$subfieldtag} }, $value;
             }
-
-            # Field processing
-            eval $fieldprocessing if ($fieldprocessing);
-
-            push @valuesarray, $value;
         }
-	    push (@fieldstab, join($fieldseparator, @valuesarray)); 
-	 }
-    };
+        # We force the key as an integer (trick for 00X and OXX fields)
+        push @{ $field_list->{fields}{0+$fieldtag} }, $values;
+    }
 
-    $csv->combine(@fieldstab);
+    # For each field or subfield
+    foreach my $csv_structure (@csv_structures) {
+        my @field_values;
+        my $tags = $csv_structure->{fields};
+        my $content = $csv_structure->{content};
+
+        if ( $header ) {
+            # If we have a user-supplied header, we use it
+            if ( exists $csv_structure->{header} ) {
+                push @marcfieldsheaders, $csv_structure->{header};
+            } else {
+                # If not, we get the matching tag name from koha
+                my $tag = $tags->[0];
+                if ( $tag->{subfieldtag} ) {
+                    my $query = "SELECT liblibrarian FROM marc_subfield_structure WHERE tagfield=? AND tagsubfield=?";
+                    my @results = $dbh->selectrow_array( $query, {}, $tag->{subfieldtag} );
+                    push @marcfieldsheaders, $results[0];
+                } else {
+                    my $query = "SELECT liblibrarian FROM marc_tag_structure WHERE tagfield=?";
+                    my @results = $dbh->selectrow_array( $query, {}, $tag->{fieldtag} );
+                    push @marcfieldsheaders, $results[0];
+                }
+            }
+        }
+
+        # TT tags exist
+        if ( $content =~ m|\[\%.*\%\]| ) {
+            my $tt = Template->new();
+            my $template = $content;
+            my $vars;
+            # Replace 00X and 0XX with X or XX
+            $content =~ s|fields.00(\d)|fields.$1|g;
+            $content =~ s|fields.0(\d{2})|fields.$1|g;
+            my $tt_output;
+            $tt->process( \$content, $field_list, \$tt_output );
+            push @csv_rows, $tt_output;
+        } else {
+            for my $tag ( @$tags ) {
+                my @fields = $record->field( $tag->{fieldtag} );
+                # If it is a subfield
+                my @loop_values;
+                if ( $tag->{subfieldtag} ) {
+                    # For each field
+                    foreach my $field (@fields) {
+                        my @subfields = $field->subfield( $tag->{subfieldtag} );
+                        foreach my $subfield (@subfields) {
+                            my $authvalues = GetKohaAuthorisedValuesFromField( $tag->{fieldtag}, $tag->{subfieldtag}, $frameworkcode, undef);
+                            push @loop_values, (defined $authvalues->{$subfield}) ? $authvalues->{$subfield} : $subfield;
+                        }
+                    }
+
+                # Or a field
+                } else {
+                    my $authvalues = GetKohaAuthorisedValuesFromField( $tag->{fieldtag}, undef, $frameworkcode, undef);
+
+                    foreach my $field ( @fields ) {
+                        my $value;
+
+                        # If it is a control field
+                        if ($field->is_control_field) {
+                            $value = defined $authvalues->{$field->as_string} ? $authvalues->{$field->as_string} : $field->as_string;
+                        } else {
+                            # If it is a field, we gather all subfields, joined by the subfield separator
+                            my @subvaluesarray;
+                            my @subfields = $field->subfields;
+                            foreach my $subfield (@subfields) {
+                                push (@subvaluesarray, defined $authvalues->{$subfield->[1]} ? $authvalues->{$subfield->[1]} : $subfield->[1]);
+                            }
+                            $value = join ($subfieldseparator, @subvaluesarray);
+                        }
+
+                        # Field processing
+                        my $marcfield = $tag->{fieldtag}; # This line fixes a retrocompatibility concern
+                                                          # The "processing" could be based on the $marcfield variable.
+                        eval $fieldprocessing if ($fieldprocessing);
+
+                        push @loop_values, $value;
+                    }
+
+                }
+                push @field_values, {
+                    fieldtag => $tag->{fieldtag},
+                    subfieldtag => $tag->{subfieldtag},
+                    values => \@loop_values,
+                };
+            }
+            for my $field_value ( @field_values ) {
+                if ( $field_value->{subfieldtag} ) {
+                    push @csv_rows, join( $subfieldseparator, @{ $field_value->{values} } );
+                } else {
+                    push @csv_rows, join( $fieldseparator, @{ $field_value->{values} } );
+                }
+            }
+        }
+    }
+
+
+    if ( $header ) {
+        $csv->combine(@marcfieldsheaders);
+        $output = $csv->string() . "\n";
+    }
+    $csv->combine(@csv_rows);
     $output .= $csv->string() . "\n";
 
     return $output;
