@@ -39,42 +39,45 @@
                                 <div id="subscriptionline[% subscription_LOO.subscriptionid %]" style="border-bottom:1px solid #EEE;">
                                     <h3>Subscription information for [% subscription_LOO.bibliotitle %]</h3>
                                     <p>
-                                        The current subscription began on [% subscription_LOO.startdate %] and is issued every
+                                        The current subscription began on [% subscription_LOO.startdate %] and is issued
                                         [% IF ( subscription_LOO.periodicity1 ) %]
-                                                day
+                                                twice per day
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity2 ) %]
-                                                week
+                                                every day
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity3 ) %]
-                                                2 weeks
+                                                three times per week
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity4 ) %]
-                                                3 weeks
+                                                every week
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity5 ) %]
-                                                month
+                                                every 2 weeks
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity6 ) %]
-                                                2 months
+                                                every 3 weeks
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity7 ) %]
-                                                3 months
-                                        [% END %]
-                                        [% IF ( subscription_LOO.periodicity13 ) %]
-                                                4 months
+                                                every month
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity8 ) %]
-                                                quarter
+                                                every 2 months
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity9 ) %]
-                                                2 quarters
+                                                every quarter
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity10 ) %]
-                                                year
+                                                twice per year
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity11 ) %]
-                                                2 years
+                                                every year
+                                        [% END %]
+                                        [% IF ( subscription_LOO.periodicity12 ) %]
+                                                every 2 years
+                                        [% END %]
+                                        [% IF ( subscription_LOO.periodicity13 ) %]
+                                                irregularly
                                         [% END %]
                                         [% IF ( subscription_LOO.arrival1 ) %]
                                             on Monday
