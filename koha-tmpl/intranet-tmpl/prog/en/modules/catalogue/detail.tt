@@ -525,6 +525,7 @@ function verify_images() {
                 [% IF ( hostrecords ) %]<th>Host records</th>[% END %]
                 [% IF ( analyze ) %]<th>Used in</th><th></th>[% END %]
                 [% IF ( ShowCourseReserves ) %]<th>Course Reserves</th>[% END %]
+                <th>Edit</th>
             </tr>
         </thead>
         <tbody>
@@ -698,6 +699,7 @@ function verify_images() {
                        [% END %]
                     </td>
                 [% END %]
+                <td><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber %]&itemnumber=[% item.itemnumber %]#edititem">Edit</a></td>
                 </tr>
             [% END %]
         </tbody>
