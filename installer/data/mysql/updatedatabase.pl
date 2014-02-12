@@ -8036,6 +8036,14 @@ if(CheckVersion($DBversion)) {
     print "Upgrade to $DBversion done (Bug 3445: Add indexes to action_logs table)\n";
     SetVersion($DBversion);
 }
+$DBversion = "3.15.00.XXX";
+if (CheckVersion($DBversion)) {
+    $dbh->do(q|
+        DELETE FROM systempreferences WHERE variable= "memberofinstitution"
+    |);
+    print "Upgrade to $DBversion done (Bug 11751: Remove memberofinstitytion system preference)\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 

@@ -133,7 +133,6 @@ my $stickyduedate  = $query->param('stickyduedate') || $session->param('stickydu
 my $duedatespec    = $query->param('duedatespec')   || $session->param('stickyduedate');
 my $issueconfirmed = $query->param('issueconfirmed');
 my $cancelreserve  = $query->param('cancelreserve');
-my $organisation   = $query->param('organisations');
 my $print          = $query->param('print') || q{};
 my $debt_confirmed = $query->param('debt_confirmed') || 0; # Don't show the debt error dialog twice
 my $charges        = $query->param('charges') || q{};
@@ -658,25 +657,6 @@ if ( $borrower->{'category_type'} eq 'C') {
     $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
 }
 
-my $CGIorganisations;
-my $member_of_institution;
-if ( C4::Context->preference("memberofinstitution") ) {
-    my $organisations = get_institutions();
-    my @orgs;
-    my %org_labels;
-    foreach my $organisation ( keys %$organisations ) {
-        push @orgs, $organisation;
-        $org_labels{$organisation} = $organisations->{$organisation}->{'surname'};
-    }
-    $member_of_institution = 1;
-    $CGIorganisations      = CGI::popup_menu(
-        -id     => 'organisations',
-        -name   => 'organisations',
-        -labels => \%org_labels,
-        -values => \@orgs,
-    );
-}
-
 my $lib_messages_loop = GetMessages( $borrowernumber, 'L', $branch );
 if($lib_messages_loop){ $template->param(flagged => 1 ); }
 
@@ -747,8 +727,6 @@ $template->param(
     relprevissues		=> \@relprevissues,
     displayrelissues		=> $displayrelissues,
     inprocess         => $inprocess,
-    memberofinstution => $member_of_institution,
-    CGIorganisations  => $CGIorganisations,
     is_child          => ($borrower->{'category_type'} eq 'C'),
     circview => 1,
     soundon           => C4::Context->preference("SoundOn"),

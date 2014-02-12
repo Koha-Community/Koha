@@ -62,7 +62,6 @@ BEGIN {
         &GetPendingIssues
         &GetAllIssues
 
-        &get_institutions
         &getzipnamecity
         &getidcity
 
@@ -122,7 +121,6 @@ BEGIN {
     push @EXPORT, qw(
         &AddMember
         &AddMember_Opac
-        &add_member_orgs
         &MoveMemberToDeleted
         &ExtendMemberSubscriptionTo
     );
@@ -1667,51 +1665,6 @@ sub GetAge{
 
     return $age;
 }    # sub get_age
-
-=head2 get_institutions
-
-  $insitutions = get_institutions();
-
-Just returns a list of all the borrowers of type I, borrownumber and name
-
-=cut
-
-#'
-sub get_institutions {
-    my $dbh = C4::Context->dbh();
-    my $sth =
-      $dbh->prepare(
-"SELECT borrowernumber,surname FROM borrowers WHERE categorycode=? ORDER BY surname"
-      );
-    $sth->execute('I');
-    my %orgs;
-    while ( my $data = $sth->fetchrow_hashref() ) {
-        $orgs{ $data->{'borrowernumber'} } = $data;
-    }
-    return ( \%orgs );
-
-}    # sub get_institutions
-
-=head2 add_member_orgs
-
-  add_member_orgs($borrowernumber,$borrowernumbers);
-
-Takes a borrowernumber and a list of other borrowernumbers and inserts them into the borrowers_to_borrowers table
-
-=cut
-
-#'
-sub add_member_orgs {
-    my ( $borrowernumber, $otherborrowers ) = @_;
-    my $dbh   = C4::Context->dbh();
-    my $query =
-      "INSERT INTO borrowers_to_borrowers (borrower1,borrower2) VALUES (?,?)";
-    my $sth = $dbh->prepare($query);
-    foreach my $otherborrowernumber (@$otherborrowers) {
-        $sth->execute( $borrowernumber, $otherborrowernumber );
-    }
-
-}    # sub add_member_orgs
 
 =head2 GetCities
 

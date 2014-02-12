@@ -182,7 +182,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('maxoutstanding','5','','maximum amount withstanding to be able make holds','Integer'),
 ('maxRecordsForFacets','20',NULL,NULL,'Integer'),
 ('maxreserves','50','','Define maximum number of holds a patron can place','Integer'),
-('memberofinstitution','0',NULL,'If ON, patrons can be linked to institutions','YesNo'),
 ('minPasswordLength','3',NULL,'Specify the minimum length of a patron/staff password','free'),
 ('NewItemsDefaultLocation','','','If set, all new items will have a location of the given Location Code ( Authorized Value type LOC )',''),
 ('noissuescharge','5','','Define maximum amount withstanding before check outs are blocked','Integer'),

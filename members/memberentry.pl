@@ -400,11 +400,6 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             }
         }
 
-		if ($data{'organisations'}){            
-			# need to add the members organisations
-			my @orgs=split(/\|/,$data{'organisations'});
-			add_member_orgs($borrowernumber,\@orgs);
-		}
         if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
             C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
         }
@@ -619,28 +614,6 @@ if($no_categories){
     $template->param(no_categories => 1);
 }
 $template->param(no_add => $no_add);
-my $CGIorganisations;
-my $member_of_institution;
-if (C4::Context->preference("memberofinstitution")){
-    my $organisations=get_institutions();
-    my @orgs;
-    my %org_labels;
-    foreach my $organisation (keys %$organisations) {
-        push @orgs,$organisation;
-        $org_labels{$organisation}=$organisations->{$organisation}->{'surname'};
-    }
-    $member_of_institution=1;
-
-    $CGIorganisations = CGI::scrolling_list( -id => 'organisations',
-        -name     => 'organisations',
-        -labels   => \%org_labels,
-        -values   => \@orgs,
-        -size     => 5,
-        -multiple => 'true'
-
-    );
-}
-
 # --------------------------------------------------------------------------------------------------------
 
 my $CGIsort = buildCGIsort("Bsort1","sort1",$data{'sort1'});
@@ -728,8 +701,6 @@ $template->param(
   category_type =>$category_type,
   modify          => $modify,
   nok     => $nok,#flag to konw if an error 
-  memberofinstution => $member_of_institution,
-  CGIorganisations => $CGIorganisations,
   NoUpdateLogin =>  $NoUpdateLogin
   );
 
