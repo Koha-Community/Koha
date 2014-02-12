@@ -5,7 +5,7 @@
 	<div id="patron_search" class="residentsearch">
 	<p class="tip">Enter patron card number or partial name:</p>
 	<form action="/cgi-bin/koha/members/member.pl" method="post">
-    <input id="searchmember" size="25" class="focus" name="member" type="text" value="[% member %]"/>
+    <input id="searchmember" data-toggle="tooltip" size="25" class="focus" name="member" type="text" value="[% member %]"/>
 	<span class="filteraction" id="filteraction_off"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').toggle();">[-]</a></span>
 	<span class="filteraction" id="filteraction_on"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').toggle();">[+]</a></span>
 
@@ -28,21 +28,15 @@
                 $("#searchfields").change(function() {
                     if ( $(this).val() == 'dateofbirth' ) {
                         [% IF dateformat == 'us' %]
-                            [% SET format = 'MM/DD/YYYY' %]
+                            var MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'MM/DD/YYYY'");
                         [% ELSIF dateformat == 'iso' %]
-                            [% SET format = 'YYYY-MM-DD' %]
+                            var MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'YYYY-MM-DD'");
                         [% ELSIF dateformat == 'metric' %]
-                            [% SET format = 'DD/MM/YYYY' %]
+                            var MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'DD/MM/YYYY'");
                         [% END %]
-
-                        $('#searchmember').qtip({
-                            content: 'Dates of birth should be entered in the format "[% format %]"',
-                            style: {
-                                tip: 'topLeft'
-                            }
-                        })
+                        $('#searchmember').attr("title",MSG_DATE_FORMAT).tooltip('show');
                     } else {
-                        $('#searchmember').qtip('destroy');
+                        $('#searchmember').tooltip('destroy');
                     }
                 });
             </script>

@@ -13,7 +13,6 @@
 <script type="text/javascript" src="[% interface %]/lib/shortcut/shortcut.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.highlight-3.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.qtip.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/bootstrap/bootstrap.min.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.validate.min.js"></script>
 
