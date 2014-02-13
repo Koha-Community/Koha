@@ -782,17 +782,19 @@ No patron matched <span class="ex">[% message %]</span>
                     <input type="checkbox" class="radio" name="items[]" value="[% todayissue.itemnumber %]" />
                 [% END %]
                 </span>
-                [% IF todayissue.renewsallowed && todayissue.renewsleft %]
+                [% IF todayissue.renewsallowed && todayissue.renewsleft && !todayissue.renew_error_too_soon %]
                     <span class="renewals">([% todayissue.renewsleft %] of [% todayissue.renewsallowed %] renewals remaining)</span>
                 [% END %]
                 <span class="renewals-disabled">
             [% END %]
-		[% IF ( todayissue.renew_error_on_reserve ) %]
-            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% todayissue.biblionumber %]">On hold</a>
-		[% END %]
-                [% IF ( todayissue.renew_error_too_many ) %]
-            Not renewable
-                [% END %]
+            [% IF ( todayissue.renew_error_on_reserve ) %]
+                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% todayissue.biblionumber %]">On hold</a>
+            [% ELSIF ( todayissue.renew_error_too_many ) %]
+                Not renewable
+            [% ELSIF ( todayissue.renew_error_too_soon ) %]
+                No renewal before [% todayissue.soonestrenewdate %]
+                <span class="renewals">([% todayissue.renewsleft %] of [% todayissue.renewsallowed %] renewals remaining)</span>
+            [% END %]
             [% IF ( todayissue.can_confirm ) %]
                 </span>
             [% END %]
@@ -877,17 +879,19 @@ No patron matched <span class="ex">[% message %]</span>
                     <input type="checkbox" class="radio" name="items[]" value="[% previssue.itemnumber %]" />
                 [% END %]
                 </span>
-                [% IF previssue.renewsallowed && previssue.renewsleft %]
+                [% IF previssue.renewsallowed && previssue.renewsleft && !previssue.renew_error_too_soon %]
                     <span class="renewals">([% previssue.renewsleft %] of [% previssue.renewsallowed %] renewals remaining)</span>
                 [% END %]
                 <span class="renewals-disabled">
             [% END %]
-		[% IF ( previssue.renew_error_on_reserve ) %]
-            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% previssue.biblionumber %]">On hold</a>
-		[% END %]
-                [% IF ( previssue.renew_error_too_many ) %]
-            Not renewable
-                [% END %]
+            [% IF ( previssue.renew_error_on_reserve ) %]
+                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% previssue.biblionumber %]">On Hold</a>
+            [% ELSIF ( previssue.renew_error_too_many ) %]
+                Not renewable
+            [% ELSIF ( previssue.renew_error_too_soon ) %]
+                No renewal before [% previssue.soonestrenewdate %]
+                <span class="renewals">([% previssue.renewsleft %] of [% previssue.renewsallowed %] renewals remaining)</span>
+            [% END %]
             [% IF ( previssue.can_confirm ) %]
                 </span>
             [% END %]

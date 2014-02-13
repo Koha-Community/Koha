@@ -521,6 +521,14 @@ sub build_issue_data {
         $row{renew_failed}  = $renew_failed{ $issue->{itemnumber} };
         $row{return_failed} = $return_failed{ $issue->{barcode} };
         ($row{'renewcount'},$row{'renewsallowed'},$row{'renewsleft'}) = C4::Circulation::GetRenewCount($issue->{'borrowernumber'},$issue->{'itemnumber'}); #Add renewal count to item data display
+
+        $row{'soonestrenewdate'} = output_pref(
+            C4::Circulation::GetSoonestRenewDate(
+                $issue->{borrowernumber},
+                $issue->{itemnumber}
+            )
+        );
+
         push( @{$localissue}, \%row );
     }
     return $localissue;

@@ -79,6 +79,7 @@ BEGIN {
 		&AddIssue
 		&AddRenewal
 		&GetRenewCount
+        &GetSoonestRenewDate
 		&GetItemIssue
 		&GetItemIssues
 		&GetIssuingCharges
@@ -2472,7 +2473,7 @@ sub CanBookBeRenewed {
 
     my $dbh       = C4::Context->dbh;
     my $renews    = 1;
-    my $renewokay = 0;
+    my $renewokay = 1;
     my $error;
 
     my $item      = GetItem($itemnumber)      or return ( 0, 'no_item' );
@@ -2486,10 +2487,28 @@ sub CanBookBeRenewed {
 
     my $issuingrule = GetIssuingRule($borrower->{categorycode}, $item->{itype}, $branchcode);
 
-    if ( ( $issuingrule->{renewalsallowed} > $itemissue->{renewals} ) || $override_limit ) {
-        $renewokay = 1;
-    } else {
+    if ( $issuingrule->{norenewalbefore} ) {
+
+        # Get current time and add norenewalbefore. If this is smaller than date_due, it's too soon for renewal.
+        if (
+            DateTime->now( time_zone => C4::Context->tz() )->add(
+                $issuingrule->{lengthunit} => $issuingrule->{norenewalbefore}
+            ) < $itemissue->{date_due}
+        )
+        {
+            $renewokay = 0;
+            $error     = "too_soon";
+        }
+    }
+
+    if ( $issuingrule->{renewalsallowed} <= $itemissue->{renewals} ) {
+        $renewokay = 0;
         $error = "too_many";
+    }
+
+    if ( $override_limit ) {
+        $renewokay = 1;
+        $error     = undef;
     }
 
     my ( $resfound, $resrec, undef ) = C4::Reserves::CheckReserves( $itemnumber );
@@ -2666,6 +2685,52 @@ sub GetRenewCount {
     $renewsleft    = $renewsallowed - $renewcount;
     if($renewsleft < 0){ $renewsleft = 0; }
     return ( $renewcount, $renewsallowed, $renewsleft );
+}
+
+=head2 GetSoonestRenewDate
+
+  $NoRenewalBeforeThisDate = &GetSoonestRenewDate($borrowernumber, $itemnumber);
+
+Find out the soonest possible renew date of a borrowed item.
+
+C<$borrowernumber> is the borrower number of the patron who currently
+has the item on loan.
+
+C<$itemnumber> is the number of the item to renew.
+
+C<$GetSoonestRenewDate> returns the DateTime of the soonest possible renew date,
+based on the value "No renewal before" of the applicable issuing rule. Returns the
+current date if the item can already be renewed.
+
+=cut
+
+sub GetSoonestRenewDate {
+    my ( $borrowernumber, $itemnumber ) = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    my $item      = GetItem($itemnumber)      or return ( 0, 'no_item' );
+    my $itemissue = GetItemIssue($itemnumber) or return ( 0, 'no_checkout' );
+
+    $borrowernumber ||= $itemissue->{borrowernumber};
+    my $borrower = C4::Members::GetMemberDetails($borrowernumber)
+      or return;
+
+    my $branchcode = _GetCircControlBranch( $item, $borrower );
+    my $issuingrule =
+      GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
+
+    my $now = DateTime->now( time_zone => C4::Context->tz() );
+
+    if ( $issuingrule->{norenewalbefore} ) {
+        my $soonestrenewal =
+          $itemissue->{date_due}->subtract(
+            $issuingrule->{lengthunit} => $issuingrule->{norenewalbefore} );
+
+        $soonestrenewal = $now > $soonestrenewal ? $now : $soonestrenewal;
+        return $soonestrenewal;
+    }
+    return $now;
 }
 
 =head2 GetIssuingCharges
