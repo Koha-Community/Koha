@@ -7,38 +7,8 @@
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function isNotNull(f,noalert) {
-	if (f.value.length ==0) {
-		return false;
-	}
-	return true;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function Check(f) {
-	var _alertString="";
-	var alertString2;
-	if (f.authtypecode.value.length==0) {
-		_alertString += "\n- " + _("Authority type : code missing");
-	}
-	if (!(isNotNull(window.document.Aform.authtypetext,1))) {
-		_alertString += "\n- " + _("Description missing");
-	}
-	if (_alertString.length==0) {
-		document.Aform.submit();
-	} else {
-		alertString2  = _("Form not submitted because of the following problem(s)");
-		alertString2 += "\n------------------------------------------------------------------------------------\n";
-		alertString2 += _alertString;
-		alert(alertString2);
-	}
-}
-
-//]]>
-</script>
 </head>
+
 <body id="admin_authtypes" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -61,7 +31,7 @@ function Check(f) {
 
 [% IF ( add_form ) %]
 
-    <form action="[% script_name %]" name="Aform" method="post">
+    <form action="[% script_name %]" name="Aform" method="post" class="validated">
     <fieldset class="rows">
     <legend>
     [% IF ( authtypecode ) %]
@@ -78,11 +48,11 @@ function Check(f) {
             <input type="hidden" name="checked" value="0" />
             <input type="hidden" name="authtypecode" value="[% authtypecode %]" />[% authtypecode %]
     [% ELSE %]
-            <label for="authtypecode">Authority type: </label>
-            <input id="authtypecode" type="text" name="authtypecode" size="10" maxlength="10" onblur="toUC(this)" />
+            <label for="authtypecode" class="required">Authority type: </label>
+            <input id="authtypecode" type="text" class="required" required="required" name="authtypecode" size="10" maxlength="10" onblur="toUC(this)" />
     [% END %]
         </li>
-		<li><label for="authtypetext">Description: </label><input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="[% authtypetext |html %]" /></li>
+        <li><label for="authtypetext" class="required">Description: </label><input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="[% authtypetext |html %]" class="required" required="required" /></li>
 		<li><label for="summary">Summary: </label><textarea id="summary" name="summary" cols="55" rows="7">[% summary %]</textarea></li>
 		<li>
 		<p class="tip">Note: for 'Authority field to copy', enter the authority field that should be copied from the authority record to the bibliographic record. E.g., in MARC21, field 100 in the authority record should be copied to field 100 in the bibliographic record</p>
@@ -94,7 +64,8 @@ function Check(f) {
         </li>
     </ol>
 	</fieldset>
-	<fieldset class="action"><input type="submit" value="Submit" onclick="Check(this.form); return false;" />
+    <fieldset class="action">
+        <input type="submit" value="Submit" />
         <a class="cancel" href="[% script_name %]">Cancel</a>
     </fieldset>
 	</form>
