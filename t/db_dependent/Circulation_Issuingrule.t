@@ -116,6 +116,7 @@ my $sampleissuingrule1 = {
     finedays           => 0,
     lengthunit         => 'Null',
     renewalperiod      => 5,
+    norenewalbefore    => 6,
     issuelength        => 5,
     chargeperiod       => 0,
     rentaldiscount     => '2.000000',
@@ -137,6 +138,7 @@ my $sampleissuingrule2 = {
     maxissueqty        => 2,
     renewalsallowed    => 'Null',
     renewalperiod      => 2,
+    norenewalbefore    => 7,
     reservesallowed    => 'Null',
     issuelength        => 2,
     lengthunit         => 'Null',
@@ -160,6 +162,7 @@ my $sampleissuingrule3 = {
     maxissueqty        => 3,
     renewalsallowed    => 'Null',
     renewalperiod      => 3,
+    norenewalbefore    => 8,
     reservesallowed    => 'Null',
     issuelength        => 3,
     lengthunit         => 'Null',
@@ -183,6 +186,7 @@ $query = 'INSERT INTO issuingrules (
                 maxissueqty,
                 renewalsallowed,
                 renewalperiod,
+                norenewalbefore,
                 reservesallowed,
                 issuelength,
                 lengthunit,
@@ -198,7 +202,7 @@ $query = 'INSERT INTO issuingrules (
                 reservecharge,
                 chargename,
                 restrictedtype
-                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 my $sth = $dbh->prepare($query);
 $sth->execute(
     $sampleissuingrule1->{branchcode},
@@ -207,6 +211,7 @@ $sth->execute(
     $sampleissuingrule1->{maxissueqty},
     $sampleissuingrule1->{renewalsallowed},
     $sampleissuingrule1->{renewalperiod},
+    $sampleissuingrule1->{norenewalbefore},
     $sampleissuingrule1->{reservesallowed},
     $sampleissuingrule1->{issuelength},
     $sampleissuingrule1->{lengthunit},
@@ -230,6 +235,7 @@ $sth->execute(
     $sampleissuingrule2->{maxissueqty},
     $sampleissuingrule2->{renewalsallowed},
     $sampleissuingrule2->{renewalperiod},
+    $sampleissuingrule2->{norenewalbefore},
     $sampleissuingrule2->{reservesallowed},
     $sampleissuingrule2->{issuelength},
     $sampleissuingrule2->{lengthunit},
@@ -253,6 +259,7 @@ $sth->execute(
     $sampleissuingrule3->{maxissueqty},
     $sampleissuingrule3->{renewalsallowed},
     $sampleissuingrule3->{renewalperiod},
+    $sampleissuingrule3->{norenewalbefore},
     $sampleissuingrule3->{reservesallowed},
     $sampleissuingrule3->{issuelength},
     $sampleissuingrule3->{lengthunit},
