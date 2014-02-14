@@ -111,18 +111,14 @@ if ($op eq 'add_form') {
             -id=>'authorised_value',
             -values=> \@authorised_values,
             -size=>1,
-            -tabindex=>'',
             -multiple=>0,
             -default => $data->{'authorised_value'},
             );
 
     if ($searchfield) {
-        $template->param(action => "Modify tag",
-                                searchfield => "<input type=\"hidden\" name=\"tagfield\" value=\"$searchfield\" />$searchfield");
+        $template->param('searchfield' => $searchfield);
         $template->param('heading_modify_tag_p' => 1);
     } else {
-        $template->param(action => "Add tag",
-                                searchfield => "<input type=\"text\" name=\"tagfield\" size=\"5\" maxlength=\"3\" />");
         $template->param('heading_add_tag_p' => 1);
     }
     $template->param('use_heading_flags_p' => 1);
