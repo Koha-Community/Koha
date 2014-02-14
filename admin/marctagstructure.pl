@@ -126,16 +126,8 @@ if ($op eq 'add_form') {
 	$template->param('use_heading_flags_p' => 1);
 	$template->param(liblibrarian => $data->{'liblibrarian'},
 			libopac => $data->{'libopac'},
-			repeatable => CGI::checkbox(-name=>'repeatable',
-						-checked=> $data->{'repeatable'}?'checked':'',
-						-value=> 1,
-						-label => '',
-						-id=> 'repeatable'),
-			mandatory => CGI::checkbox(-name => 'mandatory',
-						-checked => $data->{'mandatory'}?'checked':'',
-						-value => 1,
-						-label => '',
-						-id => 'mandatory'),
+            repeatable => $data->{'repeatable'},
+            mandatory => $data->{'mandatory'},
 			authorised_value => $authorised_value,
 			frameworkcode => $frameworkcode,
     );  # FIXME: move checkboxes to presentation layer
