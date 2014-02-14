@@ -63,6 +63,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('BakerTaylorPassword','','','Baker & Taylor Password for Content Cafe (external content)','Free'),
 ('BakerTaylorUsername','','','Baker & Taylor Username for Content Cafe (external content)','Free'),
 ('BasketConfirmations','1','always ask for confirmation.|do not ask for confirmation.','When closing or reopening a basket,','Choice'),
+('batch_checkouts','',NULL,'Allow patron categories allowed to checkout in a batch','Free'),
 ('BiblioAddsAuthorities','0',NULL,'If ON, adding a new biblio will check for an existing authority record and create one on the fly if one doesn\'t exist','YesNo'),
 ('BiblioDefaultView','normal','normal|marc|isbd','Choose the default detail view in the catalog; choose between normal, marc or isbd','Choice'),
 ('BibtexExportAdditionalFields',  '', NULL ,  'Define additional BibTex tags to export from MARC records in YAML format as an associative array with either a marc tag/subfield combination as the value, or a list of tag/subfield combinations.',  'textarea'),

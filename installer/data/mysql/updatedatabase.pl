@@ -11120,6 +11120,16 @@ if ( CheckVersion($DBversion) ) {
    SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences ( variable, value, options, explanation, type )
+        VALUES ('batch_checkouts','','','Allow patron categories allowed to checkout in a batch','Free')
+    |);
+    print "Upgrade to $DBversion done (Bug 11759: Add batch_checkouts system preference)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
