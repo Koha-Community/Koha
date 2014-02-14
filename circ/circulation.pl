@@ -89,6 +89,11 @@ if (!C4::Context->userenv && !$branch){
     }
 }
 
+my $barcodes = [];
+if ( my $barcode = $query->param('barcode') ) {
+    $barcodes = [ $barcode ];
+}
+
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
     {
         template_name   => 'circ/circulation.tt',
@@ -133,10 +138,12 @@ if (C4::Context->preference("DisplayClearScreenButton")) {
     $template->param(DisplayClearScreenButton => 1);
 }
 
-my $barcode        = $query->param('barcode') || q{};
-$barcode =~  s/^\s*|\s*$//g; # remove leading/trailing whitespace
+for my $barcode ( @$barcodes ) {
+    $barcode =~ s/^\s*|\s*$//g; # remove leading/trailing whitespace
+    $barcode = barcodedecode($barcode)
+        if( $barcode && C4::Context->preference('itemBarcodeInputFilter'));
+}
 
-$barcode = barcodedecode($barcode) if( $barcode && C4::Context->preference('itemBarcodeInputFilter'));
 my $stickyduedate  = $query->param('stickyduedate') || $session->param('stickyduedate');
 my $duedatespec    = $query->param('duedatespec')   || $session->param('stickyduedate');
 my $issueconfirmed = $query->param('issueconfirmed');
@@ -146,7 +153,7 @@ my $debt_confirmed = $query->param('debt_confirmed') || 0; # Don't show the debt
 my $charges        = $query->param('charges') || q{};
 
 # Check if stickyduedate is turned off
-if ( $barcode ) {
+if ( @$barcodes ) {
     # was stickyduedate loaded from session?
     if ( $stickyduedate && ! $query->param("stickyduedate") ) {
         $session->clear( 'stickyduedate' );
@@ -179,12 +186,12 @@ if( $onsite_checkout && !$duedatespec_allow ) {
 our $todaysdate = C4::Dates->new->output('iso');
 
 # check and see if we should print
-if ( $barcode eq '' && $print eq 'maybe' ) {
+if ( @$barcodes == 0 && $print eq 'maybe' ) {
     $print = 'yes';
 }
 
-my $inprocess = ($barcode eq '') ? '' : $query->param('inprocess');
-if ( $barcode eq '' && $charges eq 'yes' ) {
+my $inprocess = (@$barcodes == 0) ? '' : $query->param('inprocess');
+if ( @$barcodes == 0 && $charges eq 'yes' ) {
     $template->param(
         PAYCHARGES     => 'yes',
         borrowernumber => $borrowernumber
@@ -298,25 +305,29 @@ if ($borrowernumber) {
 # STEP 3 : ISSUING
 #
 #
-if ($barcode) {
+if (@$barcodes) {
+  my $checkout_infos;
+  for my $barcode ( @$barcodes ) {
+    my $template_params = { barcode => $barcode };
     # always check for blockers on issuing
     my ( $error, $question, $alerts ) =
     CanBookBeIssued( $borrower, $barcode, $datedue , $inprocess, undef, { onsite_checkout => $onsite_checkout } );
     my $blocker = $invalidduedate ? 1 : 0;
 
-    $template->param( alert => $alerts );
+    $template_params->{alert} = $alerts;
 
     #  Get the item title for more information
     my $getmessageiteminfo = GetBiblioFromItemNumber(undef,$barcode);
-    $template->param(
-        authvalcode_notforloan => C4::Koha::GetAuthValCode('items.notforloan', $getmessageiteminfo->{'frameworkcode'}),
-    );
+    $template_params->{authvalcode_notforloan} =
+        C4::Koha::GetAuthValCode('items.notforloan', $getmessageiteminfo->{'frameworkcode'});
+
     # Fix for bug 7494: optional checkout-time fallback search for a book
 
     if ( $error->{'UNKNOWN_BARCODE'}
-        && C4::Context->preference("itemBarcodeFallbackSearch") )
+        && C4::Context->preference("itemBarcodeFallbackSearch")
+    )
     {
-     $template->param( FALLBACK => 1 );
+     $template_params->{FALLBACK} = 1;
 
         my $query = "kw=" . $barcode;
         my ( $searcherror, $results, $total_hits ) = SimpleSearch($query);
@@ -338,37 +349,33 @@ if ($barcode) {
                     }
                 }
             }
-            $template->param( options => \@options );
+            $template_params->{options} = \@options;
         }
     }
 
     unless( $onsite_checkout and C4::Context->preference("OnSiteCheckoutsForce") ) {
         delete $question->{'DEBT'} if ($debt_confirmed);
         foreach my $impossible ( keys %$error ) {
-            $template->param(
-                $impossible => $$error{$impossible},
-                IMPOSSIBLE  => 1
-            );
+            $template_params->{$impossible} = $$error{$impossible};
+            $template_params->{IMPOSSIBLE} = 1;
             $blocker = 1;
         }
     }
+    my $iteminfo = GetBiblioFromItemNumber(undef, $barcode);
     if( !$blocker || $force_allow_issue ){
         my $confirm_required = 0;
         unless($issueconfirmed){
             #  Get the item title for more information
-            my $getmessageiteminfo  = GetBiblioFromItemNumber(undef,$barcode);
-	    $template->{VARS}->{'additional_materials'} = $getmessageiteminfo->{'materials'};
-            $template->param( itemhomebranch => $getmessageiteminfo->{'homebranch'} );
+            $template_params->{additional_materials} = $iteminfo->{'materials'};
+            $template_params->{itemhomebranch} = $iteminfo->{'homebranch'};
 
             # pass needsconfirmation to template if issuing is possible and user hasn't yet confirmed.
             foreach my $needsconfirmation ( keys %$question ) {
-                $template->param(
-                    $needsconfirmation => $$question{$needsconfirmation},
-                    getTitleMessageIteminfo => $getmessageiteminfo->{'title'},
-                    getBarcodeMessageIteminfo => $getmessageiteminfo->{'barcode'},
-                    NEEDSCONFIRMATION  => 1,
-                    onsite_checkout => $onsite_checkout,
-                );
+                $template_params->{$needsconfirmation} = $$question{$needsconfirmation};
+                $template_params->{getTitleMessageIteminfo} = $iteminfo->{'title'};
+                $template_params->{getBarcodeMessageIteminfo} = $iteminfo->{'barcode'};
+                $template_params->{NEEDSCONFIRMATION} = 1;
+                $template_params->{onsite_checkout} => $onsite_checkout,
                 $confirm_required = 1;
             }
         }
@@ -379,9 +386,8 @@ if ($barcode) {
             $inprocess = 1;
         }
     }
-    
+
     my ( $od, $issue, $fines ) = GetMemberIssuesAndFines($borrowernumber);
-    $template->param( issuecount => $issue );
 
     if ($question->{RESERVE_WAITING} or $question->{RESERVED}){
         $template->param(
@@ -389,6 +395,18 @@ if ($barcode) {
             itembiblionumber => $getmessageiteminfo->{'biblionumber'}
         );
     }
+
+    $template_params->{issuecount} = $issue;
+
+    if ( $iteminfo ) {
+        $iteminfo->{subtitle} = GetRecordValue('subtitle', GetMarcBiblio($iteminfo->{biblionumber}), GetFrameworkCode($iteminfo->{biblionumber}));
+        $template_params->{item} = $iteminfo;
+    }
+    push @$checkout_infos, $template_params;
+  }
+
+  $template->param( %{$checkout_infos->[0]} );
+  $template->param( barcode => $barcodes->[0] );
 }
 
 # reload the borrower info for the sake of reseting the flags.....
@@ -534,7 +552,7 @@ $template->param(
     expiry            => format_date($borrower->{'dateexpiry'}),
     roadtype          => $roadtype,
     amountold         => $amountold,
-    barcode           => $barcode,
+    barcodes          => $barcodes,
     stickyduedate     => $stickyduedate,
     duedatespec       => $duedatespec,
     message           => $message,
