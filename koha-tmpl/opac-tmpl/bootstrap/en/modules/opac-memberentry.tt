@@ -61,6 +61,11 @@
 
                         <legend id="library_legend">Library</legend>
                             <ol>
+                                <li>
+                                    <label>Card number</label>
+                                    <input type="text" value="[% borrower.cardnumber %]" disabled="disabled"/>
+                                </li>
+
                                 [% UNLESS hidden.defined('branchcode') %]
                                     <li>
                                         [% IF mandatory.defined('branchcode') %]
