@@ -86,3 +86,9 @@ function openWindow(link,name,width,height) {
 function removeFocus() {
     $(':focus').blur();
 }
+
+function toUC(f) {
+    var x=f.value.toUpperCase();
+    f.value=x;
+    return true;
+}
