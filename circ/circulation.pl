@@ -90,13 +90,33 @@ if (!C4::Context->userenv && !$branch){
 }
 
 my $barcodes = [];
+my $batch = $query->param('batch');
 if ( my $barcode = $query->param('barcode') ) {
     $barcodes = [ $barcode ];
+} else {
+    my $filefh = $query->upload('uploadfile');
+    if ( $filefh ) {
+        while ( my $content = <$filefh> ) {
+            $content =~ s/[\r\n]*$//g;
+            push @$barcodes, $content if $content;
+        }
+    } elsif ( my $list = $query->param('barcodelist') ) {
+        push @$barcodes, split( /\s\n/, $list );
+        $barcodes = [ map { $_ =~ /^\s*$/ ? () : $_ } @$barcodes ];
+    } else {
+        @$barcodes = $query->param('barcodes');
+    }
 }
+
+$barcodes = [ uniq @$barcodes ];
+
+my $template_name = $batch
+    ? q|circ/circulation_batch_checkouts.tt|
+    : q|circ/circulation.tt|;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
     {
-        template_name   => 'circ/circulation.tt',
+        template_name   => $template_name,
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
@@ -325,6 +345,7 @@ if (@$barcodes) {
 
     if ( $error->{'UNKNOWN_BARCODE'}
         && C4::Context->preference("itemBarcodeFallbackSearch")
+        && not $batch
     )
     {
      $template_params->{FALLBACK} = 1;
@@ -404,9 +425,16 @@ if (@$barcodes) {
     }
     push @$checkout_infos, $template_params;
   }
-
-  $template->param( %{$checkout_infos->[0]} );
-  $template->param( barcode => $barcodes->[0] );
+  unless ( $batch ) {
+    $template->param( %{$checkout_infos->[0]} );
+    $template->param( barcode => $barcodes->[0] );
+  } else {
+    my $confirmation_needed = grep { $_->{NEEDSCONFIRMATION} } @$checkout_infos;
+    $template->param(
+        checkout_infos => $checkout_infos,
+        confirmation_needed => $confirmation_needed,
+    );
+  }
 }
 
 # reload the borrower info for the sake of reseting the flags.....
@@ -527,6 +555,9 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
         extendedattributes => $attributes
     );
 }
+my $view = $batch
+    ?'batch_checkout_view'
+    : 'circview';
 
 my @relatives = GetMemberRelatives( $borrower->{'borrowernumber'} );
 my $relatives_issues_count =
@@ -559,7 +590,7 @@ $template->param(
     totaldue          => sprintf('%.2f', $total),
     inprocess         => $inprocess,
     is_child          => ($borrowernumber && $borrower->{'category_type'} eq 'C'),
-    circview => 1,
+    $view             => 1,
     soundon           => C4::Context->preference("SoundOn"),
     fast_cataloging   => $fast_cataloging,
     CircAutoPrintQuickSlip   => C4::Context->preference("CircAutoPrintQuickSlip"),
