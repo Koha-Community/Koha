@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% IF ( borrowernumber ) %]
 <div class="patroninfo"><h5>[% INCLUDE 'patron-title.inc' %]</h5>
 <!--[if IE 6]>
@@ -63,6 +64,9 @@
 <div id="menu">
 <ul>
     [% IF ( circview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% borrowernumber %]">Check out</a></li>
+    [% IF Koha.Preference('batch_checkouts').split('\|').grep(categorycode).size > 0 %]
+      [% IF ( batch_checkout_view ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% borrower.borrowernumber %]&amp;batch=1">Batch check out</a></li>
+    [% END %]
     [% IF ( CAN_user_borrowers ) %]
         [% IF ( detailview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Details</a></li>
     [% END %]
