@@ -17,8 +17,20 @@
             function () { $(this).toggleClass("ulined") }
         );
         $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aaSorting": [ [0,'desc'], [3,'asc'] ],
             "aoColumnDefs": [
                 { "aTargets": [ 8 ], "sType": "natural" }
+            ],
+            "aoColumns": [
+                null,
+                null,
+                null,
+                { "sType": "anti-the" },
+                null,
+                null,
+                null,
+                null,
+                null
             ],
             "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
             "iDisplayLength": 20,
