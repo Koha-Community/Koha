@@ -182,8 +182,21 @@ if ($issues){
         if($status && C4::Context->preference("OpacRenewalAllowed")){
             $issue->{'status'} = $status;
         }
-        $issue->{'too_many'} = 1 if $renewerror and $renewerror eq 'too_many';
-        $issue->{'on_reserve'} = 1 if $renewerror and $renewerror eq 'on_reserve';
+
+        if ($renewerror) {
+            $issue->{'too_many'}   = 1 if $renewerror eq 'too_many';
+            $issue->{'on_reserve'} = 1 if $renewerror eq 'on_reserve';
+
+            if ( $renewerror eq 'too_soon' ) {
+                $issue->{'too_soon'}         = 1;
+                $issue->{'soonestrenewdate'} = output_pref(
+                    C4::Circulation::GetSoonestRenewDate(
+                        $issue->{borrowernumber},
+                        $issue->{itemnumber}
+                    )
+                );
+            }
+        }
 
         if ( $issue->{'overdue'} ) {
             push @overdues, $issue;
