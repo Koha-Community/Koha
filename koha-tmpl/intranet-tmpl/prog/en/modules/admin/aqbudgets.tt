@@ -384,9 +384,16 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
         <td> <span style="color: gray;"> Edit Delete </span> </td>
     [% ELSE %]
         <td>
-            <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]" >Edit</a>
-            <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=delete_confirm&amp;budget_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]">Delete</a>
-            <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_parent_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]">Add child fund</a>
+            <div class="dropdown dropup">
+                <a class="btn btn-mini dropdown-toggle" id="budgetactions[% budget.budget_id %]_[% budget.budget_period_id %]" role="button" data-toggle="dropdown" href="#">
+                   Actions <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="budgetactions[% budget.budget_id %]_[% budget.budget_period_id %]">
+                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]" >Edit</a></li>
+                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=delete_confirm&amp;budget_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]">Delete</a></li>
+                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_parent_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]">Add child fund</a></li>
+                </ul>
+            </div>
         </td>
     [% END %]
     </tr>
