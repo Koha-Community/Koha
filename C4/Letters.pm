@@ -23,6 +23,7 @@ use warnings;
 use MIME::Lite;
 use Mail::Sendmail;
 
+use C4::Koha qw(GetAuthorisedValueByCode);
 use C4::Members;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Branch;
@@ -637,6 +638,7 @@ sub _parseletter {
             #Therefore adding the test on biblio. This includes biblioitems,
             #but excludes items. Removed unneeded global and lookahead.
 
+        $val = GetAuthorisedValueByCode ('ROADTYPE', $val, 0) if $table=~/^borrowers$/ && $field=~/^streettype$/;
         my $replacedby   = defined ($val) ? $val : '';
         ($letter->{title}  ) and do {
             $letter->{title}   =~ s/$replacetablefield/$replacedby/g;
