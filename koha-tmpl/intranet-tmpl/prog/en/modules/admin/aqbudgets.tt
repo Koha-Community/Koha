@@ -160,12 +160,12 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
                 }
 
                 var nTrs = $('#budgeth tbody tr');
-                var iColspan = nTrs[0].getElementsByTagName('td').length;
+                var iColspan = nTrs[1].getElementsByTagName('td').length;
                 var sLastGroup = "";
                 for ( var i=0 ; i<nTrs.length ; i++ )
                 {
                     var iDisplayIndex = oSettings._iDisplayStart + i;
-                    var sGroup = oSettings.aoData[ oSettings.aiDisplay[iDisplayIndex] ]._aData[0];
+                    var sGroup = oSettings.aoData[ oSettings.aiDisplay[iDisplayIndex] ]._aData[1];
                     if ( sGroup != sLastGroup )
                     {
                         var nGroup = document.createElement( 'tr' );
@@ -180,10 +180,10 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
                 }
             },
             "aoColumnDefs": [
-                { "bVisible": false, "aTargets": [ 0 ] }
+                { "bVisible": false, "aTargets": [ 0, 1 ] }
             ],
-            "aaSortingFixed": [[ 0, 'asc' ]],
-            "aaSorting": [[ 1, 'asc' ]],
+            "aaSortingFixed": [[ 1, 'asc' ]],
+            "aaSorting": [[ 2, 'asc' ]],
             'bSort': false,
             'bPaginate': false,
             "bAutoWidth": false
@@ -202,9 +202,19 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
             $(oTable).treetable('collapseAll');
         });
 
+        $("#hide_inactive").click(function(e){
+            e.preventDefault();
+            oTable.fnFilter( 0, 0 ); // Hide active=0
+        });
+        $("#show_inactive").click(function(e){
+            e.preventDefault();
+            oTable.fnFilter( '', 0 );
+        });
+
         $("#filterbutton").click(function() {
             $("#fundfilters").slideToggle(0);
         });
+        $("#hide_inactive").click();
     });
 //]]>
 </script>
@@ -256,10 +266,13 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
 <table id="budgeth">
     <caption>
         <span class="actions"><a href="#" id="expand_all">Expand all</a>
-        | <a href="#" id="collapse_all">Collapse all</a></span>
+        | <a href="#" id="collapse_all">Collapse all</a>
+        | <a href="#" id="hide_inactive">Hide inactive budgets</a>
+        | <a href="#" id="show_inactive">Show inactive budgets</a></span>
     </caption>
     <thead>
         <tr>
+            <th>Active</th>
             <th>Budget period description</th>
             <th>Fund code</th>
             <th>Fund name</th>
@@ -276,6 +289,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
     <tfoot>
     <tr>
     <th></th>
+    <th></th>
     <th colspan="2" style="text-align: left;" nowrap="nowrap">Period allocated [% IF ( budget_period_total ) %][% budget_period_total %][% END %]  </th>
     <th nowrap="nowrap" class="data"> [% period_alloc_total %]</th>
     <th></th>
@@ -290,6 +304,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
     <tbody>
     [% FOREACH budget IN budgets %]
     <tr data-tt-id="[% budget.budget_id %]" [% IF ( budget.budget_parent_id ) %]data-tt-parent-id="[% budget.budget_parent_id %]"[% END %]>
+    <td>[% budget.budget_period_active %]</td>
     <td>Budget [% budget.budget_period_description %]</td>
     <td>[% budget.budget_code_indent %]</td>
     <td>[% budget.budget_name %]</td>
