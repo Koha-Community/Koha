@@ -189,10 +189,21 @@ var MSG_CONFIRM_RESUME_HOLDS  = _("Are you sure you want to resume all suspended
                 [% IF ( show_barcode ) %]<td class="barcode">[% ISSUE.barcode %]</td>[% END %]
                 <td class="call_no">[% ISSUE.itemcallnumber %]</td>
                 [% IF ( OpacRenewalAllowed ) %]
-                    <td class="renew">[% IF ( ISSUE.status ) %][% IF ( canrenew ) %]<input type="checkbox" name="item" value="[% ISSUE.itemnumber %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber %]&amp;borrowernumber=[% ISSUE.borrowernumber %]">Renew</a>[% END %] <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>
-                        [% ELSE %]
-                        Not renewable[% IF ( ISSUE.too_many ) %] <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>[% ELSE %][% IF ( ISSUE.on_reserve ) %] <span class="renewals">(On hold)</span>[% END %][% END %] 
-                        [% END %]</td>
+                    <td class="renew">
+                    [% IF ( ISSUE.status ) %]
+                        [% IF ( canrenew ) %]
+                            <input type="checkbox" name="item" value="[% ISSUE.itemnumber %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber %]&amp;borrowernumber=[% ISSUE.borrowernumber %]">Renew</a>
+                        [% END %]
+                        <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>
+                    [% ELSIF ( ISSUE.too_many ) %]
+                        Not renewable
+                    [% ELSIF ( ISSUE.too_soon ) %]
+                        No renewal before [% ISSUE.soonestrenewdate %]
+                        <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>
+                    [% ELSIF ( ISSUE.on_reserve ) %]
+                        <span class="renewals">(On hold)</span>
+                    [% END %]
+                    </td>
                 [% END %]
 [% IF ( OPACFinesTab ) %]
                 <td class="fines">[% IF ( ISSUE.charges ) %]Yes[% ELSE %]No[% END %]</td>
