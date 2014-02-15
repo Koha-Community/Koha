@@ -77,6 +77,8 @@ my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
 
 my $warnIsRootUser   = (! $loggedinuser);
 
+my $warnNoActiveCurrency = (! defined C4::Budgets->GetCurrency());
+
 $template->param(
     kohaVersion   => $kohaVersion,
     osVersion     => $osVersion,
@@ -93,6 +95,7 @@ $template->param(
     warnPrefAnonymousPatron => $warnPrefAnonymousPatron,
     errZebraConnection => $errZebraConnection,
     warnIsRootUser => $warnIsRootUser,
+    warnNoActiveCurrency => $warnNoActiveCurrency,
 );
 
 my @components = ();
