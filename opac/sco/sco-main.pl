@@ -111,6 +111,10 @@ if (C4::Context->preference('SelfCheckoutByLogin') && !$patronid) {
 }
 my $borrower = GetMemberDetails(undef,$patronid);
 
+my $currencySymbol = "";
+if ( defined C4::Budgets->GetCurrency() ) {
+    $currencySymbol = C4::Budgets->GetCurrency()->{symbol};
+}
 
 my $branch = $issuer->{branchcode};
 my $confirm_required = 0;
@@ -154,7 +158,7 @@ elsif ( $op eq "checkout" ) {
             hide_main                 => 1,
         );
         if ($issue_error eq 'DEBT') {
-            $template->param(amount => C4::Budgets->GetCurrency()->{symbol}.$impossible->{DEBT});
+            $template->param(amount => $currencySymbol.$impossible->{DEBT});
         }
         #warn "issue_error: " . $issue_error ;
         if ( $issue_error eq "NO_MORE_RENEWALS" ) {
@@ -187,7 +191,7 @@ elsif ( $op eq "checkout" ) {
             hide_main                 => 1,
         );
         if ($issue_error eq 'DEBT') {
-            $template->param(amount => C4::Budgets->GetCurrency()->{symbol}.$needconfirm->{DEBT});
+            $template->param(amount => $currencySymbol.$needconfirm->{DEBT});
         }
     } else {
         if ( $confirmed || $issuenoconfirm ) {    # we'll want to call getpatroninfo again to get updated issues.
