@@ -104,9 +104,9 @@
             <p>Please log in instead with a regular staff account. To create a staff account, create a library, a patron category 'Staff' and add a new patron. Then give this patron permissions from 'More' in the toolbar.</p>
         [% END %]
             <h2>Warnings regarding the system configuration</h2>
-        [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatron %]
+        [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatron || warnNoActiveCurrency %]
         <table>
-            <caption>Preferences</caption>
+            <caption>Preferences and parameters</caption>
             [% IF (warnPrefBiblioAddsAuthorities) %]
             <tr><th scope="row"><b>Warning</b> </th><td>System preference 'AutoCreateAuthorities' set, but needs 'BiblioAddsAuthorities' set as well.</td></tr>
             [% END %]
@@ -115,6 +115,9 @@
             [% END %]
             [% IF warnPrefAnonymousPatron %]
                 <tr><th scope="row"><b>Warning</b> </th><td>System preference 'OPACPrivacy' set, but AnonymousPatron preference is set to '0'. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
+            [% END %]
+            [% IF warnNoActiveCurrency %]
+                <tr><th scope="row"><b>Warning</b> </th><td>No active currency is defined. Please go to Administration:Currencies & Exchange rates and mark one currency as active.</td></tr>
             [% END %]
         </table>
         [% ELSE %]
