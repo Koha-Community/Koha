@@ -268,17 +268,22 @@
                   <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loop_order.biblionumber %]">[% loop_order.title |html %]</a>
                 [% IF ( loop_order.author ) %] by [% loop_order.author %][% END %]
                 [% IF ( loop_order.isbn ) %] &ndash; [% loop_order.isbn %][% END %]
-                [% IF ( loop_order.publishercode ) %]<br />Publisher :[% loop_order.publishercode %][% END %]
+                [% IF ( loop_order.publishercode ) %]<br />Publisher:[% loop_order.publishercode %][% END %]
                 [% IF ( loop_order.suggestionid ) %]
                     <br/>
                     Suggested by: [% loop_order.surnamesuggestedby %][% IF ( loop_order.firstnamesuggestedby ) %], [% loop_order.firstnamesuggestedby %] [% END %]
                     (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% loop_order.suggestionid %]&amp;op=show">suggestion #[% loop_order.suggestionid %]</a>)
                 [% END %]
                 <br />
-                [% IF ( loop_order.notes ) %]
-                    <p class="ordernote"><strong>Note: </strong>[% loop_order.notes|html %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]">Change note</a>]</p>
+                [% IF ( loop_order.order_internalnote ) %]
+                    f<p class="ordernote"><strong>Internal note: </strong>[% loop_order.order_internalnote|html %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]&type=internal">Change internal note</a>]</p>
                 [% ELSE %]
-                    [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]">Add note</a>]
+                    [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]&type=internal">Add internal note</a>]
+                [% END %]
+		[% IF ( loop_order.order_vendornote ) %]
+                    <p class="ordernote"><strong>Vendor note: </strong>[% loop_order.order_vendornote|html %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]&type=vendor">Change vendor note</a>]</p>
+                [% ELSE %]
+                    [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]&type=vendor">Add vendor note</a>]
                 [% END %]
                 </td>
                 <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a></td>

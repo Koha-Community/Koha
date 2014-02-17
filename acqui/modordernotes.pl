@@ -47,7 +47,7 @@ my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
 my $op = $input->param('op');
 my $ordernumber = $input->param('ordernumber');
 my $referrer = $input->param('referrer') || $input->referer();
-
+my $type = $input->param('type');
 my $order = GetOrder($ordernumber);
 my $basket = GetBasket($order->{basketno});
 my ($bookseller) = GetBookSellerFromId($basket->{booksellerid});
@@ -55,14 +55,20 @@ my ($bookseller) = GetBookSellerFromId($basket->{booksellerid});
 
 if($op and $op eq 'save') {
     my $ordernotes = $input->param('ordernotes');
-    $order->{'notes'} = $ordernotes;
+    if ($type eq "vendor") {
+        $order->{'order_vendornote'} = $ordernotes;
+    } else {
+        $order->{'order_internalnote'} = $ordernotes;
+    }
     ModOrder($order);
     print $input->redirect($referrer);
     exit;
 } else {
-    $template->param(
-        ordernotes => $order->{'notes'},
-    );
+    if ($type eq "vendor") {
+        $template->param(ordernotes => $order->{'order_vendornote'});
+    } else {
+        $template->param(ordernotes => $order->{'order_internalnote'});
+    }
 }
 
 if($op) {
@@ -76,6 +82,7 @@ $template->param(
     booksellername       => $bookseller->{'name'},
     ordernumber => $ordernumber,
     referrer => $referrer,
+    type => $type,
 );
 
 

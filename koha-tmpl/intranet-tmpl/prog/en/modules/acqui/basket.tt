@@ -491,10 +491,15 @@
                                     (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% books_loo.suggestionid %]&amp;op=show">suggestion #[% books_loo.suggestionid %]</a>)
                                 [% END %]
                             </p>
-                                [% IF ( books_loo.notes ) %]
-                                    <p class="ordernote"><strong>Note: </strong>[% books_loo.notes|html %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]">Change note</a>]</p>
+                                [% IF ( books_loo.order_internalnote ) %]
+                                    <p class="ordernote"><strong>Internal note: </strong>[% books_loo.order_internalnote|html %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]&type=internal">Change internal note</a>]</p>
                                 [% ELSE %]
-                                    <p>[<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]">Add note</a>]</p>
+                                    [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]&type=internal">Add internal note</a>]
+                                [% END %]
+                                [% IF ( books_loo.order_vendornote ) %]
+                                    <p class="ordernote"><strong>Vendor note: </strong>[% books_loo.order_vendornote|html %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]&type=vendor">Change vendor note</a>]</p>
+                                [% ELSE %]
+                                    [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]&type=vendor">Add vendor note</a>]
                                 [% END %]
                             [% IF (books_loo.transferred_from) %]
                               [% basket = books_loo.transferred_from.basket %]
@@ -598,7 +603,7 @@
                         [% ELSE %]
                           <em>Deleted bibliographic record, can't find title</em><br />
                         [% END %]
-                        [% IF ( order.notes ) %] [% order.notes %][% END %]
+                        [% IF ( order.order_internalnote ) %] [% order.order_internalnote %][% END %]
                         [% IF ( order.isbn ) %] - [% order.isbn %][% END %]
                         [% IF ( order.issn ) %] - [% order.issn %][% END %]
                         [% IF ( order.publishercode ) %], [% order.publishercode %][% END %]

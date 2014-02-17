@@ -2979,7 +2979,8 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `quantityreceived` smallint(6) NOT NULL default 0, -- the quantity that have been received so far
   `cancelledby` varchar(10) default NULL, -- not used? always NULL
   `datecancellationprinted` date default NULL, -- the date the line item was deleted
-  `notes` mediumtext, -- notes related to this order line
+  `order_internalnote` mediumtext, -- notes related to this order line, made for staff
+  `order_vendornote` mediumtext, -- notes related to this order line, made for vendor
   `supplierreference` mediumtext, -- not used? always NULL
   `purchaseordernumber` mediumtext, -- not used? always NULL
   `basketno` int(11) default NULL, -- links this order line to a specific basket (aqbasket.basketno)

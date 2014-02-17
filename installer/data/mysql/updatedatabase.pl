@@ -8136,6 +8136,13 @@ if ( CheckVersion($DBversion) ) {
    print "Upgrade to $DBversion done (Bug 9448 - Add separate permission for writing off fees)\n";
    SetVersion ($DBversion);
 }
+$DBversion = "3.15.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("ALTER TABLE aqorders CHANGE notes order_internalnote MEDIUMTEXT;");
+    $dbh->do("ALTER TABLE aqorders ADD COLUMN order_vendornote MEDIUMTEXT AFTER order_internalnote;");
+    print "Upgrade to $DBversion done (Bug 9416 - In each order, add a new note made for the vendor)\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 

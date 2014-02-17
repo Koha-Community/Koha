@@ -1,26 +1,27 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisition &rsaquo; Change order notes</title>
+<title>Koha &rsaquo; Acquisition &rsaquo; Change order [% IF (type == "vendor") %]vendor[% ELSE %]internal[% END %] note</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body>
 [% INCLUDE 'header.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisition</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername|html %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Basket [% basketname|html %] ([% basketno %])</a> &rsaquo; Change order notes</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisition</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername|html %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Basket [% basketname|html %] ([% basketno %])</a> &rsaquo; Change order [% IF (type == "vendor") %]vendor[% ELSE %]internal[% END %] note</div>
 
 <div id="doc" class="yui-t7">
 
 <div id="bd">
   <div id="yui-main">
-      <h1>Change order notes (order no. [% ordernumber %])</h1>
+      <h1>Change order [% IF (type == "vendor") %]vendor[% ELSE %]internal[% END %] note (order no. [% ordernumber %])</h1>
       <form action="/cgi-bin/koha/acqui/modordernotes.pl" method="post">
         <fieldset class="brief">
-          <label for="ordernotes">Notes:</label>
+          <label for="ordernotes">Note:</label>
           <textarea id="ordernotes" name="ordernotes" rows="3" cols="30" class="focus">[% ordernotes %]</textarea>
         </fieldset>
         <input type="hidden" name="referrer" value="[% referrer %]" />
         <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
         <input type="hidden" name="op" value="save" />
+        <input type="hidden" name="type" value="[% type %]" />
         <fieldset class="action">
           <input type="submit" value="Save" />
           <a class="cancel" href="[% referrer %]">Cancel</a>

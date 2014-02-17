@@ -310,7 +310,7 @@ sub GetBasketAsCSV {
             publicationyear => $bd->{'publicationyear'},
             publishercode => $bd->{'publishercode'},
             collectiontitle => $bd->{'collectiontitle'},
-            notes => $order->{'notes'},
+            notes => $order->{'order_internalnote'},
             quantity => $order->{'quantity'},
             rrp => $order->{'rrp'},
             deliveryplace => C4::Branch::GetBranchName( $basket->{'deliveryplace'} ),
@@ -381,7 +381,7 @@ sub GetBasketGroupAsCSV {
                 rrp => $order->{rrp},
                 discount => $bookseller->{discount},
                 ecost => $order->{ecost},
-                notes => $order->{notes},
+                notes => $order->{order_internalnote},
                 entrydate => $order->{entrydate},
                 booksellername => $bookseller->{name},
                 bookselleraddress => $bookseller->{address1},
@@ -1234,7 +1234,7 @@ Else, the upcoming July 1st is used.
 
 =item defaults entrydate to Now
 
-The following keys are used: "biblionumber", "title", "basketno", "quantity", "notes", "rrp", "ecost", "gstrate", "unitprice", "subscription", "sort1", "sort2", "booksellerinvoicenumber", "listprice", "budgetdate", "purchaseordernumber", "branchcode", "booksellerinvoicenumber", "budget_id".
+The following keys are used: "biblionumber", "title", "basketno", "quantity", "order_vendornote", "order_internalnote", "rrp", "ecost", "gstrate", "unitprice", "subscription", "sort1", "sort2", "booksellerinvoicenumber", "listprice", "budgetdate", "purchaseordernumber", "branchcode", "booksellerinvoicenumber", "budget_id".
 
 =back
 
