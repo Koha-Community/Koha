@@ -30,6 +30,13 @@ __PACKAGE__->table("opac_news");
   is_auto_increment: 1
   is_nullable: 0
 
+=head2 branchcode
+
+  data_type: 'varchar'
+  is_foreign_key: 1
+  is_nullable: 1
+  size: 10
+
 =head2 title
 
   data_type: 'varchar'
@@ -78,6 +85,8 @@ __PACKAGE__->add_columns(
     is_auto_increment => 1,
     is_nullable => 0,
   },
+  "branchcode",
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "title",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 250 },
   "new",
@@ -109,9 +118,31 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("idnew");
 
+=head1 RELATIONS
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0tkil0XyRwcT+abM2XoADw
+=head2 branchcode
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Branch>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "branchcode",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "branchcode" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-02-16 23:15:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/q+riAqsYmCQkUCUL9MU7g
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
