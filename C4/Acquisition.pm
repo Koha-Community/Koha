@@ -786,7 +786,7 @@ sub DelBasketgroup {
 
   $basketgroup = &GetBasketgroup($basketgroupid);
 
-Returns a reference to the hash containing all infermation about the basketgroup.
+Returns a reference to the hash containing all information about the basketgroup.
 
 =cut
 
