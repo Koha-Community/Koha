@@ -6,38 +6,6 @@
 
     <script type="text/javascript">
     //<![CDATA[
-
-        function Check(f) {
-            var _alertString = "";
-
-            if( ! $("#department").val() ) {
-                _alertString += _("- You must choose a department") + "\n";
-            }
-
-            if( ! $("#course_number").val() ) {
-                _alertString += _("- You must choose a course number") + "\n";
-            }
-
-            if( ! $("#course_name").val() ) {
-                _alertString += _("- You must add a course name") + "\n";
-            }
-
-            if ( _alertString.length ) {
-                var alertHeader;
-                alertHeader = _("Form not submitted because of the following problem(s)");
-                alertHeader += "\n------------------------------------------------------------------------------------\n\n";
-
-                alert( alertHeader + _alertString );
-            } else {
-                f.submit();
-            }
-        }
-
-    //]]>
-    </script>
-
-    <script type="text/javascript">
-    //<![CDATA[
     $(document).ready(function(){
         $( "#find_instructor" ).autocomplete({
             source: "/cgi-bin/koha/circ/ysearch.pl",
@@ -100,14 +68,14 @@
 
     <div id="doc" class="yui-t7">
         <div id="bd">
-            <form method="post" action="/cgi-bin/koha/course_reserves/mod_course.pl">
+            <form method="post" action="/cgi-bin/koha/course_reserves/mod_course.pl" class="validated">
                 [% IF course_id %]<input type="hidden" name="course_id" value="[% course_id %]" />[% END %]
                 <fieldset class="rows">
                     <legend>[% IF course_id %]Edit course[% ELSE %]Create course[% END %]</legend>
                     <ol>
                         <li>
                             <label class="required" for="department">Department:</label>
-                            <select id="department" name="department">
+                            <select id="department" name="department" required="required" class="required">
                                 <option value="">Select a department</option>
 
                                 [% FOREACH d IN departments %]
@@ -118,11 +86,13 @@
                                     [% END %]
                                 [% END %]
                             </select>
+                            <span class="required">Required</span>
                         </li>
 
                         <li>
                             <label class="required" for="course_number">Course number:</label>
-                            <input id="course_number" name="course_number" type="text" value="[% course_number %]" />
+                            <input id="course_number" name="course_number" type="text" value="[% course_number %]" required="required" class="required" />
+                            <span class="required">Required</span>
                         </li>
 
                         <li>
@@ -132,7 +102,8 @@
 
                         <li>
                             <label class="required" for="course_name">Course name:</label>
-                            <input id="course_name" name="course_name" type="text" value="[% course_name %]" />
+                            <input id="course_name" name="course_name" type="text" value="[% course_name %]" required="required" class="required" />
+                            <span class="required">Required</span>
                         </li>
 
                         <li>
@@ -195,7 +166,7 @@
                 </fieldset>
 
                 <fieldset class="action">
-                    <input type="submit" onclick="Check(this.form); return false;" value="Save" class="submit" />
+                    <input type="submit" value="Save" class="submit" />
 
                     <a href="/cgi-bin/koha/course_reserves/course-reserves.pl" class="cancel">Cancel</a>
                 </fieldset>
