@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% IF ( CAN_user_circulate ) %][% IF ( CircAutocompl ) %]<script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
@@ -25,8 +26,9 @@ $(document).ready(function(){
     <form action="/cgi-bin/koha/circ/circulation.pl" id="patronsearch" method="post">
     [% IF ( CircAutocompl ) %]
     <div class="autocomplete">
-                <input autocomplete="off" id="findborrower" name="findborrower" size="40" class="focus" type="text" /> <input id="autocsubmit" type="submit" class="submit" value="Submit" />
-                <input name="branch" value="[% branch %]" type="hidden" />
+                <input autocomplete="off" id="findborrower" name="findborrower" size="40" class="focus" type="text" />
+                <input id="autocsubmit" type="submit" class="submit" value="Submit" />
+                <input name="branch" value="[% Branches.GetLoggedInBranchcode() %]" type="hidden" />
                 <input name="printer" value="" type="hidden" />
             [% IF ( stickyduedate ) %]
                 <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
