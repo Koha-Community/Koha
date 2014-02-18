@@ -402,7 +402,7 @@ sub _get_outstanding_holds {
         else {
             # We need to return a barcode for the biblio so the client
             # can request the biblio info
-            $item = ( GetItemnumbersForBiblio($h->{biblionumber}) )[0];
+            $item = ( GetItemnumbersForBiblio($h->{biblionumber}) )->[0];
         }
         $h->{barcode} = GetBarcodeFromItemnumber($item);
     }
