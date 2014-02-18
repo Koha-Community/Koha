@@ -8191,6 +8191,17 @@ Your library.'
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+        VALUES('AllowMultipleIssuesOnABiblio',1,'Allow/Don\'t allow patrons to check out multiple items from one biblio','','YesNo')
+    });
+
+    print "Upgrade to $DBversion done (Bug 10859 - Add system preference AllowMultipleIssuesOnABiblio)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

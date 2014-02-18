@@ -271,6 +271,15 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
 [% IF  HIGHHOLDS %]
     <li>High demand item. Loan period shortened to [% HIGHHOLDS.duration %] days (due [% HIGHHOLDS.returndate %]). Check out anyway?</li>
 [% END %]
+
+[% IF BIBLIO_ALREADY_ISSUED %]
+  <li>
+    Borrower has already an issue on another item from this biblio.
+    [% IF CAN_user_circulate_force_checkout %]
+      Check out anyway?
+    [% END %]
+  </li>
+[% END %]
 </ul>
 
 [% IF HIGHHOLDS %]
