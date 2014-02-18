@@ -295,6 +295,7 @@ my $booksellerid = $input->param('booksellerid');
 $template->param(booksellerid => $booksellerid);
 
 if ( $op eq "add" ) {
+    my $bookseller = &GetBookSellerFromId($booksellerid);
     if(! $booksellerid){
         $template->param( ungroupedlist => 1);
         my @booksellers = GetBookSeller('');
@@ -319,8 +320,8 @@ if ( $op eq "add" ) {
         if ( $basketgroupid ) {
             # Get the selected baskets in the basketgroup to display them
             my $selecteds = GetBasketsByBasketgroup($basketgroupid);
-            foreach (@{$selecteds}){
-                $_->{total} = BasketTotal($_->{basketno}, $_);
+            foreach my $basket(@{$selecteds}){
+                $basket->{total} = BasketTotal($basket->{basketno}, $bookseller);
             }
             $template->param(basketgroupid => $basketgroupid,
                              selectedbaskets => $selecteds);
@@ -351,7 +352,6 @@ if ( $op eq "add" ) {
     }
     $template->param(grouping => 1);
     my $basketgroups = &GetBasketgroups($booksellerid);
-    my $bookseller = &GetBookSellerFromId($booksellerid);
     my $baskets = &GetBasketsByBookseller($booksellerid);
 
     displaybasketgroups($basketgroups, $bookseller, $baskets);
