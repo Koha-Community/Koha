@@ -1197,7 +1197,7 @@ sub GetLastOrderReceivedFromSubscriptionid {
         LIMIT 1
     |;
     my $result_set =
-      $dbh->selectall_arrayref( $query, { Slice => {} }, $subscriptionid );
+      $dbh->selectall_arrayref( $query, { Slice => {} }, $subscriptionid, $subscriptionid );
 
     # result_set assumed to contain 1 match
     return $result_set->[0];
