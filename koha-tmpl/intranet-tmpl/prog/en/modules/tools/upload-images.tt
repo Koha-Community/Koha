@@ -17,16 +17,12 @@ $(document).ready(function(){
 	$("#image").click(function(){
 		$("#bibnum").show();
 	});
+    $("#uploadfile").validate({
+        submitHandler: function(form) {
+            ajaxFileUpload();
+        }
+    });
 });
-function CheckForm(f) {
-    if ($("#fileToUpload").value == '') {
-        alert(_("Please upload a file first."));
-    } else {
-        return submitBackgroundJob(f);
-    }
-    return false;
-}
-
 //]]>
 </script>
 </head>
@@ -72,11 +68,12 @@ function CheckForm(f) {
 <ol>
 	<li>
         <div id="fileuploadform">
-		<label for="fileToUpload">Select the file to upload: </label>
-		<input type="file" id="fileToUpload" name="fileToUpload" />
+        <label for="fileToUpload" class="required">Select the file to upload: </label>
+        <input type="file" id="fileToUpload" name="fileToUpload" required="required" class="required" />
+    <span class="required">Required</span>
         </div>	</li>
 </ol>
-  <fieldset class="action"><button class="submit" onclick="return ajaxFileUpload();">Upload file</button></fieldset>
+    <fieldset class="action"><button class="submit">Upload file</button></fieldset>
 </fieldset>
 
         <div id="uploadpanel"><div id="fileuploadstatus">Upload progress: <div id="fileuploadprogress"></div> <span id="fileuploadpercent">0</span>%</div>
