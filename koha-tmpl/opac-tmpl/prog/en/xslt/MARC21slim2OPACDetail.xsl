@@ -112,7 +112,7 @@
         <!-- Title Statement -->
         <!-- Alternate Graphic Representation (MARC 880) -->
         <xsl:if test="$display880">
-            <h1 class="title" property="alternativeHeadline">
+            <h1 class="title" property="alternateName">
                 <xsl:call-template name="m880Select">
                     <xsl:with-param name="basetags">245</xsl:with-param>
                     <xsl:with-param name="codes">abhfgknps</xsl:with-param>
@@ -159,10 +159,11 @@
         </xsl:if>
         <xsl:choose>
             <xsl:when test="marc:datafield[@tag=100] or marc:datafield[@tag=110] or marc:datafield[@tag=111] or marc:datafield[@tag=700] or marc:datafield[@tag=710] or marc:datafield[@tag=711]">
-                <h5 class="author" property="author">by
+                <h5 class="author">by
                     <xsl:call-template name="showAuthor">
                         <xsl:with-param name="authorfield" select="marc:datafield[@tag=100 or @tag=110 or @tag=111 or @tag=700 or @tag=710 or @tag=711]"/>
                         <xsl:with-param name="UseAuthoritiesForTracings" select="$UseAuthoritiesForTracings"/>
+                        <xsl:with-param name="materialTypeLabel" select="$materialTypeLabel"/>
                     </xsl:call-template>
                 </h5>
             </xsl:when>
@@ -473,7 +474,7 @@
         <xsl:if test="marc:datafield[@tag=246]">
         <span class="results_summary other_title"><span class="label">Other title: </span>
             <xsl:for-each select="marc:datafield[@tag=246]">
-                <span property="alternativeHeadline"> 
+                <span property="alternateName">
                 <xsl:call-template name="chopPunctuation">
                   <xsl:with-param name="chopString">
                     <xsl:call-template name="subfieldSelect">
@@ -491,7 +492,7 @@
         <xsl:if test="marc:datafield[@tag=242]">
         <span class="results_summary translated_title"><span class="label">Title translated: </span>
             <xsl:for-each select="marc:datafield[@tag=242]">
-                <span property="alternativeHeadline"> 
+                <span property="alternateName">
                 <xsl:call-template name="chopPunctuation">
                   <xsl:with-param name="chopString">
                     <xsl:call-template name="subfieldSelect">
@@ -507,7 +508,7 @@
 
         <!-- Uniform Title  Statement: Alternate Graphic Representation (MARC 880) -->
         <xsl:if test="$display880">
-            <span property="alternativeHeadline"> 
+            <span property="alternateName">
             <xsl:call-template name="m880Select">
                 <xsl:with-param name="basetags">130,240</xsl:with-param>
                 <xsl:with-param name="codes">adfklmor</xsl:with-param>
@@ -520,7 +521,7 @@
         <xsl:if test="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2!=2]">
         <span class="results_summary uniform_titles"><span class="label">Uniform titles: </span>
         <xsl:for-each select="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2!=2]">
-            <span property="alternativeHeadline"> 
+            <span property="alternateName">
             <xsl:variable name="str">
                 <xsl:for-each select="marc:subfield">
                     <xsl:if test="(contains('adfklmor',@code) and (not(../marc:subfield[@code='n' or @code='p']) or (following-sibling::marc:subfield[@code='n' or @code='p'])))">
@@ -987,6 +988,7 @@
     <xsl:template name="showAuthor">
         <xsl:param name="authorfield" />
         <xsl:param name="UseAuthoritiesForTracings" />
+        <xsl:param name="materialTypeLabel" />
         <xsl:for-each select="$authorfield">
             <xsl:choose><xsl:when test="position()!=1"><xsl:text>; </xsl:text></xsl:when></xsl:choose>
             <xsl:choose>
@@ -1008,11 +1010,32 @@
                         <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=au:"<xsl:value-of select="marc:subfield[@code='a']"/>"</xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
+                <span resource="#record"><span>
+                    <xsl:choose>
+                        <xsl:when test="substring(@tag, 1, 1)='1'">
+                            <xsl:choose>
+                                <xsl:when test="$materialTypeLabel='Music'"><xsl:attribute name="property">byArtist</xsl:attribute></xsl:when>
+                                <xsl:otherwise><xsl:attribute name="property">author</xsl:attribute></xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
+                        <xsl:otherwise><xsl:attribute name="property">contributor</xsl:attribute></xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:choose>
+                        <xsl:when test="substring(@tag, 2, 1)='0'">
+                            <xsl:choose>
+                                <xsl:when test="$materialTypeLabel='Music'"><xsl:attribute name="typeof">MusicGroup</xsl:attribute></xsl:when>
+                                <xsl:otherwise><xsl:attribute name="typeof">Person</xsl:attribute></xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
+                        <xsl:otherwise><xsl:attribute name="typeof">Organization</xsl:attribute></xsl:otherwise>
+                    </xsl:choose>
+                <span property="name">
                 <xsl:choose>
                     <xsl:when test="@tag=100 or @tag=700"><xsl:call-template name="nameABCQ"/></xsl:when>
                     <xsl:when test="@tag=110 or @tag=710"><xsl:call-template name="nameABCDN"/></xsl:when>
                     <xsl:when test="@tag=111 or @tag=711"><xsl:call-template name="nameACDEQ"/></xsl:when>
                 </xsl:choose>
+                </span></span></span>
                 <!-- add relator code too between brackets-->
                 <xsl:if test="marc:subfield[@code='4' or @code='e']">
                     <span class="relatorcode">
