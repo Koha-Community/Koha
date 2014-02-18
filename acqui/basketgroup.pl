@@ -250,6 +250,7 @@ if ( $op eq "add" ) {
 # else, edit (if it is open) or display (if it is close) the basketgroup basketgroupid
 # the template will know if basketgroup must be displayed or edited, depending on the value of closed key
 #
+    my $bookseller = &GetBookSellerFromId($booksellerid);
     if(! $booksellerid){
 # Unknown bookseller
 # FIXME : ungroupedlist does not seem to be used in this file nor in template
@@ -277,8 +278,8 @@ if ( $op eq "add" ) {
         if ( $basketgroupid ) {
             # Get the selected baskets in the basketgroup to display them
             my $selecteds = GetBasketsByBasketgroup($basketgroupid);
-            foreach (@{$selecteds}){
-                $_->{total} = BasketTotal($_->{basketno}, $_);
+            foreach my $basket(@{$selecteds}){
+                $basket->{total} = BasketTotal($basket->{basketno}, $bookseller);
             }
             $template->param(basketgroupid => $basketgroupid,
                              selectedbaskets => $selecteds);
@@ -311,7 +312,6 @@ if ( $op eq "add" ) {
     # the template will display a unique basketgroup
     $template->param(grouping => 1);
     my $basketgroups = &GetBasketgroups($booksellerid);
-    my $bookseller = &GetBookSellerFromId($booksellerid);
     my $baskets = &GetBasketsByBookseller($booksellerid);
     displaybasketgroups($basketgroups, $bookseller, $baskets);
 } elsif ($op eq 'mod_basket') {
