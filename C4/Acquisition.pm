@@ -1663,6 +1663,7 @@ sub SearchOrders {
                biblio.*,
                biblioitems.isbn,
                biblioitems.biblioitemnumber,
+               aqbasket.authorisedby,
                aqbasket.closedate,
                aqbasket.creationdate,
                aqbasket.basketname,
