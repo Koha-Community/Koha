@@ -155,26 +155,7 @@ function placeHold () {
     $("#hold_form").submit();
     return false;
 }
-    /**
-     * This function checks to make sure a list title is assigned
-     */
-      function Check(f) {
-		var _alertString="";
-		var alertString2;
 
-	    if($("#shelfname").val() == ""){
-            _alertString += "- "+_("You must enter a List Name") + "\n";
-		}
-
-		if (_alertString.length==0) {
-            f.submit();
-		} else {
-			alertString2 = _("Form not submitted because of the following problem(s)");
-			alertString2 += "\n------------------------------------------------------------------------------------\n\n";
-			alertString2 += _alertString;
-			alert(alertString2);
-		}
-	}
     function cartList(){
         var checkboxes = $("#searchresults").find(":checkbox");
         var vshelf = vShelfAdd(checkboxes);
@@ -440,14 +421,16 @@ function placeHold () {
 [% IF ( seflag ) %]
 <div class="yui-ge">
     <div class="yui-u first">
-    <form method="post" action="/cgi-bin/koha/virtualshelves/shelves.pl">
+    <form method="post" action="/cgi-bin/koha/virtualshelves/shelves.pl" class="validated">
         <fieldset class="rows">
 
     [% IF ( shelves ) %]
-        <input type="hidden" name="shelves" value="1" />
         <legend>Create a new list</legend>
+        <input type="hidden" name="shelves" value="1" />
         <ol>
-        <li><label class="required" for="addshelf">List name:</label><input id="addshelf" type="text" name="addshelf" size="25" /></li>
+        <li><label class="required" for="addshelf">List name:</label><input id="addshelf" type="text" name="addshelf" size="25" required="required" class="required" />
+            <span class="required">Required</span>
+        </li>
         <li><span class="label">Owner: </span><input type="hidden" name="owner" id="owner" value="[% loggedinuser %]" />[% loggedinusername %]</li>
         <li><label for="sortfield" >Sort this list by: </label>
         <select name="sortfield" id="sortfield">
@@ -466,13 +449,15 @@ function placeHold () {
     [% END %]
 
     [% IF ( edit ) %]
-		<input type="hidden" name="op" value="modifsave" />
-        <input type="hidden" name="display" value="[% display %]" />
-        [% IF ( showprivateshelves ) %]<input type="hidden" name="display" value="privateshelves" />[% END %]
-		<input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
         <legend>Edit list <i>[% shelfname | html %]</i></legend>
+        <input type="hidden" name="display" value="[% display %]" />
+        <input type="hidden" name="op" value="modifsave" />
+        [% IF ( showprivateshelves ) %]<input type="hidden" name="display" value="privateshelves" />[% END %]
+        <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
 		<ol>
-		<li><label for="shelfname">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value="[% shelfname |html %]" /></li>
+            <li><label for="shelfname" class="required">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value="[% shelfname |html %]" required="required" class="required" />
+            <span class="required">Required</span>
+        </li>
 		<li><label for="owner">Owner: </label><input type="hidden" id="owner" name="owner" value="[% IF ( owner ) %][% ownername %][% ELSE %][% loggedinusername %][% END %]" />[% IF ( owner ) %][% ownername %][% ELSE %][% loggedinusername %][% END %]</li>
 		<li><label for="sortfield" >Sort this list by: </label>
 		<select name="sortfield">
@@ -499,7 +484,8 @@ function placeHold () {
 	[% END %]
 
 		</fieldset>
-		<fieldset class="action"><input type="submit" onclick="Check(this.form); return false;" value="Save" class="submit" />
+
+    <fieldset class="action"><input type="submit" value="Save" class="submit" />
         [% IF ( showprivateshelves ) %]
             <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves" class="cancel">Cancel</a>
         [% ELSE %]
@@ -516,7 +502,6 @@ function placeHold () {
         <div class="help"><ul>
             <li>A <b>Private</b> list is managed by you and can be seen only by you.</li>
             <li> A <b>Public</b> list can be seen by everybody, but managed only by you.</li>
-            <br/>
             <li>The owner of a list is always allowed to add entries, but needs permission to remove.</li>
         </ul>
         </div>
