@@ -14,6 +14,8 @@ use C4::Items;
 use Koha::RecordProcessor;
 use XML::LibXML;
 
+use constant LOCK_FILENAME => 'rebuild..LCK';
+
 # script that checks zebradir structure & create directories & mandatory files if needed
 #
 #
@@ -161,13 +163,20 @@ my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = &GetMarcFromKohaFi
 # does not exist and cannot be created, we fall back on /tmp - which will
 # always work.
 
-my $lockdir = C4::Context->config("zebra_lockdir") // "/var/lock";
-$lockdir .= "/rebuild";
-unless (-d $lockdir) {
-    eval { mkpath($lockdir, 0, oct(755)) };
-    $lockdir = "/tmp" if ($@);
+my ($lockfile, $LockFH);
+foreach( C4::Context->config("zebra_lockdir"), "/var/lock/zebra_".C4::Context->config('database'), "/tmp/zebra_".C4::Context->config('database') ) {
+    #we try three possibilities (we really want to lock :)
+    next if !$_;
+    ($LockFH, $lockfile) = _create_lockfile($_.'/rebuild');
+    last if defined $LockFH;
 }
-my $lockfile = $lockdir . "/rebuild..LCK";
+if( !defined $LockFH ) {
+    print "WARNING: Could not create lock file $lockfile: $!\n";
+    print "Please check your koha-conf.xml for ZEBRA_LOCKDIR.\n";
+    print "Verify file permissions for it too.\n";
+    $use_flock=0; #we disable file locking now and will continue without it
+        #note that this mimics old behavior (before we used the lockfile)
+};
 
 if ( $verbose_logging ) {
     print "Zebra configuration information\n";
@@ -175,7 +184,7 @@ if ( $verbose_logging ) {
     print "Zebra biblio directory      = $biblioserverdir\n";
     print "Zebra authorities directory = $authorityserverdir\n";
     print "Koha directory              = $kohadir\n";
-    print "Lockfile                    = $lockfile\n";
+    print "Lockfile                    = $lockfile\n" if $lockfile;
     print "BIBLIONUMBER in :     $biblionumbertagfield\$$biblionumbertagsubfield\n";
     print "BIBLIOITEMNUMBER in : $biblioitemnumbertagfield\$$biblioitemnumbertagsubfield\n";
     print "================================\n";
@@ -194,7 +203,6 @@ my $tester = XML::LibXML->new();
 # to prevent the potential for a infinite backlog from cron invocations, but an
 # option (wait-for-lock) is provided to let the program wait for the lock.
 # See http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=11078 for details.
-open my $LockFH, q{>}, $lockfile or die "$lockfile: $!";
 if ($daemon_mode) {
     while (1) {
         # For incremental updates, skip the update if the updates are locked
@@ -210,9 +218,9 @@ if ($daemon_mode) {
     if (_flock($LockFH, $lock_mode)) {
         do_one_pass();
         _flock($LockFH, LOCK_UN);
-    } else {
-        # Can't die() here because we have files to dlean up.
-        print "Aborting rebuild.  Unable to flock $lockfile: $!\n";
+    }
+    else {
+        print "Skipping rebuild/update because flock failed on $lockfile: $!\n";
     }
 }
 
@@ -785,6 +793,16 @@ sub _flock {
         return 1 if !$use_flock;
         return flock($fh, $op);
     }
+}
+
+sub _create_lockfile { #returns undef on failure
+    my $dir= shift;
+    unless (-d $dir) {
+        eval { mkpath($dir, 0, oct(755)) };
+        return if $@;
+    }
+    return if !open my $fh, q{>}, $dir.'/'.LOCK_FILENAME;
+    return ( $fh, $dir.'/'.LOCK_FILENAME );
 }
 
 sub print_usage {
