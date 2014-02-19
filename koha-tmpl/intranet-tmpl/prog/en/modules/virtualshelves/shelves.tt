@@ -380,7 +380,15 @@ function placeHold () {
 
 		</fieldset>
 		<fieldset class="action"><input type="submit" onclick="Check(this.form); return false;" value="Save" class="submit" />
-        [% IF ( showprivateshelves ) %]<a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves" class="cancel">Cancel</a>[% ELSE %]<a href="/cgi-bin/koha/virtualshelves/shelves.pl" class="cancel">Cancel</a>[% END %]
+        [% IF ( showprivateshelves ) %]
+            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves" class="cancel">Cancel</a>
+        [% ELSE %]
+            [% IF ( display == "viewshelf" ) %]
+               <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]" class="cancel">Cancel</a>
+            [% ELSE %]
+                <a href="/cgi-bin/koha/virtualshelves/shelves.pl" class="cancel">Cancel</a>
+            [% END %]
+        [% END %]
     </fieldset>
     </form>
     </div>
