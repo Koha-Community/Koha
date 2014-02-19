@@ -153,8 +153,8 @@ CREATE TABLE `biblioitems` ( -- information related to bibliographic records in 
   `volume` mediumtext,
   `number` mediumtext,
   `itemtype` varchar(10) default NULL, -- biblio level item type (MARC21 942$c)
-  `isbn` varchar(30) default NULL, -- ISBN (MARC21 020$a)
-  `issn` varchar(9) default NULL, -- ISSN (MARC21 022$a)
+  `isbn` mediumtext, -- ISBN (MARC21 020$a)
+  `issn` mediumtext, -- ISSN (MARC21 022$a)
   `ean` varchar(13) default NULL,
   `publicationyear` text,
   `publishercode` varchar(255) default NULL, -- publisher (MARC21 260$b)
@@ -186,8 +186,8 @@ CREATE TABLE `biblioitems` ( -- information related to bibliographic records in 
   KEY `bibinoidx` (`biblioitemnumber`),
   KEY `bibnoidx` (`biblionumber`),
   KEY `itemtype_idx` (`itemtype`),
-  KEY `isbn` (`isbn`),
-  KEY `issn` (`issn`),
+  KEY `isbn` (`isbn`(255)),
+  KEY `issn` (`issn`(255)),
   KEY `publishercode` (`publishercode`),
   CONSTRAINT `biblioitems_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
