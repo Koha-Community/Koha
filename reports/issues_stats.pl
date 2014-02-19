@@ -320,8 +320,8 @@ sub calculate {
           ( $linesource eq 'items' )
           ? " LEFT JOIN items ON (statistics.itemnumber = items.itemnumber) "
           : " LEFT JOIN borrowers ON (statistics.borrowernumber = borrowers.borrowernumber) ";
+        $strsth .= " WHERE $line is not null ";
     }
-    $strsth .= " WHERE $line is not null ";
 
     if ( $line =~ /datetime/ ) {
         if ( $linefilter[1] and ( $linefilter[0] ) ) {
@@ -408,8 +408,8 @@ sub calculate {
           ( $colsource eq 'items' )
           ? "LEFT JOIN items ON (statistics.itemnumber = items.itemnumber) "
           : "LEFT JOIN borrowers ON (statistics.borrowernumber = borrowers.borrowernumber) ";
+        $strsth2 .= " WHERE $column IS NOT NULL ";
     }
-    $strsth2 .= " WHERE $column IS NOT NULL ";
 
     if ( $column =~ /datetime/ ) {
         if ( ( $colfilter[1] ) and ( $colfilter[0] ) ) {
@@ -608,7 +608,7 @@ sub calculate {
     for my $col (@loopcol) {
         my $total = 0;
         foreach my $row (@looprow) {
-            $total += table_get(\%table, $row->{rowtitle}, $col->{coltitle});
+            $total += table_get(\%table, $row->{rowtitle}, $col->{coltitle}) || 0;
             $debug and warn "value added " . table_get(\%table, $row->{rowtitle}, $col->{coltitle}) . "for line " . $row->{rowtitle};
         }
         push @loopfooter, { 'totalcol' => $total };
@@ -654,7 +654,7 @@ sub table_get {
 sub table_inc {
     my ($table, $row, $col, $inc) = @_;
 
-    $table->{ null_to_zzempty(lc($row)) }->{ null_to_zzempty(lc($col)) } += $inc;
+    $table->{ null_to_zzempty(lc($row // '')) }->{ null_to_zzempty(lc($col // '')) } += $inc;
 }
 
 1;
