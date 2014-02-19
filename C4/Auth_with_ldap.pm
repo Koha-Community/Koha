@@ -27,6 +27,7 @@ use C4::Members qw(AddMember changepassword);
 use C4::Members::Attributes;
 use C4::Members::AttributeTypes;
 use C4::Members::Messaging;
+use C4::Dates;
 use C4::Auth qw(checkpw_internal);
 use Koha::AuthUtils qw(hash_password);
 use List::MoreUtils qw( any );
@@ -64,6 +65,15 @@ my @mapkeys = keys %mapping;
 $debug and print STDERR "Got ", scalar(@mapkeys), " ldap mapkeys (  total  ): ", join ' ', @mapkeys, "\n";
 @mapkeys = grep {defined $mapping{$_}->{is}} @mapkeys;
 $debug and print STDERR "Got ", scalar(@mapkeys), " ldap mapkeys (populated): ", join ' ', @mapkeys, "\n";
+
+my %categorycode_conversions;
+my $default_categorycode;
+if(defined $ldap->{categorycode_mapping}) {
+    $default_categorycode = $ldap->{categorycode_mapping}->{default};
+    foreach my $cat (@{$ldap->{categorycode_mapping}->{categorycode}}) {
+        $categorycode_conversions{$cat->{value}} = $cat->{content};
+    }
+}
 
 my %config = (
 	anonymous => ($ldapname and $ldappassword) ? 0 : 1,
@@ -255,6 +265,18 @@ sub ldap_entry_2_hash {
 		( substr($borrower{'firstname'},0,1)
   		. substr($borrower{ 'surname' },0,1)
   		. " ");
+
+    # Date and categorycode conversions
+    $borrower{'dateexpiry'} = C4::Dates->new($borrower{'dateexpiry'},'sql')->output('iso') if $borrower{'dateexpiry'};
+    $borrower{'dateofbirth'} = C4::Dates->new($borrower{'dateofbirth'},'sql')->output('iso') if $borrower{'dateofbirth'};
+    $borrower{'dateenrolled'} = C4::Dates->new($borrower{'dateenrolled'},'sql')->output('iso') if $borrower{'dateenrolled'};
+
+    if(defined $categorycode_conversions{$borrower{categorycode}}) {
+        $borrower{categorycode} = $categorycode_conversions{$borrower{categorycode}};
+    }
+    elsif($default_categorycode) {
+        $borrower{categorycode} = $default_categorycode;
+    }
 
 	# check if categorycode exists, if not, fallback to default from koha-conf.xml
 	my $dbh = C4::Context->dbh;
