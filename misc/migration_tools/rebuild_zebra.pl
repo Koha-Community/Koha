@@ -5,6 +5,7 @@ use strict;
 
 use C4::Context;
 use Getopt::Long;
+use Fcntl qw(:flock);
 use File::Temp qw/ tempdir /;
 use File::Path;
 use C4::Biblio;
@@ -42,6 +43,8 @@ my $where;
 my $offset;
 my $run_as_root;
 my $run_user = (getpwuid($<))[0];
+my $wait_for_lock = 0;
+my $use_flock;
 
 my $verbose_logging = 0;
 my $zebraidx_log_opt = " -v none,fatal,warn ";
@@ -62,11 +65,12 @@ my $result = GetOptions(
     'x'             => \$as_xml,
     'y'             => \$do_not_clear_zebraqueue,
     'z'             => \$process_zebraqueue,
-    'where:s'        => \$where,
-    'length:i'        => \$length,
+    'where:s'       => \$where,
+    'length:i'      => \$length,
     'offset:i'      => \$offset,
-    'v+'             => \$verbose_logging,
-    'run-as-root'    => \$run_as_root,
+    'v+'            => \$verbose_logging,
+    'run-as-root'   => \$run_as_root,
+    'wait-for-lock' => \$wait_for_lock,
 );
 
 if (not $result or $want_help) {
@@ -151,12 +155,27 @@ my $dbh = C4::Context->dbh;
 my ($biblionumbertagfield,$biblionumbertagsubfield) = &GetMarcFromKohaField("biblio.biblionumber","");
 my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = &GetMarcFromKohaField("biblioitems.biblioitemnumber","");
 
+# Protect again simultaneous update of the zebra index by using a lock file.
+# Create our own lock directory if its missing.  This shouild be created
+# by koha-zebra-ctl.sh or at system installation.  If the desired directory
+# does not exist and cannot be created, we fall back on /tmp - which will
+# always work.
+
+my $lockdir = C4::Context->config("zebra_lockdir") // "/var/lock";
+$lockdir .= "/rebuild";
+unless (-d $lockdir) {
+    eval { mkpath($lockdir, 0, oct(755)) };
+    $lockdir = "/tmp" if ($@);
+}
+my $lockfile = $lockdir . "/rebuild..LCK";
+
 if ( $verbose_logging ) {
     print "Zebra configuration information\n";
     print "================================\n";
     print "Zebra biblio directory      = $biblioserverdir\n";
     print "Zebra authorities directory = $authorityserverdir\n";
     print "Koha directory              = $kohadir\n";
+    print "Lockfile                    = $lockfile\n";
     print "BIBLIONUMBER in :     $biblionumbertagfield\$$biblionumbertagsubfield\n";
     print "BIBLIOITEMNUMBER in : $biblioitemnumbertagfield\$$biblioitemnumbertagsubfield\n";
     print "================================\n";
@@ -164,13 +183,37 @@ if ( $verbose_logging ) {
 
 my $tester = XML::LibXML->new();
 
+# The main work is done here by calling do_one_pass().  We have added locking
+# avoid race conditions between Full rebuilds and incremental updates either from
+# daemon mode or periodic invocation from cron.  The race can lead to an updated
+# record being overwritten by a rebuild if the update is applied after the export
+# by the rebuild and before the rebuild finishes (more likely to effect large
+# catalogs).
+#
+# We have chosen to exit immediately by default if we cannot obtain the lock
+# to prevent the potential for a infinite backlog from cron invocations, but an
+# option (wait-for-lock) is provided to let the program wait for the lock.
+# See http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=11078 for details.
+open my $LockFH, q{>}, $lockfile or die "$lockfile: $!";
 if ($daemon_mode) {
     while (1) {
-        do_one_pass() if ( zebraqueue_not_empty() );
+        # For incremental updates, skip the update if the updates are locked
+        if (_flock($LockFH, LOCK_EX|LOCK_NB)) {
+            do_one_pass() if ( zebraqueue_not_empty() );
+            _flock($LockFH, LOCK_UN);
+        }
         sleep $daemon_sleep;
     }
 } else {
-    do_one_pass();
+    # all one-off invocations
+    my $lock_mode = ($wait_for_lock) ? LOCK_EX : LOCK_EX|LOCK_NB;
+    if (_flock($LockFH, $lock_mode)) {
+        do_one_pass();
+        _flock($LockFH, LOCK_UN);
+    } else {
+        # Can't die() here because we have files to dlean up.
+        print "Aborting rebuild.  Unable to flock $lockfile: $!\n";
+    }
 }
 
 
@@ -228,7 +271,7 @@ sub zebraqueue_not_empty {
         $where_str = 'server = "authorityserver" AND done = 0;';
     }
     my $query =
-      $dbh->prepare( 'SELECT COUNT(*) FROM zebraqueue WHERE ' . $where_str );
+        $dbh->prepare('SELECT COUNT(*) FROM zebraqueue WHERE ' . $where_str );
 
     $query->execute;
     my $count = $query->fetchrow_arrayref->[0];
@@ -724,6 +767,26 @@ sub do_indexing {
 
 }
 
+sub _flock {
+# test if flock is present; if so, use it; if not, return true
+# op refers to the official flock operations incl LOCK_EX, LOCK_UN, etc.
+# combining LOCK_EX with LOCK_NB returns immediately
+    my ($fh, $op)= @_;
+    if( !defined($use_flock) ) {
+        #check if flock is present; if not, you will have a fatal error
+        my $i=eval { flock($fh, $op) };
+        #assuming that $fh and $op are fine(..), an undef i means no flock
+        $use_flock= defined($i)? 1: 0;
+        print "Warning: flock could not be used!\n" if $verbose_logging && !$use_flock;
+        return 1 if !$use_flock;
+        return $i;
+    }
+    else {
+        return 1 if !$use_flock;
+        return flock($fh, $op);
+    }
+}
+
 sub print_usage {
     print <<_USAGE_;
 $0: reindex MARC bibs and/or authorities in Zebra.
@@ -808,6 +871,12 @@ Parameters:
                             or something like that
 
     --run-as-root           explicitily allow script to run as 'root' user
+
+    --wait-for-lock         when not running in daemon mode, the default
+                            behavior is to abort a rebuild if the rebuild
+                            lock is busy.  This option will cause the program
+                            to wait for the lock to free and then continue
+                            processing the rebuild request,
 
     --help or -h            show this message.
 _USAGE_

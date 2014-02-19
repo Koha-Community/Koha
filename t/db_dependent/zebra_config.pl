@@ -31,6 +31,7 @@ if ($indexing_mode eq 'dom') {
 make_path("$destination/var/lock/zebradb");
 make_path("$destination/var/lock/zebradb/biblios");
 make_path("$destination/var/lock/zebradb/authorities");
+make_path("$destination/var/lock/zebradb/rebuild");
 make_path("$destination/var/lib/zebradb");
 make_path("$destination/var/lib/zebradb/biblios");
 make_path("$destination/var/lib/zebradb/biblios/key");
