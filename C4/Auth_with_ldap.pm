@@ -318,8 +318,8 @@ sub update_local {
         ((map {$borrower->{$_}} @keys), $borrowerid)
     );
 
-    # MODIFY PASSWORD/LOGIN
-    _do_changepassword($userid, $borrowerid, $password);
+    # MODIFY PASSWORD/LOGIN if password was mapped
+    _do_changepassword($userid, $borrowerid, $password) if $borrower->{'password'};
 }
 
 1;
