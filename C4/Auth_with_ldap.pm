@@ -88,7 +88,9 @@ sub search_method {
 		  base => $base,
 	 	filter => $filter,
 		# attrs => ['*'],
-	) or die "LDAP search failed to return object.";
+    );
+    die "LDAP search failed to return object : " . $search->error if $search->code;
+
 	my $count = $search->count;
 	if ($search->code > 0) {
 		warn sprintf("LDAP Auth rejected : %s gets %d hits\n", $filter->as_string, $count) . description($search);
@@ -163,7 +165,7 @@ sub checkpw_ldap {
 		my $cmpmesg = $db->compare( $userldapentry, attr=>'userpassword', value => $password );
 		if ($cmpmesg->code != 6) {
 			warn "LDAP Auth rejected : invalid password for user '$userid'. " . description($cmpmesg);
-			return 0;
+			return -1;
 		}
 	}
 
