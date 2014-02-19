@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2013 Equinox Software, Inc.
+# Copyright 2013-2014 Equinox Software, Inc.
 #
 # This file is part of Koha.
 #
@@ -18,8 +18,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 7;
 
+use C4::Context;
 BEGIN {
     use_ok('Koha::Template::Plugin::Branches');
 }
@@ -35,3 +36,11 @@ is($name, '', 'received empty string as name of the "__ANY__" placeholder librar
 
 $name = $plugin->GetName(undef);
 is($name, '', 'received empty string as name of NULL/undefined library code');
+
+my $library = $plugin->GetLoggedInBranchcode();
+is($library, '', 'no active library if there is no active user session');
+
+C4::Context->_new_userenv('DUMMY_SESSION_ID');
+C4::Context::set_userenv(123, 'userid', 'usercnum', 'First name', 'Surname', 'MYLIBRARY', 'My Library', 0);
+$library = $plugin->GetLoggedInBranchcode();
+is($library, 'MYLIBRARY', 'GetLoggedInBranchcode() returns active library');

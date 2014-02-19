@@ -39,7 +39,9 @@ sub GetName {
 sub GetLoggedInBranchcode {
     my ($self) = @_;
 
-    return C4::Context->userenv->{'branch'} if C4::Context->userenv;
+    return C4::Context->userenv ?
+        C4::Context->userenv->{'branch'} :
+        '';
 }
 
 1;
