@@ -7,27 +7,6 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-    function Check(f) {
-        var _alertString="";
-        var alertString2;
-        if (f.currency.value.length==0) {
-            _alertString += _("- Currency name missing") + "\n";
-        }
-        if (f.rate.value.length==0) {
-            _alertString += _("- Rate missing") + "\n";
-        }
-        if (f.symbol.value.length==0) {
-            _alertString += _("- Symbol missing") + "\n";
-        }
-        if (_alertString.length==0) {
-            document.Aform.submit();
-        } else {
-            alertString2 = _("Form not submitted because of the following problem(s)") + "\n";
-            alertString2 += "------------------------------------------------------------------------------------\n";
-            alertString2 += _alertString;
-            alert(alertString2);
-        }
-    }
 
     function check_currency(val) {
         if ( val == 1.0 ) {
@@ -76,7 +55,7 @@
 
 [% IF ( add_form ) %]
 
-<form action="[% script_name %]" name="Aform" method="post">
+<form action="[% script_name %]" name="Aform" method="post" class="validated">
     <input type="hidden" name="op" value="save" />
     <fieldset class="rows">
     <legend>[% IF ( searchfield ) %]
@@ -90,17 +69,17 @@
             <span class="label">Currency: </span>
             <input type="hidden" name="currency" id="currency" value="[% searchfield %]" />[% searchfield %]
     [% ELSE %]
-            <label for="currency">Currency: </label>
-            <input type="text" name="currency" id="currency" size="50" maxlength="50" onblur="toUC(this);" />
+            <label for="currency" class="required">Currency: </label>
+            <input type="text" name="currency" id="currency" size="50" maxlength="50" onblur="toUC(this);" required="required" class="required" /> <span class="required">Required</span>
     [% END %]
         </li>
         <li>
-            <label for="rate">Rate: </label>
-            <input type="text" name="rate" id="rate" size="10" maxlength="10" value="[% rate %]" />
+            <label for="rate" class="required">Rate: </label>
+            <input type="text" name="rate" id="rate" size="10" maxlength="10" value="[% rate %]" required="required" class="required" /> <span class="required">Required</span>
         </li>
         <li>
-            <label for="symbol">Symbol: </label>
-            <input type="text" name="symbol" id="symbol" size="5" maxlength="5" value="[% symbol %]" />
+            <label for="symbol" class="required">Symbol: </label>
+            <input type="text" name="symbol" id="symbol" size="5" maxlength="5" value="[% symbol %]" required="required" class="required" /> <span class="required">Required</span>
         </li>
 
         <li>
@@ -120,7 +99,7 @@
         </fieldset>
 
     <fieldset class="action">
-        <input type="submit" value="Submit" onclick="Check(this.form); return false;" />
+        <input type="submit" value="Submit" />
         <a href="/cgi-bin/koha/admin/currency.pl" class="cancel">Cancel</a>
     </fieldset>
     </form>
