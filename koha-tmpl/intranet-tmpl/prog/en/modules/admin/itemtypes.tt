@@ -22,47 +22,6 @@ Data deleted
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-
-function isNotNull(f,noalert) {
-	if (f.value.length ==0) {
-		return false;
-	}
-	return true;
-}
-
-function isNum(v,maybenull) {
-var n = new Number(v.value);
-if (isNaN(n)) {
-	return false;
-	}
-if (maybenull==0 && v.value=='') {
-	return false;
-}
-return true;
-}
-
-function Check(f) {
-	var ok=1;
-	var _alertString="";
-	var alertString2;
-	if (f.itemtype.value.length==0) {
-		_alertString += "\n- " + _("Itemtype missing");
-	}
-	if (!(isNotNull(window.document.Aform.description,1))) {
-		_alertString += "\n- " + _("Description missing");
-	}
-	if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
-		_alertString += "\n- " + _("Rental charge is not a number");
-	}
-	if (_alertString.length==0) {
-		document.Aform.submit();
-	} else {
-		alertString2  = _("Form not submitted because of the following problem(s)");
-		alertString2 += "\n------------------------------------------------------------------------------------\n";
-		alertString2 += _alertString;
-		alert(alertString2);
-	}
-}
      $(document).ready(function() {
         $('#icons').tabs();
         $("#table_item_type").dataTable($.extend(true, {}, dataTablesDefaults, {
@@ -73,6 +32,13 @@ function Check(f) {
             "aaSorting": [[ 2, "asc" ]],
             "iDisplayLength": 10
         }));
+        $( "#itemtypeentry" ).validate({
+            rules: {
+                itemtype: { required: true },
+                description: { required: true },
+                rentalcharge: { number: true }
+            }
+        });
      });
 //]]>
 </script>
@@ -124,7 +90,7 @@ Item types administration
   [% ELSE %]
       <h3>Add item type</h3>
   [% END %]
-<form action="[% script_name %]" name="Aform" method="post">
+<form action="[% script_name %]" name="Aform" method="post" id="itemtypeentry">
   <input type="hidden" name="op" value="add_validate" />
     <input type="hidden" name="checked" value="0" />
 		
@@ -137,15 +103,11 @@ Item types administration
      </li>
   [% ELSE %]
       <li>
-          <label for="itemtype">Item type: </label> <input type="text" id="itemtype" name="itemtype" size="10" maxlength="10" onblur="toUC(this)" class="focus" />
+          <label for="itemtype" class="required">Item type: </label> <input type="text" id="itemtype" name="itemtype" size="10" maxlength="10" onblur="toUC(this)" required="required" /> <span class="required">Required</span>
       </li>
   [% END %]
       <li>
-      [% IF ( itemtype ) %]
-          <label for="description">Description: </label><input type="text" id="description" name="description" size="48" value="[% description |html %]" class="focus" /></li>
-      [% ELSE %]
-          <label for="description">Description: </label><input type="text" id="description" name="description" size="48" value="[% description |html %]" /></li>
-      [% END %]
+          <label for="description" class="required">Description: </label><input type="text" id="description" name="description" size="48" value="[% description |html %]" required="required" /> <span class="required">Required</span></li>
      [% IF ( noItemTypeImages ) %]
 	 <li><span class="label">Image: </span>Item type images are disabled. To enable them, turn off the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=noItemTypeImages">noItemTypeImages system preference</a></li></ol>
 	 [% ELSE %]</ol>
@@ -242,7 +204,7 @@ Item types administration
     </fieldset>
 
     <fieldset class="action">
-      <input type="button" value="Save changes" onclick="Check(this.form)" />
+      <input type="submit" value="Save changes" />
 	  <a href="/cgi-bin/koha/admin/itemtypes.pl" class="cancel">Cancel</a>
     </fieldset>
 </form>
