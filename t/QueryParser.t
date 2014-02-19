@@ -17,7 +17,7 @@ ok(defined $QParser, 'Successfully created empty QP object');
 ok($QParser->load_config('./etc/searchengine/queryparser.yaml'), 'Loaded QP config');
 
 is($QParser->search_class_count, 4, 'Initialized 4 search classes');
-is (scalar(@{$QParser->search_fields()->{'keyword'}}), 108, "Correct number of search fields for 'keyword' class");
+is (scalar(@{$QParser->search_fields()->{'keyword'}}), 109, "Correct number of search fields for 'keyword' class");
 
 is($QParser->target_syntax('biblioserver', 'smith'), '@or @or @attr 1=1016 @attr 4=6 "smith" @attr 9=20 @attr 2=102 @attr 4=6 "smith" @attr 9=34 @attr 2=102 @attr 4=6 "smith"', 'super simple keyword query');
 is($QParser->target_syntax('biblioserver', 'au:smith'), '@attr 1=1003 @attr 4=6 "smith"', 'simple author query');
