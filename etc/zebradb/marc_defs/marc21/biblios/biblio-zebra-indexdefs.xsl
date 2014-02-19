@@ -1218,7 +1218,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     </xslo:for-each>
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('i', @code)">
-        <z:index name="stocknumber:w">
+        <z:index name="Number-local-acquisition:w">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
