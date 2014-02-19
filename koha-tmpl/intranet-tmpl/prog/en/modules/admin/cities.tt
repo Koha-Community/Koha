@@ -5,13 +5,6 @@
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-    function Check(f) {
-        if (f.city_zipcode.value.length == 0 && f.city_name.value.length == 0 ) {
-            alert(_("City name & zipcode missing"));
-        } else{
-            document.Aform.submit();
-        }
-    }
     $(document).ready(function() {
         $("#table_cities").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
@@ -53,7 +46,7 @@
 		<h1>New city</h1>
 	[% END %]
 
-	<form action="[% script_name %]" name="Aform" method="post">
+    <form action="[% script_name %]" name="Aform" method="post" class="validated">
 	<input type="hidden" name="op" value="add_validate" />
 	<input type="hidden" name="checked" value="0" />
 	<input type="hidden" name="cityid" value="[% cityid %]" />
@@ -63,16 +56,16 @@
 		<span class="label">City ID: </span>[% cityid %]</li>
 	[% END %]
 	<li>
-	<label for="city_name" class="required" title="required">City: </label>
-	<input type="text" name="city_name" id="city_name" size="80" maxlength="100" value="[% city_name |html %]" />
+    <label for="city_name" class="required">City: </label>
+    <input type="text" name="city_name" id="city_name" size="80" maxlength="100" value="[% city_name |html %]" required="required" class="required" /> <span class="required">Required</span>
 	</li>
 	<li>
 	<label for="city_state">State: </label>
 	<input type="text" name="city_state" id="city_state" size="80" maxlength="100" value="[% city_state |html %]" />
 	</li>
 	<li>				
-	<label for="city_zipcode" class="required" title="required">Zip/Postal code: </label>
-	<input type="text" name="city_zipcode" id="city_zipcode" size="20" maxlength="20" value="[% city_zipcode %]" />
+    <label for="city_zipcode" class="required">Zip/Postal code: </label>
+    <input type="text" name="city_zipcode" id="city_zipcode" size="20" maxlength="20" value="[% city_zipcode %]" required="required" class="required" /> <span class="required">Required</span>
 	</li>
 	<li>
 	<label for="city_country">Country: </label>
@@ -80,7 +73,7 @@
 	</li></ol></fieldset>
 	
 	<fieldset class="action">
-		<input class="button" type="button" onclick="Check(this.form)" value="Submit" /> <a class="cancel" href="/cgi-bin/koha/admin/cities.pl">Cancel</a>
+        <input type="submit" value="Submit" /> <a class="cancel" href="/cgi-bin/koha/admin/cities.pl">Cancel</a>
 	</fieldset>
 	</form>
 
