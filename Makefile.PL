@@ -186,7 +186,9 @@ Directory for Zebra configuration files.
 
 =item ZEBRA_LOCK_DIR
 
-Directory for Zebra's lock files.
+Directory for Zebra's lock files.  This includes subdirs for authorities,
+biblios, and the zebra rebuild function.  Any activity to reindex
+zebra from koha should interlock here with rebuild_zebra.pl.
 
 =item ZEBRA_DATA_DIR
 
@@ -318,6 +320,7 @@ my $target_map = {
   './skel/var/lib/koha/zebradb/biblios/register'  => { target => 'ZEBRA_DATA_DIR', trimdir => 6 },
   './skel/var/lib/koha/zebradb/biblios/shadow'  => { target => 'ZEBRA_DATA_DIR', trimdir => 6 },
   './skel/var/lib/koha/zebradb/biblios/tmp'  => { target => 'ZEBRA_DATA_DIR', trimdir => 6 },
+  './skel/var/lock/koha/zebradb/rebuild' => { target => 'ZEBRA_LOCK_DIR', trimdir => 6 },
   './skel/var/lib/koha/plugins' => { target => 'PLUGINS_DIR', trimdir => 6 },
   './sms'                       => 'INTRANET_CGI_DIR',
   './suggestion'                => 'INTRANET_CGI_DIR',

@@ -65,6 +65,7 @@ case "$1" in
         mkdir -p $LOCKDIR
         mkdir -p $LOCKDIR/biblios
         mkdir -p $LOCKDIR/authorities
+        mkdir -p $LOCKDIR/rebuild
         if [[ $EUID -eq 0 ]]; then
             chown -R $USER:$GROUP $LOCKDIR
         fi
