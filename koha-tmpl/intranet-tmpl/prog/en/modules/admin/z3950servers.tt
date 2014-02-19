@@ -13,46 +13,22 @@
 [% IF ( add_form ) %]
 <script type="text/javascript">
 //<![CDATA[
-        //
-        function isNotNull(f,noalert) {
-                if (f.value.length ==0) {
-                    return false;
-                }
-                return true;
-        }
-        //
-        function isNum(v,maybenull) {
-        var n = new Number(v.value);
-        if (isNaN(n)) {
-                return false;
-                }
-        if (maybenull==0 && v.value=='') {
-                return false;
-        }
-        return true;
-        }
-        //
-        function Check(f) {
-                var ok=1;
-                var _alertString="";
-                var alertString2;
-                if (f.searchfield.value.length==0) {_alertString += "- target name missing\n";
-                }
-                if (f.host.value.length==0) {_alertString += "- host missing\n";
-                }
-                if (f.port.value.length==0) {_alertString += "- port missing\n";
-                }
-                if (f.db.value.length==0) {_alertString += "- database missing\n";
-                }
-                if (isNaN(f.port.value)) {_alertString += "- port must be a number\n";
-                }
-                if (isNaN(f.rank.value)) {_alertString += "- rank must be a number\n";
-                }
-                if (_alertString.length==0) {document.Aform.submit();
-                } else {alertString2 = "Form not submitted because of the following problem(s)\n";alertString2 += "------------------------------------------------------------------------------------\n\n";alertString2 += _alertString;alert(alertString2);
-                }
-        }
-        //]]>
+    $(document).ready(function(){
+        $( "#serverentry" ).validate({
+            rules: {
+                searchfield: { required: true },
+                host: { required: true },
+                port: {
+                    required: true,
+                    number: true
+                },
+                db: { required: true },
+                rank: { number: true },
+                timeout: { number: true }
+            }
+        });
+    });
+//]]>
 </script>
 [% END %]
 [% IF ( else ) %]
@@ -93,7 +69,7 @@
 
 [% IF ( add_form ) %]
        
-        <form action="[% script_name %]" name="Aform" method="post">
+        <form action="[% script_name %]" name="Aform" method="post" id="serverentry">
         <input type="hidden" name="op" value="add_validate" />
 [% IF ( searchfield ) %]
                 <h1>Modify Z39.50 server</h1>
@@ -104,14 +80,14 @@
         <ol>[% IF ( searchfield ) %]
                 <li><span class="label">Z39.50 server: </span>        <input type="hidden" name="searchfield" value="[% searchfield %]" />[% searchfield %]</li>
         [% ELSE %]
-                <li><label for="searchfield">Z39.50 server: </label>        <input type="text" name="searchfield" id="searchfield" size="65" maxlength="100" onblur="toUC(this)" /></li>
+                <li><label for="searchfield" class="required">Z39.50 server: </label>        <input type="text" name="searchfield" id="searchfield" size="65" maxlength="100" onblur="toUC(this)" required="required" /> <span class="required">Required</span></li>
         [% END %]
 
-		<li><label for="host">Hostname: </label>	<input type="text" name="host" id="host" size="30" value="[% host %]" />
+        <li><label for="host" class="required">Hostname: </label> <input type="text" name="host" id="host" size="30" value="[% host %]" required="required" /> <span class="required">Required</span>
 		</li>
-		<li><label for="port">Port: </label>	<input type="text" name="port" id="port" size="5" value="[% port %]" onblur="isNum(this)" />
+        <li><label for="port" class="required">Port: </label> <input type="text" name="port" id="port" size="5" value="[% port %]" required="required" /> <span class="required">Required</span>
 		</li>
-		<li><label for="db">Database: </label>	<input type="text" name="db" id="db" value="[% db %]" />
+        <li><label for="db" class="required">Database: </label> <input type="text" name="db" id="db" value="[% db %]" required="required" /> <span class="required">Required</span>
 		</li>
 		<li><label for="userid">Userid: </label>	<input type="text" name="userid" id="userid" value="[% userid %]" />
 		</li>
@@ -124,7 +100,7 @@
                                 <input type="checkbox" name="checked" id="checked" value="1" />
                         [% END %]
                 </li>
-		<li><label for="rank">Rank (display order): </label>	<input type="text" name="rank" id="rank" size="4" value="[% rank %]" onblur="isNum(this)" />
+        <li><label for="rank">Rank (display order): </label> <input type="text" name="rank" id="rank" size="4" value="[% rank %]" />
 		</li>	
 		<li><label for="syntax">Syntax (z3950 can send<br /> records in various format. Choose one): </label>	
 <select name="syntax">
@@ -223,7 +199,7 @@
 </select>
 </li>
     <li><label for="timeout">Timeout (0 its like not set): </label>
-		<input type="text" name="timeout" id="timeout" size="4" value="[% timeout %]" onblur="isNum(this)" /> seconds
+        <input type="text" name="timeout" id="timeout" size="4" value="[% timeout %]" /> seconds
 	</li>
     <li><label for="recordtype">Record type: </label>
     <select name="recordtype" id="recordtype">
@@ -241,8 +217,8 @@
     </li>
 </ol>
         </fieldset>
-		
-		<fieldset class="action"><input type="button" value="Save" onclick="Check(this.form)" /> <a class="cancel" href="/cgi-bin/koha/admin/z3950servers.pl">Cancel</a></fieldset>
+
+        <fieldset class="action"><input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/z3950servers.pl">Cancel</a></fieldset>
         </form>
 [% END %]
 
