@@ -568,7 +568,7 @@ sub getRecords {
                           )
                         {
                             $number_of_facets++;
-                            if (   ( $number_of_facets < 6 )
+                            if (   ( $number_of_facets <= 5 )
                                 || ( $expanded_facet eq $link_value )
                                 || ( $facets_info->{$link_value}->{'expanded'} )
                               )
@@ -645,7 +645,7 @@ sub getRecords {
                         # handle expanded option
                         unless ( $facets_info->{$link_value}->{'expanded'} ) {
                             $expandable = 1
-                              if ( ( $number_of_facets > 6 )
+                              if ( ( $number_of_facets > 5 )
                                 && ( $expanded_facet ne $link_value ) );
                         }
                         push @facets_loop,
