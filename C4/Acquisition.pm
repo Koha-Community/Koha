@@ -1615,6 +1615,7 @@ sub CancelReceipt {
         };
         $sth = $dbh->prepare($query);
         $sth->execute(0, undef, undef, $ordernumber);
+        _cancel_items_receipt( $ordernumber );
     } else {
         # The order line has a parent, increase parent quantity and delete
         # the order line.
@@ -1651,25 +1652,7 @@ sub CancelReceipt {
                 " receipt";
             return;
         }
-        if(C4::Context->preference('AcqCreateItem') eq 'receiving') {
-            # Remove items that were created at receipt
-            $query = qq{
-                DELETE FROM items, aqorders_items
-                USING items, aqorders_items
-                WHERE items.itemnumber = ? AND aqorders_items.itemnumber = ?
-            };
-            $sth = $dbh->prepare($query);
-            my @itemnumbers = GetItemnumbersFromOrder($ordernumber);
-            foreach my $itemnumber (@itemnumbers) {
-                $sth->execute($itemnumber, $itemnumber);
-            }
-        } else {
-            # Update items
-            my @itemnumbers = GetItemnumbersFromOrder($ordernumber);
-            foreach my $itemnumber (@itemnumbers) {
-                ModItemOrder($itemnumber, $parent_ordernumber);
-            }
-        }
+        _cancel_items_receipt( $ordernumber, $parent_ordernumber );
         # Delete order line
         $query = qq{
             DELETE FROM aqorders
@@ -1681,6 +1664,31 @@ sub CancelReceipt {
     }
 
     return $parent_ordernumber;
+}
+
+sub _cancel_items_receipt {
+    my ( $ordernumber, $parent_ordernumber ) = @_;
+    $parent_ordernumber ||= $ordernumber;
+
+    my @itemnumbers = GetItemnumbersFromOrder($ordernumber);
+    if(C4::Context->preference('AcqCreateItem') eq 'receiving') {
+        # Remove items that were created at receipt
+        my $query = qq{
+            DELETE FROM items, aqorders_items
+            USING items, aqorders_items
+            WHERE items.itemnumber = ? AND aqorders_items.itemnumber = ?
+        };
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare($query);
+        foreach my $itemnumber (@itemnumbers) {
+            $sth->execute($itemnumber, $itemnumber);
+        }
+    } else {
+        # Update items
+        foreach my $itemnumber (@itemnumbers) {
+            ModItemOrder($itemnumber, $parent_ordernumber);
+        }
+    }
 }
 
 #------------------------------------------------------------#
