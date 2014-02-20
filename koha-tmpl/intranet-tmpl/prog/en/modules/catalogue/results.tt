@@ -148,6 +148,9 @@ $('#sort_by').change(function() {
             window.location = '/cgi-bin/koha/catalogue/[% gotoPage %]?biblionumber=' + [% SEARCH_RESULTS.last.biblionumber %] + '&searchid=[% searchid %]';
         [% END %]
     [% END %]
+
+[% IF LocalCoverImages %]KOHA.LocalCover.GetCoverFromBibnumber(false);[% END %]
+
 });
 
 
@@ -430,19 +433,24 @@ var holdForPatron = function () {
                     <!-- TABLE RESULTS START -->
                 <table>
                     <tr>
-                        [% IF ( AmazonCoverImages ) %]<th>&nbsp;</th>[% END %]
+                        [% IF ( AmazonCoverImages || LocalCoverImages ) %]<th>&nbsp;</th>[% END %]
                         <th colspan="2">Results</th>
                         <th>Location</th>
                     </tr>
                         <!-- Actual Search Results -->
                         [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
                          [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
-                            [% IF ( AmazonCoverImages ) %]
+                            [% IF ( AmazonCoverImages || LocalCoverImages ) %]
                                 <td>
-                                    <a class="p1" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
-									
-                                        <img src="[% IF ( SEARCH_RESULT.normalized_isbn ) %]http://images.amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn %].01.TZZZZZZZ.jpg[% ELSE %]http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif[% END %]" alt="" class="thumbnail" />
-                                    </a></td>
+                                    [% IF ( LocalCoverImages ) %]
+                                        <span title="[% SEARCH_RESULT.biblionumber |url %]" class="[% SEARCH_RESULT.biblionumber %]" id="local-thumbnail[% loop.count %]"></span>
+                                    [% END %]
+                                    [% IF ( AmazonCoverImages ) %]
+                                        <a class="p1" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
+                                            <img src="[% IF ( SEARCH_RESULT.normalized_isbn ) %]http://images.amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn %].01.TZZZZZZZ.jpg[% ELSE %]http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif[% END %]" alt="" class="thumbnail" />
+                                        </a>
+                                    [% END %]
+                                </td>
                             [% END %]
                             <td>
                                 <input type="checkbox" class="selection" id="bib[% SEARCH_RESULT.biblionumber %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber %]" style="display:none" />
