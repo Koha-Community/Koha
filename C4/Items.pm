@@ -2316,10 +2316,10 @@ sub _koha_modify_item {
     $query =~ s/,$//;
     $query .= " WHERE itemnumber=?";
     push @bind, $item->{'itemnumber'};
-    my $sth = C4::Context->dbh->prepare($query);
+    my $sth = $dbh->prepare($query);
     $sth->execute(@bind);
-    if ( C4::Context->dbh->errstr ) {
-        $error.="ERROR in _koha_modify_item $query".$dbh->errstr;
+    if ( $sth->err ) {
+        $error.="ERROR in _koha_modify_item $query: ".$sth->errstr;
         warn $error;
     }
     return ($item->{'itemnumber'},$error);
