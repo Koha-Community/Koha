@@ -666,17 +666,6 @@ sub _shelf_count {
     return $total;
 }
 
-sub _biblionumber_sth { #only used in obsolete sub below
-    my ($shelf) = @_;
-    my $query = 'select biblionumber from virtualshelfcontents where shelfnumber = ?';
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare($query)
-        or die $dbh->errstr;
-    $sth->execute( $shelf )
-        or die $sth->errstr;
-    $sth;
-}
-
 sub _CheckShelfName {
     my ($name, $cat, $owner, $number)= @_;
 
