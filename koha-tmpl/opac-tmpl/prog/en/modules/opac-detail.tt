@@ -937,7 +937,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <div id="bibliodescriptions" class="toptabs">
 
 <ul>   
-    [% IF ( defaulttab == 'holdings' ) %]<li id="tab_holdings" class="ui-tabs-selected">[% ELSE %]<li id="tab_holdings">[% END %]
+    [% IF ( defaulttab == 'holdings' ) %]<li id="tab_holdings" class="ui-tabs-active">[% ELSE %]<li id="tab_holdings">[% END %]
         <a href="#holdings">[% IF SeparateHoldings %][% LoginBranchname %] holdings[% ELSE %]Holdings[% END %][% UNLESS too_many_items %]  ( [% itemloop.size || 0 %] )[% END %]</a>
     </li>
     [% IF (SeparateHoldings) %]
@@ -976,7 +976,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% END %]
 [% END %]
 [% IF ( subscriptionsnumber ) %]
-    [% IF ( defaulttab == 'subscriptions' ) %]<li id="tab_subscriptions" class="ui-tabs-selected">[% ELSE %]<li id="tab_subscriptions">[% END %]
+    [% IF ( defaulttab == 'subscriptions' ) %]<li id="tab_subscriptions" class="ui-tabs-active">[% ELSE %]<li id="tab_subscriptions">[% END %]
         <a href="#subscriptions">Subscriptions</a>
     </li>
 [% END %]
@@ -995,7 +995,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% END %][% END %]
 
 [% IF ( serialcollection ) %]
-    [% IF ( defaulttab == 'serialcollection' ) %]<li id="tab_serialcollection" class="ui-tabs-selected">[% ELSE %]<li id="tab_serialcollection">[% END %]
+    [% IF ( defaulttab == 'serialcollection' ) %]<li id="tab_serialcollection" class="ui-tabs-active">[% ELSE %]<li id="tab_serialcollection">[% END %]
         <a href="#serialcollection">Serial collection</a>
     </li>
 [% END %]
