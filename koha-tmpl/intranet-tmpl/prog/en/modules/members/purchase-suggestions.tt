@@ -33,8 +33,8 @@
             <div class="yui-g">
                 <h2>Purchase suggestions</h2>
 
-                <div id="toolbar">
-                    <a class="btn" id="newsuggestion" href="/cgi-bin/koha/suggestion/suggestion.pl?op=add&suggestedby=[% borrowernumber %]&redirect=purchase_suggestions&borrowernumber=[% borrowernumber %]"><i class="icon-plus"></i> New purchase suggestion</a>
+                <div id="toolbar" class="btn-toolbar">
+                    <a class="btn btn-small" id="newsuggestion" href="/cgi-bin/koha/suggestion/suggestion.pl?op=add&amp;suggestedby=[% borrowernumber %]&amp;redirect=purchase_suggestions&amp;borrowernumber=[% borrowernumber %]"><i class="icon-plus"></i> New purchase suggestion</a>
                 </div>
 
                 [% IF suggestions %]
@@ -55,7 +55,7 @@
                                     <p>
                                         <strong>
                                             [% IF ( CAN_user_catalogue ) %]
-                                                <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% s.suggestionid %]&op=show">[% s.title |html %]</a>
+                                                <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% s.suggestionid %]&amp;op=show">[% s.title |html %]</a>
                                             [% ELSE %]
                                                 [% s.title |html %]
                                             [% END %]
@@ -94,7 +94,9 @@
                     </tbody>
                   </table>
                 [% ELSE %]
-                  There is no purchase suggestion for this patron.
+                    <div class="dialog message">
+                        <p>This patron has not submitted any purchase suggestions</p>
+                    </div>
                 [% END %]
             </div>
         </div>

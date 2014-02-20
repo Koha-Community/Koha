@@ -51,6 +51,9 @@ $template->param(
     branchname   => GetBranchName( $borrower->{'branchcode'} ),
 );
 
+my ($picture, $dberror) = GetPatronImage($borrowernumber);
+$template->param( picture => 1 ) if $picture;
+
 my $suggestions = SearchSuggestion( { suggestedby => $borrowernumber } );
 
 $template->param( suggestions => $suggestions );
