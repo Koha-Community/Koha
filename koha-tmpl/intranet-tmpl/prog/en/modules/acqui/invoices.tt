@@ -11,8 +11,11 @@
 $(document).ready(function() {
     $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
         sDom: "t",
+        bPaginate: false,
+        bFilter: false,
+        bInfo: false,
         "aoColumns": [
-            null,null,{ "sType": "title-string" },null,null,null,null
+            null,null,null,{ "sType": "title-string" },null,null,null,null
         ],
         aoColumnDefs: [
             { "bSortable": false, "aTargets": [0, 7] }
