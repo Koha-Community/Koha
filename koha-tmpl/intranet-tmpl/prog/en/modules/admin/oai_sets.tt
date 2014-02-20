@@ -32,7 +32,7 @@ function delDescField(minusButton) {
   <div id="yui-main">
     <div class="yui-b">
         [% IF ( op_new || op_mod ) %]
-            <form method="post" action="/cgi-bin/koha/admin/oai_sets.pl">
+            <form method="post" action="/cgi-bin/koha/admin/oai_sets.pl" class="validated">
             [% IF ( op_new ) %]
                 <h2>Add a new OAI set</h2>
                 <input type="hidden" name="op" value="savenew" />
@@ -45,11 +45,13 @@ function delDescField(minusButton) {
                     <ol>
                         <li>
                             <label for="spec" class="required">setSpec: </label>
-                            <input type="text" id="spec" name="spec" value="[% spec %]" />
+                            <input type="text" id="spec" name="spec" value="[% spec %]" required="required" class="required" />
+                            <span class="required">Required</span>
                         </li>
                         <li>
                             <label for="name" class="required">setName: </label>
-                            <input type="text" id="name" name="name" value="[% name %]" />
+                            <input type="text" id="name" name="name" value="[% name %]" required="required" class="required" />
+                            <span class="required">Required</span>
                         </li>
                         [% FOREACH desc IN descriptions %]
                             <li>
