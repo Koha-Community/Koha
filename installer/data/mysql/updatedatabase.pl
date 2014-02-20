@@ -8425,6 +8425,17 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
               ADD INDEX isbn ( isbn ( 255 ) ),
               ADD INDEX issn ( issn ( 255 ) )
     ");
+
+    $dbh->do("ALTER TABLE deletedbiblioitems DROP INDEX isbn");
+    $dbh->do("ALTER TABLE deletedbiblioitems DROP INDEX issn");
+    $dbh->do("ALTER TABLE deletedbiblioitems
+              CHANGE isbn isbn MEDIUMTEXT NULL DEFAULT NULL,
+              CHANGE issn issn MEDIUMTEXT NULL DEFAULT NULL
+    ");
+    $dbh->do("ALTER TABLE deletedbiblioitems 
+              ADD INDEX isbn ( isbn ( 255 ) )
+    ");
+
     print "Upgrade to $DBversion done (Bug 11268 - Biblioitems URL field is too small for some URLs)\n";
     SetVersion($DBversion);
 }
