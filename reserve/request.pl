@@ -476,7 +476,12 @@ foreach my $biblionumber (@biblionumbers) {
             $reserve{'itemnumber'}  = $res->{'itemnumber'};
             $reserve{'wbrname'} = $branches->{$res->{'branchcode'}}->{'branchname'};
             if($reserve{'holdingbranch'} eq $reserve{'wbrcode'}){
-                $reserve{'atdestination'} = 1;
+                # Just because the holdingbranch matches the reserve branch doesn't mean the item
+                # has arrived at the destination, check for an open transfer for the item as well
+                my ( $transfertwhen, $transfertfrom, $transferto ) = C4::Circulation::GetTransfers( $res->{itemnumber} );
+                if ( not $transferto or $transferto ne $res->{branchcode} ) {
+                    $reserve{'atdestination'} = 1;
+                }
             }
             # set found to 1 if reserve is waiting for patron pickup
             $reserve{'found'} = 1 if $res->{'found'} eq 'W';
