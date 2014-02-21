@@ -259,7 +259,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
     <div id="yui-main">
     <div class="yui-b">
 [% IF ( op_save ) %]
-    <form id="add_edit" action="suggestion.pl" method="post">
+    <form id="add_edit" action="suggestion.pl" method="post" class="validated">
     [% IF ( suggestionid ) %]
         <h1>Edit purchase suggestion #[% suggestionid %]</h1>
         <input type="hidden" name="suggestionid" value="[% suggestionid %]"/>
@@ -267,7 +267,11 @@ $(document).ready(function() { calcNewsuggTotal(); });
         <h1>Enter a new purchase suggestion</h1>
     [% END %]
     <fieldset class="rows"> <legend>Bibliographic information</legend><ol>
-        <li><label for="title">Title:</label><input type="text" id="title" name="title" size="80" maxlength="255" value="[% title |html %]"/></li>
+        <li>
+            <label for="title" class="required">Title:</label>
+            <input type="text" id="title" name="title" size="80" maxlength="255" value="[% title |html %]" required="required" class="required" />
+            <span class="required">Required</span>
+        </li>
         <li><label for="author">Author:</label><input type="text" id="author" name="author" size="50" maxlength="80" value="[% author %]"/></li>
         <li><label for="copyrightdate">Copyright date:</label><input type="text" id="copyrightdate" name="copyrightdate" size="4" maxlength="4" value="[% copyrightdate %]" /></li>
         <li><label for="isbn">ISBN or ISSN or other standard number:</label><input type="text" id="isbn" name="isbn" size="50" maxlength="80" value="[% isbn %]"/></li>
