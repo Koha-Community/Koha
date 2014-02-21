@@ -251,64 +251,44 @@ if ( $op eq "add" ) {
 # the template will know if basketgroup must be displayed or edited, depending on the value of closed key
 #
     my $bookseller = &GetBookSellerFromId($booksellerid);
-    if(! $booksellerid){
-# Unknown bookseller
-# FIXME : ungroupedlist does not seem to be used in this file nor in template
-        $template->param( ungroupedlist => 1);
-        my @booksellers = GetBookSeller('');
-       for (my $i=0; $i < scalar @booksellers; $i++) {
-            my $baskets = &GetBasketsByBookseller($booksellers[$i]->{id});
-            for (my $j=0; $j < scalar @$baskets; $j++) {
-                if(! @$baskets[$i]->{closedate} || @$baskets[$i]->{basketgroupid}) {
-                    splice(@$baskets, $j, 1);
-                    $j--;
-                }
-            }
-            if (scalar @$baskets == 0){
-                splice(@booksellers, $i, 1);
-                $i--;
-            }
+    my $basketgroupid = $input->param('basketgroupid');
+    my $billingplace;
+    my $deliveryplace;
+    my $freedeliveryplace;
+    if ( $basketgroupid ) {
+        # Get the selected baskets in the basketgroup to display them
+        my $selecteds = GetBasketsByBasketgroup($basketgroupid);
+        foreach my $basket(@{$selecteds}){
+            $basket->{total} = BasketTotal($basket->{basketno}, $bookseller);
         }
+        $template->param(basketgroupid => $basketgroupid,
+                         selectedbaskets => $selecteds);
+
+        # Get general informations about the basket group to prefill the form
+        my $basketgroup = GetBasketgroup($basketgroupid);
+        $template->param(
+            name            => $basketgroup->{name},
+            deliverycomment => $basketgroup->{deliverycomment},
+            freedeliveryplace => $basketgroup->{freedeliveryplace},
+        );
+        $billingplace  = $basketgroup->{billingplace};
+        $deliveryplace = $basketgroup->{deliveryplace};
+        $freedeliveryplace = $basketgroup->{freedeliveryplace};
+        $template->param( closedbg => ($basketgroup ->{'closed'}) ? 1 : 0);
     } else {
-# Known bookseller
-        my $basketgroupid = $input->param('basketgroupid');
-        my $billingplace;
-        my $deliveryplace;
-        my $freedeliveryplace;
-        if ( $basketgroupid ) {
-            # Get the selected baskets in the basketgroup to display them
-            my $selecteds = GetBasketsByBasketgroup($basketgroupid);
-            foreach my $basket(@{$selecteds}){
-                $basket->{total} = BasketTotal($basket->{basketno}, $bookseller);
-            }
-            $template->param(basketgroupid => $basketgroupid,
-                             selectedbaskets => $selecteds);
-
-            # Get general informations about the basket group to prefill the form
-            my $basketgroup = GetBasketgroup($basketgroupid);
-            $template->param(
-                name            => $basketgroup->{name},
-                deliverycomment => $basketgroup->{deliverycomment},
-                freedeliveryplace => $basketgroup->{freedeliveryplace},
-            );
-            $billingplace  = $basketgroup->{billingplace};
-            $deliveryplace = $basketgroup->{deliveryplace};
-            $freedeliveryplace = $basketgroup->{freedeliveryplace};
-            $template->param( closedbg => ($basketgroup ->{'closed'}) ? 1 : 0);
-        } else {
-            $template->param( closedbg => 0);
-        }
-        # determine default billing and delivery places depending on librarian homebranch and existing basketgroup data
-        my $borrower = GetMember( ( 'borrowernumber' => $loggedinuser ) );
-        $billingplace  = $billingplace  || $borrower->{'branchcode'};
-        $deliveryplace = $deliveryplace || $borrower->{'branchcode'};
-
-        my $branches = C4::Branch::GetBranchesLoop( $billingplace );
-        $template->param( billingplaceloop => $branches );
-        $branches = C4::Branch::GetBranchesLoop( $deliveryplace );
-        $template->param( deliveryplaceloop => $branches );
-        $template->param( booksellerid => $booksellerid );
+        $template->param( closedbg => 0);
     }
+    # determine default billing and delivery places depending on librarian homebranch and existing basketgroup data
+    my $borrower = GetMember( ( 'borrowernumber' => $loggedinuser ) );
+    $billingplace  = $billingplace  || $borrower->{'branchcode'};
+    $deliveryplace = $deliveryplace || $borrower->{'branchcode'};
+
+    my $branches = C4::Branch::GetBranchesLoop( $billingplace );
+    $template->param( billingplaceloop => $branches );
+    $branches = C4::Branch::GetBranchesLoop( $deliveryplace );
+    $template->param( deliveryplaceloop => $branches );
+    $template->param( booksellerid => $booksellerid );
+
     # the template will display a unique basketgroup
     $template->param(grouping => 1);
     my $basketgroups = &GetBasketgroups($booksellerid);
