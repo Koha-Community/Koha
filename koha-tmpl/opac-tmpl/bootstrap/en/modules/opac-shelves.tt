@@ -543,7 +543,7 @@
                                             [% END %]
                                         </select>
                                     </li>
-                                    [% IF (OpacAllowPublicListCreation) %]
+                                    [% IF ( OpacAllowPublicListCreation || category2 ) %]
                                         <li>
                                             <label for="category">Category:</label>
                                             <select name="category" id="category">
@@ -558,16 +558,15 @@
                                                     <option value="2">Public</option>
                                                 [% END %]
                                             </select>
+                                            [% IF ( category2 && !OpacAllowPublicListCreation ) %]
+                                                The library has disabled the ability for patrons to create new public lists.  If you make your list private, you will not be able to make it public again.
+                                            [% END %]
                                         </li>
                                         [% INCLUDE list_permissions %]
                                     [% END %]
                                 </ol>
-                                [% UNLESS ( OpacAllowPublicListCreation ) %]
-                                    [% IF ( category2 ) %]
-                                        <input type="hidden" name="category" value="2" />
-                                    [% ELSE %]
-                                        <input type="hidden" name="category" value="1" />
-                                    [% END %]
+                                [% UNLESS ( OpacAllowPublicListCreation || category2 ) %]
+                                    <input type="hidden" name="category" value="1" />
                                 [% END %]
                             </fieldset>
 
