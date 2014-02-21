@@ -67,9 +67,12 @@
                 return false;
             }
         } else {
-            alert(_("This record has no items."));
+            alertNoItems();
             return false;
         }
+    }
+    function alertNoItems(){
+        alert(_("This record has no items."));
     }
 [% END %]
 	 $(document).ready(function() {
@@ -100,6 +103,13 @@
             return false;
         });
         $("#export").remove(); // Hide embedded export form if JS menus available
+        $("#deletebiblio").tooltip();
+        $("#batchedit-disabled,#batchdelete-disabled,#deleteallitems-disabled")
+            .on("click",function(e){
+                e.preventDefault();
+                alertNoItems();
+            })
+            .tooltip();
 	 });
 	//]]>
 	</script>
@@ -146,9 +156,21 @@ CAN_user_serials_create_subscription ) %]
             <li><a id="edititems" href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber %]">Edit items</a></li>
             [% END %]
 
-            [% IF ( CAN_user_tools_items_batchmod ) %]<li><a href="/cgi-bin/koha/tools/batchMod.pl?op=show&amp;biblionumber=[% biblionumber %]&amp;src=CATALOGUING">Edit items in batch</a></li>[% END %]
+            [% IF ( CAN_user_tools_items_batchmod ) %]
+                [% IF ( count ) %]
+                    <li><a id="batchedit" href="/cgi-bin/koha/tools/batchMod.pl?op=show&amp;biblionumber=[% biblionumber %]&amp;src=CATALOGUING">Edit items in batch</a></li>
+                [% ELSE %]
+                    <li class="disabled"><a id="batchedit-disabled" href="#" data-toggle="tooltip" data-placement="left" title="This record has no items">Edit items in batch</a></li>
+                [% END %]
+            [% END %]
 
-            [% IF ( CAN_user_tools_items_batchdel ) %]<li><a href="/cgi-bin/koha/tools/batchMod.pl?del=1&amp;op=show&amp;biblionumber=[% biblionumber %]&amp;src=CATALOGUING">Delete items in a batch</a></li>[% END %]
+            [% IF ( CAN_user_tools_items_batchdel ) %]
+                [% IF ( count ) %]
+                    <li><a id="batchdelete" href="/cgi-bin/koha/tools/batchMod.pl?del=1&amp;op=show&amp;biblionumber=[% biblionumber %]&amp;src=CATALOGUING">Delete items in a batch</a></li>
+                [% ELSE %]
+                    <li class="disabled"><a id="batchdelete-disabled" href="#" data-toggle="tooltip" data-placement="left" title="This record has no items">Delete items in a batch</a></li>
+                [% END %]
+            [% END %]
 
             [% IF ( CAN_user_editcatalogue_edit_items ) %]<li><a href="/cgi-bin/koha/cataloguing/moveitem.pl?biblionumber=[% biblionumber %]">Attach item</a></li>[% END %]
 
@@ -159,13 +181,19 @@ CAN_user_serials_create_subscription ) %]
             <li><a id="duplicatebiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]&amp;frameworkcode=[% current_framework %]&amp;op=duplicate">Edit as new (duplicate)</a></li>
             <li><a href="#" id="z3950copy">Replace record via Z39.50</a></li>
 
-            [% IF ( count ) %]<li class="disabled">[% ELSE %]<li>[% END %]
-            <a id="deletebiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&amp;biblionumber=[% biblionumber %]">Delete record</a></li>
+                [% IF ( count ) %]
+                    <li class="disabled"><a id="deletebiblio" data-toggle="tooltip" data-placement="left" title="[% count %] item(s) are attached to this record. You must delete all items before deleting this record." href="#">Delete record</a></li>
+                [% ELSE %]
+                    <li><a id="deletebiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&amp;biblionumber=[% biblionumber %]">Delete record</a></li>
+                [% END %]
             [% END %]
 
             [% IF ( CAN_user_editcatalogue_edit_items ) %]
-            [% UNLESS ( count ) %]<li class="disabled">[% ELSE %]<li>[% END %]<li>
-            <a href="#" id="deleteallitems">Delete all items</a></li>
+                [% IF ( count ) %]
+                    <li><a href="#" id="deleteallitems">Delete all items</a></li>
+                [% ELSE %]
+                    <li class="disabled"><a href="#" id="deleteallitems-disabled" data-toggle="tooltip" data-placement="left" title="This record has no items">Delete all items</a></li>
+                [% END %]
             [% END %]
 
     </ul>
