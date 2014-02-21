@@ -910,8 +910,8 @@ database to be used by Koha);
 
     print q(
 Koha uses the Zebra search engine for high-performance
-searching of bibliographic and authority records.  If you
-have installed the Zebra software
+searching of bibliographic and authority records.  Checking
+to see if you have installed the Zebra software...
 );
 
     if (defined(my $zebra_path = find_zebra())) {
