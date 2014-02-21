@@ -1851,17 +1851,6 @@ CREATE TABLE `reviews` ( -- patron opac comments
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `roadtype`
---
-
-DROP TABLE IF EXISTS `roadtype`;
-CREATE TABLE `roadtype` ( -- road types defined in administration and used in patron management
-  `roadtypeid` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha for each road type
-  `road_type` varchar(100) NOT NULL default '', -- text for road type
-  PRIMARY KEY  (`roadtypeid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
 -- Table structure for table `saved_sql`
 --
 
