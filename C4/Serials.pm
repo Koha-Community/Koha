@@ -34,6 +34,29 @@ use C4::Serials::Numberpattern;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
+# Define statuses
+use constant {
+    EXPECTED               => 1,
+    ARRIVED                => 2,
+    LATE                   => 3,
+    MISSING                => 4,
+    MISSING_NEVER_RECIEVED => 41,
+    MISSING_SOLD_OUT       => 42,
+    MISSING_DAMAGED        => 43,
+    MISSING_LOST           => 44,
+    NOT_ISSUED             => 5,
+    DELETED                => 6,
+    CLAIMED                => 7,
+    STOPPED                => 8,
+};
+
+use constant MISSING_STATUSES => (
+    MISSING,          MISSING_NEVER_RECIEVED,
+    MISSING_SOLD_OUT, MISSING_DAMAGED,
+    MISSING_LOST
+);
+
+
 BEGIN {
     $VERSION = 3.07.00.049;    # set version for version checking
     require Exporter;
@@ -95,6 +118,7 @@ the array is in name order
 
 sub GetSuppliersWithLateIssues {
     my $dbh   = C4::Context->dbh;
+    my $statuses = join(',', ( LATE, MISSING_STATUSES, CLAIMED ) );
     my $query = qq|
     SELECT DISTINCT id, name
     FROM            subscription
@@ -103,7 +127,7 @@ sub GetSuppliersWithLateIssues {
     WHERE id > 0
         AND (
             (planneddate < now() AND serial.status=1)
-            OR serial.STATUS IN (3, 4, 41, 42, 43, 44, 7)
+            OR serial.STATUS IN ( $statuses )
         )
         AND subscription.closed = 0
     ORDER BY name|;
@@ -372,7 +396,7 @@ sub PrepareSerialsData {
             }
         }
         $subs->{ "status" . $subs->{'status'} } = 1;
-        if ( grep { $_ == $subs->{status} } qw( 1 3 4 41 42 43 44 7 ) ) {
+        if ( grep { $_ == $subs->{status} } ( EXPECTED, LATE, MISSING_STATUSES, CLAIMED ) ) {
             $subs->{"checked"} = 1;
         }
 
@@ -638,9 +662,10 @@ sub GetSerials {
     my $counter = 0;
     $count = 5 unless ($count);
     my @serials;
+    my $statuses = join( ',', ( ARRIVED, MISSING_STATUSES, NOT_ISSUED ) );
     my $query = "SELECT serialid,serialseq, status, publisheddate, planneddate,notes, routingnotes
                         FROM   serial
-                        WHERE  subscriptionid = ? AND status NOT IN (2, 4, 41, 42, 43, 44, 5)
+                        WHERE  subscriptionid = ? AND status NOT IN ( $statuses )
                         ORDER BY IF(publisheddate<>'0000-00-00',publisheddate,planneddate) DESC";
     my $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
@@ -661,7 +686,7 @@ sub GetSerials {
     $query = "SELECT   serialid,serialseq, status, planneddate, publisheddate,notes, routingnotes
        FROM     serial
        WHERE    subscriptionid = ?
-       AND      (status in (2, 4, 41, 42, 43, 44, 5))
+       AND      status IN ( $statuses )
        ORDER BY IF(publisheddate<>'0000-00-00',publisheddate,planneddate) DESC
       ";
     $sth = $dbh->prepare($query);
