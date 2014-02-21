@@ -87,8 +87,11 @@ function reloadPage(p) {
                         <form action="/cgi-bin/koha/tools/csv-profiles.pl" class="validated" method="post">
 						<fieldset class="rows">
                           <ol>
-                            <li><label for="profile_name" class="required">Profile name: </label>
-                            <input type="text" id="profile_name" name="profile_name" required="required" /></li>
+                            <li>
+                                <label for="profile_name" class="required">Profile name: </label>
+                                <input type="text" id="profile_name" name="profile_name" required="required" />
+                                <span class="required">Required</span>
+                            </li>
 
                             <li>
                               <label for="profile_type" class="required">Profile type: </label>
@@ -96,6 +99,7 @@ function reloadPage(p) {
                                 <option value="marc" selected="selected">MARC</option>
                                 <option value="sql">SQL</option>
                               </select>
+                              <span class="required">Required</span>
                             </li>
 
 						    <li><label for="profile_description">Profile description: </label>
@@ -152,8 +156,10 @@ function reloadPage(p) {
 						    </select></li>
 
 
-                            <li class="marc_specific"><label for="new_profile_marc_content" class="required">Profile MARC fields: </label>
-                            <textarea cols="50" rows="2" name="profile_marc_content" id="new_profile_marc_content"></textarea>
+                            <li class="marc_specific">
+                                <label for="new_profile_marc_content" class="required">Profile MARC fields: </label>
+                                <textarea cols="50" rows="2" name="profile_marc_content" id="new_profile_marc_content"></textarea>
+                                <span class="required">Required</span>
 						    <p>You have to define which fields or subfields you want to export, separated by pipes.</p>
                             <p>You can also use your own headers (instead of the ones from Koha) by prefixing the field number with an header, followed by the equal sign.</p>
 						    <p>Example: Personal name=200|Entry element=210$a|300|009</p>
@@ -180,7 +186,7 @@ function reloadPage(p) {
 						<fieldset class="rows">
                             <ol>
                             <li><label for="modify_profile_name" class="required">Profile name: </label>
-						    <select id="modify_profile_name" name="profile_name" onchange="javascript:reloadPage(this)">
+                                <select id="modify_profile_name" name="profile_name" required="required" class="required" onchange="reloadPage(this)">
 							<option value="0">-- Choose One --</option>
 							[% FOREACH existing_profile IN existing_profiles %]
 							[% IF ( existing_profile.export_format_id == selected_profile_id ) %]
@@ -189,11 +195,13 @@ function reloadPage(p) {
 							<option value="[% existing_profile.export_format_id %]">[% existing_profile.profile %]</option>
 							[% END %]
 							[% END %]
-						    </select></li>
+                            </select>
+                            <span class="required">Required</span>
+                            </li>
 
                             <li>
                               <label for="modify_profile_type" class="required">Profile type: </label>
-                              <select id="modify_profile_type" name="profile_type">
+                              <select id="modify_profile_type" name="profile_type" class="required" required="required">
                                 <option value="marc">MARC</option>
                                 [% IF selected_profile_type == "sql" %]
                                   <option value="sql" selected="selected">SQL</option>
@@ -201,6 +209,7 @@ function reloadPage(p) {
                                   <option value="sql">SQL</option>
                                 [% END %]
                               </select>
+                                <span class="required">Required</span>
                             </li>
 
 
@@ -352,8 +361,11 @@ function reloadPage(p) {
 							[% END %]
 						    </select></li>
 
-                            <li class="marc_specific"><label for="modify_profile_marc_content" class="required">Profile MARC fields: </label>
-                            <textarea cols="50" rows="2" name="profile_marc_content" id="modify_profile_marc_content">[% selected_profile_content %]</textarea></li>
+                            <li class="marc_specific">
+                                <label for="modify_profile_marc_content" class="required">Profile MARC fields: </label>
+                                <textarea cols="50" rows="2" name="profile_marc_content" id="modify_profile_marc_content" class="required" required="required">[% selected_profile_content %]</textarea>
+                                <span class="required">Required</span>
+                            </li>
 
                             <li class="sql_specific">
                               <label for="modify_profile_sql_content" class="required">Profile SQL fields: </label>

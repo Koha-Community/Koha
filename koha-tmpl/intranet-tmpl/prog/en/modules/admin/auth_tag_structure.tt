@@ -90,7 +90,10 @@
                         [% searchfield %]
                     </li>
                 [% ELSE %]
-                    <li><label for="tagfield" class="required">Tag: </label><input type="text" id="tagfield" name="tagfield" size="5" maxlength="3" required="required" class="required" /></li>
+                    <li>
+                        <label for="tagfield" class="required">Tag: </label><input type="text" id="tagfield" name="tagfield" size="5" maxlength="3" required="required" class="required" />
+                        <span class="required">Required</span>
+                    </li>
                 [% END %]
 
         <li><label for="liblibrarian">Text for librarians: </label><input type="text" name="liblibrarian" id="liblibrarian" value="[% liblibrarian |html %]" size="40" maxlength="100" /></li>

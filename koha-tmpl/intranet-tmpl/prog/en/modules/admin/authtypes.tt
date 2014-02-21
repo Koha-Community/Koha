@@ -50,9 +50,13 @@
     [% ELSE %]
             <label for="authtypecode" class="required">Authority type: </label>
             <input id="authtypecode" type="text" class="required" required="required" name="authtypecode" size="10" maxlength="10" onblur="toUC(this)" />
+            <span class="required">Required</span>
     [% END %]
         </li>
-        <li><label for="authtypetext" class="required">Description: </label><input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="[% authtypetext |html %]" class="required" required="required" /></li>
+        <li>
+            <label for="authtypetext" class="required">Description: </label><input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="[% authtypetext |html %]" class="required" required="required" />
+            <span class="required">Required</span>
+        </li>
 		<li><label for="summary">Summary: </label><textarea id="summary" name="summary" cols="55" rows="7">[% summary %]</textarea></li>
 		<li>
 		<p class="tip">Note: for 'Authority field to copy', enter the authority field that should be copied from the authority record to the bibliographic record. E.g., in MARC21, field 100 in the authority record should be copied to field 100 in the bibliographic record</p>

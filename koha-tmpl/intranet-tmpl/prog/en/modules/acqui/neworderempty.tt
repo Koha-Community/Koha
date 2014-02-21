@@ -258,6 +258,7 @@ $(document).ready(function()
             [% ELSE %]
             <label for="entertitle" class="required">Title: </label>
                 <input type="text" id="entertitle" size="50" name="title" value="[% title |html %]" class="focus" />
+                <span class="required">Required</span>
             [% END %]
         </li>
         <li>
@@ -422,6 +423,7 @@ $(document).ready(function()
                             <input type="text" size="20" id="quantity" name="quantity" value="[% quantityrec %]" onchange="updateCosts();" />
                         [% END %]
                     [% END %]
+                    <span class="required">Required</span>
                 [% END %]
                 <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, usefull when receiveing an order -->
                 <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="1" />
@@ -454,6 +456,7 @@ $(document).ready(function()
                     </option>
                 [% END %]
                 </select>
+                <span class="required">Required</span>
                 <label for="showallbudgets" style="float:none;width:auto;">&nbsp;Show all:</label>
                 <input type="checkbox" id="showallbudgets" />
                 [% END %]

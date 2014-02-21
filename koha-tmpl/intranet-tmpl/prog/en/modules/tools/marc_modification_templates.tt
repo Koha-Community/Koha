@@ -501,12 +501,13 @@ function setSelectByValue( selectId, value ) {
                 <div class="dialog message"><p>There are no defined templates. Please create a template first.</p></div>
             [% END %]
 
-            <form method="post" action="/cgi-bin/koha/tools/marc_modification_templates.pl" id="add_template" >
+            <form method="post" action="/cgi-bin/koha/tools/marc_modification_templates.pl" id="add_template" class="validated">
                 <fieldset>
                     <legend>Create a new template</legend>
 
                     <label for="template_name" class="required">Name: </label>
-                    <input name="template_name" id="template_name" type="text" size="30" required="required" />
+                    <input name="template_name" id="template_name" type="text" size="30" required="required" class="required" />
+                    <span class="required">Required</span>
 
                     <input type="hidden" name="op" value="create_template" />
                     <input type="submit" value="Create template" />

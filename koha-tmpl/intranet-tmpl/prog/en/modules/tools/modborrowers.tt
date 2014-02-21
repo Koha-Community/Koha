@@ -275,7 +275,7 @@
                             [% IF ( op == 'show' ) %]
                             <div id="cataloguing_additem_newitem">
                                 <h2>Edit patrons</h2>
-                                <div class="hint">Checking the box right next the label will disable the entry and delete the values of that field on all selected patrons</div>
+                                <div class="hint">Checking the box right next to the label will disable the entry and delete the values of that field on all selected patrons</div>
                                 <fieldset class="rows" id="fields_list">
                                     <ol>
                                         [% FOREACH field IN fields %]
@@ -336,7 +336,10 @@
                                             [% IF ( field.type == 'date' ) %]
                                                 <input type="text" name="[% field.name %]" id="[% field.name %]" value="" size="10" maxlength="10" readonly="readonly" class="datepicker" />
                                                 <a href="#" class="clear-field" onclick="clearDate('[% field.name %]');return false;">Clear</a>
-                                                [% END %]
+                                            [% END %]
+                                            [% IF field.mandatory %]
+                                                <span class="required">Required fields cannot be cleared</span>
+                                            [% END %]
                                         </li>
                                         [% END %]
                                         [% IF ( patron_attributes_codes ) %]
