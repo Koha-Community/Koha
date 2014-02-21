@@ -55,6 +55,7 @@ my $subtype = $input->param('subtype');
 my $sublength = $input->param('sublength');
 my $custompattern = $input->param('custompattern');
 
+my $frequency = GetSubscriptionFrequency($frequencyid);
 
 my %pattern = (
     numberingmethod => $input->param('numberingmethod') // '',
@@ -118,7 +119,7 @@ my @predictions_loop;
 my ($calculated) = GetSeq(\%subscription, \%pattern);
 push @predictions_loop, {
     number => $calculated,
-    publicationdate => $date,
+    publicationdate => ($frequency->{unit} ? $date : undef),
     issuenumber => $issuenumber,
     dow => Day_of_Week(split /-/, $date),
 };
@@ -142,7 +143,7 @@ while( $i < 1000 ) {
         $date = GetNextDate(\%subscription, $date);
     }
     if(defined $date){
-        $line{'publicationdate'} = $date;
+        $line{'publicationdate'} = $date if $frequency->{unit};
         $line{'dow'} = Day_of_Week(split /-/, $date);
     }
 
@@ -176,8 +177,6 @@ while( $i < 1000 ) {
 $template->param(
     predictions_loop => \@predictions_loop,
 );
-
-my $frequency = GetSubscriptionFrequency($frequencyid);
 
 if ( $frequency->{unit} and not $custompattern ) {
     $template->param( ask_for_irregularities => 1 );
