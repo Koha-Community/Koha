@@ -149,6 +149,7 @@ CAN_user_serials_create_subscription ) %]
     </div>
 [% END %]
 
+[% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items || CAN_user_tools_items_batchmod || CAN_user_tools_items_batchdel ) %]
     <div class="btn-group">
     <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="icon-pencil"></i> Edit <span class="caret"></span></button>
         <ul class="dropdown-menu">
@@ -184,6 +185,7 @@ CAN_user_serials_create_subscription ) %]
 
     </ul>
     </div>
+[% END %]
 
     <div class="btn-group">
     <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="icon-download-alt"></i> Save <span class="caret"></span></button>
