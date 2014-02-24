@@ -131,7 +131,7 @@ function checkMultiHold() {
 
     $('#hold-request-form').preventDoubleFormSubmit();
 
-[% UNLESS ( borrowernumber || borrower_list ) %]
+[% UNLESS ( borrowernumber || borrower_list || noitems ) %]
     [% IF ( CircAutocompl ) %]
     $( "#patron" ).autocomplete({
         source: "/cgi-bin/koha/circ/ysearch.pl",
