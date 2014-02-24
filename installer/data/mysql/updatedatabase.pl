@@ -7613,8 +7613,13 @@ CREATE TABLE borrower_debarments (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
     });
 
+    # debarments with end date
     $dbh->do(q{
-INSERT INTO borrower_debarments ( borrowernumber, expiration, comment ) SELECT borrowernumber, debarred, debarredcomment FROM borrowers WHERE debarred IS NOT NULL
+INSERT INTO borrower_debarments ( borrowernumber, expiration, comment ) SELECT borrowernumber, debarred, debarredcomment FROM borrowers WHERE debarred IS NOT NULL AND debarred <> '9999-12-31'
+    });
+    # debarments with no end date
+    $dbh->do(q{
+INSERT INTO borrower_debarments ( borrowernumber, comment ) SELECT borrowernumber, debarredcomment FROM borrowers WHERE debarred = '9999-12-31'
     });
 
     $dbh->do(q{
@@ -8103,6 +8108,15 @@ if(CheckVersion($DBversion)) {
         ALTER TABLE issuingrules ADD norenewalbefore int(4) default NULL AFTER renewalperiod
     });
     print "Upgrade to $DBversion done (Bug 7413: Allow OPAC renewal x days before due date)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.15.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE borrower_debarments SET expiration = NULL WHERE expiration = '9999-12-31'
+    });
+    print "Upgrade to $DBversion done (Bug 11846 - correct borrower_debarments with expiration 9999-12-31)\n";
     SetVersion($DBversion);
 }
 
