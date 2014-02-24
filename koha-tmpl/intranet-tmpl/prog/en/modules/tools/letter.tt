@@ -34,7 +34,7 @@ $(document).ready(function() {
                  || ( title.length > 0 && content.length == 0 )
             ) {
                 var mtt = $(this).find('input[name="message_transport_type"]').val();
-                var msg = _("You must specify a title and a content for %s");
+                var msg = _("Please specify title and content for %s");
                 msg = msg.replace( "%s", mtt );
                 alert(msg)
                 event.preventDefault();
@@ -95,7 +95,7 @@ $(document).ready(function() {
                         chaineAj += $(this).val();
                     }
                 } );
-                $(myQuery).insertAtCaret(chaineAj);
+                $(myQuery).insertAtCaret("<<" + chaineAj + ">>");
             }
         }
 	[% END %]

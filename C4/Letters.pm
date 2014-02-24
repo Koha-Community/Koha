@@ -851,22 +851,18 @@ ENDSQL
 
   my @mtt = GetMessageTransportTypes();
 
-  returns a list of hashes
+  returns an arrayref of transport types
 
 =cut
 
 sub GetMessageTransportTypes {
     my $dbh = C4::Context->dbh();
-    my $sth = $dbh->prepare("
+    my $mtts = $dbh->selectcol_arrayref("
         SELECT message_transport_type
         FROM message_transport_types
         ORDER BY message_transport_type
     ");
-    $sth->execute;
-    my @mtts = map{
-        $_->[0]
-    } @{ $sth->fetchall_arrayref() };
-    return \@mtts;
+    return $mtts;
 }
 
 =head2 _add_attachements

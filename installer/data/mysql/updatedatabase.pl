@@ -8295,7 +8295,7 @@ if ( CheckVersion($DBversion) ) {
         }
     }
 
-    print "Upgrade done (Bug 9016: Adds the association table overduerules_transport_types)\n";
+    print "Upgrade done (Bug 9016: Adds multi transport types management for notices)\n";
     SetVersion($DBversion);
 }
 
