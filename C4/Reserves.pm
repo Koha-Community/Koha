@@ -1890,6 +1890,7 @@ sub _Findgroupreserve {
         AND itemnumber = ?
         AND reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
         AND suspend = 0
+        ORDER BY priority
     /;
     my $sth = $dbh->prepare($item_level_target_query);
     $sth->execute($itemnumber, $lookahead||0);
@@ -1922,6 +1923,7 @@ sub _Findgroupreserve {
         AND hold_fill_targets.itemnumber = ?
         AND reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
         AND suspend = 0
+        ORDER BY priority
     /;
     $sth = $dbh->prepare($title_level_target_query);
     $sth->execute($itemnumber, $lookahead||0);
@@ -1955,6 +1957,7 @@ sub _Findgroupreserve {
           AND (reserves.itemnumber IS NULL OR reserves.itemnumber = ?)
           AND reserves.reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
           AND suspend = 0
+          ORDER BY priority
     /;
     $sth = $dbh->prepare($query);
     $sth->execute( $biblio, $bibitem, $itemnumber, $lookahead||0);
