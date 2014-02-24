@@ -10,7 +10,7 @@ use C4::Circulation;
 use C4::Items;
 use C4::Context;
 
-use Test::More tests => 27;
+use Test::More tests => 30;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -341,6 +341,32 @@ C4::Circulation::AddIssue( $borrower_1, 'barcode_1', $daysago10, 0, $today );
 AddReturn('barcode_1', undef, undef, undef, '2014-04-01 23:42');
 $return = $dbh->selectrow_hashref("SELECT * FROM old_issues LIMIT 1" );
 ok( $return->{returndate} eq '2014-04-01 23:42:00', "Item returned with a return date of '2014-04-01 23:42' has that return date" );
+
+my ($biblionumber, $biblioitemnumber, $itemnumber) = C4::Items::AddItem(
+    {
+        barcode        => 'barcode_3',
+        itemcallnumber => 'callnumber3',
+        homebranch     => $samplebranch1->{branchcode},
+        holdingbranch  => $samplebranch1->{branchcode},
+        notforloan => 1,
+    },
+    $biblionumber
+);
+
+C4::Context->set_preference( 'UpdateNotForLoanStatusOnCheckin', q{} );
+AddReturn( 'barcode_3', $samplebranch1->{branchcode} );
+my $item = GetItem( $itemnumber );
+ok( $item->{notforloan} eq 1, 'UpdateNotForLoanStatusOnCheckin does not modify value when not enabled' );
+
+C4::Context->set_preference( 'UpdateNotForLoanStatusOnCheckin', '1: 9' );
+AddReturn( 'barcode_3', $samplebranch1->{branchcode} );
+$item = GetItem( $itemnumber );
+ok( $item->{notforloan} eq 9, q{UpdateNotForLoanStatusOnCheckin updates notforloan value from 1 to 9 with setting "1: 9"} );
+
+AddReturn( 'barcode_3', $samplebranch1->{branchcode} );
+$item = GetItem( $itemnumber );
+ok( $item->{notforloan} eq 9, q{UpdateNotForLoanStatusOnCheckin does not update notforloan value from 9 with setting "1: 9"} );
+
 
 #End transaction
 $dbh->rollback;
