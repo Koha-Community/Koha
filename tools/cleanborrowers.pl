@@ -79,6 +79,7 @@ if ( $params->{'step2'} ) {
     if ( $checkboxes{borrower} ) {
         $membersToDelete =
           GetBorrowersToExpunge( { not_borrowered_since => $filterdate1, expired_before => $borrower_dateexpiry, category_code => $borrower_categorycode } );
+        _skip_borrowers_with_nonzero_balance( $membersToDelete );
         $totalDel = scalar @$membersToDelete;
 
     }
@@ -97,7 +98,7 @@ if ( $params->{'step2'} ) {
         memberstoanonymize_list => $membersToAnonymize,
         filterdate1             => format_date($filterdate1),
         filterdate2             => format_date($filterdate2),
-        borrower_dateexpiry     => $borrower_dateexpiry,
+        borrower_dateexpiry     => format_date($borrower_dateexpiry),
         borrower_categorycode   => $borrower_categorycode,
     );
 
@@ -121,21 +122,15 @@ if ( $params->{'step3'} ) {
     if ($do_delete) {
         my $membersToDelete =
           GetBorrowersToExpunge( { not_borrowered_since => $filterdate1, expired_before => $borrower_dateexpiry, category_code => $borrower_categorycode } );
+        _skip_borrowers_with_nonzero_balance( $membersToDelete );
         $totalDel = scalar(@$membersToDelete);
         $radio    = $params->{'radio'};
-        if ( $radio eq 'trash' ) {
-            my $i;
-            for ( $i = 0 ; $i < $totalDel ; $i++ ) {
-                MoveMemberToDeleted( $membersToDelete->[$i]->{'borrowernumber'} );
-                C4::VirtualShelves::HandleDelBorrower( $membersToDelete->[$i]->{'borrowernumber'} );
-                DelMember( $membersToDelete->[$i]->{'borrowernumber'} );
-            }
-        } else {    # delete completly.
-            my $i;
-            for ( $i = 0 ; $i < $totalDel ; $i++ ) {
-                C4::VirtualShelves::HandleDelBorrower( $membersToDelete->[$i]->{'borrowernumber'} );
-                DelMember( $membersToDelete->[$i]->{'borrowernumber'} );
-            }
+        for ( my $i = 0 ; $i < $totalDel ; $i++ ) {
+            $radio eq 'testrun' && last;
+            my $borrowernumber = $membersToDelete->[$i]->{'borrowernumber'};
+            $radio eq 'trash' && MoveMemberToDeleted( $borrowernumber );
+            C4::VirtualShelves::HandleDelBorrower( $borrowernumber );
+            DelMember( $borrowernumber );
         }
         $template->param(
             do_delete => '1',
@@ -156,6 +151,7 @@ if ( $params->{'step3'} ) {
     $template->param(
         step3 => '1',
         trash => ( $radio eq "trash" ) ? (1) : (0),
+        testrun => ( $radio eq "testrun" ) ? 1: 0,
     );
 
     #writing the template
@@ -172,3 +168,12 @@ $template->param(
 
 #writing the template
 output_html_with_http_headers $cgi, $cookie, $template->output;
+
+sub _skip_borrowers_with_nonzero_balance {
+    my $borrowers = shift;
+    my $balance;
+    @$borrowers = map {
+        (undef, undef, $balance) = GetMemberIssuesAndFines( $_->{borrowernumber} );
+        ($balance != 0) ? (): ($_);
+    } @$borrowers;
+}
