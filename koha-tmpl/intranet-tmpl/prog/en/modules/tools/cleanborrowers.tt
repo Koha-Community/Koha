@@ -76,7 +76,7 @@
                     <select id="borrower_categorycode" name="borrower_categorycode">
                         <option value="" selected="selected">Any</option>
                         [% FOREACH bc IN borrower_categorycodes %]
-                            [% UNLESS bc.categorycode == 'S' %]
+                            [% UNLESS ( bc.categorycode == 'S' || bc.category_type == 'S' ) %]
                                 <option value="[% bc.categorycode %]">[% bc.description %]</option>
                             [% END %]
                         [% END %]
@@ -119,11 +119,14 @@
         <br />
             [% IF ( totalToDelete ) %]
                 <fieldset><legend>What do you want to do for deleted patrons?</legend>
+                <input id="delete" type="radio" name="radio" value="delete" />
                 <label for="delete">Permanently delete these patrons</label>
-                <input id="delete" type="radio" name="radio" value="delete" checked="checked" />
 
+                <br /><input id="trash" type="radio" name="radio" value="trash" />
                 <label for="trash">Move these patrons to the trash</label>
-                <input id="trash" type="radio" name="radio" value="trash" />
+
+                <br /><input id="testrun" type="radio" name="radio" value="testrun" checked="checked" />
+                <label for="testrun">Do not remove any patrons (test run)</label>
                 <input type="hidden" name="do_delete" value="[% totalToDelete %]" /></fieldset>
 
             [% END %]
@@ -148,15 +151,19 @@
 <!-- Step 3 START -->
 
     <div id="step3">
-
-        [% IF ( do_delete ) %]
-            [% IF ( trash ) %]
-                <h4>[% TotalDel %] patrons have been successfully moved to trash</h4>
-            [% ELSE %]
-                <h4>[% TotalDel %] patrons have been successfully deleted</h4>
-            [% END %]
+        [% IF ( testrun ) %]
+            <h4>[% TotalDel %] patrons would have been removed (if it wasn't a test run)</h4>
+            <h4>No patron records have been actually removed</h4>
         [% ELSE %]
-            <h4>No patron records have been removed</h4>
+            [% IF ( do_delete ) %]
+                [% IF ( trash ) %]
+                    <h4>[% TotalDel %] patrons have been successfully moved to trash</h4>
+                [% ELSE %]
+                    <h4>[% TotalDel %] patrons have been successfully deleted</h4>
+                [% END %]
+            [% ELSE %]
+                <h4>No patron records have been removed</h4>
+            [% END %]
         [% END %]
         [% IF ( do_anonym ) %]
             <h4>All patrons with checkouts older than [% filterdate1 %] have been anonymized</h4>
