@@ -114,11 +114,11 @@ $(document).ready(function(){
         var sg_id = $(selected).val();
         var sg_name = $(selected).text();
         if (sg_id.length > 0) {
-            rtable.fnFilter('^' + sg_name + '$', 4, true, true, true, false);
-            rtable.fnSetColumnVis(4, false);
+            rtable.fnFilter('^' + sg_name + '$', 5, true, true, true, false);
+            rtable.fnSetColumnVis(5, false);
         } else {
-            rtable.fnFilter('', 4);
-            rtable.fnSetColumnVis(4, true);
+            rtable.fnFilter('', 5);
+            rtable.fnSetColumnVis(5, true);
         }
     });
 
