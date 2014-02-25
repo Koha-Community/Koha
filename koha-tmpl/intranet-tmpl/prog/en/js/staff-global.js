@@ -25,8 +25,8 @@ function _(s) { return s; } // dummy function for gettext
         return false;
     });
 
-    $('.noEnterSubmit').keypress(function(e){
-        if ( e.which == 13 ) return false;
+    $('.noEnterSubmit').live("keypress", function(e){
+        return checkEnter(e);
     });
 });
 
@@ -37,7 +37,7 @@ function checkEnter(e){ //e is event object passed from function invocation
 		e = e;
 		characterCode = e.which; //character code is contained in NN4's which property
 	} else {
-		e = event;
+            e = window.event;
 		characterCode = e.keyCode; //character code is contained in IE's keyCode property
 	}
 
