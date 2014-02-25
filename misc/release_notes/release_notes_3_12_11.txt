@@ -1,0 +1,293 @@
+RELEASE NOTES FOR KOHA 3.12.11
+25 Feb 2014
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.12.11 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.12.11.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+
+Koha 3.12.11 is a bugfix/maintenance release.
+
+
+It includes 3 enhancements and 13 bugfixes.
+
+
+Enhancements in 3.12.11
+======================
+
+Packaging
+----------
+	10896	Add a --verbose option to koha-translate
+
+Templates
+----------
+	11398	A typo occurred with occured
+
+Test Suite
+----------
+	11540	Increasing test coverage for C4::Charset
+
+
+Critical bugs fixed in 3.12.11
+======================
+
+
+Acquisitions
+----------
+	9948	critical	Acq data going on first item even if not received
+
+Cataloging
+----------
+	8018	major	New subfields have a default max length of zero
+
+Command-line Utilities
+----------
+	11417	major	Remove_unused_authorities.pl doesn't accept --test
+
+Patrons
+----------
+	10453	critical	Updating child to adult loses password
+
+Searching
+----------
+	9579	major	Facets truncation broken for multi-byte characters
+
+Tools
+----------
+	11412	major	Bulkmarcimport can crash when searching for duplicates
+
+
+Other bugs fixed in 3.12.11
+======================
+
+
+Architecture, internals, and plumbing
+----------
+	11402	minor	Labels::_guide_box should return undef if undefned data is passed
+
+Command-line Utilities
+----------
+	11188	minor	Make gather_print_notices.pl die on failed open()
+
+Packaging
+----------
+	11510	trivial	Typo in koha-translate usage message
+
+Searching
+----------
+	7518	normal	Searches with quotation marks don't work
+
+Test Suite
+----------
+	11439	normal	UT: XISBN.t returns failure
+
+Tools
+----------
+	11279	normal	Quote of the day feature won't pick a quote
+
+Z39.50 / SRU / OpenSearch Servers
+----------
+	11419	minor	Z39.50 searches not displaying errors
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+The Koha manual is maintained in DocBook.The home page for Koha 
+documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.12/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+  * Arabic (88%)
+  * Armenian (99%)
+  * Chinese (China) (99%)
+  * Chinese (Taiwan) (99%)
+  * Czech (100%)
+  * Danish (99%)
+  * English (New Zealand) (91%)
+  * French (99%)
+  * French (Canada) (97%)
+  * German (100%)
+  * German (Switzerland) (99%)
+  * Greek (54%)
+  * Italian (100%)
+  * Kurdish (77%)
+  * Norwegian Bokmål (63%)
+  * Polish (100%)
+  * Portuguese (99%)
+  * Portuguese (Brazil) (91%)
+  * Slovak (99%)
+  * Spanish (100%)
+  * Swedish (97%)
+  * Turkish (100%)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.12.11 is
+
+  Release Manager:       Jared Camins-Esakov <jcamins@cpbibliography.com>
+  Documentation Manager: Nicole C Engard <nengard@gmail.com>
+  Installation Documentation Managers:
+                         Samuel Desseaux <samuel.desseaux@ecp.fr>
+                         Mason James <mtj@kohaaloha.com>
+  Translation Manager:   Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>
+  QA Team:               Chris Cormack <chrisc@catalyst.net.nz>
+                         Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>
+                         Jonathan Druart <jonathan.druart@biblibre.com>
+                         Brendan Gallagher <brendan@bywatersolutions.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+                         Mason James <mtj@kohaaloha.com>
+                         Paul Poulain <paul.poulain@biblibre.com>
+  Bug Wranglers:         Magnus Enger <magnus@enger.priv.no>
+  Packaging Manager:     Robin Sheat <robin@catalyst.net.nz>
+  Live CD Manager:       Vimal Kumar V.
+  VM Manager:            Samuel Desseaux <samuel.desseaux@ecp.fr>
+
+  Release Maintainer (3.8.x): Kyle Hall <kyle@bywatersolutions.com>
+  Release Maintainer (3.10.x): Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  Release Maintainer (3.12.x): Tomás Cohen Arazi <tomascohen@gmail.com>
+  Release Maintainer (3.14.x): Fridolin Somers <fridolin.somers@biblibre.com>
+
+
+Credits
+======================
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.12.11:
+  * Universidad Nacional de Cordoba
+
+We thank the following individuals who contributed patches to Koha 3.12.11.
+  *      1	Jacek Ablewicz
+  *      7	Tomas Cohen Arazi
+  *      1	Pablo Bianchi
+  *      1	Gaetan Boisson
+  *      3	Galen Charlton
+  *      2	Jonathan Druart
+  *      1	Magnus Enger
+  *      3	Katrin Fischer
+  *      1	Kyle M Hall
+  *      1	Emma Heath
+  *      1	Matthias Meusburger
+  *      1	Marcel de Rooy
+  *      1	Fridolyn SOMERS
+
+We thank the following companies who contributed patches to Koha 3.12.11
+  *       3 BSZ BW                                                                                         
+  *       5 BibLibre                                                                                    
+  *       1 ByWater-Solutions                                                                   
+  *       3 Equinox                                                                                   
+  *       1 Libriotech                                                                                 
+  *       1 Rijksmuseum                                                                               
+  *       1 biblos.pk.edu.pl
+  *       8 unidentified
+  *       1 wegc.school.nz
+
+We also especially thank the following individuals who tested patches
+for Koha 3.12.11.
+  *      26 Tomas Cohen Arazi
+  *       1 Nora Blake
+  *      27 Galen Charlton
+  *       7 Chris Cormack
+  *       3 Jonathan Druart
+  *       1 Nicole C. Engard
+  *       1 Magnus Enger
+  *      14 Katrin Fischer
+  *       2 Kyle M Hall
+  *       1 Emma Heath
+  *       1 Tom Houlker
+  *       1 Leila
+  *       7 Fridolin SOMERS
+  *      12 Fridolin Somers
+  *       2 Mark Tompsett
+
+We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is 3.12.x.
+
+The last Koha release was 3.12.10, which was released on February 7, 2014.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+He rau ringa e oti ai.
+(Many hands finish the work)
+
+##### Autogenerated release notes updated last on 25 Feb 2014 13:57:22 Z #####
