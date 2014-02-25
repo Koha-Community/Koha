@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-opac-t-prog-v-3000000\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-17 22:50-0300\n"
-"PO-Revision-Date: 2014-01-22 03:13+0000\n"
+"POT-Creation-Date: 2014-02-16 19:01-0300\n"
+"PO-Revision-Date: 2014-02-21 03:43+0000\n"
 "Last-Translator: Anthony <maolins@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1390360381.0\n"
+"X-POOTLE-MTIME: 1392954237.0\n"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:528
@@ -2175,7 +2175,7 @@ msgstr "%s %s"
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:47
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:64
-#: opac-tmpl/prog/en/includes/item-status.inc:43
+#: opac-tmpl/prog/en/includes/item-status.inc:50
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:5
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:44
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:113
@@ -2779,15 +2779,13 @@ msgstr "%s %s %s %s %s %s"
 msgid "%s %s %s %s %s %s "
 msgstr "%s %s %s %s %s %s "
 
-#. For the first occurrence,
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  IF ( item.itemlost ) 
-#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %4$s:  IF ( av_lib_include ) 
-#. %5$s:  av_lib_include 
-#. %6$s:  ELSE 
-#. %7$s:  IF ( item.lostimageurl ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:1
+#. %1$s:  FOREACH review IN SYNDETICS_REVIEW.reviews 
+#. %2$s:  IF ( review.content ) 
+#. %3$s:  review.content 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  END 
+#. %7$s:  END 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1154
 #, c-format
 msgid "%s %s %s %s %s %s %s "
@@ -2899,7 +2897,7 @@ msgstr "%s %s %s %s %s %s %s%s%sKoha 線上%s 目錄 &rsaquo; 指定參考書 %s
 #. %7$s:  END 
 #. %8$s:  ELSE 
 #. %9$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:34
+#: opac-tmpl/prog/en/includes/item-status.inc:41
 #, c-format
 msgid "%s %s %s %s %s %s Item damaged %s %s Available %s"
 msgstr "%s %s %s %s %s %s 館藏毀損 %s %s 可得 %s"
@@ -3207,7 +3205,7 @@ msgstr "%s %s %s 館藏處理中 "
 #. %2$s:  END 
 #. %3$s:  ELSIF ( item.notforloan_per_itemtype ) 
 #. %4$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:31
+#: opac-tmpl/prog/en/includes/item-status.inc:38
 #, c-format
 msgid "%s %s %s Not for loan %s"
 msgstr "%s %s %s 不外借 %s"
@@ -3618,7 +3616,7 @@ msgstr "%s %s 找不到。 %s "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:29
+#: opac-tmpl/prog/en/includes/item-status.inc:36
 #, c-format
 msgid "%s %s Not for loan %s"
 msgstr "%s %s 不外借 %s"
@@ -4154,7 +4152,8 @@ msgid ""
 "%s %sPayment,thanks %sNew Card %sFine %sAccount management fee %sSundry "
 "%sLost Item %sWriteoff %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
-"%s %s付款收到，謝謝 %s新增卡片 %s罰款 %s帳戶管理費 %s雜費 %s遺失館藏 %s豁免 %s%s %s %s, %s%s %s(%s)%s "
+"%s %s付款收到，謝謝 %s新增卡片 %s罰款 %s帳戶管理費 %s雜費 %s遺失館藏 %s豁免 "
+"%s%s %s %s, %s%s %s(%s)%s "
 
 #. %1$s:  IF (render=='standalone') 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -4429,7 +4428,7 @@ msgstr "%s 網際網路使用者的批評"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  END 
-#. %4$s:  ELSIF ( item.datedue ) 
+#. %4$s:  ELSIF ( item.datedue || issue.date_due ) 
 #. %5$s:  IF ( OPACShowCheckoutName ) 
 #. %6$s:  item.cardnumber 
 #. %7$s:  item.firstname 
@@ -4446,7 +4445,7 @@ msgstr "%s 網際網路使用者的批評"
 #. %18$s:  IF ( item.notforloanvalueopac ) 
 #. %19$s:  item.notforloanvalueopac 
 #. %20$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:9
+#: opac-tmpl/prog/en/includes/item-status.inc:16
 #, c-format
 msgid ""
 "%s Item lost %s %s %s %s Checked out to %s %s %s %s Checked out %s %s In "
@@ -4751,6 +4750,24 @@ msgstr ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
 "hidden.defined('mobile') && hidden.defined('email') && hidden.defined"
 "('emailpro') && hidden.defined('fax') %%] "
+
+#. %1$s:  USE AuthorisedValues 
+#. %2$s:  IF ( item.itemlost ) 
+#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
+#. %4$s:  IF ( av_lib_include ) 
+#. %5$s:  av_lib_include 
+#. %6$s:  ELSE 
+#. %7$s:  IF ( item.lostimageurl ) 
+#: opac-tmpl/prog/en/includes/item-status.inc:1
+#, c-format
+msgid ""
+"%s [%%#- This include takes two parameters: an item structure and an "
+"optional loan (issue) structure. The issue structure is used by course "
+"reserves pages, which do not use an API to fetch items that populates item."
+"datedue. -%%] %s %s %s %s %s %s "
+msgstr ""
+"%s [%%#- 包括兩個參數：館藏結構與借出選項結構。借出結構係供指定參考書頁面使用，未使用 API 抓取布置在 item.datedue 的館藏 -"
+"%%] %s %s %s %s %s %s "
 
 #. For the first occurrence,
 #. %1$s:  ind.label 
@@ -6705,10 +6722,10 @@ msgstr "(總共 %s )"
 
 #. For the first occurrence,
 #. %1$s:  item.restrictedopac 
-#: opac-tmpl/prog/en/includes/item-status.inc:29
-#: opac-tmpl/prog/en/includes/item-status.inc:31
-#: opac-tmpl/prog/en/includes/item-status.inc:34
-#: opac-tmpl/prog/en/includes/item-status.inc:43
+#: opac-tmpl/prog/en/includes/item-status.inc:36
+#: opac-tmpl/prog/en/includes/item-status.inc:38
+#: opac-tmpl/prog/en/includes/item-status.inc:41
+#: opac-tmpl/prog/en/includes/item-status.inc:50
 #: opac-tmpl/prog/en/modules/opac-results.tt:631
 #: opac-tmpl/prog/en/modules/opac-detail.tt:810
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:274

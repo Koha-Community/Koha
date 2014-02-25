@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-01-17 22:32-0300\n"
-"PO-Revision-Date: 2012-10-06 03:08+0200\n"
+"POT-Creation-Date: 2014-02-16 18:42-0300\n"
+"PO-Revision-Date: 2014-02-20 07:49+0000\n"
 "Last-Translator: kaz <karenmyers1@hotmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: tet\n"
@@ -14,7 +14,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.1.6\n"
+"X-Generator: Pootle 2.5.0\n"
+"X-POOTLE-MTIME: 1392882568.0\n"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:528
@@ -34,16 +35,14 @@ msgid "#"
 msgstr "#"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:110
-#, fuzzy, c-format
+#, c-format
 msgid "#record"
-msgstr "%s rejistu sira"
+msgstr "#rejistu"
 
 #. A
 #: opac-tmpl/prog/en/modules/opac-detail.tt:721
-#, fuzzy
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
-msgstr ""
-"$[% MARCSUBJECT_SUBFIELDS_LOO.code %] [% MARCSUBJECT_SUBFIELDS_LOO.value %]"
+msgstr "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 
 #. For the first occurrence,
 #. %1$s:  debug 
@@ -2175,7 +2174,7 @@ msgstr "%s %s"
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:47
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:64
-#: opac-tmpl/prog/en/includes/item-status.inc:43
+#: opac-tmpl/prog/en/includes/item-status.inc:50
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:5
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:44
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:113
@@ -2779,15 +2778,13 @@ msgstr "%s %s %s %s %s %s"
 msgid "%s %s %s %s %s %s "
 msgstr "%s %s %s %s %s %s "
 
-#. For the first occurrence,
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  IF ( item.itemlost ) 
-#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %4$s:  IF ( av_lib_include ) 
-#. %5$s:  av_lib_include 
-#. %6$s:  ELSE 
-#. %7$s:  IF ( item.lostimageurl ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:1
+#. %1$s:  FOREACH review IN SYNDETICS_REVIEW.reviews 
+#. %2$s:  IF ( review.content ) 
+#. %3$s:  review.content 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  END 
+#. %7$s:  END 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1154
 #, c-format
 msgid "%s %s %s %s %s %s %s "
@@ -2809,11 +2806,13 @@ msgstr "%s %s %s %s %s %s %s "
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:87
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]"
 "Greek (to 1453) %s%s %s %s "
-msgstr "%s %s by %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s "
+msgstr ""
+"%s %s %s %s %s %s %s %s %%]Hebrew %s %%]Arabi %s %%]Gregu (modernu) %s %%]"
+"Gregu (to'o 1453) %s%s %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -2845,12 +2844,13 @@ msgstr "%s %s by %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s "
 #. %28$s:  INCLUDE 'datatables.inc' 
 #. %29$s:  IF ( SocialNetworks ) 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s%s%sKoha online%s "
 "catalog &rsaquo; Details for: %s%s, %s%s %s %s %s "
 msgstr ""
-"%s %s%s%s%sKoha online%s katalogu &rsaquo; Detalle sira ba: %s%s, %s%s %s "
+"%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s%s%sKoha online%s "
+"katalogu &rsaquo; Detalle ba: %s%s, %s%s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( singleBranchMode ) 
@@ -2864,9 +2864,9 @@ msgstr ""
 #. %10$s:  END 
 #. %11$s:  IF ( available_items_loo.itemcallnumber ) 
 #: opac-tmpl/prog/en/modules/opac-results.tt:565
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s %s %s %s %s%s%s %s["
-msgstr "%s %s %s %s %s %s %s %s %s%s%s %s["
+msgstr "%s %s %s %s %s %s %s %s%s%s %s["
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -2881,12 +2881,13 @@ msgstr "%s %s %s %s %s %s %s %s %s%s%s %s["
 #. %11$s:  course.course_name 
 #. %12$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %s%s%sKoha online%s catalog &rsaquo; Course reserves for "
 "%s %s "
 msgstr ""
-"%s %s %s%s%sKoha online%s katalogu &rsaquo; Ita nia biblioteka nia uma %s %s "
+"%s %s %s %s %s %s %s%s%sKoha online%s katalogu &rsaquo; Rezervasaun kursus "
+"ba %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
@@ -2897,10 +2898,10 @@ msgstr ""
 #. %7$s:  END 
 #. %8$s:  ELSE 
 #. %9$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:34
-#, fuzzy, c-format
+#: opac-tmpl/prog/en/includes/item-status.inc:41
+#, c-format
 msgid "%s %s %s %s %s %s Item damaged %s %s Available %s"
-msgstr "%s %s Item estraga ona %s Disponivel %s"
+msgstr "%s %s %s %s %s %s Item estraga ona %s Disponivel %s"
 
 #. %1$s:  IF ( print_basket ) 
 #. %2$s:  BIBLIO_RESULT.title |html 
@@ -2929,9 +2930,9 @@ msgstr "%s %s %s %s %s %s%s %s %s%s %s "
 #. %9$s:  END 
 #. %10$s:  END 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1576
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s %s (priority %s) %s %s %s %s "
-msgstr "%s %s %s%s%s%s %s %s%s %s "
+msgstr "%s %s %s %s %s (prioridade %s) %s %s %s %s "
 
 #. %1$s:  BIBLIO_RESULT.title |html 
 #. %2$s:  IF ( BIBLIO_RESULT.subtitle ) 
@@ -2967,14 +2968,14 @@ msgstr "%s %s %s%s%s%s %s %s%s %s "
 #. %17$s:  END 
 #. %18$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-results.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s%s%sKoha online%s catalog &rsaquo; %s Results of search %sfor "
 "'%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s %s You did not specify any search "
 "criteria. %s %s "
 msgstr ""
-"%s %s%s%s%sKoha online%s katalogu &rsaquo; %s Rezultadu husi peskiza %sba "
-"'%s'%s%s&nbsp;ho limite(s):&nbsp;'%s'%s %s Ita la espisifika kriteria "
+"%s %s %s %s %s%s%ssKoha online%s katalogu &rsaquo; %s Rezultadu husi peskiza "
+"%sba '%s'%s%s&nbsp;ho limite(s):&nbsp;'%s'%s %s Ita la espisifika kriteria "
 "peskiza. %s %s "
 
 #. %1$s:  USE Koha 
@@ -2991,12 +2992,13 @@ msgstr ""
 #. %12$s:  INCLUDE 'doc-head-close.inc' 
 #. %13$s:  INCLUDE 'calendar.inc' 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s%s%sKoha online%s catalog &rsaquo; %sUpdate your personal "
 "details%sRegister a new account%s %s %s "
 msgstr ""
-"%s%s%s%sKoha online%s katalogu &rsaquo; Detalle sira pesoal ba %s %s %s "
+"%s %s %s %s %s%s%sKoha online%s katalogu &rsaquo; %sAtualiza ita nia "
+"informasaun pesoal%sRejista konta foun ida%s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -3007,18 +3009,18 @@ msgstr ""
 #. %7$s:  END 
 #. %8$s:  UNLESS ( summary.summaryonly ) 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:31
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s %s%s:%s %s "
-msgstr "%s %s %s %s %s%s:%s %s %s "
+msgstr "%s %s %s %s %s%s:%s %s "
 
 #. %1$s:  IF ( ITEM_RESULT.itemcallnumber ) 
 #. %2$s:  ITEM_RESULT.itemcallnumber 
 #. %3$s:  IF ( OPACShelfBrowser ) 
 #. %4$s:  IF ( ITEM_RESULT.itemnumber == starting_itemnumber ) 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1547
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s ("
-msgstr "%s %s %s %s"
+msgstr "%s %s %s %s ("
 
 #. For the first occurrence,
 #. %1$s:  sublanguages_loo.native_description 
@@ -3039,9 +3041,9 @@ msgstr "%s %s %s %s (%s)"
 #. %5$s:  END 
 #. %6$s:  INCLUDE shelfbrowser tab='otherholdings' 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1080
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s No other items. %s %s "
-msgstr "%s %s %s%s%sLa iha titulu%s %s %s%s "
+msgstr "%s %s %s %s La iha item seluk. %s %s "
 
 #. %1$s:  IF showpriority 
 #. %2$s:  bibitemloo.rank 
@@ -3052,9 +3054,9 @@ msgstr "%s %s %s%s%sLa iha titulu%s %s %s%s "
 #. %7$s:  bibitemloo.reservecount 
 #. %8$s:  END 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:352
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s out of %s %s %s %s "
-msgstr "%s %s %s (%s) %s %s %s %s %s "
+msgstr "%s %s %s %s out of %s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -3079,13 +3081,13 @@ msgstr "%s %s %s %s%s"
 #. %11$s:  END 
 #. %12$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s%s%s%sKoha online%s catalog &rsaquo; %sAuthority search result"
 "%sNo results found%s %s "
 msgstr ""
-"%s %s%s%sKoha online%s katalogu &rsaquo; %sRezultadu peskiza authoridade%sLa "
-"hetan rezultadu%s %s "
+"%s %s %s %s%s%s%sKoha online%s katalogu &rsaquo; %sRezultadu peskiza "
+"autoridade%sLa hetan rezultadu%s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  SET TagsShowEnabled = ( TagsEnabled && TagsShowOnList ) 
@@ -3101,12 +3103,13 @@ msgstr ""
 #. %12$s:  END 
 #. %13$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s%s%s%sKoha online%s catalog &rsaquo; %sContents of %s%sYour lists"
 "%s%s "
 msgstr ""
-"%s%s%s%sKoha online%s katalogu &rsaquo; %sKonteúdu ba %s%sHau nia lista%s%s "
+"%s %s %s %s%s%s%sKoha online%s katalogu &rsaquo; %sKonteúdu husi%s%sIta nia "
+"lista%s%s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE AuthorisedValues 
@@ -3117,9 +3120,9 @@ msgstr ""
 #. %7$s:  END 
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s%s%sKoha online%s catalog &rsaquo; Courses %s "
-msgstr "%s %s%s%s%sKoha online%s katalogu &rsaquo; Tags %s "
+msgstr "%s %s %s %s%s%sKoha online%s katalogu &rsaquo; Kursus %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -3132,11 +3135,12 @@ msgstr "%s %s%s%s%sKoha online%s katalogu &rsaquo; Tags %s "
 #. %9$s:  INCLUDE 'calendar.inc' 
 #. %10$s:  INCLUDE 'datatables.inc' 
 #: opac-tmpl/prog/en/modules/opac-user.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s%s%sKoha online%s catalog &rsaquo; Your library home %s %s %s "
 msgstr ""
-"%s %s %s%s%sKoha online%s katalogu &rsaquo; Ita nia biblioteka nia uma %s %s "
+"%s %s %s %s%s%sKoha online%s katalogu &rsaquo; Ita nia biblioteka nia uma %s "
+"%s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -3148,10 +3152,11 @@ msgstr ""
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #. %9$s:  INCLUDE 'datatables.inc' 
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s%s%sKoha online%s catalog &rsaquo; Your search history %s %s "
-msgstr "%s %s%s%sKoha online%s katalogu &rsaquo; Ita nia istoria peskiza%s "
+msgstr ""
+"%s %s %s %s%s%sKoha online%s katalogu &rsaquo; Ita nia istoria peskiza%s "
 
 #. %1$s:  ELSE 
 #. %2$s:  IF ( SEARCH_RESULT.ALTERNATEHOLDINGS ) 
@@ -3183,9 +3188,9 @@ msgstr "%s %s %s (%s) %s %s %s %s %s "
 #. %5$s:  END 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:51
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:59
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s ; %s %s "
-msgstr "%s %s %s %s %s "
+msgstr "%s %s %s ; %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -3207,7 +3212,7 @@ msgstr "%s %s %s Item hein hela iha "
 #. %2$s:  END 
 #. %3$s:  ELSIF ( item.notforloan_per_itemtype ) 
 #. %4$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:31
+#: opac-tmpl/prog/en/includes/item-status.inc:38
 #, c-format
 msgid "%s %s %s Not for loan %s"
 msgstr "%s %s %s Labele empresta %s"
@@ -3252,9 +3257,9 @@ msgstr "%s %s %s%s "
 #. %4$s:  LibraryNameTitle or "Koha online" 
 #. %5$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s%s catalog &rsaquo; Your checkout history %s "
-msgstr "%s %s%s katalogu &rsaquo; Istoria impresta livru ba %s "
+msgstr "%s %s%s katalogu &rsaquo; Istoria empresta livru ba %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -3281,13 +3286,13 @@ msgstr "%s %s %s%s%s"
 #. %11$s:  END 
 #. %12$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s%s%s%sKoha online%s catalog &rsaquo; %sEnter a new purchase "
 "suggestion%s %sPurchase Suggestions%s %s "
 msgstr ""
-"%s%s%s%sKoha online%s katalogu &rsaquo; %sHatama sujesaun ida ba livru foun"
-"%s %sSujesaun atu Sosa%s %s "
+"%s %s %s%s%s%sKoha online%s katalogu &rsaquo; %sHatama sujesaun ida kona-ba "
+"sosa livru foun%s %sSujesaun atu Sosa%s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  PROCESS 'opac-authorities.inc' 
@@ -3298,9 +3303,9 @@ msgstr ""
 #. %7$s:  END 
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-auth-MARCdetail.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s%s%s%sKoha online%s catalog &rsaquo; Entry %s "
-msgstr "%s%s%s%sKoha online%s katalogu &rsaquo; Tama %s %s "
+msgstr "%s %s %s%s%s%sKoha online%s katalogu &rsaquo; Hatama %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  PROCESS 'opac-authorities.inc' 
@@ -3312,9 +3317,9 @@ msgstr "%s%s%s%sKoha online%s katalogu &rsaquo; Tama %s %s "
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #. %9$s:  IF ( displayhierarchy ) 
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s%s%s%sKoha online%s catalog &rsaquo; Entry %s %s "
-msgstr "%s%s%s%sKoha online%s katalogu &rsaquo; Tama %s %s "
+msgstr "%s %s %s%s%s%sKoha online%s katalogu &rsaquo; Hatama %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -3325,10 +3330,9 @@ msgstr "%s%s%s%sKoha online%s katalogu &rsaquo; Tama %s %s "
 #. %7$s:  END 
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s%s%s%sKoha online%s catalog &rsaquo; Recent comments %s "
-msgstr ""
-"%s %s%s%s%sKoha online%s katalogu &rsaquo; Komentariu sira foun daudaun %s "
+msgstr "%s %s%s%s%sKoha online%s katalogu &rsaquo; Komentariu foun daudaun %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -3341,12 +3345,13 @@ msgstr ""
 #. %9$s:  INCLUDE 'doc-head-close.inc' 
 #. %10$s:  INCLUDE 'datatables.inc' 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s%s%s%sKoha online%s catalog &rsaquo; Subscription information for %s "
 "%s %s "
 msgstr ""
-"%s%s%s%sKoha online%s katalogu &rsaquo; Informasaun asinatura ba %s %s "
+"%s %s %s%s%s%sKoha online%s katalogu &rsaquo; Informasaun asinatura ba %s %s "
+""
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -3358,9 +3363,9 @@ msgstr ""
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #. %9$s:  INCLUDE 'datatables.inc' 
 #: opac-tmpl/prog/en/modules/opac-tags.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s%s%s%sKoha online%s catalog &rsaquo; Tags %s %s "
-msgstr "%s %s%s%s%sKoha online%s katalogu &rsaquo; Tags %s "
+msgstr "%s %s %s%s%s%sKoha online%s katalogu &rsaquo; Tags %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -3371,9 +3376,9 @@ msgstr "%s %s%s%s%sKoha online%s katalogu &rsaquo; Tags %s "
 #. %7$s:  END 
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-account.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s%s%s%sKoha online%s catalog &rsaquo; Your fines and charges %s "
-msgstr "%s %s%s%s%sKoha online%s katalogu &rsaquo; Ita nia multa %s "
+msgstr "%s %s %s%s%s%sKoha online%s katalogu &rsaquo; Ita nia multa %s "
 
 #. For the first occurrence,
 #. %1$s:  USE Koha 
@@ -3386,9 +3391,9 @@ msgstr "%s %s%s%s%sKoha online%s katalogu &rsaquo; Ita nia multa %s "
 #: opac-tmpl/prog/en/modules/opac-registration-confirmation.tt:1
 #: opac-tmpl/prog/en/modules/opac-registration-invalid.tt:1
 #: opac-tmpl/prog/en/modules/opac-main.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s%s%sKoha online%s catalog %s "
-msgstr "%s %s%s%sKoha online%s katalogu %s "
+msgstr "%s %s %s%s%sKoha online%s katalogu %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3407,14 +3412,14 @@ msgstr "%s %s%s%sKoha online%s katalogu %s "
 #. %15$s:  END 
 #. %16$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s%s%sKoha online%s catalog &rsaquo; %s Results of search %sfor '%s'%s"
 "%s&nbsp;with limit(s):&nbsp;'%s'%s %s You did not specify any search "
 "criteria. %s %s "
 msgstr ""
-"%s %s%s%s%sKoha online%s katalogu &rsaquo; %s Rezultadu husi peskiza %sba "
-"'%s'%s%s&nbsp;ho limite(s):&nbsp;'%s'%s %s Ita la espisifika kriteria "
+"%s %s %s%s%sKoha online%s katalogu &rsaquo; %s Rezultadu husi peskiza %sba '"
+"%s'%s%s&nbsp;ho limite(s):&nbsp;'%s'%s %s Ita la espesifika kriteria "
 "peskiza. %s %s "
 
 #. %1$s:  USE Koha 
@@ -3425,9 +3430,9 @@ msgstr ""
 #. %6$s:  END 
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; Advanced search %s "
-msgstr "%s %s%s%sKoha online%s katalogu &rsaquo; Peskiza avansadu %s "
+msgstr "%s %s %s%s%sKoha online%s katalogu &rsaquo; Peskiza avansadu %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3438,9 +3443,9 @@ msgstr "%s %s%s%sKoha online%s katalogu &rsaquo; Peskiza avansadu %s "
 #. %7$s:  biblio.title |html 
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-imageviewer.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; Images for: %s %s "
-msgstr "%s %s%s%sKoha online%s katalogu &rsaquo; Imajen ba: %s %s "
+msgstr "%s %s %s%s%sKoha online%s katalogu &rsaquo; Imajen ba: %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3450,11 +3455,13 @@ msgstr "%s %s%s%sKoha online%s katalogu &rsaquo; Imajen ba: %s %s "
 #. %6$s:  END 
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-registration-email-sent.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s%s%sKoha online%s catalog &rsaquo; Please confirm your registration "
 "%s "
-msgstr "%s %s%s%sKoha online%s katalogu &rsaquo; Aumenta ba ita-nia lista %s "
+msgstr ""
+"%s %s %s%s%sKoha online%s katalogu &rsaquo; Faz favor konfirma ita-nia "
+"rejistrasaun %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3464,9 +3471,9 @@ msgstr "%s %s%s%sKoha online%s katalogu &rsaquo; Aumenta ba ita-nia lista %s "
 #. %6$s:  END 
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-memberentry-update-submitted.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; Updates submitted %s "
-msgstr "%s %s%s%sKoha online%s katalogu &rsaquo; Peskiza avansadu %s "
+msgstr "%s %s %s%s%sKoha online%s katalogu &rsaquo; Updates hatama ona %s "
 
 #. %1$s:  SET TagsInputEnabled = ( opacuserlogin && TagsEnabled && TagsInputOnList ) 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3477,9 +3484,9 @@ msgstr "%s %s%s%sKoha online%s katalogu &rsaquo; Peskiza avansadu %s "
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #. %8$s:  IF ( print_basket ) 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; Your cart %s %s "
-msgstr "%s %s%s%sKoha online%s katalogu &rsaquo; Ita nia karriñu%s "
+msgstr "%s %s %s%s%sKoha online%s katalogu &rsaquo; Ita nia karriñu %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -3544,11 +3551,9 @@ msgstr "%s %s %s(%s)%s %s "
 #. %6$s:  IF ( facets_loo.type_label_Location ) 
 #. %7$s:  END 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:18
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %sLibraries%s %s %sLocations%s "
-msgstr ""
-"%sAutor sira%s %sTitulu sira%s %sTopiku sira%s %sFatin%s %sSerie%s %s "
-"%sBiblioteka sira%s %s "
+msgstr "%s %s %sBiblioteka sira%s %s %sFatin%s "
 
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
@@ -3570,9 +3575,9 @@ msgstr ""
 #. %18$s:  END 
 #. %19$s:  END 
 #: opac-tmpl/prog/en/includes/search/facets.inc:10
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s (%s) %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s ["
-msgstr "%s %s by %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
+msgstr "%s %s (%s) %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s ["
 
 #. %1$s:  results_loo.author 
 #. %2$s:  IF ( results_loo.publicationyear ) 
@@ -3617,14 +3622,14 @@ msgstr "%s %s Item iha tranzitu ba "
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s No results found. %s "
-msgstr "%s La hetan rezultadu. %s "
+msgstr "%s %s La hetan rezultadu. %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:29
+#: opac-tmpl/prog/en/includes/item-status.inc:36
 #, c-format
 msgid "%s %s Not for loan %s"
 msgstr "%s %s Labele empresta %s"
@@ -3640,6 +3645,8 @@ msgid ""
 "%s %s Search also for narrower subjects %s Search also for broader subjects "
 "%s Search also for related subjects %s "
 msgstr ""
+"%s %s Buka mos ba asuntu kloot liu %s Buka mos ba asuntu luan liu %s Buka "
+"mos ba asuntu ho relasaun %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  IF ( review.borrowernumber && ShowReviewer != "none" ) 
@@ -3701,9 +3708,9 @@ msgstr "%s %s tag%stags%s konsege aumenta tiona."
 #. %3$s:  END 
 #. %4$s:  END 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:724
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s | %s %s "
-msgstr "%s %s| %s %s "
+msgstr "%s %s | %s %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -3950,9 +3957,9 @@ msgstr ""
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #. %8$s:  INCLUDE 'datatables.inc' 
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Most popular titles %s %s "
-msgstr "%s%s%s%sKoha online%s katalogu &rsaquo; Titulu popular Liu %s "
+msgstr "%s %s%s%s%sKoha online%s katalogu &rsaquo; Titulu popular liu %s %s "
 
 #. For the first occurrence,
 #. %1$s:  USE Koha 
@@ -3964,9 +3971,9 @@ msgstr "%s%s%s%sKoha online%s katalogu &rsaquo; Titulu popular Liu %s "
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:1
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Serials %s "
-msgstr "%s%s%s%sKoha online%s katalogu &rsaquo; Periodiku sira %s "
+msgstr "%s %s%s%s%sKoha online%s katalogu &rsaquo; Periodiku %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3976,10 +3983,9 @@ msgstr "%s%s%s%sKoha online%s katalogu &rsaquo; Periodiku sira %s "
 #. %6$s:  END 
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Your privacy management %s "
-msgstr ""
-"%s%s%s%sKoha online%s katalogu &rsaquo; Jestaun privasidade ba %s %s %s "
+msgstr "%s%s%s%sKoha online%s katalogu &rsaquo; Ita nia jestaun privasidade %s "
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -4024,9 +4030,9 @@ msgstr ""
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%sKoha online%s catalog &rsaquo; Add to your list "
-msgstr "%s %s%s%sKoha online%s katalogu &rsaquo; Aumenta ba ita-nia lista %s "
+msgstr "%s %s%s%sKoha online%s katalogu &rsaquo; Aumenta ba ita-nia lista "
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -4036,9 +4042,9 @@ msgstr "%s %s%s%sKoha online%s katalogu &rsaquo; Aumenta ba ita-nia lista %s "
 #. %6$s:  q | html 
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%sKoha online%s catalog &rsaquo; OverDrive search for '%s' %s "
-msgstr "%s %s%s%sKoha online%s katalogu &rsaquo; Imajen ba: %s %s "
+msgstr "%s %s%s%sKoha online%s katalogu &rsaquo; Peskiza OverDrive ba '%s' %s "
 
 #. For the first occurrence,
 #. %1$s:  borrower.firstname 
@@ -4128,9 +4134,9 @@ msgstr "%s %s, ISSN %s %s %s; %s %s "
 #. %5$s:  END 
 #. %6$s:  END 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:67
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s: %s %s ; %s %s "
-msgstr "%s %s %s %s %s %s "
+msgstr "%s %s: %s %s ; %s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( WINDOW_CLOSE ) 
@@ -4163,13 +4169,15 @@ msgid ""
 "%s %sPayment,thanks %sNew Card %sFine %sAccount management fee %sSundry "
 "%sLost Item %sWriteoff %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
+"%s %sPagamentu,obrigado %sKartaun Foun %sMulta %sTaxa jestaun konta %"
+"sDiversos %sItem Lakon %sEliminar %s%s %s %s, %s%s %s(%s)%s "
 
 #. %1$s:  IF (render=='standalone') 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
 #: opac-tmpl/prog/en/modules/svc/suggestion.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %sSearch suggestions"
-msgstr "%s%sHau nia %s%sSujestaun sosa livru"
+msgstr "%s %sSujestaun atu peskiza"
 
 #. %1$s:  END 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -4274,18 +4282,18 @@ msgstr "%s - %s%s %s- %s%s %s ; %s%s %s - %s%s %s : %s%s %s ; %s%s %s "
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:289
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:481
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:648
-#, fuzzy, c-format
+#, c-format
 msgid "%s Address 2:"
-msgstr "Hela fatin:"
+msgstr "%s Hela fatin 2:"
 
 #. For the first occurrence,
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:275
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:467
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:634
-#, fuzzy, c-format
+#, c-format
 msgid "%s Address:"
-msgstr "Hela fatin:"
+msgstr "%s Hela fatin:"
 
 #. %1$s:  IF ( GROUP_RESULT.onloancount ) 
 #. %2$s:  GROUP_RESULT.onloancount 
@@ -4352,15 +4360,15 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:303
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:495
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:662
-#, fuzzy, c-format
+#, c-format
 msgid "%s City:"
-msgstr "Sidade:"
+msgstr "%s Sidade:"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:579
-#, fuzzy, c-format
+#, c-format
 msgid "%s Contact Note:"
-msgstr "Nota kona ba konteudu:"
+msgstr "%s Nota Kontaktu:"
 
 #. %1$s:  IF (errcode==1) 
 #. %2$s:  ELSE 
@@ -4379,15 +4387,15 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:345
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:537
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:704
-#, fuzzy, c-format
+#, c-format
 msgid "%s Country:"
-msgstr "Rai:"
+msgstr "%sRai:"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:165
-#, fuzzy, c-format
+#, c-format
 msgid "%s Date of birth:"
-msgstr "Data moris:"
+msgstr "%s Data moris:"
 
 #. For the first occurrence,
 #. %1$s:  IF ( koha_spsuggest ) 
@@ -4399,15 +4407,15 @@ msgstr "%s Ita dehan hanesan ne'e: "
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:565
-#, fuzzy, c-format
+#, c-format
 msgid "%s Email:"
-msgstr "Email:"
+msgstr "%s Email:"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:441
-#, fuzzy, c-format
+#, c-format
 msgid "%s Fax:"
-msgstr "Fax:"
+msgstr "%s Fax:"
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -4415,19 +4423,19 @@ msgstr "Fax:"
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:620
 #, fuzzy, c-format
 msgid "%s First name:"
-msgstr "Naran uluk:"
+msgstr "%s Naran uluk:"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:78
-#, fuzzy, c-format
+#, c-format
 msgid "%s Home Library:"
-msgstr "Biblioteka nia uma:"
+msgstr "%s Biblioteka nia uma:"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:184
 #, c-format
 msgid "%s Initials:"
-msgstr ""
+msgstr "%s Initials:"
 
 #. %1$s:  SEARCH_RESULT.num_critics 
 #: opac-tmpl/prog/en/modules/opac-results.tt:613
@@ -4438,7 +4446,7 @@ msgstr "%s Uzador Internet kritika"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  END 
-#. %4$s:  ELSIF ( item.datedue ) 
+#. %4$s:  ELSIF ( item.datedue || issue.date_due ) 
 #. %5$s:  IF ( OPACShowCheckoutName ) 
 #. %6$s:  item.cardnumber 
 #. %7$s:  item.firstname 
@@ -4455,14 +4463,15 @@ msgstr "%s Uzador Internet kritika"
 #. %18$s:  IF ( item.notforloanvalueopac ) 
 #. %19$s:  item.notforloanvalueopac 
 #. %20$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:9
-#, fuzzy, c-format
+#: opac-tmpl/prog/en/includes/item-status.inc:16
+#, c-format
 msgid ""
 "%s Item lost %s %s %s %s Checked out to %s %s %s %s Checked out %s %s In "
 "transit from %s to %s since %s %s On hold %s Item withdrawn %s %s %s %s"
 msgstr ""
-"%s %s Fo empresta ona ba %s %s %s %s Fo empresta ona %s %s Iha tranzitu husi "
-"%s ba %s dezde %s %s Iha rezerva ona %s Item hasai ona %s %s"
+"%s Item lakon %s %s %s %s Fo empresta ona ba %s %s %s %s Fo empresta ona %s "
+"%s Iha tranzitu husi %s ba %s dezde %s %s Iha rezerva ona %s Item hasai "
+"tiona %s %s %s %s"
 
 #. %1$s:  ELSE 
 #: opac-tmpl/prog/en/modules/opac-user.tt:403
@@ -4519,9 +4528,9 @@ msgstr "%s Labele fo empresta tan%s "
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:198
-#, fuzzy, c-format
+#, c-format
 msgid "%s Other names:"
-msgstr "Naran Seluk:"
+msgstr "%s Naran Seluk:"
 
 #. %1$s:  IF ( PassMismatch ) 
 #. %2$s:  END 
@@ -4547,9 +4556,9 @@ msgstr ""
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:551
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:718
-#, fuzzy, c-format
+#, c-format
 msgid "%s Phone:"
-msgstr "Telemovil:"
+msgstr "%s Telemovil:"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:149
@@ -4559,15 +4568,15 @@ msgstr "%s Favor hasoru funsionariu ida biblioteka nian. "
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:413
-#, fuzzy, c-format
+#, c-format
 msgid "%s Primary email:"
-msgstr "Email Primariu:"
+msgstr "%s Email Primariu:"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:371
-#, fuzzy, c-format
+#, c-format
 msgid "%s Primary phone:"
-msgstr "Telemovil Primariu:"
+msgstr "%s Telemovil primariu:"
 
 #. %1$s:  SEARCH_RESULT.num_critics_pro 
 #: opac-tmpl/prog/en/modules/opac-results.tt:616
@@ -4607,15 +4616,15 @@ msgstr "%s Peskiza%sba '%s'%s%s&nbsp;ho limite(s):&nbsp;'%s'%s"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:427
-#, fuzzy, c-format
+#, c-format
 msgid "%s Secondary email:"
-msgstr "Email Segundu:"
+msgstr "%s Email segundu:"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:385
-#, fuzzy, c-format
+#, c-format
 msgid "%s Secondary phone:"
-msgstr "Telemovil Segundu:"
+msgstr "%s Telemovil segundu:"
 
 #. %1$s:  LibraryName 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:113
@@ -4628,23 +4637,23 @@ msgstr "%s Sistema auto empresta"
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:317
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:509
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:676
-#, fuzzy, c-format
+#, c-format
 msgid "%s State:"
-msgstr "Distritu:"
+msgstr "%s Distritu:"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:261
-#, fuzzy, c-format
+#, c-format
 msgid "%s Street number:"
-msgstr "Kliente nia Numeru:"
+msgstr "%s Numeru iha dalan:"
 
 #. For the first occurrence,
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:137
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:606
-#, fuzzy, c-format
+#, c-format
 msgid "%s Surname:"
-msgstr "apelidu"
+msgstr "%s Apelidu:"
 
 #. %1$s:  IF holds_count.defined 
 #. %2$s:  holds_count 
@@ -4662,6 +4671,8 @@ msgid ""
 "%s Total holds: %s %s %s %s (priority %s) %s Overall queue priority: %s %s "
 "%s "
 msgstr ""
+"%s Rezervasaun Total: %s %s %s %s (prioridade %s) %s Prioridade forma "
+"kompletamante: %s %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4696,9 +4707,9 @@ msgstr "%s Ita seidauk empresta livru ida husi biblioteka ida ne'e. %s "
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:331
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:523
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:690
-#, fuzzy, c-format
+#, c-format
 msgid "%s Zip/Postal code:"
-msgstr "Kodigu Zip:"
+msgstr "%s Kodigu zip:"
 
 #. %1$s:  UNLESS ( item_level_itypes ) 
 #. %2$s:  IF ( description ) 
@@ -4724,6 +4735,11 @@ msgid ""
 "('B_zipcode') && hidden.defined('B_county') && hidden.defined('B_phone') && "
 "hidden.defined('B_email') && hidden.defined('contactnote') %%] "
 msgstr ""
+"%s [%% UNLESS hidden.defined('B_address') && hidden.defined('B_address2') && "
+"hidden.defined('B_city') && hidden.defined('B_state') && "
+"hidden.defined('B_zipcode') && hidden.defined('B_county') && "
+"hidden.defined('B_phone') && hidden.defined('B_email') && "
+"hidden.defined('contactnote') %%] "
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:589
@@ -4749,6 +4765,22 @@ msgid ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
 "hidden.defined('mobile') && hidden.defined('email') && hidden.defined"
 "('emailpro') && hidden.defined('fax') %%] "
+msgstr ""
+
+#. %1$s:  USE AuthorisedValues 
+#. %2$s:  IF ( item.itemlost ) 
+#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
+#. %4$s:  IF ( av_lib_include ) 
+#. %5$s:  av_lib_include 
+#. %6$s:  ELSE 
+#. %7$s:  IF ( item.lostimageurl ) 
+#: opac-tmpl/prog/en/includes/item-status.inc:1
+#, c-format
+msgid ""
+"%s [%%#- This include takes two parameters: an item structure and an "
+"optional loan (issue) structure. The issue structure is used by course "
+"reserves pages, which do not use an API to fetch items that populates item."
+"datedue. -%%] %s %s %s %s %s %s "
 msgstr ""
 
 #. For the first occurrence,
@@ -4958,11 +4990,13 @@ msgstr "%s %s %s %s %s %s "
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/prog/en/includes/opac-authorities.inc:53
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s %s %s %s %s %s %%]English %s %%]French %s %%]Italian %s %%]German %s %%]"
 "Spanish %s%s %s %s "
-msgstr "%s %s by %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s "
+msgstr ""
+"%s%s %s %s %s %s %s %%]Inglés %s %%]Francas %s %%]Itália %s %%]Alemanya %s %"
+"%]Espanyól %s%s %s %s "
 
 #. %1$s:  FOREACH USER_INF IN USER_INFO 
 #. %2$s:  USER_INF.title 
@@ -5179,9 +5213,9 @@ msgstr "%s%s(%s)%s"
 #. %2$s:  LibraryNameTitle or "Koha online" 
 #. %3$s:  title |html 
 #: opac-tmpl/prog/en/modules/opac-review.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s catalog &rsaquo; Comments on %s "
-msgstr "%s%s katalogu &rsaquo; Komentariu sira ba %s %s "
+msgstr "%s%s kopia sira%sKopia sira%s ( %s )"
 
 #. %1$s:  IF SeparateHoldings 
 #. %2$s:  LoginBranchname 
@@ -5189,9 +5223,9 @@ msgstr "%s%s katalogu &rsaquo; Komentariu sira ba %s %s "
 #. %4$s:  END 
 #. %5$s:  itemloop.size || 0 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:941
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s holdings%sHoldings%s ( %s )"
-msgstr "Kopia sira ( %s )"
+msgstr "%s%s kopia sira%sKopia sira%s ( %s )"
 
 #. %1$s:  deleted_count 
 #. %2$s:  IF ( deleted_count ==1 ) 
@@ -5588,9 +5622,9 @@ msgstr "%shusi %s%s"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:90
-#, fuzzy, c-format
+#, c-format
 msgid "%s. "
-msgstr "%s. %s "
+msgstr "%s. "
 
 #. %1$s:  GROUP_RESULT.result_number 
 #. %2$s:  IF ( GROUP_RESULT.BiblioDefaultViewmarc ) 
@@ -5794,9 +5828,9 @@ msgstr "%sLimita ba "
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/includes/masthead.inc:13
-#, fuzzy, c-format
+#, c-format
 msgid "%sLog Out"
-msgstr "Log Out"
+msgstr "%sLog Out"
 
 #. %1$s:  IF ( ERROR.scrubbed ) 
 #. %2$s:  END 
@@ -5985,9 +6019,9 @@ msgid "&#8674; "
 msgstr ""
 
 #: opac-tmpl/prog/en/modules/opac-passwd.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "&#8674; Change your password "
-msgstr "Troka ita-nia password "
+msgstr "&#8674; Troka ita-nia password "
 
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:27
 #, fuzzy, c-format
@@ -6671,9 +6705,9 @@ msgstr "&nbsp;&nbsp;(%s vota sira)"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:605
 #: opac-tmpl/prog/en/modules/opac-detail.tt:712
-#, fuzzy, c-format
+#, c-format
 msgid "&nbsp;|&nbsp; "
-msgstr "&nbsp;&nbsp;(%s vota sira) "
+msgstr "&nbsp;|&nbsp; "
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:76
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:146
@@ -6718,10 +6752,10 @@ msgstr "(%s total)"
 
 #. For the first occurrence,
 #. %1$s:  item.restrictedopac 
-#: opac-tmpl/prog/en/includes/item-status.inc:29
-#: opac-tmpl/prog/en/includes/item-status.inc:31
-#: opac-tmpl/prog/en/includes/item-status.inc:34
-#: opac-tmpl/prog/en/includes/item-status.inc:43
+#: opac-tmpl/prog/en/includes/item-status.inc:36
+#: opac-tmpl/prog/en/includes/item-status.inc:38
+#: opac-tmpl/prog/en/includes/item-status.inc:41
+#: opac-tmpl/prog/en/includes/item-status.inc:50
 #: opac-tmpl/prog/en/modules/opac-results.tt:631
 #: opac-tmpl/prog/en/modules/opac-detail.tt:810
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:274
@@ -7124,9 +7158,9 @@ msgstr "/ "
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:426
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:579
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:1030
-#, fuzzy, c-format
+#, c-format
 msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
-msgstr "/cgi-bin/koha/opac-detail.pl?biblionumber="
+msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:257
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:196
@@ -7181,9 +7215,9 @@ msgid "/cgi-bin/koha/opac-search.pl?q=an:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:1005
-#, fuzzy, c-format
+#, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=an:\""
-msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
+msgstr "/cgi-bin/koha/opac-search.pl?q=an:\""
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:101
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:122
@@ -7194,9 +7228,9 @@ msgid "/cgi-bin/koha/opac-search.pl?q=au:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:1008
-#, fuzzy, c-format
+#, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=au:\""
-msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
+msgstr "/cgi-bin/koha/opac-search.pl?q=au:\""
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:217
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:383
@@ -7242,14 +7276,14 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=ti,phr:"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:995
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:600
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:603
-#, fuzzy, c-format
+#, c-format
 msgid "/cgi-bin/koha/tracklinks.pl?uri="
-msgstr "/cgi-bin/koha/opac-search.pl?q="
+msgstr "/cgi-bin/koha/tracklinks.pl?uri="
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:174
-#, fuzzy, c-format
+#, c-format
 msgid "/opac-tmpl/lib/famfamfam/"
-msgstr "/opac-tmpl/prog/famfamfam/"
+msgstr "/opac-tmpl/lib/famfamfam/"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACMARCdetail.xsl:18
 #, c-format
@@ -8159,7 +8193,7 @@ msgstr "Autor(s)"
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:45
 #, c-format
 msgid "Author(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
-msgstr "Autor(s): %s%s %s%s%s%s%s %s %s%s %s%s%s %s. %s%s %s, %s%s %s %s%s "
+msgstr "Autor(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:98
 #, c-format
@@ -11252,9 +11286,9 @@ msgid "Location"
 msgstr "Fatin"
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:353
-#, fuzzy, c-format
+#, c-format
 msgid "Location (Status)"
-msgstr "Fatin(s)"
+msgstr "Fatin (Estatus)"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:297
 #, c-format
@@ -11267,9 +11301,9 @@ msgid "Location(s) (Status)"
 msgstr "Fatin(s)"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1149
-#, fuzzy, c-format
+#, c-format
 msgid "Location(s): "
-msgstr "Fatin "
+msgstr "Fatin(s): "
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-registration-confirmation.tt:48
@@ -11899,9 +11933,9 @@ msgid "New tag(s), separated by a comma:"
 msgstr ""
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:461
-#, fuzzy, c-format
+#, c-format
 msgid "New tag(s):"
-msgstr "Tag foun:"
+msgstr "Tag foun(s):"
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:476
 #: opac-tmpl/prog/en/modules/opac-basket.tt:179
@@ -12715,9 +12749,9 @@ msgid "Please confirm the checkout:"
 msgstr "Favor konfirma katak empresta ona:"
 
 #: opac-tmpl/prog/en/modules/opac-registration-email-sent.tt:14
-#, fuzzy, c-format
+#, c-format
 msgid "Please confirm your registration"
-msgstr ". Faz favor kontakta biblioteka ne'e atu hetan informasaun tan.."
+msgstr "Faz favor konfirma ita nia rejistrasaun"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:229
 #, c-format
@@ -12754,15 +12788,15 @@ msgstr ""
 
 #: opac-tmpl/prog/en/modules/opac-sendbasket.tt:16
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:16
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Please note that the attached file is a MARC bibliographic records file "
 "which can be imported into personal bibliographic software like EndNote, "
 "Reference Manager or ProCite."
 msgstr ""
-"Hi, %s %s haruka ona karriñu ida husi ami nia katalogu online. Favor hatene "
-"katak dokumentu ida ne'e iha formatu MARC ne'ebe bele importa ba Personal "
-"Bibliographic Software hanesan EndNote, Reference Manager ka ProCite."
+"Faz favor, observa katak dokumentu iha aneksu iha formatu MARC ne'ebe bele "
+"importa ba personal bibliographic software hanesan EndNote, Reference "
+"Manager ka ProCite."
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:229
 #: opac-tmpl/prog/en/modules/opac-user.tt:88
@@ -13762,9 +13796,9 @@ msgstr "Items ne'ebe hili ona : "
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:578
 #: opac-tmpl/prog/en/modules/opac-detail.tt:680
-#, fuzzy, c-format
+#, c-format
 msgid "Select the item(s) to search :"
-msgstr "Items ne'ebe hili ona :"
+msgstr "Hili item(s) atu peskiza ona :"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -15999,9 +16033,9 @@ msgstr "Ita nia Karriñu"
 
 #. %1$s:  IF ( BORROWER_INF.userdebarreddate ) 
 #: opac-tmpl/prog/en/modules/opac-user.tt:103
-#, fuzzy, c-format
+#, c-format
 msgid "Your account has been frozen%s until "
-msgstr "Ita nia konta suspende ona. %s "
+msgstr "Ita nia konta suspende tiona%s to'o "
 
 #. %1$s:  ELSIF ( circ_error_CARD_LOST ) 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:143
@@ -19101,5 +19135,3 @@ msgstr ""
 #, c-format
 msgid "• "
 msgstr "• "
-
-#, fuzzy

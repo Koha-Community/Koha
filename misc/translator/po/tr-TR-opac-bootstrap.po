@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-17 22:55-0300\n"
-"PO-Revision-Date: 2013-12-17 14:07+0000\n"
+"POT-Creation-Date: 2014-02-16 19:06-0300\n"
+"PO-Revision-Date: 2014-02-24 13:20+0000\n"
 "Last-Translator: onur <sonure@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1387289223.0\n"
+"X-POOTLE-MTIME: 1393248059.0\n"
 
 #. %1$s:  BORROWER_INF.debarredcomment 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:68
@@ -2124,7 +2124,7 @@ msgstr "%s %s"
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:15
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:34
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:63
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:43
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:50
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:1
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:11
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:168
@@ -2985,10 +2985,10 @@ msgstr ""
 #. %7$s:  END 
 #. %8$s:  ELSE 
 #. %9$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:34
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:41
 #, c-format
 msgid "%s %s %s %s %s %s Item damaged %s %s Available %s"
-msgstr "%s %s %s %s %s %s Materyal Hasarlı %s %s Mevcut %s"
+msgstr "%s %s %s %s %s %s Materyal Hasarlı %s %s Kullanılabilir %s"
 
 #. %1$s:  IF ( print_basket ) 
 #. %2$s:  BIBLIO_RESULT.title |html 
@@ -3308,36 +3308,6 @@ msgstr "%s %s %s (%s) %s %s %s %s %s "
 msgid "%s %s %s ; %s %s "
 msgstr "%s %s %s ; %s %s "
 
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  IF ( item.datedue ) 
-#. %3$s:  IF ( OPACShowCheckoutName ) 
-#. %4$s:  item.cardnumber 
-#. %5$s:  item.firstname 
-#. %6$s:  item.surname 
-#. %7$s:  ELSE 
-#. %8$s:  END 
-#. %9$s:  ELSIF ( item.transfertwhen ) 
-#. %10$s:  item.transfertfrom 
-#. %11$s:  item.transfertto 
-#. %12$s:  item.transfertwhen 
-#. %13$s:  ELSIF ( item.waiting ) 
-#. %14$s:  ELSIF ( item.withdrawn ) 
-#. %15$s:  ELSIF ( item.itemlost ) 
-#. %16$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %17$s:  IF ( av_lib_include ) 
-#. %18$s:  av_lib_include 
-#. %19$s:  ELSE 
-#. %20$s:  IF ( item.lostimageurl ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:1
-#, c-format
-msgid ""
-"%s %s %s Checked out to %s %s %s %s Checked out %s %s In transit from %s to "
-"%s since %s %s On hold %s Item withdrawn %s %s %s %s %s %s "
-msgstr ""
-"%s %s %s için Ödünç verilmiş %s %s %s %s Ödünç verilmiş %s %s 'den aktarımda "
-"%s - %s den beri %s %s Ayırtılmış %s Materyal sistemden düşülmüş %s %s %s %s "
-"%s %s "
-
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( RESERVE.intransit ) 
@@ -3377,7 +3347,7 @@ msgstr "%s %s %s Başka materyal yok. %s %s "
 #. %2$s:  END 
 #. %3$s:  ELSIF ( item.notforloan_per_itemtype ) 
 #. %4$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:38
 #, c-format
 msgid "%s %s %s Not for loan %s"
 msgstr "%s %s %s Ödünç verilmez %s"
@@ -3833,7 +3803,7 @@ msgstr "%s %s Sonuç bulunamadı. %s "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:29
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:36
 #, c-format
 msgid "%s %s Not for loan %s"
 msgstr "%s %s Ödünç verilmez %s"
@@ -4707,14 +4677,32 @@ msgstr "%s İnternet kullanıcısı eleştirileri"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  END 
-#. %4$s:  ELSIF ( item.itemnotforloan ) 
-#. %5$s:  IF ( item.notforloanvalueopac ) 
-#. %6$s:  item.notforloanvalueopac 
-#. %7$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:22
+#. %4$s:  ELSIF ( item.datedue || issue.date_due ) 
+#. %5$s:  IF ( OPACShowCheckoutName ) 
+#. %6$s:  item.cardnumber 
+#. %7$s:  item.firstname 
+#. %8$s:  item.surname 
+#. %9$s:  ELSE 
+#. %10$s:  END 
+#. %11$s:  ELSIF ( item.transfertwhen ) 
+#. %12$s:  item.transfertfrom 
+#. %13$s:  item.transfertto 
+#. %14$s:  item.transfertwhen 
+#. %15$s:  ELSIF ( item.waiting ) 
+#. %16$s:  ELSIF ( item.withdrawn ) 
+#. %17$s:  ELSIF ( item.itemnotforloan ) 
+#. %18$s:  IF ( item.notforloanvalueopac ) 
+#. %19$s:  item.notforloanvalueopac 
+#. %20$s:  IF ( item.restrictedopac ) 
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:16
 #, c-format
-msgid "%s Item lost %s %s %s %s %s %s"
-msgstr "%s Materyal kayıp %s %s %s %s %s %s"
+msgid ""
+"%s Item lost %s %s %s %s Checked out to %s %s %s %s Checked out %s %s In "
+"transit from %s to %s since %s %s On hold %s Item withdrawn %s %s %s %s"
+msgstr ""
+"%s Materyal kayıp %s %s %s %s Materyal kullanıcıya ödünç verildi %s %s %s %s "
+"Materyal ödünç verildi %s %s In transit from %s to %s since %s %s Materyal "
+"ayırtıldı %s Materyal sistemden düşülmüş %s %s %s %s"
 
 #. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:537
@@ -5105,6 +5093,26 @@ msgstr ""
 "defined('firstname') && hidden.defined('dateofbirth') && hidden.defined"
 "('initials') && hidden.defined('othernames') && hidden.defined('sex') %%]"
 
+#. %1$s:  USE AuthorisedValues 
+#. %2$s:  IF ( item.itemlost ) 
+#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
+#. %4$s:  IF ( av_lib_include ) 
+#. %5$s:  av_lib_include 
+#. %6$s:  ELSE 
+#. %7$s:  IF ( item.lostimageurl ) 
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:1
+#, c-format
+msgid ""
+"%s [%%#- This include takes two parameters: an item structure and an "
+"optional loan (issue) structure. The issue structure is used by course "
+"reserves pages, which do not use an API to fetch items that populates item."
+"datedue. -%%] %s %s %s %s %s %s "
+msgstr ""
+" %s [%%#- Bu içerik iki parametre kullanır: materyal yapısı ve opsiyonel "
+"ödünç verme (çıkarma)yapısı. Çıkarma yapısı kurs rezerv sayfaları tarafından "
+"kullanılır. Kurs rezerv sayfaları materyalleri getirmek için API "
+"(item.datedue. kısmını doldurur) kullanmaz.  -%%] %s %s %s %s %s %s"
+
 #. For the first occurrence,
 #. %1$s:  ind.label 
 #: opac-tmpl/bootstrap/en/includes/search/resort_form.inc:14
@@ -5406,7 +5414,7 @@ msgstr "%s%s Katalog &rsaquo; %s hakkında yorumlar "
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:520
 #, c-format
 msgid "%s%s holdings%sHoldings%s ( %s )"
-msgstr "%s%s ayırmalar%s;Ayırmalar%s ( %s )"
+msgstr "%s%s mevcut%sMevcut%s ( %s )"
 
 #. %1$s:  deleted_count 
 #. %2$s:  IF ( deleted_count ==1 ) 
@@ -6769,10 +6777,10 @@ msgstr "(%s toplam)"
 
 #. For the first occurrence,
 #. %1$s:  item.restrictedopac 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:29
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:34
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:43
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:36
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:38
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:41
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:50
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:432
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:374
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:395
@@ -8260,7 +8268,7 @@ msgstr "Otorite türü:"
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:77
 #, c-format
 msgid "Authorized headings"
-msgstr "Yetkili başlıklar"
+msgstr "Otorite başlıklar"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:5
 #, c-format
@@ -10141,7 +10149,7 @@ msgstr "Roman"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:428
 #, c-format
 msgid "Fiction notes:"
-msgstr "Hikaye/roman notları:"
+msgstr "Roman notları:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:50
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:166
@@ -10396,7 +10404,7 @@ msgstr "Cuma"
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:107
 #, c-format
 msgid "From: "
-msgstr "den/dan: "
+msgstr "Şurada ara: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:82
 #, c-format
@@ -10506,11 +10514,12 @@ msgid ""
 "HarvestBibliographicRecords and HarvestExpandedRecords in Data Aggregation, "
 "but allows quick, real time lookup by bibliographic identifier."
 msgstr ""
-"Kayıt tanımlayıcıları listesi bibliyografik bilgiler gibi yerler ve materyal "
-"bilgileri ilişkili kayıt nesnelerin listesini döndürür. Arayan döndürülecek "
-"kayıt nesneleri için belirli meta veri şeması isteyebilir. Bu işlev "
-"HarvestBibliographicRecords ve veri toplama HarvestExpandedRecords benzer "
-"şekilde davranır ancak hızlı, bibliyografik tanımlayıcı tarafından gerçek "
+"Kayıt tanımlayıcıları listesi göz önüne alındığında, bibliyografik "
+"bilgilerin yanı sıra ilgili koleksiyonların ve materyal bilgilerini içeren "
+"kayıt nesnelerin bir listesini getirir. Arama yapan, getirilecek kayıt "
+"nesneleri için belirli meta veri şeması isteyebilir. Bu fonksiyon, Veri "
+"Toplama içinde HarvestBibliographicRecords ve HarvestExpandedRecords ile "
+"benzer şekilde davranır, ama bibliyografik tanımlayıcı ile hızlı, gerçek "
 "zamanlı arama sağlar."
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:108
@@ -10707,7 +10716,7 @@ msgstr "Eser Adı ayır"
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:137
 #, c-format
 msgid "Holdings"
-msgstr "Ayırtılanlar"
+msgstr "Mevcut"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:773
 #, c-format
@@ -12735,7 +12744,7 @@ msgstr "Diğer formlar:"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:523
 #, c-format
 msgid "Other holdings ( %s )"
-msgstr "Diğer ayırmalar ( %s )"
+msgstr "Diğer koleksiyonlar ( %s )"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:928
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:437
@@ -13136,7 +13145,7 @@ msgstr "Kartpostal"
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:19
 #, c-format
 msgid "Powered by %s "
-msgstr "İşleyen: %s  "
+msgstr "Destekleyen %s  "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:255
 #, c-format
@@ -15101,8 +15110,8 @@ msgid ""
 "The %s most checked-out %s %s %s %s at %s %s %s in the past %s months %s of "
 "all time%s "
 msgstr ""
-"%s En çok ödünç alınan %s %s %s %s at %s %s %s  %s geçmiş aylarda %s tüm "
-"zamanların %s "
+"%s en çok ödünç alınan materyal %s %s %s %s  %s %s %s için geçtiğimiz %s ay "
+"içerisinde %s of all time%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -18186,7 +18195,7 @@ msgstr "edebi metin değil"
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:701
 #, c-format
 msgid "not fiction "
-msgstr "roman harici "
+msgstr "roman dışı"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:301

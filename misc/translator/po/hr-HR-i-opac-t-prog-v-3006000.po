@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2014-01-17 22:27-0300\n"
-"PO-Revision-Date: 2013-08-16 10:36+0000\n"
+"POT-Creation-Date: 2014-02-16 18:38-0300\n"
+"PO-Revision-Date: 2014-02-13 15:29+0000\n"
 "Last-Translator: Marijana <mglavica@ffzg.hr>\n"
 "Language-Team: Koha translation team <koha-translate@lists.koha.org>\n"
 "Language: hr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1376649393.0\n"
+"X-POOTLE-MTIME: 1392305383.0\n"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:528
@@ -2175,7 +2175,7 @@ msgstr "%s %s"
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:47
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:64
-#: opac-tmpl/prog/en/includes/item-status.inc:43
+#: opac-tmpl/prog/en/includes/item-status.inc:50
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:5
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:44
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:113
@@ -2779,15 +2779,13 @@ msgstr "%s %s %s %s %s %s"
 msgid "%s %s %s %s %s %s "
 msgstr "%s %s %s %s %s %s "
 
-#. For the first occurrence,
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  IF ( item.itemlost ) 
-#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %4$s:  IF ( av_lib_include ) 
-#. %5$s:  av_lib_include 
-#. %6$s:  ELSE 
-#. %7$s:  IF ( item.lostimageurl ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:1
+#. %1$s:  FOREACH review IN SYNDETICS_REVIEW.reviews 
+#. %2$s:  IF ( review.content ) 
+#. %3$s:  review.content 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  END 
+#. %7$s:  END 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1154
 #, c-format
 msgid "%s %s %s %s %s %s %s "
@@ -2883,13 +2881,13 @@ msgstr "%s %s %s %s %s %s %s %s%s%s %s["
 #. %11$s:  course.course_name 
 #. %12$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %s%s%sKoha online%s catalog &rsaquo; Course reserves for "
 "%s %s "
 msgstr ""
-"%s %s %s %s%s%sKoha online%s katalog &rsaquo; Naslovnica moje knjižnice %s "
-"%s "
+"%s %s %s %s %s %s %s%s%sKoha online%s katalog &rsaquo; Literatura "
+"rezervirana za kolegij %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
@@ -2900,7 +2898,7 @@ msgstr ""
 #. %7$s:  END 
 #. %8$s:  ELSE 
 #. %9$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:34
+#: opac-tmpl/prog/en/includes/item-status.inc:41
 #, c-format
 msgid "%s %s %s %s %s %s Item damaged %s %s Available %s"
 msgstr "%s %s %s %s %s %s Oštećeno %s %s Dostupno %s"
@@ -3213,7 +3211,7 @@ msgstr "%s %s %s Primjerak čeka u "
 #. %2$s:  END 
 #. %3$s:  ELSIF ( item.notforloan_per_itemtype ) 
 #. %4$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:31
+#: opac-tmpl/prog/en/includes/item-status.inc:38
 #, c-format
 msgid "%s %s %s Not for loan %s"
 msgstr "%s %s %s Nije za posudbu %s"
@@ -3630,7 +3628,7 @@ msgstr "%s %s Nije pronađen niti jedan rezultat. %s "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:29
+#: opac-tmpl/prog/en/includes/item-status.inc:36
 #, c-format
 msgid "%s %s Not for loan %s"
 msgstr "%s %s Nije za posudbu %s"
@@ -4444,7 +4442,7 @@ msgstr "%s Kritike internet korisnika"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  END 
-#. %4$s:  ELSIF ( item.datedue ) 
+#. %4$s:  ELSIF ( item.datedue || issue.date_due ) 
 #. %5$s:  IF ( OPACShowCheckoutName ) 
 #. %6$s:  item.cardnumber 
 #. %7$s:  item.firstname 
@@ -4461,14 +4459,14 @@ msgstr "%s Kritike internet korisnika"
 #. %18$s:  IF ( item.notforloanvalueopac ) 
 #. %19$s:  item.notforloanvalueopac 
 #. %20$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:9
-#, fuzzy, c-format
+#: opac-tmpl/prog/en/includes/item-status.inc:16
+#, c-format
 msgid ""
 "%s Item lost %s %s %s %s Checked out to %s %s %s %s Checked out %s %s In "
 "transit from %s to %s since %s %s On hold %s Item withdrawn %s %s %s %s"
 msgstr ""
-"%s %s %s Zaduženo na ime %s %s %s %s Zaduženo %s %s U tranzitu iz %s prema "
-"%s od %s %s Rezervirano %s Otpisano %s %s %s %s %s %s"
+"%s Izgubljeno %s %s %s %s Zaduženo na %s %s %s %s Posuđeno %s %s U tranzitu "
+"iz %s prema %s od %s %s Rezervirano %s Otpisano %s %s %s %s"
 
 #. %1$s:  ELSE 
 #: opac-tmpl/prog/en/modules/opac-user.tt:403
@@ -4770,6 +4768,22 @@ msgstr ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
 "hidden.defined('mobile') && hidden.defined('email') && hidden.defined"
 "('emailpro') && hidden.defined('fax') %%] "
+
+#. %1$s:  USE AuthorisedValues 
+#. %2$s:  IF ( item.itemlost ) 
+#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
+#. %4$s:  IF ( av_lib_include ) 
+#. %5$s:  av_lib_include 
+#. %6$s:  ELSE 
+#. %7$s:  IF ( item.lostimageurl ) 
+#: opac-tmpl/prog/en/includes/item-status.inc:1
+#, c-format
+msgid ""
+"%s [%%#- This include takes two parameters: an item structure and an "
+"optional loan (issue) structure. The issue structure is used by course "
+"reserves pages, which do not use an API to fetch items that populates item."
+"datedue. -%%] %s %s %s %s %s %s "
+msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  ind.label 
@@ -5909,7 +5923,7 @@ msgstr "%sPrikazano samo "
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:172
 #, c-format
 msgid "%sThis item is already checked out to you.%s"
-msgstr "%sOvaj naslov već imate zadužen.%s"
+msgstr "%sOvaj naslov već imate posuđen.%s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -6018,9 +6032,9 @@ msgid "&#8674; Checkout history"
 msgstr "&#8674; Povijest posudbe"
 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:17
-#, fuzzy, c-format
+#, c-format
 msgid "&#8674; Course reserves for "
-msgstr "&#8674; Promijena lozinke "
+msgstr "&#8674; Literatura rezervirana za kolegij "
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:550
 #, c-format
@@ -6740,10 +6754,10 @@ msgstr "(%s ukupno)"
 
 #. For the first occurrence,
 #. %1$s:  item.restrictedopac 
-#: opac-tmpl/prog/en/includes/item-status.inc:29
-#: opac-tmpl/prog/en/includes/item-status.inc:31
-#: opac-tmpl/prog/en/includes/item-status.inc:34
-#: opac-tmpl/prog/en/includes/item-status.inc:43
+#: opac-tmpl/prog/en/includes/item-status.inc:36
+#: opac-tmpl/prog/en/includes/item-status.inc:38
+#: opac-tmpl/prog/en/includes/item-status.inc:41
+#: opac-tmpl/prog/en/includes/item-status.inc:50
 #: opac-tmpl/prog/en/modules/opac-results.tt:631
 #: opac-tmpl/prog/en/modules/opac-detail.tt:810
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:274
@@ -9145,9 +9159,9 @@ msgstr "Broj izvještaja:"
 #: opac-tmpl/prog/en/includes/masthead.inc:134
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:17
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1522
-#, fuzzy, c-format
+#, c-format
 msgid "Course reserves"
-msgstr "SearchCourseReserves"
+msgstr "Rezervirano za kolegije"
 
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:19
 #, c-format
@@ -12049,7 +12063,7 @@ msgstr "Ne može se produžiti"
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:72
 #, c-format
 msgid "No reserves have been selected for this course."
-msgstr ""
+msgstr "Nema rezervirane literature za ovaj kolegij."
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
@@ -14737,6 +14751,8 @@ msgid ""
 "The %s most checked-out %s %s %s %s at %s %s %s in the past %s months %s of "
 "all time%s "
 msgstr ""
+"Broj %s najviše posuđivanih %s %s %s %s u %s %s %s u posljednjih %s mjeseci "
+"%s oduvijek%s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -15793,7 +15809,7 @@ msgstr "Ne možete ponovo obnoviti rok vraćanja za ovaj primjerak. %s "
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:303
 #, c-format
 msgid "You currently have nothing checked out."
-msgstr ""
+msgstr "Trenutno nemate ništa posuđeno."
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:233
 #: opac-tmpl/prog/en/modules/opac-user.tt:243
@@ -15835,6 +15851,7 @@ msgstr ""
 #, c-format
 msgid "You have checked out too many items and can't check out any more. %s "
 msgstr ""
+"Imate zaduženo maksimalan broj primjeraka i ne možete više posuditi %s "
 
 #: opac-tmpl/prog/en/modules/opac-account.tt:64
 #, c-format
@@ -19008,4 +19025,3 @@ msgstr ""
 #, c-format
 msgid "• "
 msgstr ""
-

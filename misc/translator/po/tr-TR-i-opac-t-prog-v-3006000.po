@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-17 22:54-0300\n"
-"PO-Revision-Date: 2013-12-23 11:33+0000\n"
+"POT-Creation-Date: 2014-02-16 19:05-0300\n"
+"PO-Revision-Date: 2014-02-24 13:04+0000\n"
 "Last-Translator: onur <sonure@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1387798405.0\n"
+"X-POOTLE-MTIME: 1393247095.0\n"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:528
@@ -2175,7 +2175,7 @@ msgstr "%s %s"
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:47
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:64
-#: opac-tmpl/prog/en/includes/item-status.inc:43
+#: opac-tmpl/prog/en/includes/item-status.inc:50
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:5
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:44
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:113
@@ -2779,15 +2779,13 @@ msgstr "%s %s %s %s %s %s"
 msgid "%s %s %s %s %s %s "
 msgstr "%s %s %s %s %s %s "
 
-#. For the first occurrence,
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  IF ( item.itemlost ) 
-#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %4$s:  IF ( av_lib_include ) 
-#. %5$s:  av_lib_include 
-#. %6$s:  ELSE 
-#. %7$s:  IF ( item.lostimageurl ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:1
+#. %1$s:  FOREACH review IN SYNDETICS_REVIEW.reviews 
+#. %2$s:  IF ( review.content ) 
+#. %3$s:  review.content 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  END 
+#. %7$s:  END 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1154
 #, c-format
 msgid "%s %s %s %s %s %s %s "
@@ -2901,7 +2899,7 @@ msgstr ""
 #. %7$s:  END 
 #. %8$s:  ELSE 
 #. %9$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:34
+#: opac-tmpl/prog/en/includes/item-status.inc:41
 #, c-format
 msgid "%s %s %s %s %s %s Item damaged %s %s Available %s"
 msgstr "%s %s %s %s %s %s Materyal Hasarlı %s %s Kullanılabilir %s"
@@ -3215,7 +3213,7 @@ msgstr "Materyalin beklemede olduğu yer %s %s %s "
 #. %2$s:  END 
 #. %3$s:  ELSIF ( item.notforloan_per_itemtype ) 
 #. %4$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:31
+#: opac-tmpl/prog/en/includes/item-status.inc:38
 #, c-format
 msgid "%s %s %s Not for loan %s"
 msgstr "%s %s %s Ödünç verilmez %s"
@@ -3226,7 +3224,7 @@ msgstr "%s %s %s Ödünç verilmez %s"
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:113
 #, c-format
 msgid "%s %s %s You have subscribed to email notification on new issues "
-msgstr "%s %s %s Yeni sayılar hakkında e-posta bildirimlerine abone oldunuz "
+msgstr "%s %s %s Yeni sayılar hakkındaki e-posta bildirimlerine abone oldunuz "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -3556,9 +3554,9 @@ msgstr "%s %s %s(%s)%s %s "
 #. %6$s:  IF ( facets_loo.type_label_Location ) 
 #. %7$s:  END 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:18
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %sLibraries%s %s %sLocations%s "
-msgstr "%s %sMateryal türleri%s %s %sKütüphaneler%s %s %sKonumlar%s"
+msgstr "%s %s %sKütüphaneler%s %s %sKonumlar%s"
 
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
@@ -3634,7 +3632,7 @@ msgstr "%s %s Sonuç bulunamadı. %s "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:29
+#: opac-tmpl/prog/en/includes/item-status.inc:36
 #, c-format
 msgid "%s %s Not for loan %s"
 msgstr "%s %s Ödünç verilmez %s"
@@ -4183,6 +4181,8 @@ msgid ""
 "%s %sPayment,thanks %sNew Card %sFine %sAccount management fee %sSundry "
 "%sLost Item %sWriteoff %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
+"%s %sÖdeme,teşekkürler %sYani Kart %sCeza %sHesap yönetim ücreti %sMuhtelif "
+"%sKayıp materyal %sBorcu sil %s%s %s %s, %s%s %s(%s)%s"
 
 #. %1$s:  IF (render=='standalone') 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -4458,7 +4458,7 @@ msgstr "%s İnternet kullanıcısı eleştirileri"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  END 
-#. %4$s:  ELSIF ( item.datedue ) 
+#. %4$s:  ELSIF ( item.datedue || issue.date_due ) 
 #. %5$s:  IF ( OPACShowCheckoutName ) 
 #. %6$s:  item.cardnumber 
 #. %7$s:  item.firstname 
@@ -4475,7 +4475,7 @@ msgstr "%s İnternet kullanıcısı eleştirileri"
 #. %18$s:  IF ( item.notforloanvalueopac ) 
 #. %19$s:  item.notforloanvalueopac 
 #. %20$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:9
+#: opac-tmpl/prog/en/includes/item-status.inc:16
 #, c-format
 msgid ""
 "%s Item lost %s %s %s %s Checked out to %s %s %s %s Checked out %s %s In "
@@ -4536,13 +4536,13 @@ msgstr "%s kataloğunda %s sonuç bulunamadı. "
 #: opac-tmpl/prog/en/modules/opac-user.tt:192
 #, c-format
 msgid "%s Not renewable%s "
-msgstr "%s Yenilenemez%s "
+msgstr "%s Süresi uzatılamaz%s "
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:198
 #, c-format
 msgid "%s Other names:"
-msgstr "%s Diğer Adı:"
+msgstr "%s Diğer Adlar:"
 
 #. %1$s:  IF ( PassMismatch ) 
 #. %2$s:  END 
@@ -4698,7 +4698,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-results.tt:619
 #, c-format
 msgid "%s Video extracts"
-msgstr "%s Video özleri"
+msgstr "%s Video özetleri"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4786,6 +4786,26 @@ msgstr ""
 "hidden.defined('mobile') && hidden.defined('email') && hidden.defined"
 "('emailpro') && hidden.defined('fax') %%] "
 
+#. %1$s:  USE AuthorisedValues 
+#. %2$s:  IF ( item.itemlost ) 
+#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
+#. %4$s:  IF ( av_lib_include ) 
+#. %5$s:  av_lib_include 
+#. %6$s:  ELSE 
+#. %7$s:  IF ( item.lostimageurl ) 
+#: opac-tmpl/prog/en/includes/item-status.inc:1
+#, c-format
+msgid ""
+"%s [%%#- This include takes two parameters: an item structure and an "
+"optional loan (issue) structure. The issue structure is used by course "
+"reserves pages, which do not use an API to fetch items that populates item."
+"datedue. -%%] %s %s %s %s %s %s "
+msgstr ""
+"%s [%%#- Bu içerik iki parametre kullanır: materyal yapısı ve opsiyonel "
+"ödünç verme (çıkarma) yapısı. Çıkarma yapısı kurs rezerv sayfaları "
+"tarafından kullanılır. Kurs rezerv sayfaları materyalleri getirmek için API "
+"(item.datedue. kısmını doldurur) kullanmaz.  -%%] %s %s %s %s %s %s"
+
 #. For the first occurrence,
 #. %1$s:  ind.label 
 #: opac-tmpl/prog/en/includes/search/resort_form.inc:14
@@ -4840,7 +4860,7 @@ msgstr "%s kayıtlar"
 #: opac-tmpl/prog/en/modules/opac-user.tt:402
 #, c-format
 msgid "%s since %s%s "
-msgstr "%s -den beri %s %s "
+msgstr "%s itibariyle %s %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -5231,7 +5251,7 @@ msgstr "%s%s Katalog &rsaquo; %s hakkında yorumlar "
 #: opac-tmpl/prog/en/modules/opac-detail.tt:941
 #, c-format
 msgid "%s%s holdings%sHoldings%s ( %s )"
-msgstr "%s%s ayırmalar%s;Ayırmalar%s ( %s )"
+msgstr "%s%s mevcut%sMevcut%s ( %s )"
 
 #. %1$s:  deleted_count 
 #. %2$s:  IF ( deleted_count ==1 ) 
@@ -5646,8 +5666,8 @@ msgid ""
 "%s. Usually the reason for freezing an account is old overdues or damage "
 "fees. If "
 msgstr ""
-"%s. Genellikle bir hesabın durdurulmasının sebebi eski gecikmeler ya da "
-"hasar bedelleridir. Eğer "
+"%s. Genellikle bir hesabın dondurulmasının sebebi eski gecikmeler ya da "
+"hasar bedelleridir."
 
 #. For the first occurrence,
 #. %1$s:  OPACBaseURL 
@@ -6757,10 +6777,10 @@ msgstr "(%s toplam)"
 
 #. For the first occurrence,
 #. %1$s:  item.restrictedopac 
-#: opac-tmpl/prog/en/includes/item-status.inc:29
-#: opac-tmpl/prog/en/includes/item-status.inc:31
-#: opac-tmpl/prog/en/includes/item-status.inc:34
-#: opac-tmpl/prog/en/includes/item-status.inc:43
+#: opac-tmpl/prog/en/includes/item-status.inc:36
+#: opac-tmpl/prog/en/includes/item-status.inc:38
+#: opac-tmpl/prog/en/includes/item-status.inc:41
+#: opac-tmpl/prog/en/includes/item-status.inc:50
 #: opac-tmpl/prog/en/modules/opac-results.tt:631
 #: opac-tmpl/prog/en/modules/opac-detail.tt:810
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:274
@@ -7034,7 +7054,7 @@ msgstr ", bu materyallerin hiç birisi ayırtılamaz. "
 msgid ", you cannot place holds because the library doesn't have up-to-date "
 msgstr ""
 ", ayırma işlemi yapamazsınız çünkü kütüphane kayıtlarında güncel iletişim "
-"bilgileriniz yoktur. "
+"bilgileriniz yer almamaktadır. "
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:240
 #, c-format
@@ -7643,7 +7663,7 @@ msgstr "Erişim engellendi"
 #: opac-tmpl/prog/en/modules/opac-user.tt:106
 #, c-format
 msgid "According to our records, we don't have up-to-date %s"
-msgstr "Kayıtlarımıza göre, bu kadar güncelleme yok %s"
+msgstr "Kayıtlarımıza göre, bu kadar %s güncelleme yok "
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:36
 #, c-format
@@ -8222,7 +8242,7 @@ msgstr "Otorite arama sonuçları"
 #: opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tt:49
 #, c-format
 msgid "Authorized headings"
-msgstr "Onaylanmış başlıklar"
+msgstr "Otorite başlıklar"
 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:6
 #, c-format
@@ -10002,7 +10022,7 @@ msgstr "Roman"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:856
 #, c-format
 msgid "Fiction notes:"
-msgstr "Hikaye/roman notları:"
+msgstr "Roman notları:"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:50
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:166
@@ -10244,7 +10264,7 @@ msgstr "Cuma"
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:102
 #, c-format
 msgid "From: "
-msgstr "den/dan: "
+msgstr "Şurada ara:"
 
 #: opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tt:54
 #, c-format
@@ -10529,7 +10549,7 @@ msgstr "Eser Adı ayır"
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:184
 #, c-format
 msgid "Holdings"
-msgstr "Ayırtılanlar"
+msgstr "Mevcut"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:815
 #, c-format
@@ -10896,9 +10916,9 @@ msgid "Item type: "
 msgstr "Materyal türü: "
 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:18
-#, fuzzy, c-format
+#, c-format
 msgid "Item types"
-msgstr "Materyal türü"
+msgstr "Materyal türleri"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -12466,7 +12486,7 @@ msgstr "Diğer formlar:"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:944
 #, c-format
 msgid "Other holdings ( %s )"
-msgstr "Diğer ayırmalar ( %s )"
+msgstr "Diğer koleksiyonlar ( %s )"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:922
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:928
@@ -14823,8 +14843,8 @@ msgid ""
 "The %s most checked-out %s %s %s %s at %s %s %s in the past %s months %s of "
 "all time%s "
 msgstr ""
-"%s En çok ödünç alınan %s %s %s %s at %s %s %s  %s geçmiş aylarda %s tüm "
-"zamanların %s "
+"%s en çok ödünç alınan materyal %s %s %s %s  %s %s %s için geçtiğimiz %s ay "
+"içerisinde %s of all time%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -17950,7 +17970,7 @@ msgstr "edebi metin değil"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:701
 #, c-format
 msgid "not fiction "
-msgstr "roman harici "
+msgstr "roman dışı"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:301
@@ -19150,4 +19170,3 @@ msgstr ""
 #, c-format
 msgid "• "
 msgstr "• "
-
