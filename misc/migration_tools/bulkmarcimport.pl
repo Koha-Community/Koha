@@ -35,7 +35,7 @@ use open qw( :std :encoding(UTF-8) );
 binmode( STDOUT, ":encoding(UTF-8)" );
 my ( $input_marc_file, $number, $offset) = ('',0,0);
 my ($version, $delete, $test_parameter, $skip_marc8_conversion, $char_encoding, $verbose, $commit, $fk_off,$format,$biblios,$authorities,$keepids,$match, $isbn_check, $logfile);
-my ( $insert, $filters, $update, $all, $yamlfile, $authtypes );
+my ( $insert, $filters, $update, $all, $yamlfile, $authtypes, $append );
 my $cleanisbn = 1;
 my ($sourcetag,$sourcesubfield,$idmapfl, $dedup_barcode);
 my $framework = '';
@@ -56,6 +56,7 @@ GetOptions(
     'fk' => \$fk_off,
     'm:s' => \$format,
     'l:s' => \$logfile,
+    'append' => \$append,
     'k|keepids:s' => \$keepids,
     'b|biblios' => \$biblios,
     'a|authorities' => \$authorities,
@@ -76,6 +77,7 @@ GetOptions(
 );
 $biblios ||= !$authorities;
 $insert  ||= !$update;
+my $writemode = ($append) ? "a" : "w";
 
 if ($all) {
     $insert = 1;
@@ -182,7 +184,7 @@ my $sth_isbn = $dbh->prepare("SELECT biblionumber,biblioitemnumber FROM biblioit
 $dbh->{AutoCommit} = 0;
 my $loghandle;
 if ($logfile){
-   $loghandle= IO::File->new($logfile,"w") ;
+   $loghandle= IO::File->new($logfile, $writemode) ;
    print $loghandle "id;operation;status\n";
 }
 RECORD: while (  ) {
@@ -631,6 +633,10 @@ The I<NUMBER> of records to wait before performing a 'commit' operation
 =item B<-l>
 
 File logs actions done for each record and their status into file
+
+=item B<-append>
+
+If specified, data will be appended to the logfile. If not, the logfile will be erased for each execution.
 
 =item B<-t, -test>
 
