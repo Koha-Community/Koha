@@ -1,11 +1,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.12\n"
-"POT-Creation-Date: 2014-01-17 22:19-0300\n"
-"PO-Revision-Date: 2013-12-05 14:35+0000\n"
-"Last-Translator: Héctor <hector.hecaxmmx@gmail.com>\n"
-"Language-Team: Koha Translation Team <koha-translate@lists.koha-community."
-"org>\n"
+"POT-Creation-Date: 2014-02-16 18:28-0300\n"
+"PO-Revision-Date: 2014-02-24 02:48+0000\n"
+"Last-Translator: Bernardo <bgkriegel@gmail.com>\n"
+"Language-Team: Koha Translation Team <koha-translate@lists.koha-"
+"community.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1386254143.0\n"
+"X-POOTLE-MTIME: 1393210085.0\n"
 
 #. %1$s:  BORROWER_INF.debarredcomment 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:68
@@ -2121,7 +2121,7 @@ msgstr "%s %s"
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:15
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:34
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:63
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:43
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:50
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:1
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:11
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:168
@@ -2982,7 +2982,7 @@ msgstr ""
 #. %7$s:  END 
 #. %8$s:  ELSE 
 #. %9$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:34
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:41
 #, c-format
 msgid "%s %s %s %s %s %s Item damaged %s %s Available %s"
 msgstr "%s %s %s %s %s %s Ejemplar dañado %s %s Disponible %s"
@@ -3306,35 +3306,6 @@ msgstr "%s %s %s (%s) %s %s %s %s %s "
 msgid "%s %s %s ; %s %s "
 msgstr "%s %s %s ; %s %s "
 
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  IF ( item.datedue ) 
-#. %3$s:  IF ( OPACShowCheckoutName ) 
-#. %4$s:  item.cardnumber 
-#. %5$s:  item.firstname 
-#. %6$s:  item.surname 
-#. %7$s:  ELSE 
-#. %8$s:  END 
-#. %9$s:  ELSIF ( item.transfertwhen ) 
-#. %10$s:  item.transfertfrom 
-#. %11$s:  item.transfertto 
-#. %12$s:  item.transfertwhen 
-#. %13$s:  ELSIF ( item.waiting ) 
-#. %14$s:  ELSIF ( item.withdrawn ) 
-#. %15$s:  ELSIF ( item.itemlost ) 
-#. %16$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %17$s:  IF ( av_lib_include ) 
-#. %18$s:  av_lib_include 
-#. %19$s:  ELSE 
-#. %20$s:  IF ( item.lostimageurl ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:1
-#, c-format
-msgid ""
-"%s %s %s Checked out to %s %s %s %s Checked out %s %s In transit from %s to "
-"%s since %s %s On hold %s Item withdrawn %s %s %s %s %s %s "
-msgstr ""
-"%s %s %s Prestado a %s %s %s %s Prestado %s %s En tránsito desde %s a %s "
-"desde %s %s Reservado %s ejemplar retirado %s %s %s %s %s %s "
-
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( RESERVE.intransit ) 
@@ -3374,7 +3345,7 @@ msgstr "%s %s %s No hay otros ejemplares. %s %s "
 #. %2$s:  END 
 #. %3$s:  ELSIF ( item.notforloan_per_itemtype ) 
 #. %4$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:38
 #, c-format
 msgid "%s %s %s Not for loan %s"
 msgstr "%s %s %s No para préstamo %s"
@@ -3833,7 +3804,7 @@ msgstr "%s %s No se encontraron resultados. %s "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:29
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:36
 #, c-format
 msgid "%s %s Not for loan %s"
 msgstr "%s %s No par préstamo %s"
@@ -4714,14 +4685,32 @@ msgstr "%s Críticas de usuarios de Internet"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  END 
-#. %4$s:  ELSIF ( item.itemnotforloan ) 
-#. %5$s:  IF ( item.notforloanvalueopac ) 
-#. %6$s:  item.notforloanvalueopac 
-#. %7$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:22
+#. %4$s:  ELSIF ( item.datedue || issue.date_due ) 
+#. %5$s:  IF ( OPACShowCheckoutName ) 
+#. %6$s:  item.cardnumber 
+#. %7$s:  item.firstname 
+#. %8$s:  item.surname 
+#. %9$s:  ELSE 
+#. %10$s:  END 
+#. %11$s:  ELSIF ( item.transfertwhen ) 
+#. %12$s:  item.transfertfrom 
+#. %13$s:  item.transfertto 
+#. %14$s:  item.transfertwhen 
+#. %15$s:  ELSIF ( item.waiting ) 
+#. %16$s:  ELSIF ( item.withdrawn ) 
+#. %17$s:  ELSIF ( item.itemnotforloan ) 
+#. %18$s:  IF ( item.notforloanvalueopac ) 
+#. %19$s:  item.notforloanvalueopac 
+#. %20$s:  IF ( item.restrictedopac ) 
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:16
 #, c-format
-msgid "%s Item lost %s %s %s %s %s %s"
-msgstr "%s Ejemplar perdido %s %s %s %s %s %s"
+msgid ""
+"%s Item lost %s %s %s %s Checked out to %s %s %s %s Checked out %s %s In "
+"transit from %s to %s since %s %s On hold %s Item withdrawn %s %s %s %s"
+msgstr ""
+"%s Ejemplar perdido %s %s %s %s Prestado a %s %s %s %s Prestado %s %s En "
+"tránsito desde %s a %s desde %s %s Reservado %s Ejemplar retirado %s %s %s %"
+"s"
 
 #. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:537
@@ -5112,6 +5101,26 @@ msgstr ""
 "%s [%% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden."
 "defined('firstname') && hidden.defined('dateofbirth') && hidden.defined"
 "('initials') && hidden.defined('othernames') && hidden.defined('sex') %%] "
+
+#. %1$s:  USE AuthorisedValues 
+#. %2$s:  IF ( item.itemlost ) 
+#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
+#. %4$s:  IF ( av_lib_include ) 
+#. %5$s:  av_lib_include 
+#. %6$s:  ELSE 
+#. %7$s:  IF ( item.lostimageurl ) 
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:1
+#, c-format
+msgid ""
+"%s [%%#- This include takes two parameters: an item structure and an "
+"optional loan (issue) structure. The issue structure is used by course "
+"reserves pages, which do not use an API to fetch items that populates item."
+"datedue. -%%] %s %s %s %s %s %s "
+msgstr ""
+"%s [%%#- Esto incluye dos parámetros: una estructura de ítem y una "
+"estructura opcional de préstamo (emisión). La estructura de préstamo se "
+"utiliza por las páginas de reservas de cursos, que no utilizan una API para "
+"obtener los ítems que llenan item.datedue. -%%] %s %s %s %s %s %s "
 
 #. For the first occurrence,
 #. %1$s:  ind.label 
@@ -6778,10 +6787,10 @@ msgstr "(%s total)"
 
 #. For the first occurrence,
 #. %1$s:  item.restrictedopac 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:29
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:34
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:43
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:36
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:38
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:41
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:50
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:432
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:374
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:395

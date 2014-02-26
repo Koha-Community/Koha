@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2014-01-17 22:30-0300\n"
-"PO-Revision-Date: 2014-01-03 19:39+0000\n"
+"POT-Creation-Date: 2014-02-16 18:41-0300\n"
+"PO-Revision-Date: 2014-02-15 18:08+0000\n"
 "Last-Translator: Poul <poul@wachmann.dk>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
 "Language: da\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1388777951.0\n"
+"X-POOTLE-MTIME: 1392487718.0\n"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:528
@@ -28,7 +28,7 @@ msgid "\"%s\""
 msgstr "\"%s\""
 
 #: opac-tmpl/prog/en/xslt/compact.xsl:34
-#, fuzzy, c-format
+#, c-format
 msgid "#"
 msgstr "#"
 
@@ -2172,7 +2172,7 @@ msgstr "%s %s"
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:47
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:64
-#: opac-tmpl/prog/en/includes/item-status.inc:43
+#: opac-tmpl/prog/en/includes/item-status.inc:50
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:5
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:44
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:113
@@ -2776,15 +2776,13 @@ msgstr "%s %s %s %s %s %s"
 msgid "%s %s %s %s %s %s "
 msgstr "%s %s %s %s %s %s "
 
-#. For the first occurrence,
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  IF ( item.itemlost ) 
-#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %4$s:  IF ( av_lib_include ) 
-#. %5$s:  av_lib_include 
-#. %6$s:  ELSE 
-#. %7$s:  IF ( item.lostimageurl ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:1
+#. %1$s:  FOREACH review IN SYNDETICS_REVIEW.reviews 
+#. %2$s:  IF ( review.content ) 
+#. %3$s:  review.content 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  END 
+#. %7$s:  END 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1154
 #, c-format
 msgid "%s %s %s %s %s %s %s "
@@ -2806,13 +2804,13 @@ msgstr "%s %s %s %s %s %s %s "
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:87
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]"
 "Greek (to 1453) %s%s %s %s "
 msgstr ""
-"%s%s %s %s %s %s %s %%]Engelsk %s %%]Fransk %s %%]Italiensk %s %%]Tysk %s %%]"
-"Spansk %s%s %s %s "
+"%s %s %s %s %s %s %s %s %%]Hebræisk %s %%]Arabisk %s %%]Græsk (modern) %s %%]"
+"Græsk (til 1453) %s%s %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -2844,13 +2842,13 @@ msgstr ""
 #. %28$s:  INCLUDE 'datatables.inc' 
 #. %29$s:  IF ( SocialNetworks ) 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s%s%sKoha online%s "
 "catalog &rsaquo; Details for: %s%s, %s%s %s %s %s "
 msgstr ""
-"%s %s %s %s %s%s%s%sKoha online%s katalog &rsaquo; Detaljer for: %s%s, %s%s "
-"%s "
+"%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s%s%sKoha online%s "
+"katalog &rsaquo; Detaljer for: %s%s, %s%s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( singleBranchMode ) 
@@ -2881,11 +2879,13 @@ msgstr "%s %s %s %s %s %s %s %s%s%s %s["
 #. %11$s:  course.course_name 
 #. %12$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %s%s%sKoha online%s catalog &rsaquo; Course reserves for "
 "%s %s "
-msgstr "%s %s %s %s%s%sKoha online%s katalog &rsaquo; Dit bibliotek %s %s "
+msgstr ""
+"%s %s %s %s %s %s %s%s%sKoha online%s katalog &rsaquo; Kursus reserveret for "
+"%s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
@@ -2896,7 +2896,7 @@ msgstr "%s %s %s %s%s%sKoha online%s katalog &rsaquo; Dit bibliotek %s %s "
 #. %7$s:  END 
 #. %8$s:  ELSE 
 #. %9$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:34
+#: opac-tmpl/prog/en/includes/item-status.inc:41
 #, c-format
 msgid "%s %s %s %s %s %s Item damaged %s %s Available %s"
 msgstr "%s %s %s %s %s %s Materiale beskadiget %s %s Tilgængelig %s"
@@ -2966,15 +2966,15 @@ msgstr "%s %s %s %s %s%s %s %s%s %s "
 #. %17$s:  END 
 #. %18$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-results.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s%s%sKoha online%s catalog &rsaquo; %s Results of search %sfor "
 "'%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s %s You did not specify any search "
 "criteria. %s %s "
 msgstr ""
-"%s %s %s %s%s%sKoha online%s catalog &rsaquo; %s Søgeresultater %sfor '%s'%s"
-"%s&nbsp;med begrænsning(er):&nbsp;'%s'%s %s Du angav ingen søgekriterier. %s "
-"%s "
+"%s %s %s %s %s%s%sKoha online%s katalog &rsaquo; %s Resultater af søgning "
+"%sfor '%s'%s%s&nbsp;med afgrænsning(er):&nbsp;'%s'%s %s Du angav ikke et "
+"søgekriterium. %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -3016,9 +3016,9 @@ msgstr "%s %s %s %s %s%s:%s %s "
 #. %3$s:  IF ( OPACShelfBrowser ) 
 #. %4$s:  IF ( ITEM_RESULT.itemnumber == starting_itemnumber ) 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1547
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s ("
-msgstr "%s %s %s %s"
+msgstr "%s %s %s %s ("
 
 #. For the first occurrence,
 #. %1$s:  sublanguages_loo.native_description 
@@ -3039,9 +3039,9 @@ msgstr "%s %s %s %s (%s)"
 #. %5$s:  END 
 #. %6$s:  INCLUDE shelfbrowser tab='otherholdings' 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1080
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s No other items. %s %s "
-msgstr "%s %s %s Ingen andre materialer. %s %s "
+msgstr "%s %s %s %s Ingen andre eksemplarer %s %s "
 
 #. %1$s:  IF showpriority 
 #. %2$s:  bibitemloo.rank 
@@ -3118,7 +3118,7 @@ msgstr ""
 #. %7$s:  END 
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s%s%sKoha online%s catalog &rsaquo; Courses %s "
 msgstr "%s %s %s%s%s%sKoha online%s katalog &rsaquo; Mærker %s "
 
@@ -3133,10 +3133,10 @@ msgstr "%s %s %s%s%s%sKoha online%s katalog &rsaquo; Mærker %s "
 #. %9$s:  INCLUDE 'calendar.inc' 
 #. %10$s:  INCLUDE 'datatables.inc' 
 #: opac-tmpl/prog/en/modules/opac-user.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s%s%sKoha online%s catalog &rsaquo; Your library home %s %s %s "
-msgstr "%s %s %s %s%s%sKoha online%s katalog &rsaquo; Dit bibliotek %s %s "
+msgstr "%s %s %s %s%s%sKoha online%s katalog &rsaquo; Dit bibliotek %s %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -3148,10 +3148,10 @@ msgstr "%s %s %s %s%s%sKoha online%s katalog &rsaquo; Dit bibliotek %s %s "
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #. %9$s:  INCLUDE 'datatables.inc' 
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s%s%sKoha online%s catalog &rsaquo; Your search history %s %s "
-msgstr "%s %s %s%s%sKoha online%s katalog &rsaquo; Din søgehistorik %s "
+msgstr "%s %s %s %s%s%sKoha online%s katalog &rsaquo; Din søgehistorik %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  IF ( SEARCH_RESULT.ALTERNATEHOLDINGS ) 
@@ -3207,7 +3207,7 @@ msgstr "%s %s %s Materiale venter ved "
 #. %2$s:  END 
 #. %3$s:  ELSIF ( item.notforloan_per_itemtype ) 
 #. %4$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:31
+#: opac-tmpl/prog/en/includes/item-status.inc:38
 #, c-format
 msgid "%s %s %s Not for loan %s"
 msgstr "%s %s %s Ikke til udlån %s"
@@ -3339,12 +3339,13 @@ msgstr "%s %s %s%s%s%sKoha online%s katalog &rsaquo; Nyeste kommentarer %s "
 #. %9$s:  INCLUDE 'doc-head-close.inc' 
 #. %10$s:  INCLUDE 'datatables.inc' 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s%s%s%sKoha online%s catalog &rsaquo; Subscription information for %s "
 "%s %s "
 msgstr ""
-"%s %s%s%s%sKoha online%s katalog &rsaquo; Abonnementsinformation for %s %s "
+"%s %s %s%s%s%sKoha online%s katalog &rsaquo; Abonnentinformation for %s %s "
+"%s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -3356,9 +3357,9 @@ msgstr ""
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #. %9$s:  INCLUDE 'datatables.inc' 
 #: opac-tmpl/prog/en/modules/opac-tags.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s%s%s%sKoha online%s catalog &rsaquo; Tags %s %s "
-msgstr "%s %s %s%s%s%sKoha online%s katalog &rsaquo; Mærker %s "
+msgstr "%s %s %s%s%s%sKoha online%s katalog &rsaquo; Tags %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -3476,9 +3477,9 @@ msgstr "%s %s %s%s%sKoha online%s katalog &rsaquo; Opdateringer sendt %s "
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #. %8$s:  IF ( print_basket ) 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; Your cart %s %s "
-msgstr "%s %s %s%s%sKoha online%s katalog &rsaquo; Din kurv %s "
+msgstr "%s %s %s%s%sKoha online%s katalog &rsaquo; Din kurv %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -3543,11 +3544,9 @@ msgstr "%s %s %s(%s)%s %s "
 #. %6$s:  IF ( facets_loo.type_label_Location ) 
 #. %7$s:  END 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:18
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %sLibraries%s %s %sLocations%s "
-msgstr ""
-"%sForfattere%s %sTitler%s %sEmner%s %sSteder%s %sSerier%s %sMaterialetyper%s "
-"%s %sBiblioteker%s %s %sPlaceringer%s "
+msgstr "%s %s %sBiblioteker%s %s %sAdresser%s "
 
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
@@ -3623,7 +3622,7 @@ msgstr "%s %s Ingen resultater fundet. %s "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:29
+#: opac-tmpl/prog/en/includes/item-status.inc:36
 #, c-format
 msgid "%s %s Not for loan %s"
 msgstr "%s %s Ikke til udlån %s"
@@ -3684,9 +3683,9 @@ msgstr "%s %s sendte en kurv fra vores onlinekatalog."
 #. %2$s:  surname 
 #. %3$s:  shelfname 
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s sent you from our online catalog, the virtual shelf called : %s."
-msgstr "%s %s sendte en kurv fra vores onlinekatalog."
+msgstr "%s %s sendte dig fra vores katalog, den virtuelle hylde kaldet: %s."
 
 #. %1$s:  added_count 
 #. %2$s:  IF ( added_count ==1 ) 
@@ -4442,7 +4441,7 @@ msgstr "%s Internet brugerkritik"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  END 
-#. %4$s:  ELSIF ( item.datedue ) 
+#. %4$s:  ELSIF ( item.datedue || issue.date_due ) 
 #. %5$s:  IF ( OPACShowCheckoutName ) 
 #. %6$s:  item.cardnumber 
 #. %7$s:  item.firstname 
@@ -4459,7 +4458,7 @@ msgstr "%s Internet brugerkritik"
 #. %18$s:  IF ( item.notforloanvalueopac ) 
 #. %19$s:  item.notforloanvalueopac 
 #. %20$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:9
+#: opac-tmpl/prog/en/includes/item-status.inc:16
 #, fuzzy, c-format
 msgid ""
 "%s Item lost %s %s %s %s Checked out to %s %s %s %s Checked out %s %s In "
@@ -4769,6 +4768,22 @@ msgstr ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
 "hidden.defined('mobile') && hidden.defined('email') && hidden.defined"
 "('emailpro') && hidden.defined('fax') %%] "
+
+#. %1$s:  USE AuthorisedValues 
+#. %2$s:  IF ( item.itemlost ) 
+#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
+#. %4$s:  IF ( av_lib_include ) 
+#. %5$s:  av_lib_include 
+#. %6$s:  ELSE 
+#. %7$s:  IF ( item.lostimageurl ) 
+#: opac-tmpl/prog/en/includes/item-status.inc:1
+#, c-format
+msgid ""
+"%s [%%#- This include takes two parameters: an item structure and an "
+"optional loan (issue) structure. The issue structure is used by course "
+"reserves pages, which do not use an API to fetch items that populates item."
+"datedue. -%%] %s %s %s %s %s %s "
+msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  ind.label 
@@ -6738,10 +6753,10 @@ msgstr "(%s totalt)"
 
 #. For the first occurrence,
 #. %1$s:  item.restrictedopac 
-#: opac-tmpl/prog/en/includes/item-status.inc:29
-#: opac-tmpl/prog/en/includes/item-status.inc:31
-#: opac-tmpl/prog/en/includes/item-status.inc:34
-#: opac-tmpl/prog/en/includes/item-status.inc:43
+#: opac-tmpl/prog/en/includes/item-status.inc:36
+#: opac-tmpl/prog/en/includes/item-status.inc:38
+#: opac-tmpl/prog/en/includes/item-status.inc:41
+#: opac-tmpl/prog/en/includes/item-status.inc:50
 #: opac-tmpl/prog/en/modules/opac-results.tt:631
 #: opac-tmpl/prog/en/modules/opac-detail.tt:810
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:274
@@ -19114,4 +19129,3 @@ msgstr ""
 #, c-format
 msgid "• "
 msgstr "• "
-

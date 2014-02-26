@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-01-17 22:56-0300\n"
-"PO-Revision-Date: 2014-01-16 11:35+0000\n"
-"Last-Translator: alextrieutuan <alex.trieutuan@gmail.com>\n"
+"POT-Creation-Date: 2014-02-16 19:07-0300\n"
+"PO-Revision-Date: 2014-02-15 12:13+0000\n"
+"Last-Translator: chandoi <chanandnan@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
@@ -16,13 +16,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1389872144.0\n"
+"X-POOTLE-MTIME: 1392466423.0\n"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:528
 #, c-format
 msgid "!%s"
-msgstr "!%s"
+msgstr "%s"
 
 #. %1$s:  BORROWER_INF.debarredcomment 
 #: opac-tmpl/prog/en/modules/opac-user.tt:103
@@ -2175,7 +2175,7 @@ msgstr "%s %s"
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:47
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:64
-#: opac-tmpl/prog/en/includes/item-status.inc:43
+#: opac-tmpl/prog/en/includes/item-status.inc:50
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:5
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:44
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:113
@@ -2779,15 +2779,13 @@ msgstr "%s %s %s %s %s %s"
 msgid "%s %s %s %s %s %s "
 msgstr "%s %s %s %s %s %s"
 
-#. For the first occurrence,
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  IF ( item.itemlost ) 
-#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %4$s:  IF ( av_lib_include ) 
-#. %5$s:  av_lib_include 
-#. %6$s:  ELSE 
-#. %7$s:  IF ( item.lostimageurl ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:1
+#. %1$s:  FOREACH review IN SYNDETICS_REVIEW.reviews 
+#. %2$s:  IF ( review.content ) 
+#. %3$s:  review.content 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  END 
+#. %7$s:  END 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1154
 #, c-format
 msgid "%s %s %s %s %s %s %s "
@@ -2902,7 +2900,7 @@ msgstr ""
 #. %7$s:  END 
 #. %8$s:  ELSE 
 #. %9$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:34
+#: opac-tmpl/prog/en/includes/item-status.inc:41
 #, c-format
 msgid "%s %s %s %s %s %s Item damaged %s %s Available %s"
 msgstr "%s %s %s %s %s %s Tài liệu hỏng %s %s Sẵn sàng %s"
@@ -3126,9 +3124,9 @@ msgstr ""
 #. %7$s:  END 
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s%s%sKoha online%s catalog &rsaquo; Courses %s "
-msgstr "%s %s%s%s%sMục lục trực tuyến%s Koha &rsaquo; Tags %s"
+msgstr "%s %s %s %s%s%sMục lục trực tuyến%s Koha &rsaquo; Tags %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -3217,7 +3215,7 @@ msgstr "%s %s %s Tài liệu chờ tại "
 #. %2$s:  END 
 #. %3$s:  ELSIF ( item.notforloan_per_itemtype ) 
 #. %4$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:31
+#: opac-tmpl/prog/en/includes/item-status.inc:38
 #, c-format
 msgid "%s %s %s Not for loan %s"
 msgstr "%s %s %s Không cho mượn %s"
@@ -3321,9 +3319,9 @@ msgstr "%s%s%s%sMục lục trực tuyến%s Koha &rsaquo; Mục %s %s"
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #. %9$s:  IF ( displayhierarchy ) 
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s%s%s%sKoha online%s catalog &rsaquo; Entry %s %s "
-msgstr "%s%s%s%sMục lục trực tuyến%s Koha &rsaquo; Mục %s %s"
+msgstr "%s %s %s%s%s%sMục lục trực tuyến%s danh mục &rsaquo; Mục %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -3465,8 +3463,8 @@ msgid ""
 "%s %s %s%s%sKoha online%s catalog &rsaquo; Please confirm your registration "
 "%s "
 msgstr ""
-"%s %s%s%sMục lục trực tuyến%s Koha &rsaquo; Vui lòng xác nhận đăng ký của "
-"bạn %s "
+"%s %s %s%s%sMục lục trực tuyến%s danh mục; Vui lòng xác nhận đăng ký của bạn "
+"%s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3556,11 +3554,9 @@ msgstr "%s%s %s%s%s %s "
 #. %6$s:  IF ( facets_loo.type_label_Location ) 
 #. %7$s:  END 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:18
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %sLibraries%s %s %sLocations%s "
-msgstr ""
-"%sTác giả%s %sĐề mục%s %sChủ đề%s %sĐịa điểm%s %s Số Seri%s %s %sThư viện%s "
-"%s "
+msgstr "%s %s %sThư viện%s %s %sĐịa Điểm%s "
 
 #. %1$s:  IF ( value.active ) 
 #. %2$s:  value.lib 
@@ -3636,7 +3632,7 @@ msgstr "%s Không tìm thấy kết quả. %s "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:29
+#: opac-tmpl/prog/en/includes/item-status.inc:36
 #, c-format
 msgid "%s %s Not for loan %s"
 msgstr "%s %s Không cho mượn %s"
@@ -3699,7 +3695,7 @@ msgstr "%s %s Gửi bạn một danh mục từ mục lục trực tuyến của
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:13
 #, fuzzy, c-format
 msgid "%s %s sent you from our online catalog, the virtual shelf called : %s."
-msgstr "%s %s Gửi bạn một danh mục từ mục lục trực tuyến của chúng tôi."
+msgstr "%s %s Gửi bạn một danh mục từ mục lục trực tuyến của chúng tôi:%s."
 
 #. %1$s:  added_count 
 #. %2$s:  IF ( added_count ==1 ) 
@@ -4115,6 +4111,8 @@ msgid ""
 "%s(Broader heading) %s(Narrower heading) %s(Immediate parent body) %s%s"
 "(%s)%s %s"
 msgstr ""
+"%s %s(trước đó nhóm) %s(sau đó nhóm) %s(từ viết tắt) %s(Thành phần âm nhạc) "
+"%s(đề rộng hơn) %s(đề hẹp) %s(cơ thể mẹ ngay lập tức) %s%s(%s)%s %s"
 
 #. %1$s:  SEARCH_RESULT.title |html 
 #. %2$s:  FOREACH subtitl IN SEARCH_RESULT.subtitle 
@@ -4179,6 +4177,8 @@ msgid ""
 "%s %sPayment,thanks %sNew Card %sFine %sAccount management fee %sSundry "
 "%sLost Item %sWriteoff %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
+"%s %sThanh toán,nhờ %sThẻ mới %stốt%sPhí quản lý tài khoản %slặt vặt %smất "
+"mục %sgiảm bớt %s%s %s %s, %s%s %s(%s)%s "
 
 #. %1$s:  IF (render=='standalone') 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -4442,7 +4442,7 @@ msgstr "%s Thư viện chủ:"
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:184
 #, c-format
 msgid "%s Initials:"
-msgstr ""
+msgstr "% s Tắt:"
 
 #. %1$s:  SEARCH_RESULT.num_critics 
 #: opac-tmpl/prog/en/modules/opac-results.tt:613
@@ -4453,7 +4453,7 @@ msgstr "%s Ý kiến người sử dụng"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  END 
-#. %4$s:  ELSIF ( item.datedue ) 
+#. %4$s:  ELSIF ( item.datedue || issue.date_due ) 
 #. %5$s:  IF ( OPACShowCheckoutName ) 
 #. %6$s:  item.cardnumber 
 #. %7$s:  item.firstname 
@@ -4470,7 +4470,7 @@ msgstr "%s Ý kiến người sử dụng"
 #. %18$s:  IF ( item.notforloanvalueopac ) 
 #. %19$s:  item.notforloanvalueopac 
 #. %20$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:9
+#: opac-tmpl/prog/en/includes/item-status.inc:16
 #, fuzzy, c-format
 msgid ""
 "%s Item lost %s %s %s %s Checked out to %s %s %s %s Checked out %s %s In "
@@ -4501,7 +4501,7 @@ msgstr "%s xem MARC %s"
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:399
 #, c-format
 msgid "%s Mobile phone:"
-msgstr ""
+msgstr "%s Số điện thoại :"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4676,6 +4676,8 @@ msgid ""
 "%s Total holds: %s %s %s %s (priority %s) %s Overall queue priority: %s %s "
 "%s "
 msgstr ""
+"%s tổng số nắm giữ: %s %s %s %s (ưu tiên %s) %s Ưu tiên hàng đợi tổng thể: "
+"%s %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4740,6 +4742,10 @@ msgid ""
 "('B_zipcode') && hidden.defined('B_county') && hidden.defined('B_phone') && "
 "hidden.defined('B_email') && hidden.defined('contactnote') %%] "
 msgstr ""
+"%s [%% Trừ khi ẩn. xác định('B_địa chỉ') &&  ẩn. xác định('Bđịa chỉ') &&ẩn. "
+"xác định('B_thành phố') && ẩn. xác định('B_nhà nước') && ẩn. xác định('B_mã "
+"bưu điện') && ẩn. xác định('B_hạt') && ẩn. xác định('B_điện thoại') && ẩn. "
+"xác định('B_email') &&ẩn. xác định('lưu ý liên hệ') %%] "
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:589
@@ -4774,6 +4780,22 @@ msgstr ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
 "hidden.defined('mobile') && hidden.defined('email') && hidden.defined"
 "('emailpro') && hidden.defined('fax') %%]"
+
+#. %1$s:  USE AuthorisedValues 
+#. %2$s:  IF ( item.itemlost ) 
+#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
+#. %4$s:  IF ( av_lib_include ) 
+#. %5$s:  av_lib_include 
+#. %6$s:  ELSE 
+#. %7$s:  IF ( item.lostimageurl ) 
+#: opac-tmpl/prog/en/includes/item-status.inc:1
+#, c-format
+msgid ""
+"%s [%%#- This include takes two parameters: an item structure and an "
+"optional loan (issue) structure. The issue structure is used by course "
+"reserves pages, which do not use an API to fetch items that populates item."
+"datedue. -%%] %s %s %s %s %s %s "
+msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  ind.label 
@@ -6001,7 +6023,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:260
 #, c-format
 msgid "%sentry%sentries%s. "
-msgstr ""
+msgstr "%sMục%Mục%s. "
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:299
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:550
@@ -6042,7 +6064,7 @@ msgstr "&#8674; Thông tin cá nhân"
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:13
 #, c-format
 msgid "&#8674; Privacy policy "
-msgstr ""
+msgstr "&#8674; chính sách bảo mật "
 
 #: opac-tmpl/prog/en/modules/opac-memberentry-update-submitted.tt:15
 #, fuzzy, c-format
@@ -6052,7 +6074,7 @@ msgstr "&#8674; Thay đổi mật khẩu"
 #: opac-tmpl/prog/en/modules/opac-messaging.tt:29
 #, c-format
 msgid "&#8674; Your messaging settings"
-msgstr ""
+msgstr "&#8674; Thiết lập tin nhắn của bạn "
 
 #: opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tt:30
 #: opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tt:86
@@ -6527,10 +6549,10 @@ msgstr "(%s tổng)"
 
 #. For the first occurrence,
 #. %1$s:  item.restrictedopac 
-#: opac-tmpl/prog/en/includes/item-status.inc:29
-#: opac-tmpl/prog/en/includes/item-status.inc:31
-#: opac-tmpl/prog/en/includes/item-status.inc:34
-#: opac-tmpl/prog/en/includes/item-status.inc:43
+#: opac-tmpl/prog/en/includes/item-status.inc:36
+#: opac-tmpl/prog/en/includes/item-status.inc:38
+#: opac-tmpl/prog/en/includes/item-status.inc:41
+#: opac-tmpl/prog/en/includes/item-status.inc:50
 #: opac-tmpl/prog/en/modules/opac-results.tt:631
 #: opac-tmpl/prog/en/modules/opac-detail.tt:810
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:274
@@ -6823,6 +6845,8 @@ msgid ""
 ", you cannot renew your books online. Please pay your fines if you wish to "
 "renew your books."
 msgstr ""
+", bạn không thể gia hạn sách trực tuyến. Xin nộp tiền phạt của bạn nếu bạn "
+"muốn đổi mới sách của bạn."
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:21
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:26
@@ -7268,7 +7292,7 @@ msgstr "; Thể loại văn học: "
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:731
 #, c-format
 msgid "; Målgruppe: "
-msgstr ""
+msgstr "; mục tiêu: "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:590
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:685
@@ -7309,7 +7333,7 @@ msgstr "; Loại periodikum: "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:603
 #, c-format
 msgid ";biblionumber="
-msgstr ""
+msgstr ";số Biblio="
 
 #. %1$s:  HTML5MediaParent 
 #. %2$s:  FOREACH HTML5MediaSet IN HTML5MediaSets 
@@ -7324,6 +7348,8 @@ msgid ""
 "<%s controls preload=none> %s <%s src=\"%s\"%s /> %s [%s tag not supported "
 "by your browser.] "
 msgstr ""
+"<%s controls preload=none> %s <%s src=\"%s\"%s /> %s [%s Không hổ trợ trình "
+"duyệt của bạn.]"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:56
 #: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:107
@@ -7335,7 +7361,7 @@ msgstr "= "
 #: opac-tmpl/prog/en/modules/opac-registration-email-sent.tt:16
 #, c-format
 msgid "A confirmation email has been sent to the email address "
-msgstr ""
+msgstr "Một email xác nhận đã được gửi đến địa chỉ email của bạn"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:253
 #, c-format
@@ -7520,7 +7546,7 @@ msgstr "Thêm %s %s bởi "
 #: opac-tmpl/prog/en/modules/opac-detail.tt:575
 #, c-format
 msgid "Additional authors:"
-msgstr ""
+msgstr "Tác giả bổ sung:"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
 #, c-format
@@ -7710,7 +7736,7 @@ msgstr "Annet lagringsmedium"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:261
 #, c-format
 msgid "Annet lydmateriale"
-msgstr ""
+msgstr "vật liệu âm thanh khác"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:152
 #, c-format
@@ -7781,12 +7807,12 @@ msgstr "Bất kì ai"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Apr"
-msgstr ""
+msgstr "Tháng Tư"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "April"
-msgstr ""
+msgstr "Tháng Tư"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-user.tt:8
@@ -7853,7 +7879,7 @@ msgstr "Artikler (i bøker eller periodika)"
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:345
 #, c-format
 msgid "Ascending"
-msgstr ""
+msgstr "Tăng dần"
 
 #. For the first occurrence,
 #. %1$s:  subscription.branchname 
@@ -7887,12 +7913,12 @@ msgstr "Hồ sơ cá nhân độc giả:"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Aug"
-msgstr ""
+msgstr "Tháng Tám"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "August"
-msgstr ""
+msgstr "Tháng tám"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:386
 #: opac-tmpl/prog/en/modules/ilsdi.tt:709
@@ -7906,6 +7932,8 @@ msgid ""
 "Authenticates a user's login credentials and returns the identifier for the "
 "patron."
 msgstr ""
+"Xác nhận thông tin đăng nhập của người dùng và trả về định danh cho người "
+"bảo trợ."
 
 #: opac-tmpl/prog/en/includes/masthead.inc:50
 #: opac-tmpl/prog/en/includes/masthead.inc:52
@@ -8155,7 +8183,7 @@ msgstr "Thư mục: "
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:153
 #, c-format
 msgid "Biennial"
-msgstr ""
+msgstr "hai năm"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:227
 #, c-format
@@ -8262,7 +8290,7 @@ msgstr "Sách"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1012
 #, c-format
 msgid "Book reviews by critics ( XXX )"
-msgstr ""
+msgstr "Đánh giá cuốn sách của các nhà phê bình ( XXX )"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:247
 #, c-format
@@ -8469,7 +8497,7 @@ msgstr "Băng ghi âm"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:776
 #, c-format
 msgid "Cast: "
-msgstr ""
+msgstr "diễn viên: "
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
 #, c-format
@@ -8496,7 +8524,7 @@ msgstr "Quay trỏ lại:"
 #. INPUT type=submit name=confirm
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:283
 msgid "Check in item"
-msgstr ""
+msgstr "Kiểm tra trong mục"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
@@ -8914,6 +8942,8 @@ msgstr "Tác giả công ty (Thứ hai)"
 msgid ""
 "Could not login, perhaps your Persona email does not match your Koha one"
 msgstr ""
+"Không thể đăng nhập, có lẽ email cá nhân của bạn không phù hợp với một Koha "
+"của bạn"
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:422
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:160
@@ -8929,7 +8959,7 @@ msgstr "Quốc gia: "
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:34
 #, c-format
 msgid "Course #"
-msgstr ""
+msgstr "Tất nhiên #"
 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:22
 #, fuzzy, c-format
@@ -8941,12 +8971,12 @@ msgstr "Thẻ số:"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1522
 #, c-format
 msgid "Course reserves"
-msgstr ""
+msgstr "chắc chắn dự trử"
 
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:19
 #, c-format
 msgid "Courses"
-msgstr ""
+msgstr "Tất nhiên"
 
 #. IMG
 #: opac-tmpl/prog/en/modules/opac-user.tt:167
@@ -8985,7 +9015,7 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:101
 #, c-format
 msgid "CreativeWork"
-msgstr ""
+msgstr "ý tưởng"
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:124
 #: opac-tmpl/prog/en/modules/opac-user.tt:249
@@ -9028,7 +9058,7 @@ msgstr "Bị hỏng ("
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:133
 #, c-format
 msgid "Database"
-msgstr ""
+msgstr "cơ sỏ dử liệu"
 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:190
 #: opac-tmpl/prog/en/modules/opac-account.tt:24
@@ -9081,7 +9111,7 @@ msgstr "Due"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "December"
-msgstr ""
+msgstr "Tháng Mười Hai"
 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:46
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:48
@@ -9148,7 +9178,7 @@ msgstr "Xoá lịch sử tìm kiếm của bạn"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1464
 #, c-format
 msgid "Delicious"
-msgstr ""
+msgstr "thơm ngon"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:508
 #, c-format
@@ -9168,18 +9198,18 @@ msgstr "Delvsi avløst av: "
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:21
 #, c-format
 msgid "Department:"
-msgstr ""
+msgstr "Cơ quan:"
 
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:33
 #, c-format
 msgid "Dept."
-msgstr ""
+msgstr "nợ."
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:349
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:351
 #, c-format
 msgid "Descending"
-msgstr ""
+msgstr "Giảm dần"
 
 #: opac-tmpl/prog/en/modules/opac-account.tt:25
 #, c-format
@@ -9323,7 +9353,7 @@ msgstr "Đã có mật khẩu chưa? "
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Done"
-msgstr ""
+msgstr "Đã xong"
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:151
 #, c-format
@@ -9597,12 +9627,12 @@ msgstr "Error 500"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
 msgid "Error searching OverDrive collection"
-msgstr ""
+msgstr "Lỗi tìm kiếm bộ sưu tập OverDrive"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 msgid "Error searching OverDrive collection."
-msgstr ""
+msgstr "Lỗi tìm kiếm bộ sưu tập OverDrive"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -9729,7 +9759,7 @@ msgstr "FV"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1462
 #, c-format
 msgid "Facebook"
-msgstr ""
+msgstr "Facebook"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:156
 #, c-format
@@ -9739,12 +9769,12 @@ msgstr "Fantasikart"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Feb"
-msgstr ""
+msgstr "Tháng Hai"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "February"
-msgstr ""
+msgstr "Tháng Hai"
 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:209
 #, fuzzy, c-format
@@ -9893,6 +9923,8 @@ msgid ""
 "For your convenience, the login box on this page has been pre-filled with "
 "this data. Please log in%s and change your password%s."
 msgstr ""
+"Để tiện cho bạn, ô đăng nhập trên trang này đã được điền sẵn với dữ liệu "
+"này. Vui lòng đăng nhập% s và thay đổi mật khẩu của bạn% s."
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:581
 #, c-format
@@ -9977,12 +10009,12 @@ msgstr "Fotomosaikk"
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 msgid "Found"
-msgstr ""
+msgstr "Tìm Thấy"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Fr"
-msgstr ""
+msgstr "T6"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:585
 #, c-format
@@ -9998,7 +10030,7 @@ msgstr "Fil"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Friday"
-msgstr ""
+msgstr "Thứ sáu"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:16
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:102
@@ -10164,7 +10196,7 @@ msgstr "Grammofonplate"
 #. OPTGROUP
 #: opac-tmpl/prog/en/includes/masthead.inc:97
 msgid "Groups"
-msgstr ""
+msgstr "Nhóm"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
 #, c-format
@@ -10579,12 +10611,12 @@ msgstr "Thông tin"
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:37
 #, c-format
 msgid "Instructors"
-msgstr ""
+msgstr "giáo viên hướng dẫn"
 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:25
 #, c-format
 msgid "Instructors:"
-msgstr ""
+msgstr "giáo viên hướng dẫn:"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:532
 #, c-format
@@ -10629,7 +10661,7 @@ msgstr "Mục không thể kiểm tra"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1520
 #, c-format
 msgid "Item hold queue priority"
-msgstr ""
+msgstr "Ưu tiên hàng đợi hàng giữ"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1518
 #, fuzzy, c-format
@@ -10682,32 +10714,32 @@ msgstr "và"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "January"
-msgstr ""
+msgstr "Tháng Giêng"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:195
 #, c-format
 msgid "Jordglobus"
-msgstr ""
+msgstr "Jordglobus"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Jul"
-msgstr ""
+msgstr "Tháng Bảy"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "July"
-msgstr ""
+msgstr "Tháng bảy"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Jun"
-msgstr ""
+msgstr "Tháng Sáu"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "June"
-msgstr ""
+msgstr "Tháng sáu"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:230
 #, c-format
@@ -10723,7 +10755,7 @@ msgstr "Vị thành niên; "
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:42
 #, c-format
 msgid "Kar"
-msgstr ""
+msgstr "Tuyết"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:167
@@ -10737,17 +10769,17 @@ msgstr "Thẻ"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:113
 #, c-format
 msgid "Kartografisk materiale"
-msgstr ""
+msgstr "bản đồ vật liệu"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:163
 #, c-format
 msgid "Kartprofil"
-msgstr ""
+msgstr "thẻ hồ sơ"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:171
 #, c-format
 msgid "Kartseksjon"
-msgstr ""
+msgstr "Phần bản đồ"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:120
 #, c-format
@@ -10768,7 +10800,7 @@ msgstr "Từ khóa"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:84
 #, c-format
 msgid "Kit"
-msgstr ""
+msgstr "Đồ Đạc"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:449
 #, c-format
@@ -10779,12 +10811,12 @@ msgstr "Nhấn vào đây để đăng nhập "
 #: opac-tmpl/prog/en/includes/opac-bottom.inc:53
 #, c-format
 msgid "Koha"
-msgstr ""
+msgstr "Koha"
 
 #. LINK
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:10
 msgid "Koha - RSS"
-msgstr ""
+msgstr "Koha - RSS"
 
 #: opac-tmpl/prog/en/modules/opac-browser.tt:45
 #, c-format
@@ -10807,35 +10839,35 @@ msgstr "Kết hợp tài liệu"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:454
 #, c-format
 msgid "Kombidokumenter"
-msgstr ""
+msgstr "Kết hợp tài liệu"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:580
 #, c-format
 msgid "Komedier"
-msgstr ""
+msgstr "Phim Hài"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:121
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:252
 #, c-format
 msgid "Kompaktplate"
-msgstr ""
+msgstr "trượt tấm"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:514
 #, c-format
 msgid "Konferansepublikasjon "
-msgstr ""
+msgstr "hội nghị xuất bản"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:495
 #, c-format
 msgid "Konversasjonsleksika"
-msgstr ""
+msgstr "tiểu học Bách khoa toàn thư"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:136
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:236
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:267
 #, c-format
 msgid "Kunstreproduksjon"
-msgstr ""
+msgstr "nghệ thuật sinh sản"
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:306
 #, c-format
@@ -10916,27 +10948,27 @@ msgstr "Tài liệu luật"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:723
 #, c-format
 msgid "Lettlest;"
-msgstr ""
+msgstr "nhỏ nhất;"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:688
 #, c-format
 msgid "Level 1: Basic discovery interfaces"
-msgstr ""
+msgstr "Cấp 1: Giao diện khám phá cơ bản"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:695
 #, c-format
 msgid "Level 2: Elementary OPAC supplement"
-msgstr ""
+msgstr "Level 2: Tiểu OPAC bổ sung"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:706
 #, c-format
 msgid "Level 3: Elementary OPAC alternative"
-msgstr ""
+msgstr "Cấp 3: Tiểu OPAC thay thế"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:720
 #, c-format
 msgid "Level 4: Robust/domain specific discovery platforms"
-msgstr ""
+msgstr "Cấp độ 4: mạnh mẽ / nền tảng phát hiện cụ thể"
 
 #. OPTGROUP
 #: opac-tmpl/prog/en/includes/masthead.inc:90
@@ -10982,7 +11014,7 @@ msgstr "Giới hạn: "
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1563
 #, c-format
 msgid "Link to resource "
-msgstr ""
+msgstr "Liên kết đến tài nguyên "
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1463
 #, fuzzy, c-format
@@ -10999,7 +11031,7 @@ msgstr "Liên kết"
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:274
 #, c-format
 msgid "List %s Deleted."
-msgstr ""
+msgstr "Danh sách %s xóa."
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:615
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:682
@@ -11021,7 +11053,7 @@ msgstr "Tên Giá ảo: "
 #: opac-tmpl/prog/en/modules/opac-detail.tt:797
 #, c-format
 msgid "List(s) this item appears in: "
-msgstr ""
+msgstr "Liệt kê các mục này xuất hiện trong: "
 
 #: opac-tmpl/prog/en/includes/masthead.inc:124
 #: opac-tmpl/prog/en/includes/masthead.inc:128
@@ -11040,19 +11072,19 @@ msgstr "Thể loại văn học"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:4
 msgid "Loading"
-msgstr ""
+msgstr "đang tải"
 
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/datatables.inc:2
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 msgid "Loading..."
-msgstr ""
+msgstr "đang tải..."
 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:71
 #, c-format
 msgid "Local login"
-msgstr ""
+msgstr "đăng nhập nội bộ"
 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:43
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1507
@@ -11126,7 +11158,7 @@ msgstr "Đăng nhập:"
 #: opac-tmpl/prog/en/modules/opac-auth.tt:97
 #, c-format
 msgid "Logging on to the catalog has not been enabled by the library."
-msgstr ""
+msgstr "Đăng nhập vào các cửa hàng đã không được kích hoạt bởi thư viện."
 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:82
 #, c-format
@@ -11145,70 +11177,72 @@ msgid ""
 "Looks up a patron in the ILS by an identifier, and returns the ILS "
 "identifier for that patron, aka the patron identifier."
 msgstr ""
+"Nhìn lên một người bảo trợ trong ILS bởi một định danh, và trả về định danh "
+"ILS cho rằng người bảo trợ, hay còn gọi là định danh bảo trợ."
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:358
 #: opac-tmpl/prog/en/modules/ilsdi.tt:708
 #, c-format
 msgid "LookupPatron"
-msgstr ""
+msgstr "tra cứu bảo trợ"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:214
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1117
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:847
 #, c-format
 msgid "Lost ("
-msgstr ""
+msgstr "thất bại ("
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:500
 #, c-format
 msgid "Lover og forskrifter"
-msgstr ""
+msgstr "Tình yêu là quy định"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:531
 #, c-format
 msgid "Lyd"
-msgstr ""
+msgstr "âm thanh"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:125
 #, c-format
 msgid "Lydbok"
-msgstr ""
+msgstr "sách âm thanh"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:259
 #, c-format
 msgid "Lydbånd"
-msgstr ""
+msgstr "băng"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:586
 #, c-format
 msgid "Lyder (f.eks. fuglelyder)"
-msgstr ""
+msgstr "âm thanh(VD: tiếng chim)"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:258
 #, c-format
 msgid "Lydkassett"
-msgstr ""
+msgstr "băng âm thanh"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:118
 #, c-format
 msgid "Lydopptak"
-msgstr ""
+msgstr "Ghi âm"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:557
 #, c-format
 msgid "Lærebok, brevkurs"
-msgstr ""
+msgstr "Sách giáo khoa, các khóa học tương ứng"
 
 #: opac-tmpl/prog/en/modules/opac-downloadcart.tt:15
 #: opac-tmpl/prog/en/modules/opac-downloadshelf.tt:23
 #, c-format
 msgid "MARC"
-msgstr ""
+msgstr "MARC"
 
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:61
 #, c-format
 msgid "MARC (Unicode/UTF-8)"
-msgstr ""
+msgstr "MARC (Unicode/UTF-8)"
 
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:62
 #, c-format
@@ -11249,77 +11283,77 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:139
 #, c-format
 msgid "MESSAGE 10:"
-msgstr ""
+msgstr "Thông điệp 10:"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:141
 #, c-format
 msgid "MESSAGE 11:"
-msgstr ""
+msgstr "Thông điệp 11:"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:143
 #, c-format
 msgid "MESSAGE 12:"
-msgstr ""
+msgstr "Tin nhắn 12:"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:145
 #, c-format
 msgid "MESSAGE 13:"
-msgstr ""
+msgstr "Tin nhắn 13:"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:147
 #, c-format
 msgid "MESSAGE 14:"
-msgstr ""
+msgstr "Tin nhắn 14:"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:149
 #, c-format
 msgid "MESSAGE 15:"
-msgstr ""
+msgstr "Tin nhắn 15:"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:121
 #, c-format
 msgid "MESSAGE 1:"
-msgstr ""
+msgstr "THÔNG ĐIỆP 1:"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:123
 #, c-format
 msgid "MESSAGE 2:"
-msgstr ""
+msgstr "THÔNG ĐIỆP 2:"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:125
 #, c-format
 msgid "MESSAGE 3:"
-msgstr ""
+msgstr "THÔNG ĐIỆP 3:"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:127
 #, c-format
 msgid "MESSAGE 4:"
-msgstr ""
+msgstr "THÔNG ĐIỆP 4:"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:129
 #, c-format
 msgid "MESSAGE 5:"
-msgstr ""
+msgstr "THÔNG ĐIỆP 5:"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:131
 #, c-format
 msgid "MESSAGE 6:"
-msgstr ""
+msgstr "THÔNG ĐIỆP 6:"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:133
 #, c-format
 msgid "MESSAGE 7:"
-msgstr ""
+msgstr "THÔNG ĐIỆP 7:"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:135
 #, c-format
 msgid "MESSAGE 8:"
-msgstr ""
+msgstr "THÔNG ĐIỆP 8:"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:137
 #, c-format
 msgid "MESSAGE 9:"
-msgstr ""
+msgstr "THÔNG ĐIỆP 9:"
 
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:63
 #, c-format
@@ -11347,22 +11381,22 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:184
 #, c-format
 msgid "Magnetbåndkassett"
-msgstr ""
+msgstr "băng kassett"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:185
 #, c-format
 msgid "Magnetbåndspole"
-msgstr ""
+msgstr "Băng từ Cực"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:179
 #, c-format
 msgid "Magnetisk-optisk plate"
-msgstr ""
+msgstr "Tấm từ-quang"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:89
 #, c-format
 msgid "Main Author"
-msgstr ""
+msgstr "tác giả chính"
 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:253
 #, fuzzy, c-format
@@ -11373,7 +11407,7 @@ msgstr "Địa chỉ email:"
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:306
 #, c-format
 msgid "Make a "
-msgstr ""
+msgstr "làm cho một"
 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:216
 #, fuzzy, c-format
@@ -11383,7 +11417,7 @@ msgstr "Nam"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:224
 #, c-format
 msgid "Maleri"
-msgstr ""
+msgstr "sơn"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:180
 #, c-format
@@ -11393,19 +11427,19 @@ msgstr "Quản lý bởi"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:116
 #, c-format
 msgid "Manuskripter"
-msgstr ""
+msgstr "bản thảo"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:550
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:87
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:99
 #, c-format
 msgid "Map"
-msgstr ""
+msgstr "Bản đồ"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Mar"
-msgstr ""
+msgstr "Tháng 3"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
@@ -11416,40 +11450,41 @@ msgstr "Tìm kiếm"
 #: opac-tmpl/prog/en/modules/opac-results.tt:637
 #, c-format
 msgid "Match:"
-msgstr ""
+msgstr "trận đấu:"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:162
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:445
 #, c-format
 msgid "Materialtype: "
-msgstr ""
+msgstr "Loại vật liệu:"
 
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "May"
-msgstr ""
+msgstr "Tháng Năm"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:156
 #, c-format
 msgid "Me"
-msgstr ""
+msgstr "Tôi"
 
+# Tiếng Thụy Điển
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:582
 #, c-format
 msgid "Memoarer"
-msgstr ""
+msgstr "hồi ký"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:948
 #, c-format
 msgid "Merged with ... to form ..."
-msgstr ""
+msgstr "Sáp nhập với ... để tạo thành ..."
 
 #: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:14
 #: opac-tmpl/prog/en/modules/opac-sendbasketform.tt:8
 #, c-format
 msgid "Message sent"
-msgstr ""
+msgstr "Gửi tin nhắn"
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:65
 #, c-format
@@ -11459,45 +11494,45 @@ msgstr "Tin nhắn cho bạn"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:216
 #, c-format
 msgid "Mikro-opak"
-msgstr ""
+msgstr "vi mờ"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:213
 #, c-format
 msgid "Mikrofilmkassett"
-msgstr ""
+msgstr "băng phim"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:144
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:215
 #, c-format
 msgid "Mikrofilmkort"
-msgstr ""
+msgstr "phim ngắn"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:143
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:214
 #, c-format
 msgid "Mikrofilmspole"
-msgstr ""
+msgstr "cuộn phim"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:142
 #, c-format
 msgid "Mikroformer"
-msgstr ""
+msgstr "Hình thức"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:271
 #, c-format
 msgid "Mikroskopdia"
-msgstr ""
+msgstr "kính hiển vi"
 
 #. %1$s:  subscription.missinglist 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1199
 #, c-format
 msgid "Missing issues: %s "
-msgstr ""
+msgstr "Vấn đề thiếu:% s"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:548
 #, c-format
 msgid "Mixed Materials"
-msgstr ""
+msgstr "Vật liệu hỗn hợp"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:85
 #, fuzzy, c-format
@@ -11507,12 +11542,13 @@ msgstr "tài liệu hình ảnh"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Mo"
-msgstr ""
+msgstr "Thứ 2"
 
+# Tiếng Đức
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:272
 #, c-format
 msgid "Modell"
-msgstr ""
+msgstr "mô hình"
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:365
 #, c-format
@@ -11528,43 +11564,43 @@ msgstr "Chỉnh sửa"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:49
 #, c-format
 msgid "Mon"
-msgstr ""
+msgstr "Thứ Hai"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Monday"
-msgstr ""
+msgstr "Thứ hai"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:479
 #, c-format
 msgid "Monografiserie"
-msgstr ""
+msgstr "Dòng chuyên khảo"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:130
 #, c-format
 msgid "Monographic series"
-msgstr ""
+msgstr "loạt chuyên khảo"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:147
 #, c-format
 msgid "Monthly"
-msgstr ""
+msgstr "Hàng tháng"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1386
 #, c-format
 msgid "More book reviews at iDreamBooks.com"
-msgstr ""
+msgstr "Thêm những đánh giá cuốn sách ở iDreamBooks.com"
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:149
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1238
 #, c-format
 msgid "More details"
-msgstr ""
+msgstr "Chi tiết"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
 msgid "More lists"
-msgstr ""
+msgstr "nhiều danh sách"
 
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:36
 #, c-format
@@ -11580,41 +11616,41 @@ msgstr "Tài liệu mượn nhiều nhất"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:41
 #, c-format
 msgid "Mus"
-msgstr ""
+msgstr "chúng tôi"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:554
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:89
 #, c-format
 msgid "Music"
-msgstr ""
+msgstr "Âm Nhạc"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:100
 #, c-format
 msgid "MusicAlbum"
-msgstr ""
+msgstr "Album Nhạc"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
 #, c-format
 msgid "Musical recording"
-msgstr ""
+msgstr "ghi âm âm nhạc"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:169
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:123
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:452
 #, c-format
 msgid "Musikk"
-msgstr ""
+msgstr "Nhạc"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:117
 #, c-format
 msgid "Musikktrykk"
-msgstr ""
+msgstr "Nhạc bấm"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:169
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:452
 msgid "Musikktrykk og lydopptak"
-msgstr ""
+msgstr "Nhạc bấm và bản ghi âm"
 
 #: opac-tmpl/prog/en/modules/opac-tags.tt:99
 #, c-format
@@ -11624,7 +11660,7 @@ msgstr "Từ khóa"
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:223
 #, c-format
 msgid "N/A:"
-msgstr ""
+msgstr "Không có"
 
 #. %1$s:  heading | html 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:7
@@ -11635,28 +11671,30 @@ msgstr "ISBN: %s"
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:32
 #, c-format
 msgid "Name"
-msgstr ""
+msgstr "Tên"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:159
 #, c-format
 msgid "Navigasjonskart"
-msgstr ""
+msgstr "bản đồ trang web"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:440
 #, c-format
 msgid "Nettbasert ressurs: "
-msgstr ""
+msgstr "Nguồn tài nguyên trực tuyến: "
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:140
 #, c-format
 msgid "Nettressurser"
-msgstr ""
+msgstr "nguồn tài nguyên web"
 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:51
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:53
 #, c-format
 msgid "Never"
-msgstr ""
+msgstr "Không bao giờ"
 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:31
 #, c-format
@@ -11664,6 +11702,8 @@ msgid ""
 "Never: Delete my reading history immediately. This will delete all record of "
 "the item that was checked-out upon check-in."
 msgstr ""
+"Không bao giờ: Xóa lịch sử đọc sách của tôi ngay lập tức. Điều này sẽ xóa "
+"tất cả các kỷ lục của mặt hàng đã được kiểm tra ra khi nhận phòng."
 
 #. %1$s:  review.title |html 
 #. %2$s:  FOREACH subtitl IN review.subtitle 
@@ -11698,7 +11738,7 @@ msgstr "Đề nghị mua mới"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:821
 #, c-format
 msgid "New tag(s), separated by a comma:"
-msgstr ""
+msgstr "Thẻ mới (s), cách nhau bằng dấu phẩy:"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:461
 #, c-format
@@ -11715,7 +11755,7 @@ msgstr "Thêm từ khóa:"
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:131
 #, c-format
 msgid "Newspaper"
-msgstr ""
+msgstr "báo"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -11810,12 +11850,12 @@ msgstr "Đang cập nhật ảnh bìa"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/datatables.inc:2
 msgid "No data available in table"
-msgstr ""
+msgstr "Không có dữ liệu có sẵn trong bảng"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/datatables.inc:2
 msgid "No entries to show"
-msgstr ""
+msgstr "Không có mục để hiển thị"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -11844,12 +11884,12 @@ msgstr "Không giới hạn"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/datatables.inc:2
 msgid "No matching records found"
-msgstr ""
+msgstr "Không tìm thấy bản ghi nào trùng khớp."
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1067
 #, c-format
 msgid "No physical items for this record"
-msgstr ""
+msgstr "Không có mục vật lý cho hồ sơ này"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:180
 #, c-format
@@ -11874,12 +11914,12 @@ msgstr "Không cho phép gia hạn"
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:72
 #, c-format
 msgid "No reserves have been selected for this course."
-msgstr ""
+msgstr "Không dự trữ đã được chọn cho khóa học này."
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 msgid "No results found in the library's OverDrive collection."
-msgstr ""
+msgstr "Không tìm thấy trong bộ sưu tập của thư viện OverDrive kết quả."
 
 #: opac-tmpl/prog/en/includes/masthead.inc:197
 #, c-format
@@ -11889,7 +11929,7 @@ msgstr "Không tìm thấy!"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "No tag was specified."
-msgstr ""
+msgstr "Chưa ghi rõ địa chỉ URL."
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:812
 #, c-format
@@ -11926,13 +11966,13 @@ msgstr "Hiển thị đơn giản"
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:306
 #, c-format
 msgid "Not finding what you're looking for?"
-msgstr ""
+msgstr "Không tìm thấy những gì bạn đang tìm kiếm?"
 
 #. %1$s:  itemLoo.notforloanvalue 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:526
 #, c-format
 msgid "Not for loan (%s)"
-msgstr ""
+msgstr "Không cho vay (% s)"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:535
 #, c-format
@@ -11942,7 +11982,7 @@ msgstr "Không giữ"
 #: opac-tmpl/prog/en/modules/opac-results.tt:362
 #, c-format
 msgid "Not what you expected? Check for "
-msgstr ""
+msgstr "Không phải những gì bạn mong đợi? kiểm tra"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1208
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:178
@@ -11956,16 +11996,18 @@ msgid ""
 "Note: This feature only available to French catalogs where ISBD subjects "
 "have been populated, and an index built by separate script."
 msgstr ""
+"Lưu ý: Tính năng này chỉ dành cho danh mục sản phẩm của Pháp, khi đối tượng "
+"ISBD đã được dân cư, và một chỉ số được xây dựng bởi kịch bản riêng biệt."
 
 #: opac-tmpl/prog/en/modules/opac-review.tt:74
 #, c-format
 msgid "Note: Your comment must be approved by a librarian. "
-msgstr ""
+msgstr "Lưu ý: Cảm nhận của bạn phải được sự chấp thuận của một thủ thư."
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "Note: you can only delete your own tags."
-msgstr ""
+msgstr "Lưu ý: bạn chỉ có thể xóa các thẻ của riêng bạn."
 
 #. %1$s:  ELSIF ( ERROR.scrubbed ) 
 #: opac-tmpl/prog/en/modules/opac-tags.tt:56
@@ -11974,6 +12016,8 @@ msgid ""
 "Note: you can only delete your own tags. %sNote: your tag contained markup "
 "code that was removed. "
 msgstr ""
+"Lưu ý: bạn chỉ có thể xóa các thẻ của riêng bạn. %sLưu ý: từ khóa của bạn "
+"chứa mã đánh dấu đã bị xóa. "
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -11981,12 +12025,15 @@ msgid ""
 "Note: you can only tag an item with a given term once. Check 'My Tags' to "
 "see your current tags."
 msgstr ""
+"Lưu ý: bạn chỉ có thể đánh dấu một mục với một thuật ngữ được một lần. Kiểm "
+"tra 'khóa của tôi' để xem các thẻ hiện tại của bạn."
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid ""
 "Note: your tag contained markup code that was removed. The tag was added as "
 msgstr ""
+"Lưu ý: từ khóa của bạn chứa mã đánh dấu đã bị xóa. Thẻ được thêm vào như "
 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:192
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:49
@@ -11999,7 +12046,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:95
 #, c-format
 msgid "Notes"
-msgstr ""
+msgstr "Ghi chú"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.notes 
@@ -12012,19 +12059,19 @@ msgstr "Ghi chú : %s "
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:107
 #, c-format
 msgid "Notes/Comments"
-msgstr ""
+msgstr "Ghi chú / Bình luận"
 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:33
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:126
 #, c-format
 msgid "Notes:"
-msgstr ""
+msgstr "Ghi chú:"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-user.tt:8
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
-msgstr ""
+msgstr "Không được chọn. Kiểm tra hộp cho mỗi mục bạn muốn làm mới"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
@@ -12037,32 +12084,32 @@ msgstr "Không"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1447
 #, c-format
 msgid "Novelist Select"
-msgstr ""
+msgstr "tiểu thuyết gia chọn"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:920
 #, c-format
 msgid "Novelist Select: "
-msgstr ""
+msgstr "tiểu thuyết gia chọn: "
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:560
 #, c-format
 msgid "Novelle / fortelling"
-msgstr ""
+msgstr "Truyện ngắn / tường thuật"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "November"
-msgstr ""
+msgstr "Tháng mười một"
 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:194
 #, c-format
 msgid "Number"
-msgstr ""
+msgstr "Số"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:524
 #, c-format
 msgid "Numeriske data"
-msgstr ""
+msgstr "một số dử liệu"
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-tags.tt:71
@@ -12078,51 +12125,51 @@ msgstr "Hoặc"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Oct"
-msgstr ""
+msgstr "Tháng Mười"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "October"
-msgstr ""
+msgstr "Tháng Mười"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:242
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1141
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:874
 #, c-format
 msgid "On hold ("
-msgstr ""
+msgstr "Giữ máy ("
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:228
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1129
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:861
 #, c-format
 msgid "On order ("
-msgstr ""
+msgstr "Về trật tự ("
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:950
 #, c-format
 msgid "Online Access: "
-msgstr ""
+msgstr "Truy cập trực tuyến: "
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:407
 #, c-format
 msgid "Online Resources:"
-msgstr ""
+msgstr "Các nguồn trực tuyến"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:746
 #, c-format
 msgid "Online resources:"
-msgstr ""
+msgstr "Các nguồn trực tuyến"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:594
 #, c-format
 msgid "Online resources: "
-msgstr ""
+msgstr "Các nguồn trực tuyến"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:533
 #, c-format
 msgid "Online tjeneste"
-msgstr ""
+msgstr "dịch vụ trực tuyến"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:319
 #, c-format
@@ -12136,26 +12183,30 @@ msgid ""
 "will be for the librarians to find the title you're requesting. The \"Notes"
 "\" field can be used to provide any additional information."
 msgstr ""
+"Chỉ tiêu đề là cần thiết, nhưng biết thêm thông tin bạn nhập vào dễ dàng hơn "
+"nó sẽ được cho các cán bộ thư viện để tìm tiêu đề bạn đang yêu cầu. \"Ghi chú"
+"\" lĩnh vực có thể được sử dụng để cung cấp thêm thông tin."
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:181
 #, c-format
 msgid "Optisk kassett"
-msgstr ""
+msgstr "Mực quang"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:187
 #, c-format
 msgid "Optisk plate"
-msgstr ""
+msgstr "đĩa quang"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:139
 #, c-format
 msgid "Optiske lagringsmedia (CD-ROM)"
-msgstr ""
+msgstr "Phương tiện truyền thông lưu trữ quang học (CD-ROM)"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:494
 #, c-format
 msgid "Ordbøker"
-msgstr ""
+msgstr "từ điển"
 
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:38
 #, c-format
@@ -12172,15 +12223,17 @@ msgstr "Sắp xếp theo chủ đề"
 msgid "Order by: "
 msgstr "Sắp xếp theo: "
 
+# Tiếng Đan Mạch
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:234
 #, c-format
 msgid "Ordkort"
-msgstr ""
+msgstr "thẻ từ"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:266
 #, c-format
 msgid "Originalt kunstverk"
-msgstr ""
+msgstr "tác phẩm nghệ thuật gốc"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:166
 #, c-format
@@ -12191,12 +12244,12 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:159
 #, c-format
 msgid "Other"
-msgstr ""
+msgstr "khác"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1334
 #, c-format
 msgid "Other editions of this work"
-msgstr ""
+msgstr "Các phiên bản khác của công việc này"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:827
 #, fuzzy, c-format
@@ -12225,18 +12278,18 @@ msgstr "Chủ đề khác: "
 #: opac-tmpl/prog/en/modules/ilsdi.tt:704
 #, c-format
 msgid "OutputIntermediateFormat "
-msgstr ""
+msgstr "Sản lượng định dạng trung gian "
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:703
 #, c-format
 msgid "OutputRewritablePage "
-msgstr ""
+msgstr "Đầu ra ghi lại Trang "
 
 #. %1$s:  q | html 
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:143
 #, c-format
 msgid "OverDrive search for '%s'"
-msgstr ""
+msgstr "Tìm kiếm OverDrive cho '% s'"
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:120
 #, c-format
@@ -12248,10 +12301,11 @@ msgstr "Quá hạn"
 msgid "Overdues "
 msgstr "Quá hạn "
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:502
 #, c-format
 msgid "Oversiktsverker innenfor et emne"
-msgstr ""
+msgstr "Công trình tổng quan trong một chủ đề"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:55
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:65
@@ -12259,11 +12313,12 @@ msgstr ""
 msgid "PR"
 msgstr ""
 
+# Tiếng Phần Lan
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:351
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:763
 #, c-format
 msgid "Parallelltittel: "
-msgstr ""
+msgstr "Nhan đề song song: "
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:18
 #: opac-tmpl/prog/en/modules/ilsdi.tt:100
@@ -12279,12 +12334,12 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/ilsdi.tt:669
 #, c-format
 msgid "Parameters"
-msgstr ""
+msgstr "Tham số"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:666
 #, c-format
 msgid "Partial contents:"
-msgstr ""
+msgstr "Một phần nội dung:"
 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:84
 #, c-format
@@ -12339,30 +12394,32 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:129
 #, c-format
 msgid "Periodical"
-msgstr ""
+msgstr "Định kỳ"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:139
 #, c-format
 msgid "Periodicity"
-msgstr ""
+msgstr "tính tuần hoàn"
 
+# Tiếng Bosnia
 #. IMG
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:165
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:145
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:448
 #, c-format
 msgid "Periodika"
-msgstr ""
+msgstr "định kỳ"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:217
 #, fuzzy, c-format
 msgid "Permissions: "
 msgstr "Miêu tả: "
 
+# Perspektivk art - Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:173
 #, c-format
 msgid "Perspektivkart"
-msgstr ""
+msgstr "quan điểm nghệ thuật"
 
 #: opac-tmpl/prog/en/modules/opac-messaging.tt:40
 #, fuzzy, c-format
@@ -12398,7 +12455,7 @@ msgstr "Hình ảnh"
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:83
 #, c-format
 msgid "Piece-Analytic Level"
-msgstr ""
+msgstr "Mảnh phân tích Cấp"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:5
@@ -12445,35 +12502,36 @@ msgstr "Ngày"
 msgid "Places"
 msgstr "Ngày"
 
+# Tiếng Đức
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:238
 #, c-format
 msgid "Plakat"
-msgstr ""
+msgstr "poster"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:172
 #, c-format
 msgid "Plan"
-msgstr ""
+msgstr "Kế hoạch"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:194
 #, c-format
 msgid "Planet- eller måneglobus"
-msgstr ""
+msgstr "Hành tinh hoặc mặt trăng toàn cầu"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:232
 #, c-format
 msgid "Plansje"
-msgstr ""
+msgstr "biểu đồ"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:183
 #, c-format
 msgid "Platelager (harddisk)"
-msgstr ""
+msgstr "Ổ đĩa cứng (HDD)"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1008
 #, c-format
 msgid "Play media"
-msgstr ""
+msgstr "dùng phương tiện truyền thông"
 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:34
 #, c-format
@@ -12481,11 +12539,13 @@ msgid ""
 "Please also note that the library staff can't update these values for you: "
 "it's your privacy!"
 msgstr ""
+"Cũng xin lưu ý rằng các nhân viên thư viện không thể cập nhật các giá trị "
+"cho bạn: đó là sự riêng tư của bạn!"
 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:38
 #, c-format
 msgid "Please choose your privacy rule:"
-msgstr ""
+msgstr "Vui lòng chọn nguyên tắc riêng tư của bạn:"
 
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tt:28
 #, c-format
@@ -12493,11 +12553,13 @@ msgid ""
 "Please confirm that you do not want to receive email when a new issue "
 "arrives for this subscription"
 msgstr ""
+"Hãy xác nhận rằng bạn không muốn nhận email khi một vấn đề mới đến cho các "
+"thuê bao này"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:171
 #, c-format
 msgid "Please confirm the checkout:"
-msgstr ""
+msgstr "Vui lòng xác nhận thanh toán:"
 
 #: opac-tmpl/prog/en/modules/opac-registration-email-sent.tt:14
 #, fuzzy, c-format
@@ -12507,12 +12569,12 @@ msgstr ". Vui lòng liên hệ thư viện nếu bạn muốn gia hạn mượn.
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:229
 #, c-format
 msgid "Please contact your librarian, or use the "
-msgstr ""
+msgstr "Xin vui lòng liên hệ với thủ thư của bạn, hoặc sử dụng"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:317
 #, c-format
 msgid "Please enter your card number:"
-msgstr ""
+msgstr "Vui lòng nhập số thẻ của bạn:"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:93
 #, c-format
@@ -12520,6 +12582,8 @@ msgid ""
 "Please fill out this form to make a purchase suggestion. You will receive an "
 "email when the library processes your suggestion"
 msgstr ""
+"Xin vui lòng điền vào mẫu đơn này để thực hiện một đề nghị mua. Bạn sẽ nhận "
+"được một email khi thư viện xử lý đề nghị của bạn"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:311
 #, c-format
@@ -12532,6 +12596,8 @@ msgid ""
 "Please note that information on any book still checked-out must be kept by "
 "the library no matter which privacy option you choose."
 msgstr ""
+"Xin lưu ý rằng thông tin về bất kỳ cuốn sách vẫn check-out phải được lưu giữ "
+"ở thư viện không có vấn đề riêng tư lựa chọn mà bạn chọn."
 
 #: opac-tmpl/prog/en/modules/opac-sendbasket.tt:16
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:16
@@ -12541,6 +12607,9 @@ msgid ""
 "which can be imported into personal bibliographic software like EndNote, "
 "Reference Manager or ProCite."
 msgstr ""
+"Xin lưu ý rằng các tập tin đính kèm là một biểu ghi thư mục MARC tập tin có "
+"thể được nhập khẩu vào phần mềm thư mục cá nhân như EndNote, Reference "
+"Manager hoặc ProCite."
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:229
 #: opac-tmpl/prog/en/modules/opac-user.tt:88
@@ -12549,25 +12618,25 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-user.tt:106
 #, c-format
 msgid "Please note:"
-msgstr ""
+msgstr "Xin lưu ý:"
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:109
 #: opac-tmpl/prog/en/modules/opac-user.tt:112
 #, c-format
 msgid "Please note: "
-msgstr ""
+msgstr "Xin lưu ý: "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/prog/en/modules/opac-tags.tt:60
 #, c-format
 msgid "Please try again with plain text. %sUnrecognized error. %s "
-msgstr ""
+msgstr "Vui lòng thử lại với văn bản gốc. %sUnrecognized lỗi. %s "
 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:739
 #, c-format
 msgid "Please type this following characters into the preceding box: "
-msgstr ""
+msgstr "Xin vui lòng nhập các ký tự này sau vào hộp trước: "
 
 #. OPTGROUP
 #: opac-tmpl/prog/en/includes/resort_form.inc:2
@@ -12591,10 +12660,11 @@ msgstr "Tần suất (nhiều đến ít)"
 msgid "Post or edit your comments on this item. "
 msgstr "Đăng hoặc sử bình luận của bạn trên tài liệu này. "
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:237
 #, c-format
 msgid "Postkort"
-msgstr ""
+msgstr "bưu thiếp"
 
 #: opac-tmpl/prog/en/includes/opac-bottom.inc:48
 #, c-format
@@ -12619,12 +12689,12 @@ msgstr "Thể loại văn học: "
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
 #, c-format
 msgid "Preschool"
-msgstr ""
+msgstr "giáo dục mầm non"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:849
 #, c-format
 msgid "Preschool; "
-msgstr ""
+msgstr "giáo dục mầm non;"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
@@ -12670,12 +12740,12 @@ msgstr "In giá ảo"
 #: opac-tmpl/prog/en/modules/opac-user.tt:362
 #, c-format
 msgid "Priority"
-msgstr ""
+msgstr "Ưu tiên"
 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:24
 #, c-format
 msgid "Privacy rule"
-msgstr ""
+msgstr "quy tắc riêng tư"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:571
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:760
@@ -12707,7 +12777,7 @@ msgstr "Đang tiến hành"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:109
 #, c-format
 msgid "Product"
-msgstr ""
+msgstr "Sản phẩm"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
 #, c-format
@@ -12717,12 +12787,12 @@ msgstr "Chương trình"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:525
 #, c-format
 msgid "Programvare"
-msgstr ""
+msgstr "phần mềm"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:307
 #, c-format
 msgid "Provenance note: "
-msgstr ""
+msgstr "Nguồn gốc lưu ý: "
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:572
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:762
@@ -12835,22 +12905,23 @@ msgstr "Nhà xuất bản: "
 #: opac-tmpl/prog/en/includes/masthead.inc:143
 #, c-format
 msgid "Purchase suggestions"
-msgstr ""
+msgstr "đề nghị mua"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:149
 #, c-format
 msgid "Quarterly"
-msgstr ""
+msgstr "Quý"
 
+# Note of the Day
 #: opac-tmpl/prog/en/modules/opac-main.tt:37
 #, c-format
 msgid "Quote of the Day"
-msgstr ""
+msgstr "Ghi chú hàng ngày"
 
 #: opac-tmpl/prog/en/modules/sco/receipt.tt:5
 #, c-format
 msgid "RECEIPT "
-msgstr ""
+msgstr "biên lai "
 
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:64
 #, c-format
@@ -12869,15 +12940,16 @@ msgstr ""
 msgid "RT: %s"
 msgstr "RT: %s"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:576
 #, c-format
 msgid "Rapporter, referater"
-msgstr ""
+msgstr "Báo cáo, biên"
 
 #. INPUT type=submit name=rate_button
 #: opac-tmpl/prog/en/modules/opac-detail.tt:897
 msgid "Rate me"
-msgstr ""
+msgstr "đánh giá tôi"
 
 #: opac-tmpl/prog/en/modules/opac-passwd.tt:36
 #, c-format
@@ -12887,7 +12959,7 @@ msgstr "Nhập lại mật khẩu mới"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:273
 #, c-format
 msgid "Realia"
-msgstr ""
+msgstr "thực tế"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:123
 #, c-format
@@ -12897,23 +12969,24 @@ msgstr "Lý do cho đề xuất: "
 #: opac-tmpl/prog/en/modules/ilsdi.tt:717
 #, c-format
 msgid "RecallItem "
-msgstr ""
+msgstr "Thu hồi Mục "
 
 #: opac-tmpl/prog/en/includes/masthead.inc:137
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:21
 #, c-format
 msgid "Recent comments"
-msgstr ""
+msgstr "ý kiến ​​gần đây"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:216
 #, c-format
 msgid "Record not found"
-msgstr ""
+msgstr "Kỷ lục không tìm thấy"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:497
 #, c-format
 msgid "Referanseverk"
-msgstr ""
+msgstr "tài liệu tham khảo Công trình"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:2
 #: opac-tmpl/prog/en/includes/search/facets.inc:3
@@ -12926,7 +12999,7 @@ msgstr "Lọc kết quả tìm"
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:48
 #, c-format
 msgid "Register a new account"
-msgstr ""
+msgstr "Đăng ký tài khoản mới"
 
 #: opac-tmpl/prog/en/modules/opac-main.tt:61
 #, fuzzy, c-format
@@ -12936,17 +13009,18 @@ msgstr "Trạng thái từ khóa."
 #: opac-tmpl/prog/en/modules/opac-registration-confirmation.tt:15
 #, c-format
 msgid "Registration Complete!"
-msgstr ""
+msgstr "Hoàn thành đăng ký!"
 
 #: opac-tmpl/prog/en/modules/opac-registration-invalid.tt:15
 #, fuzzy, c-format
 msgid "Registration invalid!"
 msgstr "tài liệu luật"
 
+# Tiếng Pháp
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:498
 #, c-format
 msgid "Registre"
-msgstr ""
+msgstr "Đăng ký"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
 #, c-format
@@ -12956,7 +13030,7 @@ msgstr "In thường"
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:163
 #, c-format
 msgid "Regularity"
-msgstr ""
+msgstr "Độ đều đặn"
 
 #: opac-tmpl/prog/en/includes/resort_form.inc:1
 #, c-format
@@ -12978,7 +13052,7 @@ msgstr "Sắp xếp kết quả tìm được theo"
 #: opac-tmpl/prog/en/modules/opac-basket.tt:166
 #, c-format
 msgid "Remove"
-msgstr ""
+msgstr "Gỡ bỏ"
 
 #. A
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:138
@@ -12989,7 +13063,7 @@ msgstr "Coded fields"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:6
 msgid "Remove from list"
-msgstr ""
+msgstr "Gỡ bỏ ra khỏi danh sách"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:492
 #, fuzzy, c-format
@@ -13031,7 +13105,7 @@ msgstr "Gia hạn tất cả"
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:292
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:293
 msgid "Renew item"
-msgstr ""
+msgstr "Đổi mới mục"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-user.tt:8
@@ -13042,7 +13116,7 @@ msgstr "Gia hạn tài liệu được chọn"
 #: opac-tmpl/prog/en/modules/ilsdi.tt:713
 #, c-format
 msgid "RenewLoan"
-msgstr ""
+msgstr "Gia hạn vay"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:453
 #, fuzzy, c-format
@@ -13118,32 +13192,33 @@ msgstr "Tiếp tục tất cả Đặt mượn"
 #. INPUT type=submit name=confirm
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:181
 msgid "Return item"
-msgstr ""
+msgstr "trở lại Mục"
 
 #. INPUT type=submit name=returnbook
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:159
 msgid "Return this item"
-msgstr ""
+msgstr "Trở lại Mục này"
 
 #. INPUT type=submit name=confirm
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:167
 msgid "Return to account summary"
-msgstr ""
+msgstr "Quay trở lại sơ lược tài khoản"
 
 #: opac-tmpl/prog/en/modules/sco/help.tt:42
 #, c-format
 msgid "Return to the self-checkout"
-msgstr ""
+msgstr "Trở về tự kiểm tra"
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-passwd.tt:49
 msgid "Return to your record"
-msgstr ""
+msgstr "Trở về hồ sơ của bạn"
 
+# Returns a patrons status information from Koha.
 #: opac-tmpl/prog/en/modules/ilsdi.tt:538
 #, c-format
 msgid "Returns a patron's status information from Koha."
-msgstr ""
+msgstr "Trả về một tình trạng thông tin khách hàng quen từ Koha."
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:559
 #, c-format
@@ -13151,6 +13226,8 @@ msgid ""
 "Returns information about the services available on a particular item for a "
 "particular patron."
 msgstr ""
+"Trả về thông tin về các dịch vụ đã có sẵn một mục cụ thể cho một người bảo "
+"trợ cụ thể."
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:408
 #, c-format
@@ -13159,11 +13236,14 @@ msgid ""
 "request. This function can optionally return patron's contact information, "
 "fine information, hold request information, loan information, and messages."
 msgstr ""
+"Lợi nhuận quy định thông tin về người bảo trợ, dựa trên lựa chọn trong yêu "
+"cầu. Chức năng này có thể tùy chọn trả về thông tin người bảo trợ của liên "
+"lạc, thông tin tốt, giữ thông tin yêu cầu, thông tin vay vốn, và tin nhắn."
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:800
 #, c-format
 msgid "Review: "
-msgstr ""
+msgstr "Nhận xét "
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
 #: opac-tmpl/prog/en/modules/opac-detail.tt:957
@@ -13174,32 +13254,32 @@ msgstr "Bài bình"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:790
 #, c-format
 msgid "Reviews from LibraryThing.com:"
-msgstr ""
+msgstr "Nhận xét từ LibraryThing.com:"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1151
 #, c-format
 msgid "Reviews provided by Syndetics"
-msgstr ""
+msgstr "Đánh giá được cung cấp bởi Syndetics"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:559
 #, c-format
 msgid "Roman"
-msgstr ""
+msgstr "La mã"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:575
 #, c-format
 msgid "Romaner"
-msgstr ""
+msgstr "La mã"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:257
 #, c-format
 msgid "Rull (pianorull/orgelrull)"
-msgstr ""
+msgstr "cuộn (cuộn piano / cuộn cơ quan)"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:204
 #, c-format
 msgid "Røntgenbilde"
-msgstr ""
+msgstr "quang tuyến x"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:55
 #, c-format
@@ -13225,7 +13305,7 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:346
 #, c-format
 msgid "SUDOC serial history: "
-msgstr ""
+msgstr "SUDOC lịch sử nối tiếp: "
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
@@ -13236,7 +13316,7 @@ msgstr "Thêm"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:491
 #, c-format
 msgid "Sammendrag(abstracts)/Referatorganer"
-msgstr ""
+msgstr "Tóm tắt (tóm tắt) / phút Cơ quan"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:517
 #, c-format
@@ -13246,7 +13326,7 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:572
 #, c-format
 msgid "Samtaler og diskusjoner"
-msgstr ""
+msgstr "Các cuộc đàm phán và thảo luận"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
@@ -13257,7 +13337,7 @@ msgstr "Nhà nước:"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Saturday"
-msgstr ""
+msgstr "Thứ bảy"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -13293,12 +13373,12 @@ msgstr "Lưu vào Giá ảo của bạn "
 #: opac-tmpl/prog/en/modules/ilsdi.tt:701
 #, c-format
 msgid "Scan "
-msgstr ""
+msgstr "Quét"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:245
 #, c-format
 msgid "Scan a new item or enter its barcode:"
-msgstr ""
+msgstr "Quét một mục mới hoặc nhập mã vạch của nó:"
 
 #: opac-tmpl/prog/en/modules/sco/help.tt:33
 #, c-format
@@ -13307,29 +13387,32 @@ msgid ""
 "item. The checked-out item should appear in your checkouts list. The Submit "
 "button only needs to be clicked if you enter the barcode manually."
 msgstr ""
+"Quét từng hạng mục và chờ đợi cho trang để tải lại trước khi quét các mục "
+"tiếp theo. Mục check-out sẽ xuất hiện trong danh sách kiểm của bạn. Nút "
+"Submit chỉ cần phải được bấm nếu bạn nhập mã vạch bằng tay."
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:390
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:128
 #, c-format
 msgid "Scan index for: "
-msgstr ""
+msgstr "Chỉ số quét: "
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:386
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:124
 #, c-format
 msgid "Scan index:"
-msgstr ""
+msgstr "Quét chỉ mục:"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:801
 #, c-format
 msgid "Scope and content: "
-msgstr ""
+msgstr "Phạm vi và nội dung: "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:552
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:91
 #, c-format
 msgid "Score"
-msgstr ""
+msgstr "Điểm số"
 
 #. INPUT type=submit name=do
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:148
@@ -13376,7 +13459,7 @@ msgstr "Tìm chủ đề này trong:"
 #: opac-tmpl/prog/en/modules/search/results.tt:86
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:425
 msgid "Search for works by this author"
-msgstr ""
+msgstr "Tìm kiếm các tác phẩm của tác giả này"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:55
 #, c-format
@@ -13403,29 +13486,30 @@ msgstr "Tìm %s"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/datatables.inc:2
 msgid "Search:"
-msgstr ""
+msgstr "Tìm kiếm:"
 
 #: opac-tmpl/prog/en/modules/opac-authorities-home.tt:19
 #, c-format
 msgid "Search: "
 msgstr "Tìm trong: "
 
+# Search Course Reserves
 #: opac-tmpl/prog/en/modules/ilsdi.tt:722
 #, c-format
 msgid "SearchCourseReserves "
-msgstr ""
+msgstr "Dự trữ tìm kiếm khóa học"
 
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 msgid "Searching OverDrive..."
-msgstr ""
+msgstr "Tìm kiếm OverDrive ..."
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:107
 #, c-format
 msgid "Secondary Author"
-msgstr ""
+msgstr "tác giả phụ"
 
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:35
 #, fuzzy, c-format
@@ -13447,12 +13531,12 @@ msgstr "Hành động:"
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:519
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:89
 msgid "See Baker & Taylor"
-msgstr ""
+msgstr "Xem Baker & Taylor"
 
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:70
 #, c-format
 msgid "See also:"
-msgstr ""
+msgstr "Xem thêm:"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-detail.tt:38
@@ -13506,12 +13590,12 @@ msgstr "Chọn tất cả"
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:23
 #, c-format
 msgid "Select local databases:"
-msgstr ""
+msgstr "chọn cơ sở dử liệu :"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:39
 #, c-format
 msgid "Select remote databases:"
-msgstr ""
+msgstr "Chọn cơ sở dữ liệu từ xa:"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -13540,27 +13624,30 @@ msgstr "Chọn tựa đề đến: "
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:222
 #, c-format
 msgid "Self checkout"
-msgstr ""
+msgstr "tự kiểm tra"
 
 #: opac-tmpl/prog/en/modules/sco/help.tt:16
 #, c-format
 msgid "Self checkout help"
-msgstr ""
+msgstr "Tự kiểm tra giúp đỡ"
 
+# Tiếng Đan Mạch
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:570
 #, c-format
 msgid "Selvbiografier"
-msgstr ""
+msgstr "tự truyện"
 
+# Semi annual
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:151
 #, c-format
 msgid "Semiannual"
-msgstr ""
+msgstr "bán hàng năm"
 
+# Semi Monthly
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:146
 #, c-format
 msgid "Semimonthly"
-msgstr ""
+msgstr "một tháng hai kỳ"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:143
 #, c-format
@@ -13577,7 +13664,7 @@ msgstr "Gửi"
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:305
 #, c-format
 msgid "Send list"
-msgstr ""
+msgstr "gửi danh sách"
 
 #: opac-tmpl/prog/en/modules/opac-sendbasketform.tt:21
 #, c-format
@@ -13592,33 +13679,33 @@ msgstr "Gửi danh sách"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Sep"
-msgstr ""
+msgstr "Tháng Chín"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:889
 #, c-format
 msgid "Separated from:"
-msgstr ""
+msgstr "Tách ra từ:"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "September"
-msgstr ""
+msgstr "Tháng chín"
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:288
 #, c-format
 msgid "Serial"
-msgstr ""
+msgstr "Nối tiếp"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:999
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1022
 #, c-format
 msgid "Serial collection"
-msgstr ""
+msgstr "nối tiếp bộ sưu tập"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:126
 #, c-format
 msgid "Serial type"
-msgstr ""
+msgstr "nối tiếp loại"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.serial 
@@ -13626,12 +13713,12 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:114
 #, c-format
 msgid "Serial: %s "
-msgstr ""
+msgstr "Nối tiếp:% s "
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:124
 #, c-format
 msgid "Serials"
-msgstr ""
+msgstr "số xê ri"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:65
 #: opac-tmpl/prog/en/includes/masthead.inc:67
@@ -13642,87 +13729,87 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:143
 #, c-format
 msgid "Series"
-msgstr ""
+msgstr "dãy liên tiếp nhau"
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:408
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:146
 #, c-format
 msgid "Series Title"
-msgstr ""
+msgstr "Tiêu đề loạt"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:837
 #, c-format
 msgid "Series information:"
-msgstr ""
+msgstr "dãy thông tin: "
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:88
 #, c-format
 msgid "Series title"
-msgstr ""
+msgstr "dãy tiêu đề"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:627
 #, c-format
 msgid "Series:"
-msgstr ""
+msgstr "Dãy:"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:180
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:186
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:193
 #, c-format
 msgid "Series: "
-msgstr ""
+msgstr "Dãy: "
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:214
 #, c-format
 msgid "Session lost"
-msgstr ""
+msgstr "lổi phiên"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:538
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:70
 #, c-format
 msgid "Set"
-msgstr ""
+msgstr "Đặt"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:88
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:77
 #, c-format
 msgid "Set Level"
-msgstr ""
+msgstr "Đặt cấp độ"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:295
 #, c-format
 msgid "Set: "
-msgstr ""
+msgstr "đặt:"
 
 #: opac-tmpl/prog/en/modules/opac-messaging.tt:37
 #, c-format
 msgid "Settings updated"
-msgstr ""
+msgstr "cài đặt cập nhật"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1461
 #, c-format
 msgid "Share"
-msgstr ""
+msgstr "Chia sẻ"
 
 #. A
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1465
 msgid "Share by email"
-msgstr ""
+msgstr "Chia sẻ qua email"
 
 #. A
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1464
 msgid "Share on Delicious"
-msgstr ""
+msgstr "Chia sẻ trên Delicious"
 
 #. A
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1462
 msgid "Share on Facebook"
-msgstr ""
+msgstr "Chia sẻ trên Facebook"
 
 #. A
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1463
 msgid "Share on LinkedIn"
-msgstr ""
+msgstr "Chia sẻ trên LinkedIn"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:94
 #, c-format
@@ -13734,10 +13821,11 @@ msgstr "Vị trí"
 msgid "Show"
 msgstr "Xem"
 
+# Show MENU entries
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/datatables.inc:2
 msgid "Show _MENU_ entries"
-msgstr ""
+msgstr "cho mục MENU"
 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:6
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:48
@@ -13775,6 +13863,8 @@ msgstr "[Thêm lựa chọn]"
 msgid ""
 "Show pagination list ([% indexPag %]-[% indexPagEnd %] / [% totalPag %])"
 msgstr ""
+"Hiển thị danh sách pagination ([% indexPag %]-[% indexPagEnd %] / [% "
+"totalPag %])"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:5
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:91
@@ -13790,7 +13880,7 @@ msgstr "Hiển thị đến "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:288
 #, c-format
 msgid "Show volumes"
-msgstr ""
+msgstr "Hiện khối lượng"
 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:173
 #, c-format
@@ -13824,7 +13914,7 @@ msgstr "Hiển thị 50 tài liệu gần đây"
 #: opac-tmpl/prog/en/modules/opac-main.tt:68
 #, c-format
 msgid "Sign in with your Email"
-msgstr ""
+msgstr "Đăng nhập bằng Emai của bạn"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:974
 #, c-format
@@ -13834,37 +13924,43 @@ msgstr "Tài liệu tương tự"
 #: opac-tmpl/prog/en/modules/opac-user.tt:112
 #, c-format
 msgid "Since you have "
-msgstr ""
+msgstr "Kể từ khi bạn có "
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:158
 #, c-format
 msgid "Sjøkart"
-msgstr ""
+msgstr "thủy văn"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:558
 #, c-format
 msgid "Skjønnlitteratur"
-msgstr ""
+msgstr "viễn tưởng"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:562
 #, c-format
 msgid "Skuespill"
-msgstr ""
+msgstr "chơi"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:576
 #, c-format
 msgid "Slått sammen med: .., til: ... "
-msgstr ""
+msgstr "Sáp nhập với: .., để: ... "
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:255
 #, c-format
 msgid "Sløyfekassett"
-msgstr ""
+msgstr "Ribbon Cartridge"
 
+# Små Barn; Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:739
 #, c-format
 msgid "Småbarn;"
-msgstr ""
+msgstr "trẻ mới biết đi;"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:228
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:234
@@ -13883,23 +13979,23 @@ msgstr "Đề xuất mua"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:4
 msgid "Sorry, plain view is temporarily unavailable"
-msgstr ""
+msgstr "Xin lỗi, rỏ ràng xem là tạm thời không có"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "Sorry, tags are not enabled on this system."
-msgstr ""
+msgstr "Xin lỗi, thẻ không được kích hoạt trên hệ thống này."
 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:54
 #, c-format
 msgid "Sorry, the CAS login failed."
-msgstr ""
+msgstr "Xin lỗi, đăng nhập CAS thất bại."
 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:29
 #, c-format
 msgid ""
 "Sorry, the system doesn't think you have permission to access this page. "
-msgstr ""
+msgstr "Xin lỗi, hệ thống không nghĩ rằng bạn có quyền truy cập trang này. "
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:117
 #, fuzzy, c-format
@@ -13912,18 +14008,20 @@ msgid ""
 "Sorry, this self-checkout station has lost authentication. Please contact "
 "the administrator to resolve this problem. "
 msgstr ""
+"Xin lỗi, trạm tự kiểm tra này đã mất đi chứng thực. Xin vui lòng liên hệ với "
+"người quản trị để giải quyết vấn đề này. "
 
 #. %1$s:  too_much_oweing 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:245
 #, c-format
 msgid "Sorry, you cannot place holds because you owe %s. "
-msgstr ""
+msgstr "Xin lỗi, bạn có thể không phải là nơi giữ vì bạn nợ% s. "
 
 #. %1$s:  too_many_reserves 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:250
 #, c-format
 msgid "Sorry, you cannot place more than %s holds. "
-msgstr ""
+msgstr "Xin lỗi, bạn không thể đặt nhiều hơn% s nắm giữ. "
 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:36
 #, c-format
@@ -13961,22 +14059,22 @@ msgstr "Sắp xếp theo: "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:90
 #, c-format
 msgid "Sound"
-msgstr ""
+msgstr "Âm thanh"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:526
 #, c-format
 msgid "Source: "
-msgstr ""
+msgstr "Nguồn: "
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
 #, c-format
 msgid "Specialized"
-msgstr ""
+msgstr "chuyên ngành"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:870
 #, c-format
 msgid "Specialized; "
-msgstr ""
+msgstr "chuyên ngành; "
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:679
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:704
@@ -13984,55 +14082,57 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:740
 #, c-format
 msgid "Spesialisert;"
-msgstr ""
+msgstr "chuyên ngành;"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:270
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:530
 #, c-format
 msgid "Spill"
-msgstr ""
+msgstr "trò chơi"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:945
 #, c-format
 msgid "Split into .. and ...:"
-msgstr ""
+msgstr "Chia thành .. và ...:"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:124
 #, c-format
 msgid "Språkkurs"
-msgstr ""
+msgstr "các khóa học"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:579
 #, c-format
 msgid "Språkundervisning"
-msgstr ""
+msgstr "ngôn ngữ giảng dạy"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:116
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:118
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "Standard number"
-msgstr ""
+msgstr "số tiêu chuẩn"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:100
 #, c-format
 msgid "Standard number (ISBN, ISSN or other):"
-msgstr ""
+msgstr "số tiêu chuẩn (ISBN, ISSN hoặc khác):"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:368
 #, c-format
 msgid "Standardtittel: "
-msgstr ""
+msgstr "Tiêu chuẩn Tiêu đề:"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
 #, c-format
 msgid "Statistics"
 msgstr "Thống kê"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:506
 #, c-format
 msgid "Statistikker"
-msgstr ""
+msgstr "Thống kê"
 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:195
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:47
@@ -14049,22 +14149,22 @@ msgstr "Tình trạng"
 #: opac-tmpl/prog/en/modules/sco/help.tt:28
 #, c-format
 msgid "Step one: Enter your user id%s and password%s"
-msgstr ""
+msgstr "Bước một: Nhập id người dùng%s và mật khẩu của bạn%s"
 
 #: opac-tmpl/prog/en/modules/sco/help.tt:37
 #, c-format
 msgid "Step three: Click the 'Finish' button"
-msgstr ""
+msgstr "Bước ba: Nhấp vào nút 'Finish'"
 
 #: opac-tmpl/prog/en/modules/sco/help.tt:32
 #, c-format
 msgid "Step two: Scan the barcode for each item, one at a time"
-msgstr ""
+msgstr "Bước hai: Quét mã vạch của từng hạng mục, cùng một lúc"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:203
 #, c-format
 msgid "Stereobilde"
-msgstr ""
+msgstr "Hình ảnh âm thanh stereo"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:193
 #, c-format
@@ -14086,12 +14186,12 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:231
 #, c-format
 msgid "Studieplansje"
-msgstr ""
+msgstr "Biểu đồ nghiên cứu"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Su"
-msgstr ""
+msgstr "Chủ Nhật"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:55
 #: opac-tmpl/prog/en/includes/masthead.inc:57
@@ -14116,44 +14216,44 @@ msgstr "Chủ đề - Đồng tác giả"
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:367
 #, c-format
 msgid "Subject - Family"
-msgstr ""
+msgstr "Chủ đề - Gia đình"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:387
 #, c-format
 msgid "Subject - Form"
-msgstr ""
+msgstr "Tiêu đề - Mẫu"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:382
 #, c-format
 msgid "Subject - Geographical Name"
-msgstr ""
+msgstr "Chủ đề - Tên địa lý"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:357
 #, c-format
 msgid "Subject - Personal Name"
-msgstr ""
+msgstr "Chủ đề - Tên cá nhân"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:377
 #, c-format
 msgid "Subject - Topical Name"
-msgstr ""
+msgstr "Chủ đề -  Tên Đề tài"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:397
 #, c-format
 msgid "Subject Category"
-msgstr ""
+msgstr "Phân loại theo mục"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:139
 #: opac-tmpl/prog/en/modules/opac-tags_subject.tt:12
 #, c-format
 msgid "Subject cloud"
-msgstr ""
+msgstr "Tiêu đề điện toán đám mây"
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:404
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:142
 #, c-format
 msgid "Subject phrase"
-msgstr ""
+msgstr "cụm từ chủ đề"
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:255
 #, c-format
@@ -14182,7 +14282,7 @@ msgstr "Chủ đề: "
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:90
 #, c-format
 msgid "Subject: %s "
-msgstr ""
+msgstr "Chủ đề: %s"
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:45
@@ -14213,7 +14313,7 @@ msgstr "Thay đổi(OK)"
 #. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:749
 msgid "Submit update request"
-msgstr ""
+msgstr "Gửi yêu cầu cập nhật"
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:128
@@ -14224,33 +14324,33 @@ msgstr "Đề xuất mua"
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tt:13
 #, c-format
 msgid "Subscribe issue receive warning"
-msgstr ""
+msgstr "Theo dõi vấn đề nhận được cảnh báo"
 
 #. A
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:121
 msgid "Subscribe to email notification on new issues"
-msgstr ""
+msgstr "Theo dõi email thông báo về các vấn đề mới"
 
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:121
 #, c-format
 msgid "Subscribe to email notification on new issues "
-msgstr ""
+msgstr "Theo dõi email thông báo về các vấn đề mới"
 
 #. IMG
 #: opac-tmpl/prog/en/includes/masthead.inc:195
 #: opac-tmpl/prog/en/includes/masthead.inc:200
 msgid "Subscribe to this search"
-msgstr ""
+msgstr "Đăng ký tìm kiếm này"
 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:196
 #, c-format
 msgid "Subscription"
-msgstr ""
+msgstr "Đăng ký"
 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:252
 #, c-format
 msgid "Subscription : "
-msgstr ""
+msgstr "Đăng ký"
 
 #. %1$s:  subscription.histstartdate | $KohaDates 
 #. %2$s:  IF ( subscription.histenddate ) 
@@ -14268,12 +14368,12 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:23
 #, c-format
 msgid "Subscription information for %s"
-msgstr ""
+msgstr "Thông tin thuê bao cho %s"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:980
 #, c-format
 msgid "Subscriptions"
-msgstr ""
+msgstr "Sự đăng ký"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
 #, c-format
@@ -14283,57 +14383,57 @@ msgstr "Giới hạn chi tiết:"
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:150
 #, c-format
 msgid "Suggested by: "
-msgstr ""
+msgstr "Đề xuất bởi: "
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:179
 #, c-format
 msgid "Suggested for"
-msgstr ""
+msgstr "đề nghị cho"
 
 #: opac-tmpl/prog/en/modules/svc/suggestion.tt:13
 #, c-format
 msgid "Suggestions"
-msgstr ""
+msgstr "Góp ý"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:177
 #, c-format
 msgid "Summary"
-msgstr ""
+msgstr "Tóm tắt"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:804
 #, c-format
 msgid "Summary: "
-msgstr ""
+msgstr "Tóm tắt: "
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Sun"
-msgstr ""
+msgstr "Mặt Trời"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Sunday"
-msgstr ""
+msgstr "Chủ Nhật"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:933
 #, c-format
 msgid "Superseded by:"
-msgstr ""
+msgstr "Thay thế bởi:"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:936
 #, c-format
 msgid "Superseded in part by:"
-msgstr ""
+msgstr "Thay thế một phần bởi:"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:877
 #, c-format
 msgid "Supersedes in part:"
-msgstr ""
+msgstr "Thay thế một phần:"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:874
 #, c-format
 msgid "Supersedes:"
-msgstr ""
+msgstr "thay thế:"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
 #, c-format
@@ -14345,20 +14445,22 @@ msgstr "Phiếu điều tra"
 msgid "Suspend all holds"
 msgstr "Hủy tất cả Đặt mượn"
 
+# Cylinder
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:254
 #, c-format
 msgid "Sylinder"
-msgstr ""
+msgstr "xi lanh"
 
+# Symbol kort - Tiếng Đan Mạch
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:235
 #, c-format
 msgid "Symbolkort"
-msgstr ""
+msgstr "biểu tượng Kort"
 
 #: opac-tmpl/prog/en/modules/maintenance.tt:23
 #, c-format
 msgid "System maintenance"
-msgstr ""
+msgstr "bảo trì hệ thống"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:950
 #, c-format
@@ -14368,7 +14470,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1127
 #, c-format
 msgid "Table of contents provided by Syndetics"
-msgstr ""
+msgstr "Bảng nội dung được cung cấp bởi Syndetics"
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-results.tt:473
@@ -14381,7 +14483,7 @@ msgstr "Từ khóa"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:975
 #, c-format
 msgid "Tag browser"
-msgstr ""
+msgstr "thẻ trình duyệt"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:138
 #, c-format
@@ -14427,67 +14529,74 @@ msgstr "Báo cáo"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:563
 #, c-format
 msgid "Tegneserie"
-msgstr ""
+msgstr "phim hoạt hình"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:699
 #, c-format
 msgid "Tegneserier for barn i alderen til og med 5 år;"
-msgstr ""
+msgstr "Truyện tranh cho trẻ em trong độ tuổi 5 tuổi"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:700
 #, c-format
 msgid "Tegneserier for elever på 1. til 3. klassetrinn;"
-msgstr ""
+msgstr "Truyện tranh dành cho học sinh lớp 1-3"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:701
 #, c-format
 msgid "Tegneserier for elever på 4. og 5. klassetrinn;"
-msgstr ""
+msgstr "Truyện tranh cho học sinh trong lớp 4 và 5"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:702
 #, c-format
 msgid "Tegneserier for elever på 6. og 7. klassetrinn;"
-msgstr ""
+msgstr "Truyện tranh cho học sinh trong lớp 6 và 7;"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:703
 #, c-format
 msgid "Tegneserier for elever på ungdomstrinnet;"
-msgstr ""
+msgstr "Truyện tranh cho học sinh trong các trường trung học;"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:691
 #, c-format
 msgid "Tegneserier for voksne;"
-msgstr ""
+msgstr "Phim hoạt hình cho người lớn;"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:693
 #, c-format
 msgid "Tegneserier;"
-msgstr ""
+msgstr "truyện tranh;"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:167
 #, c-format
 msgid "Tegnet kart"
-msgstr ""
+msgstr "bản đồ nhân vật"
 
+# tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:223
 #, c-format
 msgid "Tegning"
-msgstr ""
+msgstr "bản vẽ"
 
+# Tiếng Đan Mạch
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:230
 #, c-format
 msgid "Teknisk tegning"
-msgstr ""
+msgstr "Vẽ kỹ thuật"
 
+# Tekniska rapporter - Tiếng Thụy Điển
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:507
 #, c-format
 msgid "Tekniske rapporter"
-msgstr ""
+msgstr "báo cáo kỹ thuật"
 
+# Tiếng Ba Lan
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:527
 #, c-format
 msgid "Tekst"
-msgstr ""
+msgstr "văn bản"
 
 #. A
 #: opac-tmpl/prog/en/includes/opac-authorities.inc:13
@@ -14501,22 +14610,23 @@ msgstr "Thuật ngữ"
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:159
 #, c-format
 msgid "Term/Phrase"
-msgstr ""
+msgstr "Hạn / cụm từ"
 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:20
 #, fuzzy, c-format
 msgid "Term:"
 msgstr "Thuật ngữ"
 
+# Terreng modell - Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:169
 #, c-format
 msgid "Terrengmodell"
-msgstr ""
+msgstr "địa hình mẫu"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Th"
-msgstr ""
+msgstr "thứ 5"
 
 #: opac-tmpl/prog/en/modules/opac-memberentry-update-submitted.tt:17
 #, fuzzy, c-format
@@ -14532,7 +14642,7 @@ msgstr "Cảm ơn"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1202
 #, c-format
 msgid "The %s latest issues for this subscription:"
-msgstr ""
+msgstr "% S vấn đề mới nhất cho đăng ký này:"
 
 #. %1$s:  limit 
 #. %2$s:  IF ( itemtype ) 
@@ -14562,16 +14672,20 @@ msgid ""
 "The %s%s%sKoha online%s catalog is offline for system maintenance. We'll be "
 "back soon! If you have any questions, please contact the "
 msgstr ""
+"%s%s%sKoha trực tuyến%s Catalogue đang ẩn để bảo trì hệ thống. Chúng tôi sẽ "
+"quay lại sớm! Nếu bạn có thắc mắc, xin vui lòng liên lạc với "
 
 #: opac-tmpl/prog/en/modules/opac-tags_subject.tt:31
 #, c-format
 msgid "The ISBD cloud is not enabled."
-msgstr ""
+msgstr "Các ISBD đám mây không được kích hoạt."
 
 #: opac-tmpl/prog/en/modules/opac-browser.tt:45
 #, c-format
 msgid "The browser table is empty. this feature is not fully set-up. See the "
 msgstr ""
+"Bảng trình duyệt có sản phẩm nào. tính năng này không được thiết lập đầy đủ. "
+"xem"
 
 #. %1$s:  email_add 
 #: opac-tmpl/prog/en/modules/opac-sendbasketform.tt:9
@@ -14645,40 +14759,43 @@ msgid ""
 "the configuration of this feature. Please help to fix the system by "
 "informing your library of this error."
 msgstr ""
+"Việc xóa lịch sử của bạn đọc thất bại vì có một vấn đề với cấu hình tính "
+"năng này. Xin vui lòng giúp đỡ để sửa chữa hệ thống bằng cách thông báo cho "
+"thư viện của bạn của lỗi này."
 
 #. %1$s:  subscription_LOO.histstartdate 
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:88
 #, c-format
 msgid "The first subscription was started on %s"
-msgstr ""
+msgstr "Các thuê bao đầu tiên được bắt đầu vào ngày% s"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:258
 #, c-format
 msgid "The list "
-msgstr ""
+msgstr "Danh sách "
 
 #. %1$s:  email 
 #: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:15
 #, c-format
 msgid "The list was sent to: %s"
-msgstr ""
+msgstr "Danh sách này được gửi đến:% s"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:136
 #, c-format
 msgid "The selected suggestions have been deleted."
-msgstr ""
+msgstr "Những lời đề nghị được lựa chọn đã bị xóa."
 
 #. %1$s:  subscription_LOO.histenddate 
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:90
 #, c-format
 msgid "The subscription expired on %s"
-msgstr ""
+msgstr "Các thuê bao đã hết hạn vào% s"
 
 #. %1$s:  ELSIF ( circ_error_max_loans_allowed ) 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:121
 #, c-format
 msgid "The system does not recognize this barcode. %s "
-msgstr ""
+msgstr "Hệ thống không nhận ra mã vạch này. % s"
 
 #. %1$s:  ERROR.scrubbed 
 #. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
@@ -14688,17 +14805,19 @@ msgid ""
 "The tag was added as &quot;%s&quot;. %sNote: your tag was entirely markup "
 "code. It was NOT added. "
 msgstr ""
+"Thẻ đã được thêm vào như là &quot;%s&quot. % Lưu ý: từ khóa của bạn là đánh "
+"dấu mã hoàn toàn. Nó được không thêm."
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:235
 #, c-format
 msgid "The userid "
-msgstr ""
+msgstr "ID người sử dụng"
 
 #. %1$s:  subscriptionsnumber 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1191
 #, c-format
 msgid "There are %s subscription(s) associated with this title."
-msgstr ""
+msgstr "có %s đăng kí với tiêu đề này"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1317
 #, c-format
@@ -14733,7 +14852,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-passwd.tt:16
 #, c-format
 msgid "There was a problem with your submission"
-msgstr ""
+msgstr "Có một vấn đề với trình của bạn"
 
 #: opac-tmpl/prog/en/modules/opac-registration-invalid.tt:17
 #, c-format
@@ -14741,6 +14860,8 @@ msgid ""
 "There were problems processing your registration. Please contact your "
 "library for help."
 msgstr ""
+"Có những vấn đề xử lý đăng ký của bạn. Xin vui lòng liên hệ với thư viện của "
+"bạn để được giúp đỡ."
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
 #, c-format
@@ -14758,24 +14879,28 @@ msgid ""
 "This &quot;cloud&quot; shows the most used topics in our catalog. Click on "
 "any subject below to see the items in our collection."
 msgstr ""
+"Này \"đám mây\" cho thấy các chủ đề sử dụng nhiều nhất trong danh mục của "
+"chúng tôi. Nhấp vào bất kỳ đối tượng dưới đây để xem các mục trong bộ sưu "
+"tập của chúng tôi."
 
 #. %1$s:  ELSIF ( circ_error_GNA ) 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:145
 #, c-format
 msgid "This card has been declared lost. %s "
-msgstr ""
+msgstr "Thẻ này đã được tuyên bố bị mất. %s "
 
 #: opac-tmpl/prog/en/modules/errors/402.tt:15
 #: opac-tmpl/prog/en/modules/errors/400.tt:15
 #, c-format
 msgid "This error means that the Koha is pointed an invalid link."
-msgstr ""
+msgstr "Lỗi này có nghĩa là các Koha là chỉ một liên kết không hợp lệ."
 
 #: opac-tmpl/prog/en/modules/errors/404.tt:15
 #, c-format
 msgid ""
 "This error means that the link was broken and that the page doesn't exist."
 msgstr ""
+"Lỗi này có nghĩa là các liên kết bị phá vỡ và rằng trang này không tồn tại."
 
 #: opac-tmpl/prog/en/modules/errors/401.tt:15
 #, c-format
@@ -14783,17 +14908,20 @@ msgid ""
 "This error means that the you are trying to access a link that you're not "
 "authorized to see."
 msgstr ""
+"Lỗi này có nghĩa là bạn đang cố gắng truy cập hai một liên kết mà bạn không "
+"được uỷ quyền để xem trên."
 
 #: opac-tmpl/prog/en/modules/errors/403.tt:15
 #, c-format
 msgid ""
 "This error means that you are forbidden for some reason to see this page."
 msgstr ""
+"Lỗi này có nghĩa là bạn đang bị cấm đối với một số lý do để xem trang này."
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1190
 #, c-format
 msgid "This is a serial"
-msgstr ""
+msgstr "Đây là một nối tiếp"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -14803,13 +14931,13 @@ msgstr "Tài liệu này đã được thêm vào giỏ tài liệu của bạn"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "This item has been removed from your cart"
-msgstr ""
+msgstr "Mục này đã bị loại bỏ khỏi giỏ hàng của bạn"
 
 #. %1$s:  ELSIF ( circ_error_RESTRICTED ) 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:133
 #, c-format
 msgid "This item has been withdrawn from the collection. %s "
-msgstr ""
+msgstr "Mục này đã bị với rút ra từ bộ sưu tập. %s "
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -14820,19 +14948,19 @@ msgstr "Tài liệu này đã có trong giỏ của bạn"
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:125
 #, c-format
 msgid "This item is checked out to someone else. %s "
-msgstr ""
+msgstr "Mặt hàng này được kiểm tra ra cho người khác. %s "
 
 #. %1$s:  ELSIF ( circ_error_DEBT ) 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:129
 #, c-format
 msgid "This item is not for loan. %s "
-msgstr ""
+msgstr "Mặt hàng này không phải là cho vay. %s "
 
 #. %1$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:137
 #, c-format
 msgid "This item is on hold for another patron. %s "
-msgstr ""
+msgstr "Mặt hàng này là giữ cho một người khác. %s "
 
 #. %1$s:  IF ( opacuserlogin ) 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:528
@@ -14840,6 +14968,8 @@ msgstr ""
 msgid ""
 "This list is empty. %sYou can add to your lists from the results of any "
 msgstr ""
+"Danh sách này có sản phẩm nào. %sBạn có thể thêm vào danh sách của bạn từ "
+"kết quả của bất  kỳ "
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:961
 #: opac-tmpl/prog/en/modules/opac-detail.tt:964
@@ -14850,27 +14980,29 @@ msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
 "clicking "
 msgstr ""
+"Trang này chứa nội dung phong phú có thể nhìn thấy khi JavaScript được kích "
+"hoạt hoặc bằng cách bấm vào "
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1043
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1080
 #, c-format
 msgid "This record has many physical items. "
-msgstr ""
+msgstr "Hồ sơ này có nhiều mặt hàng vật lý."
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1195
 #, c-format
 msgid "This subscription is closed."
-msgstr ""
+msgstr "Đăng ký này đả đóng lại."
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:331
 #, c-format
 msgid "This title cannot be requested because it's already in your possession."
-msgstr ""
+msgstr "Không có thể yêu cầu danh hiệu này vì nó đã có trong sở hữu của bạn."
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:333
 #, c-format
 msgid "This title cannot be requested."
-msgstr ""
+msgstr "Không có thể yêu cầu tiêu đề này."
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:5
@@ -14878,37 +15010,39 @@ msgid ""
 "This title consists of multiple volumes/parts. Please indicate which part "
 "you need. Clicking on specific copy information may be helpful."
 msgstr ""
+"Danh hiệu này bao gồm nhiều khối lượng / phần. Xin cho biết đó là một phần "
+"bạn cần. Nhấp vào thông tin bản cụ thể có thể hữu ích."
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:156
 #, c-format
 msgid "Three times a month"
-msgstr ""
+msgstr "Ba lần một tháng"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:155
 #, c-format
 msgid "Three times a week"
-msgstr ""
+msgstr "Ba lần một tuần"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:150
 #, c-format
 msgid "Three times a year"
-msgstr ""
+msgstr "Ba lần một năm"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Thu"
-msgstr ""
+msgstr "Thứ Năm"
 
 #. IMG
 #: opac-tmpl/prog/en/modules/opac-imageviewer.tt:70
 #: opac-tmpl/prog/en/modules/opac-imageviewer.tt:72
 msgid "Thumbnail"
-msgstr ""
+msgstr "Hình thu nhỏ"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Thursday"
-msgstr ""
+msgstr "Thứ năm"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:481
 #, c-format
@@ -14992,48 +15126,48 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-auth.tt:99
 #, c-format
 msgid "To report this error, you can "
-msgstr ""
+msgstr "Để thông báo lỗi này, bạn có thể "
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Today"
-msgstr ""
+msgstr "Hôm nay"
 
 #: opac-tmpl/prog/en/modules/sco/receipt.tt:41
 #, c-format
 msgid "Today's checkouts"
-msgstr ""
+msgstr "Ngày nay kiểm"
 
 #: opac-tmpl/prog/en/modules/opac-browser.tt:17
 #, c-format
 msgid "Top level"
-msgstr ""
+msgstr "Cấp đầu"
 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
 #, c-format
 msgid "Topics"
-msgstr ""
+msgstr "Chủ đề"
 
 #: opac-tmpl/prog/en/modules/opac-account.tt:33
 #, c-format
 msgid "Total due"
-msgstr ""
+msgstr "Tổng số do"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:402
 #, c-format
 msgid "Trademark"
-msgstr ""
+msgstr "thương hiệu"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:82
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:71
 #, c-format
 msgid "Translation of"
-msgstr ""
+msgstr "dịch"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:206
 #, c-format
 msgid "Transparent"
-msgstr ""
+msgstr "Trong suốt"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:172
@@ -15055,22 +15189,22 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:154
 #, c-format
 msgid "Triennial"
-msgstr ""
+msgstr "ba năm một kỳ"
 
 #: opac-tmpl/prog/en/modules/errors/401.tt:16
 #, c-format
 msgid "Try logging in to the catalog"
-msgstr ""
+msgstr "Hãy thử đăng nhập vào danh mục"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:168
 #, c-format
 msgid "Trykt kart"
-msgstr ""
+msgstr "bản đồ in"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Tu"
-msgstr ""
+msgstr "Thứ ba"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
@@ -15081,7 +15215,7 @@ msgstr "Due"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Tuesday"
-msgstr ""
+msgstr "Thứ ba"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1467
 #, c-format
@@ -15092,12 +15226,12 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:684
 #, c-format
 msgid "Type"
-msgstr ""
+msgstr "Kiểu"
 
 #: opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tt:50
 #, c-format
 msgid "Type of heading"
-msgstr ""
+msgstr "kiểu tiêu đề"
 
 #. INPUT type=text name=q
 #: opac-tmpl/prog/en/includes/masthead.inc:83
@@ -15109,13 +15243,13 @@ msgstr "Nhập hạn tìm kiếm"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 msgid "Type:"
-msgstr ""
+msgstr "Dạng:"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:536
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:173
 #, c-format
 msgid "Type: "
-msgstr ""
+msgstr "Dạng:"
 
 #. %1$s:  heading | html 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:9
@@ -15126,7 +15260,7 @@ msgstr "UF: %s"
 #: opac-tmpl/prog/en/modules/opac-basket.tt:313
 #, c-format
 msgid "URL(s)"
-msgstr ""
+msgstr "Địa chỉ mạng"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.url |url 
@@ -15134,40 +15268,42 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:137
 #, c-format
 msgid "URL: %s "
-msgstr ""
+msgstr "Địa chỉ Mạng: %s "
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:684
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:709
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:727
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:742
 #, c-format
 msgid "Ukjent;"
-msgstr ""
+msgstr "chưa biết;"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "Unable to add one or more tags."
-msgstr ""
+msgstr "Không thể thêm một hoặc nhiều thẻ."
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:523
 #, c-format
 msgid "Unavailable (lost or missing)"
-msgstr ""
+msgstr "Không có sẵn (bị mất hoặc bị mất tích)"
 
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:104
 #, c-format
 msgid "Unavailable issues"
-msgstr ""
+msgstr "vấn đề không có sẵn"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:578
 #, c-format
 msgid "Undervisning"
-msgstr ""
+msgstr "giảng dạy"
 
+# Tiếng Đan Mạch
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:737
 #, c-format
 msgid "Ungdom over 12 år;"
-msgstr ""
+msgstr "Trong hơn 12 năm;"
 
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:32
 #: opac-tmpl/prog/en/modules/opac-results.tt:462
@@ -15179,7 +15315,7 @@ msgstr "Bỏ sáng kết quả"
 #: opac-tmpl/prog/en/modules/opac-basket.tt:282
 #, c-format
 msgid "Unified title"
-msgstr ""
+msgstr "tiêu đề thống nhất"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.unititle 
@@ -15187,53 +15323,53 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:108
 #, c-format
 msgid "Unified title: %s "
-msgstr ""
+msgstr "Tiêu đề thống nhất:%s "
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:131
 #, c-format
 msgid "Uniform Conventional Heading"
-msgstr ""
+msgstr "Đồng phục nhóm thông thường"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:125
 #, c-format
 msgid "Uniform Title"
-msgstr ""
+msgstr "thống nhất tiêu đề"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:667
 #, c-format
 msgid "Uniform titles:"
-msgstr ""
+msgstr "thống nhất tiêu đề:"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:515
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:521
 #, c-format
 msgid "Uniform titles: "
-msgstr ""
+msgstr "thống nhất tiêu đề: "
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:158
 #, c-format
 msgid "Unknown"
-msgstr ""
+msgstr "Không rõ"
 
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tt:26
 #, c-format
 msgid "Unsubscribe"
-msgstr ""
+msgstr "Hủy đăng ký"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:132
 #, c-format
 msgid "Updating loose-leaf"
-msgstr ""
+msgstr "Cập nhật tháo rời"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:134
 #, c-format
 msgid "Updating website"
-msgstr ""
+msgstr "Cập nhật trang Web"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:261
 #, c-format
 msgid "Use the \"Confirm\" button below to confirm deletion. "
-msgstr ""
+msgstr "Sử dụng nút \"Xác nhận\" bên dưới để  xác nhận xóa."
 
 #: opac-tmpl/prog/en/modules/errors/403.tt:18
 #: opac-tmpl/prog/en/modules/errors/404.tt:18
@@ -15244,23 +15380,23 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-auth.tt:101
 #, c-format
 msgid "Use top menu bar to navigate to another part of Koha."
-msgstr ""
+msgstr "Sử dụng trên thanh menu để điều hướng đến một phần khác của Koha."
 
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:56
 #, c-format
 msgid "Used for/see from:"
-msgstr ""
+msgstr "Sử dụng cho / nhìn thấy từ:"
 
 #: opac-tmpl/prog/en/modules/opac-auth-MARCdetail.tt:43
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:47
 #, c-format
 msgid "Used in "
-msgstr ""
+msgstr "được sử dụng trong"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:312
 #, c-format
 msgid "Username:"
-msgstr ""
+msgstr "Tên người dùng:"
 
 #. %1$s:  borrower.userid 
 #: opac-tmpl/prog/en/modules/opac-registration-confirmation.tt:19
@@ -15274,28 +15410,33 @@ msgid ""
 "Usually the reason for freezing an account is old overdues or damage fees. "
 "If "
 msgstr ""
+"Thường là lý do đóng băng tài khoản là quá hạn cũ, lệ phí thiệt hại. Nếu "
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:296
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:368
 #, c-format
 msgid "Utgave: "
-msgstr ""
+msgstr "vấn đề: "
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:279
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:751
 #, c-format
 msgid "Utgiver: "
-msgstr ""
+msgstr "nhà xuất bản:"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:526
 #, c-format
 msgid "Utskilt fra: "
-msgstr ""
+msgstr "Tiết ra từ: "
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:274
 #, c-format
 msgid "Utstilling"
-msgstr ""
+msgstr "màn hình hiển thị"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
 #, c-format
@@ -15316,38 +15457,38 @@ msgstr "văn học"
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:114
 #, c-format
 msgid "Video types"
-msgstr ""
+msgstr "định dạng video"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:281
 #, c-format
 msgid "Videokassett"
-msgstr ""
+msgstr "băng video"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:130
 #, c-format
 msgid "Videokassett (VHS)"
-msgstr ""
+msgstr "băng video (VHS)"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:280
 #, c-format
 msgid "Videoplate"
-msgstr ""
+msgstr "video Disc"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:131
 #, c-format
 msgid "Videoplate (DVD)"
-msgstr ""
+msgstr "Video Disc (DVD)"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:282
 #, c-format
 msgid "Videospole"
-msgstr ""
+msgstr "video Cực"
 
 #. A
 #: opac-tmpl/prog/en/modules/opac-user.tt:167
 #: opac-tmpl/prog/en/modules/opac-user.tt:311
 msgid "View at Amazon.com"
-msgstr ""
+msgstr "Xem tại Amazon.com"
 
 #. A
 #: opac-tmpl/prog/en/modules/opac-results.tt:535
@@ -15370,12 +15511,12 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:420
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:421
 msgid "View details for this title"
-msgstr ""
+msgstr "Xem chi tiết tài liệu này"
 
 #: opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tt:70
 #, c-format
 msgid "View full heading"
-msgstr ""
+msgstr "Xem đầy đủ tiêu đề"
 
 #. A
 #: opac-tmpl/prog/en/includes/masthead.inc:11
@@ -15397,66 +15538,70 @@ msgstr ""
 msgid "Visual material"
 msgstr "tài liệu hình ảnh"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:735
 #, c-format
 msgid "Voksne over 15 år;"
-msgstr ""
+msgstr "Người lớn trên 15 năm;"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:734
 #, c-format
 msgid "Voksne over 18 år;"
-msgstr ""
+msgstr "Người lớn trên 18 năm;"
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:665
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:690
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:715
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:733
 #, c-format
 msgid "Voksne;"
-msgstr ""
+msgstr "người lớn;"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:482
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1510
 #, c-format
 msgid "Vol info"
-msgstr ""
+msgstr "thông tin vol"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:278
 #, c-format
 msgid "Volumes: "
-msgstr ""
+msgstr "Âm lượng: "
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:126
 #: opac-tmpl/prog/en/modules/opac-user.tt:278
 #, c-format
 msgid "Waiting"
-msgstr ""
+msgstr "Đang chờ"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "Warning: Cannot be undone. Please confirm once again"
-msgstr ""
+msgstr "Cảnh báo: Không thể được hoàn tác. Vui lòng xác nhận lại một lần nữa"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:289
 #, c-format
 msgid "Warning: You could not delete all selected items from this shelf."
 msgstr ""
+"Cảnh báo: Bạn không thể xóa tất cả các mục được lựa chọn từ thềm lục địa này."
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:286
 #, c-format
 msgid "Warning: You could not delete any selected items from this shelf."
-msgstr ""
+msgstr "Cảnh báo: Bạn không thể xóa các mục được lựa chọn từ thềm lục địa này."
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "We"
-msgstr ""
+msgstr "Chúng ta"
 
 #. %1$s:  total 
 #: opac-tmpl/prog/en/modules/search/results.tt:45
 #, c-format
 msgid "We have %s results for your search "
-msgstr ""
+msgstr "Chúng tôi có kết quả% s cho tìm kiếm của bạn"
 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:26
 #, c-format
@@ -15464,26 +15609,28 @@ msgid ""
 "We take great care in protecting your privacy. On this screen, you can "
 "define how long we keep your reading history."
 msgstr ""
+"Chúng tôi rất cẩn thận trong việc bảo vệ sự riêng tư của bạn. Trên màn hình "
+"này, bạn có thể xác định bao lâu chúng tôi tiếp tục lịch sử của bạn đọc."
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:254
 #, c-format
 msgid "Website"
-msgstr ""
+msgstr "Trang Web"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Wed"
-msgstr ""
+msgstr "Thứ Tư"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 msgid "Wednesday"
-msgstr ""
+msgstr "Thứ tư"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:144
 #, c-format
 msgid "Weekly"
-msgstr ""
+msgstr "Hàng tuần"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:7
 #, c-format
@@ -15496,11 +15643,13 @@ msgid ""
 "Whatever your privacy rule you choose, you can delete all your reading "
 "history immediately by clicking here. "
 msgstr ""
+"Bất cứ điều gì quy luật riêng tư của bạn mà bạn chọn, bạn có thể xóa tất cả "
+"lịch sử của bạn đọc ngay lập tức bằng cách nhấn vào đây."
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:260
 #, c-format
 msgid "Wire"
-msgstr ""
+msgstr "Dây"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:9
@@ -15513,19 +15662,19 @@ msgstr "Đề xuất mua "
 #: opac-tmpl/prog/en/modules/opac-basket.tt:33
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:6
 msgid "With selected titles: "
-msgstr ""
+msgstr "lựa chọn tiêu đề:"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:207
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1111
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:840
 #, c-format
 msgid "Withdrawn ("
-msgstr ""
+msgstr "thu hồi ("
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:157
 #, c-format
 msgid "Without periodicity"
-msgstr ""
+msgstr "Nếu không có chu kỳ"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
@@ -15544,7 +15693,7 @@ msgstr "Được gởi %s bởi %s"
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:753
 #, c-format
 msgid "Year"
-msgstr ""
+msgstr "Năm"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:734
 #, c-format
@@ -15563,54 +15712,57 @@ msgid ""
 "You are accessing self-checkout from a different IP address! please log in "
 "again."
 msgstr ""
+"Bạn đang truy cập tự thanh toán từ một địa chỉ IP khác nhau! xin vui lòng "
+"đăng nhập lại."
 
 #. %1$s:  borrowername 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:231
 #, c-format
 msgid "You are logged in as %s."
-msgstr ""
+msgstr "Bạn đang đăng nhập như %s."
 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:41
 #, c-format
 msgid "You are logging from a different IP address. Please log in again."
 msgstr ""
+"Bạn đang đăng nhập từ một địa chỉ IP khác nhau. Xin vui lòng đăng nhập lại."
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:99
 #, c-format
 msgid "You can use OAI-PMH ListRecords instead of this service."
-msgstr ""
+msgstr "Bạn có thể sử dụng OAI-PMH ListRecords thay vì dịch vụ này."
 
 #: opac-tmpl/prog/en/modules/opac-passwd.tt:41
 #, c-format
 msgid "You can't change your password."
-msgstr ""
+msgstr "Bạn không thể thay đổi mật khẩu của bạn."
 
 #. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:127
 #, c-format
 msgid "You cannot renew this item again. %s "
-msgstr ""
+msgstr "Bạn không thể gia hạn lại mục này. % s"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:303
 #, c-format
 msgid "You currently have nothing checked out."
-msgstr ""
+msgstr "Bạn đang có không kiểm tra ra."
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:233
 #: opac-tmpl/prog/en/modules/opac-user.tt:243
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
-msgstr ""
+msgstr "Bạn đang nợ tiền phạt và các khoản phí lên tới:"
 
 #: opac-tmpl/prog/en/modules/opac-downloadshelf.tt:39
 #, c-format
 msgid "You do not have permission to download this list."
-msgstr ""
+msgstr "Bạn không được phép tải xuống danh sách này."
 
 #: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:25
 #, c-format
 msgid "You do not have permission to send this list."
-msgstr ""
+msgstr "Bạn không có quyền để gửi danh sách này."
 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:46
 #, c-format
@@ -15624,18 +15776,18 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-user.tt:252
 #, c-format
 msgid "You have a credit of:"
-msgstr ""
+msgstr "Bạn có một tín dụng:"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:325
 #, c-format
 msgid "You have already requested this title."
-msgstr ""
+msgstr "Bạn đã yêu cầu danh hiệu này."
 
 #. %1$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:123
 #, c-format
 msgid "You have checked out too many items and can't check out any more. %s "
-msgstr ""
+msgstr "Bạn đã kiểm tra ra quá nhiều mặt hàng và không thể kiểm tra nữa. %s "
 
 #: opac-tmpl/prog/en/modules/opac-account.tt:64
 #, c-format
@@ -15648,6 +15800,8 @@ msgid ""
 "You have not filled out all required fields. Please fill in all missing "
 "fields and resubmit."
 msgstr ""
+"Bạn chưa điền vào tất cả các trường bắt buộc. Xin vui lòng điền vào tất cả "
+"các lĩnh vực thiếu và gửi lại."
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:222
 #, c-format
@@ -15660,33 +15814,35 @@ msgid ""
 "You have successfully registered your new account. To log in, use the "
 "following credentials:"
 msgstr ""
+"Bạn đã đăng ký thành công tài khoản mới của bạn. Đăng nhập, sử dụng các "
+"thông tin sau đây:"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "You must be logged in to add tags."
-msgstr ""
+msgstr "Bạn phải đăng nhập để thêm nhãn."
 
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:13
 msgid "You must be logged in to create or add to Lists"
-msgstr ""
+msgstr "Bạn phải đăng nhập để tạo ra hoặc thêm vào danh sách"
 
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
 msgid "You must be logged in to create or add to lists"
-msgstr ""
+msgstr "Bạn phải đăng nhập để tạo ra hoặc thêm vào danh sách"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:262
 #, c-format
 msgid "You must select a library for pickup. "
-msgstr ""
+msgstr "Bạn phải chọn một thư viện cho xe bán tải."
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:257
 #, c-format
 msgid "You must select at least one item. "
-msgstr ""
+msgstr "Bạn phải chọn ít nhất một mục."
 
 #. %1$s:  amount 
 #. %2$s:  ELSIF ( circ_error_WTHDRAWN ) 
@@ -15718,19 +15874,19 @@ msgstr "Giỏ tài liệu của bạn"
 #: opac-tmpl/prog/en/modules/opac-user.tt:103
 #, c-format
 msgid "Your account has been frozen%s until "
-msgstr ""
+msgstr "Tài khoản của bạn đã được đóng băng%s cho đến khi "
 
 #. %1$s:  ELSIF ( circ_error_CARD_LOST ) 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:143
 #, c-format
 msgid "Your account has been suspended. %s "
-msgstr ""
+msgstr "Tài khoản của bạn đã bị treo. %s "
 
 #. %1$s:  ELSIF ( circ_error_DEBARRED ) 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:141
 #, c-format
 msgid "Your account has expired. %s "
-msgstr ""
+msgstr "Tài khoản của bạn đã hết hạn. %s "
 
 #: opac-tmpl/prog/en/modules/opac-registration-email-sent.tt:18
 #, c-format
@@ -15738,6 +15894,8 @@ msgid ""
 "Your account will not be activated until you follow the link provided in the "
 "confirmation email."
 msgstr ""
+"Tài khoản của bạn sẽ không được kích hoạt cho đến khi bạn thực hiện theo các "
+"liên kết cung cấp trong email xác nhận."
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:95
 #, fuzzy, c-format
@@ -15747,12 +15905,12 @@ msgstr ". Vui lòng liên hệ thư viện nếu bạn muốn gia hạn mượn.
 #: opac-tmpl/prog/en/modules/opac-user.tt:88
 #, c-format
 msgid "Your card will expire on "
-msgstr ""
+msgstr "Thẻ của bạn sẽ hết hạn vào "
 
 #: opac-tmpl/prog/en/modules/opac-sendbasket.tt:1
 #, c-format
 msgid "Your cart "
-msgstr ""
+msgstr "giỏ hàng của bạn"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -15772,7 +15930,7 @@ msgstr "Bình luận của bạn "
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-review.tt:6
 msgid "Your comment (preview, pending approval)"
-msgstr ""
+msgstr "Bình luận của bạn (xem trước, chờ phê duyệt)"
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:84
 #, c-format
@@ -15780,17 +15938,19 @@ msgid ""
 "Your corrections have been submitted to the library, and a staff member will "
 "update your record as soon as possible."
 msgstr ""
+"Chỉnh sửa của bạn đã được gửi đến thư viện, và một nhân viên sẽ cập nhật hồ "
+"sơ của bạn càng sớm càng tốt."
 
 #: opac-tmpl/prog/en/modules/opac-downloadcart.tt:6
 #: opac-tmpl/prog/en/modules/opac-downloadshelf.tt:14
 #, c-format
 msgid "Your download should begin automatically."
-msgstr ""
+msgstr "Tải về của bạn nên bắt đầu tự động."
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-review.tt:6
 msgid "Your edited comment (preview, pending approval)"
-msgstr ""
+msgstr "Bình luận của bạn thay đổi nội dung (xem trước, đang chờ phê duyệt)"
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:109
 #, c-format
@@ -15798,6 +15958,8 @@ msgid ""
 "Your library card has been marked as lost or stolen. If this is an error, "
 "please contact the library."
 msgstr ""
+"Thẻ thư viện của bạn đã được đánh dấu là bị mất hoặc bị đánh cắp. Nếu đây là "
+"một lỗi, xin vui lòng liên hệ với thư viện."
 
 #. %1$s:  shelfname 
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:1
@@ -15846,7 +16008,7 @@ msgstr "Danh sách dùng riêng của bạn"
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:16
 #, c-format
 msgid "Your reading history has been deleted."
-msgstr ""
+msgstr "Lịch sử của bạn đọc đã bị xóa."
 
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:81
 #, c-format
@@ -15870,6 +16032,8 @@ msgid ""
 "Your updates have been submitted. A librarian will review your updates "
 "before applying them."
 msgstr ""
+"Cập nhật của bạn đã được gửi. Một cán bộ thư viện sẽ xem xét cập nhật của "
+"bạn trước khi áp dụng."
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:216
 #, c-format
@@ -15890,12 +16054,12 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:1019
 #, c-format
 msgid "["
-msgstr ""
+msgstr "["
 
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:78
 #, c-format
 msgid "[ "
-msgstr ""
+msgstr "[ "
 
 #. LINK
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:5
@@ -15903,12 +16067,14 @@ msgid ""
 "[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% "
 "END %] catalog recent comments"
 msgstr ""
+"[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Thư viện "
+"[% END %] danh mục ý kiến ​​gần đây"
 
 #. LINK
 #: opac-tmpl/prog/en/modules/opac-results.tt:13
 #: opac-tmpl/prog/en/modules/search/results.tt:9
 msgid "[% LibraryName |html %] Search RSS Feed"
-msgstr ""
+msgstr "[% LibraryName |html %] Tìm kiếm RSS Feed"
 
 #. SPAN
 #: opac-tmpl/prog/en/modules/opac-results.tt:709
@@ -16027,12 +16193,12 @@ msgstr "[Xem tất cả]"
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:78
 #, c-format
 msgid "]"
-msgstr ""
+msgstr "]"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:155
 #, c-format
 msgid "] "
-msgstr ""
+msgstr "] "
 
 #. %1$s:  ELSE 
 #. %2$s:  SET url = "/cgi-bin/koha/opac-search.pl?" 
@@ -16070,12 +16236,12 @@ msgstr "%s %s %s "
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:254
 #, c-format
 msgid "]%s %s (%s), %s "
-msgstr ""
+msgstr "]%s %s (%s), %s "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACMARCdetail.xsl:54
 #, c-format
 msgid "_"
-msgstr ""
+msgstr "_"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:114
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:414
@@ -16083,7 +16249,7 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:647
 #, c-format
 msgid "_blank"
-msgstr ""
+msgstr "_Xóa đĩa"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/datatables.inc:2
@@ -16220,7 +16386,7 @@ msgstr "tóm tắt hoặc tổng quan "
 #: opac-tmpl/prog/en/modules/opac-auth.tt:57
 #, c-format
 msgid "account, %s please "
-msgstr ""
+msgstr "tài khoản, %s xin vui lòng "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:443
 #, c-format
@@ -16259,7 +16425,7 @@ msgstr "Chữ nổi Braille"
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:253
 #, c-format
 msgid "already exists!"
-msgstr ""
+msgstr "đã tồn tại!"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -16271,12 +16437,12 @@ msgstr "đã có trong giỏ tài liệu của bạn"
 #, c-format
 msgid ""
 "an identifier indicating the location to which to deliver the item for pickup"
-msgstr ""
+msgstr "một định danh chỉ vị trí mà để cung cấp các mặt hàng cho xe bán tải"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:364
 #, c-format
 msgid "an identifier used to look up the patron in Koha"
-msgstr ""
+msgstr "một định danh sử dụng để tìm người bảo trợ trong Koha"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:61
 #, c-format
@@ -16289,21 +16455,23 @@ msgid ""
 "anyone else to add entries. (The owner of a list is always allowed to add "
 "entries, but needs permission to remove.)"
 msgstr ""
+"bất cứ ai khác để thêm các mục. (Các chủ sở hữu của một danh sách luôn luôn "
+"cho phép thêm các mục, nhưng cần sự cho phép để loại bỏ.)"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:230
 #, c-format
 msgid "anyone to remove his own contributed entries."
-msgstr ""
+msgstr "bất cứ ai để loại bỏ các mục đóng góp của mình."
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:238
 #, c-format
 msgid "anyone to remove other contributed entries."
-msgstr ""
+msgstr "bất cứ ai để loại bỏ các mục đóng góp khác."
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:237
 #, c-format
 msgid "aperture card "
-msgstr ""
+msgstr "thẻ khẩu độ"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:94
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:447
@@ -16314,17 +16482,17 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:784
 #, c-format
 msgid "art original "
-msgstr ""
+msgstr "nghệ thuật ban đầu "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:790
 #, c-format
 msgid "art reproduction "
-msgstr ""
+msgstr "sản sinh nghệ thuật "
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:543
 msgid "article"
-msgstr ""
+msgstr "Bài viết"
 
 #. %1$s:  WAITIN.branch 
 #. %2$s:  ELSE 
@@ -16334,12 +16502,12 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-user.tt:278
 #, c-format
 msgid "at %s %s In transit from %s to %s %s"
-msgstr ""
+msgstr "tại% s% s Trong quá cảnh từ% s đến% s% s"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:212
 #, c-format
 msgid "atlas "
-msgstr ""
+msgstr "bản đồ"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:682
 #, c-format
@@ -16354,7 +16522,7 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:56
 #, c-format
 msgid "autobiography"
-msgstr ""
+msgstr "cuốn tự truyện"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:186
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:200
@@ -16379,19 +16547,19 @@ msgstr "có thể mượn"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:181
 #, c-format
 msgid "available online "
-msgstr ""
+msgstr "có sẵn trực tuyến"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-detail.tt:38
 msgid "average rating:"
-msgstr ""
+msgstr "Đánh giá trung bình:"
 
 #. %1$s:  rating_avg_int 
 #. %2$s:  rating_total 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:905
 #, c-format
 msgid "average rating: %s (%s votes)"
-msgstr ""
+msgstr "Đánh giá trung bình: %s (%s đánh giá)"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:818
 #, c-format
@@ -16426,12 +16594,12 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:598
 #, c-format
 msgid "bibliography"
-msgstr ""
+msgstr "tham khảo thư loại"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:596
 #, c-format
 msgid "bibliography "
-msgstr ""
+msgstr "tham khảo thư loại "
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:694
@@ -16446,19 +16614,20 @@ msgstr "tiểu sử "
 #. IMG
 #: opac-tmpl/prog/en/modules/opac-results.tt:509
 msgid "bonus"
-msgstr ""
+msgstr "tiền thưởng"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:538
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:541
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:546
 msgid "book"
-msgstr ""
+msgstr "Sách"
 
+# borrower number
 #: opac-tmpl/prog/en/modules/ilsdi.tt:370
 #, c-format
 msgid "borrowernumber"
-msgstr ""
+msgstr "số vay"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:90
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:348
@@ -16470,7 +16639,7 @@ msgstr "chữ nổi "
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:192
 #, c-format
 msgid "bristol board"
-msgstr ""
+msgstr "Ban bristol"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -16491,32 +16660,32 @@ msgstr "của "
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:191
 #, c-format
 msgid "canvas"
-msgstr ""
+msgstr "bức vẽ"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:193
 #, c-format
 msgid "cardboard/illustration board"
-msgstr ""
+msgstr "tông / hội đồng quản trị minh họa"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:368
 #, c-format
 msgid "cardnumber"
-msgstr ""
+msgstr "số thẻ"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:107
 #, c-format
 msgid "cartoons or comic strips"
-msgstr ""
+msgstr "phim hoạt hình hay truyện tranh"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:600
 #, c-format
 msgid "catalog "
-msgstr ""
+msgstr "Phân loại "
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:89
 #, c-format
 msgid "catalogue"
-msgstr ""
+msgstr "danh mục"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:115
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:468
@@ -16529,7 +16698,7 @@ msgstr ""
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:196
 msgid "celestial globe"
-msgstr ""
+msgstr "toàn cầu"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:907
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:352
@@ -16545,27 +16714,27 @@ msgstr "thay đổi mật khẩu"
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:268
 msgid "chart"
-msgstr ""
+msgstr "sơ đồ"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:814
 #, c-format
 msgid "chart "
-msgstr ""
+msgstr "sơ đồ "
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:69
 #, c-format
 msgid "charts"
-msgstr ""
+msgstr "bảng xếp hạng"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:10
 #, c-format
 msgid "children (9-14)"
-msgstr ""
+msgstr "trẻ em (9-14)"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:166
 #, c-format
 msgid "chip cartridge "
-msgstr ""
+msgstr "mực con chip "
 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:59
 #, c-format
@@ -16575,7 +16744,7 @@ msgstr "click vào đây để đăng nhập"
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:74
 #, c-format
 msgid "coats of arms"
-msgstr ""
+msgstr "áo khoác của cánh tay"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:102
 #, fuzzy, c-format
@@ -16585,43 +16754,43 @@ msgstr "Đồng tác giả"
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:178
 #, c-format
 msgid "collage"
-msgstr ""
+msgstr "cắt dán"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:270
 #, c-format
 msgid "collage "
-msgstr ""
+msgstr "cắt dán "
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:58
 #, c-format
 msgid "collective biography"
-msgstr ""
+msgstr "tập tiểu sử"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:351
 #, c-format
 msgid "combination "
-msgstr ""
+msgstr "kết hợp"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:713
 #, c-format
 msgid "comic strip "
-msgstr ""
+msgstr "truyện tranh "
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:549
 msgid "computer file"
-msgstr ""
+msgstr "tập tin máy tính"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:170
 msgid "computer optical disc cartridge"
-msgstr ""
+msgstr "máy tính mực đĩa quang"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:659
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:741
 #, c-format
 msgid "conference publication "
-msgstr ""
+msgstr "công bố hội nghị"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:228
 #: opac-tmpl/prog/en/modules/opac-user.tt:106
@@ -16637,7 +16806,7 @@ msgstr "bao gồm"
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:59
 #, c-format
 msgid "contains biographical data"
-msgstr ""
+msgstr "tiểu sử dử liệu"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:114
 #, fuzzy, c-format
@@ -16647,7 +16816,7 @@ msgstr "Tác giả công ty (Đồng tác giả)"
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:96
 #, c-format
 msgid "corporate_main_author"
-msgstr ""
+msgstr "tác giả chính của công ty"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:120
 #, fuzzy, c-format
@@ -16675,25 +16844,25 @@ msgstr "chỉ những tài liệu có thể mượn."
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:324
 #, c-format
 msgid "cylinder "
-msgstr ""
+msgstr "xi lanh "
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:569
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:673
 msgid "database"
-msgstr ""
+msgstr "cơ sở dữ liệu"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:618
 #: opac-tmpl/prog/en/modules/ilsdi.tt:649
 #, c-format
 msgid "date after which hold request is no longer needed"
-msgstr ""
+msgstr "ngày sau đó giữ yêu cầu là không còn cần thiết"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:620
 #: opac-tmpl/prog/en/modules/ilsdi.tt:651
 #, c-format
 msgid "date after which item returned to shelf if item is not picked up"
-msgstr ""
+msgstr "ngày sau đó mục trở lại kệ nếu mục không phải là chọn"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:23
 #, c-format
@@ -16701,16 +16870,19 @@ msgid ""
 "defines the type of record identifier being used in the request, possible "
 "values: "
 msgstr ""
+"xác định các loại định danh kỷ lục được sử dụng trong các yêu cầu, giá trị "
+"có thể: "
 
+# desired due date
 #: opac-tmpl/prog/en/modules/ilsdi.tt:588
 #, c-format
 msgid "desired_due_date"
-msgstr ""
+msgstr "mong muốn thời hạn"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:215
 #, c-format
 msgid "diagram "
-msgstr ""
+msgstr "biểu đồ"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:92
 #, c-format
@@ -16725,12 +16897,12 @@ msgstr "từ điển "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:72
 #, c-format
 msgid "digitized microfilm "
-msgstr ""
+msgstr "vi phim số hóa"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:75
 #, c-format
 msgid "digitized other analog "
-msgstr ""
+msgstr "số hóa tương tự khác"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:793
 #, c-format
@@ -16740,17 +16912,17 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:94
 #, c-format
 msgid "directory"
-msgstr ""
+msgstr "thư mục"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:639
 #, c-format
 msgid "directory "
-msgstr ""
+msgstr "thư mục"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:618
 #, c-format
 msgid "discography "
-msgstr ""
+msgstr "Lịch sử âm nhạc đưa vào đĩa"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:176
 #: opac-tmpl/prog/en/xslt/MARC21slimUtils.xsl:144
@@ -16767,34 +16939,34 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:100
 #, c-format
 msgid "dissertation or thesis"
-msgstr ""
+msgstr "luận văn hay luận án"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:108
 #, c-format
 msgid "dissertation or thesis (revised)"
-msgstr ""
+msgstr "luận văn hay luận án (sửa đổi)"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:39
 #, c-format
 msgid "drama"
-msgstr ""
+msgstr "phim"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:710
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:744
 #, c-format
 msgid "drama "
-msgstr ""
+msgstr "phim "
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:179
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:274
 #, c-format
 msgid "drawing"
-msgstr ""
+msgstr "Bản vẽ"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:199
 msgid "earth moon globe"
-msgstr ""
+msgstr "thế giới mặt trăng trái đất"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:186
 #, fuzzy, c-format
@@ -16804,7 +16976,7 @@ msgstr "Phiên bản"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:96
 #, c-format
 msgid "electronic "
-msgstr ""
+msgstr "Điện tử"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:29
 #, c-format
@@ -16820,7 +16992,7 @@ msgstr "electronic ressource"
 #: opac-tmpl/prog/en/modules/opac-auth.tt:100
 #, c-format
 msgid "email the Koha Administrator"
-msgstr ""
+msgstr "gửi email cho người quản trị Koha"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:93
 #, c-format
@@ -16836,27 +17008,27 @@ msgstr "bách khoa toàn thư "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:747
 #, c-format
 msgid "essay "
-msgstr ""
+msgstr "bài luận"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:40
 #, c-format
 msgid "essays"
-msgstr ""
+msgstr "bài tiểu luận"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:104
 #, c-format
 msgid "examination paper"
-msgstr ""
+msgstr "giấy khám xét"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:73
 #, c-format
 msgid "facsimiles"
-msgstr ""
+msgstr "fax"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:690
 #, c-format
 msgid "festschrift "
-msgstr ""
+msgstr "phát hiện font chử"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:602
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:609
@@ -16889,103 +17061,106 @@ msgstr "văn học "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:258
 #, c-format
 msgid "film cartridge "
-msgstr ""
+msgstr "phim hộp"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:261
 #, c-format
 msgid "film cassette "
-msgstr ""
+msgstr "phim băng"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:264
 #, c-format
 msgid "film reel "
-msgstr ""
+msgstr "phim vũ đạo"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:636
 #, c-format
 msgid "filmography "
-msgstr ""
+msgstr "đóng phim"
 
+# film slip
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:303
 #, c-format
 msgid "filmslip "
-msgstr ""
+msgstr "phim trượt "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:796
 #, c-format
 msgid "filmstrip "
-msgstr ""
+msgstr "Phim đèn chiếu "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:306
 #, c-format
 msgid "filmstrip cartridge "
-msgstr ""
+msgstr "hộp mực cuộn phim "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:309
 #, c-format
 msgid "filmstrip roll "
-msgstr ""
+msgstr "lăn cuộn phim "
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:277
 msgid "flash card"
-msgstr ""
+msgstr "thẻ nhớ"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:817
 #, c-format
 msgid "flash card "
-msgstr ""
+msgstr "thẻ nhớ "
 
+# Tiếng Hmong
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:753
 #, c-format
 msgid "folktale "
-msgstr ""
+msgstr "câu chuyện dân gian"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:676
 msgid "font"
-msgstr ""
+msgstr "phông chữ"
 
 #: opac-tmpl/prog/en/modules/opac-browser.tt:45
 #, c-format
 msgid "for more information on what it does and how to configure it."
 msgstr ""
+"để biết thêm thông tin về những gì nó làm và làm thế nào để cấu hình nó."
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:76
 #, c-format
 msgid "forms"
-msgstr ""
+msgstr "Biểu mẫu"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:679
 msgid "game"
-msgstr ""
+msgstr "Trò chơi"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:75
 #, c-format
 msgid "genealogical tables"
-msgstr ""
+msgstr "bảng phả hệ"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:194
 #, c-format
 msgid "glass"
-msgstr ""
+msgstr "cái cốc"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:49
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:43
 #, c-format
 msgid "gra"
-msgstr ""
+msgstr "trò chơi"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:805
 #, c-format
 msgid "graphic "
-msgstr ""
+msgstr "đồ họa "
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:26
 #, c-format
 msgid "hand-written"
-msgstr ""
+msgstr "viết tay"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:609
 #, c-format
@@ -16995,12 +17170,12 @@ msgstr "sách hướng dẫn "
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:196
 #, c-format
 msgid "hardboard"
-msgstr ""
+msgstr "bìa cứng"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:271
 #, c-format
 msgid "has already been added."
-msgstr ""
+msgstr "đã được thêm vào."
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:961
 #: opac-tmpl/prog/en/modules/opac-detail.tt:964
@@ -17008,12 +17183,12 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1488
 #, c-format
 msgid "here"
-msgstr ""
+msgstr "đây"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:756
 #, c-format
 msgid "history "
-msgstr ""
+msgstr "Lịch sử"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:108
 #, c-format
@@ -17024,12 +17199,12 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:759
 #, c-format
 msgid "humor, satire "
-msgstr ""
+msgstr "hài hước, châm biếm"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:41
 #, c-format
 msgid "humour, satire"
-msgstr ""
+msgstr "hài hước, châm biếm"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:480
 #, c-format
@@ -17066,12 +17241,12 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:80
 #, c-format
 msgid "illuminations"
-msgstr ""
+msgstr "Chiếu sáng"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:66
 #, c-format
 msgid "illustrations"
-msgstr ""
+msgstr "Tranh minh họa"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:396
 #, c-format
@@ -17147,7 +17322,7 @@ msgstr "trong %s tiền phạt"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
 msgid "in OverDrive collection"
-msgstr ""
+msgstr "trong bộ sưu tập OverDrive"
 
 #: opac-tmpl/prog/en/modules/opac-authorities-home.tt:34
 #, c-format
@@ -17167,32 +17342,32 @@ msgstr "trong mục chính"
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:90
 #, c-format
 msgid "index"
-msgstr ""
+msgstr "chỉ mục"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:615
 #, c-format
 msgid "index "
-msgstr ""
+msgstr "chỉ mục "
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:57
 #, c-format
 msgid "individual biography"
-msgstr ""
+msgstr "tiểu sử cá nhân"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-review.tt:6
 msgid "injecting NEW comment: "
-msgstr ""
+msgstr "tiêm chích bình luận mới: "
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-review.tt:6
 msgid "injecting OLD comment: "
-msgstr ""
+msgstr "OLD bình luận"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:168
 #, c-format
 msgid "irregular"
-msgstr ""
+msgstr "không thường xuyên"
 
 #: opac-tmpl/prog/en/modules/opac-authorities-home.tt:29
 #, c-format
@@ -17220,12 +17395,12 @@ msgstr "tài liệu đã được thêm vào giỏ của bạn"
 #: opac-tmpl/prog/en/modules/ilsdi.tt:673
 #, c-format
 msgid "item_id"
-msgstr ""
+msgstr "mục_ID"
 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:6
 #, c-format
 msgid "items. "
-msgstr ""
+msgstr "mục "
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:279
 #, c-format
@@ -17284,7 +17459,7 @@ msgstr "báo cáo luật "
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:101
 #, c-format
 msgid "laws and legislation"
-msgstr ""
+msgstr "pháp luật và sự làm luật"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:612
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:799
@@ -17295,7 +17470,7 @@ msgstr "bài báo "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:648
 #, c-format
 msgid "legal case and case notes "
-msgstr ""
+msgstr "trường hợp và trường hợp ghi chú pháp lý "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:621
 #, c-format
@@ -17305,42 +17480,42 @@ msgstr "tài liệu luật "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:722
 #, c-format
 msgid "letter "
-msgstr ""
+msgstr "thư "
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:42
 #, c-format
 msgid "letters"
-msgstr ""
+msgstr "thư"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:46
 #, c-format
 msgid "libretto"
-msgstr ""
+msgstr "văn ca kịch"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:308
 #, c-format
 msgid "list of authority record identifiers"
-msgstr ""
+msgstr "danh sách các quyền định danh kỷ lục"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:21
 #, c-format
 msgid "list of either bibliographic or item identifiers"
-msgstr ""
+msgstr "danh sách của một trong hai định thư mục hoặc mục"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:103
 #, c-format
 msgid "list of system record identifiers"
-msgstr ""
+msgstr "danh sách các hệ thống định danh kỷ lục"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:105
 #, c-format
 msgid "literature surveys/reviews"
-msgstr ""
+msgstr "khảo sát văn học / đánh giá"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:571
 #, c-format
 msgid "loose-leaf "
-msgstr ""
+msgstr "giấy rời"
 
 #: opac-tmpl/prog/en/xslt/MARC21slimUtils.xsl:139
 #: opac-tmpl/prog/en/xslt/MARC21slimUtils.xsl:147
@@ -17351,12 +17526,12 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:172
 #, c-format
 msgid "magnetic disc "
-msgstr ""
+msgstr "đĩa từ"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:175
 #, c-format
 msgid "magneto-optical disc "
-msgstr ""
+msgstr "từ-quang đĩa"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:90
 #, fuzzy, c-format
@@ -17366,73 +17541,75 @@ msgstr "Đồng tác giả"
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:550
 msgid "map"
-msgstr ""
+msgstr "bản đồ"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:218
 #, c-format
 msgid "map "
-msgstr ""
+msgstr "bản đồ "
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:67
 #, c-format
 msgid "maps"
-msgstr ""
+msgstr "Bản đồ"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, c-format
 msgid "materialTypeLabel"
-msgstr ""
+msgstr "nhãn loại vật liệu"
 
+# material type
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, c-format
 msgid "materialtype"
-msgstr ""
+msgstr "loại vật liệu"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:762
 #, c-format
 msgid "memoir "
-msgstr ""
+msgstr "cuốn hồi ký"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:204
 #, c-format
 msgid "metal"
-msgstr ""
+msgstr "Kim loại"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:99
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:240
 #, c-format
 msgid "microfiche "
-msgstr ""
+msgstr "vi thẻ"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:243
 #, c-format
 msgid "microfiche cassette "
-msgstr ""
+msgstr "vi thẻ băng"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:102
 #, c-format
 msgid "microfilm "
-msgstr ""
+msgstr "vi "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:246
 #, c-format
 msgid "microfilm cartridge "
-msgstr ""
+msgstr "hộp mực vi "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:249
 #, c-format
 msgid "microfilm cassette "
-msgstr ""
+msgstr "vi băng "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:252
 #, c-format
 msgid "microfilm reel "
 msgstr ""
 
+# Tiếng Latinh
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:30
 #, c-format
 msgid "microform"
-msgstr ""
+msgstr "vi"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:255
 #, c-format
@@ -17457,49 +17634,49 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:200
 #, c-format
 msgid "mixed collection"
-msgstr ""
+msgstr "bộ sưu tập hỗn hợp"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:548
 msgid "mixed materials"
-msgstr ""
+msgstr "vật liệu hỗn hợp"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:221
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:824
 #, c-format
 msgid "model "
-msgstr ""
+msgstr "mô hình"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:354
 #, c-format
 msgid "moon "
-msgstr ""
+msgstr "mặt trăng"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:117
 #, c-format
 msgid "motion picture"
-msgstr ""
+msgstr "hình ảnh chuyển động"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:811
 #, c-format
 msgid "motion picture "
-msgstr ""
+msgstr "hình ảnh chuyển động"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:27
 #, c-format
 msgid "multimedia"
-msgstr ""
+msgstr "Đa phương tiện"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:48
 #, c-format
 msgid "multiple/other literary forms"
-msgstr ""
+msgstr "nhiều / hình thức văn chương khác"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:72
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:554
 #, c-format
 msgid "music"
-msgstr ""
+msgstr "Âm nhạc"
 
 #: opac-tmpl/prog/en/includes/usermenu.inc:6
 #, c-format
@@ -17551,31 +17728,32 @@ msgstr "Tóm lượt"
 msgid "my tags"
 msgstr "Từ khóa"
 
+# needed before date
 #: opac-tmpl/prog/en/modules/ilsdi.tt:617
 #: opac-tmpl/prog/en/modules/ilsdi.tt:648
 #, c-format
 msgid "needed_before_date"
-msgstr ""
+msgstr "cần thiết trước ngày"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:577
 #, c-format
 msgid "newspaper "
-msgstr ""
+msgstr "báo"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:23
 #, c-format
 msgid "newspaper format"
-msgstr ""
+msgstr "định dạng báo"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:81
 #, c-format
 msgid "no illustrations"
-msgstr ""
+msgstr "không có hình ảnh minh họa"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:167
 #, c-format
 msgid "normalised irregular"
-msgstr ""
+msgstr "bình thường không đều"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:63
 #, c-format
@@ -17590,7 +17768,7 @@ msgstr "tiểu sử"
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:47
 #, c-format
 msgid "not a literary text"
-msgstr ""
+msgstr "không phải là một văn bản văn học"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:701
 #, c-format
@@ -17616,27 +17794,27 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:669
 #, c-format
 msgid "numeric data "
-msgstr ""
+msgstr "dữ liệu số"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:102
 #, c-format
 msgid "numeric table"
-msgstr ""
+msgstr "bảng số"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:148
 #, c-format
 msgid "of accompanying material, "
-msgstr ""
+msgstr "của đi kèm các tài liệu,"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:144
 #, c-format
 msgid "of contents page, "
-msgstr ""
+msgstr "trang nội dung,"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:141
 #, c-format
 msgid "of intermediate text, "
-msgstr ""
+msgstr "trang nội dung,"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:147
 #, c-format
@@ -17646,17 +17824,17 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:142
 #, c-format
 msgid "of original work, "
-msgstr ""
+msgstr "của tác phẩm gốc,"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:149
 #, c-format
 msgid "of subtitles, "
-msgstr ""
+msgstr "phụ đề,"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:143
 #, c-format
 msgid "of summary, "
-msgstr ""
+msgstr "tóm tắt"
 
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:124
 #, fuzzy, c-format
@@ -17666,28 +17844,28 @@ msgstr "Mua lại vào cuối cùng:"
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:145
 #, c-format
 msgid "of title page, "
-msgstr ""
+msgstr "trang tiêu đề, "
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:146
 #, c-format
 msgid "of title proper, "
-msgstr ""
+msgstr "danh hiệu gần đó, "
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:228
 #, c-format
 msgid "on file."
-msgstr ""
+msgstr "trên tập tin."
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:229
 #: opac-tmpl/prog/en/modules/opac-user.tt:106
 #, c-format
 msgid "online update form"
-msgstr ""
+msgstr "hình thức cập nhật trực tuyến"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:179
 msgid "optical disc"
-msgstr ""
+msgstr "đĩa quang"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:62
 #, c-format
@@ -17703,7 +17881,7 @@ msgstr "hoặc "
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:72
 #, c-format
 msgid "original_title"
-msgstr ""
+msgstr "Tựa gốc"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:110
 #, c-format
@@ -17713,17 +17891,17 @@ msgstr "khác"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:312
 #, c-format
 msgid "other filmstrip type "
-msgstr ""
+msgstr "loại phim đèn chiếu khác"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:31
 #, c-format
 msgid "other form of textual material"
-msgstr ""
+msgstr "dạng tài liệu văn bản"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:187
 #, c-format
 msgid "other non-projected graphic type"
-msgstr ""
+msgstr "khác không dự kiến ​​loại đồ họa"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:206
 #, c-format
@@ -17733,18 +17911,18 @@ msgstr "khác"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 msgid "out of"
-msgstr ""
+msgstr "ra khỏi"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:180
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:280
 #, c-format
 msgid "painting"
-msgstr ""
+msgstr "đang vẽ"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:205
 #, c-format
 msgid "paper"
-msgstr ""
+msgstr "Giấy"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:392
 #, c-format
@@ -17775,37 +17953,38 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:580
 #, c-format
 msgid "periodical "
-msgstr ""
+msgstr "định kỳ"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:282
 #, c-format
 msgid "photomechanical print "
-msgstr ""
+msgstr "in quang cơ "
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:181
 #, c-format
 msgid "photomechanical reproduction"
-msgstr ""
+msgstr "sinh sản quang cơ"
 
+# photo negative
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:182
 #, c-format
 msgid "photonegative"
-msgstr ""
+msgstr "hình ảnh tiêu cực"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:285
 #, c-format
 msgid "photonegative "
-msgstr ""
+msgstr "hình ảnh tiêu cực"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:183
 #, c-format
 msgid "photoprint"
-msgstr ""
+msgstr "in ảnh"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:288
 #, c-format
 msgid "photoprint "
-msgstr ""
+msgstr "in ảnh"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:619
 #: opac-tmpl/prog/en/modules/ilsdi.tt:650
@@ -17839,47 +18018,50 @@ msgstr ""
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:202
 msgid "planetary or lunar globe"
-msgstr ""
+msgstr "toàn cầu hành tinh hoặc mặt trăng"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:70
 #, c-format
 msgid "plans"
-msgstr ""
+msgstr "kế hoạch"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:195
 #, c-format
 msgid "plaster"
-msgstr ""
+msgstr "Thạch cao"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:71
 #, c-format
 msgid "plates"
-msgstr ""
+msgstr "tấm"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:44
 #, c-format
 msgid "poetry"
-msgstr ""
+msgstr "Thơ ca"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:765
 #, c-format
 msgid "poetry "
-msgstr ""
+msgstr "Thơ ca "
 
+# Tiếng Pháp
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:197
 #, c-format
 msgid "porcelaine"
-msgstr ""
+msgstr "sứ"
 
+# Tiếng Pháp
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:68
 #, c-format
 msgid "portraits"
-msgstr ""
+msgstr "Chân dung"
 
+# pré-primary (0-5) - Tiếng Pháp
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:8
 #, c-format
 msgid "pre-primary (0-5)"
-msgstr ""
+msgstr "mầm non (0-5)"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:9
 #, fuzzy, c-format
@@ -17900,7 +18082,7 @@ msgstr "in "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:224
 #, c-format
 msgid "profile "
-msgstr ""
+msgstr "Hồ sơ "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:633
 #, c-format
@@ -17910,18 +18092,18 @@ msgstr "chương trình "
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:97
 #, c-format
 msgid "programmed text books"
-msgstr ""
+msgstr "sách văn bản lập trình"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:95
 #, c-format
 msgid "project description"
-msgstr ""
+msgstr "Mô tả dự án"
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:755
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:306
 #, c-format
 msgid "purchase suggestion"
-msgstr ""
+msgstr "đề nghị mua"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:827
 #, c-format
@@ -17936,12 +18118,12 @@ msgstr "%s bảng ghis"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:69
 #, c-format
 msgid "reformatted digital "
-msgstr ""
+msgstr "kỹ thuật số định dạng "
 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:90
 #, c-format
 msgid "register here"
-msgstr ""
+msgstr "đăng ký tại đây"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:166
 #, fuzzy, c-format
@@ -17961,39 +18143,39 @@ msgstr "in thường "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:768
 #, c-format
 msgid "rehearsal "
-msgstr ""
+msgstr "diễn tập"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:109
 #, c-format
 msgid "religious text"
-msgstr ""
+msgstr "văn bản tôn giáo"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:183
 msgid "remote"
-msgstr ""
+msgstr "từ xa"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:227
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:321
 #, c-format
 msgid "remote-sensing image "
-msgstr ""
+msgstr "viễn thám hình ảnh "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:771
 #, c-format
 msgid "reporting "
-msgstr ""
+msgstr "báo cáo "
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:613
 #, c-format
 msgid "request_location"
-msgstr ""
+msgstr "yêu cầu cho thuê"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:37
 #, c-format
 msgid ""
 "requests a particular format or set of formats in reporting availability"
-msgstr ""
+msgstr "yêu cầu cụ thể theo kích cỡ hoặc tập hợp các báo cáo định dạng sẵn có"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:30
 #, c-format
@@ -18001,6 +18183,8 @@ msgid ""
 "requests a particular level of detail in reporting availability, possible "
 "values: "
 msgstr ""
+"yêu cầu cụ thể đối với mức độ chi tiết trong báo cáo sẵn có, khả năng giá "
+"trị: "
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
@@ -18011,39 +18195,39 @@ msgstr "Kết quả"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 msgid "results in the library's OverDrive collection."
-msgstr ""
+msgstr "kết quả trong bộ sưu tập thư viện Overdrive chè."
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:395
 #, c-format
 msgid "results_summary description"
-msgstr ""
+msgstr "Mô tả tóm tắt kết quả"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:368
 #, c-format
 msgid "results_summary edition"
-msgstr ""
+msgstr "bản tóm tắt kết quả"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:921
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:468
 #, c-format
 msgid "results_summary other_title"
-msgstr ""
+msgstr "tiêu đề kết quả khác tóm tắt"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:884
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:321
 #, c-format
 msgid "results_summary publisher"
-msgstr ""
+msgstr "nhà xuất bản tóm tắt kết quả"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:185
 #, c-format
 msgid "results_summary series"
-msgstr ""
+msgstr "loạt kết quả tóm tắt"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:514
 #, c-format
 msgid "results_summary uniform_title"
-msgstr ""
+msgstr "kết quả tóm tắt nhan đề đồng nhất"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:36
 #, c-format
@@ -18053,17 +18237,17 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/ilsdi.tt:29
 #, c-format
 msgid "return_type"
-msgstr ""
+msgstr "Kiểu trả về"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:630
 #, c-format
 msgid "review "
-msgstr ""
+msgstr "Nhận xét"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:327
 #, c-format
 msgid "roll "
-msgstr ""
+msgstr "cuộn"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:173
 #: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:79
@@ -18075,17 +18259,17 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:77
 #, c-format
 msgid "samples"
-msgstr ""
+msgstr "mẫu"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:309
 #, c-format
 msgid "schema"
-msgstr ""
+msgstr "giản đồ"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:552
 msgid "score"
-msgstr ""
+msgstr "Điểm"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:187
 #, c-format
@@ -18131,42 +18315,44 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:43
 #, c-format
 msgid "short stories"
-msgstr ""
+msgstr "truyện ngắn"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:728
 #, c-format
 msgid "short story "
-msgstr ""
+msgstr "truyện ngắn "
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:416
 #, c-format
 msgid "show_contact"
-msgstr ""
+msgstr "hiện_liên hệ"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:418
 #, c-format
 msgid "show_fines"
-msgstr ""
+msgstr "hiện_tiền phạt"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:420
 #, c-format
 msgid "show_holds"
-msgstr ""
+msgstr "hiện_giữ"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:422
 #, c-format
 msgid "show_loans"
-msgstr ""
+msgstr "hiện_cho vay"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:241
 #, c-format
 msgid "shows your account to be clear, please consult a librarian."
 msgstr ""
+"cho tài khoản của bạn được rõ ràng, xin vui lòng tham khảo ý kiến ​​một cán bộ "
+"thư viện."
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:103
 #, c-format
 msgid "shows your account to be clear, please contact the library."
-msgstr ""
+msgstr "cho tài khoản của bạn được rõ ràng, xin vui lòng liên hệ với thư viện."
 
 #. %1$s:  RESERVE.datesent | $KohaDates 
 #. %2$s:  ELSIF ( RESERVE.suspend ) 
@@ -18184,7 +18370,7 @@ msgstr "từ %s %s treo %s đến khi %s %s %s đang chờ %s %s "
 #: opac-tmpl/prog/en/modules/maintenance.tt:24
 #, c-format
 msgid "site administrator"
-msgstr ""
+msgstr "quản trị trang web"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:202
 #, c-format
@@ -18219,49 +18405,51 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:333
 #, c-format
 msgid "sound cassette "
-msgstr ""
+msgstr "băng âm thanh "
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:337
 msgid "sound disc"
-msgstr ""
+msgstr "đĩa âm thanh"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:78
 #, c-format
 msgid "sound recordings"
-msgstr ""
+msgstr "bản ghi âm"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:339
 #, c-format
 msgid "sound-tape reel "
 msgstr ""
 
+# soundtrack film
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:342
 #, c-format
 msgid "sound-track film "
-msgstr ""
+msgstr "âm thanh theo dõi bộ phim "
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:310
 #, c-format
 msgid ""
 "specifies the metadata schema of records to be returned, possible values: "
 msgstr ""
+"xác định các lược đồ siêu dữ liệu hồ sơ để được trả lại, giá trị có thể: "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:731
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:777
 #, c-format
 msgid "speech "
-msgstr ""
+msgstr "Tiếng nói "
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:45
 #, c-format
 msgid "speeches, oratory"
-msgstr ""
+msgstr "bài phát biểu, nhà nguyện"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:99
 #, c-format
 msgid "standard"
-msgstr ""
+msgstr "Chuẩn"
 
 #: opac-tmpl/prog/en/modules/opac-authorities-home.tt:28
 #, c-format
@@ -18350,13 +18538,13 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:186
 #, c-format
 msgid "technical drawing"
-msgstr ""
+msgstr "bản vẽ kỹ thuật"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:297
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:808
 #, c-format
 msgid "technical drawing "
-msgstr ""
+msgstr "bản vẽ kỹ thuật "
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:103
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:646
@@ -18367,12 +18555,13 @@ msgstr "báo cáo kỹ thuật"
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:205
 msgid "terrestrial globe"
-msgstr ""
+msgstr "thế giới trên mặt đất"
 
+# text in loose leaf binder
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:369
 #, c-format
 msgid "text in looseleaf binder "
-msgstr ""
+msgstr "văn bản trong thể tháo rời từng chất kết dính "
 
 #. META http-equiv=Content-Type
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:2
@@ -18386,7 +18575,7 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:203
 #, c-format
 msgid "textile"
-msgstr ""
+msgstr "dệt may"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:612
 #: opac-tmpl/prog/en/modules/ilsdi.tt:643
@@ -18394,18 +18583,18 @@ msgstr ""
 msgid ""
 "the ILS identifier for the bibliographic record on which the request is "
 "placed"
-msgstr ""
+msgstr "định danh ILS cho biểu ghi thư mục trên mà yêu cầu được đặt"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:610
 #: opac-tmpl/prog/en/modules/ilsdi.tt:641
 #, c-format
 msgid "the ILS identifier for the patron for whom the request is placed"
-msgstr ""
+msgstr "định danh ILS cho người bảo trợ cho người yêu cầu được đặt"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:645
 #, c-format
 msgid "the ILS identifier for the specific item on which the request is placed"
-msgstr ""
+msgstr "định danh ILS cho các mục cụ thể mà yêu cầu được đặt"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:589
 #, c-format
@@ -18481,13 +18670,13 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:79
 #, c-format
 msgid "transparencies"
-msgstr ""
+msgstr "Độ trong suốt"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:318
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:833
 #, c-format
 msgid "transparency "
-msgstr ""
+msgstr "Độ trong suốt"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:52
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:46
@@ -18498,12 +18687,12 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:106
 #, c-format
 msgid "treaties"
-msgstr ""
+msgstr "Điều ước quốc tế"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:654
 #, c-format
 msgid "treaty "
-msgstr ""
+msgstr "Điều ước quốc tế "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:677
 #, c-format
@@ -18515,10 +18704,11 @@ msgstr ""
 msgid "unAPI"
 msgstr ""
 
+# uniform conventional heading
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:132
 #, c-format
 msgid "uniform_conventional_heading"
-msgstr ""
+msgstr "đề thông thường thống nhất"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:126
 #, c-format
@@ -18565,27 +18755,29 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:119
 #, c-format
 msgid "video recording"
-msgstr ""
+msgstr "Quay phim"
 
+# video cartridge
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:372
 #, c-format
 msgid "videocartridge "
-msgstr ""
+msgstr "hộp mực phim "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:375
 #, c-format
 msgid "videocassette "
-msgstr ""
+msgstr "máy chiếu phim "
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:379
 msgid "videodisc"
-msgstr ""
+msgstr "đĩa phim"
 
+# video recording
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:836
 #, c-format
 msgid "videorecording "
-msgstr ""
+msgstr "băng ghi hình "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:381
 #, c-format
@@ -18618,7 +18810,7 @@ msgstr "tài liệu hình ảnh"
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:118
 #, c-format
 msgid "visual projection"
-msgstr ""
+msgstr "chiếu hình ảnh"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:418
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:570
@@ -18629,7 +18821,7 @@ msgstr ""
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 msgid "waiting holds:"
-msgstr ""
+msgstr "chờ đợi nắm giữ:"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:235
 #, c-format
@@ -18696,7 +18888,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:58
 #, c-format
 msgid "you"
-msgstr ""
+msgstr "bạn"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:11
 #, fuzzy, c-format
@@ -18765,15 +18957,17 @@ msgstr ""
 msgid "~ "
 msgstr ""
 
+# Tiếng Na Uy
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:478
 #, c-format
 msgid "Årbok"
-msgstr ""
+msgstr "niên giám"
 
+# Tiếng Đan Mạch
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:269
 #, c-format
 msgid "Øvelsesmodell"
-msgstr ""
+msgstr "thực hành mẫu"
 
 #. A
 #: opac-tmpl/prog/en/modules/opac-detail.tt:614
@@ -18787,5 +18981,3 @@ msgstr ""
 #, c-format
 msgid "• "
 msgstr ""
-
-#, fuzzy

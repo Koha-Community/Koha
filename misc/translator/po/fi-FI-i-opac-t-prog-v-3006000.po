@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-01-17 22:48-0300\n"
-"PO-Revision-Date: 2013-12-12 12:19+0000\n"
+"POT-Creation-Date: 2014-02-16 18:58-0300\n"
+"PO-Revision-Date: 2014-01-28 07:49+0000\n"
 "Last-Translator: paxed <paxed@alt.org>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
 "Language: fi\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1386850787.0\n"
+"X-POOTLE-MTIME: 1390895350.0\n"
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:528
@@ -2172,7 +2172,7 @@ msgstr "%s %s"
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:47
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:64
-#: opac-tmpl/prog/en/includes/item-status.inc:43
+#: opac-tmpl/prog/en/includes/item-status.inc:50
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:5
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:44
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:113
@@ -2776,15 +2776,13 @@ msgstr "%s %s %s %s %s %s"
 msgid "%s %s %s %s %s %s "
 msgstr "%s %s %s %s %s %s "
 
-#. For the first occurrence,
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  IF ( item.itemlost ) 
-#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %4$s:  IF ( av_lib_include ) 
-#. %5$s:  av_lib_include 
-#. %6$s:  ELSE 
-#. %7$s:  IF ( item.lostimageurl ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:1
+#. %1$s:  FOREACH review IN SYNDETICS_REVIEW.reviews 
+#. %2$s:  IF ( review.content ) 
+#. %3$s:  review.content 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  END 
+#. %7$s:  END 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1154
 #, c-format
 msgid "%s %s %s %s %s %s %s "
@@ -2900,7 +2898,7 @@ msgstr ""
 #. %7$s:  END 
 #. %8$s:  ELSE 
 #. %9$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:34
+#: opac-tmpl/prog/en/includes/item-status.inc:41
 #, c-format
 msgid "%s %s %s %s %s %s Item damaged %s %s Available %s"
 msgstr "%s %s %s %s %s %s Aineisto vioittunut %s %s Saatavilla %s"
@@ -3043,9 +3041,9 @@ msgstr "%s %s %s %s (%s)"
 #. %5$s:  END 
 #. %6$s:  INCLUDE shelfbrowser tab='otherholdings' 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1080
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s No other items. %s %s "
-msgstr "%s %s %s Ei muita nimekkeitä. %s %s "
+msgstr "%s %s %s %s Ei muita niteitä. %s %s "
 
 #. %1$s:  IF showpriority 
 #. %2$s:  bibitemloo.rank 
@@ -3217,7 +3215,7 @@ msgstr "%s %s %s Aineisto odottaa toimipisteessä "
 #. %2$s:  END 
 #. %3$s:  ELSIF ( item.notforloan_per_itemtype ) 
 #. %4$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:31
+#: opac-tmpl/prog/en/includes/item-status.inc:38
 #, c-format
 msgid "%s %s %s Not for loan %s"
 msgstr "%s %s %s Ei lainata %s"
@@ -3640,9 +3638,9 @@ msgstr "%s %s ; %s "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #: opac-tmpl/prog/en/modules/opac-user.tt:405
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s Item in transit to "
-msgstr "                  %s Aineisto matkalla kohteeseen %s                 "
+msgstr "%s Aineisto matkalla kohteeseen %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -3655,7 +3653,7 @@ msgstr "%s %s Ei osumia. %s "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:29
+#: opac-tmpl/prog/en/includes/item-status.inc:36
 #, c-format
 msgid "%s %s Not for loan %s"
 msgstr "%s %s Ei lainattavissa %s"
@@ -3774,9 +3772,9 @@ msgstr "%s %s%s "
 #. %3$s:  LibraryNameTitle or "Koha online" 
 #. %4$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-tags_subject.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s catalog &rsaquo; ISBD %s "
-msgstr "%s%s - aineistoluettelo &rsaquo; ISBD-näkymä %s "
+msgstr "%s %s%s luettelo &rsaquo; ISBD %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3784,9 +3782,9 @@ msgstr "%s%s - aineistoluettelo &rsaquo; ISBD-näkymä %s "
 #. %4$s:  INCLUDE 'doc-head-close.inc' 
 #. %5$s:  INCLUDE 'calendar.inc' 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s catalog &rsaquo; Placing a hold %s %s "
-msgstr "%s%s - aineistoluettelo &rsaquo; Varaaminen %s %s "
+msgstr "%s %s%s luettelo &rsaquo; Varaaminen %s %s "
 
 #. For the first occurrence,
 #. %1$s:  ELSE 
@@ -3872,13 +3870,11 @@ msgstr "%s %s%s%s%s%s"
 #. %9$s:  END 
 #. %10$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-messaging.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s%s%s%s%sKoha online%s%sKoha online%s catalog &rsaquo; Your messaging "
 "settings %s "
-msgstr ""
-"%s%s%s%sn%sKoha ILS OPAC%s%s%s - aineistoluettelo&rsaquo; Viestiasetuksesi "
-"%s "
+msgstr "%s %s%s%s%s%sKoha %s%sKoha %s luettelo &rsaquo; Viestiasetukset %s "
 
 #. %1$s:  USE KohaDates 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3899,9 +3895,9 @@ msgstr "%s %s%s%s%sKoha ILS OPAC%s &rsaquo; Itsepalvelulainaus "
 #. %6$s:  END 
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-authorities-home.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Authority search %s "
-msgstr "%s %s%sn%sKoha ILS OPAC - %s aineistoluettelo &rsaquo; Tarkka haku %s "
+msgstr "%s %s%s%s%sKoha %s luettelo &rsaquo; Auktoriteettihaku %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3911,10 +3907,9 @@ msgstr "%s %s%sn%sKoha ILS OPAC - %s aineistoluettelo &rsaquo; Tarkka haku %s "
 #. %6$s:  END 
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-passwd.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Change your password %s "
-msgstr ""
-"%s%s%sn%s Koha ILS OPAC%s - aineistoluettelo &rsaquo; Muuta salasanasi %s "
+msgstr "%s %s%s%s%sKoha%s luettelo &rsaquo; Vaihda salasana %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3924,10 +3919,9 @@ msgstr ""
 #. %6$s:  END 
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-downloadcart.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Download cart%s "
-msgstr ""
-"%s%s%sn%s Koha ILS OPAC%s - aineistoluettelo &rsaquo; Korin tallennus%s "
+msgstr "%s %s%s%s%sKoha%s luettelo &rsaquo; Tallenna kori%s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3937,11 +3931,9 @@ msgstr ""
 #. %6$s:  END 
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-downloadshelf.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Download list%s "
-msgstr ""
-"%s%s%sn%s Koha ILS OPAC%s - aineistoluettelo &rsaquo; Viitelistan "
-"tallentaminen%s "
+msgstr "%s %s%s%s%sKoha %s luettelo &rsaquo; Tallenna lista%s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3951,9 +3943,9 @@ msgstr ""
 #. %6$s:  END 
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-browser.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; ISBD %s "
-msgstr "%s%s%sn%s Koha ILS OPAC%s - aineistoluettelo &rsaquo; ISBD-näkymä %s "
+msgstr "%s %s%s%s%sKoha %s luettelo &rsaquo; ISBD %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3963,9 +3955,9 @@ msgstr "%s%s%sn%s Koha ILS OPAC%s - aineistoluettelo &rsaquo; ISBD-näkymä %s "
 #. %6$s:  END 
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-ISBDdetail.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; ISBD view %s "
-msgstr "%s%s%sn%s Koha ILS OPAC%s - aineistoluettelo &rsaquo; ISBD-näkymä%s "
+msgstr "%s %s%s%s%sKoha %s luettelo &rsaquo; ISBD %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3976,12 +3968,10 @@ msgstr "%s%s%sn%s Koha ILS OPAC%s - aineistoluettelo &rsaquo; ISBD-näkymä%s "
 #. %7$s:  biblionumber 
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s%s%s%sKoha online%s catalog &rsaquo; MARC details for record no. %s %s "
-msgstr ""
-"%s%s%sn%s Koha ILS OPAC%s - aineistoluettelo &rsaquo; MARC-näyttö tietueelle "
-"%s %s "
+msgstr "%s %s%s%s%sKoha %s luettelo &rsaquo; MARC-tiedot tietueelle %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -3992,11 +3982,9 @@ msgstr ""
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #. %8$s:  INCLUDE 'datatables.inc' 
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Most popular titles %s %s "
-msgstr ""
-"%s%s%sn%s Koha ILS OPAC%s - aineistoluettelo &rsaquo; Suosituimmat nimekkeet"
-"%s "
+msgstr "%s %s%s%s%sKoha %s luettelo &rsaquo; Suosituimmat nimekkeet %s %s "
 
 #. For the first occurrence,
 #. %1$s:  USE Koha 
@@ -4008,10 +3996,9 @@ msgstr ""
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:1
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Serials %s "
-msgstr ""
-"%s%s%sn%s Koha ILS OPAC%s - aineistoluettelo &rsaquo; Kausijulkaisut %s "
+msgstr "%s %s%s%s%sKoha %s luettelo &rsaquo; Kausijulkaisut %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -4021,11 +4008,9 @@ msgstr ""
 #. %6$s:  END 
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Your privacy management %s "
-msgstr ""
-"%s%s%sn%s Koha ILS OPAC%s - aineistoluettelo &rsaquo; Yksityisyysasetuksesi"
-"%s "
+msgstr "%s %s%s%s%sKoha %s luettelo &rsaquo; Yksityisyysasetukset %s "
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -4069,10 +4054,9 @@ msgstr ""
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%sKoha online%s catalog &rsaquo; Add to your list "
-msgstr ""
-"%s %s%sn%sKoha ILS OPAC - %s aineistoluettelo &rsaquo; Vie listaasi %s "
+msgstr "%s %s%s%sKoha %s luettelo &rsaquo; Lisää listalle "
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -4082,10 +4066,9 @@ msgstr ""
 #. %6$s:  q | html 
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s%sKoha online%s catalog &rsaquo; OverDrive search for '%s' %s "
-msgstr ""
-"%s %s%sn%sKoha ILS OPAC - %s aineistoluettelo &rsaquo; Kuvat kohteelle: %s "
+msgstr "%s %s%s%sKoha %s luettelo &rsaquo; OverDrive-haku '%s' %s "
 
 #. For the first occurrence,
 #. %1$s:  borrower.firstname 
@@ -4140,14 +4123,15 @@ msgstr "%s %s(%s)%s ?"
 #. %12$s:  END 
 #. %13$s:  END 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:22
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s(Earlier heading) %s(Later heading) %s(Acronym) %s(Musical composition) "
 "%s(Broader heading) %s(Narrower heading) %s(Immediate parent body) %s%s"
 "(%s)%s %s"
 msgstr ""
-"%s %s(Edeltäjä) %s(Jatkaja) %s(Lyhenne) %s(Sävellys) %s(Laaja nimeke) %s"
-"(Suppea nimeke) %s(%s) %s"
+"%s %s(Aikaisempi otsikkomuoto) %s(Myöhempi otsikkomuoto) %s(Akronyymi) %s"
+"(Musiikkiteos) %s(Laajempi termi) %s(Suppeampi termi) %s(Isäntäyhteisö) %s%s"
+"(%s)%s %s"
 
 #. %1$s:  SEARCH_RESULT.title |html 
 #. %2$s:  FOREACH subtitl IN SEARCH_RESULT.subtitle 
@@ -4241,9 +4225,9 @@ msgstr "%s %steos%steosta%s"
 #. %3$s:  CASE 'used for/see from:' 
 #. %4$s:  END 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:14
-#, fuzzy, c-format
+#, c-format
 msgid "%s %ssee also: %sused for/see from: %s"
-msgstr "Edeltäjä/Katso:"
+msgstr "%s %skatso myös: %skatso kohde: %s"
 
 #. %1$s:  END 
 #. %2$s:  UNLESS ( loop.last ) 
@@ -4257,17 +4241,17 @@ msgstr "%s %s|%s %s "
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:204
-#, fuzzy, c-format
+#, c-format
 msgid "%s &nbsp; %s "
-msgstr "%s&nbsp; %s "
+msgstr "%s &nbsp; %s "
 
 #. %1$s:  IF loop.index == 0 
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:67
-#, fuzzy, c-format
+#, c-format
 msgid "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s and %s "
-msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Nimeke merkkijonona "
+msgstr "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s ja %s "
 
 #. %1$s:  IF ( SYNDETICS_TO.p ) 
 #. %2$s:  SYNDETICS_TO.p 
@@ -4488,7 +4472,7 @@ msgstr "%s Nettiarviot"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  END 
-#. %4$s:  ELSIF ( item.datedue ) 
+#. %4$s:  ELSIF ( item.datedue || issue.date_due ) 
 #. %5$s:  IF ( OPACShowCheckoutName ) 
 #. %6$s:  item.cardnumber 
 #. %7$s:  item.firstname 
@@ -4505,14 +4489,15 @@ msgstr "%s Nettiarviot"
 #. %18$s:  IF ( item.notforloanvalueopac ) 
 #. %19$s:  item.notforloanvalueopac 
 #. %20$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:9
-#, fuzzy, c-format
+#: opac-tmpl/prog/en/includes/item-status.inc:16
+#, c-format
 msgid ""
 "%s Item lost %s %s %s %s Checked out to %s %s %s %s Checked out %s %s In "
 "transit from %s to %s since %s %s On hold %s Item withdrawn %s %s %s %s"
 msgstr ""
-"%s %s %s Lainattu asiakkaalle %s %s %s %s Lainassa %s %s Matkalla kohteesta "
-"%s kohteeseen %s alkaen %s %s Varauksessa %s Korjattavana %s %s %s %s %s %s"
+"%s Nide kadonnut %s %s %s %s Lainassa asiakkaalla %s %s %s %s Lainassa %s %s "
+"In kuljetuksessa kirjastosta %s kirjastoon %s ajalla %s %s Varattu %s Nide "
+"pois kierrosta %s %s %s %s"
 
 #. %1$s:  ELSE 
 #: opac-tmpl/prog/en/modules/opac-user.tt:403
@@ -4536,14 +4521,14 @@ msgstr "%s MARC-näkymä"
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:399
 #, c-format
 msgid "%s Mobile phone:"
-msgstr ""
+msgstr "%s Matkapuhelinnumero:"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/prog/en/modules/opac-user.tt:389
-#, fuzzy, c-format
+#, c-format
 msgid "%s Never expires %s "
-msgstr "%s%s%sPysyvä varaus%s "
+msgstr "%s Ei vanhene %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4712,6 +4697,8 @@ msgid ""
 "%s Total holds: %s %s %s %s (priority %s) %s Overall queue priority: %s %s "
 "%s "
 msgstr ""
+"%s Varauksia yhteensä: %s %s %s %s (järjestysnro %s) %s Järjestys koko "
+"jonossa: %s %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4799,6 +4786,22 @@ msgid ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
 "hidden.defined('mobile') && hidden.defined('email') && hidden.defined"
 "('emailpro') && hidden.defined('fax') %%] "
+msgstr ""
+
+#. %1$s:  USE AuthorisedValues 
+#. %2$s:  IF ( item.itemlost ) 
+#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
+#. %4$s:  IF ( av_lib_include ) 
+#. %5$s:  av_lib_include 
+#. %6$s:  ELSE 
+#. %7$s:  IF ( item.lostimageurl ) 
+#: opac-tmpl/prog/en/includes/item-status.inc:1
+#, c-format
+msgid ""
+"%s [%%#- This include takes two parameters: an item structure and an "
+"optional loan (issue) structure. The issue structure is used by course "
+"reserves pages, which do not use an API to fetch items that populates item."
+"datedue. -%%] %s %s %s %s %s %s "
 msgstr ""
 
 #. For the first occurrence,
@@ -5008,11 +5011,13 @@ msgstr "%s%s %s %s %s %s "
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/prog/en/includes/opac-authorities.inc:53
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s %s %s %s %s %s %%]English %s %%]French %s %%]Italian %s %%]German %s %%]"
 "Spanish %s%s %s %s "
-msgstr "%s %s / %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s "
+msgstr ""
+"%s%s %s %s %s %s %s %%]englanti %s %%]ranska %s %%]italia %s %%]saksa %s %%]"
+"espanja %s%s %s %s "
 
 #. %1$s:  FOREACH USER_INF IN USER_INFO 
 #. %2$s:  USER_INF.title 
@@ -5241,9 +5246,9 @@ msgstr "%s%s Aineistoluettelo &rsaquo; Teoksesta %s sanottua "
 #. %4$s:  END 
 #. %5$s:  itemloop.size || 0 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:941
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s holdings%sHoldings%s ( %s )"
-msgstr "Kokoelma (%s)"
+msgstr "%s%s kokoelmat%sKokoelmat%s ( %s )"
 
 #. %1$s:  deleted_count 
 #. %2$s:  IF ( deleted_count ==1 ) 
@@ -5470,9 +5475,9 @@ msgstr "%s%s, %s"
 #. %7$s:  END 
 #. %8$s:  INCLUDE 'item-status.inc' item = ITEM_RESULT 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:384
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s, %s%s %s (%s) %s (%s) "
-msgstr "%s%s, %s%s %s (%s) %s "
+msgstr "%s%s, %s%s %s (%s) %s (%s) "
 
 #. %1$s:  IF ( suggestions_loo.author ) 
 #. %2$s:  suggestions_loo.author |html 
@@ -5620,7 +5625,7 @@ msgstr "%s(%s)%s %s, %s%s "
 #: opac-tmpl/prog/en/includes/date-format.inc:1
 #, c-format
 msgid "%s(MM/DD/YYYY)%s(DD/MM/YYYY)%s(YYYY-MM-DD)%s "
-msgstr ""
+msgstr "%s(kk/pp/vvvv)%s(pp/kk/vvvv)%s(vvvv-kk-pp)%s "
 
 #. %1$s:  IF ( ITEM_RESULT.location_opac ) 
 #. %2$s:  ITEM_RESULT.location_opac 
@@ -5638,7 +5643,7 @@ msgstr "%s, %s%s %s (%s) %s (%s) "
 #. %2$s:  bibitemloo.author 
 #. %3$s:  END 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:317
-#, fuzzy, c-format
+#, c-format
 msgid "%s, by %s%s"
 msgstr "%s / %s%s"
 
@@ -5741,9 +5746,9 @@ msgstr "%sKäyttäjätunnus lukittu %s %s"
 #. %4$s:  END 
 #. %5$s:  IF ( facets_loo.type_label_Topics ) 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:12
-#, fuzzy, c-format
+#, c-format
 msgid "%sAuthors%s %sTitles%s %s"
-msgstr "%s%s %s%s%s%s"
+msgstr "%sTekijä%s %sNimeke%s %s"
 
 #. %1$s:  IF ( latestserial.status1 ) 
 #. %2$s:  ELSE 
@@ -5777,11 +5782,11 @@ msgstr ""
 #. %8$s:  starting_ccode 
 #. %9$s:  END 
 #: opac-tmpl/prog/en/includes/shelfbrowser.inc:4
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sBrowsing %s Shelves%s %s, Shelving location: %s%s %s, Collection code: %s"
 "%s "
-msgstr "%sSelaus %s Hyllyt%s%s, Hyllypaikka: %s%s%s, Kokoelma: %s%s "
+msgstr "%sSelaus %s Hyllyt%s %s, Hyllypaikka: %s%s %s, Kokoelma: %s%s"
 
 #. %1$s:  IF ( ccodesearch ) 
 #. %2$s:  ELSE 
@@ -5808,13 +5813,13 @@ msgstr "%sKokoelma%sAineistolaji%s"
 #. %15$s:  IF ( serial.status8 ) 
 #. %16$s:  END 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sNot available%s %sDelete%s "
 "%sClaimed%s %sStopped%s "
 msgstr ""
-"%sOdottaa%s %sSaapunut%s %sMyöhässä%s %sKadonnut%s %sEi saatavilla%s "
-"%sPalautuspyyntö lähetetty%s "
+"%sOdottaa%s %sSaapunut%s %sMyöhässä%s %sPuuttuu%s %sEi saatavilla%s %sPoista"
+"%s %sReklamoitu%s %sLopetettu%s "
 
 #. %1$s:  IF ( messaging_preference.Item_Due ) 
 #. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
@@ -5923,14 +5928,14 @@ msgstr ""
 #. %11$s:  suggestions_loo.reason |html 
 #. %12$s:  END 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:209
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sRequested %sChecked by the library %sAccepted by the library %sOrdered by "
 "the library %sSuggestion declined %sAvailable in the library %s %s %s %s"
 "(%s)%s "
 msgstr ""
-"%sTiedustelu lähtetetty%s %sKäsitelty%s %sHyväksytty%s %sTilattu%s "
-"%sHankintaehdotus hylätty%s %sSaatavana kirjastossa%s %s(%s)%s "
+"%sEhdotettu %sKirjaston tarkistama %sKirjaston hyväksymä %sTilattu %sEhdotus "
+"hylätty %sSaatavilla kirjastossa %s %s %s %s(%s)%s "
 
 #. %1$s:  IF ( available ) 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:6
@@ -6052,9 +6057,9 @@ msgid "&#8674; Checkout history"
 msgstr "&#8674; Lainaushistoria"
 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:17
-#, fuzzy, c-format
+#, c-format
 msgid "&#8674; Course reserves for "
-msgstr "&#8674; Vaihda salasanasi "
+msgstr "&#8674; Kurssikirjat "
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:550
 #, c-format
@@ -6645,9 +6650,9 @@ msgstr ""
 #. %1$s:  SEARCH_RESULT.score_avg 
 #. %2$s:  SEARCH_RESULT.num_scores 
 #: opac-tmpl/prog/en/modules/opac-results.tt:610
-#, fuzzy, c-format
+#, c-format
 msgid "&nbsp;&nbsp; %s / 5 (on %s rates)"
-msgstr "%s / 5 (yhteensä %s arviota)"
+msgstr "&nbsp;&nbsp; %s / 5 (yhteensä %s arviota)"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:99
 #, c-format
@@ -6775,10 +6780,10 @@ msgstr "(Yhteensä %s)"
 
 #. For the first occurrence,
 #. %1$s:  item.restrictedopac 
-#: opac-tmpl/prog/en/includes/item-status.inc:29
-#: opac-tmpl/prog/en/includes/item-status.inc:31
-#: opac-tmpl/prog/en/includes/item-status.inc:34
-#: opac-tmpl/prog/en/includes/item-status.inc:43
+#: opac-tmpl/prog/en/includes/item-status.inc:36
+#: opac-tmpl/prog/en/includes/item-status.inc:38
+#: opac-tmpl/prog/en/includes/item-status.inc:41
+#: opac-tmpl/prog/en/includes/item-status.inc:50
 #: opac-tmpl/prog/en/modules/opac-results.tt:631
 #: opac-tmpl/prog/en/modules/opac-detail.tt:810
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:274
@@ -6894,7 +6899,7 @@ msgstr "(Use SRU instead)"
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:464
 #, c-format
 msgid "(done)"
-msgstr ""
+msgstr "(valmis)"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/datatables.inc:2
@@ -6956,15 +6961,15 @@ msgstr ") "
 #. %2$s:  END 
 #. %3$s:  END 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1554
-#, fuzzy, c-format
+#, c-format
 msgid ") %s %s %s "
-msgstr "%s %s %s "
+msgstr ") %s %s %s "
 
 #. %1$s:  ELSE 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1552
-#, fuzzy, c-format
+#, c-format
 msgid ") %s ("
-msgstr "(%s) %s"
+msgstr ") %s ("
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:202
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:209
@@ -7584,7 +7589,7 @@ msgstr "= "
 #: opac-tmpl/prog/en/modules/opac-registration-email-sent.tt:16
 #, c-format
 msgid "A confirmation email has been sent to the email address "
-msgstr ""
+msgstr "Vahvistusviesti on lähetetty sähköpostiin "
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:253
 #, c-format
@@ -7769,7 +7774,7 @@ msgstr "%s %s kirjoitti "
 #: opac-tmpl/prog/en/modules/opac-detail.tt:575
 #, c-format
 msgid "Additional authors:"
-msgstr ""
+msgstr "Muut tekijät:"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
 #, c-format
@@ -8071,21 +8076,18 @@ msgstr "Haluatko varmasti poistaa niteet vinkkilistastasi?"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:6
-#, fuzzy
 msgid "Are you sure you want to remove this item from the list?"
-msgstr "Haluatko varmasti poistaa niteet vinkkilistastasi?"
+msgstr "Haluatko varmasti poistaa nimekkeen listalta?"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-user.tt:8
-#, fuzzy
 msgid "Are you sure you want to resume all suspended holds?"
-msgstr "Haluatko varmasti poistaa tämän varauksen?"
+msgstr "Haluatko varmasti jatkaa keskeytettyjä varauksia?"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-user.tt:8
-#, fuzzy
 msgid "Are you sure you want to suspend all holds?"
-msgstr "Haluatko varmasti poistaa tämän varauksen?"
+msgstr "Haluatko varmasti keskeyttää varaukset?"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:543
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:80
@@ -8102,7 +8104,7 @@ msgstr "Artikkeli (kirjassa tai kausijulkaisussa)"
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:345
 #, c-format
 msgid "Ascending"
-msgstr ""
+msgstr "Nouseva"
 
 #. For the first occurrence,
 #. %1$s:  subscription.branchname 
@@ -8403,9 +8405,9 @@ msgid "Bibliography: "
 msgstr "Kirjallisuusluettelo: "
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:153
-#, fuzzy, c-format
+#, c-format
 msgid "Biennial"
-msgstr "Triennaali"
+msgstr "Joka toinen vuosi"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:227
 #, c-format
@@ -8512,7 +8514,7 @@ msgstr "Kirja"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1012
 #, c-format
 msgid "Book reviews by critics ( XXX )"
-msgstr ""
+msgstr "Kriitikkojen kirja-arvostelut ( XXX )"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:247
 #, c-format
@@ -8721,7 +8723,7 @@ msgstr "Äänikasetti"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:776
 #, c-format
 msgid "Cast: "
-msgstr ""
+msgstr "Esittäjät: "
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
 #, c-format
@@ -8752,9 +8754,8 @@ msgstr "Palauta laina"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
-#, fuzzy
 msgid "Check out"
-msgstr "Lainattu"
+msgstr "Lainaa"
 
 #. %1$s:  IF ( AllowSelfCheckReturns ) 
 #. %2$s:  END 
@@ -8864,9 +8865,8 @@ msgstr "Lisää koriin"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-detail.tt:38
-#, fuzzy
 msgid "Click to forward the list to"
-msgstr "Lisää koriin"
+msgstr "Näytä sivu"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:839
 #: opac-tmpl/prog/en/modules/opac-detail.tt:841
@@ -8882,9 +8882,8 @@ msgstr "Avaa uudessa ikkunassa"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-detail.tt:38
-#, fuzzy
 msgid "Click to rewind the list to"
-msgstr "Avaa uudessa ikkunassa"
+msgstr "Näytä sivu"
 
 #. DIV
 #: opac-tmpl/prog/en/modules/opac-user.tt:169
@@ -9008,9 +9007,9 @@ msgid "Computer File"
 msgstr "Tietokoneohjelma"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:86
-#, fuzzy, c-format
+#, c-format
 msgid "Computer file"
-msgstr "m -Tiedosto"
+msgstr "Elektroninen aineisto"
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:647
@@ -9134,9 +9133,9 @@ msgid "Copyright date"
 msgstr "Painovuosi"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:99
-#, fuzzy, c-format
+#, c-format
 msgid "Copyright date:"
-msgstr "Painovuosi"
+msgstr "Julkaisuvuosi:"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.copyrightdate 
@@ -9166,6 +9165,8 @@ msgstr "Muu yhteisötekijä"
 msgid ""
 "Could not login, perhaps your Persona email does not match your Koha one"
 msgstr ""
+"Kirjautuminen epäonnistui, Persona-sähköpostisi ei täsmää Kohaan "
+"tallennettuun sähköpostiin"
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:422
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:160
@@ -9181,24 +9182,24 @@ msgstr "Maa: "
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:34
 #, c-format
 msgid "Course #"
-msgstr ""
+msgstr "Kurssi #"
 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:22
-#, fuzzy, c-format
+#, c-format
 msgid "Course number:"
-msgstr "Raportin numero:"
+msgstr "Kurssinumero:"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:134
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:17
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1522
-#, fuzzy, c-format
+#, c-format
 msgid "Course reserves"
-msgstr "SearchCourseReserves"
+msgstr "Kurssivarannot"
 
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:19
 #, c-format
 msgid "Courses"
-msgstr ""
+msgstr "Kurssit"
 
 #. IMG
 #: opac-tmpl/prog/en/modules/opac-user.tt:167
@@ -9413,18 +9414,18 @@ msgstr "Delvsi avlÃ¸st av: "
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:21
 #, c-format
 msgid "Department:"
-msgstr ""
+msgstr "Osasto:"
 
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:33
 #, c-format
 msgid "Dept."
-msgstr ""
+msgstr "Osasto"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:349
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:351
 #, c-format
 msgid "Descending"
-msgstr ""
+msgstr "Laskeva"
 
 #: opac-tmpl/prog/en/modules/opac-account.tt:25
 #, c-format
@@ -9519,9 +9520,9 @@ msgid "Diskografier"
 msgstr "Dsikografiat"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:786
-#, fuzzy, c-format
+#, c-format
 msgid "Dissertation note: "
-msgstr "Opinnäyte "
+msgstr "Huomautus väitöskirjasta: "
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:219
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:227
@@ -9540,10 +9541,10 @@ msgstr "Älä ilmoita"
 #. %3$s:  notes 
 #. %4$s:  END 
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Do you want to receive an email when a new issue of %s %s(%s)%s arrives?"
-msgstr "Haluatko sähköpostiisi ilmoituksen lehden saapumisesta?"
+msgstr "Haluatko sähköpostiisi ilmoituksen lehden %s %s(%s)%s saapumisesta?"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:508
 #, c-format
@@ -9841,12 +9842,12 @@ msgstr "Virhe 500"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
 msgid "Error searching OverDrive collection"
-msgstr ""
+msgstr "Virhe haettaessa OverDrive-kokoelmasta"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 msgid "Error searching OverDrive collection."
-msgstr ""
+msgstr "Virhe haettaessa OverDrive-kokoelmasta."
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -10135,6 +10136,8 @@ msgid ""
 "For your convenience, the login box on this page has been pre-filled with "
 "this data. Please log in%s and change your password%s."
 msgstr ""
+"Kirjautumistietosi ovat valmiiksi syötetty kenttiin. Kirjaudu sisään%s ja "
+"vaihda salasanasi%s."
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:581
 #, c-format
@@ -10216,9 +10219,8 @@ msgstr "Kuvakollaasi"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
-#, fuzzy
 msgid "Found"
-msgstr "Äänitallenne"
+msgstr "Löytyi"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
@@ -10263,9 +10265,9 @@ msgid "Fysiske bøker"
 msgstr "kirja"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
-#, fuzzy, c-format
+#, c-format
 msgid "General"
-msgstr "yleinen"
+msgstr "Yleinen"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:864
 #, c-format
@@ -10357,9 +10359,8 @@ msgstr "Mene"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-detail.tt:38
-#, fuzzy
 msgid "Go to detail"
-msgstr "Tarkat yhteystiedot"
+msgstr "Tarkat tiedot"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:693
 #, c-format
@@ -10393,7 +10394,7 @@ msgstr "Gramofoniäänilevy"
 #. OPTGROUP
 #: opac-tmpl/prog/en/includes/masthead.inc:97
 msgid "Groups"
-msgstr ""
+msgstr "Ryhmät"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
 #, c-format
@@ -10469,9 +10470,8 @@ msgstr "Hei,"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:5
-#, fuzzy
 msgid "Hide options"
-msgstr "[Lisää valintoja]"
+msgstr "Piilota valintoja"
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:154
 #, c-format
@@ -10491,19 +10491,19 @@ msgid "Hold date"
 msgstr "Varauspäivämäärä"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:405
-#, fuzzy, c-format
+#, c-format
 msgid "Hold not needed after:"
-msgstr "Varauksen raukeamispäivä"
+msgstr "Varauksen raukeamispäivä:"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:414
-#, fuzzy, c-format
+#, c-format
 msgid "Hold notes:"
-msgstr "Kokoelmahuomautus:"
+msgstr "Varaushuomautus:"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:396
-#, fuzzy, c-format
+#, c-format
 msgid "Hold starts on date:"
-msgstr "Varauksen alkamispäivä"
+msgstr "Varauksen alkamispäivä:"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:636
 #: opac-tmpl/prog/en/modules/ilsdi.tt:715
@@ -10518,12 +10518,12 @@ msgid "HoldTitle"
 msgstr "HoldTitle"
 
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:184
-#, fuzzy, c-format
+#, c-format
 msgid "Holdings"
-msgstr "Kokoelma:"
+msgstr "Kokoelmat"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:815
-#, fuzzy, c-format
+#, c-format
 msgid "Holdings note: "
 msgstr "Kokoelmahuomautus: "
 
@@ -10544,9 +10544,9 @@ msgid "Holds "
 msgstr "Varaus "
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:352
-#, fuzzy, c-format
+#, c-format
 msgid "Holds and priority: "
-msgstr "Kokoelmahuomautus: "
+msgstr "Varaukset ja järjestys: "
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:263
 #, c-format
@@ -10631,9 +10631,9 @@ msgstr "ISBN: %s "
 #. %4$s:  END 
 #. %5$s:  END 
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:60
-#, fuzzy, c-format
+#, c-format
 msgid "ISBN: %s %s %s; %s %s "
-msgstr "%s %s %s ; %s %s "
+msgstr "ISBN: %s %s %s; %s %s "
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:410
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:148
@@ -10691,12 +10691,12 @@ msgstr "Voit kirjautua ilman CAS-tiliä "
 
 #. %1$s:  IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:90
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you don't have a library card, stop by your local library to sign up%s"
 msgstr ""
 "Jos sinulla ei ole kirjastokorttia, käväise kirjastossa, niin annamme sen "
-"sinulle!"
+"sinulle!%s"
 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:89
 #, c-format
@@ -10802,12 +10802,12 @@ msgstr "Tietoja"
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:37
 #, c-format
 msgid "Instructors"
-msgstr ""
+msgstr "Luennoitsija"
 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:25
 #, c-format
 msgid "Instructors:"
-msgstr ""
+msgstr "Luennoitsija:"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:532
 #, c-format
@@ -10852,7 +10852,7 @@ msgstr "Ei lainata"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1520
 #, c-format
 msgid "Item hold queue priority"
-msgstr ""
+msgstr "Nidevarauksen jonojärjestys"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1518
 #, c-format
@@ -11201,12 +11201,12 @@ msgid "Limit to: "
 msgstr "Rajaa seuraaviin: "
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1563
-#, fuzzy, c-format
+#, c-format
 msgid "Link to resource "
 msgstr "Verkkosaatavuus: "
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1463
-#, fuzzy, c-format
+#, c-format
 msgid "LinkedIn"
 msgstr "Jaa LinkedInillä"
 
@@ -11292,9 +11292,9 @@ msgid "Location and availability: "
 msgstr "Sijainti ja saatavuus: "
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:329
-#, fuzzy, c-format
+#, c-format
 msgid "Location(s) (Status)"
-msgstr "Sijainti"
+msgstr "Sijainti (Tila)"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1149
 #, c-format
@@ -11721,9 +11721,9 @@ msgid "Mixed Materials"
 msgstr "Sekalaiset aineistot"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:85
-#, fuzzy, c-format
+#, c-format
 msgid "Mixed materials"
-msgstr "mixed materials"
+msgstr "Sekalaiset aineistot"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
@@ -11762,7 +11762,7 @@ msgid "Monografiserie"
 msgstr "Monofgrafiasarja"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:130
-#, fuzzy, c-format
+#, c-format
 msgid "Monographic series"
 msgstr "Monografiasarja"
 
@@ -11774,7 +11774,7 @@ msgstr "Kuukausittain"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1386
 #, c-format
 msgid "More book reviews at iDreamBooks.com"
-msgstr ""
+msgstr "Lisää kirja-arvosteluita osoitteessa iDreamBooks.com"
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:149
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1238
@@ -11921,7 +11921,7 @@ msgstr "Tee hankintaehdotus"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:821
 #, c-format
 msgid "New tag(s), separated by a comma:"
-msgstr ""
+msgstr "Avainsanat, erotettuina pilkulla:"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:461
 #, c-format
@@ -12097,12 +12097,12 @@ msgstr "Ei voi uusia"
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:72
 #, c-format
 msgid "No reserves have been selected for this course."
-msgstr ""
+msgstr "Tälle kurssille ei ole varattu aineistoa."
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 msgid "No results found in the library's OverDrive collection."
-msgstr ""
+msgstr "Haulle ei löytynyt tuloksia kirjaston OverDrive-kokoelmasta."
 
 #: opac-tmpl/prog/en/includes/masthead.inc:197
 #, c-format
@@ -12168,7 +12168,7 @@ msgstr "Ei varattu"
 #: opac-tmpl/prog/en/modules/opac-results.tt:362
 #, c-format
 msgid "Not what you expected? Check for "
-msgstr ""
+msgstr "Löysitkö hakemasi? Katso muita "
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1208
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:178
@@ -12440,15 +12440,15 @@ msgid "Other editions: "
 msgstr "Muut laitokset: "
 
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:82
-#, fuzzy, c-format
+#, c-format
 msgid "Other forms:"
 msgstr "Muu nimi:"
 
 #. %1$s:  otheritemloop.size || 0 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:944
-#, fuzzy, c-format
+#, c-format
 msgid "Other holdings ( %s )"
-msgstr "Kokoelma (%s)"
+msgstr "Muu kokoelma (%s)"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:922
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:928
@@ -12472,7 +12472,7 @@ msgstr "OutputRewritablePage "
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:143
 #, c-format
 msgid "OverDrive search for '%s'"
-msgstr ""
+msgstr "OverDrive-haku '%s'"
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:120
 #, c-format
@@ -12551,9 +12551,9 @@ msgid "Patent document"
 msgstr "Patentit"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:440
-#, fuzzy, c-format
+#, c-format
 msgid "Patent information: "
-msgstr "Käyttäjän tiedot "
+msgstr "Patenttitiedot: "
 
 #. %1$s:  review.datereviewed | $KohaDates 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1307
@@ -12621,9 +12621,9 @@ msgid "Pick up location"
 msgstr "Noutotoimipiste"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:365
-#, fuzzy, c-format
+#, c-format
 msgid "Pick up location:"
-msgstr "Noutotoimipiste"
+msgstr "Noutotoimipiste:"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:175
 #, c-format
@@ -12638,20 +12638,18 @@ msgstr "Piece-Analytic Level"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:5
-#, fuzzy
 msgid "Place a hold on"
 msgstr "Tee varaus"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:312
-#, fuzzy, c-format
+#, c-format
 msgid "Place a hold on "
-msgstr "Tee varaus "
+msgstr "Tee varaus"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:5
-#, fuzzy
 msgid "Place a hold on: "
-msgstr "Tee varaus "
+msgstr "Tee varaus:"
 
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:9
@@ -12707,9 +12705,9 @@ msgid "Platelager (harddisk)"
 msgstr "Platelager (harddisk)"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Play media"
-msgstr "multimedia"
+msgstr "Multimedia"
 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:34
 #, c-format
@@ -12740,9 +12738,9 @@ msgid "Please confirm the checkout:"
 msgstr "Vahvista laina:"
 
 #: opac-tmpl/prog/en/modules/opac-registration-email-sent.tt:14
-#, fuzzy, c-format
+#, c-format
 msgid "Please confirm your registration"
-msgstr ". Ole hyvä ja ota yhteyttä kirjastoon kortin uusimiseksi."
+msgstr "Vahvista rekisteröitymisesi"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:229
 #, c-format
@@ -12812,7 +12810,7 @@ msgstr "Syötä tekstitieto uudestaan %sTuntematon virhe %s "
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:739
 #, c-format
 msgid "Please type this following characters into the preceding box: "
-msgstr ""
+msgstr "Syötä seuraavat merkit laatikkoon: "
 
 #. OPTGROUP
 #: opac-tmpl/prog/en/includes/resort_form.inc:2
@@ -12847,9 +12845,9 @@ msgid "Powered by "
 msgstr "Virtaa antaa: "
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
-#, fuzzy, c-format
+#, c-format
 msgid "Pre-adolescent"
-msgstr "Nuoret;"
+msgstr "Yläasteikäiset"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:855
 #, c-format
@@ -12862,9 +12860,9 @@ msgid "Preferred form: "
 msgstr "Suositeltu muoto: "
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
-#, fuzzy, c-format
+#, c-format
 msgid "Preschool"
-msgstr "Esikoululaiset;"
+msgstr "Esikouluikäiset"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:849
 #, c-format
@@ -12951,7 +12949,7 @@ msgstr "Käsitellään..."
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:109
 #, c-format
 msgid "Product"
-msgstr ""
+msgstr "Tuote"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
 #, c-format
@@ -13023,9 +13021,9 @@ msgid "Publication:"
 msgstr "Julkaisuvuosi:"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:164
-#, fuzzy, c-format
+#, c-format
 msgid "Publication: "
-msgstr "Julkaisuvuosi: "
+msgstr "Julkaisuvuosi:"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:639
 #, c-format
@@ -13089,7 +13087,7 @@ msgstr "Neljännesvuosittain"
 #: opac-tmpl/prog/en/modules/opac-main.tt:37
 #, c-format
 msgid "Quote of the Day"
-msgstr ""
+msgstr "Päivän sana"
 
 #: opac-tmpl/prog/en/modules/sco/receipt.tt:5
 #, c-format
@@ -13105,7 +13103,7 @@ msgstr "RIS"
 #: opac-tmpl/prog/en/modules/opac-downloadshelf.tt:21
 #, c-format
 msgid "RIS (Zotero, EndNote, others)"
-msgstr ""
+msgstr "RIS (Zotero, EndNote, muut)"
 
 #. %1$s:  heading | html 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:11
@@ -13183,9 +13181,9 @@ msgid "Registration Complete!"
 msgstr "Kirjautuminen on valmis!"
 
 #: opac-tmpl/prog/en/modules/opac-registration-invalid.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid "Registration invalid!"
-msgstr "legislation"
+msgstr "Virheellinen kirjautuminen!"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:498
 #, c-format
@@ -13226,9 +13224,8 @@ msgstr "Poista"
 
 #. A
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:138
-#, fuzzy
 msgid "Remove field"
-msgstr "Koodikentät"
+msgstr "Poista kenttä"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:6
@@ -13236,7 +13233,7 @@ msgid "Remove from list"
 msgstr "Poista listalta"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:492
-#, fuzzy, c-format
+#, c-format
 msgid "Remove from this list"
 msgstr "Poista listalta"
 
@@ -13604,9 +13601,9 @@ msgid "Search %s %s (in %s only)%s %s "
 msgstr "Hae %s %s (vain %sssa)%s %s "
 
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:23
-#, fuzzy, c-format
+#, c-format
 msgid "Search courses:"
-msgstr "Hae:"
+msgstr "Hae kursseista:"
 
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:42
 #, c-format
@@ -13664,7 +13661,7 @@ msgstr "SearchCourseReserves "
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 msgid "Searching OverDrive..."
-msgstr ""
+msgstr "Haetaan OverDrive:sta.."
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:107
 #, c-format
@@ -13700,9 +13697,8 @@ msgstr "Katso myös:"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-detail.tt:38
-#, fuzzy
 msgid "See biblio"
-msgstr "%s teosta"
+msgstr "Katso nimeke"
 
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:90
 #, c-format
@@ -13761,15 +13757,15 @@ msgstr "Valitse etätietokannat:"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:9
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:171
-#, fuzzy, c-format
+#, c-format
 msgid "Select suggestions to: "
-msgstr "Valitse nimekkeet kohteelle: "
+msgstr "Valitse ehdotukset: "
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:578
 #: opac-tmpl/prog/en/modules/opac-detail.tt:680
-#, fuzzy, c-format
+#, c-format
 msgid "Select the item(s) to search :"
-msgstr "Valitse nimekkeet kohteelle:"
+msgstr "Valitse haettavat niteet :"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -14010,9 +14006,9 @@ msgstr "Näytä lisää"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:5
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:392
-#, fuzzy, c-format
+#, c-format
 msgid "Show more options"
-msgstr "[Lisää valintoja]"
+msgstr "Näytä lisää valintoja"
 
 #. A
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1424
@@ -14046,7 +14042,7 @@ msgstr "Näytä vuosi: "
 #: opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tt:36
 #, c-format
 msgid "Showing %s of about %s results"
-msgstr ""
+msgstr "Näytetään %s noin %s tuloksesta"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/datatables.inc:2
@@ -14068,7 +14064,7 @@ msgstr "Näytetään 50 viimeistä"
 #: opac-tmpl/prog/en/modules/opac-main.tt:68
 #, c-format
 msgid "Sign in with your Email"
-msgstr ""
+msgstr "Kirjaudu sähköpostiosoitteellasi"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:974
 #, c-format
@@ -14120,9 +14116,9 @@ msgid "Sorry"
 msgstr "Sorry"
 
 #: opac-tmpl/prog/en/modules/svc/suggestion.tt:23
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, no suggestions."
-msgstr "Ehdotuksen perustelu:"
+msgstr "Valitettavasti ei ehdotuksia."
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:4
@@ -14262,9 +14258,9 @@ msgid "Standard number"
 msgstr "ISBN, ISSN tai muu"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:100
-#, fuzzy, c-format
+#, c-format
 msgid "Standard number (ISBN, ISSN or other):"
-msgstr "ISBN, ISSN tai muu"
+msgstr "Standardinumero (ISBN, ISSN tai muu):"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:368
 #, c-format
@@ -14464,7 +14460,6 @@ msgstr "Lähetä päivityspyyntö"
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:128
-#, fuzzy
 msgid "Submit your suggestion"
 msgstr "Lähetä hankintaehdotus"
 
@@ -14538,9 +14533,9 @@ msgid "Suggested for"
 msgstr "Ehdotettu toimipisteelle"
 
 #: opac-tmpl/prog/en/modules/svc/suggestion.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "Suggestions"
-msgstr "Tilaukset"
+msgstr "Ehdotukset"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:177
 #, c-format
@@ -14751,9 +14746,9 @@ msgid "Term/Phrase"
 msgstr "Hakusana/merkkijono"
 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid "Term:"
-msgstr "Hakusana"
+msgstr "Hakusana:"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:169
 #, c-format
@@ -14905,6 +14900,8 @@ msgid ""
 "the configuration of this feature. Please help to fix the system by "
 "informing your library of this error."
 msgstr ""
+"Lainahistoriasi poistaminen epäonnistui. Tämä on virhe! Ole hyvä ja ilmoita "
+"asiasta kirjastolle"
 
 #. %1$s:  subscription_LOO.histstartdate 
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:88
@@ -15005,7 +15002,7 @@ msgstr "Virhe salasanassa"
 msgid ""
 "There were problems processing your registration. Please contact your "
 "library for help."
-msgstr ""
+msgstr "Rekisteröitymisessäsi oli ongelmia. Ota yhteyttä kirjastoosi."
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
 #, c-format
@@ -15142,7 +15139,7 @@ msgstr "Teosta ei voi varata"
 msgid ""
 "This title consists of multiple volumes/parts. Please indicate which part "
 "you need. Clicking on specific copy information may be helpful."
-msgstr ""
+msgstr "Tässä nimekkeessä on useita osia. Ilmoita minkä osan haluat."
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:156
 #, c-format
@@ -15277,7 +15274,7 @@ msgstr "Ylin"
 #: opac-tmpl/prog/en/includes/opac-facets.inc:15
 #, c-format
 msgid "Topics"
-msgstr ""
+msgstr "Asiasanat"
 
 #: opac-tmpl/prog/en/modules/opac-account.tt:33
 #, c-format
@@ -15350,7 +15347,7 @@ msgstr "Tiistai"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1467
 #, c-format
 msgid "Tweet"
-msgstr ""
+msgstr "Twiittaa"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:617
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:684
@@ -15371,9 +15368,8 @@ msgstr "Hakusanat"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
-#, fuzzy
 msgid "Type:"
-msgstr "Laji:"
+msgstr "Tyyppi:"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:536
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:173
@@ -15485,14 +15481,14 @@ msgid "Unsubscribe"
 msgstr "Lopeta tilaus"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:132
-#, fuzzy, c-format
+#, c-format
 msgid "Updating loose-leaf"
-msgstr "Irtolehti"
+msgstr "Päivitetään irtolehtiaineistoa"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:134
 #, c-format
 msgid "Updating website"
-msgstr ""
+msgstr "Päivitetään verkko-osoitetta"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:261
 #, c-format
@@ -15575,9 +15571,9 @@ msgid "VM"
 msgstr "VM"
 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:734
-#, fuzzy, c-format
+#, c-format
 msgid "Verification:"
-msgstr "Kaunokirjallisuus"
+msgstr "Vahvistus:"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:114
 #, c-format
@@ -15659,7 +15655,7 @@ msgid "Visual Material"
 msgstr "Kuva-aineisto"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:88
-#, fuzzy, c-format
+#, c-format
 msgid "Visual material"
 msgstr "Visuaalinen aineisto"
 
@@ -15702,6 +15698,7 @@ msgstr "Odottaa..."
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "Warning: Cannot be undone. Please confirm once again"
 msgstr ""
+"Varoitus: Tätä toimintoa ei voi peruuttaa. Ole hyvä ja vahvista uudelleen"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:289
 #, c-format
@@ -15722,7 +15719,7 @@ msgstr "Ke"
 #: opac-tmpl/prog/en/modules/search/results.tt:45
 #, c-format
 msgid "We have %s results for your search "
-msgstr ""
+msgstr "Hakuusi löytyi %s osumaa"
 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:26
 #, c-format
@@ -15908,7 +15905,7 @@ msgstr "Olet jo varannut tämän teoksen"
 
 #. %1$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:123
-#, fuzzy, c-format
+#, c-format
 msgid "You have checked out too many items and can't check out any more. %s "
 msgstr ""
 "Lainojen maksimimäärä saavutettu. Palauta osa lainaamastasi aineistosta. %s "
@@ -15923,7 +15920,7 @@ msgstr "Ei maksamattomia maksuja"
 msgid ""
 "You have not filled out all required fields. Please fill in all missing "
 "fields and resubmit."
-msgstr ""
+msgstr "Et ole täyttänyt kaikkia vaadittuja kenttiä."
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:222
 #, c-format
@@ -15935,7 +15932,7 @@ msgstr "Ei lainoja"
 msgid ""
 "You have successfully registered your new account. To log in, use the "
 "following credentials:"
-msgstr ""
+msgstr "Uusi tilisi on luotu. Kirjaudu sisään seuraavilla tiedoilla:"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -15967,25 +15964,25 @@ msgstr "Valitse ainakin yksi teos "
 #. %1$s:  amount 
 #. %2$s:  ELSIF ( circ_error_WTHDRAWN ) 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:131
-#, fuzzy, c-format
+#, c-format
 msgid "You owe the library %s and cannot check out. %s "
 msgstr ""
 "Maksamattomat maksusi ovat %s. Olet lainakiellossa. Ota yhteyttä kirjastoon. "
-"%s "
+"%s"
 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:62
 #, c-format
 msgid ""
 "You typed in the wrong characters in the box before submitting. Please try "
 "again."
-msgstr ""
+msgstr "Kirjoitit väärät merkit laatikkoon. Yritä uudelleen."
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-detail.tt:38
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
-msgstr ""
+msgstr "Istuntosi keksi on vanhentunut. Lataa sivu uudelleen."
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:144
 #, c-format
@@ -16016,6 +16013,8 @@ msgid ""
 "Your account will not be activated until you follow the link provided in the "
 "confirmation email."
 msgstr ""
+"Sait aktivointilinkin sähköpostiisi. Aktivoi tilisi klikkaamalla sitä "
+"linkkiä."
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:95
 #, c-format
@@ -16152,6 +16151,8 @@ msgid ""
 "Your updates have been submitted. A librarian will review your updates "
 "before applying them."
 msgstr ""
+"Tietojesi muutokset on tallennettu. Kirjasto tarkistaa muutokset ennen "
+"hyväksymistä."
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:216
 #, c-format
@@ -16277,9 +16278,9 @@ msgid ""
 msgstr ""
 
 #: opac-tmpl/prog/en/includes/masthead.inc:181
-#, fuzzy, c-format
+#, c-format
 msgid "[Create new list]"
-msgstr "Aloita uusi lista"
+msgstr "[Luo uusi lista]"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:150
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:338
@@ -16670,9 +16671,8 @@ msgstr "Verkkosaatavuus "
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-detail.tt:38
-#, fuzzy
 msgid "average rating:"
-msgstr "Tähdet: %s (%s ääntä)"
+msgstr "keskiarvo:"
 
 #. %1$s:  rating_avg_int 
 #. %2$s:  rating_total 
@@ -16764,9 +16764,8 @@ msgstr "Bristol-taulu"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-detail.tt:38
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
-#, fuzzy
 msgid "by"
-msgstr "/"
+msgstr "/ "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:452
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:162
@@ -17442,15 +17441,14 @@ msgstr "ilsdi.pl?service=RenewLoan&amp;patron_id=1&amp;item_id=1 "
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-user.tt:112
-#, fuzzy, c-format
+#, c-format
 msgid "in %s fines"
-msgstr "maksuja."
+msgstr "%s maksuja"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
-#, fuzzy
 msgid "in OverDrive collection"
-msgstr "Lehdet"
+msgstr "OverDrive-kokoelmassa"
 
 #: opac-tmpl/prog/en/modules/opac-authorities-home.tt:34
 #, c-format
@@ -18036,7 +18034,7 @@ msgstr "muut"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 msgid "out of"
-msgstr ""
+msgstr "/"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:180
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:280
@@ -18307,14 +18305,13 @@ msgstr "kysyy tietoja saatavuuden raportointiin, vaihtoehdot: "
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
-#, fuzzy
 msgid "results"
-msgstr "Hakutulos"
+msgstr "hakutulos"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 msgid "results in the library's OverDrive collection."
-msgstr ""
+msgstr "tulosta kirjaston OverDrive-kokoelmassa."
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:395
 #, c-format
@@ -18857,9 +18854,9 @@ msgid "url"
 msgstr "url"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:391
-#, fuzzy, c-format
+#, c-format
 msgid "user's login identifier (userid or cardnumber)"
-msgstr "Käyttäjätunnus"
+msgstr "käyttäjän kirjautumistunnus (käyttäjätunnus tai kortin numero)"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:393
 #, c-format
@@ -18938,7 +18935,7 @@ msgstr "vxyz"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 msgid "waiting holds:"
-msgstr ""
+msgstr "odottavia varauksia:"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:235
 #, c-format
@@ -18977,9 +18974,8 @@ msgstr "Musiikkiäänite "
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-detail.tt:38
-#, fuzzy
 msgid "with biblionumber"
-msgstr "[% biblionumber |url %]"
+msgstr "tietuenumerolla"
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:226
 #, c-format
@@ -19019,9 +19015,8 @@ msgstr "Käyttäjätilisi"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-detail.tt:38
-#, fuzzy
 msgid "your rating:"
-msgstr "arviosi: %s"
+msgstr "arviosi:"
 
 #. %1$s:  rating_value 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:900
@@ -19096,5 +19091,3 @@ msgstr ""
 #, c-format
 msgid "• "
 msgstr "• "
-
-#, fuzzy

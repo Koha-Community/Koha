@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0\n"
-"POT-Creation-Date: 2014-01-17 22:43-0300\n"
+"POT-Creation-Date: 2014-02-16 18:53-0300\n"
 "PO-Revision-Date: 2013-12-23 18:50+0000\n"
 "Last-Translator: HamadDafallah <hamad4a@gmail.com>\n"
 "Language-Team: Arabic <k-qub@live.com>\n"
@@ -2177,7 +2177,7 @@ msgstr "%s %s"
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:47
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:64
-#: opac-tmpl/prog/en/includes/item-status.inc:43
+#: opac-tmpl/prog/en/includes/item-status.inc:50
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:5
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:44
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:113
@@ -2781,15 +2781,13 @@ msgstr "%s %s %s %s %s %s"
 msgid "%s %s %s %s %s %s "
 msgstr "%s %s %s %s %s %s "
 
-#. For the first occurrence,
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  IF ( item.itemlost ) 
-#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %4$s:  IF ( av_lib_include ) 
-#. %5$s:  av_lib_include 
-#. %6$s:  ELSE 
-#. %7$s:  IF ( item.lostimageurl ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:1
+#. %1$s:  FOREACH review IN SYNDETICS_REVIEW.reviews 
+#. %2$s:  IF ( review.content ) 
+#. %3$s:  review.content 
+#. %4$s:  END 
+#. %5$s:  END 
+#. %6$s:  END 
+#. %7$s:  END 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1154
 #, c-format
 msgid "%s %s %s %s %s %s %s "
@@ -2903,7 +2901,7 @@ msgstr ""
 #. %7$s:  END 
 #. %8$s:  ELSE 
 #. %9$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:34
+#: opac-tmpl/prog/en/includes/item-status.inc:41
 #, c-format
 msgid "%s %s %s %s %s %s Item damaged %s %s Available %s"
 msgstr "%s %s %s %s %s %s المادة تالفة %s %s متاح %s"
@@ -3216,7 +3214,7 @@ msgstr "%s %s %s المادة في الانتظار في "
 #. %2$s:  END 
 #. %3$s:  ELSIF ( item.notforloan_per_itemtype ) 
 #. %4$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:31
+#: opac-tmpl/prog/en/includes/item-status.inc:38
 #, c-format
 msgid "%s %s %s Not for loan %s"
 msgstr "%s %s %s لا تُعار %s"
@@ -3635,7 +3633,7 @@ msgstr "%s %s لم يتم العثور على نتائج. %s "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:29
+#: opac-tmpl/prog/en/includes/item-status.inc:36
 #, c-format
 msgid "%s %s Not for loan %s"
 msgstr "%s %s لا تُعار %s"
@@ -4455,7 +4453,7 @@ msgstr "%s الملاحظات والنقد من مستخدمي الانترنت"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  END 
-#. %4$s:  ELSIF ( item.datedue ) 
+#. %4$s:  ELSIF ( item.datedue || issue.date_due ) 
 #. %5$s:  IF ( OPACShowCheckoutName ) 
 #. %6$s:  item.cardnumber 
 #. %7$s:  item.firstname 
@@ -4472,7 +4470,7 @@ msgstr "%s الملاحظات والنقد من مستخدمي الانترنت"
 #. %18$s:  IF ( item.notforloanvalueopac ) 
 #. %19$s:  item.notforloanvalueopac 
 #. %20$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/prog/en/includes/item-status.inc:9
+#: opac-tmpl/prog/en/includes/item-status.inc:16
 #, fuzzy, c-format
 msgid ""
 "%s Item lost %s %s %s %s Checked out to %s %s %s %s Checked out %s %s In "
@@ -4781,6 +4779,22 @@ msgstr ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
 "hidden.defined('mobile') && hidden.defined('email') && hidden.defined"
 "('emailpro') && hidden.defined('fax') %%] "
+
+#. %1$s:  USE AuthorisedValues 
+#. %2$s:  IF ( item.itemlost ) 
+#. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
+#. %4$s:  IF ( av_lib_include ) 
+#. %5$s:  av_lib_include 
+#. %6$s:  ELSE 
+#. %7$s:  IF ( item.lostimageurl ) 
+#: opac-tmpl/prog/en/includes/item-status.inc:1
+#, c-format
+msgid ""
+"%s [%%#- This include takes two parameters: an item structure and an "
+"optional loan (issue) structure. The issue structure is used by course "
+"reserves pages, which do not use an API to fetch items that populates item."
+"datedue. -%%] %s %s %s %s %s %s "
+msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  ind.label 
@@ -6746,10 +6760,10 @@ msgstr "(%s الإجمالي)"
 
 #. For the first occurrence,
 #. %1$s:  item.restrictedopac 
-#: opac-tmpl/prog/en/includes/item-status.inc:29
-#: opac-tmpl/prog/en/includes/item-status.inc:31
-#: opac-tmpl/prog/en/includes/item-status.inc:34
-#: opac-tmpl/prog/en/includes/item-status.inc:43
+#: opac-tmpl/prog/en/includes/item-status.inc:36
+#: opac-tmpl/prog/en/includes/item-status.inc:38
+#: opac-tmpl/prog/en/includes/item-status.inc:41
+#: opac-tmpl/prog/en/includes/item-status.inc:50
 #: opac-tmpl/prog/en/modules/opac-results.tt:631
 #: opac-tmpl/prog/en/modules/opac-detail.tt:810
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:274
@@ -19095,4 +19109,3 @@ msgstr ""
 #, c-format
 msgid "• "
 msgstr "• "
-
