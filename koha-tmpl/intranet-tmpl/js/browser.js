@@ -2,13 +2,16 @@ if ( KOHA === undefined ) var KOHA = {};
 
 KOHA.browser = function (searchid, biblionumber) {
     var me = this;
+
+    if (!searchid) {
+        // We are generating a clean numeric datetime representation so we can easily compare them using the default javascript lexigraphic sorter.
+        searchid = 'scs_' + (new Date()).getTime(); // scs for Staff Client Search
+    }
     this.searchid = searchid;
 
-    if (me.searchid) {
-        var cookie = $.cookie(me.searchid)
-        if (cookie) {
-            me.searchCookie = JSON.parse(cookie);
-        }
+    var cookie = $.cookie(me.searchid)
+    if (cookie) {
+        me.searchCookie = JSON.parse(cookie);
     }
 
     var browseRecords = function (movement) {
