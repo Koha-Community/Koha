@@ -25,7 +25,7 @@ function _(s) { return s; } // dummy function for gettext
         return false;
     });
 
-    $('.noEnterSubmit').live("keypress", function(e){
+    $("body").on("keypress", ".noEnterSubmit", function(e){
         return checkEnter(e);
     });
 });
