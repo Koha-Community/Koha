@@ -70,7 +70,17 @@
                                 [% biblio_lis.citation %]
 
                              </td>
-                             <td>[% biblio_lis.overlay_status %]</td>
+                             <td>
+                                [% IF ( biblio_lis.overlay_status == 'no_match' ) %]
+                                    No match
+                                [% ELSIF ( biblio_lis.overlay_status == 'match_applied' ) %]
+                                    Match applied
+                                [% ELSIF ( biblio_lis.overlay_status == 'auto_match' ) %]
+                                    Match found
+                                [% ELSE %]
+                                    [% biblio_lis.overlay_status %]
+                                [% END %]
+                             </td>
                              <td><a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]&amp;breedingid=[% biblio_lis.import_record_id %]&amp;import_batch_id=[% biblio_lis.import_batch_id %]&amp;biblionumber=[% biblio_lis.match_biblionumber %]">Add order</a></td>
                          </tr>
      [% IF ( biblio_lis.match_biblionumber ) %]
@@ -112,7 +122,23 @@
                      <tr>
                         <td>[% batch_lis.file_name %]</td>
                        <td>[% batch_lis.comments %]</td>
-                       <td>[% batch_lis.import_status %]</td>
+                       <td>
+                        [% IF ( batch_lis.import_status == 'cleaned' ) %]
+                            Cleaned
+                        [% ELSIF ( batch_lis.import_status == 'imported' ) %]
+                            Imported
+                        [% ELSIF ( batch_lis.import_status == 'importing' ) %]
+                            Importing
+                        [% ELSIF ( batch_lis.import_status == 'reverted' ) %]
+                            Reverted
+                        [% ELSIF ( batch_lis.import_status == 'reverting' ) %]
+                            Reverting
+                        [% ELSIF ( batch_lis.import_status == 'staged' ) %]
+                            Staged
+                        [% ELSE %]
+                            [% batch_lis.import_status %]
+                        [% END %]
+                       </td>
                        <td><span title="[% batch_lis.staged_date %]">[% batch_lis.staged_date | $KohaDates with_hours => 1 %]</span></td>
                        <td>[% batch_lis.num_biblios %]</td>
                        <td><a href="[% batch_lis.scriptname %]?import_batch_id=[% batch_lis.import_batch_id %]&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]">Add orders</a></td>
