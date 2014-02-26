@@ -160,7 +160,7 @@ my $DisplayMultiPlaceHold = C4::Context->preference("DisplayMultiPlaceHold");
 use CGI qw('-no_undef_params');
 my $cgi = new CGI;
 
-my $lang = C4::Templates::getlanguage($cgi, 'intranet');
+my ($template,$borrowernumber,$cookie);
 # decide which template to use
 my $template_name;
 my $template_type;
@@ -181,6 +181,9 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user({
     flagsrequired   => { catalogue => 1 },
     }
 );
+
+my $lang = C4::Languages::getlanguage($cgi);
+
 if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
     $template->param('UNIMARC' => 1);
 }

@@ -27,6 +27,7 @@ use CGI::Session;
 require Exporter;
 use C4::Context;
 use C4::Templates;    # to get the template
+use C4::Languages;
 use C4::Branch; # GetBranches
 use C4::Search::History;
 use C4::VirtualShelves;
@@ -133,6 +134,8 @@ sub get_template_and_user {
 
     my $in       = shift;
     my ( $user, $cookie, $sessionID, $flags );
+
+    C4::Context->interface($in->{type});
 
     my $template = C4::Templates::gettemplate(
         $in->{'template_name'},
@@ -480,9 +483,9 @@ sub get_template_and_user {
 
     # Check if we were asked using parameters to force a specific language
     if ( defined $in->{'query'}->param('language') ) {
-        # Extract the language, let C4::Templates::getlanguage choose
+        # Extract the language, let C4::Languages::getlanguage choose
         # what to do
-        my $language = C4::Templates::getlanguage($in->{'query'},$in->{'type'});
+        my $language = C4::Languages::getlanguage($in->{'query'});
         my $languagecookie = C4::Templates::getlanguagecookie($in->{'query'},$language);
         if ( ref $cookie eq 'ARRAY' ) {
             push @{ $cookie }, $languagecookie;

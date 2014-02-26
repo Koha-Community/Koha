@@ -285,7 +285,7 @@ sub themelanguage {
     ($query) or warn "no query in themelanguage";
 
     # Select a language based on cookie, syspref available languages & browser
-    my $lang = getlanguage($query, $interface);
+    my $lang = C4::Languages::getlanguage($query);
 
     # Select theme
     my $is_intranet = $interface eq 'intranet';
@@ -307,6 +307,7 @@ sub themelanguage {
 
 sub setlanguagecookie {
     my ( $query, $language, $uri ) = @_;
+
     my $cookie = $query->cookie(
         -name    => 'KohaOpacLanguage',
         -value   => $language,
@@ -337,54 +338,6 @@ sub getlanguagecookie {
     );
 
     return $cookie;
-}
-
-=head2 getlanguage
-
-    Select a language based on the URL parameter 'language', a cookie,
-    syspref available languages & browser
-
-=cut
-
-sub getlanguage {
-    my ($query, $interface) = @_;
-
-    my $preference_to_check =
-      $interface eq 'intranet' ? 'language' : 'opaclanguages';
-    # Get the available/valid languages list
-    my @languages = split /,/, C4::Context->preference($preference_to_check);
-
-    my $lang;
-
-    # Chose language from the URL
-    $lang = $query->param( 'language' );
-    if ( defined $lang && any { $_ eq $lang } @languages) {
-        return $lang;
-    }
-
-    # cookie
-    if ($query and $query->cookie('KohaOpacLanguage') ) {
-        $lang = $query->cookie('KohaOpacLanguage');
-        $lang =~ s/[^a-zA-Z_-]*//; # sanitize cookie
-    }
-
-    # HTTP_ACCEPT_LANGUAGE
-    if ( !$lang && $ENV{HTTP_ACCEPT_LANGUAGE} ) {
-        $lang = accept_language( $ENV{HTTP_ACCEPT_LANGUAGE},
-            getTranslatedLanguages( $interface, 'prog' ) );
-    }
-
-    # Ignore a lang not selected in sysprefs
-    if ( $lang && any { $_ eq $lang } @languages ) {
-        return $lang;
-    }
-
-    # Pick the first selected syspref language
-    $lang = shift @languages;
-    return $lang if $lang;
-
-    # Fall back to English if necessary
-    return 'en';
 }
 
 1;

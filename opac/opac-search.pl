@@ -91,7 +91,6 @@ BEGIN {
 }
 
 my ($template,$borrowernumber,$cookie);
-my $lang = C4::Templates::getlanguage($cgi, 'opac');
 # decide which template to use
 my $template_name;
 my $template_type = 'basic';
@@ -121,6 +120,9 @@ else {
     authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
     }
 );
+
+my $lang = C4::Languages::getlanguage($cgi);
+
 if ($template_name eq 'opac-results.tmpl') {
    $template->param('COinSinOPACResults' => C4::Context->preference('COinSinOPACResults'));
 }

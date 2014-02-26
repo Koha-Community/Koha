@@ -19,9 +19,12 @@ package C4::Languages;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-use strict; 
-#use warnings; FIXME - Bug 2505
+use strict;
+use warnings;
+
 use Carp;
+use CGI;
+use List::MoreUtils qw( any );
 use C4::Context;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
@@ -46,7 +49,7 @@ BEGIN {
         &getLanguages
         &getAllLanguages
     );
-    @EXPORT_OK = qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages getLanguages get_bidi regex_lang_subtags language_get_description accept_language);
+    @EXPORT_OK = qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages getLanguages get_bidi regex_lang_subtags language_get_description accept_language getlanguage);
     $DEBUG = 0;
 }
 
@@ -552,6 +555,56 @@ sub accept_language {
     return $secondaryMatch if $secondaryMatch;
     return undef;   # else, we got nothing.
 }
+
+=head2 getlanguage
+
+    Select a language based on the URL parameter 'language', a cookie,
+    syspref available languages & browser
+
+=cut
+
+sub getlanguage {
+    my ($cgi) = @_;
+
+    $cgi //= new CGI;
+    my $interface = C4::Context->interface;
+    my $language;
+
+    my $preference_to_check =
+      $interface eq 'intranet' ? 'language' : 'opaclanguages';
+    # Get the available/valid languages list
+    my @languages = split /,/, C4::Context->preference($preference_to_check);
+
+    # Chose language from the URL
+    $language = $cgi->param( 'language' );
+    if ( defined $language && any { $_ eq $language } @languages) {
+        return $language;
+    }
+
+    # cookie
+    if ($language = $cgi->cookie('KohaOpacLanguage') ) {
+        $language =~ s/[^a-zA-Z_-]*//; # sanitize cookie
+    }
+
+    # HTTP_ACCEPT_LANGUAGE
+    if ( !$language && $ENV{HTTP_ACCEPT_LANGUAGE} ) {
+        $language = accept_language( $ENV{HTTP_ACCEPT_LANGUAGE},
+            getTranslatedLanguages( $interface, 'prog' ) );
+    }
+
+    # Ignore a lang not selected in sysprefs
+    if ( $language && any { $_ eq $language } @languages ) {
+        return $language;
+    }
+
+    # Pick the first selected syspref language
+    $language = shift @languages;
+    return $language if $language;
+
+    # Fall back to English if necessary
+    return 'en';
+}
+
 1;
 
 __END__

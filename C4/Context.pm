@@ -1261,6 +1261,17 @@ sub IsSuperLibrarian {
     return ($userenv->{flags}//0) % 2;
 }
 
+sub interface {
+    my ($class, $interface) = @_;
+
+    if (defined $interface) {
+        $interface ||= 'opac';
+        $context->{interface} = $interface;
+    }
+
+    return $context->{interface};
+}
+
 1;
 __END__
 

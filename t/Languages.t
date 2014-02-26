@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2013 Equinox Software, Inc.
+# Copyright 2014 BibLibre
 #
 # This file is part of Koha.
 #
@@ -22,7 +23,7 @@ use Test::MockModule;
 use CGI;
 
 BEGIN {
-    use_ok('C4::Templates');
+    use_ok('C4::Languages');
 }
 
 my @languages = (); # stores the list of active languages
@@ -41,11 +42,11 @@ $module_context->mock(
   },
 );
 
-delete $ENV{TTTP_ACCEPT_LANGUAGE};
+delete $ENV{HTTP_ACCEPT_LANGUAGE};
 
 my $query = CGI->new();
 @languages = ('de-DE', 'fr-FR');
-is(C4::Templates::getlanguage($query, 'opac'), 'de-DE', 'default to first language specified in syspref (bug 10560)');
+is(C4::Languages::getlanguage($query), 'de-DE', 'default to first language specified in syspref (bug 10560)');
 
 @languages = ();
-is(C4::Templates::getlanguage($query, 'opac'), 'en', 'default to English if no language specified in syspref (bug 10560)');
+is(C4::Languages::getlanguage($query), 'en', 'default to English if no language specified in syspref (bug 10560)');
