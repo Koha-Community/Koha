@@ -5,18 +5,18 @@ KOHA.browser = function (searchid, biblionumber) {
     this.searchid = searchid;
 
     if (me.searchid) {
-        var cookie = $.cookie(searchid)
+        var cookie = $.cookie(me.searchid)
         if (cookie) {
             me.searchCookie = JSON.parse(cookie);
         }
     }
 
-    var browseRecords = function (searchid, movement) {
+    var browseRecords = function (movement) {
         var newSearchPos = me.curPos + movement;
         if (newSearchPos > me.searchCookie.results.length - 1) {
-            window.location = '/cgi-bin/koha/catalogue/search.pl?' + decodeURIComponent(me.searchCookie.query) + '&limit=' + decodeURIComponent(me.searchCookie.limit) + '&sort=' + me.searchCookie.sort + '&gotoPage=detail.pl&gotoNumber=first&searchid=' + searchid + '&offset=' + newSearchPos;
+            window.location = '/cgi-bin/koha/catalogue/search.pl?' + decodeURIComponent(me.searchCookie.query) + '&limit=' + decodeURIComponent(me.searchCookie.limit) + '&sort=' + me.searchCookie.sort + '&gotoPage=detail.pl&gotoNumber=first&searchid=' + me.searchid + '&offset=' + newSearchPos;
         } else if (newSearchPos < 0) {
-            window.location = '/cgi-bin/koha/catalogue/search.pl?' + decodeURIComponent(me.searchCookie.query) + '&limit=' + decodeURIComponent(me.searchCookie.limit) + '&sort=' + me.searchCookie.sort + '&gotoPage=detail.pl&gotoNumber=last&searchid=' + searchid + '&offset=' + (me.offset - me.searchCookie.pagelen);
+            window.location = '/cgi-bin/koha/catalogue/search.pl?' + decodeURIComponent(me.searchCookie.query) + '&limit=' + decodeURIComponent(me.searchCookie.limit) + '&sort=' + me.searchCookie.sort + '&gotoPage=detail.pl&gotoNumber=last&searchid=' + me.searchid + '&offset=' + (me.offset - me.searchCookie.pagelen);
         } else {
             window.location = window.location.href.replace('biblionumber=' + biblionumber, 'biblionumber=' + me.searchCookie.results[newSearchPos]);
         }
@@ -86,11 +86,11 @@ KOHA.browser = function (searchid, biblionumber) {
                     $('#menu').before('<div class="browse-controls"><div class="browse-controls-inner"><div class="browse-label"><a href="' + searchURL + '" id="browse-return-to-results" class="browse-button">' + BROWSER_RETURN_TO_SEARCH + '</a></div><div class="browse-prev-next">' + prevbutton + nextbutton + '</div></div></div>');
                     $('a#browse-previous').click(function (ev) {
                         ev.preventDefault();
-                        browseRecords(searchid, -1);
+                        browseRecords(-1);
                     });
                     $('a#browse-next').click(function (ev) {
                         ev.preventDefault();
-                        browseRecords(me.searchid, 1);
+                        browseRecords(1);
                     });
                     $('a[href*="biblionumber="]').click(function (ev) {
                         ev.preventDefault();
