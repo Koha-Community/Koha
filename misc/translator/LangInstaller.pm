@@ -476,7 +476,7 @@ sub extract_messages {
     }
 
     my $xgettext_cmd = "$self->{xgettext} -L Perl --from-code=UTF-8 " .
-        "-kmaketext -o $Bin/$self->{domain}.pot -D $intranetdir";
+        "-o $Bin/$self->{domain}.pot -D $intranetdir";
     $xgettext_cmd .= " $_" foreach (@files_to_scan);
 
     if (system($xgettext_cmd) != 0) {

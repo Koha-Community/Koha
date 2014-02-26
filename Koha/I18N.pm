@@ -18,10 +18,10 @@ package Koha::I18N;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use Modern::Perl;
-use base qw(Locale::Maketext);
+use base qw(Locale::Maketext Exporter);
 
-use C4::Templates;
-use C4::Context;
+use CGI;
+use C4::Languages;
 
 use Locale::Maketext::Lexicon {
     'en' => ['Auto'],
@@ -31,22 +31,28 @@ use Locale::Maketext::Lexicon {
             . '/misc/translator/po/*-messages.po'
     ],
     '_AUTO' => 1,
+    '_style' => 'gettext',
 };
 
-sub get_handle_from_context {
-    my ($class, $cgi, $interface) = @_;
+our @EXPORT = qw( gettext );
 
-    my $lh;
-    my $lang = C4::Templates::getlanguage($cgi, $interface);
-    if ($lang) {
-        $lh = $class->get_handle($lang)
-            or die "No language handle for '$lang'";
-    } else {
-        $lh = $class->get_handle()
-            or die "Can't get a language handle";
+my %language_handles;
+
+sub get_language_handle {
+    my $cgi = new CGI;
+    my $language = C4::Languages::getlanguage;
+
+    if (not exists $language_handles{$language}) {
+        $language_handles{$language} = __PACKAGE__->get_handle($language)
+            or die "No language handle for '$language'";
     }
 
-    return $lh;
+    return $language_handles{$language};
+}
+
+sub gettext {
+    my $lh = get_language_handle;
+    $lh->maketext(@_);
 }
 
 1;
