@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Summary for [% firstname %] [% surname %] ([% cardnumber %])</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -22,6 +23,10 @@
 <li>[% IF ( phone ) %][% phone %][% ELSE %](no phone number on file)[% END %]</li>
 <li>[% IF ( email ) %][% email %][% ELSE %](no primary email on file)[% END %]</li>
 [% IF ( emailpro ) %]<li>[% emailpro %]</li>[% END %]
+<li>Registration date: [% dateenrolled %]</li>
+<li>Expiration date: [% dateexpiry %]</li>
+<li>Library: [% branchname %]</li>
+<li>Category: [% description %]</li>
 </ul>
 
 [% IF ( issueloop ) %]
@@ -83,6 +88,36 @@
 		<td>[% reserveloo.reservedate2 %]</td>
 	</tr>
 	[% END %]
+</table>
+[% END %]
+
+[% IF ( accounts ) %]
+<table>
+    <caption>Account fines and payments</caption>
+    <tr>
+        <th>Description of charges</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Outstanding</th>
+    </tr>
+    [% FOREACH account IN accounts %]
+    <tr>
+        <td>
+            [% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">[% END %]
+            [% account.description %]&nbsp;[% IF ( account.printtitle ) %] [% account.title |html %][% END %]
+            [% IF ( account.itemnumber ) %]</a>[% END %]
+        </td>
+        <td>[% account.date | $KohaDates %]</td>
+        <td>[% account.amount %]</td>
+        <td>[% account.amountoutstanding %]</td>
+    </tr>
+    [% END %]
+    <tfoot>
+        <tr>
+            <td colspan="3">Total due</td>
+            <td colspan="2">[% totaldue %]</td>
+        </tr>
+    </tfoot>
 </table>
 [% END %]
 

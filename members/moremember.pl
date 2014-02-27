@@ -232,6 +232,19 @@ my $lib2 = &GetSortDetails( "Bsort2", $data->{'sort2'} );
 $template->param( lib1 => $lib1 ) if ($lib1);
 $template->param( lib2 => $lib2 ) if ($lib2);
 
+# If printing a page, send the account informations to the template
+if ($print eq "page") {
+    foreach my $accountline (@$accts) {
+        $accountline->{amount} = sprintf '%.2f', $accountline->{amount};
+        $accountline->{amountoutstanding} = sprintf '%.2f', $accountline->{amountoutstanding};
+
+        if ($accountline->{accounttype} ne 'F' && $accountline->{accounttype} ne 'FU'){
+            $accountline->{printtitle} = 1;
+        }
+    }
+    $template->param( accounts => $accts );
+}
+
 # Show OPAC privacy preference is system preference is set
 if ( C4::Context->preference('OPACPrivacy') ) {
     $template->param( OPACPrivacy => 1);
