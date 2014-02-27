@@ -31,7 +31,6 @@ use C4::Members;
 use C4::Branch;
 use C4::Category;
 use Koha::DateUtils;
-use File::Basename;
 use Koha::List::Patron;
 
 my $input = new CGI;
@@ -225,7 +224,6 @@ $template->param(
     branchloop   => \@branchloop,
     categories   => \@categories,
     searching    => "1",
-    actionname   => basename($0),
     numresults   => $count,
     resultsloop  => \@resultsdata,
     results_per_page => $resultsperpage,
