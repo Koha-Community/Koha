@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Notices[% IF ( add_form ) %][% IF ( modify ) %] &rsaquo; Modify notice[% ELSE %] &rsaquo; Add notice[% END %][% END %][% IF ( add_validate ) %] &rsaquo; Notice added[% END %][% IF ( delete_confirm ) %] &rsaquo; Confirm deletion[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -310,7 +311,15 @@ $(document).ready(function() {
 
         [% FOREACH letter IN letters %]
           <li>
-            <fieldset class="rows mtt" id="[% letter.message_transport_type %]">
+            [% IF letter.message_transport_type == "sms" and not Koha.Preference("SMSSendDriver") %]
+              <fieldset class="rows mtt" id="[% letter.message_transport_type %]" disabled="disabled">
+                <div class="dialog message">You should enable the SMSSendDriver preference to use the sms templates.</div>
+            [% ELSIF letter.message_transport_type == "phone" and not Koha.Preference("TalkingTechItivaPhoneNotification") %]
+              <fieldset class="rows mtt" id="[% letter.message_transport_type %]" disabled="disabled">
+                <div class="dialog message">You should enable the TalkingTechItivaPhoneNotification preference to use the phone templates.</div>
+            [% ELSE %]
+              <fieldset class="rows mtt" id="[% letter.message_transport_type %]">
+            [% END %]
               <legend>
                 [% SWITCH letter.message_transport_type %]
                 [% CASE 'email' %]

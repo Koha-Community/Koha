@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Notice triggers</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -146,7 +147,13 @@ $(document).ready(function() {
                   [% IF mtt.selected %]
                     <input type="checkbox" name="mtt[% tab.number %]-[% value.overduename %]" value="[% mtt.value %]" checked="checked" />
                   [% ELSE %]
-                    <input type="checkbox" name="mtt[% tab.number %]-[% value.overduename %]" value="[% mtt.value %]" />
+                    [% IF mtt.value == "sms" and not Koha.Preference("SMSSendDriver") %]
+                      <input type="checkbox" name="mtt[% tab.number %]-[% value.overduename %]" value="[% mtt.value %]" disabled="disabled" />
+                    [% ELSIF mtt.value == "phone" and not Koha.Preference("TalkingTechItivaPhoneNotification") %]
+                      <input type="checkbox" name="mtt[% tab.number %]-[% value.overduename %]" value="[% mtt.value %]" disabled="disabled" />
+                    [% ELSE %]
+                      <input type="checkbox" name="mtt[% tab.number %]-[% value.overduename %]" value="[% mtt.value %]" />
+                    [% END %]
                   [% END %]
                 </td>
               [% END %]
