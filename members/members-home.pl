@@ -30,7 +30,6 @@ use Koha::Borrower::Modifications;
 
 my $query = new CGI;
 my $branch = $query->param('branchcode');
-my $template_name;
 
 $branch = q{} unless defined $branch;
 
