@@ -88,12 +88,32 @@ sub printorders {
     }
     push(@$abaskets, $arrbasket);
 
+    my $titleinfo;
     for my $basket (@$baskets){
         for my $line (@{$orders->{$basket->{basketno}}}) {
             $arrbasket = undef;
+            $titleinfo = "";
+            if ( C4::Context->preference("marcflavour") eq 'UNIMARC' ) {
+                $titleinfo =  $line->{title} . " / " . $line->{author} .
+                    ( $line->{isbn} ? " ISBN: " . $line->{isbn} : '' ) .
+                    ( $line->{en} ? " EN: " . $line->{en} : '' ) .
+                    ( $line->{itemtype} ? ", " . $line->{itemtype} : '' ) .
+                    ( $line->{edition} ? ", " . $line->{edition} : '' ) .
+                    ( $line->{publishercode} ? ' Verlag: '. $line->{publishercode} : '') .
+                    ( $line->{publicationyear} ? ', '. $line->{publicationyear} : '');
+            }
+            else { # MARC21, NORMARC
+                $titleinfo =  $line->{title} . " " . $line->{author} .
+                    ( $line->{isbn} ? " ISBN: " . $line->{isbn} : '' ) .
+                    ( $line->{en} ? " EN: " . $line->{en} : '' ) .
+                    ( $line->{itemtype} ? " " . $line->{itemtype} : '' ) .
+                    ( $line->{edition} ? ", " . $line->{edition} : '' ) .
+                    ( $line->{publishercode} ? ' Verlag: '. $line->{publishercode} : '') .
+                    ( $line->{copyrightdate} ? ' '. $line->{copyrightdate} : '');
+            }
             push( @$arrbasket,
                 $basket->{basketno},
-                $line->{title} . " / " . $line->{author} . ( $line->{isbn} ? " ISBN: " . $line->{isbn} : '' ) . ( $line->{en} ? " EN: " . $line->{en} : '' ) . ", " . $line->{itemtype} . ( $line->{publishercode} ? 'Verlag:'. $line->{publishercode} : ""),
+                $titleinfo,
                 $line->{quantity},
                 $num->format_price($line->{rrpgsti}),
                 $num->format_price($line->{discount}).'%',
