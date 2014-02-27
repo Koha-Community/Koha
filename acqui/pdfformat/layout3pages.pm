@@ -381,6 +381,8 @@ sub printhead {
     $text->text($bookseller->{address2});
     $text->translate(100/mm,  ($height-200)/mm);
     $text->text($bookseller->{address3});
+    $text->translate(100/mm, ($height-205)/mm);
+    $text->text($bookseller->{accountnumber});
     
     # print delivery infos
     $text->font( $pdf->corefont("Times-Bold", -encoding => "utf8"), 4/mm );
