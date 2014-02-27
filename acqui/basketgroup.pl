@@ -200,12 +200,15 @@ sub printbasketgrouppdf{
 
             # Editor Number
             my $en;
+            my $edition;
             my $marcrecord=eval{MARC::Record::new_from_xml( $ord->{marcxml},'UTF-8' )};
             if ($marcrecord){
                 if ( C4::Context->preference("marcflavour") eq 'UNIMARC' ) {
                     $en = $marcrecord->subfield( '345', "b" );
+                    $edition = $marcrecord->subfield( '205', 'a' );
                 } elsif ( C4::Context->preference("marcflavour") eq 'MARC21' ) {
                     $en = $marcrecord->subfield( '037', "a" );
+                    $edition = $marcrecord->subfield( '250', 'a' );
                 }
             }
 
@@ -213,8 +216,9 @@ sub printbasketgrouppdf{
                 isbn => ($ord->{isbn} ? $ord->{isbn} : undef),
                 itemtype => ( $ord->{itemtype} and $bib->{itemtype} ? $itemtypes->{$bib->{itemtype}}->{description} : undef ),
                 en => ( $en ? $en : undef ),
+                edition => ( $edition ? $edition : undef ),
             };
-            for my $key ( qw/ gstrate author title itemtype publishercode discount quantity rrpgsti rrpgste gstgsti gstgste ecostgsti ecostgste gstvalue totalgste totalgsti / ) {
+            for my $key ( qw/ gstrate author title itemtype publishercode copyrightdate publicationyear discount quantity rrpgsti rrpgste gstgsti gstgste ecostgsti ecostgste gstvalue totalgste totalgsti / ) {
                 $ba_order->{$key} = $ord->{$key};
             }
 
