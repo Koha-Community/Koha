@@ -2544,10 +2544,12 @@ sub GetNextDate {
         # irreg1;irreg2;irreg3
         # where irregX is the number of issue which will not be received
         # (the first issue takes the number 1, the 2nd the number 2 and so on)
-        my @irreg = split /;/, $subscription->{'irregularity'} ;
         my %irregularities;
-        foreach my $irregularity (@irreg) {
-            $irregularities{$irregularity} = 1;
+        if ( $subscription->{irregularity} ) {
+            my @irreg = split /;/, $subscription->{'irregularity'} ;
+            foreach my $irregularity (@irreg) {
+                $irregularities{$irregularity} = 1;
+            }
         }
 
         # Get the 'fictive' next issue number

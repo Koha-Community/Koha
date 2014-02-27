@@ -41,7 +41,7 @@ my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
 my $budgetid;
 my $bpid = AddBudgetPeriod({
     budget_period_startdate => '01-01-2015',
-    budget_period_enddate   => '12-31-2015',
+    budget_period_enddate   => '31-12-2015',
     budget_description      => "budget desc"
 });
 
@@ -58,7 +58,13 @@ my $budget_id = AddBudget({
 my $frequency_id = AddSubscriptionFrequency({ description => "Test frequency 1" });
 my $pattern_id = AddSubscriptionNumberpattern({
     label => 'Test numberpattern 1',
-    numberingmethod => '{X}'
+    numberingmethod => '{X}',
+    label1 => q{},
+    add1 => 1,
+    every1 => 1,
+    every1 => 1,
+    numbering1 => 1,
+    whenmorethan1 => 1,
 });
 
 my $subscriptionid = NewSubscription(
