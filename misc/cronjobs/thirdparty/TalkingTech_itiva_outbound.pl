@@ -68,8 +68,8 @@ my $type_module_map = {
 };
 
 my $type_notice_map = {
-    'PREOVERDUE' => 'PREDUE_PHONE',
-    'OVERDUE'    => 'OVERDUE_PHONE',
+    'PREOVERDUE' => 'PREDUE',
+    'OVERDUE'    => 'OVERDUE',
     'RESERVE'    => 'HOLD',
 };
 
