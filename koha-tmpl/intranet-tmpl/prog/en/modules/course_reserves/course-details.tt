@@ -17,7 +17,7 @@
             "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
             "iDisplayLength": 20,
             "aoColumnDefs": [
-                { 'bSortable': false, 'aTargets': [ 9, 10, 11 ] }
+                { 'bSortable': false, 'aTargets': [ 'NoSort' ] }
             ]
         }));
 
@@ -82,9 +82,9 @@
                         <th>Library</th>
                         <th>Staff note</th>
                         <th>Public note</th>
-                        [% IF CAN_user_coursereserves_add_reserves %]<th>&nbsp;<!-- Edit --></th>[% END %]
-                        [% IF CAN_user_coursereserves_delete_reserves %]<th>&nbsp;<!-- Remove --></th>[% END %]
-                        <th>Other course reserves</th>
+                        [% IF CAN_user_coursereserves_add_reserves %]<th class="NoSort">&nbsp;<!-- Edit --></th>[% END %]
+                        [% IF CAN_user_coursereserves_delete_reserves %]<th class="NoSort">&nbsp;<!-- Remove --></th>[% END %]
+                        <th class="NoSort">Other course reserves</th>
                     </tr>
                 </thead>
 
