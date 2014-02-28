@@ -164,7 +164,11 @@ my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = &GetMarcFromKohaFi
 # always work.
 
 my ($lockfile, $LockFH);
-foreach( C4::Context->config("zebra_lockdir"), "/var/lock/zebra_".C4::Context->config('database'), "/tmp/zebra_".C4::Context->config('database') ) {
+foreach (
+    C4::Context->config("zebra_lockdir"),
+    '/var/lock/zebra_' . C4::Context->config('database'),
+    '/tmp/zebra_' . C4::Context->config('database')
+) {
     #we try three possibilities (we really want to lock :)
     next if !$_;
     ($LockFH, $lockfile) = _create_lockfile($_.'/rebuild');
@@ -174,8 +178,10 @@ if( !defined $LockFH ) {
     print "WARNING: Could not create lock file $lockfile: $!\n";
     print "Please check your koha-conf.xml for ZEBRA_LOCKDIR.\n";
     print "Verify file permissions for it too.\n";
-    $use_flock=0; #we disable file locking now and will continue without it
-        #note that this mimics old behavior (before we used the lockfile)
+    $use_flock = 0; # we disable file locking now and will continue
+                    # without it
+                    # note that this mimics old behavior (before we used
+                    # the lockfile)
 };
 
 if ( $verbose_logging ) {
@@ -193,10 +199,10 @@ if ( $verbose_logging ) {
 my $tester = XML::LibXML->new();
 
 # The main work is done here by calling do_one_pass().  We have added locking
-# avoid race conditions between Full rebuilds and incremental updates either from
+# avoid race conditions between full rebuilds and incremental updates either from
 # daemon mode or periodic invocation from cron.  The race can lead to an updated
 # record being overwritten by a rebuild if the update is applied after the export
-# by the rebuild and before the rebuild finishes (more likely to effect large
+# by the rebuild and before the rebuild finishes (more likely to affect large
 # catalogs).
 #
 # We have chosen to exit immediately by default if we cannot obtain the lock
@@ -218,8 +224,7 @@ if ($daemon_mode) {
     if (_flock($LockFH, $lock_mode)) {
         do_one_pass();
         _flock($LockFH, LOCK_UN);
-    }
-    else {
+    } else {
         print "Skipping rebuild/update because flock failed on $lockfile: $!\n";
     }
 }
@@ -776,20 +781,21 @@ sub do_indexing {
 }
 
 sub _flock {
-# test if flock is present; if so, use it; if not, return true
-# op refers to the official flock operations incl LOCK_EX, LOCK_UN, etc.
-# combining LOCK_EX with LOCK_NB returns immediately
+    # test if flock is present; if so, use it; if not, return true
+    # op refers to the official flock operations including LOCK_EX,
+    # LOCK_UN, etc.
+    # combining LOCK_EX with LOCK_NB returns immediately
     my ($fh, $op)= @_;
     if( !defined($use_flock) ) {
         #check if flock is present; if not, you will have a fatal error
-        my $i=eval { flock($fh, $op) };
-        #assuming that $fh and $op are fine(..), an undef i means no flock
-        $use_flock= defined($i)? 1: 0;
+        my $lock_acquired = eval { flock($fh, $op) };
+        # assuming that $fh and $op are fine(..), an undef $lock_acquired
+        # means no flock
+        $use_flock = defined($lock_acquired) ? 1 : 0;
         print "Warning: flock could not be used!\n" if $verbose_logging && !$use_flock;
         return 1 if !$use_flock;
-        return $i;
-    }
-    else {
+        return $lock_acquired;
+    } else {
         return 1 if !$use_flock;
         return flock($fh, $op);
     }
