@@ -456,7 +456,7 @@ sub getRecords {
 
                     ## Check if it's an index scan
                     if ($scan) {
-                        my ( $term, $occ ) = $results[ $i - 1 ]->term($j);
+                        my ( $term, $occ ) = $results[ $i - 1 ]->display_term($j);
 
                  # here we create a minimal MARC record and hand it off to the
                  # template just like a normal result ... perhaps not ideal, but
