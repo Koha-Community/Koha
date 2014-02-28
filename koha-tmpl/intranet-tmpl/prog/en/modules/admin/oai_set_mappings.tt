@@ -7,11 +7,12 @@ $(document).ready(function() {
     $("#mappingform").submit(function(){
       hideDialogBox();
     });
-    $("#ORbutton").live("click", function(){
-       newCondition();
-       return false;
+    $("body").on("click","#ORbutton", function(e){
+        e.preventDefault();
+        newCondition();
     });
-    $(".clear-field").live("click",function(e){
+    $("body").on("click",".clear-field",function(e){
+        e.preventDefault();
         clearRow(e.target);
     });
 });

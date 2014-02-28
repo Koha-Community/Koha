@@ -636,10 +636,12 @@
                     }
                     return valid;
                 });
-                $("#renewselected_link").live('click',function(){
+                $("body").on("click","#renewselected_link",function(e){
+                    e.preventDefault();
                     $("#renewselected").submit();
                 });
-                $("#renewall_link").live('click',function(){
+                $("body").on("click","#renewall_link",function(e){
+                    e.preventDefault();
                     $("#renewall").submit();
                 });
                 $("#checkoutst caption").append("<div id=\"renewcontrols\"><a id=\"renewselected_link\" href=\"#\">"+_("Renew selected")+"</a> <a id=\"renewall_link\" href=\"#\">"+_("Renew all")+"</a></div>");
