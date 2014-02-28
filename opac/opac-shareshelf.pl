@@ -6,7 +6,7 @@
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
+# Foundation; either version 3 of the License, or (at your option) any later
 # version.
 #
 # Koha is distributed in the hope that it will be useful, but WITHOUT ANY
@@ -21,6 +21,7 @@ use strict;
 use warnings;
 
 use constant KEYLENGTH => 10;
+use constant TEMPLATE_NAME => 'opac-shareshelf.tmpl';
 
 use CGI;
 use Email::Valid;
@@ -33,106 +34,107 @@ use C4::VirtualShelves;
 
 #-------------------------------------------------------------------------------
 
-my $query= new CGI;
-my ($shelfname, $owner);
-my ($template, $loggedinuser, $cookie);
-my $errcode=0;
-my (@addr, $fail_addr, @newkey);
-my @base64alphabet= ('A'..'Z', 'a'..'z', 0..9, '+', '/');
-
-my $shelfnumber= $query->param('shelfnumber')||0;
-my $op= $query->param('op')||'';
-my $addrlist= $query->param('invite_address')||'';
-my $key= $query->param('key')||'';
+my $pvar= _init( {} );
+if(! $pvar->{errcode} ) {
+    show_invite( $pvar ) if $pvar->{op} eq 'invite';
+    confirm_invite( $pvar ) if $pvar->{op} eq 'conf_invite';
+    show_accept( $pvar ) if $pvar->{op} eq 'accept';
+}
+load_template_vars( $pvar );
+output_html_with_http_headers $pvar->{query}, $pvar->{cookie},
+    $pvar->{template}->output;
 
 #-------------------------------------------------------------------------------
 
-check_common_errors();
-load_template("opac-shareshelf.tmpl");
-if($errcode) {
-    #nothing to do
-}
-elsif($op eq 'invite') {
-    show_invite();
-}
-elsif($op eq 'conf_invite') {
-    confirm_invite();
-}
-elsif($op eq 'accept') {
-    show_accept();
-}
-load_template_vars();
-output_html_with_http_headers $query, $cookie, $template->output;
+sub _init {
+    my ($param) = @_;
+    my $query = new CGI;
+    $param->{query} = $query;
+    $param->{shelfnumber} = $query->param('shelfnumber')||0;
+    $param->{op} = $query->param('op')||'';
+    $param->{addrlist} = $query->param('invite_address')||'';
+    $param->{key} = $query->param('key')||'';
+    $param->{appr_addr} = [];
 
-#-------------------------------------------------------------------------------
+    $param->{errcode} = check_common_errors($param);
+    load_template($param);
+    return $param;
+}
 
 sub check_common_errors {
-    if($op!~/^(invite|conf_invite|accept)$/) {
-        $errcode=1; #no operation specified
-        return;
+    my ($param) = @_;
+    if( $param->{op} !~ /^(invite|conf_invite|accept)$/ ) {
+        return 1; #no operation specified
     }
-    if($shelfnumber!~/^\d+$/) {
-        $errcode=2; #invalid shelf number
-        return;
+    if( $param->{shelfnumber} !~ /^\d+$/ ) {
+        return 2; #invalid shelf number
     }
-    if(!C4::Context->preference('OpacAllowSharingPrivateLists')) {
-        $errcode=3; #not or no longer allowed?
-        return;
+    if( ! C4::Context->preference('OpacAllowSharingPrivateLists') ) {
+        return 3; #not or no longer allowed?
     }
+    return;
 }
 
 sub show_invite {
-    return unless check_owner_category();
+    my ($param) = @_;
+    return unless check_owner_category( $param );
 }
 
 sub confirm_invite {
-    return unless check_owner_category();
-    process_addrlist();
-    if(@addr) {
-        send_invitekey();
+    my ($param) = @_;
+    return unless check_owner_category( $param );
+    process_addrlist( $param );
+    if( @{$param->{appr_addr}} ) {
+        send_invitekey( $param );
     }
     else {
-        $errcode=6; #not one valid address
+        $param->{errcode}=6; #not one valid address
     }
 }
 
 sub show_accept {
+    my ($param) = @_;
     #TODO Add some code here to accept an invitation (followup report)
 }
 
 sub process_addrlist {
-    my @temp= split /[,:;]/, $addrlist;
-    $fail_addr='';
+    my ($param) = @_;
+    my @temp= split /[,:;]/, $param->{addrlist};
+    my @appr_addr;
+    my $fail_addr='';
     foreach my $a (@temp) {
         $a=~s/^\s+//;
         $a=~s/\s+$//;
-        if(IsEmailAddress($a)) {
-            push @addr, $a;
+        if( IsEmailAddress($a) ) {
+            push @appr_addr, $a;
         }
         else {
             $fail_addr.= ($fail_addr? '; ': '').$a;
         }
     }
+    $param->{appr_addr}= \@appr_addr;
+    $param->{fail_addr}= $fail_addr;
 }
 
 sub send_invitekey {
+    my ($param) = @_;
     my $fromaddr= C4::Context->preference('KohaAdminEmailAddress');
-    my $url= 'http://'.C4::Context->preference('OPACBaseURL');
-    $url.= "/cgi-bin/koha/opac-shareshelf.pl?shelfnumber=$shelfnumber";
-    $url.= "&op=accept&key=";
-        #FIXME Waiting for the right http or https solution (BZ 8952 a.o.)
+    my $url= 'http://'.C4::Context->preference('OPACBaseURL').
+        "/cgi-bin/koha/opac-shareshelf.pl?shelfnumber=".
+        $param->{shelfnumber}."&op=accept&key=";
+        #TODO Waiting for the right http or https solution (BZ 8952 a.o.)
 
-    foreach my $a (@addr) {
-        @newkey=randomlist(KEYLENGTH, 64); #generate a new key
+    foreach my $a ( @{$param->{appr_addr}} ) {
+        my @newkey= randomlist(KEYLENGTH, 64); #generate a new key
 
         #prepare letter
         my $letter= C4::Letters::GetPreparedLetter(
             module => 'members',
             letter_code => 'SHARE_INVITE',
             branchcode => C4::Context->userenv->{"branch"},
-            tables => { borrowers => $loggedinuser, },
+            tables => { borrowers => $param->{loggedinuser}, },
             substitute => {
-                listname => $shelfname,
+                listname => $param->{shelfname},
                 shareurl => $url.keytostring(\@newkey,0),
             },
         );
@@ -145,41 +147,50 @@ sub send_invitekey {
             to_address             => $a,
         });
         #add a preliminary share record
-        AddShare($shelfnumber,keytostring(\@newkey,1));
+        AddShare( $param->{shelfnumber}, keytostring(\@newkey,1));
     }
 }
 
 sub check_owner_category {
-    #FIXME candidate for a module? what held me back is: getting back the two different error codes and the shelfname
-    (undef,$shelfname,$owner,my $category)= GetShelf($shelfnumber);
-    $errcode=4 if $owner!= $loggedinuser; #should be owner
-    $errcode=5 if !$errcode && $category!=1; #should be private
-    return $errcode==0;
+    my ($param)= @_;
+    #TODO candidate for a module?
+    #need to get back the two different error codes and the shelfname
+
+    ( undef, $param->{shelfname}, $param->{owner}, my $category ) =
+    GetShelf( $param->{shelfnumber} );
+    $param->{errcode}=4 if $param->{owner}!= $param->{loggedinuser};
+    $param->{errcode}=5 if !$param->{errcode} && $category!=1;
+        #should be private
+    return !defined $param->{errcode};
 }
 
 sub load_template {
-    my ($file)= @_;
-    ($template, $loggedinuser, $cookie)= get_template_and_user({
-        template_name   => $file,
-        query           => $query,
+    my ($param)= @_;
+    ($param->{template}, $param->{loggedinuser}, $param->{cookie} ) =
+    get_template_and_user( {
+        template_name   => TEMPLATE_NAME,
+        query           => $param->{query},
         type            => "opac",
         authnotrequired => 0, #should be a user
-    });
+    } );
 }
 
 sub load_template_vars {
+    my ($param) = @_;
+    my $template = $param->{template};
+    my $str= join '; ', @{$param->{appr_addr}};
     $template->param(
-        errcode         => $errcode,
-        op              => $op,
-        shelfnumber     => $shelfnumber,
-        shelfname       => $shelfname,
-        approvedaddress => (join '; ', @addr),
-        failaddress     => $fail_addr,
+        errcode         => $param->{errcode},
+        op              => $param->{op},
+        shelfnumber     => $param->{shelfnumber},
+        shelfname       => $param->{shelfname},
+        approvedaddress => $str,
+        failaddress     => $param->{fail_addr},
     );
 }
 
 sub IsEmailAddress {
-    #FIXME candidate for a module?
+    #TODO candidate for a module?
     return Email::Valid->address($_[0])? 1: 0;
 }
 
@@ -192,7 +203,8 @@ sub randomlist {
 sub keytostring {
     my ($keyref, $flgBase64)= @_;
     if($flgBase64) {
-        return join '', map { base64chr($_); } @$keyref;
+        my $alphabet= [ 'A'..'Z', 'a'..'z', 0..9, '+', '/' ];
+        return join '', map { alphabet_char($_, $alphabet); } @$keyref;
     }
     return join '', map { sprintf("%02d",$_); } @$keyref;
 }
@@ -201,7 +213,8 @@ sub stringtokey {
     my ($str, $flgBase64)= @_;
     my @temp=split '', $str||'';
     if($flgBase64) {
-        return map { base64ord($_); } @temp;
+        my $alphabet= [ 'A'..'Z', 'a'..'z', 0..9, '+', '/' ];
+        return map { alphabet_ordinal($_, $alphabet); } @temp;
     }
     return () if $str!~/^\d+$/;
     my @retval;
@@ -211,16 +224,16 @@ sub stringtokey {
     return @retval;
 }
 
-sub base64ord { #base64 ordinal
-    my ($char)=@_;
-    return 0 -ord('A')+ord($char) if $char=~/[A-Z]/;
-    return 26-ord('a')+ord($char) if $char=~/[a-z]/;
-    return 52-ord('0')+ord($char) if $char=~/[0-9]/;
-    return 62 if $char eq '+';
-    return 63 if $char eq '/';
-    return;
+sub alphabet_ordinal {
+    my ($char, $alphabet) = @_;
+    for( 0..$#$alphabet ) {
+        return $_ if $char eq $alphabet->[$_];
+    }
+    return ''; #ignore missing chars
 }
 
-sub base64chr { #reverse operation for ord
-    return $_[0]=~/^\d+$/ && $_[0]<64? $base64alphabet[$_[0]]: undef;
+sub alphabet_char {
+#reverse operation for ordinal; ignore invalid numbers
+    my ($num, $alphabet) = @_;
+    return $num =~ /^\d+$/ && $num<=$#$alphabet? $alphabet->[$num]: '';
 }
