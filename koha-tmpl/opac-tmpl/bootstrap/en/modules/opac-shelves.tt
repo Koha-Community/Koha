@@ -109,6 +109,7 @@
                     [% IF ( paramsloop ) %]
                         [% FOREACH paramsloo IN paramsloop %]
                             [% IF ( paramsloo.already ) %]<div class="alert">A list named <b>[% paramsloo.already %]</b> already exists!</div>[% END %]
+                            [% IF ( paramsloo.addshelf_failed ) %]<div class="dialog alert">List could not be created. [% IF loggedinuser==0 %](Do not use the database administrator account.)[% END %]</div>[% END %]
                             [% IF ( paramsloo.status ) %]<div class="alert">[% paramsloo.string %]</div>[% END %]
                             [% IF ( paramsloo.nobarcode ) %]<div class="alert">ERROR: No barcode given.</div>[% END %]
                             [% IF ( paramsloo.noshelfnumber ) %]<div class="alert">ERROR: No shelfnumber given.</div>[% END %]

@@ -337,7 +337,7 @@ sub shelfpage {
         #Add a shelf
             if ( my $newshelf = $query->param('addshelf') ) {
 
-                # note: a user can always add a new shelf
+                # note: a user can always add a new shelf (except kohaadmin)
                 my $shelfnumber = AddShelf( {
                     shelfname => $newshelf,
                     sortfield => $query->param('sortfield'),
@@ -348,7 +348,9 @@ sub shelfpage {
                     },
                     $query->param('owner') );
                 $stay = 1;
-                if ( $shelfnumber == -1 ) {    #shelf already exists.
+                if( !$shelfnumber ) {
+                    push @paramsloop, { addshelf_failed => 1 };
+                } elsif ( $shelfnumber == -1 ) {    #shelf already exists.
                     $showadd = 1;
                     push @paramsloop, { already => $newshelf };
                     $template->param( shelfnumber => $shelfnumber );

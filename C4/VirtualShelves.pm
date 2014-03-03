@@ -334,6 +334,7 @@ sub AddShelf {
         $hashref->{allow_add}//0,
         $hashref->{allow_delete_own}//1,
         $hashref->{allow_delete_other}//0 );
+    return if $sth->err;
     my $shelfnumber = $dbh->{'mysql_insertid'};
     return $shelfnumber;
 }

@@ -228,6 +228,7 @@ function placeHold () {
 <div class="yui-ge">
     <div class="yui-u first">
         [% IF ( paramsloo.already ) %]<div class="dialog alert">A List named [% paramsloo.already %] already exists!</div>[% END %]
+        [% IF ( paramsloo.addshelf_failed ) %]<div class="dialog alert">List could not be created. [% IF loggedinuser==0 %](Do not use the database administrator account.)[% END %]</div>[% END %]
 		[% IF ( paramsloo.status ) %]<div class="dialog alert">[% paramsloo.string %]</div>[% END %]
 		[% IF ( paramsloo.nobarcode ) %]<div class="dialog alert">ERROR: No barcode given.</div>[% END %] 
         [% IF ( paramsloo.noshelfnumber ) %]<div class="dialog alert">ERROR: No list number given.</div>[% END %]
