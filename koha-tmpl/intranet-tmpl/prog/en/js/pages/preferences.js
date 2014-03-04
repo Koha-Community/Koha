@@ -95,16 +95,16 @@ $( document ).ready( function () {
     $("h3").attr("class","expanded").attr("title",MSG_CLICK_TO_EXPAND);
     var collapsible = $(".collapsed,.expanded");
 
-    $(collapsible).toggle(
-        function () {
+    $(collapsible).on("click",function(){
+        var panel = $(this).next("div");
+        if(panel.is(":visible")){
             $(this).addClass("collapsed").removeClass("expanded").attr("title",MSG_CLICK_TO_EXPAND);
-            $(this).next("div").hide();
-        },
-        function () {
+            panel.hide();
+        } else {
             $(this).addClass("expanded").removeClass("collapsed").attr("title",MSG_CLICK_TO_COLLAPSE);
-            $(this).next("div").show();
+            panel.show();
         }
-    );
+    });
 
     if ( to_highlight ) {
         var words = to_highlight.split( ' ' );

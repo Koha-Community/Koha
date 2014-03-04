@@ -182,23 +182,26 @@ $(document).ready(function(){
     });
 
     var loaded = 0;
-    $("#switchview").toggle(
-      function () {
-        $(this).text(_("view labeled"));
-        $("#labeledmarc").hide();
-        if(!loaded){
-            $("#plainmarc").show().html("<div style=\"margin:1em;padding:1em;border:1px solid #EEE;font-size:150%;\"><img src=\"[% interface %]/[% theme %]/images/loading.gif\" /> "+_("Loading")+"...</div>").load("/cgi-bin/koha/opac-showmarc.pl","id=[% biblionumber %]&viewas=html");
-            loaded = 1;
+    var toggle = 0;
+    $("#switchview").on("click",function(e){
+        e.preventDefault();
+        if( toggle == 0){
+            $(this).text(_("view labeled"));
+            $("#labeledmarc").hide();
+            if(!loaded){
+                $("#plainmarc").show().html("<div style=\"margin:1em;padding:1em;border:1px solid #EEE;font-size:150%;\"><img src=\"[% interface %]/[% theme %]/images/loading.gif\" /> "+_("Loading")+"...</div>").load("/cgi-bin/koha/opac-showmarc.pl","id=[% biblionumber %]&viewas=html");
+                loaded = 1;
+            } else {
+                $("#plainmarc").show();
+            }
+            toggle = 1;
         } else {
-            $("#plainmarc").show();
+            $(this).text(_("view plain"));
+            $("#labeledmarc").show();
+            $("#plainmarc").hide();
+            toggle = 0;
         }
-      },
-      function () {
-        $(this).text(_("view plain"));
-        $("#labeledmarc").show();
-        $("#plainmarc").hide();
-      }
-    );
+    });
 });
 [% END %]
 //]]>
