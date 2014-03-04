@@ -45,21 +45,7 @@ __PACKAGE__->mk_accessors(qw( ));
 # database connection from the data given in the current context, and
 # returns it.
 sub _new_schema {
-    my $context = C4::Context->new();
-    my $db_driver = C4::Context::db_scheme2dbi($context->config("db_scheme"));
-
-    my $db_name   = $context->config("database");
-    my $db_host   = $context->config("hostname");
-    my $db_port   = $context->config("port") || '';
-    my $db_user   = $context->config("user");
-    my $db_passwd = $context->config("pass");
-
-    my $db_opts = ($db_driver eq 'mysql') ? { mysql_enable_utf8 => 1 } :
-                  ($db_driver eq 'Pg')    ? { pg_enable_utf8    => 1 } :
-                                            { };
-    my $schema    = Koha::Schema->connect(
-        "DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",
-        $db_user, $db_passwd, $db_opts );
+    my $schema = Koha::Schema->connect( sub { C4::Context->dbh } );
     return $schema;
 }
 
