@@ -26,7 +26,7 @@ use C4::Reserves;
 use Koha::DateUtils;
 use Koha::Database;
 
-use Test::More tests => 55;
+use Test::More tests => 57;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -281,6 +281,13 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
         $title, $checkitem, $found
     );
+
+    C4::Context->set_preference('AllowRenewalIfOtherItemsAvailable', 1 );
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
+    is( $renewokay, 1, 'Bug 11634 - Allow renewal of item with unfilled holds if other available items can fill those holds');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber2);
+    is( $renewokay, 1, 'Bug 11634 - Allow renewal of item with unfilled holds if other available items can fill those holds');
+    C4::Context->set_preference('AllowRenewalIfOtherItemsAvailable', 0 );
 
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
     is( $renewokay, 0, '(Bug 10663) Cannot renew, reserved');
