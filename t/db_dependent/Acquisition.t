@@ -8,7 +8,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 63;
+use Test::More tests => 64;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -103,6 +103,7 @@ is( $neworder->{claimed_date}, strftime( "%Y-%m-%d", localtime(time) ), "AddClai
 my @expectedfields = qw( basketno
                          biblionumber
                          invoiceid
+                         booksellerid
                          budgetdate
                          cancelledby
                          closedate
