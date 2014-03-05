@@ -631,8 +631,8 @@ sub ShelvesMax {
 
 When a member is deleted (DelMember in Members.pm), you should call me first.
 This routine deletes/moves lists and entries for the deleted member/borrower.
-You could just delete everything (and lose more than you want), but instead we
-now try to save all public/shared stuff and keep others happy.
+Lists owned by the borrower are deleted, but entries from the borrower to
+other lists are kept.
 
 =cut
 
@@ -641,31 +641,22 @@ sub HandleDelBorrower {
     my $query;
     my $dbh = C4::Context->dbh;
 
-    #Delete shares of this borrower (not lists !)
-    #Although this would be done later via the FK cascaded delete, we do it now.
-    #Because it makes the following delete statement on shelves more meaningful.
-    $query="DELETE FROM virtualshelfshares WHERE borrowernumber=?";
+    #Delete all lists and all shares of this borrower
+    #Consistent with the approach Koha uses on deleting individual lists
+    #Note that entries in virtualshelfcontents added by this borrower to
+    #lists of others will be handled by a table constraint: the borrower
+    #is set to NULL in those entries.
+    $query="DELETE FROM virtualshelves WHERE owner=?";
     $dbh->do($query,undef,($borrower));
 
-    #Delete private lists without owner that now have no shares anymore
-    $query="DELETE vs.* FROM virtualshelves vs LEFT JOIN virtualshelfshares sh USING (shelfnumber) WHERE category=1 AND vs.owner IS NULL AND sh.shelfnumber IS NULL";
-    $dbh->do($query);
-
-    #Change owner for private lists which have shares
-    $query="UPDATE virtualshelves LEFT JOIN virtualshelfshares sh USING (shelfnumber) SET owner=NULL where owner=? AND category=1 AND sh.borrowernumber IS NOT NULL";
-    $dbh->do($query,undef,($borrower));
-
-    #Delete unshared private lists
-    $query="DELETE FROM virtualshelves WHERE owner=? AND category=1";
-    $dbh->do($query,undef,($borrower));
-
-    #Handle public lists owned by borrower
-    $query="UPDATE virtualshelves SET owner=NULL WHERE owner=? AND category=2";
-    $dbh->do($query,undef,($borrower));
-
-    #Handle entries added by borrower to lists of others
-    $query="UPDATE virtualshelfcontents SET borrowernumber=NULL WHERE borrowernumber=?";
-    $dbh->do($query,undef,($borrower));
+    #NOTE:
+    #We could handle the above deletes via a constraint too.
+    #But a new BZ report 11889 has been opened to discuss another approach.
+    #Instead of deleting we could also disown lists (based on a pref).
+    #In that way we could save shared and public lists.
+    #The current table constraints support that idea now.
+    #This pref should then govern the results of other routines such as
+    #DelShelf too.
 }
 
 =head2 AddShare
