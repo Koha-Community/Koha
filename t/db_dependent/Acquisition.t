@@ -8,7 +8,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 66;
+use Test::More tests => 69;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -168,11 +168,16 @@ my ($datereceived, $new_ordernumber) = ModReceiveOrder(
     12,
     $invoiceid,
     42,
+    undef,
+    undef,
+    undef,
+    "my notes"
     );
 my $order2 = GetOrder( $ordernumber2 );
 is($order2->{'quantityreceived'}, 0, 'Splitting up order did not receive any on original order');
 is($order2->{'quantity'}, 40, '40 items on original order');
 is($order2->{'budget_id'}, $budgetid, 'Budget on original order is unchanged');
+is( $order2->{notes}, "my notes", 'ModReceiveOrder and GetOrder deal with notes' );
 
 $neworder = GetOrder( $new_ordernumber );
 is($neworder->{'quantity'}, 2, '2 items on new order');
@@ -195,13 +200,17 @@ my $budgetid2 = C4::Budgets::AddBudget(
     12,
     $invoiceid,
     42,
-    $budgetid2
+    $budgetid2,
+    undef,
+    undef,
+    "my other notes"
     );
 
 my $order3 = GetOrder( $ordernumber3 );
 is($order3->{'quantityreceived'}, 0, 'Splitting up order did not receive any on original order');
 is($order3->{'quantity'}, 2, '2 items on original order');
 is($order3->{'budget_id'}, $budgetid, 'Budget on original order is unchanged');
+is( $order3->{notes}, "my other notes", 'ModReceiveOrder and GetOrder deal with notes' );
 
 $neworder = GetOrder( $new_ordernumber );
 is($neworder->{'quantity'}, 2, '2 items on new order');
@@ -217,13 +226,17 @@ is($neworder->{'budget_id'}, $budgetid2, 'Budget on new order is changed');
     12,
     $invoiceid,
     42,
-    $budgetid2
+    $budgetid2,
+    undef,
+    undef,
+    "my third notes"
     );
 
 $order3 = GetOrder( $ordernumber3 );
 is($order3->{'quantityreceived'}, 2, 'Order not split up');
 is($order3->{'quantity'}, 2, '2 items on order');
 is($order3->{'budget_id'}, $budgetid2, 'Budget has changed');
+is( $order3->{notes}, "my third notes", 'ModReceiveOrder and GetOrder deal with notes' );
 
 my $nonexistent_order = GetOrder();
 is( $nonexistent_order, undef, 'GetOrder returns undef if no ordernumber is given' );
