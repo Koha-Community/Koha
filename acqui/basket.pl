@@ -216,13 +216,6 @@ if ( $op eq 'delete_confirm' ) {
                 $basketgroup = $bg;
             }
         }
-        my %emptygroup = ( id   =>   undef,
-                           name =>   "No group");
-        if ( ! $basket->{basketgroupid} ) {
-            $emptygroup{default} = 1;
-            $emptygroup{nogroup} = 1;
-        }
-        unshift( @$basketgroups, \%emptygroup );
     }
 
     # if the basket is closed, calculate estimated delivery date
