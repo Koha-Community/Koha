@@ -2682,7 +2682,9 @@ sub CanBookBeRenewed {
         my @reservable;
         foreach my $b (@borrowernumbers) {
             foreach my $i (@itemnumbers) {
-                if ( CanItemBeReserved( $b, $i ) ) {
+                if (   IsAvailableForItemLevelRequest($i)
+                    && CanItemBeReserved( $b, $i ) )
+                {
                     push( @reservable, $i );
                 }
             }
