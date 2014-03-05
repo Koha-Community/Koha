@@ -1438,7 +1438,7 @@ C<$ordernumber>.
 sub ModReceiveOrder {
     my (
         $biblionumber,    $ordernumber,  $quantrec, $user, $cost, $ecost,
-        $invoiceid, $rrp, $budget_id, $datereceived, $received_items
+        $invoiceid, $rrp, $budget_id, $datereceived, $received_items, $notes
     )
     = @_;
 
@@ -1466,14 +1466,15 @@ q{SELECT * FROM aqorders WHERE biblionumber=? AND aqorders.ordernumber=?},
         # without received items (the quantity is decreased),
         # the second part is a new order line with quantity=quantityrec
         # (entirely received)
-        my $sth=$dbh->prepare("
+        my $query = q|
             UPDATE aqorders
             SET quantity = ?,
-                orderstatus = 'partial'
-            WHERE ordernumber = ?
-        ");
+                orderstatus = 'partial'|;
+        $query .= q|, notes = ?| if defined $notes;
+        $query .= q| WHERE ordernumber = ?|;
+        my $sth = $dbh->prepare($query);
 
-        $sth->execute($order->{quantity} - $quantrec, $ordernumber);
+        $sth->execute($order->{quantity} - $quantrec, ( defined $notes ? $notes : () ), $ordernumber);
 
         delete $order->{'ordernumber'};
         $order->{'budget_id'} = ( $budget_id || $order->{'budget_id'} );
@@ -1494,11 +1495,14 @@ q{SELECT * FROM aqorders WHERE biblionumber=? AND aqorders.ordernumber=?},
             }
         }
     } else {
-        my $sth=$dbh->prepare("update aqorders
-                            set quantityreceived=?,datereceived=?,invoiceid=?,
-                                unitprice=?,rrp=?,ecost=?,budget_id=?,orderstatus='complete'
-                            where biblionumber=? and ordernumber=?");
-        $sth->execute($quantrec,$datereceived,$invoiceid,$cost,$rrp,$ecost,$budget_id,$biblionumber,$ordernumber);
+        my $query = q|
+            update aqorders
+            set quantityreceived=?,datereceived=?,invoiceid=?,
+                unitprice=?,rrp=?,ecost=?,budget_id=?,orderstatus='complete'|;
+        $query .= q|, notes = ?| if defined $notes;
+        $query .= q| where biblionumber=? and ordernumber=?|;
+        my $sth = $dbh->prepare( $query );
+        $sth->execute($quantrec,$datereceived,$invoiceid,$cost,$rrp,$ecost,$budget_id,( defined $notes ? $notes : () ),$biblionumber,$ordernumber);
     }
     return ($datereceived, $new_ordernumber);
 }

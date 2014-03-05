@@ -53,7 +53,7 @@ my $booksellerid     = $input->param('booksellerid');
 my $cnt              = 0;
 my $ecost            = $input->param('ecost');
 my $rrp              = $input->param('rrp');
-my $note             = $input->param("note");
+my $notes            = $input->param("notes");
 my $bookfund         = $input->param("bookfund");
 my $order            = GetOrder($ordernumber);
 my $new_ordernumber  = $ordernumber;
@@ -112,6 +112,7 @@ if ($quantityrec > $origquantityrec ) {
             $bookfund,
             $datereceived,
             \@received_items,
+            $notes,
         );
     }
 
