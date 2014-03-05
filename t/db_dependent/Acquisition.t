@@ -639,6 +639,7 @@ ok(
   datecancellationprinted
   budget_id
   authorisedby
+  booksellerid
 );
 
 # note that authorisedby was added to the return of SearchOrder by the
@@ -712,7 +713,6 @@ is( scalar (@$search_orders), 0, "SearchOrders with pending and ordered params g
 #
 # Test GetBudgetByOrderNumber
 #
-
 ok( GetBudgetByOrderNumber( $ordernumbers[0] )->{'budget_id'} eq $budgetid,
     "GetBudgetByOrderNumber returns expected budget" );
 

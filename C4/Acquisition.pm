@@ -1668,6 +1668,7 @@ sub SearchOrders {
                biblioitems.isbn,
                biblioitems.biblioitemnumber,
                aqbasket.authorisedby,
+               aqbasket.booksellerid,
                aqbasket.closedate,
                aqbasket.creationdate,
                aqbasket.basketname,
