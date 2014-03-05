@@ -651,9 +651,18 @@ my $invoiceid = AddInvoice(
     unknown       => "unknown"
 );
 
-my ( $datereceived, $new_ordernumber ) =
-  ModReceiveOrder( $biblionumber4, $ordernumbers[4], 1, undef, 10, 10,
-    $invoiceid, 10, $order_content[4]->{str}->{budget_id} );
+my ($datereceived, $new_ordernumber) = ModReceiveOrder(
+    {
+        biblionumber      => $biblionumber4,
+        ordernumber       => $ordernumbers[4],
+        quantityreceived  => 1,
+        cost              => 10,
+        ecost             => 10,
+        invoiceid         => $invoiceid,
+        rrp               => 10,
+        budget_id          => $order_content[4]->{str}->{budget_id},
+    }
+);
 
 my $search_orders = SearchOrders({
     booksellerid => $booksellerid,
@@ -791,9 +800,18 @@ is(
     "AddClaim : Check claimed_date"
 );
 
-( $datereceived, $new_ordernumber ) =
-  ModReceiveOrder( $biblionumber2, $ordernumbers[1], 2, undef, 12, 12,
-    $invoiceid, 42, undef, undef, undef, "my notes");
+( $datereceived, $new_ordernumber ) = ModReceiveOrder(
+    {
+        biblionumber     => $biblionumber2,
+        ordernumber      => $ordernumbers[1],
+        quantityreceived => 2,
+        cost             => 12,
+        ecost            => 12,
+        invoiceid        => $invoiceid,
+        rrp              => 42,
+        notes            => "my notes",
+    }
+);
 my $order2 = GetOrder( $ordernumbers[1] );
 is( $order2->{'quantityreceived'},
     0, 'Splitting up order did not receive any on original order' );
@@ -816,9 +834,19 @@ my $budgetid2 = C4::Budgets::AddBudget(
     }
 );
 
-( $datereceived, $new_ordernumber ) =
-  ModReceiveOrder( $biblionumber2, $ordernumbers[2], 2, undef, 12, 12,
-    $invoiceid, 42, $budgetid2, undef, undef, "my other notes" );
+( $datereceived, $new_ordernumber ) = ModReceiveOrder(
+    {
+        biblionumber     => $biblionumber2,
+        ordernumber      => $ordernumbers[2],
+        quantityreceived => 2,
+        cost             => 12,
+        ecost            => 12,
+        invoiceid        => $invoiceid,
+        rrp              => 42,
+        budget_id        => $budgetid2,
+        notes            => "my other notes",
+    }
+);
 
 my $order3 = GetOrder( $ordernumbers[2] );
 is( $order3->{'quantityreceived'},
@@ -835,9 +863,19 @@ is( $neworder->{'quantityreceived'},
     2, 'Splitting up order received items on new order' );
 is( $neworder->{'budget_id'}, $budgetid2, 'Budget on new order is changed' );
 
-( $datereceived, $new_ordernumber ) =
-  ModReceiveOrder( $biblionumber2, $ordernumbers[2], 2, undef, 12, 12,
-    $invoiceid, 42, $budgetid2, undef, undef, "my third notes" );
+( $datereceived, $new_ordernumber ) = ModReceiveOrder(
+    {
+        biblionumber     => $biblionumber2,
+        ordernumber      => $ordernumbers[2],
+        quantityreceived => 2,
+        cost             => 12,
+        ecost            => 12,
+        invoiceid        => $invoiceid,
+        rrp              => 42,
+        budget_id        => $budgetid2,
+        notes            => "my third notes",
+    }
+);
 
 $order3 = GetOrder( $ordernumbers[2] );
 is( $order3->{'quantityreceived'}, 2,          'Order not split up' );

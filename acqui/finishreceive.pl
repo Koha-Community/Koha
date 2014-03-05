@@ -100,20 +100,20 @@ if ($quantityrec > $origquantityrec ) {
 
     # save the quantity received.
     if ( $quantityrec > 0 ) {
-        ($datereceived, $new_ordernumber) = ModReceiveOrder(
-            $biblionumber,
-            $ordernumber,
-            $quantityrec,
-            $user,
-            $order->{unitprice},
-            $order->{ecost},
-            $invoiceid,
-            $order->{rrp},
-            $bookfund,
-            $datereceived,
-            \@received_items,
-            $notes,
-        );
+        ($datereceived, $new_ordernumber) = ModReceiveOrder({
+              biblionumber     => $biblionumber,
+              ordernumber      => $ordernumber,
+              quantityreceived => $quantityrec,
+              user             => $user,
+              cost             => $order->{unitprice},
+              ecost            => $order->{ecost},
+              invoiceid        => $invoiceid,
+              rrp              => $order->{rrp},
+              budget_id        => $bookfund,
+              datereceived     => $datereceived,
+              received_items   => \@received_items,
+              notes            => $notes,
+        } );
     }
 
     # now, add items if applicable
