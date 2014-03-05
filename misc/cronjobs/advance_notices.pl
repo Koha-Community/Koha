@@ -349,13 +349,18 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$upcoming_digest ) {
     ## Get branch info for borrowers home library.
     my %branch_info = get_branch_info( $borrowernumber );
 
-    my $letter = parse_letter( { letter_code    => $letter_type,
-                              borrowernumber => $borrowernumber,
-                              substitute     => { count => $count,
-                                                  'items.content' => $titles,
-                                                  %branch_info,
-                                                }
-                         } )
+    my $letter = parse_letter(
+        {
+            letter_code    => $letter_type,
+            borrowernumber => $borrowernumber,
+            substitute     => {
+                count           => $count,
+                'items.content' => $titles,
+                %branch_info,
+            },
+            branchcode => $branch_info{ "branches.branchcode" },
+        }
+      )
       or die "no letter of type '$letter_type' found. Please see sample_notices.sql";
     if ($nomail) {
       local $, = "\f";
@@ -392,13 +397,18 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$due_digest ) {
     ## Get branch info for borrowers home library.
     my %branch_info = get_branch_info( $borrowernumber );
 
-    my $letter = parse_letter( { letter_code    => $letter_type,
-                              borrowernumber => $borrowernumber,
-                              substitute     => { count => $count,
-                                                  'items.content' => $titles,
-                                                  %branch_info,
-                                                }
-                         } )
+    my $letter = parse_letter(
+        {
+            letter_code    => $letter_type,
+            borrowernumber => $borrowernumber,
+            substitute     => {
+                count           => $count,
+                'items.content' => $titles,
+                %branch_info,
+            },
+            branchcode => $branch_info{ "branches.branchcode" },
+        }
+      )
       or die "no letter of type '$letter_type' found. Please see sample_notices.sql";
 
     if ($nomail) {
