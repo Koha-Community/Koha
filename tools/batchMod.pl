@@ -141,7 +141,6 @@ if ($op eq "action") {
 	my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber", "");
 	if ($values_to_modify){
 	    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
-        utf8::encode($xml);
 	    $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
         }
         if ($values_to_blank){
