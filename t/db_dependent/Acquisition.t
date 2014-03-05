@@ -160,19 +160,18 @@ my $invoiceid = AddInvoice(
 );
 
 my ($datereceived, $new_ordernumber) = ModReceiveOrder(
-    $biblionumber2,
-    $ordernumber2,
-    2,
-    undef,
-    12,
-    12,
-    $invoiceid,
-    42,
-    undef,
-    undef,
-    undef,
-    "my notes"
-    );
+    {
+        biblionumber     => $biblionumber2,
+        ordernumber      => $ordernumber2,
+        quantityreceived => 2,
+        cost             => 12,
+        ecost            => 12,
+        invoiceid        => $invoiceid,
+        rrp              => 42,
+        notes            => "my notes",
+    }
+);
+
 my $order2 = GetOrder( $ordernumber2 );
 is($order2->{'quantityreceived'}, 0, 'Splitting up order did not receive any on original order');
 is($order2->{'quantity'}, 40, '40 items on original order');
@@ -192,19 +191,18 @@ my $budgetid2 = C4::Budgets::AddBudget(
 );
 
 ($datereceived, $new_ordernumber) = ModReceiveOrder(
-    $biblionumber2,
-    $ordernumber3,
-    2,
-    undef,
-    12,
-    12,
-    $invoiceid,
-    42,
-    $budgetid2,
-    undef,
-    undef,
-    "my other notes"
-    );
+    {
+        biblionumber     => $biblionumber2,
+        ordernumber      => $ordernumber3,
+        quantityreceived => 2,
+        cost             => 12,
+        ecost            => 12,
+        invoiceid        => $invoiceid,
+        rrp              => 42,
+        budget_id        => $budgetid2,
+        notes            => "my other notes",
+    }
+);
 
 my $order3 = GetOrder( $ordernumber3 );
 is($order3->{'quantityreceived'}, 0, 'Splitting up order did not receive any on original order');
@@ -218,19 +216,18 @@ is($neworder->{'quantityreceived'}, 2, 'Splitting up order received items on new
 is($neworder->{'budget_id'}, $budgetid2, 'Budget on new order is changed');
 
 ($datereceived, $new_ordernumber) = ModReceiveOrder(
-    $biblionumber2,
-    $ordernumber3,
-    2,
-    undef,
-    12,
-    12,
-    $invoiceid,
-    42,
-    $budgetid2,
-    undef,
-    undef,
-    "my third notes"
-    );
+    {
+        biblionumber     => $biblionumber2,
+        ordernumber      => $ordernumber3,
+        quantityreceived => 2,
+        cost             => 12,
+        ecost            => 12,
+        invoiceid        => $invoiceid,
+        rrp              => 42,
+        budget_id        => $budgetid2,
+        notes            => "my third notes",
+    }
+);
 
 $order3 = GetOrder( $ordernumber3 );
 is($order3->{'quantityreceived'}, 2, 'Order not split up');

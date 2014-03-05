@@ -1419,8 +1419,20 @@ sub GetCancelledOrders {
 
 =head3 ModReceiveOrder
 
-  &ModReceiveOrder($biblionumber, $ordernumber, $quantityreceived, $user,
-    $cost, $ecost, $invoiceid, rrp, budget_id, datereceived, \@received_itemnumbers);
+  &ModReceiveOrder({
+    biblionumber => $biblionumber,
+    ordernumber => $ordernumber,
+    quantityreceived => $quantityreceived,
+    user => $user,
+    cost => $cost,
+    ecost => $ecost,
+    invoiceid => $invoiceid,
+    rrp => rrp,
+    budget_id => budget_id,
+    datereceived => datereceived,
+    received_itemnumbers => \@received_itemnumbers,
+    notes => $notes,
+    );
 
 Updates an order, to reflect the fact that it was received, at least
 in part. All arguments not mentioned below update the fields with the
@@ -1435,11 +1447,19 @@ C<$ordernumber>.
 
 
 sub ModReceiveOrder {
-    my (
-        $biblionumber,    $ordernumber,  $quantrec, $user, $cost, $ecost,
-        $invoiceid, $rrp, $budget_id, $datereceived, $received_items, $notes
-    )
-    = @_;
+    my ( $params ) = @_;
+    my $biblionumber = $params->{biblionumber};
+    my $ordernumber = $params->{ordernumber};
+    my $quantrec = $params->{quantityreceived};
+    my $user = $params->{user};
+    my $cost = $params->{cost};
+    my $ecost = $params->{ecost};
+    my $invoiceid = $params->{invoiceid};
+    my $rrp = $params->{rrp};
+    my $budget_id = $params->{budget_id};
+    my $datereceived = $params->{datereceived};
+    my $received_items = $params->{received_items};
+    my $notes = $params->{notes};
 
     my $dbh = C4::Context->dbh;
     $datereceived = C4::Dates->output('iso') unless $datereceived;

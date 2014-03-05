@@ -87,39 +87,41 @@ my $invoiceid2 = AddInvoice(invoicenumber => 'invoice2', booksellerid => $bookse
                             shipmentdate => '2012-12-24',
                            );
 
-my ($datereceived, $new_ordernumber) = ModReceiveOrder(
-    $biblionumber1,
-    $ordernumber1,
-    2,
-    undef,
-    12,
-    12,
-    $invoiceid1,
-    42
-    );
+my ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
+    {
+        biblionumber     => $biblionumber1,
+        ordernumber      => $ordernumber1,
+        quantityreceived => 2,
+        cost             => 12,
+        ecost            => 12,
+        invoiceid        => $invoiceid1,
+        rrp              => 42
+    }
+);
 
-($datereceived, $new_ordernumber) = ModReceiveOrder(
-    $biblionumber2,
-    $ordernumber2,
-    1,
-    undef,
-    5,
-    5,
-    $invoiceid2,
-    42
-    );
+( $datereceived, $new_ordernumber ) = ModReceiveOrder(
+    {
+        biblionumber     => $biblionumber2,
+        ordernumber      => $ordernumber2,
+        quantityreceived => 1,
+        cost             => 5,
+        ecost            => 5,
+        invoiceid        => $invoiceid2,
+        rrp              => 42
+    }
+);
 
-($datereceived, $new_ordernumber) = ModReceiveOrder(
-    $biblionumber3,
-    $ordernumber3,
-    1,
-    undef,
-    12,
-    12,
-    $invoiceid2,
-    42
-    );
-
+( $datereceived, $new_ordernumber ) = ModReceiveOrder(
+    {
+        biblionumber     => $biblionumber3,
+        ordernumber      => $ordernumber3,
+        quantityreceived => 1,
+        cost             => 12,
+        ecost            => 12,
+        invoiceid        => $invoiceid2,
+        rrp              => 42
+    }
+);
 
 my $invoice1 = GetInvoiceDetails($invoiceid1);
 my $invoice2 = GetInvoiceDetails($invoiceid2);

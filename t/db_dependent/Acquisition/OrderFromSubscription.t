@@ -83,8 +83,17 @@ is ( $order->{subscriptionid}, $subscription->{subscriptionid}, "test subscripti
 ok( $order->{ecost} == $cost, "test cost for the last order not received");
 
 my ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
-    $biblionumber, $ordernumber, 1, undef, $cost, $cost,
-    undef, $cost, $budget_id, '02-01-2013', undef);
+    {
+        biblionumber     => $biblionumber,
+        ordernumber      => $ordernumber,
+        quantityreceived => 1,
+        cost             => $cost,
+        ecost            => $cost,
+        rrp              => $cost,
+        budget_id        => $budget_id,
+        datereceived     => '02-01-2013'
+    }
+);
 
 $order = GetLastOrderReceivedFromSubscriptionid( $subscription->{subscriptionid} );
 is ( $order->{subscriptionid}, $subscription->{subscriptionid}, "test subscriptionid for the last order received");
