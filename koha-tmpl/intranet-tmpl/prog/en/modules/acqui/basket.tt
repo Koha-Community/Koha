@@ -355,7 +355,7 @@
                             [%- END -%]
                           [% ELSE %]
                             <select id="basketgroupid" name="basketgroupid">
-                              <option value="new">Add new group</option>
+                              <option value="">No group</option>
                               [% FOREACH bg IN basketgroups %]
                                 [% IF ( bg.default ) %]
                                     <option value="[% bg.id %]" selected="selected">[% bg.name %]</option>
@@ -367,6 +367,7 @@
                                   [% END %]
                                 [% END %]
                               [% END %]
+                              <option value="new">Add new group</option>
                             </select>
                             <input type="hidden" id="basketno" value="[% basketno %]" name="basketno" />
                             <input type="hidden" value="mod_basket" name="op" />
