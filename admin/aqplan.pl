@@ -225,7 +225,6 @@ HideCols($authcat, @hide_cols);
 }
 # ------------------------------------------------------------
 if ( $authcat =~ m/^Asort/ ) {
-    # ----------- copied from C4::Input::buildCGIsort()
    my $query = qq{ SELECT * FROM authorised_values WHERE category=? order by lib };
     my $sth   = $dbh->prepare($query);
     $sth->execute($authcat  );

@@ -621,16 +621,7 @@ if($no_categories){
 $template->param(no_add => $no_add);
 # --------------------------------------------------------------------------------------------------------
 
-my $CGIsort = buildCGIsort("Bsort1","sort1",$data{'sort1'});
-if ($CGIsort) {
-    $template->param(CGIsort1 => $CGIsort);
-}
-$template->param( sort1 => $data{'sort1'});		# shouldn't this be in an "else" statement like the 2nd one?
-
-$CGIsort = buildCGIsort("Bsort2","sort2",$data{'sort2'});
-if ($CGIsort) {
-    $template->param(CGIsort2 => $CGIsort);
-}
+$template->param( sort1 => $data{'sort1'});
 $template->param( sort2 => $data{'sort2'});
 
 if ($nok) {
