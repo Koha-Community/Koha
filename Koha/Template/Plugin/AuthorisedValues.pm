@@ -25,6 +25,7 @@ use base qw( Template::Plugin );
 use Encode qw{encode decode};
 
 use C4::Koha;
+use C4::Charset;
 
 =pod
 
@@ -43,9 +44,34 @@ sub GetByCode {
     return encode( 'UTF-8', GetAuthorisedValueByCode( $category, $code, $opac ) );
 }
 
+
 sub Get {
     my ( $self, $category, $selected, $opac ) = @_;
     return GetAuthorisedValues( $category, $selected, $opac );
+}
+
+sub BuildDropbox {
+    my ( $self, $name, $category, $default, $params ) = @_;
+    my $class = $params->{class};
+    my $avs = C4::Koha::GetAuthvalueDropbox($category, $default);
+    my $size = $params->{size} || 20;
+    my $html;
+    if ( @$avs ) {
+        $html = qq|<select id="$name" name="$name" class="$class" >|;
+        for my $av ( @$avs ) {
+            if ( $av->{default} ) {
+                $html .= qq|<option value="$av->{value}" selected="selected">$av->{label}</option>|;
+            } else {
+                $html .= qq|<option value="$av->{value}">$av->{label}</option>|;
+            }
+        }
+        $html .= q|</select>|;
+    } else {
+        $html .= qq|<input type="text" id="$name" name="$name" size="$size" value="$default" class="$class" />|;
+
+    }
+
+    return encode( 'UTF-8', $html );
 }
 
 1;
