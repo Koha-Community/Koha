@@ -58,8 +58,6 @@ BEGIN {
         &AddBudgetPeriod
 	    &DelBudgetPeriod
 
-        &GetAuthvalueDropbox
-
         &ModBudgetPlan
 
         &GetCurrency
@@ -399,44 +397,6 @@ sub GetBudgetAuthCats  {
         push @auth_cats_loop,{ authcat => $_ };
     }
     return \@auth_cats_loop;
-}
-
-# -------------------------------------------------------------------
-sub GetAuthvalueDropbox {
-    my ( $authcat, $default ) = @_;
-    my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
-    my $dbh = C4::Context->dbh;
-
-    my $query = qq{
-        SELECT *
-        FROM authorised_values
-    };
-    $query .= qq{
-          LEFT JOIN authorised_values_branches ON ( id = av_id )
-    } if $branch_limit;
-    $query .= qq{
-        WHERE category = ?
-    };
-    $query .= " AND ( branchcode = ? OR branchcode IS NULL )" if $branch_limit;
-    $query .= " GROUP BY lib ORDER BY category, lib, lib_opac";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $authcat, $branch_limit ? $branch_limit : () );
-
-
-    my $option_list = [];
-    my @authorised_values = ( q{} );
-    while (my $av = $sth->fetchrow_hashref) {
-        push @{$option_list}, {
-            value => $av->{authorised_value},
-            label => $av->{lib},
-            default => ($default eq $av->{authorised_value}),
-        };
-    }
-
-    if ( @{$option_list} ) {
-        return $option_list;
-    }
-    return;
 }
 
 # -------------------------------------------------------------------
