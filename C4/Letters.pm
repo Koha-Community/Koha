@@ -98,18 +98,17 @@ $template->param(LETTERLOOP => \@letterloop);
 sub GetLetters {
 
     # returns a reference to a hash of references to ALL letters...
-    my ( $cat, $message_transport_type ) = @_;
-    $message_transport_type ||= 'email';
+    my ( $cat ) = @_;
     my %letters;
     my $dbh = C4::Context->dbh;
     my $sth;
     my $query = q{
-        SELECT * FROM letter WHERE
+        SELECT * FROM letter WHERE 1
     };
-    $query .= q{ module = ? AND } if defined $cat;
-    $query .= q{ message_transport_type = ? ORDER BY name};
+    $query .= q{ AND module = ? } if defined $cat;
+    $query .= q{ GROUP BY code ORDER BY name};
     $sth = $dbh->prepare($query);
-    $sth->execute((defined $cat ? $cat : ()), $message_transport_type);
+    $sth->execute((defined $cat ? $cat : ()));
 
     while ( my $letter = $sth->fetchrow_hashref ) {
         $letters{ $letter->{'code'} } = $letter->{'name'};
