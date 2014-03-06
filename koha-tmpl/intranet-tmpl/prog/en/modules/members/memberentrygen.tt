@@ -1,3 +1,4 @@
+[% USE AuthorisedValues %]
 [% IF ( opduplicate ) %][% SET focusAction = "clearDupe" %][% END %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -958,12 +959,8 @@
         <label for="sort1">
       [% END %]
       Sort 1: </label>
-      [% IF ( CGIsort1 ) %] 
-        [% CGIsort1 %]
-      [% ELSE %]
-            <input type="text" id="sort1" name="sort1" size="20" value="[% sort1 %]" class="[% focusAction %]" />
-	  [% IF ( mandatorysort1 ) %]<span class="required">Required</span>[% END %]
-      [% END %]   
+      [% AuthorisedValues.BuildDropbox("sort1", "Bsort1", sort1, { class => focusAction, size => 20 } ) %]
+      [% IF ( mandatorysort1 ) %]<span class="required">Required</span>[% END %]
     </li>
         [% END %]
         [% UNLESS nosort2 %]
@@ -974,12 +971,8 @@
     <label for="sort2">
     [% END %]
     Sort 2: </label>
-    [% IF ( CGIsort2 ) %] 
-      [% CGIsort2 %]
-    [% ELSE %]
-        <input type="text" id="sort2" name="sort2" size="20" value="[% sort2 %]" class="[% focusAction %]" />
-	  [% IF ( mandatorysort2 ) %]<span class="required">Required</span>[% END %]
-    [% END %] 
+    [% AuthorisedValues.BuildDropbox("sort2", "Bsort2", sort2, { class => focusAction, size => 20 } ) %]
+    [% IF ( mandatorysort2 ) %]<span class="required">Required</span>[% END %]
     </li>
         [% END %]
 	</ol>

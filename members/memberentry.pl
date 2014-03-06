@@ -630,9 +630,8 @@ $template->param( sort1 => $data{'sort1'});		# shouldn't this be in an "else" st
 $CGIsort = buildCGIsort("Bsort2","sort2",$data{'sort2'});
 if ($CGIsort) {
     $template->param(CGIsort2 => $CGIsort);
-} else {
-    $template->param( sort2 => $data{'sort2'});
 }
+$template->param( sort2 => $data{'sort2'});
 
 if ($nok) {
     foreach my $error (@errors) {
