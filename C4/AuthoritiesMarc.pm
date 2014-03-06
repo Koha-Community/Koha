@@ -1034,15 +1034,17 @@ sub BuildSummary {
                 $subfields_to_report = 'vxyz';
             }
             if ($subfields_to_report) {
+                my $hemain = $field->subfield( substr($subfields_to_report, 0, 1) );
                 push @authorized, {
                     heading => $field->as_string($subfields_to_report),
-                    hemain  => $field->subfield( substr($subfields_to_report, 0, 1) ),
+                    hemain  => $hemain,
                     field   => $tag,
                 };
             } else {
+                my $hemain = $field->subfield( 'a' );
                 push @authorized, {
                     heading => $field->as_string(),
-                    hemain  => $field->subfield('a'),
+                    hemain  => $hemain,
                     field   => $tag,
                 };
             }
