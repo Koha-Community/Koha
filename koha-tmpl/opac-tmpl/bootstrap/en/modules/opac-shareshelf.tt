@@ -1,0 +1,90 @@
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Share a list
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+
+<body id="opac-shareshelf" class="scrollto">
+[% INCLUDE 'masthead.inc' %]
+<div class="main">
+    <ul class="breadcrumb">
+        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+        [% IF ( loggedinusername ) %]
+            <li><a href="/cgi-bin/koha/opac-user.pl">[% FOREACH USER_INF IN USER_INFO %][% USER_INF.title %] [% USER_INF.firstname %] [% USER_INF.surname %][% END %]</a> <span class="divider">&rsaquo;</span></li>
+        [% END %]
+        <li>Share a list</li>
+    </ul> <!-- / .breadcrumb -->
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            [% IF ( OpacNav ) %]
+                <div class="span2">
+                    <div id="navigation">
+                        [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
+                    </div>
+                </div>
+            [% END %]
+
+[%# This section contains the essential code for error messages and three operations: invite, confirm_invite and accept. %]
+    <h2>Share a list with another patron</h2>
+    <div class="span10">
+        <div id="shareshelf" class="maincontent">
+
+    [% IF errcode %]
+        [% IF errcode==1 && op %]<div class="alert">The operation [% op %] is not supported.</div>[% END %]
+        [% IF errcode==1 && !op %]<div class="alert">No operation parameter has been passed.</div>[% END %]
+        [% IF errcode==2 %]<div class="alert">Invalid shelf number.</div>[% END %]
+        [% IF errcode==3 %]<div class="alert">The feature of sharing lists is not in use in this library.</div>[% END %]
+        [% IF errcode==4 %]<div class="alert">You can only share a list if you are the owner.</div>[% END %]
+        [% IF errcode==5 %]<div class="alert">You cannot share a public list.</div>[% END %]
+        [% IF errcode==6 %]<div class="alert">Sorry, but you did not enter any valid email address.</div>[% END %]
+        [% IF errcode==7 %]<div class="alert">Sorry, but we could not accept this key. The invitation may have expired. Contact the patron who sent you the invitation.</div>[% END %]
+        [% IF errcode==8 %]<div class="alert">As owner of a list you cannot accept an invitation for sharing it.</div>[% END %]
+
+    [% ELSIF op=='invite' %]
+        <div id="invite">
+        <form method="post" onsubmit="return $('#invite_address').val().trim()!='';">
+        <fieldset class="rows">
+            <ol>
+            <input type="hidden" name="op" value="conf_invite"/>
+            <input type="hidden" name="shelfnumber" value="[% shelfnumber %]"/>
+            <li><label for="name">List name:</label> [% shelfname %]</li>
+            <li>
+                <label for="invite_address">Email address:</label>
+                <input id="invite_address" name="invite_address"/>
+            </li>
+            </ol>
+        </fieldset>
+        <fieldset class="action">
+            <input type="submit" value="Send" class="btn" />
+        </fieldset>
+        </form>
+        </div>
+
+    [% ELSIF op=='conf_invite' %]
+        <div id="conf_invite">
+        [% IF approvedaddress %]
+        <p>An invitation to share list <i>[% shelfname %]</i> has been sent to [% approvedaddress %].</p>
+        [% END %]
+        [% IF failaddress %]
+            <p>Something went wrong while processing the following addresses. Please check them. These are: [% failaddress %]</p>
+        [% END %]
+        [% IF approvedaddress %]
+        <p>You will receive an email notification if someone accepts your share within two weeks.</p>
+        [% END %]
+        <p><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">Return to your lists</a></p>
+        </div>
+
+    [% ELSIF op=='accept' %]
+        [%# Nothing to do: we already display an error or we redirect. %]
+    [% END %]
+
+        </div> <!-- / .span10 -->
+    </div> <!-- / .maincontent -->
+[%# End of essential part %]
+
+        </div> <!-- / .row-fluid -->
+    </div> <!-- / .container-fluid -->
+</div> <!-- / .main -->
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %][% END %]
