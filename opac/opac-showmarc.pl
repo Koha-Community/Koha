@@ -71,7 +71,7 @@ if ($view eq 'card' || $view eq 'html') {
         $xslfile = "compact.xsl";
     }
     else { # must be html
-        $xslfile = C4::Context->preference('marcflavour') . "slim2OPACMARCdetail.xsl";
+        $xslfile = 'plainMARC.xsl';
     }
     $xslfilename = "$htdocs/$theme/$lang/xslt/$xslfile";
     $xslfilename = "$htdocs/$theme/en/xslt/$xslfile" unless ( $lang ne 'en' && -f $xslfilename );
