@@ -1,113 +1,272 @@
 #!/usr/bin/perl
-#
-# This Koha test module is a stub!  
-# Add more tests here!!!
 
-use strict;
-use warnings;
-use Test::More tests => 17;
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+
+use Test::More tests => 3;
+use Test::MockModule;
+use Data::Dumper;
+
 use MARC::Record;
-use C4::Biblio;
 
 BEGIN {
     use_ok('C4::Biblio');
 }
 
-my $isbn = '0590353403';
-my $title = 'Foundation';
+my $dbh = C4::Context->dbh;
+# Start transaction
+$dbh->{AutoCommit} = 0;
+$dbh->{RaiseError} = 1;
 
-my $marc_record=MARC::Record->new;
-my $field = MARC::Field->new('020','','','a' => $isbn);
-$marc_record->append_fields($field);
-my($biblionumber,$biblioitemnumber) = AddBiblio($marc_record,'');
-my $data = &GetBiblioData($biblionumber);
-is($data->{Title},undef,'Makes sure title field in biblio is empty.');
+my $global_marcflavour;
+# Mocking variables
+my $original_preference = C4::Context->can( 'preference' );
+my $context             = new Test::MockModule('C4::Context');
 
-$field = MARC::Field->new('245','','','a' => $title);
-$marc_record->append_fields($field);
-ModBiblio($marc_record,$biblionumber,'');
-$data = &GetBiblioData($biblionumber);
-is($data->{title},$title,'uses ModBiblio to add a title to the previously created record and checks that its there.');
-is($data->{isbn},$isbn,'Makes sure the isbn is still there after using ModBiblio.');
+mock_preference();
+mock_marcfromkohafield();
 
-my $itemdata = &GetBiblioItemData($biblioitemnumber);
-is($itemdata->{title},$title,'First test of GetBiblioItemData to get same result of previous two GetBiblioData tests.');
-is($itemdata->{isbn},$isbn,'Second test checking it returns the correct isbn.');
+sub run_tests {
 
-my $success = 0;
-$field = MARC::Field->new(
-        655, ' ', ' ',
-        'a' => 'Auction catalogs',
-        '9' => '1'
-        );
-eval {
+    # Undef C4::Biblio::inverted_field_map to avoid problems introduced
+    # by caching in TransformMarcToKoha
+    undef $C4::Biblio::inverted_field_map;
+
+    my $marcflavour = shift;
+    $global_marcflavour = $marcflavour;
+
+    my $isbn = '0590353403';
+    my $title = 'Foundation';
+
+    # Generate a record with just the ISBN
+    my $marc_record = MARC::Record->new;
+    my $isbn_field  = create_isbn_field( $isbn, $marcflavour );
+    $marc_record->append_fields( $isbn_field );
+
+    # Add the record to the DB
+    my( $biblionumber, $biblioitemnumber ) = AddBiblio( $marc_record, '' );
+    my $data = GetBiblioData( $biblionumber );
+    is( $data->{ isbn }, $isbn,
+        '(GetBiblioData) ISBN correctly retireved.');
+    is( $data->{ title }, undef,
+        '(GetBiblioData) Title field is empty in fresh biblio.');
+
+    # Add title
+    my $field = create_title_field( $title, $marcflavour );
+    $marc_record->append_fields( $field );
+    ModBiblio( $marc_record, $biblionumber ,'' );
+    $data = GetBiblioData( $biblionumber );
+    is( $data->{ title }, $title,
+        'ModBiblio correctly added the title field, and GetBiblioData.');
+    is( $data->{ isbn }, $isbn, '(ModBiblio) ISBN is still there after ModBiblio.');
+
+    my $itemdata = GetBiblioItemData( $biblioitemnumber );
+    is( $itemdata->{ title }, $title,
+        'First test of GetBiblioItemData to get same result of previous two GetBiblioData tests.');
+    is( $itemdata->{ isbn }, $isbn,
+        'Second test checking it returns the correct isbn.');
+
+    my $success = 0;
+    $field = MARC::Field->new(
+            655, ' ', ' ',
+            'a' => 'Auction catalogs',
+            '9' => '1'
+            );
+    eval {
+        $marc_record->append_fields($field);
+        $success = ModBiblio($marc_record,$biblionumber,'');
+    } or do {
+        diag($@);
+        $success = 0;
+    };
+    ok($success, "ModBiblio handles authority-linked 655");
+
+    eval {
+        $field->delete_subfields('a');
+        $marc_record->append_fields($field);
+        $success = ModBiblio($marc_record,$biblionumber,'');
+    } or do {
+        diag($@);
+        $success = 0;
+    };
+    ok($success, "ModBiblio handles 655 with authority link but no heading");
+
+    eval {
+        $field->delete_subfields('9');
+        $marc_record->append_fields($field);
+        $success = ModBiblio($marc_record,$biblionumber,'');
+    } or do {
+        diag($@);
+        $success = 0;
+    };
+    ok($success, "ModBiblio handles 655 with no subfields");
+
+    ## Testing GetMarcISSN
+    my $issns;
+    $issns = GetMarcISSN( $marc_record, $marcflavour );
+    is( $issns->[0], undef,
+        'GetMarcISSN handles records without the ISSN field (list is empty)' );
+    is( scalar @$issns, 0,
+        'GetMarcISSN handles records without the ISSN field (count is 0)' );
+    # Add an ISSN field
+    my $issn = '1234-1234';
+    $field = create_issn_field( $issn, $marcflavour );
     $marc_record->append_fields($field);
-    $success = ModBiblio($marc_record,$biblionumber,'');
-} or do {
-    diag($@);
-    $success = 0;
-};
-ok($success, "ModBiblio handles authority-linked 655");
+    $issns = GetMarcISSN( $marc_record, $marcflavour );
+    is( $issns->[0], $issn,
+        'GetMarcISSN handles records with a single ISSN field (first element is correct)' );
+    is( scalar @$issns, 1,
+        'GetMARCISSN handles records with a single ISSN field (count is 1)');
+    # Add multiple ISSN field
+    my @more_issns = qw/1111-1111 2222-2222 3333-3333/;
+    foreach (@more_issns) {
+        $field = create_issn_field( $_, $marcflavour );
+        $marc_record->append_fields($field);
+    }
+    $issns = GetMarcISSN( $marc_record, $marcflavour );
+    is( scalar @$issns, 4,
+        'GetMARCISSN handles records with multiple ISSN fields (count correct)');
 
-eval {
-    $field->delete_subfields('a');
+    ## Testing GetMarcControlnumber
+    my $controlnumber;
+    $controlnumber = GetMarcControlnumber( $marc_record, $marcflavour );
+    is( $controlnumber, '', 'GetMarcControlnumber handles records without 001' );
+
+    $field = MARC::Field->new( '001', '' );
     $marc_record->append_fields($field);
-    $success = ModBiblio($marc_record,$biblionumber,'');
-} or do {
-    diag($@);
-    $success = 0;
-};
-ok($success, "ModBiblio handles 655 with authority link but no heading");
+    $controlnumber = GetMarcControlnumber( $marc_record, $marcflavour );
+    is( $controlnumber, '', 'GetMarcControlnumber handles records with empty 001' );
 
-eval {
-    $field->delete_subfields('9');
-    $marc_record->append_fields($field);
-    $success = ModBiblio($marc_record,$biblionumber,'');
-} or do {
-    diag($@);
-    $success = 0;
-};
-ok($success, "ModBiblio handles 655 with no subfields");
+    $field = $marc_record->field('001');
+    $field->update('123456789X');
+    $controlnumber = GetMarcControlnumber( $marc_record, $marcflavour );
+    is( $controlnumber, '123456789X', 'GetMarcControlnumber handles records with 001' );
 
-# Testing GetMarcISSN
-my $issns;
-$issns = GetMarcISSN( $marc_record, 'MARC21' );
-is( $issns->[0], undef,
-    'GetMarcISSN handles records without 022 (list is empty)' );
-is( scalar @$issns, 0, 'GetMarcISSN handles records without 022 (number of elements correct)' );
+    ## Testing GetMarcISBN
+    my $record_for_isbn = MARC::Record->new();
+    my $isbns = GetMarcISBN( $record_for_isbn, $marcflavour );
+    is( scalar @$isbns, 0, '(GetMarcISBN) The record contains no ISBN');
 
-my $issn = '1234-1234';
-$field = MARC::Field->new( '022', '', '', 'a', => $issn );
-$marc_record->append_fields($field);
-$issns = GetMarcISSN( $marc_record, 'MARC21' );
-is( $issns->[0], $issn,
-    'GetMarcISSN handles records with single 022 (first element is correct)' );
-is( scalar @$issns, 1, 'GetMARCISSN handles records with single 022 (number of elements correct)'
-);
+    # We add one ISBN
+    $isbn_field = create_isbn_field( $isbn, $marcflavour );
+    $record_for_isbn->append_fields( $isbn_field );
+    $isbns = GetMarcISBN( $record_for_isbn, $marcflavour );
+    is( scalar @$isbns, 1, '(GetMarcISBN) The record contains one ISBN');
+    is( $isbns->[0]->{ marcisbn }, $isbn, '(GetMarcISBN) The record contains our ISBN');
 
-my @more_issns = qw/1111-1111 2222-2222 3333-3333/;
-foreach (@more_issns) {
-    $field = MARC::Field->new( '022', '', '', 'a', => $_ );
-    $marc_record->append_fields($field);
+    # We add 3 more ISBNs
+    $record_for_isbn = MARC::Record->new();
+    my @more_isbns = qw/1111111111 2222222222 3333333333 444444444/;
+    foreach (@more_isbns) {
+        $field = create_isbn_field( $_, $marcflavour );
+        $record_for_isbn->append_fields($field);
+    }
+    $isbns = GetMarcISBN( $record_for_isbn, $marcflavour );
+    is( scalar @$isbns, 4, '(GetMarcISBN) The record contains 4 ISBNs');
+    for my $i (0 .. $#more_isbns) {
+        is( $isbns->[$i]->{ marcisbn }, $more_isbns[$i],
+            "(GetMarcISBN) Corretly retrieves ISBN #". ($i + 1));
+    }
+
 }
-$issns = GetMarcISSN( $marc_record, 'MARC21' );
-is( scalar @$issns, 4, 'GetMARCISSN handles records with multiple 022 (number of elements correct)'
-);
 
-# Testing GetMarcControlnumber
-my $controlnumber;
-$controlnumber = GetMarcControlnumber( $marc_record, 'MARC21' );
-is( $controlnumber, '', 'GetMarcControlnumber handles records without 001' );
+sub mock_preference {
 
-$field = MARC::Field->new( '001', '' );
-$marc_record->append_fields($field);
-$controlnumber = GetMarcControlnumber( $marc_record, 'MARC21' );
-is( $controlnumber, '', 'GetMarcControlnumber handles records with empty 001' );
+    $context->mock( 'preference', sub {
+        my ( $self, $pref ) = @_;
+        if ( $pref eq 'marcflavour' ) {
+            return $global_marcflavour;
+        } else {
+            &$original_preference(@_);
+        }
+    });
 
-$field = $marc_record->field('001');
-$field->update('123456789X');
-$controlnumber = GetMarcControlnumber( $marc_record, 'MARC21' );
-is( $controlnumber, '123456789X', 'GetMarcControlnumber handles records with 001' );
+}
 
-# clean up after ourselves
-DelBiblio($biblionumber);
+sub mock_marcfromkohafield {
+
+    $context->mock('marcfromkohafield',
+        sub {
+            my ( $self ) = shift;
+
+            if ( $global_marcflavour eq 'MARC21' ) {
+
+                return  {
+                '' => {
+                    'biblio.title' => [ '245', 'a' ],
+                    'biblio.biblionumber' => [ '999', 'c' ],
+                    'biblioitems.isbn' => [ '020', 'a' ],
+                    'biblioitems.issn' => [ '022', 'a' ],
+                    'biblioitems.biblioitemnumber' => [ '999', 'd' ]
+                    }
+                };
+            } elsif ( $global_marcflavour eq 'UNIMARC' ) {
+
+                return {
+                '' => {
+                    'biblio.title' => [ '200', 'a' ],
+                    'biblio.biblionumber' => [ '999', 'c' ],
+                    'biblioitems.isbn' => [ '010', 'a' ],
+                    'biblioitems.issn' => [ '011', 'a' ],
+                    'biblioitems.biblioitemnumber' => [ '090', 'a' ]
+                    }
+                };
+            }
+        });
+}
+
+sub create_title_field {
+    my ( $title, $marcflavour ) = @_;
+
+    my $title_field = ( $marcflavour eq 'UNIMARC' ) ? '200' : '245';
+    my $field = MARC::Field->new( $title_field,'','','a' => $title);
+
+    return $field;
+}
+
+sub create_isbn_field {
+    my ( $isbn, $marcflavour ) = @_;
+
+    my $isbn_field = ( $marcflavour eq 'UNIMARC' ) ? '010' : '020';
+    my $field = MARC::Field->new( $isbn_field,'','','a' => $isbn);
+
+    return $field;
+}
+
+sub create_issn_field {
+    my ( $issn, $marcflavour ) = @_;
+
+    my $issn_field = ( $marcflavour eq 'UNIMARC' ) ? '011' : '022';
+    my $field = MARC::Field->new( $issn_field,'','','a' => $issn);
+
+    return $field;
+}
+
+subtest 'MARC21' => sub {
+    plan tests => 25;
+    run_tests('MARC21');
+    $dbh->rollback;
+};
+
+subtest 'UNIMARC' => sub {
+    plan tests => 25;
+    run_tests('UNIMARC');
+    $dbh->rollback;
+};
+
+
+1;
