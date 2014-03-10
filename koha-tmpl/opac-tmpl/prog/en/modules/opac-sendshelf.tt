@@ -59,7 +59,7 @@ Your list : [% shelfname %]
             [% IF ( BIBLIO_RESULT.ISBN && BIBLIO_RESULT.size > 0 ) %]
             <span>
                 ISBN: [% FOREACH isbn IN BIBLIO_RESULT.ISBN %]
-                          [% isbn.marcisbn %]
+                          [% isbn %]
                           [% UNLESS ( loop.last ) %]; [% END %]
                       [% END %]
             </span><br/>
