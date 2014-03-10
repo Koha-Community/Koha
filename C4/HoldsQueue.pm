@@ -299,6 +299,7 @@ to fill a hold request if and only if:
     * it is not currently in transit
     * it is not lost
     * it is not sitting on the hold shelf
+    * it is not damaged (unless AllowHoldsOnDamagedItems is on)
 
 =cut
 
@@ -330,8 +331,6 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
                            AND (found IS NOT NULL OR priority = 0)
                         )
                        AND items.biblionumber = ?";
-    $items_query .=  " AND damaged = 0 "
-      unless C4::Context->preference('AllowHoldsOnDamagedItems');
 
     my @params = ($biblionumber, $biblionumber);
     if ($branches_to_use && @$branches_to_use) {
