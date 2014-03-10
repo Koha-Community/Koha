@@ -697,7 +697,7 @@ ok(
             ),
             @$search_orders )
     ),
-    "SearchOrders with pending params gets only pending orders"
+    "SearchOrders with pending params gets only pending orders (bug 10723)"
 );
 
 #
@@ -772,15 +772,6 @@ is(
     strftime( "%Y-%m-%d", localtime(time) ),
     "AddClaim : Check claimed_date"
 );
-
-my $firstorder = $search_orders->[0];
-
-# fake receiving the order
-ModOrder({
-    ordernumber      => $firstorder->{ordernumber},
-    biblionumber     => $firstorder->{biblionumber},
-    quantityreceived => $firstorder->{quantity},
-});
 
 ( $datereceived, $new_ordernumber ) =
   ModReceiveOrder( $biblionumber2, $ordernumbers[1], 2, undef, 12, 12,
