@@ -1639,13 +1639,12 @@ sub GetMarcISBN {
     } else {    # assume marc21 if not unimarc
         $scope = '020';
     }
+
     my @marcisbns;
-    my $marcisbn;
     foreach my $field ( $record->field($scope) ) {
         my $isbn = $field->as_string();
         if ( $isbn ne "" ) {
-            $marcisbn = { marcisbn => $isbn, };
-            push @marcisbns, $marcisbn;
+            push @marcisbns, $isbn;
         }
     }
 

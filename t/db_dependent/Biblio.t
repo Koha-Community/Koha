@@ -19,7 +19,6 @@ use Modern::Perl;
 
 use Test::More tests => 3;
 use Test::MockModule;
-use Data::Dumper;
 
 use MARC::Record;
 
@@ -166,7 +165,7 @@ sub run_tests {
     $record_for_isbn->append_fields( $isbn_field );
     $isbns = GetMarcISBN( $record_for_isbn, $marcflavour );
     is( scalar @$isbns, 1, '(GetMarcISBN) The record contains one ISBN');
-    is( $isbns->[0]->{ marcisbn }, $isbn, '(GetMarcISBN) The record contains our ISBN');
+    is( $isbns->[0], $isbn, '(GetMarcISBN) The record contains our ISBN');
 
     # We add 3 more ISBNs
     $record_for_isbn = MARC::Record->new();
@@ -178,7 +177,7 @@ sub run_tests {
     $isbns = GetMarcISBN( $record_for_isbn, $marcflavour );
     is( scalar @$isbns, 4, '(GetMarcISBN) The record contains 4 ISBNs');
     for my $i (0 .. $#more_isbns) {
-        is( $isbns->[$i]->{ marcisbn }, $more_isbns[$i],
+        is( $isbns->[$i], $more_isbns[$i],
             "(GetMarcISBN) Corretly retrieves ISBN #". ($i + 1));
     }
 
