@@ -853,8 +853,13 @@ Parameters:
                             table.  Cannot be used with -r
                             or -s.
 
-    --skip-deletes          select only updated records marked
-                            in the zebraqueue table, not deletes.
+    --skip-deletes          only select record updates, not record
+                            deletions, to avoid potential excessive
+                            I/O when zebraidx processes deletions.
+                            If this option is used for normal indexing,
+                            a cronjob should be set up to run
+                            rebuild_zebra.pl -z without --skip-deletes
+                            during off hours.
                             Only effective with -z.
 
     -r                      clear Zebra index before
