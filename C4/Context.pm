@@ -293,7 +293,7 @@ sub memcached {
     }
 }
 
-=head2 db_schema2dbi
+=head2 db_scheme2dbi
 
     my $dbd_driver_name = C4::Context::db_schema2dbi($scheme);
 
@@ -401,6 +401,7 @@ sub new {
     $self->{tz} = undef; # local timezone object
 
     bless $self, $class;
+    $self->{db_driver} = db_scheme2dbi($self->config('db_scheme'));  # cache database driver
     return $self;
 }
 
@@ -793,13 +794,12 @@ sub _new_Zconn {
 # Internal helper function (not a method!). This creates a new
 # database connection from the data given in the current context, and
 # returns it.
-our $db_driver = 'mysql';
 sub _new_dbh
 {
 
     ## $context
     ## correct name for db_scheme
-    my $db_driver = db_scheme2dbi($context->config("db_scheme"));
+    my $db_driver = $context->{db_driver};
 
     my $db_name   = $context->config("database");
     my $db_host   = $context->config("hostname");
@@ -866,9 +866,9 @@ sub dbh
     my $sth;
 
     unless ( $params->{new} ) {
-        if ( defined $db_driver && $db_driver eq 'mysql' && $context->{"dbh"} ) {
+        if ( defined($context->{db_driver}) && $context->{db_driver} eq 'mysql' && $context->{"dbh"} ) {
             return $context->{"dbh"};
-        } elsif ( defined $db_driver && defined($context->{"dbh"}) && $context->{"dbh"}->ping()) {
+        } elsif ( defined($context->{"dbh"}) && $context->{"dbh"}->ping() ) {
             return $context->{"dbh"};
         }
     }
