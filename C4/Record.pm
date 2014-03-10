@@ -28,11 +28,10 @@ use MARC::File::XML; # marc2marcxml, marcxml2marc, changeEncoding
 use MARC::Crosswalk::DublinCore; # marc2dcxml
 use Biblio::EndnoteStyle;
 use Unicode::Normalize; # _entity_encode
-use XML::LibXSLT;
-use XML::LibXML;
 use C4::Biblio; #marc2bibtex
 use C4::Csv; #marc2csv
 use C4::Koha; #marc2csv
+use C4::XSLT ();
 use YAML; #marcrecords2csv
 use Text::CSV::Encoded; #marc2csv
 
@@ -306,14 +305,7 @@ sub _transformWithStylesheet {
     # grab the XML, run it through our stylesheet, push it out to the browser
     my $xmlrecord = marc2marcxml($marc);
     my $xslfile = C4::Context->config('intrahtdocs') . $stylesheet;
-    my $parser = XML::LibXML->new();
-    my $xslt = XML::LibXSLT->new();
-    my $source = $parser->parse_string($xmlrecord);
-    my $style_doc = $parser->parse_file($xslfile);
-    my $style_sheet = $xslt->parse_stylesheet($style_doc);
-    my $results = $style_sheet->transform($source);
-    my $newxmlrecord = $style_sheet->output_string($results);
-    return ($newxmlrecord);
+    return C4::XSLT::engine->transform($xmlrecord, $xslfile);
 }
 
 sub marc2endnote {

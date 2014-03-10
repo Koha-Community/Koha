@@ -81,7 +81,7 @@ my $test4xml=qq(<?xml version="1.0" encoding="UTF-8"?>
 </mods>
 );
 
-is ($mods, $test4xml, "testing marc2mosxml");
+is ($mods, $test4xml, "testing marc2modsxml");
 
 $marc->append_fields(MARC::Field->new(
     '100', ' ', ' ', a => 'Rowling, J.K.'

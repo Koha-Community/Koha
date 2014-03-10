@@ -9,7 +9,7 @@
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
+# Foundation; either version 3 of the License, or (at your option) any later
 # version.
 #
 # Koha is distributed in the hope that it will be useful, but WITHOUT ANY
@@ -34,8 +34,7 @@ use C4::Output;
 use C4::Auth;
 use C4::Biblio;
 use C4::ImportBatch;
-use XML::LibXSLT;
-use XML::LibXML;
+use C4::XSLT ();
 
 my $input= new CGI;
 my $biblionumber= $input->param('id');
@@ -63,13 +62,7 @@ if($view eq 'card') {
     if ( ! -f $xslfile && $themelang ne '/en' ) {
         $xslfile=~s#$themelang#/en#;
     }
-    my $parser       = XML::LibXML->new();
-    my $xslt         = XML::LibXSLT->new();
-    my $source       = $parser->parse_string($xmlrecord);
-    my $style_doc    = $parser->parse_file($xslfile);
-    my $stylesheet   = $xslt->parse_stylesheet($style_doc);
-    my $results      = $stylesheet->transform($source);
-    my $newxmlrecord = $stylesheet->output_string($results);
+    my $newxmlrecord = C4::XSLT::engine->transform($xmlrecord, $xslfile);
     print $input->header(-charset => 'UTF-8'), Encode::encode_utf8($newxmlrecord);
 }
 else {
