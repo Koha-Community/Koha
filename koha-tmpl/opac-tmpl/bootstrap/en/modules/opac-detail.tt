@@ -197,7 +197,7 @@
                         [% END %]
 
                         [% IF ( MARCISBNS ) %]
-                            <span class="results_summary isbn"><span class="label">ISBN:</span>[% FOREACH MARCISBN IN MARCISBNS %][% MARCISBN.marcisbn %][% IF ( loop.last ) %].[% ELSE %]; [% END %][% END %]</span>
+                            <span class="results_summary isbn"><span class="label">ISBN:</span>[% FOREACH MARCISBN IN MARCISBNS %][% MARCISBN %][% IF ( loop.last ) %].[% ELSE %]; [% END %][% END %]</span>
                         [% ELSE %]
                             [% IF ( normalized_isbn ) %]
                                 <span class="results_summary isbn"><span class="label">ISBN: </span>[% normalized_isbn %]</span>
