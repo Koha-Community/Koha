@@ -101,6 +101,7 @@ $(document).ready(function()
             cloneItemBlock(0, '[% UniqueItemFields %]');
         [% END %]
 
+        [% IF ( suggestionid ) %]updateCosts();[% END %]
         $("#quantity").change(function() {
             updateCosts();
         });
