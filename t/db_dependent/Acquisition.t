@@ -487,7 +487,10 @@ ok(((scalar @get_orders == 1) and grep ($_->{ordernumber} eq $ordernumbers[3], @
                    notes
                    datecancellationprinted
                    budget_id
+    authorisedby
 );
+# note that authorisedby was added to the return of SearchOrder by the
+# patch for bug 11777
 
 my $invoiceid = AddInvoice(
     invoicenumber => 'invoice',
