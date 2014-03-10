@@ -137,6 +137,7 @@ sub get_template_and_user {
 
     C4::Context->interface($in->{type});
 
+    $in->{'authnotrequired'} ||= 0;
     my $template = C4::Templates::gettemplate(
         $in->{'template_name'},
         $in->{'type'},
