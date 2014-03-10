@@ -137,6 +137,9 @@ sub get_template_and_user {
     my $template =
       C4::Templates::gettemplate( $in->{'template_name'}, $in->{'type'}, $in->{'query'}, $in->{'is_plugin'} );
     my ( $user, $cookie, $sessionID, $flags );
+
+    $in->{'authnotrequired'} ||= 0;
+
     if ( $in->{'template_name'} !~m/maintenance/ ) {
         ( $user, $cookie, $sessionID, $flags ) = checkauth(
             $in->{'query'},
