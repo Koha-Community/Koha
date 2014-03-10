@@ -2253,36 +2253,45 @@ sub GetReservesControlBranch {
 
     my $p = CalculatePriority($biblionumber, $resdate);
 
-Calculate priority for a new reserve on biblionumber.
-The reserve date parameter is optional. Plays a role if the preference
-AllowHoldDateInFuture is set.
+Calculate priority for a new reserve on biblionumber, placing it at
+the end of the line of all holds whose start date falls before
+the current system time and that are neither on the hold shelf
+or in transit.
+
+The reserve date parameter is optional; if it is supplied, the
+priority is based on the set of holds whose start date falls before
+the parameter value.
+
 After calculation of this priority, it is recommended to call
 _ShiftPriorityByDateAndPriority. Note that this is currently done in
 AddReserves.
 
 =cut
 
-sub  CalculatePriority {
+sub CalculatePriority {
     my ( $biblionumber, $resdate ) = @_;
 
-    my $sql = qq{
+    my $sql = q{
         SELECT COUNT(*) FROM reserves
-        WHERE biblionumber=? AND priority>0 AND
-            (found IS NULL or found='')
+        WHERE biblionumber = ?
+        AND   priority > 0
+        AND   (found IS NULL OR found = '')
     };
-        #skip found==W or found==T (waiting or transit holds)
+    #skip found==W or found==T (waiting or transit holds)
     if( $resdate ) {
-        $sql.= ' AND ( reservedate<=? )';
+        $sql.= ' AND ( reservedate <= ? )';
     }
     else {
         $sql.= ' AND ( reservedate < NOW() )';
     }
     my $dbh = C4::Context->dbh();
-    my @row= $dbh->selectrow_array( $sql, undef, $resdate?
-        ($biblionumber, $resdate): ($biblionumber) );
+    my @row = $dbh->selectrow_array(
+        $sql,
+        undef,
+        $resdate ? ($biblionumber, $resdate) : ($biblionumber)
+    );
 
-    return @row? $row[0]+1: 1;
-        #if @row does not contain anything, something went wrong..
+    return @row ? $row[0]+1 : 1;
 }
 
 =head1 AUTHOR
