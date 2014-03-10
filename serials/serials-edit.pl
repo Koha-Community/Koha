@@ -93,7 +93,6 @@ if ( scalar(@subscriptionids) == 1 && index( $subscriptionids[0], q|,| ) > 0 ) {
 }
 my @errors;
 my @errseq;
-my $dbh   = C4::Context->dbh;
 
 # If user comes from subscription details
 unless (@serialids) {
