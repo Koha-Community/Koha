@@ -45,6 +45,7 @@
 <div id="doc2" class="yui-t7">
     <div id="bd">
         <div id="yui-main">
+            [% IF CAN_user_coursereserves_add_reserves OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_manage_courses %]
             <div id="toolbar">
                 <ul class="toolbar">
                     [% IF CAN_user_coursereserves_add_reserves %]<li><a class="btn" id="add_items" href="/cgi-bin/koha/course_reserves/add_items.pl?course_id=[% course.course_id %]"><i class="icon-plus"></i> Add reserves</a></li>[% END %]
@@ -52,6 +53,7 @@
                     [% IF ( CAN_user_coursereserves_manage_courses ) %]<li><a class="btn" id="delete_course" href="/cgi-bin/koha/course_reserves/mod_course.pl?course_id=[% course.course_id %]&amp;action=del"><i class="icon-remove"></i> Delete course</a></li>[% END %]
                 </ul>
             </div><!-- /toolbar -->
+            [% END %]
 
             <div class="rows">
               <ol>

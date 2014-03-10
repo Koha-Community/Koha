@@ -30,7 +30,7 @@ $(document).ready(function() {
         <div id="yui-main">
             <div class="yui-b">
                 <div class="yui-g">
-
+                    [% IF CAN_user_coursereserves_add_reserves OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_manage_courses %]
                     <div id="toolbar">
                         <ul class="toolbar">
                             [% IF ( CAN_user_coursereserves_manage_courses ) %]
@@ -38,6 +38,7 @@ $(document).ready(function() {
                             [% END %]
                         </ul>
                     </div><!-- /toolbar -->
+                    [% END %]
 
                     <!--
                     <div id="search-toolbar">
