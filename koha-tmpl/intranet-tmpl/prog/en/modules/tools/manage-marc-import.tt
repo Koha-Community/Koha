@@ -26,9 +26,7 @@ $(document).ready(function(){
   });
 
   [% IF import_batch_id %]
-      $("#records-table").dataTable({
-          "aLengthMenu": [[10, 15, 20, 25, 50, 100, -1], [10, 15, 20, 25, 50, 100, _("All")]],
-          "iDisplayLength" : 20,
+      $("#records-table").dataTable($.extend(true, {}, dataTablesDefaults, {
           "bAutoWidth": false,
           "bFilter": false,
           "bProcessing": true,
@@ -106,7 +104,7 @@ $(document).ready(function(){
                     + aData['matched'] + '">' + aData['matched'] + '</a>'
             );
           },
-      });
+      }));
     [% END %]
 });
 
