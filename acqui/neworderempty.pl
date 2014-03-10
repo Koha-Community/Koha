@@ -182,6 +182,7 @@ if ( $ordernumber eq '' ) {    # create order
 # otherwise, retrieve suggestion information.
     if ($suggestionid) {
         $data = ($biblionumber) ? GetBiblioData($biblionumber) : GetSuggestion($suggestionid);
+        $budget_id ||= $data->{'budgetid'} // 0;
     }
 }
 else {    #modify order
