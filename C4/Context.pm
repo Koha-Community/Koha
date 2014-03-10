@@ -401,6 +401,7 @@ sub new {
     $self->{tz} = undef; # local timezone object
 
     bless $self, $class;
+    $self->{db_driver} = db_scheme2dbi($self->config('db_scheme'));  # cache database driver
     return $self;
 }
 
@@ -782,7 +783,6 @@ sub _new_Zconn {
 # Internal helper function (not a method!). This creates a new
 # database connection from the data given in the current context, and
 # returns it.
-our $db_driver = 'mysql';
 sub _new_dbh
 {
 
@@ -790,7 +790,7 @@ sub _new_dbh
     ## correct name for db_scheme
     my $db_driver;
     if ($context->config("db_scheme")){
-        $db_driver=db_scheme2dbi($context->config("db_scheme"));
+        $db_driver=$context->{db_driver};
     }else{
         $db_driver="mysql";
     }
@@ -860,9 +860,9 @@ sub dbh
     my $sth;
 
     unless ( $params->{new} ) {
-        if ( defined $db_driver && $db_driver eq 'mysql' && $context->{"dbh"} ) {
+        if ( defined($context->{db_driver}) && $context->{db_driver} eq 'mysql' && $context->{"dbh"} ) {
             return $context->{"dbh"};
-        } elsif ( defined $db_driver && defined($context->{"dbh"}) && $context->{"dbh"}->ping()) {
+        } elsif ( defined($context->{"dbh"}) && $context->{"dbh"}->ping() ) {
             return $context->{"dbh"};
         }
     }
