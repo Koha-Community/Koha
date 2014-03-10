@@ -88,7 +88,11 @@ $(document).ready(function(){
 
             if ( aData['match_id'] ) {
                 $('td:eq(4)', nRow).html(
+                    [% IF ( record_type == 'auth' ) -%]
+                    _("Matches authority ")
+                    [%- ELSE -%]
                     _("Matches biblio ")
+                    [%- END %]
                     + aData['match_id']
                     + " (" + _("score") + "="
                     + aData['score']
