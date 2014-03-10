@@ -131,6 +131,7 @@ __PACKAGE__->mk_accessors(qw( do_not_return_source ));
     my $output2= $xslt_engine->transform( $xml2 );
 
     Pass a xml string and a fully qualified path of a XSLT file.
+    Instead of a filename, you may also pass a URL.
     If you do not pass a filename, the last file used is assumed.
     Returns the transformed string.
     Check the error number in err to know if something went wrong.
@@ -240,7 +241,7 @@ sub _init {
 sub _load {
     my ($self, $file)= @_;
 
-    if( !$file || !-e $file ) {
+    if( !$file || ( $file!~ /^https?:\/\// && !-e $file ) ) {
         $self->_set_error(2);
         return;
     }

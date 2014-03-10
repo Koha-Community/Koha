@@ -1,4 +1,5 @@
 package C4::XSLT;
+
 # Copyright (C) 2006 LibLime
 # <jmf at liblime dot com>
 # Parts Copyright Katrin Fischer 2011
@@ -9,7 +10,7 @@ package C4::XSLT;
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
+# Foundation; either version 3 of the License, or (at your option) any later
 # version.
 #
 # Koha is distributed in the hope that it will be useful, but WITHOUT ANY
@@ -30,12 +31,16 @@ use C4::Koha;
 use C4::Biblio;
 use C4::Circulation;
 use C4::Reserves;
+use Koha::XSLT_Handler;
+
 use Encode;
-use XML::LibXML;
-use XML::LibXSLT;
-use LWP::Simple;
 
 use vars qw($VERSION @ISA @EXPORT);
+
+my $engine; #XSLT Handler object
+my %authval_per_framework;
+    # Cache for tagfield-tagsubfield to decode per framework.
+    # Should be preferably be placed in Koha-core...
 
 BEGIN {
     require Exporter;
@@ -43,8 +48,8 @@ BEGIN {
     @ISA = qw(Exporter);
     @EXPORT = qw(
         &XSLTParse4Display
-        &GetURI
     );
+    $engine=Koha::XSLT_Handler->new( { do_not_return_source => 1 } );
 }
 
 =head1 NAME
@@ -53,22 +58,10 @@ C4::XSLT - Functions for displaying XSLT-generated content
 
 =head1 FUNCTIONS
 
-=head2 GetURI
-
-GetURI file and returns the xslt as a string
-
-=cut
-
-sub GetURI {
-    my ($uri) = @_;
-    my $string;
-    $string = get $uri ;
-    return $string;
-}
-
 =head2 transformMARCXML4XSLT
 
 Replaces codes with authorized values in a MARC::Record object
+Is only used in this module currently.
 
 =cut
 
@@ -108,12 +101,9 @@ sub transformMARCXML4XSLT {
 =head2 getAuthorisedValues4MARCSubfields
 
 Returns a ref of hash of ref of hash for tag -> letter controled by authorised values
+Is only used in this module currently.
 
 =cut
-
-# Cache for tagfield-tagsubfield to decode per framework.
-# Should be preferably be placed in Koha-core...
-my %authval_per_framework;
 
 sub getAuthorisedValues4MARCSubfields {
     my ($frameworkcode) = @_;
@@ -134,7 +124,17 @@ sub getAuthorisedValues4MARCSubfields {
     return $authval_per_framework{ $frameworkcode };
 }
 
-my $stylesheet;
+=head2 XSLTParse4Display
+
+Returns xml for biblionumber and requested XSLT transformation.
+Returns undef if the transform fails.
+
+Used in OPAC results and detail, intranet results and detail, list display.
+(Depending on the settings of your XSLT preferences.)
+
+The helper function _get_best_default_xslt_filename is used in a unit test.
+
+=cut
 
 sub _get_best_default_xslt_filename {
     my ($htdocs, $theme, $lang, $base_xslfile) = @_;
@@ -195,7 +195,6 @@ sub XSLTParse4Display {
 
     # grab the XML, run it through our stylesheet, push it out to the browser
     my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
-    #return $record->as_formatted();
     my $itemsxml  = buildKohaItemsNamespace($biblionumber, $hidden_items);
     my $xmlrecord = $record->as_xml(C4::Context->preference('marcflavour'));
     my $sysxml = "<sysprefs>\n";
@@ -223,26 +222,18 @@ sub XSLTParse4Display {
     $xmlrecord =~ s/\& /\&amp\; /;
     $xmlrecord =~ s/\&amp\;amp\; /\&amp\; /;
 
-    my $parser = XML::LibXML->new();
-    # don't die when you find &, >, etc
-    $parser->recover_silently(0);
-    my $source = $parser->parse_string($xmlrecord);
-    unless ( $stylesheet->{$xslfilename} ) {
-        my $xslt = XML::LibXSLT->new();
-        my $style_doc;
-        if ( $xslfilename =~ /^https?:\/\// ) {
-            my $xsltstring = GetURI($xslfilename);
-            $style_doc = $parser->parse_string($xsltstring);
-        } else {
-            use Cwd;
-            $style_doc = $parser->parse_file($xslfilename);
-        }
-        $stylesheet->{$xslfilename} = $xslt->parse_stylesheet($style_doc);
-    }
-    my $results      = $stylesheet->{$xslfilename}->transform($source);
-    my $newxmlrecord = $stylesheet->{$xslfilename}->output_string($results);
-    return $newxmlrecord;
+    #If the xslt should fail, we will return undef (old behavior was
+    #raw MARC)
+    #Note that we did set do_not_return_source at object construction
+    return $engine->transform($xmlrecord, $xslfilename ); #file or URL
 }
+
+=head2 buildKohaItemsNamespace
+
+Returns XML for items.
+Is only used in this module currently.
+
+=cut
 
 sub buildKohaItemsNamespace {
     my ($biblionumber, $hidden_items) = @_;
@@ -306,26 +297,32 @@ sub buildKohaItemsNamespace {
                 "<holdingbranch>$holdingbranch</holdingbranch>".
                 "<location>$location</location>".
                 "<ccode>$ccode</ccode>".
-		"<status>$status</status>".
-		"<itemcallnumber>".$itemcallnumber."</itemcallnumber>"
-        . "</item>";
-
+                "<status>$status</status>".
+                "<itemcallnumber>".$itemcallnumber."</itemcallnumber>".
+                "</item>";
     }
     $xml = "<items xmlns=\"http://www.koha-community.org/items\">".$xml."</items>";
     return $xml;
 }
 
+=head2 engine
 
-
-1;
-__END__
-
-=head1 NOTES
+Returns reference to XSLT handler object.
 
 =cut
+
+sub engine {
+    return $engine;
+}
+
+1;
+
+__END__
 
 =head1 AUTHOR
 
 Joshua Ferraro <jmf@liblime.com>
+
+Koha Development Team <http://koha-community.org/>
 
 =cut
