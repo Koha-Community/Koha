@@ -139,6 +139,7 @@ sub get_template_and_user {
     my $in       = shift;
     my ( $user, $cookie, $sessionID, $flags );
 
+    $in->{'authnotrequired'} ||= 0;
     my $template = C4::Templates::gettemplate(
         $in->{'template_name'},
         $in->{'type'},
