@@ -600,7 +600,7 @@
                                 <tr>
                                     <th id="serial_library">Library</th>
                                     <th id="serial_collection">Serial collection</th>
-                                    <th id="serial_itemcallnumber">Item callnumber</th>
+                                    <th id="serial_itemcallnumber">Item call number</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -767,7 +767,7 @@
                                 [% IF ( subscription.closed ) %]
                                     <p>This subscription is closed.</p>
                                 [% END %]
-                                <span style="display:none;"> [% IF ( subscription.callnumber ) %]<p>Callnumber: [% subscription.callnumber %]</p>[% END %]</span>
+                                <span style="display:none;"> [% IF ( subscription.callnumber ) %]<p>Call number: [% subscription.callnumber %]</p>[% END %]</span>
                                 [% IF ( subscription.subscriptionnotes ) %]
                                     <p>[% subscription.subscriptionnotes FILTER html_line_break %] </p>
                                 [% END %]
@@ -779,7 +779,7 @@
                                     <p>[% subscription.opacnote FILTER html_line_break %]</p>
                                 [% END %]
                                 [% IF ( subscription.callnumber ) %]
-                                  <p>Callnumber: [% subscription.callnumber %]</p>
+                                  <p>Call number: [% subscription.callnumber %]</p>
                                 [% END %]
                                 [% IF ( subscription.latestserials ) %]
                                     <p> The [% subscription.opacdisplaycount %] latest issues for this subscription:</p>
