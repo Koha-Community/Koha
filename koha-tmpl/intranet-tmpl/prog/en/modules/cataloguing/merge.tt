@@ -34,7 +34,8 @@ div#result { margin-top: 1em; }
             }
             for (subfieldcode in tagslib[tag]) {
                 if (subfieldcode == 'lib' || subfieldcode == 'mandatory'
-                || subfieldcode == 'repeatable' || subfieldcode == 'tab') {
+                || subfieldcode == 'repeatable' || subfieldcode == 'tab'
+                || subfieldcode == '@') {
                     continue;
                 }
                 if (tagslib[tag][subfieldcode].mandatory == 1 && tagslib[tag][subfieldcode].tab >= 0) {
