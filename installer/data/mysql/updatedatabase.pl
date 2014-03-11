@@ -8603,15 +8603,6 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-
-$DBversion = "3.17.00.XXX";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('HighlightedStopWords','and|or|not',NULL,'List of words to NOT highlight when OpacHighlightedWords is enabled','free')"
-    );
-    print "Upgrade to $DBversion done (Bug 6149: Operator highlighted in search results)\n";
-    SetVersion($DBversion);
-}
-
 $DBversion = '3.17.00.014';
 if ( CheckVersion($DBversion) ) {
     $dbh->do("
@@ -8713,6 +8704,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('NotHighlightedWords','and|or|not',NULL,'List of words to NOT highlight when OpacHighlightedWords is enabled','free')"
+    );
+    print "Upgrade to $DBversion done (Bug 6149: Operator highlighted in search results)\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 
