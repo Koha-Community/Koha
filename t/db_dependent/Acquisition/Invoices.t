@@ -179,6 +179,13 @@ DelInvoice($invoiceid3);
 is(scalar @invoices, $invoicecount - 1, 'DelInvoice deletes invoice');
 is(GetInvoice($invoiceid3), undef, 'DelInvoice deleted correct invoice');
 
+my @invoices_linked_to_subscriptions = map{
+    $_->{linked_to_subscriptions}
+    ? $_
+    : ()
+} @invoices;
+is_deeply( \@invoices_linked_to_subscriptions, [], "GetInvoices return linked_to_subscriptions: there is no invoices linked to subscriptions yet" )
+
 END {
     $dbh and $dbh->rollback;
 }

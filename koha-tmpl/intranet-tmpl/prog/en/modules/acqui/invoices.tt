@@ -12,7 +12,6 @@ $(document).ready(function() {
     var resultst = $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
         sDom: "t",
         bPaginate: false,
-        bFilter: false,
         bInfo: false,
         "aoColumns": [
             null,null,null,{ "sType": "title-string" },null,null,null,null
@@ -27,7 +26,7 @@ $(document).ready(function() {
 
     $("#show_only_subscription").click(function(){
         if ( $(this).attr("checked") ) {
-            resultst.fnFilter( "[0-9]+", 0, true );
+            resultst.fnFilter( "1", 0, true );
         } else {
             resultst.fnFilter( '', 0 );
         }
@@ -121,7 +120,7 @@ $(document).ready(function() {
             <tbody>
               [% FOREACH invoice IN invoices %]
                 <tr data-invoiceid="[% invoice.invoiceid %]" data-booksellerid="[% invoice.booksellerid %]" data-shipmentdate="[% invoice.shipmentdate | $KohaDates %]" data-billingdate="[% invoice.billingdate | $KohaDates %]" data-shipmentcost="[% invoice.shipmentcost %]" data-shipment_budgetid="[% invoice.shipmentcost_budgetid %]" data-closedate="[% invoice.closedate | $KohaDates %]">
-                  <td>[% invoice.subscriptionid %]</td>
+                  <td>[% invoice.is_linked_to_subscriptions %]</td>
                   <td><input type="checkbox" class="select-invoice" value="[% invoice.invoiceid %]"></input></td>
                   <td><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid %]">[% invoice.invoicenumber %]</a></td>
                   <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% invoice.booksellerid %]">[% invoice.suppliername %]</a></td>

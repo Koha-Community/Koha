@@ -2587,6 +2587,13 @@ sub GetInvoices {
               NULL
             )
           ) AS receivedbiblios,
+          COUNT(
+             DISTINCT IF(
+              aqorders.subscriptionid IS NOT NULL,
+              aqorders.subscriptionid,
+              NULL
+            )
+          ) AS is_linked_to_subscriptions,
           SUM(aqorders.quantityreceived) AS receiveditems
         FROM aqinvoices
           LEFT JOIN aqbooksellers ON aqbooksellers.id = aqinvoices.booksellerid
