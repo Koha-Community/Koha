@@ -244,7 +244,7 @@ foreach my $report_id (@ARGV) {
     if ($email){
         my %mail;
         if ($format eq 'html') {
-                $message = "<html><head><style>tr:nth-child(n+1) { background-color: #ccc;}</style></head><body>$message</body></html>";
+                $message = "<html><head><style>tr:nth-child(2n+1) { background-color: #ccc;}</style></head><body>$message</body></html>";
            %mail = (
               To      => $to,
               From    => $from,
