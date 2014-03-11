@@ -108,6 +108,7 @@
     //<![CDATA[
     var MSG_CONFIRM_AGAIN = _("Warning: Cannot be undone. Please confirm once again")
     var MSG_DELETE_SEARCH_HISTORY = _("Are you sure you want to delete your search history?");
+    var MSG_NO_SUGGESTION_SELECTED = _("No suggestion was selected");
     [% IF Koha.Preference( 'opacbookbag' ) == 1 or Koha.Preference( 'virtualshelves' ) == 1 %]
         var MSG_BASKET_EMPTY = _("Your cart is currently empty");
         var MSG_RECORD_IN_BASKET = _("The item is already in your cart");
