@@ -1034,10 +1034,11 @@ sub GetImportRecordsRange {
 
     my $order_by = $parameters->{order_by} || 'import_record_id';
     ( $order_by ) = grep( /^$order_by$/, qw( import_record_id title status overlay_status ) ) ? $order_by : 'import_record_id';
-    $order_by .= ",authorized_heading" if $order_by eq 'title';
 
     my $order_by_direction =
       uc( $parameters->{order_by_direction} ) eq 'DESC' ? 'DESC' : 'ASC';
+
+    $order_by .= " $order_by_direction, authorized_heading" if $order_by eq 'title';
 
     my $query = "SELECT title, author, isbn, issn, authorized_heading, import_records.import_record_id,
                                            record_sequence, status, overlay_status,
