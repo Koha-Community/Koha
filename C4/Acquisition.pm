@@ -1630,12 +1630,14 @@ sub CancelReceipt {
     basketno => $basketno,
     owner => $owner,
     pending => $pending
+    ordered => $ordered
 });
 
 Searches for orders.
 
 C<$owner> Finds order for the logged in user.
 C<$pending> Finds pending orders. Ignores completed and cancelled orders.
+C<$ordered> Finds orders to receive only (status 'ordered' or 'partial').
 
 
 C<@results> is an array of references-to-hash with the keys are fields
@@ -1681,12 +1683,10 @@ sub SearchOrders {
         WHERE (datecancellationprinted is NULL)
     };
 
-    if ( $pending ) {
+    if ( $pending or $ordered ) {
         $query .= q{ AND (quantity > quantityreceived OR quantityreceived is NULL)};
     }
     if ( $ordered ) {
-        $query .= q{ AND (quantity > quantityreceived OR quantityreceived is NULL)}
-            unless $pending;
         $query .= q{ AND aqorders.orderstatus IN ( "ordered", "partial" )};
     }
 

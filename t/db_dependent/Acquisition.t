@@ -8,7 +8,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 64;
+use Test::More tests => 66;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -700,6 +700,15 @@ ok(
     "SearchOrders with pending params gets only pending orders (bug 10723)"
 );
 
+$search_orders = SearchOrders({
+    booksellerid => $booksellerid,
+    basketno     => $basketno,
+    pending      => 1,
+    ordered      => 1,
+});
+is( scalar (@$search_orders), 0, "SearchOrders with pending and ordered params gets only pending ordered orders (bug 11170)" );
+
+
 #
 # Test GetBudgetByOrderNumber
 #
@@ -759,6 +768,15 @@ is( join( " ", @$test_extra_fields ),
     '', "GetLateOrders gets orders with no unexpected fields" );
 is( join( " ", @$test_different_fields ),
     '', "GetLateOrders gets orders with the right content in every fields" );
+
+$search_orders = SearchOrders({
+    booksellerid => $booksellerid,
+    basketno     => $basketno,
+    pending      => 1,
+    ordered      => 1,
+});
+is( scalar (@$search_orders), 3, "SearchOrders with pending and ordered params gets only pending ordered orders. After closing the basket, orders are marked as 'ordered' (bug 11170)" );
+
 
 #
 # Test AddClaim
