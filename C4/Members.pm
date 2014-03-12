@@ -1349,8 +1349,20 @@ sub checkcardnumber {
     return 0;
 }
 
+=head2 get_cardnumber_length
+
+    my ($min, $max) = C4::Members::get_cardnumber_length()
+
+Returns the minimum and maximum length for patron cardnumbers as
+determined by the CardnumberLength system preference, the
+BorrowerMandatoryField system preference, and the width of the
+database column.
+
+=cut
+
 sub get_cardnumber_length {
-    my ( $min, $max ) = ( 1, 16 ); # borrowers.cardnumber is a varchar(16)
+    my ( $min, $max ) = ( 0, 16 ); # borrowers.cardnumber is a nullable varchar(16)
+    $min = 1 if C4::Context->preference('BorrowerMandatoryField') =~ /cardnumber/;
     if ( my $cardnumber_length = C4::Context->preference('CardnumberLength') ) {
         # Is integer and length match
         if ( $cardnumber_length =~ m|^\d+$| ) {

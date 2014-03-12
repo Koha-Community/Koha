@@ -134,6 +134,7 @@ Patrons:
                no: "Don't"
          - enable the ability to upload and attach arbitrary files to a borrower record.
      -
-         - Card numbers for patrons must be strictly equal to
+         - Card numbers for patrons must be
          - pref: CardnumberLength
-         - characters. The length can be a single number or a range separated by a comma ( i.e. Min,Max ).
+         - "characters long. The length can be a single number to specify an exact length, a range separated by a comma (i.e., 'Min,Max'), or a maximum with no minimum (i.e., ',Max')."
+         - "If 'cardnumber' is included in the BorrowerMandatoryField list, the minimum length, if not specified here, defaults to one."

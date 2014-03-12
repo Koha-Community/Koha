@@ -6,13 +6,19 @@
 use strict;
 use warnings;
 
-use Test::More tests => 23;
+use Test::More tests => 24;
 use Data::Dumper;
+use C4::Context;
 
 BEGIN {
         use_ok('C4::Members');
 }
 
+my $dbh = C4::Context->dbh;
+
+# Start transaction
+$dbh->{AutoCommit} = 0;
+$dbh->{RaiseError} = 1;
 
 my $CARDNUMBER   = 'TESTCARD01';
 my $FIRSTNAME    = 'Marie';
@@ -147,12 +153,20 @@ $results = Search(\@searchstring);
 ok (_find_member($results), "Search (arrayref) for independent branches, same branch")
   or diag("Card $CARDNUMBER not found in the resultset for independent branches: ".Dumper(C4::Context->preference($INDEPENDENT_BRANCHES_PREF), $results));
 
+C4::Context->set_preference( 'CardnumberLength', '' );
+C4::Context->clear_syspref_cache();
 
 my $checkcardnum=C4::Members::checkcardnumber($CARDNUMBER, "");
 is ($checkcardnum, "1", "Card No. in use");
 
 $checkcardnum=C4::Members::checkcardnumber($IMPOSSIBLE_CARDNUMBER, "");
 is ($checkcardnum, "0", "Card No. not used");
+
+C4::Context->set_preference( 'CardnumberLength', '4' );
+C4::Context->clear_syspref_cache();
+
+$checkcardnum=C4::Members::checkcardnumber($IMPOSSIBLE_CARDNUMBER, "");
+is ($checkcardnum, "2", "Card number is too long");
 
 my $age=GetAge("1992-08-14", "2011-01-19");
 is ($age, "18", "Age correct");
