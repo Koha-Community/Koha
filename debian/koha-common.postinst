@@ -8,8 +8,9 @@ AUTOMATIC_TRANSLATIONS_UPDATE="yes"
 . /usr/share/debconf/confmodule
 
 # Read configuration variable file if it is present
-if [ -r /etc/koha/koha-common.conf ]; then
-    . /etc/koha/koha-common.conf
+CONFIG=/etc/koha/koha-common.conf
+if [ -r $CONFIG ]; then
+    . $CONFIG
 fi
 
 conf=/etc/mysql/koha-common.cnf
@@ -21,6 +22,37 @@ fi
 #DEBHELPER#
 
 koha-upgrade-schema $(koha-list)
+
+# Generate a config file if one doesn't exist already
+if [ ! -e $CONFIG ]; then
+    cat <<EOF > $CONFIG
+## Automatic template translation update
+#
+# This variable controls whether template translations should
+# be updated automatically on koha-common package upgrades.
+# Options: 'yes' (default)
+#          'no'
+# Note: if you choose 'no' then you will have to issue
+#  $ koha-translate --update <lang_code>
+#
+AUTOMATIC_TRANSLATIONS_UPDATE="yes"
+EOF
+fi
+
+# Substitute the values from debconf into the file.
+db_get koha-common/automatically-update-translations
+UPDATE="$RET"
+if [ "$UPDATE" = "false" ]; then
+    UPDATE="no"
+else
+    UPDATE="yes"
+fi
+# In case they were removed/commented out, we add it in.
+grep -Eq '^ *AUTOMATIC_TRANSLATIONS_UPDATE=' $CONFIG || \
+    echo "AUTOMATIC_TRANSLATIONS_UPDATE=" >> $CONFIG
+
+sed -e "s/^ *AUTOMATIC_TRANSLATIONS_UPDATE=.*/AUTOMATIC_TRANSLATIONS_UPDATE=\"$UPDATE\"/" < $CONFIG > $CONFIG.tmp
+mv -f $CONFIG.tmp $CONFIG
 
 if [ "$AUTOMATIC_TRANSLATIONS_UPDATE" = "yes" ]; then
     for lang in $(koha-translate --list | grep -v -x "en"); do
