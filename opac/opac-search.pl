@@ -481,11 +481,19 @@ if (C4::Context->preference('OpacSuppression')) {
         my $IPAddress = $ENV{'REMOTE_ADDR'};
         my $IPRange = C4::Context->preference('OpacSuppressionByIPRange');
         if ($IPAddress !~ /^$IPRange/)  {
-            $query = "($query) not Suppress=1";
+            if ( $query_type eq 'pqf' ) {
+                $query = "($query) && -(suppress:1)";
+            } else {
+                $query = "($query) not Suppress=1";
+            }
         }
     }
     else {
-        $query = "($query) not Suppress=1";
+        if ( $query_type eq 'pqf' ) {
+            $query = "($query) && -(suppress:1)";
+        } else {
+            $query = "($query) not Suppress=1";
+        }
     }
 }
 
