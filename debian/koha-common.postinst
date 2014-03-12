@@ -2,15 +2,14 @@
 
 set -e
 
-NAME="koha-common"
 # Default to "no"
 AUTOMATIC_TRANSLATIONS_UPDATE="no"
 
 . /usr/share/debconf/confmodule
 
 # Read configuration variable file if it is present
-if [ -r /etc/default/$NAME ]; then
-    . /etc/default/$NAME
+if [ -r /etc/koha/koha-common.conf ]; then
+    . /etc/koha/koha-common.conf
 fi
 
 conf=/etc/mysql/koha-common.cnf
