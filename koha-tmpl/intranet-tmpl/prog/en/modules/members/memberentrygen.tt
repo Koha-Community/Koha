@@ -898,9 +898,11 @@
           [% END %]
           Card number: </label>
           [% IF minlength_cardnumber == maxlength_cardnumber %]
-              <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" pattern=".{[% minlength_cardnumber %]}" title="Exactly [% minlength_cardnumber %] characters" />
+              <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" title="exactly [% minlength_cardnumber %] characters" />
           [% ELSIF minlength_cardnumber && maxlength_cardnumber %]
-              <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" pattern=".{[% minlength_cardnumber %],[% maxlength_cardnumber %]}" title="between [% minlength_cardnumber %] and [% maxlength_cardnumber %] characters" />
+              <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" title="between [% minlength_cardnumber %] and [% maxlength_cardnumber %] characters" />
+          [% ELSIF maxlength_cardnumber %]
+              <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" maxlength="[% maxlength_cardnumber %]" title="up to [% maxlength_cardnumber %] characters" />
           [% ELSE %]
                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" />
           [% END %]
