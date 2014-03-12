@@ -146,7 +146,7 @@ sub checkpw_ldap {
         my $res = $db->bind( $principal_name, password => $password );
         if ( $res->code ) {
             warn "LDAP bind failed as kohauser $userid: " . description($res);
-            return 0;
+            return -1;
         }
         if ( !defined($userldapentry)
             && ( $config{update} or $config{replicate} ) )
