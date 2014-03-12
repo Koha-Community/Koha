@@ -8065,6 +8065,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        DROP TABLE aqorderdelivery;
+    });
+    print "Upgrade to $DBversion done (Bug 11928 - remove unused table)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

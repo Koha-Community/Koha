@@ -2956,19 +2956,6 @@ CREATE TABLE `aqcontract` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Table structure for table `aqorderdelivery`
---
-
-DROP TABLE IF EXISTS `aqorderdelivery`;
-CREATE TABLE `aqorderdelivery` (
-  `ordernumber` date default NULL,
-  `deliverynumber` smallint(6) NOT NULL default 0,
-  `deliverydate` varchar(18) default NULL,
-  `qtydelivered` smallint(6) default NULL,
-  `deliverycomments` mediumtext
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
 -- Table structure for table `aqorders`
 --
 
