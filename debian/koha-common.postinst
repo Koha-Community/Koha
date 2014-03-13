@@ -59,7 +59,7 @@ if [ "$AUTOMATIC_TRANSLATIONS_UPDATE" = "yes" ]; then
         if koha-translate --update $lang; then
             echo "Updated the $lang translations."
         else
-            cat <<EOF
+            cat <<EOF >&2
 ERROR: an error was found when updating '$lang' translations. Please manually
 run 'koha-translate --update $lang'. Run man koha-translate for more options.
 EOF
@@ -69,7 +69,7 @@ else
     # no auto-update, check update needed and warn if needed
     if koha-translate --list | grep -v -q -x "en"; then
         # translations installed, update needed
-        cat <<EOF
+        cat <<EOF >&2
 Warning: template translations are not set to be automatically updated.
 Please manually run 'koha-translate --update lang_code' to update them.
 
