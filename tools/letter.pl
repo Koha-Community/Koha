@@ -166,14 +166,19 @@ sub add_form {
     my $message_transport_types = GetMessageTransportTypes();
     my @letter_loop;
     if ($letters) {
+        $template->param(
+            modify     => 1,
+            code       => $code,
+            branchcode => $branchcode,
+        );
         my $first_flag = 1;
+        # The letter name is contained into each mtt row.
+        # So we can only sent the first one to the template.
         for my $mtt ( @$message_transport_types ) {
+            # The letter_name
             if ( $first_flag ) {
                 $template->param(
-                    modify     => 1,
-                    code       => $code,
-                    branchcode => $branchcode,
-                    name       => $letters->{$mtt}{name},
+                    letter_name=> $letters->{$mtt}{name},
                 );
                 $first_flag = 0;
             }
