@@ -61,17 +61,15 @@ is_deeply($loanlength, $default, 'none matches');
 
 #Set syspref ReturnBeforeExpiry = 1 and useDaysMode = 'Days'
 $contextmodule->mock('preference', sub {
-			 my ($self, $syspref) = @_;
-			 if ( $syspref eq "ReturnBeforeExpiry") {
-			     return 1;
-			 }
-			 elsif ( $syspref eq "useDaysMode") {
-			     return 'Days';
-			 }
-			 else {
-			     return;
-			 }
-		     });
+    my ($self, $syspref) = @_;
+    if ( $syspref eq "ReturnBeforeExpiry" ) {
+        return 1;
+    } elsif ( $syspref eq "useDaysMode" ) {
+        return 'Days';
+    } else {
+        return;
+    }
+});
 
 my $dateexpiry = '2013-01-01';
 
@@ -86,17 +84,15 @@ $date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borr
 
 #Set syspref ReturnBeforeExpiry = 1 and useDaysMode != 'Days'
 $contextmodule->mock('preference', sub {
-			 my ($self, $syspref) = @_;
-			 if ( $syspref eq "ReturnBeforeExpiry") {
-			     return 1;
-			 }
-			 elsif ($syspref eq "useDaysMode") {
-			     return 'noDays';
-			 }
-			 else {
-			     return;
-			 }
-		     });
+    my ($self, $syspref) = @_;
+    if ( $syspref eq "ReturnBeforeExpiry" ) {
+        return 1;
+    } elsif ( $syspref eq "useDaysMode" ) {
+        return 'noDays';
+    } else {
+        return;
+    }
+});
 
 $borrower = {categorycode => 'B', dateexpiry => $dateexpiry};
 $start_date = DateTime->new({year => 2013, month => 2, day => 9});
@@ -110,17 +106,15 @@ $date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borr
 
 #Set syspref ReturnBeforeExpiry = 0 and useDaysMode = 'Days'
 $contextmodule->mock('preference', sub {
-			 my ($self, $syspref) = @_;
-			 if ( $syspref eq "ReturnBeforeExpiry") {
-			     return 0;
-			 }
-			 elsif ( $syspref eq "useDaysMode") {
-			     return 'Days';
-			 }
-			 else {
-			     return;
-			 }
-		     });
+    my ($self, $syspref) = @_;
+    if ( $syspref eq "ReturnBeforeExpiry" ) {
+        return 0;
+    } elsif ( $syspref eq "useDaysMode" ) {
+        return 'Days';
+    } else {
+        return;
+    }
+});
 
 $borrower = {categorycode => 'B', dateexpiry => $dateexpiry};
 $start_date = DateTime->new({year => 2013, month => 2, day => 9});
