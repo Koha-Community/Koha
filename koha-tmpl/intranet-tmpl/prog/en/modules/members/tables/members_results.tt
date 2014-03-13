@@ -24,7 +24,7 @@
                 "dt_fines":
                     "[% IF data.fines < 0 %]<span class='credit'>[% data.fines |html %]</span> [% ELSIF data.fines > 0 %] <span class='debit'><strong>[% data.fines |html %]</strong></span> [% ELSE %] [% data.fines |html%] [% END %]</td>",
                 "dt_borrowernotes":
-                    "[% data.borrowernotes |html |html_line_break |collapse %]",
+                    "[% data.borrowernotes.replace('\\\\' , '\\\\') |html |html_line_break |collapse %]",
                 "dt_action":
                     "[% IF data.category_type %]<a href='/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% data.borrowernumber %]&amp;category_type=[% data.category_type %]'>Edit</a>[% ELSE %][% IF data.categorycode %]<a href='/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% data.borrowernumber %]&amp;categorycode=[% data.categorycode %]'>Edit</a>[% ELSE %]<a href='/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% data.borrowernumber %]&amp;category_type=A'>Edit</a>[% END %][% END %]",
                 "borrowernumber":
