@@ -12,6 +12,10 @@ use C4::Category;
 use C4::Circulation;
 use MARC::Record;
 
+my $dbh = C4::Context->dbh;
+$dbh->{AutoCommit} = 0;
+$dbh->{RaiseError} = 1;
+
 my $branchcode;
 my $branch_created;
 my @branches = keys %{ GetBranches() };
@@ -58,44 +62,24 @@ AddIssue($borrower, '0203');
 
 # Begin tests...
 my $issues;
-$issues = GetIssues({biblionumber => $biblionumber1});
+$issues = C4::Circulation::GetIssues({biblionumber => $biblionumber1});
 is(scalar @$issues, 1, "Biblio $biblionumber1 has 1 item issued");
 is($issues->[0]->{itemnumber}, $itemnumber1, "First item of biblio $biblionumber1 is issued");
 
-$issues = GetIssues({biblionumber => $biblionumber2});
+$issues = C4::Circulation::GetIssues({biblionumber => $biblionumber2});
 is(scalar @$issues, 1, "Biblio $biblionumber2 has 1 item issued");
 is($issues->[0]->{itemnumber}, $itemnumber3, "First item of biblio $biblionumber2 is issued");
 
-$issues = GetIssues({borrowernumber => $borrowernumber});
+$issues = C4::Circulation::GetIssues({borrowernumber => $borrowernumber});
 is(scalar @$issues, 2, "Borrower $borrowernumber checked out 2 items");
 
-$issues = GetIssues({borrowernumber => $borrowernumber, biblionumber => $biblionumber1});
+$issues = C4::Circulation::GetIssues({borrowernumber => $borrowernumber, biblionumber => $biblionumber1});
 is(scalar @$issues, 1, "One of those is an item from biblio $biblionumber1");
 
-$issues = GetIssues({borrowernumber => $borrowernumber, biblionumber => $biblionumber2});
+$issues = C4::Circulation::GetIssues({borrowernumber => $borrowernumber, biblionumber => $biblionumber2});
 is(scalar @$issues, 1, "The other is an item from biblio $biblionumber2");
 
-$issues = GetIssues({itemnumber => $itemnumber2});
+$issues = C4::Circulation::GetIssues({itemnumber => $itemnumber2});
 is(scalar @$issues, 0, "No one has issued the second item of biblio $biblionumber2");
-
-END {
-    AddReturn('0101', $branchcode);
-    AddReturn('0203', $branchcode);
-    DelMember($borrowernumber);
-    if ($category_created) {
-        C4::Context->dbh->do(
-            "DELETE FROM categories WHERE categorycode = ?", undef, $categorycode);
-    }
-    my $dbh = C4::Context->dbh;
-    C4::Items::DelItem($dbh, $biblionumber1, $itemnumber1);
-    C4::Items::DelItem($dbh, $biblionumber1, $itemnumber2);
-    C4::Items::DelItem($dbh, $biblionumber2, $itemnumber3);
-    C4::Biblio::DelBiblio($biblionumber1);
-    C4::Biblio::DelBiblio($biblionumber2);
-
-    if ($branch_created) {
-        DelBranch($branchcode);
-    }
-};
 
 done_testing;
