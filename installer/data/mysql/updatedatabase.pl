@@ -7946,7 +7946,7 @@ if (CheckVersion($DBversion)) {
 }
 
 $DBversion = "3.15.00.016";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+if (CheckVersion($DBversion)) {
     $dbh->do("ALTER TABLE biblioitems CHANGE url url TEXT NULL DEFAULT NULL");
     $dbh->do("ALTER TABLE deletedbiblioitems CHANGE url url TEXT NULL DEFAULT NULL");
     print "Upgrade to $DBversion done (Bug 11268 - Biblioitems URL field is too small for some URLs)\n";
@@ -8006,14 +8006,14 @@ if ( CheckVersion($DBversion) ) {
 }
 
 $DBversion = "3.15.00.019";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES('OpacMaxItemsToDisplay','50','','Max items to display at the OPAC on a biblio detail','Integer')");
     print "Upgrade to $DBversion done (Bug 11256: Add system preference OpacMaxItemsToDisplay)\n";
     SetVersion($DBversion);
 }
 
 $DBversion = "3.15.00.020";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES('MaxItemsForBatch','1000',NULL,'Max number of items record to process in a batch (modification or deletion)','Integer')
     |);
@@ -8065,7 +8065,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.15.00.025";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         DROP TABLE aqorderdelivery;
