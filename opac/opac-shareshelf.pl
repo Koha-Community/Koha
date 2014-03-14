@@ -116,7 +116,7 @@ sub show_accept {
     if( AcceptShare($param->{shelfnumber}, $dbkey, $param->{loggedinuser} ) ) {
         notify_owner($param);
         #redirect to view of this shared list
-        print $param->{query}->redirect(SHELVES_URL.$param->{shelfnumber});
+        print $param->{query}->redirect( -uri => SHELVES_URL.$param->{shelfnumber}, -cookie => $param->{cookie} );
         exit;
     }
     else {
