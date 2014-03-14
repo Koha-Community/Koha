@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use Template::Plugin;
 use base qw( Template::Plugin );
-use Encode qw{encode decode};
+use Encode qw{encode is_utf8};
 
 use C4::Koha;
 use C4::Context;
@@ -33,7 +33,7 @@ sub GetName {
     my $sth   = C4::Context->dbh->prepare($query);
     $sth->execute($branchcode);
     my $b = $sth->fetchrow_hashref();
-    return $b ? encode( 'UTF-8', $b->{'branchname'} ) : q{};
+    return $b->{branchname};
 }
 
 sub GetLoggedInBranchcode {

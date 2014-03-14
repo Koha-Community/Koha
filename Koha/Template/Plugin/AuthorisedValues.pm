@@ -21,7 +21,7 @@ use Modern::Perl;
 use Template::Plugin;
 use base qw( Template::Plugin );
 
-use Encode qw{encode decode};
+use Encode qw{encode is_utf8};
 
 use C4::Koha;
 
@@ -62,6 +62,12 @@ In a template, you can get the description for an authorised value with
 the following TT code: [% AuthorisedValues.GetByCode( 'CATEGORY', 'AUTHORISED_VALUE_CODE', 'IS_OPAC' ) %]
 
 The parameters are identical to those used by the subroutine C4::Koha::GetAuthorisedValueByCode.
+
+sub GetByCode {
+    my ( $self, $category, $code, $opac ) = @_;
+    my $av = GetAuthorisedValueByCode( $category, $code, $opac );
+    return $av;
+}
 
 =head2 GetAuthValueDropbox
 

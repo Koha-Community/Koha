@@ -624,7 +624,7 @@ sub _marc_marc8_to_utf8 {
                     # occurs, upgrade the string in place.  Moral of the story seems to be
                     # that pack("U", ...) is better than chr(...) if you need to guarantee
                     # that the resulting string is UTF-8.
-                    utf8::upgrade($utf8sf);
+                    $utf8sf = Encode::encode('UTF-8', $utf8sf);
                 }
                 push @converted_subfields, $subfield->[0], $utf8sf;
             }

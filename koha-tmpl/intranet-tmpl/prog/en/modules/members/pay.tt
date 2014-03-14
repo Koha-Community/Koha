@@ -136,7 +136,7 @@ function enableCheckboxActions(){
           [% CASE %][% line.accounttype %]
         [%- END -%]
         [%- IF line.description %], [% line.description %][% END %]
-        [% IF line.title %]([% line.title |html %])[% END %]
+        [% IF line.title %]([% line.title %])[% END %]
     </td>
     <td><input type="text" name="payment_note_[% line.accountno %]" /></td>
     <td>[% line.accounttype %]</td>

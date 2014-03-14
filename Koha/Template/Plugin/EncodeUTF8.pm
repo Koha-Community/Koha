@@ -25,7 +25,7 @@ use Encode qw{encode};
 
 sub filter {
     my ( $self, $value ) = @_;
-    return encode( 'UTF-8', $value );
+    return is_utf8( $value ) ? encode( 'UTF-8', $value ) : $value;
 }
 
 1;
