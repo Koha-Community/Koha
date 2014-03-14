@@ -127,7 +127,7 @@ foreach my $barcode (@barcodes) {
 # redirection to the referrer page
 #
 if ( $input->param('destination') eq "circ" ) {
-    $cardnumber = uri_escape($cardnumber);
+    $cardnumber = uri_escape_utf8($cardnumber);
     print $input->redirect( '/cgi-bin/koha/circ/circulation.pl?findborrower='
           . $cardnumber
           . $failedrenews

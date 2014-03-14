@@ -173,7 +173,7 @@ sub redirect_to_paycollect {
     $redirect .= get_for_redirect( 'notify_id',    "notify_id$line_no",    0 );
     $redirect .= get_for_redirect( 'notify_level', "notify_level$line_no", 0 );
     $redirect .= get_for_redirect( 'accountlines_id', "accountlines_id$line_no", 0 );
-    $redirect .= q{&} . 'payment_note' . q{=} . uri_escape( $input->param("payment_note_$line_no") );
+    $redirect .= q{&} . 'payment_note' . q{=} . uri_escape_utf8( $input->param("payment_note_$line_no") );
     $redirect .= '&remote_user=';
     $redirect .= $user;
     return print $input->redirect($redirect);

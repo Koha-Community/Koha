@@ -152,7 +152,7 @@ sub set_to_session {
     my $session = C4::Auth::get_session($sessionID);
     return () unless $session;
     $session->param( 'search_history',
-        uri_escape( encode_json($search_history) ) );
+        uri_escape_utf8( encode_json($search_history) ) );
 }
 
 1;

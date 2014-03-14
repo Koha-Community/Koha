@@ -62,7 +62,7 @@ if($op eq 'add'){
 if($op eq 'save'){
     my $sth = $dbh->prepare('UPDATE serial SET routingnotes = ? WHERE subscriptionid = ?');
     $sth->execute($notes,$subscriptionid);
-    my $urldate = URI::Escape::uri_escape($date_selected);
+    my $urldate = URI::Escape::uri_escape_utf8($date_selected);
     print $query->redirect("routing-preview.pl?subscriptionid=$subscriptionid&issue=$urldate");
 }
 

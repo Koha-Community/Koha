@@ -1479,17 +1479,17 @@ sub buildQuery {
         if ( @limits ) {
             $q .= ' and '.join(' and ', @limits);
         }
-        return ( undef, $q, $q, "q=ccl=".uri_escape($q), $q, '', '', '', '', 'ccl' );
+        return ( undef, $q, $q, "q=ccl=".uri_escape_utf8($q), $q, '', '', '', '', 'ccl' );
     }
     if ( $query =~ /^cql=/ ) {
-        return ( undef, $', $', "q=cql=".uri_escape($'), $', '', '', '', '', 'cql' );
+        return ( undef, $', $', "q=cql=".uri_escape_utf8($'), $', '', '', '', '', 'cql' );
     }
     if ( $query =~ /^pqf=/ ) {
         if ($query_desc) {
-            $query_cgi = "q=".uri_escape($query_desc);
+            $query_cgi = "q=".uri_escape_utf8($query_desc);
         } else {
             $query_desc = $';
-            $query_cgi = "q=pqf=".uri_escape($');
+            $query_cgi = "q=pqf=".uri_escape_utf8($');
         }
         return ( undef, $', $', $query_cgi, $query_desc, '', '', '', '', 'pqf' );
     }
@@ -1711,7 +1711,7 @@ sub buildQuery {
             $group_OR_limits{$k} .= " or " if $group_OR_limits{$k};
             $limit_desc      .= " or " if $group_OR_limits{$k};
             $group_OR_limits{$k} .= "$this_limit";
-            $limit_cgi       .= "&limit=" . uri_escape($this_limit);
+            $limit_cgi       .= "&limit=" . uri_escape_utf8($this_limit);
             $limit_desc      .= " $this_limit";
         }
 
@@ -1719,7 +1719,7 @@ sub buildQuery {
         else {
             $limit .= " and " if $limit || $query;
             $limit      .= "$this_limit";
-            $limit_cgi  .= "&limit=" . uri_escape($this_limit);
+            $limit_cgi  .= "&limit=" . uri_escape_utf8($this_limit);
             if ($this_limit =~ /^branch:(.+)/) {
                 my $branchcode = $1;
                 my $branchname = GetBranchName($branchcode);
@@ -1809,9 +1809,9 @@ sub _build_initial_query {
     #e.g. " and kw,wrdl:test"
     $params->{query} .= $operator . $operand;
 
-    $params->{query_cgi} .= "&op=".uri_escape($operator) if $operator;
-    $params->{query_cgi} .= "&idx=".uri_escape($params->{index}) if $params->{index};
-    $params->{query_cgi} .= "&q=".uri_escape($params->{original_operand}) if $params->{original_operand};
+    $params->{query_cgi} .= "&op=".uri_escape_utf8($operator) if $operator;
+    $params->{query_cgi} .= "&idx=".uri_escape_utf8($params->{index}) if $params->{index};
+    $params->{query_cgi} .= "&q=".uri_escape_utf8($params->{original_operand}) if $params->{original_operand};
 
     #e.g. " and kw,wrdl: test"
     $params->{query_desc} .= $operator . $params->{index_plus} . " " . $params->{original_operand};
