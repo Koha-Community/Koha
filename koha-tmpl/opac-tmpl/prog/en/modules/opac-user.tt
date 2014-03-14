@@ -204,7 +204,7 @@ var MSG_CONFIRM_RESUME_HOLDS  = _("Are you sure you want to resume all suspended
         [% END %]</tbody>
         </table>
        [% IF ( canrenew && !userdebarred && OpacRenewalAllowed ) %]
-        <input type="submit" value="Renew Selected" />
+        <input type="submit" value="Renew selected" />
         [% END %]
         </form>
         [% IF ( canrenew && !userdebarred && OpacRenewalAllowed ) %]
@@ -214,7 +214,7 @@ var MSG_CONFIRM_RESUME_HOLDS  = _("Are you sure you want to resume all suspended
             [% FOREACH ISSUE IN ISSUES %]
             <input type="hidden" name="item" value="[% ISSUE.itemnumber %]" />
             [% END %]
-            <input type="submit" value="Renew All" />
+            <input type="submit" value="Renew all" />
         </form>
         [% END %]
     [% ELSE %]
