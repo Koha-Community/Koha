@@ -24,6 +24,7 @@ use C4::Context;
 use POSIX qw(strftime);
 use LWP::UserAgent;
 use JSON;
+use URI::Encode qw(uri_encode);
 
 =head1 NAME C4::UsageStats
 
@@ -369,7 +370,7 @@ Send to hea.koha-community.org database informations
 
 sub ReportToCommunity {
     my $data = shift;
-    my $json = to_json($data);
+    my $json = uri_encode(to_json($data), 1);
 
     my $ua = LWP::UserAgent->new;
     my $req = HTTP::Request->new(POST => "http://hea.koha-community.org/upload.pl");
