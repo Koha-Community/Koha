@@ -35,6 +35,7 @@ use IO::File;
 use YAML::Syck qw();
 use List::MoreUtils qw(any);
 $YAML::Syck::ImplicitTyping = 1;
+$YAML::Syck::ImplicitUnicode = 1;
 our $lang;
 
 # use Smart::Comments;
