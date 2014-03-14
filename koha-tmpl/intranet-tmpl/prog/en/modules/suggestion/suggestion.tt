@@ -54,10 +54,8 @@ $(document).ready(function() {
     });
     $(".sorted").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
-            { "aTargets": [ 0, -1, -2 ], "bSortable": false, "bSearchable": false },
-        ],
-        "aoColumns": [
-            null,{ "sType": "anti-the" },null,null,null,null,null
+            { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+            { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
         ],
         "sPaginationType": "four_button"
     }));
@@ -469,7 +467,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
     <table id="[% suggestion.suggestiontype %]t" class="sorted">
         <thead>
             <tr><th>&nbsp;</th>
-            <th>Suggestion</th>
+            <th class="anti-the">Suggestion</th>
             <th>Suggested by - on</th>
             <th>Managed by - on</th>
             <th>Library</th>
