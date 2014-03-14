@@ -446,9 +446,9 @@ function filterByFirstLetterSurname(letter) {
                 <option value="">Any</option>
                 [% FOREACH cat IN categories %]
                   [% IF cat.selected %]
-                    <option selected="selected" value="[% cat.categorycode %]">[% cat.description %]</option>
+                    <option selected="selected" value="[% cat.categorycode %]">[% cat.description | html_entity %]</option>
                   [% ELSE %]
-                    <option value="[% cat.categorycode %]">[% cat.description %]</option>
+                    <option value="[% cat.categorycode %]">[% cat.description | html_entity %]</option>
                   [% END %]
                 [% END %]
               </select>
