@@ -28,7 +28,7 @@ Manage numbering patterns
 =cut
 
 use Modern::Perl;
-use CGI;
+use CGI qw ( -utf8 );
 
 use C4::Auth;
 use C4::Output;

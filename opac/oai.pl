@@ -21,7 +21,7 @@
 use strict;
 use warnings;
 
-use CGI qw/:standard -oldstyle_urls/;
+use CGI qw( :standard -oldstyle_urls -utf8 );
 use vars qw( $GZIP );
 use C4::Context;
 

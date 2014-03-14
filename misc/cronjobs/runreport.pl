@@ -29,7 +29,7 @@ use Getopt::Long qw(:config auto_help auto_version);
 use Pod::Usage;
 use Mail::Sendmail;
 use Text::CSV_XS;
-use CGI;
+use CGI qw ( -utf8 );
 use Carp;
 use Encode;
 

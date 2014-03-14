@@ -27,7 +27,7 @@
 
 use strict;
 #use warnings; FIXME - Bug 2505
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Members;
 use C4::Auth qw/check_cookie_auth/;

@@ -23,7 +23,7 @@ use warnings;
 use C4::Debug;
 use C4::Context;
 use Authen::CAS::Client;
-use CGI;
+use CGI qw ( -utf8 );
 use FindBin;
 
 

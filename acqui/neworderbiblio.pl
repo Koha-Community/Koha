@@ -59,7 +59,7 @@ use strict;
 #use warnings; FIXME - Bug 2505
 
 use C4::Search;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Biblio;
 use C4::Auth;
 use C4::Output;

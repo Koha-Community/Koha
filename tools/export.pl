@@ -20,7 +20,7 @@ use Modern::Perl;
 use MARC::File::XML;
 use List::MoreUtils qw(uniq);
 use Getopt::Long;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::AuthoritiesMarc;    # GetAuthority
 use C4::Biblio;             # GetMarcBiblio

@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 
-use CGI;
+use CGI qw ( -utf8 );
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
 use Test::More tests => 6;

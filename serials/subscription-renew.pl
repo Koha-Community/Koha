@@ -46,7 +46,7 @@ Id of the subscription this script has to renew
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use Carp;
 use C4::Koha;
 use C4::Auth;

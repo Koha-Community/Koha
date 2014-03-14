@@ -23,7 +23,7 @@
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Acquisition qw( SearchOrders );
 use C4::Auth qw(:DEFAULT get_session);
 use C4::Branch;

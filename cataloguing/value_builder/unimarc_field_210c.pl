@@ -25,7 +25,7 @@ use C4::AuthoritiesMarc;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Search;
 use MARC::Record;
 use C4::Koha;

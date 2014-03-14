@@ -21,7 +21,7 @@
 
 use Modern::Perl;
 
-use CGI;
+use CGI qw ( -utf8 );
 use List::MoreUtils qw/uniq/;
 
 use C4::Auth;

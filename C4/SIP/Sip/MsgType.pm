@@ -16,7 +16,7 @@ use Sip::Constants qw(:all);
 use Sip::Checksum qw(verify_cksum);
 
 use Data::Dumper;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Auth qw(&check_api_auth);
 
 use UNIVERSAL qw(can);	# make sure this is *after* C4 modules.

@@ -27,7 +27,7 @@ note: there is currently no 'delete rating' functionality in this script
 
 use strict;
 use warnings;
-use CGI;
+use CGI qw ( -utf8 );
 use CGI::Cookie;
 use C4::Auth qw(:DEFAULT check_cookie_auth);
 use C4::Context;

@@ -35,7 +35,7 @@ C4::Utils::DataTables - Utility subs for building query when DataTables source i
 
 =head1 SYNOPSYS
 
-    use CGI;
+    use CGI qw ( -utf8 );
     use C4::Context;
     use C4::Utils::DataTables;
 

@@ -6,7 +6,7 @@
 use Modern::Perl;
 use YAML;
 
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Serials;
 use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;

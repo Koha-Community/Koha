@@ -57,7 +57,7 @@ use C4::Auth;
 use C4::Biblio;
 use C4::Budgets;
 use C4::Output;
-use CGI;
+use CGI qw ( -utf8 );
 
 use C4::Acquisition qw/ GetBasketsInfosByBookseller CanUserManageBasket /;
 use C4::Members qw/GetMember/;

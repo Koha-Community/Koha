@@ -19,7 +19,7 @@ package C4::Reports;
 
 use strict;
 #use warnings; FIXME - Bug 2505
-use CGI;
+use CGI qw ( -utf8 );
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;

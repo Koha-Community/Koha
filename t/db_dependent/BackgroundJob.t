@@ -6,7 +6,7 @@
 use strict;
 use warnings;
 use C4::Auth;
-use CGI;
+use CGI qw ( -utf8 );
 use Test::More tests => 14;
 
 BEGIN {

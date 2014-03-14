@@ -49,7 +49,7 @@ use warnings;
 use C4::Input;
 use C4::Auth;
 use C4::Output;
-use CGI;
+use CGI qw ( -utf8 );
 
 use C4::Bookseller::Contact;
 use C4::Acquisition qw/SearchOrders GetOrder ModOrder/;

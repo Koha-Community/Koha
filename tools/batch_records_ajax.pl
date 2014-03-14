@@ -31,7 +31,7 @@ the records from an import batch.
 
 use Modern::Perl;
 
-use CGI;
+use CGI qw ( -utf8 );
 use JSON qw/ to_json /;
 
 use C4::Context;

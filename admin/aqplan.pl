@@ -22,7 +22,7 @@
 
 use strict;
 #use warnings; FIXME - Bug 2505
-use CGI;
+use CGI qw ( -utf8 );
 use List::Util qw/min/;
 use Date::Calc qw/Delta_YMD Easter_Sunday Today Decode_Date_EU/;
 use Date::Manip qw/ ParseDate UnixDate DateCalc/;

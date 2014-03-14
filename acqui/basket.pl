@@ -25,7 +25,7 @@ use warnings;
 use C4::Auth;
 use C4::Koha;
 use C4::Output;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Acquisition;
 use C4::Budgets;
 use C4::Branch;

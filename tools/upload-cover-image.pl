@@ -41,7 +41,7 @@ use strict;
 use warnings;
 
 use File::Temp;
-use CGI;
+use CGI qw ( -utf8 );
 use GD;
 use C4::Context;
 use C4::Auth;

@@ -26,7 +26,7 @@ A script that takes an ajax json query, and then inserts or modifies a star-rati
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use CGI::Cookie;  # need to check cookies before having CGI parse the POST request
 
 use C4::Auth qw(:DEFAULT check_cookie_auth);

@@ -23,7 +23,7 @@ use strict;
 use warnings;
 
 # external modules
-use CGI;
+use CGI qw ( -utf8 );
 # use Digest::MD5 qw(md5_base64);
 use List::MoreUtils qw/uniq/;
 

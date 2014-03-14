@@ -5,7 +5,7 @@ use strict;
 
 # standard or CPAN modules used
 use IO::File;
-use CGI;
+use CGI qw ( -utf8 );
 use CGI::Session;
 use C4::Context;
 use C4::Biblio;

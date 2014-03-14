@@ -32,7 +32,7 @@ C4::Scrubber is used to remove all markup content from the sumitted text.
 
 use strict;
 use warnings;
-use CGI;
+use CGI qw ( -utf8 );
 use CGI::Cookie; # need to check cookies before having CGI parse the POST request
 
 use C4::Auth qw(:DEFAULT check_cookie_auth);

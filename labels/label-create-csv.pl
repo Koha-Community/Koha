@@ -21,7 +21,7 @@
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use Text::CSV_XS;
 use Data::Dumper;
 

@@ -20,8 +20,8 @@
 use strict;
 use warnings;
 
-use CGI;
-use Encode qw(decode encode);
+use CGI qw ( -utf8 );
+use Encode qw(encode);
 use Carp;
 
 use Mail::Sendmail;

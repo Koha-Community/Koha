@@ -23,7 +23,7 @@ use C4::Templates;
 use C4::Output;
 # use C4::Auth;
 use C4::Context;
-use CGI;
+use CGI qw ( -utf8 );
 
 sub _help_template_file_of_url {
     my $url = shift;

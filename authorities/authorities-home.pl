@@ -20,7 +20,7 @@
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use URI::Escape;
 use C4::Auth;
 

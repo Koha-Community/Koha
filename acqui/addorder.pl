@@ -121,7 +121,7 @@ if it is an order from an existing suggestion : the id of this suggestion.
 
 use strict;
 use warnings;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Auth;           # get_template_and_user
 use C4::Acquisition;    # ModOrder
 use C4::Suggestions;    # ModStatus

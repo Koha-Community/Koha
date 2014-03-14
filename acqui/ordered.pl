@@ -30,7 +30,7 @@ this script is to show orders ordered but not yet received
 use C4::Context;
 use strict;
 use warnings;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 

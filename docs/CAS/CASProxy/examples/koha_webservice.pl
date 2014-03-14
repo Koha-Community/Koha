@@ -39,7 +39,7 @@ binmode(STDOUT, ":utf8");
 use C4::Auth qw(check_api_auth);
 use C4::Output;
 use C4::Context;
-use CGI;
+use CGI qw ( -utf8 );
 
 my $cgi = new CGI;
 

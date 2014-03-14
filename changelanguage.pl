@@ -19,7 +19,7 @@ use strict;
 use warnings;
 
 use C4::Templates;
-use CGI;
+use CGI qw ( -utf8 );
 
 my $query    = new CGI;
 my $language = $query->param('language');

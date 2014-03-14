@@ -22,7 +22,7 @@
 
 use strict;
 use warnings;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Acquisition;
 use C4::Biblio;
 use C4::Budgets;

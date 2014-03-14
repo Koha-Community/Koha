@@ -39,7 +39,7 @@ InstallAuth - Authenticates Koha users for Install process
 
 =head1 SYNOPSIS
 
-  use CGI;
+  use CGI qw ( -utf8 );
   use InstallAuth;
   use C4::Output;
 

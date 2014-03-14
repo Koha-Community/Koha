@@ -21,7 +21,7 @@
 
 use Modern::Perl;
 
-use CGI;
+use CGI qw ( -utf8 );
 use List::Util qw/min/;
 
 use Koha::Database;

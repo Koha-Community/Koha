@@ -51,7 +51,7 @@ use Business::ISBN;
 my $DisplayMultiPlaceHold = C4::Context->preference("DisplayMultiPlaceHold");
 # create a new CGI object
 # FIXME: no_undef_params needs to be tested
-use CGI qw('-no_undef_params');
+use CGI qw('-no_undef_params' -utf8);
 my $cgi = new CGI;
 
 my $branch_group_limit = $cgi->param("branch_group_limit");

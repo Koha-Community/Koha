@@ -47,7 +47,7 @@ If it exists, C<$basketno> is the basket we edit
 
 use strict;
 use warnings;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Auth;
 use C4::Branch;

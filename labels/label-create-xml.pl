@@ -21,7 +21,7 @@
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use XML::Simple;
 use Data::Dumper;
 

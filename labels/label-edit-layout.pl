@@ -21,7 +21,7 @@
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use POSIX;
 
 use C4::Auth qw(get_template_and_user);

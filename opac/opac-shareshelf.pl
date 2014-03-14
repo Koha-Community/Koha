@@ -24,7 +24,7 @@ use constant TEMPLATE_NAME => 'opac-shareshelf.tt';
 use constant SHELVES_URL =>
   '/cgi-bin/koha/opac-shelves.pl?display=privateshelves&viewshelf=';
 
-use CGI;
+use CGI qw ( -utf8 );
 use Email::Valid;
 
 use C4::Auth;

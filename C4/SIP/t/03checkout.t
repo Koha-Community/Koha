@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Clone qw(clone);
 
-use CGI;
+use CGI qw ( -utf8 );
 
 use Sip::Constants qw(:all);
 use SIPtest qw(

@@ -47,7 +47,7 @@ Default value for the dropbox.
 
 use Modern::Perl;
 
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Koha;
 use C4::Charset;
 use C4::Auth qw/check_api_auth/;

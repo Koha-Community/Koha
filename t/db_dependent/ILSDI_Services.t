@@ -4,7 +4,7 @@ use Modern::Perl;
 
 use C4::Members qw/AddMember GetMember GetBorrowercategory/;
 use C4::Branch;
-use CGI;
+use CGI qw ( -utf8 );
 
 use Test::More tests => 15;
 

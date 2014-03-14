@@ -20,7 +20,7 @@
 use Modern::Perl;
 use Test::More tests => 3;
 use Test::MockModule;
-use CGI;
+use CGI qw ( -utf8 );
 
 BEGIN {
     use_ok('C4::Languages');

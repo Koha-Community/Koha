@@ -10,7 +10,7 @@ use strict;
 use POSIX qw(strftime);
 use Sys::Syslog qw(syslog);
 use Data::Dumper;
-use CGI;
+use CGI qw ( -utf8 );
 
 use ILS;
 use ILS::Transaction;

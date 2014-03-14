@@ -22,7 +22,7 @@ use strict;
 use warnings;
 use vars qw($debug);
 
-use CGI;
+use CGI qw ( -utf8 );
 use autouse 'Data::Dumper' => qw(Dumper);
 
 use C4::Auth qw(get_template_and_user);

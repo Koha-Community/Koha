@@ -23,7 +23,7 @@
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use LWP::Simple;
 use XML::Simple;
 use Config;

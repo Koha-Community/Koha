@@ -18,7 +18,7 @@
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Auth;    # get_template_and_user
 use C4::Members;
 use C4::Branch;

@@ -24,7 +24,7 @@ use C4::Context;
 use C4::RotatingCollections;
 use C4::Branch;
 
-use CGI;
+use CGI qw ( -utf8 );
 
 my $query = new CGI;
 

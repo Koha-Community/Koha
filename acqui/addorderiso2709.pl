@@ -22,7 +22,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use Modern::Perl;
-use CGI;
+use CGI qw ( -utf8 );
 use Carp;
 use YAML qw/Load/;
 

@@ -20,7 +20,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 use C4::Biblio;

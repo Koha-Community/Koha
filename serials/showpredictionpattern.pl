@@ -30,7 +30,7 @@ publication date, based on frequency and first publication date.
 
 use Modern::Perl;
 
-use CGI;
+use CGI qw ( -utf8 );
 use Date::Calc qw(Today Day_of_Year Week_of_Year Day_of_Week Days_in_Year Delta_Days Add_Delta_Days Add_Delta_YM);
 use C4::Auth;
 use C4::Output;

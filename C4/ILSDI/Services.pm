@@ -31,7 +31,7 @@ use C4::Context;
 use C4::AuthoritiesMarc;
 use XML::Simple;
 use HTML::Entities;
-use CGI;
+use CGI qw ( -utf8 );
 use DateTime;
 use C4::Auth;
 
@@ -49,7 +49,7 @@ hashref that will be printed by XML::Simple in opac/ilsdi.pl
 
 	use C4::ILSDI::Services;
 	use XML::Simple;
-	use CGI;
+	use CGI qw ( -utf8 );
 
 	my $cgi = new CGI;
 

@@ -28,7 +28,7 @@ This script displays lost items.
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 use C4::Biblio;

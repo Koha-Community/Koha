@@ -23,7 +23,7 @@ use URI::Escape;
 use C4::Context;
 use C4::Auth;
 use C4::Output;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Accounts;

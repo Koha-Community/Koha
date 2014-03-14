@@ -19,7 +19,7 @@
 
 use strict;
 #use warnings; FIXME - Bug 2505
-use CGI;
+use CGI qw ( -utf8 );
 use CGI::Cookie;
 use JSON;
 use C4::Auth;

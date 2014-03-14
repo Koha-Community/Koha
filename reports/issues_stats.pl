@@ -20,7 +20,7 @@
 use strict;
 #use warnings; FIXME - Bug 2505
 
-use CGI;
+use CGI qw ( -utf8 );
 use Date::Manip;
 
 use C4::Auth;

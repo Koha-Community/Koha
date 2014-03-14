@@ -34,7 +34,7 @@
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use Digest::MD5 qw(md5_base64);
 
 use C4::Auth qw(get_template_and_user checkpw);

@@ -42,7 +42,7 @@ It need :
 use strict;
 #use warnings; FIXME - Bug 2505
 use C4::Auth;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Context;
 
 use C4::AuthoritiesMarc;

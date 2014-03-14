@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use vars qw($debug $cgi_debug);
 
-use CGI;
+use CGI qw ( -utf8 );
 use List::Util qw( max min );
 use POSIX qw(ceil);
 

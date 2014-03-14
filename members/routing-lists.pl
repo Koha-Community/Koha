@@ -19,7 +19,7 @@
 
 use strict;
 #use warnings; FIXME - Bug 2505
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Output;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Branch; # GetBranches

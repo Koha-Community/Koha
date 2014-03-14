@@ -22,7 +22,7 @@ use strict;
 use warnings;
 
 #need to open cgi and get the fh before anything else opens a new cgi context (see C4::Auth)
-use CGI;
+use CGI qw ( -utf8 );
 my $input = CGI->new;
 my $uploadbarcodes = $input->param('uploadbarcodes');
 

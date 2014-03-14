@@ -56,7 +56,7 @@ use C4::Bookseller qw( ModBookseller AddBookseller );
 use C4::Bookseller::Contact;
 use C4::Biblio;
 use C4::Output;
-use CGI;
+use CGI qw ( -utf8 );
 
 my $input=new CGI;
 my ($template, $loggedinuser, $cookie) = get_template_and_user(

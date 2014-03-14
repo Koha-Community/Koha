@@ -55,7 +55,7 @@ use Text::CSV;
 # ė
 # č
 
-use CGI;
+use CGI qw ( -utf8 );
 # use encoding 'utf8';    # don't do this
 
 my (@errors, @feedback);

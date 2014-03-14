@@ -24,7 +24,7 @@
 
 use strict;
 use warnings;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Output;
 use C4::Reserves;
 use C4::Auth;

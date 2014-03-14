@@ -27,7 +27,7 @@ This script allows ajax call for dynamic authorities search
 
 =cut
 
-use CGI;
+use CGI qw ( -utf8 );
 use Modern::Perl;
 use JSON;
 

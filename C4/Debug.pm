@@ -22,7 +22,7 @@ use warnings;
 
 use Exporter;
 
-# use CGI;
+# use CGI qw ( -utf8 );
 use vars qw($VERSION @ISA @EXPORT $debug $cgi_debug);
 # use vars qw(@EXPORT_OK %EXPORT_TAGS);
 

@@ -46,7 +46,8 @@ script to administer the budget periods table
 
 use Modern::Perl;
 
-use CGI;
+use Number::Format qw(format_price);
+use CGI qw ( -utf8 );
 use List::Util qw/min/;
 use Koha::DateUtils;
 use Koha::Database;

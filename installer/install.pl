@@ -5,7 +5,7 @@ use warnings;
 use diagnostics;
 
 use C4::InstallAuth;
-use CGI;
+use CGI qw ( -utf8 );
 use IPC::Cmd;
 
 use C4::Context;

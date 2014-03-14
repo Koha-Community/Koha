@@ -19,7 +19,7 @@ package C4::Reports::Guided;
 
 use strict;
 #use warnings; FIXME - Bug 2505 this module needs a lot of repair to run clean under warnings
-use CGI;
+use CGI qw ( -utf8 );
 use Carp;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);

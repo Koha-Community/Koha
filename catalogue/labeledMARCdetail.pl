@@ -19,7 +19,7 @@
 
 use strict;
 use warnings;
-use CGI; 
+use CGI qw ( -utf8 ); 
 use MARC::Record;
 use C4::Auth;
 use C4::Context;

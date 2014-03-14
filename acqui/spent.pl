@@ -34,7 +34,7 @@ use C4::Auth;
 use C4::Output;
 use strict;
 use warnings;
-use CGI;
+use CGI qw ( -utf8 );
 
 my $dbh      = C4::Context->dbh;
 my $input    = new CGI;

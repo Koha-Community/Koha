@@ -25,7 +25,7 @@ Member Search.pl script used to search for members to add to a routing list
 
 use strict;
 use warnings;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Auth;       # get_template_and_user
 use C4::Output;
 use C4::Members;    # BornameSearch

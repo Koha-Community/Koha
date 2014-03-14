@@ -27,7 +27,7 @@ use strict;
 #use warnings; FIXME - Bug 2505
 use C4::Stats;
 use C4::Dates qw/format_date/;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Output;
 use C4::Branch; # GetBranches
 use C4::Auth;

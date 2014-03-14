@@ -21,7 +21,7 @@ use strict;
 use C4::Output;
 use C4::Templates;
 use C4::Auth;
-use CGI;
+use CGI qw ( -utf8 );
 use warnings;
 
 use vars qw($debug);

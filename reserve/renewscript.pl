@@ -21,7 +21,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 use strict;
 use warnings;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Circulation;
 use C4::Context;
 use C4::Items;

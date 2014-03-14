@@ -20,7 +20,7 @@
 
 
 use strict;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Circulation;
 use C4::Auth;

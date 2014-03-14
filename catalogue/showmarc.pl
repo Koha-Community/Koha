@@ -24,7 +24,7 @@ use strict;
 use warnings;
 
 # standard or CPAN modules used
-use CGI qw(:standard);
+use CGI qw(:standard -utf8);
 use DBI;
 use Encode;
 

@@ -3,8 +3,8 @@ package C4::Templates;
 use strict;
 use warnings;
 use Carp;
-use CGI;
-use List::MoreUtils qw/any uniq/;
+use CGI qw ( -utf8 );
+use List::MoreUtils qw/ any uniq /;
 
 # Copyright 2009 Chris Cormack and The Koha Dev Team
 #

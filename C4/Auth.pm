@@ -90,7 +90,7 @@ C4::Auth - Authenticates Koha users
 
 =head1 SYNOPSIS
 
-  use CGI;
+  use CGI qw ( -utf8 );
   use C4::Auth;
   use C4::Output;
 

@@ -28,7 +28,7 @@ use strict;
 #use warnings; FIXME - Bug 2505
 
 # standard or CPAN modules used
-use CGI;
+use CGI qw ( -utf8 );
 use CGI::Cookie;
 use MARC::File::USMARC;
 

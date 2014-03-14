@@ -23,7 +23,7 @@ use warnings;
 
 require Exporter;
 use C4::Context;
-use CGI;
+use CGI qw ( -utf8 );
 
 use vars qw($VERSION @ISA @EXPORT);
 

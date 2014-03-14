@@ -19,7 +19,7 @@
 use strict;
 #use warnings; FIXME - Bug 2505
 use C4::Context;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Output;
 use C4::Auth;
 use C4::Overdues;    # AddNotifyLine

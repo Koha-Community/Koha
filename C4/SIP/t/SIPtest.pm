@@ -38,7 +38,7 @@ BEGIN {
 # The number of tests is set in run_sip_tests() below, based
 # on the size of the array of tests.
 use Test::More;
-use CGI;
+use CGI qw ( -utf8 );
 
 use IO::Socket::INET;
 use Sip qw(:all);

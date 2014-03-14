@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use CGI;
+use CGI qw ( -utf8 );
 use Graphics::Magick;
 use POSIX qw(ceil);
 use autouse 'Data::Dumper' => qw(Dumper);

@@ -7,7 +7,7 @@ use strict;
 use Win32::Process;
 use Win32;
 use C4::Context;
-use CGI;
+use CGI qw ( -utf8 );
 my $input=new CGI;
 my $fileplace=C4::Context->config('intranetdir');
 my $fullpath=$fileplace."/cgi-bin/sms";

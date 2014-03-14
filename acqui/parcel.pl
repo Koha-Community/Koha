@@ -62,7 +62,7 @@ use C4::Acquisition;
 use C4::Budgets;
 use C4::Biblio;
 use C4::Items;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Output;
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Suggestions;

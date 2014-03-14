@@ -43,7 +43,7 @@ ALSO :
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use MIME::Base64;
 use C4::Auth;
 use C4::Context;

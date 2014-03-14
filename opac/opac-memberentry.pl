@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use CGI;
+use CGI qw ( -utf8 );
 use Digest::MD5 qw( md5_base64 md5_hex );
 use String::Random qw( random_string );
 

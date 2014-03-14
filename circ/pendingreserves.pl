@@ -31,7 +31,7 @@ use constant TWO_DAYS_AGO => -2;
 
 use C4::Context;
 use C4::Output;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Debug;

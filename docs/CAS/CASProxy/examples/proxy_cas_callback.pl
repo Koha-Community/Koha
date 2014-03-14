@@ -27,7 +27,7 @@
 
 use strict;
 use warnings;
-use CGI;
+use CGI qw ( -utf8 );
 use Authen::CAS::Client;
 use Storable qw(nstore_fd);
 

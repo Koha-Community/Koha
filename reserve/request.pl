@@ -29,7 +29,7 @@ script to place reserves/requests
 use strict;
 use warnings;
 use C4::Branch;
-use CGI;
+use CGI qw ( -utf8 );
 use List::MoreUtils qw/uniq/;
 use Date::Calc qw/Date_to_Days/;
 use C4::Output;

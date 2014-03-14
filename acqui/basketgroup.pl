@@ -50,7 +50,7 @@ use Carp;
 use C4::Input;
 use C4::Auth;
 use C4::Output;
-use CGI;
+use CGI qw ( -utf8 );
 
 use C4::Budgets qw/ConvertCurrency/;
 use C4::Acquisition qw/CloseBasketgroup ReOpenBasketgroup GetOrders GetBasketsByBasketgroup GetBasketsByBookseller ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroups ModBasket GetBasketgroup GetBasket GetBasketGroupAsCSV/;

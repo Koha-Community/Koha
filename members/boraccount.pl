@@ -28,7 +28,7 @@ use warnings;
 use C4::Auth;
 use C4::Output;
 use C4::Dates qw/format_date/;
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Branch;
 use C4::Accounts;

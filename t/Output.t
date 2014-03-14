@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Test::More tests => 5;
-use CGI;
+use CGI qw ( -utf8 );
 
 BEGIN {
     use_ok('C4::Output');

@@ -21,7 +21,7 @@
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use Date::Calc qw/Today Add_Delta_YM/;
 
 use C4::Context;

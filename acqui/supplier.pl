@@ -46,7 +46,7 @@ use C4::Auth;
 use C4::Contract;
 use C4::Biblio;
 use C4::Output;
-use CGI;
+use CGI qw ( -utf8 );
 
 use C4::Bookseller qw( DelBookseller );
 use C4::Bookseller::Contact;

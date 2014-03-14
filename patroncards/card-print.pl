@@ -20,7 +20,7 @@
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use Data::Dumper;
 
 use C4::Auth qw(get_template_and_user);

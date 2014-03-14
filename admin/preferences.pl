@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use CGI;
+use CGI qw ( -utf8 );
 use Encode;
 use C4::Auth;
 use C4::Context;

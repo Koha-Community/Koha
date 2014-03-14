@@ -61,7 +61,7 @@ The biblionumber of this order.
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Koha;   # GetKohaAuthorisedValues GetItemTypes
 use C4::Acquisition;

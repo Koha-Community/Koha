@@ -42,7 +42,7 @@ written 20/02/2002 by paul.poulain@free.fr
 
 use strict;
 #use warnings; FIXME - Bug 2505
-use CGI;
+use CGI qw ( -utf8 );
 
 use List::Util qw/min/;
 use File::Spec;

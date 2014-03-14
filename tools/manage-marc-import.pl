@@ -21,7 +21,7 @@ use strict;
 use warnings;
 
 # standard or CPAN modules used
-use CGI;
+use CGI qw ( -utf8 );
 use CGI::Cookie;
 use MARC::File::USMARC;
 

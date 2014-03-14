@@ -23,7 +23,7 @@ use Modern::Perl;
 
 use File::Temp;
 use File::Copy;
-use CGI;
+use CGI qw ( -utf8 );
 use GD;
 use C4::Context;
 use C4::Auth;

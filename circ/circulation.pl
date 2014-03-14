@@ -24,7 +24,7 @@
 
 use strict;
 use warnings;
-use CGI;
+use CGI qw ( -utf8 );
 use DateTime;
 use DateTime::Duration;
 use C4::Output;

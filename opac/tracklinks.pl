@@ -22,7 +22,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Auth qw(checkauth);
 use Koha::Linktracker;
-use CGI;
+use CGI qw ( -utf8 );
 
 my $cgi = new CGI;
 my $uri = $cgi->param('uri') || '';

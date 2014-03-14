@@ -27,7 +27,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Context;
 use XML::Simple;
-use CGI;
+use CGI qw ( -utf8 );
 
 =head1 DLF ILS-DI for Koha
 

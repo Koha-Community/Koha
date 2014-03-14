@@ -32,7 +32,7 @@ This PGTIOU will allow us to retrive the matching PGTID
 
 use strict;
 use warnings;
-use CGI;
+use CGI qw ( -utf8 );
 use Authen::CAS::Client;
 use Storable qw(fd_retrieve);
 use LWP::Simple;

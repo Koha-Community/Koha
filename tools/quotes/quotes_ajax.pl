@@ -20,7 +20,7 @@
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use JSON;
 use autouse 'Data::Dumper' => qw(Dumper);
 

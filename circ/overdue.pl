@@ -23,7 +23,7 @@ use strict;
 use warnings;
 use C4::Context;
 use C4::Output;
-use CGI qw(-oldstyle_urls);
+use CGI qw(-oldstyle_urls -utf8);
 use C4::Auth;
 use C4::Branch;
 use C4::Debug;

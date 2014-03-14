@@ -6,7 +6,7 @@ use C4::Record;
 use C4::Auth;
 use C4::Output;
 use C4::AuthoritiesMarc;
-use CGI;
+use CGI qw ( -utf8 );
 
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

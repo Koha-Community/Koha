@@ -63,7 +63,7 @@ op can be :
 
 use strict;
 use warnings;
-use CGI;
+use CGI qw ( -utf8 );
 use Encode qw( decode is_utf8 );
 use C4::Auth;
 use C4::Dates qw/format_date format_date_in_iso/;

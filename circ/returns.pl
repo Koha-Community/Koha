@@ -30,7 +30,7 @@ script to execute returns of books
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use DateTime;
 use C4::Context;
 use C4::Auth qw/:DEFAULT get_session/;

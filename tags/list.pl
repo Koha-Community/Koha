@@ -19,7 +19,7 @@
 
 use warnings;
 use strict;
-use CGI;
+use CGI qw ( -utf8 );
 
 use C4::Auth qw(:DEFAULT check_cookie_auth);
 use C4::Biblio;

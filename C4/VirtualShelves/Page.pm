@@ -23,7 +23,7 @@ package C4::VirtualShelves::Page;
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw ( -utf8 );
 use Exporter;
 use Data::Dumper;
 
