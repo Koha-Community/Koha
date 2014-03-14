@@ -25,6 +25,32 @@ use POSIX qw(strftime);
 use LWP::UserAgent;
 use JSON;
 
+=head1 NAME C4::UsageStats
+
+=head1 DESCRIPTION
+
+This package contains what is needed to report Koha statistics to hea
+hea.koha-community.org is the server that centralize Koha setups informations
+Koha libraries are encouraged to provide informations about their collections,
+their structure,...
+
+This package is normally only called by a cronjob, like
+0 3 1 * * export KOHA_CONF=/home/koha/etc/koha-conf.xml; export PERL5LIB=/home/koha/src; perl /home/koha/src/C4/UsageStats.pm
+
+IMPORTANT : please do NOT run the cron on the 1st, but on another day. The idea is to avoid all
+Koha libraries sending their data at the same time ! So choose any day between 1 and 28 !
+
+
+=head2 NeedUpdate
+
+  $needUpdateYN = C4::UsageStats::NeedUpdate;
+
+Returns Y (1) if the last update is more than 1 month old
+This way, even if the cronjob is run every minute, the webservice will be called
+only once a month !
+
+=cut
+
 sub NeedUpdate {
     my $lastupdated = C4::Context->preference('UsageStatsLastUpdateTime') || 0;
     my $now = strftime("%s", localtime);
@@ -36,6 +62,14 @@ sub NeedUpdate {
     return 0;
 }
 
+=head2 LaunchCron
+
+  LaunchCron();
+
+Compute results and send them to the centralized server
+
+=cut
+
 sub LaunchCron {
     if (!C4::Context->preference('UsageStatsShare')) {
       die ("UsageStats is not configured");
@@ -43,9 +77,17 @@ sub LaunchCron {
     if (NeedUpdate) {
         C4::Context->set_preference('UsageStatsLastUpdateTime', strftime("%s", localtime));
         my $data = BuildReport();
-        ReportToComunity($data);
+        ReportToCommunity($data);
     }
 }
+
+=head2 Builreport
+
+  BuildReport();
+
+retrieve some database volumety and systempreferences that will be sent to hea server
+
+=cut
 
 sub BuildReport {
     my $report = {
@@ -61,26 +103,290 @@ sub BuildReport {
     }
 
     # Get systempreferences.
-    foreach (qw/IntranetBiblioDefaultView marcflavour/) {
+    foreach (qw/ AcqCreateItem
+ AcqWarnOnDuplicateInvoice
+ AcqViewBaskets
+ BasketConfirmations
+ OrderPdfFormat
+ casAuthentication
+ casLogout
+ AllowPkiAuth
+ DebugLevel
+ delimiter
+ noItemTypeImages
+ virtualshelves
+ AutoLocation
+ IndependentBranches
+ SessionStorage
+ Persona
+ AuthDisplayHierarchy
+ AutoCreateAuthorities
+ BiblioAddsAuthorities
+ dontmerge
+ UseAuthoritiesForTracings
+ CatalogModuleRelink
+ hide_marc
+ IntranetBiblioDefaultView
+ LabelMARCView
+ OpacSuppression
+ SeparateHoldings
+ UseControlNumber
+ advancedMARCeditor
+ DefaultClassificationSource
+ EasyAnalyticalRecords
+ autoBarcode
+ item-level_itypes
+ marcflavour
+ PrefillItem
+ z3950NormalizeAuthor
+ SpineLabelAutoPrint
+ SpineLabelShowPrintOnBibDetails
+ BlockReturnOfWithdrawnItems
+ CalculateFinesOnReturn
+ AgeRestrictionOverride
+ AllFinesNeedOverride
+ AllowFineOverride
+ AllowItemsOnHoldCheckout
+ AllowNotForLoanOverride
+ AllowRenewalLimitOverride
+ AllowReturnToBranch
+ AllowTooManyOverride
+ AutomaticItemReturn
+ AutoRemoveOverduesRestrictions
+ CircControl
+ HomeOrHoldingBranch
+ HomeOrHoldingBranchReturn
+ InProcessingToShelvingCart
+ IssueLostItem
+ IssuingInProcess
+ ManInvInNoissuesCharge
+ OverduesBlockCirc
+ RenewalPeriodBase
+ RenewalSendNotice
+ RentalsInNoissuesCharge
+ ReturnBeforeExpiry
+ ReturnToShelvingCart
+ TransfersMaxDaysWarning
+ UseBranchTransferLimits
+ useDaysMode
+ UseTransportCostMatrix
+ UseCourseReserves
+ finesCalendar
+ FinesIncludeGracePeriod
+ finesMode
+ RefundLostItemFeeOnReturn
+ WhenLostChargeReplacementFee
+ WhenLostForgiveFine
+ AllowHoldDateInFuture
+ AllowHoldPolicyOverride
+ AllowHoldsOnDamagedItems
+ AllowHoldsOnPatronsPossessions
+ AllowOnShelfHolds
+ AutoResumeSuspendedHolds
+ canreservefromotherbranches
+ decreaseLoanHighHolds
+ DisplayMultiPlaceHold
+ emailLibrarianWhenHoldIsPlaced
+ ExpireReservesMaxPickUpDelay
+ OPACAllowHoldDateInFuture
+ OPACAllowUserToChooseBranch
+ ReservesControlBranch
+ ReservesNeedReturns
+ SuspendHoldsIntranet
+ SuspendHoldsOpac
+ TransferWhenCancelAllWaitingHolds
+ AllowAllMessageDeletion
+ AllowOfflineCirculation
+ CircAutocompl
+ CircAutoPrintQuickSlip
+ DisplayClearScreenButton
+ FilterBeforeOverdueReport
+ FineNotifyAtCheckin
+ itemBarcodeFallbackSearch
+ itemBarcodeInputFilter
+ previousIssuesDefaultSortOrder
+ RecordLocalUseOnReturn
+ soundon
+ SpecifyDueDate
+ todaysIssuesDefaultSortOrder
+ UpdateTotalIssuesOnCirc
+ UseTablesortForCirc
+ WaitingNotifyAtCheckin
+ AllowSelfCheckReturns
+ AutoSelfCheckAllowed
+ FRBRizeEditions
+ OPACFRBRizeEditions
+ AmazonCoverImages
+ OPACAmazonCoverImages
+ Babeltheque
+ BakerTaylorEnabled
+ GoogleJackets
+ HTML5MediaEnabled
+ IDreamBooksReadometer
+ IDreamBooksResults
+ IDreamBooksReviews
+ LibraryThingForLibrariesEnabled
+ LocalCoverImages
+ OPACLocalCoverImages
+ NovelistSelectEnabled
+ XISBN
+ OpenLibraryCovers
+ UseKohaPlugins
+ SyndeticsEnabled
+  TagsEnabled
+ CalendarFirstDayOfWeek
+ opaclanguagesdisplay
+ AuthoritiesLog
+ BorrowersLog
+ CataloguingLog
+ FinesLog
+ IssueLog
+ LetterLog
+ ReturnLog
+ SubscriptionLog
+ AuthorisedValueImages
+ BiblioDefaultView
+ COinSinOPACResults
+ DisplayOPACiconsXSLT
+ hidelostitems
+ HighlightOwnItemsOnOPAC
+ OpacAddMastheadLibraryPulldown
+ OPACDisplay856uAsImage
+ OpacHighlightedWords
+ OpacKohaUrl
+ OpacMaintenance
+ OpacPublic
+ OpacSeparateHoldings
+ OPACShowBarcode
+ OPACShowCheckoutName
+ OpacShowFiltersPulldownMobile
+ OPACShowHoldQueueDetails
+ OpacShowLibrariesPulldownMobile
+ OpacShowRecentComments
+ OPACShowUnusedAuthorities
+ OpacStarRatings
+ opacthemes
+ OPACURLOpenInNewWindow
+ OpacAuthorities
+ opacbookbag
+ OpacBrowser
+ OpacBrowseResults
+ OpacCloud
+ OPACFinesTab
+ OpacHoldNotes
+ OpacItemLocation
+ OpacPasswordChange
+ OPACPatronDetails
+ OPACpatronimages
+ OPACPopupAuthorsSearch
+ OpacTopissue
+ opacuserlogin
+ QuoteOfTheDay
+ RequestOnOpac
+ reviewson
+ ShowReviewer
+ ShowReviewerPhoto
+ SocialNetworks
+ suggestion
+ AllowPurchaseSuggestionBranchChoice
+ OpacAllowPublicListCreation
+ OpacAllowSharingPrivateLists
+ OPACItemHolds
+ OpacRenewalAllowed
+ OpacRenewalBranch
+ OPACViewOthersSuggestions
+ SearchMyLibraryFirst
+ singleBranchMode
+ AnonSuggestions
+ EnableOpacSearchHistory
+ OPACPrivacy
+ opacreadinghistory
+ TrackClicks
+ PatronSelfRegistration
+ OPACShelfBrowser
+ AddPatronLists
+ AutoEmailOpacUser
+ AutoEmailPrimaryAddress
+ autoMemberNum
+ BorrowerRenewalPeriodBase
+ checkdigit
+ EnableBorrowerFiles
+ EnhancedMessagingPreferences
+ ExtendedPatronAttributes
+ intranetreadinghistory
+ memberofinstitution
+ patronimages
+ TalkingTechItivaPhoneNotification
+ uppercasesurnames
+ IncludeSeeFromInSearches
+ OpacGroupResults
+ QueryAutoTruncate
+ QueryFuzzy
+ QueryStemming
+ QueryWeightFields
+ TraceCompleteSubfields
+ TraceSubjectSubdivisions
+ UseICU
+ UseQueryParser
+ defaultSortField
+ displayFacetCount
+ OPACdefaultSortField
+ OPACItemsResultsDisplay
+ expandedSearchOption
+ IntranetNumbersPreferPhrase
+ OPACNumbersPreferPhrase
+ opacSerialDefaultTab
+ RenewSerialAddsSuggestion
+ RoutingListAddReserves
+ RoutingSerials
+ SubscriptionHistory
+ Display856uAsImage
+ DisplayIconsXSLT
+ StaffAuthorisedValueImages
+ template
+ yuipath
+ HidePatronName
+ intranetbookbag
+ StaffDetailItemSelection
+ viewISBD
+ viewLabeledMARC
+ viewMARC
+ ILS-DI
+ OAI-PMH
+ version/) {
         $report->{systempreferences}{$_} = C4::Context->preference($_);
     }
     return $report;
 }
 
-sub ReportToComunity {
+=head2 ReportToCommunity
+
+  ReportToCommunity;
+
+Send to hea.koha-community.org database informations
+
+=cut
+
+sub ReportToCommunity {
     my $data = shift;
     my $json = to_json($data);
 
-    my $url = C4::Context->config('mebaseurl');
-
     my $ua = LWP::UserAgent->new;
-    my $req = HTTP::Request->new(POST => "$url/upload.pl");
+    my $req = HTTP::Request->new(POST => "http://hea.koha-community.org/upload.pl");
     $req->content_type('application/x-www-form-urlencoded');
     $req->content("data=$json");
     my $res = $ua->request($req);
     my $content = from_json($res->decoded_content);
     C4::Context->set_preference('UsageStatsID', $content->{library}{library_id});
 }
+
+=head2 _count
+
+  $data = _count($table);
+
+Count the number of records in $table tables
+
+=cut
 
 sub _count {
     my $table = shift;
