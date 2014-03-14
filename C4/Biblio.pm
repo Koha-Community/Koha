@@ -23,7 +23,7 @@ use strict;
 use warnings;
 use Carp;
 
-# use utf8;
+use Encode qw( decode );
 use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
@@ -2336,9 +2336,6 @@ sub TransformHtmlToXml {
         @$values[$i] =~ s/"/&quot;/g;
         @$values[$i] =~ s/'/&apos;/g;
 
-        #         if ( !utf8::is_utf8( @$values[$i] ) ) {
-        #             utf8::decode( @$values[$i] );
-        #         }
         if ( ( @$tags[$i] ne $prevtag ) ) {
             $j++ unless ( @$tags[$i] eq "" );
             my $indicator1 = eval { substr( @$indicator[$j], 0, 1 ) };
@@ -2473,7 +2470,7 @@ sub TransformHtmlToMarc {
     foreach my $param_name ( keys %$cgi_params ) {
         if ( $param_name =~ /^tag_/ ) {
             my $param_value = $cgi_params->{$param_name};
-            if ( utf8::decode($param_value) ) {
+            if ( $param_value = Encode::decode('UTF-8', $param_value) ) {
                 $cgi_params->{$param_name} = $param_value;
             }
 

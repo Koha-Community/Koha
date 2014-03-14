@@ -18,6 +18,8 @@
 use Modern::Perl;
 
 use Test::More tests => 16;
+use Encode qw( is_utf8 );
+
 use MARC::Record;
 
 use utf8;
@@ -40,9 +42,9 @@ my $octets = "abc";
 ok(IsStringUTF8ish($octets), "verify octets are valid UTF-8 (ASCII)");
 
 $octets = "flamb\c3\a9";
-ok(!utf8::is_utf8($octets), "verify that string does not have Perl UTF-8 flag on");
+ok(!Encode::is_utf8($octets), "verify that string does not have Perl UTF-8 flag on");
 ok(IsStringUTF8ish($octets), "verify octets are valid UTF-8 (LATIN SMALL LETTER E WITH ACUTE)");
-ok(!utf8::is_utf8($octets), "verify that IsStringUTF8ish does not magically turn Perl UTF-8 flag on");
+ok(!Encode::is_utf8($octets), "verify that IsStringUTF8ish does not magically turn Perl UTF-8 flag on");
 
 $octets = "a\xc2" . "c";
 ok(!IsStringUTF8ish($octets), "verify octets are not valid UTF-8");
@@ -57,14 +59,14 @@ $record->append_fields(
     MARC::Field->new('245', ' ', ' ', a => 'Rayuela'),
 );
 # Verify our data serves its purpose
-ok( !utf8::is_utf8($record->subfield('100','a')) &&
-    !utf8::is_utf8($record->subfield('245','a')),
+ok( !Encode::is_utf8($record->subfield('100','a')) &&
+    !Encode::is_utf8($record->subfield('245','a')),
     'Verify that the subfields are NOT set the UTF-8 flag yet' );
 
 SetUTF8Flag($record);
 
-ok( utf8::is_utf8($record->subfield('100','a')) &&
-    utf8::is_utf8($record->subfield('245','a')),
+ok( Encode::is_utf8($record->subfield('100','a')) &&
+    Encode::is_utf8($record->subfield('245','a')),
     'SetUTF8Flag sets the UTF-8 flag to all subfields' );
 
 is( nsb_clean("Le Moyen Âge"), "Le Moyen Âge", "nsb_clean removes  and " );

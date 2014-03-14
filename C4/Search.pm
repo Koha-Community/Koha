@@ -36,7 +36,7 @@ use URI::Escape;
 use Business::ISBN;
 use MARC::Record;
 use MARC::Field;
-use utf8;
+use Encode qw( decode is_utf8 );
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
 # set the version for version checking
@@ -1982,8 +1982,8 @@ sub searchResults {
                             my @repl = $marcrecord->field($1)->subfield($2);
                             my $subfieldvalue = $repl[$i];
 
-                            if (! utf8::is_utf8($subfieldvalue)) {
-                                utf8::decode($subfieldvalue);
+                            if (! Encode::is_utf8($subfieldvalue)) {
+                                $subfieldvalue = Encode::decode('UTF-8', $subfieldvalue);
                             }
 
                              $newline =~ s/\[$tag\]/$subfieldvalue/g;

@@ -20,6 +20,7 @@
 use Modern::Perl;
 use CGI qw/-utf8/;
 use Text::CSV::Encoded;
+use Encode qw( decode );
 use URI::Escape;
 use File::Temp;
 use File::Basename qw( dirname );
@@ -915,7 +916,7 @@ sub header_cell_values {
     foreach my $c (@{$sth->{NAME}}) {
         # TODO in Bug 11944
         #FIXME apparently DBI still needs a utf8 fix for this?
-        utf8::decode($c);
+        $c = Encode::decode('UTF-8', $c);
         push @cols, $c;
     }
     return @cols;

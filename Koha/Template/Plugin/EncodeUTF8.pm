@@ -21,11 +21,11 @@ use Modern::Perl;
 
 use base qw{Template::Plugin::Filter};
 
-use Encode qw{encode};
+use Encode qw{encode is_utf8};
 
 sub filter {
     my ( $self, $value ) = @_;
-    return is_utf8( $value ) ? encode( 'UTF-8', $value ) : $value;
+    return Encode::is_utf8( $value ) ? Encode::encode( 'UTF-8', $value ) : $value;
 }
 
 1;

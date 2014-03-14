@@ -21,6 +21,7 @@ package C4::ItemType;
 use strict;
 use warnings;
 use C4::Context;
+use Encode qw( encode );
 
 our $AUTOLOAD;
 
@@ -81,7 +82,7 @@ sub all {
     for ( @{$dbh->selectall_arrayref(
         "SELECT * FROM itemtypes ORDER BY description", { Slice => {} })} )
     {
-        utf8::encode($_->{description});
+        $_->{description} = Encode::encode('UTF-8', $_->{description});
         push @itypes, $class->new($_);
     }
     return @itypes;
@@ -105,7 +106,7 @@ sub get {
         "SELECT * FROM itemtypes WHERE itemtype = ?", undef, $itemtype
     );
     if ( $data->{description} ) {
-        utf8::encode($data->{description});
+        $data->{description} = Encode::encode('UTF-8', $data->{description});
     }
     return $class->new($data);
 }

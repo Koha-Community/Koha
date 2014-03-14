@@ -64,6 +64,7 @@ op can be :
 use strict;
 use warnings;
 use CGI;
+use Encode qw( decode is_utf8 );
 use C4::Auth;
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Biblio;
@@ -202,7 +203,7 @@ if ( $op and $op eq 'serialchangestatus' ) {
 
     # Convert serialseqs to UTF-8 to prevent encoding problems
     foreach my $seq (@serialseqs) {
-        utf8::decode($seq) unless utf8::is_utf8($seq);
+        $seq = Encode::decode('UTF-8', $seq) unless Encode::is_utf8($seq);
     }
 
     my $newserial;

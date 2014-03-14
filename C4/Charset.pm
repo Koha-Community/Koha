@@ -25,6 +25,7 @@ use Text::Iconv;
 use C4::Context;
 use C4::Debug;
 use Unicode::Normalize;
+use Encode qw( decode encode is_utf8 );
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -111,8 +112,8 @@ will assume that this situation occur does not very often.
 sub IsStringUTF8ish {
     my $str = shift;
 
-    return 1 if utf8::is_utf8($str);
-    return utf8::decode($str);
+    return 1 if Encode::is_utf8($str);
+    return Encode::decode('UTF-8', $str);
 }
 
 =head2 SetUTF8Flag
@@ -180,7 +181,7 @@ Sample code :
 sub NormalizeString{
 	my ($string,$nfd,$transform)=@_;
     return $string unless defined($string); # force scalar context return.
-	utf8::decode($string) unless (utf8::is_utf8($string));
+    $string = Encode::decode('UTF-8', $string) unless (Encode::is_utf8($string));
 	if ($nfd){
 		$string= NFD($string);
 	}

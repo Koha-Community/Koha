@@ -84,10 +84,6 @@ my ($input) = @_;
     my @innerloop;
     my (%numbers,%cells,@colhdr,@rowhdr,@multiplelines,@lists,$table);
     while (my $tab = $rq->fetchrow_hashref){
-#       if (! utf8::is_utf8($tab->{lib})) {
-#         utf8::decode($tab->{lib});
-#       }
-#       warn $tab->{lib};
       my $number=substr($tab->{authorised_value},0,1);
       if ($tab->{authorised_value}=~/[0-9]XX/){
         $numbers{$number}->{'hdr_tab'}=$tab->{lib};
