@@ -206,7 +206,7 @@ $.tablesorter.addParser({
         [% END %]</tbody>
         </table>
        [% IF ( canrenew && !userdebarred && OpacRenewalAllowed ) %]
-        <input type="submit" value="Renew Selected" />
+        <input type="submit" value="Renew selected" />
         [% END %]
         </form>
         [% IF ( canrenew && !userdebarred && OpacRenewalAllowed ) %]
@@ -216,7 +216,7 @@ $.tablesorter.addParser({
             [% FOREACH ISSUE IN ISSUES %]
             <input type="hidden" name="item" value="[% ISSUE.itemnumber %]" />
             [% END %]
-            <input type="submit" value="Renew All" />
+            <input type="submit" value="Renew all" />
         </form>
         [% END %]
     [% ELSE %]
