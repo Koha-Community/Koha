@@ -69,6 +69,7 @@ sub new {
             COMPILE_DIR => $use_template_cache ? C4::Context->config('template_cache_dir') : '',
             INCLUDE_PATH => \@includes,
             FILTERS => {},
+            ENCODING => 'UTF-8',
         }
     ) or die Template->error();
     my $self = {
