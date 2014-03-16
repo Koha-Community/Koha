@@ -47,7 +47,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         template_name   => "cataloguing/z3950_auth_search.tmpl",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 1,
         flagsrequired   => { catalogue => 1 },
 });
 
