@@ -36,7 +36,6 @@ use URI::Escape;
 use Business::ISBN;
 use MARC::Record;
 use MARC::Field;
-use Encode qw( decode is_utf8 );
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
 # set the version for version checking
@@ -1931,6 +1930,8 @@ sub searchResults {
              : $bibliotag < 10
                ? GetFrameworkCode($marcrecord->field($bibliotag)->data)
                : GetFrameworkCode($marcrecord->subfield($bibliotag,$bibliosubf));
+
+        SetUTF8Flag($marcrecord);
         my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, $fw );
         $oldbiblio->{subtitle} = GetRecordValue('subtitle', $marcrecord, $fw);
         $oldbiblio->{result_number} = $i + 1;
@@ -1981,12 +1982,7 @@ sub searchResults {
                         if($marcrecord->field($1)){
                             my @repl = $marcrecord->field($1)->subfield($2);
                             my $subfieldvalue = $repl[$i];
-
-                            if (! Encode::is_utf8($subfieldvalue)) {
-                                $subfieldvalue = Encode::decode('UTF-8', $subfieldvalue);
-                            }
-
-                             $newline =~ s/\[$tag\]/$subfieldvalue/g;
+                            $newline =~ s/\[$tag\]/$subfieldvalue/g;
                         }
                     }
                     $newsummary .= "$newline\n";
@@ -2229,8 +2225,6 @@ sub searchResults {
         }
 
         # XSLT processing of some stuff
-        SetUTF8Flag($marcrecord);
-        warn $marcrecord->as_formatted if $DEBUG;
         my $interface = $search_context eq 'opac' ? 'OPAC' : '';
         if (!$scan && C4::Context->preference($interface . "XSLTResultsDisplay")) {
             $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, $interface."XSLTResultsDisplay", 1, \@hiddenitems);
