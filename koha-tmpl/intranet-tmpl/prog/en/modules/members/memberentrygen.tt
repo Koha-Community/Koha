@@ -1,4 +1,3 @@
-[% USE AuthorisedValues %]
 [% IF ( opduplicate ) %][% SET focusAction = "clearDupe" %][% END %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -959,7 +958,7 @@
         <label for="sort1">
       [% END %]
       Sort 1: </label>
-      [% AuthorisedValues.BuildDropbox("sort1", "Bsort1", sort1, { class => focusAction, size => 20 } ) %]
+      [% PROCESS 'av-build-dropbox.inc' name="sort1", category="Bsort1", default=sort1, class=focusAction, size = 20 %]
       [% IF ( mandatorysort1 ) %]<span class="required">Required</span>[% END %]
     </li>
         [% END %]
@@ -971,7 +970,7 @@
     <label for="sort2">
     [% END %]
     Sort 2: </label>
-    [% AuthorisedValues.BuildDropbox("sort2", "Bsort2", sort2, { class => focusAction, size => 20 } ) %]
+    [% PROCESS 'av-build-dropbox.inc' name="sort2", category="Bsort2", default=sort2, class=focusAction, size = 20 %]
     [% IF ( mandatorysort2 ) %]<span class="required">Required</span>[% END %]
     </li>
         [% END %]
