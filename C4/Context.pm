@@ -1261,15 +1261,29 @@ sub IsSuperLibrarian {
     return ($userenv->{flags}//0) % 2;
 }
 
+=head2 interface
+
+Sets the current interface for later retrieval in any Perl module
+
+    C4::Context->interface('opac');
+    C4::Context->interface('intranet');
+    my $interface = C4::Context->interface;
+
+=cut
+
 sub interface {
     my ($class, $interface) = @_;
 
     if (defined $interface) {
-        $interface ||= 'opac';
-        $context->{interface} = $interface;
+        $interface = lc $interface;
+        if ($interface eq 'opac' || $interface eq 'intranet') {
+            $context->{interface} = $interface;
+        } else {
+            warn "invalid interface : '$interface'";
+        }
     }
 
-    return $context->{interface};
+    return $context->{interface} // 'opac';
 }
 
 1;

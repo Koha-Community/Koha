@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use DBI;
-use Test::More tests => 14;
+use Test::More tests => 24;
 use Test::MockModule;
 
 BEGIN {
@@ -45,3 +45,17 @@ is(C4::Context::db_scheme2dbi('mysql'), 'mysql', 'ask for mysql, get mysql');
 is(C4::Context::db_scheme2dbi('Pg'),    'Pg',    'ask for Pg, get Pg');
 is(C4::Context::db_scheme2dbi('xxx'),   'mysql', 'ask for unsupported DBMS, get mysql');
 is(C4::Context::db_scheme2dbi(),        'mysql', 'ask for nothing, get mysql');
+
+# C4::Context::interface
+my $lastwarn;
+local $SIG{__WARN__} = sub { $lastwarn = $_[0] };
+is(C4::Context->interface, 'opac');
+is(C4::Context->interface('foobar'), 'opac');
+like($lastwarn, qr/invalid interface : 'foobar'/);
+is(C4::Context->interface, 'opac');
+is(C4::Context->interface('intranet'), 'intranet');
+is(C4::Context->interface, 'intranet');
+is(C4::Context->interface('foobar'), 'intranet');
+is(C4::Context->interface, 'intranet');
+is(C4::Context->interface('OPAC'), 'opac');
+is(C4::Context->interface, 'opac');
