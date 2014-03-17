@@ -21,13 +21,11 @@ use Modern::Perl;
 use Template::Plugin;
 use base qw( Template::Plugin );
 
-use Encode qw{encode is_utf8};
-
 use C4::Koha;
 
 sub GetByCode {
     my ( $self, $category, $code, $opac ) = @_;
-    return encode( 'UTF-8', GetAuthorisedValueByCode( $category, $code, $opac ) );
+    return GetAuthorisedValueByCode( $category, $code, $opac );
 }
 
 sub Get {
@@ -65,8 +63,7 @@ The parameters are identical to those used by the subroutine C4::Koha::GetAuthor
 
 sub GetByCode {
     my ( $self, $category, $code, $opac ) = @_;
-    my $av = GetAuthorisedValueByCode( $category, $code, $opac );
-    return $av;
+    return GetAuthorisedValueByCode( $category, $code, $opac );
 }
 
 =head2 GetAuthValueDropbox

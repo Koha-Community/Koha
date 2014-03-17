@@ -21,7 +21,6 @@ use Modern::Perl;
 
 use Template::Plugin;
 use base qw( Template::Plugin );
-use Encode qw{encode decode};
 
 use C4::Koha;
 
