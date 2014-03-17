@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 31;
+use Test::More tests => 34;
 use MARC::Record;
 use DateTime::Duration;
 
@@ -15,6 +15,7 @@ use t::lib::Mocks;
 
 use Koha::DateUtils;
 
+use Data::Dumper;
 BEGIN {
     use_ok('C4::Reserves');
 }
@@ -199,6 +200,30 @@ my ($itemnum_cpl, $itemnum_fpl);
         barcode => 'bug10272_FPL'
     } , $bibnum2);
 
+# Ensure that priorities are numbered correcly when a hold is moved to waiting
+# (bug 11947)
+$dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum2));
+AddReserve('RPL',  $requesters{'RPL'}, $bibnum2,
+           $constraint, $bibitems,  1, $resdate, $expdate, $notes,
+           $title,      $checkitem, $found);
+AddReserve('FPL',  $requesters{'FPL'}, $bibnum2,
+           $constraint, $bibitems,  2, $resdate, $expdate, $notes,
+           $title,      $checkitem, $found);
+AddReserve('CPL',  $requesters{'CPL'}, $bibnum2,
+           $constraint, $bibitems,  3, $resdate, $expdate, $notes,
+           $title,      $checkitem, $found);
+ModReserveAffect($itemnum_cpl, $requesters{'RPL'}, 0);
+
+# Now it should have different priorities.
+my $title_reserves = GetReservesFromBiblionumber({biblionumber => $bibnum2});
+# Sort by reserve number in case the database gives us oddly ordered results
+my @reserves = sort { $a->{reserve_id} <=> $b->{reserve_id} } @$title_reserves;
+is($reserves[0]{priority}, 0, 'Item is correctly waiting');
+is($reserves[1]{priority}, 1, 'Item is correctly priority 1');
+is($reserves[2]{priority}, 2, 'Item is correctly priority 2');
+
+
+$dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum2));
 AddReserve('RPL',  $requesters{'RPL'}, $bibnum2,
            $constraint, $bibitems,  1, $resdate, $expdate, $notes,
            $title,      $checkitem, $found);
