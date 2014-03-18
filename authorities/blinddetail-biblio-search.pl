@@ -150,6 +150,10 @@ else {
 my $tag_number = $index;
 $tag_number =~ s/^tag_(\d*)_.*$/$1/;
 
+# Remove spaces in indicators
+$indicator1 =~ s/\s//g;
+$indicator2 =~ s/\s//g;
+
 $template->param(
     authid          => $authid ? $authid : "",
     index           => $index,
