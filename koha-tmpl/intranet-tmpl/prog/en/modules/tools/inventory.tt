@@ -249,7 +249,7 @@ $(document).ready(function(){
             [% result.damaged | html %]
             </td>
             <td>
-            [% result.datelastseen | html | $KohaDates%]
+            [% result.datelastseen | $KohaDates | html %]
             </td>
             <td>
             [% IF result.problem == 'wrongplace' %]
