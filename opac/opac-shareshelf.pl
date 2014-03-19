@@ -283,8 +283,8 @@ sub stringtokey {
 
 sub alphabet_ordinal {
     my ($char, $alphabet) = @_;
-    for( 0..$#$alphabet ) {
-        return $_ if $char eq $alphabet->[$_];
+    for my $ord ( 0..$#$alphabet ) {
+        return $ord if $char eq $alphabet->[$ord];
     }
     return ''; #ignore missing chars
 }
