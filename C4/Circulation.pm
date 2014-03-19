@@ -2480,7 +2480,7 @@ sub CanBookBeRenewed {
     my $itemissue = GetItemIssue($itemnumber) or return ( 0, 'no_checkout' );
 
     $borrowernumber ||= $itemissue->{borrowernumber};
-    my $borrower = C4::Members::GetMemberDetails($borrowernumber)
+    my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber )
       or return;
 
     my $branchcode  = _GetCircControlBranch($item, $borrower);
