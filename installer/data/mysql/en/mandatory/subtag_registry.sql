@@ -74,7 +74,7 @@ INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
 VALUES( 'hy','arm');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'hy', 'language', 'hy', '&#1344;&#1377;&#1397;&#1381;&#1408;&#1383;&#1398;');
+VALUES ( 'hy', 'language', 'hy', 'Հայերեն');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'hy', 'language', 'en', 'Armenian');
