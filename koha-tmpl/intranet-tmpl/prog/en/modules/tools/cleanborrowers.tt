@@ -1,5 +1,6 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Batch patron deletion/anonymization [% IF ( step2 ) %]&rsaquo; Confirm[% END %][% IF ( step3 ) %]&rsaquo; Finished[% END %]</title>
+<title>Koha &rsaquo; Tools &rsaquo; Batch patron deletion/anonymization [% IF step == 2 %]&rsaquo; Confirm[% END %][% IF step == 3 %]&rsaquo; Finished[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
@@ -21,9 +22,13 @@
                       return false;
                   }
               }
+              if(!form.checkbox[0].checked && !form.checkbox[1].checked) {
+                alert( _("Please check at least one action") );
+                return false;
+              }
               return true;
           }
-          
+
         /**
          *  checkForm2(form)
          *  This function check the form2 is correctly filled.
@@ -39,7 +44,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>  &rsaquo; [% IF ( step1 ) %]Clean Patron Records[% ELSE %]<a href="/cgi-bin/koha/tools/cleanborrowers.pl">Clean patron records</a> &rsaquo; [% END %][% IF ( step2 ) %]Confirm[% END %][% IF ( step3 ) %]Finished[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>  &rsaquo; [% IF step == 1 %]Clean Patron Records[% ELSE %]<a href="/cgi-bin/koha/tools/cleanborrowers.pl">Clean patron records</a> &rsaquo; [% END %][% IF step == 2 %]Confirm[% END %][% IF step == 3 %]Finished[% END %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -51,7 +56,7 @@
 <div class="help">
     <p>This tool allows you to delete patrons and anonymize checkout history. For deleting patrons, any combination of limits can be used.</p>
 </div>
-[% IF ( step1 ) %]
+[% IF step == 1 %]
 <!-- step 1 START -->
 <div id="step1">
     <form name="f1" onsubmit="return checkForm(this);" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post">
@@ -63,7 +68,7 @@
         <ul>
                 <li>
                     <label for="date1">who have not borrowed since:</label>
-                    <input size="10" id="date1" name="filterdate1" type="text" class="datepicker" />
+                    <input size="10" id="date1" name="not_borrowed_since" type="text" class="datepicker" />
                     <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                 </li>
                 <li>
@@ -91,13 +96,13 @@
         <ul>
             <li>
                 <label for="date2">Permanently delete checkout history older than</label>
-                <input size="10" id="date2" name="filterdate2" type="text" class="datepicker" />
+                <input size="10" id="date2" name="last_issue_date" type="text" class="datepicker" />
                 <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
             </li>
         </ul>
 
             <!-- hidden here -->
-            <input type="hidden" name="step2" value="1" />
+            <input type="hidden" name="step" value="2" />
             </fieldset>
             <fieldset class="action"><input type="submit" value="Next &gt;&gt;" /></fieldset>
     </form>
@@ -105,7 +110,7 @@
 <!-- step 1 END -->
 [% END %]
 
-[% IF ( step2 ) %]
+[% IF step == 2 %]
 <!-- STEP 2 START -->
 <div id="step2">
         <form name="f2" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post" onsubmit="return checkForm2(this);">
@@ -135,10 +140,10 @@
                 <input type="hidden" name="do_anonym" value="[% totalToAnonymize %]" />
             [% END %]
 
-            <input type="hidden" name="step3" value="1" />
-            <input type="hidden" name="filterdate1" value="[% filterdate1 %]" />
-            <input type="hidden" name="filterdate2" value="[% filterdate2 %]" />
-            <input type="hidden" name="borrower_dateexpiry" value="[% borrower_dateexpiry %]" />
+            <input type="hidden" name="step" value="3" />
+            <input type="hidden" name="not_borrowed_since" value="[% not_borrowed_since | $KohaDates %]" />
+            <input type="hidden" name="last_issue_date" value="[% last_issue_date | $KohaDates %]" />
+            <input type="hidden" name="borrower_dateexpiry" value="[% borrower_dateexpiry | $KohaDates %]" />
             <input type="hidden" name="borrower_categorycode" value="[% borrower_categorycode %]" />
     </fieldset>
     <fieldset class="action"><input type="submit" value="Finish" /> <a class="cancel" href="/cgi-bin/koha/tools/cleanborrowers.pl">Cancel</a></fieldset>
@@ -147,7 +152,7 @@
 <!-- STEP 2 END -->
 [% END %]
 
-[% IF ( step3 ) %]
+[% IF step == 3 %]
 <!-- Step 3 START -->
 
     <div id="step3">
@@ -166,7 +171,7 @@
             [% END %]
         [% END %]
         [% IF ( do_anonym ) %]
-            <h4>All patrons with checkouts older than [% filterdate1 %] have been anonymized</h4>
+            <h4>All patrons with checkouts older than [% last_issue_date | $KohaDates %] have been anonymized</h4>
         [% ELSE %]
             <h4>No patron records have been anonymized</h4>
         [% END %]
