@@ -25,7 +25,7 @@ function fetch_availability( prod, $tr ) {
                 $availability_summary.find( '.available' ).append( ', ' + _("waiting holds:") + ' <strong>' + data.numberOfHolds + '</strong>' );
             }
 
-            $tr.find( '.info' ).append( '<span class="results_summary actions"><span class="label">' + _("Actions:") + ' </span><a href="http://' + prod.contentDetails[0].href + '" ' + ( data.copiesAvailable ? ( ' class="addtocart">' + _("Check out") ) : ( ' class="hold">' + _("Place hold") ) ) + '</a></span>' );
+            $tr.find( '.info' ).append( '<span class="results_summary actions"><span class="label">' + _("Actions:") + ' </span><a href="' + prod.contentDetails[0].href + '" ' + ( data.copiesAvailable ? ( ' class="addtocart">' + _("Check out") ) : ( ' class="hold">' + _("Place hold") ) ) + '</a></span>' );
         }
     );
 }
@@ -54,7 +54,7 @@ function search( offset ) {
 
             results.push( '<tr>' );
 
-            results.push( '<td class="info"><a class="title" href="http://', prod.contentDetails[0].href, '">' );
+            results.push( '<td class="info"><a class="title" href="', prod.contentDetails[0].href, '">' );
             results.push( prod.title );
             if ( prod.subtitle ) results.push( ', ', prod.subtitle );
             results.push( '</a>' );
@@ -71,7 +71,7 @@ function search( offset ) {
 
             results.push( '<td>' );
             if ( prod.images.thumbnail ) {
-                results.push( '<a href="http://', prod.contentDetails[0].href, '">' );
+                results.push( '<a href="', prod.contentDetails[0].href, '">' );
                 results.push( '<img class="thumbnail" src="', prod.images.thumbnail.href, '" />' );
                 results.push( '</a>' );
             }
