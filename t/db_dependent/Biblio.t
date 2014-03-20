@@ -21,6 +21,7 @@ use Test::More tests => 3;
 use Test::MockModule;
 
 use MARC::Record;
+use t::lib::Mocks qw( mock_preference );
 
 BEGIN {
     use_ok('C4::Biblio');
@@ -31,12 +32,9 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
-my $global_marcflavour;
 # Mocking variables
-my $original_preference = C4::Context->can( 'preference' );
 my $context             = new Test::MockModule('C4::Context');
 
-mock_preference();
 mock_marcfromkohafield();
 
 sub run_tests {
@@ -46,7 +44,7 @@ sub run_tests {
     undef $C4::Biblio::inverted_field_map;
 
     my $marcflavour = shift;
-    $global_marcflavour = $marcflavour;
+    t::lib::Mocks::mock_preference('marcflavour', $marcflavour);
 
     my $isbn = '0590353403';
     my $title = 'Foundation';
@@ -183,26 +181,13 @@ sub run_tests {
 
 }
 
-sub mock_preference {
-
-    $context->mock( 'preference', sub {
-        my ( $self, $pref ) = @_;
-        if ( $pref eq 'marcflavour' ) {
-            return $global_marcflavour;
-        } else {
-            &$original_preference(@_);
-        }
-    });
-
-}
-
 sub mock_marcfromkohafield {
 
     $context->mock('marcfromkohafield',
         sub {
             my ( $self ) = shift;
 
-            if ( $global_marcflavour eq 'MARC21' ) {
+            if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
 
                 return  {
                 '' => {
@@ -213,7 +198,7 @@ sub mock_marcfromkohafield {
                     'biblioitems.biblioitemnumber' => [ '999', 'd' ]
                     }
                 };
-            } elsif ( $global_marcflavour eq 'UNIMARC' ) {
+            } elsif ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
 
                 return {
                 '' => {
