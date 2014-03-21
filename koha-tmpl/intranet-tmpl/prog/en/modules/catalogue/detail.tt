@@ -184,6 +184,9 @@ function verify_images() {
         $("#marcPreview").on("hidden", function(){
             $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/loading-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
         });
+        [% IF LocalCoverImages %]
+        KOHA.LocalCover.GetCoverFromBibnumber(true);
+        [% END %]
     });
 
      [% IF ( AmazonCoverImages ) %]$(window).load(function() {
@@ -373,8 +376,18 @@ function verify_images() {
         <span id="catalogue_detail_marc_preview" class="results_summary"><span class="label">MARC Preview:</span> <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblionumber %]&amp;viewas=html" title="MARC" class="previewMARC">Show</a></span>
         [% IF ( holdcount ) %]<span class="results_summary"><span class="label">Holds:</span> <span class="holdcount"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">[% holdcount %]</a></span></span>[% ELSE %][% END %]
 
-        [% IF ( AmazonCoverImages ) %]</div><div class="yui-u" id="bookcoverimg">
-        <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="" /></a>[% END %]
+        [% IF ( ( AmazonEnabled && AmazonCoverImages ) || LocalCoverImages ) %]
+        </div><div class="yui-u" id="bookcoverimg">
+        [% IF ( LocalCoverImages ) %]<div title="[% biblionumber |url %]" class="[% biblionumber %]" id="local-thumbnail-preview"></div>[% END %]
+        [% IF ( AmazonEnabled ) %][% IF ( AmazonCoverImages ) %]<div id="bookcoverimg">
+        <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link">
+            [% IF ( using_https ) %]
+            <img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="" />
+            [% ELSE %]
+            <img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="" />
+            [% END %]
+        </a></div>[% END %][% END %]
+        [% END %]
     [% ELSE %]
 
     <h3>[% title |html %]</h3>
@@ -437,8 +450,21 @@ function verify_images() {
         </ul>
         </div>
        
-[% IF ( AmazonCoverImages ) %]<div class="yui-u" id="bookcoverimg">
-<a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="" /></a></div>[% END %]
+    [% IF ( ( AmazonEnabled && AmazonCoverImages ) || LocalCoverImages ) %]
+        <div class="yui-u" id="bookcoverimg">
+        [% IF ( LocalCoverImages ) %]<div title="[% biblionumber |url %]" class="[% biblionumber %]" id="local-thumbnail-preview"></div>[% END %]
+        [% IF ( AmazonEnabled ) %][% IF ( AmazonCoverImages ) %]<div id="bookcoverimg">
+            <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link">
+            [% IF ( using_https ) %]
+            <img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="" />
+            [% ELSE %]
+            <img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="" />
+            [% END %]
+            </a>
+        </div>
+        [% END %][% END %]
+        </div>
+    [% END %]
         
         <div class="yui-u" style="margin-top: 1em;">
         <ul>
