@@ -23,6 +23,7 @@ KOHA.LocalCover = {
             var message = document.createElement("span");
             $(message).attr("class","no-image");
             $(message).html(NO_LOCAL_JACKET);
+            $(mydiv).parent().find('.no-image').remove();
             $(mydiv).append(message);
             var img = $("<img />").attr('src',
                 '/cgi-bin/koha/catalogue/image.pl?thumbnail=1&biblionumber=' + $(mydiv).attr("class"))
