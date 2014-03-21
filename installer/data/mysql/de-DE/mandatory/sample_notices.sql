@@ -119,3 +119,28 @@ Wenn Sie keine Kontoanmeldung durchgeführt haben, können Sie diese Benachricht
 Vielen Dank,
 Ihr Bibliotheksteam'
 );
+
+INSERT INTO  letter (module, code, branchcode, name, is_html, title, content)
+VALUES ('members', 'SHARE_INVITE', '', 'Invitation for sharing a list', '0', 'Share list <<listname>>', 'Dear patron,
+
+One of our patrons, <<borrowers.firstname>> <<borrowers.surname>>, invites you to share his list <<listname>> in our library catalog.
+
+To access this shared list, please click on the following URL or copy-and-paste it into your browser address bar.
+
+<<shareurl>>
+
+In case you are not a patron in our library or do not want to accept this invitation, please ignore this mail. Note also that this invitation expires within two weeks.
+
+Thank you.
+
+Your library.'
+);
+INSERT INTO  letter (module, code, branchcode, name, is_html, title, content)
+VALUES ( 'members', 'SHARE_ACCEPT', '', 'Notification about an accepted share', '0', 'Share on list <<listname>> accepted', 'Dear patron,
+
+We want to inform you that <<borrowers.firstname>> <<borrowers.surname>> accepted your invitation to share your list <<listname>> in our library catalog.
+
+Thank you.
+
+Your library.'
+);

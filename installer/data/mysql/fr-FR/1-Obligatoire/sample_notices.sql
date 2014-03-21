@@ -19,3 +19,28 @@ VALUES
 ('suggestions','ORDERED','Suggestion commandée', 'Suggestion commandée','Cher(e) <<borrowers.firstname>> <<borrowers.surname>>,\n\nVous avez effectué une demande de suggestion d\'achat sur le docuement <<suggestions.title>> de <<suggestions.author>>.\n\nNous sommes heureux de vous informer que le document que vous avez demandé est maintenant en commande. Le document devrait arriver rapidement dans nos collections.\n\nVous serez averti quand le docuement sera disponible.\n\nSi vous avez des questions, merci de nous contacter à l\'adresse <<branches.branchemail>>\n\nMerci,\n\n<<branches.branchname>>'),
 ('suggestions','REJECTED','Suggestion rejetée', 'Suggestion d\'achat rejeté','Cher(e) <<borrowers.firstname>> <<borrowers.surname>>,\n\nVous avez fait la demande du document <<suggestions.title>> de <<suggestions.author>>.\n\nla Bibliothèque a examiné votre demande ce jour, et a décidé de ne pas retenir la suggestion pour l\'instant.\n\nLa raison est la suivante: <<suggestions.reason>>\n\nSi vous avez des questions, merci de nous contacter à l\'adresse <<branches.branchemail>>.\n\nMerci,\n\n<<branches.branchname>>');
 INSERT INTO `letter` (module, code, name, title, content) VALUES ('circulation','RENEWAL','Item Renewal','Renewals','Les documents suivants ont été renouvelés\r\n----\r\n<<biblio.title>>\r\n----\r\nMerci, <<branches.branchname>>.');
+
+INSERT INTO  letter (module, code, branchcode, name, is_html, title, content)
+VALUES ('members', 'SHARE_INVITE', '', 'Invitation for sharing a list', '0', 'Share list <<listname>>', 'Dear patron,
+
+One of our patrons, <<borrowers.firstname>> <<borrowers.surname>>, invites you to share his list <<listname>> in our library catalog.
+
+To access this shared list, please click on the following URL or copy-and-paste it into your browser address bar.
+
+<<shareurl>>
+
+In case you are not a patron in our library or do not want to accept this invitation, please ignore this mail. Note also that this invitation expires within two weeks.
+
+Thank you.
+
+Your library.'
+);
+INSERT INTO  letter (module, code, branchcode, name, is_html, title, content)
+VALUES ( 'members', 'SHARE_ACCEPT', '', 'Notification about an accepted share', '0', 'Share on list <<listname>> accepted', 'Dear patron,
+
+We want to inform you that <<borrowers.firstname>> <<borrowers.surname>> accepted your invitation to share your list <<listname>> in our library catalog.
+
+Thank you.
+
+Your library.'
+);
