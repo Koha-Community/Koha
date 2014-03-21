@@ -2,6 +2,8 @@
     <title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; Manage label batches</title>
     [% INCLUDE 'doc-head-close.inc' %]
     [% INCLUDE 'greybox.inc' %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+    [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
     //<![CDATA[
         function dofocus() {    // named function req'd for body onload event by some FF and IE7 security models
@@ -121,6 +123,14 @@
             };
 
          $(document).ready(function() {
+            $("#batcht").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false }
+                ],
+                "aaSorting": [[ 1, "asc" ]],
+                "sPaginationType": "four_button"
+            }));
             $("#additems").click(function(){
                 Add();
                 return false;
@@ -171,18 +181,28 @@
                             <a class="btn btn-small" id="exportitems" href="#">Export item(s)</a>
                             <a class="btn btn-small" id="exportbatch" href="#">Export batch</a>[% END %]
                     </div>
-                    <div class="yui-g">
-                        <div class="yui-u first" id="manage-label-batches">
+
+                        [% IF ( err ) %]
+                            <div class="dialog alert">
+                                <strong>WARNING:</strong> An error was encountered and [% errstr %] Please have your system administrator check the error log for details.
+                            </div>
+                        [% ELSIF ( duplicate_message ) %]
+                            <div class="dialog message">
+                                <strong>[% duplicate_count %] duplicate item(s) found</strong> and removed from batch [% batch_id %].
+                            </div>
+                        [% END %]
+
+                        <div id="manage-label-batches">
                             <div class="hint">Current library: [% LoginBranchname %]</div>
                             <form name="add_by_barcode" action="/cgi-bin/koha/labels/label-edit-batch.pl" method="post">
                                 <div>
                                     <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
                                     <ol><li>
-                                    <input type="hidden" name="op" value="add" \>
-                                    <input type="hidden" name="batch_id" value="[% batch_id %]" \>
+                                    <input type="hidden" name="op" value="add" />
+                                    <input type="hidden" name="batch_id" value="[% batch_id %]" />
                                     <label for="barcode">Add by barcode(s):
-                                        <br \> <span class="hint">One barcode per line.</span>
-                                        <br \> <span class="hint">Leave empty to add via item search.</span>
+                                        <br /> <span class="hint">One barcode per line.</span>
+                                        <br /> <span class="hint">Leave empty to add via item search.</span>
                                     </label>
                                     <textarea rows="5" id="barcode" name="barcode" tabindex="1" class="focus"></textarea>
                                     </li></ol>
@@ -192,39 +212,43 @@
                                 [% IF ( table_loop ) %]
                                 <form name="items" class="checkboxed">
                                     <h2>Items in batch number [% batch_id %]</h2>
-                                    <table>
+                                    <table id="batcht">
                                         [% FOREACH table_loo IN table_loop %]
-                                        [% IF ( table_loo.header_fields ) %]
-                                        <tr>
-                                        [% FOREACH header_field IN table_loo.header_fields %]
-                                            [% SWITCH header_field.field_label -%]
-                                                [% CASE "Label Number" -%]
-                                                    <th>Label number</th>
-                                                [% CASE "Summary" -%]
-                                                    <th>Summary</th>
-                                                [% CASE "Item Type" %]
-                                                    <th>Item type</th>
-                                                [% CASE "Barcode" %]
-                                                    <th>Barcode</th>
-                                                [% CASE "Select" -%]
-                                                    <th>Select</th>
-                                                [% CASE %]
-                                                    <th>[% header_field.field_label %]</th>
-                                            [% END -%]
+                                            [% IF ( table_loo.header_fields ) %]
+                                                <thead>
+                                                    <tr>
+                                                        [% FOREACH header_field IN table_loo.header_fields %]
+                                                            [% SWITCH header_field.field_label -%]
+                                                                [% CASE "Label Number" -%]
+                                                                    <th>Label number</th>
+                                                                [% CASE "Summary" -%]
+                                                                    <th class="anti-the">Summary</th>
+                                                                [% CASE "Item Type" %]
+                                                                    <th>Item type</th>
+                                                                [% CASE "Barcode" %]
+                                                                    <th>Barcode</th>
+                                                                [% CASE "Select" -%]
+                                                                    <th>Select</th>
+                                                                [% CASE %]
+                                                                    <th>[% header_field.field_label %]</th>
+                                                            [% END -%]
+                                                        [% END %]
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                            [% ELSE %]
+                                                    <tr>
+                                                        [% FOREACH text_field IN table_loo.text_fields %]
+                                                            [% IF ( text_field.select_field ) %]
+                                                                <td><input type="checkbox" name="action" value="[% text_field.field_value %]"></td>
+                                                            [% ELSE %]
+                                                                <td>[% text_field.field_value %]</td>
+                                                            [% END %]
+                                                        [% END %]
+                                                    </tr>
+                                            [% END %]
                                         [% END %]
-                                        </tr>
-                                        [% ELSE %]
-                                        <tr>
-                                        [% FOREACH text_field IN table_loo.text_fields %]
-                                        [% IF ( text_field.select_field ) %]
-                                            <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]"></td>
-                                        [% ELSE %]
-                                            <td>[% text_field.field_value %]</td>
-                                        [% END %]
-                                        [% END %]
-                                        </tr>
-                                        [% END %]
-                                        [% END %]
+                                        </tbody>
                                     </table>
                                 </form>
                                 [% ELSE %]
@@ -238,25 +262,10 @@
                                 </fieldset>
                                 [% END %]
                             </div>
-                            [% IF ( err ) %]
-                            <div class="yui-u">
-                                <div class="dialog alert">
-                                    <strong>WARNING:</strong> An error was encountered and [% errstr %] Please have your system administrator check the error log for details.
-                                </div>
-                            </div>
-                            [% ELSIF ( duplicate_message ) %]
-                            <div class="yui-u">
-                                <div class="dialog message">
-                                    <strong>[% duplicate_count %] duplicate item(s) found</strong> and removed from batch [% batch_id %].
-                                </div>
-                            </div>
-                            [% END %]
                         </div>
-                    </div>
                 </div>
                 <div class="yui-b">
                     [% INCLUDE 'labels-menu.inc' %]
                 </div>
             </div>
-        </div>
     [% INCLUDE 'intranet-bottom.inc' %]
