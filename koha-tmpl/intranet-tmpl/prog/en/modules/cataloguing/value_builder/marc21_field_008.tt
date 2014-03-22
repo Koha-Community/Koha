@@ -24,7 +24,7 @@
 
     function changeTypeofMaterial(form)
     {
-        if (form.material_type.options[form.material_type.selectedIndex].value != "" && confirm('Show values for \'' + form.material_type.options[form.material_type.selectedIndex].text + '\' material type?')) {
+        if (form.material_type.options[form.material_type.selectedIndex].value != "" && confirm(_("Show values for") + ' \'' + form.material_type.options[form.material_type.selectedIndex].text + '\' ' + _("material type?"))) {
             objXmlControlField.setIdMaterial(form.material_type.options[form.material_type.selectedIndex].value);
             objXmlControlField.renderTemplate();
             renderResult(tr_result, form.result.value, true);
