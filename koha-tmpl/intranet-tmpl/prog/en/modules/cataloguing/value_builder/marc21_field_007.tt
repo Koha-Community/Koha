@@ -1100,8 +1100,12 @@ function RedrawChoices(typ){
                           <tr> \
                            <td><label for="f6">' +
                                _("06-08 Image bit depth") +
-                           '</label> <br /><I>(if exact bit depth known, enter; <br />otherwise use pulldown)</i></td> \
-				<td><input type="text" size=3 name="f6" id = "f6" value="[% f6 %][% f7 %][% f8 %]" />- <label for="f6pulldown">Exact bit depth 001-999</label> \
+                           '</label> <br /><I>' +
+                           _("(if exact bit depth known, enter; <br />otherwise use pulldown)") +
+                           '</i></td> \
+                            <td><input type="text" size=3 name="f6" id = "f6" value="[% f6 %][% f7 %][% f8 %]" />- <label for="f6pulldown">' +
+                           _("Exact bit depth 001-999") +
+                           '</label> \
                              <select id="f6pulldown" name="f6pulldown" onchange="editER_fld6(this.options[selectedIndex].value)"> \
                               <option value="">' +
                                   _(" ") +
@@ -3894,8 +3898,10 @@ function RedrawChoices(typ){
                           <tr> \
                            <td><label for="f6">' +
                                _("06-08 Reduction ratio") +
-                           '</label> <br /><I>(three digits, pad with zero as needed, <br />or ||| for no attempt to code)</i></td> \
-				<td><input type="text" size=3 name="f6" id = "f6" value="[% f6 %][% f7 %][% f8 %]"> - 001-999</input> \
+                           '</label> <br /><I>' +
+                           _("(three digits, pad with zero as needed, <br />or ||| for no attempt to code)") +
+                           '</i></td> \
+                            <td><input type="text" size=3 name="f6" id = "f6" value="[% f6 %][% f7 %][% f8 %]"> - 001-999</input> \
                             </td> \
                            </td> \
                           <tr> \
@@ -6425,8 +6431,12 @@ function RedrawChoices(typ){
                           <tr> \
                            <td><label for="f17">' +
                                _("17-22 Film inspection date") +
-                           '</label><br /><I>(YYYYMM; use up to 6 - for unknown <br />or | for no attempt to code)</i></td> \
-				<td><input type="text" size=6 name="f17" id = "f17" value="[% f17 %][% f18 %][% f19 %][% f20 %][% f21 %][% f22 %]">- Date</input> \
+                           '</label><br /><I>' +
+                           _("(YYYYMM; use up to 6 - for unknown <br />or | for no attempt to code)") +
+                           '</i></td> \
+                            <td><input type="text" size=6 name="f17" id = "f17" value="[% f17 %][% f18 %][% f19 %][% f20 %][% f21 %][% f22 %]">- ' +
+                            _("Date") +
+                            '</input> \
                             </td> \
                            </td> \
                         </table>';  
