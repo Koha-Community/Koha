@@ -501,7 +501,7 @@ if ($tag) {
     my $taglist = get_tags({term=>$tag, approved=>1});
     $results_hashref->{biblioserver}->{hits} = scalar (@$taglist);
     my @biblist  = (map {GetBiblioData($_->{biblionumber})} @$taglist);
-    my @marclist = (map {$_->{marc}} @biblist );
+    my @marclist = (map { (C4::Context->config('zebra_bib_index_mode') eq 'dom')? $_->{marcxml}: $_->{marc}; } @biblist);
     $DEBUG and printf STDERR "taglist (%s biblionumber)\nmarclist (%s records)\n", scalar(@$taglist), scalar(@marclist);
     $results_hashref->{biblioserver}->{RECORDS} = \@marclist;
     # FIXME: tag search and standard search should work together, not exclusively
