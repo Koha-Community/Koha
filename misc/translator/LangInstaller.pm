@@ -95,7 +95,7 @@ sub new {
         {
             name   => 'Intranet prog UI',
             dir    => $context->config('intrahtdocs') . '/prog',
-            suffix => '-i-staff-t-prog-v-3006000.po',
+            suffix => '-staff-prog.po',
         },
         {
             name   => 'Intranet prog help',
@@ -111,6 +111,21 @@ sub new {
             name   => "OPAC $theme",
             dir    => "$opachtdocs/$theme",
             suffix => "-opac-$theme.po",
+        };
+    }
+
+    # MARC flavours (hardcoded list)
+    for ( "MARC21", "UNIMARC", "NORMARC" ) {
+        # search for strings on staff & opac marc files
+        my $dirs = $context->config('intrahtdocs') . '/prog';
+        opendir $fh, $context->config('opachtdocs');
+        for ( grep { not /^\.|\.\.|lib$/ } readdir($fh) ) {
+            $dirs .= ' ' . "$opachtdocs/$_";
+        }
+        push @{$self->{interface}}, {
+            name   => "$_",
+            dir    => $dirs,
+            suffix => "-marc-$_.po",
         };
     }
 
@@ -333,29 +348,37 @@ sub install_tmpl {
     my ($self, $files) = @_;
     say "Install templates" if $self->{verbose};
     for my $trans ( @{$self->{interface}} ) {
-        print
-            "  Install templates '$trans->{name}'\n",
-            "    From: $trans->{dir}/en/\n",
-            "    To  : $trans->{dir}/$self->{lang}\n",
-            "    With: $self->{path_po}/$self->{lang}$trans->{suffix}\n"
+        my @t_dirs = split(" ", $trans->{dir});
+        for my $t_dir ( @t_dirs ) {
+            my @files   = @$files;
+            my @nomarc = ();
+            print
+                "  Install templates '$trans->{name}'\n",
+                "    From: $t_dir/en/\n",
+                "    To  : $t_dir/$self->{lang}\n",
+                "    With: $self->{path_po}/$self->{lang}$trans->{suffix}\n"
                 if $self->{verbose};
 
-        my $trans_dir = ( $trans->{name} =~ /help/ )?"$trans->{dir}":"$trans->{dir}/en/";
-        my $lang_dir  = ( $trans->{name} =~ /help/ )?"$trans->{dir}":"$trans->{dir}/$self->{lang}";
-        $lang_dir =~ s|/en/|/$self->{lang}/|;
-        mkdir $lang_dir unless -d $lang_dir;
-        my $excludes  = ( $trans->{name} =~ /UI/   )?"-x 'help'":"";
+            my $trans_dir = ( $trans->{name} =~ /help/ )?"$t_dir":"$t_dir/en/";
+            my $lang_dir  = ( $trans->{name} =~ /help/ )?"$t_dir":"$t_dir/$self->{lang}";
+            $lang_dir =~ s|/en/|/$self->{lang}/|;
+            mkdir $lang_dir unless -d $lang_dir;
+            my $excludes = ( $trans->{name} !~ /help/   )?"":"-x 'help'";
+            # if installing MARC po file, only touch corresponding files
+            my $marc     = ( $trans->{name} =~ /MARC/ )?"-m \"$trans->{name}\"":"";            # for MARC translations
+            # if not installing MARC po file, ignore all MARC files
+            @nomarc      = ( 'marc21', 'unimarc', 'normarc' ) if ( $trans->{name} !~ /MARC/ ); # hardcoded MARC variants
 
-        system
-            "$self->{process} install " .
-            "-i $trans_dir " .
-            "-o $lang_dir  ".
-            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r $excludes" .
-            (
-                @$files
-                    ? ' -f ' . join ' -f ', @$files
-                    : ''
-            )
+            system
+                "$self->{process} install " .
+                "-i $trans_dir " .
+                "-o $lang_dir  ".
+                "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r " .
+                "$excludes " .
+                "$marc " .
+                ( @files   ? ' -f ' . join ' -f ', @files : '') .
+                ( @nomarc  ? ' -n ' . join ' -n ', @nomarc : '');
+        }
     }
 }
 
@@ -365,25 +388,30 @@ sub update_tmpl {
 
     say "Update templates" if $self->{verbose};
     for my $trans ( @{$self->{interface}} ) {
+        my @files   = @$files;
+        my @nomarc = ();
         print
             "  Update templates '$trans->{name}'\n",
             "    From: $trans->{dir}/en/\n",
             "    To  : $self->{path_po}/$self->{lang}$trans->{suffix}\n"
                 if $self->{verbose};
-        my $lang_dir = "$trans->{dir}/$self->{lang}";
 
-        my $trans_dir = ( $trans->{name} =~ /help/ )?"$trans->{dir}":"$trans->{dir}/en/";
-        my $excludes  = ( $trans->{name} =~ /UI/   )?"-x 'help'":"";
+        my $trans_dir = ( $trans->{name} =~ /help/ )?"$trans->{dir}":join("/en/ -i ",split(" ",$trans->{dir}))."/en/"; # multiple source dirs
+        # do no process 'help' dirs unless needed
+        my $excludes  = ( $trans->{name} !~ /help/ )?"-x help":"";
+        # if processing MARC po file, only use corresponding files
+        my $marc      = ( $trans->{name} =~ /MARC/ )?"-m \"$trans->{name}\"":"";            # for MARC translations
+        # if not processing MARC po file, ignore all MARC files
+        @nomarc       = ( 'marc21', 'unimarc', 'normarc' ) if ( $trans->{name} !~ /MARC/ );      # hardcoded MARC variants
 
         system
             "$self->{process} update " .
             "-i $trans_dir " .
-            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r $excludes" .
-            (
-                @$files
-                    ? ' -f ' . join ' -f ', @$files
-                    : ''
-            )
+            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r " .
+            "$excludes " .
+            "$marc "     .
+            ( @files   ? ' -f ' . join ' -f ', @files : '') .
+            ( @nomarc  ? ' -n ' . join ' -n ', @nomarc : '');
     }
 }
 
@@ -405,24 +433,29 @@ sub create_tmpl {
 
     say "Create templates\n" if $self->{verbose};
     for my $trans ( @{$self->{interface}} ) {
+        my @files   = @$files;
+        my @nomarc = ();
         print
             "  Create templates .po files for '$trans->{name}'\n",
             "    From: $trans->{dir}/en/\n",
             "    To  : $self->{path_po}/$self->{lang}$trans->{suffix}\n"
                 if $self->{verbose};
 
-        my $trans_dir = ( $trans->{name} =~ /help/ )?"$trans->{dir}":"$trans->{dir}/en/";
-        my $excludes  = ( $trans->{name} =~ /UI/   )?"-x 'help'":"";
+        my $trans_dir = ( $trans->{name} =~ /help/ )?"$trans->{dir}":join("/en/ -i ",split(" ",$trans->{dir}))."/en/"; # multiple source dirs
+        my $excludes  = ( $trans->{name} !~ /help/ )?"-x help":"";
+        # if processing MARC po file, only use corresponding files
+        my $marc      = ( $trans->{name} =~ /MARC/ )?"-m \"$trans->{name}\"":"";            # for MARC translations
+        # if not processing MARC po file, ignore all MARC files
+        @nomarc       = ( 'marc21', 'unimarc', 'normarc' ) if ( $trans->{name} !~ /MARC/ ); # hardcoded MARC variants
 
         system
             "$self->{process} create " .
             "-i $trans_dir " .
-            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r $excludes" .
-            (
-                @$files
-                    ? ' -f ' . join ' -f ', @$files
-                    : ''
-            )
+            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r " .
+            "$excludes " .
+            "$marc " .
+            ( @files  ? ' -f ' . join ' -f ', @files   : '') .
+            ( @nomarc ? ' -n ' . join ' -n ', @nomarc : '');
     }
 }
 
@@ -584,8 +617,12 @@ appropriate directory.
 
 =item translate create F<lang>
 
-Create 3 .po files in F<po> subdirectory: (1) from opac pages templates, (2)
-intranet templates, and (3) from preferences.
+Create 4 kinds of .po files in F<po> subdirectory:
+(1) one from each theme on opac pages templates,
+(2) intranet templates and help,
+(3) preferences, and
+(4) one for each MARC dialect.
+
 
 =over
 
@@ -594,7 +631,7 @@ intranet templates, and (3) from preferences.
 Contains extracted text from english (en) OPAC templates found in
 <KOHA_ROOT>/koha-tmpl/opac-tmpl/{theme}/en/ directory.
 
-=item F<lang>-intranet.po
+=item F<lang>-staff-prog.po and F<lang>-staff-help.po
 
 Contains extracted text from english (en) intranet templates found in
 <KOHA_ROOT>/koha-tmpl/intranet-tmpl/prog/en/ directory.
@@ -604,6 +641,11 @@ Contains extracted text from english (en) intranet templates found in
 Contains extracted text from english (en) preferences. They are found in files
 located in <KOHA_ROOT>/koha-tmpl/intranet-tmpl/prog/en/admin/preferences
 directory.
+
+=item F<lang>-marc-{MARC}.po
+
+Contains extracted text from english (en) files from opac and intranet,
+related with MARC dialects.
 
 =back
 
