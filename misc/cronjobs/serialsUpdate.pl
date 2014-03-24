@@ -110,10 +110,10 @@ $sth->execute();
 while ( my $issue = $sth->fetchrow_hashref ) {
 
     my $subscription = &GetSubscription( $issue->{subscriptionid} );
-    my $planneddate  = $issue->{planneddate};
+    my $publisheddate  = $issue->{publisheddate};
 
-    if ( $subscription && $planneddate && $planneddate ne "0000-00-00" ) {
-        my $nextpublisheddate = GetNextDate( $planneddate, $subscription );
+    if ( $subscription && $publisheddate && $publisheddate ne "0000-00-00" ) {
+        my $nextpublisheddate = GetNextDate( $subscription, $publisheddate );
         my $today = format_date_in_iso( C4::Dates->new()->output() );
 
         if ( $nextpublisheddate && $today ) {
