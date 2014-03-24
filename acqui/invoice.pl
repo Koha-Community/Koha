@@ -123,9 +123,8 @@ foreach my $order (@$orders) {
     $foot{$$line{gstgsti}}{totalgsti} += $$line{totalgsti};
     $total_gsti += $$line{totalgsti};
 
-    my %row = %{ $order, $line };
-    $row{'orderline'} = $row{'parent_ordernumber'};
-    push @orders_loop, \%row;
+    $line->{orderline} = $line->{parent_ordernumber};
+    push @orders_loop, $line;
 }
 
 push @foot_loop, map {$_} values %foot;
