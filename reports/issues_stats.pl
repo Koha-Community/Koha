@@ -22,6 +22,7 @@ use warnings;
 
 use CGI qw ( -utf8 );
 use Date::Manip;
+use Text::Unaccent;
 
 use C4::Auth;
 use C4::Debug;
@@ -320,7 +321,7 @@ sub calculate {
           ( $linesource eq 'items' )
           ? " LEFT JOIN items ON (statistics.itemnumber = items.itemnumber) "
           : " LEFT JOIN borrowers ON (statistics.borrowernumber = borrowers.borrowernumber) ";
-        $strsth .= " WHERE $line is not null ";
+        $strsth .= " WHERE $line is not null AND $line != '' ";
     }
 
     if ( $line =~ /datetime/ ) {
@@ -408,7 +409,7 @@ sub calculate {
           ( $colsource eq 'items' )
           ? "LEFT JOIN items ON (statistics.itemnumber = items.itemnumber) "
           : "LEFT JOIN borrowers ON (statistics.borrowernumber = borrowers.borrowernumber) ";
-        $strsth2 .= " WHERE $column IS NOT NULL ";
+        $strsth2 .= " WHERE $column IS NOT NULL AND $column != '' ";
     }
 
     if ( $column =~ /datetime/ ) {
@@ -480,14 +481,14 @@ sub calculate {
     # preparing calculation
     my $strcalc = "SELECT ";
     if($line_attribute_type) {
-        $strcalc .= "attribute_$line_attribute_type.attribute AS line_attribute, ";
+        $strcalc .= "TRIM(attribute_$line_attribute_type.attribute) AS line_attribute, ";
     } else {
-        $strcalc .= "$linefield, ";
+        $strcalc .= "TRIM($linefield), ";
     }
     if($column_attribute_type) {
-        $strcalc .= "attribute_$column_attribute_type.attribute AS column_attribute, ";
+        $strcalc .= "TRIM(attribute_$column_attribute_type.attribute) AS column_attribute, ";
     } else {
-        $strcalc .= "$colfield, ";
+        $strcalc .= "TRIM($colfield), ";
     }
     $strcalc .=
         ( $process == 1 ) ? " COUNT(*) "
@@ -642,19 +643,25 @@ sub null_to_zzempty {
 sub table_set {
     my ($table, $row, $col, $val) = @_;
 
-    $table->{ null_to_zzempty(lc($row)) }->{ null_to_zzempty(lc($col)) } = $val;
+    $row = lc(unac_string('utf-8', $row // ''));
+    $col = lc(unac_string('utf-8', $col // ''));
+    $table->{ null_to_zzempty($row) }->{ null_to_zzempty($col) } = $val;
 }
 
 sub table_get {
     my ($table, $row, $col) = @_;
 
-    return $table->{ null_to_zzempty(lc($row)) }->{ null_to_zzempty(lc($col)) };
+    $row = lc(unac_string('utf-8', $row // ''));
+    $col = lc(unac_string('utf-8', $col // ''));
+    return $table->{ null_to_zzempty($row) }->{ null_to_zzempty($col) };
 }
 
 sub table_inc {
     my ($table, $row, $col, $inc) = @_;
 
-    $table->{ null_to_zzempty(lc($row // '')) }->{ null_to_zzempty(lc($col // '')) } += $inc;
+    $row = lc(unac_string('utf-8', $row // ''));
+    $col = lc(unac_string('utf-8', $col // ''));
+    $table->{ null_to_zzempty($row) }->{ null_to_zzempty($col) } += $inc;
 }
 
 1;
