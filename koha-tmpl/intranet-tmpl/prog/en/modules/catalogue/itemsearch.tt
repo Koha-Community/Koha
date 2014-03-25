@@ -22,7 +22,7 @@
         [% empty_option || "All" %]
       </option>
       [% FOREACH option IN options %]
-        [% IF values.grep(option.value).size %]
+        [% IF values != '' && values.grep(option.value).size %]
           <option value="[% option.value %]" selected="selected">[% option.label %]</option>
         [% ELSE %]
           <option value="[% option.value %]">[% option.label %]</option>
@@ -210,6 +210,7 @@
       $('#results').dataTable($.extend(true, {}, dataTablesDefaults, {
         'bDestroy': true,
         'bServerSide': true,
+        'bProcessing': true,
         'sAjaxSource': '/cgi-bin/koha/catalogue/itemsearch.pl',
         'fnServerParams': function(aoData) {
           aoData.push( { 'name': 'format', 'value': 'json' } );
@@ -217,7 +218,7 @@
             aoData.push(params[i]);
           }
         },
-        'sDom': '<"top pager"ilp>t<"bottom pager"ip>',
+        'sDom': '<"top pager"ilp>t<"bottom pager"ip>r',
         'aoColumns': [
           { 'sName': 'title' },
           { 'sName': 'publicationyear' },
@@ -344,6 +345,12 @@
               label="Collection code"
               options = ccodes
               empty_option = "All collection codes"
+            %]
+            [% INCLUDE form_field_select
+              name="notforloan"
+              label="Status"
+              options = notforloans
+              empty_option = "All statuses"
             %]
           </fieldset>
           <fieldset>

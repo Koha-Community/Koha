@@ -54,7 +54,7 @@ if (defined $format and $format eq 'json') {
     my @c = $cgi->param('c');
     foreach my $i (0 .. ($cgi->param('iColumns') - 1)) {
         my $sSearch = $cgi->param("sSearch_$i");
-        if ($sSearch) {
+        if (defined $sSearch and $sSearch ne '') {
             my @words = split /\s+/, $sSearch;
             foreach my $word (@words) {
                 push @f, $columns[$i];
@@ -98,7 +98,7 @@ if (scalar keys %params > 0) {
         filters => [],
     };
 
-    foreach my $p (qw(homebranch location itype ccode issues datelastborrowed)) {
+    foreach my $p (qw(homebranch location itype ccode issues datelastborrowed notforloan)) {
         if (my @q = $cgi->param($p)) {
             if ($q[0] ne '') {
                 my $f = {
