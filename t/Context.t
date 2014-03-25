@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use DBI;
-use Test::More tests => 16;
+use Test::More tests => 14;
 use Test::MockModule;
 
 BEGIN {
@@ -45,8 +45,3 @@ is(C4::Context::db_scheme2dbi('mysql'), 'mysql', 'ask for mysql, get mysql');
 is(C4::Context::db_scheme2dbi('Pg'),    'Pg',    'ask for Pg, get Pg');
 is(C4::Context::db_scheme2dbi('xxx'),   'mysql', 'ask for unsupported DBMS, get mysql');
 is(C4::Context::db_scheme2dbi(),        'mysql', 'ask for nothing, get mysql');
-
-my $oConnection = C4::Context->Zconn('biblioserver', 0);
-isnt($oConnection->option('async'), 1, "ZOOM connection is synchronous");
-$oConnection = C4::Context->Zconn('biblioserver', 1);
-is($oConnection->option('async'), 1, "ZOOM connection is asynchronous");
