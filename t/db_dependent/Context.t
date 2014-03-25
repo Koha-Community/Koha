@@ -98,6 +98,11 @@ is(C4::Context->preference("SillyPreference"), 'thing4', "Retrieved syspref (val
 $history = $dbh->{mock_all_history};
 is(scalar(@{$history}), 0, 'Did not retrieve syspref from database');
 
+my $oConnection = C4::Context->Zconn('biblioserver', 0);
+isnt($oConnection->option('async'), 1, "ZOOM connection is synchronous");
+$oConnection = C4::Context->Zconn('biblioserver', 1);
+is($oConnection->option('async'), 1, "ZOOM connection is asynchronous");
+
 done_testing();
 
 sub TransformVersionToNum {
