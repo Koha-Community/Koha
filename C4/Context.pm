@@ -689,6 +689,8 @@ C<$auth> whether this connection has rw access (1) or just r access (0 or NULL)
 
 sub Zconn {
     my ($self, $server, $async, $auth, $piggyback, $syntax) = @_;
+    #TODO: We actually just ignore the auth and syntax parameter
+    #It also looks like we are not passing auth, piggyback, syntax anywhere
 
     my $cache_key = join ('::', (map { $_ // '' } ($server, $async, $auth, $piggyback, $syntax)));
     if ( defined($context->{"Zconn"}->{$cache_key}) && (0 == $context->{"Zconn"}->{$cache_key}->errcode()) ) {
@@ -703,7 +705,7 @@ sub Zconn {
         # the basic health of a ZOOM::Connection
         $context->{"Zconn"}->{$cache_key}->destroy() if defined($context->{"Zconn"}->{$cache_key});
 
-        $context->{"Zconn"}->{$cache_key} = &_new_Zconn($server,$async,$auth,$piggyback,$syntax);
+        $context->{"Zconn"}->{$cache_key} = &_new_Zconn( $server, $async, $piggyback );
         return $context->{"Zconn"}->{$cache_key};
     }
 }
@@ -723,15 +725,15 @@ C<$auth> whether this connection has rw access (1) or just r access (0 or NULL)
 =cut
 
 sub _new_Zconn {
-    my ($server,$async,$auth,$piggyback,$syntax) = @_;
+    my ( $server, $async, $piggyback ) = @_;
 
     my $tried=0; # first attempt
     my $Zconn; # connection object
     my $elementSetName;
     my $index_mode;
+    my $syntax;
 
     $server //= "biblioserver";
-    $syntax //= "XML";
 
     if ( $server eq 'biblioserver' ) {
         $index_mode = $context->{'config'}->{'zebra_bib_index_mode'} // 'grs1';
@@ -740,36 +742,31 @@ sub _new_Zconn {
     }
 
     if ( $index_mode eq 'grs1' ) {
-
         $elementSetName = 'F';
         $syntax = ( $context->preference("marcflavour") eq 'UNIMARC' )
                 ? 'unimarc'
                 : 'usmarc';
 
-    } else {
-
-        $elementSetName = 'marcxml';
-        $syntax = 'XML';
+    } else { # $index_mode eq 'dom'
+        #we do not need an elementSetName
+        $syntax = 'xml';
     }
 
     my $host = $context->{'listen'}->{$server}->{'content'};
-    my $servername = $context->{"config"}->{$server};
     my $user = $context->{"serverinfo"}->{$server}->{"user"};
     my $password = $context->{"serverinfo"}->{$server}->{"password"};
-    $auth = 1 if($user && $password);
-    retry:
     eval {
         # set options
         my $o = new ZOOM::Options();
-        $o->option(user=>$user) if $auth;
-        $o->option(password=>$password) if $auth;
+        $o->option(user => $user) if $user && $password;
+        $o->option(password => $password) if $user && $password;
         $o->option(async => 1) if $async;
         $o->option(count => $piggyback) if $piggyback;
         $o->option(cqlfile=> $context->{"server"}->{$server}->{"cql2rpn"});
         $o->option(cclfile=> $context->{"serverinfo"}->{$server}->{"ccl2rpn"});
         $o->option(preferredRecordSyntax => $syntax);
-        $o->option(elementSetName => $elementSetName);
-        $o->option(databaseName => ($servername?$servername:"biblios"));
+        $o->option(elementSetName => $elementSetName) if $elementSetName;
+        $o->option(databaseName => $context->{"config"}->{$server}||"biblios");
 
         # create a new connection object
         $Zconn= create ZOOM::Connection($o);
@@ -781,9 +778,7 @@ sub _new_Zconn {
         if ($Zconn->errcode() !=0) {
             warn "something wrong with the connection: ". $Zconn->errmsg();
         }
-
     };
-
     return $Zconn;
 }
 
