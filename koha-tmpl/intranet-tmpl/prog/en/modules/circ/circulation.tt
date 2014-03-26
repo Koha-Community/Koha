@@ -94,6 +94,9 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
     } ).attr( 'checked', false );
     [% END %]
     [% END %]
+    [% IF AutoResumeSuspendedHolds %]
+        $("#suspend_until").datepicker("option", "minDate", 1); // require that hold suspended until date is after today
+    [% END %]
  });
 //]]>
 </script>
