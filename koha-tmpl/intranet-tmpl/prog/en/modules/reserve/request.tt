@@ -19,6 +19,12 @@ var override_items = {[% FOREACH bibitemloo IN bibitemloop %][% FOREACH itemloo 
 };
 var MSG_NO_ITEMS_AVAILABLE = _("A hold cannot be requested on any of these items.");
 
+$(document).ready(function() {
+    [% IF AutoResumeSuspendedHolds %]
+        $(".suspend_until_datepicker").datepicker("option", "minDate", 1);
+    [% END %]
+});
+
 function check() {
 	var msg = "";
 	var count_reserv = 0;
@@ -740,7 +746,7 @@ function checkMultiHold() {
 
             [% IF AutoResumeSuspendedHolds %]
         <label for="suspend_until_[% reserveloo.reserve_id %]">[% IF ( reserveloo.suspend ) %] on [% ELSE %] until [% END %]</label>
-            <input name="suspend_until" id="suspend_until_[% reserveloo.reserve_id %]" size="10" readonly="readonly" value="[% reserveloo.suspend_until | $KohaDates %]" class="datepicker" />
+            <input name="suspend_until" id="suspend_until_[% reserveloo.reserve_id %]" size="10" readonly="readonly" value="[% reserveloo.suspend_until | $KohaDates %]" class="datepicker suspend_until_datepicker" />
             <a href='#' onclick="document.getElementById('suspend_until_[% reserveloo.reserve_id %]').value='';">Clear date</a>
             [% END %]
 	[% ELSE %]
