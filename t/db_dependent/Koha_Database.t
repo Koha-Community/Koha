@@ -1,10 +1,10 @@
 #!/usr/bin/perl
 #
 
-use strict;
-use warnings;
+use Modern::Perl;
+use utf8;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 BEGIN {
     use_ok('Koha::Database');
@@ -25,3 +25,18 @@ ok( $new_schema = $database->new_schema(), 'Try to get a new schema' );
 ok( $database->set_schema($new_schema), 'Switch to new schema' );
 ok( $database->restore_schema(),        'Switch back' );
 
+# run in a transaction
+$schema->storage->txn_begin();
+
+# clear the way
+$schema->resultset('Category')->search({ categorycode => 'GIFT-RUS' })->delete;
+my $gift = 'подарок';
+$schema->resultset('Category')->create({
+    categorycode => 'GIFT-RUS',
+    description  => $gift,
+});
+my $desc = $schema->resultset('Category')->search({
+    categorycode => 'GIFT-RUS',
+})->single->get_column('description');
+is($desc, $gift, 'stored and retrieved UTF8 string');
+$schema->storage->txn_rollback();
