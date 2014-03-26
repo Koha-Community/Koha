@@ -6987,7 +6987,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.12.112.000";
+$DBversion = "3.12.12.000";
 if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (3.12.12 release)\n";
     SetVersion ($DBversion);
