@@ -59,9 +59,13 @@ sub _new_schema {
     my $db_port   = $context->config("port") || '';
     my $db_user   = $context->config("user");
     my $db_passwd = $context->config("pass");
+
+    my $db_opts = ($db_driver eq 'mysql') ? { mysql_enable_utf8 => 1 } :
+                  ($db_driver eq 'Pg')    ? { pg_enable_utf8    => 1 } :
+                                            { };
     my $schema    = Koha::Schema->connect(
         "DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",
-        $db_user, $db_passwd );
+        $db_user, $db_passwd, $db_opts );
     return $schema;
 }
 
