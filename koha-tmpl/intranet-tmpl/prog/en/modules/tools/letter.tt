@@ -56,7 +56,7 @@ $(document).ready(function() {
     var sms_limit = 160;
     $("#content_sms").on("keyup", function(){
         var length = $(this).val().length;
-        $("#sms_counter").html(length + "/" + sms_limit);
+        $("#sms_counter").html(length + "/" + sms_limit + _(" characters"));
         if ( length  > sms_limit ) {
             $("#sms_counter").css("color", "red");
         } else {
@@ -341,7 +341,10 @@ $(document).ready(function() {
                   <label for="title">Message subject:</label><input type="text" id="title" name="title" size="60" value="[% letter.title %]" />
                 </li>
                 <li>
-                  <label for="SQLfieldname">Message body: [% IF letter.message_transport_type == 'sms' %]<span id="sms_counter">[% letter.content.length %]/160</span>[% END %]</label>
+                  <label for="SQLfieldname">Message body:</label>
+                  [% IF letter.message_transport_type == 'sms' %]
+                    <span id="sms_counter">[% IF letter.content.length > 0 %][% letter.content.length %][% ELSE %]0[% END %]/160 characters</span>
+                  [% END %]
                   <table>
                     <tr>
                       <td>
