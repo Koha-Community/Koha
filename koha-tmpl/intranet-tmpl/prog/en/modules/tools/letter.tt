@@ -26,6 +26,7 @@ $(document).ready(function() {
     [% END %]
 
     $("#submit").click( function(event) {
+        var at_least_one_exists = 0;
         $("fieldset.mtt").each( function(){
             var title = $(this).find('input[name="title"]').val();
             var content = $(this).find('textarea[name="content"]').val();
@@ -36,10 +37,19 @@ $(document).ready(function() {
                 var mtt = $(this).find('input[name="message_transport_type"]').val();
                 var msg = _("Please specify title and content for %s");
                 msg = msg.replace( "%s", mtt );
+                at_least_one_exists = 1;
                 alert(msg)
                 event.preventDefault();
+                return false;
+            } else if ( title.length > 0 && content.length > 0 ) {
+                at_least_one_exists = 1;
             }
         } );
+        if ( ! at_least_one_exists ) {
+            alert( _("Please fill at least one template.") );
+            event.preventDefault();
+            return false;
+        }
         return true;
     });
 
@@ -212,7 +222,7 @@ $(document).ready(function() {
 	
 [% IF ( add_form ) %]
 <h1>[% IF ( modify ) %]Modify notice[% ELSE %]Add notice[% END %]</h1>
-        <form name="Aform" method="post" enctype="multipart/form-data">
+        <form name="Aform" method="post" enctype="multipart/form-data" class="validate">
 		<input type="hidden" name="op" id="op" value="add_validate" />
 		<input type="hidden" name="checked" value="0" />
 		[% IF ( modify ) %]
@@ -280,14 +290,23 @@ $(document).ready(function() {
                                     [% ELSE %]
                                       <option value="suggestions">Suggestions</option>
                                     [% END %]
-				</select>
-			</li>
-			<li>
-				<span class="label">Code:</span>[% IF ( adding ) %]<input type="text" id="code" name="code" size="20" maxlength="20" />[% ELSE %]<input type="hidden" id="code" name="code" value="[% code %]" />[% code %][% END %]
-			</li>
-		<li>
-            <label for="name">Name:</label><input type="text" id="name" name="name" size="60" value="[% letter_name %]" />
-		</li>
+                </select>
+            </li>
+            <li>
+                [% IF adding %]
+                  <label for"code" class="required">Code:</label>
+                  <input type="text" id="code" name="code" size="20" maxlength="20" required="required" />
+                  <span class="required">Required</span>
+                [% ELSE %]
+                  <label for="code">Code:</label>
+                  <input type="hidden" id="code" name="code" value="[% code %]" />[% code %]
+                [% END %]
+            </li>
+        <li>
+            <label for="name" class="required">Name:</label>
+            <input type="text" id="name" name="name" size="60" value="[% letter_name %]" required="required" />
+            <span class="required">Required</span>
+        </li>
 
         [% FOREACH letter IN letters %]
           <li>
