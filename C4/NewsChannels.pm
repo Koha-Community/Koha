@@ -150,7 +150,7 @@ sub get_opac_news {
                   FROM opac_news LEFT JOIN branches
                       ON opac_news.branchcode=branches.branchcode
                 };
-    $query = ' WHERE 1';
+    $query .= ' WHERE 1';
     if ($lang) {
         $query .= " AND (opac_news.lang='' OR opac_news.lang=?)";
         push @values,$lang;
