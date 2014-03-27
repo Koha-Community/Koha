@@ -176,7 +176,7 @@ sub add_form {
         # So we can only sent the first one to the template.
         for my $mtt ( @$message_transport_types ) {
             # The letter_name
-            if ( $first_flag ) {
+            if ( $first_flag and $letters->{$mtt}{name} ) {
                 $template->param(
                     letter_name=> $letters->{$mtt}{name},
                 );
