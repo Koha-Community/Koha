@@ -92,3 +92,7 @@ function toUC(f) {
     f.value=x;
     return true;
 }
+
+function confirmDelete(message) {
+    return (confirm(message) ? true : false);
+}
