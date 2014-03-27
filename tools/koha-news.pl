@@ -96,30 +96,32 @@ if ( $op eq 'add_form' ) {
     }
 }
 elsif ( $op eq 'add' ) {
-    my $parameters = {
-                      title          => $title,
-                      new            => $new,
-                      lang           => $lang,
-                      expirationdate => $expirationdate,
-                      timestamp      => $timestamp,
-                      number         => $number,
-                      branchcode     => $branchcode,
-                  };
-    add_opac_new( $parameters );
+    add_opac_new(
+        {
+            title          => $title,
+            new            => $new,
+            lang           => $lang,
+            expirationdate => $expirationdate,
+            timestamp      => $timestamp,
+            number         => $number,
+            branchcode     => $branchcode,
+        }
+    );
     print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl");
 }
 elsif ( $op eq 'edit' ) {
-    my $parameters = {
-                      idnew          => $id,
-                      title          => $title,
-                      new            => $new,
-                      lang           => $lang,
-                      expirationdate => $expirationdate,
-                      timestamp      => $timestamp,
-                      number         => $number,
-                      branchcode     => $branchcode,
-                  };
-    upd_opac_new( $parameters );
+    upd_opac_new(
+        {
+            idnew          => $id,
+            title          => $title,
+            new            => $new,
+            lang           => $lang,
+            expirationdate => $expirationdate,
+            timestamp      => $timestamp,
+            number         => $number,
+            branchcode     => $branchcode,
+        }
+    );
     print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl");
 }
 elsif ( $op eq 'del' ) {
