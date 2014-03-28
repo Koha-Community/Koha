@@ -259,10 +259,18 @@ $(document).ready(function() {
                     [% serialslis.serialseq %]
                 </td>
                 <td>
-                    [% serialslis.planneddate %]
+                    [% IF serialslis.planneddate %]
+                      [% serialslis.planneddate %]
+                    [% ELSE %]
+                      Unknown
+                    [% END %]
                 </td>
                 <td>
-                    [% serialslis.publisheddate %]
+                    [% IF serialslis.publisheddate %]
+                      [% serialslis.publisheddate %]
+                    [% ELSE %]
+                      Unknown
+                    [% END %]
                 </td>
                 <td>
                     [% IF ( serialslis.status1 ) %]Expected[% END %]

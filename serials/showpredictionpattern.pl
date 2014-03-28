@@ -119,7 +119,7 @@ my @predictions_loop;
 my ($calculated) = GetSeq(\%subscription, \%pattern);
 push @predictions_loop, {
     number => $calculated,
-    publicationdate => ($frequency->{unit} ? $date : undef),
+    publicationdate => $date,
     issuenumber => $issuenumber,
     dow => Day_of_Week(split /-/, $date),
 };
@@ -143,7 +143,7 @@ while( $i < 1000 ) {
         $date = GetNextDate(\%subscription, $date);
     }
     if(defined $date){
-        $line{'publicationdate'} = $date if $frequency->{unit};
+        $line{'publicationdate'} = $date;
         $line{'dow'} = Day_of_Week(split /-/, $date);
     }
 
