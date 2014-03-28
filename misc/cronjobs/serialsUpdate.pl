@@ -99,8 +99,10 @@ my $sth = $dbh->prepare(
      FROM serial 
      LEFT JOIN subscription 
        ON (subscription.subscriptionid=serial.subscriptionid) 
+     LEFT JOIN subscription_frequencies
+       ON (subscription.periodicity = subscription_frequencies.id)
      WHERE serial.status = 1 
-       AND periodicity <> 32
+       AND subscription_frequencies.unit IS NOT NULL
        AND DATE_ADD(planneddate, INTERVAL CAST(graceperiod AS SIGNED) DAY) < NOW()
        AND subscription.closed = 0
     }

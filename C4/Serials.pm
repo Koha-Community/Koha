@@ -419,9 +419,9 @@ sub PrepareSerialsData {
 
     foreach my $subs (@{$lines}) {
         for my $datefield ( qw(publisheddate planneddate) ) {
-            # handle both undef and undef returned as 0000-00-00
-            if (!defined $subs->{$datefield} or $subs->{$datefield}=~m/^00/) {
-                $subs->{$datefield} = 'XXX';
+            # handle 0000-00-00 dates
+            if (defined $subs->{$datefield} and $subs->{$datefield} =~ m/^00/) {
+                $subs->{$datefield} = undef;
             }
         }
         $subs->{ "status" . $subs->{'status'} } = 1;
@@ -1232,10 +1232,6 @@ sub ModSerialStatus {
         DelIssue( { 'serialid' => $serialid, 'subscriptionid' => $subscriptionid, 'serialseq' => $serialseq } );
     } else {
 
-        unless ($frequency->{'unit'}) {
-            if ( not $planneddate or $planneddate eq '0000-00-00' ) { $planneddate = C4::Dates->new()->output('iso') };
-            if ( not $publisheddate or $publisheddate eq '0000-00-00' ) { $publisheddate = C4::Dates->new()->output('iso') };
-        }
         my $query = 'UPDATE serial SET serialseq=?,publisheddate=?,planneddate=?,status=?,notes=? WHERE  serialid = ?';
         $sth = $dbh->prepare($query);
         $sth->execute( $serialseq, $publisheddate, $planneddate, $status, $notes, $serialid );
@@ -2529,12 +2525,14 @@ skipped then the returned date will be 2007-05-10
 return :
 $resultdate - then next date in the sequence (ISO date)
 
-Return $publisheddate if subscription is irregular
+Return undef if subscription is irregular
 
 =cut
 
 sub GetNextDate {
     my ( $subscription, $publisheddate, $updatecount ) = @_;
+
+    return unless $subscription and $publisheddate;
 
     my $freqdata = GetSubscriptionFrequency($subscription->{'periodicity'});
 
@@ -2672,9 +2670,6 @@ sub GetNextDate {
             $sth->execute($subscription->{'countissuesperunit'}, $subscription->{'subscriptionid'});
         }
         return sprintf("%04d-%02d-%02d", $year, $month, $day);
-    }
-    else {
-        return $publisheddate;
     }
 }
 

@@ -244,10 +244,22 @@ $(document).ready(function() {
                  <td><a href="serials-collection.pl?subscriptionid=[% serial.subscriptionid %]">[% serial.subscriptionid %]</a></td>
 [% END %]
                 <td>
-                    <span title="[% serial.publisheddate %]">[% serial.publisheddate | $KohaDates %]</span>
+                    <span title="[% serial.publisheddate %]">
+                      [% IF serial.publisheddate %]
+                        [% serial.publisheddate | $KohaDates %]
+                      [% ELSE %]
+                        Unknown
+                      [% END %]
+                    </span>
                 </td>
                 <td>
-                    <span title="[% serial.planneddate %]">[% serial.planneddate | $KohaDates %]</span>
+                    <span title="[% serial.planneddate %]">
+                      [% IF serial.planneddate %]
+                        [% serial.planneddate | $KohaDates %]
+                      [% ELSE %]
+                        Unknown
+                      [% END %]
+                    </span>
                 </td>
                 <td>
                     [% serial.serialseq %]

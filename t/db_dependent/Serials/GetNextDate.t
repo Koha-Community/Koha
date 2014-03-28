@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use C4::Context;
-use Test::More tests => 84;
+use Test::More tests => 86;
 use Modern::Perl;
 
 my $dbh = C4::Context->dbh;
@@ -471,7 +471,7 @@ is($publisheddate, '1974-01-01');
 # TEST CASE 25 - Irregular
 $id = AddSubscriptionFrequency({
     description => "Irregular",
-    unit => '',
+    unit => undef,
     issuesperunit => 1,
     unitsperissue => 1,
 });
@@ -482,10 +482,16 @@ $subscription = {
     countissuesperunit => 1,
 };
 $publisheddate = $subscription->{firstacquidate};
-# GetNextDate always return the same date if subscription is irregular
+# GetNextDate always return undef if subscription is irregular
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-01-01');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-01-01');
+is($publisheddate, undef);
+
+# GetNextDate returns undef if one of two first parameters is undef
+$publisheddate = GetNextDate($subscription, undef);
+is($publisheddate, undef);
+$publisheddate = GetNextDate(undef, $subscription->{firstacquidate});
+is($publisheddate, undef);
+$publisheddate = GetNextDate(undef, undef);
+is($publisheddate, undef);
 
 $dbh->rollback;
