@@ -187,7 +187,7 @@ sub add_form {
                 message_transport_type => $mtt,
                 is_html    => $letters->{$mtt}{is_html},
                 title      => $letters->{$mtt}{title},
-                content    => $letters->{$mtt}{content},
+                content    => $letters->{$mtt}{content}//'',
             };
         }
     }
