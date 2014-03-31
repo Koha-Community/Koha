@@ -203,7 +203,7 @@ CAN_user_serials_create_subscription ) %]
                 [% END %]
             [% END %]
 
-            [% IF ( CAN_user_editcatalogue_edit_items ) %]
+            [% IF ( CAN_user_editcatalogue_delete_all_items ) %]
                 [% IF ( count ) %]
                     <li><a href="#" id="deleteallitems">Delete all items</a></li>
                 [% ELSE %]
