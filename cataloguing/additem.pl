@@ -373,6 +373,8 @@ my $uid = $loggedinuser ? GetMember( borrowernumber => $loggedinuser )->{userid}
 my $limitededition = $uid ? haspermission($uid,  {'editcatalogue' => 'limited_item_edition'}) : undef;
 # In case user is a superlibrarian, edition is not limited
 $limitededition = 0 if ($limitededition != 0 && $limitededition->{'superlibrarian'} eq 1);
+# In case user has fast cataloging permission (and we're in fast cataloging), edition is not limited
+$limitededition = 0 if ($limitededition != 0 && $frameworkcode eq 'FA' && haspermission($uid, {'editcatalogue' => 'fast_cataloging'}));
 
 my $today_iso = C4::Dates->today('iso');
 my $tagslib = &GetMarcStructure(1,$frameworkcode);
