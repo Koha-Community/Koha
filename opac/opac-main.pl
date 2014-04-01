@@ -44,8 +44,6 @@ $template->param(
     casAuthentication   => $casAuthentication,
 );
 
-$template->param( shibbolethAuthentication => C4::Context->config('useshibboleth') );
-
 # display news
 # use cookie setting for language, bug default to syspref if it's not set
 my ($theme, $news_lang, $availablethemes) = C4::Templates::themelanguage(C4::Context->config('opachtdocs'),'opac-main.tt','opac',$input);

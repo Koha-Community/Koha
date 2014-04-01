@@ -281,6 +281,18 @@
         </div>
         <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="modalAuth">
             <div class="modal-body">
+                    [% IF ( shibbolethAuthentication ) %]
+                    [% IF ( invalidShibLogin ) %]
+                    <!-- This is what is displayed if shibboleth login has failed to match a koha user -->
+                    <div class="alert alert-info">
+                        <p>Sorry, your Shibboleth identity does not match a valid library identity. If you have a local login, you may use that below.</p>
+                    </div>
+                    [% ELSE %]
+                    <h4>Shibboleth Login</h4>
+                    <p>If you have a Shibboleth account, please <a href="[% shibbolethLoginUrl %]">click here to login</a>.</p>
+                    <h4>Local Login</h4>
+                    [% END %]
+		    [% END %]
                     <input type="hidden" name="koha_login_context" value="opac" />
                     <fieldset class="brief">
                         <label for="muserid">Login:</label><input type="text" id="muserid" name="userid" />
