@@ -80,19 +80,19 @@ sub do_checkin {
         $self->alert_type('99');
     }
     if ($messages->{Wrongbranch}) {
-        $self->destination_loc($messages->{Wrongbranch}->{Rightbranch});
+        $self->{item}->destination_loc($messages->{Wrongbranch}->{Rightbranch});
         $self->alert_type('04');            # send to other branch
     }
     if ($messages->{WrongTransfer}) {
-        $self->destination_loc($messages->{WrongTransfer});
+        $self->{item}->destination_loc($messages->{WrongTransfer});
         $self->alert_type('04');            # send to other branch
     }
     if ($messages->{NeedsTransfer}) {
-        $self->destination_loc($iteminformation->{homebranch});
+        $self->{item}->destination_loc($messages->{NeedsTransfer});
         $self->alert_type('04');            # send to other branch
     }
     if ($messages->{WasTransfered}) { # set into transit so tell unit
-        $self->destination_loc($iteminformation->{homebranch});
+        $self->{item}->destination_loc($iteminformation->{homebranch});
         $self->alert_type('04');            # send to other branch
     }
     if ($messages->{ResFound}) {
