@@ -30,6 +30,8 @@ BEGIN {
 }
 
 my $dbh = C4::Context->dbh;
+my $branches = GetBranches;
+my ($branch1, $branch2) = keys %$branches;
 
 subtest 'General Add, Get and Del tests' => sub {
 
@@ -44,7 +46,7 @@ subtest 'General Add, Get and Del tests' => sub {
     my ($bibnum, $bibitemnum) = get_biblio();
 
     # Add an item.
-    my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL' } , $bibnum);
+    my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch1, holdingbranch => $branch1 } , $bibnum);
     cmp_ok($item_bibnum, '==', $bibnum, "New item is linked to correct biblionumber.");
     cmp_ok($item_bibitemnum, '==', $bibitemnum, "New item is linked to correct biblioitemnumber.");
 
@@ -90,14 +92,14 @@ subtest 'GetHiddenItemnumbers tests' => sub {
 
     # Add two items
     my ($item1_bibnum, $item1_bibitemnum, $item1_itemnumber) = AddItem(
-            { homebranch => 'CPL',
-              holdingbranch => 'CPL',
+            { homebranch => $branch1,
+              holdingbranch => $branch1,
               withdrawn => 1 },
             $biblionumber
     );
     my ($item2_bibnum, $item2_bibitemnum, $item2_itemnumber) = AddItem(
-            { homebranch => 'MPL',
-              holdingbranch => 'MPL',
+            { homebranch => $branch2,
+              holdingbranch => $branch2,
               withdrawn => 0 },
             $biblionumber
     );
@@ -138,7 +140,7 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     # Two variables, a value each
     $opachiddenitems = "
         withdrawn: [1]
-        homebranch: [MPL]
+        homebranch: [$branch2]
     ";
     C4::Context->set_preference( 'OpacHiddenItems', $opachiddenitems );
     @hidden = GetHiddenItemnumbers( @items );
@@ -161,23 +163,20 @@ subtest 'GetItemsInfo tests' => sub {
     $dbh->{AutoCommit} = 0;
     $dbh->{RaiseError} = 1;
 
-    my $homebranch    = 'CPL';
-    my $holdingbranch = 'MPL';
-
     # Add a biblio
-    my ($biblionumber) = get_biblio();
+    my ($biblionumber, $biblioitemnumber) = get_biblio();
     # Add an item
     my ($item_bibnum, $item_bibitemnum, $itemnumber)
         = AddItem({
-                homebranch    => $homebranch,
-                holdingbranch => $holdingbranch
+                homebranch    => $branch1,
+                holdingbranch => $branch2
             }, $biblionumber );
 
-    my $branch = GetBranchDetail( $homebranch );
+    my $branch = GetBranchDetail( $branch1 );
     $branch->{ opac_info } = "homebranch OPAC info";
     ModBranch($branch);
 
-    $branch = GetBranchDetail( $holdingbranch );
+    $branch = GetBranchDetail( $branch2 );
     $branch->{ opac_info } = "holdingbranch OPAC info";
     ModBranch($branch);
 
