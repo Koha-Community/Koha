@@ -298,6 +298,9 @@ sub load_sql_in_order {
     $request->execute;
     my ($systempreference) = $request->fetchrow;
     $systempreference = '' unless defined $systempreference; # avoid warning
+    # Make sure subtag_registry.sql is loaded second
+    my $subtag_registry = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/mandatory/subtag_registry.sql";
+    unshift(@fnames, $subtag_registry);
     # Make sure the global sysprefs.sql file is loaded first
     my $globalsysprefs = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/sysprefs.sql";
     unshift(@fnames, $globalsysprefs);
