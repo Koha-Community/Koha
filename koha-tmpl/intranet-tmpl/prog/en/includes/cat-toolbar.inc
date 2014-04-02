@@ -234,11 +234,11 @@ CAN_user_serials_create_subscription ) %]
     <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">Add to <span class="caret"></span></button>
     <ul class="dropdown-menu">
         <li><a href="#" id="addtocart">Cart</a></li>
-        <li><a id="addtoshelf" href="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber=[% biblionumber %]">List</a></li>
+        <li><a href="#" id="addtoshelf">List</a></li>
     </ul>
     </div>
 [% ELSIF ( virtualshelves ) %]
-    <div class="btn-group"><a id="addtoshelf" class="btn btn-small" href="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber=[% biblionumber %]"><i class="icon-list"></i> Add to list</a> </div>
+    <div class="btn-group"><a id="addtoshelf" class="btn btn-small"><i class="icon-list"></i> Add to list</a> </div>
 [% ELSIF ( intranetbookbag ) %]
     <div class="btn-group"><a id="addtocart" class="btn btn-small"><i class="icon-shopping-cart"></i> Add to cart</a> </div>
 [% END %]
