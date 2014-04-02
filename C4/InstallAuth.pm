@@ -1,7 +1,4 @@
-# -*- tab-width: 8 -*-
-# NOTE: This file uses 8-character tabs; do not change the tab size!
-
-package InstallAuth;
+package C4::InstallAuth;
 
 # Copyright 2000-2002 Katipo Communications
 #
