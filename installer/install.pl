@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use diagnostics;
 
-use InstallAuth;
+use C4::InstallAuth;
 use CGI;
 use IPC::Cmd;
 
