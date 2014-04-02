@@ -2,6 +2,8 @@
     <title>Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; Manage patron card batches</title>
     [% INCLUDE 'doc-head-close.inc' %]
     [% INCLUDE 'greybox.inc' %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+    [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         //<![CDATA[
            function DeleteConfirm() {
@@ -99,6 +101,13 @@
             };
 
          $(document).ready(function() {
+            $("#batcht").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false }
+                ],
+                "aaSorting": [[ 1, "asc" ]],
+                "sPaginationType": "four_button"
+            }));
             $("#additems").click(function(){
                 Add();
                 return false;
@@ -151,47 +160,59 @@
                     <a class="btn btn-small" id="exportbatch" href="#">Export batch</a>[% END %]
                 </div>
 
+                [% IF ( duplicate_message ) %]
+                    <div class="dialog message">
+                        <strong>[% duplicate_count %] duplicate item(s) found</strong> and removed from batch [% batch_id %].
+                    </div>
+                [% END %]
 
                     [% INCLUDE 'patroncards-errors.inc' %]
-                    <div class="yui-g">
-                        <div class="yui-u first" id="manage-patroncard-batches">
-                            <div class="hint">Current library: [% LoginBranchname %]</div>
-                                [% IF ( table_loop ) %]
-                                <form name="items" class="checkboxed">
-                                    <h2>Items in batch number [% batch_id %]</h2>
-                                    <table>
-                                        [% FOREACH table_loo IN table_loop %]
+                    <div id="manage-patroncard-batches">
+                        <div class="hint">Current library: [% LoginBranchname %]</div>
+                            [% IF ( table_loop ) %]
+                            <form name="items" class="checkboxed">
+                                <h2>Items in batch number [% batch_id %]</h2>
+                                <table id="batcht">
+                                    [% FOREACH table_loo IN table_loop %]
                                         [% IF ( table_loo.header_fields ) %]
-                                        <tr>
-                                        [% FOREACH header_field IN table_loo.header_fields %]
-                                            <th>[% header_field.field_label %]</th>
-                                        [% END %]
-                                        </tr>
+                                            <thead>
+                                                <tr>
+                                                    [% FOREACH header_field IN table_loo.header_fields %]
+                                                        [% SWITCH header_field.field_label -%]
+                                                            [% CASE "Card Number" -%]
+                                                                <th>Card number</th>
+                                                            [% CASE "Summary" -%]
+                                                                <th>Summary</th>
+                                                            [% CASE "Borrower Number" %]
+                                                                <th>Borrower number</th>
+                                                            [% CASE "Select" -%]
+                                                                <th>Select</th>
+                                                            [% CASE %]
+                                                                <th>[% header_field.field_label %]</th>
+                                                        [% END -%]
+                                                    [% END %]
+                                                </tr>
+                                            </thead>
+                                            <tbody>
                                         [% ELSE %]
-                                        <tr>
-                                        [% FOREACH text_field IN table_loo.text_fields %]
-                                        [% IF ( text_field.select_field ) %]
-                                            <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]"></td>
-                                        [% ELSE %]
-                                            <td>[% text_field.field_value %]</td>
+                                            <tr>
+                                                [% FOREACH text_field IN table_loo.text_fields %]
+                                                    [% IF ( text_field.select_field ) %]
+                                                        <td><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>
+                                                    [% ELSE %]
+                                                        <td>[% text_field.field_value %]</td>
+                                                    [% END %]
+                                                [% END %]
+                                            </tr>
                                         [% END %]
-                                        [% END %]
-                                        </tr>
-                                        [% END %]
-                                        [% END %]
-                                    </table>
-                                </form>
-                                [% ELSE %]
-                                    <div class="dialog message"><h4>There are no items in batch [% batch_id %] yet</h4>
-                                    <p>Use the toolbar above to add items.</p></div>
-                                [% END %]
-                            </div>
-                            [% IF ( duplicate_message ) %]
-                            <div class="yui-u">
+                                    [% END %]
+                                    </tbody>
+                                </table>
+                            </form>
+                            [% ELSE %]
                                 <div class="dialog message">
-                                    <strong>[% duplicate_count %] duplicate item(s) found</strong> and removed from batch [% batch_id %].
-                                </div>
-                            </div>
+                                <h4>There are no items in batch [% batch_id %] yet</h4>
+                                <p>Use the toolbar above to add items.</p></div>
                             [% END %]
                         </div>
                     </div>
@@ -200,5 +221,4 @@
                     [% INCLUDE 'patroncards-menu.inc' %]
                 </div>
             </div>
-        </div>
     [% INCLUDE 'intranet-bottom.inc' %]
