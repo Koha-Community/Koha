@@ -88,6 +88,7 @@ BEGIN {
     #Insert data
     push @EXPORT, qw(
         &AddMember
+    &AddMember_Auto
         &AddMember_Opac
     );
 
@@ -1261,6 +1262,20 @@ sub GetBorrowersWithEmail {
     return @result;
 }
 
+=head2 AddMember_Auto
+
+=cut
+
+sub AddMember_Auto {
+    my ( %borrower ) = @_;
+
+    $borrower{'cardnumber'} ||= fixup_cardnumber();
+
+    $borrower{'borrowernumber'} = AddMember(%borrower);
+
+    return ( %borrower );
+}
+
 =head2 AddMember_Opac
 
 =cut
@@ -1278,9 +1293,9 @@ sub AddMember_Opac {
 
     $borrower{'cardnumber'} = fixup_cardnumber( $borrower{'cardnumber'} );
 
-    my $borrowernumber = AddMember(%borrower);
+    %borrower = AddMember_Auto(%borrower);
 
-    return ( $borrowernumber, $borrower{'password'} );
+    return ( $borrower{'borrowernumber'}, $borrower{'password'} );
 }
 
 =head2 DeleteExpiredOpacRegistrations
