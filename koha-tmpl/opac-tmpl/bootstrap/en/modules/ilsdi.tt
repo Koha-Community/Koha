@@ -1,5 +1,6 @@
 [% USE Koha %]
-[% INCLUDE 'doc-head-open.inc' %][% LibraryNameTitle or "Koha online" %] catalog &rsaquo;
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
     [% IF ( GetAvailability ) %]
         ILS-DI &rsaquo; GetAvailability
     [% ELSIF ( GetRecords ) %]

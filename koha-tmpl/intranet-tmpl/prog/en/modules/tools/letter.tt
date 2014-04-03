@@ -173,7 +173,7 @@ $(document).ready(function() {
         [% ELSE %]
 			<tr>
         [% END %]
-				<td>[% lette.branchname || "(All libraries)" %]</td>
+				<td>[% IF ( lette.branchname ) %][% lette.branchname %][% ELSE %](All libraries)[% END %]</td>
 				<td>[% lette.module %]</td>
 				<td>[% lette.code %]</td>
 				<td>[% lette.name %]</td>

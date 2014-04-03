@@ -167,7 +167,7 @@ function populateHiddenCheckboxes(tab) {
 [% INCLUDE 'cat-search.inc' %]
 
 <div id="breadcrumbs">
-  <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a> &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]&amp;searchfield=[% tagfield %]">[% frameworkcode or "Default" %] framework structure</a> &rsaquo;
+  <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a> &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]&amp;searchfield=[% tagfield %]">[% IF ( frameworkcode ) %][% frameworkcode %][% ELSE %]Default[% END %] framework structure</a> &rsaquo;
   [% IF ( add_form ) %]
   [% IF ( use_heading_flags_p ) %]
   [% IF ( heading_edit_subfields_p ) %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield %]&amp;frameworkcode=[% frameworkcode %]">Tag [% tagfield %] subfield structure</a> &rsaquo; Edit subfields constraints
