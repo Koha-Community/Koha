@@ -432,16 +432,26 @@ $(document).ready(function()
                     <input type="hidden" name="budget_id" id="budget_id" value="[% budget_id %]" />[% Budget_name %]
                 [% ELSE %]
                 <label class="required" for="budget_id">Fund: </label>
+                [% active_count = 0 %]
+                [% IF !ordernumber %]
+                    [% FOREACH budget_loo IN budget_loop %]
+                        [% active_count= active_count + budget_loo.b_active %]
+                    [% END %]
+                [% END %]
                 <select id="budget_id" size="1" name="budget_id">
-                        <option value="">Select a fund</option>
+                    <option value="">Select a fund</option>
                 [% FOREACH budget_loo IN budget_loop %]
                     [% IF ( budget_loo.b_sel ) %]
-                        <option value="[% budget_loo.b_id %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]">[% budget_loo.b_txt %]</option>
+                        [% active_count = 0 #select no other fund %]
+                        <option value="[% budget_loo.b_id %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]">
+                    [% ELSIF active_count==1 && budget_loo.b_active %]
+                        <option value="[% budget_loo.b_id %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]">
                     [% ELSE %]
-                        [% IF ( budget_loo.b_active ) %]<option value="[% budget_loo.b_id %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]">[% budget_loo.b_txt %]</option>
-                        [% ELSE %]<option value="[% budget_loo.b_id %]" class="b_inactive" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]">[% budget_loo.b_txt %] (inactive)</option>
-                        [% END %]
+                        [% bdgclass=budget_loo.b_active? "": "b_inactive" %]
+                        <option value="[% budget_loo.b_id %]" class="[% bdgclass %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]">
                     [% END %]
+                    [% budget_loo.b_txt %][% IF !budget_loo.b_active %] (inactive)[% END %]
+                    </option>
                 [% END %]
                 </select>
                 <label for="showallbudgets" style="float:none;width:auto;">&nbsp;Show all:</label>
