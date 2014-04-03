@@ -9,7 +9,7 @@
 //<![CDATA[ 
 
 var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
-var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these records from the shelf?");
+var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");
 var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to remove this list?");
 [% IF ( viewshelf ) %]
 $(document).ready(function(){
@@ -230,7 +230,7 @@ function placeHold () {
         [% IF ( paramsloo.already ) %]<div class="dialog alert">A List named [% paramsloo.already %] already exists!</div>[% END %]
 		[% IF ( paramsloo.status ) %]<div class="dialog alert">[% paramsloo.string %]</div>[% END %]
 		[% IF ( paramsloo.nobarcode ) %]<div class="dialog alert">ERROR: No barcode given.</div>[% END %] 
-		[% IF ( paramsloo.noshelfnumber ) %]<div class="dialog alert">ERROR: No shelfnumber given.</div>[% END %] 
+        [% IF ( paramsloo.noshelfnumber ) %]<div class="dialog alert">ERROR: No list number given.</div>[% END %]
 		[% IF ( paramsloo.need_confirm ) %]
 		<div class="dialog alert">The list <i>[% paramsloo.need_confirm %]</i> is not empty.
 			<br />It has <b>[% paramsloo.count %]</b> entries.
@@ -247,10 +247,10 @@ function placeHold () {
 		<div class="dialog alert">A record matching barcode <b>[% paramsloo.duplicatebiblio %]</b> has already been added.</div>
 		[% END %]
                 [% IF ( paramsloo.nothingdeleted) %]
-                      <div class="dialog message">Warning: You could not delete any selected items from this shelf.</div>
+                      <div class="dialog message">Warning: You could not delete any of the selected items from this list.</div>
                 [% END %]
                 [% IF ( paramsloo.somedeleted) %]
-                      <div class="dialog message">Warning: You could not delete all selected items from this shelf.</div>
+                      <div class="dialog message">Warning: You could not delete all selected items from this list.</div>
                 [% END %]
                 [% IF ( paramsloo.modifyfailure) %]
                       <div class="dialog message">ERROR: List could not be modified.</div>
