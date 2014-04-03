@@ -1,3 +1,5 @@
+<script type="text/javascript">
+//<![CDATA[
 function mergeAuth(authid, summary) {
     var alreadySelected = $.cookie('auth_to_merge');
     if (alreadySelected !== null) {
@@ -36,3 +38,5 @@ $(document).ready(function () {
         mergeAuth($(this).parents('tr').attr('data-authid'), $(this).parents('tr').find('div.authorizedheading').text());
     });
 });
+//]]>
+</script>
