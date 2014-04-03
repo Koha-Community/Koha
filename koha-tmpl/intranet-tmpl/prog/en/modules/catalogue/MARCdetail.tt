@@ -78,10 +78,9 @@ function Changefwk(FwkList) {
                 <div class="tag_title">
                     <span class="tag_num">[% tab0X.tag %]</span>
 		    [% IF ( tab0X.tag_ind ) %]
-		      <span class="tag_ind1">[% tab0X.tag_ind.substr(0, 1) %]</span>
-		      <span class="tag_ind2">[% tab0X.tag_ind.substr(1, 1) %]</span>
+		      <span class="tag_ind1">[% tab0X.tag_ind.substr(0, 1) %]</span><span class="tag_ind2">[% tab0X.tag_ind.substr(1, 1) %]</span>
 		    [% END %]
-                    [% IF (tab0X.tag_desc) %]<span class="tag_desc">[% tab0X.tag_desc %]</span>[% END %]
+                    [% IF (tab0X.tag_desc) %]<span class="dashwrapper"> -</span> <span class="tag_desc">[% tab0X.tag_desc %]</span>[% END %]
                 </div>
             [% ELSE %]
                 <div class="tag">
@@ -89,7 +88,7 @@ function Changefwk(FwkList) {
             [% FOREACH subfiel IN tab0X.subfield %]
                 <p class="subfield_line">
                     <span class="subfield-label">&nbsp;
-                    [% UNLESS ( subfiel.hide_marc ) %][% subfiel.marc_subfield %][% END %]
+                    [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield %]</b>[% END %]
                     <span class="desc" title="[% subfiel.long_desc %]">[% subfiel.short_desc %]</span></span>
                     [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value |html %]</a>[% ELSE %][% subfiel.marc_value |html %][% END %]
                     [% IF ( subfiel.link ) %]
