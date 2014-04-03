@@ -34,8 +34,15 @@ BEGIN {
 }
 
 my $input = new CGI;
+my $base;
 
-my $base        = C4::Context->config('intranetdir');
+if ( C4::Context->config('supportdir') ) {
+     $base = C4::Context->config('supportdir');
+}
+else {
+     $base        = "/usr/share/koha/bin";
+}
+
 my $CONFIG_NAME = $ENV{'KOHA_CONF'};
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -68,8 +75,8 @@ if ( $mode eq 'job_add' ) {
     my $format = $input->param('format');
     my $email  = $input->param('email');
     my $command =
-        "EXPORT KOHA_CONF=\"$CONFIG_NAME\"; " . $base
-      . "/tools/runreport.pl $report $format $email";
+        "export KOHA_CONF=\"$CONFIG_NAME\"; " . $base
+      . "/cronjobs/runreport.pl $report --format=$format --to=$email";
 
     if ($recurring) {
         my $frequency = $input->param('frequency');
