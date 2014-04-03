@@ -164,9 +164,9 @@ if ($op eq 'add_form') {
         }
         $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
         $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
-	}
+    }
     print $input->redirect("/cgi-bin/koha/admin/marctagstructure.pl?searchfield=$tagfield&frameworkcode=$frameworkcode");
-	exit;
+    exit;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB

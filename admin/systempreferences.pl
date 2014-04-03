@@ -357,7 +357,7 @@ if ( $op eq 'add_form' ) {
             logaction( 'SYSTEMPREFERENCE', 'ADD', undef, $input->param('variable') . " | " . $value );
         }
     }
-    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=systempreferences.pl?tab=\"></html>";
+    print $input->redirect("/cgi-bin/koha/admin/systempreferences.pl?tab=");
     exit;
 ################## DELETE_CONFIRM ##################################
     # called by default form, used to confirm deletion of data in DB

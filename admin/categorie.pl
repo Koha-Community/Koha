@@ -267,8 +267,7 @@ elsif ( $op eq 'add_validate' ) {
         C4::Form::MessagingPreferences::handle_form_action( $input,
             { categorycode => $input->param('categorycode') }, $template );
     }
-
-    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=categorie.pl\"></html>";
+    print $input->redirect("/cgi-bin/koha/admin/categorie.pl");
     exit;
 
     # END $OP eq ADD_VALIDATE
@@ -305,7 +304,7 @@ elsif ( $op eq 'delete_confirmed' ) {
     $sth->execute($categorycode);
     $sth->finish;
 
-    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=categorie.pl\"></html>";
+    print $input->redirect("/cgi-bin/koha/admin/categorie.pl");
     exit;
 
     # END $OP eq DELETE_CONFIRMED

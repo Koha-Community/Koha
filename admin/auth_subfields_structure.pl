@@ -348,8 +348,8 @@ if ($op eq 'add_form') {
 			}
 		}
 	}
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_subfields_structure.pl?tagfield=$tagfield&authtypecode=$authtypecode\"></html>";
-	exit;
+    print $input->redirect("/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=$tagfield&amp;authtypecode=$authtypecode");
+    exit;
 
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
@@ -373,9 +373,8 @@ if ($op eq 'add_form') {
 		my $sth=$dbh->prepare("delete from auth_subfield_structure where tagfield=? and tagsubfield=? and authtypecode=?");
 		$sth->execute($tagfield,$tagsubfield,$authtypecode);
 	}
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_subfields_structure.pl?tagfield=$tagfield&authtypecode=$authtypecode\"></html>";
-	exit;
-	$template->param(tagfield => $tagfield);
+    print $input->redirect("/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=$tagfield&amp;authtypecode=$authtypecode");
+    exit;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT

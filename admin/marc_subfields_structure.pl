@@ -428,8 +428,7 @@ elsif ( $op eq 'add_validate' ) {
     $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
 
-    print
-"Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield&frameworkcode=$frameworkcode\"></html>";
+    print $input->redirect("/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=$tagfield&amp;frameworkcode=$frameworkcode");
     exit;
 
     # END $OP eq ADD_VALIDATE
@@ -471,10 +470,8 @@ elsif ( $op eq 'delete_confirmed' ) {
     }
     $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
-    print
-"Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield&frameworkcode=$frameworkcode\"></html>";
+    print $input->redirect("/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=$tagfield&amp;frameworkcode=$frameworkcode");
     exit;
-    $template->param( tagfield => $tagfield );
 
     # END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################

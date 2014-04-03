@@ -116,8 +116,7 @@ elsif ( $op eq 'add_validate' ) {
     # We could get a list of all frameworks and do them one-by-one, or zap
     # everything.
     $cache->flush_all();
-    print
-"Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=koha2marclinks.pl?tablename=$tablename\"></html>";
+    print $input->redirect("/cgi-bin/koha/admin/koha2marclinks.pl?tablename=$tablename");
     exit;
 
     # END $OP eq ADD_VALIDATE

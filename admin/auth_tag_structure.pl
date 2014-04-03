@@ -158,7 +158,7 @@ if ($op eq 'add_form') {
            );
         }
     }
-    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_tag_structure.pl?searchfield=".$input->param('tagfield')."&authtypecode=$authtypecode\">";
+    print $input->redirect("/cgi-bin/koha/admin/auth_tag_structure.pl?searchfield=$tagfield&amp;authtypecode=$authtypecode");
     exit;
                                                     # END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
@@ -181,7 +181,8 @@ if ($op eq 'add_form') {
         my $sth = $dbh->prepare("delete from auth_subfield_structure where tagfield=? and authtypecode=?");
         $sth->execute($searchfield,$authtypecode);
     }
-    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_tag_structure.pl?searchfield=".$input->param('tagfield')."&authtypecode=$authtypecode\">";
+    my $tagfield = $input->param('tagfield');
+    print $input->redirect("/cgi-bin/koha/admin/auth_tag_structure.pl?searchfield=$tagfield&amp;authtypecode=$authtypecode");
     exit;
                                                     # END $OP eq DELETE_CONFIRMED
 ################## ITEMTYPE_CREATE ##################################

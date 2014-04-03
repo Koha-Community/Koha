@@ -88,8 +88,8 @@ if ($op eq 'del') {
     # If it's ok to delete the subscription, we do so
     if ($issueconfirmed eq "1") {
 		&DelSubscription($subscriptionid);
-		print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=serials-home.pl\"></html>";
-		exit;
+        print $query->redirect("/cgi-bin/koha/serials/serials-home.pl");
+        exit;
     }
 }
 my $hasRouting = check_routing($subscriptionid);

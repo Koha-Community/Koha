@@ -162,7 +162,7 @@ if ($op eq 'add_form') {
                 }
             }
             $sth->finish;
-            print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$new_category."&offset=$offset\"></html>";
+            print $input->redirect("/cgi-bin/koha/admin/authorised_values.pl?searchfield=$new_category&amp;offset=$offset");
             exit;
         }
     }
@@ -192,8 +192,9 @@ if ($op eq 'add_form') {
                     $sth->execute($id, $branchcode);
                 }
             }
-    	    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$input->param('category')."&offset=$offset\"></html>";
-    	    exit;
+            my $category = $input->param('category');
+            print $input->redirect("/cgi-bin/koha/admin/authorised_values.pl?searchfield=$category&amp;offset=$offset");
+            exit;
         }
     }
     if ( $duplicate_entry ) {       
@@ -224,8 +225,8 @@ if ($op eq 'add_form') {
 	my $id = $input->param('id');
 	my $sth=$dbh->prepare("delete from authorised_values where id=?");
 	$sth->execute($id);
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=$searchfield&offset=$offset\"></html>";
-	exit;
+    print $input->redirect("/cgi-bin/koha/admin/authorised_values.pl?searchfield=$searchfield&amp;offset=$offset");
+    exit;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
