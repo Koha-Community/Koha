@@ -88,12 +88,41 @@ function displayMoreConstraint(numlayer){
                 <li><label for="mandatory[% loo.row %]">Mandatory: </label>[% loo.mandatory %]&nbsp;</li>
                 <li><label for="liblibrarian[% loo.row %]">Text for librarian: </label><input id="liblibrarian[% loo.row %]" type="text" name="liblibrarian" value="[% loo.liblibrarian %]" size="40" maxlength="80" /></li>
                 <li><label for="libopac[% loo.row %]">Text for OPAC: </label><input type="text" id="libopac[% loo.row %]" name="libopac" value="[% loo.libopac %]" size="40" maxlength="80" /></li>
-                <li><label for="tab[% loo.row %]">Managed in tab: </label>[% loo.tab %] (ignore means that the subfield does not display in the record editor)</li>
+                <li><label for="tab[% loo.row %]">Managed in tab: </label>
+                    <select name="tab" tabindex="" size="1" id="[% loo.tab.id %]">
+                        [%- IF ( loo.tab.default ==  -1 ) -%]
+                        <option value="-1" selected="selected">ignore</option>
+                        [%- ELSE -%]
+                        <option value="-1">ignore</option>
+                        [%- END -%]
+                    [%- FOREACH t IN [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'] -%]
+                        [%- IF ( loo.tab.default ==  t ) -%]
+                        <option value="[%- t -%]" selected="selected">[%- t -%]</option>
+                        [%- ELSE -%]
+                        <option value="[%- t -%]">[%- t -%]</option>
+                        [%- END -%]
+                    [%- END -%]
+                    </select>
+                    (ignore means that the subfield does not display in the record editor)
+                </li>
                 <li>
                     <fieldset>
                         <legend>Display</legend>
                         <ol>
-                            <li><label for="ohidden[% loo.row %]">Select to display or not:</label>[% loo.ohidden %]  </li>
+                            <li><label for="ohidden[% loo.row %]">Select to display or not:</label>
+                                <select name="ohidden" size="1" id="[% loo.ohidden.id %]">
+                                    [%- IF ( loo.ohidden.default ==  0 ) -%]
+                                    <option value= "0" selected="selected">Show all</option>
+                                    <option value="-5">Hide all</option>
+                                    [%- ELSIF ( loo.ohidden.default == -5 ) -%]
+                                    <option value= "0">Show all</option>
+                                    <option value="-5" selected="selected">Hide all</option>
+                                    [%- ELSE -%]
+                                    <option value= "0">Show all</option>
+                                    <option value="-5">Hide all</option>
+                                    [%- END -%]
+                                </select>
+                            </li>
                             <!-- <li><label for="ihidden[% loo.row %]">Intranet:</label>[% loo.ihidden %] </li> -->
                             <!-- <li><label for="ehidden[% loo.row %]">Editor:</label>[% loo.ehidden %] (see online help)</li> -->
                         </ol>
