@@ -253,10 +253,13 @@ sub gettemplate {
 #        lang      => $lang
 #    );
 
-    # Bidirectionality
+    # Bidirectionality, must be sent even if is the only language
     my $current_lang = regex_lang_subtags($lang);
     my $bidi;
     $bidi = get_bidi($current_lang->{script}) if $current_lang->{script};
+    $template->param(
+            bidi                 => $bidi,
+    );
     # Languages
     my $languages_loop = getTranslatedLanguages($interface,$theme,$lang);
     my $num_languages_enabled = 0;
@@ -265,11 +268,11 @@ sub gettemplate {
             $num_languages_enabled++ if $sublang->{enabled};
          }
     }
+    my $one_language_enabled = ($num_languages_enabled <= 1) ? 1 : 0; # deal with zero enabled langs as well
     $template->param(
             languages_loop       => $languages_loop,
-            bidi                 => $bidi,
-            one_language_enabled => ($num_languages_enabled <= 1) ? 1 : 0, # deal with zero enabled langs as well
-    ) unless @$languages_loop<2;
+            one_language_enabled => $one_language_enabled,
+    ) unless $one_language_enabled;
 
     return $template;
 }
