@@ -167,7 +167,7 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
         ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $params->{'frameworkcode'} );
         # get the price if there is one.
         $listprice = GetMarcPrice($marcrecord, $marcflavour);
-        SetImportRecordStatus($params->{'breedingid'}, 'imported');
+        #SetImportRecordStatus($params->{'breedingid'}, 'imported');
 }
 
 
