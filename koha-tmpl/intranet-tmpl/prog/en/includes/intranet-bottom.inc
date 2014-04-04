@@ -9,7 +9,7 @@
 
             [% IF ( languages_loo.group_enabled ) %]
             [% IF ( languages_loo.plural ) %]
-            <li class="dropdown"><a class="dropdown-toggle dropup" data-toggle="dropdown" id="show[% languages_loo.rfc4646_subtag %]" href="#">[% languages_loo.native_description %] ([% languages_loo.rfc4646_subtag %]) <span class="caret"></span></a>
+            <li class="dropdown"><a class="dropdown-toggle dropup" data-toggle="dropdown" id="show[% languages_loo.rfc4646_subtag %]" href="#">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]  <span class="caret"></span></a>
             <ul id="sub[% languages_loo.rfc4646_subtag %]" class="dropdown-menu">
             [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]
 		[% IF ( sublanguages_loo.enabled ) %]
