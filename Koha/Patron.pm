@@ -30,6 +30,7 @@ use Koha::Holds;
 use Koha::Issues;
 use Koha::OldIssues;
 use Koha::Patron::Categories;
+use Koha::Patron::HouseboundProfiles;
 use Koha::Patron::Images;
 use Koha::Patrons;
 use Koha::Virtualshelves;
@@ -121,6 +122,18 @@ sub guarantees {
     my ( $self ) = @_;
 
     return Koha::Patrons->search( { guarantorid => $self->borrowernumber } );
+}
+
+=head3 housebound_profile
+
+Returns the HouseboundProfile associated with this patron.
+
+=cut
+
+sub housebound_profile {
+    my ( $self ) = @_;
+
+    return Koha::Patron::HouseboundProfiles->find($self->borrowernumber);
 }
 
 =head3 siblings

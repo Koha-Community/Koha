@@ -37,6 +37,38 @@ Koha::Patron - Koha Patron Object class
 
 =cut
 
+=head3 housebound_choosers
+
+Returns all Patrons which are Housebound choosers.
+
+=cut
+
+sub housebound_choosers {
+    my ( $self ) = @_;
+    my $cho = $self->_resultset->search
+        ->search_related('borrower_attributes', {
+            code => 'HSBND',
+            attribute => 'CHO',
+        })->search_related('borrowernumber');
+    return Koha::Patrons->_new_from_dbic($cho);
+}
+
+=head3 housebound_deliverers
+
+Returns all Patrons which are Housebound deliverers.
+
+=cut
+
+sub housebound_deliverers {
+    my ( $self ) = @_;
+    my $del = $self->_resultset->search
+        ->search_related('borrower_attributes', {
+            code => 'HSBND',
+            attribute => 'DEL',
+        })->search_related('borrowernumber');
+    return Koha::Patrons->_new_from_dbic($del);
+}
+
 =head3 type
 
 =cut
