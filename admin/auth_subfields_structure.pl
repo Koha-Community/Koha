@@ -140,41 +140,14 @@ if ($op eq 'add_form') {
 
 		my %row_data;  # get a fresh hash for the row data
         $row_data{defaultvalue} = $data->{defaultvalue};
-		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
-					-id=>"tab$i",
-                                        -values =>
-                                        [ '-1', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10' ],
-                                        -labels => {
-                                            '-1' => 'ignore',
-                                            '0'  => '0',
-                                            '1'  => '1',
-                                            '2'  => '2',
-                                            '3'  => '3',
-                                            '4'  => '4',
-                                            '5'  => '5',
-                                            '6'  => '6',
-                                            '7'  => '7',
-                                            '8'  => '8',
-                                            '9'  => '9',
-                                        },
-					-default=>$data->{'tab'},
-					-size=>1,
-		 			-tabindex=>'',
-					-multiple=>0,
-					);
-		$row_data{ohidden} = CGI::scrolling_list(-name=>'ohidden',
-					-id=>"ohidden$i",
-					#-values=>['0','1','2'],
-					#-labels => {'0'=>'Show','1'=>'Show Collapsed',
-					#				'2' =>'Hide',
-					#				},
-					-values=>['0','-5'],
-					-labels => {'0'=>'Show All','-5'=>'Hide All',},
-					-default=>$data->{'hidden'},
-					#-default=>"-5",
-					-size=>1,
-					-multiple=>0,
-					);
+        $row_data{tab} = {
+                    id      => "tab$i",
+                    default => $data->{'tab'},
+                    };
+        $row_data{ohidden} = {
+                    id      => "ohidden$i",
+                    default => $data->{'hidden'}
+                    };
 		#$row_data{ihidden} = CGI::scrolling_list(-name=>'ihidden',
 		#			-id=>"ihidden$i",
 		#			-values=>['0','1','2'],
