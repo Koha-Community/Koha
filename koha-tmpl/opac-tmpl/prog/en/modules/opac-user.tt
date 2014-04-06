@@ -193,7 +193,7 @@ var MSG_CONFIRM_RESUME_HOLDS  = _("Are you sure you want to resume all suspended
 
 [% IF ( JacketImages ) %]<td class="jacketcell">
 
-[% IF ( OPACAmazonCoverImages ) %][% IF ( ISSUE.normalized_isbn ) %]<a href="http://www.amazon.com/gp/reader/[% ISSUE.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link" title="View at Amazon.com"><img border="0" src="http://images.amazon.com/images/P/[% ISSUE.normalized_isbn %].01.THUMBZZZ.jpg" alt="Cover Image" /></a>[% ELSE %]<a href="#"><span class="no-image">No cover image available</span></a>[% END %][% END %]
+[% IF ( OPACAmazonCoverImages ) %][% IF ( ISSUE.normalized_isbn ) %]<a href="http://www.amazon.com/gp/reader/[% ISSUE.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link" title="View at Amazon.com"><img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% ISSUE.normalized_isbn %].01.THUMBZZZ.jpg" alt="Cover Image" /></a>[% ELSE %]<a href="#"><span class="no-image">No cover image available</span></a>[% END %][% END %]
 
 [% IF ( GoogleJackets ) %][% IF ( ISSUE.normalized_isbn ) %]<div style="display:block;" title="Click to view in Google Books" class="[% ISSUE.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<a href="http://books.google.com/books?q=[% ISSUE.title |url %]"><span class="no-image">No cover image available</span></a>[% END %][% END %]
 
@@ -348,7 +348,7 @@ var MSG_CONFIRM_RESUME_HOLDS  = _("Are you sure you want to resume all suspended
 <tr>
 [% IF ( JacketImages ) %]<td class="jacketcell">
 
-[% IF ( OPACAmazonCoverImages ) %][% IF ( OVERDUE.normalized_isbn ) %]<a href="http://www.amazon.com/gp/reader/[% OVERDUE.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link" title="View at Amazon.com"><img src="http://images.amazon.com/images/P/[% OVERDUE.normalized_isbn %].01.THUMBZZZ.jpg" alt="" class="thumbnail" /></a>[% ELSE %]<a href="#"><span class="no-image">No cover image available</span></a>[% END %][% END %]
+[% IF ( OPACAmazonCoverImages ) %][% IF ( OVERDUE.normalized_isbn ) %]<a href="http://www.amazon.com/gp/reader/[% OVERDUE.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link" title="View at Amazon.com"><img src="https://images-na.ssl-images-amazon.com/images/P/[% ISSUE.normalized_isbn %].01.THUMBZZZ.jpg" alt="" class="thumbnail" /></a>[% ELSE %]<a href="#"><span class="no-image">No cover image available</span></a>[% END %][% END %]
 
 [% IF ( GoogleJackets ) %][% IF ( OVERDUE.normalized_isbn ) %]<div style="display:block;" title="Click to view in Google Books" class="[% OVERDUE.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<a href="http://books.google.com/books?q=[% OVERDUE.title |url %]"><span class="no-image">No cover image available</span></a>[% END %][% END %]
 
