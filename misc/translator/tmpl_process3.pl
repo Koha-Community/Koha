@@ -348,7 +348,7 @@ if ($action eq 'create')  {
         close INPUT;
         close OUTPUT;
     }
-    $st = system("msgmerge -U ".($quiet?'-q':'')." -s $str_file $tmpfile2");
+    $st = system("msgmerge ".($quiet?'-q':'')." -s $str_file $tmpfile2 -o - | msgattrib --no-obsolete -o $str_file");
     } else {
     error_normal "Text extraction failed: $xgettext: $!\n", undef;
     error_additional "Will not run msgmerge\n", undef;
@@ -377,10 +377,10 @@ if ($action eq 'create')  {
         if ( @filenames ) {
             my ($tmph3, $tmpfile3) = tmpnam();
             $st = system("msgcat $str_file $tmpfile2 > $tmpfile3");
-            $st = system("msgmerge -U ".($quiet?'-q':'')." -s $str_file $tmpfile3")
+            $st = system("msgmerge ".($quiet?'-q':'')." -s $str_file $tmpfile3 -o - | msgattrib --no-obsolete -o $str_file")
                 unless $st;
         } else {
-            $st = system("msgmerge -U ".($quiet?'-q':'')." -s $str_file $tmpfile2");
+            $st = system("msgmerge ".($quiet?'-q':'')." -s $str_file $tmpfile2 -o - | msgattrib --no-obsolete -o $str_file");
         }
     } else {
         error_normal "Text extraction failed: $xgettext: $!\n", undef;
@@ -527,13 +527,13 @@ Anchors are represented by an <AI<n>> notation.
 The meaning of this non-standard notation might not be obvious.
 
 The create action calls xgettext.pl to do the actual work;
-the update action calls xgettext.pl and msgmerge(1) to do the
-actual work.
+the update action calls xgettext.pl, msgmerge(1) and msgattrib(1)
+to do the actual work.
 
 =head1 BUGS
 
-xgettext.pl must be present in the current directory; the
-msgmerge(1) command must also be present in the search path.
+xgettext.pl must be present in the current directory; both
+msgmerge(1) and msgattrib(1) must also be present in the search path.
 The script currently does not check carefully whether these
 dependent commands are present.
 
