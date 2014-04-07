@@ -277,6 +277,8 @@ sub SearchAuthorities {
             next;
         }
 
+        SetUTF8Flag( $authrecord );
+
         my $authid=$authrecord->field('001')->data();
         my %newline;
         $newline{authid} = $authid;

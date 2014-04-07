@@ -23,7 +23,7 @@ use strict;
 use warnings;
 use Carp;
 
-use Encode qw( decode );
+use Encode qw( decode is_utf8 );
 use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
@@ -2470,11 +2470,9 @@ sub TransformHtmlToMarc {
     foreach my $param_name ( keys %$cgi_params ) {
         if ( $param_name =~ /^tag_/ ) {
             my $param_value = $cgi_params->{$param_name};
-            if ( $param_value = Encode::decode('UTF-8', $param_value) ) {
-                $cgi_params->{$param_name} = $param_value;
+            unless ( Encode::is_utf8( $param_value ) ) {
+                $cgi_params->{$param_name} = Encode::decode('UTF-8', $param_value );
             }
-
-            # FIXME - need to do something if string is not valid UTF-8
         }
     }
 
