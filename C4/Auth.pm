@@ -34,6 +34,7 @@ use C4::VirtualShelves;
 use Koha::AuthUtils qw(hash_password);
 use POSIX qw/strftime/;
 use List::MoreUtils qw/ any /;
+use Encode qw( encode is_utf8);
 
 # use utf8;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $caslogout $shib $shib_login);
@@ -1649,6 +1650,9 @@ sub checkpw {
 
 sub checkpw_internal {
     my ( $dbh, $userid, $password ) = @_;
+
+    $password = Encode::encode( 'UTF-8', $password )
+      if Encode::is_utf8($password);
 
     if ( $userid && $userid eq C4::Context->config('user') ) {
         if ( $password && $password eq C4::Context->config('pass') ) {

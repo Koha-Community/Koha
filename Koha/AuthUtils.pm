@@ -19,6 +19,7 @@ package Koha::AuthUtils;
 
 use Modern::Perl;
 use Crypt::Eksblowfish::Bcrypt qw(bcrypt en_base64);
+use Encode qw( encode is_utf8 );
 use Fcntl qw/O_RDONLY/; # O_RDONLY is used in generate_salt
 
 use base 'Exporter';
@@ -51,6 +52,8 @@ user passwords.
 # Using Bcrypt method for hashing. This can be changed to something else in future, if needed.
 sub hash_password {
     my $password = shift;
+    $password = Encode::encode( 'UTF-8', $password )
+      if Encode::is_utf8($password);
 
     # Generate a salt if one is not passed
     my $settings = shift;
