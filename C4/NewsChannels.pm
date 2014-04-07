@@ -61,9 +61,9 @@ sub add_opac_new {
     if ($href_entry) {
         my @fields = keys %{$href_entry};
         my @values = values %{$href_entry};
-        my $field_string = join ',',@fields;
+        my $field_string = join ',', @fields;
         $field_string = $field_string // q{};
-        my $values_string = '?,' x ($#fields) . '?';
+        my $values_string = join(',', map { '?' } @fields);
         my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare("INSERT INTO opac_news ( $field_string ) VALUES ( $values_string )");
         $sth->execute(@values);
