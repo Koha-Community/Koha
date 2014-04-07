@@ -22,7 +22,7 @@ use VerboseWarnings qw( :warn :die );
 
 ###############################################################################
 
-use vars qw( $in_dir @filenames $str_file $out_dir $quiet );
+use vars qw( @in_dirs @filenames $str_file $out_dir $quiet );
 use vars qw( @excludes $exclude_regex );
 use vars qw( $recursive_p );
 use vars qw( $pedantic_p );
@@ -185,7 +185,9 @@ Usage: $0 create [OPTION]
   or:  $0 --help
 Create or update PO files from templates, or install translated templates.
 
-  -i, --input=SOURCE          Get or update strings from SOURCE directory.
+  -i, --input=SOURCE          Get or update strings from SOURCE directory(s).
+                              On create or update can have multiple values.
+                              On install only one value.
   -o, --outputdir=DIRECTORY   Install translation(s) to specified DIRECTORY
       --pedantic-warnings     Issue warnings even for detected problems
                               which are likely to be harmless
@@ -199,10 +201,10 @@ Create or update PO files from templates, or install translated templates.
   -q, --quiet                 no output to screen (except for errors)
 
 The -o option is ignored for the "create" and "update" actions.
-Try `perldoc $0 for perhaps more information.
+Try `perldoc $0` for perhaps more information.
 EOF
     exit($exitcode);
-}#`
+}
 
 ###############################################################################
 
@@ -217,7 +219,7 @@ sub usage_error (;$) {
 ###############################################################################
 
 GetOptions(
-    'input|i=s'             => \$in_dir,
+    'input|i=s'             => \@in_dirs,
     'filename|f=s'          => \@filenames,
     'outputdir|o=s'         => \$out_dir,
     'recursive|r'           => \$recursive_p,
@@ -239,15 +241,17 @@ $SIG{__WARN__} = sub {
 
 my $action = shift or usage_error('You must specify an ACTION.');
 usage_error('You must at least specify input and string list filenames.')
-    if !$in_dir || !defined $str_file;
+    if !@in_dirs || !defined $str_file;
 
 # Type match defaults to *.tt plus *.inc if not specified
 $type = "tt|inc|xsl|xml|def" if !defined($type);
 
 # Check the inputs for being directories
-usage_error("$in_dir: Input must be a directory.\n"
-    . "(Symbolic links are not supported at the moment)")
-    unless -d $in_dir;
+for my $in_dir ( @in_dirs ) {
+    usage_error("$in_dir: Input must be a directory.\n"
+        . "(Symbolic links are not supported at the moment)")
+        unless -d $in_dir;
+}
 
 # Generates the global exclude regular expression
 $exclude_regex =  '(?:'.join('|', @excludes).')' if @excludes;
@@ -255,13 +259,15 @@ $exclude_regex =  '(?:'.join('|', @excludes).')' if @excludes;
 my @in_files;
 # Generate the list of input files if a directory is specified
 # input is a directory, generates list of files to process
-$in_dir =~ s/\/$//; # strips the trailing / if any
 
 for my $fn ( @filenames ) {
     die "You cannot specify input files and directories at the same time.\n"
         if -d $fn;
 }
-@in_files = listfiles($in_dir, $type, $action, \@filenames);
+for my $in_dir ( @in_dirs ) {
+    $in_dir =~ s/\/$//; # strips the trailing / if any
+    @in_files = ( @in_files, listfiles($in_dir, $type, $action, \@filenames) );
+}
 
 # restores the string list from file
 $href = Locale::PO->load_file_ashash($str_file);
@@ -394,6 +400,12 @@ if ($action eq 'create')  {
     usage_error("You must specify an output directory when using the install method.");
     }
     
+    if ( scalar @in_dirs > 1 ) {
+    usage_error("You must specify only one input directory when using the install method.");
+    }
+
+    my $in_dir = shift @in_dirs;
+
     if ($in_dir eq $out_dir) {
     warn "You must specify a different input and output directory.\n";
     exit -1;
