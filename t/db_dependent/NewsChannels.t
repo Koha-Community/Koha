@@ -4,14 +4,6 @@ use Modern::Perl;
 use C4::Dates qw(format_date);
 use C4::Branch qw(GetBranchName);
 use Test::More tests => 10;
-use Readonly;
-
-Readonly my $F1 => 1;
-Readonly my $F2 => 2;
-Readonly my $F3 => 3;
-Readonly my $F4 => 4;
-Readonly my $F5 => 5;
-Readonly my $F6 => 6;
 
 BEGIN {
     use_ok('C4::NewsChannels');
@@ -94,26 +86,44 @@ $expirationdate1 = format_date($expirationdate1);
 $timestamp2      = format_date($timestamp2);
 $expirationdate2 = format_date($expirationdate2);
 
-my $hashref_check = get_opac_new($idnew1);
-my $failure       = 0;
-if ( $hashref_check->{title}          ne $title1 )          { $failure = $F1; }
-if ( $hashref_check->{new}            ne $new1 )            { $failure = $F2; }
-if ( $hashref_check->{lang}           ne $lang1 )           { $failure = $F3; }
-if ( $hashref_check->{expirationdate} ne $expirationdate1 ) { $failure = $F4; }
-if ( $hashref_check->{timestamp}      ne $timestamp1 )      { $failure = $F5; }
-if ( $hashref_check->{number}         ne $number1 )         { $failure = $F6; }
-ok( $failure == 0, "Successfully tested get_opac_new id1 ($failure)!" );
+is_deeply(
+    get_opac_new($idnew1),
+    {
+        title          => $title1,
+        new            => $new1,
+        lang           => $lang1,
+        expirationdate => $expirationdate1,
+        timestamp      => $timestamp1,
+        number         => $number1,
+        idnew          => $idnew1,
+        branchname     => "$addbra branch",
+        branchcode     => $addbra,
+        # this represents $lang => 1 in the hash
+        # that's returned... which seems a little
+        # redundant given that there's a perfectly
+        # good 'lang' key in the hash
+        ''             => 1,
+    },
+    'got back expected news item via get_opac_new - ID 1'
+);
 
 # Test get_opac_new (single news item)
-$hashref_check = get_opac_new($idnew2);
-$failure       = 0;
-if ( $hashref_check->{title}          ne $title2 )          { $failure = $F1; }
-if ( $hashref_check->{new}            ne $new2 )            { $failure = $F2; }
-if ( $hashref_check->{lang}           ne $lang2 )           { $failure = $F3; }
-if ( $hashref_check->{expirationdate} ne $expirationdate2 ) { $failure = $F4; }
-if ( $hashref_check->{timestamp}      ne $timestamp2 )      { $failure = $F5; }
-if ( $hashref_check->{number}         ne $number2 )         { $failure = $F6; }
-ok( $failure == 0, "Successfully tested get_opac_new id2 ($failure)!" );
+is_deeply(
+    get_opac_new($idnew2),
+    {  
+        title          => $title2,
+        new            => $new2,
+        lang           => $lang2,
+        expirationdate => $expirationdate2,
+        timestamp      => $timestamp2,
+        number         => $number2,
+        idnew          => $idnew2,
+        branchname     => "$addbra branch",
+        branchcode     => $addbra,
+        ''             => 1,
+    },
+    'got back expected news item via get_opac_new - ID 2'
+);
 
 # Test get_opac_news (multiple news items)
 my ( $opac_news_count, $arrayref_opac_news ) = get_opac_news( 0, q{}, 'LIB1' );
