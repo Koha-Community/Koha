@@ -47,6 +47,7 @@ my $override_holds = $cgi->param('override_holds');
 
 my ( $item, $issue, $borrower );
 my $error = q{};
+my $soonest_renew_date;
 
 if ($barcode) {
     $item = $schema->resultset("Item")->single( { barcode => $barcode } );
@@ -75,6 +76,12 @@ if ($barcode) {
                     }
                 }
 
+                if ( $error && ($error eq 'too_soon') ) {
+                    $soonest_renew_date = C4::Circulation::GetSoonestRenewDate(
+                        $borrower->borrowernumber(),
+                        $item->itemnumber(),
+                    );
+                }
                 if ($can_renew) {
                     my $date_due = AddRenewal( undef, $item->itemnumber() );
                     $template->param( date_due => $date_due );
@@ -96,7 +103,8 @@ if ($barcode) {
         item     => $item,
         issue    => $issue,
         borrower => $borrower,
-        error    => $error
+        error    => $error,
+        soonestrenewdate => $soonest_renew_date,
     );
 }
 

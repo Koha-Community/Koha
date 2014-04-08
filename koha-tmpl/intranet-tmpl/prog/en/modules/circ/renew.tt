@@ -54,6 +54,18 @@
                                     </form>
                                 [% END %]
 
+                            [% ELSIF error == "too_soon" %]
+
+                                <p>[% item.biblio.title | $EncodeUTF8 %] [% item.biblioitem.subtitle | $EncodeUTF8 %] ( [% item.barcode %] ) cannot be renewed before [% soonestrenewdate | $KohaDates %]. </p>
+
+                                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
+                                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
+                                        <input type="hidden" name="barcode" value="[% item.barcode %]"/>
+                                        <input type="hidden" name="override_limit" value="1" />
+                                        <input type="submit" class="approve" value="Override and renew" />
+                                    </form>
+                                [% END %]
+
                             [% ELSIF error == "on_reserve" %]
 
                                 <p>This item is on hold for another patron.</p>
