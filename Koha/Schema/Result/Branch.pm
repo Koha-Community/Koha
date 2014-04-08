@@ -413,6 +413,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 opac_news
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::OpacNews>
+
+=cut
+
+__PACKAGE__->has_many(
+  "opac_news",
+  "Koha::Schema::Result::OpacNews",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 reserves
 
 Type: has_many
@@ -469,8 +484,8 @@ Composing rels: L</branchrelations> -> categorycode
 __PACKAGE__->many_to_many("categorycodes", "branchrelations", "categorycode");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-31 16:31:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PKoXMUUg0NUf/xVDBkPOqQ
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-04-08 22:40:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1RVlM6TXiG4B7szUQSN64Q
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
