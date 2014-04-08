@@ -99,7 +99,7 @@ sub GetOverDriveToken {
 
     my $cache;
 
-    eval { $cache = Koha::Cache->new() };
+    eval { $cache = Koha::Cache->get_instance() };
 
     my $token;
     $cache and $token = $cache->get_from_cache( "overdrive_token" ) and return $token;
@@ -124,7 +124,9 @@ sub GetOverDriveToken {
     $token = $contents->{'token_type'} . ' ' . $contents->{'access_token'};
 
     # Fudge factor to prevent spurious failures
-    $cache and $cache->set_in_cache( 'overdrive_token', $token, $contents->{'expires_in'} - 5 );
+    $cache
+      and $cache->set_in_cache( 'overdrive_token', $token,
+        { expiry => $contents->{'expires_in'} - 5 } );
 
     return $token;
 }

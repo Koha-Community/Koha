@@ -71,7 +71,7 @@ sub TIESCALAR {
         $self->{'value'} = &{ $self->{'preload'} }( @{ $self->{'arguments'} } );
         if ( defined( $self->{'cache'} ) ) {
             $self->{'cache'}->set_in_cache( $self->{'key'}, $self->{'value'},
-                $self->{'timeout'}, $self->{'cache_type'} . '_cache' );
+                { expiry => $self->{'timeout'} } );
         }
         $self->{'lastupdate'} = time;
     }
@@ -90,9 +90,7 @@ sub FETCH {
     if ( !( $self->{'inprocess'} && defined( $self->{'value'} ) )
         && $self->{'cache'} )
     {
-        $self->{'value'} =
-          $self->{'cache'}
-          ->get_from_cache( $self->{'key'}, $self->{'cache_type'} . '_cache' );
+        $self->{'value'} = $self->{'cache'}->get_from_cache( $self->{'key'} );
         $self->{'lastupdate'} = $now;
     }
 
@@ -106,7 +104,7 @@ sub FETCH {
             $self->{'value'}, $index );
         if ( defined( $self->{'cache'} ) ) {
             $self->{'cache'}->set_in_cache( $self->{'key'}, $self->{'value'},
-                $self->{'timeout'}, $self->{'cache_type'} . '_cache' );
+                { expiry => $self->{'timeout'} } );
         }
         $self->{'lastupdate'} = $now;
     }
@@ -130,9 +128,9 @@ sub STORE {
         && $self->{'allowupdate'}
         && defined( $self->{'cache'} ) )
     {
-        $self->{'cache'}
-          ->set_in_cache( $self->{'key'}, $self->{'value'}, $self->{'timeout'},
-            $self->{'cache_type'} . '_cache' );
+        $self->{'cache'}->set_in_cache( $self->{'key'}, $self->{'value'},
+            { expiry => $self->{'timeout'} },
+        );
     }
 
     return $self->{'value'};
@@ -149,8 +147,7 @@ sub DESTROY {
         && $self->{'unset'}
         && defined( $self->{'cache'} ) )
     {
-        $self->{'cache'}->clear_from_cache( $self->{'key'},
-            $self->{'cache_type'} . '_cache' );
+        $self->{'cache'}->clear_from_cache( $self->{'key'} );
     }
 
     undef $self->{'value'};

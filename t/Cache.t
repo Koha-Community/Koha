@@ -5,7 +5,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 29;
+use Test::More tests => 32;
 
 my $destructorcount = 0;
 
@@ -16,10 +16,10 @@ BEGIN {
 }
 
 SKIP: {
-    my $cache = Koha::Cache->new();
+    my $cache = Koha::Cache->get_instance();
 
-    skip "Cache not enabled", 25
-      unless ( Koha::Cache->is_cache_active() && defined $cache );
+    skip "Cache not enabled", 28
+      unless ( $cache->is_cache_active() && defined $cache );
 
     # test fetching an item that isnt in the cache
     is( $cache->get_from_cache("not in here"),
@@ -134,12 +134,26 @@ SKIP: {
 
     $hash{'key'} = 'value';
     is($myhash->{'key'}, 'value', 'retrieved value after clearing cache');
+
+    # UTF8 testing
+    my $utf8_str = "A Møøse once bit my sister";
+    $cache->set_in_cache('utf8_1', $utf8_str);
+    is($cache->get_from_cache('utf8_1'), $utf8_str, 'Simple 8-bit UTF8 correctly retrieved');
+    $utf8_str = "\x{20ac}"; # €
+    $cache->set_in_cache('utf8_1', $utf8_str);
+    my $utf8_res = $cache->get_from_cache('utf8_1');
+    # This'll ensure that we're getting a unicode string back, rather than
+    # a couple of bytes.
+    is(length($utf8_res), 1, 'UTF8 string length correct');
+    # ...and that it's really the character we intend
+    is(ord($utf8_res), 8364, 'UTF8 string value correct');
 }
 
 END {
   SKIP: {
+        my $cache = Koha::Cache->get_instance();
         skip "Cache not enabled", 1
-          unless ( Koha::Cache->is_cache_active() );
+          unless ( $cache->is_cache_active() );
         is( $destructorcount, 1, 'Destructor run exactly once' );
     }
 }

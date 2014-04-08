@@ -46,11 +46,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $cache_active = Koha::Cache->is_cache_active;
-my ($cache_key, $cache, $json_text);
+my $cache = Koha::Cache->get_instance();
+my $cache_active = $cache->is_cache_active;
+my ($cache_key, $json_text);
 if ($cache_active) {
     $cache_key = "intranet:report:".($report_name ? "name:$report_name" : "id:$report_id");
-    $cache = Koha::Cache->new();
     $json_text = $cache->get_from_cache($cache_key);
 }
 
