@@ -9,7 +9,7 @@ use C4::Items;
 use C4::Members;
 use C4::Reserves;
 
-use Test::More tests => 45;
+use Test::More tests => 48;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -305,10 +305,22 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     $reserveid = C4::Reserves::GetReserveId({ biblionumber => $biblionumber, itemnumber => $itemnumber, borrowernumber => $reserving_borrowernumber});
     CancelReserve({ reserve_id => $reserveid });
 
+    # set policy to require that loans cannot be
+    # renewed until seven days prior to the due date
+    $dbh->do('UPDATE issuingrules SET norenewalbefore = 7');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
+    is( $renewokay, 0, 'Cannot renew, renewal is premature');
+    is( $error, 'too_soon', 'Cannot renew, renewal is premature (returned code is too_soon)');
+    is(
+        GetSoonestRenewDate($renewing_borrowernumber, $itemnumber),
+        $datedue->clone->add(days => -7),
+        'renewals permitted 7 days before due date, as expected',
+    );
+
     diag("Too many renewals");
 
     # set policy to forbid renewals
-    $dbh->do('UPDATE issuingrules SET renewalsallowed = 0');
+    $dbh->do('UPDATE issuingrules SET norenewalbefore = NULL, renewalsallowed = 0');
 
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
     is( $renewokay, 0, 'Cannot renew, 0 renewals allowed');
