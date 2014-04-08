@@ -115,7 +115,7 @@ elsif ($op eq 'add') {
     my $renewalsallowed  = $input->param('renewalsallowed');
     my $renewalperiod    = $input->param('renewalperiod');
     my $norenewalbefore  = $input->param('norenewalbefore');
-    $norenewalbefore = undef if $norenewalbefore == 0;
+    $norenewalbefore = undef if $norenewalbefore eq '0' or $norenewalbefore =~ /^\s*$/;
     my $reservesallowed  = $input->param('reservesallowed');
     $maxissueqty =~ s/\s//g;
     $maxissueqty = undef if $maxissueqty !~ /^\d+/;
