@@ -740,7 +740,7 @@ sub SearchSubscriptions {
         $subscription->{cannotedit} = not can_edit_subscription( $subscription );
         $subscription->{cannotdisplay} =
             ( C4::Context->preference("IndependentBranches") &&
-              C4::Context->userenv &&
+              (!C4::Context->IsSuperLibrarian()) &&
               $subscription->{branchcode} ne C4::Context->userenv->{'branch'} ) ? 1 : 0;
     }
 
