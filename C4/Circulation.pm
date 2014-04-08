@@ -2698,9 +2698,11 @@ has the item on loan.
 
 C<$itemnumber> is the number of the item to renew.
 
-C<$GetSoonestRenewDate> returns the DateTime of the soonest possible renew date,
-based on the value "No renewal before" of the applicable issuing rule. Returns the
-current date if the item can already be renewed.
+C<$GetSoonestRenewDate> returns the DateTime of the soonest possible
+renew date, based on the value "No renewal before" of the applicable
+issuing rule. Returns the current date if the item can already be
+renewed, and returns undefined if the borrower, loan, or item
+cannot be found.
 
 =cut
 
@@ -2709,8 +2711,8 @@ sub GetSoonestRenewDate {
 
     my $dbh = C4::Context->dbh;
 
-    my $item      = GetItem($itemnumber)      or return ( 0, 'no_item' );
-    my $itemissue = GetItemIssue($itemnumber) or return ( 0, 'no_checkout' );
+    my $item      = GetItem($itemnumber)      or return;
+    my $itemissue = GetItemIssue($itemnumber) or return;
 
     $borrowernumber ||= $itemissue->{borrowernumber};
     my $borrower = C4::Members::GetMemberDetails($borrowernumber)
