@@ -4,11 +4,11 @@
 [% INCLUDE 'calendar.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 //<![CDATA[
     var weekdays = new Array(_("Sundays"),_("Mondays"),_("Tuesdays"),_("Wednesdays"),_("Thursdays"),_("Fridays"),_("Saturdays"));
 
-    /* Creates all the structures to deal with all diferents kinds of holidays */
+    /* Creates all the structures to deal with all different kinds of holidays */
     var week_days = new Array();
     var holidays = new Array();
     var holidates = new Array();
@@ -116,15 +116,15 @@
         var dayMonth = month + '/' + day;
         var dateString = year + '/' + month + '/' + day;
         if (exception_holidays[dateString] != null) {
-            return [true, "exception", "Exception: "+exception_holidays[dateString].title];
+            return [true, "exception", _("Exception") + ": "+exception_holidays[dateString].title];
         } else if ( week_days[weekDay] != null ){
-            return [true, "repeatableweekly", "Weekly holdiay: "+week_days[weekDay].title];
+            return [true, "repeatableweekly", _("Weekly holiday") + ": "+week_days[weekDay].title];
         } else if ( day_month_holidays[dayMonth] != null ) {
-            return [true, "repeatableyearly", "Yearly holdiay: "+day_month_holidays[dayMonth].title];
+            return [true, "repeatableyearly", _("Yearly holiday") + ": "+day_month_holidays[dayMonth].title];
         } else if (holidays[dateString] != null) {
-            return [true, "holiday", "Single holiday: "+holidays[dateString].title];
+            return [true, "holiday", _("Single holiday") + ": "+holidays[dateString].title];
         } else {
-            return [true, "normalday", "Normal day"];
+            return [true, "normalday", _("Normal day")];
         }
     }
 
@@ -269,9 +269,10 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
                 <input type="text" id="datecancelrange" name="datecancelrange" size="20" value="[% datecancelrange %]" class="datepicker"/>
             </li>
             <li><label for="showTitle">Title: </label><input type="text" name="showTitle" id="showTitle" size="35" /></li>
-            <!-- showTitle is necessary for exception radio button to work properly --> 
+            <!-- showTitle is necessary for exception radio button to work properly -->
+            <li>
                 <label for="showDescription">Description:</label>
-                <textarea rows="2" cols="40" id="showDescription" name="showDescription"></textarea>    
+                <textarea rows="2" cols="40" id="showDescription" name="showDescription"></textarea>
             </li>
             <li class="radio"><div id="exceptionPosibility" style="position:static">
                 <input type="radio" name="showOperation" id="showOperationExc" value="exception" /> <label for="showOperationExc">Generate an exception for this repeated holiday.</label>
@@ -279,7 +280,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
                 <div class="hint">You can make an exception for this holiday rule. This means that you will be able to say that for a repeatable holiday there is one day which is going to be an exception.</div>
             </div></li>
             <li class="radio"><input type="radio" name="showOperation" id="showOperationExcRange" value="exceptionrange" />
-                <label for="newOperationFieldException">Generate exceptions on a range of dates.</label>
+                <label for="showOperationExcRange">Generate exceptions on a range of dates.</label>
                 <a href="#" class="helptext">[?]</a>
                 <div class="hint">You can make an exception on a range of dates repeated yearly.</div>
             </li>
@@ -304,7 +305,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
             </ol>
             <fieldset class="action">
                 <input type="submit" name="submit" value="Save" />
-                <a href="#" class="cancel" name="cancel2" onclick=" hidePanel('showHoliday');">Cancel</a>
+                <a href="#" class="cancel" onclick=" hidePanel('showHoliday');">Cancel</a>
             </fieldset>
             </fieldset>
         </form>
@@ -345,7 +346,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
             <li class="radio"><input type="radio" name="newOperation" id="newOperationOnce" value="holiday" checked="checked" />
             <label for="newOperationOnce">Holiday only on this day</label>.
             <a href="#" class="helptext">[?]</a>
-            <div class="hint">Make a single holiday. For example, selecting August 1st, 2012 will make it a holiday, but will not affect August 1st in other years.</div>
+            <div class="hint">Make a single holiday. For example, selecting August 1, 2012 will make it a holiday, but will not affect August 1 in other years.</div>
             </li>
             <li class="radio"><input type="radio" name="newOperation" id="newOperationDay" value="weekday" />
                             <label for="newOperationDay">Holiday repeated every same day of the week</label>.
@@ -355,17 +356,17 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
             <li class="radio"><input type="radio" name="newOperation" id="newOperationYear" value="repeatable" />
                             <label for="newOperationYear">Holiday repeated yearly on the same date</label>.
                             <a href="#" class="helptext">[?]</a>
-                            <div class="hint">This will take this day and month as a reference to make it a holiday. Through this option, you can repeat this rule for every year. For example, selecting August 1st will make August 1st a holiday every year.</div>
+                            <div class="hint">This will take this day and month as a reference to make it a holiday. Through this option, you can repeat this rule for every year. For example, selecting August 1 will make August 1 a holiday every year.</div>
                             </li>
             <li class="radio"><input type="radio" name="newOperation" id="newOperationField" value="holidayrange" />
                             <label for="newOperationField">Holidays on a range</label>.
                             <a href="#" class="helptext">[?]</a>
-                            <div class="hint">Make a single holiday on a range. For example, selecting August 1st, 2012  and August 10st, 2012 will make all days between 1st and 10st holiday, but will not affect August 1-10 in other years.</div>
+                            <div class="hint">Make a single holiday on a range. For example, selecting August 1, 2012  and August 10, 2012 will make all days between August 1 and 10 a holiday, but will not affect August 1-10 in other years.</div>
                             </li>
             <li class="radio"><input type="radio" name="newOperation" id="newOperationFieldyear" value="holidayrangerepeat" />
                             <label for="newOperationFieldyear">Holidays repeated yearly on a range</label>.
                             <a href="#" class="helptext">[?]</a>
-                            <div class="hint">Make a single holiday on a range repeated yearly. For example, selecting August 1st, 2012  and August 10st, 2012 will make all days between 1st and 10st holiday, and will affect August 1-10 in other years.</div>
+                            <div class="hint">Make a single holiday on a range repeated yearly. For example, selecting August 1, 2012  and August 10, 2012 will make all days between August 1 and 10 a holiday, and will affect August 1-10 in other years.</div>
                             </li>
                 <li class="radio">
                 <input type="checkbox" name="allBranches" id="allBranches" />
@@ -375,7 +376,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
                 </li></ol>
                 <fieldset class="action">
                     <input type="submit" name="submit" value="Save" />
-                    <a href="#" class="cancel" name="cancel2" onclick=" hidePanel('newHoliday');">Cancel</a>
+                    <a href="#" class="cancel" onclick=" hidePanel('newHoliday');">Cancel</a>
                 </fieldset>
                 </fieldset>
          </form>
@@ -412,7 +413,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
     <ul>
         <li>Search in the calendar the day you want to set as holiday.</li>
         <li>Click the date to add or edit a holiday.</li>
-        <li>Enter a title and description for the holdiay.</li>
+        <li>Enter a title and description for the holiday.</li>
         <li>Specify how the holiday should repeat.</li>
         <li>Click Save to finish.</li>
     </ul>
