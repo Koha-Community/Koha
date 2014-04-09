@@ -329,15 +329,18 @@
        [% SET estimated_total = 0 %]
 
        [% FOREACH loop_receive IN loop_received %]
-           [% IF (funds.${ loop_receive.budget.budget_name }.estimated == '') %]
-              [% SET funds.${ loop_receive.budget.budget_name }.estimated = 0 %]
+           [% SET index = loop.count %]
+           [% SET funds.${ index }.budget_name = loop_receive.budget.budget_name %]
+           [% IF (funds.${ index }.estimated == '') %]
+              [% SET funds.${ index }.estimated = 0 %]
            [% END %]
-           [% IF (funds.${ loop_receive.budget.budget_name }.actual == '') %]
-              [% SET funds.${ loop_receive.budget.budget_name }.actual = 0 %]
+           [% IF (funds.${ index }.actual == '') %]
+              [% SET funds.${ index }.actual = 0 %]
            [% END %]
            [% SET estimated_total = estimated_total + ( loop_receive.ecost * loop_receive.quantityreceived ) %]
-           [% SET funds.${ loop_receive.budget.budget_name }.estimated = funds.${ loop_receive.budget.budget_name }.estimated + ( loop_receive.ecost * loop_receive.quantityreceived )%]
-           [% SET funds.${ loop_receive.budget.budget_name }.actual = funds.${ loop_receive.budget.budget_name }.actual + loop_receive.total %]
+           [% SET funds.${ index }.estimated = funds.${ index }.estimated + ( loop_receive.ecost * loop_receive.quantityreceived )%]
+
+           [% SET funds.${ index }.actual = funds.${ loop_receive.budget.budget_name }.actual + loop_receive.total %]
        [% END %]
 
    <form action="/cgi-bin/koha/acqui/parcel.pl" method="get" name="orderform">
@@ -362,7 +365,7 @@
         [% FOREACH key IN funds.keys.sort %]
             <tr>
                 <td colspan="6" class="total">(Tax exc.)</td>
-                <td><i>Subtotal for</i> [% key %]</td>
+                <td colspan="2"><i>Subtotal for</i> [% funds.$key.budget_name %]</td>
                 <td>[% currency( funds.$key.estimated ) %]</td>
                 <td>[% currency( funds.$key.actual ) %]</td>
                 <td>&nbsp;</td>
