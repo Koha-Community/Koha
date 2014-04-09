@@ -25,8 +25,8 @@ use strict;
 
 use C4::Context;
 use C4::Branch qw(GetBranchesCount);
+use Koha::Cache;
 use Koha::DateUtils qw(dt_from_string);
-use Memoize;
 use DateTime::Format::MySQL;
 use Business::ISBN;
 use autouse 'Data::Dumper' => qw(Dumper);
@@ -82,9 +82,6 @@ BEGIN {
 	$DEBUG = 0;
 @EXPORT_OK = qw( GetDailyQuote );
 }
-
-# expensive functions
-memoize('GetAuthorisedValues');
 
 =head1 NAME
 
@@ -1126,13 +1123,33 @@ This function returns all authorised values from the'authorised_value' table in 
 
 C<$category> returns authorised values for just one category (optional).
 
+C<$selected> adds a "selected => 1" entry to the hash if the
+authorised_value matches it. B<NOTE:> this feature should be considered
+deprecated as it may be removed in the future.
+
 C<$opac> If set to a true value, displays OPAC descriptions rather than normal ones when they exist.
 
 =cut
 
 sub GetAuthorisedValues {
     my ( $category, $selected, $opac ) = @_;
-    my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
+
+    # TODO: the "selected" feature should be replaced by a utility function
+    # somewhere else, it doesn't belong in here. For starters it makes
+    # caching much more complicated. Or just let the UI logic handle it, it's
+    # what it's for.
+
+    # Is this cached already?
+    $opac = $opac ? 1 : 0; # normalise to be safe
+    my $selected_key = defined($selected) ? $selected : '';
+    my $cache_key = "AuthorisedValues-$category-$selected_key-$opac";
+    my $cache     = Koha::Cache->get_instance();
+    my $result    = $cache->get_from_cache($cache_key);
+warn "fetched $result from cache";
+    return $result if $result;
+
+    my $branch_limit =
+      C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
     my @results;
     my $dbh      = C4::Context->dbh;
     my $query = qq{
@@ -1178,6 +1195,11 @@ sub GetAuthorisedValues {
         push @results, $data;
     }
     $sth->finish;
+
+    # We can't cache for long because of that "selected" thing which
+    # makes it impossible to clear the cache without iterating through every
+    # value, which sucks. This'll cover this request, and not a whole lot more.
+    $cache->set_in_cache( $cache_key, \@results, { deepcopy => 1, expiry => 5 } );
     return \@results;
 }
 
