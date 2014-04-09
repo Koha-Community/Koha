@@ -150,7 +150,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
         push( @subfields_data, \%subfield_data );
         my %tag_data;
         $tag_data{tag} = '000';
-	$tag_data{tag_desc} = $tagslib->{'000'}->{lib};
+        $tag_data{tag_desc} = $tagslib->{'000'}->{lib};
         my @tmp = @subfields_data;
         $tag_data{subfield} = \@tmp;
         push( @loop_data, \%tag_data );
@@ -238,8 +238,8 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
                 }
                 else {
                     $tag_data{tag} = $fields[$x_i]->tag();
-		    $tag_data{tag_ind} = C4::Koha::display_marc_indicators($fields[$x_i]);
-		    $tag_data{tag_desc} = $tagslib->{ $fields[$x_i]->tag() }->{lib};
+            $tag_data{tag_ind} = C4::Koha::display_marc_indicators($fields[$x_i]);
+            $tag_data{tag_desc} = $tagslib->{ $fields[$x_i]->tag() }->{lib};
                 }
             }
             my @tmp = @subfields_data;
