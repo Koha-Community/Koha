@@ -113,6 +113,9 @@ var MSG_CONFIRM_RESUME_HOLDS  = _("Are you sure you want to resume all suspended
             [% END %]
         </ul></div>
         [% END %]
+
+        [% SET OPACMySummaryNote = Koha.Preference('OPACMySummaryNote') %]
+        [% IF OPACMySummaryNote %][% OPACMySummaryNote %][% END %]
         
 <div id="opac-user-views" class="toptabs">
         <ul>

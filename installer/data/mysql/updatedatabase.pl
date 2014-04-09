@@ -8120,6 +8120,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q|
+        INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACMySummaryNote','','','Note to display on the patron summary page. This note only appears if the patron is connected.','Free')
+    |);
+    print "Upgrade to $DBversion done (Bug 12052: Add OPACMySummaryNote syspref)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

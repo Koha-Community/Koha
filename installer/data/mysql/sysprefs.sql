@@ -243,6 +243,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpacMaxItemsToDisplay','50','','Max items to display at the OPAC on a biblio detail','Integer'),
 ('OPACMobileUserCSS','',NULL,'Include the following CSS for the mobile view on all pages in the OPAC:','free'),
 ('OPACMySummaryHTML','','70|10','Enter the HTML that will appear in a column on the \'my summary\' and \'my reading history\' tabs when a user is logged in to the OPAC. Enter {BIBLIONUMBER}, {TITLE}, {AUTHOR}, or {ISBN} in place of their respective variables in the HTML. Leave blank to disable.','Textarea'),
+('OPACMySummaryNote','','','Note to display on the patron summary page. This note only appears if the patron is connected.','Free'),
 ('OpacNav','Important links here.','70|10','Use HTML tags to add navigational links to the left-hand navigational bar in OPAC','Textarea'),
 ('OpacNavBottom','Important links here.','70|10','Use HTML tags to add navigational links to the left-hand navigational bar in OPAC','Textarea'),
 ('OpacNavRight','','70|10','Show the following HTML in the right hand column of the main page under the main login form','Textarea'),
