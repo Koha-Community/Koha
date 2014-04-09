@@ -80,6 +80,9 @@
                         </div>
                     [% END # / IF patron_flagged %]
 
+                    [% SET OPACMySummaryNote = Koha.Preference('OPACMySummaryNote') %]
+                    [% IF OPACMySummaryNote %][% OPACMySummaryNote %][% END %]
+
                     <div id="opac-user-views" class="toptabs">
                         <ul>
                             <li><a href="#opac-user-checkouts">Checked out ([% issues_count %])</a></li>
