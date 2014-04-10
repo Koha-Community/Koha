@@ -27,6 +27,7 @@ use C4::Context;
 use C4::Output;
 use C4::Context;
 
+use Koha::Cache;
 
 # retrieve parameters
 my $input = new CGI;
@@ -45,6 +46,7 @@ my $pagesize = 20;
 my $script_name = "/cgi-bin/koha/admin/marctagstructure.pl";
 
 my $dbh = C4::Context->dbh;
+my $cache = Koha::Cache->get_instance();
 
 # open template
 my ($template, $loggedinuser, $cookie)
@@ -160,6 +162,8 @@ if ($op eq 'add_form') {
                           $frameworkcode
             );
         }
+        $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
+        $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
 	}
     print $input->redirect("/cgi-bin/koha/admin/marctagstructure.pl?searchfield=$tagfield&frameworkcode=$frameworkcode");
 	exit;
@@ -184,6 +188,8 @@ if ($op eq 'add_form') {
         my $sth2 = $dbh->prepare("DELETE FROM marc_subfield_structure WHERE tagfield=? AND frameworkcode=?");
         $sth1->execute($searchfield, $frameworkcode);
         $sth2->execute($searchfield, $frameworkcode);
+        $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
+        $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
 	}
 	$template->param(
           searchfield => $searchfield,
@@ -347,5 +353,7 @@ sub duplicate_framework {
 	while ( my ($frameworkcode, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $kohafield, $tab, $authorised_value, $thesaurus_category, $value_builder, $seealso,$hidden) = $sth->fetchrow) {
 	    $sth_insert->execute($newframeworkcode, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $kohafield, $tab, $authorised_value, $thesaurus_category, $value_builder, $seealso, $hidden);
 	}
+    $cache->clear_from_cache("MarcStructure-0-$newframeworkcode");
+    $cache->clear_from_cache("MarcStructure-1-$newframeworkcode");
 }
 

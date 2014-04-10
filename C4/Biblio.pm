@@ -39,6 +39,8 @@ use C4::Charset;
 use C4::Linker;
 use C4::OAI::Sets;
 
+use Koha::Cache;
+
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
@@ -138,16 +140,6 @@ BEGIN {
       prepare_host_field
     );
 }
-
-eval {
-    if (C4::Context->ismemcached) {
-        require Memoize::Memcached;
-        import Memoize::Memcached qw(memoize_memcached);
-
-        memoize_memcached( 'GetMarcStructure',
-                            memcached => C4::Context->memcached);
-    }
-};
 
 =head1 NAME
 
@@ -1099,24 +1091,17 @@ $frameworkcode : the framework code to read
 
 =cut
 
-# cache for results of GetMarcStructure -- needed
-# for batch jobs
-our $marc_structure_cache;
-
 sub GetMarcStructure {
     my ( $forlibrarian, $frameworkcode ) = @_;
     my $dbh = C4::Context->dbh;
     $frameworkcode = "" unless $frameworkcode;
 
-    if ( defined $marc_structure_cache and exists $marc_structure_cache->{$forlibrarian}->{$frameworkcode} ) {
-        return $marc_structure_cache->{$forlibrarian}->{$frameworkcode};
-    }
+    $forlibrarian = $forlibrarian ? 1 : 0;
+    my $cache = Koha::Cache->get_instance();
+    my $cache_key = "MarcStructure-$forlibrarian-$frameworkcode";
+    my $cached = $cache->get_from_cache($cache_key);
+    return $cached if $cached;
 
-    #     my $sth = $dbh->prepare(
-    #         "SELECT COUNT(*) FROM marc_tag_structure WHERE frameworkcode=?");
-    #     $sth->execute($frameworkcode);
-    #     my ($total) = $sth->fetchrow;
-    #     $frameworkcode = "" unless ( $total > 0 );
     my $sth = $dbh->prepare(
         "SELECT tagfield,liblibrarian,libopac,mandatory,repeatable 
         FROM marc_tag_structure 
@@ -1178,8 +1163,7 @@ sub GetMarcStructure {
         $res->{$tag}->{$subfield}->{maxlength}        = $maxlength;
     }
 
-    $marc_structure_cache->{$forlibrarian}->{$frameworkcode} = $res;
-
+    $cache->set_in_cache($cache_key, $res);
     return $res;
 }
 

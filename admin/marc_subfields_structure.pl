@@ -75,6 +75,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+my $cache = Koha::Cache->get_instance();
 
 my $op       = $input->param('op');
 $tagfield =~ s/\,//g;
@@ -424,6 +425,9 @@ elsif ( $op eq 'add_validate' ) {
     }
     $sth_insert->finish;
     $sth_update->finish;
+    $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
+    $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
+
     print
 "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield&frameworkcode=$frameworkcode\"></html>";
     exit;
@@ -465,6 +469,8 @@ elsif ( $op eq 'delete_confirmed' ) {
         $sth->execute( $tagfield, $tagsubfield, $frameworkcode );
         $sth->finish;
     }
+    $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
+    $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
     print
 "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield&frameworkcode=$frameworkcode\"></html>";
     exit;

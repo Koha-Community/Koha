@@ -59,6 +59,7 @@ else {
 }
 
 my $dbh = C4::Context->dbh;
+my $cache = Koha::Cache->get_instance();
 
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
@@ -112,6 +113,9 @@ elsif ( $op eq 'add_validate' ) {
     $dbh->do(
 "update marc_subfield_structure set kohafield='$tablename.$kohafield' where tagfield='$temp[0]' and tagsubfield='$temp[1]'"
     );
+    # We could get a list of all frameworks and do them one-by-one, or zap
+    # everything.
+    $cache->flush_all();
     print
 "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=koha2marclinks.pl?tablename=$tablename\"></html>";
     exit;
