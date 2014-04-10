@@ -113,7 +113,7 @@ $contextmodule->mock('preference', sub {
         return '';
     } elsif ($pref eq 'AlternateHoldingsField') {
         return '490av';
-    } elsif ($pref eq 'authoritysep') {
+    } elsif ($pref eq 'AuthoritySeparator') {
         return '--';
     } elsif ($pref eq 'DisplayLibraryFacets') {
         return 'holding';
