@@ -184,8 +184,7 @@ sub _get_cas_and_service {
     my $query = shift;
     my $key   = shift;    # optional
 
-    my $uri = C4::Context->preference('OPACBaseURL'); # server address
-    $uri .= $query->url( -absolute => 1, -query => 1 ); # page with params
+    my $uri = _url_with_get_params($query);
 
     my $casparam = $defaultcasserver;
     $casparam = $query->param('cas') if defined $query->param('cas');
@@ -193,6 +192,23 @@ sub _get_cas_and_service {
     my $cas = Authen::CAS::Client->new( $casservers->{$casparam} );
 
     return ( $cas, $uri );
+}
+
+# Get the current URL with parameters contained directly into URL (GET params)
+# This method replaces $query->url() which will give both GET and POST params
+sub _url_with_get_params {
+    my $query = shift;
+
+    my $uri_base_part = C4::Context->preference('OPACBaseURL') . $query->script_name();
+    my $uri_params_part = '';
+    foreach ( $query->url_param() ) {
+        $uri_params_part .= '&' if $uri_params_part;
+        $uri_params_part .= $_ . '=';
+        $uri_params_part .= URI::Escape::uri_escape( $query->url_param($_) );
+    }
+    $uri_base_part .= '?' if $uri_params_part;
+
+    return $uri_base_part . $uri_params_part;
 }
 
 1;
