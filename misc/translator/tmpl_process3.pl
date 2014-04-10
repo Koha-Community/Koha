@@ -22,7 +22,7 @@ use VerboseWarnings qw( :warn :die );
 
 ###############################################################################
 
-use vars qw( @in_dirs @filenames $str_file $out_dir $quiet );
+use vars qw( @in_dirs @filenames @match @nomatch $str_file $out_dir $quiet );
 use vars qw( @excludes $exclude_regex );
 use vars qw( $recursive_p );
 use vars qw( $pedantic_p );
@@ -133,7 +133,10 @@ sub text_replace (**) {
 }
 
 sub listfiles {
-    my($dir, $type, $action, $filenames) = @_;
+    my($dir, $type, $action) = @_;
+    my $filenames = join ('|', @filenames); # used to update strings from this file
+    my $match     = join ('|', @match);     # use only this files
+    my $nomatch   = join ('|', @nomatch);   # do no use this files
     my @it = ();
     if (opendir(DIR, $dir)) {
         my @dirent = readdir DIR;   # because DIR is shared when recursing
@@ -144,12 +147,14 @@ sub listfiles {
             || (defined $exclude_regex && $dirent =~ /^(?:$exclude_regex)$/)) {
             ;
             } elsif (-f $path) {
-                my $basename = basename $path;
+                my $basename = fileparse( $path );
                 push @it, $path
-                    if ( not @$filenames or ( grep { $path =~ /$_/ } @$filenames ) )
-                       and (!defined $type || $dirent =~ /\.(?:$type)$/) || $action eq 'install';
+                    if  ( not @filenames or $basename =~ /($filenames)/i )
+                    and ( not @match     or $basename =~ /($match)/i     ) # files to include
+                    and ( not @nomatch   or $basename !~ /($nomatch)/i   ) # files not to include
+                    and (!defined $type || $dirent =~ /\.(?:$type)$/) || $action eq 'install';
             } elsif (-d $path && $recursive_p) {
-                push @it, listfiles($path, $type, $action, $filenames);
+                push @it, listfiles($path, $type, $action);
             }
         }
     } else {
@@ -167,7 +172,7 @@ sub mkdir_recursive ($) {
     my ($prefix, $basename) = ($dir =~ /\/([^\/]+)$/s)? ($`, $1): ('.', $dir);
     mkdir_recursive($prefix) if $prefix ne '.' && !-d $prefix;
     if (!-d $dir) {
-    print STDERR "Making directory $dir..." unless $quiet;
+    print STDERR "Making directory $dir...\n" unless $quiet;
     # creates with rwxrwxr-x permissions
     mkdir($dir, 0775) || warn_normal "$dir: $!", undef;
     }
@@ -192,11 +197,16 @@ Create or update PO files from templates, or install translated templates.
       --pedantic-warnings     Issue warnings even for detected problems
                               which are likely to be harmless
   -r, --recursive             SOURCE in the -i option is a directory
-  -f, --filename=FILE         FILE is a specific filaneme.
+  -f, --filename=FILE         FILE is a specific filename or part of it.
                               If given, only these files will be processed.
+                              On update only relevant strings will be updated.
+  -m, --match=FILE            FILE is a specific filename or part of it.
+                              If given, only these files will be processed.
+  -n, --nomatch=FILE          FILE is a specific filename or part of it.
+                              If given, these files will not be processed.
   -s, --str-file=FILE         Specify FILE as the translation (po) file
                               for input (install) or output (create, update)
-  -x, --exclude=REGEXP        Exclude files matching the given REGEXP
+  -x, --exclude=REGEXP        Exclude dirs matching the given REGEXP
       --help                  Display this help and exit
   -q, --quiet                 no output to screen (except for errors)
 
@@ -221,6 +231,8 @@ sub usage_error (;$) {
 GetOptions(
     'input|i=s'             => \@in_dirs,
     'filename|f=s'          => \@filenames,
+    'match|m=s'             => \@match,
+    'nomatch|n=s'           => \@nomatch,
     'outputdir|o=s'         => \$out_dir,
     'recursive|r'           => \$recursive_p,
     'str-file|s=s'          => \$str_file,
@@ -266,7 +278,7 @@ for my $fn ( @filenames ) {
 }
 for my $in_dir ( @in_dirs ) {
     $in_dir =~ s/\/$//; # strips the trailing / if any
-    @in_files = ( @in_files, listfiles($in_dir, $type, $action, \@filenames) );
+    @in_files = ( @in_files, listfiles($in_dir, $type, $action));
 }
 
 # restores the string list from file
