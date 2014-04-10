@@ -126,6 +126,7 @@ if ( $email ) {
     if ( $template_res =~ /<HEADER>(.*)<END_HEADER>/s ) {
         $email_header = $1;
         $email_header =~ s|\n?(.*)\n?|$1|;
+        $email_header = encode_qp($email_header);
     }
 
     my $email_file = "list.txt";
@@ -137,7 +138,7 @@ if ( $email ) {
     if ( $template_res =~ /<MESSAGE>(.*)<END_MESSAGE>/s ) {
         $body = $1;
         $body =~ s|\n?(.*)\n?|$1|;
-        $body = encode("UTF-8", encode_qp($body));
+        $body = encode_qp($body);
     }
 
     my $boundary = "====" . time() . "====";
