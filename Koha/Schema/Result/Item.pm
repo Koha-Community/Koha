@@ -624,11 +624,11 @@ __PACKAGE__->belongs_to(
   { biblioitemnumber => "biblioitemnumber" },
 );
 
-use C4::Context;
 sub effective_itemtype {
     my ( $self ) = @_;
 
-    if ( C4::Context->preference('item-level_itypes') ) {
+    my $pref = $self->result_source->schema->resultset('Systempreference')->find('item-level_itypes');
+    if ( $pref->value() ) {
         return $self->itype();
     } else {
         return $self->biblioitem()->itemtype();
