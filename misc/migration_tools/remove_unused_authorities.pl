@@ -84,10 +84,19 @@ print "$counter authorities parsed, $totdeleted deleted and $totundeleted unchan
 
 sub print_usage {
     print <<_USAGE_;
-$0: Removes unused authorities.
+$0: Remove unused authority records
 
-This script will parse all authoritiestypes (or only those given as parameter), and remove authorities without any biblio attached.
-warning : there is no individual confirmation !
+This script removes authority records that do not have any biblio
+records attached to them.
+
+If the --aut option is supplied, only authority records of that
+particular type will be checked for usage.  --aut can be repeated.
+
+If --aut is not supplied, all authority records will be checked.
+
+Use --test to perform a test run.  This script does not ask the
+operator to confirm the deletion of each authority record.
+
 parameters
     --aut|authtypecode TYPE       the list of authtypes to check
     --test or -t                  test mode, don't delete really, just count
