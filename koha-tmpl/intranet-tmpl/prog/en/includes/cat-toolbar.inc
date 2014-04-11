@@ -18,7 +18,7 @@
 	function GetZ3950Terms(){
 		var strQuery="&frameworkcode=";
 		[% FOREACH z3950_search_param IN z3950_search_params %]
-			strQuery += "&" + "[% z3950_search_param.name |html %]" + "=" + "[% z3950_search_param.encvalue |html %]";
+            strQuery += "&" + "[% z3950_search_param.name |uri %]" + "=" + "[% z3950_search_param.value |uri %]";
 		[% END %]
 		return strQuery;
 	}
