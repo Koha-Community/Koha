@@ -128,7 +128,7 @@ function displaymoreoptions() {
     }
 
     var X = 0, Y = 0, Z = 0;
-    var numberingmethod = unescape(globalnumpatterndata.numberingmethod);
+    var numberingmethod = globalnumpatterndata.numberingmethod;
     if(numberingmethod.match(/{X}/)) X = 1;
     if(numberingmethod.match(/{Y}/)) Y = 1;
     if(numberingmethod.match(/{Z}/)) Z = 1;
@@ -141,7 +141,7 @@ function displaymoreoptions() {
 
     if(X) {
         if(globalnumpatterndata.label1) {
-            $("#headerX").html(unescape(globalnumpatterndata.label1));
+            $("#headerX").html(globalnumpatterndata.label1);
         } else {
             $("#headerX").html("X");
         }
@@ -157,7 +157,7 @@ function displaymoreoptions() {
     }
     if(Y) {
         if(globalnumpatterndata.label2) {
-            $("#headerY").html(unescape(globalnumpatterndata.label2));
+            $("#headerY").html(globalnumpatterndata.label2);
         } else {
             $("#headerY").html("Y");
         }
@@ -173,7 +173,7 @@ function displaymoreoptions() {
     }
     if(Z) {
         if(globalnumpatterndata.label3) {
-            $("#headerZ").html(unescape(globalnumpatterndata.label3));
+            $("#headerZ").html(globalnumpatterndata.label3);
         } else {
             $("#headerZ").html("Z");
         }
@@ -212,8 +212,8 @@ function modifyAdvancedPattern() {
 }
 
 function restoreAdvancedPattern() {
-    $("#patternname").attr("readonly", true).val(unescape(globalnumpatterndata.label));
-    $("#numberingmethod").attr("readonly", true).val(unescape(globalnumpatterndata.numberingmethod));
+    $("#patternname").attr("readonly", true).val(globalnumpatterndata.label);
+    $("#numberingmethod").attr("readonly", true).val(globalnumpatterndata.numberingmethod);
 
     $("#advancedpredictionpatternt input").each(function() {
         $(this).attr("readonly", true);
@@ -222,13 +222,13 @@ function restoreAdvancedPattern() {
             var tempid = id.replace(/(\d)/, "temp$1");
             $(this).val($("#"+tempid).val());
         } else {
-            $(this).val(unescape(globalnumpatterndata[id]));
+            $(this).val(globalnumpatterndata[id]);
         }
     });
     $("#advancedpredictionpatternt select").each(function() {
         $(this).attr("disabled", true);
         var id = $(this).attr('id');
-        $(this).val(unescape(globalnumpatterndata[id]));
+        $(this).val(globalnumpatterndata[id]);
     });
 
     $("#restoreadvancedpatternbutton").hide();

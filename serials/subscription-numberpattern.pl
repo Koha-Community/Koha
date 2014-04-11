@@ -21,7 +21,7 @@ use Modern::Perl;
 use CGI;
 use C4::Serials::Numberpattern;
 use C4::Auth qw/check_cookie_auth/;
-use URI::Escape;
+use JSON qw( to_json );
 
 my $input=new CGI;
 
@@ -34,6 +34,7 @@ if ($auth_status ne "ok") {
 my $numpatternid=$input->param("numberpattern_id");
 
 my $numberpatternrecord=GetSubscriptionNumberpattern($numpatternid);
+
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header(-type => 'text/plain', -charset => 'UTF-8');
-print "{",join (",",map {"\"$_\":\"".(uri_escape_utf8($numberpatternrecord->{$_}) // '')."\"" }sort keys %$numberpatternrecord),"}";
+print to_json( $numberpatternrecord );

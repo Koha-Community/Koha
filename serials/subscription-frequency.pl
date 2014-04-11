@@ -17,12 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+use Modern::Perl;
 use CGI;
 use C4::Context;
 use C4::Serials::Frequency;
 use C4::Auth qw/check_cookie_auth/;
-use URI::Escape;
-use strict;
+use JSON qw( to_json );
 
 my $input=new CGI;
 my $frqid=$input->param("frequency_id");
@@ -33,4 +33,4 @@ if ($auth_status ne "ok") {
 my $frequencyrecord=GetSubscriptionFrequency($frqid);
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header(-type => 'text/plain', -charset => 'UTF-8');
-print "{".join (",",map { "\"$_\":\"".uri_escape_utf8($frequencyrecord->{$_})."\"" }sort keys %$frequencyrecord)."}";
+print to_json( $frequencyrecord );
