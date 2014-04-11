@@ -38,7 +38,7 @@ my @files_with_directive_in_tag = do {
         while ( my $token = $parser->next_token ) {
             my $attr = $token->{_attr};
             next unless $attr;
-            push @lines, $token->{_lc} if $attr->{'[%'};
+            push @lines, $token->{_lc} if $attr->{'[%'} or $attr->{'[%-'};
         }
         ($dir) = $dir =~ /koha-tmpl\/(.*)$/;
         push @files, { name => "$dir/$name", lines => \@lines } if @lines;
