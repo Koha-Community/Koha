@@ -114,15 +114,15 @@ overdues that could not be emailed are sent in CSV format to the admin.
 
 =item B<-html>
 
-Produces html data. if patron does not have a mail address or
--n (no mail) flag is set, an html file is generated in the specified
+Produces html data. If patron does not have an email address or
+-n (no mail) flag is set, an HTML file is generated in the specified
 directory. This can be downloaded or futher processed by library staff.
 The file will be called notices-YYYY-MM-DD.html and placed in the directory
 specified.
 
 =item B<-text>
 
-Produces plain text data. if patron does not have a mail address or
+Produces plain text data. If patron does not have an email address or
 -n (no mail) flag is set, a text file is generated in the specified
 directory. This can be downloaded or futher processed by library staff.
 The file will be called notices-YYYY-MM-DD.txt and placed in the directory
