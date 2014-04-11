@@ -2251,7 +2251,7 @@ $arrayref = z3950_search_args($matchpoints)
 
 This function returns an array reference that contains the search parameters to be
 passed to the Z39.50 search script (z3950_search.pl). The array elements
-are hash refs whose keys are name, value and encvalue, and whose values are the
+are hash refs whose keys are name and value, and whose values are the
 name of a search parameter, the value of that search parameter and the URL encoded
 value of that parameter.
 
@@ -2262,7 +2262,7 @@ data is in a hash reference in $matchpoints, as returned by Biblio::GetBiblioDat
 
 If $matchpoints is a scalar, it is assumed to be an unnamed query descriptor, e.g.
 a general purpose search argument. In this case, the returned array contains only
-entry: the key is 'title' and the value and encvalue are derived from $matchpoints.
+entry: the key is 'title' and the value is derived from $matchpoints.
 
 If a search parameter value is undefined or empty, it is not included in the returned
 array.
@@ -2309,8 +2309,8 @@ sub z3950_search_args {
     my $array = [];
     for my $field (qw/ lccn isbn issn title author dewey subject /)
     {
-        my $encvalue = URI::Escape::uri_escape_utf8($bibrec->{$field});
-        push @$array, { name=>$field, value=>$bibrec->{$field}, encvalue=>$encvalue } if defined $bibrec->{$field};
+        push @$array, { name => $field, value => $bibrec->{$field} }
+          if defined $bibrec->{$field};
     }
     return $array;
 }
