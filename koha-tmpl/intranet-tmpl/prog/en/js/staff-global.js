@@ -3,14 +3,22 @@ if ( KOHA === undefined ) var KOHA = {};
 
 function _(s) { return s; } // dummy function for gettext
 
+// http://stackoverflow.com/questions/14859281/select-tab-by-name-in-jquery-ui-1-10-0/16550804#16550804
+$.fn.tabIndex = function () {
+    return $(this).parent().find(this).index() - 1;
+};
+$.fn.selectTabByID = function (tabID) {
+    $(this).tabs("option", "active", $(tabID).tabIndex());
+};
+
  $(document).ready(function() {
     $('#header_search').tabs().on( "tabsactivate", function(e, ui) { $(this).find("div:visible").find('input').eq(0).focus(); });
 
     $(".close").click(function(){ window.close(); });
 
-    if($("#header_search #checkin_search").length > 0){ shortcut.add('Alt+r',function (){ $("#header_search").tabs("select","#checkin_search"); $("#ret_barcode").focus(); }); } else { shortcut.add('Alt+r',function (){ location.href="/cgi-bin/koha/circ/returns.pl"; }); }
-    if($("#header_search #circ_search").length > 0){ shortcut.add('Alt+u',function (){ $("#header_search").tabs("select","#circ_search"); $("#findborrower").focus(); }); } else { shortcut.add('Alt+u',function(){ location.href="/cgi-bin/koha/circ/circulation.pl"; }); }
-    if($("#header_search #catalog_search").length > 0){ shortcut.add('Alt+q',function (){ $("#header_search").tabs("select","#catalog_search"); $("#search-form").focus(); }); } else { shortcut.add('Alt+q',function(){ location.href="/cgi-bin/koha/catalogue/search.pl"; }); }
+    if($("#header_search #checkin_search").length > 0){ shortcut.add('Alt+r',function (){ $("#header_search").selectTabByID("#checkin_search"); $("#ret_barcode").focus(); }); } else { shortcut.add('Alt+r',function (){ location.href="/cgi-bin/koha/circ/returns.pl"; }); }
+    if($("#header_search #circ_search").length > 0){ shortcut.add('Alt+u',function (){ $("#header_search").selectTabByID("#circ_search"); $("#findborrower").focus(); }); } else { shortcut.add('Alt+u',function(){ location.href="/cgi-bin/koha/circ/circulation.pl"; }); }
+    if($("#header_search #catalog_search").length > 0){ shortcut.add('Alt+q',function (){ $("#header_search").selectTabByID("#catalog_search"); $("#search-form").focus(); }); } else { shortcut.add('Alt+q',function(){ location.href="/cgi-bin/koha/catalogue/search.pl"; }); }
 
     $(".focus").focus();
     $(".validated").each(function() {
