@@ -1813,7 +1813,8 @@ sub _Findgroupreserve {
                reserves.priority            AS priority,
                reserves.timestamp           AS timestamp,
                biblioitems.biblioitemnumber AS biblioitemnumber,
-               reserves.itemnumber          AS itemnumber
+               reserves.itemnumber          AS itemnumber,
+               reserves.reserve_id          AS reserve_id
         FROM reserves
         JOIN biblioitems USING (biblionumber)
         JOIN hold_fill_targets USING (biblionumber, borrowernumber)
@@ -1844,7 +1845,8 @@ sub _Findgroupreserve {
                reserves.priority                   AS priority,
                reserves.timestamp                  AS timestamp,
                reserveconstraints.biblioitemnumber AS biblioitemnumber,
-               reserves.itemnumber                 AS itemnumber
+               reserves.itemnumber                 AS itemnumber,
+               reserves.reserve_id                 AS reserve_id
         FROM reserves
           LEFT JOIN reserveconstraints ON reserves.biblionumber = reserveconstraints.biblionumber
         WHERE reserves.biblionumber = ?
