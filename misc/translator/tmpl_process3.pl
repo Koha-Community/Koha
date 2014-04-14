@@ -353,8 +353,8 @@ if ($action eq 'create')  {
     error_normal "Text extraction failed: $xgettext: $!\n", undef;
     error_additional "Will not run msgmerge\n", undef;
     }
-#   unlink $tmpfile1 || warn_normal "$tmpfile1: unlink failed: $!\n", undef;
-#   unlink $tmpfile2 || warn_normal "$tmpfile2: unlink failed: $!\n", undef;
+    unlink $tmpfile1 || warn_normal "$tmpfile1: unlink failed: $!\n", undef;
+    unlink $tmpfile2 || warn_normal "$tmpfile2: unlink failed: $!\n", undef;
 
 } elsif ($action eq 'update') {
     my($tmph1, $tmpfile1) = tmpnam();
@@ -386,8 +386,8 @@ if ($action eq 'create')  {
         error_normal "Text extraction failed: $xgettext: $!\n", undef;
         error_additional "Will not run msgmerge\n", undef;
     }
-#   unlink $tmpfile1 || warn_normal "$tmpfile1: unlink failed: $!\n", undef;
-#   unlink $tmpfile2 || warn_normal "$tmpfile2: unlink failed: $!\n", undef;
+    unlink $tmpfile1 || warn_normal "$tmpfile1: unlink failed: $!\n", undef;
+    unlink $tmpfile2 || warn_normal "$tmpfile2: unlink failed: $!\n", undef;
 
 } elsif ($action eq 'install') {
     if(!defined($out_dir)) {
