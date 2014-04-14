@@ -659,17 +659,19 @@ function verify_images() {
                         <td class="enumchron">
                             [% IF ( itemdata_enumchron ) %]
                                 [% IF item.enumchron && item.serialseq %]
-                                    [% item.enumchron %]
-                                    [% IF ( item.serialseq &&
-                                            item.enumchron!=item.serialseq ) %]
-                                       -- [% item.serialseq %]
+                                    <span class="enum">[% item.enumchron %]</span>
+                                    [% IF ( item.serialseq && item.enumchron!=item.serialseq ) %]
+                                        <span class="sep"> -- </span>
+                                        <span class="serialseq">[% item.serialseq %]</span>
                                     [% END %]
                                 [% ELSIF item.enumchron %]
-                                    [% item.enumchron %]
+                                    <span class="enum">[% item.enumchron %]</span>
                                 [% ELSIF item.serialseq %]
-                                    [% item.serialseq %]
+                                    <span class="serialseq">[% item.serialseq %]</span>
                                 [% END %]
-                                [% IF ( item.publisheddate ) %] ([% item.publisheddate %])[% END %]
+                                [% IF ( item.publisheddate ) %]
+                                    <span class="pubdate">([% item.publisheddate %])</span>
+                                [% END %]
                             [% END %]
                         </td>
                     [% END %]
