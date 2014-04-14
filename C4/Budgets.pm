@@ -825,30 +825,52 @@ sub CanUserUseBudget {
         }
 
         # Budget restricted to owner
-        if ($budget->{budget_permission} == 1
-        && $budget->{budget_owner_id}
-        && $budget->{budget_owner_id} != $borrower->{borrowernumber}) {
-            return 0;
+        if ( $budget->{budget_permission} == 1 ) {
+            if (    $budget->{budget_owner_id}
+                and $budget->{budget_owner_id} != $borrower->{borrowernumber} )
+            {
+                return 0;
+            }
         }
 
-        my @budget_users = GetBudgetUsers($budget->{budget_id});
-
         # Budget restricted to owner, users and library
-        if ($budget->{budget_permission} == 2
-        && $budget->{budget_owner_id}
-        && $budget->{budget_owner_id} != $borrower->{borrowernumber}
-        && (0 == grep {$borrower->{borrowernumber} == $_} @budget_users)
-        && defined $budget->{budget_branchcode}
-        && $budget->{budget_branchcode} ne C4::Context->userenv->{branch}) {
-            return 0;
+        elsif ( $budget->{budget_permission} == 2 ) {
+            my @budget_users = GetBudgetUsers( $budget->{budget_id} );
+
+            if (
+                (
+                        $budget->{budget_owner_id}
+                    and $budget->{budget_owner_id} !=
+                    $borrower->{borrowernumber}
+                    or not $budget->{budget_owner_id}
+                )
+                and ( 0 == grep { $borrower->{borrowernumber} == $_ }
+                    @budget_users )
+                and defined $budget->{budget_branchcode}
+                and $budget->{budget_branchcode} ne
+                C4::Context->userenv->{branch}
+              )
+            {
+                return 0;
+            }
         }
 
         # Budget restricted to owner and users
-        if ($budget->{budget_permission} == 3
-        && $budget->{budget_owner_id}
-        && $budget->{budget_owner_id} != $borrower->{borrowernumber}
-        && (0 == grep {$borrower->{borrowernumber} == $_} @budget_users)) {
-            return 0;
+        elsif ( $budget->{budget_permission} == 3 ) {
+            my @budget_users = GetBudgetUsers( $budget->{budget_id} );
+            if (
+                (
+                        $budget->{budget_owner_id}
+                    and $budget->{budget_owner_id} !=
+                    $borrower->{borrowernumber}
+                    or not $budget->{budget_owner_id}
+                )
+                and ( 0 == grep { $borrower->{borrowernumber} == $_ }
+                    @budget_users )
+              )
+            {
+                return 0;
+            }
         }
     }
 

@@ -182,12 +182,12 @@ ok (CanUserModifyBudget($borrower2, $budget11, $flags));
 ok (CanUserModifyBudget($borrower2, $budget12, $flags));
 
 # Restriction is 'owner and users'
-ok (CanUserModifyBudget($borrower1, $budget13, $flags));
+ok (!CanUserModifyBudget($borrower1, $budget13, $flags)); # no owner, no user
 ok (CanUserModifyBudget($borrower1, $budget14, $flags));
 ok (CanUserModifyBudget($borrower1, $budget15, $flags));
 ok (CanUserModifyBudget($borrower1, $budget16, $flags));
-ok (CanUserModifyBudget($borrower2, $budget13, $flags));
-ok (CanUserModifyBudget($borrower2, $budget14, $flags));
+ok (!CanUserModifyBudget($borrower2, $budget13, $flags)); # no owner, no user
+ok (!CanUserModifyBudget($borrower2, $budget14, $flags)); # No owner and user list contains borrower1
 ok (CanUserModifyBudget($borrower2, $budget15, $flags));
 ok (!CanUserModifyBudget($borrower2, $budget16, $flags));
 
@@ -220,17 +220,17 @@ ok (CanUserModifyBudget($borrower1, $budget10, $flags));
 ok (CanUserModifyBudget($borrower1, $budget11, $flags));
 ok (CanUserModifyBudget($borrower1, $budget12, $flags));
 ok (CanUserModifyBudget($borrower2, $budget9, $flags));
-ok (CanUserModifyBudget($borrower2, $budget10, $flags));
+ok (!CanUserModifyBudget($borrower2, $budget10, $flags)); # Limited to library B1
 ok (CanUserModifyBudget($borrower2, $budget11, $flags));
 ok (!CanUserModifyBudget($borrower2, $budget12, $flags));
 
 # Restriction is 'owner and users'
-ok (CanUserModifyBudget($borrower1, $budget13, $flags));
+ok (!CanUserModifyBudget($borrower1, $budget13, $flags)); # No owner, no user
 ok (CanUserModifyBudget($borrower1, $budget14, $flags));
 ok (CanUserModifyBudget($borrower1, $budget15, $flags));
 ok (CanUserModifyBudget($borrower1, $budget16, $flags));
-ok (CanUserModifyBudget($borrower2, $budget13, $flags));
-ok (CanUserModifyBudget($borrower2, $budget14, $flags));
+ok (!CanUserModifyBudget($borrower2, $budget13, $flags)); # No owner, no user
+ok (!CanUserModifyBudget($borrower2, $budget14, $flags)); # No owner and user list contains borrower1
 ok (CanUserModifyBudget($borrower2, $budget15, $flags));
 ok (!CanUserModifyBudget($borrower2, $budget16, $flags));
 
