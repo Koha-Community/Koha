@@ -8111,7 +8111,7 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.15.00.029";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         UPDATE borrower_debarments SET expiration = NULL WHERE expiration = '9999-12-31'
