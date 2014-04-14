@@ -972,63 +972,37 @@ sub CanBookBeIssued {
             }
         }
     }
-    #
-    # CHECK AGE RESTRICTION
-    #
 
+    ## CHECK AGE RESTRICTION
     # get $marker from preferences. Could be something like "FSK|PEGI|Alter|Age:"
-    my $markers = C4::Context->preference('AgeRestrictionMarker' );
-    my $bibvalues = $biblioitem->{'agerestriction'};
-    if (($markers)&&($bibvalues))
-    {
-        # Split $bibvalues to something like FSK 16 or PEGI 6
-        my @values = split ' ', uc($bibvalues);
+    my $markers         = C4::Context->preference('AgeRestrictionMarker');
+    my $bibvalues       = $biblioitem->{'agerestriction'};
+    my $restriction_age = 0;
 
-        # Search first occurence of one of the markers
-        my @markers = split /\|/, uc($markers);
-        my $index = 0;
-        my $restrictionyear = 0;
-        for my $value (@values) {
-            $index ++;
-            for my $marker (@markers) {
-                $marker =~ s/^\s+//; #remove leading spaces
-                $marker =~ s/\s+$//; #remove trailing spaces
-                if ($marker eq $value) {
-                    if ($index <= $#values) {
-                        $restrictionyear += $values[$index];
-                    }
-                    last;
-                } elsif ($value =~ /^\Q$marker\E(\d+)$/) {
-                    # Perhaps it is something like "K16" (as in Finland)
-                    $restrictionyear += $1;
-                    last;
-                }
+    $restriction_age = GetAgeRestriction( $biblioitem->{'agerestriction'} );
+
+    if ( $restriction_age > 0 ) {
+        if ( $borrower->{'dateofbirth'} ) {
+            my @alloweddate = split /-/, $borrower->{'dateofbirth'};
+            $alloweddate[0] += $restriction_age;
+
+            #Prevent runime eror on leap year (invalid date)
+            if ( ( $alloweddate[1] == 2 ) && ( $alloweddate[2] == 29 ) ) {
+                $alloweddate[2] = 28;
             }
-            last if ($restrictionyear > 0);
-        }
 
-        if ($restrictionyear > 0) {
-            if ( $borrower->{'dateofbirth'}  ) {
-                my @alloweddate =  split /-/,$borrower->{'dateofbirth'} ;
-                $alloweddate[0] += $restrictionyear;
-                #Prevent runime eror on leap year (invalid date)
-                if (($alloweddate[1] == 2) && ($alloweddate[2] == 29)) {
-                    $alloweddate[2] = 28;
+            if ( Date_to_Days(Today) < Date_to_Days(@alloweddate) - 1 ) {
+                if ( C4::Context->preference('AgeRestrictionOverride') ) {
+                    $needsconfirmation{AGE_RESTRICTION} = "$bibvalues";
                 }
-
-                if ( Date_to_Days(Today) <  Date_to_Days(@alloweddate) -1  ) {
-                    if (C4::Context->preference('AgeRestrictionOverride' )) {
-                        $needsconfirmation{AGE_RESTRICTION} = "$bibvalues";
-                    }
-                    else {
-                        $issuingimpossible{AGE_RESTRICTION} = "$bibvalues";
-                    }
+                else {
+                    $issuingimpossible{AGE_RESTRICTION} = "$bibvalues";
                 }
             }
         }
     }
 
-## check for high holds decreasing loan period
+    ## check for high holds decreasing loan period
     my $decrease_loan = C4::Context->preference('decreaseLoanHighHolds');
     if ( $decrease_loan && $decrease_loan == 1 ) {
         my ( $reserved, $num, $duration, $returndate ) =
@@ -3586,6 +3560,44 @@ sub IsItemIssued {
     });
     $sth->execute($itemnumber);
     return $sth->fetchrow;
+}
+
+sub GetAgeRestriction {
+    my ($record_restrictions) = @_;
+    my $markers = C4::Context->preference('AgeRestrictionMarker');
+
+    # Split $record_restrictions to something like FSK 16 or PEGI 6
+    my @values = split ' ', uc($record_restrictions);
+    return unless @values;
+
+    # Search first occurence of one of the markers
+    my @markers = split /\|/, uc($markers);
+    return unless @markers;
+
+    my $index            = 0;
+    my $restriction_year = 0;
+    for my $value (@values) {
+        $index++;
+        for my $marker (@markers) {
+            $marker =~ s/^\s+//;    #remove leading spaces
+            $marker =~ s/\s+$//;    #remove trailing spaces
+            if ( $marker eq $value ) {
+                if ( $index <= $#values ) {
+                    $restriction_year += $values[$index];
+                }
+                last;
+            }
+            elsif ( $value =~ /^\Q$marker\E(\d+)$/ ) {
+
+                # Perhaps it is something like "K16" (as in Finland)
+                $restriction_year += $1;
+                last;
+            }
+        }
+        last if ( $restriction_year > 0 );
+    }
+
+    return $restriction_year;
 }
 
 1;
