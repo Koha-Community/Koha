@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
+
 use MARC::Record;
 
 use C4::Branch;
@@ -71,6 +72,8 @@ AddReserve($branch,    $borrowernumber, $biblionumber,
 my ($status, $reserve, $all_reserves) = CheckReserves($itemnumber, $barcode);
 
 is($status, "Reserved", "CheckReserves Test 1");
+
+ok(exists($reserve->{reserve_id}), 'CheckReserves() include reserve_id in its response');
 
 ($status, $reserve, $all_reserves) = CheckReserves($itemnumber);
 is($status, "Reserved", "CheckReserves Test 2");
