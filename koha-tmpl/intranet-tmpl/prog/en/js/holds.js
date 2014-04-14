@@ -4,6 +4,7 @@ $(document).ready(function() {
     $("#holds-tab").click( function() {
         if ( ! holdsTable ) {
             holdsTable = $("#holds-table").dataTable({
+                "bAutoWidth": false,
                 "sDom": "<'row-fluid'<'span6'><'span6'>r>t<'row-fluid'>t",
                 "aoColumns": [
                     {
@@ -11,7 +12,7 @@ $(document).ready(function() {
                     },
                     {
                         "mDataProp": function ( oObj ) {
-                            title = "<a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
+                            title = "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber="
                                   + oObj.biblionumber
                                   + "'>"
                                   + oObj.title;
@@ -23,7 +24,7 @@ $(document).ready(function() {
                             title += "</a>";
 
                             if ( oObj.author ) {
-                                title += " " + BY + " " + oObj.author;
+                                title += " " + BY.replace( "_AUTHOR_",  oObj.author );
                             }
 
                             if ( oObj.itemnotes ) {
@@ -33,17 +34,6 @@ $(document).ready(function() {
                                 }
                                 title += " - <span class='" + span_class + "'>" + oObj.itemnotes + "</span>"
                             }
-
-                            title += " "
-                                  + "<a href='/cgi-bin/koha/catalogue/moredetail.pl?biblionumber="
-                                  + oObj.biblionumber
-                                  + "&itemnumber="
-                                  + oObj.itemnumber
-                                  + "#"
-                                  + oObj.itemnumber
-                                  + "'>"
-                                  + oObj.barcode
-                                  + "</a>";
 
                             return title;
                         }
@@ -58,9 +48,9 @@ $(document).ready(function() {
                             var data = "";
 
                             if ( oObj.suspend == 1 ) {
-                                data += "<p>" + HOLD_IS + " <strong> " + SUSPENDED + " </strong>";
+                                data += "<p>" + HOLD_IS_SUSPENDED;
                                 if ( oObj.suspend_until ) {
-                                    data += " " + UNTIL + " " + oObj.suspend_until_formatted;
+                                    data += " " + UNTIL.replace( "_SUSPEND_UNTIL_", oObj.suspend_until_formatted );
                                 }
                                 data += "</p>";
                             }
@@ -68,19 +58,27 @@ $(document).ready(function() {
                             if ( oObj.barcode ) {
                                 data += "<em>";
                                 if ( oObj.found == "W" ) {
-                                    data += ITEM_IS + " <strong> " + WAITING + " </strong>";
+                                    data += ITEM_IS_WAITING;
 
                                     if ( ! oObj.waiting_here ) {
-                                        data += " " + AT + " " + oObj.waiting_at;
+                                        data += " " + AT.replace("_WAITING_AT_BRANCH_", oObj.waiting_at );
                                     }
                                 } else if ( oObj.transferred ) {
-                                    data += ITEM_IS + " <strong> " + IN_TRANSIT + " </strong> " + FROM + oObj.from_branch;
+                                    data += ITEM_IS_IN_TRANSIT.replace( "_FROM_BRANCH_", oObj.from_branch );
                                 } else if ( oObj.not_transferred ) {
-                                    data += NOT_TRANSFERRED_YET + " " + oObj.not_transferred_by;
-                                }                                 data += "</em>";
+                                    data += NOT_TRANSFERRED_YET.replace( "_FROM_BRANCH_", oObj.not_transferred_by );
+                                }
+                                data += "</em>";
 
                                 data += " <a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
-                                     + oObj.biblionumber + "'>" + oObj.barcode + "</a>";
+                                  + oObj.biblionumber
+                                  + "&itemnumber="
+                                  + oObj.itemnumber
+                                  + "#"
+                                  + oObj.itemnumber
+                                  + "'>"
+                                  + oObj.barcode
+                                  + "</a>";
                             }
 
                             return data;
@@ -97,6 +95,7 @@ $(document).ready(function() {
                         }
                     },
                     {
+                        "bSortable": false,
                         "mDataProp": function( oObj ) {
                             return "<select name='rank-request'>"
                                  + "<option value='n'>" + NO + "</option>"
@@ -110,7 +109,7 @@ $(document).ready(function() {
                 ],
                 "bPaginate": false,
                 "bProcessing": true,
-                "bServerSide": true,
+                "bServerSide": false,
                 "sAjaxSource": '/cgi-bin/koha/svc/holds.pl',
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
                     aoData.push( { "name": "borrowernumber", "value": borrowernumber } );

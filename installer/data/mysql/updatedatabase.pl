@@ -8560,6 +8560,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        DELETE FROM systempreferences WHERE variable = 'UseTableSortForCirc'
+    });
+
+    print "Upgrade to $DBversion done (Bug 11703 - Convert checkouts table to ajax datatable)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

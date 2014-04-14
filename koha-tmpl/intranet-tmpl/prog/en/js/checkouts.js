@@ -127,12 +127,12 @@ $(document).ready(function() {
     var issuesTable;
     var drawn = 0;
     issuesTable = $("#issues-table").dataTable({
+        "bAutoWidth": false,
         "sDom": "<'row-fluid'<'span6'><'span6'>r>t<'row-fluid'>t",
-        "aaSorting": [[ 0, "desc" ]],
         "aoColumns": [
             {
                 "mDataProp": function( oObj ) {
-                    if ( $.datepicker.formatDate('yy-mm-dd', new Date(oObj.issuedate) ) == ymd ) {
+                    if ( oObj.issued_today ) {
                         return "<strong>" + TODAYS_CHECKOUTS + "</strong>";
                     } else {
                         return "<strong>" + PREVIOUS_CHECKOUTS + "</strong>";
@@ -157,7 +157,7 @@ $(document).ready(function() {
             },
             {
                 "mDataProp": function ( oObj ) {
-                    title = "<a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
+                    title = "<span class='strong'><a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
                           + oObj.biblionumber
                           + "'>"
                           + oObj.title;
@@ -166,10 +166,10 @@ $(document).ready(function() {
                               title += " " + value.subfield;
                     });
 
-                    title += "</a>";
+                    title += "</a></span>";
 
                     if ( oObj.author ) {
-                        title += " " + BY + " " + oObj.author;
+                        title += " " + BY.replace( "_AUTHOR_",  " " + oObj.author );
                     }
 
                     if ( oObj.itemnotes ) {
@@ -195,18 +195,21 @@ $(document).ready(function() {
                 }
             },
             { "mDataProp": "itemtype" },
-            { "mDataProp": "issuedate" },
+            { "mDataProp": "issuedate_formatted" },
             { "mDataProp": "branchname" },
             { "mDataProp": "itemcallnumber" },
             {
-                "bSortable": false,
                 "mDataProp": function ( oObj ) {
+                    if ( ! oObj.charge ) oObj.charge = 0;
                     return parseFloat(oObj.charge).toFixed(2);
                 }
             },
             {
-                "bSortable": false,
-                "mDataProp": "price" },
+                "mDataProp": function ( oObj ) {
+                    if ( ! oObj.price ) oObj.price = 0;
+                    return parseFloat(oObj.price).toFixed(2);
+                }
+            },
             {
                 "bSortable": false,
                 "mDataProp": function ( oObj ) {
@@ -233,6 +236,13 @@ $(document).ready(function() {
 
                         span_style = "display: none";
                         span_class = "renewals-allowed";
+                    } else if ( oObj.can_renew_error == "too_soon" ) {
+                        content += "<span class='renewals-disabled'>"
+                                + NOT_RENEWABLE_TOO_SOON
+                                + "</span>";
+
+                        span_style = "display: none";
+                        span_class = "renewals-allowed";
                     } else {
                         content += "<span class='renewals-disabled'>"
                                 + oObj.can_renew_error
@@ -248,10 +258,8 @@ $(document).ready(function() {
 
                     if ( oObj.renewals_remaining ) {
                         content += "<span class='renewals'>("
-                                + oObj.renewals_remaining
-                                + " " + OF + " "
-                                + oObj.renewals_allowed + " "
-                                + RENEWALS_REMAINING + ")</span>";
+                                + RENEWALS_REMAINING.replace( "_RENEWALS_REMAINING_", oObj.renewals_remaining ).replace( "_RENEWALS_ALLOWED_", oObj.renewals_allowed )
+                                + ")</span>";
                     }
 
                     content += "</span>";
@@ -333,10 +341,16 @@ $(document).ready(function() {
     $("#relatives-issues-tab").click( function() {
         if ( ! relativesIssuesTable ) {
             relativesIssuesTable = $("#relatives-issues-table").dataTable({
+                "bAutoWidth": false,
                 "sDom": "<'row-fluid'<'span6'><'span6'>r>t<'row-fluid'>t",
                 "aaSorting": [],
                 "aoColumns": [
                     {
+                        "mDataProp": "date_due",
+                        "bVisible": false,
+                    },
+                    {
+                        "iDataSort": 1, // Sort on hidden unformatted date due column
                         "mDataProp": function( oObj ) {
                             var today = new Date();
                             var due = new Date( oObj.date_due );
@@ -349,7 +363,7 @@ $(document).ready(function() {
                     },
                     {
                         "mDataProp": function ( oObj ) {
-                            title = "<a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
+                            title = "<span class='strong'><a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
                                   + oObj.biblionumber
                                   + "'>"
                                   + oObj.title;
@@ -358,7 +372,7 @@ $(document).ready(function() {
                                       title += " " + value.subfield;
                             });
 
-                            title += "</a>";
+                            title += "</a></span>";
 
                             if ( oObj.author ) {
                                 title += " " + BY + " " + oObj.author;
@@ -387,11 +401,21 @@ $(document).ready(function() {
                         }
                     },
                     { "mDataProp": "itemtype" },
-                    { "mDataProp": "issuedate" },
+                    { "mDataProp": "issuedate_formatted" },
                     { "mDataProp": "branchname" },
                     { "mDataProp": "itemcallnumber" },
-                    { "mDataProp": "charge" },
-                    { "mDataProp": "price" },
+                    {
+                        "mDataProp": function ( oObj ) {
+                            if ( ! oObj.charge ) oObj.charge = 0;
+                            return parseFloat(oObj.charge).toFixed(2);
+                        }
+                    },
+                    {
+                        "mDataProp": function ( oObj ) {
+                            if ( ! oObj.price ) oObj.price = 0;
+                            return parseFloat(oObj.price).toFixed(2);
+                        }
+                    },
                     {
                         "mDataProp": function( oObj ) {
                             return "<a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=" + oObj.borrowernumber + "'>"
@@ -401,7 +425,7 @@ $(document).ready(function() {
                 ],
                 "bPaginate": false,
                 "bProcessing": true,
-                "bServerSide": true,
+                "bServerSide": false,
                 "sAjaxSource": '/cgi-bin/koha/svc/checkouts.pl',
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
                     $.each(relatives_borrowernumbers, function( index, value ) {

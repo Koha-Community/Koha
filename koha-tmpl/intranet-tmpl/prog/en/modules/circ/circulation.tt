@@ -15,9 +15,9 @@
 [% INCLUDE 'calendar.inc' %]
 
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 [% INCLUDE 'strings.inc' %]
+[% INCLUDE 'datatables.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min.js"></script>
 [% INCLUDE 'timepicker.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.rowGrouping.js"></script>
@@ -721,6 +721,7 @@ No patron matched <span class="ex">[% message %]</span>
         <table id="relatives-issues-table">
             <thead>
                 <tr>
+                    <th scope="col">Due date (unformatted, hidden)</th>
                     <th scope="col">Due date</th>
                     <th scope="col">Title</th>
                     <th scope="col">Item type</th>

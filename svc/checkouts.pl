@@ -81,7 +81,9 @@ my $sql = '
         borrowernumber,
         surname,
         firstname,
-        cardnumber
+        cardnumber,
+
+        DATEDIFF( issuedate, CURRENT_DATE() ) AS not_issued_today
     FROM issues
         LEFT JOIN items USING ( itemnumber )
         LEFT JOIN biblio USING ( biblionumber )
@@ -95,7 +97,7 @@ if ( @borrowernumber == 1 ) {
     $sql .= '= ?';
 }
 else {
-    $sql = ' IN (' . join( ',', ('?') x @borrowernumber ) . ') ';
+    $sql .= ' IN (' . join( ',', ('?') x @borrowernumber ) . ') ';
 }
 push( @parameters, @borrowernumber );
 
@@ -103,11 +105,12 @@ $sql .= " ORDER BY $sorting_column $sorting_direction ";
 
 my $dbh = C4::Context->dbh();
 my $sth = $dbh->prepare($sql);
-$sth->execute( @parameters );
+$sth->execute(@parameters);
 
 my $item_level_itypes = C4::Context->preference('item-level_itypes');
 
-my @checkouts;
+my @checkouts_today;
+my @checkouts_previous;
 while ( my $c = $sth->fetchrow_hashref() ) {
     my ($charge) = GetIssuingCharges( $c->{itemnumber}, $c->{borrowernumber} );
 
@@ -116,50 +119,71 @@ while ( my $c = $sth->fetchrow_hashref() ) {
 
     my ( $renewals_count, $renewals_allowed, $renewals_remaining ) =
       GetRenewCount( $c->{borrowernumber}, $c->{itemnumber} );
-    push(
-        @checkouts,
-        {
-            DT_RowId   => $c->{itemnumber} . '-' . $c->{borrowernumber},
-            title      => $c->{title},
-            author     => $c->{author},
-            barcode    => $c->{barcode},
-            itemtype   => $item_level_itypes ? $c->{itype} : $c->{itemtype},
-            itemnotes  => $c->{itemnotes},
-            branchcode => $c->{branchcode},
-            branchname => $c->{branchname},
-            itemcallnumber => $c->{itemcallnumber}   || q{},
-            charge         => $charge,
-            price          => $c->{replacementprice} || q{},
-            can_renew      => $can_renew,
-            can_renew_error    => $can_renew_error,
-            itemnumber         => $c->{itemnumber},
-            borrowernumber     => $c->{borrowernumber},
-            biblionumber       => $c->{biblionumber},
-            issuedate          => $c->{issuedate},
-            date_due           => $c->{date_due},
-            renewals_count     => $renewals_count,
-            renewals_allowed   => $renewals_allowed,
-            renewals_remaining => $renewals_remaining,
-            issuedate_formatted =>
-              output_pref( dt_from_string( $c->{issuedate} ) ),
-            date_due_formatted =>
-              output_pref_due( dt_from_string( $c->{date_due} ) ),
-            subtitle => GetRecordValue(
-                'subtitle',
-                GetMarcBiblio( $c->{biblionumber} ),
-                GetFrameworkCode( $c->{biblionumber} )
-            ),
-            borrower => {
-                surname    => $c->{surname},
-                firstname  => $c->{firstname},
-                cardnumber => $c->{cardnumber},
+
+    my $checkout = {
+        DT_RowId   => $c->{itemnumber} . '-' . $c->{borrowernumber},
+        title      => $c->{title},
+        author     => $c->{author},
+        barcode    => $c->{barcode},
+        itemtype   => $item_level_itypes ? $c->{itype} : $c->{itemtype},
+        itemnotes  => $c->{itemnotes},
+        branchcode => $c->{branchcode},
+        branchname => $c->{branchname},
+        itemcallnumber => $c->{itemcallnumber}   || q{},
+        charge         => $charge,
+        price          => $c->{replacementprice} || q{},
+        can_renew      => $can_renew,
+        can_renew_error     => $can_renew_error,
+        itemnumber          => $c->{itemnumber},
+        borrowernumber      => $c->{borrowernumber},
+        biblionumber        => $c->{biblionumber},
+        issuedate           => $c->{issuedate},
+        date_due            => $c->{date_due},
+        renewals_count      => $renewals_count,
+        renewals_allowed    => $renewals_allowed,
+        renewals_remaining  => $renewals_remaining,
+        issuedate_formatted => output_pref(
+            {
+                dt          => dt_from_string( $c->{issuedate} ),
+                as_due_date => 1
             }
-        }
-    );
+        ),
+        date_due_formatted => output_pref(
+            {
+                dt          => dt_from_string( $c->{date_due} ),
+                as_due_date => 1
+            }
+        ),
+        subtitle => GetRecordValue(
+            'subtitle',
+            GetMarcBiblio( $c->{biblionumber} ),
+            GetFrameworkCode( $c->{biblionumber} )
+        ),
+        borrower => {
+            surname    => $c->{surname},
+            firstname  => $c->{firstname},
+            cardnumber => $c->{cardnumber},
+        },
+        issued_today => !$c->{not_issued_today},
+    };
+
+    if ( $c->{not_issued_today} ) {
+        push( @checkouts_previous, $checkout );
+    }
+    else {
+        push( @checkouts_today, $checkout );
+    }
 }
 
+@checkouts_today = reverse(@checkouts_today)
+  if ( C4::Context->preference('todaysIssuesDefaultSortOrder') eq 'desc' );
+@checkouts_previous = reverse(@checkouts_previous)
+  if ( C4::Context->preference('previousIssuesDefaultSortOrder') eq 'desc' );
+
+my @checkouts = ( @checkouts_today, @checkouts_previous );
+
 my $data;
-$data->{'iTotalRecords'}        = scalar @checkouts;                 #FIXME
+$data->{'iTotalRecords'}        = scalar @checkouts;
 $data->{'iTotalDisplayRecords'} = scalar @checkouts;
 $data->{'sEcho'}                = $input->param('sEcho') || undef;
 $data->{'aaData'}               = \@checkouts;

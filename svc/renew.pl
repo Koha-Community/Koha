@@ -26,7 +26,7 @@ use C4::Circulation;
 use C4::Context;
 use C4::Auth qw(check_cookie_auth);
 
-use Koha::DateUtils qw(output_pref_due dt_from_string);
+use Koha::DateUtils qw(output_pref dt_from_string);
 
 my $input = new CGI;
 
@@ -63,7 +63,7 @@ $data->{branchcode} = $branchcode;
 
 if ( $data->{renew_okay} ) {
     $date_due = AddRenewal( $borrowernumber, $itemnumber, $branchcode, $date_due );
-    $data->{date_due} = output_pref_due( $date_due );
+    $data->{date_due} = output_pref( { dt => $date_due, as_due_date => 1 } );
 }
 
 print to_json($data);

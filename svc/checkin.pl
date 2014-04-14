@@ -27,8 +27,6 @@ use C4::Items qw(GetBarcodeFromItemnumber);
 use C4::Context;
 use C4::Auth qw(check_cookie_auth);
 
-use Koha::DateUtils qw(output_pref_due);
-
 my $input = new CGI;
 
 my ( $auth_status, $sessionID ) =

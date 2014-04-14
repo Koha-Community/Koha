@@ -95,14 +95,17 @@ while ( my $h = $holds_rs->next() ) {
             'subtitle', GetMarcBiblio($biblionumber),
             GetFrameworkCode($biblionumber)
         ),
-        reservedate_formatted => $h->reservedate()
-        ? output_pref_due( dt_from_string( $h->reservedate() ) )
+        reservedate_formatted => $h->reservedate() ? output_pref(
+            { dt => dt_from_string( $h->reservedate() ), dateonly => 1 }
+          )
         : q{},
-        suspend_until_formatted => $h->suspend_until()
-        ? output_pref_due( dt_from_string( $h->suspend_until() ) )
+        suspend_until_formatted => $h->suspend_until() ? output_pref(
+            { dt => dt_from_string( $h->suspend_until() ), dateonly => 1 }
+          )
         : q{},
-        expirationdate_formatted => $h->expirationdate()
-        ? output_pref_due( dt_from_string( $h->expirationdate() ) )
+        expirationdate_formatted => $h->expirationdate() ? output_pref(
+            { dt => dt_from_string( $h->expirationdate() ), dateonly => 1 }
+          )
         : q{},
     };
 
@@ -120,7 +123,7 @@ while ( my $h = $holds_rs->next() ) {
         if ($transferred_when) {
             $hold->{color}       = 'transferred';
             $hold->{transferred} = 1;
-            $hold->{date_sent}   = format_date($transferred_when);
+            $hold->{date_sent} = output_pref( dt_from_string($transferred_when) );
             $hold->{from_branch} = GetBranchName($transferred_from);
         }
         elsif ( $item->holdingbranch()->branchcode() ne
