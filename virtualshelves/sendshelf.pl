@@ -21,7 +21,7 @@ use strict;
 use warnings;
 
 use CGI qw ( -utf8 );
-use Encode qw(encode);
+use Encode qw( encode );
 use Carp;
 
 use Mail::Sendmail;
@@ -119,7 +119,7 @@ if ($email) {
 
     # Analysing information and getting mail properties
     if ( $template_res =~ /<SUBJECT>(.*)<END_SUBJECT>/s ) {
-        $mail{subject} = $1;
+        $mail{'subject'} = Encode::encode("UTF-8", $1);
         $mail{subject} =~ s|\n?(.*)\n?|$1|;
     }
     else { $mail{'subject'} = "no subject"; }
@@ -128,7 +128,7 @@ if ($email) {
     if ( $template_res =~ /<HEADER>(.*)<END_HEADER>/s ) {
         $email_header = $1;
         $email_header =~ s|\n?(.*)\n?|$1|;
-        $email_header = encode_qp($email_header);
+        $email_header = encode_qp(Encode::encode("UTF-8", $email_header));
     }
 
     my $email_file = "list.txt";
@@ -140,7 +140,7 @@ if ($email) {
     if ( $template_res =~ /<MESSAGE>(.*)<END_MESSAGE>/s ) {
         $body = $1;
         $body =~ s|\n?(.*)\n?|$1|;
-        $body = encode_qp($body);
+        $body = encode_qp(Encode::encode("UTF-8", $body));
     }
 
     my $boundary = "====" . time() . "====";

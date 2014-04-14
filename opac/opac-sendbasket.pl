@@ -131,6 +131,7 @@ if ( $email_add ) {
     if ( $template_res =~ /<SUBJECT>(.*)<END_SUBJECT>/s ) {
         $mail{subject} = $1;
         $mail{subject} =~ s|\n?(.*)\n?|$1|;
+        $mail{subject} = Encode::encode("UTF-8", $mail{subject});
     }
     else { $mail{'subject'} = "no subject"; }
 
@@ -138,7 +139,7 @@ if ( $email_add ) {
     if ( $template_res =~ /<HEADER>(.*)<END_HEADER>/s ) {
         $email_header = $1;
         $email_header =~ s|\n?(.*)\n?|$1|;
-        $email_header = encode_qp($email_header);
+        $email_header = encode_qp(Encode::encode("UTF-8", $email_header));
     }
 
     my $email_file = "basket.txt";
@@ -150,7 +151,7 @@ if ( $email_add ) {
     if ( $template_res =~ /<MESSAGE>(.*)<END_MESSAGE>/s ) {
         $body = $1;
         $body =~ s|\n?(.*)\n?|$1|;
-        $body = encode_qp($body);
+        $body = encode_qp(Encode::encode("UTF-8", $body));
     }
 
     $mail{body} = $body;
