@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Holds to pull</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -5,16 +6,15 @@
 <!-- Plugin datatables -->
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
-<script type="text/JavaScript" language="JavaScript">
+<script type="text/JavaScript">
 //<![CDATA[
 $(document).ready(function() {
-  [% IF (dateformat == 'metric') %]
-      dt_add_type_uk_date();
-  [% END %]
   var holdst = $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
-      "aoColumnDefs": [
-          { "sType": "string", "aTargets": [ 4, 8, 9 ] } //Target columns that use <br> separators and pull-down menus. FIXME: Use class names instead of indexes.
-      ]
+    "aoColumnDefs": [
+        { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+        { "sType": "title-string", "aTargets" : [ "title-string" ] },
+        { "sType": "string", "aTargets": [ "string-sort" ] } //Target columns that use <br> separators and pull-down menus.
+    ]
   }));
   holdst.fnAddFilters("filter");
   [%# add separateData function to cleanse jQuery select lists by breaking apart strings glued with BR tags and then de-duplicating any repeated library codes %]
@@ -83,7 +83,7 @@ $(document).ready(function() {
 
 <h2>Holds to pull[% IF ( run_report ) %] placed between [% from %] and [% to %][% END %]</h2>
 [% IF ( run_report ) %]
-<h3>Reported on [% todaysdate %]</h3>
+<h3>Reported on [% todaysdate | $KohaDates %]</h3>
 <p>The following holds have not been filled. Please retrieve them and check them in.</p>
 <div class="searchresults">
     [% IF ( reserveloop ) %]
@@ -93,14 +93,14 @@ $(document).ready(function() {
         <th>Pull this many items</th>
         <th>Items available</th>
         <th>Patrons with holds</th>
-        <th>Title</th>
-        <th>Libraries</th>
+        <th class="anti-the">Title</th>
+        <th class="string-sort">Libraries</th>
         <th>Available call numbers</th>
         <th>Available copy numbers</th>
         <th>Available enumeration</th>
-        <th>Available itypes</th>
-        <th>Available locations</th>
-        <th>Earliest hold date</th>
+        <th class="string-sort">Available itypes</th>
+        <th class="string-sort">Available locations</th>
+        <th class="title-string">Earliest hold date</th>
         </tr>
     </thead>
     <tbody>
@@ -112,10 +112,9 @@ $(document).ready(function() {
             <td>[% reserveloo.rcount %]</td>
             <td>
             <p>
-        [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
-                    [% reserveloo.title |html %]
-                </a> [% IF ( reserveloo.author ) %]<p> by [% reserveloo.author %]</p>[% END %]
-            </p>
+                [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
+                [% reserveloo.title |html %]</a></p>
+                [% IF ( reserveloo.author ) %]<p> by [% reserveloo.author %]</p>[% END %]
             </td>
         [% ELSE %]
             <td>"</td>
@@ -129,9 +128,8 @@ $(document).ready(function() {
         <td><p>[% reserveloo.enumchron %]</p></td>
         <td>[% reserveloo.itype %]</td>
         <td>[% reserveloo.location %]</td>
-        <td width="15%">
-            <p>[% reserveloo.reservedate %]</p>
-            <p>in [% reserveloo.branch %]</p>
+        <td>
+            <span title="[% reserveloo.reservedate %]">[% reserveloo.reservedate | $KohaDates %] in [% reserveloo.branch %]</span>
             [% IF ( reserveloo.statusw ) %]<p>Waiting</p>[% END %][% IF ( reserveloo.statusf ) %]<p>Fullfilled</p>[% END %]
         </td>
         </tr>

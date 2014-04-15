@@ -165,7 +165,7 @@ if ( $run_report ) {
         push(
             @reservedata,
             {
-                reservedate     => format_date( $data->{l_reservedate} ),
+                reservedate     => $data->{l_reservedate},
                 priority        => $data->{priority},
                 name            => $data->{l_patron},
                 title           => $data->{title},
@@ -196,7 +196,7 @@ if ( $run_report ) {
 }
 
 $template->param(
-    todaysdate          => format_date($todaysdate),
+    todaysdate          => $todaysdate,
     from                => $startdate,
     to                  => $enddate,
     run_report          => $run_report,
