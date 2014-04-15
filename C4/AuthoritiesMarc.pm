@@ -957,7 +957,7 @@ sub BuildSummary {
         foreach my $field ($record->field('2..')) {
             push @authorized, {
                 heading => $field->as_string('abcdefghijlmnopqrstuvwxyz'),
-                hemain  => $field->subfield('a'),
+                hemain  => ( $field->subfield('a') // undef ),
                 field   => $field->tag(),
             };
         }
@@ -969,7 +969,7 @@ sub BuildSummary {
             my $thesaurus = $field->subfield('2') ? "thes. : ".$thesaurus{"$field->subfield('2')"}." : " : '';
             push @seefrom, {
                 heading => $thesaurus . $field->as_string('abcdefghijlmnopqrstuvwxyz'),
-                hemain  => $field->subfield('a'),
+                hemain  => ( $field->subfield('a') // undef ),
                 type    => 'seefrom',
                 field   => $field->tag(),
             };
@@ -983,9 +983,9 @@ sub BuildSummary {
                 field   => $_->tag,
                 type    => $type,
                 heading => $heading,
-                hemain  => $_->subfield('a'),
+                hemain  => ( $_->subfield('a') // undef ),
                 search  => $heading,
-                authid  => $_->subfield('9'),
+                authid  => ( $_->subfield('9') // undef ),
             }
         } $record->field('5..');
 
