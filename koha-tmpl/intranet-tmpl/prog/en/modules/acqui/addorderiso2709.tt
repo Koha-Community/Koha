@@ -146,8 +146,8 @@
                   </ul>
 
                   <div id="records_to_import">
-                    <span class="checkall"><a id="checkAll" href="#">Check All</a></span>
-                    <span class="uncheckall"><a id="unCheckAll" href="#">Uncheck All</a></span>
+                    <span class="checkall"><a id="checkAll" href="#">Check all</a></span>
+                    <span class="uncheckall"><a id="unCheckAll" href="#">Uncheck all</a></span>
                         <input type="hidden" name="op" value="import_records"/>
                         <input type="hidden" name="basketno" value="[% basketno %]" />
                         <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
@@ -165,9 +165,9 @@
                               <input type="checkbox" name="import_record_id" id="record_[% biblio.import_record_id %]" value="[% biblio.import_record_id %]" />
                               <span class="citation">[% biblio.citation %]</span>
                             </label>
-                            ( Show <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% biblio.import_record_id %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% biblio.import_record_id %]" title="Card" rel="gb_page_center[600,500]">Card</a> ; <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;breedingid=[% biblio.import_record_id %]&amp;import_batch_id=[% biblio.import_batch_id %]&amp;biblionumber=[% biblio.match_biblionumber %]">Add order</a> )
-
-
+                            <span class="links" style="font-weight: normal;">
+                              ( <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% biblio.import_record_id %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% biblio.import_record_id %]" title="Card" rel="gb_page_center[600,500]">Card</a> | <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;breedingid=[% biblio.import_record_id %]&amp;import_batch_id=[% biblio.import_batch_id %]&amp;biblionumber=[% biblio.match_biblionumber %]">Add order</a> )
+                            </span>
                           </legend>
                           <ol>
                             <li class="status">
@@ -196,7 +196,7 @@
                             </li>
                             <li class="discount">
                                 <label for="discount_record_[% biblio.import_record_id %]">Discount: </label>
-                                <input id="discount_record_[% biblio.import_record_id %]" type="text" value="[% biblio.discount %]" name="discount" />
+                                <input id="discount_record_[% biblio.import_record_id %]" type="text" value="[% biblio.discount %]" name="discount" size="6" /> %
                             </li>
                             <li class="budget">
                                 <label for="fund_record_[% biblio.import_record_id %]">Fund: </label>
@@ -216,11 +216,11 @@
                                 [% END %]
                             </li>
                             <li class="sort1">
-                                <label for="sort1_record_[% biblio.import_record_id %]">Planning value 1: </label>
+                                <label for="sort1_record_[% biblio.import_record_id %]">Statistic 1: </label>
                                 <input id="sort1_record_[% biblio.import_record_id %]" type="text" id="sort1" size="20" name="sort1" value="[% biblio.sort1 %]" />
                             </li>
                             <li class="sort2">
-                                <label for="sort2_record_[% biblio.import_record_id %]">Planning value 2: </label>
+                                <label for="sort2_record_[% biblio.import_record_id %]">Statistic 2: </label>
                                 <input id="sort2_record_[% biblio.import_record_id %]" type="text" id="sort2" size="20" name="sort2" value="[% biblio.sort2 %]" />
                             </li>
                           </ol>
@@ -266,6 +266,7 @@
                         [% END %] <!-- items -->
                       </div>
                       <div id="accounting_details">
+                        <p>Import all the checked items in the basket with the following accounting details (used only if no information is filled for the item):</p>
                         <fieldset class="rows" style="float:none;">
                             <legend>Accounting details</legend>
                             <ol>
@@ -314,7 +315,7 @@
                                 </li>
                                 <li>
                                     <div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
-                                    <label for="sort1">Planning value 1: </label>
+                                    <label for="sort1">Statistic 1: </label>
                                     [% IF CGIsort1 %]
                                         <select id="all_sort1" size="1" name="all_sort1">
                                         [% FOREACH sort_opt IN CGIsort1 %]
@@ -331,7 +332,7 @@
                                 </li>
                                 <li>
                                   <span id="sort2_zone">
-                                    <label for="sort2">Planning value 2: </label>
+                                    <label for="sort2">Statistic 2: </label>
                                     [% IF CGIsort2 %]
                                         <select id="all_sort2" size="1" name="all_sort1">
                                         [% FOREACH sort_opt IN CGIsort2 %]

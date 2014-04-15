@@ -215,6 +215,9 @@ function calcNewsuggTotal(){
 }
 
 function getAuthValueDropbox( name, cat, destination, selected ) {
+    if ( typeof(selected) == 'undefined' ) {
+        selected = "";
+    }
     if (cat == null || cat == "") {
         $(destination).replaceWith(' <input type="text" name="' + name + '" value="' + selected + '" />' );
         return;

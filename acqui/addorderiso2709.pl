@@ -174,7 +174,7 @@ if ($op eq ""){
         my $c_quantity = shift( @quantities ) || GetMarcQuantity($marcrecord, C4::Context->preference('marcflavour') ) || 1;
         my $c_budget_id = shift( @budgets_id ) || $input->param('all_budget_id') || $budget_id;
         my $c_discount = shift ( @discount);
-        $c_discount = $c_discount / 100 if $c_discount > 100;
+        $c_discount = $c_discount / 100 if $c_discount > 1;
         my $c_sort1 = shift( @sort1 ) || $input->param('all_sort1') || '';
         my $c_sort2 = shift( @sort2 ) || $input->param('all_sort2') || '';
 
