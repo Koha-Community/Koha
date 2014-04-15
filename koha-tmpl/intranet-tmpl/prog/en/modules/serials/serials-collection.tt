@@ -60,13 +60,9 @@ function CheckNone( node ) {
 }
 $(document).ready(function() {
     $('#subscription_years').tabs();
-    [% IF dateformat == "metric" %]
-      dt_add_type_uk_date();
-    [% END %]
-
     $(".subscription-year-table").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
-            { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+            { "aTargets": [ 0,-1 ], "bSortable": false, "bSearchable": false },
             { "sType": "title-string", "aTargets" : [ "title-string" ] }
         ],
         "aaSorting": [[0, 'desc']],

@@ -12,18 +12,15 @@
         [% UNLESS ( preview ) %]
          var sTable = $("#claimst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sDom": 't',
-            [% IF ( letter ) %]
                 "aoColumnDefs": [
-                    { "aTargets": [ 0,1 ], "bSortable": false, "bSearchable": false }
+                    [% IF ( letter ) %]
+                        { "aTargets": [ 0,1 ], "bSortable": false, "bSearchable": false },
+                    [% ELSE %]
+                        { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+                    [% END %]
+                    { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] },
+                    { 'sType': "title-string", 'aTargets' : [ 'title-string'] }
                 ],
-            [% ELSE %]
-                "aoColumnDefs": [
-                    { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false }
-                ],
-            [% END %]
-            "aoColumns": [
-                [% IF ( letter ) %]null,[% END %]null,null,{ "sType": "anti-the" },null,null,{ "sType": "title-string" },{ "sType": "title-string" }
-        ],
             "bPaginate": false
         }));
         [% END %]
@@ -268,12 +265,12 @@
                     <th><input type="checkbox" id="CheckAll"></th>
                     <th>Vendor</th>
                     <th>Library</th>
-                    <th>Title</th>
+                    <th class="anti-the">Title</th>
                     <th>ISSN</th>
                     <th>Issue number</th>
                     <th>Status</th>
-                    <th>Since</th>
-                    <th>Claim date</th>
+                    <th class="title-string">Since</th>
+                    <th class="title-string">Claim date</th>
                 </tr></thead>
                 <tbody>[% FOREACH missingissue IN missingissues %]
                     <tr>
