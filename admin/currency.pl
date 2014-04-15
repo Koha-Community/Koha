@@ -185,6 +185,7 @@ sub add_validate {
     my $rec = {
         rate     => $input->param('rate'),
         symbol   => $input->param('symbol') || q{},
+        isocode  => $input->param('isocode') || q{},
         active   => $input->param('active') || 0,
         currency => $input->param('currency'),
     };
@@ -198,20 +199,22 @@ sub add_validate {
         {}, $input->param('currency') );
     if ($row_count) {
         $dbh->do(
-q|UPDATE currency SET rate = ?, symbol = ?, active = ? WHERE currency = ? |,
+q|UPDATE currency SET rate = ?, symbol = ?, isocode = ?, active = ? WHERE currency = ? |,
             {},
             $rec->{rate},
             $rec->{symbol},
+            $rec->{isocode},
             $rec->{active},
             $rec->{currency}
         );
     } else {
         $dbh->do(
-q|INSERT INTO currency (currency, rate, symbol, active) VALUES (?,?,?,?) |,
+q|INSERT INTO currency (currency, rate, symbol, isocode, active) VALUES (?,?,?,?,?) |,
             {},
             $rec->{currency},
             $rec->{rate},
             $rec->{symbol},
+            $rec->{isocode},
             $rec->{active}
         );
 

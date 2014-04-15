@@ -46,7 +46,8 @@
 <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
-
+<div class="message dialog"><p style="text-align:justify" >The active currency priority will be picked during the importation process from a staged file whenever the price data is provided under different currencies.<br/>
+The symbol may be the pure currency sign or a string in which it's included ( like '$US' ).</p></div>
 [% IF ( else ) %]
 <div id="toolbar" class="btn-toolbar">
     <a class="btn btn-small" id="newcurrency" href="[% script_name %]?op=add_form"><i class="icon-plus"></i> New currency</a>
@@ -81,7 +82,10 @@
             <label for="symbol" class="required">Symbol: </label>
             <input type="text" name="symbol" id="symbol" size="5" maxlength="5" value="[% symbol %]" required="required" class="required" /> <span class="required">Required</span>
         </li>
-
+        <li>
+            <label for="isocode" class="required">Iso code: </label>
+            <input type="text" name="isocode" id="isocode" size="5" maxlength="5" value="[% isocode %]" required="required"  class="required" /> <span class="required">Required</span>
+        </li>
         <li>
             <span class="label">Last updated: </span>[% timestamp %]
         </li>
@@ -161,6 +165,7 @@
             <th>Currency</th>
             <th>Rate</th>
             <th>Symbol</th>
+            <th>Iso code</th>
             <th>Last updated</th>
             <th>Active</th>
             <th colspan="2">Actions&nbsp;</th>
@@ -174,6 +179,7 @@
             <td>[% loo.currency %]</td>
             <td>[% loo.rate %]</td>
             <td>[% loo.symbol |html %]</td>
+            <td>[% loo.isocode |html %]</td>
             <td>[% loo.timestamp %]</td>
             <td style="color:green;">[% IF ( loo.active ) %]✓[% END %]</td>
             <td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.currency %]">Edit</a></td>

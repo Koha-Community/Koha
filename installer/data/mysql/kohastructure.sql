@@ -716,6 +716,7 @@ DROP TABLE IF EXISTS `currency`;
 CREATE TABLE `currency` (
   `currency` varchar(10) NOT NULL default '',
   `symbol` varchar(5) default NULL,
+  `isocode` varchar(5) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `rate` float(15,5) default NULL,
   `active` tinyint(1) default NULL,
