@@ -334,7 +334,7 @@ sub import_batches_list {
             if (scalar @$stagedList) {
                 push @list, {
                         import_batch_id => $batch->{'import_batch_id'},
-                        num_biblios => $batch->{'num_records'},
+                        num_records => $batch->{'num_records'},
                         num_items => $batch->{'num_items'},
                         staged_date => $batch->{'upload_timestamp'},
                         import_status => $batch->{'import_status'},
@@ -404,12 +404,12 @@ sub import_biblios_list {
 
         push @list, \%cellrecord;
     }
-    my $num_biblios = $batch->{'num_records'};
+    my $num_records = $batch->{'num_records'};
     my $overlay_action = GetImportBatchOverlayAction($import_batch_id);
     my $nomatch_action = GetImportBatchNoMatchAction($import_batch_id);
     my $item_action = GetImportBatchItemAction($import_batch_id);
     $template->param(biblio_list => \@list,
-                        num_results => $num_biblios,
+                        num_results => $num_records,
                         import_batch_id => $import_batch_id,
                         "overlay_action_${overlay_action}" => 1,
                         overlay_action => $overlay_action,
@@ -428,7 +428,7 @@ sub batch_info {
                                           comments => $batch->{'comments'},
                                           import_status => $batch->{'import_status'},
                                           upload_timestamp => $batch->{'upload_timestamp'},
-                                          num_biblios => $batch->{'num_records'},
+                                          num_records => $batch->{'num_records'},
                                           num_items => $batch->{'num_items'});
     if ($batch->{'num_records'} > 0) {
         if ($batch->{'import_status'} eq 'staged' or $batch->{'import_status'} eq 'reverted') {
