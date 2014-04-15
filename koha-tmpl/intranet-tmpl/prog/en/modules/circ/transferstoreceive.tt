@@ -6,17 +6,13 @@
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-[% IF (dateformat == 'metric') %]
-dt_add_type_uk_date();
-[% END %]
 $(document).ready(function() {
     [% FOREACH branchesloo IN branchesloop %]
     $("#transferst[% branchesloo.branchcode %]").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
             { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-        ],
-        "aoColumns": [
-            { "sType": "title-string" },{ "sType": "anti-the" },null,null,null,null
+            { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+            { "sType": "title-string", "aTargets" : [ "title-string" ] }
         ],
         "sDom": 't',
         "bPaginate": false
@@ -48,8 +44,8 @@ $(document).ready(function() {
             <table style="width: 100%" id="transferst[% branchesloo.branchcode %]">
             <caption>Coming from [% branchesloo.branchname %]</caption>
             <thead><tr>
-                <th>Date of transfer</th>
-                <th>Title</th>
+                <th class="title-string">Date of transfer</th>
+                <th class="anti-the">Title</th>
                 <th>On hold for</th>
                 <th>Home library</th>
                 <th>Call no.</th>

@@ -6,18 +6,14 @@
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-[% IF (dateformat == 'metric') %]
-dt_add_type_uk_date();
-[% END %]
      $(document).ready(function() {
          $('#resultlist').tabs();
          $("th a").hide();
         $("#holdst,#holdso").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
                 { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-            ],
-            "aoColumns": [
-                { "sType": "title-string" },{ "sType": "anti-the" },null,null,null,null,null
+                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                { "sType": "title-string", "aTargets" : [ "title-string" ] }
             ],
             "sPaginationType": "four_button"
         }));
@@ -81,8 +77,8 @@ dt_add_type_uk_date();
             [% IF ( reserveloop ) %]
                <table id="holdst">
                <thead><tr>
-                    <th>Available since</th>
-                    <th>Title</th>
+                    <th class="title-string">Available since</th>
+                    <th class="anti-the">Title</th>
                     <th>Patron</th>
                     <th>Location</th>
                     <th>Copy number</th>
@@ -141,8 +137,8 @@ dt_add_type_uk_date();
                <br/>
                <table id="holdso">
                <thead><tr>
-                    <th>Available since</th>
-                    <th>Title</th>
+                    <th class="title-string">Available since</th>
+                    <th class="anti-the">Title</th>
                     <th>Patron</th>
                     <th>Location</th>
                     <th>Copy number</th>

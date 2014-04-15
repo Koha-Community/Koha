@@ -23,7 +23,6 @@
 //<![CDATA[
 var MSG_ADD_MESSAGE = _("Add a new message");
 var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
-[% IF ( UseTablesortForCirc && dateformat == 'metric' ) %]dt_add_type_uk_date();[% END %]
 [% IF ( borrowernumber ) %]if($.cookie("holdfor") != [% borrowernumber %]){ $.cookie("holdfor",null, { path: "/", expires: 0 }); }[% ELSE %]$.cookie("holdfor",null, { path: "/", expires: 0 });[% END %]
 [% UNLESS ( borrowernumber ) %][% UNLESS ( CGIselectborrower ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %][% END %]
 	 $(document).ready(function() {
@@ -42,10 +41,9 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
             "sDom": 't',
             "aaSorting": [],
             "aoColumnDefs": [
-                { "aTargets": [ -1, -2[% IF ( exports_enabled ) %], -3[% END %] ], "bSortable": false, "bSearchable": false }
-            ],
-            "aoColumns": [
-                { "sType": "title-string" },{ "sType": "anti-the" },null,{ "sType": "title-string" },null,null,null,null,null,null[% IF ( exports_enabled ) %],null[% END %]
+                { "aTargets": [ -1, -2[% IF ( exports_enabled ) %], -3[% END %] ], "bSortable": false, "bSearchable": false },
+                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                { "sType": "title-string", "aTargets" : [ "title-string" ] }
             ],
             "bPaginate": false
         }));
@@ -53,8 +51,10 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
         $("#relissuest").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sDom": 't',
             "aaSorting": [],
-            "aoColumns": [
-                { "sType": "title-string" },{ "sType": "anti-the" },null,{ "sType": "title-string" },null,null,null,null,{ "sType": "html" }
+            "aoColumnDefs": [
+                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                { "sType": "title-string", "aTargets" : [ "title-string" ] },
+                { "sType": "html", "aTargets" : [ "html-content" ] }
             ],
             "bPaginate": false
         }));
@@ -724,10 +724,10 @@ No patron matched <span class="ex">[% message %]</span>
     <input type="hidden" name="branch" value="[% branch %]" />
         <table id="issuest">
     <thead><tr>
-        <th scope="col">Due date</th>
-        <th scope="col">Title</th>
+        <th scope="col" class="title-string">Due date</th>
+        <th scope="col" class="anti-the">Title</th>
         <th scope="col">Item type</th>
-        <th scope="col">Checked out on</th>
+        <th scope="col" class="title-string">Checked out on</th>
         <th scope="col">Checked out from</th>
         <th scope="col">Call no</th>
         <th scope="col">Charge</th>
@@ -973,15 +973,15 @@ No patron matched <span class="ex">[% message %]</span>
     <table id="relissuest">
     <thead>
     <tr>
-        <th scope="col">Due date</th>
-        <th scope="col">Title</th>
+        <th scope="col" class="title-string">Due date</th>
+        <th scope="col" class="anti-the">Title</th>
         <th scope="col">Item type</th>
-        <th scope="col">Checked out on</th>
+        <th scope="col" class="title-string">Checked out on</th>
         <th scope="col">Checked out from</th>
         <th scope="col">Call no</th>
         <th scope="col">Charge</th>
         <th scope="col">Price</th>
-        <th scope="col">Patron</th>
+        <th scope="col" class="html-content">Patron</th>
     </tr>
     </thead>
 [% IF ( relissues ) %]	<tbody>
