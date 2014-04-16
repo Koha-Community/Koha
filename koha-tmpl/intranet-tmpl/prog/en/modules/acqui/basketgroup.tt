@@ -241,9 +241,9 @@ function submitForm(form) {
 
 	<div id="basket_groups" class="toptabs">
 	<ul class="ui-tabs-nav">
-        [% UNLESS ( closed ) %]<li class="ui-tabs-selected"><a href="#opened">Open</a></li>
+        [% UNLESS ( closed ) %]<li class="ui-tabs-active"><a href="#opened">Open</a></li>
         [% ELSE%]<li><a href="#opened">Open</a></li>[% END %]
-        [% IF ( closed ) %]<li class="ui-tabs-selected"><a href="#closed">Closed</a></li>
+        [% IF ( closed ) %]<li class="ui-tabs-active"><a href="#closed">Closed</a></li>
         [% ELSE %]<li><a href="#closed">Closed</a></li>[% END %]
     </ul>
     <div id="opened">

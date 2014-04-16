@@ -42,7 +42,7 @@ $(document).ready(function() {
 
 <style type="text/css">
 	fieldset.rows div.toptabs li { clear:none;margin-right:.5em;padding-bottom:0;width:auto; }
-    fieldset.rows div.toptabs .ui-tabs-nav li.ui-tabs-selected {background-color : #F4F8F9; }
+    fieldset.rows div.toptabs .ui-tabs-nav li.ui-tabs-active {background-color : #F4F8F9; }
 	fieldset.rows .ui-tabs-panel { margin-right : 10px; margin-left : 10px;margin-bottom:10px;}
     fieldset.rows .ui-tabs-nav { margin-left : 10px; }
 </style>
@@ -119,7 +119,7 @@ $(document).ready(function() {
 			<ul>
                   <li><a href="#none">None</a></li>
 				  [% FOREACH imageset IN imagesets %]
-                        [% IF ( imageset.imagesetactive ) %]<li class="ui-tabs-selected">[% ELSE %]<li>[% END %]<a href="#[% imageset.imagesetname %]">[% imageset.imagesetname %]</a></li>
+                        [% IF ( imageset.imagesetactive ) %]<li class="ui-tabs-active">[% ELSE %]<li>[% END %]<a href="#[% imageset.imagesetname %]">[% imageset.imagesetname %]</a></li>
 				  [% END %]
 			</ul>
   <div id="none"><ul>
