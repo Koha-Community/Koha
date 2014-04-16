@@ -23,7 +23,7 @@
 		});
 
         [% IF tab %]
-          $('#addbibliotabs').tabs('option', 'selected', "#[% tab %]");
+          $('#addbibliotabs').selectTabByID("#[% tab %]");
         [% END %]
 
 		/* check cookie to hide/show marcdocs*/
@@ -94,7 +94,7 @@
         });
         $("#saveandcontinue").click(function(){
             $(".btn-group").removeClass("open");
-            var tab = $("#addbibliotabs li.ui-tabs-selected:first a").attr('href');
+            var tab = $("#addbibliotabs li.ui-tabs-active:first a").attr('href');
             tab = tab.replace('#', '');
             $("#current_tab").val(tab);
             redirect("just_save", tab);

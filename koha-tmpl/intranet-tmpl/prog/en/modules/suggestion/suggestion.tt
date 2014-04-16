@@ -437,12 +437,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
     <div id="suggestiontabs" class="toptabs">
     <ul class="ui-tabs-nav">
         [% FOREACH suggestion IN suggestions %]
-            [% IF ( suggestion.first ) %]
-                <li class="ui-tabs-selected">
-            [% ELSE %]
                 <li>
-            [% END %]
-
             <a href="#[% suggestion.suggestiontype %]">
             [% IF ( suggestion.suggestiontypelabel ) %]
                 [% IF (suggestion.suggestiontypelabel == "Pending") %]Pending

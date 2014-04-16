@@ -43,7 +43,7 @@ Data deleted
 </script>
 <style type="text/css">
 	fieldset.rows div.toptabs li { clear:none;margin-right:.5em;padding-bottom:0;width:auto; }
-  fieldset.rows div.toptabs .ui-tabs-nav li.ui-tabs-selected {background-color : #F4F8F9; }
+  fieldset.rows div.toptabs .ui-tabs-nav li.ui-tabs-active {background-color : #F4F8F9; }
 	fieldset.rows .ui-tabs-panel { margin-right : 10px; margin-left : 10px;margin-bottom:10px;}
   fieldset.rows .ui-tabs-nav { margin-left : 10px; }
 </style>
@@ -115,9 +115,9 @@ Item types administration
 			<ul>
           <li><a href="#none">None</a></li>
 				  [% FOREACH imageset IN imagesets %]
-            [% IF ( imageset.imagesetactive ) %]<li class="ui-tabs-selected">[% ELSE %]<li>[% END %]<a href="#[% imageset.imagesetname %]">[% imageset.imagesetname %]</a></li>
+            [% IF ( imageset.imagesetactive ) %]<li class="ui-tabs-active">[% ELSE %]<li>[% END %]<a href="#[% imageset.imagesetname %]">[% imageset.imagesetname %]</a></li>
 				  [% END %]
-                  [% IF ( remote_image ) %]<li class="ui-tabs-selected">[% ELSE %]<li>[% END %]<a href="#remote">Remote image</a></li>
+                  [% IF ( remote_image ) %]<li class="ui-tabs-active">[% ELSE %]<li>[% END %]<a href="#remote">Remote image</a></li>
 			</ul>
   <div id="none"><ul>
   <li><label for="noimage">No image: </label><input type="radio" name="image" id="noimage" value="removeImage" /></li>
