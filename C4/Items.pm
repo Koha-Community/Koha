@@ -35,7 +35,8 @@ use DateTime::Format::MySQL;
 use Data::Dumper; # used as part of logging item record changes, not just for
                   # debugging; so please don't remove this
 use Koha::DateUtils qw/dt_from_string/;
-use C4::SQLHelper qw(GetColumns);
+
+use Koha::Database;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -2637,9 +2638,9 @@ sub _SearchItems_build_where_fragment {
             };
         }
     } else {
-        my @columns = GetColumns('items');
-        push @columns, GetColumns('biblio');
-        push @columns, GetColumns('biblioitems');
+        my @columns = Koha::Database->new()->schema()->resultset('Item')->result_source->columns;
+        push @columns, Koha::Database->new()->schema()->resultset('Biblio')->result_source->columns;
+        push @columns, Koha::Database->new()->schema()->resultset('Biblioitem')->result_source->columns;
         my @operators = qw(= != > < >= <= like);
         my $field = $filter->{field};
         if ( (0 < grep /^$field$/, @columns) or (substr($field, 0, 5) eq 'marc:') ) {
@@ -2766,9 +2767,9 @@ sub SearchItems {
         $query .= qq{ WHERE $where_str };
     }
 
-    my @columns = GetColumns('items');
-    push @columns, GetColumns('biblio');
-    push @columns, GetColumns('biblioitems');
+    my @columns = Koha::Database->new()->schema()->resultset('Item')->result_source->columns;
+    push @columns, Koha::Database->new()->schema()->resultset('Biblio')->result_source->columns;
+    push @columns, Koha::Database->new()->schema()->resultset('Biblioitem')->result_source->columns;
     my $sortby = (0 < grep {$params->{sortby} eq $_} @columns)
         ? $params->{sortby} : 'itemnumber';
     my $sortorder = (uc($params->{sortorder}) eq 'ASC') ? 'ASC' : 'DESC';

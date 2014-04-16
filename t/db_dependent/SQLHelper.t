@@ -64,7 +64,3 @@ ok($status>0 && !($@), "DeleteInTable OK");
 $status=DeleteInTable("branches", {branchcode => 'ZZZZ'});
 ok($status>0 && !($@), "DeleteInTable (branch) OK");
 
-my @biblio_columns = C4::SQLHelper::GetColumns('biblio');
-my @expected_columns = qw(biblionumber frameworkcode author title unititle notes
-    serial seriestitle copyrightdate timestamp datecreated abstract);
-is_deeply([sort @biblio_columns], [sort @expected_columns], "GetColumns('biblio') returns all columns of biblio table");
