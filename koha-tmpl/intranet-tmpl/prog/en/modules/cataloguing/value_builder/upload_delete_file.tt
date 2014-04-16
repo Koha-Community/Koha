@@ -38,8 +38,11 @@
 
 [% ELSE %]
 
-    [% IF ( error ) %]
-        Error: Unable to delete the file.
+    [% IF ( MissingURL ) %]
+        <p>Error: The OPAC system preference OPACBaseURL is not configured.</p>
+        <p><input type="button" value="close" onclick="window.close();" /></p>
+    [% ELSIF ( error ) %]
+        <p>Error: Unable to delete the file.</p>
         <p><input type="button" value="close" onclick="window.close();" /></p>
     [% ELSE %]
         <h2>File deletion</h2>

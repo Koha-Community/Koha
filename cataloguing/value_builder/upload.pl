@@ -100,9 +100,12 @@ sub plugin {
         my $fh = $input->upload('uploaded_file');
 
         $id = C4::UploadedFiles::UploadFile($uploaded_file, $dir, $fh->handle);
-        if($id) {
-            my $OPACBaseURL = C4::Context->preference('OPACBaseURL');
-            $OPACBaseURL =~ s#/$##;
+        my $OPACBaseURL = C4::Context->preference('OPACBaseURL') // '';
+        $OPACBaseURL =~ s#/$##;
+        if (!$OPACBaseURL) {
+            $template->param(MissingURL => 1);
+        }
+        if($id && $OPACBaseURL) {
             my $return = "$OPACBaseURL/cgi-bin/koha/opac-retrieve-file.pl?id=$id";
             $template->param(
                 success => 1,
