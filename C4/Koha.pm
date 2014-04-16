@@ -1564,7 +1564,7 @@ sub _isbn_cleanup {
             format        => 'ISBN-10',
             strip_hyphens => 1,
         }
-    );
+    ) if $isbn;
 }
 
 =head2 NormalizedISBN
@@ -1590,6 +1590,8 @@ sub NormalizeISBN {
     my $string        = $params->{isbn};
     my $strip_hyphens = $params->{strip_hyphens};
     my $format        = $params->{format};
+
+    return unless $string;
 
     my $isbn = Business::ISBN->new($string);
 
@@ -1627,6 +1629,8 @@ sub NormalizeISBN {
 
 sub GetVariationsOfISBN {
     my ($isbn) = @_;
+
+    return unless $isbn;
 
     my @isbns;
 
