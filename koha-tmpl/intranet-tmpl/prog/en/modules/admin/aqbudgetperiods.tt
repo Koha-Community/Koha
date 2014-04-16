@@ -72,31 +72,19 @@
             }
     }
 
-
-
-    [% IF ( dateformat == 'metric' ) %]
-        dt_add_type_uk_date();
-    [% END %]
     $(document).ready(function() {
         var tabs = $('#budgetsTabs').tabs();
         [% IF ( tab ) %]
-            tabs.tabs('select', [% tab %]);
+            tabs.tabs("option", "active", [% tab %]);
         [% END %]
         $("#activeperiodst,#inactiveperiodst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                {
-                    [% IF ( dateformat == 'metric' ) %]
-                        "aTargets": [ 1, 2 ], "sType": "uk_date",
-                    [% END %]
-                    "bSortable": false, 'aTargets':['_all'],
-                },
-            ],
-            "sPaginationType": "four_button",
             "sDom": 't',
-            "bAutoWidth": false,
-            "bPaginate": false,
-            "bInfo": false,
-            "bFilter": false,
+            "aaSorting": [],
+            "aoColumnDefs": [
+                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                { "sType": "title-string", "aTargets" : [ "title-string" ] }
+            ],
+            "bPaginate": false
         } ) );
     });
 </script>
@@ -329,8 +317,8 @@
           <thead>
             <tr>
               <th>Budget name</th>
-              <th>Start date</th>
-              <th>End date</th>
+              <th class="title-string">Start date</th>
+              <th class="title-string">End date</th>
               <th>Locked</th>
               <th>Total</th>
               <th>Actions</th>
@@ -340,14 +328,14 @@
               [% FOREACH period_active IN period_active_loop %]
                 <tr>
                 <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% period_active.budget_period_id %]" title="View funds for [% period_active.budget_period_description %]">[% period_active.budget_period_description %]</a></td>
-                <td>[% period_active.budget_period_startdate | $KohaDates %]</td>
-                <td>[% period_active.budget_period_enddate | $KohaDates %]</td>
+                <td><span title="[% period_active.budget_period_startdate %]">[% period_active.budget_period_startdate | $KohaDates %]</span></td>
+                <td><span title="[% period_active.budget_period_enddate %]">[% period_active.budget_period_enddate | $KohaDates %]</span></td>
                 <td>
                   [% IF ( period_active.budget_period_locked ) %]
                     <span style="color:green;">Locked</span>&nbsp;
                   [% END %]
                 </td>
-                <td align='right'>[% period_active.budget_period_total %]</td>
+                <td class="data">[% period_active.budget_period_total %]</td>
                 <td>
                   <a href="[% script_name %]?op=add_form&amp;budget_period_id=[% period_active.budget_period_id |html %]">Edit</a>
                   <a href="[% script_name %]?op=delete_confirm&amp;budget_period_id=[% period_active.budget_period_id %]">Delete</a>
@@ -368,8 +356,8 @@
           <thead>
               <tr>
                   <th>Budget name</th>
-                  <th>Start date</th>
-                  <th>End date</th>
+                  <th class="title-string">Start date</th>
+                  <th class="title-string">End date</th>
                   <th>Locked</th>
                   <th>Total</th>
                   <th>Actions</th>
@@ -383,10 +371,10 @@
                       <tr class="highlight">
                   [% END %]
                   <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% period_loo.budget_period_id %]" title="View funds for [% period_loo.budget_period_description %]">[% period_loo.budget_period_description %]</a></td>
-                  <td>[% period_loo.budget_period_startdate | $KohaDates %]</td>
-                  <td>[% period_loo.budget_period_enddate | $KohaDates %]</td>
+                  <td><span title="[% period_loo.budget_period_startdate %]">[% period_loo.budget_period_startdate | $KohaDates %]</span></td>
+                  <td><span title="[% period_loo.budget_period_enddate %]">[% period_loo.budget_period_enddate | $KohaDates %]</span></td>
                   <td> [% IF ( period_loo.budget_period_locked ) %]<span style="color:green;">Locked</span>&nbsp;[% ELSE %][% END %] </td>
-                  <td align='right'>[% period_loo.budget_period_total %]</td>
+                  <td class="data">[% period_loo.budget_period_total %]</td>
                   <td>
                       <a href="[% period_loo.script_name %]?op=add_form&amp;budget_period_id=[% period_loo.budget_period_id |html %]">Edit</a>
                       <a href="[% period_loo.script_name %]?op=delete_confirm&amp;budget_period_id=[% period_loo.budget_period_id %]">Delete</a>
