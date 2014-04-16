@@ -88,9 +88,7 @@ sub get_suggestions {
         $thissearch = "$index=$thissearch"
           unless ( $thissearch =~ s/OP!/$index=/g );
         $template->{VARS}->{index} = $index;
-        my $label = pack("U0a*", $template->output); #FIXME: C4::Templates is
-        # returning incorrectly-marked UTF-8. This fixes the problem, but is
-        # an annoying workaround.
+        my $label = $template->output;
         push @results,
         {
             'search'  => $thissearch,
