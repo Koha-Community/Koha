@@ -977,9 +977,7 @@ sub CanBookBeIssued {
     # get $marker from preferences. Could be something like "FSK|PEGI|Alter|Age:"
     my $markers         = C4::Context->preference('AgeRestrictionMarker');
     my $bibvalues       = $biblioitem->{'agerestriction'};
-    my $restriction_age = 0;
-
-    $restriction_age = GetAgeRestriction( $biblioitem->{'agerestriction'} );
+    my $restriction_age = GetAgeRestriction( $bibvalues );
 
     if ( $restriction_age > 0 ) {
         if ( $borrower->{'dateofbirth'} ) {
