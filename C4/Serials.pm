@@ -2849,18 +2849,65 @@ sub can_edit_subscription {
     return 0 unless C4::Context->userenv;
     my $flags = C4::Context->userenv->{flags};
     $userid ||= C4::Context->userenv->{'id'};
-    my $independent_branches = C4::Context->preference('IndependentBranches');
-    return 1 unless $independent_branches;
-    if( C4::Context->IsSuperLibrarian()
-        or C4::Auth::haspermission( $userid, {serials => 'superserials'}),
-        or C4::Auth::haspermission( $userid, {serials => 'edit_subscription'}),
-        or not defined $subscription->{branchcode}
-        or $subscription->{branchcode} eq ''
-        or $subscription->{branchcode} eq C4::Context->userenv->{'branch'}
-    ) {
-        return 1;
+
+    if ( C4::Context->preference('IndependentBranches') ) {
+        return 1
+          if C4::Context->IsSuperLibrarian()
+              or
+              C4::Auth::haspermission( $userid, { serials => 'superserials' } )
+              or (
+                  C4::Auth::haspermission( $userid,
+                      { serials => 'edit_subscription' } )
+                  and (  not defined $subscription->{branchcode}
+                      or $subscription->{branchcode} eq ''
+                      or $subscription->{branchcode} eq
+                      C4::Context->userenv->{'branch'} )
+              );
     }
-     return 0;
+    else {
+        return 1
+          if C4::Context->IsSuperLibrarian()
+              or
+              C4::Auth::haspermission( $userid, { serials => 'superserials' } )
+              or C4::Auth::haspermission(
+                  $userid, { serials => 'edit_subscription' }
+              ),
+        ;
+    }
+    return 0;
+}
+
+sub can_show_subscription {
+    my ( $subscription, $userid ) = @_;
+    return 0 unless C4::Context->userenv;
+    my $flags = C4::Context->userenv->{flags};
+    $userid ||= C4::Context->userenv->{'id'};
+
+    if ( C4::Context->preference('IndependentBranches') ) {
+        return 1
+          if C4::Context->IsSuperLibrarian()
+              or
+              C4::Auth::haspermission( $userid, { serials => 'superserials' } )
+              or (
+                  C4::Auth::haspermission( $userid,
+                      { serials => '*' } )
+                  and (  not defined $subscription->{branchcode}
+                      or $subscription->{branchcode} eq ''
+                      or $subscription->{branchcode} eq
+                      C4::Context->userenv->{'branch'} )
+              );
+    }
+    else {
+        return 1
+          if C4::Context->IsSuperLibrarian()
+              or
+              C4::Auth::haspermission( $userid, { serials => 'superserials' } )
+              or C4::Auth::haspermission(
+                  $userid, { serials => '*' }
+              ),
+        ;
+    }
+    return 0;
 }
 
 1;
