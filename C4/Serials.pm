@@ -2840,45 +2840,30 @@ sub subscriptionCurrentlyOnOrder {
 
     $can = can_edit_subscription( $subscriptionid[, $userid] );
 
-Return 1 if the subscription is editable by the current logged user (or a given $userid), else 0.
+Return 1 if the subscription can be edited by the current logged user (or a given $userid), else 0.
 
 =cut
 
 sub can_edit_subscription {
     my ( $subscription, $userid ) = @_;
-    return 0 unless C4::Context->userenv;
-    my $flags = C4::Context->userenv->{flags};
-    $userid ||= C4::Context->userenv->{'id'};
-
-    if ( C4::Context->preference('IndependentBranches') ) {
-        return 1
-          if C4::Context->IsSuperLibrarian()
-              or
-              C4::Auth::haspermission( $userid, { serials => 'superserials' } )
-              or (
-                  C4::Auth::haspermission( $userid,
-                      { serials => 'edit_subscription' } )
-                  and (  not defined $subscription->{branchcode}
-                      or $subscription->{branchcode} eq ''
-                      or $subscription->{branchcode} eq
-                      C4::Context->userenv->{'branch'} )
-              );
-    }
-    else {
-        return 1
-          if C4::Context->IsSuperLibrarian()
-              or
-              C4::Auth::haspermission( $userid, { serials => 'superserials' } )
-              or C4::Auth::haspermission(
-                  $userid, { serials => 'edit_subscription' }
-              ),
-        ;
-    }
-    return 0;
+    return _can_do_on_subscription( $subscription, $userid, 'edit_subscription' );
 }
+
+=head2 can_show_subscription
+
+    $can = can_show_subscription( $subscriptionid[, $userid] );
+
+Return 1 if the subscription can be shown by the current logged user (or a given $userid), else 0.
+
+=cut
 
 sub can_show_subscription {
     my ( $subscription, $userid ) = @_;
+    return _can_do_on_subscription( $subscription, $userid, '*' );
+}
+
+sub _can_do_on_subscription {
+    my ( $subscription, $userid, $permission ) = @_;
     return 0 unless C4::Context->userenv;
     my $flags = C4::Context->userenv->{flags};
     $userid ||= C4::Context->userenv->{'id'};
@@ -2890,7 +2875,7 @@ sub can_show_subscription {
               C4::Auth::haspermission( $userid, { serials => 'superserials' } )
               or (
                   C4::Auth::haspermission( $userid,
-                      { serials => '*' } )
+                      { serials => $permission } )
                   and (  not defined $subscription->{branchcode}
                       or $subscription->{branchcode} eq ''
                       or $subscription->{branchcode} eq
@@ -2903,7 +2888,7 @@ sub can_show_subscription {
               or
               C4::Auth::haspermission( $userid, { serials => 'superserials' } )
               or C4::Auth::haspermission(
-                  $userid, { serials => '*' }
+                  $userid, { serials => $permission }
               ),
         ;
     }
