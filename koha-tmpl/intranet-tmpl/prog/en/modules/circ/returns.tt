@@ -375,8 +375,18 @@ $(document).ready(function () {
                     [% IF ( errmsgloo.NotForLoanStatusUpdated ) %]
                         <p class="problem">
                             Not for loan status updated
-                            from [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.from ) %]
-                            to [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.to ) %]
+                            from
+                            [% IF errmsgloo.NotForLoanStatusUpdated.from %]
+                                [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.from ) %]
+                            [% ELSE %]
+                                being available for loan
+                            [% END %]
+                            to
+                            [% IF errmsgloo.NotForLoanStatusUpdated.to %]
+                                [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.to ) %]
+                            [% ELSE %]
+                                being available for loan
+                            [% END %]
                         </p>
                     [% END %]
                     [% IF ( errmsgloo.badbarcode ) %]
