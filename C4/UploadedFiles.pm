@@ -150,6 +150,8 @@ sub UploadFile {
 
     my $sha = new Digest::SHA;
     $sha->add($data);
+    $sha->add($filename);
+    $sha->add($dir);
     my $id = $sha->hexdigest;
 
     # Test if this id already exist
