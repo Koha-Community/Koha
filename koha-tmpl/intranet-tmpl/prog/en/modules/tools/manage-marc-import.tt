@@ -8,8 +8,7 @@
 <script type="text/javascript" src="[% themelang %]/js/background-job-progressbar.js"></script>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
-<script type="text/JavaScript" language="JavaScript">
+<script type="text/javascript">
 //<![CDATA[
 var MSG_CONFIRM_CLEAN = _("Clear all reservoir records staged in this batch?  This cannot be undone.");
 
@@ -159,7 +158,7 @@ function show_marc( id ) {
 [% IF ( alert ) %]
 <div class="alert">
 [% ELSE %]
-<div class="dialog">
+<div class="dialog message">
 [% END %]
 <b><p>[% label_batch_msg %]</p></b>
 </div>
