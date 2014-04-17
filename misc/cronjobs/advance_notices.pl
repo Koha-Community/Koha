@@ -91,7 +91,10 @@ the patrons are printed to standard out.
 
 Defines the maximum number of days in advance to send advance notices.
 
+=item B<-c>
 
+Confirm flag: Add this option. The script will only print a usage
+statement otherwise.
 
 =item B<--itemscontent>
 
@@ -160,7 +163,6 @@ messages to patrons when their messages are overdue.
 
 # These are defaults for command line options.
 my $confirm;                                                        # -c: Confirm that the user has read and configured this script.
-# my $confirm     = 1;                                                # -c: Confirm that the user has read and configured this script.
 my $nomail;                                                         # -n: No mail. Will not send any emails.
 my $mindays     = 0;                                                # -m: Maximum number of days in advance to send notices
 my $maxdays     = 30;                                               # -e: the End of the time period
