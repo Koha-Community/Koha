@@ -25,9 +25,11 @@ use C4::Context;
 use C4::Members::Messaging;
 use C4::Debug;
 
+use constant MAX_DAYS_IN_ADVANCE => 30;
+
 =head1 NAME
 
-C4::Form::MessagingPreferences - manage messaging prefernces form
+C4::Form::MessagingPreferences - manage messaging preferences form
 
 =head1 SYNOPSIS
 
@@ -134,10 +136,10 @@ sub set_form_values {
         if ( $option->{'takes_days'} ) {
             my $days_in_advance = $pref->{'days_in_advance'} ? $pref->{'days_in_advance'} : 0;
             $option->{days_in_advance} = $days_in_advance;
-            @{$option->{'select_days'}} = map {; {
+            @{$option->{'select_days'}} = map { {
                 day        => $_,
-                selected   => $_ == $days_in_advance ? 'selected="selected"' :'' } 
-            } ( 0..30 ); # FIXME: 30 is a magic number.
+                selected   => $_ == $days_in_advance  }
+            } ( 0..MAX_DAYS_IN_ADVANCE );
         }
         foreach my $transport ( keys %{$pref->{'transports'}} ) {
             $option->{'transports_'.$transport} = 1;

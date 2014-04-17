@@ -74,7 +74,7 @@ LEFT JOIN borrower_message_transport_preferences
 ON     borrower_message_transport_preferences.borrower_message_preference_id = borrower_message_preferences.borrower_message_preference_id
 LEFT JOIN message_attributes
 ON     message_attributes.message_attribute_id = borrower_message_preferences.message_attribute_id
-JOIN message_transports
+LEFT JOIN message_transports
 ON     message_transports.message_attribute_id = message_attributes.message_attribute_id
 AND    message_transports.message_transport_type = borrower_message_transport_preferences.message_transport_type
 WHERE  message_attributes.message_name = ?
