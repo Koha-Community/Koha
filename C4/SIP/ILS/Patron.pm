@@ -61,6 +61,8 @@ sub new {
     $dexpiry and $dexpiry =~ s/-//g;    # YYYYMMDD
     my $fines_amount = $flags->{CHARGES}->{amount};
     $fines_amount = ($fines_amount and $fines_amount > 0) ? $fines_amount : 0;
+    my $fee_limit = _fee_limit();
+    my $fine_blocked = $fines_amount > $fee_limit;
     {
     no warnings;    # any of these $kp->{fields} being concat'd could be undef
     %ilspatron = (
@@ -79,10 +81,10 @@ sub new {
         address         => $adr,
         home_phone      => $kp->{phone},
         email_addr      => $kp->{email},
-        charge_ok       => ( !$debarred && !$expired ),
-        renew_ok        => ( !$debarred && !$expired ),
-        recall_ok       => ( !$debarred && !$expired ),
-        hold_ok         => ( !$debarred && !$expired ),
+        charge_ok       => ( !$debarred && !$expired && !$fine_blocked),
+        renew_ok        => ( !$debarred && !$expired && !$fine_blocked),
+        recall_ok       => ( !$debarred && !$expired && !$fine_blocked),
+        hold_ok         => ( !$debarred && !$expired && !$fine_blocked),
         card_lost       => ( $kp->{lost} || $kp->{gonenoaddress} || $flags->{LOST} ),
         claims_returned => 0,
         fines           => $fines_amount, # GetMemberAccountRecords($kp->{borrowernumber})
@@ -99,6 +101,7 @@ sub new {
         unavail_holds   => [],
         inet            => ( !$debarred && !$expired ),
         expired         => $expired,
+        fee_limit       => $fee_limit,
     );
     }
     $debug and warn "patron fines: $ilspatron{fines} ... amountoutstanding: $kp->{amountoutstanding} ... CHARGES->amount: $flags->{CHARGES}->{amount}";
@@ -146,7 +149,7 @@ my %fields = (
     card_lost               => 0,   # for patron_status[4]
     recall_overdue          => 0,
     currency                => 1,
-#   fee_limit               => 0,
+    fee_limit               => 0,
     screen_msg              => 1,
     print_line              => 1,
     too_many_charged        => 0,   # for patron_status[5]
@@ -331,9 +334,8 @@ sub inet_privileges {
     return $self->{inet} ? 'Y' : 'N';
 }
 
-sub fee_limit {
-    my $self = shift;
-    return C4::Context->preference("noissuescharge") || 5;
+sub _fee_limit {
+    return C4::Context->preference('noissuescharge') || 5;
 }
 
 sub excessive_fees {
