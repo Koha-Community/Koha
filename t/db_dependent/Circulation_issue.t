@@ -342,7 +342,8 @@ AddReturn('barcode_1', undef, undef, undef, '2014-04-01 23:42');
 $return = $dbh->selectrow_hashref("SELECT * FROM old_issues LIMIT 1" );
 ok( $return->{returndate} eq '2014-04-01 23:42:00', "Item returned with a return date of '2014-04-01 23:42' has that return date" );
 
-my ($biblionumber, $biblioitemnumber, $itemnumber) = C4::Items::AddItem(
+my $itemnumber;
+($biblionumber, $biblioitemnumber, $itemnumber) = C4::Items::AddItem(
     {
         barcode        => 'barcode_3',
         itemcallnumber => 'callnumber3',
