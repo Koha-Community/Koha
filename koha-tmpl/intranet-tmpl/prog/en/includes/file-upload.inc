@@ -1,5 +1,5 @@
 <!-- AJAX file upload stuff -->
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/ajaxfileupload.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/ajaxfileupload.js"></script>
 <script type="text/javascript">
     //<![CDATA[
     var fileUploadProgressTimer = 0;
