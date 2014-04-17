@@ -56,7 +56,8 @@ $template->param(
 );
 
 my $branch =
-  C4::Context->preference("IndependentBranchesPatronModifications")
+  (      C4::Context->preference("IndependentBranchesPatronModifications")
+      || C4::Context->preference("IndependentBranches") )
   && !$flags->{'superlibrarian'}
   ? C4::Context->userenv()->{'branch'}
   : undef;
