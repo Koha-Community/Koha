@@ -160,46 +160,6 @@ function dt_add_rangedate_filter(begindate_id, enddate_id, dateCol) {
     );
 }
 
-//Sorting for dates (uk format)
-function dt_add_type_uk_date() {
-  jQuery.fn.dataTableExt.aTypes.unshift(
-    function ( sData )
-    {
-      if (sData.match(/(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/(19|20|21)\d\d/))
-      {
-        return 'uk_date';
-      }
-      return null;
-    }
-  );
-
-  jQuery.fn.dataTableExt.oSort['uk_date-asc']  = function(a,b) {
-    var re = /(\d{2}\/\d{2}\/\d{4})/;
-    a.match(re);
-    var ukDatea = RegExp.$1.split("/");
-    b.match(re);
-    var ukDateb = RegExp.$1.split("/");
-
-    var x = (ukDatea[2] + ukDatea[1] + ukDatea[0]) * 1;
-    var y = (ukDateb[2] + ukDateb[1] + ukDateb[0]) * 1;
-
-    return ((x < y) ? -1 : ((x > y) ?  1 : 0));
-  };
-
-  jQuery.fn.dataTableExt.oSort['uk_date-desc'] = function(a,b) {
-    var re = /(\d{2}\/\d{2}\/\d{4})/;
-    a.match(re);
-    var ukDatea = RegExp.$1.split("/");
-    b.match(re);
-    var ukDateb = RegExp.$1.split("/");
-
-    var x = (ukDatea[2] + ukDatea[1] + ukDatea[0]) * 1;
-    var y = (ukDateb[2] + ukDateb[1] + ukDateb[0]) * 1;
-
-    return ((x < y) ? 1 : ((x > y) ?  -1 : 0));
-  };
-}
-
 // Sorting on html contains
 // <a href="foo.pl">bar</a> sort on 'bar'
 function dt_overwrite_html_sorting_localeCompare() {
