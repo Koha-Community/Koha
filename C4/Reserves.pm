@@ -2104,7 +2104,7 @@ sub MergeHolds {
 
 =head2 RevertWaitingStatus
 
-  $success = RevertWaitingStatus({ itemnumber => $itemnumber });
+  RevertWaitingStatus({ itemnumber => $itemnumber });
 
   Reverts a 'waiting' hold back to a regular hold with a priority of 1.
 
@@ -2159,7 +2159,8 @@ sub RevertWaitingStatus {
       reserve_id = ?
     ";
     $sth = $dbh->prepare( $query );
-    return $sth->execute( $reserve->{'reserve_id'} );
+    $sth->execute( $reserve->{'reserve_id'} );
+    _FixPriority( { biblionumber => $reserve->{biblionumber} } );
 }
 
 =head2 GetReserveId
