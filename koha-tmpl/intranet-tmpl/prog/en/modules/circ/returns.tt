@@ -404,7 +404,7 @@ $(document).ready(function () {
             <div class="yui-u">
             <fieldset id="checkin_options">
                 <legend>Options</legend>
-                    [% IF ( overduecharges ) %]
+                    [% IF ( CAN_user_updatecharges_writeoff && overduecharges ) %]
                     <p>
                         [% IF ( exemptfine ) %]
                         <input type="checkbox" id="exemptcheck" name="exemptfine" value="exemptfine" checked="checked" />
