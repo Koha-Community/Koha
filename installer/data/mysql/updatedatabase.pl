@@ -8132,7 +8132,7 @@ if(CheckVersion($DBversion)) {
 $DBversion = "3.15.00.XXX";
 if ( CheckVersion($DBversion) ) {
    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ('10', 'writeoff', 'Write off charges')");
-   $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ('10', 'remaining_permissions', 'Remaining updatecharges permissions')");
+   $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ('10', 'remaining_permissions', 'Remaining permissions for managing charges')");
    print "Upgrade to $DBversion done (Bug 9448 - Add separate permission for writing off fees)\n";
    SetVersion ($DBversion);
 }

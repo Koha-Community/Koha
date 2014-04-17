@@ -12,7 +12,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 9, 'fast_cataloging', 'Szybkie katalogowanie'),
    ( 9, 'edit_items', 'Edit Items'),
    (10, 'writeoff', 'Write off charges'),
-   (10, 'remaining_permissions', 'Remaining updatecharges permissions'),
+   (10, 'remaining_permissions', 'Remaining permissions for managing charges'),
    (11, 'vendors_manage', 'Zarządzanei dostawcami'),
    (11, 'contracts_manage', 'Zarządzanie kontraktami'),
    (11, 'period_manage', 'Manage periods'),

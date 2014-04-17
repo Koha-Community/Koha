@@ -32,7 +32,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 9, 'fast_cataloging', 'Hurtigkatalogisering'),
    ( 9, 'edit_items', 'Endre eksmeplarer'),
    (10, 'writeoff', 'Write off charges'),
-   (10, 'remaining_permissions', 'Remaining updatecharges permissions'),
+   (10, 'remaining_permissions', 'Remaining permissions for managing charges'),
    (11, 'vendors_manage', 'Administrere leverandører'),
    (11, 'contracts_manage', 'Administrere kontrakter'),
    (11, 'period_manage', 'Administrere perioder'),
