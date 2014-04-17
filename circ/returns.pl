@@ -172,6 +172,14 @@ my $issueinformation;
 my $itemnumber;
 my $barcode     = $query->param('barcode');
 my $exemptfine  = $query->param('exemptfine');
+if (
+  $exemptfine &&
+  !C4::Auth::haspermission(C4::Context->userenv->{'id'}, {'updatecharges' => 'writeoff'})
+) {
+    # silently prevent unauthorized operator from forgiving overdue
+    # fines by manually tweaking form parameters
+    undef $exemptfine;
+}
 my $dropboxmode = $query->param('dropboxmode');
 my $dotransfer  = $query->param('dotransfer');
 my $canceltransfer = $query->param('canceltransfer');
