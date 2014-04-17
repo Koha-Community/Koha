@@ -85,7 +85,9 @@ sub do_checkout {
             } elsif ($confirmation eq 'ISSUED_TO_ANOTHER') {
                 $self->screen_msg("Item already checked out to another patron.  Please return item for check-in.");
                 $noerror = 0;
-            } elsif ($confirmation eq 'DEBT') {     # don't do anything, it's the minor debt, and alarms fire elsewhere
+            } elsif ($confirmation eq 'DEBT') {
+                $self->screen_msg('Outstanding Fines block issue');
+                $noerror = 0;
             } elsif ($confirmation eq 'HIGHHOLDS') {
                 $overridden_duedate = $needsconfirmation->{$confirmation}->{returndate};
                 $self->screen_msg('Loan period reduced for high-demand item');
