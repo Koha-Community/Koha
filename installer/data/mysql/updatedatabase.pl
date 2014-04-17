@@ -8129,7 +8129,7 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.15.00.031";
 if ( CheckVersion($DBversion) ) {
    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ('10', 'writeoff', 'Write off fines and fees')");
    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ('10', 'remaining_permissions', 'Remaining permissions for managing fines and fees')");
