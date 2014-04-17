@@ -8,10 +8,11 @@
 <script type="text/javascript">
 //<![CDATA[
  $(document).ready(function() {
-    [% IF (dateformat == 'metric') %]
-        dt_add_type_uk_date();
-    [% END %]
-    var spent = $("#spent").dataTable($.extend(true, {}, dataTablesDefaults, {
+    $("#spent").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+            { "sType": "title-string", "aTargets" : [ "title-string" ] }
+        ],
         "sPaginationType": "four_button"
     } ) );
  });
@@ -34,18 +35,18 @@
 <h2>Spent</h2>
 
 
-<table cellspacing="0" cellpadding="0" border="0" id="spent" class="collapse">
+<table id="spent">
     <thead>
     <tr>
-        <th> Title </th>
+        <th class="anti-the"> Title </th>
 	<th> Order </th>
 	<th> Vendor </th>
 	<th> Invoice </th>
-	<th> Itemtype </th>
+    <th> Item type </th>
 	<th> Received </th>
     <th> Unit price </th>
-    <th> Date ordered </th>
-    <th> Date received </th>
+    <th class="title-string"> Date ordered </th>
+    <th class="title-string"> Date received </th>
 	<th> Subtotal </th>
     </tr>
     </thead>
@@ -75,16 +76,16 @@
 	<td class="cell">
 	    [% order.quantityreceived %]
 	</td>
-	<td class="cell" align="right">
+    <td class="cell">
 	    [% order.unitprice %]
 	</td>
-	<td class="cell" align="right">
-	    [% order.entrydate | $KohaDates %]
+    <td class="cell">
+        <span title="[% order.entrydate %]">[% order.entrydate | $KohaDates %]</span>
 	</td>
-	<td class="cell" align="right">
-	    [% order.datereceived | $KohaDates %]
+    <td class="cell">
+        <span title="[% order.datereceived %]">[% order.datereceived | $KohaDates %]</span>
 	</td>
-	<td class="cell" align="right">
+    <td class="data cell">
 	    [% order.rowtotal %]
 	</td>
     </tr>
@@ -93,19 +94,19 @@
         [% IF shipmentcosts.size %]
             <tr valign="top">
                 <td colspan="9"> Sub total </td>
-                <td align="right"> [% subtotal %] </td>
+                <td class="data"> [% subtotal %] </td>
             </tr>
             [% FOREACH shipmentcost IN shipmentcosts %]
                 <tr>
                     <td></td>
                     <td colspan="8">Shipping cost for invoice [% shipmentcost.invoicenumber %]</td>
-                    <td class="total">[% shipmentcost.shipmentcost %]</td>
+                    <td class="data total">[% shipmentcost.shipmentcost %]</td>
                 </tr>
             [% END %]
         [% END %]
         <tr>
             <td colspan="9">TOTAL</td>
-            <td class="total">[% total %]</td>
+            <td class="data total">[% total %]</td>
         </tr>
     </tfoot>
 </table>

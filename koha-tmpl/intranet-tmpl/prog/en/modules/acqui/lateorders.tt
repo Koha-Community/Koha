@@ -9,9 +9,6 @@
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-[% IF (dateformat == 'metric') %]
-    dt_add_type_uk_date();
-[% END %]
 
 var late_orderst;
 function check_uncheck() {
@@ -29,6 +26,8 @@ $(document).ready(function() {
     late_orderst = $("#late_orders").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
             { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+            { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+            { "sType": "title-string", "aTargets" : [ "title-string" ] }
         ],
         "sPaginationType": "four_button",
         "bAutoWidth": false,
@@ -112,17 +111,17 @@ $(document).ready(function() {
             [% ELSE %]
                 <th></th>
             [% END %]
-            <th>Order date</th>
-            <th>Estimated delivery date</th>
+            <th class="title-string">Order date</th>
+            <th class="title-string">Estimated delivery date</th>
             <th>Vendor</th>
-            <th>Information</th>
+            <th class="anti-the">Information</th>
             <th>Total cost</th>
             <th>Basket</th>
             <th>Basket group</th>
             <th>Library</th>
             <th>Fund</th>
             <th>Claims count</th>
-            <th>Claimed date</th>
+            <th class="title-string">Claimed date</th>
         </tr>
       </thead>
       <tbody>
@@ -133,12 +132,13 @@ $(document).ready(function() {
                 <input type="checkbox" value="[% lateorder.ordernumber %]" data-booksellerid="[% lateorder.supplierid %]" name="ordernumber">
             </td>
             <td>
-                [% lateorder.orderdate %]
-                ([% lateorder.latesince %] days)
+                <span title="[% lateorder.orderdate %]">[% lateorder.orderdate | $KohaDates %] ([% lateorder.latesince %] days)</span>
             </td>
             <td>
                 [% IF ( lateorder.estimateddeliverydate ) %]
-                    [% lateorder.estimateddeliverydate | $KohaDates  %]
+                    <span title="[% lateorder.estimateddeliverydate %]">[% lateorder.estimateddeliverydate | $KohaDates  %]</span>
+                [% ELSE %]
+                    <span title="0000-00-00"></span>
                 [% END %]
             </td>
             <td>
@@ -180,7 +180,13 @@ $(document).ready(function() {
             <td>[% lateorder.budget %]
             </td>
             <td>[% lateorder.claims_count %]</td>
-            <td>[% lateorder.claimed_date %]</td>
+            <td>
+                [% IF ( lateorder.claimed_date ) %]
+                    <span title="[% lateorder.claimed_date %]">[% lateorder.claimed_date | $KohaDates %]</span>
+                [% ELSE %]
+                    <span title="0000-00-00"></span>
+                [% END %]
+            </td>
         </tr>
       [% END %]
       </tbody>
@@ -226,7 +232,7 @@ $(document).ready(function() {
 
 	<li><label for="booksellerid">Vendor:</label>
 		<select id="booksellerid" size="1" tabindex="" name="booksellerid">
-			<option value=""/>
+            <option value=""></option>
 			[% FOREACH SUPPLIER_LOO IN SUPPLIER_LOOP %]
                 [% IF ( SUPPLIER_LOO.selected ) %]<option value="[% SUPPLIER_LOO.id %]" selected="selected">[% SUPPLIER_LOO.name %]</option>
                 [% ELSE %]<option value="[% SUPPLIER_LOO.id %]">[% SUPPLIER_LOO.name %]</option>[% END %]

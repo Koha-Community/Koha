@@ -8,10 +8,10 @@
 <script type="text/javascript">
 //<![CDATA[
  $(document).ready(function() {
-[% IF (dateformat == 'metric') %]
-    dt_add_type_uk_date();
-[% END %]
     var parcelst = $("#parcelst").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+          { "sType": "title-string", "aTargets" : [ "title-string" ] }
+        ],
         "sPaginationType": "four_button"
     } ) );
 
@@ -88,7 +88,7 @@
     <thead>
         <tr>
             <th>Line</th>
-            <th>Date received</th>
+            <th class="title-string">Date received</th>
             <th>Invoice number</th>
             <th>Item count</th>
             <th>Biblio count</th>
@@ -107,7 +107,7 @@
                 [% searchresult.number %]
             </td>
             <td>
-                [% searchresult.datereceived %]
+                <span title="[% searchresult.datereceived %]">[% searchresult.datereceived | $KohaDates %]</span>
             </td>
             <td>
                 [% IF ( searchresult.code ) %]

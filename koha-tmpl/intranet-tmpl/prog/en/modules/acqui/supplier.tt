@@ -14,20 +14,12 @@ function confirm_deletion() {
 }
 
  $(document).ready(function() {
-    [% IF (dateformat == 'metric') %]
-        dt_add_type_uk_date();
-    [% END %]
     var contractst = $("#contractst").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
           { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
-          [% IF (dateformat == 'metric') %]
-            { "aTargets": [ 2, 3 ], "sType": "uk_date" },
-          [% END %]
+          { "sType": "title-string", "aTargets" : [ "title-string" ] }
         ],
-        'sDom': 't',
-        'bPaginate': false,
-        'bFilter': false,
-        'bInfo': false,
+        'sDom': 't'
     } ) );
  });
 //]]>
@@ -249,8 +241,8 @@ function confirm_deletion() {
                     <tr>
                         <th scope="col">Name</th>
                         <th scope="col">Description</th>
-                        <th scope="col">Start date</th>
-                        <th scope="col">End date</th>
+                        <th scope="col" class="title-string">Start date</th>
+                        <th scope="col" class="title-string">End date</th>
                         <th scope="col">&nbsp; </th>
                         <th scope="col">&nbsp; </th>
                     </tr>
@@ -262,8 +254,8 @@ function confirm_deletion() {
                             <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber %]&amp;booksellerid=[% contract.booksellerid %]">[% contract.contractname %]</a>
                         </td>
                         <td>[% contract.contractdescription %]</td>
-                        <td>[% contract.contractstartdate | $KohaDates %]</td>
-                        <td>[% contract.contractenddate | $KohaDates %]</td>
+                        <td><span title="[% contract.contractstartdate %]">[% contract.contractstartdate | $KohaDates %]</span></td>
+                        <td><span title="[% contract.contractenddate %]">[% contract.contractenddate | $KohaDates %]</span></td>
                         <td><a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber %]&amp;booksellerid=[% contract.booksellerid %]">Edit</a></td>
                         <td><a href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&amp;contractnumber=[% contract.contractnumber %]&amp;booksellerid=[% contract.booksellerid %]">Delete</a></td>
                         </tr>

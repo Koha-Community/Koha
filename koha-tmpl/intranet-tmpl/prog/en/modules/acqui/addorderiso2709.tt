@@ -14,16 +14,12 @@
 <script type="text/javascript" src="[% themelang %]/js/cataloging.js"></script>
 <script type="text/JavaScript">
 //<![CDATA[
-    [% IF (dateformat == 'metric') %]
-        dt_add_type_uk_date();
-    [% END %]
     $(document).ready(function() {
-        var srlt = $("#files").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumns": [
-                null,null,null,{ "sType": "title-string" },null,null
-            ],
+        $("#files,#recordst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
-                { "aTargets": [ 5 ], "bSortable": false, "bSearchable": false },
+                { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                { "sType": "title-string", "aTargets" : [ "title-string" ] }
             ],
             "sPaginationType": "four_button",
             "aaSorting": []
@@ -58,12 +54,15 @@
                   </h1>
                <div>
                    <form action="[% scriptname %]" method="post" name="import_biblios">
-                     <table>
+                     <table id="recordst">
+                     <thead>
                      <tr>
-                         <th>Citation</th>
+                         <th class="anti-the">Citation</th>
                          <th>Match?</th>
                          <th>Order</th>
                        </tr>
+                       </thead>
+                       <tbody>
                        [% FOREACH biblio_lis IN biblio_list %]
                          <tr>
                              <td>
@@ -89,6 +88,7 @@
     </tr>
     [% END %]
                       [% END %]
+                      </tbody>
                      </table>
                    </form>
                </div>
@@ -112,9 +112,9 @@
                        <th>File name</th>
                        <th>Comments</th>
                        <th>Status</th>
-                       <th>Staged</th>
+                       <th class="title-string">Staged</th>
                        <th># Bibs</th>
-                       <th>&nbsp;</th>
+                       <th class="NoSort">&nbsp;</th>
                      </tr>
                      </thead>
                      <tbody>

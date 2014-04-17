@@ -2191,8 +2191,6 @@ sub GetLateOrders {
     $sth->execute(@query_params);
     my @results;
     while (my $data = $sth->fetchrow_hashref) {
-        $data->{orderdate} = format_date($data->{orderdate});
-        $data->{claimed_date} = format_date($data->{claimed_date});
         push @results, $data;
     }
     return @results;

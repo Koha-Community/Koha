@@ -14,16 +14,13 @@
         }
     }
 
-    [% IF (dateformat == 'metric') %]
-        dt_add_type_uk_date();
-    [% END %]
     $(document).ready(function() {
         $("#srlt").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
-                [% IF (dateformat == 'metric') %]
-                    { "aTargets": [ -2 ], "sType": "uk_date" },
-                [% END %]
-            ],
+                { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                { "sType": "title-string", "aTargets" : [ "title-string" ] }
+            ]
         } ) )
 
         $("#show_only_renewed").click(function(){
@@ -58,12 +55,12 @@
                         <thead>
                             <tr>
                                 <th>ISSN</th>
-                                <th>Title</th>
+                                <th class="anti-the">Title</th>
                                 <th> Notes </th>
                                 <th>Library</th>
                                 <th>Call number</th>
-                                <th>Expiration date</th>
-                                <th></th>
+                                <th class="title-string">Expiration date</th>
+                                <th class="NoSort"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,7 +81,11 @@
                                     [% IF (sub.callnumber) %][% sub.callnumber %][% END %]
                                 </td>
                                 <td>
-                                    [% IF (sub.enddate) %][% sub.enddate | $KohaDates %][% END %]
+                                    [% IF (sub.enddate) %]
+                                        <span title="[% sub.enddate %]">[% sub.enddate | $KohaDates %]</span>
+                                    [% ELSE %]
+                                        <span title="0000-00-00"></span>
+                                    [% END %]
                                 </td>
                                 <td>
                                     [% IF (sub.alreadyOnOrder) %]

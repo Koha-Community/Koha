@@ -7,11 +7,12 @@
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-[% IF (dateformat == 'metric') %]
-    dt_add_type_uk_date();
-[% END %]
  $(document).ready(function() {
-    var spent = $("#spent").dataTable($.extend(true, {}, dataTablesDefaults, {
+    $("#spent").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+            { "sType": "title-string", "aTargets" : [ "title-string" ] }
+        ],
         "sPaginationType": "four_button"
     } ) );
  });
@@ -33,16 +34,16 @@
 <h1>Fund: [% fund_code %]</h1>
 <h2>Ordered</h2>
 
-<table cellspacing="0" cellpadding="0" border="0" id="spent" class="collapse">
+<table id="spent">
     <thead>
     <tr>
-        <th> Title </th>
+    <th class="anti-the"> Title </th>
 	<th> Order </th>
 	<th> Vendor </th>
-	<th> Itemtype </th>
+    <th> Item type </th>
     <th> Left on order </th>
 	<th> Estimated cost per unit </th>
-    <th> Date ordered </th>
+    <th class="title-string"> Date ordered </th>
 	<th> Subtotal </th>
     </tr>
     </thead>
@@ -72,13 +73,13 @@
 	<td class="cell">
 	    [% order.left %]
 	</td>
-	<td class="cell" align="right">
+    <td class="data cell">
 	    [% order.ecost %]
 	</td>
-	<td class="cell" align="right">
-	    [% order.entrydate | $KohaDates %]
+    <td class="cell">
+        <span title="[% order.entrydate %]">[% order.entrydate | $KohaDates %]</span>
 	</td>
-	<td class="cell" align="right">
+    <td class="data cell">
 	    [% order.subtotal %]
 	</td>
     </tr>
@@ -93,7 +94,7 @@
         <td> </td>
         <td> </td>
 	<td> </td>
-        <td align="right">
+        <td class="data">
             [% total %]
         </td>
     </tr>

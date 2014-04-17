@@ -7,11 +7,12 @@
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-[% IF (dateformat == 'metric') %]
-    dt_add_type_uk_date();
-[% END %]
  $(document).ready(function() {
-    var histsearcht = $("#histsearcht").dataTable($.extend(true, {}, dataTablesDefaults, {
+    $("#histsearcht").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+            { "sType": "title-string", "aTargets" : [ "title-string" ] }
+        ],
         "sPaginationType": "four_button"
     } ) );
  });
@@ -136,10 +137,10 @@
 				<th>Basket</th>
 				<th>Basket group</th>
                 <th>Invoice number</th>
-				<th>Summary</th>
+                <th class="anti-the">Summary</th>
 				<th>Vendor</th>
-				<th>Placed on</th>
-				<th>Received on</th>
+                <th class="title-string">Placed on</th>
+                <th class="title-string">Received on</th>
                 <th>Quantity received</th>
                 <th>Pending order</th>
 				<th>Unit cost</th>
@@ -181,10 +182,12 @@
                         <br />[% order.author %] <br /> [% order.isbn %]
                     </td>
                     <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id %]">[% order.name %]</a></td>
-                    <td>[% order.creationdate | $KohaDates %]</td>
+                    <td><span title="[% order.creationdate %]">[% order.creationdate | $KohaDates %]</span></td>
                     <td>
                         [% IF order.datereceived %]
-                            [% order.datereceived | $KohaDates %]
+                            <span title="[% order.datereceived %]">[% order.datereceived | $KohaDates %]</span>
+                        [% ELSE %]
+                            <span title="0000-00-00"></span>
                         [% END %]
                     </td>
                     <td>[% order.quantityreceived %]</td>

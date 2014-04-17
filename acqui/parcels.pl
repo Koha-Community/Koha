@@ -169,7 +169,7 @@ for my $i ( $startfrom .. $last_row) {
         nullcode         => $p->{invoicenumber} eq 'NULL',
         emptycode        => $p->{invoicenumber} eq q{},
         raw_datereceived => $p->{shipmentdate},
-        datereceived     => format_date( $p->{shipmentdate} ),
+        datereceived     => $p->{shipmentdate},
         bibcount         => $p->{receivedbiblios} || 0,
         reccount         => $p->{receiveditems} || 0,
         itemcount        => $p->{itemsexpected} || 0,
