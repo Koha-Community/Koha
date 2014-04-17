@@ -59,7 +59,7 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
    --import DAYS      purge records from import tables older than DAYS days.
                       Defaults to 60 days if no days specified.
    --z3950            purge records from import tables that are the result
-                      of z39.50 searches
+                      of Z39.50 searches
    --logs DAYS        purge entries from action_logs older than DAYS days.
                       Defaults to 180 days if no days specified.
    --searchhistory DAYS  purge entries from search_history older than DAYS days.
@@ -188,9 +188,9 @@ if($pImport) {
 }
 
 if($pZ3950) {
-    print "Purging z39.50 records from import tables.\n" if $verbose;
+    print "Purging Z39.50 records from import tables.\n" if $verbose;
     PurgeZ3950();
-    print "Done with purging z39.50 records from import tables.\n" if $verbose;
+    print "Done with purging Z39.50 records from import tables.\n" if $verbose;
 }
 
 if($pLogs) {
@@ -243,7 +243,7 @@ sub PurgeImportTables {
 
     # Now purge import_batches
     # Timestamp cannot be used here without care, because records are added
-    # continuously to batches without updating timestamp (z3950 search).
+    # continuously to batches without updating timestamp (Z39.50 search).
     # So we only delete older empty batches.
     # This delete will therefore not have a cascading effect.
     $sth = $dbh->prepare("DELETE ba
