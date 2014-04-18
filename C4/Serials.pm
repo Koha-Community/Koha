@@ -736,20 +736,9 @@ sub SearchSubscriptions {
     my $results = $sth->fetchall_arrayref( {} );
     $sth->finish;
 
-    my $cant_display_other_branches = 0;
-    if (my $env = C4::Context->userenv) {
-        my $userid = $env->{'id'};
-        $cant_display_other_branches =
-            C4::Context->preference('IndependentBranches') &&
-            !C4::Context->IsSuperLibrarian() &&
-            !C4::Auth::haspermission( $userid, {serials => 'superserials'});
-    }
-    my $user_branch = C4::Context->userenv ? C4::Context->userenv->{'branch'} : q{};
     for my $subscription ( @$results ) {
         $subscription->{cannotedit} = not can_edit_subscription( $subscription );
-        $subscription->{cannotdisplay} =
-            $cant_display_other_branches &&
-            $subscription->{branchcode} ne $user_branch;
+        $subscription->{cannotdisplay} = not can_show_subscription( $subscription );
     }
 
     return @$results;
