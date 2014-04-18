@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 69;
+use Test::More tests => 72;
+use Test::MockModule;
 use C4::Context;
 use Koha::DateUtils;
 use DateTime::Duration;
@@ -194,7 +195,7 @@ is( $bookseller1fromid->{subscriptioncount},
     0, 'Supplier1 has 0 subscription' );
 
 my $id_subscription1 = NewSubscription(
-    undef,      "",     $id_supplier1, undef, $id_budget, $biblionumber,
+    undef,      'BRANCH2',     $id_supplier1, undef, $id_budget, $biblionumber,
     '01-01-2013',undef, undef, undef,  undef,
     undef,      undef,  undef, undef, undef, undef,
     1,          "subscription notes",undef, '01-01-2013', undef, undef,
@@ -206,7 +207,7 @@ my @subscriptions = SearchSubscriptions({biblionumber => $biblionumber});
 is($subscriptions[0]->{publicnotes}, 'subscription notes', 'subscription search results include public notes (bug 10689)');
 
 my $id_subscription2 = NewSubscription(
-    undef,      "",     $id_supplier1, undef, $id_budget, $biblionumber,
+    undef,      'BRANCH2',     $id_supplier1, undef, $id_budget, $biblionumber,
     '01-01-2013',undef, undef, undef,  undef,
     undef,      undef,  undef, undef, undef, undef,
     1,          "subscription notes",undef, '01-01-2013', undef, undef,
@@ -364,7 +365,7 @@ ModBasket($basket4info);
 
 #Add 1 subscription
 my $id_subscription3 = NewSubscription(
-    undef,      "",     $id_supplier1, undef, $id_budget, $biblionumber,
+    undef,      "BRANCH1",     $id_supplier1, undef, $id_budget, $biblionumber,
     '01-01-2013',undef, undef, undef,  undef,
     undef,      undef,  undef, undef, undef, undef,
     1,          "subscription notes",undef, '01-01-2013', undef, undef,
@@ -662,6 +663,47 @@ ok( exists( $suppliers{$id_supplier1} ),
 ok( exists( $suppliers{$id_supplier1} ),
     "Supplier1 has late orders and $daysago10==$daysago10 " )
   ;
+
+C4::Context->_new_userenv('DUMMY SESSION');
+C4::Context::set_userenv(0,0,0,'firstname','surname', 'BRANCH1', 'Library 1', 0, '', '');
+my $userenv = C4::Context->userenv;
+
+my $module = Test::MockModule->new('C4::Auth');
+$module->mock(
+    'haspermission',
+    sub {
+        # simulate user that has serials permissions but
+        # NOT superserials
+        my ($userid, $flagsrequired) = @_;
+        return 0 if 'superserials' eq ($flagsrequired->{serials} // 0);
+        return exists($flagsrequired->{serials});
+    }
+);
+
+C4::Context->set_preference('IndependentBranches', 0);
+@subscriptions = SearchSubscriptions({expiration_date => '2013-12-31'});
+is(
+    scalar(grep { !$_->{cannotdisplay} } @subscriptions ),
+    3,
+    'ordinary user can see all subscriptions with IndependentBranches off'
+);
+
+C4::Context->set_preference('IndependentBranches', 1);
+@subscriptions = SearchSubscriptions({expiration_date => '2013-12-31'});
+is(
+    scalar(grep { !$_->{cannotdisplay} } @subscriptions ),
+    1,
+    'ordinary user can see only their library\'s subscriptions with IndependentBranches on'
+);
+
+# don the cape and turn into Superlibrarian!
+C4::Context::set_userenv(0,0,0,'firstname','surname', 'BRANCH1', 'Library 1', 1, '', '');
+@subscriptions = SearchSubscriptions({expiration_date => '2013-12-31'});
+is(
+    scalar(grep { !$_->{cannotdisplay} } @subscriptions ),
+    3,
+    'superlibrarian can see all subscriptions with IndependentBranches on (bug 12048)'
+);
 
 #End transaction
 $dbh->rollback;
