@@ -1,7 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Budgets &rsaquo; Funds &rsaquo; Planning for [% budget_period_description %] by [% authcat %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
 <script type="text/javascript">
 //<![CDATA[
@@ -37,14 +37,6 @@
             }
     }
     $(document).ready(function() {
-        $("#selectallbutton").on("click",function(e){
-            $("#itemst").checkCheckboxes();
-            e.preventDefault();
-        });
-        $("#clearallbutton").on("click",function(e){
-            $("#itemst").unCheckCheckboxes();
-            e.preventDefault();
-        });
         $("#selections input").on("change",function(e){
             var num = $(this).attr("id");
             if(num == 'showall'){
