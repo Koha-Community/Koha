@@ -744,7 +744,7 @@ sub SearchSubscriptions {
             !C4::Context->IsSuperLibrarian() &&
             !C4::Auth::haspermission( $userid, {serials => 'superserials'});
     }
-    my $user_branch = C4::Context->userenv->{'branch'};
+    my $user_branch = C4::Context->userenv ? C4::Context->userenv->{'branch'} : q{};
     for my $subscription ( @$results ) {
         $subscription->{cannotedit} = not can_edit_subscription( $subscription );
         $subscription->{cannotdisplay} =
@@ -1540,14 +1540,14 @@ sub NewSubscription {
     my $pattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subscription->{numberpattern});
 
     # calculate issue number
-    my $serialseq = GetSeq($subscription, $pattern);
+    my $serialseq = GetSeq($subscription, $pattern) || q{};
     $query = qq|
         INSERT INTO serial
             (serialseq,subscriptionid,biblionumber,status, planneddate, publisheddate)
         VALUES (?,?,?,?,?,?)
     |;
     $sth = $dbh->prepare($query);
-    $sth->execute( "$serialseq", $subscriptionid, $biblionumber, 1, $firstacquidate, $firstacquidate );
+    $sth->execute( $serialseq, $subscriptionid, $biblionumber, 1, $firstacquidate, $firstacquidate );
 
     logaction( "SERIAL", "ADD", $subscriptionid, "" ) if C4::Context->preference("SubscriptionLog");
 
