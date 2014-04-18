@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use Modern::Perl;
 
-use Test::More;# tests => 5; #FIXME uncomment me
+use Test::More tests => 37;
 
 use MARC::Record;
 
@@ -81,7 +81,7 @@ my $borrowernumber = C4::Members::AddMember(
     userid => $userid,
 );
 
-$userenv = { flags => 1, id => $borrowernumber, branch => '' }; # FIXME Not sure about this test
+$userenv = { flags => 1, id => $borrowernumber, branch => '' };
 
 # Can edit a subscription
 
@@ -210,11 +210,7 @@ is( C4::Serials::can_show_subscription($subscription_from_another_branch), 1,
 "Without IndependentBranches, renew_subscription cannot show a subscription from another branch"
 );
 
-
-
 $dbh->rollback;
-
-done_testing;
 
 # C4::Context->userenv
 sub Mock_userenv {
