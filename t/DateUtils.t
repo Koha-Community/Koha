@@ -5,7 +5,7 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 32;
+use Test::More tests => 34;
 use Test::MockModule;
 
 BEGIN { use_ok('Koha::DateUtils'); }
@@ -132,3 +132,16 @@ cmp_ok $date_string, 'eq', '11/12/2013', 'as_due_date with hours and timeformat 
 
 $date_string = output_pref({ dt => $dt, dateformat => 'metric', timeformat => '12hr', dateonly => 1, as_due_date => 1});
 cmp_ok $date_string, 'eq', '11/12/2013', 'as_due_date without hours and timeformat 12hr';
+
+# Test as_due_date for hourly loans
+$dt = DateTime->new(
+    year       => 2013,
+    month      => 12,
+    day        => 11,
+    hour       => 18,
+    minute     => 35,
+);
+$date_string = output_pref({ dt => $dt, dateformat => 'metric', timeformat => '24hr', as_due_date => 1 });
+cmp_ok $date_string, 'eq', '11/12/2013 18:35', 'as_due_date with hours and timeformat 24hr (non-midnight time)';
+$date_string = output_pref({ dt => $dt, dateformat => 'us', timeformat => '12hr', as_due_date => 1 });
+cmp_ok $date_string, 'eq', '12/11/2013 06:35 PM', 'as_due_date with hours and timeformat 12hr (non-midnight time)';
