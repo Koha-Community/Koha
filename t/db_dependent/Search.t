@@ -834,6 +834,12 @@ TODO: {
     is($newresults[0]->{biblionumber}, '300', 'Over-large bib record has the correct biblionumber (bug 11096)');
     like($newresults[0]->{notes}, qr/This is large note #550/, 'Able to render the notes field for over-large bib record (bug 11096)');
 
+    # verify that we don't attempt to sort if no results were returned
+    # because of a query error
+    warning_like {( undef, $results_hashref, $facets_loop ) =
+        getRecords('ccl=( AND )', '', ['title_az'], [ 'biblioserver' ], '20', 0, undef, \%branches, \%itemtypes, 'ccl', undef)
+    } qr/WARNING: query problem with/, 'got warning instead of crash when attempting to run invalid query (bug 9578)';
+    
     cleanup();
 }
 
@@ -909,7 +915,7 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + GRS-1' => sub {
-    plan tests => 103;
+    plan tests => 104;
     run_marc21_search_tests('grs1');
 };
 
