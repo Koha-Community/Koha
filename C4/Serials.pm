@@ -846,7 +846,7 @@ sub GetSerials2 {
         $line->{ "status" . $line->{status} } = 1; # fills a "statusX" value, used for template status select list
         # Format dates for display
         for my $datefield ( qw( planneddate publisheddate ) ) {
-            if ($line->{$datefield} =~m/^00/) {
+            if (!defined($line->{$datefield}) || $line->{$datefield} =~m/^00/) {
                 $line->{$datefield} = q{};
             }
             else {
