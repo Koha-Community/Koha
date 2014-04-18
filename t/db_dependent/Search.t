@@ -12,7 +12,7 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 224;
+use Test::More tests => 226;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;
@@ -776,6 +776,12 @@ sub run_marc21_search_tests {
     is($count, 1, 'MARC21 authorities: one hit on match contains "沙士北亞威廉姆" (QP)');
 
 
+    # verify that we don't attempt to sort if no results were returned
+    # because of a query error
+    warning_like {( undef, $results_hashref, $facets_loop ) =
+        getRecords('ccl=( AND )', '', ['title_az'], [ 'biblioserver' ], '20', 0, undef, \%branches, \%itemtypes, 'ccl', undef)
+    } qr/WARNING: query problem with/, 'got warning instead of crash when attempting to run invalid query (bug 9578)';
+    
     cleanup();
 }
 
