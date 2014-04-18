@@ -91,7 +91,7 @@
 </table>
 [% END %]
 
-[% IF ( accounts ) %]
+[% IF ( accounts && ( totaldue != '0.00' ) ) %]
 <table>
     <caption>Account fines and payments</caption>
     <tr>
@@ -101,6 +101,7 @@
         <th>Outstanding</th>
     </tr>
     [% FOREACH account IN accounts %]
+    [% NEXT IF account.amountoutstanding == '0.00' %]
     <tr>
         <td>
             [% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">[% END %]
