@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisition &rsaquo; Change order [% IF (type == "vendor") %]vendor[% ELSE %]internal[% END %] note</title>
+<title>Koha &rsaquo; Acquisition &rsaquo; Change order [% IF (type == "vendor") %]vendor note[% ELSE %]internal note[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -12,7 +12,7 @@
 
 <div id="bd">
   <div id="yui-main">
-      <h1>Change order [% IF (type == "vendor") %]vendor[% ELSE %]internal[% END %] note (order no. [% ordernumber %])</h1>
+      <h1>Change order [% IF (type == "vendor") %]vendor note[% ELSE %]internal note[% END %] (order no. [% ordernumber %])</h1>
       <form action="/cgi-bin/koha/acqui/modordernotes.pl" method="post">
         <fieldset class="brief">
           <label for="ordernotes">Note:</label>

@@ -336,7 +336,8 @@ if ( defined $subscriptionid ) {
         $data->{ecost}          = $lastOrderReceived->{ecost};
         $data->{quantity}       = $lastOrderReceived->{quantity};
         $data->{unitprice}      = $lastOrderReceived->{unitprice};
-        $data->{notes}          = $lastOrderReceived->{notes};
+        $data->{order_internalnote} = $lastOrderReceived->{order_internalnote};
+        $data->{order_vendornote}   = $lastOrderReceived->{order_vendornote};
         $data->{sort1}          = $lastOrderReceived->{sort1};
         $data->{sort2}          = $lastOrderReceived->{sort2};
 
@@ -385,6 +386,8 @@ $template->param(
     discount             => $bookseller->{'discount'},
     orderdiscount_2dp    => sprintf( "%.2f", $data->{'discount'} || 0 ),
     orderdiscount        => $data->{'discount'},
+    order_internalnote   => $data->{'order_internalnote'},
+    order_vendornote     => $data->{'order_vendornote'},
     listincgst       => $bookseller->{'listincgst'},
     invoiceincgst    => $bookseller->{'invoiceincgst'},
     name             => $bookseller->{'name'},
@@ -418,8 +421,6 @@ $template->param(
     acqcreate        => C4::Context->preference("AcqCreateItem") eq "ordering" ? 1 : "",
     (uc(C4::Context->preference("marcflavour"))) => 1
 );
-
-$template->param ( notes => $data->{'notes'} ) if ( $ordernumber );
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
