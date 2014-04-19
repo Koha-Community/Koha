@@ -35,7 +35,7 @@ BEGIN {
     $VERSION = 3.07.00.049;
 	require Exporter;
 	@ISA = qw(Exporter);
-    @EXPORT = qw(&ImportBreeding &BreedingSearch &Z3950Search &Z3950SearchAuth);
+    @EXPORT = qw(&BreedingSearch &Z3950Search &Z3950SearchAuth);
 }
 
 =head1 NAME
@@ -45,114 +45,13 @@ C4::Breeding : module to add biblios to import_records via
 
 =head1 SYNOPSIS
 
-    use C4::Scan;
-    &ImportBreeding($marcrecords,$overwrite_biblio,$filename,$z3950random,$batch_type);
-
-    C<$marcrecord> => the MARC::Record
-    C<$overwrite_biblio> => if set to 1 a biblio with the same ISBN will be overwritted.
-                                if set to 0 a biblio with the same isbn will be ignored (the previous will be kept)
-                                if set to -1 the biblio will be added anyway (more than 1 biblio with the same ISBN 
-                                possible in the breeding
-    C<$encoding> => USMARC
-                        or UNIMARC. used for char_decoding.
-                        If not present, the parameter marcflavour is used instead
-    C<$z3950random> => the random value created during a z3950 search result.
+    Z3950Search($pars, $template);
+    ($count, @results) = &BreedingSearch($title,$isbn,$random);
 
 =head1 DESCRIPTION
 
-    ImportBreeding import MARC records in the reservoir (import_records/import_batches tables).
-    the records can be properly encoded or not, we try to reencode them in utf-8 if needed.
-    works perfectly with BNF server, that sends UNIMARC latin1 records. Should work with other servers too.
-
-=head2 ImportBreeding
-
-	ImportBreeding($marcrecords,$overwrite_biblio,$filename,$encoding,$z3950random,$batch_type);
-
-	TODO description
-
-=cut
-
-sub ImportBreeding {
-    my ($marcrecords,$overwrite_biblio,$filename,$encoding,$z3950random,$batch_type) = @_;
-    my @marcarray = split /\x1D/, $marcrecords;
-    
-    my $dbh = C4::Context->dbh;
-    
-    my $batch_id = GetZ3950BatchId($filename);
-    my $searchisbn = $dbh->prepare("select biblioitemnumber from biblioitems where isbn=?");
-    my $searchissn = $dbh->prepare("select biblioitemnumber from biblioitems where issn=?");
-    # FIXME -- not sure that this kind of checking is actually needed
-    my $searchbreeding = $dbh->prepare("select import_record_id from import_biblios where isbn=? and title=?");
-    
-#     $encoding = C4::Context->preference("marcflavour") unless $encoding;
-    # fields used for import results
-    my $imported=0;
-    my $alreadyindb = 0;
-    my $alreadyinfarm = 0;
-    my $notmarcrecord = 0;
-    my $breedingid;
-    for (my $i=0;$i<=$#marcarray;$i++) {
-        my ($marcrecord, $charset_result, $charset_errors);
-        ($marcrecord, $charset_result, $charset_errors) = 
-            MarcToUTF8Record($marcarray[$i]."\x1D", C4::Context->preference("marcflavour"), $encoding);
-        
-        # Normalize the record so it doesn't have separated diacritics
-        SetUTF8Flag($marcrecord);
-
-#         warn "$i : $marcarray[$i]";
-        # FIXME - currently this does nothing 
-        my @warnings = $marcrecord->warnings();
-        
-        if (scalar($marcrecord->fields()) == 0) {
-            $notmarcrecord++;
-        } else {
-            my $oldbiblio = TransformMarcToKoha($dbh,$marcrecord,'');
-            # if isbn found and biblio does not exist, add it. If isbn found and biblio exists, 
-            # overwrite or ignore depending on user choice
-            # drop every "special" char : spaces, - ...
-            $oldbiblio->{isbn} = C4::Koha::GetNormalizedISBN($oldbiblio->{isbn});
-            # search if biblio exists
-            my $biblioitemnumber;
-            if ($oldbiblio->{isbn}) {
-                $searchisbn->execute($oldbiblio->{isbn});
-                ($biblioitemnumber) = $searchisbn->fetchrow;
-            } else {
-                if ($oldbiblio->{issn}) {
-                    $searchissn->execute($oldbiblio->{issn});
-                	($biblioitemnumber) = $searchissn->fetchrow;
-                }
-            }
-            if ($biblioitemnumber && $overwrite_biblio ne 2) {
-                $alreadyindb++;
-            } else {
-                # FIXME - in context of batch load,
-                # rejecting records because already present in the reservoir
-                # not correct in every case.
-                # search in breeding farm
-                if ($oldbiblio->{isbn}) {
-                    $searchbreeding->execute($oldbiblio->{isbn},$oldbiblio->{title});
-                    ($breedingid) = $searchbreeding->fetchrow;
-                } elsif ($oldbiblio->{issn}){
-                    $searchbreeding->execute($oldbiblio->{issn},$oldbiblio->{title});
-                    ($breedingid) = $searchbreeding->fetchrow;
-                }
-                if ($breedingid && $overwrite_biblio eq '0') {
-                    $alreadyinfarm++;
-                } else {
-                    if ($breedingid && $overwrite_biblio eq '1') {
-                        ModBiblioInBatch($breedingid, $marcrecord);
-                    } else {
-                        my $import_id = AddBiblioToBatch($batch_id, $imported, $marcrecord, $encoding, $z3950random);
-                        $breedingid = $import_id;
-                    }
-                    $imported++;
-                }
-            }
-        }
-    }
-    return ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported,$breedingid);
-}
-
+This module contains routines related to Koha's Z39.50 search into
+cataloguing reservoir features.
 
 =head2 BreedingSearch
 
@@ -408,7 +307,6 @@ sub _handle_one_result {
     my ($marcrecord) = MarcToUTF8Record($raw, C4::Context->preference('marcflavour'), $servhref->{encd}); #ignores charset return values
     SetUTF8Flag($marcrecord);
 
-    #call to ImportBreeding replaced by next two calls for optimization
     my $batch_id = GetZ3950BatchId($servhref->{name});
     my $breedingid = AddBiblioToBatch($batch_id, $seq, $marcrecord, 'UTF-8', 0, 0);
         #FIXME passing 0 for z3950random
