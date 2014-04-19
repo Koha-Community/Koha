@@ -176,6 +176,8 @@ Returns a reference to an array of hashes:
     print "$language->{language_locale_name}\n";
  }
 
+This routine is a wrapper for getLanguages().
+
 =cut
 
 sub getAllLanguages {
@@ -184,9 +186,9 @@ sub getAllLanguages {
 
 =head2 getLanguages
 
-Returns a reference to an array of hashes.
-Extracted from getAllLanguages to limit effect on the code base.
-This new function (name) will allow for more arguments to customize the values returned.
+    my $lang_arrayref = getLanguages([$lang[, $isFiltered]]);
+
+Returns a reference to an array of hashes of languages.
 
 - If no parameter is passed to the function, it returns english languages names
 - If a $lang parameter conforming to RFC4646 syntax is passed, the function returns languages names translated in $lang
