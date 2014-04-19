@@ -198,8 +198,9 @@ if ($op eq ""){
             "quantity", $quantity, "branchcode", $branch, 
             "budget_id", $budget_id, "uncertainprice", 1,
             "sort1", $cgiparams->{'sort1'},"sort2", $cgiparams->{'sort2'},
-            "notes", $cgiparams->{'notes'}, "budget_id", $cgiparams->{'budget_id'},
+            "order_internalnote", $cgiparams->{'order_internalnote'}, "budget_id", $cgiparams->{'budget_id'},
             "currency",$cgiparams->{'currency'},
+            "order_vendornote" => $cgiparams->{'order_vendornote'},
         );
 
         my $price = GetMarcPrice($marcrecord, C4::Context->preference('marcflavour'));
