@@ -218,7 +218,7 @@ sub printbasketgrouppdf{
                 en => ( $en ? $en : undef ),
                 edition => ( $edition ? $edition : undef ),
             };
-            for my $key ( qw/ gstrate author title itemtype publishercode copyrightdate publicationyear discount quantity rrpgsti rrpgste gstgsti gstgste ecostgsti ecostgste gstvalue totalgste totalgsti / ) {
+            for my $key ( qw/ gstrate author title itemtype publishercode copyrightdate publicationyear discount quantity rrpgsti rrpgste gstgsti gstgste ecostgsti ecostgste gstvalue totalgste totalgsti order_vendornote / ) {
                 $ba_order->{$key} = $ord->{$key};
             }
 
