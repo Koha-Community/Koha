@@ -281,7 +281,7 @@
                     [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]&type=internal">Add internal note</a>]
                 [% END %]
                 [% IF ( loop_order.order_vendornote ) %]
-                    <p class="ordernote"><strong>Vendor note: </strong>[% loop_order.order_vendornote|html %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]&type=vendor">Change vendor note</a>]</p>
+                    <p class="ordernote"><strong>Vendor note: </strong>[% loop_order.order_vendornote|html %]</p>
                 [% ELSE %]
                     [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]&type=vendor">Add vendor note</a>]
                 [% END %]
