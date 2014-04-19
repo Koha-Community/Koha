@@ -1432,7 +1432,8 @@ sub GetCancelledOrders {
     budget_id => $budget_id,
     datereceived => $datereceived,
     received_itemnumbers => \@received_itemnumbers,
-    notes => $notes,
+    order_internalnote => $order_internalnote,
+    order_vendornote => $order_vendornote,
    });
 
 Updates an order, to reflect the fact that it was received, at least
@@ -1460,7 +1461,8 @@ sub ModReceiveOrder {
     my $budget_id = $params->{budget_id};
     my $datereceived = $params->{datereceived};
     my $received_items = $params->{received_items};
-    my $notes = $params->{notes};
+    my $order_internalnote = $params->{order_internalnote};
+    my $order_vendornote = $params->{order_vendornote};
 
     my $dbh = C4::Context->dbh;
     $datereceived = C4::Dates->output('iso') unless $datereceived;
@@ -1490,11 +1492,17 @@ q{SELECT * FROM aqorders WHERE biblionumber=? AND aqorders.ordernumber=?},
             UPDATE aqorders
             SET quantity = ?,
                 orderstatus = 'partial'|;
-        $query .= q|, notes = ?| if defined $notes;
+        $query .= q|, order_internalnote = ?| if defined $order_internalnote;
+        $query .= q|, order_vendornote = ?| if defined $order_vendornote;
         $query .= q| WHERE ordernumber = ?|;
         my $sth = $dbh->prepare($query);
 
-        $sth->execute($order->{quantity} - $quantrec, ( defined $notes ? $notes : () ), $ordernumber);
+        $sth->execute(
+            $order->{quantity} - $quantrec,
+            ( defined $order_internalnote ? $order_internalnote : () ),
+            ( defined $order_vendornote ? $order_vendornote : () ),
+            $ordernumber
+        );
 
         delete $order->{'ordernumber'};
         $order->{'budget_id'} = ( $budget_id || $order->{'budget_id'} );
@@ -1519,10 +1527,23 @@ q{SELECT * FROM aqorders WHERE biblionumber=? AND aqorders.ordernumber=?},
             update aqorders
             set quantityreceived=?,datereceived=?,invoiceid=?,
                 unitprice=?,rrp=?,ecost=?,budget_id=?,orderstatus='complete'|;
-        $query .= q|, notes = ?| if defined $notes;
+        $query .= q|, order_internalnote = ?| if defined $order_internalnote;
+        $query .= q|, order_vendornote = ?| if defined $order_vendornote;
         $query .= q| where biblionumber=? and ordernumber=?|;
         my $sth = $dbh->prepare( $query );
-        $sth->execute($quantrec,$datereceived,$invoiceid,$cost,$rrp,$ecost,$budget_id,( defined $notes ? $notes : () ),$biblionumber,$ordernumber);
+        $sth->execute(
+            $quantrec,
+            $datereceived,
+            $invoiceid,
+            $cost,
+            $rrp,
+            $ecost,
+            $budget_id,
+            ( defined $order_internalnote ? $order_internalnote : () ),
+            ( defined $order_vendornote ? $order_vendornote : () ),
+            $biblionumber,
+            $ordernumber
+        );
     }
     return ($datereceived, $new_ordernumber);
 }

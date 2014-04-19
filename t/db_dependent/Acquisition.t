@@ -8,7 +8,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 71;
+use Test::More tests => 72;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -818,7 +818,8 @@ is(
         ecost            => 12,
         invoiceid        => $invoiceid,
         rrp              => 42,
-        notes            => "my notes",
+        order_internalnote => "my notes",
+        order_vendornote   => "my vendor notes",
     }
 );
 my $order2 = GetOrder( $ordernumbers[1] );
@@ -827,8 +828,10 @@ is( $order2->{'quantityreceived'},
 is( $order2->{'quantity'}, 40, '40 items on original order' );
 is( $order2->{'budget_id'}, $budgetid,
     'Budget on original order is unchanged' );
-is( $order2->{notes}, "my notes",
-    'ModReceiveOrder and GetOrder deal with notes' );
+is( $order2->{order_internalnote}, "my notes",
+    'ModReceiveOrder and GetOrder deal with internal notes' );
+is( $order2->{order_vendornote}, "my vendor notes",
+    'ModReceiveOrder and GetOrder deal with vendor notes' );
 
 $neworder = GetOrder($new_ordernumber);
 is( $neworder->{'quantity'}, 2, '2 items on new order' );
@@ -853,7 +856,7 @@ my $budgetid2 = C4::Budgets::AddBudget(
         invoiceid        => $invoiceid,
         rrp              => 42,
         budget_id        => $budgetid2,
-        notes            => "my other notes",
+        order_internalnote => "my other notes",
     }
 );
 
@@ -863,7 +866,7 @@ is( $order3->{'quantityreceived'},
 is( $order3->{'quantity'}, 2, '2 items on original order' );
 is( $order3->{'budget_id'}, $budgetid,
     'Budget on original order is unchanged' );
-is( $order3->{notes}, "my other notes",
+is( $order3->{order_internalnote}, "my other notes",
     'ModReceiveOrder and GetOrder deal with notes' );
 
 $neworder = GetOrder($new_ordernumber);
@@ -882,7 +885,7 @@ is( $neworder->{'budget_id'}, $budgetid2, 'Budget on new order is changed' );
         invoiceid        => $invoiceid,
         rrp              => 42,
         budget_id        => $budgetid2,
-        notes            => "my third notes",
+        order_internalnote => "my third notes",
     }
 );
 
@@ -890,7 +893,7 @@ $order3 = GetOrder( $ordernumbers[2] );
 is( $order3->{'quantityreceived'}, 2,          'Order not split up' );
 is( $order3->{'quantity'},         2,          '2 items on order' );
 is( $order3->{'budget_id'},        $budgetid2, 'Budget has changed' );
-is( $order3->{notes}, "my third notes", 'ModReceiveOrder and GetOrder deal with notes' );
+is( $order3->{order_internalnote}, "my third notes", 'ModReceiveOrder and GetOrder deal with notes' );
 
 my $nonexistent_order = GetOrder();
 is( $nonexistent_order, undef, 'GetOrder returns undef if no ordernumber is given' );
