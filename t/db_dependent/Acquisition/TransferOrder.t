@@ -78,7 +78,12 @@ is(scalar GetOrders($basketno2), 1, "1 order in basket2");
 ($order) = GetOrders($basketno2);
 is(scalar GetItemnumbersFromOrder($order->{ordernumber}), 1, "1 item in basket2's order");
 
-ModReceiveOrder( $biblionumber, $newordernumber, 2, undef, undef, undef, undef, undef, undef, dt_from_string );
+ModReceiveOrder({
+    biblionumber => $biblionumber,
+    ordernumber => $newordernumber,
+    quantityreceived => 2, 
+    datereceived => dt_from_string(),
+});
 CancelReceipt( $newordernumber );
 $order = GetOrder( $newordernumber );
 is ( $order->{ordernumber}, $newordernumber, 'Regression test Bug 11549: After a transfer, receive and cancel the receive should be possible.' );
