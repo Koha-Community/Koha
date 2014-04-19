@@ -556,7 +556,7 @@ for (my $i=0;$i<@servers;$i++) {
             @newresults = searchResults('opac', $query_desc, $hits, $results_per_page, $offset, $scan,
                                         $results_hashref->{$server}->{"RECORDS"});
         }
-    $hits = 0 unless @newresults;
+        $hits = 0 unless @newresults;
 
         foreach my $res (@newresults) {
 
