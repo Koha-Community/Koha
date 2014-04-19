@@ -920,7 +920,7 @@ subtest 'MARC21 + GRS-1' => sub {
 };
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 103;
+    plan tests => 104;
     run_marc21_search_tests('dom');
 };
 
