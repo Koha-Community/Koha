@@ -8147,7 +8147,7 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.15.00.033";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('NoLoginInstructions', '', '60|10', 'Instructions when a person is not connected', 'Textarea')");
+    $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('NoLoginInstructions', '', '60|10', 'Instructions to display on the OPAC login form when a patron is not logged in', 'Textarea')");
     print "Upgrade to $DBversion done (Bug 10951: Add NoLoginInstructions pref)\n";
     SetVersion($DBversion);
 }
