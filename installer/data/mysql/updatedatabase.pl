@@ -7167,13 +7167,6 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 10096 - Add a Z39.50 interface for authority searching)\n";
 }
 
-$DBversion = "3.13.00.XXX";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('AdvancedSearchLanguages','','','ISO 639-2 codes of languages you wish to see appear as an Advanced search option.  Example: eng|fra|ita','Textarea')");
-    print "Upgrade to $DBversion done (Bug 10986: system preferences to limit languages in Advanced search )\n";
-    SetVersion ($DBversion);
-}
-
 $DBversion = "3.13.00.025";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
    $dbh->do("ALTER TABLE oai_sets_mappings ADD COLUMN operator varchar(8) NOT NULL default 'equal' AFTER marcsubfield;");
@@ -8156,6 +8149,13 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('NoLoginInstructions', '', '60|10', 'Instructions to display on the OPAC login form when a patron is not logged in', 'Textarea')");
     print "Upgrade to $DBversion done (Bug 10951: Add NoLoginInstructions pref)\n";
     SetVersion($DBversion);
+}
+
+$DBversion = "3.15.00.034";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('AdvancedSearchLanguages','','','ISO 639-2 codes of languages you wish to see appear as an advanced search option.  Example: eng|fra|ita','Textarea')");
+    print "Upgrade to $DBversion done (Bug 10986: system preferences to limit languages in advanced search )\n";
+    SetVersion ($DBversion);
 }
 
 =head1 FUNCTIONS
