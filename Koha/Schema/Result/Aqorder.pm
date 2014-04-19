@@ -106,7 +106,12 @@ __PACKAGE__->table("aqorders");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
-=head2 notes
+=head2 order_internalnote
+
+  data_type: 'mediumtext'
+  is_nullable: 1
+
+=head2 order_vendornote
 
   data_type: 'mediumtext'
   is_nullable: 1
@@ -264,7 +269,9 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "datecancellationprinted",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
-  "notes",
+  "order_internalnote",
+  { data_type => "mediumtext", is_nullable => 1 },
+  "order_vendornote",
   { data_type => "mediumtext", is_nullable => 1 },
   "supplierreference",
   { data_type => "mediumtext", is_nullable => 1 },
@@ -460,8 +467,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-22 13:37:51
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+bznx/vy8sLxOYDBZkwycw
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-04-19 15:25:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XGQHKw2/pml/kFe89vbvXw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
