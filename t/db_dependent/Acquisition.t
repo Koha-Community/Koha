@@ -194,7 +194,8 @@ my @order_content = (
             biblionumber   => $biblionumber1,
             budget_id      => $budget->{budget_id},
             uncertainprice => 0,
-            notes          => "some notes",
+            order_internalnote => "internal note",
+            order_vendornote   => "vendor note"
         },
         num => {
             quantity  => 24,
@@ -219,7 +220,8 @@ my @order_content = (
             biblionumber   => $biblionumber2,
             budget_id      => $budget->{budget_id},
             uncertainprice => 0,
-            notes          => "ordernotes"
+            order_internalnote => "internal note",
+            order_vendornote   => "vendor note"
         },
         num => {
             quantity  => 4,
@@ -237,7 +239,8 @@ my @order_content = (
             basketno     => $basketno,
             biblionumber => $biblionumber3,
             budget_id    => $budget->{budget_id},
-            notes        => "ordernotes"
+            order_internalnote => "internal note",
+            order_vendornote   => "vendor note"
         },
         num => {
             quantity       => 4,
@@ -256,7 +259,8 @@ my @order_content = (
             basketno     => $basketno,
             biblionumber => $biblionumber4,
             budget_id    => $budget->{budget_id},
-            notes        => "ordernotes"
+            order_internalnote => "internal note",
+            order_vendornote   => "vendor note"
         },
         num => {
             quantity       => 1,
@@ -345,6 +349,8 @@ ok(
 #
 
 my @expectedfields = qw(
+  order_internalnote
+  order_vendornote
   ordernumber
   biblionumber
   entrydate
@@ -359,7 +365,6 @@ my @expectedfields = qw(
   quantityreceived
   cancelledby
   datecancellationprinted
-  notes
   supplierreference
   purchaseordernumber
   basketno
@@ -427,6 +432,9 @@ is( join( " ", @$test_different_fields ),
 #
 
 my @base_expectedfields = qw(
+  order_internalnote
+  order_vendornote
+  notes
   ordernumber
   ecost
   uncertainprice
@@ -468,7 +476,6 @@ my @base_expectedfields = qw(
   subscriptionid
   editionresponsibility
   sort2
-  notes
   volumedate
   budget_id
   illus
@@ -584,6 +591,9 @@ ok(
 #
 
 @expectedfields = qw (
+  order_internalnote
+  order_vendornote
+  notes
   basketgroupid
   basketgroupname
   firstname
@@ -635,7 +645,6 @@ ok(
   subscriptionid
   frameworkcode
   sort2
-  notes
   datecancellationprinted
   budget_id
   authorisedby
