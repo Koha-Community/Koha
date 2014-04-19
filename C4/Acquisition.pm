@@ -1427,12 +1427,12 @@ sub GetCancelledOrders {
     cost => $cost,
     ecost => $ecost,
     invoiceid => $invoiceid,
-    rrp => rrp,
-    budget_id => budget_id,
-    datereceived => datereceived,
+    rrp => $rrp,
+    budget_id => $budget_id,
+    datereceived => $datereceived,
     received_itemnumbers => \@received_itemnumbers,
     notes => $notes,
-    );
+   });
 
 Updates an order, to reflect the fact that it was received, at least
 in part. All arguments not mentioned below update the fields with the
