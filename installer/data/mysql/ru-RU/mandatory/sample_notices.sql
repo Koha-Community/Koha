@@ -21,7 +21,7 @@ INSERT INTO `letter` (module, code, name, title, content) VALUES ('circulation',
 INSERT INTO  letter (module, code, branchcode, name, is_html, title, content)
 VALUES ('members', 'SHARE_INVITE', '', 'Invitation for sharing a list', '0', 'Share list <<listname>>', 'Dear patron,
 
-One of our patrons, <<borrowers.firstname>> <<borrowers.surname>>, invites you to share his list <<listname>> in our library catalog.
+One of our patrons, <<borrowers.firstname>> <<borrowers.surname>>, invites you to share a list <<listname>> in our library catalog.
 
 To access this shared list, please click on the following URL or copy-and-paste it into your browser address bar.
 
