@@ -22,7 +22,7 @@ use Modern::Perl;
 
 use C4::Auth;
 use C4::Reports::Guided;
-use JSON;
+use JSON::XS;
 use CGI;
 
 use Koha::Cache;
@@ -66,14 +66,14 @@ unless ($json_text) {
         else {
             $lines = $sth->fetchall_arrayref;
         }
-        $json_text = to_json($lines);
+        $json_text = encode_json($lines);
 
         if ($cache_active) {
             $cache->set_in_cache( $cache_key, $json_text, $report_rec->{cache_expiry} );
         }
     }
     else {
-        $json_text = to_json($errors);
+        $json_text = encode_json($errors);
     }
 }
 
