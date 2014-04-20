@@ -337,7 +337,7 @@ sub shelfpage {
         #Add a shelf
             if ( my $newshelf = $query->param('addshelf') ) {
 
-                # note: a user can always add a new shelf (except kohaadmin)
+                # note: a user can always add a new shelf (except database administrator account)
                 my $shelfnumber = AddShelf( {
                     shelfname => $newshelf,
                     sortfield => $query->param('sortfield'),
