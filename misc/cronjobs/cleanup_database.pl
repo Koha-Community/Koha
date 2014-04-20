@@ -25,6 +25,7 @@ use constant DEFAULT_MAIL_PURGEDAYS => 30;
 use constant DEFAULT_IMPORT_PURGEDAYS => 60;
 use constant DEFAULT_LOGS_PURGEDAYS => 180;
 use constant DEFAULT_SEARCHHISTORY_PURGEDAYS => 30;
+use constant DEFAULT_SHARE_INVITATION_EXPIRY_DAYS => 14;
 
 BEGIN {
     # find Koha's Perl modules
@@ -64,6 +65,8 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
                       Defaults to 180 days if no days specified.
    --searchhistory DAYS  purge entries from search_history older than DAYS days.
                          Defaults to 30 days if no days specified
+   --list-invites  DAYS  purge (unaccepted) list share invites older than DAYS
+                         days.  Defaults to 14 days if no days specified.
 USAGE
     exit $_[0];
 }
@@ -71,7 +74,8 @@ USAGE
 my (
     $help,            $sessions,       $sess_days,    $verbose,
     $zebraqueue_days, $mail,           $purge_merged, $pImport,
-    $pLogs,           $pSearchhistory, $pZ3950
+    $pLogs,           $pSearchhistory, $pZ3950,
+    $pListShareInvites,
 );
 
 GetOptions(
@@ -86,6 +90,7 @@ GetOptions(
     'z3950'        => \$pZ3950,
     'logs:i'       => \$pLogs,
     'searchhistory:i' => \$pSearchhistory,
+    'list-invites:i'  => \$pListShareInvites,
 ) || usage(1);
 
 $sessions=1 if $sess_days && $sess_days>0;
@@ -96,6 +101,7 @@ $pLogs= DEFAULT_LOGS_PURGEDAYS if defined($pLogs) && $pLogs==0;
 $zebraqueue_days= DEFAULT_ZEBRAQ_PURGEDAYS if defined($zebraqueue_days) && $zebraqueue_days==0;
 $mail= DEFAULT_MAIL_PURGEDAYS if defined($mail) && $mail==0;
 $pSearchhistory= DEFAULT_SEARCHHISTORY_PURGEDAYS if defined($pSearchhistory) && $pSearchhistory==0;
+$pListShareInvites = DEFAULT_SHARE_INVITATION_EXPIRY_DAYS if defined($pListShareInvites) && $pListShareInvites == 0;
 
 if ($help) {
     usage(0);
@@ -108,7 +114,8 @@ unless ( $sessions
     || $pImport
     || $pLogs
     || $pSearchhistory
-    || $pZ3950 )
+    || $pZ3950
+    || $pListShareInvites )
 {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -204,6 +211,17 @@ if($pSearchhistory) {
     print "Purging records older than $pSearchhistory from search_history.\n" if $verbose;
     PurgeSearchHistory($pSearchhistory);
     print "Done with purging search_history.\n" if $verbose;
+}
+
+if ($pListShareInvites) {
+    print "Purging unaccepted list share invites older than $pListShareInvites days.\n" if $verbose;
+    $sth = $dbh->prepare("
+        DELETE FROM virtualshelfshares
+        WHERE invitekey IS NOT NULL
+        AND (sharedate + INTERVAL ? DAY) < NOW()
+    ");
+    $sth->execute($pListShareInvites);
+    print "Done with purging unaccepted list share invites.\n" if $verbose;
 }
 
 exit(0);

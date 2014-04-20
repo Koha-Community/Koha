@@ -675,13 +675,9 @@ sub AddShare {
     my ($shelfnumber, $key)= @_;
     return if !$shelfnumber || !$key;
 
-    my $sql;
     my $dbh = C4::Context->dbh;
-    $sql="DELETE FROM virtualshelfshares WHERE sharedate<NOW() LIMIT 10";
-        #housekeeping: add one, remove max 10 expired ones
-    $dbh->do($sql);
-    $sql="INSERT INTO virtualshelfshares (shelfnumber, invitekey, sharedate) VALUES (?, ?, ADDDATE(NOW(),?))";
-    $dbh->do($sql, undef, ($shelfnumber, $key, SHARE_INVITATION_EXPIRY_DAYS));
+    my $sql = "INSERT INTO virtualshelfshares (shelfnumber, invitekey, sharedate) VALUES (?, ?, NOW())";
+    $dbh->do($sql, undef, ($shelfnumber, $key));
     return !$dbh->err;
 }
 
@@ -703,10 +699,10 @@ sub AcceptShare {
     my $dbh = C4::Context->dbh;
     $sql="
 UPDATE virtualshelfshares
-SET invitekey=NULL, sharedate=NULL, borrowernumber=?
-WHERE shelfnumber=? AND invitekey=? AND sharedate>NOW()
+SET invitekey=NULL, sharedate=NOW(), borrowernumber=?
+WHERE shelfnumber=? AND invitekey=? AND (sharedate + INTERVAL ? DAY) >NOW()
     ";
-    my $i= $dbh->do($sql, undef, ($borrowernumber, $shelfnumber, $key));
+    my $i= $dbh->do($sql, undef, ($borrowernumber, $shelfnumber, $key,  SHARE_INVITATION_EXPIRY_DAYS));
     return if !defined($i) || !$i || $i eq '0E0'; #not found
     return 1;
 }

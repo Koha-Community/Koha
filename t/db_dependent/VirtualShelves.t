@@ -179,9 +179,8 @@ for my $i (0..9){
 
 #----------------------- TEST AddShare ----------------------------------------#
 
-#first count the number of shares in the table; keep in mind that AddShare may
-#delete some expired records while housekeeping
-my $sql_sharecount="select count(*) from virtualshelfshares where DATEDIFF(sharedate, NOW())>0";
+#first count the number of shares in the table
+my $sql_sharecount="select count(*) from virtualshelfshares";
 my $cnt1=$dbh->selectrow_array($sql_sharecount);
 
 #try to add a share without shelfnumber: should fail
