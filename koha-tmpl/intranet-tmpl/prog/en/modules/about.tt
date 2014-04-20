@@ -120,7 +120,8 @@
                 <tr><th scope="row"><b>Warning</b> </th><td>No active currency is defined. Please go to <a href="/cgi-bin/koha/admin/currency.pl">Administration &gt; Currencies and exchange rates</a> and mark one currency as active.</td></tr>
             [% END %]
         </table>
-        [% ELSIF xml_config_warnings.size %]
+        [% END %]
+        [% IF xml_config_warnings.size %]
         <table>
             <caption>XML configuration file</caption>
         [% FOREACH config_entry IN xml_config_warnings %]
