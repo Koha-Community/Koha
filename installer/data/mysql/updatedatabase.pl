@@ -8158,7 +8158,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.15.00.035";
 if ( CheckVersion($DBversion) ) {
     #insert a notice for sharing a list and accepting a share
     $dbh->do("
