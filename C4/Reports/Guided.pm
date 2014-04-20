@@ -400,22 +400,25 @@ sub nb_rows {
 
 =head2 execute_query
 
-  ($results, $error) = execute_query($sql, $offset, $limit)
+  ($sth, $error) = execute_query($sql, $offset, $limit[, \@sql_params])
 
 
-When passed C<$sql>, this function returns an array ref containing a result set
-suitably formatted for display in html or for output as a flat file when passed in
-C<$format> and C<$id>. It also returns the C<$total> records available for the
-supplied query. If passed any query other than a SELECT, or if there is a db error,
-C<$errors> an array ref is returned containing the error after this manner:
+This function returns a DBI statement handler from which the caller can
+fetch the results of the SQL passed via C<$sql>.
+
+If passed any query other than a SELECT, or if there is a db error,
+C<$errors> an array ref is returned containing the error after this
+manner:
 
 C<$error->{'sqlerr'}> contains the offending SQL keyword.
-C<$error->{'queryerr'}> contains the native db engine error returned for the query.
+C<$error->{'queryerr'}> contains the native db engine error returned
+for the query.
 
-Valid values for C<$format> are 'text,' 'tab,' 'csv,' or 'url. C<$sql>, C<$type>,
-C<$offset>, and C<$limit> are required parameters. If a valid C<$format> is passed
-in, C<$offset> and C<$limit> are ignored for obvious reasons. A LIMIT specified by
-the user in a user-supplied SQL query WILL apply in any case.
+C<$offset>, and C<$limit> are required parameters.
+
+C<\@sql_params> is an optional list of parameter values to paste in.
+The caller is reponsible for making sure that C<$sql> has placeholders
+and that the number placeholders matches the number of parameters.
 
 =cut
 
@@ -470,9 +473,11 @@ sub strip_limit {
     }
 }
 
-sub execute_query ($;$$$) {
+sub execute_query {
 
-    my ( $sql, $offset, $limit, $no_count ) = @_;
+    my ( $sql, $offset, $limit, $sql_params ) = @_;
+
+    $sql_params = [] unless defined $sql_params;
 
     # check parameters
     unless ($sql) {
@@ -506,7 +511,7 @@ sub execute_query ($;$$$) {
     $sql .= " LIMIT ?, ?";
 
     my $sth = C4::Context->dbh->prepare($sql);
-    $sth->execute($offset, $limit);
+    $sth->execute(@$sql_params, $offset, $limit);
     return ( $sth );
     # my @xmlarray = ... ;
     # my $url = "/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=$id";

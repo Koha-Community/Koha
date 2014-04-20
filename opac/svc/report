@@ -56,21 +56,12 @@ unless ($json_text) {
     my $offset = 0;
     my $limit = C4::Context->preference("SvcMaxReportRows") || 10;
     my $sql = $report_rec->{savedsql};
-    if (@sql_params) {
 
-        # we have sql params need to fix the sql
-        my @split = split /<<|>>/, $sql;
-        my @tmpl_parameters;
-        for ( my $i = 0 ; $i < $#split / 2 ; $i++ ) {
-            my $quoted = C4::Context->dbh->quote( $sql_params[$i] );
+    # convert SQL parameters to placeholders
+    $sql =~ s/(<<.*?>>)/\?/g;
 
-            # if there are special regexp chars, we must \ them
-            $split[ $i * 2 + 1 ] =~ s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g;
-            $sql =~ s/<<$split[$i*2+1]>>/$quoted/;
-        }
-    }
     my ( $sth, $errors ) =
-      execute_query( $sql, $offset, $limit );
+      execute_query( $sql, $offset, $limit, \@sql_params );
     if ($sth) {
         my $lines;
         if ($report_annotation) {

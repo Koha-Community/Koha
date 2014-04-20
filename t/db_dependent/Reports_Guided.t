@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 14;
 
 use C4::Context;
 
@@ -14,8 +14,7 @@ BEGIN {
 }
 can_ok(
     'C4::Reports::Guided',
-    qw(save_report
-      delete_report)
+    qw(save_report delete_report execute_query)
 );
 
 #Start transaction
@@ -67,6 +66,24 @@ $count -= 2;
 
 is( scalar( @{ get_saved_reports() } ),
     $count, "Report2 and report3 have been deleted" );
+
+my $sth = execute_query('SELECT COUNT(*) FROM systempreferences', 0, 10);
+my $results = $sth->fetchall_arrayref;
+is(scalar(@$results), 1, 'running a query returned a result');
+
+my $version = C4::Context->preference('Version');
+$sth = execute_query(
+    'SELECT value FROM systempreferences WHERE variable = ?',
+    0,
+    10,
+    [ 'Version' ],
+);
+$results = $sth->fetchall_arrayref;
+is_deeply(
+    $results,
+    [ [ $version ] ],
+    'running a query with a parameter returned the expected result'
+);
 
 #End transaction
 $dbh->rollback;
