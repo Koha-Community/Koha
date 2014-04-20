@@ -119,6 +119,7 @@ my $font_types = [
     {type => 'CO',      name => 'Courier-Oblique',              selected => 0},
     {type => 'CBO',     name => 'Courier-Bold-Oblique',         selected => 0},
     {type => 'H',       name => 'Helvetica',                    selected => 0},
+    {type => 'HO',      name => 'Helvetica-Oblique',            selected => 0},
     {type => 'HB',      name => 'Helvetica-Bold',               selected => 0},
     {type => 'HBO',     name => 'Helvetica-Bold-Oblique',       selected => 0},
 ];

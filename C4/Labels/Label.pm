@@ -396,6 +396,7 @@ sub draw_label_text {
         else {
             $field->{'data'} = _get_barcode_data($field->{'code'},$item,$record);
         }
+        #FIXME: We should not force the title to oblique; this should be selectible in the layout configuration
         ($field->{'code'} eq 'title') ? (($font =~ /T/) ? ($font = 'TI') : ($font = ($font . 'O'))) : ($font = $font);
         my $field_data = $field->{'data'};
         if ($field_data) {
@@ -442,7 +443,8 @@ sub draw_label_text {
         LABEL_LINES:    # generate lines of label text for current field
         foreach my $line (@label_lines) {
             next LABEL_LINES if $line eq '';
-            my $string_width = C4::Creators::PDF->StrWidth($line, $font, $self->{'font_size'});
+            my $fontName = C4::Creators::PDF->Font($font);
+            my $string_width = C4::Creators::PDF->StrWidth($line, $fontName, $self->{'font_size'});
             if ($self->{'justify'} eq 'R') {
                 $text_llx = $params{'llx'} + $self->{'width'} - ($self->{'left_text_margin'} + $string_width);
             }
