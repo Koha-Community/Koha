@@ -1,5 +1,22 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Copyright (C) 2012-2013 ByWater Solutions
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 
 use Socket qw(:crlf);
@@ -114,29 +131,30 @@ else {
 
 sub help {
     print
-q/
-sip_cli_emulator.pl - SIP command line emulator
+q/sip_cli_emulator.pl - SIP command line emulator
 
-  Usage:
-    sip_cli_emulator.pl --address localhost -port 6001 --sip_user myuser --sip_pass mypass --location MYLOCATION --patron 70000003 --password Patr0nP@ssword
+Test a SIP2 service by sending patron status and patron
+information requests.
 
-  Options:
-    --help          brief help message
+Usage:
+  sip_cli_emulator.pl [OPTIONS]
 
-    -a --address    SIP server ip address or host name
-    -p --port       SIP server port
+Options:
+  --help           display help message
 
-    -su --sip_user  SIP server login username
-    -sp --sip_pass  SIP server login password
+  -a --address     SIP server ip address or host name
+  -p --port        SIP server port
 
-    -l --location   SIP location code
+  -su --sip_user   SIP server login username
+  -sp --sip_pass   SIP server login password
 
-    --patron        ILS patron cardnumber or username
-    --password      ILS patron password
+  -l --location    SIP location code
+ 
+  --patron         ILS patron cardnumber or username
+  --password       ILS patron password
 
-    -t --terminator    Specifies the SIP2 message terminator, either CR, or CRLF ( defaults to CRLF )
-
-sip_cli_emulator.pl will make requests for information about the given user from the given server via SIP2.
+  -t --terminator  SIP2 message terminator, either CR, or CRLF
+                   (defaults to CRLF)
 
 /
 
