@@ -22,7 +22,7 @@ use MARC::Record;
 use C4::Biblio;
 use Koha::Database;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 BEGIN {
     use_ok('C4::Items');
@@ -169,10 +169,10 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
     my $biblioitem = $biblio->biblioitem();
     my ( $item ) = $biblioitem->items();
 
-    C4::Context->set_preference( 'item-level_itypes', 0 );
+    $schema->resultset('Systempreference')->update_or_create({ variable => 'item-level_itypes', value => 0 });
     ok( $item->effective_itemtype() eq 'BIB_LEVEL', '$item->itemtype() returns biblioitem.itemtype when item-level_itypes is disabled' );
 
-    C4::Context->set_preference( 'item-level_itypes', 1 );
+    $schema->resultset('Systempreference')->update_or_create({ variable => 'item-level_itypes', value => 1 });
     ok( $item->effective_itemtype() eq 'ITEM_LEVEL', '$item->itemtype() returns items.itype when item-level_itypes is disabled' );
 
 
