@@ -758,6 +758,9 @@ ok( GetBudgetByOrderNumber( $ordernumbers[0] )->{'budget_id'} eq $budgetid,
   unitpricesupplier
   subtotal
   latesince
+  basketname
+  basketgroupid
+  basketgroupname
 );
 my @lateorders = GetLateOrders(0);
 is( scalar grep ( $_->{basketno} eq $basketno, @lateorders ),
