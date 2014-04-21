@@ -1724,7 +1724,7 @@ sub SearchOrders {
             LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
     };
 
-    # If we search on ordernumber, we retrieve the transfered order is a transfer has been done.
+    # If we search on ordernumber, we retrieve the transfered order if a transfer has been done.
     $query .= q{
             LEFT JOIN aqorders_transfers ON aqorders_transfers.ordernumber_to = aqorders.ordernumber
     } if $ordernumber;
