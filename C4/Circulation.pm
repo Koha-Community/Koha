@@ -1015,7 +1015,13 @@ sub CanBookBeIssued {
         }
     }
 
-    if (not C4::Context->preference('AllowMultipleIssuesOnABiblio')) {
+    if (
+        !C4::Context->preference('AllowMultipleIssuesOnABiblio') &&
+        # don't do the multiple loans per bib check if we've
+        # already determined that we've got a loan on the same item
+        !$issuingimpossible{NO_MORE_RENEWALS} &&
+        !$needsconfirmation{RENEW_ISSUE}
+    ) {
         # Check if borrower has already issued an item from the same biblio
         # Only if it's not a subscription
         my $biblionumber = $item->{biblionumber};
@@ -1027,8 +1033,9 @@ sub CanBookBeIssued {
                 biblionumber   => $biblionumber,
             } );
             my @issues = $issues ? @$issues : ();
-            # If there is at least one issue on another item than the item we want to checkout
-            if (scalar @issues > 0 and $issues[0]->{itemnumber} != $item->{itemnumber}) {
+            # if we get here, we don't already have a loan on this item,
+            # so if there are any loans on this bib, ask for confirmation
+            if (scalar @issues > 0) {
                 $needsconfirmation{BIBLIO_ALREADY_ISSUED} = 1;
             }
         }
