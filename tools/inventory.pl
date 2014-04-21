@@ -204,9 +204,11 @@ if ( $markseen or $op ) {
 # If "compare barcodes list to results" has been checked, we want to alert for missing items
 if ( $compareinv2barcd ) {
     # set "missing" flags for all items with a datelastseen (dls) before the choosen datelastseen (cdls)
-    my $dls = output_pref( dt_from_string( $datelastseen ), 'iso' );
+    my $dls = output_pref( { dt => dt_from_string( $datelastseen ),
+                             dateformat => 'iso' } );
     foreach my $item ( @$inventorylist ) {
-        my $cdls = output_pref( dt_from_string( $_->{datelastseen} ), 'iso' );
+        my $cdls = output_pref( { dt => dt_from_string( $_->{datelastseen} ),
+                                  dateformat => 'iso' } );
         if ( $cdls lt $dls ) {
             $item->{problem} = 'missingitem';
             # We have to push a copy of the item, not the reference
