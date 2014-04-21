@@ -180,7 +180,7 @@ is(scalar @invoices, $invoicecount - 1, 'DelInvoice deletes invoice');
 is(GetInvoice($invoiceid3), undef, 'DelInvoice deleted correct invoice');
 
 my @invoices_linked_to_subscriptions = map{
-    $_->{linked_to_subscriptions}
+    $_->{is_linked_to_subscriptions}
     ? $_
     : ()
 } @invoices;

@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Data::Dumper;
 
 use_ok('C4::Acquisition');
@@ -82,6 +82,9 @@ my $order = GetLastOrderNotReceivedFromSubscriptionid( $subscription->{subscript
 is ( $order->{subscriptionid}, $subscription->{subscriptionid}, "test subscriptionid for the last order not received");
 ok( $order->{ecost} == $cost, "test cost for the last order not received");
 
+$dbh->do(q{DELETE FROM aqinvoices});
+my $invoiceid = AddInvoice(invoicenumber => 'invoice1', booksellerid => $booksellerid, unknown => "unknown");
+
 my ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {
         biblionumber     => $biblionumber,
@@ -91,7 +94,8 @@ my ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
         ecost            => $cost,
         rrp              => $cost,
         budget_id        => $budget_id,
-        datereceived     => '02-01-2013'
+        datereceived     => '02-01-2013',
+        invoiceid        => $invoiceid,
     }
 );
 
@@ -101,6 +105,10 @@ ok( $order->{ecost} == $cost, "test cost for the last order received");
 
 $order = GetLastOrderNotReceivedFromSubscriptionid( $subscription->{subscriptionid} );
 is ( $order, undef, "test no not received order for a received order");
+
+my @invoices = GetInvoices();
+my @invoices_linked_to_subscriptions = grep { $_->{is_linked_to_subscriptions} } @invoices;
+is(scalar(@invoices_linked_to_subscriptions), 1, 'GetInvoices() can identify invoices that are linked to a subscription');
 
 # Cleanup
 $dbh->rollback;
