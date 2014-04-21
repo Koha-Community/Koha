@@ -2579,7 +2579,6 @@ sub GetInvoices {
     my $dbh = C4::Context->dbh;
     my $query = qq{
         SELECT aqinvoices.*, aqbooksellers.name AS suppliername,
-          aqorders.subscriptionid,
           COUNT(
             DISTINCT IF(
               aqorders.datereceived IS NOT NULL,

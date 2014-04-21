@@ -9,7 +9,7 @@ use warnings;
 use C4::Bookseller qw( GetBookSellerFromId );
 use C4::Biblio qw( AddBiblio );
 
-use Test::More tests => 21;
+use Test::More tests => 22;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -184,7 +184,7 @@ my @invoices_linked_to_subscriptions = map{
     ? $_
     : ()
 } @invoices;
-is_deeply( \@invoices_linked_to_subscriptions, [], "GetInvoices return linked_to_subscriptions: there is no invoices linked to subscriptions yet" )
+is_deeply( \@invoices_linked_to_subscriptions, [], "GetInvoices return linked_to_subscriptions: there is no invoices linked to subscriptions yet" );
 
 END {
     $dbh and $dbh->rollback;
