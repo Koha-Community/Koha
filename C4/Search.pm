@@ -1048,21 +1048,18 @@ sub _build_weighted_query {
     # Keyword, or, no index specified
     if ( ( $index eq 'kw' ) || ( !$index ) ) {
         $weighted_query .=
-          "Title-cover,ext,r1=\"$operand\"";    # exact title-cover
-        $weighted_query .= " or ti,ext,r2=\"$operand\"";    # exact title
-        $weighted_query .= " or Title-cover,phr,r3=\"$operand\"";    # phrase title
-        $weighted_query .= " or ti,wrdl,r4=\"$operand\"";    # words in title
-          #$weighted_query .= " or any,ext,r4=$operand";               # exact any
-          #$weighted_query .=" or kw,wrdl,r5=\"$operand\"";            # word list any
+          "Title-cover,ext,r2=\"$operand\""; # exact title-cover
+        $weighted_query .= " or ti,ext,r3=\"$operand\""; # exact title
+        $weighted_query .= " or Title-cover,phr,r4=\"$operand\""; # phrase title
+        #$weighted_query .=" or kw,wrdl,r8=\"$operand\""; # word list any
         $weighted_query .= " or wrdl,fuzzy,r8=\"$operand\""
-          if $fuzzy_enabled;    # add fuzzy, word list
+          if $fuzzy_enabled; # add fuzzy, word list
         $weighted_query .= " or wrdl,right-Truncation,r9=\"$stemmed_operand\""
           if ( $stemming and $stemmed_operand )
-          ;                     # add stemming, right truncation
+          ; # add stemming, right truncation
         $weighted_query .= " or wrdl,r9=\"$operand\"";
 
-        # embedded sorting: 0 a-z; 1 z-a
-        # $weighted_query .= ") or (sort1,aut=1";
+        $weighted_query .= ") and (Bib-level,rk,r1=\"m\" or Bib-level,rk,r1=\"s\" or Bib-level,rk,r2=\"c\" or Bib-level,rk,r9=\"a\" or Bib-level,rk,r9=\"b\" or Bib-level,rk,r9=\"d\" or Bib-level,rk,r1=\"i\" ";
     }
 
     # Barcode searches should skip this process

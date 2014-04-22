@@ -31,6 +31,7 @@
                             [% IF ( facets_loo.type_label_HoldingLibrary ) %]<span id="facet-holding-libraries">Holding libraries</span>[% END %]
                         [% END %]
                         [% IF facets_loo.type_label_Location %]<h5 id="facet-locations">Locations</h5>[% END %]
+                        [% IF facets_loo.type_label_Language %]<h5 id="facet-language">Languages</h5>[% END %]
                         <ul>
                             [% SET url = "/cgi-bin/koha/opac-search.pl?" _ query_cgi _ limit_cgi %]
                             [% IF ( sort_by ) %]

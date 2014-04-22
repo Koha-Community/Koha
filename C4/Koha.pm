@@ -479,6 +479,11 @@ sub getFacets {
                 label => 'Location',
                 tags => [ qw / 952c / ],
             },
+            {
+                idx => 'ln',
+                label => 'Language',
+                tags => [ qw / 041a / ],
+            },
             ];
 
             unless ( Koha::Libraries->search->count == 1 )
