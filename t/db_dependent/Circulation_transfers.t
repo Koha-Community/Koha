@@ -9,7 +9,7 @@ use C4::Circulation;
 use Koha::DateUtils;
 use DateTime::Duration;
 
-use Test::More tests => 19;
+use Test::More tests => 22;
 use Test::Deep;
 
 BEGIN {
@@ -197,6 +197,17 @@ is( C4::Circulation::DeleteTransfer($item_id1),
     1, "A the item1's transfer has been deleted" );
 is(C4::Circulation::DeleteTransfer(),undef,"Without itemid DeleteTransfer returns undef");
 is(C4::Circulation::DeleteTransfer(-1),'0E0',"with a wrong itemid DeleteTranfer returns 0E0");
+
+#Test TransferSlip
+is( C4::Circulation::TransferSlip($samplebranch1->{branchcode}, undef, 5, $samplebranch2->{branchcode}),
+    undef, "No tranferslip if invalid or undef itemnumber or barcode" );
+is( C4::Circulation::TransferSlip($samplebranch1->{branchcode}, $item_id1, 1, $samplebranch2->{branchcode})->{'code'},
+    'TRANSFERSLIP', "Get a transferslip on valid itemnumber and/or barcode" );
+cmp_deeply(
+    C4::Circulation::TransferSlip($samplebranch1->{branchcode}, $item_id1, undef, $samplebranch2->{branchcode}),
+    C4::Circulation::TransferSlip($samplebranch1->{branchcode}, undef, 1, $samplebranch2->{branchcode}),
+    "Barcode and itemnumber for same item both generate same TransferSlip"
+    );
 
 #End transaction
 $dbh->rollback;

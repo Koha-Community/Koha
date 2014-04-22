@@ -3755,16 +3755,16 @@ sub ProcessOfflinePayment {
 
 =head2 TransferSlip
 
-  TransferSlip($user_branch, $itemnumber, $to_branch)
+  TransferSlip($user_branch, $itemnumber, $barcode, $to_branch)
 
   Returns letter hash ( see C4::Letters::GetPreparedLetter ) or undef
 
 =cut
 
 sub TransferSlip {
-    my ($branch, $itemnumber, $to_branch) = @_;
+    my ($branch, $itemnumber, $barcode, $to_branch) = @_;
 
-    my $item =  GetItem( $itemnumber )
+    my $item =  GetItem( $itemnumber, $barcode )
       or return;
 
     my $pulldate = C4::Dates->new();

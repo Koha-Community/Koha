@@ -38,6 +38,7 @@ my $sessionID = $input->cookie("CGISESSID");
 my $session = get_session($sessionID);
 
 my $itemnumber = $input->param('transferitem');
+my $barcode    = $input->param('barcode');
 my $branchcode = $input->param('branchcode');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -54,7 +55,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $userenv = C4::Context->userenv;
 my ($slip, $is_html);
-if ( my $letter = TransferSlip ($session->param('branch') || $userenv->{branch}, $itemnumber, $branchcode) ) {
+if ( my $letter = TransferSlip ($session->param('branch') || $userenv->{branch}, $itemnumber, $barcode, $branchcode) ) {
     $slip = $letter->{content};
     $is_html = $letter->{is_html};
 }
