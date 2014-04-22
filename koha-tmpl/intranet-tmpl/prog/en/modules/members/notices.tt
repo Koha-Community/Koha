@@ -43,7 +43,7 @@
 		<td>
             <a class="notice-title" data-noticeid="[% QUEUED_MESSAGE.message_id %]" href="#">[% QUEUED_MESSAGE.subject %]</a>
             <div id="notice[% QUEUED_MESSAGE.message_id %]" class="notice">
-                [% QUEUED_MESSAGE.content FILTER html_line_break %]
+                <iframe srcdoc="[% QUEUED_MESSAGE.content FILTER html_line_break FILTER html %]"></iframe>
             </div>
         </td>
 		<td>
