@@ -1,11 +1,11 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% title %]</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Transfers</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/print.css" />
-[% IF stylesheet %]
-<link rel="stylesheet" type="text/css" href="[% stylesheet %]" />
+[% IF ( Koha.Preference('SlipCSS') ) %]
+<link rel="stylesheet" type="text/css" href="[% Koha.Preference('SlipCSS') %]" />
 [% END %]
 
 [% INCLUDE 'slip-print.inc' #printThenClose %]
@@ -15,10 +15,10 @@
 
 [% IF plain %]
 <pre>
-[% slip %]
+[% IF ( slip ) %][% slip %][% ELSE %]No hold found[% END %]
 </pre>
 [% ELSE %]
-[% slip %]
+[% IF ( slip ) %][% slip %][% ELSE %]No hold found[% END %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
