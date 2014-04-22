@@ -18,12 +18,12 @@
   <select id="[% name %]" name="[% name %]" class="[% class %]" >
   [% FOR av IN avs %]
     [% IF av.default %]
-      <option value="[% av.value %]" selected="selected">[% av.label %]</option>
+      <option value="[% av.value %]" selected="selected">[% av.label | html_entity %]</option>
     [% ELSE %]
-      <option value="[% av.value %]">[% av.label %]</option>
+      <option value="[% av.value %]">[% av.label | html_entity %]</option>
     [% END %]
   [% END %]
   </select>
 [% ELSE %]
-  <input type="text" id="[% name %]" name="[% name %]" size="[% size %]" value="[% default %]" class="[% class %]" />
+  <input type="text" id="[% name %]" name="[% name %]" size="[% size %]" value="[% default | html_entity %]" class="[% class %]" />
 [% END %]
