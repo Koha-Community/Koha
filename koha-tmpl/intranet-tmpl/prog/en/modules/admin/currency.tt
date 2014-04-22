@@ -46,8 +46,6 @@
 <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
-<div class="message dialog"><p style="text-align:justify" >The active currency priority will be picked during the importation process from a staged file whenever the price data is provided under different currencies.<br/>
-The symbol may be the pure currency sign or a string in which it's included ( like '$US' ).</p></div>
 [% IF ( else ) %]
 <div id="toolbar" class="btn-toolbar">
     <a class="btn btn-small" id="newcurrency" href="[% script_name %]?op=add_form"><i class="icon-plus"></i> New currency</a>
@@ -83,7 +81,7 @@ The symbol may be the pure currency sign or a string in which it's included ( li
             <input type="text" name="symbol" id="symbol" size="5" maxlength="5" value="[% symbol %]" required="required" class="required" /> <span class="required">Required</span>
         </li>
         <li>
-            <label for="isocode" class="required">Iso code: </label>
+            <label for="isocode" class="required">ISO code: </label>
             <input type="text" name="isocode" id="isocode" size="5" maxlength="5" value="[% isocode %]" required="required"  class="required" /> <span class="required">Required</span>
         </li>
         <li>
@@ -165,7 +163,7 @@ The symbol may be the pure currency sign or a string in which it's included ( li
             <th>Currency</th>
             <th>Rate</th>
             <th>Symbol</th>
-            <th>Iso code</th>
+            <th>ISO code</th>
             <th>Last updated</th>
             <th>Active</th>
             <th colspan="2">Actions&nbsp;</th>
@@ -196,6 +194,16 @@ The symbol may be the pure currency sign or a string in which it's included ( li
     [% IF ( ltcount ) %]
         <a href="[% script_name %]?offset=[% nextpage %]">Next &gt;&gt;</a>
     [% END %]
+
+    <div class="hint">
+        <p>
+            When importing MARC files via the staging tools, the tool will attempt to find and use the price of the currently active currency.
+        </p>
+        <p>
+            Some examples of compatible price fields include "$9.99", "9.99 USD", "$9.99 USD", "9.99 USD (10.00 CAN)", "$9.99 USD (paperback)".
+            These examples assume USD is the active currency.
+        </p>
+    </div>
 
 [% END %]
 
