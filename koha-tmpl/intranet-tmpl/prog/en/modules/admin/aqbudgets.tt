@@ -202,19 +202,21 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
             $(oTable).treetable('collapseAll');
         });
 
-        $("#hide_inactive").click(function(e){
+        [% UNLESS budget_period_id %]
+          $("#hide_inactive").click(function(e){
             e.preventDefault();
             oTable.fnFilter( 0, 0 ); // Hide active=0
-        });
-        $("#show_inactive").click(function(e){
+          });
+          $("#show_inactive").click(function(e){
             e.preventDefault();
             oTable.fnFilter( '', 0 );
-        });
+          });
+          $("#hide_inactive").click();
+        [% END %]
 
         $("#filterbutton").click(function() {
             $("#fundfilters").slideToggle(0);
         });
-        $("#hide_inactive").click();
     });
 //]]>
 </script>
@@ -264,12 +266,14 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
 [% IF budgets %]
 
 <table id="budgeth">
-    <caption>
+    [% UNLESS budget_period_id %]
+      <caption>
         <span class="actions"><a href="#" id="expand_all">Expand all</a>
         | <a href="#" id="collapse_all">Collapse all</a>
         | <a href="#" id="hide_inactive">Hide inactive budgets</a>
         | <a href="#" id="show_inactive">Show inactive budgets</a></span>
-    </caption>
+      </caption>
+    [% END %]
     <thead>
         <tr>
             <th>Active</th>
