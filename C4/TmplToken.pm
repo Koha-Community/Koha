@@ -19,13 +19,8 @@ package C4::TmplToken;
 
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 use C4::TmplTokenType;
-require Exporter;
-
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
-###############################################################################
 
 =head1 NAME
 
@@ -37,14 +32,8 @@ This is a class representing a token scanned from an HTML::Template .tmpl file.
 
 =cut
 
-###############################################################################
+our $VERSION = 3.07.00.049;
 
-$VERSION = 3.07.00.049;
-
-@ISA = qw(Exporter);
-@EXPORT_OK = qw();
-
-###############################################################################
 
 sub new {
     my $this = shift;
