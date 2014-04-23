@@ -12,6 +12,9 @@ $(document).ready(function() {
       dt_add_type_uk_date();
   [% END %]
   var holdst = $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
+      "aoColumnDefs": [
+          { "sType": "string", "aTargets": [ 4, 8, 9 ] } //Target columns that use <br> separators and pull-down menus. FIXME: Use class names instead of indexes.
+      ]
   }));
   holdst.fnAddFilters("filter");
   [%# add separateData function to cleanse jQuery select lists by breaking apart strings glued with BR tags and then de-duplicating any repeated library codes %]
