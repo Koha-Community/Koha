@@ -10257,6 +10257,16 @@ DELETE FROM language_descriptions
     SetVersion($DBversion);
 }
 
+$DBversion = "3.19.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{
+        INSERT INTO systempreferences (variable,value,explanation,options,type)
+        VALUES('IdRef','0','Disable/enable the IdRef webservice from the OPAC detail page.',NULL,'YesNo')
+    });
+    print "Upgrade to $DBversion done (Bug 8992: Add system preference IdRef))\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.

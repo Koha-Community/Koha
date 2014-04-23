@@ -148,6 +148,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('IDreamBooksReadometer','0','','Display Readometer from IDreamBooks.com','YesNo'),
 ('IDreamBooksResults','0','','Display IDreamBooks.com rating in search results','YesNo'),
 ('IDreamBooksReviews','0','','Display book review snippets from IDreamBooks.com','YesNo'),
+('IdRef','0','','Disable/enable the IdRef webservice from the OPAC detail page.','YesNo'),
 ('ILS-DI','0','','Enables ILS-DI services at OPAC.','YesNo'),
 ('ILS-DI:AuthorizedIPs','','Restricts usage of ILS-DI to some IPs','.','Free'),
 ('ImageLimit','5','','Limit images stored in the database by the Patron Card image manager to this number.','Integer'),
