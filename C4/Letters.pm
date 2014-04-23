@@ -451,9 +451,10 @@ sub GetPreparedLetter {
     my $module      = $params{module} or croak "No module";
     my $letter_code = $params{letter_code} or croak "No letter_code";
     my $branchcode  = $params{branchcode} || '';
+    my $mtt         = $params{message_transport_type} || 'email';
 
-    my $letter = getletter( $module, $letter_code, $branchcode, $params{message_transport_type} )
-        or warn( "No $module $letter_code letter"),
+    my $letter = getletter( $module, $letter_code, $branchcode, $mtt )
+        or warn( "No template $mtt for $module $letter_code letter"),
             return;
 
     my $tables = $params{tables};
