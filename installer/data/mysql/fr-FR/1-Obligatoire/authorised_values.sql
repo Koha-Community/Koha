@@ -687,3 +687,16 @@ INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES 
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'qualif', '573', 'Diffuseur');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'qualif', '574', 'Présentateur');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'qualif', '575', 'Responsable');
+
+-- SIP2 media types
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '000', 'Autre');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '001', 'Livre');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '002', 'Magazine');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '003', 'Périodique relié');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '004', 'Cassette audio');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '005', 'Cassette vidéo');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '006', 'CD/CDROM');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '007', 'Disquette');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '008', 'Livre avec disquette');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '009', 'Livre avec CD');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '010', 'Livre avec cassette audio');
