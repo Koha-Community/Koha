@@ -16,7 +16,6 @@ use C4::Circulation;
 use C4::Reserves qw( ModReserveAffect );
 use C4::Items qw( ModItemTransfer );
 use C4::Debug;
-use Koha::DateUtils;
 
 use parent qw(ILS::Transaction);
 
