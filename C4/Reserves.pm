@@ -1930,7 +1930,7 @@ sub _koha_notify_reserve {
         $letter_params{letter_code} = $letter_code;
         $letter_params{message_transport_type} = $mtt;
         my $letter =  C4::Letters::GetPreparedLetter ( %letter_params )
-            or die "Could not find a letter called '$letter_params{'letter_code'}' in the 'reserves' module";
+            or die "Could not find a letter called '$letter_params{'letter_code'}' for $mtt in the 'reserves' module";
 
         C4::Letters::EnqueueLetter( {
             letter => $letter,
