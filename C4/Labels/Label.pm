@@ -8,6 +8,7 @@ use Algorithm::CheckDigits;
 use Text::CSV_XS;
 use Data::Dumper;
 use Library::CallNumber::LC;
+use Text::Bidi qw( log2vis );
 
 use C4::Context;
 use C4::Debug;
@@ -444,6 +445,7 @@ sub draw_label_text {
         foreach my $line (@label_lines) {
             next LABEL_LINES if $line eq '';
             my $fontName = C4::Creators::PDF->Font($font);
+            $line = log2vis( $line );
             my $string_width = C4::Creators::PDF->StrWidth($line, $fontName, $self->{'font_size'});
             if ($self->{'justify'} eq 'R') {
                 $text_llx = $params{'llx'} + $self->{'width'} - ($self->{'left_text_margin'} + $string_width);
