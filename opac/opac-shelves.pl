@@ -27,6 +27,12 @@ my $query = CGI->new();
 
 my $template_name = $query->param('rss') ? "opac-shelves-rss.tt" : "opac-shelves.tt";
 
+# if virtualshelves is disabled, leave immediately
+if ( ! C4::Context->preference('virtualshelves') ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         template_name   => $template_name,
         query           => $query,
