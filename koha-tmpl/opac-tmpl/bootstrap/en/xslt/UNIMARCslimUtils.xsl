@@ -335,6 +335,7 @@
     <xsl:param name="tag" />
     <xsl:param name="label" />
     <xsl:param name="spanclass" />
+    <xsl:variable name="IdRef" select="marc:sysprefs/marc:syspref[@name='IdRef']"/>
     <xsl:if test="marc:datafield[@tag=$tag]">
       <span class="results_summary author {$spanclass}">
         <span class="label">
@@ -373,6 +374,20 @@
                 </xsl:if>
               </xsl:for-each>
             </a>
+            <xsl:if test="$IdRef">
+              <xsl:if test="marc:subfield[@code=3]">
+                <xsl:text> </xsl:text>
+                <a>
+                  <xsl:attribute name="href">
+                    <xsl:text>/cgi-bin/koha/opac-idref.pl?unimarc3=</xsl:text>
+                    <xsl:value-of select="marc:subfield[@code=3]"/>
+                  </xsl:attribute>
+                  <xsl:attribute name="title">IdRef</xsl:attribute>
+                  <xsl:attribute name="rel">gb_page_center[600,500]</xsl:attribute>
+                  <xsl:text>Idref</xsl:text>
+                </a>
+              </xsl:if>
+            </xsl:if>
             <xsl:if test="not(position() = last())">
               <span style="padding: 3px;">
                 <xsl:text>;</xsl:text>
