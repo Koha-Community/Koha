@@ -36,6 +36,14 @@ use C4::Output;
 use Koha::Virtualshelves;
 use Koha::Virtualshelfshares;
 
+
+# if virtualshelves is disabled, leave immediately
+if ( ! C4::Context->preference('virtualshelves') ) {
+    my $query = new CGI;
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
 #-------------------------------------------------------------------------------
 
 my $pvar = _init( {} );

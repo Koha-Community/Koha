@@ -40,6 +40,11 @@ our $authorized          = 1;
 our $errcode		= 0;
 our @biblios;
 
+# if virtualshelves is disabled, leave immediately
+if ( ! C4::Context->preference('virtualshelves') ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
 
 if (scalar(@biblionumber) == 1) {
     @biblionumber = (split /\//,$biblionumber[0]);
