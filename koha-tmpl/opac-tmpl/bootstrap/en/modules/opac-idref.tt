@@ -1,0 +1,74 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your search IDREF for ppn [% unimarc3 %]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %]
+  <style type="text/css">
+    ul.ui-tabs-nav li a, ul.ui-tabs-nav li span.a  { padding:0.6em 1em; }
+    #idref h2.role {
+        background-color: #DDDEEE;
+        cursor: pointer;
+    }
+    #idref table {
+        margin: 0;
+    }
+  </style>
+[% END %]
+
+</head>
+<body>
+<div id="idref">
+  [% IF error %]
+    This ppn is not found on the idref service.
+  [% ELSE %]
+    [% FOREACH role IN content %]
+      <div>
+        <h2 class="role" title="Click to expand this role">[% role.role_name %] ([% role.count %])</h2>
+          <div class="docs">
+            <table>
+              <thead>
+                <th>Citation</th>
+                <th>Koha</th>
+                <th>Sudoc</th>
+              </thead>
+              <tbody>
+                [% FOREACH doc IN role.docs %]
+                  <tr>
+                    <td>[% doc.citation %]</td>
+                    <td><a href="/cgi-bin/koha/opac-search.pl?q=ident:[% doc.ppn %]" target="_blank">Koha</a></td>
+                    <td><a href="http://www.sudoc.fr/[% doc.ppn %]" target="_blank">Sudoc</a></td>
+                  </tr>
+                [% END %]
+              </tbody>
+            </table>
+          </div>
+      </div>
+    [% END %]
+  [% END %]
+</div>
+[% BLOCK jsinclude %]
+[% INCLUDE 'datatables.inc' %]
+<script type="text/javascript">
+  $(document).ready(function (){
+      $("table").dataTable($.extend(true, {}, dataTablesDefaults, {
+          'bFilter': false,
+          'aoColumnDefs': [
+              { 'aTargets': [-1, -2], 'bSortable': false }
+          ],
+      }));
+
+      $(".role").click(function(){
+          var docs_node = $(this).parent().find("div.docs");
+          if ( $(docs_node).is(":visible") ) {
+              $(".docs").hide();
+          } else {
+              $(".docs").hide();
+              docs_node.show();
+          }
+      });
+      $(".docs").hide();
+  });
+</script>
+[% END %]
+
+[% INCLUDE 'opac-bottom.inc' is_popup=1%]

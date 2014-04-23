@@ -31,6 +31,7 @@
 [% IF ( OpacStarRatings != 'disable' ) %]
     [% BLOCK cssinclude %]<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/jquery.rating.css" />[% END %]
 [% END %]
+[% INCLUDE greybox.inc %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-detail' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
@@ -183,6 +184,9 @@
                                     [% END %]
                                     [% IF (MARCAUTHOR.authoritylink) %]
                                         <a class='authlink' href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% MARCAUTHOR.authoritylink %]"><img style="vertical-align:middle" height="15" width="15" src="[% interface %]/[% theme %]/images/filefind.png"></a>
+                                    [% END %]
+                                    [% IF IDREF and MARCAUTHOR.unimarc3 %]
+                                        <a href="/cgi-bin/koha/opac-idref.pl?unimarc3=[% MARCAUTHOR.unimarc3 %]" title="IdRef" rel="gb_page_center[600,500]">IdRef</a>
                                     [% END %]
                                     [% UNLESS ( loop.last ) %]|[% END %]
                                 [% END # /FOREACH MARCAUTHORS %]

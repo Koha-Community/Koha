@@ -1922,8 +1922,13 @@ sub GetMarcAuthors {
         }
 
         # other subfields
+        my $unimarc3;
         for my $authors_subfield (@subfields) {
             next if ( $authors_subfield->[0] eq '9' );
+
+            # unimarc3 contains the $3 of the author for UNIMARC.
+            # For french academic libraries, it's the "ppn", and it's required for idref webservice
+            $unimarc3 = $authors_subfield->[1] if $marcflavour eq 'UNIMARC' and $authors_subfield->[0] =~ /3/;
 
             # don't load unimarc subfields 3, 5
             next if ( $marcflavour eq 'UNIMARC' and ( $authors_subfield->[0] =~ /3|5/ ) );
@@ -1960,6 +1965,7 @@ sub GetMarcAuthors {
         push @marcauthors, {
             MARCAUTHOR_SUBFIELDS_LOOP => \@subfields_loop,
             authoritylink => $subfield9,
+            unimarc3 => $unimarc3
         };
     }
     return \@marcauthors;

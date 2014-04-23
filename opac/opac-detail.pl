@@ -1093,6 +1093,19 @@ if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
     $template->param('OPACSearchForTitleIn' => $search_for_title);
 }
 
+#IDREF
+if ( C4::Context->preference("IDREF") ) {
+    # If the record comes from the SUDOC
+    if ( $record->field('009') ) {
+        my $unimarc3 = $record->field("009")->data;
+        if ( $unimarc3 =~ /^\d+$/ ) {
+            $template->param(
+                IDREF => 1,
+            );
+        }
+    }
+}
+
 # We try to select the best default tab to show, according to what
 # the user wants, and what's available for display
 my $opac_serial_default = C4::Context->preference('opacSerialDefaultTab');
