@@ -311,37 +311,6 @@ foreach my $r ( @{$budgets_hierarchy} ) {
 }
 $template->param( budget_loop    => $budget_loop,);
 
-my $CGIsort1;
-if ($budget) {    # its a mod ..
-    if ( defined $budget->{'sort1_authcat'} ) {    # with custom  Asort* planning values
-        $CGIsort1 = GetAuthvalueDropbox(  $budget->{'sort1_authcat'}, $data->{'sort1'} );
-    }
-} elsif ( scalar(@$budgets) ) {
-} elsif ( scalar(@$budgets_hierarchy) ) {
-    $CGIsort1 = GetAuthvalueDropbox( @$budgets_hierarchy[0]->{'sort1_authcat'}, '' );
-}
-# if CGIsort is successfully fetched, the use it
-# else - failback to plain input-field
-if ($CGIsort1) {
-    $template->param( CGIsort1 => $CGIsort1 );
-} else {
-    $template->param( sort1 => $data->{'sort1'} );
-}
-
-my $CGIsort2;
-if ($budget) {
-    if ( defined $budget->{'sort2_authcat'} ) {
-        $CGIsort2 = GetAuthvalueDropbox(  $budget->{'sort2_authcat'}, $data->{'sort2'} );
-    }
-} elsif ( scalar(@$budgets_hierarchy) ) {
-    $CGIsort2 = GetAuthvalueDropbox( @$budgets_hierarchy[0]->{sort2_authcat}, '' );
-}
-if ($CGIsort2) {
-    $template->param( CGIsort2 => $CGIsort2 );
-} else {
-    $template->param( sort2 => $data->{'sort2'} );
-}
-
 output_html_with_http_headers $input, $cookie, $template->output;
 
 

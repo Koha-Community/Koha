@@ -65,6 +65,8 @@
             $(this).parent().siblings('li').find('input[name="sort2"]').attr('name', 'all_sort2');
         } );
 
+        $("select[name='all_budget_id']").change();
+
         $("#records_to_import fieldset.rows ol").hide();
         $('input:checkbox[name="import_record_id"]').change(function(){
             var container = $(this).parents("fieldset");
@@ -316,38 +318,12 @@
                                 </li>
                                 <li>
                                     <div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
-                                    <label for="sort1">Statistic 1: </label>
-                                    [% IF CGIsort1 %]
-                                        <select id="all_sort1" size="1" name="all_sort1">
-                                        [% FOREACH sort_opt IN CGIsort1 %]
-                                            [% IF sort_opt.default %]
-                                                <option value="[% sort_opt.id %]" selected="selected">[% sort_opt.label %]</option>
-                                            [% ELSE %]
-                                                <option value="[% sort_opt.id %]">[% sort_opt.label %]</option>
-                                            [% END %]
-                                        [% END %]
-                                        </select>
-                                    [% ELSE %]
-                                        <input type="text" id="all_sort1" size="20" name="all_sort1" value="[% sort1 %]" />
-                                    [% END %]
+                                    <label for="all_sort1">Statistic 1: </label>
+                                    <input type="text" id="all_sort1" size="20" name="all_sort1" value="" />
                                 </li>
                                 <li>
-                                  <span id="sort2_zone">
-                                    <label for="sort2">Statistic 2: </label>
-                                    [% IF CGIsort2 %]
-                                        <select id="all_sort2" size="1" name="all_sort1">
-                                        [% FOREACH sort_opt IN CGIsort2 %]
-                                            [% IF sort_opt.default %]
-                                                <option value="[% sort_opt.id %]" selected="selected">[% sort_opt.label %]</option>
-                                            [% ELSE %]
-                                                <option value="[% sort_opt.id %]">[% sort_opt.label %]</option>
-                                            [% END %]
-                                        [% END %]
-                                        </select>
-                                    [% ELSE %]
-                                         <input type="text" id="all_sort2" size="20" name="all_sort2" value="[% sort2 %]" />
-                                    [% END %]
-                                  </span>
+                                    <label for="all_sort2">Statistic 2: </label>
+                                    <input type="text" id="all_sort2" size="20" name="all_sort2" value="" />
                                 </li>
                             </ol>
                         </fieldset>
