@@ -183,7 +183,7 @@ sub IsDebarred {
 
     return unless ($borrowernumber);
 
-    my $sql = "SELECT debarred FROM borrowers WHERE borrowernumber = ?";
+    my $sql = "SELECT debarred FROM borrowers WHERE borrowernumber = ? AND debarred > CURRENT_DATE()";
     my $sth = C4::Context->dbh->prepare($sql);
     $sth->execute($borrowernumber);
     my ($debarred) = $sth->fetchrow_array();
