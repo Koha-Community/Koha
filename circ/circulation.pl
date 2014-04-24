@@ -40,7 +40,7 @@ use C4::Reserves;
 use C4::Context;
 use CGI::Session;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
-use Koha::Borrower::Debarments qw(GetDebarments);
+use Koha::Borrower::Debarments qw(GetDebarments IsDebarred);
 use Koha::DateUtils;
 
 use Date::Calc qw(
@@ -266,12 +266,16 @@ if ($borrowernumber) {
         finetotal    => $fines
     );
 
-    $template->param(
-        'userdebarred'    => $borrower->{debarred},
-        'debarredcomment' => $borrower->{debarredcomment},
-    );
-    if ( $borrower->{debarred} ne "9999-12-31" ) {
-        $template->param( 'userdebarreddate' => C4::Dates::format_date( $borrower->{debarred} ) );
+    if ( IsDebarred($borrowernumber) ) {
+        $template->param(
+            'userdebarred'    => $borrower->{debarred},
+            'debarredcomment' => $borrower->{debarredcomment},
+        );
+
+        if ( $borrower->{debarred} ne "9999-12-31" ) {
+            $template->param( 'userdebarreddate' =>
+                  C4::Dates::format_date( $borrower->{debarred} ) );
+        }
     }
 
 }
