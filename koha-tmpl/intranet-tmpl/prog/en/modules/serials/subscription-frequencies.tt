@@ -70,6 +70,15 @@ $(document).ready(function() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
+[% BLOCK translate_frequnit %]
+[%  SWITCH frequnit %]
+[%   CASE 'day'     %] day
+[%   CASE 'week'    %] week
+[%   CASE 'month'   %] month
+[%   CASE 'year'    %] year
+[%  END %]
+[% END %]
+
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo;
@@ -110,7 +119,7 @@ $(document).ready(function() {
                     [% ELSE %]
                       <option value="[% unit.val %]">
                     [% END %]
-                      [% unit.val %]
+                      [% PROCESS translate_frequnit frequnit=unit.val %]
                     </option>
                   [% END %]
                 </select>
@@ -189,7 +198,7 @@ $(document).ready(function() {
               [% FOREACH frequency IN frequencies_loop %]
                 <tr>
                   <td>[% frequency.description %]</td>
-                  <td>[% frequency.unit %]</td>
+                  <td>[% PROCESS translate_frequnit frequnit=frequency.unit %]</td>
                   <td>[% frequency.issuesperunit %]</td>
                   <td>[% frequency.unitsperissue %]</td>
                   <td>[% frequency.displayorder %]</td>
