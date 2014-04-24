@@ -37,6 +37,7 @@ sub string_negligible_p ($) {
 	    || $t =~ /^\d+$/			# purely digits
 	    || $t =~ /^[-\+\.,:;!\?'"%\(\)\[\]\|]+$/ # punctuation w/o context
 	    || $t =~ /^[A-Za-z]$/		# single letters
+            || $t =~ /^(&[a-z]+;|&#\d+;|&#x[0-9a-fA-F]+;|%%|%s|\s|[[:punct:]])*$/ # html entities,placeholder,punct, ...
 	)
 }
 
