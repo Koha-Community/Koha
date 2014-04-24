@@ -16,8 +16,7 @@ function enableCheckboxActions(){
     $(document).ready(function(){
  $('#pay-fines-form').preventDoubleFormSubmit();
         $("#woall").click(function(event){
-            var msg = _("Are you sure you want to write off %s in outstanding fines? This cannot be undone!");
-            msg = msg.replace( "%s", "[% total | format('%.2f') %]" );
+            var msg = _("Are you sure you want to write off %s in outstanding fines? This cannot be undone!").format( "[% total | format('%.2f') %]" );
             var answer = confirm(msg);
                 if (!answer){
                     event.preventDefault();

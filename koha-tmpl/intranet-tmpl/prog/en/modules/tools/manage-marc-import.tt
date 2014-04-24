@@ -84,17 +84,15 @@ $(document).ready(function(){
             );
 
             if ( aData['match_id'] ) {
+                [% IF ( record_type == 'auth' ) -%]
+                var matching_msg = _("Matches authority %s (score=%s):%s");
+                [%- ELSE -%]
+                var matching_msg = _("Matches biblio %s (score=%s):%s");
+                [%- END %]
                 $('td:eq(4)', nRow).html(
-                    [% IF ( record_type == 'auth' ) -%]
-                    _("Matches authority ")
-                    [%- ELSE -%]
-                    _("Matches biblio ")
-                    [%- END %]
-                    + aData['match_id']
-                    + " (" + _("score") + "="
-                    + aData['score']
-                    + '):' + '<a target="_blank" href="' + record_details_url
-                    + aData['match_id'] + '">' + aData['match_citation'] + '</a>'
+                    matching_msg.format(aData['match_id'], aData['score'],
+                    '<a target="_blank" href="' + record_details_url
+                    + aData['match_id'] + '">' + aData['match_citation'] + '</a>')
                 );
             }
 

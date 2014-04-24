@@ -7,7 +7,7 @@
             function DeleteConfirm() {
                 var element_id = selected_layout("delete");
                 if (element_id>-1) {
-                    var msg = _("Are you sure you want to delete") + " [% card_element %] " + element_id + "?"
+                    var msg = _("Are you sure you want to delete %s %s?").format("[% card_element %]", element_id);
                     var answer = confirm(msg);
                     if (answer) {
                         window.location = "/cgi-bin/koha/patroncards/manage.pl?op=delete&card_element=[% card_element %]&element_id=" + element_id;
@@ -64,7 +64,7 @@
                         return(document.layouts.action[selected[0]].value);
                     }
                     else {
-                        alert(_("Please select only one ")+"[% card_element %]"+_(" to ") + op + ".");
+                        alert(_("Please select only one %s to %s.").format("[% card_element %]", op));
                         return (-1);
                     }
                 }
@@ -73,7 +73,7 @@
                         return(document.layouts.action.value);
                     }
                 };
-                alert(_("Please select a ")+"[% card_element %].");
+                alert(_("Please select a %s.").format("[% card_element %]"));
                 return (-1);
             };
 

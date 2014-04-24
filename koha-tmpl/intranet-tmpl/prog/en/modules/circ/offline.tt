@@ -119,7 +119,7 @@ function synchronize() {
         }).done(function (data) {
             if (data) {
                 $('.loading-overlay').hide();
-                alert(_("Please log in to Koha and try again. (Error: '" + data + "')"));
+                alert(_("Please log in to Koha and try again. (Error: '%s')").format(data));
             } else {
                 var uploadIter = $.indexedDB("koha").objectStore("transactions").each(uploadTransaction);
                 uploadIter.done(function() {
@@ -193,7 +193,7 @@ function finishedLoading() {
 
 function loadRecords(page) {
 [% IF (AllowOfflineCirculation) %]
-    $(".loading-overlay div").text(_("Loading page " + page + ", please wait..."));
+    $(".loading-overlay div").text(_("Loading page %s, please wait...").format(page));
     $(".loading-overlay").show();
     $.ajax({
         type: "GET",
@@ -378,7 +378,7 @@ function showPatron(barcode, patron, error) {
     if (patron.name.length > 0) {
         $('.patron-title').text(patron.name);
     } else {
-        $('.patron-title').text(_("Unrecognized patron") + " (" + barcode + ")");
+        $('.patron-title').text(_("Unrecognized patron (%s)").format(barcode));
     }
     if (patron.address.length > 0 || patron.address2.length > 0) {
         $('#patron-address-1').text(patron.address);
@@ -403,12 +403,12 @@ function showPatron(barcode, patron, error) {
         $('#patron-email').html('<span class="empty" id="noemailstored">' + _("No email stored.") + '</span></li>');
     }
     if (patron.categorycode.length > 0) {
-        $('#patron-category').text(_("Category: ") + patron.categorycode);
+        $('#patron-category').text(_("Category: %s").format(patron.categorycode));
     } else {
         $('#patron-category').html('<span class="empty" id="unknowncategory">' + _("Category code unknown.") + '</span></li>');
     }
     if (patron.branchcode.length > 0) {
-        $('#patron-library').text(_("Home library: ") + patron.branchcode);
+        $('#patron-library').text(_("Home library: %s").format(patron.branchcode));
     } else {
         $('#patron-library').html('<span class="empty" id="unknowncategory">' + _("Home library unknown.") + '</span></li>');
     }

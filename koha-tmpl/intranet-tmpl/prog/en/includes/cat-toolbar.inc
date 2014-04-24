@@ -35,24 +35,24 @@
         var countdeletedorders = [% countdeletedorders %];
         var is_confirmed;
 	if (count > 0){
-            is_confirmed = alert( count + " " +_("item(s) are attached to this record. You must delete all items before deleting this record.") );
+            is_confirmed = alert( _("%s item(s) are attached to this record. You must delete all items before deleting this record.").format(count) );
          }
         else if (countorders > 0){
             [% IF ( CAN_user_acquisition_order_manage ) %]
-                is_confirmed = confirm( _("Warning: This record is used in")+" "+ countorders + " " +_("order(s). Deleting it could cause serious issues on acquisition module. Are you sure you want to delete this record?") );
+                is_confirmed = confirm( _("Warning: This record is used in %s order(s). Deleting it could cause serious issues on acquisition module. Are you sure you want to delete this record?").format(countorders) );
             [% ELSE %]
-                is_confirmed = alert( countorders + " " +_("order(s) are using this record. You need order managing permissions to delete this record.") );
+                is_confirmed = alert( _("%s order(s) are using this record. You need order managing permissions to delete this record.").format(countorders) );
             [% END %]
         }
         else if (countdeletedorders > 0){
              [% IF ( CAN_user_acquisition_order_manage ) %]
-                 is_confirmed = confirm( countdeletedorders + " " +_("deleted order(s) are using this record. Are you sure you want to delete this record?") );
+                 is_confirmed = confirm( _("%s deleted order(s) are using this record. Are you sure you want to delete this record?").format(countdeletedorders) );
              [% ELSE %]
-                 is_confirmed = alert( countdeletedorders + " " +_("deleted order(s) are using this record. You need order managing permissions to delete this record.") );
+                 is_confirmed = alert( _("%s deleted order(s) are using this record. You need order managing permissions to delete this record.").format(countdeletedorders) );
              [% END %]
         }
         else if ( holdcount > 0 ) {
-            is_confirmed = confirm( holdcount + " " + _("holds(s) for this record. Are you sure you want to delete this record?"));
+            is_confirmed = confirm( _("%s holds(s) for this record. Are you sure you want to delete this record?").format(holdcount) );
         } else {
             is_confirmed = confirm(_("Are you sure you want to delete this record?"));
         }
@@ -74,9 +74,9 @@
         var holdcount = [% holdcount %];
 
         if ( holdcount > 0 ) {
-            alert( holdcount + " " + _("hold(s) on this record. You must delete all holds before deleting all items.") );
+            alert( _("%s hold(s) on this record. You must delete all holds before deleting all items.").format(holdcount) );
         } else if ( count > 0 ) {
-            if( confirm( _("Are you sure you want to delete the") + " " + count + " " + _("attached items?") ) ) {
+            if( confirm( _("Are you sure you want to delete the %s attached items?").format(count) ) ) {
                 window.location="/cgi-bin/koha/cataloguing/additem.pl?op=delallitems&amp;biblionumber=[% biblionumber %]";
             } else {
                 return false;

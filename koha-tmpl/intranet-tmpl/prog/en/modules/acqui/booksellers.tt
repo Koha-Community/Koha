@@ -31,7 +31,7 @@ $(document).ready(function() {
     });
     $(".modal").on("show", function(){
         var basket = $(this).data("basketno");
-        var legend = _("Add order to basket") + " " + basket;
+        var legend = _("Add order to basket %s").format(basket);
         $(this).find("legend").html(legend);
     });
 });

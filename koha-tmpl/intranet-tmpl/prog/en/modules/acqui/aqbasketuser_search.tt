@@ -18,7 +18,7 @@
     function add_user(borrowernumber, borrowername) {
         var p = window.opener;
         if(p.add_basket_user(borrowernumber, borrowername) < 0) {
-            alert(_("Borrower '" + borrowername + "' is already in the list."));
+            alert(_("Borrower '%s' is already in the list.").format(borrowername));
         }
     }
 //]]>

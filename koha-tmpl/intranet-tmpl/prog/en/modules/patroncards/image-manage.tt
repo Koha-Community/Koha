@@ -6,7 +6,7 @@
             function DeleteConfirm() {
                 var results = selected_images("delete");
                 if (results.images != -1) {
-                    var msg = "Are you sure you want to delete image(s): " + results.image_ids + "?";
+                    var msg = _("Are you sure you want to delete image(s): %s?").format(results.image_ids);
                     var answer = confirm(msg);
                     if (answer) {
                         window.location = "/cgi-bin/koha/patroncards/image-manage.pl?op=delete&" + results.images;
@@ -32,7 +32,7 @@
                 else if (document.delete_images.action.checked){
                         return {images:"batch_id="+document.delete_images.action.value, image_ids:document.delete_images.action.value};
                 };
-                alert(_("Please select image(s) to ") + op + ".");
+                alert(_("Please select image(s) to %s.").format(op));
                 return (-1);
             };
         $(document).ready(function() {

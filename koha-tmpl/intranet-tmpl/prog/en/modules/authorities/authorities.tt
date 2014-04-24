@@ -46,7 +46,7 @@ function AreMandatoriesNotOk(){
         // alert (id_string);
         if( ! $("#" + id_string).val() ){
             $("#" + id_string).attr('class','subfield_not_filled').focus();
-            StrAlert += "\t* "+label[i]+_(" in tab ")+tab[i]+"\n";
+            StrAlert += "\t* " + _("%s in tab %s").format(label[i], tab[i]) + "\n";
         }
     }
     
@@ -79,7 +79,7 @@ function AreMandatoriesNotOk(){
     	
     	if(isempty){
     		flag = 1;
-			StrAlert += "\t* Field " + arr[0] + _(" is mandatory, at least one of its subfields must be filled") + "\n";
+                StrAlert += "\t* " + _("Field %s is mandatory, at least one of its subfields must be filled.").format(arr[0]) + "\n";
     	}
     	
     }

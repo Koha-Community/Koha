@@ -64,7 +64,7 @@ function Check(f) {
     if (total_errors > 0) {
         var alertString2 = _("Form not submitted because of the following problem(s)");
         alertString2 += "\n------------------------------------------------------------------------------------\n";
-        alertString2 += "\n- "+ total_errors + _(" mandatory fields empty (highlighted)");
+        alertString2 += "\n- " + _("%s mandatory fields empty (highlighted)").format(total_errors);
         alert(alertString2);
         return false;
     }

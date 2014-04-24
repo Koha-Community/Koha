@@ -69,7 +69,7 @@ function validate_goto_page(){
         return false;
     }
     else if(page < 1 || page > [% total_pages %] ) {
-        alert(_("The page should be a number between 1 and ") + [% total_pages %] + ".");
+        alert(_("The page should be a number between 1 and %s.").format([% total_pages %]));
         return false;
     }
     else {

@@ -261,8 +261,7 @@ function testPredictionPattern() {
     [% END %]
 
     if(error){
-        alert(_("Cannot test prediction pattern for the following reason(s):") + "\n\n"
-            + error_msg);
+        alert(_("Cannot test prediction pattern for the following reason(s): %s").format(error_msg));
         return false;
     }
 
@@ -323,8 +322,7 @@ function saveAdvancedPattern() {
     var cnfrm = 1;
     if(found){
         var msg = _("This pattern name already exists. Do you want to modify it?")
-            + "\n" + _("Warning: it will modify the pattern for all subscriptions")
-            + _("that are using it.");
+            + "\n" + _("Warning: it will modify the pattern for all subscriptions that are using it.");
         cnfrm = confirm(msg);
     }
 

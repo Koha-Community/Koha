@@ -116,13 +116,13 @@
         var dayMonth = month + '/' + day;
         var dateString = year + '/' + month + '/' + day;
         if (exception_holidays[dateString] != null) {
-            return [true, "exception", _("Exception") + ": "+exception_holidays[dateString].title];
+            return [true, "exception", _("Exception: %s").format(exception_holidays[dateString].title)];
         } else if ( week_days[weekDay] != null ){
-            return [true, "repeatableweekly", _("Weekly holiday") + ": "+week_days[weekDay].title];
+            return [true, "repeatableweekly", _("Weekly holiday: %s").format(week_days[weekDay].title)];
         } else if ( day_month_holidays[dayMonth] != null ) {
-            return [true, "repeatableyearly", _("Yearly holiday") + ": "+day_month_holidays[dayMonth].title];
+            return [true, "repeatableyearly", _("Yearly holiday: %s").format(day_month_holidays[dayMonth].title)];
         } else if (holidays[dateString] != null) {
-            return [true, "holiday", _("Single holiday") + ": "+holidays[dateString].title];
+            return [true, "holiday", _("Single holiday: %s").format(holidays[dateString].title)];
         } else {
             return [true, "normalday", _("Normal day")];
         }

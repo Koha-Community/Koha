@@ -160,7 +160,7 @@
             if (!idsToDelete) {
                 alert(_("Please select a quote(s) by clicking the quote id(s) you desire to delete."));
             }
-            else if (confirm(_("Are you sure you wish to delete quote(s) ")+idsToDelete+"?")) {
+            else if (confirm(_("Are you sure you wish to delete quote(s) %s?").format(idsToDelete))) {
                 oTable.$('.selected').each(function(){
                         var quoteID = $(this).attr('id');
                             $.ajax({

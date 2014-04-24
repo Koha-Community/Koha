@@ -54,22 +54,22 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 		// window.alert(_("AJAX approved tag: ") + tag);
 	};
 	var failure_approve = function(tag){
-		window.alert(_("AJAX failed to approve tag: ") + tag);
+                window.alert(_("AJAX failed to approve tag: %s").format(tag));
 	};
 	var success_reject  = function(tag){
 		// window.alert(_("AJAX rejected tag: ") + tag);
 	};
 	var failure_reject  = function(tag){
-		window.alert(_("AJAX failed to reject tag: ") + tag);
+                window.alert(_("AJAX failed to reject tag: %s").format(tag));
 	};
 	var success_test    = function(tag){
-		$('#verdict').html(tag + _(" is permitted!"));
+                $('#verdict').html(_("%s is permitted!").format(tag));
 	};
 	var failure_test    = function(tag){
-		$('#verdict').html(tag + _(" is prohibited!"));
+                $('#verdict').html(_("%s is prohibited!").format(tag));
 	};
 	var indeterminate_test = function(tag){
-		$('#verdict').html(tag + _(" is neither permitted nor prohibited!"));
+                $('#verdict').html(_("%s is neither permitted nor prohibited!").format(tag));
 	};
 
 	var success_test_call = function() {
@@ -122,7 +122,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 			}
 		});
 		$("*").ajaxError(function(evt, request, settings){
-			if ((alerted +=1) <= 1){ window.alert(_("AJAX error")+" (" + alerted + " alert)"); }
+                        if ((alerted +=1) <= 1){ window.alert(_("AJAX error (%s alert)").format(alerted)); }
 		});
         $("#tagst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [

@@ -60,8 +60,7 @@ function Check(ff) {
 
     if (totalExceedsBudget(ff.budget_id.value, ff.total.value  )  ) {
         ok=1;
-        _alertString += "\n- " + _("Order total (") + ff.total.value +
-            _(") exceeds budget available (") + actTotal+")";
+        _alertString += "\n- " + _("Order total (%s) exceeds budget available (%s)").format(ff.total.value, actTotal);
     }
 
     if ( ff.field_value ) {
@@ -69,7 +68,7 @@ function Check(ff) {
         if (empty_item_mandatory > 0) {
             ok = 1;
             _alertString +=
-                "\n- " + empty_item_mandatory + _(" item mandatory fields empty");
+                "\n- " + _("%s item mandatory fields empty").format(empty_item_mandatory);
         }
 
     }

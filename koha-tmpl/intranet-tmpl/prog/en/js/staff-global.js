@@ -3,6 +3,19 @@ if ( KOHA === undefined ) var KOHA = {};
 
 function _(s) { return s; } // dummy function for gettext
 
+// http://stackoverflow.com/questions/1038746/equivalent-of-string-format-in-jquery/5341855#5341855
+String.prototype.format = function() { return formatstr(this, arguments) }
+function formatstr(str, col) {
+    col = typeof col === 'object' ? col : Array.prototype.slice.call(arguments, 1);
+    var idx = 0;
+    return str.replace(/%%|%s|%(\d+)\$s/g, function (m, n) {
+        if (m == "%%") { return "%"; }
+        if (m == "%s") { return col[idx++]; }
+        return col[n];
+    });
+};
+
+
 // http://stackoverflow.com/questions/14859281/select-tab-by-name-in-jquery-ui-1-10-0/16550804#16550804
 $.fn.tabIndex = function () {
     return $(this).parent().find(this).index() - 1;

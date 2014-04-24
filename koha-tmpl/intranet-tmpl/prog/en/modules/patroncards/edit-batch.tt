@@ -7,7 +7,7 @@
     <script type="text/javascript">
         //<![CDATA[
            function DeleteConfirm() {
-                var msg = _("Are you sure you want to delete batch") + " [% batch_id %]?";
+                var msg = _("Are you sure you want to delete batch %s?").format("[% batch_id %]");
                 var answer = confirm(msg);
                 if (answer) {
                     window.location = "/cgi-bin/koha/patroncards/manage.pl?op=delete&amp;card_element=batch&amp;element_id=[% batch_id %]";
@@ -32,7 +32,7 @@
                     }
                     getstr = items.join("&");
                     item_msg = item_num.join(", ");
-                    var msg = "Are you sure you want to remove card number(s): " + item_msg + " from this batch?"
+                    var msg = _("Are you sure you want to remove card number(s): %s from this batch?").format(item_msg);
                 }
                 else {
                     alert(_("Please select at least label to delete."));

@@ -70,7 +70,7 @@ $(document).ready(function() {
                         $('#merge_' + prop).val(invoice[prop]);
                     });
                     if (invoice.closedate) {
-                        $('#merge_status').text(_("Closed on " + invoice.closedate + ""));
+                        $('#merge_status').text(_("Closed on %s").format(invoice.closedate));
                     } else {
                         $('#merge_status').text(_("Open"));
                     }

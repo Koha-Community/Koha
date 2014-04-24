@@ -70,7 +70,7 @@
             var information_category_node = $(select_attr).parent().parent().find('span.information_category');
             information_category_node.html("");
             if ( category.length > 0 ) {
-                information_category_node.html(_("This attribute will be only applied to the patron's category") +' "' + category + '"');
+                information_category_node.html(_("This attribute will be only applied to the patron's category %s").format(category));
             }
             if ( type == 'select' ) {
                 var options = '<option value = ""></option>';

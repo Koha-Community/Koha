@@ -258,7 +258,7 @@ function AreMandatoriesNotOk(){
       if (tabflag[tagsubfieldid][0]==0){
         var tag=tagsubfieldid.substr(0,3);
         var subfield=tagsubfieldid.substr(3,1);    
-        StrAlert += "\t* "+_("tag ")+tag+_(" subfield ")+subfield+" "+tabflag[tagsubfieldid][1]+_(" in tab ")+tabflag[tagsubfieldid][2]+"\n";
+        StrAlert += "\t* "+_("tag %s subfield %s %s in tab %s").format(tag, subfield, tabflag[tagsubfieldid][1], tabflag[tagsubfieldid][2]) + "\n";
         //StrAlert += "\t* "+label[i]+_(" in tab ")+tab[i]+"\n"; 
         flag=1;    
       }   
@@ -308,7 +308,7 @@ function AreMandatoriesNotOk(){
     	
     	if(isempty){
     		flag = 1;
-    		StrAlert += _("\t* Field ") + arr[0] + _(" is mandatory, at least one of its subfields must be filled.") + "\n";
+                StrAlert += "\t* " + _("Field %s is mandatory, at least one of its subfields must be filled.").format(arr[0]) + "\n";
     	}
     	
     }

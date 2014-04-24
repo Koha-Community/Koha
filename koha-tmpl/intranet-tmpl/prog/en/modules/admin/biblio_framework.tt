@@ -67,7 +67,7 @@ function Check(f) {
 
         var matches = new RegExp("\\?error_import_export=(.+)$").exec(window.location.search);
         if (matches && matches.length > 1) {
-            alert(_("Error importing the framework ") + decodeURIComponent(matches[1]));
+            alert(_("Error importing the framework %s").format(decodeURIComponent(matches[1])));
         }
 
         $('input.input_import').change( function() {
@@ -89,7 +89,7 @@ function Check(f) {
             if (/(?:\.csv|\.ods|\.xml)$/.test(obj.val())) {
                 if (confirm(_("Do you really want to import the framework fields and subfields? This will overwrite the current configuration. For safety reasons please use the export option to make a backup"))) {
                     var frameworkcode = $('#' + id + ' input:hidden[name=frameworkcode]').val();
-                    $('#importing_' + frameworkcode).find("span").html(_("Importing to framework:")+"<strong>" + frameworkcode + "</strong>. " +_("Importing from file:")+"<i>" + obj.val().replace(new RegExp("^.+[/\\\\]"),"") + "</i>");
+                    $('#importing_' + frameworkcode).find("span").html(_("Importing to framework: %s. Importing from file: %s").format("<strong>" + frameworkcode + "</strong>", "<i>" + obj.val().replace(new RegExp("^.+[/\\\\]"),"") + "</i>"));
                     if (navigator.userAgent.toLowerCase().indexOf('msie') != -1) {
                         var timestamp = new Date().getTime();
                         $('#importing_' + frameworkcode).find("img").attr('src', '[% interface %]/[% theme %]/img/loading-small.gif' + '?' +timestamp);
