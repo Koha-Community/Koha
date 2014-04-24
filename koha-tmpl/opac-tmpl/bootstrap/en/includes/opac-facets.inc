@@ -32,10 +32,10 @@
                         <ul>
                             [% FOREACH facet IN facets_loo.facets %]
                                 <li>
-                                    <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |url %][% limit_cgi |url %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]&amp;limit=[% facet.type_link_value |url %]:[% facet.facet_link_value |url %]" title="[% facet.facet_title_value |html %]">[% facet.facet_label_value %]</a>
-                                    [% IF ( displayFacetCount ) %]
-                                        ([% facet.facet_count %])
-                                    [% END %]
+                                    <span class="facet-label"><a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |url %][% limit_cgi |url %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]&amp;limit=[% facet.type_link_value |url %]:[% facet.facet_link_value |url %]" title="[% facet.facet_title_value |html %]">[% facet.facet_label_value %]</a></span>
+                                [% IF ( displayFacetCount ) %]
+                                    <span class="facet-count"> ([% facet.facet_count %])</span>
+                                [% END %]
                                 </li>
                             [% END %]
                             [% IF ( facets_loo.expandable ) %]
