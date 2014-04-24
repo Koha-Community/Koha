@@ -30,7 +30,9 @@ sub filter {
     return "" unless $text;
     $config->{with_hours} //= 0;
     my $dt = dt_from_string( $text, 'iso' );
-    return output_pref({ dt => $dt, dateonly => !$config->{with_hours} });
+    return $config->{as_due_date} ?
+        output_pref({ dt => $dt, as_due_date => 1 }) :
+        output_pref({ dt => $dt, dateonly => !$config->{with_hours} });
 }
 
 1;

@@ -68,7 +68,7 @@
                                     <td>[% cr.item.itemcallnumber %]</td>
                                     <td>[% cr.item.copynumber %]</td>
                                     <td>[% INCLUDE 'item-status.inc' item=cr.item issue=cr.issue %]</td>
-                                    <td>[% cr.issue.date_due | $KohaDates %]</td>
+                                    <td>[% cr.issue.date_due | $KohaDates as_due_date => 1 %]</td>
                                     <td>[% cr.public_note %]</td>
                                 </tr>
                             [% END %]
