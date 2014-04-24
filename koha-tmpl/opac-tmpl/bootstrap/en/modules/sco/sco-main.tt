@@ -229,9 +229,9 @@
                                                 </td>
                                                 <td>[% ISSUE.itemcallnumber %]</td>
                                                 [% IF ( ISSUE.overdue ) %]
-                                                    <td class="overdue"><span title="[% ISSUE.date_due %]">[% ISSUE.date_due | $KohaDates %]</span></td>
+                                                    <td class="overdue"><span title="[% ISSUE.date_due %]">[% ISSUE.date_due | $KohaDates as_due_date => 1 %]</span></td>
                                                 [% ELSE   %]
-                                                    <td><span title="[% ISSUE.date_due %]">[% ISSUE.date_due | $KohaDates %]</span></td>
+                                                    <td><span title="[% ISSUE.date_due %]">[% ISSUE.date_due | $KohaDates as_due_date => 1 %]</span></td>
                                                 [% END %]
                                                 <td>
                                                     <form action="/cgi-bin/koha/sco/sco-main.pl" method="post">
