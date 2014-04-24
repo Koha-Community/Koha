@@ -10688,6 +10688,22 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.21.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE systempreferences SET value='0' WHERE variable='CalendarFirstDayOfWeek' AND value='Sunday';
+    });
+    $dbh->do(q{
+        UPDATE systempreferences SET value='1' WHERE variable='CalendarFirstDayOfWeek' AND value='Monday';
+    });
+    $dbh->do(q{
+        UPDATE systempreferences SET options='0|1|2|3|4|5|6' WHERE variable='CalendarFirstDayOfWeek';
+    });
+
+    print "Upgrade to $DBversion done (Bug 12137 - Extend functionality of CalendarFirstDayOfWeek to be any day)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.

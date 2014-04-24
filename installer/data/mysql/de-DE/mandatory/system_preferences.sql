@@ -30,7 +30,8 @@ UPDATE systempreferences SET value =
     <li><a href="http://www.scholar.google.com/scholar?q={TITLE}" target="_blank">Google Scholar</a></li>
     <li><a href="http://www.bookfinder.com/search/?author={AUTHOR}&amp;title={TITLE}&amp;st=xl&amp;ac=qr" target="_blank">Online-Buchhandel (Bookfinder.com)</a></li>' 
     WHERE variable = 'OPACSearchForTitleIn';
-UPDATE systempreferences SET value = 'Monday' WHERE variable = 'CalendarFirstDayOfWeek';
+-- Sunday = 0, Monday = 1, etc.
+UPDATE systempreferences SET value = '1' WHERE variable = 'CalendarFirstDayOfWeek';
 UPDATE systempreferences SET value = '0.07|0.19|0.00' WHERE variable = 'gist';
 UPDATE systempreferences SET value = 'Dieser Text wird über den Systemparameter <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RoutingListNote#jumped">RoutingListNote</a> konfiguriert.' where variable = 'RoutingListNote';
 UPDATE systempreferences SET value = 'barcode stocknumber' WHERE variable = 'uniqueitemfields';
