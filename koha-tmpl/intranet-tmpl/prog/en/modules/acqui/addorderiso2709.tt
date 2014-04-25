@@ -26,26 +26,24 @@
             "aaSorting": []
         } ) );
 
-        //keep a copy of all budgets before removing the inactives
-        disabledBudgetsCopy = $("select[name='all_budget_id']").html();
-        $("select[name='all_budget_id'] .b_inactive").remove();
-        $("select[name='budget_id'] .b_inactive").remove();
+        $("select[name='all_budget_id'] .b_inactive").hide();
+        $("select[name='budget_id'] .b_inactive").hide();
 
         $("#showallbudgets").click(function() {
             if ($(this).is(":checked")) {
-                $("select[name='budget_id']").html(disabledBudgetsCopy); //Puts back all the funds
+                $("select[name='budget_id'] .b_inactive").show();
             }
             else {
-                $("select[name='budget_id'] .b_inactive").remove();
+                $("select[name='budget_id'] .b_inactive").hide();
             }
         });
 
         $("#all_showallbudgets").click(function() {
             if ($(this).is(":checked")) {
-                $("select[name='all_budget_id']").html(disabledBudgetsCopy); //Puts back all the funds
+                $("select[name='all_budget_id'] .b_inactive").show();
             }
             else {
-                $("select[name='all_budget_id'] .b_inactive").remove();
+                $("select[name='all_budget_id'] .b_inactive").hide();
             }
         });
 
@@ -235,10 +233,14 @@
                                     <option value="">Select a fund</option>
                                     [% FOREACH budget IN budget_loop %]
                                         [% IF ( budget.b_id == biblio.budget_id ) %]
+                                          [% IF budget.b_active %]
                                             <option value="[% budget.b_id %]" data-sort1-authcat="[% budget.b_sort1_authcat %]" data-sort2-authcat="[% budget.b_sort2_authcat %]" selected="selected">[% budget.b_txt %]</option>
+                                          [% ELSE %]
+                                            <option value="[% budget.b_id %]" data-sort1-authcat="[% budget.b_sort1_authcat %]" data-sort2-authcat="[% budget.b_sort2_authcat %]" selected="selected">[% budget.b_txt %] (inactive)</option>
+                                          [% END %]
                                         [% ELSE %]
                                             [% IF budget.b_active %]<option value="[% budget.b_id %]" data-sort1-authcat="[% budget.b_sort1_authcat %]" data-sort2-authcat="[% budget.b_sort2_authcat %]">[% budget.b_txt %]</option>
-                                            [% ELSE %]<option value="[% budget.b_id %]" class="b_inactive" data-sort1-authcat="[% budget.b_sort1_authcat %]" data-sort2-authcat="[% budget.b_sort2_authcat %]">[% budget.b_txt %]</option>
+                                            [% ELSE %]<option value="[% budget.b_id %]" class="b_inactive" data-sort1-authcat="[% budget.b_sort1_authcat %]" data-sort2-authcat="[% budget.b_sort2_authcat %]">[% budget.b_txt %] (inactive)</option>
                                             [% END %]
                                         [% END %]
                                     [% END %]
@@ -327,7 +329,7 @@
                                               <option value="">Select a fund</option>
                                             [% FOREACH budget_loo IN budget_loop %]
                                                 [% IF ( budget_loo.b_active ) %]<option value="[% budget_loo.b_id %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]">[% budget_loo.b_txt %]</option>
-                                                [% ELSE %]<option value="[% budget_loo.b_id %]" class="b_inactive" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]">[% budget_loo.b_txt %]</option>
+                                                [% ELSE %]<option value="[% budget_loo.b_id %]" class="b_inactive" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]">[% budget_loo.b_txt %] (inactive)</option>
                                                 [% END %]
                                             [% END %]
                                             </select>
