@@ -74,7 +74,7 @@ my ($template, $loggedinuser, $cookie)
 my $uid = $loggedinuser ? GetMember( borrowernumber => $loggedinuser )->{userid} : undef;
 my $restrictededition = $uid ? haspermission($uid,  {'tools' => 'items_batchmod_restricted'}) : undef;
 # In case user is a superlibrarian, edition is not restricted
-$restrictededition = 0 if ($restrictededition != 0 && $restrictededition->{'superlibrarian'} eq 1);
+$restrictededition = 0 if ($restrictededition != 0 && C4::Context->IsSuperLibrarian());
 
 my $today_iso = C4::Dates->today('iso');
 $template->param(today_iso => $today_iso);
