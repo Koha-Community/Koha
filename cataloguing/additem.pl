@@ -159,8 +159,8 @@ sub generate_subfield_form {
         my $attributes_no_value_textarea = qq(id="$subfield_data{id}" name="field_value" class="input_marceditor" rows="5" cols="64" );
 
         # Getting list of subfields to keep when limited edition is enabled
-        my $subfieldsToAllowForLimitedEdition = C4::Context->preference('SubfieldsToAllowForLimitedEdition');
-        my @subfieldsToAllow = split(/ /, $subfieldsToAllowForLimitedEdition);
+        my $subfieldsToAllowForRestrictedEdition = C4::Context->preference('SubfieldsToAllowForRestrictedEdition');
+        my @subfieldsToAllow = split(/ /, $subfieldsToAllowForRestrictedEdition);
 
         # If we're on limited edition, and our field is not in the list of subfields to allow,
         # then it is read-only

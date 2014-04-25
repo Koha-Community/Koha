@@ -300,7 +300,7 @@ unshift (@$branches, $nochange_branch);
 my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
 
 # Getting list of subfields to keep when limited batchmod edit is enabled
-my $subfieldsToAllowForBatchmod = C4::Context->preference('SubfieldsToAllowForLimitedBatchmod');
+my $subfieldsToAllowForBatchmod = C4::Context->preference('SubfieldsToAllowForRestrictedBatchmod');
 my @subfieldsToAllow = split(/ /, $subfieldsToAllowForBatchmod);
 
 foreach my $tag (sort keys %{$tagslib}) {
