@@ -9438,6 +9438,38 @@ if ( CheckVersion($DBversion) ) {
    SetVersion ($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{
+        INSERT INTO permissions (module_bit, code, description) VALUES ('9', 'edit_items_restricted', 'Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEdition preference (please note that edit_item is still required)');
+    });
+
+    $dbh->do(q{
+        INSERT INTO permissions (module_bit, code, description) VALUES ('9', 'delete_all_items', 'Delete all items at once');
+    });
+
+    $dbh->do(q{
+        INSERT INTO permissions (module_bit, code, description) VALUES ('13', 'items_batchmod_restricted', 'Limit batch item modification to subfields defined in the SubfieldsToAllowForRestrictedBatchmod preferenec (pplease note that items_batchmod is still required)');
+    });
+
+    # The delete_all_items permission should be added to users having the edit_items permission.
+    $dbh->do(q{
+        INSERT INTO user_permissions (borrowernumber, module_bit, code) SELECT borrowernumber, module_bit, "delete_all_items" FROM user_permissions WHERE code="edit_items";
+    });
+
+    # Add 2 new prefs
+    $dbh->do(q{
+        INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SubfieldsToAllowForRestrictedEdition','','Define a list of subfields for which edition is authorized when edit_items_restricted permission is enabled, separated by spaces. Example: 995\$f 995\$h 995\$j','','Free');
+    });
+
+    $dbh->do(q{
+        INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SubfieldsToAllowForRestrictedBatchmod','','Define a list of subfields for which edition is authorized when items_batchmod_restricted permission is enabled, separated by spaces. Example: 995\$f 995\$h 995\$j','','Free');
+    });
+
+    print "Upgrade to $DBversion done (Bug 7673: Adds 2 new prefs (SubfieldsToAllowForRestrictedEdition and SubfieldsToAllowForRestrictedBatchmod) and 3 new permissions (edit_items_restricted and delete_all_items and items_batchmod_restricted))\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

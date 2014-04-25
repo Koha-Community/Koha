@@ -109,6 +109,20 @@ Cataloging:
             - pref: UNIMARCField100Language
               class: short
             - as default language in the UNIMARC field 100 when creating a new record or in the field plugin.
+        -
+            - Define a list of subfields for which edition is authorized when edit_items_restricted permission is enabled, separated by spaces.
+            - pref: SubfieldsToAllowForRestrictedEdition
+            - 'Examples:'
+            - 'UNIMARC: "995$f 995$h 995$j"'
+            - 'MARC21: "952$a 952$b 952$c"'
+            - Note that the FA framework is excluded from the permission.
+        -
+            - Define a list of subfields for which edition is authorized when items_batchmod_restricted permission is enabled, separated by spaces.
+            - pref: SubfieldsToAllowForRestrictedBatchmod
+            - 'Examples:'
+            - 'UNIMARC: "995$f 995$h 995$j"'
+            - 'MARC21: "952$a 952$b 952$c"'
+            - Note that the FA framework is excluded from the permission.
     Display:
         -
             - 'Separate multiple displayed authors, series or subjects with '
