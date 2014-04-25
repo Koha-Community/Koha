@@ -5,7 +5,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Members;
 
-use Test::More tests => 19;
+use Test::More tests => 21;
 
 use_ok('Koha::Borrower::Debarments');
 
@@ -95,5 +95,11 @@ ok( @$debarments == 0, "DelDebarment functions correctly" );
 
 $dbh->do(q|UPDATE borrowers SET debarred = '1970-01-01'|);
 is( IsDebarred( $borrowernumber ), undef, 'A patron with a debarred date in the past is not debarred' );
+
+$dbh->do(q|UPDATE borrowers SET debarred = NULL|);
+is( IsDebarred( $borrowernumber ), undef, 'A patron without a debarred date is not debarred' );
+
+$dbh->do(q|UPDATE borrowers SET debarred = '9999-31-12'|); # Note: Change this test before the first of January 10000!
+is( IsDebarred( $borrowernumber ), undef, 'A patron with a debarred date in the future is debarred' );
 
 $dbh->rollback;
