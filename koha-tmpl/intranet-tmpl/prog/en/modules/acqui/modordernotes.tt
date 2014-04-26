@@ -1,5 +1,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisition &rsaquo; [% IF (type == "vendor") %]Change order vendor note vendor note[% ELSE %]Change order internal note[% END %]</title>
+<title>Koha &rsaquo; Acquisition &rsaquo;
+[%- IF (type == "vendor") -%]
+    Change order vendor note
+[%- ELSE -%]
+    Change order internal note
+[%- END -%]
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
