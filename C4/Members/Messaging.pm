@@ -98,6 +98,7 @@ END_SQL
         $return->{'days_in_advance'} = $row->{'days_in_advance'} if defined $row->{'days_in_advance'};
         $return->{'wants_digest'}    = $row->{'wants_digest'}    if defined $row->{'wants_digest'};
         $return->{'letter_code'}     = $row->{'letter_code'};
+        next unless defined $row->{'message_transport_type'};
         $return->{'transports'}->{ $row->{'message_transport_type'} } = $row->{'letter_code'};
     }
     return $return;
