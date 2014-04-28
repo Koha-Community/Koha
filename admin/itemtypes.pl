@@ -91,6 +91,9 @@ if ($op) {
 
 my $dbh = C4::Context->dbh;
 
+my $sip_media_type = $input->param('sip_media_type');
+undef($sip_media_type) if defined($sip_media_type) and $sip_media_type =~ /^\s*$/;
+
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ( $op eq 'add_form' ) {
@@ -164,7 +167,7 @@ elsif ( $op eq 'add_validate' ) {
             $input->param('summary'),
             $input->param('checkinmsg'),
             $input->param('checkinmsgtype'),
-            $input->param('sip_media_type'),
+            $sip_media_type,
             $input->param('itemtype')
         );
     }
@@ -188,7 +191,7 @@ elsif ( $op eq 'add_validate' ) {
             $input->param('summary'),
             $input->param('checkinmsg'),
             $input->param('checkinmsgtype'),
-            $input->param('sip_media_type'),
+            $sip_media_type,
         );
     }
 
