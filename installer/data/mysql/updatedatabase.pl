@@ -8217,8 +8217,8 @@ if(CheckVersion($DBversion)) {
          ('SIP_MEDIA_TYPE', '005', 'Video tape'),
          ('SIP_MEDIA_TYPE', '006', 'CD/CDROM'),
          ('SIP_MEDIA_TYPE', '007', 'Diskette'),
-         ('SIP_MEDIA_TYPE', '008', 'Book with deskette'),
-         ('SIP_MEDIA_TYPE', '009', 'Book with cd'),
+         ('SIP_MEDIA_TYPE', '008', 'Book with diskette'),
+         ('SIP_MEDIA_TYPE', '009', 'Book with CD'),
          ('SIP_MEDIA_TYPE', '010', 'Book with audio tape')
     });
     print "Upgrade to $DBversion done (Bug 11351 - Add support for SIP2 media type)\n";
