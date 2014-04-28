@@ -99,7 +99,7 @@ is( IsDebarred( $borrowernumber ), undef, 'A patron with a debarred date in the 
 $dbh->do(q|UPDATE borrowers SET debarred = NULL|);
 is( IsDebarred( $borrowernumber ), undef, 'A patron without a debarred date is not debarred' );
 
-$dbh->do(q|UPDATE borrowers SET debarred = '9999-31-12'|); # Note: Change this test before the first of January 10000!
-is( IsDebarred( $borrowernumber ), undef, 'A patron with a debarred date in the future is debarred' );
+$dbh->do(q|UPDATE borrowers SET debarred = '9999-12-31'|); # Note: Change this test before the first of January 10000!
+is( IsDebarred( $borrowernumber ), '9999-12-31', 'A patron with a debarred date in the future is debarred' );
 
 $dbh->rollback;
