@@ -8202,10 +8202,10 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.15.00.037";
 if(CheckVersion($DBversion)) {
     $dbh->do(q{
-        ALTER TABLE itemtypes ADD sip_media_type VARCHAR( 3 ) DEFAULT NULL
+        ALTER TABLE itemtypes ADD sip_media_type VARCHAR( 3 ) DEFAULT NULL AFTER checkinmsgtype
     });
     $dbh->do(q{
         INSERT INTO authorised_values (category, authorised_value, lib) VALUES
