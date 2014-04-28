@@ -54,7 +54,6 @@ my $cnt              = 0;
 my $ecost            = $input->param('ecost');
 my $rrp              = $input->param('rrp');
 my $order_internalnote = $input->param("order_internalnote");
-my $order_vendornote = $input->param("order_vendornote");
 my $bookfund         = $input->param("bookfund");
 my $order            = GetOrder($ordernumber);
 my $new_ordernumber  = $ordernumber;
@@ -114,7 +113,6 @@ if ($quantityrec > $origquantityrec ) {
               datereceived     => $datereceived,
               received_items   => \@received_items,
               order_internalnote  => $order_internalnote,
-              order_vendornote    => $order_vendornote,
         } );
     }
 
