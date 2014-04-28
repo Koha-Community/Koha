@@ -704,6 +704,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.190',
     },
+    'OpenOffice::OODoc' => {
+        usage      => 'Export',
+        required   => 1,
+        min_ver    => '2.125',
+    },
 };
 
 1;
