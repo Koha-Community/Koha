@@ -8,7 +8,7 @@ KOHA.Preferences = {
             humanMsg.displayAlert( MSG_NOTHING_TO_SAVE );
             return;
         }
-        KOHA.AJAX.MarkRunning( $( form ).find( '.save-all' ), _( MSG_SAVING ) );
+        KOHA.AJAX.MarkRunning( $( form ).find( '.save-all' ), MSG_SAVING );
         KOHA.AJAX.Submit( {
             data: data,
             url: '/cgi-bin/koha/svc/config/systempreferences/',
@@ -21,7 +21,7 @@ KOHA.Preferences = {
         modified_prefs.each(function(){
             var modified_pref = $(this).attr("id");
             modified_pref = modified_pref.replace("pref_","");
-            msg += "<strong>"+ MSG_SAVED_PREFERENCE + " " + modified_pref + "</strong>\n";
+            msg += "<strong>"+ MSG_SAVED_PREFERENCE.format(modified_pref) + "</strong>\n";
         });
         humanMsg.displayAlert(msg);
 

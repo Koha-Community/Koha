@@ -91,7 +91,7 @@ function toggleField(pField) {
                         // We select the whole field and removing non-selected subfields, instead of...
 
                         // Alerting the user
-                        alert(MSG_MERGEREC_SUBFIELD_PRE + " " + field + " " + MSG_MERGEREC_SUBFIELD_POST);
+                        alert(MSG_MERGEREC_SUBFIELD.format(field));
                         pField.checked = false;
                     } else {
                         $(where).nextAll("ul").append(clone);

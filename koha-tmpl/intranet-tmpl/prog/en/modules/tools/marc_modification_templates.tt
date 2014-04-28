@@ -202,7 +202,7 @@ function editAction( mmta_id, ordering, action, field_number, from_field, from_s
     document.getElementById('description').value = description;
 
     window.modaction_legend_innerhtml = document.getElementById('modaction_legend').innerhtml;
-    document.getElementById('modaction_legend').innerhtml = _("Edit action") + ordering;
+    document.getElementById('modaction_legend').innerhtml = _("Edit action%s").format(ordering);
 
     window.action_submit_value = document.getElementById('action_submit').value;
     document.getElementById('action_submit').value = _("Update action");

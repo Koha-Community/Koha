@@ -8,7 +8,7 @@ if (d!=="") {
       var ok=1;
       var msg;
       if ( (date.length < 2) && (ok==1) ) {
-        msg = MSG_SEPARATOR+field.name;
+        msg = MSG_SEPARATOR.format(field.name);
         alert(msg); ok=0; field.focus();
         return;
       }
@@ -17,19 +17,19 @@ if (d!=="") {
       var yyyy = date[2];
       // checking days
       if ( ((isNaN(dd))||(dd<1)||(dd>31)) && (ok==1) ) {
-        msg = MSG_INCORRECT_DAY+field.name;
+        msg = MSG_INCORRECT_DAY.format(field.name);
         alert(msg); ok=0; field.focus();
         return false;
       }
       // checking months
       if ( ((isNaN(mm))||(mm<1)||(mm>12)) && (ok==1) ) {
-        msg = MSG_INCORRECT_MONTH+field.name;
+        msg = MSG_INCORRECT_MONTH.format(field.name);
         alert(msg); ok=0; field.focus();
         return false;
       }
       // checking years
       if ( ((isNaN(yyyy))||(yyyy<amin)||(yyyy>amax)) && (ok==1) ) {
-        msg = MSG_INCORRECT_YEAR+field.name;
+        msg = MSG_INCORRECT_YEAR.format(field.name);
         alert(msg); ok=0; field.focus();
         return false;
       }

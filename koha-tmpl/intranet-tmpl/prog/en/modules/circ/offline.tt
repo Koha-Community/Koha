@@ -17,21 +17,21 @@
 <script type="text/javascript">
 //<![CDATA[
 var ALERT_SUCCESSFUL_CHECKIN = _("Checked in item.");
-var ALERT_MATERIALS = _("Note about the accompanying materials: ");
+var ALERT_MATERIALS = _("Note about the accompanying materials: %s");
 var ALERT_RESTRICTED = _("Patron is RESTRICTED");
-var ALERT_NO_MATCHING_ITEM = _("No item with barcode in offline database (transaction recorded anyway): ");
+var ALERT_NO_MATCHING_ITEM = _("No item with barcode in offline database (transaction recorded anyway): %s");
 var ALERT_NOT_CHECKED_OUT = _("Item not listed as checked out in offline database (transaction recorded anyway)");
 var ALERT_ITEM_WITHDRAWN = _("Item has been withdrawn (transaction recorded anyway)");
 var ALERT_ITEM_RESTRICTED = _("Item is restricted (transaction recorded anyway)");
 var ALERT_ITEM_LOST = _("Item has been lost (transaction recorded anyway)");
-var ALERT_NO_MATCHING_PATRON = _("No patron cardnumber in offline database (proceeding anyway): ");
+var ALERT_NO_MATCHING_PATRON = _("No patron cardnumber in offline database (proceeding anyway): %s");
 var ALERT_PATRON_GONE_NO_ADDRESS = _("Patron's address is in doubt (proceeding anyway)");
 var ALERT_PATRON_CARD_LOST = _("Patron's card is lost");
-var ALERT_PATRON_EXPIRED = _("Patron's card is expired");
-var ALERT_PATRON_BLOCKED_TEMPORARY = _("Patron has had overdue items and is restricted until: ");
+var ALERT_PATRON_EXPIRED = _("Patron's card is expired (%s)");
+var ALERT_PATRON_BLOCKED_TEMPORARY = _("Patron has had overdue items and is restricted until: %s");
 var ALERT_PATRON_RESTRICTED = _("Patron is restricted");
-var ALERT_PATRON_FINE = _("Patron has outstanding fines: ");
-var ALERT_PATRON_FINE_OVER_LIMIT = _("Patron fines are over limit: ");
+var ALERT_PATRON_FINE = _("Patron has outstanding fines: %s");
+var ALERT_PATRON_FINE_OVER_LIMIT = _("Patron fines are over limit: %s");
 var UPLOAD_PENDING_MESSAGE = _("You have transactions in the offline circulation database on this computer that have not been uploaded.");
 var NO_UPLOAD_PENDING_MESSAGE = _("You do not have any pending transactions in the offline circulation database on this computer.");
 
@@ -79,10 +79,10 @@ function checkin(barcode, item, error) {
 function checkAlerts(barcode, item) {
     var alerts = [];
     if (typeof item === 'undefined') {
-        alerts.push(ALERT_NO_MATCHING_ITEM + barcode);
+        alerts.push(ALERT_NO_MATCHING_ITEM.format(barcode));
     } else {
         if (typeof item.materials !== 'undefined' && item.materials != null) {
-            alerts.push(ALERT_MATERIALS + item.materials);
+            alerts.push(ALERT_MATERIALS.format(item.materials));
         }
     }
     return alerts;
@@ -321,7 +321,7 @@ function recordFine(amount) {
 function checkPatronAlerts(cardnumber, patron) {
     var alerts = [];
     if (typeof patron === 'undefined') {
-        alerts.push(ALERT_NO_MATCHING_PATRON + cardnumber);
+        alerts.push(ALERT_NO_MATCHING_PATRON.format(cardnumber));
     } else {
         if (patron.gonenoaddress !== '0') {
             alerts.push(ALERT_PATRON_GONE_NO_ADDRESS);
@@ -331,18 +331,18 @@ function checkPatronAlerts(cardnumber, patron) {
         }
         if (patron.debarred !== null) {
             if (patron.debarred != '9999-12-31') {
-                alerts.push(ALERT_PATRON_BLOCKED_TEMPORARY + $.datepicker.formatDate(dateformat, new Date(patron.debarred)));
+                alerts.push(ALERT_PATRON_BLOCKED_TEMPORARY.format($.datepicker.formatDate(dateformat, new Date(patron.debarred))));
             } else {
                 alerts.push(ALERT_PATRON_RESTRICTED);
             }
         }
         if (new Date(patron.dateexpiry) < new Date()) {
-            alerts.push(ALERT_PATRON_EXPIRED + ' (' + $.datepicker.formatDate(dateformat, new Date(patron.dateexpiry)) + ')');
+            alerts.push(ALERT_PATRON_EXPIRED.format($.datepicker.formatDate(dateformat, new Date(patron.dateexpiry))));
         }
         if (parseInt(patron.fine) > [% maxoutstanding %]) {
-            alerts.push(ALERT_PATRON_FINE_OVER_LIMIT + patron.fine);
+            alerts.push(ALERT_PATRON_FINE_OVER_LIMIT.format(patron.fine));
         } else if (parseInt(patron.fine) > 0) {
-            alerts.push(ALERT_PATRON_FINE + patron.fine);
+            alerts.push(ALERT_PATRON_FINE.format(patron.fine));
         }
     }
     return alerts;

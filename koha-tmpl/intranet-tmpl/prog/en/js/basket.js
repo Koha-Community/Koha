@@ -184,10 +184,11 @@ function addSelRecords(valSel) { // function for adding a selection of biblios t
     var msg = "";
     if (nbAdd) {
         if (i > nbAdd) {
-            msg = nbAdd+" "+MSG_NRECORDS_ADDED+", "+(i-nbAdd)+" "+MSG_NRECORDS_IN_BASKET;
+            msg = MSG_NRECORDS_ADDED.format(nbAdd);
+            msg += MSG_NRECORDS_IN_BASKET.format((i-nbAdd));
         }
         else {
-            msg = nbAdd+" "+MSG_NRECORDS_ADDED;
+            msg = MSG_NRECORDS_ADDED.format(nbAdd);
         }
     }
     else {
@@ -195,7 +196,7 @@ function addSelRecords(valSel) { // function for adding a selection of biblios t
             msg = MSG_NO_RECORD_SELECTED;
         }
         else {
-            msg = MSG_NO_RECORD_ADDED+" ("+MSG_NRECORDS_IN_BASKET+") !";
+            msg = MSG_NO_RECORD_ADDED;
         }
     }
 	showCartUpdate(msg);
@@ -378,10 +379,10 @@ function showLess() {
 function updateBasket(updated_value,target) {
 	if(target){
 	target.$('#basketcount').html(" <span>("+updated_value+")</span>");
-    target.$('#cartDetails').html(MSG_IN_YOUR_CART+updated_value);
+    target.$('#cartDetails').html(MSG_IN_YOUR_CART.format(updated_value));
 	} else {
 	$('#basketcount').html(" <span>("+updated_value+")</span>");
-    $('#cartDetails').html(MSG_IN_YOUR_CART+updated_value);
+    $('#cartDetails').html(MSG_IN_YOUR_CART.format(updated_value));
 	}
 	var basketcount = updated_value;
 }
