@@ -1157,50 +1157,6 @@ sub ModSubscriptionHistory {
     return $sth->rows;
 }
 
-# Update missinglist field, used by ModSerialStatus
-sub _update_missinglist {
-    my $subscriptionid = shift;
-
-    my $dbh = C4::Context->dbh;
-    my @missingserials = GetSerials2($subscriptionid, "4,41,42,43,44,5");
-    my $missinglist;
-    foreach my $missingserial (@missingserials) {
-        if ( grep { $_ == $missingserial->{status} } qw( 4 41 42 43 44 ) ) {
-            $missinglist .= $missingserial->{'serialseq'} . "; ";
-        } elsif($missingserial->{'status'} == 5) {
-            $missinglist .= "not issued " . $missingserial->{'serialseq'} . "; ";
-        }
-    }
-    $missinglist =~ s/; $//;
-    my $query = qq{
-        UPDATE subscriptionhistory
-        SET missinglist = ?
-        WHERE subscriptionid = ?
-    };
-    my $sth = $dbh->prepare($query);
-    $sth->execute($missinglist, $subscriptionid);
-}
-
-# Update recievedlist field, used by ModSerialStatus
-sub _update_receivedlist {
-    my $subscriptionid = shift;
-
-    my $dbh = C4::Context->dbh;
-    my @receivedserials = GetSerials2($subscriptionid, "2");
-    my $receivedlist;
-    foreach (@receivedserials) {
-        $receivedlist .= $_->{'serialseq'} . "; ";
-    }
-    $receivedlist =~ s/; $//;
-    my $query = qq{
-        UPDATE subscriptionhistory
-        SET recievedlist = ?
-        WHERE subscriptionid = ?
-    };
-    my $sth = $dbh->prepare($query);
-    $sth->execute($receivedlist, $subscriptionid);
-}
-
 =head2 ModSerialStatus
 
 ModSerialStatus($serialid,$serialseq, $planneddate,$publisheddate,$status,$notes)
@@ -1241,17 +1197,32 @@ sub ModSerialStatus {
         $sth->execute($subscriptionid);
         my $val = $sth->fetchrow_hashref;
         unless ( $val->{manualhistory} ) {
+            $query = "SELECT missinglist,recievedlist FROM subscriptionhistory WHERE  subscriptionid=?";
+            $sth   = $dbh->prepare($query);
+            $sth->execute($subscriptionid);
+            my ( $missinglist, $recievedlist ) = $sth->fetchrow;
+
             if ( $status == 2 || ($oldstatus == 2 && $status != 2) ) {
-                  _update_receivedlist($subscriptionid);
+                $recievedlist .= "; $serialseq"
+                    if ($recievedlist !~ /(^|;)\s*$serialseq(?=;|$)/);
             }
+
+            # in case serial has been previously marked as missing
+            if (grep /$status/, (1,2,3,7)) {
+                $missinglist=~ s/(^|;)\s*$serialseq(?=;|$)//g;
+            }
+
             my @missing_statuses = qw( 4 41 42 43 44 );
-            if ( (  grep { $_ == $status } ( @missing_statuses, 5 ) )
-              || (
-                  ( grep { $_ == $oldstatus } @missing_statuses )
-                  && ! ( grep { $_ == $status } @missing_statuses ) )
-              || ($oldstatus == 5 && $status != 5)) {
-                _update_missinglist($subscriptionid);
-            }
+            $missinglist .= "; $serialseq"
+                if ( ( grep { $_ == $status } @missing_statuses ) && ( $missinglist !~/(^|;)\s*$serialseq(?=;|$)/ ) );
+            $missinglist .= "; not issued $serialseq"
+                if ( $status == 5 && $missinglist !~ /(^|;)\s*$serialseq(?=;|$)/ );
+
+            $query = "UPDATE subscriptionhistory SET recievedlist=?, missinglist=? WHERE  subscriptionid=?";
+            $sth   = $dbh->prepare($query);
+            $recievedlist =~ s/^; //;
+            $missinglist  =~ s/^; //;
+            $sth->execute( $recievedlist, $missinglist, $subscriptionid );
         }
     }
 
