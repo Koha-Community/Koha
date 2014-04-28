@@ -307,7 +307,11 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
     </tfoot>
     <tbody>
     [% FOREACH budget IN budgets %]
-    <tr data-tt-id="[% budget.budget_id %]" [% IF ( budget.budget_parent_id ) %]data-tt-parent-id="[% budget.budget_parent_id %]"[% END %]>
+    [% IF budget.budget_parent_id %]
+      <tr data-tt-id="[% budget.budget_id %]" data-tt-parent-id="[% budget.budget_parent_id %]">
+    [% ELSE %]
+      <tr data-tt-id="[% budget.budget_id %]">
+    [% END %]
     <td>[% budget.budget_period_active %]</td>
     <td>Budget [% budget.budget_period_description %]</td>
     <td>[% budget.budget_code_indent %]</td>
