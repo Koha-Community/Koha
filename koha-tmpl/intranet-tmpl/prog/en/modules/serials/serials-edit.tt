@@ -86,7 +86,7 @@ $(document).ready(function() {
         if ( total_errors > 0 ) {
             var mes  = _("Form not submitted because of the following problem(s)");
             mes += "\n------------------------------------------------------------------------------------\n";
-            mes += "\n- " _("%s mandatory fields empty (highlighted)").format(total_errors);
+            mes += "\n- " + _("%s mandatory fields empty (highlighted)").format(total_errors);
             alert(mes);
             return false;
         }
