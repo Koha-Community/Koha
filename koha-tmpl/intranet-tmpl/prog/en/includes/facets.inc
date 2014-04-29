@@ -17,8 +17,8 @@
 [% IF facets_loo.type_label_Places %]<span id="facet-places">Places</span>[% END %]
 [% IF facets_loo.type_label_Series %]<span id="facet-series">Series</span>[% END %]
 [% IF facets_loo.type_label_ItemTypes %]<span id="facet-itemtypes">Item types</span>[% END %]
-[% IF ( facets_loo.type_label_HomeLibrary ) %]Home libraries[% END %]
-[% IF ( facets_loo.type_label_HoldingLibrary ) %]Holding libraries[% END %]
+[% IF ( facets_loo.type_label_HomeLibrary ) %]<span id="facet-home-libraries">Home libraries</span>[% END %]
+[% IF ( facets_loo.type_label_HoldingLibrary ) %]<span id="facet-holding-libraries">Holding libraries</span>[% END %]
 [% IF facets_loo.type_label_Location %]<span id="facet-locations">Locations</span>[% END %]
 <ul>
         [% FOREACH facet IN facets_loo.facets %]<li><a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi |html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by %][% END %]&amp;limit=[% facet.type_link_value %]:[% facet.facet_link_value %]" title="[% facet.facet_title_value %]">[% facet.facet_label_value %]</a> [% IF ( displayFacetCount ) %]([% facet.facet_count %])[% END %]</li>[% END %][% IF ( facets_loo.expandable ) %]

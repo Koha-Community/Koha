@@ -25,8 +25,8 @@
                         [% IF facets_loo.type_label_Series %]<h5 id="facet-series">Series</h5>[% END %]
                         [% IF facets_loo.type_label_ItemTypes %]<h5 id="facet-itemtypes">Item types</h5>[% END %]
                         [% UNLESS singleBranchMode %]
-                          [% IF ( facets_loo.type_label_HomeLibrary ) %]Home libraries[% END %]
-                          [% IF ( facets_loo.type_label_HoldingLibrary ) %]Holding libraries[% END %]
+                            [% IF ( facets_loo.type_label_HomeLibrary ) %]<span id="facet-home-libraries">Home libraries</span>[% END %]
+                            [% IF ( facets_loo.type_label_HoldingLibrary ) %]<span id="facet-holding-libraries">Holding libraries</span>[% END %]
                         [% END %]
                         [% IF facets_loo.type_label_Location %]<h5 id="facet-locations">Locations</h5>[% END %]
                         <ul>
