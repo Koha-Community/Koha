@@ -19,6 +19,6 @@ my @dirs = ( 'acqui', 'admin', 'authorities', 'basket',
     'sms', 'suggestion', 'svc', 'tags', 'tools', 'virtualshelves' );
 
 $Test::Strict::TEST_STRICT = 0;
-$Test::Strict::TEST_SKIP = [ 'misc/kohalib.pl', 'sms/sms_listen_windows_start.pl' ];
+$Test::Strict::TEST_SKIP = [ 'misc/kohalib.pl', 'sms/sms_listen_windows_start.pl', 'misc/plack/koha.psgi' ];
 
 all_perl_files_ok(@dirs);
