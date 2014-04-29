@@ -44,8 +44,6 @@ use C4::BackgroundJob;
 use C4::MarcModificationTemplates;
 
 my $input = new CGI;
-my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
 
 my $fileID=$input->param('uploadedfileid');
 my $runinbackground = $input->param('runinbackground');
@@ -91,8 +89,7 @@ if ($completedJobID) {
 
     my $filename = $uploaded_file->name();
     my $job = undef;
-    my $staging_callback = sub { };
-    my $matching_callback = sub { };
+    my $dbh;
     if ($runinbackground) {
         my $job_size = () = $marcrecord =~ /\035/g;
         # if we're matching, job size is doubled
@@ -104,12 +101,6 @@ if ($completedJobID) {
         if (my $pid = fork) {
             # parent
             # return job ID as JSON
-            
-            # prevent parent exiting from
-            # destroying the kid's database handle
-            # FIXME: according to DBI doc, this may not work for Oracle
-            $dbh->{InactiveDestroy}  = 1;
-
             my $reply = CGI->new("");
             print $reply->header(-type => 'text/html');
             print '{"jobID":"' . $jobID . '"}';
@@ -122,21 +113,28 @@ if ($completedJobID) {
             # close STDERR; # there is no good reason to close STDERR
         } else {
             # fork failed, so exit immediately
-            warn "fork failed while attempting to run $ENV{'SCRIPT_NAME'} as a background job";
+            warn "fork failed while attempting to run $ENV{'SCRIPT_NAME'} as a background job: $!";
             exit 0;
         }
 
         # if we get here, we're a child that has detached
         # itself from Apache
-        $staging_callback = staging_progress_callback($job, $dbh);
-        $matching_callback = matching_progress_callback($job, $dbh);
 
     }
 
+    # New handle, as we're a child.
+    $dbh = C4::Context->dbh({new => 1});
+    $dbh->{AutoCommit} = 0;
     # FIXME branch code
-    my ($batch_id, $num_valid, $num_items, @import_errors) = BatchStageMarcRecords($record_type, $encoding, $marcrecord, $filename, $marc_modification_template, $comments, '', $parse_items, 0, 50, staging_progress_callback($job, $dbh));
-
-    $dbh->commit();
+    my ( $batch_id, $num_valid, $num_items, @import_errors ) =
+      BatchStageMarcRecords(
+        $record_type,                $encoding,
+        $marcrecord,                 $filename,
+        $marc_modification_template, $comments,
+        '',                          $parse_items,
+        0,                           50,
+        staging_progress_callback( $job, $dbh )
+      );
 
     my $num_with_matches = 0;
     my $checked_matches = 0;
@@ -147,8 +145,9 @@ if ($completedJobID) {
         if (defined $matcher) {
             $checked_matches = 1;
             $matcher_code = $matcher->code();
-            $num_with_matches = BatchFindDuplicates($batch_id, $matcher,
-                                                       10, 50, matching_progress_callback($job, $dbh));
+            $num_with_matches =
+              BatchFindDuplicates( $batch_id, $matcher, 10, 50,
+                matching_progress_callback( $job, $dbh ) );
             SetImportBatchMatcher($batch_id, $matcher_id);
             SetImportBatchOverlayAction($batch_id, $overlay_action);
             SetImportBatchNoMatchAction($batch_id, $nomatch_action);
@@ -160,14 +159,14 @@ if ($completedJobID) {
     }
 
     my $results = {
-	    staged => $num_valid,
- 	    matched => $num_with_matches,
-        num_items => $num_items,
-        import_errors => scalar(@import_errors),
-        total => $num_valid + scalar(@import_errors),
+        staged          => $num_valid,
+        matched         => $num_with_matches,
+        num_items       => $num_items,
+        import_errors   => scalar(@import_errors),
+        total           => $num_valid + scalar(@import_errors),
         checked_matches => $checked_matches,
-        matcher_failed => $matcher_failed,
-        matcher_code => $matcher_code,
+        matcher_failed  => $matcher_failed,
+        matcher_code    => $matcher_code,
         import_batch_id => $batch_id
     };
     if ($runinbackground) {
@@ -183,8 +182,6 @@ if ($completedJobID) {
                          matcher_code => $matcher_code,
                          import_batch_id => $batch_id
                         );
-
-
     }
 
 } else {
@@ -210,7 +207,6 @@ sub staging_progress_callback {
     return sub {
         my $progress = shift;
         $job->progress($progress);
-        $dbh->commit();
     }
 }
 
@@ -221,6 +217,5 @@ sub matching_progress_callback {
     return sub {
         my $progress = shift;
         $job->progress($start_progress + $progress);
-        $dbh->commit();
     }
 }
