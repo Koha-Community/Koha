@@ -64,7 +64,7 @@ else {
 $template->param(
     slip => $slip,
     plain => !$is_html,
-    title => "Koha -- Circulation: Transfers",
+    caller => 'transfer',
     stylesheet => C4::Context->preference("SlipCSS"),
 );
 

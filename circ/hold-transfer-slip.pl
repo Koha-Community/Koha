@@ -58,6 +58,7 @@ if ( my $letter = ReserveSlip ($session->param('branch') || $userenv->{branch}, 
     $is_html = $letter->{is_html};
 }
 $template->param( slip => $slip ) if ($slip);
+$template->param( caller => 'hold-transfer' );
 $template->param( plain => !$is_html );
 
 output_html_with_http_headers $input, $cookie, $template->output;

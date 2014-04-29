@@ -61,7 +61,7 @@ if (my $letter = IssueSlip ($session->param('branch') || $branch, $borrowernumbe
 
 $template->{VARS}->{slip} = $slip;
 $template->{VARS}->{plain} = !$is_html;
-$template->{VARS}->{title} = "Print Receipt for $borrowernumber";
+$template->{VARS}->{borrowernumber} = $borrowernumber;
 $template->{VARS}->{stylesheet} = C4::Context->preference("SlipCSS");
 $template->{VARS}->{error} = $error;
 
