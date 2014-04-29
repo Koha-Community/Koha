@@ -40,7 +40,7 @@ my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
     template_name   => 'services/itemrecorddisplay.tmpl',
     query           => $input,
     type            => 'intranet',
-    authnotrequired => 1,
+    flagsrequired   => {acquisition => '*'},
 } );
 
 my $biblionumber = $input->param('biblionumber') || '';
