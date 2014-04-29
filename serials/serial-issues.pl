@@ -70,9 +70,7 @@ if ($selectview eq "full"){
      = get_template_and_user({template_name => "serials/serial-issues-full.tmpl",
      query => $query,
      type => "intranet",
-     authnotrequired => 0,
 	 flagsrequired => {serials => '*'},
-     debug => 1,
      });
 
  # replace CR by <br> in librarian note
@@ -94,8 +92,7 @@ if ($selectview eq "full"){
     = get_template_and_user({template_name => "serials/serial-issues.tmpl",
         query => $query,
         type => "intranet",
-        authnotrequired => 1,
-        debug => 1,
+           flagsrequired => {serials => '*'},
      });
 
  # replace CR by <br> in librarian note
