@@ -283,13 +283,13 @@ if ($barcode) {
         if (C4::Context->preference("WaitingNotifyAtCheckin") ) {
             #Check for waiting holds
             my @reserves = GetReservesFromBorrowernumber($borrower->{'borrowernumber'});
-            my $waiting_holds;
+            my $waiting_holds = 0;
             foreach my $num_res (@reserves) {
                 if ( $num_res->{'found'} eq 'W' && $num_res->{'branchcode'} eq $userenv_branch) {
                     $waiting_holds++;
                 }
             } 
-            if ($waiting_holds && $waiting_holds > 0) {
+            if ($waiting_holds > 0) {
                 $template->param(
                     waiting_holds       => $waiting_holds,
                     holdsborrowernumber => $borrower->{'borrowernumber'},
