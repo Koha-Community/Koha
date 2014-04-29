@@ -8225,7 +8225,7 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = '3.15.00.XXX';
+$DBversion = '3.15.00.038';
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         INSERT INTO  systempreferences (
