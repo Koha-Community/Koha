@@ -313,7 +313,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
       <tr data-tt-id="[% budget.budget_id %]">
     [% END %]
     <td>[% budget.budget_period_active %]</td>
-    <td>Budget [% budget.budget_period_description %][% UNLESS budget.budget_period_active %] (inactive)[% END %]</td>
+    <td>Budget [% budget.budget_period_description %] [id=[% budget.budget_period_id %]][% UNLESS budget.budget_period_active %] (inactive)[% END %]</td>
     <td>[% budget.budget_code_indent %]</td>
     <td>[% budget.budget_name %]</td>
     <td class="data">
