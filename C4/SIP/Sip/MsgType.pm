@@ -1054,7 +1054,7 @@ sub handle_end_patron_session {
 sub handle_fee_paid {
     my ($self, $server) = @_;
     my $ils = $server->{ils};
-    my ($trans_date, $fee_type, $pay_type, $currency) = $self->{fixed_fields};
+    my ($trans_date, $fee_type, $pay_type, $currency) = @{ $self->{fixed_fields} };
     my $fields = $self->{fields};
     my ($fee_amt, $inst_id, $patron_id, $terminal_pwd, $patron_pwd);
     my ($fee_id, $trans_id);

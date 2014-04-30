@@ -147,14 +147,12 @@ sub recordpayment {
     my $usth = $dbh->prepare(
         "INSERT INTO accountlines
   (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding,manager_id)
-  VALUES (?,?,now(),?,'Payment,thanks','Pay',?,?)"
+  VALUES (?,?,now(),?,'',?,?,?)"
     );
 
-    my $payment_description = "Payment, thanks";
-    $payment_description .= " (via SIP2)" if defined $sip_paytype;
     my $paytype = "Pay";
-    $paytype .= "-$sip_paytype" if defined $sip_paytype;
-    $usth->execute( $borrowernumber, $nextaccntno, 0 - $data, $payment_description, $paytype, 0 - $amountleft, $manager_id );
+    $paytype .= $sip_paytype if defined $sip_paytype;
+    $usth->execute( $borrowernumber, $nextaccntno, 0 - $data, $paytype, 0 - $amountleft, $manager_id );
     $usth->finish;
 
     UpdateStats( $branch, 'payment', $data, '', '', '', $borrowernumber, $nextaccntno );

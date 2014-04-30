@@ -116,6 +116,9 @@ function enableCheckboxActions(){
     <td>
         [% SWITCH line.accounttype %]
           [% CASE 'Pay' %]Payment,thanks
+          [% CASE 'Pay00' %]Payment,thanks (cash via SIP2)
+          [% CASE 'Pay01' %]Payment,thanks (VISA via SIP2)
+          [% CASE 'Pay02' %]Payment,thanks (credit card via SIP2)
           [% CASE 'N' %]New Card
           [% CASE 'F' %]Fine
           [% CASE 'A' %]Account management fee
