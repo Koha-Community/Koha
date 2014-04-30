@@ -48,8 +48,23 @@
                                 [% FOREACH ACCOUNT_LINE IN ACCOUNT_LINES %]
                                     [% IF ( ACCOUNT_LINE.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
                                         <td>[% ACCOUNT_LINE.date | $KohaDates %]</td>
-                                        <td>[% ACCOUNT_LINE.description %]
-                                        [% IF ( ACCOUNT_LINE.title ) %][% ACCOUNT_LINE.title |html %][% END %]</td>
+                                        <td>
+                                          [% SWITCH ACCOUNT_LINE.accounttype %]
+                                            [% CASE 'Pay' %]Payment,thanks
+                                            [% CASE 'Pay00' %]Payment,thanks (cash via SIP2)
+                                            [% CASE 'Pay01' %]Payment,thanks (VISA via SIP2)
+                                            [% CASE 'Pay02' %]Payment,thanks (credit card via SIP2)
+                                            [% CASE 'N' %]New Card
+                                            [% CASE 'F' %]Fine
+                                            [% CASE 'A' %]Account management fee
+                                            [% CASE 'M' %]Sundry
+                                            [% CASE 'L' %]Lost Item
+                                            [% CASE 'W' %]Writeoff
+                                            [% CASE %][% ACCOUNT_LINE.accounttype %]
+                                          [%- END -%]
+                                          [%- IF ACCOUNT_LINE.description %], [% ACCOUNT_LINE.description %][% END %]
+                                          [% IF line.title %]([% line.title |html_entity %])[% END %]
+                                        </td>
                                         [% IF ( ACCOUNT_LINE.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amount %]</td>
                                         [% IF ( ACCOUNT_LINE.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amountoutstanding %]</td>
                                     </tr>
