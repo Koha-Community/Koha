@@ -48,43 +48,44 @@ my $params = $cgi->Vars; # NOTE: Multivalue parameters NOT allowed!!
 
 print $cgi->header('application/json; charset=utf-8');
 
-if ($params->{'action'} eq 'add') {
+my $action = $params->{'action'} || 'get';
+if ($action eq 'add') {
     my $sth = $dbh->prepare('INSERT INTO quotes (source, text) VALUES (?, ?);');
     $sth->execute($params->{'source'}, $params->{'text'});
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
-        exit 0;
+        exit 1;
     }
     my $new_quote_id = $dbh->{q{mysql_insertid}}; # ALERT: mysqlism here
     $sth = $dbh->prepare('SELECT * FROM quotes WHERE id = ?;');
     $sth->execute($new_quote_id);
     print to_json($sth->fetchall_arrayref, {utf8 =>1});
-    exit 1;
+    exit 0;
 }
-elsif ($params->{'action'} eq 'edit') {
+elsif ($action eq 'edit') {
     my $aaData = [];
     my $editable_columns = [qw(source text)]; # pay attention to element order; these columns match the quotes table columns
     my $sth = $dbh->prepare("UPDATE quotes SET $editable_columns->[$params->{'column'}-1]  = ? WHERE id = ?;");
     $sth->execute($params->{'value'}, $params->{'id'});
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
-        exit 0;
+        exit 1;
     }
     $sth = $dbh->prepare("SELECT $editable_columns->[$params->{'column'}-1] FROM quotes WHERE id = ?;");
     $sth->execute($params->{'id'});
     $aaData = $sth->fetchrow_array();
     print Encode::encode('utf8', $aaData);
 
-    exit 1;
+    exit 0;
 }
-elsif ($params->{'action'} eq 'delete') {
+elsif ($action eq 'delete') {
     my $sth = $dbh->prepare("DELETE FROM quotes WHERE id = ?;");
     $sth->execute($params->{'id'});
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
-        exit 0;
+        exit 1;
     }
-    exit 1;
+    exit 0;
 }
 else {
     my $aaData = [];
@@ -97,7 +98,7 @@ else {
     $sth->execute();
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
-        exit 0;
+        exit 1;
     }
 
     $aaData = $sth->fetchall_arrayref;
