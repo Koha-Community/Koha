@@ -180,11 +180,11 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
                 }
             },
             "aoColumnDefs": [
-                { "bVisible": false, "aTargets": [ 0, 1 ] }
+                { "bVisible": false, "aTargets": [ 0, 1 ] },
+                { "bSortable": false, "aTargets": ["_all"] }
             ],
-            "aaSortingFixed": [[ 1, 'asc' ]],
-            "aaSorting": [[ 2, 'asc' ]],
-            'bSort': false,
+            'bSort': true,
+            'aaSortingFixed': [[ 1, 'asc' ]],
             'bPaginate': false,
             "bAutoWidth": false
         }));
@@ -313,7 +313,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
       <tr data-tt-id="[% budget.budget_id %]">
     [% END %]
     <td>[% budget.budget_period_active %]</td>
-    <td>Budget [% budget.budget_period_description %]</td>
+    <td>Budget [% budget.budget_period_description %][% UNLESS budget.budget_period_active %] (inactive)[% END %]</td>
     <td>[% budget.budget_code_indent %]</td>
     <td>[% budget.budget_name %]</td>
     <td class="data">
