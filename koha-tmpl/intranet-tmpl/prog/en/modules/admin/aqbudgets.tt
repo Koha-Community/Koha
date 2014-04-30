@@ -205,7 +205,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
         [% UNLESS budget_period_id %]
           $("#hide_inactive").click(function(e){
             e.preventDefault();
-            oTable.fnFilter( 0, 0 ); // Hide active=0
+            oTable.fnFilter( 1, 0 ); // Show only active=1
           });
           $("#show_inactive").click(function(e){
             e.preventDefault();
