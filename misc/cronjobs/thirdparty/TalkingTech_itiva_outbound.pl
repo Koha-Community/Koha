@@ -134,8 +134,8 @@ foreach my $type (@types) {
                 borrowers   => $issues->{'borrowernumber'},
                 biblio      => $issues->{'biblionumber'},
                 biblioitems => $issues->{'biblionumber'},
-                message_transport_type => 'phone',
             },
+            message_transport_type => 'phone',
         );
 
         die "No letter found for type $type!... dying\n" unless $letter;
