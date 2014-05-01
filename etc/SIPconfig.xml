@@ -5,6 +5,10 @@
 <!--
   Set Net::Server::PreFork runtime parameters
   syslog_ident will identify SIP2 Koha server entries in syslog
+  See documentation for Net::Server
+  user and group select what user the service should run as
+  if started as root (e.g. in server startup ) the server will switch to
+  this user after binding to the socket it is listening on
   For OpenSolaris, add: syslog_logsock=stream
 -->
   <server-params
@@ -13,6 +17,10 @@
     log_file='Sys::Syslog'
     syslog_ident='koha_sip'
     syslog_facility='local6'
+    setsid="1"
+    user='koha'
+    group='koha'
+    pid_file='/var/run/sipserver.pid'
   />
 
   <listeners>
@@ -121,4 +129,3 @@ in our case "ILS".
       <AllFinesNeedOverride>0</AllFinesNeedOverride>
 </syspref_overrides>
 
-</acsconfig>

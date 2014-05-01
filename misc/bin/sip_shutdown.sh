@@ -1,19 +1,10 @@
 #!/bin/bash
 
-. $HOME/.bash_profile
+#Terminates the session leader Sipserver which should terminate the children
+# The pidfile name is specified as a server parameter in the configuration
+# file
 
-# this is brittle: the primary server must have the lowest PPID
-# this is brittle: ps behavior is very platform-specific, only tested on Debian Etch
+PID_FILE=/var/run/sipserver.pid
 
-target="SIPServer";
-PROCPID=$(ps x -o pid,ppid,args --sort ppid | grep "$target" | grep -v grep | head -1 | awk '{print $1}');
+kill `cat $PID_FILE`
 
-if [ ! $PROCPID ] ; then
-    echo "No processes found for $target";
-    exit;
-fi
-
-echo "SIP Processes for this user ($USER):";
-ps x -o pid,ppid,args --sort ppid | grep "$target" | grep -v grep ;
-echo "Killing process #$PROCPID";
-kill $PROCPID;
