@@ -1,11 +1,12 @@
-use strict;
-use warnings;
-use Test::More tests => 22;
+use Modern::Perl;
+use Test::More tests => 25;
 
 BEGIN {use_ok('C4::Budgets') }
 use C4::Context;
+use C4::Biblio;
+use C4::Bookseller;
+use C4::Acquisition;
 use C4::Dates;
-use C4::Context;
 
 use YAML;
 my $dbh = C4::Context->dbh;
@@ -135,4 +136,187 @@ ok($budgets->[0]->{budget_name} lt $budgets->[1]->{budget_name}, 'default sort o
 ok($del_status=DelBudget($budget_id),
     "DelBudget returned $del_status");
 
-$dbh->rollback;
+# GetBudgetHierarchySpent and GetBudgetHierarchyOrdered
+my $budget_period_total = 10_000;
+my $budget_1_total = 1_000;
+my $budget_11_total = 100;
+my $budget_111_total = 50;
+my $budget_12_total = 100;
+my $budget_2_total = 2_000;
+
+my $budget_period_id = AddBudgetPeriod(
+    {
+        budget_period_startdate => '2013-01-01',
+        budget_period_enddate   => '2014-12-31',
+        budget_description      => 'Budget Period',
+        budget_period_active    => 1,
+        budget_period_total     => $budget_period_total,
+    }
+);
+my $budget_id1 = AddBudget(
+    {
+        budget_code      => 'budget_1',
+        budget_name      => 'budget_1',
+        budget_active    => 1,
+        budget_period_id => $budget_period_id,
+        budget_parent_id => undef,
+        budget_amount    => $budget_1_total,
+    }
+);
+my $budget_id2 = AddBudget(
+    {
+        budget_code      => 'budget_2',
+        budget_name      => 'budget_2',
+        budget_active    => 1,
+        budget_period_id => $budget_period_id,
+        budget_parent_id => undef,
+        budget_amount    => $budget_2_total,
+    }
+);
+my $budget_id11 = AddBudget(
+    {
+        budget_code      => 'budget_11',
+        budget_name      => 'budget_11',
+        budget_active    => 1,
+        budget_period_id => $budget_period_id,
+        budget_parent_id => $budget_id1,
+        budget_amount    => $budget_11_total,
+    }
+);
+my $budget_id12 = AddBudget(
+    {
+        budget_code      => 'budget_12',
+        budget_name      => 'budget_12',
+        budget_active    => 1,
+        budget_period_id => $budget_period_id,
+        budget_parent_id => $budget_id1,
+        budget_amount    => $budget_12_total,
+    }
+);
+my $budget_id111 = AddBudget(
+    {
+        budget_code      => 'budget_111',
+        budget_name      => 'budget_111',
+        budget_active    => 1,
+        budget_period_id => $budget_period_id,
+        budget_parent_id => $budget_id11,
+        owner_id         => 1,
+        budget_amount    => $budget_111_total,
+    }
+);
+my $budget_id21 = AddBudget(
+    {
+        budget_code      => 'budget_21',
+        budget_name      => 'budget_21',
+        budget_active    => 1,
+        budget_period_id => $budget_period_id,
+        budget_parent_id => $budget_id2,
+    }
+);
+
+my $booksellerid = C4::Bookseller::AddBookseller(
+    {
+        name         => "my vendor",
+        address1     => "bookseller's address",
+        phone        => "0123456",
+        active       => 1,
+        deliverytime => 5,
+    }
+);
+
+my $basketno = C4::Acquisition::NewBasket( $booksellerid, 1 );
+my ( $biblionumber, $biblioitemnumber ) =
+  C4::Biblio::AddBiblio( MARC::Record->new, '' );
+
+my @order_infos = (
+    {
+        budget_id => $budget_id1,
+        pending_quantity  => 1,
+        spent_quantity  => 0,
+    },
+    {
+        budget_id => $budget_id2,
+        pending_quantity  => 2,
+        spent_quantity  => 1,
+    },
+    {
+        budget_id => $budget_id11,
+        pending_quantity  => 3,
+        spent_quantity  => 4,
+    },
+    {
+        budget_id => $budget_id12,
+        pending_quantity  => 4,
+        spent_quantity  => 3,
+    },
+    {
+        budget_id => $budget_id111,
+        pending_quantity  => 2,
+        spent_quantity  => 1,
+    },
+
+    # No order for budget_21
+
+);
+
+my %budgets;
+my $invoiceid = AddInvoice(invoicenumber => 'invoice_test_clone', booksellerid => $booksellerid, unknown => "unknown");
+my $item_price = 10;
+my $item_quantity = 2;
+for my $infos (@order_infos) {
+    for ( 1 .. $infos->{pending_quantity} ) {
+        my ( undef, $ordernumber ) = C4::Acquisition::NewOrder(
+            {
+                basketno           => $basketno,
+                biblionumber       => $biblionumber,
+                budget_id          => $infos->{budget_id},
+                order_internalnote => "internal note",
+                order_vendornote   => "vendor note",
+                quantity           => 2,
+                cost               => $item_price,
+                rrp                => $item_price,
+                listprice          => $item_price,
+                ecost              => $item_price,
+                rrp                => $item_price,
+                discount           => 0,
+                uncertainprice     => 0,
+                gstrate            => 0,
+            }
+        );
+        push @{ $budgets{$infos->{budget_id}} }, $ordernumber;
+    }
+    for ( 1 .. $infos->{spent_quantity} ) {
+        my ( undef, $ordernumber ) = C4::Acquisition::NewOrder(
+            {
+                basketno           => $basketno,
+                biblionumber       => $biblionumber,
+                budget_id          => $infos->{budget_id},
+                order_internalnote => "internal note",
+                order_vendornote   => "vendor note",
+                quantity           => $item_quantity,
+                cost               => $item_price,
+                rrp                => $item_price,
+                listprice          => $item_price,
+                ecost              => $item_price,
+                rrp                => $item_price,
+                discount           => 0,
+                uncertainprice     => 0,
+                gstrate            => 0,
+            }
+        );
+        ModReceiveOrder({
+              biblionumber     => $biblionumber,
+              ordernumber      => $ordernumber,
+              budget_id        => $infos->{budget_id},
+              quantityreceived => $item_quantity,
+              cost             => $item_price,
+              ecost            => $item_price,
+              invoiceid        => $invoiceid,
+              rrp              => $item_price,
+              received_items   => [],
+        } );
+    }
+}
+is( GetBudgetHierarchySpent( $budget_id1 ), 160, "total spent for budget1 is 160" );
+is( GetBudgetHierarchySpent( $budget_id11 ), 100, "total spent for budget1 is 100" );
+is( GetBudgetHierarchySpent( $budget_id111 ), 20, "total spent for budget1 is 20" );
