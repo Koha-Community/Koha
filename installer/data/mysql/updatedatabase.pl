@@ -8574,6 +8574,35 @@ $DBversion = "3.17.00.010";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("DELETE FROM systempreferences WHERE variable='opacsmallimage'");
     print "Upgrade to $DBversion done (Bug 11347 - PROG/CCSR deprecation: Remove opacsmallimage system preference)\n";
+    SetVersion($DBversion);
+}
+
+
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    # Correct invalid recordtypes (should be very exceptional)
+    $dbh->do(q{
+        UPDATE z3950servers set recordtype='biblio' WHERE recordtype NOT IN ('authority','biblio')
+    });
+    # Correct invalid server types (should also be very exceptional)
+    $dbh->do(q{
+        UPDATE z3950servers set type='zed' WHERE type <> 'zed'
+    });
+    # Adjust table
+    $dbh->do(q{
+        ALTER TABLE z3950servers
+        DROP COLUMN icon,
+        DROP COLUMN description,
+        DROP COLUMN position,
+        MODIFY COLUMN id int NOT NULL AUTO_INCREMENT FIRST,
+        MODIFY COLUMN recordtype enum('authority','biblio') NOT NULL DEFAULT 'biblio',
+        CHANGE COLUMN name servername mediumtext NOT NULL,
+        CHANGE COLUMN type servertype enum('zed','sru') NOT NULL DEFAULT 'zed',
+        ADD COLUMN sru_options varchar(255) default NULL,
+        ADD COLUMN sru_fields mediumtext default NULL,
+        ADD COLUMN add_xslt mediumtext default NULL
+    });
+    print "Upgrade to $DBversion done (Bug 6536: Z3950 improvements)\n";
     SetVersion ($DBversion);
 }
 

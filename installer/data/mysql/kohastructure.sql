@@ -2334,23 +2334,23 @@ CREATE TABLE `virtualshelfshares` ( -- shared private lists
 
 DROP TABLE IF EXISTS `z3950servers`;
 CREATE TABLE `z3950servers` ( -- connection information for the Z39.50 targets used in cataloging
+  `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
   `host` varchar(255) default NULL, -- target's host name
   `port` int(11) default NULL, -- port number used to connect to target
   `db` varchar(255) default NULL, -- target's database name
   `userid` varchar(255) default NULL, -- username needed to log in to target
   `password` varchar(255) default NULL, -- password needed to log in to target
-  `name` mediumtext, -- name given to the target by the library
-  `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
+  `servername` mediumtext NOT NULL, -- name given to the target by the library
   `checked` smallint(6) default NULL, -- whether this target is checked by default  (1 for yes, 0 for no)
   `rank` int(11) default NULL, -- where this target appears in the list of targets
   `syntax` varchar(80) default NULL, -- marc format provided by this target
   `timeout` int(11) NOT NULL DEFAULT '0', -- number of seconds before Koha stops trying to access this server
-  `icon` text, -- unused in Koha
-  `position` enum('primary','secondary','') NOT NULL default 'primary',
-  `type` enum('zed','opensearch') NOT NULL default 'zed',
+  `servertype` enum('zed','sru') NOT NULL default 'zed', -- zed means z39.50 server
   `encoding` text default NULL, -- characters encoding provided by this target
-  `description` text NOT NULL, -- unused in Koha
-  `recordtype` varchar(45) NOT NULL default 'biblio', -- server contains bibliographic or authority records
+  `recordtype` enum('authority','biblio') NOT NULL default 'biblio', -- server contains bibliographic or authority records
+  `sru_options` varchar(255) default NULL, -- options like sru=get, sru_version=1.1; will be passed to the server via ZOOM
+  `sru_fields` mediumtext default NULL, -- contains the mapping between the Z3950 search fields and the specific SRU server indexes
+  `add_xslt` mediumtext default NULL, -- zero or more paths to XSLT files to be processed on the search results
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
