@@ -45,7 +45,8 @@ BEGIN {
         &GetBudgetOrdered
         &GetBudgetName
         &GetPeriodsCount
-        &GetChildBudgetsSpent
+        GetBudgetHierarchySpent
+        GetBudgetHierarchyOrdered
 
         &GetBudgetUsers
         &ModBudgetUsers
@@ -555,35 +556,14 @@ sub GetBudgetHierarchy {
 		last if $children == 0;
 	}
 
-# add budget-percent and allocation, and flags for html-template
-	foreach my $r (@sort) {
-		my $subs_href = $r->{'child'};
-        my @subs_arr = ();
-        if ( defined $subs_href ) {
-            @subs_arr = @{$subs_href};
-        }
 
-        my $moo = $r->{'budget_code_indent'};
-        $moo =~ s/\ /\&nbsp\;/g;
-        $r->{'budget_code_indent'} =  $moo;
-
-        $moo = $r->{'budget_name_indent'};
-        $moo =~ s/\ /\&nbsp\;/g;
-        $r->{'budget_name_indent'} = $moo;
-
-        $r->{'budget_spent'}       = GetBudgetSpent( $r->{'budget_id'} );
-        $r->{budget_ordered} = GetBudgetOrdered( $r->{budget_id} );
-
-        $r->{budget_spent_sublevels} = 0;
-        $r->{budget_ordered_sublevels} = 0;
-        # foreach sub-levels
-		foreach my $sub (@subs_arr) {
-			my $sub_budget = GetBudget($sub);
-            $r->{budget_spent_sublevels} += GetBudgetSpent( $sub_budget->{'budget_id'} );
-            $r->{budget_ordered_sublevels} += GetBudgetOrdered($sub);
-		}
-	}
-	return \@sort;
+    foreach my $budget (@sort) {
+        $budget->{budget_spent}   = GetBudgetSpent( $budget->{budget_id} );
+        $budget->{budget_ordered} = GetBudgetOrdered( $budget->{budget_id} );
+        $budget->{total_spent} = GetBudgetHierarchySpent( $budget->{budget_id} );
+        $budget->{total_ordered} = GetBudgetHierarchyOrdered( $budget->{budget_id} );
+    }
+    return \@sort;
 }
 
 # -------------------------------------------------------------------
@@ -681,31 +661,52 @@ sub GetBudgetByCode {
     return $sth->fetchrow_hashref;
 }
 
-=head2 GetChildBudgetsSpent
+=head2 GetBudgetHierarchySpent
 
-  &GetChildBudgetsSpent($budget-id);
+  my $spent = GetBudgetHierarchySpent( $budget_id );
 
-gets the total spent of the level and sublevels of $budget_id
+Gets the total spent of the level and sublevels of $budget_id
 
 =cut
 
-# -------------------------------------------------------------------
-sub GetChildBudgetsSpent {
+sub GetBudgetHierarchySpent {
     my ( $budget_id ) = @_;
     my $dbh = C4::Context->dbh;
-    my $query = "
-        SELECT *
+    my $children_ids = $dbh->selectcol_arrayref(q|
+        SELECT budget_id
         FROM   aqbudgets
-        WHERE  budget_parent_id=?
-        ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $budget_id );
-    my $result = $sth->fetchall_arrayref({});
-    my $total_spent = GetBudgetSpent($budget_id);
-    if ($result){
-        $total_spent += GetChildBudgetsSpent($_->{"budget_id"}) foreach @$result;    
+        WHERE  budget_parent_id = ?
+    |, {}, $budget_id );
+
+    my $total_spent = GetBudgetSpent( $budget_id );
+    for my $child_id ( @$children_ids ) {
+        $total_spent += GetBudgetHierarchySpent( $child_id );
     }
     return $total_spent;
+}
+
+=head2 GetBudgetHierarchyOrdered
+
+  my $ordered = GetBudgetHierarchyOrdered( $budget_id );
+
+Gets the total ordered of the level and sublevels of $budget_id
+
+=cut
+
+sub GetBudgetHierarchyOrdered {
+    my ( $budget_id ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $children_ids = $dbh->selectcol_arrayref(q|
+        SELECT budget_id
+        FROM   aqbudgets
+        WHERE  budget_parent_id = ?
+    |, {}, $budget_id );
+
+    my $total_ordered = GetBudgetOrdered( $budget_id );
+    for my $child_id ( @$children_ids ) {
+        $total_ordered += GetBudgetHierarchyOrdered( $child_id );
+    }
+    return $total_ordered;
 }
 
 =head2 GetBudgets

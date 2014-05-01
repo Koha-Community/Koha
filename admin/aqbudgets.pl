@@ -273,9 +273,6 @@ if ( $op eq 'list' ) {
 	#This Looks WEIRD to me : should budgets be filtered in such a way ppl who donot own it would not see the amount spent on the budget by others ?
 
     foreach my $budget (@budgets) {
-        #Level and sublevels total spent and ordered
-        $budget->{total_spent} = $budget->{budget_spent_sublevels} + $budget->{budget_spent};
-        $budget->{total_ordered} = $budget->{budget_ordered_sublevels} + $budget->{budget_ordered};
         # PERMISSIONS
         unless(CanUserModifyBudget($borrowernumber, $budget, $staffflags)) {
             $budget->{'budget_lock'} = 1;
