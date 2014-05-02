@@ -192,8 +192,11 @@ my $return_date_override_remember =
   $query->param('return_date_override_remember');
 if ($return_date_override) {
     if ( C4::Context->preference('SpecifyReturnDate') ) {
+        # FIXME we really need to stop adding more uses of C4::Dates
         if ( $return_date_override =~ C4::Dates->regexp('syspref') ) {
 
+            # note that we've overriden the return date
+            $template->param( return_date_was_overriden => 1);
             # Save the original format if we are remembering for this series
             $template->param(
                 return_date_override          => $return_date_override,

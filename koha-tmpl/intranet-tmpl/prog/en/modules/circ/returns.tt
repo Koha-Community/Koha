@@ -128,7 +128,7 @@ $(document).ready(function () {
 [% END %]
 
 <!-- Patron is restricted and checkin was backdated -->
-[% IF return_date_override && Borrowers.IsDebarred( borrower ) %]
+[% IF return_date_was_overriden && Borrowers.IsDebarred( borrower ) %]
     <div id="restricted_backdated" class="dialog message">
         <h3>
             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber %]">
