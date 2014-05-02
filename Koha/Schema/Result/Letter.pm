@@ -69,6 +69,14 @@ __PACKAGE__->table("letter");
   data_type: 'text'
   is_nullable: 1
 
+=head2 message_transport_type
+
+  data_type: 'varchar'
+  default_value: 'email'
+  is_foreign_key: 1
+  is_nullable: 0
+  size: 20
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -86,6 +94,14 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 200 },
   "content",
   { data_type => "text", is_nullable => 1 },
+  "message_transport_type",
+  {
+    data_type => "varchar",
+    default_value => "email",
+    is_foreign_key => 1,
+    is_nullable => 0,
+    size => 20,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -98,13 +114,30 @@ __PACKAGE__->add_columns(
 
 =item * L</branchcode>
 
+=item * L</message_transport_type>
+
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("module", "code", "branchcode");
+__PACKAGE__->set_primary_key("module", "code", "branchcode", "message_transport_type");
 
 =head1 RELATIONS
+
+=head2 message_transport_type
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::MessageTransportType>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "message_transport_type",
+  "Koha::Schema::Result::MessageTransportType",
+  { message_transport_type => "message_transport_type" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
 
 =head2 message_transports
 
@@ -126,8 +159,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Lc0RfG7k0QwnWCDywFImLg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-05-02 18:04:32
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HFUQ+/BKlweHglzOlm0lUQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

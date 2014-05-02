@@ -67,6 +67,23 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 letters
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Letter>
+
+=cut
+
+__PACKAGE__->has_many(
+  "letters",
+  "Koha::Schema::Result::Letter",
+  {
+    "foreign.message_transport_type" => "self.message_transport_type",
+  },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 message_queues
 
 Type: has_many
@@ -101,6 +118,23 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 overduerules_transport_types
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::OverduerulesTransportType>
+
+=cut
+
+__PACKAGE__->has_many(
+  "overduerules_transport_types",
+  "Koha::Schema::Result::OverduerulesTransportType",
+  {
+    "foreign.message_transport_type" => "self.message_transport_type",
+  },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 borrower_message_preferences
 
 Type: many_to_many
@@ -116,8 +150,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UApxVVoE1dZpL6HP1kytJQ
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-05-02 18:04:32
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YpzL/dxDWq//5vqXfvHoVQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

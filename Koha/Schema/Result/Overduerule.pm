@@ -131,9 +131,29 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("branchcode", "categorycode");
 
+=head1 RELATIONS
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hP/0cV6iad2dz8kIhCYFjw
+=head2 overduerules_transport_types
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::OverduerulesTransportType>
+
+=cut
+
+__PACKAGE__->has_many(
+  "overduerules_transport_types",
+  "Koha::Schema::Result::OverduerulesTransportType",
+  {
+    "foreign.branchcode"   => "self.branchcode",
+    "foreign.categorycode" => "self.categorycode",
+  },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-05-02 18:04:32
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zQK4gTxkrPPwJzujbZxxdg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
