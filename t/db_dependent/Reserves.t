@@ -399,7 +399,10 @@ $dbh->rollback;
 
 sub count_hold_print_messages {
     my $message_count = $dbh->selectall_arrayref(q{
-        SELECT COUNT(*) FROM message_queue WHERE letter_code = 'HOLD_PRINT'
+        SELECT COUNT(*)
+        FROM message_queue
+        WHERE letter_code = 'HOLD' 
+        AND   message_transport_type = 'print'
     });
     return $message_count->[0]->[0];
 }
