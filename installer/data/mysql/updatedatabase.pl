@@ -8315,29 +8315,33 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.15.00.XXX";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    my $name = $dbh->selectcol_arrayref(q|
+        SELECT name FROM letter WHERE code="HOLD"
+    |);
+    $name = $name->[0];
     $dbh->do(q|
         UPDATE letter
         SET code="HOLD",
             message_transport_type="phone",
-            name=(SELECT name FROM ( SELECT name FROM letter WHERE code="HOLD" LIMIT 1 ) AS t)
+            name= ?
         WHERE code="HOLD_PHONE"
-    |);
+    |, {}, $name);
 
     $dbh->do(q|
         UPDATE letter
         SET code="PREDUE",
             message_transport_type="phone",
-            name=(SELECT name FROM ( SELECT name FROM letter WHERE code="HOLD" LIMIT 1 ) AS t)
+            name= ?
         WHERE code="PREDUE_PHONE"
-    |);
+    |, {}, $name);
 
     $dbh->do(q|
         UPDATE letter
         SET code="OVERDUE",
             message_transport_type="phone",
-            name=(SELECT name FROM ( SELECT name FROM letter WHERE code="HOLD" LIMIT 1 ) AS t)
+            name= ?
         WHERE code="OVERDUE_PHONE"
-    |);
+    |, {}, $name);
 
     print "Upgrade to $DBversion done (Bug 11867: Update letters *_PHONE)\n";
     SetVersion($DBversion);
