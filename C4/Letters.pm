@@ -1035,7 +1035,8 @@ sub _is_duplicate {
         AND letter_code = ?
         AND CAST(time_queued AS date) = CAST(NOW() AS date)
         AND status="sent"
-    |, {}, $message->{message_transport_type}, $message->{borrowernumber}, $message->{letter_code} );
+        AND content = ?
+    |, {}, $message->{message_transport_type}, $message->{borrowernumber}, $message->{letter_code}, $message->{content} );
     return $count;
 }
 
