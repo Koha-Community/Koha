@@ -1,6 +1,7 @@
 package Koha::Template::Plugin::Borrowers;
 
 # Copyright ByWater Solutions 2013
+# Copyright Equinox Software, Inc. 2014
 
 # This file is part of Koha.
 #
@@ -21,9 +22,7 @@ use Modern::Perl;
 
 use base qw( Template::Plugin );
 
-use Date::Calc qw/Today Add_Delta_YM check_date Date_to_Days/;
-
-use C4::Koha;
+use Koha::Borrower::Debarments qw//;
 
 =pod
 
@@ -34,7 +33,7 @@ Templates when it makes sense to do so.
 To use, first, include the line '[% USE Borrowers %]' at the top
 of the template to enable the plugin.
 
-For example: [% IF Borrowers.IsDebarred( borrower.borrowernumber ) %]
+For example: [% IF Borrowers.IsDebarred( borrower ) %]
 removes the necessity of setting a template variable in Perl code to
 find out if a patron is restricted even if that variable is not evaluated
 in any way in the script.
@@ -46,13 +45,7 @@ sub IsDebarred {
 
     return unless $borrower;
 
-    if ( $borrower->{'debarred'} && check_date( split( /-/, $borrower->{'debarred'} ) ) ) {
-        if ( Date_to_Days(Date::Calc::Today) < Date_to_Days( split( /-/, $borrower->{'debarred'} ) ) ) {
-            return 1;
-        }
-    }
-
-    return 0;
+    return Koha::Borrower::Debarments::IsDebarred($borrower->{borrowernumber});
 }
 
 1;
