@@ -313,7 +313,7 @@ $(document).ready(function() {
           <li>
             [% IF letter.message_transport_type == "sms" and not Koha.Preference("SMSSendDriver") %]
               <fieldset class="rows mtt" id="[% letter.message_transport_type %]" disabled="disabled">
-                <div class="dialog message">You should enable the SMSSendDriver preference to use the sms templates.</div>
+                <div class="dialog message">You should enable the SMSSendDriver preference to use the SMS templates.</div>
             [% ELSIF letter.message_transport_type == "phone" and not Koha.Preference("TalkingTechItivaPhoneNotification") %]
               <fieldset class="rows mtt" id="[% letter.message_transport_type %]" disabled="disabled">
                 <div class="dialog message">You should enable the TalkingTechItivaPhoneNotification preference to use the phone templates.</div>
