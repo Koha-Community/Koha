@@ -1924,10 +1924,14 @@ sub _koha_notify_reserve {
     my $notification_sent = 0; #Keeping track if a Hold_filled message is sent. If no message can be sent, then default to a print message.
     my $send_notification = sub {
         my ( $mtt, $letter_code ) = (@_);
+        return unless defined $letter_code;
         $letter_params{letter_code} = $letter_code;
         $letter_params{message_transport_type} = $mtt;
-        my $letter =  C4::Letters::GetPreparedLetter ( %letter_params )
-            or die "Could not find a letter called '$letter_params{'letter_code'}' for $mtt in the 'reserves' module";
+        my $letter =  C4::Letters::GetPreparedLetter ( %letter_params );
+        unless ($letter) {
+            warn "Could not find a letter called '$letter_params{'letter_code'}' for $mtt in the 'reserves' module";
+            return;
+        }
 
         C4::Letters::EnqueueLetter( {
             letter => $letter,
@@ -1936,7 +1940,7 @@ sub _koha_notify_reserve {
             message_transport_type => $mtt,
         } );
     };
-    
+
     while ( my ( $mtt, $letter_code ) = each %{ $messagingprefs->{transports} } ) {
         if ( ($mtt eq 'email' and not $to_address) or ($mtt eq 'sms' and not $borrower->{smsalertnumber}) ) {
             # email or sms is requested but not exist
