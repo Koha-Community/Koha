@@ -104,6 +104,45 @@
             return confirm ( alert_message );
           });
         [% END %]
+        [% IF closed %]
+          var oTable = $("#closed_report").dataTable($.extend(true, {}, dataTablesDefaults, {
+            // The following is a c/p from aqbudgets.tt and is a candidate for refactoring.
+            "fnDrawCallback": function ( oSettings ) {
+                if ( oSettings.aiDisplay.length == 0 )
+                {
+                    return;
+                }
+
+                var nTrs = $('#closed_report tbody tr');
+                var iColspan = nTrs[1].getElementsByTagName('td').length;
+                var sLastGroup = "";
+                for ( var i=0 ; i<nTrs.length ; i++ )
+                {
+                    var iDisplayIndex = oSettings._iDisplayStart + i;
+                    var sGroup = oSettings.aoData[ oSettings.aiDisplay[iDisplayIndex] ]._aData[0];
+                    if ( sGroup != sLastGroup )
+                    {
+                        var nGroup = document.createElement( 'tr' );
+                        var nCell = document.createElement( 'td' );
+                        nCell.colSpan = iColspan;
+                        nCell.className = "group";
+                        nCell.innerHTML = sGroup;
+                        nGroup.appendChild( nCell );
+                        nTrs[i].parentNode.insertBefore( nGroup, nTrs[i] );
+                        sLastGroup = sGroup;
+                    }
+                }
+            },
+            "aoColumnDefs": [
+                { "bVisible": false, "aTargets": [ 0, 1 ] },
+                { "bSortable": false, "aTargets": ["_all"] }
+            ],
+            'bSort': true,
+            'aaSortingFixed': [[ 1, 'asc' ]],
+            'bPaginate': false,
+            "bAutoWidth": false
+          }));
+        [% END %]
     });
 </script>
 
@@ -126,6 +165,9 @@
     [% END %]
     [% IF close_form %]&rsaquo;
       Close budget [% budget_period_description %]
+    [% END %]
+    [% IF closed %]&rsaquo;
+      Budget [% budget_period_description %] closed
     [% END %]
 </title>
 
@@ -175,7 +217,13 @@
     <!-- close a budget -->
     [% IF close_form %]
         <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo;
-        Close budget <a href="cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">[% budget_period_description %]</a>
+        Close budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">[% budget_period_description %]</a>
+    [% END %]
+
+    <!-- budget closed -->
+    [% IF closed %]
+        <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo;
+        Budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">[% budget_period_description %]</a> closed
     [% END %]
     <!-- display budget periods list -->
     <!-- ########################################## -->
@@ -189,7 +237,7 @@
 <div id="yui-main">
 <div class="yui-b">
 
-[% UNLESS close_form %]
+[% UNLESS close_form OR closed%]
   [% INCLUDE 'budgets-admin-toolbar.inc' %]
 [% END %]
 
@@ -349,7 +397,7 @@
     <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Back</a>
   [% ELSE %]
     <h3>Choose the funds you want to move unreceived orders:</h3>
-      Fund list of budget <a href="cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">[% budget_period_description %]</a>:
+      Fund list of budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">[% budget_period_description %]</a>:
     <table id="budgeth">
       <thead>
         <tr>
@@ -396,6 +444,53 @@
       </fieldset>
     </form>
   [% END %]
+[% ELSIF closed %]
+  <h3>Report after moving unreceived orders from budget [% from_budget_period.budget_period_description %] ([% from_budget_period.budget_period_startdate | $KohaDates %] - [% to_budget_period.budget_period_enddate | $KohaDates %]) to [% to_budget_period.budget_period_description %] ([% to_budget_period.budget_period_startdate | $KohaDates %] - [% to_budget_period.budget_period_enddate | $KohaDates%])</h3>
+
+  <table id="closed_report">
+    <thead>
+      <tr>
+        <td>Budget id</td>
+        <td>Basket</td>
+        <td>Ordernumber</td>
+        <td>Informations</td>
+      </tr>
+    </thead>
+    <tbody>
+      [% FOR r IN report %]
+          [% IF r.moved %]
+            [% IF r.orders_moved.size > 0 %]
+              [% FOR order IN r.orders_moved %]
+                <tr>
+                  <td>[% r.budget.budget_name %] (id=[% r.budget.budget_id %]) Amount=[% r.budget.budget_amount %][% IF r.unspent_moved %] ([% r.unspent_moved %] remaining has been moved)[% END %]</td>
+                  <td>[% order.basketname %]</td>
+                  <td>[% order.ordernumber %]</td>
+                  <td>Moved!</td>
+                </tr>
+              [% END %]
+            [% ELSE %]
+              <tr>
+                <td>[% r.budget.budget_name %] (id=[% r.budget.budget_id %])</td>
+                <td></td>
+                <td></td>
+                <td>There was no unreceived orders for this fund.</td>
+              </tr>
+            [% END %]
+          [% ELSE %]
+            [% IF r.error == 'budget_code_not_exists' %]
+              <tr>
+                <td>[% r.budget.budget_id %] [% r.budget.budget_amount %][% IF r.unspent_moved %] ([% r.unspent_moved %] remaining has been moved)[% END %]</td>
+                <td></td>
+                <td></td>
+                <td>This fund code does not exist in the destination budget.</td>
+              </tr>
+            [% END %]
+          [% END %]
+        </tr>
+      [% END %]
+    </tbody>
+  </table>
+  <a class="cancel" href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Back</a>
 [% END %]
 
 <!--  DEFAULT  display budget periods list -->

@@ -248,6 +248,7 @@ elsif ( $op eq 'close_form' ) {
 
 elsif ( $op eq 'close_confirmed' ) {
     my $to_budget_period_id    = $input->param('to_budget_period_id');
+    my $from_budget_period_id  = $input->param('from_budget_period_id');
     my $move_remaining_unspent = $input->param('move_remaining_unspent');
     my $report                 = C4::Budgets::MoveOrders(
         {
@@ -255,6 +256,17 @@ elsif ( $op eq 'close_confirmed' ) {
             to_budget_period_id    => $to_budget_period_id,
             move_remaining_unspent => $move_remaining_unspent,
         }
+    );
+
+    my $from_budget_period = GetBudgetPeriod($from_budget_period_id);
+    my $to_budget_period   = GetBudgetPeriod($to_budget_period_id);
+    $template->param(
+        closed           => 1,
+        budget_period_id => $from_budget_period->{budget_period_id},
+        budget_period_description => $from_budget_period->{budget_period_description},
+        from_budget_period => $from_budget_period,
+        to_budget_period   => $to_budget_period,
+        report             => $report,
     );
 }
 
