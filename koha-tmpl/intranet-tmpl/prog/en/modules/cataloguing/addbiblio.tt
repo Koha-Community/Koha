@@ -610,7 +610,33 @@ function Changefwk(FwkList) {
                     </label>
                 [% END %]
                 
-                [% subfield_loo.marc_value %]
+                [% SET mv = subfield_loo.marc_value %]
+                [% IF ( mv.type == 'text' ) %]
+                    [% IF ( mv.readonly == 1 ) %]
+                    <input type="text" id="[%- mv.id -%]" name="[%- mv.name -%]" value="[%- mv.value -%]" class="input_marceditor readonly" tabindex="1" size="[%- mv.size -%]" maxlength="[%- mv.maxlength -%]" readonly="readonly" />
+                    [% ELSE %]
+                    <input type="text" id="[%- mv.id -%]" name="[%- mv.name -%]" value="[%- mv.value -%]" class="input_marceditor" tabindex="1" size="[%- mv.size -%]" maxlength="[%- mv.maxlength -%]" />
+                    [% END %]
+                    [% IF ( mv.authtype ) %]
+                    <span class="subfield_controls"><a href="#" class="buttonDot tag_editor" onclick="openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'[%- mv.authtype -%]','biblio'); return false;" tabindex="1" title="Tag editor">Tag editor</a></span>
+                    [% END %]
+                [% ELSIF ( mv.type == 'text_complex' ) %]
+                    <input type="text" id="[%- mv.id -%]" name="[%- mv.name -%]" value="[%- mv.value -%]" class="input_marceditor" tabindex="1" size="[%- mv.size -%]" maxlength="[%- mv.maxlength -%]" onfocus="Focus[%- mv.function_name -%]([%- mv.index_tag -%])" onblur="Blur[%- mv.function_name -%]([%- mv.index_tag -%])" /><span class="subfield_controls"><a href="#" class="buttonDot tag_editor" onclick="Clic[%- mv.function_name -%]('[%- mv.id -%]'); return false;" tabindex="1" title="Tag editor">Tag editor</a></span>[% mv.javascript %]
+                [% ELSIF ( mv.type == 'hidden' ) %]
+                    <input tabindex="1" type="hidden" id="[%- mv.id -%]" name="[%- mv.name -%]" size="[%- mv.size -%]" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
+                [% ELSIF ( mv.type == 'textarea' ) %]
+                    <textarea cols="70" rows="4" id="[%- mv.id -%]" name="[%- mv.name -%]" class="input_marceditor" tabindex="1">[%- mv.value -%]</textarea>
+                [% ELSIF ( mv.type == 'select' ) %]
+                    <select name="[%- mv.name -%]" tabindex="1" size="1" class="input_marceditor" id="[%- mv.id -%]">
+                    [% FOREACH aval IN mv.values %]
+                        [% IF aval == mv.default %]
+                        <option value="[%- aval -%]" selected="selected">[%- mv.labels.$aval -%]</option>
+                        [% ELSE %]
+                        <option value="[%- aval -%]">[%- mv.labels.$aval -%]</option>
+                        [% END %]
+                    [% END %]
+                    </select>
+                [% END %]
                 
                 <span class="subfield_controls">
                 [% IF ( subfield_loo.repeatable ) %]

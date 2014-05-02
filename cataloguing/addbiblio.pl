@@ -239,18 +239,15 @@ sub build_authorized_values_list {
         }
     }
     $authorised_values_sth->finish;
-    return CGI::scrolling_list(
-        -name     => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
-        -values   => \@authorised_values,
-        -default  => $value,
-        -labels   => \%authorised_lib,
-        -override => 1,
-        -size     => 1,
-        -multiple => 0,
-        -tabindex => 1,
-        -id       => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
-        -class    => "input_marceditor",
-    );
+    return {
+        type     => 'select',
+        id       => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
+        name     => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
+        default  => $value,
+        values   => \@authorised_values,
+        labels   => \%authorised_lib,
+    };
+
 }
 
 =head2 CreateKey
@@ -366,37 +363,33 @@ sub create_input {
            defined($tagslib->{$tag}->{'a'}->{authtypecode}) and
            $tagslib->{$tag}->{'a'}->{authtypecode} ne '') {
 
-        $subfield_data{marc_value} =
-            "<input type=\"text\"
-                    id=\"".$subfield_data{id}."\"
-                    name=\"".$subfield_data{id}."\"
-                    value=\"$value\"
-                    class=\"input_marceditor readonly\"
-                    tabindex=\"1\"
-                    size=\"5\"
-                    maxlength=\"".$subfield_data{maxlength}."\"
-                    readonly=\"readonly\"
-                    \/>";
+        $subfield_data{marc_value} = {
+            type      => 'text',
+            id        => $subfield_data{id},
+            name      => $subfield_data{id},
+            value     => $value,
+            size      => 5,
+            maxlength => $subfield_data{maxlength},
+            readonly  => 1,
+        };
 
     # it's a thesaurus / authority field
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
         # when authorities auto-creation is allowed, do not set readonly
         my $is_readonly = !C4::Context->preference("BiblioAddsAuthorities");
-        $subfield_data{marc_value} =
-            "<input type=\"text\"
-                    id=\"".$subfield_data{id}."\"
-                    name=\"".$subfield_data{id}."\"
-                    value=\"$value\"
-                    class=\"input_marceditor readonly\"
-                    tabindex=\"1\"
-                    size=\"67\"
-                    maxlength=\"".$subfield_data{maxlength}."\"".
-                    ($is_readonly ? "readonly=\"readonly\"" : "").
-                    "\/>
-                    <span class=\"subfield_controls\"><a href=\"#\" class=\"buttonDot tag_editor\"
-                       onclick=\"openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."','biblio'); return false;\" tabindex=\"1\" title=\"Tag editor\">Tag editor</a></span>
-            ";
+
+        $subfield_data{marc_value} = {
+            type      => 'text',
+            id        => $subfield_data{id},
+            name      => $subfield_data{id},
+            value     => $value,
+            size      => 67,
+            maxlength => $subfield_data{maxlength},
+            readonly  => ($is_readonly) ? 1 : 0,
+            authtype  => $tagslib->{$tag}->{$subfield}->{authtypecode},
+        };
+
     # it's a plugin field
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{'value_builder'} ) {
@@ -413,46 +406,44 @@ sub create_input {
             my $extended_param = plugin_parameters( $dbh, $rec, $tagslib, $subfield_data{id}, $tabloop );
             my ( $function_name, $javascript ) = plugin_javascript( $dbh, $rec, $tagslib, $subfield_data{id}, $tabloop );
         
-            $subfield_data{marc_value} =
-                    "<input tabindex=\"1\"
-                            type=\"text\"
-                            id=\"".$subfield_data{id}."\"
-                            name=\"".$subfield_data{id}."\"
-                            value=\"$value\"
-                            class=\"input_marceditor\"
-                            onfocus=\"Focus$function_name($index_tag)\"
-                            size=\"67\"
-                            maxlength=\"".$subfield_data{maxlength}."\"
-                            onblur=\"Blur$function_name($index_tag); \" \/>
-                            <span class=\"subfield_controls\"><a href=\"#\" class=\"buttonDot tag_editor\" onclick=\"Clic$function_name('$subfield_data{id}'); return false;\" tabindex=\"1\" title=\"Tag editor\">Tag editor</a></span>
-                    $javascript";
+            $subfield_data{marc_value} = {
+                type           => 'text_complex',
+                id             => $subfield_data{id},
+                name           => $subfield_data{id},
+                value          => $value,
+                size           => 67,
+                maxlength      => $subfield_data{maxlength},
+                function_name  => $function_name,
+                index_tag      => $index_tag,
+                javascript     => $javascript,
+            };
+
         } else {
             warn "Plugin Failed: $plugin";
             # supply default input form
-            $subfield_data{marc_value} =
-                "<input type=\"text\"
-                        id=\"".$subfield_data{id}."\"
-                        name=\"".$subfield_data{id}."\"
-                        value=\"$value\"
-                        tabindex=\"1\"
-                        size=\"67\"
-                        maxlength=\"".$subfield_data{maxlength}."\"
-                        class=\"input_marceditor\"
-                \/>
-                ";
+            $subfield_data{marc_value} = {
+                type      => 'text',
+                id        => $subfield_data{id},
+                name      => $subfield_data{id},
+                value     => $value,
+                size      => 67,
+                maxlength => $subfield_data{maxlength},
+                readonly  => 0,
+            };
+
         }
         # it's an hidden field
     }
     elsif ( $tag eq '' ) {
-        $subfield_data{marc_value} =
-            "<input tabindex=\"1\"
-                    type=\"hidden\"
-                    id=\"".$subfield_data{id}."\"
-                    name=\"".$subfield_data{id}."\"
-                    size=\"67\"
-                    maxlength=\"".$subfield_data{maxlength}."\"
-                    value=\"$value\" \/>
-            ";
+        $subfield_data{marc_value} = {
+            type      => 'hidden',
+            id        => $subfield_data{id},
+            name      => $subfield_data{id},
+            value     => $value,
+            size      => 67,
+            maxlength => $subfield_data{maxlength},
+        };
+
     }
     else {
         # it's a standard field
@@ -466,28 +457,25 @@ sub create_input {
                 && C4::Context->preference("marcflavour") eq "MARC21" )
           )
         {
-            $subfield_data{marc_value} =
-                "<textarea cols=\"70\"
-                           rows=\"4\"
-                           id=\"".$subfield_data{id}."\"
-                           name=\"".$subfield_data{id}."\"
-                           class=\"input_marceditor\"
-                           tabindex=\"1\"
-                           >$value</textarea>
-                ";
+            $subfield_data{marc_value} = {
+                type      => 'textarea',
+                id        => $subfield_data{id},
+                name      => $subfield_data{id},
+                value     => $value,
+            };
+
         }
         else {
-            $subfield_data{marc_value} =
-                "<input type=\"text\"
-                        id=\"".$subfield_data{id}."\"
-                        name=\"".$subfield_data{id}."\"
-                        value=\"$value\"
-                        tabindex=\"1\"
-                        size=\"67\"
-                        maxlength=\"".$subfield_data{maxlength}."\"
-                        class=\"input_marceditor\"
-                \/>
-                ";
+            $subfield_data{marc_value} = {
+                type      => 'text',
+                id        => $subfield_data{id},
+                name      => $subfield_data{id},
+                value     => $value,
+                size      => 67,
+                maxlength => $subfield_data{maxlength},
+                readonly  => 0,
+            };
+
         }
     }
     $subfield_data{'index_subfield'} = $index_subfield;
