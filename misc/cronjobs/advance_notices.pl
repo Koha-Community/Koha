@@ -262,7 +262,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                                       substitute     => { 'items.content' => $titles },
                                       message_transport_type => $transport,
                                     } )
-                    or die "no letter of type '$letter_type' found. Please see sample_notices.sql";
+                    or warn "no letter of type '$letter_type' found. Please see sample_notices.sql";
                 push @letters, $letter;
             }
         }
@@ -298,7 +298,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                                       substitute     => { 'items.content' => $titles },
                                       message_transport_type => $transport,
                                     } )
-                    or die "no letter of type '$letter_type' found. Please see sample_notices.sql";
+                    or warn "no letter of type '$letter_type' found. Please see sample_notices.sql";
                 push @letters, $letter;
             }
         }
