@@ -331,12 +331,12 @@ is_deeply(
     "With issuing rules (renewal allowed, 1 remaining) and with a valid parameter, Getrenewcount of item1 returns 0 renews left"
 );
 
-$dbh->do("TRUNCATE TABLE old_issues");
+$dbh->do("DELETE FROM old_issues");
 AddReturn('barcode_1');
 my $return = $dbh->selectrow_hashref("SELECT DATE(returndate) AS return_date, CURRENT_DATE() AS today FROM old_issues LIMIT 1" );
 ok( $return->{return_date} eq $return->{today}, "Item returned with no return date specified has todays date" );
 
-$dbh->do("TRUNCATE TABLE old_issues");
+$dbh->do("DELETE FROM old_issues");
 C4::Circulation::AddIssue( $borrower_1, 'barcode_1', $daysago10, 0, $today );
 AddReturn('barcode_1', undef, undef, undef, '2014-04-01 23:42');
 $return = $dbh->selectrow_hashref("SELECT * FROM old_issues LIMIT 1" );
