@@ -593,10 +593,8 @@ END_SQL
                     );
                     unless ($letter) {
                         $verbose and warn "Message '$overdue_rules->{letter$i}' content not found";
-
-                        # might as well skip while PERIOD, no other borrowers are going to work.
-                        # FIXME : Does this mean a letter must be defined in order to trigger a debar ?
-                        next PERIOD;
+                        # this transport doesn't have a configured notice, so try another
+                        next;
                     }
 
                     if ( $exceededPrintNoticesMaxLines ) {
