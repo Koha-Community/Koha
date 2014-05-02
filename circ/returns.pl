@@ -49,17 +49,6 @@ use Koha::Calendar;
 
 my $query = new CGI;
 
-my $userenv = C4::Context->userenv;
-if (!$userenv){
-    my $sessionID = $query->cookie("CGISESSID");
-    my $session = get_session($sessionID);
-    if ($session->param('branch') eq 'NO_LIBRARY_SET'){
-        # no branch set we can't return
-        print $query->redirect("/cgi-bin/koha/circ/selectbranchprinter.pl");
-        exit;
-    }
-} 
-
 #getting the template
 my ( $template, $librarian, $cookie ) = get_template_and_user(
     {
@@ -71,10 +60,19 @@ my ( $template, $librarian, $cookie ) = get_template_and_user(
     }
 );
 
+my $sessionID = $query->cookie("CGISESSID");
+my $session = get_session($sessionID);
+if ($session->param('branch') eq 'NO_LIBRARY_SET'){
+    # no branch set we can't return
+    print $query->redirect("/cgi-bin/koha/circ/selectbranchprinter.pl");
+    exit;
+}
+
 #####################
 #Global vars
 my $branches = GetBranches();
 my $printers = GetPrinters();
+my $userenv = C4::Context->userenv;
 my $userenv_branch = $userenv->{'branch'} // '';
 my $printer = $userenv->{'branchprinter'} // '';
 
