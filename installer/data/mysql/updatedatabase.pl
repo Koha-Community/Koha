@@ -8294,12 +8294,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
-
-
-
-
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.15.00.040";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         UPDATE message_transports SET letter_code='HOLD' WHERE letter_code='HOLD_PHONE' OR letter_code='HOLD_PRINT'
