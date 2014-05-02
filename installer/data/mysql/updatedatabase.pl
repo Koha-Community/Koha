@@ -8309,12 +8309,8 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
-
-
-
-$DBversion = "3.15.00.XXX";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+$DBversion = "3.15.00.041";
+if ( CheckVersion($DBversion) ) {
     my $name = $dbh->selectcol_arrayref(q|
         SELECT name FROM letter WHERE code="HOLD"
     |);
