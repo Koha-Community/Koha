@@ -8243,12 +8243,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-
-
-
-
-
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.15.00.039";
 if ( CheckVersion($DBversion) ) {
 
     $dbh->do( q{
@@ -8298,7 +8293,6 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade done (Bug 9016: Adds multi transport types management for notices)\n";
     SetVersion($DBversion);
 }
-
 
 =head1 FUNCTIONS
 
