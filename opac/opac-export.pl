@@ -91,8 +91,15 @@ if ($error){
     print $query->end_html();
 }
 else {
-    print $query->header(
-      -type => 'application/octet-stream',
-      -attachment=>"bib-$biblionumber.$format");
-    print $marc;
+    if ($format eq 'marc8'){
+        print $query->header(
+            -type => 'application/marc',
+            -charset=>'ISO-2022',
+            -attachment=>"bib-$biblionumber.$format");
+    }else{
+        print $query->header(
+            -type => 'application/octet-stream',
+            -charset=>'utf-8',
+            -attachment=>"bib-$biblionumber.$format");
+    }
 }
