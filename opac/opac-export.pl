@@ -102,4 +102,5 @@ else {
             -charset=>'utf-8',
             -attachment=>"bib-$biblionumber.$format");
     }
+    print $marc;
 }
