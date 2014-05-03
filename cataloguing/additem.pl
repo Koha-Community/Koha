@@ -154,9 +154,6 @@ sub generate_subfield_form {
 	    my $input = new CGI;
 	    $value = $input->param('barcode');
 	}
-        my $attributes_no_value = qq(id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$subfield_data{maxlength}" );
-        my $attributes_no_value_textarea = qq(id="$subfield_data{id}" name="field_value" class="input_marceditor" rows="5" cols="64" );
-        my $attributes          = qq($attributes_no_value value="$value" );
         
         if ( $subfieldlib->{authorised_value} ) {
             my @authorised_values;
@@ -213,29 +210,35 @@ sub generate_subfield_form {
             }
 
             if ($subfieldlib->{'hidden'}) {
-                $subfield_data{marc_value} = qq(<input type="hidden" $attributes /> $authorised_lib{$value});
+                $subfield_data{marc_value} = {
+                    type      => 'hidden',
+                    id        => $subfield_data{id},
+                    maxlength => $subfield_data{max_length},
+                    value     => $value,
+                    avalue    => $authorised_lib{$value},
+                };
             }
             else {
-                $subfield_data{marc_value} =CGI::scrolling_list(      # FIXME: factor out scrolling_list
-                    -name     => "field_value",
-                    -values   => \@authorised_values,
-                    -default  => $value,
-                    -labels   => \%authorised_lib,
-                    -override => 1,
-                    -size     => 1,
-                    -multiple => 0,
-                    -id       => "tag_".$tag."_subfield_".$subfieldtag."_".$index_subfield,
-                    -class    => "input_marceditor",
-                );
+                $subfield_data{marc_value} = {
+                    type     => 'select',
+                    id       => "tag_".$tag."_subfield_".$subfieldtag."_".$index_subfield,
+                    name     => "field_value",
+                    values   => \@authorised_values,
+                    labels   => \%authorised_lib,
+                    default  => $value,
+                };
             }
 
         }
             # it's a thesaurus / authority field
         elsif ( $subfieldlib->{authtypecode} ) {
-                $subfield_data{marc_value} = "<input type=\"text\" $attributes />
-                    <a href=\"#\" class=\"buttonDot\"
-                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$subfieldlib->{authtypecode}."&index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
-            ";
+                $subfield_data{marc_value} = {
+                    type          => 'text1',
+                    id            => $subfield_data{id},
+                    maxlength     => $subfield_data{max_length},
+                    value         => $value,
+                    authtypecode  => $subfieldlib->{authtypecode},
+                };
         }
             # it's a plugin field
         elsif ( $subfieldlib->{value_builder} ) {
@@ -247,22 +250,41 @@ sub generate_subfield_form {
 		    my $change = index($javascript, 'function Change') > -1 ?
 		        "return Change$function_name($subfield_data{random}, '$subfield_data{id}');" :
 		        'return 1;';
-                    $subfield_data{marc_value} = qq[<input type="text" $attributes
-                        onfocus="Focus$function_name($subfield_data{random}, '$subfield_data{id}');"
-			onchange=" $change"
-                         onblur=" Blur$function_name($subfield_data{random}, '$subfield_data{id}');" />
-                        <a href="#" class="buttonDot" onclick="Clic$function_name('$subfield_data{id}'); return false;" title="Tag Editor">...</a>
-                        $javascript];
+                    $subfield_data{marc_value} = {
+                        type        => 'text2',
+                        id          => $subfield_data{id},
+                        maxlength   => $subfield_data{max_length},
+                        value       => $value,
+                        function    => $function_name,
+                        data_random => $subfield_data{random},
+                        change      => $change,
+                        javascript  => $javascript,
+                    };
                 } else {
                     warn "Plugin Failed: $plugin";
-                    $subfield_data{marc_value} = "<input type=\"text\" $attributes />"; # supply default input form
+                    $subfield_data{marc_value} = {
+                        type        => 'text',
+                        id          => $subfield_data{id},
+                        maxlength   => $subfield_data{max_length},
+                        value       => $value,
+                    }; # supply default input form
                 }
         }
         elsif ( $tag eq '' ) {       # it's an hidden field
-            $subfield_data{marc_value} = qq(<input type="hidden" $attributes />);
+            $subfield_data{marc_value} = {
+                type        => 'hidden',
+                id          => $subfield_data{id},
+                maxlength   => $subfield_data{max_length},
+                value       => $value,
+            };
         }
         elsif ( $subfieldlib->{'hidden'} ) {   # FIXME: shouldn't input type be "hidden" ?
-            $subfield_data{marc_value} = qq(<input type="text" $attributes />);
+            $subfield_data{marc_value} = {
+                type        => 'text',
+                id          => $subfield_data{id},
+                maxlength   => $subfield_data{max_length},
+                value       => $value,
+            };
         }
         elsif ( length($value) > 100
                     or (C4::Context->preference("marcflavour") eq "UNIMARC" and
@@ -271,10 +293,19 @@ sub generate_subfield_form {
                           500 <= $tag && $tag < 600                     )
                   ) {
             # oversize field (textarea)
-            $subfield_data{marc_value} = "<textarea $attributes_no_value_textarea>$value</textarea>\n";
+            $subfield_data{marc_value} = {
+                type        => 'textarea',
+                id          => $subfield_data{id},
+                value       => $value,
+            };
         } else {
            # it's a standard field
-           $subfield_data{marc_value} = "<input type=\"text\" $attributes />";
+            $subfield_data{marc_value} = {
+                type        => 'text',
+                id          => $subfield_data{id},
+                maxlength   => $subfield_data{max_length},
+                value       => $value,
+            };
         }
         
         return \%subfield_data;
