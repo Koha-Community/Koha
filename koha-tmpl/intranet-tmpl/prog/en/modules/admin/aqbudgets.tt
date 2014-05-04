@@ -381,7 +381,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
         [% INCLUDE colorcellvalue value=budget.total_remaining text=budget.total_remaining_display parent=budget.budget_parent_id %]
     </td>
     [% IF ( budget.budget_lock ) %]
-        <td> <span style="color: gray;"> Edit Delete </span> </td>
+        <td> <span></span> </td>
     [% ELSE %]
         <td>
             <div class="dropdown dropup">
