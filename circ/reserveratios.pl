@@ -166,13 +166,9 @@ while ( my $data = $sth->fetchrow_hashref ) {
     );
 }
 
-{
-    for my $rd ( @reservedata ) {
-        $rd->{biblionumber} || next;
-        my $pcnt = CountPendingOrdersByBiblionumber( $rd->{biblionumber} );
-        $pcnt || next;
-        $rd->{pendingorders} = $pcnt;
-    }
+for my $rd ( @reservedata ) {
+    next unless $rd->{biblionumber};
+    $rd->{pendingorders} = CountPendingOrdersByBiblionumber( $rd->{biblionumber} );
 }
 
 $template->param(
@@ -189,13 +185,15 @@ output_html_with_http_headers $input, $cookie, $template->output;
 sub CountPendingOrdersByBiblionumber {
     my $biblionumber = shift;
     my @orders = GetOrdersByBiblionumber( $biblionumber );
-    scalar(@orders) || return(0);
-    my $cnt=0;  for my $order ( @orders ) {
-        defined($order->{datecancellationprinted}) && $order->{datecancellationprinted} && next;
-        my $onum = $order->{quantity} // 0;
-        my $rnum = $order->{quantityreceived} // 0;
-        $rnum >= $onum && next;
-        $cnt+=$onum; $cnt-=$rnum;
+    my $cnt = 0;
+    if (scalar(@orders)) {
+        for my $order ( @orders ) {
+            next if $order->{datecancellationprinted};
+            my $onum = $order->{quantity} // 0;
+            my $rnum = $order->{quantityreceived} // 0;
+            next if $rnum >= $onum;
+            $cnt += ($onum - $rnum);
+        }
     }
-    $cnt;
+    return $cnt;
 }

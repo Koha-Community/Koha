@@ -360,13 +360,10 @@ my @gst_values = map {
     option => $_ + 0.0
 }, split( '\|', C4::Context->preference("gist") );
 
-my $quantity = $data->{'quantity'};
-{
-    defined($quantity) && last;
-    my $rr_quantity_to_order = $input->param('rr_quantity_to_order');
-    (defined($rr_quantity_to_order) && $rr_quantity_to_order) || last;
-    $quantity = $rr_quantity_to_order;
-}
+my $quantity = $input->param('rr_quantity_to_order') ?
+      $input->param('rr_quantity_to_order') :
+      $data->{'quantity'};
+$quantity //= 0;
 
 $template->param(
     existing         => $biblionumber,
