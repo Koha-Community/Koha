@@ -330,9 +330,6 @@ foreach my $tag (sort keys %{$tagslib}) {
 	$subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} > 4) || ($tagslib->{$tag}->{$subfield}->{hidden} < -4));
     # testing branch value if IndependentBranches.
 
-    my $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="255" );
-	my $attributes          = qq($attributes_no_value value="$value" );
-
 	if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
 	my @authorised_values;
 	my %authorised_lib;
@@ -383,25 +380,23 @@ foreach my $tag (sort keys %{$tagslib}) {
           }
           $value="";
       }
-      $subfield_data{marc_value} =CGI::scrolling_list(      # FIXME: factor out scrolling_list
-          -name     => "field_value",
-          -values   => \@authorised_values,
-          -default  => $value,
-          -labels   => \%authorised_lib,
-          -override => 1,
-          -size     => 1,
-          -multiple => 0,
-          -tabindex => 1,
-          -id       => "tag_".$tag."_subfield_".$subfield."_".$index_subfield,
-          -class    => "input_marceditor",
-      );
+        $subfield_data{marc_value} = {
+            type    => 'select',
+            id      => "tag_".$tag."_subfield_".$subfield."_".$index_subfield,
+            name    => "field_value",
+            values  => \@authorised_values,
+            labels  => \%authorised_lib,
+            default => $value,
+        };
     # it's a thesaurus / authority field
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
-        $subfield_data{marc_value} = "<input type=\"text\" $attributes />
-            <a href=\"#\" class=\"buttonDot\"
-                onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
-    ";
+        $subfield_data{marc_value} = {
+            type         => 'text1',
+            id           => $subfield_data{id},
+            value        => $value,
+            authtypecode => $tagslib->{$tag}->{$subfield}->{authtypecode},
+        }
     # it's a plugin field
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{value_builder} ) {
@@ -411,21 +406,36 @@ foreach my $tag (sort keys %{$tagslib}) {
 			my $temp;
             my $extended_param = plugin_parameters( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
             my ( $function_name, $javascript ) = plugin_javascript( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
-            $subfield_data{marc_value} = qq[<input type="text" $attributes
-                onfocus="Focus$function_name($subfield_data{random}, '$subfield_data{id}');"
-                 onblur=" Blur$function_name($subfield_data{random}, '$subfield_data{id}');" />
-                <a href="#" class="buttonDot" onclick="Clic$function_name('$subfield_data{id}'); return false;" title="Tag Editor">...</a>
-                $javascript];
+            $subfield_data{marc_value} = {
+                type       => 'text2',
+                id         => $subfield_data{id},
+                value      => $value,
+                function   => $function_name,
+                random     => $subfield_data{random},
+                javascript => $javascript,
+            };
         } else {
             warn "Plugin Failed: $plugin";
-            $subfield_data{marc_value} = "<input type=\"text\" $attributes />"; # supply default input form
+            $subfield_data{marc_value} = {                                      # supply default input form
+                type       => 'text',
+                id         => $subfield_data{id},
+                value      => $value,
+            };
         }
     }
     elsif ( $tag eq '' ) {       # it's an hidden field
-        $subfield_data{marc_value} = qq(<input type="hidden" $attributes />);
+            $subfield_data{marc_value} = {
+                type       => 'hidden',
+                id         => $subfield_data{id},
+                value      => $value,
+            };
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{'hidden'} ) {   # FIXME: shouldn't input type be "hidden" ?
-        $subfield_data{marc_value} = qq(<input type="text" $attributes />);
+        $subfield_data{marc_value} = {
+                type       => 'text',
+                id         => $subfield_data{id},
+                value      => $value,
+        };
     }
     elsif ( length($value) > 100
             or (C4::Context->preference("marcflavour") eq "UNIMARC" and
@@ -434,10 +444,18 @@ foreach my $tag (sort keys %{$tagslib}) {
                   500 <= $tag && $tag < 600                     )
           ) {
         # oversize field (textarea)
-        $subfield_data{marc_value} = "<textarea $attributes_no_value>$value</textarea>\n";
+        $subfield_data{marc_value} = {
+                type       => 'textarea',
+                id         => $subfield_data{id},
+                value      => $value,
+        };
     } else {
         # it's a standard field
-         $subfield_data{marc_value} = "<input type=\"text\" $attributes />";
+        $subfield_data{marc_value} = {
+                type       => 'text',
+                id         => $subfield_data{id},
+                value      => $value,
+        };
     }
 #   $subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
     push (@loop_data, \%subfield_data);
