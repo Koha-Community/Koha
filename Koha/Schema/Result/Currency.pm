@@ -36,6 +36,12 @@ __PACKAGE__->table("currency");
   is_nullable: 1
   size: 5
 
+=head2 isocode
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 5
+
 =head2 timestamp
 
   data_type: 'timestamp'
@@ -60,6 +66,8 @@ __PACKAGE__->add_columns(
   "currency",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
   "symbol",
+  { data_type => "varchar", is_nullable => 1, size => 5 },
+  "isocode",
   { data_type => "varchar", is_nullable => 1, size => 5 },
   "timestamp",
   {
@@ -119,8 +127,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1fpLJHtP0bseXVfytxii5Q
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-05-04 22:05:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MqgYbFC8CTfcBHyAiIcdVA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
