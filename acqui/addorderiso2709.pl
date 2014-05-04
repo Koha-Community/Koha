@@ -195,6 +195,7 @@ if ($op eq ""){
                 }
             }
             ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $cgiparams->{'frameworkcode'} || '' );
+            SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
             # 2nd add authorities if applicable
             if (C4::Context->preference("BiblioAddsAuthorities")){
                 my $headings_linked =BiblioAutoLink($marcrecord, $cgiparams->{'frameworkcode'});
@@ -279,6 +280,8 @@ if ($op eq ""){
                 my ( $biblionumber, $bibitemnum, $itemnumber ) = AddItemFromMarc( $record, $biblionumber );
                 NewOrderItem( $itemnumber, $ordernumber );
             }
+        } else {
+            SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
         }
     }
     # go to basket page
