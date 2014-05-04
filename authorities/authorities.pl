@@ -118,18 +118,14 @@ sub build_authorized_values_list {
             $authorised_lib{$value} = $lib;
         }
     }
-    return CGI::scrolling_list(
-        -name     => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
-        -values   => \@authorised_values,
-        -default  => $value,
-        -labels   => \%authorised_lib,
-        -override => 1,
-        -size     => 1,
-        -multiple => 0,
-        -tabindex => 1,
-        -id       => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
-        -class    => "input_marceditor",
-    );
+    return {
+        type     => 'select',
+        id       => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
+        name     => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
+        values   => \@authorised_values,
+        labels   => \%authorised_lib,
+        default  => $value,
+    };
 }
 
 
@@ -209,16 +205,13 @@ sub create_input {
     # it's a thesaurus / authority field
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
-        $subfield_data{marc_value} =
-    "<input type=\"text\"
-            id=\"".$subfield_data{id}."\"
-            name=\"".$subfield_data{id}."\"
-            value=\"$value\"
-            class=\"input_marceditor\"
-            tabindex=\"1\" \/>
-        <a href=\"#\" class=\"buttonDot\"
-        onclick=\"openAuth(this.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."','auth'); return false;\" tabindex=\"1\" title=\"Tag Editor\">...</a>
-    ";
+        $subfield_data{marc_value} = {
+            type         => 'text1',
+            id           => $subfield_data{id},
+            name         => $subfield_data{id},
+            value        => $value,
+            authtypecode => $tagslib->{$tag}->{$subfield}->{authtypecode},
+        };
     # it's a plugin field
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{'value_builder'} ) {
@@ -238,43 +231,35 @@ sub create_input {
         my ( $function_name, $javascript ) = plugin_javascript( $dbh, $rec, $tagslib, $subfield_data{id}, $tabloop );
 #         my ( $function_name, $javascript,$extended_param );
         
-        $subfield_data{marc_value} =
-            "<input tabindex=\"1\"
-                    type=\"text\"
-                    id=\"".$subfield_data{id}."\"
-                    size=\"67\"
-                    maxlength=\"$max_length\"
-                    name=\"".$subfield_data{id}."\"
-                    value=\"$value\"
-                    class=\"input_marceditor\"
-                    onfocus=\"Focus$function_name($index_tag)\"
-                    onblur=\"Blur$function_name($index_tag); \" \/>
-                    <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
-                    $javascript";
+        $subfield_data{marc_value} = {
+            type       => 'text2',
+            id         => $subfield_data{id},
+            name       => $subfield_data{id},
+            value      => $value,
+            maxlength  => $max_length,
+            function   => $function_name,
+            index_tag  => $index_tag,
+            javascript => $javascript,
+        };
         # it's an hidden field
     }
     elsif ( $tag eq '' ) {
-        $subfield_data{marc_value} =
-            "<input tabindex=\"1\"
-                    type=\"hidden\"
-                    id=\"".$subfield_data{id}."\"
-                    name=\"".$subfield_data{id}."\"
-                    size=\"67\"
-                    maxlength=\"$max_length\"
-                    value=\"$value\" \/>
-            ";
+        $subfield_data{marc_value} = {
+            type      => 'hidden',
+            id        => $subfield_data{id},
+            name      => $subfield_data{id},
+            value     => $value,
+            maxlength => $max_length,
+        }
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{'hidden'} ) {
-        $subfield_data{marc_value} =
-            "<input type=\"text\"
-                    id=\"".$subfield_data{id}."\"
-                    name=\"".$subfield_data{id}."\"
-                    class=\"input_marceditor\"
-                    tabindex=\"1\"
-                    size=\"67\"
-                    maxlength=\"$max_length\"
-                    value=\"$value\"
-            \/>";
+        $subfield_data{marc_value} = {
+            type => 'text',
+            id        => $subfield_data{id},
+            name      => $subfield_data{id},
+            value     => $value,
+            maxlength => $max_length,
+        };
 
         # it's a standard field
     }
@@ -289,30 +274,24 @@ sub create_input {
                 && C4::Context->preference("marcflavour") eq "MARC21" )
         )
         {
-            $subfield_data{marc_value} =
-                "<textarea cols=\"70\"
-                        rows=\"4\"
-                        id=\"".$subfield_data{id}."\"
-                        name=\"".$subfield_data{id}."\"
-                        class=\"input_marceditor\"
-                        tabindex=\"1\"
-                        size=\"67\"
-                        maxlength=\"$max_length\"
-                        >$value</textarea>
-                ";
+            $subfield_data{marc_value} = {
+                type => 'textarea',
+                id        => $subfield_data{id},
+                name      => $subfield_data{id},
+                value     => $value,
+                maxlength => $max_length,
+            };
+
         }
         else {
-            $subfield_data{marc_value} =
-                "<input type=\"text\"
-                        id=\"".$subfield_data{id}."\"
-                        name=\"".$subfield_data{id}."\"
-                        value=\"$value\"
-                        tabindex=\"1\"
-                        size=\"67\"
-                        maxlength=\"$max_length\"
-                        class=\"input_marceditor\"
-                \/>
-                ";
+            $subfield_data{marc_value} = {
+                type => 'text',
+                id        => $subfield_data{id},
+                name      => $subfield_data{id},
+                value     => $value,
+                maxlength => $max_length,
+            };
+
         }
     }
     $subfield_data{'index_subfield'} = $index_subfield;
@@ -538,7 +517,10 @@ sub build_hidden_data {
             $subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
             $subfield_data{marc_mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
             $subfield_data{marc_repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
-            $subfield_data{marc_value}="<input type=\"hidden\" name=\"field_value[]\">";
+            $subfield_data{marc_value} = {
+                type => 'hidden_simple',
+                name => 'field_value[]',
+            };
             push(@loop_data, \%subfield_data);
             $i++
         }

@@ -311,7 +311,33 @@ function confirmnotdup(redirect){
                     </label>
                 [% END %]
                 
-                [% subfield_loo.marc_value %]
+                [% SET mv = subfield_loo.marc_value %]
+                [% IF ( mv.type == 'select' ) %]
+                     <select name="[%- mv.name -%]" tabindex="1" size="1" class="input_marceditor" id="[%- mv.id -%]">
+                     [% FOREACH aval IN mv.values %]
+                         [% IF aval == mv.default %]
+                         <option value="[%- aval -%]" selected="selected">[%- mv.labels.$aval -%]</option>
+                         [% ELSE %]
+                         <option value="[%- aval -%]">[%- mv.labels.$aval -%]</option>
+                         [% END %]
+                     [% END %]
+                     </select>
+                [% ELSIF ( mv.type == 'text1' ) %]
+                    <input type="text" id="[%- mv.id -%]" name="[%- mv.id -%]" value="[%- mv.value -%]" class="input_marceditor" tabindex="1" />
+                    <a href="#" class="buttonDot" onclick="openAuth(this.parentNode.getElementsByTagName('input')[1].id,'[%- mv.authtypecode -%]','auth'); return false;" tabindex="1" title="Tag editor">...</a>
+                [% ELSIF ( mv.type == 'text2' ) %]
+                    <input tabindex="1" type="text" id="[%- mv.id -%]" size="67" maxlength="[%- mv.maxlength -%]" name="[%- mv.id -%]" value="[%- mv.value -%]" class="input_marceditor" onfocus="Focus[%- mv.function -%]([%- mv.index_tag -%])" onblur="Blur[%- mv.function -%]([%- mv.index_tag -%]);" />
+                    <a href="#" class="buttonDot" onclick="Clic[%- mv.function -%]('[%- mv.id -%]'); return false;" title="Tag editor">...</a>
+                    [% mv.javascript %]
+                [% ELSIF ( mv.type == 'text' ) %]
+                    <input type="text" id="[%- mv.id -%]" name="[%- mv.name -%]" value="[%- mv.value -%]" class="input_marceditor" tabindex="1" size="67" maxlength="[%- mv.maxlength -%]" />
+                [% ELSIF ( mv.type == 'textarea' ) %]
+                    <textarea cols="70" rows="4" id="[%- mv.id -%]" name="[%- mv.name -%]" class="input_marceditor" tabindex="1" size="67" maxlength="[%- mv.maxlength -%]">[%- mv.value -%]</textarea>
+                [% ELSIF ( mv.type == 'hidden' ) %]
+                    <input tabindex="1" type="hidden" id="[%- mv.id -%]" name="[%- mv.name -%]" size="67" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
+                [% ELSIF ( mv.type == 'hidden_simple' ) %]
+                    <input type="hidden" name="[%- mv.name -%]" />
+                [% END %]
 
                 <span class="subfield_controls">
                 [% IF ( subfield_loo.repeatable ) %]
