@@ -8362,7 +8362,7 @@ if ( CheckVersion($DBversion) ) {
    SetVersion ($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.15.00.044";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("ALTER TABLE currency ADD isocode VARCHAR(5) default NULL AFTER symbol;");
     print "Upgrade to $DBversion done (Added isocode to the currency table)\n";
