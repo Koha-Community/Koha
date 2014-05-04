@@ -26,24 +26,26 @@
             "aaSorting": []
         } ) );
 
-        $("select[name='all_budget_id'] .b_inactive").hide();
-        $("select[name='budget_id'] .b_inactive").hide();
+        // keep copy of the inactive budgets
+        disabledBudgetsCopy = $("select[name='all_budget_id']").html();
+        $("select[name='all_budget_id'] .b_inactive").remove();
+        $("select[name='budget_id'] .b_inactive").remove();
 
         $("#showallbudgets").click(function() {
             if ($(this).is(":checked")) {
-                $("select[name='budget_id'] .b_inactive").show();
+                $("select[name='budget_id']").html(disabledBudgetsCopy)
             }
             else {
-                $("select[name='budget_id'] .b_inactive").hide();
+                $("select[name='budget_id'] .b_inactive").remove();
             }
         });
 
         $("#all_showallbudgets").click(function() {
             if ($(this).is(":checked")) {
-                $("select[name='all_budget_id'] .b_inactive").show();
+                $("select[name='all_budget_id']").html(disabledBudgetsCopy);
             }
             else {
-                $("select[name='all_budget_id'] .b_inactive").hide();
+                $("select[name='all_budget_id'] .b_inactive").remove();
             }
         });
 
