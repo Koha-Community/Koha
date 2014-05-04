@@ -327,11 +327,11 @@ sub import_batches_list {
     foreach my $batch (@$batches) {
         if ( $batch->{'import_status'} =~ /^staged$|^reverted$/ ) {
             # check if there is at least 1 line still staged
-            my $stagedList=GetImportRecordsRange($batch->{'import_batch_id'}, undef, undef, $batch->{import_status});
+            my $stagedList=GetImportRecordsRange($batch->{'import_batch_id'}, undef, undef, $batch->{import_status}, { order_by_direction => 'ASC' });
             if (scalar @$stagedList) {
                 push @list, {
                         import_batch_id => $batch->{'import_batch_id'},
-                        num_biblios => $batch->{'num_biblios'},
+                        num_biblios => $batch->{'num_records'},
                         num_items => $batch->{'num_items'},
                         staged_date => $batch->{'upload_timestamp'},
                         import_status => $batch->{'import_status'},
@@ -401,7 +401,7 @@ sub import_biblios_list {
 
         push @list, \%cellrecord;
     }
-    my $num_biblios = $batch->{'num_biblios'};
+    my $num_biblios = $batch->{'num_records'};
     my $overlay_action = GetImportBatchOverlayAction($import_batch_id);
     my $nomatch_action = GetImportBatchNoMatchAction($import_batch_id);
     my $item_action = GetImportBatchItemAction($import_batch_id);
@@ -425,9 +425,9 @@ sub batch_info {
                                           comments => $batch->{'comments'},
                                           import_status => $batch->{'import_status'},
                                           upload_timestamp => $batch->{'upload_timestamp'},
-                                          num_biblios => $batch->{'num_biblios'},
-                                          num_items => $batch->{'num_biblios'});
-    if ($batch->{'num_biblios'} > 0) {
+                                          num_biblios => $batch->{'num_records'},
+                                          num_items => $batch->{'num_items'});
+    if ($batch->{'num_records'} > 0) {
         if ($batch->{'import_status'} eq 'staged' or $batch->{'import_status'} eq 'reverted') {
             $template->param(can_commit => 1);
         }
