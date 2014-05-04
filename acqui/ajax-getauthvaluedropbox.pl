@@ -48,7 +48,7 @@ Default value for the dropbox.
 use Modern::Perl;
 
 use CGI;
-use C4::Budgets;
+use C4::Koha;
 use C4::Charset;
 use C4::Auth qw/check_api_auth/;
 
@@ -70,7 +70,7 @@ $default = C4::Charset::NormalizeString($default);
 
 binmode STDOUT, ':encoding(UTF-8)';
 print $input->header(-type => 'text/plain', -charset => 'UTF-8');
-my $avs = GetAuthvalueDropbox($category, $default);
+my $avs = C4::Koha::GetAuthvalueDropbox($category, $default);
 my $html = qq|<select id="$name" name="$name">|;
 for my $av ( @$avs ) {
     if ( $av->{default} ) {
