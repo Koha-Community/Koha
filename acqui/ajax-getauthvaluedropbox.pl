@@ -50,6 +50,17 @@ use Modern::Perl;
 use CGI;
 use C4::Budgets;
 use C4::Charset;
+use C4::Auth qw/check_api_auth/;
+
+my $query = CGI->new();
+binmode STDOUT, ':encoding(UTF-8)';
+
+my ($status, $cookie, $sessionID) = check_api_auth($query, { catalogue => '*'} );
+unless ($status eq "ok") {
+    print $query->header(-type => 'text/plain', -status => '403 Forbidden');
+    print '<option></option>';
+    exit 0;
+}
 
 my $input = new CGI;
 my $name = $input->param('name');
