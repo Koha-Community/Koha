@@ -1517,6 +1517,7 @@ sub MungeMarcPrice {
     my $active_currency = C4::Budgets->GetCurrency();
     my $symbol = $active_currency->{'symbol'};
     my $isocode = $active_currency->{'isocode'};
+    $isocode = $active_currency->{'currency'} unless defined $isocode;
     my $localprice;
     if ( $symbol ) {
         my @matches =($price=~ /

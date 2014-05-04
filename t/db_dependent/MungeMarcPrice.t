@@ -30,7 +30,7 @@ my @prices2test=( { string => '25,5 £, $34,55, $LD35',       expected => '34.55
                   { string => '5.99 (7.75 CAN)',             expected => '5.99' },
                 );
 
-plan tests => scalar  @prices2test;
+plan tests => 2 * scalar @prices2test;
 
 # set active currency test data
 my $CURRENCY = 'TEST';
@@ -49,9 +49,26 @@ if ($active_currency) {
 $dbh->do("INSERT INTO currency ( currency,symbol,isocode,rate,active )
           VALUES ('$CURRENCY','$SYMBOL','$ISOCODE','$RATE',1)");
 foreach my $price (@prices2test) {
-    my $mungemarcprice=MungeMarcPrice($price->{'string'});
-    my $expected=$price->{'expected'};
-    ok ($mungemarcprice eq $expected, "must return $price->{'expected'} from initial string : $price->{'string'}");
+    is(
+        MungeMarcPrice($price->{'string'}),
+        $price->{'expected'},
+        "got expected price from $price->{'string'} (using currency.isocode)",
+    );
 }
+
+# run tests again, but fall back to currency name
+$dbh->do('DELETE FROM aqbasket');
+$dbh->do('DELETE FROM currency');
+$dbh->do("INSERT INTO currency ( currency, symbol, rate, active )
+          VALUES ('$ISOCODE', '$SYMBOL', '$RATE', 1)");
+
+foreach my $price (@prices2test) {
+    is(
+        MungeMarcPrice($price->{'string'}),
+        $price->{'expected'},
+        "got expected price from $price->{'string'} (using ISO code as currency name)",
+    );
+}
+
 # Cleanup
 $dbh->rollback;
