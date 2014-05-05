@@ -29,6 +29,7 @@ find({
         return if $m =~ /C4::VirtualShelves::Page/; # DB
         return if $m =~ /C4::Members::Statistics/; # DB
         return if $m =~ /C4::Serials/; # needs context
+        return if $m =~ /C4::Search::History/; # needs context
         use_ok($m) || BAIL_OUT("***** PROBLEMS LOADING FILE '$m'");
     },
 }, $lib);
