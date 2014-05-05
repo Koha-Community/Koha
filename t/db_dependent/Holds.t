@@ -6,7 +6,7 @@ use t::lib::Mocks;
 use C4::Context;
 use C4::Branch;
 
-use Test::More tests => 29;
+use Test::More tests => 32;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
@@ -25,6 +25,11 @@ $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 my $borrowers_count = 5;
+
+$dbh->do('DELETE FROM itemtypes');
+my $insert_sth = $dbh->prepare('INSERT INTO itemtypes (itemtype) VALUES (?)');
+$insert_sth->execute('CAN');
+$insert_sth->execute('CANNOT');
 
 # Setup Test------------------------
 # Helper biblio.
@@ -187,6 +192,12 @@ $dbh->do(
     {},
     '*', '*', '*', 25
 );
+$dbh->do(
+    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
+      VALUES (?, ?, ?, ?)}, 
+    {},
+    '*', '*', 'CANNOT', 0 
+);
 
 # make sure some basic sysprefs are set
 t::lib::Mocks::mock_preference('ReservesControlBranch', 'homebranch');
@@ -216,7 +227,6 @@ ok(
 
 # Regression test for bug 11336
 ($bibnum, $title, $bibitemnum) = create_helper_biblio();
-my ( $hold1, $hold2 );
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL' } , $bibnum);
 AddReserve(
     $branch,
@@ -286,14 +296,43 @@ C4::Context->set_preference( 'AllowHoldsOnDamagedItems', 0 );
 ok( !CanItemBeReserved( $borrowernumbers[0], $itemnumber), "Patron cannot reserve damaged item with AllowHoldsOnDamagedItems disabled" );
 ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for damaged item with AllowHoldsOnDamagedItems disabled" );
 
+# Regression test for bug 9532
+($bibnum, $title, $bibitemnum) = create_helper_biblio('CANNOT');
+($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL', itype => 'CANNOT' } , $bibnum);
+AddReserve(
+    $branch,
+    $borrowernumbers[0],
+    $bibnum,
+    'a',
+    '',
+    1,
+);
+ok(
+    !CanItemBeReserved( $borrowernumbers[0], $itemnumber),
+    "cannot request item if policy that matches on item-level item type forbids it"
+);
+ModItem({ itype => 'CAN' }, $item_bibnum, $itemnumber);
+ok(
+    CanItemBeReserved( $borrowernumbers[0], $itemnumber),
+    "can request item if policy that matches on item type allows it"
+);
+
+t::lib::Mocks::mock_preference('item-level_itypes', 0);
+ModItem({ itype => undef }, $item_bibnum, $itemnumber);
+ok(
+    !CanItemBeReserved( $borrowernumbers[0], $itemnumber),
+    "cannot request item if policy that matches on bib-level item type forbids it (bug 9532)"
+);
 
 # Helper method to set up a Biblio.
 sub create_helper_biblio {
+    my $itemtype = shift;
     my $bib = MARC::Record->new();
     my $title = 'Silence in the library';
     $bib->append_fields(
         MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
         MARC::Field->new('245', ' ', ' ', a => $title),
+        MARC::Field->new('942', ' ', ' ', c => $itemtype),
     );
     return ($bibnum, $title, $bibitemnum) = AddBiblio($bib, '');
 }
