@@ -1,0 +1,1265 @@
+RELEASE NOTES FOR KOHA 3.16.0-beta
+05 May 2014
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.16.0-beta can be downloaded from:
+
+    http://download.koha-community.org/koha-3.16.00-beta.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+
+Koha 3.16.0-beta is a major release, that comes with many new features.
+
+
+It includes 2 features, 195 enhancements and 359 bugfixes.
+
+
+New features in 3.16.0-beta
+======================
+
+Acquisitions
+----------
+	8230	Show the ordered status in catalogue page
+
+Searching
+----------
+	10862	Add an search history for the staff interface
+
+
+Enhancements in 3.16.0-beta
+======================
+
+Acquisitions
+----------
+	7180	Order from staged file improvements
+	7267	Display accountnumber in PDF
+	7288	Invoice improvements - Show only subscriptions
+	7308	New column in admin/aqbudgets
+	9261	Allow librarians to make purchase suggestions for patrons
+	9416	We should have 2 kinds of notes for each order line
+	9807	There should be a way to show the content of a basketgroup without reopening it
+	10090	The ordered and spent page display the itemtype code
+	10789	Excessive and often incorrect use of finish in C4::Acquisitions
+	10875	Addorderiso2709: the link "show all funds" is missing.
+	10922	Display if prices are tax exc. or inc. when creating a new order
+	10983	Unused subroutines in C4:Budgets
+	11027	Add a column for basketgroups in late orders table
+	11141	Filters are not kept on receiving
+	11224	C4::Acquisition need more UT, and more robust ones.
+	11429	Add a link to basketgroup in basket detail page
+	11435	Show basketgroup information in Acquisition tab in catalogue page
+	11459	[Signed-Off] OrderPdfFormat pref description could be more verbose
+	11551	Allow to search on ordernumber in histsearch.pl
+	11552	After a transfer, allow to search on the original order line
+	11578	Improvement of the funds list view
+	11579	The ordernumber is not displayed on the basket page
+	11665	An ability to place orders directly from hold ratios list
+	11763	Consolidate fund action links into menu
+	11787	Use validation plugin when adding new vendor
+	11805	Use validation plugin when creating new basket in Acquisitions
+	11828	Add German PDF template for orders in acquisitions
+	11864	Show parent_orderline in received orders table
+
+Architecture, internals, and plumbing
+----------
+	7372	RoadTypes should be folded into Authorised Values
+	10277	Add C4::Context->IsSuperLibrarian()
+	10533	Basketgroup js functions should in a separated js file
+	11051	Performance of opac-search
+	11268	Biblioitems URL field is too small for some URLs
+	11389	Re-enable PostgreSQL as a database scheme that Koha can connect to
+	11468	Remove use of smartmatch from DateUtils
+	11474	Remove experimental given/when from C4::Utils::Datatables
+	11478	Remove experimental given/when from Koha::SimpleMARC
+	11479	Remove experimental given/when from C4::MarcModificationTemplates
+	11518	Add new method to Koha::Schema::Result::Item that will always return the correct itemtype
+	11555	Make "All" one of the default options for datatables
+	11605	DT: default entry is 20
+	11730	C4::Charset call C4::Context without use it
+	11751	Some code related to "institution" is unused and obsolete
+	11957	Sample_only_param_tables.sql is not usable
+	11960	GetMemberDetails is unnecessarily called in CanBookBeRenewed
+
+Authentication
+----------
+	11146	Show a go back link on no permission page
+
+Cataloging
+----------
+	9366	On cataloguing each user can easily display tags or not
+	9673	Track when items are marked as lost or withdrawn
+	10970	Update MARC21 frameworks to Update Nr. 17 - DB update
+	11746	Add edit item links to record details page
+
+Circulation
+----------
+	7413	Allow OPAC renewal x days before due date
+	8231	Warning on Check in if borrower is restricted
+	9823	Code optimization: Change prototype of GetReservesFromBiblionumber
+	10694	Allow arbitrary backdating of returns
+	10845	Multi transport types for holds
+	10859	Alert if a patron already has an issue for the same biblio
+	10863	Add 2 circulation permissions: force_checkout and lift_restriction
+	11040	Add option to print regular slip to CircAutoPrintQuickSlip
+	11182	Warnings in circulation
+	11359	Add cardnumber and phonenumber columns to the branch overdues circulation report.
+	11486	Show renewal count on 'check out' and 'details' tabs in patron record
+	11561	Preventing duplicate print notices and enforcing a print notice if no notices can be generated
+	11630	AgeRestrictionMarker doesn't handle marker immediately followed by age
+
+Command-line Utilities
+----------
+	7844	Plack scripts for developers
+	10782	Add a koha-mysqlcheck script
+	10955	Add ability to skip deletions in zebraqueue
+	11078	Rebuild_zebra.pl can lose updates due to race condition during full rebuilds
+	11278	Adjusting bulkmarcimport.pl for customization routine and verbose printing
+	11484	Add option to purge z39.50 search records from import table to cleanup_database.pl
+
+Course reserves
+----------
+	11788	Use validation plugin when creating new course
+	11866	Staff side course reserves too restrictive
+
+Database
+----------
+	3445	Action_logs table needs some thought
+
+Documentation
+----------
+	11238	The version of the manual online link should be dynamically updated
+
+Hold requests
+----------
+	11138	Auto-unsuspend holds not in default cronjobs
+
+I18N/L10N
+----------
+	7934	Separate po file for help pages
+	8044	Localization for Perl scripts and modules
+	11495	I18n toolchain misses one instance of text "Select titles to: " in bootstrap
+	11631	Make translation toolchain ignore useless translatable strings
+	11848	Make Koha::I18N easier to use
+	12138	Use placeholders in translatable javascript strings
+
+Installation and upgrade (web-based installer)
+----------
+	10138	Add some authorized values in french installer
+
+Label printing
+----------
+	11539	C4::Barcodes::PrinterConfig does not appear to be being used anywhere
+	12018	Add table sorting to patron card batches
+
+Lists
+----------
+	9032	Share a list
+	11789	Use validation plugin when creating new list
+
+MARC Authority data support
+----------
+	8334	Authority UNIMARC 100 field plugin
+
+MARC Bibliographic data support
+----------
+	11032	Validate passed records in Biblio.pm
+	11330	Inconsistent field/subfield descriptions on MARC21 bibliographic frameworks
+	11453	Update EN default UNIMARC bibliographic framework
+
+MARC Bibliographic record staging/import
+----------
+	10500	Improve isbn matching when importing records
+	10558	Convert records table in manage-marc-import.pl to ajax DataTable
+	10811	Add a 999$c record matching rule to the MARC21 defaults
+
+Notices
+----------
+	11598	Add --text option to overdue_notices similar to --html option
+
+OPAC
+----------
+	10774	Allow individual holds to be suspended and resumed from the OPAC
+	10807	OPAC: There is no authority search history
+	10907	Showing the staff members name who managed a suggestion should be optional
+	10951	Make the NoLoginInstructions a customizable field through preferences
+	10986	Limit the list of languages in advanced search through system preferences
+	11066	Export Citations not RDA compatible
+	11104	Label in opac topics in facets not easily css selectable
+	11105	Label - opac - places on facets not easily css selectable
+	11256	Set a number of items to display on a biblio detail page
+	11304	Bootstrap OPAC detail page doesn't display holding tabs properly
+	11465	Show counts and amounts on OPAC your summary tabs
+	11466	Purchase suggestion itemtypes, only default available if AdvancedSearchTypes not equal 'itemtypes'
+	11684	More mixed content warnings using SSL with amazon - opac-readingrecord and opac-user
+	11694	Improve handling of individual hold suspension in Bootstrap OPAC
+	11786	Improve RDFa schema.org mappings in prog and bootstrap
+	11860	Display subscription callnumber in OPAC detail page
+	12052	Display a patron message on the summary page
+
+Packaging
+----------
+	7234	Koha-common Debian package should include koha-sites.conf
+	10003	Koha-* scripts (packages) should provide tab-completion in bash
+	10646	Mod_rewrite should be enabled by the postinst script
+	10896	Add a --verbose option to koha-translate
+	10942	Provide a way for package upgrades to update template translations
+	11284	Package related updates for the new release
+	11655	Koha-translate --list shouldn't show 'en'
+
+Patrons
+----------
+	9448	Add separate permission for writing off fees
+	10318	Show email on patron search results
+	10834	Add Sort 1 and Sort 2 to list of searchable patron fields
+	10861	Add a check on cardnumber length
+	11671	Restructure patron lists add form for improved usability
+	11869	Add more informations to the member printing pages.
+
+Reports
+----------
+	9915	Allow opac/svc/report to be passed sql parameters
+	11679	Add an ods export choice for reports
+	12040	Add STMP authentication parameters to runreports.pl
+
+Searching
+----------
+	9940	Add a new index for original language of document
+	9972	Add/ change some zebra indexes (MARC21) (GRS1+DOM)
+	10857	Add facets cancellation
+	11069	Increase title ranking in relevance when using QueryWeightFields
+	11202	Improve UNIMARC biblio indexing
+	11334	Add facet for home library
+
+Serials
+----------
+	10809	Use template branches plugin in serials search
+	10851	Add missing statuses
+	10852	Add 3 filters to the serials search
+	11386	Mandatory fields in subscription add form should use standard formatting
+	11861	Add ISSN column in serials claims table
+
+SIP2
+----------
+	6273	SIP2 Fee Paid and Fee Paid Response support
+	8769	Allow SIP2 return backdating
+	9288	Add a script to test SIP from the command line
+	11351	Add support for SIP2 media types
+
+Staff Client
+----------
+	11101	Item Type label in OPAC not easily css selectable.
+	11333	Use jQuery validator plugin for CSV profile forms
+	11772	Show warning on About page:System information if no active currency is defined
+
+System Administration
+----------
+	11596	Missing indexing options in koha-conf.xml should be reported
+	11766	Use validation plugin when creating new authority type
+	11767	Use validation plugin when creating new authority framework tag
+	11769	Use validation plugin when creating new MARC framework
+	11771	Use validation plugin when creating new MARC framework tag
+	11791	Use validation plugin when creating new city
+	11792	Use validation plugin when creating new currency
+	11793	Use validation plugin when creating new item type
+	11795	Use validation plugin when creating new Z39.50 server
+	11806	Use validation plugin when creating new OAI set
+
+Templates
+----------
+	7484	Keeping typed values when searching for authorities
+	9677	Style button on notices and slips page with Bootstrap
+	10987	Too many 'see also' and 'usedfor/see from' labels occurences
+	11087	Have the fines tab default to pay fines rather than account
+	11272	Copy submit button on inventory
+	11312	Add span to facets (for css selection)
+	11328	Show local cover images in staff client search results
+	11398	A typo occurred with occured
+	11570	Upgrade jQueryUI to latest version in the staff client
+	11724	Make Funds/Status on suggestions page sortable/searchable
+	11946	Add table sorters to label batches
+	12088	Improve date handling and sorting in holds to pull report
+	12089	Remove use of dt_add_type_uk_date()
+	12101	Move Greybox library outside of language-specific directory
+	12102	Move humanmsg jQuery plugin outside of language-specific directory
+	12103	Move ajaxfileupload jQuery plugin outside of language-specific directory
+	12107	Move checkboxes jQuery plugin outside of language-specific directory
+	12116	Move fixFloat jQuery plugin outside of language-specific directory
+	12119	Move jeditable jQuery plugin outside of language-specific directory
+
+Test Suite
+----------
+	11452	Add some tests for Koha::Template::Plugin::Cache
+	11480	Tests in Output_JSON.t make invalid assumptions
+	11537	Increasing test coverage for C4::Log
+	11540	Increasing test coverage for C4::Charset
+	11541	Increasing test coverage for C4::Installer
+	11542	Increasing test coverage for C4::Print
+	11543	Increasing test coverage for C4::Category
+	11544	Increasing test coverage for C4::Installer_PerlModule
+	11545	Increasing test coverage for C4::Languages
+	11562	QA: the sysprefs.sql is not correctly sorted
+
+Tools
+----------
+	2693	Tagging: Add filter by name
+	7567	News by Library: refactor, enhance, and fix
+	9016	Multi transport types for notices
+	10832	Multi transport types for overdue notices
+	10833	Multi transport types for advanced notices
+	11441	Ability to globally remove authorities with no bibliographic record linked.
+	11785	Use validation plugin when uploading local cover images
+	11850	Bulkmarcimport does not append in logfile
+	11867	Multi transport types: Manage *_PHONE notices
+	11868	Multi transport types: disable sms and phone if not in use
+
+Transaction logs
+----------
+	11477	Add names for librarian and borrowers in the logs
+
+Web services
+----------
+	11491	Extending report service to be annotated
+
+
+Critical bugs fixed in 3.16.0-beta
+======================
+
+(this list include all bugfixes since the previous major version. Most of them have already been fixed in maintainance releases)
+
+
+Acquisitions
+----------
+	9948	critical	Acq data going on first item even if not received
+	11322	critical	Suggestion "notes" field should be sanitized or escaped
+	11755	critical	Argument 'booksellerid' not properly handled in orderreceive.pl
+	10613	major	Gst is not calculated correctly on the invoice page
+	11549	major	After transferring an order, receive and cancel the receipt will delete the order
+	11675	major	Budget amount is not checked if a parent exist
+	11680	major	Tax rate changes on edit
+	11699	major	Notes entered when receiving are not saved
+	12019	major	Funds displayed on acquisition home show funds of all branches
+
+Architecture, internals, and plumbing
+----------
+	11493	critical	Batch Item Modification not handling unicode characters
+	11660	critical	Tools/pdfViewer.pl is vulnerable to displaying the contents of an arbitrary file on the server
+	11661	critical	Edithelp.pl can be used to write arbitrary files to the server
+	11662	critical	Member-picupload.pl can write to arbitrary files on the server
+	11666	critical	Admin/import_export_framework.pl allows execution of arbitrary SQL without authentication
+	10611	major	C4::Context->dbh checks if the DB is still running
+	11563	major	Class noEnterSubmit no longer functioning
+	11779	major	Unexpected change in logged in branch when changing overdue notice triggers
+
+Authentication
+----------
+	11219	critical	CAS authentication fails with URL parameters
+
+Cataloging
+----------
+	6435	major	[ENH] Added daemon mode parameters to rebuild_zebra.pl
+	8018	major	New subfields have a default max length of zero
+	11286	major	Bug 10602 prevents to create new subfields in authorities
+	11338	major	Items that are captured for holds can be deleted without warning
+	11410	major	Cataloging search finds no results for searches with ampersands
+
+Circulation
+----------
+	9532	major	Reserve rules with itemtype on biblio
+
+Command-line Utilities
+----------
+	11417	major	Remove_unused_authorities.pl doesn't accept --test
+
+Course reserves
+----------
+	11534	major	Impossible to remove instructors on course reserve
+
+Database
+----------
+	11846	major	Correct database update for debarments with 9999-12-31
+
+Hold requests
+----------
+	11258	major	Holds queue is still making transfer requests that contradict the branch holds policy
+	11336	major	Priority is not updated on deleting holds
+	11947	major	Hold priorities not re-calculated when hold is confirmed on checkin.
+
+I18N/L10N
+----------
+	2546	major	Description of charges: string hardcoded
+	11290	major	Members-home.pl displays badly if using non english templates and have a utf8 char in categorycode description
+	11571	major	Bug 7934 introduces a regression in the translate script
+
+Lists
+----------
+	11248	major	Problems with translated list email sent
+
+Notices
+----------
+	9210	major	Automatic carriage return are missing in print letters generated for holds
+
+OPAC
+----------
+	11307	critical	Potential XSS attack vector in opac rss feed
+	11341	critical	XSS attack vector in facets in OPAC - prog theme
+	10605	major	Problems with translated cart email sent
+	10952	major	Store anonymous search history in session
+	11277	major	Bootstrap theme: error in link for showing all facets
+	11535	major	Patron self-registration form does not sanitize its input
+	11978	major	OverDrive API now prepends http:// to URLs
+	12046	major	Authentication using CAS - bootstrap
+
+Patrons
+----------
+	11282	blocker	Not possible to create multiple restrictions from patron details/new restriction overwrites existing
+	10453	critical	Updating child to adult loses password
+	11352	critical	Batch Patron Deletion/Anonmyzation deletes more than warning states it will delete
+	12134	critical	Members are restricted even if the debarment is ended
+	6739	major	Expired patrons not blocked from opac actions
+	11009	major	Do not allow reading records of anonymous patron
+
+Searching
+----------
+	11096	major	Koha cannot retrieve big records from Zebra
+	11533	major	"use" QueryParser breaks authority search
+
+Serials
+----------
+	11262	major	Don't require hardcoded translations for seasonal numbering pattern to work
+	11689	major	New missing statuses is not well managed
+	11995	major	Followup for Bug 7688 - FIX GetNextDate in serialsUpdate.pl
+	12003	major	Next issues for irregular pattern not correctly predicted
+	12080	major	Superserials permission appears to be broken
+
+Staff Client
+----------
+	11369	major	Too many search cursor cookies overflow HTTP-header size, when making multiple searches in the staff client.
+
+Templates
+----------
+	766	major	Use of CGI::scrolling_list prevents customization in template
+
+Tools
+----------
+	11414	critical	Marc modification template limitations should alert the user
+	11287	major	Import borrowers doesn't take into account the new restriction system
+	11412	major	Bulkmarcimport can crash when searching for duplicates
+
+
+Other bugs fixed in 3.16.0-beta
+======================
+
+(this list include all bugfixes since the previous major version. Most of them have already been fixed in maintainance releases)
+
+
+About
+----------
+	7143	trivial	Bug for tracking changes to the about page
+
+Acquisitions
+----------
+	7791	normal	Deleting basket should not delete all existing orders without warning
+	8683	normal	Acq: Clear button doesn't clear all item fields
+	9224	normal	Acqui/finishreceive.pl is not Plack-compatible
+	9593	normal	Prices not imported correctly from a staged file
+	11018	normal	Add order from a reverted file
+	11059	normal	Not possible to sort staged dates in metric format
+	11111	normal	The basket group is not displayed on the parcel page
+	11166	normal	Branch filter in budgets admin uses pattern match  instead of equals
+	11170	normal	The pending order list should only display orders to receive
+	11171	normal	The basket group is not displayed on the supplier list page
+	11237	normal	Clarify explanation for the new pref AcqItemSetSubfieldsWhenReceived
+	11243	normal	Supplier list counts all items, even canceled ones
+	11397	normal	Displaying itemnumber list on the Acquisition detail tab is useless
+	11644	normal	Cannot update fund if total is equal to amount unallocated
+	11777	normal	Created by name is not coming in order receiving page
+	11798	normal	Problems with column sorting and row visibility in invoices table
+	11914	normal	Ordering from suggestions: fund (budget id) is not retained; price calculations not working
+	11056	minor	Dead code in basketgroup.pl : remove code depending on "validate" param
+	11314	minor	Restore ability to see only 5 entries on parcel.pl
+	11471	minor	Basket groups display 0 0
+	11550	minor	Add a couple of unit tests for C4::Acq::GetOrder
+	11820	minor	Dead code in basketgroup.pl : "add" operation is never invoked without a booksellerid
+	11845	minor	Set overlay and import status translatable in addorderiso2709.tt
+	11939	minor	Sample of currencies with a working active value
+	9654	trivial	Missing space between amount and currency symbol in basket groups
+	12111	trivial	Improving templates regarding order notes
+
+Architecture, internals, and plumbing
+----------
+	7965	normal	Silence warns in staff error log (koha-error_log)
+	10626	normal	Remove doubled up TT plugins
+	11035	normal	Replace shortcut plugin jquery.hotkeys.min.js
+	11061	normal	Koha::Calendar::_mock_init is unused
+	11112	normal	Koha::Calendar->new loads all holidays
+	11148	normal	Two routines are useless in Koha::DateUtils
+	11391	normal	Suggestions.suggesteddate has a problematic default value
+	11616	normal	The tablesorter plugin is no longer in use
+	11687	normal	Statecollection.pl is unused
+	11384	minor	Koha should not use "ctid" as a column name
+	11402	minor	Labels::_guide_box should return undef if undefned data is passed
+	11757	minor	Dependency on POE is not longer necessary
+	12076	minor	Xt/tt_valid.t can miss an invalid construct
+	12112	minor	C4::Breeding::ImportBreeding() is not used
+	12131	minor	C4/TmplToken.pm has an unnecessary dependency on Exporter
+	11077	trivial	Correct silent warnings in C4/Auth.pm
+	11587	trivial	IsSuperLibrarian generates warnings
+	11799	trivial	Housekeeping: Remove _biblionumber_sth from VirtualShelves.pm
+	11803	trivial	Consistent use of $dbh in _koha_modify_item
+	11856	trivial	Minor improvements on code documentation (omnibus)
+
+Authentication
+----------
+	7002	normal	Inaccurate checks for borrower flags == 1
+	11048	normal	Fix logout redirection for CAS authentication
+
+Cataloging
+----------
+	7125	normal	Can't change tag in frameworks
+	7442	minor	Crash when selecting an authority with 200$x or 200$y
+	9114	minor	Exported MARC frameworks encoding should be UTF-8
+	10808	minor	Thesaurus search form does not correspond to current search query
+	11313	minor	Empty value in mandatory combobox in record edition
+	11955	minor	Remove spaces in empty indicators after linking an authority to a biblio record.
+	11316	trivial	Plugin icon missing tooltip in addbiblio.pl
+	11611	trivial	Fix possible confusion between UNIMARC and MARC21 in some sysprefs
+
+Circulation
+----------
+	11756	normal	Hold ratios report sorting incorrectly
+	11075	minor	Clicking 'select all' link in export tab in checkout page clears renew checkboxes
+	11231	minor	Notes should be reservenotes in pendingreserves.pl and reserveratios.pl
+
+Command-line Utilities
+----------
+	11188	minor	Make gather_print_notices.pl die on failed open()
+
+Course reserves
+----------
+	11179	minor	Opac-course-details.pl shows item as available when it is checked out
+
+Database
+----------
+	5377	normal	Database fields too small for multiple ISBN and ISSN
+	11155	normal	PostgreSQL schema contains syntax errors
+	11249	normal	Add db indexes on borrowers names
+	11275	normal	Make deleteditems.materials of type text
+	11928	normal	Table aqorderdelivery seem useless
+	6331	minor	Obsolete marc column in deleteditems
+
+Documentation
+----------
+	11483	normal	New serial pages missing help
+	11383	minor	There is no help page for the marc modification templates tool
+	11403	minor	Renew page missing help file
+
+Hold requests
+----------
+	8918	normal	ILS-DI: HoldTitle and HoldItem do not calculate rank of hold
+	11445	normal	It is possible for duplicate hold notifications to be sent
+	11531	normal	Cannot add new libraries to the transport cost if previously used.
+	12000	normal	Staff users can set hold suspension dates to occur in the past
+	12079	normal	CheckReserves() and _Findgroupreserve do not return reserve_id
+	9788	minor	Improvements for calling GetReservesFromItemnumber
+	10452	minor	AllowHoldsOnDamagedItems should control using damaged items to fulfill holds
+
+I18N/L10N
+----------
+	5052	normal	Can't choose languages if all choices are sublanguages
+	11225	normal	\n in translation strings should be removed
+	11227	normal	Staff po files contain some Javascript
+	11411	normal	Bootstrap theme (enhancement) for (right to left).
+	11488	normal	Untranslatable warning "Are you sure you want to write off ..."
+	11505	normal	Untranslatable table headers in Label batch manager
+	11588	normal	Untranslatable subscription frequency units
+	11618	normal	JQuery timepicker is not picked up by the i18n toolchain
+	11646	normal	Untranslatable confirm popup in field 006 and 008 builders
+	11686	normal	"please note your reason here..." does not get translated
+	11731	normal	Typo "tranports" in installation
+	12034	normal	MSG_REMOVE_FROM_LIST different wording between OPAC and staff client
+	12056	normal	Untranslatable strings in calendar
+	12081	normal	Tmpl_process3.pl does not delete temp files
+	11363	minor	Label printer profile units are not translatable
+	11366	minor	Acq basket group "No group" untranslatable
+	11497	minor	I18n toolchain fails to pick up TT code in the format 'SomeVariable or "Some Text"' for translation
+	11508	minor	Untranslatable pull-down in auth_subfields_structure.pl
+	11639	minor	Untranslatable strings in 007 builder
+	11973	minor	Fix Armenian language description
+	11993	minor	Untranslatable confirm popup in request.tt
+	10818	trivial	System preference OAI-PMH:ConfFile isn't translatable
+	11189	trivial	Rename Print label in UNIMARC advanced search
+	11393	trivial	Language menu not show up as name for Thai (th-THA was shown)
+
+Installation and upgrade (command-line installer)
+----------
+	10580	normal	Remove NoZebra reference from Makefile.pl
+	10729	normal	Support phrases-icu.xml in install and upgrade
+
+Installation and upgrade (web-based installer)
+----------
+	11260	normal	Update German web installer
+	11261	normal	Sample frequencies and numbering patterns should better be mandatory on install
+
+Label printing
+----------
+	8375	normal	Common diacritics not shown correctly when exporting batch label to PDF
+	9854	normal	Add 'ttf-dejavu*' packages to debian/control file, for label printing (bug 8375)
+	11222	normal	A regression on label-item-search.pl done by Bug 9239
+
+Lists
+----------
+	8262	normal	Special kohaadmin cannot create lists
+	10714	minor	Redirect to list contents view upon save after initiating edit from list contents view
+
+MARC Authority data support
+----------
+	10691	normal	5xx not properly linked by authid in authority search result list
+	10905	minor	Author tracings incorrect when UseAuthoritiesForTracings is turned on
+	11652	minor	Merging authority records does not correct biblios
+	11797	minor	Auth_finder.pl: Odd number of elements in anonymous hash
+
+MARC Bibliographic data support
+----------
+	11004	normal	Make xmlControlfield.js use the marcflavour syspref to look for XML files
+	11695	normal	Typo: "Tree-character alphabetic code"
+	11762	normal	Sequence of MARC21 245 subfields different on XSLT result list and detail page
+	11912	minor	GetMarcISBN wrongly prepends a space to ISBNs
+
+MARC Bibliographic record staging/import
+----------
+	11923	normal	Marc record batches not sorting by citation descending
+
+Notices
+----------
+	8258	normal	Branch specific  DUEDGST notice is not used
+	9216	normal	Make table headings translatable
+	11696	normal	Multi transport types: the print notices should be processed in first
+	11760	normal	In notices, code of road type is used instead of descritpion
+	8168	minor	Ersatz CSV header in attachment of overdue notices sent to administrator
+	11732	trivial	Eliminate warning on undefined branchcode
+
+OPAC
+----------
+	8952	normal	Add http:// to url in social media links on opac-detail
+	10195	normal	Records hidden with OpacSuppression can still be accessed
+	10647	normal	Make OPAC MARC plain view work for all flavours of MARC
+	10865	normal	Don't show list permissions when adding public lists/sharing lists is not allowed
+	11127	normal	OPAC suggestion: the delete link is active when no suggestion selected
+	11183	normal	Warnings in opac
+	11308	normal	RSS feed is slightly broken in bootstrap theme
+	11310	normal	Update XSLT stylesheets in bootstrap theme
+	11489	normal	OPAC search results in 404 error when the only search result is supressed
+	11647	normal	Subscribe to email notification for serials needs user login
+	11743	normal	Remove unused DataTables plugin from OPAC theme directories
+	11768	normal	Show patron cardnumber in opac personal details
+	11809	normal	OPAC patron details form shouldn't show 'Clear date' if field is required
+	11951	normal	OPAC search suggestions template error
+	11986	normal	Tags searching doesn't work in OPAC if biblio DOM indexing is being used
+	12058	normal	OverDrive search results page doesn't show cart, lists, or login links
+	8661	minor	Break out additional authors in opac like in staff
+	10781	minor	Remove C4::ILSDI::Utility
+	10797	minor	Move styling from element to CSS file for search input field in OPAC
+	10944	minor	Mixed content warnings in results and detail with Amazon images on https
+	11242	minor	Fix opac-MARCdetail.pl bizarre ordering of data and noisy warnings
+	11342	minor	Error with opac self registration if BorrowersTitles is empty
+	11381	minor	IDreamBooks too close to title on bootstrap
+	11476	minor	Opac self registration title pull down offers 2 empty options
+	11516	minor	OPAC highlight lost in results browser
+	11522	minor	Self registration formatting
+	11709	minor	Bootstrap OPAC lists interface requires some revisions
+	11752	minor	In OPAC, the serials details display the wrong periodicity
+	12073	minor	OPAC detail page printing show links URL
+	10798	trivial	OPAC_SEARCH_LIMIT behaves badly with search groups
+	11094	trivial	Bootstrap theme: typo loaction
+	11174	trivial	Wrong parameter 'valuec' in  opac-authoritiessearchresultlist
+	11329	trivial	Check for marc record in opac-showmarc
+	11663	trivial	Bootstap theme opac holding tab improperly displayed when opacbookbag syspref is disabled
+
+Packaging
+----------
+	10735	normal	Koha-dump not working
+	11705	normal	New Debian policy enforcement is breaking the build script
+	8921	minor	Koha-common*.deb should depend on cron
+	11509	trivial	Koha-create should print better usage information
+	11510	trivial	Typo in koha-translate usage message
+
+Patrons
+----------
+	11184	normal	Fix wrong attribute type cloning
+	11207	normal	Impossibility to remove a sms number
+	11283	normal	Restriction type is not translatable
+	11628	normal	Staffaccess permission is missing in french userflags.sql file
+	11707	normal	Additional attributes broken for category code with space
+	12069	normal	If you access members/mod_debarment.pl when logged out you are redirected to OPAC login
+	12100	normal	Messaging preferences did not save Days in Advance
+	11125	minor	Remove Problematic Logic from Patron Messaging Preferences Form
+	11802	minor	Patron purchase suggestions page requires some corrections
+	11855	trivial	Tiny code cleanup in members
+
+Reports
+----------
+	11704	normal	Wrong headers in {opac|intranet}/svc/report
+	11833	normal	Filtering on saved report subgroup doesn't work
+	12114	normal	Reports web service JSON output has an encoding problem
+	10777	minor	Runreport.pl allows for sending html reports via email, but mimetype is wrong
+
+Searching
+----------
+	7518	normal	Searches with quotation marks don't work
+	10688	normal	QueryParser doesn't recognize QP queries when used in a fielded search box
+	10893	normal	Location facet not working in UNIMARC
+	11131	normal	Authority search does not display summary while searching by all auth types
+	11192	normal	Fix two definitions in ccl.properties
+	11252	normal	Rebuild_zebra.pl should not have --munge-config
+	11255	normal	Sort by relevance asc generates a wrong query
+	11741	normal	< > not displaying correctly in XSLT result list
+	11796	normal	Results with 6 facets have missing facet
+	4397	minor	Display problems (umlauts, ß) with scan index in advanced search
+	6886	minor	Single branch mode should disable showing the branch name in front of all callnumbers
+	9578	minor	Error when search and sort not on relevance
+	10544	minor	Stocknumber index is an alias of Number-local-acquisition
+	11635	minor	995$r defined twice in record.abs
+	11572	trivial	Keyword searches no longer detect isbn from "Search the catalog"
+	11619	trivial	Duplicate key in QueryParser config
+
+Self checkout
+----------
+	11773	normal	Crash 'undefined value as a HASH' in sco-main.pl
+	11415	minor	SCO has no option to disable automatic receipt printing
+	11784	minor	Patron images broken in Self checkout
+
+Serials
+----------
+	10837	normal	Exporting serial claims does not work if no notice defined
+	11091	normal	Limits in catalog search when creating subscription
+	11228	normal	Explanation on 'patron notification' is not quite right
+	11263	normal	New 'locale' setting in subscriptions is not user friendly
+	11265	normal	Problems with locale saving/editing on serial subscriptions
+	11309	normal	Duplicated patterns when subscription table is updated
+	11637	normal	No way to prevent a prediction date for the next issue in serials
+	10429	minor	Branch filter not working in serial claims
+	11214	minor	Allow create routing list in serial collection page
+	11416	minor	Serials editor improperly hides fields
+	12048	minor	Doesn't display other libraries subscriptions when superlibrarian user
+	12098	minor	User can edit some subcriptions he should be prevented to
+
+SIP2
+----------
+	9865	normal	Make SIP2 message encoding configurable via SIPconfig.xml
+	11783	normal	Record level unavailable holds sending empty CD field rather than item barcode
+
+Staff Client
+----------
+	10415	normal	Add course reserves to staff client home page
+	11906	normal	Bad display of utf-8 chars in Patron lists (Datatable)
+	12060	normal	Indentation issues allow markup errors in header.inc
+	12075	normal	JQueryUI upgrade broke keyboard shortcuts
+	12024	minor	Add to list opens the list adding UI in two windows
+	12071	minor	Javascript broken for a search with double quotes
+	9075	trivial	Rename type to material type
+
+System Administration
+----------
+	7491	normal	Description for item-level_itypes is misleading
+	10012	minor	Remove all traces of NoZebraIndexes
+	11513	minor	Warnings in Patron categories
+
+Templates
+----------
+	2310	normal	Delete grayed out w/out explanation
+	10661	normal	Mandatory item fields should be formatted the same on all forms
+	10751	normal	Title should be mandatory for creating suggestions in staff
+	10790	normal	Adding/editing item types screen mis aligned if  noItemTypeImages  not showing
+	11117	normal	Right to left text in facets + facet count = mixed text
+	11503	normal	Several typos
+	11692	normal	Number 9 showing on topissues
+	11710	normal	Use new DataTables include in cataloging Z39.50 search template
+	11711	normal	Use new DataTables include in circ templates
+	11713	normal	Use new DataTables include in course reserves templates
+	11716	normal	Use new DataTables include in label manage template
+	11717	normal	Use new DataTables include in member templates
+	11718	normal	Use new DataTables include in reports templates
+	11719	normal	Use new DataTables include in serials templates
+	11721	normal	Use new DataTables include in suggestions template
+	11734	normal	Use new DataTables include in batch modification templates
+	11735	normal	Use new DataTables include in calendar template
+	11736	normal	Use new DataTables include in Koha news templates
+	11737	normal	Use new DataTables include in quotes management template
+	11738	normal	Use new DataTables include in batch patron modification template
+	11739	normal	Use new DataTables include in notices template
+	11740	normal	Use new DataTables include in quotes upload template
+	11748	normal	Remove unused jquery.uitablefilter.js plugin
+	11753	normal	Replace jQuery qTip plugin with Bootstrap tooltip on patron search form
+	11794	normal	OpacSerialDefaultTab  being ignored
+	11819	normal	Don't show catalog edit menu if user has no edit permissions
+	11821	normal	Staff client catalog: delete menu items greyed out without explanation
+	11829	normal	JavaScript error on staff client biblio details pages if template variables are undefined
+	11877	normal	Eliminate use of deprecated jQuery .live() method
+	11878	normal	Eliminate use of deprecated jQuery .toggle() method usage
+	11885	normal	Inconsistent HTML in MARC Details
+	12094	normal	JQueryUI upgrade broke default tab selection
+	12105	normal	Remove duplicated plugin jquery.dataTables.columnFilter.js
+	12117	normal	Remove unused image myshadow.png from the staff client
+	12118	normal	Unnecessary YUI assets included in offline circ manifest
+	12127	normal	Incorrect DataTable types in Holds to Pull list
+	10825	minor	Detail.tt displays duplicated enumchron values for serial items
+	11502	minor	Branch filter in "Holds To Pull" is too fuzzy
+	11648	minor	Use word item instead of copy
+	11649	minor	Always use words "copy number"
+	11670	minor	Remove sorting from patron lists action columns
+	11749	minor	Remove unused jQuery plugin jquery.hoverIntent.minified.js from the staff client
+	11764	minor	Move repeatedly redefined function toUC() into staff-global.js
+	11765	minor	Remove unused function isDate from templates
+	11832	minor	JavaScript error on staff client place hold screen if record has no items
+	10823	trivial	Add class info to enumchron data in detail.tt, for better styling
+	11246	trivial	Followup for Bug 10465 fields 780 and 785 in UNIMARC XSLT should be removed in bootstrap theme
+	11554	trivial	Capitalization fix in patron account on fines tab
+	11608	trivial	Don't need the word 'library' on funds
+	11918	trivial	Typo on authorized value page
+	11935	trivial	Capitalization: OPAC prog theme, checkouts tab
+	11938	trivial	Capitalization: Serial prediction pattern preview - Publication Date
+
+Test Suite
+----------
+	11124	normal	The staff benchmark script does not work with sql administrator account
+	11439	normal	UT: XISBN.t returns failure
+	11457	normal	T/db_dependent/Bookseller.t can fail when subscription table is not empty
+	11499	normal	Zebra_setup.pl not correctly setting indexing mode
+	11470	minor	Circulation_transfers.t can fail, spuriously
+	11934	trivial	Replace given by if-else in Circulation_issuingrules.t
+
+Tools
+----------
+	5031	normal	CSV export profile form doesn't indicate that profile marcfields are required
+	10996	normal	Cannot exclude numeric subfields on export
+	11208	normal	Multi transport types: a sms message without sms number should be marked as failed
+	11209	normal	Multi transport types: same messages are sent for a patron
+	11245	normal	Typo in modborrowers.tt javascript string
+	11254	normal	Breeding search must normalize ISBN
+	11279	normal	Quote of the day feature won't pick a quote
+	11343	normal	The max number of items to process in a batch is hardcoded
+	11475	normal	Batch modification process ends with broken link
+	11636	normal	Impossible to remove patrons from patron list during add process
+	12032	normal	TinyMCE rewrites urls in a very annoying and unexpected way
+	11253	minor	Tools/inventory.pl output_pref ignores 'iso' parameter passed
+	12115	minor	Follow up fix for tools/inventory.pl's output_pref issues
+
+Transaction logs
+----------
+	11473	normal	View log template has malformed conditionals, and logging info incorrect/inconsistent/unexpected
+
+Z39.50 / SRU / OpenSearch Servers
+----------
+	1047	normal	Punctuation in site names breaks Edit/Delete z39.50 server administration
+	11701	normal	Fix C4::Context::Zconn
+	9612	minor	SRU Response is different when DOM indexing is enabled
+	11419	minor	Z39.50 searches not displaying errors
+
+
+New sysprefs in 3.16.0-beta
+======================
+
+  * AcquisitionDetails
+  * AdvancedSearchLanguages
+  * AggressiveMatchOnISBN
+  * AllowMultipleIssuesOnABiblio
+  * BlockExpiredPatronOpacActions
+  * DisplayLibraryFacets
+  * EnableSearchHistory
+  * MarcFieldsToOrder
+  * MaxItemsForBatch
+  * NoLoginInstructions
+  * OpacMaxItemsToDisplay
+  * OPACMySummaryNote
+  * OpacSuggestionManagedBy
+  * OpacSuppressionMessage
+  * OpacSuppressionRedirect
+  * SelfCheckReceiptPrompt
+  * SpecifyReturnDate
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+The Koha manual is maintained in DocBook.The home page for Koha 
+documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.16/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+  * Arabic (80%)
+  * Armenian (93%)
+  * Chinese (China) (95%)
+  * Chinese (Taiwan) (99%)
+  * Czech (96%)
+  * Danish (87%)
+  * English (New Zealand) (81%)
+  * French (95%)
+  * French (Canada) (86%)
+  * German (99%)
+  * German (Switzerland) (94%)
+  * Italian (93%)
+  * Kurdish (69%)
+  * Norwegian Bokmål (62%)
+  * Polish (62%)
+  * Portuguese (93%)
+  * Portuguese (Brazil) (85%)
+  * Slovak (95%)
+  * Spanish (95%)
+  * Swedish (88%)
+  * Turkish (95%)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.16.0-beta is
+
+  Release Manager:       Galen Charlton <gmc@esilibrary.com>
+  Documentation Manager: Nicole C Engard <nengard@gmail.com>
+  Translation Manager:   Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>
+  QA Team:               Ruth Bavousett <druthb@gmail.com>
+                         Chris Cormack <chrisc@catalyst.net.nz>
+                         Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>,
+                         Jonathan Druart <jonathan.druart@biblibre.com>,
+                         Brendan Gallagher <brendan@bywatersolutions.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+                         Paul Poulain <paul.poulain@biblibre.com>
+                         Martin Renvoize <martin.renvoize@ptfs-europe.com>
+  Module Maintainers:    Tomás Cohen Arazi <tomascohen@gmail.com>
+                         Jared Camins-Esakov <jcamins@cpbibliography.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+  Bug Wranglers:         Chris Cormack <chrisc@catalyst.net.nz>
+                         Magnus Enger <magnus@enger.priv.no>
+  Packaging Manager:     Robin Sheat <robin@catalyst.net.nz>
+  VM Manager:            Samuel Desseaux <samuel.desseaux@ecp.fr>
+  Database Documentation Managers:
+                         Joy Nelson <joy@bywatersolutions.com>
+                         Samuel Desseaux <samuel.desseaux@ecp.fr>
+
+  Release Maintainer (3.8.x):  Kyle Hall <kyle@bywatersolutions.com>
+  Release Maintainer (3.10.x): Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  Release Maintainer (3.12.x): Tomás Cohen Arazi <tomascohen@gmail.com>
+  Release Maintainer (3.14.x): Fridolin Somers <fridolin.somers@biblibre.com>
+
+
+Credits
+======================
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.16.0-beta:
+  * Hochschule für Gesundheit (hsg), Germany
+  * Universidad Nacionald de Cordoba
+  * Universidad Nacional de Cordoba
+
+We thank the following individuals who contributed patches to Koha 3.16.0-beta.
+  *      9	Jacek Ablewicz
+  *      1	Aleisha Amohia
+  *      2	Roman Amor
+  *      1	Nuño López Ansótegui
+  *     35	Tomas Cohen Arazi
+  *      1	Daniel Barker
+  *      1	JaTara Barnes
+  *      1	Pablo Bianchi
+  *      3	Blou
+  *      1	Gaetan Boisson
+  *      1	Isaac Brodsky
+  *      1	Jared Camins-Esakov
+  *     12	Colin Campbell
+  *      3	Frédérick Capovilla
+  *    312	Galen Charlton
+  *     10	David Cook
+  *     17	Chris Cormack
+  *      1	Samuel Crosby
+  *      1	Stéphane Delaune
+  *      6	Frédéric Demians
+  *    235	Jonathan Druart
+  *      1	Rachel Dustin
+  *      7	Nicole Engard
+  *      4	Magnus Enger
+  *      1	Vitor FERNANDES
+  *     31	Katrin Fischer
+  *      1	Amit Gupta
+  *      1	Chris Hall
+  *     88	Kyle M Hall
+  *      1	Tim Hannah
+  *      1	Emma Heath
+  *      1	Tom Houlker
+  *      2	Mason James
+  *      5	Srdjan Jankovic
+  *      1	Janusz Kaczmarek
+  *      6	Pasi Kallinen
+  *      3	Doug Kingston
+  *      5	Olli-Antti Kivilahti
+  *     21	Bernardo Gonzalez Kriegel
+  *      2	Ketan Kulkarni
+  *      1	Nicolas Legrand
+  *    111	Owen Leonard
+  *      2	Jesse Maseto
+  *     26	Julian Maurice
+  *      7	Holger Meißner
+  *      3	Matthias Meusburger
+  *      7	Sophie Meynieux
+  *      3	Francesca Moore
+  *      1	Joy Nelson
+  *      1	Chris Nighswonger
+  *      1	Nicholas van Oudtshoorn
+  *      2	Dobrica Pavlinusic
+  *      1	Paul Poulain
+  *      6	Liz Rea
+  *      1	Martin Renvoize
+  *     48	Marcel de Rooy
+  *      1	Fridolin SOMERS
+  *     33	Fridolyn SOMERS
+  *     27	Mathieu Saby
+  *      2	A. Sassmannshausen
+  *      1	Adrien Saurat
+  *      1	Dan Scott
+  *      8	Robin Sheat
+  *      1	Juan Sieira
+  *     17	Fridolin Somers
+  *      1	Claire Stent
+  *      3	Zeno Tajoli
+  *      3	Lyon3 Team
+  *      1	Peggy Thrasher
+  *      2	Mirko Tietgen
+  *     26	Mark Tompsett
+  *      3	Marc Véron
+  *      1	Ian Walls
+  *      1	Jesse Weaver
+  *      2	alex_h
+  *      3	blou
+  *      1	daniel
+  *      1	merllissia
+  *      1	“ByWater
+
+We thank the following companies who contributed patches to Koha 3.16.0-beta
+  *     111 ACPL                                                                                          
+  *      31 BSZ BW                                                                                         
+  *       7 BSZ BW                                                                                            
+  *     326 BibLibre                                                                                    
+  *      12 BigBallOfWax                                                                          
+  *      98 ByWater-Solutions                                                                   
+  *       1 C & P Bibliography                                                                    
+  *      25 Catalyst                                                                                 
+  *     312 Equinox                                                                                   
+  *       1 Foundations                                                                              
+  *       2 KohaAloha                                                                                  
+  *       3 Libeo                                                                                          
+  *       4 Libriotech                                                                                 
+  *       1 MASmedios                                                                                  
+  *      15 PTFS-Europe                                                                              
+  *      10 Prosentient Systems
+  *      48 Rijksmuseum                                                                               
+  *       6 Tamil                                                                                           
+  *       3 Université Jean Moulin Lyon 3
+  *      20 Université Rennes 2
+  *       1 Xercode                                                                                       
+  *       2 abunchofthings.net
+  *       9 biblos.pk.edu.pl
+  *       1 bulac.fr
+  *       1 bywatersolutions
+  *       1 bywatersolutions.com”
+  *       2 carvingit.com
+  *       3 cineca.it
+  *       1 coffeecode.net
+  *       1 dover.nh.gov
+  *       1 hibs.school.nz
+  *       6 inlibro.com
+  *       1 isaacbrodsky.com
+  *       5 jns.fi
+  *       1 keep.pt
+  *       1 massey.ac.nz
+  *       6 pttk.fi
+  *       3 randomnotes.org
+  *       2 rot13.org                                                                                      
+  *     107 unidentified
+  *       3 veron.ch
+  *       1 wegc.school.nz
+  *       2 xtra.co.nz
+
+We also especially thank the following individuals who tested patches
+for Koha 3.16.0-beta.
+  *       1 Koha Team Lyon 3
+  *       2 Koha team AMU
+  *       3 Jacek Ablewicz
+  *       5 Aleisha
+  *       1 Joel Aloi
+  *       1 Aleisha Amohia
+  *       1 Roman Amor
+  *       3 Pierre Angot
+  *      21 Tomas Cohen Arazi
+  *       5 Petter Goksoyr Asen
+  *       1 Aurélie
+  *       3 Sonia BOUIS
+  *       1 Isabelle Beroud
+  *       1 Nora Blake
+  *      10 Christopher Brannon
+  *       1 Heather Braum
+  *       2 Nicolas Bravais
+  *       5 Broust
+  *       1 Nathalie CHATILLON
+  *       4 Jared Camins-Esakov
+  *    1211 Galen Charlton
+  *      21 David Cook
+  *     153 Chris Cormack
+  *       3 Charlene Criton
+  *       1 Jen DeMuth
+  *       1 Stephane Delaye
+  *       3 Frédéric Demians
+  *     287 Jonathan Druart
+  *      12 Nicole C. Engard
+  *       7 Magnus Enger
+  *       1 Suzanne Fayle
+  *       3 Aurelie Fichot
+  *     404 Katrin Fischer
+  *       2 Corey Fuimaono
+  *      18 Brendan Gallagher
+  *     224 Kyle M Hall
+  *       2 Emma Heath
+  *       1 Tom Houlker
+  *       1 JMBroust
+  *       1 Mason James
+  *       1 Pasi Kallinen
+  *      15 Olli-Antti Kivilahti
+  *       1 Barbara Knibbs
+  *      42 Bernardo Gonzalez Kriegel
+  *       1 Melissa Lefebvre
+  *       4 Nicolas Legrand
+  *       1 Leila
+  *      58 Owen Leonard
+  *       2 Havilah Lyon
+  *       4 Jesse Maseto
+  *       4 Julian Maurice
+  *       1 Sean McGarvey
+  *       1 Tom McMurdo
+  *       2 Melia Meggs
+  *       1 Holger Meissner
+  *       5 Holger Meißner
+  *       1 Matthias Meusburger
+  *       1 Sophie Meynieux
+  *       2 Michot
+  *       4 Francesca Moore
+  *       4 Chris Nighswonger
+  *       3 David Noe
+  *      10 Dobrica Pavlinusic
+  *       3 Paul Poulain
+  *       7 Liz Rea
+  *      52 Martin Renvoize
+  *       1 Chris Rohde
+  *       4 Benjamin Rokseth
+  *     116 Marcel de Rooy
+  *       7 Paola Rossi
+  *       2 Fridolyn SOMERS
+  *       9 Mathieu Saby
+  *       1 Garming Sam
+  *       2 Joel Sasse
+  *       2 A. Sassmannshausen
+  *       1 Adrien Saurat
+  *       1 Kim Schwant
+  *       1 Dan Scott
+  *       4 Robin Sheat
+  *       3 Fridolin Somers
+  *       3 Srdjan
+  *      69 Mark Tompsett
+  *       1 Ed Veal
+  *       4 Marc Veron
+  *       5 Cedric Vita
+  *       1 Cédric Vita
+  *      40 Marc Véron
+  *       5 Jesse Weaver
+  *       1 alex_h
+  *       2 marjorie barry-vila
+  *       3 sonia bouis
+  *       1 cedric.vita@dracenie.com
+  *       1 daniel
+  *       1     Signed-off-by jmbroust
+  *       6 remy juliette
+  *       3 merlissia
+  *       1 silvere
+  *       9 wajasu
+
+We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is master.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+He rau ringa e oti ai.
+(Many hands finish the work)
+
+##### Autogenerated release notes updated last on 05 May 2014 23:23:23 Z #####
