@@ -2699,11 +2699,11 @@ sub _numeration {
     my $string;
     given ($num_type) {
         when (/^dayname$/) {
-            # 1970-06-01 was a monday
+            # 1970-11-01 was a Sunday
             $value = $value % 7;
             my $dt = DateTime->new(
                 year    => 1970,
-                month   => 6,
+                month   => 11,
                 day     => $value + 1,
                 locale  => $locale,
             );
