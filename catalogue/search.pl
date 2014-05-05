@@ -721,7 +721,7 @@ my $gotopage = $cgi->param('gotoPage');
 $template->{'VARS'}->{'gotoPage'} = $gotopage
   if $gotopage =~ m/^(ISBD|labeledMARC|MARC|more)?detail.pl$/;
 
-my @input_values = map { $_->{input_value} } @limit_inputs;
+my @input_values = map { Encode::decode_utf8($_->{input_value}) } @limit_inputs;
 for my $facet ( @$facets ) {
     for my $entry ( @{ $facet->{facets} } ) {
         my $index = $entry->{type_link_value};
