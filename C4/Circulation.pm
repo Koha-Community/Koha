@@ -1780,7 +1780,7 @@ sub AddReturn {
     }
 
     # case of a return of document (deal with issues and holdingbranch)
-    my $today = dt_from_string( $return_date, 'iso' );
+    my $today = DateTime->now( time_zone => C4::Context->tz() );
 
     if ($doreturn) {
         my $datedue = $issue->{date_due};
