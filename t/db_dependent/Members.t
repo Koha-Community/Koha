@@ -6,7 +6,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 24;
+use Test::More tests => 26;
 use Data::Dumper;
 use C4::Context;
 
@@ -65,7 +65,8 @@ my %data = (
     surname => $SURNAME,
     categorycode => $CATEGORYCODE,
     branchcode => $BRANCHCODE,
-    dateofbirth => ''
+    dateofbirth => '',
+    dateexpiry => '9999-12-31',
 );
 
 my $addmem=AddMember(%data);
@@ -186,6 +187,10 @@ C4::Context->clear_syspref_cache();
 $notice_email = GetNoticeEmailAddress($member->{'borrowernumber'});
 is ($notice_email, $EMAILPRO, "GetNoticeEmailAddress returns correct value when AutoEmailPrimaryAddress is emailpro");
 
+ok(!$member->{is_expired}, "GetMemberDetails() indicates that patron is not expired");
+ModMember(borrowernumber => $member->{'borrowernumber'}, dateexpiry => '2001-01-1');
+$member = GetMemberDetails($member->{'borrowernumber'});
+ok($member->{is_expired}, "GetMemberDetails() indicates that patron is expired");
 
 # clean up 
 DelMember($member->{borrowernumber});
