@@ -386,7 +386,10 @@ sub GetMemberDetails {
       C4::Context->preference('BlockExpiredPatronOpacActions')
       if ( $borrower->{'BlockExpiredPatronOpacActions'} == -1 );
 
-    $borrower->{'is_expired'} =
+    $borrower->{'is_expired'} = 0;
+    $borrower->{'is_expired'} = 1 if
+      defined($borrower->{dateexpiry}) &&
+      $borrower->{'dateexpiry'} ne '0000-00-00' &&
       Date_to_Days( Today() ) >
       Date_to_Days( split /-/, $borrower->{'dateexpiry'} );
 
