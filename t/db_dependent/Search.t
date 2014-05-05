@@ -433,15 +433,12 @@ if ( $indexing_mode eq 'dom' ) {
         , "Simple descending publication date sorting in getRecords matches old behavior");
 }
 
-TODO: {
-    local $TODO = "Switch relevance search to MARCXML too";
     ( undef, $results_hashref, $facets_loop ) =
         getRecords('books', 'books', [ 'relevance' ], [ 'biblioserver' ], '20', 0, undef, \%branches, \%itemtypes, undef, 1);
     $record = MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[0]);
-    is($record->title_proper(), 'books', "Scan returned requested item");
+    is($record->title_proper(), 'Books', "Scan returned requested item");
     is($record->subfield('100', 'a'), 2, "Scan returned correct number of records matching term");
     # Time to test buildQuery and searchResults too.
-}
 
     my ( $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
