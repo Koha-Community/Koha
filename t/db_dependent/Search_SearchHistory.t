@@ -43,9 +43,6 @@ C4::Search::History::add({userid => 12345, sessionid => 'session_1', query_desc 
 C4::Search::History::add({userid => 56789, sessionid => 'session_2', query_desc => 'query_desc_4', query_cgi => 'query_cgi_4', total => 8});
 is(_get_history_count(), 4, 'successfully added four search_history rows');
 
-# We're not testing GetSearchHistory at present because it is broken...
-# see bug 10677
-
 # munge some dates
 my $sth = $dbh->prepare('
     UPDATE search_history
