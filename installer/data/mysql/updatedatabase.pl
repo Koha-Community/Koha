@@ -8405,7 +8405,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.15.00.048";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OpacSuppressionRedirect','1','Redirect the opac detail page for suppressed records to an explanatory page (otherwise redirect to 404 error page)','','YesNo')");
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OpacSuppressionMessage', '','Display this message on the redirect page for suppressed biblios','70|10','Textarea')");
