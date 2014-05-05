@@ -8413,7 +8413,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.15.00.049";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE biblioitems DROP INDEX isbn");
     $dbh->do("ALTER TABLE biblioitems DROP INDEX issn");
