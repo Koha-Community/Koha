@@ -633,9 +633,14 @@ sub get_matches {
 
         next if scalar(@source_keys) == 0;
 
+        # FIXME - because of a bug in QueryParser, an expression ofthe
+        # format 'isbn:"isbn1" || isbn:"isbn2" || isbn"isbn3"...'
+        # does not get parsed correctly, so we will not
+        # do AggressiveMatchOnISBN if UseQueryParser is on
         @source_keys = C4::Koha::GetVariationsOfISBNs(@source_keys)
           if ( $matchpoint->{index} =~ /^isbn$/i
-            && C4::Context->preference('AggressiveMatchOnISBN') );
+            && C4::Context->preference('AggressiveMatchOnISBN') )
+            && !C4::Context->preference('UseQueryParser');
 
         # build query
         my $query;
@@ -643,13 +648,13 @@ sub get_matches {
         my $searchresults;
         my $total_hits;
         if ( $self->{'record_type'} eq 'biblio' ) {
-            my $phr = C4::Context->preference('AggressiveMatchOnISBN') ? ',phr' : q{};
 
             if ($QParser) {
                 $query = join( " || ",
-                    map { "$matchpoint->{'index'}$phr:$_" } @source_keys );
+                    map { "$matchpoint->{'index'}:$_" } @source_keys );
             }
             else {
+                my $phr = C4::Context->preference('AggressiveMatchOnISBN') ? ',phr' : q{};
                 $query = join( " or ",
                     map { "$matchpoint->{'index'}$phr=$_" } @source_keys );
             }
