@@ -92,17 +92,20 @@ if ( ! $record ) {
 
 # redirect if opacsuppression is enabled and biblio is suppressed
 if (C4::Context->preference('OpacSuppression')) {
+    # FIXME hardcoded; the suppression flag ought to be materialized
+    # as a column on biblio or the like
     my $opacsuppressionfield = '942';
     my $opacsuppressionfieldvalue = $record->field($opacsuppressionfield);
     # redirect to opac-blocked info page or 404?
     my $opacsuppressionredirect;
     if ( C4::Context->preference("OpacSuppressionRedirect") ) {
         $opacsuppressionredirect = "/cgi-bin/koha/opac-blocked.pl";
-    }
-    else {
+    } else {
         $opacsuppressionredirect = "/cgi-bin/koha/errors/404.pl";
     }
-    if ( $opacsuppressionfieldvalue->subfield("n") == 1) {
+    if ( $opacsuppressionfieldvalue &&
+         $opacsuppressionfieldvalue->subfield("n") &&
+         $opacsuppressionfieldvalue->subfield("n") == 1) {
         # if OPAC suppression by IP address
         if (C4::Context->preference('OpacSuppressionByIPRange')) {
             my $IPAddress = $ENV{'REMOTE_ADDR'};
@@ -111,8 +114,7 @@ if (C4::Context->preference('OpacSuppression')) {
                 print $query->redirect($opacsuppressionredirect);
                 exit;
             }
-         }
-        else {
+        } else {
             print $query->redirect($opacsuppressionredirect);
             exit;
         }
