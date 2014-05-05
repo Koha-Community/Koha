@@ -49,6 +49,7 @@
     [% END %]
 [% END %]
 [% BLOCK authresult %]
+    [% IF ( summary.summary ) %][% summary.summary | html %]:[% END %]
     <div class="authres_repet">
       [% FOREACH repet IN summary.repets %]
         <span>[% repet | html %]</span>
