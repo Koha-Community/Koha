@@ -8368,8 +8368,8 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+$DBversion = "3.15.00.045";
+if ( CheckVersion($DBversion) ) {
     $dbh->do("
         INSERT INTO systempreferences (variable,value,explanation,options,type)
         VALUES (
@@ -8384,7 +8384,6 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     print "Upgraded to $DBversion done (Bug 6739 - expired patrons not blocked from opac actions)\n";
     SetVersion ($DBversion);
 }
-
 
 =head1 FUNCTIONS
 
