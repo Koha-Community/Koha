@@ -39,6 +39,7 @@ use C4::Installer;
 use C4::Dates;
 use Koha::Database;
 use Koha;
+use C4::Koha qw/GetSupportList/;
 
 use MARC::Record;
 use MARC::File::XML ( BinaryEncoding => 'utf8' );
@@ -11317,6 +11318,20 @@ if ( CheckVersion($DBversion) ) {
             ADD COLUMN publisheddatetext VARCHAR(100) DEFAULT NULL AFTER publisheddate
     });
     print "Upgrade to $DBversion done (Bug 8296: Add descriptive (text) published date field for serials)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    foreach my $format (@{ GetSupportList() }) {
+        $dbh->do(
+            q/INSERT INTO authorised_values (category, authorised_value, lib, lib_opac, imageurl)
+            VALUES (?, ?, ?, ?, ?)/,
+            {},
+            'SUGGEST_FORMAT', $format->{itemtype}, $format->{description}, $format->{description}, $format->{imageurl}
+        );
+    }
+    print "Upgrade to $DBversion done (Bug 9468: create new SUGGEST_FORMAT authorised_value list)\n";
     SetVersion($DBversion);
 }
 
