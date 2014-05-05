@@ -45,6 +45,13 @@ __PACKAGE__->table("search_history");
   data_type: 'text'
   is_nullable: 0
 
+=head2 type
+
+  data_type: 'varchar'
+  default_value: 'biblio'
+  is_nullable: 0
+  size: 16
+
 =head2 total
 
   data_type: 'integer'
@@ -68,6 +75,13 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "query_cgi",
   { data_type => "text", is_nullable => 0 },
+  "type",
+  {
+    data_type => "varchar",
+    default_value => "biblio",
+    is_nullable => 0,
+    size => 16,
+  },
   "total",
   { data_type => "integer", is_nullable => 0 },
   "time",
@@ -80,8 +94,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HLDQ0HfcjBkl6y1rXoX0qA
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-05-05 02:39:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8x/CWZQFWoXcKGVs4h4CWQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
