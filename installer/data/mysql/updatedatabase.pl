@@ -8374,7 +8374,7 @@ if ( CheckVersion($DBversion) ) {
         INSERT INTO systempreferences (variable,value,explanation,options,type)
         VALUES (
             'BlockExpiredPatronOpacActions',
-            '1',
+            '0',
             'Set whether an expired patron can perform opac actions such as placing holds or renew books, can be overridden on a per patron-type basis',
             NULL,
             'YesNo'
