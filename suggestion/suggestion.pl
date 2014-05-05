@@ -54,14 +54,13 @@ sub Init{
 sub GetCriteriumDesc{
     my ($criteriumvalue,$displayby)=@_;
     if ($displayby =~ /status/i) {
-        if ( grep { /^($criteriumvalue)$/ } qw(ASKED ACCEPTED REJECTED CHECKED ORDERED AVAILABLE) ) {
-            return ($criteriumvalue eq 'ASKED'?"Pending":ucfirst(lc( $criteriumvalue)));
-        } else {
-            return GetAuthorisedValueByCode('SUGGEST_STATUS', $criteriumvalue) || $criteriumvalue;
+        unless ( grep { /$criteriumvalue/ } qw(ASKED ACCEPTED REJECTED CHECKED ORDERED AVAILABLE) ) {
+            return GetAuthorisedValueByCode('SUGGEST_STATUS', $criteriumvalue ) || "Unknown";
         }
+        return ($criteriumvalue eq 'ASKED'?"Pending":ucfirst(lc( $criteriumvalue))) if ($displayby =~/status/i);
     }
     return (GetBranchName($criteriumvalue)) if ($displayby =~/branchcode/);
-    return (GetSupportName($criteriumvalue)) if ($displayby =~/itemtype/);
+    return GetAuthorisedValueByCode('SUGGEST_FORMAT', $criteriumvalue) || "Unknown" if ($displayby =~/itemtype/);
     if ($displayby =~/suggestedby/||$displayby =~/managedby/||$displayby =~/acceptedby/){
         my $borr=C4::Members::GetMember(borrowernumber=>$criteriumvalue);
         return "" unless $borr;
@@ -324,20 +323,6 @@ $branchfilter=C4::Context->userenv->{'branch'} if ($onlymine && !$branchfilter);
 $template->param( branchloop => \@branchloop,
                 branchfilter => $branchfilter);
 
-# the index parameter is different for item-level itemtypes
-my $supportlist = GetSupportList();
-
-foreach my $support (@$supportlist) {
-    $$support{'selected'} = (defined $$suggestion_ref{'itemtype'})
-        ? $$support{'itemtype'} eq $$suggestion_ref{'itemtype'}
-        : 0;
-    if ( $$support{'imageurl'} ) {
-        $$support{'imageurl'} = getitemtypeimagelocation( 'intranet', $$support{'imageurl'} );
-    } else {
-        delete $$support{'imageurl'};
-    }
-}
-$template->param(itemtypeloop=>$supportlist);
 $template->param( returnsuggestedby => $returnsuggestedby );
 
 my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG",$$suggestion_ref{'patronreason'});

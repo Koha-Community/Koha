@@ -151,15 +151,6 @@ if ( $op eq "delete_confirm" ) {
     exit;
 }
 map{ $_->{'branchcodesuggestedby'}=GetBranchInfo($_->{'branchcodesuggestedby'})->[0]->{'branchname'}} @$suggestions_loop;
-my $supportlist=GetSupportList();
-foreach my $support(@$supportlist){
-	if ($$support{'imageurl'}){
-		$$support{'imageurl'}= getitemtypeimagelocation( 'opac', $$support{'imageurl'} );
-	}
-	else {
-	   delete $$support{'imageurl'}
-	}
-}
 
 foreach my $suggestion(@$suggestions_loop) {
     if($suggestion->{'suggestedby'} == $borrowernumber) {
@@ -192,7 +183,6 @@ if ( C4::Context->preference("AllowPurchaseSuggestionBranchChoice") ) {
 
 $template->param(
 	%$suggestion,
-	itemtypeloop=> $supportlist,
     suggestions_loop => $suggestions_loop,
     patron_reason_loop => $patron_reason_loop,
     "op_$op"         => 1,

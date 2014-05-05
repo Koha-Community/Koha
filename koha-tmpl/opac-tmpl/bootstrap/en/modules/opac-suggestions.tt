@@ -43,18 +43,7 @@
                                         <li><label for="collectiontitle">Collection title:</label><input type="text" id="collectiontitle" name="collectiontitle" class="span6" maxlength="80" /></li>
                                         <li><label for="place">Publication place:</label><input type="text" id="place" name="place"  maxlength="80" /></li>
                                         <li><label for="itemtype">Item type:</label>
-                                            <select name="itemtype" id="itemtype">
-                                                <option value="">Default</option>
-                                                [% FOREACH itemtypeloo IN itemtypeloop %]
-                                                    [% IF ( itemtypeloo.selected ) %]
-                                                        <option value="[% itemtypeloo.itemtype %]" selected="selected">
-                                                    [% ELSE %]
-                                                        <option value="[% itemtypeloo.itemtype %]">
-                                                    [% END %]
-                                                            [% itemtypeloo.translated_description %]
-                                                        </option>
-                                                [% END %]
-                                            </select>
+                                            [% PROCESS 'av-build-dropbox.inc' name="itemtype", category="SUGGEST_FORMAT", size = 20 %]
                                         </li>
                                         [% IF ( branchloop ) %]
                                             <li><label for="branch">Library:</label>
@@ -195,7 +184,7 @@
                                                                 [% IF ( suggestions_loo.publishercode ) %] - [% suggestions_loo.publishercode |html %][% END %]
                                                                 [% IF ( suggestions_loo.place ) %]([% suggestions_loo.place |html %])[% END %]
                                                                 [% IF ( suggestions_loo.collectiontitle ) %] , [% suggestions_loo.collectiontitle |html %][% END %]
-                                                                [% IF ( suggestions_loo.itemtype ) %] - [% suggestions_loo.itemtype %][% END %]
+                                                                [% IF ( suggestions_loo.itemtype ) %] - [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestions_loo.itemtype, 1 ) %][% END %]
                                                         </p>
                                                     </td>
                                                     <td>
