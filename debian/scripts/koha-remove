@@ -19,6 +19,14 @@
 
 set -e
 
+# include helper functions
+if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
+    . "/usr/share/koha/bin/koha-functions.sh"
+else
+    echo "Error: /usr/share/koha/bin/koha-functions.sh not present." 1>&2
+    exit 1
+fi
+
 args=$(getopt -l keep-mysql -o k -n $0 -- "$@")
 eval set -- $args
 while [ ! -z "$1" ]
@@ -35,7 +43,7 @@ NAMES="$@"
 
 SITECONFDIR="/etc/koha/sites"
 # There has to be a better way of excluding '.' from find. But this works.
-INSTANCES=`cd $SITECONFDIR && find . -type d -printf " %f" |sed s/\ .\ //`
+INSTANCES=$(get_instances)
 
 if [ -z $NAMES ] ; then
     echo "Please specify a Koha instance name. Your choices are:"
@@ -69,10 +77,10 @@ eof
     # If the daemon is not running already, we don't want to fail this loop. So bin the result code if this fails.
     koha-stop-zebra $name || /bin/true
 
-    instancefile="$name.conf"
+    instancefile=$(get_apache_config_for $name)
 
-    [ -f "/etc/apache2/sites-available/$instancefile" ]  && \
-        rm "/etc/apache2/sites-available/$instancefile"
+    [ -f "$instancefile" ]  && \
+        rm "$instancefile"
     [ -f "/etc/koha/sites/$name/koha-conf.xml" ] && \
         rm "/etc/koha/sites/$name/koha-conf.xml"
     [ -f "/etc/koha/sites/$name/zebra-biblios.cfg" ] && \

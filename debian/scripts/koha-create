@@ -19,6 +19,14 @@
 
 set -e
 
+# include helper functions
+if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
+    . "/usr/share/koha/bin/koha-functions.sh"
+else
+    echo "Error: /usr/share/koha/bin/koha-functions.sh not present." 1>&2
+    exit 1
+fi
+
 usage()
 {
     local scriptname=$0
@@ -61,11 +69,6 @@ Options:
 Note: the instance name cannot be longer that 11 chars.
 
 EOF
-}
-
-die() {
-    echo "$@" 1>&2
-    exit 1
 }
 
 # UPPER CASE VARIABLES - from configfile or default value

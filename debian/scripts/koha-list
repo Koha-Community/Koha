@@ -19,53 +19,13 @@
 
 set -e
 
-die()
-{
-    echo "$@" 1>&2
+# include helper functions
+if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
+    . "/usr/share/koha/bin/koha-functions.sh"
+else
+    echo "Error: /usr/share/koha/bin/koha-functions.sh not present." 1>&2
     exit 1
-}
-
-is_enabled()
-{
-    local instancename=$1
-    local instancefile="/etc/apache2/sites-available/$instancename.conf"
-
-    if grep '^[[:space:]]*Include /etc/koha/apache-shared-disable.conf' \
-            "$instancefile" > /dev/null
-    then
-        return 1
-    else
-        return 0
-    fi
-}
-
-is_email_enabled()
-{
-    local instancename=$1
-
-    if [ -e /var/lib/koha/$instancename/email.enabled ]; then
-        return 0
-    else
-        return 1
-    fi
-}
-
-is_sip_enabled()
-{
-    local instancename=$1
-
-    if [ -e /etc/koha/sites/$instancename/SIPconfig.xml ]; then
-        return 0
-    else
-        return 1
-    fi
-}
-
-get_instances()
-{
-    find /etc/koha/sites -mindepth 1 -maxdepth 1\
-                         -type d -printf '%f\n' | sort
-}
+fi
 
 show_instances()
 {

@@ -19,16 +19,16 @@
 
 set -e
 
+# include helper functions
+if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
+    . "/usr/share/koha/bin/koha-functions.sh"
+else
+    echo "Error: /usr/share/koha/bin/koha-functions.sh not present." 1>&2
+    exit 1
+fi
 
 # Make sure the files we create are not accessible by anyone else.
 umask 0077
-
-
-die() {
-    echo "$@" 1>&2
-    exit 1
-}
-
 
 # Parse command line.
 [ "$#" = 1 ] || die "Usage: $0 instancename"

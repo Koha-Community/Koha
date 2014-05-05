@@ -20,6 +20,14 @@
 
 set -e
 
+# include helper functions
+if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
+    . "/usr/share/koha/bin/koha-functions.sh"
+else
+    echo "Error: /usr/share/koha/bin/koha-functions.sh not present." 1>&2
+    exit 1
+fi
+
 usage()
 {
     local scriptname=$(basename $0)
@@ -48,12 +56,6 @@ $scriptname --help|-h
     -h | --help           Display this help message
 
 EOF
-}
-
-die()
-{
-    echo "$@" 1>&2
-    exit 1
 }
 
 list()
