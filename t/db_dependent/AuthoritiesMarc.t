@@ -178,7 +178,9 @@ my $expected_unimarc_name_summary = {
     'otherscript' => [],
     'seealso' => [],
     'seefrom' => [],
-    'summary' => 'Fossey, Brigitte',
+    'repets' => [
+        'Fossey, Brigitte'
+    ],
     'type' => 'Auteur'
 };
 
