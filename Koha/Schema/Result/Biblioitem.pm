@@ -54,15 +54,13 @@ __PACKAGE__->table("biblioitems");
 
 =head2 isbn
 
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 30
 
 =head2 issn
 
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 9
 
 =head2 ean
 
@@ -234,9 +232,9 @@ __PACKAGE__->add_columns(
   "itemtype",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "isbn",
-  { data_type => "varchar", is_nullable => 1, size => 30 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "issn",
-  { data_type => "varchar", is_nullable => 1, size => 9 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "ean",
   { data_type => "varchar", is_nullable => 1, size => 13 },
   "publicationyear",
@@ -343,8 +341,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-01-31 15:58:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4tm44zYP5ZPJo/xINVgHVg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-05-05 17:59:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QE7ghWQ1JZw+IBDRwvgvSA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
