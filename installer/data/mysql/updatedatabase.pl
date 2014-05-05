@@ -8385,7 +8385,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.15.00.046";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         ALTER TABLE search_history ADD COLUMN type VARCHAR(16) NOT NULL DEFAULT 'biblio' AFTER query_cgi
