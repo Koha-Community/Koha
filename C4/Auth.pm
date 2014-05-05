@@ -260,7 +260,6 @@ sub get_template_and_user {
             my @recentSearches = C4::Search::History::get_from_session({ cgi => $in->{'query'} });
             if (@recentSearches) {
                 my $dbh = C4::Context->dbh;
-
                 my $query = q{
                     INSERT INTO search_history(userid, sessionid, query_desc, query_cgi, type,  total, time )
                     VALUES (?, ?, ?, ?, ?, ?, ?)

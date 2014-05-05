@@ -49,7 +49,7 @@ sub add_to_session {
         query_cgi  => $query_cgi,
         total      => "$total",
         type       => $type,
-        time       => output_pref( { dt => dt_from_string(), dateformat => 'iso' } ),
+        time       => output_pref( { dt => dt_from_string(), dateformat => 'iso', timeformat => '24hr' } ),
       };
 
     shift @recent_searches if ( @recent_searches > 15 );
