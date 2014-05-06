@@ -78,6 +78,55 @@ EOF
     fi
 fi
 
+# Check if we need to rename the Apache vhost files
+RENAME_APACHE_FILES="no"
+for vhost in $(koha-list); do
+    if [ -f "/etc/apache2/sites-available/$vhost" ] && \
+       [ ! -f "/etc/apache2/sites-available/$vhost.conf" ]; then
+       RENAME_APACHE_FILES="yes"
+       break # at least one, trigger renaming
+    fi
+done
+
+if [ "$RENAME_APACHE_FILES" = "yes" ]; then
+    # If the user agreed we now rename their Apache files
+    db_get koha-common/rename-apache-vhost-files
+    if [ "$RET" = "false" ]; then
+        # We're not renaming the files, just print a warning
+        cat <<EOF >&2
+Warning: you have chosen not to migrate your Apache virtual hosts files to the
+Apache 2.4 naming schema. You can do it manually by running this for each
+Koha instance:
+
+    $ sudo a2dissite instance
+    $ sudo mv /etc/apache2/sites-available/instance \
+              /etc/apache2/sites-available/instance.conf
+    $ sudo a2ensite instance
+EOF
+    else
+        # We have to rename the Apache files
+        for site in $(koha-list); do
+            ENABLE_VHOST="yes"
+            if [ -f "/etc/apache2/sites-available/$site" ] && \
+               [ ! -f "/etc/apache2/sites-available/$site.conf" ]; then
+                if ! a2dissite $site > /dev/null 2>&1; then
+                    echo "Warning: problem disabling $site in Apache" >&2
+                    ENABLE_VHOST="no"
+                fi
+                # Rename the vhost definition files
+                mv "/etc/apache2/sites-available/$site" \
+                   "/etc/apache2/sites-available/$site.conf"
+
+                if [ "$ENABLE_VHOST" = "yes" ]; then
+                    if ! a2ensite $site > /dev/null 2>&1; then
+                        echo "Warning: problem enabling $site in Apache" >&2
+                    fi
+                fi
+            fi
+        done
+    fi
+fi
+
 db_stop
 
 exit 0

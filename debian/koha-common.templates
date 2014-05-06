@@ -15,3 +15,11 @@ Default: true
 Description: automatically update translations
   When Koha is upgraded, any existing translated templates can be regenerated
   to keep everything in sync. Select "yes" if you want this.
+
+Template: koha-common/rename-apache-vhost-files
+Type: boolean
+Default: true
+Description: Rename the Apache virtual hosts files for Koha instances?
+ When Koha is upgraded, the Apache's virtual host definition files can be
+ renamed to match the needs of the newer Apache 2.4. Previously defined
+ Koha instances will get their Apache files appended '.conf'.
