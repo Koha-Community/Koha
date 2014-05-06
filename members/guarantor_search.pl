@@ -42,7 +42,7 @@ my ( $template, $loggedinuser, $cookie );
     }
 );
 
-my $member        = $input->param('member');
+my $member        = $input->param('member') // '';
 my $orderby       = $input->param('orderby');
 my $category_type = $input->param('category_type');
 
