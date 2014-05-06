@@ -71,7 +71,6 @@ if ($member ne ''){
 
 	for (my $i=0; $i < $count; $i++){
 	#find out stats
-	my ($od,$issue,$fines)=GetMemberIssuesAndFines($results->[$i]{'borrowerid'});
 	my $guarantorinfo=uc($results->[$i]{'surname'})." , ".ucfirst($results->[$i]{'firstname'});
 	my %row = (
 		background => $background,
@@ -94,8 +93,6 @@ if ($member ne ''){
 		dateofbirth =>format_date($results->[$i]{'dateofbirth'}),
 		#fi op	
 		
-		odissue => "$od/$issue",
-		fines => $fines,
 		borrowernotes => $results->[$i]{'borrowernotes'});
 	if ( $background ) { $background = 0; } else {$background = 1; }
 	push(@resultsdata, \%row);
