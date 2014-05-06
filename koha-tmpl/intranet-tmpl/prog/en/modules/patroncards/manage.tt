@@ -1,3 +1,15 @@
+[% BLOCK translate_card_element %]
+[%  SWITCH element %]
+[%   CASE 'layout'    %]layout
+[%   CASE 'Layouts'   %]Layouts
+[%   CASE 'template'  %]template
+[%   CASE 'Templates' %]Templates
+[%   CASE 'profile'   %]profile
+[%   CASE 'Profiles'  %]Profiles
+[%   CASE 'batch'     %]batch
+[%   CASE 'Batches'   %]Batches
+[%  END %]
+[% END %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Patron cards &rsaquo; Manage patron card elements</title>
     [% INCLUDE 'doc-head-close.inc' %]
@@ -7,7 +19,7 @@
             function DeleteConfirm() {
                 var element_id = selected_layout("delete");
                 if (element_id>-1) {
-                    var msg = _("Are you sure you want to delete %s %s?").format("[% card_element %]", element_id);
+                    var msg = _("Are you sure you want to delete %s %s?").format("[% PROCESS translate_card_element element=card_element %]", element_id);
                     var answer = confirm(msg);
                     if (answer) {
                         window.location = "/cgi-bin/koha/patroncards/manage.pl?op=delete&card_element=[% card_element %]&element_id=" + element_id;
@@ -64,7 +76,7 @@
                         return(document.layouts.action[selected[0]].value);
                     }
                     else {
-                        alert(_("Please select only one %s to %s.").format("[% card_element %]", op));
+                        alert(_("Please select only one %s to %s.").format("[% PROCESS translate_card_element element=card_element %]", op));
                         return (-1);
                     }
                 }
@@ -73,7 +85,7 @@
                         return(document.layouts.action.value);
                     }
                 };
-                alert(_("Please select a %s.").format("[% card_element %]"));
+                alert(_("Please select a %s.").format("[% PROCESS translate_card_element element=card_element %]"));
                 return (-1);
             };
 
@@ -101,7 +113,7 @@
         <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
         <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
         <a href="/cgi-bin/koha/patroncards/home.pl">Patron card creator</a> &rsaquo;
-        Manage card [% card_element_title %]
+        Manage card [% PROCESS translate_card_element element=card_element_title %]
     </div>
     <div id="doc3" class="yui-t2">
         <div id="bd">
@@ -114,7 +126,7 @@
                             <div class="hint">Current library: [% LoginBranchname %]</div>
                             [% IF ( table_loop ) %]
                             <form name="layouts" action="/cgi-bin/koha/manage.pl?card_element=[% card_element %]">
-                            <h2>Currently Available [% card_element_title %]</h2>
+                            <h2>Currently Available [% PROCESS translate_card_element element=card_element_title %]</h2>
                             <table>
                                 [% FOREACH table_loo IN table_loop %]
                                 [% IF ( table_loo.header_fields ) %]
@@ -146,8 +158,8 @@
                             </form>
                             [% ELSE %]
                         <div class="dialog message">
-                            <h4>There are no [% card_element_title %] currently available.</h4>
-                            <p>Use the toolbar above to create a new [% card_element %].</p></div>
+                            <h4>There are no [% PROCESS translate_card_element element=card_element_title %] currently available.</h4>
+                            <p>Use the toolbar above to create a new [% PROCESS translate_card_element element=card_element %].</p></div>
                             [% END %]
                         </div>
                     </div>
