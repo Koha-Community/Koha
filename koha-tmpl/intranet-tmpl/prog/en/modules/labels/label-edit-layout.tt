@@ -1,3 +1,12 @@
+[% BLOCK translate_label_types %]
+[%  SWITCH type %]
+[%   CASE 'BIB'    %]Biblio
+[%   CASE 'BARBIB' %]Barcode/Biblio
+[%   CASE 'BIBBAR' %]Biblio/Barcode
+[%   CASE 'ALT'    %]Alternating
+[%   CASE 'BAR'    %]Barcode
+[%  END %]
+[% END %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Labels</title>
     [% INCLUDE 'doc-head-close.inc' %]
@@ -19,6 +28,13 @@
         //]]>
     </script>
 </head>
+[% BLOCK translate_justification_types %]
+[%  SWITCH type %]
+[%   CASE 'L' %]Left
+[%   CASE 'C' %]Center
+[%   CASE 'R' %]Right
+[%  END %]
+[% END %]
 <body id="labels_label-edit-layout" class="tools labels">
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
@@ -58,9 +74,9 @@
                                     <select name="printing_type" id="printing_type">
                                     [% FOREACH label_type IN label_types %]
                                     [% IF ( label_type.selected ) %]
-                                    <option value="[% label_type.type %]" selected="selected">[% label_type.name %]</option>
+                                    <option value="[% label_type.type %]" selected="selected">[% PROCESS translate_label_types type=label_type.type %]</option>
                                     [% ELSE %]
-                                    <option value="[% label_type.type %]">[% label_type.name %]</option>
+                                    <option value="[% label_type.type %]">[% PROCESS translate_label_types type=label_type.type %]</option>
                                     [% END %]
                                     [% END %]
                                     </select>
@@ -132,9 +148,9 @@
                                     <select name="text_justify" id="text_justify">
                                         [% FOREACH text_justification_type IN text_justification_types %]
                                         [% IF ( text_justification_type.selected ) %]
-                                        <option value="[% text_justification_type.type %]" selected="selected">[% text_justification_type.name %]</option>
+                                        <option value="[% text_justification_type.type %]" selected="selected">[% PROCESS translate_justification_types type=text_justification_type.type %]</option>
                                         [% ELSE %]
-                                        <option value="[% text_justification_type.type %]">[% text_justification_type.name %]</option>
+                                        <option value="[% text_justification_type.type %]">[% PROCESS translate_justification_types type=text_justification_type.type %]</option>
                                         [% END %]
                                         [% END %]
                                     </select>
