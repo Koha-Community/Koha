@@ -34,11 +34,11 @@ $pdf_creator->FontSize(); # Reset font size before testing text width etc below
 
 ok($pdf_creator->Page(), "testing Page() works");
 
-is($pdf_creator->StrWidth("test", "H", 12), '19.344', "testing StrWidth() returns correct point width");
+is($pdf_creator->StrWidth("test", "H", 12), '23.044921875', "testing StrWidth() returns correct point width");
 
 @result = $pdf_creator->Text(10, 10, "test");
 is($result[0], '10', "testing Text() writes from a given x-value");
-is($result[1], '29.344', "testing Text() writes to the correct x-value");
+is($result[1], '33.044921875', "testing Text() writes to the correct x-value");
 
 open(my $fh, '>', 'test.pdf');
 select $fh;

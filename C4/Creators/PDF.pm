@@ -308,6 +308,18 @@ sub SinglePage {
 sub StrWidth {
     my $self = shift;
     my ($string, $font, $fontSize) = @_;
+
+    # replace font code with path to TTF font file if need be
+    my $ttf = C4::Context->config('ttf');
+    if ( $ttf ) {
+        my $ttf_path = first { $_->{type} eq $font } @{ $ttf->{font} };
+        if ( -e $ttf_path->{content} ) {
+            $font = $ttf_path->{content};
+        } else {
+            warn "ERROR in koha-conf.xml -- missing <font type=\"$font\">/path/to/font.ttf</font>";
+        }
+    }
+
     return prStrWidth($string, $font, $fontSize);
 }
 
