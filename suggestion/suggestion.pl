@@ -182,7 +182,20 @@ elsif ($op eq "change" ) {
         $$suggestion_ref{'suggestionid'}=$suggestionid;
         &ModSuggestion($suggestion_ref);
     }
-    $op = 'else';
+    my $params;
+    foreach my $key (
+        qw(
+        displayby branchcode title author isbn publishercode copyrightdate
+        collectiontitle suggestedby suggesteddate_from suggesteddate_to
+        manageddate_from manageddate_to accepteddate_from
+        accepteddate_to budgetid
+        )
+      )
+    {
+        $params .= $key . '=' . $input->param($key) . '&'
+          if $input->param($key);
+    }
+    print $input->redirect("/cgi-bin/koha/suggestion/suggestion.pl?$params");
 }elsif ($op eq "delete" ) {
     foreach my $delete_field (@editsuggestions) {
         &DelSuggestion( $borrowernumber, $delete_field,'intranet' );
