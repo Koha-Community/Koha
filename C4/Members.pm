@@ -1270,7 +1270,8 @@ sub GetMemberAccountBalance {
 
     my $ACCOUNT_TYPE_LENGTH = 5; # this is plain ridiculous...
 
-    my @not_fines = ('Res');
+    my @not_fines;
+    push @not_fines, 'Res' unless C4::Context->preference('HoldsInNoissuesCharge');
     push @not_fines, 'Rent' unless C4::Context->preference('RentalsInNoissuesCharge');
     unless ( C4::Context->preference('ManInvInNoissuesCharge') ) {
         my $dbh = C4::Context->dbh;

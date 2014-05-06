@@ -8697,6 +8697,14 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('HoldsInNoissuesCharge', '0', 'Hold charges block checkouts (added to noissuescharge).',NULL,'YesNo');");
+    print "Upgrade to $DBversion done (Bug 12205: Add HoldsInNoissuesCharge systempreference)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
