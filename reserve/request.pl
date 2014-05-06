@@ -79,9 +79,9 @@ $findborrower = '' unless defined $findborrower;
 $findborrower =~ s|,| |g;
 my $borrowernumber_hold = $input->param('borrowernumber') || '';
 my $messageborrower;
-my $maxreserves;
 my $warnings;
 my $messages;
+my $exceeded_maxreserves;
 
 my $date = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 my $action = $input->param('action');
@@ -126,23 +126,46 @@ if ($findborrower) {
     }
 }
 
+my @biblionumbers = ();
+my $biblionumbers = $input->param('biblionumbers');
+if ($multihold) {
+    @biblionumbers = split '/', $biblionumbers;
+} else {
+    push @biblionumbers, $input->param('biblionumber');
+}
+
+
 # If we have the borrowernumber because we've performed an action, then we
 # don't want to try to place another reserve.
 if ($borrowernumber_hold && !$action) {
     my $borrowerinfo = GetMember( borrowernumber => $borrowernumber_hold );
     my $diffbranch;
     my @getreservloop;
-    my $count_reserv = 0;
 
     # we check the reserves of the borrower, and if he can reserv a document
     # FIXME At this time we have a simple count of reservs, but, later, we could improve the infos "title" ...
 
-    my $number_reserves =
+    my $reserves_count =
       GetReserveCount( $borrowerinfo->{'borrowernumber'} );
 
-    if ( C4::Context->preference('maxreserves') && ($number_reserves >= C4::Context->preference('maxreserves')) ) {
-        $warnings = 1;
-        $maxreserves = 1;
+    my $new_reserves_count = scalar( @biblionumbers );
+
+    my $maxreserves = C4::Context->preference('maxreserves');
+    if ( $maxreserves
+        && ( $reserves_count + $new_reserves_count > $maxreserves ) )
+    {
+        my $new_reserves_allowed =
+            $maxreserves - $reserves_count > 0
+          ? $maxreserves - $reserves_count
+          : 0;
+        $warnings             = 1;
+        $exceeded_maxreserves = 1;
+        $template->param(
+            new_reserves_allowed => $new_reserves_allowed,
+            new_reserves_count   => $new_reserves_count,
+            reserves_count       => $reserves_count,
+            maxreserves          => $maxreserves,
+        );
     }
 
     # we check the date expiry of the borrower (only if there is an expiry date, otherwise, set to 1 (warn)
@@ -171,7 +194,6 @@ if ($borrowernumber_hold && !$action) {
                 borroweremail       => $borrowerinfo->{'email'},
                 borroweremailpro    => $borrowerinfo->{'emailpro'},
                 borrowercategory    => $borrowerinfo->{'category'},
-                borrowerreservs     => $count_reserv,
                 cardnumber          => $borrowerinfo->{'cardnumber'},
                 expiry              => $expiry,
                 diffbranch          => $diffbranch,
@@ -186,14 +208,6 @@ $template->param( messageborrower => $messageborrower );
 
 # FIXME launch another time GetMember perhaps until
 my $borrowerinfo = GetMember( borrowernumber => $borrowernumber_hold );
-
-my @biblionumbers = ();
-my $biblionumbers = $input->param('biblionumbers');
-if ($multihold) {
-    @biblionumbers = split '/', $biblionumbers;
-} else {
-    push @biblionumbers, $input->param('biblionumber');
-}
 
 my $itemdata_enumchron = 0;
 my @biblioloop = ();
@@ -210,7 +224,7 @@ foreach my $biblionumber (@biblionumbers) {
         #All is OK and we can continue
     }
     elsif ( $canReserve eq 'tooManyReserves' ) {
-        $maxreserves = 1;
+        $exceeded_maxreserves = 1;
     }
     elsif ( $canReserve eq 'ageRestricted' ) {
         $template->param( $canReserve => 1 );
@@ -314,15 +328,21 @@ foreach my $biblionumber (@biblionumbers) {
         my $num_override  = 0;
         my $hiddencount   = 0;
 
-        $biblioitem->{description} =
-          $itemtypes->{ $biblioitem->{itemtype} }{description};
-	if($biblioitem->{biblioitemnumber} ne $biblionumber){
-		$biblioitem->{hostitemsflag}=1;
-	}
+        if ( $biblioitem->{biblioitemnumber} ne $biblionumber ) {
+            $biblioitem->{hostitemsflag} = 1;
+        }
+
         $biblioloopiter{description} = $biblioitem->{description};
-        $biblioloopiter{itypename} = $biblioitem->{description};
-        $biblioloopiter{imageurl} =
-          getitemtypeimagelocation('intranet', $itemtypes->{$biblioitem->{itemtype}}{imageurl});
+        $biblioloopiter{itypename}   = $biblioitem->{description};
+        if ( $biblioitem->{itemtype} ) {
+
+            $biblioitem->{description} =
+              $itemtypes->{ $biblioitem->{itemtype} }{description};
+
+            $biblioloopiter{imageurl} =
+              getitemtypeimagelocation( 'intranet',
+                $itemtypes->{ $biblioitem->{itemtype} }{imageurl} );
+        }
 
         foreach my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } )    {
             my $item = $iteminfos_of->{$itemnumber};
@@ -426,6 +446,7 @@ foreach my $biblionumber (@biblionumbers) {
 
             if (
                    !$item->{cantreserve}
+                && !$exceeded_maxreserves
                 && IsAvailableForItemLevelRequest($item, $borrowerinfo)
                 && CanItemBeReserved(
                     $borrowerinfo->{borrowernumber}, $itemnumber
@@ -592,7 +613,7 @@ foreach my $biblionumber (@biblionumbers) {
 
 $template->param( biblioloop => \@biblioloop );
 $template->param( biblionumbers => $biblionumbers );
-$template->param( maxreserves => $maxreserves );
+$template->param( exceeded_maxreserves => $exceeded_maxreserves );
 
 if ($multihold) {
     $template->param( multi_hold => 1 );

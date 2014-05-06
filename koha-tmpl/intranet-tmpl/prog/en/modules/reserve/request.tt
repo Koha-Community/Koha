@@ -298,13 +298,15 @@ function checkMultiHold() {
     </form>
   [% ELSE %]
 
-[% IF ( maxreserves || alreadyreserved || none_available || alreadypossession || ageRestricted ) %]
+[% IF ( exceeded_maxreserves || alreadyreserved || none_available || alreadypossession || ageRestricted ) %]
     <div class="dialog alert">
 
     [% UNLESS ( multi_hold ) %]
       <h3>Cannot place hold</h3>
-  	  <ul>
-        [% IF ( alreadypossession ) %]
+      <ul>
+        [% IF ( exceeded_maxreserves ) %]
+          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> can only place a maximum of [% maxreserves %] total holds.</li>
+        [% ELSIF ( alreadypossession ) %]
           <li> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>is already in possession</strong> of one item</li>
         [% ELSIF ( alreadyreserved ) %]
           <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>already has a hold</strong> on this item </li>
@@ -315,9 +317,12 @@ function checkMultiHold() {
         [% ELSIF ( maxreserves ) %]
           <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> has too many holds.</li>
         [% END %]
-	  </ul>
+      </ul>
     [% ELSE %]
-      <h3>Cannot place hold on some items</h3>
+        <h3>Cannot place hold on some items</h3>
+        [% IF ( exceeded_maxreserves ) %]
+          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> can place [% new_reserves_allowed %] of the requested [% new_reserves_count %] holds for a maximum of [% maxreserves %] total holds.</li>
+        [% END %]
     [% END %]
 
     </div>
