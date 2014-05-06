@@ -14,5 +14,5 @@
   "[% item.stocknumber |html %]",
   "[% item.status |html %]",
   "[% (item.issues || 0) |html %]",
-  "<a href='/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber %]&itemnumber=[% item.itemnumber %]'>Modify</a>"
+  "<a href='/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber %]&itemnumber=[% item.itemnumber %]'>Edit</a>"
 ]

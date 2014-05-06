@@ -133,7 +133,7 @@
   <title>Koha &rsaquo; Catalog &rsaquo; Advanced search</title>
   [% INCLUDE 'doc-head-close.inc' %]
   [% INCLUDE 'datatables.inc' %]
-  <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
+  <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
   <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
   <link rel="stylesheet" type="text/css" href="[% themelang %]/css/itemsearchform.css" />
   <script type="text/javascript">
@@ -355,7 +355,9 @@
           </fieldset>
           <fieldset>
             [% INCLUDE form_field_select_text_block %]
-            <p class="hint">You can use the following joker characters: % _</p>
+            <p class="hint">You can use the following wildcard characters: % _</p>
+            <p class="hint">% matches any number of characters</p>
+            <p class="hint">_ matches only a single charcter</p>
           </fieldset>
           <fieldset>
             <div class="form-field">
