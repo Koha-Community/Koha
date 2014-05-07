@@ -748,8 +748,8 @@ sub _new_Zconn {
                 : 'usmarc';
 
     } else { # $index_mode eq 'dom'
-        #we do not need an elementSetName
         $syntax = 'xml';
+        $elementSetName = 'marcxml';
     }
 
     my $host = $context->{'listen'}->{$server}->{'content'};
