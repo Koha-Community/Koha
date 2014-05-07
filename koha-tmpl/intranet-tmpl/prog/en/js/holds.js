@@ -50,7 +50,7 @@ $(document).ready(function() {
                             if ( oObj.suspend == 1 ) {
                                 data += "<p>" + HOLD_IS_SUSPENDED;
                                 if ( oObj.suspend_until ) {
-                                    data += " " + UNTIL.replace( "_SUSPEND_UNTIL_", oObj.suspend_until_formatted );
+                                    data += " " + UNTIL.format( oObj.suspend_until_formatted );
                                 }
                                 data += "</p>";
                             }
@@ -61,12 +61,12 @@ $(document).ready(function() {
                                     data += ITEM_IS_WAITING;
 
                                     if ( ! oObj.waiting_here ) {
-                                        data += " " + AT.replace("_WAITING_AT_BRANCH_", oObj.waiting_at );
+                                        data += " " + AT.format( oObj.waiting_at );
                                     }
                                 } else if ( oObj.transferred ) {
-                                    data += ITEM_IS_IN_TRANSIT.replace( "_FROM_BRANCH_", oObj.from_branch );
+                                    data += ITEM_IS_IN_TRANSIT.format( oObj.from_branch );
                                 } else if ( oObj.not_transferred ) {
-                                    data += NOT_TRANSFERRED_YET.replace( "_FROM_BRANCH_", oObj.not_transferred_by );
+                                    data += NOT_TRANSFERRED_YET.format( oObj.not_transferred_by );
                                 }
                                 data += "</em>";
 

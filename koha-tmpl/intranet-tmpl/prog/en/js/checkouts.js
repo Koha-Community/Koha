@@ -258,7 +258,7 @@ $(document).ready(function() {
 
                     if ( oObj.renewals_remaining ) {
                         content += "<span class='renewals'>("
-                                + RENEWALS_REMAINING.replace( "_RENEWALS_REMAINING_", oObj.renewals_remaining ).replace( "_RENEWALS_ALLOWED_", oObj.renewals_allowed )
+                                + RENEWALS_REMAINING.format( oObj.renewals_remaining, oObj.renewals_allowed )
                                 + ")</span>";
                     }
 

@@ -14,14 +14,14 @@
     var ON_HOLD = _("On hold");
     var NOT_RENEWABLE = _("Not renewable");
     var NOT_RENEWABLE_TOO_SOON = _("Cannot renew, renewal is premature");
-    var RENEWALS_REMAINING = _("_RENEWALS_REMAINING_ of _RENEWALS_ALLOWED_ renewals remaining");
+    var RENEWALS_REMAINING = _("%s of %s renewals remaining");
     var HOLD_IS_SUSPENDED = _("Hold is <strong>suspended</strong>");
-    var UNTIL = _("until _SUSPEND_UNTIL_");
+    var UNTIL = _("until %s");
     var ITEM_IS_WAITING = _("Item is <strong>waiting</strong>"); //
-    var AT = _("at _WAITING_AT_BRANCH_");
-    var ITEM_IS_IN_TRANSIT = _("Item is <strong>in transit</strong> from _FROM_BRANCH_");
+    var AT = _("at %s");
+    var ITEM_IS_IN_TRANSIT = _("Item is <strong>in transit</strong> from %s");
     var FROM = _("from");
-    var NOT_TRANSFERRED_YET = _("Item hasn't been transferred yet from _FROM_BRANCH_");
+    var NOT_TRANSFERRED_YET = _("Item hasn't been transferred yet from %s");
     var NO = _("No");
     var YES = _("Yes");
 //]]>
