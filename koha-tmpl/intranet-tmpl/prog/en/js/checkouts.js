@@ -238,7 +238,7 @@ $(document).ready(function() {
                         span_class = "renewals-allowed";
                     } else if ( oObj.can_renew_error == "too_soon" ) {
                         content += "<span class='renewals-disabled'>"
-                                + NOT_RENEWABLE_TOO_SOON
+                                + NOT_RENEWABLE_TOO_SOON.format( oObj.can_renew_date )
                                 + "</span>";
 
                         span_style = "display: none";

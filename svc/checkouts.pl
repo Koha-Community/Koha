@@ -27,7 +27,8 @@ use JSON qw(to_json);
 
 use C4::Auth qw(check_cookie_auth);
 use C4::Biblio qw(GetMarcBiblio GetFrameworkCode GetRecordValue );
-use C4::Circulation qw(GetIssuingCharges CanBookBeRenewed GetRenewCount);
+use C4::Circulation
+  qw(GetIssuingCharges CanBookBeRenewed GetRenewCount GetSoonestRenewDate);
 use C4::Context;
 
 use Koha::DateUtils;
@@ -116,6 +117,15 @@ while ( my $c = $sth->fetchrow_hashref() ) {
 
     my ( $can_renew, $can_renew_error ) =
       CanBookBeRenewed( $c->{borrowernumber}, $c->{itemnumber} );
+    my $can_renew_date =
+      $can_renew_error eq 'too_soon'
+      ? output_pref(
+        {
+            dt => GetSoonestRenewDate( $c->{borrowernumber}, $c->{itemnumber} ),
+            as_due_date => 1
+        }
+      )
+      : undef;
 
     my ( $renewals_count, $renewals_allowed, $renewals_remaining ) =
       GetRenewCount( $c->{borrowernumber}, $c->{itemnumber} );
@@ -134,6 +144,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         price          => $c->{replacementprice} || q{},
         can_renew      => $can_renew,
         can_renew_error     => $can_renew_error,
+        can_renew_date      => $can_renew_date,
         itemnumber          => $c->{itemnumber},
         borrowernumber      => $c->{borrowernumber},
         biblionumber        => $c->{biblionumber},

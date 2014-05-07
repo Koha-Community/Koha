@@ -13,7 +13,7 @@
     var BY = _("by _AUTHOR_");
     var ON_HOLD = _("On hold");
     var NOT_RENEWABLE = _("Not renewable");
-    var NOT_RENEWABLE_TOO_SOON = _("Cannot renew, renewal is premature");
+    var NOT_RENEWABLE_TOO_SOON = _("No renewal before %s");
     var RENEWALS_REMAINING = _("%s of %s renewals remaining");
     var HOLD_IS_SUSPENDED = _("Hold is <strong>suspended</strong>");
     var UNTIL = _("until %s");
