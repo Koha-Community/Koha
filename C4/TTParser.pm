@@ -75,7 +75,7 @@ sub text{
     my $is_cdata = shift;
     while($work){
         # if there is a template_toolkit tag
-        if( $work =~ m/\[%.*?\]/ ){
+        if( $work =~ m/\[%.*?%\]/ ){
             #everything before this tag is text (or possibly CDATA), add a text token to tokens if $`
             if( $` ){
                 my $t = C4::TmplToken->new( $`, ($is_cdata? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT), $line, $self->{filename} );
