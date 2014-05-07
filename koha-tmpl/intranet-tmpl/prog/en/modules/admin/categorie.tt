@@ -284,19 +284,19 @@
 	<tr><th scope="row">Receives overdue notices: </th><td>[% IF ( overduenoticerequired ) %]Yes[% ELSE %]No[% END %]</td></tr>
 	<tr><th scope="row">Lost items in staff client</th><td>[% IF ( hidelostitems ) %]Hidden by default[% ELSE %]Shown[% END %]</td></tr>
 	<tr><th scope="row">Hold fee: </th><td>[% reservefee %]</td></tr>
-                <tr>
-                    <th scope="row">Default privacy: </th>
-                    <td>
-                        [% SWITCH category.default_privacy %]
-                        [% CASE 'default' %]
-                            Default
-                        [% CASE 'never' %]
-                            Never
-                        [% CASE 'forever' %]
-                            Forever
-                        [% END %]
-                    </td>
-                </tr>
+    <tr>
+        <th scope="row">Default privacy: </th>
+        <td>
+            [% SWITCH category.default_privacy %]
+            [% CASE 'default' %]
+                Default
+            [% CASE 'never' %]
+                Never
+            [% CASE 'forever' %]
+                Forever
+            [% END %]
+        </td>
+    </tr>
 </table>
 		<fieldset class="action">[% IF ( totalgtzero ) %]
 <input type="submit" value="OK" /></form>
