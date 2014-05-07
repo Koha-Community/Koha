@@ -62,58 +62,30 @@ C4::Letters - Give functions for Letters management
 
   Letters are managed through "alerts" sent by Koha on some events. All "alert" related functions are in this module too.
 
-=head2 GetLetters([$category])
+=head2 GetLetters([$module])
 
-  $letters = &GetLetters($category);
+  $letters = &GetLetters($module);
   returns informations about letters.
-  if needed, $category filters for letters given category
-  Create a letter selector with the following code
-
-=head3 in PERL SCRIPT
-
-my $letters = GetLetters($cat);
-my @letterloop;
-foreach my $thisletter (keys %$letters) {
-    my $selected = 1 if $thisletter eq $letter;
-    my %row =(
-        value => $thisletter,
-        selected => $selected,
-        lettername => $letters->{$thisletter},
-    );
-    push @letterloop, \%row;
-}
-$template->param(LETTERLOOP => \@letterloop);
-
-=head3 in TEMPLATE
-
-    <select name="letter">
-        <option value="">Default</option>
-    <!-- TMPL_LOOP name="LETTERLOOP" -->
-        <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="lettername" --></option>
-    <!-- /TMPL_LOOP -->
-    </select>
+  if needed, $module filters for letters given module
 
 =cut
 
 sub GetLetters {
+    my ($filters) = @_;
+    my $module    = $filters->{module};
+    my $dbh       = C4::Context->dbh;
+    my $letters   = $dbh->selectall_arrayref(
+        q|
+            SELECT module, code, branchcode, name
+            FROM letter
+            WHERE 1
+        |
+          . ( $module ? q| AND module = ?| : q|| )
+          . q| GROUP BY code ORDER BY name|, { Slice => {} }
+        , ( $module ? $module : () )
+    );
 
-    # returns a reference to a hash of references to ALL letters...
-    my ( $cat ) = @_;
-    my %letters;
-    my $dbh = C4::Context->dbh;
-    my $sth;
-    my $query = q{
-        SELECT * FROM letter WHERE 1
-    };
-    $query .= q{ AND module = ? } if defined $cat;
-    $query .= q{ GROUP BY code ORDER BY name};
-    $sth = $dbh->prepare($query);
-    $sth->execute((defined $cat ? $cat : ()));
-
-    while ( my $letter = $sth->fetchrow_hashref ) {
-        $letters{ $letter->{'code'} } = $letter->{'name'};
-    }
-    return \%letters;
+    return $letters;
 }
 
 # FIXME: using our here means that a Plack server will need to be

@@ -159,17 +159,13 @@ foreach (@lateorders){
 	$total += $_->{subtotal};
 }
 
-my @letters;
-my $letters=GetLetters("claimacquisition");
-foreach (keys %$letters){
-	push @letters, {code=>$_,name=>$letters->{$_}};
-}
-$template->param(letters=>\@letters) if (@letters);
+my $letters = GetLetters({ module => "claimacquisition" });
 
 $template->param(ERROR_LOOP => \@errors) if (@errors);
 $template->param(
 	lateorders => \@lateorders,
 	delay => $delay,
+    letters => $letters,
     estimateddeliverydatefrom => $estimateddeliverydatefrom,
     estimateddeliverydateto   => $estimateddeliverydateto,
 	total => $total,

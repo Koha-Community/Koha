@@ -177,12 +177,12 @@
 
     <h1>Claims</h1>
 
-[% IF ( letter ) %][% UNLESS ( missingissues ) %][% IF ( supplierid ) %] <div class="dialog alert">No missing issues found.</div>[% ELSE %]<div class="dialog message">Please choose a vendor.</div>[% END %][% END %][% END %]
+[% IF letters %][% UNLESS ( missingissues ) %][% IF ( supplierid ) %] <div class="dialog alert">No missing issues found.</div>[% ELSE %]<div class="dialog message">Please choose a vendor.</div>[% END %][% END %][% END %]
 	
 	     [% IF ( SHOWCONFIRMATION ) %]
      <div class="dialog alert">Your notification has been sent.</div>
      [% END %]
-[% UNLESS ( letter ) %]<div class="dialog alert">No claims notice defined. <a href="/cgi-bin/koha/tools/letter.pl">Please define one</a>.</div>[% END %]
+[% UNLESS letters %]<div class="dialog alert">No claims notice defined. <a href="/cgi-bin/koha/tools/letter.pl">Please define one</a>.</div>[% END %]
     <form id="claims" name="claims" action="claims.pl" method="post">
     <fieldset>
 	    <label for="supplierid">Vendor: </label>
@@ -331,7 +331,7 @@
             <span class="exportSelected"><a id="ExportSelected" href="/cgi-bin/koha/serials/claims.pl">Download selected claims</a></span>
         [% END %]
 
-[% IF ( letter ) %]
+[% IF ( letters ) %]
         <fieldset class="action"> <label for="letter_code">Select notice:</label>
             <select name="letter_code" id="letter_code">
                 [% FOREACH letter IN letters %]

@@ -88,7 +88,6 @@ if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
       if (!defined $subs->{letter}) {
           $subs->{letter}= q{};
       }
-    letter_loop($subs->{'letter'}, $template);
     my $nextexpected = GetNextExpected($subscriptionid);
     $nextexpected->{'isfirstissue'} = $nextexpected->{planneddate} eq $firstissuedate ;
     $subs->{nextacquidate} = $nextexpected->{planneddate}  if($op eq 'modify');
@@ -123,6 +122,10 @@ if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
         my @fields_id = map { fieldid => $_ }, split '\|', $dont_copy_fields;
         $template->param( dont_export_field_loop => \@fields_id );
     }
+
+    my $letters = get_letter_loop( $subs->{letter} );
+    $template->param( letterloop => $letters );
+
 }
 
 my $onlymine =
@@ -152,7 +155,8 @@ $template->param(branchloop => $branchloop,
 );
 # prepare template variables common to all $op conditions:
 if ($op!~/^mod/) {
-    letter_loop(q{}, $template);
+    my $letters = get_letter_loop();
+    $template->param( letterloop => $letters );
 }
 
 if ($op eq 'addsubscription') {
@@ -172,7 +176,10 @@ if ($op eq 'addsubscription') {
         }
     $template->param(subtype => \@sub_type_data);
 
-    letter_loop( '', $template ) if ($op ne 'modsubscription' && $op ne 'dup' && $op ne 'modify');
+    if ( $op ne 'modsubscription' && $op ne 'dup' && $op ne 'modify' ) {
+        my $letters = get_letter_loop();
+        $template->param( letterloop => $letters );
+    }
 
     my $new_biblionumber = $query->param('biblionumber_for_new_subscription');
     if (defined $new_biblionumber) {
@@ -225,19 +232,18 @@ if ($op eq 'addsubscription') {
     output_html_with_http_headers $query, $cookie, $template->output;
 }
 
-sub letter_loop {
-    my ($selected_letter, $templte) = @_;
-    my $letters = GetLetters('serial');
-    my $letterloop;
-    foreach my $thisletter (keys %{$letters}) {
-        push @{$letterloop}, {
-            value => $thisletter,
-            selected => $thisletter eq $selected_letter,
-            lettername => $letters->{$thisletter},
-        };
-    }
-    $templte->param(letterloop => $letterloop);
-    return;
+sub get_letter_loop {
+    my ($selected_lettercode) = @_;
+    my $letters = GetLetters({ module => 'serial' });
+    return [
+        map {
+            {
+                value      => $_->{code},
+                lettername => $_->{name},
+                ( $_->{code} eq $selected_lettercode ? ( selected => 1 ) : () ),
+            }
+          } @$letters
+    ];
 }
 
 sub _get_sub_length {

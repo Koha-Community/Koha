@@ -58,14 +58,9 @@ for my $s (@{$supplierlist} ) {
     }
 }
 
-my $letters = GetLetters('claimissues');
-my @letters;
-foreach (keys %{$letters}){
-    push @letters ,{code=>$_,name=> $letters->{$_}};
-}
+my $letters = GetLetters({ module => 'claimissues' });
 
-my $letter=((scalar(@letters)>1) || ($letters[0]->{name}||$letters[0]->{code}));
-my  @missingissues;
+my @missingissues;
 my @supplierinfo;
 if ($supplierid) {
     @missingissues = GetLateOrMissingIssues($supplierid,$serialid,$order);
@@ -85,7 +80,7 @@ if($op && $op eq 'preview'){
         ### $cntupdate SHOULD be equal to scalar(@$serialnums)
     }
 }
-$template->param('letters'=>\@letters,'letter'=>$letter);
+
 $template->param(
         order =>$order,
         suploop => $supplierlist,
@@ -99,6 +94,7 @@ $template->param(
         supplierloop => \@supplierinfo,
         branchloop   => $branchloop,
         csv_profiles => C4::Csv::GetCsvProfiles( "sql" ),
+        letters => $letters,
         (uc(C4::Context->preference("marcflavour"))) => 1
         );
 output_html_with_http_headers $input, $cookie, $template->output;

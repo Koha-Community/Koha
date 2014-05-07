@@ -201,9 +201,7 @@ if ($op eq 'save') {
 }
 my $branchloop = GetBranchesLoop($branch);
 
-my $letters = GetLetters("circulation");
-
-my $countletters = keys %{$letters};
+my $letters = GetLetters({ module => "circulation" });
 
 my @line_loop;
 
@@ -222,25 +220,7 @@ for my $data (@categories) {
             );
             $row{delay}=$temphash{$data->{'categorycode'}}->{"delay$i"};
             $row{debarred}=$temphash{$data->{'categorycode'}}->{"debarred$i"};
-            if ($countletters){
-                my @letterloop;
-                foreach my $thisletter (sort { $letters->{$a} cmp $letters->{$b} } keys %$letters) {
-                    my $selected;
-                    if ( $temphash{$data->{categorycode}}->{"letter$i"} &&
-                        $thisletter eq $temphash{$data->{'categorycode'}}->{"letter$i"}) {
-                        $selected = 1;
-                    }
-                    my %letterrow =(value => $thisletter,
-                                    selected => $selected,
-                                    lettername => $letters->{$thisletter},
-                                    );
-                    push @letterloop, \%letterrow;
-                }
-                $row{letterloop}=\@letterloop;
-            } else {
-                $row{noletter}=1;
-                $row{letter}=$temphash{$data->{'categorycode'}}->{"letter$i"};
-            }
+            $row{selected_lettercode} = $temphash{ $data->{categorycode} }->{"letter$i"};
             my @selected_mtts = @{ GetOverdueMessageTransportTypes( $branch, $data->{'categorycode'}, $i) };
             my @mtts;
             for my $mtt ( @$message_transport_types ) {
@@ -268,24 +248,9 @@ for my $data (@categories) {
                 overduename => $data->{'categorycode'},
                 line        => $data->{'description'}
             );
-            if ($countletters){
-                my @letterloop;
-                foreach my $thisletter (sort { $letters->{$a} cmp $letters->{$b} } keys %$letters) {
-                    my $selected;
-                    if ($dat->{"letter$i"} && $thisletter eq $dat->{"letter$i"}) {
-                        $selected = 1;
-                    }
-                    my %letterrow =(value => $thisletter,
-                                    selected => $selected,
-                                    lettername => $letters->{$thisletter},
-                                    );
-                    push @letterloop, \%letterrow;
-                }
-                $row{letterloop}=\@letterloop;
-            } else {
-                $row{noletter}=1;
-                if ($dat->{"letter$i"}){$row{letter}=$dat->{"letter$i"};}
-            }
+
+            $row{selected_lettercode} = $dat->{"letter$i"};
+
             if ($dat->{"delay$i"}){$row{delay}=$dat->{"delay$i"};}
             if ($dat->{"debarred$i"}){$row{debarred}=$dat->{"debarred$i"};}
             my @selected_mtts = @{ GetOverdueMessageTransportTypes( $branch, $data->{'categorycode'}, $i) };
@@ -333,5 +298,6 @@ $template->param(
     branch => $branch,
     tabs => \@tabs,
     message_transport_types => $message_transport_types,
+    letters => $letters,
 );
 output_html_with_http_headers $input, $cookie, $template->output;

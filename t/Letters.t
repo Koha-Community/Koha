@@ -31,7 +31,9 @@ $dbh->{mock_add_resultset} = $mock_letters;
 
 my $letters = C4::Letters::GetLetters();
 
-is( $letters->{ISBN}, 'book', 'HASH ref of ISBN is book' );
+my ( $ISBN_letter ) = grep {$_->{code} eq 'ISBN'} @$letters;
+is( $ISBN_letter->{name}, 'book', 'letter name for "ISBN" letter is book' );
+is( scalar( @$letters ), 2, 'GetLetters returns the 2 inserted letters' );
 
 # Regression test for bug 10843
 # $dt->add takes a scalar, not undef
