@@ -120,20 +120,16 @@ $(document).ready(function() {
               <input type="text" name="delay[% tab.number %]-[% value.overduename %]" size="5" value="[% value.delay %]" />
               </td>
               <td>
-              [% IF ( value.noletter ) %]
-                <input type="text" name="letter[% tab.number %]-[% value.overduename %]" value="[% value.letter %]" />
-              [% ELSE %]
                 <select name="letter[% tab.number %]-[% value.overduename %]">
                   <option value="">No notice</option>
-                  [% FOREACH letterloop IN value.letterloop %]
-                    [% IF ( letterloop.selected ) %]
-                      <option value="[% letterloop.value %]" selected="selected">[% letterloop.lettername %]</option>
+                  [% FOREACH letter IN letters %]
+                    [% IF letter.code == value.selected_lettercode %]
+                      <option value="[% letter.code %]" selected="selected">[% letter.name %]</option>
                     [% ELSE %]
-                      <option value="[% letterloop.value %]">[% letterloop.lettername %]</option>
+                      <option value="[% letter.code %]">[% letter.name %]</option>
                     [% END %]
                   [% END %]
                 </select>
-              [% END %]
               </td>
               <td>
               [% IF ( value.debarred ) %]

@@ -73,6 +73,7 @@ C4::Letters - Give functions for Letters management
 sub GetLetters {
     my ($filters) = @_;
     my $module    = $filters->{module};
+    my $code      = $filters->{code};
     my $dbh       = C4::Context->dbh;
     my $letters   = $dbh->selectall_arrayref(
         q|
@@ -81,6 +82,7 @@ sub GetLetters {
             WHERE 1
         |
           . ( $module ? q| AND module = ?| : q|| )
+          . ( $code   ? q| AND code = ?|   : q|| )
           . q| GROUP BY code ORDER BY name|, { Slice => {} }
         , ( $module ? $module : () )
     );

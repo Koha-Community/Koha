@@ -78,7 +78,6 @@ sub get_letters {
     my $letter = $dbh->selectall_hashref("SELECT * $sql", 'message_transport_type', undef, @$args);
     return $letter;
 }
-
 # $protected_letters = protected_letters()
 # - return a hashref of letter_codes representing letters that should never be deleted
 sub protected_letters {
@@ -121,17 +120,26 @@ $template->param(
 	action => $script_name
 );
 
-if ($op eq 'copy') {
-    add_copy();
-    $op = 'add_form';
-}
-
-if ($op eq 'add_form') {
-    add_form($branchcode, $module, $code);
-}
-elsif ( $op eq 'add_validate' ) {
+if ( $op eq 'add_validate' or $op eq 'copy_validate' ) {
     add_validate();
-    $op = q{}; # next operation is to return to default screen
+    $op = q{}; # we return to the default screen for the next operation
+}
+if ($op eq 'copy_form') {
+    my $oldbranchcode = $input->param('oldbranchcode') || q||;
+    my $branchcode = $input->param('branchcode') || q||;
+    my $oldcode = $input->param('oldcode') || $input->param('code');
+    add_form($oldbranchcode, $module, $code);
+    $template->param(
+        oldbranchcode => $oldbranchcode,
+        branchcode => $branchcode,
+        branchloop => _branchloop($branchcode),
+        oldcode => $oldcode,
+        copying => 1,
+        modify => 0,
+    );
+}
+elsif ( $op eq 'add_form' ) {
+    add_form($branchcode, $module, $code);
 }
 elsif ( $op eq 'delete_confirm' ) {
     delete_confirm($branchcode, $module, $code);
@@ -258,7 +266,6 @@ sub add_form {
 
 sub add_validate {
     my $dbh        = C4::Context->dbh;
-    my $oldbranchcode = $input->param('oldbranchcode');
     my $branchcode    = $input->param('branchcode') || '';
     my $module        = $input->param('module');
     my $oldmodule     = $input->param('oldmodule');
@@ -271,12 +278,12 @@ sub add_validate {
         my $is_html = $input->param("is_html_$mtt");
         my $title   = shift @title;
         my $content = shift @content;
-        my $letter = get_letters($oldbranchcode,$oldmodule, $code, $mtt);
+        my $letter = get_letters($branchcode,$oldmodule, $code, $mtt);
         unless ( $title and $content ) {
-            delete_confirmed( $oldbranchcode, $oldmodule, $code, $mtt );
+            delete_confirmed( $branchcode, $oldmodule, $code, $mtt );
             next;
         }
-        if ( exists $letter->{$mtt} ) {
+        elsif ( exists $letter->{$mtt} ) {
             $dbh->do(
                 q{
                     UPDATE letter
@@ -285,7 +292,7 @@ sub add_validate {
                 },
                 undef,
                 $branchcode, $module, $name, $is_html || 0, $title, $content,
-                $oldbranchcode, $oldmodule, $code, $mtt
+                $branchcode, $oldmodule, $code, $mtt
             );
         } else {
             $dbh->do(
@@ -297,30 +304,7 @@ sub add_validate {
     }
     # set up default display
     default_display($branchcode);
-}
-
-sub add_copy {
-    my $dbh        = C4::Context->dbh;
-    my $oldbranchcode = $input->param('oldbranchcode');
-    my $branchcode    = $input->param('branchcode');
-    my $module        = $input->param('module');
-    my $code          = $input->param('code');
-
-    return if keys %{ get_letters($branchcode,$module, $code, '*') };
-
-    my $old_letters = get_letters($oldbranchcode,$module, $code, '*');
-
-    my $message_transport_types = GetMessageTransportTypes();
-    for my $mtt ( @$message_transport_types ) {
-        next unless exists $old_letters->{$mtt};
-        my $old_letter = $old_letters->{$mtt};
-
-        $dbh->do(
-            q{INSERT INTO letter (branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES (?,?,?,?,?,?,?,?)},
-            undef,
-            $branchcode, $module, $code, $old_letter->{name}, $old_letter->{is_html}, $old_letter->{title}, $old_letter->{content}, $mtt
-        );
-    }
+    return 1;
 }
 
 sub delete_confirm {

@@ -1,0 +1,63 @@
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Copyright 2014 BibLibre
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+
+use C4::Service;
+use C4::Letters qw( GetLetters );
+
+=head1 NAME
+
+svc/letters - Web service for getting letters
+
+=head1 SYNOPSIS
+
+  GET /svc/letters
+
+=head1 DESCRIPTION
+
+For the moment, this service is only used to get a letter from a letter code.
+
+=head1 METHODS
+
+=cut
+
+=head2 set_preference
+
+=over 4
+
+GET /svc/letters/$code
+
+=back
+
+Used to get letters with a given letter code.
+
+=cut
+
+our ( $query, $response ) = C4::Service->init( tools => 'edit_notices' );
+
+sub get_letters {
+    my $letters = GetLetters({ code => $query->param('code') });
+    $response->param( letters => $letters );
+    C4::Service->return_success( $response );
+}
+
+C4::Service->dispatch(
+    [ 'GET /', [ 'code' ], \&get_letters ],
+);

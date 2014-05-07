@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Notices[% IF ( add_form ) %][% IF ( modify ) %] &rsaquo; Modify notice[% ELSE %] &rsaquo; Add notice[% END %][% END %][% IF ( add_validate ) %] &rsaquo; Notice added[% END %][% IF ( delete_confirm ) %] &rsaquo; Confirm deletion[% END %]</title>
+<title>Koha &rsaquo; Tools &rsaquo; Notices[% IF ( add_form or copy_form ) %][% IF ( modify ) %] &rsaquo; Modify notice[% ELSE %] &rsaquo; Add notice[% END %][% END %][% IF ( add_validate or copy_validate) %] &rsaquo; Notice added[% END %][% IF ( delete_confirm ) %] &rsaquo; Confirm deletion[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
@@ -26,7 +26,8 @@ $(document).ready(function() {
       });
     [% END %]
 
-    $("#submit").click( function(event) {
+    $("#submit_form").click( function(event) {
+        event.preventDefault();
         var at_least_one_exists = 0;
         $("fieldset.mtt").each( function(){
             var title = $(this).find('input[name="title"]').val();
@@ -40,7 +41,6 @@ $(document).ready(function() {
                 msg = msg.replace( "%s", mtt );
                 at_least_one_exists = 1;
                 alert(msg)
-                event.preventDefault();
                 return false;
             } else if ( title.length > 0 && content.length > 0 ) {
                 at_least_one_exists = 1;
@@ -48,10 +48,34 @@ $(document).ready(function() {
         } );
         if ( ! at_least_one_exists ) {
             alert( _("Please fill at least one template.") );
-            event.preventDefault();
             return false;
         }
-        return true;
+
+        // Test if code already exists in DB
+        var new_lettercode = $("#code").val();
+        [% IF copy_form %]
+          if ( new_lettercode == '[% code %]' ) {
+            alert( _("Please change the code.") );
+            return false;
+          }
+        [% END %]
+        if ( new_lettercode != '[% code %]' ) {
+          $.ajax({
+            data: { code: new_lettercode },
+            type: 'GET',
+            url: '/cgi-bin/koha/svc/letters/',
+            success: function (data) {
+              if ( data.letters.length > 0 ) {
+                alert( _("This letter code is already used for another letter.") );
+                return false;
+              } else {
+                $("#add_notice").submit();
+              }
+            },
+          });
+        } else {
+          $("#add_notice").submit();
+        }
     });
 
     var sms_limit = 160;
@@ -65,7 +89,7 @@ $(document).ready(function() {
         }
     });
 }); 
-[% IF ( add_form ) %]
+[% IF add_form or copy_form %]
 	
     function cancel(f) {
         $('#op').val("");
@@ -117,9 +141,9 @@ $(document).ready(function() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'letters-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% IF ( add_form ) %][% IF ( modify ) %]<a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Modify notice[% ELSE %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Add notice[% END %][% ELSE %][% IF ( add_validate ) %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Notice added[% ELSE %][% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Confirm deletion[% ELSE %]Notices &amp; Slips[% END %][% END %][% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% IF ( add_form or copy_form) %][% IF ( modify ) %]<a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Modify notice[% ELSE %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Add notice[% END %][% ELSE %][% IF ( add_validate or copy_validate) %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Notice added[% ELSE %][% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Confirm deletion[% ELSE %]Notices &amp; Slips[% END %][% END %][% END %]</div>
 
-[% IF ( add_form ) %]<div id="doc" class="yui-t7">[% ELSE %]<div id="doc3" class="yui-t2">[% END %]
+[% IF add_form or copy_form %]<div id="doc" class="yui-t7">[% ELSE %]<div id="doc3" class="yui-t2">[% END %]
    
    <div id="bd">
 	<div id="yui-main">
@@ -182,7 +206,7 @@ $(document).ready(function() {
                   <td style="white-space: nowrap">
                     [% IF !independant_branch || !lette.branchcode %]
                       <form method="post" action="/cgi-bin/koha/tools/letter.pl">
-                        <input type="hidden" name="op" value="copy" />
+                        <input type="hidden" name="op" value="copy_form" />
                         <input type="hidden" name="oldbranchcode" value="[% lette.branchcode %]" />
                         <input type="hidden" name="module" value="[% lette.module %]" />
                         <input type="hidden" name="code" value="[% lette.code %]" />
@@ -221,10 +245,15 @@ $(document).ready(function() {
 [% END %]
 
 	
-[% IF ( add_form ) %]
+[% IF add_form or copy_form %]
 <h1>[% IF ( modify ) %]Modify notice[% ELSE %]Add notice[% END %]</h1>
-        <form name="Aform" method="post" enctype="multipart/form-data" class="validate">
-		<input type="hidden" name="op" id="op" value="add_validate" />
+        <form id="add_notice" name="Aform" method="post" enctype="multipart/form-data" class="validate">
+        [% IF add_form %]
+          <input type="hidden" name="op" id="op" value="add_validate" />
+        [% ELSE %]
+          <input type="hidden" name="op" id="op" value="copy_validate" />
+        [% END %]
+
 		<input type="hidden" name="checked" value="0" />
 		[% IF ( modify ) %]
 		<input type="hidden" name="add" value="0" />
@@ -232,7 +261,7 @@ $(document).ready(function() {
 		<input type="hidden" name="add" value="1" />
 		[% END %]
 		<fieldset class="rows">
-				<input type="hidden" name="oldbranchcode" value="[% branchcode %]" />
+            <input type="hidden" name="oldbranchcode" value="[% oldbranchcode %]" />
             [% IF independant_branch %]
                 <input type="hidden" name="branchcode" value="[% independant_branch %]" />
             [% ELSE %]
@@ -250,7 +279,11 @@ $(document).ready(function() {
 			<li>
 				<label for="module">Koha module:</label>
 				<input type="hidden" name="oldmodule" value="[% module %]" />
-		[% IF ( modify ) %]<select name="module" id="module">[% END %] [% IF ( adding ) %] <select name="module" id="module" onchange="javascript:window.location.href = unescape(window.location.pathname)+'?op=add_form&amp;module='+this.value+'&amp;content='+window.document.forms['Aform'].elements['content'].value;">[% END %]
+                [% IF adding  %]
+                  <select name="module" id="module" onchange="javascript:window.location.href = unescape(window.location.pathname)+'?op=add_form&amp;module='+this.value+'&amp;content='+window.document.forms['Aform'].elements['content'].value;">
+                [% ELSE %]
+                  <select name="module" id="module">
+                [% END %]
                                     [% IF ( module == "catalogue" ) %]
                                       <option value="catalogue" selected="selected">Catalog</option>
                                     [% ELSE %]
@@ -294,20 +327,19 @@ $(document).ready(function() {
                 </select>
             </li>
             <li>
-                [% IF adding %]
-                  <label for"code" class="required">Code:</label>
-                  <input type="text" id="code" name="code" size="20" maxlength="20" required="required" />
-                  <span class="required">Required</span>
-                [% ELSE %]
-                  <label for="code">Code:</label>
-                  <input type="hidden" id="code" name="code" value="[% code %]" />[% code %]
-                [% END %]
+              <label for="code" class="required">Code:</label>
+              <input type="text" id="code" name="code" size="20" maxlength="20" value="[% code %]" required="required"/>
+              <span class="required">Required</span>
+              [% IF copying %]
+                You must change this code to reflect the copy.
+              [% END %]
+              <input type="hidden" id="code" name="oldcode" value="[% oldcode %]" />
             </li>
-        <li>
-            <label for="name" class="required">Name:</label>
-            <input type="text" id="name" name="name" size="60" value="[% letter_name %]" required="required" />
-            <span class="required">Required</span>
-        </li>
+            <li>
+              <label for="name" class="required">Name:</label>
+              <input type="text" id="name" name="name" size="60" value="[% letter_name %]" required="required" />
+              <span class="required">Required</span>
+          </li>
 
         [% FOREACH letter IN letters %]
           <li>
@@ -376,12 +408,12 @@ $(document).ready(function() {
 
         [% IF code.search('DGST') %] <span class="overdue">Warning, this is a template for a Digest, as such, any references to branch data ( e.g. branches.branchname ) will refer to the borrower's home branch.</span> [% END %]
         </fieldset>
-        <fieldset class="action"><input type="submit" id="submit" value="Submit" class="button" /> <a class="cancel" href="/cgi-bin/koha/tools/letter.pl">Cancel</a></fieldset>
+        <fieldset class="action"><input type="submit" id="submit_form" value="Submit" class="button" /> <a class="cancel" href="/cgi-bin/koha/tools/letter.pl">Cancel</a></fieldset>
       <input type="hidden" name="searchfield" value="[% searchfield %]" />
     </form>
 [% END %]
 
-[% IF ( add_validate ) %]
+[% IF ( add_validate or copy_validate) %]
 	Data recorded
 	<form action="[% action %]" method="post">
 	<input type="submit" value="OK" />
@@ -431,7 +463,7 @@ $(document).ready(function() {
 
 </div>
 </div>
-[% UNLESS ( add_form ) %]
+[% UNLESS add_form or copy_form %]
     <div class="yui-b noprint">
         [% INCLUDE 'tools-menu.inc' %]
     </div>
