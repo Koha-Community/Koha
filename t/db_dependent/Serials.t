@@ -234,11 +234,13 @@ is( @others, 6, "GetSerials returns all serials not arrived and not missing if c
 $subscription = C4::Serials::GetSubscription($subscriptionid); # Retrieve the updated subscription
 
 my @serialseqs;
-for my $am ( reverse @arrived_missing ) {
-    if ( grep {/^$am->{status}$/} qw( 4 41 42 43 44 5 ) ) {
+for my $am ( @arrived_missing ) {
+    if ( grep {/^$am->{status}$/} qw( 4 41 42 43 44 ) ) {
         push @serialseqs, $am->{serialseq}
+    } elsif ( grep {/^$am->{status}$/} qw( 5 ) ) {
+        push @serialseqs, 'not issued ' . $am->{serialseq};
     }
 }
-is( $subscription->{missinglist}, 'not issued ' . join('; ', @serialseqs), "subscription missinglist is updated after ModSerialStatus" );
+is( $subscription->{missinglist}, join('; ', @serialseqs), "subscription missinglist is updated after ModSerialStatus" );
 
 $dbh->rollback;
