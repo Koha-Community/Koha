@@ -1,21 +1,17 @@
-use utf8;
 package Koha::Schema::Result::Category;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
-
-=head1 NAME
-
-Koha::Schema::Result::Category
-
-=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-=head1 TABLE: C<categories>
+
+=head1 NAME
+
+Koha::Schema::Result::Category
 
 =cut
 
@@ -43,7 +39,6 @@ __PACKAGE__->table("categories");
 =head2 enrolmentperioddate
 
   data_type: 'date'
-  datetime_undef_if_invalid: 1
   is_nullable: 1
 
 =head2 upperagelimit
@@ -108,6 +103,13 @@ __PACKAGE__->table("categories");
   default_value: -1
   is_nullable: 0
 
+=head2 default_privacy
+
+  data_type: 'enum'
+  default_value: 'default'
+  extra: {list => ["default","never","forever"]}
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -118,7 +120,7 @@ __PACKAGE__->add_columns(
   "enrolmentperiod",
   { data_type => "smallint", is_nullable => 1 },
   "enrolmentperioddate",
-  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  { data_type => "date", is_nullable => 1 },
   "upperagelimit",
   { data_type => "smallint", is_nullable => 1 },
   "dateofbirthrequired",
@@ -141,18 +143,14 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "A", is_nullable => 0, size => 1 },
   "blockexpiredpatronopacactions",
   { data_type => "tinyint", default_value => -1, is_nullable => 0 },
+  "default_privacy",
+  {
+    data_type => "enum",
+    default_value => "default",
+    extra => { list => ["default", "never", "forever"] },
+    is_nullable => 0,
+  },
 );
-
-=head1 PRIMARY KEY
-
-=over 4
-
-=item * L</categorycode>
-
-=back
-
-=cut
-
 __PACKAGE__->set_primary_key("categorycode");
 
 =head1 RELATIONS
@@ -233,8 +231,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-05-05 02:00:18
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:21IkmwMfRevsRHU9ezaIKg
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2014-05-07 12:15:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CwCE9qxkWafuO9btYXWZeg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
