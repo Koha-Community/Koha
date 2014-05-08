@@ -1723,6 +1723,7 @@ sub SearchOrders {
     my $owner = $params->{owner};
     my $pending = $params->{pending};
     my $ordered = $params->{ordered};
+    my $biblionumber = $params->{biblionumber};
 
     my $dbh = C4::Context->dbh;
     my @args = ();
@@ -1781,6 +1782,10 @@ sub SearchOrders {
     if ( $ordernumber ) {
         $query .= ' AND ( aqorders.ordernumber = ? OR aqorders_transfers.ordernumber_from = ? ) ';
         push @args, ( $ordernumber, $ordernumber );
+    }
+    if ( $biblionumber ) {
+        $query .= 'AND aqorders.biblionumber = ?';
+        push @args, $biblionumber;
     }
     if( $search ) {
         $query .= ' AND (biblio.title LIKE ? OR biblio.author LIKE ? OR biblioitems.isbn LIKE ?)';

@@ -46,6 +46,8 @@ not use an API to fetch items that populates item.datedue.
     [% ELSE %]
         Item damaged
     [% END %]
+[% ELSIF item.on_order %]
+  On order
 [% ELSE %]
     Available [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac %])</span>[% END %]
 [% END %]

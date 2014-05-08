@@ -8551,6 +8551,15 @@ if (CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES('OPACAcquisitionDetails','0', '','Show the acquisition details at the OPAC','YesNo')
+    |);
+    print "Upgrade to $DBversion done (Bug 11169 - Add OPACAcquisitionDetails syspref)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

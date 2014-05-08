@@ -24,6 +24,7 @@ use strict;
 use warnings;
 
 use CGI;
+use C4::Acquisition qw( SearchOrders );
 use C4::Auth qw(:DEFAULT get_session);
 use C4::Branch;
 use C4::Koha;
@@ -596,6 +597,28 @@ if ($currentbranch and C4::Context->preference('OpacSeparateHoldings')) {
 my $separatebranch = C4::Context->preference('OpacSeparateHoldingsBranch');
 my $viewallitems = $query->param('viewallitems');
 my $max_items_to_display = C4::Context->preference('OpacMaxItemsToDisplay') // 50;
+
+# Get items on order
+my ( @itemnumbers_on_order );
+if ( C4::Context->preference('OPACAcquisitionDetails' ) ) {
+    my $orders = C4::Acquisition::SearchOrders({
+        biblionumber => $biblionumber,
+        pending => 1,
+    });
+    my $total_quantity = 0;
+    for my $order ( @$orders ) {
+        if ( C4::Context->preference('AcqCreateItem') eq 'ordering' ) {
+            for my $itemnumber ( C4::Acquisition::GetItemnumbersFromOrder( $order->{ordernumber} ) ) {
+                push @itemnumbers_on_order, $itemnumber;
+            }
+        }
+        $total_quantity += $order->{quantity};
+    }
+    $template->{VARS}->{acquisition_details} = {
+        total_quantity => $total_quantity,
+    };
+}
+
 if ( not $viewallitems and @items > $max_items_to_display ) {
     $template->param(
         too_many_items => 1,
@@ -647,6 +670,14 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
         $itm->{transfertfrom} = $branches->{$transfertfrom}{branchname};
         $itm->{transfertto}   = $branches->{$transfertto}{branchname};
      }
+    
+    if (    C4::Context->preference('OPACAcquisitionDetails')
+        and C4::Context->preference('AcqCreateItem') eq 'ordering' )
+    {
+        $itm->{on_order} = 1
+          if grep /^$itm->{itemnumber}$/, @itemnumbers_on_order;
+    }
+
     my $itembranch = $itm->{$separatebranch};
     if ($currentbranch and C4::Context->preference('OpacSeparateHoldings')) {
         if ($itembranch and $itembranch eq $currentbranch) {

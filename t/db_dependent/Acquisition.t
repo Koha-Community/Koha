@@ -8,7 +8,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 76;
+use Test::More tests => 77;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -798,6 +798,10 @@ $search_orders = SearchOrders({
 });
 is( scalar (@$search_orders), 3, "SearchOrders with pending and ordered params gets only pending ordered orders. After closing the basket, orders are marked as 'ordered' (bug 11170)" );
 
+$search_orders = SearchOrders({
+    ordernumber => $ordernumbers[4]
+});
+is( scalar (@$search_orders), 1, "SearchOrders takes into account the ordernumber filter" );
 
 #
 # Test AddClaim

@@ -460,7 +460,13 @@ OPAC:
                   yes: Allow
                   no: Do not allow
             - users to add a note when placing a hold.
-
+        -
+            - pref: OPACAcquisitionDetails
+              default: 0
+              choices:
+                  yes: Display
+                  no: Don't display
+            - the acquisition details on OPAC detail pages.
     Policy:
         -
             - pref: singleBranchMode

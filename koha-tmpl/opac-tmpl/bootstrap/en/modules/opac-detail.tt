@@ -633,7 +633,13 @@
                             <p>This record has many physical items ([% items_count %]). <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]&amp;viewallitems=1">Click here to view them all.</a></p>
                         [% ELSIF ( itemloop.size ) %]
                             [% INCLUDE items_table items=itemloop tab="holdings" %]
-
+                            [% IF Koha.Preference('OPACAcquisitionDetails') and Koha.Preference('AcqCreateItem') != 'ordering' and acquisition_details.total_quantity > 0 %]
+                              [% IF acquisition_details.total_quantity == 1 %]
+                                1 item is on order.
+                              [% ELSE %]
+                                [% acquisition_details.total_quantity %] items are on order.
+                              [% END %]
+                            [% END %]
                             [% IF holds_count.defined || priority %]
                                 <div id="bib_holds">
                                     [% IF holds_count.defined %]
@@ -654,7 +660,15 @@
                                     <div id="alternateholdings"><span class="holdings_label">Holdings:</span> [% ALTERNATEHOLDING.holding %]</div>
                                 [% END %]
                             [% ELSE %]
-                                <div id="noitems">No physical items for this record</div>
+                                [% IF Koha.Preference('OPACAcquisitionDetails') and Koha.Preference('AcqCreateItem') != 'ordering' and acquisition_details.total_quantity > 0 %]
+                                  [% IF acquisition_details.total_quantity == 1 %]
+                                    1 item is on order.
+                                  [% ELSE %]
+                                    [% acquisition_details.total_quantity %] items are on order.
+                                  [% END %]
+                                [% ELSE %]
+                                    <div id="noitems">No physical items for this record</div>
+                                [% END %]
                             [% END %]
                         [% END # IF itemloop.size %]
                         [% PROCESS 'shelfbrowser.inc' %]
