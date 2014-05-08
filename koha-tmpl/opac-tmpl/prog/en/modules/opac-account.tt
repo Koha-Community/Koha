@@ -54,7 +54,7 @@
                             [% CASE %][% ACCOUNT_LINE.accounttype %]
                           [%- END -%]
                           [%- IF ACCOUNT_LINE.description %], [% ACCOUNT_LINE.description %][% END %]
-                          [% IF line.title %]([% line.title |html_entity %])[% END %]
+                          [% IF ACCOUNT_LINE.title %]([% ACCOUNT_LINE.title %])[% END %]
                         </td>
                         [% IF ( ACCOUNT_LINE.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amount %]</td>
                         [% IF ( ACCOUNT_LINE.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amountoutstanding %]</td>
