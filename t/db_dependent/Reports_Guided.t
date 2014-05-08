@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 
 use C4::Context;
 
@@ -83,6 +83,19 @@ is_deeply(
     $results,
     [ [ $version ] ],
     'running a query with a parameter returned the expected result'
+);
+
+# for next test, we want to let execute_query capture any SQL errors
+$dbh->{RaiseError} = 0;
+my $errors;
+($sth, $errors) = execute_query(
+    'SELECT surname FRM borrowers',  # error in the query is intentional
+    0,
+    10,
+);
+ok(
+    defined($errors) && exists($errors->{queryerr}),
+    'attempting to run a report with an SQL syntax error returns error message (Bug 12214)'
 );
 
 #End transaction
