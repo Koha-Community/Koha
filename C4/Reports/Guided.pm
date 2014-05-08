@@ -512,6 +512,7 @@ sub execute_query {
 
     my $sth = C4::Context->dbh->prepare($sql);
     $sth->execute(@$sql_params, $offset, $limit);
+    return ( $sth, { queryerr => $sth->errstr } ) if ($sth->err);
     return ( $sth );
     # my @xmlarray = ... ;
     # my $url = "/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=$id";

@@ -753,7 +753,7 @@ elsif ($phase eq 'Run this report'){
                 'execute' => 1,
                 'name'    => $name,
                 'notes'   => $notes,
-                'errors'  => $errors,
+                'errors'  => defined($errors) ? [ $errors ] : undef,
                 'pagination_bar'  => pagination_bar($url, $totpages, $input->param('page')),
                 'unlimited_total' => $total,
                 'sql_params'      => \@sql_params,
