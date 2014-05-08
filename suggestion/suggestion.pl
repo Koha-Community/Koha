@@ -31,6 +31,7 @@ use C4::Search;
 use C4::Dates qw(format_date);
 use C4::Members;
 use C4::Debug;
+use URI::Escape;
 
 sub Init{
     my $suggestion= shift @_;
@@ -170,7 +171,7 @@ elsif ($op eq "change" ) {
         $$suggestion_ref{'suggestionid'}=$suggestionid;
         &ModSuggestion($suggestion_ref);
     }
-    my $params;
+    my $params = '';
     foreach my $key (
         qw(
         displayby branchcode title author isbn publishercode copyrightdate
@@ -180,8 +181,8 @@ elsif ($op eq "change" ) {
         )
       )
     {
-        $params .= $key . '=' . $input->param($key) . '&'
-          if $input->param($key);
+        $params .= $key . '=' . uri_escape($input->param($key)) . '&'
+          if defined($input->param($key));
     }
     print $input->redirect("/cgi-bin/koha/suggestion/suggestion.pl?$params");
 }elsif ($op eq "delete" ) {
