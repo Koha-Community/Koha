@@ -37,8 +37,8 @@ sub add {
 sub add_to_session {
     my ($params) = @_;
     my $cgi = $params->{cgi};
-    my $query_desc = Encode::decode_utf8( $params->{query_desc} ) || "unknown";
-    my $query_cgi  = Encode::decode_utf8( $params->{query_cgi} )  || "unknown";
+    my $query_desc = $params->{query_desc} || "unknown";
+    my $query_cgi  = $params->{query_cgi} || "unknown";
     my $total      = $params->{total};
     my $type       = $params->{type}                              || 'biblio';
 
@@ -152,7 +152,7 @@ sub set_to_session {
     my $session = C4::Auth::get_session($sessionID);
     return () unless $session;
     $session->param( 'search_history',
-        uri_escape_utf8( encode_json($search_history) ) );
+        uri_escape( encode_json($search_history) ) );
 }
 
 1;
