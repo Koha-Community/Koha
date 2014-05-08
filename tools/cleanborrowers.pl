@@ -85,39 +85,7 @@ if ( $step == 2 ) {
     my $membersToDelete;
     if ( $checkboxes{borrower} ) {
         $membersToDelete = GetBorrowersToExpunge(
-            {
-                (
-                    $not_borrowered_since
-                    ? (
-                        not_borrowered_since => output_pref(
-                            {
-                                dt         => $not_borrowered_since,
-                                dateformat => 'iso',
-                                dateonly   => 1
-                            }
-                        )
-                      )
-                    : ()
-                ),
-                (
-                    $borrower_dateexpiry
-                    ? (
-                        expired_before => output_pref(
-                            {
-                                dt         => $borrower_dateexpiry,
-                                dateformat => 'iso',
-                                dateonly   => 1
-                            }
-                        )
-                      )
-                    : ()
-                ),
-                (
-                    $borrower_categorycode
-                    ? ( category_code => $borrower_categorycode )
-                    : ()
-                ),
-            }
+            _get_selection_params($not_borrowered_since, $borrower_dateexpiry, $borrower_categorycode)
         );
         _skip_borrowers_with_nonzero_balance( $membersToDelete );
         $totalDel = scalar @$membersToDelete;
@@ -147,34 +115,7 @@ elsif ( $step == 3 ) {
     # delete members
     if ($do_delete) {
         my $membersToDelete = GetBorrowersToExpunge(
-            {
-                (
-                    $not_borrowered_since
-                    ? (
-                        not_borrowered_since => output_pref(
-                            {
-                                dt         => $not_borrowered_since,
-                                dateformat => 'iso'
-                            }
-                        )
-                      )
-                    : ()
-                ),
-                (
-                    $borrower_dateexpiry
-                    ? (
-                        expired_before => output_pref(
-                            { dt => $borrower_dateexpiry, dateformat => 'iso' }
-                        )
-                      )
-                    : ()
-                ),
-                (
-                    $borrower_categorycode
-                    ? ( category_code => $borrower_categorycode )
-                    : ()
-                ),
-            }
+            _get_selection_params($not_borrowered_since, $borrower_dateexpiry, $borrower_categorycode)
         );
         _skip_borrowers_with_nonzero_balance( $membersToDelete );
         $totalDel = scalar(@$membersToDelete);
@@ -227,3 +168,22 @@ sub _skip_borrowers_with_nonzero_balance {
         ($balance != 0) ? (): ($_);
     } @$borrowers;
 }
+
+sub _get_selection_params {
+    my ($not_borrowered_since, $borrower_dateexpiry, $borrower_categorycode) = @_;
+
+    my $params = {};
+    $params->{not_borrowered_since} = output_pref({
+        dt         => $not_borrowered_since,
+        dateformat => 'iso',
+        dateonly   => 1
+    }) if $not_borrowered_since;
+    $params->{expired_before} = output_pref({
+        dt         => $borrower_dateexpiry,
+        dateformat => 'iso',
+        dateonly   => 1
+    }) if $borrower_dateexpiry;
+    $params->{borrower_categorycode} = $borrower_categorycode if $borrower_categorycode;
+
+    return $params;
+};
