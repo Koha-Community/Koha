@@ -912,14 +912,7 @@ elsif ($phase eq 'Save Compound'){
 # pass $sth, get back an array of names for the column headers
 sub header_cell_values {
     my $sth = shift or return ();
-    my @cols;
-    foreach my $c (@{$sth->{NAME}}) {
-        # TODO in Bug 11944
-        #FIXME apparently DBI still needs a utf8 fix for this?
-        $c = Encode::decode('UTF-8', $c);
-        push @cols, $c;
-    }
-    return @cols;
+    return @{$sth->{NAME}};
 }
 
 # pass $sth, get back a TMPL_LOOP-able set of names for the column headers
