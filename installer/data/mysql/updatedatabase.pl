@@ -8490,6 +8490,28 @@ if ( CheckVersion($DBversion) ) {
    SetVersion ($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if (CheckVersion($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,type) VALUES('AcqEnableFiles','0','If enabled, allows librarians to upload and attach arbitrary files to invoice records.','YesNo')");
+    $dbh->do("
+CREATE TABLE IF NOT EXISTS `misc_files` (
+  `file_id` int(11) NOT NULL AUTO_INCREMENT,
+  `table_tag` varchar(255) NOT NULL,
+  `record_id` int(11) NOT NULL,
+  `file_name` varchar(255) NOT NULL,
+  `file_type` varchar(255) NOT NULL,
+  `file_description` varchar(255) DEFAULT NULL,
+  `file_content` longblob NOT NULL, -- file content
+  `date_uploaded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`file_id`),
+  KEY `table_tag` (`table_tag`),
+  KEY `record_id` (`record_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    ");
+    print "Upgrade to $DBversion done (Bug 3050 - Add an option to upload scanned invoices)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

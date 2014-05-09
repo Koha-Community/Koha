@@ -46,6 +46,12 @@ Acquisitions:
             - Upon receiving items, update their subfields if they were created when placing an order (e.g. o=5|a="foo bar").
             - pref: AcqItemSetSubfieldsWhenReceived
         -
+            - pref: AcqEnableFiles
+              choices:
+                  yes: Do
+                  no: "Don't"
+            - enable the ability to upload and attach arbitrary files to invoices.
+        -
             - Set the mapping values for a new order line created from a MARC record in a staged file.
             - pref: MarcFieldsToOrder
               type: textarea

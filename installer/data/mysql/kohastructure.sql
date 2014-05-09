@@ -3402,6 +3402,24 @@ CREATE TABLE IF NOT EXISTS marc_modification_template_actions (
   CONSTRAINT `mmta_ibfk_1` FOREIGN KEY (`template_id`) REFERENCES `marc_modification_templates` (`template_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `misc_files`
+--
+
+CREATE TABLE IF NOT EXISTS `misc_files` ( -- miscellaneous files attached to records from various tables
+  `file_id` int(11) NOT NULL AUTO_INCREMENT, -- unique id for the file record
+  `table_tag` varchar(255) NOT NULL, -- usually table name, or arbitrary unique tag
+  `record_id` int(11) NOT NULL, -- record id from the table this file is associated to
+  `file_name` varchar(255) NOT NULL, -- file name
+  `file_type` varchar(255) NOT NULL, -- MIME type of the file
+  `file_description` varchar(255) DEFAULT NULL, -- description given to the file
+  `file_content` longblob NOT NULL, -- file content
+  `date_uploaded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, -- date and time the file was added
+  PRIMARY KEY (`file_id`),
+  KEY `table_tag` (`table_tag`),
+  KEY `record_id` (`record_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

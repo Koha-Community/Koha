@@ -1,5 +1,6 @@
 INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
 ('AcqCreateItem','ordering','ordering|receiving|cataloguing','Define when the item is created : when ordering, when receiving, or in cataloguing module','Choice'),
+('AcqEnableFiles','0',NULL,'If enabled, allows librarians to upload and attach arbitrary files to invoice records.','YesNo'),
 ('AcqItemSetSubfieldsWhenReceived','','','Upon receiving items, update their subfields if they were created when placing an order (e.g. o=5|a="foo bar")','Free'),
 ('AcquisitionDetails', '1', '', 'Hide/Show acquisition details on the biblio detail page.', 'YesNo'),
 ('AcqViewBaskets','user','user|branch|all','Define which baskets a user is allowed to view: his own only, any within his branch or all','Choice'),
