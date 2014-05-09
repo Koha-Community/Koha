@@ -35,6 +35,7 @@ use C4::Output;
 use C4::Acquisition;
 use C4::Bookseller qw/GetBookSellerFromId/;
 use C4::Budgets;
+use Koha::Misc::Files;
 
 my $input = new CGI;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
@@ -50,6 +51,12 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 
 my $invoiceid = $input->param('invoiceid');
 my $op        = $input->param('op');
+
+my $invoice_files;
+if ( C4::Context->preference('AcqEnableFiles') ) {
+    $invoice_files = Koha::Misc::Files->new(
+        tabletag => 'aqinvoices', recordid => $invoiceid );
+}
 
 if ( $op && $op eq 'close' ) {
     CloseInvoice($invoiceid);
@@ -86,11 +93,13 @@ elsif ( $op && $op eq 'mod' ) {
     } elsif ($input->param('merge')) {
         my @sources = $input->param('merge');
         MergeInvoices($invoiceid, \@sources);
+        defined($invoice_files) && $invoice_files->MergeFileRecIds(@sources);
     }
     $template->param( modified => 1 );
 }
 elsif ( $op && $op eq 'delete' ) {
     DelInvoice($invoiceid);
+    defined($invoice_files) && $invoice_files->DelAllFiles();
     my $referer = $input->param('referer') || 'invoices.pl';
     if ($referer) {
         print $input->redirect($referer);
@@ -165,6 +174,8 @@ $template->param(
     currency         => GetCurrency()->{currency},
     budgets_loop     => \@budgets_loop,
 );
+
+defined( $invoice_files ) && $template->param( files => $invoice_files->GetFilesInfo() );
 
 # FIXME
 # Fonction dupplicated from basket.pl

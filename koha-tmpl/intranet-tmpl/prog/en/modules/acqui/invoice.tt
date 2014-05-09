@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% USE KohaDates %]
 
 [% INCLUDE 'doc-head-open.inc' %]
@@ -27,7 +28,17 @@
             bFilter: false,
             sDom: "t"
         }));
-
+[% IF ( (Koha.Preference('AcqEnableFiles')) && files ) %]
+        $("#invoice_files_table").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                { "aTargets": [ 3 ], "sType": "natural" }
+            ],
+            bInfo: false,
+            bPaginate: false,
+            bFilter: false,
+            sDom: "t"
+        }));
+[% END %]
         $("#show_all_details").click(function(){
             updateColumnsVisibility($(this+":checked").val());
         });
@@ -108,6 +119,7 @@
       </form>
       <p>
           <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid %]">Go to receipt page</a>
+          [% IF Koha.Preference('AcqEnableFiles') %]| <a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid %]">Manage invoice files</a>[% END %]
       </p>
       <h2>Invoice details</h2>
       [% IF orders_loop.size %]
@@ -198,6 +210,30 @@
           </table>
         [% ELSE %]
             <div class="dialog message"><p>No orders yet</p></div>
+        [% END %]
+        [% IF ( (Koha.Preference('AcqEnableFiles')) && files ) %]
+            <br />
+            <h2>Files attached to invoice</h2>
+            <table id="invoice_files_table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Uploaded</th>
+                    </tr>
+                </thead>
+                <tbody>
+                [% FOREACH f IN files %]
+                    <tr>
+                         <td><a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id %]">[% f.file_name | html %]</a></td>
+                         <td>[% f.file_type | html %]</td>
+                         <td>[% f.file_description | html %]</td>
+                         <td><!-- [% f.date_uploaded %] -->[% f.date_uploaded | $KohaDates %]</td>
+                    </tr>
+                [% END %]
+                </tbody>
+            </table>
         [% END %]
     </div>
   </div>
