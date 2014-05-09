@@ -1,0 +1,100 @@
+[% USE KohaDates %]
+
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisitions &rsaquo; Invoice &rsaquo; Files</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'datatables.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        $("#invoice_files_details_table").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [ 3 ], "sType": "natural" }
+            ],
+            bInfo: false,
+            bPaginate: false,
+            bFilter: false,
+            sDom: "t"
+        }));
+    });
+//]]>
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'acquisitions-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/invoices.pl">Invoices</a> &rsaquo; <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid %]">[% invoicenumber %]</a> &rsaquo; Files</div>
+
+<div id="doc3" class="yui-t2">
+
+<div id="bd">
+  <div id="yui-main">
+    <div class="yui-b">
+      <h2>Files for invoice: [% invoicenumber | html %]</h2>
+      <p><b>Vendor: </b><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% suppliername %]</a></p>
+      <br />
+      [% IF errors %]
+        <div class="dialog alert">
+          [% IF errors.empty_upload %]The file you are attempting to upload has no contents.[% END %]
+          [% IF errors.no_file %]You did not select a file to upload.[% END %]
+          [% IF errors.invalid_parameter %]Invalid or missing script parameter.[% END %]
+        </div>
+      [% END %]
+      [% IF files %]
+          <table id="invoice_files_details_table">
+              <thead>
+                  <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Description</th>
+                      <th>Uploaded</th>
+                      <th>Bytes</th>
+                      <th>&nbsp;</th>
+                      <th>&nbsp;</th>
+                  </tr>
+              </thead>
+              <tbody>
+                [% FOREACH f IN files %]
+                  <tr>
+                      <td><a href="?invoiceid=[% invoiceid %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id %]">[% f.file_name | html %]</a></td>
+                      <td>[% f.file_type | html %]</td>
+                      <td>[% f.file_description | html %]</td>
+                      <td><!-- [% f.date_uploaded %] -->[% f.date_uploaded | $KohaDates %]</td>
+                      <td>[% f.file_size %]</td>
+                      <td><a href="?invoiceid=[% invoiceid %]&amp;op=delete&amp;file_id=[% f.file_id %]">Delete</a></td>
+                      <td><a href="?invoiceid=[% invoiceid %]&amp;op=download&amp;file_id=[% f.file_id %]">Download</a></td>
+                  </tr>
+                [% END %]
+              </tbody>
+          </table>
+      [% ELSE %]
+          <div class="dialog message">
+              <p>This invoice has no files attached.</p>
+          </div>
+      [% END %]
+      [% IF invoiceid %]
+          <br />
+          <form method="post" action="/cgi-bin/koha/acqui/invoice-files.pl" enctype="multipart/form-data">
+              <fieldset class="rows">
+                  <legend>Upload New File</legend>
+                  <ol>
+                      <li><input type="hidden" name="op" value="upload" />
+                      <input type="hidden" name="invoiceid" value="[% invoiceid %]" />
+                      <label for="description">Description:</label>
+                      <input name="description" id="description" type="text" /></li>
+                      <li><label for="uploadfile">File:</label><input name="uploadfile" type="file" id="uploadfile" /></li>
+                  </ol>
+                  <fieldset class="action"><input name="upload" type="submit" id="upload" value="Upload File" /></fieldset>
+              </fieldset>
+          </form>
+      [% END %]
+    </div>
+  </div>
+  <div class="yui-b">
+    [% INCLUDE 'acquisitions-menu.inc' %]
+  </div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
