@@ -44,4 +44,14 @@ sub GetLoggedInBranchcode {
         '';
 }
 
+sub GetURL {
+    my ( $self, $branchcode ) = @_;
+
+    my $query = "SELECT branchurl FROM branches WHERE branchcode = ?";
+    my $sth   = C4::Context->dbh->prepare($query);
+    $sth->execute($branchcode);
+    my $b = $sth->fetchrow_hashref();
+    return encode( 'UTF-8', $b->{'branchurl'} );
+}
+
 1;

@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE Branches %]
 [% USE AuthorisedValues %]
 [% SET TagsShowEnabled = ( TagsEnabled && TagsShowOnDetail ) %]
 [% SET TagsInputEnabled = ( opacuserlogin && TagsEnabled && TagsInputOnDetail ) %]
@@ -1505,11 +1506,11 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         <thead><tr>
             [% IF ( item_level_itypes ) %]<th id="item_itemtype" class="itype">Item type</th>[% END %]
             [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' || singleBranchMode ) %]
-                <th>Current Location</th>
+                <th>Current location</th>
             [% END %]
             [% UNLESS ( singleBranchMode ) %]
                 [% IF ( OpacLocationBranchToDisplay == 'home' || OpacLocationBranchToDisplay == 'both' ) %]
-                    <th>Home Library</th>
+                    <th>Home library</th>
                 [% END %]
             [% END %]
             [% IF ( itemdata_ccode ) %]<th id="item_ccode" class="collection">Collection</th>[% END %]
@@ -1562,10 +1563,10 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
                             <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
 
                             <span class="[% ITEM_RESULT.branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]">
-                                    [% IF ( ITEM_RESULT.homebranchurl ) %]
-                                            <a href="[% ITEM_RESULT.homebranchurl %]">[% ITEM_RESULT.homebranchname %]</a>
+                                    [% IF ( Branches.GetURL( ITEM_RESULT.homebranch ) ) %]
+                                            <a href="[% Branches.GetURL( ITEM_RESULT.homebranch ) %]">[% Branches.GetName( ITEM_RESULT.homebranch ) %]</a>
                                     [% ELSE %]
-                                             [% ITEM_RESULT.homebranchname %]
+                                             [% Branches.GetName( ITEM_RESULT.homebranch ) %]
                                     [% END %]
                             </span>
 

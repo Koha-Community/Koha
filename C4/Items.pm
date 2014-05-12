@@ -1323,14 +1323,6 @@ sub GetItemsInfo {
         if ( my $bdata = $bsth->fetchrow_hashref ) {
             $data->{'branchname'} = $bdata->{'branchname'};
         }
-        $bsth = $dbh->prepare(
-            "SELECT * FROM branches WHERE branchcode = ?
-        "
-        );
-        $bsth->execute( $data->{'homebranch'} );
-        if ( my $bdata = $bsth->fetchrow_hashref ) {
-            $data->{'homebranchname'} = $bdata->{'branchname'};
-        }
         $data->{'datedue'}        = $datedue;
 
         # get notforloan complete status if applicable
