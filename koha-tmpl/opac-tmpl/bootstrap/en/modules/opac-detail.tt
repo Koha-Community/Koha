@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE Branches %]
 [% USE AuthorisedValues %]
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnDetail ) %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnDetail ) %]
@@ -1127,7 +1128,14 @@
         <thead>
             <tr>
                 [% IF ( item_level_itypes ) %]<th id="item_itemtype" class="itype">Item type</th>[% END %]
-                <th id="item_location">Location</th>
+                [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' || singleBranchMode ) %]
+                    <th>Current location</th>
+                [% END %]
+                [% UNLESS ( singleBranchMode ) %]
+                    [% IF ( OpacLocationBranchToDisplay == 'home' || OpacLocationBranchToDisplay == 'both' ) %]
+                        <th>Home library</th>
+                    [% END %]
+                [% END %]
                 [% IF ( itemdata_ccode ) %]<th id="item_ccode" class="collection">Collection</th>[% END %]
                 <th id="item_callnumber" class="call_no">Call number</th>
                 [% IF ( itemdata_enumchron ) %]<th id="item_enumchron" class="vol_info">Vol info</th>[% END %]
@@ -1162,21 +1170,56 @@
                             [% ITEM_RESULT.description %]
                         </td>
                     [% END %]
-                    <td class="location" property="seller">
-                    <link property="itemOffered" href="#record" />
-                    <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
-                        [% UNLESS ( singleBranchMode ) %]
-                            <div class="[% ITEM_RESULT.branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]">
-                            [% IF ( ITEM_RESULT.branchurl ) %]
-                                <a href="[% ITEM_RESULT.branchurl %]" title="">[% ITEM_RESULT.branchname %]</a>
-                            [% ELSE %]
-                                <span title="">[% ITEM_RESULT.branchname %]</span>
-                            [% END %]
+                    [% UNLESS singleBranchMode %]
+                        [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' ) %]
+                            <td class="location" property="seller">
+                                <link property="itemOffered" href="#record" />
+                                <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
+                                <div class="[% ITEM_RESULT.branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]">
+                                    [% IF ( ITEM_RESULT.branchurl ) %]
+                                        <a href="[% ITEM_RESULT.branchurl %]" title="">[% ITEM_RESULT.branchname %]</a>
+                                    [% ELSE %]
+                                        <span title="">[% ITEM_RESULT.branchname %]</span>
+                                    [% END %]
+                                </div>
+
+                                [% IF ( OpacLocationBranchToDisplayShelving == 'holding' || OpacLocationBranchToDisplayShelving == 'both' ) %]
+                                    <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
+                                [% END %]
+
                                 <div class="branch-info-tooltip">[% ITEM_RESULT.branch_opac_info %]</div>
-                            </div>
+                            </td>
                         [% END %]
-                        <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
-                    </td>
+
+                        [% IF ( OpacLocationBranchToDisplay == 'home' || OpacLocationBranchToDisplay == 'both' ) %]
+                            <td class="location" property="seller">
+                                <link property="itemOffered" href="#record" />
+                                <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
+                                <div class="[% ITEM_RESULT.branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]">
+                                    [% IF ( ITEM_RESULT.branchurl ) %]
+                                        [% home_branch_url = Branches.GetURL( ITEM_RESULT.homebranch ) %]
+                                        [% IF ( home_branch_url ) %]
+                                             <a href="[% home_branch_url %]">[% Branches.GetName( ITEM_RESULT.homebranch ) %]</a>
+                                        [% ELSE %]
+                                            [% Branches.GetName( ITEM_RESULT.homebranch ) %]
+                                        [% END %]
+                                    [% ELSE %]
+                                        <span title="">[% ITEM_RESULT.branchname %]</span>
+                                    [% END %]
+                                </div>
+
+                                [% IF ( OpacLocationBranchToDisplayShelving == 'home' || OpacLocationBranchToDisplayShelving == 'both' ) %]
+                                    <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
+                                [% END %]
+
+                                <div class="branch-info-tooltip">[% ITEM_RESULT.branch_opac_info %]</div>
+                            </td>
+                        [% END %]
+
+                    [% ELSE %]
+                         <td class="location"><span class="shelvingloc">[% ITEM_RESULT.location_description %]</span></td>
+                    [% END %]
+
                     [% IF ( itemdata_ccode ) %]
                         <td class="collection">[% ITEM_RESULT.ccode %]</td>
                     [% END %]
