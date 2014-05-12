@@ -1,22 +1,28 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; [% IF ( else ) %]Z39.50 servers[% END %]
-[% IF ( add_form ) %] Z39.50 servers &rsaquo; [% IF ( searchfield ) %]Modify Z39.50 server [% searchfield %][% ELSE %]New Z39.50 server[% END %][% END %]
-[% IF ( delete_confirm ) %]Z39.50 servers &rsaquo; Confirm deletion[% END %]
-[% IF ( confirm_add ) %] Z39.50 servers &rsaquo; Z39.50 server added[% END %]
-[% IF ( confirm_update ) %] Z39.50 servers &rsaquo; Z39.50 server updated[% END %]
-[% IF ( delete_confirmed ) %]Z39.50 servers &rsaquo; Z39.50 server deleted[% END %]</title>
+<title>Koha &rsaquo; Administration &rsaquo; Z39.50 servers
+[% IF op == 'edit' %] &rsaquo; Modify Z39.50 server [% server.name %][% END %]
+[% IF op ==  'add' %] &rsaquo; New Z39.50 server[% END %]
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% IF ( else ) %]
-<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
+
+[% IF op == 'list' %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+    [% INCLUDE 'datatables.inc' %]
 [% END %]
-[% IF ( add_form ) %]
+
 <script type="text/javascript">
 //<![CDATA[
+[% IF ( add_form ) %]
     $(document).ready(function(){
+        // Update selects for syntax, encoding and recordtype
+        [% IF server %]
+            $("#syntax").val('[% server.syntax %]');
+            $("#encoding").val('[% server.encoding %]');
+            $("#recordtype").val('[% server.recordtype %]');
+        [% END %]
         $( "#serverentry" ).validate({
             rules: {
-                searchfield: { required: true },
+                servername: { required: true },
                 host: { required: true },
                 port: {
                     required: true,
@@ -28,278 +34,155 @@
             }
         });
     });
-//]]>
-</script>
-[% END %]
-[% IF ( else ) %]
-    <script type="text/javascript">
-    //<![CDATA[
-     $(document).ready(function() {
-        [% IF ( loop ) %]$("#serverst").dataTable($.extend(true, {}, dataTablesDefaults, {
+[% ELSE %]
+    $(document).ready(function() {
+        $("#serverst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
-                { "aTargets": [ 2,3,4,7,8,9,10,11 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [2,3,4,7,8,9,10,11], "bSortable": false, "bSearchable": false },
             ],
             "sPaginationType": "four_button"
-        }));[% END %]
-     });
-    //]]>
-    </script>
+        }));
+    });
+    function ConfirmDelete(name,id) {
+        if( confirm( _("Choose OK if you really want to delete server ")+
+          name+'.')) {
+            window.location="[% script_name %]?op=delete_confirmed&id="+id;
+        }
+        return false;
+    }
 [% END %]
+//]]>
+</script>
 
 </head>
 <body id="admin_z3950servers" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'z3950-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( else ) %]Z39.50 servers[% END %]
-[% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a> &rsaquo; [% IF ( searchfield ) %]Modify Z39.50 server [% searchfield %][% ELSE %]New Z39.50 server[% END %][% END %]
-[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a> &rsaquo; Confirm deletion[% END %]
-[% IF ( confirm_add ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a> &rsaquo; Z39.50 server added[% END %]
-[% IF ( confirm_update ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a> &rsaquo; Z39.50 server updated[% END %]
-
-[% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a> &rsaquo; Z39.50 server deleted[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
+<a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a>
+[% IF op == 'edit' %]&rsaquo; Modify Z39.50 server [% server.name %][% END %]
+[% IF op ==  'add' %]&rsaquo; New Z39.50 server[% END %]
+</div>
 
 <div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+<div id="bd">
+<div id="yui-main">
+<div class="yui-b">
+
+[% IF msg_deleted %]
+    <div class="dialog alert">Z39.50 server deleted ([% msg_add %])</div>
+[% ELSIF msg_updated %]
+    <div class="dialog alert">Z39.50 server updated ([% msg_add %])</div>
+[% ELSIF msg_added %]
+    <div class="dialog alert">Z39.50 server added ([% msg_add %])</div>
+[% END %]
 
 [% IF ( add_form ) %]
-       
-        <form action="[% script_name %]" name="Aform" method="post" id="serverentry">
-        <input type="hidden" name="op" value="add_validate" />
-[% IF ( searchfield ) %]
-                <h1>Modify Z39.50 server</h1>
+    <form action="[% script_name %]" name="Aform" method="post" id="serverentry">
+        <input type="hidden" name="op" value="add_validated" />
+        [% IF op == 'edit' %]
+            <h1>Modify Z39.50 server</h1>
+            <input type="hidden" name="id" value="[% server.id %]" />
         [% ELSE %]
-                <h1>New Z39.50 server</h1>
+            <h1>New Z39.50 server</h1>
         [% END %]                
         <fieldset class="rows">
-        <ol>[% IF ( searchfield ) %]
-                <li><span class="label">Z39.50 server: </span>        <input type="hidden" name="searchfield" value="[% searchfield %]" />[% searchfield %]</li>
+        <ol>
+        <li><label for="name" class="required">Z39.50 server: </label><input type="text" name="servername" id="servername" size="65" maxlength="100" onblur="toUC(this)" value="[% server.name | html %]" required="required"/> <span class="required">Required</span></li>
+
+        <li><label for="host" class="required">Hostname: </label> <input type="text" name="host" id="host" size="30" value="[% server.host %]" required="required" /> <span class="required">Required</span>
+        </li>
+        <li><label for="port" class="required">Port: </label> <input type="text" name="port" id="port" size="5" value="[% server.port %]" required="required" /> <span class="required">Required</span>
+        </li>
+        <li><label for="db" class="required">Database: </label> <input type="text" name="db" id="db" value="[% server.db %]" required="required" /> <span class="required">Required</span>
+        </li>
+        <li><label for="userid">Userid: </label> <input type="text" name="userid" id="userid" value="[% server.userid %]" />
+        </li>
+        <li><label for="password">Password: </label> <input type="text" name="password" id="password" value="[% server.password %]" />
+        </li>
+        <li><label for="checked">Checked (searched by default): </label>
+        [% IF ( server.checked ) %]
+            <input type="checkbox" name="checked" id="checked" value="1" checked="checked" />
         [% ELSE %]
-                <li><label for="searchfield" class="required">Z39.50 server: </label>        <input type="text" name="searchfield" id="searchfield" size="65" maxlength="100" onblur="toUC(this)" required="required" /> <span class="required">Required</span></li>
+            <input type="checkbox" name="checked" id="checked" value="1" />
         [% END %]
+        </li>
+        <li><label for="rank">Rank (display order): </label> <input type="text" name="rank" id="rank" size="4" value="[% server.rank %]" />
+        </li>
 
-        <li><label for="host" class="required">Hostname: </label> <input type="text" name="host" id="host" size="30" value="[% host %]" required="required" /> <span class="required">Required</span>
-		</li>
-        <li><label for="port" class="required">Port: </label> <input type="text" name="port" id="port" size="5" value="[% port %]" required="required" /> <span class="required">Required</span>
-		</li>
-        <li><label for="db" class="required">Database: </label> <input type="text" name="db" id="db" value="[% db %]" required="required" /> <span class="required">Required</span>
-		</li>
-		<li><label for="userid">Userid: </label>	<input type="text" name="userid" id="userid" value="[% userid %]" />
-		</li>
-		<li><label for="password">Password: </label>	<input type="text" name="password" id="password" value="[% password %]" />
-		</li>
-		<li><label for="checked">Checked (searched by default): </label>
-                        [% IF ( checked ) %]
-                                <input type="checkbox" name="checked" id="checked" value="1" checked="checked" />
-                        [% ELSE %]
-                                <input type="checkbox" name="checked" id="checked" value="1" />
-                        [% END %]
-                </li>
-        <li><label for="rank">Rank (display order): </label> <input type="text" name="rank" id="rank" size="4" value="[% rank %]" />
-		</li>	
-		<li><label for="syntax">Syntax (z3950 can send<br /> records in various format. Choose one): </label>	
-<select name="syntax">
-[% IF ( syntaxUNIMARC ) %]
-<option value="UNIMARC" selected="selected">UNIMARC</option>
-[% ELSE %]
-<option value="UNIMARC">UNIMARC</option>
-[% END %]
-[% IF ( syntaxINTERMARC ) %]
-<option value="INTERMARC" selected="selected">INTERMARC</option>
-[% ELSE %]
-<option value="INTERMARC">INTERMARC</option>
-[% END %]
-[% IF ( syntaxCCF ) %]
-<option value="CCF" selected="selected">CCF</option>
-[% ELSE %]
-<option value="CCF">CCF</option>
-[% END %]
-[% IF ( syntaxUSMARC ) %]
-<option value="USMARC" selected="selected">MARC21/USMARC</option>
-[% ELSE %]
-<option value="USMARC">MARC21/USMARC</option>
-[% END %]
-[% IF ( syntaxUKMARC ) %]
-<option value="UKMARC" selected="selected">UKMARC</option>
-[% ELSE %]
-<option value="UKMARC">UKMARC</option>
-[% END %]
-[% IF ( syntaxNORMARC ) %]
-<option value="NORMARC" selected="selected">NORMARC</option>
-[% ELSE %]
-<option value="NORMARC">NORMARC</option>
-[% END %]
-[% IF ( syntaxLIBRISMARC ) %]
-<option value="LIBRISMARC" selected="selected">LIBRISMARC</option>
-[% ELSE %]
-<option value="LIBRISMARC">LIBRISMARC</option>
-[% END %]
-[% IF ( syntaxDANMARC ) %]
-<option value="DANMARC" selected="selected">DANMARC</option>
-[% ELSE %]
-<option value="DANMARC">DANMARC</option>
-[% END %]
-[% IF ( syntaxFINMARC ) %]
-<option value="FINMARC" selected="selected">FINMARC</option>
-[% ELSE %]
-<option value="FINMARC">FINMARC</option>
-[% END %]
-[% IF ( syntaxCANMARC ) %]
-<option value="CANMARC" selected="selected">CANMARC</option>
-[% ELSE %]
-<option value="CANMARC">CANMARC</option>
-[% END %]
-[% IF ( syntaxSBN ) %]
-<option value="SBN" selected="selected">SBN</option>
-[% ELSE %]
-<option value="SBN">SBN</option>
-[% END %]
-[% IF ( syntaxPICAMARC ) %]
-<option value="PICAMARC" selected="selected">PICAMARC</option>
-[% ELSE %]
-<option value="PICAMARC">PICAMARC</option>
-[% END %]
-[% IF ( syntaxAUSMARC ) %]
-<option value="AUSMARC" selected="selected">AUSMARC</option>
-[% ELSE %]
-<option value="AUSMARC">AUSMARC</option>
-[% END %]
-[% IF ( syntaxIBERMARC ) %]
-<option value="IBERMARC" selected="selected">IBERMARC</option>
-[% ELSE %]
-<option value="IBERMARC">IBERMARC</option>
-[% END %]
-[% IF ( syntaxCATMARC ) %]
-<option value="CATMARC" selected="selected">CATMARC</option>
-[% ELSE %]
-<option value="CATMARC">CATMARC</option>
-[% END %]
-[% IF ( syntaxMALMARC ) %]
-<option value="MALMARC" selected="selected">MALMARC</option>
-[% ELSE %]
-<option value="MALMARC">MALMARC</option>
-[% END %]
-</select>
-</li>
+        <li><label for="syntax">Syntax (z3950 can send<br /> records in various format. Choose one): </label>
+        <select name="syntax" id="syntax">
+            <option value="UNIMARC">UNIMARC</option>
+            <option value="INTERMARC">INTERMARC</option>
+            <option value="CCF">CCF</option>
+            <option value="USMARC">MARC21/USMARC</option>
+            <option value="UKMARC">UKMARC</option>
+            <option value="NORMARC">NORMARC</option>
+            <option value="LIBRISMARC">LIBRISMARC</option>
+            <option value="DANMARC">DANMARC</option>
+            <option value="FINMARC">FINMARC</option>
+            <option value="CANMARC">CANMARC</option>
+            <option value="SBN">SBN</option>
+            <option value="PICAMARC">PICAMARC</option>
+            <option value="AUSMARC">AUSMARC</option>
+            <option value="IBERMARC">IBERMARC</option>
+            <option value="CATMARC">CATMARC</option>
+            <option value="MALMARC">MALMARC</option>
+        </select>
+        </li>
 
-    <li><label for="encoding">Encoding (z3950 can send<br /> records in various encodings. Choose one): </label>  
-<select name="encoding">
-[% FOREACH enc IN [ 'utf8' 'EUC-KR' 'ISO_5426' 'ISO_6937' 'ISO_8859-1' 'MARC-8' ] %]
-    [% IF ( encoding == enc ) %]
-    <option value="[% enc %]" selected="selected">[% enc %]</option>
-    [% ELSE %]
-    <option value="[% enc %]">[% enc %]</option>
-    [% END %]
-[% END %]
-</select>
-</li>
-    <li><label for="timeout">Timeout (0 its like not set): </label>
-        <input type="text" name="timeout" id="timeout" size="4" value="[% timeout %]" /> seconds
-	</li>
-    <li><label for="recordtype">Record type: </label>
-    <select name="recordtype" id="recordtype">
-            [% IF ( recordtypebiblio ) %]
-            <option value="biblio" selected="selected">Bibliographic</option>
-            [% ELSE %]
-                   <option value="biblio">Bibliographic</option>
-            [% END %]
-            [% IF ( recordtypeauthority ) %]
-            <option value="authority" selected="selected">Authority</option>
-            [% ELSE %]
-                   <option value="authority">Authority</option>
+        <li><label for="encoding">Encoding (z3950 can send<br /> records in various encodings. Choose one): </label>
+        <select name="encoding" id="encoding">
+            [% FOREACH enc IN [ 'utf8' 'EUC-KR' 'ISO_5426' 'ISO_6937' 'ISO_8859-1' 'MARC-8' ] %]
+                <option value="[% enc %]">[% enc %]</option>
             [% END %]
         </select>
-    </li>
-</ol>
+        </li>
+
+        <li><label for="timeout">Timeout (0 its like not set): </label>
+        <input type="text" name="timeout" id="timeout" size="4" value="[% server.timeout %]" /> seconds
+        </li>
+        <li><label for="recordtype">Record type: </label>
+        <select name="recordtype" id="recordtype">
+            <option value="biblio">Bibliographic</option>
+            <option value="authority">Authority</option>
+        </select>
+        </li>
+        </ol>
         </fieldset>
 
         <fieldset class="action"><input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/z3950servers.pl">Cancel</a></fieldset>
-        </form>
+    </form>
 [% END %]
 
-[% IF ( confirm_add ) %]
-<h3>Z39.50 server added</h3>
-<form action="[% script_name %]" method="post">
-        <input type="submit" value="OK" />
-        </form>
-[% END %]
-
-[% IF ( confirm_update ) %]
-<h3>Z39.50 server updated</h3>
-<form action="[% script_name %]" method="post">
-        <input type="submit" value="OK" />
-        </form>
-[% END %]
-
-[% IF ( delete_confirm ) %]
-	[% reqsel %]
-<h3>Confirm deletion of server [% searchfield %]</h3>
-        <ul>
-                <li><strong>Target: </strong>        [% searchfield %]</li>
-                <li><strong>Hostname: </strong>[% host %]</li>
-                <li><strong>Port: </strong>[% port %]</li>
-                <li><strong>Database: </strong>[% db %]</li>
-                <li><strong>Userid: </strong>[% userid %]</li>
-                <li><strong>Password: </strong>[% password %]</li>
-                <li><strong>Checked: </strong>[% checked %]</li>
-                <li><strong>Rank: </strong>[% rank %]</li>
-                <li><strong>Syntax: </strong>[% syntax %]</li>
-                <li><strong>Encoding: </strong>[% encoding %]</li>
-                <li><strong>Timeout: </strong>[% timeout %]</li>
-                <li><strong>Record type: </strong>[% recordtype %]</li>
-	</ul>                <form action="[% script_name %]" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="[% searchfield %]" /><input type="submit" value="Delete this server" /></form>  <form action="[% script_name %]" method="post"><input type="submit" value="Do not delete" /></form>
-
-
-
-[% END %]
-
-[% IF ( delete_confirmed ) %]
-<h3>Z39.50 server deleted</h3>
-<form action="[% script_name %]" method="post">
-                <input type="submit" value="OK" />
-</form>
-[% END %]
-
-[% IF ( else ) %]
-
-<div id="toolbar" class="btn-toolbar">
-    <a id="newserver" class="btn btn-small" href="/cgi-bin/koha/admin/z3950servers.pl?op=add_form"><i class="icon-plus"></i> New Z39.50 server</a>
-</div>
-
-<h3>Z39.50 servers administration</h3>
-
-        [% IF ( searchfield ) %]
-                You searched for [% searchfield %]
+[% IF op == 'list' %]
+    <div id="toolbar" class="btn-toolbar">
+        <a id="newserver" class="btn btn-small" href="/cgi-bin/koha/admin/z3950servers.pl?op=add"><i class="icon-plus"></i> New Z39.50 server</a>
+    </div>
+    <h3>Z39.50 servers administration</h3>
+    [% IF id %]
+        You searched for record [% id %]
+    [% ELSIF searchfield %]
+        You searched for [% searchfield %]
+    [% END %]
+    <table id="serverst">
+        <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Checked</th><th>Rank</th><th>Syntax</th><th>Encoding</th><th>Timeout</th><th>Record type</th><th>Options</th>
+        </tr></thead>
+        <tbody>
+        [% FOREACH loo IN loop %]
+            [% UNLESS ( loop.odd ) %]
+                <tr class="highlight">
+            [% ELSE %]
+                <tr>
+            [% END %]
+            <td><a href="[% loo.script_name %]?op=edit&amp;id=[% loo.id %]">[% loo.name %]</a></td><td>[% loo.host %]:[% loo.port %]</td><td>[% loo.db %]</td><td>[% loo.userid %]</td><td>[% IF loo.password %]########[% END %]</td><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank %]</td>
+<td>[% loo.syntax %]</td><td>[% loo.encoding %]</td><td>[% loo.timeout %]</td><td>[% loo.recordtype %]</td>
+            <td><a href="[% loo.script_name %]?op=edit&amp;id=[% loo.id %]">Edit</a> <a href="[% loo.script_name %]?op=add&amp;id=[% loo.id %]">Copy</a> <a href="javascript:void(0);" onclick="ConfirmDelete('[% loo.name | replace("['\"]","") %]','[% loo.id %]');">Delete</a></td>
+            </tr>
         [% END %]
-<table id="serverst">
-                <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Checked</th><th>Rank</th><th>Syntax</th><th>Encoding</th><th>Timeout</th><th>Record type</th><th>&nbsp;</th><th>&nbsp;</th>
-                </tr></thead>
-                <tbody>[% FOREACH loo IN loop %]
-                [% UNLESS ( loop.odd ) %]
-                    <tr class="highlight">
-                [% ELSE %]
-                    <tr>
-                [% END %]
-<td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.name |uri %]">[% loo.name %]</a></td><td>[% loo.host %]:[% loo.port %]</td><td>[% loo.db %]</td><td>[% loo.userid %]</td><td>[% loo.password %]</td><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank %]</td>
-
-<td>[% loo.syntax %]</td><td>[% loo.encoding %]</td><td>[% loo.timeout %]</td><td>[% loo.recordtype %]</td><td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.name |uri %]">Edit</a></td><td><a href="[% loo.script_name %]?op=delete_confirm&amp;searchfield=[% loo.name |uri %]">Delete</a></td>                </tr>
-                [% END %]</tbody>
-</table>
-
-[% IF ( offsetgtzero ) %]<form action="[% script_name %]" method="get">
-	<input type="hidden" name="offset" value="[% prevpage %]" />
-	<input type="submit" value="&lt;&lt; Previous">
-</form>[% END %]
-
-[% IF ( ltcount ) %]<form action="[% script_name %]" method="get">
-	<input type="hidden" name="offset" value="[% nextpage %]" />
-	<input type="submit" value="Next &gt;&gt;" />
-</form> [% END %]
- 
-
+        </tbody>
+    </table>
 [% END %]
 
 </div>
