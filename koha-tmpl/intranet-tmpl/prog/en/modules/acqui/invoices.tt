@@ -11,14 +11,10 @@
 $(document).ready(function() {
     var resultst = $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
         sDom: "t",
-        bPaginate: false,
-        bInfo: false,
-        "aoColumns": [
-            null,null,null,{ "sType": "title-string" },null,null,null,null
-        ],
         aoColumnDefs: [
             { "bSortable": false, "aTargets": [1, 8] },
-            { "bVisible": false, "aTargets": [0] }
+            { "bVisible": false, "aTargets": [0] },
+            { "sType": "title-string", "aTargets" : [ "title-string" ] }
         ]
     }));
 
@@ -110,7 +106,7 @@ $(document).ready(function() {
                 <th>&nbsp;</th>
                 <th>Invoice no.</th>
                 <th>Vendor</th>
-                <th>Billing date</th>
+                <th class="title-string">Billing date</th>
                 <th>Received biblios</th>
                 <th>Received items</th>
                 <th>Status</th>
@@ -121,7 +117,7 @@ $(document).ready(function() {
               [% FOREACH invoice IN invoices %]
                 <tr data-invoiceid="[% invoice.invoiceid %]" data-booksellerid="[% invoice.booksellerid %]" data-shipmentdate="[% invoice.shipmentdate | $KohaDates %]" data-billingdate="[% invoice.billingdate | $KohaDates %]" data-shipmentcost="[% invoice.shipmentcost %]" data-shipment_budgetid="[% invoice.shipmentcost_budgetid %]" data-closedate="[% invoice.closedate | $KohaDates %]">
                   <td>[% invoice.is_linked_to_subscriptions %]</td>
-                  <td><input type="checkbox" class="select-invoice" value="[% invoice.invoiceid %]"></input></td>
+                  <td><input type="checkbox" class="select-invoice" value="[% invoice.invoiceid %]" /></td>
                   <td><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid %]">[% invoice.invoicenumber %]</a></td>
                   <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% invoice.booksellerid %]">[% invoice.suppliername %]</a></td>
                   <td>
@@ -141,15 +137,23 @@ $(document).ready(function() {
                     [% END %]
                   </td>
                   <td>
-                    <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid %]">Details</a> /
-                    [% IF invoice.closedate %]
-                      <a href="invoice.pl?op=reopen&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26billingdatefrom=[% billingdatefrom %]%26billingdateto=[% billingdateto %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]">Reopen</a>
-                    [% ELSE %]
-                      <a href="invoice.pl?op=close&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26billingdatefrom=[% billingdatefrom %]%26billingdateto=[% billingdateto %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]">Close</a>
-                    [% END %]
-                    [% UNLESS invoice.receivedbiblios || invoice.receiveditems %]
-                      / <a href="invoice.pl?op=delete&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26billingdatefrom=[% billingdatefrom %]%26billingdateto=[% billingdateto %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]">Delete</a>
-                    [% END %]
+
+                      <div class="dropdown dropup">
+                          <a class="btn btn-mini dropdown-toggle" id="invoiceactions[% invoice.invoiceid %]" role="button" data-toggle="dropdown" href="#">
+                             Actions <b class="caret"></b>
+                          </a>
+                          <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="invoiceactions[% invoice.invoiceid %]">
+                              <li><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid %]"><i class="icon-search"></i> Details</a></li>
+                            [% IF invoice.closedate %]
+                                <li><a href="invoice.pl?op=reopen&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26billingdatefrom=[% billingdatefrom %]%26billingdateto=[% billingdateto %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]"><i class="icon-refresh"></i> Reopen</a></li>
+                            [% ELSE %]
+                                <li><a href="invoice.pl?op=close&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26billingdatefrom=[% billingdatefrom %]%26billingdateto=[% billingdateto %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]"><i class="icon-remove-sign"></i> Close</a></li>
+                            [% END %]
+                            [% UNLESS invoice.receivedbiblios || invoice.receiveditems %]
+                                <li><a href="invoice.pl?op=delete&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26billingdatefrom=[% billingdatefrom %]%26billingdateto=[% billingdateto %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]"><i class="icon-remove"></i> Delete</a></li>
+                            [% END %]
+                          </ul>
+                      </div>
                   </td>
                 </tr>
               [% END %]
@@ -179,8 +183,7 @@ $(document).ready(function() {
                             <select id="merge_shipment_budgetid" name="shipment_budget_id">
                                 <option value="">No fund</option>
                               [% FOREACH budget IN budgets_loop %]
-                                  <option value="[% budget.budget_id %]">
-                                  [% budget.budget_name %]
+                                  <option value="[% budget.budget_id %]">[% budget.budget_name %]
                                   </option>
                               [% END %]
                             </select></li>
