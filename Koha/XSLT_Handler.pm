@@ -67,6 +67,10 @@ Koha::XSLT_Handler - Facilitate use of XSLT transformations
     If true, transform returns undef on failure. By default, it returns the
     original string passed. Errors are reported as described.
 
+=head2 print_warns
+
+    If set, print error messages to STDERR. True by default.
+
 =head1 ERROR CODES
 
 =head2 Error 1
@@ -120,7 +124,7 @@ use XML::LibXSLT;
 use base qw(Class::Accessor);
 
 __PACKAGE__->mk_ro_accessors(qw( err errstr ));
-__PACKAGE__->mk_accessors(qw( do_not_return_source ));
+__PACKAGE__->mk_accessors(qw( do_not_return_source print_warns ));
 
 =head2 transform
 
@@ -229,6 +233,7 @@ sub _init {
 
     $self->_set_error;
     $self->{xslt_hash}={};
+    $self->{print_warns}=1 unless exists $self->{print_warns};
     $self->{do_not_return_source}=0 unless exists $self->{do_not_return_source};
         #by default we return source on a failing transformation
         #but it could be passed at construction time already
@@ -303,6 +308,8 @@ sub _set_error {
     if( $addmsg ) {
         $self->{errstr}.= " $addmsg";
     }
+
+    warn $self->{errstr} if $self->{print_warns};
     return;
 }
 
