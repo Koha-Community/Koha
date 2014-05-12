@@ -64,6 +64,16 @@ $(document).ready(function(){
         $(".btn-group").removeClass("open");
         return false;
     });
+    $("#printcheckinslip").click(function(){
+        printx_window("checkinslip");
+        $(".btn-group").removeClass("open");
+        return false;
+    });
+    $("#printfineslip").click(function(){
+        printx_window("fineslip");
+        $(".btn-group").removeClass("open");
+        return false;
+    });
     $("#searchtohold").click(function(){
         searchToHold();
         return false;
@@ -157,6 +167,8 @@ function searchToHold(){
                 [% IF ( CAN_user_borrowers ) %]<li><a id="printsummary" href="#">Print summary</a></li>[% END %]
                 <li><a id="printslip" href="#">Print slip</a></li>
                 <li><a id="printquickslip" href="#">Print quick slip</a></li>
+                <li><a id="printcheckinslip" href="#">Print checked-in today -slip</a></li>
+                <li><a id="printfineslip" href="#">Print fines</a></li>
                 [% IF Borrowers.HasOverdues( borrowernumber ) %]
                     <li><a id="print_overdues" href="#">Print overdues</a></li>
                 [% END %]

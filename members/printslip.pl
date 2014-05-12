@@ -76,7 +76,16 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $borrowernumber = $input->param('borrowernumber');
 my $branch=C4::Context->userenv->{'branch'};
 my ($slip, $is_html);
-if (my $letter = IssueSlip ($session->param('branch') || $branch, $borrowernumber, $print eq "qslip")) {
+if ($print eq 'checkinslip') {
+    if (my $letter = CheckInSlip($borrowernumber, $session->param('branch') || $branch)) {
+        $slip = $letter->{content};
+        $is_html = $letter->{is_html};
+    }
+} elsif ($print eq 'fineslip') {
+    my $letter = FineSlip($borrowernumber, $session->param('branch') || $branch);
+    $slip = $letter->{content};
+    $is_html = $letter->{is_html};
+} elsif (my $letter = IssueSlip ($session->param('branch') || $branch, $borrowernumber, $print eq "qslip")) {
     $slip = $letter->{content};
     $is_html = $letter->{is_html};
 }

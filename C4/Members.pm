@@ -74,6 +74,7 @@ BEGIN {
         &GetBorrowersToExpunge
 
         &IssueSlip
+        &CheckInSlip
 
         GetOverduesForPatron
     );
@@ -1243,6 +1244,71 @@ sub IssueSlip {
             'borrowers'   => $borrowernumber,
         },
         repeat => \%repeat,
+    );
+}
+
+=head2 GetTodaysReturnsForBorrower
+
+    $returns = GetTodaysReturnsForBorrower($borrowernumber, $branch);
+
+Return a list of items borrower has checked-in today in branch.
+
+=cut
+
+sub GetTodaysReturnsForBorrower {
+    my ($borrowernumber, $branch) = @_;
+    my $dbh  = C4::Context->dbh;
+    my $date = POSIX::strftime("%Y-%m-%d",localtime());
+
+    my $query = "
+       SELECT itemnumber
+       FROM old_issues
+       WHERE DATE(returndate) = ?
+         AND borrowernumber = ?
+         AND branchcode = ?
+    ";
+
+    my $sth = $dbh->prepare($query);
+    $sth->execute($date, $borrowernumber, $branch);
+    my @results;
+
+    while ( my $data = $sth->fetchrow_hashref ) {
+        my $bibdata = GetBiblioFromItemNumber($data->{itemnumber});
+        push @results, $bibdata;
+    }
+    return \@results;
+}
+
+=head2 CheckInSlip
+
+    $letter = CheckInSlip($borrowernumber, $branch [, $message_transport_type ] );
+
+Returns the prepared letter data for items patron checked-in today in branch.
+message_transport_type defaults to 'print'.
+
+=cut
+
+sub CheckInSlip {
+    my ($borrowernumber, $branch, $mtt) = @_;
+    my $issues = GetTodaysReturnsForBorrower($borrowernumber, $branch);
+    my %repeat = (
+            'checkedin' => [ map {
+                'biblio' => $_,
+                'items'  => $_,
+                'issues' => $_,
+            }, @$issues ],
+        );
+
+    return  C4::Letters::GetPreparedLetter (
+        module => 'circulation',
+        letter_code => 'CHECKINSLIP',
+        branchcode => $branch,
+        tables => {
+            'branches'    => $branch,
+            'borrowers'   => $borrowernumber,
+        },
+        repeat => \%repeat,
+        message_transport_type => $mtt || 'print',
     );
 }
 
