@@ -110,6 +110,7 @@ elsif ($op eq 'add') {
     my $fine = $input->param('fine');
     my $finedays     = $input->param('finedays');
     my $maxsuspensiondays = $input->param('maxsuspensiondays');
+    $maxsuspensiondays = undef if $maxsuspensiondays eq q||;
     my $firstremind  = $input->param('firstremind');
     my $chargeperiod = $input->param('chargeperiod');
     my $maxissueqty  = $input->param('maxissueqty');
