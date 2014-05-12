@@ -256,8 +256,11 @@ if ( $guarantorid ) {
 		        $newdata{$_} = $guarantordata->{$_};
 	        }
         }
+	push @errors, 'ERROR_guarantor_is_guarantee' if ( $guarantordata->{'guarantorid'} );
     }
 }
+
+push @errors, 'ERROR_child_no_guarantor' if ( $category_type eq 'C' && !$guarantorid );
 
 ###############test to take the right zipcode, country and city name ##############
 # set only if parameter was passed from the form
