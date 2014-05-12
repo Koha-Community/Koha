@@ -394,6 +394,11 @@ if ( $op eq "export" ) {
                     print "\n";
                 }
                 else {
+                    my (@result_build_tag) = MARC::File::USMARC::_build_tag_directory($record);
+                    if ($result_build_tag[2] > 99999) {
+                        warn "record (number $recordid) length ".$result_build_tag[2]." is larger than the MARC spec allows (99999 bytes)";
+                        next;
+                    }
                     print $record->as_usmarc();
                 }
             }
