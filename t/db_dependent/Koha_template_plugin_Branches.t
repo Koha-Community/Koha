@@ -41,6 +41,6 @@ my $library = $plugin->GetLoggedInBranchcode();
 is($library, '', 'no active library if there is no active user session');
 
 C4::Context->_new_userenv('DUMMY_SESSION_ID');
-C4::Context::set_userenv(123, 'userid', 'usercnum', 'First name', 'Surname', 'MYLIBRARY', 'My Library', 0);
+C4::Context->set_userenv(123, 'userid', 'usercnum', 'First name', 'Surname', 'MYLIBRARY', 'My Library', 0);
 $library = $plugin->GetLoggedInBranchcode();
 is($library, 'MYLIBRARY', 'GetLoggedInBranchcode() returns active library');
