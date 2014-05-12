@@ -1147,6 +1147,7 @@ CREATE TABLE `issuingrules` ( -- circulation and fine rules
   `reservecharge` decimal(28,6) default NULL,
   `fine` decimal(28,6) default NULL, -- fine amount
   `finedays` int(11) default NULL, -- suspension in days
+  `maxsuspensiondays` int(11) default NULL, -- max suspension days
   `firstremind` int(11) default NULL, -- fine grace period
   `chargeperiod` int(11) default NULL, -- how often the fine amount is charged
   `accountsent` int(11) default NULL, -- not used? always NULL

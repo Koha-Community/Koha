@@ -8526,6 +8526,16 @@ if (CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q|
+        ALTER TABLE issuingrules
+        ADD maxsuspensiondays INT(11) DEFAULT NULL AFTER finedays;
+    |);
+    print "Upgrade to $DBversion done (Bug 12230: Add new issuing rule maxsuspensiondays)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
