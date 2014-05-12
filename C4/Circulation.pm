@@ -2085,10 +2085,21 @@ sub _debar_user_on_return {
         # grace period is measured in the same units as the loan
         my $grace =
           DateTime::Duration->new( $unit => $issuingrule->{firstremind} );
+
         if ( $deltadays->subtract($grace)->is_positive() ) {
+            my $suspension_days = $deltadays * $finedays;
+
+            # If the max suspension days is < than the suspension days
+            # the suspension days is limited to this maximum period.
+            my $max_sd = $issuingrule->{maxsuspensiondays};
+            if ( defined $max_sd ) {
+                $max_sd = DateTime::Duration->new( days => $max_sd );
+                $suspension_days = $max_sd
+                  if DateTime::Duration->compare( $max_sd, $suspension_days ) < 0;
+            }
 
             my $new_debar_dt =
-              $dt_today->clone()->add_duration( $deltadays * $finedays );
+              $dt_today->clone()->add_duration( $suspension_days );
 
             Koha::Borrower::Debarments::AddUniqueDebarment({
                 borrowernumber => $borrower->{borrowernumber},
