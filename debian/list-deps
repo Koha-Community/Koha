@@ -83,6 +83,9 @@ foreach my $module ( keys %$deps ) {
     elsif ( exists $overrides{$module} ) {
         print "$overrides{$module}\n";
     }
+    elsif ( ! $deps->{$module}->{'required'} ) {
+        # Ignore because we don't have it and we don't care.
+    }
     else {
         print "EEEK: unknown package for $module\n";
     }
