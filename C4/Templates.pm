@@ -163,20 +163,6 @@ sub utf8_hashref {
         utf8::encode($hashref->{$key}) if utf8::is_utf8($hashref->{$key});
     }
 }
-        
-        
-# FIXME - this is a horrible hack to cache
-# the current known-good language, temporarily
-# put in place to resolve bug 4403.  It is
-# used only by C4::XSLT::XSLTParse4Display;
-# the language is set via the usual call
-# to themelanguage.
-my $_current_language = 'en';
-
-sub _current_language {
-    return $_current_language;
-}
-
 
 # wrapper method to allow easier transition from HTML template pro to Template Toolkit
 sub param {
@@ -296,7 +282,6 @@ sub themelanguage {
     # Try to find first theme for the selected language
     for my $theme (@themes) {
         if ( -e "$htdocs/$theme/$lang/modules/$tmpl" ) {
-            $_current_language = $lang;
             return ($theme, $lang, \@themes)
         }
     }

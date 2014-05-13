@@ -162,7 +162,7 @@ sub XSLTParse4Display {
     if ( $xslfilename =~ /^\s*"?default"?\s*$/i ) {
         my $htdocs;
         my $theme;
-        my $lang = C4::Templates::_current_language();
+        my $lang = C4::Languages::getlanguage();
         my $xslfile;
         if ($xslsyspref eq "XSLTDetailsDisplay") {
             $htdocs  = C4::Context->config('intrahtdocs');
@@ -189,7 +189,7 @@ sub XSLTParse4Display {
     }
 
     if ( $xslfilename =~ m/\{langcode\}/ ) {
-        my $lang = C4::Templates::_current_language();
+        my $lang = C4::Languages::getlanguage();
         $xslfilename =~ s/\{langcode\}/$lang/;
     }
 

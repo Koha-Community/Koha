@@ -55,7 +55,7 @@ if(!ref $record) {
 }
 
 if($view eq 'card') {
-    my $themelang =  '/' . C4::Templates::_current_language();
+    my $themelang =  '/' . C4::Languages::getlanguage($input);
     my $xmlrecord= $importid? $record->as_xml(): GetXmlBiblio($biblionumber);
     my $xslfile =
       C4::Context->config('intrahtdocs') . '/prog' . $themelang . "/xslt/compact.xsl";

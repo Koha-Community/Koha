@@ -57,7 +57,7 @@ if ($view eq 'card' || $view eq 'html') {
     my $xslfilename;
     my $htdocs  = C4::Context->config('opachtdocs');
     my $theme   = C4::Context->preference("opacthemes");
-    my $lang = C4::Templates::_current_language();
+    my $lang = C4::Languages::getlanguage($input);
 
     if ($view eq 'card'){
         $xslfile = "compact.xsl";
