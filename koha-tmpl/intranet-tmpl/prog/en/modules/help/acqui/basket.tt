@@ -5,59 +5,54 @@
 <p>Once your basket is created you are presented with several options for adding items to the order.</p>
 
 <ul>
-    <li>If you are ordering another copy of an existing item, you can simply search for the record in your system.
+	<li>If you are ordering another copy of an existing item, you can simply search for the record in your system.
 <ul>
-    <li>From the results, simply click 'Order' to be brought to the order form.
+	<li>From the results, simply click 'Order' to be brought to the order form.
 <ul>
-    <li>All of the details associated with the item will already be listed under 'Catalog details.'</li>
+	<li>All of the details associated with the item will already be listed under 'Catalog details.'</li>
 </ul>
 </li>
 </ul>
 </li>
-    <li>If you allow patrons to make purchase suggestions (learn more in the Managing Suggestions section of this manual), then you can place orders from those suggestions.</li>
-    <li>From the results, click 'Order' next to the item you want to order and you will be presented with the order form including a link to the suggestion
+	<li>If you allow patrons to make purchase suggestions (learn more in the Managing Suggestions section of this manual), then you can place orders from those suggestions.</li>
+	<li>From the results, click 'Order' next to the item you want to order and you will be presented with the order form including a link to the suggestion
 <ul>
-    <li>From this form you can make changes to the Catalog Details if necessary.</li>
-    <li>When the item appears in your basket it will include a link to the suggestion.</li>
+	<li>From this form you can make changes to the Catalog Details if necessary.</li>
+	<li>When the item appears in your basket it will include a link to the suggestion.</li>
 </ul>
 </li>
-    <li>To order from a record that can't be found anywhere else, choose the 'From a new (empty) record.'
+	<li>To order from a record that can't be found anywhere else, choose the 'From a new (empty) record.'
 <ul>
-    <li>You will be presented with an empty form to fill in all of the necessary details about the item you are ordering.</li>
+	<li>You will be presented with an empty form to fill in all of the necessary details about the item you are ordering.</li>
 </ul>
 </li>
-    <li>If you want to search other libraries for an item to purchase, you can use the 'From an external source' option that will allow you to order from a MARC record found via a Z39.50 search.
+	<li>If you want to search other libraries for an item to purchase, you can use the 'From an external source' option that will allow you to order from a MARC record found via a Z39.50 search.
 <ul>
-    <li>From the results, click the Order link next to the item you want to purchase.</li>
-    <li>If the item you're ordering from an external source looks like it might be a duplicate, Koha will warn you and give you options on how to proceed.
+	<li>From the results, click the Order link next to the item you want to purchase.</li>
+	<li>If the item you're ordering from an external source looks like it might be a duplicate, Koha will warn you and give you options on how to proceed.
 <ul>
-    <li>From the warning, you can choose to order another copy on the existing bib record, create a new bib record, or cancel your order of this item.</li>
+	<li>From the warning, you can choose to order another copy on the existing bib record, create a new bib record, or cancel your order of this item.</li>
 </ul>
 </li>
-    <li>In the order form that pops up, you will not be able to edit the catalog details.</li>
+	<li>In the order form that pops up, you will not be able to edit the catalog details.</li>
 </ul>
 </li>
-    <li>The final option for ordering is to order from a staged record (learn more about staging records).
+	<li>The next option for ordering is to order from a staged record.
 <ul>
-    <li>From the list of files you are presented with, choose the 'Add orders' link.
-<ul>
-    <li>From the list of records, click 'Add order' next to the item that you want to add to your order.
-<ul>
-    <li>From the order form, you will not be able to edit the catalog details.</li>
+	<li>From the list of files you are presented with, choose the 'Add orders' link to add the records in the staged file to your order.</li>
+	<li>Next to each title is a checkbox, check the items you would like to order, or choose 'Check all' at the top. Depending on your settings in the MarcFieldsToOrder preference Koha will populate the next screen with with the relevant Quantity, Price, Fund, Statistic 1, and Statistic 2 found within the staged file.</li>
+	<li>In the 'Item Information' tab you can enter information that will be added to every ordered item such as item type, collection code and not for loan status.</li>
+	<li>If no information is imported from the MARC record regarding fund information the 'Default accounting details' tab can be used to apply values related to the accounting.</li>
 </ul>
 </li>
-    <li>The other option is to import all records from the staged file by scrolling below the list of records in the staged file and filling in the item information.
+	<li>The final option for ordering is to order from a list of titles with the highest hold ratios
 <ul>
-    <li>If you choose this option the Koha will look in the 020$c and grab the pricing information from that field and put that on each order line.</li>
-</ul>
-</li>
-</ul>
-</li>
+	<li>This option will take you to the Holds Ratio report where you can find items with a high hold ratio and order additional copies. Next to each title will be a link with the number of items to order, click that and it will add the item to your basket.</li>
 </ul>
 </li>
 </ul>
 
-<p>After bringing in the bib information, if your AcqCreateItem system preference is set to add an item when ordering you will enter the item info next. You need to fill out at least one item record and then click the 'Add' button at the bottom left of the item form.</p>
+<p>After bringing in the bib information (for all import methods except for the staged file), if your AcqCreateItem system preference is set to add an item when ordering you will enter the item info next. You need to fill out at least one item record and then click the 'Add' button at the bottom left of the item form.</p>
 
 <p>After clicking add the item will appear above the form and then you can enter your next item the same way (if ordering more than one item).</p>
 
