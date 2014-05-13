@@ -109,10 +109,11 @@ EOF
             ENABLE_VHOST="yes"
             if [ -f "/etc/apache2/sites-available/$site" ] && \
                [ ! -f "/etc/apache2/sites-available/$site.conf" ]; then
-                if ! a2dissite $site > /dev/null 2>&1; then
-                    echo "Warning: problem disabling $site in Apache" >&2
+                if [ ! -f "/etc/apache2/sites-enabled/$site" ]; then
                     ENABLE_VHOST="no"
                 fi
+                a2dissite $site > /dev/null 2>&1 || true
+                rm -f "/etc/apache2/sites-enabled/$site"
                 # Rename the vhost definition files
                 mv "/etc/apache2/sites-available/$site" \
                    "/etc/apache2/sites-available/$site.conf"
