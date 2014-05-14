@@ -1,4 +1,3 @@
-[% USE EncodeUTF8 %]
 [% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Item types [% IF ( add_form ) %]&rsaquo;
@@ -202,9 +201,9 @@ Item types administration
               <option value=""></option>
               [% FOREACH a IN AuthorisedValues.Get('SIP_MEDIA_TYPE', sip_media_type ) %]
                   [% IF a.selected %]
-                      <option value="[% a.authorised_value %]" selected="selected">[% a.lib | $EncodeUTF8 %]</option>
+                      <option value="[% a.authorised_value %]" selected="selected">[% a.lib %]</option>
                   [% ELSE %]
-                      <option value="[% a.authorised_value %]">[% a.lib | $EncodeUTF8  %]</option>
+                      <option value="[% a.authorised_value %]">[% a.lib %]</option>
                   [% END %]
               [% END %]
           </select>

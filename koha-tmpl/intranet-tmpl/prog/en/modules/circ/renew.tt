@@ -55,7 +55,7 @@
 
                             [% ELSIF error == "too_soon" %]
 
-                                <p>[% item.biblio.title | $EncodeUTF8 %] [% item.biblioitem.subtitle | $EncodeUTF8 %] ( [% item.barcode %] ) cannot be renewed before [% soonestrenewdate | $KohaDates %]. </p>
+                                <p>[% item.biblio.title %] [% item.biblioitem.subtitle %] ( [% item.barcode %] ) cannot be renewed before [% soonestrenewdate | $KohaDates %]. </p>
 
                                 [% IF Koha.Preference('AllowRenewalLimitOverride') %]
                                     <form method="post" action="/cgi-bin/koha/circ/renew.pl">
