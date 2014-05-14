@@ -17,7 +17,7 @@ INSERT INTO `userflags` VALUES(14,'editauthorities','autorizza la modifica delle
 INSERT INTO `userflags` VALUES(15,'serials','autorizza la gestione degli abbonamenti ai periodici',0);
 INSERT INTO `userflags` VALUES(16,'reports','autorizza accesso al modulo dei reports',0);
 INSERT INTO `userflags` VALUES(17,'staffaccess','modifica la login o i permessi degli staff users',0);
-INSERT INTO `userflags` VALUES(18,'coursereserves','Course Reserves',0);
-INSERT INTO `userflags` VALUES(19, 'plugins', 'Koha plugins', '0');
+INSERT INTO `userflags` VALUES(18,'coursereserves','Modulo \'Testi per i corsi\'',0);
+INSERT INTO `userflags` VALUES(19, 'plugins', 'Gestisci i plugins di Koha', '0');
 
 SET FOREIGN_KEY_CHECKS=1;
