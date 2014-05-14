@@ -82,7 +82,6 @@ sub all {
     for ( @{$dbh->selectall_arrayref(
         "SELECT * FROM itemtypes ORDER BY description", { Slice => {} })} )
     {
-        $_->{description} = Encode::encode('UTF-8', $_->{description});
         push @itypes, $class->new($_);
     }
     return @itypes;
@@ -105,9 +104,6 @@ sub get {
     my $data = $dbh->selectrow_hashref(
         "SELECT * FROM itemtypes WHERE itemtype = ?", undef, $itemtype
     );
-    if ( $data->{description} ) {
-        $data->{description} = Encode::encode('UTF-8', $data->{description});
-    }
     return $class->new($data);
 }
 

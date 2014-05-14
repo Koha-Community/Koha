@@ -35,15 +35,6 @@ use C4::Output;
 # shortcut for long package name
 our $preferences = 'C4::ItemCirculationAlertPreference';
 
-# utf8 filter
-sub utf8 {
-    my ($data, @keys) = @_;
-    for (@keys) {
-        $data->{$_} = decode('utf8', $data->{$_});
-    }
-    $data;
-}
-
 # prepend "br_" to column name and replace spaces with "<br/>"
 sub br {
     my ($data, @keys) = @_;
