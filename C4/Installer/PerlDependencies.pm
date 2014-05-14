@@ -197,14 +197,14 @@ our $PERL_DEPS = {
     'Text::PDF' => {
         'usage'    => 'Core',
         'required' => '1',
-        'min_ver'  => '0.33',
+        'min_ver'  => '0.29',
         # We don't use this directly, but it's not a required dependency for
         # PDF::Reuse however we need it via that or tests fail.
     },
     'Font::TTF' => {
         'usage'    => 'Core',
         'required' => '1',
-        'min_ver'  => '0.33',
+        'min_ver'  => '0.45',
         # Also needed for our use of PDF::Reuse
     },
     'DateTime' => {
