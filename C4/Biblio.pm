@@ -57,13 +57,14 @@ BEGIN {
 
     # to get something
     push @EXPORT, qw(
-      &GetBiblio
-      &GetBiblioData
-      &GetBiblioItemData
-      &GetBiblioItemInfosOf
-      &GetBiblioItemByBiblioNumber
-      &GetBiblioFromItemNumber
-      &GetBiblionumberFromItemnumber
+      GetBiblio
+      GetBiblioData
+      GetMarcBiblio
+      GetBiblioItemData
+      GetBiblioItemInfosOf
+      GetBiblioItemByBiblioNumber
+      GetBiblioFromItemNumber
+      GetBiblionumberFromItemnumber
 
       &GetRecordValue
       &GetFieldMapping
@@ -77,7 +78,6 @@ BEGIN {
       &GetMarcISBN
       &GetMarcISSN
       &GetMarcSubjects
-      &GetMarcBiblio
       &GetMarcAuthors
       &GetMarcSeries
       &GetMarcHosts

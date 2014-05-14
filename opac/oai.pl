@@ -288,7 +288,9 @@ package C4::OAI::GetRecord;
 use strict;
 use warnings;
 use HTTP::OAI;
+use C4::Biblio;
 use C4::OAI::Sets;
+use MARC::File::XML;
 
 use base ("HTTP::OAI::GetRecord");
 
@@ -299,31 +301,39 @@ sub new {
     my $self = HTTP::OAI::GetRecord->new(%args);
 
     my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("
+        SELECT timestamp
+        FROM   biblioitems
+        WHERE  biblionumber=? " );
     my $prefix = $repository->{koha_identifier} . ':';
     my ($biblionumber) = $args{identifier} =~ /^$prefix(.*)/;
-    my ($marcxml, $timestamp);
-    my $deleted = 0;
-    unless ( ($marcxml, $timestamp) = $dbh->selectrow_array(q/
-        SELECT marcxml, timestamp
-        FROM   biblioitems
-        WHERE  biblionumber=? /, undef, $biblionumber)) {
-
-      unless ( ($marcxml, $timestamp) = $dbh->selectrow_array(q/
-          SELECT biblionumber, timestamp
-          FROM deletedbiblio
-          WHERE biblionumber=? /, undef, $biblionumber )) {
-
-
-        return HTTP::OAI::Response->new(
-            requestURL  => $repository->self_url(),
-            errors      => [ new HTTP::OAI::Error(
+    $sth->execute( $biblionumber );
+    my ($timestamp);
+    unless ( ($timestamp) = $sth->fetchrow ) {
+        unless ( ($timestamp) = $dbh->selectrow_array(q/
+            SELECT timestamp
+            FROM deletedbiblio
+            WHERE biblionumber=? /, undef, $biblionumber ))
+        {
+            return HTTP::OAI::Response->new(
+             requestURL  => $repository->self_url(),
+             errors      => [ new HTTP::OAI::Error(
                 code    => 'idDoesNotExist',
                 message => "There is no biblio record with this identifier",
-                ) ] ,
-        );
-      } else {
-        $deleted = 1;
-      }
+                ) ],
+            );
+        }
+        else {
+            $deleted = 1;
+        }
+    }
+
+    # We fetch it using this method, rather than the database directly,
+    # so it'll include the item data
+    my $marcxml;
+    unless ($deleted) {
+        my $record = GetMarcBiblio($biblionumber, 1);
+        $marcxml = $record->as_xml();
     }
     my $oai_sets = GetOAISetsBiblio($biblionumber);
     my @setSpecs;
@@ -332,10 +342,11 @@ sub new {
     }
 
     #$self->header( HTTP::OAI::Header->new( identifier  => $args{identifier} ) );
-    ($deleted == 1) ? $self->record( C4::OAI::DeletedRecord->new(
-        $timestamp, \@setSpecs, %args ) )
-        : $self->record( C4::OAI::Record->new(
-        $repository, $marcxml, $timestamp, \@setSpecs, %args ) );
+    $self->record(
+        $deleted
+        ? C4::OAI::DeletedRecord->new($timestamp, \@setSpecs, %args)
+        : C4::OAI::Record->new($repository, $marcxml, $timestamp, \@setSpecs, %args);
+    );
     return $self;
 }
 
