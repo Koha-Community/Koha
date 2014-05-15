@@ -1,31 +1,24 @@
+#!/usr/bin/perl
 package SIPServer;
 
 use strict;
 use warnings;
 use FindBin qw($Bin);
 use lib "$Bin";
-# use Exporter;
 use Sys::Syslog qw(syslog);
 use Net::Server::PreFork;
 use IO::Socket::INET;
 use Socket qw(:DEFAULT :crlf);
-use Data::Dumper;		# For debugging
 require UNIVERSAL::require;
 
-#use Sip qw(readline);
 use Sip::Constants qw(:all);
 use Sip::Configuration;
 use Sip::Checksum qw(checksum verify_cksum);
 use Sip::MsgType;
 
+use base qw(Net::Server::PreFork);
+
 use constant LOG_SIP => "local6"; # Local alias for the logging facility
-
-use vars qw(@ISA $VERSION);
-
-BEGIN {
-    $VERSION = 3.07.00.049;
-	@ISA = qw(Net::Server::PreFork);
-}
 
 #
 # Main	# not really, since package SIPServer
@@ -43,7 +36,6 @@ my %transports = (
 # Read configuration
 #
 my $config = new Sip::Configuration $ARGV[0];
-print STDERR "SIPServer config: \n" . Dumper($config) . "\nEND SIPServer config.\n";
 my @parms;
 
 #
@@ -75,8 +67,6 @@ if (defined($config->{'server-params'})) {
     }
 }
 
-print scalar(localtime),  " -- startup -- procid:$$\n";
-print "Params for Net::Server::PreFork : \n" . Dumper(\@parms);
 
 #
 # This is the main event.
