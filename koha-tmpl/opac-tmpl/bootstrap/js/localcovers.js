@@ -28,6 +28,7 @@ KOHA.LocalCover = {
             var img = $("<img />").attr('src',
                 '/cgi-bin/koha/opac-image.pl?thumbnail=1&biblionumber=' + $(mydiv).attr("class"))
                 .load(function () {
+                    this.setAttribute("class", "thumbnail");
                     if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
                         //IE HACK
                         try {
@@ -36,7 +37,7 @@ KOHA.LocalCover = {
                         }
                         catch(err){
                         };
-                    } else {
+                    } else if (this.width > 1) { // don't show the silly 1px "no image" img
                         if (uselink) {
                             var a = $("<a />").attr('href', '/cgi-bin/koha/opac-imageviewer.pl?biblionumber=' + $(mydiv).attr("class"));
                             $(a).append(img);
