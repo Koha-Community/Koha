@@ -6,7 +6,9 @@
 use strict;
 use warnings;
 
-use Test::More tests => 9;
+use Test::More tests => 11;
+use List::Util qw(first);
+use Data::Dumper;
 
 BEGIN {
     use_ok('C4::Languages');
@@ -37,5 +39,15 @@ is_deeply($languages, $all_languages, 'getLanguages() and getAllLanguages() with
 C4::Context->set_preference('AdvancedSearchLanguages', 'ita|eng');
 $languages = C4::Languages::getLanguages('eng', 1);
 is(scalar(@$languages), 2, 'getLanguages() filtering using AdvancedSearchLanguages works');
+
+my $translatedlanguages1 = C4::Languages::getTranslatedLanguages('opac','prog',undef,'');
+my @currentcheck1 = map { $_->{current} } @$translatedlanguages1;
+my $onlyzeros = first { $_ != 0 } @currentcheck1;
+ok(! $onlyzeros, "Everything was zeros.\n");
+
+my $translatedlanguages2 = C4::Languages::getTranslatedLanguages('opac','prog','en','');
+my @currentcheck2 = map { $_->{current} } @$translatedlanguages2;
+$onlyzeros = first { $_ != 0 } @currentcheck2;
+ok($onlyzeros, "There is a $onlyzeros\n");
 
 $dbh->rollback;
