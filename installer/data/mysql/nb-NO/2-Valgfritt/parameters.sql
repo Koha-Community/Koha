@@ -19,8 +19,8 @@
 -- with Koha; if not, write to the Free Software Foundation, Inc.,
 -- 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-INSERT INTO `currency` (currency, rate, symbol, active) VALUES
+INSERT INTO currency (currency, rate, symbol, active) VALUES
 ('USD', 5.6157, '$', 0),
-('NOK', 1.0, '$', 1),
+('NOK', 1.0, 'kr', 1),
 ('GBP', 8.9680, '£', 0),
 ('EUR', 7.8940, '€', 0);
