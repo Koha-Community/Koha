@@ -269,7 +269,7 @@ sub _get_themes {
     my $interface = shift;
     my $htdocs;
     my @themes;
-    if ( $interface eq 'intranet' ) {
+    if ( $interface && $interface eq 'intranet' ) {
         $htdocs = C4::Context->config('intrahtdocs');
     }
     else {
@@ -292,6 +292,8 @@ Internal function, returns an array of directory names, excluding non-language d
 
 sub _get_language_dirs {
     my ($htdocs,$theme) = @_;
+    $htdocs //= '';
+    $theme //= '';
     my @lang_strings;
     opendir D, "$htdocs/$theme";
     for my $lang_string ( readdir D ) {
@@ -318,6 +320,7 @@ FIXME: this could be rewritten and simplified using map
 
 sub _build_languages_arrayref {
         my ($translated_languages,$current_language,$enabled_languages) = @_;
+        $current_language //= '';
         my @translated_languages = @$translated_languages;
         my @languages_loop; # the final reference to an array of hashrefs
         my @enabled_languages = @$enabled_languages;
@@ -355,7 +358,7 @@ sub _build_languages_arrayref {
             my $enabled;
             for my $enabled_language (@enabled_languages) {
                 my $regex_enabled_language = regex_lang_subtags($enabled_language);
-                $enabled = 1 if $key eq $regex_enabled_language->{language};
+                $enabled = 1 if $key eq ($regex_enabled_language->{language} // '');
             }
             push @languages_loop,  {
                             # this is only use if there is one
@@ -364,7 +367,7 @@ sub _build_languages_arrayref {
                             language => $key,
                             sublanguages_loop => $value,
                             plural => $track_language_groups->{$key} >1 ? 1 : 0,
-                            current => $current_language_regex->{language} eq $key ? 1 : 0,
+                            current => ($current_language_regex->{language} // '') eq $key ? 1 : 0,
                             group_enabled => $enabled,
                            };
         }
