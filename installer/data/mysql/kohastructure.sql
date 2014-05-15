@@ -1123,6 +1123,7 @@ CREATE TABLE `issues` ( -- information related to check outs or issues
   `lastreneweddate` datetime default NULL, -- date the item was last renewed
   `return` varchar(4) default NULL,
   `renewals` tinyint(4) default NULL, -- lists the number of times the item was renewed
+  `auto_renew` BOOLEAN default FALSE, -- automatic renewal
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
   `issuedate` datetime default NULL, -- date the item was checked out or issued
   KEY `issuesborridx` (`borrowernumber`),
@@ -1160,6 +1161,7 @@ CREATE TABLE `issuingrules` ( -- circulation and fine rules
   `renewalsallowed` smallint(6) NOT NULL default "0", -- how many renewals are allowed
   `renewalperiod` int(4) default NULL, -- renewal period in the unit set in issuingrules.lengthunit
   `norenewalbefore` int(4) default NULL, -- no renewal allowed until X days or hours before due date. In the unit set in issuingrules.lengthunit
+  `auto_renew` BOOLEAN default FALSE, -- automatic renewal
   `reservesallowed` smallint(6) NOT NULL default "0", -- how many holds are allowed
   `branchcode` varchar(10) NOT NULL default '', -- the branch this rule is for (branches.branchcode)
   overduefinescap decimal(28,6) default NULL, -- the maximum amount of an overdue fine
@@ -1594,6 +1596,7 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
   `lastreneweddate` datetime default NULL, -- date the item was last renewed
   `return` varchar(4) default NULL,
   `renewals` tinyint(4) default NULL, -- lists the number of times the item was renewed
+  `auto_renew` BOOLEAN default FALSE, -- automatic renewal
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
   `issuedate` datetime default NULL, -- date the item was checked out or issued
   KEY `old_issuesborridx` (`borrowernumber`),

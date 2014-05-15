@@ -8751,6 +8751,21 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q{
+        ALTER TABLE issues ADD auto_renew BOOLEAN default FALSE AFTER renewals
+    });
+    $dbh->do(q{
+        ALTER TABLE old_issues ADD auto_renew BOOLEAN default FALSE AFTER renewals
+    });
+    $dbh->do(q{
+        ALTER TABLE issuingrules ADD auto_renew BOOLEAN default FALSE AFTER norenewalbefore
+    });
+    print "Upgrade to $DBversion done (Bug 11577: [ENH] Automatic renewal feature)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
