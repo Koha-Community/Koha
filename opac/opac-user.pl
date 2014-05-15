@@ -194,8 +194,10 @@ if ($issues){
         $issue->{'renewed'} = $renewed{ $issue->{'itemnumber'} };
 
         if ($renewerror) {
-            $issue->{'too_many'}   = 1 if $renewerror eq 'too_many';
-            $issue->{'on_reserve'} = 1 if $renewerror eq 'on_reserve';
+            $issue->{'too_many'}       = 1 if $renewerror eq 'too_many';
+            $issue->{'on_reserve'}     = 1 if $renewerror eq 'on_reserve';
+            $issue->{'auto_renew'}     = 1 if $renewerror eq 'auto_renew';
+            $issue->{'auto_too_soon'}  = 1 if $renewerror eq 'auto_too_soon';
 
             if ( $renewerror eq 'too_soon' ) {
                 $issue->{'too_soon'}         = 1;
