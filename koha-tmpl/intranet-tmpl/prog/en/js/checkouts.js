@@ -255,6 +255,20 @@ $(document).ready(function() {
 
                         span_style = "display: none";
                         span_class = "renewals-allowed";
+                    } else if ( oObj.can_renew_error == "auto_too_soon" ) {
+                        content += "<span class='renewals-disabled'>"
+                                + NOT_RENEWABLE_AUTO_TOO_SOON
+                                + "</span>";
+
+                        span_style = "display: none";
+                        span_class = "renewals-allowed";
+                    } else if ( oObj.can_renew_error == "auto_renew" ) {
+                        content += "<span class='renewals-disabled'>"
+                                + NOT_RENEWABLE_AUTO_RENEW
+                                + "</span>";
+
+                        span_style = "display: none";
+                        span_class = "renewals-allowed";
                     } else {
                         content += "<span class='renewals-disabled'>"
                                 + oObj.can_renew_error

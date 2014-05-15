@@ -1183,7 +1183,7 @@ AddIssue does the following things :
 =cut
 
 sub AddIssue {
-    my ( $borrower, $barcode, $datedue, $cancelreserve, $issuedate, $sipmode) = @_;
+    my ( $borrower, $barcode, $datedue, $cancelreserve, $issuedate, $sipmode, $auto_renew ) = @_;
     my $dbh = C4::Context->dbh;
 	my $barcodecheck=CheckValidBarcode($barcode);
     if ($datedue && ref $datedue ne 'DateTime') {
@@ -1249,12 +1249,18 @@ sub AddIssue {
                 $sth->execute(C4::Context->userenv->{'branch'},$item->{'itemnumber'});
             }
 
+        # If automatic renewal wasn't selected while issuing, set the value according to the issuing rule.
+        unless ($auto_renew) {
+            my $issuingrule = GetIssuingRule($borrower->{categorycode}, $item->{itype}, $branch);
+            $auto_renew = $issuingrule->{auto_renew};
+        }
+
         # Record in the database the fact that the book was issued.
         my $sth =
           $dbh->prepare(
                 "INSERT INTO issues
-                    (borrowernumber, itemnumber,issuedate, date_due, branchcode)
-                VALUES (?,?,?,?,?)"
+                    (borrowernumber, itemnumber,issuedate, date_due, branchcode, auto_renew)
+                VALUES (?,?,?,?,?,?)"
           );
         unless ($datedue) {
             my $itype = ( C4::Context->preference('item-level_itypes') ) ? $biblio->{'itype'} : $biblio->{'itemtype'};
@@ -1267,7 +1273,8 @@ sub AddIssue {
             $item->{'itemnumber'},              # itemnumber
             $issuedate->strftime('%Y-%m-%d %H:%M:00'), # issuedate
             $datedue->strftime('%Y-%m-%d %H:%M:00'),   # date_due
-            C4::Context->userenv->{'branch'}    # branchcode
+            C4::Context->userenv->{'branch'},   # branchcode
+            $auto_renew ? 1 : 0                 # automatic renewal
         );
         if ( C4::Context->preference('ReturnToShelvingCart') ) { ## ReturnToShelvingCart is on, anything issued should be taken off the cart.
           CartToShelf( $item->{'itemnumber'} );
@@ -2599,7 +2606,9 @@ C<$itemnumber> is the number of the item to renew.
 
 C<$override_limit>, if supplied with a true value, causes
 the limit on the number of times that the loan can be renewed
-(as controlled by the item type) to be ignored.
+(as controlled by the item type) to be ignored. Overriding also allows
+to renew sooner than "No renewal before" and to manually renew loans
+that are automatically renewed.
 
 C<$CanBookBeRenewed> returns a true value if the item may be renewed. The
 item must currently be on loan to the specified borrower; renewals
@@ -2611,10 +2620,8 @@ already renewed the loan. $error will contain the reason the renewal can not pro
 sub CanBookBeRenewed {
     my ( $borrowernumber, $itemnumber, $override_limit ) = @_;
 
-    my $dbh       = C4::Context->dbh;
-    my $renews    = 1;
-    my $renewokay = 1;
-    my $error;
+    my $dbh    = C4::Context->dbh;
+    my $renews = 1;
 
     my $item      = GetItem($itemnumber)      or return ( 0, 'no_item' );
     my $itemissue = GetItemIssue($itemnumber) or return ( 0, 'no_checkout' );
@@ -2623,42 +2630,36 @@ sub CanBookBeRenewed {
     my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber )
       or return;
 
-    my $branchcode  = _GetCircControlBranch($item, $borrower);
+    my ( $resfound, $resrec, undef ) = C4::Reserves::CheckReserves($itemnumber);
 
-    my $issuingrule = GetIssuingRule($borrower->{categorycode}, $item->{itype}, $branchcode);
+    return ( 0, "on_reserve" ) if $resfound;    # '' when no hold was found
+
+    return ( 1, undef ) if $override_limit;
+
+    my $branchcode = _GetCircControlBranch( $item, $borrower );
+    my $issuingrule =
+      GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
+
+    return ( 0, "too_many" )
+      if $issuingrule->{renewalsallowed} <= $itemissue->{renewals};
 
     if ( $issuingrule->{norenewalbefore} ) {
 
-        # Get current time and add norenewalbefore. If this is smaller than date_due, it's too soon for renewal.
+        # Get current time and add norenewalbefore.
+        # If this is smaller than date_due, it's too soon for renewal.
         if (
             DateTime->now( time_zone => C4::Context->tz() )->add(
                 $issuingrule->{lengthunit} => $issuingrule->{norenewalbefore}
             ) < $itemissue->{date_due}
-        )
+          )
         {
-            $renewokay = 0;
-            $error     = "too_soon";
+            return ( 0, "auto_too_soon" ) if $itemissue->{auto_renew};
+            return ( 0, "too_soon" );
         }
     }
 
-    if ( $issuingrule->{renewalsallowed} <= $itemissue->{renewals} ) {
-        $renewokay = 0;
-        $error = "too_many";
-    }
-
-    if ( $override_limit ) {
-        $renewokay = 1;
-        $error     = undef;
-    }
-
-    my ( $resfound, $resrec, undef ) = C4::Reserves::CheckReserves( $itemnumber );
-
-    if ( $resfound ) { # '' when no hold was found
-        $renewokay = 0;
-        $error = "on_reserve";
-    }
-
-    return ( $renewokay, $error );
+    return ( 0, "auto_renew" ) if $itemissue->{auto_renew};
+    return ( 1, undef );
 }
 
 =head2 AddRenewal

@@ -134,6 +134,10 @@ if ( $barcode ) {
         $stickyduedate  = $query->param('stickyduedate');
         $duedatespec    = $query->param('duedatespec');
     }
+    $session->param('auto_renew', $query->param('auto_renew'));
+}
+else {
+    $session->clear('auto_renew');
 }
 
 my ($datedue,$invalidduedate);
@@ -344,7 +348,8 @@ if ($barcode) {
             }
         }
         unless($confirm_required) {
-            AddIssue( $borrower, $barcode, $datedue, $cancelreserve );
+            AddIssue( $borrower, $barcode, $datedue, $cancelreserve, undef, undef, $session->param('auto_renew') );
+            $session->clear('auto_renew');
             $inprocess = 1;
         }
     }

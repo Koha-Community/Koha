@@ -489,6 +489,15 @@ No patron matched <span class="ex">[% message %]</span>
     [% END %]
     <button type="submit" class="btn">Check out</button>
 
+    <div class="date-select">
+        [% IF NEEDSCONFIRMATION %]
+            <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" />
+        [% ELSE %]
+            <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" />
+        [% END %]
+        <label for="auto_renew">Automatic renewal</label>
+    </div>
+
     [% IF ( SpecifyDueDate ) %]<div class="date-select">
         <div class="hint">Specify due date [% INCLUDE 'date-format.inc' %]: </div>
         [% IF ( duedatespec ) %]<input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec %]" readonly="readonly" />[% ELSE %]<input type="text" size="13" id="duedatespec" name="duedatespec" value="" readonly="readonly" />
