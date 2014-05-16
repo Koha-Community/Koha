@@ -38,14 +38,37 @@ use Test::More;
 # use FindBin;
 # use IPC::Open3;
 
-foreach my $type qw(intranet opac) {
-    my $template_dir = File::Spec->rel2abs("koha-tmpl/$type-tmpl/prog/en/modules");
-    my $include_dir  = File::Spec->rel2abs("koha-tmpl/$type-tmpl/prog/en/includes");
-    my $template_test = create_template_test($include_dir);
-    find({ wanted => $template_test, no_chdir => 1 }, $template_dir, $include_dir);
-}
+print "Testing intranet prog templates\n";
+run_template_test(
+    'koha-tmpl/intranet-tmpl/prog/en/modules',
+    'koha-tmpl/intranet-tmpl/prog/en/includes'
+);
+
+print "Testing opac bootstrap templates\n";
+run_template_test(
+    'koha-tmpl/opac-tmpl/bootstrap/en/modules',
+    'koha-tmpl/opac-tmpl/bootstrap/en/includes'
+);
+
+print "Testing opac prog templates\n";
+run_template_test(
+    'koha-tmpl/opac-tmpl/prog/en/modules',
+    'koha-tmpl/opac-tmpl/prog/en/includes'
+);
+
+# TODO add test of opac ccsr templates
 
 done_testing();
+
+sub run_template_test {
+    my $template_path = shift;
+    my $include_path  = shift;
+    my $template_dir  = File::Spec->rel2abs($template_path);
+    my $include_dir   = File::Spec->rel2abs($include_path);
+    my $template_test = create_template_test($include_dir);
+    find( { wanted => $template_test, no_chdir => 1 },
+        $template_dir, $include_dir );
+}
 
 sub create_template_test {
     my $includes = shift;
