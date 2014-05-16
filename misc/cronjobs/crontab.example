@@ -85,3 +85,6 @@ KOHA_CRON_PATH = /usr/share/koha/bin/cronjobs
 
 # delete old purchase suggestions weekly. Replace XX with a number to define the age of suggestions to delete.
 @weekly	__KOHA_USER__  $KOHA_CRON_PATH/purge_suggestions.pl --days XX > /dev/null 2>&1
+
+# every day at 3AM renew all issues scheduled for automatic renewal
+0 3 * * *  __KOHA_USER__ $KOHA_CRON_PATH/automatic_renewals.pl
