@@ -38,7 +38,7 @@ $(document).ready(function() {
     <b>Note : The items are exported by this tool unless specified.</b>
 </p>
 
-<form method="post" action="/cgi-bin/koha/tools/export.pl">
+<form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/export.pl">
     <fieldset class="rows">
     <legend> Select records to export </legend>
         <ol><li>
@@ -97,6 +97,15 @@ $(document).ready(function() {
 </ul></li></ol>
     </fieldset>
     <fieldset class="rows">
+    <legend>
+        Use a file
+    </legend>
+        <ol>
+        <li>File containing a biblionumber's list with one biblionumber per line. This list works as a filter: it's compatible with other parameters.</li>
+        <li><label for="id_list_file">File : </label> <input type="file" id="id_list_file" name="id_list_file" /></li>
+        </ol>
+    </fieldset>
+    <fieldset class="rows">
     <legend> Options</legend>
 <ol>        <li>
         <label for="dont_export_item">Don't export items</label>
@@ -136,7 +145,7 @@ $(document).ready(function() {
 </div>
 
 <div id="auths">
-<form method="post" action="/cgi-bin/koha/tools/export.pl">
+<form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/export.pl">
     <fieldset class="rows">
     <legend> Select records to export </legend>
         <ol><li>
@@ -160,6 +169,15 @@ $(document).ready(function() {
                 [% END %]
             </select>
         </li>
+        </ol>
+    </fieldset>
+    <fieldset class="rows">
+    <legend>
+        Use a file
+    </legend>
+        <ol>
+        <li>File containing an authid's list with one authid per line. This list works as a filter: it's compatible with other parameters.</li>
+        <li><label for="id_list_file">File : </label> <input type="file" id="id_list_file" name="id_list_file" /></li>
         </ol>
     </fieldset>
     <fieldset class="rows">

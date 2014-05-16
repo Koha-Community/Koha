@@ -38,6 +38,7 @@ my $dont_export_items;
 my $deleted_barcodes;
 my $timestamp;
 my $record_type;
+my $id_list_file;
 my $help;
 my $op       = $query->param("op")       || '';
 my $filename = $query->param("filename") || 'koha.mrc';
@@ -60,12 +61,13 @@ if ( $commandline ) {
         'clean'             => \$clean,
         'filename=s'        => \$filename,
         'record-type=s'     => \$record_type,
+        'id_list_file=s'    => \$id_list_file,
         'help|?'            => \$help
     );
 
     if ($help) {
         print <<_USAGE_;
-export.pl [--format=format] [--date=date] [--record-type=TYPE] [--dont_export_items] [--deleted_barcodes] [--clean] --filename=outputfile
+export.pl [--format=format] [--date=date] [--record-type=TYPE] [--dont_export_items] [--deleted_barcodes] [--clean] [--id_list_file=PATH] --filename=outputfile
 
 
  --format=FORMAT        FORMAT is either 'xml' or 'marc' (default)
@@ -82,6 +84,11 @@ export.pl [--format=format] [--date=date] [--record-type=TYPE] [--dont_export_it
                         specified). Used only if TYPE is 'bibs'
 
  --clean                removes NSE/NSB
+
+ --id_list_file=PATH    PATH is an absolute path to a file containing a list of
+                        IDs(biblionumber or authid) with only one ID per line.
+                        This IDs list works as a filter: it's compatible with
+                        other parameters
 _USAGE_
         exit;
     }
@@ -93,6 +100,7 @@ _USAGE_
     $deleted_barcodes  ||= 0;
     $clean             ||= 0;
     $record_type       ||= "bibs";
+    $id_list_file       ||= 0;
 
     # Redirect stdout
     open STDOUT, '>', $filename if $filename;
@@ -196,6 +204,19 @@ if ( $op eq "export" ) {
         my $starting_authid = $query->param('starting_authid');
         my $ending_authid   = $query->param('ending_authid');
         my $authtype        = $query->param('authtype');
+        my $filefh;
+        if ($commandline) {
+            open $filefh,"<", $id_list_file or die "cannot open $id_list_file: $!";
+        } else {
+            $filefh = $query->upload("id_list_file");
+        }
+        my %id_filter;
+        if ($filefh) {
+            while (my $number=<$filefh>){
+                $number=~s/[\r\n]*$//;
+                $id_filter{$number}=1 if $number=~/^\d+$/;
+            }
+        }
 
         if ( $record_type eq 'bibs' and not @biblionumbers ) {
             if ($timestamp) {
@@ -308,6 +329,7 @@ if ( $op eq "export" ) {
             push @recordids, map {
                 map { $$_[0] } $_
             } @{ $sth->fetchall_arrayref };
+            @recordids = grep { exists($id_filter{$_}) } @recordids if scalar(%id_filter);
         }
 
         my $xml_header_written = 0;
