@@ -151,7 +151,7 @@ $template->param(
     booksellerid     => $details->{'booksellerid'},
     datereceived     => $details->{'datereceived'},
     billingdate      => C4::Dates->new($details->{'billingdate'}, "iso")->output(),
-    invoiceclosedate => $details->{'invoiceclosedate'},
+    invoiceclosedate => $details->{'closedate'},
     shipmentcost     => $details->{'shipmentcost'},
     orders_loop      => \@orders_loop,
     foot_loop        => \@foot_loop,
