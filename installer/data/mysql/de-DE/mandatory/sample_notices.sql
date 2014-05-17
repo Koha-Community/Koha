@@ -108,9 +108,9 @@ Signatur: <<items.itemcallnumber>><br/>', 1);
 
 INSERT INTO `letter` (`module`,`code`,`branchcode`,`name`,`is_html`,`title`,`content`)
 VALUES (
-'members',  'OPAC_REG_VERIFY',  '',  'Bestätigung der Anmeldung zur Bibliotheksnutzung',  '1',  'Verify Your Account',  'Guten Tag,
+'members',  'OPAC_REG_VERIFY',  '',  'Bestätigung der Anmeldung zur Bibliotheksnutzung',  '1',  'E-Mail-Adresse für Benutzerkonto verifizieren',  'Guten Tag,
 
-Ihr Bibliothekskonto wurde angelegt. Bitte bestätigen Sie Ihre Emailadresse, indem Sie auf folgenden Link klicken:
+Ihr Bibliothekskonto wurde angelegt. Bitte bestätigen Sie Ihre E-Mail-Adresse indem Sie auf folgenden Link klicken:
 
 http://<<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>
 
@@ -121,26 +121,25 @@ Ihr Bibliotheksteam'
 );
 
 INSERT INTO  letter (module, code, branchcode, name, is_html, title, content)
-VALUES ('members', 'SHARE_INVITE', '', 'Invitation for sharing a list', '0', 'Share list <<listname>>', 'Dear patron,
+VALUES ('members', 'SHARE_INVITE', '', 'Einladung zum Teilen einer Liste', '0', 'Teilen der Liste <<listname>>', 'Lieber Benutzer,
 
-One of our patrons, <<borrowers.firstname>> <<borrowers.surname>>, invites you to share a list <<listname>> in our library catalog.
+Einer unserer Benutzer, <<borrowers.firstname>> <<borrowers.surname>>, möchte die Liste <<listname>> über unseren Bibliothekskatalog mit Ihnen teilen.
 
-To access this shared list, please click on the following URL or copy-and-paste it into your browser address bar.
+Um die Liste aufzurufen, klicken Sie bitte die untenstehende URL oder kopieren Sie diese in die Adresszeile Ihres Browsers:
 
 <<shareurl>>
 
-In case you are not a patron in our library or do not want to accept this invitation, please ignore this mail. Note also that this invitation expires within two weeks.
+Im Fall dass Sie kein Benutzer unserer Bibliothek sind und diese Einladung nicht annehmen möchten, ignorieren Sie bitte diese E-Mail.
+Bitte beachten Sie, dass die Einladung nach zwei Wochen ungültig wird.
 
-Thank you.
-
-Your library.'
+Vielen Dank,
+Ihr Bibliotheksteam'
 );
 INSERT INTO  letter (module, code, branchcode, name, is_html, title, content)
-VALUES ( 'members', 'SHARE_ACCEPT', '', 'Notification about an accepted share', '0', 'Share on list <<listname>> accepted', 'Dear patron,
+VALUES ( 'members', 'SHARE_ACCEPT', '', 'Angenommene Einladung zum Teilen einer Liste', '0', 'Einladung für Liste <<listname>> angenommen', 'Lieber Benutzer,
 
-We want to inform you that <<borrowers.firstname>> <<borrowers.surname>> accepted your invitation to share your list <<listname>> in our library catalog.
+Wir möchten Sie darüber informieren, dass der Benutzer <<borrowers.firstname>> <<borrowers.surname>> Ihre Einladung zum teilen der Liste <<listname>> über unseren Bibliothekskatalog angenommen hat.
 
-Thank you.
-
-Your library.'
+Vielen Dank,
+Ihr Biblioheksteam'
 );
