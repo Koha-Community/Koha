@@ -6,4 +6,4 @@ INSERT INTO itemtypes (itemtype, description, rentalcharge, notforloan, imageurl
 ('VM', 'Visual Materials',5,1,'bridge/dvd.gif',''),
 ('MU', 'Music',5,0,'bridge/sound.gif',''),
 ('CR', 'Continuing Resources',5,0,'bridge/periodical.gif',''),
-('REF', 'Reference',0,1,'','');
+('REF', 'Reference',0,1,'bridge/reference.gif','');

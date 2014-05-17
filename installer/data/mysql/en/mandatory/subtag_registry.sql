@@ -885,7 +885,7 @@ INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'Laoo', 'script', 'en', 'Lao');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES( 'Laoo', 'script', 'en', 'Laotisch');
+VALUES( 'Laoo', 'script', 'de', 'Laotisch');
 
 
 -- REGIONS
