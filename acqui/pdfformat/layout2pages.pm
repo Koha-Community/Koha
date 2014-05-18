@@ -113,7 +113,7 @@ sub printorders {
             }
             push( @$arrbasket,
                 $basket->{basketno},
-                $titleinfo. ($line->{order_vendornote} ? "\n----------------\nNotes for vendor : " . $line->{order_vendornote} : '' ),
+                $titleinfo. ($line->{order_vendornote} ? "\n----------------\nNote for vendor : " . $line->{order_vendornote} : '' ),
                 $line->{quantity},
                 $num->format_price($line->{rrpgsti}),
                 $num->format_price($line->{discount}).'%',

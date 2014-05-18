@@ -102,7 +102,7 @@ sub printorders {
         my $pdftable = new PDF::Table();
         my $abaskets;
         my $arrbasket;
-        my @keys = ('Document', 'Qte', 'Prix', 'Prix net', '% Remise', 'Remise', 'Taux TVA', 'Total HT', 'Total TTC');
+        my @keys = ('Document', 'Qté', 'Prix', 'Prix net', '% Remise', 'Remise', 'Taux TVA', 'Total HT', 'Total TTC');
         for my $bkey (@keys) {
             push(@$arrbasket, $bkey);
         }
@@ -132,8 +132,7 @@ sub printorders {
             }
 
             push( @$arrbasket,
-                $titleinfo,
-                $line->{quantity},
+                $titleinfo. ($line->{order_vendornote} ? "\n----------------\nNote pour le fournisseur : ". $line->{order_vendornote} : '' ),                $line->{quantity},
                 $num->format_price($line->{rrpgste}),
                 $num->format_price($line->{rrpgsti}),
                 $num->format_price($line->{discount}).'%',
