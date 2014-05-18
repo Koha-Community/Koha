@@ -69,32 +69,20 @@ Signatur: <<items.itemcallnumber>><br/>
 Fällig am: <<issues.date_due>><br />
 </p>
 </checkedout>', 1),
-('circulation','RESERVESLIP','Vormerkquittung','Vormerkquittung', '<h2>Ausleihquittung</h2>
+('circulation','RESERVESLIP','Vormerkquittung','Vormerkquittung', '<h2>Vormerkung</h2>
+<h4>Abholbereit seit: <<today>></h4>
+<br/>
 Bibliothek: <<branches.branchname>> <br/>
-Ausleihe an: <<borrowers.firstname>>  <<borrowers.surname>> <br />
+Vorgemerkt für: <<borrowers.firstname>>  <<borrowers.surname>> <br />
 Ausweisnummer: <<borrowers.cardnumber>> <br />
+<br/>
 <br />
-<<today>><br />
-<br />
-<h4>Ausleihen</h4>
-<checkedout>
-<p>
-<<biblio.title>> <br />
+<h3><<biblio.author>> <<biblio.title>></h3>
+Barcode: <<items.barcode>><br/>
 Signatur: <<items.itemcallnumber>><br/>
-Barcode: <<items.barcode>><br />
-Fällig am: <<issues.date_due>><br />
-</p>
-</checkedout>
-<br />
-<h4>Überfällig</h4>
-<overdue>
 <p>
-<<biblio.title>> <br />
-Signatur: <<items.itemcallnumber>><br/>
-Barcode: <<items.barcode>><br />
-Fällig am: <<issues.date_due>><br />
+<pre><<reserves.reservenotes>></pre>
 </p>
-</overdue>
 ', 1),
 ('circulation','TRANSFERSLIP','Transportquittung','Transportquittung', '<h2>TRANSPORT</h2>
 <h3>Transport nach: <<branches.branchname>></h3>
