@@ -1640,6 +1640,9 @@ sub GetVariationsOfISBN {
     push( @isbns, NormalizeISBN({ isbn => $isbn, format => 'ISBN-10', strip_hyphens => 1 }) );
     push( @isbns, NormalizeISBN({ isbn => $isbn, format => 'ISBN-13', strip_hyphens => 1 }) );
 
+    # Strip out any "empty" strings from the array
+    @isbns = grep { /\S/ } @isbns;
+
     return wantarray ? @isbns : join( " | ", @isbns );
 }
 
