@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use C4::Context;
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::MockModule;
 use DBD::Mock;
 
@@ -67,3 +67,9 @@ my @isbns = qw/ 978-0-321-49694-2 0-321-49694-9 978-0-321-49694-2 0321496949 978
 is( join('|', @isbns), join('|', GetVariationsOfISBN('978-0-321-49694-2 (pbk.)')), 'GetVariationsOfISBN returns all variations' );
 
 is( join('|', @isbns), join('|', GetVariationsOfISBNs('978-0-321-49694-2 (pbk.)')), 'GetVariationsOfISBNs returns all variations' );
+
+my $isbn;
+eval {
+    $isbn = C4::Koha::NormalizeISBN({ isbn => '0788893777 (2 DVD 45th ed)', format => 'ISBN-10', strip_hyphens => 1 });
+};
+ok($@ eq '', 'NormalizeISBN does not throw exception when parsing invalid ISBN (bug 12243)');
