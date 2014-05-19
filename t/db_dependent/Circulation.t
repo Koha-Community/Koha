@@ -26,7 +26,7 @@ use C4::Reserves;
 use Koha::DateUtils;
 use Koha::Database;
 
-use Test::More tests => 51;
+use Test::More tests => 55;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -151,9 +151,11 @@ $dbh->do(
     q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed,
                                 maxissueqty, issuelength, lengthunit,
                                 renewalsallowed, renewalperiod,
+                                norenewalbefore, auto_renew,
                                 fine, chargeperiod)
       VALUES (?, ?, ?, ?,
               ?, ?, ?,
+              ?, ?,
               ?, ?,
               ?, ?
              )
@@ -162,6 +164,7 @@ $dbh->do(
     '*', '*', '*', 25,
     20, 14, 'days',
     1, 7,
+    '', 0,
     .10, 1
 );
 
@@ -323,6 +326,25 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     $reserveid = C4::Reserves::GetReserveId({ biblionumber => $biblionumber, itemnumber => $itemnumber, borrowernumber => $reserving_borrowernumber});
     CancelReserve({ reserve_id => $reserveid });
 
+    # Test automatic renewal before value for "norenewalbefore" in policy is set
+    my $barcode4 = '11235813';
+    my ( $item_bibnum4, $item_bibitemnum4, $itemnumber4 ) = AddItem(
+        {
+            homebranch       => $branch,
+            holdingbranch    => $branch,
+            barcode          => $barcode4,
+            replacementprice => 16.00
+        },
+        $biblionumber
+    );
+
+    AddIssue( $renewing_borrower, $barcode4, undef, undef, undef, undef, 1 );
+    ( $renewokay, $error ) =
+      CanBookBeRenewed( $renewing_borrowernumber, $itemnumber4 );
+    is( $renewokay, 0, 'Cannot renew, renewal is automatic' );
+    is( $error, 'auto_renew',
+        'Cannot renew, renewal is automatic (returned code is auto_renew)' );
+
     # set policy to require that loans cannot be
     # renewed until seven days prior to the due date
     $dbh->do('UPDATE issuingrules SET norenewalbefore = 7');
@@ -333,6 +355,14 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         GetSoonestRenewDate($renewing_borrowernumber, $itemnumber),
         $datedue->clone->add(days => -7),
         'renewals permitted 7 days before due date, as expected',
+    );
+
+    # Test automatic renewal again
+    ( $renewokay, $error ) =
+      CanBookBeRenewed( $renewing_borrowernumber, $itemnumber4 );
+    is( $renewokay, 0, 'Cannot renew, renewal is automatic and premature' );
+    is( $error, 'auto_too_soon',
+'Cannot renew, renewal is automatic and premature (returned code is auto_too_soon)'
     );
 
     # Too many renewals
