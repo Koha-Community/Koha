@@ -1,5 +1,5 @@
-RELEASE NOTES FOR KOHA 3.16.0-beta
-05 May 2014
+RELEASE NOTES FOR KOHA 3.16.0-rc
+19 May 2014
 ========================================================================
 
 Koha is the first free and open source software library automation package 
@@ -9,9 +9,9 @@ The website for the Koha project is
 
     http://koha-community.org/
 
-Koha 3.16.0-beta can be downloaded from:
+Koha 3.16.0-rc can be downloaded from:
 
-    http://download.koha-community.org/koha-3.16.00-beta.tar.gz
+    http://download.koha-community.org/koha-3.16.00-rc.tar.gz
 
 Installation instructions can be found at:
 
@@ -20,13 +20,13 @@ Installation instructions can be found at:
     OR in the INSTALL files that come in the tarball
 
 
-Koha 3.16.0-beta is a major release, that comes with many new features.
+Koha 3.16.0-rc is a major release, that comes with many new features.
 
 
-It includes 2 features, 195 enhancements and 359 bugfixes.
+It includes 2 features, 200 enhancements and 388 bugfixes.
 
 
-New features in 3.16.0-beta
+New features in 3.16.0-rc
 ======================
 
 Acquisitions
@@ -38,7 +38,7 @@ Searching
 	10862	Add an search history for the staff interface
 
 
-Enhancements in 3.16.0-beta
+Enhancements in 3.16.0-rc
 ======================
 
 Acquisitions
@@ -91,6 +91,7 @@ Architecture, internals, and plumbing
 	11751	Some code related to "institution" is unused and obsolete
 	11957	Sample_only_param_tables.sql is not usable
 	11960	GetMemberDetails is unnecessarily called in CanBookBeRenewed
+	11975	Tools: Batch patron deletion code should be improved
 
 Authentication
 ----------
@@ -149,6 +150,7 @@ I18N/L10N
 ----------
 	7934	Separate po file for help pages
 	8044	Localization for Perl scripts and modules
+	10964	Update MARC21 de-DE default framework to Update Nr. 17 (September 2013)
 	11495	I18n toolchain misses one instance of text "Select titles to: " in bootstrap
 	11631	Make translation toolchain ignore useless translatable strings
 	11848	Make Koha::I18N easier to use
@@ -157,8 +159,10 @@ I18N/L10N
 Installation and upgrade (web-based installer)
 ----------
 	10138	Add some authorized values in french installer
+	12113	Update German web Installer for 3.16
+	12275	Small corrections to English web installer
 
-Label printing
+Label/patron card printing
 ----------
 	11539	C4::Barcodes::PrinterConfig does not appear to be being used anywhere
 	12018	Add table sorting to patron card batches
@@ -333,7 +337,7 @@ Web services
 	11491	Extending report service to be annotated
 
 
-Critical bugs fixed in 3.16.0-beta
+Critical bugs fixed in 3.16.0-rc
 ======================
 
 (this list include all bugfixes since the previous major version. Most of them have already been fixed in maintainance releases)
@@ -344,12 +348,14 @@ Acquisitions
 	9948	critical	Acq data going on first item even if not received
 	11322	critical	Suggestion "notes" field should be sanitized or escaped
 	11755	critical	Argument 'booksellerid' not properly handled in orderreceive.pl
+	4068	major	Accepting a suggestion hides 'pending' tab
 	10613	major	Gst is not calculated correctly on the invoice page
 	11549	major	After transferring an order, receive and cancel the receipt will delete the order
 	11675	major	Budget amount is not checked if a parent exist
 	11680	major	Tax rate changes on edit
 	11699	major	Notes entered when receiving are not saved
 	12019	major	Funds displayed on acquisition home show funds of all branches
+	12168	major	Spent and ordered budget values are wrong if deep > 2
 
 Architecture, internals, and plumbing
 ----------
@@ -358,6 +364,7 @@ Architecture, internals, and plumbing
 	11661	critical	Edithelp.pl can be used to write arbitrary files to the server
 	11662	critical	Member-picupload.pl can write to arbitrary files on the server
 	11666	critical	Admin/import_export_framework.pl allows execution of arbitrary SQL without authentication
+	12243	critical	Records with invalid ISBNs can cause searches to fail
 	10611	major	C4::Context->dbh checks if the DB is still running
 	11563	major	Class noEnterSubmit no longer functioning
 	11779	major	Unexpected change in logged in branch when changing overdue notice triggers
@@ -402,6 +409,11 @@ I18N/L10N
 	11290	major	Members-home.pl displays badly if using non english templates and have a utf8 char in categorycode description
 	11571	major	Bug 7934 introduces a regression in the translate script
 
+Installation and upgrade (web-based installer)
+----------
+	12212	blocker	Wrong number of parameters for AggressiveMatchOnISBN in sysprefs.sql
+	12251	blocker	Error in sample_notices.sql (es-ES)
+
 Lists
 ----------
 	11248	major	Problems with translated list email sent
@@ -421,6 +433,11 @@ OPAC
 	11978	major	OverDrive API now prepends http:// to URLs
 	12046	major	Authentication using CAS - bootstrap
 
+Packaging
+----------
+	12234	blocker	Package dependency updates for master
+	11404	major	Add out-of-the-box support for Apache 2.4
+
 Patrons
 ----------
 	11282	blocker	Not possible to create multiple restrictions from patron details/new restriction overwrites existing
@@ -437,6 +454,8 @@ Searching
 
 Serials
 ----------
+	11843	blocker	Manual subscription history doesn't seem to work as expected
+	12161	critical	Serials receiving is broken
 	11262	major	Don't require hardcoded translations for seasonal numbering pattern to work
 	11689	major	New missing statuses is not well managed
 	11995	major	Followup for Bug 7688 - FIX GetNextDate in serialsUpdate.pl
@@ -451,14 +470,24 @@ Templates
 ----------
 	766	major	Use of CGI::scrolling_list prevents customization in template
 
+Test Suite
+----------
+	12271	critical	Valid-templates.t does not test bootstrap opac templates
+
 Tools
 ----------
 	11414	critical	Marc modification template limitations should alert the user
+	9048	major	Quote editor does not work under Plack
 	11287	major	Import borrowers doesn't take into account the new restriction system
 	11412	major	Bulkmarcimport can crash when searching for duplicates
+	12163	major	Adding a new quote fails
+
+Z39.50 / SRU / OpenSearch Servers
+----------
+	9612	major	SRU Response is different when DOM indexing is enabled
 
 
-Other bugs fixed in 3.16.0-beta
+Other bugs fixed in 3.16.0-rc
 ======================
 
 (this list include all bugfixes since the previous major version. Most of them have already been fixed in maintainance releases)
@@ -472,6 +501,7 @@ Acquisitions
 ----------
 	7791	normal	Deleting basket should not delete all existing orders without warning
 	8683	normal	Acq: Clear button doesn't clear all item fields
+	9063	normal	When ordering from staged file '# Bibs' is empty
 	9224	normal	Acqui/finishreceive.pl is not Plack-compatible
 	9593	normal	Prices not imported correctly from a staged file
 	11018	normal	Add order from a reverted file
@@ -489,6 +519,7 @@ Acquisitions
 	11914	normal	Ordering from suggestions: fund (budget id) is not retained; price calculations not working
 	11056	minor	Dead code in basketgroup.pl : remove code depending on "validate" param
 	11314	minor	Restore ability to see only 5 entries on parcel.pl
+	11433	minor	Remove attachbasket op value in basket.pl
 	11471	minor	Basket groups display 0 0
 	11550	minor	Add a couple of unit tests for C4::Acq::GetOrder
 	11820	minor	Dead code in basketgroup.pl : "add" operation is never invoked without a booksellerid
@@ -496,6 +527,7 @@ Acquisitions
 	11939	minor	Sample of currencies with a working active value
 	9654	trivial	Missing space between amount and currency symbol in basket groups
 	12111	trivial	Improving templates regarding order notes
+	12185	trivial	Remove extra "f" from parcel.tt
 
 Architecture, internals, and plumbing
 ----------
@@ -508,9 +540,11 @@ Architecture, internals, and plumbing
 	11391	normal	Suggestions.suggesteddate has a problematic default value
 	11616	normal	The tablesorter plugin is no longer in use
 	11687	normal	Statecollection.pl is unused
+	12259	normal	Invalid dependency module version number
 	11384	minor	Koha should not use "ctid" as a column name
 	11402	minor	Labels::_guide_box should return undef if undefned data is passed
 	11757	minor	Dependency on POE is not longer necessary
+	12065	minor	Consistent use of encode_qp when sending basket/shelf
 	12076	minor	Xt/tt_valid.t can miss an invalid construct
 	12112	minor	C4::Breeding::ImportBreeding() is not used
 	12131	minor	C4/TmplToken.pm has an unnecessary dependency on Exporter
@@ -545,6 +579,7 @@ Circulation
 Command-line Utilities
 ----------
 	11188	minor	Make gather_print_notices.pl die on failed open()
+	12288	minor	Search Errors with AggressiveMatchOnISBN turned on
 
 Course reserves
 ----------
@@ -562,6 +597,7 @@ Database
 Documentation
 ----------
 	11483	normal	New serial pages missing help
+	12244	normal	Help Files for Koha 3.16
 	11383	minor	There is no help page for the marc modification templates tool
 	11403	minor	Renew page missing help file
 
@@ -591,6 +627,7 @@ I18N/L10N
 	12034	normal	MSG_REMOVE_FROM_LIST different wording between OPAC and staff client
 	12056	normal	Untranslatable strings in calendar
 	12081	normal	Tmpl_process3.pl does not delete temp files
+	12240	normal	Update of Italian SQL files (no marc setup) - 3.16
 	11363	minor	Label printer profile units are not translatable
 	11366	minor	Acq basket group "No group" untranslatable
 	11497	minor	I18n toolchain fails to pick up TT code in the format 'SomeVariable or "Some Text"' for translation
@@ -598,6 +635,7 @@ I18N/L10N
 	11639	minor	Untranslatable strings in 007 builder
 	11973	minor	Fix Armenian language description
 	11993	minor	Untranslatable confirm popup in request.tt
+	12240	minor 	Update of MARC21 Italian setup - 3.16
 	10818	trivial	System preference OAI-PMH:ConfFile isn't translatable
 	11189	trivial	Rename Print label in UNIMARC advanced search
 	11393	trivial	Language menu not show up as name for Thai (th-THA was shown)
@@ -611,8 +649,10 @@ Installation and upgrade (web-based installer)
 ----------
 	11260	normal	Update German web installer
 	11261	normal	Sample frequencies and numbering patterns should better be mandatory on install
+	7841	minor	Several warnings on language from webinstaller
+	12209	minor	Fix currency symbol for NOK
 
-Label printing
+Label/patron card printing
 ----------
 	8375	normal	Common diacritics not shown correctly when exporting batch label to PDF
 	9854	normal	Add 'ttf-dejavu*' packages to debian/control file, for label printing (bug 8375)
@@ -669,6 +709,7 @@ OPAC
 	11986	normal	Tags searching doesn't work in OPAC if biblio DOM indexing is being used
 	12058	normal	OverDrive search results page doesn't show cart, lists, or login links
 	8661	minor	Break out additional authors in opac like in staff
+	9723	minor	Hourly loans don't show time due in OPAC
 	10781	minor	Remove C4::ILSDI::Utility
 	10797	minor	Move styling from element to CSS file for search input field in OPAC
 	10944	minor	Mixed content warnings in results and detail with Amazon images on https
@@ -704,6 +745,7 @@ Patrons
 	11707	normal	Additional attributes broken for category code with space
 	12069	normal	If you access members/mod_debarment.pl when logged out you are redirected to OPAC login
 	12100	normal	Messaging preferences did not save Days in Advance
+	12198	normal	Guarantor search makes incorrect and unnecessary call to GetMemberIssuesAndFines
 	11125	minor	Remove Problematic Logic from Patron Messaging Preferences Form
 	11802	minor	Patron purchase suggestions page requires some corrections
 	11855	trivial	Tiny code cleanup in members
@@ -714,6 +756,7 @@ Reports
 	11833	normal	Filtering on saved report subgroup doesn't work
 	12114	normal	Reports web service JSON output has an encoding problem
 	10777	minor	Runreport.pl allows for sending html reports via email, but mimetype is wrong
+	12214	minor	SQL errors in reports are not shown to user
 
 Searching
 ----------
@@ -737,6 +780,7 @@ Searching
 Self checkout
 ----------
 	11773	normal	Crash 'undefined value as a HASH' in sco-main.pl
+	9724	minor	Hourly loans don't show time due in SCO
 	11415	minor	SCO has no option to disable automatic receipt printing
 	11784	minor	Patron images broken in Self checkout
 
@@ -814,6 +858,8 @@ Templates
 	12117	normal	Remove unused image myshadow.png from the staff client
 	12118	normal	Unnecessary YUI assets included in offline circ manifest
 	12127	normal	Incorrect DataTable types in Holds to Pull list
+	12195	normal	Remove duplicated plugin jquery.dataTables.min.js
+	12196	normal	Remove unused jquery.qtip.js plugin
 	10825	minor	Detail.tt displays duplicated enumchron values for serial items
 	11502	minor	Branch filter in "Holds To Pull" is too fuzzy
 	11648	minor	Use word item instead of copy
@@ -823,6 +869,7 @@ Templates
 	11764	minor	Move repeatedly redefined function toUC() into staff-global.js
 	11765	minor	Remove unused function isDate from templates
 	11832	minor	JavaScript error on staff client place hold screen if record has no items
+	12206	minor	Malformed HTML in search result other holdings list
 	10823	trivial	Add class info to enumchron data in detail.tt, for better styling
 	11246	trivial	Followup for Bug 10465 fields 780 and 785 in UNIMARC XSLT should be removed in bootstrap theme
 	11554	trivial	Capitalization fix in patron account on fines tab
@@ -864,11 +911,10 @@ Z39.50 / SRU / OpenSearch Servers
 ----------
 	1047	normal	Punctuation in site names breaks Edit/Delete z39.50 server administration
 	11701	normal	Fix C4::Context::Zconn
-	9612	minor	SRU Response is different when DOM indexing is enabled
 	11419	minor	Z39.50 searches not displaying errors
 
 
-New sysprefs in 3.16.0-beta
+New sysprefs in 3.16.0-rc
 ======================
 
   * AcquisitionDetails
@@ -925,27 +971,27 @@ interface are available in this release for the following languages:
 
 
   * English (USA)
-  * Arabic (80%)
+  * Arabic (79%)
   * Armenian (93%)
-  * Chinese (China) (95%)
-  * Chinese (Taiwan) (99%)
-  * Czech (96%)
+  * Chinese (China) (94%)
+  * Chinese (Taiwan) (100%)
+  * Czech (97%)
   * Danish (87%)
-  * English (New Zealand) (81%)
-  * French (95%)
-  * French (Canada) (86%)
-  * German (99%)
-  * German (Switzerland) (94%)
-  * Italian (93%)
+  * English (New Zealand) (80%)
+  * French (96%)
+  * French (Canada) (85%)
+  * German (100%)
+  * German (Switzerland) (100%)
+  * Italian (100%)
   * Kurdish (69%)
-  * Norwegian Bokmål (62%)
-  * Polish (62%)
-  * Portuguese (93%)
+  * Norwegian Bokmål (63%)
+  * Polish (61%)
+  * Portuguese (92%)
   * Portuguese (Brazil) (85%)
-  * Slovak (95%)
-  * Spanish (95%)
-  * Swedish (88%)
-  * Turkish (95%)
+  * Slovak (98%)
+  * Spanish (99%)
+  * Swedish (87%)
+  * Turkish (99%)
 
 
 Partial translations are available for various other languages.
@@ -967,7 +1013,7 @@ The most up-to-date translations can be found at:
 Release Team
 ======================
 
-The release team for Koha 3.16.0-beta is
+The release team for Koha 3.16.0-rc is
 
   Release Manager:       Galen Charlton <gmc@esilibrary.com>
   Documentation Manager: Nicole C Engard <nengard@gmail.com>
@@ -1002,58 +1048,59 @@ Credits
 ======================
 
 We thank the following libraries who are known to have sponsored
-new features in Koha 3.16.0-beta:
+new features in Koha 3.16.0-rc:
   * Hochschule für Gesundheit (hsg), Germany
   * Universidad Nacionald de Cordoba
   * Universidad Nacional de Cordoba
 
-We thank the following individuals who contributed patches to Koha 3.16.0-beta.
+We thank the following individuals who contributed patches to Koha 3.16.0-rc.
   *      9	Jacek Ablewicz
   *      1	Aleisha Amohia
   *      2	Roman Amor
   *      1	Nuño López Ansótegui
-  *     35	Tomas Cohen Arazi
+  *     39	Tomas Cohen Arazi
   *      1	Daniel Barker
   *      1	JaTara Barnes
   *      1	Pablo Bianchi
   *      3	Blou
   *      1	Gaetan Boisson
   *      1	Isaac Brodsky
+  *      2	Koha SAB CINECA
   *      1	Jared Camins-Esakov
   *     12	Colin Campbell
   *      3	Frédérick Capovilla
-  *    312	Galen Charlton
+  *    330	Galen Charlton
   *     10	David Cook
   *     17	Chris Cormack
   *      1	Samuel Crosby
   *      1	Stéphane Delaune
   *      6	Frédéric Demians
-  *    235	Jonathan Druart
+  *    241	Jonathan Druart
   *      1	Rachel Dustin
-  *      7	Nicole Engard
-  *      4	Magnus Enger
+  *     15	Nicole Engard
+  *      6	Magnus Enger
   *      1	Vitor FERNANDES
-  *     31	Katrin Fischer
+  *     35	Katrin Fischer
   *      1	Amit Gupta
   *      1	Chris Hall
-  *     88	Kyle M Hall
+  *     95	Kyle M Hall
   *      1	Tim Hannah
   *      1	Emma Heath
   *      1	Tom Houlker
   *      2	Mason James
   *      5	Srdjan Jankovic
   *      1	Janusz Kaczmarek
-  *      6	Pasi Kallinen
+  *      7	Pasi Kallinen
   *      3	Doug Kingston
   *      5	Olli-Antti Kivilahti
-  *     21	Bernardo Gonzalez Kriegel
+  *     23	Bernardo Gonzalez Kriegel
   *      2	Ketan Kulkarni
   *      1	Nicolas Legrand
-  *    111	Owen Leonard
+  *    115	Owen Leonard
   *      2	Jesse Maseto
-  *     26	Julian Maurice
+  *     28	Julian Maurice
   *      7	Holger Meißner
-  *      3	Matthias Meusburger
+  *      4	Matthias Meusburger
   *      7	Sophie Meynieux
   *      3	Francesca Moore
   *      1	Joy Nelson
@@ -1063,22 +1110,22 @@ We thank the following individuals who contributed patches to Koha 3.16.0-beta.
   *      1	Paul Poulain
   *      6	Liz Rea
   *      1	Martin Renvoize
-  *     48	Marcel de Rooy
+  *     50	Marcel de Rooy
   *      1	Fridolin SOMERS
   *     33	Fridolyn SOMERS
-  *     27	Mathieu Saby
+  *     28	Mathieu Saby
   *      2	A. Sassmannshausen
   *      1	Adrien Saurat
   *      1	Dan Scott
-  *      8	Robin Sheat
+  *     15	Robin Sheat
   *      1	Juan Sieira
-  *     17	Fridolin Somers
+  *     18	Fridolin Somers
   *      1	Claire Stent
   *      3	Zeno Tajoli
   *      3	Lyon3 Team
   *      1	Peggy Thrasher
   *      2	Mirko Tietgen
-  *     26	Mark Tompsett
+  *     28	Mark Tompsett
   *      3	Marc Véron
   *      1	Ian Walls
   *      1	Jesse Weaver
@@ -1088,27 +1135,27 @@ We thank the following individuals who contributed patches to Koha 3.16.0-beta.
   *      1	merllissia
   *      1	“ByWater
 
-We thank the following companies who contributed patches to Koha 3.16.0-beta
-  *     111 ACPL                                                                                          
-  *      31 BSZ BW                                                                                         
+We thank the following companies who contributed patches to Koha 3.16.0-rc
+  *     115 ACPL                                                                                          
+  *      35 BSZ BW                                                                                         
   *       7 BSZ BW                                                                                            
-  *     326 BibLibre                                                                                    
+  *     336 BibLibre                                                                                    
   *      12 BigBallOfWax                                                                          
-  *      98 ByWater-Solutions                                                                   
+  *     113 ByWater-Solutions                                                                   
   *       1 C & P Bibliography                                                                    
-  *      25 Catalyst                                                                                 
-  *     312 Equinox                                                                                   
+  *      32 Catalyst                                                                                 
+  *     330 Equinox                                                                                   
   *       1 Foundations                                                                              
   *       2 KohaAloha                                                                                  
   *       3 Libeo                                                                                          
-  *       4 Libriotech                                                                                 
+  *       6 Libriotech                                                                                 
   *       1 MASmedios                                                                                  
   *      15 PTFS-Europe                                                                              
   *      10 Prosentient Systems
-  *      48 Rijksmuseum                                                                               
+  *      50 Rijksmuseum                                                                               
   *       6 Tamil                                                                                           
   *       3 Université Jean Moulin Lyon 3
-  *      20 Université Rennes 2
+  *      21 Université Rennes 2
   *       1 Xercode                                                                                       
   *       2 abunchofthings.net
   *       9 biblos.pk.edu.pl
@@ -1116,7 +1163,7 @@ We thank the following companies who contributed patches to Koha 3.16.0-beta
   *       1 bywatersolutions
   *       1 bywatersolutions.com”
   *       2 carvingit.com
-  *       3 cineca.it
+  *       5 cineca.it
   *       1 coffeecode.net
   *       1 dover.nh.gov
   *       1 hibs.school.nz
@@ -1125,25 +1172,25 @@ We thank the following companies who contributed patches to Koha 3.16.0-beta
   *       5 jns.fi
   *       1 keep.pt
   *       1 massey.ac.nz
-  *       6 pttk.fi
+  *       7 pttk.fi
   *       3 randomnotes.org
   *       2 rot13.org                                                                                      
-  *     107 unidentified
+  *     115 unidentified
   *       3 veron.ch
   *       1 wegc.school.nz
   *       2 xtra.co.nz
 
 We also especially thank the following individuals who tested patches
-for Koha 3.16.0-beta.
+for Koha 3.16.0-rc.
   *       1 Koha Team Lyon 3
   *       2 Koha team AMU
   *       3 Jacek Ablewicz
-  *       5 Aleisha
+  *       7 Aleisha
   *       1 Joel Aloi
   *       1 Aleisha Amohia
   *       1 Roman Amor
   *       3 Pierre Angot
-  *      21 Tomas Cohen Arazi
+  *      22 Tomas Cohen Arazi
   *       5 Petter Goksoyr Asen
   *       1 Aurélie
   *       3 Sonia BOUIS
@@ -1155,34 +1202,34 @@ for Koha 3.16.0-beta.
   *       5 Broust
   *       1 Nathalie CHATILLON
   *       4 Jared Camins-Esakov
-  *    1211 Galen Charlton
+  *    1301 Galen Charlton
   *      21 David Cook
-  *     153 Chris Cormack
+  *     156 Chris Cormack
   *       3 Charlene Criton
   *       1 Jen DeMuth
   *       1 Stephane Delaye
   *       3 Frédéric Demians
-  *     287 Jonathan Druart
+  *     312 Jonathan Druart
   *      12 Nicole C. Engard
   *       7 Magnus Enger
   *       1 Suzanne Fayle
   *       3 Aurelie Fichot
-  *     404 Katrin Fischer
+  *     409 Katrin Fischer
   *       2 Corey Fuimaono
-  *      18 Brendan Gallagher
-  *     224 Kyle M Hall
+  *      22 Brendan Gallagher
+  *     239 Kyle M Hall
   *       2 Emma Heath
   *       1 Tom Houlker
   *       1 JMBroust
   *       1 Mason James
-  *       1 Pasi Kallinen
+  *       2 Pasi Kallinen
   *      15 Olli-Antti Kivilahti
   *       1 Barbara Knibbs
-  *      42 Bernardo Gonzalez Kriegel
+  *      61 Bernardo Gonzalez Kriegel
   *       1 Melissa Lefebvre
   *       4 Nicolas Legrand
   *       1 Leila
-  *      58 Owen Leonard
+  *      60 Owen Leonard
   *       2 Havilah Lyon
   *       4 Jesse Maseto
   *       4 Julian Maurice
@@ -1200,10 +1247,10 @@ for Koha 3.16.0-beta.
   *      10 Dobrica Pavlinusic
   *       3 Paul Poulain
   *       7 Liz Rea
-  *      52 Martin Renvoize
+  *      54 Martin Renvoize
   *       1 Chris Rohde
   *       4 Benjamin Rokseth
-  *     116 Marcel de Rooy
+  *     118 Marcel de Rooy
   *       7 Paola Rossi
   *       2 Fridolyn SOMERS
   *       9 Mathieu Saby
@@ -1213,15 +1260,15 @@ for Koha 3.16.0-beta.
   *       1 Adrien Saurat
   *       1 Kim Schwant
   *       1 Dan Scott
-  *       4 Robin Sheat
+  *       7 Robin Sheat
   *       3 Fridolin Somers
   *       3 Srdjan
-  *      69 Mark Tompsett
+  *      70 Mark Tompsett
   *       1 Ed Veal
-  *       4 Marc Veron
+  *       5 Marc Veron
   *       5 Cedric Vita
   *       1 Cédric Vita
-  *      40 Marc Véron
+  *      41 Marc Véron
   *       5 Jesse Weaver
   *       1 alex_h
   *       2 marjorie barry-vila
@@ -1262,4 +1309,4 @@ tracker at
 He rau ringa e oti ai.
 (Many hands finish the work)
 
-##### Autogenerated release notes updated last on 05 May 2014 23:23:23 Z #####
+##### Autogenerated release notes updated last on 19 May 2014 23:11:24 Z #####
