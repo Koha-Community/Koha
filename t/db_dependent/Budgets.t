@@ -318,5 +318,5 @@ for my $infos (@order_infos) {
     }
 }
 is( GetBudgetHierarchySpent( $budget_id1 ), 160, "total spent for budget1 is 160" );
-is( GetBudgetHierarchySpent( $budget_id11 ), 100, "total spent for budget1 is 100" );
-is( GetBudgetHierarchySpent( $budget_id111 ), 20, "total spent for budget1 is 20" );
+is( GetBudgetHierarchySpent( $budget_id11 ), 100, "total spent for budget11 is 100" );
+is( GetBudgetHierarchySpent( $budget_id111 ), 20, "total spent for budget111 is 20" );
