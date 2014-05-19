@@ -239,11 +239,11 @@ href="/cgi-bin/koha/opac-rss.pl?[% query_cgi %][% limit_cgi |html %]" />
                                                                     [% END %]
                                                                 [% END %]
 
-                                                                [% IF ( ( ( Koha.Preference( 'opacbookbag' ) == 1 ) || ( Koha.Preference( 'virtualshelves' ) == 1 ) ) %]
+                                                                [% IF ( ( Koha.Preference( 'opacbookbag' ) == 1 ) || ( Koha.Preference( 'virtualshelves' ) == 1 ) ) %]
                                                                     <input type="checkbox" name="biblionumber" value="[% GROUP_RESULT.biblionumber %]" title="Click to add to cart" /> <label for="bib[% GROUP_RESULT.biblionumber %]">
                                                                 [% END %]
                                                                 <img src="[% themelang %]/images/[% GROUP_RESULT.itemtype %].gif" alt="[% GROUP_RESULT.ccode %]" title="[% GROUP_RESULT.ccode %]" />
-                                                                [% IF ( ( ( Koha.Preference( 'opacbookbag' ) = 1 ) || ( Koha.Preference( 'virtualshelves' ) == 1 ) ) %]</label>[% END %]
+                                                                [% IF ( ( Koha.Preference( 'opacbookbag' ) = 1 ) || ( Koha.Preference( 'virtualshelves' ) == 1 ) ) %]</label>[% END %]
                                                                 [% IF ( GROUP_RESULT.classification ) %]
                                                                     <a href="/cgi-bin/koha/opac-search.pl?q=callnum:[% GROUP_RESULT.classification |url %]"> [% GROUP_RESULT.classification %] </a>
                                                                 [% END %]
