@@ -47,7 +47,11 @@ run_template_test(
 print "Testing opac bootstrap templates\n";
 run_template_test(
     'koha-tmpl/opac-tmpl/bootstrap/en/modules',
-    'koha-tmpl/opac-tmpl/bootstrap/en/includes'
+    'koha-tmpl/opac-tmpl/bootstrap/en/includes',
+    # templates to exclude from testing because
+    # they cannot stand alone
+    'doc-head-close.inc',
+    'opac-bottom.inc',
 );
 
 print "Testing opac prog templates\n";
@@ -63,15 +67,17 @@ done_testing();
 sub run_template_test {
     my $template_path = shift;
     my $include_path  = shift;
+    my @exclusions = @_;
     my $template_dir  = File::Spec->rel2abs($template_path);
     my $include_dir   = File::Spec->rel2abs($include_path);
-    my $template_test = create_template_test($include_dir);
+    my $template_test = create_template_test($include_dir, @exclusions);
     find( { wanted => $template_test, no_chdir => 1 },
         $template_dir, $include_dir );
 }
 
 sub create_template_test {
     my $includes = shift;
+    my @exclusions = @_;
     return sub {
         my $tt = Template->new(
             {
@@ -80,6 +86,12 @@ sub create_template_test {
                 PLUGIN_BASE  => 'Koha::Template::Plugin',
             }
         );
+        foreach my $exclusion (@exclusions) {
+            if ($_ =~ /${exclusion}$/) {
+                diag("excluding template $_ because it cannot stand on its own");
+                return;
+            }
+        }
         my $vars;
         my $output;
         if ( !ok( $tt->process( $_, $vars, \$output ), $_ ) ) {
