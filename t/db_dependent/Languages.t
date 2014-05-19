@@ -6,9 +6,10 @@
 use strict;
 use warnings;
 
-use Test::More tests => 11;
+use Test::More tests => 13;
 use List::Util qw(first);
 use Data::Dumper;
+use Test::Warn;
 
 BEGIN {
     use_ok('C4::Languages');
@@ -40,12 +41,18 @@ C4::Context->set_preference('AdvancedSearchLanguages', 'ita|eng');
 $languages = C4::Languages::getLanguages('eng', 1);
 is(scalar(@$languages), 2, 'getLanguages() filtering using AdvancedSearchLanguages works');
 
-my $translatedlanguages1 = C4::Languages::getTranslatedLanguages('opac','prog',undef,'');
+my $translatedlanguages1;
+warnings_are { $translatedlanguages1 = C4::Languages::getTranslatedLanguages('opac','prog',undef,'') }
+             [],
+             'no warnings for calling getTranslatedLanguages';
 my @currentcheck1 = map { $_->{current} } @$translatedlanguages1;
 my $onlyzeros = first { $_ != 0 } @currentcheck1;
 ok(! $onlyzeros, "Everything was zeros.\n");
 
-my $translatedlanguages2 = C4::Languages::getTranslatedLanguages('opac','prog','en','');
+my $translatedlanguages2;
+warnings_are { $translatedlanguages2 = C4::Languages::getTranslatedLanguages('opac','prog','en','') }
+             [],
+             'no warnings for calling getTranslatedLanguages';
 my @currentcheck2 = map { $_->{current} } @$translatedlanguages2;
 $onlyzeros = first { $_ != 0 } @currentcheck2;
 ok($onlyzeros, "There is a $onlyzeros\n");
