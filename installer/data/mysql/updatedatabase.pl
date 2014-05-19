@@ -8465,6 +8465,12 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.052";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done (Koha 3.16 RC)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
