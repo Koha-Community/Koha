@@ -33,11 +33,6 @@ use Modern::Perl;
 use CGI;
 use C4::Auth;
 use C4::Output;
-# FIXME: C4::Search is needed by C4::Items::GetAnalyticsCount, which is called
-# by C4::Acquisition::DelOrder. But C4::Search is not imported by C4::Items.
-# Once this problem is resolved, the following line can be removed.
-# See Bug 7847.
-use C4::Search;
 use C4::Acquisition;
 
 my $input = new CGI;

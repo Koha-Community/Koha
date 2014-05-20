@@ -8942,6 +8942,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("
+        ALTER TABLE aqorders
+        ADD COLUMN cancellationreason TEXT DEFAULT NULL AFTER datecancellationprinted
+    ");
+    print "Upgrade to $DBversion done (Bug 7162: Add aqorders.cancellationreason)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

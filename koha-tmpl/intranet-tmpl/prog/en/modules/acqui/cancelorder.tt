@@ -41,18 +41,18 @@
       [% ELSE %]
         [% IF ( success_cancelorder ) %]
             <div class="dialog message">
-                The order has been successfully canceled
+                The order has been successfully cancelled
         [% ELSE %]
             <div class="dialog alert">
-                An error has occured.
+                An error has occurred.
                 [% IF ( error_delitem ) %]
-                    <p>The order has been canceled, although one or more items could not have been deleted.</p>
+                    <p>The order has been cancelled, although one or more items could not have been deleted.</p>
                 [% END %]
                 [% IF ( error_delbiblio ) %]
-                <p>The order has been canceled, although the record has not been deleted.</p>
+                <p>The order has been cancelled, although the record has not been deleted.</p>
                 [% END %]
         [% END %]
-                <p>Click <a href="[% referrer %]">here</a> to return to previous page</p>
+                <p><a href="[% referrer %]">OK</a></p>
             </div>
       [% END %]
 

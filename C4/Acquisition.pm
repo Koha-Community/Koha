@@ -1794,19 +1794,14 @@ sub DelOrder {
         SET    datecancellationprinted=now(), orderstatus='cancelled'
     ";
     if($reason) {
-        $query .= "
-            , notes = IF(notes IS NULL,
-                CONCAT('Cancellation reason: ', ?),
-                CONCAT(notes, ' - Cancellation reason: ', ?)
-            )
-        ";
+        $query .= ", cancellationreason = ? ";
     }
     $query .= "
         WHERE biblionumber=? AND ordernumber=?
     ";
     my $sth = $dbh->prepare($query);
     if($reason) {
-        $sth->execute($reason, $reason, $bibnum, $ordernumber);
+        $sth->execute($reason, $bibnum, $ordernumber);
     } else {
         $sth->execute( $bibnum, $ordernumber );
     }

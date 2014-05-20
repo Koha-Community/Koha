@@ -595,6 +595,10 @@
                         [% IF ( order.publishercode ) %], [% order.publishercode %][% END %]
                         [% IF ( order.publicationyear ) %], [% order.publicationyear %][% END %]
                         [% IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement %][% END %]
+                        [% IF ( order.cancellationreason ) %]
+                          <br />
+                          Cancellation reason: [% order.cancellationreason %]
+                        [% END %]
                       </p>
                       [% IF order.transferred_to %]
                         [% basket = order.transferred_to.basket %]
