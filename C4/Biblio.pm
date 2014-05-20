@@ -1249,12 +1249,27 @@ sub GetMarcSubfieldStructureFromKohaField {
 
 =head2 GetMarcBiblio
 
-  my $record = GetMarcBiblio($biblionumber, [$embeditems]);
+  my $record = GetMarcBiblio($biblionumber, [$embeditems], [$opac]);
 
-Returns MARC::Record representing bib identified by
-C<$biblionumber>.  If no bib exists, returns undef.
-C<$embeditems>.  If set to true, items data are included.
-The MARC record contains biblio data, and items data if $embeditems is set to true.
+Returns MARC::Record representing a biblio record, or C<undef> if the
+biblionumber doesn't exist.
+
+=over 4
+
+=item C<$biblionumber>
+
+the biblionumber
+
+=item C<$embeditems>
+
+set to true to include item information.
+
+=item C<$opac>
+
+set to true to make the result suited for OPAC view. This causes things like
+OpacHiddenItems to be applied.
+
+=back
 
 =cut
 
@@ -1278,15 +1293,21 @@ sub GetMarcBiblio {
     my $record = MARC::Record->new();
 
     if ($marcxml) {
-        $record = eval { MARC::Record::new_from_xml( $marcxml, "utf8", C4::Context->preference('marcflavour') ) };
+        $record = eval {
+            MARC::Record::new_from_xml( $marcxml, "utf8",
+                C4::Context->preference('marcflavour') );
+        };
         if ($@) { warn " problem with :$biblionumber : $@ \n$marcxml"; }
         return unless $record;
 
-        C4::Biblio::_koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
-        C4::Biblio::EmbedItemsInMarcBiblio($record, $biblionumber) if ($embeditems);
+        C4::Biblio::_koha_marc_update_bib_ids( $record, $frameworkcode, $biblionumber,
+            $biblioitemnumber );
+        C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber, undef, $opac )
+          if ($embeditems);
 
         return $record;
-    } else {
+    }
+    else {
         return;
     }
 }
@@ -2887,17 +2908,19 @@ sub ModZebra {
 
 =head2 EmbedItemsInMarcBiblio
 
-    EmbedItemsInMarcBiblio($marc, $biblionumber, $itemnumbers);
+    EmbedItemsInMarcBiblio($marc, $biblionumber, $itemnumbers, $opac);
 
 Given a MARC::Record object containing a bib record,
 modify it to include the items attached to it as 9XX
 per the bib's MARC framework.
-if $itemnumbers is defined, only specified itemnumbers are embedded
+if $itemnumbers is defined, only specified itemnumbers are embedded.
+
+If $opac is true, then opac-relevant suppressions are included.
 
 =cut
 
 sub EmbedItemsInMarcBiblio {
-    my ($marc, $biblionumber, $itemnumbers) = @_;
+    my ($marc, $biblionumber, $itemnumbers, $opac) = @_;
     if ( !$marc ) {
         carp 'EmbedItemsInMarcBiblio: No MARC record passed';
         return;
@@ -2914,10 +2937,23 @@ sub EmbedItemsInMarcBiblio {
     $sth->execute($biblionumber);
     my @item_fields;
     my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
-    while (my ($itemnumber) = $sth->fetchrow_array) {
+    my @items;
+    my $opachiddenitems = $opac
+      && ( C4::Context->preference('OpacHiddenItems') !~ /^\s*$/ );
+    require C4::Items;
+    while ( my ($itemnumber) = $sth->fetchrow_array ) {
         next if @$itemnumbers and not grep { $_ == $itemnumber } @$itemnumbers;
-        require C4::Items;
-        my $item_marc = C4::Items::GetMarcItem($biblionumber, $itemnumber);
+        my $i = C4::Items::GetItem($itemnumber) if $opachiddenitems;
+        push @items, { itemnumber => $itemnumber, item => $i };
+    }
+    my @hiddenitems =
+      C4::Items::GetHiddenItemnumbers( map { $_->{item} } @items )
+      if $opachiddenitems;
+    # Convert to a hash for quick searching
+    my %hiddenitems = map { $_ => 1 } @hiddenitems;
+    foreach my $itemnumber ( map { $_->{itemnumber} } @items ) {
+        next if $hiddenitems{$itemnumber};
+        my $item_marc = C4::Items::GetMarcItem( $biblionumber, $itemnumber );
         push @item_fields, $item_marc->field($itemtag);
     }
     $marc->append_fields(@item_fields);
