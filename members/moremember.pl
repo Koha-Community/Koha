@@ -51,7 +51,7 @@ use C4::Branch; # GetBranchName
 use C4::Form::MessagingPreferences;
 use List::MoreUtils qw/uniq/;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
-use Koha::Borrower::Debarments qw(GetDebarments);
+use Koha::Borrower::Debarments qw(GetDebarments IsDebarred);
 #use Smart::Comments;
 #use Data::Dumper;
 use DateTime;
@@ -146,9 +146,9 @@ for (qw(gonenoaddress lost borrowernotes)) {
 	 $data->{$_} and $template->param(flagged => 1) and last;
 }
 
-my $debar = $data->{'debarred'};
-if ($debar) {
+if ( IsDebarred($borrowernumber) ) {
     $template->param( 'userdebarred' => 1, 'flagged' => 1 );
+    my $debar = $data->{'debarred'};
     if ( $debar ne "9999-12-31" ) {
         $template->param( 'userdebarreddate' => C4::Dates::format_date($debar) );
         $template->param( 'debarredcomment'  => $data->{debarredcomment} );
