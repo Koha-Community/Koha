@@ -2,7 +2,7 @@
 //<![CDATA[
 function mergeAuth(authid, summary) {
     var alreadySelected = $.cookie('auth_to_merge');
-    if (alreadySelected !== null) {
+    if (alreadySelected !== undefined) {
         alreadySelected = JSON.parse(alreadySelected);
         $.cookie('auth_to_merge', '', { 'path': '/', 'expires': -1 });
         var refstring = "";
@@ -18,7 +18,7 @@ function mergeAuth(authid, summary) {
 
 function showMergingInProgress() {
     var alreadySelected = $.cookie('auth_to_merge');
-    if (alreadySelected !== null) {
+    if (alreadySelected !== undefined) {
         alreadySelected = JSON.parse(alreadySelected);
         $('#merge_in_progress').html(_("Merging with authority: ") + "<a href='detail.pl?authid=" + alreadySelected.authid + "'><span class='authorizedheading'>" + alreadySelected.summary + "</span> (" + alreadySelected.authid + ")</a> <a href='#' id='cancel_merge'>" + _("Cancel merge") + "</a>");
         $('#cancel_merge').click(function(event) {
