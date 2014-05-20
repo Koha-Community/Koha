@@ -150,7 +150,7 @@ $template->param(
     suppliername     => $details->{'suppliername'},
     booksellerid     => $details->{'booksellerid'},
     datereceived     => $details->{'datereceived'},
-    billingdate      => C4::Dates->new($details->{'billingdate'}, "iso")->output(),
+    billingdate      => $details->{'billingdate'},
     invoiceclosedate => $details->{'closedate'},
     shipmentcost     => $details->{'shipmentcost'},
     orders_loop      => \@orders_loop,
