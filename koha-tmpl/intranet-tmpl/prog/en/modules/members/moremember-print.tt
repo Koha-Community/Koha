@@ -1,15 +1,11 @@
+[% USE Koha %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Summary for [% firstname %] [% surname %] ([% cardnumber %])</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/print.css" />
-<script type="text/javascript">
-    function printThenClose() {
-        window.print();
-        window.close();
-    }
-</script>
+[% INCLUDE 'slip-print.inc' #printThenClose %]
 <body id="pat_moremember-print" class="pat" onload="printThenClose();">
 
 </head>
