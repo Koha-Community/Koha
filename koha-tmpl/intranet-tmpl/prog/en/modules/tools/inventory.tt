@@ -8,8 +8,27 @@
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-$(document).ready(function(){
+function checkForm() {
+    if ( $('#uploadbarcodes').val() ) {
+        if ( !(
+            $('#branchloop').val()   ||
+            $('#locationloop').val() ||
+            $('#minlocation').val()  ||
+            $('#maxlocation').val()  ||
+            $('#statuses input:checked').length
+        ) ) {
+            return confirm(
+                _("You have not selected any catalog filters and are about to compare a file of barcodes to your entire catalog.") + "\n\n" +
+                _("For large catalogs this can result in unexpected behavior") + "\n\n" +
+                _("Are you sure you want to do this?")
+            );
+        }
+    }
 
+    return true;
+}
+
+$(document).ready(function(){
         inventorydt = $('#inventoryt').dataTable($.extend(true, {}, dataTablesDefaults, {
             'sPaginationType': 'full_numbers',
             [% IF compareinv2barcd %]
@@ -88,7 +107,7 @@ $(document).ready(function(){
     [% END %]
        [% UNLESS op %]
     <div class="yui-g">
-    <form method="post" action="/cgi-bin/koha/tools/inventory.pl" enctype="multipart/form-data">
+    <form method="post" action="/cgi-bin/koha/tools/inventory.pl" enctype="multipart/form-data" onsubmit="return checkForm()">
         <fieldset class="rows">
             <legend>Use a barcode file</legend>
      <ol>
@@ -97,9 +116,6 @@ $(document).ready(function(){
             </li>
           </ol>
         </fieldset>
-
-        <!-- submit button for uploaded file -->
-        <fieldset class="action"><input type="submit" value="Submit" class="button" /></fieldset>
 
         <fieldset class="rows">
         <legend>Select items you want to check</legend>
@@ -144,7 +160,7 @@ $(document).ready(function(){
     </fieldset>
             <fieldset class="rows">
             <legend>Item statuses</legend>
-            <div name="statuses" style="display: block;">
+            <div id="statuses" style="display: block;">
                   [% FOREACH status IN statuses %]
                       [% IF (status.values) %]
                           <fieldset style="float: left; padding: 5px; margin: 5px;text-align:right">
@@ -189,7 +205,6 @@ $(document).ready(function(){
   </fieldset>
             <input type="hidden" name="op" value="do_it" />
 
-            <!-- repeat submit button for generating shelf list -->
             <fieldset class="action"><input type="submit" value="Submit" class="button" /></fieldset>
     </form>
     </div>
