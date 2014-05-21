@@ -4,5 +4,4 @@ values
 ('print'),
 ('email'),
 ('sms'),
-('feed'),
 ('phone');

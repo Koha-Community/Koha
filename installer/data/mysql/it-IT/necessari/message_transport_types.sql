@@ -6,7 +6,6 @@ values
 ('email'),
 ('print'),
 ('sms'),
-('feed'),
 ('phone');
 
 SET FOREIGN_KEY_CHECKS=1;

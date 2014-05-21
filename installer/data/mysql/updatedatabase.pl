@@ -9543,6 +9543,36 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    my $count_l = $dbh->selectcol_arrayref(q|
+        SELECT COUNT(*) FROM letter WHERE message_transport_type='feed'
+    |);
+    my $count_mq = $dbh->selectcol_arrayref(q|
+        SELECT COUNT(*) FROM message_queue WHERE message_transport_type='feed'
+    |);
+    my $count_ott = $dbh->selectcol_arrayref(q|
+        SELECT COUNT(*) FROM overduerules_transport_types WHERE message_transport_type='feed'
+    |);
+    my $count_mt = $dbh->selectcol_arrayref(q|
+        SELECT COUNT(*) FROM message_transports WHERE message_transport_type='feed'
+    |);
+    my $count_bmtp = $dbh->selectcol_arrayref(q|
+        SELECT COUNT(*) FROM borrower_message_transport_preferences WHERE message_transport_type='feed'
+    |);
+
+    my $deleted = 0;
+    if ( $count_l->[0] == 0 and $count_mq->[0] == 0 and $count_ott->[0] == 0 and $count_mt->[0] == 0 and $count_bmtp->[0] == 0 ) {
+        $deleted = $dbh->do(q|
+            DELETE FROM message_transport_types where message_transport_type='feed'
+        |);
+        $deleted = $deleted ne '0E0' ? 1 : 0;
+    }
+
+    print "Upgrade to $DBversion done (Bug 12298: Delete the 'feed' message transport type " . ($deleted ? '(deleted!)' : '(not deleted)') . ")\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
