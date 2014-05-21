@@ -8,16 +8,7 @@
 <link rel="stylesheet" type="text/css" href="[% stylesheet %]" />
 [% END %]
 
-<script type="text/javascript">
-[% IF ( Koha.Preference('IntranetSlipPrinterJS') ) %]
-    [% Koha.Preference('IntranetSlipPrinterJS') %]
-[% ELSE %]
-     function printThenClose() {
-         window.print();
-         window.close();
-     }
-[% END %]
-</script>
+[% INCLUDE 'slip-print.inc' #printThenClose %]
 </head>
 <body id="circ_printslip" class="circ" onload="printThenClose();">
 <div id="receipt">
