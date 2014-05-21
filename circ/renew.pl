@@ -76,7 +76,7 @@ if ($barcode) {
                     }
                 }
 
-                if ( $error && ($error eq 'too_soon') ) {
+                if ( $error && ($error eq 'too_soon' or $error eq 'auto_too_soon') ) {
                     $soonest_renew_date = C4::Circulation::GetSoonestRenewDate(
                         $borrower->borrowernumber(),
                         $item->itemnumber(),
