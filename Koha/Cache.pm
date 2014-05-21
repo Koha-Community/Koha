@@ -234,6 +234,8 @@ the caching layer anyway.
 The cache object to use if you want to provide your own. It should be an
 instance of C<Cache::*> and follow the same interface as L<Cache::Memcache>.
 
+=back
+
 =cut
 
 sub set_in_cache {
