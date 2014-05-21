@@ -95,8 +95,17 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 # Searching the catalog.
 
-    # find results
-my ( $error, $marcresults, $total_hits ) = SimpleSearch( $query, $results_per_page * ( $page - 1 ), $results_per_page );
+my @operands = $query;
+my $QParser;
+$QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
+my $builtquery;
+if ($QParser) {
+    $builtquery = $query;
+} else {
+    my ( $builterror,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type);
+    ( $builterror,$builtquery,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(undef,\@operands);
+}
+my ( $error, $marcresults, $total_hits ) = SimpleSearch( $builtquery, $results_per_page * ( $page - 1 ), $results_per_page );
 
 if (defined $error) {
     $template->param(
