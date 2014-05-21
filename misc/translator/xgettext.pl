@@ -24,9 +24,11 @@ use vars qw( $disable_fuzzy_p );
 use vars qw( $verbose_p );
 use vars qw( $po_mode_p );
 
+our $OUTPUT;
+
 ###############################################################################
 
-sub string_negligible_p ($) {
+sub string_negligible_p {
     my($t) = @_;				# a string
     # Don't emit pure whitespace, pure numbers, pure punctuation,
     # single letters, or TMPL_VAR's.
@@ -41,7 +43,7 @@ sub string_negligible_p ($) {
 	)
 }
 
-sub token_negligible_p( $ ) {
+sub token_negligible_p {
     my($x) = @_;
     my $t = $x->type;
     return !$extract_all_p && (
@@ -57,7 +59,7 @@ sub token_negligible_p( $ ) {
 
 ###############################################################################
 
-sub remember ($$) {
+sub remember {
     my($token, $string) = @_;
     # If we determine that the string is negligible, don't bother to remember
     unless (string_negligible_p( $string ) || token_negligible_p( $token )) {
@@ -69,7 +71,7 @@ sub remember ($$) {
 
 ###############################################################################
 
-sub string_list () {
+sub string_list {
     my @t = keys %text;
     # The real gettext tools seems to sort case sensitively; I don't know why
     @t = sort { $a cmp $b } @t if $sort eq 's';
@@ -86,7 +88,7 @@ sub string_list () {
 
   ###############################################################################
 
-sub text_extract (*) {
+sub text_extract {
     my($h) = @_;
     for (;;) {
         my $s = TmplTokenizer::next_token $h;
@@ -102,7 +104,8 @@ sub text_extract (*) {
 	    }
         } elsif ($kind eq C4::TmplTokenType::TAG && %$attr) {
             # value [tag=input], meta
-            my $tag = lc($1) if $t =~ /^<(\S+)/s;
+            my $tag;
+            $tag = lc($1) if $t =~ /^<(\S+)/s;
             for my $a ('alt', 'content', 'title', 'value', 'label', 'placeholder') {
                 if ($attr->{$a}) {
                     next if $a eq 'label' && $tag ne 'optgroup';
@@ -124,16 +127,16 @@ sub text_extract (*) {
 
 ###############################################################################
 
-sub generate_strings_list () {
+sub generate_strings_list {
     # Emit all extracted strings.
     for my $t (string_list) {
-	printf OUTPUT "%s\n", $t;
+        printf $OUTPUT "%s\n", $t;
     }
 }
 
 ###############################################################################
 
-sub generate_po_file () {
+sub generate_po_file {
     # We don't emit the Plural-Forms header; it's meaningless for us
     my $pot_charset = (defined $charset_out? $charset_out: 'CHARSET');
     $pot_charset = TmplTokenizer::charset_canon $pot_charset;
@@ -141,17 +144,17 @@ sub generate_po_file () {
     my $time = POSIX::strftime('%Y-%m-%d %H:%M%z', localtime(time));
     my $time_pot = $time;
     my $time_po  = $po_mode_p? $time: 'YEAR-MO-DA HO:MI+ZONE';
-    print OUTPUT <<EOF;
+    print $OUTPUT <<EOF;
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL\@ADDRESS>, YEAR.
 #
 EOF
-    print OUTPUT <<EOF unless $disable_fuzzy_p;
+    print $OUTPUT <<EOF unless $disable_fuzzy_p;
 #, fuzzy
 EOF
-    print OUTPUT <<EOF;
+    print $OUTPUT <<EOF;
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\\n"
@@ -168,7 +171,7 @@ EOF
     for my $t (string_list) {
 	if ($text{$t}->[0]->type == C4::TmplTokenType::TEXT_PARAMETRIZED) {
 	    my($token, $n) = ($text{$t}->[0], 0);
-	    printf OUTPUT "#. For the first occurrence,\n"
+        printf $OUTPUT "#. For the first occurrence,\n"
 		    if @{$text{$t}} > 1 && $token->parameters_and_fields > 0;
 	    for my $param ($token->parameters_and_fields) {
 		$n += 1;
@@ -183,61 +186,62 @@ EOF
 		    $type = $param->string =~ /\[%(.*?)%\]/is? $1: 'ERROR';
 		    my $name = $param->string =~ /\bname=(["']?)([^\s"']+)\1/is?
 			    $2: undef;
-		    printf OUTPUT "#. %s: %s\n", $fmt,
+            printf $OUTPUT "#. %s: %s\n", $fmt,
 			"$type" . (defined $name? " name=$name": '');
 		} else {
 		    my $name = $param->attributes->{'name'};
-		    my $value = $param->attributes->{'value'}
+            my $value;
+            $value = $param->attributes->{'value'}
 			    unless $subtype =~ /^(?:text)$/;
-		    printf OUTPUT "#. %s: %s\n", $fmt, "type=$subtype"
+            printf $OUTPUT "#. %s: %s\n", $fmt, "type=$subtype"
 			    . (defined $name?  " name=$name->[1]": '')
 			    . (defined $value? " value=$value->[1]": '');
 		}
 	    }
 	} elsif ($text{$t}->[0]->type == C4::TmplTokenType::TAG) {
 	    my($token) = ($text{$t}->[0]);
-	    printf OUTPUT "#. For the first occurrence,\n"
+        printf $OUTPUT "#. For the first occurrence,\n"
 		    if @{$text{$t}} > 1 && $token->parameters_and_fields > 0;
 	    if ($token->string =~ /^<meta\b/is) {
 		my $type = $token->attributes->{'http-equiv'}->[1];
-		print OUTPUT "#. META http-equiv=$type\n" if defined $type;
+        print $OUTPUT "#. META http-equiv=$type\n" if defined $type;
 	    } elsif ($token->string =~ /^<([a-z0-9]+)/is) {
 		my $tag = uc($1);
 		my $type = (lc($tag) eq 'input'?
 			$token->attributes->{'type'}: undef);
 		my $name = $token->attributes->{'name'};
-		printf OUTPUT "#. %s\n", $tag
+        printf $OUTPUT "#. %s\n", $tag
 		    . (defined $type? " type=$type->[1]": '')
 		    . (defined $name? " name=$name->[1]": '');
 	    }
 	} elsif ($text{$t}->[0]->has_js_data) {
-	    printf OUTPUT "#. For the first occurrence,\n" if @{$text{$t}} > 1;
-	    printf OUTPUT "#. SCRIPT\n";
+        printf $OUTPUT "#. For the first occurrence,\n" if @{$text{$t}} > 1;
+        printf $OUTPUT "#. SCRIPT\n";
 	}
 	my $cformat_p;
 	for my $token (@{$text{$t}}) {
 	    my $pathname = $token->pathname;
 	    $pathname =~ s/^$directory_re//os;
         $pathname =~ s/^.*\/koha-tmpl\/(.*)$/$1/;
-	    printf OUTPUT "#: %s:%d\n", $pathname, $token->line_number
+        printf $OUTPUT "#: %s:%d\n", $pathname, $token->line_number
 		    if defined $pathname && defined $token->line_number;
 	    $cformat_p = 1 if $token->type == C4::TmplTokenType::TEXT_PARAMETRIZED;
 	}
-	printf OUTPUT "#, c-format\n" if $cformat_p;
-	printf OUTPUT "msgid %s\n", TmplTokenizer::quote_po
+        printf $OUTPUT "#, c-format\n" if $cformat_p;
+        printf $OUTPUT "msgid %s\n", TmplTokenizer::quote_po
 		TmplTokenizer::string_canon
 		TmplTokenizer::charset_convert $t, $charset_in, $charset_out;
-	printf OUTPUT "msgstr %s\n\n", (defined $translation{$t}?
+        printf $OUTPUT "msgstr %s\n\n", (defined $translation{$t}?
 		TmplTokenizer::quote_po( $translation{$t} ): "\"\"");
     }
 }
 
 ###############################################################################
 
-sub convert_translation_file () {
-    open(INPUT, "<$convert_from") || die "$convert_from: $!\n";
+sub convert_translation_file {
+    open(my $INPUT, '<', $convert_from) || die "$convert_from: $!\n";
     VerboseWarnings::set_input_file_name $convert_from;
-    while (<INPUT>) {
+    while (<$INPUT>) {
 	chomp;
 	my($msgid, $msgstr) = split(/\t/);
 	die "$convert_from: $.: Malformed tmpl_process input (no tab)\n"
@@ -274,7 +278,7 @@ sub convert_translation_file () {
 
 ###############################################################################
 
-sub usage ($) {
+sub usage {
     my($exitcode) = @_;
     my $h = $exitcode? *STDERR: *STDOUT;
     print $h <<EOF;
@@ -308,7 +312,7 @@ EOF
 
 ###############################################################################
 
-sub usage_error (;$) {
+sub usage_error {
     print STDERR "$_[0]\n" if @_;
     print STDERR "Try `$0 --help' for more information.\n";
     exit(-1);
@@ -347,17 +351,16 @@ usage_error('You cannot specify both --convert-from and --files-from')
 
 if (defined $output && $output ne '-') {
     print STDERR "$0: Opening output file \"$output\"\n" if $verbose_p;
-        open(OUTPUT, ">$output") || die "$output: $!\n";
+        open($OUTPUT, '>', $output) || die "$output: $!\n";
 } else {
     print STDERR "$0: Outputting to STDOUT...\n" if $verbose_p;
-    open(OUTPUT, ">&STDOUT");
+    open($OUTPUT, ">&STDOUT");
 }
-#binmode OUTPUT, ':encoding(UTF-8)';
 
 if (defined $files_from) {
     print STDERR "$0: Opening input file list \"$files_from\"\n" if $verbose_p;
-    open(INPUT, "<$files_from") || die "$files_from: $!\n";
-    while (<INPUT>) {
+    open(my $INPUT, '<', $files_from) || die "$files_from: $!\n";
+    while (<$INPUT>) {
 	chomp;
 	my $input = /^\//? $_: "$directory/$_";
 	my $h = TmplTokenizer->new( $input );
@@ -366,7 +369,7 @@ if (defined $files_from) {
 	print STDERR "$0: Processing file \"$input\"\n" if $verbose_p;
 	text_extract( $h );
     }
-    close INPUT;
+    close $INPUT;
 } else {
     print STDERR "$0: Converting \"$convert_from\"\n" if $verbose_p;
     convert_translation_file;
