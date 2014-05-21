@@ -31,7 +31,7 @@
 [% IF ( (Koha.Preference('AcqEnableFiles')) && files ) %]
         $("#invoice_files_table").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
-                { "aTargets": [ 3 ], "sType": "natural" }
+                { "aTargets": [ "title-string" ], "sType": "title-string" }
             ],
             bInfo: false,
             bPaginate: false,
@@ -229,7 +229,9 @@
                          <td><a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id %]">[% f.file_name | html %]</a></td>
                          <td>[% f.file_type | html %]</td>
                          <td>[% f.file_description | html %]</td>
-                         <td><!-- [% f.date_uploaded %] -->[% f.date_uploaded | $KohaDates %]</td>
+                         <td class="title-string">
+                           <span title="[% f.date_uploaded %]">[% f.date_uploaded | $KohaDates %]</span>
+                         </td>
                     </tr>
                 [% END %]
                 </tbody>

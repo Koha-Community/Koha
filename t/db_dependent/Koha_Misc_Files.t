@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 use C4::Context;
-use Test::More tests => 27;
+use Test::More tests => 30;
 
 BEGIN {
     use_ok('Koha::Misc::Files');
@@ -16,6 +16,7 @@ $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 ## new() parameter handling check
+is(Koha::Misc::Files->new(), undef, "new() param check test/0");
 is(Koha::Misc::Files->new(recordid => 12), undef, "new() param check test/1");
 is(Koha::Misc::Files->new(recordid => 'aa123', tabletag => 'ttag_a'), undef, "new() param check test/2");
 
@@ -76,10 +77,12 @@ $files_a_123_infos = $mf_a_123->GetFilesInfo();
 is(scalar @$files_a_123_infos, 3, "GetFilesInfo() result count after DelFile()");
 
 ## DelAllFiles() tests
-$mf_a_123->DelAllFiles();
+my $number_of_deleted_files_a_123 = $mf_a_123->DelAllFiles();
+is( $number_of_deleted_files_a_123, 3, "DelAllFiles returns the number of deleted files/1" );
 $files_a_123_infos = $mf_a_123->GetFilesInfo();
 is(scalar @$files_a_123_infos, 0, "GetFilesInfo() result count after DelAllFiles()/1");
-$mf_b_221->DelAllFiles();
+my $number_of_deleted_files_b_221 = $mf_b_221->DelAllFiles();
+is( $number_of_deleted_files_b_221, 1, "DelAllFiles returns the number of deleted files/2" );
 is(scalar @{$mf_b_221->GetFilesInfo()}, 0, "GetFilesInfo() result count after DelAllFiles()/2");
 
 $dbh->rollback;
