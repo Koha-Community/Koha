@@ -397,8 +397,8 @@ else {
         if ( $rq->execute ) {
             my ($version) = $rq->fetchrow;
             if ($version) {
-                $query->redirect("install.pl?step=3");
-				exit;
+                print $query->redirect("/cgi-bin/koha/installer/install.pl?step=3");
+                exit;
             }
         }
     }
