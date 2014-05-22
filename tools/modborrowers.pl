@@ -21,7 +21,8 @@
 #
 # Batch Edit Patrons
 # Modification for patron's fields:
-# surname firstname branchcode categorycode sort1 sort2 dateenrolled dateexpiry borrowernotes
+# surname firstname branchcode categorycode city state zipcode country sort1
+# sort2 dateenrolled dateexpiry borrowernotes
 # And for patron attributes.
 
 use Modern::Perl;
@@ -169,7 +170,7 @@ if ( $op eq 'show' ) {
         {
             name => "firstname",
             type => "text",
-            mandatory => ( grep /surname/, @mandatoryFields ) ? 1 : 0,
+            mandatory => ( grep /firstname/, @mandatoryFields ) ? 1 : 0,
         }
         ,
         {
@@ -184,6 +185,30 @@ if ( $op eq 'show' ) {
             type => "select",
             option => \@categories_option,
             mandatory => ( grep /categorycode/, @mandatoryFields ) ? 1 : 0,
+        }
+        ,
+        {
+            name => "city",
+            type => "text",
+            mandatory => ( grep /city/, @mandatoryFields ) ? 1 : 0,
+        }
+        ,
+        {
+            name => "state",
+            type => "text",
+            mandatory => ( grep /state/, @mandatoryFields ) ? 1 : 0,
+        }
+        ,
+        {
+            name => "zipcode",
+            type => "text",
+            mandatory => ( grep /zipcode/, @mandatoryFields ) ? 1 : 0,
+        }
+        ,
+        {
+            name => "country",
+            type => "text",
+            mandatory => ( grep /country/, @mandatoryFields ) ? 1 : 0,
         }
         ,
         {
@@ -230,7 +255,7 @@ if ( $op eq 'do' ) {
 
     my @disabled = $input->param('disable_input');
     my $infos;
-    for my $field ( qw/surname firstname branchcode categorycode sort1 sort2 dateenrolled dateexpiry borrowernotes/ ) {
+    for my $field ( qw/surname firstname branchcode categorycode city state zipcode country sort1 sort2 dateenrolled dateexpiry borrowernotes/ ) {
         my $value = $input->param($field);
         $infos->{$field} = $value if $value;
         $infos->{$field} = "" if grep { /^$field$/ } @disabled;

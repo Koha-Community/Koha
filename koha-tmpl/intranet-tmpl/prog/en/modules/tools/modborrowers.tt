@@ -14,15 +14,13 @@
                 $("#borrowerst").dataTable($.extend(true, {}, dataTablesDefaults, {
                     "sDom": 't',
                     [% IF ( op == 'show_results' ) %]
-                        "aoColumns": [
-                            null,null,null,null,null,{ "sType": "title-string" },{ "sType": "title-string" }[% FOREACH attrh IN attributes_header %],null[% END %]
+                        "aoColumnDefs": [
+                            { 'sType': "title-string", 'aTargets' : [ 'title-string'] }
                         ],
                     [% ELSE %]
                         "aoColumnDefs": [
                             { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-                        ],
-                        "aoColumns": [
-                            null,null,null,null,null,null,{ "sType": "title-string" },{ "sType": "title-string" }[% FOREACH attrh IN attributes_header %],null[% END %]
+                            { 'sType': "title-string", 'aTargets' : [ 'title-string'] }
                         ],
                     [% END %]
                     "bPaginate": false
@@ -232,8 +230,12 @@
                                                 <th>First name</th>
                                                 <th>Library</th>
                                                 <th>Category</th>
-                                                <th>Registration date</th>
-                                                <th>Expiry date</th>
+                                                <th>City</th>
+                                                <th>State</th>
+                                                <th>Zip code</th>
+                                                <th>Country</th>
+                                                <th class="title-string">Registration date</th>
+                                                <th class="title-string">Expiry date</th>
                                                 [% FOREACH attrh IN attributes_header %]
                                                     <th>[% attrh.attribute %]</th>
                                                 [% END %]
@@ -250,6 +252,10 @@
                                                     <td>[% borrower.firstname %]</td>
                                                     <td>[% borrower.branchname %]</td>
                                                     <td>[% borrower.categorycode %]</td>
+                                                    <td>[% borrower.city %]</td>
+                                                    <td>[% borrower.state %]</td>
+                                                    <td>[% borrower.zipcode %]</td>
+                                                    <td>[% borrower.country %]</td>
                                                     <td><span title="[% borrower.dateenrolled %]">[% borrower.dateenrolled | $KohaDates %]</span></td>
                                                     <td><span title="[% borrower.dateexpiry %]">[% borrower.dateexpiry | $KohaDates %]</span></td>
                                                     [% FOREACH pa IN borrower.patron_attributes %]
@@ -288,6 +294,14 @@
                                                 Library:
                                                 [% CASE 'categorycode' %]
                                                 Category
+                                                [% CASE 'city' %]
+                                                City
+                                                [% CASE 'state' %]
+                                                State
+                                                [% CASE 'zipcode' %]
+                                                Zip code
+                                                [% CASE 'country' %]
+                                                Country
                                                 [% CASE 'sort1' %]
                                                 Sort 1:
                                                 [% CASE 'sort2' %]
