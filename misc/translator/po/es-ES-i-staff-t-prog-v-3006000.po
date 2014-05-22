@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.14 staff\n"
 "POT-Creation-Date: 2014-05-05 21:38-0300\n"
-"PO-Revision-Date: 2014-05-18 13:14+0000\n"
+"PO-Revision-Date: 2014-05-21 17:35+0000\n"
 "Last-Translator: Bernardo <bgkriegel@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-"
 "community.org>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1400418868.0\n"
+"X-POOTLE-MTIME: 1400693740.0\n"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils-MODS31.xsl:12
 #, c-format
@@ -668,7 +668,7 @@ msgstr ""
 #. %9$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:96
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:323
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s Email %s Print %s SMS %s Feed %s Phone %s %s %s "
 msgstr "%s %s Email %s Imprimir %s SMS %s Transmitir %s Teléfono %s %s %s "
 
@@ -3275,6 +3275,9 @@ msgid ""
 "'seefrom' or 'seealso', controls the label for the entry type: authid: if it "
 "is a linked authority, its authid %%] %s %s %s %s %s "
 msgstr ""
+"%s [%%# Parametros: cabecera: la cabecera en si linkType: actualmente "
+"'seefrom' o 'seealso', controla la etiqueta para el tipo de entrada: authid: "
+"si es una autoridad enlazada, su authid %%] %s %s %s %s %s "
 
 #. %1$s:  USE AuthorisedValues 
 #. %2$s:  SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) 
@@ -3288,6 +3291,11 @@ msgid ""
 "input (generated if the authorised value category does not exist). %%] %s "
 "[%% DEFAULT class = '' size = 20 %%] %s "
 msgstr ""
+"%s [%%# Parameters: name: the name of the select element category: the "
+"authorised value category default: the default authorised value to select "
+"class: the CSS class of the select element size: the size to use for the "
+"input (generated if the authorised value category does not exist). %%] %s [%"
+"% DEFAULT class = '' size = 20 %%] %s "
 
 #. %1$s:  ELSIF ( rule.hardduedateafter ) 
 #. %2$s:  rule.hardduedate 
@@ -4787,7 +4795,7 @@ msgid ""
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot issued"
 "%s %sDelete%s %s Claimed %s %s %s %s %sStopped%s "
 msgstr ""
-"%sEsperado%s %sArribado%s %sRetrasado%s %sExtraviado%s %sExtraviado (nunca "
+"%sEsperado%s %sRecibido%s %sRetrasado%s %sExtraviado%s %sExtraviado (nunca "
 "se recibió)%s %sExtraviado (liquidado)%s %sExtraviado (dañado)%s %"
 "sExtraviado (perdido)%s %sNo emitido%s %sEliminado%s %s Reclamado %s %s %s %"
 "s %sDetenido%s "
@@ -4826,7 +4834,7 @@ msgid ""
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot issued"
 "%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%sEsperado%s %sArribado%s %sRetrasado%s %sExtraviado%s %sExtraviado (nunca "
+"%sEsperado%s %sRecibido%s %sRetrasado%s %sExtraviado%s %sExtraviado (nunca "
 "se recibió)%s %sExtraviado (liquidado)%s %sExtraviado (dañado)%s %"
 "sExtraviado (perdido)%s %sNo emitido%s %sEliminado%s %sReclamado%s %"
 "sDetenido%s "
@@ -7741,11 +7749,10 @@ msgstr "(si está vacío, la suscripción está todavía activa)"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
-#, fuzzy
 msgid "(if exact bit depth known, enter; <br />otherwise use pulldown)"
 msgstr ""
-"(si se conoce la profundidad de bits exacta, introduzca; <br />de lo "
-"contrario utilice el menú desplegable)"
+"(si conoce la profundidad de bits exacta, introduzca; <br />de lo contrario "
+"utilice el menú desplegable)"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:105
 #, c-format
@@ -15261,7 +15268,7 @@ msgid "Budget name"
 msgstr "Nombre del presupuesto"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:280
-#, fuzzy, c-format
+#, c-format
 msgid "Budget period description"
 msgstr "Descripción del periodo del presupuesto"
 
@@ -17287,7 +17294,7 @@ msgstr "Fecha de préstamo de:"
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:108
 #, c-format
 msgid "Checkout date from: "
-msgstr "Fecha de préstamo de:  "
+msgstr "Fecha de préstamo de: "
 
 #: intranet-tmpl/prog/en/includes/biblio-view-menu.inc:32
 #, c-format
@@ -33775,7 +33782,7 @@ msgid "MARC bibliographic framework test"
 msgstr "Prueba de las hojas de trabajo bibliográficas MARC"
 
 #: intranet-tmpl/prog/en/columns.def:139
-#, fuzzy, c-format
+#, c-format
 msgid "MARC blob"
 msgstr "MARC blob"
 
@@ -47279,7 +47286,7 @@ msgid ""
 msgstr ""
 "Algunos ejemplos de los campos de precios compatibles incluyen \"$9.99\", "
 "\"9.99 USD\", \"$9.99 USD\", \"9.99 USD (10.00 CAN)\", \"$9.99 USD (rústica)\". "
-"Estos ejemplos asumen USD es la divisa/moneda activa."
+"Estos ejemplos asumen USD es la divisa/moneda activa. "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:4
@@ -54041,7 +54048,7 @@ msgstr "Usuario "
 #: intranet-tmpl/prog/en/columns.def:110
 #, c-format
 msgid "User code"
-msgstr "Código de usuario "
+msgstr "Código de usuario"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:278
 #, c-format
@@ -56256,7 +56263,6 @@ msgstr "[% barcode_lly |html %]"
 
 #. INPUT type=text name=quantity
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:218
-#, fuzzy
 msgid "[% biblio.quantity.length ? biblio.quantity : 1 %]"
 msgstr "[% biblio.quantity.length ? biblio.quantity : 1 %]"
 
@@ -56417,7 +56423,6 @@ msgstr "[% component.tag |html %]"
 
 #. A
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:200
-#, fuzzy
 msgid ""
 "[% count %] item(s) are attached to this record. You must delete all items "
 "before deleting this record."
@@ -56432,7 +56437,6 @@ msgstr "[% datelastseen | $KohaDates %]"
 
 #. INPUT type=text name=[% name %]
 #: intranet-tmpl/prog/en/includes/av-build-dropbox.inc:28
-#, fuzzy
 msgid "[% default | html_entity %]"
 msgstr "[% default | html_entity %]"
 
@@ -56465,7 +56469,6 @@ msgstr "[% enddate | $KohaDates %]"
 
 #. INPUT type=text name=enrolmentperioddate
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:140
-#, fuzzy
 msgid "[% enrolmentperioddate | $KohaDates %]"
 msgstr "[% enrolmentperioddate | $KohaDates %]"
 
@@ -56676,7 +56679,6 @@ msgstr "[% recycle_loo.value |html %]"
 
 #. A
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:78
-#, fuzzy
 msgid "[% repet | html %]"
 msgstr "[% repet | html %]"
 
@@ -56838,7 +56840,7 @@ msgstr ""
 "%%] "
 
 #: intranet-tmpl/prog/en/includes/authorities-search-results.inc:120
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "[%% PROCESS showreference heading=seeals.heading linkType='seealso' "
 "type=seeals.type authid=seeals.authid %%] "
@@ -56847,7 +56849,7 @@ msgstr ""
 "type=seeals.type authid=seeals.authid %%] "
 
 #: intranet-tmpl/prog/en/includes/authorities-search-results.inc:105
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
 "type=seefro.type authid=seefro.authid %%] "
