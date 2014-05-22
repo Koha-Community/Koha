@@ -23,6 +23,12 @@ __PACKAGE__->table("z3950servers");
 
 =head1 ACCESSORS
 
+=head2 id
+
+  data_type: 'integer'
+  is_auto_increment: 1
+  is_nullable: 0
+
 =head2 host
 
   data_type: 'varchar'
@@ -52,15 +58,9 @@ __PACKAGE__->table("z3950servers");
   is_nullable: 1
   size: 255
 
-=head2 name
+=head2 servername
 
   data_type: 'mediumtext'
-  is_nullable: 1
-
-=head2 id
-
-  data_type: 'integer'
-  is_auto_increment: 1
   is_nullable: 0
 
 =head2 checked
@@ -85,23 +85,11 @@ __PACKAGE__->table("z3950servers");
   default_value: 0
   is_nullable: 0
 
-=head2 icon
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 position
-
-  data_type: 'enum'
-  default_value: 'primary'
-  extra: {list => ["primary","secondary",""]}
-  is_nullable: 0
-
-=head2 type
+=head2 servertype
 
   data_type: 'enum'
   default_value: 'zed'
-  extra: {list => ["zed","opensearch"]}
+  extra: {list => ["zed","sru"]}
   is_nullable: 0
 
 =head2 encoding
@@ -109,21 +97,34 @@ __PACKAGE__->table("z3950servers");
   data_type: 'text'
   is_nullable: 1
 
-=head2 description
-
-  data_type: 'text'
-  is_nullable: 0
-
 =head2 recordtype
 
-  data_type: 'varchar'
+  data_type: 'enum'
   default_value: 'biblio'
+  extra: {list => ["authority","biblio"]}
   is_nullable: 0
-  size: 45
+
+=head2 sru_options
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+=head2 sru_fields
+
+  data_type: 'mediumtext'
+  is_nullable: 1
+
+=head2 add_xslt
+
+  data_type: 'mediumtext'
+  is_nullable: 1
 
 =cut
 
 __PACKAGE__->add_columns(
+  "id",
+  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "host",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "port",
@@ -134,10 +135,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "password",
   { data_type => "varchar", is_nullable => 1, size => 255 },
-  "name",
-  { data_type => "mediumtext", is_nullable => 1 },
-  "id",
-  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
+  "servername",
+  { data_type => "mediumtext", is_nullable => 0 },
   "checked",
   { data_type => "smallint", is_nullable => 1 },
   "rank",
@@ -146,33 +145,28 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "timeout",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
-  "icon",
-  { data_type => "text", is_nullable => 1 },
-  "position",
-  {
-    data_type => "enum",
-    default_value => "primary",
-    extra => { list => ["primary", "secondary", ""] },
-    is_nullable => 0,
-  },
-  "type",
+  "servertype",
   {
     data_type => "enum",
     default_value => "zed",
-    extra => { list => ["zed", "opensearch"] },
+    extra => { list => ["zed", "sru"] },
     is_nullable => 0,
   },
   "encoding",
   { data_type => "text", is_nullable => 1 },
-  "description",
-  { data_type => "text", is_nullable => 0 },
   "recordtype",
   {
-    data_type => "varchar",
+    data_type => "enum",
     default_value => "biblio",
+    extra => { list => ["authority", "biblio"] },
     is_nullable => 0,
-    size => 45,
   },
+  "sru_options",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
+  "sru_fields",
+  { data_type => "mediumtext", is_nullable => 1 },
+  "add_xslt",
+  { data_type => "mediumtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -192,5 +186,5 @@ __PACKAGE__->set_primary_key("id");
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BA+II2AVWOTLfgbko1GAOA
 
 
-# You can replace this text with custom content, and it will be preserved on regeneration
+# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
