@@ -481,3 +481,9 @@ function CheckMandatorySubfields(p){
     });
     return total;
 }
+
+ $(document).ready(function() {
+    $("body").on("keypress", ".input_marceditor, .indicator", function(e){
+        return checkEnter(e);
+    });
+});
