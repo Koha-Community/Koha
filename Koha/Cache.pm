@@ -455,7 +455,7 @@ sub _set_tied_defaults {
 
     $args->{'timeout'}   = '600' unless defined( $args->{'timeout'} );
     $args->{'inprocess'} = '0'   unless defined( $args->{'inprocess'} );
-    unless ( lc( $args->{'cache_type'} ) eq 'null' ) {
+    unless ( $args->{cache_type} and lc( $args->{cache_type} ) eq 'null' ) {
         $args->{'cache'} = $self;
         $args->{'cache_type'} ||= $ENV{'CACHING_SYSTEM'};
     }
