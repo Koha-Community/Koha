@@ -609,7 +609,7 @@ function verify_images() {
                             [% END %]
                         [% END %]
 
-                        [% IF ( item.itemnotforloan ) %]
+                        [% IF ( item.itemnotforloan || item.notforloan_per_itemtype ) %]
                             Not for loan
                             [% IF ( item.notforloanvalue ) %]
                                 ([% item.notforloanvalue %])
@@ -643,7 +643,16 @@ function verify_images() {
                                 [% END %]
                             [% END %]
                         [% END %]
-                        [% UNLESS ( item.itemnotforloan or item.onloan or item.itemlost or item.withdrawn or item.damaged or item.transfertwhen or item.reservedate ) %]
+                        [% UNLESS (
+                               item.itemnotforloan
+                            or item.notforloan_per_itemtype
+                            or item.onloan
+                            or item.itemlost
+                            or item.withdrawn
+                            or item.damaged
+                            or item.transfertwhen
+                            or item.reservedate
+                        ) %]
                             Available
                         [% END %]
 
