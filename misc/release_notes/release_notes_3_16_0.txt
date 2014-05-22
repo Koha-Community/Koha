@@ -1,5 +1,5 @@
-RELEASE NOTES FOR KOHA 3.16.0-rc
-19 May 2014
+RELEASE NOTES FOR KOHA 3.16.0
+22 May 2014
 ========================================================================
 
 Koha is the first free and open source software library automation package 
@@ -9,9 +9,9 @@ The website for the Koha project is
 
     http://koha-community.org/
 
-Koha 3.16.0-rc can be downloaded from:
+Koha 3.16.0 can be downloaded from:
 
-    http://download.koha-community.org/koha-3.16.00-rc.tar.gz
+    http://download.koha-community.org/koha-3.16.00.tar.gz
 
 Installation instructions can be found at:
 
@@ -20,13 +20,13 @@ Installation instructions can be found at:
     OR in the INSTALL files that come in the tarball
 
 
-Koha 3.16.0-rc is a major release, that comes with many new features.
+Koha 3.16.0 is a major release, that comes with many new features.
 
 
-It includes 2 features, 200 enhancements and 388 bugfixes.
+It includes 2 features, 200 enhancements and 391 bugfixes.
 
 
-New features in 3.16.0-rc
+New features in 3.16.0
 ======================
 
 Acquisitions
@@ -38,7 +38,7 @@ Searching
 	10862	Add an search history for the staff interface
 
 
-Enhancements in 3.16.0-rc
+Enhancements in 3.16.0
 ======================
 
 Acquisitions
@@ -96,6 +96,7 @@ Architecture, internals, and plumbing
 Authentication
 ----------
 	11146	Show a go back link on no permission page
+	11241	DHXD
 
 Cataloging
 ----------
@@ -337,7 +338,7 @@ Web services
 	11491	Extending report service to be annotated
 
 
-Critical bugs fixed in 3.16.0-rc
+Critical bugs fixed in 3.16.0
 ======================
 
 (this list include all bugfixes since the previous major version. Most of them have already been fixed in maintainance releases)
@@ -348,6 +349,7 @@ Acquisitions
 	9948	critical	Acq data going on first item even if not received
 	11322	critical	Suggestion "notes" field should be sanitized or escaped
 	11755	critical	Argument 'booksellerid' not properly handled in orderreceive.pl
+	12274	critical	Closed invoices not properly handled on invoice details page
 	4068	major	Accepting a suggestion hides 'pending' tab
 	10613	major	Gst is not calculated correctly on the invoice page
 	11549	major	After transferring an order, receive and cancel the receipt will delete the order
@@ -446,6 +448,7 @@ Patrons
 	12134	critical	Members are restricted even if the debarment is ended
 	6739	major	Expired patrons not blocked from opac actions
 	11009	major	Do not allow reading records of anonymous patron
+	12292	major	Members are restricted even if the debarment is ended - moremember.pl
 
 Searching
 ----------
@@ -487,7 +490,7 @@ Z39.50 / SRU / OpenSearch Servers
 	9612	major	SRU Response is different when DOM indexing is enabled
 
 
-Other bugs fixed in 3.16.0-rc
+Other bugs fixed in 3.16.0
 ======================
 
 (this list include all bugfixes since the previous major version. Most of them have already been fixed in maintainance releases)
@@ -635,7 +638,6 @@ I18N/L10N
 	11639	minor	Untranslatable strings in 007 builder
 	11973	minor	Fix Armenian language description
 	11993	minor	Untranslatable confirm popup in request.tt
-	12240	minor 	Update of MARC21 Italian setup - 3.16
 	10818	trivial	System preference OAI-PMH:ConfFile isn't translatable
 	11189	trivial	Rename Print label in UNIMARC advanced search
 	11393	trivial	Language menu not show up as name for Thai (th-THA was shown)
@@ -649,6 +651,7 @@ Installation and upgrade (web-based installer)
 ----------
 	11260	normal	Update German web installer
 	11261	normal	Sample frequencies and numbering patterns should better be mandatory on install
+	12282	normal	RESERVESLIP wrong in German sample notices
 	7841	minor	Several warnings on language from webinstaller
 	12209	minor	Fix currency symbol for NOK
 
@@ -914,7 +917,7 @@ Z39.50 / SRU / OpenSearch Servers
 	11419	minor	Z39.50 searches not displaying errors
 
 
-New sysprefs in 3.16.0-rc
+New sysprefs in 3.16.0
 ======================
 
   * AcquisitionDetails
@@ -975,23 +978,23 @@ interface are available in this release for the following languages:
   * Armenian (93%)
   * Chinese (China) (94%)
   * Chinese (Taiwan) (100%)
-  * Czech (97%)
+  * Czech (100%)
   * Danish (87%)
-  * English (New Zealand) (80%)
+  * English (New Zealand) (81%)
   * French (96%)
   * French (Canada) (85%)
   * German (100%)
   * German (Switzerland) (100%)
   * Italian (100%)
   * Kurdish (69%)
-  * Norwegian Bokmål (63%)
+  * Norwegian Bokmål (66%)
   * Polish (61%)
   * Portuguese (92%)
   * Portuguese (Brazil) (85%)
-  * Slovak (98%)
+  * Slovak (100%)
   * Spanish (99%)
-  * Swedish (87%)
-  * Turkish (99%)
+  * Swedish (88%)
+  * Turkish (100%)
 
 
 Partial translations are available for various other languages.
@@ -1013,7 +1016,7 @@ The most up-to-date translations can be found at:
 Release Team
 ======================
 
-The release team for Koha 3.16.0-rc is
+The release team for Koha 3.16.0 is
 
   Release Manager:       Galen Charlton <gmc@esilibrary.com>
   Documentation Manager: Nicole C Engard <nengard@gmail.com>
@@ -1048,13 +1051,13 @@ Credits
 ======================
 
 We thank the following libraries who are known to have sponsored
-new features in Koha 3.16.0-rc:
+new features in Koha 3.16.0:
   * Hochschule für Gesundheit (hsg), Germany
   * Universidad Nacionald de Cordoba
   * Universidad Nacional de Cordoba
 
-We thank the following individuals who contributed patches to Koha 3.16.0-rc.
-  *      9	Jacek Ablewicz
+We thank the following individuals who contributed patches to Koha 3.16.0.
+  *     10	Jacek Ablewicz
   *      1	Aleisha Amohia
   *      2	Roman Amor
   *      1	Nuño López Ansótegui
@@ -1069,18 +1072,18 @@ We thank the following individuals who contributed patches to Koha 3.16.0-rc.
   *      1	Jared Camins-Esakov
   *     12	Colin Campbell
   *      3	Frédérick Capovilla
-  *    330	Galen Charlton
+  *    332	Galen Charlton
   *     10	David Cook
   *     17	Chris Cormack
   *      1	Samuel Crosby
   *      1	Stéphane Delaune
   *      6	Frédéric Demians
-  *    241	Jonathan Druart
+  *    243	Jonathan Druart
   *      1	Rachel Dustin
   *     15	Nicole Engard
   *      6	Magnus Enger
   *      1	Vitor FERNANDES
-  *     35	Katrin Fischer
+  *     36	Katrin Fischer
   *      1	Amit Gupta
   *      1	Chris Hall
   *     95	Kyle M Hall
@@ -1093,7 +1096,7 @@ We thank the following individuals who contributed patches to Koha 3.16.0-rc.
   *      7	Pasi Kallinen
   *      3	Doug Kingston
   *      5	Olli-Antti Kivilahti
-  *     23	Bernardo Gonzalez Kriegel
+  *     24	Bernardo Gonzalez Kriegel
   *      2	Ketan Kulkarni
   *      1	Nicolas Legrand
   *    115	Owen Leonard
@@ -1135,16 +1138,16 @@ We thank the following individuals who contributed patches to Koha 3.16.0-rc.
   *      1	merllissia
   *      1	“ByWater
 
-We thank the following companies who contributed patches to Koha 3.16.0-rc
+We thank the following companies who contributed patches to Koha 3.16.0
   *     115 ACPL                                                                                          
-  *      35 BSZ BW                                                                                         
+  *      36 BSZ BW                                                                                         
   *       7 BSZ BW                                                                                            
-  *     336 BibLibre                                                                                    
+  *     338 BibLibre                                                                                    
   *      12 BigBallOfWax                                                                          
   *     113 ByWater-Solutions                                                                   
   *       1 C & P Bibliography                                                                    
   *      32 Catalyst                                                                                 
-  *     330 Equinox                                                                                   
+  *     332 Equinox                                                                                   
   *       1 Foundations                                                                              
   *       2 KohaAloha                                                                                  
   *       3 Libeo                                                                                          
@@ -1158,7 +1161,7 @@ We thank the following companies who contributed patches to Koha 3.16.0-rc
   *      21 Université Rennes 2
   *       1 Xercode                                                                                       
   *       2 abunchofthings.net
-  *       9 biblos.pk.edu.pl
+  *      10 biblos.pk.edu.pl
   *       1 bulac.fr
   *       1 bywatersolutions
   *       1 bywatersolutions.com”
@@ -1175,13 +1178,13 @@ We thank the following companies who contributed patches to Koha 3.16.0-rc
   *       7 pttk.fi
   *       3 randomnotes.org
   *       2 rot13.org                                                                                      
-  *     115 unidentified
+  *     116 unidentified
   *       3 veron.ch
   *       1 wegc.school.nz
   *       2 xtra.co.nz
 
 We also especially thank the following individuals who tested patches
-for Koha 3.16.0-rc.
+for Koha 3.16.0.
   *       1 Koha Team Lyon 3
   *       2 Koha team AMU
   *       3 Jacek Ablewicz
@@ -1202,19 +1205,19 @@ for Koha 3.16.0-rc.
   *       5 Broust
   *       1 Nathalie CHATILLON
   *       4 Jared Camins-Esakov
-  *    1301 Galen Charlton
+  *    1308 Galen Charlton
   *      21 David Cook
   *     156 Chris Cormack
   *       3 Charlene Criton
   *       1 Jen DeMuth
   *       1 Stephane Delaye
   *       3 Frédéric Demians
-  *     312 Jonathan Druart
+  *     314 Jonathan Druart
   *      12 Nicole C. Engard
   *       7 Magnus Enger
   *       1 Suzanne Fayle
   *       3 Aurelie Fichot
-  *     409 Katrin Fischer
+  *     411 Katrin Fischer
   *       2 Corey Fuimaono
   *      22 Brendan Gallagher
   *     239 Kyle M Hall
@@ -1225,7 +1228,7 @@ for Koha 3.16.0-rc.
   *       2 Pasi Kallinen
   *      15 Olli-Antti Kivilahti
   *       1 Barbara Knibbs
-  *      61 Bernardo Gonzalez Kriegel
+  *      63 Bernardo Gonzalez Kriegel
   *       1 Melissa Lefebvre
   *       4 Nicolas Legrand
   *       1 Leila
@@ -1247,7 +1250,7 @@ for Koha 3.16.0-rc.
   *      10 Dobrica Pavlinusic
   *       3 Paul Poulain
   *       7 Liz Rea
-  *      54 Martin Renvoize
+  *      56 Martin Renvoize
   *       1 Chris Rohde
   *       4 Benjamin Rokseth
   *     118 Marcel de Rooy
@@ -1309,4 +1312,4 @@ tracker at
 He rau ringa e oti ai.
 (Many hands finish the work)
 
-##### Autogenerated release notes updated last on 19 May 2014 23:11:24 Z #####
+##### Autogenerated release notes updated last on 22 May 2014 17:09:57 Z #####
