@@ -1,0 +1,91 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; SRU Search fields mapping</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        $("#form01").submit(function(event) {
+            if(window.opener) {
+                var newmap=allInputs();
+                window.opener.$('#show_sru_fields').val(newmap);
+                window.close();
+            } else {
+                // In this case not called as a popup. Just do nothing.
+                event.preventDefault();
+            }
+        });
+    });
+    function allInputs () {
+        var aInput= new Array();
+        $("form :input").each(function() {
+            if( this.id && $(this).val() ) {
+                aInput.push(this.id+'='+$(this).val());
+            }
+        });
+        return aInput.join(',');
+    }
+//]]>
+</script>
+</head>
+
+<body id="sru_modmapping">
+<div id="custom-doc" class="yui-t7">
+
+    <div id="bd">
+        <h1>Modify SRU Search fields mapping</h1>
+        <form id="form01" method="post">
+            <fieldset class="rows">
+                <legend>Legend </legend>
+                <ul>
+                <li>
+                <label for="Title">Title: </label>
+                <input id="title" type="text" value="[% mapping.title %]" />
+                </li>
+                <li>
+                <label for="ISBN">ISBN: </label>
+                <input id="isbn" type="text" value="[% mapping.isbn %]" />
+                </li>
+                <li>
+                <label for="LCCall">LC Call No: </label>
+                <input id="lccall" type="text" value="[% mapping.lccall %]" />
+                </li>
+                <li>
+                <label for="Control number">Control no: </label>
+                <input id="controlnumber" type="text" value="[% mapping.controlnumber %]" />
+                </li>
+                <li>
+                <label for="Any">Any: </label>
+                <input id="srchany" type="text" value="[% mapping.srchany %]" />
+                </li>
+                <li>
+                <label for="Author">Author: </label>
+                <input id="author" type="text" value="[% mapping.author %]" />
+                </li>
+                <li>
+                <label for="ISSN">ISSN: </label>
+                <input id="issn" type="text" value="[% mapping.issn %]" />
+                </li>
+                <li>
+                <label for="Subject">Subject: </label>
+                <input id="subject" type="text" value="[% mapping.subject %]" />
+                </li>
+                <li>
+                <label for="Dewey">Dewey: </label>
+                <input id="dewey" type="text" value="[% mapping.dewey %]" />
+                </li>
+                <li>
+                <label for="Standard ID">Standard ID: </label>
+                <input id="stdid" type="text" value="[% mapping.stdid %]" />
+                </li>
+
+                </ul>
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" value="Save" class="submit" />
+                <a class="close cancel" href="#">Cancel</a>
+            </fieldset>
+        </form>
+    </div>
+
+[% INCLUDE 'intranet-bottom.inc' %]
