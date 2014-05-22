@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF ( op_add ) %]Enter a new purchase suggestion[% END %]
 [% IF ( op_else ) %]Purchase Suggestions[% END %]
@@ -205,6 +206,7 @@
                                                         [% ELSIF ( suggestions_loo.REJECTED ) %]Suggestion declined
                                                         [% ELSIF ( suggestions_loo.AVAILABLE ) %]Available in the library
                                                         [% ELSE %] [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) %] [% END %]
+                                                        [% IF ( suggestions_loo.reason ) %]([% suggestions_loo.reason |html %])[% END %]
                                                     </td>
                                                 </tr>
                                             [% END # / FOREACH suggestions_loo %]
