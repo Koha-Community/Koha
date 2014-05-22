@@ -184,7 +184,8 @@
                                                 </td>[% END # / IF JacketImages %]
 
                                                 <td class="title">
-                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber %]">[% ISSUE.title |html %]</a> <span class="item-details">[% ISSUE.author %]</span>
+                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber %]">[% ISSUE.title |html %] [% FOREACH subtitl IN ISSUE.subtitle %] [% subtitl.subfield %][% END %]</a>
+                                                    <span class="item-details">[% ISSUE.author %]</span>
                                                 </td>
                                                 [% IF ( ISSUE.overdue ) %]
                                                     <td class="date_due overdue">
@@ -338,7 +339,7 @@
                                                 <td><img src="[% themelang %]/images/[% WAITIN.itemtype %].gif" alt="[% WAITIN.itemtype %]" title="[% WAITIN.itemtype %]" /></td>
                                                 <td>
                                                     <a class="title" href="opac-detail.pl?biblionumber=[% WAITIN.biblionumber %]">
-                                                        [% WAITIN.waiting_title %]
+                                                        [% WAITIN.waiting_title %] [% FOREACH subtitl IN WAITIN.subtitle %] [% subtitl.subfield %][% END %]
                                                     </a>
                                                     <span class="item-details">
                                                         [% WAITIN.author %]
@@ -422,7 +423,7 @@
                                                 [% END # /IF jacketcell %]
 
                                                 <td>
-                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?bib=[% OVERDUE.biblionumber %]">[% OVERDUE.title |html %]
+                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?bib=[% OVERDUE.biblionumber %]">[% OVERDUE.title |html %] [% FOREACH subtitl IN OVERDUE.subtitle %] [% subtitl.subfield %][% END %]
                                                     </a>
                                                     <span class="item-details">[% OVERDUE.author %]</span></td>
 
@@ -520,7 +521,7 @@
                                             <tr>
                                         [% END %]
                                             <td class="title">
-                                                <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RESERVE.biblionumber %]">[% RESERVE.reserves_title %]</a>
+                                                <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RESERVE.biblionumber %]">[% RESERVE.reserves_title %] [% FOREACH subtitl IN RESERVE.subtitle %] [% subtitl.subfield %][% END %]</a>
                                                 [% RESERVE.author %]
                                             </td>
                                             <td class="reservedate">
