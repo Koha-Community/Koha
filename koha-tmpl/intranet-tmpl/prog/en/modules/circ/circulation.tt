@@ -252,6 +252,8 @@ $(document).ready(function() {
 [% IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
 
+[% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
+
 [% IF ( RESERVED ) %]
     <p>
     <input type="checkbox" id="cancelreserve" name="cancelreserve" value="cancel" />
@@ -291,6 +293,7 @@ $(document).ready(function() {
 [% END %]
 
 <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
+    [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
@@ -340,6 +343,7 @@ $(document).ready(function() {
                 [% FOREACH book IN options %]
                     <br />
                     <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
+                    [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
                         <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
                         <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
                         <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
@@ -420,11 +424,20 @@ $(document).ready(function() {
         [% END %]
         </ul>
 
+        [% IF (forceallow) %]
+            <li>Debarment overridden temporarily</li>
+        [% END %]
+
 </div></div>
 [% ELSE %]
 [% IF ( soundon ) %]
 <audio src="[% interface %]/[% theme %]/sound/beep.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
 [% END %]
+
+  [% IF (forceallow) %]
+      <div id="overridden_debarment" class="dialog alert">Debarment overridden temporarily</div>
+  [% END %]
+
     [% END %] <!-- /impossible -->
 
 [% IF ( issued ) %]
@@ -446,6 +459,7 @@ No patron matched <span class="ex">[% message %]</span>
 <fieldset id="circ_circulation_selectborrower" class="brief">
     <legend>Patron selection</legend>
 
+[% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
     <input type="hidden" name="branch" value="[% branch %]" />
     <input type="hidden" name="printer" value="[% printer %]" />
     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
@@ -483,6 +497,8 @@ No patron matched <span class="ex">[% message %]</span>
     [% IF ( DisplayClearScreenButton ) %]
         <span id="clearscreen"><a href="/cgi-bin/koha/circ/circulation.pl" title="Clear screen">x</a></span>
     [% END %]
+
+    [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
 
     <label for="barcode">Checking out to [% INCLUDE 'patron-title.inc' %]</label>
 
@@ -541,6 +557,8 @@ No patron matched <span class="ex">[% message %]</span>
 		<h3>[% IF ( noissues ) %]
 		        Cannot check out!
 		[% ELSE %]Attention:[% END %]</h3>
+
+
 		<ul>
 
 			[% IF ( warndeparture ) %]
@@ -609,6 +627,13 @@ No patron matched <span class="ex">[% message %]</span>
 
 
 			</ul>
+
+[% IF (noissues && borrowernumber) %]
+<div class="override_debarment">
+<a href="/cgi-bin/koha/circ/circulation.pl?forceallow=1&amp;borrowernumber=[% borrowernumber %]" class="btn btn-small">Override debarment temporarily</a>
+</div>
+[% END %]
+
         </div>
 
 			[% IF ( WaitingReserveLoop ) %]

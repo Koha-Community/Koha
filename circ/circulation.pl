@@ -97,6 +97,16 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
 
 my $branches = GetBranches();
 
+my $force_allow_issue = $query->param('forceallow') || 0;
+
+my @failedrenews = $query->param('failedrenew');    # expected to be itemnumbers
+our %renew_failed = ();
+for (@failedrenews) { $renew_failed{$_} = 1; }
+
+my @failedreturns = $query->param('failedreturn');
+our %return_failed = ();
+for (@failedreturns) { $return_failed{$_} = 1; }
+
 my $findborrower = $query->param('findborrower') || q{};
 $findborrower =~ s|,| |g;
 my $borrowernumber = $query->param('borrowernumber');
@@ -235,7 +245,8 @@ if ($borrowernumber) {
         #borrowercard expired, no issues
         $template->param(
             flagged  => "1",
-            noissues => "1",
+            noissues => ($force_allow_issue) ? 0 : "1",
+            forceallow => $force_allow_issue,
             expired => "1",
             renewaldate => format_date("$renew_year-$renew_month-$renew_day")
         );
@@ -328,7 +339,7 @@ if ($barcode) {
         );
         $blocker = 1;
     }
-    if( !$blocker ){
+    if( !$blocker || $force_allow_issue ){
         my $confirm_required = 0;
         unless($issueconfirmed){
             #  Get the item title for more information
@@ -400,7 +411,8 @@ foreach my $flag ( sort keys %$flags ) {
     $flags->{$flag}->{'message'} =~ s#\n#<br />#g;
     if ( $flags->{$flag}->{'noissues'} ) {
         $template->param(
-            noissues => 'true',
+            noissues => ($force_allow_issue) ? 0 : 'true',
+            forceallow => $force_allow_issue,
         );
         if ( $flag eq 'GNA' ) {
             $template->param( gna => 'true' );
