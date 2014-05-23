@@ -352,6 +352,51 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 club_enrollments
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ClubEnrollment>
+
+=cut
+
+__PACKAGE__->has_many(
+  "club_enrollments",
+  "Koha::Schema::Result::ClubEnrollment",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 club_templates
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ClubTemplate>
+
+=cut
+
+__PACKAGE__->has_many(
+  "club_templates",
+  "Koha::Schema::Result::ClubTemplate",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 clubs
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Club>
+
+=cut
+
+__PACKAGE__->has_many(
+  "clubs",
+  "Koha::Schema::Result::Club",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 collections
 
 Type: has_many
@@ -543,8 +588,8 @@ Composing rels: L</branchrelations> -> categorycode
 __PACKAGE__->many_to_many("categorycodes", "branchrelations", "categorycode");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-24 13:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/9YwsU+GXK+fzc6IX2Tj5g
+# Created by DBIx::Class::Schema::Loader v0.07040 @ 2015-01-12 09:56:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lvjA8x8u5RKeZQ0+uiLm7A
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

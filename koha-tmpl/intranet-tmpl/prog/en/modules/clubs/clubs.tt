@@ -1,0 +1,252 @@
+[% USE Branches %]
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Tools &rsaquo; Patron clubs</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
+
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        tTable = $('#club-templates-table').dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sPaginationType": "four_button",
+            "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
+            "aoColumnDefs": [
+                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+            ]
+        } ));
+
+        cTable = $('#clubs-table').dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sPaginationType": "four_button",
+            "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
+            "aoColumnDefs": [
+                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+            ]
+        } ));
+    });
+
+    function ConfirmDeleteTemplate( id, name, a ) {
+        if ( confirm( _("Are you sure you want to delete the club template %s?" ).format(name) ) ) {
+            $.ajax({
+                type: "POST",
+                url: '/cgi-bin/koha/svc/club/template/delete',
+                data: { id: id },
+                success: function( data ) {
+                    if ( data.success ) {
+                        tTable.fnDeleteRow(a.closest("tr")[0]);
+                    } else {
+                        alert(_("Unable to delete template!"));
+                    }
+                },
+                dataType: 'json'
+            });
+        }
+    }
+
+    function ConfirmDeleteClub( id, name, a ) {
+        if ( confirm( _("Are you sure you want to delete the club %s?" ).format(name) ) ) {
+            $.ajax({
+                type: "POST",
+                url: '/cgi-bin/koha/svc/club/delete',
+                data: { id: id },
+                success: function( data ) {
+                    if ( data.success ) {
+                        cTable.fnDeleteRow(a.closest("tr")[0]);
+                    } else {
+                        alert(_("Unable to delete club!"));
+                    }
+                },
+                dataType: 'json'
+            });
+        }
+    }
+//]]>
+</script>
+
+</head>
+
+<body id="clubs_clubs" class="clubs">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Patron clubs</div>
+
+<div id="doc3" class="yui-t2">
+   <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b">
+                <h1>Patron clubs</h1>
+
+                [% IF club_template %]
+                    <div class="dialog message">
+                        [% IF stored == 'updated' %]
+                            <p>Club template <i>[% club_template.name %]</i> was updated.</p>
+                        [% ELSE %]
+                            <p>Club template <i>[% club_template.name %]</i> was saved.</p>
+                        [% END %]
+                    </div>
+                [% ELSIF club %]
+                    <div class="dialog message">
+                        [% IF stored == 'updated' %]
+                            <p>Club <i>[% club.name %]</i> was updated.</p>
+                        [% ELSE %]
+                            <p>Club <i>[% club.name %]</i> was saved.</p>
+                        [% END %]
+                    </div>
+                [% END %]
+
+                <h3>Club templates</h3>
+
+                [% IF CAN_user_clubs_edit_templates %]
+                    <div class="btn-toolbar">
+                        <div class="btn-group">
+                            <a class="btn btn-default" href="templates-add-modify.pl"><i class="fa fa-plus"></i> New club template</a>
+                        </div>
+                    </div>
+                [% END %]
+
+                <table id="club-templates-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Public enrollment</th>
+                            <th>Email required</th>
+                            <th>Library</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        [% IF club_templates %]
+                            [% FOREACH t IN club_templates %]
+                                <tr>
+                                    <td>[% t.name %]</td>
+                                    <td>[% t.description %]</td>
+                                    <td>
+                                        [% IF t.is_enrollable_from_opac %]
+                                            Yes
+                                        [% ELSE %]
+                                            No
+                                        [% END %]
+                                    </td>
+                                    <td>
+                                        [% IF t.is_email_required %]
+                                            Yes
+                                        [% ELSE %]
+                                            No
+                                        [% END %]
+                                    </td>
+                                    <td>[% Branches.GetName( t.branchcode ) %]</td>
+                                    <td>
+                                        [% IF CAN_user_clubs_edit_templates %]
+                                            <a class="btn btn-default" style="white-space:nowrap"  href="templates-add-modify.pl?id=[% t.id %]">
+                                                <i class="fa fa-edit"></i> Edit
+                                            </a>
+                                        [% END %]
+                                    </td>
+                                    <td>
+                                        [% IF CAN_user_clubs_edit_templates %]
+                                            <a class="btn btn-default" href="#" onclick='ConfirmDeleteTemplate([% t.id %], "[% t.name | html %]", $(this) ); return false;'>
+                                                <i class="fa fa-trash"></i> Delete
+                                            </a>
+                                        [% END %]
+                                    </td>
+                                </tr>
+                            [% END %]
+                        [% ELSE %]
+                            <tr>
+                                <td colspan="7">
+                                    No club templates defined.
+                                </td>
+                            </td>
+                        [% END %]
+                    </tbody>
+                </table>
+
+                <h3>Clubs</h3>
+
+                [% IF CAN_user_clubs_edit_clubs %]
+                    <div class="btn-toolbar">
+                        <div class="btn-group">
+                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New club <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                [% FOREACH t IN club_templates %]
+                                    <li><a href="/cgi-bin/koha/clubs/clubs-add-modify.pl?club_template_id=[% t.id %]">[% t.name %]</a></li>
+                                [% END %]
+                            </ul>
+                        </div>
+                    </div>
+                [% END %]
+
+                <table id="clubs-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Template</th>
+                            <th>Description</th>
+                            <th>Public enrollment</th>
+                            <th>Email required</th>
+                            <th>Library</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        [% IF clubs %]
+                            [% FOREACH c IN clubs %]
+                                <tr>
+                                    <td>[% c.name %]</td>
+                                    <td>[% c.club_template.name %]</td>
+                                    <td>[% c.description %]</td>
+                                    <td>
+                                        [% IF c.club_template.is_enrollable_from_opac %]
+                                            Yes
+                                        [% ELSE %]
+                                            No
+                                        [% END %]
+                                    </td>
+                                    <td>
+                                        [% IF c.club_template.is_email_required %]
+                                            Yes
+                                        [% ELSE %]
+                                            No
+                                        [% END %]
+                                    </td>
+                                    <td>[% Branches.GetName( c.branchcode ) %]</td>
+                                    <td>
+                                        [% IF CAN_user_clubs_edit_clubs %]
+                                            <a class="btn btn-default" style="white-space:nowrap" href="clubs-add-modify.pl?id=[% c.id %]">
+                                                <i class="fa fa-edit"></i> Edit
+                                            </a>
+                                        [% END %]
+                                    </td>
+                                    <td>
+                                        [% IF CAN_user_clubs_edit_clubs %]
+                                            <a class="btn btn-default" href="#" onclick='ConfirmDeleteClub([% c.id %], "[% c.name | html %]", $(this) ); return false;'>
+                                                <i class="fa fa-trash"></i> Delete
+                                            </a>
+                                        [% END %]
+                                    </td>
+                                </tr>
+                            [% END %]
+                        [% ELSE %]
+                            <tr>
+                                <td colspan="8">
+                                    No club templates defined.
+                                </td>
+                            </td>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="yui-b noprint">
+            [% INCLUDE 'tools-menu.inc' %]
+        </div>
+    </div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -35,6 +35,7 @@ use Koha::Patron::HouseboundRole;
 use Koha::Patron::Images;
 use Koha::Patrons;
 use Koha::Virtualshelves;
+use Koha::Club::Enrollments;
 
 use base qw(Koha::Object);
 
@@ -582,6 +583,43 @@ sub holds {
     my ($self) = @_;
     my $holds_rs = $self->_result->reserves->search( {}, { order_by => 'reservedate' } );
     return Koha::Holds->_new_from_dbic($holds_rs);
+}
+
+=head3 first_valid_email_address
+
+=cut
+
+sub first_valid_email_address {
+    my ($self) = @_;
+
+    return $self->email() || $self->emailpro() || $self->B_email() || q{};
+}
+
+=head3 get_club_enrollments
+
+=cut
+
+sub get_club_enrollments {
+    my ($self) = @_;
+
+    return Koha::Club::Enrollments->search( { borrowernumber => $self->borrowernumber(), date_canceled => undef } );
+}
+
+=head3 get_enrollable_clubs
+
+=cut
+
+sub get_enrollable_clubs {
+    my ( $self, $is_enrollable_from_opac ) = @_;
+
+    my $params;
+    $params->{is_enrollable_from_opac} = $is_enrollable_from_opac
+      if $is_enrollable_from_opac;
+    $params->{is_email_required} = 0 unless $self->first_valid_email_address();
+
+    $params->{borrower} = $self;
+
+    return Koha::Clubs->get_enrollable($params);
 }
 
 =head3 type

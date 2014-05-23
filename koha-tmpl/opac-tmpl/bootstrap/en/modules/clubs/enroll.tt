@@ -1,0 +1,66 @@
+[% USE AuthorisedValues %]
+[% SET AuthorisedValuesCategories = AuthorisedValues.GetCategories %]
+
+<h3>
+    Enroll in <i>[% club.name %]</i>
+</h3>
+
+<div class="container">
+    <form id="patron-enrollment-form">
+        <input type="hidden" name="id" value="[% club.id %]" />
+        <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+        <fieldset class="rows">
+            <ol>
+                [% FOREACH f IN club.club_template.club_template_enrollment_fields %]
+                    <li>
+                        <label>[% f.name %]</label>
+                        [% IF f.authorised_value_category %]
+                            <select name="[% f.id %]">
+                                [% FOREACH a IN AuthorisedValues.Get( f.authorised_value_category ) %]
+                                    <option value="[% a.authorised_value %]">[% a.lib %]</option>
+                                [% END %]
+                            </select>
+                        [% ELSE %]
+                            <input type="text" name="[% f.id %]" />
+                        [% END %]
+                        <span class="hint">[% f.description %]</span>
+                    </li>
+                [% END %]
+
+                <li>
+                    <a href="#" class="btn btn-default" onclick="addEnrollment(); return false;"><i class="fa fa-plus"></i> Enroll</a>
+                    <a href="#" onclick="showClubs(); return false;">Cancel</a>
+                </li>
+            </ol>
+        </fieldset>
+    </form>
+</div>
+
+<script type="text/javascript">
+function addEnrollment() {
+    $("body").css("cursor", "progress");
+    $.ajax({
+        type: "POST",
+        url: '/cgi-bin/koha/svc/club/enroll',
+        data: $( "#patron-enrollment-form" ).serialize(),
+        success: function( data ) {
+            if ( data.success ) {
+                $('#opac-user-clubs').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrowernumber %]&id=[% club.id %]', function() {
+                    $("body").css("cursor", "default");
+                });
+            } else {
+                alert(_("Unable to create enrollment!"));
+            }
+        },
+        dataType: 'json'
+    });
+    return false;
+}
+
+function showClubs() {
+    $("body").css("cursor", "progress");
+    $('#opac-user-clubs').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrowernumber %]&id=[% club.id %]', function() {
+        $("body").css("cursor", "default");
+    });
+}
+</script>
