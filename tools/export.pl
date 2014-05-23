@@ -85,7 +85,7 @@ export.pl [--format=format] [--date=date] [--record-type=TYPE] [--dont_export_it
 
  --clean                removes NSE/NSB
 
- --id_list_file=PATH    PATH is an absolute path to a file containing a list of
+ --id_list_file=PATH    PATH is a path to a file containing a list of
                         IDs(biblionumber or authid) with only one ID per line.
                         This IDs list works as a filter: it's compatible with
                         other parameters
