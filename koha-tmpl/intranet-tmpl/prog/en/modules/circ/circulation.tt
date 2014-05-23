@@ -94,6 +94,13 @@ $(document).ready(function() {
         }
     });
 
+    if ( $('#clubs-tab').length ) {
+        $('#clubs-tab-link').on('click', function() {
+            $('#clubs-tab').text(_("Loading..."));
+            $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber %]');
+        });
+    }
+
     [% IF !( CircAutoPrintQuickSlip == 'clear' ) %]
         // listen submit to trigger qslip on empty checkout
         $('#mainform').bind('submit',function() {
@@ -888,6 +895,16 @@ No patron matched <span class="ex">[% message | html %]</span>
         [% END %]
     </li>
 
+    [% SET enrollments = patron.get_club_enrollments.size || 0 %]
+    [% SET enrollable  = patron.get_enrollable_clubs.size || 0 %]
+    [% IF CAN_user_clubs && ( enrollable || enrollments ) %]
+        <li>
+            <a id="clubs-tab-link" href="#clubs-tab">
+                Clubs ([% enrollments %]/[% enrollable %])
+            </a>
+        </li>
+    [% END %]
+
     [% IF relatives_issues_count %]
         <li><a id="relatives-issues-tab" href="#relatives-issues">Relatives' checkouts</a></li>
     [% END %]
@@ -933,6 +950,12 @@ No patron matched <span class="ex">[% message | html %]</span>
                 </tr>
             </thead>
         </table>
+    </div>
+[% END %]
+
+[% IF CAN_user_clubs && ( enrollable || enrollments ) %]
+    <div id="clubs-tab">
+        Loading...
     </div>
 [% END %]
 

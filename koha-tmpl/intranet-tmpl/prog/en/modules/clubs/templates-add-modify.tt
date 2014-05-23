@@ -1,0 +1,216 @@
+[% USE Branches %]
+[% USE AuthorisedValues %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Tools &rsaquo; Patron clubs &rsaquo; Club template</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="clubs_templates_add_modify" class="clubs">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="clubs.pl">Patron clubs</a> &rsaquo; Add / modify club template</div>
+
+<div class="yui-t7">
+    <div class="yui-main">
+        <form method="post" class="validated">
+            <input type="hidden" name="id" value="[% club_template.id %]" />
+
+            <fieldset class="rows">
+
+                <legend>
+                    [% IF club_template %]
+                        Modify club template <i>[% club_template.name %]</i>
+                    [% ELSE %]
+                        Create a new club template
+                    [% END %]
+                </legend>
+
+                <ol>
+                    <li>
+                        <label class="required" for="name">Name:</label>
+                        <input id="club-template-name" name="name" type="text" value="[% club_template.name %]" required="required"/>
+                        <span class="required">Required</span>
+                    </li>
+
+                    <li>
+                        <label for="description">Description:</label>
+                        <input id="club-template-description" name="description" type="text" value="[% club_template.description %]" />
+                    </li>
+
+                    <li>
+                        <label for="is_enrollable_from_opac">Allow public enrollment:</label>
+                        [% IF club_template.is_enrollable_from_opac %]
+                            <input type="checkbox" id="club-template-is-enrollable-from-opac" name="is_enrollable_from_opac" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" id="club-template-is-enrollable-from-opac" name="is_enrollable_from_opac" />
+                        [% END %]
+                        <span class="hint">If a template allows public enrollment, patrons can enroll in a club based on this template from the public catalog.</span>
+                    </li>
+
+                    <li>
+                        <label for="is_email_required">Require valid email address:</label>
+                        [% IF club_template.is_email_required %]
+                            <input type="checkbox" id="club-template-is-email-required" name="is_email_required" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" id="club-template-is-email-required" name="is_email_required" />
+                        [% END %]
+                        <span class="hint">If set, a club based on this template can only be enrolled in by patrons with a valid email address.</span>
+                    </li>
+
+                    <li>
+                        <label for="branchcode">Library:</label>
+                        <select name="branchcode" id="club-template-branchcode">
+                            <option value="">&nbsp</option>
+                            [% PROCESS options_for_libraries libraries => Branches.all( selected => club_template.branchcode ) %]
+                        </select>
+                        <span class="hint">If set, only librarians logged in with this branch will be able to modify this club template.</span>
+                    </li>
+
+                </ol>
+
+                <h2>Club fields:</h2>
+                <p><span class="hint">These fields will be used in the creation of clubs based on this template</span></p>
+                <span id="club-template-fields">
+                    [% FOREACH f IN club_template.club_template_fields %]
+                        <ul>
+                            <input type="hidden" name="club_template_field_id" value="[% f.id %]" />
+                            <li>
+                                <label for="field-name-[% f.id %]">Name:</label>
+                                <input name="club_template_field_name" id="field-name-[% f.id %]" value="[% f.name %]" />
+                            </li>
+
+                            <li>
+                                <label for="field-description-[% f.id %]">Description:</label>
+                                <input name="club_template_field_description" id="field-description-[% f.id %]" value="[% f.description %]" />
+                            </li>
+
+                            <li>
+                                <label for="field-description-[% f.id %]">Authorised value category:</label>
+                                <select name="club_template_field_authorised_value_category" id="field-authorised-value-category-[% f.id %]">
+                                    <option value="">&nbsp;</option>
+                                    [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => f.authorised_value_category) %]
+                                </select>
+                            </li>
+
+                            <li>
+                                <label for="field-delete-[% f.id %]">Delete field:</label>
+                                <input type="checkbox" name="club_template_field_delete" id="field-delete-[% f.id %]" value="[% f.id %]" />
+                            </li>
+
+                            <hr/>
+                        </ul>
+                    [% END %]
+                </span>
+                <div class="btn-toolbar">
+                    <a href="#" class="btn btn-default" onclick="$('#new-field-template').clone().attr('id','').show().appendTo('#club-template-fields'); return false;">
+                        <i class="fa fa-plus"></i> Add new field
+                    </a>
+                </div>
+
+                <h2>Enrollment fields:</h2>
+                <p><span class="hint">These fields will be used when enrolling a patron in a club based on this template</span></p>
+                <span id="club-template-enrollment-fields">
+                    [% FOREACH f IN club_template.club_template_enrollment_fields %]
+                        <ul>
+                            <input type="hidden" name="club_template_enrollment_field_id" value="[% f.id %]" />
+                            <li>
+                                <label for="enrollment-field-name-[% f.id %]">Name:</label>
+                                <input name="club_template_enrollment_field_name" id="enrollment-field-name-[% f.id %]" value="[% f.name %]" />
+                            </li>
+
+                            <li>
+                                <label for="enrollment-field-description-[% f.id %]">Description:</label>
+                                <input name="club_template_enrollment_field_description" id="enrollment-field-description-[% f.id %]" value="[% f.description %]" />
+                            </li>
+
+                            <li>
+                                <label for="enrollment-field-description-[% f.id %]">Authorised value category:</label>
+                                <select name="club_template_enrollment_field_authorised_value_category" id="enrollment-field-authorised-value-category-[% f.id %]">
+                                    <option value="">&nbsp;</option>
+                                    [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => f.authorised_value_category) %]
+                                </select>
+                            </li>
+
+                            <li>
+                                <label for="enrollment-field-delete-[% f.id %]">Delete field:</label>
+                                <input type="checkbox" name="club_template_enrollment_field_delete" id="enrollment-field-delete-[% f.id %]" value="[% f.id %]" />
+                            </li>
+
+                            <hr/>
+                        </ul>
+                    [% END %]
+                </span>
+                <div class="btn-toolbar">
+                    <a href="#" class="btn btn-default" onclick="$('#new-enrollment-field-template').clone().attr('id','').show().appendTo('#club-template-enrollment-fields'); return false;">
+                        <i class="fa fa-plus"></i> Add new field
+                    </a>
+                </div>
+
+            </fieldset>
+
+            <fieldset class="action">
+                <input type="hidden" name="id" value="[% club_template.id %]" />
+                <input type="submit" class="btn btn-default" value="Save" />
+                <a href="clubs.pl" class="cancel">Cancel</a>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+<span id="new-field-template" style="display:none">
+    <ul>
+        <input type="hidden" name="club_template_field_id" value="" />
+
+        <li>
+            <label for="club_template_field_name">Name:</label>
+            <input name="club_template_field_name" />
+        </li>
+
+        <li>
+            <label for="club_template_field_description">Description:</label>
+            <input name="club_template_field_description" />
+        </li>
+
+        <li>
+            <label for="club_template_field_authorised_value_category">Authorised value category:</label>
+            <select name="club_template_field_authorised_value_category">
+                <option value="">&nbsp;</option>
+                [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories() %]
+            </select>
+        </li>
+
+        <a href="#" onclick="$(this).parent().remove(); return false;">Cancel</a>
+
+        <hr/>
+    </ul>
+</span>
+
+<span id="new-enrollment-field-template" style="display:none">
+    <ul>
+        <input type="hidden" name="club_template_enrollment_field_id" value="" />
+
+        <li>
+            <label for="club_template_enrollment_field_name">Name:</label>
+            <input name="club_template_enrollment_field_name" />
+        </li>
+
+        <li>
+            <label for="club_template_enrollment_field_description">Description:</label>
+            <input name="club_template_enrollment_field_description" />
+        </li>
+
+        <li>
+            <label for="club_template_enrollment_field_authorised_value_category">Authorised value category:</label>
+            <select name="club_template_enrollment_field_authorised_value_category">
+                <option value="">&nbsp;</option>
+                [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories() %]
+            </select>
+        </li>
+
+        <a href="#" onclick="$(this).parent().remove(); return false;">Cancel</a>
+
+        <hr/>
+    </ul>
+</span>
+
+[% INCLUDE 'intranet-bottom.inc' %]

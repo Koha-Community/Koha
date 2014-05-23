@@ -78,5 +78,8 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (19, 'tool', 'Use tool plugins'),
    (19, 'report', 'Use report plugins'),
    (19, 'configure', 'Configure plugins'),
-   (20, 'delete_public_lists', 'Delete public lists')
+   (20, 'delete_public_lists', 'Delete public lists'),
+   (21, 'edit_templates', 'Create and update club templates'),
+   (21, 'edit_clubs', 'Create and update clubs'),
+   (21, 'enroll', 'Enroll patrons in clubs')
 ;

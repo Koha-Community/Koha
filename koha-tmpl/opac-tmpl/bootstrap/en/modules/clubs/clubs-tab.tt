@@ -1,0 +1,102 @@
+[% USE KohaDates %]
+
+[% IF enrollments %]
+    <table id="clubs-table-enrolled" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th colspan="4">
+                    Clubs you are currently enrolled in
+                </th>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Date enrolled</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            [% FOREACH e IN enrollments %]
+                <tr>
+                    <td>[% e.club.name %]</td>
+                    <td>[% e.club.description %]</td>
+                    <td>[% e.date_enrolled | $KohaDates %]</td>
+                    [% IF e.club.club_template.is_enrollable_from_opac %]
+                        <td>
+                            <a class="btn btn-xs" onclick="cancelEnrollment( [% e.id %] )">
+                                <i class="icon-remove"></i> Cancel
+                            </a>
+                        </td>
+                    [% END %]
+                </tr>
+            [% END %]
+        </tbody>
+    </table>
+[% END %]
+
+[% IF clubs %]
+    <table id="clubs-table-unenrolled" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th colspan="3">
+                    Clubs you can enroll in
+                </th>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            [% FOREACH c IN clubs %]
+                <tr>
+                    <td>[% c.name %]</td>
+                    <td>[% c.description %]</td>
+                    <td>
+                        [% IF !c.club_template.is_email_required || ( c.club_template.is_email_required && borrower.FirstValidEmailAddress ) %]
+                            <a class="btn btn-xs" onclick="loadEnrollmentForm([% c.id %])">
+                                <i class="icon-plus"></i> Enroll
+                            </a>
+                        [% ELSE %]
+                            <span class="hint">You must have an email address to enroll</span>
+                        [% END %]
+                    </td>
+                </tr>
+            [% END %]
+        </tbody>
+    </table>
+[% END %]
+
+<script type="text/javascript">
+function loadEnrollmentForm( id ) {
+    $("body").css("cursor", "progress");
+    $('#opac-user-clubs').load('/cgi-bin/koha/clubs/enroll.pl?borrowernumber=[% borrower.borrowernumber %]&id=' + id, function() {
+        $("body").css("cursor", "default");
+    });
+
+    return false;
+}
+
+function cancelEnrollment( id ) {
+    $("body").css("cursor", "progress");
+    $.ajax({
+        type: "POST",
+        url: '/cgi-bin/koha/svc/club/cancel_enrollment',
+        data: { id: id },
+        success: function( data ) {
+            if ( data.success ) {
+                $('#opac-user-clubs').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrower.borrowernumber %]', function() {
+                    $("body").css("cursor", "default");
+                });
+            } else {
+                alert(_("Unable to cancel enrollment!"));
+            }
+        },
+        dataType: 'json'
+    });
+    return false;
+}
+</script>

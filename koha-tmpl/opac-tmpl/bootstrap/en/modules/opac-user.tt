@@ -82,7 +82,7 @@ Using this account is not recommended because some parts of Koha will not functi
                                     [% ELSIF error == 'too_soon' %]
                                         It is too soon after the checkout date for this item to be renewed.
                                     [% ELSIF error == 'on_reserve' %]
-                                        This item is on hold for another patron.
+                                        This item is on hold for another borrower.
                                     [% END %]
                                 [% END %]
                             </span>
@@ -133,6 +133,15 @@ Using this account is not recommended because some parts of Koha will not functi
                                 [% IF ( BORROWER_INFO.amountoverzero ) %]<li><a href="#opac-user-fines">Fines ([% amountoutstanding | $Price %])</a></li>[% END %]
                                 [% IF ( BORROWER_INFO.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% amountoutstanding | $Price %])</a></li>[% END %]
                             [% END %]
+
+                            [% IF borrower.get_club_enrollments.size || borrower.get_enrollable_clubs(1).size %]
+                                <li>
+                                    <a id="opac-user-clubs-tab-link" href="#opac-user-clubs">
+                                        Clubs ([% borrower.get_club_enrollments.size %]/[% borrower.get_enrollable_clubs(1).size || 0 %])
+                                    </a>
+                                </li>
+                            [% END %]
+
                             [% IF ( RESERVES.count ) %]<li><a href="#opac-user-holds">Holds ([% RESERVES.count %])</a></li>[% END %]
                             [% IF Koha.Preference('ArticleRequests') && borrower.article_requests_current %]<li><a href="#opac-user-article-requests">Article requests ([% borrower.article_requests_current.count %])</a></li>[% END %]
                             [% IF ( OverDriveCirculation ) %]
@@ -318,6 +327,12 @@ Using this account is not recommended because some parts of Koha will not functi
                                 </table>
                             [% END # IF issues_count %]
                         </div> <!-- / .opac-user-checkouts -->
+
+                        [% IF borrower.get_club_enrollments_count.size || borrower.get_enrollable_clubs(1).size %]
+                            <div id="opac-user-clubs">
+                                Loading...
+                            </div>
+                        [% END %]
 
                         [% IF ( OPACFinesTab ) %]
                             <!-- FINES BOX -->
@@ -905,6 +920,13 @@ Using this account is not recommended because some parts of Koha will not functi
             [% END %]
 
             $( ".suspend-until" ).datepicker({ minDate: 1 }); // Require that "until date" be in the future
+
+            if ( $('#opac-user-clubs').length ) {
+                $('#opac-user-clubs-tab-link').on('click', function() {
+                    $('#opac-user-clubs').text(_("Loading..."));
+                    $('#opac-user-clubs').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrowernumber %]');
+                });
+            }
         });
         //]]>
     </script>

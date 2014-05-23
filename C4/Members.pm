@@ -989,20 +989,10 @@ addresses.
 
 sub GetFirstValidEmailAddress {
     my $borrowernumber = shift;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( "SELECT email, emailpro, B_email FROM borrowers where borrowernumber = ? ");
-    $sth->execute( $borrowernumber );
-    my $data = $sth->fetchrow_hashref;
 
-    if ($data->{'email'}) {
-       return $data->{'email'};
-    } elsif ($data->{'emailpro'}) {
-       return $data->{'emailpro'};
-    } elsif ($data->{'B_email'}) {
-       return $data->{'B_email'};
-    } else {
-       return '';
-    }
+    my $borrower = Koha::Patrons->find( $borrowernumber );
+
+    return $borrower->first_valid_email_address();
 }
 
 =head2 GetNoticeEmailAddress

@@ -860,6 +860,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
+=head2 club_enrollments
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ClubEnrollment>
+
+=cut
+
+__PACKAGE__->has_many(
+  "club_enrollments",
+  "Koha::Schema::Result::ClubEnrollment",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 course_instructors
 
 Type: has_many
@@ -1341,8 +1356,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-02-10 07:30:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:35WEsGd5LmkZ3bB486M1yA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-26 16:17:25
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Qq3fmJ73x8Qv+Pqbs7zkow
 
 __PACKAGE__->belongs_to(
     "guarantor",

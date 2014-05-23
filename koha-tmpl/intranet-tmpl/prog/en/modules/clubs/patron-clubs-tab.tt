@@ -1,0 +1,102 @@
+[% USE KohaDates %]
+
+[% IF enrollments %]
+    <table>
+        <thead>
+            <tr>
+                <th colspan="4">
+                    Clubs currently enrolled in
+                </th>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Date enrolled</th>
+                [% IF CAN_user_clubs_enroll %]<th>&nbsp;</th>[% END %]
+            </tr>
+        </thead>
+
+        <tbody>
+            [% FOREACH e IN enrollments %]
+                <tr>
+                    <td>[% e.club.name %]</td>
+                    <td>[% e.club.description %]</td>
+                    <td>[% e.date_enrolled | $KohaDates %]</td>
+                    [% IF CAN_user_clubs_enroll %]
+                        <td>
+                            <a class="btn btn-xs" onclick="cancelEnrollment( [% e.id %] )">
+                                <i class="fa fa-remove"></i> Cancel
+                            </a>
+                        </td>
+                    [% END %]
+                </tr>
+            [% END %]
+        </tbody>
+    </table>
+[% END %]
+
+[% IF clubs %]
+    <table>
+        <thead>
+            <tr>
+                <th colspan="3">
+                    Clubs not enrolled in
+                </th>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                [% IF CAN_user_clubs_enroll %]<th>&nbsp;</th>[% END %]
+            </tr>
+        </thead>
+
+        <tbody>
+            [% FOREACH c IN clubs %]
+                <tr>
+                    <td>[% c.name %]</td>
+                    <td>[% c.description %]</td>
+                    [% IF CAN_user_clubs_enroll %]
+                        <td>
+                            <a class="btn btn-xs" onclick="loadEnrollmentForm([% c.id %])">
+                                <i class="fa fa-plus"></i> Enroll
+                            </a>
+                        </td>
+                    [% END %]
+                </tr>
+            [% END %]
+        </tbody>
+    </table>
+[% END %]
+
+[% IF CAN_user_clubs_enroll %]
+<script type="text/javascript">
+function loadEnrollmentForm( id ) {
+    $("body").css("cursor", "progress");
+    $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-enroll.pl?borrowernumber=[% borrowernumber %]&id=' + id, function() {
+        $("body").css("cursor", "default");
+    });
+
+    return false;
+}
+
+function cancelEnrollment( id ) {
+    $("body").css("cursor", "progress");
+    $.ajax({
+        type: "POST",
+        url: '/cgi-bin/koha/svc/club/cancel_enrollment',
+        data: { id: id },
+        success: function( data ) {
+            if ( data.success ) {
+                $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber %]', function() {
+                    $("body").css("cursor", "default");
+                });
+            } else {
+                alert(_("Unable to cancel enrollment!"));
+            }
+        },
+        dataType: 'json'
+    });
+    return false;
+}
+</script>
+[% END %]
