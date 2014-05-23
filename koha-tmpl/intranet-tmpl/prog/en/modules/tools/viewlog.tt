@@ -71,7 +71,7 @@
 								<label for="modules">Module:</label>
 								<select name="modules" id="modules" multiple="multiple">
 									<option value="" selected="selected">All</option>
-                                                                        [% FOREACH modx IN [ CATALOGUING AUTHORITIES MEMBERS ACQUISITIONS SERIAL CIRCULATION LETTER FINES SYSTEMPREFERENCE ] %]
+                                                                        [% FOREACH modx IN [ 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' ] %]
                                                                         <option value="[% modx %]">[% PROCESS translate_log_module module=modx %]</option>
                                                                         [% END %]
 								</select>
@@ -80,7 +80,7 @@
 								<label for="action">Action:</label>
 								<select name="action" id="action">
 									<option value ="">All</option>
-                                                                        [% FOREACH actx IN [ ADD DELETE MODIFY ISSUE RETURN CREATE ] %]
+                                                                        [% FOREACH actx IN [ 'ADD' 'DELETE' 'MODIFY' 'ISSUE' 'RETURN' 'CREATE' ] %]
                                                                         <option value="[% actx %]">[% PROCESS translate_log_action action=actx %]</option>
                                                                         [% END %]
 								</select>
