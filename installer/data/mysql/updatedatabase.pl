@@ -8483,7 +8483,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = '3.17.00.001';
 if ( CheckVersion($DBversion) ) {
    $dbh->do("UPDATE systempreferences SET variable = 'AuthoritySeparator' WHERE variable = 'authoritysep'");
    print "Upgrade to $DBversion done (Bug 10330 - Rename system preference authoritysep to AuthoritySeparator)\n";
