@@ -8490,7 +8490,7 @@ if ( CheckVersion($DBversion) ) {
    SetVersion ($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.17.00.002";
 if (CheckVersion($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,type) VALUES('AcqEnableFiles','0','If enabled, allows librarians to upload and attach arbitrary files to invoice records.','YesNo')");
     $dbh->do("
