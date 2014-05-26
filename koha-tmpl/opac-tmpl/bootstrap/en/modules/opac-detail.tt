@@ -1129,11 +1129,11 @@
             <tr>
                 [% IF ( item_level_itypes ) %]<th id="item_itemtype" class="itype">Item type</th>[% END %]
                 [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' || singleBranchMode ) %]
-                    <th>Current location</th>
+                    <th id="item_current_location" class="item_location">Current location</th>
                 [% END %]
                 [% UNLESS ( singleBranchMode ) %]
                     [% IF ( OpacLocationBranchToDisplay == 'home' || OpacLocationBranchToDisplay == 'both' ) %]
-                        <th>Home library</th>
+                        <th id="item_home_location" class="item_location">Home library</th>
                     [% END %]
                 [% END %]
                 [% IF ( itemdata_ccode ) %]<th id="item_ccode" class="collection">Collection</th>[% END %]
