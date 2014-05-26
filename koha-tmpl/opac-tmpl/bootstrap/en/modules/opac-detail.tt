@@ -1196,7 +1196,7 @@
                                 <link property="itemOffered" href="#record" />
                                 <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
                                 <div class="[% ITEM_RESULT.branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]">
-                                    [% IF ( ITEM_RESULT.branchurl ) %]
+                                    [% IF Branches.GetURL( ITEM_RESULT.homebranch ) %]
                                         [% home_branch_url = Branches.GetURL( ITEM_RESULT.homebranch ) %]
                                         [% IF ( home_branch_url ) %]
                                              <a href="[% home_branch_url %]">[% Branches.GetName( ITEM_RESULT.homebranch ) %]</a>
@@ -1204,7 +1204,7 @@
                                             [% Branches.GetName( ITEM_RESULT.homebranch ) %]
                                         [% END %]
                                     [% ELSE %]
-                                        <span title="">[% ITEM_RESULT.branchname %]</span>
+                                        <span title="">[% Branches.GetName( ITEM_RESULT.homebranch ) %]</span>
                                     [% END %]
                                 </div>
 
@@ -1212,7 +1212,6 @@
                                     <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
                                 [% END %]
 
-                                <div class="branch-info-tooltip">[% ITEM_RESULT.branch_opac_info %]</div>
                             </td>
                         [% END %]
 
@@ -1385,6 +1384,7 @@
             "aoColumns": [
                 [% IF ( item_level_itypes ) %]null,[% END %]
                 null,
+                [% IF ( OpacLocationBranchToDisplay == 'both' ) %]null,[% END %]
                 [% IF ( itemdata_ccode ) %]null,[% END %]
                 null,
                 [% IF ( itemdata_enumchron ) %]null,[% END %]
