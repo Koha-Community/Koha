@@ -119,7 +119,10 @@ EOF
                    "/etc/apache2/sites-available/$site.conf"
 
                 if [ "$ENABLE_VHOST" = "yes" ]; then
-                    if ! a2ensite $site > /dev/null 2>&1; then
+                    if ! {
+                        a2ensite "$site" > /dev/null 2>&1 ||
+                        a2ensite "${site}.conf" > /dev/null 2>&1
+                    }; then
                         echo "Warning: problem enabling $site in Apache" >&2
                     fi
                 fi
