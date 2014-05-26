@@ -147,49 +147,49 @@ sub transform {
     my ( $self, $orgxml, $file ) = @_;
 
     #Initialized yet?
-    if( !$self->{xslt_hash} ) {
+    if ( !$self->{xslt_hash} ) {
         $self->_init;
     }
     else {
-        $self->_set_error; #clear error
+        $self->_set_error;    #clear error
     }
-    my $retval= $self->{do_not_return_source}? undef: $orgxml;
+    my $retval = $self->{do_not_return_source} ? undef : $orgxml;
 
     #check if no string passed
-    if( !defined $orgxml ) {
+    if ( !defined $orgxml ) {
         $self->_set_error(7);
-        return; #always undef
+        return;               #always undef
     }
 
     #If no file passed, use the last file again
-    if( !$file ) {
-        if( !$self->{last_xsltfile} ) {
+    if ( !$file ) {
+        if ( !$self->{last_xsltfile} ) {
             $self->_set_error(1);
             return $retval;
         }
-        $file= $self->{last_xsltfile};
+        $file = $self->{last_xsltfile};
     }
 
     #load stylesheet
-    my $stsh= $self->{xslt_hash}->{$file} // $self->_load($file);
+    my $stsh = $self->{xslt_hash}->{$file} // $self->_load($file);
     return $retval if $self->{err};
 
     #parse input and transform
     my $parser = XML::LibXML->new();
-    my $source= eval { $parser->parse_string($orgxml) };
-    if( $@ ) {
-        $self->_set_error(5, $@);
+    my $source = eval { $parser->parse_string($orgxml) };
+    if ($@) {
+        $self->_set_error( 5, $@ );
         return $retval;
     }
-    my $str= eval {
-        my $result= $stsh->transform($source);
+    my $str = eval {
+        my $result = $stsh->transform($source);
         $stsh->output_as_chars($result);
     };
-    if( $@ ) {
-        $self->_set_error(6, $@);
+    if ($@) {
+        $self->_set_error( 6, $@ );
         return $retval;
     }
-    $self->{last_xsltfile}= $file;
+    $self->{last_xsltfile} = $file;
     return $str;
 }
 
@@ -209,16 +209,16 @@ sub transform {
 =cut
 
 sub refresh {
-    my ( $self, $file )= @_;
+    my ( $self, $file ) = @_;
     $self->_set_error;
     return if !$self->{xslt_hash};
     my $rv;
-    if( $file ) {
-        $rv= delete $self->{xslt_hash}->{$file}? 1: 0;
+    if ($file) {
+        $rv = delete $self->{xslt_hash}->{$file} ? 1 : 0;
     }
     else {
-        $rv= scalar keys %{ $self->{xslt_hash} };
-        $self->{xslt_hash}= {};
+        $rv = scalar keys %{ $self->{xslt_hash} };
+        $self->{xslt_hash} = {};
     }
     return $rv;
 }
@@ -229,14 +229,16 @@ sub refresh {
 # Internal routine for initialization.
 
 sub _init {
-    my $self= shift;
+    my $self = shift;
 
     $self->_set_error;
-    $self->{xslt_hash}={};
-    $self->{print_warns}=1 unless exists $self->{print_warns};
-    $self->{do_not_return_source}=0 unless exists $self->{do_not_return_source};
-        #by default we return source on a failing transformation
-        #but it could be passed at construction time already
+    $self->{xslt_hash}            = {};
+    $self->{print_warns}          = 1 unless exists $self->{print_warns};
+    $self->{do_not_return_source} = 0
+      unless exists $self->{do_not_return_source};
+
+    #by default we return source on a failing transformation
+    #but it could be passed at construction time already
     return;
 }
 
@@ -244,9 +246,9 @@ sub _init {
 # Internal routine for loading a new stylesheet.
 
 sub _load {
-    my ($self, $file)= @_;
+    my ( $self, $file ) = @_;
 
-    if( !$file || ( $file!~ /^https?:\/\// && !-e $file ) ) {
+    if ( !$file || ( $file !~ /^https?:\/\// && !-e $file ) ) {
         $self->_set_error(2);
         return;
     }
@@ -254,16 +256,16 @@ sub _load {
     #load sheet
     my $parser = XML::LibXML->new;
     my $style_doc = eval { $parser->load_xml( location => $file ) };
-    if( $@ ) {
-        $self->_set_error(3, $@);
+    if ($@) {
+        $self->_set_error( 3, $@ );
         return;
     }
 
     #parse sheet
     my $xslt = XML::LibXSLT->new;
     $self->{xslt_hash}->{$file} = eval { $xslt->parse_stylesheet($style_doc) };
-    if( $@ ) {
-        $self->_set_error(4, $@);
+    if ($@) {
+        $self->_set_error( 4, $@ );
         delete $self->{xslt_hash}->{$file};
         return;
     }
@@ -274,39 +276,39 @@ sub _load {
 # Internal routine for handling error information.
 
 sub _set_error {
-    my ($self, $errno, $addmsg)= @_;
+    my ( $self, $errno, $addmsg ) = @_;
 
-    if(!$errno) { #clear the error
-        $self->{err}= undef;
-        $self->{errstr}= undef;
+    if ( !$errno ) {    #clear the error
+        $self->{err}    = undef;
+        $self->{errstr} = undef;
         return;
     }
 
-    $self->{err}= $errno;
-    if($errno==1) {
-        $self->{errstr}= "No XSLT file passed.";
+    $self->{err} = $errno;
+    if ( $errno == 1 ) {
+        $self->{errstr} = "No XSLT file passed.";
     }
-    elsif($errno==2) {
-        $self->{errstr}= "XSLT file not found.";
+    elsif ( $errno == 2 ) {
+        $self->{errstr} = "XSLT file not found.";
     }
-    elsif($errno==3) {
-        $self->{errstr}= "Error while loading stylesheet xml:";
+    elsif ( $errno == 3 ) {
+        $self->{errstr} = "Error while loading stylesheet xml:";
     }
-    elsif($errno==4) {
-        $self->{errstr}= "Error while parsing stylesheet:";
+    elsif ( $errno == 4 ) {
+        $self->{errstr} = "Error while parsing stylesheet:";
     }
-    elsif($errno==5) {
-        $self->{errstr}= "Error while parsing input:";
+    elsif ( $errno == 5 ) {
+        $self->{errstr} = "Error while parsing input:";
     }
-    elsif($errno==6) {
-        $self->{errstr}= "Error while transforming input:";
+    elsif ( $errno == 6 ) {
+        $self->{errstr} = "Error while transforming input:";
     }
-    elsif($errno==7) {
-        $self->{errstr}= "No string to transform.";
+    elsif ( $errno == 7 ) {
+        $self->{errstr} = "No string to transform.";
     }
 
-    if( $addmsg ) {
-        $self->{errstr}.= " $addmsg";
+    if ($addmsg) {
+        $self->{errstr} .= " $addmsg";
     }
 
     warn $self->{errstr} if $self->{print_warns};
