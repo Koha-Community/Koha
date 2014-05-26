@@ -8526,8 +8526,8 @@ if (CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
-if(CheckVersion($DBversion)) {
+$DBversion = "3.17.00.005";
+if (CheckVersion($DBversion)) {
     $dbh->do(q|
         ALTER TABLE issuingrules
         ADD maxsuspensiondays INT(11) DEFAULT NULL AFTER finedays;
