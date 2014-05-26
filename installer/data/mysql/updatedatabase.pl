@@ -8512,13 +8512,12 @@ CREATE TABLE IF NOT EXISTS `misc_files` (
     SetVersion($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+$DBversion = "3.17.00.003";
+if (CheckVersion($DBversion)) {
     $dbh->do("UPDATE systempreferences SET type = 'Choice', options = '0|1|force' WHERE variable = 'OPACItemHolds'");
     print "Upgrade to $DBversion done (Bug 7825 - Changed OPACItemHolds syspref to Choice)\n";
     SetVersion($DBversion);
 }
-
 
 =head1 FUNCTIONS
 
