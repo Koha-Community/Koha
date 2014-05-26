@@ -8544,7 +8544,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.17.00.007";
 if (CheckVersion($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('UpdateNotForLoanStatusOnCheckin', '', 'NULL', 'This is a list of value pairs. When an item is checked in, if the not for loan value on the left matches the items not for loan value it will be updated to the right-hand value. E.g. ''-1: 0'' will cause an item that was set to ''Ordered'' to now be available for loan. Each pair of values should be on a separate line.', 'Free');");
     print "Upgrade to $DBversion done (Bug 11629 - Add ability to update not for loan status on checkin)\n";
