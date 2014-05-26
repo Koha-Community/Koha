@@ -22,7 +22,7 @@ $dbh->{RaiseError} = 1;
 my %data = (
     firstname =>  'my firstname',
     surname => 'my surname',
-    categorycode => 'UT',
+    categorycode => 'PT',
     branchcode => 'UT',
     cardnumber => 'ilsdi-cardnumber',
     userid => 'ilsdi-userid',
@@ -30,11 +30,11 @@ my %data = (
 );
 
 # Crate patron category
-unless ( GetBorrowercategory('UT') ) {
+unless ( GetBorrowercategory('PT') ) {
     $dbh->do("INSERT INTO categories
-    (categorycode,description,enrolmentperiod,upperagelimit,enrolmentfee,overduenoticerequired,reservefee,category_type)
+    (categorycode,description,enrolmentperiod,upperagelimit,enrolmentfee,overduenoticerequired,reservefee,category_type,default_privacy)
         VALUES
-    ('UT','Unit tester',99,99,0.000000,1,0.000000,'C');");
+    ('PT','Unit tester',99,99,0.000000,1,0.000000,'C','default');");
 }
 
 # Create branch
