@@ -310,7 +310,13 @@ Circulation:
         -
             - Send all notices as a BCC to this email address
             - pref: OverdueNoticeBcc
-        - 
+        -
+            - pref: OverdueNoticeCalendar
+              choices:
+                  yes: "Use Calendar"
+                  no: "Ignore Calendar"
+            - when working out the period for overdue notices
+        -
             - Include up to
             - pref: PrintNoticesMaxLines
               class: integer

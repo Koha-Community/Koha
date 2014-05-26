@@ -44,6 +44,7 @@ use C4::Budgets qw(GetCurrency);
 
 use Koha::Borrower::Debarments qw(AddUniqueDebarment);
 use Koha::DateUtils;
+use Koha::Calendar;
 
 =head1 NAME
 
@@ -353,12 +354,14 @@ if (@branchcodes) {
         @branches = ('');
     }
 }
-
+my $date_to_run;
 if ($date){
     $date=$dbh->quote($date);
+    $date_to_run = dt_from_string($date);
 }
 else {
     $date="NOW()";
+    $date_to_run = DateTime->now( time_zone => C4::Context->tz() );
 }
 
 # these are the fields that will be substituted into <<item.content>>
@@ -417,9 +420,16 @@ elsif ( defined $text_filename ) {
 }
 
 foreach my $branchcode (@branches) {
+    if ( C4::Context->preference('OverdueNoticeCalendar') ) {
+        my $calendar = Koha::Calendar->new( branchcode => $branchcode );
+        if ( $calendar->is_holiday($date_to_run) ) {
+            next;
+        }
+    }
 
-    my $branch_details = C4::Branch::GetBranchDetail($branchcode);
-    my $admin_email_address = $branch_details->{'branchemail'} || C4::Context->preference('KohaAdminEmailAddress');
+    my $branch_details      = C4::Branch::GetBranchDetail($branchcode);
+    my $admin_email_address = $branch_details->{'branchemail'}
+      || C4::Context->preference('KohaAdminEmailAddress');
     my @output_chunks;    # may be sent to mail or stdout or csv file.
 
     $verbose and warn sprintf "branchcode : '%s' using %s\n", $branchcode, $admin_email_address;
@@ -431,7 +441,6 @@ SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, TO_DAYS($date)-TO_DAYS
     AND biblio.biblionumber   = items.biblionumber
     AND biblio.biblionumber   = biblioitems.biblionumber
     AND issues.borrowernumber = ?
-    AND TO_DAYS($date)-TO_DAYS(date_due) BETWEEN ? and ?
 END_SQL
 
     my $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? ";
@@ -454,6 +463,7 @@ END_SQL
     # my $outfile = 'overdues_' . ( $mybranch || $branchcode || 'default' );
     while ( my $overdue_rules = $rqoverduerules->fetchrow_hashref ) {
       PERIOD: foreach my $i ( 1 .. 3 ) {
+
             $verbose and warn "branch '$branchcode', pass $i\n";
             my $mindays = $overdue_rules->{"delay$i"};    # the notice will be sent after mindays days (grace period)
             my $maxdays = (
@@ -474,12 +484,14 @@ END_SQL
             # <date> <itemcount> <firstname> <lastname> <address1> <address2> <address3> <city> <postcode> <country>
 
             my $borrower_sql = <<'END_SQL';
-SELECT distinct(issues.borrowernumber), firstname, surname, address, address2, city, zipcode, country, email, emailpro, B_email, smsalertnumber
+SELECT issues.borrowernumber, firstname, surname, address, address2, city, zipcode, country, email, emailpro, B_email, smsalertnumber,
+TO_DAYS(?)-TO_DAYS(date_due) as difference, date_due
 FROM   issues,borrowers,categories
 WHERE  issues.borrowernumber=borrowers.borrowernumber
 AND    borrowers.categorycode=categories.categorycode
 END_SQL
             my @borrower_parameters;
+            push @borrower_parameters, $date_to_run->datetime();
             if ($branchcode) {
                 $borrower_sql .= ' AND issues.branchcode=? ';
                 push @borrower_parameters, $branchcode;
@@ -488,22 +500,49 @@ END_SQL
                 $borrower_sql .= ' AND borrowers.categorycode=? ';
                 push @borrower_parameters, $overdue_rules->{categorycode};
             }
-            $borrower_sql .= '  AND categories.overduenoticerequired=1 ';
-            if($triggered) {
-                $borrower_sql .= " AND TO_DAYS($date)-TO_DAYS(date_due) = ?";
-                push @borrower_parameters, $mindays;
-            } else {
-                $borrower_sql .= " AND TO_DAYS($date)-TO_DAYS(date_due) BETWEEN ? and ? " ;
-                push @borrower_parameters, $mindays, $maxdays;
-            }
+            $borrower_sql .= '  AND categories.overduenoticerequired=1 ORDER BY issues.borrowernumber';
 
             # $sth gets borrower info iff at least one overdue item has triggered the overdue action.
 	        my $sth = $dbh->prepare($borrower_sql);
             $sth->execute(@borrower_parameters);
-            $verbose and warn $borrower_sql . "\n $branchcode | " . $overdue_rules->{'categorycode'} . "\n ($mindays, $maxdays)\nreturns " . $sth->rows . " rows";
 
+            $verbose and warn $borrower_sql . "\n $branchcode | " . $overdue_rules->{'categorycode'} . "\n ($mindays, $maxdays, ".  $date_to_run->datetime() .")\nreturns " . $sth->rows . " rows";
+            my $borrowernumber;
             while ( my $data = $sth->fetchrow_hashref ) {
-                my $borrowernumber = $data->{'borrowernumber'};
+
+                # check the borrower has at least one item that matches
+                my $days_between;
+                if ( C4::Context->preference('OverdueNoticeCalendar') )
+                {
+                    my $calendar =
+                      Koha::Calendar->new( branchcode => $branchcode );
+                    $days_between =
+                      $calendar->days_between(  dt_from_string($data->{date_due}),
+                        $date_to_run );
+                }
+                else {
+                    $days_between =
+                      $date_to_run->delta_days(  dt_from_string($data->{date_due}) );
+                }
+                $days_between = $days_between->in_units('days');
+                if ($triggered) {
+                    if ( $mindays != $days_between ) {
+                        next;
+                    }
+                }
+                else {
+                    unless (   $days_between >= $mindays
+                        && $days_between <= $maxdays )
+                    {
+                        next;
+                    }
+                }
+                if ($borrowernumber eq $data->{'borrowernumber'}){
+# we have already dealt with this borrower
+                    $verbose and warn "already dealt with this borrower $borrowernumber";
+                    next;
+                }
+                $borrowernumber = $data->{'borrowernumber'};
                 my $borr =
                     $data->{'firstname'} . ', '
                   . $data->{'surname'} . ' ('
@@ -548,8 +587,9 @@ END_SQL
                     );
                     $verbose and warn "debarring $borr\n";
                 }
-                my @params = ($listall ? ( $borrowernumber , 1 , $MAX ) : ( $borrowernumber, $mindays, $maxdays ));
-                $verbose and warn "STH2 PARAMS: borrowernumber = $borrowernumber, mindays = $mindays, maxdays = $maxdays";
+#                my @params = ($listall ? ( $borrowernumber , 1 , $MAX ) : ( $borrowernumber, $mindays, $maxdays ));
+                my @params = ($borrowernumber);
+                $verbose and warn "STH2 PARAMS: borrowernumber = $borrowernumber";
                 $sth2->execute(@params);
                 my $itemcount = 0;
                 my $titles = "";
@@ -558,6 +598,30 @@ END_SQL
                 my $j = 0;
                 my $exceededPrintNoticesMaxLines = 0;
                 while ( my $item_info = $sth2->fetchrow_hashref() ) {
+                    if ( C4::Context->preference('OverdueNoticeCalendar') ) {
+                        my $calendar =
+                          Koha::Calendar->new( branchcode => $branchcode );
+                        $days_between =
+                          $calendar->days_between(
+                            dt_from_string( $item_info->{date_due} ), $date_to_run );
+                    }
+                    else {
+                        $days_between =
+                          $date_to_run->delta_days(
+                            dt_from_string( $item_info->{date_due} ) );
+                    }
+                    $days_between = $days_between->in_units('days');
+                    if ($listall){
+                        unless ($days_between >= 1 and $days_between <= $MAX){
+                            next;
+                        }
+                    }
+                    else {
+                        unless ($days_between >=$mindays && $days_between <= $maxdays){
+                            next;
+                        }
+                    }
+
                     if ( ( scalar(@emails_to_use) == 0 || $nomail ) && $PrintNoticesMaxLines && $j >= $PrintNoticesMaxLines ) {
                       $exceededPrintNoticesMaxLines = 1;
                       last;
