@@ -169,14 +169,14 @@ if ( $category_type eq 'C') {
 if ( $data->{'ethnicity'} || $data->{'ethnotes'} ) {
     $template->param( printethnicityline => 1 );
 }
-if ( $category_type eq 'A' || $category_type eq 'I') {
+my ( $count, $guarantees ) = GetGuarantees( $data->{'borrowernumber'} );
+if ( $count ) {
     $template->param( isguarantee => 1 );
 
     # FIXME
     # It looks like the $i is only being returned to handle walking through
     # the array, which is probably better done as a foreach loop.
     #
-    my ( $count, $guarantees ) = GetGuarantees( $data->{'borrowernumber'} );
     my @guaranteedata;
     for ( my $i = 0 ; $i < $count ; $i++ ) {
         push(@guaranteedata,
