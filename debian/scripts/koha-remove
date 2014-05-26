@@ -104,7 +104,7 @@ eof
         rm -r "/var/run/koha/$name"
     getent passwd "$name-koha" > /dev/null && deluser --quiet "$name-koha"
     # in case the site has already been disabled, we don't want to break the loop now.
-    a2dissite "$name" || /bin/true
+    a2dissite "$name" > /dev/null 2>&1 || a2dissite "${name}.conf" > /dev/null 2>&1 || /bin/true
 done
 
 service apache2 restart

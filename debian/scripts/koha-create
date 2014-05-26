@@ -619,7 +619,12 @@ fi
 if [ "$op" = create ] || [ "$op" = populate ] || [ "$op" = use ]
 then
     # Reconfigure Apache.
-    a2ensite "$name"
+    if ! {
+        a2ensite "$name" > /dev/null 2>&1 ||
+            a2ensite "${name}.conf" > /dev/null 2>&1
+    }; then
+        echo "Warning: problem enabling $name in Apache" >&2
+    fi
     service apache2 restart
 
     # Start Zebra.
