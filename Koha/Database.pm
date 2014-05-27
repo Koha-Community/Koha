@@ -45,7 +45,12 @@ __PACKAGE__->mk_accessors(qw( ));
 # database connection from the data given in the current context, and
 # returns it.
 sub _new_schema {
-    my $schema = Koha::Schema->connect( sub { C4::Context->dbh } );
+
+    my $context = C4::Context->new();
+
+    # we are letting C4::Context->dbh not set the RaiseError handle attribute
+    # for now for compatbility purposes
+    my $schema = Koha::Schema->connect( sub { C4::Context->dbh }, { unsafe => 1 } );
     return $schema;
 }
 
