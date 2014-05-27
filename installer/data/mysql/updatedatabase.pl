@@ -7953,7 +7953,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.14.06.004";
 if(CheckVersion($DBversion)) {
     $dbh->do(q{
         ALTER TABLE `action_logs`
