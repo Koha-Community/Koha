@@ -226,6 +226,7 @@ my $admin_adress = C4::Context->preference('KohaAdminEmailAddress');
 
 my @letters;
 UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
+    @letters = ();
     warn 'examining ' . $upcoming->{'itemnumber'} . ' upcoming due items' if $verbose;
     # warn( Data::Dumper->Dump( [ $upcoming ], [ 'overdue' ] ) );
 
