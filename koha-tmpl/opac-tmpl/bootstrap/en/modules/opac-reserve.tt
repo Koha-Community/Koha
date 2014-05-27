@@ -105,6 +105,12 @@
                             </div>
                         [% END %]
 
+                        [% IF ( new_reserves_allowed ) %]
+                            <div id="new_reserves_allowed" class="alert">
+                                <strong>Sorry,</strong> you can only place [% new_reserves_allowed %] more holds. Please uncheck the checkboxes for the items you wish to not place holds on.
+                            </div>
+                        [% END %]
+
                         <form action="/cgi-bin/koha/opac-reserve.pl" method="post" id="hold-request-form">
                             <input type="hidden" name="place_reserve" value="1"/>
                             <!-- These values are set dynamically by js -->
@@ -562,6 +568,13 @@
         $(".placehold").click(function(){
             var biblionumbers = "";
             var selections = "";
+
+            [% IF new_reserves_allowed %]
+                if ($(".confirmjs:checked").size() > [% new_reserves_allowed %] ) {
+                    alert(MSG_MAX_HOLDS_EXCEEDED);
+                    return false;
+                }
+            [% END %]
 
             if ($(".confirmjs:checked").size() == 0) {
                 alert(MSG_NO_RECORD_SELECTED);

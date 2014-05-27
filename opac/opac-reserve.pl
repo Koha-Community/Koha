@@ -38,7 +38,7 @@ use Koha::DateUtils;
 use Date::Calc qw/Today Date_to_Days/;
 # use Data::Dumper;
 
-my $MAXIMUM_NUMBER_OF_RESERVES = C4::Context->preference("maxreserves");
+my $maxreserves = C4::Context->preference("maxreserves");
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -114,6 +114,7 @@ if (($#biblionumbers < 0) && (! $query->param('place_reserve'))) {
     &get_out($query, $cookie, $template->output);
 }
 
+
 # pass the pickup branch along....
 my $branch = $query->param('branch') || $borr->{'branchcode'} || C4::Context->userenv->{branch} || '' ;
 ($branches->{$branch}) or $branch = "";     # Confirm branch is real
@@ -183,7 +184,7 @@ foreach my $biblioNumber (@biblionumbers) {
 #
 if ( $query->param('place_reserve') ) {
     my $reserve_cnt = 0;
-    if ($MAXIMUM_NUMBER_OF_RESERVES) {
+    if ($maxreserves) {
         $reserve_cnt = GetReservesFromBorrowernumber( $borrowernumber );
     }
 
@@ -267,8 +268,8 @@ if ( $query->param('place_reserve') ) {
         }
         my $notes = $query->param('notes_'.$biblioNum)||'';
 
-        if (   $MAXIMUM_NUMBER_OF_RESERVES
-            && $reserve_cnt >= $MAXIMUM_NUMBER_OF_RESERVES )
+        if (   $maxreserves
+            && $reserve_cnt >= $maxreserves )
         {
             $canreserve = 0;
         }
@@ -308,32 +309,41 @@ if ( $borr->{'amountoutstanding'} && ($borr->{'amountoutstanding'} > $maxoutstan
 if ( $borr->{gonenoaddress} && ($borr->{gonenoaddress} == 1) ) {
     $noreserves = 1;
     $template->param(
-                     message => 1,
-                     GNA     => 1
-                    );
+        message => 1,
+        GNA     => 1
+    );
 }
 if ( $borr->{lost} && ($borr->{lost} == 1) ) {
     $noreserves = 1;
     $template->param(
-                     message => 1,
-                     lost    => 1
-                    );
+        message => 1,
+        lost    => 1
+    );
 }
 if ( $borr->{'debarred'} ) {
     $noreserves = 1;
     $template->param(
-                     message  => 1,
-                     debarred => 1
-                    );
+        message  => 1,
+        debarred => 1
+    );
 }
 
 my @reserves = GetReservesFromBorrowernumber( $borrowernumber );
+my $reserves_count = scalar(@reserves);
 $template->param( RESERVES => \@reserves );
-if ( $MAXIMUM_NUMBER_OF_RESERVES && (scalar(@reserves) >= $MAXIMUM_NUMBER_OF_RESERVES) ) {
+if ( $maxreserves && ( $reserves_count >= $maxreserves ) ) {
     $template->param( message => 1 );
     $noreserves = 1;
     $template->param( too_many_reserves => scalar(@reserves));
 }
+
+unless ( $noreserves ) {
+    my $requested_reserves_count = scalar( @biblionumbers );
+    if ( $maxreserves && ( $reserves_count + $requested_reserves_count > $maxreserves ) ) {
+        $template->param( new_reserves_allowed => $maxreserves - $reserves_count );
+    }
+}
+
 foreach my $res (@reserves) {
     foreach my $biblionumber (@biblionumbers) {
         if ( $res->{'biblionumber'} == $biblionumber && $res->{'borrowernumber'} == $borrowernumber) {

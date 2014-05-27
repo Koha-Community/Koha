@@ -78,6 +78,8 @@ $findborrower =~ s|,| |g;
 my $borrowernumber_hold = $input->param('borrowernumber') || '';
 my $messageborrower;
 my $maxreserves;
+my $warnings;
+my $messages;
 
 my $date = C4::Dates->today('iso');
 my $action = $input->param('action');
@@ -122,13 +124,14 @@ if ($borrowernumber_hold && !$action) {
     my @getreservloop;
     my $count_reserv = 0;
 
-#   we check the reserves of the borrower, and if he can reserv a document
-# FIXME At this time we have a simple count of reservs, but, later, we could improve the infos "title" ...
+    # we check the reserves of the borrower, and if he can reserv a document
+    # FIXME At this time we have a simple count of reservs, but, later, we could improve the infos "title" ...
 
     my $number_reserves =
       GetReserveCount( $borrowerinfo->{'borrowernumber'} );
 
     if ( C4::Context->preference('maxreserves') && ($number_reserves >= C4::Context->preference('maxreserves')) ) {
+        $warnings = 1;
         $maxreserves = 1;
     }
 
@@ -136,7 +139,7 @@ if ($borrowernumber_hold && !$action) {
     my $expiry_date = $borrowerinfo->{dateexpiry};
     my $expiry = 0; # flag set if patron account has expired
     if ($expiry_date and $expiry_date ne '0000-00-00' and
-            Date_to_Days(split /-/,$date) > Date_to_Days(split /-/,$expiry_date)) {
+        Date_to_Days(split /-/,$date) > Date_to_Days(split /-/,$expiry_date)) {
         $expiry = 1;
     }
 
@@ -162,6 +165,8 @@ if ($borrowernumber_hold && !$action) {
                 cardnumber          => $borrowerinfo->{'cardnumber'},
                 expiry              => $expiry,
                 diffbranch          => $diffbranch,
+                messages            => $messages,
+                warnings            => $warnings
     );
 }
 
@@ -417,8 +422,7 @@ foreach my $biblionumber (@biblionumbers) {
                 $num_available++;
             }
             elsif ( C4::Context->preference('AllowHoldPolicyOverride') ) {
-
-# If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
+                # If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
                 $item->{override} = 1;
                 $num_override++;
             }
