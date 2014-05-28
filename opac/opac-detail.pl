@@ -603,7 +603,7 @@ my ( @itemnumbers_on_order );
 if ( C4::Context->preference('OPACAcquisitionDetails' ) ) {
     my $orders = C4::Acquisition::SearchOrders({
         biblionumber => $biblionumber,
-        pending => 1,
+        ordered => 1,
     });
     my $total_quantity = 0;
     for my $order ( @$orders ) {
