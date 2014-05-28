@@ -33,6 +33,14 @@ my $input           = new CGI;
 my $allsuggestions  = $input->param('showall');
 my $op              = $input->param('op');
 my $suggestion      = $input->Vars;
+my $negcaptcha      = $input->param('negcap');
+
+# If a spambot accidentally populates the 'negcap' field in the sugesstions form, then silently skip and return.
+if ($negcaptcha ) {
+    print $input->redirect("/cgi-bin/koha/opac-suggestions.pl");
+    exit;
+}
+
 delete $$suggestion{$_} foreach qw<op suggestedbyme>;
 $op = 'else' unless $op;
 
