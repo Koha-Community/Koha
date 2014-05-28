@@ -7,6 +7,16 @@ Administration:
               class: email
             - "as the email address for the administrator of Koha. (This is the default From: address for emails unless there is one for the particular library, and is referred to when an internal error occurs.)"
         -
+           - Use
+           - pref: ReplytoDefault
+             class: email
+           - "as the email address that will be set as the replyto in emails"
+        -
+           - Use
+           - pref: ReturnpathDefault
+             class: email
+           - "as the email address set as the return path, if you leave this empty the admin address will be used."
+        -
             - Show
             - pref: DebugLevel
               default: 0

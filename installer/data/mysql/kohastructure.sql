@@ -389,6 +389,8 @@ CREATE TABLE `branches` ( -- information about your libraries or branches are st
   `branchphone` mediumtext, -- the primary phone for your library or branch
   `branchfax` mediumtext, -- the fax number for your library or branch
   `branchemail` mediumtext, -- the primary email address for your library or branch
+  `branchreplyto` mediumtext, -- the email to be used as a Reply-To
+  `branchreturnpath` mediumtext, -- the email to be used as Return-Path
   `branchurl` mediumtext, -- the URL for your library or branch's website
   `issuing` tinyint(4) default NULL, -- unused in Koha
   `branchip` varchar(15) default NULL, -- the IP address for your library or branch

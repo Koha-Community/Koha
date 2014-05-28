@@ -8777,6 +8777,20 @@ if ( CheckVersion($DBversion) ) {
         INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('StatisticsFields','location|itype|ccode','Define fields (from the items table) used for statistics members',NULL,'Free')
     });
     print "Upgrade to $DBversion done (Bug 12728: Checked syspref StatisticsFields)\n";
+}
+
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(
+"INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('ReplytoDefault',  '',  NULL,  'The default email address to be set as replyto.',  'Free')"
+    );
+    $dbh->do(
+"INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('ReturnpathDefault',  '',  NULL,  'The default email address to be set as return-path',  'Free')"
+    );
+    $dbh->do("ALTER TABLE branches ADD branchreplyto mediumtext AFTER branchemail");
+    $dbh->do("ALTER TABLE branches ADD branchreturnpath mediumtext AFTER branchreplyto");
+    print
+"Upgrade to $DBversion done (Bug XXX Adding replyto and returnpath addresses.)\n";
     SetVersion($DBversion);
 }
 
