@@ -28,6 +28,7 @@ use Modern::Perl;
 # to perform, etc.
 ## load Koha modules
 use C4::Context;
+use List::MoreUtils q/any/;
 
 my $searchengine = C4::Context->preference("SearchEngine");
 if ( $searchengine =~ /^Solr$/ ) {
@@ -210,11 +211,27 @@ my $cnt;
 my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes") || "itemtypes";
 my @advanced_search_types = split(/\|/, $advanced_search_types);
 
+my $hidingrules = {};
+my $yaml = C4::Context->preference('OpacHiddenItems');
+if ( $yaml =~ /\S/ ) {
+    $yaml = "$yaml\n\n"; # YAML expects trailing newline. Surplus does not hurt.
+    eval {
+        $hidingrules = YAML::Load($yaml);
+    };
+    if ($@) {
+        warn "Unable to parse OpacHiddenItems syspref : $@";
+    }
+}
+
 foreach my $advanced_srch_type (@advanced_search_types) {
+    $advanced_srch_type =~ s/^\s*//;
+    $advanced_srch_type =~ s/\s*$//;
    if ($advanced_srch_type eq 'itemtypes') {
    # itemtype is a special case, since it's not defined in authorized values
         my @itypesloop;
 	foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
+            next if $hidingrules->{itype} && any { $_ eq $thisitemtype } @{$hidingrules->{itype}};
+            next if $hidingrules->{itemtype} && any { $_ eq $thisitemtype } @{$hidingrules->{itemtype}};
 	    my %row =(  number=>$cnt++,
 		ccl => "$itype_or_itemtype,phr",
                 code => $thisitemtype,
@@ -231,6 +248,9 @@ foreach my $advanced_srch_type (@advanced_search_types) {
        my $advsearchtypes = GetAuthorisedValues($advanced_srch_type, '', 'opac');
         my @authvalueloop;
 	for my $thisitemtype (@$advsearchtypes) {
+            my $hiding_key = lc $thisitemtype->{category};
+            $hiding_key = "location" if $hiding_key eq 'loc';
+            next if $hidingrules->{$hiding_key} && any { $_ eq $thisitemtype->{authorised_value} } @{$hidingrules->{$hiding_key}};
 		my %row =(
 				number=>$cnt++,
 				ccl => $advanced_srch_type,
