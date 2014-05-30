@@ -532,7 +532,7 @@ sub getRecords {
                                 foreach my $field (@fields) {
                                     my $data = $field->as_string( $subfield_letters, $facet->{sep} );
 
-                                    unless ( $data ~~ @used_datas ) {
+                                    unless ( grep { /^$data$/ } @used_datas ) {
                                         push @used_datas, $data;
                                         $facets_counter->{ $facet->{idx} }->{$data}++;
                                     }
