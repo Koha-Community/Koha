@@ -30,15 +30,12 @@ use Modern::Perl;
 use C4::Context;
 
 my $searchengine = C4::Context->preference("SearchEngine");
-for ( $searchengine ) {
-    when ( /^Solr$/ ) {
-        warn "We use Solr";
-        require 'opac/search.pl';
-        exit;
-    }
-    when ( /^Zebra$/ ) {
+if ( $searchengine =~ /^Solr$/ ) {
+    warn "We use Solr";
+    require 'opac/search.pl';
+    exit;
+} elsif ( $searchengine =~ /^Zebra$/ ) {
 
-    }
 }
 
 use C4::Output;
@@ -360,7 +357,7 @@ my @allowed_sortby = qw /acqdate_asc acqdate_dsc author_az author_za call_number
 @sort_by = $cgi->param('sort_by');
 $sort_by[0] = $default_sort_by if !$sort_by[0] && defined($default_sort_by);
 foreach my $sort (@sort_by) {
-    if ( $sort ~~ @allowed_sortby ) {
+    if ( grep { /^$sort$/ } @allowed_sortby ) {
         $template->param($sort => 1);
     }
 }
