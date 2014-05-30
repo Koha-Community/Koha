@@ -2668,36 +2668,32 @@ sub _numeration {
     $num_type //= '';
     $locale ||= 'en';
     my $string;
-    given ($num_type) {
-        when (/^dayname$/) {
-            # 1970-11-01 was a Sunday
-            $value = $value % 7;
-            my $dt = DateTime->new(
-                year    => 1970,
-                month   => 11,
-                day     => $value + 1,
-                locale  => $locale,
-            );
-            $string = $dt->strftime("%A");
-        }
-        when (/^monthname$/) {
-            $value = $value % 12;
-            my $dt = DateTime->new(
-                year    => 1970,
-                month   => $value + 1,
-                locale  => $locale,
-            );
-            $string = $dt->strftime("%B");
-        }
-        when (/^season$/) {
-              my @seasons= qw( Spring Summer Fall Winter );
-              $value = $value % 4;
-              $string = $seasons[$value];
-        }
-        default {
-            $string = $value;
-        }
+    if ( $num_type =~ /^dayname$/ ) {
+        # 1970-11-01 was a Sunday
+        $value = $value % 7;
+        my $dt = DateTime->new(
+            year    => 1970,
+            month   => 11,
+            day     => $value + 1,
+            locale  => $locale,
+        );
+        $string = $dt->strftime("%A");
+    } elsif ( $num_type =~ /^monthname$/ ) {
+        $value = $value % 12;
+        my $dt = DateTime->new(
+            year    => 1970,
+            month   => $value + 1,
+            locale  => $locale,
+        );
+        $string = $dt->strftime("%B");
+    } elsif ( $num_type =~ /^season$/ ) {
+        my @seasons= qw( Spring Summer Fall Winter );
+        $value = $value % 4;
+        $string = $seasons[$value];
+    } else {
+        $string = $value;
     }
+
     return $string;
 }
 
