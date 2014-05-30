@@ -43,8 +43,8 @@ $(document).ready(function(){
             $(".linktools").hide();
             $("tr").removeClass("selected");
             row.addClass("selected");
-            if($tgt.is("a")||$tgt.is(":nth-child(7)")||$tgt.is(":nth-child(8)")||$tgt.is(":nth-child(9)")||$tgt.is(":nth-child(10)")){
-                return true;
+            if($tgt.is("a")||$tgt.is(":nth-child(8)")||$tgt.is(":nth-child(9)")||$tgt.is(":nth-child(10)")){
+                //Don't show inline links for cells containing links of their own.
             } else {
                 var position = $(this).offset();
                 var top = position.top+5;
