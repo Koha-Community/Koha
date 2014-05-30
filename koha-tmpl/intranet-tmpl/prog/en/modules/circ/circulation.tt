@@ -26,6 +26,7 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
 [% IF ( borrowernumber ) %]if($.cookie("holdfor") != [% borrowernumber %]){ $.cookie("holdfor",null, { path: "/", expires: 0 }); }[% ELSE %]$.cookie("holdfor",null, { path: "/", expires: 0 });[% END %]
 [% UNLESS ( borrowernumber ) %][% UNLESS ( CGIselectborrower ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %][% END %]
 	 $(document).ready(function() {
+        $('#issues-form').preventDoubleFormSubmit();
         $('#patronlists').tabs([% IF ( UseTablesortForCirc ) %]{
             // Correct table sizing for tables hidden in tabs
             // http://www.datatables.net/examples/api/tabs_and_scrolling.html
@@ -717,7 +718,7 @@ No patron matched <span class="ex">[% message %]</span>
 <!-- SUMMARY : TODAY & PREVIOUS ISSUES -->
 <div id="checkouts">
 [% IF ( issuecount ) %]
-    <form name="issues" action="/cgi-bin/koha/reserve/renewscript.pl" method="post" class="checkboxed">
+    <form id="issues-form" name="issues" action="/cgi-bin/koha/reserve/renewscript.pl" method="post" class="checkboxed">
     <input type="hidden" value="circ" name="destination" />
     <input type="hidden" name="cardnumber" value="[% cardnumber %]" />
     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
