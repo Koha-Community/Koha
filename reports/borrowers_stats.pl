@@ -154,12 +154,12 @@ if ($do_it) {
 }
 output_html_with_http_headers $input, $cookie, $template->output;
 
-sub catcode_aref() {
+sub catcode_aref {
 	my $req = C4::Context->dbh->prepare("SELECT categorycode, description FROM categories ORDER BY description");
 	$req->execute;
 	return $req->fetchall_arrayref({});
 }
-sub catcodes_hash() {
+sub catcodes_hash {
 	my %cathash;
 	my $catcodes = &catcode_aref;
 	foreach (@$catcodes) {
@@ -202,28 +202,24 @@ sub calculate {
 
     # Filters
     my $linefilter;
-    given ($line) {
-        when (/categorycode/) { $linefilter = @$filters[0] }
-        when (/zipcode/) { $linefilter = @$filters[1] }
-        when (/branchcode/) { $linefilter = @$filters[2] }
-        when (/sex/) { $linefilter = @$filters[5] }
-        when (/sort1/) { $linefilter = @$filters[6] }
-        when (/sort2/) { $linefilter = @$filters[7] }
-        when (/^patron_attr\.(.*)$/) { $linefilter = $attr_filters->{$1} }
-        default { $linefilter = '' }
-    }
+    if    ( $line =~ /categorycode/ ) { $linefilter = @$filters[0]; }
+    elsif ( $line =~ /zipcode/ )      { $linefilter = @$filters[1]; }
+    elsif ( $line =~ /branchcode/ )   { $linefilter = @$filters[2]; }
+    elsif ( $line =~ /sex/ )          { $linefilter = @$filters[5]; }
+    elsif ( $line =~ /sort1/ )        { $linefilter = @$filters[6]; }
+    elsif ( $line =~ /sort2/ )        { $linefilter = @$filters[7]; }
+    elsif ( $line =~ /^patron_attr\.(.*)$/ ) { $linefilter = $attr_filters->{$1}; }
+    else  { $linefilter = ''; }
 
     my $colfilter;
-    given ($column) {
-        when (/categorycode/) { $colfilter = @$filters[0] }
-        when (/zipcode/) { $colfilter = @$filters[1] }
-        when (/branchcode/) { $colfilter = @$filters[2] }
-        when (/sex/) { $colfilter = @$filters[5] }
-        when (/sort1/) { $colfilter = @$filters[6] }
-        when (/sort2/) { $colfilter = @$filters[7] }
-        when (/^patron_attr\.(.*)$/) { $colfilter = $attr_filters->{$1} }
-        default { $colfilter = '' }
-    }
+    if    ( $column =~ /categorycode/ ) { $colfilter = @$filters[0]; }
+    elsif ( $column =~ /zipcode/ )      { $colfilter = @$filters[1]; }
+    elsif ( $column =~ /branchcode/)    { $colfilter = @$filters[2]; }
+    elsif ( $column =~ /sex/)           { $colfilter = @$filters[5]; }
+    elsif ( $column =~ /sort1/)         { $colfilter = @$filters[6]; }
+    elsif ( $column =~ /sort2/)         { $colfilter = @$filters[7]; }
+    elsif ( $column =~ /^patron_attr\.(.*)$/) { $colfilter = $attr_filters->{$1}; }
+    else  { $colfilter = ''; }
 
     my @loopfilter;
     foreach my $i (0 .. scalar @$filters) {
@@ -235,16 +231,16 @@ sub calculate {
                 $cell{filter} = @$filters[$i];
             }
 
-            given ($i) {
-                when (0) { $cell{crit} = "Cat code" }
-                when (1) { $cell{crit} = "Zip code" }
-                when (2) { $cell{crit} = "Branch code" }
-                when ([3,4]) { $cell{crit} = "Date of birth" }
-                when (5) { $cell{crit} = "Sex" }
-                when (6) { $cell{crit} = "Sort1" }
-                when (7) { $cell{crit} = "Sort2" }
-                default { $cell{crit} = "Unknown" }
-            }
+            if    ( $i == 0)  { $cell{crit} = "Cat code"; }
+            elsif ( $i == 1 ) { $cell{crit} = "Zip code"; }
+            elsif ( $i == 2 ) { $cell{crit} = "Branch code"; }
+            elsif ( $i == 3 ||
+                    $i == 4 ) { $cell{crit} = "Date of birth"; }
+            elsif ( $i == 5 ) { $cell{crit} = "Sex"; }
+            elsif ( $i == 6 ) { $cell{crit} = "Sort1"; }
+            elsif ( $i == 7 ) { $cell{crit} = "Sort2"; }
+            else { $cell{crit} = "Unknown"; }
+
             push @loopfilter, \%cell;
         }
     }
