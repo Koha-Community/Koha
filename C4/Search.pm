@@ -2164,14 +2164,14 @@ sub searchResults {
                     || $item->{itemlost}
                     || $item->{damaged}
                     || $item->{notforloan}
-                    || $reservestatus eq 'Waiting'
+                    || $reservestatus eq 'Waiting' || $reservestatus eq 'Reserved'
                     || ($transfertwhen ne ''))
                 {
                     $withdrawn_count++        if $item->{withdrawn};
                     $itemlost_count++        if $item->{itemlost};
                     $itemdamaged_count++     if $item->{damaged};
                     $item_in_transit_count++ if $transfertwhen ne '';
-                    $item_onhold_count++     if $reservestatus eq 'Waiting';
+                    $item_onhold_count++     if $reservestatus eq 'Waiting' || $reservestatus eq 'Reserved';
                     $item->{status} = $item->{withdrawn} . "-" . $item->{itemlost} . "-" . $item->{damaged} . "-" . $item->{notforloan};
 
                     # can place a hold on a item if

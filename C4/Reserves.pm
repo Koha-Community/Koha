@@ -714,7 +714,7 @@ sub GetReserveStatus {
     }
 
     if(defined $found) {
-        return 'Waiting'  if $found eq 'W' and $priority == 0;
+        return 'Waiting'  if ($found eq 'W' || $found eq 'T') and $priority == 0;
         return 'Finished' if $found eq 'F';
     }
 
