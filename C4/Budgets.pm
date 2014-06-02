@@ -1144,6 +1144,7 @@ sub MoveOrders {
     my ($params)              = @_;
     my $from_budget_period_id = $params->{from_budget_period_id};
     my $to_budget_period_id   = $params->{to_budget_period_id};
+    my $move_remaining_unspent = $params->{move_remaining_unspent};
     return
       if not $from_budget_period_id
           or not $to_budget_period_id
@@ -1162,6 +1163,13 @@ sub MoveOrders {
             WHERE ordernumber = ?
         |
     );
+    my $sth_update_budget_amount = $dbh->prepare(
+        q|
+            UPDATE aqbudgets
+            SET budget_amount = ?
+            WHERE budget_id = ?
+        |
+    );
     my $from_budgets = GetBudgetHierarchy($from_budget_period_id);
     for my $from_budget (@$from_budgets) {
         my $new_budget_id = $dbh->selectcol_arrayref(
@@ -1178,7 +1186,7 @@ sub MoveOrders {
             push @report,
               {
                 moved       => 0,
-                budget_code => $from_budget->{budget_code},
+                budget      => $from_budget,
                 error       => 'budget_code_not_exists',
               };
             next;
@@ -1193,14 +1201,29 @@ sub MoveOrders {
         my @orders_moved;
         for my $order (@$orders_to_move) {
             $sth_update_aqorders->execute( $new_budget->{budget_id}, $order->{ordernumber} );
-            push @orders_moved, $order->{ordernumber};
+            push @orders_moved, $order;
+        }
+
+        my $unspent_moved = 0;
+        if ($move_remaining_unspent) {
+            my $spent   = GetBudgetHierarchySpent( $from_budget->{budget_id} );
+            my $unspent = $from_budget->{budget_amount} - $spent;
+            my $new_budget_amount = $new_budget->{budget_amount};
+            if ( $unspent > 0 ) {
+                $new_budget_amount += $unspent;
+                $unspent_moved = $unspent;
+            }
+            $new_budget->{budget_amount} = $new_budget_amount;
+            $sth_update_budget_amount->execute( $new_budget_amount,
+                $new_budget->{budget_id} );
         }
 
         push @report,
           {
-            budget => $new_budget,
+            budget        => $new_budget,
             orders_moved  => \@orders_moved,
             moved         => 1,
+            unspent_moved => $unspent_moved,
           };
     }
     return \@report;

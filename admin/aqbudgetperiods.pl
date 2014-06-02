@@ -227,7 +227,10 @@ elsif ( $op eq 'close_form' ) {
 
         # We want to move funds from this budget
         my $unreceived_orders = C4::Acquisition::SearchOrders(
-            { budget_id => $budget->{budget_id}, } );
+            {
+                budget_id => $budget->{budget_id},
+            }
+        );
         $budget->{unreceived_orders} = $unreceived_orders;
         $number_of_unreceived_orders += scalar(@$unreceived_orders);
     }
@@ -244,11 +247,13 @@ elsif ( $op eq 'close_form' ) {
 }
 
 elsif ( $op eq 'close_confirmed' ) {
-    my $to_budget_period_id = $input->param('to_budget_period_id');
-    my $report              = C4::Budgets::MoveOrders(
+    my $to_budget_period_id    = $input->param('to_budget_period_id');
+    my $move_remaining_unspent = $input->param('move_remaining_unspent');
+    my $report                 = C4::Budgets::MoveOrders(
         {
-            from_budget_period_id => $budget_period_id,
-            to_budget_period_id   => $to_budget_period_id,
+            from_budget_period_id  => $budget_period_id,
+            to_budget_period_id    => $to_budget_period_id,
+            move_remaining_unspent => $move_remaining_unspent,
         }
     );
 }

@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 77;
+use Test::More tests => 107;
 
 BEGIN {
     use_ok('C4::Budgets')
@@ -467,14 +467,14 @@ $budget_period_id_cloned = C4::Budgets::CloneBudgetPeriod(
         budget_period_id        => $budget_period_id,
         budget_period_startdate => '2014-01-01',
         budget_period_enddate   => '2014-12-31',
-        reset_all_funds         => 1,
     }
 );
 
 my $report = C4::Budgets::MoveOrders(
     {
-        from_budget_period_id => $budget_period_id,
-        to_budget_period_id   => $budget_period_id_cloned,
+        from_budget_period_id  => $budget_period_id,
+        to_budget_period_id    => $budget_period_id_cloned,
+        move_remaining_unspent => 1,
     }
 );
 is( scalar( @$report ), 6 , "MoveOrders has processed 6 funds" );
@@ -482,6 +482,31 @@ is( scalar( @$report ), 6 , "MoveOrders has processed 6 funds" );
 my $number_of_orders_moved = 0;
 $number_of_orders_moved += scalar( @{ $_->{orders_moved} } ) for @$report;
 is( $number_of_orders_moved, $number_of_orders_to_move, "MoveOrders has moved $number_of_orders_to_move orders" );
+
+my @new_budget_ids = map { $_->{budget_id} }
+  @{ C4::Budgets::GetBudgetHierarchy($budget_period_id_cloned) };
+my @old_budget_ids = map { $_->{budget_id} }
+  @{ C4::Budgets::GetBudgetHierarchy($budget_period_id) };
+for my $budget_id ( keys %budgets ) {
+    for my $ordernumber ( @{ $budgets{$budget_id} } ) {
+        my $budget            = GetBudgetByOrderNumber($ordernumber);
+        my $is_in_new_budgets = grep /^$budget->{budget_id}$/, @new_budget_ids;
+        my $is_in_old_budgets = grep /^$budget->{budget_id}$/, @old_budget_ids;
+        is( $is_in_new_budgets, 1, "MoveOrders changed the budget_id for order $ordernumber" );
+        is( $is_in_old_budgets, 0, "MoveOrders changed the budget_id for order $ordernumber" );
+    }
+}
+
+
+# MoveOrders with param move_remaining_unspent
+my @new_budgets = @{ C4::Budgets::GetBudgetHierarchy($budget_period_id_cloned) };
+my @old_budgets = @{ C4::Budgets::GetBudgetHierarchy($budget_period_id) };
+
+for my $new_budget ( @new_budgets ) {
+    my ( $old_budget ) = map { $_->{budget_code} eq $new_budget->{budget_code} ? $_ : () } @old_budgets;
+    my $new_budget_amount_should_be = $old_budget->{budget_amount} * 2 - $old_budget->{total_spent};
+    is( $new_budget->{budget_amount} + 0, $new_budget_amount_should_be, "MoveOrders updated the budget amount with the previous unspent budget (for budget $new_budget->{budget_code})" );
+}
 
 sub _get_dependencies {
     my ($budget_hierarchy) = @_;
