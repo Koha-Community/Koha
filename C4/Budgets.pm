@@ -1014,10 +1014,13 @@ sub ConvertCurrency {
   my $new_budget_period_id = CloneBudgetPeriod({
     budget_period_id => $budget_period_id,
     budget_period_startdate => $budget_period_startdate;
-    $budget_period_enddate   => $budget_period_enddate;
+    budget_period_enddate   => $budget_period_enddate;
+    mark_original_budget_as_inactive => 1
   });
 
 Clone a budget period with all budgets.
+If the mark_origin_budget_as_inactive is set (0 by default),
+the original budget will be marked as inactive.
 
 =cut
 
@@ -1026,6 +1029,8 @@ sub CloneBudgetPeriod {
     my $budget_period_id        = $params->{budget_period_id};
     my $budget_period_startdate = $params->{budget_period_startdate};
     my $budget_period_enddate   = $params->{budget_period_enddate};
+    my $mark_original_budget_as_inactive =
+      $params->{mark_original_budget_as_inactive} || 0;
 
     my $budget_period = GetBudgetPeriod($budget_period_id);
 
@@ -1037,8 +1042,21 @@ sub CloneBudgetPeriod {
 
     my $budgets = GetBudgetHierarchy($budget_period_id);
     CloneBudgetHierarchy(
-        { budgets => $budgets, new_budget_period_id => $new_budget_period_id }
+        {
+            budgets              => $budgets,
+            new_budget_period_id => $new_budget_period_id
+        }
     );
+
+    if ($mark_original_budget_as_inactive) {
+        ModBudgetPeriod(
+            {
+                budget_period_id     => $budget_period_id,
+                budget_period_active => 0,
+            }
+        );
+    }
+
     return $new_budget_period_id;
 }
 

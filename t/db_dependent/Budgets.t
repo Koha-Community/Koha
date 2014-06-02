@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 65;
+use Test::More tests => 69;
 
 BEGIN {
     use_ok('C4::Budgets')
@@ -373,7 +373,38 @@ is(
 is_deeply(
     _get_dependencies($budget_hierarchy),
     _get_dependencies($budget_hierarchy_cloned),
-    'CloneBudgetPeriod keep the same dependencies order'
+    'CloneBudgetPeriod keeps the same dependencies order'
+);
+
+# CloneBudgetPeriod with param mark_original_budget_as_inactive
+my $budget_period = C4::Budgets::GetBudgetPeriod($budget_period_id);
+is( $budget_period->{budget_period_active}, 1,
+    'CloneBudgetPeriod does not mark as inactive the budgetperiod if not needed'
+);
+
+$budget_period_id_cloned = C4::Budgets::CloneBudgetPeriod(
+    {
+        budget_period_id                 => $budget_period_id,
+        budget_period_startdate          => '2014-01-01',
+        budget_period_enddate            => '2014-12-31',
+        mark_original_budget_as_inactive => 1,
+    }
+);
+
+$budget_hierarchy        = GetBudgetHierarchy($budget_period_id);
+$budget_hierarchy_cloned = GetBudgetHierarchy($budget_period_id_cloned);
+
+is( scalar(@$budget_hierarchy_cloned), scalar(@$budget_hierarchy),
+'CloneBudgetPeriod (with inactive param) clones the same number of budgets (funds)'
+);
+is_deeply(
+    _get_dependencies($budget_hierarchy),
+    _get_dependencies($budget_hierarchy_cloned),
+    'CloneBudgetPeriod (with inactive param) keeps the same dependencies order'
+);
+$budget_period = C4::Budgets::GetBudgetPeriod($budget_period_id);
+is( $budget_period->{budget_period_active}, 0,
+    'CloneBudgetPeriod (with inactive param) marks as inactive the budgetperiod'
 );
 
 sub _get_dependencies {
