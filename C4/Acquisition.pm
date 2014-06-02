@@ -1731,6 +1731,7 @@ sub SearchOrders {
     my $pending = $params->{pending};
     my $ordered = $params->{ordered};
     my $biblionumber = $params->{biblionumber};
+    my $budget_id = $params->{budget_id};
 
     my $dbh = C4::Context->dbh;
     my @args = ();
@@ -1822,6 +1823,11 @@ sub SearchOrders {
     if ( $owner ) {
         $query .= ' AND aqbasket.authorisedby=? ';
         push @args, $userenv->{'number'};
+    }
+
+    if ( $budget_id ) {
+        $query .= ' AND aqorders.budget_id = ?';
+        push @args, $budget_id;
     }
 
     $query .= ' ORDER BY aqbasket.basketno';

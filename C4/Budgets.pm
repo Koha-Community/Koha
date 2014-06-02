@@ -1041,6 +1041,8 @@ sub CloneBudgetPeriod {
 
     $budget_period->{budget_period_startdate} = $budget_period_startdate;
     $budget_period->{budget_period_enddate}   = $budget_period_enddate;
+    # The new budget (budget_period) should be active by default
+    $budget_period->{budget_period_active}    = 1;
     my $original_budget_period_id = $budget_period->{budget_period_id};
     delete $budget_period->{budget_period_id};
     my $new_budget_period_id = AddBudgetPeriod( $budget_period );
@@ -1127,6 +1129,82 @@ sub CloneBudgetHierarchy {
     }
 }
 
+=head2 MoveOrders
+
+  my $report = MoveOrders({
+    from_budget_period_id => $from_budget_period_id,
+    to_budget_period_id   => $to_budget_period_id,
+  });
+
+Clone a budget hierarchy.
+
+=cut
+
+sub MoveOrders {
+    my ($params)              = @_;
+    my $from_budget_period_id = $params->{from_budget_period_id};
+    my $to_budget_period_id   = $params->{to_budget_period_id};
+    return
+      if not $from_budget_period_id
+          or not $to_budget_period_id
+          or $from_budget_period_id == $to_budget_period_id;
+
+    # Can't move orders to an inactive budget (budgetperiod)
+    my $budget_period = GetBudgetPeriod($to_budget_period_id);
+    return unless $budget_period->{budget_period_active};
+
+    my @report;
+    my $dbh     = C4::Context->dbh;
+    my $sth_update_aqorders = $dbh->prepare(
+        q|
+            UPDATE aqorders
+            SET budget_id = ?
+            WHERE ordernumber = ?
+        |
+    );
+    my $from_budgets = GetBudgetHierarchy($from_budget_period_id);
+    for my $from_budget (@$from_budgets) {
+        my $new_budget_id = $dbh->selectcol_arrayref(
+            q|
+                SELECT budget_id
+                FROM aqbudgets
+                WHERE budget_period_id = ?
+                    AND budget_code = ?
+            |, {}, $to_budget_period_id, $from_budget->{budget_code}
+        );
+        $new_budget_id = $new_budget_id->[0];
+        my $new_budget = GetBudget( $new_budget_id );
+        unless ( $new_budget ) {
+            push @report,
+              {
+                moved       => 0,
+                budget_code => $from_budget->{budget_code},
+                error       => 'budget_code_not_exists',
+              };
+            next;
+        }
+        my $orders_to_move = C4::Acquisition::SearchOrders(
+            {
+                budget_id => $from_budget->{budget_id},
+                pending   => 1,
+            }
+        );
+
+        my @orders_moved;
+        for my $order (@$orders_to_move) {
+            $sth_update_aqorders->execute( $new_budget->{budget_id}, $order->{ordernumber} );
+            push @orders_moved, $order->{ordernumber};
+        }
+
+        push @report,
+          {
+            budget => $new_budget,
+            orders_moved  => \@orders_moved,
+            moved         => 1,
+          };
+    }
+    return \@report;
+}
 
 END { }    # module clean-up code here (global destructor)
 

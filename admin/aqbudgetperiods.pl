@@ -206,6 +206,53 @@ elsif ( $op eq 'duplicate_budget' ){
     $op = 'else';
 }
 
+elsif ( $op eq 'close_form' ) {
+
+    my $budget_period = GetBudgetPeriod($budget_period_id);
+
+    my $active_budget_periods =
+      C4::Budgets::GetBudgetPeriods( { budget_period_active => 1 } );
+
+    # Remove the budget period from the list
+    $active_budget_periods =
+      [ map { ( $_->{budget_period_id} == $budget_period_id ) ? () : $_ }
+          @$active_budget_periods ];
+
+    my $budgets_to_move = GetBudgetHierarchy($budget_period_id);
+
+    # C4::Context->userenv->{branchcode}, $show_mine ? $borrower_id : '')
+
+    my $number_of_unreceived_orders = 0;
+    for my $budget (@$budgets_to_move) {
+
+        # We want to move funds from this budget
+        my $unreceived_orders = C4::Acquisition::SearchOrders(
+            { budget_id => $budget->{budget_id}, } );
+        $budget->{unreceived_orders} = $unreceived_orders;
+        $number_of_unreceived_orders += scalar(@$unreceived_orders);
+    }
+
+    $template->param(
+        close_form       => 1,
+        budget_period_id => $budget_period_id,
+        budget_period_description =>
+          $budget_period->{budget_period_description},
+        budget_periods              => $active_budget_periods,
+        budgets_to_move             => $budgets_to_move,
+        number_of_unreceived_orders => $number_of_unreceived_orders,
+    );
+}
+
+elsif ( $op eq 'close_confirmed' ) {
+    my $to_budget_period_id = $input->param('to_budget_period_id');
+    my $report              = C4::Budgets::MoveOrders(
+        {
+            from_budget_period_id => $budget_period_id,
+            to_budget_period_id   => $to_budget_period_id,
+        }
+    );
+}
+
 # DEFAULT - DISPLAY AQPERIODS TABLE
 # -------------------------------------------------------------------
 # display the list of budget periods

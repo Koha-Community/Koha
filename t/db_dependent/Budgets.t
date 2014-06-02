@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 71;
+use Test::More tests => 77;
 
 BEGIN {
     use_ok('C4::Budgets')
@@ -17,6 +17,12 @@ $dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM aqbudgetperiods|);
 $dbh->do(q|DELETE FROM aqbudgets|);
+
+# Mock userenv
+local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
+my $userenv;
+*C4::Context::userenv = \&Mock_userenv;
+$userenv = { flags => 1, id => 'my_userid', branch => 'CPL' };
 
 #
 # Budget Periods :
@@ -295,6 +301,7 @@ my %budgets;
 my $invoiceid = AddInvoice(invoicenumber => 'invoice_test_clone', booksellerid => $booksellerid, unknown => "unknown");
 my $item_price = 10;
 my $item_quantity = 2;
+my $number_of_orders_to_move = 0;
 for my $infos (@order_infos) {
     for ( 1 .. $infos->{pending_quantity} ) {
         my ( undef, $ordernumber ) = C4::Acquisition::NewOrder(
@@ -316,6 +323,7 @@ for my $infos (@order_infos) {
             }
         );
         push @{ $budgets{$infos->{budget_id}} }, $ordernumber;
+        $number_of_orders_to_move++;
     }
     for ( 1 .. $infos->{spent_quantity} ) {
         my ( undef, $ordernumber ) = C4::Acquisition::NewOrder(
@@ -434,6 +442,47 @@ is( $number_of_budgets_not_reset, 0,
     'CloneBudgetPeriod has reset all budgets (funds)' );
 
 
+# MoveOrders
+my $number_orders_moved = C4::Budgets::MoveOrders();
+is( $number_orders_moved, undef, 'MoveOrders return undef if no arg passed' );
+$number_orders_moved =
+  C4::Budgets::MoveOrders( { from_budget_period_id => $budget_period_id } );
+is( $number_orders_moved, undef,
+    'MoveOrders return undef if only 1 arg passed' );
+$number_orders_moved =
+  C4::Budgets::MoveOrders( { to_budget_period_id => $budget_period_id } );
+is( $number_orders_moved, undef,
+    'MoveOrders return undef if only 1 arg passed' );
+$number_orders_moved = C4::Budgets::MoveOrders(
+    {
+        from_budget_period_id => $budget_period_id,
+        to_budget_period_id   => $budget_period_id
+    }
+);
+is( $number_orders_moved, undef,
+    'MoveOrders return undef if 2 budget period id are the same' );
+
+$budget_period_id_cloned = C4::Budgets::CloneBudgetPeriod(
+    {
+        budget_period_id        => $budget_period_id,
+        budget_period_startdate => '2014-01-01',
+        budget_period_enddate   => '2014-12-31',
+        reset_all_funds         => 1,
+    }
+);
+
+my $report = C4::Budgets::MoveOrders(
+    {
+        from_budget_period_id => $budget_period_id,
+        to_budget_period_id   => $budget_period_id_cloned,
+    }
+);
+is( scalar( @$report ), 6 , "MoveOrders has processed 6 funds" );
+
+my $number_of_orders_moved = 0;
+$number_of_orders_moved += scalar( @{ $_->{orders_moved} } ) for @$report;
+is( $number_of_orders_moved, $number_of_orders_to_move, "MoveOrders has moved $number_of_orders_to_move orders" );
+
 sub _get_dependencies {
     my ($budget_hierarchy) = @_;
     my $graph;
@@ -457,4 +506,9 @@ sub _get_budgetname_by_id {
       map { ( $_->{budget_id} eq $budget_id ) ? $_->{budget_name} : () }
       @$budgets;
     return $budget_name;
+}
+
+# C4::Context->userenv
+sub Mock_userenv {
+    return $userenv;
 }

@@ -4,6 +4,10 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 [% INCLUDE 'datatables.inc' %]
+[% IF close_form %]
+    <link href="[% interface %]/lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/treetable/jquery.treetable.js"></script>
+[% END %]
 <script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
 <script type="text/javascript">
 // #################################################################################
@@ -84,8 +88,22 @@
                 { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
                 { "sType": "title-string", "aTargets" : [ "title-string" ] }
             ],
-            "bPaginate": false
+            "bPaginate": false,
+            'bAutoWidth': false
         } ) );
+
+        [% IF close_form %]
+          $("#budgeth").dataTable($.extend(true, {}, dataTablesDefaults, {
+            sDom: "t"
+          }));
+          $("#move_form").submit(function(){
+            var budget_from = "[% budget_period_description %]";
+            var budget_to = $("#budget_period").find("option:selected").html();
+            var alert_message = _("You have chosen to move all unreceived orders from '%s' to '%s'.").format(budget_from, budget_to);
+            alert_message += _("\nThis action cannot be reversed. Do you wish to continue?");
+            return confirm ( alert_message );
+          });
+        [% END %]
     });
 </script>
 
@@ -105,6 +123,9 @@
     [% END %]
     [% IF ( delete_confirmed ) %]&rsaquo;
         Data deleted
+    [% END %]
+    [% IF close_form %]&rsaquo;
+      Close budget [% budget_period_description %]
     [% END %]
 </title>
 
@@ -150,6 +171,12 @@
     [% IF ( duplicate_form ) %]
         <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo; Duplicate budget
     [% END %]
+
+    <!-- close a budget -->
+    [% IF close_form %]
+        <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo;
+        Close budget <a href="cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">[% budget_period_description %]</a>
+    [% END %]
     <!-- display budget periods list -->
     <!-- ########################################## -->
     [% IF ( else ) %]
@@ -162,7 +189,9 @@
 <div id="yui-main">
 <div class="yui-b">
 
-[% INCLUDE 'budgets-admin-toolbar.inc' %]
+[% UNLESS close_form %]
+  [% INCLUDE 'budgets-admin-toolbar.inc' %]
+[% END %]
 
 [% IF ( duplicate_form ) %]
 <h3>Duplicate budget</h3>
@@ -309,6 +338,62 @@
 
     </div>
 [% END %]
+
+[% IF close_form %]
+  [% IF budget_periods.size == 0 %]
+    You cannot move funds of this budget, there is no active budget.
+    Please create a new active budget and retry.
+    <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Back</a>
+  [% ELSIF number_of_unreceived_orders == 0 %]
+    There is no unreceived orders for this budget.
+    <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Back</a>
+  [% ELSE %]
+    <h3>Choose the funds you want to move unreceived orders:</h3>
+      Fund list of budget <a href="cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">[% budget_period_description %]</a>:
+    <table id="budgeth">
+      <thead>
+        <tr>
+            <th>Fund id</th>
+            <th>Fund code</th>
+            <th>Fund name</th>
+            <th>Unreceived orders</th>
+        </tr>
+      </thead>
+      <tbody>
+        [% FOREACH budget IN budgets_to_move %]
+          <tr>
+            <td>[% budget.budget_id %]</td>
+            <td>[% budget.budget_code_indent %]</td>
+            <td>[% budget.budget_name %]</td>
+            <td>[% budget.unreceived_orders.size %]</td>
+          </tr>
+        [% END %]
+      </tbody>
+    </table>
+    <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" name="f" method="post" id="move_form">
+      <fieldset class="rows">
+        <ol>
+          <li>
+            <label class="required" for="to_budget_period_id">Select a budget</label>
+            <select name="to_budget_period_id" id="to_budget_period_id" required="required">
+              <option value=""></option>
+              [% FOR budget_period IN budget_periods %]
+                <option value="[% budget_period.budget_period_id %]">[% budget_period.budget_period_description %]</option>
+              [% END %]
+            </select>
+          </li>
+        </ol>
+      </fieldset>
+      <fieldset class="action">
+          <input type="hidden" name="op" value="close_confirmed" />
+          <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
+          <input type="submit" value="Move unreceive orders" />
+          <a class="cancel" href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Cancel</a>
+      </fieldset>
+    </form>
+  [% END %]
+[% END %]
+
 <!--  DEFAULT  display budget periods list -->
 [% IF ( else ) %]
   <h2>Budgets administration</h2>
@@ -350,6 +435,7 @@
                   <a href="[% script_name %]?op=add_form&amp;budget_period_id=[% period_active.budget_period_id |html %]">Edit</a>
                   <a href="[% script_name %]?op=delete_confirm&amp;budget_period_id=[% period_active.budget_period_id %]">Delete</a>
                   <a href="[% script_name %]?op=duplicate_form&amp;budget_period_id=[% period_active.budget_period_id %]">Duplicate</a>
+                  <a href="[% script_name %]?op=close_form&amp;budget_period_id=[% period_active.budget_period_id %]">Close</a>
                   <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% period_active.budget_period_id %]">Add fund</a>
                 </td>
                 </tr>
@@ -390,6 +476,7 @@
                       <a href="[% script_name %]?op=add_form&amp;budget_period_id=[% period_loo.budget_period_id |html %]">Edit</a>
                       <a href="[% script_name %]?op=delete_confirm&amp;budget_period_id=[% period_loo.budget_period_id %]">Delete</a>
                       <a href="[% script_name %]?op=duplicate_form&amp;budget_period_id=[% period_loo.budget_period_id %]">Duplicate</a>
+                      <a href="[% script_name %]?op=close_form&amp;budget_period_id=[% period_loo.budget_period_id %]">Close</a>
                   <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% period_loo.budget_period_id %]">Add fund</a>
                   </td>
                   </tr>
