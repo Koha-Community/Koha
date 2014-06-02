@@ -279,6 +279,8 @@ foreach my $res (@reserves) {
     $res->{'branch'} = $branches->{ $res->{'branchcode'} }->{'branchname'};
     my $biblioData = GetBiblioData($res->{'biblionumber'});
     $res->{'reserves_title'} = $biblioData->{'title'};
+    $res->{'author'} = $biblioData->{'author'};
+
     if ($show_priority) {
         $res->{'priority'} ||= '';
     }
