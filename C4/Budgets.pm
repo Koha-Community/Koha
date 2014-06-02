@@ -1008,6 +1008,95 @@ sub ConvertCurrency {
     return ( $price / $cur );
 }
 
+
+=head2 CloneBudgetPeriod
+
+  my $new_budget_period_id = CloneBudgetPeriod({
+    budget_period_id => $budget_period_id,
+    budget_period_startdate => $budget_period_startdate;
+    $budget_period_enddate   => $budget_period_enddate;
+  });
+
+Clone a budget period with all budgets.
+
+=cut
+
+sub CloneBudgetPeriod {
+    my ($params)                = @_;
+    my $budget_period_id        = $params->{budget_period_id};
+    my $budget_period_startdate = $params->{budget_period_startdate};
+    my $budget_period_enddate   = $params->{budget_period_enddate};
+
+    my $budget_period = GetBudgetPeriod($budget_period_id);
+
+    $budget_period->{budget_period_startdate} = $budget_period_startdate;
+    $budget_period->{budget_period_enddate}   = $budget_period_enddate;
+    my $original_budget_period_id = $budget_period->{budget_period_id};
+    delete $budget_period->{budget_period_id};
+    my $new_budget_period_id = AddBudgetPeriod( $budget_period );
+
+    my $budgets = GetBudgetHierarchy($budget_period_id);
+    CloneBudgetHierarchy(
+        { budgets => $budgets, new_budget_period_id => $new_budget_period_id }
+    );
+    return $new_budget_period_id;
+}
+
+=head2 CloneBudgetHierarchy
+
+  CloneBudgetHierarchy({
+    budgets => $budgets,
+    new_budget_period_id => $new_budget_period_id;
+  });
+
+Clone a budget hierarchy.
+
+=cut
+
+sub CloneBudgetHierarchy {
+    my ($params)             = @_;
+    my $budgets              = $params->{budgets};
+    my $new_budget_period_id = $params->{new_budget_period_id};
+    next unless @$budgets or $new_budget_period_id;
+
+    my $children_of   = $params->{children_of};
+    my $new_parent_id = $params->{new_parent_id};
+
+    my @first_level_budgets =
+      ( not defined $children_of )
+      ? map { ( not $_->{budget_parent_id} )             ? $_ : () } @$budgets
+      : map { ( $_->{budget_parent_id} == $children_of ) ? $_ : () } @$budgets;
+
+    # get only the columns of aqbudgets
+    my @columns = Koha::Database->new()->schema->source('Aqbudget')->columns;
+
+    for my $budget ( sort { $a->{budget_id} <=> $b->{budget_id} }
+        @first_level_budgets )
+    {
+
+        my $tidy_budget =
+          { map { join( ' ', @columns ) =~ /$_/ ? ( $_ => $budget->{$_} ) : () }
+              keys($budget) };
+        my $new_budget_id = AddBudget(
+            {
+                %$tidy_budget,
+                budget_id        => undef,
+                budget_parent_id => $new_parent_id,
+                budget_period_id => $new_budget_period_id
+            }
+        );
+        CloneBudgetHierarchy(
+            {
+                budgets              => $budgets,
+                new_budget_period_id => $new_budget_period_id,
+                children_of          => $budget->{budget_id},
+                new_parent_id        => $new_budget_id
+            }
+        );
+    }
+}
+
+
 END { }    # module clean-up code here (global destructor)
 
 1;

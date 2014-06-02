@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 63;
+use Test::More tests => 65;
 
 BEGIN {
     use_ok('C4::Budgets')
@@ -352,3 +352,51 @@ for my $infos (@order_infos) {
 is( GetBudgetHierarchySpent( $budget_id1 ), 160, "total spent for budget1 is 160" );
 is( GetBudgetHierarchySpent( $budget_id11 ), 100, "total spent for budget11 is 100" );
 is( GetBudgetHierarchySpent( $budget_id111 ), 20, "total spent for budget111 is 20" );
+
+# CloneBudgetPeriod
+my $budget_period_id_cloned = C4::Budgets::CloneBudgetPeriod(
+    {
+        budget_period_id        => $budget_period_id,
+        budget_period_startdate => '2014-01-01',
+        budget_period_enddate   => '2014-12-31',
+    }
+);
+
+my $budget_hierarchy        = GetBudgetHierarchy($budget_period_id);
+my $budget_hierarchy_cloned = GetBudgetHierarchy($budget_period_id_cloned);
+
+is(
+    scalar(@$budget_hierarchy_cloned),
+    scalar(@$budget_hierarchy),
+    'CloneBudgetPeriod clones the same number of budgets (funds)'
+);
+is_deeply(
+    _get_dependencies($budget_hierarchy),
+    _get_dependencies($budget_hierarchy_cloned),
+    'CloneBudgetPeriod keep the same dependencies order'
+);
+
+sub _get_dependencies {
+    my ($budget_hierarchy) = @_;
+    my $graph;
+    for my $budget (@$budget_hierarchy) {
+        if ( $budget->{child} ) {
+            my @sorted = sort @{ $budget->{child} };
+            for my $child_id (@sorted) {
+                push @{ $graph->{ $budget->{budget_name} }{children} },
+                  _get_budgetname_by_id( $budget_hierarchy, $child_id );
+            }
+        }
+        push @{ $graph->{ $budget->{budget_name} }{parents} },
+          $budget->{parent_id};
+    }
+    return $graph;
+}
+
+sub _get_budgetname_by_id {
+    my ( $budgets, $budget_id ) = @_;
+    my ($budget_name) =
+      map { ( $_->{budget_id} eq $budget_id ) ? $_->{budget_name} : () }
+      @$budgets;
+    return $budget_name;
+}
