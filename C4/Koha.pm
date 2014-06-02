@@ -1140,16 +1140,16 @@ sub GetAuthorisedValues {
     # what it's for.
 
     # Is this cached already?
-    $opac = $opac ? 1 : 0; # normalise to be safe
-    my $selected_key = defined($selected) ? $selected : '';
-    my $cache_key = "AuthorisedValues-$category-$selected_key-$opac";
-    my $cache     = Koha::Cache->get_instance();
-    my $result    = $cache->get_from_cache($cache_key);
-warn "fetched $result from cache";
-    return $result if $result;
-
+    $opac = $opac ? 1 : 0;    # normalise to be safe
     my $branch_limit =
       C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
+    my $selected_key = defined($selected) ? $selected : '';
+    my $cache_key =
+      "AuthorisedValues-$category-$selected_key-$opac-$branch_limit";
+    my $cache  = Koha::Cache->get_instance();
+    my $result = $cache->get_from_cache($cache_key);
+    return $result if $result;
+
     my @results;
     my $dbh      = C4::Context->dbh;
     my $query = qq{
