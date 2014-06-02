@@ -580,7 +580,7 @@ sub UpdateMarcWith {
     foreach my $subfield ( $fieldfrom->subfields() ) {
         foreach my $field_to_update ( @fields_to ) {
             if ( $subfield->[1] ) {
-                unless ( $field_to_update->subfield($subfield->[0]) ~~ $subfield->[1] ) {
+                unless ( $field_to_update->subfield($subfield->[0]) eq $subfield->[1] ) {
                     $modified++;
                     $field_to_update->update( $subfield->[0] => $subfield->[1] );
                 }
