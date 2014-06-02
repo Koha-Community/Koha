@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 69;
+use Test::More tests => 71;
 
 BEGIN {
     use_ok('C4::Budgets')
@@ -382,6 +382,14 @@ is( $budget_period->{budget_period_active}, 1,
     'CloneBudgetPeriod does not mark as inactive the budgetperiod if not needed'
 );
 
+$budget_hierarchy_cloned = GetBudgetHierarchy($budget_period_id_cloned);
+my $number_of_budgets_not_reset = 0;
+for my $budget (@$budget_hierarchy_cloned) {
+    $number_of_budgets_not_reset++ if $budget->{budget_amount} > 0;
+}
+is( $number_of_budgets_not_reset, 5,
+    'CloneBudgetPeriod does not reset budgets (funds) if not needed' );
+
 $budget_period_id_cloned = C4::Budgets::CloneBudgetPeriod(
     {
         budget_period_id                 => $budget_period_id,
@@ -406,6 +414,25 @@ $budget_period = C4::Budgets::GetBudgetPeriod($budget_period_id);
 is( $budget_period->{budget_period_active}, 0,
     'CloneBudgetPeriod (with inactive param) marks as inactive the budgetperiod'
 );
+
+# CloneBudgetPeriod with param reset_all_budgets
+$budget_period_id_cloned = C4::Budgets::CloneBudgetPeriod(
+    {
+        budget_period_id        => $budget_period_id,
+        budget_period_startdate => '2014-01-01',
+        budget_period_enddate   => '2014-12-31',
+        reset_all_budgets         => 1,
+    }
+);
+
+$budget_hierarchy_cloned     = GetBudgetHierarchy($budget_period_id_cloned);
+$number_of_budgets_not_reset = 0;
+for my $budget (@$budget_hierarchy_cloned) {
+    $number_of_budgets_not_reset++ if $budget->{budget_amount} > 0;
+}
+is( $number_of_budgets_not_reset, 0,
+    'CloneBudgetPeriod has reset all budgets (funds)' );
+
 
 sub _get_dependencies {
     my ($budget_hierarchy) = @_;

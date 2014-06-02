@@ -190,6 +190,7 @@ elsif ( $op eq 'duplicate_budget' ){
     my $budget_period_startdate = dt_from_string $input->param('budget_period_startdate');
     my $budget_period_enddate   = dt_from_string $input->param('budget_period_enddate');
     my $mark_original_budget_as_inactive = $input->param('mark_original_budget_as_inactive');
+    my $reset_all_budgets = $input->param('reset_all_budgets');
 
     my $new_budget_period_id = C4::Budgets::CloneBudgetPeriod(
         {
@@ -197,6 +198,7 @@ elsif ( $op eq 'duplicate_budget' ){
             budget_period_startdate => $budget_period_startdate,
             budget_period_enddate   => $budget_period_enddate,
             mark_original_budget_as_inactive => $mark_original_budget_as_inactive,
+            reset_all_budgets => $reset_all_budgets,
         }
     );
 
