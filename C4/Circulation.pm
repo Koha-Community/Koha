@@ -3251,19 +3251,6 @@ sub SendCirculationAlert {
         message_name   => $message_name{$type},
     });
     my $issues_table = ( $type eq 'CHECKOUT' || $type eq 'RENEWAL' ) ? 'issues' : 'old_issues';
-    my $letter =  C4::Letters::GetPreparedLetter (
-        module => 'circulation',
-        letter_code => $type,
-        branchcode => $branch,
-        tables => {
-            $issues_table => $item->{itemnumber},
-            'items'       => $item->{itemnumber},
-            'biblio'      => $item->{biblionumber},
-            'biblioitems' => $item->{biblionumber},
-            'borrowers'   => $borrower,
-            'branches'    => $branch,
-        }
-    ) or return;
 
     my @transports = keys %{ $borrower_preferences->{transports} };
     # warn "no transports" unless @transports;
@@ -3272,15 +3259,43 @@ sub SendCirculationAlert {
         my $message = C4::Message->find_last_message($borrower, $type, $_);
         if (!$message) {
             #warn "create new message";
+            my $letter =  C4::Letters::GetPreparedLetter (
+                module => 'circulation',
+                letter_code => $type,
+                branchcode => $branch,
+                message_transport_type => $_,
+                tables => {
+                    $issues_table => $item->{itemnumber},
+                    'items'       => $item->{itemnumber},
+                    'biblio'      => $item->{biblionumber},
+                    'biblioitems' => $item->{biblionumber},
+                    'borrowers'   => $borrower,
+                    'branches'    => $branch,
+                }
+            ) or return;
             C4::Message->enqueue($letter, $borrower, $_);
         } else {
             #warn "append to old message";
+            my $letter =  C4::Letters::GetPreparedLetter (
+                module => 'circulation',
+                letter_code => $type,
+                branchcode => $branch,
+                message_transport_type => $_,
+                tables => {
+                    $issues_table => $item->{itemnumber},
+                    'items'       => $item->{itemnumber},
+                    'biblio'      => $item->{biblionumber},
+                    'biblioitems' => $item->{biblionumber},
+                    'borrowers'   => $borrower,
+                    'branches'    => $branch,
+                }
+            ) or return;
             $message->append($letter);
             $message->update;
         }
     }
 
-    return $letter;
+    return;
 }
 
 =head2 updateWrongTransfer
