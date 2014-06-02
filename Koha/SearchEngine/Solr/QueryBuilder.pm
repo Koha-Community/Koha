@@ -60,16 +60,12 @@ sub build_advanced_query {
         # And others
         $index_name = @$indexes[$i] if @$indexes[$i];
         my $operator = defined @$operators[$i-1] ? @$operators[$i-1] : 'AND';
-        for ( uc ( $operator ) ) {
-            when ('OR'){
-                $q .= BuildTokenString($index_name, $kw, 'OR');
-            }
-            when ('NOT'){
-                $q .= BuildTokenString($index_name, $kw, 'NOT');
-            }
-            default {
-                $q .= BuildTokenString($index_name, $kw, 'AND');
-            }
+        if ( uc ( $operator ) eq 'OR' ) {
+            $q .= BuildTokenString($index_name, $kw, 'OR');
+        } elsif ( uc ( $operator ) eq 'NOT' ) {
+            $q .= BuildTokenString($index_name, $kw, 'NOT');
+        } else {
+            $q .= BuildTokenString($index_name, $kw, 'AND');
         }
         $i = $i + 1;
     }
