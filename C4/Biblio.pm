@@ -2190,20 +2190,24 @@ sub TransformKohaToMarc {
     my $record = MARC::Record->new();
     SetMarcUnicodeFlag( $record, C4::Context->preference("marcflavour") );
     my $db_to_marc = C4::Context->marcfromkohafield;
+    my $tag_hr = {};
     while ( my ($name, $value) = each %$hash ) {
         next unless my $dtm = $db_to_marc->{''}->{$name};
         next unless ( scalar( @$dtm ) );
-        my ($tag, $letter) = @$dtm;
+        my ($tag, $letter) = @$dtm; $tag .= '';
         foreach my $value ( split(/\s?\|\s?/, $value, -1) ) {
-            if ( my $field = $record->field($tag) ) {
-                $field->add_subfields( $letter => $value );
-            }
-            else {
-                $record->insert_fields_ordered( MARC::Field->new(
-                    $tag, " ", " ", $letter => $value ) );
-            }
+            $value eq '' && next;
+            $tag_hr->{$tag} //= [];
+            push @{$tag_hr->{$tag}}, [($letter, $value)];
         }
-
+    }
+    foreach my $tag (sort keys %$tag_hr) {
+        my @sfl = @{$tag_hr->{$tag}};
+        @sfl = sort { $a->[0] cmp $b->[0]; } @sfl;
+        @sfl = map { @{$_}; } @sfl;
+        $record->insert_fields_ordered(
+            MARC::Field->new($tag, " ", " ", @sfl)
+        );
     }
     return $record;
 }
