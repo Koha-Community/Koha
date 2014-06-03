@@ -7984,7 +7984,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.14.07.001";
 if ( CheckVersion($DBversion) ) {
     $dbh->{AutoCommit} = 0;
     $dbh->{RaiseError} = 1;
