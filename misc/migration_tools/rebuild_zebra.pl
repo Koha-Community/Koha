@@ -48,6 +48,7 @@ my $run_as_root;
 my $run_user = (getpwuid($<))[0];
 my $wait_for_lock = 0;
 my $use_flock;
+my $table = 'biblioitems';
 
 my $verbose_logging = 0;
 my $zebraidx_log_opt = " -v none,fatal,warn ";
@@ -75,6 +76,7 @@ my $result = GetOptions(
     'v+'            => \$verbose_logging,
     'run-as-root'   => \$run_as_root,
     'wait-for-lock' => \$wait_for_lock,
+    't|table:s'     => \$table,
 );
 
 if (not $result or $want_help) {
@@ -442,7 +444,10 @@ sub select_all_authorities {
 }
 
 sub select_all_biblios {
-    my $strsth = qq{ SELECT biblionumber FROM biblioitems };
+    $table = 'biblioitems'
+      if $table ne 'items'
+      and $table ne 'biblio';
+    my $strsth = qq{ SELECT biblionumber FROM $table };
     $strsth.=qq{ WHERE $where } if ($where);
     $strsth.=qq{ LIMIT $length } if ($length && !$offset);
     $strsth.=qq{ LIMIT $offset,$length } if ($offset);
@@ -917,6 +922,9 @@ Parameters:
                             lock is busy.  This option will cause the program
                             to wait for the lock to free and then continue
                             processing the rebuild request,
+
+    --table                 specify a table (can be items, biblioitems or biblio) to retrieve biblionumber to index.
+                            biblioitems is the default value.
 
     --help or -h            show this message.
 _USAGE_
