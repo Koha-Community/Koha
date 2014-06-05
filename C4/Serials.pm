@@ -1578,36 +1578,29 @@ sub NewIssue {
         }
     );
 
-    my $dbh   = C4::Context->dbh;
     my $serialid = $serial->id();
 
-    my $query = qq|
-        SELECT missinglist,recievedlist
-        FROM   subscriptionhistory
-        WHERE  subscriptionid=?
-    |;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($subscriptionid);
-    my ( $missinglist, $recievedlist ) = $sth->fetchrow;
+    my $subscription_history = $schema->resultset('Subscriptionhistory')->find($subscriptionid);
+    my $missinglist = $subscription_history->missinglist();
+    my $recievedlist = $subscription_history->recievedlist();
 
     if ( $status == ARRIVED ) {
-      ### TODO Add a feature that improves recognition and description.
-      ### As such count (serialseq) i.e. : N18,2(N19),N20
-      ### Would use substr and index But be careful to previous presence of ()
-        $recievedlist .= "; $serialseq" unless (index($recievedlist,$serialseq)>0);
+        ### TODO Add a feature that improves recognition and description.
+        ### As such count (serialseq) i.e. : N18,2(N19),N20
+        ### Would use substr and index But be careful to previous presence of ()
+        $recievedlist .= "; $serialseq" unless ( index( $recievedlist, $serialseq ) > 0 );
     }
-    if ( grep {/^$status$/} ( MISSING_STATUSES ) ) {
-        $missinglist .= "; $serialseq" unless (index($missinglist,$serialseq)>0);
+    if ( grep { /^$status$/ } (MISSING_STATUSES) ) {
+        $missinglist .= "; $serialseq" unless ( index( $missinglist, $serialseq ) > 0 );
     }
-    $query = qq|
-        UPDATE subscriptionhistory
-        SET    recievedlist=?, missinglist=?
-        WHERE  subscriptionid=?
-    |;
-    $sth = $dbh->prepare($query);
+
     $recievedlist =~ s/^; //;
     $missinglist  =~ s/^; //;
-    $sth->execute( $recievedlist, $missinglist, $subscriptionid );
+
+    $subscription_history->recievedlist($recievedlist);
+    $subscription_history->missinglist($missinglist);
+    $subscription_history->update();
+
     return $serialid;
 }
 
