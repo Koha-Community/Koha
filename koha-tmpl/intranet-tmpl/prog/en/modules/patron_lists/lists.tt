@@ -51,7 +51,7 @@
                 [% FOREACH l IN lists %]
                     <tr>
                         <td>[% l.name %]</td>
-                        <td>[% l.patron_list_patrons.size || 0 %]</td>
+                        <td>[% l.patron_list_patrons_rs.count || 0 %]</td>
                         <td>
                             <a class="btn btn-mini" href="list.pl?patron_list_id=[% l.patron_list_id %]">
                                 <i class="icon-plus-sign"></i> Add patrons <i class="icon-user"></i>
