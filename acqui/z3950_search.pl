@@ -31,7 +31,6 @@ use C4::Koha;
 use C4::Bookseller qw/ GetBookSellerFromId /;
 
 my $input           = new CGI;
-my $dbh             = C4::Context->dbh;
 my $biblionumber    = $input->param('biblionumber')||0;
 my $frameworkcode   = $input->param('frameworkcode')||'';
 my $title           = $input->param('title');
@@ -92,11 +91,16 @@ $template->param(
 );
 
 if ( $op ne "do_search" ) {
-    my $sth = $dbh->prepare("select id,host,servername,checked from z3950servers where recordtype='biblio' and servertype='zed' order by host");
-    $sth->execute();
-    my $serverloop = $sth->fetchall_arrayref( {} );
+    my $schema = Koha::Database->new()->schema();
+    my $rs = $schema->resultset('Z3950server')->search(
+        {
+            recordtype => 'biblio',
+            servertype => ['zed', 'sru'],
+        },
+        { result_class => 'DBIx::Class::ResultClass::HashRefInflator' },
+    );
     $template->param(
-        serverloop   => $serverloop,
+        serverloop   => [ $rs->all ],
         opsearch     => "search",
     );
     output_html_with_http_headers $input, $cookie, $template->output;

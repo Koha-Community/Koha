@@ -27,6 +27,7 @@ use C4::Charset;
 use MARC::File::USMARC;
 use C4::ImportBatch;
 use C4::AuthoritiesMarc; #GuessAuthTypeCode, FindDuplicateAuthority
+use Koha::Database;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -135,109 +136,36 @@ sub Z3950Search {
     my @id= @{$pars->{id}};
     my $page= $pars->{page};
     my $biblionumber= $pars->{biblionumber};
-    my $isbn= $pars->{isbn};
-    my $issn= $pars->{issn};
-    my $title= $pars->{title};
-    my $author= $pars->{author};
-    my $dewey= $pars->{dewey};
-    my $subject= $pars->{subject};
-    my $lccn= $pars->{lccn};
-    my $lccall= $pars->{lccall};
-    my $controlnumber= $pars->{controlnumber};
-    my $srchany= $pars->{srchany};
-    my $stdid= $pars->{stdid};
 
     my $show_next       = 0;
     my $total_pages     = 0;
-    my $term;
     my @results;
     my @breeding_loop = ();
     my @oConnection;
     my @oResult;
     my @errconn;
     my $s = 0;
-    my $query;
-    my $nterms=0;
     my $imported=0;
-    my @serverinfo; #replaces former serverhost, servername, encoding
 
-    if ($isbn) {
-        $term=$isbn;
-        $query .= " \@attr 1=7 \@attr 5=1 \"$term\" ";
-        $nterms++;
-    }
-    if ($issn) {
-        $term=$issn;
-        $query .= " \@attr 1=8 \@attr 5=1 \"$term\" ";
-        $nterms++;
-    }
-    if ($title) {
-        $query .= " \@attr 1=4 \"$title\" ";
-        $nterms++;
-    }
-    if ($author) {
-        $query .= " \@attr 1=1003 \"$author\" ";
-        $nterms++;
-    }
-    if ($dewey) {
-        $query .= " \@attr 1=16 \"$dewey\" ";
-        $nterms++;
-    }
-    if ($subject) {
-        $query .= " \@attr 1=21 \"$subject\" ";
-        $nterms++;
-    }
-    if ($lccn) {
-        $query .= " \@attr 1=9 $lccn ";
-        $nterms++;
-    }
-    if ($lccall) {
-        $query .= " \@attr 1=16 \@attr 2=3 \@attr 3=1 \@attr 4=1 \@attr 5=1 \@attr 6=1 \"$lccall\" ";
-        $nterms++;
-    }
-    if ($controlnumber) {
-        $query .= " \@attr 1=12 \"$controlnumber\" ";
-        $nterms++;
-    }
-    if($srchany) {
-        $query .= " \@attr 1=1016 \"$srchany\" ";
-        $nterms++;
-    }
-    if($stdid) {
-        $query .= " \@attr 1=1007 \"$stdid\" ";
-        $nterms++;
-    }
-    for my $i (1..$nterms-1) {
-        $query = "\@and " . $query;
+    my ( $zquery, $squery ) = _build_query( $pars );
+
+    my $schema = Koha::Database->new()->schema();
+    my $rs = $schema->resultset('Z3950server')->search(
+        { id => [ @id ] },
+        { result_class => 'DBIx::Class::ResultClass::HashRefInflator' },
+    );
+    my @servers = $rs->all;
+    foreach my $server ( @servers ) {
+        $oConnection[$s] = _create_connection( $server );
+        $oResult[$s] =
+            $server->{servertype} eq 'zed'?
+                $oConnection[$s]->search_pqf( $zquery ):
+                $oConnection[$s]->search(new ZOOM::Query::CQL(
+                    _translate_query( $server, $squery )));
+        $s++;
     }
 
-    my $dbh   = C4::Context->dbh;
-    foreach my $servid (@id) {
-        my $sth = $dbh->prepare("select * from z3950servers where id=?");
-        $sth->execute($servid);
-        while (my $server = $sth->fetchrow_hashref) {
-            my $option1= new ZOOM::Options();
-            $option1->option( 'async' => 1 );
-            $option1->option( 'elementSetName', 'F' );
-            $option1->option( 'databaseName',   $server->{db} );
-            $option1->option( 'user', $server->{userid} ) if $server->{userid};
-            $option1->option( 'password', $server->{password} ) if $server->{password};
-            $option1->option( 'preferredRecordSyntax', $server->{syntax} );
-            $option1->option( 'timeout', $server->{timeout} ) if $server->{timeout};
-            $oConnection[$s]= create ZOOM::Connection($option1);
-            $oConnection[$s]->connect( $server->{host}, $server->{port} );
-            $serverinfo[$s]->{host}= $server->{host};
-            $serverinfo[$s]->{name}= $server->{servername};
-            $serverinfo[$s]->{encd}= $server->{encoding} // "iso-5426";
-            $s++;
-        }    ## while fetch
-    }    # foreach
-    my $nremaining  = $s;
-
-    for ( my $z = 0 ; $z < $s ; $z++ ) {
-        $oResult[$z] = $oConnection[$z]->search_pqf($query);
-    }
-
+    my $nremaining = $s;
     while ( $nremaining-- ) {
         my $k;
         my $event;
@@ -251,7 +179,7 @@ sub Z3950Search {
             my ($error)= $oConnection[$k]->error_x(); #ignores errmsg, addinfo, diagset
             if ($error) {
                 if ($error =~ m/^(10000|10007)$/ ) {
-                    push(@errconn, { server => $serverinfo[$k]->{host}, error => $error } );
+                    push(@errconn, { server => $servers[$k]->{host}, error => $error } );
                 }
             }
             else {
@@ -263,11 +191,11 @@ sub Z3950Search {
                     $total_pages = int($numresults/20)+1 if $total_pages < ($numresults/20);
                     for ($i = ($page-1)*20; $i < (($numresults < ($page*20)) ? $numresults : ($page*20)); $i++) {
                         if($oResult[$k]->record($i)) {
-                            my $res=_handle_one_result($oResult[$k]->record($i), $serverinfo[$k], ++$imported, $biblionumber); #ignores error in sequence numbering
+                            my $res=_handle_one_result($oResult[$k]->record($i), $servers[$k], ++$imported, $biblionumber); #ignores error in sequence numbering
                             push @breeding_loop, $res if $res;
                         }
                         else {
-                            push(@breeding_loop,{'server'=>$serverinfo[$k]->{name},'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
+                            push(@breeding_loop,{'server'=>$servers[$k]->{servername},'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
                         }
                     }
                 }    #if $numresults
@@ -289,10 +217,6 @@ sub Z3950Search {
         $oConnection[$_]->destroy();
     }
 
-    my @servers = ();
-    foreach my $id (@id) {
-        push @servers, {id => $id};
-    }
     $template->param(
         breeding_loop => \@breeding_loop,
         servers => \@servers,
@@ -300,14 +224,53 @@ sub Z3950Search {
     );
 }
 
+sub _build_query {
+    my ( $pars ) = @_;
+
+    my $qry_build = {
+        isbn    => '@attr 1=7 @attr 5=1 "#term" ',
+        issn    => '@attr 1=8 @attr 5=1 "#term" ',
+        title   => '@attr 1=4 #term ',
+        author  => '@attr 1=1003 "#term" ',
+        dewey   => '@attr 1=16 "#term" ',
+        subject => '@attr 1=21 "#term" ',
+        lccall  => '@attr 1=16 @attr 2=3 @attr 3=1 @attr 4=1 @attr 5=1 '.
+                   '@attr 6=1 "#term" ',
+        controlnumber => '@attr 1=12 "#term" ',
+        srchany => '@attr 1=1016 "#term" ',
+        stdid   => '@attr 1=1007 "#term" ',
+    };
+
+    my $zquery='';
+    my $squery='';
+    my $nterms=0;
+    foreach my $k ( keys %$pars ) {
+        if( ( my $val=$pars->{$k} ) && $qry_build->{$k} ) {
+            $qry_build->{$k} =~ s/#term/$val/g;
+            $zquery .= $qry_build->{$k};
+            $squery .= "[$k]=\"$val\" and ";
+            $nterms++;
+        }
+    }
+    $zquery = "\@and " . $zquery for 2..$nterms;
+    $squery =~ s/ and $//;
+    return ( $zquery, $squery );
+}
+
 sub _handle_one_result {
     my ($zoomrec, $servhref, $seq, $bib)= @_;
 
     my $raw= $zoomrec->raw();
-    my ($marcrecord) = MarcToUTF8Record($raw, C4::Context->preference('marcflavour'), $servhref->{encd}); #ignores charset return values
+    my $marcrecord;
+    if( $servhref->{servertype} eq 'sru' ) {
+        $marcrecord= MARC::Record->new_from_xml( $raw, 'UTF-8',
+            $servhref->{syntax} );
+    } else {
+        ($marcrecord) = MarcToUTF8Record($raw, C4::Context->preference('marcflavour'), $servhref->{encoding} // "iso-5426" ); #ignores charset return values
+    }
     SetUTF8Flag($marcrecord);
 
-    my $batch_id = GetZ3950BatchId($servhref->{name});
+    my $batch_id = GetZ3950BatchId($servhref->{servername});
     my $breedingid = AddBiblioToBatch($batch_id, $seq, $marcrecord, 'UTF-8', 0, 0);
         #FIXME passing 0 for z3950random
         #Will eliminate this unused field in a followup report
@@ -319,7 +282,7 @@ sub _handle_one_result {
     return _add_rowdata(
         {
             biblionumber => $bib,
-            server       => $servhref->{name},
+            server       => $servhref->{servername},
             breedingid   => $breedingid,
         }, $marcrecord) if $breedingid;
 }
@@ -352,6 +315,63 @@ sub _isbn_replace {
     $isbn =~ s/\|/ \| /g;
     $isbn =~ s/\(/ \(/g;
     return $isbn;
+}
+
+sub _create_connection {
+    my ( $server ) = @_;
+    my $option1= new ZOOM::Options();
+    $option1->option( 'async' => 1 );
+    $option1->option( 'elementSetName', 'F' );
+    $option1->option( 'preferredRecordSyntax', $server->{syntax} );
+    $option1->option( 'timeout', $server->{timeout} ) if $server->{timeout};
+
+    if( $server->{servertype} eq 'sru' ) {
+        foreach( split ',', $server->{sru_options}//'' ) {
+            my @temp= split '=';
+            $option1->option( $temp[0] => $temp[1] ) if @temp;
+        }
+    } elsif( $server->{servertype} eq 'zed' ) {
+        $option1->option( 'databaseName',   $server->{db} );
+        $option1->option( 'user', $server->{userid} ) if $server->{userid};
+        $option1->option( 'password', $server->{password} ) if $server->{password};
+    }
+
+    my $obj= ZOOM::Connection->create($option1);
+    if( $server->{servertype} eq 'sru' ) {
+        my $host= $server->{host};
+        if( $host !~ /^https?:\/\// ) {
+            #Normally, host will not be prefixed by protocol.
+            #In that case we can (safely) assume http.
+            #In case someone prefixed with https, give it a try..
+            $host = 'http://' . $host;
+        }
+        $obj->connect( $host.':'.$server->{port}.'/'.$server->{db} );
+    } else {
+        $obj->connect( $server->{host}, $server->{port} );
+    }
+    return $obj;
+}
+
+sub _translate_query { #SRU query adjusted per server cf. srufields column
+    my ($server, $query) = @_;
+
+    #sru_fields is in format title=field,isbn=field,...
+    #if a field doesn't exist, try anywhere or remove [field]=
+    my @parts= split(',', $server->{sru_fields} );
+    my %trans= map { if( /=/ ) { ( $`,$' ) } else { () } } @parts;
+    my $any= $trans{srchany}?$trans{srchany}.'=':'';
+
+    my $q=$query;
+    foreach my $key (keys %trans) {
+        my $f=$trans{$key};
+        if( $f ) {
+            $q=~s/\[$key\]/$f/g;
+        } else {
+            $q=~s/\[$key\]=/$any/g;
+        }
+    }
+    $q=~s/\[\w+\]=/$any/g; # remove remaining fields (not found in field list)
+    return $q;
 }
 
 =head2 ImportBreedingAuth

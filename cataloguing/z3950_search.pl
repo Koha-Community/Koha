@@ -29,7 +29,6 @@ use C4::Breeding;
 use C4::Koha;
 
 my $input        = new CGI;
-my $dbh          = C4::Context->dbh;
 my $error         = $input->param('error');
 my $biblionumber  = $input->param('biblionumber') || 0;
 my $frameworkcode = $input->param('frameworkcode');
@@ -73,11 +72,16 @@ $template->param(
 );
 
 if ( $op ne "do_search" ) {
-    my $sth = $dbh->prepare("SELECT id,host,servername,checked FROM z3950servers WHERE recordtype='biblio' AND servertype='zed' ORDER BY rank, servername");
-    $sth->execute();
-    my $serverloop = $sth->fetchall_arrayref( {} );
+    my $schema = Koha::Database->new()->schema();
+    my $rs = $schema->resultset('Z3950server')->search(
+        {
+            recordtype => 'biblio',
+            servertype => ['zed', 'sru'],
+        },
+        { result_class => 'DBIx::Class::ResultClass::HashRefInflator' },
+    );
     $template->param(
-        serverloop   => $serverloop,
+        serverloop   => [ $rs->all ],
         opsearch     => "search",
     );
     output_html_with_http_headers $input, $cookie, $template->output;
