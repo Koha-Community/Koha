@@ -227,7 +227,7 @@ sub Z3950Search {
             $oConnection[$s]= create ZOOM::Connection($option1);
             $oConnection[$s]->connect( $server->{host}, $server->{port} );
             $serverinfo[$s]->{host}= $server->{host};
-            $serverinfo[$s]->{name}= $server->{name};
+            $serverinfo[$s]->{name}= $server->{servername};
             $serverinfo[$s]->{encd}= $server->{encoding} // "iso-5426";
             $s++;
         }    ## while fetch
