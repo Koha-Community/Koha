@@ -72,7 +72,14 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(i) {
 	defaultvalue=document.getElementById(\"$field_number\").value;
-	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008.pl&index=$field_number&result=\"+defaultvalue,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+    //Retrieve full leader string and pass it to the 008 tag editor
+    var leader_value = \$(\"input[id^='tag_000']\").val();
+    var leader_parameter = \"\";
+    if (leader_value){
+        //Only add the parameter to the URL if there is a value to add
+        leader_parameter = \"&leader=\"+leader_value;
+    }
+    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008.pl&index=$field_number&result=\"+defaultvalue+leader_parameter,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 //]]>
@@ -90,6 +97,54 @@ sub plugin {
     my ($input) = @_;
     my $index   = $input->param('index');
     my $result  = $input->param('result');
+    my $leader  = $input->param('leader');
+
+    my $material_configuration;
+    if ($leader && length($leader) == '24') {
+        #MARC 21 Material Type Configuration
+        #Field 008/18-34 Configuration
+        #If Leader/06 = a and Leader/07 = a, c, d, or m: Books
+        #If Leader/06 = a and Leader/07 = b, i, or s: Continuing Resources
+        #If Leader/06 = t: Books
+        #If Leader/06 = c, d, i, or j: Music
+        #If Leader/06 = e, or f: Maps
+        #If Leader/06 = g, k, o, or r: Visual Materials
+        #If Leader/06 = m: Computer Files
+        #If Leader/06 = p: Mixed Materials
+        #http://www.loc.gov/marc/bibliographic/bdleader.html
+        my $material_configuration_mapping = {
+            a => {
+                a => 'BKS',
+                c => 'BKS',
+                d => 'BKS',
+                m => 'BKS',
+                b => 'CR',
+                i => 'CR',
+                s => 'CR',
+            },
+            t => 'BKS',
+            c => 'MU',
+            d => 'MU',
+            i => 'MU',
+            j => 'MU',
+            e => 'MP',
+            f => 'MP',
+            g => 'VM',
+            k => 'VM',
+            o => 'VM',
+            r => 'VM',
+            m => 'CF',
+            p => 'MX',
+        };
+        my $leader06 = substr($leader, 6, 1);
+        my $leader07 = substr($leader, 7, 1);
+        #Retrieve material type using leader06
+        $material_configuration = $material_configuration_mapping->{$leader06};
+        #If the value returned is a ref (i.e. leader06 is 'a'), then use leader07 to get the actual material type
+        if ( ($material_configuration) && (ref($material_configuration) eq 'HASH') ){
+            $material_configuration = $material_configuration->{$leader07};
+        }
+    }
 
     my $dbh = C4::Context->dbh;
 
@@ -123,6 +178,7 @@ sub plugin {
             index => $index,
             result => $result,
             errorXml => $errorXml,
+            material_configuration => $material_configuration,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
