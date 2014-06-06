@@ -98,7 +98,7 @@
           }));
           $("#move_form").submit(function(){
             var budget_from = "[% budget_period_description %]";
-            var budget_to = $("#budget_period").find("option:selected").html();
+            var budget_to = $("#to_budget_period_id").find("option:selected").html();
             var alert_message = _("You have chosen to move all unreceived orders from '%s' to '%s'.").format(budget_from, budget_to);
             alert_message += _("\nThis action cannot be reversed. Do you wish to continue?");
             return confirm ( alert_message );
@@ -396,7 +396,7 @@
     There is no unreceived orders for this budget.
     <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Back</a>
   [% ELSE %]
-    <h3>Choose the funds you want to move unreceived orders:</h3>
+    <h3>The unreceived orders from the following funds will be moved</h3>
       Fund list of budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">[% budget_period_description %]</a>:
     <table id="budgeth">
       <thead>
@@ -445,7 +445,7 @@
     </form>
   [% END %]
 [% ELSIF closed %]
-  <h3>Report after moving unreceived orders from budget [% from_budget_period.budget_period_description %] ([% from_budget_period.budget_period_startdate | $KohaDates %] - [% to_budget_period.budget_period_enddate | $KohaDates %]) to [% to_budget_period.budget_period_description %] ([% to_budget_period.budget_period_startdate | $KohaDates %] - [% to_budget_period.budget_period_enddate | $KohaDates%])</h3>
+  <h3>Report after moving unreceived orders from budget [% from_budget_period.budget_period_description %] ([% from_budget_period.budget_period_startdate | $KohaDates %] - [% from_budget_period.budget_period_enddate | $KohaDates %]) to [% to_budget_period.budget_period_description %] ([% to_budget_period.budget_period_startdate | $KohaDates %] - [% to_budget_period.budget_period_enddate | $KohaDates%])</h3>
 
   <table id="closed_report">
     <thead>

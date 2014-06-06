@@ -229,6 +229,7 @@ elsif ( $op eq 'close_form' ) {
         my $unreceived_orders = C4::Acquisition::SearchOrders(
             {
                 budget_id => $budget->{budget_id},
+                pending   => 1,
             }
         );
         $budget->{unreceived_orders} = $unreceived_orders;
@@ -248,7 +249,6 @@ elsif ( $op eq 'close_form' ) {
 
 elsif ( $op eq 'close_confirmed' ) {
     my $to_budget_period_id    = $input->param('to_budget_period_id');
-    my $from_budget_period_id  = $input->param('from_budget_period_id');
     my $move_remaining_unspent = $input->param('move_remaining_unspent');
     my $report                 = C4::Budgets::MoveOrders(
         {
@@ -258,7 +258,7 @@ elsif ( $op eq 'close_confirmed' ) {
         }
     );
 
-    my $from_budget_period = GetBudgetPeriod($from_budget_period_id);
+    my $from_budget_period = GetBudgetPeriod($budget_period_id);
     my $to_budget_period   = GetBudgetPeriod($to_budget_period_id);
     $template->param(
         closed           => 1,
