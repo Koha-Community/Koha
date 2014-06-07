@@ -6,6 +6,9 @@
     //<![CDATA[
 
      $(document).ready(function() {
+        //Set focus to cataloging search
+        $("input[name=q]:eq(0)").focus();
+
         $("#z3950search").click(function(){
             PopupZ3950("");
             return false;
@@ -32,6 +35,7 @@
         [% END %]
         return strQuery;
     }
+
     //]]>
 </script>
 </head>

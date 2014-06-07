@@ -25,6 +25,9 @@ $(document).ready(function(){
     tagslib = [];
     $.getJSON("/cgi-bin/koha/cataloguing/merge_ajax.pl", {frameworkcode : "[% framework %]" }, function(json) {
         tagslib = json;
+
+    //Set focus to cataloging search
+    $("input[name=q]:eq(0)").focus();
     });
 
     // Creating tabs

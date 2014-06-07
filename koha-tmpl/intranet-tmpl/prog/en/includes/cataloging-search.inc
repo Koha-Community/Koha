@@ -1,6 +1,3 @@
-<script>$(document).ready(function(){
-	$("input[name=q]:eq(0)").focus();
-});</script>
 
 <div class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Cataloging Resident Search Box -->
