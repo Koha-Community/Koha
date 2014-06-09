@@ -108,11 +108,6 @@ if ( $patron->{categorycode} ) {
 
 $template->param( 'alphabet' => C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' );
 
-my $orderby = $input->param('orderby') // '';
-if(defined $orderby and $orderby ne '') {
-    $orderby =~ s/[, ]/_/g;
-}
-
 my $view = $input->request_method() eq "GET" ? "show_form" : "show_results";
 
 $template->param(
@@ -124,7 +119,6 @@ $template->param(
     categorycode        => $patron->{categorycode},
     searchtype          => $input->param('searchtype') || 'start_with',
     searchfieldstype    => $searchfieldstype,
-    "orderby_$orderby"  => 1,
     PatronsPerPage      => C4::Context->preference("PatronsPerPage") || 20,
     view                => $view,
 );

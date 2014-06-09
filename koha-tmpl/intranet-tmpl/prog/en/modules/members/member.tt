@@ -205,10 +205,10 @@ $(document).ready(function() {
         },
         'bFilter': false,
         'bAutoWidth': false,
-        [% IF orderby_cardnumber_0 %]
-            'aaSorting': [[0, 'asc']],
-        [% ELSE %]
+        [% IF CAN_user_tools_manage_patron_lists %]
             'aaSorting': [[1, 'asc']],
+        [% ELSE %]
+            'aaSorting': [[0, 'asc']],
         [% END %]
         "aLengthMenu": [aLengthMenu, aLengthMenuLabel],
         'sPaginationType': 'full_numbers',
