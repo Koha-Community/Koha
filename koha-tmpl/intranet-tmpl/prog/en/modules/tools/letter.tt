@@ -59,7 +59,10 @@ $(document).ready(function() {
             return false;
           }
         [% END %]
-        if ( new_lettercode != '[% code %]' ) {
+
+        [% IF ( add_form and code ) # IF edit %]
+          if ( new_lettercode != '[% code %]' ) {
+        [% END %]
           $.ajax({
             data: { code: new_lettercode },
             type: 'GET',
@@ -73,9 +76,11 @@ $(document).ready(function() {
               }
             },
           });
-        } else {
-          $("#add_notice").submit();
-        }
+        [% IF ( add_form and code ) %]
+          } else {
+            $("#add_notice").submit();
+          }
+        [% END %]
     });
 
     var sms_limit = 160;

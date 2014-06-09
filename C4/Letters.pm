@@ -85,6 +85,7 @@ sub GetLetters {
           . ( $code   ? q| AND code = ?|   : q|| )
           . q| GROUP BY code ORDER BY name|, { Slice => {} }
         , ( $module ? $module : () )
+        , ( $code ? $code : () )
     );
 
     return $letters;
