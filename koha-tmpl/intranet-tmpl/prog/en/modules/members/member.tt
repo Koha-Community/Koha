@@ -185,7 +185,7 @@ $(document).ready(function() {
         },
         'aoColumns':[
             [% IF CAN_user_tools_manage_patron_lists %]
-              { 'mDataProp': 'dt_borrowernumber' },
+              { 'mDataProp': 'dt_borrowernumber', 'bSortable': false },
             [% END %]
             { 'mDataProp': 'dt_cardnumber' },
             { 'mDataProp': 'dt_name' },

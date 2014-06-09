@@ -53,7 +53,7 @@ foreach (keys %$patron){
 my $searchmember = $input->param('searchmember');
 my $quicksearch = $input->param('quicksearch') // 0;
 
-if ( $quicksearch ) {
+if ( $quicksearch and $searchmember ) {
     my $branchcode;
     if ( C4::Branch::onlymine ) {
         my $userenv = C4::Context->userenv;
