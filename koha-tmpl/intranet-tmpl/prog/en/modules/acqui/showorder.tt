@@ -1,0 +1,38 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<style>
+  td {
+    padding: 0 1em;
+  }
+  td:first-child {
+    font-weight: bold;
+    text-align: right;
+  }
+</style>
+</head>
+<body>
+  [% IF order %]
+    <table>
+      <tbody>
+        <tr>
+          <td>Creation date</td>
+          <td>[% order.entrydate %]</td>
+        </tr>
+        <tr>
+          <td>Creator</td>
+          <td>[% creator.firstname %] [% creator.surname %]</td>
+        </tr>
+        <tr>
+          <td>Claims count</td>
+          <td>[% order.claims_count %]</td>
+        </tr>
+        <tr>
+          <td>Last claim date</td>
+          <td>[% order.claimed_date %]</td>
+        </tr>
+      </tbody>
+    </table>
+  [% ELSE %]
+    No order found.
+  [% END %]
+</body>
+</html>

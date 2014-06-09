@@ -3159,6 +3159,7 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `unitprice_tax_excluded` decimal(28,6) default NULL, -- the unit price excluding tax (on receiving)
   `unitprice_tax_included` decimal(28,6) default NULL, -- the unit price including tax (on receiving)
   `quantityreceived` smallint(6) NOT NULL default 0, -- the quantity that have been received so far
+  `created_by` int(11) NULL DEFAULT NULL, -- the borrowernumber of order line's creator
   `datecancellationprinted` date default NULL, -- the date the line item was deleted
   `cancellationreason` MEDIUMTEXT default NULL, -- reason of cancellation
   `order_internalnote` LONGTEXT, -- notes related to this order line, made for staff

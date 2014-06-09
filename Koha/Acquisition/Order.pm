@@ -69,6 +69,13 @@ sub store {
           unless $self->$key;
     }
 
+    if (not defined $self->{created_by}) {
+        my $userenv = C4::Context->userenv;
+        if ($userenv) {
+            $self->created_by($userenv->{number});
+        }
+    }
+
     $self->quantityreceived(0) unless $self->quantityreceived;
     $self->entrydate(dt_from_string) unless $self->entrydate;
 

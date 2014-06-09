@@ -114,7 +114,7 @@
             <th>Basket group</th>
             <th>Order line</th>
             <th>Summary</th>
-            <th>View record</th>
+            <th>More</th>
             <th>Quantity</th>
             <th>Unit cost</th>
             <th>Order cost</th>
@@ -162,7 +162,11 @@
                     [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]&type=vendor">Add vendor note</a>]
                 [% END %]
                 </td>
-                <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_order.biblionumber %]" class="previewData">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_order.biblionumber %]" class="previewData">Card</a></td>
+                <td>
+                  <a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=[% loop_order.ordernumber %]" class="previewData">Order</a><br>
+                  <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_order.biblionumber %]" class="previewData">MARC</a><br>
+                  <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_order.biblionumber %]" class="previewData">Card</a>
+                </td>
                 <td>[% loop_order.quantity %]</td>
                 <td>[% loop_order.ecost | $Price %]</td>
                 <td>[% loop_order.total | $Price %]</td>
