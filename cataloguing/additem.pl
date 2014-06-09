@@ -154,8 +154,8 @@ sub generate_subfield_form {
 	    my $input = new CGI;
 	    $value = $input->param('barcode');
 	}
-        my $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$subfield_data{maxlength}" );
-        my $attributes_no_value_textarea = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" rows="5" cols="64" );
+        my $attributes_no_value = qq(id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$subfield_data{maxlength}" );
+        my $attributes_no_value_textarea = qq(id="$subfield_data{id}" name="field_value" class="input_marceditor" rows="5" cols="64" );
         my $attributes          = qq($attributes_no_value value="$value" );
         
         if ( $subfieldlib->{authorised_value} ) {
@@ -224,7 +224,6 @@ sub generate_subfield_form {
                     -override => 1,
                     -size     => 1,
                     -multiple => 0,
-                    -tabindex => 1,
                     -id       => "tag_".$tag."_subfield_".$subfieldtag."_".$index_subfield,
                     -class    => "input_marceditor",
                 );
