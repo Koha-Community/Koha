@@ -38,55 +38,43 @@ $marcrecord->add_fields(
         );
 my $samplehash = [
     {
-        'field' => [
-            {
-                'value' => '1234',
-                'tag'   => '001',
-            }
-        ]
+        'value' => '1234',
+        'tag'   => '001',
     },
     {
-        'field' => [
+        'subfield' => [
             {
-                'subfield' => [
-                    {
-                        'value'  => 'Cooking',
-                        'subtag' => 'a'
-                    }
-                ],
-                'indicator2' => ' ',
-                'tag'        => 150,
-                'indicator1' => ' ',
+                'value'  => 'Cooking',
+                'subtag' => 'a'
             }
-        ]
+        ],
+        'indicator2' => ' ',
+        'tag'        => 150,
+        'indicator1' => ' ',
     },
     {
-        'field' => [
+        'subfield' => [
             {
-                'subfield' => [
-                    {
-                        'value'  => 'Cookery',
-                        'subtag' => 'a'
-                    },
-                    {
-                        'value' => 'Instructional manuals',
-                        'subtag' => 'z'
-                    }
-                ],
-                'indicator2' => ' ',
-                'tag'        => 450,
-                'indicator1' => ' ',
+                'value'  => 'Cookery',
+                'subtag' => 'a'
+            },
+            {
+                'value'  => 'Instructional manuals',
+                'subtag' => 'z'
             }
-        ]
+        ],
+        'indicator2' => ' ',
+        'tag'        => 450,
+        'indicator1' => ' ',
     }
 ];
 
 my $hash = Koha::Util::MARC::createMergeHash($marcrecord);
 my %fieldkeys;
 foreach my $field (@$hash) {
-    $fieldkeys{delete $field->{'field'}->[0]->{'key'}}++;
-    if (defined $field->{'field'}->[0]->{'subfield'}) {
-        foreach my $subfield (@{$field->{'field'}->[0]->{'subfield'}}) {
+    $fieldkeys{delete $field->{'key'}}++;
+    if (defined $field->{'subfield'}) {
+        foreach my $subfield (@{$field->{'subfield'}}) {
             $fieldkeys{delete $subfield->{'subkey'}}++;
         }
     }
