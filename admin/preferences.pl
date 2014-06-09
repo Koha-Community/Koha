@@ -20,7 +20,6 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use Encode;
 use C4::Auth;
 use C4::Context;
 use C4::Koha;
@@ -55,7 +54,7 @@ sub GetTab {
         local_currency => $local_currency, # currency code is used, because we do not know how a given currency is formatted.
     );
 
-    return YAML::Syck::Load( Encode::decode('UTF-8',$tab_template->output()) );
+    return YAML::Syck::Load( $tab_template->output() );
 }
 
 sub _get_chunk {
