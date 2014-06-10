@@ -203,9 +203,13 @@ sub _url_with_get_params {
     my $uri_base_part = C4::Context->preference('OPACBaseURL') . $query->script_name();
     my $uri_params_part = '';
     foreach ( $query->url_param() ) {
-        $uri_params_part .= '&' if $uri_params_part;
-        $uri_params_part .= $_ . '=';
-        $uri_params_part .= URI::Escape::uri_escape( $query->url_param($_) );
+        # url_param() always returns parameters that were deleted by delete()
+        # This additional check ensure that parameter was not deleted.
+        if ($query->param($_)) {
+            $uri_params_part .= '&' if $uri_params_part;
+            $uri_params_part .= $_ . '=';
+            $uri_params_part .= URI::Escape::uri_escape( $query->param($_) );
+        }
     }
     $uri_base_part .= '?' if $uri_params_part;
 
