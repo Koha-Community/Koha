@@ -25,7 +25,9 @@ use C4::Installer::PerlDependencies;
 # These are packages that may not be in the apt archive in a way that
 # apt-file can find, e.g. in the Koha repo rather than the regular
 # debian one.
-my %overrides = ();
+my %overrides = (
+    'LWP::Protocol::https' => 'liblwp-protocol-https-perl|libwww-perl (<6.02), libio-socket-ssl-perl',
+);
 
 # These are packages we're going to ignore
 my %ignore = (
@@ -55,7 +57,10 @@ foreach my $module ( keys %$deps ) {
             @lines = ( @lines, $line );
         }
     }
-    if ( scalar(@lines) == 1 && $lines[0] ne "" ) {
+    if ( exists $overrides{$module} ) {
+        print "$overrides{$module}\n";
+    }
+    elsif ( scalar(@lines) == 1 && $lines[0] ne "" ) {
         my $pkg = $lines[0];
         print "$pkg\n";
     }
@@ -79,9 +84,6 @@ foreach my $module ( keys %$deps ) {
         # is no reason to be suspicious of this
         # commit.)
         # RM note: suspicious?  me?  always!
-    }
-    elsif ( exists $overrides{$module} ) {
-        print "$overrides{$module}\n";
     }
     elsif ( ! $deps->{$module}->{'required'} ) {
         # Ignore because we don't have it and we don't care.
