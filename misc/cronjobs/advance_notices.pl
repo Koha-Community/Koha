@@ -339,8 +339,8 @@ SELECT biblio.*, items.*, issues.*
     AND issues.borrowernumber = ?
     AND (TO_DAYS(date_due)-TO_DAYS(NOW()) = ?)
 END_SQL
-@letters = ();
 PATRON: while ( my ( $borrowernumber, $digest ) = each %$upcoming_digest ) {
+    @letters = ();
     my $count = $digest->{count};
     my $from_address = $digest->{email};
 
@@ -399,8 +399,8 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$upcoming_digest ) {
 }
 
 # Now, run through all the people that want digests and send them
-@letters = ();
 PATRON: while ( my ( $borrowernumber, $digest ) = each %$due_digest ) {
+    @letters = ();
     my $count = $digest->{count};
     my $from_address = $digest->{email};
 
