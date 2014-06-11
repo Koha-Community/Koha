@@ -30,7 +30,7 @@ sub search {
     my $select = "SELECT
         borrowers.borrowernumber, borrowers.surname, borrowers.firstname, borrowers.address,
         borrowers.address2, borrowers.city, borrowers.zipcode, borrowers.country,
-        CAST(borrowers.cardnumber AS UNSIGNED) AS cardnumber, borrowers.dateexpiry,
+        cardnumber, borrowers.dateexpiry,
         borrowers.borrowernotes, borrowers.branchcode, borrowers.email,
         categories.description AS category_description, categories.category_type,
         branches.branchname";
