@@ -509,7 +509,7 @@ var holdForPatron = function () {
                                         [% IF ( SEARCH_RESULT.size ) %] ; [% SEARCH_RESULT.size %][% END %]</span> [% IF ( SEARCH_RESULT.isbn ) %]<span class="results_isbn">ISBN: [% SEARCH_RESULT.isbn | replace('\s\|', ', ')%]</span>[% END %]
                                         <span class="results_itemtype">[% SEARCH_RESULT.description %]</span>
                                         [% IF ( SEARCH_RESULT.timestamp ) %] <i>(modified on [% SEARCH_RESULT.timestamp %])</i>[% END %]
-                                        [% IF ( SEARCH_RESULT.cn_class ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% SEARCH_RESULT.cn_class |url %]">[% SEARCH_RESULT.cn_class %]</a>][% END %]
+                                        [% IF ( SEARCH_RESULT.cn_class ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% SEARCH_RESULT.cn_class |uri %]%22">[% SEARCH_RESULT.cn_class %]</a>][% END %]
                                     </p>
                                     [% IF ( SEARCH_RESULT.searchhighlightblob ) %]<p class="searchhighlightblob">[% SEARCH_RESULT.searchhighlightblob %]</p>[% END %]
 
@@ -553,7 +553,7 @@ var holdForPatron = function () {
                                         [% END %]
                                         [% IF ( available_items_loo.branchname ) %][% available_items_loo.branchname %][% END %]
                                         [% IF ( available_items_loo.location ) %][% available_items_loo.location %][% END %]
-                                        [% IF ( available_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% available_items_loo.itemcallnumber |url %]">[% available_items_loo.itemcallnumber %]</a>][% END %]
+                                        [% IF ( available_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% available_items_loo.itemcallnumber |uri %]%22">[% available_items_loo.itemcallnumber %]</a>][% END %]
                                         ([% available_items_loo.count %])
                                         [% IF item_level_itypes && available_items_loo.description %]
                                         <br/>[% available_items_loo.description %]
@@ -575,7 +575,7 @@ var holdForPatron = function () {
                                         [% END %]
                                         [% IF ( onloan_items_loo.branchname ) %][% onloan_items_loo.branchname %][% END %]
                                         [% IF ( onloan_items_loo.location ) %][% onloan_items_loo.location %][% END %]
-                                        [% IF ( onloan_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% onloan_items_loo.itemcallnumber |url %]">[% onloan_items_loo.itemcallnumber %]</a>][% END %]
+                                        [% IF ( onloan_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% onloan_items_loo.itemcallnumber |uri %]%22">[% onloan_items_loo.itemcallnumber %]</a>][% END %]
                                         ([% onloan_items_loo.count %][% IF ( onloan_items_loo.longoverdue ) %], [% onloan_items_loo.longoverdue %] long overdue[% END %]) date due: [% onloan_items_loo.due_date %]
                                         [% IF item_level_itypes && onloan_items_loo.description %]
                                         <br/>[% onloan_items_loo.description %]
@@ -597,7 +597,7 @@ var holdForPatron = function () {
                                         [% END %]
                                         [% IF ( other_items_loo.branchname ) %][% other_items_loo.branchname %][% END %]
                                         [% IF ( other_items_loo.location ) %][% other_items_loo.location %][% END %]
-                                        [% IF ( other_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% other_items_loo.itemcallnumber |url %]">[% other_items_loo.itemcallnumber %]</a>][% END %]
+                                        [% IF ( other_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% other_items_loo.itemcallnumber |uri %]%22">[% other_items_loo.itemcallnumber %]</a>][% END %]
                                         [% IF ( other_items_loo.withdrawn ) %](Withdrawn)[% END %]
                                         [% IF ( other_items_loo.itemlost ) %](Lost)[% END %]
                                         [% IF ( other_items_loo.damaged ) %](Damaged)[% END %]
