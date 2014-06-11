@@ -2194,9 +2194,10 @@ sub TransformKohaToMarc {
     while ( my ($name, $value) = each %$hash ) {
         next unless my $dtm = $db_to_marc->{''}->{$name};
         next unless ( scalar( @$dtm ) );
-        my ($tag, $letter) = @$dtm; $tag .= '';
+        my ($tag, $letter) = @$dtm;
+        $tag .= '';
         foreach my $value ( split(/\s?\|\s?/, $value, -1) ) {
-            $value eq '' && next;
+            next if $value eq '';
             $tag_hr->{$tag} //= [];
             push @{$tag_hr->{$tag}}, [($letter, $value)];
         }
