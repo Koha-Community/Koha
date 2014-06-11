@@ -129,7 +129,8 @@ my $sampleissuingrule1 = {
     renewalsallowed    => 0,
     firstremind        => 0,
     itemtype           => 'BOOK',
-    categorycode       => $samplecat->{categorycode}
+    categorycode       => $samplecat->{categorycode},
+    maxsuspensiondays  => 0,
 };
 my $sampleissuingrule2 = {
     branchcode         => $samplebranch2->{branchcode},
@@ -153,7 +154,8 @@ my $sampleissuingrule2 = {
     accountsent        => 'Null',
     reservecharge      => 'Null',
     chargename         => 'Null',
-    restrictedtype     => 'Null'
+    restrictedtype     => 'Null',
+    maxsuspensiondays  => 0,
 };
 my $sampleissuingrule3 = {
     branchcode         => $samplebranch1->{branchcode},
@@ -177,7 +179,8 @@ my $sampleissuingrule3 = {
     accountsent        => 'Null',
     reservecharge      => 'Null',
     chargename         => 'Null',
-    restrictedtype     => 'Null'
+    restrictedtype     => 'Null',
+    maxsuspensiondays  => 0,
 };
 $query = 'INSERT INTO issuingrules (
                 branchcode,
@@ -201,8 +204,9 @@ $query = 'INSERT INTO issuingrules (
                 accountsent,
                 reservecharge,
                 chargename,
-                restrictedtype
-                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                restrictedtype,
+                maxsuspensiondays
+                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 my $sth = $dbh->prepare($query);
 $sth->execute(
     $sampleissuingrule1->{branchcode},
@@ -226,7 +230,8 @@ $sth->execute(
     $sampleissuingrule1->{accountsent},
     $sampleissuingrule1->{reservecharge},
     $sampleissuingrule1->{chargename},
-    $sampleissuingrule1->{restrictedtype}
+    $sampleissuingrule1->{restrictedtype},
+    $sampleissuingrule1->{maxsuspensiondays},
 );
 $sth->execute(
     $sampleissuingrule2->{branchcode},
@@ -250,7 +255,8 @@ $sth->execute(
     $sampleissuingrule2->{accountsent},
     $sampleissuingrule2->{reservecharge},
     $sampleissuingrule2->{chargename},
-    $sampleissuingrule2->{restrictedtype}
+    $sampleissuingrule2->{restrictedtype},
+    $sampleissuingrule2->{maxsuspensiondays},
 );
 $sth->execute(
     $sampleissuingrule3->{branchcode},
@@ -274,7 +280,8 @@ $sth->execute(
     $sampleissuingrule3->{accountsent},
     $sampleissuingrule3->{reservecharge},
     $sampleissuingrule3->{chargename},
-    $sampleissuingrule3->{restrictedtype}
+    $sampleissuingrule3->{restrictedtype},
+    $sampleissuingrule3->{maxsuspensiondays},
 );
 
 is_deeply(
