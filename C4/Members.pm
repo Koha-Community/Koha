@@ -40,6 +40,7 @@ use Koha::Patron::Debarments qw(IsDebarred);
 use Text::Unaccent qw( unac_string );
 use Koha::AuthUtils qw(hash_password);
 use Koha::Database;
+use Koha::List::Patron;
 
 our (@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -1740,6 +1741,7 @@ sub GetHideLostItemsPreference {
       not_borrowered_since => $not_borrowered_since,
       expired_before       => $expired_before,
       category_code        => $category_code,
+      patron_list_id       => $patron_list_id,
       branchcode           => $branchcode
   );
 
@@ -1748,18 +1750,19 @@ sub GetHideLostItemsPreference {
 =cut
 
 sub GetBorrowersToExpunge {
-    my $params = shift;
 
-    my $filterdate     = $params->{'not_borrowered_since'};
-    my $filterexpiry   = $params->{'expired_before'};
-    my $filtercategory = $params->{'category_code'};
-    my $filterbranch   = $params->{'branchcode'} ||
+    my $params = shift;
+    my $filterdate       = $params->{'not_borrowered_since'};
+    my $filterexpiry     = $params->{'expired_before'};
+    my $filtercategory   = $params->{'category_code'};
+    my $filterbranch     = $params->{'branchcode'} ||
                         ((C4::Context->preference('IndependentBranches')
                              && C4::Context->userenv 
                              && !C4::Context->IsSuperLibrarian()
                              && C4::Context->userenv->{branch})
                          ? C4::Context->userenv->{branch}
                          : "");  
+    my $filterpatronlist = $params->{'patron_list_id'};
 
     my $dbh   = C4::Context->dbh;
     my $query = q|
@@ -1775,11 +1778,13 @@ sub GetBorrowersToExpunge {
                 AND guarantorid <> 0
         ) as tmp ON borrowers.borrowernumber=tmp.guarantorid
         LEFT JOIN old_issues USING (borrowernumber)
-        LEFT JOIN issues USING (borrowernumber) 
-        WHERE  category_type <> 'S'
+        LEFT JOIN issues USING (borrowernumber)|;
+    if ( $filterpatronlist  ){
+        $query .= q| LEFT JOIN patron_list_patrons USING (borrowernumber)|;
+    }
+    $query .= q| WHERE  category_type <> 'S'
         AND tmp.guarantorid IS NULL
    |;
-
     my @query_params;
     if ( $filterbranch && $filterbranch ne "" ) {
         $query.= " AND borrowers.branchcode = ? ";
@@ -1793,6 +1798,10 @@ sub GetBorrowersToExpunge {
         $query .= " AND categorycode = ? ";
         push( @query_params, $filtercategory );
     }
+    if ( $filterpatronlist ){
+        $query.=" AND patron_list_id = ? ";
+        push( @query_params, $filterpatronlist );
+    }
     $query.=" GROUP BY borrowers.borrowernumber HAVING currentissue IS NULL ";
     if ( $filterdate ) {
         $query.=" AND ( latestissue < ? OR latestissue IS NULL ) ";
@@ -1803,10 +1812,10 @@ sub GetBorrowersToExpunge {
     my $sth = $dbh->prepare($query);
     if (scalar(@query_params)>0){  
         $sth->execute(@query_params);
-    } 
+    }
     else {
         $sth->execute;
-    }      
+    }
     
     my @results;
     while ( my $data = $sth->fetchrow_hashref ) {

@@ -12,7 +12,7 @@
          */
           function checkForm(form) {
               if((form.checkbox[0].checked)){
-                  if ( (!form.date1.value) && (!form.borrower_dateexpiry.value) && (!form.borrower_categorycode.value) ){
+                  if ( (!form.date1.value) && (!form.borrower_dateexpiry.value) && (!form.borrower_categorycode.value) && (!form.patron_list_id.value)){
                     alert(_("Please enter at least one criterion for deletion!"));
                     return false;
                   }
@@ -88,8 +88,20 @@
                         [% END %]
                     </select>
                 </li>
+                [% IF patron_lists %]
+                <li>
+                    <label for="patron_list_id">who are in patron list: </label>
+                    <select id="patron_list_id" name="patron_list_id">
+                        <option value=""></option>
+                        [% FOREACH pl IN patron_lists %]
+                            <option value="[% pl.patron_list_id %]">[% pl.name %]</option>
+                        [% END %]
+                    </select>
+                </li>
+                [% END %]
             </ul>
         </fieldset>
+
         <fieldset>
         <legend>Anonymize checkout history</legend>
         [% UNLESS Koha.Preference('AnonymousPatron') %]
@@ -121,12 +133,12 @@
     <fieldset>
         <legend>Warnings</legend>
         <ul>
-            <li>[% IF ( totalToDelete ) %][% totalToDelete %] [% ELSE %]0 [% END %] patrons will be deleted</li>
-            <li>[% IF ( totalToAnonymize ) %][% totalToAnonymize %] [% ELSE %]0 [% END %] checkout history will be anonymized</li>
+            <li>[% patrons_to_delete.size || 0 %] patrons will be deleted</li>
+            <li>[% patrons_to_anonymize.size || 0 %] patron's checkout histories will be anonymized</li>
         </ul>
 
         <br />
-            [% IF ( totalToDelete ) %]
+            [% IF patrons_to_delete.size %]
                 <fieldset><legend>What do you want to do for deleted patrons?</legend>
                 <input id="delete" type="radio" name="radio" value="delete" />
                 <label for="delete">Permanently delete these patrons</label>
@@ -136,12 +148,12 @@
 
                 <br /><input id="testrun" type="radio" name="radio" value="testrun" checked="checked" />
                 <label for="testrun">Do not remove any patrons (test run)</label>
-                <input type="hidden" name="do_delete" value="[% totalToDelete %]" /></fieldset>
+                <input type="hidden" name="do_delete" value="[% patrons_to_delete.size %]" /></fieldset>
 
             [% END %]
-            [% IF ( totalToAnonymize ) %]
-                Checkout history for [% totalToAnonymize %] patrons will be anonymized
-                <input type="hidden" name="do_anonym" value="[% totalToAnonymize %]" />
+            [% IF patrons_to_anonymize.size %]
+                Checkout history for [% patrons_to_anonymize.size %] patrons will be anonymized
+                <input type="hidden" name="do_anonym" value="[% patrons_to_anonymize.size %]" />
             [% END %]
 
             <input type="hidden" name="step" value="3" />
@@ -149,6 +161,7 @@
             <input type="hidden" name="last_issue_date" value="[% last_issue_date | $KohaDates %]" />
             <input type="hidden" name="borrower_dateexpiry" value="[% borrower_dateexpiry | $KohaDates %]" />
             <input type="hidden" name="borrower_categorycode" value="[% borrower_categorycode %]" />
+            <input type="hidden" name="patron_list_id" value="[% patron_list_id %]" />
     </fieldset>
     <fieldset class="action"><input type="submit" value="Finish" /> <a class="cancel" href="/cgi-bin/koha/tools/cleanborrowers.pl">Cancel</a></fieldset>
         </form>

@@ -51,6 +51,12 @@
                     <th>Name</th>
                     <th>Patrons in list</th>
                     <th>&nbsp;</th>
+                    [% IF CAN_user_tools_edit_patrons %]
+                        <th>&nbsp;</th>
+                    [% END %]
+                    [% IF CAN_user_tools_delete_anonymize_patrons %]
+                        <th>&nbsp;</th>
+                    [% END %]
                 </tr>
             </thead>
 
@@ -72,6 +78,20 @@
                                 </ul>
                             </div>
                         </td>
+                        [% IF CAN_user_tools_edit_patrons %]
+                            <td>
+                                <a class="btn btn-mini" href="/cgi-bin/koha/tools/modborrowers.pl?patron_list_id=[% l.patron_list_id %]&op=show">
+                                    <i class="fa fa-edit"></i> Edit patrons</i>
+                                </a>
+                            </td>
+                        [% END %]
+                        [% IF CAN_user_tools_delete_anonymize_patrons %]
+                            <td>
+                                <a class="btn btn-mini" href="/cgi-bin/koha/tools/cleanborrowers.pl?step=2&patron_list_id=[% l.patron_list_id %]&checkbox=borrower">
+                                    <i class="fa fa-trash"></i> Delete patrons</i>
+                                </a>
+                            </td>
+                        [% END %]
                     </tr>
                 [% END %]
             </tbody>
