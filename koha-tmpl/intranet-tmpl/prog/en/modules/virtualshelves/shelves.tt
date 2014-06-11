@@ -379,7 +379,7 @@ function placeHold () {
                 [% FOREACH result IN itemsloo.ITEM_RESULTS %]
                     <li>[% result.holdingbranch %] [% IF ( result.location_intranet ) %] ([% result.location_intranet %]) [% END %]
                         [% IF ( result.itemcallnumber ) %]
-                            [<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% result.itemcallnumber |url %]">[% result.itemcallnumber %]</a>]
+                            [<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% result.itemcallnumber |uri %]%22">[% result.itemcallnumber %]</a>]
                         [% END %]
                     </li>
                 [% END %]
