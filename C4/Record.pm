@@ -661,54 +661,59 @@ sub marc2bibtex {
     $author = join ' and ', @texauthors;
 
     # Defining the conversion hash according to the marcflavour
-    my %bh;
+    my @bh;
     if ( $marcflavour eq "UNIMARC" ) {
-	
-	# FIXME, TODO : handle repeatable fields
-	# TODO : handle more types of documents
 
-	# Unimarc to bibtex hash
-	%bh = (
+        # FIXME, TODO : handle repeatable fields
+        # TODO : handle more types of documents
 
-	    # Mandatory
-	    author    => $author,
-	    title     => $record->subfield("200", "a") || "",
-	    editor    => $record->subfield("210", "g") || "",
-	    publisher => $record->subfield("210", "c") || "",
-	    year      => $record->subfield("210", "d") || $record->subfield("210", "h") || "",
+        # Unimarc to bibtex hash
+        @bh = (
 
-	    # Optional
-	    volume  =>  $record->subfield("200", "v") || "",
-	    series  =>  $record->subfield("225", "a") || "",
-	    address =>  $record->subfield("210", "a") || "",
-	    edition =>  $record->subfield("205", "a") || "",
-	    note    =>  $record->subfield("300", "a") || "",
-	    url     =>  $record->subfield("856", "u") || ""
-	);
+            # Mandatory
+            author    => $author,
+            title     => $record->subfield("200", "a") || "",
+            editor    => $record->subfield("210", "g") || "",
+            publisher => $record->subfield("210", "c") || "",
+            year      => $record->subfield("210", "d") || $record->subfield("210", "h") || "",
+
+            # Optional
+            volume  =>  $record->subfield("200", "v") || "",
+            series  =>  $record->subfield("225", "a") || "",
+            address =>  $record->subfield("210", "a") || "",
+            edition =>  $record->subfield("205", "a") || "",
+            note    =>  $record->subfield("300", "a") || "",
+            url     =>  $record->subfield("856", "u") || ""
+        );
     } else {
 
-	# Marc21 to bibtex hash
-	%bh = (
+        # Marc21 to bibtex hash
+        @bh = (
 
-	    # Mandatory
-	    author    => $author,
-	    title     => $record->subfield("245", "a") || "",
-	    editor    => $record->subfield("260", "f") || "",
-        publisher => $record->subfield("264", "b") || $record->subfield("260", "b") || "",
-        year      => $record->subfield("264", "c") || $record->subfield("260", "c") || $record->subfield("260", "g") || "",
+            # Mandatory
+            author    => $author,
+            title     => $record->subfield("245", "a") || "",
+            editor    => $record->subfield("260", "f") || "",
+            publisher => $record->subfield("264", "b") || $record->subfield("260", "b") || "",
+            year      => $record->subfield("264", "c") || $record->subfield("260", "c") || $record->subfield("260", "g") || "",
 
-	    # Optional
-	    # unimarc to marc21 specification says not to convert 200$v to marc21
-	    series  =>  $record->subfield("490", "a") || "",
-        address =>  $record->subfield("264", "a") || $record->subfield("260", "a") || "",
-	    edition =>  $record->subfield("250", "a") || "",
-	    note    =>  $record->subfield("500", "a") || "",
-	    url     =>  $record->subfield("856", "u") || ""
-	);
+            # Optional
+            # unimarc to marc21 specification says not to convert 200$v to marc21
+            series  =>  $record->subfield("490", "a") || "",
+            address =>  $record->subfield("264", "a") || $record->subfield("260", "a") || "",
+            edition =>  $record->subfield("250", "a") || "",
+            note    =>  $record->subfield("500", "a") || "",
+            url     =>  $record->subfield("856", "u") || ""
+        );
     }
 
     $tex .= "\@book{";
-    $tex .= join(",\n", $id, map { $bh{$_} ? qq(\t$_ = {$bh{$_}}) : () } keys %bh);
+    my @elt;
+    for ( my $i = 0 ; $i < scalar( @bh ) ; $i = $i + 2 ) {
+        next unless $bh[$i+1];
+        push @elt, qq|\t$bh[$i] = {$bh[$i+1]}|;
+    }
+    $tex .= join(",\n", $id, @elt);
     $tex .= "\n}\n";
 
     return $tex;
