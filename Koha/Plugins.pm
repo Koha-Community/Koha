@@ -51,7 +51,7 @@ This will return a list of all the available plugins of the passed type.
 
 Usage: my @plugins = C4::Plugins::GetPlugins( $method );
 
-At the moment, the available types are 'report' and 'tool'.
+At the moment, the available types are 'report', 'tool' and 'to_marc'.
 =cut
 
 sub GetPlugins {

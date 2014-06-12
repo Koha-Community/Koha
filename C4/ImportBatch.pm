@@ -27,6 +27,7 @@ use C4::Items;
 use C4::Charset;
 use C4::AuthoritiesMarc;
 use C4::MarcModificationTemplates;
+use Koha::Plugins::Handler;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -347,11 +348,15 @@ sub ModAuthInBatch {
 
 =head2 BatchStageMarcRecords
 
-  ($batch_id, $num_records, $num_items, @invalid_records) = 
-    BatchStageMarcRecords($encoding, $marc_records, $file_name, $marc_modification_template,
-                          $comments, $branch_code, $parse_items,
-                          $leave_as_staging, 
-                          $progress_interval, $progress_callback);
+( $batch_id, $num_records, $num_items, @invalid_records ) =
+  BatchStageMarcRecords(
+    $encoding,                   $marc_records,
+    $file_name,                  $to_marc_plugin,
+    $marc_modification_template, $comments,
+    $branch_code,                $parse_items,
+    $leave_as_staging,           $progress_interval,
+    $progress_callback
+  );
 
 =cut
 
@@ -360,6 +365,7 @@ sub BatchStageMarcRecords {
     my $encoding = shift;
     my $marc_records = shift;
     my $file_name = shift;
+    my $to_marc_plugin = shift;
     my $marc_modification_template = shift;
     my $comments = shift;
     my $branch_code = shift;
@@ -390,6 +396,14 @@ sub BatchStageMarcRecords {
     } else {
         SetImportBatchItemAction($batch_id, 'ignore');
     }
+
+    $marc_records = Koha::Plugins::Handler->run(
+        {
+            class  => $to_marc_plugin,
+            method => 'to_marc',
+            params => { data => $marc_records }
+        }
+    ) if $to_marc_plugin;
 
     my $marc_type = C4::Context->preference('marcflavour');
     $marc_type .= 'AUTH' if ($marc_type eq 'UNIMARC' && $record_type eq 'auth');

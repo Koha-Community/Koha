@@ -117,6 +117,24 @@ function CheckForm(f) {
             <select name="encoding" id="encoding"><option value="utf8" selected="selected">UTF-8 (Default)</option><option value="MARC-8">MARC 8</option><option value="ISO_5426">ISO 5426</option><option value="ISO_6937">ISO 6937</option><option value=ISO_8859-1">ISO 8859-1</option><option value="EUC-KR">EUC-KR</option></select>
 	</li>
 </ol></fieldset>
+
+  [% IF plugins %]
+    <fieldset class="rows">
+      <legend>Transform file to MARC:</legend>
+      <ol>
+        <li>
+          <label for="comments">Convert file to MARC using the following plugin: </label>
+          <select name="to_marc_plugin" id="to_marc_plugin">
+            <option value="">Do not use.</option>
+              [% FOREACH p IN plugins %]
+                <option value="[% p.metadata.class %]">[% p.metadata.name %]</option>
+              [% END %]
+          </select>
+        </li>
+      </ol>
+    </fieldset>
+  [% END %]
+
   [% IF MarcModificationTemplatesLoop %]
     <fieldset class="rows">
       <legend>Use MARC Modification Template:</legend>

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 20;
+use Test::More tests => 21;
 use File::Basename;
 use FindBin qw($Bin);
 use Archive::Extract;
@@ -29,6 +29,7 @@ isa_ok( $plugin, "Koha::Plugins::Base", 'Test plugin parent class' );
 
 ok( $plugin->can('report'), 'Test plugin can report' );
 ok( $plugin->can('tool'), 'Test plugin can tool' );
+ok( $plugin->can('to_marc'), 'Test plugin can to_marc' );
 ok( $plugin->can('configure'), 'Test plugin can configure' );
 ok( $plugin->can('install'), 'Test plugin can install' );
 ok( $plugin->can('uninstall'), 'Test plugin can install' );

@@ -57,6 +57,13 @@
     <dt><a href="/cgi-bin/koha/admin/cities.pl">Cities and towns</a></dt>
     <dd>Define cities and towns that your patrons live in.</dd>
 </dl>
+[% IF CAN_user_plugins %]
+    <h3>Plugins</h3>
+    <dl>
+        <dt><a href="/cgi-bin/koha/plugins/plugins-home.pl">Manage plugins</a></dt>
+        <dd>View, manage, configure and run plugins.</dd>
+    </dl>
+[% END %]
 </div>
 <div class="yui-u">
 <h3>Catalog</h3>

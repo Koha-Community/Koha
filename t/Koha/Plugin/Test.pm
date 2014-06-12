@@ -37,6 +37,11 @@ sub tool {
     return "Koha::Plugin::Test::tool";
 }
 
+sub to_marc {
+    my ( $self, $args ) = @_;
+    return "Koha::Plugin::Test::to_marc";
+}
+
 sub configure {
     my ( $self, $args ) = @_;
     return "Koha::Plugin::Test::configure";;

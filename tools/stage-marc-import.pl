@@ -42,33 +42,39 @@ use C4::Matcher;
 use C4::UploadedFile;
 use C4::BackgroundJob;
 use C4::MarcModificationTemplates;
+use Koha::Plugins;
 
 my $input = new CGI;
 
-my $fileID=$input->param('uploadedfileid');
-my $runinbackground = $input->param('runinbackground');
-my $completedJobID = $input->param('completedJobID');
-my $matcher_id = $input->param('matcher');
-my $overlay_action = $input->param('overlay_action');
-my $nomatch_action = $input->param('nomatch_action');
-my $parse_items = $input->param('parse_items');
-my $item_action = $input->param('item_action');
-my $comments = $input->param('comments');
-my $record_type = $input->param('record_type');
-my $encoding = $input->param('encoding');
+my $fileID                     = $input->param('uploadedfileid');
+my $runinbackground            = $input->param('runinbackground');
+my $completedJobID             = $input->param('completedJobID');
+my $matcher_id                 = $input->param('matcher');
+my $overlay_action             = $input->param('overlay_action');
+my $nomatch_action             = $input->param('nomatch_action');
+my $parse_items                = $input->param('parse_items');
+my $item_action                = $input->param('item_action');
+my $comments                   = $input->param('comments');
+my $record_type                = $input->param('record_type');
+my $encoding                   = $input->param('encoding');
+my $to_marc_plugin             = $input->param('to_marc_plugin');
 my $marc_modification_template = $input->param('marc_modification_template_id');
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "tools/stage-marc-import.tt",
-					query => $input,
-					type => "intranet",
-					authnotrequired => 0,
-					flagsrequired => {tools => 'stage_marc_import'},
-					debug => 1,
-					});
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "tools/stage-marc-import.tt",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { tools => 'stage_marc_import' },
+        debug           => 1,
+    }
+);
 
-$template->param(SCRIPT_NAME => $ENV{'SCRIPT_NAME'},
-						uploadmarc => $fileID);
+$template->param(
+    SCRIPT_NAME => $ENV{'SCRIPT_NAME'},
+    uploadmarc  => $fileID
+);
 
 my %cookies = parse CGI::Cookie($cookie);
 my $sessionID = $cookies{'CGISESSID'}->value;
@@ -128,12 +134,12 @@ if ($completedJobID) {
     # FIXME branch code
     my ( $batch_id, $num_valid, $num_items, @import_errors ) =
       BatchStageMarcRecords(
-        $record_type,                $encoding,
-        $marcrecord,                 $filename,
-        $marc_modification_template, $comments,
-        '',                          $parse_items,
-        0,                           50,
-        staging_progress_callback( $job, $dbh )
+        $record_type,    $encoding,
+        $marcrecord,     $filename,
+        $to_marc_plugin, $marc_modification_template,
+        $comments,       '',
+        $parse_items,    0,
+        50, staging_progress_callback( $job, $dbh )
       );
 
     my $num_with_matches = 0;
@@ -188,15 +194,17 @@ if ($completedJobID) {
 
 } else {
     # initial form
-    if (C4::Context->preference("marcflavour") eq "UNIMARC") {
-        $template->param("UNIMARC" => 1);
+    if ( C4::Context->preference("marcflavour") eq "UNIMARC" ) {
+        $template->param( "UNIMARC" => 1 );
     }
     my @matchers = C4::Matcher::GetMatcherList();
-    $template->param(available_matchers => \@matchers);
+    $template->param( available_matchers => \@matchers );
 
     my @templates = GetModificationTemplates();
     $template->param( MarcModificationTemplatesLoop => \@templates );
 
+    my @plugins = Koha::Plugins->new()->GetPlugins('to_marc');
+    $template->param( plugins => \@plugins );
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -56,11 +56,12 @@ sub run {
     my $plugin_class  = $args->{'class'};
     my $plugin_method = $args->{'method'};
     my $cgi           = $args->{'cgi'};
+    my $params        = $args->{'params'};
 
     if ( can_load( modules => { $plugin_class => undef } ) ) {
         my $plugin = $plugin_class->new( { cgi => $cgi, enable_plugins => $args->{'enable_plugins'} } );
         if ( $plugin->can($plugin_method) ) {
-            return $plugin->$plugin_method();
+            return $plugin->$plugin_method( $params );
         } else {
             warn "Plugin does not have method $plugin_method";
         }
