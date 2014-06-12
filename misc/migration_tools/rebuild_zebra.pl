@@ -136,6 +136,13 @@ if (not $biblios and not $authorities) {
     die $msg;
 }
 
+our @tables_allowed_for_select = ( 'biblioitems', 'items', 'biblio' );
+unless ( grep { /^$table$/ } @tables_allowed_for_select ) {
+    die "Cannot specify -t|--table with value '$table'. Only "
+      . ( join ', ', @tables_allowed_for_select )
+      . " are allowed.";
+}
+
 
 #  -v is for verbose, which seems backwards here because of how logging is set
 #    on the CLI of zebraidx.  It works this way.  The default is to not log much
@@ -445,8 +452,7 @@ sub select_all_authorities {
 
 sub select_all_biblios {
     $table = 'biblioitems'
-      if $table ne 'items'
-      and $table ne 'biblio';
+      if grep { /^$table$/ } @tables_allowed_for_select;
     my $strsth = qq{ SELECT biblionumber FROM $table };
     $strsth.=qq{ WHERE $where } if ($where);
     $strsth.=qq{ LIMIT $length } if ($length && !$offset);
