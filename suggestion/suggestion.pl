@@ -413,7 +413,7 @@ foreach my $field ( qw(managedby acceptedby suggestedby budgetid) ) {
 
 $template->param(
     %hashlists,
-    borrowernumber           => $input->param('borrowernumber'),
+    borrowernumber           => ($input->param('borrowernumber') // undef),
     SuggestionStatuses       => GetAuthorisedValues('SUGGEST_STATUS'),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
