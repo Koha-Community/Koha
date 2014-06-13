@@ -1856,6 +1856,7 @@ sub searchResults {
         my $item_in_transit_count = 0;
         my $can_place_holds       = 0;
         my $item_onhold_count     = 0;
+        my $notforloan_count      = 0;
         my $items_count           = scalar(@fields);
         my $maxitems_pref = C4::Context->preference('maxItemsinSearchResults');
         my $maxitems = $maxitems_pref ? $maxitems_pref - 1 : 1;
@@ -1926,6 +1927,8 @@ sub searchResults {
                 # item is on order
                 if ( $item->{notforloan} < 0 ) {
                     $ordered_count++;
+                } elsif ( $item->{notforloan} > 0 ) {
+                    $notforloan_count++;
                 }
 
                 # is item in transit?
@@ -2065,6 +2068,7 @@ sub searchResults {
         $oldbiblio->{intransitcount}       = $item_in_transit_count;
         $oldbiblio->{onholdcount}          = $item_onhold_count;
         $oldbiblio->{orderedcount}         = $ordered_count;
+        $oldbiblio->{notforloancount}      = $notforloan_count;
 
         if (C4::Context->preference("AlternateHoldingsField") && $items_count == 0) {
             my $fieldspec = C4::Context->preference("AlternateHoldingsField");
