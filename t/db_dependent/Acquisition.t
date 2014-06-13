@@ -8,7 +8,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 75;
+use Test::More tests => 87;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -883,5 +883,31 @@ my $nonexistent_order = GetOrder();
 is( $nonexistent_order, undef, 'GetOrder returns undef if no ordernumber is given' );
 $nonexistent_order = GetOrder( 424242424242 );
 is( $nonexistent_order, undef, 'GetOrder returns undef if a nonexistent ordernumber is given' );
+
+# Tests for DelOrder
+my $order1 = GetOrder($ordernumbers[0]);
+my $error = DelOrder($order1->{biblionumber}, $order1->{ordernumber});
+ok((not defined $error), "DelOrder does not fail");
+$order1 = GetOrder($order1->{ordernumber});
+ok((defined $order1->{datecancellationprinted}), "order is cancelled");
+ok((not defined $order1->{cancellationreason}), "order has no cancellation reason");
+ok((defined GetBiblio($order1->{biblionumber})), "biblio still exists");
+
+my $order2 = GetOrder($ordernumbers[1]);
+my $error = DelOrder($order2->{biblionumber}, $order2->{ordernumber}, 1);
+ok((not defined $error), "DelOrder does not fail");
+$order2 = GetOrder($order2->{ordernumber});
+ok((defined $order2->{datecancellationprinted}), "order is cancelled");
+ok((not defined $order2->{cancellationreason}), "order has no cancellation reason");
+ok((not defined GetBiblio($order2->{biblionumber})), "biblio does not exist anymore");
+
+my $order4 = GetOrder($ordernumbers[3]);
+my $error = DelOrder($order4->{biblionumber}, $order4->{ordernumber}, 1, "foobar");
+ok((not defined $error), "DelOrder does not fail");
+$order4 = GetOrder($order4->{ordernumber});
+ok((defined $order4->{datecancellationprinted}), "order is cancelled");
+ok(($order4->{cancellationreason} eq "foobar"), "order has cancellation reason \"foobar\"");
+ok((not defined GetBiblio($order4->{biblionumber})), "biblio does not exist anymore");
+# End of tests for DelOrder
 
 $dbh->rollback;
