@@ -43,7 +43,22 @@
   [% FOREACH account IN accounts %]
 <tr class="highlight">
       <td>[% account.date %]</td>
-      <td>[% account.description %]</td>
+      <td>
+        [% SWITCH account.accounttype %]
+          [% CASE 'Pay' %]Payment, thanks
+          [% CASE 'Pay00' %]Payment, thanks (cash via SIP2)
+          [% CASE 'Pay01' %]Payment, thanks (VISA via SIP2)
+          [% CASE 'Pay02' %]Payment, thanks (credit card via SIP2)
+          [% CASE 'N' %]New Card
+          [% CASE 'F' %]Fine
+          [% CASE 'A' %]Account management fee
+          [% CASE 'M' %]Sundry
+          [% CASE 'L' %]Lost Item
+          [% CASE 'W' %]Writeoff
+          [% CASE %][% account.accounttype %]
+        [%- END -%]
+        [%- IF account.description %], [% account.description %][% END %]
+      </td>
       [% IF ( account.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amount %]</td>
     </tr>
 

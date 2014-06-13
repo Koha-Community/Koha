@@ -720,7 +720,7 @@ sub makepartialpayment {
     . ' VALUES (?, ?, now(), ?, ?, ?, 0, ?, ?, ?)';
 
     $dbh->do(  $insert, undef, $borrowernumber, $nextaccntno, $amount,
-        "Payment, thanks - $user", 'Pay', $data->{'itemnumber'}, $manager_id, $payment_note);
+        '', 'Pay', $data->{'itemnumber'}, $manager_id, $payment_note);
 
     UpdateStats({
                 branch => $user,
