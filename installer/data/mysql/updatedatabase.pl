@@ -8551,7 +8551,7 @@ if (CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.008";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES('OPACAcquisitionDetails','0', '','Show the acquisition details at the OPAC','YesNo')
