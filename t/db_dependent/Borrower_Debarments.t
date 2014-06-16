@@ -5,7 +5,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Members;
 
-use Test::More tests => 22;
+use Test::More tests => 31;
 
 use_ok('Koha::Borrower::Debarments');
 
@@ -86,10 +86,51 @@ is( @$debarments, 1, "GetDebarments returns 1 OVERDUES debarment after running A
 is( $debarments->[0]->{'expiration'}, '9999-11-09', "AddOverduesDebarment updated OVERDUES debarment correctly" );
 
 
-DelUniqueDebarment({
+my $delUniqueDebarment = DelUniqueDebarment({
+});
+is( $delUniqueDebarment, undef, "DelUniqueDebarment without the arguments 'borrowernumber' and 'type' returns undef" );
+$debarments = GetDebarments({
     borrowernumber => $borrowernumber,
     type => 'OVERDUES',
 });
+is( @$debarments, 1, "DelUniqueDebarment without the arguments 'borrowernumber' and 'type' does not delete the debarment" );
+
+$delUniqueDebarment = DelUniqueDebarment({
+    borrowernumber => $borrowernumber,
+});
+is( $delUniqueDebarment, undef, "DelUniqueDebarment without the argument 'type' returns undef" );
+$debarments = GetDebarments({
+    borrowernumber => $borrowernumber,
+    type => 'OVERDUES',
+});
+is( @$debarments, 1, "DelUniqueDebarment without the argument 'type' does not delete the debarment" );
+
+$delUniqueDebarment = DelUniqueDebarment({
+    type => 'OVERDUES'
+});
+is( $delUniqueDebarment, undef, "DelUniqueDebarment without the argument 'borrowernumber' returns undef" );
+$debarments = GetDebarments({
+    borrowernumber => $borrowernumber,
+    type => 'OVERDUES',
+});
+is( @$debarments, 1, "DelUniqueDebarment without the argument 'borrowerumber' does not delete the debarment" );
+
+$delUniqueDebarment = DelUniqueDebarment({
+    borrowernumber => $borrowernumber,
+    type => 'SUSPENSION',
+});
+is( $delUniqueDebarment, undef, "DelUniqueDebarment with wrong arguments returns undef" );
+$debarments = GetDebarments({
+    borrowernumber => $borrowernumber,
+    type => 'OVERDUES',
+});
+is( @$debarments, 1, "DelUniqueDebarment with wrong arguments does not delete the debarment" );
+
+$delUniqueDebarment = DelUniqueDebarment({
+    borrowernumber => $borrowernumber,
+    type => 'OVERDUES',
+});
+is( $delUniqueDebarment, 1, "DelUniqueDebarment returns 1" );
 $debarments = GetDebarments({
     borrowernumber => $borrowernumber,
     type => 'OVERDUES',
