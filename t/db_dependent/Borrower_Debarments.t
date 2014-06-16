@@ -5,7 +5,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Members;
 
-use Test::More tests => 21;
+use Test::More tests => 22;
 
 use_ok('Koha::Borrower::Debarments');
 
@@ -84,6 +84,17 @@ $debarments = GetDebarments({
 });
 ok( @$debarments == 1, "GetDebarments returns 1 OVERDUES debarment after running AddOverduesDebarment twice" );
 ok( $debarments->[0]->{'expiration'} eq '9999-11-09', "AddOverduesDebarment updated OVERDUES debarment correctly" );
+
+
+DelUniqueDebarment({
+    borrowernumber => $borrowernumber,
+    type => 'OVERDUES',
+});
+$debarments = GetDebarments({
+    borrowernumber => $borrowernumber,
+    type => 'OVERDUES',
+});
+is( @$debarments, 0, "DelUniqueDebarment functions correctly" );
 
 
 $debarments = GetDebarments({ borrowernumber => $borrowernumber });
