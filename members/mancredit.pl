@@ -89,6 +89,7 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 }
     
     $template->param(
+        finesview => 1,
         borrowernumber => $borrowernumber,
         firstname => $data->{'firstname'},
         surname  => $data->{'surname'},
