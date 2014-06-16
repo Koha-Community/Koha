@@ -47,6 +47,7 @@ foreach my $key ( keys %$borrower ) {
     $template->param( $key => $borrower->{$key} );
 }
 $template->param(
+    suggestionsview  => 1,
     categoryname => $borrower->{'description'},
     branchname   => GetBranchName( $borrower->{'branchcode'} ),
 );
