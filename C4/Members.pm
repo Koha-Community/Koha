@@ -879,7 +879,8 @@ sub Check_Userid {
       $dbh->prepare(
         "SELECT * FROM borrowers WHERE userid=? AND borrowernumber != ?");
     $sth->execute( $uid, $member );
-    if ( ( $uid ne '' ) && ( my $row = $sth->fetchrow_hashref ) ) {
+    if ( (( $uid ne '' ) && ( my $row = $sth->fetchrow_hashref    )) or
+         (( $uid ne '' ) && ( $uid eq C4::Context->config('user') )) ) {
         return 0;
     }
     else {
