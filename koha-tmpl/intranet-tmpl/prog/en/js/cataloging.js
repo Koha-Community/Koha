@@ -483,7 +483,5 @@ function CheckMandatorySubfields(p){
 }
 
  $(document).ready(function() {
-    $("body").on("keypress", ".input_marceditor, .indicator", function(e){
-        return checkEnter(e);
-    });
+    $(".input_marceditor, .indicator").addClass('noEnterSubmit');
 });
