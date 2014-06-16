@@ -26,14 +26,14 @@ my $success = AddDebarment({
     type => 'MANUAL',
     comment => 'Test 1',
 });
-ok( $success, "AddDebarment returned true" );
+is( $success, 1, "AddDebarment returned true" );
 
 
 my $debarments = GetDebarments({ borrowernumber => $borrowernumber });
-ok( @$debarments == 1, "GetDebarments returns 1 debarment" );
-ok( $debarments->[0]->{'type'} eq 'MANUAL', "Correctly stored 'type'" );
-ok( $debarments->[0]->{'expiration'} eq '9999-06-10', "Correctly stored 'expiration'" );
-ok( $debarments->[0]->{'comment'} eq 'Test 1', "Correctly stored 'comment'" );
+is( @$debarments, 1, "GetDebarments returns 1 debarment" );
+is( $debarments->[0]->{'type'}, 'MANUAL', "Correctly stored 'type'" );
+is( $debarments->[0]->{'expiration'}, '9999-06-10', "Correctly stored 'expiration'" );
+is( $debarments->[0]->{'comment'}, 'Test 1', "Correctly stored 'comment'" );
 
 
 $success = AddDebarment({
@@ -42,10 +42,10 @@ $success = AddDebarment({
 });
 
 $debarments = GetDebarments({ borrowernumber => $borrowernumber });
-ok( @$debarments == 2, "GetDebarments returns 2 debarments" );
-ok( $debarments->[1]->{'type'} eq 'MANUAL', "Correctly stored 'type'" );
-ok( !$debarments->[1]->{'expiration'}, "Correctly stored debarrment with no expiration" );
-ok( $debarments->[1]->{'comment'} eq 'Test 2', "Correctly stored 'comment'" );
+is( @$debarments, 2, "GetDebarments returns 2 debarments" );
+is( $debarments->[1]->{'type'}, 'MANUAL', "Correctly stored 'type'" );
+is( $debarments->[1]->{'expiration'}, undef, "Correctly stored debarrment with no expiration" );
+is( $debarments->[1]->{'comment'}, 'Test 2', "Correctly stored 'comment'" );
 
 
 ModDebarment({
@@ -54,12 +54,12 @@ ModDebarment({
     expiration => '9998-06-10',
 });
 $debarments = GetDebarments({ borrowernumber => $borrowernumber });
-ok( $debarments->[1]->{'comment'} eq 'Test 3', "ModDebarment functions correctly" );
+is( $debarments->[1]->{'comment'}, 'Test 3', "ModDebarment functions correctly" );
 
 
 my $borrower = GetMember( borrowernumber => $borrowernumber );
-ok( $borrower->{'debarred'} eq '9999-06-10', "Field borrowers.debarred set correctly" );
-ok( $borrower->{'debarredcomment'} eq "Test 1\nTest 3", "Field borrowers.debarredcomment set correctly" );
+is( $borrower->{'debarred'}, '9999-06-10', "Field borrowers.debarred set correctly" );
+is( $borrower->{'debarredcomment'}, "Test 1\nTest 3", "Field borrowers.debarredcomment set correctly" );
 
 
 AddUniqueDebarment({
@@ -70,8 +70,8 @@ $debarments = GetDebarments({
     borrowernumber => $borrowernumber,
     type => 'OVERDUES',
 });
-ok( @$debarments == 1, "GetDebarments returns 1 OVERDUES debarment" );
-ok( $debarments->[0]->{'type'} eq 'OVERDUES', "AddOverduesDebarment created new debarment correctly" );
+is( @$debarments, 1, "GetDebarments returns 1 OVERDUES debarment" );
+is( $debarments->[0]->{'type'}, 'OVERDUES', "AddOverduesDebarment created new debarment correctly" );
 
 AddUniqueDebarment({
     borrowernumber => $borrowernumber,
@@ -82,8 +82,8 @@ $debarments = GetDebarments({
     borrowernumber => $borrowernumber,
     type => 'OVERDUES',
 });
-ok( @$debarments == 1, "GetDebarments returns 1 OVERDUES debarment after running AddOverduesDebarment twice" );
-ok( $debarments->[0]->{'expiration'} eq '9999-11-09', "AddOverduesDebarment updated OVERDUES debarment correctly" );
+is( @$debarments, 1, "GetDebarments returns 1 OVERDUES debarment after running AddOverduesDebarment twice" );
+is( $debarments->[0]->{'expiration'}, '9999-11-09', "AddOverduesDebarment updated OVERDUES debarment correctly" );
 
 
 DelUniqueDebarment({
@@ -102,7 +102,7 @@ foreach my $d ( @$debarments ) {
     DelDebarment( $d->{'borrower_debarment_id'} );
 }
 $debarments = GetDebarments({ borrowernumber => $borrowernumber });
-ok( @$debarments == 0, "DelDebarment functions correctly" );
+is( @$debarments, 0, "DelDebarment functions correctly" );
 
 $dbh->do(q|UPDATE borrowers SET debarred = '1970-01-01'|);
 is( IsDebarred( $borrowernumber ), undef, 'A patron with a debarred date in the past is not debarred' );
