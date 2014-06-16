@@ -1270,7 +1270,8 @@ sub GetItemsInfo {
            itemtypes.notforloan as notforloan_per_itemtype,
            holding.branchurl,
            holding.branchname,
-           holding.opac_info as branch_opac_info
+           holding.opac_info as holding_branch_opac_info,
+           home.opac_info as home_branch_opac_info
      FROM items
      LEFT JOIN branches AS holding ON items.holdingbranch = holding.branchcode
      LEFT JOIN branches AS home ON items.homebranch=home.branchcode

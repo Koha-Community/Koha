@@ -1189,19 +1189,19 @@
                             <td class="location" property="seller">
                                 <link property="itemOffered" href="#record" />
                                 <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
-                                <div class="[% ITEM_RESULT.branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]">
+                                <span class="[% ITEM_RESULT.holding_branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]" title="">
                                     [% IF ( ITEM_RESULT.branchurl ) %]
-                                        <a href="[% ITEM_RESULT.branchurl %]" title="">[% ITEM_RESULT.branchname %]</a>
+                                        <a href="[% ITEM_RESULT.branchurl %]">[% ITEM_RESULT.branchname %]</a>
                                     [% ELSE %]
-                                        <span title="">[% ITEM_RESULT.branchname %]</span>
+                                        <span>[% ITEM_RESULT.branchname %]</span>
                                     [% END %]
-                                </div>
+                                </span>
+                                <div class="branch-info-tooltip">[% ITEM_RESULT.holding_branch_opac_info %]</div>
 
                                 [% IF ( OpacLocationBranchToDisplayShelving == 'holding' || OpacLocationBranchToDisplayShelving == 'both' ) %]
                                     <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
                                 [% END %]
 
-                                <div class="branch-info-tooltip">[% ITEM_RESULT.branch_opac_info %]</div>
                             </td>
                         [% END %]
 
@@ -1209,18 +1209,19 @@
                             <td class="location" property="seller">
                                 <link property="itemOffered" href="#record" />
                                 <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
-                                <div class="[% ITEM_RESULT.branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]">
+                                <span class="[% ITEM_RESULT.home_branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]" title="">
                                     [% IF Branches.GetURL( ITEM_RESULT.homebranch ) %]
                                         [% home_branch_url = Branches.GetURL( ITEM_RESULT.homebranch ) %]
                                         [% IF ( home_branch_url ) %]
                                              <a href="[% home_branch_url %]">[% Branches.GetName( ITEM_RESULT.homebranch ) %]</a>
                                         [% ELSE %]
-                                            [% Branches.GetName( ITEM_RESULT.homebranch ) %]
+                                            <span>[% Branches.GetName( ITEM_RESULT.homebranch ) %]</span>
                                         [% END %]
                                     [% ELSE %]
-                                        <span title="">[% Branches.GetName( ITEM_RESULT.homebranch ) %]</span>
+                                        <span>[% Branches.GetName( ITEM_RESULT.homebranch ) %]</span>
                                     [% END %]
-                                </div>
+                                </span>
+                                <div class="branch-info-tooltip">[% ITEM_RESULT.home_branch_opac_info %]</div>
 
                                 [% IF ( OpacLocationBranchToDisplayShelving == 'home' || OpacLocationBranchToDisplayShelving == 'both' ) %]
                                     <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
@@ -1354,7 +1355,7 @@
 
      $(document).ready(function() {
         $('#bibliodescriptions').tabs();
-        $(".branch-info-tooltip-trigger").tooltip({
+        $(".branch-info-tooltip-trigger").uitooltip({
             position: { my: "left+15 center", at: "right center" },
             show: 50,
             hide: 50,
