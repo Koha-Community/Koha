@@ -1662,6 +1662,13 @@ sub buildQuery {
 
                 warn "FIELD WEIGHTED OPERAND: >$weighted_operand<" if $DEBUG;
 
+                #Use relevance ranking when not using a weighted query (which adds relevance ranking of its own)
+
+                #N.B. Truncation is mutually exclusive with Weighted Queries,
+                #so even if QueryWeightFields is turned on, QueryAutoTruncate will turn it off, thus
+                #the need for this relevance wrapper.
+                $operand = "(rk=($operand))" unless $weight_fields;
+
                 ($query,$query_cgi,$query_desc,$previous_operand) = _build_initial_query({
                     query => $query,
                     query_cgi => $query_cgi,
