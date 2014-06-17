@@ -937,8 +937,7 @@ sub GetOrders {
     my $query  ="
         SELECT biblio.*,biblioitems.*,
                 aqorders.*,
-                aqbudgets.*,
-                biblio.title
+                aqbudgets.*
         FROM    aqorders
             LEFT JOIN aqbudgets        ON aqbudgets.budget_id = aqorders.budget_id
             LEFT JOIN biblio           ON biblio.biblionumber = aqorders.biblionumber
