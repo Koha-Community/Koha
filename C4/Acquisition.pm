@@ -1032,7 +1032,6 @@ sub GetOrders {
         SELECT biblio.*,biblioitems.*,
                 aqorders.*,
                 aqbudgets.*,
-                biblio.title,
                 aqorders_transfers.ordernumber_from AS transferred_from,
                 aqorders_transfers.timestamp AS transferred_from_timestamp
         FROM    aqorders
