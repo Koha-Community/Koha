@@ -8780,6 +8780,18 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
+        $dbh->do("UPDATE marc_subfield_structure SET liblibrarian = 'Encoded bitrate', libopac = 'Encoded bitrate' WHERE tagfield = '347' AND tagsubfield = 'f'");
+        $dbh->do("UPDATE marc_subfield_structure SET repeatable = 1 WHERE tagfield IN ('110','111','610','611','710','711','810','811') AND tagsubfield = 'c'");
+        $dbh->do("UPDATE auth_subfield_structure SET repeatable = 1 WHERE tagfield IN ('110','111','410','411','510','511','710','711') AND tagsubfield = 'c'");
+        print "Upgrade to $DBversion done (Bug 12435 - Update MARC21 frameworks to Update No. 18 (April 2014))\n";
+    }
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

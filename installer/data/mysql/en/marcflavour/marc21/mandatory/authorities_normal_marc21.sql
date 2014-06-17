@@ -1,7 +1,7 @@
 -- *******************************************************
 --   KOHA  MARC 21 STANDARD DEFAULT AUTHORITY FRAMEWORKS
 --
---        Revised to Update No. 17 (September 2013)
+--        Revised to Update No. 18 (April 2014)
 -- *******************************************************
 
 -- ******************************************************
@@ -598,7 +598,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '100', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 1, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '110', 'a', 'Corporate name or jurisdiction name as entry element', 'Corporate name or jurisdiction name as entry element', 0, 0, 1, NULL, NULL, '''110b'',''110c'',''110d'',''110t'',''110o'',''110m'',''110r'',''110s'',''110k'',''110n'',''110p'',''110g'',''110l'',''110f'',''110h'',''110x'',''110z'',''110y'',''110v''', 0, 0, '', '', ''),
 		('', '110', 'b', 'Subordinate unit', 'Subordinate unit', 1, 0, 1, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '110', 'c', 'Location of meeting', 'Location of meeting', 0, 0, 1, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '110', 'c', 'Location of meeting', 'Location of meeting', 1, 0, 1, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '110', 'd', 'Date of meeting or treaty signing', 'Date of meeting or treaty signing', 1, 0, 1, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '110', 'e', 'Relator term', 'Relator term', 1, 0, 1, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '110', 'f', 'Date of a work', 'Date of a work', 0, 0, 1, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -621,7 +621,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '110', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 1, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '111', 'a', 'Meeting name or jurisdiction name as entry element', 'Meeting name or jurisdiction name as entry element', 0, 0, 1, NULL, NULL, '''111e'',''111c'',''111d'',''111t'',''111s'',''111k'',''111n'',''111p'',''111g'',''111l'',''111f'',''111h'',''111x'',''111z'',''111y'',''111v''', 0, 0, '', '', ''),
 		('', '111', 'b', 'Number [OBSOLETE]', 'Number [OBSOLETE]', 0, 0, 1, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '111', 'c', 'Location of meeting', 'Location of meeting', 0, 0, 1, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '111', 'c', 'Location of meeting', 'Location of meeting', 1, 0, 1, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '111', 'd', 'Date of meeting', 'Date of meeting', 0, 0, 1, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '111', 'e', 'Subordinate unit', 'Subordinate unit', 1, 0, 1, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '111', 'f', 'Date of a work', 'Date of a work', 0, 0, 1, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -969,7 +969,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '400', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, 4, NULL, NULL, NULL, 0, 1, '', '', ''),
 		('', '410', 'a', 'Corporate name or jurisdiction name as entry element', 'Corporate name or jurisdiction name as entry element', 0, 0, 4, NULL, NULL, '''410b'',''410c'',''410d'',''410t'',''410o'',''410m'',''410r'',''410s'',''410k'',''410n'',''410p'',''410g'',''410l'',''410f'',''410h'',''410x'',''410z'',''410y'',''410v''', 0, 0, '', '', 'CORPO_NAME'),
 		('', '410', 'b', 'Subordinate unit', 'Subordinate unit', 1, 0, 4, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '410', 'c', 'Location of meeting', 'Location of meeting', 0, 0, 4, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '410', 'c', 'Location of meeting', 'Location of meeting', 1, 0, 4, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '410', 'd', 'Date of meeting or treaty signing', 'Date of meeting or treaty signing', 1, 0, 4, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '410', 'e', 'Relator term', 'Relator term', 1, 0, 4, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '410', 'f', 'Date of a work', 'Date of a work', 0, 0, 4, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -997,7 +997,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '410', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, 4, NULL, NULL, NULL, 0, 1, '', '', ''),
 		('', '411', 'a', 'Meeting name or jurisdiction name as entry element', 'Meeting name or jurisdiction name as entry element', 0, 0, 4, NULL, NULL, '''411e'',''411c'',''411d'',''411t'',''411s'',''411k'',''411n'',''411p'',''411g'',''411l'',''411f'',''411h'',''411x'',''411z'',''411y'',''411v''', 0, 0, '', '', 'MEETI_NAME'),
 		('', '411', 'b', 'Number {OBSOLETE]', 'Number {OBSOLETE]', 0, 0, 4, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '411', 'c', 'Location of meeting', 'Location of meeting', 0, 0, 4, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '411', 'c', 'Location of meeting', 'Location of meeting', 1, 0, 4, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '411', 'd', 'Date of meeting', 'Date of meeting', 0, 0, 4, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '411', 'e', 'Subordinate unit', 'Subordinate unit', 1, 0, 4, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '411', 'f', 'Date of a work', 'Date of a work', 0, 0, 4, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -1189,7 +1189,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '500', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, 5, NULL, NULL, NULL, 0, 1, '', '', ''),
 		('', '510', 'a', 'Corporate name or jurisdiction name as entry element', 'Corporate name or jurisdiction name as entry element', 0, 0, 5, NULL, NULL, '''510b'',''510c'',''510d'',''510t'',''510o'',''510m'',''510r'',''510s'',''510k'',''510n'',''510p'',''510g'',''510l'',''510f'',''510h'',''510x'',''510z'',''510y'',''510v''', 0, 0, '', '', 'CORPO_NAME'),
 		('', '510', 'b', 'Subordinate unit', 'Subordinate unit', 1, 0, 5, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '510', 'c', 'Location of meeting', 'Location of meeting', 0, 0, 5, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '510', 'c', 'Location of meeting', 'Location of meeting', 1, 0, 5, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '510', 'd', 'Date of meeting or treaty signing', 'Date of meeting or treaty signing', 1, 0, 5, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '510', 'e', 'Relator term', 'Relator term', 1, 0, 5, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '510', 'f', 'Date of a work', 'Date of a work', 0, 0, 5, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -1217,7 +1217,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '510', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 5, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '510', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, 5, NULL, NULL, NULL, 0, 1, '', '', ''),
 		('', '511', 'a', 'Meeting name or jurisdiction name as entry element', 'Meeting name or jurisdiction name as entry element', 0, 0, 5, NULL, NULL, '''511e'',''511c'',''511d'',''511t'',''511s'',''511k'',''511n'',''511p'',''511g'',''511l'',''511f'',''511h'',''511x'',''511z'',''511y'',''511v''', 0, 0, '', '', 'MEETI_NAME'),
-		('', '511', 'c', 'Location of meeting', 'Location of meeting', 0, 0, 5, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '511', 'c', 'Location of meeting', 'Location of meeting', 1, 0, 5, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '511', 'd', 'Date of meeting', 'Date of meeting', 0, 0, 5, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '511', 'e', 'Subordinate unit', 'Subordinate unit', 1, 0, 5, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '511', 'f', 'Date of a work', 'Date of a work', 0, 0, 5, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -1552,7 +1552,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '700', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '710', 'a', 'Corporate name or jurisdiction name as entry element', 'Corporate name or jurisdiction name as entry element', 0, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '710', 'b', 'Subordinate unit', 'Subordinate unit', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '710', 'c', 'Location of meeting', 'Location of meeting', 0, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '710', 'c', 'Location of meeting', 'Location of meeting', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '710', 'd', 'Date of meeting or treaty signing', 'Date of meeting or treaty signing', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '710', 'e', 'Relator term', 'Relator term', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '710', 'f', 'Date of a work', 'Date of a work', 0, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -1581,7 +1581,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '710', '6', 'Linkage', 'Linkage', 0, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '710', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '711', 'a', 'Meeting name or jurisdiction name as entry element', 'Meeting name or jurisdiction name as entry element', 0, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '711', 'c', 'Location of meeting', 'Location of meeting', 0, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '711', 'c', 'Location of meeting', 'Location of meeting', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '711', 'd', 'Date of meeting', 'Date of meeting', 0, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '711', 'e', 'Subordinate unit', 'Subordinate unit', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '711', 'f', 'Date of a work', 'Date of a work', 0, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),

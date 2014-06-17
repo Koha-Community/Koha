@@ -7,7 +7,7 @@
 --                    guided by Paul POULAIN
 --                      by thd for LibLime
 --
---           Revised to Update No. 17 (September 2013)
+--           Revised to Update No. 18 (April 2014)
 -- *************************************************************
 
 
@@ -918,7 +918,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('110', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 1, '', '', '', 0, -5, '', '', '', NULL),
 		('110', 'a', 'Corporate name or jurisdiction name as entry element', 'Corporate name or jurisdiction name as entry element', 0, 0, '', 1, '', 'CORPO_NAME', '', NULL, 0, '', '', '', NULL),
 		('110', 'b', 'Subordinate unit', 'Subordinate unit', 1, 0, '', 1, '', '', '', NULL, 0, '', '', '', NULL),
-		('110', 'c', 'Location of meeting', 'Location of meeting', 0, 0, '', 1, '', '', '', NULL, -1, '', '', '', NULL),
+		('110', 'c', 'Location of meeting', 'Location of meeting', 1, 0, '', 1, '', '', '', NULL, -1, '', '', '', NULL),
 		('110', 'd', 'Date of meeting or treaty signing', 'Date of meeting or treaty signing', 1, 0, '', 1, '', '', '', NULL, -1, '', '', '', NULL),
 		('110', 'e', 'Relator term', 'Relator term', 1, 0, '', 1, '', '', '', NULL, 0, '', '', '', NULL),
 		('110', 'f', 'Date of a work', 'Date of a work', 0, 0, '', 1, '', '', '', NULL, -6, '', '', '', NULL),
@@ -936,7 +936,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('111', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 1, '', '', '', 0, -5, '', '', '', NULL),
 		('111', 'a', 'Meeting name or jurisdiction name as entry element', 'Meeting name or jurisdiction name as entry element', 0, 0, NULL, 1, NULL, 'MEETI_NAME', '', NULL, 0, '', '', '', NULL),
 		('111', 'b', 'Number [OBSOLETE]', 'Number [OBSOLETE]', 0, 0, NULL, 1, NULL, NULL, '', NULL, -6, '', '', '', NULL),
-		('111', 'c', 'Location of meeting', 'Location of meeting', 0, 0, NULL, 1, NULL, NULL, '', NULL, 0, '', '', '', NULL),
+		('111', 'c', 'Location of meeting', 'Location of meeting', 1, 0, NULL, 1, NULL, NULL, '', NULL, 0, '', '', '', NULL),
 		('111', 'd', 'Date of meeting', 'Date of meeting', 0, 0, NULL, 1, NULL, NULL, '', NULL, 0, '', '', '', NULL),
 		('111', 'e', 'Subordinate unit', 'Subordinate unit', 1, 0, NULL, 1, NULL, NULL, '', NULL, 0, '', '', '', NULL),
 		('111', 'f', 'Date of a work', 'Date of a work', 0, 0, NULL, 1, NULL, NULL, '', NULL, -6, '', '', '', NULL),
@@ -1321,7 +1321,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
         ('347', 'c', 'File size', 'File size', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('347', 'd', 'Resolution', 'Resolution', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('347', 'e', 'Regional encoding', 'Regional encoding', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
-        ('347', 'f', 'Transmission speed', 'Transmission speed', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('347', 'f', 'Encoded bitrate', 'Encoded bitrate', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('350', '6', 'Linkage', 'Linkage', 0, 0, NULL, 3, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('350', 'a', 'Price', 'Price', 1, 0, NULL, 3, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('350', 'b', 'Form of issue', 'Form of issue', 1, 0, NULL, 3, NULL, NULL, '', NULL, -6, '', '', '', NULL),
@@ -1997,7 +1997,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('610', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 6, '', '', '', 0, -5, '', '', '', NULL),
 		('610', 'a', 'Corporate name or jurisdiction name as entry element', 'Corporate name or jurisdiction name as entry element', 0, 0, '', 6, '', 'CORPO_NAME', '', NULL, 0, '', '', '', NULL),
 		('610', 'b', 'Subordinate unit', 'Subordinate unit', 1, 0, '', 6, '', '', '', NULL, 0, '', '', '', NULL),
-		('610', 'c', 'Location of meeting', 'Location of meeting', 0, 0, '', 6, '', '', '', NULL, -1, '', '', '', NULL),
+		('610', 'c', 'Location of meeting', 'Location of meeting', 1, 0, '', 6, '', '', '', NULL, -1, '', '', '', NULL),
 		('610', 'd', 'Date of meeting or treaty signing', 'Date of meeting or treaty signing', 1, 0, '', 6, '', '', '', NULL, -1, '', '', '', NULL),
 		('610', 'e', 'Relator term', 'Relator term', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL),
 		('610', 'f', 'Date of a work', 'Date of a work', 0, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL),
@@ -2026,7 +2026,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('611', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 6, '', '', '', 0, -5, '', '', '', NULL),
 		('611', 'a', 'Meeting name or jurisdiction name as entry element', 'Meeting name or jurisdiction name as entry element', 0, 0, NULL, 6, NULL, 'MEETI_NAME', '', NULL, -1, '', '', '', NULL),
 		('611', 'b', 'Number  (BK CF MP MU SE VM MX)  [OBSOLETE]', 'Number  (BK CF MP MU SE VM MX)  [OBSOLETE]', 1, 0, NULL, -1, NULL, NULL, '', NULL, -6, '', '', '', NULL),
-		('611', 'c', 'Location of meeting', 'Location of meeting', 0, 0, NULL, 6, NULL, NULL, '', NULL, -1, '', '', '', NULL),
+		('611', 'c', 'Location of meeting', 'Location of meeting', 1, 0, NULL, 6, NULL, NULL, '', NULL, -1, '', '', '', NULL),
 		('611', 'd', 'Date of meeting', 'Date of meeting', 0, 0, NULL, 6, NULL, NULL, '', NULL, -1, '', '', '', NULL),
 		('611', 'e', 'Subordinate unit', 'Subordinate unit', 1, 0, NULL, 6, NULL, NULL, '', NULL, -1, '', '', '', NULL),
 		('611', 'f', 'Date of a work', 'Date of a work', 0, 0, NULL, 6, NULL, NULL, '', NULL, -6, '', '', '', NULL),
@@ -2386,7 +2386,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('710', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 7, '', '', '', 0, -5, '', '', '', NULL),
 		('710', 'a', 'Corporate name or jurisdiction name as entry element', 'Corporate name or jurisdiction name as entry element', 0, 0, '', 7, '', 'CORPO_NAME', '', NULL, 0, '', '', '', NULL),
 		('710', 'b', 'Subordinate unit', 'Subordinate unit', 1, 0, '', 7, '', '', '', NULL, 0, '', '', '', NULL),
-		('710', 'c', 'Location of meeting', 'Location of meeting', 0, 0, '', 7, '', '', '', NULL, -1, '', '', '', NULL),
+		('710', 'c', 'Location of meeting', 'Location of meeting', 1, 0, '', 7, '', '', '', NULL, -1, '', '', '', NULL),
 		('710', 'd', 'Date of meeting or treaty signing', 'Date of meeting or treaty signing', 1, 0, '', 7, '', '', '', NULL, -1, '', '', '', NULL),
 		('710', 'e', 'Relator term', 'Relator term', 1, 0, '', 7, '', '', '', NULL, 0, '', '', '', NULL),
 		('710', 'f', 'Date of a work', 'Date of a work', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
@@ -2413,7 +2413,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('711', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 7, '', '', '', 0, -5, '', '', '', NULL),
 		('711', 'a', 'Meeting name or jurisdiction name as entry element', 'Meeting name or jurisdiction name as entry element', 0, 0, NULL, 7, NULL, 'MEETI_NAME', '', NULL, 0, '', '', '', NULL),
 		('711', 'b', 'Number (BK CF MP MU SE VM MX) [OBSOLETE]', 'Number (BK CF MP MU SE VM MX) [OBSOLETE]', 0, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
-		('711', 'c', 'Location of meeting', 'Location of meeting', 0, 0, NULL, 7, NULL, NULL, '', NULL, 0, '', '', '', NULL),
+		('711', 'c', 'Location of meeting', 'Location of meeting', 1, 0, NULL, 7, NULL, NULL, '', NULL, 0, '', '', '', NULL),
 		('711', 'd', 'Date of meeting', 'Date of meeting', 0, 0, NULL, 7, NULL, NULL, '', NULL, 0, '', '', '', NULL),
 		('711', 'e', 'Subordinate unit', 'Subordinate unit', 1, 0, NULL, 7, NULL, NULL, '', NULL, 0, '', '', '', NULL),
 		('711', 'f', 'Date of a work', 'Date of a work', 0, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
@@ -3050,7 +3050,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('810', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 8, '', '', '', 0, -5, '', '', '', NULL),
 		('810', 'a', 'Corporate name or jurisdiction name as entry element', 'Corporate name or jurisdiction name as entry element', 0, 0, '', 8, '', 'CORPO_NAME', '', NULL, -1, '', '', '', NULL),
 		('810', 'b', 'Subordinate unit', 'Subordinate unit', 1, 0, '', 8, '', '', '', NULL, -1, '', '', '', NULL),
-		('810', 'c', 'Location of meeting', 'Location of meeting', 0, 0, '', 8, '', '', '', NULL, -1, '', '', '', NULL),
+		('810', 'c', 'Location of meeting', 'Location of meeting', 1, 0, '', 8, '', '', '', NULL, -1, '', '', '', NULL),
 		('810', 'd', 'Date of meeting or treaty signing', 'Date of meeting or treaty signing', 1, 0, '', 8, '', '', '', NULL, -1, '', '', '', NULL),
 		('810', 'e', 'Relator term', 'Relator term', 1, 0, '', 8, '', '', '', NULL, -1, '', '', '', NULL),
 		('810', 'f', 'Date of a work', 'Date of a work', 0, 0, '', 8, '', '', '', NULL, -6, '', '', '', NULL),
@@ -3079,7 +3079,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('811', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 8, '', '', '', 0, -5, '', '', '', NULL),
 		('811', 'a', 'Meeting name or jurisdiction name as entry element', 'Meeting name or jurisdiction name as entry element', 0, 0, NULL, 8, NULL, 'MEETI_NAME', '', NULL, -1, '', '', '', NULL),
 		('811', 'b', 'Number (BK CF MP MU SE VM MX) [OBSOLETE]', 'Number (BK CF MP MU SE VM MX) [OBSOLETE]', 0, 0, NULL, 8, NULL, NULL, '', NULL, -6, '', '', '', NULL),
-		('811', 'c', 'Location of meeting', 'Location of meeting', 0, 0, NULL, 8, NULL, NULL, '', NULL, -1, '', '', '', NULL),
+		('811', 'c', 'Location of meeting', 'Location of meeting', 1, 0, NULL, 8, NULL, NULL, '', NULL, -1, '', '', '', NULL),
 		('811', 'd', 'Date of meeting', 'Date of meeting', 0, 0, NULL, 8, NULL, NULL, '', NULL, -1, '', '', '', NULL),
 		('811', 'e', 'Subordinate unit', 'Subordinate unit', 1, 0, NULL, 8, NULL, NULL, '', NULL, -1, '', '', '', NULL),
 		('811', 'f', 'Date of a work', 'Date of a work', 0, 0, NULL, 8, NULL, NULL, '', NULL, -6, '', '', '', NULL),
