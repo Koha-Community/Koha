@@ -81,7 +81,7 @@ KOHA.browser = function (searchid, biblionumber) {
                     } else {
                         prevbutton = '<a href="#" id="browse-previous" class="browse-button">« ' + BROWSER_PREVIOUS + '</a>';
                     }
-                    if (me.curPos === me.searchCookie.results.length && me.searchCookie.total == me.curPos + me.searchCookie.offset) {
+                    if (me.curPos === me.searchCookie.pagelen - 1) {
                         nextbutton = '<span id="browse-next" class="browse-button">' + BROWSER_NEXT + ' »</span>';
                     } else {
                         nextbutton = '<a href="#" id="browse-next" class="browse-button">' + BROWSER_NEXT + ' »</a>';
