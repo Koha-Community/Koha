@@ -168,6 +168,19 @@ Typically this can be enabled with:
 EOM
         die
     fi
+
+    # Check that the CGI module is installed and enabled
+    # (Apache 2.4 may not have it by default.)
+    if ! /usr/sbin/apachectl -M 2> /dev/null | grep -q 'cgi_module'; then
+        cat 1>&2 << EOM
+Koha requires mod_cgi to be enabled within Apache in order to run.
+Typically this can be enabled with:
+
+    sudo a2enmod cgi
+EOM
+        die
+    fi
+
 }
 
 set_biblios_indexing_mode()
