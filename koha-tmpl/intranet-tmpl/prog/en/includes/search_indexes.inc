@@ -40,6 +40,15 @@
     [% END %]
     <option value="pb">Publisher</option>
     <option value="pl">Publisher location</option>
-    <option value="yr">Publication date (yyyy)</option>
-    <option value="acqdate">Acquisition date (yyyy-mm-dd)</option>
+    [%#
+        Use non-normalized st-year instead of st-numeric,
+        since pubdate can include 'u' to signify unkown
+        dates. See "Legal Characters" at:
+        http://www.loc.gov/marc/bibliographic/bd008a.html
+
+        This search is also for date ranges due to the
+        special Zebra r=r CCL mapping for 'yr'
+    %]
+    <option value="yr,st-year">Publication date (yyyy-yyyy)</option>
+    <option value="acqdate,st-date-normalized">Acquisition date (yyyy-mm-dd)</option>
 </select>

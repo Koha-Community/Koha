@@ -1537,17 +1537,28 @@ sub buildQuery {
                 my $index   = $indexes[$i];
 
                 # Add index-specific attributes
+
+                #Afaik, this 'yr' condition will only ever be met in the staff client advanced search
+                #for "Publication date", since typing 'yr:YYYY' into the search box produces a CCL query,
+                #which is processed higher up in this sub. Other than that, year searches are typically
+                #handled as limits which are not processed her either.
+
                 # Date of Publication
-                if ( $index eq 'yr' ) {
-                    $index .= ",st-numeric";
-                    $indexes_set++;
+                if ( $index =~ /yr/ ) {
+                    #weight_fields/relevance search causes errors with date ranges
+                    #In the case of YYYY-, it will only return records with a 'yr' of YYYY (not the range)
+                    #In the case of YYYY-YYYY, it will return no results
 					$stemming = $auto_truncation = $weight_fields = $fuzzy_enabled = $remove_stopwords = 0;
                 }
 
                 # Date of Acquisition
-                elsif ( $index eq 'acqdate' ) {
-                    $index .= ",st-date-normalized";
-                    $indexes_set++;
+                elsif ( $index =~ /acqdate/ ) {
+                    #stemming and auto_truncation would have zero impact since it already is YYYY-MM-DD format
+                    #Weight_fields probably SHOULD be turned OFF, otherwise you'll get records floating to the
+                      #top of the results just because they have lots of item records matching that date.
+                    #Fuzzy actually only applies during _build_weighted_query, and is reset there anyway, so
+                      #irrelevant here
+                    #remove_stopwords doesn't function anymore so is irrelevant
 					$stemming = $auto_truncation = $weight_fields = $fuzzy_enabled = $remove_stopwords = 0;
                 }
                 # ISBN,ISSN,Standard Number, don't need special treatment
@@ -1734,9 +1745,13 @@ sub buildQuery {
     # This is flawed , means we can't search anything with : in it
     # if user wants to do ccl or cql, start the query with that
 #    $query =~ s/:/=/g;
+    #NOTE: We use several several different regexps here as you can't have variable length lookback assertions
     $query =~ s/(?<=(ti|au|pb|su|an|kw|mc|nb|ns)):/=/g;
     $query =~ s/(?<=(wrdl)):/=/g;
     $query =~ s/(?<=(trn|phr)):/=/g;
+    $query =~ s/(?<=(st-numeric)):/=/g;
+    $query =~ s/(?<=(st-year)):/=/g;
+    $query =~ s/(?<=(st-date-normalized)):/=/g;
     $limit =~ s/:/=/g;
     for ( $query, $query_desc, $limit, $limit_desc ) {
         s/  +/ /g;    # remove extra spaces
