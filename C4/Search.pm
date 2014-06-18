@@ -1486,43 +1486,19 @@ sub buildQuery {
 
                 warn "FIELD WEIGHTED OPERAND: >$weighted_operand<" if $DEBUG;
 
-                # If there's a previous operand, we need to add an operator
-                if ($previous_operand) {
+                ($query,$query_cgi,$query_desc,$previous_operand) = _build_initial_query({
+                    query => $query,
+                    query_cgi => $query_cgi,
+                    query_desc => $query_desc,
+                    operator => ($operators[ $i - 1 ]) ? $operators[ $i - 1 ] : '',
+                    parsed_operand => $operand,
+                    original_operand => ($operands[$i]) ? $operands[$i] : '',
+                    index => $index,
+                    index_plus => $index_plus,
+                    indexes_set => $indexes_set,
+                    previous_operand => $previous_operand,
+                });
 
-                    # User-specified operator
-                    if ( $operators[ $i - 1 ] ) {
-                        $query     .= " $operators[$i-1] ";
-                        $query     .= " $index_plus " unless $indexes_set;
-                        $query     .= " $operand";
-                        $query_cgi .= "&op=".uri_escape($operators[$i-1]);
-                        $query_cgi .= "&idx=".uri_escape($index) if $index;
-                        $query_cgi .= "&q=".uri_escape($operands[$i]) if $operands[$i];
-                        $query_desc .=
-                          " $operators[$i-1] $index_plus $operands[$i]";
-                    }
-
-                    # Default operator is and
-                    else {
-                        $query      .= " and ";
-                        $query      .= "$index_plus " unless $indexes_set;
-                        $query      .= "$operand";
-                        $query_cgi  .= "&op=and&idx=".uri_escape($index) if $index;
-                        $query_cgi  .= "&q=".uri_escape($operands[$i]) if $operands[$i];
-                        $query_desc .= " and $index_plus $operands[$i]";
-                    }
-                }
-
-                # There isn't a pervious operand, don't need an operator
-                else {
-
-                    # Field-weighted queries already have indexes set
-                    $query .= " $index_plus " unless $indexes_set;
-                    $query .= $operand;
-                    $query_desc .= " $index_plus $operands[$i]";
-                    $query_cgi  .= "&idx=".uri_escape($index) if $index;
-                    $query_cgi  .= "&q=".uri_escape($operands[$i]) if $operands[$i];
-                    $previous_operand = 1;
-                }
             }    #/if $operands
         }    # /for
     }
@@ -1625,6 +1601,42 @@ sub buildQuery {
         $query_desc,        $limit, $limit_cgi,    $limit_desc,
         $stopwords_removed, $query_type
     );
+}
+
+=head2 _build_initial_query
+
+  ($query, $query_cgi, $query_desc, $previous_operand) = _build_initial_query($initial_query_params);
+
+  Build a section of the initial query containing indexes, operators, and operands.
+
+=cut
+
+sub _build_initial_query {
+    my ($params) = @_;
+
+    my $operator = "";
+    if ($params->{previous_operand}){
+        #If there is a previous operand, add a supplied operator or the default 'and'
+        $operator = ($params->{operator}) ? " ".($params->{operator})." " : ' and ';
+    }
+
+    #NOTE: indexes_set is typically set when doing truncation or field weighting
+    my $operand = ($params->{indexes_set}) ? $params->{parsed_operand} : $params->{index_plus}.$params->{parsed_operand};
+
+    #e.g. "kw,wrdl:test"
+    #e.g. " and kw,wrdl:test"
+    $params->{query} .= $operator . $operand;
+
+    $params->{query_cgi} .= "&op=".uri_escape($operator) if $operator;
+    $params->{query_cgi} .= "&idx=".uri_escape($params->{index}) if $params->{index};
+    $params->{query_cgi} .= "&q=".uri_escape($params->{original_operand}) if $params->{original_operand};
+
+    #e.g. " and kw,wrdl: test"
+    $params->{query_desc} .= $operator . $params->{index_plus} . " " . $params->{original_operand};
+
+    $params->{previous_operand} = 1 unless $params->{previous_operand}; #If there is no previous operand, mark this as one
+
+    return ($params->{query}, $params->{query_cgi}, $params->{query_desc}, $params->{previous_operand});
 }
 
 =head2 searchResults
