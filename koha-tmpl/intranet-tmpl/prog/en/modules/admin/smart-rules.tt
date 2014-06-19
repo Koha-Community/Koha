@@ -42,7 +42,9 @@ $(document).ready(function() {
                     $(current_column).find("input[type='text']").val(itm);
                     // select the corresponding option
                     $(current_column).find("select option").each(function(){
-                        if ( $(this).text().toLowerCase() == itm.toLowerCase() ) {
+                        opt = $(this).text().toLowerCase();
+                        opt = opt.replace(/^\s*|\s*$/g,'');
+                        if ( opt == itm.toLowerCase() ) {
                             $(this).attr('selected', 'selected');
                         }
                     });
