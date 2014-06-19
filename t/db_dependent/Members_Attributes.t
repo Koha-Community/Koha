@@ -31,6 +31,7 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
+$dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM borrowers|);
 $dbh->do(q|DELETE FROM borrower_attributes|);
 $dbh->do(q|DELETE FROM borrower_attribute_types|);
