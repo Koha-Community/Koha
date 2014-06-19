@@ -1744,6 +1744,31 @@ sub GetVariationsOfISBNs {
     return wantarray ? @isbns : join( " | ", @isbns );
 }
 
+=head2 IsKohaFieldLinked
+
+    my $is_linked = IsKohaFieldLinked({
+        kohafield => $kohafield,
+        frameworkcode => $frameworkcode,
+    });
+
+    Return 1 if the field is linked
+
+=cut
+
+sub IsKohaFieldLinked {
+    my ( $params ) = @_;
+    my $kohafield = $params->{kohafield};
+    my $frameworkcode = $params->{frameworkcode} || '';
+    my $dbh = C4::Context->dbh;
+    my $is_linked = $dbh->selectcol_arrayref( q|
+        SELECT COUNT(*)
+        FROM marc_subfield_structure
+        WHERE frameworkcode = ?
+        AND kohafield = ?
+    |,{}, $frameworkcode, $kohafield );
+    return $is_linked->[0];
+}
+
 1;
 
 __END__

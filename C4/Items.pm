@@ -442,38 +442,51 @@ Returns item record
 
 =cut
 
-my %default_values_for_mod_from_marc = (
-# DO NOT include (internal) item fields here.
-# Only fields that are related to the MARC structure used in additem.pl
-# Bug 7817 removed permanent_location.
-    barcode              => undef, 
-    booksellerid         => undef, 
-    ccode                => undef, 
-    'items.cn_source'    => undef, 
-    coded_location_qualifier => undef,
-    copynumber           => undef, 
-    damaged              => 0,
-#    dateaccessioned      => undef,
-    enumchron            => undef, 
-    holdingbranch        => undef, 
-    homebranch           => undef, 
-    itemcallnumber       => undef, 
-    itemlost             => 0,
-    itemnotes            => undef, 
-    itype                => undef, 
-    location             => undef, 
-    materials            => undef, 
-    notforloan           => 0,
-    paidfor              => undef,  # should not be here: see BZ 12817
-    price                => undef, 
-    replacementprice     => undef, 
-    replacementpricedate => undef, 
-    restricted           => undef, 
-    stack                => undef, 
-    stocknumber          => undef, 
-    uri                  => undef, 
-    withdrawn             => 0,
-);
+our %default_values_for_mod_from_marc;
+
+sub _build_default_values_for_mod_marc {
+    my ($frameworkcode) = @_;
+    return $default_values_for_mod_from_marc{$frameworkcode}
+      if exists $default_values_for_mod_from_marc{$frameworkcode};
+    my $marc_structure = C4::Biblio::GetMarcStructure( 1, $frameworkcode );
+    my $default_values = {
+        barcode                  => undef,
+        booksellerid             => undef,
+        ccode                    => undef,
+        'items.cn_source'        => undef,
+        coded_location_qualifier => undef,
+        copynumber               => undef,
+        damaged                  => 0,
+        enumchron                => undef,
+        holdingbranch            => undef,
+        homebranch               => undef,
+        itemcallnumber           => undef,
+        itemlost                 => 0,
+        itemnotes                => undef,
+        itype                    => undef,
+        location                 => undef,
+        permanent_location       => undef,
+        materials                => undef,
+        notforloan               => 0,
+        # paidfor => undef, # commented, see bug 12817
+        price                    => undef,
+        replacementprice         => undef,
+        replacementpricedate     => undef,
+        restricted               => undef,
+        stack                    => undef,
+        stocknumber              => undef,
+        uri                      => undef,
+        withdrawn                => 0,
+    };
+    while ( my ( $field, $default_value ) = each %$default_values ) {
+        $field =~ s|[^\.]*\.?(.*)|items.$1|;
+        $default_values_for_mod_from_marc{$frameworkcode}{$field} =
+          $default_value
+          if C4::Koha::IsKohaFieldLinked(
+            { kohafield => $field, frameworkcode => $frameworkcode } );
+    }
+    return $default_values_for_mod_from_marc{$frameworkcode};
+}
 
 sub ModItemFromMarc {
     my $item_marc = shift;
@@ -487,8 +500,10 @@ sub ModItemFromMarc {
     my $localitemmarc = MARC::Record->new;
     $localitemmarc->append_fields( $item_marc->field($itemtag) );
     my $item = &TransformMarcToKoha( $dbh, $localitemmarc, $frameworkcode, 'items' );
-    foreach my $item_field ( keys %default_values_for_mod_from_marc ) {
-        $item->{$item_field} = $default_values_for_mod_from_marc{$item_field} unless (exists $item->{$item_field});
+    my $default_values = _build_default_values_for_mod_marc();
+    foreach my $item_field ( keys %$default_values ) {
+        $item->{$item_field} = $default_values->{$item_field}
+          unless exists $item->{$item_field};
     }
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
 
