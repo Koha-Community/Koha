@@ -248,7 +248,7 @@ elsif ( $op eq 'add_validate' ) {
                 BlockExpiredPatronOpacActions,
                 default_privacy
             )
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)" );
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)" );
         $sth->execute(
             map { $input->param($_) } (
                 'categorycode',    'description',
