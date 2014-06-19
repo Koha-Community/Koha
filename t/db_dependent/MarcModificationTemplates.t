@@ -1,6 +1,8 @@
 use Modern::Perl;
 
-use Test::More tests => 78;
+use Test::More tests => 94;
+
+use Koha::SimpleMARC;
 
 use_ok("MARC::Field");
 use_ok("MARC::Record");
@@ -151,7 +153,7 @@ like( $template_id, qr|^\d+$|, "new template returns an id" );
 
 is( AddModificationTemplateAction(
     $template_id, 'delete_field', 0,
-    '245', '', '', '', '', '',
+    '245', '', '', '', '',
     '', '', '',
     'if', '245', 'a', 'equals', 'Bad title', '',
     'Delete field 245 if 245$a eq "Bad title"'
@@ -183,15 +185,15 @@ is( AddModificationTemplateAction(
 
 is( AddModificationTemplateAction(
     $template_id, 'move_field', 0,
-    '952', 'd', '', '952', 'e', '',
+    '952', 'd', '', '952', 'e',
     '', '', '',
     'if', '952', 'c', 'equals', '^GEN', '1',
-    'Move field 952$d to 952$e if 952$c =~ /^GE/'
-), 1, 'Add fifth action: move field 952$d to 952$e if 952$c =~ /^GE/');
+    'Move field 952$d to 952$e if 952$c =~ /^GEN/'
+), 1, 'Add fifth action: move field 952$d to 952$e if 952$c =~ /^GEN/');
 
 is( AddModificationTemplateAction(
     $template_id, 'update_field', 0,
-    '650', 'a', 'Computer algorithms.', '', '', '',
+    '650', 'a', 'Computer algorithms.', '', '',
     '', '', '',
     'if', '650', '9', 'equals', '499', '',
     'Update field 650$a with "Computer algorithms." to 651 if 650$9 == 499'
@@ -199,19 +201,140 @@ is( AddModificationTemplateAction(
 
 is( AddModificationTemplateAction(
     $template_id, 'move_field', 0,
-    '650', '', '', '651', '', '',
+    '650', '', '', '651', '',
     '', '', '',
     'if', '650', '9', 'equals', '499', '',
     'Move field 650 to 651 if 650$9 == 499'
 ), 1, 'Add seventh action: move field 650 to 651 if 650$9 == 499');
 
+is( AddModificationTemplateAction(
+    $template_id, 'update_field', 0,
+    '999', 'a', 'non existent.', '', '',
+    '', '', '',
+    '', '', '', '', '', '',
+    'Update non existent field 999$a with "non existent"'
+), 1, 'Add eighth action: update field non existent 999$a with "non existent."');
 
 my $record = new_record();
 
 is( ModifyRecordWithTemplate( $template_id, $record ), undef, "The ModifyRecordWithTemplate returns undef" );
 
-my $expected_record = expected_record();
+my $expected_record = expected_record_1();
 is_deeply( $record, $expected_record, "Record modification as expected");
+
+$template_id = AddModificationTemplate("another_template_test");
+
+# Duplicate 245 => 3x245
+is( AddModificationTemplateAction(
+    $template_id, 'copy_field', 0,
+    '245', '', '', '245', '',
+    '', '', '',
+    'if', '245', 'a', 'equals', 'Bad title', '',
+    'Copy field 245 if 245$a eq "Bad title"'
+), 1, 'Add action: copy field 245 if 245$a eq "Bad title"');
+
+$record = new_record();
+is( ModifyRecordWithTemplate( $template_id, $record ), undef, "The ModifyRecordWithTemplate returns undef" );
+
+my @fields_245a = Koha::SimpleMARC::read_field({
+    record => $record,
+    field => '245',
+    subfield => 'a',
+});
+is_deeply( \@fields_245a, [
+        'The art of computer programming',
+        'Bad title',
+        'Bad title',
+    ], 'Copy field has copied the "Bad title"' );
+
+# Update first "Bad title"
+is( AddModificationTemplateAction(
+    $template_id, 'update_field', 1,
+    '245', 'a', 'Bad title updated', '', '',
+    '', '', '',
+    'if', '245', 'a', 'equals', 'Bad title', '',
+    'Update first 245$a matching "Bad title" with "Bad title updated"'
+), 1, 'Add action: update field 245$a matching "Bad title" with "Bad title updated');
+
+$record = new_record();
+is( ModifyRecordWithTemplate( $template_id, $record ), undef, "The ModifyRecordWithTemplate returns undef" );
+
+@fields_245a = Koha::SimpleMARC::read_field({
+    record => $record,
+    field => '245',
+    subfield => 'a',
+});
+is_deeply( \@fields_245a, [
+        'The art of computer programming',
+        'Bad title updated',
+        'Bad title',
+    ], 'update_field has update first the "Bad title"' );
+
+# Duplicate first 245 => 3x245
+is( AddModificationTemplateAction(
+    $template_id, 'copy_field', 1,
+    '245', '', '', '245', '',
+    '', '', '',
+    'if', '245', 'a', 'equals', '^Bad title', '1',
+    'Copy field 245 if 245$a =~ "^Bad title"'
+), 1, 'Add action: copy field 245 if 245$a =~ "^Bad title"');
+
+$record = new_record();
+is( ModifyRecordWithTemplate( $template_id, $record ), undef, "The ModifyRecordWithTemplate returns undef" );
+
+@fields_245a = Koha::SimpleMARC::read_field({
+    record => $record,
+    field => '245',
+    subfield => 'a',
+});
+is_deeply( \@fields_245a, [
+        'The art of computer programming',
+        'Bad title updated',
+        'Bad title',
+        'Bad title updated',
+    ], 'Copy field has copied first "^Bad title"' );
+
+# Delete first ^Bad title
+is( AddModificationTemplateAction(
+    $template_id, 'delete_field', 1,
+    '245', '', '', '', '',
+    '', '', '',
+    'if', '245', 'a', 'equals', '^Bad title', '1',
+    'Delete first 245$a mathing ^Bad title'
+), 1, 'Delete first 245$a mathing ^Bad title');
+
+$record = new_record();
+is( ModifyRecordWithTemplate( $template_id, $record ), undef, "The ModifyRecordWithTemplate returns undef" );
+@fields_245a = Koha::SimpleMARC::read_field({
+    record => $record,
+    field => '245',
+    subfield => 'a',
+});
+is_deeply( \@fields_245a, [
+        'The art of computer programming',
+        'Bad title',
+        'Bad title updated',
+    ], 'delete field has been deleted the right field"' );
+
+is( AddModificationTemplateAction(
+    $template_id, 'delete_field', 0,
+    '245', '', '', '', '',
+    '', '', '',
+    'if', '245', 'a', 'equals', 'updated$', '1',
+    'Delete first 245$a mathing updated$'
+), 1, 'Delete first 245$a mathing updated$');
+
+$record = new_record();
+is( ModifyRecordWithTemplate( $template_id, $record ), undef, "The ModifyRecordWithTemplate returns undef" );
+@fields_245a = Koha::SimpleMARC::read_field({
+    record => $record,
+    field => '245',
+    subfield => 'a',
+});
+is_deeply( \@fields_245a, [
+        'The art of computer programming',
+        'Bad title'
+    ], 'delete field has been deleted the right field"' );
 
 sub new_record {
     my $record = MARC::Record->new;
@@ -229,7 +352,7 @@ sub new_record {
         ),
         MARC::Field->new(
             245, '1', '4',
-            a => 'field to remove',
+            a => 'Bad title',
             c => 'Donald E. Knuth.',
         ),
         MARC::Field->new(
@@ -254,7 +377,7 @@ sub new_record {
     return $record;
 }
 
-sub expected_record {
+sub expected_record_1 {
     my $record = MARC::Record->new;
     $record->leader('03174nam a2200445 a 4500');
     my @fields = (
@@ -288,11 +411,57 @@ sub expected_record {
             a => 'Computer algorithms.',
             9 => '499',
         ),
+        MARC::Field->new(
+            999, ' ', ' ',
+            a => 'non existent.',
+        ),
     );
     $record->append_fields(@fields);
     return $record;
 }
 
+sub expected_record_2 {
+    my $record = MARC::Record->new;
+    $record->leader('03174nam a2200445 a 4500');
+    my @fields = (
+        MARC::Field->new(
+            100, '1', ' ',
+            a => 'Knuth, Donald Ervin',
+            d => '1938',
+        ),
+        MARC::Field->new(
+            245, '1', '4',
+            a => 'The art of computer programming',
+            c => 'Donald E. Knuth.',
+        ),
+        MARC::Field->new(
+            650, ' ', '0',
+            9 => '462',
+        ),
+        MARC::Field->new(
+            952, ' ', ' ',
+            p => '3010023917_updated',
+            y => 'BK',
+            c => 'GEN',
+            e => '2001-06-25',
+        ),
+        MARC::Field->new(
+            246, '', ' ',
+            a => 'The art of computer programming',
+        ),
+        MARC::Field->new(
+            651, ' ', '0',
+            a => 'Computer algorithms.',
+            9 => '499',
+        ),
+        MARC::Field->new(
+            999, ' ', ' ',
+            a => 'non existent.',
+        ),
+    );
+    $record->append_fields(@fields);
+    return $record;
+}
 
 # C4::Context->userenv
 sub Mock_userenv {

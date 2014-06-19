@@ -360,7 +360,7 @@ sub field_equals {
   my $value = $params->{value};
   my $fieldName = $params->{field};
   my $subfieldName = $params->{subfield};
-  my $regex = $params->{regex};
+  my $is_regex = $params->{is_regex};
 
   if ( ! $record ) { return; }
 
@@ -374,7 +374,7 @@ sub field_equals {
     SUBFIELDS: for my $subfield_value ( @subfield_values ) {
       if (
           (
-              $regex and $subfield_value =~ m/$value/
+              $is_regex and $subfield_value =~ m/$value/
           ) or (
               $subfield_value eq $value
           )
@@ -546,7 +546,7 @@ sub _copy_move_field {
     my $fromFieldName = $params->{from_field};
     my $toFieldName = $params->{to_field};
     my $regex = $params->{regex};
-    my $field_numbers = $params->{field_numbers};
+    my $field_numbers = $params->{field_numbers} // [];
     my $action = $params->{action} || 'copy';
 
     my @fields = $record->field( $fromFieldName );

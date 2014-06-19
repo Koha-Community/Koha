@@ -504,7 +504,7 @@ sub ModifyRecordWithTemplate {
 
     foreach my $a ( @actions ) {
         my $action = $a->{'action'};
-        my $field_number = $a->{'field_number'};
+        my $field_number = $a->{'field_number'} // 1;
         my $from_field = $a->{'from_field'};
         my $from_subfield = $a->{'from_subfield'};
         my $field_value = $a->{'field_value'};
@@ -526,7 +526,7 @@ sub ModifyRecordWithTemplate {
         }
 
         my $do = 1;
-        my $field_numbers = [ $field_number ];
+        my $field_numbers = [];
         if ( $conditional ) {
             if ( $conditional_comparison eq 'exists' ) {
                 $field_numbers = field_exists({
@@ -554,6 +554,7 @@ sub ModifyRecordWithTemplate {
                     value => $conditional_value,
                     field => $conditional_field,
                     subfield => $conditional_subfield,
+                    is_regex => $conditional_regex,
                 });
                 $do = $conditional eq 'if'
                     ? @$field_numbers
@@ -562,8 +563,10 @@ sub ModifyRecordWithTemplate {
             elsif ( $conditional_comparison eq 'not_equals' ) {
                 $field_numbers = field_equals({
                     record => $record,
+                    value => $conditional_value,
                     field => $conditional_field,
-                    subfield => $conditional_subfield
+                    subfield => $conditional_subfield,
+                    is_regex => $conditional_regex,
                 });
                 $do = $conditional eq 'if'
                     ? not @$field_numbers
@@ -572,9 +575,28 @@ sub ModifyRecordWithTemplate {
         }
 
         if ( $do ) {
-            @$field_numbers = ( $field_number )
-                if $from_field ne $to_subfield
-                    and $field_number;
+
+            # field_number == 0 if all field need to be updated
+            # or 1 if only the first field need to be updated
+
+            # A condition has been given
+            if ( @$field_numbers > 0 ) {
+                if ( $field_number == 1 ) {
+                    # We want only the first matching
+                    $field_numbers = [ $field_numbers->[0] ];
+                }
+            }
+            # There was no condition
+            else {
+                if ( $field_number == 1 ) {
+                    # We want to process the first field
+                    $field_numbers = [ 1 ];
+                } elsif ( $to_field and $from_field ne $to_field ) {
+                    # If the from and to fields are not the same, we only process the first field.
+                    $field_numbers = [ 1 ];
+                }
+            }
+
             if ( $action eq 'copy_field' ) {
                 copy_field({
                     record => $record,
