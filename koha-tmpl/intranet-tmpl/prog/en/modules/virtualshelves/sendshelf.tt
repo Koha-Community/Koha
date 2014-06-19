@@ -55,7 +55,7 @@ Your list: [% shelfname %]
             </span><br/>
             [% END %]
 
-            [% IF ( BIBLIO_RESULT.ISBN && BIBLIO_RESULT.size > 0 ) %]
+            [% IF ( BIBLIO_RESULT.ISBN ) %]
             <span>
                 ISBN: [% FOREACH isbn IN BIBLIO_RESULT.ISBN %]
                           [% isbn.marcisbn %]
@@ -73,8 +73,8 @@ Your list: [% shelfname %]
                 [% IF ( BIBLIO_RESULT.pages ) %]
                     , [% BIBLIO_RESULT.pages %]
                 [% END %]
-                [% IF BIBLIO_RESULT.size %]
-                , [% BIBLIO_RESULT.size %]
+                [% IF BIBLIO_RESULT.item('size') %]
+                , [% BIBLIO_RESULT.item('size') %]
                 [% END %]
             </span><br/>
             [% END %]

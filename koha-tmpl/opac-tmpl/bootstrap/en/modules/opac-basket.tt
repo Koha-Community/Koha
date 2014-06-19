@@ -76,7 +76,7 @@
                                         [% END # / IF print_basket %]
                                     </h3>
                                     <!-- COinS / Openurl -->
-                                    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.size %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
+                                    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
 
                                     <table class="table">
                                         [% IF ( BIBLIO_RESULT.isbn ) %]
@@ -117,7 +117,7 @@
                                         [% IF ( BIBLIO_RESULT.pages ) %]
                                             <tr>
                                                 <th scope="row">Details</th>
-                                                <td>[% BIBLIO_RESULT.pages %] [% BIBLIO_RESULT.illus %] [% BIBLIO_RESULT.size %]</td>
+                                                <td>[% BIBLIO_RESULT.pages %] [% BIBLIO_RESULT.illus %] [% BIBLIO_RESULT.item('size') %]</td>
                                             </tr>
                                         [% END %]
 
@@ -256,7 +256,7 @@
                                             <td>
                                                 <a href="#" onclick="openBiblio('[% BIBLIO_RESULT.dest %]',[% BIBLIO_RESULT.biblionumber %])">[% BIBLIO_RESULT.title |html %][% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %][% subtitl.subfield |html %][% END %][% END %]</a>
                                                 <!-- COinS / Openurl -->
-                                                <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.size %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
+                                                <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
                                                 [% IF ( TagsInputEnabled && loggedinusername ) %]
                                                 <span id="newtag[% BIBLIO_RESULT.biblionumber %]_status" class="tagstatus results_summary" style="display:none">Tag status here.</span>
                                                 [% END %]

@@ -66,8 +66,8 @@ Your cart
                 [% IF ( BIBLIO_RESULT.pages ) %]
                     , [% BIBLIO_RESULT.pages %]
                 [% END %]
-                [% IF BIBLIO_RESULT.size %]
-                , [% BIBLIO_RESULT.size %]
+                [% IF BIBLIO_RESULT.item('size') %]
+                , [% BIBLIO_RESULT.item('size') %]
                 [% END %]
             </span><br/>
             [% END %]
