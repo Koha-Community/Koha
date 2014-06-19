@@ -1425,13 +1425,6 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
         </z:index>
       </xslo:if>
     </xslo:for-each>
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('9', @code)">
-        <z:index name="Host-Item-Number:w">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
   </xslo:template>
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='462']">
     <xslo:for-each select="marc:subfield">
