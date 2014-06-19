@@ -136,7 +136,7 @@ function placeHold () {
         [% END %]
     </h3>
 	    <!-- COinS / Openurl -->
-    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.size %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
+    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
     <table>
         [% IF ( BIBLIO_RESULT.isbn ) %]
         <tr>
@@ -175,7 +175,7 @@ function placeHold () {
         [% IF ( BIBLIO_RESULT.pages ) %]
             <tr>
                 <th scope="row">Details</th>
-                <td>[% BIBLIO_RESULT.pages %] [% BIBLIO_RESULT.illus %] [% BIBLIO_RESULT.size %]</td>
+                <td>[% BIBLIO_RESULT.pages %] [% BIBLIO_RESULT.illus %] [% BIBLIO_RESULT.item('size') %]</td>
             </tr>
         [% END %]
         [% IF ( BIBLIO_RESULT.seriestitle ) %]
@@ -311,14 +311,14 @@ function placeHold () {
                         [% BIBLIO_RESULT.author %]
                         <p>[% IF ( BIBLIO_RESULT.publishercode ) %]- [% BIBLIO_RESULT.publishercode %]
                         [% IF ( BIBLIO_RESULT.place ) %] [% BIBLIO_RESULT.place %][% END %][% END %]
-                        [% IF ( BIBLIO_RESULT.pages ) %] - [% BIBLIO_RESULT.pages %][% IF ( BIBLIO_RESULT.size ) %] [% BIBLIO_RESULT.size %]
+                        [% IF ( BIBLIO_RESULT.pages ) %] - [% BIBLIO_RESULT.pages %][% IF ( BIBLIO_RESULT.item('size') ) %] [% BIBLIO_RESULT.item('size') %]
                         [% END %]
                         [% END %]</p>
                         [% IF ( BIBLIO_RESULT.notes ) %]
                         <p>[% BIBLIO_RESULT.notes %]</p>
                         [% END %]
 						    <!-- COinS / Openurl -->
-    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.size %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
+    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
 
 						</td>
             <td>[% BIBLIO_RESULT.description %]</td>
