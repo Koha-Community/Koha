@@ -44,6 +44,8 @@ BEGIN {
     );
 }
 
+=encoding UTF-8
+
 =head1 NAME
 
 C4::Charset - utilities for handling character set conversions.

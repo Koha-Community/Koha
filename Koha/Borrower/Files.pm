@@ -36,6 +36,10 @@ BEGIN {
 
 Koha::Borrower::Files - Module for managing borrower files
 
+=head1 METHODS
+
+=over
+
 =cut
 
 sub new {
@@ -75,8 +79,11 @@ sub GetFilesInfo {
 }
 
 =item AddFile()
+
     my $bf = Koha::Borrower::Files->new( borrowernumber => $borrowernumber );
-    $bh->AddFile( name => $filename, type => $mimetype, description => $description, content => $content );
+    $bh->AddFile( name => $filename, type => $mimetype,
+                  description => $description, content => $content );
+
 =cut
 
 sub AddFile {
@@ -100,8 +107,10 @@ sub AddFile {
 }
 
 =item GetFile()
+
     my $bf = Koha::Borrower::Files->new( borrowernumber => $borrowernumber );
     my $file = $bh->GetFile( file_id => $file_id );
+
 =cut
 
 sub GetFile {
@@ -119,8 +128,10 @@ sub GetFile {
 }
 
 =item DelFile()
+
     my $bf = Koha::Borrower::Files->new( borrowernumber => $borrowernumber );
     $bh->DelFile( file_id => $file_id );
+
 =cut
 
 sub DelFile {

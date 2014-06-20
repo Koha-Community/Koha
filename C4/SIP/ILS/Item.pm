@@ -25,6 +25,8 @@ use Koha::Database;
 
 our $VERSION = 3.07.00.049;
 
+=encoding UTF-8
+
 =head1 EXAMPLE
 
  our %item_db = (
