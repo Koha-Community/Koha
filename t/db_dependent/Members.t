@@ -1,12 +1,23 @@
 #!/usr/bin/perl
+
+# This file is part of Koha.
 #
-# This is to test C4/Members
-# It requires a working Koha database with the sample data
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
-use Test::More tests => 26;
+use Test::More tests => 34;
 use Data::Dumper;
 use C4::Context;
 
@@ -67,6 +78,7 @@ my %data = (
     branchcode => $BRANCHCODE,
     dateofbirth => '',
     dateexpiry => '9999-12-31',
+    userid => 'tomasito'
 );
 
 my $addmem=AddMember(%data);
@@ -198,11 +210,46 @@ $results = Search($CARDNUMBER,undef,undef,undef,["cardnumber"]);
 ok (!_find_member($results), "Delete member")
   or diag("Card $CARDNUMBER found for the deleted member in the resultset: ".Dumper($results));
 
+# Check_Userid tests
+%data = (
+    cardnumber   => "123456789",
+    firstname    => "Tomasito",
+    surname      => "None",
+    categorycode => "S",
+    branchcode   => "MPL",
+    dateofbirth  => '',
+    dateexpiry   => '9999-12-31',
+    userid       => 'tomasito'
+);
+# Add a new borrower
+my $borrowernumber = AddMember( %data );
+is( Check_Userid( 'tomasito', $borrowernumber ), 1,
+    'recently created userid -> unique (borrowernumber passed)' );
+is( Check_Userid( 'tomasitoxxx', $borrowernumber ), 1,
+    'non-existent userid -> unique (borrowernumber passed)' );
+is( Check_Userid( 'tomasito', '' ), 0,
+    'userid exists (blank borrowernumber)' );
+is( Check_Userid( 'tomasitoxxx', '' ), 1,
+    'non-existent userid -> unique (blank borrowernumber)' );
 
-exit;
+# Add a new borrower with the same userid but different cardnumber
+$data{ cardnumber } = "987654321";
+my $new_borrowernumber = AddMember( %data );
+is( Check_Userid( 'tomasito', '' ), 0,
+    'userid not unique (blank borrowernumber)' );
+is( Check_Userid( 'tomasito', $borrowernumber ), 0,
+    'userid not unique (first borrowernumber passed)' );
+is( Check_Userid( 'tomasito', $new_borrowernumber ), 0,
+    'userid not unique (second borrowernumber passed)' );
+
+# Regression tests for BZ12226
+is( Check_Userid( C4::Context->config('user'), '' ), 0,
+    'Check_Userid should return 0 for the DB user (Bug 12226)');
 
 sub _find_member {
     my ($resultset) = @_;
     my $found = $resultset && grep( { $_->{cardnumber} && $_->{cardnumber} eq $CARDNUMBER } @$resultset );
     return $found;
 }
+
+1;
