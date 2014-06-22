@@ -1072,24 +1072,16 @@
     </xsl:template>
 
     <xsl:template name="nameABCDN">
-        <xsl:for-each select="marc:subfield[@code='a']">
-                <xsl:call-template name="chopPunctuation">
-                    <xsl:with-param name="chopString" select="."/>
-                </xsl:call-template>
-        </xsl:for-each>
-        <xsl:for-each select="marc:subfield[@code='b']">
-            <xsl:value-of select="."/>
-            <xsl:choose>
-                <xsl:when test="position() != last()">
-                    <xsl:text> -- </xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:for-each>
-        <xsl:if test="marc:subfield[@code='c'] or marc:subfield[@code='d'] or marc:subfield[@code='n']">
-                <xsl:call-template name="subfieldSelect">
-                    <xsl:with-param name="codes">cdn</xsl:with-param>
-                </xsl:call-template>
-        </xsl:if>
+            <xsl:call-template name="chopPunctuation">
+                <xsl:with-param name="chopString">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">abcdn</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:with-param>
+                <xsl:with-param name="punctuation">
+                    <xsl:text>:,;/ </xsl:text>
+                </xsl:with-param>
+            </xsl:call-template>
     </xsl:template>
 
     <xsl:template name="nameACDEQ">
