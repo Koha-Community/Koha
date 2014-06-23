@@ -540,8 +540,6 @@ sub ModItem {
 
     $item->{'itemnumber'} = $itemnumber or return;
 
-    $item->{onloan} = undef if $item->{itemlost};
-
     my @fields = qw( itemlost withdrawn );
 
     # Only call GetItem if we need to set an "on" date field

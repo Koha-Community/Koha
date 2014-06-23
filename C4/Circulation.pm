@@ -2073,6 +2073,8 @@ sub MarkIssueReturned {
                                   WHERE borrowernumber = ?
                                   AND itemnumber = ?");
     $sth_del->execute($borrowernumber, $itemnumber);
+
+    ModItem( { 'onloan' => undef }, undef, $itemnumber );
 }
 
 =head2 _debar_user_on_return
