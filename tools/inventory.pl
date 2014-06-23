@@ -226,11 +226,19 @@ if ( $uploadbarcodes && length($uploadbarcodes) > 0 ) {
 
 # now build the result list: inventoried items if requested, and mis-placed items -always-
 my $inventorylist;
+my $wrongplacelist;
 my @items_with_problems;
 if ( $markseen or $op ) {
     # retrieve all items in this range.
     my $totalrecords;
-    ($inventorylist, $totalrecords) = GetItemsForInventory($minlocation, $maxlocation, $location, $itemtype, $ignoreissued, '', $branchcode, $branch, 0, undef , $staton);
+
+    # We use datelastseen only when comparing the results to the barcode file.
+    my $paramdatelastseen = ($compareinv2barcd) ? $datelastseen : '';
+    ($inventorylist, $totalrecords) = GetItemsForInventory($minlocation, $maxlocation, $location, $itemtype, $ignoreissued, $paramdatelastseen, $branchcode, $branch, 0, undef, $staton);
+
+    # For the items that may be marked as "wrong place", we only check the location (callnumbers, location and branch)
+    ($wrongplacelist, $totalrecords) = GetItemsForInventory($minlocation, $maxlocation, $location, undef, undef, undef, $branchcode, $branch, 0, undef, undef);
+
 }
 
 # If "compare barcodes list to results" has been checked, we want to alert for missing items
@@ -280,7 +288,7 @@ foreach my $item ( @scanned_items ) {
         $item->{problem} = 'changestatus';
         push @items_with_problems, { %$item };
     }
-    if (none { $item->{barcode} eq $_->{barcode} && !$_->{'onloan'} } @$inventorylist) {
+    if (none { $item->{barcode} eq $_->{barcode} && !$_->{'onloan'} } @$wrongplacelist) {
         $item->{problem} = 'wrongplace';
         push @items_with_problems, { %$item };
     }
