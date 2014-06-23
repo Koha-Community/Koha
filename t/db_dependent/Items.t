@@ -22,7 +22,6 @@ use MARC::Record;
 use C4::Biblio;
 use C4::Branch;
 use Koha::Database;
-use Data::Printer;
 
 use Test::More tests => 5;
 
