@@ -20,9 +20,11 @@ use Modern::Perl;
 
 use MARC::Record;
 use C4::Biblio;
+use C4::Branch;
 use Koha::Database;
+use Data::Printer;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 BEGIN {
     use_ok('C4::Items');
@@ -38,8 +40,7 @@ subtest 'General Add, Get and Del tests' => sub {
     $dbh->{AutoCommit} = 0;
     $dbh->{RaiseError} = 1;
 
-    # Helper biblio.
-    diag("Creating biblio instance for testing.");
+    # Create a biblio instance for testing
     my ($bibnum, $bibitemnum) = get_biblio();
 
     # Add an item.
@@ -139,6 +140,44 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     @items = ();
     @hidden = GetHiddenItemnumbers( @items );
     ok( scalar @hidden == 0, "Empty items list, no item hidden");
+
+    $dbh->rollback;
+};
+
+subtest 'GetItemsInfo tests' => sub {
+
+    plan tests => 3;
+
+    # Start transaction
+    $dbh->{AutoCommit} = 0;
+    $dbh->{RaiseError} = 1;
+
+    my $homebranch    = 'CPL';
+    my $holdingbranch = 'MPL';
+
+    # Add a biblio
+    my $biblionumber = get_biblio();
+    # Add an item
+    my ($item_bibnum, $item_bibitemnum, $itemnumber)
+        = AddItem({
+                homebranch    => $homebranch,
+                holdingbranch => $holdingbranch
+            }, $biblionumber );
+
+    my $branch = GetBranchDetail( $homebranch );
+    $branch->{ opac_info } = "homebranch OPAC info";
+    ModBranch($branch);
+
+    $branch = GetBranchDetail( $holdingbranch );
+    $branch->{ opac_info } = "holdingbranch OPAC info";
+    ModBranch($branch);
+
+    my @results = GetItemsInfo( $biblionumber );
+    ok( @results, 'GetItemsInfo returns results');
+    is( $results[0]->{ home_branch_opac_info }, "homebranch OPAC info",
+        'GetItemsInfo returns the correct home branch OPAC info notice' );
+    is( $results[0]->{ holding_branch_opac_info }, "holdingbranch OPAC info",
+        'GetItemsInfo returns the correct holding branch OPAC info notice' );
 
     $dbh->rollback;
 };
