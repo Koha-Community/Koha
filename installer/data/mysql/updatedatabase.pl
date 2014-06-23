@@ -8439,7 +8439,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
               ADD INDEX isbn ( isbn ( 255 ) )
     ");
 
-    print "Upgrade to $DBversion done (Bug 11268 - Biblioitems URL field is too small for some URLs)\n";
+    print "Upgrade to $DBversion done (Bug 5377 - Biblioitems isbn and issn fields too small for multiple ISBN and ISSN)\n";
     SetVersion($DBversion);
 }
 
