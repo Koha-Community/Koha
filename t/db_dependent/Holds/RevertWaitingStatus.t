@@ -22,6 +22,7 @@ $dbh->{RaiseError} = 1;
 $dbh->do("DELETE FROM reserves");
 $dbh->do("DELETE FROM old_reserves");
 
+local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
 *C4::Context::userenv = \&Mock_userenv;
 
 sub Mock_userenv {
