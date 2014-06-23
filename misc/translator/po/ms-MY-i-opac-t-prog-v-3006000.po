@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-05-18 19:35-0300\n"
+"POT-Creation-Date: 2014-06-15 20:09-0300\n"
 "PO-Revision-Date: 2012-06-18 07:58+0200\n"
 "Last-Translator: azlan <azlan.send@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgid "#record"
 msgstr "%s rekod"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-detail.tt:721
+#: opac-tmpl/prog/en/modules/opac-detail.tt:726
 #, fuzzy
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 msgstr ""
@@ -133,7 +133,7 @@ msgstr "%s %s Item rosak %s Sedia ada %s"
 #. %8$s:  ITEM_RESULT.priority 
 #. %9$s:  END 
 #. %10$s:  END 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1576
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1593
 #, fuzzy, c-format
 msgid "%s %s %s %s %s (priority %s) %s %s %s %s "
 msgstr "%s %s %s %s %s%s %s %s%s %s "
@@ -193,10 +193,19 @@ msgstr "%s%s%s%sKatalog atas talian%s Koha &rsaquo; Butiran peribadi anda %s "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #. %6$s:  INCLUDE shelfbrowser tab='otherholdings' 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1080
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1085
 #, fuzzy, c-format
 msgid "%s %s %s %s No other items. %s %s "
 msgstr "%s %s %s%s%sTiada judul%s %s %s%s "
+
+#. %1$s:  END 
+#. %2$s:  IF ( subscription_LOO.letter ) 
+#. %3$s:  IF ( loggedinusername ) 
+#. %4$s:  IF ( subscription_LOO.hasalert ) 
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:113
+#, fuzzy, c-format
+msgid "%s %s %s %s You have subscribed to email notification on new issues "
+msgstr "%s %s %s Anda telah melanggan notifikasi email untuk isu-isu baru "
 
 #. %1$s:  IF showpriority 
 #. %2$s:  bibitemloo.rank 
@@ -324,14 +333,6 @@ msgstr "%s %s %s Item telah sedia di "
 #, c-format
 msgid "%s %s %s Not for loan %s"
 msgstr "%s %s %s Tidak boleh dipinjam %s"
-
-#. %1$s:  END 
-#. %2$s:  IF ( subscription_LOO.letter ) 
-#. %3$s:  IF ( subscription_LOO.hasalert ) 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:113
-#, c-format
-msgid "%s %s %s You have subscribed to email notification on new issues "
-msgstr "%s %s %s Anda telah melanggan notifikasi email untuk isu-isu baru "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -669,6 +670,17 @@ msgid ""
 "%s Search also for related subjects %s "
 msgstr ""
 
+#. %1$s:  END 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#. %4$s:  END 
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:124
+#, fuzzy, c-format
+msgid ""
+"%s %s You must log in if you want to subscribe to email notification on new "
+"issues %s %s "
+msgstr "%s %s %s Anda telah melanggan notifikasi email untuk isu-isu baru "
+
 #. %1$s:  ELSE 
 #. %2$s:  IF ( review.borrowernumber && ShowReviewer != "none" ) 
 #. %3$s:  SWITCH ShowReviewer 
@@ -985,7 +997,7 @@ msgstr ""
 #. %5$s:  IF ( collectionvolume ) 
 #. %6$s:  collectionvolume 
 #. %7$s:  END 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:659
+#: opac-tmpl/prog/en/modules/opac-detail.tt:664
 #, c-format
 msgid "%s %s, ISSN %s %s %s; %s %s "
 msgstr "%s %s, ISSN %s %s %s; %s %s "
@@ -1074,18 +1086,18 @@ msgstr "%s (carian berkaitan: %s%s%s). %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:288
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:480
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:647
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:295
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:487
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:654
 #, fuzzy, c-format
 msgid "%s Address 2:"
 msgstr "Alamat:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:274
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:466
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:633
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:281
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:473
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:640
 #, fuzzy, c-format
 msgid "%s Address:"
 msgstr "Alamat:"
@@ -1152,15 +1164,15 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:302
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:494
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:661
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:309
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:501
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:668
 #, fuzzy, c-format
 msgid "%s City:"
 msgstr "Bandar:"
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:578
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:585
 #, fuzzy, c-format
 msgid "%s Contact Note:"
 msgstr "Nota kandungan:"
@@ -1179,15 +1191,15 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:344
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:536
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:703
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:351
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:543
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:710
 #, fuzzy, c-format
 msgid "%s Country:"
 msgstr "Negara:"
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:164
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:169
 #, fuzzy, c-format
 msgid "%s Date of birth:"
 msgstr "Tarikh lahir:"
@@ -1201,33 +1213,33 @@ msgid "%s Did you mean: "
 msgstr "%s Adakah anda maksudkan: "
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:564
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:571
 #, fuzzy, c-format
 msgid "%s Email:"
 msgstr "Email:"
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:440
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:447
 #, fuzzy, c-format
 msgid "%s Fax:"
 msgstr "Faks:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:150
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:619
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:155
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:626
 #, fuzzy, c-format
 msgid "%s First name:"
 msgstr "Nama pertama:"
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:78
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:83
 #, fuzzy, c-format
 msgid "%s Home library:"
 msgstr "Perpustakaan peribadi:"
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:183
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:190
 #, c-format
 msgid "%s Initials:"
 msgstr ""
@@ -1286,7 +1298,7 @@ msgid "%s MARC view"
 msgstr "%sFormat MARC%s"
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:398
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:405
 #, c-format
 msgid "%s Mobile phone:"
 msgstr ""
@@ -1321,7 +1333,7 @@ msgid "%s Not renewable%s "
 msgstr "%s Tidak boleh diperbaharui%s "
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:197
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:204
 #, fuzzy, c-format
 msgid "%s Other names:"
 msgstr "Nama lain:"
@@ -1348,8 +1360,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:550
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:717
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:557
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:724
 #, fuzzy, c-format
 msgid "%s Phone:"
 msgstr "No. Telefon:"
@@ -1361,13 +1373,13 @@ msgid "%s Please see a member of the library staff. "
 msgstr "%s Sila berjumpa dengan kakitangan perpustakaan. "
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:412
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:419
 #, fuzzy, c-format
 msgid "%s Primary email:"
 msgstr "Email utama:"
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:370
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:377
 #, fuzzy, c-format
 msgid "%s Primary phone:"
 msgstr "No. telefon utama:"
@@ -1385,7 +1397,7 @@ msgid "%s Quotations"
 msgstr "%s Sebut harga"
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:115
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:120
 #, fuzzy, c-format
 msgid "%s Salutation:"
 msgstr "%s Sebut harga"
@@ -1409,13 +1421,13 @@ msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s Carian %suntuk '%s'%s%s&nbsp;dengan had:&nbsp;'%s'%s"
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:426
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:433
 #, fuzzy, c-format
 msgid "%s Secondary email:"
 msgstr "Email kedua:"
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:384
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:391
 #, fuzzy, c-format
 msgid "%s Secondary phone:"
 msgstr "No. telefon kedua:"
@@ -1428,23 +1440,23 @@ msgstr "%s Sistem Peminjaman Layan Diri"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:316
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:508
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:675
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:323
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:515
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:682
 #, fuzzy, c-format
 msgid "%s State:"
 msgstr "Negeri:"
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:260
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:267
 #, fuzzy, c-format
 msgid "%s Street number:"
 msgstr "Nombor pengguna:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:136
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:605
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:141
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:612
 #, fuzzy, c-format
 msgid "%s Surname:"
 msgstr "nama keluarga"
@@ -1459,7 +1471,7 @@ msgstr "nama keluarga"
 #. %8$s:  priority 
 #. %9$s:  END 
 #. %10$s:  END 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1048
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1053
 #, c-format
 msgid ""
 "%s Total holds: %s %s %s %s (priority %s) %s Overall queue priority: %s %s "
@@ -1496,15 +1508,15 @@ msgstr "%s Anda tidak pernah meminjam apa-apa dari perpustakaan ini. %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:330
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:522
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:689
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:337
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:529
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:696
 #, fuzzy, c-format
 msgid "%s Zip/Postal code:"
 msgstr "Poskod:"
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:449
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:456
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('B_address') && hidden.defined('B_address2') && "
@@ -1514,7 +1526,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:588
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:595
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('altcontactsurname') && hidden.defined"
@@ -1531,7 +1543,7 @@ msgid "%s [%% UNLESS hidden.defined('branchcode') %%] "
 msgstr ""
 
 #. %1$s:  END 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:354
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:361
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
@@ -1590,7 +1602,7 @@ msgstr "%s biblio"
 #. %5$s:  XISBN.copyrightdate 
 #. %6$s:  END 
 #. %7$s:  IF ( XISBN.publishercode ) 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1348
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1353
 #, c-format
 msgid "%s by %s%s%s &copy;%s%s%s "
 msgstr "%s oleh %s%s%s &salinan;%s%s%s "
@@ -1728,7 +1740,7 @@ msgstr "%s%s Katalog &rsaquo; Komen mengenai %s %s "
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #. %5$s:  itemloop.size || 0 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:941
+#: opac-tmpl/prog/en/modules/opac-detail.tt:946
 #, fuzzy, c-format
 msgid "%s%s holdings%sHoldings%s ( %s )"
 msgstr "Tempahan ( %s )"
@@ -1935,7 +1947,7 @@ msgstr "%s%s %s%s%s%s"
 #. %12$s:  END 
 #. %13$s:  END 
 #. %14$s:  END 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1216
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1221
 #, c-format
 msgid ""
 "%sAwaited %s %sArrived %s %sLate %s %sMissing %s %sNot issued %s %s %s %s %s "
@@ -2258,7 +2270,7 @@ msgid "&#8674; Your messaging settings"
 msgstr "Tetapan mesej anda"
 
 # Code?
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1426
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1433
 #, c-format
 msgid "&laquo; Previous"
 msgstr "&laquo; Terdahulu"
@@ -3020,7 +3032,7 @@ msgstr "(Gunakan SRU)"
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:479
 #: opac-tmpl/prog/en/modules/opac-results.tt:688
-#: opac-tmpl/prog/en/modules/opac-detail.tt:824
+#: opac-tmpl/prog/en/modules/opac-detail.tt:829
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:464
 #, c-format
 msgid "(done)"
@@ -3307,19 +3319,19 @@ msgstr "/cgi-bin/koha/opac-search.pl?q="
 msgid "/opac-tmpl/lib/famfamfam/"
 msgstr "/opac-tmpl/prog/famfamfam/"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACMARCdetail.xsl:18
+#: opac-tmpl/prog/en/xslt/plainMARC.xsl:18
 #, c-format
 msgid "000 "
 msgstr "000 "
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:6
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:92
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:96
 #, c-format
 msgid "10 titles"
 msgstr "10 judul"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:12
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:98
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:102
 #, c-format
 msgid "100 titles"
 msgstr "100 judul"
@@ -3331,7 +3343,7 @@ msgid "100,110,111,700,710,711"
 msgstr "100,110,111,700,710,711"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:39
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:127
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:131
 #, c-format
 msgid "12 months"
 msgstr "12 bulan"
@@ -3342,31 +3354,31 @@ msgid "130,240"
 msgstr "130,240"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:7
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:93
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:97
 #, c-format
 msgid "15 titles"
 msgstr "15 judul"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:8
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:94
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:98
 #, c-format
 msgid "20 titles"
 msgstr "20 judul"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:37
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:125
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:129
 #, c-format
 msgid "3 months"
 msgstr "3 bulan"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:9
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:95
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:99
 #, c-format
 msgid "30 titles"
 msgstr "30 judul"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:10
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:96
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:100
 #, c-format
 msgid "40 titles"
 msgstr "40 judul"
@@ -3377,13 +3389,13 @@ msgid "440,490"
 msgstr "440,490"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:11
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:97
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:101
 #, c-format
 msgid "50 titles"
 msgstr "50 judul"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:38
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:126
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:130
 #, c-format
 msgid "6 months"
 msgstr "6 bulan"
@@ -3486,7 +3498,7 @@ msgstr "[% biblionumber |url %]"
 #. %5$s:  HTML5MediaSet.typeblock 
 #. %6$s:  END 
 #. %7$s:  HTML5MediaParent 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1360
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1365
 #, c-format
 msgid ""
 "<%s controls preload=none> %s <%s src=\"%s\"%s /> %s [%s tag not supported "
@@ -3509,8 +3521,8 @@ msgid "A record matching barcode "
 msgstr "Rekod pemadanan barkod "
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:460
-#, c-format
-msgid "A specific copy"
+#, fuzzy, c-format
+msgid "A specific item"
 msgstr "Salinan khusus"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:404
@@ -3524,7 +3536,7 @@ msgstr "AND "
 msgid "AR"
 msgstr "AR"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:969
+#: opac-tmpl/prog/en/modules/opac-detail.tt:974
 #, c-format
 msgid "About the author"
 msgstr "Tentang pengarang"
@@ -3599,8 +3611,8 @@ msgstr "Tindakan:"
 #: opac-tmpl/prog/en/modules/opac-results.tt:478
 #: opac-tmpl/prog/en/modules/opac-results.tt:687
 #: opac-tmpl/prog/en/modules/opac-basket.tt:181
-#: opac-tmpl/prog/en/modules/opac-detail.tt:819
-#: opac-tmpl/prog/en/modules/opac-detail.tt:823
+#: opac-tmpl/prog/en/modules/opac-detail.tt:824
+#: opac-tmpl/prog/en/modules/opac-detail.tt:828
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:383
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:463
 #, c-format
@@ -3678,7 +3690,7 @@ msgstr "Tambah ke: "
 msgid "Added %s %s by "
 msgstr "Ditambah %s %s oleh "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:575
+#: opac-tmpl/prog/en/modules/opac-detail.tt:580
 #, c-format
 msgid "Additional authors:"
 msgstr ""
@@ -3724,20 +3736,20 @@ msgid "All Tags"
 msgstr "Semua Tag"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:28
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:116
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:120
 #, c-format
 msgid "All collections"
 msgstr "Semua koleksi"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:28
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:116
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:120
 #, c-format
 msgid "All item types"
 msgstr "Semua jenis item"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:89
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:18
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:104
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:108
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:301
 #, c-format
 msgid "All libraries"
@@ -3759,12 +3771,12 @@ msgstr ""
 "Harap maklum bahawa anda perlu memulangkan semua item-item yang dipinjam "
 "sebelum kad anda tamat tempoh."
 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:458
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:465
 #, fuzzy, c-format
 msgid "Alternate address"
 msgstr "Alamat lain:"
 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:597
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:604
 #, fuzzy, c-format
 msgid "Alternate contact"
 msgstr "Hubungan lain:"
@@ -4023,8 +4035,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  subscription.branchname 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1193
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1194
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1198
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1199
 #, c-format
 msgid "At library: %s"
 msgstr "Di perpustakaan: %s"
@@ -4045,7 +4057,7 @@ msgstr "Pengguna"
 msgid "Audience: "
 msgstr "Pengguna: "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:847
+#: opac-tmpl/prog/en/modules/opac-detail.tt:852
 #, c-format
 msgid "Audiovisual profile:"
 msgstr "Profil Audio Visual:"
@@ -4101,7 +4113,7 @@ msgstr "Pengarang (A-Z)"
 msgid "Author (Z-A)"
 msgstr "Pengarang (Z-A)"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1171
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1176
 #, c-format
 msgid "Author notes provided by Syndetics"
 msgstr "Nota pengarang disediakan oleh Syndetics"
@@ -4202,7 +4214,7 @@ msgstr "Digantikan dengan: "
 msgid "Avspiller med lydfil (eks. Digibøker)"
 msgstr "Pemain dengan fail audio (contoh: Buku digital)"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:865
+#: opac-tmpl/prog/en/modules/opac-detail.tt:870
 #, c-format
 msgid "Awards:"
 msgstr "Anugerah:"
@@ -4244,13 +4256,13 @@ msgstr "ISBN: %s"
 msgid "Back to lists"
 msgstr "Kembali ke senarai"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1427
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1438
 #, c-format
 msgid "Back to results"
 msgstr "Kembali ke hasil carian"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1427
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1438
 msgid "Back to the results search list"
 msgstr "Kembali ke senarai hasil carian"
 
@@ -4258,7 +4270,7 @@ msgstr "Kembali ke senarai hasil carian"
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:476
 #: opac-tmpl/prog/en/modules/opac-user.tt:141
 #: opac-tmpl/prog/en/modules/opac-user.tt:296
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1516
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1533
 #, c-format
 msgid "Barcode"
 msgstr "Barkod"
@@ -4426,7 +4438,7 @@ msgstr "Bok"
 msgid "Book"
 msgstr "Buku"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1012
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1017
 #, c-format
 msgid "Book reviews by critics ( XXX )"
 msgstr ""
@@ -4462,13 +4474,13 @@ msgstr "Tampilkan menggunakan hierarki"
 msgid "Browse our catalogue"
 msgstr "Telusuri katalog kami"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1424
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1429
 #, c-format
 msgid "Browse results"
 msgstr "Tampilkan hasil carian"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1552
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1554
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1569
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1571
 #, c-format
 msgid "Browse shelf"
 msgstr "Telusuri rak"
@@ -4537,7 +4549,7 @@ msgstr "No. panggilan"
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:90
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:92
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:481
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1509
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1526
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:329
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:331
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:564
@@ -4559,7 +4571,7 @@ msgid "Call number (Z-A to 9-0)"
 msgstr "Nombor Panggilan (Z-A to 9-0)"
 
 #. %1$s:  subscription.callnumber 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1196
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1201
 #, fuzzy, c-format
 msgid "Callnumber: %s"
 msgstr "Nombor panggilan"
@@ -4569,8 +4581,8 @@ msgstr "Nombor panggilan"
 #: opac-tmpl/prog/en/modules/opac-messaging.tt:150
 #: opac-tmpl/prog/en/modules/opac-user.tt:426
 #: opac-tmpl/prog/en/modules/opac-basket.tt:182
-#: opac-tmpl/prog/en/modules/opac-detail.tt:605
-#: opac-tmpl/prog/en/modules/opac-detail.tt:712
+#: opac-tmpl/prog/en/modules/opac-detail.tt:610
+#: opac-tmpl/prog/en/modules/opac-detail.tt:717
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:209
 #: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:44
 #: opac-tmpl/prog/en/modules/opac-sendbasketform.tt:33
@@ -4586,11 +4598,11 @@ msgid "Cancel"
 msgstr "Batal"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:117
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:118
 msgid "Cancel email notification"
 msgstr "Batalkan notifikasi email"
 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:117
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:118
 #, c-format
 msgid "Cancel email notification "
 msgstr "Batalkan notifikasi email "
@@ -4617,6 +4629,12 @@ msgstr "Batalkan permohonan tempahan yang aktif untuk pengguna."
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:496
 msgid "Cannot be put on hold"
 msgstr "Tidak boleh ditempah"
+
+# scipt?
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:74
+#, fuzzy, c-format
+msgid "Card number"
+msgstr "cardnumber"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -4741,7 +4759,7 @@ msgstr "Kosongkan semua"
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:6
 #: opac-tmpl/prog/en/modules/opac-user.tt:446
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:171
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:177
 #, c-format
 msgid "Clear date"
 msgstr "Padamkan tarikh"
@@ -4764,13 +4782,13 @@ msgstr "Klik sini untuk akses secara online"
 msgid "Click here to access online "
 msgstr "Klik sini untuk akses secara online "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1043
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1080
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1048
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1085
 #, c-format
 msgid "Click here to view them all."
 msgstr "Klik sini untuk paparkan semuanya."
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1373
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1378
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr "Klik pada gambar untuk tampilkannya di image viewer"
@@ -4786,14 +4804,14 @@ msgstr "Klik untuk tambah ke troli"
 msgid "Click to forward the list to"
 msgstr "Klik untuk tambah ke troli"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:839
-#: opac-tmpl/prog/en/modules/opac-detail.tt:841
-#: opac-tmpl/prog/en/modules/opac-detail.tt:848
-#: opac-tmpl/prog/en/modules/opac-detail.tt:850
-#: opac-tmpl/prog/en/modules/opac-detail.tt:857
-#: opac-tmpl/prog/en/modules/opac-detail.tt:859
-#: opac-tmpl/prog/en/modules/opac-detail.tt:867
-#: opac-tmpl/prog/en/modules/opac-detail.tt:868
+#: opac-tmpl/prog/en/modules/opac-detail.tt:844
+#: opac-tmpl/prog/en/modules/opac-detail.tt:846
+#: opac-tmpl/prog/en/modules/opac-detail.tt:853
+#: opac-tmpl/prog/en/modules/opac-detail.tt:855
+#: opac-tmpl/prog/en/modules/opac-detail.tt:862
+#: opac-tmpl/prog/en/modules/opac-detail.tt:864
+#: opac-tmpl/prog/en/modules/opac-detail.tt:872
+#: opac-tmpl/prog/en/modules/opac-detail.tt:873
 #, c-format
 msgid "Click to open in new window"
 msgstr "Klik untuk buka tetingkap baru"
@@ -4810,7 +4828,7 @@ msgstr "Klik untuk buka tetingkap baru"
 msgid "Click to view in Google Books"
 msgstr "Klik untuk paparkan di Google Books"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1433
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1450
 #, c-format
 msgid "Close"
 msgstr "Tutup"
@@ -4856,7 +4874,7 @@ msgstr "Kolaj"
 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:44
 #: opac-tmpl/prog/en/modules/opac-basket.tt:248
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1508
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1525
 #, c-format
 msgid "Collection"
 msgstr "Koleksi"
@@ -4866,7 +4884,7 @@ msgstr "Koleksi"
 msgid "Collection title:"
 msgstr "Judul koleksi:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:659
+#: opac-tmpl/prog/en/modules/opac-detail.tt:664
 #, c-format
 msgid "Collection: "
 msgstr "Koleksi: "
@@ -4881,16 +4899,16 @@ msgstr "Koleksi: : %s "
 
 #. For the first occurrence,
 #. %1$s:  review.firstname 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1297
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1299
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1303
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1302
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1304
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1308
 #, c-format
 msgid "Comment by %s"
 msgstr "Dikomen oleh %s"
 
 #. %1$s:  review.firstname 
 #. %2$s:  review.surname|truncate(2,'.') 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1301
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1306
 #, c-format
 msgid "Comment by %s %s"
 msgstr "Dikomen oleh %s %s"
@@ -4898,7 +4916,7 @@ msgstr "Dikomen oleh %s %s"
 #. %1$s:  review.title 
 #. %2$s:  review.firstname 
 #. %3$s:  review.surname 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1295
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1300
 #, c-format
 msgid "Comment by %s %s %s"
 msgstr "Dikomen oleh %s %s %s"
@@ -4910,7 +4928,7 @@ msgid "Comment:"
 msgstr "Komentar:"
 
 #. %1$s:  reviews.size || 0 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:984
+#: opac-tmpl/prog/en/modules/opac-detail.tt:989
 #, fuzzy, c-format
 msgid "Comments ( %s )"
 msgstr "Komen-komen ( %s%s%s%s )"
@@ -4946,7 +4964,7 @@ msgstr "Sahkan"
 msgid "Confirm holds for: %s %s %s (%s) %s "
 msgstr "Sahkan tempahan untuk: %s %s %s (%s) %s "
 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:362
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:369
 #, c-format
 msgid "Contact information"
 msgstr "Maklumat hubungan"
@@ -4956,7 +4974,7 @@ msgstr "Maklumat hubungan"
 msgid "Content"
 msgstr "Kandungan"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:914
+#: opac-tmpl/prog/en/modules/opac-detail.tt:919
 #, c-format
 msgid "Content Cafe"
 msgstr "Cafe Kandungan"
@@ -5008,37 +5026,12 @@ msgstr "Bersambung:"
 msgid "Continuing Resource"
 msgstr "Sumber Berlangsungan"
 
-#: opac-tmpl/prog/en/modules/opac-results-grouped.tt:249
-#, c-format
-msgid "Copies available at:"
-msgstr "Salinan tersedia di:"
-
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:140
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1050
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:781
-#, c-format
-msgid "Copies available for loan: "
-msgstr "Salinan tersedia untuk pinjaman: "
-
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:177
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1082
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:813
-#, c-format
-msgid "Copies available for reference: "
-msgstr "Salinan tersedia untuk rujukan: "
-
-#: opac-tmpl/prog/en/modules/opac-results.tt:563
-#: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
-#, c-format
-msgid "Copies available:"
-msgstr "Salinan tersedia:"
-
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:46
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:472
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1512
-#, c-format
-msgid "Copy"
-msgstr "Salin"
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1529
+#, fuzzy, c-format
+msgid "Copy number"
+msgstr "Nombor panggilan"
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:265
 #, c-format
@@ -5109,7 +5102,7 @@ msgstr "Nombor kad:"
 # Code?
 #: opac-tmpl/prog/en/includes/masthead.inc:134
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:17
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1522
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1539
 #, fuzzy, c-format
 msgid "Course reserves"
 msgstr "SearchCourseReserves"
@@ -5126,7 +5119,7 @@ msgid "Cover Image"
 msgstr "Imej Kulit"
 
 #. IMG
-#: opac-tmpl/prog/en/modules/opac-detail.tt:535
+#: opac-tmpl/prog/en/modules/opac-detail.tt:540
 msgid "Cover image"
 msgstr "Imej kulit"
 
@@ -5203,7 +5196,7 @@ msgstr "pangkalan data"
 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:190
 #: opac-tmpl/prog/en/modules/opac-account.tt:24
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1206
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1211
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:49
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:67
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:61
@@ -5217,7 +5210,7 @@ msgid "Date added"
 msgstr "Tarikh ditambah"
 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:48
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1515
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1532
 #, c-format
 msgid "Date due"
 msgstr "Tarikh tamat"
@@ -5317,7 +5310,7 @@ msgstr "Hapuskan senarai ini"
 msgid "Delete your search history"
 msgstr "Padam sejarah carian anda"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1464
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1481
 #, fuzzy, c-format
 msgid "Delicious"
 msgstr "Kongsi di Delicious"
@@ -5608,7 +5601,7 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-review.tt:6
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1285
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1290
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:638
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:704
 #, c-format
@@ -5625,7 +5618,7 @@ msgstr "Sunting senarai"
 msgid "Edition Statement"
 msgstr "Penyata Edisi"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:636
+#: opac-tmpl/prog/en/modules/opac-detail.tt:641
 #, c-format
 msgid "Edition statement:"
 msgstr "Penyata edisi:"
@@ -5637,7 +5630,7 @@ msgstr "Penyata edisi:"
 msgid "Edition: "
 msgstr "Edisi: "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:994
+#: opac-tmpl/prog/en/modules/opac-detail.tt:999
 #, c-format
 msgid "Editions"
 msgstr "Edisi"
@@ -5676,7 +5669,7 @@ msgid "Elever på ungdomstrinnet;"
 msgstr "Pelajar sekolah menengah;"
 
 #: opac-tmpl/prog/en/modules/opac-messaging.tt:40
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1465
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1482
 #, c-format
 msgid "Email"
 msgstr "Email"
@@ -5702,12 +5695,12 @@ msgstr "Kosongkan dan tutup"
 msgid "Encyclopedias "
 msgstr "Ensiklopedia "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:913
+#: opac-tmpl/prog/en/modules/opac-detail.tt:918
 #, c-format
 msgid "Enhanced content: "
 msgstr "Kandungan yang diperkayakan: "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1099
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1104
 #, c-format
 msgid "Enhanced descriptions from Syndetics:"
 msgstr "Huraian yang diperkayakan dari Syndetics:"
@@ -5866,19 +5859,20 @@ msgstr "Contoh panggilan"
 msgid "Example response"
 msgstr "Contoh respon"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:954
+#: opac-tmpl/prog/en/modules/opac-detail.tt:959
 #, c-format
 msgid "Excerpt"
 msgstr "Petikan"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1142
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1147
 #, c-format
 msgid "Excerpt provided by Syndetics"
 msgstr "Petikan disediakan oleh Syndetics"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:6
-msgid "Expecting a specific copy selection."
+#, fuzzy
+msgid "Expecting a specific item selection."
 msgstr "Menjangkakan pemilihan salinan spesifik."
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:359
@@ -5902,7 +5896,7 @@ msgstr "Lanjutkan tarikh tamat pinjaman patron."
 msgid "FV"
 msgstr "FV"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1462
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1479
 #, fuzzy, c-format
 msgid "Facebook"
 msgstr "buku"
@@ -5922,7 +5916,7 @@ msgstr ""
 msgid "February"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:208
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:215
 #, fuzzy, c-format
 msgid "Female:"
 msgstr "Perempuan"
@@ -5937,7 +5931,7 @@ msgstr "Kumpulan rencana "
 msgid "Fiction"
 msgstr "Fiksyen"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:856
+#: opac-tmpl/prog/en/modules/opac-detail.tt:861
 #, c-format
 msgid "Fiction notes:"
 msgstr "Nota Fiksyen:"
@@ -6179,7 +6173,7 @@ msgid "Friday"
 msgstr ""
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:16
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:102
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:106
 #, c-format
 msgid "From: "
 msgstr "Dari: "
@@ -6489,7 +6483,7 @@ msgstr "Tempahan:"
 msgid "Holdings note: "
 msgstr "Nota Tempahan: "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1064
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1069
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:436
 #, c-format
 msgid "Holdings:"
@@ -6546,7 +6540,7 @@ msgid "IP address where the end user request is being placed"
 msgstr "IP address pengguna ketika membuat tempahan"
 
 #: opac-tmpl/prog/en/modules/opac-ISBDdetail.tt:38
-#: opac-tmpl/prog/en/modules/opac-detail.tt:555
+#: opac-tmpl/prog/en/modules/opac-detail.tt:560
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:74
 #, c-format
 msgid "ISBD view"
@@ -6568,7 +6562,7 @@ msgstr "ISBN"
 msgid "ISBN %s"
 msgstr "ISBN %s"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:649
+#: opac-tmpl/prog/en/modules/opac-detail.tt:654
 #, c-format
 msgid "ISBN:"
 msgstr "ISBN:"
@@ -6576,7 +6570,7 @@ msgstr "ISBN:"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:330
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:194
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:418
-#: opac-tmpl/prog/en/modules/opac-detail.tt:652
+#: opac-tmpl/prog/en/modules/opac-detail.tt:657
 #, c-format
 msgid "ISBN: "
 msgstr "ISBN: "
@@ -6603,7 +6597,7 @@ msgstr "%s %s %s %s %s "
 msgid "ISSN"
 msgstr "ISSN"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:656
+#: opac-tmpl/prog/en/modules/opac-detail.tt:661
 #, c-format
 msgid "ISSN:"
 msgstr "ISSN:"
@@ -6615,7 +6609,7 @@ msgstr "ISSN:"
 msgid "ISSN: "
 msgstr "ISSN: "
 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:107
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:112
 #, fuzzy, c-format
 msgid "Identity"
 msgstr "Butiran hubungan"
@@ -6692,7 +6686,7 @@ msgstr "Bukan fiksyen"
 msgid "Illustration"
 msgstr "Ilustrasi"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1004
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1009
 #, c-format
 msgid "Images"
 msgstr "Imej"
@@ -6789,7 +6783,7 @@ msgstr "Multimedia interaktif"
 msgid "Intervjuer"
 msgstr "Temubual"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1205
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1210
 #, c-format
 msgid "Issue #"
 msgstr "Isu #"
@@ -6809,7 +6803,7 @@ msgstr "Ringkasan isu"
 msgid "It has "
 msgstr "Ia mempunyai "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1023
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1028
 #, fuzzy, c-format
 msgid "Item callnumber"
 msgstr "Nombor panggilan"
@@ -6819,12 +6813,12 @@ msgstr "Nombor panggilan"
 msgid "Item cannot be checked out."
 msgstr "Item tidak boleh dipinjam."
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1520
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1537
 #, c-format
 msgid "Item hold queue priority"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1518
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1535
 #, fuzzy, c-format
 msgid "Item holds"
 msgstr "Buat tempahan"
@@ -6833,7 +6827,7 @@ msgstr "Buat tempahan"
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:474
 #: opac-tmpl/prog/en/modules/opac-user.tt:140
 #: opac-tmpl/prog/en/modules/opac-user.tt:295
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1506
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1523
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:59
 #, c-format
 msgid "Item type"
@@ -6845,7 +6839,7 @@ msgid "Item type:"
 msgstr "Jenis item:"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:346
-#: opac-tmpl/prog/en/modules/opac-detail.tt:737
+#: opac-tmpl/prog/en/modules/opac-detail.tt:742
 #, c-format
 msgid "Item type: "
 msgstr "Jenis item: "
@@ -6854,6 +6848,31 @@ msgstr "Jenis item: "
 #, fuzzy, c-format
 msgid "Item types"
 msgstr "Jenis item"
+
+#: opac-tmpl/prog/en/modules/opac-results-grouped.tt:249
+#, fuzzy, c-format
+msgid "Items available at:"
+msgstr "Salinan tersedia di:"
+
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:140
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1050
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:781
+#, fuzzy, c-format
+msgid "Items available for loan: "
+msgstr "Salinan tersedia untuk pinjaman: "
+
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:177
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1082
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:813
+#, fuzzy, c-format
+msgid "Items available for reference: "
+msgstr "Salinan tersedia untuk rujukan: "
+
+#: opac-tmpl/prog/en/modules/opac-results.tt:563
+#: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
+#, fuzzy, c-format
+msgid "Items available:"
+msgstr "Tiada item tersedia:"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -7139,7 +7158,7 @@ msgid "Libraries"
 msgstr "Perpustakaan"
 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:191
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1021
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1026
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:71
 #, c-format
 msgid "Library"
@@ -7168,17 +7187,17 @@ msgid "Limit to any of the following:"
 msgstr "Terhad kepada mana-mana yang berikut:"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:26
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:114
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:118
 #, c-format
 msgid "Limit to: "
 msgstr "Terhad kepada: "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1563
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1580
 #, fuzzy, c-format
 msgid "Link to resource "
 msgstr "Sumber atas talian: "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1463
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1480
 #, fuzzy, c-format
 msgid "LinkedIn"
 msgstr "Kongsi di LinkedIn"
@@ -7212,7 +7231,7 @@ msgstr "Nama senarai:"
 msgid "List name: "
 msgstr "Nama senarai: "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:797
+#: opac-tmpl/prog/en/modules/opac-detail.tt:802
 #, c-format
 msgid "List(s) this item appears in: "
 msgstr "Senarai item ini terpapar di: "
@@ -7249,7 +7268,7 @@ msgid "Local login"
 msgstr "Login local"
 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:43
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1507
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1524
 #, c-format
 msgid "Location"
 msgstr "Lokasi"
@@ -7294,7 +7313,7 @@ msgid "Log in"
 msgstr "Log masuk"
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:693
-#: opac-tmpl/prog/en/modules/opac-detail.tt:830
+#: opac-tmpl/prog/en/modules/opac-detail.tt:835
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:470
 #, c-format
 msgid "Log in to add tags."
@@ -7306,7 +7325,7 @@ msgid "Log in to create your own lists"
 msgstr "Log masuk untuk membuat senarai sendiri"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:5
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1326
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1331
 #, c-format
 msgid "Log in to your account"
 msgstr "Log masuk ke akaun anda"
@@ -7423,13 +7442,13 @@ msgstr "MARC (non-Unicode/MARC-8)"
 msgid "MARC Card View"
 msgstr "Format Kad MARC"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACMARCdetail.xsl:8
+#: opac-tmpl/prog/en/xslt/plainMARC.xsl:8
 #, fuzzy, c-format
 msgid "MARC View"
 msgstr "Format MARC"
 
 #: opac-tmpl/prog/en/modules/opac-ISBDdetail.tt:38
-#: opac-tmpl/prog/en/modules/opac-detail.tt:555
+#: opac-tmpl/prog/en/modules/opac-detail.tt:560
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:73
 #: opac-tmpl/prog/en/modules/opac-auth-MARCdetail.tt:34
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:36
@@ -7562,7 +7581,7 @@ msgstr "Cakera magnet-optik"
 msgid "Main Author"
 msgstr "Pengarang Utama"
 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:252
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:259
 #, fuzzy, c-format
 msgid "Main address"
 msgstr "Alamat Email:"
@@ -7573,7 +7592,7 @@ msgstr "Alamat Email:"
 msgid "Make a "
 msgstr "Buat "
 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:215
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:222
 #, fuzzy, c-format
 msgid "Male:"
 msgstr "Lelaki"
@@ -7690,7 +7709,7 @@ msgid "Mikroskopdia"
 msgstr "Mikroskopdia"
 
 #. %1$s:  subscription.missinglist 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1199
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1204
 #, c-format
 msgid "Missing issues: %s "
 msgstr "Isu-isu yang hilang: %s "
@@ -7752,13 +7771,13 @@ msgstr "Siri-siri Monograf"
 msgid "Monthly"
 msgstr "Bulanan"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1386
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1391
 #, c-format
 msgid "More book reviews at iDreamBooks.com"
 msgstr ""
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:149
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1238
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1243
 #, c-format
 msgid "More details"
 msgstr "Butiran lanjut"
@@ -7823,7 +7842,7 @@ msgstr "Muzik dan Rakaman Bunyi"
 msgid "My Tags"
 msgstr "Tag Saya"
 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:222
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:229
 #, c-format
 msgid "N/A:"
 msgstr ""
@@ -7899,7 +7918,7 @@ msgid "New purchase suggestion"
 msgstr "Cadangan pembelian baru"
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:685
-#: opac-tmpl/prog/en/modules/opac-detail.tt:821
+#: opac-tmpl/prog/en/modules/opac-detail.tt:826
 #, c-format
 msgid "New tag(s), separated by a comma:"
 msgstr ""
@@ -7926,7 +7945,7 @@ msgstr "Surat Khabar"
 #: opac-tmpl/prog/en/includes/calendar.inc:1
 #: opac-tmpl/prog/en/includes/shelfbrowser.inc:70
 #: opac-tmpl/prog/en/includes/datatables.inc:2
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1428
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1443
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 #, c-format
 msgid "Next"
@@ -7939,15 +7958,15 @@ msgstr "Seterusnya"
 msgid "Next &gt;&gt;"
 msgstr "Seterusnya &gt;&gt;"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1428
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1441
 #, c-format
 msgid "Next &raquo;"
 msgstr "Seterusnya &raquo;"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:445
-#, c-format
-msgid "Next available copy"
-msgstr "Salinan tersedia seterusnya"
+#, fuzzy, c-format
+msgid "Next available item"
+msgstr "Tiada item tersedia."
 
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tt:21
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tt:35
@@ -7959,18 +7978,6 @@ msgstr "Tidak"
 #, c-format
 msgid "No available items."
 msgstr "Tiada item tersedia."
-
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:135
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1045
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:776
-#, c-format
-msgid "No copies available "
-msgstr "Tiada salinan tersedia "
-
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:198
-#, c-format
-msgid "No copies available."
-msgstr "Tiada salinan tersedia."
 
 #. For the first occurrence,
 #. SCRIPT
@@ -7998,8 +8005,8 @@ msgstr "Tiada salinan tersedia."
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:83
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:90
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:92
-#: opac-tmpl/prog/en/modules/opac-detail.tt:542
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1345
+#: opac-tmpl/prog/en/modules/opac-detail.tt:547
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1350
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:509
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:516
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:517
@@ -8032,6 +8039,18 @@ msgstr "TIada sebarang item ditambah ke troli anda"
 msgid "No item was selected"
 msgstr "Tiada item dipilih"
 
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:135
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1045
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:776
+#, fuzzy, c-format
+msgid "No items available "
+msgstr "Tiada item tersedia:"
+
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:198
+#, fuzzy, c-format
+msgid "No items available."
+msgstr "Tiada item tersedia:"
+
 #: opac-tmpl/prog/en/modules/opac-results.tt:586
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:260
 #, c-format
@@ -8039,7 +8058,7 @@ msgid "No items available:"
 msgstr "Tiada item tersedia:"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:40
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:128
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:132
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:205
 #, c-format
 msgid "No limit"
@@ -8050,7 +8069,7 @@ msgstr "Tiada had"
 msgid "No matching records found"
 msgstr "Tiada rekod berpadanan dijumpai"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1067
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1072
 #, c-format
 msgid "No physical items for this record"
 msgstr "Tiada item fizikal untuk rekod ini"
@@ -8095,7 +8114,7 @@ msgstr "Tiada hasil dijumpai!"
 msgid "No tag was specified."
 msgstr "Tiada tag ditentukan."
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:812
+#: opac-tmpl/prog/en/modules/opac-detail.tt:817
 #, c-format
 msgid "No tags from this library for this title."
 msgstr "Tiada tag untuk judul ini di perpustakaan ini."
@@ -8118,7 +8137,7 @@ msgstr "Tiada"
 #: opac-tmpl/prog/en/modules/opac-ISBDdetail.tt:38
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:167
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:16
-#: opac-tmpl/prog/en/modules/opac-detail.tt:555
+#: opac-tmpl/prog/en/modules/opac-detail.tt:560
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:71
 #: opac-tmpl/prog/en/modules/opac-auth-MARCdetail.tt:34
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:36
@@ -8148,7 +8167,7 @@ msgstr "Tidak boleh ditempah"
 msgid "Not what you expected? Check for "
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1208
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1213
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:178
 #, c-format
 msgid "Note"
@@ -8207,7 +8226,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:145
 #: opac-tmpl/prog/en/modules/opac-user.tt:358
 #: opac-tmpl/prog/en/modules/opac-basket.tt:272
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1514
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1531
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:38
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:95
 #, c-format
@@ -8247,14 +8266,14 @@ msgstr ""
 msgid "Nov"
 msgstr "Tidak"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:989
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1394
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1447
+#: opac-tmpl/prog/en/modules/opac-detail.tt:994
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1399
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1464
 #, c-format
 msgid "Novelist Select"
 msgstr "Pilihan Novelist"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:920
+#: opac-tmpl/prog/en/modules/opac-detail.tt:925
 #, c-format
 msgid "Novelist Select: "
 msgstr "Pilihan Novelist: "
@@ -8325,7 +8344,7 @@ msgstr "Akses Atas Talian: "
 msgid "Online Resources:"
 msgstr "Sumber Atas Talian:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:746
+#: opac-tmpl/prog/en/modules/opac-detail.tt:751
 #, c-format
 msgid "Online resources:"
 msgstr "Sumber atas talian:"
@@ -8412,7 +8431,7 @@ msgstr "Ortofoto"
 msgid "Other"
 msgstr "Lain-lain"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1334
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1339
 #, c-format
 msgid "Other editions of this work"
 msgstr "Edisi lain untuk koleksi ini"
@@ -8428,7 +8447,7 @@ msgid "Other forms:"
 msgstr "Nama lain:"
 
 #. %1$s:  otheritemloop.size || 0 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:944
+#: opac-tmpl/prog/en/modules/opac-detail.tt:949
 #, fuzzy, c-format
 msgid "Other holdings ( %s )"
 msgstr "Tempahan ( %s )"
@@ -8542,7 +8561,7 @@ msgid "Patent information: "
 msgstr "Maklumat peribadi "
 
 #. %1$s:  review.datereviewed | $KohaDates 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1307
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1312
 #, c-format
 msgid "Patron comment on %s"
 msgstr "Komen pengguna pada %s"
@@ -8591,7 +8610,7 @@ msgstr "Peta Perspektif"
 msgid "Phone"
 msgstr "No. Telefon:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:646
+#: opac-tmpl/prog/en/modules/opac-detail.tt:651
 #, c-format
 msgid "Physical details:"
 msgstr "Butiran fizikal:"
@@ -8641,7 +8660,7 @@ msgstr "Buat tempahan "
 
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:9
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:83
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:87
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
 #: opac-tmpl/prog/en/modules/opac-results.tt:671
 #: opac-tmpl/prog/en/modules/opac-results.tt:674
@@ -8692,7 +8711,7 @@ msgstr "Carta"
 msgid "Platelager (harddisk)"
 msgstr "Cakera keras (harddisk)"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1008
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1013
 #, fuzzy, c-format
 msgid "Play media"
 msgstr "multimedia"
@@ -8798,7 +8817,7 @@ msgid "Please try again with plain text. %sUnrecognized error. %s "
 msgstr ""
 "Sila cuba lagi menggunakan teks biasa (plain text). %sRalat tidak pasti. %s "
 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:738
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:745
 #, c-format
 msgid "Please type this following characters into the preceding box: "
 msgstr ""
@@ -8820,7 +8839,7 @@ msgstr "Populariti (kurang ke lebih)"
 msgid "Popularity (most to least)"
 msgstr "Populariti (lebih ke kurang)"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1321
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1326
 #, c-format
 msgid "Post or edit your comments on this item. "
 msgstr "Beri atau sunting komen anda pada item ini. "
@@ -8868,7 +8887,7 @@ msgstr "Terdahulu"
 
 #: opac-tmpl/prog/en/includes/shelfbrowser.inc:16
 #: opac-tmpl/prog/en/includes/datatables.inc:2
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1426
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1435
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 #, c-format
 msgid "Previous"
@@ -9017,7 +9036,7 @@ msgstr "Penerbitan:"
 msgid "Publication: "
 msgstr "Penerbitan: "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:639
+#: opac-tmpl/prog/en/modules/opac-detail.tt:644
 #, c-format
 msgid "Published by :"
 msgstr "Diterbitkan oleh :"
@@ -9109,7 +9128,7 @@ msgid "Rapporter, referater"
 msgstr "Laporan, Minit"
 
 #. INPUT type=submit name=rate_button
-#: opac-tmpl/prog/en/modules/opac-detail.tt:897
+#: opac-tmpl/prog/en/modules/opac-detail.tt:902
 msgid "Rate me"
 msgstr "Buat Ulasan"
 
@@ -9246,18 +9265,10 @@ msgstr "Padamkan item yang dipilih"
 msgid "Renew"
 msgstr "Perbaharui"
 
-#. INPUT type=submit
-#: opac-tmpl/prog/en/modules/opac-user.tt:217
-msgid "Renew All"
-msgstr "Perbaharui Semua Sekali"
-
-#. INPUT type=submit
-#: opac-tmpl/prog/en/modules/opac-user.tt:207
-msgid "Renew Selected"
-msgstr "Perbaharui Yang Dipilih"
-
+#. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-user.tt:8
+#: opac-tmpl/prog/en/modules/opac-user.tt:217
 msgid "Renew all"
 msgstr "Perbaharui semua skali"
 
@@ -9269,8 +9280,10 @@ msgstr "Perbaharui semua skali"
 msgid "Renew item"
 msgstr "Perbaharui item"
 
+#. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-user.tt:8
+#: opac-tmpl/prog/en/modules/opac-user.tt:207
 msgid "Renew selected"
 msgstr "Perbaharui yang dipilih"
 
@@ -9286,43 +9299,43 @@ msgstr "RenewLoan"
 msgid "Report number: "
 msgstr "Nombor kad: "
 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:141
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:155
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:174
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:188
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:202
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:229
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:265
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:279
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:293
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:307
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:321
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:335
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:349
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:375
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:389
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:403
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:417
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:431
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:445
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:471
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:485
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:499
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:513
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:527
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:541
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:555
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:569
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:583
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:610
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:624
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:638
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:652
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:666
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:680
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:694
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:708
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:722
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:146
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:160
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:181
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:195
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:209
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:236
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:272
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:286
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:300
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:314
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:328
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:342
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:356
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:382
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:396
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:410
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:424
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:438
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:452
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:478
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:492
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:506
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:520
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:534
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:548
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:562
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:576
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:590
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:617
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:631
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:645
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:659
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:673
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:687
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:701
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:715
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:729
 #, fuzzy, c-format
 msgid "Required"
 msgstr "(Wajib)"
@@ -9409,17 +9422,17 @@ msgid "Review: "
 msgstr "Ulasan: "
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
-#: opac-tmpl/prog/en/modules/opac-detail.tt:957
+#: opac-tmpl/prog/en/modules/opac-detail.tt:962
 #, c-format
 msgid "Reviews"
 msgstr "Ulasan"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:790
+#: opac-tmpl/prog/en/modules/opac-detail.tt:795
 #, c-format
 msgid "Reviews from LibraryThing.com:"
 msgstr "Ulasan dari LibraryThing.com:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1151
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1156
 #, c-format
 msgid "Reviews provided by Syndetics"
 msgstr "Ulasan yang diberikan oleh Syndetics"
@@ -9581,8 +9594,8 @@ msgstr "Skor"
 #. INPUT type=submit name=do
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:148
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:336
-#: opac-tmpl/prog/en/modules/opac-detail.tt:607
-#: opac-tmpl/prog/en/modules/opac-detail.tt:714
+#: opac-tmpl/prog/en/modules/opac-detail.tt:612
+#: opac-tmpl/prog/en/modules/opac-detail.tt:719
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:49
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:67
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:24
@@ -9691,7 +9704,7 @@ msgstr "seksyen"
 #: opac-tmpl/prog/en/modules/opac-user.tt:171
 #: opac-tmpl/prog/en/modules/opac-user.tt:315
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:92
-#: opac-tmpl/prog/en/modules/opac-detail.tt:546
+#: opac-tmpl/prog/en/modules/opac-detail.tt:551
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:519
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:89
 msgid "See Baker & Taylor"
@@ -9708,14 +9721,14 @@ msgstr "Pilih senarai"
 msgid "See biblio"
 msgstr "%s biblio"
 
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:90
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:94
 #, c-format
 msgid "See the most popular titles"
 msgstr "Lihat judul yang paling popular"
 
 # Code?
 #. A
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1428
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1441
 msgid ""
 "See: [% IF ( nextTitle ) %][% nextTitle |html %][% ELSE %]next biblio[% END "
 "%]"
@@ -9724,7 +9737,7 @@ msgstr ""
 "END %]"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1426
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1433
 msgid ""
 "See: [% IF ( previousTitle ) %][% previousTitle |html %][% ELSE %]previous "
 "biblio[% END %]"
@@ -9738,8 +9751,8 @@ msgid "Select a list"
 msgstr "Pilih senarai"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:470
-#, c-format
-msgid "Select a specific copy:"
+#, fuzzy, c-format
+msgid "Select a specific item:"
 msgstr "Pilih salinan tertentu:"
 
 #. For the first occurrence,
@@ -9770,8 +9783,8 @@ msgstr "Pilih pangkalan data remote"
 msgid "Select suggestions to: "
 msgstr "Pilih judul untuk: "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:578
-#: opac-tmpl/prog/en/modules/opac-detail.tt:680
+#: opac-tmpl/prog/en/modules/opac-detail.tt:583
+#: opac-tmpl/prog/en/modules/opac-detail.tt:685
 #, fuzzy, c-format
 msgid "Select the item(s) to search :"
 msgstr "Pilih judul untuk:"
@@ -9859,8 +9872,8 @@ msgstr ""
 msgid "Serial"
 msgstr "Terbitan bersiri"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:999
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1022
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1004
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1027
 #, c-format
 msgid "Serial collection"
 msgstr "Koleksi terbitan bersiri"
@@ -9900,7 +9913,7 @@ msgstr "Siri"
 msgid "Series Title"
 msgstr "Siri Judul"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:837
+#: opac-tmpl/prog/en/modules/opac-detail.tt:842
 #, c-format
 msgid "Series information:"
 msgstr "Maklumat siri:"
@@ -9910,7 +9923,7 @@ msgstr "Maklumat siri:"
 msgid "Series title"
 msgstr "Judul siri"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:627
+#: opac-tmpl/prog/en/modules/opac-detail.tt:632
 #, c-format
 msgid "Series:"
 msgstr "Siri"
@@ -9949,28 +9962,28 @@ msgstr "Tetapkan: "
 msgid "Settings updated"
 msgstr "Tetapan dikemaskini"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1461
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1478
 #, c-format
 msgid "Share"
 msgstr "Kongsi"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1465
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1482
 msgid "Share by email"
 msgstr "Kongsi menggunakan email"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1464
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1481
 msgid "Share on Delicious"
 msgstr "Kongsi di Delicious"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1462
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1479
 msgid "Share on Facebook"
 msgstr "Kongsi di Facebook"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1463
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1480
 msgid "Share on LinkedIn"
 msgstr "Kongsi di LinkedIn"
 
@@ -10022,7 +10035,7 @@ msgid "Show more options"
 msgstr "[Tetapan lain]"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1424
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1429
 msgid ""
 "Show pagination list ([% indexPag %]-[% indexPagEnd %] / [% totalPag %])"
 msgstr ""
@@ -10030,7 +10043,7 @@ msgstr ""
 "%])"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:5
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:91
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:95
 #, c-format
 msgid "Show the top "
 msgstr "Kembali ke atas "
@@ -10079,7 +10092,7 @@ msgstr "Menampilkan 50 item terakhir"
 msgid "Sign in with your Email"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:974
+#: opac-tmpl/prog/en/modules/opac-detail.tt:979
 #, c-format
 msgid "Similar items"
 msgstr "Item-item serupa"
@@ -10295,8 +10308,8 @@ msgstr "Statistik"
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:195
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:47
 #: opac-tmpl/prog/en/modules/opac-user.tt:364
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1207
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1513
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1212
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1530
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:181
 #, c-format
 msgid "Status"
@@ -10418,8 +10431,8 @@ msgstr "Frasa Subjek"
 msgid "Subject(s)"
 msgstr "Subjek"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:677
-#: opac-tmpl/prog/en/modules/opac-detail.tt:730
+#: opac-tmpl/prog/en/modules/opac-detail.tt:682
+#: opac-tmpl/prog/en/modules/opac-detail.tt:735
 #, c-format
 msgid "Subject(s):"
 msgstr "Subjek:"
@@ -10444,12 +10457,12 @@ msgstr "Subjek: %s "
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:45
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:134
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:138
 #: opac-tmpl/prog/en/modules/opac-authorities-home.tt:48
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:252
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:326
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:56
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:754
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:761
 msgid "Submit"
 msgstr "Serah"
 
@@ -10469,7 +10482,7 @@ msgid "Submit changes"
 msgstr "Serahkan perubahan"
 
 #. INPUT type=submit
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:748
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:755
 #, fuzzy
 msgid "Submit update request"
 msgstr "Serahkan Cadangan Anda"
@@ -10486,11 +10499,11 @@ msgid "Subscribe issue receive warning"
 msgstr "Langgan amaran penerimaan isu"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:121
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:122
 msgid "Subscribe to email notification on new issues"
 msgstr "Langgan notifikasi email untuk isu-isu baru"
 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:121
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:122
 #, c-format
 msgid "Subscribe to email notification on new issues "
 msgstr "Langgan notifikasi email untuk isu-isu baru "
@@ -10516,7 +10529,7 @@ msgstr "Langganan : "
 #. %3$s:  subscription.histenddate | $KohaDates 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1198
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1203
 #, c-format
 msgid "Subscription from: %s to:%s %s %s now (current)%s"
 msgstr "Langganan sejak:%s hingga:%s %s %s sekarang%s"
@@ -10529,7 +10542,7 @@ msgstr "Langganan sejak:%s hingga:%s %s %s sekarang%s"
 msgid "Subscription information for %s"
 msgstr "Maklumat langganan untuk %s"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:980
+#: opac-tmpl/prog/en/modules/opac-detail.tt:985
 #, c-format
 msgid "Subscriptions"
 msgstr "Langganan"
@@ -10620,12 +10633,12 @@ msgstr "Simbol Kad"
 msgid "System maintenance"
 msgstr "Penyelenggaraan sistem"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:950
+#: opac-tmpl/prog/en/modules/opac-detail.tt:955
 #, c-format
 msgid "TOC"
 msgstr "TOC"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1127
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1132
 #, c-format
 msgid "Table of contents provided by Syndetics"
 msgstr "Senarai kandungan disediakan oleh Syndetics"
@@ -10638,7 +10651,7 @@ msgstr "Senarai kandungan disediakan oleh Syndetics"
 msgid "Tag"
 msgstr "Tag"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:975
+#: opac-tmpl/prog/en/modules/opac-detail.tt:980
 #, c-format
 msgid "Tag browser"
 msgstr "Paparan tag"
@@ -10655,7 +10668,7 @@ msgstr "Status tag disini."
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:481
 #: opac-tmpl/prog/en/modules/opac-results.tt:690
-#: opac-tmpl/prog/en/modules/opac-detail.tt:826
+#: opac-tmpl/prog/en/modules/opac-detail.tt:831
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:466
 #, c-format
 msgid "Tag status here. "
@@ -10667,8 +10680,8 @@ msgstr "Status tag disini. "
 msgid "Tags added: "
 msgstr "Tag ditambah: "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:808
-#: opac-tmpl/prog/en/modules/opac-detail.tt:812
+#: opac-tmpl/prog/en/modules/opac-detail.tt:813
+#: opac-tmpl/prog/en/modules/opac-detail.tt:817
 #, c-format
 msgid "Tags from this library:"
 msgstr "Tag dari perpustakaan ini:"
@@ -10789,7 +10802,7 @@ msgid "Thank you!"
 msgstr "Terima kasih!"
 
 #. %1$s:  subscription.opacdisplaycount 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1202
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1207
 #, c-format
 msgid "The %s latest issues for this subscription:"
 msgstr "%s isu terbaru untuk langganan ini:"
@@ -10969,12 +10982,12 @@ msgid "The userid "
 msgstr "ID pengguna "
 
 #. %1$s:  subscriptionsnumber 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1191
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1196
 #, c-format
 msgid "There are %s subscription(s) associated with this title."
 msgstr "Tiada langganan yang berkaitan dengan judul ini."
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1317
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1322
 #, c-format
 msgid "There are no comments for this item."
 msgstr "Belum ada komen untuk item ini."
@@ -11075,7 +11088,7 @@ msgstr ""
 "Ralat ini terjadi kerana anda tidak dibenarkan melihat laman ini atas sebab-"
 "sebab tertentu."
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1190
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1195
 #, c-format
 msgid "This is a serial"
 msgstr "Ini merupakan sebuah terbitan bersiri"
@@ -11128,10 +11141,10 @@ msgstr ""
 "Senarai ini masih kosong. %sAnda boleh tambahkan ke dalam senarai anda dari "
 "hasil carian "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:961
-#: opac-tmpl/prog/en/modules/opac-detail.tt:964
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1482
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1486
+#: opac-tmpl/prog/en/modules/opac-detail.tt:966
+#: opac-tmpl/prog/en/modules/opac-detail.tt:969
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1499
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1503
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -11140,13 +11153,13 @@ msgstr ""
 "Laman ini mengandungi perkayaan kandungan yang hanya boleh dipaparkan "
 "apabila JavaScript diaktifkan atau dengan klik. "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1043
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1080
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1048
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1085
 #, c-format
 msgid "This record has many physical items. "
 msgstr "Rekod ini mempunyai banyak item fizikal. "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1195
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1200
 #, fuzzy, c-format
 msgid "This subscription is closed."
 msgstr "Langganan akan tamat pada %s"
@@ -11165,7 +11178,7 @@ msgstr "Judul ini tidak dapat dipohon."
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:6
 msgid ""
 "This title consists of multiple volumes/parts. Please indicate which part "
-"you need. Clicking on specific copy information may be helpful."
+"you need. Clicking on specific item information may be helpful."
 msgstr ""
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:156
@@ -11240,7 +11253,7 @@ msgstr "Judul (A-Z)"
 msgid "Title (Z-A)"
 msgstr "Judul (Z-A)"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:947
+#: opac-tmpl/prog/en/modules/opac-detail.tt:952
 #, c-format
 msgid "Title notes"
 msgstr "Nota judul"
@@ -11372,7 +11385,7 @@ msgstr "Tamat"
 msgid "Tuesday"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1467
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1484
 #, c-format
 msgid "Tweet"
 msgstr ""
@@ -11489,7 +11502,7 @@ msgstr "Tajuk Konvensional Seragam"
 msgid "Uniform Title"
 msgstr "Judul Seragam"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:667
+#: opac-tmpl/prog/en/modules/opac-detail.tt:672
 #, c-format
 msgid "Uniform titles:"
 msgstr "Judul seragam:"
@@ -11600,7 +11613,7 @@ msgstr "Pita VHS / Kaset Video"
 msgid "VM"
 msgstr "VM"
 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:733
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:740
 #, fuzzy, c-format
 msgid "Verification:"
 msgstr "fiksyen"
@@ -11708,7 +11721,7 @@ msgid "Voksne;"
 msgstr "Orang dewasa;"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:483
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1510
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1527
 #, c-format
 msgid "Vol info"
 msgstr "Maklumat Vol"
@@ -11844,7 +11857,7 @@ msgstr "Ditulis pada %s oleh %s"
 msgid "Year"
 msgstr "Tahun"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:734
+#: opac-tmpl/prog/en/modules/opac-detail.tt:739
 #, c-format
 msgid "Year: "
 msgstr "Tahun: "
@@ -12075,7 +12088,7 @@ msgstr "Troli anda masih kosong"
 msgid "Your cart is empty."
 msgstr "Troli anda masih kosong."
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1277
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1282
 #, c-format
 msgid "Your comment "
 msgstr "Komen anda "
@@ -12217,15 +12230,15 @@ msgstr "[% SEARCH_RESULT.biblionumber |url %]"
 
 # script?
 #. DIV
-#: opac-tmpl/prog/en/modules/opac-detail.tt:534
-#: opac-tmpl/prog/en/modules/opac-detail.tt:544
-#: opac-tmpl/prog/en/modules/opac-detail.tt:545
+#: opac-tmpl/prog/en/modules/opac-detail.tt:539
+#: opac-tmpl/prog/en/modules/opac-detail.tt:549
+#: opac-tmpl/prog/en/modules/opac-detail.tt:550
 msgid "[% biblionumber |url %]"
 msgstr "[% biblionumber |url %]"
 
 # script?
 #. INPUT type=text name=borrower_dateofbirth
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:168
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:173
 #, fuzzy
 msgid "[% borrower.dateofbirth | $KohaDates %]"
 msgstr "[% BORROWER_INF.dateofbirth | $KohaDates %]"
@@ -12302,7 +12315,7 @@ msgid ""
 "type=seefro.type authid=seefro.authid %%] "
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:245
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:252
 #, c-format
 msgid ""
 "[%% UNLESS hidden.defined('streetnumber') && hidden.defined('address') && "
@@ -12310,7 +12323,7 @@ msgid ""
 "('state') && hidden.defined('zipcode') && hidden.defined('country') %%] "
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:96
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:101
 #, c-format
 msgid ""
 "[%% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden."
@@ -12524,8 +12537,8 @@ msgstr "Dewasa, Umum"
 msgid "adult, serious"
 msgstr "Dewasa, serius"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:580
-#: opac-tmpl/prog/en/modules/opac-detail.tt:685
+#: opac-tmpl/prog/en/modules/opac-detail.tt:585
+#: opac-tmpl/prog/en/modules/opac-detail.tt:690
 #, fuzzy, c-format
 msgid "all"
 msgstr "Braille"
@@ -12663,7 +12676,7 @@ msgstr "purata kedudukan: %s (%s undian)"
 
 #. %1$s:  rating_avg_int 
 #. %2$s:  rating_total 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:905
+#: opac-tmpl/prog/en/modules/opac-detail.tt:910
 #, c-format
 msgid "average rating: %s (%s votes)"
 msgstr "purata kedudukan: %s (%s undian)"
@@ -12758,7 +12771,7 @@ msgstr "oleh"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:452
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:162
-#: opac-tmpl/prog/en/modules/opac-detail.tt:561
+#: opac-tmpl/prog/en/modules/opac-detail.tt:566
 #: opac-tmpl/prog/en/modules/search/results.tt:85
 #, c-format
 msgid "by "
@@ -13294,10 +13307,10 @@ msgstr "papan keras"
 msgid "has already been added."
 msgstr "telah ditambah."
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:961
-#: opac-tmpl/prog/en/modules/opac-detail.tt:964
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1483
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1488
+#: opac-tmpl/prog/en/modules/opac-detail.tt:966
+#: opac-tmpl/prog/en/modules/opac-detail.tt:969
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1500
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1505
 #, c-format
 msgid "here"
 msgstr "di sini"
@@ -13568,7 +13581,7 @@ msgstr "opac koha %s"
 
 # script?
 #. ABBR
-#: opac-tmpl/prog/en/modules/opac-detail.tt:549
+#: opac-tmpl/prog/en/modules/opac-detail.tt:554
 msgid "koha:biblionumber:[% biblionumber %]"
 msgstr "koha:biblionumber:[% biblionumber %]"
 
@@ -13975,7 +13988,7 @@ msgstr "sarikata, "
 msgid "of summary, "
 msgstr "ringkasan, "
 
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:124
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:128
 #, fuzzy, c-format
 msgid "of the last:"
 msgstr "Diperolehi di akhir:"
@@ -14806,7 +14819,7 @@ msgstr "title"
 msgid "to create new lists."
 msgstr "untuk menambah senarai baru"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1326
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1331
 #, c-format
 msgid "to post a comment."
 msgstr "untuk membuat komen."
@@ -14893,7 +14906,7 @@ msgstr "sehingga "
 msgid "up to "
 msgstr "sehingga "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1511
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1528
 #, c-format
 msgid "url"
 msgstr "url"
@@ -15079,7 +15092,7 @@ msgid "your rating:"
 msgstr "kedudukan anda: %s,"
 
 #. %1$s:  rating_value 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:900
+#: opac-tmpl/prog/en/modules/opac-detail.tt:905
 #, c-format
 msgid "your rating: %s, "
 msgstr "kedudukan anda: %s, "
@@ -15096,7 +15109,7 @@ msgstr "Øvelsesmodell"
 
 # script?
 #. A
-#: opac-tmpl/prog/en/modules/opac-detail.tt:614
+#: opac-tmpl/prog/en/modules/opac-detail.tt:619
 msgid ""
 "‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value %]"
 msgstr ""
@@ -15108,3 +15121,4 @@ msgstr ""
 #, c-format
 msgid "• "
 msgstr "• "
+

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-05-18 20:03-0300\n"
+"POT-Creation-Date: 2014-06-15 20:27-0300\n"
 "PO-Revision-Date: 2014-04-22 12:11+0000\n"
 "Last-Translator: Peter <pschouten@ingressus.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
 "X-POOTLE-MTIME: 1398168711.0\n"
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:110
+#, fuzzy, c-format
+msgid "#record"
+msgstr "%s records"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:273
@@ -108,7 +113,7 @@ msgstr "%s %s %s %s %s %s Item beschadigd %s %s Beschikbaar %s"
 #. %8$s:  ITEM_RESULT.priority 
 #. %9$s:  END 
 #. %10$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1201
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1203
 #, c-format
 msgid "%s %s %s %s %s (priority %s) %s %s %s %s "
 msgstr "%s %s %s %s %s (prioriteit %s) %s %s %s %s "
@@ -217,6 +222,17 @@ msgid ""
 msgstr ""
 "%s %s %s %s , %s %s %s (%s) %s.%s,%s %s %s %s Dit record heeft geen items. "
 "%s "
+
+#. %1$s:  END 
+#. %2$s:  IF ( subscription_LOO.letter ) 
+#. %3$s:  IF ( loggedinusername ) 
+#. %4$s:  IF ( subscription_LOO.hasalert ) 
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:131
+#, fuzzy, c-format
+msgid "%s %s %s %s You have subscribed to email notification on new issues "
+msgstr ""
+"%s %s %s U heeft zich geabonneerd op e-mailnotificatie bij nieuwe "
+"afleveringen "
 
 #. %1$s:  IF showpriority 
 #. %2$s:  bibitemloo.rank 
@@ -373,16 +389,6 @@ msgstr "%s %s %s Niet te leen %s"
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr ""
 "%s %s %s Let op: dit venster zal automatisch sluiten in 5 seconden. %s "
-
-#. %1$s:  END 
-#. %2$s:  IF ( subscription_LOO.letter ) 
-#. %3$s:  IF ( subscription_LOO.hasalert ) 
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:131
-#, c-format
-msgid "%s %s %s You have subscribed to email notification on new issues "
-msgstr ""
-"%s %s %s U heeft zich geabonneerd op e-mailnotificatie bij nieuwe "
-"afleveringen "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -747,6 +753,19 @@ msgid ""
 msgstr ""
 "%s %s Zoek ook naar engere termen %s Zoek ook naar bredere termen %s Zoek "
 "ook naar gerelateerde termen %s "
+
+#. %1$s:  END 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#. %4$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:142
+#, fuzzy, c-format
+msgid ""
+"%s %s You must log in if you want to subscribe to email notification on new "
+"issues %s %s "
+msgstr ""
+"%s %s %s U heeft zich geabonneerd op e-mailnotificatie bij nieuwe "
+"afleveringen "
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -1154,7 +1173,7 @@ msgstr ""
 #. %2$s:  IF ( shelvesloo.single ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:662
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:686
 #, c-format
 msgid "%s %sitem%sitem(s)%s"
 msgstr "%s %sitem%sitem(s)%s"
@@ -1194,18 +1213,18 @@ msgstr "%s Account geblokkeerd %s %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:280
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:472
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:639
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:287
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:479
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:646
 #, c-format
 msgid "%s Address 2:"
 msgstr "%s Adres 2:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:266
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:458
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:625
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:273
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:465
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:632
 #, c-format
 msgid "%s Address:"
 msgstr "%s Adres:"
@@ -1295,9 +1314,9 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:294
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:486
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:653
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:301
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:493
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:660
 #, c-format
 msgid "%s City:"
 msgstr "%s Plaats:"
@@ -1305,13 +1324,13 @@ msgstr "%s Plaats:"
 #. %1$s:  IF ( ccodesearch ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:75
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:79
 #, c-format
 msgid "%s Collection %s Item type %s: "
 msgstr "%s Collectie %s Itemtype %s "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:570
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:577
 #, c-format
 msgid "%s Contact Note:"
 msgstr "%s Notities bij contactpersonen:"
@@ -1330,15 +1349,15 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:336
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:528
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:695
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:343
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:535
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:702
 #, c-format
 msgid "%s Country:"
 msgstr "%s Land:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:157
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:162
 #, c-format
 msgid "%s Date of birth:"
 msgstr "%s Geboortedatum:"
@@ -1350,33 +1369,33 @@ msgid "%s Did you mean: "
 msgstr "%s Bedoelde u soms: "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:556
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:563
 #, c-format
 msgid "%s Email:"
 msgstr "%s E-mail:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:432
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:439
 #, c-format
 msgid "%s Fax:"
 msgstr "%s Fax:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:143
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:611
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:618
 #, c-format
 msgid "%s First name:"
 msgstr "%s Voornaam:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:69
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:74
 #, c-format
 msgid "%s Home library:"
 msgstr "%s Thuisbibliotheek:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:176
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:183
 #, c-format
 msgid "%s Initials:"
 msgstr "%s Initialen:"
@@ -1442,7 +1461,7 @@ msgid "%s MARC view"
 msgstr "%s MARC-presentatie"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:390
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:397
 #, c-format
 msgid "%s Mobile phone:"
 msgstr "%s Mobiele telefoon:"
@@ -1470,7 +1489,7 @@ msgid "%s On hold %s No renewals left %s "
 msgstr "%s Gereserveerd %s Geen verlengingen over %s "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:190
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:197
 #, c-format
 msgid "%s Other names:"
 msgstr "%s Overige namen:"
@@ -1497,8 +1516,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:542
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:709
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:549
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:716
 #, c-format
 msgid "%s Phone:"
 msgstr "%s Telefoon:"
@@ -1510,14 +1529,14 @@ msgid "%s Please see a member of the library staff. "
 msgstr "%s Neem a.u.b. contact op met een bibliotheekmedewerker. "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:404
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:411
 #, c-format
 msgid "%s Primary email:"
 msgstr "%s Primaire e-mail:"
 
 # UItgaande van primary school=basisschool
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:362
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:369
 #, c-format
 msgid "%s Primary phone:"
 msgstr "%s Primaire telefoonnummer:"
@@ -1549,7 +1568,7 @@ msgid "%s Quotations"
 msgstr "%s Citaten"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:108
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:113
 #, c-format
 msgid "%s Salutation:"
 msgstr "%s Aanhef:"
@@ -1573,13 +1592,13 @@ msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s Zoeken %snaar '%s'%s%s&nbsp;met filter(s):&nbsp;'%s'%s"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:418
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:425
 #, c-format
 msgid "%s Secondary email:"
 msgstr "%s Secondaire e-mail:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:376
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:383
 #, c-format
 msgid "%s Secondary phone:"
 msgstr "%s Secondaire telefoonnummer:"
@@ -1598,23 +1617,23 @@ msgstr "%s Toont alleen "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:308
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:500
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:667
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:315
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:507
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:674
 #, c-format
 msgid "%s State:"
 msgstr "%s Provincie:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:252
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:259
 #, c-format
 msgid "%s Street number:"
 msgstr "%s Straatnummer:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:129
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:597
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:134
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:604
 #, c-format
 msgid "%s Surname:"
 msgstr "%s Achternaam:"
@@ -1718,15 +1737,15 @@ msgstr "%s U heeft nog niet eerder iets geleend van deze bibliotheek. %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:322
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:514
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:681
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:329
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:521
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:688
 #, c-format
 msgid "%s Zip/Postal code:"
 msgstr "%s Postcode:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:441
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:448
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('B_address') && hidden.defined('B_address2') && "
@@ -1740,7 +1759,7 @@ msgstr ""
 "hidden.defined('B_email') && hidden.defined('contactnote') %%] "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:580
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:587
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('altcontactsurname') && hidden.defined"
@@ -1756,7 +1775,7 @@ msgstr ""
 "hidden.defined('altcontactcountry') && hidden.defined('altcontactphone') %%] "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:346
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:353
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
@@ -1768,7 +1787,7 @@ msgstr ""
 "('emailpro') && hidden.defined('fax') %%] "
 
 #. %1$s:  END # /UNLESS fields hidden 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:235
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:242
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('streetnumber') && hidden.defined('address') && "
@@ -1780,7 +1799,7 @@ msgstr ""
 "('state') && hidden.defined('zipcode') && hidden.defined('country') %%] "
 
 #. %1$s:  END # / defined 'branchcode' 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:85
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:90
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden."
@@ -1942,7 +1961,7 @@ msgstr ""
 #. %5$s:  END 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:595
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:619
 #, c-format
 msgid "%s%s %sitem%sitems%s%sEmpty%s"
 msgstr "%s%s %sitem%sitems%s%sLeeg%s"
@@ -2264,8 +2283,8 @@ msgstr "%sUitloggen"
 #. %2$s:  END 
 #. %3$s:  IF ( shelveslooppri.viewcategory2 ) 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:596
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:663
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:620
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:687
 #, c-format
 msgid "%sPrivate%s %sPublic%s "
 msgstr "%sPrivé%s %sOpenbaar%s "
@@ -2342,13 +2361,8 @@ msgstr ""
 msgid "%sentry%sentries%s. "
 msgstr "%singang%singangen%s. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:489
-#, c-format
-msgid "&#8674; Editing"
-msgstr "&#8674; In bewerking"
-
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:5
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1025
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1026
 #, c-format
 msgid "&laquo; Previous"
 msgstr "&laquo; Vorige"
@@ -3139,19 +3153,19 @@ msgid "(remove)"
 msgstr "(verwijder)"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:405
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:516
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:557
 #, c-format
 msgid "(su"
 msgstr "(zo"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:217
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:383
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:247
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:265
 #, c-format
 msgid "+and+(bib-level:a+or+bib-level:b)"
 msgstr "+and+(bib-level:a+or+bib-level:b)"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:264
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:282
 #, c-format
 msgid "+not+(bib-level:a+or+bib-level:b)"
 msgstr "+not+(bib-level:a+or+bib-level:b)"
@@ -3190,7 +3204,7 @@ msgstr ""
 "wanneer u uw boeken wilt verlengen."
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:21
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:25
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:26
 #, c-format
 msgid ",complete-subfield"
 msgstr ",complete-subfield"
@@ -3201,7 +3215,7 @@ msgid "- You must enter a Title"
 msgstr "- U moet een titel opgeven"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 msgid "- You must enter a list name"
 msgstr "- U moet een lijstnaam opgeven"
 
@@ -3238,7 +3252,7 @@ msgstr ". Neem a.u.b. contact op met de bibliotheek voor meer informatie."
 msgid "...or..."
 msgstr "...of..."
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, c-format
 msgid ".png"
 msgstr ".png"
@@ -3247,19 +3261,19 @@ msgstr ".png"
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:128
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:426
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:537
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:986
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:579
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1030
 #, c-format
 msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:257
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:196
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:43
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:44
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:405
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:289
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:423
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:710
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:752
 #: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:167
 #, c-format
 msgid "/cgi-bin/koha/opac-detail.pl?biblionumber="
@@ -3269,9 +3283,7 @@ msgstr "/cgi-bin/koha/opac-detail.pl?biblionumber="
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:536
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:587
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:208
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:513
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:862
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:925
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:554
 #: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:179
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q="
@@ -3279,18 +3291,18 @@ msgstr "/cgi-bin/koha/opac-search.pl?q="
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:251
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:417
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:282
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:704
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:801
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:857
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:920
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:300
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:746
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:843
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:900
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:963
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=Control-number:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=Control-number:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:220
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:386
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:250
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:268
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=Host-item:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=Host-item:"
@@ -3299,56 +3311,66 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=Host-item:"
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:119
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:139
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:202
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:245
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:327
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:510
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:961
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:247
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:331
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:551
 #: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:173
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=an:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1005
+#, fuzzy, c-format
+msgid "/cgi-bin/koha/opac-search.pl?q=an:\""
+msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
+
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:101
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:122
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:142
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:333
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:964
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:337
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=au:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1008
+#, fuzzy, c-format
+msgid "/cgi-bin/koha/opac-search.pl?q=au:\""
+msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
+
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:217
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:383
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:247
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:264
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:265
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:282
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=rcn:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=rcn:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:178
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:193
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:221
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:196
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:211
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:239
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=se,phr:\""
 msgstr "/cgi-bin/koha/opac-search.pl?q=se,phr:\""
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:411
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:522
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:563
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=su"
 msgstr "/cgi-bin/koha/opac-search.pl?q=su"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:272
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:274
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=su:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=su:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:262
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:428
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:267
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:285
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:715
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:804
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:303
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:757
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:846
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:905
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:968
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=ti,phr:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=ti,phr:"
@@ -3357,97 +3379,97 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=ti,phr:"
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:960
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:992
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:995
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:558
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:561
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:600
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:603
 #, c-format
 msgid "/cgi-bin/koha/tracklinks.pl?uri="
 msgstr "/cgi-bin/koha/tracklinks.pl?uri="
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, c-format
 msgid "/opac-tmpl/lib/famfamfam/"
 msgstr "/opac-tmpl/lib/famfamfam/"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACMARCdetail.xsl:18
+#: opac-tmpl/bootstrap/en/xslt/plainMARC.xsl:18
 #, c-format
 msgid "000 "
 msgstr "000 "
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:7
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:97
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:101
 #, c-format
 msgid "10 titles"
 msgstr "10 titels"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:13
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:103
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:107
 #, c-format
 msgid "100 titles"
 msgstr "100 titels"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:446
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:135
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:153
 #, c-format
 msgid "100,110,111,700,710,711"
 msgstr "100,110,111,700,710,711"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:61
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:63
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:143
 #, c-format
 msgid "12 months"
 msgstr "12 maanden"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:475
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:512
 #, c-format
 msgid "130,240"
 msgstr "130,240"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:8
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:98
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:102
 #, c-format
 msgid "15 titles"
 msgstr "15 titels"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:9
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:99
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:103
 #, c-format
 msgid "20 titles"
 msgstr "20 titels"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:51
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:53
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:141
 #, c-format
 msgid "3 months"
 msgstr "3 maanden"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:10
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:100
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:104
 #, c-format
 msgid "30 titles"
 msgstr "30 titels"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:11
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:101
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:105
 #, c-format
 msgid "40 titles"
 msgstr "40 titels"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:165
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:183
 #, c-format
 msgid "440,490"
 msgstr "440,490"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:12
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:106
 #, c-format
 msgid "50 titles"
 msgstr "50 titels"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:56
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:58
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:138
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:142
 #, c-format
 msgid "6 months"
 msgstr "6 maanden"
@@ -3536,8 +3558,8 @@ msgstr "; Type serieel werk: "
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:960
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:992
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:995
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:558
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:561
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:600
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:603
 #, c-format
 msgid ";biblionumber="
 msgstr ";biblionumber="
@@ -3574,17 +3596,17 @@ msgid "A record matching barcode "
 msgstr "Een record met overeenkomende barcode "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:242
-#, c-format
-msgid "A specific copy"
+#, fuzzy, c-format
+msgid "A specific item"
 msgstr "Een bepaald exemplaar"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:404
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:515
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:556
 #, c-format
 msgid "AND "
 msgstr "AND "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:55
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:56
 #, c-format
 msgid "AR"
 msgstr "AR"
@@ -3594,28 +3616,28 @@ msgstr "AR"
 msgid "About the author"
 msgstr "Over de auteur"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:896
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:939
 #, c-format
 msgid "Absorbed by:"
 msgstr "Opgegaan in:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:899
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:942
 #, c-format
 msgid "Absorbed in part by:"
 msgstr "Gedeeltelijk opgegaan in:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:844
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:886
 #, c-format
 msgid "Absorbed in part:"
 msgstr "Gedeeltelijk hierin opgegaan:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:841
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:883
 #, c-format
 msgid "Absorbed:"
 msgstr "Hierin opgegaan:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:277
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:760
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:290
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:802
 #, c-format
 msgid "Abstract: "
 msgstr "Uittreksel: "
@@ -3791,20 +3813,20 @@ msgid "All Tags"
 msgstr "Alle tags"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:33
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:123
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:127
 #, c-format
 msgid "All collections"
 msgstr "Alle collecties"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:35
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:125
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:129
 #, c-format
 msgid "All item types"
 msgstr "Alle type items"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:202
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:18
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:109
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:113
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:200
 #, c-format
 msgid "All libraries"
@@ -3826,12 +3848,12 @@ msgstr ""
 "Bedenk ook dat u alle geleende items terug moet brengen voor uw kaart "
 "verloopt."
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:450
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:457
 #, c-format
 msgid "Alternate address"
 msgstr "Alternatief adres"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:589
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:596
 #, c-format
 msgid "Alternate contact"
 msgstr "Alternatief contactpersoon"
@@ -3865,7 +3887,7 @@ msgstr "Een fout deed zich voor tijdens het verwerken van uw verzoek."
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:213
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:379
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:243
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:261
 #, c-format
 msgid "Analytics: "
 msgstr "Analytics: "
@@ -4022,7 +4044,7 @@ msgid "Are you sure you want to cancel this hold?"
 msgstr "Bent u zeker dat u deze reservering wilt annuleren?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 msgid "Are you sure you want to delete this list?"
 msgstr "Bent u zeker dat u deze lijst wilt verwijderen?"
 
@@ -4044,12 +4066,12 @@ msgid "Are you sure you want to remove the selected items?"
 msgstr "Bent u zeker dat u de geselecteerde items wilt verwijderen?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 msgid "Are you sure you want to remove these items from the list?"
 msgstr "Bent u zeker dat u deze items wilt verwijderen uit de lijst?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 msgid "Are you sure you want to remove this item from the list?"
 msgstr "Bent u zeker dat u dit item wilt verwijderen uit de lijst?"
 
@@ -4064,7 +4086,7 @@ msgid "Are you sure you want to suspend all holds?"
 msgstr "Bent u zeker dat u alle reserveringen wilt blokkeren?"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:543
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:79
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:80
 #, c-format
 msgid "Article"
 msgstr "Artikel"
@@ -4100,7 +4122,7 @@ msgstr "Atlas"
 msgid "Audience"
 msgstr "Doelgroep"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:323
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:336
 #, c-format
 msgid "Audience: "
 msgstr "Doelgroep: "
@@ -4144,9 +4166,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:243
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:187
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:189
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:506
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:508
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:723
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:530
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:532
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:747
 #, c-format
 msgid "Author"
 msgstr "Auteur"
@@ -4236,7 +4258,7 @@ msgstr "Beschikbaarheid "
 msgid "Availability:"
 msgstr "Beschikbaarheid:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:99
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:103
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1031
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:774
 #, c-format
@@ -4278,7 +4300,7 @@ msgstr "Afspeler met geluidsbestand (bijv. Digiboeken)"
 msgid "Awards:"
 msgstr "Prijzen:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:674
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:716
 #, c-format
 msgid "Awards: "
 msgstr "Prijzen: "
@@ -4290,8 +4312,8 @@ msgstr "LET OP"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:45
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:49
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:53
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:58
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:54
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:59
 #, c-format
 msgid "BK"
 msgstr "BK"
@@ -4308,13 +4330,13 @@ msgstr "BT: %s"
 msgid "Back to lists"
 msgstr "Terug naar lijsten"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1030
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1031
 #, c-format
 msgid "Back to results"
 msgstr "Terug naar resultaat"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1030
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1031
 msgid "Back to the results search list"
 msgstr "Terug naar lijst zoekresultaat"
 
@@ -4322,7 +4344,7 @@ msgstr "Terug naar lijst zoekresultaat"
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:260
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:112
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:355
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1125
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1127
 #, c-format
 msgid "Barcode"
 msgstr "Barcode"
@@ -4384,7 +4406,7 @@ msgstr "Bibliografische gegevens"
 msgid "Bibliographies"
 msgstr "Bibliografieën"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:303
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:316
 #, c-format
 msgid "Bibliography: "
 msgstr "Bibliografie: "
@@ -4489,8 +4511,9 @@ msgstr "Boek"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:541
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:546
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:72
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:82
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:73
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:83
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:98
 #, c-format
 msgid "Book"
 msgstr "Boek"
@@ -4537,8 +4560,8 @@ msgstr "Doorzoek de catalogus"
 msgid "Browse results"
 msgstr "Bekijk resultaten"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1174
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1176
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1178
 #, c-format
 msgid "Browse shelf"
 msgstr "Snuffel langs de plank"
@@ -4564,7 +4587,7 @@ msgid "CD software"
 msgstr "Cd-software"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:51
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:60
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:61
 #, c-format
 msgid "CF"
 msgstr "CF"
@@ -4612,12 +4635,12 @@ msgstr "Standpl."
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:265
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1118
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1120
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:199
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:201
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:516
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:518
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:725
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:540
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:542
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:749
 #, c-format
 msgid "Call number"
 msgstr "Standplaats"
@@ -4659,9 +4682,9 @@ msgstr "Plaatskenmerk: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:44
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:245
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:546
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:548
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:742
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:572
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:766
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:90
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:63
@@ -4673,11 +4696,11 @@ msgid "Cancel"
 msgstr "Annuleren"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:136
 msgid "Cancel email notification"
 msgstr "Annuleer e-mailnotificatie"
 
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:136
 #, c-format
 msgid "Cancel email notification "
 msgstr "Annuleer e-mailnotificatie "
@@ -4704,6 +4727,11 @@ msgstr "Annuleert een actieve reserveringsaanvraag voor de gebruiker."
 msgid "Cannot be put on hold"
 msgstr "Kan niet gereserveerd worden"
 
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:65
+#, fuzzy, c-format
+msgid "Card number"
+msgstr "kaartnummer"
+
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:22
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #, c-format
@@ -4715,7 +4743,7 @@ msgstr "Mand"
 msgid "Cassette recording"
 msgstr "Cassette-opname"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:734
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:776
 #, c-format
 msgid "Cast: "
 msgstr "Acteurs: "
@@ -4725,8 +4753,8 @@ msgstr "Acteurs: "
 msgid "Catalogs"
 msgstr "Catalogi"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:524
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:729
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:548
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:753
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:76
 #, c-format
 msgid "Category:"
@@ -4747,7 +4775,7 @@ msgstr "Wijzig uw wachtwoord"
 msgid "Change your password "
 msgstr "Wijzig uw wachtwoord "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:908
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:951
 #, c-format
 msgid "Changed back to:"
 msgstr "Terugveranderd in:"
@@ -4774,16 +4802,17 @@ msgstr "Uitlenen%s, terugbrengen%s of verleng een item: "
 msgid "Check-in date:"
 msgstr "Inleverdatum:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
-#, c-format
-msgid "Checked out"
-msgstr "Uitgeleend"
-
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:193
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1104
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:832
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:202
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1106
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:833
 #, c-format
 msgid "Checked out ("
+msgstr "Uitgeleend ("
+
+#. %1$s:  issues_count 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
+#, fuzzy, c-format
+msgid "Checked out (%s)"
 msgstr "Uitgeleend ("
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:29
@@ -4802,7 +4831,7 @@ msgstr "Uitleningen"
 msgid "Checkouts for %s "
 msgstr "Uitleningen van %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:85
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:89
 #, c-format
 msgid "Checkouts: "
 msgstr "Uitleningen: "
@@ -4812,7 +4841,7 @@ msgstr "Uitleningen: "
 msgid "Classification"
 msgstr "Classificatie"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:242
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:255
 #, c-format
 msgid "Classification: "
 msgstr "Classificatie: "
@@ -4834,7 +4863,7 @@ msgstr "Wissen"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:35
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:236
 #, c-format
 msgid "Clear all"
@@ -4844,7 +4873,7 @@ msgstr "Wis alles"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:371
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:577
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:164
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:170
 #, c-format
 msgid "Clear date"
 msgstr "Wis datum"
@@ -4856,15 +4885,15 @@ msgstr "Wis datum"
 msgid "Click here if you're not %s %s"
 msgstr "Klik hier als u niet %s %s bent"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:415
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:428
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:981
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1016
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:583
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:625
 #, c-format
 msgid "Click here to access online"
 msgstr "Klik hier voor online toegang"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:115
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:122
 #, c-format
 msgid "Click here to access online "
 msgstr "Klik hier voor online toegang "
@@ -4885,7 +4914,7 @@ msgid "Click to add to cart"
 msgstr "Klik om aan uw mand toe te voegen"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 msgid "Click to forward the list to"
 msgstr "Klik op lijst door te sturen naar"
 
@@ -4902,7 +4931,7 @@ msgid "Click to open in new window"
 msgstr "Klik om een nieuw venster te openen"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 msgid "Click to rewind the list to"
 msgstr "Klik om terug te gaan in de lijst naar"
 
@@ -4912,7 +4941,7 @@ msgstr "Klik om terug te gaan in de lijst naar"
 msgid "Click to view in Google Books"
 msgstr "Klik om te bekijken in Google Books"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1041
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1043
 #, c-format
 msgid "Close"
 msgstr "Sluit"
@@ -4937,7 +4966,7 @@ msgstr "Sluit dit venster."
 msgid "Close window"
 msgstr "Sluit venster"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:96
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:101
 #, c-format
 msgid "Coauthor"
 msgstr "Mede-auteur"
@@ -4954,7 +4983,7 @@ msgstr "Collage"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:126
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1117
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1119
 #, c-format
 msgid "Collection"
 msgstr "Collectie"
@@ -5023,14 +5052,14 @@ msgstr "Opmerkingen over "
 msgid "Computer File"
 msgstr "Computerbestand"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:85
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:86
 #, c-format
 msgid "Computer file"
 msgstr "Computerbestand"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:615
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:680
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:639
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:704
 msgid "Confirm"
 msgstr "Bevestigen"
 
@@ -5044,7 +5073,7 @@ msgstr "Bevestigen"
 msgid "Confirm holds for: %s %s %s (%s) %s "
 msgstr "Bevestig reserveringen voor: %s %s %s (%s) %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:354
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:361
 #, c-format
 msgid "Contact information"
 msgstr "Contactinformatie"
@@ -5060,18 +5089,18 @@ msgstr "Content"
 msgid "Content Cafe"
 msgstr "Content Cafe"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:761
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:803
 #, c-format
 msgid "Content advice: "
 msgstr "Contentadvies: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:586
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:654
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:610
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:678
 #, c-format
 msgid "Contents"
 msgstr "Inhoud"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:260
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:273
 #, c-format
 msgid "Contents note: "
 msgstr "Opmerking over inhoud: "
@@ -5081,68 +5110,43 @@ msgstr "Opmerking over inhoud: "
 msgid "Contents of "
 msgstr "Inhoud van "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:627
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:669
 #, c-format
 msgid "Contents:"
 msgstr "Inhoud:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:884
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:927
 #, c-format
 msgid "Continued by:"
 msgstr "Voortgezet als:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:887
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:930
 #, c-format
 msgid "Continued in part by:"
 msgstr "Gedeeltelijk voortgezet als:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:829
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:871
 #, c-format
 msgid "Continues in part:"
 msgstr "Gedeeltelijke voortzetting van:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:826
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:868
 #, c-format
 msgid "Continues:"
 msgstr "Voortzetting van:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:542
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:75
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:76
 #, c-format
 msgid "Continuing Resource"
 msgstr "Seriële publicatie"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:205
-#, c-format
-msgid "Copies available at:"
-msgstr "Exemplaren beschikbaar bij:"
-
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:133
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1050
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:781
-#, c-format
-msgid "Copies available for loan: "
-msgstr "Exemplaren uitleenbaar: "
-
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:170
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1082
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:813
-#, c-format
-msgid "Copies available for reference: "
-msgstr "Exemplaren ter inzage: "
-
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:351
-#: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
-#, c-format
-msgid "Copies available:"
-msgstr "Exemplaren beschikbaar:"
-
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:256
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
-#, c-format
-msgid "Copy"
-msgstr "Exemplaar"
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1123
+#, fuzzy, c-format
+msgid "Copy number"
+msgstr "Standplaats"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:143
 #, c-format
@@ -5168,23 +5172,23 @@ msgstr "Copyrightdatum:"
 msgid "Copyright year: %s "
 msgstr "Copyrightjaar: %s "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:106
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:113
 #, c-format
 msgid "Corporate Author (Coauthor)"
 msgstr "Corporatie (Mede-auteur)"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:91
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:95
 #, c-format
 msgid "Corporate Author (Main)"
 msgstr "Corporatie (Hoofd)"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:111
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:119
 #, c-format
 msgid "Corporate Author (Secondary)"
 msgstr "Corporatie (Secundair)"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:202
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:203
 msgid ""
 "Could not login, perhaps your Persona email does not match your Koha one"
 msgstr ""
@@ -5195,7 +5199,7 @@ msgstr ""
 msgid "Count"
 msgstr "Aantal"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:167
 #, c-format
 msgid "Country: "
 msgstr "Land: "
@@ -5212,7 +5216,7 @@ msgstr "Cursusnummer:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:243
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:17
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1131
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:15
 #, c-format
 msgid "Course reserves"
@@ -5235,7 +5239,7 @@ msgstr "Cursussen"
 msgid "Cover image"
 msgstr "Omslagafbeelding"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:707
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:731
 #, c-format
 msgid "Create a new list"
 msgstr "Maak een nieuwe lijst"
@@ -5263,10 +5267,20 @@ msgstr ""
 "Maakt, voor een gebruiker, een reservering op exemplaarniveau bij een "
 "bibliografisch record in Koha."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:90
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:101
+#, fuzzy, c-format
+msgid "CreativeWork"
+msgstr "verdragen"
+
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:290
 #, c-format
 msgid "Credits"
+msgstr "Credits"
+
+#. %1$s:  BORROWER_INF.amountoutstanding 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:90
+#, fuzzy, c-format
+msgid "Credits (%s)"
 msgstr "Credits"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:49
@@ -5294,9 +5308,9 @@ msgstr "Dvd-video / Videodisc"
 msgid "Daily"
 msgstr "Dagelijks"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:214
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1123
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:854
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:223
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1125
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:855
 #, c-format
 msgid "Damaged ("
 msgstr "Beschadigd ("
@@ -5327,7 +5341,7 @@ msgid "Date added:"
 msgstr "Datum toegevoegd:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1126
 #, c-format
 msgid "Date due"
 msgstr "Datum verwacht"
@@ -5409,8 +5423,8 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:118
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:136
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:617
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:682
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:641
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:706
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:236
 #, c-format
 msgid "Delete"
@@ -5418,6 +5432,7 @@ msgstr "Verwijder"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:483
 msgid "Delete list"
 msgstr "Lijst verwijderen"
 
@@ -5427,7 +5442,7 @@ msgid "Delete selected"
 msgstr "Selectie verwijderen"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:484
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:508
 msgid "Delete this list"
 msgstr "Deze lijst verwijderen"
 
@@ -5437,7 +5452,7 @@ msgstr "Deze lijst verwijderen"
 msgid "Delete your search history"
 msgstr "Zoekgeschiedenis verwijderen"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1075
 #, c-format
 msgid "Delicious"
 msgstr "Delicious"
@@ -5478,9 +5493,9 @@ msgstr "Aflopend"
 msgid "Description"
 msgstr "Omvang/vorm"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:193
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:368
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:373
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:195
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:396
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:401
 #, c-format
 msgid "Description: "
 msgstr "Omschrijving: "
@@ -5513,7 +5528,7 @@ msgstr "Details voor: %s%s, %s%s"
 msgid "Dewey"
 msgstr "Dewey"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:222
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:235
 #, c-format
 msgid "Dewey: "
 msgstr "Dewey: "
@@ -5583,7 +5598,7 @@ msgstr "Diskette"
 msgid "Diskografier"
 msgstr "Discografieën"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:744
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:786
 #, c-format
 msgid "Dissertation note: "
 msgstr "Annotatie proefschrift: "
@@ -5736,14 +5751,15 @@ msgstr ""
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:863
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:606
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:673
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:697
 #, c-format
 msgid "Edit"
 msgstr "Bewerken"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:165
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:474
 msgid "Edit list"
 msgstr "Wijzig lijst"
 
@@ -5752,7 +5768,12 @@ msgstr "Wijzig lijst"
 msgid "Edit list "
 msgstr "Wijzig lijst "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:174
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:518
+#, fuzzy, c-format
+msgid "Editing "
+msgstr "Editie: "
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:185
 #, c-format
 msgid "Edition Statement"
 msgstr "Editievermelding"
@@ -5763,8 +5784,8 @@ msgid "Edition statement:"
 msgstr "Editievermelding:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:513
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:343
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:348
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:369
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:374
 #, c-format
 msgid "Edition: "
 msgstr "Editie: "
@@ -5808,7 +5829,7 @@ msgid "Elever på ungdomstrinnet;"
 msgstr "Scholieren in het voortgezet onderwijs;"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:33
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
 #, c-format
 msgid "Email"
 msgstr "E-mail"
@@ -5960,7 +5981,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:35
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:39
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:41
 #, c-format
 msgid "Error:"
 msgstr "Fout:"
@@ -6032,7 +6053,8 @@ msgstr "Uittreksel verzorgd door Syndetics"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:371
-msgid "Expecting a specific copy selection."
+#, fuzzy
+msgid "Expecting a specific item selection."
 msgstr "Selectie van een specifiek exemplaar verwacht."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:513
@@ -6063,7 +6085,7 @@ msgstr ""
 msgid "FV"
 msgstr "FV"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1071
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
 #, c-format
 msgid "Facebook"
 msgstr "Facebook"
@@ -6083,7 +6105,7 @@ msgstr "feb"
 msgid "February"
 msgstr "februari"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:201
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:208
 #, c-format
 msgid "Female:"
 msgstr "Vrouwelijk:"
@@ -6155,13 +6177,19 @@ msgstr "Filmspoel"
 msgid "Fine amount"
 msgstr "Boetebedrag"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:88
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:362
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #, c-format
 msgid "Fines"
+msgstr "Boetes"
+
+#. For the first occurrence,
+#. %1$s:  BORROWER_INF.amountoutstanding 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:88
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
+#, fuzzy, c-format
+msgid "Fines (%s)"
 msgstr "Boetes"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:27
@@ -6262,7 +6290,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:236
 msgid "Form not submitted because of the following problem(s)"
 msgstr "Formulier niet ingediend vanwege de volgende problemen"
@@ -6272,7 +6300,7 @@ msgstr "Formulier niet ingediend vanwege de volgende problemen"
 msgid "Format"
 msgstr "Formaat"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:838
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:880
 #, c-format
 msgid "Formed by the union: ... and: ..."
 msgstr "Gevormd door het samengaan van: ... en: ..."
@@ -6351,7 +6379,7 @@ msgid "Friday"
 msgstr "vrijdag"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:16
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:107
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:111
 #, c-format
 msgid "From: "
 msgstr "Van: "
@@ -6487,7 +6515,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:221
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:138
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:67
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:123
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:24
@@ -6498,7 +6526,7 @@ msgstr "OK"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 msgid "Go to detail"
 msgstr "Ga naar detailgegevens"
 
@@ -6670,7 +6698,7 @@ msgstr "HoldTitle"
 msgid "Holdings"
 msgstr "Bezit"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:773
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:815
 #, c-format
 msgid "Holdings note: "
 msgstr "Bezit opmerking: "
@@ -6681,14 +6709,15 @@ msgstr "Bezit opmerking: "
 msgid "Holdings:"
 msgstr "Bezit:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:93
-#, c-format
-msgid "Holds"
-msgstr "Reserveringen"
-
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:470
 #, c-format
 msgid "Holds "
+msgstr "Reserveringen "
+
+#. %1$s:  reserves_count 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:93
+#, fuzzy, c-format
+msgid "Holds (%s)"
 msgstr "Reserveringen "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:164
@@ -6823,8 +6852,8 @@ msgid "ISBN:"
 msgstr "ISBN:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:330
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:182
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:388
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:194
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:418
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:203
 #, c-format
 msgid "ISBN: "
@@ -6857,13 +6886,13 @@ msgid "ISSN:"
 msgstr "ISSN:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:340
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:200
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:398
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:212
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:430
 #, c-format
 msgid "ISSN: "
 msgstr "ISSN: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:100
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:105
 #, c-format
 msgid "Identity"
 msgstr "Identiteit"
@@ -6966,9 +6995,9 @@ msgstr "Onmiddellijk verwijderen"
 msgid "In online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 msgstr "In online catalogus: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:228
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1135
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:868
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:237
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1137
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:869
 #, c-format
 msgid "In transit ("
 msgstr "In transport ("
@@ -6991,12 +7020,12 @@ msgstr "In uw mand"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:234
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:400
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:687
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:729
 #, c-format
 msgid "In: "
 msgstr "In: "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:621
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:663
 #, c-format
 msgid "Incomplete contents:"
 msgstr "Incomplete inhoud:"
@@ -7067,12 +7096,12 @@ msgstr "Standplaats item"
 msgid "Item cannot be checked out."
 msgstr "Item kan niet uitgeleend worden."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1131
 #, c-format
 msgid "Item hold queue priority"
 msgstr "Reserveer item wachtrij prioriteit"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1127
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
 #, c-format
 msgid "Item holds"
 msgstr "Reserveringen op item"
@@ -7081,7 +7110,7 @@ msgstr "Reserveringen op item"
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:258
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:109
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:354
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1115
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1117
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:62
 #, c-format
 msgid "Item type"
@@ -7099,6 +7128,31 @@ msgstr "Type item:"
 #, c-format
 msgid "Item type: "
 msgstr "Type item: "
+
+#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:205
+#, fuzzy, c-format
+msgid "Items available at:"
+msgstr "Exemplaren beschikbaar bij:"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:140
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1050
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:781
+#, fuzzy, c-format
+msgid "Items available for loan: "
+msgstr "Exemplaren uitleenbaar: "
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:177
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1082
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:813
+#, fuzzy, c-format
+msgid "Items available for reference: "
+msgstr "Exemplaren ter inzage: "
+
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:351
+#: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
+#, fuzzy, c-format
+msgid "Items available:"
+msgstr "Geen items beschikbaar:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
@@ -7202,7 +7256,7 @@ msgid "Keyword"
 msgstr "Alle woorden"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:547
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:83
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:84
 #, c-format
 msgid "Kit"
 msgstr "Kit"
@@ -7302,11 +7356,7 @@ msgstr "Chipkaart"
 msgid "Language"
 msgstr "Taal"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:126
-#, c-format
-msgid "Language:"
-msgstr "Taal:"
-
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:137
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:175
 #, c-format
 msgid "Language: "
@@ -7419,17 +7469,17 @@ msgid "Limit to currently available items."
 msgstr "Filter op beschikbare items."
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:30
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:120
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:124
 #, c-format
 msgid "Limit to: "
 msgstr "Beperk tot: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1188
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1190
 #, c-format
 msgid "Link to resource "
 msgstr "Online bronnen "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
 #, c-format
 msgid "LinkedIn"
 msgstr "LinkedIn"
@@ -7446,19 +7496,19 @@ msgstr "Boetes"
 msgid "List %s Deleted."
 msgstr "Lijst %s verwijderd."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:585
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:653
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:609
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:677
 #, c-format
 msgid "List name"
 msgstr "Lijstnaam"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:711
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:735
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:74
 #, c-format
 msgid "List name:"
 msgstr "Lijstnaam:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:496
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:520
 #, c-format
 msgid "List name: "
 msgstr "Lijstnaam: "
@@ -7469,8 +7519,7 @@ msgid "List(s) this item appears in: "
 msgstr "Lijst(en) waarin dit item voorkomt: "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:36
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:489
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:558
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:582
 #, c-format
 msgid "Lists"
 msgstr "Lijsten"
@@ -7498,7 +7547,7 @@ msgid "Local login"
 msgstr "Lokale inlog"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:51
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1116
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1118
 #, c-format
 msgid "Location"
 msgstr "Locatie"
@@ -7518,7 +7567,7 @@ msgstr "Locatie en beschikbaarheid: "
 msgid "Location(s) (Status)"
 msgstr "Locatie(s) (Status)"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1149
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1151
 #, c-format
 msgid "Location(s): "
 msgstr "Locatie(s): "
@@ -7530,8 +7579,8 @@ msgstr "Locatie(s): "
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:98
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:77
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:633
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:645
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:657
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:669
 #, c-format
 msgid "Log in"
 msgstr "Inloggen"
@@ -7602,9 +7651,9 @@ msgstr ""
 msgid "LookupPatron"
 msgstr "LookupPatron"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:207
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1117
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:847
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:216
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1119
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:848
 #, c-format
 msgid "Lost ("
 msgstr "Vermist ("
@@ -7660,7 +7709,7 @@ msgstr "MARC"
 msgid "MARC Card View"
 msgstr "MARC"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACMARCdetail.xsl:8
+#: opac-tmpl/bootstrap/en/xslt/plainMARC.xsl:8
 #, c-format
 msgid "MARC View"
 msgstr "MARC-presentatie"
@@ -7762,19 +7811,19 @@ msgid "MESSAGE 9:"
 msgstr "MELDING 9:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:52
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:61
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:62
 #, c-format
 msgid "MP"
 msgstr "MP"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:54
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:63
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:64
 #, c-format
 msgid "MU"
 msgstr "MU"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:50
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:59
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:60
 #, c-format
 msgid "MX"
 msgstr "MX"
@@ -7794,12 +7843,12 @@ msgstr "Magneetspoel"
 msgid "Magnetisk-optisk plate"
 msgstr "Magnetische optische schijf"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:86
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:89
 #, c-format
 msgid "Main Author"
 msgstr "Auteur"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:244
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:251
 #, c-format
 msgid "Main address"
 msgstr "Postadres"
@@ -7812,7 +7861,7 @@ msgstr "Postadres"
 msgid "Make a "
 msgstr "Maak een "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:208
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:215
 #, c-format
 msgid "Male:"
 msgstr "Mannelijk:"
@@ -7838,7 +7887,8 @@ msgid "Manuskripter"
 msgstr "Handschriften"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:550
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:86
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:87
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:99
 #, c-format
 msgid "Map"
 msgstr "Kaart"
@@ -7880,7 +7930,7 @@ msgstr "Mijzelf"
 msgid "Memoarer"
 msgstr "Memoires"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:905
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:948
 #, c-format
 msgid "Merged with ... to form ..."
 msgstr "Samengegaan met ... om te vormen ..."
@@ -7939,7 +7989,7 @@ msgstr "Ontbrekende nummers: %s "
 msgid "Mixed Materials"
 msgstr "Gemengde materialen"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:84
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:85
 #, c-format
 msgid "Mixed materials"
 msgstr "Gemengde materialen"
@@ -8028,9 +8078,14 @@ msgid "Mus"
 msgstr "Muz"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:554
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:88
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:89
 #, c-format
 msgid "Music"
+msgstr "Muziek"
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:100
+#, fuzzy, c-format
+msgid "MusicAlbum"
 msgstr "Muziek"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:273
@@ -8061,7 +8116,7 @@ msgstr "Gedrukte en uitgevoerde muziek"
 msgid "My Tags"
 msgstr "Mijn tags"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:215
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:222
 #, c-format
 msgid "N/A:"
 msgstr "N.v.t.:"
@@ -8125,8 +8180,9 @@ msgstr "Nieuwe opmerking op %s %s, %s%s"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:58
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:150
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:579
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:642
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:467
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:603
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:666
 #, c-format
 msgid "New list"
 msgstr "Nieuwe lijst"
@@ -8166,7 +8222,7 @@ msgstr "Nieuwsblad"
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:1
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:69
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1034
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1036
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
 #, c-format
 msgid "Next"
@@ -8179,15 +8235,15 @@ msgid "Next &gt;&gt;"
 msgstr "Volgende &gt;&gt;"
 
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:15
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1032
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1034
 #, c-format
 msgid "Next &raquo;"
 msgstr "Volgende &rsaquo;"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:235
-#, c-format
-msgid "Next available copy"
-msgstr "Volgende beschikbare exemplaar"
+#, fuzzy, c-format
+msgid "Next available item"
+msgstr "Geen beschikbare items."
 
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:31
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:45
@@ -8200,25 +8256,13 @@ msgstr "Nee"
 msgid "No available items."
 msgstr "Geen beschikbare items."
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:128
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1045
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:776
-#, c-format
-msgid "No copies available "
-msgstr "Geen exemplaren beschikbaar "
-
-#: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:152
-#, c-format
-msgid "No copies available."
-msgstr "Geen exemplaren beschikbaar."
-
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:95
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:161
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:169
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:178
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:187
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:162
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:170
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:179
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:188
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:31
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:44
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:53
@@ -8271,6 +8315,18 @@ msgstr "Er werd geen item toegevoegd aan uw mand"
 msgid "No item was selected"
 msgstr "Er werd geen item geselecteerd"
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:135
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1045
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:776
+#, fuzzy, c-format
+msgid "No items available "
+msgstr "Geen items beschikbaar:"
+
+#: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:152
+#, fuzzy, c-format
+msgid "No items available."
+msgstr "Geen items beschikbaar:"
+
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:379
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:216
 #, c-format
@@ -8279,7 +8335,7 @@ msgstr "Geen items beschikbaar:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:66
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:68
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:140
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:144
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:177
 #, c-format
 msgid "No limit"
@@ -8300,7 +8356,7 @@ msgstr "Geen fysieke items voor dit record"
 msgid "No private lists"
 msgstr "Geen privélijsten"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:628
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:652
 #, c-format
 msgid "No private lists."
 msgstr "Geen privélijsten."
@@ -8310,7 +8366,7 @@ msgstr "Geen privélijsten."
 msgid "No public lists"
 msgstr "Geen openbare lijsten"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:693
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:717
 #, c-format
 msgid "No public lists."
 msgstr "Geen openbare lijsten."
@@ -8334,6 +8390,12 @@ msgstr "Geen resultaten gevonden in de OverDrive collectie van de bibliotheek."
 #, c-format
 msgid "No results found!"
 msgstr "Geen resultaat gevonden!"
+
+#. SCRIPT
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#, fuzzy
+msgid "No suggestion was selected"
+msgstr "Er werd geen item geselecteerd"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
@@ -8467,7 +8529,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:150
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1123
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1125
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:43
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:111
 #, c-format
@@ -8507,7 +8569,7 @@ msgstr "nov"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:569
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:990
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1056
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1058
 #, c-format
 msgid "Novelist Select"
 msgstr "Selecteer Schrijver"
@@ -8558,16 +8620,16 @@ msgstr "okt"
 msgid "October"
 msgstr "oktober"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:235
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1141
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:874
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:244
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1143
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:875
 #, c-format
 msgid "On hold ("
 msgstr "Gereserveerd ("
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:221
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1129
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:861
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:230
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1131
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:862
 #, c-format
 msgid "On order ("
 msgstr "In bestelling ("
@@ -8577,7 +8639,7 @@ msgstr "In bestelling ("
 msgid "Online Access: "
 msgstr "Online Toegang: "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:394
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:407
 #, c-format
 msgid "Online Resources:"
 msgstr "Online bronnen:"
@@ -8587,7 +8649,7 @@ msgstr "Online bronnen:"
 msgid "Online resources:"
 msgstr "Online bronnen:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:552
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:594
 #, c-format
 msgid "Online resources: "
 msgstr "Online bronnen: "
@@ -8670,17 +8732,12 @@ msgstr "Orthofoto"
 msgid "Other"
 msgstr "Anders"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:922
-#, c-format
-msgid "Other Title: "
-msgstr "Alternatieve titel: "
-
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:914
 #, c-format
 msgid "Other editions of this work"
 msgstr "Andere edities van dit werk"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:785
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:827
 #, c-format
 msgid "Other editions: "
 msgstr "Andere edities: "
@@ -8696,9 +8753,10 @@ msgstr "Andere vormen:"
 msgid "Other holdings ( %s )"
 msgstr "Overig bezit ( %s )"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:922
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:928
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:437
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:442
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:469
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:474
 #, c-format
 msgid "Other title: "
 msgstr "Alternatieve titel: "
@@ -8721,10 +8779,11 @@ msgstr "OutputRewritablePage "
 msgid "OverDrive search for '%s'"
 msgstr "OverDrive zoekactie voor '%s'"
 
+#. %1$s:  overdues_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:86
-#, c-format
-msgid "Overdue"
-msgstr "Te laat"
+#, fuzzy, c-format
+msgid "Overdue (%s)"
+msgstr "Te laat meldingen "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:348
 #, c-format
@@ -8737,7 +8796,7 @@ msgid "Oversiktsverker innenfor et emne"
 msgstr "Overzicht van werken binnen een thema"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:55
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:64
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:65
 #, c-format
 msgid "PR"
 msgstr "PR"
@@ -8764,7 +8823,7 @@ msgstr "Parallelltitel: "
 msgid "Parameters"
 msgstr "Parameters"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:624
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:666
 #, c-format
 msgid "Partial contents:"
 msgstr "Gedeeltelijke inhoud:"
@@ -8798,7 +8857,7 @@ msgstr "Wachtwoord: %s"
 msgid "Patent document"
 msgstr "Octrooischrift"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:408
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:440
 #, c-format
 msgid "Patent information: "
 msgstr "Patentinformatie: "
@@ -8864,17 +8923,13 @@ msgstr "Fysieke gegevens:"
 msgid "Pick up library"
 msgstr "Afhaalbibliotheek"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:522
-#, c-format
-msgid "Pick up loaction:"
-msgstr "Afhaallocatie:"
-
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:477
 #, c-format
 msgid "Pick up location"
 msgstr "Afhaallocatie"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:522
 #, c-format
 msgid "Pick up location:"
 msgstr "Afhaallocatie:"
@@ -8884,8 +8939,8 @@ msgstr "Afhaallocatie:"
 msgid "Picture"
 msgstr "Afbeelding"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:91
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:81
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:94
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:83
 #, c-format
 msgid "Piece-Analytic Level"
 msgstr "Onderdeel-Analytisch Niveau"
@@ -8907,7 +8962,7 @@ msgstr "Plaats reservering op: "
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:9
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:86
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:90
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:471
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:474
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
@@ -8918,7 +8973,7 @@ msgstr "Plaats reservering op: "
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:407
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:410
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, c-format
 msgid "Place hold"
 msgstr "Plaats reservering"
@@ -9060,7 +9115,7 @@ msgstr "Let op: "
 msgid "Please try again with plain text. %sUnrecognized error. %s "
 msgstr "Probeer a.u.b. opnieuw met platte tekst. %sOnbekende fout.%s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:730
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:737
 #, c-format
 msgid "Please type this following characters into the preceding box: "
 msgstr "Typ a.u.b. de volgende karakters in het voorgaande vakje: "
@@ -9130,7 +9185,7 @@ msgstr "Vorige"
 
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:16
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1027
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1028
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
 #, c-format
 msgid "Previous"
@@ -9176,9 +9231,9 @@ msgstr "Prioriteit"
 msgid "Priority:"
 msgstr "Prioriteit:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:527
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:529
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:731
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:551
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:553
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:755
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:78
 #, c-format
 msgid "Private"
@@ -9194,6 +9249,11 @@ msgstr "Privélijsten"
 msgid "Processing..."
 msgstr "In bewerking..."
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:109
+#, c-format
+msgid "Product"
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:317
 #, c-format
 msgid "Programmed texts"
@@ -9204,14 +9264,14 @@ msgstr "Geprogrammeerde teksten"
 msgid "Programvare"
 msgstr "Software"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:294
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:307
 #, c-format
 msgid "Provenance note: "
 msgstr "Provenance opmerking: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:532
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:534
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:733
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:556
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:558
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:757
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:80
 #, c-format
 msgid "Public"
@@ -9227,8 +9287,8 @@ msgstr "Openbare lijsten"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:65
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:67
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:569
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:571
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:593
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:595
 #, c-format
 msgid "Public lists"
 msgstr "Openbare lijsten"
@@ -9261,12 +9321,16 @@ msgstr "Jaar van uitgave/Copyright: Aflopend"
 msgid "Publication/Copyright date: Oldest to newest"
 msgstr "Jaar van uitgave/Copyright: Oplopend"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:162
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:319
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:353
 #, c-format
 msgid "Publication:"
+msgstr "Publicatie:"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:164
+#, fuzzy, c-format
+msgid "Publication: "
 msgstr "Publicatie:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:188
@@ -9310,8 +9374,8 @@ msgstr "Uitgever:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:885
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:890
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:304
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:309
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:322
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:327
 #, c-format
 msgid "Publisher: "
 msgstr "Uitgever: "
@@ -9476,7 +9540,7 @@ msgid "Remove field"
 msgstr "Veld verwijderen"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 msgid "Remove from list"
 msgstr "Verwijder uit lijst"
 
@@ -9486,7 +9550,7 @@ msgid "Remove from this list"
 msgstr "Verwijder uit deze lijst"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:477
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:501
 msgid "Remove selected items"
 msgstr "Verwijder geselecteerde items"
 
@@ -9526,48 +9590,48 @@ msgstr "Verleng selectie"
 msgid "RenewLoan"
 msgstr "RenewLoan"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:421
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:453
 #, c-format
 msgid "Report number: "
 msgstr "Rapportnummer: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:134
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:148
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:167
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:181
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:195
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:222
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:257
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:271
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:285
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:299
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:313
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:327
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:341
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:367
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:381
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:395
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:409
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:423
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:437
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:463
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:477
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:491
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:505
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:519
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:533
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:547
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:561
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:575
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:602
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:616
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:630
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:644
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:658
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:672
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:686
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:700
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:714
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:153
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:188
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:202
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:229
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:264
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:278
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:292
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:306
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:320
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:334
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:348
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:374
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:388
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:402
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:416
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:430
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:444
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:470
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:484
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:498
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:512
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:526
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:540
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:554
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:568
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:582
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:609
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:623
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:637
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:651
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:665
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:679
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:693
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:707
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:721
 #, c-format
 msgid "Required"
 msgstr "Vereist"
@@ -9669,7 +9733,7 @@ msgstr ""
 "van de gebruiker teruggeven, reserveringsinformatie, leeninformatie en "
 "berichten."
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:758
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:800
 #, c-format
 msgid "Review: "
 msgstr "Recensie: "
@@ -9710,7 +9774,7 @@ msgstr "Rollen (pianorol/orgelrol)"
 msgid "Røntgenbilde"
 msgstr "Röntgenbeelden"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:54
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:55
 #, c-format
 msgid "SE"
 msgstr "SE"
@@ -9726,12 +9790,12 @@ msgid "SMS number:"
 msgstr "SMS-nummer:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:42
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:50
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:51
 #, c-format
 msgid "ST"
 msgstr "ST"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:333
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:346
 #, c-format
 msgid "SUDOC serial history: "
 msgstr "SUDOC tijdschriftsgeschiedenis: "
@@ -9769,8 +9833,8 @@ msgstr "zaterdag"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:544
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:741
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:568
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:88
@@ -9829,13 +9893,13 @@ msgstr "Scan index op: "
 msgid "Scan index:"
 msgstr "Scan index:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:759
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:801
 #, c-format
 msgid "Scope and content: "
 msgstr "Scope en inhoud: "
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:552
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:90
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:91
 #, c-format
 msgid "Score"
 msgstr "Score"
@@ -9880,7 +9944,7 @@ msgstr "Zoek naar deze titel in:"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:313
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:187
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:50
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:87
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:89
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:347
 msgid "Search for works by this author"
 msgstr "Zoek naar werken van deze auteur"
@@ -9931,7 +9995,7 @@ msgstr "SearchCourseReserves "
 msgid "Searching OverDrive..."
 msgstr "Zoeken in OverDrive..."
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:101
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:107
 #, c-format
 msgid "Secondary Author"
 msgstr "Secondaire Auteur"
@@ -9965,17 +10029,17 @@ msgid "See also:"
 msgstr "Zie ook:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 msgid "See biblio"
 msgstr "Zie biblio"
 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:94
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:98
 #, c-format
 msgid "See the most popular titles"
 msgstr "Bekijk de meest populaire titels"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1032
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1034
 msgid ""
 "See: [% IF ( nextTitle ) %][% nextTitle |html %][% ELSE %]next biblio[% END "
 "%]"
@@ -9984,7 +10048,7 @@ msgstr ""
 "END %]"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1025
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1026
 msgid ""
 "See: [% IF ( previousTitle ) %][% previousTitle |html %][% ELSE %]previous "
 "biblio[% END %]"
@@ -9998,15 +10062,15 @@ msgid "Select a list"
 msgstr "Selecteer een lijst"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:254
-#, c-format
-msgid "Select a specific copy:"
+#, fuzzy, c-format
+msgid "Select a specific item:"
 msgstr "Selecteer een specifiek exemplaar:"
 
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:34
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:236
 #, c-format
 msgid "Select all"
@@ -10034,7 +10098,7 @@ msgstr "Selecteer de term(en) om te zoeken"
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:38
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:316
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:233
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, c-format
 msgid "Select titles to: "
 msgstr "Selecteer titels om te: "
@@ -10091,7 +10155,7 @@ msgstr "Uw lijst wordt verstuurd"
 msgid "Sep"
 msgstr "sep"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:847
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:889
 #, c-format
 msgid "Separated from:"
 msgstr "Afgesplitst van:"
@@ -10132,8 +10196,8 @@ msgstr "Tijdschriften"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:166
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:168
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:217
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:76
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:229
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:77
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:81
 #, c-format
 msgid "Series"
@@ -10160,8 +10224,8 @@ msgid "Series:"
 msgstr "Reeks:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:180
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:168
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:175
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:186
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:193
 #, c-format
 msgid "Series: "
 msgstr "Reeks: "
@@ -10172,18 +10236,18 @@ msgid "Session lost"
 msgstr "Sessie afgebroken"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:538
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:69
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:70
 #, c-format
 msgid "Set"
 msgstr "Set"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:86
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:76
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:88
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:77
 #, c-format
 msgid "Set Level"
 msgstr "Stel Niveau In"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:277
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:295
 #, c-format
 msgid "Set: "
 msgstr "Set: "
@@ -10193,28 +10257,28 @@ msgstr "Set: "
 msgid "Settings updated"
 msgstr "Instellingen bijgewerkt"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1070
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
 #, c-format
 msgid "Share"
 msgstr "Delen"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
 msgid "Share by email"
 msgstr "Deel via e-mail"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1075
 msgid "Share on Delicious"
 msgstr "Deel op Delicious"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1071
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
 msgid "Share on Facebook"
 msgstr "Deel op Facebook"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
 msgid "Share on LinkedIn"
 msgstr "Deel op LinkedIn"
 
@@ -10241,7 +10305,7 @@ msgstr "Toon alle items"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:223
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:389
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:253
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:271
 #, c-format
 msgid "Show analytics"
 msgstr "Toon analytics"
@@ -10270,12 +10334,12 @@ msgstr ""
 "Toon paginering lijst ([% indexPag %]-[% indexPagEnd %] / [% totalPag %])"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:5
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:96
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:100
 #, c-format
 msgid "Show the top "
 msgstr "Toon de top "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:270
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:288
 #, c-format
 msgid "Show volumes"
 msgstr "Toon volumes"
@@ -10428,7 +10492,7 @@ msgstr "Sorry, u kunt niet meer dan %s reserveringen plaatsen. "
 msgid "Sorry, your session has timed out. Please log in again."
 msgstr "Sorry, uw sessie is verlopen. A.u.b. log opnieuw in."
 
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:63
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:65
 #, c-format
 msgid "Sort By: "
 msgstr "Sorteer op: "
@@ -10443,8 +10507,8 @@ msgstr "Sorteer op:"
 msgid "Sort by: "
 msgstr "Sorteer op: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:498
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:720
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:522
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:744
 #, c-format
 msgid "Sort this list by: "
 msgstr "Sorteer deze lijst op: "
@@ -10455,7 +10519,7 @@ msgid "Sorting: "
 msgstr "Aan het sorteren: "
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:553
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:89
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:90
 #, c-format
 msgid "Sound"
 msgstr "Geluid"
@@ -10489,7 +10553,7 @@ msgstr "Gespecialiseerd;"
 msgid "Spill"
 msgstr "Spelen"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:902
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:945
 #, c-format
 msgid "Split into .. and ...:"
 msgstr "Gesplitst in .. en ...:"
@@ -10535,7 +10599,7 @@ msgstr "Statistieken"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:481
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:788
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1122
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:152
 #, c-format
 msgid "Status"
@@ -10598,49 +10662,49 @@ msgstr "zo"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:156
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:158
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:379
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:392
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:79
 #, c-format
 msgid "Subject"
 msgstr "Trefwoord"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:359
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:372
 #, c-format
 msgid "Subject - Author/Title"
 msgstr "Onderwerp - Auteur/Titel"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:349
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:362
 #, c-format
 msgid "Subject - Corporate Author"
 msgstr "Onderwerp - Corporatieve Auteur"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:354
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:367
 #, c-format
 msgid "Subject - Family"
 msgstr "Onderwerp - Familie"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:374
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:387
 #, c-format
 msgid "Subject - Form"
 msgstr "Onderwerp - Vorm"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:369
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:382
 #, c-format
 msgid "Subject - Geographical Name"
 msgstr "Onderwerp - Geografische Naam"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:344
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:357
 #, c-format
 msgid "Subject - Personal Name"
 msgstr "Onderwerp - Persoonsnaam"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:364
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:377
 #, c-format
 msgid "Subject - Topical Name"
 msgstr "Onderwerp - Eigen Naam"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:384
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:397
 #, c-format
 msgid "Subject Category"
 msgstr "Onderwerpscategorie"
@@ -10668,12 +10732,12 @@ msgstr "Trefwoord(en)"
 msgid "Subject(s):"
 msgstr "Onderwerp(en):"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:505
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:545
 #, c-format
 msgid "Subject(s): "
 msgstr "Onderwerp(en): "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:757
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:799
 #, c-format
 msgid "Subject: "
 msgstr "Onderwerp: "
@@ -10688,12 +10752,12 @@ msgstr "Onderwerp: %s "
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:73
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:151
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:79
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:185
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:289
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:69
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:746
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:753
 #, c-format
 msgid "Submit"
 msgstr "Indienen"
@@ -10710,7 +10774,7 @@ msgid "Submit changes"
 msgstr "Wijzigingen indienen"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:740
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:747
 msgid "Submit update request"
 msgstr "Wijzigingsverzoek indienen"
 
@@ -10725,11 +10789,11 @@ msgid "Subscribe to a subscription alert"
 msgstr "Abonneer op een abonnementsnotificatie"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:140
 msgid "Subscribe to email notification on new issues"
 msgstr "Abonneer op e-mailnotificatie bij nieuwe nummers"
 
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:140
 #, c-format
 msgid "Subscribe to email notification on new issues "
 msgstr "Abonneer op e-mailnotificatie bij nieuwe nummers "
@@ -10796,7 +10860,7 @@ msgstr "Suggesties"
 msgid "Summary"
 msgstr "Samenvatting"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:762
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:804
 #, c-format
 msgid "Summary: "
 msgstr "Samenvatting: "
@@ -10811,22 +10875,22 @@ msgstr "zon"
 msgid "Sunday"
 msgstr "zondag"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:890
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:933
 #, c-format
 msgid "Superseded by:"
 msgstr "Voortgezet als:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:893
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:936
 #, c-format
 msgid "Superseded in part by:"
 msgstr "Gedeeltelijk voortgezet als:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:835
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:877
 #, c-format
 msgid "Supersedes in part:"
 msgstr "Gedeeltelijke voortzetting van:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:832
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:874
 #, c-format
 msgid "Supersedes:"
 msgstr "Voortzetting van:"
@@ -11306,7 +11370,7 @@ msgstr ""
 msgid "Theses"
 msgstr "Theses"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:313
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:326
 #, c-format
 msgid "Thesis: "
 msgstr "Theses: "
@@ -11394,7 +11458,7 @@ msgid "This item is on hold for another patron. %s "
 msgstr "Dit item is gereserveerd voor een andere gebruiker. %s "
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:465
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:489
 #, c-format
 msgid ""
 "This list is empty. %s You can add to your lists from the results of any "
@@ -11404,8 +11468,8 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:540
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:543
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1086
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1090
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1088
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1092
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -11436,9 +11500,10 @@ msgstr "Deze titel kan niet aangevraagd worden."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:371
+#, fuzzy
 msgid ""
 "This title consists of multiple volumes/parts. Please indicate which part "
-"you need. Clicking on specific copy information may be helpful."
+"you need. Clicking on specific item information may be helpful."
 msgstr ""
 "Deze titel bestaat uit meerdere delen. Geef aan welk deel u nodig heeft. Het "
 "aanklikken van specifieke bandinformatie kan helpen."
@@ -11495,9 +11560,9 @@ msgstr "Tijdschrift"
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:193
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:195
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:501
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:503
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:722
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:525
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:527
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:746
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
 #, c-format
 msgid "Title"
@@ -11526,7 +11591,7 @@ msgid "Title phrase"
 msgstr "Titelzin"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:939
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:458
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:492
 #, c-format
 msgid "Title translated: "
 msgstr "Vertaalde titel: "
@@ -11580,12 +11645,12 @@ msgstr "Topterm"
 msgid "Total due"
 msgstr "Totaal verschuldigd"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:389
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:402
 #, c-format
 msgid "Trademark"
 msgstr "Handelsmerk"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:81
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:82
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:71
 #, c-format
 msgid "Translation of"
@@ -11643,13 +11708,13 @@ msgstr "di"
 msgid "Tuesday"
 msgstr "dinsdag"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1078
 #, c-format
 msgid "Tweet"
 msgstr "Tweet"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:655
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:611
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:679
 #, c-format
 msgid "Type"
 msgstr "Type"
@@ -11671,7 +11736,7 @@ msgid "Type:"
 msgstr "Type:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:536
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:155
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:173
 #, c-format
 msgid "Type: "
 msgstr "Type: "
@@ -11751,12 +11816,12 @@ msgstr "Uniforme titel"
 msgid "Unified title: %s "
 msgstr "Uniforme titel: %s "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:121
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:131
 #, c-format
 msgid "Uniform Conventional Heading"
 msgstr "Uniforme Ingang"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:116
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:125
 #, c-format
 msgid "Uniform Title"
 msgstr "Uniforme Titel"
@@ -11766,8 +11831,8 @@ msgstr "Uniforme Titel"
 msgid "Uniform titles:"
 msgstr "Uniforme titels:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:478
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:483
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:515
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:521
 #, c-format
 msgid "Uniform titles: "
 msgstr "Uniforme titels: "
@@ -11863,12 +11928,12 @@ msgid "VHS tape / Videocassette"
 msgstr "VHS-band / Videocassette"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:53
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:62
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:63
 #, c-format
 msgid "VM"
 msgstr "VM"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:725
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:732
 #, c-format
 msgid "Verification:"
 msgstr "Verificatie:"
@@ -11935,7 +12000,7 @@ msgstr "Toon bij Amazon.com"
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:76
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:86
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:88
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:326
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:329
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:331
@@ -11962,7 +12027,7 @@ msgstr "Vensterkaart"
 msgid "Visual Material"
 msgstr "Beeldmateriaal"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:87
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:88
 #, c-format
 msgid "Visual material"
 msgstr "Beeldmateriaal"
@@ -11986,20 +12051,25 @@ msgid "Voksne;"
 msgstr "Volwassenen;"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:267
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1119
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
 #, c-format
 msgid "Vol info"
 msgstr "Bandinfo"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:260
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:278
 #, c-format
 msgid "Volumes: "
 msgstr "Volumes: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:332
 #, c-format
 msgid "Waiting"
+msgstr "Wacht"
+
+#. %1$s:  waiting_count 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
+#, fuzzy, c-format
+msgid "Waiting (%s)"
 msgstr "Wacht"
 
 #. SCRIPT
@@ -12023,7 +12093,7 @@ msgid "We"
 msgstr "wo"
 
 #. %1$s:  total 
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:46
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:48
 #, c-format
 msgid "We have %s results for your search "
 msgstr "We hebben %s resultaten voor uw zoekactie "
@@ -12091,13 +12161,13 @@ msgstr "Met geselecteerde suggesties: "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:316
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 msgid "With selected titles: "
 msgstr "Met geselecteerde titels: "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:200
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1111
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:840
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:209
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1113
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:841
 #, c-format
 msgid "Withdrawn ("
 msgstr "Afgeschreven ("
@@ -12121,9 +12191,9 @@ msgid "Written on %s by %s"
 msgstr "Geschreven op %s door %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:244
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:511
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:513
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:724
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:535
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:537
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
 #, c-format
 msgid "Year"
 msgstr "Jaar"
@@ -12301,7 +12371,7 @@ msgid ""
 msgstr "U heeft de verkeerde karakters ingetikt. Probeer opnieuw in te dienen."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
@@ -12480,8 +12550,8 @@ msgstr "Uw privacybeheer"
 msgid "Your privacy rules have been updated."
 msgstr "Uw privacy-instelling is gewijzigd."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:563
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:565
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:589
 #, c-format
 msgid "Your private lists"
 msgstr "Uw privélijsten"
@@ -12570,7 +12640,7 @@ msgid "[% biblionumber |url %]"
 msgstr "[% biblionumber |url %]"
 
 #. INPUT type=text name=borrower_dateofbirth
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:161
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:166
 msgid "[% borrower.dateofbirth | $KohaDates %]"
 msgstr "[% borrower.dateofbirth | $KohaDates %]"
 
@@ -12612,7 +12682,7 @@ msgid "[% review.biblionumber |url %]"
 msgstr "[% review.biblionumber |url %]"
 
 #. INPUT type=text name=shelfname
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:496
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:520
 msgid "[% shelfname |html %]"
 msgstr "[% shelfname |html %]"
 
@@ -12650,9 +12720,10 @@ msgstr "[Meer opties]"
 msgid "[New search]"
 msgstr "[Nieuwe zoekactie]"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:401
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:568
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:605
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:114
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:414
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:610
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:647
 #, c-format
 msgid "_blank"
 msgstr "_blank"
@@ -12662,15 +12733,17 @@ msgstr "_blank"
 msgid "a an the"
 msgstr "de het een"
 
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:246
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:533
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:583
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:214
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:225
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:699
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:789
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:808
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:852
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:914
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:412
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:232
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:243
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:741
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:831
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:850
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:895
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:957
 #, c-format
 msgid "a_t"
 msgstr "a_t"
@@ -12681,45 +12754,45 @@ msgstr "a_t"
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:931
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:371
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:766
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:341
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:353
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:367
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:380
 #, c-format
 msgid "ab"
 msgstr "ab"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:447
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:136
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:154
 #, c-format
 msgid "abc"
 msgstr "abc"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:600
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:642
 #, c-format
 msgid "abcd"
 msgstr "abcd"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:660
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:702
 #, c-format
 msgid "abcdefgijklnou"
 msgstr "abcdefgijklnou"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:514
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:528
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:555
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:569
 #, c-format
 msgid "abcdfgklmnopqrstvxyz"
 msgstr "abcdfgklmnopqrstvxyz"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:278
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:280
 #, c-format
 msgid "abcdfijkmnpvxyz"
 msgstr "abcdfijkmnpvxyz"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:747
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:789
 #, c-format
 msgid "abcdgo"
 msgstr "abcdgo"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:265
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:278
 #, c-format
 msgid "abcdjpvxyz"
 msgstr "abcdjpvxyz"
@@ -12731,24 +12804,30 @@ msgid "abcdvxyz"
 msgstr "abcdvxyz"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:318
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:366
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:378
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:394
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:407
 #, c-format
 msgid "abceg"
 msgstr "abceg"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:883
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:302
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:320
 #, c-format
 msgid "abcg"
 msgstr "abcg"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:463
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:498
 #, c-format
 msgid "abchnp"
 msgstr "abchnp"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:766
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1189
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1042
+#, c-format
+msgid "abcq"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:808
 #, c-format
 msgid "abcu"
 msgstr "abcu"
@@ -12759,13 +12838,13 @@ msgid "abh"
 msgstr "abh"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:400
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:100
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:118
 #, c-format
 msgid "abhfgknps"
 msgstr "abhfgknps"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:356
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:435
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:467
 #, c-format
 msgid "abhfgnp"
 msgstr "abhfgnp"
@@ -12786,20 +12865,20 @@ msgstr "uittreksel of samenvatting "
 msgid "account, %s please "
 msgstr "account, %s a.u.b. "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:411
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:443
 #, c-format
 msgid "acdef"
 msgstr "acdef"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:122
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:462
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1215
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1031
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:475
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1216
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1074
 #, c-format
 msgid "acdeq"
 msgstr "acdeq"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:476
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:513
 #, c-format
 msgid "adfklmor"
 msgstr "adfklmor"
@@ -12869,9 +12948,7 @@ msgid "aperture card "
 msgstr "vensterkaart "
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:94
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:434
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1187
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:998
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:447
 #, c-format
 msgid "aq"
 msgstr "aq"
@@ -12891,12 +12968,6 @@ msgstr "kunst reproductie "
 msgid "article"
 msgstr "artikel"
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:246
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:412
-#, c-format
-msgid "at"
-msgstr "bij"
-
 #. %1$s:  WAITIN.branch 
 #. %2$s:  ELSE 
 #. %3$s:  WAITIN.holdingbranch 
@@ -12912,12 +12983,12 @@ msgstr "bij %s %s In transport van %s naar %s %s "
 msgid "atlas "
 msgstr "atlas "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:640
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:682
 #, c-format
 msgid "atru"
 msgstr "atru"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:137
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:155
 #, c-format
 msgid "au"
 msgstr "au"
@@ -12929,9 +13000,9 @@ msgstr "autobiografie"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:186
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:200
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:166
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:182
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:197
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:184
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:200
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:215
 #, c-format
 msgid "av"
 msgstr "van"
@@ -12953,7 +13024,7 @@ msgid "available online "
 msgstr "beschikbaar online "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 msgid "average rating: "
 msgstr "gemiddelde waardering: "
 
@@ -12964,16 +13035,14 @@ msgstr "gemiddelde waardering: "
 msgid "average rating: %s (%s votes)"
 msgstr "gemiddelde waardering: %s (%s stemmen)"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:776
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:818
 #, c-format
 msgid "az"
 msgstr "az"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:131
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:470
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1224
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:888
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1039
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:483
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:889
 #, c-format
 msgid "bc"
 msgstr "bc"
@@ -13048,15 +13117,15 @@ msgstr "bristolpapier"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
 msgid "by"
 msgstr "door"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:452
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:144
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:162
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:97
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:86
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:88
 #, c-format
 msgid "by "
 msgstr "door "
@@ -13102,9 +13171,9 @@ msgid "catalogue"
 msgstr "catalogus"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:115
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:455
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1208
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1024
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:468
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1209
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1067
 #, c-format
 msgid "cdn"
 msgstr "cdn"
@@ -13115,7 +13184,7 @@ msgid "celestial globe"
 msgstr "hemelglobe"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:907
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:328
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:352
 #, c-format
 msgid "cg"
 msgstr "cg"
@@ -13159,6 +13228,11 @@ msgstr "klik hier voor online toegang"
 #, c-format
 msgid "coats of arms"
 msgstr "familiewapens"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:102
+#, fuzzy, c-format
+msgid "coauthor"
+msgstr "Mede-auteur"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:179
 #, c-format
@@ -13216,6 +13290,21 @@ msgstr "bevat"
 #, c-format
 msgid "contains biographical data"
 msgstr "bevat biografische gegevens"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:114
+#, fuzzy, c-format
+msgid "corporate_coauthor"
+msgstr "Corporatie (Mede-auteur)"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:96
+#, c-format
+msgid "corporate_main_author"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:120
+#, fuzzy, c-format
+msgid "corporate_secondary_author"
+msgstr "Secondaire Auteur"
 
 # vertalen?
 #. SPAN
@@ -13370,6 +13459,11 @@ msgstr "tekening"
 msgid "earth moon globe"
 msgstr "aarde-maanglobe"
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:186
+#, fuzzy, c-format
+msgid "edition"
+msgstr "Edities"
+
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:96
 #, c-format
 msgid "electronic "
@@ -13429,16 +13523,16 @@ msgstr "feestbundel "
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:602
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:609
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:482
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:489
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1051
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1058
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:495
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:502
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1083
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1090
 #, c-format
 msgid "fghkdlmor"
 msgstr "fghkdlmor"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:427
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:125
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:143
 #, c-format
 msgid "fgknps"
 msgstr "fgknps"
@@ -13573,8 +13667,8 @@ msgstr "is reeds toegevoegd."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:540
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:543
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1087
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1092
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1089
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1094
 #, c-format
 msgid "here"
 msgstr "hier"
@@ -13583,6 +13677,11 @@ msgstr "hier"
 #, c-format
 msgid "history "
 msgstr "geschiedenis "
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:108
+#, c-format
+msgid "http://schema.org/"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:719
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:759
@@ -13595,7 +13694,7 @@ msgstr "humor, satire "
 msgid "humour, satire"
 msgstr "humor, satire"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:447
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:480
 #, c-format
 msgid "iabhfgnp"
 msgstr "iabhfgnp"
@@ -13615,7 +13714,7 @@ msgstr "id"
 msgid "id_type"
 msgstr "id_type"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:279
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:281
 #, c-format
 msgid "ijknpxyz"
 msgstr "ijknpxyz"
@@ -13790,7 +13889,7 @@ msgstr "item_id"
 msgid "items. "
 msgstr "items. "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:266
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:279
 #, c-format
 msgid "jpxyz"
 msgstr "jpxyz"
@@ -13921,6 +14020,11 @@ msgstr "magnetische schijf "
 msgid "magneto-optical disc "
 msgstr "magneetoptische schijf "
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:90
+#, fuzzy, c-format
+msgid "main_author"
+msgstr "Auteur"
+
 #. IMG
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:550
 msgid "map"
@@ -13936,12 +14040,12 @@ msgstr "kaart "
 msgid "maps"
 msgstr "kaarten"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, c-format
 msgid "materialTypeLabel"
 msgstr "materialTypeLabel"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, c-format
 msgid "materialtype"
 msgstr "materialtype"
@@ -14131,52 +14235,52 @@ msgstr "numerieke gegevens "
 msgid "numeric table"
 msgstr "numerieke tabel"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:137
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:148
 #, c-format
 msgid "of accompanying material, "
 msgstr "van begeleidend materiaal, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:133
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:144
 #, c-format
 msgid "of contents page, "
 msgstr "van inhoudsopgave, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:130
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:141
 #, c-format
 msgid "of intermediate text, "
 msgstr "van tussentekst, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:136
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:147
 #, c-format
 msgid "of libretto, "
 msgstr "van libretto, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:131
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:142
 #, c-format
 msgid "of original work, "
 msgstr "van origineel werk, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:138
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:149
 #, c-format
 msgid "of subtitles, "
 msgstr "van ondertitels, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:132
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:143
 #, c-format
 msgid "of summary, "
 msgstr "van samenvatting, "
 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:139
 #, c-format
 msgid "of the last:"
 msgstr "van de laatste:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:134
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:145
 #, c-format
 msgid "of title page, "
 msgstr "van titelpagina, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:135
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:146
 #, c-format
 msgid "of title proper, "
 msgstr "van de hoofdtitel, "
@@ -14206,6 +14310,12 @@ msgstr "of"
 #, c-format
 msgid "or "
 msgstr "of "
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:83
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:72
+#, fuzzy, c-format
+msgid "original_title"
+msgstr "Origineel kunstwerk"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:110
 #, c-format
@@ -14334,6 +14444,12 @@ msgstr "afbeelding"
 msgid "picture "
 msgstr "afbeelding "
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:95
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:84
+#, fuzzy, c-format
+msgid "piece_analytic_level"
+msgstr "Onderdeel-Analytisch Niveau"
+
 #. IMG
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:202
 msgid "planetary or lunar globe"
@@ -14431,6 +14547,11 @@ msgstr "aanschafsuggestie"
 msgid "realia "
 msgstr "realia "
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:107
+#, fuzzy, c-format
+msgid "record"
+msgstr "%s records"
+
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:69
 #, c-format
 msgid "reformatted digital "
@@ -14514,38 +14635,34 @@ msgstr "resultaten"
 msgid "results in the library's OverDrive collection."
 msgstr "resultaten in de OverDrive collectie van de bibliotheek."
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:884
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:921
-#, c-format
-msgid "results_summary"
-msgstr "results_summary"
-
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:367
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:395
 #, c-format
 msgid "results_summary description"
 msgstr "results_summary description"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:342
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:368
 #, c-format
 msgid "results_summary edition"
 msgstr "results_summary edition"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:436
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:921
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:468
 #, c-format
 msgid "results_summary other_title"
 msgstr "results_summary other_title"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:303
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:884
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:321
 #, c-format
 msgid "results_summary publisher"
 msgstr "results_summary publisher"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:167
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:185
 #, c-format
 msgid "results_summary series"
 msgstr "results_summary series"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:477
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:514
 #, c-format
 msgid "results_summary uniform_title"
 msgstr "results_summary uniform_title"
@@ -14593,15 +14710,20 @@ msgstr "schema"
 msgid "score"
 msgstr "score"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:169
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:187
 #, c-format
 msgid "se"
 msgstr "se"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:468
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:492
 #, c-format
 msgid "search"
 msgstr "zoekactie"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:108
+#, fuzzy, c-format
+msgid "secondary_author"
+msgstr "Secondaire Auteur"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:230
 #, c-format
@@ -14618,10 +14740,21 @@ msgstr "Zie ook:"
 msgid "serial"
 msgstr "tijdschrift"
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:230
+#, fuzzy, c-format
+msgid "series"
+msgstr "reeks "
+
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:574
 #, c-format
 msgid "series "
 msgstr "reeks "
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:89
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:78
+#, fuzzy, c-format
+msgid "set_level"
+msgstr "Stel Niveau In"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:43
 #, c-format
@@ -14953,8 +15086,8 @@ msgstr "theses "
 msgid "title"
 msgstr "title"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:633
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:645
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:657
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:669
 #, c-format
 msgid "to create new lists."
 msgstr "om nieuwe lijsten aan te maken."
@@ -15002,7 +15135,7 @@ msgstr "verdragen"
 msgid "treaty "
 msgstr "verdrag "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:635
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:677
 #, c-format
 msgid "tru"
 msgstr "tru"
@@ -15011,6 +15144,16 @@ msgstr "tru"
 #: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:42
 msgid "unAPI"
 msgstr "unAPI"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:132
+#, fuzzy, c-format
+msgid "uniform_conventional_heading"
+msgstr "Uniforme Ingang"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:126
+#, fuzzy, c-format
+msgid "uniform_title"
+msgstr "Uniforme titels:"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:14
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:170
@@ -15029,7 +15172,7 @@ msgstr "tot "
 msgid "up to "
 msgstr "tot "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1120
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1122
 #, c-format
 msgid "url"
 msgstr "url"
@@ -15111,12 +15254,12 @@ msgid "visual projection"
 msgstr "beeldprojectie"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 msgid "votes"
 msgstr "stemmen"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:418
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:529
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:570
 #, c-format
 msgid "vxyz"
 msgstr "vxyz"
@@ -15171,7 +15314,7 @@ msgid "wire recording "
 msgstr "draadspoelopname "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 msgid "with biblionumber"
 msgstr "met biblionummer"
 
@@ -15181,11 +15324,11 @@ msgid "wood"
 msgstr "hout"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:446
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:112
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:406
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:119
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:419
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:972
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1007
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:576
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:618
 #, c-format
 msgid "y3z"
 msgstr "y3z"
@@ -15238,7 +15381,7 @@ msgid "your purchase suggestions"
 msgstr "uw aanschafsuggesties"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 msgid "your rating: "
 msgstr "uw waardering: "
 
@@ -15292,9 +15435,10 @@ msgid ""
 msgstr ""
 "‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value %]"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:130
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:153
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:183
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:131
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:155
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:185
 #, c-format
 msgid "• "
 msgstr "• "
+

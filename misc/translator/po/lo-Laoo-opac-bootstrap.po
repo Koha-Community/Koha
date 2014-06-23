@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-05-18 20:10-0300\n"
+"POT-Creation-Date: 2014-06-15 20:32-0300\n"
 "PO-Revision-Date: 2012-07-14 10:36+0200\n"
 "Last-Translator: mylibrary <mylibrarystaff@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -15,6 +15,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.1.6\n"
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:110
+#, fuzzy, c-format
+msgid "#record"
+msgstr "%s ບັນທຶກ"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:273
@@ -104,7 +109,7 @@ msgstr "%s %s ລາຍການທີ່ເສຍຫາຍ %s ຫວ້າງ %
 #. %8$s:  ITEM_RESULT.priority 
 #. %9$s:  END 
 #. %10$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1201
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1203
 #, fuzzy, c-format
 msgid "%s %s %s %s %s (priority %s) %s %s %s %s "
 msgstr "%s %s %s %s %s%s %s %s%s %s "
@@ -208,6 +213,15 @@ msgstr "%s%s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊື
 msgid ""
 "%s %s %s %s , %s %s %s (%s) %s.%s,%s %s %s %s This record has no items. %s "
 msgstr "%s%s %s%s, %s%s %s (%s)%s.%s,%s %s %s%sການບັນທຶກນີ້ ບໍ່ມີລາຍການຫຍັງ.%s "
+
+#. %1$s:  END 
+#. %2$s:  IF ( subscription_LOO.letter ) 
+#. %3$s:  IF ( loggedinusername ) 
+#. %4$s:  IF ( subscription_LOO.hasalert ) 
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:131
+#, fuzzy, c-format
+msgid "%s %s %s %s You have subscribed to email notification on new issues "
+msgstr "%s %s %s ທ່ານຕ້ອງລົງນາມ ອີເມວຂອງທ່ານໃສ່ໃນສະບັບໃໝ່ "
 
 #. %1$s:  IF showpriority 
 #. %2$s:  bibitemloo.rank 
@@ -359,14 +373,6 @@ msgstr "%s %s %s ຢື່ມອອກບໍ່ໄດ້ %s"
 #, fuzzy, c-format
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr "%s %sໝາຍເຫດ: ຫນ້າຕ່າງນີ້ຈະປິດໂດຍອັດໂຕໂນມັດພາຍໃນ 5 ວິນາທີ%s "
-
-#. %1$s:  END 
-#. %2$s:  IF ( subscription_LOO.letter ) 
-#. %3$s:  IF ( subscription_LOO.hasalert ) 
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:131
-#, c-format
-msgid "%s %s %s You have subscribed to email notification on new issues "
-msgstr "%s %s %s ທ່ານຕ້ອງລົງນາມ ອີເມວຂອງທ່ານໃສ່ໃນສະບັບໃໝ່ "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -717,6 +723,17 @@ msgid ""
 "%s %s Search also for narrower subjects %s Search also for broader subjects "
 "%s Search also for related subjects %s "
 msgstr ""
+
+#. %1$s:  END 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#. %4$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:142
+#, fuzzy, c-format
+msgid ""
+"%s %s You must log in if you want to subscribe to email notification on new "
+"issues %s %s "
+msgstr "%s %s %s ທ່ານຕ້ອງລົງນາມ ອີເມວຂອງທ່ານໃສ່ໃນສະບັບໃໝ່ "
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -1100,7 +1117,7 @@ msgstr ""
 #. %2$s:  IF ( shelvesloo.single ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:662
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:686
 #, c-format
 msgid "%s %sitem%sitem(s)%s"
 msgstr "%s %sລາຍການ%sລາຍການຕ່າງໆ(s)%s"
@@ -1140,18 +1157,18 @@ msgstr "%sບັນຊີທີ່ຖຶກໂຈະໄວ້ %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:280
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:472
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:639
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:287
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:479
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:646
 #, fuzzy, c-format
 msgid "%s Address 2:"
 msgstr "ທີ່ຢູ່:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:266
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:458
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:625
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:273
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:465
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:632
 #, fuzzy, c-format
 msgid "%s Address:"
 msgstr "ທີ່ຢູ່:"
@@ -1239,9 +1256,9 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:294
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:486
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:653
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:301
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:493
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:660
 #, fuzzy, c-format
 msgid "%s City:"
 msgstr "ຈຳນວນ:"
@@ -1249,13 +1266,13 @@ msgstr "ຈຳນວນ:"
 #. %1$s:  IF ( ccodesearch ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:75
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:79
 #, fuzzy, c-format
 msgid "%s Collection %s Item type %s: "
 msgstr "%sປະເພດລາຍການ%sທີ່ສະສົມໄວ້%s "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:570
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:577
 #, fuzzy, c-format
 msgid "%s Contact Note:"
 msgstr "ບັນທຶກສາລະບານ:"
@@ -1272,15 +1289,15 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:336
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:528
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:695
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:343
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:535
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:702
 #, fuzzy, c-format
 msgid "%s Country:"
 msgstr "ປະເທດ:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:157
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:162
 #, fuzzy, c-format
 msgid "%s Date of birth:"
 msgstr "ວັນເດືອນປີເກີດ:"
@@ -1292,33 +1309,33 @@ msgid "%s Did you mean: "
 msgstr "%s ຄວາມໝາຍຂອງເຈົ້າແມ່ນ: "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:556
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:563
 #, fuzzy, c-format
 msgid "%s Email:"
 msgstr "ອີເມວ:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:432
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:439
 #, fuzzy, c-format
 msgid "%s Fax:"
 msgstr "ໂທລະສານ:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:143
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:611
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:618
 #, fuzzy, c-format
 msgid "%s First name:"
 msgstr "ຊື່ແທ້:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:69
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:74
 #, fuzzy, c-format
 msgid "%s Home library:"
 msgstr "ໜ້າທຳອິດຂອງຫໍສະໝຸດ:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:176
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:183
 #, c-format
 msgid "%s Initials:"
 msgstr ""
@@ -1383,7 +1400,7 @@ msgid "%s MARC view"
 msgstr "%s ສະແດງ MARC%s"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:390
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:397
 #, c-format
 msgid "%s Mobile phone:"
 msgstr ""
@@ -1411,7 +1428,7 @@ msgid "%s On hold %s No renewals left %s "
 msgstr "%sສຳຮອງ %sບໍ່ສາມາດຕໍ່ອາຍຸໄດ້ອີກແລ້ວ %s "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:190
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:197
 #, fuzzy, c-format
 msgid "%s Other names:"
 msgstr "ຊື່ອື່ນ:"
@@ -1437,8 +1454,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:542
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:709
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:549
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:716
 #, fuzzy, c-format
 msgid "%s Phone:"
 msgstr "ໂທລະສັບ:"
@@ -1450,13 +1467,13 @@ msgid "%s Please see a member of the library staff. "
 msgstr "%s ກະລຸນນາໄປພົບພະນັກງານຂອງຫໍສະໜຸດ. "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:404
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:411
 #, fuzzy, c-format
 msgid "%s Primary email:"
 msgstr "ອີເມວຫລັກ:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:362
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:369
 #, fuzzy, c-format
 msgid "%s Primary phone:"
 msgstr "ໂທລະສັບຫລັກ:"
@@ -1489,7 +1506,7 @@ msgid "%s Quotations"
 msgstr "ບໍ່ມີພາບປະກອບ"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:108
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:113
 #, fuzzy, c-format
 msgid "%s Salutation:"
 msgstr "ບໍ່ມີພາບປະກອບ"
@@ -1513,13 +1530,13 @@ msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s ຄົ້ນຫາ %sເພື່ອ '%s'%s%s&nbsp;ໃນຂອບເຂດຈຳກັດ:&nbsp;'%s'%s"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:418
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:425
 #, fuzzy, c-format
 msgid "%s Secondary email:"
 msgstr "ອີເມວທີສອງ ຫລື ສຳຮອງ:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:376
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:383
 #, fuzzy, c-format
 msgid "%s Secondary phone:"
 msgstr "ເບີໂທລະສັບທີສອງ ຫລື ສຳຮອງ:"
@@ -1538,23 +1555,23 @@ msgstr "%sການສະນຳສະເໝີເທົ່ານັ້ນ "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:308
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:500
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:667
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:315
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:507
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:674
 #, fuzzy, c-format
 msgid "%s State:"
 msgstr "ລັດ:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:252
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:259
 #, fuzzy, c-format
 msgid "%s Street number:"
 msgstr "ເລກລຳດັບຂອງສະມາຊິກ:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:129
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:597
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:134
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:604
 #, fuzzy, c-format
 msgid "%s Surname:"
 msgstr "ນາມສະກຸນ"
@@ -1653,15 +1670,15 @@ msgstr "%s ທ່ານບໍ່ຄື່ຢື່ມຫຍັ່ງອອກຈ
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:322
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:514
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:681
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:329
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:521
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:688
 #, fuzzy, c-format
 msgid "%s Zip/Postal code:"
 msgstr "ລະຫັດ Zip Code:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:441
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:448
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('B_address') && hidden.defined('B_address2') && "
@@ -1671,7 +1688,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:580
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:587
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('altcontactsurname') && hidden.defined"
@@ -1682,7 +1699,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:346
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:353
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
@@ -1691,7 +1708,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END # /UNLESS fields hidden 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:235
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:242
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('streetnumber') && hidden.defined('address') && "
@@ -1700,7 +1717,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END # / defined 'branchcode' 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:85
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:90
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden."
@@ -1851,7 +1868,7 @@ msgstr ""
 #. %5$s:  END 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:595
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:619
 #, c-format
 msgid "%s%s %sitem%sitems%s%sEmpty%s"
 msgstr "%s%s %sລາຍການ%sລາຍການຕ່າງໆ%s%sຫ້ວາງເປົາ%s"
@@ -2168,8 +2185,8 @@ msgstr "ອອກຈາກລະບົບ"
 #. %2$s:  END 
 #. %3$s:  IF ( shelveslooppri.viewcategory2 ) 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:596
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:663
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:620
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:687
 #, fuzzy, c-format
 msgid "%sPrivate%s %sPublic%s "
 msgstr "%sສ່ວນຕົວ%s %sສາທາລະນະ%s %sເປີດ%s "
@@ -2241,13 +2258,8 @@ msgstr "%sຂໍ້ມູໃນການຕິດຕໍ່%s ຢູ່ໃນແ�
 msgid "%sentry%sentries%s. "
 msgstr "%sເຂົ້າຫາ%sເຂົ້າຫາ%s. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:489
-#, fuzzy, c-format
-msgid "&#8674; Editing"
-msgstr "ກຳລັງແກ້ໄຂ"
-
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:5
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1025
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1026
 #, c-format
 msgid "&laquo; Previous"
 msgstr "&laquo; ກ່ອນໝ້າ"
@@ -3038,19 +3050,19 @@ msgid "(remove)"
 msgstr "ຖອນອອກ"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:405
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:516
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:557
 #, c-format
 msgid "(su"
 msgstr "(su"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:217
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:383
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:247
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:265
 #, c-format
 msgid "+and+(bib-level:a+or+bib-level:b)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:264
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:282
 #, c-format
 msgid "+not+(bib-level:a+or+bib-level:b)"
 msgstr ""
@@ -3087,7 +3099,7 @@ msgstr ""
 "ຖ້າທ່ານຕ້ອງການທີ່ຈະຕໍ່ອາຍຸປື້ມຂອງທ່ານ."
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:21
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:25
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:26
 #, c-format
 msgid ",complete-subfield"
 msgstr ",ສຳເລັດໃນການເຕີ່ມຂໍ້ມູນ"
@@ -3098,7 +3110,7 @@ msgid "- You must enter a Title"
 msgstr "- ທ່ານຈະຕ້ອງໃສ່ຫົວຂໍ້"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, fuzzy
 msgid "- You must enter a list name"
 msgstr "- ທ່ານຈະຕ້ອງໃສ່ລາຍການຊື່"
@@ -3134,7 +3146,7 @@ msgstr "ບັດຂອງທ່ານຈະໜົດກຳໃນໃນ %s. ກ�
 msgid "...or..."
 msgstr "...ຫຼື..."
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, c-format
 msgid ".png"
 msgstr ".png"
@@ -3143,19 +3155,19 @@ msgstr ".png"
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:128
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:426
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:537
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:986
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:579
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1030
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 msgstr "/cgi-bin/koha/opac-detail.pl?biblionumber="
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:257
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:196
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:43
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:44
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:405
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:289
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:423
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:710
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:752
 #: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:167
 #, c-format
 msgid "/cgi-bin/koha/opac-detail.pl?biblionumber="
@@ -3165,9 +3177,7 @@ msgstr "/cgi-bin/koha/opac-detail.pl?biblionumber="
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:536
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:587
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:208
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:513
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:862
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:925
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:554
 #: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:179
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q="
@@ -3175,18 +3185,18 @@ msgstr "/cgi-bin/koha/opac-search.pl?q="
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:251
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:417
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:282
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:704
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:801
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:857
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:920
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:300
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:746
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:843
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:900
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:963
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=Control-number:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=Control-number:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:220
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:386
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:250
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:268
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=Host-item:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=Host-item:"
@@ -3195,56 +3205,66 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=Host-item:"
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:119
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:139
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:202
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:245
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:327
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:510
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:961
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:247
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:331
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:551
 #: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:173
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=an:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1005
+#, fuzzy, c-format
+msgid "/cgi-bin/koha/opac-search.pl?q=an:\""
+msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
+
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:101
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:122
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:142
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:333
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:964
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:337
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=au:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1008
+#, fuzzy, c-format
+msgid "/cgi-bin/koha/opac-search.pl?q=au:\""
+msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
+
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:217
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:383
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:247
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:264
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:265
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:282
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=rcn:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=rcn:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:178
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:193
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:221
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:196
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:211
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:239
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=se,phr:\""
 msgstr "/cgi-bin/koha/opac-search.pl?q=se,phr:\""
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:411
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:522
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:563
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=su"
 msgstr "/cgi-bin/koha/opac-search.pl?q=su"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:272
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:274
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=su:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=su:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:262
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:428
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:267
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:285
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:715
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:804
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:303
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:757
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:846
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:905
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:968
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=ti,phr:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=ti,phr:"
@@ -3253,97 +3273,97 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=ti,phr:"
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:960
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:992
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:995
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:558
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:561
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:600
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:603
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/tracklinks.pl?uri="
 msgstr "/cgi-bin/koha/opac-search.pl?q="
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, fuzzy, c-format
 msgid "/opac-tmpl/lib/famfamfam/"
 msgstr "/opac-tmpl/prog/famfamfam/"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACMARCdetail.xsl:18
+#: opac-tmpl/bootstrap/en/xslt/plainMARC.xsl:18
 #, c-format
 msgid "000 "
 msgstr "000 "
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:7
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:97
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:101
 #, c-format
 msgid "10 titles"
 msgstr "10 ຫົວຂໍ້"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:13
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:103
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:107
 #, c-format
 msgid "100 titles"
 msgstr "100 ຫົວຂໍ້"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:446
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:135
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:153
 #, c-format
 msgid "100,110,111,700,710,711"
 msgstr "100,110,111,700,710,711"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:61
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:63
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:143
 #, c-format
 msgid "12 months"
 msgstr "12 ເດືອນ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:475
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:512
 #, c-format
 msgid "130,240"
 msgstr "130,240"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:8
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:98
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:102
 #, c-format
 msgid "15 titles"
 msgstr "15 ຫົວຂໍ້"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:9
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:99
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:103
 #, c-format
 msgid "20 titles"
 msgstr "20 ຫົວຂໍ້"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:51
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:53
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:141
 #, c-format
 msgid "3 months"
 msgstr "3 ເດືອນ"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:10
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:100
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:104
 #, c-format
 msgid "30 titles"
 msgstr "30 ຫົວຂໍ້"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:11
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:101
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:105
 #, c-format
 msgid "40 titles"
 msgstr "40 ຫົວຂໍ້"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:165
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:183
 #, c-format
 msgid "440,490"
 msgstr "440,490"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:12
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:106
 #, c-format
 msgid "50 titles"
 msgstr "50 ຫົວຂໍ້"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:56
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:58
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:138
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:142
 #, c-format
 msgid "6 months"
 msgstr "6 ເດືອນ"
@@ -3432,8 +3452,8 @@ msgstr "; ປະເພດທີ່ພິມຕໍ່ເນື່ອງ: "
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:960
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:992
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:995
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:558
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:561
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:600
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:603
 #, fuzzy, c-format
 msgid ";biblionumber="
 msgstr "[% biblionumber |url %]"
@@ -3469,16 +3489,16 @@ msgstr "ບາໂຄດທີ່ຕົງກັບການບັນທຶກ "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:242
 #, fuzzy, c-format
-msgid "A specific copy"
+msgid "A specific item"
 msgstr "ສະເພາະເຫລັ້ມທີ່ຕ້ອງການ "
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:404
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:515
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:556
 #, c-format
 msgid "AND "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:55
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:56
 #, c-format
 msgid "AR"
 msgstr "AR"
@@ -3488,28 +3508,28 @@ msgstr "AR"
 msgid "About the author"
 msgstr "ກ່ຽວກັບຜູ້ແຕ່ງ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:896
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:939
 #, c-format
 msgid "Absorbed by:"
 msgstr "ຈັດພິມໂດຍ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:899
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:942
 #, c-format
 msgid "Absorbed in part by:"
 msgstr "ຮຽບຮຽງພາກສ່ວນນີ້ໂດຍ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:844
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:886
 #, c-format
 msgid "Absorbed in part:"
 msgstr "ພາກສ່ວນທີ່ຮຽບຮຽງ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:841
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:883
 #, c-format
 msgid "Absorbed:"
 msgstr "ລວບລວມ:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:277
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:760
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:290
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:802
 #, c-format
 msgid "Abstract: "
 msgstr "ບົດສັງເຂບ: "
@@ -3686,20 +3706,20 @@ msgid "All Tags"
 msgstr "ທຸກໆປະເພດຂອງຂໍ້ມູນ"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:33
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:123
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:127
 #, c-format
 msgid "All collections"
 msgstr "ສີ່ງທີ່ສະສົມທັງໜົດ"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:35
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:125
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:129
 #, c-format
 msgid "All item types"
 msgstr "ທຸກໆປະເພດຂອງລາຍການ"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:202
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:18
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:109
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:113
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:200
 #, c-format
 msgid "All libraries"
@@ -3719,12 +3739,12 @@ msgid ""
 "expires."
 msgstr "ແລະ ຍັງເຕືອນໃຫ້ທ່ານຕ້ອງສົ່ງລາຍການທີ່ຢື່ມອອກທັງໜົດຄືນກ່ອນໝ້າບັດຂອງທ່ານຈະໜົດອາຍຸ."
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:450
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:457
 #, fuzzy, c-format
 msgid "Alternate address"
 msgstr "ທີ່ຢູ່ທີ່ສຳຮອງ:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:589
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:596
 #, fuzzy, c-format
 msgid "Alternate contact"
 msgstr "ການຕິດຕໍ່ທີ່ຢູ່ສຳຮອງ:"
@@ -3758,7 +3778,7 @@ msgstr "ມີຂໍ້ຜິດພາດເກີດຂື້ນໃນຂະນ
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:213
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:379
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:243
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:261
 #, c-format
 msgid "Analytics: "
 msgstr "ການວິເຄາະ: "
@@ -3915,7 +3935,7 @@ msgid "Are you sure you want to cancel this hold?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງການຈະຍົກເລີກການຈ່ອງນີ້?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 msgid "Are you sure you want to delete this list?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຈະລົບລາຍການນີ້?"
 
@@ -3937,12 +3957,12 @@ msgid "Are you sure you want to remove the selected items?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງການຈະຖອນລາຍການທີ່ທ່ານເລືອກ?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 msgid "Are you sure you want to remove these items from the list?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງການຈະຖອນຂໍ້ມູນເລົ່ານີ້ອອກຈາກລາຍການຂອງທ່ານ?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, fuzzy
 msgid "Are you sure you want to remove this item from the list?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງການຈະຖອນຂໍ້ມູນເລົ່ານີ້ອອກຈາກລາຍການຂອງທ່ານ?"
@@ -3960,7 +3980,7 @@ msgid "Are you sure you want to suspend all holds?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງການຈະຍົກເລີກການຈ່ອງນີ້?"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:543
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:79
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:80
 #, c-format
 msgid "Article"
 msgstr "ຫົວເລື່ອງ"
@@ -3996,7 +4016,7 @@ msgstr "Atlas"
 msgid "Audience"
 msgstr "ຜູ້ຊົມໃຊ້"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:323
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:336
 #, c-format
 msgid "Audience: "
 msgstr "ຜູ້ຊົມໃຊ້: "
@@ -4039,9 +4059,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:243
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:187
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:189
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:506
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:508
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:723
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:530
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:532
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:747
 #, c-format
 msgid "Author"
 msgstr "ນັກປະພັນ"
@@ -4131,7 +4151,7 @@ msgstr "ຍັງຫວ້າງຢູ່: "
 msgid "Availability:"
 msgstr "ຍັງຫວ້າງຢູ່:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:99
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:103
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1031
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:774
 #, c-format
@@ -4173,7 +4193,7 @@ msgstr "Avspiller med lydfil (eks. Digibøker)"
 msgid "Awards:"
 msgstr "ລາງວັນ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:674
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:716
 #, c-format
 msgid "Awards: "
 msgstr "ລາງວັນ: "
@@ -4185,8 +4205,8 @@ msgstr "ລະວັງ"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:45
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:49
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:53
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:58
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:54
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:59
 #, c-format
 msgid "BK"
 msgstr "BK"
@@ -4203,13 +4223,13 @@ msgstr "ISBN %s"
 msgid "Back to lists"
 msgstr "ກັບຄືນຫາລາຍການ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1030
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1031
 #, c-format
 msgid "Back to results"
 msgstr "ກັບຄືນຫາຜົນຂອງການຄົ້ນຫາ"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1030
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1031
 msgid "Back to the results search list"
 msgstr "ກັບຄືນຫາລາຍການຜົນຂອງການຄົ້ນຫາ"
 
@@ -4217,7 +4237,7 @@ msgstr "ກັບຄືນຫາລາຍການຜົນຂອງການຄ
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:260
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:112
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:355
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1125
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1127
 #, c-format
 msgid "Barcode"
 msgstr "ບາໂຄດ"
@@ -4279,7 +4299,7 @@ msgstr "ຂໍ້ມູນກ່ຽວກັບບັນນານຸກົມ"
 msgid "Bibliographies"
 msgstr "ບັນນານຸກົມຕ່າງໆ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:303
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:316
 #, c-format
 msgid "Bibliography: "
 msgstr "ບັນນານຸກົມຕ່າງໆ: "
@@ -4384,8 +4404,9 @@ msgstr "Bok"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:541
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:546
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:72
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:82
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:73
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:83
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:98
 #, c-format
 msgid "Book"
 msgstr "ປື້ມ"
@@ -4432,8 +4453,8 @@ msgstr "ຄົ້ນຫາຕາມລາຍຊື່ປື້ມໃນຫໍສ
 msgid "Browse results"
 msgstr "ດຶງເອົາຜົນຂອງການຄົ້ນຫາ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1174
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1176
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1178
 #, fuzzy, c-format
 msgid "Browse shelf"
 msgstr "ຄົ້ນເບີ່ງຕາມຖ້ານ"
@@ -4459,7 +4480,7 @@ msgid "CD software"
 msgstr "ຊີດີ ໂປຼແກຼມຂອງຄອມພິວເຕີ"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:51
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:60
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:61
 #, c-format
 msgid "CF"
 msgstr "CF"
@@ -4507,12 +4528,12 @@ msgstr "ລຳດັບການໂທ."
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:265
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1118
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1120
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:199
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:201
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:516
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:518
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:725
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:540
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:542
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:749
 #, fuzzy, c-format
 msgid "Call number"
 msgstr "ໝາຍເລກໂທລະສັບ"
@@ -4554,9 +4575,9 @@ msgstr "ໝາຍເລກໂທລະສັບ"
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:44
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:245
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:546
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:548
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:742
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:572
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:766
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:90
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:63
@@ -4568,11 +4589,11 @@ msgid "Cancel"
 msgstr "ຍົກເລີກ"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:136
 msgid "Cancel email notification"
 msgstr "ຍົກເລີກການຈັດແຈງໝວດໝູ່ຂອງ ອີເມວ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:136
 #, c-format
 msgid "Cancel email notification "
 msgstr "ຍົກເລີກການຈັດແຈງໝວດໝູ່ຂອງ ອີເມວ "
@@ -4599,6 +4620,11 @@ msgstr "ຍົກເລີກການສະແດງຜົນການຈ່ອ
 msgid "Cannot be put on hold"
 msgstr "ບໍ່ສາມາທີ່ຈະເພີ່ມໃສ່ໃນການຈ່ອງ"
 
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:65
+#, fuzzy, c-format
+msgid "Card number"
+msgstr "ນາມບັດເລກທີ່"
+
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:22
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #, c-format
@@ -4610,7 +4636,7 @@ msgstr "ບ່ອນທີ່ເລືອກໄວ້"
 msgid "Cassette recording"
 msgstr "ການບັນທືກສຽງໂດຍກາແຊດ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:734
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:776
 #, c-format
 msgid "Cast: "
 msgstr ""
@@ -4620,8 +4646,8 @@ msgstr ""
 msgid "Catalogs"
 msgstr "ບັນຊີລາຍຊື່"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:524
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:729
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:548
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:753
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:76
 #, c-format
 msgid "Category:"
@@ -4642,7 +4668,7 @@ msgstr "ປ່ຽນລະຫັດຂອງຂ້ອຍ"
 msgid "Change your password "
 msgstr "ປ່ຽນລະຫັດຜ່ານຂອງເຈົ້າ "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:908
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:951
 #, c-format
 msgid "Changed back to:"
 msgstr "ປ່ຽນກັບໄປຫາ:"
@@ -4671,16 +4697,17 @@ msgstr "ຢື່ມອອກ%s, ສົ່ງຄືນ%s ຫລື ຢື່ມ�
 msgid "Check-in date:"
 msgstr "ລາຍການທີ່ຈະຢື່ມຕໍ່"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
-#, fuzzy, c-format
-msgid "Checked out"
-msgstr "(ໄດ້ຢືມອອກ)"
-
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:193
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1104
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:832
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:202
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1106
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:833
 #, c-format
 msgid "Checked out ("
+msgstr "ໄດ້ຢືມອອກ ("
+
+#. %1$s:  issues_count 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
+#, fuzzy, c-format
+msgid "Checked out (%s)"
 msgstr "ໄດ້ຢືມອອກ ("
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:29
@@ -4699,7 +4726,7 @@ msgstr "ບັນດາລາຍການຕ່າງໆທີ່ຢືມອອ
 msgid "Checkouts for %s "
 msgstr "ຢື່ມອອກໃຫ້ %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:85
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:89
 #, fuzzy, c-format
 msgid "Checkouts: "
 msgstr "ບັນດາລາຍການຕ່າງໆທີ່ຢືມອອກ "
@@ -4709,7 +4736,7 @@ msgstr "ບັນດາລາຍການຕ່າງໆທີ່ຢືມອອ
 msgid "Classification"
 msgstr "ການຈັດໝວດໝູ່"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:242
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:255
 #, c-format
 msgid "Classification: "
 msgstr "ການຈັດໝວດໝູ່: "
@@ -4731,7 +4758,7 @@ msgstr "ລົບລ້າງ"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:35
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:236
 #, fuzzy, c-format
 msgid "Clear all"
@@ -4741,7 +4768,7 @@ msgstr "ລົບລ້າງທັງໝົດ"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:371
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:577
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:164
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:170
 #, fuzzy, c-format
 msgid "Clear date"
 msgstr "ລົບແຟ້ມຂອງຄອມພິວເຕີ"
@@ -4753,15 +4780,15 @@ msgstr "ລົບແຟ້ມຂອງຄອມພິວເຕີ"
 msgid "Click here if you're not %s %s"
 msgstr "ຖ້າເຈົ້າບໍ່ແມ່ນ %s %s)"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:415
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:428
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:981
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1016
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:583
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:625
 #, c-format
 msgid "Click here to access online"
 msgstr "ກົດທີ່ນີ້ ເພື່ອເຂົ້າສູ່ລະບົບອອນລາຍ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:115
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:122
 #, c-format
 msgid "Click here to access online "
 msgstr "ກົດທີ່ນິີ້ ເພື່ອເຂົ້າສູ່ລະບົບອອນລາຍ "
@@ -4782,7 +4809,7 @@ msgid "Click to add to cart"
 msgstr "ກົດ ເພື່ອເພີ່ມເຂົ້າຊ່ອງລາຍການທີ່ທ່ານເລືອກ"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "Click to forward the list to"
 msgstr "ກົດ ເພື່ອເພີ່ມເຂົ້າຊ່ອງລາຍການທີ່ທ່ານເລືອກ"
@@ -4800,7 +4827,7 @@ msgid "Click to open in new window"
 msgstr "ກົດ ເພື່ອເປີດໃນຫນ້າຕ່າງໃໝ່"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "Click to rewind the list to"
 msgstr "ກົດ ເພື່ອເປີດໃນຫນ້າຕ່າງໃໝ່"
@@ -4811,7 +4838,7 @@ msgstr "ກົດ ເພື່ອເປີດໃນຫນ້າຕ່າງໃ�
 msgid "Click to view in Google Books"
 msgstr "ກົດ ເພື່ອສະແດງງຜົນໃນ Google Books"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1041
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1043
 #, c-format
 msgid "Close"
 msgstr "ປິດ"
@@ -4836,7 +4863,7 @@ msgstr "ປິດໜ້າຕາງນີ້."
 msgid "Close window"
 msgstr "ປິດໝ້າຕາງ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:96
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:101
 #, c-format
 msgid "Coauthor"
 msgstr "ນັກປະພັນຮ່ວມ"
@@ -4853,7 +4880,7 @@ msgstr "ພາບປະຕໍ່"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:126
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1117
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1119
 #, c-format
 msgid "Collection"
 msgstr "ສີ່ງທີ່ສະສົມໄວ້"
@@ -4922,14 +4949,14 @@ msgstr "ບັນດາຄຳຄິດເຫັນໃນ "
 msgid "Computer File"
 msgstr "ບັນດາແຟມເອກະສານຂອງຄອມພິວເຕີ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:85
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:86
 #, fuzzy, c-format
 msgid "Computer file"
 msgstr "ບັນດາແຟມເອກະສານຂອງຄອມພິວເຕີ"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:615
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:680
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:639
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:704
 msgid "Confirm"
 msgstr "ຢື່ນຢັນ"
 
@@ -4943,7 +4970,7 @@ msgstr "ຢື່ນຢັນ"
 msgid "Confirm holds for: %s %s %s (%s) %s "
 msgstr "ຢື່ນຢັນການຈ່ອງສຳລັບ: %s %s %s (%s) %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:354
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:361
 #, fuzzy, c-format
 msgid "Contact information"
 msgstr "ຂໍ້ມູນການຕິດຕໍ່"
@@ -4959,18 +4986,18 @@ msgstr "ເນື້ອຫາ"
 msgid "Content Cafe"
 msgstr "Content Cafe"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:761
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:803
 #, c-format
 msgid "Content advice: "
 msgstr "ແນະນຳເນື້ອຫາ: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:586
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:654
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:610
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:678
 #, c-format
 msgid "Contents"
 msgstr "ສາລະບານ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:260
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:273
 #, c-format
 msgid "Contents note: "
 msgstr "ບັນທຶກສາລະບານ: "
@@ -4980,68 +5007,43 @@ msgstr "ບັນທຶກສາລະບານ: "
 msgid "Contents of "
 msgstr "ບັນທຶກສາລະບານ: "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:627
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:669
 #, c-format
 msgid "Contents:"
 msgstr "ສາລະບານ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:884
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:927
 #, c-format
 msgid "Continued by:"
 msgstr "ສືບຕໍ່ໂດຍ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:887
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:930
 #, c-format
 msgid "Continued in part by:"
 msgstr "ສືບຕໍ່ພາກສ່ວນໃດໝຶ່ງໂດຍ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:829
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:871
 #, c-format
 msgid "Continues in part:"
 msgstr "ສືບຕໍ່ພາກສ່ວນໃດໝຶ່ງ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:826
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:868
 #, c-format
 msgid "Continues:"
 msgstr "ດຳເນີນການຕໍ່:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:542
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:75
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:76
 #, c-format
 msgid "Continuing Resource"
 msgstr "ການດຳເນີນຕໍ່ສິ່ງທີ່ີມີຢູ່"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:205
-#, c-format
-msgid "Copies available at:"
-msgstr "ມີໃຫ້ສຳເນົາຢູ່ທີ່:"
-
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:133
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1050
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:781
-#, c-format
-msgid "Copies available for loan: "
-msgstr "ມີສະບັບສຳເນົາໃຫ້ຢື່ມ: "
-
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:170
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1082
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:813
-#, c-format
-msgid "Copies available for reference: "
-msgstr "ມີສຳເນົາສຳ ເພື່ອຢັ້ງຢືນ: "
-
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:351
-#: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
-#, c-format
-msgid "Copies available:"
-msgstr "ມີໃຫ້ສຳເນົາ:"
-
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:256
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
-#, c-format
-msgid "Copy"
-msgstr "ສຳເນົາ"
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1123
+#, fuzzy, c-format
+msgid "Copy number"
+msgstr "ໝາຍເລກໂທລະສັບ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:143
 #, c-format
@@ -5067,23 +5069,23 @@ msgstr "ວັນທີ ສະຫງວນລິຂະສິດ:"
 msgid "Copyright year: %s "
 msgstr "ວັນທີ ສະຫງວນລິຂະສິດ: "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:106
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:113
 #, c-format
 msgid "Corporate Author (Coauthor)"
 msgstr "ນັກປະພັນຮ່ວມ (ຜູ້ຮ່ວມປະພັນ)"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:91
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:95
 #, c-format
 msgid "Corporate Author (Main)"
 msgstr "ນັກປະພັນຮ່ວມ (ຫລັກໆ)"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:111
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:119
 #, c-format
 msgid "Corporate Author (Secondary)"
 msgstr "ນັກປະພັນຮ່ວມ (ສຳຮອງ)"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:202
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:203
 msgid ""
 "Could not login, perhaps your Persona email does not match your Koha one"
 msgstr ""
@@ -5093,7 +5095,7 @@ msgstr ""
 msgid "Count"
 msgstr "ນັບ, ການນັບ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:167
 #, c-format
 msgid "Country: "
 msgstr "ປະເທດ: "
@@ -5110,7 +5112,7 @@ msgstr "ບັດເລກທີ່:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:243
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:17
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1131
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:15
 #, fuzzy, c-format
 msgid "Course reserves"
@@ -5134,7 +5136,7 @@ msgstr ""
 msgid "Cover image"
 msgstr "ໝ້າປົກທີ່ເປັນຮູບ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:707
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:731
 #, fuzzy, c-format
 msgid "Create a new list"
 msgstr "ສ້າງລາຍການໃໜ່"
@@ -5159,10 +5161,20 @@ msgid ""
 msgstr ""
 "ສ້າງ, ສຳລັບສະມາຊິກ, ໃນລະດັບລາຍການຂໍຈ່ອງຂອງລາຍການໃດໝຶ່ງສະເພາະທີ່ໄດ້ບັນທຶກຂໍມູນໄວ້ໃນ ໂຄຫາແລ້ວ."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:90
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:101
+#, fuzzy, c-format
+msgid "CreativeWork"
+msgstr "ບັນດາສົນທິສັນຍາ"
+
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:290
 #, c-format
 msgid "Credits"
+msgstr "ບັດສິນເຊື່ອ"
+
+#. %1$s:  BORROWER_INF.amountoutstanding 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:90
+#, fuzzy, c-format
+msgid "Credits (%s)"
 msgstr "ບັດສິນເຊື່ອ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:49
@@ -5190,9 +5202,9 @@ msgstr "ດີວີດີ ວີດີໂອ / ແຜ່ນວີດີໂອ"
 msgid "Daily"
 msgstr "ປະຈຳວັນ, ລາຍວັນ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:214
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1123
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:854
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:223
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1125
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:855
 #, c-format
 msgid "Damaged ("
 msgstr "ເປເພຊຸດໂຊມ ("
@@ -5223,7 +5235,7 @@ msgid "Date added:"
 msgstr "ເພີ່ມວັນທີ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1126
 #, fuzzy, c-format
 msgid "Date due"
 msgstr "ເຖີງວັນກຳນົດ"
@@ -5303,8 +5315,8 @@ msgstr "ກຳນົດຂໍ້ມູນ metadata schema ທີ່ຢູ່ໃ�
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:118
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:136
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:617
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:682
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:641
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:706
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:236
 #, c-format
 msgid "Delete"
@@ -5312,6 +5324,7 @@ msgstr "ລືບ"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:483
 #, fuzzy
 msgid "Delete list"
 msgstr "ລືບລາຍການບັນຊີ"
@@ -5323,7 +5336,7 @@ msgid "Delete selected"
 msgstr "ຢື່ມຕໍ່ລາຍການທີ່ເລືອກໄວ້"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:484
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:508
 #, fuzzy
 msgid "Delete this list"
 msgstr "ລືບລາຍການບັນຊີນີ້"
@@ -5334,7 +5347,7 @@ msgstr "ລືບລາຍການບັນຊີນີ້"
 msgid "Delete your search history"
 msgstr "ລົບປະຫວັດລາຍການຄົ້ນຫາຂອງທ່ານ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1075
 #, c-format
 msgid "Delicious"
 msgstr ""
@@ -5375,9 +5388,9 @@ msgstr ""
 msgid "Description"
 msgstr "ຄຳອາທິບາຍ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:193
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:368
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:373
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:195
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:396
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:401
 #, c-format
 msgid "Description: "
 msgstr "ຄຳອາທິບາຍ: "
@@ -5410,7 +5423,7 @@ msgstr "ຄຳຄິດເຫັນໃຫມ່ຈາກ %s %s, %s%s"
 msgid "Dewey"
 msgstr "Dewey"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:222
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:235
 #, c-format
 msgid "Dewey: "
 msgstr "Dewey: "
@@ -5480,7 +5493,7 @@ msgstr "ແຜ່ນດິສແກັດ"
 msgid "Diskografier"
 msgstr "Diskografier"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:744
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:786
 #, fuzzy, c-format
 msgid "Dissertation note: "
 msgstr "ບົດວິທະຍານິພົນລະດັບປະລິນຍາໂທ ຫລື ເອກ "
@@ -5627,14 +5640,15 @@ msgstr "ຜິດພາດ: ເຈົ້າບໍ່ມີສິດທີ່ຈ�
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:863
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:606
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:673
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:697
 #, c-format
 msgid "Edit"
 msgstr "ແກ້ໄຂ"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:165
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:474
 #, fuzzy
 msgid "Edit list"
 msgstr "ລາຍການທີ່ທຳການແກ້ໄຂ"
@@ -5644,7 +5658,12 @@ msgstr "ລາຍການທີ່ທຳການແກ້ໄຂ"
 msgid "Edit list "
 msgstr "ລາຍການທີ່ທຳການແກ້ໄຂ "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:174
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:518
+#, fuzzy, c-format
+msgid "Editing "
+msgstr "ສະບັບທີ: "
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:185
 #, fuzzy, c-format
 msgid "Edition Statement"
 msgstr "ສະບັບດັດແກ້:"
@@ -5655,8 +5674,8 @@ msgid "Edition statement:"
 msgstr "ສະບັບດັດແກ້:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:513
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:343
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:348
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:369
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:374
 #, c-format
 msgid "Edition: "
 msgstr "ສະບັບທີ: "
@@ -5700,7 +5719,7 @@ msgid "Elever på ungdomstrinnet;"
 msgstr "Elever på ungdomstrinnet;"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:33
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
 #, c-format
 msgid "Email"
 msgstr "ອີເມວ"
@@ -5849,7 +5868,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:35
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:39
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:41
 #, c-format
 msgid "Error:"
 msgstr "ຜິດພາດ:"
@@ -5921,7 +5940,8 @@ msgstr "ຂໍ້ຄວາມຫຍໍ້ທີ່ເປີດໃຫ້ບໍລ
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:371
-msgid "Expecting a specific copy selection."
+#, fuzzy
+msgid "Expecting a specific item selection."
 msgstr "ເລີືອກສະເນົາລາຍການໃດໝຶ່ງສະເພາະ."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:513
@@ -5951,7 +5971,7 @@ msgstr "ເພີ່ມກຳນົດເວລາສົ່ງໃຫ້ແກ່
 msgid "FV"
 msgstr "FV"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1071
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
 #, fuzzy, c-format
 msgid "Facebook"
 msgstr "ປື້ມ"
@@ -5971,7 +5991,7 @@ msgstr ""
 msgid "February"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:201
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:208
 #, fuzzy, c-format
 msgid "Female:"
 msgstr "ເພດຍີງ"
@@ -6043,13 +6063,19 @@ msgstr "Filmspole"
 msgid "Fine amount"
 msgstr "ຈຳນວນຄ່າປັບໃຫມ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:88
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:362
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #, c-format
 msgid "Fines"
+msgstr "ຄ່າປັບໃຫມ"
+
+#. For the first occurrence,
+#. %1$s:  BORROWER_INF.amountoutstanding 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:88
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
+#, fuzzy, c-format
+msgid "Fines (%s)"
 msgstr "ຄ່າປັບໃຫມ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:27
@@ -6149,7 +6175,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:236
 msgid "Form not submitted because of the following problem(s)"
 msgstr "ແບບຟອມບໍ່ຖືກຕ້ອງ ເພາະມີບັນຫາຕາມມາ"
@@ -6159,7 +6185,7 @@ msgstr "ແບບຟອມບໍ່ຖືກຕ້ອງ ເພາະມີບ�
 msgid "Format"
 msgstr "; ຮູບແບບ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:838
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:880
 #, c-format
 msgid "Formed by the union: ... and: ..."
 msgstr "ແບບຟອມສ້າງຂື້ນໂດຍສະຫະພັນ: ... ແລະ: ..."
@@ -6240,7 +6266,7 @@ msgid "Friday"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:16
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:107
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:111
 #, c-format
 msgid "From: "
 msgstr "ມາຈາກ: "
@@ -6371,7 +6397,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:221
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:138
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:67
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:123
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:24
@@ -6382,7 +6408,7 @@ msgstr "ດຳເນີນການ"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "Go to detail"
 msgstr "ລາຍລະອຽດການຕິດຕໍ່"
@@ -6556,7 +6582,7 @@ msgstr "ຫົວຂໍ້ການຈ່ອງ"
 msgid "Holdings"
 msgstr "ສິ່ງທີ່ຈ່ອງ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:773
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:815
 #, fuzzy, c-format
 msgid "Holdings note: "
 msgstr "ຂຽນລາຍລະອຽດກ່ຽວກັບສິ່ງທີ່ຈ່ອງ: "
@@ -6567,14 +6593,15 @@ msgstr "ຂຽນລາຍລະອຽດກ່ຽວກັບສິ່ງທີ
 msgid "Holdings:"
 msgstr "ສິ່ງທີ່ຈ່ອງ:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:93
-#, c-format
-msgid "Holds"
-msgstr "ຈ່ອງ"
-
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:470
 #, c-format
 msgid "Holds "
+msgstr "ຈ່ອງ "
+
+#. %1$s:  reserves_count 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:93
+#, fuzzy, c-format
+msgid "Holds (%s)"
 msgstr "ຈ່ອງ "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:164
@@ -6709,8 +6736,8 @@ msgid "ISBN:"
 msgstr "ISBN:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:330
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:182
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:388
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:194
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:418
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:203
 #, c-format
 msgid "ISBN: "
@@ -6743,13 +6770,13 @@ msgid "ISSN:"
 msgstr "ISSN:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:340
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:200
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:398
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:212
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:430
 #, c-format
 msgid "ISSN: "
 msgstr "ISSN: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:100
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:105
 #, fuzzy, c-format
 msgid "Identity"
 msgstr "ລາຍລະອຽດ ສະຖານະ"
@@ -6845,9 +6872,9 @@ msgstr "ທຳການລົບທັນທີທັນໃດ"
 msgid "In online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:228
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1135
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:868
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:237
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1137
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:869
 #, c-format
 msgid "In transit ("
 msgstr "ຢູ່ໃນຊ່ວງນຳມາ ("
@@ -6870,12 +6897,12 @@ msgstr "ກຳລັງສົ່ງກ່ອງລາຍການທີ່ທາ
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:234
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:400
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:687
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:729
 #, c-format
 msgid "In: "
 msgstr "ໃນ: "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:621
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:663
 #, c-format
 msgid "Incomplete contents:"
 msgstr "ເນື້ອຫາຍັງບໍ່ທັນສຳເລັດ:"
@@ -6946,12 +6973,12 @@ msgstr "ໝາຍເລກໂທລະສັບ"
 msgid "Item cannot be checked out."
 msgstr "ບໍ່ສະມາດຢືມລາຍການນີ້ອອກໄດ້."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1131
 #, c-format
 msgid "Item hold queue priority"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1127
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
 #, fuzzy, c-format
 msgid "Item holds"
 msgstr "ທີ່ຈ່ອງ"
@@ -6960,7 +6987,7 @@ msgstr "ທີ່ຈ່ອງ"
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:258
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:109
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:354
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1115
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1117
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:62
 #, c-format
 msgid "Item type"
@@ -6978,6 +7005,31 @@ msgstr "ປະເພດລາຍການ:"
 #, c-format
 msgid "Item type: "
 msgstr "ປະເພດລາຍການ: "
+
+#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:205
+#, fuzzy, c-format
+msgid "Items available at:"
+msgstr "ມີໃຫ້ສຳເນົາຢູ່ທີ່:"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:140
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1050
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:781
+#, fuzzy, c-format
+msgid "Items available for loan: "
+msgstr "ມີສະບັບສຳເນົາໃຫ້ຢື່ມ: "
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:177
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1082
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:813
+#, fuzzy, c-format
+msgid "Items available for reference: "
+msgstr "ມີສຳເນົາສຳ ເພື່ອຢັ້ງຢືນ: "
+
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:351
+#: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
+#, fuzzy, c-format
+msgid "Items available:"
+msgstr "ບໍ່ມີລາຍການໃດຫວ້າງ:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
@@ -7084,7 +7136,7 @@ msgid "Keyword"
 msgstr "ອັກສອນຫຍໍ້ເພື່ອຄົ້ນຫາ"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:547
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:83
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:84
 #, c-format
 msgid "Kit"
 msgstr "Kit"
@@ -7184,11 +7236,7 @@ msgstr "Lagringsbrikke"
 msgid "Language"
 msgstr "ພາສາ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:126
-#, fuzzy, c-format
-msgid "Language:"
-msgstr "ພາສາ:"
-
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:137
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:175
 #, c-format
 msgid "Language: "
@@ -7303,17 +7351,17 @@ msgid "Limit to currently available items."
 msgstr "ປະຈຳບັນຍັງມີລາຍການທີ່ຍັງຫວ້າງຢູ່."
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:30
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:120
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:124
 #, c-format
 msgid "Limit to: "
 msgstr "ຈຳກັດທີ່: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1188
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1190
 #, fuzzy, c-format
 msgid "Link to resource "
 msgstr "ຊັບພະຍາກອນທີ່ຢູ່ຫໍສະຫມຸດແບບອອນລາຍ: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
 #, fuzzy, c-format
 msgid "LinkedIn"
 msgstr "ເຊື່ອມຕໍ່"
@@ -7330,19 +7378,19 @@ msgstr "ເຊື່ອມຕໍ່"
 msgid "List %s Deleted."
 msgstr "ລາຍການ %s ຖືກລຶບ."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:585
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:653
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:609
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:677
 #, fuzzy, c-format
 msgid "List name"
 msgstr "ບັນຊີລາຍຊື່"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:711
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:735
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:74
 #, fuzzy, c-format
 msgid "List name:"
 msgstr "ບັນຊີລາຍຊື່:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:496
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:520
 #, fuzzy, c-format
 msgid "List name: "
 msgstr "ບັນຊີລາຍຊື່: "
@@ -7353,8 +7401,7 @@ msgid "List(s) this item appears in: "
 msgstr "ລາຍການຕ່າງໆ ເຫລົ່ານີ້ຈະປະກົດຂື້ນໃນ: "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:36
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:489
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:558
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:582
 #, c-format
 msgid "Lists"
 msgstr "ລາຍການບັນຂີ"
@@ -7383,7 +7430,7 @@ msgid "Local login"
 msgstr "ເຂົ້າສູ່ລະບົບພາຍໃນ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:51
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1116
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1118
 #, c-format
 msgid "Location"
 msgstr "ທີ່ຕັ້ງ"
@@ -7403,7 +7450,7 @@ msgstr "ທີ່ຕັ້ງ ແລະ ຍັງຫວ້າງ: "
 msgid "Location(s) (Status)"
 msgstr "ທີ່ຕັ້ງຕ່າງໆ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1149
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1151
 #, fuzzy, c-format
 msgid "Location(s): "
 msgstr "ທີ່ຕັ້ງ "
@@ -7415,8 +7462,8 @@ msgstr "ທີ່ຕັ້ງ "
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:98
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:77
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:633
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:645
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:657
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:669
 #, c-format
 msgid "Log in"
 msgstr "ເຂົ້າສູ່ລະບົບ"
@@ -7487,9 +7534,9 @@ msgstr ""
 msgid "LookupPatron"
 msgstr "ຄົ້ນຫາສະມາຊິກ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:207
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1117
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:847
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:216
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1119
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:848
 #, c-format
 msgid "Lost ("
 msgstr "ເສັຍ ("
@@ -7545,7 +7592,7 @@ msgstr "MARCXML"
 msgid "MARC Card View"
 msgstr "ສະແດງບັດ MARC"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACMARCdetail.xsl:8
+#: opac-tmpl/bootstrap/en/xslt/plainMARC.xsl:8
 #, fuzzy, c-format
 msgid "MARC View"
 msgstr "ສະແດງ MARC"
@@ -7647,19 +7694,19 @@ msgid "MESSAGE 9:"
 msgstr "ຂໍ້ຄວາມ 9:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:52
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:61
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:62
 #, c-format
 msgid "MP"
 msgstr "MP"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:54
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:63
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:64
 #, c-format
 msgid "MU"
 msgstr "MU"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:50
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:59
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:60
 #, c-format
 msgid "MX"
 msgstr "MX"
@@ -7679,12 +7726,12 @@ msgstr "Magnetbåndspole"
 msgid "Magnetisk-optisk plate"
 msgstr "Magnetisk-optisk plate"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:86
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:89
 #, c-format
 msgid "Main Author"
 msgstr "ນັກປະພັນຕົວຫລັກ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:244
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:251
 #, fuzzy, c-format
 msgid "Main address"
 msgstr "ທີ່ຢູ່ອີເມວ:"
@@ -7697,7 +7744,7 @@ msgstr "ທີ່ຢູ່ອີເມວ:"
 msgid "Make a "
 msgstr "ສ້າງ "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:208
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:215
 #, fuzzy, c-format
 msgid "Male:"
 msgstr "ເພດຊາຍ"
@@ -7723,7 +7770,8 @@ msgid "Manuskripter"
 msgstr "Manuskripter"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:550
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:86
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:87
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:99
 #, c-format
 msgid "Map"
 msgstr "ແຜນທີ່"
@@ -7768,7 +7816,7 @@ msgstr "ຂ້ອຍ"
 msgid "Memoarer"
 msgstr "Memoarer"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:905
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:948
 #, c-format
 msgid "Merged with ... to form ..."
 msgstr "ເຊື່ອມເຂົ້າກັບ ... ຮູບແບບ ..."
@@ -7827,7 +7875,7 @@ msgstr "ສິ່ງທີ່ຂາດຫາຍ: %s "
 msgid "Mixed Materials"
 msgstr "ເຄື່ອງມືທີ່ປະສົມປະສານກັນ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:84
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:85
 #, fuzzy, c-format
 msgid "Mixed materials"
 msgstr "ເຄື່ອງມືແບບປະສົມ"
@@ -7917,9 +7965,14 @@ msgid "Mus"
 msgstr "Mus"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:554
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:88
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:89
 #, c-format
 msgid "Music"
+msgstr "ເພງ"
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:100
+#, fuzzy, c-format
+msgid "MusicAlbum"
 msgstr "ເພງ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:273
@@ -7950,7 +8003,7 @@ msgstr "Musikktrykk og lydopptak"
 msgid "My Tags"
 msgstr "ແທັກຂອງຂ້ອຍ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:215
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:222
 #, c-format
 msgid "N/A:"
 msgstr ""
@@ -8014,8 +8067,9 @@ msgstr "ຄຳຄິດເຫັນໃຫມ່ຈາກ %s %s, %s%s"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:58
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:150
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:579
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:642
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:467
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:603
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:666
 #, fuzzy, c-format
 msgid "New list"
 msgstr "ລາຍການໃຫມ່"
@@ -8055,7 +8109,7 @@ msgstr "ໜັງສືພີມ"
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:1
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:69
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1034
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1036
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
 #, c-format
 msgid "Next"
@@ -8068,15 +8122,15 @@ msgid "Next &gt;&gt;"
 msgstr "ຕໍ່ໄປ &gt;&gt;"
 
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:15
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1032
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1034
 #, c-format
 msgid "Next &raquo;"
 msgstr "ລາຍຊື່ປື້ມ &rsaquo;"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:235
-#, c-format
-msgid "Next available copy"
-msgstr "ມີໃຫ້ສຳເນົາອັນຕໍ່ໄປ"
+#, fuzzy, c-format
+msgid "Next available item"
+msgstr "ລາຍການບໍ່ຫວ້າງ."
 
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:31
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:45
@@ -8089,25 +8143,13 @@ msgstr "ບໍ່"
 msgid "No available items."
 msgstr "ລາຍການບໍ່ຫວ້າງ."
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:128
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1045
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:776
-#, c-format
-msgid "No copies available "
-msgstr "ບໍ່ມີໃຫ້ສຳເນົາ "
-
-#: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:152
-#, c-format
-msgid "No copies available."
-msgstr "ບໍ່ມີໃຫ້ສຳເນົາ."
-
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:95
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:161
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:169
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:178
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:187
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:162
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:170
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:179
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:188
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:31
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:44
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:53
@@ -8161,6 +8203,18 @@ msgstr "ບໍ່ມີລາຍການທີ່ຖືກເພີ່ມເຂ
 msgid "No item was selected"
 msgstr "ບໍ່ມີລາຍການໃດຖືກເລືອກ"
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:135
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1045
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:776
+#, fuzzy, c-format
+msgid "No items available "
+msgstr "ບໍ່ມີລາຍການໃດຫວ້າງ:"
+
+#: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:152
+#, fuzzy, c-format
+msgid "No items available."
+msgstr "ບໍ່ມີລາຍການໃດຫວ້າງ:"
+
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:379
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:216
 #, c-format
@@ -8169,7 +8223,7 @@ msgstr "ບໍ່ມີລາຍການໃດຫວ້າງ:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:66
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:68
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:140
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:144
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:177
 #, c-format
 msgid "No limit"
@@ -8191,7 +8245,7 @@ msgstr "ບໍ່ມີລາຍກ່ຽວກັບ ຟີຊິກ ໃນກ�
 msgid "No private lists"
 msgstr "ບໍ່ມີລາຍການສ່ວນຕົວ."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:628
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:652
 #, c-format
 msgid "No private lists."
 msgstr "ບໍ່ມີລາຍການສ່ວນຕົວ."
@@ -8201,7 +8255,7 @@ msgstr "ບໍ່ມີລາຍການສ່ວນຕົວ."
 msgid "No public lists"
 msgstr "ບໍ່ມີລາຍການທີ່ເປັນສາທາລະນະ."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:693
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:717
 #, c-format
 msgid "No public lists."
 msgstr "ບໍ່ມີລາຍການທີ່ເປັນສາທາລະນະ."
@@ -8225,6 +8279,12 @@ msgstr ""
 #, fuzzy, c-format
 msgid "No results found!"
 msgstr "ການຄົ້ນຫາບໍ່ພົບ!"
+
+#. SCRIPT
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#, fuzzy
+msgid "No suggestion was selected"
+msgstr "ບໍ່ມີລາຍການໃດຖືກເລືອກ"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
@@ -8360,7 +8420,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:150
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1123
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1125
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:43
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:111
 #, c-format
@@ -8401,7 +8461,7 @@ msgstr "ບໍ່"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:569
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:990
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1056
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1058
 #, c-format
 msgid "Novelist Select"
 msgstr "ເລືອກນັກແຕ່ງນະວະນິຍາຍ"
@@ -8453,16 +8513,16 @@ msgstr ""
 msgid "October"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:235
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1141
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:874
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:244
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1143
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:875
 #, c-format
 msgid "On hold ("
 msgstr "ຢູ່ໃນການຈ່ອງ ("
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:221
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1129
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:861
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:230
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1131
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:862
 #, c-format
 msgid "On order ("
 msgstr "ຢູ່ລາຍການສັ່ງ ("
@@ -8472,7 +8532,7 @@ msgstr "ຢູ່ລາຍການສັ່ງ ("
 msgid "Online Access: "
 msgstr "ເຂົ້າຫາແບບອອນລາຍ: "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:394
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:407
 #, c-format
 msgid "Online Resources:"
 msgstr "ຊັບພະຍາກອນທີ່ຢູ່ຫໍສະຫມຸດແບບອອນລາຍ:"
@@ -8482,7 +8542,7 @@ msgstr "ຊັບພະຍາກອນທີ່ຢູ່ຫໍສະຫມຸດ
 msgid "Online resources:"
 msgstr "ຊັບພະຍາກອນທີ່ຢູ່ຫໍສະຫມຸດແບບອອນລາຍ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:552
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:594
 #, fuzzy, c-format
 msgid "Online resources: "
 msgstr "ຊັບພະຍາກອນທີ່ຢູ່ຫໍສະຫມຸດແບບອອນລາຍ: "
@@ -8564,17 +8624,12 @@ msgstr "Ortofoto"
 msgid "Other"
 msgstr "ສີ່ງອື່ນ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:922
-#, fuzzy, c-format
-msgid "Other Title: "
-msgstr "ລາຍການອື່ນໆ: "
-
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:914
 #, fuzzy, c-format
 msgid "Other editions of this work"
 msgstr "ສະບັບປັບປຸງຂອງງານນີ້"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:785
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:827
 #, fuzzy, c-format
 msgid "Other editions: "
 msgstr "ສະບັບປັບປຸງອື່ນໆ: "
@@ -8590,9 +8645,10 @@ msgstr "ຊື່ອື່ນ:"
 msgid "Other holdings ( %s )"
 msgstr "ສິ່ງທີ່ຈ່ອງ ( %s )"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:922
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:928
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:437
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:442
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:469
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:474
 #, c-format
 msgid "Other title: "
 msgstr "ລາຍການອື່ນໆ: "
@@ -8615,10 +8671,11 @@ msgstr "OutputRewritablePage "
 msgid "OverDrive search for '%s'"
 msgstr ""
 
+#. %1$s:  overdues_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:86
-#, c-format
-msgid "Overdue"
-msgstr "ກາຍກຳນົດ"
+#, fuzzy, c-format
+msgid "Overdue (%s)"
+msgstr "ກາຍກຳນົດ "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:348
 #, c-format
@@ -8631,7 +8688,7 @@ msgid "Oversiktsverker innenfor et emne"
 msgstr "Oversiktsverker innenfor et emne"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:55
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:64
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:65
 #, c-format
 msgid "PR"
 msgstr "PR"
@@ -8658,7 +8715,7 @@ msgstr "Parallelltittel: "
 msgid "Parameters"
 msgstr "ຊຸດຄຳສັ່ງ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:624
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:666
 #, c-format
 msgid "Partial contents:"
 msgstr "ເນື້ອຫາໂດຍສັງເຂບ:"
@@ -8692,7 +8749,7 @@ msgstr "ລະຫັດຜ່ານ:"
 msgid "Patent document"
 msgstr "ເອກະສານກ່ຽວກັບສິດທິ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:408
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:440
 #, fuzzy, c-format
 msgid "Patent information: "
 msgstr "ຂໍ້ມູນສ່ວນບຸກຄົນ "
@@ -8757,17 +8814,13 @@ msgstr "ລາຍລະອຽດກ່ຽວກັບຮ່າງກາຍ:"
 msgid "Pick up library"
 msgstr "ເລືອກຫໍສະຫມູດ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:522
-#, fuzzy, c-format
-msgid "Pick up loaction:"
-msgstr "ເລືອກທີ່ຕັ້ງ"
-
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:477
 #, fuzzy, c-format
 msgid "Pick up location"
 msgstr "ເລືອກທີ່ຕັ້ງ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:522
 #, fuzzy, c-format
 msgid "Pick up location:"
 msgstr "ເລືອກທີ່ຕັ້ງ"
@@ -8777,8 +8830,8 @@ msgstr "ເລືອກທີ່ຕັ້ງ"
 msgid "Picture"
 msgstr "ຮູບພາບ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:91
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:81
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:94
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:83
 #, c-format
 msgid "Piece-Analytic Level"
 msgstr ""
@@ -8802,7 +8855,7 @@ msgstr "ທີ່ຈ່ອງ"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:9
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:86
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:90
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:471
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:474
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
@@ -8813,7 +8866,7 @@ msgstr "ທີ່ຈ່ອງ"
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:407
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:410
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, c-format
 msgid "Place hold"
 msgstr "ທີ່ຈ່ອງ"
@@ -8952,7 +9005,7 @@ msgstr "ກະລຸນາບັນທືກ: "
 msgid "Please try again with plain text. %sUnrecognized error. %s "
 msgstr "ກະລຸນາລອງໃຫມ່ອີກຄັ້ງກັບຂໍ້ຄວາມຢ່າງດຽວ. %sບໍ່ຮັບຮູ້ຂໍ້ຜິດພາດທີ່ເກີດຂື້ນ. %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:730
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:737
 #, c-format
 msgid "Please type this following characters into the preceding box: "
 msgstr ""
@@ -9023,7 +9076,7 @@ msgstr "ກ່ອນຫນ້າ"
 
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:16
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1027
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1028
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
 #, c-format
 msgid "Previous"
@@ -9066,9 +9119,9 @@ msgstr "ລຳດັບຄວາມສຳຄັນ"
 msgid "Priority:"
 msgstr "ລຳດັບຄວາມສຳຄັນ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:527
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:529
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:731
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:551
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:553
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:755
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:78
 #, c-format
 msgid "Private"
@@ -9084,6 +9137,11 @@ msgstr "ລາຍການສ່ວນຕົວ"
 msgid "Processing..."
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:109
+#, c-format
+msgid "Product"
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:317
 #, c-format
 msgid "Programmed texts"
@@ -9094,14 +9152,14 @@ msgstr "ຂໍ້ຄວາມທີ່ເປັນຊຸດຄຳສັ່ງ"
 msgid "Programvare"
 msgstr "Programvare"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:294
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:307
 #, c-format
 msgid "Provenance note: "
 msgstr "ທີ່ມາຂອງການບັນທຶກ: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:532
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:534
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:733
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:556
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:558
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:757
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:80
 #, c-format
 msgid "Public"
@@ -9117,8 +9175,8 @@ msgstr "ລາຍການສາທາລະນະ"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:65
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:67
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:569
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:571
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:593
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:595
 #, c-format
 msgid "Public lists"
 msgstr "ລາຍການສາທາລະນະ"
@@ -9152,12 +9210,16 @@ msgstr "ສັ່ງພິມ/ວັນທີລິຂະສິດ: ໃຫມ່
 msgid "Publication/Copyright date: Oldest to newest"
 msgstr "ສັ່ງພິມ/ວັນທີລິຂະສິດ: ເກົ່າສຸດຫາໃຫມ່ສຸດ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:162
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:319
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:353
 #, c-format
 msgid "Publication:"
+msgstr "ການພິມ:"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:164
+#, fuzzy, c-format
+msgid "Publication: "
 msgstr "ການພິມ:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:188
@@ -9201,8 +9263,8 @@ msgstr "ຜູ້ຈັດພິມ:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:885
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:890
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:304
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:309
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:322
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:327
 #, c-format
 msgid "Publisher: "
 msgstr "ຜູ້ຈັດພິມ: "
@@ -9369,7 +9431,7 @@ msgid "Remove field"
 msgstr "ລະຫັດຂອງງານ"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 msgid "Remove from list"
 msgstr ""
 
@@ -9379,7 +9441,7 @@ msgid "Remove from this list"
 msgstr "ລືບລາຍການບັນຊີນີ້"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:477
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:501
 #, fuzzy
 msgid "Remove selected items"
 msgstr "ຖອນລາຍການທີ່ເລືອກອອກ"
@@ -9420,48 +9482,48 @@ msgstr "ຢື່ມຕໍ່ລາຍການທີ່ເລືອກໄວ້
 msgid "RenewLoan"
 msgstr "ຢື່ມຕໍ່ລາຍການທີ່ຢື່ມແລ້ວ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:421
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:453
 #, fuzzy, c-format
 msgid "Report number: "
 msgstr "ບັດເລກທີ່: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:134
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:148
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:167
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:181
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:195
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:222
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:257
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:271
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:285
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:299
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:313
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:327
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:341
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:367
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:381
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:395
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:409
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:423
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:437
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:463
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:477
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:491
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:505
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:519
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:533
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:547
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:561
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:575
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:602
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:616
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:630
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:644
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:658
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:672
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:686
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:700
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:714
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:153
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:188
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:202
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:229
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:264
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:278
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:292
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:306
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:320
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:334
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:348
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:374
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:388
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:402
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:416
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:430
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:444
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:470
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:484
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:498
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:512
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:526
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:540
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:554
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:568
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:582
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:609
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:623
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:637
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:651
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:665
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:679
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:693
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:707
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:721
 #, fuzzy, c-format
 msgid "Required"
 msgstr "(ການຮັບການຮ້ອງຂໍ)"
@@ -9561,7 +9623,7 @@ msgstr ""
 "ຫນ້າທີ່ນີ້ສາມາດເລືອກກັບຄືນໄປຫາຂໍ້ມູນການຕິດຕໍຂອງສະມາຊິກ, ຂໍ້ມູນທີ່ດີ, ຂໍ້ມູນການຮ້ອງຂໍກ່ຽວກັບການຈ່ອງ, "
 "ຂໍ້ມູນການຢື່ມ, ແລະ ຂໍ້ຄວາມຕ່າງໆ."
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:758
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:800
 #, c-format
 msgid "Review: "
 msgstr "ສະແດງຄືນ: "
@@ -9602,7 +9664,7 @@ msgstr "Rull (pianorull/orgelrull)"
 msgid "Røntgenbilde"
 msgstr "Røntgenbilde"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:54
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:55
 #, c-format
 msgid "SE"
 msgstr "SE"
@@ -9618,12 +9680,12 @@ msgid "SMS number:"
 msgstr "ຫມາຍເລກ SMS:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:42
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:50
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:51
 #, c-format
 msgid "ST"
 msgstr "ST"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:333
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:346
 #, c-format
 msgid "SUDOC serial history: "
 msgstr "ປະຫວັດລະຫັດຂອງ SUDOC: "
@@ -9663,8 +9725,8 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:544
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:741
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:568
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:88
@@ -9722,13 +9784,13 @@ msgstr "ສະແກນ ດັດສະນີເພື່ອ: "
 msgid "Scan index:"
 msgstr "ສະແກນດັດສະນີ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:759
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:801
 #, c-format
 msgid "Scope and content: "
 msgstr "ຂອບເຂດ ແລະ ເນື້ອຫາ: "
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:552
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:90
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:91
 #, c-format
 msgid "Score"
 msgstr "ຄະແນນ"
@@ -9773,7 +9835,7 @@ msgstr "ຄົ້ນຫາຫົວຂໍ້ນີ້ໃນ:"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:313
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:187
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:50
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:87
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:89
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:347
 msgid "Search for works by this author"
 msgstr "ຄົ້ນຫາຊື່ເລື່ອງໂດຍນັກປະພັນນີ້"
@@ -9825,7 +9887,7 @@ msgstr "SearchCourseReserves "
 msgid "Searching OverDrive..."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:101
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:107
 #, c-format
 msgid "Secondary Author"
 msgstr "ນັກປະພັນຜູ້ທີ່ສອງ"
@@ -9859,18 +9921,18 @@ msgid "See also:"
 msgstr "ເລືອກລາຍການຫນຶ່ງ"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "See biblio"
 msgstr "%s ລາຍການປື້ມ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:94
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:98
 #, fuzzy, c-format
 msgid "See the most popular titles"
 msgstr "ເບີ່ງທີ່ ຫົວຂໍ້ທີ່ໄດ້ຮັບຄວາມນິຍົມຫລາຍທີສຸດ"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1032
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1034
 msgid ""
 "See: [% IF ( nextTitle ) %][% nextTitle |html %][% ELSE %]next biblio[% END "
 "%]"
@@ -9879,7 +9941,7 @@ msgstr ""
 "%]"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1025
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1026
 msgid ""
 "See: [% IF ( previousTitle ) %][% previousTitle |html %][% ELSE %]previous "
 "biblio[% END %]"
@@ -9893,15 +9955,15 @@ msgid "Select a list"
 msgstr "ເລືອກລາຍການຫນຶ່ງ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:254
-#, c-format
-msgid "Select a specific copy:"
+#, fuzzy, c-format
+msgid "Select a specific item:"
 msgstr "ເລືອກສຳເນົາໃດຫນຶ່ງສະເພາະ:"
 
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:34
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:236
 #, fuzzy, c-format
 msgid "Select all"
@@ -9929,7 +9991,7 @@ msgstr "ລາຍການທີ່ເລືອກແລ້ວ :"
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:38
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:316
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:233
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, fuzzy, c-format
 msgid "Select titles to: "
 msgstr "ລາຍການທີ່ເລືອກແລ້ວ : "
@@ -9987,7 +10049,7 @@ msgstr "ກຳລັງສົ່ງລາຍການຂອງທ່ານ"
 msgid "Sep"
 msgstr "ຊຸດ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:847
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:889
 #, c-format
 msgid "Separated from:"
 msgstr "ແຍກອອກຈາກ:"
@@ -10028,8 +10090,8 @@ msgstr "ຕໍ່ເນື່ອງກັນ"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:166
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:168
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:217
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:76
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:229
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:77
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:81
 #, c-format
 msgid "Series"
@@ -10056,8 +10118,8 @@ msgid "Series:"
 msgstr "ຊຸດ:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:180
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:168
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:175
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:186
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:193
 #, c-format
 msgid "Series: "
 msgstr "ຫົວເລື່ອງ: "
@@ -10068,18 +10130,18 @@ msgid "Session lost"
 msgstr "ຂາດການຕິດຕໍ່ກັບລະບົບ"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:538
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:69
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:70
 #, c-format
 msgid "Set"
 msgstr "ຊຸດ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:86
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:76
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:88
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:77
 #, c-format
 msgid "Set Level"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:277
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:295
 #, c-format
 msgid "Set: "
 msgstr "ຊຸດ: "
@@ -10089,29 +10151,29 @@ msgstr "ຊຸດ: "
 msgid "Settings updated"
 msgstr "ປັບປຸງການຕັ້ງຕ່າສຳເລັດ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1070
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
 #, fuzzy, c-format
 msgid "Share"
 msgstr "ບັນທຶກ"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
 #, fuzzy
 msgid "Share by email"
 msgstr "ອີເມວທີສອງ ຫລື ສຳຮອງ:"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1075
 msgid "Share on Delicious"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1071
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
 msgid "Share on Facebook"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
 msgid "Share on LinkedIn"
 msgstr ""
 
@@ -10138,7 +10200,7 @@ msgstr "ສະແດງລາຍການທັງຫມົດ"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:223
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:389
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:253
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:271
 #, c-format
 msgid "Show analytics"
 msgstr "ສະແດງລາຍການໃດຫນຶ່ງສະເພາະ"
@@ -10168,12 +10230,12 @@ msgstr ""
 "%])"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:5
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:96
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:100
 #, c-format
 msgid "Show the top "
 msgstr "ສະແດງດາ້ນເທິງສຸດ "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:270
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:288
 #, c-format
 msgid "Show volumes"
 msgstr "ສະແດງລາຍການເພີ່ມເຕີ່ມ"
@@ -10323,7 +10385,7 @@ msgstr "ຂໍອະໄພ, ທ່ານບໍ່ສາມາດຈ່ອງເ�
 msgid "Sorry, your session has timed out. Please log in again."
 msgstr "ຂໍອະໄພ, ເວລາຂອງທ່ານໄດ້ຫມົດແລ້ວ. ກະລຸນາເລີມເຂົ້າສູ່ລະບົບໃຫມ່ອີກຄັ້ງ."
 
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:63
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:65
 #, fuzzy, c-format
 msgid "Sort By: "
 msgstr "ຈັດລຽງລຳດັບຕາມ: "
@@ -10338,8 +10400,8 @@ msgstr "ຈັດລຽງລຳດັບຕາມ:"
 msgid "Sort by: "
 msgstr "ຈັດລຽງລຳດັບຕາມ: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:498
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:720
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:522
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:744
 #, c-format
 msgid "Sort this list by: "
 msgstr "ລຽງລຳດັບລາຍການນີ້ຕາມ: "
@@ -10350,7 +10412,7 @@ msgid "Sorting: "
 msgstr "ການລາຍງານ "
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:553
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:89
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:90
 #, c-format
 msgid "Sound"
 msgstr "ສຽງ"
@@ -10384,7 +10446,7 @@ msgstr "ສິ່ງທີ່ຄວນເອົາໃຈໃສ່ເປັນພ
 msgid "Spill"
 msgstr "Spill"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:902
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:945
 #, c-format
 msgid "Split into .. and ...:"
 msgstr "ແຍກເຂົ້າຫາ .. ແລະ ...:"
@@ -10430,7 +10492,7 @@ msgstr "Statistikker"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:481
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:788
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1122
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:152
 #, c-format
 msgid "Status"
@@ -10493,49 +10555,49 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:156
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:158
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:379
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:392
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:79
 #, c-format
 msgid "Subject"
 msgstr "ຫົວເລື່ອງ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:359
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:372
 #, c-format
 msgid "Subject - Author/Title"
 msgstr "ຫົວເລື່ອງ - ນັກປະພັນ/ຫົວຂໍ້"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:349
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:362
 #, c-format
 msgid "Subject - Corporate Author"
 msgstr "ຫົວເລື່ອງ - ນັກປະພັນຮ່ວມ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:354
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:367
 #, c-format
 msgid "Subject - Family"
 msgstr "ຫົວເລື່ອງ - ຄອບຄົວ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:374
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:387
 #, c-format
 msgid "Subject - Form"
 msgstr "ຫົວເລື່ອງ - ຮູບແບບ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:369
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:382
 #, c-format
 msgid "Subject - Geographical Name"
 msgstr "ຫົວເລື່ອງ - ຊື່ທາງທໍລະນີວິທະຍາ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:344
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:357
 #, c-format
 msgid "Subject - Personal Name"
 msgstr "ຫົວເລື່ອງ - ຊື່ສ່ວນບຸກຄົນ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:364
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:377
 #, c-format
 msgid "Subject - Topical Name"
 msgstr "ຫົວເລື່ອງ - ຊື່ດ້ານຫົວຂໍ້"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:384
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:397
 #, c-format
 msgid "Subject Category"
 msgstr "ຫມວດຂອງຫົວເລື່ອງ"
@@ -10563,12 +10625,12 @@ msgstr "ຫົວເລື່ອງຕ່າງໆ"
 msgid "Subject(s):"
 msgstr "ຫົວເລື່ອງຕ່າງໆ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:505
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:545
 #, c-format
 msgid "Subject(s): "
 msgstr "ຫົວເລື່ອງຕ່າງໆ: "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:757
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:799
 #, c-format
 msgid "Subject: "
 msgstr "ຫົວເລື່ອງ: "
@@ -10583,12 +10645,12 @@ msgstr "ຫົວເລື່ອງ: "
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:73
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:151
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:79
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:185
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:289
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:69
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:746
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:753
 #, c-format
 msgid "Submit"
 msgstr "ສົ່ງຂໍ້ມູນ"
@@ -10606,7 +10668,7 @@ msgid "Submit changes"
 msgstr "ບັນທຶກການປ່ຽນແປງຕ່າງໆ"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:740
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:747
 #, fuzzy
 msgid "Submit update request"
 msgstr "ສົ່ງຄຳແນະນຳຂອງທ່ານ"
@@ -10623,11 +10685,11 @@ msgid "Subscribe to a subscription alert"
 msgstr "ສະບັບສຳລັບການລົງນາມ"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:140
 msgid "Subscribe to email notification on new issues"
 msgstr "ບອກຮັບແຈ້ງເຕືອນທາງອີເມວໃນເມື່ອມີລາຍການໃຫມ່ເຂົ້າມາ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:140
 #, c-format
 msgid "Subscribe to email notification on new issues "
 msgstr "ແຈ້ງເຕືອນທາງອີເມວໃນເມື່ອງມີລາຍການໃຫມ່ເຂົ້າມາ "
@@ -10694,7 +10756,7 @@ msgstr "ການສະມັກສະມາຊິກ"
 msgid "Summary"
 msgstr "ສະຫລຸບ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:762
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:804
 #, c-format
 msgid "Summary: "
 msgstr "ສະຫລຸບ: "
@@ -10710,22 +10772,22 @@ msgstr "ສຽງ"
 msgid "Sunday"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:890
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:933
 #, c-format
 msgid "Superseded by:"
 msgstr "ແທ່ນທີ່ໂດຍ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:893
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:936
 #, c-format
 msgid "Superseded in part by:"
 msgstr "ແທ່ນທີ່ພາກສ່ວນນີ້ໂດຍ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:835
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:877
 #, c-format
 msgid "Supersedes in part:"
 msgstr "ແທ່ນທີ່ໃນພາກສ່ວນນີ້:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:832
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:874
 #, c-format
 msgid "Supersedes:"
 msgstr "ແທ່ນທີ່:"
@@ -11197,7 +11259,7 @@ msgstr ""
 msgid "Theses"
 msgstr "ເຫລົ່ານີ້"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:313
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:326
 #, c-format
 msgid "Thesis: "
 msgstr "ບົດນິພົນ: "
@@ -11277,7 +11339,7 @@ msgid "This item is on hold for another patron. %s "
 msgstr "ລາຍການນີ້ໄດ້ຈ່ອງໄວ້ສຳລັບຄົນອື່ນແລ້ວ. %s "
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:465
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:489
 #, fuzzy, c-format
 msgid ""
 "This list is empty. %s You can add to your lists from the results of any "
@@ -11285,8 +11347,8 @@ msgstr "ລາຍການນີ້ຫວ້າງເປົ່າ. ທ່ານ�
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:540
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:543
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1086
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1090
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1088
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1092
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -11319,7 +11381,7 @@ msgstr "ບໍ່ສາມາດຮ້ອງຂໍໃນຫົວຂໍ້ນີ
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:371
 msgid ""
 "This title consists of multiple volumes/parts. Please indicate which part "
-"you need. Clicking on specific copy information may be helpful."
+"you need. Clicking on specific item information may be helpful."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:157
@@ -11374,9 +11436,9 @@ msgstr "Tidsskrift"
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:193
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:195
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:501
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:503
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:722
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:525
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:527
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:746
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
 #, c-format
 msgid "Title"
@@ -11405,7 +11467,7 @@ msgid "Title phrase"
 msgstr "ສຳນວນກ່ຽວກັບຊື່ເລື່ອງ"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:939
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:458
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:492
 #, c-format
 msgid "Title translated: "
 msgstr "ສຳນວນກ່ຽວກັບຊື່ເລື່ອງ: "
@@ -11457,12 +11519,12 @@ msgstr "ລະດັບສູງສຸດ"
 msgid "Total due"
 msgstr "ຈຳນວນທັງຫມົດທີ່ກຳນົດ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:389
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:402
 #, c-format
 msgid "Trademark"
 msgstr "ເຄື່ອງຫມາຍການຄ້າ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:81
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:82
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:71
 #, fuzzy, c-format
 msgid "Translation of"
@@ -11521,13 +11583,13 @@ msgstr "ເຖີງກຳນົດ"
 msgid "Tuesday"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1078
 #, c-format
 msgid "Tweet"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:655
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:611
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:679
 #, c-format
 msgid "Type"
 msgstr "ປະເພດ"
@@ -11551,7 +11613,7 @@ msgid "Type:"
 msgstr "ປະເພດ:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:536
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:155
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:173
 #, c-format
 msgid "Type: "
 msgstr "ປະເພດ: "
@@ -11628,12 +11690,12 @@ msgstr "ຊື່ເລື່ອງລວມ"
 msgid "Unified title: %s "
 msgstr "ຊື່ເລື່ອງລວມ "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:121
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:131
 #, c-format
 msgid "Uniform Conventional Heading"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:116
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:125
 #, fuzzy, c-format
 msgid "Uniform Title"
 msgstr "ຮູບແບບຂອງຊື່ເລື່ອງ:"
@@ -11643,8 +11705,8 @@ msgstr "ຮູບແບບຂອງຊື່ເລື່ອງ:"
 msgid "Uniform titles:"
 msgstr "ຮູບແບບຂອງຊື່ເລື່ອງ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:478
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:483
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:515
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:521
 #, c-format
 msgid "Uniform titles: "
 msgstr "ຮູບແບບຂອງຊື່ເລື່ອງຕ່າງ: "
@@ -11738,12 +11800,12 @@ msgid "VHS tape / Videocassette"
 msgstr "ເທັບ VHS / ວີດີໂອ ກາແຊັດ"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:53
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:62
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:63
 #, c-format
 msgid "VM"
 msgstr "VM"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:725
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:732
 #, fuzzy, c-format
 msgid "Verification:"
 msgstr "ນະວະນິຍາຍ"
@@ -11810,7 +11872,7 @@ msgstr "ສະແດງທີ່ Amazon.com"
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:76
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:86
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:88
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:326
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:329
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:331
@@ -11837,7 +11899,7 @@ msgstr "Vinduskort"
 msgid "Visual Material"
 msgstr "ເຄື່ອງໃນການສະແດງອອກ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:87
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:88
 #, fuzzy, c-format
 msgid "Visual material"
 msgstr "ເຄື່ອງມືໃນການສື່ສານ"
@@ -11861,20 +11923,25 @@ msgid "Voksne;"
 msgstr "Voksne;"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:267
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1119
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
 #, fuzzy, c-format
 msgid "Vol info"
 msgstr "ຂໍ້ມູນກ່ຽວກັບລະດັບ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:260
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:278
 #, c-format
 msgid "Volumes: "
 msgstr "Volumes: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:332
 #, c-format
 msgid "Waiting"
+msgstr "ລໍຖ້າ"
+
+#. %1$s:  waiting_count 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
+#, fuzzy, c-format
+msgid "Waiting (%s)"
 msgstr "ລໍຖ້າ"
 
 #. SCRIPT
@@ -11899,7 +11966,7 @@ msgid "We"
 msgstr "Wire"
 
 #. %1$s:  total 
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:46
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:48
 #, c-format
 msgid "We have %s results for your search "
 msgstr ""
@@ -11968,14 +12035,14 @@ msgstr "ລາຍການທີ່ເລືອກແລ້ວ : "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:316
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, fuzzy
 msgid "With selected titles: "
 msgstr "ລາຍການທີ່ເລືອກແລ້ວ : "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:200
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1111
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:840
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:209
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1113
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:841
 #, c-format
 msgid "Withdrawn ("
 msgstr "ຖອນອອກ ("
@@ -11998,9 +12065,9 @@ msgid "Written on %s by %s"
 msgstr "ຂຽນລົງທີ່ %s ໂດຍ %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:244
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:511
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:513
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:724
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:535
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:537
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
 #, c-format
 msgid "Year"
 msgstr "ປີ"
@@ -12174,7 +12241,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
@@ -12348,8 +12415,8 @@ msgstr "ຄຳຄິດຄຳເຫັນຂອງທ່ານ"
 msgid "Your privacy rules have been updated."
 msgstr "ຂໍ້ກຳນົດກ່ຽວກັບຂໍ້ມູນສ່ວນຕົວຂອງທ່ານໄດ້ຮັບການປັບປຸງແລ້ວ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:563
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:565
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:589
 #, c-format
 msgid "Your private lists"
 msgstr "ລາຍການສ່ວນຕົວຂອງທ່ານ"
@@ -12437,7 +12504,7 @@ msgid "[% biblionumber |url %]"
 msgstr "[% biblionumber |url %]"
 
 #. INPUT type=text name=borrower_dateofbirth
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:161
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:166
 msgid "[% borrower.dateofbirth | $KohaDates %]"
 msgstr ""
 
@@ -12481,7 +12548,7 @@ msgid "[% review.biblionumber |url %]"
 msgstr "[% ສະແດງຄືນ.biblionumber |url %]"
 
 #. INPUT type=text name=shelfname
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:496
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:520
 msgid "[% shelfname |html %]"
 msgstr "[% ຊື່ຂອງຖ້ານ |html %]"
 
@@ -12520,9 +12587,10 @@ msgstr "[ຕົວເລືອກເພີ່ມເຕີ່ມ]"
 msgid "[New search]"
 msgstr "[ຄົ້ນຫາໃຫມ່]"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:401
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:568
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:605
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:114
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:414
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:610
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:647
 #, c-format
 msgid "_blank"
 msgstr "_ບອ່ນເປົາຫວ້າງ"
@@ -12532,15 +12600,17 @@ msgstr "_ບອ່ນເປົາຫວ້າງ"
 msgid "a an the"
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:246
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:533
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:583
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:214
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:225
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:699
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:789
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:808
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:852
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:914
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:412
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:232
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:243
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:741
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:831
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:850
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:895
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:957
 #, c-format
 msgid "a_t"
 msgstr "a_t"
@@ -12551,45 +12621,45 @@ msgstr "a_t"
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:931
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:371
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:766
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:341
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:353
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:367
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:380
 #, c-format
 msgid "ab"
 msgstr "ab"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:447
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:136
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:154
 #, c-format
 msgid "abc"
 msgstr "abc"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:600
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:642
 #, c-format
 msgid "abcd"
 msgstr "abcd"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:660
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:702
 #, c-format
 msgid "abcdefgijklnou"
 msgstr "abcdefgijklnou"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:514
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:528
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:555
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:569
 #, c-format
 msgid "abcdfgklmnopqrstvxyz"
 msgstr "abcdfgklmnopqrstvxyz"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:278
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:280
 #, fuzzy, c-format
 msgid "abcdfijkmnpvxyz"
 msgstr "abcdjpvxyz"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:747
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:789
 #, fuzzy, c-format
 msgid "abcdgo"
 msgstr "abcd"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:265
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:278
 #, c-format
 msgid "abcdjpvxyz"
 msgstr "abcdjpvxyz"
@@ -12601,24 +12671,30 @@ msgid "abcdvxyz"
 msgstr "abcdvxyz"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:318
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:366
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:378
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:394
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:407
 #, c-format
 msgid "abceg"
 msgstr "abceg"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:883
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:302
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:320
 #, c-format
 msgid "abcg"
 msgstr "abcg"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:463
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:498
 #, c-format
 msgid "abchnp"
 msgstr "abchnp"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:766
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1189
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1042
+#, c-format
+msgid "abcq"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:808
 #, c-format
 msgid "abcu"
 msgstr "abcu"
@@ -12629,13 +12705,13 @@ msgid "abh"
 msgstr "abh"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:400
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:100
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:118
 #, c-format
 msgid "abhfgknps"
 msgstr "abhfgknps"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:356
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:435
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:467
 #, c-format
 msgid "abhfgnp"
 msgstr "abhfgnp"
@@ -12656,20 +12732,20 @@ msgstr "ສະຫລຸບ ຫລື ສັງລວມ "
 msgid "account, %s please "
 msgstr "ກະລຸນາ, %s ບັນຊີ "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:411
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:443
 #, fuzzy, c-format
 msgid "acdef"
 msgstr "acdeq"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:122
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:462
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1215
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1031
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:475
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1216
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1074
 #, c-format
 msgid "acdeq"
 msgstr "acdeq"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:476
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:513
 #, c-format
 msgid "adfklmor"
 msgstr "adfklmor"
@@ -12734,9 +12810,7 @@ msgid "aperture card "
 msgstr "ເຄື່ອງໜາຍຂອງບັນ "
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:94
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:434
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1187
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:998
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:447
 #, c-format
 msgid "aq"
 msgstr "aq"
@@ -12756,12 +12830,6 @@ msgstr "ງານສິລະປະທີ່ນຳມາປັບປຸງໃໜ
 msgid "article"
 msgstr "ຫົວຂໍ້"
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:246
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:412
-#, fuzzy, c-format
-msgid "at"
-msgstr "ຊຸດ"
-
 #. %1$s:  WAITIN.branch 
 #. %2$s:  ELSE 
 #. %3$s:  WAITIN.holdingbranch 
@@ -12777,12 +12845,12 @@ msgstr "ທີ່ %s %s ໃນການເຄື່ອນຫາຈາກ %s ເ�
 msgid "atlas "
 msgstr "ແຜນທີ່ໂລກ "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:640
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:682
 #, fuzzy, c-format
 msgid "atru"
 msgstr "tru"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:137
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:155
 #, c-format
 msgid "au"
 msgstr "au"
@@ -12794,9 +12862,9 @@ msgstr "ຊີວະປະຫວັດ"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:186
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:200
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:166
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:182
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:197
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:184
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:200
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:215
 #, c-format
 msgid "av"
 msgstr "av"
@@ -12818,7 +12886,7 @@ msgid "available online "
 msgstr "ຍັງຫວ້າງຢູ່ອອນລາຍ "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "average rating: "
 msgstr "ລາຍການຂອງທ່ານ : %s "
@@ -12830,16 +12898,14 @@ msgstr "ລາຍການຂອງທ່ານ : %s "
 msgid "average rating: %s (%s votes)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:776
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:818
 #, c-format
 msgid "az"
 msgstr "az"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:131
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:470
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1224
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:888
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1039
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:483
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:889
 #, c-format
 msgid "bc"
 msgstr "bc"
@@ -12915,16 +12981,16 @@ msgstr "ຄະນະກຳມະການ bristol"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
 #, fuzzy
 msgid "by"
 msgstr "ໂດຍ"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:452
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:144
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:162
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:97
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:86
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:88
 #, c-format
 msgid "by "
 msgstr "ໂດຍ "
@@ -12970,9 +13036,9 @@ msgid "catalogue"
 msgstr "ບັນຊີລາຍຊື່ປື້ມ"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:115
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:455
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1208
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1024
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:468
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1209
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1067
 #, c-format
 msgid "cdn"
 msgstr "cdn"
@@ -12983,7 +13049,7 @@ msgid "celestial globe"
 msgstr "ໂລກແຫ່ງທ້ອງຟ້າ"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:907
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:328
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:352
 #, c-format
 msgid "cg"
 msgstr "cg"
@@ -13027,6 +13093,11 @@ msgstr "ກົດທີ່ນີ້ທຳການເຂົ້າສູ່ລະ
 #, c-format
 msgid "coats of arms"
 msgstr "ກາປະຈຳຕະກູນ"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:102
+#, fuzzy, c-format
+msgid "coauthor"
+msgstr "ນັກປະພັນຮ່ວມ"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:179
 #, c-format
@@ -13084,6 +13155,21 @@ msgstr "ປະກອບມີ"
 #, fuzzy, c-format
 msgid "contains biographical data"
 msgstr "ປະກອບມີ biogr. data"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:114
+#, fuzzy, c-format
+msgid "corporate_coauthor"
+msgstr "ນັກປະພັນຮ່ວມ (ຜູ້ຮ່ວມປະພັນ)"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:96
+#, c-format
+msgid "corporate_main_author"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:120
+#, fuzzy, c-format
+msgid "corporate_secondary_author"
+msgstr "ນັກປະພັນຜູ້ທີ່ສອງ"
 
 #. SPAN
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:79
@@ -13230,6 +13316,11 @@ msgstr "ການແຕ້ມ"
 msgid "earth moon globe"
 msgstr "ແຜນດິນ ເດືອນ ໝ່ວຍໂລກ"
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:186
+#, fuzzy, c-format
+msgid "edition"
+msgstr "ສະບັບທີ່"
+
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:96
 #, c-format
 msgid "electronic "
@@ -13289,16 +13380,16 @@ msgstr "festschrift "
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:602
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:609
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:482
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:489
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1051
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1058
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:495
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:502
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1083
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1090
 #, c-format
 msgid "fghkdlmor"
 msgstr "fghkdlmor"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:427
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:125
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:143
 #, c-format
 msgid "fgknps"
 msgstr "fgknps"
@@ -13433,8 +13524,8 @@ msgstr "ໄດ້ຖືກເພີ່ມເຂົ້າແລ້ວ."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:540
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:543
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1087
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1092
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1089
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1094
 #, c-format
 msgid "here"
 msgstr "ທີ່ນີ້"
@@ -13443,6 +13534,11 @@ msgstr "ທີ່ນີ້"
 #, c-format
 msgid "history "
 msgstr "ປະຫວັດສາດ "
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:108
+#, c-format
+msgid "http://schema.org/"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:719
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:759
@@ -13455,7 +13551,7 @@ msgstr "ອາລົມຂັນ, ຄວາມແນບນຽນ "
 msgid "humour, satire"
 msgstr "ອາລົມຂັນ, ຄວາມແນບນຽນ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:447
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:480
 #, c-format
 msgid "iabhfgnp"
 msgstr "iabhfgnp"
@@ -13475,7 +13571,7 @@ msgstr "id"
 msgid "id_type"
 msgstr "ປະເພດ_id"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:279
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:281
 #, fuzzy, c-format
 msgid "ijknpxyz"
 msgstr "jpxyz"
@@ -13648,7 +13744,7 @@ msgstr "ລາຍການ_id"
 msgid "items. "
 msgstr "ບັນດາລາຍການ. "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:266
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:279
 #, c-format
 msgid "jpxyz"
 msgstr "jpxyz"
@@ -13779,6 +13875,11 @@ msgstr "ແຜ່ນແມ່ເຫລັກ "
 msgid "magneto-optical disc "
 msgstr "ເຄື່ອງກຳເນີດໄຟ້າຂະໝາດແຜ່ນດິດ "
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:90
+#, fuzzy, c-format
+msgid "main_author"
+msgstr "ນັກປະພັນຕົວຫລັກ"
+
 #. IMG
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:550
 msgid "map"
@@ -13794,12 +13895,12 @@ msgstr "ແຜ່ນທີ່ "
 msgid "maps"
 msgstr "ບັນດາແຜ່ນທີ່"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, c-format
 msgid "materialTypeLabel"
 msgstr "ປະເພດເຄື່ອງມືໃນການພິມປ້າຍ/ບາໂຄດ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, c-format
 msgid "materialtype"
 msgstr "ປະເພດເຄື່ອງມື"
@@ -13989,52 +14090,52 @@ msgstr "ຂໍ້ມູນທີເປັນຕົວເລກ "
 msgid "numeric table"
 msgstr "ຕາຕະລາງຕົວເລກ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:137
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:148
 #, c-format
 msgid "of accompanying material, "
 msgstr "ບັນດາສ່ວນປະກອບຂອງເຄື່ອງມື, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:133
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:144
 #, c-format
 msgid "of contents page, "
 msgstr "ໝ້າຂອງສາລະບານ "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:130
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:141
 #, c-format
 msgid "of intermediate text, "
 msgstr "ເນື້ອໃນຂໍ້ຄວາມໃນລະດັບກາງ, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:136
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:147
 #, c-format
 msgid "of libretto, "
 msgstr "of libretto, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:131
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:142
 #, c-format
 msgid "of original work, "
 msgstr "ຂອງວຽກທີ່ມາດຕະຖານ, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:138
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:149
 #, c-format
 msgid "of subtitles, "
 msgstr "ຂອງພາສາທີ່ໃຊ້ບັນລະຍາຍເລື່ອງ, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:132
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:143
 #, c-format
 msgid "of summary, "
 msgstr "ບົດະຫລຸບ, "
 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:139
 #, fuzzy, c-format
 msgid "of the last:"
 msgstr "ການຮ້ອງຂໍໃນຄັ້ງກ່ອນ:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:134
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:145
 #, c-format
 msgid "of title page, "
 msgstr "ໝ້າຂອງຊື່ເລື່ອງ, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:135
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:146
 #, c-format
 msgid "of title proper, "
 msgstr "ຂອງຫົວຂໍ້ທີ່ເໜາະສົມ, "
@@ -14064,6 +14165,12 @@ msgstr "ຫລື"
 #, fuzzy, c-format
 msgid "or "
 msgstr "ຫລື "
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:83
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:72
+#, fuzzy, c-format
+msgid "original_title"
+msgstr "Originalt kunstverk"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:110
 #, c-format
@@ -14190,6 +14297,12 @@ msgstr "ຮູບພາບ"
 msgid "picture "
 msgstr "ຮູບພາບ "
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:95
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:84
+#, c-format
+msgid "piece_analytic_level"
+msgstr ""
+
 #. IMG
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:202
 msgid "planetary or lunar globe"
@@ -14284,6 +14397,11 @@ msgstr "ຄຳແນະນຳໃນການຊື້"
 msgid "realia "
 msgstr "realia "
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:107
+#, fuzzy, c-format
+msgid "record"
+msgstr "%s ບັນທຶກ"
+
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:69
 #, c-format
 msgid "reformatted digital "
@@ -14364,38 +14482,34 @@ msgstr "ຜົນຂອງການຄົ້ນຫາ"
 msgid "results in the library's OverDrive collection."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:884
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:921
-#, fuzzy, c-format
-msgid "results_summary"
-msgstr "results_summary series"
-
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:367
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:395
 #, c-format
 msgid "results_summary description"
 msgstr "ລາຍລະອຽດກ່ຽວກັບການສັງລວມຜົນຕ່າງໆ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:342
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:368
 #, c-format
 msgid "results_summary edition"
 msgstr "ການແກ້ໄຂກ່ຽວກັບການສັງລົມຜົນຕ່າງໆ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:436
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:921
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:468
 #, c-format
 msgid "results_summary other_title"
 msgstr "ຜົນຂອງການສັງລວມຫົວຂໍ້ຕ່າງໆ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:303
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:884
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:321
 #, c-format
 msgid "results_summary publisher"
 msgstr "ການສັງລວມຜົນທີ່ໄດ້ນຳສະເໝີອອກສູ່ສາຍຕາຂອງສັງຄົມ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:167
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:185
 #, c-format
 msgid "results_summary series"
 msgstr "results_summary series"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:477
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:514
 #, c-format
 msgid "results_summary uniform_title"
 msgstr "results_summary uniform_title"
@@ -14442,15 +14556,20 @@ msgstr "ແຜນຜັງ"
 msgid "score"
 msgstr "ສີລາຈາລຶກ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:169
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:187
 #, c-format
 msgid "se"
 msgstr "se"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:468
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:492
 #, c-format
 msgid "search"
 msgstr "ການຄົ້ນຫາ"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:108
+#, fuzzy, c-format
+msgid "secondary_author"
+msgstr "ນັກປະພັນຜູ້ທີ່ສອງ"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:230
 #, c-format
@@ -14467,10 +14586,21 @@ msgstr "ເລືອກລາຍການຫນຶ່ງ"
 msgid "serial"
 msgstr "ສິ່ງທີ່ມີການພິມແບບຕໍ່ເນື່ອງ"
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:230
+#, fuzzy, c-format
+msgid "series"
+msgstr "ຊຸດ "
+
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:574
 #, c-format
 msgid "series "
 msgstr "ຊຸດ "
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:89
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:78
+#, c-format
+msgid "set_level"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:43
 #, c-format
@@ -14788,8 +14918,8 @@ msgstr "ບົດນິພົນ "
 msgid "title"
 msgstr "title"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:633
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:645
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:657
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:669
 #, fuzzy, c-format
 msgid "to create new lists."
 msgstr "ເພີ່ມລາຍການໃໝ່."
@@ -14837,7 +14967,7 @@ msgstr "ບັນດາສົນທິສັນຍາ"
 msgid "treaty "
 msgstr "ສົນທິສັນຍາ "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:635
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:677
 #, c-format
 msgid "tru"
 msgstr "tru"
@@ -14846,6 +14976,16 @@ msgstr "tru"
 #: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:42
 msgid "unAPI"
 msgstr "unAPI"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:132
+#, c-format
+msgid "uniform_conventional_heading"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:126
+#, fuzzy, c-format
+msgid "uniform_title"
+msgstr "ຮູບແບບຂອງຊື່ເລື່ອງ:"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:14
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:170
@@ -14864,7 +15004,7 @@ msgstr "ເຍົາວະຊົນ; "
 msgid "up to "
 msgstr "ເພີ່ມເປັນ "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1120
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1122
 #, c-format
 msgid "url"
 msgstr "url"
@@ -14946,13 +15086,13 @@ msgid "visual projection"
 msgstr "ອຸປະກອນໃນການສາຍພາບແບບເໜືອນຈິງ"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "votes"
 msgstr "ສີ່ງທີ່ບັນທືກ"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:418
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:529
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:570
 #, c-format
 msgid "vxyz"
 msgstr "vxyz"
@@ -15002,7 +15142,7 @@ msgid "wire recording "
 msgstr "ສາຍທີ່ໃຊ້ໃນການບັນທຶກ "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "with biblionumber"
 msgstr "[% biblionumber |url %]"
@@ -15013,11 +15153,11 @@ msgid "wood"
 msgstr "ໄມ້"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:446
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:112
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:406
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:119
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:419
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:972
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1007
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:576
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:618
 #, c-format
 msgid "y3z"
 msgstr "y3z"
@@ -15069,7 +15209,7 @@ msgid "your purchase suggestions"
 msgstr "ການແນະນຳການຊື້ຂອງຂ້ອຍ"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "your rating: "
 msgstr "ລາຍການຂອງທ່ານ : %s "
@@ -15125,9 +15265,23 @@ msgid ""
 msgstr ""
 "‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value %]"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:130
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:153
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:183
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:131
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:155
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:185
 #, c-format
 msgid "• "
 msgstr "• "
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy
