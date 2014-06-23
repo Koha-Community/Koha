@@ -1181,6 +1181,9 @@ C<items> tables of the Koha database.
 sub GetAllIssues {
     my ( $borrowernumber, $order, $limit ) = @_;
 
+    return unless $borrowernumber;
+    $order = 'date_due desc' unless $order;
+
     my $dbh = C4::Context->dbh;
     my $query =
 'SELECT *, issues.timestamp as issuestimestamp, issues.renewals AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp
