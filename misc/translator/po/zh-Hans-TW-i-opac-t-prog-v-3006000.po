@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-opac-t-prog-v-3000000\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-05 22:01-0300\n"
-"PO-Revision-Date: 2014-05-19 01:37+0000\n"
+"POT-Creation-Date: 2014-06-15 18:07-0300\n"
+"PO-Revision-Date: 2014-06-18 22:55+0000\n"
 "Last-Translator: Anthony <mao@lins.fju.edu.tw>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1400463476.0\n"
+"X-POOTLE-MTIME: 1403132132.0\n"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:110
 #, c-format
@@ -27,29 +27,6 @@ msgstr "#記錄"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:742
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 msgstr "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
-
-#. %1$s:  END 
-#. %2$s:  END 
-#. %3$s:  END 
-#. %4$s:  END 
-#. %5$s:  BLOCK language 
-#. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s:  CASE 
-#. %12$s:  lang 
-#. %13$s:  END 
-#. %14$s:  END 
-#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
-#, c-format
-msgid ""
-"%s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]Greek "
-"(to 1453) %s%s %s %s "
-msgstr ""
-"%s %s %s %s %s %s %s %%]希伯來文 %s %%]阿拉伯文 %s %%]希臘文(當代) %s %%]希臘"
-"文(1453以前) %s%s %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -114,6 +91,27 @@ msgid ""
 "%s %s %s %s %s %s %s%s%sKoha online%s catalog &rsaquo; Course reserves for "
 "%s %s "
 msgstr "%s %s %s %s %s %s %s%s%sKoha 線上%s 目錄 &rsaquo; 指定參考書 %s %s "
+
+#. %1$s:  END 
+#. %2$s:  END 
+#. %3$s:  END 
+#. %4$s:  END 
+#. %5$s:  BLOCK language 
+#. %6$s:  SWITCH lang 
+#. %7$s:  CASE ['heb'] 
+#. %8$s:  CASE ['ara'] 
+#. %9$s:  CASE ['gre'] 
+#. %10$s:  CASE ['grc'] 
+#. %11$s:  CASE 
+#. %12$s:  lang 
+#. %13$s:  END 
+#. %14$s:  END 
+#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
+#, c-format
+msgid ""
+"%s %s %s %s %s %s %sHebrew %sArabic %sGreek (modern) %sGreek (to 1453) %s%s "
+"%s %s "
+msgstr "%s %s %s %s %s %s %s希伯來文 %s阿拉伯文 %s希臘文(當代) %s希臘文(1453年之前) %s%s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
@@ -1048,8 +1046,8 @@ msgstr "%s %s說明: 此視窗將於5秒後關閉 %s "
 #. %15$s: - IF ACCOUNT_LINE.description 
 #. %16$s:  ACCOUNT_LINE.description 
 #. %17$s:  END 
-#. %18$s:  IF line.title 
-#. %19$s:  line.title |html_entity 
+#. %18$s:  IF ACCOUNT_LINE.title 
+#. %19$s:  ACCOUNT_LINE.title 
 #. %20$s:  END 
 #: opac-tmpl/prog/en/modules/opac-account.tt:42
 #, c-format
@@ -1696,11 +1694,11 @@ msgstr "%s 自從 %s%s "
 #. %4$s:  END 
 #. %5$s:  BLOCK language 
 #. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s: ERROR
+#. %7$s:  CASE ['en', 'eng'] 
+#. %8$s:  CASE ['fr', 'fre'] 
+#. %9$s:  CASE ['it', 'ita'] 
+#. %10$s:  CASE ['de', 'ger', 'deu'] 
+#. %11$s:  CASE ['es', 'spa'] 
 #. %12$s:  CASE 
 #. %13$s:  lang 
 #. %14$s:  END 
@@ -1708,11 +1706,8 @@ msgstr "%s 自從 %s%s "
 #: opac-tmpl/prog/en/includes/opac-authorities.inc:53
 #, c-format
 msgid ""
-"%s%s %s %s %s %s %s %%]English %s %%]French %s %%]Italian %s %%]German %s %%]"
-"Spanish %s%s %s %s "
-msgstr ""
-"%s%s %s %s %s %s %s %%]英文 %s %%]法文 %s %%]義大利文 %s %%]德文 %s %%]西班牙"
-"文 %s%s %s %s "
+"%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
+msgstr "%s%s %s %s %s %s %s英文 %s法文 %s義大利文 %s德文 %s西班牙文 %s%s %s %s "
 
 #. %1$s:  IF ( itemsloo.ITEM_RESULTS ) 
 #. %2$s:  FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS 
@@ -2095,7 +2090,7 @@ msgstr ""
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:173
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:172
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 msgstr "%s館藏類型 %s館藏 %s書架位置 %s其他 %s "
@@ -2877,8 +2872,8 @@ msgstr "&nbsp;&nbsp; %s / 5 (依 %s 比率)"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Author phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 作者描述"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:124
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:126
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:123
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:125
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Call number"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 索書號"
@@ -2898,12 +2893,12 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 會議名稱描述"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Corporate name"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 團體名稱"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:122
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
@@ -3192,7 +3187,7 @@ msgstr "-- 請選擇 --"
 msgid "-- Choose format --"
 msgstr "-- 請選擇格式 --"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:313
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
 #, c-format
 msgid "-- none -- "
 msgstr "-- 無 -- "
@@ -3599,7 +3594,7 @@ msgstr "合併："
 msgid "Abstract: "
 msgstr "摘要： "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "摘要"
@@ -3659,7 +3654,7 @@ msgid "Add %s items to %s"
 msgstr "新增 %s 個館藏到 %s"
 
 #. A name=ButtonPlus
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:136
 msgid "Add another field"
 msgstr "新增其他欄位"
 
@@ -3727,12 +3722,12 @@ msgstr "新增 %s %s 個 "
 msgid "Additional authors:"
 msgstr "其他作者："
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:257
 #, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "圖書/印本資料的其他內容型式"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
 #, c-format
 msgid "Adolescent"
 msgstr "青少年"
@@ -3747,7 +3742,7 @@ msgstr "青少年；"
 msgid "Adressebøker"
 msgstr "Adressebøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
 #, c-format
 msgid "Adult"
 msgstr "成人"
@@ -3782,7 +3777,7 @@ msgstr "所有館藏型式"
 #: opac-tmpl/prog/en/includes/masthead.inc:89
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:18
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:108
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:301
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:300
 #, c-format
 msgid "All libraries"
 msgstr "所有分館"
@@ -3945,17 +3940,17 @@ msgstr "Antologi"
 msgid "Any"
 msgstr "任何"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
 #, c-format
 msgid "Any audience"
 msgstr "任何讀者"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:233
 #, c-format
 msgid "Any content"
 msgstr "任何內容"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:243
 #, c-format
 msgid "Any format"
 msgstr "任何格式"
@@ -4313,7 +4308,7 @@ msgstr "返回結果"
 msgid "Back to the results search list"
 msgstr "返回搜尋結果清單"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:131
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:130
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:480
 #: opac-tmpl/prog/en/modules/opac-user.tt:170
 #: opac-tmpl/prog/en/modules/opac-user.tt:336
@@ -4368,7 +4363,7 @@ msgstr "Bibliografier"
 msgid "Bibliografiske data"
 msgstr "書目資料"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
 #, c-format
 msgid "Bibliographies"
 msgstr "書目"
@@ -4449,7 +4444,7 @@ msgid "Biografier"
 msgstr "Biografier"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:52
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
 #, c-format
 msgid "Biography"
 msgstr "傳記"
@@ -4495,7 +4490,7 @@ msgstr "圖書"
 msgid "Book reviews by critics ( XXX )"
 msgstr "專業評論 ( XXX )"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:247
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
 #, c-format
 msgid "Braille"
 msgstr "點字"
@@ -4542,12 +4537,12 @@ msgstr "瀏覽書架"
 msgid "CAS"
 msgstr "CAS"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:248
 #, c-format
 msgid "CD audio"
 msgstr "音樂光碟"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
 #, c-format
 msgid "CD software"
 msgstr "軟體光碟"
@@ -4700,7 +4695,7 @@ msgstr "借出籃"
 msgid "Cas login"
 msgstr "Cas 登入："
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
 #, c-format
 msgid "Cassette recording"
 msgstr "卡式錄音帶"
@@ -4715,7 +4710,7 @@ msgstr "Cast: "
 msgid "Catalog searches"
 msgstr "搜尋目錄"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
 #, c-format
 msgid "Catalogs"
 msgstr "目錄"
@@ -5218,7 +5213,7 @@ msgstr "目前作業："
 msgid "Curriculum"
 msgstr "課程"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "DVD 影片 / 影碟"
@@ -5453,7 +5448,7 @@ msgstr "Dia"
 msgid "Dias"
 msgstr "Dias"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
 #, c-format
 msgid "Dictionaries"
 msgstr "字典"
@@ -5479,12 +5474,12 @@ msgstr "Dikt"
 msgid "Diorama"
 msgstr "Diorama"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
 #, c-format
 msgid "Directories"
 msgstr "名錄"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
 #, c-format
 msgid "Discographies"
 msgstr "錄音帶音軌"
@@ -5746,7 +5741,7 @@ msgstr "Emne(r): "
 msgid "Empty and close"
 msgstr "清空並且關閉"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
 #, c-format
 msgid "Encyclopedias "
 msgstr "百科全書 "
@@ -5767,8 +5762,8 @@ msgid "Enter a new purchase suggestion"
 msgstr "輸入新的採訪建議"
 
 #. INPUT type=text name=q
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:133
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:163
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:132
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
 msgid "Enter search terms"
 msgstr "輸入查詢詞"
 
@@ -5977,7 +5972,7 @@ msgstr "女性："
 msgid "Festskrift "
 msgstr "文學體裁 "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
 #, c-format
 msgid "Fiction"
 msgstr "小說"
@@ -6018,7 +6013,7 @@ msgstr "Filmlydspor"
 msgid "Filmografier"
 msgstr "影片目錄"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
 #, c-format
 msgid "Filmographies"
 msgstr "影片目錄"
@@ -6089,7 +6084,7 @@ msgstr "Flykart"
 msgid "Font"
 msgstr "字型"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
 #, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -6240,7 +6235,7 @@ msgstr "完整記錄"
 msgid "Fysiske bøker"
 msgstr "Fysiske bøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
 #, c-format
 msgid "General"
 msgstr "通論"
@@ -6378,7 +6373,7 @@ msgstr "Grammofonplate"
 msgid "Groups"
 msgstr "群組"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
 #, c-format
 msgid "Groups of libraries"
 msgstr "圖書館群組"
@@ -6393,7 +6388,7 @@ msgstr "Gått inn i: "
 msgid "HELP"
 msgstr "說明"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
 #, c-format
 msgid "Handbooks"
 msgstr "手冊"
@@ -6584,7 +6579,7 @@ msgstr "檢視 ISBD "
 
 #: opac-tmpl/prog/en/includes/masthead.inc:60
 #: opac-tmpl/prog/en/includes/masthead.inc:62
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:129
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:128
 #: opac-tmpl/prog/en/modules/opac-results.tt:409
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:147
 #: opac-tmpl/prog/en/modules/opac-basket.tt:208
@@ -6775,7 +6770,7 @@ msgstr "內容不完整："
 msgid "Indexed in:"
 msgstr "索引在："
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
 #, c-format
 msgid "Indexes"
 msgstr "索引"
@@ -6947,7 +6942,7 @@ msgstr "六月"
 msgid "June"
 msgstr "六月"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:230
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
 #, c-format
 msgid "Juvenile"
 msgstr "青少年"
@@ -7098,13 +7093,13 @@ msgstr "LCCN：%s "
 msgid "Lagringsbrikke"
 msgstr "Lagringsbrikke"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:201
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:200
 #, c-format
 msgid "Language"
 msgstr "語言"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:137
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:203
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:202
 #, c-format
 msgid "Language: "
 msgstr "語言： "
@@ -7114,7 +7109,7 @@ msgstr "語言： "
 msgid "Languages:&nbsp;"
 msgstr "語言：&nbsp;"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
 #, c-format
 msgid "Large print"
 msgstr "大字本"
@@ -7129,22 +7124,22 @@ msgstr "最新"
 msgid "Last location"
 msgstr "最新館藏地"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
 #, c-format
 msgid "Law reports and digests"
 msgstr "法律報告與摘要"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
 #, c-format
 msgid "Legal articles"
 msgstr "法律論文"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "法律案件與說明"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
 #, c-format
 msgid "Legislation"
 msgstr "法律"
@@ -7199,13 +7194,13 @@ msgstr "圖書館："
 msgid "Library catalog"
 msgstr "圖書館目錄"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:299
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:298
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
 #, c-format
 msgid "Library:"
 msgstr "圖書館："
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:187
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:186
 #, c-format
 msgid "Limit to any of the following:"
 msgstr "限制於以下情況："
@@ -7312,7 +7307,7 @@ msgstr "館藏"
 msgid "Location (Status)"
 msgstr "位置(狀態)"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:297
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:296
 #, c-format
 msgid "Location and availability: "
 msgstr "位置與可及性："
@@ -7857,7 +7852,7 @@ msgstr "MusicAlbum"
 msgid "MusicGroup"
 msgstr "音樂群組"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
 #, c-format
 msgid "Musical recording"
 msgstr "音樂錄音"
@@ -8100,7 +8095,7 @@ msgstr "無可用的館藏："
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:40
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:132
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:205
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:204
 #, c-format
 msgid "No limit"
 msgstr "無限制"
@@ -8165,12 +8160,12 @@ msgstr "未指定標籤。"
 msgid "No tags from this library for this title."
 msgstr "此圖書館未指定標籤給這個題名。"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
 #, c-format
 msgid "Non fiction"
 msgstr "非小說"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:239
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
 #, c-format
 msgid "Non-musical recording"
 msgstr "非音樂錄音"
@@ -8339,7 +8334,7 @@ msgstr "Numeriske data"
 msgid "OK"
 msgstr "OK"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:310
 #, c-format
 msgid "OR"
 msgstr "或"
@@ -8393,7 +8388,7 @@ msgstr "線上連續性資源： "
 msgid "Online tjeneste"
 msgstr "Online tjeneste"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:319
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:318
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr "祗限可供外借或參考的館藏"
@@ -8591,7 +8586,7 @@ msgstr "密碼："
 msgid "Password: %s "
 msgstr "密碼：%s "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
 #, c-format
 msgid "Patent document"
 msgstr "專利文件"
@@ -8899,7 +8894,7 @@ msgstr "Postkort"
 msgid "Powered by "
 msgstr "技術支援 "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
 #, c-format
 msgid "Pre-adolescent"
 msgstr "青少年前期"
@@ -8914,7 +8909,7 @@ msgstr "青少年前期； "
 msgid "Preferred form: "
 msgstr "偏好格式： "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
 #, c-format
 msgid "Preschool"
 msgstr "學齡前"
@@ -8943,7 +8938,7 @@ msgstr "前一筆"
 msgid "Previous sessions"
 msgstr "前一筆作業"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
 #, c-format
 msgid "Primary"
 msgstr "主要"
@@ -9006,7 +9001,7 @@ msgstr "處理中 ..."
 msgid "Product"
 msgstr "Product"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
 #, c-format
 msgid "Programmed texts"
 msgstr "編碼內容"
@@ -9046,7 +9041,7 @@ msgstr "公共虛擬書架"
 msgid "Public lists:"
 msgstr "公共虛擬書架："
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:160
 #, c-format
 msgid "Publication date range:"
 msgstr "出版年範圍："
@@ -9245,7 +9240,7 @@ msgstr "無效的登錄！"
 msgid "Registre"
 msgstr "Registre"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
 #, c-format
 msgid "Regular print"
 msgstr "標準印本"
@@ -9283,7 +9278,7 @@ msgid "Remove facet [% facet.facet_link_value | html %]"
 msgstr "移除層面 [% facet.facet_link_value | html %]"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:138
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
 msgid "Remove field"
 msgstr "移除欄位"
 
@@ -9481,7 +9476,7 @@ msgstr ""
 msgid "Review: "
 msgstr "檢視："
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
 #: opac-tmpl/prog/en/modules/opac-detail.tt:965
 #, c-format
 msgid "Reviews"
@@ -9648,8 +9643,8 @@ msgid "Score"
 msgstr "分數"
 
 #. INPUT type=submit name=do
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:148
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:336
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:147
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:335
 #: opac-tmpl/prog/en/modules/opac-detail.tt:628
 #: opac-tmpl/prog/en/modules/opac-detail.tt:735
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:63
@@ -10281,7 +10276,7 @@ msgstr "抱歉，您的作業時間已過，請重新登入。"
 msgid "Sort By: "
 msgstr "排序方式： "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:327
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
 #, c-format
 msgid "Sort by:"
 msgstr "排序方式："
@@ -10297,7 +10292,7 @@ msgstr "排序方式： "
 msgid "Sort this list by: "
 msgstr "排序此虛擬書架： "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:325
 #, c-format
 msgid "Sorting: "
 msgstr "排序： "
@@ -10313,7 +10308,7 @@ msgstr "音效"
 msgid "Source: "
 msgstr "來源： "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
 #, c-format
 msgid "Specialized"
 msgstr "特殊化"
@@ -10354,7 +10349,6 @@ msgstr "Språkundervisning"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:116
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:118
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "Standard number"
 msgstr "標準號碼"
@@ -10369,7 +10363,7 @@ msgstr "標準號碼(ISBN、ISSN或其他)："
 msgid "Standardtittel: "
 msgstr "Standardtittel: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
 #, c-format
 msgid "Statistics"
 msgstr "統計"
@@ -10619,7 +10613,7 @@ msgstr "有關 %s 的訂閱資訊"
 msgid "Subscriptions"
 msgstr "訂閱"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:220
 #, c-format
 msgid "Subtype limits"
 msgstr "次類型限制"
@@ -10679,7 +10673,7 @@ msgstr "部份取代："
 msgid "Supersedes:"
 msgstr "合併："
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
 #, c-format
 msgid "Surveys"
 msgstr "調查"
@@ -10773,7 +10767,7 @@ msgstr "此圖書館的標籤："
 msgid "Tags:"
 msgstr "標籤："
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
 #, c-format
 msgid "Technical reports"
 msgstr "技術報告"
@@ -11120,7 +11114,7 @@ msgid ""
 "library for help."
 msgstr "登入有問題，請洽圖書館。"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
 #, c-format
 msgid "Theses"
 msgstr "論文"
@@ -11425,7 +11419,7 @@ msgstr "透明圖片"
 msgid "Tre-dimensjonale gjenstander"
 msgstr "Tre-dimensjonale gjenstander"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:280
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
 #, c-format
 msgid "Treaties "
 msgstr "條約 "
@@ -11672,7 +11666,7 @@ msgstr "Utskilt fra: "
 msgid "Utstilling"
 msgstr "Utstilling"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "VHS 影帶"
@@ -11840,7 +11834,7 @@ msgid ""
 "define how long we keep your reading history."
 msgstr "我們極度重視您的隱私。從此頁面您可設定閱讀記錄被圖書館保存的期限。"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:254
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
 #, c-format
 msgid "Website"
 msgstr "網站"
@@ -12243,7 +12237,9 @@ msgid ""
 "account has expired. Please contact the library for more information. %s You "
 "have renewed this item the maximum number of times allowed. %s This item is "
 "on hold for another patron. %s %s "
-msgstr "因為以下的原因無法續借：%s %s 您的帳號過期；請與圖書館連繫。%s您的續借次數已達上限。%s 此館藏已被它人預約。 %s %s "
+msgstr ""
+"因為以下的原因無法續借：%s %s 您的帳號過期；請與圖書館連繫。%s您的續借次數已"
+"達上限。%s 此館藏已被它人預約。 %s %s "
 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:27
 #, c-format
@@ -12419,20 +12415,20 @@ msgstr ""
 msgid "[Create new list]"
 msgstr "[建立新的虛擬書架]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:150
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:338
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:149
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:337
 #, c-format
 msgid "[Fewer options]"
 msgstr "[較少選項]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:152
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:340
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:151
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:339
 #, c-format
 msgid "[More options]"
 msgstr "[更多選項]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:154
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:342
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:153
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:341
 #, c-format
 msgid "[New search]"
 msgstr "[新的搜尋]"

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION 1\n"
-"POT-Creation-Date: 2014-05-05 22:07-0300\n"
+"POT-Creation-Date: 2014-06-15 18:13-0300\n"
 "PO-Revision-Date: 2013-08-22 10:00-0400\n"
 "Last-Translator: EICOM <da@dsa.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -24,29 +24,6 @@ msgstr "%s poster"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:742
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 msgstr "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
-
-#. %1$s:  END 
-#. %2$s:  END 
-#. %3$s:  END 
-#. %4$s:  END 
-#. %5$s:  BLOCK language 
-#. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s:  CASE 
-#. %12$s:  lang 
-#. %13$s:  END 
-#. %14$s:  END 
-#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
-#, fuzzy, c-format
-msgid ""
-"%s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]Greek "
-"(to 1453) %s%s %s %s "
-msgstr ""
-"%s%s %s %s %s %s %s %%]Engelska %s %%]Franska %s %%]Italienska %s %%]Tyska "
-"%s %%]Spanska %s%s %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -110,6 +87,29 @@ msgid ""
 "%s %s %s %s %s %s %s%s%sKoha online%s catalog &rsaquo; Course reserves for "
 "%s %s "
 msgstr "%s %s %s%s%sKoha online%s -katalog &rsaquo; Ditt bibliotek hem %s %s "
+
+#. %1$s:  END 
+#. %2$s:  END 
+#. %3$s:  END 
+#. %4$s:  END 
+#. %5$s:  BLOCK language 
+#. %6$s:  SWITCH lang 
+#. %7$s:  CASE ['heb'] 
+#. %8$s:  CASE ['ara'] 
+#. %9$s:  CASE ['gre'] 
+#. %10$s:  CASE ['grc'] 
+#. %11$s:  CASE 
+#. %12$s:  lang 
+#. %13$s:  END 
+#. %14$s:  END 
+#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
+#, fuzzy, c-format
+msgid ""
+"%s %s %s %s %s %s %sHebrew %sArabic %sGreek (modern) %sGreek (to 1453) %s%s "
+"%s %s "
+msgstr ""
+"%s%s %s %s %s %s %s %%]Engelska %s %%]Franska %s %%]Italienska %s %%]Tyska "
+"%s %%]Spanska %s%s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
@@ -1060,8 +1060,8 @@ msgstr "%s %sObs! Det här fönstret stängs automatiskt om 5 sekunder %s "
 #. %15$s: - IF ACCOUNT_LINE.description 
 #. %16$s:  ACCOUNT_LINE.description 
 #. %17$s:  END 
-#. %18$s:  IF line.title 
-#. %19$s:  line.title |html_entity 
+#. %18$s:  IF ACCOUNT_LINE.title 
+#. %19$s:  ACCOUNT_LINE.title 
 #. %20$s:  END 
 #: opac-tmpl/prog/en/modules/opac-account.tt:42
 #, c-format
@@ -1706,20 +1706,19 @@ msgstr "%s sedan %s%s "
 #. %4$s:  END 
 #. %5$s:  BLOCK language 
 #. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s: ERROR
+#. %7$s:  CASE ['en', 'eng'] 
+#. %8$s:  CASE ['fr', 'fre'] 
+#. %9$s:  CASE ['it', 'ita'] 
+#. %10$s:  CASE ['de', 'ger', 'deu'] 
+#. %11$s:  CASE ['es', 'spa'] 
 #. %12$s:  CASE 
 #. %13$s:  lang 
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/prog/en/includes/opac-authorities.inc:53
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"%s%s %s %s %s %s %s %%]English %s %%]French %s %%]Italian %s %%]German %s %%]"
-"Spanish %s%s %s %s "
+"%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
 msgstr ""
 "%s%s %s %s %s %s %s %%]Engelska %s %%]Franska %s %%]Italienska %s %%]Tyska "
 "%s %%]Spanska %s%s %s %s "
@@ -2112,7 +2111,7 @@ msgstr ""
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:173
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:172
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 msgstr "%sArtikeltyp %sSamling %sHyllplats %sNågot annat %s "
@@ -2905,8 +2904,8 @@ msgstr "%s / 5 (på %s taxor)"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Author phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Författarfras"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:124
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:126
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:123
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:125
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Call number"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Hyllsignum"
@@ -2926,12 +2925,12 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Del av konferensnamn"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Corporate name"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Organisationsnamn"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:122
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
@@ -3227,7 +3226,7 @@ msgstr "-- Välj --"
 msgid "-- Choose format --"
 msgstr "-- Välj format --"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:313
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
 #, c-format
 msgid "-- none -- "
 msgstr "-- saknas -- "
@@ -3642,7 +3641,7 @@ msgstr "Absorberad:"
 msgid "Abstract: "
 msgstr "Sammanfattning: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "Sammanfattningar"
@@ -3702,7 +3701,7 @@ msgid "Add %s items to %s"
 msgstr "Lägg till %s artiklar till %s"
 
 #. A name=ButtonPlus
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:136
 msgid "Add another field"
 msgstr "Lägg till ett fält"
 
@@ -3770,12 +3769,12 @@ msgstr "Lagt till %s %s av "
 msgid "Additional authors:"
 msgstr "Ytterligare författare:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:257
 #, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "Ytterligare innehållstyper för böcker/tryckt material"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
 #, c-format
 msgid "Adolescent"
 msgstr "Ungdom"
@@ -3790,7 +3789,7 @@ msgstr "Ungdom; "
 msgid "Adressebøker"
 msgstr "Adressböcker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
 #, c-format
 msgid "Adult"
 msgstr "Vuxen"
@@ -3825,7 +3824,7 @@ msgstr "Alla typer av artiklar"
 #: opac-tmpl/prog/en/includes/masthead.inc:89
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:18
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:108
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:301
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:300
 #, c-format
 msgid "All libraries"
 msgstr "Alla bibliotek"
@@ -4006,17 +4005,17 @@ msgstr "Antologi"
 msgid "Any"
 msgstr "Alla"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
 #, c-format
 msgid "Any audience"
 msgstr "Alla målgrupper"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:233
 #, c-format
 msgid "Any content"
 msgstr "Allt innehåll"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:243
 #, c-format
 msgid "Any format"
 msgstr "Alla format"
@@ -4385,7 +4384,7 @@ msgstr "Tillbaka till resultat"
 msgid "Back to the results search list"
 msgstr "Tillbaka till resultatsöklistan"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:131
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:130
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:480
 #: opac-tmpl/prog/en/modules/opac-user.tt:170
 #: opac-tmpl/prog/en/modules/opac-user.tt:336
@@ -4446,7 +4445,7 @@ msgstr "Bibliografier"
 msgid "Bibliografiske data"
 msgstr "Bibliografiska data"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
 #, c-format
 msgid "Bibliographies"
 msgstr "Bibliografier"
@@ -4537,7 +4536,7 @@ msgid "Biografier"
 msgstr "Biografier"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:52
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
 #, c-format
 msgid "Biography"
 msgstr "Biografi"
@@ -4586,7 +4585,7 @@ msgstr "Bok"
 msgid "Book reviews by critics ( XXX )"
 msgstr "Bokrecensioner av kritiker ( XXX )"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:247
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
 #, c-format
 msgid "Braille"
 msgstr "Braille"
@@ -4633,12 +4632,12 @@ msgstr "Bläddra igenom hyllan"
 msgid "CAS"
 msgstr "CAS"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:248
 #, c-format
 msgid "CD audio"
 msgstr "Ljud-CD"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
 #, c-format
 msgid "CD software"
 msgstr "CD, programvara"
@@ -4793,7 +4792,7 @@ msgstr "Kundvagn"
 msgid "Cas login"
 msgstr "Cas-inloggning"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
 #, c-format
 msgid "Cassette recording"
 msgstr "Kassettinspelning"
@@ -4808,7 +4807,7 @@ msgstr "Rollbesättning: "
 msgid "Catalog searches"
 msgstr "Fler sökningar"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
 #, c-format
 msgid "Catalogs"
 msgstr "Kataloger"
@@ -5320,7 +5319,7 @@ msgstr "Aktuell session"
 msgid "Curriculum"
 msgstr "Läroplan"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "DVD-video / videoskiva"
@@ -5565,7 +5564,7 @@ msgstr "Dia"
 msgid "Dias"
 msgstr "DiabilderDatum"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
 #, c-format
 msgid "Dictionaries"
 msgstr "Ordböcker/lexikon"
@@ -5592,12 +5591,12 @@ msgstr "Dikt"
 msgid "Diorama"
 msgstr "Diorama"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
 #, c-format
 msgid "Directories"
 msgstr "Kataloger/förteckningar"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
 #, c-format
 msgid "Discographies"
 msgstr "Diskografier"
@@ -5872,7 +5871,7 @@ msgstr "Ämne: "
 msgid "Empty and close"
 msgstr "Töm och stäng"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
 #, c-format
 msgid "Encyclopedias "
 msgstr "Encyklopedier "
@@ -5893,8 +5892,8 @@ msgid "Enter a new purchase suggestion"
 msgstr "Skriv in ett nytt inköpsförslag"
 
 #. INPUT type=text name=q
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:133
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:163
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:132
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
 msgid "Enter search terms"
 msgstr "Skriv in sökbegrepp"
 
@@ -6111,7 +6110,7 @@ msgstr "Kvinna:"
 msgid "Festskrift "
 msgstr "Festskrift "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
 #, c-format
 msgid "Fiction"
 msgstr "Skönlitteratur"
@@ -6154,7 +6153,7 @@ msgstr "Filmlydspor"
 msgid "Filmografier"
 msgstr "Filmografier"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
 #, c-format
 msgid "Filmographies"
 msgstr "Filmografier"
@@ -6230,7 +6229,7 @@ msgstr "Flykart"
 msgid "Font"
 msgstr "Teckensnitt"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
 #, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -6400,7 +6399,7 @@ msgstr "Fullständig historik"
 msgid "Fysiske bøker"
 msgstr "Fysiske bøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
 #, c-format
 msgid "General"
 msgstr "Allmänt"
@@ -6549,7 +6548,7 @@ msgstr "Grammofonplate"
 msgid "Groups"
 msgstr "Grupper"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
 #, c-format
 msgid "Groups of libraries"
 msgstr "Biblioteksgrupper"
@@ -6565,7 +6564,7 @@ msgstr "Gått inn i: "
 msgid "HELP"
 msgstr "HJÄLP"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
 #, c-format
 msgid "Handbooks"
 msgstr "Handböcker"
@@ -6761,7 +6760,7 @@ msgstr "ISBD-vy"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:60
 #: opac-tmpl/prog/en/includes/masthead.inc:62
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:129
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:128
 #: opac-tmpl/prog/en/modules/opac-results.tt:409
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:147
 #: opac-tmpl/prog/en/modules/opac-basket.tt:208
@@ -6964,7 +6963,7 @@ msgstr "Ofullständigt innehåll:"
 msgid "Indexed in:"
 msgstr "Indexerad i:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
 #, c-format
 msgid "Indexes"
 msgstr "Index"
@@ -7139,7 +7138,7 @@ msgstr "Jun"
 msgid "June"
 msgstr "Juni"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:230
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
 #, c-format
 msgid "Juvenile"
 msgstr "Ungdom"
@@ -7306,13 +7305,13 @@ msgstr "LCCN: %s "
 msgid "Lagringsbrikke"
 msgstr "Lagringsbrikke"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:201
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:200
 #, c-format
 msgid "Language"
 msgstr "Språk"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:137
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:203
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:202
 #, c-format
 msgid "Language: "
 msgstr "Språk: "
@@ -7322,7 +7321,7 @@ msgstr "Språk: "
 msgid "Languages:&nbsp;"
 msgstr "Språk:&nbsp;"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
 #, c-format
 msgid "Large print"
 msgstr "Storstil"
@@ -7337,22 +7336,22 @@ msgstr "Senaste"
 msgid "Last location"
 msgstr "Senaste placering"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
 #, c-format
 msgid "Law reports and digests"
 msgstr "Juridiska rapporter och sammanfattningar"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
 #, c-format
 msgid "Legal articles"
 msgstr "Artiklar inom juridik"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "Rättsfall och rättsfallsanteckningar"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
 #, c-format
 msgid "Legislation"
 msgstr "Lagstiftning"
@@ -7408,13 +7407,13 @@ msgstr "Bibliotek : "
 msgid "Library catalog"
 msgstr "Bibliotekskatalog"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:299
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:298
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
 #, c-format
 msgid "Library:"
 msgstr "Bibliotek:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:187
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:186
 #, c-format
 msgid "Limit to any of the following:"
 msgstr "Begränsa till något av följande:"
@@ -7521,7 +7520,7 @@ msgstr "Placering"
 msgid "Location (Status)"
 msgstr "Placering (status)"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:297
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:296
 #, c-format
 msgid "Location and availability: "
 msgstr "Placering och tillgänglighet: "
@@ -8093,7 +8092,7 @@ msgstr "Musik"
 msgid "MusicGroup"
 msgstr "Musik"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
 #, c-format
 msgid "Musical recording"
 msgstr "Musikinspelning"
@@ -8345,7 +8344,7 @@ msgstr "Inga artiklar tillgängliga:"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:40
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:132
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:205
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:204
 #, c-format
 msgid "No limit"
 msgstr "Ingen begränsning"
@@ -8410,12 +8409,12 @@ msgstr "Ingen tagg har angetts."
 msgid "No tags from this library for this title."
 msgstr "Den aktuella titeln har inga taggar från det här biblioteket."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
 #, c-format
 msgid "Non fiction"
 msgstr "Facklitteratur"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:239
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
 #, c-format
 msgid "Non-musical recording"
 msgstr "Inspelning som inte är musik"
@@ -8594,7 +8593,7 @@ msgstr "Numeriska data"
 msgid "OK"
 msgstr "OK"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:310
 #, c-format
 msgid "OR"
 msgstr "ELLER"
@@ -8649,7 +8648,7 @@ msgstr "Online-resurser: "
 msgid "Online tjeneste"
 msgstr "Online-tjänst"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:319
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:318
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr "Bara artiklar som är tillgängliga för utlåning eller som referens"
@@ -8858,7 +8857,7 @@ msgstr "Lösenord:"
 msgid "Password: %s "
 msgstr "Lösenord: %s "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
 #, c-format
 msgid "Patent document"
 msgstr "Patent"
@@ -9186,7 +9185,7 @@ msgstr "Vykort"
 msgid "Powered by "
 msgstr "Teknik från "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
 #, c-format
 msgid "Pre-adolescent"
 msgstr "För-adolescensent"
@@ -9201,7 +9200,7 @@ msgstr "Yngre tonår; "
 msgid "Preferred form: "
 msgstr "Form som föredras: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
 #, c-format
 msgid "Preschool"
 msgstr "Förskola"
@@ -9231,7 +9230,7 @@ msgid "Previous sessions"
 msgstr "Tidigare sessioner"
 
 # Assuming this does not refer to school
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
 #, c-format
 msgid "Primary"
 msgstr "Primär"
@@ -9295,7 +9294,7 @@ msgstr "Behandlar..."
 msgid "Product"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
 #, c-format
 msgid "Programmed texts"
 msgstr "Programmerade texter"
@@ -9336,7 +9335,7 @@ msgstr "Allmänna listor"
 msgid "Public lists:"
 msgstr "Allmänna listor:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:160
 #, c-format
 msgid "Publication date range:"
 msgstr "Utgivningsdatum, intervall:"
@@ -9539,7 +9538,7 @@ msgstr "Registreringen felaktig!"
 msgid "Registre"
 msgstr "Registre"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
 #, c-format
 msgid "Regular print"
 msgstr "Normal stil"
@@ -9578,7 +9577,7 @@ msgid "Remove facet [% facet.facet_link_value | html %]"
 msgstr "[% facet.facet_title_value |html %]"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:138
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
 msgid "Remove field"
 msgstr "Ta bort fält"
 
@@ -9783,7 +9782,7 @@ msgstr ""
 msgid "Review: "
 msgstr "Recension: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
 #: opac-tmpl/prog/en/modules/opac-detail.tt:965
 #, c-format
 msgid "Reviews"
@@ -9960,8 +9959,8 @@ msgid "Score"
 msgstr "Poäng"
 
 #. INPUT type=submit name=do
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:148
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:336
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:147
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:335
 #: opac-tmpl/prog/en/modules/opac-detail.tt:628
 #: opac-tmpl/prog/en/modules/opac-detail.tt:735
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:63
@@ -10607,7 +10606,7 @@ msgstr "Sessionen har upphört att gälla. Logga in igen."
 msgid "Sort By: "
 msgstr "Sortera efter: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:327
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
 #, c-format
 msgid "Sort by:"
 msgstr "Sortera efter:"
@@ -10623,7 +10622,7 @@ msgstr "Sortera efter: "
 msgid "Sort this list by: "
 msgstr "Sortera den här listan efter: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:325
 #, c-format
 msgid "Sorting: "
 msgstr "Sortering: "
@@ -10639,7 +10638,7 @@ msgstr "Ljud"
 msgid "Source: "
 msgstr "Källa: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
 #, c-format
 msgid "Specialized"
 msgstr "Specialiserad"
@@ -10683,7 +10682,6 @@ msgstr "Språkundervisning"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:116
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:118
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "Standard number"
 msgstr "Standardnummer"
@@ -10699,7 +10697,7 @@ msgstr "Standardnummer (ISBN, ISSN eller Övrigt):"
 msgid "Standardtittel: "
 msgstr "Standardtitel: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
 #, c-format
 msgid "Statistics"
 msgstr "Statistik"
@@ -10956,7 +10954,7 @@ msgstr "Prenumerationsinformation för %s"
 msgid "Subscriptions"
 msgstr "Prenumerationer"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:220
 #, c-format
 msgid "Subtype limits"
 msgstr "Undertypgränser"
@@ -11016,7 +11014,7 @@ msgstr "Ersätter delvis:"
 msgid "Supersedes:"
 msgstr "Ersätter:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
 #, c-format
 msgid "Surveys"
 msgstr "Enkäter"
@@ -11113,7 +11111,7 @@ msgstr "Taggar från det här biblioteket:"
 msgid "Tags:"
 msgstr "Taggar:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
 #, c-format
 msgid "Technical reports"
 msgstr "Tekniska rapporter"
@@ -11486,7 +11484,7 @@ msgstr ""
 "Det uppstod problem när du registrerade dig. Kontakta ditt bibliotek för "
 "hjälp."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
 #, c-format
 msgid "Theses"
 msgstr "Avhandlingar"
@@ -11801,7 +11799,7 @@ msgstr "OH-bild"
 msgid "Tre-dimensjonale gjenstander"
 msgstr "Tre-dimensjonale gjenstander"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:280
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
 #, c-format
 msgid "Treaties "
 msgstr "Avtal "
@@ -12062,7 +12060,7 @@ msgstr "Utskilt fra: "
 msgid "Utstilling"
 msgstr "Utstilling"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "VHS-band/videokassett"
@@ -12240,7 +12238,7 @@ msgstr ""
 "Vi är noga med att skydda din sekretess. På den här skärmen kan du ange hur "
 "länge vi ska behålla din läshistorik."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:254
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
 #, c-format
 msgid "Website"
 msgstr "Webbplats"
@@ -12837,20 +12835,20 @@ msgstr ""
 msgid "[Create new list]"
 msgstr "Skapa en ny lista"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:150
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:338
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:149
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:337
 #, c-format
 msgid "[Fewer options]"
 msgstr "[Färre alternativ]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:152
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:340
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:151
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:339
 #, c-format
 msgid "[More options]"
 msgstr "[Fler alternativ]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:154
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:342
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:153
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:341
 #, c-format
 msgid "[New search]"
 msgstr "[Ny sökning]"

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-05-05 22:01-0300\n"
+"POT-Creation-Date: 2014-06-15 18:07-0300\n"
 "PO-Revision-Date: 2012-06-21 08:44+0200\n"
 "Last-Translator: bunyarit <bun072@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -355,7 +355,7 @@ msgstr "รายการทรัพยากร &rsaquo; รายการ�
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( RESERVE.intransit ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:564
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:565
 #, fuzzy, c-format
 msgid "%s %s %s Item in transit from "
 msgstr "ทรัพยากรรายการนี้อยู่ระหว่างการนำส่งไปยัง <b> %s</b> "
@@ -363,7 +363,7 @@ msgstr "ทรัพยากรรายการนี้อยู่ระห
 #. %1$s:  IF ( RESERVE.wait ) 
 #. %2$s:  IF ( RESERVE.atdestination ) 
 #. %3$s:  IF ( RESERVE.found ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:554
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:555
 #, fuzzy, c-format
 msgid "%s %s %s Item waiting at "
 msgstr "ทรัพยากรรายการนี้กำลังรออยู่ที่ <b> %s</b> "
@@ -416,6 +416,27 @@ msgstr "หมายเหตุ: หน้าต่างนี้จะปิ�
 #, fuzzy, c-format
 msgid "%s %s %s%s%s%sKoha %s &rsaquo; Self checkout "
 msgstr "%s -- ยืมด้วยตนเอง "
+
+#. %1$s:  USE Koha 
+#. %2$s:  USE AuthorisedValues 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  IF ( op_add ) 
+#. %9$s:  END 
+#. %10$s:  IF ( op_else ) 
+#. %11$s:  END 
+#. %12$s:  INCLUDE 'doc-head-close.inc' 
+#. %13$s:  BLOCK cssinclude 
+#. %14$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:1
+#, fuzzy, c-format
+msgid ""
+"%s %s %s%s%s%sKoha online%s catalog &rsaquo; %sEnter a new purchase "
+"suggestion%s %sPurchase Suggestions%s %s %s%s "
+msgstr "รายการทรัพยากร &rsaquo; ห้องสมุดหลักสำหรับ "
 
 #. %1$s:  USE Koha 
 #. %2$s:  PROCESS 'opac-authorities.inc' 
@@ -751,7 +772,7 @@ msgstr "ข้อเสนอแนะการสั่งซื้อ "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:561
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:562
 #, fuzzy, c-format
 msgid "%s %s Item in transit to "
 msgstr "ทรัพยากรรายการนี้อยู่ระหว่างการนำส่งไปยัง <b> %s</b> "
@@ -886,26 +907,6 @@ msgstr "รายการทรัพยากร &rsaquo; รายละเ�
 #, fuzzy, c-format
 msgid "%s %s%s%s%sKoha %s &rsaquo; Self checkout help"
 msgstr "%s -- ยืมด้วยตนเอง"
-
-#. %1$s:  USE Koha 
-#. %2$s:  INCLUDE 'doc-head-open.inc' 
-#. %3$s:  IF ( LibraryNameTitle ) 
-#. %4$s:  LibraryNameTitle 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#. %7$s:  IF ( op_add ) 
-#. %8$s:  END 
-#. %9$s:  IF ( op_else ) 
-#. %10$s:  END 
-#. %11$s:  INCLUDE 'doc-head-close.inc' 
-#. %12$s:  BLOCK cssinclude 
-#. %13$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:1
-#, fuzzy, c-format
-msgid ""
-"%s %s%s%s%sKoha online%s catalog &rsaquo; %sEnter a new purchase suggestion"
-"%s %sPurchase Suggestions%s %s %s%s "
-msgstr "รายการทรัพยากร &rsaquo; ห้องสมุดหลักสำหรับ "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -1158,6 +1159,35 @@ msgid ""
 "%sRIS %s "
 msgstr ""
 
+#. %1$s:  SWITCH ACCOUNT_LINE.accounttype 
+#. %2$s:  CASE 'Pay' 
+#. %3$s:  CASE 'Pay00' 
+#. %4$s:  CASE 'Pay01' 
+#. %5$s:  CASE 'Pay02' 
+#. %6$s:  CASE 'N' 
+#. %7$s:  CASE 'F' 
+#. %8$s:  CASE 'A' 
+#. %9$s:  CASE 'M' 
+#. %10$s:  CASE 'L' 
+#. %11$s:  CASE 'W' 
+#. %12$s:  CASE 
+#. %13$s:  ACCOUNT_LINE.accounttype 
+#. %14$s: - END -
+#. %15$s: - IF ACCOUNT_LINE.description 
+#. %16$s:  ACCOUNT_LINE.description 
+#. %17$s:  END 
+#. %18$s:  IF ACCOUNT_LINE.title 
+#. %19$s:  ACCOUNT_LINE.title 
+#. %20$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:51
+#, c-format
+msgid ""
+"%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
+"via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
+"%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s %s"
+"(%s)%s "
+msgstr ""
+
 #. %1$s:  shelvesloo.count 
 #. %2$s:  IF ( shelvesloo.single ) 
 #. %3$s:  ELSE 
@@ -1195,7 +1225,7 @@ msgstr "(การค้นหาที่เกี่ยวข้อง: "
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:453
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:454
 #, fuzzy, c-format
 msgid "%s Account frozen %s %s "
 msgstr "บัญชีผู้ใช้ของคุณถูกระงับการใช้งาน "
@@ -1414,7 +1444,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:560
 #, fuzzy, c-format
 msgid "%s Item waiting to be pulled from "
 msgstr "ทรัพยากรรายการนี้กำลังรอการดึงไปดำเนินการ "
@@ -1453,7 +1483,7 @@ msgstr "ไม่พบข้อมูลของรายการที่ค
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.too_soon ) 
 #. %3$s:  ISSUE.soonestrenewdate 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:228
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:229
 #, fuzzy, c-format
 msgid "%s Not renewable %s No renewal before %s "
 msgstr "ไม่สามารถยืมต่อได้แล้ว "
@@ -1461,7 +1491,7 @@ msgstr "ไม่สามารถยืมต่อได้แล้ว "
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:460
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:461
 #, fuzzy, c-format
 msgid "%s On hold %s No renewals left %s "
 msgstr "ไม่สามารถยืมต่อได้แล้ว "
@@ -1528,7 +1558,7 @@ msgstr ""
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #. %6$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:96
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:103
 #, fuzzy, c-format
 msgid ""
 "%s Purchase suggestions %s %s Your purchase suggestions %s Purchase "
@@ -1683,8 +1713,8 @@ msgstr "%s %s %s %s (%s) "
 #. %1$s:  IF ( ISSUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:241
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:470
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:242
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:471
 #, fuzzy, c-format
 msgid "%s Yes %s No %s "
 msgstr "%s %s %s %s (%s) "
@@ -1850,7 +1880,7 @@ msgstr "%s ระเบียน"
 #. %1$s:  IF ( RESERVE.waitingdate ) 
 #. %2$s:  RESERVE.waitingdate | $KohaDates 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:558
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:559
 #, fuzzy, c-format
 msgid "%s since %s%s "
 msgstr "%s %s %s %s (%s) "
@@ -1861,11 +1891,11 @@ msgstr "%s %s %s %s (%s) "
 #. %4$s:  END 
 #. %5$s:  BLOCK language 
 #. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s: ERROR
+#. %7$s:  CASE ['en', 'eng'] 
+#. %8$s:  CASE ['fr', 'fre'] 
+#. %9$s:  CASE ['it', 'ita'] 
+#. %10$s:  CASE ['de', 'ger', 'deu'] 
+#. %11$s:  CASE ['es', 'spa'] 
 #. %12$s:  CASE 
 #. %13$s:  lang 
 #. %14$s:  END 
@@ -1873,8 +1903,7 @@ msgstr "%s %s %s %s (%s) "
 #: opac-tmpl/bootstrap/en/includes/opac-authorities.inc:56
 #, fuzzy, c-format
 msgid ""
-"%s%s %s %s %s %s %s %%]English %s %%]French %s %%]Italian %s %%]German %s %%]"
-"Spanish %s%s %s %s "
+"%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
 msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  FILTER trim 
@@ -2180,7 +2209,7 @@ msgstr ""
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:129
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:128
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 msgstr ""
@@ -2207,11 +2236,15 @@ msgstr "สาธารณะ"
 #. %7$s:  ELSE 
 #. %8$s:  AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) 
 #. %9$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:200
+#. %10$s:  IF ( suggestions_loo.reason ) 
+#. %11$s:  suggestions_loo.reason |html 
+#. %12$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:207
 #, c-format
 msgid ""
 "%sRequested %sChecked by the library %sAccepted by the library %sOrdered by "
-"the library %sSuggestion declined %sAvailable in the library %s %s %s "
+"the library %sSuggestion declined %sAvailable in the library %s %s %s %s"
+"(%s)%s "
 msgstr ""
 
 #. %1$s:  IF ( typeissue ) 
@@ -2820,8 +2853,8 @@ msgstr "%s %s (%s)"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Author phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; วลีของชื่อผู้แต่ง"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:91
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:93
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:92
 #, fuzzy, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Call number"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; เลขเรียกหนังสือ"
@@ -2841,12 +2874,12 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; วลีของชื่อการปร�
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Corporate name"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ชื่อหน่วยงาน"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:88
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:87
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:89
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:88
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
@@ -2901,17 +2934,17 @@ msgstr "(%s รายการบรรณานุกรม)"
 #. For the first occurrence,
 #. %1$s:  ISSUE.renewsleft 
 #. %2$s:  ISSUE.renewsallowed 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:228
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:233
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:460
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:229
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:234
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:461
 #, c-format
 msgid "(%s of %s renewals remaining)"
 msgstr "(%s of %s รายการที่สามารถยืมต่อได้)"
 
 #. For the first occurrence,
 #. %1$s:  overdues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:367
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:489
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:368
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:490
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:213
 #, c-format
 msgid "(%s total)"
@@ -2940,7 +2973,7 @@ msgstr "(ไม่สนับสนุนระบบห้องสมุด�
 msgid "(Not supported yet)"
 msgstr "(ไม่สนับสนุนระบบห้องสมุดอัตโนมัติ Koha)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:235
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:236
 #, fuzzy, c-format
 msgid "(On hold)"
 msgstr "จองอยู่"
@@ -3123,7 +3156,7 @@ msgid ",complete-subfield"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
 msgid "- You must enter a Title"
 msgstr ""
 
@@ -3133,7 +3166,7 @@ msgstr ""
 msgid "- You must enter a list name"
 msgstr "คุณจะต้องเลือกอย่างน้อยหนึ่งรายการ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:74
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:75
 #, fuzzy, c-format
 msgid "-- Choose --"
 msgstr "-- เลือกรูปแบบที่ต้องการ --"
@@ -3144,7 +3177,7 @@ msgstr "-- เลือกรูปแบบที่ต้องการ --"
 msgid "-- Choose format --"
 msgstr "-- เลือกรูปแบบที่ต้องการ --"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:213
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:212
 #, fuzzy, c-format
 msgid "-- none -- "
 msgstr "-- เลือกรูปแบบที่ต้องการ -- "
@@ -3552,7 +3585,7 @@ msgstr "รวบรวม:"
 msgid "Abstract: "
 msgstr "สาระสังเขป "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:303
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:302
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "บทคัดย่อ/บทสรุป"
@@ -3604,7 +3637,7 @@ msgid "Add %s items to %s"
 msgstr "เพิ่ม %s รายการไปยัง"
 
 #. A name=ButtonPlus
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:103
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:102
 msgid "Add another field"
 msgstr "เพิ่มฟิลด์อื่นอีก"
 
@@ -3681,12 +3714,12 @@ msgstr "เพิ่ม %s รายการไปยัง "
 msgid "Additional authors:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:300
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:299
 #, fuzzy, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "ชนิดเนื้อหาเพิ่มเติม"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:256
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:255
 #, fuzzy, c-format
 msgid "Adolescent"
 msgstr "วัยรุ่น;"
@@ -3701,7 +3734,7 @@ msgstr "วัยรุ่น; "
 msgid "Adressebøker"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:257
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:256
 #, c-format
 msgid "Adult"
 msgstr "ผู้ใหญ่"
@@ -3743,7 +3776,7 @@ msgstr "ทุกชนิดรายการ"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:207
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:18
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:113
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:200
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:199
 #, c-format
 msgid "All libraries"
 msgstr "ทุกห้องสมุด"
@@ -3772,9 +3805,9 @@ msgstr "ที่อยู่ถาวรหรือที่อยู่อื
 msgid "Alternate contact"
 msgstr "การติดต่ออื่น:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:283
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:297
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:284
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:298
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:312
 #, c-format
 msgid "Amount"
 msgstr "จำนวน"
@@ -3902,22 +3935,22 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:142
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:178
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:191
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:302
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:301
 #, c-format
 msgid "Any"
 msgstr "ใดๆ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:252
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:251
 #, fuzzy, c-format
 msgid "Any audience"
 msgstr "ผู้ใช้ใดๆ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:269
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:268
 #, fuzzy, c-format
 msgid "Any content"
 msgstr "เนื้อหาใดๆ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:283
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:282
 #, fuzzy, c-format
 msgid "Any format"
 msgstr "รูปแบบใดๆ"
@@ -3942,7 +3975,7 @@ msgstr "ชนิดใดๆ"
 msgid "Any word"
 msgstr "คำใดๆ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:120
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:127
 #, c-format
 msgid "Anyone"
 msgstr "ผู้ใด"
@@ -3958,7 +3991,7 @@ msgid "April"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 #, fuzzy
 msgid "Are you sure you want to cancel this hold?"
 msgstr "คุณแน่ใจหรือไม่ว่า คุณต้องการลบรายการทั้งหมดออก"
@@ -4006,13 +4039,13 @@ msgid "Are you sure you want to remove this share?"
 msgstr "คุณแน่ใจหรือไม่ว่า คุณต้องการเอารายการที่เลือกออก"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 #, fuzzy
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "คุณแน่ใจหรือไม่ว่า คุณต้องการลบรายการทั้งหมดออก"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 #, fuzzy
 msgid "Are you sure you want to suspend all holds?"
 msgstr "คุณแน่ใจหรือไม่ว่า คุณต้องการลบรายการทั้งหมดออก"
@@ -4054,7 +4087,7 @@ msgid "Atlas"
 msgstr "แท็ก"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:4
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:250
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:249
 #, c-format
 msgid "Audience"
 msgstr "ผู้อ่าน"
@@ -4152,7 +4185,7 @@ msgstr "ผู้แต่ง:"
 msgid "Author(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 msgstr "%s %s %s %s (%s) "
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:37
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:38
 #, c-format
 msgid "Author:"
 msgstr "ผู้แต่ง:"
@@ -4286,17 +4319,17 @@ msgstr "กลับไปยังระเบียนบรรณานุก
 msgid "Back to the results search list"
 msgstr "กลับไปยังระเบียนบรรณานุกรม"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:98
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:97
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:265
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:133
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:374
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:375
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1139
 #, c-format
 msgid "Barcode"
 msgstr "บาร์โค้ด"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:214
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:438
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:215
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:439
 #, fuzzy, c-format
 msgid "Barcode:"
 msgstr "บาร์โค้ด"
@@ -4347,7 +4380,7 @@ msgstr "บรรณานุกรม"
 msgid "Bibliografiske data"
 msgstr "บรรณานุกรม"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:304
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:303
 #, c-format
 msgid "Bibliographies"
 msgstr "บรรณานุกรม"
@@ -4428,7 +4461,7 @@ msgid "Biografier"
 msgstr "บรรณานุกรม"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:52
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:272
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:271
 #, c-format
 msgid "Biography"
 msgstr "ชีวประวัติ"
@@ -4479,7 +4512,7 @@ msgstr "หนังสือ"
 msgid "Book reviews by critics ( XXX )"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:286
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:285
 #, c-format
 msgid "Braille"
 msgstr "เอกสารอักษรเบรลล์"
@@ -4532,12 +4565,12 @@ msgstr "การตรวจสอบสิทธิ์แบบส่วนก
 msgid "CAS login"
 msgstr "เข้าสู่ระบบ:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:288
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:287
 #, c-format
 msgid "CD audio"
 msgstr "ซีดีเสียง"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:292
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:291
 #, fuzzy, c-format
 msgid "CD software"
 msgstr "ซีดีซอฟต์แวร์"
@@ -4576,7 +4609,7 @@ msgstr "เลขเรียกหนังสือ"
 msgid "Call Number"
 msgstr "เลขเรียกหนังสือ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:375
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:376
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:63
 #, fuzzy, c-format
@@ -4613,8 +4646,8 @@ msgstr "เลขเรียกหนังสือ (หนังสือท�
 msgid "Call number (Z-A to 9-0)"
 msgstr "เลขเรียกหนังสือ (นิยาย Z-A ถึง หนังสือทั่วไป 9-0)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:219
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:443
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:220
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:444
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:124
 #, fuzzy, c-format
 msgid "Call number:"
@@ -4632,8 +4665,8 @@ msgstr "เลขเรียกหนังสือ"
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:50
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:121
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:609
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:628
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:610
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:629
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:157
@@ -4645,7 +4678,7 @@ msgstr "เลขเรียกหนังสือ"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:591
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:593
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:796
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:97
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:63
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:89
@@ -4700,7 +4733,7 @@ msgstr "หมายเลขบัตรสมาชิก:"
 msgid "Cart"
 msgstr "ที่"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:289
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:288
 #, c-format
 msgid "Cassette recording"
 msgstr "เทปบันทึกเสียง"
@@ -4715,7 +4748,7 @@ msgstr ""
 msgid "Catalog searches"
 msgstr "(การค้นหาที่เกี่ยวข้อง: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:305
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:304
 #, c-format
 msgid "Catalogs"
 msgstr "รายการทรัพยากร"
@@ -4834,7 +4867,7 @@ msgstr "ล้างทั้งหมด"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:35
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:815
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
 #, fuzzy, c-format
 msgid "Clear all"
 msgstr "ล้างทั้งหมด"
@@ -4847,8 +4880,8 @@ msgstr "ล้างทั้งหมด"
 msgid "Clear date"
 msgstr "แฟ้มคอมพิวเตอร์"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:604
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:645
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:605
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:646
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr ""
@@ -4914,7 +4947,7 @@ msgstr "คลิกเพื่อดูใน Google Books"
 
 #. DIV
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:162
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:400
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:401
 msgid "Click to view in Google Books"
 msgstr "คลิกเพื่อดูใน Google Books"
 
@@ -4966,7 +4999,7 @@ msgstr "ภาพปะต่อ"
 msgid "Collection"
 msgstr "กลุ่มข้อมูล"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:41
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:42
 #, fuzzy, c-format
 msgid "Collection title:"
 msgstr "กลุ่มข้อมูล:"
@@ -5057,7 +5090,7 @@ msgid "Contact information"
 msgstr "ข้อมูลติดต่อ"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:85
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:267
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:266
 #, c-format
 msgid "Content"
 msgstr "เนื้อหา"
@@ -5137,7 +5170,7 @@ msgstr "สงวนลิขสิทธิ์"
 msgid "Copyright date"
 msgstr "วันที่จดสิขสิทธิ์:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:38
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:39
 #, fuzzy, c-format
 msgid "Copyright date:"
 msgstr "วันที่จดสิขสิทธิ์:"
@@ -5246,7 +5279,7 @@ msgstr ""
 msgid "CreativeWork"
 msgstr "สนธิสัญญา"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:309
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:310
 #, c-format
 msgid "Credits"
 msgstr "เครดิต"
@@ -5273,7 +5306,7 @@ msgstr "รหัสผ่านปัจจุบัน:"
 msgid "Curriculum"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:291
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:290
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "วิดีโอดีวีดี / วิดีโอดิสก์"
@@ -5323,14 +5356,14 @@ msgstr "วันที่เพิ่มข้อมูล"
 msgid "Date due"
 msgstr "วันกำหนดส่ง"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:192
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:199
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:448
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:193
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:200
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:449
 #, fuzzy, c-format
 msgid "Date due:"
 msgstr "วันกำหนดส่ง"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:161
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:160
 #, fuzzy, c-format
 msgid "Date range:"
 msgstr "วันที่เพิ่มข้อมูล"
@@ -5370,7 +5403,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:61
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:45
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:46
 #, c-format
 msgid "Default"
 msgstr "ค่าที่ตั้งไว้"
@@ -5399,7 +5432,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:661
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:733
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
 #, c-format
 msgid "Delete"
 msgstr "ลบ"
@@ -5412,7 +5445,7 @@ msgid "Delete list"
 msgstr "ลบรายการ"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:224
 #, fuzzy
 msgid "Delete selected"
 msgstr "เอารายการที่เลือกออก"
@@ -5552,7 +5585,7 @@ msgstr ""
 msgid "Dias"
 msgstr "วันที่"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:306
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:305
 #, c-format
 msgid "Dictionaries"
 msgstr "พจนานุกรม"
@@ -5578,12 +5611,12 @@ msgstr ""
 msgid "Diorama"
 msgstr "บทละคร"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:319
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:318
 #, c-format
 msgid "Directories"
 msgstr "รายชื่อ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:312
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:311
 #, c-format
 msgid "Discographies"
 msgstr "รายชื่อจานเสียง"
@@ -5672,7 +5705,7 @@ msgid "Drama"
 msgstr "บทละคร"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:128
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:376
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:377
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #, c-format
 msgid "Due"
@@ -5847,7 +5880,7 @@ msgstr ""
 msgid "Empty and close"
 msgstr "ลบทั้งหมดแล้วปิด"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:307
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:306
 #, fuzzy, c-format
 msgid "Encyclopedias "
 msgstr "สารานุกรม "
@@ -5862,14 +5895,14 @@ msgstr "เนื้อหาเพิ่มเติม "
 msgid "Enhanced descriptions from Syndetics:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:28
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:29
 #, c-format
 msgid "Enter a new purchase suggestion"
 msgstr "ใส่ข้อมูลข้อเสนอแนะเพื่อสั่งซื้อหนังสือใหม่"
 
 #. INPUT type=text name=q
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:100
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:162
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:99
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:161
 msgid "Enter search terms"
 msgstr "กรุณาป้อนคำค้น"
 
@@ -5976,7 +6009,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:35
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:39
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:41
 #, c-format
 msgid "Error:"
 msgstr "ข้อผิดพลาด:"
@@ -6052,13 +6085,13 @@ msgstr ""
 msgid "Expecting a specific item selection."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:535
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:539
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:536
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:540
 #, fuzzy, c-format
 msgid "Expiration:"
 msgstr "ฉบับพิมพ์"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:495
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:496
 #, fuzzy, c-format
 msgid "Expires on"
 msgstr "หมดอายุ:"
@@ -6109,7 +6142,7 @@ msgstr "ผู้หญิง"
 msgid "Festskrift "
 msgstr "Feschrift Ind. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:270
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:269
 #, c-format
 msgid "Fiction"
 msgstr "นิยาย"
@@ -6150,7 +6183,7 @@ msgstr "Filmlydspor"
 msgid "Filmografier"
 msgstr "รายชื่อภาพยนตร์"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:318
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:317
 #, c-format
 msgid "Filmographies"
 msgstr "รายชื่อภาพยนตร์"
@@ -6172,7 +6205,7 @@ msgid "Fine amount"
 msgstr "จำนวนค่าปรับ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:140
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:381
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:382
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #, c-format
 msgid "Fines"
@@ -6187,14 +6220,14 @@ msgid "Fines (%s)"
 msgstr "ค่าปรับ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:27
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:281
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:295
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:282
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:296
 #, fuzzy, c-format
 msgid "Fines and charges"
 msgstr "ค่าปรับและค่าธรรมเนียม"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:241
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:470
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:242
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:471
 #, fuzzy, c-format
 msgid "Fines:"
 msgstr "ค่าปรับ"
@@ -6235,7 +6268,7 @@ msgstr ""
 msgid "Font"
 msgstr "จำนวน"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:163
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:162
 #, fuzzy, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -6282,11 +6315,11 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:815
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
 msgid "Form not submitted because of the following problem(s)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:281
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:280
 #, fuzzy, c-format
 msgid "Format"
 msgstr "รูปแบบ:"
@@ -6404,7 +6437,7 @@ msgstr "บอกรับข้อมูลของชื่อเรื่อ
 msgid "Fysiske bøker"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:259
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:258
 #, fuzzy, c-format
 msgid "General"
 msgstr "ผู้ใหญ่, ทั่วไป"
@@ -6494,9 +6527,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:226
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:138
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:67
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:42
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:123
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:130
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:24
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:33
 #, c-format
@@ -6544,7 +6577,7 @@ msgstr ""
 msgid "Groups"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:211
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:210
 #, fuzzy, c-format
 msgid "Groups of libraries"
 msgstr "ห้องสมุด"
@@ -6554,7 +6587,7 @@ msgstr "ห้องสมุด"
 msgid "Gått inn i: "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:308
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:307
 #, c-format
 msgid "Handbooks"
 msgstr "คู่มือ"
@@ -6634,13 +6667,13 @@ msgstr "ซ่อนหน้าต่าง"
 msgid "Highlight"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:331
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:332
 #, c-format
 msgid "Hold date"
 msgstr "วันที่จอง"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:347
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:528
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:348
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:529
 #, fuzzy, c-format
 msgid "Hold date:"
 msgstr "วันที่จอง"
@@ -6695,7 +6728,7 @@ msgstr "จำนวนที่จอง ( %s ) รายการ "
 msgid "Holdings:"
 msgstr "จำนวนที่จอง ( %s ) รายการ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:489
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:490
 #, fuzzy, c-format
 msgid "Holds "
 msgstr "จอง "
@@ -6711,7 +6744,7 @@ msgstr "จอง "
 msgid "Holds and priority: "
 msgstr "จำนวนที่จอง ( %s ) รายการ "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:327
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:328
 #, fuzzy, c-format
 msgid "Holds waiting"
 msgstr "จำนวนการจองที่รอคิวอยู่"
@@ -6766,7 +6799,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:47
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:15
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:12
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:13
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:12
 #: opac-tmpl/bootstrap/en/modules/svc/suggestion.tt:12
 #, c-format
@@ -6826,7 +6859,7 @@ msgstr "มุมมองแบบ ISBD"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:166
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:168
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:96
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:84
 #, c-format
@@ -7020,7 +7053,7 @@ msgstr ""
 msgid "Indexed in:"
 msgstr "จัดทำดัชนีในหมวดหมู่:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:310
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:309
 #, c-format
 msgid "Indexes"
 msgstr "ดัชนี"
@@ -7099,16 +7132,16 @@ msgstr "จองหนังสือ"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:50
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:263
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:373
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:374
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:62
 #, c-format
 msgid "Item type"
 msgstr "ชนิดของทรัพยากร"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:206
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:207
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:121
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:43
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:44
 #, fuzzy, c-format
 msgid "Item type:"
 msgstr "ชนิดของทรัพยากร:"
@@ -7197,7 +7230,7 @@ msgstr ""
 msgid "June"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:260
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:259
 #, c-format
 msgid "Juvenile"
 msgstr "เยาวชน"
@@ -7348,13 +7381,13 @@ msgstr "LCCN: "
 msgid "Lagringsbrikke"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:172
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:171
 #, c-format
 msgid "Language"
 msgstr "ภาษา"
 
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:137
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:174
 #, fuzzy, c-format
 msgid "Language: "
 msgstr "ภาษา: "
@@ -7364,7 +7397,7 @@ msgstr "ภาษา: "
 msgid "Languages:&nbsp;"
 msgstr "ภาษา:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:285
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:284
 #, c-format
 msgid "Large print"
 msgstr "งานพิมพ์ขนาดใหญ่"
@@ -7380,22 +7413,22 @@ msgstr "ล่าช้า"
 msgid "Last location"
 msgstr "ตำแหน่งสุดท้าย"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:323
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:322
 #, c-format
 msgid "Law reports and digests"
 msgstr "บทความรายงานคดีและประมวลกฎหมาย"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:309
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:308
 #, c-format
 msgid "Legal articles"
 msgstr "บทความกฎหมาย"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:322
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:321
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "อรรถคดีและรายละเอียดคดี"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:313
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:312
 #, c-format
 msgid "Legislation"
 msgstr "ตัวบทกฎหมาย"
@@ -7451,13 +7484,13 @@ msgstr "ห้องสมุด "
 msgid "Library catalog"
 msgstr "ทรัพยากรห้องสมุด"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:198
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:58
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:197
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:59
 #, fuzzy, c-format
 msgid "Library:"
 msgstr "ห้องสมุด"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:142
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:141
 #, fuzzy, c-format
 msgid "Limit to any of the following:"
 msgstr "จำกัดชนิดของทรัพยากรโดย: เฉพาะทรัพยากรที่ตรงกับเงื่อนไขใดๆ ต่อไปนี้:"
@@ -7568,7 +7601,7 @@ msgstr "สถานที่"
 msgid "Location (Status)"
 msgstr "สถานที่"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:197
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:196
 #, fuzzy, c-format
 msgid "Location and availability: "
 msgstr "สถานที่และทรัพยากรที่มี: "
@@ -7886,12 +7919,12 @@ msgstr "ผู้ชาย"
 msgid "Maleri"
 msgstr "ผู้ชาย"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:151
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:158
 #, c-format
 msgid "Managed by"
 msgstr "จัดการโดย"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:192
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:199
 #, fuzzy, c-format
 msgid "Managed by:"
 msgstr "จัดการโดย"
@@ -7944,7 +7977,7 @@ msgstr "ชนิดของสิ่งพิมพ์ต่อเนื่อ
 msgid "May"
 msgstr "แผนที่"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:121
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:128
 #, c-format
 msgid "Me"
 msgstr "ฉันเอง"
@@ -8029,7 +8062,7 @@ msgstr "รายเดือน"
 msgid "Modell"
 msgstr "โลหะ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:504
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:505
 #, c-format
 msgid "Modify"
 msgstr "ปรับเปลี่ยน"
@@ -8120,7 +8153,7 @@ msgid "MusicGroup"
 msgstr "ดนตรี"
 
 # Music recording แปลต่างจาก music ยังไงดี
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:273
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:272
 #, c-format
 msgid "Musical recording"
 msgstr "เครื่องบันทึุกเพลง"
@@ -8186,7 +8219,7 @@ msgid "Never"
 msgstr ""
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:539
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:540
 #, fuzzy, c-format
 msgid "Never expires %s "
 msgstr "หมดอายุ: "
@@ -8222,8 +8255,8 @@ msgstr "รายการใหม่"
 msgid "New password:"
 msgstr "รหัสผ่านใหม่:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:132
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:223
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:231
 #, c-format
 msgid "New purchase suggestion"
 msgstr "รายการแนะนำการสั่งซื้อใหม่"
@@ -8305,9 +8338,9 @@ msgstr "มีตัวเล่มพร้อมให้บริการท
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:156
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:164
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:172
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:394
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:402
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:410
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:395
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:403
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:411
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:135
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
@@ -8367,7 +8400,7 @@ msgstr "ไม่พบรายการใดๆ:"
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:66
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:68
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:144
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:177
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:176
 #, c-format
 msgid "No limit"
 msgstr "ไม่จำกัด"
@@ -8445,12 +8478,12 @@ msgstr "คุณไม่ได้เลือกรายการใดๆ"
 msgid "No tags from this library for this title."
 msgstr "ไม่มีแท็กสำหรับชื่อเรื่องนี้"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:271
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:270
 #, fuzzy, c-format
 msgid "Non fiction"
 msgstr "หนังสือทั่วไป"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:274
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:273
 #, c-format
 msgid "Non-musical recording"
 msgstr "เครื่องบันทึกเสียงทั่วไป"
@@ -8496,12 +8529,12 @@ msgid "Not what you expected? Check for "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:801
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:149
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:156
 #, c-format
 msgid "Note"
 msgstr "หมายเหตุ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:177
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:184
 #, fuzzy, c-format
 msgid "Note: "
 msgstr "หมายเหตุ: "
@@ -8584,13 +8617,13 @@ msgid "Notes/Comments"
 msgstr "หมายเหตุ/ความคิดเห็น"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:41
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:82
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:83
 #, c-format
 msgid "Notes:"
 msgstr "หมายเหตุ:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
@@ -8640,7 +8673,7 @@ msgstr "ตารางตัวเลข"
 msgid "OK"
 msgstr "ตกลง"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:209
 #, c-format
 msgid "OR"
 msgstr ""
@@ -8694,12 +8727,12 @@ msgstr "ทรัพยากรแบบออนไลน์: "
 msgid "Online tjeneste"
 msgstr "ทรัพยากรแบบออนไลน์:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:220
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:219
 #, fuzzy, c-format
 msgid "Only items currently available for loan or reference"
 msgstr "เฉพาะี่รายการที่สามารถยืมได้ในปัจจุบันเท่านั้น"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:31
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:32
 #, fuzzy, c-format
 msgid ""
 "Only the title is required, but the more information you enter the easier it "
@@ -8823,7 +8856,7 @@ msgstr ""
 msgid "Overdue (%s)"
 msgstr "เกินกำหนด "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:367
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:368
 #, fuzzy, c-format
 msgid "Overdues "
 msgstr "เกินกำหนด "
@@ -8890,7 +8923,7 @@ msgstr "รหัสผ่าน:"
 msgid "Password: %s"
 msgstr "รหัสผ่าน:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:310
 #, c-format
 msgid "Patent document"
 msgstr "เอกสารสิทธิบัตร"
@@ -8965,18 +8998,18 @@ msgstr "รายละเอียดทางกายภาพ:"
 msgid "Physical presentation"
 msgstr "รายละเอียดทางกายภาพ:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:332
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:333
 #, fuzzy, c-format
 msgid "Pick up library"
 msgstr "ห้องสมุดที่รับหนังสือ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:496
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:497
 #, fuzzy, c-format
 msgid "Pick up location"
 msgstr "สถานที่รับหนังสือ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:180
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:544
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:545
 #, fuzzy, c-format
 msgid "Pick up location:"
 msgstr "สถานที่รับหนังสือ"
@@ -9027,7 +9060,7 @@ msgstr "จองหนังสือ"
 msgid "Place hold"
 msgstr "จองหนังสือ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:494
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:495
 #, fuzzy, c-format
 msgid "Placed on"
 msgstr "อยู่ที่"
@@ -9116,7 +9149,7 @@ msgstr ""
 msgid "Please enter your card number:"
 msgstr "กรุณาใส่เลขที่บัตรสมาชิกของคุณ:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:30
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:31
 #, fuzzy, c-format
 msgid ""
 "Please fill out this form to make a purchase suggestion. You will receive an "
@@ -9207,7 +9240,7 @@ msgstr ""
 msgid "Powered by %s "
 msgstr "จัดพิมพ์โดย : "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:255
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:254
 #, fuzzy, c-format
 msgid "Pre-adolescent"
 msgstr "วัยรุ่น;"
@@ -9222,7 +9255,7 @@ msgstr "วัยรุ่น; "
 msgid "Preferred form: "
 msgstr "รูปแบบของสารสนเทศ "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:253
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:252
 #, c-format
 msgid "Preschool"
 msgstr ""
@@ -9252,7 +9285,7 @@ msgstr "ก่อนหน้า"
 msgid "Previous sessions"
 msgstr "ฉบับก่อนหน้า"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:254
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:253
 #, fuzzy, c-format
 msgid "Primary"
 msgstr "Primary (5-8)"
@@ -9273,12 +9306,12 @@ msgstr "พิมพ์"
 msgid "Print list"
 msgstr "แก้ไขรายการ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:498
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:499
 #, fuzzy, c-format
 msgid "Priority"
 msgstr "ลำดับผู้จอง:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:549
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:550
 #, fuzzy, c-format
 msgid "Priority:"
 msgstr "ลำดับผู้จอง:"
@@ -9307,7 +9340,7 @@ msgstr ""
 msgid "Product"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:317
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:316
 #, c-format
 msgid "Programmed texts"
 msgstr "ข้อความที่เป็นชุดคำสั่ง"
@@ -9353,12 +9386,12 @@ msgstr "รายการสาธารณะ"
 msgid "Public lists:"
 msgstr "รายการสาธารณะ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:160
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:159
 #, fuzzy, c-format
 msgid "Publication date range"
 msgstr "ปีที่พิมพ์:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:42
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:43
 #, fuzzy, c-format
 msgid "Publication place:"
 msgstr "ปีที่พิมพ์:"
@@ -9421,7 +9454,7 @@ msgstr "สำนักพิมพ์"
 msgid "Publisher location"
 msgstr "สถานที่ตั้งสำนักพิมพ์"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:40
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:41
 #, c-format
 msgid "Publisher:"
 msgstr "สำนักพิมพ์:"
@@ -9488,7 +9521,7 @@ msgstr "พิมพ์รหัสผ่านใหม่อีกครั้
 msgid "Realia"
 msgstr "สม่ำเสมอ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:72
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:73
 #, fuzzy, c-format
 msgid "Reason for suggestion: "
 msgstr "รายการแนะนำการสั่งซื้อใหม่ "
@@ -9557,7 +9590,7 @@ msgstr "ตัวบทกฎหมาย"
 msgid "Registre"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:284
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:283
 #, c-format
 msgid "Regular print"
 msgstr "ภาพพิมพ์ขนาดปกติ"
@@ -9596,7 +9629,7 @@ msgstr ""
 
 # Coded fields?? ฟิลด์ในรูปแบบโค้ด ฟิลด์ที่ถูกใส่รหัส??
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:104
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:103
 #, fuzzy
 msgid "Remove field"
 msgstr "ฟิลด์ในรูปแบบรหัส"
@@ -9625,17 +9658,17 @@ msgid "Remove share"
 msgstr "ฟิลด์ในรูปแบบรหัส"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:137
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:226
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:378
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:458
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:227
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:379
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:459
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #, c-format
 msgid "Renew"
 msgstr "ต่ออายุ"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:268
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:269
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 #, fuzzy
 msgid "Renew all"
 msgstr "ต่ออายุทั้งหมด"
@@ -9649,8 +9682,8 @@ msgid "Renew item"
 msgstr "ต่ออายุรายการทรัพยากร"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:257
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:258
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 #, fuzzy
 msgid "Renew selected"
 msgstr "เอารายการที่เลือกออก"
@@ -9744,17 +9777,17 @@ msgstr "ผลการค้นหา %s ถึง %s จากทั้งห�
 msgid "Results of search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "&nbsp;จะจำกัดการสืบค้น:&nbsp;'%s'"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:583
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:584
 #, fuzzy, c-format
 msgid "Resume"
 msgstr "ผลการค้น"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:652
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:653
 #, c-format
 msgid "Resume all suspended holds"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:594
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:595
 #, fuzzy, c-format
 msgid "Resume your hold on "
 msgstr "จองหนังสือ"
@@ -9823,7 +9856,7 @@ msgstr ""
 msgid "Review: "
 msgstr "บทวิจารณ์ "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:316
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:315
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:546
 #, c-format
 msgid "Reviews"
@@ -9991,7 +10024,7 @@ msgid "Score"
 msgstr "ขออภัย"
 
 #. INPUT type=submit name=do
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:360
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:359
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:156
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:273
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:56
@@ -10032,14 +10065,14 @@ msgstr "ค้นหาชื่อเรื่องนี้ใน:"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:317
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:187
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:50
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:87
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:89
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:362
 #, fuzzy
 msgid "Search for works by this author"
 msgstr "ค้นหาชื่อเรื่องนี้ใน:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:23
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:115
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:122
 #, c-format
 msgid "Search for:"
 msgstr "ค้นหาด้วยคำว่า:"
@@ -10104,7 +10137,7 @@ msgstr "นิยาย"
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:58
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:271
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:170
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:408
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:409
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:141
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:88
@@ -10159,13 +10192,13 @@ msgstr "จองเฉพาะเล่มที่ต้องการ"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:34
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:815
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
 #, fuzzy, c-format
 msgid "Select all"
 msgstr "เลือกทั้งหมด"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:139
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:146
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
 #, fuzzy, c-format
 msgid "Select suggestions to: "
 msgstr "เอารายการที่เลือกออก "
@@ -10618,12 +10651,12 @@ msgstr "ขออภัย! คุณไม่สามารถจองเก�
 msgid "Sorry, your session has timed out. Please log in again."
 msgstr "ขออภัย! เซสชันของคุณหมดเวลาแล้ว กรุณาล็อกอินอีกครั้ง"
 
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:63
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:65
 #, fuzzy, c-format
 msgid "Sort By: "
 msgstr "เรียงลำดับตาม: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:233
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:232
 #, fuzzy, c-format
 msgid "Sort by:"
 msgstr "เรียงลำดับตาม:"
@@ -10639,7 +10672,7 @@ msgstr "เรียงลำดับตาม: "
 msgid "Sort this list by: "
 msgstr "เรียงลำดับรายการนี้ตาม: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:232
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:231
 #, fuzzy, c-format
 msgid "Sorting: "
 msgstr "งานพิมพ์ขนาดใหญ่ "
@@ -10655,7 +10688,7 @@ msgstr "ส่งข้อมูล"
 msgid "Source: "
 msgstr "ค้นหา "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:258
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:257
 #, fuzzy, c-format
 msgid "Specialized"
 msgstr "สิ่งพิมพ์ต่อเนื่อง"
@@ -10696,12 +10729,11 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:87
 #, fuzzy, c-format
 msgid "Standard number"
 msgstr "เลขมาตรฐาน"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:40
 #, c-format
 msgid "Standard number (ISBN, ISSN or other):"
 msgstr ""
@@ -10711,7 +10743,7 @@ msgstr ""
 msgid "Standardtittel: "
 msgstr "มาตรฐาน "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:320
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:319
 #, c-format
 msgid "Statistics"
 msgstr "สถิติ"
@@ -10723,16 +10755,16 @@ msgstr "สถิติ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:55
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:500
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:501
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:800
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:152
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:159
 #, c-format
 msgid "Status"
 msgstr "สถานะ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:554
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:200
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:555
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:207
 #, fuzzy, c-format
 msgid "Status:"
 msgstr "สถานะ"
@@ -10907,7 +10939,7 @@ msgid "Submit update request"
 msgstr "ส่งข้อเสนอแนะของคุณ"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:97
 #, fuzzy
 msgid "Submit your suggestion"
 msgstr "ส่งข้อเสนอแนะของคุณ"
@@ -10964,17 +10996,17 @@ msgstr "บอกรับข้อมูลของชื่อเรื่อ
 msgid "Subscriptions"
 msgstr "การสมัครสมาชิก"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:117
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:124
 #, fuzzy, c-format
 msgid "Suggested by:"
 msgstr "เสนอแนะโดย:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:157
 #, fuzzy, c-format
 msgid "Suggested for"
 msgstr "เสนอแนะสำหรับ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:184
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:191
 #, fuzzy, c-format
 msgid "Suggested for:"
 msgstr "เสนอแนะสำหรับ"
@@ -10985,7 +11017,7 @@ msgid "Suggestions"
 msgstr "การสมัครสมาชิก"
 
 # เรื่องย่อ หรือ บทสรุป หรือ คำอื่น??
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:155
 #, c-format
 msgid "Summary"
 msgstr "บทสรุป"
@@ -11027,31 +11059,31 @@ msgstr ""
 msgid "Supersedes:"
 msgstr "ชุด:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:315
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:314
 #, c-format
 msgid "Surveys"
 msgstr "แบบสำรวจ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:502
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:587
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:605
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:608
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:616
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:503
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:588
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:606
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:609
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:617
 #, c-format
 msgid "Suspend"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:639
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:640
 #, c-format
 msgid "Suspend all holds"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:601
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:602
 #, c-format
 msgid "Suspend until:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:596
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:597
 #, c-format
 msgid "Suspend your hold on "
 msgstr ""
@@ -11140,7 +11172,7 @@ msgstr "ข้อความแจ้งจากห้องสมุด"
 msgid "Tags:"
 msgstr "แท็ก:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:321
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:320
 #, c-format
 msgid "Technical reports"
 msgstr "รายงานทางเทคนิค"
@@ -11431,7 +11463,7 @@ msgstr "กล่องรายการที่เลือกถูกส่
 msgid "The operation %s is not supported."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:108
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:115
 #, c-format
 msgid "The selected suggestions have been deleted."
 msgstr ""
@@ -11474,7 +11506,7 @@ msgstr "(มีรายการบอกรับ %s รายการที�
 msgid "There are no comments for this item."
 msgstr "ไม่มีความคิดเห็นใดๆ สำหรับรายการนี้"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:221
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:229
 #, c-format
 msgid "There are no pending purchase suggestions."
 msgstr "ไม่มีข้อเสนอแนะการสั่งซื้อที่ค้างอยู่"
@@ -11521,7 +11553,7 @@ msgid ""
 "library for help."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:314
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:313
 #, c-format
 msgid "Theses"
 msgstr "วิทยานิพนธ์"
@@ -11696,9 +11728,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:118
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:330
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:372
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:493
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:331
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:373
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:494
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:242
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:208
@@ -11740,7 +11772,7 @@ msgid "Title translated: "
 msgstr "วลีของชื่อเรื่อง "
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:127
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:36
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:37
 #, c-format
 msgid "Title:"
 msgstr "ชื่อเรื่อง:"
@@ -11819,7 +11851,7 @@ msgstr "แผ่นใส"
 msgid "Tre-dimensjonale gjenstander"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:324
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:323
 #, fuzzy, c-format
 msgid "Treaties "
 msgstr "สนธิสัญญา "
@@ -12066,7 +12098,7 @@ msgstr ""
 msgid "Utstilling"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:290
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:289
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "เทป VHS / เทปวิดีทัศน์"
@@ -12124,7 +12156,7 @@ msgstr "ต่ออายุทั้งหมด"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:154
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:392
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:393
 msgid "View at Amazon.com"
 msgstr "ดูที่เว็บไซต์ Amazon.com"
 
@@ -12144,7 +12176,7 @@ msgstr "ดูที่เว็บไซต์ Amazon.com"
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:76
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:86
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:88
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:341
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:344
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:346
@@ -12206,7 +12238,7 @@ msgstr "ข้อมูลเกี่ยวกับตัวเล่ม"
 msgid "Volumes: "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:351
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:352
 #, c-format
 msgid "Waiting"
 msgstr "กำลังรอ"
@@ -12238,7 +12270,7 @@ msgid "We"
 msgstr ""
 
 #. %1$s:  total 
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:46
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:48
 #, c-format
 msgid "We have %s results for your search "
 msgstr ""
@@ -12250,7 +12282,7 @@ msgid ""
 "define how long we keep your reading history."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:293
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:292
 #, c-format
 msgid "Website"
 msgstr "เว็บไซต์"
@@ -12294,7 +12326,7 @@ msgid "Wire"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
 #, fuzzy
 msgid "With selected suggestions: "
 msgstr "เอารายการที่เลือกออก "
@@ -12405,8 +12437,8 @@ msgstr ""
 msgid "You currently have nothing checked out."
 msgstr "ขณะนี้ คุณยังไม่ได้ยืมทรัพยากรใดๆ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:286
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:300
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:287
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:301
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr "ขณะนี้ คุณมีค่าปรับและค่าธรรมเนียมที่ค้างชำระเป็นจำนวนเงิน:"
@@ -12440,7 +12472,7 @@ msgstr ""
 "คุณใส่ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง กรุณาลองอีักครั้ง! "
 "และอย่าลืมว่าชื่อผู้ใช้และรหัสผ่านต้องตรงตามอักษรตัวใหญ่-เล็ก"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:314
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:315
 #, c-format
 msgid "You have a credit of:"
 msgstr "คุณมีเครดิตของ:"
@@ -12456,7 +12488,7 @@ msgstr ""
 msgid "You have checked out too many items and can't check out any more. %s "
 msgstr "<em>ข้อความ 2:</em> คุณได้ยืมหลายรายการแล้ว และระบบไม่สามารถให้ยืมได้อีก "
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:61
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:76
 #, fuzzy, c-format
 msgid "You have no fines or charges"
 msgstr "คุณไม่มีค่าปรับหรือค่าธรรมเนียมที่ต้องชำระ"
@@ -12468,7 +12500,7 @@ msgid ""
 "fields and resubmit."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:273
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:274
 #, c-format
 msgid "You have nothing checked out"
 msgstr "คุณไม่้ได้ยืมทรัพยากรใดๆ"
@@ -12743,7 +12775,7 @@ msgstr "ความคิดเห็นของคุณ"
 msgid "Your privacy rules have been updated."
 msgstr "รหัสผ่านของคุณได้รับการเปลี่ยนแปลงเรียบร้อยแล้ว"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:15
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:16
 #, fuzzy, c-format
 msgid "Your purchase suggestions"
 msgstr "ข้อเสนอแนะการสั่งซื้อของฉัน"
@@ -12764,7 +12796,7 @@ msgstr "ค้นหาด้วยคำว่า:"
 msgid "Your search returned %s results."
 msgstr "ผลลัพธ์ที่ได้ทั้งหมดจำนวน %s รายการ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:109
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:116
 #, fuzzy, c-format
 msgid "Your suggestion has been submitted."
 msgstr "รหัสผ่านของคุณได้รับการเปลี่ยนแปลงเรียบร้อยแล้ว"
@@ -12865,7 +12897,7 @@ msgid "[% shelfname |html %]"
 msgstr ""
 
 #. INPUT type=text name=title
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:116
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:123
 msgid "[% title |html %]"
 msgstr ""
 
@@ -12883,17 +12915,17 @@ msgid ""
 "type=seefro.type %%] "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:362
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:361
 #, fuzzy, c-format
 msgid "[Fewer options]"
 msgstr "[ตัวเลือกน้อยกว่า]"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:364
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:363
 #, c-format
 msgid "[More options]"
 msgstr "[ตัวเลือกมากกว่า]"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:366
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:365
 #, fuzzy, c-format
 msgid "[New search]"
 msgstr "[ค้นหาใหม่]"
@@ -13147,7 +13179,7 @@ msgstr "บทความกฎหมาย"
 #. %3$s:  WAITIN.holdingbranch 
 #. %4$s:  WAITIN.branch 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:351
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:352
 #, fuzzy, c-format
 msgid "at %s %s In transit from %s to %s %s "
 msgstr "นำส่งจาก %s ไปยัง %s "
@@ -13309,7 +13341,7 @@ msgstr "โดย %s"
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:452
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:162
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:107
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:86
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:88
 #, fuzzy, c-format
 msgid "by "
 msgstr "โดย %s "
@@ -14395,6 +14427,11 @@ msgstr "ดนตรี"
 msgid "needed_before_date"
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:88
+#, c-format
+msgid "negcap "
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:577
 #, fuzzy, c-format
 msgid "newspaper "
@@ -15021,7 +15058,7 @@ msgstr "มีให้บริการในห้องสมุด"
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #. %8$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:568
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:569
 #, fuzzy, c-format
 msgid "since %s %s Suspended %s until %s %s %s Pending %s %s "
 msgstr "%s %s %s %s (%s) "
@@ -15366,7 +15403,7 @@ msgstr "ชื่อเรื่องแบบฉบับ"
 msgid "unknown"
 msgstr "ไม่รู้จัก"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:643
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:644
 #, fuzzy, c-format
 msgid "until "
 msgstr "เยาวชน "
@@ -15620,7 +15657,7 @@ msgid "Årbok"
 msgstr "หนังสือ"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:275
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:592
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:593
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:127
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:246
 #, c-format

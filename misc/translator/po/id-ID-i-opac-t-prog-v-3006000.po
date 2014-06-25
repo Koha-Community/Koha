@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-05-05 22:06-0300\n"
+"POT-Creation-Date: 2014-06-15 18:12-0300\n"
 "PO-Revision-Date: 2013-12-15 13:27+0000\n"
 "Last-Translator: Andi <andi@opensuse-id.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,29 +27,6 @@ msgstr "#rekaman"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:742
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 msgstr "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
-
-#. %1$s:  END 
-#. %2$s:  END 
-#. %3$s:  END 
-#. %4$s:  END 
-#. %5$s:  BLOCK language 
-#. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s:  CASE 
-#. %12$s:  lang 
-#. %13$s:  END 
-#. %14$s:  END 
-#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
-#, fuzzy, c-format
-msgid ""
-"%s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]Greek "
-"(to 1453) %s%s %s %s "
-msgstr ""
-"%s %s %s %s %s %s %s %s %%]Yahudi %s %%]Arabic %s %%]Yunani (modern) %s %%]"
-"Yunani (menuju 1453) %s%s %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -116,6 +93,29 @@ msgid ""
 msgstr ""
 "%s %s %s %s %s %s %s%s%sKoha daring%s katalog &rsaquo; Koleksi pilihan untuk "
 "%s %s "
+
+#. %1$s:  END 
+#. %2$s:  END 
+#. %3$s:  END 
+#. %4$s:  END 
+#. %5$s:  BLOCK language 
+#. %6$s:  SWITCH lang 
+#. %7$s:  CASE ['heb'] 
+#. %8$s:  CASE ['ara'] 
+#. %9$s:  CASE ['gre'] 
+#. %10$s:  CASE ['grc'] 
+#. %11$s:  CASE 
+#. %12$s:  lang 
+#. %13$s:  END 
+#. %14$s:  END 
+#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
+#, fuzzy, c-format
+msgid ""
+"%s %s %s %s %s %s %sHebrew %sArabic %sGreek (modern) %sGreek (to 1453) %s%s "
+"%s %s "
+msgstr ""
+"%s %s %s %s %s %s %s %s %%]Yahudi %s %%]Arabic %s %%]Yunani (modern) %s %%]"
+"Yunani (menuju 1453) %s%s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
@@ -1082,8 +1082,8 @@ msgstr ""
 #. %15$s: - IF ACCOUNT_LINE.description 
 #. %16$s:  ACCOUNT_LINE.description 
 #. %17$s:  END 
-#. %18$s:  IF line.title 
-#. %19$s:  line.title |html_entity 
+#. %18$s:  IF ACCOUNT_LINE.title 
+#. %19$s:  ACCOUNT_LINE.title 
 #. %20$s:  END 
 #: opac-tmpl/prog/en/modules/opac-account.tt:42
 #, c-format
@@ -1727,20 +1727,19 @@ msgstr "%s sejak %s%s "
 #. %4$s:  END 
 #. %5$s:  BLOCK language 
 #. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s: ERROR
+#. %7$s:  CASE ['en', 'eng'] 
+#. %8$s:  CASE ['fr', 'fre'] 
+#. %9$s:  CASE ['it', 'ita'] 
+#. %10$s:  CASE ['de', 'ger', 'deu'] 
+#. %11$s:  CASE ['es', 'spa'] 
 #. %12$s:  CASE 
 #. %13$s:  lang 
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/prog/en/includes/opac-authorities.inc:53
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"%s%s %s %s %s %s %s %%]English %s %%]French %s %%]Italian %s %%]German %s %%]"
-"Spanish %s%s %s %s "
+"%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
 msgstr ""
 "%s%s %s %s %s %s %s %%]Inggris %s %%]Perancis %s %%]Italian %s %%]jerman %s "
 "%%]Spanyol %s%s %s %s "
@@ -2133,7 +2132,7 @@ msgstr ""
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:173
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:172
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 msgstr "%sJenis barang %sKoleksi %sLokasi rak %sHal lainnya %s "
@@ -2922,8 +2921,8 @@ msgstr "&nbsp;&nbsp; %s / 5 (terhadap %s tarif)"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Author phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Frasa Penulis"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:124
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:126
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:123
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:125
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Call number"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Nomor panggil"
@@ -2943,12 +2942,12 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Frasa nama konperensi"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Corporate name"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Nama perusahaan"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:122
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
@@ -3246,7 +3245,7 @@ msgstr "-- Pilih --"
 msgid "-- Choose format --"
 msgstr "-- Pilih bentuk --"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:313
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
 #, c-format
 msgid "-- none -- "
 msgstr "-- tidak ada -- "
@@ -3655,7 +3654,7 @@ msgstr "Diserap:"
 msgid "Abstract: "
 msgstr "Abstraksi: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "Abstraksi/ikhtisar:"
@@ -3715,7 +3714,7 @@ msgid "Add %s items to %s"
 msgstr "Tambah %s barang ke %s"
 
 #. A name=ButtonPlus
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:136
 msgid "Add another field"
 msgstr "Tambah bidang lain"
 
@@ -3783,12 +3782,12 @@ msgstr "Ditambah %s %s oleh "
 msgid "Additional authors:"
 msgstr "Penulis yang lain:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:257
 #, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "Tambahan jenis konten untuk buku/materi cetak"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
 #, c-format
 msgid "Adolescent"
 msgstr "Remaja"
@@ -3803,7 +3802,7 @@ msgstr "Remaja; "
 msgid "Adressebøker"
 msgstr "Adressebøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
 #, c-format
 msgid "Adult"
 msgstr "Dewasa"
@@ -3838,7 +3837,7 @@ msgstr "Semua jenis barang"
 #: opac-tmpl/prog/en/includes/masthead.inc:89
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:18
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:108
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:301
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:300
 #, c-format
 msgid "All libraries"
 msgstr "Semua perpustakaan"
@@ -4003,17 +4002,17 @@ msgstr "Antologi"
 msgid "Any"
 msgstr "Setiap"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
 #, c-format
 msgid "Any audience"
 msgstr "Setiap pelanggan"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:233
 #, c-format
 msgid "Any content"
 msgstr "Setiap konten"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:243
 #, c-format
 msgid "Any format"
 msgstr "Setiap bentuk"
@@ -4376,7 +4375,7 @@ msgstr "Kembali ke hasil"
 msgid "Back to the results search list"
 msgstr "Kembali ke lis hasill pencarian"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:131
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:130
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:480
 #: opac-tmpl/prog/en/modules/opac-user.tt:170
 #: opac-tmpl/prog/en/modules/opac-user.tt:336
@@ -4431,7 +4430,7 @@ msgstr "Pranata bibliografi"
 msgid "Bibliografiske data"
 msgstr "Bibliografiske data"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
 #, c-format
 msgid "Bibliographies"
 msgstr "Bibliografi"
@@ -4512,7 +4511,7 @@ msgid "Biografier"
 msgstr "Biografier"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:52
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
 #, c-format
 msgid "Biography"
 msgstr "Biografi"
@@ -4558,7 +4557,7 @@ msgstr "Buku"
 msgid "Book reviews by critics ( XXX )"
 msgstr "Ulasan buku berdasarkan kritik ( XXX )"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:247
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
 #, c-format
 msgid "Braille"
 msgstr "Braille"
@@ -4605,12 +4604,12 @@ msgstr "Telusuri rak"
 msgid "CAS"
 msgstr "CAS"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:248
 #, c-format
 msgid "CD audio"
 msgstr "CD audio"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
 #, c-format
 msgid "CD software"
 msgstr "CD perangkat lunak"
@@ -4764,7 +4763,7 @@ msgstr "Troli"
 msgid "Cas login"
 msgstr "Cas masuk"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
 #, c-format
 msgid "Cassette recording"
 msgstr "Kaset rekaman"
@@ -4779,7 +4778,7 @@ msgstr "Cetakan:"
 msgid "Catalog searches"
 msgstr "Pencarian lebih lanjut"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
 #, c-format
 msgid "Catalogs"
 msgstr "Katalog"
@@ -5288,7 +5287,7 @@ msgstr "Sesi saat ini"
 msgid "Curriculum"
 msgstr "Kurikulum"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "Video DVD / Diska video"
@@ -5530,7 +5529,7 @@ msgstr "Dia"
 msgid "Dias"
 msgstr "Dias"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
 #, c-format
 msgid "Dictionaries"
 msgstr "Kamus"
@@ -5556,12 +5555,12 @@ msgstr "Dikt"
 msgid "Diorama"
 msgstr "Diorama"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
 #, c-format
 msgid "Directories"
 msgstr "Direktori"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
 #, c-format
 msgid "Discographies"
 msgstr "Discographies"
@@ -5828,7 +5827,7 @@ msgstr "Emne(r): "
 msgid "Empty and close"
 msgstr "Kosong dan tutup"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
 #, c-format
 msgid "Encyclopedias "
 msgstr "Ensiklopedia "
@@ -5849,8 +5848,8 @@ msgid "Enter a new purchase suggestion"
 msgstr "Berikan saran pembelian koleksi yang baru"
 
 #. INPUT type=text name=q
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:133
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:163
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:132
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
 msgid "Enter search terms"
 msgstr "Masukkan kategori pencarian"
 
@@ -6065,7 +6064,7 @@ msgstr "Wanita"
 msgid "Festskrift "
 msgstr "Festskrift "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
 #, c-format
 msgid "Fiction"
 msgstr "Fiksi"
@@ -6106,7 +6105,7 @@ msgstr "Filmlydspor"
 msgid "Filmografier"
 msgstr "Filmografier"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
 #, c-format
 msgid "Filmographies"
 msgstr "Filmographies"
@@ -6177,7 +6176,7 @@ msgstr "Flykart"
 msgid "Font"
 msgstr "Fonta"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
 #, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -6333,7 +6332,7 @@ msgstr "Riwayat lengkap"
 msgid "Fysiske bøker"
 msgstr "Fisik buku"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
 #, c-format
 msgid "General"
 msgstr "Umum"
@@ -6479,7 +6478,7 @@ msgstr "Catatan"
 msgid "Groups"
 msgstr "Grup"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
 #, c-format
 msgid "Groups of libraries"
 msgstr "Kelompok perpustakaan"
@@ -6494,7 +6493,7 @@ msgstr "Memasuki: "
 msgid "HELP"
 msgstr "TOLONG"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
 #, c-format
 msgid "Handbooks"
 msgstr "Buku pegangan"
@@ -6685,7 +6684,7 @@ msgstr "Tampilan ISBD"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:60
 #: opac-tmpl/prog/en/includes/masthead.inc:62
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:129
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:128
 #: opac-tmpl/prog/en/modules/opac-results.tt:409
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:147
 #: opac-tmpl/prog/en/modules/opac-basket.tt:208
@@ -6890,7 +6889,7 @@ msgstr "Konten tidak lengkap:"
 msgid "Indexed in:"
 msgstr "Diindeks di:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
 #, c-format
 msgid "Indexes"
 msgstr "Index"
@@ -7062,7 +7061,7 @@ msgstr "Jun"
 msgid "June"
 msgstr "Juni"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:230
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
 #, c-format
 msgid "Juvenile"
 msgstr "Remaja"
@@ -7213,13 +7212,13 @@ msgstr "LCCN: %s "
 msgid "Lagringsbrikke"
 msgstr "Penyimpanan kartu"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:201
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:200
 #, c-format
 msgid "Language"
 msgstr "Bahasa"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:137
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:203
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:202
 #, c-format
 msgid "Language: "
 msgstr "Bahasa: "
@@ -7229,7 +7228,7 @@ msgstr "Bahasa: "
 msgid "Languages:&nbsp;"
 msgstr "Bahasa:&nbsp;"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
 #, c-format
 msgid "Large print"
 msgstr "Cetak ukuran besar"
@@ -7244,22 +7243,22 @@ msgstr "Terakhir"
 msgid "Last location"
 msgstr "Lokasi terakhir"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
 #, c-format
 msgid "Law reports and digests"
 msgstr "Kumpulan serial dan laporan hukum"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
 #, c-format
 msgid "Legal articles"
 msgstr "Artikel legal"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "Catatan dan kasus legal"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
 #, c-format
 msgid "Legislation"
 msgstr "Perundang-undangan"
@@ -7314,13 +7313,13 @@ msgstr "Perpustakaan : "
 msgid "Library catalog"
 msgstr "Katalog perpustakaan"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:299
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:298
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
 #, c-format
 msgid "Library:"
 msgstr "Perpustakaan:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:187
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:186
 #, c-format
 msgid "Limit to any of the following:"
 msgstr "Batasi ke salah satu dari berikut ini:"
@@ -7427,7 +7426,7 @@ msgstr "Lokasi"
 msgid "Location (Status)"
 msgstr "Lokasi (Status)"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:297
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:296
 #, c-format
 msgid "Location and availability: "
 msgstr "Lokasi dan ketersediaan: "
@@ -7973,7 +7972,7 @@ msgstr "MusicAlbum"
 msgid "MusicGroup"
 msgstr "Musik"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
 #, c-format
 msgid "Musical recording"
 msgstr "Rekaman musik"
@@ -8218,7 +8217,7 @@ msgstr "Barang yang tidak tersedia:"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:40
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:132
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:205
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:204
 #, c-format
 msgid "No limit"
 msgstr "Tidak ada batas"
@@ -8283,12 +8282,12 @@ msgstr "Tidak ada tag yang ditentukan"
 msgid "No tags from this library for this title."
 msgstr "Tidak ada tag dari perpustakaan ini untuk judul tersebut."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
 #, c-format
 msgid "Non fiction"
 msgstr "Bukan fiksi"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:239
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
 #, c-format
 msgid "Non-musical recording"
 msgstr "Rekaman bukan-musik"
@@ -8466,7 +8465,7 @@ msgstr "Data numerik"
 msgid "OK"
 msgstr "OK"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:310
 #, c-format
 msgid "OR"
 msgstr "ATAU"
@@ -8520,7 +8519,7 @@ msgstr "Sumber daya daring: "
 msgid "Online tjeneste"
 msgstr "Layanan daring"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:319
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:318
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr "Saat ini hanya barang untuk dipinjam atau referensi yang tersedia"
@@ -8719,7 +8718,7 @@ msgstr "Kata sandi:"
 msgid "Password: %s "
 msgstr "Kata sandi: %s "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
 #, c-format
 msgid "Patent document"
 msgstr "Dokumen hak cipta"
@@ -9037,7 +9036,7 @@ msgstr "Kartu pos"
 msgid "Powered by "
 msgstr "Didukung oleh "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
 #, c-format
 msgid "Pre-adolescent"
 msgstr "Pra-remaja"
@@ -9052,7 +9051,7 @@ msgstr "Pra-remaja; "
 msgid "Preferred form: "
 msgstr "Pilihan bentuk: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
 #, c-format
 msgid "Preschool"
 msgstr "Prasekolah"
@@ -9081,7 +9080,7 @@ msgstr "Sebelumnya"
 msgid "Previous sessions"
 msgstr "Sesi sebelumnya"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
 #, c-format
 msgid "Primary"
 msgstr "Utama"
@@ -9144,7 +9143,7 @@ msgstr "Memroses..."
 msgid "Product"
 msgstr "Produk"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
 #, c-format
 msgid "Programmed texts"
 msgstr "Teks terprogram"
@@ -9184,7 +9183,7 @@ msgstr "Lis Publik"
 msgid "Public lists:"
 msgstr "Lis Publik:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:160
 #, c-format
 msgid "Publication date range:"
 msgstr "Rentang tanggal publikasi:"
@@ -9383,7 +9382,7 @@ msgstr "Pendaftaran gagal!"
 msgid "Registre"
 msgstr "Registrasi"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
 #, c-format
 msgid "Regular print"
 msgstr "Cetakan biasa"
@@ -9422,7 +9421,7 @@ msgid "Remove facet [% facet.facet_link_value | html %]"
 msgstr "[% facet.facet_title_value |html %]"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:138
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
 msgid "Remove field"
 msgstr "Hapus kolom"
 
@@ -9627,7 +9626,7 @@ msgstr ""
 msgid "Review: "
 msgstr "Ulasan: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
 #: opac-tmpl/prog/en/modules/opac-detail.tt:965
 #, c-format
 msgid "Reviews"
@@ -9796,8 +9795,8 @@ msgid "Score"
 msgstr "Nilai"
 
 #. INPUT type=submit name=do
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:148
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:336
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:147
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:335
 #: opac-tmpl/prog/en/modules/opac-detail.tt:628
 #: opac-tmpl/prog/en/modules/opac-detail.tt:735
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:63
@@ -10438,7 +10437,7 @@ msgstr "Mohon maaf, sesi anda telah habis. Mohon log masuk kembali."
 msgid "Sort By: "
 msgstr "Urut berdasarkan: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:327
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
 #, c-format
 msgid "Sort by:"
 msgstr "Urut berdasarkan:"
@@ -10454,7 +10453,7 @@ msgstr "Urut berdasarkan: "
 msgid "Sort this list by: "
 msgstr "Urut lis ini berdasarkan: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:325
 #, c-format
 msgid "Sorting: "
 msgstr "Pengurutan:"
@@ -10470,7 +10469,7 @@ msgstr "Suara"
 msgid "Source: "
 msgstr "Sumber "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
 #, c-format
 msgid "Specialized"
 msgstr "Khusus"
@@ -10511,7 +10510,6 @@ msgstr "Pelajaran bahasa"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:116
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:118
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "Standard number"
 msgstr "Nomor standar"
@@ -10526,7 +10524,7 @@ msgstr "Nomor standar (ISBN, ISSN atau lainnya):"
 msgid "Standardtittel: "
 msgstr "Judul standar: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
 #, c-format
 msgid "Statistics"
 msgstr "Statistik"
@@ -10776,7 +10774,7 @@ msgstr "Abonemen informasi untuk %s"
 msgid "Subscriptions"
 msgstr "Abonemen"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:220
 #, c-format
 msgid "Subtype limits"
 msgstr "Batasan subtipe"
@@ -10836,7 +10834,7 @@ msgstr "Menggantikan pada bagian:"
 msgid "Supersedes:"
 msgstr "Menggantikan:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
 #, c-format
 msgid "Surveys"
 msgstr "Survey"
@@ -10931,7 +10929,7 @@ msgstr "Tag-tag dari perpustakaan ini:"
 msgid "Tags:"
 msgstr "Tag:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
 #, c-format
 msgid "Technical reports"
 msgstr "Laporan teknis"
@@ -11289,7 +11287,7 @@ msgstr ""
 "Ada masalah dalam proses pendaftaran anda. Untuk bantuan silakan hubungi "
 "perpustakaan anda."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
 #, c-format
 msgid "Theses"
 msgstr "Tesis"
@@ -11607,7 +11605,7 @@ msgstr "Transparan"
 msgid "Tre-dimensjonale gjenstander"
 msgstr "Benda tiga-dimensi"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:280
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
 #, c-format
 msgid "Treaties "
 msgstr "Perjanjian "
@@ -11857,7 +11855,7 @@ msgstr "Dipisahkan dari: "
 msgid "Utstilling"
 msgstr "Tampilan"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "Pita VHS / kaset video"
@@ -12031,7 +12029,7 @@ msgstr ""
 "Kami sangat menjaga privasi anda. Di layar ini, anda dapat mengatur berapa "
 "lama kami menyimpan riwayat membaca anda ."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:254
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
 #, c-format
 msgid "Website"
 msgstr "Situs web"
@@ -12634,20 +12632,20 @@ msgstr ""
 msgid "[Create new list]"
 msgstr "[Buat sebuah lis baru]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:150
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:338
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:149
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:337
 #, c-format
 msgid "[Fewer options]"
 msgstr "[Pilihan lebih sedikit]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:152
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:340
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:151
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:339
 #, c-format
 msgid "[More options]"
 msgstr "[Pilihan lebih banyak]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:154
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:342
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:153
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:341
 #, c-format
 msgid "[New search]"
 msgstr "[Pencarian baru]"

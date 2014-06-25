@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Swedish translation 1\n"
-"POT-Creation-Date: 2014-05-05 22:08-0300\n"
+"POT-Creation-Date: 2014-06-15 18:13-0300\n"
 "PO-Revision-Date: 2013-07-30 20:44-0400\n"
 "Last-Translator: EICOM <da@dsa.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -14,6 +14,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.5.4\n"
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:83
+#, c-format
+msgid ""
+"\"A Short History of Western Civilization\" by Harrison, John B, 909.09821 "
+"H2451, Barcode: 08030003 Fine: 3.50"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/admin-home.tt:17
 #, c-format
@@ -30,6 +37,13 @@ msgstr ""
 #, c-format
 msgid "\"Borrower not found.\" if the borrower card number is incorrect"
 msgstr "\"Låntagare hittades inte.\" om lånekortsnumret är felaktigt"
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:83
+#, c-format
+msgid ""
+"\"History of Western Civilization\" by Hayes, Carlton Joseph Huntley, "
+"909.09821 H3261 v.1, Barcode: 08030004 Fine: 3.50"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/offline_circ/list.tt:16
 #, c-format
@@ -58,26 +72,17 @@ msgstr "\"Genomförd.\" om transaktionen genomfördes korrekt"
 msgid "%s/modules/help"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:45
-#, c-format
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:77
+#, fuzzy, c-format
 msgid ""
-"&lt;fine&gt;&lt;/fine&gt; which should be enclosed by the item tag and "
-"should enclose a currency identifier per ISO 4217. If this tag is present "
-"with a proper identifier, the fine for that item will be displayed in the "
-"proper currency format. "
+"&lt;item&gt;\"&lt;&lt;biblio.title&gt;&gt;\" by &lt;&lt;biblio.author&gt;"
+"&gt;, &lt;&lt;items.itemcallnumber&gt;&gt;, Barcode: &lt;&lt;items."
+"barcode&gt;&gt; Fine: &lt;&lt;items.fine&gt;&gt;&lt;/item&gt;"
 msgstr ""
-"&lt;fine&gt;&lt;/fine&gt; som ska omslutas av objekttaggen och en "
-"valutaindikator enligt ISO 4217. Om denna tagg finns och har en korrekt "
-"indikator visas böterna för objektet i rätt valuta. "
-
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:44
-#, c-format
-msgid ""
-"&lt;item&gt;&lt;/item&gt; which should enclose all fields from the biblio, "
-"biblioitems, and items tables."
-msgstr ""
-"&lt;item&gt;&lt;/item&gt; som bör omsluta alla fält från tabellerna biblio, "
-"biblioitems och items."
+"Följande objekt är för tillfället försenade: &lt;item&gt;\"&lt;&lt;biblio."
+"title&gt;&gt;\" av &lt;&lt;biblio.author&gt;&gt;, &lt;&lt;items."
+"itemcallnumber&gt;&gt;, Streckkod: &lt;&lt;items.barcode&gt;&gt; Bot: &lt;"
+"&lt;items.fine&gt;&gt; &lt;/item&gt;"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:33
 #, c-format
@@ -504,6 +509,11 @@ msgstr ""
 msgid "'RESTRICTED' is used for the restricted status of an item"
 msgstr "'BEGRÄNSAD' används för ett objekts begränsade status"
 
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:39
+#, c-format
+msgid "'ROADTYPE' is used forRoad types to be used in patron addresses"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:21
 #, c-format
 msgid ""
@@ -556,7 +566,7 @@ msgstr ""
 msgid "'Required match checks' - ??"
 msgstr "'Matchningskontroller som krävs' - ??"
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:39
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:40
 #, c-format
 msgid ""
 "'SUGGEST' is for a list of reasons to accept or reject patron suggestions. "
@@ -660,7 +670,7 @@ msgstr ""
 "'Leverantör' kan hittas antingen genom att söka leverantörer som angivits i "
 "inköpsmodulen eller genom att ange leverantörens ID-nummer "
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:40
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:41
 #, c-format
 msgid ""
 "'WITHDRAWN' is for a description of a withdrawn item. It appears when adding "
@@ -668,6 +678,13 @@ msgid ""
 msgstr ""
 "'INDRAGEN' är för beskrivning av ett indraget objekt. Det visas när man "
 "lägger till eller redigerar ett objekt."
+
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:42
+#, c-format
+msgid ""
+"'YES_NO' is a generic authorized value field that can be used anywhere you "
+"need a simple yes/no pull down menu."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:16
 #, fuzzy, c-format
@@ -687,8 +704,8 @@ msgstr "(! betyder 'inte synlig' eller vid minimering 'inte minimerad')"
 #: intranet-tmpl/prog/en/modules/help/admin/admin-home.tt:33
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:50
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:61
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:93
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:136
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:95
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:139
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:24
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:37
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -705,7 +722,7 @@ msgstr "(! betyder 'inte synlig' eller vid minimering 'inte minimerad')"
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:37
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/transport-cost-matrix.tt:13
-#: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:89
+#: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:90
 #: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:36
 #: intranet-tmpl/prog/en/modules/help/admin/koha2marclinks.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/oai_sets.tt:32
@@ -714,7 +731,7 @@ msgstr "(! betyder 'inte synlig' eller vid minimering 'inte minimerad')"
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
 #: intranet-tmpl/prog/en/modules/help/admin/checkmarc.tt:9
 #: intranet-tmpl/prog/en/modules/help/admin/auth_subfields_structure.tt:66
-#: intranet-tmpl/prog/en/modules/help/admin/currency.tt:11
+#: intranet-tmpl/prog/en/modules/help/admin/currency.tt:13
 #: intranet-tmpl/prog/en/modules/help/authorities/authorities-home.tt:17
 #: intranet-tmpl/prog/en/modules/help/authorities/authorities.tt:29
 #: intranet-tmpl/prog/en/modules/help/authorities/merge.tt:13
@@ -734,7 +751,7 @@ msgstr "(! betyder 'inte synlig' eller vid minimering 'inte minimerad')"
 #: intranet-tmpl/prog/en/modules/help/cataloguing/moveitem.tt:13
 #: intranet-tmpl/prog/en/modules/help/cataloguing/linkitem.tt:30
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbooks.tt:33
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:92
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:93
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:77
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:61
 #: intranet-tmpl/prog/en/modules/help/tools/quotes-upload.tt:43
@@ -750,12 +767,12 @@ msgstr "(! betyder 'inte synlig' eller vid minimering 'inte minimerad')"
 #: intranet-tmpl/prog/en/modules/help/tools/tools-home.tt:7
 #: intranet-tmpl/prog/en/modules/help/tools/inventory.tt:19
 #: intranet-tmpl/prog/en/modules/help/tools/scheduler.tt:26
-#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:44
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:48
 #: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:41
 #: intranet-tmpl/prog/en/modules/help/tools/export.tt:62
 #: intranet-tmpl/prog/en/modules/help/tools/modborrowers.tt:17
 #: intranet-tmpl/prog/en/modules/help/tools/stage-marc-import.tt:30
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:154
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:296
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:13
 #: intranet-tmpl/prog/en/modules/help/acqui/supplier.tt:54
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
@@ -775,12 +792,12 @@ msgstr "(! betyder 'inte synlig' eller vid minimering 'inte minimerad')"
 #: intranet-tmpl/prog/en/modules/help/acqui/parcel.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/neworderempty.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersuggestion.tt:17
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:114
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:109
 #: intranet-tmpl/prog/en/modules/help/acqui/orderreceive.tt:21
 #: intranet-tmpl/prog/en/modules/help/catalogue/moredetail.tt:21
 #: intranet-tmpl/prog/en/modules/help/catalogue/issuehistory.tt:9
 #: intranet-tmpl/prog/en/modules/help/catalogue/detail.tt:7
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:75
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:81
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:70
 #: intranet-tmpl/prog/en/modules/help/tags/review.tt:23
 #: intranet-tmpl/prog/en/modules/help/tags/list.tt:9
@@ -788,7 +805,7 @@ msgstr "(! betyder 'inte synlig' eller vid minimering 'inte minimerad')"
 #: intranet-tmpl/prog/en/modules/help/circ/renew.tt:11
 #: intranet-tmpl/prog/en/modules/help/circ/offline.tt:35
 #: intranet-tmpl/prog/en/modules/help/circ/transferstoreceive.tt:11
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:75
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:77
 #: intranet-tmpl/prog/en/modules/help/circ/waitingreserves.tt:9
 #: intranet-tmpl/prog/en/modules/help/circ/selectbranchprinter.tt:11
 #: intranet-tmpl/prog/en/modules/help/circ/branchoverdues.tt:11
@@ -804,7 +821,7 @@ msgstr "(! betyder 'inte synlig' eller vid minimering 'inte minimerad')"
 #: intranet-tmpl/prog/en/modules/help/plugins/plugins-upload.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:89
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:11
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:112
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:126
 #: intranet-tmpl/prog/en/modules/help/members/statistics.tt:7
 #: intranet-tmpl/prog/en/modules/help/members/readingrec.tt:11
 #: intranet-tmpl/prog/en/modules/help/members/routing-lists.tt:9
@@ -812,6 +829,7 @@ msgstr "(! betyder 'inte synlig' eller vid minimering 'inte minimerad')"
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:485
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:51
 #: intranet-tmpl/prog/en/modules/help/members/member-password.tt:14
+#: intranet-tmpl/prog/en/modules/help/members/purchase-suggestions.tt:11
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:17
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:22
 #: intranet-tmpl/prog/en/modules/help/members/paycollect.tt:60
@@ -975,12 +993,12 @@ msgstr ""
 msgid "0 =&gt; OPAC Intranet Editor !Collapsed"
 msgstr "0 =&gt; OPAC Intranet Editor !Collapsed"
 
-#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:40
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:44
 #, c-format
 msgid "06/27/2008 Eating fractions / 502326000022 McMillan, Bruce."
 msgstr "06/27/2008 Eating fractions / 502326000022 McMillan, Bruce."
 
-#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:38
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:42
 #, c-format
 msgid ""
 "07/08/2008 Creating drug-free schools and communities : 502326000054 Fox, C. "
@@ -1123,7 +1141,7 @@ msgstr "4 = Missing"
 msgid "4 =&gt; !OPAC Intranet Editor !Collapsed"
 msgstr "4 =&gt; !OPAC Intranet Editor !Collapsed"
 
-#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:25
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:29
 #, c-format
 msgid "410 Library Rd. "
 msgstr "410 Library Rd. "
@@ -1245,7 +1263,7 @@ msgstr ""
 "också att ha en enda korg i en korggrupp om det är arbetsflödet ni använder "
 "i ert bibliotek."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:73
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:68
 #, c-format
 msgid "A basket with at least one uncertain price can't be closed."
 msgstr "En korg med ett osäkert pris kan inte stängas."
@@ -1307,6 +1325,7 @@ msgid ""
 msgstr ""
 "En lista kan skapas genom att besöka Listor-sidan och klicka på 'Ny lista'"
 
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:30
 #: intranet-tmpl/prog/en/modules/help/members/routing-lists.tt:5
 #, c-format
 msgid ""
@@ -1325,7 +1344,7 @@ msgstr ""
 "En matchande post hittas genom att använda fältet du valde som sökkriterium "
 "för att undvika dubbletter"
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:36
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:38
 #, c-format
 msgid ""
 "A message will appear tell you that the item is not checked out, but the "
@@ -1342,7 +1361,7 @@ msgstr ""
 msgid "A open list can be seen and managed by everybody"
 msgstr "En öppen lista kan ses och hanteras av vem som helst"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:72
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:86
 #, c-format
 msgid ""
 "A patron image can be added by browsing for the image on your machine from "
@@ -1497,12 +1516,12 @@ msgid ""
 "libraries will be entering MM/DD/YYYY for the birthday search"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:70
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:90
 #, c-format
 msgid "ACCTDETAILS "
 msgstr "ACCTDETAILS "
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:75
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:95
 #, c-format
 msgid "ACQCLAIM (Acquisition Claim) "
 msgstr "ACQCLAIM (beställningskrav) "
@@ -1645,7 +1664,7 @@ msgstr "Tillgång till verktyget schemaläggare"
 msgid "Access to the Upload Local Cover Image Tool"
 msgstr "Tillgång till verktyget ladda upp lokal omslagsbild"
 
-#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:30
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:34
 #, c-format
 msgid ""
 "According to our records, at the time of this notice, you have items that "
@@ -1703,12 +1722,12 @@ msgstr "Lägg till en ny periodikaprenumeration"
 msgid "Add CSV Profiles"
 msgstr "Lägg till CSV-profiler"
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:72
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:74
 #, c-format
 msgid "Add New Authorized Value"
 msgstr "Lägg till nytt auktoriserat värde"
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:43
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:45
 #, c-format
 msgid "Add New Authorized Value Category"
 msgstr "Lägg till ny kategori för auktoriserade värden"
@@ -1887,7 +1906,7 @@ msgstr "Lägga till objekt"
 msgid "Adding/Editing Classification Sources"
 msgstr "Lägga till/redigera klassificeringskällor"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:48
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:54
 #, c-format
 msgid "Additional Content Types"
 msgstr "Fler innehållstyper"
@@ -1933,13 +1952,14 @@ msgstr ""
 "När du lagt till katalogdata ombeds du ange objektdata. Ange objektets "
 "streckkod, samlingskod osv. och spara objektet innan det lånas ut."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:60
-#, c-format
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:55
+#, fuzzy, c-format
 msgid ""
-"After bringing in the bib information, if your AcqCreateItem system "
-"preference is set to add an item when ordering you will enter the item info "
-"next. You need to fill out at least one item record and then click the 'Add' "
-"button at the bottom left of the item form."
+"After bringing in the bib information (for all import methods except for the "
+"staged file), if your AcqCreateItem system preference is set to add an item "
+"when ordering you will enter the item info next. You need to fill out at "
+"least one item record and then click the 'Add' button at the bottom left of "
+"the item form."
 msgstr ""
 "Om systeminställningen AcqCreateItem är inställd för att lägga till ett "
 "objekt vid beställning kommer du att ange objektinformationen när bib-"
@@ -1966,7 +1986,7 @@ msgstr ""
 "När du valt vilken tabell du vill se klickar du på 'OK'. För att redigera "
 "kopplingar klickar du på länken 'Koha-fält' eller 'Redigera'."
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:67
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:70
 #, c-format
 msgid ""
 "After choosing to clone you will be presented with a confirmation message."
@@ -1995,7 +2015,7 @@ msgstr ""
 "När du klickat på 'Spara' kommer du till objektposten där streckkoden redan "
 "är ifylld med den streckkod du försöker låna ut."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:62
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:57
 #, c-format
 msgid ""
 "After clicking add the item will appear above the form and then you can "
@@ -2185,7 +2205,7 @@ msgid ""
 "actions' on the right to process the actions."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:33
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:35
 #, c-format
 msgid ""
 "After this item is checked in the status of the item will be changed in the "
@@ -2223,7 +2243,7 @@ msgstr ""
 "väntar på kontroll visas de i huvudfönstret för personal under Verktyg"
 
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:9
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:57
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:63
 #, c-format
 msgid ""
 "All files that are uploaded will appear above a form where additional files "
@@ -2267,7 +2287,7 @@ msgid ""
 msgstr ""
 "All information för denna post finns redan listad under 'Kataloginformation'."
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:104
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:118
 #, c-format
 msgid ""
 "All of the fields with the exception of first name, card number, opac login "
@@ -2367,7 +2387,7 @@ msgstr ""
 msgid "Always contains "
 msgstr "contains "
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:67
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:88
 #, c-format
 msgid ""
 "Among the default notices are notices for several common actions within "
@@ -2414,9 +2434,9 @@ msgstr ""
 "En alternativ kontakt kan vara en förälder eller förmyndare. Det kan även "
 "användas i akademiska installationer för att lagra låntagarens hemadress."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:52
-#, c-format
-msgid "An example of using these two tags in a notice template might be like:"
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:73
+#, fuzzy, c-format
+msgid "An example of using these tags in a notice template might be like:"
 msgstr "Exempel på hur dessa två taggar kan användas i en meddelandemall:"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/linkitem.tt:3
@@ -2612,7 +2632,7 @@ msgstr ""
 msgid "At this time the only keyword in use is 'subtitle.'"
 msgstr "Just nu är det enda nyckelord som används 'Undertext'."
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:11
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:17
 #, c-format
 msgid "Audience"
 msgstr "Målgrupp"
@@ -2893,7 +2913,7 @@ msgstr ""
 "att lägga till eller ta bort fält eller underordnade fält, så ramverken "
 "måste vara färdiga innan du börjar katalogisera."
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:9
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:15
 #, c-format
 msgid "Below is a summary of the various pieces of the advanced search limit: "
 msgstr ""
@@ -2960,7 +2980,7 @@ msgid "Below the task scheduler form, there is a list of scheduled reports"
 msgstr ""
 "Under schemaläggningsformuläret finns en lista med schemalagda rapporter"
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:45
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:46
 #, c-format
 msgid "BiblioAddsAuthorities"
 msgstr "BiblioAddsAuthorities"
@@ -3107,6 +3127,16 @@ msgstr "Som standard inkluderar detta:"
 msgid "C = Credit"
 msgstr "C = Kredit"
 
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:101
+#, c-format
+msgid "CHECKIN "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:117
+#, c-format
+msgid "CHECKOUT "
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:16
 #, c-format
 msgid ""
@@ -3237,7 +3267,7 @@ msgstr ""
 "Markera 'Sökbar' för att göra attributet sökbart i personalsökning av "
 "låntagare."
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:26
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:28
 #, c-format
 msgid "Check In Messages"
 msgstr "Återlämningsmeddelande"
@@ -3394,7 +3424,7 @@ msgstr ""
 msgid "Checkout History"
 msgstr "Utlåningshistorik"
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:98
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:101
 #, c-format
 msgid "Checkouts Per Patron"
 msgstr "Lån per låntagare"
@@ -3414,7 +3444,7 @@ msgstr "Barn = En låntagare som kan tillhöra en Vuxen låntagare"
 msgid "Children patrons can have a guardian to be attached to them."
 msgstr "Barnlåntagare kan ha en förmyndare som är kopplad till dem."
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:90
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:104
 #, c-format
 msgid ""
 "Children patrons do not become adults automatically in Koha. To upgrade a "
@@ -3753,7 +3783,7 @@ msgid ""
 msgstr ""
 "Väljer du andra kombinationer av menyalternativ får du loggfilen för frågan."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:89
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:84
 #, c-format
 msgid ""
 "Choosing to 'Delete order and catalog record' removes both the order line "
@@ -3762,7 +3792,7 @@ msgstr ""
 "Väljer du 'Radera beställning och katalogpost' tas både beställningsraden "
 "och posten i katalogen bort. "
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:88
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:83
 #, c-format
 msgid ""
 "Choosing to 'Delete the order' will delete the order line but leave the "
@@ -3790,7 +3820,7 @@ msgstr "Utlåning"
 msgid "Circulation"
 msgstr "Utlåning"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:28
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:34
 #, c-format
 msgid "Circulation History"
 msgstr "Utlåningshistorik"
@@ -3957,7 +3987,7 @@ msgstr "Klicka på 'Exportera bibliografiska poster'"
 msgid "Click 'Import into catalog' to complete the import"
 msgstr "Klicka på 'Importera i katalog' för att komplettera importen"
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:48
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:50
 #, c-format
 msgid "Click 'New Category.'"
 msgstr "Klicka på 'Ny kategori'."
@@ -3997,7 +4027,7 @@ msgstr "Klicka på 'Ny post'"
 msgid "Click 'New Record' "
 msgstr "Klicka på 'Ny post' "
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:77
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:79
 #, c-format
 msgid "Click 'New authorized value for ...'"
 msgstr "Klicka på  'Nytt auktoriserat värde för ...'"
@@ -4031,8 +4061,8 @@ msgid "Click 'Save Subscription' to save the information you have entered."
 msgstr ""
 "Klicka på 'Spara prenumeration' för att spara den information du angett."
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:67
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:88
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:69
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:90
 #, c-format
 msgid "Click 'Save'"
 msgstr "Klicka på 'Spara'"
@@ -4155,7 +4185,7 @@ msgstr ""
 msgid "Click the 'Choose File' button below the instructions."
 msgstr "Klicka på knappen 'Välj fil' under instruktionerna."
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:103
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:117
 #, c-format
 msgid "Click the 'Duplicate' button at the top of their record"
 msgstr "Klicka på knappen 'Kopiera' längst upp i deras post"
@@ -4248,7 +4278,7 @@ msgstr ""
 "till verktyget för förslagshantering genom att klicka på länken 'Hantera "
 "förslag' i menyn till vänster på inköpssidan."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:112
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:107
 #, c-format
 msgid ""
 "Clicking 'Print' below your order will generate a PDF for printing, which "
@@ -4318,7 +4348,7 @@ msgstr ""
 "Klickar du på låntagarmodulen kommer du till en skärm där du kan söka/"
 "bläddra efter låntagare. Härifrån kan du söka efter en låntagare."
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:45
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:51
 #: intranet-tmpl/prog/en/modules/help/members/notices.tt:7
 #, c-format
 msgid ""
@@ -4336,7 +4366,7 @@ msgstr ""
 "Klickar du på den länken kommer du till menyn för att lägga till en ny "
 "mottagarlista."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:102
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:97
 #, c-format
 msgid ""
 "Clicking the 'Uncertain Prices' button will call up a list of items with "
@@ -4345,7 +4375,7 @@ msgstr ""
 "Klickar du på knappen 'Osäkra priser' visas en lista med poster som har "
 "osäkra priser för snabb redigering."
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:65
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:67
 #, c-format
 msgid ""
 "Clicking the Confirm button will mark the item as on hold for the patron. If "
@@ -4362,7 +4392,7 @@ msgstr ""
 "bekräfta och skriva ut visas en utskrivbar sida som du kan vika in i boken "
 "med nödvändig reservations och/eller överföringsinformation."
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:51
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:53
 #, c-format
 msgid ""
 "Clicking the Confirm hold and Transfer button will mark the item as in "
@@ -4371,7 +4401,7 @@ msgstr ""
 "Klickar du på knappen Bekräfta reservation och överför markeras objektet som "
 "på väg till biblioteket där reservationen gjordes"
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:44
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:46
 #, c-format
 msgid ""
 "Clicking the Confirm hold button will mark the item as waiting for pickup "
@@ -4380,7 +4410,7 @@ msgstr ""
 "Klickar du på knappen Bekräfta reservation markeras objektet som i väntan på "
 "hämtning från biblioteket"
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:45
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:47
 #, c-format
 msgid ""
 "Clicking the Print Slip and Confirm button will mark the item as waiting for "
@@ -4391,7 +4421,7 @@ msgstr ""
 "i väntan på hämtning från biblioteket och biblioteket får ett kvitto som kan "
 "skrivas ut och placeras på boken med låntagarens information"
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:52
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:54
 #, c-format
 msgid ""
 "Clicking the Print Slip, Transfer and Confirm button will mark the item as "
@@ -4471,12 +4501,12 @@ msgstr "Vanliga värden i detta fält är:"
 msgid "Confirm your selections to save the definition."
 msgstr "Bekräfta dina val för att spara definitionen."
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:24
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:30
 #, c-format
 msgid "Content"
 msgstr "Innehåll"
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:77
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:80
 #, c-format
 msgid ""
 "Control where patrons can place holds from using the 'Hold Policy' menu "
@@ -4484,7 +4514,7 @@ msgstr ""
 "Styr varifrån låntagare kan lägga reservationer med menyn "
 "'Reservationspolicy' "
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:84
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:87
 #, c-format
 msgid "Control where the item returns to once it is checked in "
 msgstr "Styr vart objektet överförs när det återlämnats "
@@ -4624,6 +4654,16 @@ msgstr "Anpassa kortlayouter för låntagare"
 msgid "DB table value for reports"
 msgstr "DB-tabellvärde för rapporter"
 
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:133
+#, c-format
+msgid "DUE "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:149
+#, c-format
+msgid "DUEDGST "
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:38
 #: intranet-tmpl/prog/en/modules/help/members/members-home.tt:40
 #, fuzzy, c-format
@@ -4635,7 +4675,7 @@ msgstr "Födelsedatum"
 msgid "Date should be entered using the calendar pop up"
 msgstr "Datum ska anges via popup-kalendern"
 
-#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:28
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:32
 #, c-format
 msgid "Dear Nicole Engard (23529000035726),"
 msgstr "Dear Nicole Engard (23529000035726),"
@@ -4648,7 +4688,7 @@ msgid ""
 "field"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:69
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:72
 #, c-format
 msgid "Default Checkouts and Hold Policy"
 msgstr "Standardpolicy för lån och reservationer"
@@ -4795,7 +4835,7 @@ msgstr ""
 "Beroende på vad du valt för 'Sökfält' kan du söka efter låntagare på flera "
 "olika sätt."
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:49
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:55
 #: intranet-tmpl/prog/en/modules/help/members/statistics.tt:5
 #, c-format
 msgid ""
@@ -4885,12 +4925,12 @@ msgstr ""
 msgid "Duplicate Report"
 msgstr "Dubblettrapport"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:97
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:111
 #, c-format
 msgid "Duplicate a Patron"
 msgstr "Kopiera låntagare"
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:82
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:83
 #, c-format
 msgid "Duplicating records"
 msgstr "Skapa dubblettposter"
@@ -4982,6 +5022,11 @@ msgstr ""
 "förhindra fel om ett meddelande skulle skickas utan en mall. Varje "
 "meddelande och kvittering kan redigeras per bibliotek, som standard ser du "
 "meddelanden för alla bibliotek."
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:38
+#, c-format
+msgid "Each notice offers you the same options "
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:15
 #, c-format
@@ -5080,7 +5125,7 @@ msgstr "Redigera Händelser"
 msgid "Editing Item Types"
 msgstr "Redigera Objekttyper"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:59
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:73
 #, c-format
 msgid "Editing Patrons"
 msgstr "Redigera Låntagare"
@@ -5090,7 +5135,7 @@ msgstr "Redigera Låntagare"
 msgid "Editing items"
 msgstr "Redigera objekt"
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:70
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:71
 #, c-format
 msgid "Editing records"
 msgstr "Redigera poster"
@@ -5155,8 +5200,8 @@ msgstr ""
 msgid "Enter a code and a description"
 msgstr "Ange en kod och en beskrivning"
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:57
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:79
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:59
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:81
 #, c-format
 msgid ""
 "Enter a code for your Authorized Value into the 'Authorized value' field "
@@ -5351,7 +5396,7 @@ msgid ""
 "right result to add the patron."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:77
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:72
 #, c-format
 msgid ""
 "Enter the percentage discount you're receiving on this order, once you enter "
@@ -5398,6 +5443,11 @@ msgstr ""
 "Även om en tagg har godkänts eller avslagits, kan den flyttas till en annan "
 "lista. Vid granskning av godkända taggar har alla taggar alternativet att "
 "avslå"
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:31
+#, c-format
+msgid "Every notice should have an Email template set for it"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:91
 #, c-format
@@ -5469,9 +5519,9 @@ msgstr "Köra SQL-rapporter"
 msgid "Execute overdue items report"
 msgstr "Köra rapport för försenade objekt"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:65
-#, c-format
-msgid "Existing Notices & Slips"
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:86
+#, fuzzy, c-format
+msgid "Existing Notices &amp; Slips"
 msgstr "Befintliga meddelanden & kvitteringar"
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:7
@@ -5554,7 +5604,7 @@ msgstr "Snabb katalogisering"
 msgid "Fast cataloging"
 msgstr "Snabb katalogisering"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:51
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:57
 #, c-format
 msgid "Files"
 msgstr "Filer"
@@ -5650,7 +5700,7 @@ msgstr "Slutligen formaterar du CSV-filen med fälten 'Profilfält för MARC' "
 msgid "Finally there are three types of lists you can choose from "
 msgstr "Slutligen finns det tre typer av listor du kan välja mellan "
 
-#: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:81
+#: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:82
 #, c-format
 msgid ""
 "Finally you can assign advanced messaging preferences by default to a patron "
@@ -5680,7 +5730,7 @@ msgstr ""
 "Slutligen måste du besluta vilka data du vill ersätta om det finns "
 "dubbletter. "
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:60
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:63
 #, fuzzy, c-format
 msgid ""
 "Finally, if you charge a rental fee for the item type and want to give a "
@@ -5971,7 +6021,7 @@ msgstr ""
 "För dessa värden flyttar negativa värden felet upp och till vänster och "
 "positiva värden flyttar felet nedåt och till höger"
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:106
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:109
 #, c-format
 msgid ""
 "For this library, you can edit rules for given itemtypes, regardless of the "
@@ -5980,7 +6030,7 @@ msgstr ""
 "För detta bibliotek kan du redigera regler för givna objekttyper, oavsett "
 "låntagarens kategori. För närvarande innebär detta reservationspolicy."
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:100
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:103
 #, c-format
 msgid ""
 "For this library, you can specify the maximum number of loans that a patron "
@@ -5998,7 +6048,7 @@ msgstr ""
 "För att detta alternativ ska visas måste du se till att du har konfigurerat "
 "en Mottagarlista i verktyget Meddelande"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:34
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:40
 #, c-format
 msgid "Format"
 msgstr "Format"
@@ -6024,8 +6074,8 @@ msgstr ""
 "på 'Redigera' till höger om varje underliggande fält för att göra ändringar "
 "i texten som hör till fältet."
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:79
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:111
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:82
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:114
 #, c-format
 msgid ""
 "From Any Library: Patrons from any library may put this item on hold. "
@@ -6034,8 +6084,8 @@ msgstr ""
 "Från alla bibliotek: låntagare från alla olika bibliotek kan reservera detta "
 "objekt. (Standard om inget är definierat)"
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:80
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:112
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:83
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:115
 #, c-format
 msgid ""
 "From Home Library: Only patrons from the item's home library may put this "
@@ -6065,7 +6115,7 @@ msgstr ""
 msgid "From here you can add new bibliographic records to Koha."
 msgstr "Härifrån kan du lägga till nya bibliografiska poster till Koha."
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:73
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:75
 #, c-format
 msgid ""
 "From here you can check the item out to the patron at the desk and cancel "
@@ -6118,8 +6168,17 @@ msgstr ""
 "formuläret automatiskt kommer systemet att försöka dela upp beloppet på "
 "bästa sätt, men du kan behöva redigera för att förbättra uppdelningen."
 
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:69
+#: intranet-tmpl/prog/en/modules/help/members/purchase-suggestions.tt:7
+#, c-format
+msgid ""
+"From here you can see all suggestions made by the patron and their status, "
+"you can also create a purchase suggestion on the patron's behalf by clicking "
+"the 'New purchase suggestion' button at the top."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:7
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:55
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:61
 #, c-format
 msgid "From here you can upload files to attach to the patron record."
 msgstr "Härifrån kan du ladda upp filer som ska bifogas låntagarposten."
@@ -6135,7 +6194,7 @@ msgstr ""
 "mottagarlistan. I den meny som visas kan du filtrera låntagare efter en del "
 "av deras namn, deras bibliotek och/eller deras låntagarkategori."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:85
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:80
 #, c-format
 msgid "From here, you can edit or remove the items that you have added."
 msgstr "Härifrån kan du redigera eller avlägsna de poster du lagt till."
@@ -6170,8 +6229,14 @@ msgstr ""
 "reservationer med alternativen längst ner i listan om inställningen "
 "SuspendHoldsIntranet är satt till 'tillåt'."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/addorderiso2709.tt:6
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:42
+#, fuzzy, c-format
+msgid ""
+"From the list of files you are presented with, choose the 'Add orders' link "
+"to add the records in the staged file to your order."
+msgstr "Välj länken 'Lägg till beställning' i listan med filer som visas. "
+
+#: intranet-tmpl/prog/en/modules/help/acqui/addorderiso2709.tt:6
 #, c-format
 msgid ""
 "From the list of files you are presented with, choose the 'Add orders' link. "
@@ -6199,7 +6264,6 @@ msgstr ""
 "knappen 'Skicka meddelande'."
 
 #: intranet-tmpl/prog/en/modules/help/acqui/addorderiso2709.tt:8
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:44
 #, c-format
 msgid ""
 "From the list of records, click 'Add order' next to the item that you want "
@@ -6267,7 +6331,6 @@ msgstr ""
 "reglerna sak tillämpas på"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/addorderiso2709.tt:10
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:46
 #, c-format
 msgid "From the order form, you will not be able to edit the catalog details."
 msgstr "Från beställningsformuläret kan du inte redigera kataloginformationen."
@@ -6281,7 +6344,7 @@ msgstr ""
 "I sidan som öppnas kan du klicka på 'Redigera periodika' med det nummer du "
 "vill ta emot markerat."
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:48
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:49
 #, c-format
 msgid ""
 "From the results list click 'Choose authority' to bring that into your "
@@ -6508,7 +6571,7 @@ msgstr ""
 "Från denna lista kan du redigera anpassade rapporter genom att klicka "
 "'Redigera' i kolumnen 'Sparad SQL'."
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:73
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:76
 #, c-format
 msgid ""
 "From this menu you can set a default to apply to all item types and patrons "
@@ -6576,16 +6639,30 @@ msgstr "Generell"
 
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:8
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:13
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:78
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:114
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:98
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:246
 #, c-format
 msgid "Get there:"
 msgstr "Komma dit:"
 
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:43
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:8
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:88
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:89
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:109
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:110
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:125
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:126
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:141
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:142
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:157
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:158
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:172
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:173
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:201
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:202
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:217
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:218
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:234
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:235
 #, c-format
 msgid "Get there: "
 msgstr "Komma dit: "
@@ -6677,12 +6754,12 @@ msgstr "HALIFAX PUBLIC catalogue.halifaxpubliclibraries.ca:210 horizon"
 msgid "HALTON HILLS PUBLIC cat.hhpl.on.ca:210 halton_hills"
 msgstr "HALTON HILLS PUBLIC cat.hhpl.on.ca:210 halton_hills"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:81
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:165
 #, c-format
 msgid "HOLD (Hold Available for Pickup) "
 msgstr "RESERVATION (Reservation färdig att hämtas) "
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:97
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:181
 #, c-format
 msgid "HOLDPLACED (a notice to the library staff that a hold has been placed) "
 msgstr ""
@@ -6693,11 +6770,6 @@ msgstr ""
 #, c-format
 msgid "Here are some other suggestions:"
 msgstr "Här är några andra förslag:"
-
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:125
-#, c-format
-msgid "Here is what those slips are used for:"
-msgstr "Detta är vad dessa kvitteringar används för:"
 
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:5
 #, c-format
@@ -6813,12 +6885,12 @@ msgstr ""
 "VIKTIGT: Många inställningar påverkar varandra. Om en systeminställning "
 "aktiveras kan det kräva att även andra ställs in."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:128
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:270
 #, c-format
 msgid "ISSUEQSLIP "
 msgstr "ISSUEQSLIP "
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:134
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:276
 #, c-format
 msgid "ISSUESLIP "
 msgstr "LÅNEKVITTO "
@@ -6906,6 +6978,14 @@ msgid ""
 msgstr ""
 "Om fler än ett bibliotek prenumererar på detta periodika, måste du skapa en "
 "prenumeration för varje bibliotek"
+
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:45
+#, c-format
+msgid ""
+"If no information is imported from the MARC record regarding fund "
+"information the 'Default accounting details' tab can be used to apply values "
+"related to the accounting."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:42
 #, c-format
@@ -7054,7 +7134,7 @@ msgstr ""
 "'Spara och förhandsgranska mottagarlista'. Det öppnar en utskrivbar version "
 "av listan."
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:59
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:62
 #, c-format
 msgid ""
 "If the patron can place holds on this item type, enter the total numbers of "
@@ -7075,6 +7155,14 @@ msgstr ""
 "kommer detta också att visas till höger om utlåningsrutan, vilket gör det "
 "enkelt för bibliotekarien att se att låntagaren ska ha ett annat objekt också"
 
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:67
+#: intranet-tmpl/prog/en/modules/help/members/purchase-suggestions.tt:5
+#, c-format
+msgid ""
+"If the patron has made any purchase suggestions you will see a purchase "
+"suggestions tab on the patron record."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/reserve/request.tt:29
 #, c-format
 msgid ""
@@ -7086,7 +7174,7 @@ msgstr ""
 "eller om det finns begränsningar på reservationstider, kan du ange ett "
 "förfallodatum för reservationen i 'Reservation upphör gälla datum' "
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:87
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:101
 #, c-format
 msgid ""
 "If the patron reports that they have lost their card you can set the 'Lost "
@@ -7105,7 +7193,7 @@ msgstr ""
 "Om låntagaren vill att reservationen ska börja gälla någon annan dag än "
 "idag, anger du detta i fältet 'Reservation startar datum' "
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:71
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:66
 #, c-format
 msgid "If the price is uncertain, check the uncertain price box. "
 msgstr "Om priset är osäkert, markerar du rutan för osäkert pris. "
@@ -7279,7 +7367,7 @@ msgstr "Om fältet är obligatoriskt markerar du rutan 'Obligatoriskt'"
 msgid "If this field is mandatory, check the 'Mandatory' box."
 msgstr "Om fältet är obligatoriskt markerar du rutan 'Obligatoriskt'."
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:47
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:48
 #, c-format
 msgid ""
 "If this icon appears you must click the icon to the right of the field to "
@@ -7375,7 +7463,7 @@ msgstr ""
 "Om du av misstag markerar en post som betald, kan du ångra den radposten "
 "genom att klicka på 'Ångra' till höger om raden "
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:78
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:73
 #, c-format
 msgid ""
 "If you added Planning Values when creating the Fund, those values will "
@@ -7408,7 +7496,7 @@ msgstr ""
 "beställningar från dessa förslag. För att hålla reda på förslag som "
 "beställts och mottagits måste du lägga beställningen med denna länk."
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:65
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:66
 #, c-format
 msgid ""
 "If you are about to add a duplicate record to the system you will be warned "
@@ -7443,12 +7531,12 @@ msgstr ""
 "visas de i personalklientens översikt under modullistan (tillsammans med "
 "andra saker som kräver åtgärd)."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:76
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:71
 #, c-format
 msgid "If you are charged sales tax, choose that from the gstrate field"
 msgstr "Om försäljningsskatt (moms) tas ut väljer du det från fältet gstrate"
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:31
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:33
 #, c-format
 msgid ""
 "If you are checking an item in at a library other than the home branch, a "
@@ -7457,7 +7545,7 @@ msgstr ""
 "Om du tar emot en bok på ett bibliotek som inte är hemfilialen visas ett "
 "meddelande om att boken ska överföras till hembiblioteket "
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:41
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:43
 #, c-format
 msgid ""
 "If you are checking in an item that should have multiple parts or pieces a "
@@ -7529,7 +7617,7 @@ msgstr ""
 "'Sen' eller 'Saknas', kan du klicka på knappen 'Generera nästa' under listan "
 "med nummer."
 
-#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:34
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:38
 #, c-format
 msgid ""
 "If you believe you have returned the items below please call at and library "
@@ -7645,7 +7733,6 @@ msgstr ""
 "kvittering' skrivs endast de objekt som lånades idag ut."
 
 #: intranet-tmpl/prog/en/modules/help/acqui/addorderiso2709.tt:17
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:51
 #, c-format
 msgid ""
 "If you choose this option the Koha will look in the 020$c and grab the "
@@ -7691,6 +7778,14 @@ msgid ""
 msgstr ""
 "Om du väljer att vara kvar på QOTD-uppladdningssidan får du en bekräftelse "
 "när citaten sparats korrekt."
+
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:20
+#, c-format
+msgid ""
+"If you choose to restrict a patron in this way you can also have Koha "
+"automatically remove that restriction with the "
+"AutoRemoveOverduesRestrictions preference."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:27
 #, c-format
@@ -7786,7 +7881,7 @@ msgstr ""
 "sökning på databasen för fältet/det underordnade fältet med samma värde. "
 "Detta används huvudsakligen för två saker : "
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:86
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:100
 #, c-format
 msgid ""
 "If you enter in a date and/or note related to the restriction you will see "
@@ -7795,7 +7890,7 @@ msgstr ""
 "om du anger ett datum och/eller en anteckning för begränsningen kommer detta "
 "att visas i begränsningsmeddelandet också"
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:42
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:43
 #, c-format
 msgid ""
 "If you feel that this clutters the screen you can hide the question marks by "
@@ -7831,8 +7926,8 @@ msgstr ""
 "Om SpineLabelShowPrintOnBibDetails är inställt på 'Visa' kommer det också "
 "att visas en länk för snabbutskrift av ryggetikett intill varje post."
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:64
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:66
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:88
 #, c-format
 msgid ""
 "If you have StaffAuthorisedValueImages and/or AuthorisedValueImages set to "
@@ -7929,6 +8024,13 @@ msgstr ""
 "Om du definierat lokala orter med formuläret för Ny ort visas dessa orter i "
 "en rullgardinsmeny när du lägger till eller redigerar låntagaruppgifter."
 
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:35
+#, c-format
+msgid ""
+"If you have enabled SMS notices with the SMSSendDriver preference you can "
+"set the text for your SMS notices next"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/acqui/lateorders.tt:5
 #, c-format
 msgid ""
@@ -7964,7 +8066,7 @@ msgstr ""
 "plustecknet (+) till höger om textrutan. Detta gör att du kan lägga till ett "
 "annat attributvärde."
 
-#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:32
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:36
 #, c-format
 msgid ""
 "If you have registered a password with the library, you may use it with your "
@@ -7987,7 +8089,7 @@ msgstr ""
 "Om du satt upp klasser för att organisera attribut, kommer de att visas på "
 "det sättet i formuläret för att lägga till/redigera låntagare"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:34
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:40
 #, c-format
 msgid ""
 "If you have set your BorrowersLog to track changes to patron records, then "
@@ -8034,7 +8136,14 @@ msgstr ""
 "med streckkodsläsaren. Eftersom du försöker \"låna ut\" en tom streckkod "
 "skriver Koha ut 'Snabbkvittot'."
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:56
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:26
+#, c-format
+msgid ""
+"If you have the SpecifyReturnDate preference set to 'Allow' you will be able "
+"to arbitrarily set the return date from below the check in box."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:58
 #, c-format
 msgid ""
 "If you have the system showing you fines at the time of checkin "
@@ -8108,7 +8217,12 @@ msgstr ""
 "Om du lägger beställningar till fler än ett land, behöver du lägga in "
 "växelkurser, så att inköpsmodulen kan beräkna korrekta värden."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:21
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:34
+#, c-format
+msgid "If you plan on printing this notice you can set the Print template next"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:40
 #, c-format
 msgid ""
 "If you plan on writing the notice or slip in HTML check the 'HTML Message' "
@@ -8118,7 +8232,7 @@ msgstr ""
 "rutan 'HTML-meddelande', annars genereras innehållet som ren text"
 
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:5
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:53
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:59
 #, c-format
 msgid ""
 "If you set the EnableBorrowerFiles preference to 'Do' the Files tab will be "
@@ -8268,7 +8382,7 @@ msgstr ""
 "välja dessa filialer från listan 'Filialbegränsning'. Välj 'Alla filialer' "
 "för att visa det för alla bibliotek."
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:81
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:95
 #, c-format
 msgid ""
 "If you would like to bar a patron from the library you can set the "
@@ -8318,8 +8432,8 @@ msgstr ""
 "försenade objekt med böter på andra bibliotek, måste du ändra bibliotek "
 "eller logga in på det biblioteket."
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:63
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:85
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:65
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:87
 #, c-format
 msgid ""
 "If you would like to limit this authorized value category to only specific "
@@ -8330,7 +8444,7 @@ msgstr ""
 "bibliotek, kan du välja dem från menyn 'Filialbegränsning'. För att visa den "
 "för alla bibliotek väljer du bara 'Alla filialer' längst upp i listan."
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:90
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:91
 #, c-format
 msgid ""
 "If you would like to merge together multiple records you can do that via the "
@@ -8338,12 +8452,12 @@ msgid ""
 msgstr "Om du vill slå samman flera poster kan du göra det med listverktyget."
 
 #: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:18
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "If you would like to prevent a patron from checking items out because of "
 "their overdue items, check the 'Restrict' box, this will put a notice on the "
 "patron's record at checkout informing the librarian that the patron cannot "
-"check out due to overdue items."
+"check out due to overdue items. "
 msgstr ""
 "Om du vill förhindra en låntagare från att låna, på grund av sina försenade "
 "objekt, markerar du rutan 'Begränsa'. Det visar ett meddelande i låntagarens "
@@ -8360,7 +8474,7 @@ msgstr ""
 "Om du vill byta ut andra omslagsbilder du laddat upp tidigare, markerar du "
 "'Ersätt befintliga omslagsbilder' under sektionen 'Alternativ'"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:83
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:78
 #, c-format
 msgid ""
 "If you would like to see more details you can check the 'Show all details' "
@@ -8369,7 +8483,7 @@ msgstr ""
 "Om du vill se mer information kan du markera kryssrutan 'Visa all "
 "information'."
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:80
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:94
 #, c-format
 msgid ""
 "If you would like your circulation staff to confirm a patron's address "
@@ -8384,6 +8498,14 @@ msgstr ""
 msgid ""
 "If you would like your course to show publicly you'll want to be sure to "
 "check the 'Enabled?' box before saving your new course."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:40
+#, c-format
+msgid ""
+"If you would rather not see the MARC tag numbers you can change the value in "
+"your hide_marc system preference or each user can check the box next to "
+"'Show tags' at the top of the editor."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/export.tt:50
@@ -8431,7 +8553,21 @@ msgstr ""
 "Om du hellre vill ange alla helgdagar och sedan kopiera dem till ett annat "
 "bibliotek på en gång, kan du använda kopieringsmenyn under kalendern"
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:42
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:59
+#, c-format
+msgid ""
+"If you're allowing renewals you can control how long the renewal loan peiod "
+"will be (in the units you have chosen) in the 'Renewal period' box"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:60
+#, c-format
+msgid ""
+"If you're allowing renewals you can control how soon before the due date "
+"patrons can renew their materials with the 'No renewals before' box. "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:44
 #, c-format
 msgid ""
 "If you're checking an item in that has a hold on it, you will be prompted to "
@@ -8440,7 +8576,7 @@ msgstr ""
 "Om du hanterar ett objekt som har en reservation, kommer du att ombes "
 "bekräfta reservationen "
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:49
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:51
 #, c-format
 msgid ""
 "If you're checking in an item that has a hold on it at another branch you "
@@ -8458,6 +8594,13 @@ msgid ""
 msgstr ""
 "Om du reserverar flera objekt, visas nästa tillgängliga alternativ för alla "
 "titlar. Om inga objekt kan reserveras anges detta på skärmen."
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:33
+#, c-format
+msgid ""
+"If you're using the TalkingTechItivaPhoneNotification service you can set up "
+"a Phone notification"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:7
 #, c-format
@@ -8540,8 +8683,8 @@ msgstr ""
 "Om överföringarna kommer sent till biblioteket, visas ett meddelande om hur "
 "sena de är."
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:46
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:53
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:48
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:55
 #, c-format
 msgid ""
 "Ignoring the hold will leave the item on hold, but leave its status as "
@@ -8586,16 +8729,7 @@ msgstr ""
 "Viktigt Menade du? fungerar endast i OPAC för närvarande. "
 "Intranetalternativen är tillgängliga för framtida utveckling."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:41
-#, c-format
-msgid ""
-"Important These new tags only work on the overdue notices, not other "
-"circulation related notices at this time."
-msgstr ""
-"Viktigt Dessa nya taggar fungerar endast i förseningsmeddelanden för "
-"tillfället, inte i andra utlåningsrelaterade meddelanden."
-
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:100
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:95
 #, c-format
 msgid ""
 "Important: A basket with at least one item marked as 'uncertain price' will "
@@ -8651,8 +8785,8 @@ msgstr ""
 "fält. Det innebär att du inte kan koppla både 100a och 700a till "
 "författarfältet, du måste välja ett av dem."
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:59
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:81
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:61
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:83
 #, c-format
 msgid ""
 "Important: Authorized value is limited to 80 characters and cannot have "
@@ -8671,7 +8805,7 @@ msgstr ""
 "Viktigt: innan du använder detta verktyg bör du säkerhetskopiera din "
 "databas. Ändringarna som görs är permanenta."
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:52
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:54
 #, c-format
 msgid ""
 "Important: Category cannot have spaces or special characters other than "
@@ -8712,8 +8846,8 @@ msgstr ""
 "Viktigt: för bibliotek med många låntagare kan denna rapport ta lång tid att "
 "köra."
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:125
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:130
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:128
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:133
 #, c-format
 msgid ""
 "Important: If the AutomaticItemReturnpreference is set to automatically "
@@ -8831,7 +8965,7 @@ msgstr ""
 "Viktigt: måste tilldelas till all bibliotekspersonal för att de ska kunna "
 "logga in på personalklienten"
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:116
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:119
 #, c-format
 msgid ""
 "Important: Note that if the system preference AllowHoldPolicyOverrideset to "
@@ -8851,7 +8985,7 @@ msgstr "Viktigt: ange bara nummer och decimaler i detta fält"
 msgid "Important: Only install plugins from trusted sources."
 msgstr "Viktigt: installera bara insticksprogram från betrodda källor."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:34
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:57
 #, c-format
 msgid ""
 "Important: Only the overdue notices take advantage of the &lt;item&gt;&lt;/"
@@ -8862,12 +8996,11 @@ msgstr ""
 "item&gt;, alla andra meddelanden som berör objekt måste använda &lt;&lt;"
 "items.content&gt;&gt;"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:25
-#, c-format
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:44
+#, fuzzy, c-format
 msgid ""
 "Important: Overdue notices can use &lt;&lt;items.content&gt;&gt; tags by "
-"themselves, or use &lt;item&gt;&lt;/item&gt; to span all of the tags. Learn "
-"more about the Overdue Notice Markup"
+"themselves, or use &lt;item&gt;&lt;/item&gt; to span all of the tags."
 msgstr ""
 "Viktigt: förseningsmeddelanden kan använda taggarna &lt;&lt;items.content&gt;"
 "&gt; separat, eller &lt;item&gt;&lt;/item&gt; för att täcka alla taggar. Läs "
@@ -8885,7 +9018,7 @@ msgstr ""
 "bort helt från systemet (de flyttas bara till tabellen delete_borrowers), "
 "men detta verktyg har inte så många kontroller som skulle vara önskvärt."
 
-#: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:83
+#: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:84
 #, c-format
 msgid "Important: Requires that you have EnhancedMessagingPreferences enabled"
 msgstr "Viktigt: kräver att EnhancedMessagingPreferences är aktiverat"
@@ -8904,7 +9037,7 @@ msgstr ""
 "Viktigt: 'lösenord' ska sparas som vanlig text, de omvandlas sedan till en "
 "MD5-sträng (vilket är en krypterad form av lösenordet)."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:104
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:99
 #, fuzzy, c-format
 msgid ""
 "Important: The Uncertain Prices page is independent of the basket. It is "
@@ -8952,7 +9085,7 @@ msgstr ""
 "och det rekommenderas att bilder har formatet 200x300 pixlar, men även "
 "mindre bilder fungerar."
 
-#: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:84
+#: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:85
 #, c-format
 msgid ""
 "Important: These can be changed for individual patrons, this setting is just "
@@ -8962,7 +9095,16 @@ msgstr ""
 "ett standardvärde för att göra det enklare att konfigurera meddelanden för "
 "en hel kategori"
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:118
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:69
+#, fuzzy, c-format
+msgid ""
+"Important: These new tags only work on the overdue notices, not other "
+"circulation related notices at this time."
+msgstr ""
+"Viktigt Dessa nya taggar fungerar endast i förseningsmeddelanden för "
+"tillfället, inte i andra utlåningsrelaterade meddelanden."
+
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:121
 #, c-format
 msgid ""
 "Important: These policies are based on the patron's home library, not the "
@@ -9049,6 +9191,14 @@ msgstr ""
 "Viktigt: statusvärden för förlorad-status ska vara numeriska och inte "
 "alfabetiska, för att statusen ska visas korrekt."
 
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:21
+#, c-format
+msgid ""
+"Important: When working with the overdue notices you want each notice at "
+"each branch to have a unique code. Think about using the branch code in "
+"front of the notice code for each branch."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:13
 #, c-format
 msgid ""
@@ -9090,7 +9240,7 @@ msgstr ""
 "I 'Publiceringsdatum första utgåva' anger du datumet för det nummer du har i "
 "handen, det datum från vilket prognosmönstret ska börja"
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:76
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:79
 #, c-format
 msgid ""
 "In 'Total Current Checkouts Allowed' enter the total number of items patrons "
@@ -9125,7 +9275,7 @@ msgstr ""
 "är intresserad av för att visa en meny med länkar för att förhandsgranska "
 "posten och importera den"
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:45
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:47
 #, c-format
 msgid ""
 "In addition to the existing categories that come by default with Koha, "
@@ -9179,7 +9329,7 @@ msgstr ""
 "du vill att numret ska skrivas ut i ett läsligt format måste du markera "
 "kryssrutan 'Skriv ut kortnummer som text'."
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:71
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:73
 #, c-format
 msgid ""
 "In some cases a patron may come in to pick up a hold for their partner (or "
@@ -9208,6 +9358,14 @@ msgid ""
 msgstr ""
 "I fältet 'Beskrivning' anger du en längre (vanlig text) förklaring av vad "
 "fältet kommer att innehålla"
+
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:44
+#, c-format
+msgid ""
+"In the 'Item Information' tab you can enter information that will be added "
+"to every ordered item such as item type, collection code and not for loan "
+"status."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/itemtypes.tt:14
 #, c-format
@@ -9339,7 +9497,7 @@ msgstr "I formuläret som visas måste du ange minst ett datum att söka efter."
 msgid "In the form that appears, enter the basics about your fund."
 msgstr "I formuläret som visas anger du basinformation om budgetstället."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:23
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:42
 #, c-format
 msgid ""
 "In the message body feel free to type whatever message you feel is best, use "
@@ -9459,7 +9617,7 @@ msgstr "Lånenotifikationer för objekt"
 msgid "Item Details"
 msgstr "Objektinformation"
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:104
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:107
 #, c-format
 msgid "Item Hold Policies"
 msgstr "Reservationspolicy för objekt"
@@ -9507,12 +9665,12 @@ msgstr "Objekt kan inte lånas om "
 msgid "Item checked out to another patron"
 msgstr "Objektet utlånat till annan låntagare"
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:88
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:91
 #, c-format
 msgid "Item floats "
 msgstr "Objekt flyter "
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:133
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:136
 #, c-format
 msgid ""
 "Item floats: The item will not be transferred from the library it was "
@@ -9533,12 +9691,12 @@ msgstr "Objektet lånas inte ut"
 msgid "Item on hold for someone else"
 msgstr "Objekt reserverat för någon annan"
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:89
 #, c-format
 msgid "Item returns home"
 msgstr "Objekt återgår hem"
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:123
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:126
 #, c-format
 msgid ""
 "Item returns home: The item will prompt the librarian to transfer the item "
@@ -9547,12 +9705,12 @@ msgstr ""
 "Objekt återgår hem: objektet kommer att uppmana bibliotekarien att överföra "
 "objektet till sitt hembibliotek "
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:87
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:90
 #, c-format
 msgid "Item returns to issuing library"
 msgstr "Objekt återgår till utlåningsbibliotek"
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:128
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:131
 #, c-format
 msgid ""
 "Item returns to issuing library: The item will prompt the librarian to "
@@ -9589,6 +9747,14 @@ msgid ""
 msgstr ""
 "Objekt kan flyttas från en bibliografisk post till en annan med alternativet "
 "'Koppla objekt'"
+
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:61
+#, c-format
+msgid ""
+"Items can be renewed at any time if this value is left blank. Otherwise "
+"items can only be renewed if the item is before the number in units (days/"
+"hours) entered in this box."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/itemtypes.tt:30
 #, c-format
@@ -9657,7 +9823,7 @@ msgstr ""
 "försenas. Till vänster om huvudsidan för periodika finns en länk till "
 "'Reklamationer'"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:67
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:81
 #: intranet-tmpl/prog/en/modules/help/members/member-password.tt:8
 #, c-format
 msgid ""
@@ -9930,6 +10096,14 @@ msgstr "Etikettverktyg"
 msgid "Layouts"
 msgstr "Layouter"
 
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:71
+#: intranet-tmpl/prog/en/modules/help/members/purchase-suggestions.tt:9
+#, fuzzy, c-format
+msgid ""
+"Learn more about Purchase suggestions in the Acquisitions chapter of the "
+"manual."
+msgstr "Läs mer om mottagarlistor senare i denna användarhandbok"
+
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:37
 #, c-format
 msgid "Learn more about Routing Lists later in this manual"
@@ -10072,7 +10246,7 @@ msgstr "Begränsa till ett visst bibliotek"
 msgid "Limit to an acquisition date range"
 msgstr "Begränsa till datumintervall för inköp"
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:50
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:52
 #, c-format
 msgid ""
 "Limit your Category to 10 characters (something short to make it clear what "
@@ -10366,12 +10540,12 @@ msgstr "Slå samman bibliografiska poster via listor"
 msgid "Merging items"
 msgstr "Slå samman objekt"
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:88
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:89
 #, c-format
 msgid "Merging records"
 msgstr "Slå samman poster"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:22
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:41
 #, c-format
 msgid "Message Subject is what will appear in the subject line of the email"
 msgstr "Ärendet kommer att visas i ämnesraden i e-postmeddelandet"
@@ -10386,7 +10560,7 @@ msgstr "Kontrollera låntagarkommentarer"
 msgid "Moderate patron tags"
 msgstr "Kontrollera låntagartaggar"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:32
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:38
 #, c-format
 msgid "Modification Log"
 msgstr "Ändringslogg"
@@ -10411,7 +10585,7 @@ msgstr "Modifiera budget (kan inte skapa rader, men kan redigera befintliga)"
 msgid "Modify holds priority"
 msgstr "Modifiera reservationsprioritet"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:78
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:98
 #, c-format
 msgid "More &gt; Acquisitions &gt; Late issues"
 msgstr "Mer &gt; Inköp &gt; Försenade nummer"
@@ -10448,7 +10622,7 @@ msgstr ""
 "Mer &gt; Administration &gt; Låntagare &amp; lån &gt; Attributtyper för "
 "låntagare"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:114
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:246
 #, c-format
 msgid "More &gt; Serials &gt; New Subscription"
 msgstr "Mer &gt; Periodika &gt; Ny prenumeration"
@@ -10523,7 +10697,7 @@ msgstr ""
 msgid "Name the list and choose what type of list this is "
 msgstr "Namnge listan och välj vilken typ av lista det är "
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:74
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:76
 #, c-format
 msgid ""
 "New authorized values can be added to any existing or new category. To add a "
@@ -10602,6 +10776,16 @@ msgid ""
 "Next note if this layout is for the front or the back of the patron card "
 msgstr "Notera sedan om denna layout för låntagarkortets fram- eller baksida "
 
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:43
+#, c-format
+msgid ""
+"Next to each title is a checkbox, check the items you would like to order, "
+"or choose 'Check all' at the top. Depending on your settings in the "
+"MarcFieldsToOrder preference Koha will populate the next screen with with "
+"the relevant Quantity, Price, Fund, Statistic 1, and Statistic 2 found "
+"within the staged file."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:11
 #, c-format
 msgid ""
@@ -10627,6 +10811,14 @@ msgstr ""
 "Sedan kan du välja om denna händelse är en engångsföreteelse eller om den "
 "kommer att upprepas. "
 
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:22
+#, c-format
+msgid ""
+"Next you can choose the delivery method for the overdue notice. You can "
+"choose from Email, Feed, Phone (if you are using the iTiva Talking Tech "
+"service), Print and SMS (if you have set your SMSSendDriver). "
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:22
 #, c-format
 msgid ""
@@ -10642,6 +10834,11 @@ msgid ""
 msgstr ""
 "Sedan kan du välja om du vill importera det objektdata som hittades i MARC-"
 "posterna (om den fil du laddade är en bibliografisk fil)"
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:29
+#, c-format
+msgid "Next you can customize the notice for every possible delivery method "
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/stage-marc-import.tt:9
 #, c-format
@@ -10671,13 +10868,18 @@ msgstr ""
 "Sektionen för konfiguration av bibliotek innehåller ytterligare "
 "biblioteksinställningar "
 
-#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:24
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:32
+#, c-format
+msgid "Next, you can set up a Feed template"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:28
 #, c-format
 msgid "Nicole Engard "
 msgstr "Nicole Engard "
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:81
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:113
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:84
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:116
 #, c-format
 msgid "No Holds Allowed: No patron may put this book on hold."
 msgstr "Inga reservationer tillåts: ingen låntagare kan reservera denna bok."
@@ -10725,17 +10927,6 @@ msgstr ""
 "lika med det som definieras om 'Värde'. En post med 999$9 = 'XXX YYY' kommer "
 "inte att höra till en resultatuppsättning där villkoret är 999$9 = 'XXX'."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:47
-#, c-format
-msgid ""
-"Note: ISO 4217 changes from time to time therefore all currencies may not be "
-"supported. If you find one that is not supported, please file a bug with the "
-"Locale::Currency::Format author Tan D Nguyen &lt;tnguyen at cpan doe org&gt;"
-msgstr ""
-"Obs! ISO 4217 ändras då och då och det kan därför finnas valutor som inte "
-"stöds. Om du träffar på en som inte stöds registrerar du en felrapport med "
-"Plats::Valuta::Format författare Tan D Nguyen &lt;tnguyen på cpan doe org&gt;"
-
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:32
 #, c-format
 msgid ""
@@ -10757,7 +10948,7 @@ msgstr "Obs! om du listar priser och/eller fakturabelopp ska skatt tas med."
 msgid "Notes are for internal use."
 msgstr "Kommentarer är för internt bruk."
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:41
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:47
 #, c-format
 msgid "Notices"
 msgstr "Meddelanden"
@@ -10777,7 +10968,7 @@ msgstr "Konfiguration av OAI-PMH-uppsättningar"
 msgid "OAI-PMH Sets Mappings Configuration"
 msgstr "Mappningskonfiguration av OAI-PMH-uppsättningar"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:103
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:187
 #, c-format
 msgid "ODUE (Overdue Notice) "
 msgstr "ODUE (Förseningsmeddelande) "
@@ -10787,7 +10978,14 @@ msgstr "ODUE (Förseningsmeddelande) "
 msgid "OPAC"
 msgstr "OPAC"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:88
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:109
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:125
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:141
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:157
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:172
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:201
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:217
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:234
 #, c-format
 msgid "OPAC &gt; Login &gt; my messaging"
 msgstr "OPAC &gt; Login &gt; meddelandehantering"
@@ -10873,7 +11071,7 @@ msgstr ""
 "Ange på varje rad i textfilen låntagarens lånekortsnummer, följt av ett "
 "komma (eller en tabb) och sedan filnamnet på bilden "
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:27
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:46
 #, c-format
 msgid ""
 "On overdue notices make sure to use &lt;&lt;items.content&gt;&gt; tags to "
@@ -10912,7 +11110,7 @@ msgstr ""
 "I skärmen som listar budgetfördelningen klickar du på Redigera-knappen högst "
 "upp och väljer Duplicera budget."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:96
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:91
 #, c-format
 msgid ""
 "On the summary page, you also have the option to edit the information that "
@@ -10932,6 +11130,7 @@ msgstr ""
 msgid "On this page you can create, modify and delete OAI-PMH sets"
 msgstr "På den här sidan kan du skapa, ändra och ta bort OAI-PMH-uppsättningar"
 
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:32
 #: intranet-tmpl/prog/en/modules/help/members/routing-lists.tt:7
 #, c-format
 msgid ""
@@ -10969,7 +11168,7 @@ msgstr ""
 "När alla loggar från alla utlåningsdatorer laddats kommer du att kunna välja "
 "alla eller bara välja de du vill bearbeta i Koha."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:81
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:76
 #, c-format
 msgid ""
 "Once an item is added to the basket you will be presented with a basket "
@@ -10988,7 +11187,7 @@ msgstr ""
 "När du klickat läggs en ny radpost till i kontot, som visar att betalningen "
 "ångrats"
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:67
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:69
 #, c-format
 msgid ""
 "Once confirmed the hold will show on the patron record and on the checkout "
@@ -11110,7 +11309,7 @@ msgstr ""
 "När du är nöjd med citaten klickar du på knappen 'Spara citat' i "
 "verktygsfältet för att spara dem."
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:78
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:79
 #, c-format
 msgid ""
 "Once you choose that you will be brought to a Z39.50 search window to search "
@@ -11236,7 +11435,7 @@ msgstr ""
 "När du har skapat din fil kan du använda Verktyg för låntagarimport för att "
 "importera informationen till Koha."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:64
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:59
 #, c-format
 msgid ""
 "Once you have entered the info about the item, you need to enter the "
@@ -11276,7 +11475,7 @@ msgid ""
 "items."
 msgstr "När du gjort ändringarna visas de uppdaterade posterna."
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:80
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:81
 #, c-format
 msgid ""
 "Once you have made your edits (via either method) you can click 'Save' at "
@@ -11380,7 +11579,7 @@ msgstr ""
 "När filen laddats upp eller streckkoderna har skannats klickar du på "
 "'Fortsätt'."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:98
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:93
 #, c-format
 msgid ""
 "Once you're sure your basket is complete, you can click 'Close this basket' "
@@ -11390,7 +11589,7 @@ msgstr ""
 "När du är säker på att korgen är komplett klickar du på knappen 'Stäng korg' "
 "för att ange att korgen är komplett och har skickats till leverantören."
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:63
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:64
 #, c-format
 msgid ""
 "Once you've finished, click the 'Save' button at the top and choose whether "
@@ -11501,7 +11700,7 @@ msgstr ""
 "När importen är slutförd visas en länk till de nya bibliografiska posterna "
 "till höger om varje titel som importerades"
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:95
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:98
 #, c-format
 msgid ""
 "Once your policy is set, you can unset it by clicking the 'Unset' link to "
@@ -11552,7 +11751,7 @@ msgstr "Online-hjälp"
 msgid "Online help"
 msgstr "Online-hjälp"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:102
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:116
 #, c-format
 msgid ""
 "Open the patron you want to use as your base (the patron you want to "
@@ -11642,7 +11841,7 @@ msgstr ""
 msgid "Other/Generic Classification"
 msgstr "Annat/allmän klassificering"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:37
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:65
 #, c-format
 msgid "Overdue Notice Markup"
 msgstr "Taggning för förseningsmeddelande"
@@ -11680,6 +11879,16 @@ msgid ""
 msgstr ""
 "PDF - kan läsas av alla PDF-läsare, vilket gör låntagarkort utskrivbara på "
 "skrivare&nbsp;"
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:193
+#, c-format
+msgid "PREDUE "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:209
+#, c-format
+msgid "PREDUEDGST "
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:3
 #, c-format
@@ -11862,6 +12071,11 @@ msgstr "Låntagarsökning"
 msgid "Patron statistics"
 msgstr "Låntagarstatistik"
 
+#: intranet-tmpl/prog/en/modules/help/members/purchase-suggestions.tt:3
+#, fuzzy, c-format
+msgid "Patron's Purchase Suggestions"
+msgstr "Inköpsförslag"
+
 #: intranet-tmpl/prog/en/modules/help/members/members-home.tt:3
 #, c-format
 msgid "Patrons"
@@ -11887,7 +12101,7 @@ msgstr "Låntagare läggs till i modulen 'Låntagare'."
 msgid "Patrons are assigned to one of six main categories:"
 msgstr "Låntagare tilldelas till en av sex huvudkategorier:"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:78
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:92
 #, c-format
 msgid ""
 "Patrons can also be blocked from checking items out by setting Patron Flags "
@@ -11900,7 +12114,7 @@ msgstr ""
 msgid "Patrons has lost their library card "
 msgstr "Låntagare har förlorat sitt lånekort "
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:61
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:75
 #, c-format
 msgid "Patrons in Koha can be edited using one of many edit buttons."
 msgstr "Låntagare kan i Koha redigeras med flera olika knappar för redigering."
@@ -11984,7 +12198,7 @@ msgstr ""
 msgid "Perl modules"
 msgstr "Perl-moduler"
 
-#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:26
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:30
 #, c-format
 msgid "Philadelphia, PA 19107"
 msgstr "Philadelphia, PA 19107"
@@ -12059,7 +12273,7 @@ msgstr "Insticksprogram"
 msgid "Pre-save Editing"
 msgstr "Redigering innan lagring"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:106
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:101
 #, c-format
 msgid "Printing Baskets"
 msgstr "Skriva ut korgar"
@@ -12112,12 +12326,17 @@ msgstr ""
 msgid "Provide a description so you can identify this action later"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:65
+#, fuzzy, c-format
+msgid "Purchase Suggestions"
+msgstr "Inköpsförslag"
+
 #: intranet-tmpl/prog/en/modules/help/suggestion/suggestion.tt:3
 #, c-format
 msgid "Purchase suggestions"
 msgstr "Inköpsförslag"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:67
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:62
 #, c-format
 msgid ""
 "Quantity is populated by the number of items you've added to the order above."
@@ -12159,12 +12378,17 @@ msgstr "Redigerare för dagens citat"
 msgid "Quote of the day uploader"
 msgstr "Uppladdningsverktyg för dagens citat"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:140
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:225
+#, c-format
+msgid "RENEWAL "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:282
 #, c-format
 msgid "RESERVESLIP "
 msgstr "RESERVATIONSKVITTO "
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:110
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:242
 #, c-format
 msgid "RLIST (Routing List) "
 msgstr "RLIST (mottagarlista) "
@@ -12198,7 +12422,7 @@ msgstr ""
 msgid "Receive serials on existing subscriptions"
 msgstr "Ta emot periodika för befintliga prenumerationer"
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:59
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:61
 #, c-format
 msgid "Receiving Holds"
 msgstr "Ta emot reservationer"
@@ -12366,7 +12590,13 @@ msgid "Requires that the staff member also has circulate_remaining_permissions"
 msgstr ""
 "Kräver att personalen även har rättigheten circulate_remaining_permissions"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:107
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:256
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:262
+#, c-format
+msgid "Requires that you set OpacAllowSharingPrivateLists to 'Allow'"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:190
 #, c-format
 msgid "Requires that you set Overdue Notice/Status Triggers"
 msgstr "Kräver att du ställer in utlösare för förseningsmeddelande/status"
@@ -12386,6 +12616,7 @@ msgid "Routing"
 msgstr "Mottagarlista"
 
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:3
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:28
 #, c-format
 msgid "Routing Lists"
 msgstr "Mottagarlistor"
@@ -12415,12 +12646,22 @@ msgstr ""
 "patrons library|branches&gt;&gt; AND surname like &lt;&lt;Enter filter for "
 "patron surname (%% if none)&gt;&gt;"
 
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:253
+#, c-format
+msgid "SHARE_ACCEPT "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:259
+#, c-format
+msgid "SHARE_INVITE "
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:29
 #, c-format
 msgid "Salutation is populated by the BorrowersTitles system preference"
 msgstr "Hälsning bestäms av systeminställningen BorrowersTitles"
 
-#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:22
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:26
 #, c-format
 msgid "Sample Overdue Notice"
 msgstr "Exempel på förseningsmeddelande"
@@ -12503,7 +12744,7 @@ msgstr "Söker"
 msgid "Searching Authorities"
 msgstr "Söker myndigheter"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:7
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:13
 #, c-format
 msgid "Searching Subtypes on the Staff Client"
 msgstr "Söker undertyper på personalklienten"
@@ -12513,8 +12754,7 @@ msgstr "Söker undertyper på personalklienten"
 msgid "Searching:"
 msgstr "Söker:"
 
-#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:19
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:106
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:23
 #, c-format
 msgid "See a Sample Overdue Notice"
 msgstr "Se ett exempel på ett förseningsmeddelande"
@@ -12575,7 +12815,7 @@ msgstr "Se den fullständiga dokumentationen för Anonymisera låntagare i "
 msgid "See the full documentation for Authorities in the "
 msgstr "Se den fullständiga dokumentationen för Myndigheter i "
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:93
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:95
 #, c-format
 msgid "See the full documentation for Authorized Values in the "
 msgstr "Se den fullständiga dokumentationen Godkända värden i "
@@ -12612,13 +12852,13 @@ msgid "See the full documentation for Catalog Statistics in the "
 msgstr "Se den fullständiga dokumentationen för Katalogstatistik i "
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbooks.tt:33
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:92
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:93
 #: intranet-tmpl/prog/en/modules/help/catalogue/detail.tt:7
 #, c-format
 msgid "See the full documentation for Cataloging in the "
 msgstr "Se den fullständiga dokumentationen för Katalogisering i "
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:75
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:77
 #, c-format
 msgid "See the full documentation for Checking In in the "
 msgstr "Se den fullständiga dokumentationen för Återlämning i "
@@ -12644,7 +12884,7 @@ msgstr "Se den fullständiga dokumentationen för Utlåningshistorik i "
 msgid "See the full documentation for Circulation Statistics in the "
 msgstr "Se den fullständiga dokumentationen för Utlåningsstatistik i "
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:136
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:139
 #, c-format
 msgid "See the full documentation for Circulation and Fine Rules in the "
 msgstr ""
@@ -12694,7 +12934,7 @@ msgid "See the full documentation for Creating Manual Invoices in the "
 msgstr ""
 "Se den fullständiga dokumentationen för Skapande av manuella fakturor i "
 
-#: intranet-tmpl/prog/en/modules/help/admin/currency.tt:11
+#: intranet-tmpl/prog/en/modules/help/admin/currency.tt:13
 #, c-format
 msgid "See the full documentation for Currencies and Exchange Rates in the "
 msgstr "Se den fullständiga dokumentationen för Valutor och växelkurser i "
@@ -12870,7 +13110,7 @@ msgstr "Se den fullständiga dokumentationen för Flytta objekt i "
 msgid "See the full documentation for News in the "
 msgstr "Se den fullständiga dokumentationen för Nyheter i "
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:154
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:296
 #, c-format
 msgid "See the full documentation for Notices in the "
 msgstr "Se den fullständiga dokumentationen för Meddelanden i "
@@ -12893,7 +13133,7 @@ msgstr "Se den fullständiga dokumentationen för Offline-utlåning i "
 #: intranet-tmpl/prog/en/modules/help/acqui/basketheader.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/neworderempty.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersuggestion.tt:17
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:114
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:109
 #, c-format
 msgid "See the full documentation for Ordering in the "
 msgstr "Se den fullständiga dokumentationen för Beställning i "
@@ -12913,7 +13153,7 @@ msgstr "Se den fullständiga dokumentationen för Försenade med böter i "
 msgid "See the full documentation for Patron Attribute Types in the "
 msgstr "Se den fullständiga dokumentationen för Attributtyper för låntagare i "
 
-#: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:89
+#: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:90
 #, c-format
 msgid "See the full documentation for Patron Categories in the "
 msgstr "Se den fullständiga dokumentationen för Låntagarkategorier i "
@@ -13014,7 +13254,7 @@ msgstr "Se den fullständiga dokumentationen för Rapporter i "
 msgid "See the full documentation for Routing Lists in the "
 msgstr "Se den fullständiga dokumentationen för Mottagarlistor i "
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:75
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:81
 #, c-format
 msgid "See the full documentation for Searching in the "
 msgstr "Se den fullständiga dokumentationen för Sökning i "
@@ -13214,7 +13454,7 @@ msgid ""
 msgstr ""
 "Se den fullständiga dokumentationen för Rapporten Mest utlånade objekt i "
 
-#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:44
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:48
 #, c-format
 msgid ""
 "See the full documentation for the Overdue Notice/Status Triggers in the "
@@ -13248,7 +13488,7 @@ msgstr "Se den fullständiga dokumentationen för Låntagarkortprofiler i "
 msgid "See the full documentation for the Patron Card Templates in the "
 msgstr "Se den fullständiga dokumentationen för Låntagarkortmallar i "
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:112
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:126
 #, c-format
 msgid "See the full documentation for the Patron Details in the "
 msgstr "Se den fullständiga dokumentationen för Låntagardetaljer i "
@@ -13259,6 +13499,12 @@ msgid "See the full documentation for the Patron Image Uploader in the "
 msgstr ""
 "Se den fullständiga dokumentationen för Uppladdningsverktyget för "
 "låntagarbilder i "
+
+#: intranet-tmpl/prog/en/modules/help/members/purchase-suggestions.tt:11
+#, fuzzy, c-format
+msgid ""
+"See the full documentation for the Patron's Purchase Suggestions in the "
+msgstr "Se den fullständiga dokumentationen för Inköpsförslag i "
 
 #: intranet-tmpl/prog/en/modules/help/members/members-home.tt:53
 #, c-format
@@ -13329,7 +13575,7 @@ msgid ""
 "quote id."
 msgstr "Välj de citat du vill radera genom att klicka på motsvarande citat-id."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:72
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:92
 #, c-format
 msgid ""
 "Sent to patrons when their account is set up if the AutoEmailOPACUser "
@@ -13438,7 +13684,7 @@ msgid ""
 "Simply enter the barcode for the item you want to move and click 'Select'"
 msgstr "Ange streckkoden för objektet du vill flytta och klicka på 'Välj'"
 
-#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:42
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:46
 #, c-format
 msgid "Sincerely, Library Staff"
 msgstr "Med vänlig hälsning, bibliotekspersonalen"
@@ -13448,7 +13694,7 @@ msgstr "Med vänlig hälsning, bibliotekspersonalen"
 msgid "Some fields in the attribute will not be editable once created:"
 msgstr "Vissa fält i attributet kan inte redigeras när de skapats:"
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:60
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:61
 #, c-format
 msgid ""
 "Some fixed fields have editors that will change based on the material type "
@@ -13471,7 +13717,12 @@ msgstr ""
 "Vissa låntagarkategorier kan ha ett krav på lägsta ålder (i år), ange denna "
 "ålder i 'Ålderskrav' "
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:84
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:7
+#, c-format
+msgid "Some tips"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:85
 #, c-format
 msgid ""
 "Sometimes a copy of the record you need to catalog can't be found via "
@@ -13516,14 +13767,14 @@ msgstr ""
 "din katalog, kan du gå till utlåningsmodulen och klicka på 'Snabb "
 "katalogisering'."
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:45
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:46
 #, c-format
 msgid "Sometimes fields may not be editable due to the value in your "
 msgstr ""
 "Ibland kan det inträffa att fält inte är redigerbara på grund av värdet i "
 "din "
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:99
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:113
 #, c-format
 msgid ""
 "Sometimes when you're adding a new family to your system you don't want to "
@@ -13568,7 +13819,14 @@ msgstr ""
 "Personal = En användare som kan konfigureras för att utföra åtgärder i "
 "personalmodulen"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:89
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:110
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:126
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:142
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:158
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:173
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:202
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:218
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:235
 #, c-format
 msgid "Staff Client &gt; Patron Record &gt; Notices"
 msgstr "Personalklient &gt; Låntagarpost &gt; Meddelanden"
@@ -13639,7 +13897,7 @@ msgstr ""
 msgid "Statistical Reports "
 msgstr "Statistiska rapporter "
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:47
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:53
 #, c-format
 msgid "Statistics"
 msgstr "Statistik"
@@ -13785,7 +14043,7 @@ msgstr ""
 "T = På väg: reservationen är länkad till ett objekt, men det är på väg till "
 "filialen där det ska hämtas"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:106
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:120
 #, c-format
 msgid ""
 "TIP: Clicking in a field that is already populated with data will clear that "
@@ -13811,7 +14069,7 @@ msgstr ""
 msgid "TORONTO PUBLIC symphony.torontopubliclibrary.ca:2200 unicorn"
 msgstr "TORONTO PUBLIC symphony.torontopubliclibrary.ca:2200 unicorn"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:146
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:288
 #, c-format
 msgid "TRANSFERSLIP "
 msgstr "ÖVERFÖRINGSKVITTERING "
@@ -14176,8 +14434,8 @@ msgstr ""
 "när bibliotekarien lånar ut ett objekt till låntagaren"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:19
-#, c-format
-msgid "The Code is limited to 20 characters"
+#, fuzzy, c-format
+msgid "The Code is limited to 20 characters "
 msgstr "Koden är begränsad till 20 tecken"
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:35
@@ -14197,7 +14455,14 @@ msgstr ""
 "Beskrivningen bör vara något som underlättar identifieringen av budgeten vid "
 "beställning"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:85
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:106
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:122
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:138
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:154
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:169
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:198
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:214
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:230
 #, c-format
 msgid "The EnhancedMessagingPreferences is set to 'Allow'"
 msgstr "Inställningen EnhancedMessagingPreferences är satt till 'Tillåt'"
@@ -14225,6 +14490,14 @@ msgstr ""
 "\"New York (delstat)\" skulle klicka på länken för förfinad sökning om de "
 "också är intresserade av \"New York (ort)\"). Detta är bara relevant för "
 "bibliotek med mycket hierarkiskt auktoritetsdata."
+
+#: intranet-tmpl/prog/en/modules/help/admin/currency.tt:9
+#, c-format
+msgid ""
+"The ISO code you enter will be used when importing MARC files via the "
+"staging tools, the tool will attempt to find and use the price of the "
+"currently active currency."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:5
 #, c-format
@@ -14255,7 +14528,7 @@ msgstr ""
 "att skriva ut ett nästan obegränsat antal olika etiketter, inklusive "
 "streckkoder. Detta är några av funktionerna i modulen Etikettverktyg:"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:37
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:43
 #, c-format
 msgid ""
 "The Librarian field shows the patron number for the librarian who made the "
@@ -14281,7 +14554,7 @@ msgstr ""
 "OPAC-kommentaren är en kommentar till låntagaren - den visas i låntagarens "
 "post i OPAC"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:38
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:44
 #, c-format
 msgid "The Object field lists the patron that is being modified"
 msgstr "Objektfältet visar låntagaren som modifieras"
@@ -14351,6 +14624,11 @@ msgstr ""
 "Uppladdningsverktyget för dagens citat (QOTD) ger möjlighet att ladda upp "
 "citat i bulk till den citatsamling som används för OPAC-funktionen Dagens "
 "citat."
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:231
+#, fuzzy, c-format
+msgid "The RenewalSendNotice preference is set to 'Send'"
+msgstr "Inställningen EnhancedMessagingPreferences är satt till 'Tillåt'"
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:40
 #, c-format
@@ -14490,7 +14768,7 @@ msgstr "Möjlighet att skapa och redigera, men inte att köra SQL-rapporter"
 msgid "The ability to run but not create or edit SQL reports"
 msgstr "Möjlighet att köra, men inte att skapa eller redigera SQL-rapporter"
 
-#: intranet-tmpl/prog/en/modules/help/admin/currency.tt:9
+#: intranet-tmpl/prog/en/modules/help/admin/currency.tt:11
 #, c-format
 msgid ""
 "The active currency is the main currency you use in your library. Your "
@@ -14511,7 +14789,7 @@ msgstr ""
 "I administrationsområdet gör du alla systeminställningar. Inställningarna "
 "delas upp i flera kategorier, som beskrivs nedan."
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:76
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:77
 #, c-format
 msgid ""
 "The alternative is to search via Z39.50 to overlay your record with a fuller "
@@ -14561,7 +14839,7 @@ msgstr ""
 "Kortnummerfältet beräknas automatiskt om inställningen autoMemberNum är "
 "inställd för det"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:91
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:86
 #, c-format
 msgid ""
 "The catalog record cannot always be deleted. You might see notes explaining "
@@ -14593,7 +14871,7 @@ msgstr ""
 msgid "The check in option on the quick search bar on the Circulation page"
 msgstr "Återlämningsalternativet på snabbsökningsraden på cirkulationssidan"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:30
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:36
 #: intranet-tmpl/prog/en/modules/help/members/readingrec.tt:5
 #, c-format
 msgid ""
@@ -14625,7 +14903,7 @@ msgid ""
 "are being used for a specific course."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:69
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:64
 #, c-format
 msgid ""
 "The currency pull down will have the currencies you set up in the "
@@ -14714,11 +14992,11 @@ msgstr ""
 msgid "The edit menu is also where items can be deleted from"
 msgstr "I redigeringsmenyn kan objekt också raderas"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:40
-#, c-format
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:48
+#, fuzzy, c-format
 msgid ""
-"The final option for ordering is to order from a staged record (learn more "
-"about staging records). "
+"The final option for ordering is to order from a list of titles with the "
+"highest hold ratios "
 msgstr ""
 "Det sista alternativet för sortering är att göra det från en förberedd post "
 "(läs mer om att förbereda poster). "
@@ -14790,36 +15068,16 @@ msgid "The first section is for basic information about the vendor. "
 msgstr ""
 "Den första sektionen är för grundläggande information om leverantören. "
 
-#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:36
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:40
 #, c-format
 msgid "The following item(s) are currently overdue:"
 msgstr "Följande objekt är för tillfället försenade:"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:60
-#, c-format
-msgid ""
-"The following item(s) is/are currently overdue: \"A Short History of Western "
-"Civilization\" by Harrison, John B, 909.09821 H2451, Barcode: 08030003 Fine: "
-"£3.50 \"History of Western Civilization\" by Hayes, Carlton Joseph Huntley, "
-"909.09821 H3261 v.1, Barcode: 08030004 Fine: £3.50"
-msgstr ""
-"Följande objekt är för tillfället försenade: \"A Short History of Western "
-"Civilization\" av Harrison, John B, 909.09821 H2451, Streckkod: 08030003 "
-"Bot: £3.50 \"History of Western Civilization\" av Hayes, Carlton Joseph "
-"Huntley, 909.09821 H3261 v.1, Streckkod: 08030004 Bot: £3.50"
-
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:54
-#, c-format
-msgid ""
-"The following item(s) is/are currently overdue: &lt;item&gt;\"&lt;&lt;biblio."
-"title&gt;&gt;\" by &lt;&lt;biblio.author&gt;&gt;, &lt;&lt;items."
-"itemcallnumber&gt;&gt;, Barcode: &lt;&lt;items.barcode&gt;&gt; Fine: &lt;&lt;"
-"items.fine&gt;&gt; &lt;/item&gt;"
-msgstr ""
-"Följande objekt är för tillfället försenade: &lt;item&gt;\"&lt;&lt;biblio."
-"title&gt;&gt;\" av &lt;&lt;biblio.author&gt;&gt;, &lt;&lt;items."
-"itemcallnumber&gt;&gt;, Streckkod: &lt;&lt;items.barcode&gt;&gt; Bot: &lt;"
-"&lt;items.fine&gt;&gt; &lt;/item&gt;"
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:75
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:81
+#, fuzzy, c-format
+msgid "The following item(s) is/are currently overdue:"
+msgstr "Följande objekt är för tillfället försenade:"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:36
 #, c-format
@@ -14869,17 +15127,17 @@ msgstr ""
 "Rapportguiden leder dig genom en process i sex steg för att generera en "
 "rapport."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:143
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:285
 #, c-format
 msgid "The holds slip is generated when a hold is confirmed"
 msgstr "Reservationskvitteringen genereras när en reservation bekräftas"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:13
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:19
 #, c-format
 msgid "The index name is 'aud' and it's derived from 008/22"
 msgstr "Indexnamnet är 'aud' och det kommer från 008/22"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:50
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:56
 #, c-format
 msgid ""
 "The index name is 'ctype' is taken from the 008 and it's where we get the "
@@ -14889,7 +15147,7 @@ msgstr ""
 "Indexnamnet 'ctype' är från 008 och det är där vi får 'fler innehållstyper'. "
 "Fältpositionen är 008/24-28. Vanliga värden är: "
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:36
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:42
 #, c-format
 msgid ""
 "The index name is 'l-format' and it's an index of positions 007/01 and "
@@ -14903,7 +15161,7 @@ msgstr ""
 msgid "The item edit form will appear:"
 msgstr "Formuläret för objektredigering visas:"
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:69
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:71
 #, c-format
 msgid "The item record will also show that the item is on hold."
 msgstr "Objektposten kommer också att visa att objektet är reserverat."
@@ -14944,7 +15202,7 @@ msgstr ""
 "Länkarna till reklamationer visas också till vänster om informationssidan "
 "för prenumerationer"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:68
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:63
 #, c-format
 msgid ""
 "The list of funds is populated by the funds you have assigned in the "
@@ -15011,11 +15269,18 @@ msgstr ""
 msgid "The new list form offers several options for creating your list:"
 msgstr "Formuläret för ny lista ha flera alternativ för att skapa din lista:"
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:89
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:91
 #, c-format
 msgid "The new value will appear in the list along with existing values"
 msgstr ""
 "Det nya värdet kommer att visas i listan tillsammans med befintliga värden"
+
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:40
+#, fuzzy, c-format
+msgid "The next option for ordering is to order from a staged record. "
+msgstr ""
+"Det sista alternativet för sortering är att göra det från en förberedd post "
+"(läs mer om att förbereda poster). "
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basketheader.tt:11
 #, c-format
@@ -15053,7 +15318,6 @@ msgid ""
 msgstr "Det andra är att välja att skapa en ny sats från etikettverktyget"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/addorderiso2709.tt:15
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:49
 #, c-format
 msgid ""
 "The other option is to import all records from the staged file by scrolling "
@@ -15064,11 +15328,11 @@ msgstr ""
 "filen genom att gå ner i postlistan i den förberedda filen och fylla i "
 "objektinformationen. "
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:30
-#, c-format
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:49
+#, fuzzy, c-format
 msgid ""
 "The other option, only for overdue notices, is to use the &lt;item&gt;&lt;/"
-"item&gt; tags to span the line so that it will print out multiple lines One "
+"item&gt; tags to span the line so that it will print out multiple lines. One "
 "example for the &lt;item&gt;&lt;/item&gt; tag option is:&lt;item&gt;\"&lt;"
 "&lt;biblio.title&gt;&gt;\" by &lt;&lt;biblio.author&gt;&gt;, &lt;&lt;items."
 "itemcallnumber&gt;&gt;, Barcode: &lt;&lt;items.barcode&gt;&gt; , Checkout "
@@ -15097,9 +15361,24 @@ msgstr ""
 "hitta, ombeds du att använda snabbkatalogisering för att lägga till objektet "
 "i Koha och låna ut det."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:86
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:232
+#, fuzzy, c-format
+msgid "The patron has requested to receive the checkout notice "
+msgstr "Låntagaren har begärt att få detta meddelande "
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:107
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:123
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:139
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:170
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:199
 #, c-format
 msgid "The patron has requested to receive this notice "
+msgstr "Låntagaren har begärt att få detta meddelande "
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:155
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:215
+#, fuzzy, c-format
+msgid "The patron has requested to receive this notice as a digest "
 msgstr "Låntagaren har begärt att få detta meddelande "
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:5
@@ -15127,7 +15406,7 @@ msgstr ""
 "medlemskapsavgifter, hyresavgifter, reservationsavgifter och alla andra "
 "typer av avgifter som kan debiteras låntagare."
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:43
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:49
 #: intranet-tmpl/prog/en/modules/help/members/notices.tt:5
 #, c-format
 msgid ""
@@ -15165,7 +15444,7 @@ msgstr ""
 "Citat sparas i en \"asynkron\" process, vilket innebär att du kan gå vidare "
 "till andra delar av personalklienten medan citaten sparas."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:131
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:273
 #, c-format
 msgid "The quick slip only includes items that were checked out today"
 msgstr "Snabbkvitteringen inkluderar bara objekt som lånades ut idag"
@@ -15189,7 +15468,7 @@ msgid ""
 msgstr ""
 "Posten kommer nu att ha 773-fältet korrekt ifyllt för att komplettera länken."
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:74
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:75
 #, c-format
 msgid "The record will open in the MARC editor"
 msgstr "Posten öppnas i MARC-redigeraren"
@@ -15265,7 +15544,7 @@ msgstr ""
 "Periodikamodulen används för att hantera dina periodikaprenumerationer "
 "(tidskrifter, magasin och tidningar)."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:137
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:279
 #, c-format
 msgid ""
 "The slip or receipt will show items checked out today as well as items that "
@@ -15297,10 +15576,10 @@ msgstr ""
 msgid "The three first fields are required. The rest are optional."
 msgstr "De tre första fälten är obligatoriska. Resten är valfria."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:149
-#, c-format
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:291
+#, fuzzy, c-format
 msgid ""
-"The transfer slip is printed when you confirm a transfer from one library to "
+"The transfer slip is printed when you confirm a transfer from one branch to "
 "another in your system"
 msgstr ""
 "Överföringskvitteringen skrivs ut när du bekräftar en överföring från ett "
@@ -15325,12 +15604,12 @@ msgid ""
 "current date in ISO format ( YYYY-MM-DD )."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:108
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:111
 #, c-format
 msgid "The various Hold Policies have the following effects:"
 msgstr "De olika policyerna för reservationer har följande effekter:"
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:120
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:123
 #, c-format
 msgid "The various Return Policies have the following effects:"
 msgstr "De olika policyerna för återlämning har följande effekter:"
@@ -15340,7 +15619,7 @@ msgstr "De olika policyerna för återlämning har följande effekter:"
 msgid "The vendor add form is broken into three pieces:"
 msgstr "Formuläret där man lägger till leverantörer är uppdelat i tre delar:"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:70
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:65
 #, c-format
 msgid ""
 "The vendor price is the price before any taxes or discounts are applied."
@@ -15376,13 +15655,13 @@ msgstr ""
 "det klickar du på 'Lägg till beskrivning' och fyller i den nya textrutan. Du "
 "kan lägga till så många beskrivningar du vill."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:123
-#, c-format
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:267
+#, fuzzy, c-format
 msgid ""
 "There are also a set of predefined slips (or receipts) listed on this page. "
 "All of these slips can be customized by altering their text via the Notices "
 "&amp; Slips tool and their style using the SlipCSS preference to define a "
-"stylesheet."
+"stylesheet. Here is what those slips are used for:"
 msgstr ""
 "Det finns också en uppsättning fördefinierade kvitteringar (eller kvitton) "
 "listade på denna sida. Alla dessa kvitteringar kan anpassas genom att ändra "
@@ -15412,7 +15691,7 @@ msgstr ""
 "posten och klicka på knappen 'Redigera' längst upp. Därifrån kan du välja "
 "'Redigera objekt'."
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:28
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:30
 #, c-format
 msgid "There are several messages that can appear when checking items in:"
 msgstr "Flera meddelanden kan visas när objekt återlämnas:"
@@ -15436,7 +15715,7 @@ msgstr ""
 "naturligaste är att använda knappen 'Reservera', längst upp i alla "
 "bibliografiska poster."
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:26
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:32
 #, c-format
 msgid ""
 "There are three indexes that comprise Content: 'fic' is derived from 003/33; "
@@ -15515,6 +15794,15 @@ msgstr ""
 "Dessa regler används bara om inställningen UseBranchTransferLimits är satt "
 "till 'tillämpa'."
 
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:71
+#, fuzzy, c-format
+msgid ""
+"These tags are &lt;item&gt; and &lt;/item&gt; which should enclose all "
+"fields from the biblio, biblioitems, and items tables."
+msgstr ""
+"&lt;item&gt;&lt;/item&gt; som bör omsluta alla fält från tabellerna biblio, "
+"biblioitems och items."
+
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:5
 #, c-format
 msgid ""
@@ -15575,14 +15863,14 @@ msgstr ""
 "Det kan ställas in av bibliotekarien genom att redigera en låntagarpost och "
 "lägga till en flagga, eller med utlösare för meddelanden/status"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:83
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:97
 #, c-format
 msgid ""
 "This flag can automatically be set with the Overdue/Notice StatusTriggers"
 msgstr ""
 "Denna flagga kan automatiskt ställas in med utlösare för meddelanden/status"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:68
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:82
 #: intranet-tmpl/prog/en/modules/help/members/member-password.tt:9
 #, c-format
 msgid ""
@@ -15594,7 +15882,7 @@ msgstr ""
 "\"Klicka för att fylla i med ett slumpmässigt genererat förslag. Lösenord "
 "visas som text.\""
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:74
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:88
 #, c-format
 msgid ""
 "This form will not appear if you have the patronimages system preference to "
@@ -15640,18 +15928,73 @@ msgid ""
 "This list shows you all of the titles tagged with the term you clicked on."
 msgstr "Denna lista visar alla titlar som taggats med termen du klickade på."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:83
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:211
+#, c-format
+msgid "This notice is sent as the 'Advanced notice' for all items that are due"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:195
+#, fuzzy, c-format
+msgid "This notice is sent as the 'Advanced notice' for an item is due"
+msgstr ""
+"Detta meddelande används för att skicka förseningsmeddelanden till låntagare"
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:103
+#, c-format
+msgid ""
+"This notice is sent as the 'Check in' notice for all items that are checked "
+"in"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:119
+#, fuzzy, c-format
+msgid ""
+"This notice is sent as the 'Check out' notice for all items that are checked "
+"out"
+msgstr ""
+"Kvittot eller kvitteringen kommer att visa objekt som lånades ut idag, samt "
+"objekt som fortfarande är utlånade"
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:227
+#, c-format
+msgid ""
+"This notice is sent as the 'Check out' notice for all items that are renewed"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:151
+#, fuzzy, c-format
+msgid "This notice is sent as the 'Item due' for all items that are due"
+msgstr ""
+"Detta meddelande används för att skicka förseningsmeddelanden till låntagare"
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:135
+#, c-format
+msgid "This notice is sent as the 'Item due' for an item is due"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:228
+#, fuzzy, c-format
+msgid "This notice is used if three criteria are met: "
+msgstr "Detta meddelande används om två kriterier uppfylls: "
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:104
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:120
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:136
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:152
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:167
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:196
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:212
 #, c-format
 msgid "This notice is used if two criteria are met: "
 msgstr "Detta meddelande används om två kriterier uppfylls: "
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:105
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:189
 #, c-format
 msgid "This notice is used to send Overdue Notices to Patrons"
 msgstr ""
 "Detta meddelande används för att skicka förseningsmeddelanden till låntagare"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:99
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:183
 #, c-format
 msgid ""
 "This notice requires the emailLibrarianWhenHoldIsPlaced system preference to "
@@ -15712,6 +16055,15 @@ msgid ""
 msgstr ""
 "Detta alternativ visas bara om systeminställningen SpecifyDueDate är "
 "inställd så att personal kan åsidosätta återlämningsdatumet"
+
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:50
+#, c-format
+msgid ""
+"This option will take you to the Holds Ratio report where you can find items "
+"with a high hold ratio and order additional copies. Next to each title will "
+"be a link with the number of items to order, click that and it will add the "
+"item to your basket."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/moredetail.tt:5
 #, c-format
@@ -16103,7 +16455,7 @@ msgstr ""
 "budgeten, så att du kan återanvända budgetar och budgetställen från år till "
 "år."
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:86
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:87
 #, c-format
 msgid ""
 "This will open a new MARC record with the fields filled in with the values "
@@ -16199,7 +16551,7 @@ msgstr ""
 "Tips: om sökningen inte ger resultat kan du försöka söka efter färre fält, "
 "inte alla Z39.50-servrar kan söka i alla fälten ovan."
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:102
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:105
 #, c-format
 msgid ""
 "Tip: If the total amount loanable for a given patron category is left blank, "
@@ -16265,7 +16617,7 @@ msgstr ""
 msgid "Tip: Mac users use the OPTION button in place of ALT"
 msgstr "Tips: Mac-användare kan använda OPTION-knappen istället för ALT"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:118
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:250
 #, c-format
 msgid ""
 "Tip: Notice also that if you'd like to notify patrons of new serial issues, "
@@ -16292,6 +16644,11 @@ msgid ""
 msgstr ""
 "Tips: detta verktyg använder inte etikettlayouter eller mallar, det skriver "
 "helt enkelt bara ut en ryggetikett på den första positionen på etikettarket."
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:58
+#, c-format
+msgid "Tip: To add today's date you can use the &lt;&lt;today&gt;&gt; syntax"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:73
 #, c-format
@@ -16322,6 +16679,13 @@ msgid ""
 msgstr ""
 "Tips: för att göra underliggande objektfält obligatoriska i ett ramverk, "
 "redigerar du fältet 952 i redigeraren för ramverk."
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:26
+#, c-format
+msgid ""
+"Tip: With overdue notices, be sure to put your branch name in the "
+"description as well so that it will be visible when setting up your triggers."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:25
 #, c-format
@@ -16449,8 +16813,8 @@ msgid "To add a new library:"
 msgstr "För att lägga till ett nytt bibliotek:"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:13
-#, c-format
-msgid "To add a new notice or slip "
+#, fuzzy, c-format
+msgid "To add a new notice or slip"
 msgstr "För att lägga till ett nytt meddelande eller kvittering "
 
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:44
@@ -16513,7 +16877,7 @@ msgid ""
 msgstr ""
 "För att lägga till nyheter för OPAC, personalklient eller lånekvittering:"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:75
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:89
 #, c-format
 msgid "To add patron images in bulk, use the Upload Patron Images Tool"
 msgstr ""
@@ -16693,7 +17057,7 @@ msgstr ""
 "För att skapa en kopia av en budget från ett annat år klickar du på länken "
 "för budgetnamnet i listan med budgetar."
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:51
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:52
 #, c-format
 msgid ""
 "To duplicate a field click on the 'repeat this tag' icon to the right of the "
@@ -16702,7 +17066,7 @@ msgstr ""
 "För att kopiera ett fält klickar du på ikonen 'upprepa denna tagg' till "
 "höger om taggen "
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:54
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:55
 #, c-format
 msgid ""
 "To duplicate a subfield click on the clone icon (to remove a copied field, "
@@ -16712,7 +17076,7 @@ msgstr ""
 "ta bort ett kopierat fält klickar du på ikonen ta bort klon) till höger om "
 "fältet"
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:72
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:73
 #, c-format
 msgid ""
 "To edit a record you can click 'Edit Biblio' from the search results on the "
@@ -16723,7 +17087,7 @@ msgstr ""
 "sökresultaten på katalogiseringssidan eller klicka på knappen Redigera i den "
 "bibliografiska posten och välja 'Redigera post'"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:71
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:85
 #, c-format
 msgid ""
 "To edit a specific section of the patron record (for example the Library Use "
@@ -16746,7 +17110,7 @@ msgstr ""
 "För att redigera eller ta emot ett nummer markerar du bara rutan i kolumnen "
 "'Redigera' och klickar sedan på knappen 'Redigera periodika'."
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:64
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:78
 #, c-format
 msgid ""
 "To edit the entire patron record simply click the 'Edit' button at the top "
@@ -16842,7 +17206,7 @@ msgstr ""
 "tillåter låntagare att reservera innestående titlar. Detta skript bestämmer "
 "vilket bibliotek som ska uppfylla en given reservation."
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:40
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:41
 #, c-format
 msgid ""
 "To get help from the Library of Congress on a Marc tag click the question "
@@ -16910,7 +17274,7 @@ msgstr ""
 "etiketten 'obligatoriskt'. Objektet kan inte sparas innan de obligatoriska "
 "fälten fyllts i."
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:34
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:36
 #, c-format
 msgid ""
 "To mark an item as back at the home branch, check the item in at the home "
@@ -16953,7 +17317,7 @@ msgstr ""
 "skapa en uppsättning visas och du kan där ändra setSpec, setName och "
 "beskrivningar."
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:53
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:54
 #, c-format
 msgid ""
 "To move subfields in to the right order, click the up arrow to the left of "
@@ -16962,7 +17326,7 @@ msgstr ""
 "För att placera underliggande fält i rätt ordning klickar du på uppåtpilen "
 "till vänster om fältet"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:65
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:79
 #, c-format
 msgid ""
 "To only change the patron's password, click the 'Change Password' button "
@@ -17032,7 +17396,7 @@ msgstr ""
 "som termen eller markera alla termer du vill avslå och klicka på 'Avslå' "
 "under tabellen."
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:55
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:56
 #, c-format
 msgid ""
 "To remove a subfield (if there is more than one of the same type), click the "
@@ -17057,7 +17421,7 @@ msgid ""
 "like to renew."
 msgstr "Läs av eller mata in streckkoden på objektet du vill överföra"
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:65
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:68
 #, c-format
 msgid ""
 "To save time you can clone rules from one library to another by choosing the "
@@ -17113,15 +17477,6 @@ msgstr ""
 #, c-format
 msgid "To see all of the titles this tag was added to simply click on the term"
 msgstr "För att se alla titlar med denna tagg klickar du bara på termen"
-
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:5
-#, c-format
-msgid ""
-"To see more search options click [More Options] at the bottom of the page. "
-"This will allow for more advanced boolean searching."
-msgstr ""
-"För att se fler sökalternativ klickar du på [Mer alternativ] längst ner i "
-"sidan. Det ger möjlighet till mer avancerad boolesk sökning."
 
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:50
 #, c-format
@@ -17271,7 +17626,7 @@ msgstr ""
 "kryssrutan bredvid de insticksprogram du vill använda. De två "
 "insticksprogrammen du har att välja mellan är:"
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:58
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:59
 #, c-format
 msgid "To use a plugin click on the icon to the right of the filed "
 msgstr ""
@@ -17459,8 +17814,22 @@ msgstr ""
 "Använd 'Publikt meddelande' för meddelanden du vill visa för låntagarna i "
 "OPAC"
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:62
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:84
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:11
+#, c-format
+msgid ""
+"Use the AdvancedSearchLanguages preference to control which languages appear "
+"in the language pull down filter."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:9
+#, c-format
+msgid ""
+"Use the AdvancedSearchTypes preference to control which tabs show for "
+"limiting to Item Type, Collection Code and/or Shelving location."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:64
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:86
 #, c-format
 msgid ""
 "Use the Description field for the actual value that will be displayed. If "
@@ -17479,17 +17848,17 @@ msgstr ""
 "Använd beskrivningsfältet för att ge en mer detaljerad beskrivning av ditt "
 "ramverk"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:20
-#, c-format
-msgid "Use the name field to expand on your Code"
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:24
+#, fuzzy, c-format
+msgid "Use the name field to expand on your Code "
 msgstr "Använd namnfältet för att expandera koden"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:77
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:97
 #, c-format
 msgid "Used in the claim acquisition module"
 msgstr "Används i modulen Reklamera inköp"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:112
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:244
 #, c-format
 msgid ""
 "Used in the serials module to notify patrons/staff of new issues of a serial "
@@ -17497,22 +17866,35 @@ msgstr ""
 "Används i Periodikamodulen för att meddela låntagare/personal om nya nummer "
 "av periodika "
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:136
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:261
+#, c-format
+msgid ""
+"Used to notify a patron that another patron would like to share a list with "
+"them."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:255
+#, c-format
+msgid ""
+"Used to notify a patron when another patron has accepted their shared list."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:278
 #, c-format
 msgid "Used to print a full slip in circulation"
 msgstr "Används för att skriva ut en komplett kvittering för lån"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:142
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:284
 #, c-format
 msgid "Used to print a holds slip"
 msgstr "Används för att skriva ut en reservationskvittering"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:148
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:290
 #, c-format
 msgid "Used to print a transfer slip"
 msgstr "Används för att skriva ut en överföringskvittering"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:130
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:272
 #, c-format
 msgid "Used to print the quick slip in circulation"
 msgstr "Används för att skriva ut snabbkvitteringen för lån"
@@ -17712,6 +18094,15 @@ msgstr "Visa listor"
 msgid "Visibility "
 msgstr "Synlighet "
 
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:5
+#, fuzzy, c-format
+msgid ""
+"Visit Administration > Global System Preference > Searching to control the "
+"settings for the Koha search."
+msgstr ""
+"Mer &gt; Administration &gt; Globala systeminställningar &gt; Cirkulation "
+"&gt; finescalendar "
+
 #: intranet-tmpl/prog/en/modules/help/cataloguing/moveitem.tt:7
 #, c-format
 msgid ""
@@ -17784,7 +18175,7 @@ msgstr ""
 "När du lägger till en korg bör du ge den ett namn som hjälper dig "
 "identifiera den senare"
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:55
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:57
 #, c-format
 msgid ""
 "When adding a new category you're asked to create at least one authorized "
@@ -17814,7 +18205,7 @@ msgstr ""
 "använda verktyget klickar du på länken 'Kontrollera förfallodatum' i menyn "
 "för periodika."
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:90
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:93
 #, c-format
 msgid ""
 "When an item floats it stays where it was checked in and does not ever "
@@ -17838,7 +18229,7 @@ msgstr ""
 msgid "When creating or editing:"
 msgstr "När du skapar eller redigerar:"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:39
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:67
 #, c-format
 msgid ""
 "When creating your overdue notices there are two tags in addition to the "
@@ -17865,7 +18256,7 @@ msgstr ""
 "När du fyllt i båda fälten trycker du på &lt;Enter&gt;-tangenten för att "
 "spara det nya citatet."
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:63
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:66
 #, c-format
 msgid ""
 "When finished, click 'Add' to save your changes. To modify a rule, create a "
@@ -17896,7 +18287,7 @@ msgstr ""
 "När du genererar rapporten kan du välja mellan att räkna eller summera "
 "värdena."
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:61
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:63
 #, c-format
 msgid ""
 "When items that are on hold are checked in or out the system will remind the "
@@ -17993,12 +18384,12 @@ msgstr ""
 "När detta är klart kan du ladda upp en annan fil eller hantera andra "
 "åtgärder för offline-utlåning."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:94
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:100
-#, c-format
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:178
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:184
+#, fuzzy, c-format
 msgid ""
 "When this notice references the branches table it is referring to the pickup "
-"library information."
+"branch information."
 msgstr ""
 "När detta meddelande använder filialtabellen gäller det information om "
 "hämtningsbibliotek."
@@ -18039,7 +18430,7 @@ msgstr ""
 "När du går till denna sida får du se en lista med de bibliotek och grupper "
 "som redan lagts till i systemet."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:108
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:103
 #, c-format
 msgid ""
 "When you are finished adding items to your basket, click 'Close this "
@@ -18070,7 +18461,7 @@ msgstr ""
 "då välja att spara rapporten genom att klicka på 'Spara' eller kopiera SQL-"
 "koden och redigera den."
 
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:63
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:65
 #, c-format
 msgid ""
 "When you check in an item that has a hold on it the system will ask you to "
@@ -18186,7 +18577,7 @@ msgstr ""
 "Vilket öppnar en lista med objekt där du kan klicka på 'Redigera' till "
 "vänster om det objekt du vill redigera."
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:58
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:79
 #, c-format
 msgid "Which, assuming two items were overdue, would result in a notice like:"
 msgstr ""
@@ -18513,6 +18904,14 @@ msgid ""
 "authorized values of the category SUGGEST_STATUS."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:81
+#, c-format
+msgid ""
+"You can decide if this patron category is blocked from performing actions in "
+"the OPAC if their card is expired using the next option. By default it will "
+"follow the rule set in the BlockExpiredPatronOpacActions preference"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:5
 #, c-format
 msgid ""
@@ -18584,7 +18983,7 @@ msgstr ""
 "längst upp på sidan. Du kan söka efter vilken del som helst av namnet eller "
 "ISSN."
 
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:71
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:74
 #, c-format
 msgid ""
 "You can set a default maximum number of checkouts and hold policy that will "
@@ -18666,7 +19065,7 @@ msgstr ""
 "fält från låntagarposten anger du fältnamnen på följande sätt - &lt;"
 "firstname&gt;"
 
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:117
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:249
 #, c-format
 msgid ""
 "You have the option to select the 'Routing List' notice when creating a new "
@@ -18743,7 +19142,7 @@ msgstr ""
 "Klicka på 'Lägg till objekt' för att öppna ett sökfönster där du kan hitta "
 "de objekt du vill lägga till i satsen."
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:109
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:123
 #, c-format
 msgid "You will be brought to your new patron"
 msgstr "Den nya låntagaren kommer att öppnas"
@@ -18968,7 +19367,7 @@ msgstr ""
 "Du kommer att lägga märke till att poster som redan importerats anger detta "
 "under 'Status'"
 
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:92
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:106
 #, c-format
 msgid ""
 "You will then be presented with a pop up window asking which one of your "
@@ -19018,7 +19417,7 @@ msgstr ""
 msgid "Your added items will appear above the add form once submitted"
 msgstr "De objekt du lagt till visas ovanför formuläret när de skickats"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:110
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:105
 #, c-format
 msgid ""
 "Your completed order will be listed on the Basket Grouping page for printing "
@@ -19042,7 +19441,7 @@ msgstr ""
 "Dina objekt kommer även att visas under den bibliografiska informationen i "
 "skärmen med bibliografiska poster."
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:68
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:70
 #, c-format
 msgid ""
 "Your new category and value will appear on the list of Authorized Values"
@@ -19132,42 +19531,42 @@ msgstr "alla bibliotek, samma låntagartyp, samma objekttyp"
 msgid "and "
 msgstr "och "
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:15
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:21
 #, c-format
 msgid "aud:a Preschool"
 msgstr "aud:a Preschool"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:16
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:22
 #, c-format
 msgid "aud:b Primary"
 msgstr "aud:b Primary"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:17
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:23
 #, c-format
 msgid "aud:c Pre-Adolescent"
 msgstr "aud:c Pre-Adolescent"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:18
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:24
 #, c-format
 msgid "aud:d Adolescent"
 msgstr "aud:d Adolescent"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:19
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:25
 #, c-format
 msgid "aud:e Adult"
 msgstr "aud:e Adult"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:20
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:26
 #, c-format
 msgid "aud:f Specialized"
 msgstr "aud:f Specialized"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:21
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:27
 #, c-format
 msgid "aud:g General"
 msgstr "aud:g General"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:22
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:28
 #, c-format
 msgid "aud:j Juvenile"
 msgstr "aud:j Juvenile"
@@ -19187,7 +19586,7 @@ msgstr "batch_upload_patron_images "
 msgid "be filled in in order to save the new quote."
 msgstr "ifyllda för att spara det nya citatet."
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:30
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:36
 #, c-format
 msgid "bio:b Biography"
 msgstr "bio:b Biography"
@@ -19289,112 +19688,112 @@ msgstr "create_reports "
 msgid "create_subscription "
 msgstr "create_subscription "
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:52
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:58
 #, c-format
 msgid "ctype:a Abstracts/summaries"
 msgstr "ctype:a Abstracts/summaries"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:53
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:59
 #, c-format
 msgid "ctype:b Bibliographies "
 msgstr "ctype:b Bibliographies "
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:54
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:60
 #, c-format
 msgid "ctype:c Catalogs"
 msgstr "ctype:c Catalogs"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:55
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:61
 #, c-format
 msgid "ctype:d Dictionaries"
 msgstr "ctype:d Dictionaries"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:56
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:62
 #, c-format
 msgid "ctype:e Encyclopedias"
 msgstr "ctype:e Encyclopedias"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:57
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:63
 #, c-format
 msgid "ctype:f Handbooks"
 msgstr "ctype:f Handbooks"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:58
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:64
 #, c-format
 msgid "ctype:g Legal articles"
 msgstr "ctype:g Legal articles"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:59
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:65
 #, c-format
 msgid "ctype:i Indexes "
 msgstr "ctype:i Indexes "
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:60
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:66
 #, c-format
 msgid "ctype:j Patent document"
 msgstr "ctype:j Patent document"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:61
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:67
 #, c-format
 msgid "ctype:k Discographies"
 msgstr "ctype:k Discographies"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:62
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:68
 #, c-format
 msgid "ctype:l Legislation"
 msgstr "ctype:l Legislation"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:63
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:69
 #, c-format
 msgid "ctype:m Theses"
 msgstr "ctype:m Theses"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:64
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:70
 #, c-format
 msgid "ctype:n Surveys"
 msgstr "ctype:n Surveys"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:65
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:71
 #, c-format
 msgid "ctype:o Reviews "
 msgstr "ctype:o Reviews "
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:66
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:72
 #, c-format
 msgid "ctype:p Programmed texts"
 msgstr "ctype:p Programmed texts"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:67
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:73
 #, c-format
 msgid "ctype:q Filmographies"
 msgstr "ctype:q Filmographies"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:68
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:74
 #, c-format
 msgid "ctype:r Directories"
 msgstr "ctype:r Directories"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:69
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:75
 #, c-format
 msgid "ctype:s Statistics"
 msgstr "ctype:s Statistics"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:70
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:76
 #, c-format
 msgid "ctype:t Technical reports"
 msgstr "ctype:t Technical reports"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:71
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:77
 #, c-format
 msgid "ctype:v Legal cases and case notes "
 msgstr "ctype:v Legal cases and case notes "
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:72
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:78
 #, c-format
 msgid "ctype:w Law reports and digests"
 msgstr "ctype:w Law reports and digests"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:73
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:79
 #, c-format
 msgid "ctype:z Treaties"
 msgstr "ctype:z Treaties"
@@ -19527,12 +19926,12 @@ msgstr "export_catalog "
 msgid "fast_cataloging "
 msgstr "fast_cataloging "
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:29
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:35
 #, c-format
 msgid "fic:0 Non fiction"
 msgstr "fic:0 Non fiction"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:28
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:34
 #, c-format
 msgid "fic:1 Fiction"
 msgstr "fic:1 Fiction"
@@ -19708,47 +20107,47 @@ msgstr "gå direkt till återlämning med Alt+R"
 msgid "jump to the checkout with Alt+U "
 msgstr "gå direkt till utlåning med Alt+U "
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:45
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:51
 #, c-format
 msgid "l-format:co CD Software"
 msgstr "l-format:co CD Software"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:46
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:52
 #, c-format
 msgid "l-format:cr Website"
 msgstr "l-format:cr Website"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:40
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:46
 #, c-format
 msgid "l-format:fk Braille"
 msgstr "l-format:fk Braille"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:41
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:47
 #, c-format
 msgid "l-format:sd CD audio"
 msgstr "l-format:sd CD audio"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:42
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:48
 #, c-format
 msgid "l-format:ss Cassette recording"
 msgstr "l-format:ss Cassette recording"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:38
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:44
 #, c-format
 msgid "l-format:ta Regular print"
 msgstr "l-format:ta Regular print"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:39
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:45
 #, c-format
 msgid "l-format:tb Large print"
 msgstr "l-format:tb Large print"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:44
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:50
 #, c-format
 msgid "l-format:vd DVD video / Videodisc"
 msgstr "l-format:vd DVD video / Videodisc"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:43
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:49
 #, c-format
 msgid "l-format:vf VHS tape / Videocassette"
 msgstr "l-format:vf VHS tape / Videocassette"
@@ -19797,8 +20196,8 @@ msgstr "hantering "
 #: intranet-tmpl/prog/en/modules/help/admin/admin-home.tt:33
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:50
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:61
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:93
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:136
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:95
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:139
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:24
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:37
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -19815,7 +20214,7 @@ msgstr "hantering "
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:37
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/transport-cost-matrix.tt:13
-#: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:89
+#: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:90
 #: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:36
 #: intranet-tmpl/prog/en/modules/help/admin/koha2marclinks.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/oai_sets.tt:32
@@ -19824,7 +20223,7 @@ msgstr "hantering "
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
 #: intranet-tmpl/prog/en/modules/help/admin/checkmarc.tt:9
 #: intranet-tmpl/prog/en/modules/help/admin/auth_subfields_structure.tt:66
-#: intranet-tmpl/prog/en/modules/help/admin/currency.tt:11
+#: intranet-tmpl/prog/en/modules/help/admin/currency.tt:13
 #: intranet-tmpl/prog/en/modules/help/authorities/authorities-home.tt:17
 #: intranet-tmpl/prog/en/modules/help/authorities/authorities.tt:29
 #: intranet-tmpl/prog/en/modules/help/authorities/merge.tt:13
@@ -19844,7 +20243,7 @@ msgstr "hantering "
 #: intranet-tmpl/prog/en/modules/help/cataloguing/moveitem.tt:13
 #: intranet-tmpl/prog/en/modules/help/cataloguing/linkitem.tt:30
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbooks.tt:33
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:92
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:93
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:77
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:61
 #: intranet-tmpl/prog/en/modules/help/tools/quotes-upload.tt:43
@@ -19860,12 +20259,12 @@ msgstr "hantering "
 #: intranet-tmpl/prog/en/modules/help/tools/tools-home.tt:7
 #: intranet-tmpl/prog/en/modules/help/tools/inventory.tt:19
 #: intranet-tmpl/prog/en/modules/help/tools/scheduler.tt:26
-#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:44
+#: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:48
 #: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:41
 #: intranet-tmpl/prog/en/modules/help/tools/export.tt:62
 #: intranet-tmpl/prog/en/modules/help/tools/modborrowers.tt:17
 #: intranet-tmpl/prog/en/modules/help/tools/stage-marc-import.tt:30
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:154
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:296
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:13
 #: intranet-tmpl/prog/en/modules/help/acqui/supplier.tt:54
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
@@ -19885,12 +20284,12 @@ msgstr "hantering "
 #: intranet-tmpl/prog/en/modules/help/acqui/parcel.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/neworderempty.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersuggestion.tt:17
-#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:114
+#: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:109
 #: intranet-tmpl/prog/en/modules/help/acqui/orderreceive.tt:21
 #: intranet-tmpl/prog/en/modules/help/catalogue/moredetail.tt:21
 #: intranet-tmpl/prog/en/modules/help/catalogue/issuehistory.tt:9
 #: intranet-tmpl/prog/en/modules/help/catalogue/detail.tt:7
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:75
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:81
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:70
 #: intranet-tmpl/prog/en/modules/help/tags/review.tt:23
 #: intranet-tmpl/prog/en/modules/help/tags/list.tt:9
@@ -19898,7 +20297,7 @@ msgstr "hantering "
 #: intranet-tmpl/prog/en/modules/help/circ/renew.tt:11
 #: intranet-tmpl/prog/en/modules/help/circ/offline.tt:35
 #: intranet-tmpl/prog/en/modules/help/circ/transferstoreceive.tt:11
-#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:75
+#: intranet-tmpl/prog/en/modules/help/circ/returns.tt:77
 #: intranet-tmpl/prog/en/modules/help/circ/waitingreserves.tt:9
 #: intranet-tmpl/prog/en/modules/help/circ/selectbranchprinter.tt:11
 #: intranet-tmpl/prog/en/modules/help/circ/branchoverdues.tt:11
@@ -19913,7 +20312,7 @@ msgstr "hantering "
 #: intranet-tmpl/prog/en/modules/help/plugins/plugins-upload.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:89
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:11
-#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:112
+#: intranet-tmpl/prog/en/modules/help/members/moremember.tt:126
 #: intranet-tmpl/prog/en/modules/help/members/statistics.tt:7
 #: intranet-tmpl/prog/en/modules/help/members/readingrec.tt:11
 #: intranet-tmpl/prog/en/modules/help/members/routing-lists.tt:9
@@ -19921,6 +20320,7 @@ msgstr "hantering "
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:485
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:51
 #: intranet-tmpl/prog/en/modules/help/members/member-password.tt:14
+#: intranet-tmpl/prog/en/modules/help/members/purchase-suggestions.tt:11
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:17
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:22
 #: intranet-tmpl/prog/en/modules/help/members/paycollect.tt:60
@@ -20012,12 +20412,12 @@ msgstr "moderate_tags "
 msgid "modify_holds_priority "
 msgstr "modify_holds_priority "
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:32
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:38
 #, c-format
 msgid "mus:i Non-musical recording"
 msgstr "mus:i Non-musical recording"
 
-#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:31
+#: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:37
 #, c-format
 msgid "mus:j Musical recording"
 msgstr "mus:j Musical recording"
@@ -20215,7 +20615,7 @@ msgstr "superlibrarian "
 msgid "superserials "
 msgstr "periodika "
 
-#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:45
+#: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:46
 #, c-format
 msgid ""
 "system preference. If you have this preference set to not allow catalogers "
@@ -20335,3 +20735,4 @@ msgstr "writeoff"
 #, c-format
 msgid "y - Koha item type"
 msgstr "y - Koha objekttyp"
+

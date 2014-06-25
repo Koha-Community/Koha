@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOHA3 OPAC\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-05 21:51-0300\n"
-"PO-Revision-Date: 2014-05-22 05:25+0000\n"
-"Last-Translator: Josef <josef.moravec@knihovna-uo.cz>\n"
+"POT-Creation-Date: 2014-06-15 17:57-0300\n"
+"PO-Revision-Date: 2014-06-20 08:59+0000\n"
+"Last-Translator: siracide <paul.vilhan@gmail.com>\n"
 "Language-Team: Paul\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.0\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1400736356.0\n"
+"X-POOTLE-MTIME: 1403254784.0\n"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:110
 #, c-format
@@ -28,29 +28,6 @@ msgstr "#záznam"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:742
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 msgstr "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
-
-#. %1$s:  END 
-#. %2$s:  END 
-#. %3$s:  END 
-#. %4$s:  END 
-#. %5$s:  BLOCK language 
-#. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s:  CASE 
-#. %12$s:  lang 
-#. %13$s:  END 
-#. %14$s:  END 
-#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
-#, c-format, c-format
-msgid ""
-"%s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]Greek "
-"(to 1453) %s%s %s %s "
-msgstr ""
-"%s %s %s %s %s %s %s %%]hebrejsky %s %%]arabsky %s %%]grécky (moderná) %s %%"
-"]grécky (do 1453) %s%s %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -117,6 +94,29 @@ msgid ""
 msgstr ""
 "%s %s %s %s %s %s %s%s%sKoha online%s katalóg &rsaquo; Rezervy kurzov pre %s "
 "%s "
+
+#. %1$s:  END 
+#. %2$s:  END 
+#. %3$s:  END 
+#. %4$s:  END 
+#. %5$s:  BLOCK language 
+#. %6$s:  SWITCH lang 
+#. %7$s:  CASE ['heb'] 
+#. %8$s:  CASE ['ara'] 
+#. %9$s:  CASE ['gre'] 
+#. %10$s:  CASE ['grc'] 
+#. %11$s:  CASE 
+#. %12$s:  lang 
+#. %13$s:  END 
+#. %14$s:  END 
+#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
+#, c-format
+msgid ""
+"%s %s %s %s %s %s %sHebrew %sArabic %sGreek (modern) %sGreek (to 1453) %s%s "
+"%s %s "
+msgstr ""
+"%s %s %s %s %s %s %shebrejsky %sarabsky %sgrécky (moderná) %sgrécky (do "
+"1453) %s%s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
@@ -203,7 +203,7 @@ msgstr ""
 #. %3$s:  IF ( loggedinusername ) 
 #. %4$s:  IF ( subscription_LOO.hasalert ) 
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:116
-#, c-format, c-format
+#, c-format
 msgid "%s %s %s %s You have subscribed to email notification on new issues "
 msgstr "%s %s %s %s Zapísali ste sa do E-mailových oznámení o nových číslach "
 
@@ -238,8 +238,8 @@ msgid ""
 "%s %s %s %s%s%s%sKoha online%s catalog &rsaquo; %sAuthority search result"
 "%sNo results found%s %s "
 msgstr ""
-"%s %s %s %s%s%s%sKoha online%s katalóg &rsaquo; %sVýsledok hľadania autorít%"
-"sNenašli sa výsledky%s %s "
+"%s %s %s %s%s%s%sKoha online%s katalóg &rsaquo; %sVýsledok hľadania autorít"
+"%sNenašli sa výsledky%s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  SET TagsShowEnabled = ( TagsEnabled && TagsShowOnList ) 
@@ -261,7 +261,6 @@ msgid ""
 "%s%s "
 msgstr ""
 "%s %s %s %s%s%s%sKoha online%s katalóg &rsaquo; %sObsah %s%sMoje zoznamy%s%s "
-""
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE AuthorisedValues 
@@ -286,7 +285,7 @@ msgstr "%s %s %s %s%s%sKoha online%s katalóg &rsaquo; Kurzy %s "
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #. %9$s:  INCLUDE 'calendar.inc' 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:1
-#, c-format, c-format
+#, c-format
 msgid "%s %s %s %s%s%sKoha online%s catalog &rsaquo; Placing a hold %s %s "
 msgstr "%s %s %s %s%s%sKoha online%s katalóg &rsaquo; Rezervovanie %s %s "
 
@@ -299,7 +298,7 @@ msgstr "%s %s %s %s%s%sKoha online%s katalóg &rsaquo; Rezervovanie %s %s "
 #. %7$s:  END 
 #. %8$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:1
-#, c-format, c-format
+#, c-format
 msgid "%s %s %s %s%s%sKoha online%s catalog &rsaquo; Your checkout history %s "
 msgstr ""
 "%s %s %s %s%s%sKoha online%s katalóg &rsaquo; Výpis vašich výpožičiek %s "
@@ -359,7 +358,7 @@ msgstr "%s %s %s Exemplár čaká v "
 #. %4$s:  END 
 #. %5$s:  INCLUDE shelfbrowser tab='otherholdings' 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1078
-#, c-format, c-format
+#, c-format
 msgid "%s %s %s No other items. %s %s "
 msgstr "%s %s %s Žiadne ďalšie exempláre. %s %s "
 
@@ -380,7 +379,7 @@ msgstr "%s %s %s Nevypožičateľný %s"
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:1
-#, c-format, c-format
+#, c-format
 msgid "%s %s %s%s%s%sKoha %s &rsaquo; Self checkout "
 msgstr "%s %s %s%s%s%sKoha %s &rsaquo; Samoobslužná výpožička "
 
@@ -553,7 +552,7 @@ msgstr "%s %s %s%s%sKoha online%s katalóg &rsaquo; Rozšírené hľadanie %s "
 #. %6$s:  END 
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-tags_subject.tt:1
-#, c-format, c-format
+#, c-format
 msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; ISBD %s "
 msgstr "%s %s %s%s%sKoha online%s katalóg &rsaquo; ISBD %s "
 
@@ -696,7 +695,7 @@ msgstr ""
 #. %3$s:  END 
 #. %4$s:  END 
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:127
-#, c-format, c-format
+#, c-format
 msgid ""
 "%s %s You must log in if you want to subscribe to email notification on new "
 "issues %s %s "
@@ -972,7 +971,7 @@ msgstr "%s %s%s%sKoha online%s katalóg &rsaquo; Pridajte do Vášho zoznamu "
 #. %5$s:  END 
 #. %6$s:  title |html 
 #: opac-tmpl/prog/en/modules/opac-review.tt:1
-#, c-format, c-format
+#, c-format
 msgid "%s %s%s%sKoha online%s catalog &rsaquo; Comments on %s "
 msgstr "%s %s%s%sKoha online%s katalóg &rsaquo; Recenzie o %s "
 
@@ -983,7 +982,7 @@ msgstr "%s %s%s%sKoha online%s katalóg &rsaquo; Recenzie o %s "
 #. %5$s:  END 
 #. %6$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:1
-#, c-format, c-format
+#, c-format
 msgid "%s %s%s%sKoha online%s catalog &rsaquo; ILS-DI %s "
 msgstr "%s %s%s%sKoha online%s katalóg &rsaquo; ILS-DI %s "
 
@@ -1027,7 +1026,7 @@ msgstr "Účet na meno %s %s"
 #. %12$s:  END 
 #. %13$s:  END 
 #: opac-tmpl/prog/en/includes/authorities-search-results.inc:35
-#, c-format, c-format
+#, c-format
 msgid ""
 "%s %s(Earlier heading) %s(Later heading) %s(Acronym) %s(Musical composition) "
 "%s(Broader heading) %s(Narrower heading) %s(Immediate parent body) %s%s(%s) "
@@ -1074,21 +1073,21 @@ msgstr "%s %sPoznámka: toto okno sa o 5 sekúnd automaticky zavrie%s "
 #. %15$s: - IF ACCOUNT_LINE.description 
 #. %16$s:  ACCOUNT_LINE.description 
 #. %17$s:  END 
-#. %18$s:  IF line.title 
-#. %19$s:  line.title |html_entity 
+#. %18$s:  IF ACCOUNT_LINE.title 
+#. %19$s:  ACCOUNT_LINE.title 
 #. %20$s:  END 
 #: opac-tmpl/prog/en/modules/opac-account.tt:42
-#, c-format, c-format
+#, c-format
 msgid ""
 "%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
 "via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
 "%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s %s"
 "(%s)%s "
 msgstr ""
-"%s %sZaplatené, ďakujeme %sZaplatené, ďakujeme (hotovosť cez SIP2) %"
-"sZaplatené, ďakujeme (VISA cez SIP2) %sZaplatené, ďakujeme (kreditná karta "
-"cez SIP2)%sNová karta %sPokuta %sPoplatok za vedenie účtu %sRozličné %"
-"sStratený exemplár %sOdpísané %s%s %s %s, %s%s %s(%s)%s "
+"%s %sZaplatené, ďakujeme %sZaplatené, ďakujeme (hotovosť cez SIP2) "
+"%sZaplatené, ďakujeme (VISA cez SIP2) %sZaplatené, ďakujeme (kreditná karta "
+"cez SIP2)%sNová karta %sPokuta %sPoplatok za vedenie účtu %sRozličné "
+"%sStratený exemplár %sOdpísané %s%s %s %s, %s%s %s(%s)%s "
 
 #. %1$s:  IF (render=='standalone') 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -1383,7 +1382,7 @@ msgstr "%s Nenašli sa žiadne výsledky v katalógu %s. "
 #. %2$s:  ELSIF ( ISSUE.too_soon ) 
 #. %3$s:  ISSUE.soonestrenewdate 
 #: opac-tmpl/prog/en/modules/opac-user.tt:226
-#, c-format, c-format
+#, c-format
 msgid "%s Not renewable %s No renewal before %s "
 msgstr "%s Nepredĺžiteľný %s Bez predĺženia pred %s "
 
@@ -1526,8 +1525,8 @@ msgid ""
 "again. %s "
 msgstr ""
 "%s Knižnica znemožnila čitateľom vytvárať nové verejné zoznamy. Ak svoj "
-"zoznam vytvoríte ako súkromný, už ho viac nebudete môcť zmeniť na verejný. %"
-"s "
+"zoznam vytvoríte ako súkromný, už ho viac nebudete môcť zmeniť na verejný. "
+"%s "
 
 #. %1$s:  IF holds_count.defined 
 #. %2$s:  holds_count 
@@ -1734,11 +1733,11 @@ msgstr "%s od %s%s "
 #. %4$s:  END 
 #. %5$s:  BLOCK language 
 #. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s: ERROR
+#. %7$s:  CASE ['en', 'eng'] 
+#. %8$s:  CASE ['fr', 'fre'] 
+#. %9$s:  CASE ['it', 'ita'] 
+#. %10$s:  CASE ['de', 'ger', 'deu'] 
+#. %11$s:  CASE ['es', 'spa'] 
 #. %12$s:  CASE 
 #. %13$s:  lang 
 #. %14$s:  END 
@@ -1746,11 +1745,10 @@ msgstr "%s od %s%s "
 #: opac-tmpl/prog/en/includes/opac-authorities.inc:53
 #, c-format
 msgid ""
-"%s%s %s %s %s %s %s %%]English %s %%]French %s %%]Italian %s %%]German %s %%]"
-"Spanish %s%s %s %s "
+"%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
 msgstr ""
-"%s%s %s %s %s %s %s %%]anglicky %s %%]francúzsky %s %%]taliansky %s %%]"
-"nemecky %s %%]španielsky %s%s %s %s "
+"%s%s %s %s %s %s %sanglicky %sfrancúzsky %staliansky %snemecky %sšpanielsky "
+"%s%s %s %s "
 
 #. %1$s:  IF ( itemsloo.ITEM_RESULTS ) 
 #. %2$s:  FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS 
@@ -1820,7 +1818,7 @@ msgstr "%s%s &rsaquo; Samoobslužná výpožička"
 #. %6$s:  itemloop.size || 0 
 #. %7$s:  END 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:949
-#, c-format, c-format
+#, c-format
 msgid "%s%s holdings%sHoldings%s%s ( %s )%s"
 msgstr "%s%s exempláre%sExempláre%s%s ( %s )%s"
 
@@ -1886,7 +1884,7 @@ msgstr "%s%s%s%sKoha online%s katalóg &rsaquo; Váš zoznam sa odosiela %s "
 #. %5$s:  END 
 #. %6$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-shareshelf.tt:1
-#, c-format, c-format
+#, c-format
 msgid "%s%s%s%sKoha online%s catalog &rsaquo; Share a list %s "
 msgstr "%s%s%s%sKoha online%s katalóg &rsaquo; Zdieľať zoznam %s "
 
@@ -1939,7 +1937,7 @@ msgstr ""
 #. %6$s:  IF ( shelveslooppri.viewcategory2 ) 
 #. %7$s:  END 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:657
-#, c-format, c-format
+#, c-format
 msgid "%s%sPrivate%sShared%s%s %sPublic%s "
 msgstr "%s%sSúkromný%sZdieľaný%s%s %sVerejný%s "
 
@@ -2141,7 +2139,7 @@ msgstr ""
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:173
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:172
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 msgstr "%sTyp exemplára %sZbierka %sUmiestnenie v polici %sNiečo iné %s "
@@ -2929,8 +2927,8 @@ msgstr "&nbsp;&nbsp; %s / 5 (celkom %s hodnotení)"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Author phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Autor (presne)"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:124
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:126
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:123
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:125
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Call number"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Signatúra"
@@ -2950,12 +2948,12 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Názov konferencie (presne)"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Corporate name"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Názov spoločnosti"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:122
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
@@ -3211,8 +3209,7 @@ msgstr ""
 #, c-format
 msgid ", you cannot place holds because your library card has expired."
 msgstr ""
-", nemôžete rezervovať, pretože platnosť vášho čitateľského preukazu "
-"vypršala."
+", nemôžete rezervovať, pretože platnosť vášho čitateľského preukazu vypršala."
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:138
 #, c-format
@@ -3250,7 +3247,7 @@ msgstr "-- Vybrať --"
 msgid "-- Choose format --"
 msgstr "-- Vyberte formát --"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:313
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
 #, c-format
 msgid "-- none -- "
 msgstr "-- žiaden -- "
@@ -3657,7 +3654,7 @@ msgstr "Absorbed:"
 msgid "Abstract: "
 msgstr "Abstrakt: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "Abstrakty/súhrny"
@@ -3717,7 +3714,7 @@ msgid "Add %s items to %s"
 msgstr "Vložiť %s exemplár(ov) do %s"
 
 #. A name=ButtonPlus
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:136
 msgid "Add another field"
 msgstr "Pridať ďalšie pole"
 
@@ -3785,12 +3782,12 @@ msgstr "Pridané %s %s od "
 msgid "Additional authors:"
 msgstr "Ďalší autori:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:257
 #, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "Doplňujúce typy obsahu pre knihy/tlačoviny"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
 #, c-format
 msgid "Adolescent"
 msgstr "Dospievajúci"
@@ -3805,7 +3802,7 @@ msgstr "Dospievajúci; "
 msgid "Adressebøker"
 msgstr "Adressebøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
 #, c-format
 msgid "Adult"
 msgstr "Dospelý"
@@ -3840,7 +3837,7 @@ msgstr "Všetky typy exemplárov"
 #: opac-tmpl/prog/en/includes/masthead.inc:89
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:18
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:108
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:301
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:300
 #, c-format
 msgid "All libraries"
 msgstr "Všetky knižnice"
@@ -4005,17 +4002,17 @@ msgstr "Antologi"
 msgid "Any"
 msgstr "Ľubovoľné"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
 #, c-format
 msgid "Any audience"
 msgstr "Akákoľvek veková skupina"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:233
 #, c-format
 msgid "Any content"
 msgstr "Akýkoľvek obsah"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:243
 #, c-format
 msgid "Any format"
 msgstr "Akýkoľvek formát"
@@ -4374,7 +4371,7 @@ msgstr "Späť k výsledkom"
 msgid "Back to the results search list"
 msgstr "Späť do zoznamu výsledkov hľadania"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:131
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:130
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:480
 #: opac-tmpl/prog/en/modules/opac-user.tt:170
 #: opac-tmpl/prog/en/modules/opac-user.tt:336
@@ -4429,7 +4426,7 @@ msgstr "Bibliografier"
 msgid "Bibliografiske data"
 msgstr "Bibliografiske data"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
 #, c-format
 msgid "Bibliographies"
 msgstr "Bibliografie"
@@ -4510,7 +4507,7 @@ msgid "Biografier"
 msgstr "Biografier"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:52
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
 #, c-format
 msgid "Biography"
 msgstr "Biografie"
@@ -4556,7 +4553,7 @@ msgstr "Kniha"
 msgid "Book reviews by critics ( XXX )"
 msgstr "Recenzie kníh od kritikov ( XXX )"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:247
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
 #, c-format
 msgid "Braille"
 msgstr "Braillovým písmom"
@@ -4580,7 +4577,7 @@ msgstr "Krátky výpis"
 #: opac-tmpl/prog/en/includes/masthead.inc:135
 #, c-format
 msgid "Browse by hierarchy"
-msgstr "Prezerať podľa postupnosti"
+msgstr "Prezerať podľa hierarchie"
 
 #: opac-tmpl/prog/en/modules/opac-browser.tt:13
 #, c-format
@@ -4603,12 +4600,12 @@ msgstr "Náhľad do police"
 msgid "CAS"
 msgstr "CAS"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:248
 #, c-format
 msgid "CD audio"
 msgstr "CD audio"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
 #, c-format
 msgid "CD software"
 msgstr "CD Software"
@@ -4761,7 +4758,7 @@ msgstr "Košík"
 msgid "Cas login"
 msgstr "CAS prihlásenie"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
 #, c-format
 msgid "Cassette recording"
 msgstr "Kazetový záznam"
@@ -4776,7 +4773,7 @@ msgstr "Obsadenie: "
 msgid "Catalog searches"
 msgstr "Hľadania v katalógu"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
 #, c-format
 msgid "Catalogs"
 msgstr "Katalógy"
@@ -5285,7 +5282,7 @@ msgstr "Momentálne pripojenie"
 msgid "Curriculum"
 msgstr "Životopis"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "DVD video / Videodisk"
@@ -5522,7 +5519,7 @@ msgstr "Dia"
 msgid "Dias"
 msgstr "Dias"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
 #, c-format
 msgid "Dictionaries"
 msgstr "Slovníky"
@@ -5548,12 +5545,12 @@ msgstr "Dikt"
 msgid "Diorama"
 msgstr "Diorama"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
 #, c-format
 msgid "Directories"
 msgstr "Adresáre"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
 #, c-format
 msgid "Discographies"
 msgstr "Diskografie"
@@ -5817,7 +5814,7 @@ msgstr "Emne(r): "
 msgid "Empty and close"
 msgstr "Vyprázdniť a zatvoriť"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
 #, c-format
 msgid "Encyclopedias "
 msgstr "Encyklopédie "
@@ -5838,8 +5835,8 @@ msgid "Enter a new purchase suggestion"
 msgstr "Zadajte nový návrh na nákup"
 
 #. INPUT type=text name=q
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:133
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:163
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:132
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
 msgid "Enter search terms"
 msgstr "Zadajte hľadané výrazy"
 
@@ -6052,7 +6049,7 @@ msgstr "Žena:"
 msgid "Festskrift "
 msgstr "Festskrift "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
 #, c-format
 msgid "Fiction"
 msgstr "Beletria"
@@ -6093,7 +6090,7 @@ msgstr "Filmlydspor"
 msgid "Filmografier"
 msgstr "Filmografier"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
 #, c-format
 msgid "Filmographies"
 msgstr "Filmografie"
@@ -6164,7 +6161,7 @@ msgstr "Flykart"
 msgid "Font"
 msgstr "Písmo"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
 #, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -6319,7 +6316,7 @@ msgstr "Úplný výpis"
 msgid "Fysiske bøker"
 msgstr "Fysiske bøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
 #, c-format
 msgid "General"
 msgstr "Všeobecne"
@@ -6462,7 +6459,7 @@ msgstr "Grammofonplate"
 msgid "Groups"
 msgstr "Skupiny"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
 #, c-format
 msgid "Groups of libraries"
 msgstr "Skupiny knižníc"
@@ -6477,7 +6474,7 @@ msgstr "Gått inn i: "
 msgid "HELP"
 msgstr "POMOC"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
 #, c-format
 msgid "Handbooks"
 msgstr "Príručky"
@@ -6668,7 +6665,7 @@ msgstr "Náhľad ISBD"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:60
 #: opac-tmpl/prog/en/includes/masthead.inc:62
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:129
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:128
 #: opac-tmpl/prog/en/modules/opac-results.tt:409
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:147
 #: opac-tmpl/prog/en/modules/opac-basket.tt:208
@@ -6775,7 +6772,8 @@ msgstr ""
 #, c-format
 msgid ""
 "If you don't have a library card, stop by your local library to sign up."
-msgstr "Ak ešte nemáte čitateľský preukaz, príďte sa zaregistrovať do knižnice."
+msgstr ""
+"Ak ešte nemáte čitateľský preukaz, príďte sa zaregistrovať do knižnice."
 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:93
 #, c-format
@@ -6868,7 +6866,7 @@ msgstr "Neúplný obsah:"
 msgid "Indexed in:"
 msgstr "Indexované v:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
 #, c-format
 msgid "Indexes"
 msgstr "Indexy"
@@ -7040,7 +7038,7 @@ msgstr "Jún"
 msgid "June"
 msgstr "Jún"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:230
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
 #, c-format
 msgid "Juvenile"
 msgstr "Mladistvý"
@@ -7191,13 +7189,13 @@ msgstr "LCCN: %s "
 msgid "Lagringsbrikke"
 msgstr "Lagringsbrikke"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:201
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:200
 #, c-format
 msgid "Language"
 msgstr "Jazyk"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:137
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:203
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:202
 #, c-format
 msgid "Language: "
 msgstr "Jazyk: "
@@ -7207,7 +7205,7 @@ msgstr "Jazyk: "
 msgid "Languages:&nbsp;"
 msgstr "Jazyky:&nbsp;"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
 #, c-format
 msgid "Large print"
 msgstr "Veľké písmo"
@@ -7222,22 +7220,22 @@ msgstr "Posledný"
 msgid "Last location"
 msgstr "Posledná lokácia"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
 #, c-format
 msgid "Law reports and digests"
 msgstr "Právne predpisy a súhrny"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
 #, c-format
 msgid "Legal articles"
 msgstr "Právnické články"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "Právne kázusy a procesné poznámky"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
 #, c-format
 msgid "Legislation"
 msgstr "Legislatíva"
@@ -7292,13 +7290,13 @@ msgstr "Knižnica : "
 msgid "Library catalog"
 msgstr "Knižničný katalóg"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:299
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:298
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
 #, c-format
 msgid "Library:"
 msgstr "Knižnica:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:187
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:186
 #, c-format
 msgid "Limit to any of the following:"
 msgstr "Obmedziť na jedno z nasledujúcich:"
@@ -7407,7 +7405,7 @@ msgstr "Lokácia"
 msgid "Location (Status)"
 msgstr "Lokácia (Stav)"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:297
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:296
 #, c-format
 msgid "Location and availability: "
 msgstr "Lokácia a dostupnosť: "
@@ -7953,7 +7951,7 @@ msgstr "MusicAlbum"
 msgid "MusicGroup"
 msgstr "MusicGroup"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
 #, c-format
 msgid "Musical recording"
 msgstr "Hudobná nahrávka"
@@ -8198,7 +8196,7 @@ msgstr "Nedá sa vypožičať:"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:40
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:132
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:205
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:204
 #, c-format
 msgid "No limit"
 msgstr "Bez obmedzenia"
@@ -8263,12 +8261,12 @@ msgstr "Nebola určená žiadna menovka."
 msgid "No tags from this library for this title."
 msgstr "Táto knižnica nemá žiadne menovky k tomuto titulu."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
 #, c-format
 msgid "Non fiction"
 msgstr "Ne-beletria"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:239
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
 #, c-format
 msgid "Non-musical recording"
 msgstr "Nehudobná nahrávka"
@@ -8446,7 +8444,7 @@ msgstr "Numeriske data"
 msgid "OK"
 msgstr "OK"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:310
 #, c-format
 msgid "OR"
 msgstr "ALEBO"
@@ -8500,7 +8498,7 @@ msgstr "Ďalšie detaily: "
 msgid "Online tjeneste"
 msgstr "Online tjeneste"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:319
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:318
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr "Iba exempláre momentálne dostupné na požičanie alebo konzultáciu"
@@ -8699,7 +8697,7 @@ msgstr "Heslo:"
 msgid "Password: %s "
 msgstr "Heslo: %s "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
 #, c-format
 msgid "Patent document"
 msgstr "Patentový dokument"
@@ -9017,7 +9015,7 @@ msgstr "Postkort"
 msgid "Powered by "
 msgstr "Prevádzkované v systéme "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
 #, c-format
 msgid "Pre-adolescent"
 msgstr "Pubertálny"
@@ -9032,7 +9030,7 @@ msgstr "Pubertálny; "
 msgid "Preferred form: "
 msgstr "Prednostná forma: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
 #, c-format
 msgid "Preschool"
 msgstr "Predškolský"
@@ -9061,7 +9059,7 @@ msgstr "Predchádzajúci"
 msgid "Previous sessions"
 msgstr "Predošlé pripojenia"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
 #, c-format
 msgid "Primary"
 msgstr "Primárny"
@@ -9124,7 +9122,7 @@ msgstr "Spracúva sa..."
 msgid "Product"
 msgstr "Produkt"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
 #, c-format
 msgid "Programmed texts"
 msgstr "Programmed texts"
@@ -9164,7 +9162,7 @@ msgstr "Verejné zoznamy"
 msgid "Public lists:"
 msgstr "Verejné zoznamy:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:160
 #, c-format
 msgid "Publication date range:"
 msgstr "Rozmedzie dátumu vydania:"
@@ -9363,7 +9361,7 @@ msgstr "Registrácia neplatná!"
 msgid "Registre"
 msgstr "Registre"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
 #, c-format
 msgid "Regular print"
 msgstr "Normálna tlač"
@@ -9401,7 +9399,7 @@ msgid "Remove facet [% facet.facet_link_value | html %]"
 msgstr "Odstrániť aspekt [% facet.facet_title_value |html %]"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:138
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
 msgid "Remove field"
 msgstr "Odstrániť pole"
 
@@ -9602,7 +9600,7 @@ msgstr ""
 msgid "Review: "
 msgstr "Recenzia: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
 #: opac-tmpl/prog/en/modules/opac-detail.tt:965
 #, c-format
 msgid "Reviews"
@@ -9771,8 +9769,8 @@ msgid "Score"
 msgstr "Bodovanie"
 
 #. INPUT type=submit name=do
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:148
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:336
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:147
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:335
 #: opac-tmpl/prog/en/modules/opac-detail.tt:628
 #: opac-tmpl/prog/en/modules/opac-detail.tt:735
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:63
@@ -10414,7 +10412,7 @@ msgstr "Prepáčte, čas pre Vaše pripojenie vypršal. Prihláste sa znovu, pro
 msgid "Sort By: "
 msgstr "Triediť podľa: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:327
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
 #, c-format
 msgid "Sort by:"
 msgstr "Triediť podľa:"
@@ -10430,7 +10428,7 @@ msgstr "Triediť podľa: "
 msgid "Sort this list by: "
 msgstr "Triediť tento zoznam podľa: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:325
 #, c-format
 msgid "Sorting: "
 msgstr "Triedenie: "
@@ -10446,7 +10444,7 @@ msgstr "Zvuk"
 msgid "Source: "
 msgstr "Prameň: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
 #, c-format
 msgid "Specialized"
 msgstr "Špecializovaný"
@@ -10487,7 +10485,6 @@ msgstr "Språkundervisning"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:116
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:118
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "Standard number"
 msgstr "Štandardné číslo"
@@ -10502,7 +10499,7 @@ msgstr "Štandardné číslo (ISBN, ISSN alebo iné):"
 msgid "Standardtittel: "
 msgstr "Standardtittel: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
 #, c-format
 msgid "Statistics"
 msgstr "Štatistika"
@@ -10752,7 +10749,7 @@ msgstr "Informácia o predplatnom pre %s"
 msgid "Subscriptions"
 msgstr "Objednávky"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:220
 #, c-format
 msgid "Subtype limits"
 msgstr "Obmedzenia podtypu"
@@ -10812,7 +10809,7 @@ msgstr "Čiastočne nahradzuje:"
 msgid "Supersedes:"
 msgstr "Nahradzuje:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
 #, c-format
 msgid "Surveys"
 msgstr "Ankety"
@@ -10906,7 +10903,7 @@ msgstr "Menovky z tejto knižnice:"
 msgid "Tags:"
 msgstr "Menovky:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
 #, c-format
 msgid "Technical reports"
 msgstr "Technické správy"
@@ -11134,11 +11131,11 @@ msgid ""
 "%s %s%s months%s "
 msgstr ""
 "Súčasné zápisné začalo dňa %s a vychádza %s dvakrát denne %s %s každý deň %s "
-"%s 3x za týždeň %s %s každý týždeň %s %s každé 2 týždne %s %s každé 3 "
-"týždne %s %s každý mesiac %s %s každé 2 mesiace %s %s každý štvrťrok %s %s "
-"každý polrok %s %s každý rok %s %s každé 2 roky %s %s občasne %s %s v "
-"pondelok %s %s v utorok %s %s v stredu %s %s vo štvrtok %s %s v piatok %s %s "
-"v sobotu %s %s v nedeľu %s po %s%s čísla%s %s%s týždne%s %s%s mesiace%s "
+"%s 3x za týždeň %s %s každý týždeň %s %s každé 2 týždne %s %s každé 3 týždne "
+"%s %s každý mesiac %s %s každé 2 mesiace %s %s každý štvrťrok %s %s každý "
+"polrok %s %s každý rok %s %s každé 2 roky %s %s občasne %s %s v pondelok %s "
+"%s v utorok %s %s v stredu %s %s vo štvrtok %s %s v piatok %s %s v sobotu %s "
+"%s v nedeľu %s po %s%s čísla%s %s%s týždne%s %s%s mesiace%s "
 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:18
 #, c-format
@@ -11265,7 +11262,7 @@ msgstr ""
 "So spracovaním vašej registrácie nastali problémy. Požiadajte prosím vašu "
 "knižnicu o pomoc."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
 #, c-format
 msgid "Theses"
 msgstr "Záverečné práce"
@@ -11580,7 +11577,7 @@ msgstr "Transparent"
 msgid "Tre-dimensjonale gjenstander"
 msgstr "Tre-dimensjonale gjenstander"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:280
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
 #, c-format
 msgid "Treaties "
 msgstr "Zmluvy "
@@ -11827,7 +11824,7 @@ msgstr "Utskilt fra: "
 msgid "Utstilling"
 msgstr "Utstilling"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "VHS páska / Videokazeta"
@@ -12001,7 +11998,7 @@ msgstr ""
 "Záleží nám na Vašom súkromí. Na tejto obrazovke môžete určiť ako dlho máme "
 "uchovávať Váš čitateľský výpis."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:254
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
 #, c-format
 msgid "Website"
 msgstr "Webstránka"
@@ -12608,20 +12605,20 @@ msgstr ""
 msgid "[Create new list]"
 msgstr "[Vytvoriť nový zoznam]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:150
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:338
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:149
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:337
 #, c-format
 msgid "[Fewer options]"
 msgstr "[Menej možností]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:152
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:340
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:151
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:339
 #, c-format
 msgid "[More options]"
 msgstr "[Viac možností]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:154
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:342
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:153
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:341
 #, c-format
 msgid "[New search]"
 msgstr "[Nové hľadanie]"
@@ -15349,486 +15346,4 @@ msgstr ""
 msgid "• "
 msgstr "• "
 
-#, c-format
-#~ msgid ""
-#~ "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s%s%sKoha online%s "
-#~ "catalog &rsaquo; Details for: %s%s, %s%s %s %s %s "
-#~ msgstr ""
-#~ "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s%s%sKoha online%s "
-#~ "katalóg &rsaquo; Detaily o: %s%s, %s%s %s %s %s "
-
-#, c-format
-#~ msgid "Your card has expired. Please contact the library for more information."
-#~ msgstr ""
-#~ "Váš preukaz vypršal. Pre viac informácií, kontaktujte prosím Vašu knižnicu."
-
-#, c-format
-#~ msgid "Your search history is empty."
-#~ msgstr "Váš výpis hľadania je prázdny."
-
-#~ msgid "!%s"
-#~ msgstr "!%s"
-
-#~ msgid "\"%s\""
-#~ msgstr "\"%s\""
-
-#~ msgid "#"
-#~ msgstr "#"
-
-#~ msgid "%s"
-#~ msgstr "%s"
-
-#~ msgid "%s "
-#~ msgstr "%s "
-
-#~ msgid "%s %%] %s "
-#~ msgstr "%s %%] %s "
-
-#~ msgid "%s %s"
-#~ msgstr "%s %s"
-
-#~ msgid "%s %s "
-#~ msgstr "%s %s "
-
-#~ msgid "%s %s %s"
-#~ msgstr "%s %s %s"
-
-#~ msgid "%s %s %s "
-#~ msgstr "%s %s %s "
-
-#~ msgid "%s %s %s %s"
-#~ msgstr "%s %s %s %s"
-
-#~ msgid "%s %s %s %s "
-#~ msgstr "%s %s %s %s "
-
-#~ msgid "%s %s %s %s %s"
-#~ msgstr "%s %s %s %s %s"
-
-#~ msgid "%s %s %s %s %s "
-#~ msgstr "%s %s %s %s %s "
-
-#~ msgid "%s %s %s %s %s %s"
-#~ msgstr "%s %s %s %s %s %s"
-
-#~ msgid "%s %s %s %s %s %s "
-#~ msgstr "%s %s %s %s %s %s "
-
-#~ msgid "%s %s %s %s %s %s %s "
-#~ msgstr "%s %s %s %s %s %s %s "
-
-#~ msgid "%s %s %s %s %s %s %s %s%s%s %s["
-#~ msgstr "%s %s %s %s %s %s %s %s%s%s %s["
-
-#~ msgid "%s %s %s %s %s %s%s %s %s%s %s "
-#~ msgstr "%s %s %s %s %s %s%s %s %s%s %s "
-
-#~ msgid "%s %s %s %s %s%s %s %s%s %s "
-#~ msgstr "%s %s %s %s %s%s %s %s%s %s "
-
-#~ msgid "%s %s %s %s %s%s:%s %s "
-#~ msgstr "%s %s %s %s %s%s:%s %s "
-
-#~ msgid "%s %s %s %s ("
-#~ msgstr "%s %s %s %s ("
-
-#~ msgid "%s %s %s %s (%s)"
-#~ msgstr "%s %s %s %s (%s)"
-
-#~ msgid "%s %s %s %s%s"
-#~ msgstr "%s %s %s %s%s"
-
-#~ msgid "%s %s %s &nbsp;"
-#~ msgstr "%s %s %s &nbsp;"
-
-#~ msgid "%s %s %s (%s) %s %s %s %s %s "
-#~ msgstr "%s %s %s (%s) %s %s %s %s %s "
-
-#~ msgid "%s %s %s ; %s %s "
-#~ msgstr "%s %s %s ; %s %s "
-
-#~ msgid "%s %s %s%s"
-#~ msgstr "%s %s %s%s"
-
-#~ msgid "%s %s %s%s "
-#~ msgstr "%s %s %s%s "
-
-#~ msgid "%s %s %s%s catalog &rsaquo; Placing a hold %s %s "
-#~ msgstr "%s %s %s%s katalóg &rsaquo; Rezervuje sa %s %s "
-
-#~ msgid "%s %s %s%s catalog &rsaquo; Your checkout history %s "
-#~ msgstr "%s %s %s%s katalóg &rsaquo; Výpis vašich výpožičiek %s "
-
-#~ msgid "%s %s %s%s%s"
-#~ msgstr "%s %s %s%s%s"
-
-#~ msgid "%s %s %s(%s)%s %s "
-#~ msgstr "%s %s %s(%s)%s %s "
-
-#~ msgid "%s %s %sLibraries%s %s %sLocations%s "
-#~ msgstr "%s %s %sKnižnice%s %s %sLokácie%s "
-
-#~ msgid "%s %s (%s) %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s ["
-#~ msgstr "%s %s (%s) %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s ["
-
-#~ msgid "%s %s - %s%s %s- %s%s %s(%s)%s %s ; %s%s %s - %s%s %s ; %s%s"
-#~ msgstr "%s %s - %s%s %s- %s%s %s(%s)%s %s ; %s%s %s - %s%s %s ; %s%s"
-
-#~ msgid "%s %s ; %s "
-#~ msgstr "%s %s ; %s "
-
-#~ msgid "%s %s | %s %s "
-#~ msgstr "%s %s | %s %s "
-
-#~ msgid "%s %s%s"
-#~ msgstr "%s %s%s"
-
-#~ msgid "%s %s%s "
-#~ msgstr "%s %s%s "
-
-#~ msgid "%s %s%s catalog &rsaquo; ISBD %s "
-#~ msgstr "%s %s%s Katalóg &rsaquo; ISBD %s "
-
-#~ msgid "%s %s%s%s"
-#~ msgstr "%s %s%s%s"
-
-#~ msgid "%s %s%s%s "
-#~ msgstr "%s %s%s%s "
-
-#~ msgid "%s %s%s%s %s "
-#~ msgstr "%s %s%s%s %s "
-
-#~ msgid "%s %s%s%s %s %s%s%s %s["
-#~ msgstr "%s %s%s%s %s %s%s%s %s["
-
-#~ msgid "%s %s%s%s%s"
-#~ msgstr "%s %s%s%s%s"
-
-#~ msgid "%s %s%s%s%s%s"
-#~ msgstr "%s %s%s%s%s%s"
-
-#~ msgid "%s %s(%s)%s %s, %s%s %s%s %s %s"
-#~ msgstr "%s %s(%s)%s %s, %s%s %s%s %s %s"
-
-#~ msgid "%s %s(%s)%s ?"
-#~ msgstr "%s %s(%s)%s ?"
-
-#~ msgid "%s %s, %s%s"
-#~ msgstr "%s %s, %s%s"
-
-#~ msgid "%s %s: %s %s ; %s %s "
-#~ msgstr "%s %s: %s %s ; %s %s "
-
-#~ msgid "%s %ssee also: %sused for/see from: %s"
-#~ msgstr "%s %sviď aj: %spoužitý na/viď od: %s"
-
-#~ msgid "%s %s|%s %s "
-#~ msgstr "%s %s|%s %s "
-
-#~ msgid "%s &nbsp; %s "
-#~ msgstr "%s &nbsp; %s "
-
-#~ msgid "%s (%s)%s"
-#~ msgstr "%s (%s)%s"
-
-#~ msgid "%s - %s%s %s- %s%s %s ; %s%s %s - %s%s %s : %s%s %s ; %s%s %s "
-#~ msgstr "%s - %s%s %s- %s%s %s ; %s%s %s - %s%s %s : %s%s %s ; %s%s %s "
-
-#~ msgid "%s Not renewable%s "
-#~ msgstr "%s Nedá sa obnoviť%s "
-
-#~ msgid "%s [ %s %s %s %s %s ] %s %s, %s%s "
-#~ msgstr "%s [ %s %s %s %s %s ] %s %s, %s%s "
-
-#~ msgid "%s%s"
-#~ msgstr "%s%s"
-
-#~ msgid "%s%s "
-#~ msgstr "%s%s "
-
-#~ msgid "%s%s %s"
-#~ msgstr "%s%s %s"
-
-#~ msgid "%s%s %s "
-#~ msgstr "%s%s %s "
-
-#~ msgid "%s%s %s %s"
-#~ msgstr "%s%s %s %s"
-
-#~ msgid "%s%s %s %s "
-#~ msgstr "%s%s %s %s "
-
-#~ msgid "%s%s %s %s %s "
-#~ msgstr "%s%s %s %s %s "
-
-#~ msgid "%s%s %s %s %s %s "
-#~ msgstr "%s%s %s %s %s %s "
-
-#~ msgid "%s%s %s %s%s"
-#~ msgstr "%s%s %s %s%s"
-
-#~ msgid "%s%s %s%s"
-#~ msgstr "%s%s %s%s"
-
-#~ msgid "%s%s %s%s "
-#~ msgstr "%s%s %s%s "
-
-#~ msgid "%s%s %s%s%s "
-#~ msgstr "%s%s %s%s%s "
-
-#~ msgid "%s%s %s%s%s%s"
-#~ msgstr "%s%s %s%s%s%s"
-
-#~ msgid "%s%s %s%s%s%s "
-#~ msgstr "%s%s %s%s%s%s "
-
-#~ msgid "%s%s %s%s%s%s%s %s %s%s %s%s%s %s. %s%s %s, %s%s %s %s%s "
-#~ msgstr "%s%s %s%s%s%s%s %s %s%s %s%s%s %s. %s%s %s, %s%s %s %s%s "
-
-#~ msgid "%s%s %s%s%s%s%s %s %s%s %s%s%s %s. %s%s %s, %s%s %s %s%s %s "
-#~ msgstr "%s%s %s%s%s%s%s %s %s%s %s%s%s %s. %s%s %s, %s%s %s %s%s %s "
-
-#~ msgid "%s%s &rsaquo; ILS-DI %s "
-#~ msgstr "%s%s &rsaquo; ILS-DI %s "
-
-#~ msgid "%s%s (%s)%s"
-#~ msgstr "%s%s (%s)%s"
-
-#~ msgid "%s%s catalog &rsaquo; Comments on %s "
-#~ msgstr "%s%s Katalóg &rsaquo; Recenzie k %s "
-
-#~ msgid "%s%s%s"
-#~ msgstr "%s%s%s"
-
-#~ msgid "%s%s%s "
-#~ msgstr "%s%s%s "
-
-#~ msgid "%s%s%s %s"
-#~ msgstr "%s%s%s %s"
-
-#~ msgid "%s%s%s %s "
-#~ msgstr "%s%s%s %s "
-
-#~ msgid "%s%s%s %s %s "
-#~ msgstr "%s%s%s %s %s "
-
-#~ msgid "%s%s%s %s%s"
-#~ msgstr "%s%s%s %s%s"
-
-#~ msgid "%s%s%s%s"
-#~ msgstr "%s%s%s%s"
-
-#~ msgid "%s%s%s%s%s"
-#~ msgstr "%s%s%s%s%s"
-
-#~ msgid "%s%s%s&nbsp;%s "
-#~ msgstr "%s%s%s&nbsp;%s "
-
-#~ msgid "%s%s%s,%s %s%s&nbsp;%s "
-#~ msgstr "%s%s%s,%s %s%s&nbsp;%s "
-
-#~ msgid "%s%s%s.%s; %s%s"
-#~ msgstr "%s%s%s.%s; %s%s"
-
-#~ msgid "%s%s, %s"
-#~ msgstr "%s%s, %s"
-
-#~ msgid "%s%s, %s%s %s (%s) %s (%s) "
-#~ msgstr "%s%s, %s%s %s (%s) %s (%s) "
-
-#~ msgid "%s%s,%s %s - %s,%s %s - %s%s %s(%s)%s %s , %s%s %s - %s%s "
-#~ msgstr "%s%s,%s %s - %s,%s %s - %s%s %s(%s)%s %s , %s%s %s - %s%s "
-
-#~ msgid "%s%s. %s%s %s %s|%s %s "
-#~ msgstr "%s%s. %s%s %s %s|%s %s "
-
-#~ msgid "%s%s.%s"
-#~ msgstr "%s%s.%s"
-
-#~ msgid "%s%s/%s%s"
-#~ msgstr "%s%s/%s%s"
-
-#~ msgid "%s%s|%s %s "
-#~ msgstr "%s%s|%s %s "
-
-#~ msgid "%s&nbsp; "
-#~ msgstr "%s&nbsp; "
-
-#~ msgid "%s&nbsp; %s "
-#~ msgstr "%s&nbsp; %s "
-
-#~ msgid "%s&nbsp;%s "
-#~ msgstr "%s&nbsp;%s "
-
-#~ msgid "%s&nbsp;%s %s"
-#~ msgstr "%s&nbsp;%s %s"
-
-#~ msgid "%s(%s)%s"
-#~ msgstr "%s(%s)%s"
-
-#~ msgid "%s(%s)%s %s, %s%s "
-#~ msgstr "%s(%s)%s %s, %s%s "
-
-#~ msgid "%s, %s%s %s (%s) %s (%s) "
-#~ msgstr "%s, %s%s %s (%s) %s (%s) "
-
-#~ msgid "%s. "
-#~ msgstr "%s. "
-
-#~ msgid "%s. %s"
-#~ msgstr "%s. %s"
-
-#~ msgid "%s:"
-#~ msgstr "%s:"
-
-#~ msgid "%s: "
-#~ msgstr "%s: "
-
-#~ msgid "%sAuthors%s %sTitles%s %s"
-#~ msgstr "%sAutori%s %sPredmety%s %s"
-
-#~ msgid ""
-#~ "%sAwaited %s %sArrived %s %sLate %s %sMissing %s %sNot issued %s %s %s %s "
-#~ "%s "
-#~ msgstr ""
-#~ "%sČaká sa %s %sDošiel %s %sOneskorený %s %sChýbajúci %s %sNevypožičaný %s "
-#~ "%s %s %s %s "
-
-#~ msgid "&#8674; "
-#~ msgstr "&#8674; "
-
-#~ msgid "&gt;&gt;"
-#~ msgstr "&gt;&gt;"
-
-#~ msgid "&lt;&lt;"
-#~ msgstr "&lt;&lt;"
-
-#~ msgid "&lt;&lt; "
-#~ msgstr "&lt;&lt; "
-
-#~ msgid "&nbsp;|&nbsp; "
-#~ msgstr "&nbsp;|&nbsp; "
-
-#~ msgid "("
-#~ msgstr "("
-
-#~ msgid "(%s)"
-#~ msgstr "(%s)"
-
-#~ msgid "(%s) %s "
-#~ msgstr "(%s) %s "
-
-#~ msgid ")"
-#~ msgstr ")"
-
-#~ msgid ") "
-#~ msgstr ") "
-
-#~ msgid ") %s %s %s "
-#~ msgstr ") %s %s %s "
-
-#~ msgid ") %s ("
-#~ msgstr ") %s ("
-
-#~ msgid "). "
-#~ msgstr "). "
-
-#~ msgid "+ "
-#~ msgstr "+ "
-
-#~ msgid ", "
-#~ msgstr ", "
-
-#~ msgid ", %s %s "
-#~ msgstr ", %s %s "
-
-#~ msgid "- %s"
-#~ msgstr "- %s"
-
-#~ msgid "-- "
-#~ msgstr "-- "
-
-#~ msgid ". "
-#~ msgstr ". "
-
 # 2bqXIP  <a href="http://eqnmmzhjgqrv.com/">eqnmmzhjgqrv</a>, [url=http://hqlwsyagztgq.com/]hqlwsyagztgq[/url], [link=http://wlukncillssz.com/]wlukncillssz[/link], http://idckwykxtjot.com/
-#~ msgid "/ "
-#~ msgstr "/ "
-
-#~ msgid ": "
-#~ msgstr ": "
-
-#~ msgid ":,;/ "
-#~ msgstr ":,;/ "
-
-#~ msgid "; "
-#~ msgstr "; "
-
-#~ msgid "= "
-#~ msgstr "= "
-
-#~ msgid "Copies available:"
-#~ msgstr "Dostupné kópie:"
-
-#~ msgid "Copy"
-#~ msgstr "Kopírovať"
-
-#~ msgid "Next available copy"
-#~ msgstr "nasledujúci dostupný exemplár"
-
-#~ msgid "No copies available "
-#~ msgstr "Nie sú dostupné žiadne kópie "
-
-#~ msgid "No copies available."
-#~ msgstr "Nie sú dostupné žiadne kópie."
-
-#~ msgid "Renew All"
-#~ msgstr "Predĺžiť všetko"
-
-#~ msgid "Type: "
-#~ msgstr "Typ: "
-
-#~ msgid "Your private lists"
-#~ msgstr "Vaše súkromné zoznamy"
-
-#~ msgid "["
-#~ msgstr "["
-
-#~ msgid "[ "
-#~ msgstr "[ "
-
-#~ msgid "]"
-#~ msgstr "]"
-
-#~ msgid "] "
-#~ msgstr "] "
-
-#~ msgid "] %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
-#~ msgstr "] %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
-
-#~ msgid "]%s %s (%s), "
-#~ msgstr "]%s %s (%s), "
-
-#~ msgid "]%s %s (%s), %s "
-#~ msgstr "]%s %s (%s), %s "
-
-#~ msgid "_"
-#~ msgstr "_"
-
-#~ msgid "or "
-#~ msgstr "alebo "
-
-#~ msgid "{"
-#~ msgstr "{"
-
-#~ msgid "| "
-#~ msgstr "| "
-
-#~ msgid "| %s"
-#~ msgstr "| %s"
-
-#~ msgid "}"
-#~ msgstr "}"
-
-#~ msgid "~ "
-#~ msgstr "~ "

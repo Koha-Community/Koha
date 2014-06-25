@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-05-05 21:45-0300\n"
+"POT-Creation-Date: 2014-06-15 17:52-0300\n"
 "PO-Revision-Date: 2013-06-18 02:31+0000\n"
 "Last-Translator: chrisc <chris@bigballofwax.co.nz>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
@@ -352,7 +352,7 @@ msgstr "Pūtumōhio &rsaquo; Tō Kāta "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( RESERVE.intransit ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:564
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:565
 #, fuzzy, c-format
 msgid "%s %s %s Item in transit from "
 msgstr "E kawea ana te mea ki <b> %s</b> "
@@ -360,7 +360,7 @@ msgstr "E kawea ana te mea ki <b> %s</b> "
 #. %1$s:  IF ( RESERVE.wait ) 
 #. %2$s:  IF ( RESERVE.atdestination ) 
 #. %3$s:  IF ( RESERVE.found ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:554
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:555
 #, fuzzy, c-format
 msgid "%s %s %s Item waiting at "
 msgstr "mea tatari i "
@@ -413,6 +413,27 @@ msgstr "Tuhipoka: Ka kahi aunoa tēnei matapihi i te 5 hēkona "
 #, fuzzy, c-format
 msgid "%s %s %s%s%s%sKoha %s &rsaquo; Self checkout "
 msgstr "%s Putumōhio &rsaquo;  Tāki Kuhukuhu "
+
+#. %1$s:  USE Koha 
+#. %2$s:  USE AuthorisedValues 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  IF ( op_add ) 
+#. %9$s:  END 
+#. %10$s:  IF ( op_else ) 
+#. %11$s:  END 
+#. %12$s:  INCLUDE 'doc-head-close.inc' 
+#. %13$s:  BLOCK cssinclude 
+#. %14$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:1
+#, fuzzy, c-format
+msgid ""
+"%s %s %s%s%s%sKoha online%s catalog &rsaquo; %sEnter a new purchase "
+"suggestion%s %sPurchase Suggestions%s %s %s%s "
+msgstr "Pūtumōhio &rsaquo; Kāinga Whare Pukapuka mō "
 
 #. %1$s:  USE Koha 
 #. %2$s:  PROCESS 'opac-authorities.inc' 
@@ -748,7 +769,7 @@ msgstr "Whakaaro Hoko "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:561
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:562
 #, fuzzy, c-format
 msgid "%s %s Item in transit to "
 msgstr "E kawea ana te mea ki <b> %s</b> "
@@ -883,26 +904,6 @@ msgstr "Pūtumōhio &rsaquo; Taipitopito mō %s %s "
 #, fuzzy, c-format
 msgid "%s %s%s%s%sKoha %s &rsaquo; Self checkout help"
 msgstr "%s Putumōhio &rsaquo;  Tāki Kuhukuhu"
-
-#. %1$s:  USE Koha 
-#. %2$s:  INCLUDE 'doc-head-open.inc' 
-#. %3$s:  IF ( LibraryNameTitle ) 
-#. %4$s:  LibraryNameTitle 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#. %7$s:  IF ( op_add ) 
-#. %8$s:  END 
-#. %9$s:  IF ( op_else ) 
-#. %10$s:  END 
-#. %11$s:  INCLUDE 'doc-head-close.inc' 
-#. %12$s:  BLOCK cssinclude 
-#. %13$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:1
-#, fuzzy, c-format
-msgid ""
-"%s %s%s%s%sKoha online%s catalog &rsaquo; %sEnter a new purchase suggestion"
-"%s %sPurchase Suggestions%s %s %s%s "
-msgstr "Pūtumōhio &rsaquo; Kāinga Whare Pukapuka mō "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -1154,6 +1155,35 @@ msgid ""
 "%sRIS %s "
 msgstr ""
 
+#. %1$s:  SWITCH ACCOUNT_LINE.accounttype 
+#. %2$s:  CASE 'Pay' 
+#. %3$s:  CASE 'Pay00' 
+#. %4$s:  CASE 'Pay01' 
+#. %5$s:  CASE 'Pay02' 
+#. %6$s:  CASE 'N' 
+#. %7$s:  CASE 'F' 
+#. %8$s:  CASE 'A' 
+#. %9$s:  CASE 'M' 
+#. %10$s:  CASE 'L' 
+#. %11$s:  CASE 'W' 
+#. %12$s:  CASE 
+#. %13$s:  ACCOUNT_LINE.accounttype 
+#. %14$s: - END -
+#. %15$s: - IF ACCOUNT_LINE.description 
+#. %16$s:  ACCOUNT_LINE.description 
+#. %17$s:  END 
+#. %18$s:  IF ACCOUNT_LINE.title 
+#. %19$s:  ACCOUNT_LINE.title 
+#. %20$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:51
+#, c-format
+msgid ""
+"%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
+"via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
+"%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s %s"
+"(%s)%s "
+msgstr ""
+
 #. %1$s:  shelvesloo.count 
 #. %2$s:  IF ( shelvesloo.single ) 
 #. %3$s:  ELSE 
@@ -1191,7 +1221,7 @@ msgstr "(rapunga whai pānga: "
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:453
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:454
 #, fuzzy, c-format
 msgid "%s Account frozen %s %s "
 msgstr "Kua Aakatia te Pūkete "
@@ -1410,7 +1440,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:560
 #, fuzzy, c-format
 msgid "%s Item waiting to be pulled from "
 msgstr "mea tatari kia kumea mai "
@@ -1449,7 +1479,7 @@ msgstr "Kāore he otinga i kitea i te rārangi pukapuka. "
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.too_soon ) 
 #. %3$s:  ISSUE.soonestrenewdate 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:228
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:229
 #, fuzzy, c-format
 msgid "%s Not renewable %s No renewal before %s "
 msgstr "Kua pau ngā wā whakahōu "
@@ -1457,7 +1487,7 @@ msgstr "Kua pau ngā wā whakahōu "
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:460
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:461
 #, fuzzy, c-format
 msgid "%s On hold %s No renewals left %s "
 msgstr "Kua pau ngā wā whakahōu "
@@ -1524,7 +1554,7 @@ msgstr ""
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #. %6$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:96
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:103
 #, fuzzy, c-format
 msgid ""
 "%s Purchase suggestions %s %s Your purchase suggestions %s Purchase "
@@ -1679,8 +1709,8 @@ msgstr "%s %s %s %s (%s) "
 #. %1$s:  IF ( ISSUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:241
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:470
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:242
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:471
 #, fuzzy, c-format
 msgid "%s Yes %s No %s "
 msgstr "%s %s %s %s "
@@ -1846,7 +1876,7 @@ msgstr "%s p&#363;kete"
 #. %1$s:  IF ( RESERVE.waitingdate ) 
 #. %2$s:  RESERVE.waitingdate | $KohaDates 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:558
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:559
 #, fuzzy, c-format
 msgid "%s since %s%s "
 msgstr "%s %s %s %s (%s) "
@@ -1857,11 +1887,11 @@ msgstr "%s %s %s %s (%s) "
 #. %4$s:  END 
 #. %5$s:  BLOCK language 
 #. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s: ERROR
+#. %7$s:  CASE ['en', 'eng'] 
+#. %8$s:  CASE ['fr', 'fre'] 
+#. %9$s:  CASE ['it', 'ita'] 
+#. %10$s:  CASE ['de', 'ger', 'deu'] 
+#. %11$s:  CASE ['es', 'spa'] 
 #. %12$s:  CASE 
 #. %13$s:  lang 
 #. %14$s:  END 
@@ -1869,8 +1899,7 @@ msgstr "%s %s %s %s (%s) "
 #: opac-tmpl/bootstrap/en/includes/opac-authorities.inc:56
 #, fuzzy, c-format
 msgid ""
-"%s%s %s %s %s %s %s %%]English %s %%]French %s %%]Italian %s %%]German %s %%]"
-"Spanish %s%s %s %s "
+"%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
 msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  FILTER trim 
@@ -2174,7 +2203,7 @@ msgstr ""
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:129
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:128
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 msgstr ""
@@ -2201,11 +2230,15 @@ msgstr "Tūmatanui"
 #. %7$s:  ELSE 
 #. %8$s:  AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) 
 #. %9$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:200
+#. %10$s:  IF ( suggestions_loo.reason ) 
+#. %11$s:  suggestions_loo.reason |html 
+#. %12$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:207
 #, c-format
 msgid ""
 "%sRequested %sChecked by the library %sAccepted by the library %sOrdered by "
-"the library %sSuggestion declined %sAvailable in the library %s %s %s "
+"the library %sSuggestion declined %sAvailable in the library %s %s %s %s"
+"(%s)%s "
 msgstr ""
 
 #. %1$s:  IF ( typeissue ) 
@@ -2574,8 +2607,8 @@ msgstr "%s %s (%s)"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Author phrase"
 msgstr "Kaituhi"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:91
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:93
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:92
 #, fuzzy, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Call number"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Tau Karanga"
@@ -2595,12 +2628,12 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Kīanga Igoa Hui"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Corporate name"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Ingoa Rangapū"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:88
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:87
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:89
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:88
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
@@ -2655,17 +2688,17 @@ msgstr "(%s biblios)"
 #. For the first occurrence,
 #. %1$s:  ISSUE.renewsleft 
 #. %2$s:  ISSUE.renewsallowed 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:228
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:233
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:460
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:229
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:234
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:461
 #, c-format
 msgid "(%s of %s renewals remaining)"
 msgstr "(%s o ngā whakahōutanga %s e toe ana)"
 
 #. For the first occurrence,
 #. %1$s:  overdues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:367
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:489
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:368
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:490
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:213
 #, c-format
 msgid "(%s total)"
@@ -2690,7 +2723,7 @@ msgstr ""
 msgid "(Not supported yet)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:235
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:236
 #, c-format
 msgid "(On hold)"
 msgstr "(Kei te puritia)"
@@ -2878,7 +2911,7 @@ msgid ",complete-subfield"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
 msgid "- You must enter a Title"
 msgstr ""
 
@@ -2888,7 +2921,7 @@ msgstr ""
 msgid "- You must enter a list name"
 msgstr "Me kōwhiri i te mea kotahi i te itinga rawa."
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:74
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:75
 #, fuzzy, c-format
 msgid "-- Choose --"
 msgstr "-- Kōwhiria Whakatakotoranga --"
@@ -2899,7 +2932,7 @@ msgstr "-- Kōwhiria Whakatakotoranga --"
 msgid "-- Choose format --"
 msgstr "-- Kōwhiria Whakatakotoranga --"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:213
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:212
 #, fuzzy, c-format
 msgid "-- none -- "
 msgstr "-- Kōwhiria Whakatakotoranga -- "
@@ -3307,7 +3340,7 @@ msgstr ""
 msgid "Abstract: "
 msgstr "tangohanga "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:303
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:302
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "Tīpako/whakarāpopotonga"
@@ -3359,7 +3392,7 @@ msgid "Add %s items to %s"
 msgstr "Tāpiritia %s mea ki"
 
 #. A name=ButtonPlus
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:103
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:102
 msgid "Add another field"
 msgstr "Tāpiritia tētahi atu āpure"
 
@@ -3432,12 +3465,12 @@ msgstr "Tāpiritia %s mea ki "
 msgid "Additional authors:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:300
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:299
 #, fuzzy, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "Etahi atu Momo Ihirangi mō ngā Pukapuka/Rawa Tā"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:256
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:255
 #, c-format
 msgid "Adolescent"
 msgstr ""
@@ -3452,7 +3485,7 @@ msgstr ""
 msgid "Adressebøker"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:257
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:256
 #, c-format
 msgid "Adult"
 msgstr "Pakeke"
@@ -3494,7 +3527,7 @@ msgstr "Momo mea katoa"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:207
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:18
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:113
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:200
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:199
 #, c-format
 msgid "All libraries"
 msgstr "Whare pukapuka katoa"
@@ -3523,9 +3556,9 @@ msgstr "Wāhi Noho Pūmau, Hohoko Rānei:"
 msgid "Alternate contact"
 msgstr "Tētahi Atu Tangata Whakapā"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:283
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:297
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:284
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:298
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:312
 #, c-format
 msgid "Amount"
 msgstr "Rahinga"
@@ -3653,22 +3686,22 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:142
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:178
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:191
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:302
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:301
 #, c-format
 msgid "Any"
 msgstr "He"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:252
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:251
 #, fuzzy, c-format
 msgid "Any audience"
 msgstr "Tētahi Momo Hunga Pānui"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:269
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:268
 #, fuzzy, c-format
 msgid "Any content"
 msgstr "Tētahi Ihirangi"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:283
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:282
 #, fuzzy, c-format
 msgid "Any format"
 msgstr "Tētahi Whakatakotoranga"
@@ -3693,7 +3726,7 @@ msgstr "Tētahi Momo Mea:"
 msgid "Any word"
 msgstr "Tētahi Kupu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:120
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:127
 #, c-format
 msgid "Anyone"
 msgstr "Tētahi tangata"
@@ -3709,7 +3742,7 @@ msgid "April"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 #, fuzzy
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Tūturu, ka pīrangi ki te whakapiako o tō kāta?"
@@ -3757,13 +3790,13 @@ msgid "Are you sure you want to remove this share?"
 msgstr "Tūturu, ka tangohia e koe ngā mea kua kōwhiria?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 #, fuzzy
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "Tūturu, ka pīrangi ki te whakapiako o tō kāta?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 #, fuzzy
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Tūturu, ka pīrangi ki te whakapiako o tō kāta?"
@@ -3805,7 +3838,7 @@ msgid "Atlas"
 msgstr "ngā ripa"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:4
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:250
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:249
 #, c-format
 msgid "Audience"
 msgstr "Hunga Pānui"
@@ -3903,7 +3936,7 @@ msgstr "Kaituhi:"
 msgid "Author(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 msgstr "%s %s %s %s (%s) "
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:37
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:38
 #, c-format
 msgid "Author:"
 msgstr "Kaituhi:"
@@ -4037,17 +4070,17 @@ msgstr "Hoki ki biblio"
 msgid "Back to the results search list"
 msgstr "Hoki ki biblio"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:98
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:97
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:265
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:133
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:374
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:375
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1139
 #, c-format
 msgid "Barcode"
 msgstr "Waehere Pae"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:214
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:438
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:215
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:439
 #, fuzzy, c-format
 msgid "Barcode:"
 msgstr "Waehere Pae"
@@ -4098,7 +4131,7 @@ msgstr "Rārangi Pukapuka"
 msgid "Bibliografiske data"
 msgstr "Rārangi Pukapuka"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:304
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:303
 #, c-format
 msgid "Bibliographies"
 msgstr "Rārangi Pukapuka"
@@ -4179,7 +4212,7 @@ msgid "Biografier"
 msgstr "Rārangi Pukapuka"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:52
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:272
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:271
 #, c-format
 msgid "Biography"
 msgstr "Haurongo"
@@ -4230,7 +4263,7 @@ msgstr "P&#275;ke Pukapuka"
 msgid "Book reviews by critics ( XXX )"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:286
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:285
 #, c-format
 msgid "Braille"
 msgstr "Tuhi Kāpō"
@@ -4283,12 +4316,12 @@ msgstr ""
 msgid "CAS login"
 msgstr "Takiuru:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:288
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:287
 #, c-format
 msgid "CD audio"
 msgstr "Ororongo CD"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:292
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:291
 #, fuzzy, c-format
 msgid "CD software"
 msgstr "Pūmanawa CD"
@@ -4327,7 +4360,7 @@ msgstr "Tau Tono"
 msgid "Call Number"
 msgstr "Tau Tono"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:375
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:376
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:63
 #, fuzzy, c-format
@@ -4364,8 +4397,8 @@ msgstr "Tau Karanga (Pono 0-9 ki Pakimaero A-Z)"
 msgid "Call number (Z-A to 9-0)"
 msgstr "Tau Karanga (Pakimaero 0-9 ki Pono A-Z)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:219
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:443
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:220
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:444
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:124
 #, fuzzy, c-format
 msgid "Call number:"
@@ -4383,8 +4416,8 @@ msgstr "Tau Tono"
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:50
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:121
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:609
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:628
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:610
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:629
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:157
@@ -4396,7 +4429,7 @@ msgstr "Tau Tono"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:591
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:593
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:796
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:97
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:63
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:89
@@ -4451,7 +4484,7 @@ msgstr "Tau Kāri:"
 msgid "Cart"
 msgstr "Kāta"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:289
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:288
 #, c-format
 msgid "Cassette recording"
 msgstr "Hopukanga rīpene"
@@ -4466,7 +4499,7 @@ msgstr ""
 msgid "Catalog searches"
 msgstr "(rapunga whai pānga: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:305
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:304
 #, c-format
 msgid "Catalogs"
 msgstr "Ngā putumōhio"
@@ -4585,7 +4618,7 @@ msgstr "Ūkui Katoa"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:35
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:815
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
 #, fuzzy, c-format
 msgid "Clear all"
 msgstr "Ūkui Katoa"
@@ -4598,8 +4631,8 @@ msgstr "Ūkui Katoa"
 msgid "Clear date"
 msgstr "Tiro M&#257;m&#257;"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:604
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:645
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:605
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:646
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr ""
@@ -4665,7 +4698,7 @@ msgstr "Pāwhiria kia kite i Google Books"
 
 #. DIV
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:162
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:400
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:401
 msgid "Click to view in Google Books"
 msgstr "Pāwhiria kia kite i Google Books"
 
@@ -4716,7 +4749,7 @@ msgstr "whakaahua whakapiri"
 msgid "Collection"
 msgstr "Kohinga"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:41
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:42
 #, fuzzy, c-format
 msgid "Collection title:"
 msgstr "Kohinga:"
@@ -4807,7 +4840,7 @@ msgid "Contact information"
 msgstr "Pārongo Whakapā"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:85
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:267
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:266
 #, fuzzy, c-format
 msgid "Content"
 msgstr "Ihirangi"
@@ -4887,7 +4920,7 @@ msgstr "Manatārua"
 msgid "Copyright date"
 msgstr "Rā manatā:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:38
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:39
 #, fuzzy, c-format
 msgid "Copyright date:"
 msgstr "Rā manatā:"
@@ -4996,7 +5029,7 @@ msgstr ""
 msgid "CreativeWork"
 msgstr "tiriti"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:309
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:310
 #, c-format
 msgid "Credits"
 msgstr "Tāwere"
@@ -5023,7 +5056,7 @@ msgstr "Kupuhipa o Nāianei:"
 msgid "Curriculum"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:291
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:290
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "Ataata DVD / Kōpaepae Ataata"
@@ -5073,14 +5106,14 @@ msgstr "Rā Tāpiri"
 msgid "Date due"
 msgstr "Rā Whakahoki"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:192
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:199
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:448
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:193
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:200
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:449
 #, fuzzy, c-format
 msgid "Date due:"
 msgstr "Rā Whakahoki"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:161
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:160
 #, fuzzy, c-format
 msgid "Date range:"
 msgstr "Rā Tāpiri"
@@ -5120,7 +5153,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:61
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:45
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:46
 #, fuzzy, c-format
 msgid "Default"
 msgstr "MUku"
@@ -5149,7 +5182,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:661
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:733
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
 #, c-format
 msgid "Delete"
 msgstr "MUku"
@@ -5162,7 +5195,7 @@ msgid "Delete list"
 msgstr "Muku Rārangi"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:224
 #, fuzzy
 msgid "Delete selected"
 msgstr "Mukua Mea Tīpako"
@@ -5302,7 +5335,7 @@ msgstr ""
 msgid "Dias"
 msgstr "Rā"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:306
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:305
 #, c-format
 msgid "Dictionaries"
 msgstr "Papakupu"
@@ -5328,12 +5361,12 @@ msgstr ""
 msgid "Diorama"
 msgstr "whakaari"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:319
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:318
 #, c-format
 msgid "Directories"
 msgstr "Rārangi Kōpaki"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:312
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:311
 #, c-format
 msgid "Discographies"
 msgstr "Rārangi Rekoata"
@@ -5422,7 +5455,7 @@ msgid "Drama"
 msgstr "whakaari"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:128
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:376
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:377
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #, c-format
 msgid "Due"
@@ -5597,7 +5630,7 @@ msgstr ""
 msgid "Empty and close"
 msgstr "Putua ka Kati"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:307
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:306
 #, fuzzy, c-format
 msgid "Encyclopedias "
 msgstr "Mātāpunenga "
@@ -5612,14 +5645,14 @@ msgstr "Ihirangi Arā Atu Anō "
 msgid "Enhanced descriptions from Syndetics:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:28
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:29
 #, c-format
 msgid "Enter a new purchase suggestion"
 msgstr "Whakauruhia tō whakaaro mō te hoko mea hou"
 
 #. INPUT type=text name=q
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:100
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:162
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:99
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:161
 msgid "Enter search terms"
 msgstr "Tāurua kupu rapu"
 
@@ -5726,7 +5759,7 @@ msgstr "Tuhipoka: He waehere tautohu katoa tō tohu. KĪHAI i tāpiritia."
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:35
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:39
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:41
 #, c-format
 msgid "Error:"
 msgstr "Hapa:"
@@ -5802,13 +5835,13 @@ msgstr ""
 msgid "Expecting a specific item selection."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:535
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:539
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:536
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:540
 #, fuzzy, c-format
 msgid "Expiration:"
 msgstr "Putanga"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:495
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:496
 #, fuzzy, c-format
 msgid "Expires on"
 msgstr "Ka mōnehu:"
@@ -5859,7 +5892,7 @@ msgstr "Wahine"
 msgid "Festskrift "
 msgstr "Feschrift Ind. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:270
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:269
 #, c-format
 msgid "Fiction"
 msgstr "Pakimaero"
@@ -5900,7 +5933,7 @@ msgstr ""
 msgid "Filmografier"
 msgstr "Haurongo Kiriata"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:318
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:317
 #, c-format
 msgid "Filmographies"
 msgstr "Haurongo Kiriata"
@@ -5922,7 +5955,7 @@ msgid "Fine amount"
 msgstr "Rahinga Whaina"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:140
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:381
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:382
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #, c-format
 msgid "Fines"
@@ -5937,14 +5970,14 @@ msgid "Fines (%s)"
 msgstr "Whaina"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:27
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:281
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:295
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:282
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:296
 #, fuzzy, c-format
 msgid "Fines and charges"
 msgstr "Whaina, Utu Hoki"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:241
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:470
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:242
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:471
 #, fuzzy, c-format
 msgid "Fines:"
 msgstr "Whaina"
@@ -5985,7 +6018,7 @@ msgstr ""
 msgid "Font"
 msgstr "Rahinga"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:163
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:162
 #, fuzzy, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -6033,11 +6066,11 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:815
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
 msgid "Form not submitted because of the following problem(s)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:281
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:280
 #, fuzzy, c-format
 msgid "Format"
 msgstr "Whakatakotoranga:"
@@ -6154,7 +6187,7 @@ msgstr "Pārongo tangohanga mō %s"
 msgid "Fysiske bøker"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:259
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:258
 #, fuzzy, c-format
 msgid "General"
 msgstr "Pakeke, Whānui"
@@ -6244,9 +6277,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:226
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:138
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:67
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:42
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:123
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:130
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:24
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:33
 #, c-format
@@ -6294,7 +6327,7 @@ msgstr ""
 msgid "Groups"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:211
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:210
 #, fuzzy, c-format
 msgid "Groups of libraries"
 msgstr "Whare Pukapuka"
@@ -6304,7 +6337,7 @@ msgstr "Whare Pukapuka"
 msgid "Gått inn i: "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:308
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:307
 #, c-format
 msgid "Handbooks"
 msgstr "Pukapuka ā-ringa"
@@ -6384,13 +6417,13 @@ msgstr "Huna Matapihi"
 msgid "Highlight"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:331
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:332
 #, c-format
 msgid "Hold date"
 msgstr "Rā pupuri"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:347
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:528
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:348
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:529
 #, fuzzy, c-format
 msgid "Hold date:"
 msgstr "Rā pupuri"
@@ -6445,7 +6478,7 @@ msgstr "Ngā puringa "
 msgid "Holdings:"
 msgstr "Ngā puringa"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:489
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:490
 #, fuzzy, c-format
 msgid "Holds "
 msgstr "Ngā puringa "
@@ -6461,7 +6494,7 @@ msgstr "Ngā puringa "
 msgid "Holds and priority: "
 msgstr "Ngā puringa "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:327
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:328
 #, fuzzy, c-format
 msgid "Holds waiting"
 msgstr "E tatari ana"
@@ -6516,7 +6549,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:47
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:15
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:12
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:13
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:12
 #: opac-tmpl/bootstrap/en/modules/svc/suggestion.tt:12
 #, c-format
@@ -6576,7 +6609,7 @@ msgstr "Tirohanga ISBD"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:166
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:168
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:96
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:84
 #, c-format
@@ -6773,7 +6806,7 @@ msgstr ""
 msgid "Indexed in:"
 msgstr "Kua rārangitia i:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:310
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:309
 #, c-format
 msgid "Indexes"
 msgstr "Ngā rārangi āwhina"
@@ -6852,16 +6885,16 @@ msgstr "Tono Tāpuitanga"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:50
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:263
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:373
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:374
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:62
 #, fuzzy, c-format
 msgid "Item type"
 msgstr "Momo Mea:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:206
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:207
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:121
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:43
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:44
 #, fuzzy, c-format
 msgid "Item type:"
 msgstr "Momo Mea:"
@@ -6950,7 +6983,7 @@ msgstr ""
 msgid "June"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:260
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:259
 #, c-format
 msgid "Juvenile"
 msgstr "Pūhouhou"
@@ -7101,13 +7134,13 @@ msgstr "LCCN: "
 msgid "Lagringsbrikke"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:172
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:171
 #, c-format
 msgid "Language"
 msgstr "Reo"
 
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:137
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:174
 #, fuzzy, c-format
 msgid "Language: "
 msgstr "Ngā reo: "
@@ -7117,7 +7150,7 @@ msgstr "Ngā reo: "
 msgid "Languages:&nbsp;"
 msgstr "Ngā reo:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:285
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:284
 #, c-format
 msgid "Large print"
 msgstr "Momotuhi Rahi"
@@ -7133,22 +7166,22 @@ msgstr "Tōmuri"
 msgid "Last location"
 msgstr "Tauwāhi Whakamutunga"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:323
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:322
 #, c-format
 msgid "Law reports and digests"
 msgstr "Pūrongo me ngā hautaka ture"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:309
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:308
 #, c-format
 msgid "Legal articles"
 msgstr "Tuhinga ture"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:322
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:321
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "Take ā-ture me ngā tuhipoka take"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:313
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:312
 #, c-format
 msgid "Legislation"
 msgstr "Ngā ture"
@@ -7204,13 +7237,13 @@ msgstr "Whare Pukapuka "
 msgid "Library catalog"
 msgstr "Putumōhio Whare Pukapuka"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:198
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:58
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:197
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:59
 #, fuzzy, c-format
 msgid "Library:"
 msgstr "Whare Pukapuka"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:142
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:141
 #, c-format
 msgid "Limit to any of the following:"
 msgstr "Whakatina ki ētahi o ēnei:"
@@ -7321,7 +7354,7 @@ msgstr "Tauwāhi"
 msgid "Location (Status)"
 msgstr "Tauwāhi"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:197
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:196
 #, fuzzy, c-format
 msgid "Location and availability: "
 msgstr "Wāhitū me te wātea: "
@@ -7640,12 +7673,12 @@ msgstr "Tāne"
 msgid "Maleri"
 msgstr "Tāne"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:151
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:158
 #, c-format
 msgid "Managed by"
 msgstr "Kei te whakahaeretia e"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:192
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:199
 #, fuzzy, c-format
 msgid "Managed by:"
 msgstr "Kei te whakahaeretia e"
@@ -7698,7 +7731,7 @@ msgstr "Momo Tāuhu "
 msgid "May"
 msgstr "Mahere"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:121
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:128
 #, c-format
 msgid "Me"
 msgstr "Ahau"
@@ -7783,7 +7816,7 @@ msgstr "I runga i"
 msgid "Modell"
 msgstr "konganuku"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:504
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:505
 #, c-format
 msgid "Modify"
 msgstr "Whakarerekē"
@@ -7873,7 +7906,7 @@ msgstr "puoro"
 msgid "MusicGroup"
 msgstr "puoro"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:273
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:272
 #, c-format
 msgid "Musical recording"
 msgstr "Hopukanga puoro"
@@ -7939,7 +7972,7 @@ msgid "Never"
 msgstr ""
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:539
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:540
 #, fuzzy, c-format
 msgid "Never expires %s "
 msgstr "Ka mōnehu: "
@@ -7975,8 +8008,8 @@ msgstr "Rārangi Hou"
 msgid "New password:"
 msgstr "Kupuhipa Hōu:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:132
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:223
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:231
 #, c-format
 msgid "New purchase suggestion"
 msgstr "Whakaaro Hoko Hōu"
@@ -8058,9 +8091,9 @@ msgstr "Kape e wātea ana i te:"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:156
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:164
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:172
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:394
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:402
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:410
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:395
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:403
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:411
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:135
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
@@ -8120,7 +8153,7 @@ msgstr "Kāore he kape e wātea ana:"
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:66
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:68
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:144
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:177
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:176
 #, c-format
 msgid "No limit"
 msgstr "Kāore he tepe"
@@ -8198,12 +8231,12 @@ msgstr "Kīhai tētahi mea i kōwhiria"
 msgid "No tags from this library for this title."
 msgstr "Kāore he tohu mō tēnei taitara"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:271
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:270
 #, fuzzy, c-format
 msgid "Non fiction"
 msgstr "Kōrero Pono"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:274
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:273
 #, c-format
 msgid "Non-musical recording"
 msgstr "Hopukanga puoro-kore"
@@ -8249,12 +8282,12 @@ msgid "Not what you expected? Check for "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:801
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:149
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:156
 #, c-format
 msgid "Note"
 msgstr "Me mahara"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:177
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:184
 #, fuzzy, c-format
 msgid "Note: "
 msgstr "Tuhipoka: "
@@ -8337,13 +8370,13 @@ msgid "Notes/Comments"
 msgstr "Tuhipoka/Kōrero"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:41
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:82
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:83
 #, c-format
 msgid "Notes:"
 msgstr "Tuhipoka:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
@@ -8393,7 +8426,7 @@ msgstr "papatau"
 msgid "OK"
 msgstr "Ka pai"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:209
 #, c-format
 msgid "OR"
 msgstr ""
@@ -8447,12 +8480,12 @@ msgstr "Rauemi Tuihono: "
 msgid "Online tjeneste"
 msgstr "Rauemi Tuihono:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:220
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:219
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr "Ngā mea anake e wātea ana hei hoatu taurewa, hei tohutoro rānei"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:31
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:32
 #, fuzzy, c-format
 msgid ""
 "Only the title is required, but the more information you enter the easier it "
@@ -8576,7 +8609,7 @@ msgstr ""
 msgid "Overdue (%s)"
 msgstr "Ngā hapanga "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:367
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:368
 #, fuzzy, c-format
 msgid "Overdues "
 msgstr "Ngā hapanga "
@@ -8643,7 +8676,7 @@ msgstr "Kupuhipa"
 msgid "Password: %s"
 msgstr "Kupuhipa"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:310
 #, c-format
 msgid "Patent document"
 msgstr "Pepa ārai"
@@ -8718,18 +8751,18 @@ msgstr "Taipitopito Āhuatanga:"
 msgid "Physical presentation"
 msgstr "Taipitopito Āhuatanga:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:332
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:333
 #, fuzzy, c-format
 msgid "Pick up library"
 msgstr "Wāhi Tiki"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:496
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:497
 #, fuzzy, c-format
 msgid "Pick up location"
 msgstr "Wāhi Tiki"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:180
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:544
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:545
 #, fuzzy, c-format
 msgid "Pick up location:"
 msgstr "Wāhi Tiki"
@@ -8780,7 +8813,7 @@ msgstr "Tono Tāpuitanga"
 msgid "Place hold"
 msgstr "Tono Tāpuitanga"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:494
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:495
 #, fuzzy, c-format
 msgid "Placed on"
 msgstr "Rā Tono Tāpui"
@@ -8871,7 +8904,7 @@ msgstr ""
 msgid "Please enter your card number:"
 msgstr "Tāurutia tō tau kāri"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:30
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:31
 #, fuzzy, c-format
 msgid ""
 "Please fill out this form to make a purchase suggestion. You will receive an "
@@ -8963,7 +8996,7 @@ msgstr ""
 msgid "Powered by %s "
 msgstr "I whakaputaina e: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:255
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:254
 #, c-format
 msgid "Pre-adolescent"
 msgstr ""
@@ -8978,7 +9011,7 @@ msgstr ""
 msgid "Preferred form: "
 msgstr "Whare Pukapuka "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:253
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:252
 #, c-format
 msgid "Preschool"
 msgstr ""
@@ -9008,7 +9041,7 @@ msgstr "O Mua"
 msgid "Previous sessions"
 msgstr "Putanga o Mua"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:254
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:253
 #, fuzzy, c-format
 msgid "Primary"
 msgstr "Kura Tuatahi (5-8)"
@@ -9029,12 +9062,12 @@ msgstr "Tā"
 msgid "Print list"
 msgstr "Rārangi Whakatika"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:498
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:499
 #, fuzzy, c-format
 msgid "Priority"
 msgstr "Mana ake:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:549
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:550
 #, fuzzy, c-format
 msgid "Priority:"
 msgstr "Mana ake:"
@@ -9063,7 +9096,7 @@ msgstr ""
 msgid "Product"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:317
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:316
 #, c-format
 msgid "Programmed texts"
 msgstr "Pukapuka ako raupapa"
@@ -9109,12 +9142,12 @@ msgstr "Rārangi Tūmatanui"
 msgid "Public lists:"
 msgstr "Rārangi Tūmatanui"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:160
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:159
 #, fuzzy, c-format
 msgid "Publication date range"
 msgstr "Inenga Tau Whakaputa:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:42
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:43
 #, fuzzy, c-format
 msgid "Publication place:"
 msgstr "Tau Whakaputa"
@@ -9177,7 +9210,7 @@ msgstr "Kaiwhakaputa"
 msgid "Publisher location"
 msgstr "Wāhi Kaiwhakaputa"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:40
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:41
 #, c-format
 msgid "Publisher:"
 msgstr "Kaiwhakaputa:"
@@ -9244,7 +9277,7 @@ msgstr "Patohia anō te Kupuhipa Hōu"
 msgid "Realia"
 msgstr "Riterite Tonu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:72
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:73
 #, fuzzy, c-format
 msgid "Reason for suggestion: "
 msgstr "Whakaaro Hoko Hōu "
@@ -9313,7 +9346,7 @@ msgstr "Ngā ture"
 msgid "Registre"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:284
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:283
 #, c-format
 msgid "Regular print"
 msgstr "Tānga Noa"
@@ -9351,7 +9384,7 @@ msgid "Remove facet [% facet.facet_link_value | html %]"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:104
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:103
 #, fuzzy
 msgid "Remove field"
 msgstr "Āpure Whai Waehere"
@@ -9379,17 +9412,17 @@ msgid "Remove share"
 msgstr "Āpure Whai Waehere"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:137
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:226
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:378
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:458
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:227
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:379
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:459
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #, c-format
 msgid "Renew"
 msgstr "Whakahoutia"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:268
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:269
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 #, fuzzy
 msgid "Renew all"
 msgstr "Whakahoutia te katoa"
@@ -9403,8 +9436,8 @@ msgid "Renew item"
 msgstr "Whakahou Mea"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:257
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:258
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 #, fuzzy
 msgid "Renew selected"
 msgstr "Mukua Mea Tīpako"
@@ -9498,17 +9531,17 @@ msgstr "Otinga mai i te %s ki te %s"
 msgid "Results of search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "&nbsp;me te/ngā tepe:&nbsp;'%s'"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:583
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:584
 #, fuzzy, c-format
 msgid "Resume"
 msgstr "tukunga"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:652
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:653
 #, c-format
 msgid "Resume all suspended holds"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:594
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:595
 #, fuzzy, c-format
 msgid "Resume your hold on "
 msgstr "Tono Tāpuitanga"
@@ -9577,7 +9610,7 @@ msgstr ""
 msgid "Review: "
 msgstr "Arotakenga "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:316
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:315
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:546
 #, c-format
 msgid "Reviews"
@@ -9745,7 +9778,7 @@ msgid "Score"
 msgstr "Aroha mai"
 
 #. INPUT type=submit name=do
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:360
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:359
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:156
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:273
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:56
@@ -9786,14 +9819,14 @@ msgstr "Rapua tēnei taitara i:"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:317
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:187
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:50
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:87
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:89
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:362
 #, fuzzy
 msgid "Search for works by this author"
 msgstr "Rapua tēnei taitara i:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:23
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:115
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:122
 #, c-format
 msgid "Search for:"
 msgstr "Rapua:"
@@ -9858,7 +9891,7 @@ msgstr "Pakimaero"
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:58
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:271
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:170
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:408
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:409
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:141
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:88
@@ -9913,13 +9946,13 @@ msgstr "Tāpuitia tētahi kape tauwhāiti"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:34
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:815
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
 #, fuzzy, c-format
 msgid "Select all"
 msgstr "Kōwhiria te katoa"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:139
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:146
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
 #, fuzzy, c-format
 msgid "Select suggestions to: "
 msgstr "Mukua Mea Tīpako "
@@ -10376,12 +10409,12 @@ msgstr " Aroha mai, kāore e whakaaetia kia neke atu i te %s ō tāpuitanga. "
 msgid "Sorry, your session has timed out. Please log in again."
 msgstr " Aroha mai, kua pau kē tō wātū. Taki uru mai anō."
 
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:63
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:65
 #, fuzzy, c-format
 msgid "Sort By: "
 msgstr "Kōmakatia mā te: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:233
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:232
 #, fuzzy, c-format
 msgid "Sort by:"
 msgstr "Kōmakatia mā te:"
@@ -10397,7 +10430,7 @@ msgstr "Kōmakatia mā te: "
 msgid "Sort this list by: "
 msgstr "Kōmakatia tēnei rārangi mā te: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:232
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:231
 #, fuzzy, c-format
 msgid "Sorting: "
 msgstr "Momotuhi Rahi "
@@ -10413,7 +10446,7 @@ msgstr "Tuku"
 msgid "Source: "
 msgstr "Rapua "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:258
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:257
 #, fuzzy, c-format
 msgid "Specialized"
 msgstr "Pukapuka Tāuhu:"
@@ -10454,12 +10487,11 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:87
 #, fuzzy, c-format
 msgid "Standard number"
 msgstr "Tau Pūnoa"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:40
 #, c-format
 msgid "Standard number (ISBN, ISSN or other):"
 msgstr ""
@@ -10469,7 +10501,7 @@ msgstr ""
 msgid "Standardtittel: "
 msgstr "paerewa "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:320
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:319
 #, c-format
 msgid "Statistics"
 msgstr "Tauanga"
@@ -10481,16 +10513,16 @@ msgstr "Tauanga"
 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:55
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:500
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:501
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:800
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:152
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:159
 #, c-format
 msgid "Status"
 msgstr "Mana"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:554
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:200
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:555
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:207
 #, fuzzy, c-format
 msgid "Status:"
 msgstr "Mana"
@@ -10666,7 +10698,7 @@ msgid "Submit update request"
 msgstr "Tukuna mai Tō Whakaaro"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:97
 #, fuzzy
 msgid "Submit your suggestion"
 msgstr "Tukuna mai Tō Whakaaro"
@@ -10723,17 +10755,17 @@ msgstr "Pārongo tangohanga mō %s"
 msgid "Subscriptions"
 msgstr "Tangohanga"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:117
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:124
 #, fuzzy, c-format
 msgid "Suggested by:"
 msgstr "I whakaarohia e:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:157
 #, fuzzy, c-format
 msgid "Suggested for"
 msgstr "I Whakaarohia Mō"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:184
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:191
 #, fuzzy, c-format
 msgid "Suggested for:"
 msgstr "I Whakaarohia Mō"
@@ -10743,7 +10775,7 @@ msgstr "I Whakaarohia Mō"
 msgid "Suggestions"
 msgstr "Tangohanga"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:155
 #, c-format
 msgid "Summary"
 msgstr "Tīpoka"
@@ -10784,31 +10816,31 @@ msgstr ""
 msgid "Supersedes:"
 msgstr "Rārangitanga:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:315
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:314
 #, c-format
 msgid "Surveys"
 msgstr "Rangahau"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:502
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:587
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:605
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:608
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:616
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:503
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:588
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:606
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:609
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:617
 #, c-format
 msgid "Suspend"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:639
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:640
 #, c-format
 msgid "Suspend all holds"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:601
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:602
 #, c-format
 msgid "Suspend until:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:596
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:597
 #, c-format
 msgid "Suspend your hold on "
 msgstr ""
@@ -10898,7 +10930,7 @@ msgstr "He karere mai i te whare pukapuka"
 msgid "Tags:"
 msgstr "Tohu:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:321
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:320
 #, c-format
 msgid "Technical reports"
 msgstr "Pūrongo hangarau"
@@ -11190,7 +11222,7 @@ msgstr "I tukuna te rārangi ki: %s"
 msgid "The operation %s is not supported."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:108
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:115
 #, c-format
 msgid "The selected suggestions have been deleted."
 msgstr ""
@@ -11232,7 +11264,7 @@ msgstr "(E %s ngā tangohanga e pā ana ki tēnei taitara)."
 msgid "There are no comments for this item."
 msgstr "Kāore he whakaaro mō tēnei mea."
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:221
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:229
 #, c-format
 msgid "There are no pending purchase suggestions."
 msgstr "Kāore he whakaaro hoko e tāewa ana."
@@ -11279,7 +11311,7 @@ msgid ""
 "library for help."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:314
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:313
 #, c-format
 msgid "Theses"
 msgstr "Tuhinga Whakapae"
@@ -11461,9 +11493,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:118
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:330
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:372
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:493
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:331
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:373
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:494
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:242
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:208
@@ -11505,7 +11537,7 @@ msgid "Title translated: "
 msgstr "Kīanga Taitara "
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:127
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:36
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:37
 #, c-format
 msgid "Title:"
 msgstr "Taitara:"
@@ -11586,7 +11618,7 @@ msgstr "pūataata"
 msgid "Tre-dimensjonale gjenstander"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:324
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:323
 #, fuzzy, c-format
 msgid "Treaties "
 msgstr "Tiriti "
@@ -11834,7 +11866,7 @@ msgstr ""
 msgid "Utstilling"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:290
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:289
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "Rīpene ataata"
@@ -11892,7 +11924,7 @@ msgstr "Whakahoutia te katoa"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:154
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:392
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:393
 msgid "View at Amazon.com"
 msgstr "Tirohia i Amazon.com"
 
@@ -11912,7 +11944,7 @@ msgstr "Tirohia i Amazon.com"
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:76
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:86
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:88
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:341
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:344
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:346
@@ -11974,7 +12006,7 @@ msgstr "Pārongo pukapuka"
 msgid "Volumes: "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:351
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:352
 #, c-format
 msgid "Waiting"
 msgstr "E tatari ana"
@@ -12006,7 +12038,7 @@ msgid "We"
 msgstr ""
 
 #. %1$s:  total 
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:46
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:48
 #, c-format
 msgid "We have %s results for your search "
 msgstr ""
@@ -12018,7 +12050,7 @@ msgid ""
 "define how long we keep your reading history."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:293
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:292
 #, c-format
 msgid "Website"
 msgstr "Pae tukutuku"
@@ -12062,7 +12094,7 @@ msgid "Wire"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
 #, fuzzy
 msgid "With selected suggestions: "
 msgstr "Mukua Mea Tīpako "
@@ -12177,8 +12209,8 @@ msgstr ""
 msgid "You currently have nothing checked out."
 msgstr "Kāore he mea i tākina e koe."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:286
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:300
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:287
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:301
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr "He whaina, he utu hoki e nama ana koe, ... te tapeke"
@@ -12213,7 +12245,7 @@ msgstr ""
 "Whakamātauria anō! Me mahara tonu, he pū tairongo ngā ingoa kaiwhakamahi me "
 "ngā kupuhipa."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:314
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:315
 #, c-format
 msgid "You have a credit of:"
 msgstr "He moni tāwere āu, … te tapeke"
@@ -12229,7 +12261,7 @@ msgstr ""
 msgid "You have checked out too many items and can't check out any more. %s "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:61
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:76
 #, fuzzy, c-format
 msgid "You have no fines or charges"
 msgstr "Kāore ō Whaina, Utu ranei"
@@ -12241,7 +12273,7 @@ msgid ""
 "fields and resubmit."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:273
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:274
 #, c-format
 msgid "You have nothing checked out"
 msgstr "Kāore he mea i tākina e koe"
@@ -12516,7 +12548,7 @@ msgstr "Tō Kōrero"
 msgid "Your privacy rules have been updated."
 msgstr "Kua hurihia tō kupuhipa"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:15
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:16
 #, fuzzy, c-format
 msgid "Your purchase suggestions"
 msgstr "ōku whakaaro hoko"
@@ -12537,7 +12569,7 @@ msgstr "Rapua:"
 msgid "Your search returned %s results."
 msgstr "ngā otinga i whakahokia"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:109
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:116
 #, fuzzy, c-format
 msgid "Your suggestion has been submitted."
 msgstr "Kua hurihia tō kupuhipa"
@@ -12640,7 +12672,7 @@ msgid "[% shelfname |html %]"
 msgstr ""
 
 #. INPUT type=text name=title
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:116
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:123
 msgid "[% title |html %]"
 msgstr ""
 
@@ -12658,17 +12690,17 @@ msgid ""
 "type=seefro.type %%] "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:362
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:361
 #, fuzzy, c-format
 msgid "[Fewer options]"
 msgstr "[he kōwhiringa ruarua atu]"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:364
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:363
 #, c-format
 msgid "[More options]"
 msgstr "[ētahi atu kōwhiringa]"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:366
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:365
 #, fuzzy, c-format
 msgid "[New search]"
 msgstr "[Rapu Hōu]"
@@ -12922,7 +12954,7 @@ msgstr "Tuhinga ture"
 #. %3$s:  WAITIN.holdingbranch 
 #. %4$s:  WAITIN.branch 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:351
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:352
 #, fuzzy, c-format
 msgid "at %s %s In transit from %s to %s %s "
 msgstr "e kawea ana i %s ki %s "
@@ -13084,7 +13116,7 @@ msgstr "e %s"
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:452
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:162
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:107
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:86
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:88
 #, fuzzy, c-format
 msgid "by "
 msgstr "e %s "
@@ -14146,6 +14178,11 @@ msgstr "puoro"
 msgid "needed_before_date"
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:88
+#, c-format
+msgid "negcap "
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:577
 #, fuzzy, c-format
 msgid "newspaper "
@@ -14770,7 +14807,7 @@ msgstr "Kei te wātea i te Whare Pukapuka"
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #. %8$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:568
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:569
 #, fuzzy, c-format
 msgid "since %s %s Suspended %s until %s %s %s Pending %s %s "
 msgstr "%s %s %s %s (%s) "
@@ -15115,7 +15152,7 @@ msgstr "Taitara ōrite:"
 msgid "unknown"
 msgstr "kāore i te mōhiotia"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:643
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:644
 #, fuzzy, c-format
 msgid "until "
 msgstr "Pūhouhou "
@@ -15371,7 +15408,7 @@ msgid "Årbok"
 msgstr "P&#275;ke Pukapuka"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:275
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:592
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:593
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:127
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:246
 #, c-format

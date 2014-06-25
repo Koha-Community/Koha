@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-05-05 21:47-0300\n"
+"POT-Creation-Date: 2014-06-15 17:54-0300\n"
 "PO-Revision-Date: 2008-03-22 21:11+0200\n"
 "Last-Translator: translate.koha.org\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -24,27 +24,6 @@ msgstr "%1$s 기록"
 #. A
 #: opac-tmpl/prog/en/modules/opac-detail.tt:742
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
-msgstr ""
-
-#. %1$s:  END 
-#. %2$s:  END 
-#. %3$s:  END 
-#. %4$s:  END 
-#. %5$s:  BLOCK language 
-#. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s:  CASE 
-#. %12$s:  lang 
-#. %13$s:  END 
-#. %14$s:  END 
-#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
-#, c-format
-msgid ""
-"%s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]Greek "
-"(to 1453) %s%s %s %s "
 msgstr ""
 
 #. %1$s:  USE Koha 
@@ -108,6 +87,27 @@ msgid ""
 "%s %s %s %s %s %s %s%s%sKoha online%s catalog &rsaquo; Course reserves for "
 "%s %s "
 msgstr "%1$s 목록--내 책바구니 "
+
+#. %1$s:  END 
+#. %2$s:  END 
+#. %3$s:  END 
+#. %4$s:  END 
+#. %5$s:  BLOCK language 
+#. %6$s:  SWITCH lang 
+#. %7$s:  CASE ['heb'] 
+#. %8$s:  CASE ['ara'] 
+#. %9$s:  CASE ['gre'] 
+#. %10$s:  CASE ['grc'] 
+#. %11$s:  CASE 
+#. %12$s:  lang 
+#. %13$s:  END 
+#. %14$s:  END 
+#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
+#, c-format
+msgid ""
+"%s %s %s %s %s %s %sHebrew %sArabic %sGreek (modern) %sGreek (to 1453) %s%s "
+"%s %s "
+msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
@@ -1028,8 +1028,8 @@ msgstr ""
 #. %15$s: - IF ACCOUNT_LINE.description 
 #. %16$s:  ACCOUNT_LINE.description 
 #. %17$s:  END 
-#. %18$s:  IF line.title 
-#. %19$s:  line.title |html_entity 
+#. %18$s:  IF ACCOUNT_LINE.title 
+#. %19$s:  ACCOUNT_LINE.title 
 #. %20$s:  END 
 #: opac-tmpl/prog/en/modules/opac-account.tt:42
 #, c-format
@@ -1647,11 +1647,11 @@ msgstr "%s%s 환영합니다 "
 #. %4$s:  END 
 #. %5$s:  BLOCK language 
 #. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s: ERROR
+#. %7$s:  CASE ['en', 'eng'] 
+#. %8$s:  CASE ['fr', 'fre'] 
+#. %9$s:  CASE ['it', 'ita'] 
+#. %10$s:  CASE ['de', 'ger', 'deu'] 
+#. %11$s:  CASE ['es', 'spa'] 
 #. %12$s:  CASE 
 #. %13$s:  lang 
 #. %14$s:  END 
@@ -1659,8 +1659,7 @@ msgstr "%s%s 환영합니다 "
 #: opac-tmpl/prog/en/includes/opac-authorities.inc:53
 #, c-format
 msgid ""
-"%s%s %s %s %s %s %s %%]English %s %%]French %s %%]Italian %s %%]German %s %%]"
-"Spanish %s%s %s %s "
+"%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
 msgstr ""
 
 #. %1$s:  IF ( itemsloo.ITEM_RESULTS ) 
@@ -2039,7 +2038,7 @@ msgstr ""
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:173
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:172
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 msgstr ""
@@ -2581,8 +2580,8 @@ msgstr "%s%s 환영합니다"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Author phrase"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:124
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:126
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:123
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:125
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Call number"
 msgstr ""
@@ -2602,12 +2601,12 @@ msgstr ""
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Corporate name"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:122
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr ""
@@ -2903,7 +2902,7 @@ msgstr "--당신의 구내분관을 선택하세요--"
 msgid "-- Choose format --"
 msgstr "--당신의 구내분관을 선택하세요--"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:313
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
 #, c-format
 msgid "-- none -- "
 msgstr ""
@@ -3308,7 +3307,7 @@ msgstr ""
 msgid "Abstract: "
 msgstr "모든 분관 "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
 #, c-format
 msgid "Abstracts/summaries"
 msgstr ""
@@ -3368,7 +3367,7 @@ msgid "Add %s items to %s"
 msgstr "%1$s 자료항목"
 
 #. A name=ButtonPlus
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:136
 msgid "Add another field"
 msgstr ""
 
@@ -3438,12 +3437,12 @@ msgstr "%1$s 자료항목 "
 msgid "Additional authors:"
 msgstr "추가된 저자들:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:257
 #, fuzzy, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "추가된 저자들: %s"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
 #, c-format
 msgid "Adolescent"
 msgstr ""
@@ -3458,7 +3457,7 @@ msgstr ""
 msgid "Adressebøker"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
 #, c-format
 msgid "Adult"
 msgstr ""
@@ -3493,7 +3492,7 @@ msgstr "모든 항목 유형"
 #: opac-tmpl/prog/en/includes/masthead.inc:89
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:18
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:108
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:301
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:300
 #, fuzzy, c-format
 msgid "All libraries"
 msgstr "모든 분관"
@@ -3656,17 +3655,17 @@ msgstr ""
 msgid "Any"
 msgstr "무엇이든"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
 #, c-format
 msgid "Any audience"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:233
 #, fuzzy, c-format
 msgid "Any content"
 msgstr "목차"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:243
 #, fuzzy, c-format
 msgid "Any format"
 msgstr "포멧(형식)"
@@ -4024,7 +4023,7 @@ msgstr "의해 관리되어졌습니다"
 msgid "Back to the results search list"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:131
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:130
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:480
 #: opac-tmpl/prog/en/modules/opac-user.tt:170
 #: opac-tmpl/prog/en/modules/opac-user.tt:336
@@ -4079,7 +4078,7 @@ msgstr "#도서목록"
 msgid "Bibliografiske data"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
 #, c-format
 msgid "Bibliographies"
 msgstr ""
@@ -4160,7 +4159,7 @@ msgid "Biografier"
 msgstr ""
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:52
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
 #, c-format
 msgid "Biography"
 msgstr ""
@@ -4206,7 +4205,7 @@ msgstr "책 바구니 이용"
 msgid "Book reviews by critics ( XXX )"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:247
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
 #, fuzzy, c-format
 msgid "Braille"
 msgstr "사용가능함"
@@ -4253,12 +4252,12 @@ msgstr ""
 msgid "CAS"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:248
 #, c-format
 msgid "CD audio"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
 #, c-format
 msgid "CD software"
 msgstr ""
@@ -4413,7 +4412,7 @@ msgstr "날짜"
 msgid "Cas login"
 msgstr "로케이션:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
 #, c-format
 msgid "Cassette recording"
 msgstr ""
@@ -4428,7 +4427,7 @@ msgstr ""
 msgid "Catalog searches"
 msgstr "상세검색"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
 #, fuzzy, c-format
 msgid "Catalogs"
 msgstr "%1$s 목록"
@@ -4937,7 +4936,7 @@ msgstr "현재 패스워드:"
 msgid "Curriculum"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr ""
@@ -5180,7 +5179,7 @@ msgstr ""
 msgid "Dias"
 msgstr "날짜"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
 #, fuzzy, c-format
 msgid "Dictionaries"
 msgstr "사전검색"
@@ -5206,12 +5205,12 @@ msgstr ""
 msgid "Diorama"
 msgstr "일반(표준)개관"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
 #, c-format
 msgid "Directories"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
 #, c-format
 msgid "Discographies"
 msgstr ""
@@ -5474,7 +5473,7 @@ msgstr "소유자： "
 msgid "Empty and close"
 msgstr "비우기/닫기"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
 #, c-format
 msgid "Encyclopedias "
 msgstr ""
@@ -5495,8 +5494,8 @@ msgid "Enter a new purchase suggestion"
 msgstr "새 구입희망사항을 입력하세요"
 
 #. INPUT type=text name=q
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:133
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:163
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:132
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
 #, fuzzy
 msgid "Enter search terms"
 msgstr "검색 시작"
@@ -5707,7 +5706,7 @@ msgstr "무료"
 msgid "Festskrift "
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
 #, fuzzy, c-format
 msgid "Fiction"
 msgstr "로케이션"
@@ -5748,7 +5747,7 @@ msgstr ""
 msgid "Filmografier"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
 #, c-format
 msgid "Filmographies"
 msgstr ""
@@ -5821,7 +5820,7 @@ msgstr ""
 msgid "Font"
 msgstr "총계"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
 #, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -5973,7 +5972,7 @@ msgstr "검색중"
 msgid "Fysiske bøker"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
 #, c-format
 msgid "General"
 msgstr ""
@@ -6106,7 +6105,7 @@ msgstr ""
 msgid "Groups"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
 #, fuzzy, c-format
 msgid "Groups of libraries"
 msgstr "모든 분관"
@@ -6121,7 +6120,7 @@ msgstr ""
 msgid "HELP"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
 #, c-format
 msgid "Handbooks"
 msgstr ""
@@ -6313,7 +6312,7 @@ msgstr "단순 보기"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:60
 #: opac-tmpl/prog/en/includes/masthead.inc:62
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:129
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:128
 #: opac-tmpl/prog/en/modules/opac-results.tt:409
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:147
 #: opac-tmpl/prog/en/modules/opac-basket.tt:208
@@ -6508,7 +6507,7 @@ msgstr ""
 msgid "Indexed in:"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
 #, c-format
 msgid "Indexes"
 msgstr ""
@@ -6682,7 +6681,7 @@ msgstr ""
 msgid "June"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:230
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
 #, c-format
 msgid "Juvenile"
 msgstr ""
@@ -6833,13 +6832,13 @@ msgstr ""
 msgid "Lagringsbrikke"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:201
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:200
 #, fuzzy, c-format
 msgid "Language"
 msgstr "언어변경:"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:137
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:203
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:202
 #, fuzzy, c-format
 msgid "Language: "
 msgstr "언어변경: "
@@ -6849,7 +6848,7 @@ msgstr "언어변경: "
 msgid "Languages:&nbsp;"
 msgstr "언어변경:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
 #, c-format
 msgid "Large print"
 msgstr ""
@@ -6865,22 +6864,22 @@ msgstr "최근에 방문한 내용"
 msgid "Last location"
 msgstr "로케이션"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
 #, c-format
 msgid "Law reports and digests"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
 #, c-format
 msgid "Legal articles"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
 #, c-format
 msgid "Legal cases and case notes"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
 #, fuzzy, c-format
 msgid "Legislation"
 msgstr "로케이션"
@@ -6936,13 +6935,13 @@ msgstr "%1$s 장서목록 "
 msgid "Library catalog"
 msgstr "%1$s 장서목록"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:299
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:298
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
 #, fuzzy, c-format
 msgid "Library:"
 msgstr "%1$s 장서목록"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:187
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:186
 #, c-format
 msgid "Limit to any of the following:"
 msgstr ""
@@ -7051,7 +7050,7 @@ msgstr "로케이션"
 msgid "Location (Status)"
 msgstr "로케이션"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:297
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:296
 #, fuzzy, c-format
 msgid "Location and availability: "
 msgstr "사용가능함 "
@@ -7600,7 +7599,7 @@ msgstr ""
 msgid "MusicGroup"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
 #, c-format
 msgid "Musical recording"
 msgstr ""
@@ -7845,7 +7844,7 @@ msgstr "복사할 수 없습니다."
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:40
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:132
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:205
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:204
 #, c-format
 msgid "No limit"
 msgstr ""
@@ -7911,12 +7910,12 @@ msgstr ""
 msgid "No tags from this library for this title."
 msgstr "표제검색"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
 #, fuzzy, c-format
 msgid "Non fiction"
 msgstr "로케이션"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:239
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
 #, c-format
 msgid "Non-musical recording"
 msgstr ""
@@ -8086,7 +8085,7 @@ msgstr "연속간행물"
 msgid "OK"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:310
 #, c-format
 msgid "OR"
 msgstr ""
@@ -8140,7 +8139,7 @@ msgstr ""
 msgid "Online tjeneste"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:319
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:318
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr ""
@@ -8338,7 +8337,7 @@ msgstr "패스워드:"
 msgid "Password: %s "
 msgstr "패스워드: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
 #, c-format
 msgid "Patent document"
 msgstr ""
@@ -8649,7 +8648,7 @@ msgstr ""
 msgid "Powered by "
 msgstr "%s에 의해 출판되었습니다 "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
 #, c-format
 msgid "Pre-adolescent"
 msgstr ""
@@ -8664,7 +8663,7 @@ msgstr ""
 msgid "Preferred form: "
 msgstr "%1$s 장서목록 "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
 #, c-format
 msgid "Preschool"
 msgstr ""
@@ -8694,7 +8693,7 @@ msgstr "&lt;&lt;&lt;이전"
 msgid "Previous sessions"
 msgstr "&lt;&lt;&lt;이전"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
 #, fuzzy, c-format
 msgid "Primary"
 msgstr "프린트"
@@ -8758,7 +8757,7 @@ msgstr ""
 msgid "Product"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
 #, c-format
 msgid "Programmed texts"
 msgstr ""
@@ -8800,7 +8799,7 @@ msgstr "공중 책꽂이"
 msgid "Public lists:"
 msgstr "공중 책꽂이"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:160
 #, fuzzy, c-format
 msgid "Publication date range:"
 msgstr "간행물 년도:"
@@ -9000,7 +8999,7 @@ msgstr "로케이션"
 msgid "Registre"
 msgstr "예약"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
 #, c-format
 msgid "Regular print"
 msgstr ""
@@ -9038,7 +9037,7 @@ msgid "Remove facet [% facet.facet_link_value | html %]"
 msgstr ""
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:138
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
 #, fuzzy
 msgid "Remove field"
 msgstr "대출 혹은 구독예약기간연장"
@@ -9247,7 +9246,7 @@ msgstr ""
 msgid "Review: "
 msgstr "대출 혹은 구독예약기간연장 "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
 #: opac-tmpl/prog/en/modules/opac-detail.tt:965
 #, fuzzy, c-format
 msgid "Reviews"
@@ -9415,8 +9414,8 @@ msgid "Score"
 msgstr "미안합니다"
 
 #. INPUT type=submit name=do
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:148
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:336
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:147
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:335
 #: opac-tmpl/prog/en/modules/opac-detail.tt:628
 #: opac-tmpl/prog/en/modules/opac-detail.tt:735
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:63
@@ -10053,7 +10052,7 @@ msgstr "미안합니다. 당신의 세션타임이 끝났습니다. 다시 로�
 msgid "Sort By: "
 msgstr "미안합니다 "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:327
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
 #, fuzzy, c-format
 msgid "Sort by:"
 msgstr "미안합니다"
@@ -10069,7 +10068,7 @@ msgstr "미안합니다 "
 msgid "Sort this list by: "
 msgstr "미안합니다 "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:325
 #, fuzzy, c-format
 msgid "Sorting: "
 msgstr "미안합니다 "
@@ -10085,7 +10084,7 @@ msgstr "발송"
 msgid "Source: "
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
 #, fuzzy, c-format
 msgid "Specialized"
 msgstr "거절되었음"
@@ -10126,7 +10125,6 @@ msgstr ""
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:116
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:118
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, fuzzy, c-format
 msgid "Standard number"
 msgstr "대출카드번호"
@@ -10141,7 +10139,7 @@ msgstr ""
 msgid "Standardtittel: "
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
 #, fuzzy, c-format
 msgid "Statistics"
 msgstr "지위"
@@ -10396,7 +10394,7 @@ msgstr "%s를 위한 예약정보"
 msgid "Subscriptions"
 msgstr "기술"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:220
 #, c-format
 msgid "Subtype limits"
 msgstr ""
@@ -10458,7 +10456,7 @@ msgstr ""
 msgid "Supersedes:"
 msgstr "총서명"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
 #, c-format
 msgid "Surveys"
 msgstr ""
@@ -10552,7 +10550,7 @@ msgstr "도서관에서 보낸 메세지"
 msgid "Tags:"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
 #, c-format
 msgid "Technical reports"
 msgstr ""
@@ -10889,7 +10887,7 @@ msgid ""
 "library for help."
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
 #, c-format
 msgid "Theses"
 msgstr ""
@@ -11196,7 +11194,7 @@ msgstr ""
 msgid "Tre-dimensjonale gjenstander"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:280
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
 #, fuzzy, c-format
 msgid "Treaties "
 msgstr "전거기록들 "
@@ -11450,7 +11448,7 @@ msgstr ""
 msgid "Utstilling"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr ""
@@ -11621,7 +11619,7 @@ msgid ""
 "define how long we keep your reading history."
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:254
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
 #, fuzzy, c-format
 msgid "Website"
 msgstr "대기"
@@ -12201,20 +12199,20 @@ msgstr ""
 msgid "[Create new list]"
 msgstr "새 가상서가 설치"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:150
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:338
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:149
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:337
 #, fuzzy, c-format
 msgid "[Fewer options]"
 msgstr "다른 옵션:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:152
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:340
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:151
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:339
 #, fuzzy, c-format
 msgid "[More options]"
 msgstr "다른 옵션:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:154
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:342
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:153
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:341
 #, fuzzy, c-format
 msgid "[New search]"
 msgstr "검색"

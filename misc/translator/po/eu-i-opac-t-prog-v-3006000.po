@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.4\n"
-"POT-Creation-Date: 2014-05-05 22:05-0300\n"
+"POT-Creation-Date: 2014-06-15 18:11-0300\n"
 "PO-Revision-Date: 2012-05-05 11:28+0200\n"
 "Last-Translator: bixerdo <bixerdo@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
@@ -23,27 +23,6 @@ msgstr "%s erregistroak"
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 msgstr ""
 "$[% MARCSUBJECT_SUBFIELDS_LOO.code %] [% MARCSUBJECT_SUBFIELDS_LOO.value %]"
-
-#. %1$s:  END 
-#. %2$s:  END 
-#. %3$s:  END 
-#. %4$s:  END 
-#. %5$s:  BLOCK language 
-#. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s:  CASE 
-#. %12$s:  lang 
-#. %13$s:  END 
-#. %14$s:  END 
-#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
-#, fuzzy, c-format
-msgid ""
-"%s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]Greek "
-"(to 1453) %s%s %s %s "
-msgstr "%s %s - %s%s %s- %s%s %s(%s)%s %s ; %s%s %s - %s%s %s ; %s%s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -108,6 +87,27 @@ msgid ""
 msgstr ""
 "%s %s%s%sKoha Online%s Katalogoa &rsaquo; liburutegi nagusi honentzat %s %s "
 "%s %s "
+
+#. %1$s:  END 
+#. %2$s:  END 
+#. %3$s:  END 
+#. %4$s:  END 
+#. %5$s:  BLOCK language 
+#. %6$s:  SWITCH lang 
+#. %7$s:  CASE ['heb'] 
+#. %8$s:  CASE ['ara'] 
+#. %9$s:  CASE ['gre'] 
+#. %10$s:  CASE ['grc'] 
+#. %11$s:  CASE 
+#. %12$s:  lang 
+#. %13$s:  END 
+#. %14$s:  END 
+#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
+#, fuzzy, c-format
+msgid ""
+"%s %s %s %s %s %s %sHebrew %sArabic %sGreek (modern) %sGreek (to 1453) %s%s "
+"%s %s "
+msgstr "%s %s - %s%s %s- %s%s %s(%s)%s %s ; %s%s %s - %s%s %s ; %s%s "
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
@@ -1056,8 +1056,8 @@ msgstr "%s %sOharra: leiho hau automatikoki itxiko da 5 segundu barru%s "
 #. %15$s: - IF ACCOUNT_LINE.description 
 #. %16$s:  ACCOUNT_LINE.description 
 #. %17$s:  END 
-#. %18$s:  IF line.title 
-#. %19$s:  line.title |html_entity 
+#. %18$s:  IF ACCOUNT_LINE.title 
+#. %19$s:  ACCOUNT_LINE.title 
 #. %20$s:  END 
 #: opac-tmpl/prog/en/modules/opac-account.tt:42
 #, c-format
@@ -1694,11 +1694,11 @@ msgstr "%s -(e)tik %s%s "
 #. %4$s:  END 
 #. %5$s:  BLOCK language 
 #. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s: ERROR
+#. %7$s:  CASE ['en', 'eng'] 
+#. %8$s:  CASE ['fr', 'fre'] 
+#. %9$s:  CASE ['it', 'ita'] 
+#. %10$s:  CASE ['de', 'ger', 'deu'] 
+#. %11$s:  CASE ['es', 'spa'] 
 #. %12$s:  CASE 
 #. %13$s:  lang 
 #. %14$s:  END 
@@ -1706,8 +1706,7 @@ msgstr "%s -(e)tik %s%s "
 #: opac-tmpl/prog/en/includes/opac-authorities.inc:53
 #, fuzzy, c-format
 msgid ""
-"%s%s %s %s %s %s %s %%]English %s %%]French %s %%]Italian %s %%]German %s %%]"
-"Spanish %s%s %s %s "
+"%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
 msgstr "%s %s - %s%s %s- %s%s %s(%s)%s %s ; %s%s %s - %s%s %s ; %s%s "
 
 #. %1$s:  IF ( itemsloo.ITEM_RESULTS ) 
@@ -2096,7 +2095,7 @@ msgstr ""
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:173
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:172
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 msgstr "%sItem mota $sBilduma %sKokapena %sGehiago %s "
@@ -2891,8 +2890,8 @@ msgstr "%s&nbsp;%s %s"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Author phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Egilea esaldi bezala"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:124
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:126
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:123
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:125
 #, fuzzy, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Call number"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Kokapen-kodea"
@@ -2912,12 +2911,12 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Batzarraren izenaren esaldia bezala"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Corporate name"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Erakundearen izena"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:122
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
@@ -3213,7 +3212,7 @@ msgstr "-- Aukeratu --"
 msgid "-- Choose format --"
 msgstr "-- Formatua aukeratu --"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:313
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
 #, c-format
 msgid "-- none -- "
 msgstr "-- bat ere ez -- "
@@ -3620,7 +3619,7 @@ msgstr "Bereganatua:"
 msgid "Abstract: "
 msgstr "Laburpena: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "Laburpenak"
@@ -3680,7 +3679,7 @@ msgid "Add %s items to %s"
 msgstr "Gehitu %s item zerrenda honi: %s"
 
 #. A name=ButtonPlus
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:136
 msgid "Add another field"
 msgstr "Gehitu beste eremu bat"
 
@@ -3748,12 +3747,12 @@ msgstr "Iruzkinaren sarrera-data: %s %s "
 msgid "Additional authors:"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:257
 #, fuzzy, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "Material osagarriakl/Inprimatutako materiala"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
 #, fuzzy, c-format
 msgid "Adolescent"
 msgstr "Batxilergoa;"
@@ -3768,7 +3767,7 @@ msgstr "Batxilergoa; "
 msgid "Adressebøker"
 msgstr "Adressebøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
 #, c-format
 msgid "Adult"
 msgstr "Heldua"
@@ -3803,7 +3802,7 @@ msgstr "Item mota guztiak"
 #: opac-tmpl/prog/en/includes/masthead.inc:89
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:18
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:108
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:301
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:300
 #, c-format
 msgid "All libraries"
 msgstr "Liburutegi guztiak"
@@ -3968,17 +3967,17 @@ msgstr "Antologia"
 msgid "Any"
 msgstr "Edozein"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
 #, fuzzy, c-format
 msgid "Any audience"
 msgstr "Edozein hartzaile"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:233
 #, fuzzy, c-format
 msgid "Any content"
 msgstr "Edozein eduki"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:243
 #, fuzzy, c-format
 msgid "Any format"
 msgstr "Edozein formatu"
@@ -4342,7 +4341,7 @@ msgstr "Emaitzetara itzuli"
 msgid "Back to the results search list"
 msgstr "Bilaketaren emaitzen zerrendara itzuli"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:131
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:130
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:480
 #: opac-tmpl/prog/en/modules/opac-user.tt:170
 #: opac-tmpl/prog/en/modules/opac-user.tt:336
@@ -4397,7 +4396,7 @@ msgstr "Bibliografiak"
 msgid "Bibliografiske data"
 msgstr "Datu bibliografikoak"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
 #, c-format
 msgid "Bibliographies"
 msgstr "Bibliografiak"
@@ -4478,7 +4477,7 @@ msgid "Biografier"
 msgstr "Biografoa"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:52
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
 #, c-format
 msgid "Biography"
 msgstr "Biografia"
@@ -4524,7 +4523,7 @@ msgstr "Liburua"
 msgid "Book reviews by critics ( XXX )"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:247
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
 #, c-format
 msgid "Braille"
 msgstr "Braille"
@@ -4571,12 +4570,12 @@ msgstr "Apaletan zehar nabigatu"
 msgid "CAS"
 msgstr "CAS"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:248
 #, c-format
 msgid "CD audio"
 msgstr "Audio-CDa"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
 #, fuzzy, c-format
 msgid "CD software"
 msgstr "Software-CDa"
@@ -4729,7 +4728,7 @@ msgstr "Saskia"
 msgid "Cas login"
 msgstr "CAS erabiltzailea"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
 #, c-format
 msgid "Cassette recording"
 msgstr "Grabazio-kasetea"
@@ -4744,7 +4743,7 @@ msgstr ""
 msgid "Catalog searches"
 msgstr "Bilaketa gehiago"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
 #, c-format
 msgid "Catalogs"
 msgstr "Katalogoak"
@@ -5256,7 +5255,7 @@ msgstr "Uneko saioa"
 msgid "Curriculum"
 msgstr "Curriculum"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "DVD bideoa / Videodisc"
@@ -5502,7 +5501,7 @@ msgstr "Eguna"
 msgid "Dias"
 msgstr "Egunak"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
 #, c-format
 msgid "Dictionaries"
 msgstr "Hiztegiak"
@@ -5528,12 +5527,12 @@ msgstr "Poesia"
 msgid "Diorama"
 msgstr "Diorama"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
 #, c-format
 msgid "Directories"
 msgstr "Direktorioak"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
 #, c-format
 msgid "Discographies"
 msgstr "Diskografiak"
@@ -5800,7 +5799,7 @@ msgstr "Gaiak: "
 msgid "Empty and close"
 msgstr "Hustu eta itxi"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
 #, c-format
 msgid "Encyclopedias "
 msgstr "Entziklopediak "
@@ -5821,8 +5820,8 @@ msgid "Enter a new purchase suggestion"
 msgstr "Beste erosketa-iradokizun bat egin"
 
 #. INPUT type=text name=q
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:133
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:163
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:132
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
 msgid "Enter search terms"
 msgstr "Bilaketa-terminuak sartu"
 
@@ -6036,7 +6035,7 @@ msgstr "Emakumezkoa"
 msgid "Festskrift "
 msgstr "Ospakizun-argitalpena "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
 #, c-format
 msgid "Fiction"
 msgstr "Fikzioa"
@@ -6077,7 +6076,7 @@ msgstr "Filmaren soinu-banda"
 msgid "Filmografier"
 msgstr "Filmografia"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
 #, c-format
 msgid "Filmographies"
 msgstr "Filmografiak"
@@ -6149,7 +6148,7 @@ msgstr "Aire-mapa"
 msgid "Font"
 msgstr "Iturria"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
 #, fuzzy, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -6305,7 +6304,7 @@ msgstr "Historia osoa"
 msgid "Fysiske bøker"
 msgstr "Fysiske bøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
 #, fuzzy, c-format
 msgid "General"
 msgstr "Orokorra;"
@@ -6450,7 +6449,7 @@ msgstr "Disko fonografikoa"
 msgid "Groups"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
 #, fuzzy, c-format
 msgid "Groups of libraries"
 msgstr "Liburutegi taldeak"
@@ -6465,7 +6464,7 @@ msgstr "Gått inn i: "
 msgid "HELP"
 msgstr "LAGUNTZA"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
 #, c-format
 msgid "Handbooks"
 msgstr "Eskuliburuak"
@@ -6657,7 +6656,7 @@ msgstr "ISBD ikuspegia"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:60
 #: opac-tmpl/prog/en/includes/masthead.inc:62
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:129
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:128
 #: opac-tmpl/prog/en/modules/opac-results.tt:409
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:147
 #: opac-tmpl/prog/en/modules/opac-basket.tt:208
@@ -6857,7 +6856,7 @@ msgstr "Eduki osotugabeak"
 msgid "Indexed in:"
 msgstr "Hemen indexatua:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
 #, c-format
 msgid "Indexes"
 msgstr "Aurkibideak"
@@ -7032,7 +7031,7 @@ msgstr ""
 msgid "June"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:230
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
 #, c-format
 msgid "Juvenile"
 msgstr "Haur eta gazteak"
@@ -7183,13 +7182,13 @@ msgstr "LCCN: "
 msgid "Lagringsbrikke"
 msgstr "Memoria-txartela"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:201
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:200
 #, c-format
 msgid "Language"
 msgstr "Hizkuntza"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:137
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:203
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:202
 #, c-format
 msgid "Language: "
 msgstr "Hizkuntza: "
@@ -7199,7 +7198,7 @@ msgstr "Hizkuntza: "
 msgid "Languages:&nbsp;"
 msgstr "Hizkuntzak"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
 #, c-format
 msgid "Large print"
 msgstr "Inprimaketa handia"
@@ -7215,22 +7214,22 @@ msgstr "Zerrendak"
 msgid "Last location"
 msgstr "Azken kokapena"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
 #, c-format
 msgid "Law reports and digests"
 msgstr "Txosten eta arautegi juridikoak"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
 #, c-format
 msgid "Legal articles"
 msgstr "Artikulu juridikoak"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "Lege-kasuak eta oharrak"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
 #, c-format
 msgid "Legislation"
 msgstr "Legedia"
@@ -7286,13 +7285,13 @@ msgstr "Liburutegia: "
 msgid "Library catalog"
 msgstr "Katalogoa"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:299
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:298
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
 #, fuzzy, c-format
 msgid "Library:"
 msgstr "Liburutegia"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:187
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:186
 #, c-format
 msgid "Limit to any of the following:"
 msgstr "Mugatu bilaketa:"
@@ -7400,7 +7399,7 @@ msgstr "Kokapena"
 msgid "Location (Status)"
 msgstr "Kokapena(k)"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:297
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:296
 #, c-format
 msgid "Location and availability: "
 msgstr "Kokapena eta erabilgarritasuna "
@@ -7950,7 +7949,7 @@ msgstr "Musika"
 msgid "MusicGroup"
 msgstr "Musika"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
 #, c-format
 msgid "Musical recording"
 msgstr "Musika-grabazioa"
@@ -8196,7 +8195,7 @@ msgstr "Ez dago item eskuragarririk:"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:40
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:132
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:205
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:204
 #, c-format
 msgid "No limit"
 msgstr "Mugarik gabe"
@@ -8262,12 +8261,12 @@ msgstr "Ez da etiketarik zehaztu"
 msgid "No tags from this library for this title."
 msgstr "Liburutegi honetan izenburu honetarako etiketarik ez dago"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
 #, fuzzy, c-format
 msgid "Non fiction"
 msgstr "Ez-fikzioa"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:239
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
 #, c-format
 msgid "Non-musical recording"
 msgstr "Grabazio ez-musikala"
@@ -8446,7 +8445,7 @@ msgstr "Zenbaki-datua"
 msgid "OK"
 msgstr "Onartu"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:310
 #, c-format
 msgid "OR"
 msgstr "OR"
@@ -8500,7 +8499,7 @@ msgstr "Loturak: "
 msgid "Online tjeneste"
 msgstr "Online zerbitzua"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:319
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:318
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr "Soilik mailegatzeko edo erreferentziarako eskuragarri dauden itemak"
@@ -8698,7 +8697,7 @@ msgstr "Pasahitza"
 msgid "Password: %s "
 msgstr "Pasahitza "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
 #, c-format
 msgid "Patent document"
 msgstr "Patente-dokumentua"
@@ -9020,7 +9019,7 @@ msgstr "Postala"
 msgid "Powered by "
 msgstr "Sustatzailea: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
 #, fuzzy, c-format
 msgid "Pre-adolescent"
 msgstr "DBH;"
@@ -9035,7 +9034,7 @@ msgstr "DBH; "
 msgid "Preferred form: "
 msgstr "; Forma literarioa: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
 #, fuzzy, c-format
 msgid "Preschool"
 msgstr "Haur Hezkuntza;"
@@ -9065,7 +9064,7 @@ msgstr "Aurrekoak"
 msgid "Previous sessions"
 msgstr "Aurreko saioak"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
 #, fuzzy, c-format
 msgid "Primary"
 msgstr "Lehen Hezkuntza;"
@@ -9128,7 +9127,7 @@ msgstr ""
 msgid "Product"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
 #, c-format
 msgid "Programmed texts"
 msgstr "Programatutako testuak"
@@ -9169,7 +9168,7 @@ msgstr "Zerrenda publikoak"
 msgid "Public lists:"
 msgstr "Zerrenda publikoak"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:160
 #, fuzzy, c-format
 msgid "Publication date range:"
 msgstr "Argitaratze-aldia:"
@@ -9369,7 +9368,7 @@ msgstr "legedia"
 msgid "Registre"
 msgstr "Erregistroak"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
 #, c-format
 msgid "Regular print"
 msgstr "Inprimaketa erregularra"
@@ -9408,7 +9407,7 @@ msgid "Remove facet [% facet.facet_link_value | html %]"
 msgstr "[% facet.facet_title_value |html %]"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:138
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
 #, fuzzy
 msgid "Remove field"
 msgstr "Kodifikatutako eremuak"
@@ -9618,7 +9617,7 @@ msgstr ""
 msgid "Review: "
 msgstr "Berrikustea: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
 #: opac-tmpl/prog/en/modules/opac-detail.tt:965
 #, c-format
 msgid "Reviews"
@@ -9788,8 +9787,8 @@ msgid "Score"
 msgstr "Partitura"
 
 #. INPUT type=submit name=do
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:148
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:336
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:147
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:335
 #: opac-tmpl/prog/en/modules/opac-detail.tt:628
 #: opac-tmpl/prog/en/modules/opac-detail.tt:735
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:63
@@ -10431,7 +10430,7 @@ msgstr "Sentitzen dugu, zure saioa iraungi da; mesedez, sartu berriro."
 msgid "Sort By: "
 msgstr "Antolatua: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:327
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
 #, fuzzy, c-format
 msgid "Sort by:"
 msgstr "Antolatua:"
@@ -10447,7 +10446,7 @@ msgstr "Antolatua: "
 msgid "Sort this list by: "
 msgstr "Zerrenda hau honela antolatu: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:325
 #, fuzzy, c-format
 msgid "Sorting: "
 msgstr "txostena "
@@ -10463,7 +10462,7 @@ msgstr "Soinua"
 msgid "Source: "
 msgstr "Bilatu "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
 #, fuzzy, c-format
 msgid "Specialized"
 msgstr "Espezializatua;"
@@ -10504,7 +10503,6 @@ msgstr "Språkundervisning"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:116
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:118
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, fuzzy, c-format
 msgid "Standard number"
 msgstr "Zenbaki estandarra"
@@ -10519,7 +10517,7 @@ msgstr "Zenbaki estandarra (ISBN, ISSN edo beste):"
 msgid "Standardtittel: "
 msgstr "Izenburu estandarra; "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
 #, c-format
 msgid "Statistics"
 msgstr "Estatistikak"
@@ -10772,7 +10770,7 @@ msgstr "Harpidetzaren informazioa %s-(a)(r)rentzat"
 msgid "Subscriptions"
 msgstr "Harpidetzak"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:220
 #, c-format
 msgid "Subtype limits"
 msgstr "Azpimotak"
@@ -10833,7 +10831,7 @@ msgstr "Ordezkatzen du partzialki:"
 msgid "Supersedes:"
 msgstr "Ordezkatzen du:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
 #, c-format
 msgid "Surveys"
 msgstr "Berrikuspenak"
@@ -10927,7 +10925,7 @@ msgstr "Liburutegi honen etiketak:"
 msgid "Tags:"
 msgstr "Etiketak:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
 #, c-format
 msgid "Technical reports"
 msgstr "Txosten teknikoak"
@@ -11273,7 +11271,7 @@ msgid ""
 "library for help."
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
 #, c-format
 msgid "Theses"
 msgstr "Tesiak"
@@ -11591,7 +11589,7 @@ msgstr "Gardena"
 msgid "Tre-dimensjonale gjenstander"
 msgstr "Hiru dimentsioko objektuak"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:280
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
 #, c-format
 msgid "Treaties "
 msgstr "Tratatuak "
@@ -11843,7 +11841,7 @@ msgstr "Bereizia: "
 msgid "Utstilling"
 msgstr "Erakusketa"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "VHS zinta / Bideokasetea"
@@ -12014,7 +12012,7 @@ msgstr ""
 "Zure pribatutasuna zaintzeak biziki kezkatzen gaitu. Pantaila honetan "
 "zehaztu dezakezu irakurketa-historiala zenbat denbora gorde nahi duzun"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:254
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
 #, c-format
 msgid "Website"
 msgstr "Webgunea"
@@ -12607,20 +12605,20 @@ msgstr ""
 msgid "[Create new list]"
 msgstr "Zerrenda berria sortu"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:150
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:338
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:149
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:337
 #, fuzzy, c-format
 msgid "[Fewer options]"
 msgstr "[Aukera gutxiago]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:152
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:340
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:151
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:339
 #, c-format
 msgid "[More options]"
 msgstr "[Aukera gehiago]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:154
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:342
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:153
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:341
 #, fuzzy, c-format
 msgid "[New search]"
 msgstr "[Bilaketa berria]"

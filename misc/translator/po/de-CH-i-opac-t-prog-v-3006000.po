@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: German Koha Translation\n"
-"POT-Creation-Date: 2014-05-05 21:52-0300\n"
-"PO-Revision-Date: 2014-05-12 18:47+0100\n"
+"POT-Creation-Date: 2014-06-15 17:58-0300\n"
+"PO-Revision-Date: 2014-06-18 19:27+0100\n"
 "Last-Translator: M.Véron <veron@veron.ch>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-community."
 "org>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.5.5\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1399622139.0\n"
+"X-POOTLE-MTIME: 1402999306.0\n"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:110
 #, c-format
@@ -25,29 +25,6 @@ msgstr "#record"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:742
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 msgstr "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
-
-#. %1$s:  END
-#. %2$s:  END
-#. %3$s:  END
-#. %4$s:  END
-#. %5$s:  BLOCK language
-#. %6$s:  SWITCH lang
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s:  CASE
-#. %12$s:  lang
-#. %13$s:  END
-#. %14$s:  END
-#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
-#, c-format
-msgid ""
-"%s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]Greek "
-"(to 1453) %s%s %s %s "
-msgstr ""
-"%s %s %s %s %s %s %s %%]Hebräisch %s %%]Arabisch %s %%]Griechisch (modern) "
-"%s %%]Griechisch (bis 1453) %s%s %s %s "
 
 #. %1$s:  USE Koha
 #. %2$s:  USE KohaDates
@@ -116,6 +93,29 @@ msgstr ""
 "%s "
 
 #. %1$s:  END
+#. %2$s:  END
+#. %3$s:  END
+#. %4$s:  END
+#. %5$s:  BLOCK language
+#. %6$s:  SWITCH lang
+#. %7$s:  CASE ['heb']
+#. %8$s:  CASE ['ara']
+#. %9$s:  CASE ['gre']
+#. %10$s:  CASE ['grc']
+#. %11$s:  CASE
+#. %12$s:  lang
+#. %13$s:  END
+#. %14$s:  END
+#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
+#, c-format
+msgid ""
+"%s %s %s %s %s %s %sHebrew %sArabic %sGreek (modern) %sGreek (to 1453) %s%s "
+"%s %s "
+msgstr ""
+"%s %s %s %s %s %s %sHebräisch %sArabisch %sGriechisch (modern) %sGriechisch "
+"(bis 1453) %s%s %s %s "
+
+#. %1$s:  END
 #. %2$s:  ELSIF ( item.damaged )
 #. %3$s:  av_lib_include = AuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 )
 #. %4$s:  IF av_lib_include
@@ -127,7 +127,7 @@ msgstr ""
 #: opac-tmpl/prog/en/includes/item-status.inc:41
 #, c-format
 msgid "%s %s %s %s %s %s Item damaged %s %s Available %s"
-msgstr "%s %s %s %s %s %s Beschädigt %s %s Verfügbar %s"
+msgstr "%s %s %s %s %s %s Exemplar Beschädigt %s %s Erhältlich %s"
 
 #. %1$s:  IF holds_count.defined
 #. %2$s:  ITEM_RESULT.holds_count
@@ -1066,8 +1066,8 @@ msgstr ""
 #. %15$s: - IF ACCOUNT_LINE.description
 #. %16$s:  ACCOUNT_LINE.description
 #. %17$s:  END
-#. %18$s:  IF line.title
-#. %19$s:  line.title |html_entity
+#. %18$s:  IF ACCOUNT_LINE.title
+#. %19$s:  ACCOUNT_LINE.title
 #. %20$s:  END
 #: opac-tmpl/prog/en/modules/opac-account.tt:42
 #, c-format
@@ -1086,7 +1086,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/svc/suggestion.tt:1
 #, c-format
 msgid "%s %sSearch suggestions"
-msgstr "%s %sAnschaffungsvorschläge"
+msgstr "%s %sSuchvorschläge"
 
 #. %1$s:  END
 #. %2$s:  IF ( GROUP_RESULT.author )
@@ -1492,7 +1492,7 @@ msgstr "%s Selbstverbuchungssystem"
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:682
 #, c-format
 msgid "%s State:"
-msgstr "%s Kanton:"
+msgstr "%s Bundesland:"
 
 #. %1$s:  END
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:267
@@ -1723,11 +1723,11 @@ msgstr "%s seit %s%s "
 #. %4$s:  END
 #. %5$s:  BLOCK language
 #. %6$s:  SWITCH lang
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s: ERROR
+#. %7$s:  CASE ['en', 'eng']
+#. %8$s:  CASE ['fr', 'fre']
+#. %9$s:  CASE ['it', 'ita']
+#. %10$s:  CASE ['de', 'ger', 'deu']
+#. %11$s:  CASE ['es', 'spa']
 #. %12$s:  CASE
 #. %13$s:  lang
 #. %14$s:  END
@@ -1735,11 +1735,10 @@ msgstr "%s seit %s%s "
 #: opac-tmpl/prog/en/includes/opac-authorities.inc:53
 #, c-format
 msgid ""
-"%s%s %s %s %s %s %s %%]English %s %%]French %s %%]Italian %s %%]German %s %%]"
-"Spanish %s%s %s %s "
+"%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
 msgstr ""
-"%s%s %s %s %s %s %s %%]Englisch %s %%]Französisch %s %%]Italienisch %s %%]"
-"Deutsch %s %%]Spanisch %s%s %s %s "
+"%s%s %s %s %s %s %sEnglisch %sFranzösisch %sItalienisch %sDeutsch %sSpanisch "
+"%s%s %s %s "
 
 #. %1$s:  IF ( itemsloo.ITEM_RESULTS )
 #. %2$s:  FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS
@@ -2131,7 +2130,7 @@ msgstr ""
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' )
 #. %4$s:  ELSE
 #. %5$s:  END
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:173
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:172
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 msgstr "%sMedientyp %sSammlung %sStandort %sSonstiges %s "
@@ -2921,8 +2920,8 @@ msgstr "&nbsp;&nbsp; %s / 5 (bei %s Bewertungen)"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Author phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Verfasser, exakt"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:124
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:126
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:123
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:125
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Call number"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Signatur"
@@ -2942,12 +2941,12 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Kongress, exakt"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Corporate name"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Körperschaft"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:122
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
@@ -3243,7 +3242,7 @@ msgstr "-- Auswählen --"
 msgid "-- Choose format --"
 msgstr "-- Format auswählen --"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:313
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
 #, c-format
 msgid "-- none -- "
 msgstr "-- keines -- "
@@ -3653,7 +3652,7 @@ msgstr "Darin aufgegangen:"
 msgid "Abstract: "
 msgstr "Zusammenfassung: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "Zusammenfassungen"
@@ -3713,7 +3712,7 @@ msgid "Add %s items to %s"
 msgstr "%s Titel hinzufügen zu %s"
 
 #. A name=ButtonPlus
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:136
 msgid "Add another field"
 msgstr "Füge ein anderes Feld bei"
 
@@ -3781,12 +3780,12 @@ msgstr "Hinzugefügt am %s %s von "
 msgid "Additional authors:"
 msgstr "Weitere Autoren:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:257
 #, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "Zusätzliche Medientypen für Bücher/gedruckte Materialien"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
 #, c-format
 msgid "Adolescent"
 msgstr "Heranwachsende"
@@ -3801,7 +3800,7 @@ msgstr "Heranwachsende; "
 msgid "Adressebøker"
 msgstr "Adressebøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
 #, c-format
 msgid "Adult"
 msgstr "Erwachsene"
@@ -3836,7 +3835,7 @@ msgstr "Alle Medientypen"
 #: opac-tmpl/prog/en/includes/masthead.inc:89
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:18
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:108
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:301
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:300
 #, c-format
 msgid "All libraries"
 msgstr "Alle Bibliotheken"
@@ -4001,17 +4000,17 @@ msgstr "Antologi"
 msgid "Any"
 msgstr "Beliebig"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
 #, c-format
 msgid "Any audience"
 msgstr "Beliebiges Zielpublikum"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:233
 #, c-format
 msgid "Any content"
 msgstr "Beliebiger Inhalt"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:243
 #, c-format
 msgid "Any format"
 msgstr "Beliebiges Format"
@@ -4375,7 +4374,7 @@ msgstr "Trefferliste"
 msgid "Back to the results search list"
 msgstr "Trefferliste"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:131
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:130
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:480
 #: opac-tmpl/prog/en/modules/opac-user.tt:170
 #: opac-tmpl/prog/en/modules/opac-user.tt:336
@@ -4430,7 +4429,7 @@ msgstr "Bibliografier"
 msgid "Bibliografiske data"
 msgstr "Bibliografiske data"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
 #, c-format
 msgid "Bibliographies"
 msgstr "Bibliographien"
@@ -4511,7 +4510,7 @@ msgid "Biografier"
 msgstr "Biografier"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:52
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
 #, c-format
 msgid "Biography"
 msgstr "Biografie"
@@ -4557,7 +4556,7 @@ msgstr "Buch"
 msgid "Book reviews by critics ( XXX )"
 msgstr "Besprechungen von Kritikern ( XXX )"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:247
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
 #, c-format
 msgid "Braille"
 msgstr "Braille"
@@ -4604,12 +4603,12 @@ msgstr "Regal durchstöbern"
 msgid "CAS"
 msgstr "CAS"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:248
 #, c-format
 msgid "CD audio"
 msgstr "Audio-CD"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
 #, c-format
 msgid "CD software"
 msgstr "Software (CD)"
@@ -4762,7 +4761,7 @@ msgstr "Korb"
 msgid "Cas login"
 msgstr "CAS-Login"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
 #, c-format
 msgid "Cassette recording"
 msgstr "Tonkasette"
@@ -4777,7 +4776,7 @@ msgstr "Besetzung: "
 msgid "Catalog searches"
 msgstr "Katalogsuche"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
 #, c-format
 msgid "Catalogs"
 msgstr "Kataloge"
@@ -5286,7 +5285,7 @@ msgstr "Aktuelle Session"
 msgid "Curriculum"
 msgstr "Curriculum"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "Video-DVD / Videodisk"
@@ -5525,7 +5524,7 @@ msgstr "Dia"
 msgid "Dias"
 msgstr "Dias"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
 #, c-format
 msgid "Dictionaries"
 msgstr "Wörterbücher"
@@ -5551,12 +5550,12 @@ msgstr "Dikt"
 msgid "Diorama"
 msgstr "Diorama"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
 #, c-format
 msgid "Directories"
 msgstr "Verzeichnisse"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
 #, c-format
 msgid "Discographies"
 msgstr "Diskographien"
@@ -5824,7 +5823,7 @@ msgstr "Emne(r): "
 msgid "Empty and close"
 msgstr "Löschen und schliessen"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
 #, c-format
 msgid "Encyclopedias "
 msgstr "Enzyklopädien "
@@ -5845,8 +5844,8 @@ msgid "Enter a new purchase suggestion"
 msgstr "Geben Sie einen Anschaffungsvorschlag ein"
 
 #. INPUT type=text name=q
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:133
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:163
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:132
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
 msgid "Enter search terms"
 msgstr "Suchbegriffe eingeben"
 
@@ -6059,7 +6058,7 @@ msgstr "Weiblich:"
 msgid "Festskrift "
 msgstr "Festskrift "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
 #, c-format
 msgid "Fiction"
 msgstr "Belletristik"
@@ -6100,7 +6099,7 @@ msgstr "Filmlydspor"
 msgid "Filmografier"
 msgstr "Filmografier"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
 #, c-format
 msgid "Filmographies"
 msgstr "Filmographieen"
@@ -6171,7 +6170,7 @@ msgstr "Flykart"
 msgid "Font"
 msgstr "Schriftart"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
 #, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -6328,7 +6327,7 @@ msgstr "Vollständige Historie"
 msgid "Fysiske bøker"
 msgstr "Fysiske bøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
 #, c-format
 msgid "General"
 msgstr "Allgemein"
@@ -6472,7 +6471,7 @@ msgstr "Grammofonplate"
 msgid "Groups"
 msgstr "Gruppen"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
 #, c-format
 msgid "Groups of libraries"
 msgstr "Bibliotheksgruppen"
@@ -6487,7 +6486,7 @@ msgstr "Gått inn i: "
 msgid "HELP"
 msgstr "HILFE"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
 #, c-format
 msgid "Handbooks"
 msgstr "Handbücher"
@@ -6678,7 +6677,7 @@ msgstr "ISBD"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:60
 #: opac-tmpl/prog/en/includes/masthead.inc:62
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:129
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:128
 #: opac-tmpl/prog/en/modules/opac-results.tt:409
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:147
 #: opac-tmpl/prog/en/modules/opac-basket.tt:208
@@ -6883,7 +6882,7 @@ msgstr "Unvollständiger Inhalt:"
 msgid "Indexed in:"
 msgstr "Indiziert in:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
 #, c-format
 msgid "Indexes"
 msgstr "Indices"
@@ -7055,7 +7054,7 @@ msgstr "Jun"
 msgid "June"
 msgstr "Juni"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:230
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
 #, c-format
 msgid "Juvenile"
 msgstr "Jugend"
@@ -7206,13 +7205,13 @@ msgstr "LCCN: %s "
 msgid "Lagringsbrikke"
 msgstr "Lagringsbrikke"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:201
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:200
 #, c-format
 msgid "Language"
 msgstr "Sprache"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:137
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:203
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:202
 #, c-format
 msgid "Language: "
 msgstr "Sprache: "
@@ -7222,7 +7221,7 @@ msgstr "Sprache: "
 msgid "Languages:&nbsp;"
 msgstr "Sprachen:&nbsp;"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
 #, c-format
 msgid "Large print"
 msgstr "Grossdruck"
@@ -7237,22 +7236,22 @@ msgstr "Letzte"
 msgid "Last location"
 msgstr "Letzter Standort"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
 #, c-format
 msgid "Law reports and digests"
 msgstr "Gesetzessammlungen und Gerichtsentscheide"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
 #, c-format
 msgid "Legal articles"
 msgstr "Juristische Aufsätze"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "Juristische Fälle und Fallnotizen"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
 #, c-format
 msgid "Legislation"
 msgstr "Gesetzgebung"
@@ -7307,13 +7306,13 @@ msgstr "Bibliothek: "
 msgid "Library catalog"
 msgstr "Freitext"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:299
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:298
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
 #, c-format
 msgid "Library:"
 msgstr "Bibliothek:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:187
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:186
 #, c-format
 msgid "Limit to any of the following:"
 msgstr "Suche nach folgenden Kriterien eingrenzen:"
@@ -7422,7 +7421,7 @@ msgstr "Standort"
 msgid "Location (Status)"
 msgstr "Standort (Status)"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:297
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:296
 #, c-format
 msgid "Location and availability: "
 msgstr "Standort und Verfügbarkeit: "
@@ -7967,7 +7966,7 @@ msgstr "MusicAlbum"
 msgid "MusicGroup"
 msgstr "MusicGroup"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
 #, c-format
 msgid "Musical recording"
 msgstr "Musikalische Aufnahmen"
@@ -8212,7 +8211,7 @@ msgstr "Keine Exemplare verfügbar:"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:40
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:132
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:205
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:204
 #, c-format
 msgid "No limit"
 msgstr "Keine Begrenzung"
@@ -8278,12 +8277,12 @@ msgstr "Es wurde kein Tag erfasst."
 msgid "No tags from this library for this title."
 msgstr "Es gibt keine Tags für diesen Titel."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
 #, c-format
 msgid "Non fiction"
 msgstr "Sachliteratur"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:239
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
 #, c-format
 msgid "Non-musical recording"
 msgstr "Nicht-musikalische Aufnahmen"
@@ -8463,7 +8462,7 @@ msgstr "Numeriske data"
 msgid "OK"
 msgstr "OK"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:310
 #, c-format
 msgid "OR"
 msgstr "OR"
@@ -8517,7 +8516,7 @@ msgstr "Onlineressourcen: "
 msgid "Online tjeneste"
 msgstr "Online tjeneste"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:319
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:318
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr "Nur aktuell verfügbare Exemplare"
@@ -8609,7 +8608,7 @@ msgstr "Andere Auflagen dieses Werkes"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:828
 #, c-format
 msgid "Other editions: "
-msgstr "Andere Auflagen: "
+msgstr "Andere Ausgaben: "
 
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:82
 #, c-format
@@ -8717,7 +8716,7 @@ msgstr "Passwort:"
 msgid "Password: %s "
 msgstr "Passwort: %s "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
 #, c-format
 msgid "Patent document"
 msgstr "Patentschrift"
@@ -9040,7 +9039,7 @@ msgstr "Postkort"
 msgid "Powered by "
 msgstr "Powered by "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
 #, c-format
 msgid "Pre-adolescent"
 msgstr "Vorpubertierende"
@@ -9055,7 +9054,7 @@ msgstr "Vorpubertierende; "
 msgid "Preferred form: "
 msgstr "Bevorzugter Term: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
 #, c-format
 msgid "Preschool"
 msgstr "Vorschüler"
@@ -9084,7 +9083,7 @@ msgstr "Zurück"
 msgid "Previous sessions"
 msgstr "Vorangegangene Sessions"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
 #, c-format
 msgid "Primary"
 msgstr "Grundschüler"
@@ -9147,7 +9146,7 @@ msgstr "Bearbeitung..."
 msgid "Product"
 msgstr "Produkt"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
 #, c-format
 msgid "Programmed texts"
 msgstr "Lernprogramm"
@@ -9187,7 +9186,7 @@ msgstr "Öffentliche Listen"
 msgid "Public lists:"
 msgstr "Öffentliche Listen:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:160
 #, c-format
 msgid "Publication date range:"
 msgstr "Erscheinungsjahr:"
@@ -9386,7 +9385,7 @@ msgstr "Anmeldung ungültig!"
 msgid "Registre"
 msgstr "Registre"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
 #, c-format
 msgid "Regular print"
 msgstr "Normaldruck"
@@ -9424,7 +9423,7 @@ msgid "Remove facet [% facet.facet_link_value | html %]"
 msgstr "Facette entfernen [% facet.facet_link_value | html %]"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:138
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
 msgid "Remove field"
 msgstr "Feld entfernen"
 
@@ -9626,7 +9625,7 @@ msgstr ""
 msgid "Review: "
 msgstr "Rezension: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
 #: opac-tmpl/prog/en/modules/opac-detail.tt:965
 #, c-format
 msgid "Reviews"
@@ -9795,8 +9794,8 @@ msgid "Score"
 msgstr "Noten"
 
 #. INPUT type=submit name=do
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:148
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:336
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:147
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:335
 #: opac-tmpl/prog/en/modules/opac-detail.tt:628
 #: opac-tmpl/prog/en/modules/opac-detail.tt:735
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:63
@@ -10438,7 +10437,7 @@ msgstr ""
 msgid "Sort By: "
 msgstr "Sortiere nach: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:327
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
 #, c-format
 msgid "Sort by:"
 msgstr "Sortiere nach:"
@@ -10454,7 +10453,7 @@ msgstr "Sortiere nach: "
 msgid "Sort this list by: "
 msgstr "Sortiere Liste nach: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:325
 #, c-format
 msgid "Sorting: "
 msgstr "Sortierung: "
@@ -10470,7 +10469,7 @@ msgstr "Ton"
 msgid "Source: "
 msgstr "Quelle: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
 #, c-format
 msgid "Specialized"
 msgstr "Fachkundige"
@@ -10511,7 +10510,6 @@ msgstr "Språkundervisning"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:116
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:118
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "Standard number"
 msgstr "Standardnummer"
@@ -10526,7 +10524,7 @@ msgstr "Standardnummer (ISBN, ISSN oder andere):"
 msgid "Standardtittel: "
 msgstr "Standardtittel: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
 #, c-format
 msgid "Statistics"
 msgstr "Statistiken"
@@ -10781,7 +10779,7 @@ msgid "Subscriptions"
 msgstr "Abonnements"
 
 # Subtyp ist nicht wirklich deutsch - Kontext?
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:220
 #, c-format
 msgid "Subtype limits"
 msgstr "Weitere Suchkriterien"
@@ -10842,7 +10840,7 @@ msgid "Supersedes:"
 msgstr "Hervorgegangen aus:"
 
 # Gutachten, Umfragen... Kontext?
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
 #, c-format
 msgid "Surveys"
 msgstr "Umfragen"
@@ -10936,7 +10934,7 @@ msgstr "Tags dieser Bibliothek:"
 msgid "Tags:"
 msgstr "Tags:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
 #, c-format
 msgid "Technical reports"
 msgstr "Technische Berichte"
@@ -11164,13 +11162,13 @@ msgid ""
 "on Friday %s %s on Saturday %s %s on Sunday %s for %s%s issues%s %s%s weeks"
 "%s %s%s months%s "
 msgstr ""
-"Das aktuelle Abonnement begann am %s und es erscheint %s zweimal täglich %s "
-"%s täglich %s %s drei mal wöchentlich %s %s wöchentlich %s %s alle 2 Wochen "
-"%s %s alle 3 Wochen %s %smonatlich %s %s alle 2 Monate %s %s vierteljährlich "
-"%s %s zwei mal jährlich %s %s jährlich %s %s alle 2 Jahre %s %s "
-"unregelmässig %s %s am Montag %s %s am Dienstag %s %s am Mittwoch %s %s am "
-"Donnerstag %s %s am Freitag %s %s am Samstag %s %s am Sonntag %s für %s%s "
-"Ausgaben%s %s%s Wochen%s %s%s Monate%s "
+"Das Abonnement begann am %s und erscheint %s zweimal am Tag %s %s jeden Tag "
+"%s %s dreimal in der Woche %s %s jede Woche %s %s alle 2 Wochen %s %s alle 3 "
+"Wochen %s %s jeden Monat %s %s alle 2 Monate %s %s jedes Quartal %s %s "
+"zweimal im Jahr %s %s jedes Jahr %s %s alle 2 Jahre %s %s unregelmässig %s "
+"%s am Montag %s %s am Dienstag %s %s am Mittwoch %s %s am Donnerstag %s %s "
+"am Freitag %s %s am Samstag %s %s am Sonntag %s für %s%s Heften%s %s%s Wochen"
+"%s %s%s Monate%s "
 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:18
 #, c-format
@@ -11298,7 +11296,7 @@ msgstr ""
 "Bei der Verarbeitung Ihrer Kontoeröffnung ist ein Problem aufgetreten. Bitte "
 "kontaktieren Sie die Bibliothek."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
 #, c-format
 msgid "Theses"
 msgstr "Abschlussarbeiten"
@@ -11620,7 +11618,7 @@ msgstr "Folie"
 msgid "Tre-dimensjonale gjenstander"
 msgstr "Tre-dimensjonale gjenstander"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:280
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
 #, c-format
 msgid "Treaties "
 msgstr "Verträge "
@@ -11871,7 +11869,7 @@ msgstr "Utskilt fra: "
 msgid "Utstilling"
 msgstr "Utstilling"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "VHS / Videokassette"
@@ -12047,7 +12045,7 @@ msgstr ""
 "Wir sind sehr darauf bedacht Ihre Privatsphäre zu schützen. Auf dieser Seite "
 "können Sie festlegen, wie lang Ihre Lesehistorie gespeichert wird."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:254
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
 #, c-format
 msgid "Website"
 msgstr "Website"
@@ -12662,20 +12660,20 @@ msgstr ""
 msgid "[Create new list]"
 msgstr "[Neue Liste]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:150
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:338
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:149
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:337
 #, c-format
 msgid "[Fewer options]"
 msgstr "[Weniger Optionen]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:152
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:340
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:151
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:339
 #, c-format
 msgid "[More options]"
 msgstr "[Mehr Optionen]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:154
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:342
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:153
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:341
 #, c-format
 msgid "[New search]"
 msgstr "[Neue Suche]"
@@ -14954,7 +14952,7 @@ msgstr "Schlagworte "
 #: opac-tmpl/prog/en/modules/opac-results.tt:362
 #, c-format
 msgid "suggestions"
-msgstr "Anschaffungsvorschläge"
+msgstr "Vorschläge"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:370
 #, c-format

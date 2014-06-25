@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-05-05 22:06-0300\n"
+"POT-Creation-Date: 2014-06-15 18:11-0300\n"
 "PO-Revision-Date: 2014-02-15 12:13+0000\n"
 "Last-Translator: chandoi <chanandnan@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,30 +27,6 @@ msgstr "#bảng ghi"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:742
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 msgstr "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
-
-# done!
-#. %1$s:  END 
-#. %2$s:  END 
-#. %3$s:  END 
-#. %4$s:  END 
-#. %5$s:  BLOCK language 
-#. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s:  CASE 
-#. %12$s:  lang 
-#. %13$s:  END 
-#. %14$s:  END 
-#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
-#, fuzzy, c-format
-msgid ""
-"%s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]Greek "
-"(to 1453) %s%s %s %s "
-msgstr ""
-"%s %s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]"
-"Greek (to 1453) %s%s %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -117,6 +93,30 @@ msgid ""
 msgstr ""
 "%s %s Search also for narrower subjects %s Search also for broader subjects "
 "%s Search also for related subjects %s"
+
+# done!
+#. %1$s:  END 
+#. %2$s:  END 
+#. %3$s:  END 
+#. %4$s:  END 
+#. %5$s:  BLOCK language 
+#. %6$s:  SWITCH lang 
+#. %7$s:  CASE ['heb'] 
+#. %8$s:  CASE ['ara'] 
+#. %9$s:  CASE ['gre'] 
+#. %10$s:  CASE ['grc'] 
+#. %11$s:  CASE 
+#. %12$s:  lang 
+#. %13$s:  END 
+#. %14$s:  END 
+#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
+#, fuzzy, c-format
+msgid ""
+"%s %s %s %s %s %s %sHebrew %sArabic %sGreek (modern) %sGreek (to 1453) %s%s "
+"%s %s "
+msgstr ""
+"%s %s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]"
+"Greek (to 1453) %s%s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
@@ -1075,8 +1075,8 @@ msgstr "%s %sChú ý: cửa sổ này sẽ tự động đóng trong vòng 5 gi�
 #. %15$s: - IF ACCOUNT_LINE.description 
 #. %16$s:  ACCOUNT_LINE.description 
 #. %17$s:  END 
-#. %18$s:  IF line.title 
-#. %19$s:  line.title |html_entity 
+#. %18$s:  IF ACCOUNT_LINE.title 
+#. %19$s:  ACCOUNT_LINE.title 
 #. %20$s:  END 
 #: opac-tmpl/prog/en/modules/opac-account.tt:42
 #, fuzzy, c-format
@@ -1721,20 +1721,19 @@ msgstr "%s từ khi %s%s "
 #. %4$s:  END 
 #. %5$s:  BLOCK language 
 #. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s: ERROR
+#. %7$s:  CASE ['en', 'eng'] 
+#. %8$s:  CASE ['fr', 'fre'] 
+#. %9$s:  CASE ['it', 'ita'] 
+#. %10$s:  CASE ['de', 'ger', 'deu'] 
+#. %11$s:  CASE ['es', 'spa'] 
 #. %12$s:  CASE 
 #. %13$s:  lang 
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/prog/en/includes/opac-authorities.inc:53
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"%s%s %s %s %s %s %s %%]English %s %%]French %s %%]Italian %s %%]German %s %%]"
-"Spanish %s%s %s %s "
+"%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
 msgstr "%s %s by %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 
 #. %1$s:  IF ( itemsloo.ITEM_RESULTS ) 
@@ -2123,7 +2122,7 @@ msgstr ""
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:173
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:172
 #, fuzzy, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 msgstr "%sLoạ tài liệu %sBộ sưu tập %sVị trí giá sách %sVài thứ khác %s "
@@ -2697,8 +2696,8 @@ msgstr "%s / 5 (trên %s tỷ lệ)"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Author phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Lời tác giả"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:124
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:126
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:123
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:125
 #, fuzzy, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Call number"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Số điện thoại"
@@ -2718,12 +2717,12 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Tên đầy đủ hội nghị"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Corporate name"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Tên công ty"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, fuzzy, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:122
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
 #, fuzzy, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
@@ -3016,7 +3015,7 @@ msgstr "-- Lựa Chọn --"
 msgid "-- Choose format --"
 msgstr "-- Chọn định dạng --"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:313
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
 #, fuzzy, c-format
 msgid "-- none -- "
 msgstr "-- không -- "
@@ -3425,7 +3424,7 @@ msgstr "Tiếp thu:"
 msgid "Abstract: "
 msgstr "Tóm tắt: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "Tóm tắt/tóm lược"
@@ -3485,7 +3484,7 @@ msgid "Add %s items to %s"
 msgstr "Thêm %s tài liệu đến %s"
 
 #. A name=ButtonPlus
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:136
 msgid "Add another field"
 msgstr "Thêm một trường"
 
@@ -3553,12 +3552,12 @@ msgstr "Thêm %s %s bởi "
 msgid "Additional authors:"
 msgstr "Tác giả bổ sung:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:257
 #, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "Các loại nội dung bổ sung cho sách / tài liệu được in"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
 #, fuzzy, c-format
 msgid "Adolescent"
 msgstr "Trẻ vị thành niên:"
@@ -3573,7 +3572,7 @@ msgstr "Trẻ vị thành niên: "
 msgid "Adressebøker"
 msgstr "Địa chỉ sách"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
 #, c-format
 msgid "Adult"
 msgstr "Trưởng thành"
@@ -3608,7 +3607,7 @@ msgstr "Tất cả các loại tài liệu được phân loại phân loại"
 #: opac-tmpl/prog/en/includes/masthead.inc:89
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:18
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:108
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:301
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:300
 #, c-format
 msgid "All libraries"
 msgstr "Tất cả thư viện"
@@ -3772,17 +3771,17 @@ msgstr "Antologi"
 msgid "Any"
 msgstr "Bất kỳ"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
 #, c-format
 msgid "Any audience"
 msgstr "Bất kì độc giả nào"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:233
 #, c-format
 msgid "Any content"
 msgstr "Bất kì nội dung nào"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:243
 #, c-format
 msgid "Any format"
 msgstr "Bất kì định dạng nào"
@@ -4146,7 +4145,7 @@ msgstr "Quay trở lại kết quả"
 msgid "Back to the results search list"
 msgstr "Quay trở lại danh sách kết quả tìm kiếm"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:131
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:130
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:480
 #: opac-tmpl/prog/en/modules/opac-user.tt:170
 #: opac-tmpl/prog/en/modules/opac-user.tt:336
@@ -4201,7 +4200,7 @@ msgstr "Bibliografier"
 msgid "Bibliografiske data"
 msgstr "Dữ liệu Bibliografiske"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
 #, c-format
 msgid "Bibliographies"
 msgstr "Các thư mục"
@@ -4282,7 +4281,7 @@ msgid "Biografier"
 msgstr "Biografier"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:52
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
 #, c-format
 msgid "Biography"
 msgstr "Biography"
@@ -4328,7 +4327,7 @@ msgstr "Sách"
 msgid "Book reviews by critics ( XXX )"
 msgstr "Đánh giá cuốn sách của các nhà phê bình ( XXX )"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:247
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
 #, c-format
 msgid "Braille"
 msgstr "Chữ nổi Braille"
@@ -4375,12 +4374,12 @@ msgstr "Duyệt kệ"
 msgid "CAS"
 msgstr "CAS"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:248
 #, c-format
 msgid "CD audio"
 msgstr "CD audio"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
 #, c-format
 msgid "CD software"
 msgstr "CD software"
@@ -4533,7 +4532,7 @@ msgstr "Giỏ hàng"
 msgid "Cas login"
 msgstr "Cas login"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
 #, c-format
 msgid "Cassette recording"
 msgstr "Băng ghi âm"
@@ -4548,7 +4547,7 @@ msgstr "diễn viên: "
 msgid "Catalog searches"
 msgstr "Tìm thêm"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
 #, c-format
 msgid "Catalogs"
 msgstr "Catalogs"
@@ -5060,7 +5059,7 @@ msgstr "Phiên hiện tại"
 msgid "Curriculum"
 msgstr "Bộ giáo dục"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "DVD video / Videodisc"
@@ -5303,7 +5302,7 @@ msgstr "Dia"
 msgid "Dias"
 msgstr "Dias"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
 #, c-format
 msgid "Dictionaries"
 msgstr "Từ điển"
@@ -5329,12 +5328,12 @@ msgstr "Dikt"
 msgid "Diorama"
 msgstr "Diorama"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
 #, c-format
 msgid "Directories"
 msgstr "Từ điển"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
 #, c-format
 msgid "Discographies"
 msgstr "Discographies"
@@ -5599,7 +5598,7 @@ msgstr "Emne(r): "
 msgid "Empty and close"
 msgstr "Trống và đóng"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
 #, c-format
 msgid "Encyclopedias "
 msgstr "Bách khoa toàn thư "
@@ -5620,8 +5619,8 @@ msgid "Enter a new purchase suggestion"
 msgstr "Nhập một đề nghị mua hàng mới"
 
 #. INPUT type=text name=q
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:133
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:163
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:132
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
 msgid "Enter search terms"
 msgstr "Nhập hạn tìm kiếm"
 
@@ -5835,7 +5834,7 @@ msgstr "Nữ"
 msgid "Festskrift "
 msgstr "Festskrift "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
 #, c-format
 msgid "Fiction"
 msgstr "Giả thuyết"
@@ -5876,7 +5875,7 @@ msgstr "Filmlydspor"
 msgid "Filmografier"
 msgstr "Filmografier"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
 #, c-format
 msgid "Filmographies"
 msgstr "Filmographies"
@@ -5947,7 +5946,7 @@ msgstr "Flykart"
 msgid "Font"
 msgstr "Font"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
 #, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -6103,7 +6102,7 @@ msgstr "Lịch sử đầy đủ"
 msgid "Fysiske bøker"
 msgstr "Fysiske bøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
 #, fuzzy, c-format
 msgid "General"
 msgstr "Chung;"
@@ -6247,7 +6246,7 @@ msgstr "Grammofonplate"
 msgid "Groups"
 msgstr "Nhóm"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
 #, c-format
 msgid "Groups of libraries"
 msgstr " Các nhóm thư viện"
@@ -6262,7 +6261,7 @@ msgstr "Gått inn i: "
 msgid "HELP"
 msgstr "HELP"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
 #, c-format
 msgid "Handbooks"
 msgstr "Sổ tay"
@@ -6454,7 +6453,7 @@ msgstr "ISBD view"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:60
 #: opac-tmpl/prog/en/includes/masthead.inc:62
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:129
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:128
 #: opac-tmpl/prog/en/modules/opac-results.tt:409
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:147
 #: opac-tmpl/prog/en/modules/opac-basket.tt:208
@@ -6656,7 +6655,7 @@ msgstr "Nội dung không đầy đủ:"
 msgid "Indexed in:"
 msgstr "Lập chỉ mục trong:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
 #, c-format
 msgid "Indexes"
 msgstr "Chỉ số"
@@ -6829,7 +6828,7 @@ msgstr "Tháng Sáu"
 msgid "June"
 msgstr "Tháng sáu"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:230
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
 #, c-format
 msgid "Juvenile"
 msgstr "Vị thành niên"
@@ -6980,13 +6979,13 @@ msgstr ""
 msgid "Lagringsbrikke"
 msgstr "Thẻ lưu trữ"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:201
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:200
 #, c-format
 msgid "Language"
 msgstr "Ngôn ngữ"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:137
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:203
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:202
 #, c-format
 msgid "Language: "
 msgstr "Ngôn ngữ: "
@@ -6996,7 +6995,7 @@ msgstr "Ngôn ngữ: "
 msgid "Languages:&nbsp;"
 msgstr "Ngôn ngữ:&nbsp;"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
 #, c-format
 msgid "Large print"
 msgstr "In khổ lớn"
@@ -7011,22 +7010,22 @@ msgstr "Cuối cùng"
 msgid "Last location"
 msgstr "Vị trí cuối cùng"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
 #, c-format
 msgid "Law reports and digests"
 msgstr "Báo cáo luật"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
 #, c-format
 msgid "Legal articles"
 msgstr "Bài báo"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "Ghi chú"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
 #, c-format
 msgid "Legislation"
 msgstr "Tài liệu luật"
@@ -7082,13 +7081,13 @@ msgstr "Thư viện : "
 msgid "Library catalog"
 msgstr "Mục lục thư viện"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:299
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:298
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
 #, c-format
 msgid "Library:"
 msgstr "Thư viện"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:187
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:186
 #, c-format
 msgid "Limit to any of the following:"
 msgstr "Giới hạn dạng tài liệu:"
@@ -7195,7 +7194,7 @@ msgstr "Vị trí"
 msgid "Location (Status)"
 msgstr "Ví trí"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:297
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:296
 #, c-format
 msgid "Location and availability: "
 msgstr "Giới hạn thư viện và trạng thái tài liệu: "
@@ -7743,7 +7742,7 @@ msgstr "Album Nhạc"
 msgid "MusicGroup"
 msgstr "Âm Nhạc"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
 #, c-format
 msgid "Musical recording"
 msgstr "ghi âm âm nhạc"
@@ -7990,7 +7989,7 @@ msgstr "Không có tài liệu sẵn sàng phục vụ:"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:40
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:132
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:205
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:204
 #, c-format
 msgid "No limit"
 msgstr "Không giới hạn"
@@ -8055,12 +8054,12 @@ msgstr "Chưa ghi rõ địa chỉ URL."
 msgid "No tags from this library for this title."
 msgstr "Không có từ khóa từ thư viện cho chủ đề này."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
 #, c-format
 msgid "Non fiction"
 msgstr "Khoa học"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:239
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
 #, c-format
 msgid "Non-musical recording"
 msgstr "Khác"
@@ -8236,7 +8235,7 @@ msgstr "một số dử liệu"
 msgid "OK"
 msgstr "OK"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:310
 #, c-format
 msgid "OR"
 msgstr "Hoặc"
@@ -8290,7 +8289,7 @@ msgstr "Các nguồn trực tuyến"
 msgid "Online tjeneste"
 msgstr "dịch vụ trực tuyến"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:319
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:318
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr "Đánh đấu vào ô nếu chỉ tìm những tài liệu sẵn sàng phục vụ"
@@ -8494,7 +8493,7 @@ msgstr "Mật khẩu:"
 msgid "Password: %s "
 msgstr "Mật khẩu: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
 #, c-format
 msgid "Patent document"
 msgstr "Sáng chế"
@@ -8817,7 +8816,7 @@ msgstr "bưu thiếp"
 msgid "Powered by "
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
 #, fuzzy, c-format
 msgid "Pre-adolescent"
 msgstr "Trẻ vị thành niên:"
@@ -8832,7 +8831,7 @@ msgstr ""
 msgid "Preferred form: "
 msgstr "Thể loại văn học: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
 #, c-format
 msgid "Preschool"
 msgstr "giáo dục mầm non"
@@ -8862,7 +8861,7 @@ msgstr "Trước"
 msgid "Previous sessions"
 msgstr "Phiên trước đây"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
 #, fuzzy, c-format
 msgid "Primary"
 msgstr "Chính;"
@@ -8925,7 +8924,7 @@ msgstr "Đang tiến hành"
 msgid "Product"
 msgstr "Sản phẩm"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
 #, c-format
 msgid "Programmed texts"
 msgstr "Chương trình"
@@ -8965,7 +8964,7 @@ msgstr "Danh sách dùng chung"
 msgid "Public lists:"
 msgstr "Giá ảo dùng chung"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:160
 #, c-format
 msgid "Publication date range:"
 msgstr "Giới hạn thời gian xuất bản:"
@@ -9168,7 +9167,7 @@ msgstr "tài liệu luật"
 msgid "Registre"
 msgstr "Đăng ký"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
 #, c-format
 msgid "Regular print"
 msgstr "In thường"
@@ -9206,7 +9205,7 @@ msgid "Remove facet [% facet.facet_link_value | html %]"
 msgstr ""
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:138
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
 #, fuzzy
 msgid "Remove field"
 msgstr "Coded fields"
@@ -9413,7 +9412,7 @@ msgstr ""
 msgid "Review: "
 msgstr "Nhận xét "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
 #: opac-tmpl/prog/en/modules/opac-detail.tt:965
 #, c-format
 msgid "Reviews"
@@ -9583,8 +9582,8 @@ msgid "Score"
 msgstr "Điểm số"
 
 #. INPUT type=submit name=do
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:148
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:336
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:147
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:335
 #: opac-tmpl/prog/en/modules/opac-detail.tt:628
 #: opac-tmpl/prog/en/modules/opac-detail.tt:735
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:63
@@ -10234,7 +10233,7 @@ msgstr ""
 msgid "Sort By: "
 msgstr "Sắp xếp theo: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:327
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
 #, fuzzy, c-format
 msgid "Sort by:"
 msgstr "Sắp xếp theo:"
@@ -10250,7 +10249,7 @@ msgstr "Sắp xếp theo: "
 msgid "Sort this list by: "
 msgstr "Sắp xếp danh sách này theo: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:325
 #, fuzzy, c-format
 msgid "Sorting: "
 msgstr "Sắp xếp theo: "
@@ -10266,7 +10265,7 @@ msgstr "Âm thanh"
 msgid "Source: "
 msgstr "Nguồn: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
 #, c-format
 msgid "Specialized"
 msgstr "chuyên ngành"
@@ -10307,7 +10306,6 @@ msgstr "ngôn ngữ giảng dạy"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:116
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:118
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "Standard number"
 msgstr "số tiêu chuẩn"
@@ -10323,7 +10321,7 @@ msgstr "số tiêu chuẩn (ISBN, ISSN hoặc khác):"
 msgid "Standardtittel: "
 msgstr "Tiêu chuẩn Tiêu đề:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
 #, c-format
 msgid "Statistics"
 msgstr "Thống kê"
@@ -10575,7 +10573,7 @@ msgstr "Thông tin thuê bao cho %s"
 msgid "Subscriptions"
 msgstr "Sự đăng ký"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:220
 #, c-format
 msgid "Subtype limits"
 msgstr "Giới hạn chi tiết:"
@@ -10635,7 +10633,7 @@ msgstr "Thay thế một phần:"
 msgid "Supersedes:"
 msgstr "thay thế:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
 #, c-format
 msgid "Surveys"
 msgstr "Phiếu điều tra"
@@ -10732,7 +10730,7 @@ msgstr "Từ khóa từ thư viện này:"
 msgid "Tags:"
 msgstr "Từ khóa:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
 #, c-format
 msgid "Technical reports"
 msgstr "Báo cáo"
@@ -11088,7 +11086,7 @@ msgstr ""
 "Có những vấn đề xử lý đăng ký của bạn. Xin vui lòng liên hệ với thư viện của "
 "bạn để được giúp đỡ."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
 #, c-format
 msgid "Theses"
 msgstr "Luận án"
@@ -11405,7 +11403,7 @@ msgstr "Trong suốt"
 msgid "Tre-dimensjonale gjenstander"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:280
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
 #, c-format
 msgid "Treaties "
 msgstr "Điều ước quốc tế "
@@ -11661,7 +11659,7 @@ msgstr "Tiết ra từ: "
 msgid "Utstilling"
 msgstr "màn hình hiển thị"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "Băng VHS"
@@ -11835,7 +11833,7 @@ msgstr ""
 "Chúng tôi rất cẩn thận trong việc bảo vệ sự riêng tư của bạn. Trên màn hình "
 "này, bạn có thể xác định bao lâu chúng tôi tiếp tục lịch sử của bạn đọc."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:254
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
 #, c-format
 msgid "Website"
 msgstr "Trang Web"
@@ -12425,20 +12423,20 @@ msgstr ""
 msgid "[Create new list]"
 msgstr "Tạo một danh sách mới"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:150
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:338
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:149
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:337
 #, c-format
 msgid "[Fewer options]"
 msgstr "[Giảm lựa chọn]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:152
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:340
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:151
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:339
 #, c-format
 msgid "[More options]"
 msgstr "[Thêm lựa chọn]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:154
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:342
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:153
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:341
 #, c-format
 msgid "[New search]"
 msgstr "[Tìm mới]"

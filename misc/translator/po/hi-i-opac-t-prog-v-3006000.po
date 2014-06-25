@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2014-05-05 21:49-0300\n"
+"POT-Creation-Date: 2014-06-15 17:55-0300\n"
 "PO-Revision-Date: 2013-06-21 11:16+0000\n"
 "Last-Translator: nikunj1 <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,27 +26,6 @@ msgstr "%s अभिलेख (ओं)"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:742
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 msgstr "$[% उपक्षेत्र.कोड %] [% उपक्षेत्र.मूल्य %]"
-
-#. %1$s:  END 
-#. %2$s:  END 
-#. %3$s:  END 
-#. %4$s:  END 
-#. %5$s:  BLOCK language 
-#. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s:  CASE 
-#. %12$s:  lang 
-#. %13$s:  END 
-#. %14$s:  END 
-#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
-#, fuzzy, c-format
-msgid ""
-"%s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]Greek "
-"(to 1453) %s%s %s %s "
-msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -109,6 +88,27 @@ msgid ""
 "%s %s %s %s %s %s %s%s%sKoha online%s catalog &rsaquo; Course reserves for "
 "%s %s "
 msgstr "Catalog &rsaquo; लाइब्रेरी होम के लिए "
+
+#. %1$s:  END 
+#. %2$s:  END 
+#. %3$s:  END 
+#. %4$s:  END 
+#. %5$s:  BLOCK language 
+#. %6$s:  SWITCH lang 
+#. %7$s:  CASE ['heb'] 
+#. %8$s:  CASE ['ara'] 
+#. %9$s:  CASE ['gre'] 
+#. %10$s:  CASE ['grc'] 
+#. %11$s:  CASE 
+#. %12$s:  lang 
+#. %13$s:  END 
+#. %14$s:  END 
+#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
+#, fuzzy, c-format
+msgid ""
+"%s %s %s %s %s %s %sHebrew %sArabic %sGreek (modern) %sGreek (to 1453) %s%s "
+"%s %s "
+msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
@@ -1041,8 +1041,8 @@ msgstr "नोट: इस विंडो स्वतः 5 सेकंड म�
 #. %15$s: - IF ACCOUNT_LINE.description 
 #. %16$s:  ACCOUNT_LINE.description 
 #. %17$s:  END 
-#. %18$s:  IF line.title 
-#. %19$s:  line.title |html_entity 
+#. %18$s:  IF ACCOUNT_LINE.title 
+#. %19$s:  ACCOUNT_LINE.title 
 #. %20$s:  END 
 #: opac-tmpl/prog/en/modules/opac-account.tt:42
 #, c-format
@@ -1682,11 +1682,11 @@ msgstr "%s %s %s %s (%s) "
 #. %4$s:  END 
 #. %5$s:  BLOCK language 
 #. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s: ERROR
+#. %7$s:  CASE ['en', 'eng'] 
+#. %8$s:  CASE ['fr', 'fre'] 
+#. %9$s:  CASE ['it', 'ita'] 
+#. %10$s:  CASE ['de', 'ger', 'deu'] 
+#. %11$s:  CASE ['es', 'spa'] 
 #. %12$s:  CASE 
 #. %13$s:  lang 
 #. %14$s:  END 
@@ -1694,8 +1694,7 @@ msgstr "%s %s %s %s (%s) "
 #: opac-tmpl/prog/en/includes/opac-authorities.inc:53
 #, fuzzy, c-format
 msgid ""
-"%s%s %s %s %s %s %s %%]English %s %%]French %s %%]Italian %s %%]German %s %%]"
-"Spanish %s%s %s %s "
+"%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
 msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  IF ( itemsloo.ITEM_RESULTS ) 
@@ -2078,7 +2077,7 @@ msgstr ""
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:173
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:172
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 msgstr ""
@@ -2637,8 +2636,8 @@ msgstr "%s / 5 (पर %s रेट)"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Author phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; लेखक वाक्यांश"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:124
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:126
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:123
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:125
 #, fuzzy, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Call number"
 msgstr "&nbsp; &nbsp; &nbsp; &nbsp; फोन नंबर"
@@ -2658,12 +2657,12 @@ msgstr "&nbsp; &nbsp; &nbsp; &nbsp; सम्मेलन नाम वाक्
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Corporate name"
 msgstr "&nbsp; &nbsp; &nbsp; &nbsp; कॉर्पोरेट नाम"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 msgstr "&nbsp; &nbsp; &nbsp; &nbsp; आईऍसबीऍन"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:122
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr "&nbsp; &nbsp; &nbsp; &nbsp; ISSN"
@@ -2959,7 +2958,7 @@ msgstr "\\ -- प्रारूप चुनें --"
 msgid "-- Choose format --"
 msgstr "\\ -- प्रारूप चुनें --"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:313
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
 #, fuzzy, c-format
 msgid "-- none -- "
 msgstr "\\ -- प्रारूप चुनें -- "
@@ -3364,7 +3363,7 @@ msgstr ""
 msgid "Abstract: "
 msgstr "सार "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "Abstracts / सारांश"
@@ -3424,7 +3423,7 @@ msgid "Add %s items to %s"
 msgstr "%s आइटमों में जोड़ें"
 
 #. A name=ButtonPlus
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:136
 msgid "Add another field"
 msgstr "एक अन्य क्षेत्र जोड़ें"
 
@@ -3493,12 +3492,12 @@ msgstr "%s आइटमों में जोड़ें "
 msgid "Additional authors:"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:257
 #, fuzzy, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "किताबें / मुद्रित सामग्री के लिए अतिरिक्त सामग्री प्रकार"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
 #, c-format
 msgid "Adolescent"
 msgstr ""
@@ -3513,7 +3512,7 @@ msgstr ""
 msgid "Adressebøker"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
 #, c-format
 msgid "Adult"
 msgstr "प्रौढ़"
@@ -3548,7 +3547,7 @@ msgstr "सभी मद प्रकार"
 #: opac-tmpl/prog/en/includes/masthead.inc:89
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:18
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:108
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:301
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:300
 #, c-format
 msgid "All libraries"
 msgstr "सभी पुस्तकालयों"
@@ -3711,17 +3710,17 @@ msgstr ""
 msgid "Any"
 msgstr "कोई"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
 #, fuzzy, c-format
 msgid "Any audience"
 msgstr "कोई श्रोतागण"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:233
 #, fuzzy, c-format
 msgid "Any content"
 msgstr "कोई सामग्री"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:243
 #, fuzzy, c-format
 msgid "Any format"
 msgstr "किसी भी प्रारूप"
@@ -4088,7 +4087,7 @@ msgstr "पिछला biblio करने के लिए"
 msgid "Back to the results search list"
 msgstr "पिछला biblio करने के लिए"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:131
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:130
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:480
 #: opac-tmpl/prog/en/modules/opac-user.tt:170
 #: opac-tmpl/prog/en/modules/opac-user.tt:336
@@ -4143,7 +4142,7 @@ msgstr "Bibliographies"
 msgid "Bibliografiske data"
 msgstr "Bibliographies"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
 #, c-format
 msgid "Bibliographies"
 msgstr "Bibliographies"
@@ -4224,7 +4223,7 @@ msgid "Biografier"
 msgstr "Bibliographies"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:52
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
 #, c-format
 msgid "Biography"
 msgstr "जीवनी"
@@ -4270,7 +4269,7 @@ msgstr ""
 msgid "Book reviews by critics ( XXX )"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:247
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
 #, c-format
 msgid "Braille"
 msgstr "ब्रेल"
@@ -4317,12 +4316,12 @@ msgstr "(<a1>आगे बढ़नेवाला भाग ब्राउज�
 msgid "CAS"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:248
 #, c-format
 msgid "CD audio"
 msgstr "ऑडियो सीडी"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
 #, fuzzy, c-format
 msgid "CD software"
 msgstr "सीडी सॉफ्टवेयर"
@@ -4477,7 +4476,7 @@ msgstr "गाड़ी"
 msgid "Cas login"
 msgstr "लॉगिन:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
 #, c-format
 msgid "Cassette recording"
 msgstr "कैसेट रिकॉर्डिंग"
@@ -4492,7 +4491,7 @@ msgstr ""
 msgid "Catalog searches"
 msgstr "(संबंधित खोजों:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
 #, c-format
 msgid "Catalogs"
 msgstr "सूची"
@@ -5001,7 +5000,7 @@ msgstr "वर्तमान पासवर्ड:"
 msgid "Curriculum"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "डीवीडी वीडियो / Videodisc"
@@ -5244,7 +5243,7 @@ msgstr ""
 msgid "Dias"
 msgstr "तिथि"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
 #, c-format
 msgid "Dictionaries"
 msgstr "शब्दकोश"
@@ -5270,12 +5269,12 @@ msgstr ""
 msgid "Diorama"
 msgstr "नाटक"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
 #, c-format
 msgid "Directories"
 msgstr "निर्देशिकाएँ"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
 #, c-format
 msgid "Discographies"
 msgstr "Discographies"
@@ -5538,7 +5537,7 @@ msgstr ""
 msgid "Empty and close"
 msgstr "खाली और बंद"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
 #, fuzzy, c-format
 msgid "Encyclopedias "
 msgstr "Encyclopedias "
@@ -5559,8 +5558,8 @@ msgid "Enter a new purchase suggestion"
 msgstr "एक नई खरीद सुझाव दर्ज करें"
 
 #. INPUT type=text name=q
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:133
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:163
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:132
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
 msgid "Enter search terms"
 msgstr "खोज शब्द दर्ज करें"
 
@@ -5774,7 +5773,7 @@ msgstr "मादा"
 msgid "Festskrift "
 msgstr "Feschrift Ind. "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
 #, c-format
 msgid "Fiction"
 msgstr "Fiction"
@@ -5815,7 +5814,7 @@ msgstr ""
 msgid "Filmografier"
 msgstr "Filmographies"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
 #, c-format
 msgid "Filmographies"
 msgstr "Filmographies"
@@ -5888,7 +5887,7 @@ msgstr ""
 msgid "Font"
 msgstr "गणना"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
 #, fuzzy, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -6040,7 +6039,7 @@ msgstr "निर्देशिका"
 msgid "Fysiske bøker"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
 #, fuzzy, c-format
 msgid "General"
 msgstr "वयस्क, जनरल"
@@ -6173,7 +6172,7 @@ msgstr ""
 msgid "Groups"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
 #, fuzzy, c-format
 msgid "Groups of libraries"
 msgstr "पुस्तकालय"
@@ -6188,7 +6187,7 @@ msgstr ""
 msgid "HELP"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
 #, c-format
 msgid "Handbooks"
 msgstr "हैंडबुक"
@@ -6380,7 +6379,7 @@ msgstr "ISBD देखें"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:60
 #: opac-tmpl/prog/en/includes/masthead.inc:62
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:129
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:128
 #: opac-tmpl/prog/en/modules/opac-results.tt:409
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:147
 #: opac-tmpl/prog/en/modules/opac-basket.tt:208
@@ -6579,7 +6578,7 @@ msgstr ""
 msgid "Indexed in:"
 msgstr "में क्रमाँक:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
 #, c-format
 msgid "Indexes"
 msgstr "Indexes"
@@ -6753,7 +6752,7 @@ msgstr ""
 msgid "June"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:230
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
 #, c-format
 msgid "Juvenile"
 msgstr "किशोर"
@@ -6904,13 +6903,13 @@ msgstr "LCCN: "
 msgid "Lagringsbrikke"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:201
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:200
 #, c-format
 msgid "Language"
 msgstr "भाषा"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:137
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:203
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:202
 #, fuzzy, c-format
 msgid "Language: "
 msgstr "भाषाएँ: "
@@ -6920,7 +6919,7 @@ msgstr "भाषाएँ: "
 msgid "Languages:&nbsp;"
 msgstr "भाषाएँ:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
 #, c-format
 msgid "Large print"
 msgstr "बड़े प्रिंट"
@@ -6936,22 +6935,22 @@ msgstr "देर"
 msgid "Last location"
 msgstr "अंतिम स्थान"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
 #, c-format
 msgid "Law reports and digests"
 msgstr "विधि रिपोर्टों और digests"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
 #, c-format
 msgid "Legal articles"
 msgstr "कानूनी लेख"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "कानूनी मामलों और मामले नोट"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
 #, c-format
 msgid "Legislation"
 msgstr "विधान"
@@ -7007,13 +7006,13 @@ msgstr "लाइब्रेरी "
 msgid "Library catalog"
 msgstr "लाइब्रेरी Catalog"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:299
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:298
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
 #, fuzzy, c-format
 msgid "Library:"
 msgstr "लाइब्रेरी"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:187
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:186
 #, c-format
 msgid "Limit to any of the following:"
 msgstr "किसी भी निम्नलिखित की सीमा:"
@@ -7122,7 +7121,7 @@ msgstr "स्थान"
 msgid "Location (Status)"
 msgstr "स्थान (नों)"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:297
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:296
 #, fuzzy, c-format
 msgid "Location and availability: "
 msgstr "स्थान और उपलब्धता: "
@@ -7670,7 +7669,7 @@ msgstr "संगीत"
 msgid "MusicGroup"
 msgstr "संगीत"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
 #, c-format
 msgid "Musical recording"
 msgstr "संगीत रिकॉर्डिंग"
@@ -7914,7 +7913,7 @@ msgstr "कोई आइटम उपलब्ध है:"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:40
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:132
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:205
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:204
 #, c-format
 msgid "No limit"
 msgstr "कोई सीमा नहीं"
@@ -7981,12 +7980,12 @@ msgstr "कोई आइटम चुना गया"
 msgid "No tags from this library for this title."
 msgstr "इस खिताब के लिए कोई टैग नहीं."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
 #, fuzzy, c-format
 msgid "Non fiction"
 msgstr "गैर गल्प"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:239
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
 #, c-format
 msgid "Non-musical recording"
 msgstr "गैर संगीत रिकॉर्डिंग"
@@ -8159,7 +8158,7 @@ msgstr "अंक तालिका"
 msgid "OK"
 msgstr "ठीक है"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:310
 #, c-format
 msgid "OR"
 msgstr ""
@@ -8213,7 +8212,7 @@ msgstr "ऑनलाइन संसाधन: "
 msgid "Online tjeneste"
 msgstr "ऑनलाइन संसाधन:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:319
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:318
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr "केवल आइटम वर्तमान ऋण या संदर्भ के लिए उपलब्ध"
@@ -8411,7 +8410,7 @@ msgstr "पासवर्ड:"
 msgid "Password: %s "
 msgstr "पासवर्ड: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
 #, c-format
 msgid "Patent document"
 msgstr "पेटेंट दस्तावेज़"
@@ -8727,7 +8726,7 @@ msgstr ""
 msgid "Powered by "
 msgstr "द्वारा प्रकाशित: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
 #, c-format
 msgid "Pre-adolescent"
 msgstr ""
@@ -8742,7 +8741,7 @@ msgstr ""
 msgid "Preferred form: "
 msgstr "लाइब्रेरी "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
 #, c-format
 msgid "Preschool"
 msgstr ""
@@ -8772,7 +8771,7 @@ msgstr "पिछला"
 msgid "Previous sessions"
 msgstr "पिछला मुद्दे"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
 #, fuzzy, c-format
 msgid "Primary"
 msgstr "प्राथमिक (5-8)"
@@ -8836,7 +8835,7 @@ msgstr ""
 msgid "Product"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
 #, c-format
 msgid "Programmed texts"
 msgstr "क्रमादेशित ग्रंथों"
@@ -8877,7 +8876,7 @@ msgstr "सार्वजनिक सूचियाँ"
 msgid "Public lists:"
 msgstr "सार्वजनिक सूचियाँ"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:160
 #, fuzzy, c-format
 msgid "Publication date range:"
 msgstr "प्रकाशन तिथि सीमा:"
@@ -9077,7 +9076,7 @@ msgstr "विधान"
 msgid "Registre"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
 #, c-format
 msgid "Regular print"
 msgstr "नियमित प्रिंट"
@@ -9115,7 +9114,7 @@ msgid "Remove facet [% facet.facet_link_value | html %]"
 msgstr ""
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:138
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
 #, fuzzy
 msgid "Remove field"
 msgstr "कोडित फील्ड्स"
@@ -9323,7 +9322,7 @@ msgstr ""
 msgid "Review: "
 msgstr "समीक्षा "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
 #: opac-tmpl/prog/en/modules/opac-detail.tt:965
 #, c-format
 msgid "Reviews"
@@ -9493,8 +9492,8 @@ msgid "Score"
 msgstr "खेद"
 
 #. INPUT type=submit name=do
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:148
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:336
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:147
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:335
 #: opac-tmpl/prog/en/modules/opac-detail.tt:628
 #: opac-tmpl/prog/en/modules/opac-detail.tt:735
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:63
@@ -10133,7 +10132,7 @@ msgstr "क्षमा करें, आपका सत्र को समय
 msgid "Sort By: "
 msgstr "द्वारा क्रमबद्ध करें: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:327
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
 #, fuzzy, c-format
 msgid "Sort by:"
 msgstr "द्वारा क्रमबद्ध करें:"
@@ -10149,7 +10148,7 @@ msgstr "द्वारा क्रमबद्ध करें: "
 msgid "Sort this list by: "
 msgstr "इस सूची के आधार पर छाँटें: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:325
 #, fuzzy, c-format
 msgid "Sorting: "
 msgstr "बड़े प्रिंट "
@@ -10165,7 +10164,7 @@ msgstr "भेजना"
 msgid "Source: "
 msgstr "खोज "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
 #, fuzzy, c-format
 msgid "Specialized"
 msgstr "धारावाहिक"
@@ -10206,7 +10205,6 @@ msgstr ""
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:116
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:118
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, fuzzy, c-format
 msgid "Standard number"
 msgstr "मानक संख्या"
@@ -10221,7 +10219,7 @@ msgstr ""
 msgid "Standardtittel: "
 msgstr "मानक "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
 #, c-format
 msgid "Statistics"
 msgstr "सांख्यिकी"
@@ -10474,7 +10472,7 @@ msgstr "सदस्यता के लिए जानकारी %s"
 msgid "Subscriptions"
 msgstr "सदस्यताएँ"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:220
 #, c-format
 msgid "Subtype limits"
 msgstr "Subtype सीमा"
@@ -10535,7 +10533,7 @@ msgstr ""
 msgid "Supersedes:"
 msgstr "सीरीज:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
 #, c-format
 msgid "Surveys"
 msgstr "सर्वेक्षण"
@@ -10629,7 +10627,7 @@ msgstr "पुस्तकालय की ओर से संदेश"
 msgid "Tags:"
 msgstr "टैग:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
 #, c-format
 msgid "Technical reports"
 msgstr "तकनीकी रिपोर्ट"
@@ -10970,7 +10968,7 @@ msgid ""
 "library for help."
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
 #, c-format
 msgid "Theses"
 msgstr "Theses"
@@ -11281,7 +11279,7 @@ msgstr "transparencies"
 msgid "Tre-dimensjonale gjenstander"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:280
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
 #, fuzzy, c-format
 msgid "Treaties "
 msgstr "संधियों "
@@ -11533,7 +11531,7 @@ msgstr ""
 msgid "Utstilling"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "VHS टेप / विडेओकसेट"
@@ -11702,7 +11700,7 @@ msgid ""
 "define how long we keep your reading history."
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:254
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
 #, c-format
 msgid "Website"
 msgstr "वेबसाइट"
@@ -12283,20 +12281,20 @@ msgstr ""
 msgid "[Create new list]"
 msgstr "एक नई सूची बनाएँ"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:150
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:338
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:149
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:337
 #, fuzzy, c-format
 msgid "[Fewer options]"
 msgstr "[कम विकल्प]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:152
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:340
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:151
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:339
 #, c-format
 msgid "[More options]"
 msgstr "[अतिरिक्त विकल्प]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:154
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:342
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:153
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:341
 #, fuzzy, c-format
 msgid "[New search]"
 msgstr "[नई खोज]"

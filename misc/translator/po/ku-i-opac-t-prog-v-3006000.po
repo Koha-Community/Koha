@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0\n"
-"POT-Creation-Date: 2014-05-05 21:57-0300\n"
+"POT-Creation-Date: 2014-06-15 18:03-0300\n"
 "PO-Revision-Date: 2013-05-02 12:46+0300\n"
 "Last-Translator: Harem Abdullah <harem.suli@gmail.com>\n"
 "Language-Team: kurdish translation team\n"
@@ -28,29 +28,6 @@ msgstr "%s تۆماره‌كان"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:742
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 msgstr "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
-
-#. %1$s:  END 
-#. %2$s:  END 
-#. %3$s:  END 
-#. %4$s:  END 
-#. %5$s:  BLOCK language 
-#. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s:  CASE 
-#. %12$s:  lang 
-#. %13$s:  END 
-#. %14$s:  END 
-#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
-#, fuzzy, c-format
-msgid ""
-"%s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]Greek "
-"(to 1453) %s%s %s %s "
-msgstr ""
-"%s%s %s %s %s %s %s %%]ئینگلیزی %s %%]فه‌ڕه‌نسی %s %%]ئیتاڵی %s %%]ئه‌ڵمانی %s "
-"%%]ئیسپانی %s%s %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -117,6 +94,29 @@ msgid ""
 msgstr ""
 "%s %s %s%s%sكۆهای ڕاستوخۆی له‌سه‌رهێڵ%s پێڕست &rsaquo; په‌ڕه‌ی سه‌ره‌كی "
 "كتێبخانه‌كه‌ت %s "
+
+#. %1$s:  END 
+#. %2$s:  END 
+#. %3$s:  END 
+#. %4$s:  END 
+#. %5$s:  BLOCK language 
+#. %6$s:  SWITCH lang 
+#. %7$s:  CASE ['heb'] 
+#. %8$s:  CASE ['ara'] 
+#. %9$s:  CASE ['gre'] 
+#. %10$s:  CASE ['grc'] 
+#. %11$s:  CASE 
+#. %12$s:  lang 
+#. %13$s:  END 
+#. %14$s:  END 
+#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
+#, fuzzy, c-format
+msgid ""
+"%s %s %s %s %s %s %sHebrew %sArabic %sGreek (modern) %sGreek (to 1453) %s%s "
+"%s %s "
+msgstr ""
+"%s%s %s %s %s %s %s %%]ئینگلیزی %s %%]فه‌ڕه‌نسی %s %%]ئیتاڵی %s %%]ئه‌ڵمانی %s "
+"%%]ئیسپانی %s%s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
@@ -1086,8 +1086,8 @@ msgstr ""
 #. %15$s: - IF ACCOUNT_LINE.description 
 #. %16$s:  ACCOUNT_LINE.description 
 #. %17$s:  END 
-#. %18$s:  IF line.title 
-#. %19$s:  line.title |html_entity 
+#. %18$s:  IF ACCOUNT_LINE.title 
+#. %19$s:  ACCOUNT_LINE.title 
 #. %20$s:  END 
 #: opac-tmpl/prog/en/modules/opac-account.tt:42
 #, c-format
@@ -1717,20 +1717,19 @@ msgstr "%s له‌ %s%s "
 #. %4$s:  END 
 #. %5$s:  BLOCK language 
 #. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s: ERROR
+#. %7$s:  CASE ['en', 'eng'] 
+#. %8$s:  CASE ['fr', 'fre'] 
+#. %9$s:  CASE ['it', 'ita'] 
+#. %10$s:  CASE ['de', 'ger', 'deu'] 
+#. %11$s:  CASE ['es', 'spa'] 
 #. %12$s:  CASE 
 #. %13$s:  lang 
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/prog/en/includes/opac-authorities.inc:53
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"%s%s %s %s %s %s %s %%]English %s %%]French %s %%]Italian %s %%]German %s %%]"
-"Spanish %s%s %s %s "
+"%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
 msgstr ""
 "%s%s %s %s %s %s %s %%]ئینگلیزی %s %%]فه‌ڕه‌نسی %s %%]ئیتاڵی %s %%]ئه‌ڵمانی %s "
 "%%]ئیسپانی %s%s %s %s "
@@ -2124,7 +2123,7 @@ msgstr ""
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:173
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:172
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 msgstr "%sجۆری ئایتم %sكۆمه‌ڵه‌ %sشوێنی ڕه‌فه‌ %sشتێكی تر %s "
@@ -2914,8 +2913,8 @@ msgstr "%s / 5 (له‌ %s ڕێژه‌كان)"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Author phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ده‌سته‌واژه‌ی نوسه‌ر"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:124
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:126
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:123
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:125
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Call number"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ژماره‌ی داواكردن"
@@ -2935,12 +2934,12 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ده‌سته‌واژه‌ی ناوی كۆنف
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Corporate name"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ناوی هاوبه‌ش"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:122
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
@@ -3237,7 +3236,7 @@ msgstr "-- هه‌ڵبژێره‌ --"
 msgid "-- Choose format --"
 msgstr "-- شێوازێك هه‌ڵبژێره‌ --"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:313
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
 #, c-format
 msgid "-- none -- "
 msgstr "-- هیچیان -- "
@@ -3642,7 +3641,7 @@ msgstr "ئاوێته‌كراوه‌"
 msgid "Abstract: "
 msgstr "پوخته‌ : "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "كورته‌كان/پوخته‌كان"
@@ -3702,7 +3701,7 @@ msgid "Add %s items to %s"
 msgstr "زیادبكه‌ %s ئایتم بۆ %s"
 
 #. A name=ButtonPlus
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:136
 msgid "Add another field"
 msgstr "خانه‌یه‌كی تر زیاد بكه‌"
 
@@ -3770,12 +3769,12 @@ msgstr "زیاد كرا %s %s له‌لایه‌ن "
 msgid "Additional authors:"
 msgstr "نوسه‌ره‌ یاریده‌ده‌ره‌كان:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:257
 #, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "جۆره‌كانی تری ناوه‌ڕۆكی كتێبه‌كان / بابه‌ته‌ چاپكراوه‌كان"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
 #, c-format
 msgid "Adolescent"
 msgstr "هه‌رزه‌كار"
@@ -3790,7 +3789,7 @@ msgstr "هه‌رزه‌كار; "
 msgid "Adressebøker"
 msgstr "Adressebøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
 #, c-format
 msgid "Adult"
 msgstr "پێگه‌شتوو"
@@ -3825,7 +3824,7 @@ msgstr "سه‌رجه‌م جۆری ئایتمه‌كان"
 #: opac-tmpl/prog/en/includes/masthead.inc:89
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:18
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:108
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:301
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:300
 #, c-format
 msgid "All libraries"
 msgstr "سه‌رجه‌م كتێبخانه‌كان"
@@ -3991,17 +3990,17 @@ msgstr "هه‌ڵبژێردراوه‌كان"
 msgid "Any"
 msgstr "هه‌رجۆرێك"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
 #, c-format
 msgid "Any audience"
 msgstr "هه‌ر جه‌ماوه‌رێك"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:233
 #, c-format
 msgid "Any content"
 msgstr "هه‌ر بابه‌تێك"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:243
 #, c-format
 msgid "Any format"
 msgstr "هه‌ر شێوازێك"
@@ -4362,7 +4361,7 @@ msgstr "گه‌ڕانه‌وه‌ بۆ ئه‌نجامه‌كان"
 msgid "Back to the results search list"
 msgstr "گه‌ڕانه‌وه‌ی بۆ لیستی ئه‌نجامه‌كانی گه‌ڕان"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:131
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:130
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:480
 #: opac-tmpl/prog/en/modules/opac-user.tt:170
 #: opac-tmpl/prog/en/modules/opac-user.tt:336
@@ -4417,7 +4416,7 @@ msgstr "بیبیلیۆگرافیا"
 msgid "Bibliografiske data"
 msgstr "زانیاری بیبیلیۆگرافی"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
 #, c-format
 msgid "Bibliographies"
 msgstr "بیبیلیۆگرافی"
@@ -4498,7 +4497,7 @@ msgid "Biografier"
 msgstr "ژیاننامه‌"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:52
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
 #, c-format
 msgid "Biography"
 msgstr "ژیاننامه‌"
@@ -4544,7 +4543,7 @@ msgstr "كتێب"
 msgid "Book reviews by critics ( XXX )"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:247
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
 #, c-format
 msgid "Braille"
 msgstr "بڕێل"
@@ -4591,12 +4590,12 @@ msgstr "گه‌ڕان به‌ناو ڕه‌فه‌كاندا"
 msgid "CAS"
 msgstr "CAS"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:248
 #, c-format
 msgid "CD audio"
 msgstr "ی ده‌نگیCD"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
 #, c-format
 msgid "CD software"
 msgstr "ی به‌رنامه‌CD"
@@ -4749,7 +4748,7 @@ msgstr "سه‌به‌ته‌"
 msgid "Cas login"
 msgstr "Casداخڵبوونی"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
 #, c-format
 msgid "Cassette recording"
 msgstr "تۆماری كاسێت"
@@ -4764,7 +4763,7 @@ msgstr ""
 msgid "Catalog searches"
 msgstr "گه‌ڕانی زیاتر"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
 #, c-format
 msgid "Catalogs"
 msgstr "پێڕسته‌كان"
@@ -5275,7 +5274,7 @@ msgstr "خولی ئێستا"
 msgid "Curriculum"
 msgstr "مه‌نهه‌جی خوێندن"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "ڤیدیۆ DVD / شریتی ڤیدیۆ"
@@ -5518,7 +5517,7 @@ msgstr "Dia"
 msgid "Dias"
 msgstr "Dias"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
 #, c-format
 msgid "Dictionaries"
 msgstr "فه‌رهه‌نگه‌كان"
@@ -5544,12 +5543,12 @@ msgstr "Dikt"
 msgid "Diorama"
 msgstr "Diorama"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
 #, c-format
 msgid "Directories"
 msgstr "فه‌رهه‌نگه‌كان"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
 #, c-format
 msgid "Discographies"
 msgstr "تۆماره‌كان"
@@ -5815,7 +5814,7 @@ msgstr "Emne(r): "
 msgid "Empty and close"
 msgstr "به‌تاڵی بكه‌ره‌وه‌ و دایبخه‌"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
 #, c-format
 msgid "Encyclopedias "
 msgstr "ئینسایكلۆپیدیا "
@@ -5836,8 +5835,8 @@ msgid "Enter a new purchase suggestion"
 msgstr "پێشنیارێكی نوێی كڕین داخڵ بكه‌"
 
 #. INPUT type=text name=q
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:133
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:163
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:132
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
 msgid "Enter search terms"
 msgstr "زاراوهكانی گه‌ڕان داخڵ بكه‌"
 
@@ -6052,7 +6051,7 @@ msgstr "مێ"
 msgid "Festskrift "
 msgstr "Festskrift "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
 #, c-format
 msgid "Fiction"
 msgstr "وێژه‌"
@@ -6093,7 +6092,7 @@ msgstr "مۆسیقای فلیم"
 msgid "Filmografier"
 msgstr "لیستی فلیمه‌كان"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
 #, c-format
 msgid "Filmographies"
 msgstr "لیستی فلیمه‌كان"
@@ -6164,7 +6163,7 @@ msgstr "Flykart"
 msgid "Font"
 msgstr "ڕێنوس"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
 #, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -6320,7 +6319,7 @@ msgstr "ته‌واوی مێژوو"
 msgid "Fysiske bøker"
 msgstr "Fysiske bøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
 #, c-format
 msgid "General"
 msgstr "گشتی"
@@ -6465,7 +6464,7 @@ msgstr "Grammofonplate"
 msgid "Groups"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
 #, c-format
 msgid "Groups of libraries"
 msgstr "كۆمه‌ڵه‌ كتێبخانه‌كان"
@@ -6480,7 +6479,7 @@ msgstr "Gått inn i: "
 msgid "HELP"
 msgstr "هاوكاری"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
 #, c-format
 msgid "Handbooks"
 msgstr "كتێبه‌كان"
@@ -6672,7 +6671,7 @@ msgstr "بینینی ISBD"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:60
 #: opac-tmpl/prog/en/includes/masthead.inc:62
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:129
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:128
 #: opac-tmpl/prog/en/modules/opac-results.tt:409
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:147
 #: opac-tmpl/prog/en/modules/opac-basket.tt:208
@@ -6875,7 +6874,7 @@ msgstr "محتويات غير مكتملة:"
 msgid "Indexed in:"
 msgstr "پێڕست كراوه‌ له‌:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
 #, c-format
 msgid "Indexes"
 msgstr "پێڕسته‌كان"
@@ -7049,7 +7048,7 @@ msgstr ""
 msgid "June"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:230
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
 #, c-format
 msgid "Juvenile"
 msgstr "بۆنه‌"
@@ -7200,13 +7199,13 @@ msgstr "LCCN: %s "
 msgid "Lagringsbrikke"
 msgstr "Lagringsbrikke"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:201
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:200
 #, c-format
 msgid "Language"
 msgstr "زمان"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:137
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:203
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:202
 #, c-format
 msgid "Language: "
 msgstr "زمان: "
@@ -7216,7 +7215,7 @@ msgstr "زمان: "
 msgid "Languages:&nbsp;"
 msgstr "زمانه‌كان:&nbsp;"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
 #, c-format
 msgid "Large print"
 msgstr "چاپی گه‌وره‌"
@@ -7231,22 +7230,22 @@ msgstr "دواین"
 msgid "Last location"
 msgstr "دواین جێگا"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
 #, c-format
 msgid "Law reports and digests"
 msgstr "كورته‌ و ڕاپۆرته‌ یاساییه‌كان"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
 #, c-format
 msgid "Legal articles"
 msgstr "ووتاره‌ یاساییه‌كان"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "دۆسیه‌ یاساییه‌كان و تێبینی دۆسیه‌كان"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
 #, c-format
 msgid "Legislation"
 msgstr "یاسادانان"
@@ -7302,13 +7301,13 @@ msgstr "كتێبخانه‌ : "
 msgid "Library catalog"
 msgstr "پێڕستی كتێبخانه‌"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:299
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:298
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
 #, c-format
 msgid "Library:"
 msgstr "كتێبخانه‌"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:187
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:186
 #, c-format
 msgid "Limit to any of the following:"
 msgstr "سنورداركردن بۆ هه‌ر یه‌كێك له‌مانه‌ی خواره‌وه‌"
@@ -7415,7 +7414,7 @@ msgstr "شوێن"
 msgid "Location (Status)"
 msgstr "شوێن (دۆخ)‏"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:297
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:296
 #, c-format
 msgid "Location and availability: "
 msgstr "شوێن و هه‌بوون "
@@ -7964,7 +7963,7 @@ msgstr "مۆسیقا"
 msgid "MusicGroup"
 msgstr "مۆسیقا"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
 #, c-format
 msgid "Musical recording"
 msgstr "تۆماره‌ مۆسیقیه‌كان"
@@ -8209,7 +8208,7 @@ msgstr "هیچ ئایتمێك به‌رده‌ست نیه‌"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:40
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:132
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:205
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:204
 #, c-format
 msgid "No limit"
 msgstr "بێ سنور"
@@ -8274,12 +8273,12 @@ msgstr "هیچ تاگێك ده‌ستنیشان نه‌كرابوو"
 msgid "No tags from this library for this title."
 msgstr "له‌م كتێبخانه‌یه‌دا هیچ تاگێك بۆ ئه‌م ناونیشانه‌ نیه‌"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
 #, c-format
 msgid "Non fiction"
 msgstr "نا وێژه‌یی"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:239
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
 #, c-format
 msgid "Non-musical recording"
 msgstr "تۆماری نا مۆسیقی"
@@ -8456,7 +8455,7 @@ msgstr "ئاماره‌كان"
 msgid "OK"
 msgstr "باشه‌"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:310
 #, c-format
 msgid "OR"
 msgstr "یان"
@@ -8510,7 +8509,7 @@ msgstr "سه‌رچاوه‌كانی سه‌ر هێڵی ئینته‌رنێت: "
 msgid "Online tjeneste"
 msgstr "Online tjeneste"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:319
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:318
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr "ته‌نها ئه‌و ئایتمانه‌ی ئێستا به‌رده‌ستن بۆ خواستن یان وه‌ك سه‌رچاوه‌"
@@ -8709,7 +8708,7 @@ msgstr "ووشه‌ی نهێنی :"
 msgid "Password: %s "
 msgstr "ووشه‌ی نهێنی : "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
 #, c-format
 msgid "Patent document"
 msgstr "بڕوانامه‌ی داهێنان"
@@ -9030,7 +9029,7 @@ msgstr "كارتی پۆسته‌"
 msgid "Powered by "
 msgstr "پاڵپشتی ده‌كرێت له‌لایه‌ن "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
 #, c-format
 msgid "Pre-adolescent"
 msgstr "پێش هه‌رزه‌كاری"
@@ -9045,7 +9044,7 @@ msgstr "پێش هه‌رزه‌كاری: "
 msgid "Preferred form: "
 msgstr "شێوه‌ باوه‌كان "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
 #, c-format
 msgid "Preschool"
 msgstr "پێش خوێندنگه‌"
@@ -9075,7 +9074,7 @@ msgstr "پێشتر"
 msgid "Previous sessions"
 msgstr "خوله‌كانی پێشتر"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
 #, c-format
 msgid "Primary"
 msgstr "سه‌ره‌كی"
@@ -9138,7 +9137,7 @@ msgstr "كاری تیادا ده‌كرێت"
 msgid "Product"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
 #, c-format
 msgid "Programmed texts"
 msgstr "ده‌قه‌ به‌رنامه‌سازی كراوه‌كان"
@@ -9178,7 +9177,7 @@ msgstr "لیسته‌ گشتیه‌كان"
 msgid "Public lists:"
 msgstr "لیسته‌ گشتیه‌كان:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:160
 #, c-format
 msgid "Publication date range:"
 msgstr "به‌رواره‌كانی چاپكردن"
@@ -9379,7 +9378,7 @@ msgstr "یاسادانان"
 msgid "Registre"
 msgstr "تۆمار"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
 #, c-format
 msgid "Regular print"
 msgstr "چاپی ئاسایی"
@@ -9418,7 +9417,7 @@ msgid "Remove facet [% facet.facet_link_value | html %]"
 msgstr "[% facet.facet_title_value |html %]"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:138
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
 #, fuzzy
 msgid "Remove field"
 msgstr "خانه‌ی كۆده‌كان"
@@ -9626,7 +9625,7 @@ msgstr ""
 msgid "Review: "
 msgstr "پیاداچونه‌وه‌ "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
 #: opac-tmpl/prog/en/modules/opac-detail.tt:965
 #, c-format
 msgid "Reviews"
@@ -9797,8 +9796,8 @@ msgid "Score"
 msgstr "ئه‌نجام"
 
 #. INPUT type=submit name=do
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:148
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:336
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:147
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:335
 #: opac-tmpl/prog/en/modules/opac-detail.tt:628
 #: opac-tmpl/prog/en/modules/opac-detail.tt:735
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:63
@@ -10437,7 +10436,7 @@ msgstr "ببوره‌ ، كاتی ئه‌م خوله‌ت ته‌واو بوو. 
 msgid "Sort By: "
 msgstr "ڕێكیبخه‌ به‌پێی "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:327
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
 #, c-format
 msgid "Sort by:"
 msgstr "ڕێكیبخه‌ به‌پێی"
@@ -10453,7 +10452,7 @@ msgstr "ڕێكیبخه‌ به‌پێی "
 msgid "Sort this list by: "
 msgstr "ئه‌م لیسته‌ ڕێكبخه‌ به‌پێی به‌پێی "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:325
 #, c-format
 msgid "Sorting: "
 msgstr "ڕێكخستن "
@@ -10469,7 +10468,7 @@ msgstr "ده‌نگ"
 msgid "Source: "
 msgstr "سه‌رچاوه‌ "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
 #, c-format
 msgid "Specialized"
 msgstr "تایبه‌تمه‌ند"
@@ -10510,7 +10509,6 @@ msgstr "Språkundervisning"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:116
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:118
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "Standard number"
 msgstr "ژماره‌ ستاندارده‌كان"
@@ -10525,7 +10523,7 @@ msgstr "ژماره‌ ستاندارده‌كان (ISBN, ISSN یاخود هیت�
 msgid "Standardtittel: "
 msgstr "ناونیشانی ستاندارد "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
 #, c-format
 msgid "Statistics"
 msgstr "ئامار"
@@ -10777,7 +10775,7 @@ msgstr "زانیاریه‌كانی به‌شداریكردن بۆ %s"
 msgid "Subscriptions"
 msgstr "به‌شداریكردنه‌كان"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:220
 #, c-format
 msgid "Subtype limits"
 msgstr "سنوره‌كانی نیمچه‌ جۆره‌كان"
@@ -10838,7 +10836,7 @@ msgstr "به‌شێكی گۆڕاوه‌:"
 msgid "Supersedes:"
 msgstr "ئاڵوگۆڕه‌كان:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
 #, c-format
 msgid "Surveys"
 msgstr "ئاماره‌كان"
@@ -10933,7 +10931,7 @@ msgstr "تاگه‌كانی ئه‌م كتێبخانه‌یه‌"
 msgid "Tags:"
 msgstr "تاگه‌كان:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
 #, c-format
 msgid "Technical reports"
 msgstr "ڕاپۆرته‌ ته‌كنیكیه‌كان"
@@ -11285,7 +11283,7 @@ msgid ""
 "library for help."
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
 #, c-format
 msgid "Theses"
 msgstr "توێژینه‌وه‌"
@@ -11598,7 +11596,7 @@ msgstr "ڕون"
 msgid "Tre-dimensjonale gjenstander"
 msgstr "Tre-dimensjonale gjenstander"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:280
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
 #, c-format
 msgid "Treaties "
 msgstr "په‌یمان نامه‌كان "
@@ -11852,7 +11850,7 @@ msgstr "Utskilt fra: "
 msgid "Utstilling"
 msgstr "Utstilling"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "شریتی VHS / شریتی ڤیدیۆ"
@@ -12026,7 +12024,7 @@ msgstr ""
 "گرنگیه‌كی زۆر ده‌ده‌ین به‌ پاراستنی تایبه‌تمه‌ندێتیت. ده‌توانیت له‌سه‌ر ئه‌م شاشه‌یه‌ "
 "ئه‌وه‌ ده‌ستنیشان بكه‌یت كه‌ تا چه‌ندێك مێژووی گه‌ڕانت بپارێزین."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:254
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
 #, c-format
 msgid "Website"
 msgstr "ماڵپه‌ڕ"
@@ -12612,20 +12610,20 @@ msgstr ""
 msgid "[Create new list]"
 msgstr "لیستێكی نوێ دروست بكه‌"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:150
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:338
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:149
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:337
 #, c-format
 msgid "[Fewer options]"
 msgstr "[هه‌ڵبژارده‌ی كه‌متر]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:152
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:340
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:151
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:339
 #, c-format
 msgid "[More options]"
 msgstr "[المزيد من الخيارات]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:154
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:342
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:153
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:341
 #, c-format
 msgid "[New search]"
 msgstr "[گه‌ڕانی نوێ ]"

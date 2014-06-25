@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2014-05-05 21:42-0300\n"
-"PO-Revision-Date: 2014-02-18 08:15+0000\n"
-"Last-Translator: Georgia <georgia.katsarou@gmail.com>\n"
+"POT-Creation-Date: 2014-06-15 17:48-0300\n"
+"PO-Revision-Date: 2014-06-19 19:43+0000\n"
+"Last-Translator: kosmous <kvisitor@gnugr.org>\n"
 "Language-Team: Koha Language Team <koha-translate@lists.koha.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1392711349.0\n"
+"X-POOTLE-MTIME: 1403207027.0\n"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:110
 #, c-format
@@ -27,29 +27,6 @@ msgstr "#εγγραφή"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:742
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 msgstr "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
-
-#. %1$s:  END 
-#. %2$s:  END 
-#. %3$s:  END 
-#. %4$s:  END 
-#. %5$s:  BLOCK language 
-#. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s:  CASE 
-#. %12$s:  lang 
-#. %13$s:  END 
-#. %14$s:  END 
-#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
-#, fuzzy, c-format
-msgid ""
-"%s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]Greek "
-"(to 1453) %s%s %s %s "
-msgstr ""
-"%s %s %s %s %s %s %s %s %%]Εβραϊκά %s %%]Αραβικά %s %%]Ελληνικά (σύγχρονα) "
-"%s %%]Ελληνικά (έως το 1453) %s%s %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -88,13 +65,13 @@ msgstr ""
 #. %35$s:  INCLUDE 'datatables.inc' 
 #. %36$s:  IF ( SocialNetworks ) 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 "%s%sKoha online%s catalog &rsaquo; Details for: %s%s, %s%s %s %s %s "
 msgstr ""
-"%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s%s%sKoha online%s "
-"κατάλογος &rsaquo; Λεπτομέρειες για: %s%s, %s%s %s %s %s "
+"%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s%s%s online κατάλογος"
+"%s Koha &rsaquo; Λεπτομέρειες για: %s%s, %s%s %s %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -116,6 +93,29 @@ msgid ""
 msgstr ""
 "%s %s %s %s %s %s %s%s%sonline κατάλογος%s Koha &rsaquo; Τεκμήρια δεσμευμένα "
 "για μαθήματα για %s %s "
+
+#. %1$s:  END 
+#. %2$s:  END 
+#. %3$s:  END 
+#. %4$s:  END 
+#. %5$s:  BLOCK language 
+#. %6$s:  SWITCH lang 
+#. %7$s:  CASE ['heb'] 
+#. %8$s:  CASE ['ara'] 
+#. %9$s:  CASE ['gre'] 
+#. %10$s:  CASE ['grc'] 
+#. %11$s:  CASE 
+#. %12$s:  lang 
+#. %13$s:  END 
+#. %14$s:  END 
+#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
+#, fuzzy, c-format
+msgid ""
+"%s %s %s %s %s %s %sHebrew %sArabic %sGreek (modern) %sGreek (to 1453) %s%s "
+"%s %s "
+msgstr ""
+"%s %s %s %s %s %s %s %s %%]Εβραϊκά %s %%]Αραβικά %s %%]Ελληνικά (σύγχρονα) "
+"%s %%]Ελληνικά (έως το 1453) %s%s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
@@ -1050,7 +1050,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-detail.tt:680
 #, c-format
 msgid "%s %s, ISSN %s %s %s; %s %s "
-msgstr "%s %s, ISSN %s %s %s; %s %s "
+msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  IF ( WINDOW_CLOSE ) 
@@ -1078,17 +1078,22 @@ msgstr ""
 #. %15$s: - IF ACCOUNT_LINE.description 
 #. %16$s:  ACCOUNT_LINE.description 
 #. %17$s:  END 
-#. %18$s:  IF line.title 
-#. %19$s:  line.title |html_entity 
+#. %18$s:  IF ACCOUNT_LINE.title 
+#. %19$s:  ACCOUNT_LINE.title 
 #. %20$s:  END 
 #: opac-tmpl/prog/en/modules/opac-account.tt:42
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
 "via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
 "%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s %s"
 "(%s)%s "
 msgstr ""
+"%s %sΗ πληρωμή έγινε, ευχαριστώ %sΗ πληρωμή έγινε, ευχαριστώ(τοις μετρητοίς "
+"μέσω SIP2) %sΗ πληρωμή έγινε, ευχαριστώ (VISA τοις μετρητοίς μέσω SIP2) %sΗ "
+"πληρωμή έγινε, ευχαριστώ (πιστωτική κάρτα μέσω SIP2) %sΝέα κάρτα %sFine %"
+"sΤέλη διαχείρισης λογαριασμού %sΔιάφορα %sΑπωλεσθέν τεκμήριο %sΔιαγραφή %s%s "
+"%s %s, %s%s %s(%s)%s "
 
 #. %1$s:  IF (render=='standalone') 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -1522,12 +1527,15 @@ msgstr "%s Επώνυμο:"
 #. %1$s:  IF ( category2 && !OpacAllowPublicListCreation ) 
 #. %2$s:  END 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:596
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "%s The library has disabled the ability for patrons to create new public "
 "lists. If you make your list private, you will not be able to make it public "
 "again. %s "
 msgstr ""
+"%s Η βιβλιοθήκη απενεργοποίησε τη δυνατότητα των ατόμων να δημιουργούν νέες "
+"δημόσιες λίστες. Αν κάνετε τη λίστα σας ιδιωτική, δε θα μπορείτε να την "
+"κάνετε ξανά δημόσια. %s "
 
 #. %1$s:  IF holds_count.defined 
 #. %2$s:  holds_count 
@@ -1718,11 +1726,11 @@ msgstr "%s από %s%s "
 #. %4$s:  END 
 #. %5$s:  BLOCK language 
 #. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s: ERROR
+#. %7$s:  CASE ['en', 'eng'] 
+#. %8$s:  CASE ['fr', 'fre'] 
+#. %9$s:  CASE ['it', 'ita'] 
+#. %10$s:  CASE ['de', 'ger', 'deu'] 
+#. %11$s:  CASE ['es', 'spa'] 
 #. %12$s:  CASE 
 #. %13$s:  lang 
 #. %14$s:  END 
@@ -1730,8 +1738,7 @@ msgstr "%s από %s%s "
 #: opac-tmpl/prog/en/includes/opac-authorities.inc:53
 #, fuzzy, c-format
 msgid ""
-"%s%s %s %s %s %s %s %%]English %s %%]French %s %%]Italian %s %%]German %s %%]"
-"Spanish %s%s %s %s "
+"%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
 msgstr ""
 "%s%s %s %s %s %s %s %%]Αγγλικά %s %%]Γαλλικά %s %%]Ιταλικά %s %%]Γερμανικά "
 "%s %%]Ισπανικά %s%s %s %s "
@@ -2127,7 +2134,7 @@ msgstr ""
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:173
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:172
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 msgstr "%sΤύπος τεκμηρίου %sΣυλλογή %sΤοποθεσία στο ράφι %sΚάτι άλλο %s "
@@ -2920,8 +2927,8 @@ msgstr "%s / 5 (σε %s βαθμολογήσεις)"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Author phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Συγγραφέας-Φράση"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:124
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:126
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:123
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:125
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Call number"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Ταξιθετικός αριθμός"
@@ -2941,12 +2948,12 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Όνομα συνεδρίου-Φράση"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Corporate name"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Εταιρικό όνομα"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:122
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
@@ -3243,7 +3250,7 @@ msgstr "-- Επιλογή --"
 msgid "-- Choose format --"
 msgstr "--Επιλογή διάταξης--"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:313
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
 #, c-format
 msgid "-- none -- "
 msgstr "-- κανένα -- "
@@ -3654,7 +3661,7 @@ msgstr "Απορροφήθηκε:"
 msgid "Abstract: "
 msgstr "Περίληψη: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "Επιτομές/Περιλήψεις"
@@ -3714,7 +3721,7 @@ msgid "Add %s items to %s"
 msgstr "Προσθήκη %s τεκμηρίων σε %s"
 
 #. A name=ButtonPlus
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:136
 msgid "Add another field"
 msgstr "Προσθήκη άλλου πεδίου"
 
@@ -3782,12 +3789,12 @@ msgstr "Προστέθηκε στις %s %s από "
 msgid "Additional authors:"
 msgstr "Επιπρόσθετοι συγγραφείς:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:257
 #, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "Πρόσθετοι τύποι περιεχομένου για βιβλία/έντυπο ύλικό"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
 #, fuzzy, c-format
 msgid "Adolescent"
 msgstr "Έφηβος;"
@@ -3802,7 +3809,7 @@ msgstr "Έφηβος; "
 msgid "Adressebøker"
 msgstr "Adressebøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
 #, c-format
 msgid "Adult"
 msgstr "Ενήλικος"
@@ -3837,7 +3844,7 @@ msgstr "Όλους τους τύπους τεκμηρίων"
 #: opac-tmpl/prog/en/includes/masthead.inc:89
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:18
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:108
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:301
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:300
 #, c-format
 msgid "All libraries"
 msgstr "Όλες τις βιβλιοθήκες"
@@ -3898,7 +3905,7 @@ msgstr "Παρουσιάστηκε σφάλμα κατά την επεξεργα
 #: opac-tmpl/prog/en/modules/opac-shareshelf.tt:45
 #, c-format
 msgid "An invitation to share list "
-msgstr ""
+msgstr "Μια πρόσκληση να μοιρασθείτε τη λίστα"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:213
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:379
@@ -4002,17 +4009,17 @@ msgstr "Ανθολογία"
 msgid "Any"
 msgstr "Οποιοσδήποτε"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
 #, c-format
 msgid "Any audience"
 msgstr "Οποιδήποτε αναγνώστες"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:233
 #, c-format
 msgid "Any content"
 msgstr "Οποιοδήποτε περιεχόμενο"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:243
 #, c-format
 msgid "Any format"
 msgstr "Οποιαδήποτε διάταξη"
@@ -4130,12 +4137,14 @@ msgstr "Artikler (i bøker eller periodika)"
 #, c-format
 msgid "As owner of a list you cannot accept an invitation for sharing it."
 msgstr ""
+"Ως ιδιοκτήτης μιας λίστας δεν μπορείτε να αποδεχθείτε μια πρόσκληση να τη "
+"μοιρασθείτε."
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:354
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:356
 #, c-format
 msgid "Ascending"
-msgstr ""
+msgstr "Κατ' αύξουσα σειρά"
 
 #. For the first occurrence,
 #. %1$s:  subscription.branchname 
@@ -4381,7 +4390,7 @@ msgstr "Πίσω στα αποτελέσματα"
 msgid "Back to the results search list"
 msgstr "Πίσω στη λίστα αποτελεσμάτων αναζήτησης"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:131
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:130
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:480
 #: opac-tmpl/prog/en/modules/opac-user.tt:170
 #: opac-tmpl/prog/en/modules/opac-user.tt:336
@@ -4436,7 +4445,7 @@ msgstr "Bibliografier"
 msgid "Bibliografiske data"
 msgstr "Bibliografiske data"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
 #, c-format
 msgid "Bibliographies"
 msgstr "Βιβλιογραφίες"
@@ -4517,7 +4526,7 @@ msgid "Biografier"
 msgstr "Biografier"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:52
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
 #, c-format
 msgid "Biography"
 msgstr "Βιογραφία"
@@ -4563,7 +4572,7 @@ msgstr "Βιβλίο"
 msgid "Book reviews by critics ( XXX )"
 msgstr "Ανασκοπήσεις βιβλίων ανά κριτική ( XXX )"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:247
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
 #, c-format
 msgid "Braille"
 msgstr "Μπράιγ"
@@ -4610,12 +4619,12 @@ msgstr "Περιήγηση στο ράφι"
 msgid "CAS"
 msgstr "CAS"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:248
 #, c-format
 msgid "CD audio"
 msgstr "Ηχητικό CD"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
 #, c-format
 msgid "CD software"
 msgstr "CD λογισμικού"
@@ -4768,7 +4777,7 @@ msgstr "Καρότσι"
 msgid "Cas login"
 msgstr "Σύνδεση cas"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
 #, c-format
 msgid "Cassette recording"
 msgstr "Εγγραφή σε Κασέτα ήχου"
@@ -4783,7 +4792,7 @@ msgstr ""
 msgid "Catalog searches"
 msgstr "Περισσότερες αναζητήσεις"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
 #, c-format
 msgid "Catalogs"
 msgstr "Κατάλογοι"
@@ -5296,7 +5305,7 @@ msgstr "Τρέχουσα περίοδος χρήσης"
 msgid "Curriculum"
 msgstr "Αναλυτικό Πρόγραμμα Μαθημάτων"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "DVD βίντεο/ Βιντεοδίσκος"
@@ -5494,7 +5503,7 @@ msgstr "Τμήμα"
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:362
 #, c-format
 msgid "Descending"
-msgstr ""
+msgstr "Κατά φθίνουσα σειρά"
 
 #: opac-tmpl/prog/en/modules/opac-account.tt:25
 #, c-format
@@ -5541,7 +5550,7 @@ msgstr "Dia"
 msgid "Dias"
 msgstr "Dias"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
 #, c-format
 msgid "Dictionaries"
 msgstr "Λεξικά"
@@ -5567,12 +5576,12 @@ msgstr "Dikt"
 msgid "Diorama"
 msgstr "Diorama"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
 #, c-format
 msgid "Directories"
 msgstr "Κατάλογοι"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
 #, c-format
 msgid "Discographies"
 msgstr "Δισκογραφίες"
@@ -5839,7 +5848,7 @@ msgstr "Emne(r): "
 msgid "Empty and close"
 msgstr "Καθαρισμός και κλείσιμο"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
 #, c-format
 msgid "Encyclopedias "
 msgstr "Εγκυκλοπαίδειες "
@@ -5860,8 +5869,8 @@ msgid "Enter a new purchase suggestion"
 msgstr "Εισάγετε μια νέα πρόταση για αγορά"
 
 #. INPUT type=text name=q
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:133
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:163
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:132
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
 msgid "Enter search terms"
 msgstr "Εισαγωγή όρων αναζήτησης"
 
@@ -6075,7 +6084,7 @@ msgstr "Θήλυ:"
 msgid "Festskrift "
 msgstr "Festskrift "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
 #, c-format
 msgid "Fiction"
 msgstr "Λογοτεχνία"
@@ -6116,7 +6125,7 @@ msgstr "Filmlydspor"
 msgid "Filmografier"
 msgstr "Filmografier"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
 #, c-format
 msgid "Filmographies"
 msgstr "Φιλμογραφίες"
@@ -6187,7 +6196,7 @@ msgstr "Flykart"
 msgid "Font"
 msgstr "Font"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
 #, fuzzy, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -6347,7 +6356,7 @@ msgstr "Πλήρες ιστορικό"
 msgid "Fysiske bøker"
 msgstr "Fysiske bøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
 #, fuzzy, c-format
 msgid "General"
 msgstr "Γενικό;"
@@ -6494,7 +6503,7 @@ msgstr "Πλάκα γραμμοφώνου"
 msgid "Groups"
 msgstr "Ομάδες"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
 #, c-format
 msgid "Groups of libraries"
 msgstr "Ομάδες βιβλιοθηκών"
@@ -6509,7 +6518,7 @@ msgstr "Gått inn i: "
 msgid "HELP"
 msgstr "ΒΟΗΘΕΙΑ"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
 #, c-format
 msgid "Handbooks"
 msgstr "Εγχειρίδια"
@@ -6701,7 +6710,7 @@ msgstr "Προβολή ISBD"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:60
 #: opac-tmpl/prog/en/includes/masthead.inc:62
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:129
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:128
 #: opac-tmpl/prog/en/modules/opac-results.tt:409
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:147
 #: opac-tmpl/prog/en/modules/opac-basket.tt:208
@@ -6905,7 +6914,7 @@ msgstr "Ελλιπή περιεχόμενα:"
 msgid "Indexed in:"
 msgstr "Ευρετηριασμένο σε:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
 #, c-format
 msgid "Indexes"
 msgstr "Ευρετήρια"
@@ -7079,7 +7088,7 @@ msgstr "Ιούν"
 msgid "June"
 msgstr "Ιούνιος"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:230
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
 #, c-format
 msgid "Juvenile"
 msgstr "Ανήλικος"
@@ -7230,13 +7239,13 @@ msgstr "LCCN: %s "
 msgid "Lagringsbrikke"
 msgstr "Lagringsbrikke"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:201
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:200
 #, c-format
 msgid "Language"
 msgstr "Γλώσσα"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:137
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:203
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:202
 #, c-format
 msgid "Language: "
 msgstr "Γλώσσα: "
@@ -7246,7 +7255,7 @@ msgstr "Γλώσσα: "
 msgid "Languages:&nbsp;"
 msgstr "Γλώσσες:&nbsp;"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
 #, c-format
 msgid "Large print"
 msgstr "Μεγεθυμένο κείμενο"
@@ -7261,22 +7270,22 @@ msgstr "Τελευταίο"
 msgid "Last location"
 msgstr "Τελευταία τοποθεσία"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
 #, c-format
 msgid "Law reports and digests"
 msgstr "Νομικές εκθέσεις και περιλήψεις"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
 #, c-format
 msgid "Legal articles"
 msgstr "Νομικά άρθρα"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "Νομικές υποθέσεις και πρακτικά"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
 #, c-format
 msgid "Legislation"
 msgstr "Νομοθεσία"
@@ -7332,13 +7341,13 @@ msgstr "Βιβλιοθήκη : "
 msgid "Library catalog"
 msgstr "Κατάλογος βιβλιοθήκης"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:299
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:298
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
 #, c-format
 msgid "Library:"
 msgstr "Βιβλιοθήκη:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:187
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:186
 #, c-format
 msgid "Limit to any of the following:"
 msgstr "Περιορίστε σε οποιοδήποτε από τα ακόλουθα:"
@@ -7379,6 +7388,8 @@ msgid ""
 "List could not be created. %s(Do not use the database administrator "
 "account.)%s"
 msgstr ""
+"Η λίστα δεν μπορούσε να δημιουργηθεί. %s(Μη χρησιμοποιήσετε τον λογαριασμό "
+"διαχειριστή βάσης δεδομένων.)%s"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:644
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:722
@@ -7445,7 +7456,7 @@ msgstr "Τοποθεσία"
 msgid "Location (Status)"
 msgstr "Τοποθεσία (Κατάσταση)"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:297
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:296
 #, c-format
 msgid "Location and availability: "
 msgstr "Τοποθεσία και διαθεσιμότητα: "
@@ -7993,7 +8004,7 @@ msgstr "Μουσικό Λεύκωμα/Album"
 msgid "MusicGroup"
 msgstr "Μουσική"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
 #, c-format
 msgid "Musical recording"
 msgstr "Μουσική ηχογράφηση"
@@ -8238,7 +8249,7 @@ msgstr "Δεν υπάρχουν διαθέσιμα τεκμήρια:"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:40
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:132
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:205
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:204
 #, c-format
 msgid "No limit"
 msgstr "Κανένας περιορισμός"
@@ -8304,12 +8315,12 @@ msgstr "Δε διευκρινίστηκε καμία ετικέτα."
 msgid "No tags from this library for this title."
 msgstr "Δεν υπάρχουν ετικέτες σε αυτή τη βιβλιοθήκη για αυτό τον τίτλο."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
 #, c-format
 msgid "Non fiction"
 msgstr "Μη λογοτεχνικό"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:239
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
 #, c-format
 msgid "Non-musical recording"
 msgstr "Μη-μουσική ηχογράφηση"
@@ -8491,7 +8502,7 @@ msgstr "Αριθμητικά δεδομένα"
 msgid "OK"
 msgstr "OK"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:310
 #, c-format
 msgid "OR"
 msgstr "Ή"
@@ -8545,7 +8556,7 @@ msgstr "Ηλεκτρονικές πηγές: "
 msgid "Online tjeneste"
 msgstr "Online tjeneste"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:319
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:318
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr ""
@@ -8746,7 +8757,7 @@ msgstr "Κωδικός πρόσβασης:"
 msgid "Password: %s "
 msgstr "Κωδικός πρόσβασης: %s "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
 #, c-format
 msgid "Patent document"
 msgstr "Ευρεσιτεχνία"
@@ -9067,7 +9078,7 @@ msgstr "Postkort"
 msgid "Powered by "
 msgstr "Powered by "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
 #, fuzzy, c-format
 msgid "Pre-adolescent"
 msgstr "Προεφηβικό"
@@ -9082,7 +9093,7 @@ msgstr "Προεφηβικό; "
 msgid "Preferred form: "
 msgstr "Προτιμώμενη μορφή:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
 #, fuzzy, c-format
 msgid "Preschool"
 msgstr "Προσχολικό"
@@ -9112,7 +9123,7 @@ msgstr "Προηγούμενο"
 msgid "Previous sessions"
 msgstr "Προηγούμενες περίοδοι χρήσης"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
 #, fuzzy, c-format
 msgid "Primary"
 msgstr "Πρωτεύον"
@@ -9175,7 +9186,7 @@ msgstr "Γίνεται επεξεργασία..."
 msgid "Product"
 msgstr "Προϊόν"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
 #, c-format
 msgid "Programmed texts"
 msgstr "Εγχειρίδια αυτοδιδασκαλίας"
@@ -9215,7 +9226,7 @@ msgstr "Δημόσιες λίστες"
 msgid "Public lists:"
 msgstr "Δημόσιες λίστες:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:160
 #, c-format
 msgid "Publication date range:"
 msgstr "Σειρά ημερομηνίας δημοσίευσης:"
@@ -9414,7 +9425,7 @@ msgstr "Η δημιουργία λογαριασμού δεν είναι έγκ�
 msgid "Registre"
 msgstr "Registre"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
 #, c-format
 msgid "Regular print"
 msgstr "Κανονικό κείμενο"
@@ -9453,7 +9464,7 @@ msgid "Remove facet [% facet.facet_link_value | html %]"
 msgstr "[% facet.facet_title_value |html %]"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:138
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
 #, fuzzy
 msgid "Remove field"
 msgstr "Κωδικοποιημένα πεδία"
@@ -9661,7 +9672,7 @@ msgstr ""
 msgid "Review: "
 msgstr "Κριτική: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
 #: opac-tmpl/prog/en/modules/opac-detail.tt:965
 #, c-format
 msgid "Reviews"
@@ -9832,8 +9843,8 @@ msgid "Score"
 msgstr "Παρτιτούρα"
 
 #. INPUT type=submit name=do
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:148
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:336
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:147
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:335
 #: opac-tmpl/prog/en/modules/opac-detail.tt:628
 #: opac-tmpl/prog/en/modules/opac-detail.tt:735
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:63
@@ -10387,6 +10398,8 @@ msgid ""
 "Something went wrong while processing the following addresses. Please check "
 "them. These are: %s"
 msgstr ""
+"Κάτι πήγε στραβά κατά την επεξεργασία των εξής διευθύνσεων. Παρακαλώ ελέγξτε "
+"τες. Αυτές είναι: %s"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:230
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:236
@@ -10404,11 +10417,13 @@ msgid ""
 "Sorry, but we could not accept this key. The invitation may have expired. "
 "Contact the patron who sent you the invitation."
 msgstr ""
+"Λυπούμαστε, αλλά δεν μπορούμε να δεχθούμε αυτό το κλειδί. Η πρόσκληση μπορεί "
+"να έχει λήξει. Ελάτε σε επαφή με το εκείνον που σας έστειλε την πρόσκληση."
 
 #: opac-tmpl/prog/en/modules/opac-shareshelf.tt:21
 #, c-format
 msgid "Sorry, but you did not enter a valid email address."
-msgstr ""
+msgstr "Συγγνώμη, αλλά δεν εισαγάγατε μια έγκυρη ηλεκτρονική διεύθυνση."
 
 #: opac-tmpl/prog/en/modules/svc/suggestion.tt:23
 #, fuzzy, c-format
@@ -10475,7 +10490,7 @@ msgstr "Λυπούμαστε, έχει λήξει ο χρόνος σας. Παρ
 msgid "Sort By: "
 msgstr "Ταξινόμηση ανά: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:327
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
 #, fuzzy, c-format
 msgid "Sort by:"
 msgstr "Ταξινόμηση ανά:"
@@ -10491,7 +10506,7 @@ msgstr "Ταξινόμηση ανά: "
 msgid "Sort this list by: "
 msgstr "Ταξινόμηση αυτής της λίστας ανά: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:325
 #, fuzzy, c-format
 msgid "Sorting: "
 msgstr "Ταξινόμηση:"
@@ -10507,7 +10522,7 @@ msgstr "Ήχος"
 msgid "Source: "
 msgstr "Πηγή: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
 #, fuzzy, c-format
 msgid "Specialized"
 msgstr "Ειδικευμένο;"
@@ -10548,7 +10563,6 @@ msgstr "Språkundervisning"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:116
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:118
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "Standard number"
 msgstr "Πρότυπος αριθμός"
@@ -10563,7 +10577,7 @@ msgstr "Πρότυπος Αριθμός (ISBN, ISSN ή Άλλος):"
 msgid "Standardtittel: "
 msgstr "Πρότυπος τίτλος: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
 #, c-format
 msgid "Statistics"
 msgstr "Στατιστικά στοιχεία"
@@ -10818,7 +10832,7 @@ msgstr "Πληροφορίες συνδρομής για %s"
 msgid "Subscriptions"
 msgstr "Συνδρομές"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:220
 #, c-format
 msgid "Subtype limits"
 msgstr "Περιορισμοί υποείδους"
@@ -10879,7 +10893,7 @@ msgstr "Αντικαθιστά εν μέρει:"
 msgid "Supersedes:"
 msgstr "Αντικαθιστά:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
 #, c-format
 msgid "Surveys"
 msgstr "Έρευνες"
@@ -10974,7 +10988,7 @@ msgstr "Ετικέτες από αυτή τη βιβλιοθήκη:"
 msgid "Tags:"
 msgstr "Ετικέτες:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
 #, c-format
 msgid "Technical reports"
 msgstr "Τεχνικές αναφορές"
@@ -11223,6 +11237,8 @@ msgstr ""
 #, c-format
 msgid "The feature of sharing lists is not in use in this library."
 msgstr ""
+"Το χαρακτηριστικό διαμοιρασμού λιστών δεν χρησιμοποιείται σε αυτή την "
+"βιβλιοθήκη."
 
 #. %1$s:  subscription_LOO.histstartdate 
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:91
@@ -11250,7 +11266,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:136
 #, c-format
 msgid "The selected suggestions have been deleted."
-msgstr "Η επιλεγμένες προτάσεις έχουν διαγραφεί."
+msgstr ""
 
 #. %1$s:  subscription_LOO.histenddate 
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:93
@@ -11334,7 +11350,7 @@ msgstr ""
 "Σημειώθηκαν προβλήματα κατά την επεξεργασία της εγγραφής σας. Παρακαλώ ελάτε "
 "σε επαφή με τη βιβλιοθήκη σας για βοήθεια."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
 #, c-format
 msgid "Theses"
 msgstr "Διατριβές"
@@ -11656,7 +11672,7 @@ msgstr "Transparent"
 msgid "Tre-dimensjonale gjenstander"
 msgstr "Tre-dimensjonale gjenstander"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:280
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
 #, c-format
 msgid "Treaties "
 msgstr "Συνθήκες "
@@ -11912,7 +11928,7 @@ msgstr "Utskilt fra: "
 msgid "Utstilling"
 msgstr "Utstilling"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "Ταινία VHS/ Βιντεοκασέτα"
@@ -12088,7 +12104,7 @@ msgstr ""
 "Προσέχουμε σημαντικά την προστασία της ιδιωτικότητάς σας. Σε αυτή την οθόνη, "
 "θα ορίσετε για πόσο καιρό θα κρατήσουμε το ιστορικό αναγνώσεών σας."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:254
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
 #, c-format
 msgid "Website"
 msgstr "Ιστοσελίδα"
@@ -12206,12 +12222,12 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-blocked.tt:15
 #, c-format
 msgid "You are not authorized to view this record."
-msgstr ""
+msgstr "Δεν είστε εξουσιοδοτημένος να δείτε αυτή την καταχώρηση."
 
 #: opac-tmpl/prog/en/modules/opac-shareshelf.tt:19
 #, c-format
 msgid "You can only share a list if you are the owner."
-msgstr ""
+msgstr "Μπορείτε να διαμοιρασθείτε μια λίστα μόνον αν είστε ο ιδιοκτήτης της."
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:100
 #, c-format
@@ -12234,7 +12250,7 @@ msgstr "Δεν μπορείτε να ανανεώσετε ξανά αυτό το
 #: opac-tmpl/prog/en/modules/opac-shareshelf.tt:20
 #, c-format
 msgid "You cannot share a public list."
-msgstr ""
+msgstr "Δε μπορείτε να διαμοιρασθείτε μια δημόσια λίστα."
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:306
 #, c-format
@@ -12316,7 +12332,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-auth.tt:97
 #, c-format
 msgid "You may "
-msgstr ""
+msgstr "Μπορείτε να"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -12371,6 +12387,8 @@ msgid ""
 "You will receive an email notification if someone accepts your share within "
 "two weeks."
 msgstr ""
+"Θα λάβετε μια ειδοποίηση μέσω email όταν κάποιος αποδεχθεί τον διαμοιρασμό "
+"σας εντός δύο εβδομάδων."
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-detail.tt:45
@@ -12519,13 +12537,18 @@ msgstr "Οι λίστες σας:"
 #. %5$s:  END 
 #. %6$s:  END 
 #: opac-tmpl/prog/en/modules/opac-user.tt:110
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Your loan renewal failed because of the following reason(s): %s %s Your "
 "account has expired. Please contact the library for more information. %s You "
 "have renewed this item the maximum number of times allowed. %s This item is "
 "on hold for another patron. %s %s "
 msgstr ""
+"Η ανανέωση του δανεισμού σας απέτυχε λόγω των εξής: %s %s Ο λογαριασμός σας "
+"έληξε. Παρακαλώ ελάτε σε επαφή με τη βιβλιοθήκη για περισσότερες "
+"λεπτομέρειες. %s Ανανεώσατε αυτό το τεκμήριο για τον μέγιστο αριθμό "
+"παρατάσεων που επιτρέπονται.%s Έχει γίνει κράτηση αυτού του τεκμηρίου από "
+"κάποιον άλλον. %s %s "
 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:27
 #, c-format
@@ -12706,20 +12729,20 @@ msgstr ""
 msgid "[Create new list]"
 msgstr "Δημιουργία νέας λίστας"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:150
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:338
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:149
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:337
 #, c-format
 msgid "[Fewer options]"
 msgstr "[Λιγότερες επιλογές]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:152
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:340
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:151
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:339
 #, c-format
 msgid "[More options]"
 msgstr "[Περισσότερες επιλογές]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:154
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:342
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:153
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:341
 #, c-format
 msgid "[New search]"
 msgstr "[Νέα αναζήτηση]"

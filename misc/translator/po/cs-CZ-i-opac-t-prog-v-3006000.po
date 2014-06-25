@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-05-05 22:04-0300\n"
-"PO-Revision-Date: 2014-05-21 10:09+0000\n"
+"POT-Creation-Date: 2014-06-15 18:10-0300\n"
+"PO-Revision-Date: 2014-06-16 07:33+0000\n"
 "Last-Translator: Josef <josef.moravec@knihovna-uo.cz>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/opac-prog/cs/>\n"
 "Language: cs\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1400666963.0\n"
+"X-POOTLE-MTIME: 1402904025.0\n"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:110
 #, c-format
@@ -26,29 +26,6 @@ msgstr "#záznam"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:742
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 msgstr "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
-
-#. %1$s:  END 
-#. %2$s:  END 
-#. %3$s:  END 
-#. %4$s:  END 
-#. %5$s:  BLOCK language 
-#. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s:  CASE 
-#. %12$s:  lang 
-#. %13$s:  END 
-#. %14$s:  END 
-#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
-#, c-format
-msgid ""
-"%s %s %s %s %s %s %s %%]Hebrew %s %%]Arabic %s %%]Greek (modern) %s %%]Greek "
-"(to 1453) %s%s %s %s "
-msgstr ""
-"%s %s %s %s %s %s %s %%]Hebrejština %s %%]Arabština %s %%]Řečtina (moderní) "
-"%s %%]Řečtina (do 1453) %s%s %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -115,6 +92,29 @@ msgid ""
 msgstr ""
 "%s %s %s %s %s %s %s%s%sKoha on-line%s katalog &rsaquo; Rezervace pro kurz "
 "%s %s "
+
+#. %1$s:  END 
+#. %2$s:  END 
+#. %3$s:  END 
+#. %4$s:  END 
+#. %5$s:  BLOCK language 
+#. %6$s:  SWITCH lang 
+#. %7$s:  CASE ['heb'] 
+#. %8$s:  CASE ['ara'] 
+#. %9$s:  CASE ['gre'] 
+#. %10$s:  CASE ['grc'] 
+#. %11$s:  CASE 
+#. %12$s:  lang 
+#. %13$s:  END 
+#. %14$s:  END 
+#: opac-tmpl/prog/en/includes/authorities-search-results.inc:128
+#, c-format
+msgid ""
+"%s %s %s %s %s %s %sHebrew %sArabic %sGreek (modern) %sGreek (to 1453) %s%s "
+"%s %s "
+msgstr ""
+"%s %s %s %s %s %s %sHebrejština %sArabština %sŘečtina (moderní) %sŘečtina "
+"(do 1453) %s%s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
@@ -260,8 +260,7 @@ msgid ""
 "%s %s %s %s%s%s%sKoha online%s catalog &rsaquo; %sContents of %s%sYour lists"
 "%s%s "
 msgstr ""
-"%s %s %s %s%s%s%sKoha on-line%s katalog &rsaquo; %sObsah %s%sMoje seznamy%s"
-"%s "
+"%s %s %s %s%s%s%sKoha online%s katalog &rsaquo; %sObsah %s%sMoje seznamy%s%s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE AuthorisedValues 
@@ -1073,8 +1072,8 @@ msgstr "%s %sPoznámka: toto okno se automaticky zavře za 5 sekund%s "
 #. %15$s: - IF ACCOUNT_LINE.description 
 #. %16$s:  ACCOUNT_LINE.description 
 #. %17$s:  END 
-#. %18$s:  IF line.title 
-#. %19$s:  line.title |html_entity 
+#. %18$s:  IF ACCOUNT_LINE.title 
+#. %19$s:  ACCOUNT_LINE.title 
 #. %20$s:  END 
 #: opac-tmpl/prog/en/modules/opac-account.tt:42
 #, c-format
@@ -1110,7 +1109,7 @@ msgstr "%s %sod "
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:734
 #, c-format
 msgid "%s %sitem%sitem(s)%s"
-msgstr "%s %s %s %s"
+msgstr "%s %sdokument%sdokument(y)%s"
 
 #. %1$s:  IF loop.index == 0 
 #. %2$s:  ELSE 
@@ -1736,11 +1735,11 @@ msgstr "%s od %s%s "
 #. %4$s:  END 
 #. %5$s:  BLOCK language 
 #. %6$s:  SWITCH lang 
-#. %7$s: ERROR
-#. %8$s: ERROR
-#. %9$s: ERROR
-#. %10$s: ERROR
-#. %11$s: ERROR
+#. %7$s:  CASE ['en', 'eng'] 
+#. %8$s:  CASE ['fr', 'fre'] 
+#. %9$s:  CASE ['it', 'ita'] 
+#. %10$s:  CASE ['de', 'ger', 'deu'] 
+#. %11$s:  CASE ['es', 'spa'] 
 #. %12$s:  CASE 
 #. %13$s:  lang 
 #. %14$s:  END 
@@ -1748,11 +1747,10 @@ msgstr "%s od %s%s "
 #: opac-tmpl/prog/en/includes/opac-authorities.inc:53
 #, c-format
 msgid ""
-"%s%s %s %s %s %s %s %%]English %s %%]French %s %%]Italian %s %%]German %s %%]"
-"Spanish %s%s %s %s "
+"%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
 msgstr ""
-"%s%s %s %s %s %s %s %%]Angličtina %s %%]Francouzština %s %%]Italština %s %%]"
-"Němčina %s %%]Španělština %s%s %s %s "
+"%s%s %s %s %s %s %sAngličtina %sFrancouzština %sItalština %sNěmčina %"
+"sŠpanělština %s%s %s %s "
 
 #. %1$s:  IF ( itemsloo.ITEM_RESULTS ) 
 #. %2$s:  FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS 
@@ -1807,7 +1805,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:656
 #, c-format
 msgid "%s%s %sitem%sitems%s%sEmpty%s"
-msgstr "%s%s %s %s %s%s0%s"
+msgstr "%s%s %sjednotka%sjednotky%s%sPrázdné%s"
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  LibraryName 
@@ -2148,7 +2146,7 @@ msgstr ""
 #. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:173
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:172
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 msgstr "%sTyp jednotky %sSbírka %sUmístění v polici %sNěco jiného %s "
@@ -2934,8 +2932,8 @@ msgstr "&nbsp;&nbsp; %s / 5 (počet hodnocení: %s)"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Author phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Autor (přesně)"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:124
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:126
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:123
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:125
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Call number"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Signatura"
@@ -2955,12 +2953,12 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Název konference (přesně)"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Corporate name"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Název společnosti"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:122
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:121
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
@@ -3253,7 +3251,7 @@ msgstr "-- Vyberte --"
 msgid "-- Choose format --"
 msgstr "-- Vyberte formát --"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:313
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
 #, c-format
 msgid "-- none -- "
 msgstr "-- žádný -- "
@@ -3662,7 +3660,7 @@ msgstr "Absorbováno:"
 msgid "Abstract: "
 msgstr "Abstrakt: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "Abstrakty, shrnutí"
@@ -3712,7 +3710,7 @@ msgstr "Akce:"
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:486
 #, c-format
 msgid "Add"
-msgstr "Vložit"
+msgstr "Přidat"
 
 #. %1$s:  total 
 #. %2$s:  IF ( singleshelf ) 
@@ -3722,7 +3720,7 @@ msgid "Add %s items to %s"
 msgstr "Vložit %s položky do %s"
 
 #. A name=ButtonPlus
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:136
 msgid "Add another field"
 msgstr "Vložit další pole"
 
@@ -3730,7 +3728,7 @@ msgstr "Vložit další pole"
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:482
 #, c-format
 msgid "Add tag"
-msgstr "Vložit štítek"
+msgstr "Přidat štítek"
 
 #. %1$s:  IF ( singleshelf ) 
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:16
@@ -3790,12 +3788,12 @@ msgstr "Vloženo %s %s uživatelem "
 msgid "Additional authors:"
 msgstr "Další autoři:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:258
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:257
 #, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "Doplňující typy obsahu pro knihy/tiskoviny"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
 #, c-format
 msgid "Adolescent"
 msgstr "Dospívající (14-17 let)"
@@ -3810,7 +3808,7 @@ msgstr "Adolescent; "
 msgid "Adressebøker"
 msgstr "Adressebøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:226
 #, c-format
 msgid "Adult"
 msgstr "Dospělí"
@@ -3845,7 +3843,7 @@ msgstr "Všechny typy jednotek"
 #: opac-tmpl/prog/en/includes/masthead.inc:89
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:18
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:108
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:301
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:300
 #, c-format
 msgid "All libraries"
 msgstr "Všechny knihovny"
@@ -4013,17 +4011,17 @@ msgstr "Antologi"
 msgid "Any"
 msgstr "Libovolné"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
 #, c-format
 msgid "Any audience"
 msgstr "Uživatelské určení"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:233
 #, c-format
 msgid "Any content"
 msgstr "Jakýkoliv obsah"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:243
 #, c-format
 msgid "Any format"
 msgstr "Jakýkoliv formát"
@@ -4382,7 +4380,7 @@ msgstr "Zpět na výsledky"
 msgid "Back to the results search list"
 msgstr "Zpět do seznamu výsledků vyhledávání"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:131
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:130
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:480
 #: opac-tmpl/prog/en/modules/opac-user.tt:170
 #: opac-tmpl/prog/en/modules/opac-user.tt:336
@@ -4437,7 +4435,7 @@ msgstr "Bibliografier"
 msgid "Bibliografiske data"
 msgstr "Bibliografická data"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:259
 #, c-format
 msgid "Bibliographies"
 msgstr "Bibliografie"
@@ -4518,7 +4516,7 @@ msgid "Biografier"
 msgstr "Biografier"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:52
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
 #, c-format
 msgid "Biography"
 msgstr "Biografie"
@@ -4564,7 +4562,7 @@ msgstr "Kniha"
 msgid "Book reviews by critics ( XXX )"
 msgstr "Knižní recenze ( XXX )"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:247
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
 #, c-format
 msgid "Braille"
 msgstr "Braillovo písmo"
@@ -4611,12 +4609,12 @@ msgstr "Prohlédnout regál"
 msgid "CAS"
 msgstr "CAS"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:248
 #, c-format
 msgid "CD audio"
 msgstr "Audio CD"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
 #, c-format
 msgid "CD software"
 msgstr "CD se softwarem"
@@ -4770,7 +4768,7 @@ msgid "Cas login"
 msgstr "CAS přihlášení"
 
 # Nahrávání kazet? Jedná se o typ dokumentu, takže záznam na kazetě je na místě.
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:249
 #, c-format
 msgid "Cassette recording"
 msgstr "Záznamy na kazetě"
@@ -4785,7 +4783,7 @@ msgstr "Hrají: "
 msgid "Catalog searches"
 msgstr "Hledání v katalogu"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:260
 #, c-format
 msgid "Catalogs"
 msgstr "Katalogy"
@@ -5107,7 +5105,7 @@ msgstr "Doporučení k obsahu: "
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:723
 #, c-format
 msgid "Contents"
-msgstr "Počet položek"
+msgstr "Obsah"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:273
 #, c-format
@@ -5161,7 +5159,7 @@ msgstr "Rok vydání"
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:348
 #, c-format
 msgid "Copyright date"
-msgstr "Datum vydání"
+msgstr "Datum získání autorských práv"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:99
 #, c-format
@@ -5290,7 +5288,7 @@ msgstr "Současné sezení"
 msgid "Curriculum"
 msgstr "Osnovy"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:252
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "DVD nebo jiný videodisk"
@@ -5528,7 +5526,7 @@ msgstr "Dia"
 msgid "Dias"
 msgstr "Dias"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:261
 #, c-format
 msgid "Dictionaries"
 msgstr "Slovníky"
@@ -5554,12 +5552,12 @@ msgstr "Dikt"
 msgid "Diorama"
 msgstr "Diorama"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
 #, c-format
 msgid "Directories"
 msgstr "Adresáře"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
 #, c-format
 msgid "Discographies"
 msgstr "Diskografie"
@@ -5825,7 +5823,7 @@ msgstr "Emne(r): "
 msgid "Empty and close"
 msgstr "Vysypat košík"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:262
 #, c-format
 msgid "Encyclopedias "
 msgstr "Encyklopedie "
@@ -5846,8 +5844,8 @@ msgid "Enter a new purchase suggestion"
 msgstr "Vložit nový návrh na nákup"
 
 #. INPUT type=text name=q
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:133
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:163
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:132
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
 msgid "Enter search terms"
 msgstr "Vložte hledané výrazy"
 
@@ -6060,7 +6058,7 @@ msgstr "Žena:"
 msgid "Festskrift "
 msgstr "Festskrift "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:234
 #, c-format
 msgid "Fiction"
 msgstr "Beletrie"
@@ -6101,7 +6099,7 @@ msgstr "Filmlydspor"
 msgid "Filmografier"
 msgstr "Filmografier"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:274
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
 #, c-format
 msgid "Filmographies"
 msgstr "Filmografie"
@@ -6172,7 +6170,7 @@ msgstr "Flykart"
 msgid "Font"
 msgstr "Font"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:162
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
 #, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -6328,7 +6326,7 @@ msgstr "Celá historie"
 msgid "Fysiske bøker"
 msgstr "Fysiske bøker"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
 #, c-format
 msgid "General"
 msgstr "Blíže neurčeno"
@@ -6471,7 +6469,7 @@ msgstr "Grammofonplate"
 msgid "Groups"
 msgstr "Skupiny"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:312
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
 #, c-format
 msgid "Groups of libraries"
 msgstr "Skupiny knihoven"
@@ -6486,7 +6484,7 @@ msgstr "Gått inn i: "
 msgid "HELP"
 msgstr "NÁPOVĚDA"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:263
 #, c-format
 msgid "Handbooks"
 msgstr "Příručky"
@@ -6677,7 +6675,7 @@ msgstr "ISBD"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:60
 #: opac-tmpl/prog/en/includes/masthead.inc:62
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:129
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:128
 #: opac-tmpl/prog/en/modules/opac-results.tt:409
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:147
 #: opac-tmpl/prog/en/modules/opac-basket.tt:208
@@ -6879,7 +6877,7 @@ msgstr "Neúplný obsah:"
 msgid "Indexed in:"
 msgstr "V rejstříku:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
 #, c-format
 msgid "Indexes"
 msgstr "Indexy"
@@ -7051,7 +7049,7 @@ msgstr "Červen"
 msgid "June"
 msgstr "Červen"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:230
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:229
 #, c-format
 msgid "Juvenile"
 msgstr "Děti a mládež do 15 let"
@@ -7202,13 +7200,13 @@ msgstr "LCCN: %s "
 msgid "Lagringsbrikke"
 msgstr "Lagringsbrikke"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:201
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:200
 #, c-format
 msgid "Language"
 msgstr "Jazyk"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:137
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:203
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:202
 #, c-format
 msgid "Language: "
 msgstr "Jazyk: "
@@ -7218,7 +7216,7 @@ msgstr "Jazyk: "
 msgid "Languages:&nbsp;"
 msgstr "Jazyky:&nbsp;"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:246
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
 #, c-format
 msgid "Large print"
 msgstr "Velkoformátový tisk"
@@ -7233,22 +7231,22 @@ msgstr "Poslední"
 msgid "Last location"
 msgstr "Poslední umístění"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
 #, c-format
 msgid "Law reports and digests"
 msgstr "Právní předpisy a souhrny"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:265
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:264
 #, c-format
 msgid "Legal articles"
 msgstr "Právnické články"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:278
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "Právní případy a poznámky k procesu"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:268
 #, c-format
 msgid "Legislation"
 msgstr "Legislativa"
@@ -7303,13 +7301,13 @@ msgstr "Knihovna : "
 msgid "Library catalog"
 msgstr "Katalog knihovny"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:299
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:298
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:111
 #, c-format
 msgid "Library:"
 msgstr "Knihovna:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:187
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:186
 #, c-format
 msgid "Limit to any of the following:"
 msgstr "Omezit na:"
@@ -7418,7 +7416,7 @@ msgstr "Umístění"
 msgid "Location (Status)"
 msgstr "Umístění (Stav)"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:297
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:296
 #, c-format
 msgid "Location and availability: "
 msgstr "Umístění a dostupnost: "
@@ -7963,7 +7961,7 @@ msgstr "MusicAlbum"
 msgid "MusicGroup"
 msgstr "MusicGroup"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:237
 #, c-format
 msgid "Musical recording"
 msgstr "Hudební nahrávka"
@@ -8208,7 +8206,7 @@ msgstr "Žádné dostupné jednotky:"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:40
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:132
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:205
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:204
 #, c-format
 msgid "No limit"
 msgstr "Bez omezení"
@@ -8273,12 +8271,12 @@ msgstr "Žádný štítek nebyl zadán."
 msgid "No tags from this library for this title."
 msgstr "V této knihovně nejsou k tomuto titulu přiřazené žádné štítky."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:236
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
 #, c-format
 msgid "Non fiction"
 msgstr "Naučná literatura"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:239
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:238
 #, c-format
 msgid "Non-musical recording"
 msgstr "Nehudební záznam"
@@ -8456,7 +8454,7 @@ msgstr "Numeriske data"
 msgid "OK"
 msgstr "OK"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:311
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:310
 #, c-format
 msgid "OR"
 msgstr "OR"
@@ -8510,7 +8508,7 @@ msgstr "Online zdroje: "
 msgid "Online tjeneste"
 msgstr "Online tjeneste"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:319
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:318
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr "Pouze jednotky které jsou dostupné k vypůjčení nebo nahlédnutí"
@@ -8709,7 +8707,7 @@ msgstr "Heslo:"
 msgid "Password: %s "
 msgstr "Heslo: %s "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:267
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:266
 #, c-format
 msgid "Patent document"
 msgstr "Patentové dokumenty"
@@ -9031,7 +9029,7 @@ msgstr "Postkort"
 msgid "Powered by "
 msgstr "Používáme knihovní systém "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:225
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
 #, c-format
 msgid "Pre-adolescent"
 msgstr "Děti 9-13 let"
@@ -9046,7 +9044,7 @@ msgstr "Pre-adolescent; "
 msgid "Preferred form: "
 msgstr "Preferovaný tvar: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:222
 #, c-format
 msgid "Preschool"
 msgstr "Předškoláci (0-5 let)"
@@ -9075,7 +9073,7 @@ msgstr "Předchozí"
 msgid "Previous sessions"
 msgstr "Předchozí připojení"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:224
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:223
 #, c-format
 msgid "Primary"
 msgstr "Děti 6-8 let"
@@ -9138,7 +9136,7 @@ msgstr "Zpracovává se..."
 msgid "Product"
 msgstr "Product"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:273
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
 #, c-format
 msgid "Programmed texts"
 msgstr "Učební texty"
@@ -9178,7 +9176,7 @@ msgstr "Veřejné seznamy"
 msgid "Public lists:"
 msgstr "Veřejné seznamy:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:161
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:160
 #, c-format
 msgid "Publication date range:"
 msgstr "Rozmezí data vydání:"
@@ -9377,7 +9375,7 @@ msgstr "Neplatná registrace!"
 msgid "Registre"
 msgstr "Registre"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:245
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:244
 #, c-format
 msgid "Regular print"
 msgstr "Běžný tisk"
@@ -9415,7 +9413,7 @@ msgid "Remove facet [% facet.facet_link_value | html %]"
 msgstr "Odstranit upřesnění [% facet.facet_link_value | html %]"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:138
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:137
 msgid "Remove field"
 msgstr "Odstranit pole"
 
@@ -9616,7 +9614,7 @@ msgstr ""
 msgid "Review: "
 msgstr "Recenze: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:272
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
 #: opac-tmpl/prog/en/modules/opac-detail.tt:965
 #, c-format
 msgid "Reviews"
@@ -9787,8 +9785,8 @@ msgid "Score"
 msgstr "Hodnocení"
 
 #. INPUT type=submit name=do
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:148
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:336
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:147
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:335
 #: opac-tmpl/prog/en/modules/opac-detail.tt:628
 #: opac-tmpl/prog/en/modules/opac-detail.tt:735
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:63
@@ -10431,7 +10429,7 @@ msgstr ""
 msgid "Sort By: "
 msgstr "Řadit podle: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:327
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
 #, c-format
 msgid "Sort by:"
 msgstr "Řadit podle:"
@@ -10447,7 +10445,7 @@ msgstr "Řadit podle: "
 msgid "Sort this list by: "
 msgstr "Seřadit seznam podle: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:326
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:325
 #, c-format
 msgid "Sorting: "
 msgstr "Řazení: "
@@ -10463,7 +10461,7 @@ msgstr "Zvuk"
 msgid "Source: "
 msgstr "Zdroj: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:228
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:227
 #, c-format
 msgid "Specialized"
 msgstr "Speciální"
@@ -10504,7 +10502,6 @@ msgstr "Språkundervisning"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:116
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:118
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:120
 #, c-format
 msgid "Standard number"
 msgstr "Standardní číslo"
@@ -10519,7 +10516,7 @@ msgstr "Standardní číslo (ISBN, ISSN nebo jiné):"
 msgid "Standardtittel: "
 msgstr "Standardtittel: "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:275
 #, c-format
 msgid "Statistics"
 msgstr "Statistiky"
@@ -10769,7 +10766,7 @@ msgstr "Informace o předplatném pro %s"
 msgid "Subscriptions"
 msgstr "Předplatné"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:221
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:220
 #, c-format
 msgid "Subtype limits"
 msgstr "Další upřesnění"
@@ -10829,7 +10826,7 @@ msgstr "Částečně nahrazuje:"
 msgid "Supersedes:"
 msgstr "Nahrazuje:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:271
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
 #, c-format
 msgid "Surveys"
 msgstr "Ankety"
@@ -10923,7 +10920,7 @@ msgstr "Štítky z této knihovny:"
 msgid "Tags:"
 msgstr "Štítky:"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:277
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
 #, c-format
 msgid "Technical reports"
 msgstr "Technické zprávy"
@@ -11282,7 +11279,7 @@ msgstr ""
 "Při zpracovávání registrace se vyskytl problém. Pro další pomoc kontaktujte "
 "knihovnu."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:270
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:269
 #, c-format
 msgid "Theses"
 msgstr "Závěrečné práce"
@@ -11598,7 +11595,7 @@ msgstr "Transparent"
 msgid "Tre-dimensjonale gjenstander"
 msgstr "Tre-dimensjonale gjenstander"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:280
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:279
 #, c-format
 msgid "Treaties "
 msgstr "Smlouvy "
@@ -11848,7 +11845,7 @@ msgstr "Utskilt fra: "
 msgid "Utstilling"
 msgstr "Utstilling"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:251
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:250
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "Videokazeta"
@@ -12018,7 +12015,7 @@ msgstr ""
 "Na Vašem soukromí nám opravdu záleží. Na této stránce si můžete sami "
 "nastavit, jak dlouho má být uchovávána historie vašich výpůjček."
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:254
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:253
 #, c-format
 msgid "Website"
 msgstr "Webová stránka"
@@ -12628,20 +12625,20 @@ msgstr ""
 msgid "[Create new list]"
 msgstr "Vytvořit nový seznam"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:150
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:338
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:149
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:337
 #, c-format
 msgid "[Fewer options]"
 msgstr "[Méně možností]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:152
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:340
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:151
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:339
 #, c-format
 msgid "[More options]"
 msgstr "[Více možností]"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:154
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:342
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:153
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:341
 #, c-format
 msgid "[New search]"
 msgstr "[Nové hledání]"
