@@ -8800,6 +8800,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT INTO systempreferences (variable,value) VALUES('OpacCustomSearch','');
+    });
+    print "Upgrade to $DBversion done (Bug 12296 - search box replaceable with a system preference)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

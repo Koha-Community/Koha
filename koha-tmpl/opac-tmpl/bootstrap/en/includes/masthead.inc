@@ -1,3 +1,4 @@
+[% USE Koha %]
 <div id="wrap">
     <div id="header-region">
         <div class="navbar navbar-inverse navbar-static-top">
@@ -136,112 +137,116 @@
                         [% ELSE %]
                             <div class="mastheadsearch">
                         [% END %]
-                        <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform" class="form-inline">
-                            <label for="masthead_search"> Search
+                        [% IF Koha.Preference('OpacCustomSearch') == '' %]
+                            <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform" class="form-inline">
+                                <label for="masthead_search"> Search
+                                    [% UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
+                                        [% IF ( mylibraryfirst ) %]
+                                            (in [% mylibraryfirst %] only)
+                                        [% END %]
+                                    [% END %]
+                                </label>
+
+                                <select name="idx" id="masthead_search">
+                                [% IF ( ms_kw ) %]
+                                    <option selected="selected" value="">Library catalog</option>
+                                [% ELSE %]
+                                    <option value="">Library catalog</option>
+                                [% END # /ms_kw %]
+                                [% IF ( ms_ti ) %]
+                                    <option selected="selected" value="ti">Title</option>
+                                [% ELSE %]
+                                    <option value="ti">Title</option>
+                                [% END # /ms_ti %]
+                                [% IF ( ms_au ) %]
+                                    <option selected="selected" value="au">Author</option>
+                                [% ELSE %]
+                                    <option value="au">Author</option>
+                                [% END # /ms_au%]
+                                [% IF ( ms_su ) %]
+                                    <option selected="selected" value="su">Subject</option>
+                                [% ELSE %]
+                                    <option value="su">Subject</option>
+                                [% END # /ms_su %]
+                                [% IF ( ms_nb ) %]
+                                    <option selected="selected" value="nb">ISBN</option>
+                                [% ELSE %]
+                                    <option value="nb">ISBN</option>
+                                [% END # /ms_nb%]
+                                [% IF ( ms_se ) %]
+                                    <option selected="selected" value="se">Series</option>
+                                [% ELSE %]
+                                    <option value="se">Series</option>
+                                [% END # /ms_se %]
+                                [% IF ( numbersphr ) %]
+                                    [% IF ( ms_callnum ) %]
+                                            <option selected="selected" value="callnum,phr">Call number</option>
+                                    [% ELSE %]
+                                        <option value="callnum,phr">Call number</option>
+                                    [% END #/ms_callnum %]
+                                [% ELSE %]
+                                    [% IF ( ms_callnum ) %]
+                                        <option selected="selected" value="callnum">Call number</option>
+                                    [% ELSE %]
+                                        <option value="callnum">Call number</option>
+                                    [% END # /ms_callnum %]
+                                [% END # /numbersphr %]
+                                </select>
+
                                 [% UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
-                                    [% IF ( mylibraryfirst ) %]
-                                        (in [% mylibraryfirst %] only)
-                                    [% END %]
+                                    <div class="input-append nolibrarypulldown">
                                 [% END %]
-                            </label>
-
-                            <select name="idx" id="masthead_search">
-                            [% IF ( ms_kw ) %]
-                                <option selected="selected" value="">Library catalog</option>
-                            [% ELSE %]
-                                <option value="">Library catalog</option>
-                            [% END # /ms_kw %]
-                            [% IF ( ms_ti ) %]
-                                <option selected="selected" value="ti">Title</option>
-                            [% ELSE %]
-                                <option value="ti">Title</option>
-                            [% END # /ms_ti %]
-                            [% IF ( ms_au ) %]
-                                <option selected="selected" value="au">Author</option>
-                            [% ELSE %]
-                                <option value="au">Author</option>
-                            [% END # /ms_au%]
-                            [% IF ( ms_su ) %]
-                                <option selected="selected" value="su">Subject</option>
-                            [% ELSE %]
-                                <option value="su">Subject</option>
-                            [% END # /ms_su %]
-                            [% IF ( ms_nb ) %]
-                                <option selected="selected" value="nb">ISBN</option>
-                            [% ELSE %]
-                                <option value="nb">ISBN</option>
-                            [% END # /ms_nb%]
-                            [% IF ( ms_se ) %]
-                                <option selected="selected" value="se">Series</option>
-                            [% ELSE %]
-                                <option value="se">Series</option>
-                            [% END # /ms_se %]
-                            [% IF ( numbersphr ) %]
-                                [% IF ( ms_callnum ) %]
-                                        <option selected="selected" value="callnum,phr">Call number</option>
+                                [% IF ( ms_value ) %]
+                                    <input type="text" title="Type search term" class="transl1" name="q" value="[% ms_value |html %]" /><span id="translControl"></span>
                                 [% ELSE %]
-                                    <option value="callnum,phr">Call number</option>
-                                [% END #/ms_callnum %]
-                            [% ELSE %]
-                                [% IF ( ms_callnum ) %]
-                                    <option selected="selected" value="callnum">Call number</option>
-                                [% ELSE %]
-                                    <option value="callnum">Call number</option>
-                                [% END # /ms_callnum %]
-                            [% END # /numbersphr %]
-                            </select>
+                                    <input type="text" title="Type search term" class="transl1" name="q" /><span id="translControl"></span>
+                                [% END # /ms_value %]
 
-                            [% UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
-                                <div class="input-append nolibrarypulldown">
-                            [% END %]
-                            [% IF ( ms_value ) %]
-                                <input type="text" title="Type search term" class="transl1" name="q" value="[% ms_value |html %]" /><span id="translControl"></span>
-                            [% ELSE %]
-                                <input type="text" title="Type search term" class="transl1" name="q" /><span id="translControl"></span>
-                            [% END # /ms_value %]
-
-                            [% UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
-                                <button type="submit" id="searchsubmit" class="btn btn-primary">Go</button>
-                                </div>
-                            [% END %]
-
-                            [% IF ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
-                                <div class="input-append">
-                                    <select name="branch_group_limit" id="select_library">
-                                        <option value="">All libraries</option>
-                                        [% IF BranchCategoriesLoop %]<optgroup label="Libraries">[% END %]
-                                            [% FOREACH BranchesLoo IN BranchesLoop %]
-                                                [% IF ( BranchesLoo.selected ) %]<option selected="selected" value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>
-                                                [% ELSE %]<option value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>[% END %]
-                                            [% END %]
-                                        [% IF BranchCategoriesLoop %]
-                                            </optgroup>
-                                            <optgroup label="Groups">
-                                                [% FOREACH bc IN BranchCategoriesLoop %]
-                                                    [% IF ( bc.selected ) %]
-                                                        <option selected="selected" value="multibranchlimit-[% bc.categorycode %]">[% bc.categoryname %]</option>
-                                                    [% ELSE %]
-                                                        <option value="multibranchlimit-[% bc.categorycode %]">[% bc.categoryname %]</option>
-                                                    [% END # / bc.selected %]
-                                                [% END %]
-                                            </optgroup>
-                                        [% END # / BranchCategoriesLoop %]
-                                    </select>
+                                [% UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
                                     <button type="submit" id="searchsubmit" class="btn btn-primary">Go</button>
-                                </div>
-                            [% ELSE %]
-                                [% IF ( opac_limit_override ) %]
-                                    [% IF ( opac_search_limit ) %]
-                                        <input name="limit" value="[% opac_search_limit %]" type="hidden" />
-                                    [% END %]
-                                [% ELSE %]
-                                    [% IF ( mylibraryfirst ) %]
-                                        <input name="limit" value="branch:[% mylibraryfirst %]" type="hidden" />
-                                    [% END %]
-                                [% END # / opac_limit_override %]
-                            [% END # / OpacAddMastheadLibraryPulldown %]
+                                    </div>
+                                [% END %]
 
-                        </form>
+                                [% IF ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
+                                    <div class="input-append">
+                                        <select name="branch_group_limit" id="select_library">
+                                            <option value="">All libraries</option>
+                                            [% IF BranchCategoriesLoop %]<optgroup label="Libraries">[% END %]
+                                                [% FOREACH BranchesLoo IN BranchesLoop %]
+                                                    [% IF ( BranchesLoo.selected ) %]<option selected="selected" value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>
+                                                    [% ELSE %]<option value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>[% END %]
+                                                [% END %]
+                                            [% IF BranchCategoriesLoop %]
+                                                </optgroup>
+                                                <optgroup label="Groups">
+                                                    [% FOREACH bc IN BranchCategoriesLoop %]
+                                                        [% IF ( bc.selected ) %]
+                                                            <option selected="selected" value="multibranchlimit-[% bc.categorycode %]">[% bc.categoryname %]</option>
+                                                        [% ELSE %]
+                                                            <option value="multibranchlimit-[% bc.categorycode %]">[% bc.categoryname %]</option>
+                                                        [% END # / bc.selected %]
+                                                    [% END %]
+                                                </optgroup>
+                                            [% END # / BranchCategoriesLoop %]
+                                        </select>
+                                        <button type="submit" id="searchsubmit" class="btn btn-primary">Go</button>
+                                    </div>
+                                [% ELSE %]
+                                    [% IF ( opac_limit_override ) %]
+                                        [% IF ( opac_search_limit ) %]
+                                            <input name="limit" value="[% opac_search_limit %]" type="hidden" />
+                                        [% END %]
+                                    [% ELSE %]
+                                        [% IF ( mylibraryfirst ) %]
+                                            <input name="limit" value="branch:[% mylibraryfirst %]" type="hidden" />
+                                        [% END %]
+                                    [% END # / opac_limit_override %]
+                                [% END # / OpacAddMastheadLibraryPulldown %]
+
+                            </form>
+                        [% ELSE # / Koha.Preference('OpacCustomSearch') == '' %]
+                            [% Koha.Preference('OpacCustomSearch') %]
+                        [% END # / Koha.Preference('OpacCustomSearch') == '' %]
                         </div> <!-- / .mastheadsearch -->
                     [% END # / UNLESS advsearch %]
 

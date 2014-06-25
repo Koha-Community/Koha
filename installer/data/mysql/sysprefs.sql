@@ -228,6 +228,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpacBrowseResults','1',NULL,'Disable/enable browsing and paging search results from the OPAC detail page.','YesNo'),
 ('OpacCloud','0',NULL,'If ON, enables subject cloud on OPAC','YesNo'),
 ('opaccolorstylesheet','','','Define an auxiliary stylesheet for OPAC use, to override specified settings from the primary opac.css stylesheet. Enter the filename (if the file is in the server\'s css directory) or a complete URL beginning with http (if the file lives on a remote server).','free'),
+('OpacCustomSearch','','70|10','Replace the search box on the OPAC with the provided HTML','Textarea'),
 ('opaccredits','','70|10','Define HTML Credits at the bottom of the OPAC page','Textarea'),
 ('OPACdefaultSortField','relevance','relevance|popularity|call_number|pubdate|acqdate|title|author','Specify the default field used for sorting','Choice'),
 ('OPACdefaultSortOrder','dsc','asc|dsc|za|az','Specify the default sort order','Choice'),
@@ -448,3 +449,4 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('z3950AuthorAuthFields','701,702,700',NULL,'Define the MARC biblio fields for Personal Name Authorities to fill biblio.author','free'),
 ('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo')
 ;
+INSERT INTO systempreferences (variable,value) VALUES);
