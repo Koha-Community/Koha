@@ -971,6 +971,7 @@ CREATE TABLE `deleteditems` (
   `enumchron` text default NULL, -- serial enumeration/chronology for the item (MARC21 952$h)
   `copynumber` varchar(32) default NULL, -- copy number (MARC21 952$t)
   `stocknumber` varchar(32) default NULL, -- inventory number (MARC21 952$i)
+  `new` VARCHAR(32) DEFAULT NULL, -- 'new' value, you can put whatever free-text information. This field is intented to be managed by the automatic_item_modification_by_age cronjob.
   PRIMARY KEY  (`itemnumber`),
   KEY `delitembarcodeidx` (`barcode`),
   KEY `delitemstocknumberidx` (`stocknumber`),
@@ -1266,6 +1267,7 @@ CREATE TABLE `items` ( -- holdings/item information
   `enumchron` text default NULL, -- serial enumeration/chronology for the item (MARC21 952$h)
   `copynumber` varchar(32) default NULL, -- copy number (MARC21 952$t)
   `stocknumber` varchar(32) default NULL, -- inventory number (MARC21 952$i)
+  `new` VARCHAR(32) DEFAULT NULL, -- 'new' value, you can put whatever free-text information. This field is intented to be managed by the automatic_item_modification_by_age cronjob.
   PRIMARY KEY  (`itemnumber`),
   UNIQUE KEY `itembarcodeidx` (`barcode`),
   KEY `itemstocknumberidx` (`stocknumber`),

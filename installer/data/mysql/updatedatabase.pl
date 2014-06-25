@@ -11942,6 +11942,19 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{
+        ALTER TABLE `items` ADD `new` VARCHAR(32) NULL AFTER `stocknumber`;
+    });
+    $dbh->do(q{
+        ALTER TABLE `deleteditems` ADD `new` VARCHAR(32) NULL AFTER `stocknumber`;
+    });
+    print "Upgrade to $DBversion done (Bug 11023: Adds field 'new' in items and deleteditems tables)\n";
+    SetVersion($DBversion);
+}
+
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
