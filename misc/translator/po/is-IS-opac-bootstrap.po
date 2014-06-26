@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-05-18 20:02-0300\n"
+"POT-Creation-Date: 2014-06-15 20:26-0300\n"
 "PO-Revision-Date: 2013-01-14 03:10+0200\n"
 "Last-Translator: Reynir Örn Bachmann <reynir.gudmundsson@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.6\n"
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:110
+#, fuzzy, c-format
+msgid "#record"
+msgstr "hljóð upptaka"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:273
@@ -103,7 +108,7 @@ msgstr "%s %s %s %s %s %s Eintak skemmt %s %s Er til %s"
 #. %8$s:  ITEM_RESULT.priority 
 #. %9$s:  END 
 #. %10$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1201
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1203
 #, c-format
 msgid "%s %s %s %s %s (priority %s) %s %s %s %s "
 msgstr "%s %s %s %s %s (forgangur %s) %s %s %s %s "
@@ -205,6 +210,15 @@ msgstr "Safnskrá &rsaquo; Persónulegar upplýsingar fyrir %s %s "
 msgid ""
 "%s %s %s %s , %s %s %s (%s) %s.%s,%s %s %s %s This record has no items. %s "
 msgstr "%s %s %s %s (%s) "
+
+#. %1$s:  END 
+#. %2$s:  IF ( subscription_LOO.letter ) 
+#. %3$s:  IF ( loggedinusername ) 
+#. %4$s:  IF ( subscription_LOO.hasalert ) 
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:131
+#, fuzzy, c-format
+msgid "%s %s %s %s You have subscribed to email notification on new issues "
+msgstr "%s %s %s Þú hefur skráð þið fyrir tilkynningum á nýjum eintökum "
 
 #. %1$s:  IF showpriority 
 #. %2$s:  bibitemloo.rank 
@@ -355,14 +369,6 @@ msgstr "Ekki til útláns (%s)"
 #, fuzzy, c-format
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr "Athugasemd: Þessi gluggi mun lokast sjálfkrafa eftir 5 sekúndur "
-
-#. %1$s:  END 
-#. %2$s:  IF ( subscription_LOO.letter ) 
-#. %3$s:  IF ( subscription_LOO.hasalert ) 
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:131
-#, c-format
-msgid "%s %s %s You have subscribed to email notification on new issues "
-msgstr "%s %s %s Þú hefur skráð þið fyrir tilkynningum á nýjum eintökum "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -706,6 +712,17 @@ msgid ""
 "%s %s Search also for narrower subjects %s Search also for broader subjects "
 "%s Search also for related subjects %s "
 msgstr ""
+
+#. %1$s:  END 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#. %4$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:142
+#, fuzzy, c-format
+msgid ""
+"%s %s You must log in if you want to subscribe to email notification on new "
+"issues %s %s "
+msgstr "%s %s %s Þú hefur skráð þið fyrir tilkynningum á nýjum eintökum "
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -1086,7 +1103,7 @@ msgstr ""
 #. %2$s:  IF ( shelvesloo.single ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:662
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:686
 #, c-format
 msgid "%s %sitem%sitem(s)%s"
 msgstr ""
@@ -1126,18 +1143,18 @@ msgstr "Aðgangur frystur "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:280
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:472
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:639
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:287
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:479
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:646
 #, fuzzy, c-format
 msgid "%s Address 2:"
 msgstr "Heimilisfang:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:266
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:458
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:625
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:273
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:465
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:632
 #, fuzzy, c-format
 msgid "%s Address:"
 msgstr "Heimilisfang:"
@@ -1220,9 +1237,9 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:294
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:486
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:653
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:301
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:493
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:660
 #, fuzzy, c-format
 msgid "%s City:"
 msgstr "Land:"
@@ -1230,13 +1247,13 @@ msgstr "Land:"
 #. %1$s:  IF ( ccodesearch ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:75
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:79
 #, fuzzy, c-format
 msgid "%s Collection %s Item type %s: "
 msgstr "Safn: %s "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:570
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:577
 #, fuzzy, c-format
 msgid "%s Contact Note:"
 msgstr "Athugasemdir um efni:"
@@ -1253,15 +1270,15 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:336
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:528
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:695
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:343
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:535
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:702
 #, fuzzy, c-format
 msgid "%s Country:"
 msgstr "Land:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:157
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:162
 #, fuzzy, c-format
 msgid "%s Date of birth:"
 msgstr "Fæðingardagur:"
@@ -1273,33 +1290,33 @@ msgid "%s Did you mean: "
 msgstr "Varstu að meina: "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:556
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:563
 #, fuzzy, c-format
 msgid "%s Email:"
 msgstr "Netfang:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:432
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:439
 #, fuzzy, c-format
 msgid "%s Fax:"
 msgstr "Fax:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:143
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:611
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:618
 #, fuzzy, c-format
 msgid "%s First name:"
 msgstr "Fornafn:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:69
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:74
 #, fuzzy, c-format
 msgid "%s Home library:"
 msgstr "Heimasafn:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:176
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:183
 #, c-format
 msgid "%s Initials:"
 msgstr ""
@@ -1362,7 +1379,7 @@ msgid "%s MARC view"
 msgstr "MARC sýn"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:390
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:397
 #, c-format
 msgid "%s Mobile phone:"
 msgstr ""
@@ -1390,7 +1407,7 @@ msgid "%s On hold %s No renewals left %s "
 msgstr "Engar endurnýjanir eftir "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:190
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:197
 #, fuzzy, c-format
 msgid "%s Other names:"
 msgstr "Annað nafn:"
@@ -1416,8 +1433,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:542
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:709
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:549
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:716
 #, fuzzy, c-format
 msgid "%s Phone:"
 msgstr "Sími:"
@@ -1429,13 +1446,13 @@ msgid "%s Please see a member of the library staff. "
 msgstr "Vinsamlegast hafðu samband við starfsmann safnsins. "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:404
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:411
 #, fuzzy, c-format
 msgid "%s Primary email:"
 msgstr "Vinnunetfang:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:362
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:369
 #, fuzzy, c-format
 msgid "%s Primary phone:"
 msgstr "Börn;"
@@ -1466,7 +1483,7 @@ msgid "%s Quotations"
 msgstr "engar myndskreytingar"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:108
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:113
 #, fuzzy, c-format
 msgid "%s Salutation:"
 msgstr "engar myndskreytingar"
@@ -1490,13 +1507,13 @@ msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s Leita %sað '%s'%s%s&nbsp;með takmörkunum:&nbsp;'%s'%s"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:418
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:425
 #, fuzzy, c-format
 msgid "%s Secondary email:"
 msgstr "Vinnunetfang:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:376
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:383
 #, fuzzy, c-format
 msgid "%s Secondary phone:"
 msgstr "Auka höfundur"
@@ -1515,23 +1532,23 @@ msgstr "Sýnir aðeins "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:308
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:500
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:667
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:315
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:507
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:674
 #, fuzzy, c-format
 msgid "%s State:"
 msgstr "Dagsetning:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:252
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:259
 #, fuzzy, c-format
 msgid "%s Street number:"
 msgstr "Númer meðlims:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:129
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:597
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:134
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:604
 #, fuzzy, c-format
 msgid "%s Surname:"
 msgstr "eftirnafn"
@@ -1629,15 +1646,15 @@ msgstr "Þú hefur aldrei fengið neitt lánað í þessu bókasafni. "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:322
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:514
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:681
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:329
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:521
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:688
 #, fuzzy, c-format
 msgid "%s Zip/Postal code:"
 msgstr "Póstnúmer:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:441
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:448
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('B_address') && hidden.defined('B_address2') && "
@@ -1647,7 +1664,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:580
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:587
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('altcontactsurname') && hidden.defined"
@@ -1658,7 +1675,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:346
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:353
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
@@ -1667,7 +1684,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END # /UNLESS fields hidden 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:235
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:242
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('streetnumber') && hidden.defined('address') && "
@@ -1676,7 +1693,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END # / defined 'branchcode' 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:85
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:90
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden."
@@ -1827,7 +1844,7 @@ msgstr ""
 #. %5$s:  END 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:595
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:619
 #, c-format
 msgid "%s%s %sitem%sitems%s%sEmpty%s"
 msgstr ""
@@ -2139,8 +2156,8 @@ msgstr "Útskrá"
 #. %2$s:  END 
 #. %3$s:  IF ( shelveslooppri.viewcategory2 ) 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:596
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:663
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:620
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:687
 #, fuzzy, c-format
 msgid "%sPrivate%s %sPublic%s "
 msgstr "Engin persónulegur listi "
@@ -2210,13 +2227,8 @@ msgstr "á skrá. Vinsamlegast hafið samband við bókasafnið "
 msgid "%sentry%sentries%s. "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:489
-#, fuzzy, c-format
-msgid "&#8674; Editing"
-msgstr "Breyta"
-
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:5
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1025
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1026
 #, fuzzy, c-format
 msgid "&laquo; Previous"
 msgstr "&lt;&lt; Fyrri"
@@ -3007,19 +3019,19 @@ msgid "(remove)"
 msgstr "Fjarlægja"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:405
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:516
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:557
 #, c-format
 msgid "(su"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:217
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:383
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:247
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:265
 #, c-format
 msgid "+and+(bib-level:a+or+bib-level:b)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:264
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:282
 #, c-format
 msgid "+not+(bib-level:a+or+bib-level:b)"
 msgstr ""
@@ -3063,7 +3075,7 @@ msgstr ""
 "getar endurnýjað bækurnar þínar á netinu."
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:21
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:25
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:26
 #, c-format
 msgid ",complete-subfield"
 msgstr ""
@@ -3074,7 +3086,7 @@ msgid "- You must enter a Title"
 msgstr "- Þú verður að skrá titil"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, fuzzy
 msgid "- You must enter a list name"
 msgstr "- Þú verður að gefa listanum nafn"
@@ -3110,7 +3122,7 @@ msgstr "Vara tengiliðaupplýsingar"
 msgid "...or..."
 msgstr "...eða..."
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, c-format
 msgid ".png"
 msgstr ".png"
@@ -3119,19 +3131,19 @@ msgstr ".png"
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:128
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:426
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:537
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:986
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:579
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1030
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 msgstr "/cgi-bin/koha/opac-detail.pl?biblionumber="
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:257
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:196
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:43
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:44
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:405
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:289
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:423
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:710
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:752
 #: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:167
 #, c-format
 msgid "/cgi-bin/koha/opac-detail.pl?biblionumber="
@@ -3141,9 +3153,7 @@ msgstr "/cgi-bin/koha/opac-detail.pl?biblionumber="
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:536
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:587
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:208
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:513
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:862
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:925
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:554
 #: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:179
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q="
@@ -3151,18 +3161,18 @@ msgstr "/cgi-bin/koha/opac-search.pl?q="
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:251
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:417
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:282
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:704
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:801
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:857
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:920
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:300
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:746
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:843
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:900
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:963
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=Control-number:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:220
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:386
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:250
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:268
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=Host-item:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=su:"
@@ -3171,56 +3181,66 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=su:"
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:119
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:139
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:202
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:245
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:327
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:510
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:961
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:247
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:331
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:551
 #: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:173
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=an:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1005
+#, fuzzy, c-format
+msgid "/cgi-bin/koha/opac-search.pl?q=an:\""
+msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
+
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:101
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:122
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:142
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:333
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:964
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:337
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=au:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1008
+#, fuzzy, c-format
+msgid "/cgi-bin/koha/opac-search.pl?q=au:\""
+msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
+
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:217
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:383
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:247
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:264
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:265
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:282
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=rcn:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:178
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:193
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:221
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:196
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:211
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:239
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=se,phr:\""
 msgstr "/cgi-bin/koha/opac-search.pl?q=se,phr:\""
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:411
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:522
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:563
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=su"
 msgstr "/cgi-bin/koha/opac-search.pl?q=su:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:272
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:274
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=su:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=su:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:262
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:428
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:267
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:285
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:715
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:804
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:303
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:757
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:846
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:905
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:968
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=ti,phr:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
@@ -3229,97 +3249,97 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:960
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:992
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:995
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:558
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:561
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:600
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:603
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/tracklinks.pl?uri="
 msgstr "/cgi-bin/koha/opac-search.pl?q="
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, fuzzy, c-format
 msgid "/opac-tmpl/lib/famfamfam/"
 msgstr "/opac-tmpl/prog/famfamfam/"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACMARCdetail.xsl:18
+#: opac-tmpl/bootstrap/en/xslt/plainMARC.xsl:18
 #, c-format
 msgid "000 "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:7
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:97
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:101
 #, c-format
 msgid "10 titles"
 msgstr "10 titlar"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:13
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:103
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:107
 #, c-format
 msgid "100 titles"
 msgstr "100 titlar"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:446
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:135
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:153
 #, c-format
 msgid "100,110,111,700,710,711"
 msgstr "100,110,111,700,710,711"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:61
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:63
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:143
 #, c-format
 msgid "12 months"
 msgstr "12 mánuðir"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:475
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:512
 #, c-format
 msgid "130,240"
 msgstr "130,240"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:8
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:98
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:102
 #, c-format
 msgid "15 titles"
 msgstr "15 titlar"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:9
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:99
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:103
 #, c-format
 msgid "20 titles"
 msgstr "20 titlar"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:51
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:53
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:141
 #, c-format
 msgid "3 months"
 msgstr "3 mánuðir"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:10
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:100
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:104
 #, c-format
 msgid "30 titles"
 msgstr "30 titlar"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:11
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:101
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:105
 #, c-format
 msgid "40 titles"
 msgstr "40 titlar"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:165
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:183
 #, c-format
 msgid "440,490"
 msgstr "440,490"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:12
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:106
 #, c-format
 msgid "50 titles"
 msgstr "50 titlar"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:56
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:58
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:138
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:142
 #, c-format
 msgid "6 months"
 msgstr "6 mánuðir"
@@ -3408,8 +3428,8 @@ msgstr "Reglulega "
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:960
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:992
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:995
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:558
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:561
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:600
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:603
 #, c-format
 msgid ";biblionumber="
 msgstr ""
@@ -3446,16 +3466,16 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:242
 #, fuzzy, c-format
-msgid "A specific copy"
+msgid "A specific item"
 msgstr "Tiltekið afrit "
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:404
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:515
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:556
 #, c-format
 msgid "AND "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:55
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:56
 #, c-format
 msgid "AR"
 msgstr "AR"
@@ -3465,28 +3485,28 @@ msgstr "AR"
 msgid "About the author"
 msgstr "Um höfund"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:896
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:939
 #, c-format
 msgid "Absorbed by:"
 msgstr "Sameinað af:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:899
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:942
 #, c-format
 msgid "Absorbed in part by:"
 msgstr "Sameinað að hluta af:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:844
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:886
 #, c-format
 msgid "Absorbed in part:"
 msgstr "Sameinað að hluta:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:841
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:883
 #, c-format
 msgid "Absorbed:"
 msgstr "Sameinað:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:277
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:760
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:290
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:802
 #, fuzzy, c-format
 msgid "Abstract: "
 msgstr "Útdráttur: "
@@ -3663,20 +3683,20 @@ msgid "All Tags"
 msgstr "Öll tög"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:33
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:123
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:127
 #, c-format
 msgid "All collections"
 msgstr "Öll söfn"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:35
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:125
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:129
 #, c-format
 msgid "All item types"
 msgstr "Allar safntegundir"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:202
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:18
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:109
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:113
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:200
 #, c-format
 msgid "All libraries"
@@ -3696,12 +3716,12 @@ msgid ""
 "expires."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:450
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:457
 #, fuzzy, c-format
 msgid "Alternate address"
 msgstr "Vara heimilisfang:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:589
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:596
 #, fuzzy, c-format
 msgid "Alternate contact"
 msgstr "Vara tengiliður"
@@ -3735,7 +3755,7 @@ msgstr "Villa kom upp þegar beiðnin þín var framkvæmd."
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:213
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:379
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:243
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:261
 #, fuzzy, c-format
 msgid "Analytics: "
 msgstr "Sýnir aðeins "
@@ -3892,7 +3912,7 @@ msgid "Are you sure you want to cancel this hold?"
 msgstr "Ertu viss um að þú viljir afpanta þessa pöntun ?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 msgid "Are you sure you want to delete this list?"
 msgstr "Ertu viss um að þú viljir þurrka út þennan lista ?"
 
@@ -3914,12 +3934,12 @@ msgid "Are you sure you want to remove the selected items?"
 msgstr "Ertu viss um að þú viljir fjarlægja valda hluti ?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 msgid "Are you sure you want to remove these items from the list?"
 msgstr "Ertu viss um að þú viljir fjarlægja þessa hluti af listanum ?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, fuzzy
 msgid "Are you sure you want to remove this item from the list?"
 msgstr "Ertu viss um að þú viljir fjarlægja þessa hluti af listanum ?"
@@ -3937,7 +3957,7 @@ msgid "Are you sure you want to suspend all holds?"
 msgstr "Ertu viss um að þú viljir afpanta þessa pöntun ?"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:543
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:79
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:80
 #, c-format
 msgid "Article"
 msgstr "Grein"
@@ -3973,7 +3993,7 @@ msgstr "heimskort"
 msgid "Audience"
 msgstr "Áhorfendur"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:323
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:336
 #, fuzzy, c-format
 msgid "Audience: "
 msgstr "Áhorfendur: "
@@ -4015,9 +4035,9 @@ msgstr "Auðkennir notenda og skila auðkenni til baka fyrir meðliminn."
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:243
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:187
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:189
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:506
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:508
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:723
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:530
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:532
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:747
 #, c-format
 msgid "Author"
 msgstr "Höfundur"
@@ -4107,7 +4127,7 @@ msgstr "Hlutir á lausu: "
 msgid "Availability:"
 msgstr "Hlutir á lausu:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:99
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:103
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1031
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:774
 #, fuzzy, c-format
@@ -4149,7 +4169,7 @@ msgstr ""
 msgid "Awards:"
 msgstr "Verðlaun:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:674
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:716
 #, fuzzy, c-format
 msgid "Awards: "
 msgstr "Verðlaun: "
@@ -4161,8 +4181,8 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:45
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:49
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:53
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:58
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:54
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:59
 #, c-format
 msgid "BK"
 msgstr "BK"
@@ -4179,13 +4199,13 @@ msgstr "BT: %s"
 msgid "Back to lists"
 msgstr "Aftur í listana"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1030
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1031
 #, fuzzy, c-format
 msgid "Back to results"
 msgstr "Aftur í listana"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1030
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1031
 #, fuzzy
 msgid "Back to the results search list"
 msgstr "Aftur í listana"
@@ -4194,7 +4214,7 @@ msgstr "Aftur í listana"
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:260
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:112
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:355
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1125
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1127
 #, c-format
 msgid "Barcode"
 msgstr "Strikamerki"
@@ -4256,7 +4276,7 @@ msgstr "Heimildaskrár"
 msgid "Bibliographies"
 msgstr "Heimildaskrár"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:303
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:316
 #, fuzzy, c-format
 msgid "Bibliography: "
 msgstr "Heimildaskrá: "
@@ -4361,8 +4381,9 @@ msgstr "Bók"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:541
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:546
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:72
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:82
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:73
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:83
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:98
 #, c-format
 msgid "Book"
 msgstr "Bók"
@@ -4409,8 +4430,8 @@ msgstr "Skoða eftir flokkun"
 msgid "Browse results"
 msgstr "(<a1>Skoða hillu</a>)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1174
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1176
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1178
 #, fuzzy, c-format
 msgid "Browse shelf"
 msgstr "(<a1>Skoða hillu</a>)"
@@ -4436,7 +4457,7 @@ msgid "CD software"
 msgstr "CD Hugbúnaður"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:51
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:60
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:61
 #, c-format
 msgid "CF"
 msgstr "CF"
@@ -4484,12 +4505,12 @@ msgstr "Beiðnanr."
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:265
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1118
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1120
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:199
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:201
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:516
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:518
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:725
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:540
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:542
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:749
 #, fuzzy, c-format
 msgid "Call number"
 msgstr "Beiðnanúmer"
@@ -4531,9 +4552,9 @@ msgstr "Beiðnanúmer"
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:44
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:245
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:546
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:548
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:742
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:572
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:766
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:90
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:63
@@ -4545,12 +4566,12 @@ msgid "Cancel"
 msgstr "Hætta"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:136
 #, fuzzy
 msgid "Cancel email notification"
 msgstr "Flokkun"
 
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:136
 #, fuzzy, c-format
 msgid "Cancel email notification "
 msgstr "Fá netpóst þegar nýtt eintak kemur "
@@ -4577,6 +4598,11 @@ msgstr "Afturkallar frátektarbeiðni fyrir meðlim."
 msgid "Cannot be put on hold"
 msgstr "Ekki hægt að taka frá"
 
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:65
+#, fuzzy, c-format
+msgid "Card number"
+msgstr "kortanúmer"
+
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:22
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #, c-format
@@ -4588,7 +4614,7 @@ msgstr "Karfa"
 msgid "Cassette recording"
 msgstr "Upptaka á snældu"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:734
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:776
 #, c-format
 msgid "Cast: "
 msgstr ""
@@ -4598,8 +4624,8 @@ msgstr ""
 msgid "Catalogs"
 msgstr "Safnskrár"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:524
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:729
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:548
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:753
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:76
 #, c-format
 msgid "Category:"
@@ -4620,7 +4646,7 @@ msgstr "breyta aðgangsorðinu mínu"
 msgid "Change your password "
 msgstr "Breyttu aðgangsorðinu þínu "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:908
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:951
 #, c-format
 msgid "Changed back to:"
 msgstr "Breytt aftur í:"
@@ -4649,16 +4675,17 @@ msgstr ""
 msgid "Check-in date:"
 msgstr "Endurnýja hlut"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
-#, c-format
-msgid "Checked out"
-msgstr "Í útláni"
-
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:193
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1104
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:832
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:202
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1106
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:833
 #, c-format
 msgid "Checked out ("
+msgstr "Í útláni ("
+
+#. %1$s:  issues_count 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
+#, fuzzy, c-format
+msgid "Checked out (%s)"
 msgstr "Í útláni ("
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:29
@@ -4677,7 +4704,7 @@ msgstr "Útlán"
 msgid "Checkouts for %s "
 msgstr "Útlán fyrir %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:85
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:89
 #, fuzzy, c-format
 msgid "Checkouts: "
 msgstr "Útlán "
@@ -4687,7 +4714,7 @@ msgstr "Útlán "
 msgid "Classification"
 msgstr "Flokkun"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:242
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:255
 #, fuzzy, c-format
 msgid "Classification: "
 msgstr "Flokkun: "
@@ -4709,7 +4736,7 @@ msgstr "Hreinsa"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:35
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:236
 #, fuzzy, c-format
 msgid "Clear all"
@@ -4719,7 +4746,7 @@ msgstr "Hreinsa allt"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:371
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:577
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:164
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:170
 #, fuzzy, c-format
 msgid "Clear date"
 msgstr "Hreinsa dagsetningu"
@@ -4731,15 +4758,15 @@ msgstr "Hreinsa dagsetningu"
 msgid "Click here if you're not %s %s"
 msgstr "(<a1>Smelltu hér</a> ef þú ert ekki %s %s %s)"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:415
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:428
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:981
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1016
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:583
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:625
 #, c-format
 msgid "Click here to access online"
 msgstr "Smelltu hér til að tengjast"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:115
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:122
 #, fuzzy, c-format
 msgid "Click here to access online "
 msgstr "Smelltu hér til að tengjast "
@@ -4760,7 +4787,7 @@ msgid "Click to add to cart"
 msgstr "Smelltu hér til þess að setja í körfu"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "Click to forward the list to"
 msgstr "Smelltu hér til þess að setja í körfu"
@@ -4778,7 +4805,7 @@ msgid "Click to open in new window"
 msgstr "Smelltu hér til þess að opna nýjan glugga"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "Click to rewind the list to"
 msgstr "Smelltu hér til þess að opna nýjan glugga"
@@ -4789,7 +4816,7 @@ msgstr "Smelltu hér til þess að opna nýjan glugga"
 msgid "Click to view in Google Books"
 msgstr "Smelltu hér til þess að skoða hjá Google Books"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1041
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1043
 #, fuzzy, c-format
 msgid "Close"
 msgstr "Safnskrár"
@@ -4814,7 +4841,7 @@ msgstr "Loka þessum glugga."
 msgid "Close window"
 msgstr "Loka glugga"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:96
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:101
 #, c-format
 msgid "Coauthor"
 msgstr "Meðhöfundur"
@@ -4831,7 +4858,7 @@ msgstr "klippimynd"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:126
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1117
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1119
 #, c-format
 msgid "Collection"
 msgstr "Safn"
@@ -4900,14 +4927,14 @@ msgstr "Athugasemdir "
 msgid "Computer File"
 msgstr "Tölvuskrá"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:85
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:86
 #, fuzzy, c-format
 msgid "Computer file"
 msgstr "tölvuskrá"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:615
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:680
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:639
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:704
 msgid "Confirm"
 msgstr "Samþykkja"
 
@@ -4921,7 +4948,7 @@ msgstr "Samþykkja"
 msgid "Confirm holds for: %s %s %s (%s) %s "
 msgstr "Samþykkja pöntun fyrir: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:354
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:361
 #, fuzzy, c-format
 msgid "Contact information"
 msgstr "Upplýsingar um tengilið"
@@ -4937,18 +4964,18 @@ msgstr "Efni"
 msgid "Content Cafe"
 msgstr "Efni"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:761
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:803
 #, fuzzy, c-format
 msgid "Content advice: "
 msgstr "Ráðlegging um efni: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:586
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:654
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:610
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:678
 #, c-format
 msgid "Contents"
 msgstr "Efni"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:260
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:273
 #, fuzzy, c-format
 msgid "Contents note: "
 msgstr "Athugasemdir um efni: "
@@ -4958,68 +4985,43 @@ msgstr "Athugasemdir um efni: "
 msgid "Contents of "
 msgstr "Athugasemdir um efni: "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:627
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:669
 #, c-format
 msgid "Contents:"
 msgstr "Efni:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:884
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:927
 #, c-format
 msgid "Continued by:"
 msgstr "Haldið áfram af:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:887
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:930
 #, c-format
 msgid "Continued in part by:"
 msgstr "Heldur áfram að hluta til eftir:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:829
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:871
 #, c-format
 msgid "Continues in part:"
 msgstr "Heldur áfram að hluta:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:826
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:868
 #, c-format
 msgid "Continues:"
 msgstr "Heldur áfram:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:542
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:75
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:76
 #, c-format
 msgid "Continuing Resource"
 msgstr "Áframhaldandi"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:205
-#, c-format
-msgid "Copies available at:"
-msgstr "Afrit til hjá:"
-
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:133
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1050
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:781
-#, fuzzy, c-format
-msgid "Copies available for loan: "
-msgstr "Afrit til útláns: "
-
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:170
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1082
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:813
-#, fuzzy, c-format
-msgid "Copies available for reference: "
-msgstr "Afrit til fyrir tilvísanir: "
-
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:351
-#: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
-#, c-format
-msgid "Copies available:"
-msgstr "Afrit til:"
-
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:256
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
-#, c-format
-msgid "Copy"
-msgstr "Afrit"
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1123
+#, fuzzy, c-format
+msgid "Copy number"
+msgstr "Beiðnanúmer"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:143
 #, c-format
@@ -5045,23 +5047,23 @@ msgstr "Dagsetning höfundarréttar:"
 msgid "Copyright year: %s "
 msgstr "Dagsetning höfundarréttar: "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:106
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:113
 #, c-format
 msgid "Corporate Author (Coauthor)"
 msgstr "Fyrirtækishöfundur (Meðhöfundur)"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:91
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:95
 #, c-format
 msgid "Corporate Author (Main)"
 msgstr "Fyrirtækishöfundur (Aðal)"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:111
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:119
 #, c-format
 msgid "Corporate Author (Secondary)"
 msgstr "Fyrirtækishöfundur (Auka)"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:202
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:203
 msgid ""
 "Could not login, perhaps your Persona email does not match your Koha one"
 msgstr ""
@@ -5071,7 +5073,7 @@ msgstr ""
 msgid "Count"
 msgstr "Fjöldi"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:167
 #, fuzzy, c-format
 msgid "Country: "
 msgstr "Land: "
@@ -5088,7 +5090,7 @@ msgstr "Korta númer:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:243
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:17
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1131
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:15
 #, fuzzy, c-format
 msgid "Course reserves"
@@ -5112,7 +5114,7 @@ msgstr ""
 msgid "Cover image"
 msgstr "Forsíðumynd"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:707
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:731
 #, fuzzy, c-format
 msgid "Create a new list"
 msgstr "Búa til nýjan lista"
@@ -5136,10 +5138,20 @@ msgid ""
 "bibliographic record Koha."
 msgstr "Býr til frátektarbeiðni fyrir meðlim útfrá hlut í safnfærslu í Koha."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:90
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:101
+#, fuzzy, c-format
+msgid "CreativeWork"
+msgstr "samningar"
+
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:290
 #, c-format
 msgid "Credits"
+msgstr "Þakkir"
+
+#. %1$s:  BORROWER_INF.amountoutstanding 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:90
+#, fuzzy, c-format
+msgid "Credits (%s)"
 msgstr "Þakkir"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:49
@@ -5167,9 +5179,9 @@ msgstr "DVD vídeó / Geisladiskur"
 msgid "Daily"
 msgstr "Daglega"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:214
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1123
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:854
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:223
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1125
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:855
 #, c-format
 msgid "Damaged ("
 msgstr "Skemdur ("
@@ -5200,7 +5212,7 @@ msgid "Date added:"
 msgstr "Bætt við dags"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1126
 #, fuzzy, c-format
 msgid "Date due"
 msgstr "Skiladagsetning"
@@ -5278,8 +5290,8 @@ msgstr "Skilgreinir lýsigagna snið þar sem færslum er skilað, möguleg gild
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:118
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:136
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:617
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:682
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:641
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:706
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:236
 #, c-format
 msgid "Delete"
@@ -5287,6 +5299,7 @@ msgstr "Eyða"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:483
 #, fuzzy
 msgid "Delete list"
 msgstr "Eyða lista"
@@ -5298,7 +5311,7 @@ msgid "Delete selected"
 msgstr "Fjarlægja valda hluti"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:484
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:508
 #, fuzzy
 msgid "Delete this list"
 msgstr "Eyða þessum lista"
@@ -5309,7 +5322,7 @@ msgstr "Eyða þessum lista"
 msgid "Delete your search history"
 msgstr "Eyða leitarsögunni þinni"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1075
 #, c-format
 msgid "Delicious"
 msgstr ""
@@ -5350,9 +5363,9 @@ msgstr ""
 msgid "Description"
 msgstr "Lýsing"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:193
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:368
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:373
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:195
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:396
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:401
 #, fuzzy, c-format
 msgid "Description: "
 msgstr "Lýsing: "
@@ -5385,7 +5398,7 @@ msgstr "Athugasemd eftir %s %s %s"
 msgid "Dewey"
 msgstr "Dewey"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:222
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:235
 #, fuzzy, c-format
 msgid "Dewey: "
 msgstr "Dewey: "
@@ -5455,7 +5468,7 @@ msgstr ""
 msgid "Diskografier"
 msgstr "Hljóðritanir"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:744
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:786
 #, fuzzy, c-format
 msgid "Dissertation note: "
 msgstr "ritgerð "
@@ -5602,14 +5615,15 @@ msgstr "VILLA: Þú hefur ekki næg réttindi fyrir aðgerðir á þessum lista 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:863
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:606
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:673
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:697
 #, c-format
 msgid "Edit"
 msgstr "Breyta"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:165
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:474
 #, fuzzy
 msgid "Edit list"
 msgstr "Breyta lista"
@@ -5619,7 +5633,12 @@ msgstr "Breyta lista"
 msgid "Edit list "
 msgstr "Breyta lista "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:174
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:518
+#, fuzzy, c-format
+msgid "Editing "
+msgstr "Útgáfa: "
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:185
 #, fuzzy, c-format
 msgid "Edition Statement"
 msgstr "Yfirlýsing útgefanda:"
@@ -5630,8 +5649,8 @@ msgid "Edition statement:"
 msgstr "Yfirlýsing útgefanda:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:513
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:343
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:348
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:369
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:374
 #, fuzzy, c-format
 msgid "Edition: "
 msgstr "Útgáfa: "
@@ -5675,7 +5694,7 @@ msgid "Elever på ungdomstrinnet;"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:33
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
 #, c-format
 msgid "Email"
 msgstr "Netfang"
@@ -5828,7 +5847,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:35
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:39
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:41
 #, c-format
 msgid "Error:"
 msgstr "Villa:"
@@ -5901,7 +5920,8 @@ msgstr "Útdráttur frá Syndetics"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:371
-msgid "Expecting a specific copy selection."
+#, fuzzy
+msgid "Expecting a specific item selection."
 msgstr "Býst við sérstöku afritunar vali."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:513
@@ -5931,7 +5951,7 @@ msgstr "Framlengir skiladag fyrir útlán meðlims."
 msgid "FV"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1071
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
 #, fuzzy, c-format
 msgid "Facebook"
 msgstr "bók"
@@ -5951,7 +5971,7 @@ msgstr ""
 msgid "February"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:201
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:208
 #, fuzzy, c-format
 msgid "Female:"
 msgstr "Kona"
@@ -6023,13 +6043,19 @@ msgstr "kvikmyndamiðarúlla"
 msgid "Fine amount"
 msgstr "Upphæð sektar"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:88
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:362
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #, c-format
 msgid "Fines"
+msgstr "Sektir"
+
+#. For the first occurrence,
+#. %1$s:  BORROWER_INF.amountoutstanding 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:88
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
+#, fuzzy, c-format
+msgid "Fines (%s)"
 msgstr "Sektir"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:27
@@ -6127,7 +6153,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:236
 msgid "Form not submitted because of the following problem(s)"
 msgstr "Eyðublað ekki sent inn vegna eftirfarandi vandarmál(a)"
@@ -6137,7 +6163,7 @@ msgstr "Eyðublað ekki sent inn vegna eftirfarandi vandarmál(a)"
 msgid "Format"
 msgstr "; Snið:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:838
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:880
 #, c-format
 msgid "Formed by the union: ... and: ..."
 msgstr "Myndast með sameiningu: ... og: ..."
@@ -6217,7 +6243,7 @@ msgid "Friday"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:16
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:107
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:111
 #, fuzzy, c-format
 msgid "From: "
 msgstr "Frá: "
@@ -6349,7 +6375,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:221
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:138
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:67
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:123
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:24
@@ -6360,7 +6386,7 @@ msgstr "Áfram"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "Go to detail"
 msgstr "Nánari upplýsingar um tengilið"
@@ -6534,7 +6560,7 @@ msgstr "HoldTitle"
 msgid "Holdings"
 msgstr "Frátektir:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:773
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:815
 #, fuzzy, c-format
 msgid "Holdings note: "
 msgstr "Punktar um frátektir: "
@@ -6545,14 +6571,15 @@ msgstr "Punktar um frátektir: "
 msgid "Holdings:"
 msgstr "Frátektir:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:93
-#, c-format
-msgid "Holds"
-msgstr "Frátekið"
-
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:470
 #, fuzzy, c-format
 msgid "Holds "
+msgstr "Frátekið "
+
+#. %1$s:  reserves_count 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:93
+#, fuzzy, c-format
+msgid "Holds (%s)"
 msgstr "Frátekið "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:164
@@ -6687,8 +6714,8 @@ msgid "ISBN:"
 msgstr "ISBN:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:330
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:182
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:388
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:194
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:418
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:203
 #, fuzzy, c-format
 msgid "ISBN: "
@@ -6721,13 +6748,13 @@ msgid "ISSN:"
 msgstr "ISSN:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:340
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:200
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:398
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:212
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:430
 #, fuzzy, c-format
 msgid "ISSN: "
 msgstr "ISSN: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:100
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:105
 #, fuzzy, c-format
 msgid "Identity"
 msgstr "Persónuupplýsingar"
@@ -6828,9 +6855,9 @@ msgstr ""
 msgid "In online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:228
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1135
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:868
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:237
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1137
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:869
 #, c-format
 msgid "In transit ("
 msgstr "Í flutningi ("
@@ -6853,12 +6880,12 @@ msgstr "Senda körfuna þína"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:234
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:400
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:687
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:729
 #, fuzzy, c-format
 msgid "In: "
 msgstr "Í: "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:621
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:663
 #, c-format
 msgid "Incomplete contents:"
 msgstr "Óklárað efni:"
@@ -6929,12 +6956,12 @@ msgstr "Beiðnanúmer"
 msgid "Item cannot be checked out."
 msgstr "Það er ekki hægt að fá gagnið lánað."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1131
 #, c-format
 msgid "Item hold queue priority"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1127
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
 #, fuzzy, c-format
 msgid "Item holds"
 msgstr "Taka frá"
@@ -6943,7 +6970,7 @@ msgstr "Taka frá"
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:258
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:109
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:354
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1115
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1117
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:62
 #, c-format
 msgid "Item type"
@@ -6961,6 +6988,31 @@ msgstr "Tegund hlutar:"
 #, fuzzy, c-format
 msgid "Item type: "
 msgstr "Tegund hlutar: "
+
+#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:205
+#, fuzzy, c-format
+msgid "Items available at:"
+msgstr "Afrit til hjá:"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:140
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1050
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:781
+#, fuzzy, c-format
+msgid "Items available for loan: "
+msgstr "Afrit til útláns: "
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:177
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1082
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:813
+#, fuzzy, c-format
+msgid "Items available for reference: "
+msgstr "Afrit til fyrir tilvísanir: "
+
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:351
+#: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
+#, fuzzy, c-format
+msgid "Items available:"
+msgstr "Enginn hlutur til:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
@@ -7067,7 +7119,7 @@ msgid "Keyword"
 msgstr "Leitarorð"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:547
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:83
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:84
 #, c-format
 msgid "Kit"
 msgstr "Pakki"
@@ -7167,11 +7219,7 @@ msgstr ""
 msgid "Language"
 msgstr "Tungumál"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:126
-#, fuzzy, c-format
-msgid "Language:"
-msgstr "Tungumál:"
-
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:137
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:175
 #, fuzzy, c-format
 msgid "Language: "
@@ -7286,17 +7334,17 @@ msgid "Limit to currently available items."
 msgstr "Engin gögn á lausu."
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:30
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:120
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:124
 #, fuzzy, c-format
 msgid "Limit to: "
 msgstr "Takmarkað við: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1188
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1190
 #, fuzzy, c-format
 msgid "Link to resource "
 msgstr "Netupplýsingar: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
 #, fuzzy, c-format
 msgid "LinkedIn"
 msgstr "Sektir"
@@ -7313,19 +7361,19 @@ msgstr "Sektir"
 msgid "List %s Deleted."
 msgstr "Listi %s eyddur."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:585
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:653
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:609
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:677
 #, fuzzy, c-format
 msgid "List name"
 msgstr "Nafn lista"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:711
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:735
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:74
 #, fuzzy, c-format
 msgid "List name:"
 msgstr "Nafn lista;"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:496
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:520
 #, fuzzy, c-format
 msgid "List name: "
 msgstr "Nafn lista; "
@@ -7336,8 +7384,7 @@ msgid "List(s) this item appears in: "
 msgstr "Listar sem þessi gögn birtast í: "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:36
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:489
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:558
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:582
 #, c-format
 msgid "Lists"
 msgstr "Listar"
@@ -7367,7 +7414,7 @@ msgid "Local login"
 msgstr "Kerfisauðkenni"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:51
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1116
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1118
 #, c-format
 msgid "Location"
 msgstr "Staðsetning"
@@ -7387,7 +7434,7 @@ msgstr "Staðsetning og fáanleiki: "
 msgid "Location(s) (Status)"
 msgstr "Staðsetningar"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1149
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1151
 #, fuzzy, c-format
 msgid "Location(s): "
 msgstr "Staðsetning "
@@ -7399,8 +7446,8 @@ msgstr "Staðsetning "
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:98
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:77
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:633
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:645
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:657
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:669
 #, fuzzy, c-format
 msgid "Log in"
 msgstr "Innskráning"
@@ -7471,9 +7518,9 @@ msgstr ""
 msgid "LookupPatron"
 msgstr "Fletta upp meðlim"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:207
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1117
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:847
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:216
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1119
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:848
 #, c-format
 msgid "Lost ("
 msgstr "Týnt ("
@@ -7529,7 +7576,7 @@ msgstr "Marksnið XML"
 msgid "MARC Card View"
 msgstr "Marksnið kortasýn"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACMARCdetail.xsl:8
+#: opac-tmpl/bootstrap/en/xslt/plainMARC.xsl:8
 #, fuzzy, c-format
 msgid "MARC View"
 msgstr "Marksnið sýn"
@@ -7631,19 +7678,19 @@ msgid "MESSAGE 9:"
 msgstr "Skilaboð 8:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:52
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:61
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:62
 #, c-format
 msgid "MP"
 msgstr "MP"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:54
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:63
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:64
 #, c-format
 msgid "MU"
 msgstr "MU"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:50
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:59
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:60
 #, c-format
 msgid "MX"
 msgstr "MX"
@@ -7663,12 +7710,12 @@ msgstr ""
 msgid "Magnetisk-optisk plate"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:86
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:89
 #, c-format
 msgid "Main Author"
 msgstr "Aðalhöfundur"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:244
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:251
 #, fuzzy, c-format
 msgid "Main address"
 msgstr "Póstfang:"
@@ -7681,7 +7728,7 @@ msgstr "Póstfang:"
 msgid "Make a "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:208
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:215
 #, fuzzy, c-format
 msgid "Male:"
 msgstr "Karl"
@@ -7707,7 +7754,8 @@ msgid "Manuskripter"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:550
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:86
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:87
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:99
 #, c-format
 msgid "Map"
 msgstr "Kort"
@@ -7752,7 +7800,7 @@ msgstr "Ég"
 msgid "Memoarer"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:905
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:948
 #, c-format
 msgid "Merged with ... to form ..."
 msgstr "Sameina við ... til að búa til ..."
@@ -7811,7 +7859,7 @@ msgstr "Vantar eintök: %s "
 msgid "Mixed Materials"
 msgstr "Blandað efni"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:84
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:85
 #, fuzzy, c-format
 msgid "Mixed materials"
 msgstr "ýmislegt efni"
@@ -7902,9 +7950,14 @@ msgid "Mus"
 msgstr "Tónlist"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:554
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:88
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:89
 #, c-format
 msgid "Music"
+msgstr "Tónlist"
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:100
+#, fuzzy, c-format
+msgid "MusicAlbum"
 msgstr "Tónlist"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:273
@@ -7935,7 +7988,7 @@ msgstr ""
 msgid "My Tags"
 msgstr "Tögin mín"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:215
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:222
 #, c-format
 msgid "N/A:"
 msgstr ""
@@ -7997,8 +8050,9 @@ msgstr "Athugasemd eftir %s %s %s"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:58
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:150
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:579
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:642
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:467
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:603
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:666
 #, fuzzy, c-format
 msgid "New list"
 msgstr "Nýr listi"
@@ -8038,7 +8092,7 @@ msgstr "Dagblað"
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:1
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:69
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1034
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1036
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
 #, c-format
 msgid "Next"
@@ -8051,15 +8105,15 @@ msgid "Next &gt;&gt;"
 msgstr "Næsta &gt;&gt;"
 
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:15
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1032
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1034
 #, fuzzy, c-format
 msgid "Next &raquo;"
 msgstr "Safnskrá &rsaquo;"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:235
-#, c-format
-msgid "Next available copy"
-msgstr "Næsta fáanlega afrit"
+#, fuzzy, c-format
+msgid "Next available item"
+msgstr "Engin gögn á lausu."
 
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:31
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:45
@@ -8072,25 +8126,13 @@ msgstr "Nei"
 msgid "No available items."
 msgstr "Engin gögn á lausu."
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:128
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1045
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:776
-#, fuzzy, c-format
-msgid "No copies available "
-msgstr "Engin afrit á lausu "
-
-#: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:152
-#, c-format
-msgid "No copies available."
-msgstr "Engin afrit til."
-
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:95
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:161
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:169
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:178
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:187
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:162
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:170
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:179
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:188
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:31
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:44
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:53
@@ -8144,6 +8186,18 @@ msgstr "Það var engum hlutum bætt í körfuna þína"
 msgid "No item was selected"
 msgstr "Enginn hlutur var valinn"
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:135
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1045
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:776
+#, fuzzy, c-format
+msgid "No items available "
+msgstr "Enginn hlutur til:"
+
+#: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:152
+#, fuzzy, c-format
+msgid "No items available."
+msgstr "Enginn hlutur til:"
+
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:379
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:216
 #, c-format
@@ -8152,7 +8206,7 @@ msgstr "Enginn hlutur til:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:66
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:68
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:140
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:144
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:177
 #, c-format
 msgid "No limit"
@@ -8175,7 +8229,7 @@ msgstr "Engin gögn til fyrir þessa færslu"
 msgid "No private lists"
 msgstr "Engin persónulegur listi."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:628
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:652
 #, fuzzy, c-format
 msgid "No private lists."
 msgstr "Engin persónulegur listi."
@@ -8185,7 +8239,7 @@ msgstr "Engin persónulegur listi."
 msgid "No public lists"
 msgstr "Enginn opinn listi."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:693
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:717
 #, fuzzy, c-format
 msgid "No public lists."
 msgstr "Enginn opinn listi."
@@ -8209,6 +8263,12 @@ msgstr ""
 #, fuzzy, c-format
 msgid "No results found!"
 msgstr "Það fundust engar niðurstöður"
+
+#. SCRIPT
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#, fuzzy
+msgid "No suggestion was selected"
+msgstr "Enginn hlutur var valinn"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
@@ -8341,7 +8401,7 @@ msgstr "Athugasemd: Tagið þitt inniheldur kóða sem hefur verið fjarlægður
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:150
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1123
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1125
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:43
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:111
 #, c-format
@@ -8381,7 +8441,7 @@ msgstr "Nei"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:569
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:990
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1056
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1058
 #, c-format
 msgid "Novelist Select"
 msgstr ""
@@ -8433,16 +8493,16 @@ msgstr ""
 msgid "October"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:235
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1141
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:874
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:244
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1143
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:875
 #, c-format
 msgid "On hold ("
 msgstr "Frátekið ("
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:221
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1129
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:861
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:230
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1131
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:862
 #, c-format
 msgid "On order ("
 msgstr "Í pöntun ("
@@ -8452,7 +8512,7 @@ msgstr "Í pöntun ("
 msgid "Online Access: "
 msgstr "Netaðgengi: "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:394
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:407
 #, c-format
 msgid "Online Resources:"
 msgstr "Netupplýsingar:"
@@ -8462,7 +8522,7 @@ msgstr "Netupplýsingar:"
 msgid "Online resources:"
 msgstr "Netupplýsingar:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:552
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:594
 #, fuzzy, c-format
 msgid "Online resources: "
 msgstr "Netupplýsingar: "
@@ -8545,17 +8605,12 @@ msgstr ""
 msgid "Other"
 msgstr "Annað"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:922
-#, fuzzy, c-format
-msgid "Other Title: "
-msgstr "Annar titill: "
-
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:914
 #, fuzzy, c-format
 msgid "Other editions of this work"
 msgstr "Aðrar útgáfur af þessari eintaki"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:785
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:827
 #, fuzzy, c-format
 msgid "Other editions: "
 msgstr "Útgáfa: "
@@ -8571,9 +8626,10 @@ msgstr "Annað nafn:"
 msgid "Other holdings ( %s )"
 msgstr "Frátektir ( %s )"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:922
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:928
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:437
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:442
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:469
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:474
 #, fuzzy, c-format
 msgid "Other title: "
 msgstr "Annar titill: "
@@ -8596,10 +8652,11 @@ msgstr "OutputRewritablePage "
 msgid "OverDrive search for '%s'"
 msgstr ""
 
+#. %1$s:  overdues_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:86
-#, c-format
-msgid "Overdue"
-msgstr "Runnið út af tíma"
+#, fuzzy, c-format
+msgid "Overdue (%s)"
+msgstr "Runnið út af tíma "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:348
 #, fuzzy, c-format
@@ -8612,7 +8669,7 @@ msgid "Oversiktsverker innenfor et emne"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:55
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:64
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:65
 #, c-format
 msgid "PR"
 msgstr "PR"
@@ -8639,7 +8696,7 @@ msgstr ""
 msgid "Parameters"
 msgstr "Breytur"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:624
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:666
 #, c-format
 msgid "Partial contents:"
 msgstr "Hluti af innihaldinu:"
@@ -8673,7 +8730,7 @@ msgstr "Aðgangsorð:"
 msgid "Patent document"
 msgstr "Einkaleyfisskjal"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:408
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:440
 #, fuzzy, c-format
 msgid "Patent information: "
 msgstr "Persónulegar upplýsingar "
@@ -8738,17 +8795,13 @@ msgstr "Útlitslegar upplýsingar:"
 msgid "Pick up library"
 msgstr "Bókasafn afhendingar"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:522
-#, fuzzy, c-format
-msgid "Pick up loaction:"
-msgstr "Staðsetning afhendingar"
-
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:477
 #, fuzzy, c-format
 msgid "Pick up location"
 msgstr "Staðsetning afhendingar"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:522
 #, fuzzy, c-format
 msgid "Pick up location:"
 msgstr "Staðsetning afhendingar"
@@ -8758,8 +8811,8 @@ msgstr "Staðsetning afhendingar"
 msgid "Picture"
 msgstr "Mynd"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:91
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:81
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:94
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:83
 #, c-format
 msgid "Piece-Analytic Level"
 msgstr ""
@@ -8783,7 +8836,7 @@ msgstr "Taka frá"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:9
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:86
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:90
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:471
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:474
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
@@ -8794,7 +8847,7 @@ msgstr "Taka frá"
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:407
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:410
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, c-format
 msgid "Place hold"
 msgstr "Taka frá"
@@ -8931,7 +8984,7 @@ msgstr "Athugið: "
 msgid "Please try again with plain text. %sUnrecognized error. %s "
 msgstr "Vinsamlegast reyndu aftur með venjulegan texta. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:730
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:737
 #, c-format
 msgid "Please type this following characters into the preceding box: "
 msgstr ""
@@ -9002,7 +9055,7 @@ msgstr "Fyrri"
 
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:16
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1027
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1028
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
 #, c-format
 msgid "Previous"
@@ -9045,9 +9098,9 @@ msgstr "Forgangsröðun"
 msgid "Priority:"
 msgstr "Forgangsröðun"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:527
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:529
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:731
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:551
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:553
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:755
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:78
 #, c-format
 msgid "Private"
@@ -9064,6 +9117,11 @@ msgstr "Engin persónulegur listi"
 msgid "Processing..."
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:109
+#, c-format
+msgid "Product"
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:317
 #, c-format
 msgid "Programmed texts"
@@ -9074,14 +9132,14 @@ msgstr "Forritunarlegur texti"
 msgid "Programvare"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:294
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:307
 #, fuzzy, c-format
 msgid "Provenance note: "
 msgstr "Uppruna athugasemd: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:532
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:534
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:733
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:556
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:558
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:757
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:80
 #, c-format
 msgid "Public"
@@ -9097,8 +9155,8 @@ msgstr "Almennur listi"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:65
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:67
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:569
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:571
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:593
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:595
 #, c-format
 msgid "Public lists"
 msgstr "Almennur listi"
@@ -9132,12 +9190,16 @@ msgstr "Dagsetning útgáfu: Frá nýjastu til elstu"
 msgid "Publication/Copyright date: Oldest to newest"
 msgstr "Dagsetning útgáfu: Frá elstu til nýjustu"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:162
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:319
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:353
 #, c-format
 msgid "Publication:"
+msgstr "Útgáfa:"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:164
+#, fuzzy, c-format
+msgid "Publication: "
 msgstr "Útgáfa:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:188
@@ -9181,8 +9243,8 @@ msgstr "Útgefandi:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:885
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:890
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:304
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:309
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:322
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:327
 #, fuzzy, c-format
 msgid "Publisher: "
 msgstr "Útgefandi: "
@@ -9349,7 +9411,7 @@ msgid "Remove field"
 msgstr "Forrituð svæði"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 msgid "Remove from list"
 msgstr ""
 
@@ -9359,7 +9421,7 @@ msgid "Remove from this list"
 msgstr "Eyða þessum lista"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:477
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:501
 #, fuzzy
 msgid "Remove selected items"
 msgstr "Fjarlægja valda hluti"
@@ -9402,48 +9464,48 @@ msgstr "Fjarlægja valda hluti"
 msgid "RenewLoan"
 msgstr "RenewLoan"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:421
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:453
 #, fuzzy, c-format
 msgid "Report number: "
 msgstr "Korta númer: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:134
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:148
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:167
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:181
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:195
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:222
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:257
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:271
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:285
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:299
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:313
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:327
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:341
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:367
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:381
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:395
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:409
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:423
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:437
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:463
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:477
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:491
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:505
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:519
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:533
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:547
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:561
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:575
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:602
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:616
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:630
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:644
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:658
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:672
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:686
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:700
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:714
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:153
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:188
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:202
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:229
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:264
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:278
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:292
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:306
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:320
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:334
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:348
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:374
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:388
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:402
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:416
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:430
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:444
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:470
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:484
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:498
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:512
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:526
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:540
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:554
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:568
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:582
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:609
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:623
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:637
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:651
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:665
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:679
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:693
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:707
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:721
 #, fuzzy, c-format
 msgid "Required"
 msgstr "(Nauðsynlegt)"
@@ -9543,7 +9605,7 @@ msgstr ""
 "Þetta fall getur skilað meðlimaupplýsingum, upplýsingum um sektir, "
 "upplýsingum um pantanir, upplýsingum um útlán og skilaboð."
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:758
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:800
 #, fuzzy, c-format
 msgid "Review: "
 msgstr "Rýna: "
@@ -9584,7 +9646,7 @@ msgstr ""
 msgid "Røntgenbilde"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:54
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:55
 #, c-format
 msgid "SE"
 msgstr "SE"
@@ -9600,12 +9662,12 @@ msgid "SMS number:"
 msgstr "SMS númer:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:42
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:50
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:51
 #, c-format
 msgid "ST"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:333
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:346
 #, fuzzy, c-format
 msgid "SUDOC serial history: "
 msgstr "SUDOC raðnúmera staða: "
@@ -9645,8 +9707,8 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:544
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:741
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:568
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:88
@@ -9705,13 +9767,13 @@ msgstr "Leita í safni eftir: %S "
 msgid "Scan index:"
 msgstr "Leitar í safni:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:759
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:801
 #, fuzzy, c-format
 msgid "Scope and content: "
 msgstr "Umfang og innihald: "
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:552
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:90
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:91
 #, c-format
 msgid "Score"
 msgstr "Sitg"
@@ -9756,7 +9818,7 @@ msgstr "Leita eftir þessum titli í:"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:313
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:187
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:50
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:87
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:89
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:347
 #, fuzzy
 msgid "Search for works by this author"
@@ -9809,7 +9871,7 @@ msgstr "SearchCourseReserves "
 msgid "Searching OverDrive..."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:101
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:107
 #, c-format
 msgid "Secondary Author"
 msgstr "Auka höfundur"
@@ -9844,25 +9906,25 @@ msgid "See also:"
 msgstr "Velja lista"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "See biblio"
 msgstr "%s söfn"
 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:94
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:98
 #, fuzzy, c-format
 msgid "See the most popular titles"
 msgstr "Sjá í vinsælustu titlunum"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1032
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1034
 msgid ""
 "See: [% IF ( nextTitle ) %][% nextTitle |html %][% ELSE %]next biblio[% END "
 "%]"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1025
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1026
 msgid ""
 "See: [% IF ( previousTitle ) %][% previousTitle |html %][% ELSE %]previous "
 "biblio[% END %]"
@@ -9874,15 +9936,15 @@ msgid "Select a list"
 msgstr "Velja lista"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:254
-#, c-format
-msgid "Select a specific copy:"
+#, fuzzy, c-format
+msgid "Select a specific item:"
 msgstr "Velja sértækt afrit:"
 
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:34
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:236
 #, fuzzy, c-format
 msgid "Select all"
@@ -9910,7 +9972,7 @@ msgstr "Valdir hlutir :"
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:38
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:316
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:233
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, fuzzy, c-format
 msgid "Select titles to: "
 msgstr "Valdir hlutir : "
@@ -9968,7 +10030,7 @@ msgstr "Sendir listann þinn"
 msgid "Sep"
 msgstr "Efni"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:847
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:889
 #, c-format
 msgid "Separated from:"
 msgstr "Aðskilið frá:"
@@ -10009,8 +10071,8 @@ msgstr "Raðnúmer"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:166
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:168
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:217
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:76
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:229
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:77
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:81
 #, c-format
 msgid "Series"
@@ -10037,8 +10099,8 @@ msgid "Series:"
 msgstr "Raðir:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:180
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:168
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:175
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:186
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:193
 #, fuzzy, c-format
 msgid "Series: "
 msgstr "Raðir: "
@@ -10049,18 +10111,18 @@ msgid "Session lost"
 msgstr "Tenging týnd"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:538
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:69
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:70
 #, fuzzy, c-format
 msgid "Set"
 msgstr "Efni"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:86
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:76
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:88
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:77
 #, c-format
 msgid "Set Level"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:277
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:295
 #, fuzzy, c-format
 msgid "Set: "
 msgstr "Kyn: "
@@ -10070,29 +10132,29 @@ msgstr "Kyn: "
 msgid "Settings updated"
 msgstr "Stillingar uppfærðar"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1070
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
 #, fuzzy, c-format
 msgid "Share"
 msgstr "Vista"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
 #, fuzzy
 msgid "Share by email"
 msgstr "Vinnunetfang:"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1075
 msgid "Share on Delicious"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1071
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
 msgid "Share on Facebook"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
 msgid "Share on LinkedIn"
 msgstr ""
 
@@ -10119,7 +10181,7 @@ msgstr "Sýna alla hluti"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:223
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:389
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:253
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:271
 #, fuzzy, c-format
 msgid "Show analytics"
 msgstr "Sýnir aðeins"
@@ -10147,12 +10209,12 @@ msgid ""
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:5
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:96
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:100
 #, fuzzy, c-format
 msgid "Show the top "
 msgstr "Sýna efstu "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:270
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:288
 #, fuzzy, c-format
 msgid "Show volumes"
 msgstr "Sýna meira"
@@ -10304,7 +10366,7 @@ msgid "Sorry, your session has timed out. Please log in again."
 msgstr ""
 "Afsakaðu, tengingin þín hefur runnið út. Vinsamlegast skráðu þig aftur inn."
 
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:63
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:65
 #, fuzzy, c-format
 msgid "Sort By: "
 msgstr "Raða eftir: "
@@ -10319,8 +10381,8 @@ msgstr "Raða eftir:"
 msgid "Sort by: "
 msgstr "Raða eftir: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:498
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:720
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:522
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:744
 #, fuzzy, c-format
 msgid "Sort this list by: "
 msgstr "Raða þessum lista eftir: "
@@ -10331,7 +10393,7 @@ msgid "Sorting: "
 msgstr "skýrslugerð "
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:553
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:89
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:90
 #, c-format
 msgid "Sound"
 msgstr "Hljóð"
@@ -10365,7 +10427,7 @@ msgstr "Sérhæft;"
 msgid "Spill"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:902
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:945
 #, c-format
 msgid "Split into .. and ...:"
 msgstr "Skipta í .. og ...:"
@@ -10411,7 +10473,7 @@ msgstr "Tölfræði"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:481
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:788
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1122
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:152
 #, c-format
 msgid "Status"
@@ -10474,49 +10536,49 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:156
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:158
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:379
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:392
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:79
 #, c-format
 msgid "Subject"
 msgstr "Efni"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:359
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:372
 #, c-format
 msgid "Subject - Author/Title"
 msgstr "Efni - Höfundur/Titill"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:349
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:362
 #, c-format
 msgid "Subject - Corporate Author"
 msgstr "Efni - Fyritækis höfundur"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:354
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:367
 #, c-format
 msgid "Subject - Family"
 msgstr "Efni - Fjölskylda"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:374
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:387
 #, c-format
 msgid "Subject - Form"
 msgstr "Efni - Umsókn"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:369
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:382
 #, c-format
 msgid "Subject - Geographical Name"
 msgstr "Efni - Landfræðilegt nafn"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:344
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:357
 #, c-format
 msgid "Subject - Personal Name"
 msgstr "Efni - Persónulegt nafn"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:364
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:377
 #, c-format
 msgid "Subject - Topical Name"
 msgstr "Efni - Staðbundið nafn"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:384
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:397
 #, c-format
 msgid "Subject Category"
 msgstr "Efnisflokkar"
@@ -10544,12 +10606,12 @@ msgstr "Efni"
 msgid "Subject(s):"
 msgstr "Efni:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:505
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:545
 #, fuzzy, c-format
 msgid "Subject(s): "
 msgstr "Efni: "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:757
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:799
 #, fuzzy, c-format
 msgid "Subject: "
 msgstr "Efni: "
@@ -10564,12 +10626,12 @@ msgstr "Efni: "
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:73
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:151
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:79
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:185
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:289
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:69
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:746
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:753
 #, c-format
 msgid "Submit"
 msgstr "Senda"
@@ -10587,7 +10649,7 @@ msgid "Submit changes"
 msgstr "Senda breytingar"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:740
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:747
 #, fuzzy
 msgid "Submit update request"
 msgstr "Senda tillöguna þína"
@@ -10604,11 +10666,11 @@ msgid "Subscribe to a subscription alert"
 msgstr "Útgáfur fyrir áskrift"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:140
 msgid "Subscribe to email notification on new issues"
 msgstr "Fá netpóst þegar nýtt eintak kemur"
 
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:140
 #, fuzzy, c-format
 msgid "Subscribe to email notification on new issues "
 msgstr "Fá netpóst þegar nýtt eintak kemur "
@@ -10675,7 +10737,7 @@ msgstr "Áskriftir"
 msgid "Summary"
 msgstr "Samantekt"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:762
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:804
 #, fuzzy, c-format
 msgid "Summary: "
 msgstr "Samantekt: "
@@ -10691,22 +10753,22 @@ msgstr "Hljóð"
 msgid "Sunday"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:890
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:933
 #, c-format
 msgid "Superseded by:"
 msgstr "Taka við af:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:893
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:936
 #, c-format
 msgid "Superseded in part by:"
 msgstr "Tekið við að hluta til af:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:835
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:877
 #, c-format
 msgid "Supersedes in part:"
 msgstr "Tekið við að hluta til:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:832
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:874
 #, c-format
 msgid "Supersedes:"
 msgstr "Tekið við:"
@@ -11173,7 +11235,7 @@ msgstr ""
 msgid "Theses"
 msgstr "Ritgerðir"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:313
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:326
 #, fuzzy, c-format
 msgid "Thesis: "
 msgstr "Ritgerðir: "
@@ -11259,7 +11321,7 @@ msgid "This item is on hold for another patron. %s "
 msgstr "<em>SKILABOÐ 9:</em> Þessi hlutur er frátekinn fyrir annan meðlim. "
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:465
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:489
 #, fuzzy, c-format
 msgid ""
 "This list is empty. %s You can add to your lists from the results of any "
@@ -11269,8 +11331,8 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:540
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:543
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1086
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1090
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1088
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1092
 #, fuzzy, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -11303,7 +11365,7 @@ msgstr "Það er ekki hægt að biðja um þennan titil."
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:371
 msgid ""
 "This title consists of multiple volumes/parts. Please indicate which part "
-"you need. Clicking on specific copy information may be helpful."
+"you need. Clicking on specific item information may be helpful."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:157
@@ -11358,9 +11420,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:193
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:195
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:501
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:503
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:722
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:525
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:527
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:746
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
 #, c-format
 msgid "Title"
@@ -11389,7 +11451,7 @@ msgid "Title phrase"
 msgstr "Orðasamband titils"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:939
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:458
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:492
 #, fuzzy, c-format
 msgid "Title translated: "
 msgstr "Orðasamband titils "
@@ -11443,12 +11505,12 @@ msgstr "%s <a1>Efsta stig</a>"
 msgid "Total due"
 msgstr "Samtals skuld"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:389
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:402
 #, c-format
 msgid "Trademark"
 msgstr "Vörumerki"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:81
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:82
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:71
 #, fuzzy, c-format
 msgid "Translation of"
@@ -11507,13 +11569,13 @@ msgstr "Rennur út"
 msgid "Tuesday"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1078
 #, c-format
 msgid "Tweet"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:655
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:611
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:679
 #, c-format
 msgid "Type"
 msgstr "Tegund"
@@ -11537,7 +11599,7 @@ msgid "Type:"
 msgstr "Tegund:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:536
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:155
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:173
 #, fuzzy, c-format
 msgid "Type: "
 msgstr "Tegund: "
@@ -11614,12 +11676,12 @@ msgstr "Sameinaður titill"
 msgid "Unified title: %s "
 msgstr "Sameinaður titill "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:121
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:131
 #, c-format
 msgid "Uniform Conventional Heading"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:116
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:125
 #, fuzzy, c-format
 msgid "Uniform Title"
 msgstr "Sameinaður titill:"
@@ -11629,8 +11691,8 @@ msgstr "Sameinaður titill:"
 msgid "Uniform titles:"
 msgstr "Sameinaðir titlar:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:478
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:483
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:515
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:521
 #, fuzzy, c-format
 msgid "Uniform titles: "
 msgstr "Sameinaðir titlar: "
@@ -11725,12 +11787,12 @@ msgid "VHS tape / Videocassette"
 msgstr "VHS Spóla/ Vídeóspóla"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:53
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:62
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:63
 #, c-format
 msgid "VM"
 msgstr "VM"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:725
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:732
 #, fuzzy, c-format
 msgid "Verification:"
 msgstr "skáldsaga"
@@ -11797,7 +11859,7 @@ msgstr "Skoða hjá Amazon.com"
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:76
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:86
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:88
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:326
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:329
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:331
@@ -11825,7 +11887,7 @@ msgstr ""
 msgid "Visual Material"
 msgstr "Sjónrænt efni"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:87
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:88
 #, fuzzy, c-format
 msgid "Visual material"
 msgstr "myndrænt efni"
@@ -11849,20 +11911,25 @@ msgid "Voksne;"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:267
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1119
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
 #, fuzzy, c-format
 msgid "Vol info"
 msgstr "Magnupplýsingar"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:260
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:278
 #, c-format
 msgid "Volumes: "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:332
 #, c-format
 msgid "Waiting"
+msgstr "Í bið"
+
+#. %1$s:  waiting_count 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
+#, fuzzy, c-format
+msgid "Waiting (%s)"
 msgstr "Í bið"
 
 #. SCRIPT
@@ -11886,7 +11953,7 @@ msgid "We"
 msgstr ""
 
 #. %1$s:  total 
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:46
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:48
 #, c-format
 msgid "We have %s results for your search "
 msgstr ""
@@ -11951,14 +12018,14 @@ msgstr "Valdir hlutir : "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:316
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, fuzzy
 msgid "With selected titles: "
 msgstr "Valdir hlutir : "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:200
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1111
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:840
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:209
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1113
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:841
 #, c-format
 msgid "Withdrawn ("
 msgstr "Úttekið ("
@@ -11981,9 +12048,9 @@ msgid "Written on %s by %s"
 msgstr "Skrifað þann %s af %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:244
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:511
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:513
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:724
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:535
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:537
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
 #, c-format
 msgid "Year"
 msgstr "Ár"
@@ -12166,7 +12233,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
@@ -12341,8 +12408,8 @@ msgstr "Athugasemdirnar þínar"
 msgid "Your privacy rules have been updated."
 msgstr "Aðgangsorðinu þínu hefur verið breytt"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:563
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:565
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:589
 #, c-format
 msgid "Your private lists"
 msgstr "Eigin listar"
@@ -12427,7 +12494,7 @@ msgid "[% biblionumber |url %]"
 msgstr ""
 
 #. INPUT type=text name=borrower_dateofbirth
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:161
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:166
 msgid "[% borrower.dateofbirth | $KohaDates %]"
 msgstr ""
 
@@ -12470,7 +12537,7 @@ msgid "[% review.biblionumber |url %]"
 msgstr ""
 
 #. INPUT type=text name=shelfname
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:496
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:520
 msgid "[% shelfname |html %]"
 msgstr ""
 
@@ -12508,9 +12575,10 @@ msgstr "[Fleiri möguleikar]"
 msgid "[New search]"
 msgstr "[Ný leit]"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:401
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:568
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:605
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:114
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:414
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:610
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:647
 #, c-format
 msgid "_blank"
 msgstr ""
@@ -12520,15 +12588,17 @@ msgstr ""
 msgid "a an the"
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:246
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:533
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:583
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:214
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:225
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:699
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:789
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:808
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:852
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:914
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:412
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:232
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:243
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:741
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:831
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:850
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:895
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:957
 #, c-format
 msgid "a_t"
 msgstr "a_t"
@@ -12539,45 +12609,45 @@ msgstr "a_t"
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:931
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:371
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:766
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:341
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:353
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:367
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:380
 #, c-format
 msgid "ab"
 msgstr "ab"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:447
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:136
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:154
 #, c-format
 msgid "abc"
 msgstr "abc"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:600
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:642
 #, fuzzy, c-format
 msgid "abcd"
 msgstr "abc"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:660
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:702
 #, c-format
 msgid "abcdefgijklnou"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:514
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:528
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:555
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:569
 #, fuzzy, c-format
 msgid "abcdfgklmnopqrstvxyz"
 msgstr "abcdtvxyz"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:278
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:280
 #, fuzzy, c-format
 msgid "abcdfijkmnpvxyz"
 msgstr "abcdjpvxyz"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:747
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:789
 #, fuzzy, c-format
 msgid "abcdgo"
 msgstr "abc"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:265
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:278
 #, c-format
 msgid "abcdjpvxyz"
 msgstr "abcdjpvxyz"
@@ -12589,24 +12659,30 @@ msgid "abcdvxyz"
 msgstr "abcdtvxyz"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:318
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:366
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:378
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:394
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:407
 #, c-format
 msgid "abceg"
 msgstr "abceg"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:883
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:302
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:320
 #, c-format
 msgid "abcg"
 msgstr "abcg"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:463
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:498
 #, fuzzy, c-format
 msgid "abchnp"
 msgstr "abhfgnp"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:766
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1189
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1042
+#, c-format
+msgid "abcq"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:808
 #, c-format
 msgid "abcu"
 msgstr "abcu"
@@ -12617,13 +12693,13 @@ msgid "abh"
 msgstr "ab"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:400
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:100
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:118
 #, c-format
 msgid "abhfgknps"
 msgstr "abhfgknps"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:356
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:435
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:467
 #, c-format
 msgid "abhfgnp"
 msgstr "abhfgnp"
@@ -12644,20 +12720,20 @@ msgstr "Ágrip eða samantekt "
 msgid "account, %s please "
 msgstr "um innihald síðu, "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:411
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:443
 #, fuzzy, c-format
 msgid "acdef"
 msgstr "acdeq"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:122
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:462
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1215
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1031
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:475
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1216
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1074
 #, c-format
 msgid "acdeq"
 msgstr "acdeq"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:476
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:513
 #, c-format
 msgid "adfklmor"
 msgstr "adfklmor"
@@ -12722,9 +12798,7 @@ msgid "aperture card "
 msgstr "Ljósmyndakort "
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:94
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:434
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1187
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:998
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:447
 #, c-format
 msgid "aq"
 msgstr "aq"
@@ -12744,12 +12818,6 @@ msgstr "afrit af list "
 msgid "article"
 msgstr "grein"
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:246
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:412
-#, fuzzy, c-format
-msgid "at"
-msgstr "Efni"
-
 #. %1$s:  WAITIN.branch 
 #. %2$s:  ELSE 
 #. %3$s:  WAITIN.holdingbranch 
@@ -12765,12 +12833,12 @@ msgstr "Í flutningi frá %s til %s "
 msgid "atlas "
 msgstr "heimskort "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:640
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:682
 #, fuzzy, c-format
 msgid "atru"
 msgstr "au"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:137
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:155
 #, c-format
 msgid "au"
 msgstr "au"
@@ -12782,9 +12850,9 @@ msgstr "Sjálfsævisaga"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:186
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:200
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:166
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:182
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:197
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:184
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:200
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:215
 #, c-format
 msgid "av"
 msgstr "av"
@@ -12806,7 +12874,7 @@ msgid "available online "
 msgstr "laus á netinu "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "average rating: "
 msgstr "Listinn þinn : %s "
@@ -12818,16 +12886,14 @@ msgstr "Listinn þinn : %s "
 msgid "average rating: %s (%s votes)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:776
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:818
 #, c-format
 msgid "az"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:131
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:470
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1224
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:888
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1039
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:483
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:889
 #, c-format
 msgid "bc"
 msgstr "bc"
@@ -12903,16 +12969,16 @@ msgstr "bristol borð"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
 #, fuzzy
 msgid "by"
 msgstr "eftir"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:452
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:144
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:162
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:97
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:86
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:88
 #, fuzzy, c-format
 msgid "by "
 msgstr "eftir "
@@ -12958,9 +13024,9 @@ msgid "catalogue"
 msgstr "safnskrá"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:115
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:455
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1208
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1024
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:468
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1209
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1067
 #, c-format
 msgid "cdn"
 msgstr "cdn"
@@ -12971,7 +13037,7 @@ msgid "celestial globe"
 msgstr "Himingeimur"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:907
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:328
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:352
 #, fuzzy, c-format
 msgid "cg"
 msgstr "acg"
@@ -13015,6 +13081,11 @@ msgstr "Smelltu hér til að tengjast"
 #, c-format
 msgid "coats of arms"
 msgstr "skjaldarmerki"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:102
+#, fuzzy, c-format
+msgid "coauthor"
+msgstr "Meðhöfundur"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:179
 #, c-format
@@ -13072,6 +13143,21 @@ msgstr "inniheldur"
 #, fuzzy, c-format
 msgid "contains biographical data"
 msgstr "inniheldur ævisögugögn"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:114
+#, fuzzy, c-format
+msgid "corporate_coauthor"
+msgstr "Fyrirtækishöfundur (Meðhöfundur)"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:96
+#, c-format
+msgid "corporate_main_author"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:120
+#, fuzzy, c-format
+msgid "corporate_secondary_author"
+msgstr "Auka höfundur"
 
 #. SPAN
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:79
@@ -13223,6 +13309,11 @@ msgstr "teikning"
 msgid "earth moon globe"
 msgstr "jörð tungl hnöttur"
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:186
+#, fuzzy, c-format
+msgid "edition"
+msgstr "Útgáfur"
+
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:96
 #, fuzzy, c-format
 msgid "electronic "
@@ -13282,16 +13373,16 @@ msgstr "ævisaga "
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:602
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:609
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:482
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:489
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1051
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1058
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:495
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:502
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1083
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1090
 #, c-format
 msgid "fghkdlmor"
 msgstr "fghkdlmor"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:427
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:125
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:143
 #, c-format
 msgid "fgknps"
 msgstr "fgknps"
@@ -13426,8 +13517,8 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:540
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:543
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1087
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1092
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1089
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1094
 #, fuzzy, c-format
 msgid "here"
 msgstr "Annað"
@@ -13436,6 +13527,11 @@ msgstr "Annað"
 #, fuzzy, c-format
 msgid "history "
 msgstr "saga "
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:108
+#, c-format
+msgid "http://schema.org/"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:719
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:759
@@ -13448,7 +13544,7 @@ msgstr "grín, hæðni "
 msgid "humour, satire"
 msgstr "grín, hæðni"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:447
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:480
 #, c-format
 msgid "iabhfgnp"
 msgstr "iabhfgnp"
@@ -13468,7 +13564,7 @@ msgstr "auðkenni"
 msgid "id_type"
 msgstr "id_type"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:279
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:281
 #, fuzzy, c-format
 msgid "ijknpxyz"
 msgstr "jpxyz"
@@ -13665,7 +13761,7 @@ msgstr "item_id"
 msgid "items. "
 msgstr "hlutir "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:266
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:279
 #, c-format
 msgid "jpxyz"
 msgstr "jpxyz"
@@ -13797,6 +13893,11 @@ msgstr "segulmagnaðir diskur "
 msgid "magneto-optical disc "
 msgstr "segulmagnaður/geisla diskur "
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:90
+#, fuzzy, c-format
+msgid "main_author"
+msgstr "Aðalhöfundur"
+
 #. IMG
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:550
 msgid "map"
@@ -13812,12 +13913,12 @@ msgstr "kort "
 msgid "maps"
 msgstr "kort"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, fuzzy, c-format
 msgid "materialTypeLabel"
 msgstr "Tegund raðnúmers"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, fuzzy, c-format
 msgid "materialtype"
 msgstr "Tegund raðnúmers"
@@ -14007,52 +14108,52 @@ msgstr "töluleg gögn "
 msgid "numeric table"
 msgstr "töluleg tafla"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:137
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:148
 #, fuzzy, c-format
 msgid "of accompanying material, "
 msgstr "meðfylgjandi efni, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:133
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:144
 #, fuzzy, c-format
 msgid "of contents page, "
 msgstr "um innihald síðu, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:130
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:141
 #, fuzzy, c-format
 msgid "of intermediate text, "
 msgstr "um millistig texta, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:136
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:147
 #, fuzzy, c-format
 msgid "of libretto, "
 msgstr "um óperutexta "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:131
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:142
 #, fuzzy, c-format
 msgid "of original work, "
 msgstr "um upprunalegu vinnu, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:138
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:149
 #, fuzzy, c-format
 msgid "of subtitles, "
 msgstr "um undirtitla, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:132
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:143
 #, fuzzy, c-format
 msgid "of summary, "
 msgstr "um samantekt, "
 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:139
 #, fuzzy, c-format
 msgid "of the last:"
 msgstr "Áunnið á seinustu:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:134
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:145
 #, fuzzy, c-format
 msgid "of title page, "
 msgstr "um titil síðu, "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:135
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:146
 #, fuzzy, c-format
 msgid "of title proper, "
 msgstr "um eignarétt, "
@@ -14082,6 +14183,12 @@ msgstr "eða"
 #, fuzzy, c-format
 msgid "or "
 msgstr "eða "
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:83
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:72
+#, c-format
+msgid "original_title"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:110
 #, c-format
@@ -14208,6 +14315,12 @@ msgstr "mynd"
 msgid "picture "
 msgstr "mynd "
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:95
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:84
+#, c-format
+msgid "piece_analytic_level"
+msgstr ""
+
 #. IMG
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:202
 msgid "planetary or lunar globe"
@@ -14302,6 +14415,11 @@ msgstr "Ný kauptillaga"
 msgid "realia "
 msgstr "bókasafnsvísindi "
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:107
+#, fuzzy, c-format
+msgid "record"
+msgstr "hljóð upptaka"
+
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:69
 #, fuzzy, c-format
 msgid "reformatted digital "
@@ -14382,38 +14500,34 @@ msgstr "Niðurstöður"
 msgid "results in the library's OverDrive collection."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:884
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:921
-#, fuzzy, c-format
-msgid "results_summary"
-msgstr "results_summary"
-
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:367
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:395
 #, fuzzy, c-format
 msgid "results_summary description"
 msgstr "results_summary"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:342
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:368
 #, fuzzy, c-format
 msgid "results_summary edition"
 msgstr "results_summary"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:436
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:921
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:468
 #, fuzzy, c-format
 msgid "results_summary other_title"
 msgstr "results_summary"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:303
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:884
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:321
 #, fuzzy, c-format
 msgid "results_summary publisher"
 msgstr "results_summary"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:167
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:185
 #, fuzzy, c-format
 msgid "results_summary series"
 msgstr "results_summary"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:477
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:514
 #, fuzzy, c-format
 msgid "results_summary uniform_title"
 msgstr "results_summary"
@@ -14460,15 +14574,20 @@ msgstr "stef"
 msgid "score"
 msgstr "stef"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:169
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:187
 #, c-format
 msgid "se"
 msgstr "se"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:468
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:492
 #, fuzzy, c-format
 msgid "search"
 msgstr "Leit"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:108
+#, fuzzy, c-format
+msgid "secondary_author"
+msgstr "Auka höfundur"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:230
 #, fuzzy, c-format
@@ -14485,10 +14604,21 @@ msgstr "Velja lista"
 msgid "serial"
 msgstr "raðnúmer"
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:230
+#, fuzzy, c-format
+msgid "series"
+msgstr "röð "
+
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:574
 #, fuzzy, c-format
 msgid "series "
 msgstr "röð "
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:89
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:78
+#, c-format
+msgid "set_level"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:43
 #, c-format
@@ -14807,8 +14937,8 @@ msgstr "ritgerðir "
 msgid "title"
 msgstr "title"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:633
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:645
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:657
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:669
 #, fuzzy, c-format
 msgid "to create new lists."
 msgstr "<a1>Skráðu þig inn</a> til að búa til nýjan lista."
@@ -14856,7 +14986,7 @@ msgstr "samningar"
 msgid "treaty "
 msgstr "samningur "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:635
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:677
 #, c-format
 msgid "tru"
 msgstr ""
@@ -14865,6 +14995,16 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:42
 msgid "unAPI"
 msgstr "unAPI"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:132
+#, c-format
+msgid "uniform_conventional_heading"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:126
+#, fuzzy, c-format
+msgid "uniform_title"
+msgstr "Sameinaðir titlar:"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:14
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:170
@@ -14883,7 +15023,7 @@ msgstr "Unglingur; "
 msgid "up to "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1120
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1122
 #, fuzzy, c-format
 msgid "url"
 msgstr "rtl"
@@ -14966,13 +15106,13 @@ msgid "visual projection"
 msgstr "myndræn framsetning"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "votes"
 msgstr "Athugasemd"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:418
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:529
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:570
 #, c-format
 msgid "vxyz"
 msgstr "vxyz"
@@ -15023,7 +15163,7 @@ msgid "wire recording "
 msgstr "upptaka "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 msgid "with biblionumber"
 msgstr ""
 
@@ -15033,11 +15173,11 @@ msgid "wood"
 msgstr "viður"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:446
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:112
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:406
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:119
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:419
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:972
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1007
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:576
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:618
 #, c-format
 msgid "y3z"
 msgstr "y3z"
@@ -15089,7 +15229,7 @@ msgid "your purchase suggestions"
 msgstr "mína tillögur að kaupum"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "your rating: "
 msgstr "Listinn þinn : %s "
@@ -15144,9 +15284,23 @@ msgid ""
 msgstr ""
 "‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value %]"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:130
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:153
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:183
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:131
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:155
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:185
 #, fuzzy, c-format
 msgid "• "
 msgstr "• "
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy

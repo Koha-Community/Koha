@@ -100,12 +100,24 @@ msgid "acquisitions.pref#CurrencyFormat# Display currencies using the following 
 msgstr "Währungen in folgendem Format anzeigen:"
 
 # Acquisitions > Printing
-msgid "acquisitions.pref#OrderPdfFormat# Use"
+msgid "acquisitions.pref#OrderPdfFormat# English 2-page"
+msgstr "Englisch, 2-seitig"
+
+# Acquisitions > Printing
+msgid "acquisitions.pref#OrderPdfFormat# English 3-page"
+msgstr "Englisch, 3-seitig"
+
+# Acquisitions > Printing
+msgid "acquisitions.pref#OrderPdfFormat# French 3-page"
+msgstr "Französisch, 3-seitig"
+
+# Acquisitions > Printing
+msgid "acquisitions.pref#OrderPdfFormat# Use the"
 msgstr "Verwende"
 
 # Acquisitions > Printing
-msgid "acquisitions.pref#OrderPdfFormat# when printing basket groups."
-msgstr "beim Ausdruck von Bestellgruppen."
+msgid "acquisitions.pref#OrderPdfFormat# layout when printing basket groups."
+msgstr "als Layout für den Druck von Bestellgruppen."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#UniqueItemFields# (separated by a space)"
@@ -476,12 +488,12 @@ msgid "authorities.pref#LinkerRelink# relink headings that have previously been 
 msgstr "Ansetzungen erneut, die bereits zuvor mit Normdaten verlinkt wurden."
 
 # Authorities > General
-msgid "authorities.pref#MARCAuthorityControlField008# Use the following text for the contents of MARC authority control field 008 position 06-39 (fixed length data elements). Do NOT include the date (position 00-05)."
-msgstr "Verwende den folgenden Text als Standardwert für Feld 008, Position 06-39 in den Normdaten. Position 00-05 werden NICHT angegeben."
+msgid "authorities.pref#MARCAuthorityControlField008# Use the following text for the contents of MARC21 authority control field 008 position 06-39 (fixed length data elements). Do NOT include the date (position 00-05)."
+msgstr "Verwende den folgenden Text als Standardwert für das MARC21-Normdatenfeld 008, Pos. 06-39. Das Datum (Pos. 00-05) NICHT angeben."
 
 # Authorities > General
-msgid "authorities.pref#UNIMARCAuthorityField100# Use the following text for the contents of UNIMARC authority field 100 position (fixed length data elements). Do NOT include the date (position 00-05)."
-msgstr "Verwende den folgenden Text als Voreinstellung für das UNIMARC-Normdatenfeld 100 (Kontrollfeld). Das Datum (Pos. 00-05) wird nicht mit angegeben."
+msgid "authorities.pref#UNIMARCAuthorityField100# Use the following text for the contents of UNIMARC authority field 100 position 08-35 (fixed length data elements). Do NOT include the date (position 00-07)."
+msgstr "Verwende den folgenden Text als Standardwert für das UNIMARC-Normdatenfeld 100, Pos. 08-35. Das Datum (Pos. 00-07) NICHT angeben."
 
 # Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Don't use"
@@ -552,8 +564,8 @@ msgid "cataloguing.pref#DefaultLanguageField008#  Empty defaults to eng."
 msgstr " Wenn leer, wird eng als Voreinstellung verwendet."
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#DefaultLanguageField008# Fill in the default language for field 008 Range 35-37 (e.g. eng, nor, ger, see <a href=\"http://www.loc.gov/marc/languages/language_code.html\">MARC Code List for Languages</a>)"
-msgstr "Voreingestellter Sprachcode für Feld 008, Pos. 35-37 (Beispiele: eng, nor, ger, see <a href=\"http://www.loc.gov/marc/languages/language_code.html\">MARC-Liste der Sprachcodes</a>)"
+msgid "cataloguing.pref#DefaultLanguageField008# Fill in the default language for field 008 Range 35-37 of MARC21 records (e.g. eng, nor, ger, see <a href=\"http://www.loc.gov/marc/languages/language_code.html\">MARC Code List for Languages</a>)"
+msgstr "Vorbelegung der Sprache in Feld 008 Position 35-37 der MARC21-Datensätze (z.B. eng, nor, ger, gemäss <a href=\"http://www.loc.gov/marc/languages/language_code.html\">MARC Code List for Languages</a>)"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
@@ -608,8 +620,8 @@ msgid "cataloguing.pref#MARCOrgCode# Fill in the <a href=\"http://www.loc.gov/ma
 msgstr "Verwende den <a href=\"http://www.loc.gov/marc/organizations/orgshome.html\">MARC-Organisationscode</a>"
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#MARCOrgCode# by default in new MARC records (leave blank to disable)."
-msgstr "als Voreinstellung in neuen MARC-Datensätzen (leer lassen, um Funktion zu deaktivieren)"
+msgid "cataloguing.pref#MARCOrgCode# by default in new MARC21 records (leave blank to disable)."
+msgstr "als Vorbelegung in MARC21-Datensätzen (leer lassen falls nicht verwendet)."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or blank to disable)."
@@ -828,8 +840,8 @@ msgid "cataloguing.pref#itemcallnumber# Map the MARC subfield"
 msgstr "Verknüpfe MARC-Unterfeld"
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)<br />Examples: <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
-msgstr "mit der Exemplarsignatur (Es können mehrere Felder angegeben werde, die berücksichtigt werden; zum Beispiel <code>082ab</code> berücksichtigt die Unterfelder a und b von 082)<br />Beispiele: <strong>Dewey</strong>: <code>082ab</code> oder <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> oder <code>090ab</code>; <strong>aus dem Exemplarsatz</strong>: <code>852hi</code>"
+msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)<br />Examples (for MARC21 records): <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
+msgstr "mit der Exemplarsignatur (Es können mehrere zu berücksichtigende Felder angegeben werden; zum Beispiel <code>082ab</code> berücksichtigt die Unterfelder a und b von 082 .)<br />Beispiele (für MARC21): <strong>Dewey</strong>: <code>082ab</code> oder <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> oder <code>090ab</code>; <strong>aus dem Exemplardatensatz</strong>: <code>852hi</code>"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
@@ -988,8 +1000,8 @@ msgid "circulation.pref#AllowHoldsOnDamagedItems# Don't allow"
 msgstr "Erlaube keine"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#AllowHoldsOnDamagedItems# hold requests to be placed on damaged items."
-msgstr "Vormerkungen auf beschädigte Exemplare."
+msgid "circulation.pref#AllowHoldsOnDamagedItems# hold requests to be placed on and filled by damaged items."
+msgstr " Vormerkungen auf beschädigte Exemplare vornehmen oder ausführen."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnPatronsPossessions# Allow"
@@ -1205,7 +1217,7 @@ msgstr "das Benutzerkonto geschlossen"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# open a print quick slip window"
-msgstr "den Quittungsdruck anstossen"
+msgstr "der Quittungsdruck anstossen"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# open a print slip window"
@@ -1584,8 +1596,8 @@ msgid "circulation.pref#ReservesNeedReturns# Don't automatically"
 msgstr "Vormerkungen nicht automatisch"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ReservesNeedReturns# mark holds as found and waiting when a hold is placed specifically on them and they are already checked in."
-msgstr "auf abholbereit setzen, wenn es sich um eine Exemplarvormerkung handelt, die zur Zeit nicht entliehen ist."
+msgid "circulation.pref#ReservesNeedReturns# mark a hold as found and waiting when a hold is placed on a specific item and that item is already checked in."
+msgstr "auf Abholbereit setzen, wenn eine Vormerkung auf ein bestimmtes Exemplar gesetzt wird, welches bereits zurückgebucht wurde."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ReturnBeforeExpiry# Don't require"
@@ -5063,6 +5075,18 @@ msgstr "von Yahoos eigenen Servern (weniger Anfragen auf den Servern der Bibliot
 msgid "staff_client.pref#yuipath# included with Koha (faster, will work if internet goes down)."
 msgstr "in Koha (schneller, funktioniert auch, wenn das Internet nicht verfügbar ist)."
 
+# Tools
+msgid "tools.pref"
+msgstr "tools.pref"
+
+# Tools
+msgid "tools.pref#MaxItemsForBatch# Process up to"
+msgstr "Verarbeite bis zu"
+
+# Tools
+msgid "tools.pref#MaxItemsForBatch# items in a single modification or deletion batch."
+msgstr "Exemplare in einem einzelnen Bearbeitungs- oder Löschstapel."
+
 # Web services
 msgid "web_services.pref"
 msgstr "Web Services"
@@ -5092,8 +5116,12 @@ msgid "web_services.pref#ILS-DI# ILS-DI services for OPAC users"
 msgstr "den ILS-DI Service."
 
 # Web services > ILS-DI
-msgid "web_services.pref#ILS-DI:AuthorizedIPs# allowed IPs to use the ILS-DI services"
-msgstr "IP-Adressen, denen der Zugriff auf den ILS-DI Service erlaubt ist"
+msgid "web_services.pref#ILS-DI:AuthorizedIPs# Allow IP addresses"
+msgstr "Erlaube den IP-Adressen"
+
+# Web services > ILS-DI
+msgid "web_services.pref#ILS-DI:AuthorizedIPs# to use the ILS-DI services (when enabled). Separate the IP addresses with commas and without spaces. Leave the field blank to allow any IP address."
+msgstr " die ILS-DI-Services zu verwenden (falls eingeschaltet). IP-Addressen mit Komma (ohne Leerschlag) trennen. Feld leer lassen, um die ILS-DI-Services für alle IP-Adresse zu erlauben."
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH# <a href=\"http://www.openarchives.org/pmh/\">OAI-PMH</a> server."

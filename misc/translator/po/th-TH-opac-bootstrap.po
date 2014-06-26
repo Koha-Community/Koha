@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-05-18 20:08-0300\n"
+"POT-Creation-Date: 2014-06-15 20:31-0300\n"
 "PO-Revision-Date: 2012-06-21 08:44+0200\n"
 "Last-Translator: bunyarit <bun072@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.1.6\n"
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:110
+#, fuzzy, c-format
+msgid "#record"
+msgstr "%s ระเบียน"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:273
@@ -103,7 +108,7 @@ msgstr "%s %s %s %s (%s)"
 #. %8$s:  ITEM_RESULT.priority 
 #. %9$s:  END 
 #. %10$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1201
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1203
 #, fuzzy, c-format
 msgid "%s %s %s %s %s (priority %s) %s %s %s %s "
 msgstr "%s %s %s %s (%s) "
@@ -205,6 +210,15 @@ msgstr "รายการทรัพยากร &rsaquo; ข้อมูล�
 msgid ""
 "%s %s %s %s , %s %s %s (%s) %s.%s,%s %s %s %s This record has no items. %s "
 msgstr "%s %s %s %s (%s) "
+
+#. %1$s:  END 
+#. %2$s:  IF ( subscription_LOO.letter ) 
+#. %3$s:  IF ( loggedinusername ) 
+#. %4$s:  IF ( subscription_LOO.hasalert ) 
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:131
+#, fuzzy, c-format
+msgid "%s %s %s %s You have subscribed to email notification on new issues "
+msgstr "บอกรับอีเมลแจ้งเตือนเมื่อมีฉบับใหม่ "
 
 #. %1$s:  IF showpriority 
 #. %2$s:  bibitemloo.rank 
@@ -355,14 +369,6 @@ msgstr "ห้ามยืม (%s)"
 #, fuzzy, c-format
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr "หมายเหตุ: หน้าต่างนี้จะปิดโดยอัตโนมัติภายในเวลา 5 วินาที "
-
-#. %1$s:  END 
-#. %2$s:  IF ( subscription_LOO.letter ) 
-#. %3$s:  IF ( subscription_LOO.hasalert ) 
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:131
-#, fuzzy, c-format
-msgid "%s %s %s You have subscribed to email notification on new issues "
-msgstr "บอกรับอีเมลแจ้งเตือนเมื่อมีฉบับใหม่ "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -706,6 +712,17 @@ msgid ""
 "%s %s Search also for narrower subjects %s Search also for broader subjects "
 "%s Search also for related subjects %s "
 msgstr ""
+
+#. %1$s:  END 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#. %4$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:142
+#, fuzzy, c-format
+msgid ""
+"%s %s You must log in if you want to subscribe to email notification on new "
+"issues %s %s "
+msgstr "บอกรับอีเมลแจ้งเตือนเมื่อมีฉบับใหม่ "
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -1085,7 +1102,7 @@ msgstr ""
 #. %2$s:  IF ( shelvesloo.single ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:662
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:686
 #, c-format
 msgid "%s %sitem%sitem(s)%s"
 msgstr ""
@@ -1125,18 +1142,18 @@ msgstr "บัญชีผู้ใช้ของคุณถูกระงั
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:280
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:472
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:639
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:287
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:479
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:646
 #, fuzzy, c-format
 msgid "%s Address 2:"
 msgstr "ที่อยู่:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:266
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:458
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:625
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:273
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:465
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:632
 #, fuzzy, c-format
 msgid "%s Address:"
 msgstr "ที่อยู่:"
@@ -1219,9 +1236,9 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:294
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:486
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:653
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:301
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:493
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:660
 #, fuzzy, c-format
 msgid "%s City:"
 msgstr "จำนวน"
@@ -1229,13 +1246,13 @@ msgstr "จำนวน"
 #. %1$s:  IF ( ccodesearch ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:75
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:79
 #, fuzzy, c-format
 msgid "%s Collection %s Item type %s: "
 msgstr "กลุ่มข้อมูล: %s "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:570
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:577
 #, fuzzy, c-format
 msgid "%s Contact Note:"
 msgstr "สารบัญ"
@@ -1252,15 +1269,15 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:336
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:528
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:695
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:343
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:535
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:702
 #, fuzzy, c-format
 msgid "%s Country:"
 msgstr "จำนวน"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:157
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:162
 #, fuzzy, c-format
 msgid "%s Date of birth:"
 msgstr "วันเกิด:"
@@ -1272,33 +1289,33 @@ msgid "%s Did you mean: "
 msgstr "คุณหมายความว่า: "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:556
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:563
 #, fuzzy, c-format
 msgid "%s Email:"
 msgstr "อีเมล:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:432
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:439
 #, fuzzy, c-format
 msgid "%s Fax:"
 msgstr "โทรสาร:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:143
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:611
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:618
 #, fuzzy, c-format
 msgid "%s First name:"
 msgstr "ชื่อ:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:69
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:74
 #, fuzzy, c-format
 msgid "%s Home library:"
 msgstr "ห้องสมุดหลัก"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:176
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:183
 #, c-format
 msgid "%s Initials:"
 msgstr ""
@@ -1361,7 +1378,7 @@ msgid "%s MARC view"
 msgstr "มุมมองแบบ MARC"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:390
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:397
 #, c-format
 msgid "%s Mobile phone:"
 msgstr ""
@@ -1389,7 +1406,7 @@ msgid "%s On hold %s No renewals left %s "
 msgstr "ไม่สามารถยืมต่อได้แล้ว "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:190
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:197
 #, fuzzy, c-format
 msgid "%s Other names:"
 msgstr "นามสกุล:"
@@ -1414,8 +1431,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:542
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:709
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:549
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:716
 #, fuzzy, c-format
 msgid "%s Phone:"
 msgstr "โทรศัพท์:"
@@ -1427,13 +1444,13 @@ msgid "%s Please see a member of the library staff. "
 msgstr "กรุณาพบเจ้าหน้าที่ห้องสมุด "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:404
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:411
 #, fuzzy, c-format
 msgid "%s Primary email:"
 msgstr "อีเมล:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:362
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:369
 #, fuzzy, c-format
 msgid "%s Primary phone:"
 msgstr "Primary (5-8)"
@@ -1464,7 +1481,7 @@ msgid "%s Quotations"
 msgstr "ไม่มีภาพประกอบ"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:108
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:113
 #, fuzzy, c-format
 msgid "%s Salutation:"
 msgstr "ไม่มีภาพประกอบ"
@@ -1488,13 +1505,13 @@ msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "&nbsp;จะจำกัดการสืบค้น:&nbsp;'%s'"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:418
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:425
 #, fuzzy, c-format
 msgid "%s Secondary email:"
 msgstr "อีเมล:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:376
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:383
 #, fuzzy, c-format
 msgid "%s Secondary phone:"
 msgstr "อีเมล:"
@@ -1513,23 +1530,23 @@ msgstr "แสดงเฉพาะ "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:308
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:500
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:667
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:315
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:507
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:674
 #, fuzzy, c-format
 msgid "%s State:"
 msgstr "วันที่:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:252
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:259
 #, fuzzy, c-format
 msgid "%s Street number:"
 msgstr "หมายเลขสมาชิกห้องสมุด:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:129
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:597
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:134
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:604
 #, fuzzy, c-format
 msgid "%s Surname:"
 msgstr "ชื่อ:"
@@ -1627,15 +1644,15 @@ msgstr "คุณยังไม่เคยยืมทรัพยากรใ
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:322
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:514
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:681
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:329
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:521
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:688
 #, fuzzy, c-format
 msgid "%s Zip/Postal code:"
 msgstr "รหัสไปรษณีย์:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:441
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:448
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('B_address') && hidden.defined('B_address2') && "
@@ -1645,7 +1662,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:580
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:587
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('altcontactsurname') && hidden.defined"
@@ -1656,7 +1673,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:346
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:353
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
@@ -1665,7 +1682,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END # /UNLESS fields hidden 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:235
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:242
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('streetnumber') && hidden.defined('address') && "
@@ -1674,7 +1691,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END # / defined 'branchcode' 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:85
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:90
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden."
@@ -1825,7 +1842,7 @@ msgstr ""
 #. %5$s:  END 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:595
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:619
 #, c-format
 msgid "%s%s %sitem%sitems%s%sEmpty%s"
 msgstr ""
@@ -2139,8 +2156,8 @@ msgstr "ออกจากระบบ"
 #. %2$s:  END 
 #. %3$s:  IF ( shelveslooppri.viewcategory2 ) 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:596
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:663
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:620
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:687
 #, fuzzy, c-format
 msgid "%sPrivate%s %sPublic%s "
 msgstr "ไม่มีรายการส่วนตัว "
@@ -2210,13 +2227,8 @@ msgstr "มีให้บริการในห้องสมุด "
 msgid "%sentry%sentries%s. "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:489
-#, fuzzy, c-format
-msgid "&#8674; Editing"
-msgstr "กำลังแก้ไข"
-
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:5
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1025
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1026
 #, fuzzy, c-format
 msgid "&laquo; Previous"
 msgstr "&lt;&lt; ก่อนหน้า"
@@ -3015,19 +3027,19 @@ msgid "(remove)"
 msgstr "บทวิจารณ์"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:405
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:516
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:557
 #, c-format
 msgid "(su"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:217
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:383
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:247
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:265
 #, c-format
 msgid "+and+(bib-level:a+or+bib-level:b)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:264
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:282
 #, c-format
 msgid "+not+(bib-level:a+or+bib-level:b)"
 msgstr ""
@@ -3064,7 +3076,7 @@ msgid ""
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:21
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:25
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:26
 #, c-format
 msgid ",complete-subfield"
 msgstr ""
@@ -3075,7 +3087,7 @@ msgid "- You must enter a Title"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, fuzzy
 msgid "- You must enter a list name"
 msgstr "คุณจะต้องเลือกอย่างน้อยหนึ่งรายการ"
@@ -3111,7 +3123,7 @@ msgstr "ข้อมูลติดต่อ"
 msgid "...or..."
 msgstr "...หรือ..."
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, c-format
 msgid ".png"
 msgstr ".png"
@@ -3120,19 +3132,19 @@ msgstr ".png"
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:128
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:426
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:537
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:986
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:579
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1030
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 msgstr "/cgi-bin/koha/opac-detail.pl?biblionumber="
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:257
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:196
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:43
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:44
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:405
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:289
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:423
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:710
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:752
 #: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:167
 #, c-format
 msgid "/cgi-bin/koha/opac-detail.pl?biblionumber="
@@ -3142,9 +3154,7 @@ msgstr "/cgi-bin/koha/opac-detail.pl?biblionumber="
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:536
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:587
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:208
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:513
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:862
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:925
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:554
 #: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:179
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q="
@@ -3152,18 +3162,18 @@ msgstr "/cgi-bin/koha/opac-search.pl?q="
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:251
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:417
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:282
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:704
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:801
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:857
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:920
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:300
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:746
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:843
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:900
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:963
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=Control-number:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=Control-number:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:220
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:386
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:250
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:268
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=Host-item:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=Host-item:"
@@ -3172,56 +3182,66 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=Host-item:"
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:119
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:139
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:202
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:245
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:327
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:510
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:961
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:247
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:331
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:551
 #: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:173
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=an:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1005
+#, fuzzy, c-format
+msgid "/cgi-bin/koha/opac-search.pl?q=an:\""
+msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
+
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:101
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:122
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:142
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:333
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:964
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:337
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=au:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1008
+#, fuzzy, c-format
+msgid "/cgi-bin/koha/opac-search.pl?q=au:\""
+msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
+
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:217
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:383
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:247
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:264
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:265
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:282
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=rcn:"
 msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:178
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:193
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:221
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:196
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:211
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:239
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=se,phr:\""
 msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:411
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:522
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:563
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=su"
 msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss2"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:272
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:274
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=su:"
 msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss2"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:262
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:428
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:267
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:285
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:715
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:804
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:303
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:757
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:846
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:905
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:968
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=ti,phr:"
 msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
@@ -3230,97 +3250,97 @@ msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:960
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:992
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:995
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:558
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:561
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:600
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:603
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/tracklinks.pl?uri="
 msgstr "/cgi-bin/koha/opac-search.pl?q="
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, c-format
 msgid "/opac-tmpl/lib/famfamfam/"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACMARCdetail.xsl:18
+#: opac-tmpl/bootstrap/en/xslt/plainMARC.xsl:18
 #, c-format
 msgid "000 "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:7
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:97
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:101
 #, c-format
 msgid "10 titles"
 msgstr "10 ชื่อเรื่อง"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:13
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:103
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:107
 #, c-format
 msgid "100 titles"
 msgstr "100 ชื่อเรื่อง"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:446
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:135
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:153
 #, c-format
 msgid "100,110,111,700,710,711"
 msgstr "100,110,111,700,710,711"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:61
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:63
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:143
 #, c-format
 msgid "12 months"
 msgstr "12 เดือน"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:475
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:512
 #, c-format
 msgid "130,240"
 msgstr "130,240"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:8
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:98
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:102
 #, c-format
 msgid "15 titles"
 msgstr "15 ชื่อเรื่อง"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:9
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:99
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:103
 #, c-format
 msgid "20 titles"
 msgstr "20 ชื่อเรื่อง"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:51
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:53
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:141
 #, c-format
 msgid "3 months"
 msgstr "3 เดือน"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:10
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:100
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:104
 #, c-format
 msgid "30 titles"
 msgstr "30 ชื่อเรื่อง"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:11
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:101
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:105
 #, c-format
 msgid "40 titles"
 msgstr "40 ชื่อเรื่อง"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:165
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:183
 #, c-format
 msgid "440,490"
 msgstr "440,490"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:12
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:106
 #, c-format
 msgid "50 titles"
 msgstr "50 ชื่อเรื่อง"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:56
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:58
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:138
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:142
 #, c-format
 msgid "6 months"
 msgstr "6 เดือน"
@@ -3409,8 +3429,8 @@ msgstr "สิ่งพิมพ์ต่อเนื่อง "
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:960
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:992
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:995
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:558
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:561
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:600
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:603
 #, c-format
 msgid ";biblionumber="
 msgstr ""
@@ -3446,16 +3466,16 @@ msgstr "ระเบียนที่ตรงกับบาร์โค้ด
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:242
 #, fuzzy, c-format
-msgid "A specific copy"
+msgid "A specific item"
 msgstr "จองเฉพาะเล่มที่ต้องการ "
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:404
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:515
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:556
 #, c-format
 msgid "AND "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:55
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:56
 #, fuzzy, c-format
 msgid "AR"
 msgstr "MARCXML"
@@ -3465,28 +3485,28 @@ msgstr "MARCXML"
 msgid "About the author"
 msgstr "เกี่ยวกับผู้แต่ง"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:896
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:939
 #, fuzzy, c-format
 msgid "Absorbed by:"
 msgstr "จัดพิมพ์โดย :"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:899
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:942
 #, c-format
 msgid "Absorbed in part by:"
 msgstr "รวบรวมในส่วนนี้โดย:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:844
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:886
 #, c-format
 msgid "Absorbed in part:"
 msgstr "รวบรวมในส่วนนี้:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:841
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:883
 #, c-format
 msgid "Absorbed:"
 msgstr "รวบรวม:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:277
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:760
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:290
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:802
 #, fuzzy, c-format
 msgid "Abstract: "
 msgstr "สาระสังเขป "
@@ -3668,20 +3688,20 @@ msgid "All Tags"
 msgstr "ทุกแท็ก"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:33
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:123
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:127
 #, fuzzy, c-format
 msgid "All collections"
 msgstr "คอลเลกชันผสม"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:35
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:125
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:129
 #, c-format
 msgid "All item types"
 msgstr "ทุกชนิดรายการ"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:202
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:18
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:109
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:113
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:200
 #, c-format
 msgid "All libraries"
@@ -3701,12 +3721,12 @@ msgid ""
 "expires."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:450
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:457
 #, fuzzy, c-format
 msgid "Alternate address"
 msgstr "ที่อยู่ถาวรหรือที่อยู่อื่น:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:589
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:596
 #, fuzzy, c-format
 msgid "Alternate contact"
 msgstr "การติดต่ออื่น:"
@@ -3740,7 +3760,7 @@ msgstr "มีข้อผิดพลาดเกิดขึ้นขณะพ
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:213
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:379
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:243
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:261
 #, fuzzy, c-format
 msgid "Analytics: "
 msgstr "แสดงเฉพาะ "
@@ -3898,7 +3918,7 @@ msgid "Are you sure you want to cancel this hold?"
 msgstr "คุณแน่ใจหรือไม่ว่า คุณต้องการลบรายการทั้งหมดออก"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, fuzzy
 msgid "Are you sure you want to delete this list?"
 msgstr "คุณแน่ใจหรือไม่ว่า คุณต้องการเอารายการที่เลือกออก"
@@ -3922,13 +3942,13 @@ msgid "Are you sure you want to remove the selected items?"
 msgstr "คุณแน่ใจหรือไม่ว่า คุณต้องการเอารายการที่เลือกออก"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, fuzzy
 msgid "Are you sure you want to remove these items from the list?"
 msgstr "คุณแน่ใจหรือไม่ว่า คุณต้องการเอารายการที่เลือกออก"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, fuzzy
 msgid "Are you sure you want to remove this item from the list?"
 msgstr "คุณแน่ใจหรือไม่ว่า คุณต้องการเอารายการที่เลือกออก"
@@ -3946,7 +3966,7 @@ msgid "Are you sure you want to suspend all holds?"
 msgstr "คุณแน่ใจหรือไม่ว่า คุณต้องการลบรายการทั้งหมดออก"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:543
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:79
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:80
 #, fuzzy, c-format
 msgid "Article"
 msgstr "ชื่อเรื่อง"
@@ -3982,7 +4002,7 @@ msgstr "แท็ก"
 msgid "Audience"
 msgstr "ผู้อ่าน"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:323
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:336
 #, fuzzy, c-format
 msgid "Audience: "
 msgstr "ผู้อ่าน "
@@ -4024,9 +4044,9 @@ msgstr "สมาชิกได้ผ่านการตรวจสอบโ
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:243
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:187
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:189
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:506
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:508
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:723
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:530
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:532
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:747
 #, c-format
 msgid "Author"
 msgstr "ผู้แต่ง"
@@ -4116,7 +4136,7 @@ msgstr "รายการที่ห้องสมุดมี: "
 msgid "Availability:"
 msgstr "รายการที่ห้องสมุดมี:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:99
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:103
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1031
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:774
 #, fuzzy, c-format
@@ -4158,7 +4178,7 @@ msgstr ""
 msgid "Awards:"
 msgstr "รางว้ล:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:674
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:716
 #, fuzzy, c-format
 msgid "Awards: "
 msgstr "รางว้ล: "
@@ -4170,8 +4190,8 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:45
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:49
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:53
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:58
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:54
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:59
 #, c-format
 msgid "BK"
 msgstr "ย้อนกลับ"
@@ -4188,13 +4208,13 @@ msgstr "ISBN: %s"
 msgid "Back to lists"
 msgstr "กลับไปยังระเบียนบรรณานุกรม"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1030
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1031
 #, fuzzy, c-format
 msgid "Back to results"
 msgstr "กลับไปยังระเบียนบรรณานุกรม"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1030
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1031
 #, fuzzy
 msgid "Back to the results search list"
 msgstr "กลับไปยังระเบียนบรรณานุกรม"
@@ -4203,7 +4223,7 @@ msgstr "กลับไปยังระเบียนบรรณานุก
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:260
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:112
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:355
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1125
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1127
 #, c-format
 msgid "Barcode"
 msgstr "บาร์โค้ด"
@@ -4265,7 +4285,7 @@ msgstr "บรรณานุกรม"
 msgid "Bibliographies"
 msgstr "บรรณานุกรม"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:303
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:316
 #, fuzzy, c-format
 msgid "Bibliography: "
 msgstr "บรรณานุกรม "
@@ -4370,8 +4390,9 @@ msgstr "หนังสือ"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:541
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:546
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:72
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:82
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:73
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:83
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:98
 #, fuzzy, c-format
 msgid "Book"
 msgstr "หนังสือ"
@@ -4418,8 +4439,8 @@ msgstr "เรียกดูทรัพยากรห้องสมุด"
 msgid "Browse results"
 msgstr "(<a1>เรียกดูชั้นหนังสือ</a>)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1174
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1176
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1178
 #, fuzzy, c-format
 msgid "Browse shelf"
 msgstr "(<a1>เรียกดูชั้นหนังสือ</a>)"
@@ -4445,7 +4466,7 @@ msgid "CD software"
 msgstr "ซีดีซอฟต์แวร์"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:51
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:60
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:61
 #, c-format
 msgid "CF"
 msgstr "แฟ้มคอมพิวเตอร์"
@@ -4493,12 +4514,12 @@ msgstr "เลขเรียกหนังสือ"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:265
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1118
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1120
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:199
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:201
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:516
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:518
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:725
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:540
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:542
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:749
 #, fuzzy, c-format
 msgid "Call number"
 msgstr "เลขเรียกหนังสือ"
@@ -4540,9 +4561,9 @@ msgstr "เลขเรียกหนังสือ"
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:44
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:245
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:546
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:548
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:742
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:572
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:766
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:90
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:63
@@ -4554,12 +4575,12 @@ msgid "Cancel"
 msgstr "ยกเลิก"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:136
 #, fuzzy
 msgid "Cancel email notification"
 msgstr "การจัดหมวดหมู่"
 
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:136
 #, fuzzy, c-format
 msgid "Cancel email notification "
 msgstr "บอกรับอีเมลแจ้งเตือนเมื่อมีฉบับใหม่ "
@@ -4587,6 +4608,11 @@ msgstr "ยกเลิกรายการจองสำหรับสมา
 msgid "Cannot be put on hold"
 msgstr "ไม่มีคนจอง"
 
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:65
+#, fuzzy, c-format
+msgid "Card number"
+msgstr "หมายเลขบัตรสมาชิก:"
+
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:22
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #, fuzzy, c-format
@@ -4598,7 +4624,7 @@ msgstr "ที่"
 msgid "Cassette recording"
 msgstr "เทปบันทึกเสียง"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:734
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:776
 #, c-format
 msgid "Cast: "
 msgstr ""
@@ -4608,8 +4634,8 @@ msgstr ""
 msgid "Catalogs"
 msgstr "รายการทรัพยากร"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:524
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:729
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:548
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:753
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:76
 #, c-format
 msgid "Category:"
@@ -4630,7 +4656,7 @@ msgstr "เปลี่ยนรหัสผ่านของฉัน"
 msgid "Change your password "
 msgstr "เปลี่ยนรหัสผ่านของคุณ "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:908
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:951
 #, c-format
 msgid "Changed back to:"
 msgstr ""
@@ -4659,16 +4685,17 @@ msgstr ""
 msgid "Check-in date:"
 msgstr "ต่ออายุรายการทรัพยากร"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
-#, c-format
-msgid "Checked out"
-msgstr "ยืมออกแล้ว"
-
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:193
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1104
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:832
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:202
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1106
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:833
 #, fuzzy, c-format
 msgid "Checked out ("
+msgstr "ยืมออกแล้ว"
+
+#. %1$s:  issues_count 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
+#, fuzzy, c-format
+msgid "Checked out (%s)"
 msgstr "ยืมออกแล้ว"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:29
@@ -4687,7 +4714,7 @@ msgstr "รายการที่ยืมออก"
 msgid "Checkouts for %s "
 msgstr "รายการที่ยืมออก "
 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:85
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:89
 #, fuzzy, c-format
 msgid "Checkouts: "
 msgstr "รายการที่ยืมออก "
@@ -4697,7 +4724,7 @@ msgstr "รายการที่ยืมออก "
 msgid "Classification"
 msgstr "การจัดหมวดหมู่"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:242
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:255
 #, fuzzy, c-format
 msgid "Classification: "
 msgstr "การจัดหมวดหมู่ "
@@ -4720,7 +4747,7 @@ msgstr "ล้างทั้งหมด"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:35
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:236
 #, fuzzy, c-format
 msgid "Clear all"
@@ -4730,7 +4757,7 @@ msgstr "ล้างทั้งหมด"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:371
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:577
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:164
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:170
 #, fuzzy, c-format
 msgid "Clear date"
 msgstr "แฟ้มคอมพิวเตอร์"
@@ -4742,15 +4769,15 @@ msgstr "แฟ้มคอมพิวเตอร์"
 msgid "Click here if you're not %s %s"
 msgstr "(<a1>คลิกที่นี่</a> ถ้าคุณไม่ใช่ %s %s %s)"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:415
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:428
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:981
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1016
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:583
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:625
 #, fuzzy, c-format
 msgid "Click here to access online"
 msgstr "คลิกที่นี่หากดำเนินการเสร็จสิ้นแล้ว"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:115
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:122
 #, fuzzy, c-format
 msgid "Click here to access online "
 msgstr "คลิกที่นี่หากดำเนินการเสร็จสิ้นแล้ว "
@@ -4771,7 +4798,7 @@ msgid "Click to add to cart"
 msgstr "คลิกเพื่อเพิ่มไปยังกล่องรายการที่เลือก"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "Click to forward the list to"
 msgstr "คลิกเพื่อเพิ่มไปยังกล่องรายการที่เลือก"
@@ -4789,7 +4816,7 @@ msgid "Click to open in new window"
 msgstr "คลิกเพื่อดูใน Google Books"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "Click to rewind the list to"
 msgstr "คลิกเพื่อดูใน Google Books"
@@ -4800,7 +4827,7 @@ msgstr "คลิกเพื่อดูใน Google Books"
 msgid "Click to view in Google Books"
 msgstr "คลิกเพื่อดูใน Google Books"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1041
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1043
 #, fuzzy, c-format
 msgid "Close"
 msgstr "รายการทรัพยากร"
@@ -4825,7 +4852,7 @@ msgstr "ปิดหน้าต่างนี้"
 msgid "Close window"
 msgstr "ปิดหน้าต่าง"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:96
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:101
 #, fuzzy, c-format
 msgid "Coauthor"
 msgstr "ผู้แต่ง"
@@ -4843,7 +4870,7 @@ msgstr "ภาพปะต่อ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:126
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1117
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1119
 #, c-format
 msgid "Collection"
 msgstr "กลุ่มข้อมูล"
@@ -4912,14 +4939,14 @@ msgstr "ความคิดเห็น "
 msgid "Computer File"
 msgstr "แฟ้มคอมพิวเตอร์"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:85
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:86
 #, fuzzy, c-format
 msgid "Computer file"
 msgstr "แฟ้มคอมพิวเตอร์"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:615
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:680
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:639
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:704
 msgid "Confirm"
 msgstr "ยืนยัน"
 
@@ -4933,7 +4960,7 @@ msgstr "ยืนยัน"
 msgid "Confirm holds for: %s %s %s (%s) %s "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:354
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:361
 #, fuzzy, c-format
 msgid "Contact information"
 msgstr "ข้อมูลติดต่อ"
@@ -4949,18 +4976,18 @@ msgstr "เนื้อหา"
 msgid "Content Cafe"
 msgstr "Content Cafe"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:761
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:803
 #, fuzzy, c-format
 msgid "Content advice: "
 msgstr "Content Cafe "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:586
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:654
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:610
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:678
 #, c-format
 msgid "Contents"
 msgstr "สารบัญ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:260
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:273
 #, fuzzy, c-format
 msgid "Contents note: "
 msgstr "สารบัญ "
@@ -4970,68 +4997,43 @@ msgstr "สารบัญ "
 msgid "Contents of "
 msgstr "สารบัญ "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:627
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:669
 #, fuzzy, c-format
 msgid "Contents:"
 msgstr "สารบัญ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:884
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:927
 #, fuzzy, c-format
 msgid "Continued by:"
 msgstr "เข้าเป็นสมาชิกห้องสมุด:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:887
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:930
 #, c-format
 msgid "Continued in part by:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:829
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:871
 #, c-format
 msgid "Continues in part:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:826
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:868
 #, fuzzy, c-format
 msgid "Continues:"
 msgstr "สารบัญ"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:542
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:75
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:76
 #, fuzzy, c-format
 msgid "Continuing Resource"
 msgstr "ทรัพยากรแบบออนไลน์:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:205
-#, c-format
-msgid "Copies available at:"
-msgstr "มีตัวเล่มพร้อมให้บริการที่:"
-
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:133
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1050
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:781
-#, fuzzy, c-format
-msgid "Copies available for loan: "
-msgstr "มีตัวเล่มพร้อมให้บริการที่: "
-
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:170
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1082
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:813
-#, fuzzy, c-format
-msgid "Copies available for reference: "
-msgstr "เล่มที่ห้องสมุดมี: "
-
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:351
-#: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
-#, c-format
-msgid "Copies available:"
-msgstr "เล่มที่ห้องสมุดมี:"
-
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:256
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
-#, c-format
-msgid "Copy"
-msgstr "เล่ม"
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1123
+#, fuzzy, c-format
+msgid "Copy number"
+msgstr "เลขเรียกหนังสือ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:143
 #, c-format
@@ -5057,23 +5059,23 @@ msgstr "วันที่จดสิขสิทธิ์:"
 msgid "Copyright year: %s "
 msgstr "วันที่จดสิขสิทธิ์: "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:106
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:113
 #, c-format
 msgid "Corporate Author (Coauthor)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:91
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:95
 #, c-format
 msgid "Corporate Author (Main)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:111
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:119
 #, c-format
 msgid "Corporate Author (Secondary)"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:202
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:203
 msgid ""
 "Could not login, perhaps your Persona email does not match your Koha one"
 msgstr ""
@@ -5083,7 +5085,7 @@ msgstr ""
 msgid "Count"
 msgstr "จำนวน"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:167
 #, fuzzy, c-format
 msgid "Country: "
 msgstr "จำนวน "
@@ -5100,7 +5102,7 @@ msgstr "หมายเลขบัตรสมาชิก:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:243
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:17
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1131
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:15
 #, c-format
 msgid "Course reserves"
@@ -5124,7 +5126,7 @@ msgstr ""
 msgid "Cover image"
 msgstr "ภาพปก"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:707
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:731
 #, fuzzy, c-format
 msgid "Create a new list"
 msgstr "สร้างรายการใหม่"
@@ -5148,10 +5150,20 @@ msgid ""
 "bibliographic record Koha."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:90
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:101
+#, fuzzy, c-format
+msgid "CreativeWork"
+msgstr "สนธิสัญญา"
+
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:290
 #, c-format
 msgid "Credits"
+msgstr "เครดิต"
+
+#. %1$s:  BORROWER_INF.amountoutstanding 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:90
+#, fuzzy, c-format
+msgid "Credits (%s)"
 msgstr "เครดิต"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:49
@@ -5179,9 +5191,9 @@ msgstr "วิดีโอดีวีดี / วิดีโอดิสก์
 msgid "Daily"
 msgstr "ทุกวัน"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:214
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1123
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:854
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:223
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1125
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:855
 #, fuzzy, c-format
 msgid "Damaged ("
 msgstr "เสียหายจำนวน (%s) รายการ,"
@@ -5212,7 +5224,7 @@ msgid "Date added:"
 msgstr "วันที่เพิ่มข้อมูล"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1126
 #, fuzzy, c-format
 msgid "Date due"
 msgstr "วันกำหนดส่ง"
@@ -5291,8 +5303,8 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:118
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:136
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:617
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:682
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:641
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:706
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:236
 #, c-format
 msgid "Delete"
@@ -5300,6 +5312,7 @@ msgstr "ลบ"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:483
 #, fuzzy
 msgid "Delete list"
 msgstr "ลบรายการ"
@@ -5311,7 +5324,7 @@ msgid "Delete selected"
 msgstr "เอารายการที่เลือกออก"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:484
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:508
 #, fuzzy
 msgid "Delete this list"
 msgstr "ลบรายการนี้"
@@ -5323,7 +5336,7 @@ msgstr "ลบรายการนี้"
 msgid "Delete your search history"
 msgstr "ค้นหาด้วยคำว่า:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1075
 #, c-format
 msgid "Delicious"
 msgstr ""
@@ -5364,9 +5377,9 @@ msgstr ""
 msgid "Description"
 msgstr "รายละเอียด"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:193
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:368
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:373
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:195
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:396
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:401
 #, fuzzy, c-format
 msgid "Description: "
 msgstr "รายละเอียด "
@@ -5399,7 +5412,7 @@ msgstr "แสดงความคิดเห็นโดย %s %s %s"
 msgid "Dewey"
 msgstr "ระบบดิวอี้"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:222
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:235
 #, fuzzy, c-format
 msgid "Dewey: "
 msgstr "ระบบดิวอี้ "
@@ -5469,7 +5482,7 @@ msgstr ""
 msgid "Diskografier"
 msgstr "รายชื่อจานเสียง"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:744
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:786
 #, fuzzy, c-format
 msgid "Dissertation note: "
 msgstr "วิทยานิพนธ์ระดับปริญญาโทหรือเอก "
@@ -5616,14 +5629,15 @@ msgstr "ข้อผิดพลาด: คุณไม่ได้รับส�
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:863
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:606
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:673
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:697
 #, c-format
 msgid "Edit"
 msgstr "แก้ไข"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:165
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:474
 #, fuzzy
 msgid "Edit list"
 msgstr "แก้ไขรายการ"
@@ -5633,7 +5647,12 @@ msgstr "แก้ไขรายการ"
 msgid "Edit list "
 msgstr "แก้ไขรายการ "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:174
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:518
+#, fuzzy, c-format
+msgid "Editing "
+msgstr "ฉบับพิมพ์ "
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:185
 #, fuzzy, c-format
 msgid "Edition Statement"
 msgstr "ส่วนฉบับพิมพ์:"
@@ -5644,8 +5663,8 @@ msgid "Edition statement:"
 msgstr "ส่วนฉบับพิมพ์:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:513
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:343
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:348
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:369
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:374
 #, fuzzy, c-format
 msgid "Edition: "
 msgstr "ฉบับพิมพ์ "
@@ -5689,7 +5708,7 @@ msgid "Elever på ungdomstrinnet;"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:33
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
 #, fuzzy, c-format
 msgid "Email"
 msgstr "อีเมล:"
@@ -5839,7 +5858,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:35
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:39
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:41
 #, c-format
 msgid "Error:"
 msgstr "ข้อผิดพลาด:"
@@ -5912,7 +5931,7 @@ msgstr ""
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:371
-msgid "Expecting a specific copy selection."
+msgid "Expecting a specific item selection."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:513
@@ -5942,7 +5961,7 @@ msgstr ""
 msgid "FV"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1071
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
 #, fuzzy, c-format
 msgid "Facebook"
 msgstr "หนังสือ"
@@ -5962,7 +5981,7 @@ msgstr ""
 msgid "February"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:201
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:208
 #, fuzzy, c-format
 msgid "Female:"
 msgstr "ผู้หญิง"
@@ -6034,13 +6053,19 @@ msgstr ""
 msgid "Fine amount"
 msgstr "จำนวนค่าปรับ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:88
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:362
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #, c-format
 msgid "Fines"
+msgstr "ค่าปรับ"
+
+#. For the first occurrence,
+#. %1$s:  BORROWER_INF.amountoutstanding 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:88
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
+#, fuzzy, c-format
+msgid "Fines (%s)"
 msgstr "ค่าปรับ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:27
@@ -6138,7 +6163,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:236
 msgid "Form not submitted because of the following problem(s)"
 msgstr ""
@@ -6148,7 +6173,7 @@ msgstr ""
 msgid "Format"
 msgstr "รูปแบบ:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:838
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:880
 #, c-format
 msgid "Formed by the union: ... and: ..."
 msgstr ""
@@ -6229,7 +6254,7 @@ msgid "Friday"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:16
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:107
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:111
 #, fuzzy, c-format
 msgid "From: "
 msgstr "จาก: "
@@ -6351,7 +6376,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:221
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:138
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:67
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:123
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:24
@@ -6362,7 +6387,7 @@ msgstr "ค้นหา"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "Go to detail"
 msgstr "รายละเอียดการติดต่อ"
@@ -6536,7 +6561,7 @@ msgstr "ชื่อเรื่อง"
 msgid "Holdings"
 msgstr "จำนวนที่จอง ( %s ) รายการ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:773
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:815
 #, fuzzy, c-format
 msgid "Holdings note: "
 msgstr "จำนวนที่จอง ( %s ) รายการ "
@@ -6547,14 +6572,15 @@ msgstr "จำนวนที่จอง ( %s ) รายการ "
 msgid "Holdings:"
 msgstr "จำนวนที่จอง ( %s ) รายการ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:93
-#, c-format
-msgid "Holds"
-msgstr "จอง"
-
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:470
 #, fuzzy, c-format
 msgid "Holds "
+msgstr "จอง "
+
+#. %1$s:  reserves_count 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:93
+#, fuzzy, c-format
+msgid "Holds (%s)"
 msgstr "จอง "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:164
@@ -6689,8 +6715,8 @@ msgid "ISBN:"
 msgstr "ISBN:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:330
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:182
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:388
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:194
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:418
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:203
 #, fuzzy, c-format
 msgid "ISBN: "
@@ -6723,13 +6749,13 @@ msgid "ISSN:"
 msgstr "ISSN:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:340
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:200
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:398
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:212
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:430
 #, fuzzy, c-format
 msgid "ISSN: "
 msgstr "ISSN: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:100
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:105
 #, fuzzy, c-format
 msgid "Identity"
 msgstr "รายละเีอียดด้านอัตลักษณ์"
@@ -6825,9 +6851,9 @@ msgstr ""
 msgid "In online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:228
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1135
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:868
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:237
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1137
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:869
 #, fuzzy, c-format
 msgid "In transit ("
 msgstr "นำส่งจำนวน (%s) รายการ,"
@@ -6850,12 +6876,12 @@ msgstr "กำลังส่งไปยังกล่องรายการ
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:234
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:400
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:687
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:729
 #, c-format
 msgid "In: "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:621
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:663
 #, c-format
 msgid "Incomplete contents:"
 msgstr ""
@@ -6926,12 +6952,12 @@ msgstr "เลขเรียกหนังสือ"
 msgid "Item cannot be checked out."
 msgstr "ไม่สามารถยืม-คืนรายการนี้ได้"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1131
 #, c-format
 msgid "Item hold queue priority"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1127
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
 #, fuzzy, c-format
 msgid "Item holds"
 msgstr "จองหนังสือ"
@@ -6940,7 +6966,7 @@ msgstr "จองหนังสือ"
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:258
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:109
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:354
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1115
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1117
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:62
 #, c-format
 msgid "Item type"
@@ -6958,6 +6984,31 @@ msgstr "ชนิดของทรัพยากร:"
 #, fuzzy, c-format
 msgid "Item type: "
 msgstr "ชนิดของทรัพยากร: "
+
+#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:205
+#, fuzzy, c-format
+msgid "Items available at:"
+msgstr "มีตัวเล่มพร้อมให้บริการที่:"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:140
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1050
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:781
+#, fuzzy, c-format
+msgid "Items available for loan: "
+msgstr "มีตัวเล่มพร้อมให้บริการที่: "
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:177
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1082
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:813
+#, fuzzy, c-format
+msgid "Items available for reference: "
+msgstr "เล่มที่ห้องสมุดมี: "
+
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:351
+#: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
+#, fuzzy, c-format
+msgid "Items available:"
+msgstr "ไม่พบรายการใดๆ:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
@@ -7063,7 +7114,7 @@ msgid "Keyword"
 msgstr "คำสำคัญ"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:547
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:83
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:84
 #, fuzzy, c-format
 msgid "Kit"
 msgstr "ชุดเครื่องมือ"
@@ -7163,11 +7214,7 @@ msgstr ""
 msgid "Language"
 msgstr "ภาษา"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:126
-#, fuzzy, c-format
-msgid "Language:"
-msgstr "ภาษา:"
-
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:137
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:175
 #, fuzzy, c-format
 msgid "Language: "
@@ -7282,17 +7329,17 @@ msgid "Limit to currently available items."
 msgstr "มีตัวเล่มพร้อมให้บริการที่:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:30
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:120
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:124
 #, fuzzy, c-format
 msgid "Limit to: "
 msgstr "จำกัดเฉพาะ: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1188
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1190
 #, fuzzy, c-format
 msgid "Link to resource "
 msgstr "ทรัพยากรแบบออนไลน์: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
 #, fuzzy, c-format
 msgid "LinkedIn"
 msgstr "ค่าปรับ"
@@ -7309,19 +7356,19 @@ msgstr "ค่าปรับ"
 msgid "List %s Deleted."
 msgstr "รายการ %s ถูกลบออกจากระบบแล้ว"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:585
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:653
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:609
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:677
 #, fuzzy, c-format
 msgid "List name"
 msgstr "ชื่อรายการ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:711
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:735
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:74
 #, fuzzy, c-format
 msgid "List name:"
 msgstr "ชื่อรายการ:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:496
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:520
 #, fuzzy, c-format
 msgid "List name: "
 msgstr "ชื่อรายการ: "
@@ -7332,8 +7379,7 @@ msgid "List(s) this item appears in: "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:36
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:489
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:558
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:582
 #, c-format
 msgid "Lists"
 msgstr "รายการ"
@@ -7363,7 +7409,7 @@ msgid "Local login"
 msgstr "สถานที่"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:51
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1116
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1118
 #, c-format
 msgid "Location"
 msgstr "สถานที่"
@@ -7383,7 +7429,7 @@ msgstr "สถานที่และทรัพยากรที่มี: "
 msgid "Location(s) (Status)"
 msgstr "สถานที่"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1149
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1151
 #, fuzzy, c-format
 msgid "Location(s): "
 msgstr "สถานที่ "
@@ -7395,8 +7441,8 @@ msgstr "สถานที่ "
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:98
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:77
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:633
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:645
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:657
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:669
 #, fuzzy, c-format
 msgid "Log in"
 msgstr "เข้าสู่ระบบ:"
@@ -7465,9 +7511,9 @@ msgstr ""
 msgid "LookupPatron"
 msgstr "สำหรับสมาชิกห้องสมุด"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:207
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1117
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:847
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:216
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1119
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:848
 #, fuzzy, c-format
 msgid "Lost ("
 msgstr "หายจำนวน (%s) รายการ,"
@@ -7523,7 +7569,7 @@ msgstr "MARCXML"
 msgid "MARC Card View"
 msgstr "มุมมองแบบ MARC"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACMARCdetail.xsl:8
+#: opac-tmpl/bootstrap/en/xslt/plainMARC.xsl:8
 #, fuzzy, c-format
 msgid "MARC View"
 msgstr "มุมมองแบบ MARC"
@@ -7625,19 +7671,19 @@ msgid "MESSAGE 9:"
 msgstr "ข้อความ 8:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:52
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:61
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:62
 #, c-format
 msgid "MP"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:54
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:63
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:64
 #, c-format
 msgid "MU"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:50
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:59
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:60
 #, c-format
 msgid "MX"
 msgstr ""
@@ -7657,12 +7703,12 @@ msgstr ""
 msgid "Magnetisk-optisk plate"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:86
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:89
 #, fuzzy, c-format
 msgid "Main Author"
 msgstr "ผู้แต่ง"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:244
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:251
 #, fuzzy, c-format
 msgid "Main address"
 msgstr "ที่อยู่ทางไปรษณีย์:"
@@ -7675,7 +7721,7 @@ msgstr "ที่อยู่ทางไปรษณีย์:"
 msgid "Make a "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:208
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:215
 #, fuzzy, c-format
 msgid "Male:"
 msgstr "ผู้ชาย"
@@ -7701,7 +7747,8 @@ msgid "Manuskripter"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:550
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:86
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:87
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:99
 #, fuzzy, c-format
 msgid "Map"
 msgstr "แผนที่"
@@ -7746,7 +7793,7 @@ msgstr "ฉันเอง"
 msgid "Memoarer"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:905
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:948
 #, c-format
 msgid "Merged with ... to form ..."
 msgstr ""
@@ -7805,7 +7852,7 @@ msgstr "พยายามแสดง %s "
 msgid "Mixed Materials"
 msgstr "ทัศนวัสดุ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:84
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:85
 #, fuzzy, c-format
 msgid "Mixed materials"
 msgstr "ทัศนวัสดุ"
@@ -7896,9 +7943,14 @@ msgid "Mus"
 msgstr "ดนตรี"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:554
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:88
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:89
 #, c-format
 msgid "Music"
+msgstr "ดนตรี"
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:100
+#, fuzzy, c-format
+msgid "MusicAlbum"
 msgstr "ดนตรี"
 
 # Music recording แปลต่างจาก music ยังไงดี
@@ -7930,7 +7982,7 @@ msgstr ""
 msgid "My Tags"
 msgstr "แท็กของฉัน"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:215
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:222
 #, c-format
 msgid "N/A:"
 msgstr ""
@@ -7992,8 +8044,9 @@ msgstr "แสดงความคิดเห็นโดย %s %s %s"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:58
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:150
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:579
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:642
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:467
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:603
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:666
 #, fuzzy, c-format
 msgid "New list"
 msgstr "รายการใหม่"
@@ -8033,7 +8086,7 @@ msgstr "หนังสือพิมพ์"
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:1
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:69
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1034
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1036
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
 #, c-format
 msgid "Next"
@@ -8046,15 +8099,15 @@ msgid "Next &gt;&gt;"
 msgstr "ถัดไป &gt;&gt;"
 
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:15
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1032
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1034
 #, fuzzy, c-format
 msgid "Next &raquo;"
 msgstr "รายการทรัพยากร &rsaquo;"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:235
 #, fuzzy, c-format
-msgid "Next available copy"
-msgstr "ที่สามารถยืมได้"
+msgid "Next available item"
+msgstr "มีตัวเล่มพร้อมให้บริการที่:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:31
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:45
@@ -8067,25 +8120,13 @@ msgstr "ไม่ใช่"
 msgid "No available items."
 msgstr "มีตัวเล่มพร้อมให้บริการที่:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:128
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1045
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:776
-#, fuzzy, c-format
-msgid "No copies available "
-msgstr "ไม่มีตัวเล่มหลงเหลืออยู่ "
-
-#: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:152
-#, c-format
-msgid "No copies available."
-msgstr "ไม่มีตัวเล่มหลงเหลืออยู่"
-
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:95
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:161
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:169
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:178
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:187
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:162
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:170
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:179
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:188
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:31
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:44
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:53
@@ -8139,6 +8180,18 @@ msgstr "ไม่มีการเพิ่มรายการใดๆ ล�
 msgid "No item was selected"
 msgstr "คุณไม่ได้เลือกรายการใดๆ"
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:135
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1045
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:776
+#, fuzzy, c-format
+msgid "No items available "
+msgstr "ไม่พบรายการใดๆ:"
+
+#: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:152
+#, fuzzy, c-format
+msgid "No items available."
+msgstr "ไม่พบรายการใดๆ:"
+
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:379
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:216
 #, c-format
@@ -8147,7 +8200,7 @@ msgstr "ไม่พบรายการใดๆ:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:66
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:68
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:140
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:144
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:177
 #, c-format
 msgid "No limit"
@@ -8169,7 +8222,7 @@ msgstr "ไม่มีรายการทางกายภาพสำหร
 msgid "No private lists"
 msgstr "ไม่มีรายการส่วนตัว"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:628
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:652
 #, fuzzy, c-format
 msgid "No private lists."
 msgstr "ไม่มีรายการส่วนตัว"
@@ -8179,7 +8232,7 @@ msgstr "ไม่มีรายการส่วนตัว"
 msgid "No public lists"
 msgstr "ไม่มีรายการสาธารณะ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:693
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:717
 #, fuzzy, c-format
 msgid "No public lists."
 msgstr "ไม่มีรายการสาธารณะ"
@@ -8203,6 +8256,12 @@ msgstr ""
 #, fuzzy, c-format
 msgid "No results found!"
 msgstr "ไม่พบข้อมูลของรายการที่ค้นหา"
+
+#. SCRIPT
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#, fuzzy
+msgid "No suggestion was selected"
+msgstr "คุณไม่ได้เลือกรายการใดๆ"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
@@ -8333,7 +8392,7 @@ msgstr "หมายเหตุ: แท็กของคุณมีมาร�
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:150
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1123
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1125
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:43
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:111
 #, c-format
@@ -8373,7 +8432,7 @@ msgstr "ไม่ใช่"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:569
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:990
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1056
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1058
 #, c-format
 msgid "Novelist Select"
 msgstr ""
@@ -8425,16 +8484,16 @@ msgstr ""
 msgid "October"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:235
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1141
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:874
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:244
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1143
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:875
 #, fuzzy, c-format
 msgid "On hold ("
 msgstr "จองอยู่"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:221
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1129
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:861
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:230
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1131
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:862
 #, fuzzy, c-format
 msgid "On order ("
 msgstr "อยู่ในขั้นตอนการสั่งซื้อจำนวน (%s) รายการ,"
@@ -8444,7 +8503,7 @@ msgstr "อยู่ในขั้นตอนการสั่งซื้อ
 msgid "Online Access: "
 msgstr "ทรัพยากรแบบออนไลน์: "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:394
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:407
 #, c-format
 msgid "Online Resources:"
 msgstr "ทรัพยากรแบบออนไลน์:"
@@ -8454,7 +8513,7 @@ msgstr "ทรัพยากรแบบออนไลน์:"
 msgid "Online resources:"
 msgstr "ทรัพยากรแบบออนไลน์:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:552
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:594
 #, fuzzy, c-format
 msgid "Online resources: "
 msgstr "ทรัพยากรแบบออนไลน์: "
@@ -8535,17 +8594,12 @@ msgstr ""
 msgid "Other"
 msgstr "อื่นๆ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:922
-#, fuzzy, c-format
-msgid "Other Title: "
-msgstr "นามสกุล: "
-
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:914
 #, fuzzy, c-format
 msgid "Other editions of this work"
 msgstr "ฉบับพิมพ์อื่นของชิ้นงานนี้"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:785
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:827
 #, fuzzy, c-format
 msgid "Other editions: "
 msgstr "ฉบับพิมพ์ "
@@ -8561,9 +8615,10 @@ msgstr "นามสกุล:"
 msgid "Other holdings ( %s )"
 msgstr "จำนวนที่จอง ( %s ) รายการ"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:922
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:928
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:437
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:442
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:469
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:474
 #, fuzzy, c-format
 msgid "Other title: "
 msgstr "นามสกุล: "
@@ -8586,10 +8641,11 @@ msgstr ""
 msgid "OverDrive search for '%s'"
 msgstr ""
 
+#. %1$s:  overdues_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:86
-#, c-format
-msgid "Overdue"
-msgstr "เกินกำหนด"
+#, fuzzy, c-format
+msgid "Overdue (%s)"
+msgstr "เกินกำหนด "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:348
 #, fuzzy, c-format
@@ -8602,7 +8658,7 @@ msgid "Oversiktsverker innenfor et emne"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:55
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:64
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:65
 #, c-format
 msgid "PR"
 msgstr ""
@@ -8629,7 +8685,7 @@ msgstr ""
 msgid "Parameters"
 msgstr "ข้อความที่เป็นชุดคำสั่ง"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:624
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:666
 #, c-format
 msgid "Partial contents:"
 msgstr ""
@@ -8663,7 +8719,7 @@ msgstr "รหัสผ่าน:"
 msgid "Patent document"
 msgstr "เอกสารสิทธิบัตร"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:408
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:440
 #, fuzzy, c-format
 msgid "Patent information: "
 msgstr "ข้อมูลติดต่อ "
@@ -8728,17 +8784,13 @@ msgstr "รายละเอียดทางกายภาพ:"
 msgid "Pick up library"
 msgstr "ห้องสมุดที่รับหนังสือ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:522
-#, fuzzy, c-format
-msgid "Pick up loaction:"
-msgstr "สถานที่รับหนังสือ"
-
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:477
 #, fuzzy, c-format
 msgid "Pick up location"
 msgstr "สถานที่รับหนังสือ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:522
 #, fuzzy, c-format
 msgid "Pick up location:"
 msgstr "สถานที่รับหนังสือ"
@@ -8748,8 +8800,8 @@ msgstr "สถานที่รับหนังสือ"
 msgid "Picture"
 msgstr "รูปภาพ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:91
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:81
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:94
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:83
 #, c-format
 msgid "Piece-Analytic Level"
 msgstr ""
@@ -8773,7 +8825,7 @@ msgstr "จองหนังสือ"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:9
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:86
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:90
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:471
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:474
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
@@ -8784,7 +8836,7 @@ msgstr "จองหนังสือ"
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:407
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:410
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, fuzzy, c-format
 msgid "Place hold"
 msgstr "จองหนังสือ"
@@ -8919,7 +8971,7 @@ msgstr "กรุณาสังเกตว่า: "
 msgid "Please try again with plain text. %sUnrecognized error. %s "
 msgstr "กรุณาลองอีกครั้งโดยใช้ข้อความอย่างเดียว "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:730
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:737
 #, c-format
 msgid "Please type this following characters into the preceding box: "
 msgstr ""
@@ -8991,7 +9043,7 @@ msgstr "ก่อนหน้า"
 
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:16
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1027
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1028
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
 #, c-format
 msgid "Previous"
@@ -9034,9 +9086,9 @@ msgstr "ลำดับผู้จอง:"
 msgid "Priority:"
 msgstr "ลำดับผู้จอง:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:527
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:529
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:731
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:551
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:553
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:755
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:78
 #, c-format
 msgid "Private"
@@ -9053,6 +9105,11 @@ msgstr "ไม่มีรายการส่วนตัว"
 msgid "Processing..."
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:109
+#, c-format
+msgid "Product"
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:317
 #, c-format
 msgid "Programmed texts"
@@ -9063,14 +9120,14 @@ msgstr "ข้อความที่เป็นชุดคำสั่ง"
 msgid "Programvare"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:294
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:307
 #, fuzzy, c-format
 msgid "Provenance note: "
 msgstr "กรุณาสังเกตว่า: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:532
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:534
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:733
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:556
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:558
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:757
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:80
 #, c-format
 msgid "Public"
@@ -9086,8 +9143,8 @@ msgstr "รายการสาธารณะ"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:65
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:67
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:569
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:571
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:593
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:595
 #, fuzzy, c-format
 msgid "Public lists"
 msgstr "รายการสาธารณะ"
@@ -9121,12 +9178,16 @@ msgstr "การพิมพ์/วันที่จดลิขสิทธ�
 msgid "Publication/Copyright date: Oldest to newest"
 msgstr "การพิมพ์/วันที่จดลิขสิทธิ์: รายการเก่ากว่าไปใหม่กว่า"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:162
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:319
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:353
 #, c-format
 msgid "Publication:"
+msgstr "การพิมพ์:"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:164
+#, fuzzy, c-format
+msgid "Publication: "
 msgstr "การพิมพ์:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:188
@@ -9170,8 +9231,8 @@ msgstr "สำนักพิมพ์:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:885
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:890
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:304
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:309
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:322
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:327
 #, fuzzy, c-format
 msgid "Publisher: "
 msgstr "สำนักพิมพ์: "
@@ -9339,7 +9400,7 @@ msgid "Remove field"
 msgstr "ฟิลด์ในรูปแบบรหัส"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 msgid "Remove from list"
 msgstr ""
 
@@ -9349,7 +9410,7 @@ msgid "Remove from this list"
 msgstr "ลบรายการนี้"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:477
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:501
 #, fuzzy
 msgid "Remove selected items"
 msgstr "เอารายการที่เลือกออก"
@@ -9392,48 +9453,48 @@ msgstr "เอารายการที่เลือกออก"
 msgid "RenewLoan"
 msgstr "ต่ออายุ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:421
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:453
 #, fuzzy, c-format
 msgid "Report number: "
 msgstr "หมายเลขบัตรสมาชิก: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:134
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:148
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:167
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:181
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:195
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:222
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:257
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:271
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:285
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:299
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:313
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:327
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:341
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:367
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:381
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:395
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:409
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:423
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:437
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:463
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:477
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:491
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:505
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:519
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:533
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:547
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:561
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:575
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:602
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:616
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:630
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:644
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:658
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:672
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:686
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:700
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:714
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:153
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:188
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:202
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:229
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:264
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:278
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:292
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:306
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:320
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:334
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:348
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:374
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:388
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:402
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:416
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:430
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:444
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:470
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:484
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:498
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:512
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:526
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:540
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:554
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:568
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:582
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:609
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:623
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:637
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:651
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:665
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:679
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:693
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:707
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:721
 #, fuzzy, c-format
 msgid "Required"
 msgstr "ได้รับการร้องขอ"
@@ -9530,7 +9591,7 @@ msgid ""
 "fine information, hold request information, loan information, and messages."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:758
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:800
 #, fuzzy, c-format
 msgid "Review: "
 msgstr "บทวิจารณ์ "
@@ -9571,7 +9632,7 @@ msgstr ""
 msgid "Røntgenbilde"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:54
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:55
 #, c-format
 msgid "SE"
 msgstr ""
@@ -9587,12 +9648,12 @@ msgid "SMS number:"
 msgstr "หมายเลข SMS: %S"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:42
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:50
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:51
 #, c-format
 msgid "ST"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:333
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:346
 #, fuzzy, c-format
 msgid "SUDOC serial history: "
 msgstr "ค้นหาด้วยคำว่า: "
@@ -9632,8 +9693,8 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:544
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:741
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:568
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:88
@@ -9691,13 +9752,13 @@ msgstr "สแกนดัชนีเพื่อค้นหา: %S "
 msgid "Scan index:"
 msgstr "สแกนดัชนี:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:759
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:801
 #, fuzzy, c-format
 msgid "Scope and content: "
 msgstr "เนื้อหาเพิ่มเติม "
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:552
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:90
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:91
 #, fuzzy, c-format
 msgid "Score"
 msgstr "ขออภัย"
@@ -9742,7 +9803,7 @@ msgstr "ค้นหาชื่อเรื่องนี้ใน:"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:313
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:187
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:50
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:87
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:89
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:347
 #, fuzzy
 msgid "Search for works by this author"
@@ -9795,7 +9856,7 @@ msgstr ""
 msgid "Searching OverDrive..."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:101
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:107
 #, c-format
 msgid "Secondary Author"
 msgstr ""
@@ -9830,25 +9891,25 @@ msgid "See also:"
 msgstr "เลือกหนึ่งรายการ"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "See biblio"
 msgstr "%s รายการบรรณานุกรม"
 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:94
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:98
 #, fuzzy, c-format
 msgid "See the most popular titles"
 msgstr "ดูชื่อเรื่องที่ได้รับความนิยมสูงสุด"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1032
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1034
 msgid ""
 "See: [% IF ( nextTitle ) %][% nextTitle |html %][% ELSE %]next biblio[% END "
 "%]"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1025
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1026
 msgid ""
 "See: [% IF ( previousTitle ) %][% previousTitle |html %][% ELSE %]previous "
 "biblio[% END %]"
@@ -9861,14 +9922,14 @@ msgstr "เลือกหนึ่งรายการ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:254
 #, fuzzy, c-format
-msgid "Select a specific copy:"
+msgid "Select a specific item:"
 msgstr "จองเฉพาะเล่มที่ต้องการ"
 
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:34
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:236
 #, fuzzy, c-format
 msgid "Select all"
@@ -9896,7 +9957,7 @@ msgstr "เอารายการที่เลือกออก"
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:38
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:316
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:233
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, fuzzy, c-format
 msgid "Select titles to: "
 msgstr "เอารายการที่เลือกออก "
@@ -9954,7 +10015,7 @@ msgstr "กำลังส่งไปยังกล่องรายการ
 msgid "Sep"
 msgstr "หัวเรื่อง"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:847
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:889
 #, fuzzy, c-format
 msgid "Separated from:"
 msgstr "ค้นหาด้วยคำว่า:"
@@ -9995,8 +10056,8 @@ msgstr "สิ่งพิมพ์ต่อเนื่อง"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:166
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:168
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:217
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:76
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:229
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:77
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:81
 #, c-format
 msgid "Series"
@@ -10023,8 +10084,8 @@ msgid "Series:"
 msgstr "ชุด:"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:180
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:168
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:175
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:186
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:193
 #, fuzzy, c-format
 msgid "Series: "
 msgstr "ชุด: "
@@ -10035,18 +10096,18 @@ msgid "Session lost"
 msgstr "ขาดการติดต่อกับระบบ"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:538
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:69
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:70
 #, fuzzy, c-format
 msgid "Set"
 msgstr "หัวเรื่อง"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:86
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:76
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:88
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:77
 #, c-format
 msgid "Set Level"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:277
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:295
 #, fuzzy, c-format
 msgid "Set: "
 msgstr "เพศ: "
@@ -10056,29 +10117,29 @@ msgstr "เพศ: "
 msgid "Settings updated"
 msgstr "ปรับปรุงการตั้งค่าเรียบร้อยแ้ล้ว"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1070
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
 #, fuzzy, c-format
 msgid "Share"
 msgstr "บันทึก"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
 #, fuzzy
 msgid "Share by email"
 msgstr "อีเมล:"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1075
 msgid "Share on Delicious"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1071
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
 msgid "Share on Facebook"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
 msgid "Share on LinkedIn"
 msgstr ""
 
@@ -10105,7 +10166,7 @@ msgstr "แสดงรายการทั้งหมด"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:223
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:389
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:253
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:271
 #, fuzzy, c-format
 msgid "Show analytics"
 msgstr "แสดงเฉพาะ"
@@ -10133,12 +10194,12 @@ msgid ""
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:5
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:96
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:100
 #, fuzzy, c-format
 msgid "Show the top "
 msgstr "แสดงที่ด้านบนสุด "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:270
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:288
 #, fuzzy, c-format
 msgid "Show volumes"
 msgstr "แสดงรายการเพิ่มเติม"
@@ -10288,7 +10349,7 @@ msgstr "ขออภัย! คุณไม่สามารถจองเก�
 msgid "Sorry, your session has timed out. Please log in again."
 msgstr "ขออภัย! เซสชันของคุณหมดเวลาแล้ว กรุณาล็อกอินอีกครั้ง"
 
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:63
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:65
 #, fuzzy, c-format
 msgid "Sort By: "
 msgstr "เรียงลำดับตาม: "
@@ -10303,8 +10364,8 @@ msgstr "เรียงลำดับตาม:"
 msgid "Sort by: "
 msgstr "เรียงลำดับตาม: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:498
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:720
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:522
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:744
 #, fuzzy, c-format
 msgid "Sort this list by: "
 msgstr "เรียงลำดับรายการนี้ตาม: "
@@ -10315,7 +10376,7 @@ msgid "Sorting: "
 msgstr "งานพิมพ์ขนาดใหญ่ "
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:553
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:89
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:90
 #, fuzzy, c-format
 msgid "Sound"
 msgstr "ส่งข้อมูล"
@@ -10349,7 +10410,7 @@ msgstr "สิ่งพิมพ์ต่อเนื่อง"
 msgid "Spill"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:902
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:945
 #, c-format
 msgid "Split into .. and ...:"
 msgstr ""
@@ -10395,7 +10456,7 @@ msgstr "สถิติ"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:481
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:788
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1122
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:152
 #, c-format
 msgid "Status"
@@ -10458,49 +10519,49 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:156
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:158
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:379
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:392
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:79
 #, c-format
 msgid "Subject"
 msgstr "หัวเรื่อง"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:359
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:372
 #, fuzzy, c-format
 msgid "Subject - Author/Title"
 msgstr "เสนอแนะสำหรับ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:349
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:362
 #, c-format
 msgid "Subject - Corporate Author"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:354
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:367
 #, fuzzy, c-format
 msgid "Subject - Family"
 msgstr "เสนอแนะสำหรับ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:374
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:387
 #, fuzzy, c-format
 msgid "Subject - Form"
 msgstr "เสนอแนะสำหรับ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:369
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:382
 #, fuzzy, c-format
 msgid "Subject - Geographical Name"
 msgstr "เสนอแนะสำหรับ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:344
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:357
 #, fuzzy, c-format
 msgid "Subject - Personal Name"
 msgstr "วลีของหัวเรื่อง"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:364
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:377
 #, fuzzy, c-format
 msgid "Subject - Topical Name"
 msgstr "เสนอแนะสำหรับ"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:384
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:397
 #, fuzzy, c-format
 msgid "Subject Category"
 msgstr "คลาวด์หัวเรื่อง (Subject Cloud)"
@@ -10528,12 +10589,12 @@ msgstr "หัวเรื่อง"
 msgid "Subject(s):"
 msgstr "หัวเรื่อง:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:505
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:545
 #, fuzzy, c-format
 msgid "Subject(s): "
 msgstr "หัวเรื่อง: "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:757
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:799
 #, fuzzy, c-format
 msgid "Subject: "
 msgstr "หัวเรื่อง "
@@ -10548,12 +10609,12 @@ msgstr "หัวเรื่อง "
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:73
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:151
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:79
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:185
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:289
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:69
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:746
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:753
 #, c-format
 msgid "Submit"
 msgstr "ส่งข้อมูล"
@@ -10571,7 +10632,7 @@ msgid "Submit changes"
 msgstr "บันทึกความเปลี่ยนแปลง"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:740
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:747
 #, fuzzy
 msgid "Submit update request"
 msgstr "ส่งข้อเสนอแนะของคุณ"
@@ -10588,11 +10649,11 @@ msgid "Subscribe to a subscription alert"
 msgstr "ดำเนินการสมัครสมาชิก"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:140
 msgid "Subscribe to email notification on new issues"
 msgstr "บอกรับอีเมลแจ้งเตือนเมื่อมีฉบับใหม่"
 
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:140
 #, fuzzy, c-format
 msgid "Subscribe to email notification on new issues "
 msgstr "บอกรับอีเมลแจ้งเตือนเมื่อมีฉบับใหม่ "
@@ -10661,7 +10722,7 @@ msgid "Summary"
 msgstr "บทสรุป"
 
 # เรื่องย่อ หรือ บทสรุป หรือ คำอื่น??
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:762
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:804
 #, fuzzy, c-format
 msgid "Summary: "
 msgstr "บทสรุป "
@@ -10677,22 +10738,22 @@ msgstr "ส่งข้อมูล"
 msgid "Sunday"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:890
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:933
 #, fuzzy, c-format
 msgid "Superseded by:"
 msgstr "เสนอแนะโดย:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:893
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:936
 #, c-format
 msgid "Superseded in part by:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:835
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:877
 #, c-format
 msgid "Supersedes in part:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:832
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:874
 #, fuzzy, c-format
 msgid "Supersedes:"
 msgstr "ชุด:"
@@ -11156,7 +11217,7 @@ msgstr ""
 msgid "Theses"
 msgstr "วิทยานิพนธ์"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:313
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:326
 #, fuzzy, c-format
 msgid "Thesis: "
 msgstr "วิทยานิพนธ์ "
@@ -11236,7 +11297,7 @@ msgid "This item is on hold for another patron. %s "
 msgstr "<em>ข้อความ 9:</em> รายการนี้จองไว้สำหรับผู้ใช้คนอื่น "
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:465
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:489
 #, fuzzy, c-format
 msgid ""
 "This list is empty. %s You can add to your lists from the results of any "
@@ -11245,8 +11306,8 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:540
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:543
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1086
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1090
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1088
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1092
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -11277,7 +11338,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:371
 msgid ""
 "This title consists of multiple volumes/parts. Please indicate which part "
-"you need. Clicking on specific copy information may be helpful."
+"you need. Clicking on specific item information may be helpful."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:157
@@ -11332,9 +11393,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:193
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:195
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:501
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:503
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:722
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:525
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:527
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:746
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
 #, c-format
 msgid "Title"
@@ -11363,7 +11424,7 @@ msgid "Title phrase"
 msgstr "วลีของชื่อเรื่อง"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:939
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:458
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:492
 #, fuzzy, c-format
 msgid "Title translated: "
 msgstr "วลีของชื่อเรื่อง "
@@ -11415,12 +11476,12 @@ msgstr "%s <a1>ระดับบนสุด</a>"
 msgid "Total due"
 msgstr "จำนวนทั้งหมดที่เกินกำหนด"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:389
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:402
 #, c-format
 msgid "Trademark"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:81
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:82
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:71
 #, fuzzy, c-format
 msgid "Translation of"
@@ -11479,13 +11540,13 @@ msgstr "กำหนดส่ง"
 msgid "Tuesday"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1078
 #, c-format
 msgid "Tweet"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:655
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:611
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:679
 #, c-format
 msgid "Type"
 msgstr "ชนิด"
@@ -11509,7 +11570,7 @@ msgid "Type:"
 msgstr "ชนิด"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:536
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:155
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:173
 #, fuzzy, c-format
 msgid "Type: "
 msgstr "ชนิด "
@@ -11586,12 +11647,12 @@ msgstr "ชื่อเรื่องรวม"
 msgid "Unified title: %s "
 msgstr "ชื่อเรื่องรวม "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:121
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:131
 #, c-format
 msgid "Uniform Conventional Heading"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:116
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:125
 #, fuzzy, c-format
 msgid "Uniform Title"
 msgstr "ชื่อเรื่องแบบฉบับ"
@@ -11601,8 +11662,8 @@ msgstr "ชื่อเรื่องแบบฉบับ"
 msgid "Uniform titles:"
 msgstr "ชื่อเรื่องแบบฉบับ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:478
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:483
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:515
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:521
 #, fuzzy, c-format
 msgid "Uniform titles: "
 msgstr "ชื่อเรื่องแบบฉบับ "
@@ -11697,12 +11758,12 @@ msgid "VHS tape / Videocassette"
 msgstr "เทป VHS / เทปวิดีทัศน์"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:53
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:62
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:63
 #, c-format
 msgid "VM"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:725
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:732
 #, fuzzy, c-format
 msgid "Verification:"
 msgstr "นวนิยาย"
@@ -11769,7 +11830,7 @@ msgstr "ดูที่เว็บไซต์ Amazon.com"
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:76
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:86
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:88
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:326
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:329
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:331
@@ -11797,7 +11858,7 @@ msgstr ""
 msgid "Visual Material"
 msgstr "ทัศนวัสดุ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:87
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:88
 #, fuzzy, c-format
 msgid "Visual material"
 msgstr "ทัศนวัสดุ"
@@ -11821,20 +11882,25 @@ msgid "Voksne;"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:267
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1119
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
 #, fuzzy, c-format
 msgid "Vol info"
 msgstr "ข้อมูลเกี่ยวกับตัวเล่ม"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:260
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:278
 #, c-format
 msgid "Volumes: "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:332
 #, c-format
 msgid "Waiting"
+msgstr "กำลังรอ"
+
+#. %1$s:  waiting_count 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
+#, fuzzy, c-format
+msgid "Waiting (%s)"
 msgstr "กำลังรอ"
 
 #. SCRIPT
@@ -11858,7 +11924,7 @@ msgid "We"
 msgstr ""
 
 #. %1$s:  total 
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:46
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:48
 #, c-format
 msgid "We have %s results for your search "
 msgstr ""
@@ -11923,14 +11989,14 @@ msgstr "เอารายการที่เลือกออก "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:316
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:785
 #, fuzzy
 msgid "With selected titles: "
 msgstr "เอารายการที่เลือกออก "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:200
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1111
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:840
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:209
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1113
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:841
 #, fuzzy, c-format
 msgid "Withdrawn ("
 msgstr "ถอนออกจำนวน (%s) รายการ,"
@@ -11953,9 +12019,9 @@ msgid "Written on %s by %s"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:244
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:511
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:513
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:724
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:535
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:537
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
 #, fuzzy, c-format
 msgid "Year"
 msgstr "ปี :"
@@ -12130,7 +12196,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
@@ -12306,8 +12372,8 @@ msgstr "ความคิดเห็นของคุณ"
 msgid "Your privacy rules have been updated."
 msgstr "รหัสผ่านของคุณได้รับการเปลี่ยนแปลงเรียบร้อยแล้ว"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:563
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:565
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:589
 #, fuzzy, c-format
 msgid "Your private lists"
 msgstr "ไม่มีรายการส่วนตัว"
@@ -12391,7 +12457,7 @@ msgid "[% biblionumber |url %]"
 msgstr ""
 
 #. INPUT type=text name=borrower_dateofbirth
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:161
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:166
 msgid "[% borrower.dateofbirth | $KohaDates %]"
 msgstr ""
 
@@ -12434,7 +12500,7 @@ msgid "[% review.biblionumber |url %]"
 msgstr ""
 
 #. INPUT type=text name=shelfname
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:496
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:520
 msgid "[% shelfname |html %]"
 msgstr ""
 
@@ -12472,9 +12538,10 @@ msgstr "[ตัวเลือกมากกว่า]"
 msgid "[New search]"
 msgstr "[ค้นหาใหม่]"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:401
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:568
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:605
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:114
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:414
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:610
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:647
 #, c-format
 msgid "_blank"
 msgstr ""
@@ -12484,15 +12551,17 @@ msgstr ""
 msgid "a an the"
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:246
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:533
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:583
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:214
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:225
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:699
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:789
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:808
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:852
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:914
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:412
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:232
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:243
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:741
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:831
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:850
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:895
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:957
 #, fuzzy, c-format
 msgid "a_t"
 msgstr "ที่"
@@ -12503,45 +12572,45 @@ msgstr "ที่"
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:931
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:371
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:766
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:341
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:353
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:367
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:380
 #, c-format
 msgid "ab"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:447
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:136
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:154
 #, c-format
 msgid "abc"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:600
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:642
 #, fuzzy, c-format
 msgid "abcd"
 msgstr "บาร์โค้ด"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:660
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:702
 #, c-format
 msgid "abcdefgijklnou"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:514
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:528
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:555
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:569
 #, c-format
 msgid "abcdfgklmnopqrstvxyz"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:278
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:280
 #, c-format
 msgid "abcdfijkmnpvxyz"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:747
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:789
 #, fuzzy, c-format
 msgid "abcdgo"
 msgstr "บาร์โค้ด"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:265
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:278
 #, c-format
 msgid "abcdjpvxyz"
 msgstr ""
@@ -12553,24 +12622,30 @@ msgid "abcdvxyz"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:318
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:366
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:378
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:394
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:407
 #, c-format
 msgid "abceg"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:883
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:302
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:320
 #, c-format
 msgid "abcg"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:463
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:498
 #, fuzzy, c-format
 msgid "abchnp"
 msgstr "บาร์โค้ด"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:766
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1189
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1042
+#, c-format
+msgid "abcq"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:808
 #, c-format
 msgid "abcu"
 msgstr ""
@@ -12581,13 +12656,13 @@ msgid "abh"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:400
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:100
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:118
 #, c-format
 msgid "abhfgknps"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:356
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:435
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:467
 #, c-format
 msgid "abhfgnp"
 msgstr ""
@@ -12608,20 +12683,20 @@ msgstr "บทคัดย่อ/บทสรุป "
 msgid "account, %s please "
 msgstr "Content Cafe "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:411
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:443
 #, fuzzy, c-format
 msgid "acdef"
 msgstr "บาร์โค้ด"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:122
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:462
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1215
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1031
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:475
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1216
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1074
 #, fuzzy, c-format
 msgid "acdeq"
 msgstr "บาร์โค้ด"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:476
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:513
 #, c-format
 msgid "adfklmor"
 msgstr ""
@@ -12686,9 +12761,7 @@ msgid "aperture card "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:94
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:434
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1187
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:998
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:447
 #, c-format
 msgid "aq"
 msgstr ""
@@ -12709,12 +12782,6 @@ msgstr "การผลิตซ้ำโดยใช้กลไกการส
 msgid "article"
 msgstr "บทความกฎหมาย"
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:246
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:412
-#, fuzzy, c-format
-msgid "at"
-msgstr "หัวเรื่อง"
-
 #. %1$s:  WAITIN.branch 
 #. %2$s:  ELSE 
 #. %3$s:  WAITIN.holdingbranch 
@@ -12730,12 +12797,12 @@ msgstr "นำส่งจาก %s ไปยัง %s "
 msgid "atlas "
 msgstr "แท็ก "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:640
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:682
 #, fuzzy, c-format
 msgid "atru"
 msgstr "สถานะ"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:137
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:155
 #, c-format
 msgid "au"
 msgstr ""
@@ -12747,9 +12814,9 @@ msgstr "อัตชีวประวัติ"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:186
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:200
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:166
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:182
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:197
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:184
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:200
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:215
 #, fuzzy, c-format
 msgid "av"
 msgstr "บันทึก"
@@ -12771,7 +12838,7 @@ msgid "available online "
 msgstr "ที่สามารถยืมได้ "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "average rating: "
 msgstr "รายการของคุณ "
@@ -12783,16 +12850,14 @@ msgstr "รายการของคุณ "
 msgid "average rating: %s (%s votes)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:776
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:818
 #, c-format
 msgid "az"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:131
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:470
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1224
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:888
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1039
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:483
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:889
 #, c-format
 msgid "bc"
 msgstr ""
@@ -12870,16 +12935,16 @@ msgstr "กระดาษบริสตอล"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:61
 #, fuzzy
 msgid "by"
 msgstr "โดย %s"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:452
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:144
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:162
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:97
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:86
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:88
 #, fuzzy, c-format
 msgid "by "
 msgstr "โดย %s "
@@ -12925,9 +12990,9 @@ msgid "catalogue"
 msgstr "บัญชีรายชื่อ"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:115
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:455
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1208
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1024
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:468
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1209
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1067
 #, c-format
 msgid "cdn"
 msgstr ""
@@ -12938,7 +13003,7 @@ msgid "celestial globe"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:907
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:328
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:352
 #, fuzzy, c-format
 msgid "cg"
 msgstr "แท็ก:"
@@ -12983,6 +13048,11 @@ msgstr "คลิกที่นี่หากดำเนินการเส
 #, c-format
 msgid "coats of arms"
 msgstr "ตราประจำตระกูล"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:102
+#, fuzzy, c-format
+msgid "coauthor"
+msgstr "ผู้แต่ง"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:179
 #, c-format
@@ -13041,6 +13111,21 @@ msgstr "มี"
 #, fuzzy, c-format
 msgid "contains biographical data"
 msgstr "มีข้อมูลบรรณานุกรม"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:114
+#, c-format
+msgid "corporate_coauthor"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:96
+#, c-format
+msgid "corporate_main_author"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:120
+#, c-format
+msgid "corporate_secondary_author"
+msgstr ""
 
 #. SPAN
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:79
@@ -13188,6 +13273,11 @@ msgstr "ภาพวาด"
 msgid "earth moon globe"
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:186
+#, fuzzy, c-format
+msgid "edition"
+msgstr "ฉบับพิมพ์"
+
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:96
 #, fuzzy, c-format
 msgid "electronic "
@@ -13247,16 +13337,16 @@ msgstr "Feschrift Ind. "
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:602
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:609
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:482
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:489
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1051
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1058
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:495
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:502
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1083
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1090
 #, c-format
 msgid "fghkdlmor"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:427
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:125
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:143
 #, c-format
 msgid "fgknps"
 msgstr ""
@@ -13393,8 +13483,8 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:540
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:543
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1087
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1092
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1089
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1094
 #, fuzzy, c-format
 msgid "here"
 msgstr "อื่นๆ"
@@ -13403,6 +13493,11 @@ msgstr "อื่นๆ"
 #, fuzzy, c-format
 msgid "history "
 msgstr "สมุดรายนาม "
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:108
+#, c-format
+msgid "http://schema.org/"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:719
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:759
@@ -13415,7 +13510,7 @@ msgstr "ตลกขบขัน, เสียดสี "
 msgid "humour, satire"
 msgstr "ตลกขบขัน, เสียดสี"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:447
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:480
 #, c-format
 msgid "iabhfgnp"
 msgstr ""
@@ -13435,7 +13530,7 @@ msgstr ""
 msgid "id_type"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:279
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:281
 #, c-format
 msgid "ijknpxyz"
 msgstr ""
@@ -13631,7 +13726,7 @@ msgstr "รอ"
 msgid "items. "
 msgstr "ชื่อเรื่อง "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:266
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:279
 #, c-format
 msgid "jpxyz"
 msgstr ""
@@ -13763,6 +13858,11 @@ msgstr ""
 msgid "magneto-optical disc "
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:90
+#, fuzzy, c-format
+msgid "main_author"
+msgstr "ผู้แต่ง"
+
 #. IMG
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:550
 #, fuzzy
@@ -13779,12 +13879,12 @@ msgstr "แผนที่ "
 msgid "maps"
 msgstr "แผนที่"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, fuzzy, c-format
 msgid "materialTypeLabel"
 msgstr "ชนิดของสิ่งพิมพ์ต่อเนื่อง"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:156
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
 #, fuzzy, c-format
 msgid "materialtype"
 msgstr "ชนิดของสิ่งพิมพ์ต่อเนื่อง"
@@ -13976,52 +14076,52 @@ msgstr "ตารางตัวเลข "
 msgid "numeric table"
 msgstr "ตารางตัวเลข"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:137
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:148
 #, c-format
 msgid "of accompanying material, "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:133
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:144
 #, fuzzy, c-format
 msgid "of contents page, "
 msgstr "Content Cafe "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:130
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:141
 #, fuzzy, c-format
 msgid "of intermediate text, "
 msgstr "ไม่ใช่บทประพันธ์ "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:136
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:147
 #, c-format
 msgid "of libretto, "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:131
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:142
 #, c-format
 msgid "of original work, "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:138
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:149
 #, fuzzy, c-format
 msgid "of subtitles, "
 msgstr "ไม่มีชื่อเรื่อง "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:132
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:143
 #, fuzzy, c-format
 msgid "of summary, "
 msgstr "บทสรุปของฉัน "
 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:139
 #, fuzzy, c-format
 msgid "of the last:"
 msgstr "รายการที่ได้รับล่าสุด:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:134
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:145
 #, fuzzy, c-format
 msgid "of title page, "
 msgstr "ไม่มีชื่อเรื่อง "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:135
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:146
 #, fuzzy, c-format
 msgid "of title proper, "
 msgstr "ไม่มีชื่อเรื่อง "
@@ -14051,6 +14151,12 @@ msgstr "หรือ"
 #, fuzzy, c-format
 msgid "or "
 msgstr "หรือ "
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:83
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:72
+#, c-format
+msgid "original_title"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:110
 #, c-format
@@ -14178,6 +14284,12 @@ msgstr "รูปภาพ"
 msgid "picture "
 msgstr "รูปภาพ "
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:95
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:84
+#, c-format
+msgid "piece_analytic_level"
+msgstr ""
+
 #. IMG
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:202
 msgid "planetary or lunar globe"
@@ -14272,6 +14384,11 @@ msgstr "รายการแนะนำการสั่งซื้อให
 msgid "realia "
 msgstr "สม่ำเสมอ "
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:107
+#, fuzzy, c-format
+msgid "record"
+msgstr "%s ระเบียน"
+
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:69
 #, c-format
 msgid "reformatted digital "
@@ -14353,38 +14470,34 @@ msgstr "ผลการค้น"
 msgid "results in the library's OverDrive collection."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:884
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:921
-#, fuzzy, c-format
-msgid "results_summary"
-msgstr "เนื้อหาโดยสังเขป"
-
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:367
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:395
 #, fuzzy, c-format
 msgid "results_summary description"
 msgstr "เนื้อหาโดยสังเขป"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:342
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:368
 #, fuzzy, c-format
 msgid "results_summary edition"
 msgstr "เนื้อหาโดยสังเขป"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:436
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:921
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:468
 #, fuzzy, c-format
 msgid "results_summary other_title"
 msgstr "เนื้อหาโดยสังเขป"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:303
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:884
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:321
 #, fuzzy, c-format
 msgid "results_summary publisher"
 msgstr "เนื้อหาโดยสังเขป"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:167
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:185
 #, fuzzy, c-format
 msgid "results_summary series"
 msgstr "เนื้อหาโดยสังเขป"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:477
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:514
 #, fuzzy, c-format
 msgid "results_summary uniform_title"
 msgstr "เนื้อหาโดยสังเขป"
@@ -14432,15 +14545,20 @@ msgstr ""
 msgid "score"
 msgstr "ศิลาจารึก/แท่นหิน"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:169
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:187
 #, c-format
 msgid "se"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:468
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:492
 #, fuzzy, c-format
 msgid "search"
 msgstr "ค้นหา"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:108
+#, fuzzy, c-format
+msgid "secondary_author"
+msgstr "อีเมล:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:230
 #, fuzzy, c-format
@@ -14458,10 +14576,21 @@ msgstr "เลือกหนึ่งรายการ"
 msgid "serial"
 msgstr "สิ่งพิมพ์ต่อเนื่อง"
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:230
+#, fuzzy, c-format
+msgid "series"
+msgstr "ชุด "
+
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:574
 #, fuzzy, c-format
 msgid "series "
 msgstr "ชุด "
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:89
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:78
+#, c-format
+msgid "set_level"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:43
 #, c-format
@@ -14780,8 +14909,8 @@ msgstr "วิทยานิพนธ์ "
 msgid "title"
 msgstr "title"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:633
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:645
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:657
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:669
 #, fuzzy, c-format
 msgid "to create new lists."
 msgstr "<a1>ล็อกอิน</a> เพื่อสร้างรายการข้อมูลใหม่"
@@ -14829,7 +14958,7 @@ msgstr "สนธิสัญญา"
 msgid "treaty "
 msgstr "สนธิสัญญา "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:635
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:677
 #, c-format
 msgid "tru"
 msgstr ""
@@ -14838,6 +14967,16 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:42
 msgid "unAPI"
 msgstr "unAPI"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:132
+#, c-format
+msgid "uniform_conventional_heading"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:126
+#, fuzzy, c-format
+msgid "uniform_title"
+msgstr "ชื่อเรื่องแบบฉบับ"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:14
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:170
@@ -14856,7 +14995,7 @@ msgstr "เยาวชน "
 msgid "up to "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1120
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1122
 #, c-format
 msgid "url"
 msgstr ""
@@ -14940,13 +15079,13 @@ msgid "visual projection"
 msgstr "การฉายภาพเสมือนจริง (Visual Projection)"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "votes"
 msgstr "หมายเหตุ"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:418
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:529
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:570
 #, c-format
 msgid "vxyz"
 msgstr ""
@@ -14997,7 +15136,7 @@ msgid "wire recording "
 msgstr "เครื่องบันทึกภาพ "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 msgid "with biblionumber"
 msgstr ""
 
@@ -15007,11 +15146,11 @@ msgid "wood"
 msgstr "ไม้"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:446
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:112
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:406
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:119
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:419
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:972
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1007
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:576
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:618
 #, c-format
 msgid "y3z"
 msgstr ""
@@ -15063,7 +15202,7 @@ msgid "your purchase suggestions"
 msgstr "ข้อเสนอแนะการสั่งซื้อของฉัน"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy
 msgid "your rating: "
 msgstr "รายการของคุณ "
@@ -15117,9 +15256,25 @@ msgid ""
 "‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value %]"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:130
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:153
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:183
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:131
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:155
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:185
 #, fuzzy, c-format
 msgid "• "
 msgstr "• "
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy
