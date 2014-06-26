@@ -2359,4 +2359,33 @@ a.reviewlink:visited {
     }
 }
 
+.contents {
+    width: 75%;
+}
+
+
+.contentblock {
+    font-size : 95%;
+    line-height: 135%;
+    position: relative;
+    margin-left: 2em;
+}
+
+.contents {
+    .t:first-child:before {
+        content: "→ ";
+    }
+    .t:before {
+        content: "\A → ";
+        white-space: pre;
+    }
+    .t {
+        font-weight: bold;
+        display: inline;
+    }
+    .r {
+        display: inline;
+    }
+}
+
 @import "responsive.less";
