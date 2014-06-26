@@ -25,12 +25,13 @@ use CGI;
 use List::Util qw/min/;
 use Number::Format qw(format_price);
 
+use Koha::Database;
 use C4::Auth qw/get_user_subpermissions/;
 use C4::Branch; # GetBranches
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Auth;
 use C4::Acquisition;
-use C4::Budgets;   #
+use C4::Budgets;
 use C4::Members;  # calls GetSortDetails()
 use C4::Context;
 use C4::Output;
@@ -68,14 +69,17 @@ if (not defined $template->{VARS}->{'CAN_user_acquisition_budget_add_del'}
 }
 my $num=FormatNumber;
 
-my $budget_hash               = $input->Vars;
-my $budget_id                 = $$budget_hash{budget_id};
+# get only the columns of aqbudgets in budget_hash
+my @columns = Koha::Database->new()->schema->source('Aqbudget')->columns;
+my $budget_hash = { map { join(' ',@columns) =~ /$_/ ? ( $_ => $input->param($_) )  : () } keys($input->Vars) } ;
+
+my $budget_id                 = $input->param('budget_id');
 my $budget_period_id          = $input->param('budget_period_id');
 my $budget_permission         = $input->param('budget_permission');
+my $budget_users_ids          = $input->param('budget_users_ids');
 my $filter_budgetbranch       = $input->param('filter_budgetbranch') // '';
 my $filter_budgetname         = $input->param('filter_budgetname');
-#filtering non budget keys
-delete $$budget_hash{$_} foreach grep {/filter|^op$|show/} keys %$budget_hash;
+
 
 # ' ------- get periods stuff ------------------'
 # IF PERIODID IS DEFINED,  GET THE PERIOD - ELSE JUST GET THE ACTIVE PERIOD BY DEFAULT
@@ -234,11 +238,11 @@ if ($op eq 'add_form') {
     $op = 'list';
 } elsif( $op eq 'add_validate' ) {
     my @budgetusersid;
-    if (defined $$budget_hash{'budget_users_ids'}){
-        @budgetusersid = split(':', $budget_hash->{'budget_users_ids'});
+    if (defined $budget_users_ids){
+        @budgetusersid = split(':', $budget_users_ids);
     }
 
-    if ( defined $$budget_hash{budget_id} ) {
+    if (defined $budget_id) {
         if (CanUserModifyBudget($borrowernumber, $budget_hash->{budget_id},
             $staffflags)
         ) {

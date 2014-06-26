@@ -171,17 +171,15 @@ $dt_today1->add_duration($dur5);
 my $daysago5 = output_pref({ dt => $dt_today1, dateformat => 'iso', timeformat => '24hr', dateonly => 1 });
 
 my $budgetperiod = C4::Budgets::AddBudgetPeriod({
-    budget_period_startdate => $daysago5,
-    budget_period_enddate   => $today,
-    budget_description      => "budget desc"
+    budget_period_startdate   => $daysago5,
+    budget_period_enddate     => $today,
+    budget_period_description => "budget desc"
 });
 my $id_budget = AddBudget({
     budget_code        => "CODE",
     budget_amount      => "123.132",
     budget_name        => "Budgetname",
     budget_notes       => "This is a note",
-    budget_description => "BudgetDescription",
-    budget_active      => 1,
     budget_period_id   => $budgetperiod
 });
 my $bib = MARC::Record->new();

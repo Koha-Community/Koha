@@ -20,10 +20,8 @@ package C4::Budgets;
 use strict;
 #use warnings; FIXME - Bug 2505
 use C4::Context;
-use C4::Dates qw(format_date format_date_in_iso);
-use C4::SQLHelper qw<:all>;
+use Koha::Database;
 use C4::Debug;
-
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
@@ -137,7 +135,10 @@ sub CheckBudgetParentPerm {
 
 sub AddBudgetPeriod {
     my ($budgetperiod) = @_;
-	return InsertInTable("aqbudgetperiods",$budgetperiod);
+    return unless($budgetperiod->{budget_period_startdate} && $budgetperiod->{budget_period_enddate});
+
+    my $resultset = Koha::Database->new()->schema->resultset('Aqbudgetperiod');
+    return $resultset->create($budgetperiod)->id;
 }
 # -------------------------------------------------------------------
 sub GetPeriodsCount {
@@ -403,7 +404,11 @@ sub GetBudgetAuthCats  {
 # -------------------------------------------------------------------
 sub GetBudgetPeriods {
 	my ($filters,$orderby) = @_;
-    return SearchInTable("aqbudgetperiods",$filters, $orderby, undef,undef, undef, "wide");
+
+    my $rs = Koha::Database->new()->schema->resultset('Aqbudgetperiod');
+    $rs = $rs->search( $filters, { order_by => $orderby } );
+    $rs->result_class('DBIx::Class::ResultClass::HashRefInflator');
+    return [ $rs->all ];
 }
 # -------------------------------------------------------------------
 sub GetBudgetPeriod {
@@ -450,8 +455,12 @@ sub DelBudgetPeriod{
 
 # -------------------------------------------------------------------
 sub ModBudgetPeriod {
-	my ($budget_period_information) = @_;
-	return UpdateInTable("aqbudgetperiods",$budget_period_information);
+    my ($budget_period) = @_;
+    my $result = Koha::Database->new()->schema->resultset('Aqbudgetperiod')->find($budget_period);
+    return unless($result);
+
+    $result = $result->update($budget_period);
+    return $result->in_storage;
 }
 
 # -------------------------------------------------------------------
@@ -570,13 +579,20 @@ sub GetBudgetHierarchy {
 
 sub AddBudget {
     my ($budget) = @_;
-	return InsertInTable("aqbudgets",$budget);
+    return unless ($budget);
+
+    my $resultset = Koha::Database->new()->schema->resultset('Aqbudget');
+    return $resultset->create($budget)->id;
 }
 
 # -------------------------------------------------------------------
 sub ModBudget {
     my ($budget) = @_;
-	return UpdateInTable("aqbudgets",$budget);
+    my $result = Koha::Database->new()->schema->resultset('Aqbudget')->find($budget);
+    return unless($result);
+
+    $result = $result->update($budget);
+    return $result->in_storage;
 }
 
 # -------------------------------------------------------------------
@@ -719,9 +735,13 @@ gets all budgets
 
 # -------------------------------------------------------------------
 sub GetBudgets {
-    my $filters = shift;
-    my $orderby = shift || 'budget_name';
-    return SearchInTable("aqbudgets",$filters, $orderby, undef,undef, undef, "wide");
+    my ($filters, $orderby) = @_;
+    $orderby = 'budget_name' unless($orderby);
+
+    my $rs = Koha::Database->new()->schema->resultset('Aqbudget');
+    $rs = $rs->search( $filters, { order_by => $orderby } );
+    $rs->result_class('DBIx::Class::ResultClass::HashRefInflator');
+    return [ $rs->all  ];
 }
 
 =head2 GetBudgetUsers

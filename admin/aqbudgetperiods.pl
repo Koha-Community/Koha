@@ -50,7 +50,8 @@ use strict;
 use Number::Format qw(format_price);
 use CGI;
 use List::Util qw/min/;
-use C4::Dates qw/format_date format_date_in_iso/;
+use Koha::DateUtils;
+use Koha::Database;
 use C4::Koha;
 use C4::Context;
 use C4::Auth;
@@ -58,7 +59,6 @@ use C4::Output;
 use C4::Acquisition;
 use C4::Budgets;
 use C4::Debug;
-use C4::SQLHelper;
 
 my $dbh = C4::Context->dbh;
 
@@ -67,10 +67,14 @@ my $input       = new CGI;
 my $searchfield          = $input->param('searchfield');
 my $budget_period_id     = $input->param('budget_period_id');
 my $op                   = $input->param('op')||"else";
-
-my $budget_period_hashref= $input->Vars;
 #my $sort1_authcat = $input->param('sort1_authcat');
 #my $sort2_authcat = $input->param('sort2_authcat');
+
+# get only the columns of aqbudgetperiods in budget_period_hashref
+my @columns = Koha::Database->new()->schema->source('Aqbudgetperiod')->columns;
+my $budget_period_hashref = { map { join(' ',@columns) =~ /$_/ ? ( $_ => $input->param($_) )  : () } keys($input->Vars) } ;
+$budget_period_hashref->{budget_period_startdate} = dt_from_string( $input->param('budget_period_startdate') );
+$budget_period_hashref->{budget_period_enddate}   = dt_from_string( $input->param('budget_period_enddate') );
 
 my $activepagesize = 20;
 my $inactivepagesize = 20;
@@ -136,9 +140,9 @@ if ( $op eq 'add_form' ) {
 }
 
 elsif ( $op eq 'add_validate' ) {
-## add or modify a budget period (confirmation)
+## add or modify a budget period (confirimation)
 
-	## update budget period data
+    ## update budget period data
 	if ( $budget_period_id ne '' ) {
 		$$budget_period_hashref{$_}||=0 for qw(budget_period_active budget_period_locked);
 		my $status=ModBudgetPeriod($budget_period_hashref);
@@ -182,15 +186,12 @@ elsif ( $op eq 'duplicate_form'){
 # handle the actual duplication
 elsif ( $op eq 'duplicate_budget' ){
     die "please specify a budget period id\n" if( !defined $budget_period_id || $budget_period_id eq '' );
-    my $startdate = $input->param('budget_period_startdate');
-    my $enddate = $input->param('budget_period_enddate');
 
     my $data = GetBudgetPeriod( $budget_period_id);
-
-    $data->{'budget_period_startdate'} = $startdate;
-    $data->{'budget_period_enddate'} = $enddate;
+    $data->{'budget_period_startdate'} = $budget_period_hashref->{budget_period_startdate};
+    $data->{'budget_period_enddate'} = $budget_period_hashref->{budget_period_enddate};
     delete $data->{'budget_period_id'};
-    my $new_budget_period_id = C4::SQLHelper::InsertInTable('aqbudgetperiods', $data);
+    my $new_budget_period_id = AddBudgetPeriod($data);
 
     my $tree = GetBudgetHierarchy( $budget_period_id );
 
@@ -219,8 +220,11 @@ elsif ( $op eq 'duplicate_budget' ){
             $orphan = 1;
         }
 
+        # get only the columns of aqbudgets
+        my @columns = Koha::Database->new()->schema->source('Aqbudget')->columns;
+        my $new_entry = { map { join(' ',@columns) =~ /$_/ ? ( $_ => $$entry{$_} )  : () } keys($entry) };
         # write it to db
-        my $new_id = C4::SQLHelper::InsertInTable('aqbudgets', $entry);
+        my $new_id = AddBudget($new_entry);
         $old_new{$old_id} = $new_id;
         push @{$parent_children{$parent_id}}, $new_id if $orphan;
 
@@ -228,7 +232,7 @@ elsif ( $op eq 'duplicate_budget' ){
         if( defined $parent_children{$old_id} ){
             # tell my children my new id
             for my $child ( @{$parent_children{$old_id}} ){
-                C4::SQLHelper::UpdateInTable('aqcudgets', [ 'budget_id' => $child, 'budget_parent_id' => $new_id ]);
+                ModBudget( { 'budget_id' => $child, 'budget_parent_id' => $new_id } );
             }
             delete $parent_children{$old_id};
         }
@@ -246,8 +250,8 @@ my $activepage = $input->param('apage') || 1;
 my $inactivepage = $input->param('ipage') || 1;
 # Get active budget periods
 my $results = GetBudgetPeriods(
-    {budget_period_active => 1},
-    [{budget_period_description => 0}]
+    { budget_period_active => 1 },
+    { -asc => 'budget_period_description' },
 );
 my $first = ( $activepage - 1 ) * $activepagesize;
 my $last = min( $first + $activepagesize - 1, scalar @{$results} - 1, );
@@ -265,8 +269,8 @@ my $active_pagination_bar = pagination_bar ($url, getnbpages( scalar(@$results),
 
 # Get inactive budget periods
 $results = GetBudgetPeriods(
-    {budget_period_active => 0},
-    [{budget_period_enddate => 1}]
+    { budget_period_active => 0 },
+    { -desc => 'budget_period_enddate' },
 );
 
 $first = ( $inactivepage - 1 ) * $inactivepagesize;

@@ -34,9 +34,9 @@ my $my_branch = 'CPL';
 my $another_branch = 'MPL';
 my $budgetid;
 my $bpid = AddBudgetPeriod({
-    budget_period_startdate => '2015-01-01',
-    budget_period_enddate   => '2015-12-31',
-    budget_description      => "budget desc"
+    budget_period_startdate   => '2015-01-01',
+    budget_period_enddate     => '2015-12-31',
+    budget_period_description => "budget desc"
 });
 
 my $budget_id = AddBudget({
@@ -44,8 +44,6 @@ my $budget_id = AddBudget({
     budget_amount      => "123.132",
     budget_name        => "Périodiques",
     budget_notes       => "This is a note",
-    budget_description => "Serials",
-    budget_active      => 1,
     budget_period_id   => $bpid
 });
 
