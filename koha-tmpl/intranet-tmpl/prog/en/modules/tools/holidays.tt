@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; [% branchname %] Calendar</title>
+<title>Koha &rsaquo; Tools &rsaquo; [% branchname %] calendar</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -215,14 +215,14 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% branchname %] Calendar</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% branchname %] calendar</div>
 
 <div id="doc3" class="yui-t1">
    
    <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
-    <h2>[% branchname %] Calendar</h2>
+    <h2>[% branchname %] calendar</h2>
     <div class="yui-g">
     <div class="yui-u first">
         <label for="branch">Define the holidays for:</label>
@@ -253,7 +253,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
                 <input type="hidden" id="showBranchName" name="showBranchName" />
             </li>
             <li>
-                <strong>From Date:</strong>
+                <strong>From date:</strong>
                 <span id="showDaynameOutput"></span>, 
                 
                                 [% IF ( dateformat == "us" ) %]<span id="showMonthOutput"></span>/<span id="showDayOutput"></span>/<span id="showYearOutput"></span>[% ELSIF ( dateformat == "metric" ) %]<span id="showDayOutput"></span>/<span id="showMonthOutput"></span>/<span id="showYearOutput"></span>[% ELSE %]<span id="showYearOutput"></span>/<span id="showMonthOutput"></span>/<span id="showDayOutput"></span>[% END %]
@@ -336,7 +336,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
                 <input type="hidden" id="newYear" name="newYear" />
             </li>
             <li class="dateinsert">
-                <b>To date : </b>
+                <b>To date: </b>
                 <input type="text" id="dateofrange" name="dateofrange" size="20" value="[% dateofrange %]" class="datepicker" />
             </li>
             <li><label for="title">Title: </label><input type="text" name="newTitle" id="title" size="35" /></li>
@@ -451,7 +451,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 [% END %]
 
 [% IF ( WEEK_DAYS_LOOP ) %]
-<h3>Weekly - Repeatable Holidays</h3>
+<h3>Weekly - Repeatable holidays</h3>
 <table id="holidayweeklyrepeatable">
 <thead>
 <tr>
@@ -477,14 +477,14 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 [% END %]
 
 [% IF ( DAY_MONTH_HOLIDAYS_LOOP ) %]
-<h3>Yearly - Repeatable Holidays</h3>
+<h3>Yearly - Repeatable holidays</h3>
 <table id="holidaysyearlyrepeatable">
 <thead>
 <tr>
   [% IF ( dateformat == "metric" ) %]
-  <th class="repeatableyearly">Day/Month</th>
+  <th class="repeatableyearly">Day/month</th>
   [% ELSE %]
-  <th class="repeatableyearly">Month/Day</th>
+  <th class="repeatableyearly">Month/day</th>
   [% END %]
   <th class="repeatableyearly">Title</th>
   <th class="repeatableyearly">Description</th>
@@ -503,7 +503,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 [% END %]
 
 [% IF ( HOLIDAYS_LOOP ) %]
-<h3>Unique Holidays</h3>
+<h3>Unique holidays</h3>
 <table id="holidaysunique">
 <thead>
 <tr>
