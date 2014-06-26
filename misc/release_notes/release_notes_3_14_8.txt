@@ -1,0 +1,415 @@
+RELEASE NOTES FOR KOHA 3.14.8
+26 juin 2014
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.14.8 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.14.08.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+
+Koha 3.14.8 is a bugfix/maintenance release.
+
+
+It includes 15 enhancements and 50 bugfixes.
+
+
+Enhancements in 3.14.8
+======================
+
+Acquisitions
+----------
+	11459	[Signed-Off] OrderPdfFormat pref description could be more verbose
+
+Architecture, internals, and plumbing
+----------
+	7372	RoadTypes should be folded into Authorised Values
+	11555	Make "All" one of the default options for datatables
+	11605	DT: default entry is 20
+	11957	Sample_only_param_tables.sql is not usable
+
+Cataloging
+----------
+	11746	Add edit item links to record details page
+
+Circulation
+----------
+	11359	Add cardnumber and phonenumber columns to the branch overdues circulation report.
+
+Label/patron card printing
+----------
+	12018	Add table sorting to patron card batches
+
+OPAC
+----------
+	11465	Show counts and amounts on OPAC your summary tabs
+
+Staff Client
+----------
+	11772	Show warning on About page:System information if no active currency is defined
+
+System Administration
+----------
+	11806	Use validation plugin when creating new OAI set
+
+Templates
+----------
+	9677	Style button on notices and slips page with Bootstrap
+	11570	Upgrade jQueryUI to latest version in the staff client
+	11946	Add table sorters to label batches
+
+Tools
+----------
+	11850	Bulkmarcimport does not append in logfile
+
+
+Critical bugs fixed in 3.14.8
+======================
+
+
+Architecture, internals, and plumbing
+----------
+	11715	major	Z39.50 search page does not check authorization
+
+Circulation
+----------
+	9532	major	Reserve rules with itemtype on biblio
+
+Packaging
+----------
+	12234	blocker	Package dependency updates for master
+
+
+Other bugs fixed in 3.14.8
+======================
+
+
+Acquisitions
+----------
+	11550	minor	Add a couple of unit tests for C4::Acq::GetOrder
+	11845	minor	Set overlay and import status translatable in addorderiso2709.tt
+	11939	minor	Sample of currencies with a working active value
+
+Cataloging
+----------
+	9114	minor	Exported MARC frameworks encoding should be UTF-8
+
+Hold requests
+----------
+	11531	normal	Cannot add new libraries to the transport cost if previously used.
+	12000	normal	Staff users can set hold suspension dates to occur in the past
+
+I18N/L10N
+----------
+	11618	normal	JQuery timepicker is not picked up by the i18n toolchain
+	11686	normal	"please note your reason here..." does not get translated
+	11366	minor	Acq basket group "No group" untranslatable
+	11973	minor	Fix Armenian language description
+	11993	minor	Untranslatable confirm popup in request.tt
+
+Installation and upgrade (command-line installer)
+----------
+	10729	normal	Support phrases-icu.xml in install and upgrade
+
+MARC Bibliographic data support
+----------
+	11695	normal	Typo: "Tree-character alphabetic code"
+	11762	normal	Sequence of MARC21 245 subfields different on XSLT result list and detail page
+
+Notices
+----------
+	11760	normal	In notices, code of road type is used instead of descritpion
+	8168	minor	Ersatz CSV header in attachment of overdue notices sent to administrator
+
+OPAC
+----------
+	10647	normal	Make OPAC MARC plain view work for all flavours of MARC
+	11127	normal	OPAC suggestion: the delete link is active when no suggestion selected
+	11310	normal	Update XSLT stylesheets in bootstrap theme
+	11647	normal	Subscribe to email notification for serials needs user login
+	11768	normal	Show patron cardnumber in opac personal details
+	11809	normal	OPAC patron details form shouldn't show 'Clear date' if field is required
+	11709	minor	Bootstrap OPAC lists interface requires some revisions
+	11094	trivial	Bootstrap theme: typo loaction
+
+Reports
+----------
+	11833	normal	Filtering on saved report subgroup doesn't work
+
+Serials
+----------
+	11637	normal	No way to prevent a prediction date for the next issue in serials
+
+Staff Client
+----------
+	10415	normal	Add course reserves to staff client home page
+	11906	normal	Bad display of utf-8 chars in Patron lists (Datatable)
+	12024	minor	Add to list opens the list adding UI in two windows
+
+Templates
+----------
+	10790	normal	Adding/editing item types screen mis aligned if  noItemTypeImages  not showing
+	11692	normal	Number 9 showing on topissues
+	11718	normal	Use new DataTables include in reports templates
+	11753	normal	Replace jQuery qTip plugin with Bootstrap tooltip on patron search form
+	11821	normal	Staff client catalog: delete menu items greyed out without explanation
+	11877	normal	Eliminate use of deprecated jQuery .live() method
+	11878	normal	Eliminate use of deprecated jQuery .toggle() method usage
+	12094	normal	JQueryUI upgrade broke default tab selection
+	11648	minor	Use word item instead of copy
+	11649	minor	Always use words "copy number"
+	11832	minor	JavaScript error on staff client place hold screen if record has no items
+	11918	trivial	Typo on authorized value page
+	11935	trivial	Capitalization: OPAC prog theme, checkouts tab
+	11938	trivial	Capitalization: Serial prediction pattern preview - Publication Date
+
+Test Suite
+----------
+	11934	trivial	Replace given by if-else in Circulation_issuingrules.t
+
+Tools
+----------
+	12032	normal	TinyMCE rewrites urls in a very annoying and unexpected way
+
+Z39.50 / SRU / OpenSearch Servers
+----------
+	1047	normal	Punctuation in site names breaks Edit/Delete z39.50 server administration
+	11701	normal	Fix C4::Context::Zconn
+
+
+New sysprefs in 3.14.8
+======================
+
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+The Koha manual is maintained in DocBook.The home page for Koha 
+documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.14/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+  * Arabic (82%)
+  * Armenian (100%)
+  * Chinese (China) (97%)
+  * Chinese (Taiwan) (99%)
+  * Czech (99%)
+  * Danish (89%)
+  * English (New Zealand) (83%)
+  * French (98%)
+  * French (Canada) (88%)
+  * German (100%)
+  * German (Switzerland) (99%)
+  * Greek (52%)
+  * Italian (100%)
+  * Kurdish (71%)
+  * Norwegian Bokmål (62%)
+  * Polish (63%)
+  * Portuguese (100%)
+  * Portuguese (Brazil) (89%)
+  * Slovak (100%)
+  * Spanish (100%)
+  * Swedish (90%)
+  * Turkish (100%)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.14.8 is
+
+  Release Manager:       Galen Charlton <gmc@esilibrary.com>
+  Documentation Manager: Nicole C Engard <nengard@gmail.com>
+  Installation Documentation Managers:
+                         Samuel Desseaux <samuel.desseaux@ecp.fr>
+                         Mason James <mtj@kohaaloha.com>
+  Translation Manager:   Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>
+  QA Team:               Chris Cormack <chrisc@catalyst.net.nz>
+                         Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>,
+                         Jonathan Druart <jonathan.druart@biblibre.com>,
+                         Brendan Gallagher <brendan@bywatersolutions.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+                         Mason James <mtj@kohaaloha.com>
+                         Paul Poulain <paul.poulain@biblibre.com>
+  Bug Wranglers:         Magnus Enger <magnus@enger.priv.no>
+  Packaging Manager:     Robin Sheat <robin@catalyst.net.nz>
+  Live CD Manager:       Nguyen Quoc Uy <nguyenquocuy_1102@yahoo.com>
+  VM Manager:            Samuel Desseaux <samuel.desseaux@ecp.fr>
+
+  Release Maintainer (3.8.x): Chris Hall <chrish@catalyst.net.nz>
+  Release Maintainer (3.10.x): Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  Release Maintainer (3.12.x): Tomás Cohen Arazi <tomascohen@gmail.com>
+
+
+Credits
+======================
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.14.8:
+  * Universidad Nacional de Cordoba
+
+We thank the following individuals who contributed patches to Koha 3.14.8.
+  *      1	Tomas Cohen Arazi
+  *      1	Daniel Barker
+  *      1	Isaac Brodsky
+  *      1	Colin Campbell
+  *      1	Frédérick Capovilla
+  *     12	Galen Charlton
+  *      1	David Cook
+  *      3	Chris Cormack
+  *     12	Jonathan Druart
+  *      1	Nicole Engard
+  *      1	Magnus Enger
+  *      5	Kyle M Hall
+  *      1	Pasi Kallinen
+  *      4	Bernardo Gonzalez Kriegel
+  *      1	Nicolas Legrand
+  *     21	Owen Leonard
+  *      1	Jesse Maseto
+  *      2	Julian Maurice
+  *      1	Matthias Meusburger
+  *      4	Sophie Meynieux
+  *      1	Liz Rea
+  *      1	Fridolyn SOMERS
+  *      2	A. Sassmannshausen
+  *      1	Robin Sheat
+  *     10	Fridolin Somers
+  *      1	Zeno Tajoli
+  *      1	Marc Véron
+
+We thank the following companies who contributed patches to Koha 3.14.8
+  *      21 ACPL
+  *      30 BibLibre
+  *       7 ByWater-Solutions
+  *       5 Catalyst
+  *      12 Equinox
+  *       1 Libeo
+  *       1 Libriotech
+  *       3 PTFS-Europe
+  *       1 Prosentient Systems
+  *       1 bulac.fr
+  *       1 cineca.it
+  *       1 isaacbrodsky.com
+  *       1 pttk.fi
+  *       6 unidentified
+  *       1 veron.ch
+
+We also especially thank the following individuals who tested patches
+for Koha 3.14.8.
+  *       2 Aleisha
+  *       5 Tomas Cohen Arazi
+  *       1 Broust
+  *       1 Nathalie CHATILLON
+  *      93 Galen Charlton
+  *      12 Chris Cormack
+  *      31 Jonathan Druart
+  *       6 Nicole C. Engard
+  *       2 Magnus Enger
+  *       3 Aurelie Fichot
+  *      50 Katrin Fischer
+  *      16 Kyle M Hall
+  *       1 Bernardo Gonzalez Kriegel
+  *       7 Owen Leonard
+  *       2 Havilah Lyon
+  *       1 Holger Meißner
+  *       1 Sophie Meynieux
+  *       1 Liz Rea
+  *       2 Martin Renvoize
+  *       6 Marcel de Rooy
+  *       1 Paola Rossi
+  *      89 Fridolin Somers
+  *      13 Mark Tompsett
+  *       8 Marc Véron
+  *       2 Jesse Weaver
+  *       1 marjorie barry-vila
+  *       2 remy juliette
+  *       3 wajasu
+
+We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is 3.14.x.
+
+The last Koha release was 3.8.21, which was released on January 2, 2014.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+He rau ringa e oti ai.
+(Many hands finish the work)
+
+##### Autogenerated release notes updated last on 26 juin 2014 12:13:58 Z #####
