@@ -32,12 +32,13 @@ done
             
 for name in $(koha-list $listopts)
 do
+    cmd=`echo "$@" | sed -e s/__instancename__/${name}/g`
     (
     exec 3>&1
     sudo -u "$name-koha" \
     env PERL5LIB=/usr/share/koha/lib \
         KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml" \
-        "$@" 2>&1 >&3 | sed -e "s/^/$name: /" >&2 3>&-
+        ${cmd} 2>&1 >&3 | sed -e "s/^/$name: /" >&2 3>&-
     exec 3>&-
     ) | sed -e "s/^/$name: /"
 
