@@ -25,7 +25,7 @@ KOHA.browser = function (searchid, biblionumber) {
         }
     }
 
-    this.create = function (offset, query, limit, sort, newresults) {
+    this.create = function (offset, query, limit, sort, newresults, total) {
         if (me.searchCookie) {
             if (offset === me.searchCookie.offset - newresults.length) {
                 me.searchCookie.results = newresults.concat(me.searchCookie.results);
@@ -41,7 +41,8 @@ KOHA.browser = function (searchid, biblionumber) {
                 limit: limit,
                 sort:  sort,
                 pagelen: newresults.length,
-                results: newresults
+                results: newresults,
+                total: total
             };
 
             //Bug_11369 Cleaning up excess searchCookies to prevent cookie overflow in the browser memory.
@@ -81,7 +82,7 @@ KOHA.browser = function (searchid, biblionumber) {
                     } else {
                         prevbutton = '<a href="#" id="browse-previous" class="browse-button">« ' + BROWSER_PREVIOUS + '</a>';
                     }
-                    if (me.curPos === me.searchCookie.pagelen - 1) {
+                    if (me.searchCookie.offset + me.curPos == me.searchCookie.total) {
                         nextbutton = '<span id="browse-next" class="browse-button">' + BROWSER_NEXT + ' »</span>';
                     } else {
                         nextbutton = '<a href="#" id="browse-next" class="browse-button">' + BROWSER_NEXT + ' »</a>';
