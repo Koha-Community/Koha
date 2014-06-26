@@ -8560,13 +8560,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.17.00.XXX";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-        DELETE FROM systempreferences WHERE variable = 'UseTableSortForCirc'
+        DELETE FROM systempreferences WHERE variable = 'UseTablesortForCirc'
     });
 
-    print "Upgrade to $DBversion done (Bug 11703 - Convert checkouts table to ajax datatable)\n";
+    print "Upgrade to $DBversion done (Bug 11703 - Remove UseTablesortForCirc syspref)\n";
     SetVersion($DBversion);
 }
 
