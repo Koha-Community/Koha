@@ -66,38 +66,42 @@
                         [% END # / IF virtualshelves %]
                     </ul> <!-- / .nav -->
                     [% IF Koha.Preference( 'virtualshelves' ) == 1 %]<div id="listsDetails"></div>[% END %]
-                    [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                    [% IF Koha.Preference( 'opacuserlogin' ) == 1 || EnableOpacSearchHistory %]
                         <a id="user-menu-trigger" class="pull-right" href="#"><i class="icon-user"></i> <span class="caret"></span></a>
                         <div id="members">
                             <ul class="nav pull-right">
-                                [% UNLESS ( loggedinusername ) %]
-                                    [% IF Koha.Preference('casAuthentication') %]
-                                        [%# CAS authentication is too complicated for modal window %]
-                                        <li><a href="/cgi-bin/koha/opac-user.pl">Log in to your account</a></li>
-                                    [% ELSE %]
-                                        <li><a href="/cgi-bin/koha/opac-user.pl" class="loginModal-trigger" role="button" data-toggle="modal">Log in to your account</a></li>
+                                [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                                    [% UNLESS ( loggedinusername ) %]
+                                        [% IF Koha.Preference('casAuthentication') %]
+                                            [%# CAS authentication is too complicated for modal window %]
+                                            <li><a href="/cgi-bin/koha/opac-user.pl">Log in to your account</a></li>
+                                        [% ELSE %]
+                                            <li><a href="/cgi-bin/koha/opac-user.pl" class="loginModal-trigger" role="button" data-toggle="modal">Log in to your account</a></li>
+                                        [% END %]
                                     [% END %]
-                                [% END %]
-                                [% IF ( loggedinusername ) %]
-                                    <li><p class="members navbar-text">Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername">[% FOREACH USER_INF IN USER_INFO %][% USER_INF.title %] [% USER_INF.firstname %] [% USER_INF.surname %][% END %]</span></a></p></li>
-                                    <li class="divider-vertical"></li>
+                                    [% IF ( loggedinusername ) %]
+                                        <li><p class="members navbar-text">Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername">[% FOREACH USER_INF IN USER_INFO %][% USER_INF.title %] [% USER_INF.firstname %] [% USER_INF.surname %][% END %]</span></a></p></li>
+                                        <li class="divider-vertical"></li>
+                                    [% END %]
                                 [% END %]
                                 [% IF EnableOpacSearchHistory %]
                                     <li><p class="navbar-text"><a href="/cgi-bin/koha/opac-search-history.pl" title="View your search history">Search history</a> [<a class="logout" href="/cgi-bin/koha/opac-search-history.pl?action=delete" title="Delete your search history" onclick="return confirm(MSG_DELETE_SEARCH_HISTORY);">x</a>]</p></li>
                                     <li class="divider-vertical"></li>
                                 [% END %]
-                                [% IF ( loggedinusername ) %]
-                                    <li><p class="navbar-text">
-                                        [% IF persona %]
-                                            <a class="logout" id="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1" onclick='navigator.id.logout();'>
-                                        [% ELSE %]
-                                            <a class="logout" id="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1">
-                                        [% END %]
-                                        Log out</a></p></li>
+                                [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                                    [% IF ( loggedinusername ) %]
+                                        <li><p class="navbar-text">
+                                            [% IF persona %]
+                                                <a class="logout" id="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1" onclick='navigator.id.logout();'>
+                                            [% ELSE %]
+                                                <a class="logout" id="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1">
+                                            [% END %]
+                                            Log out</a></p></li>
+                                    [% END %]
                                 [% END %]
                             </ul>
                         </div> <!-- /members -->
-                    [% END %]
+                    [% END # IF opacuserlogin %]
                 </div> <!-- /container-fluid -->
             </div> <!-- /navbar-inner -->
         </div> <!-- /navbar -->
