@@ -17,8 +17,10 @@ package C4::Contract;
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+use Modern::Perl;
 use strict;
 #use warnings; FIXME - Bug 2505
+use C4::Context;
 use C4::SQLHelper qw(:all);
 
 use vars qw($VERSION @ISA @EXPORT);
@@ -29,10 +31,11 @@ BEGIN {
     require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
-		&GetContract
-		&AddContract
-		&ModContract
-		&DelContract
+        &GetContracts
+        &GetContract
+        &AddContract
+        &ModContract
+        &DelContract
 	);
 }
 
@@ -50,12 +53,79 @@ The functions in this module deal with contracts. They allow to
 add a new contract, to modify it or to get some informations around
 a contract.
 
-This module is just a wrapper for C4::SQLHelper functions, so take a look at
-SQLHelper centralised documentation to know how to use the following subs.
+=cut
+
+
+=head2 GetContracts
+
+$contractlist = GetContracts({
+    booksellerid => $booksellerid,
+    activeonly => $activeonly
+});
+
+Looks up the contracts that belong to a bookseller
+
+Returns a list of contracts
+
+=over
+
+=item C<$booksellerid> is the "id" field in the "aqbooksellers" table.
+
+=item C<$activeonly> if exists get only contracts that are still active.
+
+=back
 
 =cut
 
-sub GetContract { SearchInTable("aqcontract", shift); }
+sub GetContracts {
+    my ($params) = @_;
+    my $booksellerid = $params->{booksellerid};
+    my $activeonly = $params->{activeonly};
+
+    my $dbh = C4::Context->dbh;
+    my $query = "SELECT * FROM aqcontract";
+    my $result_set;
+    if($booksellerid) {
+        $query .= " WHERE booksellerid=?";
+
+        if($activeonly) {
+            $query .= " AND contractenddate >= CURDATE( )";
+        }
+
+        $result_set = $dbh->selectall_arrayref( $query, { Slice => {} }, $booksellerid );
+    }
+    else {
+        $result_set = $dbh->selectall_arrayref( $query, { Slice => {} } );
+    }
+
+    return $result_set;
+}
+
+=head2 GetContract
+
+$contract = GetContract( { contractnumber => $contractnumber } );
+
+Looks up the contract that has PRIMKEY (contractnumber) value $contractID
+
+Returns a contract
+
+=cut
+
+sub GetContract {
+    my ($params) = @_;
+    my $contractno = $params->{contractnumber};
+
+    my $dbh = C4::Context->dbh;
+    my $query = "SELECT * FROM aqcontract WHERE contractnumber=?";
+
+    my $sth = $dbh->prepare($query);
+    $sth->execute($contractno);
+    my $result = $sth->fetchrow_hashref;
+    return $result;
+}
+
+
+#sub GetContract { SearchInTable("aqcontract", shift); }
 
 sub AddContract { InsertInTable("aqcontract", shift); }
 

@@ -30,6 +30,7 @@ use C4::Acquisition;
 use C4::Budgets;
 use C4::Branch;
 use C4::Bookseller qw( GetBookSellerFromId);
+use C4::Contract;
 use C4::Debug;
 use C4::Biblio;
 use C4::Members qw/GetMember/;  #needed for permissions checking for changing basketgroup of a basket
@@ -167,7 +168,9 @@ if ( $op eq 'delete_confirm' ) {
     }
     $basket->{creationdate} = ""            unless ( $basket->{creationdate} );
     $basket->{authorisedby} = $loggedinuser unless ( $basket->{authorisedby} );
-    my $contract = &GetContract($basket->{contractnumber});
+    my $contract = GetContract({
+        contractnumber => $basket->{contractnumber}
+    });
     $template->param(
         basketno             => $basketno,
         basketname           => $basket->{'basketname'},
@@ -370,7 +373,9 @@ if ( $op eq 'delete_confirm' ) {
         push @cancelledorders_loop, $line;
     }
 
-    my $contract = &GetContract($basket->{contractnumber});
+    my $contract = GetContract({
+        contractnumber => $basket->{contractnumber}
+    });
     my @orders = GetOrders($basketno);
 
     if ($basket->{basketgroupid}){

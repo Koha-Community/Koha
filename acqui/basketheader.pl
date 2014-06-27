@@ -52,8 +52,9 @@ use C4::Context;
 use C4::Auth;
 use C4::Branch;
 use C4::Output;
-use C4::Acquisition qw/GetBasket NewBasket GetContracts ModBasketHeader/;
+use C4::Acquisition qw/GetBasket NewBasket ModBasketHeader/;
 use C4::Bookseller qw/GetBookSellerFromId GetBookSeller/;
+use C4::Contract qw/GetContracts/;
 
 
 my $input = new CGI;
@@ -84,7 +85,12 @@ if ( $op eq 'add_form' ) {
         if (! $booksellerid) {
             $booksellerid=$basket->{'booksellerid'};
         }
-        @contractloop = &GetContracts($booksellerid, 1);
+        my $contracts = GetContracts({
+            booksellerid => $booksellerid,
+            activeonly => 1,
+        });
+
+        @contractloop = @$contracts;
         for (@contractloop) {
             if ( $basket->{'contractnumber'} eq $_->{'contractnumber'} ) {
                 $_->{'selected'} = 1;
@@ -94,7 +100,11 @@ if ( $op eq 'add_form' ) {
     } else {
     #new basket
         my $basket;
-        push(@contractloop, &GetContracts($booksellerid, 1));
+        my $contracts = GetContracts({
+            booksellerid => $booksellerid,
+            activeonly => 1,
+        });
+        push(@contractloop, @$contracts);
     }
     my $bookseller = GetBookSellerFromId($booksellerid);
     my $count = scalar @contractloop;

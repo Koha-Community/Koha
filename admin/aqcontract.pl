@@ -61,8 +61,9 @@ if ( $op eq 'add_form' ) {
 
    # if contractnumber exists, it's a modify action, so read values to modify...
     if ($contractnumber) {
-        my $contract =
-          @{ GetContract( { contractnumber => $contractnumber } ) }[0];
+        my $contract = GetContract({
+            contractnumber => $contractnumber
+        });
 
         $template->param(
             contractnumber      => $contract->{contractnumber},
@@ -118,7 +119,7 @@ elsif ( $op eq 'add_validate' ) {
 elsif ( $op eq 'delete_confirm' ) {
     $template->param( delete_confirm => 1 );
 
-    my $contract = @{GetContract( { contractnumber => $contractnumber } )}[0];
+    my $contract = GetContract( { contractnumber => $contractnumber } );
 
     $template->param(
         contractnumber      => $$contract{contractnumber},
@@ -149,7 +150,7 @@ if ( $op eq 'list' ) {
     $template->param(else => 1);
 
     # get contracts
-    my @contracts = @{GetContract( { booksellerid => $booksellerid } )};
+    my @contracts = @{GetContracts( { booksellerid => $booksellerid } )};
 
     # format dates
     for ( @contracts ) {

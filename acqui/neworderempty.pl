@@ -78,6 +78,7 @@ use C4::Input;
 
 use C4::Bookseller  qw/ GetBookSellerFromId /;
 use C4::Acquisition;
+use C4::Contract;
 use C4::Suggestions;	# GetSuggestion
 use C4::Biblio;			# GetBiblioData GetMarcPrice
 use C4::Items; #PrepareItemRecord
@@ -132,7 +133,9 @@ our $basket = GetBasket($basketno);
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
 my $bookseller = GetBookSellerFromId($booksellerid);
 
-my $contract = &GetContract($basket->{contractnumber});
+my $contract = GetContract({
+    contractnumber => $basket->{contractnumber}
+});
 
 #simple parameters reading (all in one :-)
 our $params = $input->Vars;

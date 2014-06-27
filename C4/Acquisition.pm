@@ -27,6 +27,7 @@ use C4::Dates qw(format_date format_date_in_iso);
 use MARC::Record;
 use C4::Suggestions;
 use C4::Biblio;
+use C4::Contract;
 use C4::Debug;
 use C4::SQLHelper qw(InsertInTable UpdateInTable);
 use C4::Bookseller qw(GetBookSellerFromId);
@@ -65,7 +66,6 @@ BEGIN {
         &NewOrderItem &ModItemOrder
 
         &GetParcels &GetParcel
-        &GetContracts &GetContract
 
         &GetInvoices
         &GetInvoice
@@ -293,7 +293,9 @@ sub GetBasketAsCSV {
     my ($basketno, $cgi) = @_;
     my $basket = GetBasket($basketno);
     my @orders = GetOrders($basketno);
-    my $contract = GetContract($basket->{'contractnumber'});
+    my $contract = GetContract({
+        contractnumber => $basket->{'contractnumber'}
+    });
 
     my $template = C4::Templates::gettemplate("acqui/csv/basket.tt", "intranet", $cgi);
 
@@ -361,7 +363,9 @@ sub GetBasketGroupAsCSV {
     my @rows;
     for my $basket (@$baskets) {
         my @orders     = GetOrders( $$basket{basketno} );
-        my $contract   = GetContract( $$basket{contractnumber} );
+        my $contract   = GetContract({
+            contractnumber => $$basket{contractnumber}
+        });
         my $bookseller = GetBookSellerFromId( $$basket{booksellerid} );
         my $basketgroup = GetBasketgroup( $$basket{basketgroupid} );
 
@@ -2471,71 +2475,7 @@ sub GetRecentAcqui {
     return $results;
 }
 
-=head3 GetContracts
-
-  $contractlist = &GetContracts($booksellerid, $activeonly);
-
-Looks up the contracts that belong to a bookseller
-
-Returns a list of contracts
-
-=over
-
-=item C<$booksellerid> is the "id" field in the "aqbooksellers" table.
-
-=item C<$activeonly> if exists get only contracts that are still active.
-
-=back
-
-=cut
-
-sub GetContracts {
-    my ( $booksellerid, $activeonly ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query;
-    if (! $activeonly) {
-        $query = "
-            SELECT *
-            FROM   aqcontract
-            WHERE  booksellerid=?
-        ";
-    } else {
-        $query = "SELECT *
-            FROM aqcontract
-            WHERE booksellerid=?
-                AND contractenddate >= CURDATE( )";
-    }
-    my $result_set =
-      $dbh->selectall_arrayref( $query, { Slice => {} }, $booksellerid );
-    return @{$result_set};
-}
-
 #------------------------------------------------------------#
-
-=head3 GetContract
-
-  $contract = &GetContract($contractID);
-
-Looks up the contract that has PRIMKEY (contractnumber) value $contractID
-
-Returns a contract
-
-=cut
-
-sub GetContract {
-    my ( $contractno ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = "
-        SELECT *
-        FROM   aqcontract
-        WHERE  contractnumber=?
-        ";
-
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $contractno );
-    my $result = $sth->fetchrow_hashref;
-    return $result;
-}
 
 =head3 AddClaim
 

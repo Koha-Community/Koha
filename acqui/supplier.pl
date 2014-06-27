@@ -43,7 +43,7 @@ To know the bookseller this script has to display details.
 use strict;
 use warnings;
 use C4::Auth;
-use C4::Contract qw/GetContract/;
+use C4::Contract;
 use C4::Biblio;
 use C4::Output;
 use CGI;
@@ -70,8 +70,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 #build array for currencies
 if ( $op eq 'display' ) {
-
-    my $contracts = GetContract( { booksellerid => $booksellerid } );
+    my $contracts = GetContracts( { booksellerid => $booksellerid } );
 
     $template->param(
         booksellerid  => $booksellerid,
