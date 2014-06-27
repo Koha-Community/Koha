@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Online Help</title>
+<title>Online help</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
 <link rel="stylesheet" type="text/css" href="[% interface %]/lib/jquery/jquery-ui.css" />
@@ -11,11 +11,6 @@
 <script type="text/javascript" src="[% interface %]/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/jquery-ui.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/shortcut/shortcut.js"></script>
-<!-- yui js --> 
-<script type="text/javascript" src="[% yuipath %]/utilities/utilities.js"></script> 
-<script type="text/javascript" src="[% yuipath %]/button/button-min.js"></script> 
-<script type="text/javascript" src="[% yuipath %]/container/container_core-min.js"></script> 
-<script type="text/javascript" src="[% yuipath %]/menu/menu-min.js"></script> 
 <!-- koha core js -->
 <script type="text/javascript" src="[% themelang %]/js/staff-global.js"></script>
 

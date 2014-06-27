@@ -100,10 +100,6 @@ sub output {
     }
     $vars->{lang} = $self->lang;
     $vars->{themelang} .= '/' . $self->preferredtheme . '/' . $self->lang;
-    $vars->{yuipath} =
-      ( C4::Context->preference("yuipath") eq "local"
-        ? ( $self->interface eq 'intranet' ? $vars->{themelang} . "/lib/yui" : "/opac-tmpl/lib/yui" )
-        : C4::Context->preference("yuipath") );
     $vars->{interface} =
       ( $self->{interface} ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' );
     $vars->{theme} = $self->theme;
@@ -215,6 +211,19 @@ sub gettemplate {
        =  _get_template_file($tmplbase, $interface, $query);
     $filename = $tmplbase if ( $is_plugin );
     my $template = C4::Templates->new($interface, $filename, $tmplbase, $query);
+
+# NOTE: Commenting these out rather than deleting them so that those who need
+# to know how we previously shimmed these directories will be able to understand.
+#    my $is_intranet = $interface eq 'intranet';
+#    my $themelang =
+#        ($is_intranet ? '/intranet-tmpl' : '/opac-tmpl') .
+#        "/$theme/$lang";
+#    $template->param(
+#        themelang => $themelang,
+#        interface => $is_intranet ? '/intranet-tmpl' : '/opac-tmpl',
+#        theme     => $theme,
+#        lang      => $lang
+#    );
 
     # Bidirectionality, must be sent even if is the only language
     my $current_lang = regex_lang_subtags($lang);
