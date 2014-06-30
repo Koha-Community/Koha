@@ -21,7 +21,7 @@ use Modern::Perl;
 use strict;
 #use warnings; FIXME - Bug 2505
 use C4::Context;
-use C4::SQLHelper qw(:all);
+use Koha::Database;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -78,27 +78,16 @@ Returns a list of contracts
 =cut
 
 sub GetContracts {
-    my ($params) = @_;
-    my $booksellerid = $params->{booksellerid};
-    my $activeonly = $params->{activeonly};
-
-    my $dbh = C4::Context->dbh;
-    my $query = "SELECT * FROM aqcontract";
-    my $result_set;
-    if($booksellerid) {
-        $query .= " WHERE booksellerid=?";
-
-        if($activeonly) {
-            $query .= " AND contractenddate >= CURDATE( )";
-        }
-
-        $result_set = $dbh->selectall_arrayref( $query, { Slice => {} }, $booksellerid );
-    }
-    else {
-        $result_set = $dbh->selectall_arrayref( $query, { Slice => {} } );
+    my ($filters) = @_;
+    if( $filters->{activeonly} ) {
+        $filters->{contractenddate} = {'>=' => \'now()'};
+        delete $filters->{activeonly};
     }
 
-    return $result_set;
+    my $rs = Koha::Database->new()->schema->resultset('Aqcontract');
+    $rs = $rs->search($filters);
+    $rs->result_class('DBIx::Class::ResultClass::HashRefInflator');
+    return [ $rs->all ];
 }
 
 =head2 GetContract
@@ -113,25 +102,41 @@ Returns a contract
 
 sub GetContract {
     my ($params) = @_;
-    my $contractno = $params->{contractnumber};
+    my $contractnumber = $params->{contractnumber};
 
-    my $dbh = C4::Context->dbh;
-    my $query = "SELECT * FROM aqcontract WHERE contractnumber=?";
-
-    my $sth = $dbh->prepare($query);
-    $sth->execute($contractno);
-    my $result = $sth->fetchrow_hashref;
-    return $result;
+    my $contracts = GetContracts({
+        contractnumber => $contractnumber,
+    });
+    return $contracts->[0];
 }
 
+sub AddContract {
+    my ($contract) = @_;
+    return unless($contract->{booksellerid});
 
-#sub GetContract { SearchInTable("aqcontract", shift); }
+    my $rs = Koha::Database->new()->schema->resultset('Aqcontract');
+    return $rs->create($contract)->id;
+}
 
-sub AddContract { InsertInTable("aqcontract", shift); }
+sub ModContract {
+    my ($contract) = @_;
+    my $result = Koha::Database->new()->schema->resultset('Aqcontract')->find($contract);
+    return unless($result);
 
-sub ModContract { UpdateInTable("aqcontract", shift); }
+    $result = $result->update($contract);
+    return $result->in_storage;
+}
 
-sub DelContract { DeleteInTable("aqcontract", shift); }
+sub DelContract {
+    my ($contract) = @_;
+    return unless($contract->{contractnumber});
+
+    my $result = Koha::Database->new()->schema->resultset('Aqcontract')->find($contract);
+    return unless($result);
+
+    eval { $result->delete };
+    return !( $result->in_storage );
+}
 
 1;
 

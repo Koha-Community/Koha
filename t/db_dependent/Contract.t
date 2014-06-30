@@ -21,7 +21,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Bookseller;
 
-use Test::More tests => 40;
+use Test::More tests => 43;
 
 BEGIN {
     use_ok('C4::Contract');
@@ -42,6 +42,9 @@ my $bookseller_id2 = C4::Bookseller::AddBookseller( { name => 'My second booksel
 isnt( $bookseller_id2, undef, 'AddBookseller does not return undef' );
 my $contracts = GetContracts();
 is( @$contracts, 0, 'GetContracts returns the correct number of contracts' );
+my $contract = GetContract();
+is( $contract, undef, 'GetContract without argument returns undef' );
+
 
 my $my_contract1 = {
     contractstartdate   => '2014-06-01',
@@ -50,11 +53,17 @@ my $my_contract1 = {
     contractdescription => 'My contract description',
     booksellerid        => $bookseller_id1,
 };
-my $my_contract_id1 = AddContract($my_contract1);
+my $my_contract_id1 = AddContract();
+is( $my_contract_id1, undef, 'AddContract without argument returns undef' );
+$my_contract_id1 = AddContract($my_contract1);
 isnt( $my_contract_id1, undef, 'AddContract does not return undef' );
+
 $contracts = GetContracts();
 is( @$contracts, 1, 'AddContract adds a contract' );
-my $contract = GetContract( { contractnumber => $my_contract_id1 } );
+
+$contract = GetContract();
+is( $contract, undef, 'GetContract without argument returns undef' );
+$contract = GetContract( { contractnumber => $my_contract_id1 } );
 is( $contract->{contractstartdate}, $my_contract1->{contractstartdate}, 'AddContract stores the contract start date correctly.' );
 is( $contract->{contractenddate}, $my_contract1->{contractenddate}, 'AddContract stores the contract end date correctly.' );
 is( $contract->{contractname}, $my_contract1->{contractname}, 'AddContract stores the contract name correctly.' );
@@ -70,7 +79,7 @@ $my_contract1 = {
     booksellerid        => $bookseller_id2,
 };
 my $mod_status = ModContract($my_contract1);
-is( $mod_status, '0E0', 'ModContract without the contract number returns 0E0' );
+is( $mod_status, undef, 'ModContract without the contract number returns 0E0' );
 
 $my_contract1->{contractnumber} = $my_contract_id1;
 $mod_status = ModContract($my_contract1);
@@ -96,10 +105,9 @@ my $my_contract_id2 = AddContract($my_contract2);
 $contracts = GetContracts( { booksellerid => $bookseller_id1 } );
 is( @$contracts, 1, 'GetContracts returns the correct number of contracts' );
 $contracts = GetContracts({
-    booksellerid => $bookseller_id1,
     activeonly => 1
 });
-is( @$contracts, 0, 'GetContracts with active only returns only current contracts' );
+is( @$contracts, 1, 'GetContracts with active only returns only current contracts' );
 $contracts = GetContracts( { booksellerid => $bookseller_id2 } );
 is( @$contracts, 1, 'GetContracts returns the correct number of contracts' );
 $contracts = GetContracts();
