@@ -1,10 +1,22 @@
 #!/usr/bin/perl
-#
-# This Koha test module is a stub!
-# Add more tests here!!!
 
-use strict;
-use warnings;
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+
 use utf8;
 
 use YAML;
@@ -675,7 +687,7 @@ if ( $indexing_mode eq 'dom' ) {
     # make one of the test items appear to be in transit
     my $circ_module = new Test::MockModule('C4::Circulation');
     $circ_module->mock('GetTransfers', sub {
-        my $itemnumber = shift;
+        my $itemnumber = shift // -1;
         if ($itemnumber == 11) {
             return ('2013-07-19', 'MPL', 'CPL');
         } else {
@@ -833,6 +845,12 @@ if ( $indexing_mode eq 'dom' ) {
     is($newresults[0]->{biblionumber}, '300', 'Over-large bib record has the correct biblionumber (bug 11096)');
     like($newresults[0]->{notes}, qr/This is large note #550/, 'Able to render the notes field for over-large bib record (bug 11096)');
 
+    # notforloancount should be returned as part of searchResults output
+    ok( defined $newresults[0]->{notforloancount},
+        '\'notforloancount\' defined in searchResults output (Bug 12419)');
+    is( $newresults[0]->{notforloancount}, 2,
+        '\'notforloancount\' == 2 (Bug 12419)');
+
     # verify that we don't attempt to sort if no results were returned
     # because of a query error
     warning_like {( undef, $results_hashref, $facets_loop ) =
@@ -914,12 +932,12 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + GRS-1' => sub {
-    plan tests => 104;
+    plan tests => 106;
     run_marc21_search_tests('grs1');
 };
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 104;
+    plan tests => 106;
     run_marc21_search_tests('dom');
 };
 
