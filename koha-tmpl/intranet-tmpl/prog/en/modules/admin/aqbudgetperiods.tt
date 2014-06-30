@@ -393,7 +393,7 @@
     Please create a new active budget and retry.
     <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Back</a>
   [% ELSIF number_of_unreceived_orders == 0 %]
-    There is no unreceived orders for this budget.
+    There are no unreceived orders for this budget.
     <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Back</a>
   [% ELSE %]
     <h3>The unreceived orders from the following funds will be moved</h3>
@@ -439,7 +439,7 @@
       <fieldset class="action">
           <input type="hidden" name="op" value="close_confirmed" />
           <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
-          <input type="submit" value="Move unreceive orders" />
+          <input type="submit" value="Move unreceived orders" />
           <a class="cancel" href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Cancel</a>
       </fieldset>
     </form>
@@ -453,7 +453,7 @@
         <td>Budget id</td>
         <td>Basket</td>
         <td>Ordernumber</td>
-        <td>Informations</td>
+        <td>Details</td>
       </tr>
     </thead>
     <tbody>
@@ -473,7 +473,7 @@
                 <td>[% r.budget.budget_name %] (id=[% r.budget.budget_id %])</td>
                 <td></td>
                 <td></td>
-                <td>There was no unreceived orders for this fund.</td>
+                <td>There were no unreceived orders for this fund.</td>
               </tr>
             [% END %]
           [% ELSE %]
