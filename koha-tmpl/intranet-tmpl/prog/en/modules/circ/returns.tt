@@ -149,7 +149,7 @@ $(document).ready(function () {
 [% IF ( wborcnum ) %]<h5>Hold for:</h5>
         <ul><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
             [% borsurname %], [% borfirstname %]</a> ([% borcnum %])</li>
-        <li>[% wboraddress %][% IF ( wboraddress2 ) %]<br />
+        <li>[% wborstnum %] [% wboraddress %][% IF ( wboraddress2 ) %]<br />
 		[% wboraddress2 %]<br />[% END %]
         [% wborcity %]  [% wborzip %]</li>
         [% IF ( wborphone ) %]<li>[% wborphone %]</li>[% END %]
@@ -182,7 +182,7 @@ $(document).ready(function () {
         <h4>Hold for:</h4>
 			<ul>
             <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borsurname %], [% borfirstname %]</a> ([% borcnum %])</li>
-            <li>[% boraddress %]<br />
+            <li>[% borstnum %] [% boraddress %]<br />
 			[% IF ( boraddress2 ) %][% boraddress2 %]<br />[% END %]
             [% borcity %] [% borzip %]</li>
            [% IF ( borphone ) %]<li> [% borphone %]</li>[% END %]
@@ -223,7 +223,7 @@ $(document).ready(function () {
                 <h4>Hold for: </h4>
                     <ul>
                         <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borsurname %], [% borfirstname %]</a> ([% borcnum %])</li>
-                        <li>[% boraddress %]<br />
+                        <li>[% borstnum %] [% boraddress %]<br />
 						[% IF ( boraddress2 ) %][% boraddress2 %]<br />[% END %]
 						[% borcity %]  [% borzip %]</li>
                         [% IF ( borphone ) %]<li>[% borphone %]</li>[% END %]
@@ -331,7 +331,7 @@ $(document).ready(function () {
             <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
                 [% borsurname %], [% borfirstname %]
             </a> ([% borcnum %])</li>
-            <li>[% boraddress %]<br />
+            <li>[% borstnum %] [% boraddress %]<br />
 			[% IF ( boraddress2 ) %][% boraddress2 %]<br />[% END %]
 			[% borcity %] [% borzip %]</li>
             [% IF ( borphone ) %]<li>[% borphone %]</li>[% END %]
