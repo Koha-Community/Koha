@@ -49,17 +49,25 @@
                                     [% IF ( ACCOUNT_LINE.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
                                         <td>[% ACCOUNT_LINE.date | $KohaDates %]</td>
                                         <td>
-                                          [% SWITCH ACCOUNT_LINE.accounttype %]
-                                            [% CASE 'Pay' %]Payment,thanks
-                                            [% CASE 'Pay00' %]Payment,thanks (cash via SIP2)
-                                            [% CASE 'Pay01' %]Payment,thanks (VISA via SIP2)
-                                            [% CASE 'Pay02' %]Payment,thanks (credit card via SIP2)
-                                            [% CASE 'N' %]New Card
+                                            [% SWITCH ACCOUNT_LINE.accounttype %]
+                                            [% CASE 'Pay' %]Payment, thanks
+                                            [% CASE 'Pay00' %]Payment, thanks (cash via SIP2)
+                                            [% CASE 'Pay01' %]Payment, thanks (VISA via SIP2)
+                                            [% CASE 'Pay02' %]Payment, thanks (credit card via SIP2)
+                                            [% CASE 'N' %]New card
                                             [% CASE 'F' %]Fine
                                             [% CASE 'A' %]Account management fee
                                             [% CASE 'M' %]Sundry
-                                            [% CASE 'L' %]Lost Item
+                                            [% CASE 'L' %]Lost item
                                             [% CASE 'W' %]Writeoff
+                                            [% CASE 'FU' %]Accruing fine
+                                            [% CASE 'Rent' %]Rental fee
+                                            [% CASE 'FOR' %]Forgiven
+                                            [% CASE 'LR' %]Lost item fee refund
+                                            [% CASE 'PAY' %]Payment
+                                            [% CASE 'WO' %]Writeoff
+                                            [% CASE 'C' %]Credit
+                                            [% CASE 'CR' %]Credit
                                             [% CASE %][% ACCOUNT_LINE.accounttype %]
                                           [%- END -%]
                                           [%- IF ACCOUNT_LINE.description %], [% ACCOUNT_LINE.description %][% END %]
