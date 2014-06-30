@@ -41,7 +41,7 @@
                                               [% ELSIF ( messaging_preference.Item_Checkout ) %]Item checkout
                                               [% ELSE %]Unknown [% END %]</td>
                                         [% IF ( messaging_preference.takes_days ) %]
-                                            <td><select name="[% messaging_preference.message_attribute_id %]-DAYS">
+                                            <td><select class="input-mini" name="[% messaging_preference.message_attribute_id %]-DAYS">
                                             [% FOREACH select_day IN messaging_preference.select_days %]
                                                 [% IF ( select_day.selected ) %]
                                                     <option value="[% select_day.day %]" selected="selected">[% select_day.day %]</option>
