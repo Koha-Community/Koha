@@ -256,7 +256,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpacLocationBranchToDisplayShelving','holding','holding|home|both','In the OPAC, display the shelving location under which which column.',  'Choice'),
 ('OpacMaintenance','0','','If ON, enables maintenance warning in OPAC','YesNo'),
 ('OpacMainUserBlock','Welcome to Koha...\r\n<hr>','70|10','A user-defined block of HTML  in the main content area of the opac main page','Textarea'),
-('OpacMainUserBlockMobile','',NULL,'Show the following HTML in its own column on the main page of the OPAC (mobile version):','free'),
 ('OpacMaxItemsToDisplay','50','','Max items to display at the OPAC on a biblio detail','Integer'),
 ('OPACMobileUserCSS','',NULL,'Include the following CSS for the mobile view on all pages in the OPAC:','free'),
 ('OPACMySummaryHTML','','70|10','Enter the HTML that will appear in a column on the \'my summary\' and \'my reading history\' tabs when a user is logged in to the OPAC. Enter {BIBLIONUMBER}, {TITLE}, {AUTHOR}, or {ISBN} in place of their respective variables in the HTML. Leave blank to disable.','Textarea'),
