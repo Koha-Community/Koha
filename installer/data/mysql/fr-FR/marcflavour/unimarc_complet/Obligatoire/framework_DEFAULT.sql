@@ -116,7 +116,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 ('336', 'note sur le type de ressource électronique', 'type de fichier', 1, 0, '', ''),
 ('337', 'note sur la configuration requise (ressources électroniques)', 'configuration requise', 1, 0, '', ''),
 ('345', 'renseignements sur l''acquisition', 'note', 0, 0, NULL, ''),
-('359', 'Table des matières', 'Table des matières', 0, 0, NULL, ''),
+('359', 'Table des matières (sudoc)', 'Table des matières (sudoc)', 0, 0, NULL, ''),
 ('410', 'Collection', 'collection', 1, 0, '', ''),
 ('411', 'sous-collection', 'sous-collection', 1, 0, '', ''),
 ('412', 'Est un extrait ou un tiré à part de', '', 0, 0, '', ''),
