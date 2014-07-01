@@ -8897,11 +8897,17 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-
 $DBversion = "3.17.00.XXX";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("DELETE FROM systempreferences WHERE variable='OpacMainUserBlockMobile'");
     print "Upgrade to $DBversion done ( Bug 12246 - PROG/CCSR deprecation: Remove OpacMainUserBlockMobile system preference )\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("DELETE FROM systempreferences WHERE variable='OPACMobileUserCSS'");
+    print "Upgrade to $DBversion done ( Bug 12245 - PROG/CCSR deprecation: Remove OPACMobileUserCSS system preference )\n";
     SetVersion ($DBversion);
 }
 

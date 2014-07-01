@@ -257,7 +257,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpacMaintenance','0','','If ON, enables maintenance warning in OPAC','YesNo'),
 ('OpacMainUserBlock','Welcome to Koha...\r\n<hr>','70|10','A user-defined block of HTML  in the main content area of the opac main page','Textarea'),
 ('OpacMaxItemsToDisplay','50','','Max items to display at the OPAC on a biblio detail','Integer'),
-('OPACMobileUserCSS','',NULL,'Include the following CSS for the mobile view on all pages in the OPAC:','free'),
 ('OPACMySummaryHTML','','70|10','Enter the HTML that will appear in a column on the \'my summary\' and \'my reading history\' tabs when a user is logged in to the OPAC. Enter {BIBLIONUMBER}, {TITLE}, {AUTHOR}, or {ISBN} in place of their respective variables in the HTML. Leave blank to disable.','Textarea'),
 ('OPACMySummaryNote','','','Note to display on the patron summary page. This note only appears if the patron is connected.','Free'),
 ('OpacNav','Important links here.','70|10','Use HTML tags to add navigational links to the left-hand navigational bar in OPAC','Textarea'),
