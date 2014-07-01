@@ -8770,7 +8770,6 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
-
 $DBversion = '3.17.00.025';
 if ( CheckVersion($DBversion) ) {
     $dbh->do(qq{
@@ -8889,6 +8888,13 @@ if ( CheckVersion($DBversion) ) {
     |);
     print "Upgrade to $DBversion done (Bug 5342: Add claims_count field in serial table)\n";
     SetVersion($DBversion);
+}
+
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("DELETE FROM systempreferences WHERE variable='OpacShowLibrariesPulldownMobile'");
+    print "Upgrade to $DBversion done ( Bug 12513 - PROG/CCSR deprecation: Remove OpacShowLibrariesPulldownMobile system preference )\n";
+    SetVersion ($DBversion);
 }
 
 =head1 FUNCTIONS

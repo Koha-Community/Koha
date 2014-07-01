@@ -285,7 +285,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OPACShowBarcode','0','','Show items barcode in holding tab','YesNo'),
 ('OPACShowCheckoutName','0','','Displays in the OPAC the name of patron who has checked out the material. WARNING: Most sites should leave this off. It is intended for corporate or special sites which need to track who has the item.','YesNo'),
 ('OPACShowHoldQueueDetails','none','none|priority|holds|holds_priority','Show holds details in OPAC','Choice'),
-('OpacShowLibrariesPulldownMobile','1',NULL,'Show the libraries pulldown on the mobile version of the OPAC.','YesNo'),
 ('OpacShowRecentComments','0',NULL,'If ON a link to recent comments will appear in the OPAC masthead','YesNo'),
 ('OPACShowUnusedAuthorities','1','','Show authorities that are not being used in the OPAC.','YesNo'),
 ('OpacStarRatings','all','disable|all|details',NULL,'Choice'),
