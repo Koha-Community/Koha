@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    $.ajaxSetup ({ cache: false });
+
     // Handle the select all/none links for checkouts table columns
     $("#CheckAllRenewals").on("click",function(){
         $("#UncheckAllCheckins").click();
