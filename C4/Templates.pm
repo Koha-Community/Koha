@@ -109,7 +109,6 @@ sub output {
     $vars->{theme} = $self->theme;
     $vars->{opaccolorstylesheet} =
         C4::Context->preference('opaccolorstylesheet');
-    $vars->{opacsmallimage} = C4::Context->preference('opacsmallimage');
     $vars->{opaclayoutstylesheet} =
         C4::Context->preference('opaclayoutstylesheet');
 

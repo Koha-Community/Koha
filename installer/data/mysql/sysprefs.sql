@@ -284,7 +284,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpacShowLibrariesPulldownMobile','1',NULL,'Show the libraries pulldown on the mobile version of the OPAC.','YesNo'),
 ('OpacShowRecentComments','0',NULL,'If ON a link to recent comments will appear in the OPAC masthead','YesNo'),
 ('OPACShowUnusedAuthorities','1','','Show authorities that are not being used in the OPAC.','YesNo'),
-('opacsmallimage','','','Enter a complete URL to an image to replace the default Koha logo','free'),
 ('OpacStarRatings','all','disable|all|details',NULL,'Choice'),
 ('OpacSuggestionManagedBy',1,'','Show the name of the staff member who managed a suggestion in OPAC','YesNo'),
 ('OpacSuppression','0','','Turn ON the OPAC Suppression feature, requires further setup, ask your system administrator for details','YesNo'),
