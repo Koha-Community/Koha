@@ -279,7 +279,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OPACShelfBrowser','1','','Enable/disable Shelf Browser on item details page. WARNING: this feature is very resource consuming on collections with large numbers of items.','YesNo'),
 ('OPACShowBarcode','0','','Show items barcode in holding tab','YesNo'),
 ('OPACShowCheckoutName','0','','Displays in the OPAC the name of patron who has checked out the material. WARNING: Most sites should leave this off. It is intended for corporate or special sites which need to track who has the item.','YesNo'),
-('OpacShowFiltersPulldownMobile','1',NULL,'Show the search filters pulldown on the mobile version of the OPAC.','YesNo'),
 ('OPACShowHoldQueueDetails','none','none|priority|holds|holds_priority','Show holds details in OPAC','Choice'),
 ('OpacShowLibrariesPulldownMobile','1',NULL,'Show the libraries pulldown on the mobile version of the OPAC.','YesNo'),
 ('OpacShowRecentComments','0',NULL,'If ON a link to recent comments will appear in the OPAC masthead','YesNo'),
