@@ -90,6 +90,11 @@ function Check(ff) {
     <div class="yui-b">
 
 [% INCLUDE 'acquisitions-toolbar.inc' %]
+
+[% IF error == 'not_deleted' %]
+    <div class="dialog alert">Contract has not been deleted. Maybe a basket linked to this contract exists.</div>
+[% END %]
+
                 [% IF ( add_form ) %]
                     <form name="Aform" action="[% script_name %]" method="post">
                         <input type="hidden" name="op" value="add_validate" />

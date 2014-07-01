@@ -33,7 +33,7 @@ use C4::Contract;
 my $input          = new CGI;
 my $contractnumber = $input->param('contractnumber');
 my $booksellerid   = $input->param('booksellerid');
-my $op             = $input->param('op') || '';
+my $op             = $input->param('op') || 'list';
 
 my $bookseller = GetBookSellerFromId($booksellerid);
 
@@ -132,17 +132,20 @@ elsif ( $op eq 'delete_confirm' ) {
 }
 #DELETE_CONFIRMED: called by delete_confirm, used to effectively confirm deletion of data in DB
 elsif ( $op eq 'delete_confirmed' ) {
-    $template->param( delete_confirmed => 1 );
+    my $deleted = DelContract( { contractnumber => $contractnumber } );
 
-    DelContract( { contractnumber => $contractnumber } );
+    if ( $deleted ) {
+        print $input->redirect("/cgi-bin/koha/acqui/supplier.pl?booksellerid=$booksellerid");
+        exit;
+    } else {
+        $template->param( error => 'not_deleted' );
+        $op = 'list';
+    }
 
-    print $input->redirect("/cgi-bin/koha/acqui/supplier.pl?booksellerid=$booksellerid");
-    exit;
-
-    # END $OP eq DELETE_CONFIRMED
+    # END $OP eq LIST
 }
 # DEFAULT: Builds a list of contracts and displays them
-else {
+if ( $op eq 'list' ) {
     $template->param(else => 1);
 
     # get contracts
