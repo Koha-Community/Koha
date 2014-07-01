@@ -41,6 +41,9 @@ $(document).ready(function() {
             if ( oTable.length > 0 ) {
                 oTable.fnAdjustColumnSizing();
             }
+        },
+        "activate": function( event, ui ) {
+            $('#'+ui.newTab.context.id).click();
         }
     } );
     $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {

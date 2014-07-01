@@ -8,7 +8,11 @@ $(document).ready(function() {
         return false;
     });
 
-    $('#patronlists').tabs();
+    $('#patronlists').tabs({
+        activate: function( event, ui ) {
+            $('#'+ui.newTab.context.id).click();
+        }
+    });
 
     $("#messages ul").after("<a href=\"#\" id=\"addmessage\">"+MSG_ADD_MESSAGE+"</a>");
 
