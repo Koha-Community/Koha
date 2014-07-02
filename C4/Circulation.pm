@@ -724,7 +724,8 @@ sub CanBookBeIssued {
                      itemnumber => $item->{'itemnumber'},
                      itemtype => $item->{'itype'},
                      borrowernumber => $borrower->{'borrowernumber'},
-                     ccode => $item->{'ccode'}}
+                     ccode => $item->{'ccode'},
+                     usercode => $borrower->{'categorycode'}}
                     );
         ModDateLastSeen( $item->{'itemnumber'} );
         return( { STATS => 1 }, {});
@@ -1440,7 +1441,8 @@ sub AddIssue {
                     itemnumber     => $item->{'itemnumber'},
                     itemtype       => $item->{'itype'},
                     borrowernumber => $borrower->{'borrowernumber'},
-                    ccode          => $item->{'ccode'}
+                    ccode          => $item->{'ccode'},
+                    usercode   => $borrower->{'categorycode'}
                 }
             );
 
@@ -2975,7 +2977,8 @@ sub AddRenewal {
             itemnumber     => $itemnumber,
             itemtype       => $item->{itype},
             borrowernumber => $borrowernumber,
-            ccode          => $item->{'ccode'}
+            ccode          => $item->{'ccode'},
+            usercode       => $borrower->{'categorycode'}
         }
     );
 

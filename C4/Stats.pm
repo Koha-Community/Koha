@@ -67,6 +67,7 @@ C<$params> is an hashref whose expected keys are:
     itemtype           : the type of the item
     accountno          : the count
     ccode              : the collection code of the item
+    usercode           : categorycode
 
 type key is mandatory.
 For types used in C4::Circulation (renew,issue,localuse,return), the following other keys are mandatory:
@@ -125,19 +126,20 @@ sub UpdateStats {
     my $itemtype          = exists $params->{itemtype}       ? $params->{itemtype} :'';
     my $accountno         = exists $params->{accountno}      ? $params->{accountno} :'';
     my $ccode             = exists $params->{ccode}          ? $params->{ccode} :'';
+    my $usercode          = exists $params->{usercode}       ? $params->{usercode} :'';
 
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
         "INSERT INTO statistics
         (datetime,
          branch,          type,        value,
-         other,           itemnumber,  itemtype,
+         other,           usercode,    itemnumber,  itemtype,
          borrowernumber,  proccode,    ccode)
-         VALUES (now(),?,?,?,?,?,?,?,?,?)"
+         VALUES (now(),?,?,?,?,?,?,?,?,?,?)"
     );
     $sth->execute(
         $branch,         $type,        $amount,
-        $other,          $itemnumber,  $itemtype,
+        $other,          $usercode,    $itemnumber,  $itemtype,
         $borrowernumber, $accountno,   $ccode
     );
 }
