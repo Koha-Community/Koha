@@ -129,6 +129,9 @@ $(document).ready(function() {
     var issuesTable;
     var drawn = 0;
     issuesTable = $("#issues-table").dataTable({
+        "oLanguage": {
+            "sEmptyTable" : MSG_DT_LOADING_RECORDS,
+        },
         "bAutoWidth": false,
         "sDom": "<'row-fluid'<'span6'><'span6'>r>t<'row-fluid'>t",
         "aoColumns": [
