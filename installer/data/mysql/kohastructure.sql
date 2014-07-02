@@ -4937,6 +4937,7 @@ CREATE TABLE `statistics` (
   `location` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'authorized value for the shelving location for this item (MARC21 952$c)',
   `borrowernumber` int(11) DEFAULT NULL COMMENT 'foreign key from the borrowers table, links transaction to a specific borrower',
   `ccode` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'foreign key from the items table, links transaction to a specific collection code',
+  `usercode` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   KEY `timeidx` (`datetime`),
   KEY `branch_idx` (`branch`),
   KEY `type_idx` (`type`),
