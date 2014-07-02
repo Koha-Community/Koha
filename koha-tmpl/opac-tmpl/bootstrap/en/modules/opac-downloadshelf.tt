@@ -1,12 +1,44 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Download list[% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
-</head>
-<body id="opac-downloadlist" class="popup">
-    <div class="main">
-        <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span12">
-                    <div id="userdownloadshelf">
+[% USE Koha %]
+[% IF ( fullpage ) %]
+    [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Download list [% shelfname %][% INCLUDE 'doc-head-close.inc' %]
+    [% BLOCK cssinclude %][% END %]
+    </head>
+    <body id="opac-downloadlist">
+        [% INCLUDE 'masthead.inc' %]
+        <div class="main">
+            <ul class="breadcrumb">
+                <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+                [% IF ( loggedinusername ) %]
+                    <li><a href="/cgi-bin/koha/opac-user.pl">[% FOREACH USER_INF IN USER_INFO %][% USER_INF.title %] [% USER_INF.firstname %] [% USER_INF.surname %][% END %]</a> <span class="divider">&rsaquo;</span></li>
+                [% END %]
+                <li>
+                    [% IF ( showprivateshelves ) %]
+                        <a href="/cgi-bin/koha/opac-shelves.pl">Your lists</a>
+                    [% ELSE %]
+                        <a href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves">Public lists</a>
+                    [% END %]
+                    <span class="divider">&rsaquo;</span>
+                </li>
+                <li>Download list <i>[% shelfname %]</i></li>
+            </ul>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    [% IF ( OpacNav||loggedinusername ) %]
+                        <div class="span2">
+                            <div id="navigation">
+                                [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
+                            </div>
+                        </div>
+                    [% END %]
+
+                    [% IF ( OpacNav||loggedinusername ) %]
+                        <div class="span10">
+                    [% ELSE %]
+                        <div class="span12">
+                    [% END %]
+[% END # / IF fullpage %]
+
+                    <div id="userdownloadshelf" class="maincontent">
                         [% UNLESS ( invalidlist ) %]
 
                             [% IF ( format ) %]
@@ -14,10 +46,10 @@
                                     <p>Your download should begin automatically.</p>
                                 </div>
                             [% ELSE %]
-                                <h1>Download list</h1>
+                                <h1>Download list <i>[% shelfname %]</i></h1>
                                 <form method="post" action="/cgi-bin/koha/opac-downloadshelf.pl">
                                     <fieldset>
-                                        <select name="format" id="format">
+                                        <select name="format" id="dlformat" required="required">
                                             <option value="">-- Choose format --</option>
                                             <option value="ris">RIS (Zotero, EndNote, others)</option>
                                             <option value="bibtex">BibTeX</option>
@@ -26,15 +58,31 @@
                                             <option value="[% csv_profile.export_format_id %]">CSV - [% csv_profile.profile %]</option>
                                             [% END %]
                                         </select>
+                                        <span class="required">Required</span>
                                     </fieldset>
 
                                     <fieldset class="action">
                                         <input type="hidden" name="shelfid" value="[% shelfid | html %]" />
                                         <input type="submit" name="save" class="btn" value="Go" />
-                                        <a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% shelfid %]" class="cancel close">Cancel</a>
+                                        <a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% shelfid %]" class="cancel close" data-dismiss="modal">Cancel</a>
                                     </fieldset>
                                 </form>
-
+                                [% IF ( modal ) %]
+                                    <script type="text/javascript">
+                                        //<![CDATA[
+                                            $(document).ready(function(){
+                                                $("#userdownloadshelf form").on("submit",function(e){
+                                                    if( $("#dlformat").val() == "" ){
+                                                        e.preventDefault();
+                                                        alert(_("Please choose a download format"));
+                                                    } else {
+                                                        $("#modalWin").modal("hide");
+                                                    }
+                                                });
+                                            });
+                                        //]]>
+                                    </script>
+                                [% END %]
                             [% END # / IF format %]
 
                         [% ELSE %]
@@ -46,9 +94,25 @@
                         [% END # / invalidlist %]
 
                     </div> <!-- / #userdownloadshelf -->
-                </div> <!-- / .span10 -->
-            </div> <!-- / .row-fluid -->
-        </div> <!-- / .container-fluid -->
-    </div> <!-- / .main -->
-[% INCLUDE 'opac-bottom.inc' is_popup=1 %]
-[% BLOCK jsinclude %][% END %]
+
+[% IF ( fullpage ) %]
+                    </div> <!-- / .span10 -->
+                </div> <!-- / .row-fluid -->
+            </div> <!-- / .container-fluid -->
+        </div> <!-- / .main -->
+    [% INCLUDE 'opac-bottom.inc' %]
+    [% BLOCK jsinclude %]
+        <script type="text/javascript">
+            //<![CDATA[
+                $(document).ready(function(){
+                    $("#userdownloadshelf form").on("submit",function(e){
+                        if( $("#dlformat").val() == "" ){
+                            e.preventDefault();
+                            alert(_("Please choose a download format"));
+                        }
+                    });
+                });
+            //]]>
+        </script>
+    [% END %]
+[% END # / IF fullpage %]

@@ -46,6 +46,8 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
 
 my $shelfid = $query->param('shelfid');
 my $format  = $query->param('format');
+my $context = $query->param('context');
+my $showprivateshelves = $query->param('showprivateshelves');
 my $dbh     = C4::Context->dbh;
 
 if ( ShelfPossibleAction( (defined($borrowernumber) ? $borrowernumber : -1), $shelfid, 'view' ) ) {
@@ -94,8 +96,24 @@ if ( ShelfPossibleAction( (defined($borrowernumber) ? $borrowernumber : -1), $sh
         print $output;
 
     } else {
+
+        # get details of the list
+        my ($shelfnumber,$shelfname,$owner,$category,$sorton) = GetShelf($shelfid);
+
+        # if modal context is passed set a variable so that page markup can be different
+        if($context eq "modal"){
+            $template->param(modal => 1);
+        } else {
+            $template->param(fullpage => 1);
+        }
         $template->param(csv_profiles => GetCsvProfilesLoop('marc'));
-        $template->param(shelfid => $shelfid); 
+        $template->param(
+            showprivateshelves  => $showprivateshelves,
+            shelfid             => $shelfid,
+            shelfname           => $shelfname,
+            shelfnumber         => $shelfnumber,
+            viewshelf           => $shelfnumber
+        );
         output_html_with_http_headers $query, $cookie, $template->output;
     }
 

@@ -156,7 +156,7 @@
                             <div id="toolbar" class="toolbar clearfix">
                                 <div class="list-actions">
                                     <a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?shelves=1">New list</a> <span class="sep">|</span>
-                                    <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfid=[% shelfnumber %]" class="download" onclick="open('/cgi-bin/koha/opac-downloadshelf.pl?shelfid=[% shelfnumber %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false;">Download list</a>
+                                    <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfid=[% shelfnumber %]&amp;showprivateshelves=[% showprivateshelves %]" class="download" data-toggle="modal" data-target="#modalWin">Download list</a>
 
                                     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                                         <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber %]" class="send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send list</a></span>
@@ -805,6 +805,16 @@
     </div> <!-- / .container-fluid -->
   </div> <!-- / .main -->
 
+<div class="modal hide" id="modalWin" role="dialog" aria-hidden="true" tabindex="-1">
+    <div class="modal-content">
+        <div class="modal-body">
+            <div style="margin:1em;padding:1em;font-size:150%;">
+                <img src="[% interface %]/[% theme %]/images/loading.gif" /> Loading
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- DEBUG -->
     <div id="debug"></div>
 <!-- /DEBUG -->
@@ -904,6 +914,11 @@ $(function() {
             return false;
         });
     [% END %]
+
+    // If JS is enabled add paramter to download link
+    var dialoglink = $(".download").attr("href");
+    dialoglink += "&context=modal";
+    $(".download").attr("href",dialoglink);
 
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
