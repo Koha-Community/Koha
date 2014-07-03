@@ -128,10 +128,13 @@ foreach my $num (@getreserves) {
     $getreserv{'borrowername'}      = $getborrower->{'surname'};
     $getreserv{'borrowerfirstname'} = $getborrower->{'firstname'};
     $getreserv{'borrowerphone'}     = $getborrower->{'phone'};
-    if ( $getborrower->{'emailaddress'} ) {
-        $getreserv{'borrowermail'}  = $getborrower->{'emailaddress'};
+
+    my $borEmail = GetFirstValidEmailAddress( $borrowernum );
+
+    if ( $borEmail ) {
+        $getreserv{'borrowermail'}  = $borEmail;
     }
- 
+
     if ($today > $calcDate) {
         if ($cancelall) {
             my $res = cancel( $itemnumber, $borrowernum, $holdingbranch, $homebranch, !$transfer_when_cancel_all );
