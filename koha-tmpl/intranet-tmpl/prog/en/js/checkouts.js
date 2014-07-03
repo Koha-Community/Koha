@@ -57,7 +57,7 @@ $(document).ready(function() {
                 exempt_fine:    $("#exemptfine").is(':checked')
             };
 
-            $.post( "/cgi-bin/koha/svc/checkin.pl", params, function( data ) {
+            $.post( "/cgi-bin/koha/svc/checkin", params, function( data ) {
                 id = "#checkin_" + data.itemnumber;
 
                 content = "";
@@ -86,7 +86,7 @@ $(document).ready(function() {
                 date_due:       $("#newduedate").val()
             };
 
-            $.post( "/cgi-bin/koha/svc/renew.pl", params, function( data ) {
+            $.post( "/cgi-bin/koha/svc/renew", params, function( data ) {
                 var id = "#renew_" + data.itemnumber;
 
                 var content = "";
@@ -305,7 +305,7 @@ $(document).ready(function() {
         "bPaginate": false,
         "bProcessing": true,
         "bServerSide": false,
-        "sAjaxSource": '/cgi-bin/koha/svc/checkouts.pl',
+        "sAjaxSource": '/cgi-bin/koha/svc/checkouts',
         "fnServerData": function ( sSource, aoData, fnCallback ) {
             aoData.push( { "name": "borrowernumber", "value": borrowernumber } );
 
@@ -431,7 +431,7 @@ $(document).ready(function() {
                 "bPaginate": false,
                 "bProcessing": true,
                 "bServerSide": false,
-                "sAjaxSource": '/cgi-bin/koha/svc/checkouts.pl',
+                "sAjaxSource": '/cgi-bin/koha/svc/checkouts',
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
                     $.each(relatives_borrowernumbers, function( index, value ) {
                         aoData.push( { "name": "borrowernumber", "value": value } );
