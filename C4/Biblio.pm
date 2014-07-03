@@ -1074,13 +1074,15 @@ sub GetBiblio {
 sub GetBiblioItemInfosOf {
     my @biblioitemnumbers = @_;
 
-    my $query = '
+    my $biblioitemnumber_values = @biblioitemnumbers ? join( ',', @biblioitemnumbers ) : "''";
+
+    my $query = "
         SELECT biblioitemnumber,
             publicationyear,
             itemtype
         FROM biblioitems
-        WHERE biblioitemnumber IN (' . join( ',', @biblioitemnumbers ) . ')
-    ';
+        WHERE biblioitemnumber IN ($biblioitemnumber_values)
+    ";
     return get_infos_of( $query, 'biblioitemnumber' );
 }
 

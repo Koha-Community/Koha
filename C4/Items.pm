@@ -1145,11 +1145,13 @@ sub GetItemsCount {
 sub GetItemInfosOf {
     my @itemnumbers = @_;
 
-    my $query = '
+    my $itemnumber_values = @itemnumbers ? join( ',', @itemnumbers ) : "''";
+
+    my $query = "
         SELECT *
         FROM items
-        WHERE itemnumber IN (' . join( ',', @itemnumbers ) . ')
-    ';
+        WHERE itemnumber IN ($itemnumber_values)
+    ";
     return get_infos_of( $query, 'itemnumber' );
 }
 
