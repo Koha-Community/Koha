@@ -110,7 +110,7 @@ $(document).ready(function() {
                 "bPaginate": false,
                 "bProcessing": true,
                 "bServerSide": false,
-                "sAjaxSource": '/cgi-bin/koha/svc/holds.pl',
+                "sAjaxSource": '/cgi-bin/koha/svc/holds',
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
                     aoData.push( { "name": "borrowernumber", "value": borrowernumber } );
 
