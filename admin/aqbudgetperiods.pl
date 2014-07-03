@@ -44,9 +44,8 @@ script to administer the budget periods table
 
 =cut
 
-## modules
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
+
 use Number::Format qw(format_price);
 use CGI;
 use List::Util qw/min/;
@@ -64,7 +63,7 @@ my $dbh = C4::Context->dbh;
 
 my $input       = new CGI;
 
-my $searchfield          = $input->param('searchfield');
+my $searchfield          = $input->param('searchfield') // '';
 my $budget_period_id     = $input->param('budget_period_id');
 my $op                   = $input->param('op')||"else";
 #my $sort1_authcat = $input->param('sort1_authcat');
@@ -140,7 +139,7 @@ if ( $op eq 'add_form' ) {
 }
 
 elsif ( $op eq 'add_validate' ) {
-## add or modify a budget period (confirimation)
+## add or modify a budget period (confirmation)
 
     ## update budget period data
 	if ( $budget_period_id ne '' ) {
@@ -222,7 +221,7 @@ elsif ( $op eq 'duplicate_budget' ){
 
         # get only the columns of aqbudgets
         my @columns = Koha::Database->new()->schema->source('Aqbudget')->columns;
-        my $new_entry = { map { join(' ',@columns) =~ /$_/ ? ( $_ => $$entry{$_} )  : () } keys(%$entry) };
+        my $new_entry = { map { join(' ',@columns) =~ /$_/ ? ( $_ => $entry->{$_} )  : () } keys(%$entry) };
         # write it to db
         my $new_id = AddBudget($new_entry);
         $old_new{$old_id} = $new_id;
