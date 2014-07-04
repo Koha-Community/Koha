@@ -5,7 +5,7 @@
 [% INCLUDE 'greybox.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/js/background-job-progressbar.js"></script>
 <script type="text/javascript">
 //<![CDATA[
@@ -169,8 +169,8 @@ $(document).ready(function() {
         </select>
         [% IF recordtype == 'biblio' %]
           <div id="toolbar">
-            <a id="selectall" href="#">Select All</a>
-            | <a id="clearall" href="#">Clear All</a>
+            <a id="selectall" href="#">Select all</a>
+            | <a id="clearall" href="#">Clear all</a>
           </div>
           <table id="biblios" class="records">
             <thead>
@@ -195,8 +195,8 @@ $(document).ready(function() {
           <div class="note">Reminder: this action will modify all selected biblios!</div>
         [% ELSE %]
           <div id="toolbar">
-            <a id="selectall" href="#">Select All</a>
-            | <a id="clearall" href="#">Clear All</a>
+            <a id="selectall" href="#">Select all</a>
+            | <a id="clearall" href="#">Clear all</a>
           </div>
           <table id="authorities" class="records">
             <thead>
