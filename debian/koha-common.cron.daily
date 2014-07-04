@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 koha-foreach --enabled --email /usr/share/koha/bin/cronjobs/overdue_notices.pl -t
-koha-foreach --enabled /usr/share/koha/bin/cronjobs/fines.pl --out /var/log/koha/__instancename__
+koha-foreach --enabled /usr/share/koha/bin/cronjobs/fines.pl
 koha-foreach --enabled --email /usr/share/koha/bin/cronjobs/advance_notices.pl -c
 koha-foreach --enabled /usr/share/koha/bin/cronjobs/holds/cancel_expired_holds.pl >/dev/null 2>&1
 koha-foreach --enabled /usr/share/koha/bin/cronjobs/services_throttle.pl > /dev/null 2>&1
