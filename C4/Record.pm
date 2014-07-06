@@ -660,14 +660,14 @@ sub marc2bibtex {
     }
     $author = join ' and ', @texauthors;
 
-    # Defining the conversion hash according to the marcflavour
+    # Defining the conversion array according to the marcflavour
     my @bh;
     if ( $marcflavour eq "UNIMARC" ) {
 
         # FIXME, TODO : handle repeatable fields
         # TODO : handle more types of documents
 
-        # Unimarc to bibtex hash
+        # Unimarc to bibtex array
         @bh = (
 
             # Mandatory
@@ -687,7 +687,7 @@ sub marc2bibtex {
         );
     } else {
 
-        # Marc21 to bibtex hash
+        # Marc21 to bibtex array
         @bh = (
 
             # Mandatory
