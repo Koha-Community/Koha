@@ -1,10 +1,10 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF ( caller = 'hold-transfer' %]
+[% IF ( caller = 'hold-transfer' ) %]
 <title>Koha &rsaquo; Circulation &rsaquo; Hold transfer print receipt</title>
-[% ELSIF ( caller == 'transfer' %]
+[% ELSIF ( caller == 'transfer' ) %]
 <title>Koha &rsaquo; Circulation &rsaquo; Transfers print receipt</title>
-[% ELSIF ( caller == 'members' %]
+[% ELSIF ( caller == 'members' ) %]
 <title>Koha &rsaquo; Members &rsaquo; Print receipt for [% borrowernumber %]</title>
 [% END %]
 
