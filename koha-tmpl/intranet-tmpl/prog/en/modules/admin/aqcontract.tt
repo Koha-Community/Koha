@@ -78,7 +78,7 @@ function Check(ff) {
         &rsaquo; Confirm deletion of contract [% contractnumber %]
     [% END %]
     [% IF ( delete_confirmed ) %]
-        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid %]">Contracts</a> &rsaquo; Contract Deleted
+        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid %]">Contracts</a> &rsaquo; Contract deleted
     [% END %]
     [% IF ( else ) %]Contracts[% END %]
 </div>
@@ -156,7 +156,7 @@ function Check(ff) {
                             <input type="hidden" name="op" value="delete_confirmed" />
                             <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
                             <input type="hidden" name="contractnumber" value="[% contractnumber %]" />
-                            <input type="submit" value="Delete this Contract" />
+                            <input type="submit" value="Delete this contract" />
                             <a class="cancel" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid %]&amp;contractnumber=[% contractnumber %]">Cancel</a>
                         </fieldset>
                     </fieldset>
