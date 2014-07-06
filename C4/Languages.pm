@@ -571,6 +571,7 @@ sub getlanguage {
 
     $cgi //= new CGI;
     my $interface = C4::Context->interface;
+    my $theme = C4::Context->preference( ( $interface eq 'opac' ) ? 'opacthemes' : 'template' );
     my $language;
 
     my $preference_to_check =
@@ -592,7 +593,7 @@ sub getlanguage {
     # HTTP_ACCEPT_LANGUAGE
     if ( !$language && $ENV{HTTP_ACCEPT_LANGUAGE} ) {
         $language = accept_language( $ENV{HTTP_ACCEPT_LANGUAGE},
-            getTranslatedLanguages( $interface, 'prog' ) );
+            getTranslatedLanguages( $interface, $theme ) );
     }
 
     # Ignore a lang not selected in sysprefs
