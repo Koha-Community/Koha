@@ -201,13 +201,8 @@ sub _get_template_file {
     my $is_intranet = $interface eq 'intranet';
     my $htdocs = C4::Context->config($is_intranet ? 'intrahtdocs' : 'opachtdocs');
     my ($theme, $lang, $availablethemes) = themelanguage($htdocs, $tmplbase, $interface, $query);
-
-    # if the template doesn't exist, load the English one as a last resort
     my $filename = "$htdocs/$theme/$lang/modules/$tmplbase";
-    unless (-f $filename) {
-        $lang = 'en';
-        $filename = "$htdocs/$theme/$lang/modules/$tmplbase";
-    }
+
     return ($htdocs, $theme, $lang, $filename);
 }
 
@@ -248,6 +243,7 @@ sub gettemplate {
 
 #---------------------------------------------------------------------------------------------------------
 # FIXME - POD
+# FIXME - Rewritten to remove hardcoded theme with minimal changes, need to be rethinked
 sub themelanguage {
     my ($htdocs, $tmpl, $interface, $query) = @_;
     ($query) or warn "no query in themelanguage";
@@ -255,20 +251,19 @@ sub themelanguage {
     # Select a language based on cookie, syspref available languages & browser
     my $lang = C4::Languages::getlanguage($query);
 
-    # Select theme
-    my $is_intranet = $interface eq 'intranet';
-    my @themes = split(" ", C4::Context->preference(
-        $is_intranet ? "template" : "opacthemes" ));
-    push @themes, 'prog';
+    # Get theme
+    my @themes   = ( C4::Context->preference( ($interface eq 'intranet') ? 'template' : 'opacthemes' ) );
+    my $fallback =   C4::Context->preference( ($interface eq 'intranet') ? 'template' : 'OPACFallback' );
+    push @themes, $fallback;
 
     # Try to find first theme for the selected language
     for my $theme (@themes) {
         if ( -e "$htdocs/$theme/$lang/modules/$tmpl" ) {
-            return ($theme, $lang, \@themes)
+            return ($theme, $lang, \@themes);
         }
     }
-    # Otherwise, return prog theme in English 'en'
-    return ('prog', 'en', \@themes);
+    # Otherwise, return fallback theme in English 'en'
+    return ($fallback, 'en', \@themes);
 }
 
 
