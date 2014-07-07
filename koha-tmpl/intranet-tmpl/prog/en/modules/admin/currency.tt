@@ -1,3 +1,5 @@
+[% USE KohaDates %]
+[% USE ColumnsSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Currencies &amp; Exchange rates &rsaquo;
 [% IF ( add_form ) %][% IF ( searchfield ) %]Modify currency '[% searchfield %]'[% ELSE %]New currency[% END %][% END %]
@@ -5,6 +7,11 @@
 [% IF ( delete_confirmed ) %]Currency deleted[% END %]
 [% IF ( else ) %]Currencies[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.colvis.css" />
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.colvis.js"></script>
+[% INCLUDE 'columns_settings.inc' %]
 <script type="text/javascript">
 //<![CDATA[
 
@@ -20,6 +27,17 @@
     }
 
     $(document).ready(function() {
+        columns_settings = [% ColumnsSettings.GetColumns( 'admin', 'currency', 'currencies-table', 'json' ) %]
+        var issuest = KohaTable("#currencies-table", {
+            "sDom": 'C<"clearfix">t',
+            "aaSorting": [],
+            "aoColumnDefs": [
+                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                { "sType": "title-string", "aTargets" : [ "title-string" ] }
+            ],
+            "bPaginate": false,
+        }, columns_settings);
+
         // prevents users to check active with a currency != 1
         $("#rate").keyup(function() {
             check_currency( $(this).val() );
@@ -158,32 +176,35 @@
         You searched for [% searchfield %]</span>
     [% END %]
 
-    <table>
+    <table id='currencies-table'>
+      <thead>
         <tr>
             <th>Currency</th>
             <th>Rate</th>
             <th>Symbol</th>
             <th>ISO code</th>
-            <th>Last updated</th>
+            <th class="title-string">Last updated</th>
             <th>Active</th>
-            <th colspan="2">Actions&nbsp;</th>
+            <th>Actions</th>
         </tr>
+      </thead>
+      <tbody>
         [% FOREACH loo IN loop %]
-        [% UNLESS ( loop.odd ) %]
-        <tr class="highlight">
-        [% ELSE %]
-        <tr>
-        [% END %]
+          <tr>
             <td>[% loo.currency %]</td>
             <td>[% loo.rate %]</td>
             <td>[% loo.symbol |html %]</td>
             <td>[% loo.isocode |html %]</td>
-            <td>[% loo.timestamp %]</td>
+            <td><span title="[% loo.timestamp %]">[% loo.timestamp | $KohaDates %]</span></td>
             <td style="color:green;">[% IF ( loo.active ) %]✓[% END %]</td>
-            <td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.currency %]">Edit</a></td>
-            <td><a href="[% loo.script_name %]?op=delete_confirm&amp;searchfield=[% loo.currency %]">Delete</a></td>
-        </tr>
+            <td>
+              <a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.currency %]">Edit</a>
+              |
+              <a href="[% loo.script_name %]?op=delete_confirm&amp;searchfield=[% loo.currency %]">Delete</a>
+            </td>
+          </tr>
         [% END %]
+      </tbody>
     </table>
 <br />
 

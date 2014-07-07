@@ -13,8 +13,13 @@
         [% IF tables.$pagename.keys and tables.$pagename.keys.size > 0 %]
           [% FOR tablename IN tables.$pagename.keys.sort %]
             <table>
-              <caption>[% tablename %]</caption>
-              <thead><tr><th>Column name</th><th>Is Hidden by default</th><th>Cannot be toggled</th></tr></thead>
+              <caption>
+                [% IF tablename == 'currencies-table' %]
+                  Currency
+                [% END %]
+                (id=[% tablename %])
+              </caption>
+              <thead><tr><th>Column name</th><th>Is hidden by default</th><th>Cannot be toggled</th></tr></thead>
               <tbody>
               [% FOR column IN tables.$pagename.$tablename %]
                 <tr>
