@@ -8613,6 +8613,28 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+
+
+
+
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        CREATE TABLE IF NOT EXISTS columns_settings (
+            module varchar(255) NOT NULL,
+            page varchar(255) NOT NULL,
+            tablename varchar(255) NOT NULL,
+            columnname varchar(255) NOT NULL,
+            cannot_be_toggled int(1) NOT NULL DEFAULT 0,
+            is_hidden int(1) NOT NULL DEFAULT 0,
+            PRIMARY KEY(module, page, tablename, columnname)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    });
+    print "Upgrade to $DBversion done (Bug 10212 - Create new table columns_settings)\n";
+    SetVersion ($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

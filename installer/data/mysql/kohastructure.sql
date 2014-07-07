@@ -3422,6 +3422,20 @@ CREATE TABLE IF NOT EXISTS `misc_files` ( -- miscellaneous files attached to rec
   KEY `record_id` (`record_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `columns_settings`
+--
+
+CREATE TABLE IF NOT EXISTS columns_settings (
+    module varchar(255) NOT NULL,
+    page varchar(255) NOT NULL,
+    tablename varchar(255) NOT NULL,
+    columnname varchar(255) NOT NULL,
+    cannot_be_toggled int(1) NOT NULL DEFAULT 0,
+    is_hidden int(1) NOT NULL DEFAULT 0,
+    PRIMARY KEY(module, page, tablename, columnname)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
