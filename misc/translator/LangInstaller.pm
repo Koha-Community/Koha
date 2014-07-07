@@ -84,19 +84,14 @@ sub new {
 
     # Get all available language codes
     opendir $fh, $self->{path_po};
-    my @langs =  map { ($_) =~ /(.*)-i-opac/ } 
-        grep { $_ =~ /.*-opac-t-prog/ } readdir($fh);
+    my @langs =  map { ($_) =~ /(.*)-pref/ }
+        grep { $_ =~ /.*-pref/ } readdir($fh);
     closedir $fh;
     $self->{langs} = \@langs;
 
     # Map for both interfaces opac/intranet
     my $opachtdocs = $context->config('opachtdocs');
     $self->{interface} = [
-        {
-            name   => 'OPAC prog',
-            dir    => "$opachtdocs/prog",
-            suffix => '-i-opac-t-prog-v-3006000.po',
-        },
         {
             name   => 'Intranet prog UI',
             dir    => $context->config('intrahtdocs') . '/prog',
@@ -109,13 +104,13 @@ sub new {
         },
     ];
 
-    # Alternate opac themes
-    opendir $fh, $context->config('opachtdocs');
-    for ( grep { not /^\.|\.\.|prog|lib$/ } readdir($fh) ) {
+    # OPAC themes
+    opendir my $dh, $context->config('opachtdocs');
+    for my $theme ( grep { not /^\.|lib/ } readdir($dh) ) {
         push @{$self->{interface}}, {
-            name   => "OPAC $_",
-            dir    => "$opachtdocs/$_",
-            suffix => "-opac-$_.po",
+            name   => "OPAC $theme",
+            dir    => "$opachtdocs/$theme",
+            suffix => "-opac-$theme.po",
         };
     }
 
@@ -514,9 +509,9 @@ sub install {
 sub get_all_langs {
     my $self = shift;
     opendir( my $dh, $self->{path_po} );
-    my @files = grep { $_ =~ /-i-opac-t-prog-v-3006000.po$/ }
+    my @files = grep { $_ =~ /-pref.po$/ }
         readdir $dh;
-    @files = map { $_ =~ s/-i-opac-t-prog-v-3006000.po$//; $_ } @files;
+    @files = map { $_ =~ s/-pref.po$//; $_ } @files;
 }
 
 
@@ -595,10 +590,10 @@ intranet templates, and (3) from preferences.
 
 =over
 
-=item F<lang>-opac.po
+=item F<lang>-opac-{theme}.po
 
 Contains extracted text from english (en) OPAC templates found in
-<KOHA_ROOT>/koha-tmpl/opac-tmpl/prog/en/ directory.
+<KOHA_ROOT>/koha-tmpl/opac-tmpl/{theme}/en/ directory.
 
 =item F<lang>-intranet.po
 
