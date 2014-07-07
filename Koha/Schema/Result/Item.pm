@@ -612,17 +612,11 @@ __PACKAGE__->might_have(
 # Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-10-24 09:58:16
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2slVK/FjcRDiYLeufoOFQQ
 
-__PACKAGE__->belongs_to(
-    "biblio",
-    "Koha::Schema::Result::Biblio",
-    { "foreign.biblionumber" => "self.biblionumber" }
-);
-
-__PACKAGE__->belongs_to(
-  "biblioitem",
-  "Koha::Schema::Result::Biblioitem",
-  { biblioitemnumber => "biblioitemnumber" },
-);
+sub biblioitem {
+    my ( $self ) = @_;
+    my @biblioitems = $self->biblioitemnumber;
+    return $biblioitems[0];
+}
 
 sub effective_itemtype {
     my ( $self ) = @_;

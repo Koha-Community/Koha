@@ -215,8 +215,7 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
         }
     );
 
-    my $biblioitem = $biblio->biblioitem();
-    my ( $item ) = $biblioitem->items();
+    my ( $item ) = $biblio->biblioitem->items();
 
     C4::Context->set_preference( 'item-level_itypes', 0 );
     ok( $item->effective_itemtype() eq 'BIB_LEVEL', '$item->itemtype() returns biblioitem.itemtype when item-level_itypes is disabled' );
