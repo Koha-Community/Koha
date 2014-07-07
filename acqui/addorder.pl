@@ -122,10 +122,10 @@ if it is an order from an existing suggestion : the id of this suggestion.
 use strict;
 use warnings;
 use CGI;
-use C4::Auth;			# get_template_and_user
+use C4::Auth;           # get_template_and_user
 use C4::Acquisition;    # ModOrder
-use C4::Suggestions;	# ModStatus
-use C4::Biblio;			# AddBiblio TransformKohaToMarc
+use C4::Suggestions;    # ModStatus
+use C4::Biblio;         # AddBiblio TransformKohaToMarc
 use C4::Budgets;
 use C4::Items;
 use C4::Output;

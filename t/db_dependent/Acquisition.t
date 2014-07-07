@@ -893,8 +893,8 @@ ok((defined $order1->{datecancellationprinted}), "order is cancelled");
 ok((not defined $order1->{cancellationreason}), "order has no cancellation reason");
 ok((defined GetBiblio($order1->{biblionumber})), "biblio still exists");
 
-my $order2 = GetOrder($ordernumbers[1]);
-my $error = DelOrder($order2->{biblionumber}, $order2->{ordernumber}, 1);
+$order2 = GetOrder($ordernumbers[1]);
+$error = DelOrder($order2->{biblionumber}, $order2->{ordernumber}, 1);
 ok((not defined $error), "DelOrder does not fail");
 $order2 = GetOrder($order2->{ordernumber});
 ok((defined $order2->{datecancellationprinted}), "order is cancelled");
@@ -902,7 +902,7 @@ ok((not defined $order2->{cancellationreason}), "order has no cancellation reaso
 ok((not defined GetBiblio($order2->{biblionumber})), "biblio does not exist anymore");
 
 my $order4 = GetOrder($ordernumbers[3]);
-my $error = DelOrder($order4->{biblionumber}, $order4->{ordernumber}, 1, "foobar");
+$error = DelOrder($order4->{biblionumber}, $order4->{ordernumber}, 1, "foobar");
 ok((not defined $error), "DelOrder does not fail");
 $order4 = GetOrder($order4->{ordernumber});
 ok((defined $order4->{datecancellationprinted}), "order is cancelled");
