@@ -104,7 +104,7 @@ $subs->{location} = GetKohaAuthorisedValueLib("LOC",$subs->{location});
 $subs->{abouttoexpire}  = abouttoexpire($subs->{subscriptionid});
 $template->param(%{ $subs });
 $template->param(biblionumber_for_new_subscription => $subs->{bibnum});
-my @irregular_issues = split /,/, $subs->{irregularity};
+my @irregular_issues = split /;/, $subs->{irregularity};
 
 my $frequency = C4::Serials::Frequency::GetSubscriptionFrequency($subs->{periodicity});
 my $numberpattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subs->{numberpattern});
