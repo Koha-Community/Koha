@@ -30,15 +30,6 @@ use Modern::Perl;
 use C4::Context;
 use List::MoreUtils q/any/;
 
-my $searchengine = C4::Context->preference("SearchEngine");
-if ( $searchengine =~ /^Solr$/ ) {
-    warn "We use Solr";
-    require 'opac/search.pl';
-    exit;
-} elsif ( $searchengine =~ /^Zebra$/ ) {
-
-}
-
 use C4::Output;
 use C4::Auth qw(:DEFAULT get_session);
 use C4::Languages qw(getLanguages);

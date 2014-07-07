@@ -34,6 +34,4 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-$template->param( SearchEngine => C4::Context->preference('SearchEngine') );
-
 output_html_with_http_headers $query, $cookie, $template->output;

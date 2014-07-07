@@ -44,7 +44,6 @@ find(
             return unless $m =~ s/[.]pm$//;
             $m =~ s{^.*/Koha/}{Koha/};
             $m =~ s{/}{::}g;
-            return if $m =~ /Koha::SearchEngine/; # Koha::SearchEngine::* are experimental
             use_ok($m) || BAIL_OUT("***** PROBLEMS LOADING FILE '$m'");
         },
     },

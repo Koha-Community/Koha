@@ -20,9 +20,6 @@ override_dh_auto_install:
 	rm -r $(TMP)/var/run
 	rm -r $(TMP)/var/lock
 	rm $(TMP)/var/log/koha/README
-	rm $(TMP)/etc/koha/searchengine/solr/config.yaml
-	rm $(TMP)/etc/koha/searchengine/solr/indexes.yaml
-	rm $(TMP)/etc/koha/solr/indexes.yaml
 	rm -r \
 		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/lib/tiny_mce
 	ln -s /usr/share/tinymce/www \

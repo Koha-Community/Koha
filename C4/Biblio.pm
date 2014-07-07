@@ -657,7 +657,7 @@ sub LinkBibHeadingsToAuthorities {
     }
 
 Check whether the specified heading-auth link is valid without reference
-to Zebra/Solr. Ideally this code would be in C4::Heading, but that won't be
+to Zebra. Ideally this code would be in C4::Heading, but that won't be
 possible until we have de-cycled C4::AuthoritiesMarc, so this is the
 safest place.
 

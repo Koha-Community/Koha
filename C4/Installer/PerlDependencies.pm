@@ -552,41 +552,6 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.03',
     },
-    'Data::Paginator' => {
-        'usage'    => 'Core',
-        'required' => '0',
-        'min_ver'  => '0.04',
-    },
-    'Data::Pagination' => {
-        'usage'    => 'Core',
-        'required' => '0',
-        'min_ver'  => '0.44',
-    },
-    'JSON::Any' => {
-        'usage'    => 'Core',
-        'required' => '0',
-        'min_ver'  => '1.28',
-    },
-    'MooseX::Storage' => {
-        'usage'    => 'Core',
-        'required' => '0',
-        'min_ver'  => '0.30',
-    },
-    'MooseX::Types' => {
-        'usage'    => 'Core',
-        'required' => '0',
-        'min_ver'  => '0.30',
-    },
-    'String::RewritePrefix' => {
-        'usage'    => 'Core',
-        'required' => '0',
-        'min_ver'  => '0.006',
-    },
-    'Time::Progress' => {
-        'usage'    => 'Core',
-        'required' => '0',
-        'min_ver'  => '1.7',
-    },
     'DBD::Mock' => {
         'usage'    => 'Core',
         'required' => '1',
