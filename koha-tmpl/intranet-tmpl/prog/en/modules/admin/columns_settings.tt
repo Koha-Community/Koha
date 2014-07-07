@@ -1,0 +1,144 @@
+[% SET panel_id = 0 %]
+[% BLOCK pagelist %]
+<div class="pagelist">
+  <form method="post" action="/cgi-bin/koha/admin/columns_settings.pl">
+    <input type="hidden" name="action" value="save" />
+    <input type="hidden" name="module" value="[% modulename %]" />
+    <input type="hidden" name="panel" value="[% panel_id %]" />
+    [% SET panel_id = panel_id + 1 %]
+    [% IF module.keys and module.keys.size > 0 %]
+      [% FOR pagename IN module.keys %]
+        <h5>[% pagename %]</h5>
+        [% SET tables = module %]
+        [% IF tables.$pagename.keys and tables.$pagename.keys.size > 0 %]
+          [% FOR tablename IN tables.$pagename.keys.sort %]
+            <table>
+              <caption>[% tablename %]</caption>
+              <thead><tr><th>Column name</th><th>Is Hidden by default</th><th>Cannot be toggled</th></tr></thead>
+              <tbody>
+              [% FOR column IN tables.$pagename.$tablename %]
+                <tr>
+                  <td>
+                    [% column.columnname %]
+                    <input type="hidden" name="columnid" value="[% pagename %]_[% tablename %]_[% column.columnname %]" />
+                  </td>
+                  <td>
+                    [% IF column.is_hidden %]
+                      [% IF column.cannot_be_modified %]
+                        <input type="checkbox" name="[% pagename %]_[% tablename %]_[% column.columnname %]_hidden" value="1" checked="checked" disabled="disabled" />
+                        <input type="hidden" name="[% pagename %]_[% tablename %]_[% column.columnname %]_hidden" value="1" />
+                      [% ELSE %]
+                        <input type="checkbox" name="[% pagename %]_[% tablename %]_[% column.columnname %]_hidden" value="1" checked="checked" />
+                      [% END %]
+                    [% ELSE %]
+                      [% IF column.cannot_be_modified %]
+                        <input type="checkbox" name="[% pagename %]_[% tablename %]_[% column.columnname %]_hidden" value="1" disabled="disabled" />
+                        <input type="hidden" name="[% pagename %]_[% tablename %]_[% column.columnname %]_hidden" value="0" />
+                      [% ELSE %]
+                        <input type="checkbox" name="[% pagename %]_[% tablename %]_[% column.columnname %]_hidden" value="1" />
+                      [% END %]
+                    [% END %]
+                  </td>
+                  <td>
+                    [% IF column.cannot_be_toggled %]
+                      [% IF column.cannot_be_modified %]
+                        <input type="checkbox" name="[% pagename %]_[% tablename %]_[% column.columnname %]_cannot_be_toggled" value="1" checked="checked" disabled="disabled" />
+                        <input type="hidden" name="[% pagename %]_[% tablename %]_[% column.columnname %]_cannot_be_toggled" value="1" />
+                      [% ELSE %]
+                        <input type="checkbox" name="[% pagename %]_[% tablename %]_[% column.columnname %]_cannot_be_toggled" value="1" checked="checked" />
+                      [% END %]
+                    [% ELSE %]
+                      [% IF column.cannot_be_modified %]
+                        <input type="checkbox" name="[% pagename %]_[% tablename %]_[% column.columnname %]_cannot_be_toggled" value="1" disabled="disabled" />
+                        <input type="hidden" name="[% pagename %]_[% tablename %]_[% column.columnname %]_cannot_be_toggled" value="0" />
+                      [% ELSE %]
+                        <input type="checkbox" name="[% pagename %]_[% tablename %]_[% column.columnname %]_cannot_be_toggled" value="1" />
+                      [% END %]
+                    [% END %]
+                  </td>
+                </tr>
+              [% END %]
+              </tbody>
+            </table>
+          [% END %]
+          <input type="submit" value="Save" />
+        [% ELSE %]
+          There is no table to configure for this module.
+        [% END %]
+      [% END %]
+    [% ELSE %]
+        There is no page using the table configuration in this module.
+    [% END %]
+  </form>
+</div>
+[% END %]
+
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Columns settings</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+    $(document).ready( function() {
+        var accordion = $( "#modules" ).accordion({
+            collapsible: true,
+            autoHeight: false,
+            header: "h3",
+            active: [% panel %]
+        });
+    });
+</script>
+</head>
+<body id="admin_tables" class="admin">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Columns settings</div>
+
+<div id="doc3" class="yui-t2">
+  <div id="bd">
+    <div id="yui-main">
+      <div class="yui-b">
+        <h2>Columns settings</h2>
+        <div id="modules">
+          <h3><a href="#acqui">Acquisition</a></h3>
+          <div id="acqui">
+            <h4>Acquisition tables</h4>
+            [% PROCESS pagelist module=modules.acqui modulename="acqui" %]
+          </div>
+
+          <h3><a href="#admin">Administration</a></h3>
+          <div id="admin">
+            <h4>Administration tables</h4>
+            [% PROCESS pagelist module=modules.admin modulename="admin" %]
+          </div>
+
+          <h3><a href="#authorities">Authorities</a></h3>
+          <div id="authorities">
+            <h4>Authorities tables</h4>
+            [% PROCESS pagelist module=modules.authorities modulename="authorities" %]
+          </div>
+
+          <h3><a href="#catalog">Catalog</a></h3>
+          <div id="catalogue">
+            <h4>Catalogue tables</h4>
+            [% PROCESS pagelist module=modules.catalogue modulename="catalogue" %]
+          </div>
+
+          <h3><a href="#cataloguing">Cataloging</a></h3>
+          <div id="cataloguing">
+            <h4>Cataloguing tables</h4>
+            [% PROCESS pagelist module=modules.cataloguing modulename="cataloguing" %]
+          </div>
+
+          <h3><a href="#circulation">Circulation</a></h3>
+          <div id="circulation">
+            <h4>Circulation tables</h4>
+            [% PROCESS pagelist module=modules.circ modulename="circ" %]
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="yui-b">
+      [% INCLUDE 'admin-menu.inc' %]
+    </div>
+  </div>
+[% INCLUDE 'intranet-bottom.inc' %]
