@@ -36,7 +36,7 @@ my $plugins_enabled = C4::Context->preference('UseKohaPlugins') && C4::Context->
 my $input = new CGI;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name => ($plugins_enabled) ? "plugins/plugins-upload.tmpl" : "plugins/plugins-disabled.tt",
+    {   template_name => ($plugins_enabled) ? "plugins/plugins-upload.tt" : "plugins/plugins-disabled.tt",
         query         => $input,
         type          => "intranet",
         authnotrequired => 0,

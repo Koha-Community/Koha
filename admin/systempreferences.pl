@@ -207,7 +207,7 @@ my $offset      = $input->param('offset') || 0;
 my $script_name = "/cgi-bin/koha/admin/systempreferences.pl";
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => "admin/systempreferences.tmpl",
+    {   template_name   => "admin/systempreferences.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

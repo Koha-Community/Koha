@@ -56,14 +56,16 @@ use C4::Branch; # GetBranches
 use Koha::DateUtils;
 
 my $input = new CGI;
-my ($template, $loggedinuser, $cookie) = get_template_and_user({
-	template_name => "acqui/lateorders.tmpl",
-	query => $input,
-	 type => "intranet",
-	authnotrequired => 0,
-	flagsrequired => {acquisition => 'order_receive'},
-	debug => 1,
-});
+my ($template, $loggedinuser, $cookie) = get_template_and_user(
+    {
+        template_name   => "acqui/lateorders.tt",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { acquisition => 'order_receive' },
+        debug           => 1,
+    }
+);
 
 my $booksellerid = $input->param('booksellerid') || undef; # we don't want "" or 0
 my $delay        = $input->param('delay') // 0;

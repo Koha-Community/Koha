@@ -59,7 +59,7 @@ use C4::Bookseller qw/GetBookSellerFromId GetBookSeller/;
 my $input = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/basketheader.tmpl",
+        template_name   => "acqui/basketheader.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

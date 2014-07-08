@@ -570,7 +570,7 @@ if(!$authtypecode) {
 }
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "authorities/authorities.tmpl",
+    = get_template_and_user({template_name => "authorities/authorities.tt",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,

@@ -43,14 +43,16 @@ my $biblionumber = $query->param('biblionumber');
 # The barcode of the item to move
 my $barcode	 = $query->param('barcode');
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/moveitem.tmpl",
-                 query => $query,
-                 type => "intranet",
-                 authnotrequired => 0,
+my ($template, $loggedinuser, $cookie) = get_template_and_user(
+    {
+        template_name   => "cataloguing/moveitem.tt",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
         flagsrequired   => { editcatalogue => 'edit_items' },
-                 debug => 1,
-                 });
+        debug           => 1,
+    }
+);
 
 
 

@@ -29,7 +29,7 @@ use C4::Output qw(output_html_with_http_headers);
 my $cgi = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "labels/label-home.tmpl",
+        template_name   => "labels/label-home.tt",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,

@@ -41,7 +41,7 @@ use C4::Budgets;
 my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
-        template_name   => 'acqui/invoices.tmpl',
+        template_name   => 'acqui/invoices.tt',
         query           => $input,
         type            => 'intranet',
         authnotrequired => 0,

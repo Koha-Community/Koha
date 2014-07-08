@@ -35,7 +35,7 @@ my $input = new CGI;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "members/moremember.tmpl",
+        template_name   => "members/moremember.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

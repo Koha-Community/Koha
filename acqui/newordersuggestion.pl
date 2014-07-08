@@ -116,7 +116,7 @@ $op = 'else' unless $op;
 my $dbh = C4::Context->dbh;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/newordersuggestion.tmpl",
+        template_name   => "acqui/newordersuggestion.tt",
         type            => "intranet",
         query           => $input,
         flagsrequired   => { acquisition => 'order_manage' },

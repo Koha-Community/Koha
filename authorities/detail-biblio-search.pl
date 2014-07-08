@@ -63,7 +63,7 @@ my $tagslib = &GetTagsLabels(1,$authtypecode);
 my $record =GetAuthority($authid);
 # open template
 my ($template, $loggedinuser, $cookie)
-		= get_template_and_user({template_name => "authorities/detail-biblio-search.tmpl",
+		= get_template_and_user({template_name => "authorities/detail-biblio-search.tt",
 			     query => $query,
 			     type => "intranet",
 			     authnotrequired => 0,

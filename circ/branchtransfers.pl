@@ -53,7 +53,7 @@ if (!C4::Context->userenv){
 # Make the page .....
 my ($template, $user, $cookie) = get_template_and_user(
     {
-        template_name   => "circ/branchtransfers.tmpl",
+        template_name   => "circ/branchtransfers.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

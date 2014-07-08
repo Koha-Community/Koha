@@ -34,7 +34,7 @@ use C4::Accounts;
 my $input = new CGI;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "members/printinvoice.tmpl",
+    {   template_name   => "members/printinvoice.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

@@ -37,14 +37,17 @@ use C4::Members::Attributes qw(GetBorrowerAttributes);
 my $input=new CGI;
 
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "members/boraccount.tmpl",
-                            query => $input,
-                            type => "intranet",
-                            authnotrequired => 0,
-                            flagsrequired => {borrowers => 1, updatecharges => 'remaining_permissions'},
-                            debug => 1,
-                            });
+my ($template, $loggedinuser, $cookie) = get_template_and_user(
+    {
+        template_name   => "members/boraccount.tt",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { borrowers     => 1,
+                             updatecharges => 'remaining_permissions'},
+        debug           => 1,
+    }
+);
 
 my $borrowernumber=$input->param('borrowernumber');
 my $action = $input->param('action') || '';

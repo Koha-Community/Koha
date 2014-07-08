@@ -41,7 +41,7 @@ my $tag_id       = $query->param('tag_id');
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "tags/list.tmpl",
+        template_name   => "tags/list.tt",
         query           => $query,
         type            => "intranet",
         debug           => 1,

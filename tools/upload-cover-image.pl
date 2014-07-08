@@ -57,7 +57,7 @@ my $input = new CGI;
 my $fileID = $input->param('uploadedfileid');
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/upload-images.tmpl",
+        template_name   => "tools/upload-images.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

@@ -36,7 +36,7 @@ use C4::HoldsQueue qw(GetHoldsQueueItems);
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/view_holdsqueue.tmpl",
+        template_name   => "circ/view_holdsqueue.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

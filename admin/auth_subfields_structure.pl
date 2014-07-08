@@ -53,7 +53,7 @@ my $op           = $input->param('op') || '';
 my $script_name  = "/cgi-bin/koha/admin/auth_subfields_structure.pl";
 
 my ($template, $borrowernumber, $cookie) = get_template_and_user(
-    {   template_name   => "admin/auth_subfields_structure.tmpl",
+    {   template_name   => "admin/auth_subfields_structure.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

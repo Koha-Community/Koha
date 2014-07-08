@@ -30,7 +30,7 @@ use C4::Search;		# enabled_staff_search_views
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "catalogue/issuehistory.tmpl",
+        template_name   => "catalogue/issuehistory.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

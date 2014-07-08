@@ -31,7 +31,7 @@ use C4::Patroncards::Profile;
 my $cgi = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "patroncards/edit-profile.tmpl",
+        template_name   => "patroncards/edit-profile.tt",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,

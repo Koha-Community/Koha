@@ -51,7 +51,7 @@ my $submitted = $input->param('submitted');
 if ( C4::Context->preference("AnonSuggestions") ) {
     ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         {
-            template_name   => "opac-suggestions.tmpl",
+            template_name   => "opac-suggestions.tt",
             query           => $input,
             type            => "opac",
             authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
@@ -64,7 +64,7 @@ if ( C4::Context->preference("AnonSuggestions") ) {
 else {
     ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         {
-            template_name   => "opac-suggestions.tmpl",
+            template_name   => "opac-suggestions.tt",
             query           => $input,
             type            => "opac",
             authnotrequired => 0,

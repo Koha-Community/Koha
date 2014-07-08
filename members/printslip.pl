@@ -64,7 +64,7 @@ my $flagsrequired = { circulate => "circulate_remaining_permissions" };
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/printslip.tmpl",
+        template_name   => "circ/printslip.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

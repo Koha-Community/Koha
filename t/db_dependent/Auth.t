@@ -74,7 +74,7 @@ $dbh->{RaiseError} = 1;
 
     my ( $template, $loggedinuser, $cookies ) = get_template_and_user(
         {
-            template_name   => "about.tmpl",
+            template_name   => "about.tt",
             query           => $query,
             type            => "opac",
             authnotrequired => 1,
@@ -91,7 +91,7 @@ $dbh->{RaiseError} = 1;
 
     ( $template, $loggedinuser, $cookies ) = get_template_and_user(
         {
-            template_name   => "about.tmpl",
+            template_name   => "about.tt",
             query           => $query,
             type            => "opac",
             authnotrequired => 1,

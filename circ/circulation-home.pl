@@ -25,13 +25,15 @@ use C4::Context;
 use C4::Koha;
 
 my $query = new CGI;
-my ($template, $loggedinuser, $cookie, $flags)
-= get_template_and_user({template_name => "circ/circulation-home.tmpl",
-				query => $query,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {circulate => "circulate_remaining_permissions"},
-				});
+my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user(
+    {
+        template_name   => "circ/circulation-home.tt",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { circulate => "circulate_remaining_permissions" },
+    }
+);
 
 # Checking if there is a Fast Cataloging Framework
 my $fa = getframeworkinfo('FA');

@@ -87,7 +87,7 @@ if (!C4::Context->userenv && !$branch){
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
     {
-        template_name   => 'circ/circulation.tmpl',
+        template_name   => 'circ/circulation.tt',
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

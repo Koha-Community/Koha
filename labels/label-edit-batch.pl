@@ -33,7 +33,7 @@ use C4::Labels;
 my $cgi = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "labels/label-edit-batch.tmpl",
+        template_name   => "labels/label-edit-batch.tt",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,

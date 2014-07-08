@@ -58,7 +58,7 @@ if ($add){
         my $error   = manualinvoice( $borrowernumber, $itemnum, $desc, $type, $amount, $note );
         if ($error) {
             my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-                {   template_name   => "members/maninvoice.tmpl",
+                {   template_name   => "members/maninvoice.tt",
                     query           => $input,
                     type            => "intranet",
                     authnotrequired => 0,
@@ -78,14 +78,15 @@ if ($add){
     }
 } else {
 
-	my ($template, $loggedinuser, $cookie)
-	= get_template_and_user({template_name => "members/maninvoice.tmpl",
-					query => $input,
-					type => "intranet",
-					authnotrequired => 0,
-                                      flagsrequired => {borrowers => 1, updatecharges => 'remaining_permissions'},
-					debug => 1,
-					});
+    my ($template, $loggedinuser, $cookie) = get_template_and_user({
+        template_name   => "members/maninvoice.tt",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { borrowers => 1,
+                             updatecharges => 'remaining_permissions' },
+        debug           => 1,
+    });
 					
   # get authorised values with type of MANUAL_INV
   my @invoice_types;

@@ -32,7 +32,7 @@ use C4::Patroncards;
 my $cgi = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "patroncards/edit-template.tmpl",
+        template_name   => "patroncards/edit-template.tt",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,

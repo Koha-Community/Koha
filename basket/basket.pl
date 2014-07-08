@@ -30,7 +30,7 @@ my $query = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     {
-        template_name   => "basket/basket.tmpl",
+        template_name   => "basket/basket.tt",
         query           => $query,
         type            => "intranet",
         flagsrequired   => { borrow => 1 },

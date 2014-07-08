@@ -52,7 +52,7 @@ my $cancel;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/waitingreserves.tmpl",
+        template_name   => "circ/waitingreserves.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

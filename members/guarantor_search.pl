@@ -33,7 +33,7 @@ my ( $template, $loggedinuser, $cookie );
 
 ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "members/guarantor_search.tmpl",
+        template_name   => "members/guarantor_search.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

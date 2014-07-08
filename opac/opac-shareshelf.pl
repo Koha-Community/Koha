@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use constant KEYLENGTH     => 10;
-use constant TEMPLATE_NAME => 'opac-shareshelf.tmpl';
+use constant TEMPLATE_NAME => 'opac-shareshelf.tt';
 use constant SHELVES_URL =>
   '/cgi-bin/koha/opac-shelves.pl?display=privateshelves&viewshelf=';
 

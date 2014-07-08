@@ -59,7 +59,7 @@ my $encoding = $input->param('encoding');
 my $marc_modification_template = $input->param('marc_modification_template_id');
 
 my ($template, $loggedinuser, $cookie)
-	= get_template_and_user({template_name => "tools/stage-marc-import.tmpl",
+    = get_template_and_user({template_name => "tools/stage-marc-import.tt",
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,

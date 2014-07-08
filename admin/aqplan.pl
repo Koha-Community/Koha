@@ -45,7 +45,7 @@ my $input = new CGI;
 my $dbh = C4::Context->dbh;
 
 my ( $template, $borrowernumber, $cookie, $staff_flags ) = get_template_and_user(
-    {   template_name   => "admin/aqplan.tmpl",
+    {   template_name   => "admin/aqplan.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

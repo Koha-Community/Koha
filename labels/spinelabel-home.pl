@@ -26,7 +26,7 @@ use C4::Context;
 
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "labels/spinelabel-home.tmpl",
+    {   template_name   => "labels/spinelabel-home.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

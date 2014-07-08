@@ -38,7 +38,7 @@ if (!$report_rec) { die "There is no such report.\n"; }
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "intranet-main.tmpl",
+        template_name   => "intranet-main.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

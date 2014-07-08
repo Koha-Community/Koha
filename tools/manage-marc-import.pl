@@ -50,7 +50,7 @@ my $offset = $input->param('offset') || 0;
 my $results_per_page = $input->param('results_per_page') || 25; 
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "tools/manage-marc-import.tmpl",
+    = get_template_and_user({template_name => "tools/manage-marc-import.tt",
                  query => $input,
                  type => "intranet",
                  authnotrequired => 0,

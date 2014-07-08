@@ -42,9 +42,9 @@ my $page = $query->param('page') || 1;
 $offset = ($page-1)*$results_per_page if $page>1;
 
 if ($format eq "rss") {
-    $template_name = "opac-showreviews-rss.tmpl";
+    $template_name = "opac-showreviews-rss.tt";
 } else {
-    $template_name = "opac-showreviews.tmpl",
+    $template_name = "opac-showreviews.tt",
 }
 
 my ( $template, $borrowernumber, $cookie ) = &get_template_and_user(

@@ -39,7 +39,7 @@ my $input = new CGI;
 my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "admin/clone-rules.tmpl",
+    = get_template_and_user({template_name => "admin/clone-rules.tt",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,

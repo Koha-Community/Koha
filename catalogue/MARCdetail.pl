@@ -33,7 +33,7 @@ This script needs a biblionumber as parameter
 It shows the biblio in a (nice) MARC format depending on MARC
 parameters tables.
 
-The template is in <templates_dir>/catalogue/MARCdetail.tmpl.
+The template is in <templates_dir>/catalogue/MARCdetail.tt.
 this template must be divided into 11 "tabs".
 
 The first 10 tabs present the biblio, the 11th one presents
@@ -73,7 +73,7 @@ my $subscriptionid = $query->param('subscriptionid');
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "catalogue/MARCdetail.tmpl",
+        template_name   => "catalogue/MARCdetail.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

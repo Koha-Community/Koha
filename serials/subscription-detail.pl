@@ -49,7 +49,7 @@ if ( $op and $op eq "close" ) {
 my $permission = ($op eq "del") ? "delete_subscription" : "*";
 
 my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "serials/subscription-detail.tmpl",
+= get_template_and_user({template_name => "serials/subscription-detail.tt",
                 query => $query,
                 type => "intranet",
                 authnotrequired => 0,

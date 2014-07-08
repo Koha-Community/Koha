@@ -45,7 +45,7 @@ $debug = 1;
 $debug and open DEBUG, ">/tmp/bor_issues_top.debug.log";
 
 my $input = new CGI;
-my $fullreportname = "reports/bor_issues_top.tmpl";
+my $fullreportname = "reports/bor_issues_top.tt";
 my $do_it   = $input->param('do_it');
 my $limit   = $input->param("Limit");
 my $column  = $input->param("Criteria");

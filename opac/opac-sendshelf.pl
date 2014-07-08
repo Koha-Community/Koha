@@ -38,7 +38,7 @@ my $query = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     {
-        template_name   => "opac-sendshelfform.tmpl",
+        template_name   => "opac-sendshelfform.tt",
         query           => $query,
         type            => "opac",
         authnotrequired => 0,
@@ -64,7 +64,7 @@ if ( $email ) {
 
     my ( $template2, $borrowernumber, $cookie ) = get_template_and_user(
         {
-            template_name   => "opac-sendshelf.tmpl",
+            template_name   => "opac-sendshelf.tt",
             query           => $query,
             type            => "opac",
             authnotrequired => 1,

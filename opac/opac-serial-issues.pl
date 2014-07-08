@@ -45,7 +45,7 @@ my $biblionumber = $query->param('biblionumber');
 if ( $selectview eq "full" ) {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "opac-full-serial-issues.tmpl",
+            template_name   => "opac-full-serial-issues.tt",
             query           => $query,
             type            => "opac",
             authnotrequired => 1,
@@ -92,7 +92,7 @@ if ( $selectview eq "full" ) {
 else {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "opac-serial-issues.tmpl",
+            template_name   => "opac-serial-issues.tt",
             query           => $query,
             type            => "opac",
             authnotrequired => 1,

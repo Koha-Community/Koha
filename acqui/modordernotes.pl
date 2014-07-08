@@ -36,7 +36,7 @@ use C4::Bookseller qw( GetBookSellerFromId);
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
-    template_name   => 'acqui/modordernotes.tmpl',
+    template_name   => 'acqui/modordernotes.tt',
     query           => $input,
     type            => 'intranet',
     authnotrequired => 0,

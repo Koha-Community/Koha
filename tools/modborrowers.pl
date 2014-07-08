@@ -39,7 +39,7 @@ use Koha::List::Patron;
 my $input = new CGI;
 my $op = $input->param('op') || 'show_form';
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "tools/modborrowers.tmpl",
+    {   template_name   => "tools/modborrowers.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

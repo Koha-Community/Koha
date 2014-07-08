@@ -35,12 +35,12 @@ my $query = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 	{
-		  template_name   => "opac-user.tmpl",
-		  query           => $query,
-		  type            => "opac",
-		  authnotrequired => 0,
-		  flagsrequired   => { borrow => 1 },
-		  debug           => 1,
+        template_name   => "opac-user.tt",
+        query           => $query,
+        type            => "opac",
+        authnotrequired => 0,
+        flagsrequired   => { borrow => 1 },
+        debug           => 1,
 	}
 ); 
 my @items          = $query->param('item');

@@ -45,7 +45,7 @@ my $query = CGI->new;
 my @output;
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
-    template_name => "offline_circ/enqueue_koc.tmpl",
+    template_name => "offline_circ/enqueue_koc.tt",
     query => $query,
     type => "intranet",
     authnotrequired => 0,

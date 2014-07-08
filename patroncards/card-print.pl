@@ -31,7 +31,7 @@ use C4::Labels;
 my $cgi = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "patroncards/card-print.tmpl",
+        template_name   => "patroncards/card-print.tt",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,

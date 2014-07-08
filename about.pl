@@ -38,7 +38,7 @@ use C4::Installer;
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "about.tmpl",
+        template_name   => "about.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

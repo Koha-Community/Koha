@@ -45,7 +45,7 @@ my $results_per_page = 20;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "cataloguing/addbooks.tmpl",
+        template_name   => "cataloguing/addbooks.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

@@ -42,7 +42,7 @@ my $popup        =
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "catalogue/labeledMARCdetail.tmpl",
+        template_name   => "catalogue/labeledMARCdetail.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

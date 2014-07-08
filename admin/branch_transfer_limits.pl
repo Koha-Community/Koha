@@ -32,7 +32,7 @@ use C4::Circulation qw{ IsBranchTransferAllowed DeleteBranchTransferLimits Creat
 my $input = new CGI;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "admin/branch_transfer_limits.tmpl",
+    = get_template_and_user({template_name => "admin/branch_transfer_limits.tt",
 			     query => $input,
 			     type => "intranet",
 			     flagsrequired => {borrowers => 1},

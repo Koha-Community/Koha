@@ -61,7 +61,7 @@ sub show {
     my $dbh = C4::Context->dbh;
     my ($template, $user, $cookie) = get_template_and_user(
         {
-            template_name   => "admin/item_circulation_alerts.tmpl",
+            template_name   => "admin/item_circulation_alerts.tt",
             query           => $input,
             type            => "intranet",
             authnotrequired => 0,

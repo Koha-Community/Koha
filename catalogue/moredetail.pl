@@ -43,15 +43,18 @@ my $query=new CGI;
 # FIXME  subject is not exported to the template?
 my $subject=$query->param('subject');
 
-# if its a subject we need to use the subject.tmpl
-my ($template, $loggedinuser, $cookie) = get_template_and_user({
-    template_name   => ($subject? 'catalogue/subject.tmpl':
-                      'catalogue/moredetail.tmpl'),
-    query           => $query,
-    type            => "intranet",
-    authnotrequired => 0,
-    flagsrequired   => {catalogue => 1},
-    });
+# if its a subject we need to use the subject.tt
+my ($template, $loggedinuser, $cookie) = get_template_and_user(
+    {
+        template_name   => ( $subject
+                                ? 'catalogue/subject.tt'
+                                : 'catalogue/moredetail.tt'),
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { catalogue => 1 },
+    }
+);
 
 if($query->cookie("holdfor")){ 
     my $holdfor_patron = GetMember('borrowernumber' => $query->cookie("holdfor"));

@@ -30,7 +30,7 @@ use C4::Output qw(output_html_with_http_headers);
 
 my $query = new CGI;
 my ($template, $borrowernumber, $cookie) = get_template_and_user({
-    template_name => "sco/help.tmpl",
+    template_name => "sco/help.tt",
     query => $query,
      type => "opac",
     debug => 1,

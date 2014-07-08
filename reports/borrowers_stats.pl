@@ -49,7 +49,7 @@ plugin that shows a stats on borrowers
 
 my $input = new CGI;
 my $do_it=$input->param('do_it');
-my $fullreportname = "reports/borrowers_stats.tmpl";
+my $fullreportname = "reports/borrowers_stats.tt";
 my $line = $input->param("Line");
 my $column = $input->param("Column");
 my @filters = $input->param("Filter");

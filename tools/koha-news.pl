@@ -53,7 +53,7 @@ my $new_detail = get_opac_new($id);
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/koha-news.tmpl",
+        template_name   => "tools/koha-news.tt",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,

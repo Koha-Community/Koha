@@ -40,7 +40,7 @@ use C4::Dates;
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-user.tmpl",
+        template_name   => "opac-user.tt",
         query           => $query,
         type            => "opac",
         authnotrequired => 0,

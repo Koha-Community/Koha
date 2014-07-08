@@ -42,7 +42,7 @@ my $data = undef;
 my $borrowernumber = undef;
 my $cardnumber = undef;
 
-my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => "members/readingrec.tmpl",
+my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => "members/readingrec.tt",
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,

@@ -29,7 +29,7 @@ use C4::Biblio;
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "reviews/reviewswaiting.tmpl",
+        template_name   => "reviews/reviewswaiting.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

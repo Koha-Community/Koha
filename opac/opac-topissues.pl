@@ -50,13 +50,15 @@ if ( ! C4::Context->preference('OpacTopissue') ) {
 my $branches = GetBranches();
 my $itemtypes = GetItemTypes();
 
-my ($template, $borrowernumber, $cookie)
-	= get_template_and_user({template_name => 'opac-topissues.tmpl',
-				query => $input,
-				type => "opac",
-               authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
-				debug => 1,
-				});
+my ($template, $borrowernumber, $cookie) = get_template_and_user(
+    {
+        template_name   => 'opac-topissues.tt',
+        query           => $input,
+        type            => "opac",
+        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
+        debug           => 1,
+    }
+);
 my $dbh = C4::Context->dbh;
 # Displaying results
 my $do_it = $input->param('do_it') || 0; # as form been posted

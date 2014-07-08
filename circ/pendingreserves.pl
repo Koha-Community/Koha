@@ -46,7 +46,7 @@ my $theme = $input->param('theme');    # only used if allowthemeoverride is set
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/pendingreserves.tmpl",
+        template_name   => "circ/pendingreserves.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

@@ -32,7 +32,7 @@ use C4::Acquisition qw(GetOrdersByBiblionumber);
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "catalogue/imageviewer.tmpl",
+        template_name   => "catalogue/imageviewer.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

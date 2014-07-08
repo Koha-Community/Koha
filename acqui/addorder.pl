@@ -155,7 +155,7 @@ unless($confirm_budget_exceeding) {
       || ( ($budget_expenditure+0) && ($budget_used + $total) > $budget_expenditure) )
     {
         my ($template, $loggedinuser, $cookie) = get_template_and_user({
-            template_name   => "acqui/addorder.tmpl",
+            template_name   => "acqui/addorder.tt",
             query           => $input,
             type            => "intranet",
             authnotrequired => 0,
@@ -212,7 +212,7 @@ unless($confirm_budget_exceeding) {
 # get_template_and_user used only to check auth & get user id
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/booksellers.tmpl",
+        template_name   => "acqui/booksellers.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

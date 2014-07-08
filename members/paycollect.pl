@@ -33,7 +33,7 @@ my $input = CGI->new();
 
 my $updatecharges_permissions = $input->param('writeoff_individual') ? 'writeoff' : 'remaining_permissions';
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => 'members/paycollect.tmpl',
+    {   template_name   => 'members/paycollect.tt',
         query           => $input,
         type            => 'intranet',
         authnotrequired => 0,

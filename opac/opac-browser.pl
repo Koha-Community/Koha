@@ -41,7 +41,7 @@ my $dbh = C4::Context->dbh;
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-browser.tmpl",
+        template_name   => "opac-browser.tt",
         query           => $query,
         type            => "opac",
         authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),

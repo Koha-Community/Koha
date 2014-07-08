@@ -36,7 +36,7 @@ die("Koha plugins are disabled!")
 my $input = new CGI;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "plugins/plugins-upload.tmpl",
+    {   template_name   => "plugins/plugins-upload.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

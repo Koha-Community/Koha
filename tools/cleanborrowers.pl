@@ -69,7 +69,7 @@ my $borrower_categorycode = $params->{'borrower_categorycode'} || q{};
 
 # getting the template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "tools/cleanborrowers.tmpl",
+    {   template_name   => "tools/cleanborrowers.tt",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,

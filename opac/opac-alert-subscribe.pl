@@ -43,7 +43,7 @@ my $biblionumber = $query->param('biblionumber');
 
 ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-alert-subscribe.tmpl",
+        template_name   => "opac-alert-subscribe.tt",
         query           => $query,
         type            => "opac",
         authnotrequired => 0, # user must logged in to request

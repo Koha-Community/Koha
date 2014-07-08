@@ -30,7 +30,7 @@ use C4::CourseReserves qw(SearchCourses);
 my $cgi = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => "opac-course-reserves.tmpl",
+    {   template_name   => "opac-course-reserves.tt",
         query           => $cgi,
         type            => "opac",
         authnotrequired => 1,

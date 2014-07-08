@@ -83,14 +83,16 @@ my ($input) = @_;
 
 	my $dbh = C4::Context->dbh;
 
-	my ($template, $loggedinuser, $cookie)
-	= get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_700-4.tmpl",
-					query => $input,
-					type => "intranet",
-					authnotrequired => 0,
-					flagsrequired => {editcatalogue => '*'},
-					debug => 1,
-					});
+    my ($template, $loggedinuser, $cookie) = get_template_and_user(
+        {
+            template_name   => "cataloguing/value_builder/unimarc_field_700-4.tt",
+            query           => $input,
+            type            => "intranet",
+            authnotrequired => 0,
+            flagsrequired   => { editcatalogue => '*' },
+            debug           => 1,
+        }
+    );
 	$template->param(index => $index,
 							index2 => $index2,
 							"f1_$result" => "f1_".$result,

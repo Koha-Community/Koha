@@ -40,7 +40,7 @@ use C4::Dates qw/format_date/;
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "reports/itemslost.tmpl",
+        template_name   => "reports/itemslost.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

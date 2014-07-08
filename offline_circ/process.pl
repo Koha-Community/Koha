@@ -28,7 +28,7 @@ use C4::Circulation;
 my $query = CGI->new;
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
-    template_name => "offline_circ/list.tmpl",
+    template_name => "offline_circ/list.tt",
     query => $query,
     type => "intranet",
     authnotrequired => 0,

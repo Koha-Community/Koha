@@ -32,7 +32,7 @@ my $input = new CGI;
 my $dbh = C4::Context->dbh();
 # Get the template to use
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "tools/holidays.tmpl",
+    = get_template_and_user({template_name => "tools/holidays.tt",
                              type => "intranet",
                              query => $input,
                              authnotrequired => 0,

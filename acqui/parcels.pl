@@ -89,7 +89,7 @@ my $op             = $input->param('op');
 $resultsperpage ||= 20;
 
 our ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
-    {   template_name   => 'acqui/parcels.tmpl',
+    {   template_name   => 'acqui/parcels.tt',
         query           => $input,
         type            => 'intranet',
         authnotrequired => 0,

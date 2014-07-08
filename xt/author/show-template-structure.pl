@@ -47,7 +47,7 @@ the following errors:
 
 =over 4
 
-xt/author/show-template-structure.pl path/to/template.tmpl
+xt/author/show-template-structure.pl path/to/template.tt
 
 =back
 

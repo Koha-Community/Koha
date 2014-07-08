@@ -48,7 +48,7 @@ my $branches=GetBranches();
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "reports/reservereport.tmpl",
+        template_name   => "reports/reservereport.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

@@ -80,13 +80,14 @@ my $inactivepagesize = 20;
 $searchfield =~ s/\,//g;
 
 my ($template, $borrowernumber, $cookie, $staff_flags ) = get_template_and_user(
-	{   template_name   => "admin/aqbudgetperiods.tmpl",
-		query           => $input,
-		type            => "intranet",
-		authnotrequired => 0,
-		flagsrequired   => { acquisition => 'period_manage' },
-		debug           => 1,
-	}
+    {
+        template_name   => "admin/aqbudgetperiods.tt",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { acquisition => 'period_manage' },
+        debug           => 1,
+    }
 );
 
 

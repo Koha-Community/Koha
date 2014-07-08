@@ -61,7 +61,7 @@ my $biblionumber = $query->param('biblionumber');
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name => "catalogue/ISBDdetail.tmpl",
+        template_name => "catalogue/ISBDdetail.tt",
         query         => $query,
         type          => "intranet",
 	authnotrequired => 0,

@@ -36,7 +36,7 @@ my $op    = $input->param('submit');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "reports/stats_screen.tmpl",
+        template_name   => "reports/stats_screen.tt",
         query           => $input,
         type            => "intranet",
         flagsrequired   => { reports => '*' },

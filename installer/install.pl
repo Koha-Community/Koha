@@ -27,7 +27,7 @@ if ( defined($language) ) {
 }
 ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name => "installer/step" . ( $step ? $step : 1 ) . ".tmpl",
+        template_name => "installer/step" . ( $step ? $step : 1 ) . ".tt",
         query         => $query,
         type          => "intranet",
         authnotrequired => 0,

@@ -51,7 +51,7 @@ my $dbh          = C4::Context->dbh;
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/csv-profiles.tmpl",
+        template_name   => "tools/csv-profiles.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

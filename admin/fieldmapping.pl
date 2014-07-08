@@ -35,7 +35,7 @@ my $op            = $query->param('op') || q{};
 my $id            = $query->param('id');
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "admin/fieldmapping.tmpl",
+    = get_template_and_user({template_name => "admin/fieldmapping.tt",
 			     query => $query,
 			     type => "intranet",
 			     authnotrequired => 0,

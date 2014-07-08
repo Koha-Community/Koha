@@ -117,7 +117,7 @@ my %optional = (
 # If no service is requested, display the online documentation
 unless ( $cgi->param('service') ) {
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {   template_name   => "ilsdi.tmpl",
+        {   template_name   => "ilsdi.tt",
             query           => $cgi,
             type            => "opac",
             authnotrequired => 1,
@@ -131,7 +131,7 @@ unless ( $cgi->param('service') ) {
 # If user requested a service description, then display it
 if ( $cgi->param('service') eq "Describe" and any { $cgi->param('verb') eq $_ } @services ) {
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {   template_name   => "ilsdi.tmpl",
+        {   template_name   => "ilsdi.tt",
             query           => $cgi,
             type            => "opac",
             authnotrequired => 1,

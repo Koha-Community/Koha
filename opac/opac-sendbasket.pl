@@ -38,7 +38,7 @@ my $query = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     {
-        template_name   => "opac-sendbasketform.tmpl",
+        template_name   => "opac-sendbasketform.tt",
         query           => $query,
         type            => "opac",
         authnotrequired => 0,
@@ -71,7 +71,7 @@ if ( $email_add ) {
 
     my ( $template2, $borrowernumber, $cookie ) = get_template_and_user(
         {
-            template_name   => "opac-sendbasket.tmpl",
+            template_name   => "opac-sendbasket.tt",
             query           => $query,
             type            => "opac",
             authnotrequired => 0,

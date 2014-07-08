@@ -35,7 +35,7 @@ my $script_name = 'koha2marclinks.pl';
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     {
-        template_name   => "admin/koha2marclinks.tmpl",
+        template_name   => "admin/koha2marclinks.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

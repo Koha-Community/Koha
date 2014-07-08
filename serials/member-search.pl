@@ -51,7 +51,7 @@ my $searchstring   = $cgi->param('member');
 my %categories_dislay;
 my ($template, $loggedinuser, $cookie);
     ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "serials/member-search.tmpl",
+    = get_template_and_user({template_name => "serials/member-search.tt",
                  query => $cgi,
                  type => "intranet",
                  authnotrequired => 0,

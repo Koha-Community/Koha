@@ -66,7 +66,7 @@ use C4::Context;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
-    {   template_name   => 'acqui/booksellers.tmpl',
+    {   template_name   => 'acqui/booksellers.tt',
         query           => $query,
         type            => 'intranet',
         authnotrequired => 0,

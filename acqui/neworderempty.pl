@@ -112,7 +112,7 @@ my $budget_name;
 
 our ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {
-        template_name   => "acqui/neworderempty.tmpl",
+        template_name   => "acqui/neworderempty.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
@@ -514,7 +514,7 @@ sub Load_Duplicate {
   my ($duplicatetitle)= @_;
   ($template, $loggedinuser, $cookie) = get_template_and_user(
     {
-        template_name   => "acqui/neworderempty_duplicate.tmpl",
+        template_name   => "acqui/neworderempty_duplicate.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

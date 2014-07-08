@@ -67,7 +67,7 @@ my $script_name   = "/cgi-bin/koha/admin/marc_subfields_structure.pl";
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/marc_subfields_structure.tmpl",
+        template_name   => "admin/marc_subfields_structure.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

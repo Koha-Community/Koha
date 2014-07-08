@@ -45,7 +45,7 @@ my $pagesize = 20;
 my $op = $input->param('op') || '';
 
 my ($template, $loggedinuser, $cookie) 
-    = get_template_and_user({template_name => "admin/stopwords.tmpl",
+    = get_template_and_user({template_name => "admin/stopwords.tt",
     query => $input,
     type => "intranet",
     flagsrequired => {parameters => 'parameters_remaining_permissions'},

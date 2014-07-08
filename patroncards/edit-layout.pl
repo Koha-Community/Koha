@@ -34,7 +34,7 @@ use C4::Patroncards;
 my $cgi = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "patroncards/edit-layout.tmpl",
+        template_name   => "patroncards/edit-layout.tt",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,

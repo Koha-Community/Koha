@@ -43,7 +43,7 @@ my $op            = $input->param('op') || '';
 my $pagesize      = 20;
 
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "admin/biblio_framework.tmpl",
+    = get_template_and_user({template_name => "admin/biblio_framework.tt",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

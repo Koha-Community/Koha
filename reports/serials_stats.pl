@@ -40,7 +40,7 @@ plugin that shows a stats on serials
 =cut
 
 my $input      = new CGI;
-my $templatename   = "reports/serials_stats.tmpl";
+my $templatename   = "reports/serials_stats.tt";
 my $do_it      = $input->param("do_it");
 my $bookseller = $input->param("bookseller");
 my $branchcode = $input->param("branchcode");

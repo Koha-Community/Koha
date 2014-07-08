@@ -34,7 +34,7 @@ my $branch = $query->param('branchcode');
 $branch = q{} unless defined $branch;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "members/member.tmpl",
+    = get_template_and_user({template_name => "members/member.tt",
                  query => $query,
                  type => "intranet",
                  authnotrequired => 0,

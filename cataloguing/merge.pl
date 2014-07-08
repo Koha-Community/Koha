@@ -40,7 +40,7 @@ my @errors;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "cataloguing/merge.tmpl",
+        template_name   => "cataloguing/merge.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

@@ -101,7 +101,7 @@ foreach (keys %$suggestion_ref){
 }
 my ( $template, $borrowernumber, $cookie, $userflags ) = get_template_and_user(
         {
-            template_name   => "suggestion/suggestion.tmpl",
+            template_name   => "suggestion/suggestion.tt",
             query           => $input,
             type            => "intranet",
             flagsrequired   => { catalogue => 1 },

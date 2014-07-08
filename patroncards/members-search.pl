@@ -48,7 +48,7 @@ foreach my $category (@categories) {
 }
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
-                template_name => "patroncards/members-search.tmpl",
+                template_name => "patroncards/members-search.tt",
                 query => $cgi,
                 type => "intranet",
                 authnotrequired => 0,

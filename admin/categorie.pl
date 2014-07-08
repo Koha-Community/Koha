@@ -76,7 +76,7 @@ my $block_expired = $input->param("block_expired");
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/categorie.tmpl",
+        template_name   => "admin/categorie.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

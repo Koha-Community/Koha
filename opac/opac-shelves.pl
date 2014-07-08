@@ -26,7 +26,7 @@ use C4::Auth;
 my $query = CGI->new();
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-        template_name   => "opac-shelves.tmpl",
+        template_name   => "opac-shelves.tt",
         query           => $query,
         type            => "opac",
         authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),

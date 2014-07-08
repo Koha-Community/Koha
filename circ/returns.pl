@@ -52,7 +52,7 @@ my $query = new CGI;
 #getting the template
 my ( $template, $librarian, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/returns.tmpl",
+        template_name   => "circ/returns.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

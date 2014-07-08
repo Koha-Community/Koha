@@ -101,7 +101,7 @@ if($ok){
 	}
 
     ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "serials/routing-preview-slip.tmpl",
+= get_template_and_user({template_name => "serials/routing-preview-slip.tt",
 				query => $query,
 				type => "intranet",
 				authnotrequired => 0,
@@ -111,7 +111,7 @@ if($ok){
     $template->param("libraryname"=>$branchname);
 } else {
     ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "serials/routing-preview.tmpl",
+= get_template_and_user({template_name => "serials/routing-preview.tt",
 				query => $query,
 				type => "intranet",
 				authnotrequired => 0,

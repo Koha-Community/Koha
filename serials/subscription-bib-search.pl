@@ -77,7 +77,7 @@ if ( $op eq "do_search" && $query ) {
 
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "serials/result.tmpl",
+            template_name   => "serials/result.tt",
             query           => $input,
             type            => "intranet",
             authnotrequired => 0,
@@ -182,7 +182,7 @@ if ( $op eq "do_search" && $query ) {
 else {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "serials/subscription-bib-search.tmpl",
+            template_name   => "serials/subscription-bib-search.tt",
             query           => $input,
             type            => "intranet",
             authnotrequired => 0,

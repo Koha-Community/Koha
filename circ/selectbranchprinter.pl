@@ -33,7 +33,7 @@ use C4::Branch; # GetBranches GetBranchesLoop
 my $query = CGI->new();
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user({
-    template_name   => "circ/selectbranchprinter.tmpl",
+    template_name   => "circ/selectbranchprinter.tt",
     query           => $query,
     type            => "intranet",
     debug           => 1,

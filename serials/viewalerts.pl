@@ -34,7 +34,7 @@ my $input = new CGI;
 my $print = $input->param('print');
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => 'serials/viewalerts.tmpl',
+    = get_template_and_user({template_name => 'serials/viewalerts.tt',
                  query => $input,
                  type => "intranet",
                  authnotrequired => 0,

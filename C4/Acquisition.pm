@@ -295,7 +295,7 @@ sub GetBasketAsCSV {
     my @orders = GetOrders($basketno);
     my $contract = GetContract($basket->{'contractnumber'});
 
-    my $template = C4::Templates::gettemplate("acqui/csv/basket.tmpl", "intranet", $cgi);
+    my $template = C4::Templates::gettemplate("acqui/csv/basket.tt", "intranet", $cgi);
 
     my @rows;
     foreach my $order (@orders) {
@@ -356,7 +356,7 @@ sub GetBasketGroupAsCSV {
     my ($basketgroupid, $cgi) = @_;
     my $baskets = GetBasketsByBasketgroup($basketgroupid);
 
-    my $template = C4::Templates::gettemplate('acqui/csv/basketgroup.tmpl', 'intranet', $cgi);
+    my $template = C4::Templates::gettemplate('acqui/csv/basketgroup.tt', 'intranet', $cgi);
 
     my @rows;
     for my $basket (@$baskets) {

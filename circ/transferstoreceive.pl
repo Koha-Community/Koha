@@ -43,7 +43,7 @@ my $itemnumber = $input->param('itemnumber');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/transferstoreceive.tmpl",
+        template_name   => "circ/transferstoreceive.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

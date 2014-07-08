@@ -77,7 +77,7 @@ sub plugin {
     my $isbn = $input->param('isbn');
 
     my ($template, $loggedinuser, $cookie)
-            = get_template_and_user({template_name => "cataloguing/value_builder/ajax.tmpl",
+            = get_template_and_user({template_name => "cataloguing/value_builder/ajax.tt",
                                     query => $input,
                                     type => "intranet",
                                     authnotrequired => 0,

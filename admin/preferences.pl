@@ -264,7 +264,7 @@ my $dbh = C4::Context->dbh;
 our $input = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => "admin/preferences.tmpl",
+    {   template_name   => "admin/preferences.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

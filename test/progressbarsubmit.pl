@@ -45,7 +45,7 @@ my $jobID = $input->param('jobID');
 my $completedJobID = $input->param('completedJobID');
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "test/progressbar.tmpl",
+    = get_template_and_user({template_name => "test/progressbar.tt",
                     query => $input,
                     type => "intranet",
                     debug => 1,

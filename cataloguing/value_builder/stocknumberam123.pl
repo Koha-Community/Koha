@@ -73,7 +73,7 @@ sub plugin {
     my $code = $input->param('code');
 
     my ($template, $loggedinuser, $cookie) = get_template_and_user({
-        template_name   => "cataloguing/value_builder/ajax.tmpl",
+        template_name   => "cataloguing/value_builder/ajax.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

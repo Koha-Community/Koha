@@ -35,7 +35,7 @@ use C4::Branch;    # GetBranches
 my $input = new CGI;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "circ/circulation.tmpl",
+    {   template_name   => "circ/circulation.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

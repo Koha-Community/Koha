@@ -104,13 +104,15 @@ sub plugin {
 			$total++;
 		}
 
-		($template, $loggedinuser, $cookie)
-			= get_template_and_user({template_name => "value_builder/labs_theses.tmpl",
-					query => $query,
-					type => 'intranet',
-					authnotrequired => 0,
-					debug => 1,
-					});
+        ($template, $loggedinuser, $cookie) = get_template_and_user(
+            {
+                template_name   => "value_builder/labs_theses.tt",
+                query           => $query,
+                type            => 'intranet',
+                authnotrequired => 0,
+                debug           => 1,
+            }
+        );
 
 		# multi page display gestion
 		my $displaynext=0;
@@ -161,12 +163,14 @@ sub plugin {
 								);
 
 	} else {
-		($template, $loggedinuser, $cookie)
-			= get_template_and_user({template_name => "value_builder/labs_theses.tmpl",
-						query => $query,
-						type => "intranet",
-						authnotrequired => 0,
-					});
+        ($template, $loggedinuser, $cookie) = get_template_and_user(
+            {
+                template_name   => "value_builder/labs_theses.tt",
+                query           => $query,
+                type            => "intranet",
+                authnotrequired => 0,
+            }
+        );
 
 		$template->param(
 						'search'=>$query->param('search'),

@@ -40,7 +40,7 @@ use Koha::Misc::Files;
 my $input = new CGI;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
-        template_name   => 'acqui/invoice.tmpl',
+        template_name   => 'acqui/invoice.tt',
         query           => $input,
         type            => 'intranet',
         authnotrequired => 0,

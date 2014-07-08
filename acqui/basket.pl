@@ -71,7 +71,7 @@ my $booksellerid = $query->param('booksellerid');
 
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {
-        template_name   => "acqui/basket.tmpl",
+        template_name   => "acqui/basket.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

@@ -67,7 +67,7 @@ if ($selectview eq "full"){
     my $yearmax=$subscriptions->[scalar(@$subscriptions)-1]{year};
 
     ($template, $loggedinuser, $cookie)
-     = get_template_and_user({template_name => "serials/serial-issues-full.tmpl",
+     = get_template_and_user({template_name => "serials/serial-issues-full.tt",
      query => $query,
      type => "intranet",
 	 flagsrequired => {serials => '*'},
@@ -89,7 +89,7 @@ if ($selectview eq "full"){
 } else {
     my $subscriptions = GetSubscriptionsFromBiblionumber($biblionumber);
     ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "serials/serial-issues.tmpl",
+    = get_template_and_user({template_name => "serials/serial-issues.tt",
         query => $query,
         type => "intranet",
 	    flagsrequired => {serials => '*'},

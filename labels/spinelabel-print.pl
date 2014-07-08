@@ -24,7 +24,7 @@ use C4::Output;
 my $scheme = C4::Context->preference('SpineLabelFormat');
 my $query  = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "labels/spinelabel-print.tmpl",
+    {   template_name   => "labels/spinelabel-print.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

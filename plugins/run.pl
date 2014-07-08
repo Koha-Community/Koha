@@ -37,7 +37,7 @@ my $class  = $cgi->param('class');
 my $method = $cgi->param('method');
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => "plugins/plugins-disabled.tmpl",
+    {   template_name   => "plugins/plugins-disabled.tt",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,

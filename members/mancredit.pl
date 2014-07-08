@@ -60,14 +60,17 @@ if ($add){
         print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
     }
 } else {
-	my ($template, $loggedinuser, $cookie)
-	  = get_template_and_user({template_name => "members/mancredit.tmpl",
-					  query => $input,
-					  type => "intranet",
-					  authnotrequired => 0,
-                      flagsrequired => { borrowers => 1, updatecharges => 'remaining_permissions' },
-					  debug => 1,
-					  });
+	my ($template, $loggedinuser, $cookie) = get_template_and_user(
+        {
+            template_name   => "members/mancredit.tt",
+            query           => $input,
+            type            => "intranet",
+            authnotrequired => 0,
+            flagsrequired   => { borrowers     => 1,
+                                 updatecharges => 'remaining_permissions' },
+            debug           => 1,
+        }
+    );
 					  
     if ( $data->{'category_type'} eq 'C') {
         my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );

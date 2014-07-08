@@ -35,7 +35,7 @@ This script needs a biblionumber as  parameter
 It shows the biblio in a (nice) MARC format depending on MARC
 parameters tables.
 
-The template is in <templates_dir>/catalogue/MARCdetail.tmpl.
+The template is in <templates_dir>/catalogue/MARCdetail.tt.
 this template must be divided into 11 "tabs".
 
 The first 10 tabs present the biblio, the 11th one presents
@@ -90,7 +90,7 @@ if ( ! $record ) {
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-MARCdetail.tmpl",
+        template_name   => "opac-MARCdetail.tt",
         query           => $query,
         type            => "opac",
         authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),

@@ -93,7 +93,7 @@ if ($split) {
             or die "Could not open $output_file: $!";
 
         my $template =
-          C4::Templates::gettemplate( 'batch/print-notices.tmpl', 'intranet',
+          C4::Templates::gettemplate( 'batch/print-notices.tt', 'intranet',
             new CGI );
 
         $template->param(
@@ -120,7 +120,7 @@ else {
 
 
     my $template =
-      C4::Templates::gettemplate( 'batch/print-notices.tmpl', 'intranet',
+      C4::Templates::gettemplate( 'batch/print-notices.tt', 'intranet',
         new CGI );
 
     $template->param(

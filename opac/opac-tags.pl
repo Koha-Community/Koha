@@ -109,11 +109,11 @@ if ($is_ajax) {
 	$debug and print STDERR "op: $loggedinuser\n";
 } else {
 	($template, $loggedinuser, $cookie) = get_template_and_user({
-		template_name   => "opac-tags.tmpl",
-		query           => $query,
-		type            => "opac",
-		authnotrequired => ($add_op ? 0 : 1),	# auth required to add tags
-		debug           => 1,
+        template_name   => "opac-tags.tt",
+        query           => $query,
+        type            => "opac",
+        authnotrequired => ($add_op ? 0 : 1), # auth required to add tags
+        debug           => 1,
 	});
 }
 

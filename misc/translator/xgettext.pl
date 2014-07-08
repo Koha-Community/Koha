@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-xgettext.pl - xgettext(1)-like interface for .tmpl strings extraction
+xgettext.pl - xgettext(1)-like interface for .tt strings extraction
 
 =cut
 
@@ -398,7 +398,7 @@ A gettext-like format provides the following advantages:
 
 Translation to non-English-like languages with different word
 order:  gettext's c-format strings can theoretically be
-emulated if we are able to do some analysis on the .tmpl input
+emulated if we are able to do some analysis on the .tt input
 and treat <TMPL_VAR> in a way similar to %s.
 
 =item - 
@@ -429,10 +429,10 @@ details.
 If you want to generate GNOME-style POTFILES.in files, such
 files (passed to -f) can be generated thus:
 
-	(cd ../.. && find koha-tmpl/opac-tmpl/default/en \
-		-name \*.inc -o -name \*.tmpl) > opac/POTFILES.in
-	(cd ../.. && find koha-tmpl/intranet-tmpl/default/en \
-		-name \*.inc -o -name \*.tmpl) > intranet/POTFILES.in
+    (cd ../.. && find koha-tmpl/opac-tmpl/default/en \
+        -name \*.inc -o -name \*.tt) > opac/POTFILES.in
+    (cd ../.. && find koha-tmpl/intranet-tmpl/default/en \
+        -name \*.inc -o -name \*.tt) > intranet/POTFILES.in
 
 This is, however, quite pointless, because the "create" and
 "update" actions have already been implemented in tmpl_process3.pl.

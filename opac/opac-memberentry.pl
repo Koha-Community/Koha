@@ -33,7 +33,7 @@ my $dbh = C4::Context->dbh;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-memberentry.tmpl",
+        template_name   => "opac-memberentry.tt",
         type            => "opac",
         query           => $cgi,
         authnotrequired => 1,
@@ -95,7 +95,7 @@ if ( $action eq 'create' ) {
         {
             ( $template, $borrowernumber, $cookie ) = get_template_and_user(
                 {
-                    template_name   => "opac-registration-email-sent.tmpl",
+                    template_name   => "opac-registration-email-sent.tt",
                     type            => "opac",
                     query           => $cgi,
                     authnotrequired => 1,
@@ -133,7 +133,7 @@ if ( $action eq 'create' ) {
         else {
             ( $template, $borrowernumber, $cookie ) = get_template_and_user(
                 {
-                    template_name   => "opac-registration-confirmation.tmpl",
+                    template_name   => "opac-registration-confirmation.tt",
                     type            => "opac",
                     query           => $cgi,
                     authnotrequired => 1,
@@ -175,7 +175,7 @@ elsif ( $action eq 'update' ) {
     else {
         ( $template, $borrowernumber, $cookie ) = get_template_and_user(
             {
-                template_name   => "opac-memberentry-update-submitted.tmpl",
+                template_name   => "opac-memberentry-update-submitted.tt",
                 type            => "opac",
                 query           => $cgi,
                 authnotrequired => 1,

@@ -49,7 +49,7 @@ my $sth;
 my $input = new CGI;
 my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
     {
-        template_name   => "reserve/request.tmpl",
+        template_name   => "reserve/request.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

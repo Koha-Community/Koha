@@ -37,7 +37,7 @@ my $cgi = new CGI;
 # Getting the template and auth
 my ($template, $loggedinuser, $cookie) = get_template_and_user(
     {
-        template_name => "opac-search-history.tmpl",
+        template_name => "opac-search-history.tt",
         query => $cgi,
         type => "opac",
         authnotrequired => 1,

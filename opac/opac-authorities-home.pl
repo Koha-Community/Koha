@@ -76,7 +76,7 @@ if ( $op eq "do_search" ) {
         $resultsperpage, $authtypecode, $orderby );
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "opac-authoritiessearchresultlist.tmpl",
+            template_name   => "opac-authoritiessearchresultlist.tt",
             query           => $query,
             type            => 'opac',
             authnotrequired => 1,
@@ -188,7 +188,7 @@ if ( $op eq "do_search" ) {
 else {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "opac-authorities-home.tmpl",
+            template_name   => "opac-authorities-home.tt",
             query           => $query,
             type            => 'opac',
             authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),

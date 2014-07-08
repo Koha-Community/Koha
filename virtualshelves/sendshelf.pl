@@ -37,7 +37,7 @@ my $query = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     {
-        template_name   => "virtualshelves/sendshelfform.tmpl",
+        template_name   => "virtualshelves/sendshelfform.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
@@ -61,11 +61,11 @@ if ( $email ) {
 
     my ( $template2, $borrowernumber, $cookie ) = get_template_and_user(
         {
-	    template_name   => "virtualshelves/sendshelf.tmpl",
-	    query           => $query,
-	    type            => "intranet",
-	    authnotrequired => 0,
-	    flagsrequired   => { catalogue => 1 },
+        template_name   => "virtualshelves/sendshelf.tt",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { catalogue => 1 },
         }
     );
 

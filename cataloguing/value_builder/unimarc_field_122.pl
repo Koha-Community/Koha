@@ -72,7 +72,7 @@ my ($input) = @_;
 	my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_122.tmpl",
+    = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_122.tt",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

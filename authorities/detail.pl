@@ -161,14 +161,16 @@ my $query=new CGI;
 my $dbh=C4::Context->dbh;
 
 # open template
-my ($template, $loggedinuser, $cookie)
-		= get_template_and_user({template_name => "authorities/detail.tmpl",
-			     query => $query,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {catalogue => 1},
-			     debug => 1,
-			     });
+my ($template, $loggedinuser, $cookie) = get_template_and_user(
+    {
+        template_name   => "authorities/detail.tt",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { catalogue => 1 },
+        debug           => 1,
+    }
+);
 
 my $authid = $query->param('authid');
 

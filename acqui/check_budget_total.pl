@@ -36,7 +36,7 @@ my $budget_id = $input->param('budget_id');
 my $total   = $input->param('total');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "acqui/ajax.tmpl",
+    {   template_name   => "acqui/ajax.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

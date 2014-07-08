@@ -84,7 +84,7 @@ my $bookseller = GetBookSellerFromId($booksellerid);
 # getting the template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/neworderbiblio.tmpl",
+        template_name   => "acqui/neworderbiblio.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

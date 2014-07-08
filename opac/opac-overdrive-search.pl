@@ -29,7 +29,7 @@ my $cgi = new CGI;
 
 # Getting the template and auth
 my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "opac-overdrive-search.tmpl",
+= get_template_and_user({template_name => "opac-overdrive-search.tt",
                                 query => $cgi,
                                 type => "opac",
                                 authnotrequired => 1,

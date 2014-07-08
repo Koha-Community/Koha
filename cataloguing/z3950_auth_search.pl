@@ -44,7 +44,7 @@ my $page            = $input->param('current_page') || 1;
 $page = $input->param('goto_page') if $input->param('changepage_goto');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-        template_name   => "cataloguing/z3950_auth_search.tmpl",
+        template_name   => "cataloguing/z3950_auth_search.tt",
         query           => $input,
         type            => "intranet",
         flagsrequired   => { catalogue => 1 },

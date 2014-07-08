@@ -63,7 +63,7 @@ BEGIN {
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-detail.tmpl",
+        template_name   => "opac-detail.tt",
         query           => $query,
         type            => "opac",
         authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),

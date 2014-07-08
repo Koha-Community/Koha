@@ -39,7 +39,7 @@ my $op = $input->param('op') || '';
 
 
 our ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "admin/patron-attr-types.tmpl",
+    = get_template_and_user({template_name => "admin/patron-attr-types.tt",
                  query => $input,
                  type => "intranet",
                  authnotrequired => 0,

@@ -32,7 +32,7 @@ my $query = CGI->new();
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => 'opac-mymessages.tmpl',
+        template_name   => 'opac-mymessages.tt',
         query           => $query,
         type            => 'opac',
         authnotrequired => 0,

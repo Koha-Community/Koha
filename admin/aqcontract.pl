@@ -38,7 +38,7 @@ my $op             = $input->param('op') || 'list';
 my $bookseller = GetBookSellerFromId($booksellerid);
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "admin/aqcontract.tmpl",
+    {   template_name   => "admin/aqcontract.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

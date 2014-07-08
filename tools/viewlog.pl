@@ -59,7 +59,7 @@ my $src      = $input->param("src");    # this param allows us to be told where 
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/viewlog.tmpl",
+        template_name   => "tools/viewlog.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

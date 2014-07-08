@@ -38,7 +38,7 @@ my $nbissues=$query->param('nbissues');
 my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie)
-  = get_template_and_user({template_name => "serials/serials-collection.tmpl",
+  = get_template_and_user({template_name => "serials/serials-collection.tt",
                             query => $query,
                             type => "intranet",
                             authnotrequired => 0,

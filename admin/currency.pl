@@ -54,7 +54,7 @@ my $script_name = '/cgi-bin/koha/admin/currency.pl';
 our $pagesize = 20;
 
 our ($template, $loggedinuser, $cookie) = get_template_and_user({
-    template_name => 'admin/currency.tmpl',
+    template_name => 'admin/currency.tt',
     query => $input,
     type => 'intranet',
     flagsrequired => {parameters => 'parameters_remaining_permissions'},

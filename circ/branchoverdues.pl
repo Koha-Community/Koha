@@ -63,7 +63,7 @@ my $input       = new CGI;
 my $dbh = C4::Context->dbh;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-        template_name   => "circ/branchoverdues.tmpl",
+        template_name   => "circ/branchoverdues.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

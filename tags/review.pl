@@ -79,14 +79,16 @@ if (is_ajax()) {
 ### Below is the sad, boring, necessary non-AJAX HTML code.
 
 my $input = CGI->new;
-my ($template, $borrowernumber, $cookie) = get_template_and_user({
-		template_name => "tags/review.tmpl",
-		query => $input,
-		 type => "intranet",
-		debug => 1,
-		authnotrequired => 0,
-	 	  flagsrequired => $needed_flags,
-});
+my ($template, $borrowernumber, $cookie) = get_template_and_user(
+    {
+        template_name   => "tags/review.tt",
+        query           => $input,
+        type            => "intranet",
+        debug           => 1,
+        authnotrequired => 0,
+        flagsrequired   => $needed_flags,
+    }
+);
 
 my ($op, @errors, @tags);
 

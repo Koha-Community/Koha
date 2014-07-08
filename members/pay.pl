@@ -46,7 +46,7 @@ our $input = CGI->new;
 
 my $updatecharges_permissions = $input->param('woall') ? 'writeoff' : 'remaining_permissions';
 our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => 'members/pay.tmpl',
+    {   template_name   => 'members/pay.tt',
         query           => $input,
         type            => 'intranet',
         authnotrequired => 0,

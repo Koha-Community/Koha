@@ -40,7 +40,7 @@ my $CONFIG_NAME = $ENV{'KOHA_CONF'};
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/scheduler.tmpl",
+        template_name   => "tools/scheduler.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

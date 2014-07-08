@@ -67,7 +67,7 @@ my $vendor = GetBookSellerFromId($booksellerid);
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "acqui/z3950_search.tmpl",
+        template_name   => "acqui/z3950_search.tt",
         query           => $input,
         type            => "intranet",
         flagsrequired   => { acquisition => 'order_manage' },

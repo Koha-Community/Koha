@@ -58,7 +58,7 @@ use C4::Biblio qw/GetBiblioData/;
 my $input=new CGI;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "acqui/uncertainprice.tmpl",
+    = get_template_and_user({template_name => "acqui/uncertainprice.tt",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

@@ -61,7 +61,7 @@ foreach my $thisauthtype (
 if ( $op eq "delete" ) {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "authorities/authorities-home.tmpl",
+            template_name   => "authorities/authorities-home.tt",
             query           => $query,
             type            => 'intranet',
             authnotrequired => 0,
@@ -101,7 +101,7 @@ if ( $op eq "do_search" ) {
 
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "authorities/searchresultlist.tmpl",
+            template_name   => "authorities/searchresultlist.tt",
             query           => $query,
             type            => 'intranet',
             authnotrequired => 0,
@@ -189,7 +189,7 @@ if ( $op eq "do_search" ) {
 if ( $op eq '' ) {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "authorities/authorities-home.tmpl",
+            template_name   => "authorities/authorities-home.tt",
             query           => $query,
             type            => 'intranet',
             authnotrequired => 0,

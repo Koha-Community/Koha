@@ -46,7 +46,7 @@ InstallAuth - Authenticates Koha users for Install process
   my $query = new CGI;
 
   my ($template, $borrowernumber, $cookie) 
-    = get_template_and_user({template_name   => "opac-main.tmpl",
+    = get_template_and_user({template_name   => "opac-main.tt",
                              query           => $query,
 			     type            => "opac",
 			     authnotrequired => 1,
@@ -81,7 +81,7 @@ InstallAuth - Authenticates Koha users for Install process
 =item get_template_and_user
 
   my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name   => "opac-main.tmpl",
+    = get_template_and_user({template_name   => "opac-main.tt",
                              query           => $query,
 			     type            => "opac",
 			     authnotrequired => 1,
@@ -234,7 +234,7 @@ sub checkauth {
 
     my $dbh = C4::Context->dbh();
     my $template_name;
-    $template_name = "installer/auth.tmpl";
+    $template_name = "installer/auth.tt";
 
     # state variables
     my $loggedin = 0;

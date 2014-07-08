@@ -34,7 +34,7 @@ my $colId = $query->param('colId');
 my $toBranch = $query->param('toBranch');
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "rotating_collections/transferCollection.tmpl",
+    = get_template_and_user({template_name => "rotating_collections/transferCollection.tt",
 			     query => $query,
 			     type => "intranet",
 			     authnotrequired => 0,

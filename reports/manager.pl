@@ -29,7 +29,7 @@ use C4::Circulation;
 my $input = new CGI;
 my $report_name=$input->param("report_name");
 my $do_it=$input->param('do_it');
-my $fullreportname = "reports/".$report_name.".tmpl";
+my $fullreportname = "reports/".$report_name.".tt";
 my @values = $input->param("value");
 my ($template, $borrowernumber, $cookie)
 	= get_template_and_user({template_name => $fullreportname,

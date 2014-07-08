@@ -28,7 +28,7 @@ my $query = new CGI;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "virtualshelves/shelves.tmpl",
+        template_name   => "virtualshelves/shelves.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

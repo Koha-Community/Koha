@@ -42,7 +42,7 @@ use C4::Suggestions;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
-    {   template_name   => 'acqui/acqui-home.tmpl',
+    {   template_name   => 'acqui/acqui-home.tt',
         query           => $query,
         type            => 'intranet',
         authnotrequired => 0,

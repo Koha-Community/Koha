@@ -92,7 +92,7 @@ sub plugin {
         ( $template, $loggedinuser, $cookie ) = get_template_and_user(
             {
                 template_name =>
-                  "cataloguing/value_builder/unimarc_field_4XX.tmpl",
+                  "cataloguing/value_builder/unimarc_field_4XX.tt",
                 query           => $query,
                 type            => "intranet",
                 authnotrequired => 0,
@@ -367,7 +367,7 @@ sub plugin {
         ( $template, $loggedinuser, $cookie ) = get_template_and_user(
             {
                 template_name =>
-                  "cataloguing/value_builder/unimarc_field_4XX.tmpl",
+                  "cataloguing/value_builder/unimarc_field_4XX.tt",
                 query           => $query,
                 type            => 'intranet',
                 authnotrequired => 0,
@@ -488,7 +488,7 @@ sub plugin {
         ( $template, $loggedinuser, $cookie ) = get_template_and_user(
             {
                 template_name =>
-                  "cataloguing/value_builder/unimarc_field_4XX.tmpl",
+                  "cataloguing/value_builder/unimarc_field_4XX.tt",
                 query           => $query,
                 type            => "intranet",
                 authnotrequired => 0,

@@ -168,10 +168,10 @@ my $template_name;
 my $template_type;
 my @params = $cgi->param("limit");
 if ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) ) {
-    $template_name = 'catalogue/results.tmpl';
+    $template_name = 'catalogue/results.tt';
 }
 else {
-    $template_name = 'catalogue/advsearch.tmpl';
+    $template_name = 'catalogue/advsearch.tt';
     $template_type = 'advsearch';
 }
 # load the template

@@ -75,7 +75,7 @@ if ($view eq 'card' || $view eq 'html') {
 }
 else { #view eq marc
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-        template_name   => "opac-showmarc.tmpl",
+        template_name   => "opac-showmarc.tt",
         query           => $input,
         type            => "opac",
         authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),

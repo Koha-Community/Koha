@@ -27,7 +27,7 @@ my $query = CGI->new;
 my $admin = C4::Context->preference('KohaAdminEmailAddress');
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => 'errors/402.tmpl',
+        template_name   => 'errors/402.tt',
         query           => $query,
         type            => 'intranet',
         authnotrequired => 1,

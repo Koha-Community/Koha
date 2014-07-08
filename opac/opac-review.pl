@@ -33,7 +33,7 @@ my $biblionumber = $query->param('biblionumber');
 my $review       = $query->param('review');
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-review.tmpl",
+        template_name   => "opac-review.tt",
         query           => $query,
         type            => "opac",
         authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),

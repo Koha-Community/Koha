@@ -31,7 +31,7 @@ my $cgi = new CGI;
 
 my ( $template, $librarian, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/renew.tmpl",
+        template_name   => "circ/renew.tt",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,

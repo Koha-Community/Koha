@@ -158,7 +158,7 @@ if ($show_results) {
 
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "labels/result.tmpl",
+            template_name   => "labels/result.tt",
             query           => $query,
             type            => "intranet",
             authnotrequired => 0,
@@ -237,7 +237,7 @@ if ($show_results) {
 else {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "labels/search.tmpl",
+            template_name   => "labels/search.tt",
             query           => $query,
             type            => "intranet",
             authnotrequired => 0,

@@ -27,7 +27,7 @@ use C4::Tags qw/get_count_by_tag_status/;
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/tools-home.tmpl",
+        template_name   => "tools/tools-home.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,

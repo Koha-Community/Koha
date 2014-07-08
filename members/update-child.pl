@@ -41,7 +41,7 @@ my $input = new CGI;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "members/update-child.tmpl",
+        template_name   => "members/update-child.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

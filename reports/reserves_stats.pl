@@ -48,7 +48,7 @@ plugin that shows circulation stats
 
 # my $debug = 1;	# override for now.
 my $input = new CGI;
-my $fullreportname = "reports/reserves_stats.tmpl";
+my $fullreportname = "reports/reserves_stats.tt";
 my $do_it    = $input->param('do_it');
 my $line     = $input->param("Line");
 my $column   = $input->param("Column");

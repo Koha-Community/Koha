@@ -41,7 +41,7 @@ my $order = $input->param('order');
 
 # open template first (security & userenv set here)
 my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => 'serials/claims.tmpl',
+= get_template_and_user({template_name => 'serials/claims.tt',
             query => $input,
             type => 'intranet',
             authnotrequired => 0,

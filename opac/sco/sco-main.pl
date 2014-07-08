@@ -63,7 +63,7 @@ if (C4::Context->preference('AutoSelfCheckAllowed'))
     $query->param(-name=>'koha_login_context',-values=>['sco']);
 }
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
-    template_name   => "sco/sco-main.tmpl",
+    template_name   => "sco/sco-main.tt",
     authnotrequired => 0,
     flagsrequired => { circulate => "circulate_remaining_permissions" },
     query => $query,

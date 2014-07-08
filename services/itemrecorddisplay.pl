@@ -37,7 +37,7 @@ use C4::Items;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
-    template_name   => 'services/itemrecorddisplay.tmpl',
+    template_name   => 'services/itemrecorddisplay.tt',
     query           => $input,
     type            => 'intranet',
     flagsrequired   => {acquisition => '*'},

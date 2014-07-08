@@ -9,14 +9,16 @@ use C4::Context;
 use C4::Auth;
 
 my $q = CGI->new();
-my ($template, $loggedinuser, $cookie) = get_template_and_user({
-	   template_name => "admin/admin-home.tmpl",	# whatever, we don't really use the template anyway.
-			   query => $q,
-			 	type => "intranet",
-	 authnotrequired => 0,
-       flagsrequired => {parameters => 'parameters_remaining_permissions'},
-		       debug => 1,
-});
+my ($template, $loggedinuser, $cookie) = get_template_and_user(
+    {
+        template_name   => "admin/admin-home.tt", # whatever, we don't really use the template anyway.
+        query           => $q,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => {parameters => 'parameters_remaining_permissions'},
+        debug           => 1,
+    }
+);
 
 my $dbh = C4::Context->dbh;
 my  $tz_sth = $dbh->prepare("SHOW VARIABLES LIKE 'time_zone'");

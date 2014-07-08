@@ -35,14 +35,16 @@ my $query = CGI->new;
 my $biblionumber = $query->param('biblionumber');
 my $barcode	 = $query->param('barcode');
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/linkitem.tmpl",
-                 query => $query,
-                 type => "intranet",
-                 authnotrequired => 0,
-                 flagsrequired => {editcatalogue => 'edit_catalogue'},
-                 debug => 1,
-                 });
+my ($template, $loggedinuser, $cookie) = get_template_and_user(
+    {
+        template_name   => "cataloguing/linkitem.tt",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { editcatalogue => 'edit_catalogue' },
+        debug           => 1,
+    }
+);
 
 my $biblio = GetMarcBiblio($biblionumber);
 my $marcflavour = C4::Context->preference("marcflavour");

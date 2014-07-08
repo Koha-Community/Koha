@@ -39,7 +39,7 @@ my ( $template, $borrowernumber, $cookie );
 if ( $m->Verify() ) {
     ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         {
-            template_name   => "opac-registration-confirmation.tmpl",
+            template_name   => "opac-registration-confirmation.tt",
             type            => "opac",
             query           => $cgi,
             authnotrequired => 1,
@@ -71,7 +71,7 @@ if ( $m->Verify() ) {
 else {
     ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         {
-            template_name   => "opac-registration-invalid.tmpl",
+            template_name   => "opac-registration-invalid.tt",
             type            => "opac",
             query           => $cgi,
             authnotrequired => 1,

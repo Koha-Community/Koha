@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # Test filter partially based on Ambrose's hideous subst.pl code
-# The idea is that the .tmpl files are not valid HTML, and as a result
+# The idea is that the .tt files are not valid HTML, and as a result
 # HTML::Parse would be completely confused by these templates.
 # This is just a simple scanner (not a parser) & should give better results.
 

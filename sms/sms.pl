@@ -14,7 +14,7 @@ my $operation = $query->param('operation');
 my $result;
 my $errorcode;
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "sms/sms-home.tmpl",
+    = get_template_and_user({template_name => "sms/sms-home.tt",
 		query => $query,
 		type => "intranet",
 		authnotrequired => 0,

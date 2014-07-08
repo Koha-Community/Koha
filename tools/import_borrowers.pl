@@ -70,7 +70,7 @@ our $csv  = Text::CSV->new({binary => 1});  # binary needed for non-ASCII Unicod
 #push @feedback, {feedback=>1, name=>'backend', value=>$csv->backend, backend=>$csv->backend}; #XXX
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-        template_name   => "tools/import_borrowers.tmpl",
+        template_name   => "tools/import_borrowers.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

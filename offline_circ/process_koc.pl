@@ -45,7 +45,7 @@ my $FILE_VERSION = '1.0';
 our $query = CGI->new;
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
-    template_name => "offline_circ/process_koc.tmpl",
+    template_name => "offline_circ/process_koc.tt",
     query => $query,
     type => "intranet",
     authnotrequired => 0,

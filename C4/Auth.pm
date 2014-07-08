@@ -82,7 +82,7 @@ C4::Auth - Authenticates Koha users
   my ($template, $borrowernumber, $cookie)
     = get_template_and_user(
         {
-            template_name   => "opac-main.tmpl",
+            template_name   => "opac-main.tt",
             query           => $query,
       type            => "opac",
       authnotrequired => 0,
@@ -106,7 +106,7 @@ automatically. This gets loaded into the template.
  my ($template, $borrowernumber, $cookie)
      = get_template_and_user(
        {
-         template_name   => "opac-main.tmpl",
+         template_name   => "opac-main.tt",
          query           => $query,
          type            => "opac",
          authnotrequired => 0,
@@ -1046,7 +1046,7 @@ sub checkauth {
     $LibraryNameTitle =~ s/<(?:\/?)(?:br|p)\s*(?:\/?)>/ /sgi;
     $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
 
-    my $template_name = ( $type eq 'opac' ) ? 'opac-auth.tmpl' : 'auth.tmpl';
+    my $template_name = ( $type eq 'opac' ) ? 'opac-auth.tt' : 'auth.tt';
     my $template = C4::Templates::gettemplate($template_name, $type, $query );
     $template->param(
         branchloop           => GetBranchesLoop(),

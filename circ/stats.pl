@@ -38,7 +38,7 @@ my $time  = $input->param('time') || '';
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/stats.tmpl",
+        template_name   => "circ/stats.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

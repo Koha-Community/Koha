@@ -111,7 +111,7 @@ sub get_gst {
 }
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "acqui/parcel.tmpl",
+    = get_template_and_user({template_name => "acqui/parcel.tt",
                  query => $input,
                  type => "intranet",
                  authnotrequired => 0,

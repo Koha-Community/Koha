@@ -149,7 +149,7 @@ my ($input) = @_;
  	}
 
         ($template, $loggedinuser, $cookie)
-            = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_210c.tmpl",
+            = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_210c.tt",
                     query => $query,
                     type => 'intranet',
                     authnotrequired => 0,
@@ -211,7 +211,7 @@ my ($input) = @_;
                                 );
     } else {
         ($template, $loggedinuser, $cookie)
-            = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_210c.tmpl",
+            = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_210c.tt",
                     query => $query,
                     type => 'intranet',
                     authnotrequired => 0,

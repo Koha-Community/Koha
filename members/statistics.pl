@@ -34,7 +34,7 @@ use C4::Output;
 my $input = new CGI;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "members/statistics.tmpl",
+    {   template_name   => "members/statistics.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

@@ -43,7 +43,7 @@ my $MAXIMUM_NUMBER_OF_RESERVES = C4::Context->preference("maxreserves");
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-reserve.tmpl",
+        template_name   => "opac-reserve.tt",
         query           => $query,
         type            => "opac",
         authnotrequired => 0,

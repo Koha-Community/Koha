@@ -39,7 +39,7 @@ my $ratio     = $input->param('ratio');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/reserveratios.tmpl",
+        template_name   => "circ/reserveratios.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

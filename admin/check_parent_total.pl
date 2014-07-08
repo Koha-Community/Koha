@@ -44,7 +44,7 @@ my $period_id = $input->param('period_id');
 my $returncode;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "acqui/ajax.tmpl",
+    {   template_name   => "acqui/ajax.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

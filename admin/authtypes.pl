@@ -41,7 +41,7 @@ my $offset       = $input->param('offset') || 0;
 my $op           = $input->param('op')     || '';
 my $pagesize     = 20;
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "admin/authtypes.tmpl",
+    = get_template_and_user({template_name => "admin/authtypes.tt",
                 query => $input,
                 type => "intranet",
                 authnotrequired => 0,

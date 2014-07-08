@@ -29,7 +29,7 @@ This script needs a biblionumber as parameter
 
 It shows the biblio
 
-The template is in <templates_dir>/catalogue/ISBDdetail.tmpl.
+The template is in <templates_dir>/catalogue/ISBDdetail.tt.
 this template must be divided into 11 "tabs".
 
 The first 10 tabs present the biblio, the 11th one presents
@@ -58,7 +58,7 @@ use C4::Members;    # GetMember
 my $query = CGI->new();
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-ISBDdetail.tmpl",
+        template_name   => "opac-ISBDdetail.tt",
         query           => $query,
         type            => "opac",
         authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
