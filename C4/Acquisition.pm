@@ -18,8 +18,7 @@ package C4::Acquisition;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-use strict;
-use warnings;
+use Modern::Perl;
 use Carp;
 use C4::Context;
 use C4::Debug;
@@ -362,9 +361,9 @@ sub GetBasketGroupAsCSV {
 
     my @rows;
     for my $basket (@$baskets) {
-        my @orders     = GetOrders( $$basket{basketno} );
+        my @orders     = GetOrders( $basket->{basketno} );
         my $contract   = GetContract({
-            contractnumber => $$basket{contractnumber}
+            contractnumber => $basket->{contractnumber}
         });
         my $bookseller = GetBookSellerFromId( $$basket{booksellerid} );
         my $basketgroup = GetBasketgroup( $$basket{basketgroupid} );
