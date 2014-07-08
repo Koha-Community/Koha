@@ -9614,6 +9614,22 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE borrowers SET userid = NULL where userid = ""
+    });
+
+    $dbh->do(q{
+        ALTER TABLE borrowers
+            DROP INDEX userid ,
+            ADD UNIQUE userid (userid)
+    });
+
+    print "Upgrade to $DBversion done (Bug 1861 - Unique patrons logins not (totally) enforced)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

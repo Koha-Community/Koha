@@ -269,7 +269,7 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   PRIMARY KEY `borrowernumber` (`borrowernumber`),
   KEY `categorycode` (`categorycode`),
   KEY `branchcode` (`branchcode`),
-  KEY `userid` (`userid`),
+  UNIQUE KEY `userid` (`userid`),
   KEY `guarantorid` (`guarantorid`),
   KEY `surname_idx` (`surname`(255)),
   KEY `firstname_idx` (`firstname`(255)),
