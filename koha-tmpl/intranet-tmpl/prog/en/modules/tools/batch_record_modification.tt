@@ -41,11 +41,15 @@ $(document).ready(function() {
   }));
 
   $("#mainformsubmit").click(function(){
-    if ( $("#marc_modification_template_id").val() > 0 ) {
-      return submitBackgroundJob(document.getElementById("process"));
+    if ($("input[type=checkbox][name='record_id']:checked").length == 0 ) {
+      alert(_("Please select at least one record to process"));
+      return false;
     }
-    alert(_("Please select a modification template."));
-    return false;
+    if ( $("#marc_modification_template_id").val() <= 0 ) {
+      alert(_("Please select a modification template."));
+      return false;
+    }
+    return submitBackgroundJob(document.getElementById("process"));
   });
 
   $("#marc_modification_template_id").change(function(){
