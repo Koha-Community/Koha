@@ -229,6 +229,11 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             if ($member) {
                 $borrowernumber = $member->{'borrowernumber'};
             }
+        } elsif ( ($matchpoint eq 'userid') && ($borrower{'userid'}) ) {
+            $member = GetMember( 'userid' => $borrower{'userid'} );
+            if ($member) {
+                $borrowernumber = $member->{'borrowernumber'};
+            }
         } elsif ($extended) {
             if (defined($matchpoint_attr_type)) {
                 foreach my $attr (@$patron_attributes) {
