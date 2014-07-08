@@ -71,8 +71,12 @@
     [% ELSE %]
         <div id="resultlist" class="toptabs">
             <ul>
-                <li><a href="#holdswaiting">[% reservecount %] Hold(s) waiting</a></li>
-                <li><a href="#holdsover">[% overcount %] Hold(s) over</a></li>
+                <li><a href="#holdswaiting">Holds waiting: [% reservecount %]</a></li>
+                <li>
+                    <a href="#holdsover">
+                        Holds waiting over [% ReservesMaxPickUpDelay %] days: [% overcount %]
+                    </a>
+                </li>
             </ul>
             <div id="holdswaiting">
             [% IF ( reserveloop ) %]

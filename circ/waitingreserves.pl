@@ -85,6 +85,9 @@ my @getreserves = $all_branches ? GetReservesForBranch() : GetReservesForBranch(
 # get reserves for the branch we are logged into, or for all branches
 
 my $today = Date_to_Days(&Today);
+my $max_pickup_delay = C4::Context->preference('ReservesMaxPickUpDelay');
+$max_pickup_delay-- if C4::Context->preference('ExpireReservesMaxPickUpDelay');
+
 foreach my $num (@getreserves) {
     next unless ($num->{'waitingdate'} && $num->{'waitingdate'} ne '0000-00-00');
 
@@ -105,9 +108,10 @@ foreach my $num (@getreserves) {
     my $itemtypeinfo = getitemtypeinfo( $gettitle->{'itemtype'} );  # using the fixed up itype/itemtype
     $getreserv{'waitingdate'} = $num->{'waitingdate'};
     my ( $waiting_year, $waiting_month, $waiting_day ) = split (/-/, $num->{'waitingdate'});
+
     ( $waiting_year, $waiting_month, $waiting_day ) =
       Add_Delta_Days( $waiting_year, $waiting_month, $waiting_day,
-        C4::Context->preference('ReservesMaxPickUpDelay'));
+        $max_pickup_delay);
     my $calcDate = Date_to_Days( $waiting_year, $waiting_month, $waiting_day );
 
     $getreserv{'itemtype'}       = $itemtypeinfo->{'description'};
@@ -157,7 +161,7 @@ $template->param(
     overloop    => \@overloop,
     overcount   => $overcount,
     show_date   => output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
-    ReservesMaxPickUpDelay => C4::Context->preference('ReservesMaxPickUpDelay')
+    ReservesMaxPickUpDelay => $max_pickup_delay,
 );
 
 if ($item && $tab eq 'holdsover') {
