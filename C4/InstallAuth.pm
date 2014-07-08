@@ -111,7 +111,6 @@ sub get_template_and_user {
     my $path     = C4::Context->config('intrahtdocs'). "/prog/". $language;
 
     my $tmplbase = $in->{template_name};
-    $tmplbase=~ s/\.tmpl$/.tt/;
     my $filename = "$path/modules/" . $tmplbase;
     my $interface = 'intranet';
     my $template = C4::Templates->new( $interface, $filename, $tmplbase, $query);
@@ -372,7 +371,6 @@ sub checkauth {
       C4::Context->config('intrahtdocs') . "/prog/"
       . ( $query->param('language') ? $query->param('language') : "en" );
     my $filename = "$path/modules/$template_name";
-    $filename =~ s/\.tmpl$/.tt/;
     my $interface = 'intranet';
     my $template = C4::Templates->new( $interface, $filename, '', $query);
     $template->param(
