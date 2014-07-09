@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -18,8 +17,6 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-# test comment
-
 use Modern::Perl;
 
 use C4::Auth;
@@ -35,11 +32,11 @@ use C4::Biblio;
 
 =head1 NAME
 
-plugin that shows a stats on borrowers
+reports/acquisitions_stats.pl
 
 =head1 DESCRIPTION
 
-=over 2
+Plugin that shows a stats on borrowers
 
 =cut
 

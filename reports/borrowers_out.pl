@@ -32,11 +32,11 @@ use C4::Dates qw/format_date_in_iso/;
 
 =head1 NAME
 
-plugin that shows a stats on borrowers
+reports/borrowers_out.pl
 
 =head1 DESCRIPTION
 
-=over 2
+Plugin that shows a stats on borrowers
 
 =cut
 

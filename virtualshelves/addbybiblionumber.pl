@@ -23,7 +23,7 @@
 
 =head1 NAME
 
-    addbybiblionumber.pl
+addbybiblionumber.pl
 
 =head1 DESCRIPTION
 

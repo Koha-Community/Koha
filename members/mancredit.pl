@@ -60,7 +60,7 @@ if ($add){
         print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
     }
 } else {
-	my ($template, $loggedinuser, $cookie) = get_template_and_user(
+    my ($template, $loggedinuser, $cookie) = get_template_and_user(
         {
             template_name   => "members/mancredit.tt",
             query           => $input,

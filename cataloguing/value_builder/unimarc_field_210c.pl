@@ -32,19 +32,22 @@ use C4::Koha;
 
 ###TODO To rewrite in order to use SearchAuthorities
 
-=head1
+=head1 FUNCTIONS
 
-plugin_parameters : other parameters added when the plugin is called by the dopop function
+=head2 plugin_parameters
+
+Other parameters added when the plugin is called by the dopop function
 
 =cut
+
 sub plugin_parameters {
 my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
 return "";
 }
 
-=head1
+=head2 plugin_javascript
 
-plugin_javascript : the javascript function called when the user enters the subfield.
+The javascript function called when the user enters the subfield.
 contain 3 javascript functions :
 * one called when the field is entered (OnFocus). Named FocusXXX
 * one called when the field is leaved (onBlur). Named BlurXXX
@@ -56,6 +59,7 @@ returns :
 the 3 scripts are inserted after the <input> in the html code
 
 =cut
+
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
 my $function_name= $field_number;
@@ -86,9 +90,9 @@ function Clic$function_name(subfield_managed) {
 return ($function_name,$res);
 }
 
-=head1
+=head2 plugin
 
-plugin : the true value_builded. The screen that is open in the popup window.
+The true value_builded. The screen that is open in the popup window.
 
 =cut
 
