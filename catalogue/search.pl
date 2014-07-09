@@ -258,6 +258,8 @@ my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes") || "i
 my @advanced_search_types = split(/\|/, $advanced_search_types);
 
 foreach my $advanced_srch_type (@advanced_search_types) {
+    $advanced_srch_type =~ s/^\s*//;
+    $advanced_srch_type =~ s/\s*$//;
    if ($advanced_srch_type eq 'itemtypes') {
    # itemtype is a special case, since it's not defined in authorized values
         my @itypesloop;
