@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% USE Branches %]
 [% USE KohaDates %]
 [% IF ( export_remove_fields OR export_with_csv_profile ) %]
@@ -33,6 +34,7 @@ var borrowernumber = "[% borrowernumber %]";
 var branchcode = "[% branch %]";
 var exports_enabled = "[% exports_enabled %]";
 var AllowRenewalLimitOverride = [% (CAN_user_circulate_override_renewals && AllowRenewalLimitOverride)? 1: 0 %];
+var script = "circulation";
 var relatives_borrowernumbers = new Array();
 [% FOREACH b IN relatives_borrowernumbers %]
     relatives_borrowernumbers.push("[% b %]");
@@ -693,6 +695,12 @@ No patron matched <span class="ex">[% message %]</span>
 <!-- SUMMARY : TODAY & PREVIOUS ISSUES -->
 <div id="checkouts">
     [% IF ( issuecount ) %]
+        <div id="issues-table-loading-message">
+            <p>
+                <a id="issues-table-load-now-button" href="#" class="btn"><i class="icon-book"></i> Show checkouts</a>
+            </p>
+        </div>
+
         <table id="issues-table">
             <thead>
                 <tr>
@@ -715,7 +723,10 @@ No patron matched <span class="ex">[% message %]</span>
             [% INCLUDE 'checkouts-table-footer.inc' %]
         </table>
 
-        <fieldset class="action">
+        <label for="issues-table-load-immediately">Always show checkouts immediately</label>
+        <input id="issues-table-load-immediately" type="checkbox" />
+
+        <fieldset id="issues-table-actions" class="action">
             [% IF ( CAN_user_circulate_override_renewals ) %]
                 [% IF ( AllowRenewalLimitOverride ) %]
                     <label for="override_limit">Override renewal limit:</label>

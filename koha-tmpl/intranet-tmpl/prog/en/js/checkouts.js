@@ -126,241 +126,260 @@ $(document).ready(function() {
 
     var ymd = $.datepicker.formatDate('yy-mm-dd', new Date());
 
-    var issuesTable;
-    var drawn = 0;
-    issuesTable = $("#issues-table").dataTable({
-        "oLanguage": {
-            "sEmptyTable" : MSG_DT_LOADING_RECORDS,
-        },
-        "bAutoWidth": false,
-        "sDom": "<'row-fluid'<'span6'><'span6'>r>t<'row-fluid'>t",
-        "aoColumns": [
-            {
-                "mDataProp": function( oObj ) {
-                    if ( oObj.issued_today ) {
-                        return "0";
-                    } else {
-                        return "100";
-                    }
-                }
-            },
-            {
-                "mDataProp": function( oObj ) {
-                    if ( oObj.issued_today ) {
-                        return "<strong>" + TODAYS_CHECKOUTS + "</strong>";
-                    } else {
-                        return "<strong>" + PREVIOUS_CHECKOUTS + "</strong>";
-                    }
-                }
-            },
-            {
-                "mDataProp": "date_due",
-                "bVisible": false,
-            },
-            {
-                "iDataSort": 1, // Sort on hidden unformatted date due column
-                "mDataProp": function( oObj ) {
-                    if ( oObj.date_due_overdue ) {
-                        return "<span class='overdue'>" + oObj.date_due_formatted + "</span>";
-                    } else {
-                        return oObj.date_due_formatted;
-                    }
-                }
-            },
-            {
-                "mDataProp": function ( oObj ) {
-                    title = "<span class='strong'><a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
-                          + oObj.biblionumber
-                          + "'>"
-                          + oObj.title;
+    $('#issues-table').hide();
+    $('#issues-table-actions').hide();
+    $('#issues-table-load-now-button').click(function(){
+        LoadIssuesTable();
+        return false;
+    });
 
-                    $.each(oObj.subtitle, function( index, value ) {
-                              title += " " + value.subfield;
-                    });
+    if ( $.cookie("issues-table-load-immediately-" + script) == "true" ) {
+        LoadIssuesTable();
+        $('#issues-table-load-immediately').prop('checked', true);
+    }
+    $('#issues-table-load-immediately').on( "change", function(){
+        $.cookie("issues-table-load-immediately-" + script, $(this).is(':checked'));
+    });
 
-                    title += "</a></span>";
+    function LoadIssuesTable() {
+        $('#issues-table-loading-message').hide();
+        $('#issues-table').show();
+        $('#issues-table-actions').show();
 
-                    if ( oObj.author ) {
-                        title += " " + BY.replace( "_AUTHOR_",  " " + oObj.author );
-                    }
-
-                    if ( oObj.itemnotes ) {
-                        var span_class = "";
-                        if ( $.datepicker.formatDate('yy-mm-dd', new Date(oObj.issuedate) ) == ymd ) {
-                            span_class = "circ-hlt";
+        issuesTable = $("#issues-table").dataTable({
+            "oLanguage": {
+                "sEmptyTable" : MSG_DT_LOADING_RECORDS,
+            },
+            "bAutoWidth": false,
+            "sDom": "<'row-fluid'<'span6'><'span6'>r>t<'row-fluid'>t",
+            "aoColumns": [
+                {
+                    "mDataProp": function( oObj ) {
+                        if ( oObj.issued_today ) {
+                            return "0";
+                        } else {
+                            return "100";
                         }
-                        title += " - <span class='" + span_class + "'>" + oObj.itemnotes + "</span>"
                     }
-
-                    title += " "
-                          + "<a href='/cgi-bin/koha/catalogue/moredetail.pl?biblionumber="
-                          + oObj.biblionumber
-                          + "&itemnumber="
-                          + oObj.itemnumber
-                          + "#"
-                          + oObj.itemnumber
-                          + "'>"
-                          + oObj.barcode
-                          + "</a>";
-
-                    return title;
-                }
-            },
-            { "mDataProp": "itemtype" },
-            { "mDataProp": "issuedate_formatted" },
-            { "mDataProp": "branchname" },
-            { "mDataProp": "itemcallnumber" },
-            {
-                "mDataProp": function ( oObj ) {
-                    if ( ! oObj.charge ) oObj.charge = 0;
-                    return parseFloat(oObj.charge).toFixed(2);
-                }
-            },
-            {
-                "mDataProp": function ( oObj ) {
-                    if ( ! oObj.price ) oObj.price = 0;
-                    return parseFloat(oObj.price).toFixed(2);
-                }
-            },
-            {
-                "bSortable": false,
-                "mDataProp": function ( oObj ) {
-                    var content = "";
-                    var span_style = "";
-                    var span_class = "";
-
-                    content += "<span>";
-                    content += "<span style='padding: 0 1em;'>" + oObj.renewals_count + "</span>";
-
-                    if ( oObj.can_renew ) {
-                        // Do nothing
-                    } else if ( oObj.can_renew_error == "on_reserve" ) {
-                        content += "<span class='renewals-disabled'>"
-                                + "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + ON_HOLD + "</a>"
-                                + "</span>";
-
-                        span_style = "display: none";
-                        span_class = "renewals-allowed";
-                    } else if ( oObj.can_renew_error == "too_many" ) {
-                        content += "<span class='renewals-disabled'>"
-                                + NOT_RENEWABLE
-                                + "</span>";
-
-                        span_style = "display: none";
-                        span_class = "renewals-allowed";
-                    } else if ( oObj.can_renew_error == "too_soon" ) {
-                        content += "<span class='renewals-disabled'>"
-                                + NOT_RENEWABLE_TOO_SOON.format( oObj.can_renew_date )
-                                + "</span>";
-
-                        span_style = "display: none";
-                        span_class = "renewals-allowed";
-                    } else if ( oObj.can_renew_error == "auto_too_soon" ) {
-                        content += "<span class='renewals-disabled'>"
-                                + NOT_RENEWABLE_AUTO_TOO_SOON
-                                + "</span>";
-
-                        span_style = "display: none";
-                        span_class = "renewals-allowed";
-                    } else if ( oObj.can_renew_error == "auto_renew" ) {
-                        content += "<span class='renewals-disabled'>"
-                                + NOT_RENEWABLE_AUTO_RENEW
-                                + "</span>";
-
-                        span_style = "display: none";
-                        span_class = "renewals-allowed";
-                    } else {
-                        content += "<span class='renewals-disabled'>"
-                                + oObj.can_renew_error
-                                + "</span>";
-
-                        span_style = "display: none";
-                        span_class = "renewals-allowed";
+                },
+                {
+                    "mDataProp": function( oObj ) {
+                        if ( oObj.issued_today ) {
+                            return "<strong>" + TODAYS_CHECKOUTS + "</strong>";
+                        } else {
+                            return "<strong>" + PREVIOUS_CHECKOUTS + "</strong>";
+                        }
                     }
-
-                    content += "<span class='" + span_class + "' style='" + span_style + "'>"
-                            +  "<input type='checkbox' class='renew' id='renew_" + oObj.itemnumber + "' name='renew' value='" + oObj.itemnumber +"'/>"
-                            +  "</span>";
-
-                    if ( oObj.renewals_remaining ) {
-                        content += "<span class='renewals'>("
-                                + RENEWALS_REMAINING.format( oObj.renewals_remaining, oObj.renewals_allowed )
-                                + ")</span>";
+                },
+                {
+                    "mDataProp": "date_due",
+                    "bVisible": false,
+                },
+                {
+                    "iDataSort": 1, // Sort on hidden unformatted date due column
+                    "mDataProp": function( oObj ) {
+                        if ( oObj.date_due_overdue ) {
+                            return "<span class='overdue'>" + oObj.date_due_formatted + "</span>";
+                        } else {
+                            return oObj.date_due_formatted;
+                        }
                     }
+                },
+                {
+                    "mDataProp": function ( oObj ) {
+                        title = "<span class='strong'><a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
+                              + oObj.biblionumber
+                              + "'>"
+                              + oObj.title;
 
-                    content += "</span>";
+                        $.each(oObj.subtitle, function( index, value ) {
+                                  title += " " + value.subfield;
+                        });
+
+                        title += "</a></span>";
+
+                        if ( oObj.author ) {
+                            title += " " + BY.replace( "_AUTHOR_",  " " + oObj.author );
+                        }
+
+                        if ( oObj.itemnotes ) {
+                            var span_class = "";
+                            if ( $.datepicker.formatDate('yy-mm-dd', new Date(oObj.issuedate) ) == ymd ) {
+                                span_class = "circ-hlt";
+                            }
+                            title += " - <span class='" + span_class + "'>" + oObj.itemnotes + "</span>"
+                        }
+
+                        title += " "
+                              + "<a href='/cgi-bin/koha/catalogue/moredetail.pl?biblionumber="
+                              + oObj.biblionumber
+                              + "&itemnumber="
+                              + oObj.itemnumber
+                              + "#"
+                              + oObj.itemnumber
+                              + "'>"
+                              + oObj.barcode
+                              + "</a>";
+
+                        return title;
+                    }
+                },
+                { "mDataProp": "itemtype" },
+                { "mDataProp": "issuedate_formatted" },
+                { "mDataProp": "branchname" },
+                { "mDataProp": "itemcallnumber" },
+                {
+                    "mDataProp": function ( oObj ) {
+                        if ( ! oObj.charge ) oObj.charge = 0;
+                        return parseFloat(oObj.charge).toFixed(2);
+                    }
+                },
+                {
+                    "mDataProp": function ( oObj ) {
+                        if ( ! oObj.price ) oObj.price = 0;
+                        return parseFloat(oObj.price).toFixed(2);
+                    }
+                },
+                {
+                    "bSortable": false,
+                    "mDataProp": function ( oObj ) {
+                        var content = "";
+                        var span_style = "";
+                        var span_class = "";
+
+                        content += "<span>";
+                        content += "<span style='padding: 0 1em;'>" + oObj.renewals_count + "</span>";
+
+                        if ( oObj.can_renew ) {
+                            // Do nothing
+                        } else if ( oObj.can_renew_error == "on_reserve" ) {
+                            content += "<span class='renewals-disabled'>"
+                                    + "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + ON_HOLD + "</a>"
+                                    + "</span>";
+
+                            span_style = "display: none";
+                            span_class = "renewals-allowed";
+                        } else if ( oObj.can_renew_error == "too_many" ) {
+                            content += "<span class='renewals-disabled'>"
+                                    + NOT_RENEWABLE
+                                    + "</span>";
+
+                            span_style = "display: none";
+                            span_class = "renewals-allowed";
+                        } else if ( oObj.can_renew_error == "too_soon" ) {
+                            content += "<span class='renewals-disabled'>"
+                                    + NOT_RENEWABLE_TOO_SOON.format( oObj.can_renew_date )
+                                    + "</span>";
+
+                            span_style = "display: none";
+                            span_class = "renewals-allowed";
+                        } else if ( oObj.can_renew_error == "auto_too_soon" ) {
+                            content += "<span class='renewals-disabled'>"
+                                    + NOT_RENEWABLE_AUTO_TOO_SOON
+                                    + "</span>";
+
+                            span_style = "display: none";
+                            span_class = "renewals-allowed";
+                        } else if ( oObj.can_renew_error == "auto_renew" ) {
+                            content += "<span class='renewals-disabled'>"
+                                    + NOT_RENEWABLE_AUTO_RENEW
+                                    + "</span>";
+
+                            span_style = "display: none";
+                            span_class = "renewals-allowed";
+                        } else {
+                            content += "<span class='renewals-disabled'>"
+                                    + oObj.can_renew_error
+                                    + "</span>";
+
+                            span_style = "display: none";
+                            span_class = "renewals-allowed";
+                        }
+
+                        content += "<span class='" + span_class + "' style='" + span_style + "'>"
+                                +  "<input type='checkbox' class='renew' id='renew_" + oObj.itemnumber + "' name='renew' value='" + oObj.itemnumber +"'/>"
+                                +  "</span>";
+
+                        if ( oObj.renewals_remaining ) {
+                            content += "<span class='renewals'>("
+                                    + RENEWALS_REMAINING.format( oObj.renewals_remaining, oObj.renewals_allowed )
+                                    + ")</span>";
+                        }
+
+                        content += "</span>";
 
 
-                    return content;
-                }
-            },
-            {
-                "bSortable": false,
-                "mDataProp": function ( oObj ) {
-                    if ( oObj.can_renew_error == "on_reserve" ) {
-                        return "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + ON_HOLD + "</a>";
-                    } else {
-                        return "<input type='checkbox' class='checkin' id='checkin_" + oObj.itemnumber + "' name='checkin' value='" + oObj.itemnumber +"'></input>";
+                        return content;
+                    }
+                },
+                {
+                    "bSortable": false,
+                    "mDataProp": function ( oObj ) {
+                        if ( oObj.can_renew_error == "on_reserve" ) {
+                            return "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + ON_HOLD + "</a>";
+                        } else {
+                            return "<input type='checkbox' class='checkin' id='checkin_" + oObj.itemnumber + "' name='checkin' value='" + oObj.itemnumber +"'></input>";
+                        }
+                    }
+                },
+                {
+                    "bVisible": exports_enabled ? true : false,
+                    "bSortable": false,
+                    "mDataProp": function ( oObj ) {
+                        return "<input type='checkbox' class='export' id='export_" + oObj.biblionumber + "' name='biblionumbers' value='" + oObj.biblionumber + "' />";
                     }
                 }
-            },
-            {
-                "bVisible": exports_enabled ? true : false,
-                "bSortable": false,
-                "mDataProp": function ( oObj ) {
-                    return "<input type='checkbox' class='export' id='export_" + oObj.biblionumber + "' name='biblionumbers' value='" + oObj.biblionumber + "' />";
+            ],
+            "fnFooterCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {
+                var total_charge = 0;
+                var total_price = 0;
+                for ( var i=0; i < aaData.length; i++ ) {
+                    total_charge += aaData[i]['charge'] * 1;
+                    total_price  += aaData[i]['price'] * 1;
                 }
+                var nCells = nRow.getElementsByTagName('td');
+                nCells[1].innerHTML = total_charge.toFixed(2);
+                nCells[2].innerHTML = total_price.toFixed(2);
+            },
+            "bPaginate": false,
+            "bProcessing": true,
+            "bServerSide": false,
+            "sAjaxSource": '/cgi-bin/koha/svc/checkouts',
+            "fnServerData": function ( sSource, aoData, fnCallback ) {
+                aoData.push( { "name": "borrowernumber", "value": borrowernumber } );
+
+                $.getJSON( sSource, aoData, function (json) {
+                    fnCallback(json)
+                } );
+            },
+            "fnInitComplete": function(oSettings) {
+                // Disable rowGrouping plugin after first use
+                // so any sorting on the table doesn't use it
+                var oSettings = issuesTable.fnSettings();
+
+                for (f = 0; f < oSettings.aoDrawCallback.length; f++) {
+                    if (oSettings.aoDrawCallback[f].sName == 'fnRowGrouping') {
+                        oSettings.aoDrawCallback.splice(f, 1);
+                        break;
+                    }
+                }
+
+                oSettings.aaSortingFixed = null;
+            },
+        }).rowGrouping(
+            {
+                iGroupingColumnIndex: 1,
+                iGroupingOrderByColumnIndex: 0,
+                sGroupingColumnSortDirection: "asc"
             }
-        ],
-        "fnFooterCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {
-            var total_charge = 0;
-            var total_price = 0;
-            for ( var i=0; i < aaData.length; i++ ) {
-                total_charge += aaData[i]['charge'] * 1;
-                total_price  += aaData[i]['price'] * 1;
-            }
-            var nCells = nRow.getElementsByTagName('td');
-            nCells[1].innerHTML = total_charge.toFixed(2);
-            nCells[2].innerHTML = total_price.toFixed(2);
-        },
-        "bPaginate": false,
-        "bProcessing": true,
-        "bServerSide": false,
-        "sAjaxSource": '/cgi-bin/koha/svc/checkouts',
-        "fnServerData": function ( sSource, aoData, fnCallback ) {
-            aoData.push( { "name": "borrowernumber", "value": borrowernumber } );
+        );
 
-            $.getJSON( sSource, aoData, function (json) {
-                fnCallback(json)
-            } );
-        },
-        "fnInitComplete": function(oSettings) {
-            // Disable rowGrouping plugin after first use
-            // so any sorting on the table doesn't use it
-            var oSettings = issuesTable.fnSettings();
-
-            for (f = 0; f < oSettings.aoDrawCallback.length; f++) {
-                if (oSettings.aoDrawCallback[f].sName == 'fnRowGrouping') {
-                    oSettings.aoDrawCallback.splice(f, 1);
-                    break;
-                }
-            }
-
-            oSettings.aaSortingFixed = null;
-        },
-    }).rowGrouping(
-        {
-            iGroupingColumnIndex: 1,
-            iGroupingOrderByColumnIndex: 0,
-            sGroupingColumnSortDirection: "asc"
+        if ( $("#issues-table").length ) {
+            $("#issues-table_processing").position({
+                of: $( "#issues-table" ),
+                collision: "none"
+            });
         }
-    );
-
-    if ( $("#issues-table").length ) {
-        $("#issues-table_processing").position({
-            of: $( "#issues-table" ),
-            collision: "none"
-        });
     }
 
     // Don't load relatives' issues table unless it is clicked on

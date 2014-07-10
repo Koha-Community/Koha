@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo;
@@ -27,6 +28,7 @@ var borrowernumber = "[% borrowernumber %]";
 var branchcode = "[% branch %]";
 var exports_enabled = "[% exports_enabled %]";
 var AllowRenewalLimitOverride = [% (CAN_user_circulate_override_renewals && AllowRenewalLimitOverride)? 1: 0 %];
+var script = "moremember";
 var relatives_borrowernumbers = new Array();
 [% FOREACH b IN relatives_borrowernumbers %]
     relatives_borrowernumbers.push("[% b %]");
@@ -410,6 +412,12 @@ function validate1(date) {
 
     <div id="checkouts">
         [% IF ( issuecount ) %]
+            <div id="issues-table-loading-message">
+                <p>
+                    <a id="issues-table-load-now-button" href="#" class="btn"><i class="icon-book"></i> Show checkouts</a>
+                </p>
+            </div>
+
             <form name="issues" action="/cgi-bin/koha/tools/export.pl" method="post" class="checkboxed">
                 <table id="issues-table" style="width: 100% !Important;">
                     <thead>
@@ -433,37 +441,42 @@ function validate1(date) {
                     [% INCLUDE 'checkouts-table-footer.inc' %]
                 </table>
 
+                <label for="issues-table-load-immediately">Always show checkouts immediately</label>
+                <input id="issues-table-load-immediately" type="checkbox" />
+
                 [% IF ( issuecount ) %]
-                    <fieldset class="action">
-                        [% IF ( CAN_user_circulate_override_renewals ) %]
-                            [% IF ( AllowRenewalLimitOverride ) %]
-                                <label for="override_limit">Override renewal limit:</label>
-                                <input type="checkbox" name="override_limit" id="override_limit" value="1" />
-                            [% END %]
-                        [% END %]
-                        <button class="btn" id="RenewCheckinChecked"><i class="icon-check"></i> Renew or return checked items</button>
-                        <button class="btn" id="RenewAll"><i class="icon-book"></i> Renew all</button>
-                    </fieldset>
-
-                    [% IF ( exports_enabled ) %]
-                        <fieldset>
-                            <label for="export_formats"><b>Export checkouts using format:</b></label>
-                            <select name="export_formats" id="export_formats">
-                                <option value="iso2709_995">ISO2709 with items</option>
-                                <option value="iso2709">ISO2709 without items</option>
-                                [% IF ( export_with_csv_profile ) %]
-                                    <option value="csv">CSV</option>
+                    <div id="issues-table-actions">
+                        <fieldset class="action">
+                            [% IF ( CAN_user_circulate_override_renewals ) %]
+                                [% IF ( AllowRenewalLimitOverride ) %]
+                                    <label for="override_limit">Override renewal limit:</label>
+                                    <input type="checkbox" name="override_limit" id="override_limit" value="1" />
                                 [% END %]
-                            </select>
-
-                           <label for="export_remove_fields">Don't export fields:</label> <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% export_remove_fields %]" title="Use for iso2709 exports" />
-                            <input type="hidden" name="op" value="export" />
-                            <input type="hidden" id="export_format" name="format" value="iso2709" />
-                            <input type="hidden" id="dont_export_item" name="dont_export_item" value="0" />
-                            <input type="hidden" id="record_type" name="record_type" value="bibs" />
-                            <button class="btn btn-small" id="export_submit"><i class="icon-download-alt"></i> Export</button>
+                            [% END %]
+                            <button class="btn" id="RenewCheckinChecked"><i class="icon-check"></i> Renew or return checked items</button>
+                            <button class="btn" id="RenewAll"><i class="icon-book"></i> Renew all</button>
                         </fieldset>
-                    [% END %]
+
+                        [% IF ( exports_enabled ) %]
+                            <fieldset>
+                                <label for="export_formats"><b>Export checkouts using format:</b></label>
+                                <select name="export_formats" id="export_formats">
+                                    <option value="iso2709_995">ISO2709 with items</option>
+                                    <option value="iso2709">ISO2709 without items</option>
+                                    [% IF ( export_with_csv_profile ) %]
+                                        <option value="csv">CSV</option>
+                                    [% END %]
+                                </select>
+
+                               <label for="export_remove_fields">Don't export fields:</label> <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% export_remove_fields %]" title="Use for iso2709 exports" />
+                                <input type="hidden" name="op" value="export" />
+                                <input type="hidden" id="export_format" name="format" value="iso2709" />
+                                <input type="hidden" id="dont_export_item" name="dont_export_item" value="0" />
+                                <input type="hidden" id="record_type" name="record_type" value="bibs" />
+                                <button class="btn btn-small" id="export_submit"><i class="icon-download-alt"></i> Export</button>
+                            </fieldset>
+                        [% END %]
+                    </div>
                 [% END %]
             </form>
         [% ELSE %]
