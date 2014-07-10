@@ -161,6 +161,20 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         [% IF ( stdid ) %]<em>Standard ID: </em><span class=term>[% stdid %]</span> [% END %]
     </p>
 
+    [% IF ( errconn ) %]
+            <div class="dialog alert">
+                <ul>
+                [% FOREACH errcon IN errconn %]
+                    [% IF ( errcon.error == '10000' ) %]<li>Connection failed to [% errcon.server %]</li>
+                    [% ELSIF ( errcon.error == '10007' ) %]<li>Connection timeout to [% errcon.server %]</li>
+                    [% ELSIF ( errcon.error == 'xslt_err' ) %]<li>[% errcon.server %]: Warning: XSLT error on search result [% errcon.seq %]</li>
+                    [% ELSE %]<li>[% errcon.server %] record [% errcon.seq %]: [% errcon.error %]</li>
+                    [% END %]
+                [% END %]
+                </ul>
+            </div>
+    [% END %]
+
     [% IF ( breeding_loop ) %]
     <table id="resultst">
 <thead>    <tr>
@@ -223,22 +237,10 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page %]" size="4" /><input type="submit" name="changepage_goto" onclick="return validate_goto_page();" value="Go" />
     </form>
 
-<p><form method="get" action="/cgi-bin/koha/cataloguing/z3950_search.pl"><input type="hidden" name="biblionumber" value="[% biblionumber %]"/><input type="hidden" name="frameworkcode" value="[% frameworkcode %]"/><input type="submit" value="Try Another Search"/></form></p>
     [% ELSE %]
-        [% IF ( errconn ) %]
-            <div class="dialog alert">
-                <ul>
-                [% FOREACH errcon IN errconn %]
-                    [% IF ( errcon.error == '10000' ) %]<li>Connection failed to [% errcon.server %]</li>
-                    [% ELSIF ( errcon.error == '10007' ) %]<li>Connection timeout to [% errcon.server %]</li>[% END %]
-                [% END %]
-                </ul>
-            </div>
-         [% END %]
-    <div class="dialog message"><h3>Nothing found</h3>
-    <p><form method="get" action="/cgi-bin/koha/cataloguing/z3950_search.pl"><input type="hidden" name="biblionumber" value="[% biblionumber %]"/><input type="hidden" name="frameworkcode" value="[% frameworkcode %]"/><input type="submit" value="Try Another Search"/></form></p>
+        <div class="dialog message">Nothing found.</div>
     [% END %]
-
+<p><form method="get" action="/cgi-bin/koha/cataloguing/z3950_search.pl"><input type="hidden" name="biblionumber" value="[% biblionumber %]"/><input type="hidden" name="frameworkcode" value="[% frameworkcode %]"/><input type="submit" value="Try Another Search"/></form></p>
 
 [% END %]
 

@@ -27,7 +27,9 @@ use C4::Charset;
 use MARC::File::USMARC;
 use C4::ImportBatch;
 use C4::AuthoritiesMarc; #GuessAuthTypeCode, FindDuplicateAuthority
+use C4::Languages;
 use Koha::Database;
+use Koha::XSLT_Handler;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -164,6 +166,7 @@ sub Z3950Search {
                     _translate_query( $server, $squery )));
         $s++;
     }
+    my $xslh = Koha::XSLT_Handler->new;
 
     my $nremaining = $s;
     while ( $nremaining-- ) {
@@ -185,17 +188,19 @@ sub Z3950Search {
             else {
                 my $numresults = $oResult[$k]->size();
                 my $i;
-                my $result = '';
+                my $res;
                 if ( $numresults > 0  and $numresults >= (($page-1)*20)) {
                     $show_next = 1 if $numresults >= ($page*20);
                     $total_pages = int($numresults/20)+1 if $total_pages < ($numresults/20);
                     for ($i = ($page-1)*20; $i < (($numresults < ($page*20)) ? $numresults : ($page*20)); $i++) {
-                        if($oResult[$k]->record($i)) {
-                            my $res=_handle_one_result($oResult[$k]->record($i), $servers[$k], ++$imported, $biblionumber); #ignores error in sequence numbering
+                        if ( $oResult[$k]->record($i) ) {
+                            undef $error;
+                            ( $res, $error ) = _handle_one_result( $oResult[$k]->record($i), $servers[$k], ++$imported, $biblionumber, $xslh ); #ignores error in sequence numbering
                             push @breeding_loop, $res if $res;
+                            push @errconn, { server => $servers[$k]->{servername}, error => $error, seq => $i+1 } if $error;
                         }
                         else {
-                            push(@breeding_loop,{'server'=>$servers[$k]->{servername},'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
+                            push @errconn, { 'server' => $servers[$k]->{servername}, error => ( ( $oConnection[$k]->error_x() )[0] ), seq => $i+1 };
                         }
                     }
                 }    #if $numresults
@@ -258,7 +263,7 @@ sub _build_query {
 }
 
 sub _handle_one_result {
-    my ($zoomrec, $servhref, $seq, $bib)= @_;
+    my ( $zoomrec, $servhref, $seq, $bib, $xslh )= @_;
 
     my $raw= $zoomrec->raw();
     my $marcrecord;
@@ -269,6 +274,8 @@ sub _handle_one_result {
         ($marcrecord) = MarcToUTF8Record($raw, C4::Context->preference('marcflavour'), $servhref->{encoding} // "iso-5426" ); #ignores charset return values
     }
     SetUTF8Flag($marcrecord);
+    my $error;
+    ( $marcrecord, $error ) = _do_xslt_proc($marcrecord, $servhref, $xslh);
 
     my $batch_id = GetZ3950BatchId($servhref->{servername});
     my $breedingid = AddBiblioToBatch($batch_id, $seq, $marcrecord, 'UTF-8', 0, 0);
@@ -279,12 +286,38 @@ sub _handle_one_result {
 
     #call to TransformMarcToKoha replaced by next call
     #we only need six fields from the marc record
-    return _add_rowdata(
+    my $row;
+    $row = _add_rowdata(
         {
             biblionumber => $bib,
             server       => $servhref->{servername},
             breedingid   => $breedingid,
         }, $marcrecord) if $breedingid;
+    return ( $row, $error );
+}
+
+sub _do_xslt_proc {
+    my ( $marc, $server, $xslh ) = @_;
+    return $marc if !$server->{add_xslt};
+
+    my $htdocs = C4::Context->config('intrahtdocs');
+    my $theme = C4::Context->preference("template"); #staff
+    my $lang = C4::Languages::getlanguage() || 'en';
+
+    my @files= split ',', $server->{add_xslt};
+    my $xml = $marc->as_xml;
+    foreach my $f ( @files ) {
+        $f =~ s/^\s+//; $f =~ s/\s+$//; next if !$f;
+        $f = C4::XSLT::_get_best_default_xslt_filename(
+            $htdocs, $theme, $lang, $f ) unless $f =~ /^\//;
+        $xml = $xslh->transform( $xml, $f );
+        last if $xslh->err; #skip other files
+    }
+    if( !$xslh->err ) {
+        return MARC::Record->new_from_xml($xml, 'UTF-8');
+    } else {
+        return ( $marc, 'xslt_err' ); #original record in case of errors
+    }
 }
 
 sub _add_rowdata {
