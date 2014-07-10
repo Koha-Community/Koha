@@ -1296,6 +1296,14 @@ sub GetItemsInfo {
            biblioitems.lccn,
            biblioitems.url,
            items.notforloan as itemnotforloan,
+           issues.borrowernumber,
+           issues.date_due as datedue,
+           borrowers.cardnumber,
+           borrowers.surname,
+           borrowers.firstname,
+           borrowers.branchcode as bcode,
+           serial.serialseq,
+           serial.publisheddate,
            itemtypes.description,
            itemtypes.notforloan as notforloan_per_itemtype,
            holding.branchurl,
@@ -1311,6 +1319,10 @@ sub GetItemsInfo {
      LEFT JOIN branches AS home ON items.homebranch=home.branchcode
      LEFT JOIN biblio      ON      biblio.biblionumber     = items.biblionumber
      LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
+     LEFT JOIN issues USING (itemnumber)
+     LEFT JOIN borrowers USING (borrowernumber)
+     LEFT JOIN serialitems USING (itemnumber)
+     LEFT JOIN serial USING (serialid)
      LEFT JOIN itemtypes   ON   itemtypes.itemtype         = "
      . (C4::Context->preference('item-level_itypes') ? 'items.itype' : 'biblioitems.itemtype');
     $query .= " LEFT JOIN issues ON issues.itemnumber = items.itemnumber"
@@ -1322,44 +1334,14 @@ sub GetItemsInfo {
     my @results;
     my $serial;
 
-    my $isth    = $dbh->prepare(
-        "SELECT issues.*,borrowers.cardnumber,borrowers.surname,borrowers.firstname,borrowers.branchcode as bcode
-        FROM   issues LEFT JOIN borrowers ON issues.borrowernumber=borrowers.borrowernumber
-        WHERE  itemnumber = ?"
-       );
-	my $ssth = $dbh->prepare("SELECT serialseq,publisheddate from serialitems left join serial on serialitems.serialid=serial.serialid where serialitems.itemnumber=? "); 
-	while ( my $data = $sth->fetchrow_hashref ) {
-        my $datedue = '';
-        $isth->execute( $data->{'itemnumber'} );
-        if ( my $idata = $isth->fetchrow_hashref ) {
-            $data->{borrowernumber} = $idata->{borrowernumber};
-            $data->{cardnumber}     = $idata->{cardnumber};
-            $data->{surname}     = $idata->{surname};
-            $data->{firstname}     = $idata->{firstname};
-            $data->{lastreneweddate} = $idata->{lastreneweddate};
-            $datedue                = $idata->{'date_due'};
-        if (C4::Context->preference("IndependentBranches")){
-        my $userenv = C4::Context->userenv;
-        unless ( C4::Context->IsSuperLibrarian() ) {
-            $data->{'NOTSAMEBRANCH'} = 1 if ($idata->{'bcode'} ne $userenv->{branch});
+    my $userenv = C4::Context->userenv;
+    my $want_not_same_branch = C4::Context->preference("IndependentBranches") && !C4::Context->IsSuperLibrarian();
+    while ( my $data = $sth->fetchrow_hashref ) {
+        if ( $data->{borrowernumber} && $want_not_same_branch) {
+            $data->{'NOTSAMEBRANCH'} = $data->{'bcode'} ne $userenv->{branch};
         }
-        }
-        }
-		if ( $data->{'serial'}) {	
-			$ssth->execute($data->{'itemnumber'}) ;
-			($data->{'serialseq'} , $data->{'publisheddate'}) = $ssth->fetchrow_array();
-			$serial = 1;
-        }
-        #get branch information.....
-        my $bsth = $dbh->prepare(
-            "SELECT * FROM branches WHERE branchcode = ?
-        "
-        );
-        $bsth->execute( $data->{'holdingbranch'} );
-        if ( my $bdata = $bsth->fetchrow_hashref ) {
-            $data->{'branchname'} = $bdata->{'branchname'};
-        }
-        $data->{'datedue'}        = $datedue;
+
+        $serial ||= $data->{'serial'};
 
         # get notforloan complete status if applicable
         if ( my $code = C4::Koha::GetAuthValCode( 'items.notforloan', $data->{frameworkcode} ) ) {
@@ -1377,6 +1359,7 @@ sub GetItemsInfo {
         if ( my $code = C4::Koha::GetAuthValCode( 'items.stack', $data->{frameworkcode} ) ) {
             $data->{stack}          = C4::Koha::GetKohaAuthorisedValueLib( $code, $data->{stack} );
         }
+
         # Find the last 3 people who borrowed this item.
         my $sth2 = $dbh->prepare("SELECT * FROM old_issues,borrowers
                                     WHERE itemnumber = ?
@@ -1395,11 +1378,10 @@ sub GetItemsInfo {
         $results[$i] = $data;
         $i++;
     }
-	if($serial) {
-		return( sort { ($b->{'publisheddate'} || $b->{'enumchron'}) cmp ($a->{'publisheddate'} || $a->{'enumchron'}) } @results );
-	} else {
-    	return (@results);
-	}
+
+    return $serial
+        ? sort { ($b->{'publisheddate'} || $b->{'enumchron'}) cmp ($a->{'publisheddate'} || $a->{'enumchron'}) } @results
+        : @results;
 }
 
 =head2 GetItemsLocationInfo
