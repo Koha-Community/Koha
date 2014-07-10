@@ -1179,6 +1179,7 @@ sub getIndexes{
                     'notes',
                     'ns',
                     'nt',
+                    'Other-control-number',
                     'pb',
                     'Personal-name',
                     'Personal-name-heading',
