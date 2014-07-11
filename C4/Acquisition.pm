@@ -1665,6 +1665,26 @@ sub CancelReceipt {
 
     }
 
+    if(C4::Context->preference('AcqCreateItem') eq 'ordering') {
+        my @affects = split q{\|}, C4::Context->preference("AcqItemSetSubfieldsWhenReceiptIsCancelled");
+        if ( @affects ) {
+            my @itemnumbers = GetItemnumbersFromOrder( $parent_ordernumber );
+            for my $in ( @itemnumbers ) {
+                my $biblionumber = C4::Biblio::GetBiblionumberFromItemnumber( $in );
+                my $frameworkcode = GetFrameworkCode($biblionumber);
+                my ( $itemfield ) = GetMarcFromKohaField( 'items.itemnumber', $frameworkcode );
+                my $item = C4::Items::GetMarcItem( $biblionumber, $in );
+                for my $affect ( @affects ) {
+                    my ( $sf, $v ) = split q{=}, $affect, 2;
+                    foreach ( $item->field($itemfield) ) {
+                        $_->update( $sf => $v );
+                    }
+                }
+                C4::Items::ModItemFromMarc( $item, $biblionumber, $in );
+            }
+        }
+    }
+
     return $parent_ordernumber;
 }
 

@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use C4::Context;
 use C4::Acquisition;
 use C4::Biblio;
@@ -70,6 +70,7 @@ my $order = GetOrder( $ordernumber );
 is(scalar GetItemnumbersFromOrder($order->{ordernumber}), 0, "Create items on receiving: 0 item exist after cancelling a receipt");
 
 t::lib::Mocks::mock_preference('AcqCreateItem', 'ordering');
+t::lib::Mocks::mock_preference('AcqItemSetSubfieldsWhenReceiptIsCancelled', '7=9'); # notforloan is mapped with 952$7
 ( undef, $ordernumber ) = C4::Acquisition::NewOrder(
     {
         basketno => $basketno1,
@@ -94,5 +95,8 @@ CancelReceipt($ordernumber);
 
 $order = GetOrder( $ordernumber );
 is(scalar GetItemnumbersFromOrder($order->{ordernumber}), 1, "Create items on ordering: items are not deleted after cancelling a receipt");
+
+my $item = C4::Items::GetItem( $itemnumber );
+is( $item->{notforloan}, 9, "The notforloan value has been updated with '9'" );
 
 $dbh->rollback;
