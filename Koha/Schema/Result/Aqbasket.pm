@@ -203,7 +203,7 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "CASCADE",
+    on_delete     => "RESTRICT",
     on_update     => "CASCADE",
   },
 );
@@ -220,7 +220,7 @@ __PACKAGE__->belongs_to(
   "booksellerid",
   "Koha::Schema::Result::Aqbookseller",
   { id => "booksellerid" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "CASCADE" },
 );
 
 =head2 branch
@@ -238,7 +238,7 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "CASCADE",
+    on_delete     => "SET NULL",
     on_update     => "CASCADE",
   },
 );
@@ -258,8 +258,8 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
   },
 );
 
@@ -274,8 +274,8 @@ Composing rels: L</aqbasketusers> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqbasketusers", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-31 16:31:18
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TCssMGPEqtE0MZ5INCufoA
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pT+YFf9nfD/dmBuE4RNCFw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

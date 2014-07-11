@@ -254,24 +254,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 import_records_matches
+=head2 import_record_matches
 
 Type: has_many
 
-Related object: L<Koha::Schema::Result::ImportRecordMatches>
+Related object: L<Koha::Schema::Result::ImportRecordMatch>
 
 =cut
 
 __PACKAGE__->has_many(
-  "import_records_matches",
-  "Koha::Schema::Result::ImportRecordMatches",
+  "import_record_matches",
+  "Koha::Schema::Result::ImportRecordMatch",
   { "foreign.import_record_id" => "self.import_record_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:e71umJ0QmfPBvlxmzbClng
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jhzXlqw5mA1lGsI9SZEv/Q
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

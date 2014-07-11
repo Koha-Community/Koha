@@ -94,12 +94,12 @@ __PACKAGE__->belongs_to(
   "class_sort_rule",
   "Koha::Schema::Result::ClassSortRule",
   { class_sort_rule => "class_sort_rule" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OPkfouKUejU6oCgy58yt6Q
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2O58Q7wdbfAl6xmiW02PAA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

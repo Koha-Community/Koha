@@ -508,7 +508,7 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "CASCADE",
+    on_delete     => "RESTRICT",
     on_update     => "CASCADE",
   },
 );
@@ -528,7 +528,7 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "CASCADE",
+    on_delete     => "RESTRICT",
     on_update     => "CASCADE",
   },
 );
@@ -609,8 +609,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-12-19 06:29:02
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:h6fPG62SifJ5T8QKPZNBBw
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Rc89LTrsDtt8Y6yXVUdhMA
 
 __PACKAGE__->belongs_to(
     "biblio",

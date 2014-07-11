@@ -708,7 +708,7 @@ __PACKAGE__->belongs_to(
   "branchcode",
   "Koha::Schema::Result::Branch",
   { branchcode => "branchcode" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
 =head2 categorycode
@@ -723,7 +723,7 @@ __PACKAGE__->belongs_to(
   "categorycode",
   "Koha::Schema::Result::Category",
   { categorycode => "categorycode" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
 =head2 course_instructors
@@ -1072,8 +1072,8 @@ Composing rels: L</course_instructors> -> course
 __PACKAGE__->many_to_many("courses", "course_instructors", "course");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-31 16:31:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:z4kW3xYX1CyrwvGdZu32nA
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5cfpOojccKCoVRMj+0mWHg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

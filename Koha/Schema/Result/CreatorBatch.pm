@@ -150,7 +150,7 @@ __PACKAGE__->belongs_to(
   "branch_code",
   "Koha::Schema::Result::Branch",
   { branchcode => "branch_code" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
 
 =head2 item_number
@@ -169,13 +169,13 @@ __PACKAGE__->belongs_to(
     is_deferrable => 1,
     join_type     => "LEFT",
     on_delete     => "CASCADE",
-    on_update     => "CASCADE",
+    on_update     => "RESTRICT",
   },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:w5Nfrm8a8ajsC0bLBACaWg
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:x9PaYKzfg8jT6zFP4IwhBA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
