@@ -1489,7 +1489,7 @@ sub GetMarcPrice {
     my @listtags;
     my $subfield;
     
-    if ( $marcflavour eq "MARC21" ) {
+    if ( $marcflavour eq "MARC21" || $marcflavour eq "NORMARC" ) {
         @listtags = ('345', '020');
         $subfield="c";
     } elsif ( $marcflavour eq "UNIMARC" ) {
