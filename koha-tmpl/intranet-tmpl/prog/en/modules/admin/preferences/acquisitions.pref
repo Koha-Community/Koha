@@ -46,6 +46,9 @@ Acquisitions:
             - Upon receiving items, update their subfields if they were created when placing an order (e.g. o=5|a="foo bar").
             - pref: AcqItemSetSubfieldsWhenReceived
         -
+            - Upon cancelling a receipt, update the item's subfields if they were created when placing an order (e.g. o=5|a="bar foo"").
+            - pref: AcqItemSetSubfieldsWhenReceiptIsCancelled
+        -
             - pref: AcqEnableFiles
               choices:
                   yes: Do
