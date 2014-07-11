@@ -38,6 +38,7 @@ my $orderby = $cgi->param('orderby') || undef;
 
 my @categories=C4::Category->all;
 my %categories_display;
+my $no_categories;
 
 foreach my $category (@categories) {
     my $hash={
@@ -47,6 +48,7 @@ foreach my $category (@categories) {
     $categories_display{$$category{categorycode}} = $hash;
 }
 
+
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
                 template_name => "patroncards/members-search.tt",
                 query => $cgi,
@@ -54,6 +56,16 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
                 authnotrequired => 0,
                 flagsrequired => {borrowers => 1},
                 debug => 1,});
+
+if(scalar(@categories) < 1){ $no_categories = 1; }
+if($no_categories && C4::Context->preference("AddPatronLists")=~/code/){
+    $template->param(no_categories => 1);
+} else {
+    $template->param(
+        categories=>\@categories,
+        category => $category
+    );
+}
 
 $orderby = "surname,firstname" unless $orderby;
 $member =~ s/,//g;   #remove any commas from search string

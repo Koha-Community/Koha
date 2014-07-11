@@ -45,7 +45,7 @@ function add_item(borrowernum,batch_id,type_id){
 <div id="custom-doc" class="yui-t7">
   <div id="bd">
 	<div class="yui-g">
-<h3>Patron Search</h3>
+<h3>Patron search</h3>
 
 <div class="browse">
     Browse by last name:
@@ -58,14 +58,27 @@ function add_item(borrowernum,batch_id,type_id){
 <input type="hidden" name="batch_id" value="[% batch_id %]" />
 <input type="hidden" name="type" value="[% type %]" />
 <label for="member">Name: </label>
-<input id="member" name="member" />
-<label for="category">Category code: </label>
-<input id="category" name="category" />
+<input id="member" name="member" value="[% member %]" />
+
+[% UNLESS ( no_categories ) %]
+    <label for="category">Category: </label>
+    <select name="category" id="category">
+        <option value="">Any</option>
+        [% FOREACH categorie IN categories %]
+            [% IF ( categorie.categorycode == category ) %]
+                <option value="[% categorie.categorycode %]" selected="selected">[% categorie.description |html_entity %]</option>
+            [% ELSE %]
+                <option value="[% categorie.categorycode %]">[% categorie.description |html_entity %]</option>
+            [% END %]
+        [% END %]
+    </select>
+[% END %]
+
 <input type="submit" value="Search" /></p>
 </form>
 
 [% IF ( resultsloop ) %]
-<div id="searchheader"> <h3>Results [% from %] to [% to %] of [% numresults %] found for [% IF ( member ) %]name: '<span class="ex">[% member %][% ELSIF ( category_type ) %]category code: '<span class="ex">[% category_type %][% END %]</span>'</h3></div>
+<div id="searchheader"> <h3>Results [% from %] to [% to %] of [% numresults %] found [% IF ( member ) %]for name: '<span class="ex">[% member %]</span>'[% END %] [% IF ( category ) %]with category code: '<span class="ex">[% category %]</span>'[% END %]</h3></div>
 [% IF ( paginationbar ) %]<div id="pagination_top" class="pages">[% paginationbar %]</div>[% END %]
 <form name="resultform" action="/cgi-bin/koha/patroncards/members-search.pl" method="get" class="checkboxed"><div style="float: right; margin-top: .5em;"><input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',[% batch_id %]); return false" /> <input type="button" class="close" value="Done" /></div>
 <div style="line-height: 2em; margin-left: .7em;"><a id="CheckAll" href="/cgi-bin/koha/patroncards/members-search.pl">Select All</a><a id="CheckNone" href="/cgi-bin/koha/patroncards/members-search.pl">Clear All</a></div>
@@ -74,10 +87,10 @@ function add_item(borrowernum,batch_id,type_id){
     <table style="float: left; margin: .5em 0;">
     <tr>
     <th>Select</th>
-    <th><a href="members-search.pl?member=[% member %]&amp;category=[% category_type %]&amp;batch_id=[% batch_id %]&amp;orderby=cardnumber">Card</a></th>
-    <th><a href="members-search.pl?member=[% member %]&amp;category=[% category_type %]&amp;batch_id=[% batch_id %]&amp;orderby=surname">Name</a></th>
-    <th><a href="members-search.pl?member=[% member %]&amp;category=[% category_type %]&amp;batch_id=[% batch_id %]&amp;orderby=borrowers.categorycode">Category</a></th>
-    <th><a href="members-search.pl?member=[% member %]&amp;category=[% category_type %]&amp;batch_id=[% batch_id %]&amp;orderby=branchcode">Library</a></th>
+    <th><a href="members-search.pl?member=[% member %]&amp;category=[% category %]&amp;batch_id=[% batch_id %]&amp;orderby=cardnumber">Card</a></th>
+    <th><a href="members-search.pl?member=[% member %]&amp;category=[% category %]&amp;batch_id=[% batch_id %]&amp;orderby=surname">Name</a></th>
+    <th><a href="members-search.pl?member=[% member %]&amp;category=[% category %]&amp;batch_id=[% batch_id %]&amp;orderby=borrowers.categorycode">Category</a></th>
+    <th><a href="members-search.pl?member=[% member %]&amp;category=[% category %]&amp;batch_id=[% batch_id %]&amp;orderby=branchcode">Library</a></th>
     <th>Expires on</th>
     <th>Notes</th>
     <th></th>
