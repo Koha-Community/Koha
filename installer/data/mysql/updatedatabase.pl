@@ -8031,7 +8031,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion ="3.13.00.XXX";
+$DBversion ="3.14.08.001";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('NoLoginInstructions', '', '60|10', 'Instructions when a person is not connected', 'Textarea')");
     print "Upgrade to $DBversion done (Bug 10951: Add NoLoginInstructions pref)\n";
