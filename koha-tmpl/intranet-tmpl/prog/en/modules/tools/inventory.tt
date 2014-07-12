@@ -102,8 +102,13 @@ $(document).ready(function(){
     <div id="yui-main">
     <div class="yui-b">
     <h1>Inventory/Stocktaking</h1>
-    [% IF (moddatecount) %]<div class="dialog message">[% moddatecount %] items modified : datelastseen set to [% date | $KohaDates %]</div>[% END %]
+    [% IF (moddatecount) %]<div class="dialog message">[% moddatecount %] items modified : datelastseen set to [% date | $KohaDates %]</div>
+    <div class="dialog alert">Number of potential barcodes read: [% LinesRead %]</div>[% END %]
     [% IF (errorfile) %]<div class="dialog alert">[% errorfile %] can't be opened</div>[% END %]
+    [% IF (err_length && err_length==1) %]<div class="dialog alert">There was 1 barcode that was too long.</div>[% END %]
+    [% IF (err_length && err_length>1) %]<div class="dialog alert">There were [% err_length %] barcodes that were too long.</div>[% END %]
+    [% IF (err_data && err_data==1) %]<div class="dialog alert">There was 1 barcode that contained at least one unprintable character.</div>[% END %]
+    [% IF (err_data && err_data>1) %]<div class="dialog alert">There were [% err_data %] barcodes that contained at least one unprintable character.</div>[% END %]
     [% FOREACH error IN errorloop %]
         <div class="dialog alert">
             [% error.barcode %]

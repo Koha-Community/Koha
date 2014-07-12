@@ -160,9 +160,41 @@ if ( $uploadbarcodes && length($uploadbarcodes) > 0 ) {
 
     my $count = 0;
 
+    my @barcodes;
+
+    my $sth = $dbh->column_info(undef,undef,"items","barcode");
+    my $barcode_def = $sth->fetchall_hashref('COLUMN_NAME');
+    my $barcode_size = $barcode_def->{barcode}->{COLUMN_SIZE};
+    my $err_length=0;
+    my $err_data=0;
+    my $lines_read=0;
+    binmode($uploadbarcodes, ":encoding(UTF-8)");
     while (my $barcode=<$uploadbarcodes>){
+        ++$lines_read;
         $barcode =~ s/\r?\n$//;
         next unless $barcode;
+        if (length($barcode)>$barcode_size) {
+            $err_length += 1;
+        }
+        my $check_barcode = $barcode;
+        $check_barcode =~ s/\p{Print}//g;
+        if (length($check_barcode)>0) { # Only printable unicode characters allowed.
+            $err_data += 1;
+        }
+        next if length($barcode)>$barcode_size;
+        next if ( length($check_barcode)>0 );
+        push @barcodes,$barcode;
+    }
+    $template->param( LinesRead => $lines_read );
+    if (! @barcodes) {
+        push @errorloop, {'barcode'=>'No valid barcodes!'};
+        $op=''; # force the initial inventory screen again.
+    }
+    else {
+        $template->param( err_length => $err_length,
+                          err_data   => $err_data );
+    }
+    foreach my $barcode (@barcodes) {
         if ( $qwithdrawn->execute($barcode) && $qwithdrawn->rows ) {
             push @errorloop, { 'barcode' => $barcode, 'ERR_WTHDRAWN' => 1 };
         } else {
