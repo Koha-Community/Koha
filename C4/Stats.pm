@@ -94,7 +94,7 @@ sub UpdateStats {
 
     my @mandatory_keys = ();
     if (! exists $params->{type} or ! defined $params->{type}) {
-        croak ("UpdateStats does not received type param");
+        croak ("UpdateStats did not received type param");
     }
     if (grep ($_ eq $params->{type}, @allowed_circulation_types  )) {
         @mandatory_keys = @circulation_mandatory_keys;
@@ -105,13 +105,13 @@ sub UpdateStats {
     }
     my @missing_params = ();
     for my $mykey (@mandatory_keys ) {
-        push @missing_params, $mykey if !grep (/^$mykey/, keys $params);
+        push @missing_params, $mykey if !grep (/^$mykey/, keys %$params);
     }
     if (scalar @missing_params > 0 ) {
-        croak ("UpdateStats does not received mandatory param(s): ".join (", ",@missing_params ));
+        croak ("UpdateStats did not received mandatory param(s): ".join (", ",@missing_params ));
     }
     my @invalid_params = ();
-    for my $myparam (keys $params ) {
+    for my $myparam (keys %$params ) {
         push @invalid_params, $myparam unless grep (/^$myparam$/, @allowed_keys);
     }
     if (scalar @invalid_params > 0 ) {
