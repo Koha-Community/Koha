@@ -27,6 +27,7 @@
         <xsl:variable name="AlternateHoldingsSeparator" select="marc:sysprefs/marc:syspref[@name='AlternateHoldingsSeparator']"/>
         <xsl:variable name="UseAuthoritiesForTracings" select="marc:sysprefs/marc:syspref[@name='UseAuthoritiesForTracings']"/>
         <xsl:variable name="DisplayIconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayIconsXSLT']"/>
+        <xsl:variable name="IntranetBiblioDefaultView" select="marc:sysprefs/marc:syspref[@name='IntranetBiblioDefaultView']"/>
         <xsl:variable name="leader" select="marc:leader"/>
         <xsl:variable name="leader6" select="substring($leader,7,1)"/>
         <xsl:variable name="leader7" select="substring($leader,8,1)"/>
@@ -289,7 +290,25 @@
            </xsl:call-template>
         </xsl:if>
 
-	<a><xsl:attribute name="href">/cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute><xsl:attribute name="class">title</xsl:attribute>
+        <a><xsl:attribute name="href">
+            <xsl:choose>
+                <xsl:when test="$IntranetBiblioDefaultView='normal'">
+                    /cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
+                </xsl:when>
+                <xsl:when test="$IntranetBiblioDefaultView='isbd'">
+                    /cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
+                </xsl:when>
+                <xsl:when test="$IntranetBiblioDefaultView='labeled_marc'">
+                    /cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
+                </xsl:when>
+                <xsl:when test="$IntranetBiblioDefaultView='marc'">
+                    /cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    /cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute><xsl:attribute name="class">title</xsl:attribute>
 
         <xsl:if test="marc:datafield[@tag=245]">
         <xsl:for-each select="marc:datafield[@tag=245]">
