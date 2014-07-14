@@ -181,7 +181,7 @@ function Check(ff) {
                             <th scope="col" colspan="2">&nbsp; </th>
                         </tr>
                     [% FOREACH loo IN loop %]
-                        [% IF ( loop.even ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+                        <tr>
                         <td>
                             <a href="[% loo.script_name %]?op=add_form&amp;booksellerid=[% loo.booksellerid %]&amp;contractnumber=[% loo.contractnumber %]">[% loo.contractname %]</a>
                         </td>

@@ -216,11 +216,7 @@
         </tr></thead>
         <tbody>
         [% FOREACH loo IN loop %]
-            [% UNLESS ( loop.odd ) %]
-                <tr class="highlight">
-            [% ELSE %]
-                <tr>
-            [% END %]
+            <tr>
             <td><a href="[% loo.script_name %]?op=edit&amp;id=[% loo.id %]">[% loo.servername %]</a></td><td>[% loo.host %]:[% loo.port %]</td><td>[% loo.db %]</td><td>[% loo.userid %]</td><td>[% IF loo.password %]########[% END %]</td><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank %]</td>
             <td>[% loo.syntax %]</td><td>[% loo.encoding %]</td><td>[% loo.timeout %]</td>
             <td>[% IF ( loo.recordtype == 'biblio' )  %]

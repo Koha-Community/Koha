@@ -266,11 +266,7 @@ Item types administration
     <th>Actions</th>
   </thead>
   [% FOREACH loo IN loop %]
-    [% UNLESS ( loop.odd ) %]
-  <tr class="highlight">
-    [% ELSE %]
-  <tr>
-    [% END %]
+    <tr>
    [% UNLESS ( noItemTypeImages ) %] <td>[% IF ( loo.imageurl ) %]<img src="[% loo.imageurl %]" alt="" />[% ELSE %]&nbsp;[% END %]</td>[% END %]
     <td>
       <a href="[% loo.script_name %]?op=add_form&amp;itemtype=[% loo.itemtype |html %]">

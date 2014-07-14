@@ -220,9 +220,7 @@
     </tr>
     <!-- note highlight assignment appears backwards because we already have a normal row for Default -->
     [% FOREACH loo IN loop %]
-        [% IF ( loop.odd ) %]<tr class="highlight">
-        [% ELSE %]<tr>
-        [% END %]
+        <tr>
             <td>[% loo.frameworkcode %]</td>
             <td>[% loo.frameworktext %]</td>
             <td><a href="marctagstructure.pl?frameworkcode=[% loo.frameworkcode %]" >MARC structure</a></td>

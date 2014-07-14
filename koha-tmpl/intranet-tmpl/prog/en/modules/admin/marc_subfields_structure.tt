@@ -391,11 +391,7 @@ function populateHiddenCheckboxes(tab) {
     <th>Delete</th>
 </tr>
 [% FOREACH loo IN loop %]
-[% UNLESS ( loop.odd ) %]
-<tr class="highlight">
-[% ELSE %]
 <tr>
-[% END %]
     <td><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield %]&amp;frameworkcode=[% frameworkcode %]#sub[% loo.tagsubfield %]field">[% loo.tagsubfield %]</a></td>
     <td>
         [% IF ( loo.subfield_ignored ) %]

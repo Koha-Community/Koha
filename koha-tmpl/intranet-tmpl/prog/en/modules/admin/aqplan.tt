@@ -125,7 +125,7 @@
 
     <tbody>
     [% FOREACH budget_line IN budget_lines %]
-    [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+    <tr>
         [% IF ( budget_line.budget_lock ) %]
             <td class="locked" title="Fund locked">
         [% ELSE %]

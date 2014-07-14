@@ -162,11 +162,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
             </thead>
             <tbody>
 				[% FOREACH rule IN rules %]
-					[% UNLESS ( loop.odd ) %]
-					<tr class="highlight" id="row_[% loop.count %]">
-					[% ELSE %]
 					<tr id="row_[% loop.count %]">
-					[% END %]
 							<td>[% IF ( rule.default_humancategorycode ) %]
 									<em>All</em>
 								[% ELSE %]

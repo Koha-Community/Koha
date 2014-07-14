@@ -54,7 +54,7 @@
                 [% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
                 [% END %] &rsaquo; Data deleted
             [% ELSE %]
-                [% IF ( authtypecode ) %][% authtypecode %] Framework</a>
+                [% IF ( authtypecode ) %][% authtypecode %] Framework
                 [% ELSE %]Default framework
                 [% END %]
             [% END %]
@@ -200,31 +200,31 @@
 </div>
 <table id="table_authtagstructure">
     <thead>
-        <th>Tag</th>
-        <th>Lib</th>
-        <th>Repeatable</th>
-        <th>Mandatory</th>
-        <th>Authorized<br />value</th>
-        <th>Subfields</th>
-        <th>Edit</th>
-        <th>Delete</th>
+        <tr>
+            <th>Tag</th>
+            <th>Lib</th>
+            <th>Repeatable</th>
+            <th>Mandatory</th>
+            <th>Authorized<br />value</th>
+            <th>Subfields</th>
+            <th>Edit</th>
+            <th>Delete</th>
+            </tr>
     </thead>
-    [% FOREACH loo IN loop %]
-    [% UNLESS ( loop.odd ) %]
-    <tr class="highlight">
-    [% ELSE %]
-    <tr>
-    [% END %]
-        <td><b>[% loo.tagfield %]</b></td>
-        <td>[% loo.liblibrarian %]</td>
-        <td>[% IF ( loo.repeatable ) %]Yes[% ELSE %]No[% END %]</td>
-        <td>[% IF ( loo.mandatory ) %]Yes[% ELSE %]No[% END %]</td>
-        <td>[% loo.authorised_value %]</td>
-        <td><a href="[% loo.subfield_link %]" class="button">subfields</a></td>
-        <td><a href="[% loo.edit %]">Edit</a></td>
-        <td><a href="[% loo.delete %]">Delete</a></td>
-    </tr>
-    [% END %]
+    <tbody>
+        [% FOREACH loo IN loop %]
+        <tr>
+            <td><b>[% loo.tagfield %]</b></td>
+            <td>[% loo.liblibrarian %]</td>
+            <td>[% IF ( loo.repeatable ) %]Yes[% ELSE %]No[% END %]</td>
+            <td>[% IF ( loo.mandatory ) %]Yes[% ELSE %]No[% END %]</td>
+            <td>[% loo.authorised_value %]</td>
+            <td><a href="[% loo.subfield_link %]" class="button">subfields</a></td>
+            <td><a href="[% loo.edit %]">Edit</a></td>
+            <td><a href="[% loo.delete %]">Delete</a></td>
+        </tr>
+        [% END %]
+    </tbody>
     </table>
 
 [% END %]

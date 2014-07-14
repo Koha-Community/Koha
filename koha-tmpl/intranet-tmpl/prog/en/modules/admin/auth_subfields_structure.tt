@@ -262,11 +262,7 @@ function displayMoreConstraint(numlayer){
         <th>Delete</th>
     </tr>
     [% FOREACH loo IN loop %]
-    [% UNLESS ( loop.odd ) %]
-    <tr class="highlight">
-    [% ELSE %]
     <tr>
-    [% END %]
         <td>[% loo.tagsubfield %]</td>
         <td>
             [% IF ( loo.subfield_ignored ) %]

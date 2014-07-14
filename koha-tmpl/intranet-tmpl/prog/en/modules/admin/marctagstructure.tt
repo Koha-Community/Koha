@@ -192,7 +192,7 @@ $(document).ready(function() {
     <tbody>
     [% IF ( select_display ) %]
         [% FOREACH loo IN loop %]
-            [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
+            <tr>
             <td>[% loo.tagfield %]</td>
             <td>[% loo.liblibrarian %]</td>
             <td>[% IF ( loo.repeatable ) %]Yes[% ELSE %]No[% END %]</td>

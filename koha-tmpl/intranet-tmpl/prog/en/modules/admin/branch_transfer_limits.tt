@@ -95,7 +95,7 @@
 
 			<tbody>
 					[% FOREACH to_branch_loo IN codes_loo.to_branch_loop %]
-						[% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+                        <tr>
 							<td><label style="min-width:400px;" for="[% to_branch_loo.code %][% to_branch_loo.toBranch %]row">[% to_branch_loo.toBranch %] - [% to_branch_loo.toBranchname %]</label></td>
 							<td>
 							[% IF ( to_branch_loo.isChecked ) %]

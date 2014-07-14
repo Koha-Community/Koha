@@ -92,11 +92,7 @@
     <th>&nbsp;</th>
 </tr>
 [% FOREACH loo IN loop %]
-[% UNLESS ( loop.odd ) %]
-<tr class="highlight">
-[% ELSE %]
 <tr>
-[% END %]
     <td><a href="[% loo.edit %]">[% loo.kohafield %]</a></td>
     <td>[% loo.tagfield %]</td>
     <td>[% loo.tagsubfield %]</td>

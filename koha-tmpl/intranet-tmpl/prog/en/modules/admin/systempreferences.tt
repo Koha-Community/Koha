@@ -264,7 +264,7 @@
         </tr></thead>
     [% END %]
     <tbody>[% FOREACH loo IN loop %]
-    [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+        <tr>
 
         <td><strong><a href="[% loo.edit %]">[% loo.variable %]</a></strong></td><td> [% loo.explanation |html %]</td>
         [% IF ( loo.oneline ) %]

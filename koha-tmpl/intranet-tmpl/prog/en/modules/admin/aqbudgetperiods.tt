@@ -570,11 +570,7 @@
           </thead>
           <tbody>
               [% FOREACH period_loo IN period_inactive_loop %]
-                  [% IF ( loop.odd ) %]
-                      <tr>
-                  [% ELSE %]
-                      <tr class="highlight">
-                  [% END %]
+                  <tr>
                   <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% period_loo.budget_period_id %]" title="View funds for [% period_loo.budget_period_description %]">[% period_loo.budget_period_description %]</a></td>
                   <td><span title="[% period_loo.budget_period_startdate %]">[% period_loo.budget_period_startdate | $KohaDates %]</span></td>
                   <td><span title="[% period_loo.budget_period_enddate %]">[% period_loo.budget_period_enddate | $KohaDates %]</span></td>

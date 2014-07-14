@@ -250,11 +250,7 @@ function CheckRuleForm(f) {
     <th>Actions</th>
   </tr>
   [% FOREACH class_source IN class_sources %]
-  [% IF ( loop.odd ) %]
   <tr>
-  [% ELSE %]
-  <tr class="highlight">
-  [% END %]
     <td>[% class_source.code %]</td>
     <td>[% class_source.description %]</td>
     <td>[% IF ( class_source.used ) %]Yes[% ELSE %]No[% END %]</td>

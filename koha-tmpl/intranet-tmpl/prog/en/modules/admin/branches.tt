@@ -186,11 +186,7 @@ tinyMCE.init({
             <th>&nbsp;</th>
         </tr></thead><tbody>
         [% FOREACH branche IN branches %]
-	[% IF ( loop.odd ) %]
-        <tr>
-	[% ELSE %]
-		<tr class="highlight">
-	[% END %]
+            <tr>
                 <td>[% branche.branch_name |html %]</td>
                 <td>[% branche.branch_code |html %]</td>
                 <td>
