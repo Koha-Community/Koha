@@ -13,7 +13,7 @@ use POSIX qw(strftime);
 use Socket qw(:crlf);
 use IO::Handle;
 
-use Sip::Constants qw(SIP_DATETIME);
+use Sip::Constants qw(SIP_DATETIME FID_SCREEN_MSG);
 use Sip::Checksum qw(checksum);
 
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
@@ -91,7 +91,18 @@ sub add_field {
 #    NOTE: if zero is a valid value for your field, don't use maybe_add!
 #
 sub maybe_add {
-    my ($fid, $value) = @_;
+    my ($fid, $value, $server) = @_;
+
+    if ( $fid eq FID_SCREEN_MSG && $server->{account}->{screen_msg_regex} ) {
+        foreach my $regex (
+            ref $server->{account}->{screen_msg_regex} eq "ARRAY"
+            ? @{ $server->{account}->{screen_msg_regex} }
+            : $server->{account}->{screen_msg_regex} )
+        {
+            $value =~ s/$regex->{find}/$regex->{replace}/g;
+        }
+    }
+
     return (defined($value) && $value) ? add_field($fid, $value) : '';
 }
 
