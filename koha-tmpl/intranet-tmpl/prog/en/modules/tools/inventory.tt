@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Inventory</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -32,10 +33,17 @@ $(document).ready(function(){
         inventorydt = $('#inventoryt').dataTable($.extend(true, {}, dataTablesDefaults, {
             'sPaginationType': 'full_numbers',
             [% IF compareinv2barcd %]
-                "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 1 ] } ]
+                "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 1 ] } ],
             [% ELSE %]
-                "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 0 ] } ]
+                "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 0 ] } ],
             [% END %]
+            'fnDrawCallback': function() {
+                //bind the click handler script to the newly created elements held in the table
+                $('.openWin').bind('click',function(e){
+                    e.preventDefault();
+                    openWindow(this.href,'marcview',800,600);
+                });
+            }
         } ));
 
 
@@ -78,7 +86,7 @@ $(document).ready(function(){
             $(".checkboxed").unCheckCheckboxes();
             return false;
         });
-    });
+});
 //]]>
 </script>
 </head>
@@ -249,10 +257,11 @@ $(document).ready(function(){
             [% result.barcode | html %]
             </td>
             <td>
-            [% result.homebranch | html %] [% result.location | html %] [[% result.itemcallnumber | html %]]
+                [% Branches.GetName( result.homebranch ) %]
+                [% result.location | html %] [% IF ( result.itemcallnumber ) %][[% result.itemcallnumber | html %]][% ELSE %][% END %]
             </td>
             <td>
-            <p><a href="#" onclick="window.open('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% result.biblionumber %]','marcview','width=800,height=600,toolbar=0,scrollbars=1');">[% result.title | html %]</a></p><p>[% result.author | html %]</p>
+            <p><a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% result.biblionumber %]" class="openWin">[% result.title | html %]</a></p><p>[% result.author | html %]</p>
             </td>
             <td>
             [% result.notforloan | html %]
