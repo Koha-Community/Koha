@@ -30,6 +30,7 @@
     <xsl:variable name="OPACItemLocation" select="marc:sysprefs/marc:syspref[@name='OPACItemLocation']"/>
     <xsl:variable name="singleBranchMode" select="marc:sysprefs/marc:syspref[@name='singleBranchMode']"/>
     <xsl:variable name="OPACTrackClicks" select="marc:sysprefs/marc:syspref[@name='TrackClicks']"/>
+    <xsl:variable name="BiblioDefaultView" select="marc:sysprefs/marc:syspref[@name='BiblioDefaultView']"/>
         <xsl:variable name="leader" select="marc:leader"/>
         <xsl:variable name="leader6" select="substring($leader,7,1)"/>
         <xsl:variable name="leader7" select="substring($leader,8,1)"/>
@@ -402,7 +403,22 @@
            </xsl:call-template>
         </xsl:if>
 
-        <a><xsl:attribute name="href">/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute><xsl:attribute name="class">title</xsl:attribute>
+        <a><xsl:attribute name="href">
+            <xsl:choose>
+                <xsl:when test="$BiblioDefaultView='normal'">
+                    /cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
+                </xsl:when>
+                <xsl:when test="$BiblioDefaultView='isbd'">
+                    /cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
+                </xsl:when>
+                <xsl:when test="$BiblioDefaultView='marc'">
+                    /cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    /cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute><xsl:attribute name="class">title</xsl:attribute>
 
         <xsl:if test="marc:datafield[@tag=245]">
         <xsl:for-each select="marc:datafield[@tag=245]">
