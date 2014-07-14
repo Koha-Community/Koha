@@ -1,27 +1,47 @@
 #!/usr/bin/perl
-#
-# This Koha test module is a stub!
-# Add more tests here!!!
 
-use strict;
-use warnings;
-use Data::Dumper;
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
 
 use C4::Suggestions;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
+use Test::Warn;
 
 BEGIN {
     use_ok('C4::Suggestions');
     use_ok('C4::Koha');
 }
 
+my $dbh = C4::Context->dbh;
+
+# Start transaction
+$dbh->{AutoCommit} = 0;
+$dbh->{RaiseError} = 1;
+
 my ($suggestionid, $suggestion, $status, $biblionumber);
 $biblionumber = 1;
 ok($suggestionid= NewSuggestion( {title=>'Petit traité de philosohpie',author=>'Hubert de Chardassé',publishercode=>'Albin Michel'} ), "NewSuggestion OK");
 ok($suggestion= GetSuggestion( $suggestionid), "GetSuggestion OK");
 ok($status= ModSuggestion( {title=>'test Modif Simple', suggestionid=>$suggestionid} ), "ModSuggestion Simple OK");
-ok($status= ModSuggestion( {STATUS=>'STALLED', suggestionid=>$suggestionid} ), "ModSuggestion Status OK");
+warning_is { $status = ModSuggestion( {STATUS=>'STALLED', suggestionid=>$suggestionid} )}
+           "No suggestions STALLED letter transported by email",
+           "ModSuggestion status warning is correct";
+ok( $status, "ModSuggestion Status OK");
 ok($status= ModSuggestion( {suggestionid => $suggestionid, biblionumber => $biblionumber } ), "ModSuggestion, set biblionumber OK" );
 ok($suggestion= GetSuggestionFromBiblionumber( $biblionumber ), "GetSuggestionFromBiblionumber OK");
 ok($suggestion= GetSuggestionInfoFromBiblionumber( $biblionumber ), "GetSuggestionInfoFromBiblionumber OK");
@@ -38,4 +58,6 @@ ok(scalar @$itemtypes2, "Purchase suggestion itemtypes collected, default Advanc
 
 is_deeply($itemtypes1, $itemtypes2, 'same set of purchase suggestion formats retrieved');
 
-##EO Bug 11466
+$dbh->rollback;
+
+1;
