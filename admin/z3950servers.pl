@@ -55,29 +55,29 @@ my $schema = Koha::Database->new()->schema();
 # First process a confirmed delete, or save a validated record
 
 if( $op eq 'delete_confirmed' && $id ) {
-    my $server=$schema->resultset('Z3950server')->find( { id => $id } );
-    if( $server ) {
+    my $server = $schema->resultset('Z3950server')->find($id);
+    if ( $server ) {
         $server->delete;
         $template->param( msg_deleted => 1, msg_add => $server->name );
     } else {
         $template->param( msg_notfound => 1, msg_add => $id );
     }
-    $id=0;
-} elsif( $op eq 'add_validated' ) {
+    $id = 0;
+} elsif ( $op eq 'add_validated' ) {
     my @fields=qw/host port db userid password rank syntax encoding timeout
         recordtype checked/;
     my $formdata = _form_data_hashref( $input, \@fields );
     #add name from servername (an input with name="name" gave problems)
     $formdata->{name} = $input->param('servername');
     if( $id ) {
-        my $server= $schema->resultset('Z3950server')->find( { id => $id } );
-        if( $server ) {
+        my $server = $schema->resultset('Z3950server')->find($id);
+        if ( $server ) {
             $server->update( $formdata );
             $template->param( msg_updated => 1, msg_add => $formdata->{name} );
         } else {
             $template->param( msg_notfound => 1, msg_add => $id );
         }
-        $id=0;
+        $id = 0;
     } else {
         $schema->resultset('Z3950server')->create( $formdata );
         $template->param( msg_added => 1, msg_add => $formdata->{name} );
