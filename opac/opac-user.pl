@@ -64,6 +64,8 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
+my %renewed = map { $_ => 1 } split( '|', $query->param('renewed') );
+
 my $show_priority;
 for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
     m/priority/ and $show_priority = 1;
@@ -188,6 +190,8 @@ if ($issues){
         if($status && C4::Context->preference("OpacRenewalAllowed")){
             $issue->{'status'} = $status;
         }
+
+        $issue->{'renewed'} = $renewed{ $issue->{'itemnumber'} };
 
         if ($renewerror) {
             $issue->{'too_many'}   = 1 if $renewerror eq 'too_many';

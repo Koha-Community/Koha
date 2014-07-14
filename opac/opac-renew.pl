@@ -43,11 +43,13 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         debug           => 1,
 	}
 ); 
-my @items          = $query->param('item');
+my @items = $query->param('item');
 
 my $opacrenew = C4::Context->preference("OpacRenewalAllowed");
 
-my $errorstring='';
+my $errorstring = q{};
+my $renewed     = q{};
+
 my $member_details = GetMemberDetails($borrowernumber);
 
 if (   $member_details->{'BlockExpiredPatronOpacActions'}
@@ -56,6 +58,7 @@ if (   $member_details->{'BlockExpiredPatronOpacActions'}
     $errorstring = 'card_expired';
 }
 else {
+    my @renewed;
     for my $itemnumber (@items) {
         my ( $status, $error ) =
           CanBookBeRenewed( $borrowernumber, $itemnumber );
@@ -81,12 +84,14 @@ else {
                 $branchcode = 'OPACRenew';
             }
             AddRenewal( $borrowernumber, $itemnumber, $branchcode );
+            push( @renewed, $itemnumber );
         }
         else {
             $errorstring .= $error . "|";
         }
     }
+    $renewed = join( '|', @renewed );
 }
 
-print $query->redirect("/cgi-bin/koha/opac-user.pl?renew_error=$errorstring");
+print $query->redirect("/cgi-bin/koha/opac-user.pl?renew_error=$errorstring&renewed=$renewed");
 
