@@ -93,6 +93,7 @@ $(document).ready(function() {
             $("#sms_counter").css("color", "black");
         }
     });
+    $( "#transport-types" ).accordion({ collapsible: true, active:false, animate: 200 });
 }); 
 [% IF add_form or copy_form %]
 	
@@ -338,26 +339,18 @@ $(document).ready(function() {
               [% IF copying %]
                 You must change this code to reflect the copy.
               [% END %]
-              <input type="hidden" id="code" name="oldcode" value="[% oldcode %]" />
+              <input type="hidden" name="oldcode" value="[% oldcode %]" />
             </li>
             <li>
               <label for="name" class="required">Name:</label>
               <input type="text" id="name" name="name" size="60" value="[% letter_name %]" required="required" />
               <span class="required">Required</span>
-          </li>
-
+            </li>
+        </ol>
+    </fieldset>
+        <div id="transport-types" style="clear:both">
         [% FOREACH letter IN letters %]
-          <li>
-            [% IF letter.message_transport_type == "sms" and not Koha.Preference("SMSSendDriver") %]
-              <fieldset class="rows mtt" id="[% letter.message_transport_type %]" disabled="disabled">
-                <div class="dialog message">You should enable the SMSSendDriver preference to use the SMS templates.</div>
-            [% ELSIF letter.message_transport_type == "phone" and not Koha.Preference("TalkingTechItivaPhoneNotification") %]
-              <fieldset class="rows mtt" id="[% letter.message_transport_type %]" disabled="disabled">
-                <div class="dialog message">You should enable the TalkingTechItivaPhoneNotification preference to use the phone templates.</div>
-            [% ELSE %]
-              <fieldset class="rows mtt" id="[% letter.message_transport_type %]">
-            [% END %]
-              <legend>
+            <h3>
                 [% SWITCH letter.message_transport_type %]
                 [% CASE 'email' %]
                   Email
@@ -372,7 +365,16 @@ $(document).ready(function() {
                 [% CASE %]
                   [% letter.message_transport_type %]
                 [% END %]
-              </legend>
+            </h3>
+            [% IF letter.message_transport_type == "sms" and not Koha.Preference("SMSSendDriver") %]
+              <fieldset class="rows mtt" id="[% letter.message_transport_type %]" disabled="disabled">
+                <div class="dialog message">You should enable the SMSSendDriver preference to use the SMS templates.</div>
+            [% ELSIF letter.message_transport_type == "phone" and not Koha.Preference("TalkingTechItivaPhoneNotification") %]
+              <fieldset class="rows mtt" id="[% letter.message_transport_type %]" disabled="disabled">
+                <div class="dialog message">You should enable the TalkingTechItivaPhoneNotification preference to use the phone templates.</div>
+            [% ELSE %]
+              <fieldset class="rows mtt" id="[% letter.message_transport_type %]">
+            [% END %]
               <ol>
                 <li>
                   <input type="hidden" name="message_transport_type" value="[% letter.message_transport_type %]" />
@@ -384,17 +386,17 @@ $(document).ready(function() {
                   [% END %]
                 </li>
                 <li>
-                  <label for="title">Message subject:</label><input type="text" id="title" name="title" size="60" value="[% letter.title %]" />
+                  <label for="title_[% letter.message_transport_type %]">Message subject:</label><input type="text" id="title_[% letter.message_transport_type %]" name="title" size="60" value="[% letter.title %]" />
                 </li>
                 <li>
-                  <label for="SQLfieldname">Message body:</label>
+                  <label for="SQLfieldname_[% letter.message_transport_type %]">Message body:</label>
                   [% IF letter.message_transport_type == 'sms' %]
                     <span id="sms_counter">[% IF letter.content.length > 0 %][% letter.content.length %][% ELSE %]0[% END %]/160 characters</span>
                   [% END %]
                   <table>
                     <tr>
                       <td>
-                        <select name="SQLfieldname" multiple="multiple" size="9">
+                        <select name="SQLfieldname" id="SQLfieldname_[% letter.message_transport_type %]" multiple="multiple" size="9">
                           [% FOREACH SQLfieldnam IN SQLfieldname %]
                             <option value="[% SQLfieldnam.value %]">[% SQLfieldnam.text %]</option>
                           [% END %]
@@ -407,12 +409,10 @@ $(document).ready(function() {
                 </li>
               </ol>
             </fieldset>
-          </li>
         [% END %]
-        </ol>
+        </div> <!-- / #transport-types -->
 
         [% IF code.search('DGST') %] <span class="overdue">Warning, this is a template for a Digest, as such, any references to branch data ( e.g. branches.branchname ) will refer to the borrower's home branch.</span> [% END %]
-        </fieldset>
         <fieldset class="action"><input type="submit" id="submit_form" value="Submit" class="button" /> <a class="cancel" href="/cgi-bin/koha/tools/letter.pl">Cancel</a></fieldset>
       <input type="hidden" name="searchfield" value="[% searchfield %]" />
     </form>
