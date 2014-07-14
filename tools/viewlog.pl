@@ -70,11 +70,24 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 if ($src eq 'circ') {   # if we were called from circulation, use the circulation menu and get data to populate it -fbcit
     use C4::Members;
+    use C4::Members::Attributes qw(GetBorrowerAttributes);
     my $borrowernumber = $object;
     my $data = GetMember('borrowernumber'=>$borrowernumber);
     my ($picture, $dberror) = GetPatronImage($data->{'borrowernumber'});
     $template->param( picture => 1 ) if $picture;
-    
+
+    if (C4::Context->preference('ExtendedPatronAttributes')) {
+        my $attributes = GetBorrowerAttributes($data->{'borrowernumber'});
+        $template->param(
+            ExtendedPatronAttributes => 1,
+            extendedattributes => $attributes
+        );
+    }
+
+    # Computes full borrower address
+    my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
+    my $address = $data->{'streetnumber'} . " $roadtype " . $data->{'address'};
+
     $template->param(   menu            => 1,
                         title           => $data->{'title'},
                         initials        => $data->{'initials'},
@@ -86,14 +99,17 @@ if ($src eq 'circ') {   # if we were called from circulation, use the circulatio
                         categorycode    => $data->{'categorycode'},
                         category_type   => $data->{'category_type'},
                         categoryname	=> $data->{'description'},
-                        address         => $data->{'address'},
+                        address         => $address,
                         address2        => $data->{'address2'},
                         city            => $data->{'city'},
                         state           => $data->{'state'},
                         zipcode         => $data->{'zipcode'},
+                        country         => $data->{'country'},
                         phone           => $data->{'phone'},
                         phonepro        => $data->{'phonepro'},
+                        mobile          => $data->{'mobile'},
                         email           => $data->{'email'},
+                        emailpro        => $data->{'emailpro'},
                         branchcode      => $data->{'branchcode'},
                         branchname		=> GetBranchName($data->{'branchcode'}),
                         RoutingSerials => C4::Context->preference('RoutingSerials'),

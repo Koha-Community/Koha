@@ -20,7 +20,7 @@
             <li class="patronaddress2">[% address2 %]</li>
         [% END %]
     [% ELSE %]
-            <li><span class="empty" id="noadressstored">No address stored.</span></li>
+            <li><span class="empty" id="noaddressstored">No address stored.</span></li>
     [% END %]
     <li class="patroncity">[% IF ( city ) %]
             [% city %][% IF ( state ) %], [% state %][% END %]
@@ -83,7 +83,7 @@
     [% IF EnableBorrowerFiles %]
         [% IF ( borrower_files ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/files.pl?borrowernumber=[% borrowernumber %]">Files</a></li>
     [% END %]
-    [% IF (  suggestionsview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/purchase-suggestions.pl?borrowernumber=[% borrowernumber %]">Purchase<br/>suggestions</a></li>
+    [% IF (  suggestionsview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/purchase-suggestions.pl?borrowernumber=[% borrowernumber %]">Purchase suggestions</a></li>
 </ul></div>
 [% END %]
 

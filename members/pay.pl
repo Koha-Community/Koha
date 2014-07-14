@@ -227,6 +227,10 @@ sub borrower_add_additional_fields {
         $b_ref->{has_picture} = 1;
     }
 
+    # Computes full borrower address
+    my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{streettype} );
+    $b_ref->{address} = $borrower->{'streetnumber'} . " $roadtype " . $borrower->{'address'};
+
     if (C4::Context->preference('ExtendedPatronAttributes')) {
         $b_ref->{extendedattributes} = GetBorrowerAttributes($borrowernumber);
         $template->param(

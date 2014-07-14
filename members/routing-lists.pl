@@ -24,6 +24,7 @@ use C4::Output;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Branch; # GetBranches
 use C4::Members;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Context;
 use C4::Serials;
 use CGI::Session;
@@ -111,22 +112,36 @@ $template->param(
     borrowernumber    => $borrowernumber,
     branch            => $branch,
     branchname        => GetBranchName($borrower->{'branchcode'}),
+    title             => $borrower->{'title'},
+    initials          => $borrower->{'initials'},
     firstname         => $borrower->{'firstname'},
     surname           => $borrower->{'surname'},
+    othernames        => $borrower->{'othernames'},
     categorycode      => $borrower->{'categorycode'},
     categoryname      => $borrower->{description},
     address           => $address,
     address2          => $borrower->{'address2'},
+    phone             => $borrower->{'phone'},
+    phonepro          => $borrower->{'phonepro'},
+    mobile            => $borrower->{'mobile'},
     email             => $borrower->{'email'},
     emailpro          => $borrower->{'emailpro'},
     borrowernotes     => $borrower->{'borrowernotes'},
     city              => $borrower->{'city'},
+    state             => $borrower->{'state'},
     zipcode           => $borrower->{'zipcode'},
     country           => $borrower->{'country'},
-    phone             => $borrower->{'phone'} || $borrower->{'mobile'},
     cardnumber        => $borrower->{'cardnumber'},
     RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
+
+if (C4::Context->preference('ExtendedPatronAttributes')) {
+    my $attributes = GetBorrowerAttributes($borrowernumber);
+    $template->param(
+        ExtendedPatronAttributes => 1,
+        extendedattributes => $attributes
+    );
+}
 
 my ($picture, $dberror) = GetPatronImage($borrower->{'borrowernumber'});
 $template->param( picture => 1 ) if $picture;

@@ -25,6 +25,7 @@ use C4::Context;
 use C4::Output;
 use C4::Branch;
 use C4::Members;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Suggestions;
 
 my $input = new CGI;
@@ -50,7 +51,21 @@ $template->param(
     suggestionsview  => 1,
     categoryname => $borrower->{'description'},
     branchname   => GetBranchName( $borrower->{'branchcode'} ),
+    RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
+
+if (C4::Context->preference('ExtendedPatronAttributes')) {
+    my $attributes = GetBorrowerAttributes($borrowernumber);
+    $template->param(
+        ExtendedPatronAttributes => 1,
+        extendedattributes => $attributes
+    );
+}
+
+# Computes full borrower address
+my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{streettype} );
+my $address = $borrower->{'streetnumber'} . " $roadtype " . $borrower->{'address'};
+$template->param( address => $address );
 
 my ($picture, $dberror) = GetPatronImage($borrowernumber);
 $template->param( picture => 1 ) if $picture;

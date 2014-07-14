@@ -25,6 +25,7 @@ use C4::Auth;
 use C4::Output;
 use CGI;
 use C4::Members;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Accounts;
 use C4::Koha;
 use C4::Branch;
@@ -174,6 +175,17 @@ sub borrower_add_additional_fields {
     if ($picture) {
         $b_ref->{has_picture} = 1;
     }
+
+    if (C4::Context->preference('ExtendedPatronAttributes')) {
+        $b_ref->{extendedattributes} = GetBorrowerAttributes($borrowernumber);
+        $template->param(
+            ExtendedPatronAttributes => 1,
+        );
+    }
+
+    # Computes full borrower address
+    my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{streettype} );
+    $b_ref->{address} = $borrower->{'streetnumber'} . " $roadtype " . $borrower->{'address'};
 
     $b_ref->{branchname} = GetBranchName( $b_ref->{branchcode} );
     return;

@@ -62,12 +62,17 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
+# Computes full borrower address
+my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{'streettype'} );
+my $address = $borrower->{'streetnumber'} . " $roadtype " . $borrower->{'address'};
+
 $template->param(
 			QUEUED_MESSAGES 	=> $queued_messages,
 			borrowernumber 		=> $borrowernumber,
 			sentnotices 		=> 1,
                         branchname              => GetBranchName($borrower->{'branchcode'}),
                         categoryname            => $borrower->{'description'},
+                        address                 => $address,
 			activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
             RoutingSerials => C4::Context->preference('RoutingSerials'),
 );

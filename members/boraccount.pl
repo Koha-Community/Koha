@@ -106,6 +106,10 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
+# Computes full borrower address
+my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
+my $address = $data->{'streetnumber'} . " $roadtype " . $data->{'address'};
+
 $template->param(
     finesview           => 1,
     firstname           => $data->{'firstname'},
@@ -116,14 +120,17 @@ $template->param(
     categorycode        => $data->{'categorycode'},
     category_type       => $data->{'category_type'},
     categoryname		=> $data->{'description'},
-    address             => $data->{'address'},
+    address             => $address,
     address2            => $data->{'address2'},
     city                => $data->{'city'},
     state               => $data->{'state'},
     zipcode             => $data->{'zipcode'},
     country             => $data->{'country'},
     phone               => $data->{'phone'},
+    phonepro            => $data->{'phonepro'},
+    mobile              => $data->{'mobile'},
     email               => $data->{'email'},
+    emailpro            => $data->{'emailpro'},
     branchcode          => $data->{'branchcode'},
 	branchname			=> GetBranchName($data->{'branchcode'}),
     total               => sprintf("%.2f",$total),

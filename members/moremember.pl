@@ -338,6 +338,9 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
     $template->param(TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"));
 }
 
+# Computes full borrower address
+my $address = $data->{'streetnumber'} . " $roadtype " . $data->{'address'};
+
 # in template <TMPL_IF name="I"> => instutitional (A for Adult, C for children) 
 $template->param( $data->{'categorycode'} => 1 ); 
 $template->param(
@@ -367,6 +370,7 @@ $template->param(
     PatronsPerPage => C4::Context->preference("PatronsPerPage") || 20,
     relatives_issues_count => $relatives_issues_count,
     relatives_borrowernumbers => \@relatives,
+    address => $address
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
