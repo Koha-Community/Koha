@@ -55,10 +55,13 @@ my $schema = Koha::Database->new()->schema();
 # First process a confirmed delete, or save a validated record
 
 if( $op eq 'delete_confirmed' && $id ) {
-    my $rs=$schema->resultset('Z3950server')->search( { id => $id } );
-    my $name= $rs->first?$rs->first->name:'';
-    my $cnt=$rs->delete;
-    $template->param( msg_deleted => 1, msg_add => $name ) if $cnt==1;
+    my $server=$schema->resultset('Z3950server')->find( { id => $id } );
+    if( $server ) {
+        $server->delete;
+        $template->param( msg_deleted => 1, msg_add => $server->name );
+    } else {
+        $template->param( msg_notfound => 1, msg_add => $id );
+    }
     $id=0;
 } elsif( $op eq 'add_validated' ) {
     my @fields=qw/host port db userid password rank syntax encoding timeout
@@ -67,9 +70,13 @@ if( $op eq 'delete_confirmed' && $id ) {
     #add name from servername (an input with name="name" gave problems)
     $formdata->{name} = $input->param('servername');
     if( $id ) {
-        my @res= $schema->resultset('Z3950server')->search( { id => $id } );
-        $res[0]->update( $formdata );
-        $template->param( msg_updated => 1, msg_add => $formdata->{name} );
+        my $server= $schema->resultset('Z3950server')->find( { id => $id } );
+        if( $server ) {
+            $server->update( $formdata );
+            $template->param( msg_updated => 1, msg_add => $formdata->{name} );
+        } else {
+            $template->param( msg_notfound => 1, msg_add => $id );
+        }
         $id=0;
     } else {
         $schema->resultset('Z3950server')->create( $formdata );
@@ -99,14 +106,14 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 sub ServerSearch  { #find server(s) by id or name
     my ( $schema, $id, $searchstring )= @_;
-    my @resobjs= $schema->resultset('Z3950server')->search(
+    my $rs = $schema->resultset('Z3950server')->search(
         $id ? { id => $id }: { name => { like => $searchstring.'%' } },
-        { order_by => 'rank,name' },
+        { result_class => 'DBIx::Class::ResultClass::HashRefInflator' }
     );
-    return [ map { {$_->get_columns} } @resobjs ];
+    return [ $rs->all ];
 }
 
 sub _form_data_hashref {
     my ( $input, $fieldref ) = @_;
-    return { map { ( $_ => $input->param($_) ) } @$fieldref };
+    return { map { ( $_ => $input->param($_)//'' ) } @$fieldref };
 }

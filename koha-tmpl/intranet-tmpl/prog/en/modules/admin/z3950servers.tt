@@ -76,6 +76,8 @@
     <div class="dialog alert">Z39.50 server updated ([% msg_add %])</div>
 [% ELSIF msg_added %]
     <div class="dialog alert">Z39.50 server added ([% msg_add %])</div>
+[% ELSIF msg_notfound %]
+    <div class="dialog alert">Error: Server with id [% msg_add %] not found</div>
 [% END %]
 
 [% IF ( add_form ) %]
