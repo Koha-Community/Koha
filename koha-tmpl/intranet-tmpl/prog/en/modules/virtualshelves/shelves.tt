@@ -234,7 +234,11 @@ function placeHold () {
         [% IF ( paramsloo.noshelfnumber ) %]<div class="dialog alert">ERROR: No list number given.</div>[% END %]
 		[% IF ( paramsloo.need_confirm ) %]
 		<div class="dialog alert">The list <i>[% paramsloo.need_confirm %]</i> is not empty.
-			<br />It has <b>[% paramsloo.count %]</b> entries.
+            [% IF ( paramsloo.single ) %]
+                <br />It has <b>[% paramsloo.count %]</b> entry.
+            [% ELSE %]
+                <br />It has <b>[% paramsloo.count %]</b> entries.
+            [% END %]
 			<br />Use the "Confirm" button below to confirm deletion.
 		</div>
 		[% END %]

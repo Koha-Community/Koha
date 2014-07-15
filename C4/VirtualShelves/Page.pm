@@ -384,13 +384,13 @@ sub shelfpage {
                 }
                 my $contents;
                 ( $contents, $totshelves ) = GetShelfContents( $number, $shelveslimit, $shelvesoffset );
-                if ( my $count = scalar @$contents ) {
+                if ( $totshelves > 0 ) {
                     unless ( scalar grep { /^CONFIRM-$number$/ } $query->param() ) {
                         if ( defined $shelflist->{$number} ) {
-                            push( @paramsloop, { need_confirm => $shelflist->{$number}->{shelfname}, count => $count, single => ($count eq 1 ? 1:0) } );
+                            push( @paramsloop, { need_confirm => $shelflist->{$number}->{shelfname}, count => $totshelves, single => ($totshelves eq 1 ? 1:0) } );
                             $shelflist->{$number}->{confirm} = $number;
                         } else {
-                            push( @paramsloop, { need_confirm => $privshelflist->{$number}->{shelfname}, count => $count } );
+                            push( @paramsloop, { need_confirm => $privshelflist->{$number}->{shelfname}, count => $totshelves } );
                             $privshelflist->{$number}->{confirm} = $number;
                         }
                         $stay = 0;
