@@ -156,17 +156,11 @@ push( @category_list, $$_{'authcat'} ) foreach @$auth_cats_loop;
 
 #reorder the list
 @category_list = sort { $a cmp $b } @category_list;
-my $tab_list = CGI::scrolling_list(
-    -name     => 'authcat',
-    -id       => 'authcat',
-    -values   => \@category_list,
-    -default  => $authcat,
-    -size     => 1,
-    -tabindex => '',
-    -multiple => 0,
-);
 
-$template->param( authcat_dropbox => $tab_list );
+$template->param( authcat_dropbox => {
+        values => \@category_list,
+        default => $authcat,
+    });
 
 my @budgets = @$budgets_ref;
 my $CGISort;
@@ -330,22 +324,8 @@ foreach my $n (@names) {
 # ------------------------------------------------------------
 #         DEFAULT DISPLAY BEGINS
 
-my $CGIextChoice = CGI::scrolling_list(
-    -name     => 'MIME',
-    -id       => 'MIME',
-    -values   => ['CSV'], # FIXME translation
-    -size     => 1,
-    -multiple => 0
-);
-
-my @dels         = ( C4::Context->preference("delimiter") );
-my $CGIsepChoice = CGI::scrolling_list(
-    -name     => 'sep',
-    -id       => 'sep',
-    -values   => \@dels,
-    -size     => 1,
-    -multiple => 0
-);
+my $CGIextChoice = ( 'CSV' ); # FIXME translation
+my $CGIsepChoice = ( C4::Context->preference("delimiter") );
 
 my ( @budget_lines, %cell_hash );
 

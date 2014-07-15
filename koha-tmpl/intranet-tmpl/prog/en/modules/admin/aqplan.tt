@@ -235,11 +235,25 @@
 <form method="post" action="/cgi-bin/koha/admin/aqplan.pl">
 <fieldset class="brief">
 <h4>Filter</h4>
-
+[% BLOCK planning_types %]
+[%   SWITCH type %]
+[%     CASE 'MONTHS'    %]<span>by months</span>
+[%     CASE 'ITEMTYPES' %]<span>by item types</span>
+[%     CASE 'BRANCHES'  %]<span>by libraries</span>
+[%   END %]
+[% END %]
 <ol>
     <li>
         <label for="authcat"> Select planning type:</label>
-        [% authcat_dropbox %]
+        <select name="authcat" id="authcat" size="1">
+        [% FOREACH value IN authcat_dropbox.values %]
+            [% IF ( value == authcat_dropbox.default ) %]
+            <option value="[% value %]" selected="selected">[% PROCESS planning_types type=value %]</option>
+            [% ELSE %]
+            <option value="[% value %]">[% PROCESS planning_types type=value %]</option>
+            [% END %]
+        [% END %]
+        </select>
     </li>
     <li class="radio">
     [% IF ( show_mine ) %]
@@ -275,13 +289,22 @@
 </form>
 [% IF ( budget_lines ) %]
 <form method="post" action="/cgi-bin/koha/admin/aqplan.pl">
-<h4>Export</h4>
 <fieldset class="brief">
+<h4>Export</h4>
     <ol>
-    <li><label for="basename">Output to a file named: </label><input type="text" name="basename" id="basename" value="Export" /></li>
-    <li><label class="inline" for="MIME">Into an application
-    </label>[% CGIextChoice %]
-    [% CGIsepChoice %]</li>
+        <li><label for="basename">Output to a file named: </label><input type="text" name="basename" id="basename" value="Export" /></li>
+        <li><label class="inline" for="MIME">Into an application</label>
+            <select name="MIME" id="MIME" size="1">
+            [% FOREACH value IN CGIextChoice %]
+                <option value="[% value %]">[% value %]</option>
+            [% END %]
+            </select>
+            <select name="sep" id="sep" size="1">
+            [% FOREACH value IN CGIsepChoice %]
+                <option value="[% value %]">[% value %]</option>
+            [% END %]
+            </select>
+        </li>
     </ol>
     <fieldset class="action">    <input type="submit" value="Submit"/>
     <input type="hidden" name="report_name" value="[% report_name %]" />
