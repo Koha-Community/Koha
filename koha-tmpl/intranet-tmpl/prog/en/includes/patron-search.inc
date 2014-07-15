@@ -75,8 +75,13 @@
 
       <label for="searchtype">Search type:</label>
       <select name="searchtype" id="searchtype">
-          <option selected="selected" value='start_with'>Starts with</option>
-          <option value='contain'>Contains</option>
+          [% IF searchtype != 'start_with' %]
+              <option value='start_with'>Starts with</option>
+              <option selected="selected" value='contain'>Contains</option>
+          [% ELSE %]
+              <option selected="selected" value='start_with'>Starts with</option>
+              <option value='contain'>Contains</option>
+          [% END %]
       </select>
 
     <input value="Search" class="submit" type="submit" />
