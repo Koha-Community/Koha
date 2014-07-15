@@ -75,37 +75,6 @@ if ( $searchfieldstype eq "dateofbirth" ) {
     $searchmember = output_pref({dt => dt_from_string($searchmember), dateformat => 'iso', dateonly => 1});
 }
 
-my $branches = C4::Branch::GetBranches;
-my @branches_loop;
-if ( C4::Branch::onlymine ) {
-    my $userenv = C4::Context->userenv;
-    my $branch = C4::Branch::GetBranchDetail( $userenv->{'branch'} );
-    push @branches_loop, {
-        value => $branch->{branchcode},
-        branchcode => $branch->{branchcode},
-        branchname => $branch->{branchname},
-        selected => 1
-    }
-} else {
-    foreach ( sort { lc($branches->{$a}->{branchname}) cmp lc($branches->{$b}->{branchname}) } keys %$branches ) {
-        my $selected = 0;
-        $selected = 1 if($patron->{branchcode} and $patron->{branchcode} eq $_);
-        push @branches_loop, {
-            value => $_,
-            branchcode => $_,
-            branchname => $branches->{$_}->{branchname},
-            selected => $selected
-        };
-    }
-}
-
-my @categories = C4::Category->all;
-if ( $patron->{categorycode} ) {
-    foreach my $category ( grep { $_->{categorycode} eq $patron->{categorycode} } @categories ) {
-        $category->{selected} = 1;
-    }
-}
-
 $template->param( 'alphabet' => C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' );
 
 my $view = $input->request_method() eq "GET" ? "show_form" : "show_results";
@@ -113,8 +82,6 @@ my $view = $input->request_method() eq "GET" ? "show_form" : "show_results";
 $template->param(
     patron_lists => [ GetPatronLists() ],
     searchmember        => $searchmember,
-    branchloop          => \@branches_loop,
-    categories          => \@categories,
     branchcode          => $patron->{branchcode},
     categorycode        => $patron->{categorycode},
     searchtype          => $input->param('searchtype') || 'start_with',

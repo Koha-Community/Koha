@@ -1,4 +1,6 @@
 [% USE Koha %]
+[% USE Branches %]
+[% USE Categories %]
 <div class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Patrons Resident Search Box -->
 <div id="header_search">
@@ -71,29 +73,37 @@
             </select>
         </p>
 
+        <p>
+            <label for="branchcode">Library: </label>
+            [% SET branches = Branches.all( selected => branchcode ) %]
+            <select name="branchcode" id="branchcode">
+                [% IF branches.size != 1 %]
+                  <option value="">Any</option>
+                [% END %]
+                [% FOREACH b IN branches %]
+                    [% IF b.selected %]
+                        <option value="[% b.branchcode %]" selected="selected">[% b.branchname %]</option>
+                    [% ELSE %]
+                        <option value="[% b.branchcode %]">[% b.branchname %]</option>
+                    [% END %]
+                [% END %]
+            </select>
+        </p>
 
-        [% IF ( branchloop ) %]
-        <p> <label for="branchcode">Library: </label>
-        <select name="branchcode" id="branchcode">
-            [% IF branchloop.size != 1 %]
-              <option value="">Any</option>
-            [% END %]
-            [% FOREACH branchloo IN branchloop %]
-            [% IF ( branchloo.selected ) %]
-            <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]
-            <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
-          [% END %]</select>
-        [% END %]
-        [% IF ( categories ) %]
-            <p>
-            <label for="categorycode">Category: </label><select name="categorycode" id="categorycode">
-            <option value="">Any</option>[% FOREACH categorie IN categories %]
-            [% IF ( categorie.selected ) %]
-            <option value="[% categorie.categorycode %]" selected="selected">[% categorie.description %]</option>[% ELSE %]
-            <option value="[% categorie.categorycode %]">[% categorie.description %]</option>[% END %]
-          [% END %]</select>
-            </p>
-        [% END %]
+        <p>
+            <label for="categorycode">Category: </label>
+            [% SET categories = Categories.all( selected => categorycode ) %]
+            <select name="categorycode" id="categorycode">
+                <option value="">Any</option>
+                [% FOREACH categorie IN categories %]
+                    [% IF ( categorie.selected ) %]
+                        <option value="[% categorie.categorycode %]" selected="selected">[% categorie.description %]</option>
+                    [% ELSE %]
+                        <option value="[% categorie.categorycode %]">[% categorie.description %]</option>
+                    [% END %]
+                [% END %]
+            </select>
+        </p>
     </div>
     </form>
 </div>

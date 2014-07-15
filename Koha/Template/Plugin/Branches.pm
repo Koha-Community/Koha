@@ -1,6 +1,7 @@
 package Koha::Template::Plugin::Branches;
 
 # Copyright ByWater Solutions 2012
+# Copyright BibLibre 2014
 
 # This file is part of Koha.
 #
@@ -51,6 +52,35 @@ sub GetURL {
     $sth->execute($branchcode);
     my $b = $sth->fetchrow_hashref();
     return $b->{branchurl};
+}
+
+sub all {
+    my ( $self, $params ) = @_;
+    my $selected = $params->{selected};
+    my $dbh = C4::Context->dbh;
+    my @params;
+    my $query = q|
+        SELECT branchcode, branchname
+        FROM branches
+    |;
+    if (    C4::Branch::onlymine
+        and C4::Context->userenv
+        and C4::Context->userenv->{branch} )
+    {
+        $query .= q| WHERE branchcode = ? |;
+        push @params, C4::Context->userenv->{branch};
+    }
+    $query .= q| ORDER BY branchname|;
+    my $branches = $dbh->selectall_arrayref( $query, { Slice => {} }, @params );
+
+    if ( $selected ) {
+        for my $branch ( @$branches ) {
+            if ( $branch->{branchcode} eq $selected ) {
+                $branch->{selected} = 1;
+            }
+        }
+    }
+    return $branches;
 }
 
 1;
