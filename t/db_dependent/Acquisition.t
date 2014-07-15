@@ -8,7 +8,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 87;
+use Test::More tests => 90;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -369,6 +369,7 @@ my @expectedfields = qw(
   quantity_to_receive
   subtotal
   latesince
+  cancellationreason
 );
 (
     $test_missing_fields,   $test_extra_fields,
@@ -481,6 +482,7 @@ my @base_expectedfields = qw(
   frameworkcode
   volumedesc
   datecancellationprinted
+  cancellationreason
 );
 @expectedfields =
   ( @base_expectedfields,
@@ -608,6 +610,7 @@ ok(
   budget_id
   authorisedby
   booksellerid
+  cancellationreason
 );
 
 # note that authorisedby was added to the return of SearchOrder by the
