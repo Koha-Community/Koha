@@ -28,9 +28,10 @@ sub search {
 
     my $dbh = C4::Context->dbh;
     my $select = "SELECT
-        borrowers.borrowernumber, borrowers.surname, borrowers.firstname, borrowers.address,
-        borrowers.address2, borrowers.city, borrowers.zipcode, borrowers.country,
-        cardnumber, borrowers.dateexpiry,
+        borrowers.borrowernumber, borrowers.surname, borrowers.firstname,
+        borrowers.streetnumber, borrowers.streettype, borrowers.address,
+        borrowers.address2, borrowers.city, borrowers.state, borrowers.zipcode,
+        borrowers.country, cardnumber, borrowers.dateexpiry,
         borrowers.borrowernotes, borrowers.branchcode, borrowers.email,
         categories.description AS category_description, categories.category_type,
         branches.branchname";
