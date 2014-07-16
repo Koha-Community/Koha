@@ -648,8 +648,11 @@ sub DelItem {
         $biblionumber = C4::Biblio::GetBiblionumberFromItemnumber($itemnumber);
     }
 
+    # If there is no biblionumber for the given itemnumber, there is nothing to delete
+    return 0 unless $biblionumber;
+
     # FIXME check the item has no current issues
-    _koha_delete_item( $itemnumber );
+    my $deleted = _koha_delete_item( $itemnumber );
 
     # get the MARC record
     my $record = GetMarcBiblio($biblionumber);
@@ -657,6 +660,7 @@ sub DelItem {
 
     #search item field code
     logaction("CATALOGUING", "DELETE", $itemnumber, "item") if C4::Context->preference("CataloguingLog");
+    return $deleted;
 }
 
 =head2 CheckItemPreSave
@@ -2355,6 +2359,10 @@ sub _koha_delete_item {
     my $sth = $dbh->prepare("SELECT * FROM items WHERE itemnumber=?");
     $sth->execute($itemnum);
     my $data = $sth->fetchrow_hashref();
+
+    # There is no item to delete
+    return 0 unless $data;
+
     my $query = "INSERT INTO deleteditems SET ";
     my @bind  = ();
     foreach my $key ( keys %$data ) {
@@ -2368,8 +2376,8 @@ sub _koha_delete_item {
 
     # delete from items table
     $sth = $dbh->prepare("DELETE FROM items WHERE itemnumber=?");
-    $sth->execute($itemnum);
-    return;
+    my $deleted = $sth->execute($itemnum);
+    return ( $deleted == 1 ) ? 1 : 0;
 }
 
 =head2 _marc_from_item_hash
