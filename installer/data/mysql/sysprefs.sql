@@ -374,6 +374,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('StaffAuthorisedValueImages','1',NULL,'','YesNo'),
 ('staffClientBaseURL','',NULL,'Specify the base URL of the staff client','free'),
 ('StaffDetailItemSelection', '1', NULL, 'Enable item selection in record detail page', 'YesNo'),
+('StaffSearchResultsDisplayBranch','holdingbranch','holdingbranch|homebranch','Controls the display of the home or holding branch for staff search results','Choice'),
 ('StaffSerialIssueDisplayCount','3','','Number of serial issues to display per subscription in the Staff client','Integer'),
 ('StaticHoldsQueueWeight','0',NULL,'Specify a list of library location codes separated by commas -- the list of codes will be traversed and weighted with first values given higher weight for holds fulfillment -- alternatively, if RandomizeHoldsQueueWeight is set, the list will be randomly selective','Integer'),
 ('SubfieldsToUseWhenPrefill','','','Define a list of subfields to use when prefilling items (separated by space)','Free'),

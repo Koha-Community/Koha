@@ -8719,6 +8719,15 @@ if(C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    my $pref = C4::Context->preference('HomeOrHoldingBranch');
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type)
+       VALUES ('StaffSearchResultsDisplayBranch', ?,'homebranch|holdingbranch','Controls the display of the home or holding branch for staff search results','choice')", undef, $pref);
+    print "Upgrade to $DBversion done (Bug 12582 - Control of branch displayed in search results linked to HomeOrHoldingBranch)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

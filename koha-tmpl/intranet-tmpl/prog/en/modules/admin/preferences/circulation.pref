@@ -240,6 +240,13 @@ Circulation:
                   holdingbranch: only the library the item was checked out from.
                   homeorholdingbranch: either the library the item is from or the library it was checked out from.
         -
+            - For search results in the staff client, display the branch of
+            - pref: StaffSearchResultsDisplayBranch
+              type: choice
+              choices:
+                  homebranch: the library the item is from.
+                  holdingbranch: the library the item is held by.
+        -
             - Calculate the due date using 
             - pref: useDaysMode
               choices:

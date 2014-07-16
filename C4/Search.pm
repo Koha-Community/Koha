@@ -1900,8 +1900,8 @@ sub searchResults {
                 }
             }
 
-            my $hbranch     = C4::Context->preference('HomeOrHoldingBranch') eq 'homebranch' ? 'homebranch'    : 'holdingbranch';
-            my $otherbranch = C4::Context->preference('HomeOrHoldingBranch') eq 'homebranch' ? 'holdingbranch' : 'homebranch';
+            my $hbranch     = C4::Context->preference('StaffSearchResultsDisplayBranch');
+            my $otherbranch = $hbranch eq 'homebranch' ? 'holdingbranch' : 'homebranch';
 
             # set item's branch name, use HomeOrHoldingBranch syspref first, fall back to the other one
             if ($item->{$hbranch}) {
