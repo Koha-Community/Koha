@@ -1861,7 +1861,12 @@ sub DelOrder {
     $sth->execute( $bibnum, $ordernumber );
     my @itemnumbers = GetItemnumbersFromOrder( $ordernumber );
     foreach my $itemnumber (@itemnumbers){
-        C4::Items::DelItem( $bibnum, $itemnumber );
+        C4::Items::DelItem(
+            {
+                biblionumber => $bibnum,
+                itemnumber   => $itemnumber
+            }
+        );
     }
     return;
 }

@@ -632,14 +632,21 @@ sub ModDateLastSeen {
 
 =head2 DelItem
 
-  DelItem( $biblionumber, $itemnumber );
+  DelItem({ itemnumber => $itemnumber, [ biblionumber => $biblionumber ] } );
 
 Exported function (core API) for deleting an item record in Koha.
 
 =cut
 
 sub DelItem {
-    my ( $biblionumber, $itemnumber ) = @_;
+    my ( $params ) = @_;
+
+    my $itemnumber   = $params->{itemnumber};
+    my $biblionumber = $params->{biblionumber};
+
+    unless ($biblionumber) {
+        $biblionumber = C4::Biblio::GetBiblionumberFromItemnumber($itemnumber);
+    }
 
     # FIXME check the item has no current issues
     _koha_delete_item( $itemnumber );
@@ -2287,7 +2294,12 @@ sub DelItemCheck {
         } elsif ($countanalytics > 0){
 		$error = "linked_analytics";
 	} else {
-            DelItem($biblionumber, $itemnumber);
+            DelItem(
+                {
+                    biblionumber => $biblionumber,
+                    itemnumber   => $itemnumber
+                }
+            );
             return 1;
         }
     }
