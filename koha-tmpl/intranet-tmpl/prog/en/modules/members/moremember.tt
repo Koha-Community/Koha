@@ -365,7 +365,10 @@ function validate1(date) {
       <li><span class="label">Zip/Postal code: </span>[% B_zipcode %]</li>
       [% IF ( B_country ) %]<li><span class="label">Country: </span>[% B_country %]</li>[% END %]
       [% IF ( B_phone ) %]<li><span class="label">Phone: </span>[% B_phone %]</li>[% END %]
-      [% IF ( B_email ) %]<li><span class="label">Email: </span><a href="mailto:[% B_email %]">[% email %]</a></li>[% END %]</ol></div>
+      [% IF ( B_email ) %]<li><span class="label">Email: </span><a href="mailto:[% B_email %]">[% email %]</a></li>[% END %]
+      [% IF ( contactnote ) %]<li><span class="label">Contact note: </span> [% contactnote %]</li>[% END %]
+      </ol>
+    </div>
 </div>
 <div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=[% borrowernumber %]&amp;step=6">Edit</a></div>
     [% END %]
