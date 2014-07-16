@@ -1,3 +1,4 @@
+[% USE ItemTypes %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; Manage label batches</title>
     [% INCLUDE 'doc-head-close.inc' %]
@@ -242,7 +243,13 @@
                                                             [% IF ( text_field.select_field ) %]
                                                                 <td><input type="checkbox" name="action" value="[% text_field.field_value %]"></td>
                                                             [% ELSE %]
-                                                                <td>[% text_field.field_value %]</td>
+                                                                <td>
+                                                                    [% IF ( text_field.field_name == '_item_type_tbl' ) %]
+                                                                        [% ItemTypes.GetDescription( text_field.field_value ) %]
+                                                                    [% ELSE %]
+                                                                        [% text_field.field_value %]
+                                                                    [% END %]
+                                                                </td>
                                                             [% END %]
                                                         [% END %]
                                                     </tr>
