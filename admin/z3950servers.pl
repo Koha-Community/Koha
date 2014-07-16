@@ -36,6 +36,7 @@ use Koha::Database;
 my $input = new CGI;
 my $op = $input->param('op') || 'list';
 my $id = $input->param('id') || 0;
+my $type = $input->param('type') || '';
 my $searchfield = '';
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user( {
@@ -58,29 +59,28 @@ if( $op eq 'delete_confirmed' && $id ) {
     my $server = $schema->resultset('Z3950server')->find($id);
     if ( $server ) {
         $server->delete;
-        $template->param( msg_deleted => 1, msg_add => $server->name );
+        $template->param( msg_deleted => 1, msg_add => $server->servername );
     } else {
         $template->param( msg_notfound => 1, msg_add => $id );
     }
     $id = 0;
 } elsif ( $op eq 'add_validated' ) {
     my @fields=qw/host port db userid password rank syntax encoding timeout
-        recordtype checked/;
+        recordtype checked servername servertype sru_options sru_fields
+        add_xslt/;
     my $formdata = _form_data_hashref( $input, \@fields );
-    #add name from servername (an input with name="name" gave problems)
-    $formdata->{name} = $input->param('servername');
     if( $id ) {
         my $server = $schema->resultset('Z3950server')->find($id);
         if ( $server ) {
             $server->update( $formdata );
-            $template->param( msg_updated => 1, msg_add => $formdata->{name} );
+            $template->param( msg_updated => 1, msg_add => $formdata->{servername} );
         } else {
             $template->param( msg_notfound => 1, msg_add => $id );
         }
         $id = 0;
     } else {
         $schema->resultset('Z3950server')->create( $formdata );
-        $template->param( msg_added => 1, msg_add => $formdata->{name} );
+        $template->param( msg_added => 1, msg_add => $formdata->{servername} );
     }
 } else {
     #use searchfield only in remaining operations
@@ -94,7 +94,7 @@ if ( $op eq 'add' || $op eq 'edit' ) {
     $data = ServerSearch( $schema, $id, $searchfield ) if $searchfield || $id;
     delete $data->[0]->{id} if @$data && $op eq 'add'; #cloning record
     $template->param( add_form => 1, server => @$data? $data->[0]: undef,
-        op => $op );
+        op => $op, type => $op eq 'add'? lc $type: '' );
 } else {
     $data = ServerSearch( $schema, $id, $searchfield );
     $template->param( loop => \@$data, searchfield => $searchfield, id => $id,
@@ -107,7 +107,7 @@ output_html_with_http_headers $input, $cookie, $template->output;
 sub ServerSearch  { #find server(s) by id or name
     my ( $schema, $id, $searchstring )= @_;
     my $rs = $schema->resultset('Z3950server')->search(
-        $id ? { id => $id }: { name => { like => $searchstring.'%' } },
+        $id ? { id => $id }: { servername => { like => $searchstring.'%' } },
         { result_class => 'DBIx::Class::ResultClass::HashRefInflator' }
     );
     return [ $rs->all ];
