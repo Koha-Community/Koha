@@ -74,8 +74,8 @@ foreach my $biblionumber ( @bibs ) {
       $hasauthors = 1;
     }
 	
-    my $shelflocations =GetKohaAuthorisedValues('items.location',$dat->{'frameworkcode'}, 'opac');
-    my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'}, 'opac');
+    my $shelflocations =GetKohaAuthorisedValues('items.location',$dat->{'frameworkcode'});
+    my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'});
 
 	for my $itm (@items) {
 	    if ($itm->{'location'}){
