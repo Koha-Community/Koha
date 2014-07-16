@@ -181,7 +181,7 @@ sub calculate {
                 $cell{err} = 1 if (@$filters[$i]<@$filters[$i-1]) ;
             }
             # format the dates filters, otherwise just fill as is
-            $cell{filter} .= ($i>=4) ? @$filters[$i] : format_date(@$filters[$i]);
+            $cell{filter} .= @$filters[$i];
 			defined ($cellmap[$i]) and
 				$cell{crit} .= $cellmap[$i];
             push @loopfilter, \%cell;

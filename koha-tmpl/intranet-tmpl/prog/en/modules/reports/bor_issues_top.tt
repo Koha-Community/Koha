@@ -1,3 +1,6 @@
+[% USE Branches %]
+[% USE KohaDates %]
+[% USE ItemTypes %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Patrons with the most checkouts</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -57,12 +60,41 @@ function Dopop(link) {
 
 
 	[% FOREACH mainloo IN mainloop %]
-        <h1>Top [% mainloo.limit %] List patrons for checkouts</h1>
+        <h1>Patrons with the most checkouts</h1>
 		[% IF ( mainloo.loopfilter ) %]
-            <p>Filtered on:</p>
-			[% FOREACH loopfilte IN mainloo.loopfilter %]
-					<p>[% IF ( loopfilte.err ) %]  [% END %] [% loopfilte.crit %] =[% loopfilte.filter %][% IF ( loopfilte.err ) %]  [% END %]</p>
-			[% END %]
+            [% IF mainloo.loopfilter.size %]
+                <p>Filtered on:</p>
+                <ul>
+                    [% FOREACH loopfilte IN mainloo.loopfilter %]
+                        <li>
+                            [% SWITCH loopfilte.crit -%]
+                                [% CASE "Issue From" -%]
+                                    Checked out after [% loopfilte.filter | $KohaDates %]
+                                [% CASE "Issue To" -%]
+                                    Checked out before [% loopfilte.filter | $KohaDates %]
+                                [% CASE "Return From" -%]
+                                    Checked in after [% loopfilte.filter | $KohaDates %]
+                                [% CASE "Return To" -%]
+                                    Checked in before [% loopfilte.filter | $KohaDates %]
+                                [% CASE "Branch" -%]
+                                    Library is [% Branches.GetName( loopfilte.filter ) %]
+                                [% CASE "Doc Type" -%]
+                                    Item type is [% ItemTypes.GetDescription( loopfilte.filter ) %]
+                                [% CASE "Bor Cat" -%]
+                                    Patron category code is [% loopfilte.filter %]
+                                [% CASE "Day" -%]
+                                    Day is [% loopfilte.filter %]
+                                [% CASE "Month" -%]
+                                    Month is [% loopfilte.filter %]
+                                [% CASE "Year" -%]
+                                    Year is [% loopfilte.filter %]
+                                [% CASE # default case -%]
+                                    [% loopfilte.crit %] = [% loopfilte.filter %]
+                            [% END -%]
+                        </li>
+                    [% END %]
+                </ul>
+            [% END %]
 		[% END %]
 		
 		<table>
