@@ -1174,7 +1174,7 @@
 		</fieldset>
         [% END # hide fieldset %][% END %]
 		<!--this zones are not necessary in modif mode -->
-		[% UNLESS ( opadd ) %]
+        [% UNLESS ( opadd || opduplicate ) %]
 		<fieldset class="rows">
             <legend>Patron account flags</legend>
 			<ol class="radio">
