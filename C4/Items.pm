@@ -632,18 +632,17 @@ sub ModDateLastSeen {
 
 =head2 DelItem
 
-  DelItem($dbh, $biblionumber, $itemnumber);
+  DelItem( $biblionumber, $itemnumber );
 
 Exported function (core API) for deleting an item record in Koha.
 
 =cut
 
 sub DelItem {
-    my ( $dbh, $biblionumber, $itemnumber ) = @_;
-    
+    my ( $biblionumber, $itemnumber ) = @_;
+
     # FIXME check the item has no current issues
-    
-    _koha_delete_item( $dbh, $itemnumber );
+    _koha_delete_item( $itemnumber );
 
     # get the MARC record
     my $record = GetMarcBiblio($biblionumber);
@@ -2288,7 +2287,7 @@ sub DelItemCheck {
         } elsif ($countanalytics > 0){
 		$error = "linked_analytics";
 	} else {
-            DelItem($dbh, $biblionumber, $itemnumber);
+            DelItem($biblionumber, $itemnumber);
             return 1;
         }
     }
@@ -2330,15 +2329,16 @@ sub _koha_modify_item {
 
 =head2 _koha_delete_item
 
-  _koha_delete_item( $dbh, $itemnum );
+  _koha_delete_item( $itemnum );
 
 Internal function to delete an item record from the koha tables
 
 =cut
 
 sub _koha_delete_item {
-    my ( $dbh, $itemnum ) = @_;
+    my ( $itemnum ) = @_;
 
+    my $dbh = C4::Context->dbh;
     # save the deleted item to deleteditems table
     my $sth = $dbh->prepare("SELECT * FROM items WHERE itemnumber=?");
     $sth->execute($itemnum);

@@ -58,7 +58,7 @@ subtest 'General Add, Get and Del tests' => sub {
     cmp_ok($moditem->{'barcode'}, '==', '987654321', 'Modified item barcode successfully to: '.$moditem->{'barcode'} . '.');
 
     # Delete item.
-    DelItem($dbh, $bibnum, $itemnumber);
+    DelItem($bibnum, $itemnumber);
     my $getdeleted = GetItem($itemnumber);
     is($getdeleted->{'itemnumber'}, undef, "Item deleted as expected.");
 
