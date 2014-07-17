@@ -37,8 +37,6 @@ It need :
   if the biblio has no isbn, then the search if done on editor only
   If the biblio ha an isbn, the search is done on isbn and editor. It's faster.
 
-=over 2
-
 =cut
 
 use strict;
@@ -50,7 +48,7 @@ use C4::Context;
 use C4::AuthoritiesMarc;
 use C4::Output;
 
-=head1
+=head1 DESCRIPTION
 
 plugin_parameters : other parameters added when the plugin is called by the dopop function
 
