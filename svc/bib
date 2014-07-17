@@ -48,11 +48,17 @@ if ($path_info =~ m!^/(\d+)$!) {
     print $query->header(-type => 'text/xml', -status => '400 Bad Request');
 }
 
-# are we retrieving or updating a bib?
+# are we retrieving, updating or deleting a bib?
 if ($query->request_method eq "GET") {
     fetch_bib($query, $biblionumber);
-} else {
+} elsif ($query->request_method eq "POST") {
     update_bib($query, $biblionumber);
+} elsif ($query->request_method eq "DELETE") {
+    delete_bib($query, $biblionumber);
+} else {
+    print $query->header(-type => 'text/xml', -status => '405 Method not allowed');
+    print XMLout({ error => 'Method not allowed' }, NoAttr => 1, RootName => 'response', XMLDecl => 1);
+    exit 0;
 }
 
 exit 0;
@@ -119,4 +125,19 @@ sub update_bib {
     }
    
     print XMLout($result, NoAttr => 1, RootName => 'response', XMLDecl => 1, NoEscape => $do_not_escape); 
+}
+
+sub delete_bib {
+    my $query = shift;
+    my $biblionumber = shift;
+    my $error = DelBiblio($biblionumber);
+
+    if (defined $error) {
+        print $query->header(-type => 'text/xml', -status => '400 Bad request');
+        print XMLout({ error => $error }, NoAttr => 1, RootName => 'response', XMLDecl => 1);
+        exit 0;
+    }
+
+    print $query->header(-type => 'text/xml');
+    print XMLout({ status => 'OK, biblio deleted' }, NoAttr => 1, RootName => 'response', XMLDecl => 1);
 }
