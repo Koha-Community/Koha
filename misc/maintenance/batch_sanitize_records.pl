@@ -120,7 +120,7 @@ for my $biblionumber (@biblionumbers) {
         say " Done!" if $verbose;
     }
     else {
-        say " Nothing todo." if $verbose;
+        say " Nothing to do." if $verbose;
     }
 }
 
@@ -154,13 +154,13 @@ sub biblios_to_sanitize {
 
 =head1 NAME
 
-batch_sanitize_biblios - This script sanitize a biblio, replacing '&amp;amp;amp;etc.' with '&amp;' in it.
+batch_sanitize_biblios - This script sanitizes a biblio, replacing '&amp;amp;amp;etc.' with '&amp;' in it.
 
 =head1 SYNOPSIS
 
 batch_sanitize_biblios.pl [-h|--help] [-v|--verbose] [-c|--confirm] [--biblionumbers=BIBLIONUMBER_LIST] [-f|--filename=FILENAME] [--auto-search] [--reindex]
 
-Replace '&amp;' by '&' in a record, you can either give some biblionumbers or a file with biblionumbers or ask for an auto-search
+Replace '&amp;' by '&' in a record. You can either give some biblionumbers or a file with biblionumbers or ask for an auto-search.
 
 =head1 OPTIONS
 
@@ -182,11 +182,12 @@ only report on the record list to process.
 
 =item B<--biblionumbers=BIBLIONUMBER_LIST>
 
-Give a biblionumber list using this parameter. They must be separated by comma.
+Give a biblionumber list using this parameter. They must be separated by
+commas.
 
 =item B<-f|--filename=FILENAME>
 
-Give a biblionumber list using a filename. One biblionumber by line or separate them with a withespace character.
+Give a biblionumber list using a filename. One biblionumber by line or separate them with a whitespace character.
 
 =item B<--auto_search>
 
