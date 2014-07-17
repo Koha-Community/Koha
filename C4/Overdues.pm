@@ -282,15 +282,19 @@ C<$branchcode> is the branch whose calendar to use for finding holidays.
 =cut
 
 sub _get_chargeable_units {
-    my ($unit, $dt1, $dt2, $branchcode) = @_;
+    my ($unit, $date_due, $date_returned, $branchcode) = @_;
+
+    # If the due date is later than the return date
+    return 0 unless ( $date_returned > $date_due );
+
     my $charge_units = 0;
     my $charge_duration;
     if ($unit eq 'hours') {
         if(C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed') {
             my $calendar = Koha::Calendar->new( branchcode => $branchcode );
-            $charge_duration = $calendar->hours_between( $dt1, $dt2 );
+            $charge_duration = $calendar->hours_between( $date_due, $date_returned );
         } else {
-            $charge_duration = $dt2->delta_ms( $dt1 );
+            $charge_duration = $date_returned->delta_ms( $date_due );
         }
         if($charge_duration->in_units('hours') == 0 && $charge_duration->in_units('seconds') > 0){
             return 1;
@@ -300,9 +304,9 @@ sub _get_chargeable_units {
     else { # days
         if(C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed') {
             my $calendar = Koha::Calendar->new( branchcode => $branchcode );
-            $charge_duration = $calendar->days_between( $dt1, $dt2 );
+            $charge_duration = $calendar->days_between( $date_due, $date_returned );
         } else {
-            $charge_duration = $dt2->delta_days( $dt1 );
+            $charge_duration = $date_returned->delta_days( $date_due );
         }
         return $charge_duration->in_units('days');
     }
