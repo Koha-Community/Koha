@@ -8,8 +8,9 @@ use C4::Branch;
 use C4::Items;
 use C4::Members;
 use C4::Reserves;
+use Koha::DateUtils;
 
-use Test::More tests => 48;
+use Test::More tests => 49;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -359,6 +360,12 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     );
 
     ok( $total_due == 15, 'Borrower only charged fine with both WhenLostForgiveFine and WhenLostChargeReplacementFee disabled' );
+
+    my $now = dt_from_string();
+    my $future = dt_from_string();
+    $future->add( days => 7 );
+    my $units = C4::Overdues::_get_chargeable_units('days', $future, $now, 'MPL');
+    ok( $units == 0, '_get_chargeable_units returns 0 for items not past due date' );
 }
 
 {
