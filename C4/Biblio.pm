@@ -410,9 +410,9 @@ sub ModBiblioframework {
   my $error = &DelBiblio($biblionumber);
 
 Exported function (core API) for deleting a biblio in koha.
-Deletes biblio record from Zebra and Koha tables (biblio,biblioitems,items)
-Also backs it up to deleted* tables
-Checks to make sure there are not issues on any of the items
+Deletes biblio record from Zebra and Koha tables (biblio & biblioitems)
+Also backs it up to deleted* tables.
+Checks to make sure that the biblio has no items attached.
 return:
 C<$error> : undef unless an error occurs
 
