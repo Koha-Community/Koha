@@ -54,7 +54,6 @@ sub search {
 
     # split on coma
     $searchmember =~ s/,/ /g if $searchmember;
-    my @where_strs_or;
     my $searchfields = {
         standard => 'surname,firstname,othernames,cardnumber',
         email => 'email,emailpro,B_email',
@@ -65,21 +64,23 @@ sub search {
         sort1 => 'sort1',
         sort2 => 'sort2',
     };
-    for my $searchfield ( split /,/, $searchfields->{$searchfieldstype} ) {
-        foreach my $term ( split / /, $searchmember) {
-            next unless $term;
-            $searchmember =~ s/\*/%/g; # * is replaced with % for sql
-            $term .= '%' # end with anything
-                if $term !~ /%$/;
-            $term = "%$term" # begin with anythin unless start_with
-                if $term !~ /^%/
-                    and $searchtype eq "contain";
+    foreach my $term ( split / /, $searchmember) {
+        next unless $term;
+        $searchmember =~ s/\*/%/g; # * is replaced with % for sql
+        $term .= '%' # end with anything
+            if $term !~ /%$/;
+        $term = "%$term" # begin with anythin unless start_with
+            if $term !~ /^%/
+                and $searchtype eq "contain";
+        my @where_strs_or;
+        for my $searchfield ( split /,/, $searchfields->{$searchfieldstype} ) {
             push @where_strs_or, "borrowers." . $dbh->quote_identifier($searchfield) . " LIKE ?";
             push @where_args, $term;
         }
+
+        push @where_strs, '('. join (' OR ', @where_strs_or) . ')'
+            if @where_strs_or;
     }
-    push @where_strs, '('. join (' OR ', @where_strs_or) . ')'
-        if @where_strs_or;
 
     my $where;
     $where = " WHERE " . join (" AND ", @where_strs) if @where_strs;
