@@ -324,7 +324,6 @@ my @expectedfields = qw(
   freight
   unitprice
   quantityreceived
-  cancelledby
   datecancellationprinted
   supplierreference
   purchaseordernumber
@@ -400,7 +399,6 @@ my @base_expectedfields = qw(
   ecost
   uncertainprice
   marc
-  cancelledby
   url
   isbn
   copyrightdate
@@ -565,7 +563,6 @@ ok(
   datereceived
   orderstatus
   supplierreference
-  cancelledby
   isbn
   copyrightdate
   gstrate

@@ -3024,7 +3024,6 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `freight` decimal(28,6) default NULL, -- shipping costs (not used)
   `unitprice` decimal(28,6) default NULL, -- the actual cost entered when receiving this line item
   `quantityreceived` smallint(6) NOT NULL default 0, -- the quantity that have been received so far
-  `cancelledby` varchar(10) default NULL, -- not used? always NULL
   `datecancellationprinted` date default NULL, -- the date the line item was deleted
   `order_internalnote` mediumtext, -- notes related to this order line, made for staff
   `order_vendornote` mediumtext, -- notes related to this order line, made for vendor
