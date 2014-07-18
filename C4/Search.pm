@@ -2035,13 +2035,12 @@ sub searchResults {
         }
 
         # XSLT processing of some stuff
-	use C4::Charset;
-	SetUTF8Flag($marcrecord);
+        SetUTF8Flag($marcrecord);
         warn $marcrecord->as_formatted if $DEBUG;
-	my $interface = $search_context eq 'opac' ? 'OPAC' : '';
-	if (!$scan && C4::Context->preference($interface . "XSLTResultsDisplay")) {
+        my $interface = $search_context eq 'opac' ? 'OPAC' : '';
+        if (!$scan && C4::Context->preference($interface . "XSLTResultsDisplay")) {
             $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, $interface."XSLTResultsDisplay", 1, \@hiddenitems);
-	    # the last parameter tells Koha to clean up the problematic ampersand entities that Zebra outputs
+        # the last parameter tells Koha to clean up the problematic ampersand entities that Zebra outputs
         }
 
         # if biblio level itypes are used and itemtype is notforloan, it can't be reserved either
