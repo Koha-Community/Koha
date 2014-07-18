@@ -565,18 +565,8 @@ if ( $numBibsAvailable == 0 || $anyholdable == 0) {
     $template->param( none_available => 1 );
 }
 
-my $itemTableColspan = 9;
-if (! $template->{VARS}->{'OPACItemHolds'}) {
-    $itemTableColspan--;
-}
-if (! $template->{VARS}->{'singleBranchMode'}) {
-    $itemTableColspan--;
-}
-$itemTableColspan-- if !$show_holds_count && !$show_priority;
 my $show_notes=C4::Context->preference('OpacHoldNotes');
 $template->param(OpacHoldNotes=>$show_notes);
-$itemTableColspan-- if !$show_notes;
-$template->param(itemtable_colspan => $itemTableColspan);
 
 # display infos
 $template->param(bibitemloop => $biblioLoop);
