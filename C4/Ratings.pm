@@ -147,41 +147,44 @@ A hashref containing:
 
 sub GetRating {
     my ( $biblionumber, $borrowernumber ) = @_;
-    my $query = qq| SELECT COUNT(*) AS total, SUM(rating_value) AS sum
-FROM ratings WHERE biblionumber = ? |;
 
-    my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute($biblionumber);
-    my $res = $sth->fetchrow_hashref();
+    my $ratings = Koha::Database->new()->schema->resultset('Rating')->search(
+        {
+            biblionumber => $biblionumber,
+        }
+    );
+
+    my $sum   = $ratings->get_column('rating_value')->sum();
+    my $total = $ratings->count();
 
     my ( $avg, $avg_int ) = 0;
 
-    if ( $res->{sum} and $res->{total} ) {
-        eval { $avg = $res->{sum} / $res->{total} };
+    if ( $sum and $total ) {
+        eval { $avg = $sum / $total };
     }
 
     $avg_int = sprintf( "%.1f", $avg );
     $avg     = sprintf( "%.0f", $avg );
 
     my %rating_hash;
-    $rating_hash{rating_total}   = $res->{total} || 0;
-    $rating_hash{rating_avg}     = $avg || 0;
-    $rating_hash{rating_avg_int} = $avg_int ||0;
+    $rating_hash{rating_total}   = $total   || 0;
+    $rating_hash{rating_avg}     = $avg     || 0;
+    $rating_hash{rating_avg_int} = $avg_int || 0;
 
     if ($borrowernumber) {
-        my $q2 = qq|
-SELECT rating_value FROM ratings WHERE biblionumber = ? AND borrowernumber = ?|;
-        my $sth1 = C4::Context->dbh->prepare($q2);
-        $sth1->execute( $biblionumber, $borrowernumber );
-        my $res1 = $sth1->fetchrow_hashref();
-        $rating_hash{'rating_value'} = $res1->{"rating_value"};
+        my $rating = Koha::Database->new()->schema->resultset('Rating')->find(
+            {
+                biblionumber   => $biblionumber,
+                borrowernumber => $borrowernumber,
+            }
+        );
+        $rating_hash{'rating_value'} = $rating->rating_value();
     }
     else {
         $rating_hash{rating_borrowernumber} = undef;
         $rating_hash{rating_value}          = undef;
     }
 
-#### %rating_hash
     return \%rating_hash;
 }
 
@@ -199,13 +202,16 @@ is 0, then the rating will be deleted. If the value is out of the range of
 
 sub AddRating {
     my ( $biblionumber, $borrowernumber, $rating_value ) = @_;
-    my $query =
-      qq| INSERT INTO ratings (borrowernumber,biblionumber,rating_value)
-        VALUES (?,?,?)|;
-    my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute( $borrowernumber, $biblionumber, $rating_value );
-    my $rating = GetRating( $biblionumber, $borrowernumber );
-    return $rating;
+
+    my $rating = Koha::Database->new()->schema->resultset('Rating')->create(
+        {
+            biblionumber   => $biblionumber,
+            borrowernumber => $borrowernumber,
+            rating_value   => $rating_value
+        }
+    );
+
+    return GetRating( $biblionumber, $borrowernumber );
 }
 
 =head2 ModRating
@@ -218,12 +224,17 @@ Mod a rating for a bib
 
 sub ModRating {
     my ( $biblionumber, $borrowernumber, $rating_value ) = @_;
-    my $query =
-qq|UPDATE ratings SET rating_value = ? WHERE borrowernumber = ? AND biblionumber = ?|;
-    my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute( $rating_value, $borrowernumber, $biblionumber );
-    my $rating = GetRating( $biblionumber, $borrowernumber );
-    return $rating;
+
+    my $rating = Koha::Database->new()->schema->resultset('Rating')->find(
+        {
+            borrowernumber => $borrowernumber,
+            biblionumber   => $biblionumber
+        }
+    );
+
+    $rating->update( { rating_value => $rating_value } );
+
+    return GetRating( $biblionumber, $borrowernumber );
 }
 
 =head2 DelRating
@@ -236,13 +247,17 @@ Delete a rating for a bib
 
 sub DelRating {
     my ( $biblionumber, $borrowernumber ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query =
-      "delete from ratings where borrowernumber = ? and biblionumber = ?";
-    my $sth    = C4::Context->dbh->prepare($query);
-    my $rv     = $sth->execute( $borrowernumber, $biblionumber );
-    my $rating = GetRating( $biblionumber, undef );
-    return $rating;
+
+    my $rating = Koha::Database->new()->schema->resultset('Rating')->find(
+        {
+            borrowernumber => $borrowernumber,
+            biblionumber   => $biblionumber
+        }
+    );
+
+    $rating->delete() if $rating;
+
+    return GetRating($biblionumber);
 }
 
 1;
