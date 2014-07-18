@@ -92,7 +92,7 @@ sub GetContracts {
 
 =head2 GetContract
 
-$contract = GetContract( { contractnumber => $contractnumber } );
+$contract = GetContract( { contractnumber => $contractnumber } );
 
 Looks up the contract that has PRIMKEY (contractnumber) value $contractID
 
@@ -103,6 +103,8 @@ Returns a contract
 sub GetContract {
     my ($params) = @_;
     my $contractnumber = $params->{contractnumber};
+
+    return unless $contractnumber;
 
     my $contracts = GetContracts({
         contractnumber => $contractnumber,
