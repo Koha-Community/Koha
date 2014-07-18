@@ -9691,6 +9691,49 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+
+
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    my $number_of_orders_not_linked = $dbh->selectcol_arrayref(q|
+        SELECT COUNT(*)
+        FROM aqorders o
+        WHERE NOT EXISTS (
+            SELECT NULL
+            FROM aqbudgets b
+            WHERE b.budget_id = o.budget_id
+        );
+    |);
+
+    if ( $number_of_orders_not_linked->[0] > 0 ) {
+        $dbh->do(q|
+            INSERT INTO aqbudgetperiods(budget_period_startdate, budget_period_enddate, budget_period_active, budget_period_description, budget_period_total) VALUES ( CAST(NOW() AS date), CAST(NOW() AS date), 0, "WARNING: This budget has been automatically created by the updatedatabase script, please see bug 12601 for more information", 0)
+        |);
+        my $budget_period_id = $dbh->last_insert_id( undef, undef, 'aqbudgetperiods', undef );
+        $dbh->do(qq|
+            INSERT INTO aqbudgets(budget_code, budget_name, budget_amount, budget_period_id) VALUES ( "BACKUP_TMP", "WARNING: fund created by the updatedatabase script, please see bug 12601", 0, $budget_period_id );
+        |);
+        my $budget_id = $dbh->last_insert_id( undef, undef, 'aqbudgets', undef );
+        $dbh->do(qq|
+            UPDATE aqorders o
+            SET budget_id = $budget_id
+            WHERE NOT EXISTS (
+                SELECT NULL
+                FROM aqbudgets b
+                WHERE b.budget_id = o.budget_id
+            )
+        |);
+    }
+
+    $dbh->do(q|
+        ALTER TABLE aqorders
+        ADD CONSTRAINT aqorders_budget_id_fk FOREIGN KEY (budget_id) REFERENCES aqbudgets(budget_id) ON DELETE CASCADE ON UPDATE CASCADE
+    |);
+
+    print "Upgrade to $DBversion done (Bug 12601 - Add new foreign key aqorders.budget_id" . ( ( $number_of_orders_not_linked->[0] > 0 )  ? ' WARNING: temporary budget and fund have been created (search for "BACKUP_TMP"). At least one of your order was not linked to a budget' : '' ) . ")\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
