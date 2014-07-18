@@ -604,7 +604,7 @@ if (C4::Context->userenv && C4::Context->userenv->{'branch'}) {
     $userbranch = C4::Context->userenv->{'branch'};
 }
 
-if (defined ($data{'branchcode'}) and ( $op eq 'modify' || ( $op eq 'add' && $category_type eq 'C' ) )) {
+if (defined ($data{'branchcode'}) and ( $op eq 'modify' || $op eq 'duplicate' || ( $op eq 'add' && $category_type eq 'C' ) )) {
     $userbranch = $data{'branchcode'};
 }
 
