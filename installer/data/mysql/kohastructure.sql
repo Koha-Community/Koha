@@ -3060,7 +3060,6 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `cancellationreason` text default NULL, -- reason of cancellation
   `order_internalnote` mediumtext, -- notes related to this order line, made for staff
   `order_vendornote` mediumtext, -- notes related to this order line, made for vendor
-  `supplierreference` mediumtext, -- not used? always NULL
   `purchaseordernumber` mediumtext, -- not used? always NULL
   `basketno` int(11) default NULL, -- links this order line to a specific basket (aqbasket.basketno)
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this order line was last modified

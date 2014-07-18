@@ -338,7 +338,6 @@ my @expectedfields = qw(
   unitprice
   quantityreceived
   datecancellationprinted
-  supplierreference
   purchaseordernumber
   basketno
   timestamp
@@ -456,7 +455,6 @@ my @base_expectedfields = qw(
   biblioitemnumber
   datereceived
   orderstatus
-  supplierreference
   agerestriction
   budget_branchcode
   gstrate
@@ -577,7 +575,6 @@ ok(
   creationdate
   datereceived
   orderstatus
-  supplierreference
   isbn
   copyrightdate
   gstrate
