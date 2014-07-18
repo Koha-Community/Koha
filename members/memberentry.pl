@@ -338,8 +338,13 @@ if ($op eq 'save' || $op eq 'insert'){
     $extended_patron_attributes = parse_extended_patron_attributes($input);
     foreach my $attr (@$extended_patron_attributes) {
         unless (C4::Members::Attributes::CheckUniqueness($attr->{code}, $attr->{value}, $borrowernumber)) {
+            my $attr_info = C4::Members::AttributeTypes->fetch($attr->{code});
             push @errors, "ERROR_extended_unique_id_failed";
-            $template->param(ERROR_extended_unique_id_failed_value => "$attr->{code}/$attr->{value}");
+            $template->param(
+                ERROR_extended_unique_id_failed_code => $attr->{code},
+                ERROR_extended_unique_id_failed_value => $attr->{value},
+                ERROR_extended_unique_id_failed_description => $attr_info->description()
+            );
         }
     }
   }

@@ -207,8 +207,7 @@
 				<li id="ERROR_password_mismatch">Passwords do not match.</li>
 			[% END %]
             [% IF ( ERROR_extended_unique_id_failed ) %]
-                <li id="ERROR_extended_unique_id_failed">The attribute value 
-                    [% ERROR_extended_unique_id_failed_value %] is already in use by another patron record.</li>
+                <li id="ERROR_extended_unique_id_failed"><strong>[% ERROR_extended_unique_id_failed_description %]</strong> attribute value <i>[% ERROR_extended_unique_id_failed_value %]</i> is already in use by another patron record.</li>
 			[% END %]
 			</ul>
 		</div>
