@@ -1,5 +1,8 @@
 [% USE ColumnsSettings %]
 
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.colvis.css" />
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.colvis.js"></script>
+
 <script type="text/javascript">
 function KohaTable(selector, dt_parameters, columns_settings) {
     var id = 0;
