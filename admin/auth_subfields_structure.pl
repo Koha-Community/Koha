@@ -148,62 +148,31 @@ if ($op eq 'add_form') {
                     id      => "ohidden$i",
                     default => $data->{'hidden'}
                     };
-		#$row_data{ihidden} = CGI::scrolling_list(-name=>'ihidden',
-		#			-id=>"ihidden$i",
-		#			-values=>['0','1','2'],
-		#			-labels => {'0'=>'Show','1'=>'Show Collapsed',
-		#							'2' =>'Hide',
-		#							},
-		#			-default=>substr($data->{'hidden'},1,1),
-		#			-size=>1,
-		#			-multiple=>0,
-		#			);
-		#$row_data{ehidden} = CGI::scrolling_list(-name=>'ehidden',
-		#			-id=>"ehidden$i",
-		#			-values=>['0','1','2'],
-		#			-labels => {'0'=>'Show','1'=>'Show Collapsed',
-		#							'2' =>'Hide',
-		#							},
-		#			-default=>substr($data->{'hidden'}."  ",2,1),
-		#			-size=>1,
-		#			-multiple=>0,
-		#			);
 		$row_data{tagsubfieldinput} = "<input type=\"hidden\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" id=\"tagsubfield\" />";
 		$row_data{tagsubfield} = $data->{'tagsubfield'};
 		$row_data{liblibrarian} = CGI::escapeHTML($data->{'liblibrarian'});
 		$row_data{libopac} = CGI::escapeHTML($data->{'libopac'});
 		$row_data{seealso} = CGI::escapeHTML($data->{'seealso'});
-		$row_data{kohafield}= CGI::scrolling_list( -name=>"kohafield",
-					-id=>"kohafield$i",
-					-values=> \@kohafields,
-					-default=> "$data->{'kohafield'}",
-					-size=>1,
-					-multiple=>0,
-					);
-		$row_data{authorised_value}  = CGI::scrolling_list(-name=>'authorised_value',
-					-id=>"authorised_value$i",
-					-values=> \@authorised_values,
-					-default=>$data->{'authorised_value'},
-					-size=>1,
-		 			-tabindex=>'',
-					-multiple=>0,
-					);
-		$row_data{frameworkcode}  = CGI::scrolling_list(-name=>'frameworkcode',
-					-id=>"frameworkcode$i",
-					-values=> \@authtypes,
-					-default=>$data->{'frameworkcode'},
-					-size=>1,
-		 			-tabindex=>'',
-					-multiple=>0,
-					);
-		$row_data{value_builder}  = CGI::scrolling_list(-name=>'value_builder',
-					-id=>"value_builder$i",
-					-values=> \@value_builder,
-					-default=>$data->{'value_builder'},
-					-size=>1,
-		 			-tabindex=>'',
-					-multiple=>0,
-					);
+        $row_data{kohafield} = {
+                    id      => "kohafield$i",
+                    values  => \@kohafields,
+                    default => "$data->{'kohafield'}",
+                    };
+        $row_data{authorised_value} = {
+                    id      => "authorised_value$i",
+                    values  => \@authorised_values,
+                    default => $data->{'authorised_value'},
+        };
+        $row_data{frameworkcode} = {
+                    id      => "frameworkcode$i",
+                    values  => \@authtypes,
+                    default => $data->{'frameworkcode'},
+        };
+        $row_data{value_builder} = {
+                    id      => "value_builder$i",
+                    values  => \@value_builder,
+                    default => $data->{'value_builder'},
+        };
 		
 		$row_data{repeatable} = CGI::checkbox(-name=>"repeatable$i",
 	-checked => $data->{'repeatable'}?'checked':'',
@@ -229,63 +198,15 @@ if ($op eq 'add_form') {
 	for (my $i=1;$i<=$more_subfields;$i++) {
 		my %row_data;  # get a fresh hash for the row data
         $row_data{'new_subfield'} = 1;
-		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
-					-id => "tab$i",
-                                        -values =>
-                                        [ '-1', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10' ],
-                                        -labels => {
-                                            '-1' => 'ignore',
-                                            '0'  => '0',
-                                            '1'  => '1',
-                                            '2'  => '2',
-                                            '3'  => '3',
-                                            '4'  => '4',
-                                            '5'  => '5',
-                                            '6'  => '6',
-                                            '7'  => '7',
-                                            '8'  => '8',
-                                            '9'  => '9',
-                                        },
-					-default=>"",
-					-size=>1,
-		 			-tabindex=>'',
-					-multiple=>0,
-					);
-		$row_data{ohidden} = CGI::scrolling_list(-name=>'ohidden',
-					-id=>"ohidden$i",
-					#-values=>['0','1','2'],
-					#-labels => {'0'=>'Show','1'=>'Show Collapsed',
-					#				'2' =>'Hide',
-					#				},
-					-values=>['0','-5'],
-					-labels => {'0'=>'Show All','-5'=>'Hide All',},
-					#-default=>"0",
-					-default=>$data->{'hidden'},
-					#-default=>"-5",
-					-size=>1,
-					-multiple=>0,
-					);
+        $row_data{tab} = {
+                    id      => "tab$i",
+                    default => $data->{'tab'},
+                    };
+        $row_data{ohidden} = {
+                    id      => "ohidden$i",
+                    default => $data->{'hidden'}
+                    };
 
-		#$row_data{ihidden} = CGI::scrolling_list(-name=>'ihidden',
-		#			-id=>"ihidden$i",
-		#			-values=>['0','1','2'],
-		#			-labels => {'0'=>'Show','1'=>'Show Collapsed',
-		#							'2' =>'Hide',
-		#							},
-		#			-default=>"0",
-		#			-size=>1,
-		#			-multiple=>0,
-		#			);
-		#$row_data{ehidden} = CGI::scrolling_list(-name=>'ehidden',
-		#			-id=>"ehidden$i",
-		#			-values=>['0','1','2'],
-		#			-labels => {'0'=>'Show','1'=>'Show Collapsed',
-		#							'2' =>'Hide',
-		#							},
-		#			-default=>"0",
-		#			-size=>1,
-		#			-multiple=>0,
-		#			);
 		$row_data{tagsubfieldinput} = "<input type=\"text\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" size=\"1\" id=\"tagsubfield\" maxlength=\"1\" />";
                 $row_data{tagsubfieldinput} = 
                         "<label><input type=\"text\" name=\"tagsubfield\" value=\""
@@ -311,36 +232,27 @@ if ($op eq 'add_form') {
 			-checked => '',
 			-value => 1,
 			-label => '');
-		$row_data{kohafield}= CGI::scrolling_list( -name=>'kohafield',
-					-id => "kohafield$i",
-					-values=> \@kohafields,
-					-default=> "",
-					-size=>1,
-					-multiple=>0,
-					);
-		$row_data{frameworkcode}  = CGI::scrolling_list(-name=>'frameworkcode',
-					-id=>'frameworkcode',
-					-values=> \@authtypes,
-					-default=>$data->{'frameworkcode'},
-					-size=>1,
-		 			-tabindex=>'',
-					-multiple=>0,
-					);
-		$row_data{authorised_value}  = CGI::scrolling_list(-name=>'authorised_value',
-					-id => 'authorised_value',
-					-values=> \@authorised_values,
-					-size=>1,
-		 			-tabindex=>'',
-					-multiple=>0,
-					);
-		$row_data{value_builder}  = CGI::scrolling_list(-name=>'value_builder',
-					-id=>'value_builder',
-					-values=> \@value_builder,
-					-default=>$data->{'value_builder'},
-					-size=>1,
-		 			-tabindex=>'',
-					-multiple=>0,
-					);
+        $row_data{kohafield} = {
+                    id      => "kohafield$i",
+                    values  => \@kohafields,
+                    default => "",
+                    };
+        $row_data{authorised_value} = {
+                    id      => "authorised_value",
+                    values  => \@authorised_values,
+                    default => "",
+        };
+        $row_data{frameworkcode} = {
+                    id      => "frameworkcode",
+                    values  => \@authtypes,
+                    default => $data->{'frameworkcode'},
+        };
+        $row_data{value_builder} = {
+                    id      => "value_builder",
+                    values  => \@value_builder,
+                    default => $data->{'value_builder'},
+        };
+
 		$row_data{row} = $i;
 		push(@loop_data, \%row_data);
 	}

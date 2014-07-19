@@ -123,8 +123,6 @@ function displayMoreConstraint(numlayer){
                                     [%- END -%]
                                 </select>
                             </li>
-                            <!-- <li><label for="ihidden[% loo.row %]">Intranet:</label>[% loo.ihidden %] </li> -->
-                            <!-- <li><label for="ehidden[% loo.row %]">Editor:</label>[% loo.ehidden %] (see online help)</li> -->
                         </ol>
                     </fieldset>
                 </li>
@@ -143,9 +141,54 @@ function displayMoreConstraint(numlayer){
                 <li>
                     <fieldset><legend>Help input</legend>    
                         <ol>
-                            <li><label for="authorised_value[% loo.row %]">Authorized value:</label> [% loo.authorised_value %]</li>
-                            <li><label for="frameworkcode[% loo.row %]">Thesaurus:</label> [% loo.frameworkcode %]</li>
-                            <li><label for="value_builder[% loo.row %]">Plugin:</label> [% loo.value_builder %]</li>
+                            <li>
+                                <label for="kohafield[% loo.row %]">Koha field:</label>
+                                <select name="kohafield" id="[% loo.kohafield.id %]" size="1">
+                                [% FOREACH value IN loo.kohafield.values %]
+                                    [% IF ( value == loo.kohafield.default ) %]
+                                    <option value="[% value %]" selected>[% value %]</option>
+                                    [% ELSE %]
+                                    <option value="[% value %]">[% value %]</option>
+                                    [% END %]
+                                [% END %]
+                                </select>
+                            </li>
+                            <li>
+                                <label for="authorised_value[% loo.row %]">Authorized value:</label>
+                                <select name="authorised_value" id="[% loo.authorised_value.id %]" size="1">
+                                [% FOREACH value IN loo.authorised_value.values %]
+                                    [% IF ( value == loo.authorised_value.default ) %]
+                                    <option value="[% value %]" selected>[% value %]</option>
+                                    [% ELSE %]
+                                    <option value="[% value %]">[% value %]</option>
+                                    [% END %]
+                                [% END %]
+                                </select>
+                            </li>
+                            <li>
+                                <label for="frameworkcode[% loo.row %]">Thesaurus:</label>
+                                <select name="frameworkcode" id="[% loo.frameworkcode.id %]" size="1">
+                                [% FOREACH value IN loo.frameworkcode.values %]
+                                    [% IF ( value == loo.frameworkcode.default ) %]
+                                    <option value="[% value %]" selected>[% value %]</option>
+                                    [% ELSE %]
+                                    <option value="[% value %]">[% value %]</option>
+                                    [% END %]
+                                [% END %]
+                                </select>
+                            </li>
+                            <li>
+                                <label for="value_builder[% loo.row %]">Plugin:</label>
+                                <select name="value_builder" id="[% loo.value_builder.id %]" size="1">
+                                [% FOREACH value IN loo.value_builder.values %]
+                                    [% IF ( value == loo.value_builder.default ) %]
+                                    <option value="[% value %]" selected>[% value %]</option>
+                                    [% ELSE %]
+                                    <option value="[% value %]">[% value %]</option>
+                                    [% END %]
+                                [% END %]
+                                </select>
+                            </li>
                         </ol>
                     </fieldset>
                 </li>
