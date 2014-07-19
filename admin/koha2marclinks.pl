@@ -85,14 +85,10 @@ if ( $op eq 'add_form' ) {
         {
             push @marcarray, "$field $tagsubfield - $liblibrarian";
         }
-        my $marclist = CGI::scrolling_list(
-            -name   => 'marc',
-            -values => \@marcarray,
-            -default =>
-              "$defaulttagfield $defaulttagsubfield - $defaultliblibrarian",
-            -size     => 1,
-            -multiple => 0,
-        );
+        my $marclist = {
+            values  => \@marcarray,
+            default => "$defaulttagfield $defaulttagsubfield - $defaultliblibrarian",
+        };
         $template->param( "marclist$i" => $marclist );
     }
     $template->param(
@@ -154,19 +150,13 @@ q|select tagfield,tagsubfield,liblibrarian,kohafield from marc_subfield_structur
 "$script_name?op=add_form&amp;tablename=$tablename&amp;kohafield=$field";
         push( @loop_data, \%row_data );
     }
+    my $tablenames = {
+        values  => [ 'biblio', 'biblioitems', 'items' ],
+        default => $tablename,
+    };
     $template->param(
         loop      => \@loop_data,
-        tablename => CGI::scrolling_list(
-            -name   => 'tablename',
-            -values => [
-                'biblio',
-                'biblioitems',
-                'items',
-            ],
-            -default  => $tablename,
-            -size     => 1,
-            -multiple => 0
-        )
+        tablename => $tablenames,
     );
 }    #---- END $OP eq DEFAULT
 output_html_with_http_headers $input, $cookie, $template->output;

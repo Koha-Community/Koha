@@ -28,105 +28,31 @@
 [% IF ( add_form ) %]
 <h1>Connect [% tablename %].[% kohafield %] to a MARC subfield</h1>
     <p>Choose and validate 1 MARC subfield for <strong>[% tablename %].[% kohafield %]</strong>. That will modify <b>all frameworks</b> which is usually what you need, but you have been warned.</p>
-    <fieldset class="rows"><ol>
-<li><form action="[% script_name %]" method="post">	<input type="hidden" name="op" value="add_validate" />
-            <input type="hidden" name="tablename" value="[% tablename %]" />
-            <input type="hidden" name="kohafield" value="[% kohafield %]" />
-            <label>000s</label>
-            [% marclist0 %] <input type="submit" value="OK" /></form>
-        
-    </li>
-    <li>
-
-        	<form action="[% script_name %]" method="post">
-            <input type="hidden" name="op" value="add_validate" />
-            <input type="hidden" name="tablename" value="[% tablename %]" />
-            <label>100s</label>
-            [% marclist1 %]
-            <input type="hidden" name="kohafield" value="[% kohafield %]" /><input type="submit" value="OK" />	</form>
-        
-    </li>
-    <li>
-
-        
-                <form action="[% script_name %]" method="post"><input type="hidden" name="op" value="add_validate" />
-            <input type="hidden" name="tablename" value="[% tablename %]" />
-            <input type="hidden" name="kohafield" value="[% kohafield %]" />
-            <label>200s</label>
-            [% marclist2 %] <input type="submit" value="OK" /></form>
-        
-    </li>
-    <li>
-    
-        <form action="[% script_name %]" method="post">
-            <input type="hidden" name="op" value="add_validate" />
-            <input type="hidden" name="tablename" value="[% tablename %]" />
-            <input type="hidden" name="kohafield" value="[% kohafield %]" />
-            <label>300s</label>
-            [% marclist3 %] <input type="submit" value="OK" />	</form>
-        
-    </li>
-    <li>
-    
-        <form action="[% script_name %]" method="post">
-            <input type="hidden" name="op" value="add_validate" />
-            <input type="hidden" name="tablename" value="[% tablename %]" />
-            <input type="hidden" name="kohafield" value="[% kohafield %]" />
-            <label>400s</label>
-            [% marclist4 %] <input type="submit" value="OK" /></form>
-        
-    </li>
-    <li>
-
-        	<form action="[% script_name %]" method="post">
-            <input type="hidden" name="op" value="add_validate" />
-            <input type="hidden" name="tablename" value="[% tablename %]" />
-            <input type="hidden" name="kohafield" value="[% kohafield %]" />
-            <label>500s</label>
-            [% marclist5 %] <input type="submit" value="OK" /></form>
-        
-    </li>
-    <li>
-    
-        <form action="[% script_name %]" method="post">
-            <input type="hidden" name="op" value="add_validate" />
-            <input type="hidden" name="tablename" value="[% tablename %]" />
-            <input type="hidden" name="kohafield" value="[% kohafield %]" />
-            <label>600s</label>
-            [% marclist6 %] <input type="submit" value="OK" /></form>
-        
-    </li>
-    <li>
-    
-        <form action="[% script_name %]" method="post">
-            <input type="hidden" name="op" value="add_validate" />
-            <input type="hidden" name="tablename" value="[% tablename %]" />
-            <input type="hidden" name="kohafield" value="[% kohafield %]" />
-            <label>700s</label>
-            [% marclist7 %] <input type="submit" value="OK" /></form>
-        
-    </li>
-    <li>
-    
-        <form action="[% script_name %]" method="post">
-            <input type="hidden" name="op" value="add_validate" />
-            <input type="hidden" name="tablename" value="[% tablename %]" />
-            <input type="hidden" name="kohafield" value="[% kohafield %]" />
-            <label>800s</label>
-            [% marclist8 %] <input type="submit" value="OK" /></form>
-        
-    </li>
-    <li>
-    
-        <form action="[% script_name %]" method="post">
-            <input type="hidden" name="op" value="add_validate" />
-            <input type="hidden" name="tablename" value="[% tablename %]" />
-            <input type="hidden" name="kohafield" value="[% kohafield %]" />
-            <label>900s</label>
-            [% marclist9 %] <input type="submit" value="OK" /></form>
-        
-    </li>
-    </ol></fieldset>
+    <fieldset class="rows">
+        <ol>
+        [% FOR i IN [ 0 .. 9 ] %]
+            [% marclist = "marclist$i" %]
+            <li>
+                <form action="[% script_name %]" method="post">
+                <input type="hidden" name="op" value="add_validate" />
+                <input type="hidden" name="tablename" value="[% tablename %]" />
+                <input type="hidden" name="kohafield" value="[% kohafield %]" />
+                <label>[% i %]00s</label>
+                <select name="marc" id="marc" size="1" width="570" style="width: 570px;">
+                    [% FOREACH value IN $marclist.values %]
+                        [% IF ( value == $marclist.default ) %]
+                            <option value="[% value %]" selected>[% value %]</option>
+                        [% ELSE %]
+                            <option value="[% value %]">[% value %]</option>
+                        [% END %]
+                    [% END %]
+                </select>
+                <input type="submit" value="OK" />
+                </form>
+            </li>
+        [% END %]
+        </ol>
+    </fieldset>
 	<fieldset class="action">
             <form action="[% script_name %]" name="Aform" method="post">
                 <input type="hidden" name="op" value="add_validate" />
@@ -144,7 +70,18 @@
 
 <h1>Koha to MARC mapping [% tagfield %]</h1>
 <form action="[% script_name %]" method="post">
-<p>[% tablename %] <input type="submit" value="OK" /></p>
+<p>
+    <select name="tablename" id="tablename" size="1">
+    [% FOREACH value IN tablename.values %]
+        [% IF ( value == tablename.default ) %]
+        <option value=[% value %] selected>[% value %]</option>
+        [% ELSE %]
+        <option value=[% value %]>[% value %]</option>
+        [% END %]
+    [% END %]
+    </select>
+    <input type="submit" value="OK" />
+</p>
 </form>
 <table>
 <tr>
