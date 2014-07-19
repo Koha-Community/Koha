@@ -100,20 +100,13 @@ if ($op eq 'add_form') {
         $sth->execute($searchfield,$authtypecode);
         $data=$sth->fetchrow_hashref;
     }
-    my $sth = $dbh->prepare("select distinct category from authorised_values");
-    $sth->execute;
-    my @authorised_values;
-    push @authorised_values,"";
-    while ((my $category) = $sth->fetchrow_array) {
-        push @authorised_values, $category;
-    }
-    my $authorised_value  = CGI::scrolling_list(-name=>'authorised_value',
-            -id=>'authorised_value',
-            -values=> \@authorised_values,
-            -size=>1,
-            -multiple=>0,
-            -default => $data->{'authorised_value'},
-            );
+
+    my @authorised_values = @{C4::Koha::GetAuthorisedValueCategories()};    # function returns array ref, dereferencing
+    unshift @authorised_values, "";                                         # put empty value first
+    my $authorised_value = {
+        values  => \@authorised_values,
+        default => $data->{'authorised_value'},
+    };
 
     if ($searchfield) {
         $template->param('searchfield' => $searchfield);

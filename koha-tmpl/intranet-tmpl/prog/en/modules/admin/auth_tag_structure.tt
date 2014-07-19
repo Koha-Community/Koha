@@ -108,9 +108,21 @@
             [% ELSE %]
                 <input type="checkbox" name="mandatory" id="mandatory" value="1" />
             [% END %]
-            </li>
-        <li><label for="authorised_value">Authorized value: </label>[% authorised_value %] (if you select a value here, the indicators will be limited to the authorized value list)</li>
-</ol></fieldset>
+        </li>
+        <li><label for="authorised_value">Authorized value: </label>
+            <select name="authorised_value" id="authorised_value" size="1">
+            [% FOREACH value IN authorised_value.values %]
+                [% IF ( value == authorised_value.default ) %]
+                    <option value="[% value %]" selected>[% value %]</option>
+                [% ELSE %]
+                    <option value="[% value %]">[% value %]</option>
+                [% END %]
+            [% END %]
+            </select>
+            (if you select a value here, the indicators will be limited to the authorized value list)
+        </li>
+        </ol>
+        </fieldset>
         <fieldset class="action">
             <input type="submit" value="Submit" />
             <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode %]" class="cancel">Cancel</a>
