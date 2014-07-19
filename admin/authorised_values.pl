@@ -237,12 +237,10 @@ exit 0;
 
 sub default_form {
     # build categories list
-    my $sth = $dbh->prepare("select distinct category from authorised_values");
-    $sth->execute;
-    my @category_list;
+    my $category_list = C4::Koha::GetAuthorisedValueCategories();
+    my @category_list = @{$category_list};
     my %categories;    # a hash, to check that some hardcoded categories exist.
-    while ( my ($category) = $sth->fetchrow_array ) {
-        push( @category_list, $category );
+    for my $category ( @category_list ) {
         $categories{$category} = 1;
     }
 
@@ -252,23 +250,19 @@ sub default_form {
     }
 
 	#reorder the list
-	@category_list = sort {$a cmp $b} @category_list;
-	my $tab_list = CGI::scrolling_list(-name=>'searchfield',
-	        -id=>'searchfield',
-			-values=> \@category_list,
-			-default=>"",
-			-size=>1,
-			-multiple=>0,
-			);
+    @category_list = sort {lc($a) cmp lc($b)} @category_list;
 	if (!$searchfield) {
 		$searchfield=$category_list[0];
 	}
+    my $tab_list = {
+        values  => \@category_list,
+        default => $searchfield,
+    };
     my ($results) = AuthorizedValuesForCategory($searchfield);
     my $count = scalar(@$results);
 	my @loop_data = ();
 	# builds value list
-    my $dbh = C4::Context->dbh;
-    $sth = $dbh->prepare("SELECT b.branchcode, b.branchname FROM authorised_values_branches AS avb, branches AS b WHERE avb.branchcode = b.branchcode AND avb.av_id = ?");
+    my $sth = $dbh->prepare("SELECT b.branchcode, b.branchname FROM authorised_values_branches AS avb, branches AS b WHERE avb.branchcode = b.branchcode AND avb.av_id = ?");
 	for (my $i=0; $i < $count; $i++){
         $sth->execute( $results->[$i]{id} );
         my @selected_branches;
@@ -287,8 +281,10 @@ sub default_form {
 		push(@loop_data, \%row_data);
 	}
 
-	$template->param( loop     => \@loop_data,
-                          tab_list => $tab_list,
-                          category => $searchfield );
+    $template->param(
+            loop     => \@loop_data,
+            tab_list => $tab_list,
+            category => $searchfield,
+    );
 }
 

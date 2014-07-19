@@ -194,7 +194,19 @@ $(document).ready(function() {
 <div class="dialog alert">Could not add value &quot;[% duplicate_value %]&quot; for category &quot;[% duplicate_category %]&quot; &mdash; value already present.
 </div>
 [% END %]
-<form action="/cgi-bin/koha/admin/authorised_values.pl" method="post" id="category"><label for="searchfield">Show category: </label>[% tab_list %] <input type="submit" value="Submit" /></form>
+<form action="/cgi-bin/koha/admin/authorised_values.pl" method="post" id="category">
+    <label for="searchfield">Show category: </label>
+    <select name="searchfield" id="searchfield" size="1">
+    [% FOREACH value IN tab_list.values %]
+    [% IF ( value == tab_list.default ) %]
+        <option value="[% value %]" selected="selected">[% value %]</option>
+    [% ELSE %]
+        <option value="[% value %]">[% value %]</option>
+    [% END %]
+    [% END %]
+    </select>
+    <input type="submit" value="Submit" />
+</form>
 [% IF ( category == 'Bsort1' ) %]
     <p>An authorized value attached to patrons, that can be used for stats purposes</p>
 [% END %]
