@@ -229,7 +229,28 @@ function populateHiddenCheckboxes(tab) {
                 		<li><label for="libopac[% loo.row %]">Text for OPAC: </label><input type="text" id="libopac[% loo.row %]" name="libopac" value="[% loo.libopac %]" size="40" maxlength="80" /></li>
                 		<li><label for="repeatable[% loo.row %]">Repeatable: </label>[% loo.repeatable %]</li>
                 		<li><label for="mandatory[% loo.row %]">Mandatory: </label>[% loo.mandatory %]</li>
-                		<li><label for="tab[% loo.row %]">Managed in tab: </label>[% loo.tab %] (ignore means that the subfield does not display in the record editor)</li>
+                        <li><label for="tab[% loo.row %]">Managed in tab: </label>
+                            <select name="tab" tabindex="" size="1" id="[% loo.tab.id %]">
+                            [%- IF ( loo.tab.default ==  -1 ) -%]
+                                <option value="-1" selected="selected">ignore</option>
+                            [%- ELSE -%]
+                                <option value="-1">ignore</option>
+                            [%- END -%]
+                            [%- FOREACH t IN [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] -%]
+                                [%- IF ( loo.tab.default ==  t ) -%]
+                                <option value="[%- t -%]" selected="selected">[%- t -%]</option>
+                                [%- ELSE -%]
+                                <option value="[%- t -%]">[%- t -%]</option>
+                                [%- END -%]
+                            [%- END -%]
+                            [%- IF ( loo.tab.default ==  10 ) -%]
+                                <option value="10" selected="selected">items (10)</option>
+                            [%- ELSE -%]
+                                <option value="10">items (10)</option>
+                            [%- END -%]
+                            </select>
+                            (ignore means that the subfield does not display in the record editor)
+                        </li>
                 	</ol>
                     </fieldset>
                     </div>
@@ -256,7 +277,18 @@ function populateHiddenCheckboxes(tab) {
                 </li>
                 <li><label for="isurl[% loo.row %]">Is a URL:</label>[% loo.isurl %] (if checked, it means that the subfield is a URL and can be clicked)</li>
                 <li><label for="link[% loo.row %]">Link:</label><input type="text" id="link[% loo.row %]" name="link" value="[% loo.link %]" size="10" maxlength="80" /> (e.g., Title or Local-Number) <span class="error"><em>NOTE: If you change this value you must ask your administrator to run misc/batchRebuildBiblioTables.pl.</em></span></li>
-                <li><label for="kohafield[% loo.row %]">Koha link:</label>[% loo.kohafield %]</li>
+                <li>
+                    <label for="kohafield[% loo.row %]">Koha link:</label>
+                    <select name="kohafield" id="[% loo.kohafield.id %]" size="1">
+                    [% FOREACH value IN loo.kohafield.values %]
+                      [% IF ( value == loo.kohafield.default ) %]
+                        <option value="[% value %]" selected>[% value %]</option>
+                      [% ELSE %]
+                        <option value="[% value %]">[% value %]</option>
+                      [% END %]
+                    [% END %]
+                    </select>
+                </li>
 			</ol>
             </fieldset>
             </div>
@@ -264,9 +296,42 @@ function populateHiddenCheckboxes(tab) {
             <div id="oth[% loo.urisubfieldcode %]">
             <fieldset class="rows">
                     	<ol>
-                    		<li><label for="authorised_value[% loo.row %]">Authorized value:</label>[% loo.authorised_value %]</li>
-                    		<li><label for="authtypecode[% loo.row %]">Thesaurus:</label>[% loo.authtypes %]</li>
-                    		<li><label for="value_builder[% loo.row %]">Plugin:</label>[% loo.value_builder %]</li>
+                            <li>
+                                <label for="authorised_value[% loo.row %]">Authorized value:</label>
+                                <select name="authorised_value" id="[% loo.authorised_value.id %]" size="1">
+                                [% FOREACH value IN loo.authorised_value.values %]
+                                    [% IF ( value == loo.authorised_value.default ) %]
+                                    <option value="[% value %]" selected>[% value %]</option>
+                                    [% ELSE %]
+                                    <option value="[% value %]">[% value %]</option>
+                                    [% END %]
+                                [% END %]
+                                </select>
+                            </li>
+                            <li>
+                                <label for="authtypecode[% loo.row %]">Thesaurus:</label>
+                                <select name="authtypecode" id="[% loo.authtypes.id %]" size="1">
+                                [% FOREACH value IN loo.authtypes.values %]
+                                    [% IF ( value == loo.authtypes.default ) %]
+                                    <option value="[% value %]" selected>[% value %]</option>
+                                    [% ELSE %]
+                                    <option value="[% value %]">[% value %]</option>
+                                    [% END %]
+                                [% END %]
+                                </select>
+                            </li>
+                            <li>
+                                <label for="value_builder[% loo.row %]">Plugin:</label>
+                                <select name="value_builder" id="[% loo.value_builder.id %]" size="1">
+                                [% FOREACH value IN loo.value_builder.values %]
+                                    [% IF ( value == loo.value_builder.default ) %]
+                                    <option value="[% value %]" selected>[% value %]</option>
+                                    [% ELSE %]
+                                    <option value="[% value %]">[% value %]</option>
+                                    [% END %]
+                                [% END %]
+                                </select>
+                            </li>
                     	</ol>
             </fieldset>
             </div>

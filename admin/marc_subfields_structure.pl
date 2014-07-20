@@ -179,29 +179,11 @@ if ( $op eq 'add_form' ) {
         my %row_data;    # get a fresh hash for the row data
         $row_data{defaultvalue} = $data->{defaultvalue};
         $row_data{maxlength} = $data->{maxlength};
-        $row_data{tab} = CGI::scrolling_list(
-            -name   => 'tab',
-            -id     => "tab$i",
-            -values =>
-              [ '-1', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10' ],
-            -labels => {
-                '-1' => 'ignore',
-                '0'  => '0',
-                '1'  => '1',
-                '2'  => '2',
-                '3'  => '3',
-                '4'  => '4',
-                '5'  => '5',
-                '6'  => '6',
-                '7'  => '7',
-                '8'  => '8',
-                '9'  => '9',
-                '10' => 'items (10)',
-            },
-            -default  => $data->{'tab'},
-            -size     => 1,
-            -multiple => 0,
-        );
+        $row_data{tab} = {
+                    id      => "tab$i",
+                    default => $data->{'tab'},
+                    };
+
         $row_data{tagsubfield} =
             $data->{'tagsubfield'}
           . "<input type=\"hidden\" name=\"tagsubfield\" value=\""
@@ -212,38 +194,26 @@ if ( $op eq 'add_form' ) {
         $row_data{liblibrarian} = CGI::escapeHTML( $data->{'liblibrarian'} );
         $row_data{libopac}      = CGI::escapeHTML( $data->{'libopac'} );
         $row_data{seealso}      = CGI::escapeHTML( $data->{'seealso'} );
-        $row_data{kohafield}    = CGI::scrolling_list(
-            -name     => "kohafield",
-            -id       => "kohafield$i",
-            -values   => \@kohafields,
-            -default  => "$data->{'kohafield'}",
-            -size     => 1,
-            -multiple => 0,
-        );
-        $row_data{authorised_value} = CGI::scrolling_list(
-            -name     => "authorised_value",
-            -id       => "authorised_value$i",
-            -values   => \@authorised_values,
-            -default  => $data->{'authorised_value'},
-            -size     => 1,
-            -multiple => 0,
-        );
-        $row_data{value_builder} = CGI::scrolling_list(
-            -name     => "value_builder",
-            -id       => "value_builder$i",
-            -values   => \@value_builder,
-            -default  => $data->{'value_builder'},
-            -size     => 1,
-            -multiple => 0,
-        );
-        $row_data{authtypes} = CGI::scrolling_list(
-            -name     => "authtypecode",
-            -id       => "authtypecode$i",
-            -values   => \@authtypes,
-            -default  => $data->{'authtypecode'},
-            -size     => 1,
-            -multiple => 0,
-        );
+        $row_data{kohafield} = {
+                    id      => "kohafield$i",
+                    values  => \@kohafields,
+                    default => "$data->{'kohafield'}",
+                    };
+        $row_data{authorised_value} = {
+                    id      => "authorised_value$i",
+                    values  => \@authorised_values,
+                    default => $data->{'authorised_value'},
+        };
+        $row_data{value_builder} = {
+                    id      => "value_builder$i",
+                    values  => \@value_builder,
+                    default => $data->{'value_builder'},
+        };
+        $row_data{authtypes} = {
+                    id      => "authtypecode$i",
+                    values  => \@authtypes,
+                    default => $data->{'authtypecode'},
+        };
         $row_data{repeatable} = CGI::checkbox(
             -name     => "repeatable$i",
             -checked  => $data->{'repeatable'} ? 'checked' : '',
@@ -278,29 +248,10 @@ if ( $op eq 'add_form' ) {
         $row_data{'subfieldcode'} = '';
         $row_data{'maxlength'} = 9999;
 
-        $row_data{tab} = CGI::scrolling_list(
-            -name   => 'tab',
-            -id     => "tab$i",
-            -values =>
-              [ '-1', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10' ],
-            -labels => {
-                '-1' => 'ignore',
-                '0'  => '0',
-                '1'  => '1',
-                '2'  => '2',
-                '3'  => '3',
-                '4'  => '4',
-                '5'  => '5',
-                '6'  => '6',
-                '7'  => '7',
-                '8'  => '8',
-                '9'  => '9',
-                '10' => 'items (10)',
-            },
-            -default  => "",
-            -size     => 1,
-            -multiple => 0,
-        );
+        $row_data{tab} = {
+                    id      => "tab$i",
+                    default => $data->{'tab'},
+                    };
         $row_data{tagsubfield} =
             "<input type=\"text\" name=\"tagsubfield\" value=\""
           . $data->{'tagsubfield'}
@@ -308,14 +259,11 @@ if ( $op eq 'add_form' ) {
         $row_data{liblibrarian} = "";
         $row_data{libopac}      = "";
         $row_data{seealso}      = "";
-        $row_data{kohafield}    = CGI::scrolling_list(
-            -name     => 'kohafield',
-            -id       => "kohafield$i",
-            -values   => \@kohafields,
-            -default  => "",
-            -size     => 1,
-            -multiple => 0,
-        );
+        $row_data{kohafield} = {
+                    id      => "kohafield$i",
+                    values  => \@kohafields,
+                    default => "$data->{'kohafield'}",
+                    };
         $row_data{hidden}     = "";
         $row_data{repeatable} = CGI::checkbox(
             -name     => "repeatable$i",
@@ -338,28 +286,21 @@ if ( $op eq 'add_form' ) {
             -value    => 1,
             -label    => ''
         );
-        $row_data{value_builder} = CGI::scrolling_list(
-            -name     => "value_builder",
-            -id       => "value_builder$i",
-            -values   => \@value_builder,
-            -default  => $data->{'value_builder'},
-            -size     => 1,
-            -multiple => 0,
-        );
-        $row_data{authorised_value} = CGI::scrolling_list(
-            -name     => "authorised_value",
-            -id       => "authorised_value$i",
-            -values   => \@authorised_values,
-            -size     => 1,
-            -multiple => 0,
-        );
-        $row_data{authtypes} = CGI::scrolling_list(
-            -name     => "authtypecode",
-            -id       => "authtypecode$i",
-            -values   => \@authtypes,
-            -size     => 1,
-            -multiple => 0,
-        );
+        $row_data{value_builder} = {
+                    id      => "value_builder$i",
+                    values  => \@value_builder,
+                    default => $data->{'value_builder'},
+        };
+        $row_data{authorised_value} = {
+                    id      => "authorised_value$i",
+                    values  => \@authorised_values,
+                    default => $data->{'authorised_value'},
+        };
+        $row_data{authtypes} = {
+                    id      => "authtypecode$i",
+                    values  => \@authtypes,
+                    default => $data->{'authtypecode'},
+        };
         $row_data{link}   = CGI::escapeHTML( $data->{'link'} );
         $row_data{row}    = $i;
         push( @loop_data, \%row_data );
