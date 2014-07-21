@@ -105,9 +105,9 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                 <label for="branch">Library: </label>
                 <select id="branch" name="branch">
                 [% IF ( new_detail.branchcode == '' ) %]
-                    <option value="" selected="selected">All Libraries</option>
+                    <option value="" selected="selected">All libraries</option>
                 [% ELSE %]
-                    <option value=""         >All Libraries</option>
+                    <option value=""         >All libraries</option>
                 [% END %]
                 [% FOREACH branch_item IN branch_list %]
                 [% IF ( branch_item.value.branchcode == new_detail.branchcode ) %]
@@ -178,9 +178,9 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             <label for="branch">Library: </label>
             <select id="branch" name="branch">
                 [% IF ( branchcode == "" ) %]
-                <option value="" selected="selected">All Libraries</option>
+                <option value="" selected="selected">All libraries</option>
                 [% ELSE %]
-                <option value=""         >All Libraries</option>
+                <option value=""         >All libraries</option>
                 [% END %]
                 [% FOREACH branch_item IN branch_list %]
                 [% IF ( branch_item.value.branchcode == branchcode ) %]
@@ -232,7 +232,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                                 [% END %]
                              </td>
                             <td>[% IF ( opac_new.branchcode == "" ) -%]
-                                All Libraries
+                                All libraries
                                 [% ELSE %][% opac_new.branchname %]
                                 [% END %]</td>
                             <td>[% opac_new.number %]</td>
