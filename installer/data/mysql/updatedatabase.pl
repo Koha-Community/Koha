@@ -11464,7 +11464,17 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     foreach my $subscription (@subscriptions) {
         my $number_pattern = $subscription->numberpattern();
 
-        my @splits = split( /\{[XYZ]\}/, $number_pattern->numberingmethod() );
+        my $numbering_method = $number_pattern->numberingmethod();
+        # Get all the data between the enumeration values, we need
+        # to split each enumeration string based on these values.
+        my @splits = split( /\{[XYZ]\}/, $numbering_method );
+        # Get the order in which the X Y and Z values are used
+        my %indexes;
+        foreach my $i (qw(X Y Z)) {
+            $indexes{$i} = index( $numbering_method, "{$i}" );
+            delete $indexes{$i} if $indexes{$i} == -1;
+        }
+        my @indexes = sort { $indexes{$a} <=> $indexes{$b} } keys(%indexes);
 
         my @serials =
           $schema->resultset('Serial')
@@ -11472,24 +11482,29 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 
         foreach my $serial (@serials) {
             my $serialseq = $serial->serialseq();
-            my ( $x, $y, $z );
+            my %enumeration_data;
 
             ## We cannot split on multiple values at once,
             ## so let's replace each of those values with __SPLIT__
             if (@splits) {
                 map( $serialseq =~ s/$_/__SPLIT__/, @splits );
-                ( undef, $x, $y, $z ) = split( /__SPLIT__/, $serialseq );
+                (
+                    undef,
+                    $enumeration_data{ $indexes[0] },
+                    $enumeration_data{ $indexes[1] },
+                    $enumeration_data{ $indexes[2] }
+                ) = split( /__SPLIT__/, $serialseq );
             }
             else
-            {    ## Nothing to split on means the only thing in serialseq is {X}
-                $x = $serialseq;
+            {    ## Nothing to split on means the only thing in serialseq is a single placeholder e.g. {X}
+                $enumeration_data{ $indexes[0] } = $serialseq;
             }
 
             $serial->update(
                 {
-                    serialseq_x => $x,
-                    serialseq_y => $y,
-                    serialseq_z => $z,
+                    serialseq_x => $enumeration_data{'X'},
+                    serialseq_y => $enumeration_data{'Y'},
+                    serialseq_z => $enumeration_data{'Z'},
                 }
             );
         }
