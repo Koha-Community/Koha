@@ -17,10 +17,11 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
+$dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM borrowers|);
+$dbh->do(q|DELETE FROM items|);
 $dbh->do(q|DELETE FROM branches|);
 $dbh->do(q|DELETE FROM biblio|);
-$dbh->do(q|DELETE FROM items|);
 $dbh->do(q|DELETE FROM categories|);
 
 my $branchcode = 'B';
