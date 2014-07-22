@@ -251,6 +251,7 @@ sub SimpleSearch {
                 $zoom_queries[$i] = new ZOOM::Query::PQF( $query, $zconns[$i]);
             } else {
                 $query =~ s/:/=/g unless $options{skip_normalize};
+                $query =~ s/\?//g; #Remove ? because this error is thrown :> CCL parsing error (10014) Right truncation not supported ZOOM for query: title=MISSÄ ON JATKOT? at /C4/Search.pm line 276.
                 $zoom_queries[$i] = new ZOOM::Query::CCL2RPN( $query, $zconns[$i]);
             }
             $tmpresults[$i] = $zconns[$i]->search( $zoom_queries[$i] );
@@ -327,7 +328,7 @@ sub getRecords {
     my (
         $koha_query,       $simple_query, $sort_by_ref,    $servers_ref,
         $results_per_page, $offset,       $expanded_facet, $branches,
-        $itemtypes,        $query_type,   $scan,           $opac
+        $itemtypes,        $query_type,   $scan,           $opac,        $availableLimit
     ) = @_;
 
     my @servers = @$servers_ref;
@@ -348,6 +349,15 @@ sub getRecords {
     my $facets         = getFacets();
 
     my @facets_loop;    # stores the ref to array of hashes for template facets loop
+
+    #Get the required marc tags for determining branch-based availability.
+    my ( $holdingbranchField, $holdingbranchSubfield, $onloanField, $onloanSubfield, $notforloanField, $notforloanSubfield );
+    if ($availableLimit) {
+        ( $holdingbranchField, $holdingbranchSubfield ) = GetMarcFromKohaField( "items.holdingbranch" );
+        ( $onloanField, $onloanSubfield ) = GetMarcFromKohaField( "items.onloan" );
+        ( $notforloanField, $notforloanSubfield ) = GetMarcFromKohaField( "items.notforloan" );
+    }
+
 
     ### LOOP THROUGH THE SERVERS
     for ( my $i = 0 ; $i < @servers ; $i++ ) {
@@ -452,6 +462,13 @@ sub getRecords {
                     $times = $size;
                 }
 
+                #If we are using pagination to display other resultset pages.
+                #The results_hash needs to contain Records starting from the given
+                #offset.
+                if ($offset > 0) {
+                    $results_hash->{'RECORDS'}->[$offset-1] = undef;
+                }
+
                 for ( my $j = $offset ; $j < $times ; $j++ ) {
                     my $records_hash;
                     my $record;
@@ -493,9 +510,19 @@ sub getRecords {
 
                     # not an index scan
                     else {
-                        $record = $results[ $i - 1 ]->record($j)->raw();
+                        $record = $results[ $i - 1 ]->record($j);
+                        last() unless $record;
+                        $record = $record->raw();
                         # warn "RECORD $j:".$record;
-                        $results_hash->{'RECORDS'}[$j] = $record;
+
+                        if (  $availableLimit  && #Availablelimit is 1 if there is no limit=branch:FTL given
+                              not(isAvailableFromMARCXML( $record, $availableLimit, $holdingbranchField, $holdingbranchSubfield, $onloanField, $onloanSubfield, $notforloanField, $notforloanSubfield )) ) {
+                            $times++; #Skip this record, but make sure we still get the $results_per_page results to display.
+                            $results_hash->{'hits'}--; #This wasn't a hit after all :(
+                            next();
+                        }
+
+                        push @{$results_hash->{'RECORDS'}}, $record;
                     }
 
                 }
@@ -1698,8 +1725,8 @@ sub buildQuery {
 ## 'available' is defined as (items.onloan is NULL) and (items.itemlost = 0)
 ## In English:
 ## all records not indexed in the onloan register (zebra) and all records with a value of lost equal to 0
-            $availability_limit .=
-"( ( allrecords,AlwaysMatches='' not onloan,AlwaysMatches='') and (lost,st-numeric=0) )"; #or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='')) )";
+#            $availability_limit .=
+#"( ( allrecords,AlwaysMatches='' not onloan,AlwaysMatches='') and (lost,st-numeric=0) )"; #or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='')) )";
             $limit_cgi  .= "&limit=available";
             $limit_desc .= "";
         }
@@ -2524,6 +2551,42 @@ sub new_record_from_zebra {
         return $marc_record;
     }
 
+}
+
+#Check each item in the MARCXML-String for onloan or notforloan
+#Return 1 when the first available item is found.
+#PARAM $limitHoldingbranch, counterintuitively is 1, if no holdingbranch based limiting is desired,
+#                           and the holdingbranch code if we want to limit by branch.
+
+sub isAvailableFromMARCXML {
+    my ( $recordXML, $limitHoldingbranch, $holdingbranchField, $holdingbranchSubfield, $onloanField, $onloanSubfield, $notforloanField, $notforloanSubfield ) = @_;
+
+    my @itemsFields = $recordXML =~ /<datafield tag="$holdingbranchField".*?>(.*?)<\/datafield>/sg;
+
+    foreach my $fieldStr (@itemsFields) {
+        my ($itemHoldingbranch, $itemOnloan, $itemNotforloan);
+
+        if ($fieldStr =~ /<subfield code="$onloanSubfield">(.*?)<\/subfield>/s) {
+            $itemOnloan = $1;
+            next() if $itemOnloan;
+        }
+        if ($fieldStr =~ /<subfield code="$notforloanSubfield">(.*?)<\/subfield>/s) {
+            $itemNotforloan = $1;
+            next() if $itemNotforloan;
+        }
+        if ($limitHoldingbranch != 1) { #Check for holdingbranch-based availability.
+            if ($fieldStr =~ /<subfield code="$holdingbranchSubfield">(.*?)<\/subfield>/s) {
+                $itemHoldingbranch = $1;
+            }
+            if ($itemHoldingbranch && $itemHoldingbranch eq $limitHoldingbranch) {
+                return 1; #Available ! wooee!
+            }
+        }
+        else {
+            return 1; #We are not checking for holdingbranch-based availability, so any availability is fine!
+        }
+    }
+    return 0;
 }
 
 END { }    # module clean-up code here (global destructor)

@@ -405,12 +405,19 @@ if($params->{'multibranchlimit'}) {
     push @limits, $multibranch if ($multibranch ne  '()');
 }
 
-my $available;
+my ($available, $availableBranch);
 foreach my $limit(@limits) {
     if ($limit =~/available/) {
         $available = 1;
     }
+    elsif ($limit =~ /branch:(.*?)$/) { #Catch holdingbranch from facets and branch from advanced search
+        $availableBranch = $1;
+    }
 }
+if ($availableBranch && $available) {
+    $available = $availableBranch;
+}
+undef $availableBranch; #Don't pollute namespace!
 $template->param(available => $available);
 
 # append year limits if they exist
@@ -520,7 +527,7 @@ eval {
     ( $error, $results_hashref, $facets ) = $searcher->search_compat(
         $query,            $simple_query, \@sort_by,       \@servers,
         $results_per_page, $offset,       $expanded_facet, undef,
-        $itemtypes,        $query_type,   $scan
+        $itemtypes,        $query_type,   $scan,    $available
     );
 };
 
