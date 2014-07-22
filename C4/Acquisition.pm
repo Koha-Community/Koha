@@ -28,7 +28,6 @@ use C4::Suggestions;
 use C4::Biblio;
 use C4::Contract;
 use C4::Debug;
-use C4::SQLHelper qw(InsertInTable UpdateInTable);
 use C4::Bookseller qw(GetBookSellerFromId);
 use C4::Templates qw(gettemplate);
 
@@ -1273,18 +1272,19 @@ sub NewOrder {
         croak "Mandatory parameter $key missing" unless $orderinfo->{$key};
     }
 
-    if ( defined $orderinfo->{subscription} && $orderinfo->{'subscription'} eq 'yes' ) {
-        $orderinfo->{'subscription'} = 1;
-    } else {
-        $orderinfo->{'subscription'} = 0;
-    }
     $orderinfo->{'entrydate'} ||= C4::Dates->new()->output("iso");
     if (!$orderinfo->{quantityreceived}) {
         $orderinfo->{quantityreceived} = 0;
     }
 
-    my $ordernumber=InsertInTable("aqorders",$orderinfo);
-    if (not $orderinfo->{parent_ordernumber}) {
+    # get only the columns of Aqorder
+    my $schema = Koha::Database->new()->schema;
+    my $columns = ' '.join(' ', $schema->source('Aqorder')->columns).' ';
+    my $new_order = { map { $columns =~ / $_ / ? ($_ => $orderinfo->{$_}) : () } keys(%$orderinfo) };
+
+    my $rs = $schema->resultset('Aqorder');
+    my $ordernumber = $rs->create($new_order)->id;
+    if (not $new_order->{parent_ordernumber}) {
         my $sth = $dbh->prepare("
             UPDATE aqorders
             SET parent_ordernumber = ordernumber
@@ -1292,7 +1292,7 @@ sub NewOrder {
         ");
         $sth->execute($ordernumber);
     }
-    return ( $orderinfo->{'basketno'}, $ordernumber );
+    return ( $new_order->{'basketno'}, $ordernumber );
 }
 
 
