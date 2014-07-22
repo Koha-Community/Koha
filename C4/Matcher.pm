@@ -691,37 +691,48 @@ sub get_matches {
             }
         }
 
+        #Collect the results
         if ( defined $error ) {
             warn "search failed ($query) $error";
         }
         else {
-            foreach my $matched ( @{$searchresults} ) {
-                $matches{$matched} += $matchpoint->{'score'};
+            if ($self->{'record_type'} eq 'authority') {
+                foreach my $matched ( @{$searchresults} ) {
+                    $matches{$matched}->{score} += $matchpoint->{'score'};
+                }
             }
+            elsif ($self->{'record_type'} eq 'biblio') {
+                foreach my $matched ( @{$searchresults} ) {
+                    my $record = C4::Search::new_record_from_zebra( 'biblioserver', $matched );
+                    $matches{$record}->{score} += $matchpoint->{'score'}; #Using $record HASH string representation as the key :)
+                    $matches{$record}->{record} = $record;
+                }
+            }
+
         }
     }
 
     # get rid of any that don't meet the threshold
-    %matches = map { ($matches{$_} >= $self->{'threshold'}) ? ($_ => $matches{$_}) : () } keys %matches;
+    %matches = map { ($matches{$_}->{score} >= $self->{'threshold'}) ? ($_ => $matches{$_}) : () } keys %matches;
 
     # get rid of any that don't meet the required checks
-    %matches = map { _passes_required_checks($source_record, $_, $self->{'required_checks'}) ?  ($_ => $matches{$_}) : () } 
+    %matches = map { _passes_required_checks($source_record, $matches{$_}->{record}, $self->{'required_checks'}) ?  ($_ => $matches{$_}) : () }
                 keys %matches unless ($self->{'record_type'} eq 'auth');
 
     my @results = ();
     if ($self->{'record_type'} eq 'biblio') {
         require C4::Biblio;
-        foreach my $marcblob (keys %matches) {
-            my $target_record = C4::Search::new_record_from_zebra('biblioserver',$marcblob);
+        foreach my $hashkey (keys %matches) {
+            my $target_record = $matches{$hashkey}->{record};
             my $record_number;
             my $result = C4::Biblio::TransformMarcToKoha($target_record, '');
             $record_number = $result->{'biblionumber'};
-            push @results, { 'record_id' => $record_number, 'score' => $matches{$marcblob} };
+            push @results, { 'record_id' => $record_number, 'score' => $matches{$hashkey}->{score}, 'target_record' => $target_record, 'target_biblio' => $result };
         }
     } elsif ($self->{'record_type'} eq 'authority') {
         require C4::AuthoritiesMarc;
         foreach my $authid (keys %matches) {
-            push @results, { 'record_id' => $authid, 'score' => $matches{$authid} };
+            push @results, { 'record_id' => $authid, 'score' => $matches{$authid}->{score} };
         }
     }
     @results = sort {
@@ -768,8 +779,7 @@ sub dump {
 }
 
 sub _passes_required_checks {
-    my ($source_record, $target_blob, $matchchecks) = @_;
-    my $target_record = MARC::Record->new_from_usmarc($target_blob); # FIXME -- need to avoid parsing record twice
+    my ($source_record, $target_record, $matchchecks) = @_;
 
     # no checks supplied == automatic pass
     return 1 if $#{ $matchchecks } == -1;
