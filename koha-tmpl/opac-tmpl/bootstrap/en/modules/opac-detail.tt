@@ -1847,6 +1847,10 @@
 //]]>
 </script>
 
+[% IF ( Koha.Preference( 'AddComponentPartRecordsToDetailedViews' ) == 1 ) %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/componentPart.js"></script>
+[% END %]
+
 [% IF OPACPopupAuthorsSearch %]
     <script type="text/javascript">
     //<![CDATA[

@@ -44,6 +44,7 @@
         <xsl:variable name="leader6" select="substring($leader,7,1)"/>
         <xsl:variable name="leader7" select="substring($leader,8,1)"/>
         <xsl:variable name="leader19" select="substring($leader,20,1)"/>
+        <xsl:variable name="controlField003" select="marc:controlfield[@tag=003]"/>
         <xsl:variable name="controlField008" select="marc:controlfield[@tag=008]"/>
         <xsl:variable name="materialTypeCode">
             <xsl:choose>
@@ -108,6 +109,37 @@
                 </xsl:call-template>
             </h1>
         </xsl:if>
+
+        <!--Component part records: Displaying title and author of component part records if available. These are floated to right by css. -->
+        <xsl:if test="marc:componentPartRecords/marc:componentPart">
+                 <span class="componentPartRecordsContainer results_summary">
+                       <h5>Component part records:</h5>
+                       <xsl:for-each select="marc:componentPartRecords/marc:componentPart">
+                         <span class="componentPartRecord">
+                                 <span class="componentPartRecordTitle">
+                                       <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of select="marc:biblionumber" /></xsl:attribute>
+                                          <xsl:choose>
+                                            <xsl:when test="marc:title">
+                                              <xsl:value-of select="substring-before( concat(marc:title, '/'), '/')" />
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                              <xsl:value-of select="substring-before( concat(marc:unititle, '/'), '/')" />
+                                            </xsl:otherwise>
+                                          </xsl:choose>
+                                       </a>
+                                 </span>
+                               <xsl:if test="marc:author">
+                                 -
+                                 <span class="componentPartRecordAuthor">
+                                       <xsl:value-of select="marc:author" />
+                                 </span>
+                               </xsl:if>
+                         </span>
+                         <br />
+                       </xsl:for-each>
+                 </span>
+               </xsl:if>
+
 
         <!--Bug 13381 -->
         <xsl:if test="marc:datafield[@tag=245]">
@@ -923,7 +955,7 @@
                 </xsl:variable>
             <xsl:choose>
                 <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
-                    <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template></xsl:attribute>
+                    <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template> and cni:<xsl:value-of select="$controlField003"/></xsl:attribute>
                         <xsl:value-of select="translate($f773, '()', '')"/>
                     </a>
                     <xsl:if test="marc:subfield[@code='g']"><xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='g']"/></xsl:if>

@@ -245,6 +245,18 @@ function verify_images() {
 <script type="text/javascript" src="[% interface %]/js/browser_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript">
 //<![CDATA[
+
+    //Setting the height of the component part record container to prevent overflow
+    $(document).ready(function() {
+        var containerHeight = $("#catalogue_detail_biblio").height();
+        $(".componentPartRecordsContainer").height( containerHeight );
+    });
+    $(window).resize(function() {
+        var containerHeight = $("#catalogue_detail_biblio").height();
+        $(".componentPartRecordsContainer").height( containerHeight );
+    });
+
+
     var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
     browser.show();
 
