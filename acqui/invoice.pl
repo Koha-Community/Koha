@@ -149,7 +149,7 @@ $template->param(
     invoicenumber    => $details->{'invoicenumber'},
     suppliername     => $details->{'suppliername'},
     booksellerid     => $details->{'booksellerid'},
-    datereceived     => $details->{'datereceived'},
+    shipmentdate     => $details->{'shipmentdate'},
     billingdate      => $details->{'billingdate'},
     invoiceclosedate => $details->{'closedate'},
     shipmentcost     => $details->{'shipmentcost'},
