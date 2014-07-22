@@ -814,8 +814,10 @@ elsif ($phase eq 'Export'){
                 my $table = $doc->getTable(0);
                 my @headers = header_cell_values( $sth );
                 my $rows = $sth->fetchall_arrayref();
-                my ( $nb_rows, $nb_cols ) = ( scalar(@$rows), scalar(@{$rows->[0]}) );
-                $doc->expandTable( $table, $nb_rows, $nb_cols );
+                my ( $nb_rows, $nb_cols ) = ( 0, 0 );
+                $nb_rows = @$rows;
+                $nb_cols = @headers;
+                $doc->expandTable( $table, $nb_rows + 1, $nb_cols );
 
                 my $row = $doc->getRow( $table, 0 );
                 my $j = 0;
@@ -823,13 +825,14 @@ elsif ($phase eq 'Export'){
                     $doc->cellValue( $row, $j, $header );
                     $j++;
                 }
-                for ( my $i = 1; $i < $nb_rows +1 ; $i++ ) {
+                my $i = 1;
+                for ( @$rows ) {
                     $row = $doc->getRow( $table, $i );
                     for ( my $j = 0 ; $j < $nb_cols ; $j++ ) {
-                        # FIXME Bug 11944
                         my $value = Encode::encode( 'UTF8', $rows->[$i - 1][$j] );
                         $doc->cellValue( $row, $j, $value );
                     }
+                    $i++;
                 }
                 $doc->save();
                 binmode(STDOUT);
