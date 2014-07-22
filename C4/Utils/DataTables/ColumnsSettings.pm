@@ -67,39 +67,16 @@ sub update_columns {
         $c->{is_hidden}         //= 0;
         $c->{cannot_be_toggled} //= 0;
 
-        my $column = $schema->resultset('ColumnsSetting')->search(
+        $schema->resultset('ColumnsSetting')->update_or_create(
             {
                 module     => $c->{module},
                 page       => $c->{page},
                 tablename  => $c->{tablename},
                 columnname => $c->{columnname},
+                is_hidden         => $c->{is_hidden},
+                cannot_be_toggled => $c->{cannot_be_toggled},
             }
         );
-        if ( $column->count ) {
-            $column = $column->first;
-            $column->update(
-                {
-                    module            => $c->{module},
-                    page              => $c->{page},
-                    tablename         => $c->{tablename},
-                    columnname        => $c->{columnname},
-                    is_hidden         => $c->{is_hidden},
-                    cannot_be_toggled => $c->{cannot_be_toggled},
-                }
-            );
-        }
-        else {
-            $schema->resultset('ColumnsSetting')->create(
-                {
-                    module            => $c->{module},
-                    page              => $c->{page},
-                    tablename         => $c->{tablename},
-                    columnname        => $c->{columnname},
-                    is_hidden         => $c->{is_hidden},
-                    cannot_be_toggled => $c->{cannot_be_toggled},
-                }
-            );
-        }
     }
 }
 
