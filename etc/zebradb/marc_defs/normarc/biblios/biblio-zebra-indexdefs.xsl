@@ -62,6 +62,11 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       <xslo:value-of select="."/>
     </z:index>
   </xslo:template>
+  <xslo:template match="marc:controlfield[@tag='003']">
+    <z:index name="Control-number-identifier:w">
+      <xslo:value-of select="."/>
+    </z:index>
+  </xslo:template>
   <xslo:template match="marc:controlfield[@tag='007']">
     <z:index name="Microform-generation:n">
       <xslo:value-of select="substring(., 12, 1)"/>

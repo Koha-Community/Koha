@@ -190,6 +190,8 @@ sub get_xslt_sysprefs {
 sub XSLTParse4Display {
     my ( $biblionumber, $orig_record, $xslsyspref, $fixamps, $hidden_items, $sysxml, $xslfilename, $lang ) = @_;
 
+    my $shouldIPullInComponentPartRecords; #We don't want to pull component part records if they are not needed! Show component part records only for detailed views.
+
     $sysxml ||= C4::Context->preference($xslsyspref);
     $xslfilename ||= C4::Context->preference($xslsyspref);
     $lang ||= C4::Languages::getlanguage();
@@ -238,13 +240,30 @@ sub XSLTParse4Display {
         $xslfilename =~ s/\{langcode\}/$lang/;
     }
 
+    ##Enable component part injection for Details XSLTs.
+    if ( $xslsyspref =~ m/Details/ ) {
+        $shouldIPullInComponentPartRecords = 1;
+    }
+
     # grab the XML, run it through our stylesheet, push it out to the browser
     my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
+    my $f001Data = $record->field('001');
+    $f001Data = $f001Data->data() if defined $f001Data; #Not all records have the field 001??
+    my $f003Data = $record->field('003');
+    $f003Data = $f003Data->data() if defined $f003Data; #Not all records have the field 003??
+
+    my $componentPartRecordsXML = '';
+    if ($shouldIPullInComponentPartRecords && C4::Context->preference(
+        'AddComponentPartRecordsToDetailedViews'))
+    {
+        $componentPartRecordsXML = _prepareComponentPartRecords($f001Data, $f003Data);
+    }
+
     my $itemsxml  = buildKohaItemsNamespace($biblionumber, $hidden_items);
     my $xmlrecord = $record->as_xml(C4::Context->preference('marcflavour'));
 
-    $xmlrecord =~ s/\<\/record\>/$itemsxml$sysxml\<\/record\>/;
-    if ($fixamps) { # We need to correct the HTML entities that Zebra outputs
+    $xmlrecord =~ s/\<\/record\>/$itemsxml$sysxml$componentPartRecordsXML\<\/record\>/;
+    if ($fixamps) { # We need to correct the ampersand entities that Zebra outputs
         $xmlrecord =~ s/\&amp;amp;/\&amp;/g;
         $xmlrecord =~ s/\&amp\;lt\;/\&lt\;/g;
         $xmlrecord =~ s/\&amp\;gt\;/\&gt\;/g;
@@ -350,6 +369,52 @@ Returns reference to XSLT handler object.
 
 sub engine {
     return $engine;
+}
+
+=head
+
+  Finds all the component parts targeting the parents fields 001 and optionally 003.
+  Strips some key identifiers from those records.
+  Builds a XML presentation out of those, ready for the XSLT processing.
+
+  $componentPartRecordsXML = &_prepareComponentPartRecords($f001Data, $f003Data);
+
+  Returns: a string containing an XML representation of component part records
+           In XSL: componentPartRecords/componentPart/title
+           in addition to title, elements can also be unititle, biblionumber, author, publishercode, publicationyear
+           eg. componentPartRecords/componentPart/biblionumber
+
+=cut
+sub _prepareComponentPartRecords {
+
+    my ($f001Data, $f003Data) = @_;
+    my $componentPartBiblios = C4::Biblio::getComponentRecords( $f001Data, $f003Data );
+
+    if (@$componentPartBiblios) {
+
+        #Collect the XML elements to a array instead of continuously concatenating a string.
+        #  There might be dozens of component part records and in such a case string concatenation is extremely slow.
+        my @componentPartRecordXML = ('<componentPartRecords>');
+        for my $cb ( @{$componentPartBiblios} ) {
+            push @componentPartRecordXML, '  <componentPart>';
+
+
+            push @componentPartRecordXML, '    <title>'.xml_escape($cb->{'title'}).'</title>'                               if $cb->{'title'};
+            push @componentPartRecordXML, '    <unititle>'.xml_escape($cb->{'unititle'}).'</unititle>'                      if $cb->{'unititle'};
+            push @componentPartRecordXML, '    <biblionumber>'.xml_escape($cb->{'biblionumber'}).'</biblionumber>'          if $cb->{'biblionumber'};
+            push @componentPartRecordXML, '    <author>'.xml_escape($cb->{'author'}).'</author>'                            if $cb->{'author'};
+            push @componentPartRecordXML, '    <publishercode>'.xml_escape($cb->{'publishercode'}).'</publishercode>'       if $cb->{'publishercode'};
+            push @componentPartRecordXML, '    <publicationyear>'.xml_escape($cb->{'publicationyear'}).'</publicationyear>' if $cb->{'publicationyear'};
+
+            push @componentPartRecordXML, '  </componentPart>';
+        }
+        push @componentPartRecordXML, '</componentPartRecords>';
+        push @componentPartRecordXML, ''; #Just to make the join operation end with a newline
+
+        #Build the real XML string.
+        return join "\n", @componentPartRecordXML;
+    }
+    return ''; #Instantiate this string so we don't get undefined errors when concatenating with this.
 }
 
 1;

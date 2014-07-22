@@ -37,6 +37,7 @@ use C4::Charset;
 use C4::Linker;
 use C4::OAI::Sets;
 use C4::Debug;
+require C4::Search; #For some reason importing this to C4::Biblio's namespace makes other modules unable to import these functions into their namespace.
 
 use Koha::Caches;
 use Koha::Authority::Types;
@@ -4323,6 +4324,77 @@ sub getHostRecord {
     return undef;
 }
 
+#Get all the component children who have the parents Field001 in the rcn-index, mainly in fields 77X.
+#@Param1, @Param2  parent's field 001 and field 003
+#OR
+#@Param1  the parent MARC::Record
+sub getComponentRecords {
+    my ($parentsField001, $parentsField003, $parentrecord, $error, $componentPartRecordXMLs, $resultSetSize) = _getComponentParts(@_);
+
+    my $marcflavour = C4::Context->preference('marcflavour');
+
+    my @componentBiblios;
+    if ($resultSetSize && !$error) {
+        foreach my $componentRecordXML (@$componentPartRecordXMLs) {
+            my $marcrecord = MARC::Record->new_from_xml( $componentRecordXML, 'UTF-8', $marcflavour );
+            my $componentBiblio = TransformMarcToKoha( C4::Context->dbh,$marcrecord,q{} );
+            push @componentBiblios, $componentBiblio;
+        }
+    }
+    return \@componentBiblios;
+}
+
+#Get biblionumbers the fast way.
+#@Param1, @Param2  parent's field 001 and field 003
+#OR
+#@Param1  the parent MARC::Record
+sub getComponentBiblionumbers {
+    my ($parentsField001, $parentsField003, $parentrecord, $error, $componentPartRecordXMLs, $resultSetSize) = _getComponentParts(@_);
+
+    my ( $tagid, $subfieldid ) = GetMarcFromKohaField( "biblio.biblionumber" );
+
+    my @componentNumbers;
+    if ($resultSetSize && !$error) {
+        foreach my $componentRecordXML (@$componentPartRecordXMLs) {
+            if ($componentRecordXML =~ /<(data|control)field tag="$tagid".*?>(.*?)<\/(data|control)field>/s) {
+                my $fieldStr = $2;
+                if ($fieldStr =~ /<subfield code="$subfieldid">(.*?)<\/subfield>/) {
+                    my $biblionumber = $1;
+                    push @componentNumbers, $biblionumber;
+                }
+            }
+        }
+    }
+    return \@componentNumbers;
+}
+
+sub _getComponentParts {
+    my ($parentsField001, $parentsField003) = @_;
+    my $parentrecord;
+
+    if (ref $parentsField001 eq 'MARC::Record') {
+        $parentrecord = $parentsField001;
+
+        $parentsField003 = $parentrecord->field('003');
+        $parentsField003 = $parentsField003->data() if $parentsField003;
+        $parentsField001 = $parentrecord->field('001');
+        $parentsField001 = $parentsField001->data() if $parentsField001;
+    }
+
+    my ($error, $componentPartRecordXMLs, $resultSetSize);
+    if ($parentsField001 && $parentsField003) {
+        ($error, $componentPartRecordXMLs, $resultSetSize) = C4::Search::SimpleSearch("rcn=$parentsField001 and cni=$parentsField003");
+    }
+    elsif ($parentsField001) {
+        ($error, $componentPartRecordXMLs, $resultSetSize) = C4::Search::SimpleSearch("rcn=$parentsField001");
+    }
+    else {
+        warn "Following record has NO field 001 or 003:\n ".$parentrecord->as_formatted() if $parentrecord;
+        warn "Record with no field 001 or 003 found! This is an outrage!" unless $parentrecord;
+    }
+
+    return ($parentsField001, $parentsField003, $parentrecord, $error, $componentPartRecordXMLs, $resultSetSize);
+}
 
 1;
 

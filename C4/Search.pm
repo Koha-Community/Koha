@@ -1152,6 +1152,8 @@ sub getIndexes{
                     'Conference-name-seealso',
                     'Content-type',
                     'Control-number',
+                    'Control-number-identifier',
+                    'cni',
                     'copydate',
                     'Corporate-name',
                     'Corporate-name-heading',

@@ -194,6 +194,14 @@ Cataloging:
               type: textarea
               class: code
         -
+            - "Requires XSLTDetailsDisplay and/or OPACXSLTDetailsDisplay system preferences to be active. Works on MARC21. "
+            - pref: AddComponentPartRecordsToDetailedViews
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - "component part records in the detailed views. This might cause a performance penalty for records with lots of component part records."
+            - "Technical explanation: This enables appending component part records to the bibliographic record data for the XSLT parsing. Component parts need to be indexed in the rcn-index, in which many by default are."
+        -
             - pref: SeparateHoldings
               choices:
                   yes: Separate

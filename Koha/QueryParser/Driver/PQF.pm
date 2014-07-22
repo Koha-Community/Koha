@@ -729,6 +729,8 @@ sub TEST_SETUP {
     $self->add_search_field_alias( 'keyword' => 'note' => 'nt' );
     $self->add_bib1_field_map('keyword' => 'record-control-number' => 'biblioserver' => { '1' => '1045' } );
     $self->add_search_field_alias( 'keyword' => 'record-control-number' => 'rcn' );
+    $self->add_bib1_field_map('keyword' => 'control-number-identifier' => 'biblioserver' => { '1' => '9015' } );
+    $self->add_search_field_alias( 'keyword' => 'control-number-identifier' => 'cni' );
     $self->add_bib1_field_map('subject' => '' => 'biblioserver' => { '1' => '21' } );
     $self->add_search_field_alias( 'subject' => '' => 'su' );
     $self->add_search_field_alias( 'subject' => '' => 'su-to' );
