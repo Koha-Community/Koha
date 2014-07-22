@@ -2395,11 +2395,11 @@ sub GetFictiveIssueNumber {
 sub _get_next_date_day {
     my ($subscription, $freqdata, $year, $month, $day) = @_;
 
-    if ($subscription->{'countissuesperunit'} + 1 > $freqdata->{'issuesperunit'}){
-        ($year,$month,$day) = Add_Delta_Days($year,$month, $day , $freqdata->{'unitsperissue'} );
-        $subscription->{'countissuesperunit'} = 1;
+    if ($subscription->{countissuesperunit} + 1 > $freqdata->{issuesperunit}){
+        ($year,$month,$day) = Add_Delta_Days($year,$month, $day , $freqdata->{unitsperissue} );
+        $subscription->{countissuesperunit} = 1;
     } else {
-        $subscription->{'countissuesperunit'}++;
+        $subscription->{countissuesperunit}++;
     }
 
     return ($year, $month, $day);
@@ -2409,21 +2409,22 @@ sub _get_next_date_week {
     my ($subscription, $freqdata, $year, $month, $day) = @_;
 
     my ($wkno, $yr) = Week_of_Year($year, $month, $day);
+    my $fa_dow = Day_of_Week(split /-/, $subscription->{firstacquidate});
 
-    if ($subscription->{'countissuesperunit'} + 1 > $freqdata->{'issuesperunit'}){
-        $subscription->{'countissuesperunit'} = 1;
-        $wkno += $freqdata->{"unitsperissue"};
+    if ($subscription->{countissuesperunit} + 1 > $freqdata->{issuesperunit}){
+        $subscription->{countissuesperunit} = 1;
+        $wkno += $freqdata->{unitsperissue};
         if($wkno > 52){
             $wkno = $wkno % 52;
             $yr++;
         }
-        my $dow = Day_of_Week($year, $month, $day);
         ($year,$month,$day) = Monday_of_Week($wkno, $yr);
-        if($freqdata->{'issuesperunit'} == 1) {
-            ($year, $month, $day) = Add_Delta_Days($year, $month, $day, $dow - 1);
-        }
+        ($year,$month,$day) = Add_Delta_Days($year, $month, $day, $fa_dow - 1);
     } else {
-        $subscription->{'countissuesperunit'}++;
+        # Try to guess the next day of week
+        my $delta_days = int((7 - ($fa_dow - 1)) / $freqdata->{issuesperunit});
+        ($year,$month,$day) = Add_Delta_Days($year, $month, $day, $delta_days);
+        $subscription->{countissuesperunit}++;
     }
 
     return ($year, $month, $day);
@@ -2432,14 +2433,20 @@ sub _get_next_date_week {
 sub _get_next_date_month {
     my ($subscription, $freqdata, $year, $month, $day) = @_;
 
-    if ($subscription->{'countissuesperunit'} + 1 > $freqdata->{'issuesperunit'}){
-        $subscription->{'countissuesperunit'} = 1;
-        ($year,$month,$day) = Add_Delta_YM($year,$month,$day, 0,$freqdata->{"unitsperissue"});
-        unless($freqdata->{'issuesperunit'} == 1) {
-            $day = 1;   # Jumping to the first day of month, because we don't know what day is expected
-        }
+    my $fa_day;
+    (undef, undef, $fa_day) = split /-/, $subscription->{firstacquidate};
+
+    if ($subscription->{countissuesperunit} + 1 > $freqdata->{issuesperunit}){
+        $subscription->{countissuesperunit} = 1;
+        ($year,$month,$day) = Add_Delta_YM($year,$month,$day, 0,
+            $freqdata->{unitsperissue});
+        my $days_in_month = Days_in_Month($year, $month);
+        $day = $fa_day <= $days_in_month ? $fa_day : $days_in_month;
     } else {
-        $subscription->{'countissuesperunit'}++;
+        # Try to guess the next day in month
+        my $delta_days = int((28 - ($fa_day - 1)) / $freqdata->{issuesperunit});
+        ($year,$month,$day) = Add_Delta_Days($year, $month, $day, $delta_days);
+        $subscription->{countissuesperunit}++;
     }
 
     return ($year, $month, $day);
@@ -2448,16 +2455,19 @@ sub _get_next_date_month {
 sub _get_next_date_year {
     my ($subscription, $freqdata, $year, $month, $day) = @_;
 
-    if ($subscription->{'countissuesperunit'} + 1 > $freqdata->{'issuesperunit'}){
-        $subscription->{'countissuesperunit'} = 1;
-        ($year,$month,$day) = Add_Delta_YM($year,$month,$day, $freqdata->{"unitsperissue"},0);
-        unless($freqdata->{'issuesperunit'} == 1) {
-            # Jumping to the first day of year, because we don't know what day is expected
-            $month = 1;
-            $day = 1;
-        }
+    my ($fa_year, $fa_month, $fa_day) = split /-/, $subscription->{firstacquidate};
+
+    if ($subscription->{countissuesperunit} + 1 > $freqdata->{issuesperunit}){
+        $subscription->{countissuesperunit} = 1;
+        ($year) = Add_Delta_YM($year,$month,$day, $freqdata->{"unitsperissue"},0);
+        $month = $fa_month;
+        my $days_in_month = Days_in_Month($year, $month);
+        $day = $fa_day <= $days_in_month ? $fa_day : $days_in_month;
     } else {
-        $subscription->{'countissuesperunit'}++;
+        # Try to guess the next day in year
+        my $delta_days = int((365 - ($fa_day - 1)) / $freqdata->{issuesperunit});
+        ($year,$month,$day) = Add_Delta_Days($year, $month, $day, $delta_days);
+        $subscription->{countissuesperunit}++;
     }
 
     return ($year, $month, $day);
