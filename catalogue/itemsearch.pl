@@ -90,6 +90,9 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user({
 my $notforloan_avcode = GetAuthValCode('items.notforloan');
 my $notforloan_values = GetAuthorisedValues($notforloan_avcode);
 
+my $location_avcode = GetAuthValCode('items.location');
+my $location_values = GetAuthorisedValues($location_avcode);
+
 if (scalar keys %params > 0) {
     # Parameters given, it's a search
 
@@ -193,10 +196,19 @@ if (scalar keys %params > 0) {
             $notforloan_map->{$nfl_value->{authorised_value}} = $nfl_value->{lib};
         }
 
+        # Get location labels
+        my $location_map = {};
+        foreach my $loc_value (@$location_values) {
+            $location_map->{$loc_value->{authorised_value}} = $loc_value->{lib};
+        }
+
         foreach my $item (@$results) {
             $item->{biblio} = GetBiblio($item->{biblionumber});
             ($item->{biblioitem}) = GetBiblioItemByBiblioNumber($item->{biblionumber});
             $item->{status} = $notforloan_map->{$item->{notforloan}};
+            if (defined $item->{location}) {
+                $item->{location} = $location_map->{$item->{location}};
+            }
         }
     }
 
@@ -236,12 +248,11 @@ if ($format eq 'html') {
             label => $branches->{$branchcode}->{branchname},
         };
     }
-    my $locations = GetAuthorisedValues('LOC');
     my @locations;
-    foreach my $location (@$locations) {
+    foreach my $location (@$location_values) {
         push @locations, {
             value => $location->{authorised_value},
-            label => $location->{lib},
+            label => $location->{lib} // $location->{authorised_value},
         };
     }
     my @itemtypes = C4::ItemType->all();
