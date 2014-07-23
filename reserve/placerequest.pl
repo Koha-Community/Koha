@@ -72,7 +72,7 @@ my $found;
 
 # if we have an item selectionned, and the pickup branch is the same as the holdingbranch
 # of the document, we force the value $rank and $found .
-if ($checkitem ne ''){
+if (defined $checkitem && $checkitem ne ''){
     $rank[0] = '0' unless C4::Context->preference('ReservesNeedReturns');
     my $item = $checkitem;
     $item = GetItem($item);
@@ -98,7 +98,7 @@ if ($type eq 'str8' && $borrower){
         }
         my $const;
 
-	if ($checkitem ne ''){
+    if (defined $checkitem && $checkitem ne ''){
 		my $item = GetItem($checkitem);
         	if ($item->{'biblionumber'} ne $biblionumber) {
                 	$biblionumber = $item->{'biblionumber'};
