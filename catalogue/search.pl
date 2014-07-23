@@ -414,7 +414,7 @@ if ($indexes[0] && (!$indexes[1] || $params->{'scan'})) {
 }
 
 # an operand can be a single term, a phrase, or a complete ccl query
-my @operands = map uri_unescape($_), $cgi->param('q');
+my @operands = map Encode::decode_utf8( uri_unescape($_) ), $cgi->param('q');
 
 # limits are use to limit to results to a pre-defined category such as branch or language
 my @limits = map uri_unescape($_), $cgi->param('limit');
@@ -498,7 +498,7 @@ for my $this_cgi ( split('&',$query_cgi) ) {
     $this_cgi =~ m/(.*?)=(.*)/;
     my $input_name = $1;
     my $input_value = $2;
-    push @query_inputs, { input_name => $input_name, input_value => $input_value };
+    push @query_inputs, { input_name => $input_name, input_value => Encode::decode_utf8( uri_unescape( $input_value ) ) };
     if ($input_name eq 'idx') {
         $scan_index_to_use = $input_value; # unless $scan_index_to_use;
     }
