@@ -224,11 +224,9 @@ sub AddReserve {
             $found = 'W';
         }
     }
-
-    if ( C4::Context->preference('AllowHoldDateInFuture') ) {
-
-        # Make room in reserves for this before those of a later reserve date
-        $priority = _ShiftPriorityByDateAndPriority( $biblionumber, $resdate, $priority );
+    if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
+	# Make room in reserves for this before those of a later reserve date
+	$priority = _ShiftPriorityByDateAndPriority( $biblionumber, $priority );
     }
 
     my $waitingdate;
@@ -1950,12 +1948,12 @@ the sub accounts for that too.
 =cut
 
 sub _ShiftPriorityByDateAndPriority {
-    my ( $biblio, $resdate, $new_priority ) = @_;
+    my ( $biblio, $new_priority ) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $query = "SELECT priority FROM reserves WHERE biblionumber = ? AND ( reservedate > ? OR priority > ? ) ORDER BY priority ASC LIMIT 1";
+    my $query = "SELECT priority FROM reserves WHERE biblionumber = ? AND priority > ? ORDER BY priority ASC LIMIT 1";
     my $sth = $dbh->prepare( $query );
-    $sth->execute( $biblio, $resdate, $new_priority );
+    $sth->execute( $biblio, $new_priority );
     my $min_priority = $sth->fetchrow;
     # if no such matches are found, $new_priority remains as original value
     $new_priority = $min_priority if ( $min_priority );
