@@ -6,9 +6,9 @@
                 <ul>
                     <li>
                         [% IF ( available ) %]
-                            Showing only <strong>available</strong> items. <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |url %][% limit_cgi_not_availablity %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]">Show all items</a>
+                            Showing only <strong>available</strong> items. <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi_not_availablity %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]">Show all items</a>
                         [% ELSE %]
-                            <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |url %][% limit_cgi |url %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]&amp;limit=available">Limit to currently available items.</a>
+                            <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi |url %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]&amp;limit=available">Limit to currently available items.</a>
                         [% END %]
                     </li>
                 </ul>
@@ -32,7 +32,7 @@
                         <ul>
                             [% FOREACH facet IN facets_loo.facets %]
                                 <li>
-                                  [% SET query_cgi_f = query_cgi | url %]
+                                  [% SET query_cgi_f = query_cgi %]
                                   [% SET limit_cgi_f = limit_cgi | url %]
                                   [% SET url = "/cgi-bin/koha/opac-search.pl?" _ query_cgi_f _ limit_cgi_f %]
                                   [% IF ( sort_by ) %]
@@ -54,7 +54,7 @@
                             [% END %]
                             [% IF ( facets_loo.expandable ) %]
                                 <li class="showmore">
-                                    <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |url %][% limit_cgi |url %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %][% IF ( offset ) %]
+                                    <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi |url %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %][% IF ( offset ) %]
                                             &amp;offset=[% offset |url %][% END %]&amp;expand=[% facets_loo.expand |url %]#[% facets_loo.type_id |url %]">Show more</a>
                                 </li>
                             [% END %]

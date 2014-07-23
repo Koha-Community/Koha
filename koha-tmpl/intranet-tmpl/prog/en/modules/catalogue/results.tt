@@ -140,7 +140,7 @@ $('#sort_by').change(function() {
             [%- END -%]
         ];
         var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
-        browser.create([% SEARCH_RESULTS.first.result_number %], '[% query_cgi | uri %]', '[% limit_cgi | uri %]','[% sort_cgi | uri %]',
+        browser.create([% SEARCH_RESULTS.first.result_number %], '[% query_cgi %]', '[% limit_cgi | uri %]','[% sort_cgi | uri %]',
                newresults, '[% total %]');
     [% END %]
     [% IF (gotoPage && gotoNumber) %]
