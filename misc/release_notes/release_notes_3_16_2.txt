@@ -1,0 +1,282 @@
+RELEASE NOTES FOR KOHA 3.16.2
+23 Jul 2014
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.16.2 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.16.02.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+
+Koha 3.16.2 is a bugfix/maintenance release.
+
+
+It includes 18 bugfixes.
+
+
+Critical bugs fixed in 3.16.2
+======================
+
+Serials
+----------
+    11226   major   Working with serials no longer requires admin (parameters) permission
+
+
+Other bugs fixed in 3.16.2
+======================
+
+
+About
+----------
+    7143    trivial Updated list of developers.
+
+Architecture, internals, and plumbing
+----------
+    10652   normal  Ajaxfileupload.js no longer fails under IE9 for local image upload.
+    12456   normal  Removed disused Perl module C4::Maintenance.
+
+
+Cataloging
+----------
+    11030   normal  Add 359, 947 and 969 fields in French unimarc_complete framework.
+    11021   minor   Delete useless 9XX field in French unimarc_complet default framework.
+
+Circulation
+----------
+    9245    normal  Fix display of the fines tab in the patron fines interface.
+
+Installation and upgrade (command-line installer)
+----------
+    12361   minor   Fix default value for opaccolorstylesheet syspref.
+
+OPAC
+----------
+    12220   normal  Fix bug that prevented the Bootstrap OPAC from being responsive
+                    on certain devices.
+    12464   normal  Fix formatting of the 505 field in the Bootstrap OPAC.
+    12511   normal  Access Novelist Select using HTTPS in the Bootstrap OPAC.
+
+Patrons
+----------
+    11857   normal  Display the number of patrons in a patron list correctly.
+    12304   normal  Creating a user via LDAP will now populate message preferences
+                    based on the patron category defaults.
+
+System Administration
+----------
+    12451   minor   Circulation rules can now edited if item type description contains
+                    a space character.
+
+Test Suite
+----------
+    12409   normal  The test t/db_dependent/Record.t no longer fails with Perl 5.18.2.
+    12417   normal  Add unit tests for Koha::Borrower::Files.
+    12455   normal  Add unit tests for C4::SMS.
+    12470   normal  Add more unit tests for C4::Circulations.
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+The Koha manual is maintained in DocBook.The home page for Koha 
+documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.16/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+  * Arabic (77%)
+  * Armenian (97%)
+  * Chinese (China) (92%)
+  * Chinese (Taiwan) (100%)
+  * Czech (99%)
+  * Danish (86%)
+  * English (New Zealand) (81%)
+  * French (95%)
+  * French (Canada) (84%)
+  * German (100%)
+  * German (Switzerland) (100%)
+  * Italian (100%)
+  * Kurdish (68%)
+  * Norwegian Bokmål (65%)
+  * Polish (75%)
+  * Portuguese (99%)
+  * Portuguese (Brazil) (89%)
+  * Slovak (100%)
+  * Spanish (100%)
+  * Swedish (87%)
+  * Turkish (100%)
+  * Vietnamese (85%)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.16.2 is
+ 
+  Release Manager:       Tomás Cohen Arazi <tomascohen@gmail.com>
+  Documentation Manager: Nicole C Engard <nengard@gmail.com>
+  Translation Manager:   Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>
+  QA Team:               Galen Charlton <gmc@esilibrary.com>
+                         Chris Cormack <chrisc@catalyst.net.nz>
+                         Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>,
+                         Jonathan Druart <jonathan.druart@biblibre.com>,
+                         Brendan Gallagher <brendan@bywatersolutions.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+                         Julian Maurice <julian.maurice@biblibre.com>
+                         Paul Poulain <paul.poulain@biblibre.com>
+                         Martin Renvoize <martin.renvoize@ptfs-europe.com>
+  Module Maintainers:    Jared Camins-Esakov <jcamins@cpbibliography.com>
+                         Chris Cormack <chrisc@catalyst.net.nz>
+                         Galen Charlton <gmc@esilibrary.com>
+                         Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>,
+                         Jonathan Druart <jonathan.druart@biblibre.com>,
+                         Brendan Gallagher <brendan@bywatersolutions.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+                         Chris Nighswonger <cnighswonger@foundations.edu>
+                         Fridolin Somers <fridolin.somers@biblibre.com>
+  Bug Wranglers:         Magnus Enger <magnus@enger.priv.no>
+                         Alex Sassmannshausen <alex.sassmannshausen@ptfs-europe.com>
+  Packaging Manager:     Robin Sheat <robin@catalyst.net.nz>
+  Database Documentation Manager:
+                         Zeno Tajoli <z.tajoli@cineca.it>
+
+  Release Maintainer (3.12.x): Kyle Hall <kyle@bywatersolutions.com>
+  Release Maintainer (3.14.x): Fridolin Somers <fridolin.somers@biblibre.com>
+  Release Maintainer (3.16.x): Galen Charlton <gmc@esilibrary.com>
+
+Credits
+======================
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.16.2:
+
+We thank the following individuals who contributed patches to Koha 3.16.2.
+  *      2  Tomas Cohen Arazi
+  *      1  Gaetan Boisson
+  *      1  David Cook
+  *      1  Chris Cormack
+  *      2  Jonathan Druart
+  *      4  Yohann Dufour
+  *      1  Katrin Fischer
+  *      1  Kyle M Hall
+  *      1  Bernardo Gonzalez Kriegel
+  *      2  Owen Leonard
+  *      1  Martin Renvoize
+  *      2  Mathieu Saby
+  *      1  Viktor Sarge
+  *      3  Fridolin Somers
+
+We thank the following companies who contributed patches to Koha 3.16.2
+  *       2 ACPL                                                                                          
+  *       1 BSZ BW                                                                                         
+  *       6 BibLibre                                                                                    
+  *       1 ByWater-Solutions                                                                   
+  *       1 Catalyst                                                                                 
+  *       1 PTFS-Europe                                                                              
+  *       1 Prosentient Systems
+  *       2 Université Rennes 2
+  *       1 regionhalland.se
+  *       7 unidentified
+
+We also especially thank the following individuals who tested patches
+for Koha 3.16.2.
+  *      22 Tomas Cohen Arazi
+  *       3 Gaetan Boisson
+  *      22 Galen Charlton
+  *       1 David Cook
+  *       3 Chris Cormack
+  *       4 Jonathan Druart
+  *       1 Nicole C. Engard
+  *      10 Katrin Fischer
+  *       5 Kyle M Hall
+  *       1 Ulrich Kleiber
+  *       8 Bernardo Gonzalez Kriegel
+  *       2 Owen Leonard
+  *       1 Marc Véron
+
+We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is 3.16.x.
+
+The last Koha release was 3.8.21, which was released on January 2, 2014.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+He rau ringa e oti ai.
+(Many hands finish the work)
+
+##### Autogenerated release notes updated last on 23 Jul 2014 21:57:06 Z #####
