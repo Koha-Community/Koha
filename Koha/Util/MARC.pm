@@ -43,8 +43,11 @@ sub createMergeHash {
     foreach my $field (@fields) {
         my $fieldtag = $field->tag();
         if ( $fieldtag < 10 ) {
-            if ( !defined($tagslib)
-                || $tagslib->{$fieldtag}->{'@'}->{'tab'} >= 0 )
+            if (
+                !defined($tagslib)
+                || ( defined( $tagslib->{$fieldtag} )
+                    && $tagslib->{$fieldtag}->{'@'}->{'tab'} >= 0 )
+              )
             {
                 push @array, {
                     tag   => $fieldtag,
