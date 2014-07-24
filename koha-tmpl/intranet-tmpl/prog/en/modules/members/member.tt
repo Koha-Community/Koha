@@ -59,8 +59,8 @@ $(document).ready(function() {
             borrowernumbers.push($(this).val());
         });
         var data = {
-            add_to_patron_list: encodeURIComponent($("#add_to_patron_list").val()),
-            new_patron_list: encodeURIComponent($("#new_patron_list").val()),
+            add_to_patron_list: $("#add_to_patron_list").val(),
+            new_patron_list: $("#new_patron_list").val(),
             borrowernumbers: borrowernumbers
         };
         $.ajax({
