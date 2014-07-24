@@ -174,6 +174,7 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
 
 
 
+my ( @order_user_ids, @order_users );
 if ( $ordernumber eq '' ) {    # create order
     $new = 'yes';
 
@@ -196,6 +197,12 @@ else {    #modify order
 
     $basket   = GetBasket( $data->{'basketno'} );
     $basketno = $basket->{'basketno'};
+
+    @order_user_ids = GetOrderUsers($ordernumber);
+    foreach my $order_user_id (@order_user_ids) {
+        my $order_user = GetMember(borrowernumber => $order_user_id);
+        push @order_users, $order_user if $order_user;
+    }
 }
 
 my $suggestion;
@@ -400,6 +407,8 @@ $template->param(
     import_batch_id  => $import_batch_id,
     subscriptionid   => $subscriptionid,
     acqcreate        => C4::Context->preference("AcqCreateItem") eq "ordering" ? 1 : "",
+    users_ids        => join(':', @order_user_ids),
+    users            => \@order_users,
     (uc(C4::Context->preference("marcflavour"))) => 1
 );
 

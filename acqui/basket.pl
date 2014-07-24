@@ -237,7 +237,7 @@ if ( $op eq 'delete_confirm' ) {
     ReopenBasket($query->param('basketno'));
     print $query->redirect('/cgi-bin/koha/acqui/basket.pl?basketno='.$basket->{'basketno'})
 } elsif ( $op eq 'mod_users' ) {
-    my $basketusers_ids = $query->param('basketusers_ids');
+    my $basketusers_ids = $query->param('users_ids');
     my @basketusers = split( /:/, $basketusers_ids );
     ModBasketUsers($basketno, @basketusers);
     print $query->redirect("/cgi-bin/koha/acqui/basket.pl?basketno=$basketno");
@@ -408,8 +408,8 @@ if ( $op eq 'delete_confirm' ) {
         creationdate         => $basket->{creationdate},
         authorisedby         => $basket->{authorisedby},
         authorisedbyname     => $basket->{authorisedbyname},
-        basketusers_ids      => join(':', @basketusers_ids),
-        basketusers          => \@basketusers,
+        users_ids            => join(':', @basketusers_ids),
+        users                => \@basketusers,
         closedate            => $basket->{closedate},
         estimateddeliverydate=> $estimateddeliverydate,
         deliveryplace        => C4::Branch::GetBranchName( $basket->{deliveryplace} ),

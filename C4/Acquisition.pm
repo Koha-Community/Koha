@@ -82,6 +82,10 @@ BEGIN {
 
         &AddClaim
         &GetBiblioCountByBasketno
+
+        &GetOrderUsers
+        &ModOrderUsers
+        &NotifyOrderUsers
     );
 }
 
@@ -1474,6 +1478,10 @@ q{SELECT * FROM aqorders WHERE biblionumber=? AND aqorders.ordernumber=?},
             $biblionumber,
             $ordernumber
         );
+
+        # All items have been received, sent a notification to users
+        NotifyOrderUsers( $ordernumber );
+
     }
     return ($datereceived, $new_ordernumber);
 }
@@ -2890,6 +2898,105 @@ sub populate_order_with_prices {
     }
 
     return $order;
+}
+
+=head3 GetOrderUsers
+
+    $order_users_ids = &GetOrderUsers($ordernumber);
+
+Returns a list of all borrowernumbers that are in order users list
+
+=cut
+
+sub GetOrderUsers {
+    my ($ordernumber) = @_;
+
+    return unless $ordernumber;
+
+    my $query = q|
+        SELECT borrowernumber
+        FROM aqorderusers
+        WHERE ordernumber = ?
+    |;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare($query);
+    $sth->execute($ordernumber);
+    my $results = $sth->fetchall_arrayref( {} );
+
+    my @borrowernumbers;
+    foreach (@$results) {
+        push @borrowernumbers, $_->{'borrowernumber'};
+    }
+
+    return @borrowernumbers;
+}
+
+=head3 ModOrderUsers
+
+    my @order_users_ids = (1, 2, 3);
+    &ModOrderUsers($ordernumber, @basketusers_ids);
+
+Delete all users from order users list, and add users in C<@order_users_ids>
+to this users list.
+
+=cut
+
+sub ModOrderUsers {
+    my ( $ordernumber, @order_users_ids ) = @_;
+
+    return unless $ordernumber;
+
+    my $dbh   = C4::Context->dbh;
+    my $query = q|
+        DELETE FROM aqorderusers
+        WHERE ordernumber = ?
+    |;
+    my $sth = $dbh->prepare($query);
+    $sth->execute($ordernumber);
+
+    $query = q|
+        INSERT INTO aqorderusers (ordernumber, borrowernumber)
+        VALUES (?, ?)
+    |;
+    $sth = $dbh->prepare($query);
+    foreach my $order_user_id (@order_users_ids) {
+        $sth->execute( $ordernumber, $order_user_id );
+    }
+}
+
+sub NotifyOrderUsers {
+    my ($ordernumber) = @_;
+
+    my @borrowernumbers = GetOrderUsers($ordernumber);
+    return unless @borrowernumbers;
+
+    my $order = GetOrder( $ordernumber );
+    for my $borrowernumber (@borrowernumbers) {
+        my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
+        my $branch = C4::Branch::GetBranchDetail( $borrower->{branchcode} );
+        my $biblio = C4::Biblio::GetBiblio( $order->{biblionumber} );
+        my $letter = C4::Letters::GetPreparedLetter(
+            module      => 'acquisition',
+            letter_code => 'ACQ_NOTIF_ON_RECEIV',
+            branchcode  => $branch->{branchcode},
+            tables      => {
+                'branches'    => $branch,
+                'borrowers'   => $borrower,
+                'biblio'      => $biblio,
+                'aqorders'    => $order,
+            },
+        );
+        if ( $letter ) {
+            C4::Letters::EnqueueLetter(
+                {
+                    letter         => $letter,
+                    borrowernumber => $borrowernumber,
+                    LibraryName    => C4::Context->preference("LibraryName"),
+                    message_transport_type => 'email',
+                }
+            ) or warn "can't enqueue letter $letter";
+        }
+    }
 }
 
 1;

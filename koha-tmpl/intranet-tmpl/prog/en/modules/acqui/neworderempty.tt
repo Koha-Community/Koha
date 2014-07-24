@@ -160,6 +160,40 @@ $(document).ready(function()
         });
         $("#budget_id").change();
     });
+
+    function UserSearchPopup(f) {
+        window.open(
+            "/cgi-bin/koha/acqui/add_user_search.pl",
+            'UserSearchPopup',
+            'width=740,height=450,toolbar=no,'
+         );
+    }
+
+    function add_user(borrowernumber, borrowername) {
+        var ids = $("#users_ids").val();
+        if(ids.length > 0) {
+            ids = ids.split(':');
+        } else {
+            ids = new Array;
+        }
+        if (ids.indexOf(borrowernumber) < 0) {
+            ids.push(borrowernumber);
+            $("#users_ids").val(ids.join(':'));
+            var li = '<li id="user_'+borrowernumber+'">'+borrowername
+                + ' [<a style="cursor:pointer" onclick="del_user('+borrowernumber+');">'
+                + _("Delete user") + '</a>]</li>';
+            $("#users_names").append(li);
+            return 0;
+        }
+        return -1;
+    }
+
+    function del_user(borrowernumber) {
+      $("#user_"+borrowernumber).remove();
+      var ids = $("#users_ids").val().split(':');
+      ids.splice(ids.indexOf(borrowernumber.toString()), 1);
+      $("#users_ids").val(ids.join(':'));
+    }
 //]]>
 </script>
 </head>
@@ -226,6 +260,29 @@ $(document).ready(function()
 [% END %]
 
 <form action="/cgi-bin/koha/acqui/addorder.pl" method="post" id="Aform" onsubmit="return Check(this);">
+
+    <fieldset class="rows">
+        <legend>Patrons</legend>
+        <ol>
+            <li>
+                <span class="label">To notify on reveiving:</span>
+                <div style="float:left">
+                    <ul id="users_names" style="padding-left:0">
+                      [% FOREACH user IN users %]
+                        <li id="user_[% user.borrowernumber %]">
+                            [% user.firstname %] [% user.surname %]
+                            [<a onclick="del_user([% user.borrowernumber %]);" style="cursor:pointer">Delete user</a>]
+                        </li>
+                      [% END %]
+                    </ul>
+                    <input type="hidden" id="basketno" name="basketno" value="[% basketno %]" />
+                    <input type="hidden" id="users_ids" name="users_ids" value="[% users_ids %]" />
+                    <input type="hidden" id="op" name="op" value="mod_users" />
+                    <input type="button" id="add_user" onclick="UserSearchPopup();" value="Add user" />
+                </div>
+            </li>
+        </ol>
+    </fieldset>
 
 <fieldset class="rows">
         <legend>
