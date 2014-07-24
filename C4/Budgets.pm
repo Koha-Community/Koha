@@ -1109,7 +1109,7 @@ sub CloneBudgetHierarchy {
 
         my $tidy_budget =
           { map { join( ' ', @columns ) =~ /$_/ ? ( $_ => $budget->{$_} ) : () }
-              keys($budget) };
+              keys %$budget };
         my $new_budget_id = AddBudget(
             {
                 %$tidy_budget,
