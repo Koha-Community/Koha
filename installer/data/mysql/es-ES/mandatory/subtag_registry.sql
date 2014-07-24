@@ -731,6 +731,26 @@ VALUES ( 'Laoo', 'script', 'lo', 'Lao');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'Laoo', 'script', 'en', 'Lao');
 
+-- Croatian
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'hr', 'language', 'Croatian','2014-07-24' );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES( 'hr','hrv');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'hr', 'language', 'hr', 'Hrvatski');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'hr', 'language', 'en', 'Croatian');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'hr', 'language', 'fr', 'Croate');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'hr', 'language', 'de', 'Kroatisch');
+
+
 -- REGIONS
 -- Canada
 INSERT INTO language_subtag_registry( subtag, type, description, added)
