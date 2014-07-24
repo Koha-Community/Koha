@@ -105,16 +105,16 @@
         });
     });
 
-    function basketUserSearchPopup(f) {
+    function UserSearchPopup(f) {
         window.open(
-            "/cgi-bin/koha/acqui/aqbasketuser_search.pl",
-            'BasketUserSearchPopup',
+            "/cgi-bin/koha/acqui/add_user_search.pl",
+            'UserSearchPopup',
             'width=740,height=450,toolbar=no,'
          );
     }
 
-    function add_basket_user(borrowernumber, borrowername) {
-        var ids = $("#basketusers_ids").val();
+    function add_user(borrowernumber, borrowername) {
+        var ids = $("#users_ids").val();
         if(ids.length > 0) {
             ids = ids.split(':');
         } else {
@@ -122,21 +122,21 @@
         }
         if (ids.indexOf(borrowernumber) < 0) {
             ids.push(borrowernumber);
-            $("#basketusers_ids").val(ids.join(':'));
+            $("#users_ids").val(ids.join(':'));
             var li = '<li id="user_'+borrowernumber+'">'+borrowername
-                + ' [<a style="cursor:pointer" onclick="del_basket_user('+borrowernumber+');">'
+                + ' [<a style="cursor:pointer" onclick="del_user('+borrowernumber+');">'
                 + _("Delete user") + '</a>]</li>';
-            $("#basketusers_names").append(li);
+            $("#users_names").append(li);
             return 0;
         }
         return -1;
     }
 
-    function del_basket_user(borrowernumber) {
+    function del_user(borrowernumber) {
       $("#user_"+borrowernumber).remove();
-      var ids = $("#basketusers_ids").val().split(':');
+      var ids = $("#users_ids").val().split(':');
       ids.splice(ids.indexOf(borrowernumber.toString()), 1);
-      $("#basketusers_ids").val(ids.join(':'));
+      $("#users_ids").val(ids.join(':'));
     }
 //]]>
 </script>
@@ -277,18 +277,18 @@
                     <form action="" method="post">
                         <span class="label">Managed by:</span>
                         <div style="float:left">
-                            <ul id="basketusers_names" style="padding-left:0">
-                              [% FOREACH user IN basketusers %]
+                            <ul id="users_names" style="padding-left:0">
+                              [% FOREACH user IN users %]
                                 <li id="user_[% user.borrowernumber %]">
                                     [% user.firstname %] [% user.surname %]
-                                    [<a onclick="del_basket_user([% user.borrowernumber %]);" style="cursor:pointer">Delete user</a>]
+                                    [<a onclick="del_user([% user.borrowernumber %]);" style="cursor:pointer">Delete user</a>]
                                 </li>
                               [% END %]
                             </ul>
                             <input type="hidden" id="basketno" name="basketno" value="[% basketno %]" />
-                            <input type="hidden" id="basketusers_ids" name="basketusers_ids" value="[% basketusers_ids %]" />
+                            <input type="hidden" id="users_ids" name="users_ids" value="[% users_ids %]" />
                             <input type="hidden" id="op" name="op" value="mod_users" />
-                            <input type="button" id="add_user" onclick="basketUserSearchPopup();" value="Add user" />
+                            <input type="button" id="add_user" onclick="UserSearchPopup();" value="Add user" />
                             <input type="submit" value="Save changes" />
                         </div>
                     </form>

@@ -13,8 +13,12 @@ sub search {
     my $categorycode = $params->{categorycode};
     my $branchcode = $params->{branchcode};
     my $searchtype = $params->{searchtype};
-    my $searchfieldstype = $params->{searchfieldstype};
+    my $searchfieldstype = $params->{searchfieldstype} || 'standard';
     my $dt_params = $params->{dt_params};
+
+    unless ( $searchmember ) {
+        $searchmember = $dt_params->{sSearch};
+    }
 
     my ($iTotalRecords, $iTotalDisplayRecords);
 

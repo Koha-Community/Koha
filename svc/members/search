@@ -43,7 +43,7 @@ my $firstletter  = $input->param('firstletter');
 my $categorycode = $input->param('categorycode');
 my $branchcode = $input->param('branchcode');
 my $searchtype = $input->param('searchtype');
-my $searchfieldstype = $input->param('searchfieldstype');
+my $searchfieldstype = $input->param('searchfieldstype') || 'standard';
 
 if ( $searchfieldstype eq "dateofbirth" ) {
     $searchmember = output_pref({dt => dt_from_string($searchmember), dateformat => 'iso', dateonly => 1});
