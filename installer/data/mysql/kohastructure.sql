@@ -32,7 +32,7 @@ CREATE TABLE `auth_header` (
   `marcxml` longtext NOT NULL,
   PRIMARY KEY  (`authid`),
   KEY `origincode` (`origincode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `auth_subfield_structure`
@@ -59,7 +59,7 @@ CREATE TABLE `auth_subfield_structure` (
   `defaultvalue` TEXT DEFAULT '',
   PRIMARY KEY  (`authtypecode`,`tagfield`,`tagsubfield`),
   KEY `tab` (`authtypecode`,`tab`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `auth_tag_structure`
@@ -76,7 +76,7 @@ CREATE TABLE `auth_tag_structure` (
   `authorised_value` varchar(10) default NULL,
   PRIMARY KEY  (`authtypecode`,`tagfield`),
   CONSTRAINT `auth_tag_structure_ibfk_1` FOREIGN KEY (`authtypecode`) REFERENCES `auth_types` (`authtypecode`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `auth_types`
@@ -89,7 +89,7 @@ CREATE TABLE `auth_types` (
   `auth_tag_to_report` varchar(3) NOT NULL default '',
   `summary` mediumtext NOT NULL,
   PRIMARY KEY  (`authtypecode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `authorised_values`
@@ -107,7 +107,7 @@ CREATE TABLE `authorised_values` ( -- stores values for authorized values catego
   KEY `name` (`category`),
   KEY `lib` (`lib`),
   KEY `auth_value_idx` (`authorised_value`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `biblio`
@@ -129,7 +129,7 @@ CREATE TABLE `biblio` ( -- table that stores bibliographic information
   `abstract` mediumtext, -- summary from the MARC record (520$a in MARC21)
   PRIMARY KEY  (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `biblio_framework`
@@ -140,7 +140,7 @@ CREATE TABLE `biblio_framework` ( -- information about MARC frameworks
   `frameworkcode` varchar(4) NOT NULL default '', -- the unique code assigned to the framework
   `frameworktext` varchar(255) NOT NULL default '', -- the description/name given to the framework
   PRIMARY KEY  (`frameworkcode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `biblioitems`
@@ -190,7 +190,7 @@ CREATE TABLE `biblioitems` ( -- information related to bibliographic records in 
   KEY `issn` (`issn`(255)),
   KEY `publishercode` (`publishercode`),
   CONSTRAINT `biblioitems_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `borrowers`
@@ -276,7 +276,7 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   KEY `othernames_idx` (`othernames`(255)),
   CONSTRAINT `borrowers_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`),
   CONSTRAINT `borrowers_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `borrower_attribute_types`
@@ -297,7 +297,7 @@ CREATE TABLE `borrower_attribute_types` ( -- definitions for custom patron field
   `class` VARCHAR(255) NOT NULL DEFAULT '',-- defines a class for an attribute_type
   PRIMARY KEY  (`code`),
   KEY `auth_val_cat_idx` (`authorised_value_category`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `borrower_attributes`
@@ -315,7 +315,7 @@ CREATE TABLE `borrower_attributes` ( -- values of custom patron fields known as 
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `borrower_attributes_ibfk_2` FOREIGN KEY (`code`) REFERENCES `borrower_attribute_types` (`code`)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `borrower_debarments`
@@ -335,7 +335,7 @@ CREATE TABLE borrower_debarments (
   KEY borrowernumber (borrowernumber),
   CONSTRAINT `borrower_debarments_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 --
@@ -354,7 +354,7 @@ CREATE TABLE `branch_item_rules` ( -- information entered in the circulation and
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `branch_item_rules_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table borrower_sync
@@ -387,7 +387,7 @@ CREATE TABLE `branchcategories` ( -- information related to library/branch group
   `show_in_pulldown` tinyint(1) NOT NULL DEFAULT '0', -- says this group should be in the opac libararies pulldown if it is enabled
   PRIMARY KEY  (`categorycode`),
   KEY `show_in_pulldown` (`show_in_pulldown`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `branches`
@@ -416,7 +416,7 @@ CREATE TABLE `branches` ( -- information about your libraries or branches are st
   `branchnotes` mediumtext, -- notes related to your library or branch
   opac_info text, -- HTML that displays in OPAC
   PRIMARY KEY (`branchcode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `branchrelations`
@@ -431,7 +431,7 @@ CREATE TABLE `branchrelations` ( -- this table links libraries/branches to group
   KEY `categorycode` (`categorycode`),
   CONSTRAINT `branchrelations_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `branchrelations_ibfk_2` FOREIGN KEY (`categorycode`) REFERENCES `branchcategories` (`categorycode`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `branchtransfers`
@@ -451,7 +451,7 @@ CREATE TABLE `branchtransfers` ( -- information for items that are in transit be
   CONSTRAINT `branchtransfers_ibfk_1` FOREIGN KEY (`frombranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `branchtransfers_ibfk_2` FOREIGN KEY (`tobranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `branchtransfers_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 --
@@ -464,7 +464,7 @@ CREATE TABLE `browser` (
   `description` varchar(255) NOT NULL,
   `number` bigint(20) NOT NULL,
   `endnode` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `categories`
@@ -490,7 +490,7 @@ CREATE TABLE `categories` ( -- this table shows information related to Koha patr
   `default_privacy` ENUM( 'default', 'never', 'forever' ) NOT NULL DEFAULT 'default', -- Default privacy setting for this patron category
   PRIMARY KEY  (`categorycode`),
   UNIQUE KEY `categorycode` (`categorycode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table: collections
@@ -542,7 +542,7 @@ CREATE TABLE `courses` (
   `enabled` enum('yes','no') NOT NULL DEFAULT 'yes', -- Determines whether the course is active
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY (`course_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `course_instructors`
@@ -558,7 +558,7 @@ CREATE TABLE `course_instructors` (
   `borrowernumber` int(11) NOT NULL,
   PRIMARY KEY (`course_id`,`borrowernumber`),
   KEY `borrowernumber` (`borrowernumber`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Constraints for table `course_instructors`
@@ -588,7 +588,7 @@ CREATE TABLE `course_items` (
    PRIMARY KEY (`ci_id`),
    UNIQUE KEY `itemnumber` (`itemnumber`),
    KEY `holdingbranch` (`holdingbranch`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Constraints for table `course_items`
@@ -615,7 +615,7 @@ CREATE TABLE `course_reserves` (
    PRIMARY KEY (`cr_id`),
    UNIQUE KEY `pseudo_key` (`course_id`,`ci_id`),
    KEY `course_id` (`course_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Constraints for table `course_reserves`
@@ -637,7 +637,7 @@ CREATE TABLE `branch_borrower_circ_rules` ( -- includes default circulation rule
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `branch_borrower_circ_rules_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `default_borrower_circ_rules`
@@ -650,7 +650,7 @@ CREATE TABLE `default_borrower_circ_rules` ( -- default checkout rules found und
   PRIMARY KEY (`categorycode`),
   CONSTRAINT `borrower_borrower_circ_rules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `default_branch_circ_rules`
@@ -665,7 +665,7 @@ CREATE TABLE `default_branch_circ_rules` (
   PRIMARY KEY (`branchcode`),
   CONSTRAINT `default_branch_circ_rules_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `default_branch_item_rules`
@@ -678,7 +678,7 @@ CREATE TABLE `default_branch_item_rules` (
   PRIMARY KEY  (`itemtype`),
   CONSTRAINT `default_branch_item_rules_ibfk_1` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `default_circ_rules`
@@ -691,7 +691,7 @@ CREATE TABLE `default_circ_rules` (
     `holdallowed` int(1) default NULL,
     `returnbranch` varchar(15) default NULL,
     PRIMARY KEY (`singleton`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `cities`
@@ -705,7 +705,7 @@ CREATE TABLE `cities` ( -- authorized values for cities/states/countries to choo
   `city_country` VARCHAR( 100 ) NULL DEFAULT NULL, -- name of the country
   `city_zipcode` varchar(20) default NULL, -- zip or postal code
   PRIMARY KEY  (`cityid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `class_sort_rules`
@@ -718,7 +718,7 @@ CREATE TABLE `class_sort_rules` (
   `sort_routine` varchar(30) NOT NULL default '',
   PRIMARY KEY (`class_sort_rule`),
   UNIQUE KEY `class_sort_rule_idx` (`class_sort_rule`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `class_sources`
@@ -734,7 +734,7 @@ CREATE TABLE `class_sources` (
   UNIQUE KEY `cn_source_idx` (`cn_source`),
   KEY `used_idx` (`used`),
   CONSTRAINT `class_source_ibfk_1` FOREIGN KEY (`class_sort_rule`) REFERENCES `class_sort_rules` (`class_sort_rule`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `currency`
@@ -749,7 +749,7 @@ CREATE TABLE `currency` (
   `rate` float(15,5) default NULL,
   `active` tinyint(1) default NULL,
   PRIMARY KEY  (`currency`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `deletedbiblio`
@@ -771,7 +771,7 @@ CREATE TABLE `deletedbiblio` ( -- stores information about bibliographic records
   `abstract` mediumtext, -- summary from the MARC record (520$a in MARC21)
   PRIMARY KEY  (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `deletedbiblioitems`
@@ -819,7 +819,7 @@ CREATE TABLE `deletedbiblioitems` ( -- information about bibliographic records t
   KEY `itemtype_idx` (`itemtype`),
   KEY `isbn` (`isbn`(255)),
   KEY `publishercode` (`publishercode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `deletedborrowers`
@@ -896,7 +896,7 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their reading history  KEY `borrowernumber` (`borrowernumber`),
   KEY borrowernumber (borrowernumber),
   KEY `cardnumber` (`cardnumber`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `deleteditems`
@@ -954,7 +954,7 @@ CREATE TABLE `deleteditems` (
   KEY `delhomebranch` (`homebranch`),
   KEY `delholdingbranch` (`holdingbranch`),
   KEY `itype_idx` (`itype`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `ethnicity`
@@ -965,7 +965,7 @@ CREATE TABLE `ethnicity` (
   `code` varchar(10) NOT NULL default '',
   `name` varchar(255) default NULL,
   PRIMARY KEY  (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `export_format`
@@ -1007,7 +1007,7 @@ CREATE TABLE hold_fill_targets (
     REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `hold_fill_targets_ibfk_4` FOREIGN KEY (`source_branchcode`)
     REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `import_batches`
@@ -1032,7 +1032,7 @@ CREATE TABLE `import_batches` ( -- information about batches of marc records tha
   `comments` mediumtext, -- any comments added when the file was uploaded
   PRIMARY KEY (`import_batch_id`),
   KEY `branchcode` (`branchcode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `import_records`
@@ -1061,7 +1061,7 @@ CREATE TABLE `import_records` (
   KEY `branchcode` (`branchcode`),
   KEY `batch_sequence` (`import_batch_id`, `record_sequence`),
   KEY `batch_id_record_type` (`import_batch_id`,`record_type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for `import_record_matches`
@@ -1074,7 +1074,7 @@ CREATE TABLE `import_record_matches` ( -- matches found when importing a batch o
   CONSTRAINT `import_record_matches_ibfk_1` FOREIGN KEY (`import_record_id`)
              REFERENCES `import_records` (`import_record_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   KEY `record_score` (`import_record_id`, `score`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `import_auths`
@@ -1090,7 +1090,7 @@ CREATE TABLE `import_auths` (
   CONSTRAINT `import_auths_ibfk_1` FOREIGN KEY (`import_record_id`)
              REFERENCES `import_records` (`import_record_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   KEY `matched_authid` (`matched_authid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `import_biblios`
@@ -1112,7 +1112,7 @@ CREATE TABLE `import_biblios` (
   KEY `matched_biblionumber` (`matched_biblionumber`),
   KEY `title` (`title`),
   KEY `isbn` (`isbn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `import_items`
@@ -1132,7 +1132,7 @@ CREATE TABLE `import_items` (
              REFERENCES `import_records` (`import_record_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   KEY `itemnumber` (`itemnumber`),
   KEY `branchcode` (`branchcode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `issues`
@@ -1160,7 +1160,7 @@ CREATE TABLE `issues` ( -- information related to check outs or issues
   KEY `bordate` (`borrowernumber`,`timestamp`),
   CONSTRAINT `issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `issuingrules`
@@ -1195,7 +1195,7 @@ CREATE TABLE `issuingrules` ( -- circulation and fine rules
   PRIMARY KEY  (`branchcode`,`categorycode`,`itemtype`),
   KEY `categorycode` (`categorycode`),
   KEY `itemtype` (`itemtype`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `items`
@@ -1259,7 +1259,7 @@ CREATE TABLE `items` ( -- holdings/item information
   CONSTRAINT `items_ibfk_1` FOREIGN KEY (`biblioitemnumber`) REFERENCES `biblioitems` (`biblioitemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `items_ibfk_2` FOREIGN KEY (`homebranch`) REFERENCES `branches` (`branchcode`) ON UPDATE CASCADE,
   CONSTRAINT `items_ibfk_3` FOREIGN KEY (`holdingbranch`) REFERENCES `branches` (`branchcode`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `itemtypes`
@@ -1278,7 +1278,7 @@ CREATE TABLE `itemtypes` ( -- defines the item types
   sip_media_type VARCHAR(3) DEFAULT NULL, -- SIP2 protocol media type for this itemtype
   PRIMARY KEY  (`itemtype`),
   UNIQUE KEY `itemtype` (`itemtype`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `creator_batches`
@@ -1302,7 +1302,7 @@ CREATE TABLE `creator_batches` (
   CONSTRAINT `creator_batches_ibfk_1` FOREIGN KEY (`borrower_number`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `creator_batches_ibfk_2` FOREIGN KEY (`branch_code`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE,
   CONSTRAINT `creator_batches_ibfk_3` FOREIGN KEY (`item_number`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `creator_images`
@@ -1317,7 +1317,7 @@ CREATE TABLE `creator_images` (
   `image_name` char(20) NOT NULL DEFAULT 'DEFAULT',
   PRIMARY KEY (`image_id`),
   UNIQUE KEY `image_name_index` (`image_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `creator_layouts`
@@ -1342,7 +1342,7 @@ CREATE TABLE `creator_layouts` (
   `layout_xml` text NOT NULL,
   `creator` char(15) NOT NULL DEFAULT 'Labels',
   PRIMARY KEY (`layout_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `creator_templates`
@@ -1372,7 +1372,7 @@ CREATE TABLE `creator_templates` (
   `creator` char(15) NOT NULL DEFAULT 'Labels',
   PRIMARY KEY (`template_id`),
   KEY `template_profile_fk_constraint` (`profile_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `letter`
@@ -1391,7 +1391,7 @@ CREATE TABLE `letter` ( -- table for all notice templates in Koha
   PRIMARY KEY  (`module`,`code`, `branchcode`, `message_transport_type`),
   CONSTRAINT `message_transport_type_fk` FOREIGN KEY (`message_transport_type`)
   REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `marc_subfield_structure`
@@ -1421,7 +1421,7 @@ CREATE TABLE `marc_subfield_structure` (
   KEY `kohafield_2` (`kohafield`),
   KEY `tab` (`frameworkcode`,`tab`),
   KEY `kohafield` (`frameworkcode`,`kohafield`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `marc_tag_structure`
@@ -1437,7 +1437,7 @@ CREATE TABLE `marc_tag_structure` (
   `authorised_value` varchar(10) default NULL,
   `frameworkcode` varchar(4) NOT NULL default '',
   PRIMARY KEY  (`frameworkcode`,`tagfield`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `marc_matchers`
@@ -1453,7 +1453,7 @@ CREATE TABLE `marc_matchers` (
   PRIMARY KEY (`matcher_id`),
   KEY `code` (`code`),
   KEY `record_type` (`record_type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `matchpoints`
@@ -1467,7 +1467,7 @@ CREATE TABLE `matchpoints` (
   PRIMARY KEY (`matchpoint_id`),
   CONSTRAINT `matchpoints_ifbk_1` FOREIGN KEY (`matcher_id`)
   REFERENCES `marc_matchers` (`matcher_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 --
@@ -1486,7 +1486,7 @@ CREATE TABLE `matchpoint_components` (
   KEY `by_sequence` (`matchpoint_id`, `sequence`),
   CONSTRAINT `matchpoint_components_ifbk_1` FOREIGN KEY (`matchpoint_id`)
   REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `matcher_component_norms`
@@ -1499,7 +1499,7 @@ CREATE TABLE `matchpoint_component_norms` (
   KEY `matchpoint_component_norms` (`matchpoint_component_id`, `sequence`),
   CONSTRAINT `matchpoint_component_norms_ifbk_1` FOREIGN KEY (`matchpoint_component_id`)
   REFERENCES `matchpoint_components` (`matchpoint_component_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `matcher_matchpoints`
@@ -1512,7 +1512,7 @@ CREATE TABLE `matcher_matchpoints` (
   REFERENCES `marc_matchers` (`matcher_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `matcher_matchpoints_ifbk_2` FOREIGN KEY (`matchpoint_id`)
   REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `matchchecks`
@@ -1530,7 +1530,7 @@ CREATE TABLE `matchchecks` (
   REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `matcher_matchchecks_ifbk_3` FOREIGN KEY (`target_matchpoint_id`)
   REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `need_merge_authorities`
@@ -1541,7 +1541,7 @@ CREATE TABLE `need_merge_authorities` ( -- keeping track of authority records st
   `id` int NOT NULL auto_increment PRIMARY KEY, -- unique id
   `authid` bigint NOT NULL, -- reference to authority record
   `done` tinyint DEFAULT 0  -- indication whether merge has been executed (0=not done, 1= done, 2= in progress)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `notifys`
@@ -1556,7 +1556,7 @@ CREATE TABLE `notifys` (
   `notify_send_date` date default NULL,
   `notify_level` int(1) NOT NULL default 0,
   `method` varchar(20) NOT NULL default ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `oai_sets`
@@ -1568,7 +1568,7 @@ CREATE TABLE `oai_sets` (
   `spec` varchar(80) NOT NULL UNIQUE,
   `name` varchar(80) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `oai_sets_descriptions`
@@ -1579,7 +1579,7 @@ CREATE TABLE `oai_sets_descriptions` (
   `set_id` int(11) NOT NULL,
   `description` varchar(255) NOT NULL,
   CONSTRAINT `oai_sets_descriptions_ibfk_1` FOREIGN KEY (`set_id`) REFERENCES `oai_sets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `oai_sets_mappings`
@@ -1593,7 +1593,7 @@ CREATE TABLE `oai_sets_mappings` (
   `operator` varchar(8) NOT NULL default 'equal',
   `marcvalue` varchar(80) NOT NULL,
   CONSTRAINT `oai_sets_mappings_ibfk_1` FOREIGN KEY (`set_id`) REFERENCES `oai_sets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `oai_sets_biblios`
@@ -1606,7 +1606,7 @@ CREATE TABLE `oai_sets_biblios` (
   PRIMARY KEY (`biblionumber`, `set_id`),
   CONSTRAINT `oai_sets_biblios_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `oai_sets_biblios_ibfk_2` FOREIGN KEY (`set_id`) REFERENCES `oai_sets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `old_issues`
@@ -1636,7 +1636,7 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
     ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `old_issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`)
     ON DELETE SET NULL ON UPDATE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `old_reserves`
@@ -1673,7 +1673,7 @@ CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have b
     ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `old_reserves_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`)
     ON DELETE SET NULL ON UPDATE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `opac_news`
@@ -1692,7 +1692,7 @@ CREATE TABLE `opac_news` ( -- data from the news tool
   PRIMARY KEY  (`idnew`),
   CONSTRAINT opac_news_branchcode_ibfk FOREIGN KEY (branchcode) REFERENCES branches (branchcode)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `overduerules`
@@ -1712,7 +1712,7 @@ CREATE TABLE `overduerules` ( -- overdue notice status and triggers
   `letter3` varchar(20) default NULL, -- foreign key from the letter table to define which notice should be sent as the third notice
   `debarred3` int(1) default 0, -- is the patron restricted when the third notice is sent (1 for yes, 0 for no)
   PRIMARY KEY  (`branchcode`,`categorycode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `patroncards`
@@ -1727,7 +1727,7 @@ CREATE TABLE `patroncards` (
    PRIMARY KEY  (`cardid`),
    KEY `patroncards_ibfk_1` (`borrowernumber`),
    CONSTRAINT `patroncards_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `patronimage`
@@ -1740,7 +1740,7 @@ CREATE TABLE `patronimage` ( -- information related to patron images
   `imagefile` mediumblob NOT NULL, -- the image
   PRIMARY KEY  (`borrowernumber`),
   CONSTRAINT `patronimage_fk1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Table structure for table `pending_offline_operations`
 --
@@ -1758,7 +1758,7 @@ CREATE TABLE pending_offline_operations (
   cardnumber varchar(16) DEFAULT NULL,
   amount decimal(28,6) DEFAULT NULL,
   PRIMARY KEY (operationid)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 --
@@ -1771,7 +1771,7 @@ CREATE TABLE `printers` (
   `printqueue` varchar(20) default NULL,
   `printtype` varchar(20) default NULL,
   PRIMARY KEY  (`printername`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `printers_profile`
@@ -1791,7 +1791,7 @@ CREATE TABLE `printers_profile` (
   `creator` char(15) NOT NULL DEFAULT 'Labels',
   PRIMARY KEY  (`profile_id`),
   UNIQUE KEY `printername` (`printer_name`,`template_id`,`paper_bin`,`creator`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `repeatable_holidays`
@@ -1807,7 +1807,7 @@ CREATE TABLE `repeatable_holidays` ( -- information for the days the library is 
   `title` varchar(50) NOT NULL default '', -- title of this closing
   `description` text NOT NULL, -- description for this closing
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `reports_dictionary`
@@ -1824,7 +1824,7 @@ CREATE TABLE reports_dictionary ( -- definitions (or snippets of SQL) stored for
    report_area varchar(6) DEFAULT NULL, -- Koha module this definition is for Circulation, Catalog, Patrons, Acquistions, Accounts)
    PRIMARY KEY  (id),
    KEY dictionary_area_idx (report_area)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `reserveconstraints`
@@ -1837,7 +1837,7 @@ CREATE TABLE `reserveconstraints` (
   `biblionumber` int(11) NOT NULL default 0,
   `biblioitemnumber` int(11) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `reserves`
@@ -1874,7 +1874,7 @@ CREATE TABLE `reserves` ( -- information related to holds/reserves in Koha
   CONSTRAINT `reserves_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `reserves_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `reserves_ibfk_4` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `reviews`
@@ -1891,7 +1891,7 @@ CREATE TABLE `reviews` ( -- patron opac comments
   PRIMARY KEY  (`reviewid`),
   CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `saved_sql`
@@ -1916,7 +1916,7 @@ CREATE TABLE saved_sql ( -- saved sql reports
    PRIMARY KEY  (`id`),
    KEY sql_area_group_idx (report_group, report_subgroup),
    KEY boridx (`borrowernumber`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 --
@@ -1930,7 +1930,7 @@ CREATE TABLE saved_reports (
    `report` longtext,
    `date_run` datetime default NULL,
    PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 --
@@ -1969,7 +1969,7 @@ CREATE TABLE `serial` (
   claims_count int(11) default 0,
   `routingnotes` text,
   PRIMARY KEY  (`serialid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `sessions`
@@ -1980,7 +1980,7 @@ CREATE TABLE sessions (
   `id` varchar(32) NOT NULL,
   `a_session` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `special_holidays`
@@ -1997,7 +1997,7 @@ CREATE TABLE `special_holidays` ( -- non repeatable holidays/library closings
   `title` varchar(50) NOT NULL default '', -- title for this closing
   `description` text NOT NULL, -- description of this closing
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `statistics`
@@ -2027,7 +2027,7 @@ CREATE TABLE `statistics` ( -- information related to transactions (circulation 
   KEY `borrowernumber_idx` (`borrowernumber`),
   KEY `associatedborrower_idx` (`associatedborrower`),
   KEY `ccode_idx` (`ccode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `stopwords`
@@ -2036,7 +2036,7 @@ CREATE TABLE `statistics` ( -- information related to transactions (circulation 
 DROP TABLE IF EXISTS `stopwords`;
   CREATE TABLE `stopwords` (
   `word` varchar(255) default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table subscription_frequencies
@@ -2051,7 +2051,7 @@ CREATE TABLE subscription_frequencies (
     unitsperissue INTEGER NOT NULL DEFAULT '1',
     issuesperunit INTEGER NOT NULL DEFAULT '1',
     PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table subscription_numberpatterns
@@ -2083,7 +2083,7 @@ CREATE TABLE subscription_numberpatterns (
     setto3 INTEGER DEFAULT NULL,
     numbering3 VARCHAR(255) DEFAULT NULL,
     PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `subscription`
@@ -2134,7 +2134,7 @@ CREATE TABLE `subscription` (
   PRIMARY KEY  (`subscriptionid`),
   CONSTRAINT subscription_ibfk_1 FOREIGN KEY (periodicity) REFERENCES subscription_frequencies (id) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT subscription_ibfk_2 FOREIGN KEY (numberpattern) REFERENCES subscription_numberpatterns (id) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `subscriptionhistory`
@@ -2152,7 +2152,7 @@ CREATE TABLE `subscriptionhistory` (
   `librariannote` varchar(150) NOT NULL default '',
   PRIMARY KEY  (`subscriptionid`),
   KEY `biblionumber` (`biblionumber`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `subscriptionroutinglist`
@@ -2170,7 +2170,7 @@ CREATE TABLE `subscriptionroutinglist` ( -- information related to the routing l
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `subscriptionroutinglist_ibfk_2` FOREIGN KEY (`subscriptionid`) REFERENCES `subscription` (`subscriptionid`)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `suggestions`
@@ -2213,7 +2213,7 @@ CREATE TABLE `suggestions` ( -- purchase suggestions
   PRIMARY KEY  (`suggestionid`),
   KEY `suggestedby` (`suggestedby`),
   KEY `managedby` (`managedby`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `systempreferences`
@@ -2227,7 +2227,7 @@ CREATE TABLE `systempreferences` ( -- global system preferences
   `explanation` text, -- descriptive text for the system preference
   `type` varchar(20) default NULL, -- type of question this preference asks (multiple choice, plain text, yes or no, etc)
   PRIMARY KEY  (`variable`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `tags`
@@ -2238,7 +2238,7 @@ CREATE TABLE `tags` (
   `entry` varchar(255) NOT NULL default '',
   `weight` bigint(20) NOT NULL default 0,
   PRIMARY KEY  (`entry`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `tags_all`
@@ -2259,7 +2259,7 @@ CREATE TABLE `tags_all` ( -- all of the tags
         REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tags_biblionumber_fk_1` FOREIGN KEY (`biblionumber`)
         REFERENCES `biblio`     (`biblionumber`)  ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `tags_approval`
@@ -2276,7 +2276,7 @@ CREATE TABLE `tags_approval` ( -- approved tags
   KEY `tags_approval_borrowers_fk_1` (`approved_by`),
   CONSTRAINT `tags_approval_borrowers_fk_1` FOREIGN KEY (`approved_by`)
         REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `tags_index`
@@ -2293,7 +2293,7 @@ CREATE TABLE `tags_index` ( -- a weighted list of all tags and where they are us
         REFERENCES `tags_approval` (`term`)  ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tags_index_biblionumber_fk_1` FOREIGN KEY (`biblionumber`)
         REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `userflags`
@@ -2306,7 +2306,7 @@ CREATE TABLE `userflags` (
   `flagdesc` varchar(255) default NULL,
   `defaulton` int(11) default NULL,
   PRIMARY KEY  (`bit`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `virtualshelves`
@@ -2325,7 +2325,7 @@ CREATE TABLE `virtualshelves` ( -- information about lists (or virtual shelves)
   `allow_delete_other` tinyint(1) default 0, -- permission for deleting entries from list that another person added
   PRIMARY KEY  (`shelfnumber`),
   CONSTRAINT `virtualshelves_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL -- no cascaded delete, please see HandleDelBorrower in VirtualShelves.pm
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `virtualshelfcontents`
@@ -2343,7 +2343,7 @@ CREATE TABLE `virtualshelfcontents` ( -- information about the titles in a list 
   CONSTRAINT `virtualshelfcontents_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `virtualshelves` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `shelfcontents_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `shelfcontents_ibfk_3` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL -- no cascaded delete, please see HandleDelBorrower in VirtualShelves.pm
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `virtualshelfshares`
@@ -2358,7 +2358,7 @@ CREATE TABLE `virtualshelfshares` ( -- shared private lists
   `sharedate` datetime,  -- date of invitation or acceptance of invitation
   CONSTRAINT `virtualshelfshares_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `virtualshelves` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `virtualshelfshares_ibfk_2` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL -- no cascaded delete, please see HandleDelBorrower in VirtualShelves.pm
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `z3950servers`
@@ -2384,7 +2384,7 @@ CREATE TABLE `z3950servers` ( -- connection information for the Z39.50 targets u
   `sru_fields` mediumtext default NULL, -- contains the mapping between the Z3950 search fields and the specific SRU server indexes
   `add_xslt` mediumtext default NULL, -- zero or more paths to XSLT files to be processed on the search results
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `zebraqueue`
@@ -2400,7 +2400,7 @@ CREATE TABLE `zebraqueue` (
   `time` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`),
   KEY `zebraqueue_lookup` (`server`, `biblio_auth_number`, `operation`, `done`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `services_throttle`
@@ -2411,7 +2411,7 @@ CREATE TABLE `services_throttle` (
   `service_type` varchar(10) NOT NULL default '',
   `service_count` varchar(45) default NULL,
   PRIMARY KEY  (`service_type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `language_subtag_registry`
@@ -2428,7 +2428,7 @@ CREATE TABLE language_subtag_registry (
         id int(11) NOT NULL auto_increment,
         PRIMARY KEY  (`id`),
         KEY `subtag` (`subtag`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `language_rfc4646_to_iso639`
@@ -2444,7 +2444,7 @@ CREATE TABLE language_rfc4646_to_iso639 (
         id int(11) NOT NULL auto_increment,
         PRIMARY KEY  (`id`),
         KEY `rfc4646_subtag` (`rfc4646_subtag`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `language_descriptions`
@@ -2460,7 +2460,7 @@ CREATE TABLE language_descriptions (
         PRIMARY KEY  (`id`),
         KEY `lang` (`lang`),
         KEY `subtag_type_lang` (`subtag`, `type`, `lang`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `language_script_bidi`
@@ -2472,7 +2472,7 @@ CREATE TABLE language_script_bidi (
         rfc4646_subtag varchar(25), -- script subtag, Arab, Hebr, etc.
         bidi varchar(3), -- rtl ltr
         KEY `rfc4646_subtag` (`rfc4646_subtag`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `language_script_mapping`
@@ -2485,7 +2485,7 @@ CREATE TABLE language_script_mapping (
         language_subtag varchar(25),
         script_subtag varchar(25),
         KEY `language_subtag` (`language_subtag`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `permissions`
@@ -2499,7 +2499,7 @@ CREATE TABLE `permissions` (
   PRIMARY KEY  (`module_bit`, `code`),
   CONSTRAINT `permissions_ibfk_1` FOREIGN KEY (`module_bit`) REFERENCES `userflags` (`bit`)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `serialitems`
@@ -2507,13 +2507,13 @@ CREATE TABLE `permissions` (
 
 DROP TABLE IF EXISTS `serialitems`;
 CREATE TABLE `serialitems` (
-    `itemnumber` int(11) NOT NULL,
-    `serialid` int(11) NOT NULL,
-    UNIQUE KEY `serialitemsidx` (`itemnumber`),
-    KEY `serialitems_sfk_1` (`serialid`),
-    CONSTRAINT `serialitems_sfk_1` FOREIGN KEY (`serialid`) REFERENCES `serial` (`serialid`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `serialitems_sfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	`itemnumber` int(11) NOT NULL,
+	`serialid` int(11) NOT NULL,
+	UNIQUE KEY `serialitemsidx` (`itemnumber`),
+	KEY `serialitems_sfk_1` (`serialid`),
+	CONSTRAINT `serialitems_sfk_1` FOREIGN KEY (`serialid`) REFERENCES `serial` (`serialid`) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT `serialitems_sfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `user_permissions`
@@ -2528,7 +2528,7 @@ CREATE TABLE `user_permissions` (
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_permissions_ibfk_2` FOREIGN KEY (`module_bit`, `code`) REFERENCES `permissions` (`module_bit`, `code`)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `tmp_holdsqueue`
@@ -2551,7 +2551,7 @@ CREATE TABLE `tmp_holdsqueue` (
   `pickbranch` varchar(10) default NULL,
   `notes` text,
   `item_level_request` tinyint(4) NOT NULL default 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `message_queue`
@@ -2576,7 +2576,7 @@ CREATE TABLE `message_queue` (
   KEY `message_transport_type` (`message_transport_type`),
   CONSTRAINT `messageq_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `messageq_ibfk_2` FOREIGN KEY (`message_transport_type`) REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `message_transport_types`
@@ -2586,7 +2586,7 @@ DROP TABLE IF EXISTS `message_transport_types`;
 CREATE TABLE `message_transport_types` (
   `message_transport_type` varchar(20) NOT NULL,
   PRIMARY KEY  (`message_transport_type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `overduerules_transport_types`
@@ -2602,7 +2602,7 @@ CREATE TABLE overduerules_transport_types(
     PRIMARY KEY (id),
     CONSTRAINT overduerules_fk FOREIGN KEY (branchcode, categorycode) REFERENCES overduerules (branchcode, categorycode) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT mtt_fk FOREIGN KEY (message_transport_type) REFERENCES message_transport_types (message_transport_type) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `message_attributes`
@@ -2615,7 +2615,7 @@ CREATE TABLE `message_attributes` (
   `takes_days` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`message_attribute_id`),
   UNIQUE KEY `message_name` (`message_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `message_transports`
@@ -2635,7 +2635,7 @@ CREATE TABLE `message_transports` (
   CONSTRAINT `message_transports_ibfk_1` FOREIGN KEY (`message_attribute_id`) REFERENCES `message_attributes` (`message_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `message_transports_ibfk_2` FOREIGN KEY (`message_transport_type`) REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `message_transports_ibfk_3` FOREIGN KEY (`letter_module`, `letter_code`, `branchcode`) REFERENCES `letter` (`module`, `code`, `branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `borrower_files`
@@ -2653,7 +2653,7 @@ CREATE TABLE IF NOT EXISTS `borrower_files` ( -- files attached to the patron/bo
   PRIMARY KEY (`file_id`),
   KEY `borrowernumber` (`borrowernumber`),
   CONSTRAINT borrower_files_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `borrower_message_preferences`
@@ -2674,7 +2674,7 @@ CREATE TABLE `borrower_message_preferences` (
   CONSTRAINT `borrower_message_preferences_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `borrower_message_preferences_ibfk_2` FOREIGN KEY (`message_attribute_id`) REFERENCES `message_attributes` (`message_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `borrower_message_preferences_ibfk_3` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `borrower_message_transport_preferences`
@@ -2688,7 +2688,7 @@ CREATE TABLE `borrower_message_transport_preferences` (
   KEY `message_transport_type` (`message_transport_type`),
   CONSTRAINT `borrower_message_transport_preferences_ibfk_1` FOREIGN KEY (`borrower_message_preference_id`) REFERENCES `borrower_message_preferences` (`borrower_message_preference_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `borrower_message_transport_preferences_ibfk_2` FOREIGN KEY (`message_transport_type`) REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for the table branch_transfer_limits
@@ -2702,7 +2702,7 @@ CREATE TABLE branch_transfer_limits (
     itemtype varchar(10) NULL,
     ccode varchar(10) NULL,
     PRIMARY KEY  (limitId)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `item_circulation_alert_preferences`
@@ -2717,7 +2717,7 @@ CREATE TABLE `item_circulation_alert_preferences` (
   `notification` varchar(16) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `branchcode` (`branchcode`,`categorycode`,`item_type`, `notification`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `messages`
@@ -2731,7 +2731,7 @@ CREATE TABLE `messages` ( -- circulation messages left via the patron's check ou
   `message` text NOT NULL, -- the text of the message
   `message_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- the date and time the message was written
   PRIMARY KEY (`message_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `accountlines`
@@ -2761,7 +2761,7 @@ CREATE TABLE `accountlines` (
   KEY `itemnumber` (`itemnumber`),
   CONSTRAINT `accountlines_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `accountlines_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `accountoffsets`
@@ -2775,7 +2775,7 @@ CREATE TABLE `accountoffsets` (
   `offsetamount` decimal(28,6) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   CONSTRAINT `accountoffsets_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `action_logs`
@@ -2797,7 +2797,7 @@ CREATE TABLE `action_logs` ( -- logs of actions taken in Koha (requires that the
   KEY `action_idx` (`action`(255)),
   KEY `object_idx` (`object`),
   KEY `info_idx` (`info`(255))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `alert`
@@ -2812,7 +2812,7 @@ CREATE TABLE `alert` (
   PRIMARY KEY  (`alertid`),
   KEY `borrowernumber` (`borrowernumber`),
   KEY `type` (`type`,`externalid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `aqbasketgroups`
@@ -2831,7 +2831,7 @@ CREATE TABLE `aqbasketgroups` (
   PRIMARY KEY  (`id`),
   KEY `booksellerid` (`booksellerid`),
   CONSTRAINT `aqbasketgroups_ibfk_1` FOREIGN KEY (`booksellerid`) REFERENCES `aqbooksellers` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `aqbasket`
@@ -2861,7 +2861,7 @@ CREATE TABLE `aqbasket` ( -- stores data about baskets in acquisitions
   CONSTRAINT `aqbasket_ibfk_2` FOREIGN KEY (`contractnumber`) REFERENCES `aqcontract` (`contractnumber`),
   CONSTRAINT `aqbasket_ibfk_3` FOREIGN KEY (`basketgroupid`) REFERENCES `aqbasketgroups` (`id`) ON UPDATE CASCADE,
   CONSTRAINT aqbasket_ibfk_4 FOREIGN KEY (branch) REFERENCES branches (branchcode) ON UPDATE CASCADE ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table aqbasketusers
@@ -2874,7 +2874,7 @@ CREATE TABLE aqbasketusers (
   PRIMARY KEY (basketno,borrowernumber),
   CONSTRAINT aqbasketusers_ibfk_1 FOREIGN KEY (basketno) REFERENCES aqbasket (basketno) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT aqbasketusers_ibfk_2 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `aqbooksellers`
@@ -2913,7 +2913,7 @@ CREATE TABLE `aqbooksellers` ( -- information about the vendors listed in acquis
   KEY `invoiceprice` (`invoiceprice`),
   CONSTRAINT `aqbooksellers_ibfk_1` FOREIGN KEY (`listprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `aqbooksellers_ibfk_2` FOREIGN KEY (`invoiceprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `aqbudgets`
@@ -2937,7 +2937,7 @@ CREATE TABLE `aqbudgets` ( -- information related to Funds
   `budget_owner_id` int(11) default NULL, -- borrowernumber of the person who owns this fund (borrowers.borrowernumber)
   `budget_permission` int(1) default '0', -- level of permission for this fund (used only by the owner, only by the library, or anyone)
   PRIMARY KEY  (`budget_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table aqbudgetborrowers
@@ -2954,7 +2954,7 @@ CREATE TABLE aqbudgetborrowers (
   CONSTRAINT aqbudgetborrowers_ibfk_2 FOREIGN KEY (borrowernumber)
     REFERENCES borrowers (borrowernumber)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `aqbudgetperiods`
@@ -2973,7 +2973,7 @@ CREATE TABLE `aqbudgetperiods` ( -- information related to Budgets
   `sort1_authcat` varchar(10) default NULL, -- statistical category for this budget
   `sort2_authcat` varchar(10) default NULL, -- second statistical category for this budget
   PRIMARY KEY  (`budget_period_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `aqbudgets_planning`
@@ -2990,7 +2990,7 @@ CREATE TABLE `aqbudgets_planning` (
   `display` tinyint(1) DEFAULT 1,
   PRIMARY KEY  (`plan_id`),
   CONSTRAINT `aqbudgets_planning_ifbk_1` FOREIGN KEY (`budget_id`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table 'aqcontacts'
@@ -3084,7 +3084,7 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   CONSTRAINT `aqorders_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT aqorders_ibfk_3 FOREIGN KEY (invoiceid) REFERENCES aqinvoices (invoiceid) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `aqorders_subscriptionid` FOREIGN KEY (`subscriptionid`) REFERENCES `subscription` (`subscriptionid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 --
@@ -3099,7 +3099,7 @@ CREATE TABLE `aqorders_items` ( -- information on items entered in the acquisiti
   PRIMARY KEY  (`itemnumber`),
   KEY `ordernumber` (`ordernumber`),
   CONSTRAINT aqorders_items_ibfk_1 FOREIGN KEY (ordernumber) REFERENCES aqorders (ordernumber) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 --
@@ -3115,7 +3115,7 @@ CREATE TABLE aqorders_transfers (
   UNIQUE KEY ordernumber_to (ordernumber_to),
   CONSTRAINT aqorders_transfers_ordernumber_from FOREIGN KEY (ordernumber_from) REFERENCES aqorders (ordernumber) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT aqorders_transfers_ordernumber_to FOREIGN KEY (ordernumber_to) REFERENCES aqorders (ordernumber) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table aqinvoices
@@ -3134,7 +3134,7 @@ CREATE TABLE aqinvoices (
   PRIMARY KEY (invoiceid),
   CONSTRAINT aqinvoices_fk_aqbooksellerid FOREIGN KEY (booksellerid) REFERENCES aqbooksellers (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT aqinvoices_fk_shipmentcost_budgetid FOREIGN KEY (shipmentcost_budgetid) REFERENCES aqbudgets (budget_id) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 --
@@ -3149,7 +3149,7 @@ CREATE TABLE `fieldmapping` ( -- koha to keyword mapping
   `fieldcode` char(3) NOT NULL, -- marc field number to map to this keyword
   `subfieldcode` char(1) NOT NULL, -- marc subfield associated with the fieldcode to map to this keyword
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `transport_cost`
@@ -3165,7 +3165,7 @@ CREATE TABLE transport_cost (
       PRIMARY KEY (frombranch, tobranch),
       CONSTRAINT transport_cost_ibfk_1 FOREIGN KEY (frombranch) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE,
       CONSTRAINT transport_cost_ibfk_2 FOREIGN KEY (tobranch) REFERENCES branches (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `biblioimages`
@@ -3181,7 +3181,7 @@ CREATE TABLE `biblioimages` ( -- local cover images
  `thumbnail` mediumblob NOT NULL, -- thumbnail file contents
  PRIMARY KEY (`imagenumber`),
  CONSTRAINT `bibliocoverimage_fk1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `social_data`
@@ -3197,7 +3197,7 @@ CREATE TABLE IF NOT EXISTS `social_data` (
   `score_avg` DECIMAL(5,2),
   `num_scores` INT,
   PRIMARY KEY  (`isbn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- 'Ratings' table. This tracks the star ratings set by borrowers.
@@ -3212,7 +3212,7 @@ CREATE TABLE ratings ( -- information related to the star ratings in the OPAC
     PRIMARY KEY  (borrowernumber,biblionumber),
     CONSTRAINT ratings_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT ratings_ibfk_2 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `quotes`
@@ -3225,7 +3225,7 @@ CREATE TABLE `quotes` ( -- data for the quote of the day feature
   `text` mediumtext NOT NULL, -- text of the quote
   `timestamp` datetime NOT NULL, -- date and time that the quote last appeared in the opac
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table categories_branches
@@ -3237,7 +3237,7 @@ CREATE TABLE categories_branches( -- association table between categories and br
     branchcode VARCHAR(10),
     FOREIGN KEY (categorycode) REFERENCES categories(categorycode) ON DELETE CASCADE,
     FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE
-) ENGINE=INNODB DEFAULT CHARSET=utf8;
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table authorised_values_branches
@@ -3249,7 +3249,7 @@ CREATE TABLE authorised_values_branches( -- association table between authorised
     branchcode VARCHAR(10),
     FOREIGN KEY (av_id) REFERENCES authorised_values(id) ON DELETE CASCADE,
     FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE
-) ENGINE=INNODB DEFAULT CHARSET=utf8;
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 --
@@ -3262,7 +3262,7 @@ CREATE TABLE borrower_attribute_types_branches( -- association table between bor
     b_branchcode VARCHAR(10),
     FOREIGN KEY (bat_code) REFERENCES borrower_attribute_types(code) ON DELETE CASCADE,
     FOREIGN KEY (b_branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE
-) ENGINE=INNODB DEFAULT CHARSET=utf8;
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `borrower_modifications`
@@ -3341,7 +3341,7 @@ CREATE TABLE IF NOT EXISTS `borrower_modifications` (
   PRIMARY KEY (`verification_token`,`borrowernumber`),
   KEY `verification_token` (`verification_token`),
   KEY `borrowernumber` (`borrowernumber`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table linktracker
@@ -3361,7 +3361,7 @@ CREATE TABLE linktracker (
    KEY itemidx (itemnumber),
    KEY borridx (borrowernumber),
    KEY dateidx (timeclicked)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table 'plugin_data'
@@ -3372,7 +3372,7 @@ CREATE TABLE IF NOT EXISTS plugin_data (
   plugin_key varchar(255) NOT NULL,
   plugin_value text,
   PRIMARY KEY (plugin_class,plugin_key)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `patron_lists`
@@ -3385,7 +3385,7 @@ CREATE TABLE patron_lists (
   owner int(11) NOT NULL,                         -- borrowernumber of the list creator
   PRIMARY KEY (patron_list_id),
   KEY owner (owner)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Constraints for table `patron_lists`
@@ -3405,7 +3405,7 @@ CREATE TABLE patron_list_patrons (
   PRIMARY KEY (patron_list_patron_id),
   KEY patron_list_id (patron_list_id),
   KEY borrowernumber (borrowernumber)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Constraints for table `patron_list_patrons`
@@ -3422,7 +3422,7 @@ CREATE TABLE IF NOT EXISTS marc_modification_templates (
     template_id int(11) NOT NULL AUTO_INCREMENT,
     name text NOT NULL,
     PRIMARY KEY (template_id)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table 'marc_modification_template_actions'
@@ -3451,7 +3451,7 @@ CREATE TABLE IF NOT EXISTS marc_modification_template_actions (
   description text,
   PRIMARY KEY (mmta_id),
   CONSTRAINT `mmta_ibfk_1` FOREIGN KEY (`template_id`) REFERENCES `marc_modification_templates` (`template_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `misc_files`
@@ -3469,7 +3469,7 @@ CREATE TABLE IF NOT EXISTS `misc_files` ( -- miscellaneous files attached to rec
   PRIMARY KEY (`file_id`),
   KEY `table_tag` (`table_tag`),
   KEY `record_id` (`record_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `columns_settings`
