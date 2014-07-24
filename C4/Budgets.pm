@@ -1136,7 +1136,7 @@ sub CloneBudgetHierarchy {
     to_budget_period_id   => $to_budget_period_id,
   });
 
-Clone a budget hierarchy.
+Move orders from one budget period to another.
 
 =cut
 
