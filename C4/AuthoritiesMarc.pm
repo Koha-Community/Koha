@@ -853,7 +853,7 @@ sub FindDuplicateAuthority {
         $op = 'and';
     }
     my $query='at:'.$authtypecode.' ';
-    my $filtervalues=qr([\001-\040\!\'\"\`\#\$\%\&\*\+,\-\./:;<=>\?\@\(\)\{\[\]\}_\|\~]);
+    my $filtervalues=qr([\001-\040\Q!'"`#$%&*+,-./:;<=>?@(){[}_|~\E\]]);
     if ($record->field($auth_tag_to_report)) {
         foreach ($record->field($auth_tag_to_report)->subfields()) {
             $_->[1]=~s/$filtervalues/ /g; $query.= " $op he:\"".$_->[1]."\"" if ($_->[0]=~/[A-z]/);
