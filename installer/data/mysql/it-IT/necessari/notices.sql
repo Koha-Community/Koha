@@ -142,3 +142,6 @@ Grazie di tutto
 
 Lo staff della biblioteca.'
 );
+
+INSERT INTO letter(module, code, branchcode, name, title, content, message_transport_type)
+VALUES ('acquisition', 'ACQ_NOTIF_ON_RECEIV', '', 'Notification on receiving', 'Order received', 'Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\n The order <<aqorders.ordernumber>> (<<biblio.title>>) has been received.\n\nYour library.', 'email')

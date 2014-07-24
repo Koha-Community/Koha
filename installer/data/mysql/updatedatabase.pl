@@ -9804,6 +9804,26 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        CREATE TABLE aqorderusers (
+            ordernumber int(11) NOT NULL,
+            borrowernumber int(11) NOT NULL,
+            PRIMARY KEY (ordernumber, borrowernumber),
+            CONSTRAINT aqorderusers_ibfk_1 FOREIGN KEY (ordernumber) REFERENCES aqorders (ordernumber) ON DELETE CASCADE ON UPDATE CASCADE,
+            CONSTRAINT aqorderusers_ibfk_2 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+    |);
+
+    $dbh->do(q|
+        INSERT INTO letter(module, code, branchcode, name, title, content, message_transport_type)
+        VALUES ('acquisition', 'ACQ_NOTIF_ON_RECEIV', '', 'Notification on receiving', 'Order received', 'Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\n The order <<aqorders.ordernumber>> (<<biblio.title>>) has been received.\n\nYour library.', 'email')
+    |);
+    print "Upgrade to $DBversion done (Bug 12648: Add letter ACQ_NOTIF_ON_RECEIV )\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

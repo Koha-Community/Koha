@@ -3088,6 +3088,18 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   CONSTRAINT `aqorders_subscriptionid` FOREIGN KEY (`subscriptionid`) REFERENCES `subscription` (`subscriptionid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Table structure for table `aqorderusers`
+--
+
+DROP TABLE IF EXISTS `aqorderusers`;
+CREATE TABLE aqorderusers (
+    ordernumber int(11) NOT NULL,
+    borrowernumber int(11) NOT NULL,
+    PRIMARY KEY (ordernumber, borrowernumber),
+    CONSTRAINT aqorderusers_ibfk_1 FOREIGN KEY (ordernumber) REFERENCES aqorders (ordernumber) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT aqorderusers_ibfk_2 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `aqorders_items`
