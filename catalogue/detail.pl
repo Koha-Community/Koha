@@ -189,6 +189,17 @@ my $norequests = 1;
 my $authvalcode_items_itemlost = GetAuthValCode('items.itemlost',$fw);
 my $authvalcode_items_damaged  = GetAuthValCode('items.damaged', $fw);
 
+my $materials_authvalcode = GetAuthValCode('items.materials', $fw);
+my %materials_map;
+if ($materials_authvalcode) {
+    my $materials_authvals = GetAuthorisedValues($materials_authvalcode);
+    if ($materials_authvals) {
+        foreach my $value (@$materials_authvals) {
+            $materials_map{$value->{authorised_value}} = $value->{lib};
+        }
+    }
+}
+
 my $analytics_flag;
 my $materials_flag; # set this if the items have anything in the materials field
 my $currentbranch = C4::Context->userenv ? C4::Context->userenv->{branch} : undef;
@@ -275,7 +286,10 @@ foreach my $item (@items) {
     }
 
     if (defined($item->{'materials'}) && $item->{'materials'} =~ /\S/){
-	$materials_flag = 1;
+        $materials_flag = 1;
+        if (defined $materials_map{ $item->{materials} }) {
+            $item->{materials} = $materials_map{ $item->{materials} };
+        }
     }
 
     if ( C4::Context->preference('UseCourseReserves') ) {
