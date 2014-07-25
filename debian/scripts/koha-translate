@@ -72,16 +72,18 @@ list()
 print_available()
 {
     # Loop over only one opac theme
-    for i in $( ls $PO_DIR | grep opac-t-prog ); do
-        echo `basename $i -i-opac-t-prog-v-3006000.po` | \
+    for i in $( ls $PO_DIR | grep opac-bootstrap ); do
+        echo `basename $i -i-opac-bootstrap.po` | \
             grep -v -x -e en
     done
 }
 
 print_installed()
 {
-    ls $KOHA_INSTALL_DIR/opac/htdocs/opac-tmpl/prog/ | \
-        grep -v -e images -e itemtypeimg -x -e en
+    ( ls -1 $KOHA_INSTALL_DIR/opac/htdocs/opac-tmpl/bootstrap/ ; \
+        ls -1 $KOHA_INSTALL_DIR/opac/htdocs/opac-tmpl/prog/ 2> /dev/null ) | \
+        sort | uniq | \
+        grep -v -e images -e itemtypeimg -x -e en -e css -e js -e less -e lib
 }
 
 install_lang()
@@ -153,6 +155,7 @@ remove_lang()
         if print_installed | grep -q $lang; then
             rm -rf $KOHA_INSTALL_DIR/opac/htdocs/opac-tmpl/prog/$lang
             rm -rf $KOHA_INSTALL_DIR/opac/htdocs/opac-tmpl/ccsr/$lang
+            rm -rf $KOHA_INSTALL_DIR/opac/htdocs/opac-tmpl/bootstrap/$lang
             rm -rf $KOHA_INSTALL_DIR/intranet/htdocs/intranet-tmpl/prog/$lang
         else
             die "Error: the selected language is not already installed."
@@ -166,9 +169,7 @@ check_lang_po_files()
 {
     lang=$1
 
-    po_files="$PO_DIR/$lang-i-opac-t-prog-v-3006000.po
-              $PO_DIR/$lang-opac-ccsr.po
-              $PO_DIR/$lang-i-staff-t-prog-v-3006000.po
+    po_files="$PO_DIR/$lang-opac-bootstrap.po
               $PO_DIR/$lang-pref.po"
 
     if [ "$lang" != "" ]; then
