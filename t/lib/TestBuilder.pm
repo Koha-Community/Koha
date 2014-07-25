@@ -189,7 +189,7 @@ sub _getForeignKeys {
             };
 
             my @keys = ();
-            while( my ($col_fk_name, $col_name) = each($rel_info->{cond}) ) {
+            while( my ($col_fk_name, $col_name) = each(%{$rel_info->{cond}}) ) {
                 $col_name    =~ s|self.(\w+)|$1|;
                 $col_fk_name =~ s|foreign.(\w+)|$1|;
                 push @keys, {
