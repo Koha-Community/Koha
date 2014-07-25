@@ -1,7 +1,7 @@
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Guided reports wizard
-[% IF ( saved1 ) %]&rsaquo; Saved Reports
+[% IF ( saved1 ) %]&rsaquo; Saved reports
 [% ELSIF ( create ) %]&rsaquo; Create from SQL
 [% ELSIF ( showsql ) %]&rsaquo; Saved reports &rsaquo; SQL view
 [% ELSIF ( execute ) %]&rsaquo; Saved reports &rsaquo; [% name %] Report
@@ -871,7 +871,7 @@ $(document).ready(function() {
 </fieldset>
 
 <fieldset class="action"><input type="hidden" name="phase" value="Save Report" />
-<input type="submit" name="submit" value="Save Report" /> <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved" class="cancel">Cancel</a>
+<input type="submit" name="submit" value="Save report" /> <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved" class="cancel">Cancel</a>
 </fieldset>
 </form>
 [% END %]
