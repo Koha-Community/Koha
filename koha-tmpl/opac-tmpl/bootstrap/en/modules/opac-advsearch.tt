@@ -358,11 +358,11 @@
     <p>
         <input class="btn btn-success" type="submit" accesskey="s" name="do" title="Search" value="Search" />
         [% IF ( expanded_options ) %]
-            <a href="/cgi-bin/koha/opac-search.pl?expanded_options=0">[Fewer options]</a>
+            <a href="/cgi-bin/koha/opac-search.pl?expanded_options=0" class="btn btn-default more-less-options">Fewer options</a>
         [% ELSE %]
-            <a href="/cgi-bin/koha/opac-search.pl?expanded_options=1">[More options]</a>
+            <a href="/cgi-bin/koha/opac-search.pl?expanded_options=1" class="btn btn-default more-less-options">More options</a>
         [% END %]
-        <a href="/cgi-bin/koha/opac-search.pl?do=Clear">[New search]</a>
+        <a href="/cgi-bin/koha/opac-search.pl?do=Clear" class="btn btn-default new-search">New search</a>
     </p>
 [% END %]
 
