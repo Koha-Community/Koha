@@ -10,7 +10,7 @@
 //<![CDATA[
 
 // Prepare array of all column headers, incrementing each index by
-// two to accomodate control and title columns
+// two to accommodate control and title columns
 var allColumns = new Array([% FOREACH item_header_loo IN item_header_loop %]'[% loop.count %]'[% UNLESS ( loop.last ) %],[% END %][% END %]);
 for( x=0; x<allColumns.length; x++ ){
   allColumns[x] = Number(allColumns[x]) + 2;
