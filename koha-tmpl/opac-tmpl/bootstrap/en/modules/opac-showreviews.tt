@@ -6,7 +6,7 @@
 [% BLOCK cssinclude %][% END %]
 <link rel="alternate" type="application/rss+xml" title="[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog recent comments" href="[% OPACBaseURL %]/cgi-bin/koha/opac-showreviews.pl?format=rss" />
 </head>
-<body id="opac-showreviews" class="scrollto">
+[% INCLUDE 'bodytag.inc' bodyid='opac-showreviews' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">

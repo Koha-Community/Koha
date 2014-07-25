@@ -3,7 +3,7 @@
     [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Download list [% shelfname %][% INCLUDE 'doc-head-close.inc' %]
     [% BLOCK cssinclude %][% END %]
     </head>
-    <body id="opac-downloadlist">
+    [% INCLUDE 'bodytag.inc' bodyid='opac-downloadlist' %]
         [% INCLUDE 'masthead.inc' %]
         <div class="main">
             <ul class="breadcrumb">

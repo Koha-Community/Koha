@@ -6,7 +6,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
-[% IF ( loggedinusername ) %]<body id="opac-usersuggestions" class="scrollto">[% ELSE %]<body id="opac-suggestions" class="scrollto">[% END %]
+[% IF ( loggedinusername ) %][% INCLUDE 'bodytag.inc' bodyid='opac-usersuggestions' bodyclass='scrollto' %][% ELSE %][% INCLUDE 'bodytag.inc' bodyid='opac-suggestions' bodyclass='scrollto' %][% END %]
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">

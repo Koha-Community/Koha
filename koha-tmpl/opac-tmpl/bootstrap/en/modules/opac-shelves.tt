@@ -5,7 +5,7 @@
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;   [% IF ( viewshelf ) %]Contents of [% shelfname |html %][% ELSE %]Your lists[% END %][% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
-[% IF ( loggedinusername ) %]<body id="opac-userlists" class="scrollto">[% ELSE %]<body id="opac-lists" class="scrollto">[% END %]
+[% IF ( loggedinusername ) %][% INCLUDE 'bodytag.inc' bodyid='opac-userlists' bodyclass='scrollto' %][% ELSE %][% INCLUDE 'bodytag.inc' bodyid='opac-lists' bodyclass='scrollto' %][% END %]
 
 [% BLOCK list_permissions %]
     <li>

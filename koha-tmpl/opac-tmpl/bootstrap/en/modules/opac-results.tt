@@ -19,7 +19,7 @@
 <link rel="alternate" type="application/rss+xml" title="[% LibraryName |html %] Search RSS feed" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |uri %][% limit_cgi |uri %]&amp;count=[% countrss |uri %]&amp;sort_by=acqdate_dsc&amp;format=rss2" />
 </head>
 
-<body id="results" class="scrollto">
+[% INCLUDE 'bodytag.inc' bodyid='results' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">

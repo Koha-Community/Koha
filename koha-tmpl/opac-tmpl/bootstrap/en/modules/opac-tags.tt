@@ -22,7 +22,7 @@
     </style>
 [% END %]
 </head>
-[% IF ( loggedinusername ) %]<body id="opac-usertags" class="scrollto">[% ELSE %]<body id="opac-tags" class="scrollto">[% END %]
+[% IF ( loggedinusername ) %][% INCLUDE 'bodytag.inc' bodyid='opac-usertags' bodyclass='scrollto' %][% ELSE %][% INCLUDE 'bodytag.inc' bodyid='opac-tags' bodyclass='scrollto' %][% END %]
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
