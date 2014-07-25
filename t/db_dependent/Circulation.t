@@ -1,5 +1,20 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 
 use DateTime;
@@ -76,7 +91,7 @@ is(
     '_GetCircControlBranch returned item branch'
 );
 
-diag('Now, set a userenv');
+# Now, set a userenv
 C4::Context->_new_userenv('xxx');
 C4::Context::set_userenv(0,0,0,'firstname','surname', 'MPL', 'Midway Public Library', '', '', '');
 is(C4::Context->userenv->{branch}, 'MPL', 'userenv set');
@@ -255,7 +270,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is( $renewokay, 1, 'Can renew, no holds for this title or item');
 
 
-    diag("Biblio-level hold, renewal test");
+    # Biblio-level hold, renewal test
     AddReserve(
         $branch, $reserving_borrowernumber, $biblionumber,
         $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
@@ -280,7 +295,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     );
     is($reserve->{found}, 'F', 'hold marked completed when checking out item that fills it');
 
-    diag("Item-level hold, renewal test");
+    # Item-level hold, renewal test
     AddReserve(
         $branch, $reserving_borrowernumber, $biblionumber,
         $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
@@ -295,7 +310,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is( $renewokay, 1, 'Can renew item 2, item-level hold is on item 1');
 
 
-    diag("Items can't fill hold for reasons");
+    # Items can't fill hold for reasons
     ModItem({ notforloan => 1 }, $biblionumber, $itemnumber);
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber, 1);
     is( $renewokay, 1, 'Can renew, item is marked not for loan, hold does not block');
@@ -307,6 +322,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     CancelReserve({ reserve_id => $reserveid });
 
     diag("Too many renewals");
+    # Too many renewals
 
     # set policy to forbid renewals
     $dbh->do('UPDATE issuingrules SET renewalsallowed = 0');
@@ -316,7 +332,6 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is( $error, 'too_many', 'Cannot renew, 0 renewals allowed (returned code is too_many)');
 
     # Test WhenLostForgiveFine and WhenLostChargeReplacementFee
-    diag("WhenLostForgiveFine and WhenLostChargeReplacementFee");
     C4::Context->set_preference('WhenLostForgiveFine','1');
     C4::Context->set_preference('WhenLostChargeReplacementFee','1');
 
@@ -353,7 +368,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $future = dt_from_string();
     $future->add( days => 7 );
     my $units = C4::Overdues::_get_chargeable_units('days', $future, $now, 'MPL');
-    ok( $units == 0, '_get_chargeable_units returns 0 for items not past due date' );
+    ok( $units == 0, '_get_chargeable_units returns 0 for items not past due date (Bug 12596)' );
 }
 
 {
@@ -402,8 +417,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 
     my $upcoming_dues;
 
-    diag( "GetUpcomingDueIssues tests" );
-
+    # GetUpcomingDueIssues tests
     for my $i(0..1) {
         $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => $i } );
         is ( scalar( @$upcoming_dues ), 0, "No items due in less than one day ($i days in advance)" );
@@ -444,3 +458,5 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 }
 
 $dbh->rollback;
+
+1;
