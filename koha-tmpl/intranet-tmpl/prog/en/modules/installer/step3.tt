@@ -5,53 +5,19 @@
 <h1 id="logo"><img alt="Koha" src="[% interface %]/[% theme %]/img/koha.org-logo.gif" /> Web installer &rsaquo; Step 3</h1>
 
 [% IF ( selectframeworks ) %]
-    <script language="JavaScript">
-    <!--
-    
+    <script type="text/javascript">
+    //<![CDATA[
+
     var surl = unescape(window.location.pathname);
-    
+
     function doLoad()
     {
         // the timeout value should be the same as in the "refresh" meta-tag
         setTimeout( "refresh()", 2*1000 );
     }
-    
+
     function refresh(value)
     {
-        //  This version of the refresh function will cause a new
-        //  entry in the visitor's history.  It is provided for
-        //  those browsers that only support JavaScript 1.0.
-        //
-        surl=surl+'?step=3&op=selectframeworks&fwklanguage='+value;
-        window.location.href = surl;
-    }
-    
-    //-->
-    </script>
-    
-    <script language="JavaScript1.1">
-    <!--
-    function refresh(value)
-    {
-        //  This version does NOT cause an entry in the browser's
-        //  page view history.  Most browsers will always retrieve
-        //  the document from the web-server whether it is already
-        //  in the browsers page-cache or not.
-        //  
-        surl=surl+'?step=3&op=selectframeworks&fwklanguage='+value;
-        window.location.replace( surl );
-    }
-    //-->
-    </script>
-    
-    <script language="JavaScript1.2">
-    <!--
-    function refresh(value)
-    {
-        //  This version of the refresh function will be invoked
-        //  for browsers that support JavaScript version 1.2
-        //
-        
         //  The argument to the location.reload function determines
         //  if the browser should retrieve the document from the
         //  web-server.  In our example all we need to do is cause
@@ -59,33 +25,53 @@
         //  re-evaluated.  If we needed to pull the document from
         //  the web-server again (such as where the document contents
         //  change dynamically) we would pass the argument as 'true'.
-        //  
+        //
         surl=surl+'?step=3&op=selectframeworks&fwklanguage='+value;
+
         window.location.replace( surl );
     }
-    //-->
-    </script>
-    </head>
-    <body>
-    <script language="JavaScript">
-    function Hide(link) {
-            subfield = document.getElementById('bloc'+link);
-        var initstyle=subfield.style.display;
-            if (initstyle == 'block') subfield.style.display = 'none' ;
-            if (initstyle == 'none') subfield.style.display = 'block' ;
+
+    function selectAllFrameworks()
+    {
+        //  A handy short link that selects all available checkboxes
+        //  on the page.
+        //
+        var checkboxes = document.getElementsByTagName("input");
+        for (var i = 0; i < checkboxes.length; i++)
+        {
+            if (checkboxes[i].type == 'checkbox')
+            {
+                checkboxes[i].checked = true;
+            }
+        }
+
+        //  Prevent event propergation.
+        return false;
     }
+
+    function Hide(link)
+    {
+        //  Toggle the display of a given element on the page.
+        //
+        subfield = document.getElementById('bloc'+link);
+        var initstyle = subfield.style.display;
+        if (initstyle == 'block') subfield.style.display = 'none' ;
+        if (initstyle == 'none') subfield.style.display = 'block' ;
+    }
+
+    //]]>
     </script>
 [% END %]
 [% IF ( finish ) %]
     <h1>Congratulations, installation complete</h1>
-    <p>If this page does not redirect in 5 seconds, click <a href="/">here</a>.</p> 
+    <p>If this page does not redirect in 5 seconds, click <a href="/">here</a>.</p>
 [% END %]
 [% IF ( choosemarc ) %]
     <h2 align="center">Select your MARC flavor</h2>
-    <form name="frameworkselection" method="post" action="install.pl">   
+    <form name="frameworkselection" method="post" action="install.pl">
     <input type="hidden" name="step" value="3" />
     <input type="hidden" name="op" value="selectframeworks" />
-    <p>  
+    <p>
     [% FOREACH flavourloo IN flavourloop %]
     <div>
             [% IF ( flavourloo.checked ) %]
@@ -102,14 +88,17 @@
 
 [% IF ( selectframeworks ) %]
     <h2 align="center">Selecting Default Settings</h2>
+    <script type="text/javascript">
+        document.write('<p><a href="#" onclick="return selectAllFrameworks();">Select all frameworks</a></p>');
+    </script>
     <form name="frameworkselection" method="post" action="install.pl">
     <input type="hidden" name="step" value="3" />
     <input type="hidden" name="op" value="addframeworks" />
-    
+
     [% IF ( frameworksloop ) %]
     <h2>MARC frameworks: [% marcflavour %]</h2>
     [% IF ( en_marc_frameworks ) %]
-        <h4><span class="error">No MARC frameworks are available for your language.  
+        <h4><span class="error">No MARC frameworks are available for your language.
                 Defaulting to the frameworks supplied for English (en)<span></h4>
     [% END %]
     [% FOREACH frameworksloo IN frameworksloop %]
@@ -120,24 +109,25 @@
         <tr>
         <td style="vertical-align:top;">
             [% IF ( framework.checked ) %]
-                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" checked="checked" />
+                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" checked="checked" id="[% framework.fwkname %]" />
             [% ELSE %]
-                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" />
+                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" id="[% framework.fwkname %]" />
             [% END %]
         </td>
         <td>
-            [% framework.fwkdescription %]
-            <em>([% framework.fwkname %])</em>
+            <label for="[% framework.fwkname %]">
+                [% framework.fwkdescription %]
+                <em>([% framework.fwkname %])</em>
+            </label>
         </td>
         </table>
     [% END %]
     </div>
-    </p>
     [% END %]
     <h2>Other data</h2>
     [% END %]
     [% IF ( en_sample_data ) %]
-        <h4><span class="error">No sample data and settings are available for your language.  
+        <h4><span class="error">No sample data and settings are available for your language.
                 Defaulting to the samples supplied for English (en)<span></h4>
     [% END %]
     [% FOREACH levelloo IN levelloop %]
@@ -148,26 +138,26 @@
         <tr>
         <td style="vertical-align:top;">
             [% IF ( framework.checked ) %]
-                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" checked="checked" />
+                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" checked="checked" id="[% framework.fwkname %]" />
             [% ELSE %]
-                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" />
+                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" id="[% framework.fwkname %]" />
             [% END %]
         </td>
         <td>
-            [% framework.fwkdescription %]
-            <em>([% framework.fwkname %])</em>
+            <label for="[% framework.fwkname %]">
+                [% framework.fwkdescription %]
+                <em>([% framework.fwkname %])</em>
+            </label>
         </td>
         </table>
     [% END %]
     </div>
-    </p>
     [% END %]
     <p>When you've made your selections, please click 'Import' below to begin the process. It may take a while to complete,
     please be patient.</p>
     <p><input type="submit" value="Import &gt;&gt;" />
     </p>
     </form>
-    </p>
 [% END %]
 
 
@@ -226,7 +216,7 @@
             We are upgrading from Koha [% dbversion %] to [% kohaversion %], you must <a href="install.pl?step=3&amp;op=updatestructure" class="button">update your database</a>
         </p>
     [% ELSE %]
-        <p>We are ready to do some basic configuration. Please 
+        <p>We are ready to do some basic configuration. Please
             <a href="install.pl?step=3&amp;op=choosemarc" class="button">install basic configuration settings</a>
             to continue the installation.
         </p>
@@ -242,7 +232,7 @@
     <ul>
       [% FOREACH update_repor IN update_report %]
           <li>[% update_repor.line |html %]</li>
-      [% END %] 
+      [% END %]
     </ul>
   [% END %]
   [% IF ( has_update_errors ) %]
@@ -250,7 +240,7 @@
     <ul>
       [% FOREACH update_error IN update_errors %]
           <li class="update_error">[% update_error.line |html %]</li>
-      [% END %] 
+      [% END %]
     </ul>
   [% END %]
  [% UNLESS ( has_update_errors ) %]
@@ -260,5 +250,6 @@
   </div>
 [% END %]
 
+</div>
 </body>
 </html>
