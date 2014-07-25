@@ -18,10 +18,11 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
+
 use C4::Auth;
 use CGI;
+use Text::CSV::Encoded;
 use C4::Context;
 use C4::Koha;
 use C4::Dates;
@@ -131,22 +132,31 @@ if ($do_it) {
     @data=@$results;
     my $total = scalar @data;
     foreach my $result (@data){
+    # Init additional columns for CSV export
+    $result->{'biblionumber'} = q{};
+    $result->{'biblioitemnumber'} = q{};
+    $result->{'barcode'} = q{};
+    $result->{'userfirstname'} = q{};
+    $result->{'usersurname'} = q{};
+    $result->{'borrowerfirstname'} = q{};
+    $result->{'borrowersurname'} = q{};
+
 	if (substr($result->{'info'}, 0, 4) eq 'item' || $result->{module} eq "CIRCULATION"){
 	    # get item information so we can create a working link
         my $itemnumber=$result->{'object'};
         $itemnumber=$result->{'info'} if ($result->{module} eq "CIRCULATION");
 	    my $item=GetItem($itemnumber);
-	    $result->{'biblionumber'}=$item->{'biblionumber'};
-	    $result->{'biblioitemnumber'}=$item->{'biblionumber'};		
-        $result->{'barcode'}=$item->{'barcode'};
+        if ($item) {
+            $result->{'biblionumber'}=$item->{'biblionumber'};
+            $result->{'biblioitemnumber'}=$item->{'biblionumber'};
+            $result->{'barcode'}=$item->{'barcode'};
+        }
 	}
     #always add firstname and surname for librarian/user
     if ($result->{'user'}){
         my $userdetails = C4::Members::GetMemberDetails($result->{'user'});
-        if ($userdetails->{'firstname'}){
+        if ($userdetails){
             $result->{'userfirstname'} = $userdetails->{'firstname'};
-        }
-        if ($userdetails->{'surname'}){
             $result->{'usersurname'} = $userdetails->{'surname'};
         }
     }
@@ -154,10 +164,8 @@ if ($do_it) {
     if ($result->{module} eq "CIRCULATION" || $result->{module} eq "MEMBERS" || $result->{module} eq "FINES"){
         if($result->{'object'}){
             my $borrowerdetails = C4::Members::GetMemberDetails($result->{'object'});
-            if ($borrowerdetails->{'firstname'}){
-            $result->{'borrowerfirstname'} = $borrowerdetails->{'firstname'};
-            }
-            if ($borrowerdetails->{'surname'}){
+            if ($borrowerdetails){
+                $result->{'borrowerfirstname'} = $borrowerdetails->{'firstname'};
                 $result->{'borrowersurname'} = $borrowerdetails->{'surname'};
             }
         }
@@ -187,18 +195,30 @@ if ($do_it) {
         output_html_with_http_headers $input, $cookie, $template->output;
     } else {
         # Printing to a csv file
+        my $content = q{};
+        my $delimiter = C4::Context->preference('delimiter') || ',';
+        if (@data) {
+            my $csv = Text::CSV::Encoded->new( { encoding_out => 'utf8', sep_char => $delimiter } );
+            $csv or die "Text::CSV::Encoded->new FAILED: " . Text::CSV::Encoded->error_diag();
+            # First line with heading
+            # Exporting bd id seems useless
+            my @headings = grep { $_ ne 'action_id' } sort keys $data[0];
+            if ( $csv->combine( @headings ) ) {
+                $content .= $csv->string() . "\n";
+            }
+            # Lines of logs
+            foreach my $line (@data) {
+                my @cells = map { $line->{$_} } @headings;
+                if ( $csv->combine( @cells ) ) {
+                    $content .= $csv->string() . "\n";
+                }
+            }
+        }
         print $input->header(
             -type       => 'text/csv',
-            -attachment => "$basename.csv",
-            -filename   => "$basename.csv"
+            -attachment => $basename . '.csv',
         );
-        my $sep = C4::Context->preference("delimiter");
-        foreach my $line (@data) {
-            #next unless $modules[0] eq "catalogue";
-		foreach (qw(timestamp firstname surname action info title author)) {
-			print $line->{$_} . $sep;
-		}	
-	}
+        print $content;
     }
 	exit;
 } else {
