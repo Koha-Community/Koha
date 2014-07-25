@@ -56,7 +56,7 @@
       </thead>
       <tbody>
         [% FOREACH user IN users_loop %]
-          [% IF ( user.toggle ) %]
+          [% IF ( loop.odd ) %]
             <tr>
           [% ELSE %]
             <tr class="highlight">
