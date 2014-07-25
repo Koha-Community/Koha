@@ -11490,9 +11490,9 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
                 map( $serialseq =~ s/$_/__SPLIT__/, @splits );
                 (
                     undef,
-                    $enumeration_data{ $indexes[0] },
-                    $enumeration_data{ $indexes[1] },
-                    $enumeration_data{ $indexes[2] }
+                    $enumeration_data{ $indexes[0] // q{} },
+                    $enumeration_data{ $indexes[1] // q{} },
+                    $enumeration_data{ $indexes[2] // q{} }
                 ) = split( /__SPLIT__/, $serialseq );
             }
             else
