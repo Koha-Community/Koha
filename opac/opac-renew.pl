@@ -90,7 +90,7 @@ else {
             $errorstring .= $error . "|";
         }
     }
-    $renewed = join( '|', @renewed );
+    $renewed = join( ':', @renewed );
 }
 
 print $query->redirect("/cgi-bin/koha/opac-user.pl?renew_error=$errorstring&renewed=$renewed");
