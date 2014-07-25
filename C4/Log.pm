@@ -241,7 +241,6 @@ sub GetLogs {
     
     my @logs;
     while( my $row = $sth->fetchrow_hashref ) {
-        $row->{$row->{module}} = 1;
         push @logs , $row;
     }
     return \@logs;
