@@ -182,9 +182,13 @@ function checkMultiHold() {
 	<div id="yui-main">
 	<div class="yui-b">
 [% IF ( noitems ) %]
-<div class="dialog alert">
-<strong>Cannot place hold:</strong> this record has no items attached.
-</div>
+    <div class="dialog alert">
+    [%IF (multi_hold) %]
+        <strong>Cannot place hold:</strong> one or more records without items attached.
+    [% ELSE %]
+        <strong>Cannot place hold:</strong> this record has no items attached.
+    [% END %]
+    </ div>
 [% ELSE %]
   [% IF ( messagetransfert ) %]
 		<div class="dialog message">
