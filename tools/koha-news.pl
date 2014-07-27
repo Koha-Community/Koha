@@ -65,12 +65,15 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 # get lang list
 my @lang_list;
 my $tlangs = getTranslatedLanguages() ;
+
 foreach my $language ( @$tlangs ) {
-    push @lang_list,
-      {
-        language => $language->{'rfc4646_subtag'},
-        selected => ( $new_detail->{lang} eq $language->{'rfc4646_subtag'} ? 1 : 0 ),
-      };
+    foreach my $sublanguage ( @{$language->{'sublanguages_loop'}} ) {
+        push @lang_list,
+        {
+            language => $sublanguage->{'rfc4646_subtag'},
+            selected => ( $new_detail->{lang} eq $sublanguage->{'rfc4646_subtag'} ? 1 : 0 ),
+        };
+    }
 }
 
 my $branches = GetBranches;
