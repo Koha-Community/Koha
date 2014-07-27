@@ -89,7 +89,8 @@
 [% IF ( selectframeworks ) %]
     <h2 align="center">Selecting Default Settings</h2>
     <script type="text/javascript">
-        document.write('<p><a href="#" onclick="return selectAllFrameworks();">Select all frameworks</a></p>');
+        var linklabel = _("Select all sample data");
+        document.write('<p><a href="#" onclick="return selectAllFrameworks();">'+linklabel+'</a></p>');
     </script>
     <form name="frameworkselection" method="post" action="install.pl">
     <input type="hidden" name="step" value="3" />

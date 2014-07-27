@@ -68,5 +68,11 @@ td input { font-size: 1.5em; }
 }
 
 </style>
+
+<script type="text/javascript">
+    //<![CDATA[
+        function _(s) { return s } // dummy function for gettext
+    //]]>
+</script>
 </head>
 <body>
