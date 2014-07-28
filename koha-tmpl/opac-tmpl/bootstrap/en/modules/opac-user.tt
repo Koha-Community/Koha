@@ -222,7 +222,7 @@
                                                 </td>
                                                 [% IF ( OpacRenewalAllowed && !( borrower.is_expired && borrower.BlockExpiredPatronOpacActions ) ) %]
                                                     <td class="renew">
-                                                    [% IF ISSUE.renewed %]<span class="alert">Renewed!</span>[% END %]
+                                                    [% IF ISSUE.renewed %]<span class="blabel label-success">Renewed!</span><br />[% END %]
                                                     [% IF ( ISSUE.status ) %]
                                                         [% IF ( canrenew ) %]
                                                             <input type="checkbox" name="item" value="[% ISSUE.itemnumber %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber %]&amp;borrowernumber=[% ISSUE.borrowernumber %]">Renew</a>
