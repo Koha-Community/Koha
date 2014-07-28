@@ -8,6 +8,7 @@
 #
 
 # Copyright 2003 Katipo Communications
+# Copyright 2014 ByWater Solutions
 #
 # This file is part of Koha.
 #
@@ -24,10 +25,9 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
-use HTML::Template::Pro;
+use Template;
 use C4::Context;
 use Time::Local;
 use POSIX;
@@ -36,35 +36,32 @@ my $dbh     = C4::Context->dbh;
 my $file    = $ARGV[0];
 my %config  = getConf("config");
 my $outFile = $config{"output"};
-my $feed    = HTML::Template::Pro->new( filename => $config{"tmpl"} );
+my $feed    = Template->new();
 
 my %channel = getConf("channel");
-$feed->param( CHANNELTITLE     => $channel{'title'} );
-$feed->param( CHANNELLINK      => $channel{'link'} );
-$feed->param( CHANNELDESC      => $channel{'desc'} );
-$feed->param( CHANNELLANG      => $channel{'lang'} );
-$feed->param( CHANNELLASTBUILD => getDate() );
+my %image   = getConf("image");
+my $vars    = {
+    CHANNELTITLE     => $channel{'title'},
+    CHANNELLINK      => $channel{'link'},
+    CHANNELDESC      => $channel{'desc'},
+    CHANNELLANG      => $channel{'lang'},
+    CHANNELLASTBUILD => getDate(),
 
-my %image = getConf("image");
-$feed->param( IMAGETITLE       => $image{'title'} );
-$feed->param( IMAGEURL         => $image{'url'} );
-$feed->param( IMAGELINK        => $image{'link'} );
-$feed->param( IMAGEDESCRIPTION => $image{'description'} );
-$feed->param( IMAGEWIDTH       => $image{'width'} );
-$feed->param( IMAGEHEIGHT      => $image{'height'} );
+    IMAGETITLE       => $image{'title'},
+    IMAGEURL         => $image{'url'},
+    IMAGELINK        => $image{'link'},
+    IMAGEDESCRIPTION => $image{'description'},
+    IMAGEWIDTH       => $image{'width'},
+    IMAGEHEIGHT      => $image{'height'},
 
-#
-# handle the items
-#
-$feed->param( ITEMS => getItems( $config{'query'} ) );
+    ITEMS => getItems( $config{'query'} )
+};
 
-open( FILE, ">$outFile" ) or die "can't open $outFile";
-print FILE $feed->output();
-close FILE;
+my $template_path = $config{"tmpl"};
+open( my $fh, "<", $template_path ) or die "cannot open $template_path : $!";
+$feed->process( $fh, $vars, $outFile );
 
 sub getDate {
-
-    #    my $date = localtime(timelocal(localtime));
     my $date = strftime( "%a, %d %b %Y %T %Z", localtime );
     return $date;
 }
@@ -80,12 +77,14 @@ sub getConf {
             my @line = split( /=/, $_, 2 );
             unless ( $line[1] ) {
                 $inSection = 0;
-            } else {
+            }
+            else {
                 my ( $key, $value ) = @line;
                 chomp $value;
                 $return{$key} = $value;
             }
-        } else {
+        }
+        else {
             if ( $_ eq "$section\n" ) { $inSection = 1 }
         }
     }

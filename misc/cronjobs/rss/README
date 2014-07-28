@@ -21,7 +21,7 @@ is invoked like this (in the case of lastAcquired):
 
 The basic process is that rss reads the config file
 (lastAcquired.conf) to determine RSS header information, the SQL query
-used to generate the results, and the HTML::Template style used to
+used to generate the results, and the Template Tookit style used to
 format the output.  Since you'll likely to want to create your own RSS
 content, or at least modify the ones present here, let's review the
 config file and the template file.
@@ -51,16 +51,15 @@ title=Koha, the worlds best Open Source Library System
 url=http://www.koha-community.org/images/foo.jpg
 link=http://www.koha-community.org
 config
-tmpl=lastAcquired.tmpl
+tmpl=lastAcquired.tt
 output=lastAcquired.xml
 query=select biblioitems.isbn as isbn, biblio.title as title, biblio.author as author from biblio, biblioitems, items where biblioitems.biblionumber = items.biblionumber and biblio.biblionumber = items.biblionumber and items.dateaccessioned is not NULL order by items.dateaccessioned desc
 
 
 This data (and the data acquired from the query) are then used to fill
 in the template.  Most of the template is boilerplate and should not
-be edited.  The section within the <TMPL_LOOP NAME=ITEMS>
-... </TMPL_LOOP> is the part which can be modified to create your own
-RSS content.  
+be edited.  The section within the [% FOREACH i IN ITEMS %] ... [% END %]
+is the part which can be modified to create your own RSS content.
 
 Here's the lastAcquired.tmpl file:
 
@@ -72,25 +71,24 @@ Here's the lastAcquired.tmpl file:
 <rss version="0.91">
 
 <channel>
- <title><TMPL_VAR CHANNELTITLE></title>
- <link><TMPL_VAR CHANNELLINK></link>
- <description><TMPL_VAR CHANNELDESC></description>
- <language><TMPL_VAR CHANNELLANG></language>
- <lastBuildDate><TMPL_VAR CHANNELLASTBUILD></lastBuildDate>
+ <title>[% CHANNELTITLE %]</title>
+ <link>[% CHANNELLINK %]</link>
+ <description>[% CHANNELDESC %]</description>
+ <language>[% CHANNELLANG %]</language>
+ <lastBuildDate>[% CHANNELLASTBUILD %]</lastBuildDate>
 
  <image>
-  <title><TMPL_VAR IMAGETITLE></title>
-  <url><TMPL_VAR IMAGEURL></url>
-  <link><TMPL_VAR IMAGELINK></link>
+  <title>[% IMAGETITLE %]</title>
+  <url>[% IMAGEURL %]</url>
+  <link>[% IMAGELINK %]</link>
  </image>
 
-<TMPL_LOOP NAME=ITEMS>
+[% FOREACH i IN ITEMS %]
  <item>
-  <title><TMPL_VAR TITLE>, by <TMPL_VAR AUTHOR></title>
-  <link>http://opac.library.org.nz/cgi-bin/koha/opac-searchresults.pl?isbn=<TMPL_VAR ISBN></link>
-
+  <title>[% i.TITLE %], by [% i.AUTHOR %]</title>
+  <link>http://opac.library.org.nz/cgi-bin/koha/opac-searchresults.pl?isbn=[% i.ISBN %]</link>
  </item>
-</TMPL_LOOP>
+[% END %]
 
 </channel>
 </rss>
@@ -100,3 +98,4 @@ Originally written by Pat Eyler (pate@eylerfamily.org), suggestions,
 advice, and help came from 'Content Syndication with RSS', Chris
 Cormack, Mike Hansen, Steve Tonnesen and a variety of folks on #koha at 
 irc.katipo.co.nz.
+Updated for use with Template Toolkit by Kyle M Hall, ByWater Solutions
