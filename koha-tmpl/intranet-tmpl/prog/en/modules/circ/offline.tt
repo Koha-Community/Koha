@@ -586,8 +586,8 @@ $(document).ready(function () {
 
     <div id="bd">
         <div id="yui-main">
-            <audio id="alert_sound" src="[% interface %]/prog/sound/critical.ogg" autobuffer="autobuffer"></audio>
-            <audio id="success_sound" src="[% interface %]/prog/sound/beep.ogg" autobuffer="autobuffer"></audio>
+            <audio id="alert_sound" src="[% interface %]/prog/sound/critical.ogg" preload="auto"></audio>
+            <audio id="success_sound" src="[% interface %]/prog/sound/beep.ogg" preload="auto"></audio>
 
             <div id="alerts" class="yui-b">
             </div>
@@ -761,7 +761,7 @@ $(document).ready(function () {
     </div>
 
     <div class="yui-b offline-circulation" style="display: none;">
-        <div class="patroninfo"><h5 class="patron-title"></h5>
+        <div class="patroninfo"><h5 class="patron-title">&nbsp;</h5>
             <ul>
                 <li id="patron-address-1"></li>
                 <li id="patron-address-2"></li>
@@ -772,5 +772,7 @@ $(document).ready(function () {
                 <li id="patron-library"></li>
             </ul>
         </div>
+    </div>
+</div>
 
 [% INCLUDE 'intranet-bottom.inc' %]
