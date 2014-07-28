@@ -5,21 +5,21 @@
  xmlns:dc="http://purl.org/dc/elements/1.1/"
 >
   <channel rdf:about="[% CHANNELLINK %]">
-	<title>[% CHANNELTITLE %]</title>
-	<link>[% CHANNELLINK %]</link>
-	<description>[% CHANNELDESC %]</description>
-	<language>[% CHANNELLANG %]</language>
-	<lastBuildDate>[% CHANNELLASTBUILD %]</lastBuildDate>
-	 <image rdf:about="[% IMAGEURL %]">
-	  <title>[% IMAGETITLE %]</title>
-	  <url>[% IMAGEURL %]</url>
-	  <link>[% IMAGELINK %]</link>
-	 </image>
+    <title>[% CHANNELTITLE %]</title>
+    <link>[% CHANNELLINK %]</link>
+    <description>[% CHANNELDESC %]</description>
+    <language>[% CHANNELLANG %]</language>
+    <lastBuildDate>[% CHANNELLASTBUILD %]</lastBuildDate>
+     <image rdf:about="[% IMAGEURL %]">
+      <title>[% IMAGETITLE %]</title>
+      <url>[% IMAGEURL %]</url>
+      <link>[% IMAGELINK %]</link>
+     </image>
     <items>
       <rdf:Seq>
-	  [% FOREACH i IN ITEMS %]
+      [% FOREACH i IN ITEMS %]
         <rdf:li resource="http://opac.library.org.nz/cgi-bin/koha/opac-detail.pl?biblionumber=[% ibiblionumber %]"/>
-	  [% END %]
+      [% END %]
       </rdf:Seq>
     </items>
 </channel>
