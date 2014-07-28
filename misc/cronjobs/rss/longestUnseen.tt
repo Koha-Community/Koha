@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE rss PUBLIC "-//Netscape Communications/DTD RSS 0.91/EN"
+	  "http://my.netscape.com/publish/formats/rss-0.91.dtd">
+
+<rss version="0.91">
+
+<channel>
+ <title>[% CHANNELTITLE></title>
+ <link>[% CHANNELLINK %]</link>
+ <description>[% CHANNELDESC %]</description>
+ <language>[% CHANNELLANG %]</language>
+ <lastBuildDate>[% CHANNELLASTBUILD %]</lastBuildDate>
+
+ <image>
+  <title>[% IMAGETITLE %]</title>
+  <url>[% IMAGEURL %]</url>
+  <link>[% IMAGELINK %]</link>
+ </image>
+
+[% FOREACH i IN ITEMS %]
+ <item>
+  <title>[% i.TITLE %], by [% i.AUTHOR %]</title>
+  <link>http://opac.library.org.nz/cgi-bin/koha/opac-searchresults.pl?isbn=[% i.ISBN %]</link>
+
+ </item>
+[% END %]
+
+</channel>
+</rss>

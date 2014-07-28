@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns="http://purl.org/rss/1.0/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+>
+  <channel rdf:about="[% CHANNELLINK %]">
+	<title>[% CHANNELTITLE %]</title>
+	<link>[% CHANNELLINK %]</link>
+	<description>[% CHANNELDESC %]</description>
+	<language>[% CHANNELLANG %]</language>
+	<lastBuildDate>[% CHANNELLASTBUILD %]</lastBuildDate>
+	 <image rdf:about="[% IMAGEURL %]">
+	  <title>[% IMAGETITLE %]</title>
+	  <url>[% IMAGEURL %]</url>
+	  <link>[% IMAGELINK %]</link>
+	 </image>
+    <items>
+      <rdf:Seq>
+	  [% FOREACH i IN ITEMS %]
+        <rdf:li resource="http://opac.library.org.nz/cgi-bin/koha/opac-detail.pl?biblionumber=[% ibiblionumber %]"/>
+	  [% END %]
+      </rdf:Seq>
+    </items>
+</channel>
+
+  [% FOREACH i IN ITEMS %]
+  <item rdf:about="http://opac.library.org.nz/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">
+  <title>[% i.TITLE %][% IF i.AUTHOR %] by [% i.AUTHOR %][% END %]</title>
+  <link>http://opac.library.org.nz/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]</link>
+<description><![CDATA[[% TITLE %][% IF i.AUTHOR %] by [% i.AUTHOR %][% END %]
+<br>[% place %] [% i.publishercode %] [% i.publicationyear %]
+<br>[% pages %] [% i.illus %] [% i.size %]
+[% IF i.notes %]<br><br>[% i.notes %][% END %]<br>
+<a href="http://opac.library.org.nz/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.biblionumber %]">View Details</a> | <a href="http://opac.library.org.nz/cgi-bin/koha/opac-reserve.pl?biblionumber=[% i.biblionumber %]">Reserve this Item</a>[% IF i.author %] | <a href="http://opac.library.org.nz/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=[% i.author %]&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search">More by this Author</a>[% END %]
+]]></description>
+ </item>
+[% END %]
+</rdf:RDF>
