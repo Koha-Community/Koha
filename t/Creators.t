@@ -1,13 +1,20 @@
 #!/usr/bin/perl
 #
-# This Koha test module is a stub!
-# Add more tests here!!!
+# This module will excercise pdf creation routines
+#
+# When run with KEEP_PDF enviroment variable it will keep
+# test.pdf for manual inspection. This can be used to verify
+# that ttf font configuration is complete like:
+#
+# KEEP_PDF=1 KOHA_CONF=/etc/koha/sites/srvgit/koha-conf.xml prove t/Creators.t
+#
+# sample of utf-8 text, font name and type will be on bottom of second page
 
 use strict;
 use warnings;
 
 use File::Temp qw/ tempfile  /;
-use Test::More tests => 16;
+use Test::More tests => 41;
 
 BEGIN {
         use_ok('C4::Creators');
@@ -51,6 +58,16 @@ is($pdf_creator->StrWidth("test", "H", 12), $expected_width, "testing StrWidth()
 is($result[0], '10', "testing Text() writes from a given x-value");
 is($result[1], $expected_offset, "testing Text() writes to the correct x-value");
 
+my $font_types = C4::Creators::Lib::get_font_types();
+isa_ok( $font_types, 'ARRAY', 'get_font_types' );
+
+my $y = 50;
+foreach my $font ( @$font_types ) {
+	ok( $pdf_creator->Font( $font->{type} ), 'Font ' . $font->{type} );
+	ok( $pdf_creator->Text(10, $y, "\x{10C}evap\x{10D}i\x{107} " . $font->{name} . ' - ' . $font->{type} ), 'Text ' . $font->{name});
+	$y += $pdf_creator->FontSize() * 1.2;
+}
+
 my  ($fh, $filename) = tempfile();
 open(  $fh, '>', $filename );
 select $fh;
@@ -59,4 +76,4 @@ ok($pdf_creator->End(), "testing End() works");
 
 close($fh);
 ok( -s $filename , "test file $filename created OK" );
-unlink $filename ;
+unlink $filename unless $ENV{KEEP_PDF};
