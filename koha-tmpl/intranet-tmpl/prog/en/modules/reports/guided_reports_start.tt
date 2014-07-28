@@ -76,7 +76,7 @@ $(document).ready(function(){
     }));
 
     var rtabs = $("#tabs").tabs();
-    rtabs.bind("tabsshow", function(e, ui) {
+    rtabs.on("tabsactivate", function(e, ui) {
         $("#subgroup_filter option").each(function() {
             if($(this).val().length > 0) {
                 $(this).remove();
@@ -87,8 +87,9 @@ $(document).ready(function(){
         rtable.fnSetColumnVis(4, true);
         rtable.fnSetColumnVis(5, true);
 
-        var g_id = $(ui.tab).attr('id')
-        var g_name = $(ui.tab).text();
+        var g_id = $(ui.newTab).children().attr('id');
+        var g_name = $(ui.newTab).text();
+
         if (g_id && g_id.length > 0) {
             rtable.fnFilter('^' + g_name + '$', 4, true, true, true, false);
             rtable.fnSetColumnVis(4, false);
