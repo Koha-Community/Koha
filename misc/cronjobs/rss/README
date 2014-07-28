@@ -51,7 +51,7 @@ title=Koha, the worlds best Open Source Library System
 url=http://www.koha-community.org/images/foo.jpg
 link=http://www.koha-community.org
 config
-tmpl=lastAcquired.tt
+template=lastAcquired.tt
 output=lastAcquired.xml
 query=select biblioitems.isbn as isbn, biblio.title as title, biblio.author as author from biblio, biblioitems, items where biblioitems.biblionumber = items.biblionumber and biblio.biblionumber = items.biblionumber and items.dateaccessioned is not NULL order by items.dateaccessioned desc
 
@@ -61,7 +61,7 @@ in the template.  Most of the template is boilerplate and should not
 be edited.  The section within the [% FOREACH i IN ITEMS %] ... [% END %]
 is the part which can be modified to create your own RSS content.
 
-Here's the lastAcquired.tmpl file:
+Here's the lastAcquired.tt file:
 
 <?xml version="1.0" encoding="UTF-8"?>
 

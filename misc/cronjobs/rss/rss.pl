@@ -57,7 +57,7 @@ my $vars    = {
     ITEMS => getItems( $config{'query'} )
 };
 
-my $template_path = $config{"tmpl"};
+my $template_path = $config{"template"};
 open( my $fh, "<", $template_path ) or die "cannot open $template_path : $!";
 $feed->process( $fh, $vars, $outFile );
 
