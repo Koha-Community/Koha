@@ -133,17 +133,19 @@
                     [% IF ( total ) %]
                         <h4>[% total %] lines found.</h4>
                         <table>
-                            <tr>
-                                <th>Date</th>
-                                <th>Librarian</th>
-                                <th>Module</th>
-                                <th>Action</th>
-                                <th>Object</th>
-                                <th>Info</th>
-                            </tr>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Librarian</th>
+                                    <th>Module</th>
+                                    <th>Action</th>
+                                    <th>Object</th>
+                                    <th>Info</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                             [% FOREACH loopro IN looprow %]
                                 [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
-                                <tr>
                                     <td>[% loopro.timestamp %]</td>
                                     <td>
                                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.user %]" title="display detail for this librarian."> [% IF ( loopro.userfirstname ) || ( loopro.usersurname ) %][% loopro.userfirstname %] [% loopro.usersurname %] ([% loopro.user %]) [% ELSE %][% loopro.user %][% END %]</a>
@@ -184,6 +186,7 @@
                                     </td>
                                 </tr>
                             [% END %]
+                            </tbody>
                         </table>
                     [% ELSE %]
                         <div class="dialog alert">
