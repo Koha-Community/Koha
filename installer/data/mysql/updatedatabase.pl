@@ -8577,7 +8577,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.011";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'hr', 'language', 'Croatian','2014-07-24' )");
     $dbh->do("INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES( 'hr','hrv')");
