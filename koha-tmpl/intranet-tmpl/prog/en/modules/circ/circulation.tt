@@ -628,7 +628,7 @@ No patron matched <span class="ex">[% message %]</span>
 
 			</ul>
 
-[% IF (noissues && borrowernumber) %]
+[% IF (noissues && borrowernumber && CAN_user_circulate_force_checkout) %]
 <div class="override_debarment">
 <a href="/cgi-bin/koha/circ/circulation.pl?forceallow=1&amp;borrowernumber=[% borrowernumber %]" class="btn btn-small">Override debarment temporarily</a>
 </div>
