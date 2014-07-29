@@ -46,6 +46,7 @@ BEGIN {
 		&GetSupportName &GetSupportList
 		&get_itemtypeinfos_of
 		&getframeworks &getframeworkinfo
+        &GetFrameworksLoop
 		&getauthtypes &getauthtype
 		&getallthemes
 		&getFacets
@@ -363,12 +364,13 @@ build a HTML select with the following code :
 
 =head3 in PERL SCRIPT
 
-  my $frameworks = frameworks();
+  my $frameworks = getframeworks();
   my @frameworkloop;
   foreach my $thisframework (keys %$frameworks) {
     my $selected = 1 if $thisframework eq $frameworkcode;
-    my %row =(value => $thisframework,
-                selected => $selected,
+    my %row =(
+                value       => $thisframework,
+                selected    => $selected,
                 description => $frameworks->{$thisframework}->{'frameworktext'},
             );
     push @frameworksloop, \%row;
@@ -377,14 +379,18 @@ build a HTML select with the following code :
 
 =head3 in TEMPLATE
 
-  <form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+  <form action="[% script_name %] method=post>
     <select name="frameworkcode">
         <option value="">Default</option>
-    <!-- TMPL_LOOP name="frameworkloop" -->
-        <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="frameworktext" --></option>
-    <!-- /TMPL_LOOP -->
+        [% FOREACH framework IN frameworkloop %]
+        [% IF ( framework.selected ) %]
+        <option value="[% framework.value %]" selected="selected">[% framework.description %]</option>
+        [% ELSE %]
+        <option value="[% framework.value %]">[% framework.description %]</option>
+        [% END %]
+        [% END %]
     </select>
-    <input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
+    <input type=text name=searchfield value="[% searchfield %]">
     <input type="submit" value="OK" class="button">
   </form>
 
@@ -401,6 +407,55 @@ sub getframeworks {
         $itemtypes{ $IT->{'frameworkcode'} } = $IT;
     }
     return ( \%itemtypes );
+}
+
+=head2 GetFrameworksLoop
+
+  $frameworks = GetFrameworksLoop( $frameworkcode );
+
+Returns the loop suggested on getframework(), but ordered by framework description.
+
+build a HTML select with the following code :
+
+=head3 in PERL SCRIPT
+
+  $template->param( frameworkloop => GetFrameworksLoop( $frameworkcode ) );
+
+=head3 in TEMPLATE
+
+  Same as getframework()
+
+  <form action="[% script_name %] method=post>
+    <select name="frameworkcode">
+        <option value="">Default</option>
+        [% FOREACH framework IN frameworkloop %]
+        [% IF ( framework.selected ) %]
+        <option value="[% framework.value %]" selected="selected">[% framework.description %]</option>
+        [% ELSE %]
+        <option value="[% framework.value %]">[% framework.description %]</option>
+        [% END %]
+        [% END %]
+    </select>
+    <input type=text name=searchfield value="[% searchfield %]">
+    <input type="submit" value="OK" class="button">
+  </form>
+
+=cut
+
+sub GetFrameworksLoop {
+    my $frameworkcode = shift;
+    my $frameworks = getframeworks();
+    my @frameworkloop;
+    foreach my $thisframework (sort { uc($frameworks->{$a}->{'frameworktext'}) cmp uc($frameworks->{$b}->{'frameworktext'}) } keys %$frameworks) {
+        my $selected = ( $thisframework eq $frameworkcode ) ? 1 : undef;
+        my %row = (
+                value       => $thisframework,
+                selected    => $selected,
+                description => $frameworks->{$thisframework}->{'frameworktext'},
+            );
+        push @frameworkloop, \%row;
+  }
+  return \@frameworkloop;
 }
 
 =head2 getframeworkinfo

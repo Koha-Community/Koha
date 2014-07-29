@@ -57,7 +57,18 @@
 					[% UNLESS ( popup ) %]
 						<h1>Labeled MARC biblio : [% biblionumber %]  ( [% bibliotitle %] )</h1>
 					[% END %]
-                    <p><b>With framework :[% framework %]</b></p>
+                    <p><b>With framework:
+                    <select name="Frameworks" id="Frameworks" size="1" onchange="Changefwk(this);">
+                        <option value="">Default</option>
+                        [% FOREACH framework IN frameworkloop %]
+                        [% IF ( framework.selected ) %]
+                        <option value="[% framework.value %]" selected="selected">[% framework.description %]</option>
+                        [% ELSE %]
+                        <option value="[% framework.value %]">[% framework.description %]</option>
+                        [% END %]
+                        [% END %]
+                    </select>
+                    </b></p>
 					<!-- div id="bibliotabs" class="toptabs numbered" -->
 					<div>
 						<table class="labeledmarc-table">

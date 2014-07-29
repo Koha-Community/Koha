@@ -29,6 +29,7 @@ use C4::Items;
 use C4::Members; # to use GetMember
 use C4::Search;		# enabled_staff_search_views
 use C4::Acquisition qw(GetOrdersByBiblionumber);
+use C4::Koha qw( GetFrameworksLoop );
 
 my $query        = new CGI;
 my $dbh          = C4::Context->dbh;
@@ -79,30 +80,8 @@ my $itemcount = GetItemsCount($biblionumber);
 $template->param( count => $itemcount,
 					bibliotitle => $biblio->{title}, );
 
-#Getting the list of all frameworks
-my $queryfwk =
-  $dbh->prepare("select frameworktext, frameworkcode from biblio_framework");
-$queryfwk->execute;
-my %select_fwk;
-my @select_fwk;
-my $curfwk;
-push @select_fwk, "Default";
-$select_fwk{"Default"} = "Default";
-
-while ( my ( $description, $fwk ) = $queryfwk->fetchrow ) {
-    push @select_fwk, $fwk;
-    $select_fwk{$fwk} = $description;
-}
-$curfwk=$frameworkcode;
-my $framework=CGI::scrolling_list( -name     => 'Frameworks',
-            -id => 'Frameworks',
-            -default => $curfwk,
-            -OnChange => 'Changefwk(this);',
-            -values   => \@select_fwk,
-            -labels   => \%select_fwk,
-            -size     => 1,
-            -multiple => 0 );
-$template->param(framework => $framework);
+#Getting framework loop
+$template->param(frameworkloop => GetFrameworksLoop( $frameworkcode ) );
 
 my @marc_data;
 my $prevlabel = '';
