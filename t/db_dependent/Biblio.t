@@ -143,6 +143,12 @@ sub run_tests {
     $issns = GetMarcISSN( $marc_record, $marcflavour );
     is( scalar @$issns, 4,
         'GetMARCISSN handles records with multiple ISSN fields (count correct)');
+    # Create an empty ISSN
+    $field = create_issn_field( "", $marcflavour );
+    $marc_record->append_fields($field);
+    $issns = GetMarcISSN( $marc_record, $marcflavour );
+    is( scalar @$issns, 4,
+        'GetMARCISSN skips empty ISSN fields (Bug 12674)');
 
     ## Testing GetMarcControlnumber
     my $controlnumber;
@@ -254,19 +260,19 @@ sub create_issn_field {
 }
 
 subtest 'MARC21' => sub {
-    plan tests => 26;
+    plan tests => 27;
     run_tests('MARC21');
     $dbh->rollback;
 };
 
 subtest 'UNIMARC' => sub {
-    plan tests => 26;
+    plan tests => 27;
     run_tests('UNIMARC');
     $dbh->rollback;
 };
 
 subtest 'NORMARC' => sub {
-    plan tests => 26;
+    plan tests => 27;
     run_tests('NORMARC');
     $dbh->rollback;
 };
