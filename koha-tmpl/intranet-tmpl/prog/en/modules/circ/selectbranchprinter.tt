@@ -78,7 +78,10 @@ Updated:<ul>
     [% END %] -->
     </ol>
 </fieldset>
-<fieldset class="action"><input type="submit" value="Submit" /></fieldset>
+<fieldset class="action">
+    <input type="submit" value="Submit" />
+    <a class="cancel" id="cancel_set_library" href="[% referer or '/cgi-bin/koha/circ/circulation.pl' %]">Cancel</a>
+</fieldset>
 <div class="noshow">
     [% FOREACH recycle_loo IN recycle_loop %]
     <input type="text" name="[% recycle_loo.param %]" value="[% recycle_loo.value |html %]" />
