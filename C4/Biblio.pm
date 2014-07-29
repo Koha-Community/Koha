@@ -1730,7 +1730,8 @@ sub GetMarcISSN {
     }
     my @marcissns;
     foreach my $field ( $record->field($scope) ) {
-        push @marcissns, $field->subfield( 'a' );
+        push @marcissns, $field->subfield( 'a' )
+            if ( $field->subfield( 'a' ) ne "" );
     }
     return \@marcissns;
 }    # end GetMarcISSN
