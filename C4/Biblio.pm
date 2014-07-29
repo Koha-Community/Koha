@@ -1711,7 +1711,7 @@ sub GetMarcISBN {
 
     my @marcisbns;
     foreach my $field ( $record->field($scope) ) {
-        my $isbn = $field->as_string();
+        my $isbn = $field->subfield( 'a' );
         if ( $isbn ne "" ) {
             push @marcisbns, $isbn;
         }
