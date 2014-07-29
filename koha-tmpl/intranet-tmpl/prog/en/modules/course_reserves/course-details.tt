@@ -161,9 +161,9 @@
                             [% IF CAN_user_coursereserves_delete_reserves %]
                                 <td>
                                     [% IF cr.item.onloan %]
-                                        On Loan
+                                        Checked out
                                     [% ELSIF cr.item.itemlost %]
-                                        Item Lost
+                                        Item lost
                                     [% ELSE %]
                                         <a href="course-details.pl?course_id=[% course.course_id %]&amp;action=del_reserve&amp;cr_id=[% cr.cr_id %]" class="delete_item" >Remove</a>
                                     [% END %]
