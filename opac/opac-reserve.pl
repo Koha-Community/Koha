@@ -300,7 +300,7 @@ my $noreserves     = 0;
 my $maxoutstanding = C4::Context->preference("maxoutstanding");
 $template->param( noreserve => 1 ) unless $maxoutstanding;
 if ( $borr->{'amountoutstanding'} && ($borr->{'amountoutstanding'} > $maxoutstanding) ) {
-    my $amount = sprintf "\$%.02f", $borr->{'amountoutstanding'};
+    my $amount = sprintf "%.02f", $borr->{'amountoutstanding'};
     $template->param( message => 1 );
     $noreserves = 1;
     $template->param( too_much_oweing => $amount );
