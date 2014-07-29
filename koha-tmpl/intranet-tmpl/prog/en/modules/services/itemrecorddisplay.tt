@@ -11,7 +11,19 @@
         [% ELSE %]
             <label>[% iteminfo.subfield %] - [% iteminfo.marc_lib %]</label>
         [% END %]
+        [% IF ( iteminfo.marc_value.type == 'select' ) %]
+        <select name="field_value" size="1">
+        [% FOREACH value IN iteminfo.marc_value.values %]
+          [% IF ( value == iteminfo.marc_value.default ) %]
+            <option value="[% value %]" selected="selected">[% iteminfo.marc_value.labels.$value %]</option>
+          [% ELSE %]
+            <option value="[% value %]">[% iteminfo.marc_value.labels.$value %]</option>
+          [% END %]
+        [% END %]
+        </select>
+        [% ELSE %]
         [% iteminfo.marc_value %]
+        [% END %]
         <input type="hidden" name="itemid" value="1" />
         <input type="hidden" name="kohafield" value="[% iteminfo.kohafield %]" />
         <input type="hidden" name="tag" value="[% iteminfo.tag %]" />

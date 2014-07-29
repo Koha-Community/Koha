@@ -2835,15 +2835,12 @@ sub PrepareItemrecordDisplay {
                             $authorised_lib{$value} = $lib;
                         }
                     }
-                    $subfield_data{marc_value} = CGI::scrolling_list(
-                        -name     => 'field_value',
-                        -values   => \@authorised_values,
-                        -default  => "$defaultvalue",
-                        -labels   => \%authorised_lib,
-                        -size     => 1,
-                        -tabindex => '',
-                        -multiple => 0,
-                    );
+                    $subfield_data{marc_value} = {
+                        type    => 'select',
+                        values  => \@authorised_values,
+                        default => "$defaultvalue",
+                        labels  => \%authorised_lib,
+                    };
                 } elsif ( $tagslib->{$tag}->{$subfield}->{value_builder} ) {
                         # opening plugin
                         my $plugin = C4::Context->intranetdir . "/cataloguing/value_builder/" . $tagslib->{$tag}->{$subfield}->{'value_builder'};
