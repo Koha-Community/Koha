@@ -33,7 +33,7 @@ $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 # Mocking variables
-my $context             = new Test::MockModule('C4::Context');
+my $context = new Test::MockModule('C4::Context');
 
 mock_marcfromkohafield();
 
@@ -178,7 +178,8 @@ sub run_tests {
         is( $isbns->[$i], $more_isbns[$i],
             "(GetMarcISBN) Corretly retrieves ISBN #". ($i + 1));
     }
-
+    is( GetMarcPrice( $record_for_isbn, $marcflavour ), 100,
+        "GetMarcPrice returns the correct value");
 }
 
 sub mock_marcfromkohafield {
@@ -230,7 +231,7 @@ sub create_isbn_field {
     my $field = MARC::Field->new( $isbn_field,'','','a' => $isbn);
     # Add the price subfield
     my $price_subfield = ( $marcflavour eq 'UNIMARC' ) ? 'd' : 'c' ;
-    $field->add_subfields( $price_subfield => '100' );
+    $field->add_subfields( $price_subfield => '$100' );
 
     return $field;
 }
@@ -245,19 +246,19 @@ sub create_issn_field {
 }
 
 subtest 'MARC21' => sub {
-    plan tests => 25;
+    plan tests => 26;
     run_tests('MARC21');
     $dbh->rollback;
 };
 
 subtest 'UNIMARC' => sub {
-    plan tests => 25;
+    plan tests => 26;
     run_tests('UNIMARC');
     $dbh->rollback;
 };
 
 subtest 'NORMARC' => sub {
-    plan tests => 25;
+    plan tests => 26;
     run_tests('NORMARC');
     $dbh->rollback;
 };
