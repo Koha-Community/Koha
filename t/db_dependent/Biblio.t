@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::MockModule;
 
 use MARC::Record;
@@ -187,7 +187,8 @@ sub mock_marcfromkohafield {
         sub {
             my ( $self ) = shift;
 
-            if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
+            if ( C4::Context->preference('marcflavour') eq 'MARC21' ||
+                 C4::Context->preference('marcflavour') eq 'NORMARC' ) {
 
                 return  {
                 '' => {
@@ -227,6 +228,9 @@ sub create_isbn_field {
 
     my $isbn_field = ( $marcflavour eq 'UNIMARC' ) ? '010' : '020';
     my $field = MARC::Field->new( $isbn_field,'','','a' => $isbn);
+    # Add the price subfield
+    my $price_subfield = ( $marcflavour eq 'UNIMARC' ) ? 'd' : 'c' ;
+    $field->add_subfields( $price_subfield => '100' );
 
     return $field;
 }
@@ -249,6 +253,12 @@ subtest 'MARC21' => sub {
 subtest 'UNIMARC' => sub {
     plan tests => 25;
     run_tests('UNIMARC');
+    $dbh->rollback;
+};
+
+subtest 'NORMARC' => sub {
+    plan tests => 25;
+    run_tests('NORMARC');
     $dbh->rollback;
 };
 
