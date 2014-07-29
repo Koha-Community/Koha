@@ -340,7 +340,14 @@ Circulation:
                   block: Block
                   noblock: "Don't block"
                   confirmation: Ask for confirmation
-            - when checking out to a borrower that has overdues outstanding	    
+            - when checking out to a borrower that has overdues outstanding
+        -
+            - "When checking out an item with rental fees, "
+            - pref: RentalFeesCheckoutConfirmation
+              choices:
+                  yes: ask
+                  no: "do not ask"
+            - "for confirmation."
         -
             - On checkin route the returned item to
             - pref: HomeOrHoldingBranchReturn

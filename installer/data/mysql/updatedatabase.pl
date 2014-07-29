@@ -9017,6 +9017,17 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+
+
+$DBversion = "XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('RentalFeesCheckoutConfirmation', '0', NULL , 'Allow user to confirm when checking out an item with rental fees.', 'YesNo')
+    |);
+    print "Upgrade to $DBversion done (Bug 11169 - Add RentalFeesCheckoutConfirmation syspref)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

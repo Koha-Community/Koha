@@ -919,12 +919,23 @@ sub CanBookBeIssued {
               if ( $borrower->{'branchcode'} ne $userenv->{branch} );
         }
     }
+    #
+    # CHECK IF THERE IS RENTAL CHARGES. RENTAL MUST BE CONFIRMED BY THE BORROWER
+    #
+    my $rentalConfirmation = C4::Context->preference("RentalFeesCheckoutConfirmation");
+
+    if ( $rentalConfirmation ){
+        my ($rentalCharge) = GetIssuingCharges( $item->{'itemnumber'}, $borrower->{'borrowernumber'} );
+        if ( $rentalCharge ){
+            $rentalCharge = sprintf("%.02f", $rentalCharge);
+            $needsconfirmation{RENTALCHARGE} = $rentalCharge;
+        }
+    }
 
     #
     # CHECK IF BOOK ALREADY ISSUED TO THIS BORROWER
     #
-    if ( $issue->{borrowernumber} && $issue->{borrowernumber} eq $borrower->{'borrowernumber'} )
-    {
+    if ( $issue->{borrowernumber} && $issue->{borrowernumber} eq $borrower->{'borrowernumber'} ){
 
         # Already issued to current borrower. Ask whether the loan should
         # be renewed.

@@ -181,7 +181,11 @@ $(document).ready(function() {
 [% END %]
 
 [% IF ( DEBT ) %]
-    <li>The patron has a debt of [% DEBT %]</li>
+    <li>The patron has a debt of [% DEBT %].</li>
+[% END %]
+
+[% IF ( RENTALCHARGE ) %]
+    <li>Rental charge for this item: [% RENTALCHARGE %]</li>
 [% END %]
 
 [% IF ( RENEW_ISSUE ) %]

@@ -339,6 +339,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('RenewalPeriodBase','date_due','date_due|now','Set whether the renewal date should be counted from the date_due or from the moment the Patron asks for renewal ','Choice'),
 ('RenewalSendNotice','0','',NULL,'YesNo'),
 ('RenewSerialAddsSuggestion','0',NULL,'If ON, adds a new suggestion at serial subscription renewal','YesNo'),
+('RentalFeesCheckoutConfirmation', '0', NULL , 'Allow user to confirm when checking out an item with rental fees.', 'YesNo'),
 ('RentalsInNoissuesCharge','1',NULL,'Rental charges block checkouts (added to noissuescharge).','YesNo'),
 ('RequestOnOpac','1',NULL,'If ON, globally enables patron holds on OPAC','YesNo'),
 ('ReservesControlBranch','PatronLibrary','ItemHomeLibrary|PatronLibrary','Branch checked for members reservations rights','Choice'),
