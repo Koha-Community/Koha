@@ -71,7 +71,7 @@ is(scalar GetOrders($basketno1), 1, "1 order in basket1");
 is(scalar GetItemnumbersFromOrder($order->{ordernumber}), 1, "1 item in basket1's order");
 is(scalar GetOrders($basketno2), 0, "0 order in basket2");
 
-diag("Transfering order to basket2");
+# Transfering order to basket2
 my $newordernumber = TransferOrder($ordernumber, $basketno2);
 is(scalar GetOrders($basketno1), 0, "0 order in basket1");
 is(scalar GetOrders($basketno2), 1, "1 order in basket2");
