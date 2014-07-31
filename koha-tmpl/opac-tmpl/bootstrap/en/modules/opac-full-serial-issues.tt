@@ -86,7 +86,13 @@
                                             <tr>
                                                 <td>
                                                     [% IF ( serial.publisheddate ) %]
-                                                        <span title="[% serial.publisheddate %]">[% serial.publisheddate | $KohaDates %]</span>
+                                                        <span title="[% serial.publisheddate %]">
+                                                            [% IF serial.publisheddatetext %]
+                                                                [% serial.publisheddatetext %]
+                                                            [% ELSE %]
+                                                                [% serial.publisheddate | $KohaDates %]
+                                                            [% END %]
+                                                        </span>
                                                     [% ELSE %]
                                                         &nbsp;
                                                     [% END %]
