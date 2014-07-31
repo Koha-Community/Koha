@@ -41,7 +41,7 @@
                 <select name="marc" id="marc" size="1" width="570" style="width: 570px;">
                     [% FOREACH value IN $marclist.values %]
                         [% IF ( value == $marclist.default ) %]
-                            <option value="[% value %]" selected>[% value %]</option>
+                            <option value="[% value %]" selected="selected">[% value %]</option>
                         [% ELSE %]
                             <option value="[% value %]">[% value %]</option>
                         [% END %]
@@ -74,9 +74,9 @@
     <select name="tablename" id="tablename" size="1">
     [% FOREACH value IN tablename.values %]
         [% IF ( value == tablename.default ) %]
-        <option value=[% value %] selected>[% value %]</option>
+        <option value="[% value %]" selected="selected">[% value %]</option>
         [% ELSE %]
-        <option value=[% value %]>[% value %]</option>
+        <option value="[% value %]">[% value %]</option>
         [% END %]
     [% END %]
     </select>

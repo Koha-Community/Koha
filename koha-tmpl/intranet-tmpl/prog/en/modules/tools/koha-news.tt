@@ -78,25 +78,25 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             <label for="lang">Display location</label>
             <select id="lang" name="lang">
                 [% IF ( default_lang == "" ) %]
-                <option value=""     selected>All</option>
+                <option value="" selected="selected">All</option>
                 [% ELSE %]
-                <option value=""             >All</option>
+                <option value=""                    >All</option>
                 [% END %]
                 [% IF ( default_lang == "koha" ) %]
-                <option value="koha" selected>Librarian interface</option>
+                <option value="koha" selected="selected">Librarian interface</option>
                 [% ELSE %]
-                <option value="koha"         >Librarian interface</option>
+                <option value="koha"                    >Librarian interface</option>
                 [% END %]
                 [% IF ( default_lang == "slip" ) %]
-                <option value="slip" selected>Slip</option>
+                <option value="slip" selected="selected">Slip</option>
                 [% ELSE %]
-                <option value="slip"         >Slip</option>
+                <option value="slip"                    >Slip</option>
                 [% END %]
                 [% FOREACH lang_lis IN lang_list %]
                 [% IF ( lang_lis.language == default_lang ) %]
-                    <option value="[% lang_lis.language %]" selected>OPAC ([% lang_lis.language %])</option>
+                    <option value="[% lang_lis.language %]" selected="selected">OPAC ([% lang_lis.language %])</option>
                 [% ELSE %]
-                    <option value="[% lang_lis.language %]"         >OPAC ([% lang_lis.language %])</option>
+                    <option value="[% lang_lis.language %]"                    >OPAC ([% lang_lis.language %])</option>
                 [% END %]
                 [% END %]
             </select>
@@ -105,13 +105,13 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                 <label for="branch">Library: </label>
                 <select id="branch" name="branch">
                 [% IF ( new_detail.branchcode == '' ) %]
-                    <option value="" selected>All Libraries</option>
+                    <option value="" selected="selected">All Libraries</option>
                 [% ELSE %]
                     <option value=""         >All Libraries</option>
                 [% END %]
                 [% FOREACH branch_item IN branch_list %]
                 [% IF ( branch_item.value.branchcode == new_detail.branchcode ) %]
-                    <option value="[% branch_item.value.branchcode %]" selected>[% branch_item.value.branchname %]</option>
+                    <option value="[% branch_item.value.branchcode %]" selected="selected">[% branch_item.value.branchname %]</option>
                 [% ELSE %]
                     <option value="[% branch_item.value.branchcode %]">[% branch_item.value.branchname %]</option>
                 [% END %]
@@ -153,23 +153,23 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             <label for="lang">Display location:</label>
             <select name="lang" id="lang">
             [% IF ( lang == "" ) %]
-            <option value=""     selected>All</option>
+            <option value=""     selected="selected">All</option>
             [% ELSE %]
             <option value=""             >All</option>
             [% END %]
             [% IF ( lang == "koha" ) %]
-            <option value="koha" selected>Librarian interface</option>
+            <option value="koha" selected="selected">Librarian interface</option>
             [% ELSE %]
             <option value="koha"         >Librarian interface</option>
             [% END %]
             [% IF ( lang == "slip" ) %]
-            <option value="slip" selected>Slip</option>
+            <option value="slip" selected="selected">Slip</option>
             [% ELSE %]
             <option value="slip"         >Slip</option>
             [% END %]
                 [% FOREACH lang_lis IN lang_list %]
                 [% IF ( lang_lis.language == lang ) %]
-                    <option value="[% lang_lis.language %]" selected>OPAC ([% lang_lis.language %])</option>
+                    <option value="[% lang_lis.language %]" selected="selected">OPAC ([% lang_lis.language %])</option>
                 [% ELSE %]
                     <option value="[% lang_lis.language %]"         >OPAC ([% lang_lis.language %])</option>
                 [% END %]
@@ -178,14 +178,14 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             <label for="branch">Library: </label>
             <select id="branch" name="branch">
                 [% IF ( branchcode == "" ) %]
-                <option value="" selected>All Libraries</option>
+                <option value="" selected="selected">All Libraries</option>
                 [% ELSE %]
                 <option value=""         >All Libraries</option>
                 [% END %]
                 [% FOREACH branch_item IN branch_list %]
                 [% IF ( branch_item.value.branchcode == branchcode ) %]
                     <option value="[% branch_item.value.branchcode %]"
-                            selected>[% branch_item.value.branchname %]
+                            selected="selected">[% branch_item.value.branchname %]
                     </option>
                 [% ELSE %]
                     <option value="[% branch_item.value.branchcode %]"

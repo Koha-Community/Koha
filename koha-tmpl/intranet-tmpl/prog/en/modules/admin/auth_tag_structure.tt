@@ -113,7 +113,7 @@
             <select name="authorised_value" id="authorised_value" size="1">
             [% FOREACH value IN authorised_value.values %]
                 [% IF ( value == authorised_value.default ) %]
-                    <option value="[% value %]" selected>[% value %]</option>
+                    <option value="[% value %]" selected="selected">[% value %]</option>
                 [% ELSE %]
                     <option value="[% value %]">[% value %]</option>
                 [% END %]

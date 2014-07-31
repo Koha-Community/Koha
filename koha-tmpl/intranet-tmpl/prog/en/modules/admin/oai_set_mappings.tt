@@ -80,11 +80,11 @@ function hideDialogBox() {
                   <td style="text-align:center"><input type="text" name="marcsubfield" size="1" value="[% mapping.marcsubfield %]" /></td>
                   <td><select name=operator>
                       [% IF mapping.operator == 'equal' %]
-                        <option selected value="equal">is equal to</option>
+                        <option value="equal" selected="selected">is equal to</option>
                         <option value="notequal">not equal to</option>
                       [% ELSE %]
                         <option value="equal">is equal to</option>
-                        <option selected value="notequal">not equal to</option>
+                        <option value="notequal" selected="selected">not equal to</option>
                       [% END %]
                       </select></td>
                   <td><input type="text" name="marcvalue" value="[% mapping.marcvalue %]" /></td>
