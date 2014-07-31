@@ -32,30 +32,36 @@ BEGIN {
     $VERSION = 3.03;                                                                    # set the version for version checking
     $debug   = $ENV{DEBUG};
     @ISA     = qw(Exporter);
-    @EXPORT  = qw(logout_shib login_shib_url checkpw_shib get_login_shib);
+    @EXPORT  = qw(shib_ok logout_shib login_shib_url checkpw_shib get_login_shib);
 }
-my $context = C4::Context->new() or die 'C4::Context->new failed';
-my $shib = C4::Context->config('shibboleth') or croak 'No <shibboleth> in koha-conf.xml';
-my $shibbolethMatchField     = $shib->{matchpoint} or croak 'No <matchpoint> defined in koha-conf.xml';
-my $shibbolethMatchAttribute = $shib->{mapping}->{$shibbolethMatchField}->{is} or croak 'Matchpoint not mapped in koha-conf.xml';
-my $protocol = "https://";
+
+# Check that shib config is not malformed
+sub shib_ok {
+    my $config = _get_shib_config();
+
+    if ( $config ) {
+        return 1;
+    }
+
+    return 0;
+}
 
 # Logout from Shibboleth
 sub logout_shib {
     my ($query) = @_;
-    my $uri = $protocol . C4::Context->preference('OPACBaseURL');
+    my $uri = _get_uri();
     print $query->redirect( $uri . "/Shibboleth.sso/Logout?return=$uri" );
 }
 
 # Returns Shibboleth login URL with callback to the requesting URL
 sub login_shib_url {
-
     my ($query) = @_;
-    my $param = $protocol . C4::Context->preference('OPACBaseURL') . $query->script_name();
+
+    my $param = _get_uri() . $query->script_name();
     if ( $query->query_string() ) {
         $param = $param . '%3F' . $query->query_string();
     }
-    my $uri = $protocol . C4::Context->preference('OPACBaseURL') . "/Shibboleth.sso/Login?target=$param";
+    my $uri = _get_uri() . "/Shibboleth.sso/Login?target=$param";
     return $uri;
 }
 
@@ -69,11 +75,13 @@ sub get_login_shib {
     # Shibboleth attributes are mapped into http environmement variables, so we're getting
     # the match point of the user this way
 
-    $debug and warn "koha borrower field to match: $shibbolethMatchField";
-    $debug and warn "shibboleth attribute to match: $shibbolethMatchAttribute";
-    $debug and warn "$shibbolethMatchAttribute value: $ENV{$shibbolethMatchAttribute}";
+    # Get shibboleth config
+    my $config = _get_shib_config();
 
-    return $ENV{$shibbolethMatchAttribute} || '';
+    my $matchAttribute = $config->{mapping}->{ $config->{matchpoint} }->{is};
+    $debug and warn $matchAttribute . " value: " . $ENV{ $matchAttribute };
+
+    return $ENV{ $matchAttribute } || '';
 }
 
 # Checks for password correctness
@@ -81,23 +89,61 @@ sub get_login_shib {
 sub checkpw_shib {
     $debug and warn "checkpw_shib";
 
-    my ( $dbh, $userid ) = @_;
-    my $retnumber;
-    $debug and warn "User Shibboleth-authenticated as: $userid";
+    my ( $dbh, $match ) = @_;
+    my ( $retnumber, $userid );
+    my $config = _get_shib_config();
+    $debug and warn "User Shibboleth-authenticated as: $match";
 
-    # Does the given shibboleth attribute value ($userid) match a valid koha user ?
-    my $sth = $dbh->prepare("select cardnumber, userid from borrowers where $shibbolethMatchField=?");
-    $sth->execute($userid);
+    # Does the given shibboleth attribute value ($match) match a valid koha user ?
+    my $sth = $dbh->prepare("select cardnumber, userid from borrowers where $config->{matchpoint}=?");
+    $sth->execute($match);
     if ( $sth->rows ) {
         my @retvals = $sth->fetchrow;
-        $retnumber = $retvals[1];
-        $userid = $retvals[0];
+        $retnumber = $retvals[0];
+        $userid = $retvals[1];
         return ( 1, $retnumber, $userid );
     }
 
     # If we reach this point, the user is not a valid koha user
-    $debug and warn "User $userid is not a valid Koha user";
+    $debug and warn "User with $config->{matchpoint} of $match is not a valid Koha user";
     return 0;
+}
+
+sub _get_uri {
+
+    my $protocol = "https://";
+
+    my $return = $protocol . C4::Context->preference('OPACBaseURL');
+    return $return;
+}
+
+sub _get_shib_config {
+    my $config = C4::Context->config('shibboleth');
+
+    if ( !$config ) {
+        carp 'shibboleth config not defined';
+        return 0;
+    }
+
+    if ( $config->{matchpoint}
+        && defined( $config->{mapping}->{ $config->{matchpoint} }->{is} ) )
+    {
+        if ($debug) {
+            warn "koha borrower field to match: " . $config->{matchpoint};
+            warn "shibboleth attribute to match: "
+              . $config->{mapping}->{ $config->{matchpoint} }->{is};
+        }
+        return $config;
+    }
+    else {
+        if ( !$config->{matchpoint} ) {
+            carp 'shibboleth matchpoint not defined';
+        }
+        else {
+            carp 'shibboleth matchpoint not mapped';
+        }
+        return 0;
+    }
 }
 
 1;

@@ -65,10 +65,17 @@ BEGIN {
     }
     if ($shib) {
         import C4::Auth_with_shibboleth
-          qw(checkpw_shib logout_shib login_shib_url get_login_shib);
+          qw(shib_ok checkpw_shib logout_shib login_shib_url get_login_shib);
 
-        # Get shibboleth login attribute
-        $shib_login = get_login_shib();
+        # Check for good config
+        if ( shib_ok() ) {
+            # Get shibboleth login attribute
+            $shib_login = get_login_shib();
+        }
+        # Bad config, disable shibboleth
+        else {
+            $shib = 0;
+        }
     }
     if ($cas) {
         import  C4::Auth_with_cas qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url);
