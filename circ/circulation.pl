@@ -371,7 +371,7 @@ if ($borrowernumber) {
 
 my @values;
 my %labels;
-my $CGIselectborrower;
+my $selectborrower;
 if ($borrowerslist) {
     foreach (
         sort {(lc $a->{'surname'} cmp lc $b->{'surname'} || lc $a->{'firstname'} cmp lc $b->{'firstname'})
@@ -382,17 +382,10 @@ if ($borrowerslist) {
         $labels{ $_->{'borrowernumber'} } =
 "$_->{'surname'}, $_->{'firstname'} ... ($_->{'cardnumber'} - $_->{'categorycode'} - $_->{'branchcode'}) ...  $_->{'address'} ";
     }
-    $CGIselectborrower = CGI::scrolling_list(
-        -name     => 'borrowernumber',
-        -class    => 'focus',
-        -id       => 'borrowernumber',
-        -values   => \@values,
-        -labels   => \%labels,
-        -ondblclick => 'document.forms[\'mainform\'].submit()',
-        -size     => 7,
-        -tabindex => '',
-        -multiple => 0
-    );
+    $selectborrower = {
+        values => \@values,
+        labels => \%labels,
+    };
 }
 
 #title
@@ -544,7 +537,7 @@ $template->param(
     stickyduedate     => $stickyduedate,
     duedatespec       => $duedatespec,
     message           => $message,
-    CGIselectborrower => $CGIselectborrower,
+    selectborrower    => $selectborrower,
     totaldue          => sprintf('%.2f', $total),
     inprocess         => $inprocess,
     is_child          => ($borrowernumber && $borrower->{'category_type'} eq 'C'),

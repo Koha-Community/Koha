@@ -41,7 +41,7 @@ var relatives_borrowernumbers = new Array();
 var MSG_ADD_MESSAGE = _("Add a new message");
 var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
 [% IF ( borrowernumber ) %]if($.cookie("holdfor") != [% borrowernumber %]){ $.cookie("holdfor",null, { path: "/", expires: 0 }); }[% ELSE %]$.cookie("holdfor",null, { path: "/", expires: 0 });[% END %]
-[% UNLESS ( borrowernumber ) %][% UNLESS ( CGIselectborrower ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %][% END %]
+[% UNLESS ( borrowernumber ) %][% UNLESS ( selectborrower ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %][% END %]
 
 $(document).ready(function() {
     [% IF !( CircAutoPrintQuickSlip == 'clear' ) %]
@@ -68,7 +68,7 @@ $(document).ready(function() {
     <strong>Checkouts</strong>
 [% END %]
 </div>
-[% IF ( CGIselectborrower ) %]
+[% IF ( selectborrower ) %]
 <div id="doc" class="yui-t7">
 
    <div id="bd">
@@ -433,7 +433,7 @@ No patron matched <span class="ex">[% message %]</span>
 [% END %]
 
 
-[% IF ( CGIselectborrower ) %]
+[% IF ( selectborrower ) %]
 [% INCLUDE 'patron-toolbar.inc' %]
 
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
@@ -447,13 +447,17 @@ No patron matched <span class="ex">[% message %]</span>
 
 <ol>    <li>
     <label for="borrowernumber">Select a patron: </label>
-    [% CGIselectborrower %]
+    <select name="borrowernumber" id="borrowernumber" size="7" class="focus" ondblclick="document.forms['mainform'].submit()">
+        [% FOREACH borrower IN selectborrower.values %]
+        <option value="[% borrower %]">[% selectborrower.labels.$borrower %]</option>
+        [% END %]
+    </select>
     </li>
 </ol>
 <p><input type="submit" value="Select" /></p>
 </fieldset>
 </form>
-[% ELSE %] <!-- CGIselectborrower -->
+[% ELSE %] <!-- selectborrower -->
 
 <!-- BARCODE ENTRY -->
 
@@ -800,7 +804,7 @@ No patron matched <span class="ex">[% message %]</span>
 
 </div>
 </div>
-[% UNLESS ( CGIselectborrower ) %][% IF ( borrowernumber ) %]<div class="yui-b">
+[% UNLESS ( selectborrower ) %][% IF ( borrowernumber ) %]<div class="yui-b">
 [% INCLUDE 'circ-menu.inc' %]
 </div>[% END %][% END %]
 </div>
