@@ -78,6 +78,9 @@
                                     </fieldset>
                                     [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]<div id="patronregistration"><p>Don't have an account? <a href="/cgi-bin/koha/opac-memberentry.pl">Register here.</a></p></div>[% END %]
                                     </fieldset>
+                                    [% IF ( NoLoginInstructions ) %]
+                                        [% NoLoginInstructions %]
+                                    [% END %]
                                 </form>
                             </div> <!-- /#login -->
                         [% END # /casAuthentication %]

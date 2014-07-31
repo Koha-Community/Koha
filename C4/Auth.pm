@@ -421,6 +421,7 @@ sub get_template_and_user {
             LibraryNameTitle          => "" . $LibraryNameTitle,
             LoginBranchname           => C4::Context->userenv?C4::Context->userenv->{"branchname"}:"",
             OPACAmazonCoverImages     => C4::Context->preference("OPACAmazonCoverImages"),
+            NoLoginInstructions      => C4::Context->preference("NoLoginInstructions"),
             OPACFRBRizeEditions       => C4::Context->preference("OPACFRBRizeEditions"),
             OpacHighlightedWords      => C4::Context->preference("OpacHighlightedWords"),
             OPACItemHolds             => C4::Context->preference("OPACItemHolds"),

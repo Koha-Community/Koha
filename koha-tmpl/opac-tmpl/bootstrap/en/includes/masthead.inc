@@ -285,6 +285,9 @@
                     <fieldset class="brief">
                         <label for="muserid">Login:</label><input type="text" id="muserid" name="userid" />
                         <label for="mpassword">Password:</label><input type="password" id="mpassword" name="password" />
+                    [% IF ( NoLoginInstructions ) %]
+                        [% NoLoginInstructions %]
+                    [% END %]
                     [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]<div id="mpatronregistration"><p>Don't have an account? <a href="/cgi-bin/koha/opac-memberentry.pl">Register here.</a></p></div>[% END %]
                     </fieldset>
             </div>
