@@ -381,7 +381,7 @@ if ( defined $csvfilename ) {
     } else {
         open $csv_fh, ">", $csvfilename or die "unable to open $csvfilename: $!";
     }
-    if ( $csv->combine(qw(name surname address1 address2 zipcode city country email itemcount itemsinfo)) ) {
+    if ( $csv->combine(qw(name surname address1 address2 zipcode city country email phone cardnumber itemcount itemsinfo branchname letternumber)) ) {
         print $csv_fh $csv->string, "\n";
     } else {
         $verbose and warn 'combine failed on argument: ' . $csv->error_input;
@@ -395,11 +395,12 @@ if ( defined $htmlfilename ) {
     $fh = *STDOUT;
   } else {
     my $today = DateTime->now(time_zone => C4::Context->tz );
-    open $fh, ">",File::Spec->catdir ($htmlfilename,"notices-".$today->ymd().".html");
+    open $fh, ">:encoding(UTF-8)",File::Spec->catdir ($htmlfilename,"notices-".$today->ymd().".html");
   }
   
   print $fh "<html>\n";
   print $fh "<head>\n";
+  print $fh "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
   print $fh "<style type='text/css'>\n";
   print $fh "pre {page-break-after: always;}\n";
   print $fh "pre {white-space: pre-wrap;}\n";
@@ -435,10 +436,11 @@ foreach my $branchcode (@branches) {
     $verbose and warn sprintf "branchcode : '%s' using %s\n", $branchcode, $admin_email_address;
 
     my $sth2 = $dbh->prepare( <<"END_SQL" );
-SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, TO_DAYS($date)-TO_DAYS(date_due) AS days_overdue
-  FROM issues,items,biblio, biblioitems
+SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, TO_DAYS($date)-TO_DAYS(date_due) AS days_overdue, branchname
+  FROM issues,items,biblio, biblioitems, branches b
   WHERE items.itemnumber=issues.itemnumber
     AND biblio.biblionumber   = items.biblionumber
+    AND b.branchcode = items.homebranch
     AND biblio.biblionumber   = biblioitems.biblionumber
     AND issues.borrowernumber = ?
 END_SQL
@@ -484,7 +486,7 @@ END_SQL
             # <date> <itemcount> <firstname> <lastname> <address1> <address2> <address3> <city> <postcode> <country>
 
             my $borrower_sql = <<'END_SQL';
-SELECT issues.borrowernumber, firstname, surname, address, address2, city, zipcode, country, email, emailpro, B_email, smsalertnumber,
+SELECT issues.borrowernumber, firstname, surname, address, address2, city, zipcode, country, email, emailpro, B_email, smsalertnumber, phone, cardnumber,
 TO_DAYS(?)-TO_DAYS(date_due) as difference, date_due
 FROM   issues,borrowers,categories
 WHERE  issues.borrowernumber=borrowers.borrowernumber
@@ -682,6 +684,10 @@ END_SQL
                               address1       => $data->{'address'},
                               address2       => $data->{'address2'},
                               city           => $data->{'city'},
+                              phone          => $data->{'phone'},
+                              cardnumber     => $data->{'cardnumber'},
+                              branchname     => $branch_details->{'branchname'},
+                              letternumber   => $i,
                               postcode       => $data->{'zipcode'},
                               country        => $data->{'country'},
                               email          => $notice_email,
@@ -896,7 +902,8 @@ sub prepare_letter_for_printing {
     if ( exists $params->{'outputformat'} && $params->{'outputformat'} eq 'csv' ) {
         if ($csv->combine(
                 $params->{'firstname'}, $params->{'lastname'}, $params->{'address1'},  $params->{'address2'}, $params->{'postcode'},
-                $params->{'city'}, $params->{'country'}, $params->{'email'}, $params->{'itemcount'}, $params->{'titles'}
+                $params->{'city'}, $params->{'country'}, $params->{'email'}, $params->{'phone'}, $params->{'cardnumber'},
+                $params->{'itemcount'}, $params->{'titles'}, $params->{'branchname'}, $params->{'letternumber'}
             )
           ) {
             return $csv->string, "\n";
