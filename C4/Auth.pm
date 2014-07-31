@@ -898,9 +898,7 @@ sub checkauth {
             }
 
             # If we are in a shibboleth session (shibboleth is enabled, a shibboleth match attribute is set and matches koha matchpoint)
-            if ( $shib and $shib_login and $shibSuccess and $type eq 'opac' ) {
-
-                # (Note: $type eq 'opac' condition should be removed when shibboleth authentication for intranet will be implemented)
+            if ( $shib and $shib_login and $shibSuccess) {
                 logout_shib($query);
             }
         }
@@ -982,8 +980,8 @@ sub checkauth {
             my $shibSuccess = 0;
             my ( $return, $cardnumber );
 
-            # If shib is enabled and we have a shib login, does the login match a valid koha user
-            if ( $shib && $shib_login && $type eq 'opac' ) {
+	    # If shib is enabled and we have a shib login, does the login match a valid koha user
+            if ( $shib && $shib_login ) {
                 my $retuserid;
 
                 # Do not pass password here, else shib will not be checked in checkpw.
