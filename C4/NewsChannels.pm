@@ -197,7 +197,7 @@ sub GetNewsToDisplay {
         OR    expirationdate IS NULL
         OR    expirationdate = '00-00-0000'
      )
-     AND   `timestamp` < CURRENT_DATE()+1
+     AND   DATE(timestamp) < DATE_ADD(CURDATE(), INTERVAL 1 DAY)
      AND   (lang = '' OR lang = ?)
      AND   (branchcode IS NULL OR branchcode = ?)
      ORDER BY number
