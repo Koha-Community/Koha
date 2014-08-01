@@ -123,7 +123,11 @@ sub output_pref {
 
     return unless defined $dt;
 
-    $dt->set_time_zone( C4::Context->tz );
+    # FIXME: see bug 13242 => no TZ for dates 'infinite'
+    if ( $dt->ymd !~ /^9999/ ) {
+        my $tz = $dateonly ? DateTime::TimeZone->new(name => 'floating') : C4::Context->tz;
+        $dt->set_time_zone( $tz );
+    }
 
     my $pref =
       defined $force_pref ? $force_pref : C4::Context->preference('dateformat');
