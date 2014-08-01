@@ -105,7 +105,6 @@ $template->param(
     datas          => $datas,
     address        => $address,
     column_names   => \@statistic_column_names,
-    length_keys    => scalar( @statistic_column_names),
     count_total_issues => $count_total_issues,
     count_total_issues_returned => $count_total_issues_returned,
     count_total_precedent_state => $count_total_precedent_state,
