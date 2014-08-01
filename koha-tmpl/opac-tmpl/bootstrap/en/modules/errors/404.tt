@@ -24,13 +24,25 @@
                     <div class="span12">
                 [% END %]
                     <div id="errormsg404">
-                        <h3>An error has occurred</h3>
-                        <h4>Error 404</h4>
+                        <h3>Sorry, the requested page is not available</h3>
+		<p><em>Error 404</em></p>
+                        <h3>This message can have following reasons</h3>
                         <ul>
-                            <li>This error means that the link was broken and that the page doesn't exist.</li>
-                            <li>To report this error, you can
-                                    <a href="mailto:[% admin %]">email the Koha Administrator</a>.</li>
-                            <li>Return to the <a href="/cgi-bin/koha/opac-main.pl">catalog home page</a>.</li>
+                            <li>You made use of an external link to a catalog item that is no longer available</li>
+                            <li>You followed an outdated link e.g. from a search engine or a bookmark</li>
+                            <li>You tried to access a page that needs authentification</li>
+                            <li>An internal link in our catalog home page is broken and the page does not exist</li>
+                        </ul>
+                        <h3>What's next?</h3>
+                        <ul>
+                            <li>You can search our catalog using the search form at the top of this page</li>
+                            <li>You can navigate to the <a href="/cgi-bin/koha/opac-main.pl"><b>catalog main page</b></a></li>
+                        </ul>
+                        <h3>Report broken links</h3>
+			<ul>
+                            <li>To report a broken link or any other issue please send an
+                                    <a href="mailto:[% admin %]">email to the Koha Administrator</a></li>
+
                         </ul>
                     </div> <!-- / #errormsg404 -->
                 </div> <!-- / .span10/12 -->
