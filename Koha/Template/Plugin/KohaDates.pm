@@ -29,7 +29,10 @@ sub filter {
     my ( $self, $text, $args, $config ) = @_;
     return "" unless $text;
     $config->{with_hours} //= 0;
-    my $dt = dt_from_string( $text, 'iso' );
+
+    my $tz = DateTime::TimeZone->new(name => 'floating') unless $config->{with_hours};
+    my $dt = dt_from_string( $text, 'iso', $tz );
+
     return $config->{as_due_date} ?
         output_pref({ dt => $dt, as_due_date => 1 }) :
         output_pref({ dt => $dt, dateonly => !$config->{with_hours} });

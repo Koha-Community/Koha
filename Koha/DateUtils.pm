@@ -123,7 +123,8 @@ sub output_pref {
 
     return unless defined $dt;
 
-    $dt->set_time_zone( C4::Context->tz );
+    my $tz = $dateonly ? DateTime::TimeZone->new(name => 'floating') : C4::Context->tz;
+    $dt->set_time_zone( $tz );
 
     my $pref =
       defined $force_pref ? $force_pref : C4::Context->preference('dateformat');
