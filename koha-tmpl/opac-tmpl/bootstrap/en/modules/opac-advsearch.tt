@@ -321,7 +321,8 @@
                                         </fieldset>
                                     </div> <!-- / .span3 -->
                                 </div> <!-- / #subtypes -->
-                            [% END # / IF usmarc %]
+                            <!-- SUBTYPE LIMITS -->
+                        [% END # / IF usmarc %]
 
                             [% IF ( UNIMARC ) %]
                                 <div id="subtypes_unimarc">
@@ -329,7 +330,7 @@
                                     [% INCLUDE 'subtypes_unimarc.inc' %]
                                 </div>
                             [% END %]
-                        </div> <!-- / .span4 -->
+
                     </div> <!-- / .row-fluid -->
                 [% END # / IF expanded_options %]
             </div> <!-- / .row-fluid -->
