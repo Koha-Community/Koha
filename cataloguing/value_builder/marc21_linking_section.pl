@@ -335,62 +335,13 @@ sub plugin {
                   }
               );
 
-            my $sth = $dbh->prepare(
-                       "Select itemtype,description from itemtypes order by description");
-            $sth->execute;
-         my @itemtype;
-          my %itemtypes;
-         push @itemtype, "";
-            $itemtypes{''} = "";
-           while ( my ( $value, $lib ) = $sth->fetchrow_array ) {
-                 push @itemtype, $value;
-                        $itemtypes{$value} = $lib;
-             }
+            my @itemtypes = C4::ItemType->all;
 
-             my $CGIitemtype = CGI::scrolling_list(
-                 -name     => 'value',
-                  -values   => \@itemtype,
-                       -labels   => \%itemtypes,
-                      -size     => 1,
-                        -multiple => 0
-         );
-             $sth->finish;
-
-         # To show list of branches please use GetBranchesLoop() and modify template
-
-         my $req = $dbh->prepare(
-"select distinctrow left(publishercode,45) from biblioitems order by publishercode"
-           );
-             $req->execute;
-         my @select;
-            push @select, "";
-              while ( my ($value) = $req->fetchrow ) {
-                       push @select, $value;
-          }
-              my $CGIpublisher = CGI::scrolling_list(
-                        -name     => 'value',
-                  -id       => 'publisher',
-                      -values   => \@select,
-                 -size     => 1,
-                        -multiple => 0
-         );
-
-#         my $sth=$dbh->prepare("select description,itemtype from itemtypes order by description");
-#         $sth->execute;
-#         while (my ($description,$itemtype) = $sth->fetchrow) {
-#             $classlist.="<option value=\"$itemtype\">$description</option>\n";
-#         }
-#         $sth->finish;
-
-                my @itemtypes = C4::ItemType->all;
-
-            $template->param(    #classlist => $classlist,
-                 CGIitemtype  => $CGIitemtype,
-                    CGIPublisher => $CGIpublisher,
-                 itypeloop    => \@itemtypes,
-                   index        => $query->param('index'),
+            $template->param(
+                        itypeloop    => \@itemtypes,
+                        index        => $query->param('index'),
                         Search       => 1,
-             );
+            );
      }
       output_html_with_http_headers $query, $cookie, $template->output;
 }
