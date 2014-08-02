@@ -273,10 +273,26 @@
 
 	<fieldset class="rows">
 	<legend>Output</legend>
-<ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
-<li><label for="outputfile">To a file:</label> 		<input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" /> <label class="inline" for="MIME">Into an application
-		</label>[% CGIextChoice %]
-		[% CGIsepChoice %]</li></ol>
+    <ol>
+        <li>
+            <label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" />
+        </li>
+        <li>
+            <label for="outputfile">To a file:</label> <input type="radio" name="output" value="file" id="outputfile" />
+            <label class="inline" for="basename">Named: </label> <input type="text" name="basename" id="basename" value="Export" />
+            <label class="inline" for="MIME">Into an application</label>
+            [% CGIextChoice %]
+            <select name="sep" id="sep" size="1">
+            [% FOREACH value IN CGIsepChoice.values.sort() %]
+              [% IF ( value == CGIsepChoice.default ) %]
+                <option value="[% value %]" selected="selected">[% value %]</option>
+              [% ELSE %]
+                <option value="[% value %]">[% value %]</option>
+              [% END %]
+            [% END %]
+            </select>
+        </li>
+    </ol>
 	</fieldset>
 
 	<fieldset class="action">

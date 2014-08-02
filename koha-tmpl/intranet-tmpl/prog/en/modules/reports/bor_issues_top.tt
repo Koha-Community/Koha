@@ -168,7 +168,15 @@ function Dopop(link) {
 			[% END %]
 			</select>
 			<label class="inline" for="sep">Delimiter: </label>
-			[% CGIseplist %]
+            <select name="sep" id="sep" size="1">
+            [% FOREACH value IN CGIseplist.values.sort() %]
+              [% IF ( value == CGIseplist.default ) %]
+                <option value="[% value %]" selected="selected">[% value %]</option>
+              [% ELSE %]
+                <option value="[% value %]">[% value %]</option>
+              [% END %]
+            [% END %]
+            </select>
 		</li>
 	</ol>
 	</fieldset>

@@ -246,7 +246,15 @@
 			[% END %]
 			</select>
 			<!-- <label class="inline" for="sep">Delimiter: </label> -->
-			[% CGIsepChoice %]
+            <select name="sep" id="sep" size="1">
+            [% FOREACH value IN CGIsepChoice.values.sort() %]
+              [% IF ( value == CGIsepChoice.default ) %]
+                <option value="[% value %]" selected="selected">[% value %]</option>
+              [% ELSE %]
+                <option value="[% value %]">[% value %]</option>
+              [% END %]
+            [% END %]
+            </select>
 		</li>
 	</ol>
 	</fieldset>

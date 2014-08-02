@@ -67,13 +67,10 @@ sub GetDelimiterChoices {
     my ($choices, $default) = $sth->fetchrow;
     my @dels = split /\|/, $choices;
 
-    return CGI::scrolling_list(
-                -name     => 'sep',
-                -id       => 'sep',
-                -default  => $default,
-                -values   => \@dels,
-                -size     => 1,
-                -multiple => 0 );
+    return {
+        values  => \@dels,
+        default => $default,
+    };
 }
 
 1;
