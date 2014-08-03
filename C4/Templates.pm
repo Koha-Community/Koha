@@ -256,14 +256,18 @@ sub themelanguage {
     my $fallback =   C4::Context->preference( ($interface eq 'intranet') ? 'template' : 'OPACFallback' );
     push @themes, $fallback;
 
-    # Try to find first theme for the selected language
+    # Try to find first theme for the selected theme/lang, then for fallback/lang
     for my $theme (@themes) {
         if ( -e "$htdocs/$theme/$lang/modules/$tmpl" ) {
             return ($theme, $lang, \@themes);
         }
     }
-    # Otherwise, return fallback theme in English 'en'
-    return ($fallback, 'en', \@themes);
+    # Otherwise return theme/'en', last resort fallback/'en'
+    for my $theme (@themes) {
+        if ( -e "$htdocs/$theme/en/modules/$tmpl" ) {
+            return ($theme, 'en', \@themes);
+        }
+    }
 }
 
 
