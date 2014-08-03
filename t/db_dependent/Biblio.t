@@ -37,6 +37,12 @@ my $context = new Test::MockModule('C4::Context');
 
 mock_marcfromkohafield();
 
+my $currency = new Test::MockModule('C4::Budgets');
+$currency->mock( 'GetCurrency', sub {
+    return { symbol   => '$',   isocode  => 'USD',
+             currency => 'USD', active => 1 };
+});
+
 sub run_tests {
 
     # Undef C4::Biblio::inverted_field_map to avoid problems introduced
@@ -178,6 +184,8 @@ sub run_tests {
         is( $isbns->[$i], $more_isbns[$i],
             "(GetMarcISBN) Corretly retrieves ISBN #". ($i + 1));
     }
+
+
     is( GetMarcPrice( $record_for_isbn, $marcflavour ), 100,
         "GetMarcPrice returns the correct value");
 }
