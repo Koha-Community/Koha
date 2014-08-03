@@ -7,7 +7,17 @@
     <div id="mainbloc">
         <form name="f_pop" onsubmit="report()" action="">
             <h2 class="authority">Collection</h2>
-            <p><label>Select a collection</label>[% collection %]</p>
+            <p><label>Select a collection</label>
+                <select name="f1" id="f1" size="1">
+                [% FOREACH value IN collection.values %]
+                  [% IF ( value == collection.default ) %]
+                    <option value="[% value %]" selected="selected">[% value %]</option>
+                  [% ELSE %]
+                    <option value="[% value %]">[% value %]</option>
+                  [% END %]
+                [% END %]
+                </select>
+            </p>
             OR new collection: <input type="text" value="" name="f2"/>
             <br/>
             <input type="submit" value="OK" class="button authority" />

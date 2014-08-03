@@ -142,14 +142,12 @@ sub plugin {
             
     } 
     @collections = sort @collections;
-    #	my @collections = ["test"];
-    my $collection = CGI::scrolling_list(
-        -name     => 'f1',
-        -values   => \@collections,
-        -default  => "$result",
-        -size     => 1,
-        -multiple => 0,
-    );
+    # my @collections = ( "test" );
+    my $collection = {
+            values  => \@collections,
+            default => "$result",
+    };
+
     $template->param(
         index      => $index,
         collection => $collection
