@@ -130,11 +130,9 @@ if ($do_it) {
 #		$count++ if (($value) and (! $haslccn));
 #		push @select, $value;
 #	}
-# 	my $CGIlccn=CGI::scrolling_list( -name     => 'Filter',
-# 				-id => 'Filter',
-# 				-values   => \@select,
-# 				-size     => 1,
-# 				-multiple => 0 );
+#   my $CGIlccn = {
+#       values   => \@select,
+#   };
 
 # No need to test for data here.  If you don't have itemcallnumbers, you probably know it.
 # FIXME: Hardcoding to 5 chars on itemcallnum. 

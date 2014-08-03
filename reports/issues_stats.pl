@@ -146,13 +146,7 @@ foreach (sort {$ccodes->{$a} cmp $ccodes->{$b}} keys %$ccodes) {
 	push @ccodes, { code => $_, description => $ccodes->{$_} };
 }
 
-my $CGIextChoice=CGI::scrolling_list(
-	-name     => 'MIME',
-	-id       => 'MIME',
-	-values   => ['CSV'], # FIXME translation
-	-size     => 1,
-	-multiple => 0 );
-    
+my $CGIextChoice = ( 'CSV' ); # FIXME translation
 my $CGIsepChoice=GetDelimiterChoices;
  
 $template->param(

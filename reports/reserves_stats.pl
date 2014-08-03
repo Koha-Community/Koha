@@ -155,15 +155,7 @@ foreach (sort {$ccodes->{$a} cmp $ccodes->{$b}} keys %$ccodes) {
 }
 
 # various
-my @mime = (C4::Context->preference("MIME"));
-
-my $CGIextChoice=CGI::scrolling_list(
-	-name     => 'MIME',
-	-id       => 'MIME',
-	-values   => \@mime,
-	-size     => 1,
-	-multiple => 0 );
-    
+my $CGIextChoice = ( 'CSV' ); # FIXME translation
 my $CGIsepChoice=GetDelimiterChoices;
  
 $template->param(

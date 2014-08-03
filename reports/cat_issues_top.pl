@@ -117,13 +117,7 @@ if ($do_it) {
     my %select;
     my $req;
     
-    my $CGIextChoice=CGI::scrolling_list(
-                -name     => 'MIME',
-                -id       => 'MIME',
-                -values   => ['CSV'], # FIXME translation
-                -size     => 1,
-                -multiple => 0 );
-    
+    my $CGIextChoice = ( 'CSV' ); # FIXME translation
     my $CGIsepChoice=GetDelimiterChoices;
 
     #doctype
