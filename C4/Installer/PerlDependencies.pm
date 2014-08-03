@@ -592,6 +592,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '1.39'
     },
+    'Test::MockObject' => {
+        'usage'    => 'Core',
+        'required' => '0',
+        'min_ver'  => '1.09',
+    },
     'Test::MockModule' => {
         'usage'    => 'Core',
         'required' => '1',
