@@ -41,11 +41,13 @@ use C4::Auth;
 use C4::Output;
 use C4::Dates qw(format_date_in_iso);
 use C4::Context;
-use C4::Branch qw(GetBranchName);
+use C4::Branch qw/GetBranchesLoop GetBranchName/;
 use C4::Members;
 use C4::Members::Attributes qw(:all);
 use C4::Members::AttributeTypes;
 use C4::Members::Messaging;
+use C4::Reports::Guided;
+use C4::Templates;
 use Koha::Borrower::Debarments;
 
 use Text::CSV;
@@ -60,10 +62,6 @@ my (@errors, @feedback);
 my $extended = C4::Context->preference('ExtendedPatronAttributes');
 my $set_messaging_prefs = C4::Context->preference('EnhancedMessagingPreferences');
 my @columnkeys = C4::Members::columns();
-if ($extended) {
-    push @columnkeys, 'patron_attributes';
-}
-my $columnkeystpl = [ map { {'key' => $_} }  grep {$_ ne 'borrowernumber' } @columnkeys ];  # ref. to array of hashrefs.
 
 my $input = CGI->new();
 our $csv  = Text::CSV->new({binary => 1});  # binary needed for non-ASCII Unicode
@@ -78,7 +76,14 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         debug           => 1,
 });
 
-$template->param(columnkeys => $columnkeystpl);
+# get the branches and pass them to the template
+my $branches = GetBranchesLoop();
+$template->param( branches => $branches ) if ( $branches );
+# get the patron categories and pass them to the template
+my $categories = GetBorrowercategoryList();
+$template->param( categories => $categories ) if ( $categories );
+my $columns = C4::Templates::GetColumnDefs( $input );
+$template->param( borrower_fields => $columns->{borrowers} );
 
 if ($input->param('sample')) {
     print $input->header(
@@ -97,8 +102,6 @@ if ($matchpoint) {
 my $overwrite_cardnumber = $input->param('overwrite_cardnumber');
 
 $template->param( SCRIPT_NAME => $ENV{'SCRIPT_NAME'} );
-
-($extended) and $template->param(ExtendedPatronAttributes => 1);
 
 if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
     push @feedback, {feedback=>1, name=>'filename', value=>$uploadborrowers, filename=>$uploadborrowers};

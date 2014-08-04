@@ -307,4 +307,51 @@ sub getlanguagecookie {
     return $cookie;
 }
 
+=head2 GetColumnDefs
+
+    my $columns = GetColumnDefs( $cgi )
+
+It is passed a CGI object and returns a hash of hashes containing
+the column names and descriptions for each table defined in the
+columns.def file corresponding to the CGI object.
+
+=cut
+
+sub GetColumnDefs {
+
+    my $query = shift;
+
+    my $columns = {};
+
+    my $htdocs = C4::Context->config('intrahtdocs');
+    my $columns_file = 'columns.def';
+
+    # Get theme and language to build the path to columns.def
+    my ($theme, $lang, $availablethemes) =
+        themelanguage($htdocs, 'about.tt', 'intranet', $query);
+    # Build columns.def path
+    my $path = "$htdocs/$theme/$lang/$columns_file";
+    my $fh;
+    if ( ! open ( $fh, q{<}, $path ) )  {
+        carp "Error opening $path. Check your templates.";
+        return;
+    }
+    # Loop through the columns.def file
+    while ( my $input = <$fh> ){
+        chomp $input;
+        if ( $input =~ m|<field name="(.*)">(.*)</field>| ) {
+            my ( $table, $column ) =  split( '\.', $1);
+            my $description        = $2;
+            # Initialize the table array if needed.
+            @{$columns->{ $table }} = () if ! defined $columns->{ $table };
+            # Push field and description
+            push @{$columns->{ $table }},
+                { field => $column, description => $description };
+        }
+    }
+    close $fh;
+
+    return $columns;
+}
+
 1;

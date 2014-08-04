@@ -1,15 +1,27 @@
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Import patrons [% IF ( uploadborrowers ) %]&rsaquo; Results[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">
-    .yui-u fieldset.rows label.widelabel { width: 12em; }
+    .yui-u fieldset.rows .widelabel { width: 12em; }
+    label.description { width: 20em; }
     .line_error { width: 100%; }
     code { background-color: yellow; }
 </style>
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        [%# Make date fields have the datepicker %]
+        $("#dateenrolled").addClass('datepicker');
+        $("#dateexpiry").addClass('datepicker');
+        $("#dateofbirth").addClass('datepicker');
+    });
+</script>
 </head>
 <body id="tools_import_borrowers" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
+[% INCLUDE 'calendar.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/tools/import_borrowers.pl">Import patrons</a>[% IF ( uploadborrowers ) %] &rsaquo; Results[% END %]</div>
 
@@ -112,12 +124,44 @@
 <fieldset class="rows">
 <legend>Default values</legend>
 <ol>
-    [% FOREACH columnkey IN columnkeys %]
-	<li>
-        <label class="widelabel" for="[% columnkey.key %]">[% columnkey.key %]: </label>
-		<input id="[% columnkey.key %]" name="[% columnkey.key %]" />
-	</li>
-    [% END %]
+[% FOREACH borrower_field IN borrower_fields %]
+  [% SWITCH borrower_field.field %]
+  [% CASE 'branchcode' %]
+    <li>
+        <label class="description" for="branchcode">[% borrower_field.description %]: </label>
+        <select id="branchcode" name="branchcode">
+            <option value="" selected="selected"></option>
+        [% FOREACH branch IN branches %]
+            <option value="[% branch.branchcode %]">
+                [% branch.branchname %]</option>
+        [% END %]
+        </select><span class="field_hint">[% borrower_field.field %]</span>
+    </li>
+  [% CASE 'categorycode' %]
+    <li>
+        <label class="description" for="categorycode">[% borrower_field.description %]: </label>
+        <select id="categorycode" name="categorycode">
+            <option value="" selected="selected"></option>
+        [% FOREACH category IN categories %]
+            <option value="[% category.categorycode %]">
+                [% category.description %]</option>
+        [% END %]
+        </select><span class="field_hint">[% borrower_field.field %]</span>
+    </li>
+  [% CASE %]
+    <li>
+        <label class="description" for="[% borrower_field.field %]">[% borrower_field.description %]: </label>
+        <input id="[% borrower_field.field %]" name="[% borrower_field.field %]" /><span class="field_hint">[% borrower_field.field %]</span>
+    </li>
+  [% END %]
+[% END %]
+[% IF ( Koha.Preference('ExtendedPatronAttributes') == 1 ) %]
+    <li>
+        <label class="description" for="patron_attributes">Patron attributes: </label>
+        <input id="patron_attributes" name="patron_attributes" />
+        <span class="field_hint">patron_attributes</span>
+    </li>
+[% END %]
 </ol></fieldset>
 	<fieldset class="rows">
 	<legend>If matching record is already in the borrowers table:</legend>
@@ -129,7 +173,7 @@
         </li>
     </ol>
     </fieldset>
-    [% IF ( ExtendedPatronAttributes ) %]
+    [% IF ( Koha.Preference('ExtendedPatronAttributes') == 1 ) %]
 	<fieldset class="rows">
     <legend>Patron attributes</legend>
     <ol><li class="radio">
