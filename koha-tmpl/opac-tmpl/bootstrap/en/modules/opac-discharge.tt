@@ -1,0 +1,47 @@
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Discharge
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="opac-discharge" class="scrollto">
+[% INCLUDE 'masthead.inc' %]
+
+<div class="main">
+    <ul class="breadcrumb">
+        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="#">Discharge</a></li>
+    </ul>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span2">
+                <div id="navigation">
+                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
+                </div>
+            </div>
+            <div class="span10">
+                <div id="discharge" class="maincontainer">
+                    <h1>Discharge</h1>
+                    [% IF success %]
+                        <p>Your discharge request has been sent. Your discharge will be available on this page within a few days.</p>
+                    [% ELSIF available %]
+                        <a href="/cgi-bin/koha/opac-discharge.pl?op=get">Get your discharge</a></li>
+                    [% ELSIF pending %]
+                        <p>Your discharge will be available on this page within a few days.</p>
+                    [% ELSIF has_issues %]
+                        <p>You cannot be discharged, you have issues. Please return items before asking for a discharge.</p>
+                    [% ELSE %]
+                        <h2>What is a discharge?</h2>
+                        <p>This document certifies that you have returned all borrowed items. It is sometimes asked during a file transfer from a school to another. The discharge is sent by us to your school. You will also find it available on your reader account.</p>
+                        <p><strong>Warning</strong>: This request is only valid if you are in good standing with the library. Once the application is made, you can not borrow library materials.</p>
+                        <a href="/cgi-bin/koha/opac-discharge.pl?op=request">Ask for a discharge</a>
+                    [% END %]
+                </div> <!-- / #discharge -->
+            </div> <!-- / .span10 -->
+        </div> <!-- / .row-fluid -->
+    </div>  <!-- / .container-fluid -->
+</div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %][% END %]

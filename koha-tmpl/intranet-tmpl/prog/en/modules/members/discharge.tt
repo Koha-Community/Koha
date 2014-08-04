@@ -1,0 +1,41 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Patrons &rsaquo; [% IF (unknowuser) %]Patron does not exist[% ELSE %]Discharge for [% firstname %] [% surname %] ([% cardnumber %])[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'patron-search.inc' %]
+
+<div id="breadcrumbs">
+         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
+&rsaquo; [% IF (unknowuser) %]Patron does not exist[% ELSE %]Discharge for [% firstname %] [% surname %] ([% cardnumber %])[% END %]
+</div>
+
+<div id="doc3" class="yui-t1">
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+<div class="yui-g">
+<h3>Discharge</h3>
+[% UNLESS can_be_discharged %]
+    <p>Cannot edit discharge: borrower has issues.</p>
+[% ELSE %]
+    [% IF has_reserves %]
+        <p>Borrower has reserves: they will be canceled if the discharge is generated.</p>
+    [% END %]
+    <form method="post">
+        <input type="submit" value="Generate discharge" name="discharge" />
+        <input type="hidden" value="[% borrowernumber %]" name="borrowernumber" />
+    </form>
+[% END %]
+</div>
+
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'circ-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
