@@ -47,6 +47,8 @@
                                     Overdues
                                 [% CASE 'SUSPENSION' %]
                                     Suspension
+                                [% CASE 'DISCHARGE' %]
+                                    Discharge
                             [% END %]
                         </td>
                         <td>[% d.comment %]</td>

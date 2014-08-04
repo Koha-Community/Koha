@@ -131,7 +131,7 @@ sub DelDebarment {
 my $success = ModDebarment({
     borrower_debarment_id => $borrower_debarment_id,
     expiration            => $expiration,
-    type                  => $type, ## enum('FINES','OVERDUES','MANUAL')
+    type                  => $type, ## enum('FINES','OVERDUES','MANUAL','DISCHARGE')
     comment               => $comment,
 });
 

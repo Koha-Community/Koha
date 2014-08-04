@@ -95,6 +95,15 @@
                 [% END %]
                 <a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">your lists</a></li>
             [% END %]
+
+            [% IF Koha.Preference( 'useDischarge' ) == 1 %]
+                [% IF ( dischargeview ) %]
+                    <li class="active">
+                [% ELSE %]
+                    <li>
+                [% END %]
+                <a href="/cgi-bin/koha/opac-discharge.pl">ask for a discharge</a></li>
+            [% END %]
         </ul>
     </div>
 [% END %]

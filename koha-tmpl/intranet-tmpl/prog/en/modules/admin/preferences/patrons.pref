@@ -132,6 +132,12 @@ Patrons:
          - pref: CardnumberLength
          - "characters long. The length can be a single number to specify an exact length, a range separated by a comma (i.e., 'Min,Max'), or a maximum with no minimum (i.e., ',Max')."
          - "If 'cardnumber' is included in the BorrowerMandatoryField list, the minimum length, if not specified here, defaults to one."
+     -
+         - pref: useDischarge
+           choices:
+               yes: Allows
+               no: "Don't allow"
+         - librarians to discharge borrowers and borrowers to request a discharge.
     "Norwegian patron database":
      -
          - pref: NorwegianPatronDBEnable

@@ -421,6 +421,7 @@ sub get_template_and_user {
             EnableBorrowerFiles                                                        => C4::Context->preference('EnableBorrowerFiles'),
             UseKohaPlugins                                                             => C4::Context->preference('UseKohaPlugins'),
             UseCourseReserves                                                          => C4::Context->preference("UseCourseReserves"),
+            useDischarge                                                               => C4::Context->preference('useDischarge'),
         );
     }
     else {
@@ -532,6 +533,7 @@ sub get_template_and_user {
             OPACLocalCoverImages                  => C4::Context->preference("OPACLocalCoverImages"),
             PatronSelfRegistration                => C4::Context->preference("PatronSelfRegistration"),
             PatronSelfRegistrationDefaultCategory => C4::Context->preference("PatronSelfRegistrationDefaultCategory"),
+            useDischarge                 => C4::Context->preference('useDischarge'),
         );
 
         $template->param( OpacPublic => '1' ) if ( $user || C4::Context->preference("OpacPublic") );

@@ -29,6 +29,7 @@ use C4::Review qw/numberofreviews/;
 use C4::Suggestions qw/CountSuggestion/;
 use C4::Tags qw/get_count_by_tag_status/;
 use Koha::Borrower::Modifications;
+use Koha::Borrower::Discharge;
 
 my $query = new CGI;
 
@@ -65,12 +66,14 @@ my $pendingtags        = get_count_by_tag_status(0);
 my $pendingsuggestions = CountSuggestion("ASKED");
 my $pending_borrower_modifications =
   Koha::Borrower::Modifications->GetPendingModificationsCount( $branch );
+my $pending_discharge_requests = Koha::Borrower::Discharge::count({ pending => 1 });
 
 $template->param(
     pendingcomments                => $pendingcomments,
     pendingtags                    => $pendingtags,
     pendingsuggestions             => $pendingsuggestions,
     pending_borrower_modifications => $pending_borrower_modifications,
+    pending_discharge_requests     => $pending_discharge_requests,
 );
 
 #

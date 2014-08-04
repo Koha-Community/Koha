@@ -111,7 +111,9 @@
             [% IF ( ( CAN_user_tools_moderate_comments  && pendingcomments ) 
                     || ( CAN_user_tools_moderate_tags && pendingtags )
                     || ( CAN_user_borrowers && pending_borrower_modifications )
-                    || ( CAN_user_acquisition && pendingsuggestions ) ) %]
+                    || ( CAN_user_acquisition && pendingsuggestions )
+                    || ( CAN_user_borrowers && pending_discharge_requests )
+            ) %]
                 <div id="area-pending">
                     [% IF ( CAN_user_acquisition && pendingsuggestions ) %]
                     <div class="pending-info" id="suggestions_pending">
@@ -140,6 +142,13 @@
                     <div class="pending-info" id="patron_updates_pending">
                         <a href="/cgi-bin/koha/members/members-update.pl">Patrons requesting modifications</a>:
                         <span class="pending-number-link">[% pending_borrower_modifications %]</span>
+                    </div>
+                    [% END %]
+
+                    [% IF CAN_user_borrowers && pending_discharge_requests %]
+                    <div class="pending-info" id="patron_discharges_pending">
+                        <a href="/cgi-bin/koha/members/discharges.pl">Discharge requests pending</a>:
+                        <span class="pending-number-link">[% pending_discharge_requests %]</span>
                     </div>
                     [% END %]
 
