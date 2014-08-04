@@ -81,7 +81,7 @@ function logOut(){
 }
 
 function openHelp(){
-    openWindow("/cgi-bin/koha/help.pl","Koha help",600,600);
+    openWindow("/cgi-bin/koha/help.pl","KohaHelp",600,600);
 }
 
 jQuery.fn.preventDoubleFormSubmit = function() {
@@ -98,7 +98,12 @@ function openWindow(link,name,width,height) {
     name = (typeof name == "undefined")?'popup':name;
     width = (typeof width == "undefined")?'600':width;
     height = (typeof height == "undefined")?'400':height;
-    var newin=window.open(link,name,'width='+width+',height='+height+',resizable=yes,toolbar=false,scrollbars=yes,top');
+    //IE <= 9 can't handle a "name" with whitespace
+    try {
+        var newin=window.open(link,name,'width='+width+',height='+height+',resizable=yes,toolbar=false,scrollbars=yes,top');
+    } catch(e) {
+        var newin=window.open(link,null,'width='+width+',height='+height+',resizable=yes,toolbar=false,scrollbars=yes,top');
+    }
 }
 
 // Use this function to remove the focus from any element for

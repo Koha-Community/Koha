@@ -154,7 +154,7 @@ function confirmnotdup(redirect){
 [% IF ( duplicateauthid ) %]
         <div class="dialog alert">
                 <h4>Duplicate record suspected</h4>
-                <p>Is this a duplicate of <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid %]" onclick="openWindow('/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid %]&amp;popup=1', 'Duplicate authority','800','600'); return false;" class="button">[% duplicateauthvalue %]</a>?</p>
+                <p>Is this a duplicate of <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid %]" onclick="openWindow('/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid %]&amp;popup=1', 'DuplicateAuthority','800','600'); return false;" class="button">[% duplicateauthvalue %]</a>?</p>
 
                 <form action="authorities.pl" method="get">
                     <input type="hidden" name="authid" value="[% duplicateauthid %]" />

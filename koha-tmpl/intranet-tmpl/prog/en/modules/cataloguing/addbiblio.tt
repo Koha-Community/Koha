@@ -403,7 +403,7 @@ function Changefwk(FwkList) {
         [% IF ( duplicatebiblionumber ) %]
                     <div class="dialog alert">
                         <h4>Duplicate record suspected</h4>
-                        <p>Is this a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber %]" onclick="openWindow('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber %]&amp;popup=1', 'Duplicate biblio','800','600'); return false;">[% duplicatetitle %]</a>?</p>
+                        <p>Is this a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber %]" onclick="openWindow('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber %]&amp;popup=1', 'DuplicateBiblio','800','600'); return false;">[% duplicatetitle %]</a>?</p>
                         [% IF ( CAN_user_editcatalogue_edit_items ) %]<form action="/cgi-bin/koha/cataloguing/additem.pl" method="get">
                                                     <input type="hidden" name="biblionumber" value="[% duplicatebiblionumber %]" />
                                                     <input type="submit" class="edit" value="Yes: Edit existing items" />
