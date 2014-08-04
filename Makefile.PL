@@ -1259,7 +1259,9 @@ sub get_target_directories {
         $dirmap{'PAZPAR2_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'pazpar2');
         $dirmap{'MISC_DIR'} = File::Spec->catdir(@basedir, $package, 'misc');
         $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
-        $dirmap{'SCRIPT_NONDEV_DIR'} = $dirmap{'SCRIPT_DIR'};
+        #For dev install, point NONDEV_DIR to misc in current dir (not base)
+        #Used by supportdir in koha-conf.xml (BZ 12031)
+        $dirmap{'SCRIPT_NONDEV_DIR'} = File::Spec->catdir($curdir, 'misc');
         $skipdirs{'SCRIPT_NONDEV_DIR'} = 1;
         $dirmap{'MAN_DIR'} = File::Spec->catdir(@basedir, $package, 'man');
         $dirmap{'DOC_DIR'} = File::Spec->catdir(@basedir, $package, 'doc');

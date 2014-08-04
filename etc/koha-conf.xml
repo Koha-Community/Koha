@@ -106,11 +106,9 @@ __PAZPAR2_TOGGLE_XML_POST__
       tool -->
  <backup_db_via_tools>0</backup_db_via_tools>
  <backup_conf_via_tools>0</backup_conf_via_tools>
- <!-- Uncomment the following line if you are not using packages and need to schedule reports through the web interface
- Example:
- My runreports.pl is in /home/user/koha-src/koha/misc/cronjobs
- my <supportdir> would be as follows:
- <supportdir>/home/user/koha-src/koha/misc</supportdir>
+ <!-- Uncomment the following line if you are not using packages and need to schedule reports through the web interface. supportdir should contain cronjobs/runreport.pl -->
+ <!--
+ <supportdir>__SCRIPT_NONDEV_DIR__</supportdir>
  -->
  <pazpar2url>http://__PAZPAR2_HOST__:__PAZPAR2_PORT__/search.pz2</pazpar2url>
  <install_log>__MISC_DIR__/koha-install-log</install_log>

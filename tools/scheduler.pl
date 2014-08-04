@@ -40,7 +40,7 @@ if ( C4::Context->config('supportdir') ) {
      $base = C4::Context->config('supportdir');
 }
 else {
-     $base        = "/usr/share/koha/bin";
+     $base = "/usr/share/koha/bin";
 }
 
 my $CONFIG_NAME = $ENV{'KOHA_CONF'};
@@ -68,24 +68,27 @@ if ( $mode eq 'job_add' ) {
     my $startdate = join('', (split /-/, $c4date->output("iso")));
 
     my $starttime = $input->param('starttime');
-    my $recurring = $input->param('recurring');
     $starttime =~ s/\://g;
     my $start  = $startdate . $starttime;
     my $report = $input->param('report');
     my $format = $input->param('format');
     my $email  = $input->param('email');
     my $command =
-        "export KOHA_CONF=\"$CONFIG_NAME\"; " . $base
-      . "/cronjobs/runreport.pl $report --format=$format --to=$email";
+        "export KOHA_CONF=\"$CONFIG_NAME\"; " .
+        "$base/cronjobs/runreport.pl $report --format=$format --to=$email";
 
-    if ($recurring) {
-        my $frequency = $input->param('frequency');
-        add_cron_job( $start, $command );
-    }
-    else {
-        unless ( add_at_job( $start, $command ) ) {
-            $template->param( job_add_failed => 1 );
-        }
+#FIXME commit ea899bc55933cd74e4665d70b1c48cab82cd1257 added recurring parameter (it is not in template) and call to add_cron_job (undefined)
+#    my $recurring = $input->param('recurring');
+#    if ($recurring) {
+#        my $frequency = $input->param('frequency');
+#        add_cron_job( $start, $command );
+#    }
+#    else {
+#        #here was the the unless ( add_at_job
+#    }
+
+    unless ( add_at_job( $start, $command ) ) {
+        $template->param( job_add_failed => 1 );
     }
 }
 

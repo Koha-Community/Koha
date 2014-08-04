@@ -115,6 +115,7 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   '__PAZPAR2_CONF_DIR__' => "$prefix/etc/koha/pazpar2",
   '__MISC_DIR__' => "$prefix/misc",
   '__SCRIPT_DIR__' => "$prefix/bin",
+  '__SCRIPT_NONDEV_DIR__' => "$prefix/bin",
   '__MAN_DIR__' => "$prefix/man",
   '__DOC_DIR__' => "$prefix/doc",
   '__ZEBRA_LOCK_DIR__' => "$prefix/var/lock/zebradb",
