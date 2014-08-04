@@ -9835,6 +9835,33 @@ if(CheckVersion($DBversion)) {
     });
 
     print "Upgrade to $DBversion done (Bug 13523 - Remove NOT NULL restriction on field marcxml due to mysql STRICT_TRANS_TABLES)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('useDischarge','','Allows librarians to discharge borrowers and borrowers to request a discharge','','YesNo')
+    |);
+    $dbh->do(q|
+        INSERT INTO `letter` (module, code, name, title, content) VALUES('members', 'DISCHARGE', 'Discharge', 'Discharge for <<borrowers.firstname>> <<borrowers.surname>>', '<h1>Discharge</h1>\r\n\r\nThe library <<borrowers.branchcode>> certifies that the following borrower :\r\n\r\n    <<borrowers.firstname>> <<borrowers.surname>>\r\n   Cardnumber : <<borrowers.cardnumber>>\r\n\r\nreturned all his documents.')
+    |);
+
+    $dbh->do(q|
+        ALTER TABLE borrower_debarments CHANGE type type ENUM('SUSPENSION','OVERDUES','MANUAL','DISCHARGE') NOT NULL DEFAULT 'MANUAL'
+    |);
+
+    $dbh->do(q|
+        CREATE TABLE discharges (
+          borrower int(11) DEFAULT NULL,
+          needed timestamp NULL DEFAULT NULL,
+          validated timestamp NULL DEFAULT NULL,
+          KEY borrower_discharges_ibfk1 (borrower),
+          CONSTRAINT borrower_discharges_ibfk1 FOREIGN KEY (borrower) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
+        )
+    |);
+
+    print "Upgrade to $DBversion done (Bug 8007 - Add System Preferences useDischarge, the discharge notice and the new table discharges)\n";
     SetVersion($DBversion);
 }
 

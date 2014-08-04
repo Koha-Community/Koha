@@ -326,7 +326,7 @@ CREATE TABLE borrower_debarments ( -- tracks restrictions on the patron's record
   borrower_debarment_id int(11) NOT NULL AUTO_INCREMENT, -- unique key for the restriction
   borrowernumber int(11) NOT NULL, -- foreign key for borrowers.borrowernumber for patron who is restricted
   expiration date DEFAULT NULL, -- expiration date of the restriction
-  `type` enum('SUSPENSION','OVERDUES','MANUAL') NOT NULL DEFAULT 'MANUAL', -- type of restriction
+  `type` enum('SUSPENSION','OVERDUES','MANUAL','DISCHARGE') NOT NULL DEFAULT 'MANUAL', -- type of restriction
   `comment` text, -- comments about the restriction
   manager_id int(11) DEFAULT NULL, -- foreign key for borrowers.borrowernumber for the librarian managing the restriction
   created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- date the restriction was added
@@ -3504,6 +3504,18 @@ CREATE TABLE items_search_fields (
     FOREIGN KEY (authorised_values_category) REFERENCES authorised_values (category)
     ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Table structure for table 'discharges'
+--
+
+CREATE TABLE discharges (
+  borrower int(11) DEFAULT NULL,
+  needed timestamp NULL DEFAULT NULL,
+  validated timestamp NULL DEFAULT NULL,
+  KEY borrower_discharges_ibfk1 (borrower),
+  CONSTRAINT borrower_discharges_ibfk1 FOREIGN KEY (borrower) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

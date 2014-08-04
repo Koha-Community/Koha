@@ -460,6 +460,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('UseControlNumber','0','','If ON, record control number (w subfields) and control number (001) are used for linking of bibliographic records.','YesNo'),
 ('UseCourseReserves','0',NULL,'Enable the course reserves feature.','YesNo'),
 ('useDaysMode','Calendar','Calendar|Days|Datedue','Choose the method for calculating due date: select Calendar to use the holidays module, and Days to ignore the holidays module','Choice'),
+('useDischarge','','','Allows librarians to discharge borrowers and borrowers to request a discharge','YesNo'),
 ('UseICU','0','1','Tell Koha if ICU indexing is in use for Zebra or not.','YesNo'),
 ('UseKohaPlugins','0','','Enable or disable the ability to use Koha Plugins.','YesNo'),
 ('UseQueryParser','0',NULL,'If enabled, try to use QueryParser for queries.','YesNo'),
