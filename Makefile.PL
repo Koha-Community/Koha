@@ -617,6 +617,7 @@ push @{ $pl_files->{'rewrite-config.PL'} }, (
 );
 push @{ $pl_files->{'rewrite-config.PL'} }, (
     'blib/SCRIPT_DIR/koha-zebra-ctl.sh',
+    'blib/SCRIPT_DIR/koha-sip-ctl.sh',
     'blib/SCRIPT_DIR/koha-pazpar2-ctl.sh',
     'blib/SCRIPT_DIR/koha-index-daemon-ctl.sh',
     'blib/SCRIPT_DIR/koha-plack-daemon.sh',
