@@ -828,6 +828,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 discharges
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Discharge>
+
+=cut
+
+__PACKAGE__->has_many(
+  "discharges",
+  "Koha::Schema::Result::Discharge",
+  { "foreign.borrower" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 hold_fill_targets
 
 Type: has_many

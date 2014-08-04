@@ -45,7 +45,7 @@ __PACKAGE__->table("borrower_debarments");
 
   data_type: 'enum'
   default_value: 'MANUAL'
-  extra: {list => ["SUSPENSION","OVERDUES","MANUAL"]}
+  extra: {list => ["SUSPENSION","OVERDUES","MANUAL","DISCHARGE"]}
   is_nullable: 0
 
 =head2 comment
@@ -84,7 +84,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "enum",
     default_value => "MANUAL",
-    extra => { list => ["SUSPENSION", "OVERDUES", "MANUAL"] },
+    extra => { list => ["SUSPENSION", "OVERDUES", "MANUAL", "DISCHARGE"] },
     is_nullable => 0,
   },
   "comment",
@@ -136,8 +136,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-31 01:30:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Vq6rOYGJBK8Mw2YFAX52Vg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-01-07 17:25:44
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4KkoPNcgZoANIScMWUyS/w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
