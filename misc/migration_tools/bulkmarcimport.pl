@@ -121,10 +121,16 @@ if ((not defined $sourcesubfield) && (not defined $sourcetag)){
   $sourcesubfield="a";
 }
 
-# save the CataloguingLog property : we don't want to log a bulkmarcimport. It will slow the import & 
+#Disable the syspref cache or else the following UPDATE statements will have no effect
+C4::Context->disable_syspref_cache();
+
+# save the CataloguingLog and AuthoritiesLog properties : we don't want to log a bulkmarcimport. It will slow the import &
 # will create problems in the action_logs table, that can't handle more than 1 entry per second per user.
 my $CataloguingLog = C4::Context->preference('CataloguingLog');
 $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='CataloguingLog'");
+
+my $AuthoritiesLog = C4::Context->preference('AuthoritiesLog');
+$dbh->do("UPDATE systempreferences SET value=0 WHERE variable='AuthoritiesLog'");
 
 if ($fk_off) {
 	$dbh->do("SET FOREIGN_KEY_CHECKS = 0");
@@ -496,6 +502,8 @@ if ($fk_off) {
 
 # restore CataloguingLog
 $dbh->do("UPDATE systempreferences SET value=$CataloguingLog WHERE variable='CataloguingLog'");
+# restore AuthoritiesLog
+$dbh->do("UPDATE systempreferences SET value=$AuthoritiesLog WHERE variable='AuthoritiesLog'");
 
 my $timeneeded = gettimeofday - $starttime;
 print "\n$i MARC records done in $timeneeded seconds\n";
