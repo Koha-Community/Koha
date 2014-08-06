@@ -27,6 +27,9 @@
             if( f.budget_period_startdate > f.budget_period_enddate ) {
               _alertString += "\n- " + _("Start date must be before end date");
             }
+            if (!(isNotNull(f.budget_period_description,1))){
+              _alertString += "\n- " + _("Budget description missing");
+            }
 
             if(_alertString.length==0){
               f.submit();
@@ -261,6 +264,11 @@
     <label class="required" for="to">End date: </label>
     <input type="text" size="10" id="to" name="budget_period_enddate" value="[% budget_period_enddate | $KohaDates %]" class="datepickerto" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+    </li>
+
+    <li>
+    <label class="required" for="budget_period_description">Description</label>
+    <input type="text" id="budget_period_description" name="budget_period_description" value="[% budgetperiod.budget_period_description %]" />
     </li>
 
     <li>

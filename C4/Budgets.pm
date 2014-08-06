@@ -1029,18 +1029,20 @@ amounts will be reset.
 =cut
 
 sub CloneBudgetPeriod {
-    my ($params)                = @_;
-    my $budget_period_id        = $params->{budget_period_id};
-    my $budget_period_startdate = $params->{budget_period_startdate};
-    my $budget_period_enddate   = $params->{budget_period_enddate};
+    my ($params)                  = @_;
+    my $budget_period_id          = $params->{budget_period_id};
+    my $budget_period_startdate   = $params->{budget_period_startdate};
+    my $budget_period_enddate     = $params->{budget_period_enddate};
+    my $budget_period_description = $params->{budget_period_description};
     my $mark_original_budget_as_inactive =
       $params->{mark_original_budget_as_inactive} || 0;
     my $reset_all_budgets = $params->{reset_all_budgets} || 0;
 
     my $budget_period = GetBudgetPeriod($budget_period_id);
 
-    $budget_period->{budget_period_startdate} = $budget_period_startdate;
-    $budget_period->{budget_period_enddate}   = $budget_period_enddate;
+    $budget_period->{budget_period_startdate}   = $budget_period_startdate;
+    $budget_period->{budget_period_enddate}     = $budget_period_enddate;
+    $budget_period->{budget_period_description} = $budget_period_description;
     # The new budget (budget_period) should be active by default
     $budget_period->{budget_period_active}    = 1;
     my $original_budget_period_id = $budget_period->{budget_period_id};

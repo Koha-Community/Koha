@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 107;
+use Test::More tests => 108;
 
 BEGIN {
     use_ok('C4::Budgets')
@@ -367,8 +367,12 @@ my $budget_period_id_cloned = C4::Budgets::CloneBudgetPeriod(
         budget_period_id        => $budget_period_id,
         budget_period_startdate => '2014-01-01',
         budget_period_enddate   => '2014-12-31',
+        budget_period_description => 'Budget Period Cloned',
     }
 );
+
+my $budget_period_cloned = C4::Budgets::GetBudgetPeriod($budget_period_id_cloned);
+is($budget_period_cloned->{budget_period_description}, 'Budget Period Cloned', 'Cloned budget\'s description is updated.');
 
 my $budget_hierarchy        = GetBudgetHierarchy($budget_period_id);
 my $budget_hierarchy_cloned = GetBudgetHierarchy($budget_period_id_cloned);

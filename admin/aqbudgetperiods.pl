@@ -177,9 +177,11 @@ elsif ( $op eq 'delete_confirmed' ) {
 
 # display the form for duplicating
 elsif ( $op eq 'duplicate_form'){
+    my $budgetperiod = GetBudgetPeriod($budget_period_id, $input);
     $template->param(
         'duplicate_form' => '1',
         'budget_period_id' => $budget_period_id,
+        'budgetperiod' => $budgetperiod,
     );
 }
 
@@ -189,6 +191,7 @@ elsif ( $op eq 'duplicate_budget' ){
 
     my $budget_period_startdate = dt_from_string $input->param('budget_period_startdate');
     my $budget_period_enddate   = dt_from_string $input->param('budget_period_enddate');
+    my $budget_period_description = $input->param('budget_period_description');
     my $mark_original_budget_as_inactive = $input->param('mark_original_budget_as_inactive');
     my $reset_all_budgets = $input->param('reset_all_budgets');
 
@@ -197,6 +200,7 @@ elsif ( $op eq 'duplicate_budget' ){
             budget_period_id        => $budget_period_id,
             budget_period_startdate => $budget_period_startdate,
             budget_period_enddate   => $budget_period_enddate,
+            budget_period_description => $budget_period_description,
             mark_original_budget_as_inactive => $mark_original_budget_as_inactive,
             reset_all_budgets => $reset_all_budgets,
         }
