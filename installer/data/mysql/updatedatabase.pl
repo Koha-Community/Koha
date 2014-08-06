@@ -8044,7 +8044,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.14.09.001";
 if(CheckVersion($DBversion)) {
     $dbh->do(q|
         INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACMySummaryNote','','','Note to display on the patron summary page. This note only appears if the patron is connected.','Free')
