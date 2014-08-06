@@ -63,6 +63,7 @@ sub get_class_sort_key {
     my $init = uc "$cn_class $cn_item";
     $init =~ s/^\s+//;
     $init =~ s/\s+$//;
+    $init =~ s/\// /g;
     $init =~ s!/!!g;
     $init =~ s/^([\p{IsAlpha}]+)/$1 /;
     my @tokens = split /\.|\s+/, $init;
@@ -75,8 +76,12 @@ sub get_class_sort_key {
                 $first_digit_group_idx = $i;
             }
             if (2 == $digit_group_count) {
-                $tokens[$i] = sprintf("%-15.15s", $tokens[$i]);
-                $tokens[$i] =~ tr/ /0/;
+               if ($i - $first_digit_group_idx == 1) {
+                    $tokens[$i] = sprintf("%-15.15s", $tokens[$i]);
+                    $tokens[$i] =~ tr/ /0/;
+                } else {
+                    $tokens[$first_digit_group_idx] .= '_000000000000000'
+                }
             }
         }
     }
