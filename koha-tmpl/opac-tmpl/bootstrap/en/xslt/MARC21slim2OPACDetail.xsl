@@ -1070,67 +1070,6 @@
         <xsl:text>.</xsl:text>
     </xsl:template>
 
-    <xsl:template name="showRDAtag264">
-    <!-- Depending on how many tags you have, we will pick by preference
-         Publisher-latest or Publisher or 'Other'-latest or 'Other'
-         The preferred tag is saved in the fav variable and passed to a
-         helper named-template -->
-        <xsl:choose>
-            <xsl:when test="marc:datafield[@tag=264 and @ind1=3 and @ind2=1]">
-            <!-- ind1==3 means latest change -->
-            <!-- ind2==1 means Publisher -->
-              <xsl:variable name="fav" select="marc:datafield[@tag=264 and @ind1=3 and @ind2=1][1]"/>
-              <xsl:call-template name="showRDAtag264helper">
-                <xsl:with-param name="field" select="$fav"/>
-              </xsl:call-template>
-            </xsl:when>
-
-            <xsl:when test="marc:datafield[@tag=264 and @ind2=1]">
-              <xsl:variable name="fav" select="marc:datafield[@tag=264 and @ind2=1][last()]"/>
-              <xsl:call-template name="showRDAtag264helper">
-                <xsl:with-param name="field" select="$fav"/>
-              </xsl:call-template>
-            </xsl:when>
-
-            <xsl:when test="marc:datafield[@tag=264 and @ind1=3]">
-              <xsl:variable name="fav" select="marc:datafield[@tag=264 and @ind1=3][1]"/>
-              <xsl:call-template name="showRDAtag264helper">
-                <xsl:with-param name="field" select="$fav"/>
-              </xsl:call-template>
-            </xsl:when>
-
-            <xsl:otherwise>
-              <xsl:variable name="fav" select="marc:datafield[@tag=264][last()]"/>
-              <xsl:call-template name="showRDAtag264helper">
-                <xsl:with-param name="field" select="$fav"/>
-              </xsl:call-template>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-    <xsl:template name="showRDAtag264helper">
-        <xsl:param name="field"/>
-        <xsl:variable name="ind2" select="$field/@ind2"/>
-        <xsl:choose>
-            <xsl:when test="$ind2='0'">
-                <span class="label">Producer: </span>
-            </xsl:when>
-            <xsl:when test="$ind2='1'">
-                <span class="label">Publisher: </span>
-            </xsl:when>
-            <xsl:when test="$ind2='2'">
-                <span class="label">Distributor: </span>
-            </xsl:when>
-            <xsl:when test="$ind2='3'">
-                <span class="label">Manufacturer: </span>
-            </xsl:when>
-        </xsl:choose>
-        <xsl:value-of select="$field/marc:subfield[@code='a']"/>
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$field/marc:subfield[@code='b']"/>
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$field/marc:subfield[@code='c']"/>
-    </xsl:template>
-
     <xsl:template name="nameABCQ">
             <xsl:call-template name="chopPunctuation">
                 <xsl:with-param name="chopString">
