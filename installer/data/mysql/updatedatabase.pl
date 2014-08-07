@@ -8589,7 +8589,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.012";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("DELETE FROM systempreferences WHERE variable='OpacShowFiltersPulldownMobile'");
     print "Upgrade to $DBversion done ( Bug 12512 - PROG/CCSR deprecation: Remove OpacShowFiltersPulldownMobile system preference )\n";
