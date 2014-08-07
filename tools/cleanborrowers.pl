@@ -183,7 +183,7 @@ sub _get_selection_params {
         dateformat => 'iso',
         dateonly   => 1
     }) if $borrower_dateexpiry;
-    $params->{borrower_categorycode} = $borrower_categorycode if $borrower_categorycode;
+    $params->{category_code} = $borrower_categorycode if $borrower_categorycode;
 
     return $params;
 };
