@@ -161,6 +161,7 @@ foreach my $pm_type(@pm_types) {
                 upgrade => ($pm_type eq 'upgrade_pm' ? 1 : 0),
                 current => ($pm_type eq 'current_pm' ? 1 : 0),
                 require => $stats->{'required'},
+                reqversion => $stats->{'min_ver'},
             }
         );
     }

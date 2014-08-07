@@ -83,7 +83,9 @@
                     <th scope="row" style="background-color:#FF8A8A;font-weight:normal" title="Optional module missing">
                     [% END %]
                     [% END %]
-                    [% ro.name %]
+                    [% IF ( ro.name ) %]
+                    [% ro.name %] <span style="font-weight:normal; font-size:smaller"> ([%ro.reqversion %])</span>
+                    [% END %]
                     </th>
                     [% IF ( ro.name == '' ) %]
                     <td>
