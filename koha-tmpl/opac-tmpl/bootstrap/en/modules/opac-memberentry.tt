@@ -740,6 +740,24 @@
                     </fieldset>
                 [% END %]
 
+                [% IF ( borrower.ExtendedPatronAttributes ) %]
+                    <fieldset class="rows">
+                        <legend>Additional information</legend>
+                        <ol>
+                            [% FOREACH patron_attribute IN borrower.patron_attributes %]
+                                <li>
+                                    <label>[% patron_attribute.description %]:</label>
+                                    [% IF ( patron_attribute.value_description ) %]
+                                        [% patron_attribute.value_description %]
+                                    [% ELSE %]
+                                        [% patron_attribute.value |html_line_break %]
+                                    [% END %]
+                                </li>
+                            [% END %]
+                        </ol>
+                    </fieldset>
+                [% END %]
+
                 [% IF action == 'edit' %]
                     [% IF OPACPatronDetails %]
                         <fieldset class="action">

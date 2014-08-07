@@ -197,6 +197,15 @@ elsif ( $action eq 'update' ) {
 }
 elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
     my $borrower = GetMember( borrowernumber => $borrowernumber );
+
+    if (C4::Context->preference('ExtendedPatronAttributes')) {
+        my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber, 'opac');
+        if (scalar(@$attributes) > 0) {
+            $borrower->{ExtendedPatronAttributes} = 1;
+            $borrower->{patron_attributes} = $attributes;
+        }
+    }
+
     $template->param(
         borrower => $borrower, );
 
