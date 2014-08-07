@@ -299,7 +299,9 @@
             </xsl:call-template>
         </xsl:if>
 
-        <xsl:if test="marc:datafield[@tag=260]">
+        <!-- Publisher info and RDA related info from tags 260, 264 -->
+        <xsl:choose>
+        <xsl:when test="marc:datafield[@tag=260]">
         <span class="results_summary publisher"><span class="label">Publisher: </span>
             <xsl:for-each select="marc:datafield[@tag=260]">
                 <xsl:if test="marc:subfield[@code='a']">
@@ -325,8 +327,18 @@
                </xsl:call-template>
                     <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
             </xsl:for-each>
+            <xsl:if test="marc:datafield[@tag=264]">
+                <xsl:text>; </xsl:text>
+                <xsl:call-template name="showRDAtag264"/>
+            </xsl:if>
         </span>
-        </xsl:if>
+        </xsl:when>
+        <xsl:when test="marc:datafield[@tag=264]">
+            <span class="results_summary">
+                <xsl:call-template name="showRDAtag264"/>
+            </span>
+        </xsl:when>
+        </xsl:choose>
 
         <!-- Edition Statement: Alternate Graphic Representation (MARC 880) -->
         <xsl:if test="$display880">
