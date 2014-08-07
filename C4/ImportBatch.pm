@@ -58,6 +58,7 @@ BEGIN {
     GetStagedWebserviceBatches
     GetImportBatchRangeDesc
     GetNumberOfNonZ3950ImportBatches
+    GetImportBiblios
     GetImportRecordsRange
 	GetItemNumbersFromImportBatch
     
@@ -1015,6 +1016,25 @@ sub GetNumberOfNonZ3950ImportBatches {
     my ($count) = $sth->fetchrow_array();
     $sth->finish();
     return $count;
+}
+
+=head2 GetImportBiblios
+
+  my $results = GetImportBiblios($importid);
+
+=cut
+
+sub GetImportBiblios {
+    my ($import_record_id) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $query = "SELECT * FROM import_biblios WHERE import_record_id = ?";
+    my $sth = $dbh->prepare_cached($query);
+    $sth->execute($import_record_id);
+    my $results = $sth->fetchall_arrayref({});
+    $sth->finish();
+    return $results;
+
 }
 
 =head2 GetImportRecordsRange

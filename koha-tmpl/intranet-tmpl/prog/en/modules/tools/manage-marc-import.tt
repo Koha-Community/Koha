@@ -1,3 +1,30 @@
+[% BLOCK final_match_link %]
+    [% IF ( record.record_type == 'biblio' ) %]
+        <a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% record.final_match_id %]">[% record.final_match_id %]</a>
+    [% ELSIF ( record.record_type == 'auth' ) %]
+        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% record.final_match_id %]">[% record.final_match_id %]</a>
+    [% END %]
+[% END %]
+[% BLOCK match_link %]
+    [% IF ( record_lis.match_id ) %]
+        <tr>
+            <td />
+            [% IF ( record.record_type == 'biblio' ) %]
+                <td class="highlight" colspan="5">Matches biblio [% record_lis.match_id %] (score = [% record_lis.match_score %]): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% record_lis.match_id %]">[% record_lis.match_citation %]</a></td>
+            [% ELSIF ( record.record_type == 'auth' ) %]
+                <td class="highlight" colspan="5">Matches authority [% record_lis.match_id %] (score = [% record_lis.match_score %]): <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% record_lis.match_id %]">[% record_lis.match_citation %]</a> |
+        <a href="/cgi-bin/koha/authorities/merge.pl?mergereference=breeding&authid=[% record_lis.match_id %]&authid=[% record_lis.import_record_id %]">Merge</a>
+                </td>
+            [% END %]
+        </tr>
+    [% ELSIF ( record.record_type == 'auth') %]
+        <tr data-authid="[% record_lis.import_record_id %]">
+            <td />
+            <td class="highlight" colspan="4"><a href="#" class="merge_auth">Search for a record to merge in a new window</a></td>
+        </tr>
+    [% END %]
+[% END %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Manage staged MARC records
 [% IF ( import_batch_id ) %]
@@ -39,7 +66,8 @@ $(document).ready(function(){
               { "mDataProp": "status" },
               { "mDataProp": "overlay_status" },
               { "mDataProp": "match_citation" },
-              { "mDataProp": "matched" },
+              { "mDataProp": "diff_url" },
+              { "mDataProp": "matched" }
           ],
           "fnServerData": function ( sSource, aoData, fnCallback ) {
               aoData.push( { "name": "import_batch_id", "value": [% import_batch_id %] } );
@@ -93,8 +121,12 @@ $(document).ready(function(){
                     + aData['match_id'] + '">' + aData['match_citation'] + '</a>')
                 );
             }
-
-            $('td:eq(5)', nRow).html(
+            if (aData['diff_url']){
+                $('td:eq(5)', nRow).html(
+                    '<a rel="gb_page_center[960,600]" href="'+aData['diff_url']+'">View</a>'
+                );
+            }
+            $('td:eq(6)', nRow).html(
                 '<a target="_blank" href="' + record_details_url
                     + aData['matched'] + '">' + aData['matched'] + '</a>'
             );
@@ -444,6 +476,7 @@ Page
                 <th>Status</th>
                 <th>Match type</th>
                 <th>Match details</th>
+                <th><abbr title="Differences between the original biblio and the imported" lang="en">Diff</abbr></th>
                 <th>Record</th>
             </tr>
         </thead>
