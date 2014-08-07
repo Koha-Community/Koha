@@ -1,0 +1,50 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha -- Cataloging: MARC Import</title>
+
+<style>
+div#main {
+    width: 100%;
+    margin: 10px auto;
+}
+
+div.col1,
+div.col2 {
+    float: left;
+    width: 46%;
+    margin-left: 3%;
+
+}
+
+pre {
+    padding: 10px;
+    overflow: scroll;
+}
+</style>
+
+[% INCLUDE 'doc-head-close.inc' %]
+
+</head>
+<body>
+
+<div id="main">
+    <div class="col1">
+        <h2>Original</h2>
+        [% IF ( ERROR_FORMATTED1 ) %]
+            <p>The biblionumber <em>[% BIBLIONUMBER %]</em> doesn't match to any record.</p>
+        [% ELSE %]
+            <h1>[% BIBLIOTITLE %]</h1>
+            <pre>[% MARC_FORMATTED1 %]</pre>
+        [% END %]
+    </div>
+    <div class="col2">
+        <h2>Imported</h2>
+        [% IF ( ERROR_FORMATTED2 ) %]
+            <p>The importid <em>[% IMPORTID %]</em> doesn't match to any record.</p>
+        [% ELSE %]
+            <h1>[% IMPORTTITLE %]</h1>
+            <pre>[% MARC_FORMATTED2 %] </pre>
+        [% END %]
+    </div>
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' %]
