@@ -33,6 +33,7 @@ my $input           = new CGI;
 my $allsuggestions  = $input->param('showall');
 my $op              = $input->param('op');
 my $suggestion      = $input->Vars;
+delete $suggestion->{negcap};
 my $negcaptcha      = $input->param('negcap');
 
 # If a spambot accidentally populates the 'negcap' field in the sugesstions form, then silently skip and return.

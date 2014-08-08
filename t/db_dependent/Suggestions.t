@@ -89,7 +89,7 @@ my $mod_suggestion1 = {
     publishercode => 'my modified publishercode',
 };
 my $status = ModSuggestion($mod_suggestion1);
-is( $status, '0E0', 'ModSuggestion without the suggestion id returns 0E0' );
+is( $status, undef, 'ModSuggestion without the suggestion id returns undef' );
 
 $mod_suggestion1->{suggestionid} = $my_suggestionid;
 $status = ModSuggestion($mod_suggestion1);

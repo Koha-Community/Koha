@@ -95,6 +95,12 @@ my $tabcode         = $input->param('tabcode');
 # filter informations which are not suggestion related.
 my $suggestion_ref  = $input->Vars;
 
+# get only the columns of Suggestion
+my $schema = Koha::Database->new()->schema;
+my $columns = ' '.join(' ', $schema->source('Suggestion')->columns).' ';
+my $suggestion_only = { map { $columns =~ / $_ / ? ($_ => $suggestion_ref->{$_}) : () } keys($suggestion_ref) };
+$suggestion_only->{STATUS} = $suggestion_ref->{STATUS};
+
 delete $$suggestion_ref{$_} foreach qw( suggestedbyme op displayby tabcode edit_field );
 foreach (keys %$suggestion_ref){
     delete $$suggestion_ref{$_} if (!$$suggestion_ref{$_} && ($op eq 'else' || $op eq 'change'));
@@ -115,26 +121,26 @@ $template->param('borrowernumber' => $borrowernumber);
 ##  Operations
 ##
 if ( $op =~ /save/i ) {
-        if ( $$suggestion_ref{"STATUS"} ) {
-        if ( my $tmpstatus = lc( $$suggestion_ref{"STATUS"} ) =~ /ACCEPTED|REJECTED/i ) {
-            $$suggestion_ref{ lc( $$suggestion_ref{"STATUS"}) . "date" } = C4::Dates->today;
-            $$suggestion_ref{ lc( $$suggestion_ref{"STATUS"}) . "by" }   = C4::Context->userenv->{number};
+        if ( $suggestion_only->{"STATUS"} ) {
+        if ( my $tmpstatus = lc( $suggestion_only->{"STATUS"} ) =~ /ACCEPTED|REJECTED/i ) {
+            $suggestion_only->{ lc( $suggestion_only->{"STATUS"}) . "date" } = C4::Dates->today;
+            $suggestion_only->{ lc( $suggestion_only->{"STATUS"}) . "by" }   = C4::Context->userenv->{number};
         }
-        $$suggestion_ref{"manageddate"} = C4::Dates->today;
-        $$suggestion_ref{"managedby"}   = C4::Context->userenv->{number};
+        $suggestion_only->{"manageddate"} = C4::Dates->today;
+        $suggestion_only->{"managedby"}   = C4::Context->userenv->{number};
     }
-    if ( $$suggestion_ref{'suggestionid'} > 0 ) {
-        &ModSuggestion($suggestion_ref);
+    if ( $suggestion_only->{'suggestionid'} > 0 ) {
+        &ModSuggestion($suggestion_only);
     } else {
         ###FIXME:Search here if suggestion already exists.
         my $suggestions_loop =
-            SearchSuggestion( $suggestion_ref );
+            SearchSuggestion( $suggestion_only );
         if (@$suggestions_loop>=1){
             #some suggestion are answering the request Donot Add
         } 
         else {    
             ## Adding some informations related to suggestion
-            &NewSuggestion($suggestion_ref);
+            &NewSuggestion($suggestion_only);
         }
         # empty fields, to avoid filter in "SearchSuggestion"
     }  
@@ -160,16 +166,16 @@ elsif ($op=~/edit/) {
 elsif ($op eq "change" ) {
     # set accepted/rejected/managed informations if applicable
     # ie= if the librarian has choosen some action on the suggestions
-    if ($$suggestion_ref{"STATUS"} eq "ACCEPTED"){
-        $$suggestion_ref{"accepteddate"}=C4::Dates->today;
-        $$suggestion_ref{"acceptedby"}=C4::Context->userenv->{number};
-    } elsif ($$suggestion_ref{"STATUS"} eq "REJECTED"){
-        $$suggestion_ref{"rejecteddate"}=C4::Dates->today;
-        $$suggestion_ref{"rejectedby"}=C4::Context->userenv->{number};
+    if ($suggestion_only->{"STATUS"} eq "ACCEPTED"){
+        $suggestion_only->{"accepteddate"}=C4::Dates->today;
+        $suggestion_only->{"acceptedby"}=C4::Context->userenv->{number};
+    } elsif ($suggestion_only->{"STATUS"} eq "REJECTED"){
+        $suggestion_only->{"rejecteddate"}=C4::Dates->today;
+        $suggestion_only->{"rejectedby"}=C4::Context->userenv->{number};
     }
-    if ($$suggestion_ref{"STATUS"}){
-        $$suggestion_ref{"manageddate"}=C4::Dates->today;
-        $$suggestion_ref{"managedby"}=C4::Context->userenv->{number};
+    if ($suggestion_only->{"STATUS"}){
+        $suggestion_only->{"manageddate"}=C4::Dates->today;
+        $suggestion_only->{"managedby"}=C4::Context->userenv->{number};
     }
     if ( my $reason = $$suggestion_ref{"reason$tabcode"}){
         if ( $reason eq "other" ) {
@@ -183,8 +189,8 @@ elsif ($op eq "change" ) {
     }
     foreach my $suggestionid (@editsuggestions) {
         next unless $suggestionid;
-        $$suggestion_ref{'suggestionid'}=$suggestionid;
-        &ModSuggestion($suggestion_ref);
+        $suggestion_only->{'suggestionid'}=$suggestionid;
+        &ModSuggestion($suggestion_only);
     }
     my $params = '';
     foreach my $key (

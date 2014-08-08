@@ -26,7 +26,6 @@ use CGI;
 use C4::Context;
 use C4::Output;
 use C4::Dates qw(format_date format_date_in_iso);
-use C4::SQLHelper qw(:all);
 use C4::Debug;
 use C4::Letters;
 use List::MoreUtils qw(any);
@@ -426,8 +425,14 @@ Insert a new suggestion on database with value given on input arg.
 
 sub NewSuggestion {
     my ($suggestion) = @_;
+
+    my $new_suggestion = { %$suggestion };
     $suggestion->{STATUS} = "ASKED" unless $suggestion->{STATUS};
-    return InsertInTable( "suggestions", $suggestion );
+    $new_suggestion->{status} = $suggestion->{STATUS};
+    delete $new_suggestion->{STATUS};
+
+    my $rs = Koha::Database->new->schema->resultset('Suggestion');
+    return $rs->create($new_suggestion)->id;
 }
 
 =head2 ModSuggestion
@@ -445,9 +450,21 @@ Note that there is no function to modify a suggestion.
 
 sub ModSuggestion {
     my ($suggestion) = @_;
-    my $status_update_table = UpdateInTable( "suggestions", $suggestion );
+    return unless( $suggestion and defined($suggestion->{suggestionid}) );
 
-    if ( $suggestion->{STATUS} ) {
+    my $mod_suggestion = { %$suggestion };
+    my $status = $suggestion->{STATUS};
+    delete $mod_suggestion->{STATUS};
+    $mod_suggestion->{status} = $status;
+
+    my $rs = Koha::Database->new->schema->resultset('Suggestion')->find($suggestion->{suggestionid});
+    my $status_update_table = 1;
+    eval {
+        $rs->update($mod_suggestion);
+    };
+    $status_update_table = 0 if( $@ );
+
+    if ( $status ) {
 
         # fetch the entire updated suggestion so that we can populate the letter
         my $full_suggestion = GetSuggestion( $suggestion->{suggestionid} );
