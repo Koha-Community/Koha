@@ -9525,9 +9525,19 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if( CheckVersion($DBversion) ){
+    $dbh->do("INSERT INTO systempreferences (variable, explanation, type) VALUES('defaultlongoverduechargevalue','Charge a lost item to the borrower account when the LOST value of the item changes to n',  'integer')");
+    $dbh->do("INSERT INTO systempreferences (variable, explanation, type) VALUES('defaultlongoverduelostvalue', 'Set the LOST value of an item to n when the item has been overdue for more than defaultlongoverduedays days.', 'integer')");
+    $dbh->do("INSERT INTO systempreferences (variable, explanation, type) VALUES('defaultlongoverduedays', 'Set the LOST value of an item when the item has been overdue for more than n days.',  'integer')");
+    print "Upgrade to $DBversion done (Bug 8337: System preferences for longoverdue cron)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
+a
 
 =cut
 

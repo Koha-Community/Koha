@@ -469,5 +469,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('XSLTDetailsDisplay','default','','Enable XSL stylesheet control over details page display on intranet','Free'),
 ('XSLTResultsDisplay','default','','Enable XSL stylesheet control over results page display on intranet','Free'),
 ('z3950AuthorAuthFields','701,702,700',NULL,'Define the MARC biblio fields for Personal Name Authorities to fill biblio.author','free'),
-('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo')
+('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo'),
+('defaultlongoverduechargevalue', NULL, NULL, "Charge a lost item to the borrower's account when the LOST value of the item changes to n.", 'integer');
+('defaultlongoverduedays', NULL, NULL, "Set the LOST value of an item when the item has been overdue for more than n days.", 'integer');
+('defaultlongoverduelostvalue', NULL, NULL, "Set the LOST value of an item to n when the item has been overdue for more than defaultlongoverduedays days.", 'integer');
 ;
