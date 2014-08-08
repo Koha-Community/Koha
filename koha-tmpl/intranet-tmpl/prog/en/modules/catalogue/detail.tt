@@ -175,6 +175,9 @@ function verify_images() {
     [% IF ( LocalCoverImages && ! localimages.0 ) %]
         showNoImageMessage();
     [% END %]
+    [% IF LocalCoverImages %]
+        KOHA.LocalCover.GetCoverFromBibnumber(true);
+    [% END %]
         $("body").on("click",".previewMARC", function(e){
             e.preventDefault();
             var page = $(this).attr("href");
@@ -184,9 +187,6 @@ function verify_images() {
         $("#marcPreview").on("hidden", function(){
             $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/loading-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
         });
-        [% IF LocalCoverImages %]
-        KOHA.LocalCover.GetCoverFromBibnumber(true);
-        [% END %]
     });
 
      [% IF ( AmazonCoverImages ) %]$(window).load(function() {
