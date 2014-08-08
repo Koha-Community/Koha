@@ -26,7 +26,6 @@ use Modern::Perl;
 
 use C4::Context;
 use C4::Debug;
-use C4::SQLHelper qw(InsertInTable UpdateInTable);
 
 sub new {
     my ( $class, %args ) = @_;
@@ -48,42 +47,20 @@ to be part of the passed in hash.
 sub AddModifications {
     my ( $self, $data ) = @_;
 
-    if ( $self->{'borrowernumber'} ) {
-        delete $data->{'borrowernumber'};
-
-        if ( keys %$data ) {
-            $data->{'borrowernumber'} = $self->{'borrowernumber'};
-            my $dbh = C4::Context->dbh;
-
-            my $query = "
-                SELECT COUNT(*) AS count
-                FROM borrower_modifications
-                WHERE borrowernumber = ?
-            ";
-
-            my $sth = $dbh->prepare($query);
-            $sth->execute( $self->{'borrowernumber'} );
-            my $result = $sth->fetchrow_hashref();
-
-            if ( $result->{'count'} ) {
-                $data->{'verification_token'} = q{};
-                return UpdateInTable( "borrower_modifications", $data );
-            }
-            else {
-                return InsertInTable( "borrower_modifications", $data );
-            }
-        }
-
+    delete $data->{borrowernumber};
+    if( $self->{borrowernumber} ) {
+        return if( not keys %$data );
+        $data->{borrowernumber} = $self->{borrowernumber};
     }
-    elsif ( $self->{'verification_token'} ) {
-        delete $data->{'borrowernumber'};
-        $data->{'verification_token'} = $self->{'verification_token'};
-
-        return InsertInTable( "borrower_modifications", $data );
+    elsif( $self->{verification_token} ) {
+        $data->{verification_token} = $self->{verification_token};
     }
     else {
         return;
     }
+
+    my $rs = Koha::Database->new()->schema->resultset('BorrowerModification');
+    return $rs->update_or_create($data);
 }
 
 =head2 Verify
@@ -120,6 +97,7 @@ sub Verify {
 $count = Koha::Borrower::Modifications->GetPendingModificationsCount();
 
 Returns the number of pending modifications for existing borrowers.
+
 =cut
 
 sub GetPendingModificationsCount {
@@ -203,10 +181,15 @@ sub ApproveModifications {
 
     return unless $borrowernumber;
 
-    my $data = $self->GetModifications({ borrowernumber => $borrowernumber });
+    my $data = $self->GetModifications( { borrowernumber => $borrowernumber } );
+    delete $data->{timestamp};
+    delete $data->{verification_token};
 
-    if ( UpdateInTable( "borrowers", $data ) ) {
-        $self->DelModifications({ borrowernumber => $borrowernumber });
+    my $rs = Koha::Database->new()->schema->resultset('Borrower')->search({
+        borrowernumber => $data->{borrowernumber},
+    });
+    if( $rs->update($data) ) {
+        $self->DelModifications( { borrowernumber => $borrowernumber } );
     }
 }
 
@@ -227,7 +210,7 @@ sub DenyModifications {
 
     return unless $borrowernumber;
 
-    return $self->DelModifications({ borrowernumber => $borrowernumber });
+    return $self->DelModifications( { borrowernumber => $borrowernumber } );
 }
 
 =head2 DelModifications

@@ -8,7 +8,11 @@ use C4::Members;
 
 use Koha::Borrower::Modifications;
 
-C4::Context->dbh->do("TRUNCATE TABLE borrower_modifications");
+my $dbh = C4::Context->dbh;
+$dbh->{RaiseError} = 1;
+$dbh->{AutoCommit} = 0;
+
+$dbh->do("DELETE FROM borrower_modifications");
 
 ## Create new pending modification
 Koha::Borrower::Modifications->new( verification_token => '1234567890' )
@@ -62,12 +66,10 @@ ok(
 );
 
 ## Check GetPendingModifications
-my $pending = Koha::Borrower::Modifications->GetPendingModifications();
-ok(
-    $pending->[0]->{'firstname'} eq 'Sandy',
-    'Test GetPendingModifications() again'
-);
-ok( $pending->[1]->{'firstname'} eq 'Kyle', 'Test GetPendingModifications()' );
+my $pendings = Koha::Borrower::Modifications->GetPendingModifications();
+my @firstnames_mod = sort ( $pendings->[0]->{firstname}, $pendings->[1]->{firstname} );
+ok( $firstnames_mod[0] eq 'Kyle', 'Test GetPendingModifications()' );
+ok( $firstnames_mod[1] eq 'Sandy', 'Test GetPendingModifications() again' );
 
 ## This should delete the row from the table
 Koha::Borrower::Modifications->DenyModifications('3');
@@ -123,3 +125,5 @@ ok(
     $new_borrower->{'surname'} eq $old_borrower->{'surname'},
     'Test ApproveModifications() applys modification to borrower, again'
 );
+
+$dbh->rollback();
