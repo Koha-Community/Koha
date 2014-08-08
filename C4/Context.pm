@@ -988,6 +988,8 @@ sub _new_queryparser {
         my $config_file = $context->config('queryparser_config');
         $config_file ||= '/etc/koha/searchengine/queryparser.yaml';
         if ( $QParser->load_config($config_file) ) {
+            # Set 'keyword' as the default search class
+            $QParser->default_search_class('keyword');
             # TODO: allow indexes to be configured in the database
             return $QParser;
         }
