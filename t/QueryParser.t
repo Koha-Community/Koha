@@ -19,20 +19,62 @@ ok($QParser->load_config('./etc/searchengine/queryparser.yaml'), 'Loaded QP conf
 is($QParser->search_class_count, 4, 'Initialized 4 search classes');
 is (scalar(@{$QParser->search_fields()->{'keyword'}}), 111, "Correct number of search fields for 'keyword' class");
 
-is($QParser->target_syntax('biblioserver', 'smith'), '@or @or @attr 1=1016 @attr 4=6 "smith" @attr 9=20 @attr 2=102 @attr 4=6 "smith" @attr 9=34 @attr 2=102 @attr 4=6 "smith"', 'super simple keyword query');
-is($QParser->target_syntax('biblioserver', 'au:smith'), '@attr 1=1003 @attr 4=6 "smith"', 'simple author query');
-is($QParser->target_syntax('biblioserver', 'keyword|publisher:smith'), '@attr 1=1018 @attr 4=6 "smith"', 'fielded publisher query');
-is($QParser->target_syntax('biblioserver', 'ti:"little engine that could"'), '@attr 1=4 @attr 4=1 "little engine that could"', 'phrase query');
-is($QParser->target_syntax('biblioserver', 'keyword|titlekw:smith'), '@attr 1=4 @attr 9=20 @attr 2=102 @attr 4=6 "smith"', 'relevance-bumped query');
-is($QParser->target_syntax('biblioserver', 'au:smith && johnson'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 1=1003 @attr 4=6 "johnson"', 'query with boolean &&');
-is($QParser->target_syntax('biblioserver', 'au:smith && ti:johnson'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 1=4 @attr 4=6 "johnson"', 'query with boolean &&');
-is($QParser->target_syntax('biblioserver', 'au:smith pubdate(-2008)'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 4=4 @attr 1=31 @attr 2=2 "2008"', 'keyword search with pubdate limited to -2008');
-is($QParser->target_syntax('biblioserver', 'au:smith pubdate(2008-)'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 4=4 @attr 1=31 @attr 2=4 "2008"', 'keyword search with pubdate limited to 2008-');
-is($QParser->target_syntax('biblioserver', 'au:smith pubdate(2008)'), '@and @attr 1=1003 @attr 4=6 "smith" @attr 4=4 @attr 1=31 "2008"', 'keyword search with pubdate limited to 2008');
-is($QParser->target_syntax('biblioserver', 'au:smith pubdate(1980,2008)'), '@and @attr 1=1003 @attr 4=6 "smith" @or @attr 4=4 @attr 1=31 "1980" @attr 4=4 @attr 1=31 "2008"', 'keyword search with pubdate limited to 1980, 2008');
-is($QParser->target_syntax('biblioserver', 'au:smith #acqdate_dsc'), '@or @attr 1=32 @attr 7=1 0 @attr 1=1003 @attr 4=6 "smith"', 'keyword search sorted by acqdate descending');
-is($QParser->bib1_mapping_by_attr('field', 'biblioserver', {'1' => '1004'})->{'field'}, 'personal', 'retrieve field by attr');
-is($QParser->bib1_mapping_by_attr_string('field', 'biblioserver', '@attr 1=1004')->{'field'}, 'personal', 'retrieve field by attrstring');
+# Set keyword search as the default
+$QParser->default_search_class('keyword');
+
+my $kwd_search = q/@attr 1=1016 @attr 4=6/;
+my $weight1    = q/@attr 2=102 @attr 9=20 @attr 4=6/;
+my $weight2    = q/@attr 2=102 @attr 9=34 @attr 4=6/;
+
+like( $QParser->target_syntax('biblioserver', 'smith'),
+    qr/\@or \@or $kwd_search "smith" ($weight1 "smith" $weight2 "smith"|$weight2 "smith" $weight1 "smith")/,
+    'super simple keyword query');
+
+is($QParser->target_syntax('biblioserver', 'au:smith'),
+    '@attr 1=1003 @attr 4=6 "smith"', 'simple author query');
+
+is($QParser->target_syntax('biblioserver', 'keyword|publisher:smith'),
+    '@attr 1=1018 @attr 4=6 "smith"', 'fielded publisher query');
+
+is($QParser->target_syntax('biblioserver', 'ti:"little engine that could"'),
+    '@attr 1=4 @attr 4=1 "little engine that could"', 'phrase query');
+
+is($QParser->target_syntax('biblioserver', 'keyword|titlekw:smith'),
+    '@attr 1=4 @attr 2=102 @attr 9=20 @attr 4=6 "smith"',
+    'relevance-bumped query');
+
+is($QParser->target_syntax('biblioserver', 'au:smith && johnson'),
+    '@and @attr 1=1003 @attr 4=6 "smith" @attr 1=1003 @attr 4=6 "johnson"',
+    'query with boolean &&');
+
+is($QParser->target_syntax('biblioserver', 'au:smith && ti:johnson'),
+    '@and @attr 1=1003 @attr 4=6 "smith" @attr 1=4 @attr 4=6 "johnson"', 'query with boolean &&');
+
+is($QParser->target_syntax('biblioserver', 'au:smith pubdate(-2008)'),
+    '@and @attr 1=1003 @attr 4=6 "smith" @attr 1=31 @attr 4=4 @attr 2=2 "2008"',
+    'keyword search with pubdate limited to -2008');
+
+is($QParser->target_syntax('biblioserver', 'au:smith pubdate(2008-)'),
+    '@and @attr 1=1003 @attr 4=6 "smith" @attr 1=31 @attr 4=4 @attr 2=4 "2008"',
+    'keyword search with pubdate limited to 2008-');
+
+is($QParser->target_syntax('biblioserver', 'au:smith pubdate(2008)'),
+    '@and @attr 1=1003 @attr 4=6 "smith" @attr 1=31 @attr 4=4 "2008"',
+    'keyword search with pubdate limited to 2008');
+
+is($QParser->target_syntax('biblioserver', 'au:smith pubdate(1980,2008)'),
+    '@and @attr 1=1003 @attr 4=6 "smith" @or @attr 1=31 @attr 4=4 "1980" @attr 1=31 @attr 4=4 "2008"',
+    'keyword search with pubdate limited to 1980, 2008');
+
+is($QParser->target_syntax('biblioserver', 'au:smith #acqdate_dsc'),
+    '@or @attr 1=32 @attr 7=1 0 @attr 1=1003 @attr 4=6 "smith"',
+    'keyword search sorted by acqdate descending');
+
+is($QParser->bib1_mapping_by_attr('field', 'biblioserver', {'1' => '1004'})->{'field'},
+    'personal', 'retrieve field by attr');
+
+is($QParser->bib1_mapping_by_attr_string('field', 'biblioserver', '@attr 1=1004')->{'field'},
+    'personal', 'retrieve field by attrstring');
 
 is ($QParser->clear_all_mappings, $QParser, 'clear all mappings returns self');
 is ($QParser->clear_all_configuration, $QParser, 'clear all configuration returns self');
