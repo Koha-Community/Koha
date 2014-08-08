@@ -28,11 +28,10 @@ KOHA.LocalCover = {
             var img = $("<img />").attr('src',
                 '/cgi-bin/koha/catalogue/image.pl?thumbnail=1&biblionumber=' + $(mydiv).attr("class"))
                 .load(function () {
-                    if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
+                    if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth <= 1) {
                         //IE HACK
                         try {
-                            $(mydiv).append(img);
-                            $(mydiv).children('.no-image').remove();
+                            $(mydiv).remove();
                         }
                         catch(err){
                         }
