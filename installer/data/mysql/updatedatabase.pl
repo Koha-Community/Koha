@@ -8917,6 +8917,15 @@ if ( CheckVersion($DBversion) ) {
     ('OPACFallback', 'prog', 'bootstrap|prog', 'Define the fallback theme for the OPAC interface.', 'Themes')");
     print "Upgrade to $DBversion done (Bug 12539 - PROG/CCSR deprecation: Remove hardcoded theme from C4/Templates.pm)\n";
     SetVersion ($DBversion);
+
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    my $opac_theme = C4::Context->preference( 'opacthemes' );
+    if ( $opac_theme eq 'prog' || $opac_theme eq 'ccsr' ) {
+        $dbh->do("UPDATE systempreferences SET value='bootstrap' WHERE variable='opacthemes'");
+    }
+    print "Upgrade to $DBversion done (Bug 12223: 'prog' and 'ccsr' themes removed)\n";
+    SetVersion($DBversion);
 }
 
 =head1 FUNCTIONS
