@@ -179,7 +179,13 @@
                 <tr>
             [% END %]
             <td><a href="[% loo.script_name %]?op=edit&amp;id=[% loo.id %]">[% loo.name %]</a></td><td>[% loo.host %]:[% loo.port %]</td><td>[% loo.db %]</td><td>[% loo.userid %]</td><td>[% IF loo.password %]########[% END %]</td><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank %]</td>
-<td>[% loo.syntax %]</td><td>[% loo.encoding %]</td><td>[% loo.timeout %]</td><td>[% loo.recordtype %]</td>
+<td>[% loo.syntax %]</td><td>[% loo.encoding %]</td><td>[% loo.timeout %]</td>
+            <td>[% IF ( loo.recordtype == 'biblio' )  %]
+                <span>Bibliographic</span>
+                [% ELSIF ( loo.recordtype == 'authority' ) %]
+                <span>Authority</span>
+                [% END %]
+            </td>
             <td><a href="[% loo.script_name %]?op=edit&amp;id=[% loo.id %]">Edit</a> <a href="[% loo.script_name %]?op=add&amp;id=[% loo.id %]">Copy</a> <a href="javascript:void(0);" onclick="ConfirmDelete('[% loo.name | replace("['\"]","") %]','[% loo.id %]');">Delete</a></td>
             </tr>
         [% END %]
