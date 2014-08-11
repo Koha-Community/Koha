@@ -45,7 +45,8 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $borr = C4::Members::GetMember( borrowernumber => $borrowernumber );
-my $minpasslen = C4::Context->preference("minPasswordLength");
+my $minpasslen = C4::Members::minPasswordLength($borr->{categorycode});
+
 if ( C4::Context->preference("OpacPasswordChange") ) {
     my $sth =  $dbh->prepare("UPDATE borrowers SET password = ? WHERE borrowernumber=?");
     if (   $query->param('Oldkey')
@@ -53,19 +54,20 @@ if ( C4::Context->preference("OpacPasswordChange") ) {
         && $query->param('Confirm') )
     {
         if ( goodkey( $dbh, $borrowernumber, $query->param('Oldkey') ) ) {
-            if ( $query->param('Newkey') =~ m|^\s+| or $query->param('Newkey') =~ m|\s+$| ) {
-                $template->param(
-                    Error_messages => 1,
-                    PasswordContainsTrailingSpaces => 1,
-                );
-            }
-            elsif ( $query->param('Newkey') eq $query->param('Confirm')
-                && length( $query->param('Confirm') ) >= $minpasslen )
+            if ( $query->param('Newkey') eq $query->param('Confirm') )
             {    # Record password
-                my $clave = hash_password( $query->param('Newkey') );
-                $sth->execute( $clave, $borrowernumber );
-                $template->param( 'password_updated' => '1' );
-                $template->param( 'borrowernumber'   => $borrowernumber );
+                    my ($success, $errorcode, $errormessage) = ValidateMemberPassword($borr->{categorycode}, $query->param('Newkey'), $query->param('Confirm'));
+                    if ($errorcode) {
+                        $template->param( 'Error_messages' => '1' );
+                        $template->param( 'PasswordPolicy' => $errormessage);
+                        $template->param( 'Ask_data' => '1' );
+                    } else {
+                        my $clave = hash_password( $query->param('Newkey') );
+
+                        $sth->execute( $clave, $borrowernumber );
+                        $template->param( 'password_updated' => '1' );
+                        $template->param( 'borrowernumber'   => $borrowernumber );
+                    }
             }
             elsif ( $query->param('Newkey') ne $query->param('Confirm') ) {
                 $template->param( 'Ask_data'       => '1' );

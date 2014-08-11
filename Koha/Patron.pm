@@ -761,15 +761,28 @@ one.
 sub change_password_to {
     my ($self, $cleartext_password) = @_;
 
-    my $min_length = C4::Context->preference("minPasswordLength");
-    if ($min_length > length($cleartext_password)) {
+    my $categorycode = $self->category->categorycode;
+
+    my ($success, $errorcode, $errormessage) = C4::Members::ValidateMemberPassword($categorycode, $cleartext_password, $cleartext_password);
+    if (defined $errorcode && $errorcode eq "NOLENGTHMATCH") {
         Koha::Exceptions::Password::TooShort->throw(
-            "Password is too short. Minimum length: $min_length"
+            $errormessage
         );
-    }
-    elsif ($cleartext_password =~ m|^\s+| or $cleartext_password =~ m|\s+$|) {
-        Koha::Exceptions::Password::TrailingWhitespaces->throw(
-            "Password cannot contain trailing whitespaces."
+    } elsif (defined $errorcode && $errorcode eq "WHITESPACEMATCH") {
+        Koha::Exceptions::Password::Policy->throw(
+            $errormessage
+        );
+    } elsif (defined $errorcode && $errorcode eq "NOCOMPLEXPOLICYMATCH") {
+        Koha::Exceptions::Password::Policy->throw(
+            $errormessage
+        );
+    } elsif (defined $errorcode && $errorcode eq "NOALPHAPOLICYMATCH") {
+        Koha::Exceptions::Password::Policy->throw(
+            $errormessage
+        );
+    } elsif (defined $errorcode && $errorcode eq "NOSIMPLEPOLICYMATCH") {
+        Koha::Exceptions::Password::Policy->throw(
+            $errormessage
         );
     }
     my $hashed_password = Koha::AuthUtils::hash_password($cleartext_password);

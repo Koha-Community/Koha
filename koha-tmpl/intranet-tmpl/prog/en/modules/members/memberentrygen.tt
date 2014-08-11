@@ -249,6 +249,9 @@ $(document).ready(function() {
             [% IF ERROR_bad_smsnumber %]
                 <li id="ERROR_bad_smsnumber">The SMS number is invalid.</li>
             [% END %]
+            [% IF PasswordPolicy %]
+                <li id="">[% PasswordPolicy %]</li>
+            [% END %]
 			</ul>
 		</div>
 	[% END %]

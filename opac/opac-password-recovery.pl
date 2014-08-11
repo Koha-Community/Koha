@@ -132,18 +132,30 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
 }
 elsif ( $query->param('passwordReset') ) {
     ( $borrower_number, $username ) = GetValidLinkInfo($uniqueKey);
-
+    my $categorycode = Koha::Patrons->find($borrower_number)->category->categorycode;
+    $minPassLength = C4::Members::minPasswordLength($categorycode);
     #validate password length & match
     if (   ($borrower_number)
-        && ( $password eq $repeatPassword )
-        && ( length($password) >= $minPassLength ) )
-    {    #apply changes
-        Koha::Patrons->find($borrower_number)->update_password( $username, hash_password($password) );
-        CompletePasswordRecovery($uniqueKey);
-        $template->param(
-            password_reset_done => 1,
-            username            => $username
-        );
+        && ( $password eq $repeatPassword ) )
+    {
+        my ($success, $errorcode, $errormessage) = C4::Members::ValidateMemberPassword($categorycode, $password, $repeatPassword);
+        if ($errorcode) {
+            $template->param(
+                new_password    => 1,
+                minPassLength   => $minPassLength,
+                email           => $email,
+                uniqueKey       => $uniqueKey,
+                hasError        => 1,
+                PasswordPolicy  => $errormessage,
+            );
+        } else {
+            Koha::Patrons->find($borrower_number)->update_password( $username, hash_password($password) );
+            CompletePasswordRecovery($uniqueKey);
+            $template->param(
+                password_reset_done => 1,
+                username            => $username
+            );
+        }
     }
     else {    #errors
         if ( !$borrower_number ) {    #parameters not valid
@@ -151,9 +163,6 @@ elsif ( $query->param('passwordReset') ) {
         }
         elsif ( $password ne $repeatPassword ) {    #passwords does not match
             $errPassNotMatch = 1;
-        }
-        elsif ( length($password) < $minPassLength ) {    #password too short
-            $errPassTooShort = 1;
         }
         $template->param(
             new_password    => 1,
@@ -170,6 +179,8 @@ elsif ( $query->param('passwordReset') ) {
 elsif ($uniqueKey) {    #reset password form
                         #check if the link is valid
     ( $borrower_number, $username ) = GetValidLinkInfo($uniqueKey);
+    my $categorycode = Koha::Patrons->find($borrower_number)->category->categorycode;
+    $minPassLength = C4::Members::minPasswordLength($categorycode);
 
     if ( !$borrower_number ) {
         $errLinkNotValid = 1;

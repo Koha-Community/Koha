@@ -132,9 +132,6 @@ if ( $input->param('add_debarment') ) {
 
 $template->param("uppercasesurnames" => C4::Context->preference('uppercasesurnames'));
 
-my $minpw = C4::Context->preference('minPasswordLength');
-$template->param("minPasswordLength" => $minpw);
-
 # function to designate mandatory fields (visually with css)
 my $check_BorrowerMandatoryField=C4::Context->preference("BorrowerMandatoryField");
 my @field_check=split(/\|/,$check_BorrowerMandatoryField);
@@ -162,6 +159,9 @@ unless ($category_type or !($categorycode)){
     $template->param("categoryname"=>$category_name);
 }
 $category_type="A" unless $category_type; # FIXME we should display a error message instead of a 500 error !
+
+my $minpw = minPasswordLength($categorycode);
+$template->param("minPasswordLength" => $minpw);
 
 # if a add or modify is requested => check validity of data.
 %data = %$borrower_data if ($borrower_data);
@@ -367,8 +367,16 @@ if ($op eq 'save' || $op eq 'insert'){
   
   my $password = $input->param('password');
   my $password2 = $input->param('password2');
-  push @errors, "ERROR_password_mismatch" if ( $password ne $password2 );
-  push @errors, "ERROR_short_password" if( $password && $minpw && $password ne '****' && (length($password) < $minpw) );
+  #push @errors, "ERROR_password_mismatch" if ( $password ne $password2 );
+  #push @errors, "ERROR_short_password" if( $password && $minpw && $password ne '****' && (length($password) < $minpw) );
+
+  if ($password ne '****') {
+    my ($success, $errorcode, $errormessage) = ValidateMemberPassword($categorycode, $password, $password2);
+    if ($errorcode) {
+        push (@errors, $errorcode);
+        $template->param( PasswordPolicy => $errormessage);
+    }
+  }
 
   # Validate emails
   push (@errors, "ERROR_bad_email") if ($input->param('email') && !Koha::Validation::email($input->param('email')));

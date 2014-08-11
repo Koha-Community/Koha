@@ -279,7 +279,7 @@ sub changepassword {
         elsif ($_->isa('Koha::Exceptions::Password::TooShort')) {
             return $c->render(status => 400, openapi => { error => $_->error });
         }
-        elsif ($_->isa('Koha::Exceptions::Password::TrailingWhitespaces')) {
+        elsif ($_->isa('Koha::Exceptions::Password::Policy')) {
             return $c->render(status => 400, openapi => { error => $_->error });
         }
         elsif ($_->isa('Koha::Exceptions::BadSystemPreference')

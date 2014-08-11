@@ -123,6 +123,12 @@ __PACKAGE__->table("categories");
   is_nullable: 0
   size: 7
 
+=head2 passwordpolicy
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 40
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -175,6 +181,8 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 7,
   },
+  "passwordpolicy",
+  { data_type => "varchar", is_nullable => 1, size => 40 },
 );
 
 =head1 PRIMARY KEY

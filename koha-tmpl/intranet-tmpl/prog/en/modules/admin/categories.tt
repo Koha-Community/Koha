@@ -166,6 +166,19 @@
                     <span>Select <i>All branches</i> if this category type must to be displayed all the time. Otherwise select libraries you want to associate with this value.
                     </span>
                 </li>
+                <li>
+                    <label for="password-policy">Category password policy</label>
+                    <select name="passwordpolicy" id="password-policy">
+                        [% UNLESS category %]<option value="" selected="selected"></option>[% ELSE %]<option value=""></option>[% END %]
+                        [% IF category and category.passwordpolicy == 'complex' %]<option value="complex" selected="selected">Complex</option>[% ELSE %]<option value="complex">Complex</option>[% END %]
+                        [% IF category and category.passwordpolicy == 'alphanumeric' %]<option value="alphanumeric" selected="selected">Alphanumeric</option>[% ELSE %]<option value="alphanumeric">Alphanumeric</option>[% END %]
+                        [% IF category and category.passwordpolicy == 'simplenumeric' %]<option value="simplenumeric" selected="selected">Numbers only</option>[% ELSE %]<option value="simplenumeric">Numbers only</option>[% END %]
+                    </select>
+                    <span>
+                        Selecting a password policy for a category affects both automatically created suggested passwords and enfo$
+                        of rules.
+                    </span>
+                </li>
                 <li><label for="block_expired">Block expired patrons:</label>
                     <select name="BlockExpiredPatronOpacActions" id="block_expired">
                         [% IF not category or category.BlockExpiredPatronOpacActions == -1%]
@@ -356,6 +369,7 @@
                     <th scope="col">Messaging</th>
                     [% END %]
                     <th scope="col">Branches limitations</th>
+                    <th scope="col">Password policy</th>
                     [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
                     <th scope="col">Check previous checkout?</th>
                     [% END %]
@@ -451,6 +465,7 @@
                                 No limitation
                             [% END %]
                         </td>
+                        <td>[% category.passwordpolicy %]</td>
                         [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
                           <td>
                               [% SWITCH category.checkprevcheckout %]

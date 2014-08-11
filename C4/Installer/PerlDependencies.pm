@@ -962,6 +962,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.07',
     },
+    'App::Genpass' => {
+        'usage'    => 'Member password generation',
+        'required' => '1',
+        'min_ver'  => '2.23',
+    },
 };
 
 1;

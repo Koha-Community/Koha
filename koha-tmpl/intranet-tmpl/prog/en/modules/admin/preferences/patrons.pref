@@ -101,8 +101,18 @@ Patrons:
          - '[% local_currency %].'
          - Empty value means no limit. Single item caps are specified in the circulation rules matrix.
      -
-         - Login passwords for staff and patrons must be at least
+         - Login passwords for simplenumeric policy must be at least
          - pref: minPasswordLength
+           class: integer
+         - characters long.
+     -
+         - Login passwords for alphanumeric policy must be at least
+         - pref: minAlnumPasswordLength
+           class: integer
+         - characters long.
+     -
+         - Login passwords for complex policy must be at least
+         - pref: minComplexPasswordLength
            class: integer
          - characters long.
      -

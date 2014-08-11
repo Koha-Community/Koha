@@ -46,23 +46,23 @@ my $destination = $input->param('destination');
 my $newpassword  = $input->param('newpassword');
 my $newpassword2 = $input->param('newpassword2');
 
-my @errors;
+my %errors;
 
 my ($bor) = GetMember( 'borrowernumber' => $member );
 
 if ( ( $member ne $loggedinuser ) && ( $bor->{'category_type'} eq 'S' ) ) {
-    push( @errors, 'NOPERMISSION' )
-      unless ( $staffflags->{'superlibrarian'} || $staffflags->{'staffaccess'} );
+    $errors{'NOPERMISSION'} = 1 unless($staffflags->{'superlibrarian'} || $staffflags->{'staffaccess'} );
 
     # need superlibrarian for koha-conf.xml fakeuser.
 }
+if ($newpassword) {
+    my ($success, $errorcode, $errormessage) = ValidateMemberPassword($bor->{categorycode}, $newpassword, $newpassword2);
+    if ($errorcode) {
+        $errors{$errorcode} = $errormessage;
+    }
+}
 
-push( @errors, 'NOMATCH' ) if ( ( $newpassword && $newpassword2 ) && ( $newpassword ne $newpassword2 ) );
-
-my $minpw = C4::Context->preference('minPasswordLength');
-push( @errors, 'SHORTPASSWORD' ) if ( $newpassword && $minpw && ( length($newpassword) < $minpw ) );
-
-if ( $newpassword && !scalar(@errors) ) {
+if ( $newpassword  && !scalar(keys %errors) ) {
 
     die "Wrong CSRF token"
         unless Koha::Token->new->check_csrf({
@@ -76,27 +76,33 @@ if ( $newpassword && !scalar(@errors) ) {
     if ( Koha::Patrons->find( $member )->update_password($uid, $digest) ) {
         $template->param( newpassword => $newpassword );
         if ( $destination eq 'circ' ) {
-            print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$cardnumber");
+            print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$cardnumber");
         }
         else {
             print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
         }
     }
     else {
-        push( @errors, 'BADUSERID' );
+        $errors{'BADUSERID'} = 1;
     }
 }
 else {
     my $userid = $bor->{'userid'};
+    my $newuserid = $input->param('newuserid');
+    if (defined $newuserid && $newuserid ne $userid) {
+        my $patron = Koha::Patrons->find($member);
+        $patron->set({ userid => $newuserid })->store;
+        if ( $destination eq 'circ' ) {
+            print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$cardnumber");
+        }
+        else {
+            print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
+        }
 
-    my $chars              = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    my $length             = int( rand(2) ) + C4::Context->preference("minPasswordLength");
-    my $defaultnewpassword = '';
-    for ( my $i = 0 ; $i < $length ; $i++ ) {
-        $defaultnewpassword .= substr( $chars, int( rand( length($chars) ) ), 1 );
+    } else {
+        my $defaultnewpassword = GenMemberPasswordSuggestion($bor->{categorycode});
+        $template->param( defaultnewpassword => $defaultnewpassword );
     }
-
-    $template->param( defaultnewpassword => $defaultnewpassword );
 }
 
 if ( $bor->{'category_type'} eq 'C') {
@@ -144,16 +150,14 @@ $template->param(
     userid                     => $bor->{'userid'},
     destination                => $destination,
     is_child                   => ( $bor->{'category_type'} eq 'C' ),
-    minPasswordLength          => $minpw,
+    minPasswordLength          => C4::Members::minPasswordLength($bor->{categorycode}),
     RoutingSerials             => C4::Context->preference('RoutingSerials'),
     csrf_token                 => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID'), }),
+    errors                     => \%errors
 );
 
-if ( scalar(@errors) ) {
+if( scalar(keys %errors )){
     $template->param( errormsg => 1 );
-    foreach my $error (@errors) {
-        $template->param($error) || $template->param( $error => 1 );
-    }
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;

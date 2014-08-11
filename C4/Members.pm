@@ -26,6 +26,7 @@ use C4::Context;
 use String::Random qw( random_string );
 use Scalar::Util qw( looks_like_number );
 use Date::Calc qw/Today check_date Date_to_Days/;
+use App::Genpass;
 use C4::Log; # logaction
 use C4::Overdues;
 use C4::Reserves;
@@ -77,6 +78,10 @@ BEGIN {
         &CheckInSlip
 
         GetOverduesForPatron
+
+        &GenMemberPasswordSuggestion
+        &ValidateMemberPassword
+        &minPasswordLength
     );
 
     #Modify data
@@ -1429,6 +1434,131 @@ sub GetOverduesForPatron {
     $sth->execute( $borrowernumber );
 
     return $sth->fetchall_arrayref({});
+}
+
+=head2 GenMemberPasswordSuggestion
+
+    $password = GenMemberPasswordSuggestion($borrowernumber);
+
+Returns a new patron password suggestion based on borrowers password policy from categories
+
+=cut
+
+sub GenMemberPasswordSuggestion {
+    my $categorycode = shift;
+    my $categoryinfo = Koha::Patron::Categories->find($categorycode);
+    my $policycode = $categoryinfo->passwordpolicy;
+    my $minpasslength = minPasswordLength($categorycode);
+
+    my $pass;
+
+    # KD#1454 - Changed in order to generate exactly $minpasslength long passwords
+    # longer ones would cause problems with self-service library use
+    my $length = $minpasslength ? $minpasslength : 4;
+
+    if ($policycode) {
+        # Generates complex passwords with numbers and uppercase, lowercase and special characters
+        if ($policycode eq "complex") {
+            my $specials = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_'];
+            $pass = App::Genpass->new(specials => $specials, readable => 0, length => $length);
+        }
+
+        # Generates simple passwords with numbers and uppercase and lowercase characters
+        elsif ($policycode eq "alphanumeric") {
+            $pass = App::Genpass->new(length => $length);
+        }
+
+        # Generates passwords with digits 0-9 only
+        else {
+            # verify => 0 due to a bug in generate() (workaround)
+            $pass = App::Genpass->new(lowercase => [], uppercase => [], verify => 0, length => $length);
+        }
+    }
+    # Defaults to empty constuctor which gives readable complex passwords
+    else {
+        $pass = App::Genpass->new(length => $length, lowercase => [], uppercase => [], verify => 0);
+    }
+
+    return $pass->generate();
+}
+
+=head2 ValidateMemberPassword
+
+    ($success, $errorcode, $errormessage) = ValidateMemberPassword($categorycode, $newpassword1, $newpassword2);
+
+Validates a member's password based on category password policy and/or minPasswordLength
+
+=cut
+
+sub ValidateMemberPassword {
+    my ($categorycode, $newpassword1, $newpassword2) = @_;
+    if (!$categorycode) {
+        return (0, ,"NOCATEGORY", "No category given");
+    }
+    my $categoryinfo = Koha::Patron::Categories->find($categorycode);
+    my $passwordpolicy = $categoryinfo->passwordpolicy;
+    my $minpasslength = minPasswordLength($categorycode);
+    # KD#1454 - Add individual minimum password lengths for different policies (validate)
+    if ($newpassword1 eq $newpassword2) {
+        if ($newpassword1 =~ m|^\s+| or $newpassword1 =~ m|\s+$|) {
+            return (0, "WHITESPACEMATCH", "Password policy: password contains leading or trailing whitespace");
+        } else {
+            if ($passwordpolicy) {
+                if ($passwordpolicy eq "complex") {
+                    unless ($newpassword1 =~ /[0-9]/
+                            && $newpassword1 =~ /[a-zåäö]/
+                            && $newpassword1 =~ /[A-ZÅÄÖ]/
+                            && $newpassword1 =~ /[\|\[\]\{\}!@#\$%\^&\*\(\)_\-\+\?]/
+                            && length($newpassword1) >= $minpasslength ) {
+                        return (0, "NOCOMPLEXPOLICYMATCH", "Password policy: password must contain numbers, lower and uppercase characters and special characters and must be at least $minpasslength characters long");
+                    }
+
+                }
+                elsif ($passwordpolicy eq "alphanumeric") {
+                   unless ($newpassword1 =~ /[0-9]/
+                            && $newpassword1 =~ /[a-zA-ZöäåÖÄÅ]/
+                            && $newpassword1 !~ /\W/
+                            && $newpassword1 !~ /[_-]/
+                            && length($newpassword1) >= $minpasslength ) {
+                        return (0, "NOALPHAPOLICYMATCH", "Password policy: password must contain both numbers and non-special characters and must be at least $minpasslength characters long");
+                    }
+                }
+                else {
+                    if ($newpassword1 !~ /^[0-9]+$/ || length($newpassword1) < $minpasslength) {
+                        return (0, "NOSIMPLEPOLICYMATCH", "Password policy: password can only contain digits 0-9 and must be at least $minpasslength characters long");
+                    }
+                }
+            } elsif (defined $minpasslength && length($newpassword1) < $minpasslength) {
+                return (0, "NOLENGTHMATCH", "Password policy: password must be at least $minpasslength characters long");
+            }
+        }
+    } else {
+        return (0, "NOPASSWORDMATCH", "The passwords do not match.");
+    }
+    return 1;
+}
+
+=head2 minPasswordLength
+
+    $minpasslength = minPasswordLength($categorycode);
+
+Returns correct minPasswordLength
+
+=cut
+
+sub minPasswordLength {
+    my $categorycode = shift;
+    my $categoryinfo = Koha::Patron::Categories->find($categorycode);
+    my $passwordpolicy = $categoryinfo->passwordpolicy;
+    my $minpasslen;
+    if ($passwordpolicy eq "complex") {
+        $minpasslen = C4::Context->preference("minComplexPasswordLength");
+    }elsif ($passwordpolicy eq "alphanumeric") {
+        $minpasslen = C4::Context->preference("minAlnumPasswordLength");
+    }else {
+        $minpasslen = C4::Context->preference("minPasswordLength");
+    }
+    return $minpasslen;
 }
 
 END { }    # module clean-up code here (global destructor)

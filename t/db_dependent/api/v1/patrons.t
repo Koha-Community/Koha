@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 133;
+use Test::More tests => 159;
 use Test::Mojo;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -46,7 +46,7 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 $schema->storage->txn_begin;
 
-my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
+my $categorycode = $builder->build({ source => 'Category', value => {passwordpolicy => ''} })->{ categorycode };
 my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
 my $guarantor = $builder->build({
     source => 'Borrower',
@@ -496,19 +496,26 @@ $tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$loggedinuser->{borrowernumbe
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(400)
-  ->json_like('/error', qr/Password is too short/, "Password too short");
+  ->json_like('/error', qr/Password policy: password must be at least 5 characters long/, "Password too short");
 
-$password_obj->{'new_password'} = " abcdef ";
+$password_obj->{'new_password'} = "ab12fsF!";
+$tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$loggedinuser->{borrowernumber}.'/password' => json => $password_obj);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(200);
+
+$password_obj->{'new_password'} = " ab12fsF! ";
 $tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$loggedinuser->{borrowernumber}.'/password' => json => $password_obj);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(400)
-  ->json_is('/error', "Password cannot contain trailing whitespaces.");
+  ->json_like('/error', qr/Password policy: password contains leading or trailing whitespace/, "Leading or trailing whitespace");
 
 $password_obj = {
     current_password    => $password,
     new_password        => "new password",
 };
+
 t::lib::Mocks::mock_preference("OpacPasswordChange", 0);
 $tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$patron->{borrowernumber}.'/password' => json => $password_obj);
 $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
@@ -526,6 +533,93 @@ $tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$patron->{borrowernumber}.'/p
 $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
 $t->request_ok($tx)
   ->status_is(200);
+
+my $oldcategory = Koha::Patron::Categories->find($categorycode);
+$oldcategory->passwordpolicy('simplenumeric')->store;
+
+$password_obj = {
+    current_password    => $password,
+    new_password        => "12345",
+};
+
+$tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$loggedinuser->{borrowernumber}.'/password' => json => $password_obj);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(200);
+
+$password_obj->{'new_password'} = "1234";
+
+$tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$loggedinuser->{borrowernumber}.'/password' => json => $password_obj);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(400)
+  ->json_like('/error', qr/Password policy: password can only contain digits 0-9 and must be at least 5 characters long/, "Password too short");
+
+$password_obj->{'new_password'} = "12F34";
+
+$tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$loggedinuser->{borrowernumber}.'/password' => json => $password_obj);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(400)
+  ->json_like('/error', qr/Password policy: password can only contain digits 0-9 and must be at least 5 characters long/, "Simplenumeric password policy not in valid format");
+
+$oldcategory->passwordpolicy('alphanumeric')->store;
+t::lib::Mocks::mock_preference("minAlnumPasswordLength", 4);
+
+$password_obj = {
+    current_password    => $password,
+    new_password        => "D124",
+};
+
+$tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$loggedinuser->{borrowernumber}.'/password' => json => $password_obj);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(200);
+
+$password_obj->{'new_password'} = "12D";
+
+$tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$loggedinuser->{borrowernumber}.'/password' => json => $password_obj);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(400)
+  ->json_like('/error', qr/Password policy: password must contain both numbers and non-special characters and must be at least 4 characters long/, "Password too short");
+
+$password_obj->{'new_password'} = "1234";
+
+$tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$loggedinuser->{borrowernumber}.'/password' => json => $password_obj);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(400)
+  ->json_like('/error', qr/Password policy: password must contain both numbers and non-special characters and must be at least 4 characters long/, "Alphanumeric password policy not in valid format");
+
+$oldcategory->passwordpolicy('complex')->store;
+t::lib::Mocks::mock_preference("minComplexPasswordLength", 6);
+
+$password_obj = {
+    current_password    => $password,
+    new_password        => "D124!a",
+};
+
+$tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$loggedinuser->{borrowernumber}.'/password' => json => $password_obj);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(200);
+
+$password_obj->{'new_password'} = "1aD!";
+
+$tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$loggedinuser->{borrowernumber}.'/password' => json => $password_obj);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(400)
+  ->json_like('/error', qr/Password policy: password must contain numbers, lower and uppercase characters and special characters and must be at least 6 characters long/, "Password too short");
+
+$password_obj->{'new_password'} = "1234Sa";
+
+$tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$loggedinuser->{borrowernumber}.'/password' => json => $password_obj);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(400)
+  ->json_like('/error', qr/Password policy: password must contain numbers, lower and uppercase characters and special characters and must be at least 6 characters long/, "Alphanumeric password policy not in valid format");
 
 # patronstatus
 my $debt = {
