@@ -402,6 +402,8 @@ sub _branch_to_template {
          branchphone    => $data->{'branchphone'},
          branchfax      => $data->{'branchfax'},
          branchemail    => $data->{'branchemail'},
+         branchreplyto  => $data->{'branchreplyto'},
+         branchreturnpath => $data->{'branchreturnpath'},
          branchurl      => $data->{'branchurl'},
          opac_info      => $data->{'opac_info'},
          branchip       => $data->{'branchip'},
