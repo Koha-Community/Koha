@@ -34,6 +34,7 @@ use Koha::DateUtils;
 use Date::Calc qw( Add_Delta_Days );
 use Encode;
 use Carp;
+use Koha::Email;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -262,11 +263,10 @@ sub SendAlerts {
         # find the list of borrowers to alert
         my $alerts = getalert( '', 'issue', $externalid );
         foreach (@$alerts) {
-
             my $borinfo = C4::Members::GetMember('borrowernumber' => $_->{'borrowernumber'});
             my $email = $borinfo->{email} or next;
 
-            # 		warn "sending issues...";
+#            		warn "sending issues...";
             my $userenv = C4::Context->userenv;
             my $branchdetails = GetBranchDetail($_->{'branchcode'});
             my $letter = GetPreparedLetter (
@@ -283,13 +283,20 @@ sub SendAlerts {
             ) or return;
 
             # ... then send mail
-            my %mail = (
-                To      => $email,
-                From    => $branchdetails->{'branchemail'} || C4::Context->preference("KohaAdminEmailAddress"),
-                Subject => Encode::encode( "utf8", "" . $letter->{title} ),
-                Message => Encode::encode( "utf8", "" . $letter->{content} ),
-                'Content-Type' => 'text/plain; charset="utf8"',
-                );
+            my $message = Koha::Email->new();
+            my %mail = $message->create_message_headers(
+                {
+                    to      => $email,
+                    from    => $branchdetails->{'branchemail'},
+                    replyto => $branchdetails->{'branchreplyto'},
+                    sender  => $branchdetails->{'branchreturnpath'},
+                    subject => Encode::encode( "utf8", "" . $letter->{title} ),
+                    message =>
+                      Encode::encode( "utf8", "" . $letter->{content} ),
+                    contenttype => 'text/plain; charset="utf8"',
+
+                }
+            );
             sendmail(%mail) or carp $Mail::Sendmail::error;
         }
     }
@@ -368,6 +375,11 @@ sub SendAlerts {
             Message        => Encode::encode( "utf8", "" . $letter->{content} ),
             'Content-Type' => 'text/plain; charset="utf8"',
         );
+        $mail{'Reply-to'} = C4::Context->preference('ReplytoDefault')
+          if C4::Context->preference('ReplytoDefault');
+        $mail{'Sender'} = C4::Context->preference('ReturnpathDefault')
+          if C4::Context->preference('ReturnpathDefault');
+
         sendmail(%mail) or carp $Mail::Sendmail::error;
 
         logaction(
@@ -396,14 +408,18 @@ sub SendAlerts {
             substitute => { 'borrowers.password' => $externalid->{'password'} },
             want_librarian => 1,
         ) or return;
-
         return { error => "no_email" } unless $externalid->{'emailaddr'};
-        my %mail = (
-                To      =>     $externalid->{'emailaddr'},
-                From    =>  $branchdetails->{'branchemail'} || C4::Context->preference("KohaAdminEmailAddress"),
-                Subject => Encode::encode( "utf8", $letter->{'title'} ),
-                Message => Encode::encode( "utf8", $letter->{'content'} ),
-                'Content-Type' => 'text/plain; charset="utf8"',
+        my $email = Koha::Email->new();
+        my %mail  = $email->create_message_headers(
+            {
+                to      => $externalid->{'emailaddr'},
+                from    => $branchdetails->{'branchemail'},
+                replyto => $branchdetails->{'branchreplyto'},
+                sender  => $branchdetails->{'branchreturnpath'},
+                subject => Encode::encode( "utf8", "" . $letter->{'title'} ),
+                message => Encode::encode( "utf8", "" . $letter->{'content'} ),
+                contenttype => 'text/plain; charset="utf8"'
+            }
         );
         sendmail(%mail) or carp $Mail::Sendmail::error;
     }
@@ -969,17 +985,28 @@ sub _send_message_by_email {
     my $content = encode('utf8', $message->{'content'});
     my $content_type = $message->{'content_type'} || 'text/plain; charset="UTF-8"';
     my $is_html = $content_type =~ m/html/io;
-
-    my $branch_email = ( $member ) ? GetBranchDetail( $member->{'branchcode'} )->{'branchemail'} : undef;
-
-    my %sendmail_params = (
-        To   => $to_address,
-        From => $message->{'from_address'} || $branch_email || C4::Context->preference('KohaAdminEmailAddress'),
-        Subject => $subject,
-        charset => 'utf8',
-        Message => $is_html ? _wrap_html($content, $subject) : $content,
-        'content-type' => $content_type,
+    my $branch_email = undef;
+    my $branch_replyto = undef;
+    my $branch_returnpath = undef;
+    if ($member){
+        my $branchdetail = GetBranchDetail( $member->{'branchcode'} );
+        $branch_email = $branchdetail->{'branchemail'};
+        $branch_replyto = $branchdetail->{'branchreplyto'};
+        $branch_returnpath = $branchdetail->{'branchreturnpath'};
+    }
+    my $email = Koha::Email->new();
+    my %sendmail_params = $email->create_message_headers(
+        {
+            to      => $to_address,
+            from    => $message->{'from_address'} || $branch_email,
+            replyto => $branch_replyto,
+            sender  => $branch_returnpath,
+            subject => $subject,
+            message => $is_html ? _wrap_html( $content, $subject ) : $content,
+            contenttype => $content_type
+        }
     );
+
     $sendmail_params{'Auth'} = {user => $username, pass => $password, method => $method} if $username;
     if ( my $bcc = C4::Context->preference('OverdueNoticeBcc') ) {
        $sendmail_params{ Bcc } = $bcc;
