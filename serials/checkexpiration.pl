@@ -69,6 +69,7 @@ my $issn  = $query->param('issn');
 my $branch = $query->param('branch');
 my $date = $query->param('date');
 $date = eval { dt_from_string( scalar $query->param('date') ) } if $date;
+my $showhistoricexpired = $query->param('showhistoryexpired');
 
 if ($date) {
     my @subscriptions = SearchSubscriptions({ title => $title, issn => $issn, orderby => 'title' });
@@ -93,20 +94,23 @@ if ($date) {
         next if $subscription->{cannotedit};
 
         my $expirationdate_dt = dt_from_string( $expirationdate, 'iso' );
+        my $today_dt = dt_from_string();
         if (   DateTime->compare( $date, $expirationdate_dt ) == 1
+            && ( $showhistoricexpired || DateTime->compare( $expiration_dt, $today_dt ) == 1 )
             && ( !$branch || ( $subscription->{'branchcode'} eq $branch ) ) ) {
             push @subscriptions_loop, $subscription;
         }
     }
 
-    $template->param (
-        title           => $title,
-        issn            => $issn,
-        numsubscription => scalar @subscriptions_loop,
-        date => $date,
-        subscriptions_loop => \@subscriptions_loop,
-        "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
-        searched => 1,
+    $template->param(
+        title               => $title,
+        issn                => $issn,
+        showhistoricexpired => $showhistoricexpired,
+        numsubscription     => scalar @subscriptions_loop,
+        date                => $date,
+        subscriptions_loop  => \@subscriptions_loop,
+        "BiblioDefaultView" . C4::Context->preference("BiblioDefaultView") => 1,
+        searched                                                           => 1,
     );
 }
 

@@ -38,6 +38,7 @@
     <legend>Filter results:</legend>
     
          <ol>
+        <ol>
         <li><label for="title">Title:</label>
         <input id="title" type="text" name="title" size="15" value="[% title | html %]" /></li>
 
@@ -57,7 +58,13 @@
         <span class="required">Required</span>
 			<div class="hint">[% INCLUDE 'date-format.inc' %]</div></li>
 			</ol>
-        
+
+        <li>
+            <label for="showhistoricexpired">Include historic expirations:</label>
+            <input id="showhistoricexpired" type="checkbox" name="showhistoricexpired"
+            [% IF ( showhistoricexpired ) %] checked="checked" [% END %]/>
+        </li>
+        </ol>
 </fieldset>
 <fieldset class="action"><input type="submit" value="Search" /></fieldset>
 </form>
