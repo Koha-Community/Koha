@@ -33,6 +33,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Biblio;
 use C4::Members;
+use Koha::Email;
 
 my $query = new CGI;
 
@@ -53,21 +54,20 @@ my $email_sender = $query->param('email_sender');
 my $dbh          = C4::Context->dbh;
 
 if ( $email_add ) {
+    my $email = Koha::Email->new();
     my $user = GetMember(borrowernumber => $borrowernumber);
     my $user_email = GetFirstValidEmailAddress($borrowernumber)
     || C4::Context->preference('KohaAdminEmailAddress');
 
-    my $email_from = C4::Context->preference('KohaAdminEmailAddress');
     my $email_replyto = "$user->{firstname} $user->{surname} <$user_email>";
     my $comment    = $query->param('comment');
-    my %mail = (
-        To   => $email_add,
-        From => $email_from,
-    'Reply-To' => $email_replyto,
-#    'X-Orig-IP' => $ENV{'REMOTE_ADDR'},
-#    FIXME Commented out for now: discussion on privacy issue
-    'X-Abuse-Report' => C4::Context->preference('KohaAdminEmailAddress'),
-    );
+
+   # if you want to use the KohaAdmin address as from, that is the default no need to set it
+    my %mail = $email->create_message_headers({
+        to => $email_add,
+        replyto => $email_replyto,
+    });
+    $mail{'X-Abuse-Report'} = C4::Context->preference('KohaAdminEmailAddress');
 
     my ( $template2, $borrowernumber, $cookie ) = get_template_and_user(
         {
