@@ -32,10 +32,11 @@ use C4::Biblio;
 use C4::Items;
 use C4::Output;
 use C4::VirtualShelves;
+use Koha::Email;
 
 my $query = new CGI;
 
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "virtualshelves/sendshelfform.tt",
         query           => $query,
@@ -48,15 +49,15 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
 my $shelfid = $query->param('shelfid');
 my $email   = $query->param('email');
 
-my $dbh          = C4::Context->dbh;
+my $dbh = C4::Context->dbh;
 
-if ( $email ) {
-    my $email_from = C4::Context->preference('KohaAdminEmailAddress');
-    my $comment    = $query->param('comment');
-
-    my %mail = (
-        To   => $email,
-        From => $email_from
+if ($email) {
+    my $comment = $query->param('comment');
+    my $message = Koha::Email->new();
+    my %mail    = $message->create_message_headers(
+        {
+            to => $email
+        }
     );
 
     my ( $template2, $borrowernumber, $cookie ) = get_template_and_user(
@@ -69,9 +70,9 @@ if ( $email ) {
         }
     );
 
-    my @shelf               = GetShelf($shelfid);
-    my ($items, $totitems)  = GetShelfContents($shelfid);
-    my $marcflavour         = C4::Context->preference('marcflavour');
+    my @shelf = GetShelf($shelfid);
+    my ( $items, $totitems ) = GetShelfContents($shelfid);
+    my $marcflavour = C4::Context->preference('marcflavour');
     my $iso2709;
     my @results;
 
@@ -84,9 +85,9 @@ if ( $email ) {
         my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
         my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
-        my $subtitle         = GetRecordValue('subtitle', $record, $fw);
+        my $subtitle         = GetRecordValue( 'subtitle', $record, $fw );
 
-        my @items = GetItemsInfo( $biblionumber );
+        my @items = GetItemsInfo($biblionumber);
 
         $dat->{MARCNOTES}      = $marcnotesarray;
         $dat->{MARCSUBJCTS}    = $marcsubjctsarray;
@@ -100,13 +101,14 @@ if ( $email ) {
         push( @results, $dat );
     }
 
-  if (C4::Context->preference('OPACBaseURL')){
-        $template2->param( OPACBaseURL => C4::Context->preference('OPACBaseURL') );
-  }
+    if ( C4::Context->preference('OPACBaseURL') ) {
+        $template2->param(
+            OPACBaseURL => C4::Context->preference('OPACBaseURL') );
+    }
 
     $template2->param(
         BIBLIO_RESULTS => \@results,
-        email_sender   => $email_from,
+        email_sender   => $mail{'from'},
         comment        => $comment,
         shelfname      => $shelf[1],
     );
@@ -146,7 +148,7 @@ if ( $email ) {
     # We set and put the multipart content
     $mail{'content-type'} = "multipart/mixed; boundary=\"$boundary\"";
 
-    my $isofile = encode_base64(encode("UTF-8", $iso2709));
+    my $isofile = encode_base64( encode( "UTF-8", $iso2709 ) );
     $boundary = '--' . $boundary;
 
     $mail{body} = <<END_OF_BODY;
@@ -167,8 +169,9 @@ END_OF_BODY
 
     # Sending mail
     if ( sendmail %mail ) {
+
         # do something if it works....
-        $template->param( SENT      => "1" );
+        $template->param( SENT => "1" );
     }
     else {
         # do something if it doesnt work....
@@ -179,10 +182,11 @@ END_OF_BODY
     $template->param( email => $email );
     output_html_with_http_headers $query, $cookie, $template->output;
 
-
-}else{
-    $template->param( shelfid => $shelfid,
-                      url     => "/cgi-bin/koha/virtualshelves/sendshelf.pl",
-                    );
+}
+else {
+    $template->param(
+        shelfid => $shelfid,
+        url     => "/cgi-bin/koha/virtualshelves/sendshelf.pl",
+    );
     output_html_with_http_headers $query, $cookie, $template->output;
 }
