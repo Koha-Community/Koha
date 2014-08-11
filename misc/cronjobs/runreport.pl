@@ -23,6 +23,7 @@ use warnings;
 
 use C4::Reports::Guided; # 0.12
 use C4::Context;
+use Koha::Email;
 
 use Getopt::Long qw(:config auto_help auto_version);
 use Pod::Usage;
@@ -266,22 +267,25 @@ foreach my $report_id (@ARGV) {
         }
     }
     if ($email){
+        my $email = Koha::Email->new();
         my %mail;
         if ($format eq 'html') {
                 $message = "<html><head><style>tr:nth-child(2n+1) { background-color: #ccc;}</style></head><body>$message</body></html>";
-           %mail = (
-              To      => $to,
-              From    => $from,
-              'Content-Type' => 'text/html',
-              Subject => encode('utf8', $subject ),
-              Message => encode('utf8', $message )
+           %mail = $email->create_message_headers({
+              to      => $to,
+              from    => $from,
+              contenttype => 'text/html',
+              subject => encode('utf8', $subject ),
+              messsage => encode('utf8', $message )
+           }
           );
         } else {
-          %mail = (
-              To      => $to,
-              From    => $from,
-              Subject => encode('utf8', $subject ),
-              Message => encode('utf8', $message )
+          %mail = $email->create_message_headers ({
+              to      => $to,
+              from    => $from,
+              subject => encode('utf8', $subject ),
+              message => encode('utf8', $message )
+          }
           );
         }
         $mail{'Auth'} = {user => $username, pass => $password, method => $method} if $username;
