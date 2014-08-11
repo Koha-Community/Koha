@@ -82,7 +82,7 @@ foreach my $branchfrom ( @branchloop ) {
                 $from_to_input_def{disabled} = 1;
             }
             else {
-                push @errors, "Invalid value for $from_row{name} -> $from_to_input_def{name}"
+                push @errors, "$from_row{name} -> $from_to_input_def{name}"
                   unless $value =~ /\d/o && $value >= 0.0;
             }
         }
