@@ -92,6 +92,35 @@ if ( ! defined C4::Context->config('zebra_auth_index_mode') ) {
     };
 }
 
+# Test QueryParser configuration sanity
+if ( C4::Context->preference( 'UseQueryParser' ) ) {
+    # Get the QueryParser configuration file name
+    my $queryparser_file          = C4::Context->config( 'queryparser_config' );
+    my $queryparser_fallback_file = '/etc/koha/searchengine/queryparser.yaml';
+    # Check QueryParser is functional
+    my $QParser = C4::Context->queryparser();
+    my $queryparser_error = {};
+    if ( ! defined $QParser || ref($QParser) ne 'Koha::QueryParser::Driver::PQF' ) {
+        # Error initializing the QueryParser object
+        # Get the used queryparser.yaml file path to report the user
+        $queryparser_error->{ fallback } = ( defined $queryparser_file ) ? 0 : 1;
+        $queryparser_error->{ file }     = ( defined $queryparser_file )
+                                                ? $queryparser_file
+                                                : $queryparser_fallback_file;
+        # Report error data to the template
+        $template->param( QueryParserError => $queryparser_error );
+    } else {
+        # Check for an absent queryparser_config entry in koha-conf.xml
+        if ( ! defined $queryparser_file ) {
+            # Not an error but a warning for the missing entry in koha-conf-xml
+            push @xml_config_warnings, {
+                    error => 'queryparser_entry_missing',
+                    file  => $queryparser_fallback_file
+            };
+        }
+    }
+}
+
 $template->param(
     kohaVersion   => $kohaVersion,
     osVersion     => $osVersion,

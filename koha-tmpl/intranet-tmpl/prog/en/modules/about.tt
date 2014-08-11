@@ -104,7 +104,8 @@
             <p>Please log in instead with a regular staff account. To create a staff account, create a library, a patron category 'Staff' and add a new patron. Then give this patron permissions from 'More' in the toolbar.</p>
         [% END %]
             <h2>Warnings regarding the system configuration</h2>
-        [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatron || warnNoActiveCurrency %]
+        [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatron ||
+              warnNoActiveCurrency || QueryParserError %]
         <table>
             <caption>Preferences and parameters</caption>
             [% IF (warnPrefBiblioAddsAuthorities) %]
@@ -119,6 +120,19 @@
             [% IF warnNoActiveCurrency %]
                 <tr><th scope="row"><b>Warning</b> </th><td>No active currency is defined. Please go to <a href="/cgi-bin/koha/admin/currency.pl">Administration &gt; Currencies and exchange rates</a> and mark one currency as active.</td></tr>
             [% END %]
+            [% IF QueryParserError %]
+                <tr><th scope="row"><b>Warning</b> </th><td>
+                    You have set UseQueryParser but there was a problem inititializing QueryParser.
+                [% IF QueryParserError.fallback %]
+                    The 'queryparser_config' entry is missing in your configuration file.
+                    <strong>[% QueryParserError.file %]</strong> was used instead without success.
+                [% ELSE %]
+                    The following configuration file was used without success: <strong>[% QueryParserError.file %]</strong>.
+                [% END %]
+                    </td>
+                </tr>
+            [% END %]
+
         </table>
         [% END %]
         [% IF xml_config_warnings.size %]
@@ -129,6 +143,13 @@
             <tr><th scope="row"><b>Warning</b> </th><td>The &lt;zebra_bib_index_mode&gt; entry is missing in your configuration file. It should be set to <strong>dom</strong> or <strong>grs1</strong>. It will default to <strong>grs1</strong> but this could change in the future.</td></tr>
             [% ELSIF config_entry.error == 'zebra_auth_index_mode_warn' %]
             <tr><th scope="row"><b>Warning</b> </th><td>The &lt;zebra_auth_index_mode&gt; entry is missing in your configuration file. It should be set to <strong>dom</strong> or <strong>grs1</strong>. It will default to <strong>dom</strong> but this could change in the future.</td></tr>
+            [% ELSIF config_entry.error == 'queryparser_entry_missing' %]
+            <tr>
+                <th scope="row"><b>Warning</b></th>
+                <td>You have set UseQueryParser but the 'queryparser_config' entry is missing in your configuration
+                    file. <strong>[% config_entry.file %]</strong> is used as a fallback.
+                </td>
+            </tr>
             [% END %]
         [% END %]
         </table>
