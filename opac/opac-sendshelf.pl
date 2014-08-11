@@ -33,6 +33,7 @@ use C4::Items;
 use C4::Output;
 use C4::VirtualShelves;
 use C4::Members;
+use Koha::Email;
 
 my $query = new CGI;
 
@@ -54,12 +55,13 @@ my $dbh          = C4::Context->dbh;
 if ( ShelfPossibleAction( (defined($borrowernumber) ? $borrowernumber : -1), $shelfid, 'view' ) ) {
 
 if ( $email ) {
-    my $email_from = C4::Context->preference('KohaAdminEmailAddress');
+    my $message = Koha::Email->new();
     my $comment    = $query->param('comment');
 
-    my %mail = (
-        To   => $email,
-        From => $email_from
+    my %mail = $message->create_message_headers(
+        {
+            to => $email,
+        }
     );
 
     my ( $template2, $borrowernumber, $cookie ) = get_template_and_user(
@@ -109,7 +111,7 @@ if ( $email ) {
 
     $template2->param(
         BIBLIO_RESULTS => \@results,
-        email_sender   => $email_from,
+        email_sender   => $mail{'from'},
         comment        => $comment,
         shelfname      => $shelf[1],
         firstname      => $user->{firstname},
