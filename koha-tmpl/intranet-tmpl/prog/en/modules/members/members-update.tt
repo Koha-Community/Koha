@@ -11,57 +11,59 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-[%
-    SET field_display_names = {
-        surname         => "Surname"
-        firstname       => "First name"
-        title           => "Title"
-        othernames      => "Other names"
-        initials        => "Initials"
-        streetnumber    => "Street number"
-        streettype      => "Street type"
-        address         => "Address"
-        address2        => "Address 2"
-        city            => "City"
-        state           => "State"
-        zipcode         => "Zip code"
-        country         => "Country"
-        email           => "Email"
-        phone           => "Primary Phone"
-        mobile          => "Primary Mobile Phone"
-        fax             => "Fax"
-        emailpro        => "Secondary email"
-        phonepro        => "Secondary phone"
-        B_streetnumber  => "Alternate address - street number"
-        B_streettype    => "Alternate address - street type"
-        B_address       => "Alternate address"
-        B_address2      => "Alternate address 2"
-        B_city          => "Alternate address - city"
-        B_state         => "Alternate address - state"
-        B_zipcode       => "Alternate address - zip code"
-        B_email         => "Alternate address - email"
-        B_phone         => "Alternate address - phone"
-        contactnote     => "Alternate address - contact note"
-        dateofbirth     => "Date of birth"
-        contactname     => "Contact - last name"
-        contactfirstname=> "Contact - first name"
-        contacttitle    => "Contact - title"
-        relationship    => "Contact - relationship"
-        ethnicity       => "Ethnicity"
-        ethnotes        => "Ethnicity notes"
-        sex             => "Sex"
-        altcontactfirstname => "Alternate contact - first name"
-        altcontactsurname   => "Alternate contact - surname"
-        altcontactaddress1  => "Alternate contact - address"
-        altcontactaddress2  => "Alternate contact - address 2"
-        altcontactaddress3  => "Alternate contact - city"
-        altcontactstate     => "Alternate contact - state"
-        altcontactzipcode   => "Alternate contact - zip code"
-        altcontactcountry   => "Alternate contact - country"
-        altcontactphone     => "Alternate contact - phone"
-        smsalertnumber      => "SMS alert number"
-    }
-%]
+[% BLOCK display_names %]
+[% SWITCH field %]
+[% CASE 'surname'             %]<span>Surname</span>
+[% CASE 'firstname'           %]<span>First name</span>
+[% CASE 'title'               %]<span>Title</span>
+[% CASE 'othernames'          %]<span>Other names</span>
+[% CASE 'initials'            %]<span>Initials</span>
+[% CASE 'streetnumber'        %]<span>Street number</span>
+[% CASE 'streettype'          %]<span>Street type</span>
+[% CASE 'address'             %]<span>Address</span>
+[% CASE 'address2'            %]<span>Address 2</span>
+[% CASE 'city'                %]<span>City</span>
+[% CASE 'state'               %]<span>State</span>
+[% CASE 'zipcode'             %]<span>Zip code</span>
+[% CASE 'country'             %]<span>Country</span>
+[% CASE 'email'               %]<span>Email</span>
+[% CASE 'phone'               %]<span>Primary Phone</span>
+[% CASE 'mobile'              %]<span>Primary Mobile Phone</span>
+[% CASE 'fax'                 %]<span>Fax</span>
+[% CASE 'emailpro'            %]<span>Secondary email</span>
+[% CASE 'phonepro'            %]<span>Secondary phone</span>
+[% CASE 'B_streetnumber'      %]<span>Alternate address: Street number</span>
+[% CASE 'B_streettype'        %]<span>Alternate address: Street type</span>
+[% CASE 'B_address'           %]<span>Alternate address: Address</span>
+[% CASE 'B_address2'          %]<span>Alternate address: Address 2</span>
+[% CASE 'B_city'              %]<span>Alternate address: City</span>
+[% CASE 'B_state'             %]<span>Alternate address: State</span>
+[% CASE 'B_zipcode'           %]<span>Alternate address: Zip/postal code</span>
+[% CASE 'B_email'             %]<span>Alternate address: Email</span>
+[% CASE 'B_phone'             %]<span>Alternate address: Phone</span>
+[% CASE 'contactnote'         %]<span>Alternate address: Contact note</span>
+[% CASE 'dateofbirth'         %]<span>Date of birth</span>
+[% CASE 'contactname'         %]<span>Contact: Last name</span>
+[% CASE 'contactfirstname'    %]<span>Contact: First name</span>
+[% CASE 'contacttitle'        %]<span>Contact: Title</span>
+[% CASE 'relationship'        %]<span>Contact: Relationship</span>
+[% CASE 'ethnicity'           %]<span>Ethnicity</span>
+[% CASE 'ethnotes'            %]<span>Ethnicity notes</span>
+[% CASE 'sex'                 %]<span>Sex</span>
+[% CASE 'altcontactfirstname' %]<span>Alternate contact: First name</span>
+[% CASE 'altcontactsurname'   %]<span>Alternate contact: Surname</span>
+[% CASE 'altcontactaddress1'  %]<span>Alternate contact: Address</span>
+[% CASE 'altcontactaddress2'  %]<span>Alternate contact: Address 2</span>
+[% CASE 'altcontactaddress3'  %]<span>Alternate contact: City</span>
+[% CASE 'altcontactstate'     %]<span>Alternate contact: State</span>
+[% CASE 'altcontactzipcode'   %]<span>Alternate contact: Zip code</span>
+[% CASE 'altcontactcountry'   %]<span>Alternate contact: Country</span>
+[% CASE 'altcontactphone'     %]<span>Alternate contact: Phone</span>
+[% CASE 'smsalertnumber'      %]<span>SMS alert number</span>
+[% CASE %][% field %]
+[% END %]
+[% END %]
+
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a> &rsaquo; Update patron records</div>
 
 <div id="doc2" class="yui-t7">
@@ -96,10 +98,10 @@
 
 
                                             [% FOREACH key IN pm.keys %]
-                                                [% IF field_display_names.$key %]
+                                                [% IF ( key != "timestamp" ) %]
                                                     [% IF ( ( pm.$key OR borrowers.$borrowernumber.$key ) && ( pm.$key != borrowers.$borrowernumber.$key ) ) %]
                                                         <tr>
-                                                            <td>[% field_display_names.$key %]</td>
+                                                            <td>[% PROCESS display_names field = key %]</td>
                                                             <td>[% borrowers.$borrowernumber.$key %]</td>
                                                             <td>[% pm.$key %]</td>
                                                         </tr>
