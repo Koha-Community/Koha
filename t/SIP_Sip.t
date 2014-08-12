@@ -1,12 +1,24 @@
 #!/usr/bin/perl
+
+# This file is part of Koha.
 #
-# This Koha test module is a stub!  
-# Add more tests here!!!
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
+use Test::Warn;
 
 BEGIN {
         use FindBin;
@@ -39,5 +51,10 @@ my $something = Sip::Checksum::checksum($testdata);
 $something =  sprintf("%4X", $something);
 ok( Sip::Checksum::verify_cksum($testdata.$something), "Checksum: $something is valid.");
 
-my $invalidTest = Sip::Checksum::verify_cksum("1234567");
+my $invalidTest;
+warning_is { $invalidTest = Sip::Checksum::verify_cksum("1234567") }
+            'verify_cksum: no sum detected',
+            'verify_cksum prints the expected warning for an invalid checksum';
 is($invalidTest, 0, "Checksum: 1234567 is invalid as expected");
+
+1;
