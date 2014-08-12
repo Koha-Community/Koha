@@ -37,6 +37,8 @@
       <arg><option>--passwdfile</option> /path/to/passwd</arg>
       <arg><option>--database</option> database</arg>
       <arg><option>--adminuser</option> n</arg>
+      <arg><option>--enable-sru</option></arg>
+      <arg><option>--sru-port</option> port</arg>
       <arg><option>--help</option>|<option>-h</option></arg>
 
       <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg>
@@ -148,6 +150,20 @@
       <term><option>--memcached-prefix</option></term>
       <listitem>
         <para>Specifiy a <option>namespace prefix</option> for memcached. You usually leave this option alone to avoid namespace collisions. It defaults to <option>koha_</option>.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--enable-sru</option></term>
+      <listitem>
+        <para>Enable the Z39.50/SRU server for the created instance.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--sru-port</option></term>
+      <listitem>
+        <para>Specifiy a <option> TCP port number</option> for the Z39.50/SRU server to listen on.</para>
       </listitem>
     </varlistentry>
 

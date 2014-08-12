@@ -6,9 +6,9 @@
 <!-- Uncomment the following entry if you want to run the public Z39.50 server.
     Also uncomment the <server> and <serverinfo> sections for id 'publicserver'
     under PUBLICSERVER'S BIBLIOGRAPHIC RECORDS title-->
-<!--
-<listen id="publicserver" >tcp:@:__ZEBRA_SRU_BIBLIOS_PORT__</listen>
--->
+__START_SRU_PUBLICSERVER__
+<listen id="publicserver" >tcp:@:__SRU_BIBLIOS_PORT__</listen>
+__END_SRU_PUBLICSERVER__
 
 <!-- Settings for special biblio server instance for PazPar2.
      Because PazPar2 only connects to a Z39.50 server using TCP/IP,
@@ -171,8 +171,8 @@
 </serverinfo>
 
 <!-- PUBLICSERVER'S BIBLIOGRAPHIC RECORDS -->
-<!-- This can be used to set up a public Z39.50/SRU server.
-
+<!-- This can be used to set up a public Z39.50/SRU server. -->
+__START_SRU_PUBLICSERVER__
 <server id="publicserver"  listenref="publicserver">
     <directory>/var/lib/koha/__KOHASITE__/biblios</directory>
     <config>/etc/koha/sites/__KOHASITE__/__ZEBRA_BIBLIOS_CFG__</config>
@@ -245,7 +245,7 @@
         <user>kohauser</user>
         <password>__ZEBRA_PASS__</password>
 </serverinfo>
--->
+__END_SRU_PUBLICSERVER__
 
 <config>
  <db_scheme>mysql</db_scheme>

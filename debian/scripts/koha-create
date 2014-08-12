@@ -60,6 +60,9 @@ Options:
   --use-memcached           Set the instance to make use of memcache.
   --memcached-servers str   Set a comma-separated list of host:port memcached servers.
   --memcached-prefix str    Set the desired prefix for the instance memcached namespace.
+  --enable-sru              Enable the Z39.50/SRU server (default: disabled).
+  --sru-port                Specifiy a TCP port number for the Z39.50/SRU server
+                            to listen on. (default: 7090).
   --defaultsql some.sql     Specify a default SQL file to be loaded on the DB.
   --configfile cfg_file     Specify an alternate config file for reading default values.
   --passwdfile passwd       Specify an alternate passwd file.
@@ -87,6 +90,9 @@ generate_config_file() {
         -e "s/__ZEBRA_PASS__/$zebrapwd/g" \
         -e "s/__ZEBRA_MARC_FORMAT__/$ZEBRA_MARC_FORMAT/g" \
         -e "s/__ZEBRA_LANGUAGE__/$ZEBRA_LANGUAGE/g" \
+        -e "s/__SRU_BIBLIOS_PORT__/$SRU_SERVER_PORT/g" \
+        -e "s/__START_SRU_PUBLICSERVER__/$START_SRU_PUBLICSERVER/g" \
+        -e "s/__END_SRU_PUBLICSERVER__/$END_SRU_PUBLICSERVER/g" \
         -e "s/__BIBLIOS_INDEXING_MODE__/$BIBLIOS_INDEXING_MODE/g" \
         -e "s/__AUTHORITIES_INDEXING_MODE__/$AUTHORITIES_INDEXING_MODE/g" \
         -e "s/__ZEBRA_BIBLIOS_CFG__/$ZEBRA_BIBLIOS_CFG/g" \
@@ -280,6 +286,17 @@ set_memcached()
 
 }
 
+enable_sru_server()
+{
+    # remove the commenting symbols
+    START_SRU_PUBLICSERVER=""
+    END_SRU_PUBLICSERVER=""
+    if [ "$SRU_SERVER_PORT" = "" ]; then
+        # --sru-port not passed, use the default
+        SRU_SERVER_PORT=$DEFAULT_SRU_SERVER_PORT
+    fi
+}
+
 # Set defaults and read config file, if it exists.
 DOMAIN=""
 OPACPORT="80"
@@ -302,6 +319,14 @@ MEMCACHED_PREFIX=""
 DEFAULT_MEMCACHED_SERVERS="127.0.0.1:11211"
 DEFAULT_MEMCACHED_PREFIX="koha_"
 
+# SRU server variables
+ENABLE_SRU="no"
+SRU_SERVER_PORT=""
+# hardcoded default SRU server port
+DEFAULT_SRU_SERVER_PORT="7090"
+START_SRU_PUBLICSERVER="<!--"
+END_SRU_PUBLICSERVER="-->"
+
 # Indexing mode variables (default is DOM)
 BIBLIOS_INDEXING_MODE="dom"
 AUTHORITIES_INDEXING_MODE="dom"
@@ -318,7 +343,7 @@ fi
 
 [ $# -ge 1 ] && [ $# -le 16 ] || ( usage ; die "Error: wrong parameters" )
 
-TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,use-memcached,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,database:,adminuser:,memcached-servers:,memcached-prefix:, \
+TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,use-memcached,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,database:,adminuser:,memcached-servers:,memcached-prefix:, \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -369,6 +394,10 @@ while true ; do
             CLO_DATABASE="$2" ; shift 2 ;;
         -a|--adminuser)
             CLO_ADMINUSER="$2" ; shift 2 ;;
+        --enable-sru)
+            ENABLE_SRU="yes" ; shift ;;
+        --sru-port)
+            SRU_SERVER_PORT="$2" ; shift 2 ;;
         -h|--help)
             usage ; exit 0 ;;
         --)
@@ -417,6 +446,9 @@ fi
 
 set_biblios_indexing_mode $BIBLIOS_INDEXING_MODE $ZEBRA_MARC_FORMAT
 
+if [ "$ENABLE_SRU" != "no" ]; then
+    enable_sru_server
+fi
 
 if [ "$CLO_AUTHORITIES_INDEXING_MODE" !=  "" ]; then
     AUTHORITIES_INDEXING_MODE=$CLO_AUTHORITIES_INDEXING_MODE
