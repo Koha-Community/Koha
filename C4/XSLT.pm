@@ -206,7 +206,7 @@ sub XSLTParse4Display {
                               UseControlNumber IntranetBiblioDefaultView BiblioDefaultView
                               singleBranchMode OPACItemLocation DisplayIconsXSLT
                               AlternateHoldingsField AlternateHoldingsSeparator
-                              TrackClicks / )
+                              TrackClicks opacthemes / )
     {
         my $sp = C4::Context->preference( $syspref );
         next unless defined($sp);

@@ -28,6 +28,7 @@
     <xsl:variable name="TraceSubjectSubdivisions" select="marc:sysprefs/marc:syspref[@name='TraceSubjectSubdivisions']"/>
     <xsl:variable name="Show856uAsImage" select="marc:sysprefs/marc:syspref[@name='OPACDisplay856uAsImage']"/>
     <xsl:variable name="OPACTrackClicks" select="marc:sysprefs/marc:syspref[@name='TrackClicks']"/>
+    <xsl:variable name="theme" select="marc:sysprefs/marc:syspref[@name='opacthemes']"/>
     <xsl:variable name="biblionumber" select="marc:datafield[@tag=999]/marc:subfield[@code='c']"/>
     <xsl:variable name="TracingQuotesLeft">
       <xsl:choose>
@@ -590,7 +591,12 @@
             <xsl:if test="marc:subfield[@code=9]">
                 <a class='authlink'>
                     <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
-                    <img style="vertical-align:middle" height="15" width="15" src="/opac-tmpl/prog/images/filefind.png"/>
+                    <xsl:element name="img">
+                        <xsl:attribute name="src">/opac-tmpl/<xsl:value-of select="$theme"/>/images/filefind.png</xsl:attribute>
+                        <xsl:attribute name="style">vertical-align:middle</xsl:attribute>
+                        <xsl:attribute name="height">15</xsl:attribute>
+                        <xsl:attribute name="width">15</xsl:attribute>
+                    </xsl:element>
                 </a>
             </xsl:if>
             <xsl:choose>
@@ -1063,7 +1069,12 @@
             <xsl:if test="marc:subfield[@code=9]">
                 <a class='authlink'>
                     <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
-                    <img style="vertical-align:middle" height="15" width="15" src="/opac-tmpl/prog/images/filefind.png"/>
+                    <xsl:element name="img">
+                        <xsl:attribute name="src">/opac-tmpl/<xsl:value-of select="$theme"/>/images/filefind.png</xsl:attribute>
+                        <xsl:attribute name="style">vertical-align:middle</xsl:attribute>
+                        <xsl:attribute name="height">15</xsl:attribute>
+                        <xsl:attribute name="width">15</xsl:attribute>
+                    </xsl:element>
                 </a>
             </xsl:if>
         </xsl:for-each>
