@@ -191,16 +191,16 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         [% END %]
 
         [% IF ( show_prevbutton ) %]
-            <input type="button" name="changepage_prev" value="Previous Page" onclick="$('#current_page').val([% current_page %]-1);$('#page_form').submit();" />
+            <input type="button" name="changepage_prev" value="Previous page" onclick="$('#current_page').val([% current_page %]-1);$('#page_form').submit();" />
         [% END %]
         Page [% current_page %] / [% total_pages %]
         [% IF ( show_nextbutton ) %]
-            <input type="button" name="changepage_next" value="Next Page" onclick="$('#current_page').val([% current_page %]+1);$('#page_form').submit();" />
+            <input type="button" name="changepage_next" value="Next page" onclick="$('#current_page').val([% current_page %]+1);$('#page_form').submit();" />
         [% END %]
         <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page %]" size="4" /><input type="submit" name="changepage_goto" onclick="return validate_goto_page();" value="Go" />
     </form>
 
-<p><form method="get" action="/cgi-bin/koha/cataloguing/z3950_auth_search.pl"><input type="hidden" name="authid" value="[% authid %]" /><input type="submit" value="Try Another Search"/></form></p>
+<p><form method="get" action="/cgi-bin/koha/cataloguing/z3950_auth_search.pl"><input type="hidden" name="authid" value="[% authid %]" /><input type="submit" value="Try another search"/></form></p>
     [% ELSE %]
         [% IF ( errconn ) %]
             <div class="dialog alert">
@@ -213,7 +213,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
             </div>
          [% END %]
    <div class="dialog message">Nothing found.</div>
-    <p><form method="get" action="/cgi-bin/koha/cataloguing/z3950_auth_search.pl"><input type="hidden" name="authid" value="[% authid %]" /><input type="submit" value="Try Another Search"/></form></p>
+    <p><form method="get" action="/cgi-bin/koha/cataloguing/z3950_auth_search.pl"><input type="hidden" name="authid" value="[% authid %]" /><input type="submit" value="Try another search"/></form></p>
     [% END %]
 
 [% END %]

@@ -330,18 +330,23 @@ sub CreateKey {
 
 =cut
 
-sub GetMandatoryFieldZ3950($){
+sub GetMandatoryFieldZ3950 {
     my $authtypecode = shift;
-
-    #Tags guessed (see GuessAuthTypeCode from AuthoritiesMarc.pm)
-
-    return {
-        '100'.'a' => 'authorpersonal',
-        '110'.'a' => 'authorcorp',
-        '111'.'a' => 'authormeetingcon',
-        '130'.'a' => 'uniformtitle',
-        '150'.'a' => 'topic',
-    };
+    if ( C4::Context->preference('marcflavour') eq 'MARC21' ){
+        return {
+            '100a' => 'authorpersonal',
+            '110a' => 'authorcorp',
+            '111a' => 'authormeetingcon',
+            '130a' => 'uniformtitle',
+            '150a' => 'topic',
+        };
+    }else{
+        return {
+            '200a' => 'authorpersonal',
+            '210a' => 'authormeetingcon', #210 in UNIMARC is used for both corporation and meeting
+            '230a' => 'uniformtitle',
+        };
+    }
 }
 
 sub build_tabs {
