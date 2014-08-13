@@ -23,6 +23,7 @@ use C4::Output;
 use C4::Auth;
 use CGI;
 use C4::Context;
+use C4::Koha;
 
 
 sub string_search  {
@@ -91,25 +92,14 @@ if ($op eq 'add_form') {
 		push @kohafields, "auth_header.".$field;
 	}
 	
-	# build authorised value list
-	$sth2 = $dbh->prepare("select distinct category from authorised_values");
-	$sth2->execute;
-	my @authorised_values;
-	push @authorised_values,"";
-	while ((my $category) = $sth2->fetchrow_array) {
-		push @authorised_values, $category;
-	}
-	push (@authorised_values,"branches");
-	push (@authorised_values,"itemtypes");
-    
-    # build thesaurus categories list
-    $sth2 = $dbh->prepare("select authtypecode from auth_types");
-    $sth2->execute;
-    my @authtypes;
-    push @authtypes, "";
-    while ( ( my $authtypecode ) = $sth2->fetchrow_array ) {
-        push @authtypes, $authtypecode;
-    }
+        # build authorised value list
+        my $authorised_values = C4::Koha::GetAuthorisedValueCategories;
+        unshift @$authorised_values, '';
+        push @$authorised_values, 'branches';
+        push @$authorised_values, 'itemtypes';
+
+        # build thesaurus categories list
+        my @authtypes = (sort keys getauthtypes);
 
 	# build value_builder list
 	my @value_builder=('');
@@ -160,7 +150,7 @@ if ($op eq 'add_form') {
                     };
         $row_data{authorised_value} = {
                     id      => "authorised_value$i",
-                    values  => \@authorised_values,
+                    values  => $authorised_values,
                     default => $data->{'authorised_value'},
         };
         $row_data{frameworkcode} = {
@@ -239,7 +229,7 @@ if ($op eq 'add_form') {
                     };
         $row_data{authorised_value} = {
                     id      => "authorised_value",
-                    values  => \@authorised_values,
+                    values  => $authorised_values,
                     default => "",
         };
         $row_data{frameworkcode} = {

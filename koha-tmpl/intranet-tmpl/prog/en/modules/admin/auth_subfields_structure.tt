@@ -89,15 +89,17 @@ function displayMoreConstraint(numlayer){
                 <li><label for="liblibrarian[% loo.row %]">Text for librarian: </label><input id="liblibrarian[% loo.row %]" type="text" name="liblibrarian" value="[% loo.liblibrarian %]" size="40" maxlength="80" /></li>
                 <li><label for="libopac[% loo.row %]">Text for OPAC: </label><input type="text" id="libopac[% loo.row %]" name="libopac" value="[% loo.libopac %]" size="40" maxlength="80" /></li>
                 <li><label for="tab[% loo.row %]">Managed in tab: </label>
-                    <select name="tab" tabindex="" size="1" id="[% loo.tab.id %]">
+                    <select name="tab" size="1" id="[% loo.tab.id %]">
                         [%- IF ( loo.tab.default ==  -1 ) -%]
                         <option value="-1" selected="selected">ignore</option>
                         [%- ELSE -%]
                         <option value="-1">ignore</option>
                         [%- END -%]
                     [%- FOREACH t IN [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'] -%]
-                        [%- IF ( loo.tab.default ==  t ) -%]
+                        [%- IF ( loo.tab.default ==  t && t.length>0 ) -%]
                         <option value="[%- t -%]" selected="selected">[%- t -%]</option>
+                        [%- ELSIF ( loo.tab.default ==  t ) -%]
+                        <option value="[%- t -%]" selected="selected">&nbsp;</option>
                         [%- ELSE -%]
                         <option value="[%- t -%]">[%- t -%]</option>
                         [%- END -%]
@@ -144,49 +146,65 @@ function displayMoreConstraint(numlayer){
                             <li>
                                 <label for="kohafield[% loo.row %]">Koha field:</label>
                                 <select name="kohafield" id="[% loo.kohafield.id %]" size="1">
-                                [% FOREACH value IN loo.kohafield.values %]
-                                    [% IF ( value == loo.kohafield.default ) %]
+                                [%- FOREACH value IN loo.kohafield.values %]
+                                    [% IF ( value == loo.kohafield.default  && value.length>0 ) -%]
                                     <option value="[% value %]" selected="selected">[% value %]</option>
-                                    [% ELSE %]
+                                    [%- ELSIF ( value == loo.kohafield.default ) -%]
+                                    <option value="[% value %]" selected="selected">&nbsp;</option>
+                                    [%- ELSIF ( value.length==0 ) -%]
+                                    <option value="[% value %]">&nbsp;</option>
+                                    [%- ELSE -%]
                                     <option value="[% value %]">[% value %]</option>
-                                    [% END %]
-                                [% END %]
+                                    [%- END -%]
+                                [%- END %]
                                 </select>
                             </li>
                             <li>
                                 <label for="authorised_value[% loo.row %]">Authorized value:</label>
                                 <select name="authorised_value" id="[% loo.authorised_value.id %]" size="1">
-                                [% FOREACH value IN loo.authorised_value.values %]
-                                    [% IF ( value == loo.authorised_value.default ) %]
+                                [%- FOREACH value IN loo.authorised_value.values %]
+                                    [% IF ( value == loo.authorised_value.default && value.length>0 ) -%]
                                     <option value="[% value %]" selected="selected">[% value %]</option>
-                                    [% ELSE %]
+                                    [%- ELSIF ( value == loo.authorised_value.default ) -%]
+                                    <option value="[% value %]" selected>&nbsp;</option>
+                                    [%- ELSIF ( value.length==0 ) -%]
+                                    <option value="[% value %]">&nbsp;</option>
+                                    [%- ELSE -%]
                                     <option value="[% value %]">[% value %]</option>
-                                    [% END %]
-                                [% END %]
+                                    [%- END -%]
+                                [%- END %]
                                 </select>
                             </li>
                             <li>
                                 <label for="frameworkcode[% loo.row %]">Thesaurus:</label>
                                 <select name="frameworkcode" id="[% loo.frameworkcode.id %]" size="1">
-                                [% FOREACH value IN loo.frameworkcode.values %]
-                                    [% IF ( value == loo.frameworkcode.default ) %]
+                                [%- FOREACH value IN loo.frameworkcode.values %]
+                                    [% IF ( value == loo.frameworkcode.default && value.length>0 ) -%]
                                     <option value="[% value %]" selected="selected">[% value %]</option>
-                                    [% ELSE %]
+                                    [%- ELSIF ( value == loo.frameworkcode.default ) -%]
+                                    <option value="[% value %]" selected="selected">&nbsp;</option>
+                                    [%- ELSIF ( value.length==0 ) -%]
+                                    <option value="[% value %]">&nbsp;</option>
+                                    [%- ELSE -%]
                                     <option value="[% value %]">[% value %]</option>
-                                    [% END %]
-                                [% END %]
+                                    [%- END -%]
+                                [%- END %]
                                 </select>
                             </li>
                             <li>
                                 <label for="value_builder[% loo.row %]">Plugin:</label>
                                 <select name="value_builder" id="[% loo.value_builder.id %]" size="1">
-                                [% FOREACH value IN loo.value_builder.values %]
-                                    [% IF ( value == loo.value_builder.default ) %]
+                                [%- FOREACH value IN loo.value_builder.values %]
+                                    [% IF ( value == loo.value_builder.default && value.length>0 ) -%]
                                     <option value="[% value %]" selected="selected">[% value %]</option>
-                                    [% ELSE %]
+                                    [%- ELSIF ( value == loo.value_builder.default ) -%]
+                                    <option value="[% value %]" selected="selected">&nbsp;</option>
+                                    [%- ELSIF ( value.length==0 ) -%]
+                                    <option value="[% value %]">&nbsp;</option>
+                                    [%- ELSE -%]
                                     <option value="[% value %]">[% value %]</option>
-                                    [% END %]
-                                [% END %]
+                                    [%- END -%]
+                                [%- END %]
                                 </select>
                             </li>
                         </ol>
