@@ -8,7 +8,7 @@
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
+# Foundation; either version 3 of the License, or (at your option) any later
 # version.
 #
 # Koha is distributed in the hope that it will be useful, but WITHOUT ANY
@@ -40,6 +40,7 @@ use XML::LibXML;
 my $input        = new CGI;
 my $biblionumber = $input->param('id');
 my $importid     = $input->param('importid');
+my $batchid      = $input->param('batchid');
 
 
 if ( $biblionumber and $importid ) {
@@ -56,7 +57,7 @@ if ( $biblionumber and $importid ) {
             query           => $input,
             type            => "intranet",
             authnotrequired => 0,
-            flagsrequired   => { catalogue => 1  },
+            flagsrequired   => { tools => 'manage_staged_marc' },
             debug           => 1,
         }
     );
@@ -82,7 +83,7 @@ if ( $biblionumber and $importid ) {
     }
 
 
-    $template->param(     SCRIPT_NAME => $ENV{'SCRIPT_NAME'},
+    $template->param(   SCRIPT_NAME => $ENV{'SCRIPT_NAME'},
                         BIBLIONUMBER => $biblionumber,
                         IMPORTID => $importid,
                         BIBLIOTITLE => $biblioTitle,
@@ -90,7 +91,8 @@ if ( $biblionumber and $importid ) {
                         MARC_FORMATTED1 => $formatted1,
                         MARC_FORMATTED2 => $formatted2,
                         ERROR_FORMATTED1 => $errorFormatted1,
-                        ERROR_FORMATTED2 => $errorFormatted2
+                        ERROR_FORMATTED2 => $errorFormatted2,
+                        batchid => $batchid
                     );
 
     output_html_with_http_headers $input, $cookie, $template->output;

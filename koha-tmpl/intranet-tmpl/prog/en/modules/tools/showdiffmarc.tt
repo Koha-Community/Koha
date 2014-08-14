@@ -1,50 +1,55 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha -- Cataloging: MARC Import</title>
-
-<style>
-div#main {
-    width: 100%;
-    margin: 10px auto;
-}
-
-div.col1,
-div.col2 {
-    float: left;
-    width: 46%;
-    margin-left: 3%;
-
-}
-
-pre {
-    padding: 10px;
-    overflow: scroll;
-}
-</style>
-
+<title>Koha &rsaquo; Tools &rsaquo; Manage staged MARC records &rsaquo; Compare matched records</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
+<script type="text/javascript" src="[% interface %]/lib/jsdiff/jsdiff.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+      var diff1 = $("#col1 pre").text();
+      var diff2 = $("#col2 pre").text();
+      var diffs = diffString(diff1,diff2);
+      $("#col1 pre,#col2 pre").html(diffs);
+    });
+</script>
+<style type="text/css">
+    ins { background-color: #e6ffe6; }
+    del { background-color: #ffe6e6; }
+    #col1 ins, #col2 del { display: none; }
+    pre { padding: 10px; overflow: scroll; }
+</style>
 </head>
-<body>
+<body id="tools_compare-marc-import" class="tools">
 
-<div id="main">
-    <div class="col1">
-        <h2>Original</h2>
-        [% IF ( ERROR_FORMATTED1 ) %]
-            <p>The biblionumber <em>[% BIBLIONUMBER %]</em> doesn't match to any record.</p>
-        [% ELSE %]
-            <h1>[% BIBLIOTITLE %]</h1>
-            <pre>[% MARC_FORMATTED1 %]</pre>
-        [% END %]
-    </div>
-    <div class="col2">
-        <h2>Imported</h2>
-        [% IF ( ERROR_FORMATTED2 ) %]
-            <p>The importid <em>[% IMPORTID %]</em> doesn't match to any record.</p>
-        [% ELSE %]
-            <h1>[% IMPORTTITLE %]</h1>
-            <pre>[% MARC_FORMATTED2 %] </pre>
-        [% END %]
-    </div>
+[% INCLUDE 'header.inc' %]
+
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/tools/manage-marc-import.pl">Manage staged MARC records</a> &rsaquo; <a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% batchid %]">Batch [% batchid %]</a> &rsaquo; Compare matched records
 </div>
 
+<div id="doc3">
+    <div class="yui-g">
+        <div id="col1" class="yui-u first">
+            <h1>Original</h1>
+            [% IF ( ERROR_FORMATTED1 ) %]
+                <div class="dialog alert">
+                    <p>The biblionumber <em>[% BIBLIONUMBER %]</em> doesn't match any existing record.</p>
+                </div>
+            [% ELSE %]
+                <h2>[% BIBLIOTITLE %]</h2>
+                <pre>[% MARC_FORMATTED1 %]</pre>
+            [% END %]
+        </div>
+        <div id="col2" class="yui-u">
+            <h1>Imported</h1>
+            [% IF ( ERROR_FORMATTED2 ) %]
+                <div class="dialog alert">
+                    <p>The import id number <em>[% IMPORTID %]</em> doesn't match any existing record.</p>
+                </div>
+            [% ELSE %]
+                <h2>[% IMPORTTITLE %]</h2>
+                <pre>[% MARC_FORMATTED2 %] </pre>
+            [% END %]
+        </div>
+    </div>
+
+<p><a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% batchid %]">Return to staged MARC batch [% batchid %]</a></p>
 [% INCLUDE 'intranet-bottom.inc' %]
