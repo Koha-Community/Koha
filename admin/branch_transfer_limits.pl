@@ -64,12 +64,8 @@ for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{b
 }
 
 
-# Set the template language for the correct limit type
-my $limit_phrase = 'Collection Code';
+# Set the template language for the correct limit type using $limitType
 my $limitType = C4::Context->preference("BranchTransferLimitsType") || "ccode";
-if ( $limitType eq 'itemtype' ) {
-	$limit_phrase = 'Item Type';
-}
 
 my @codes;
 my @branchcodes;
@@ -143,7 +139,7 @@ $template->param(
 		branchcode_loop => \@branchcode_loop,
 		branchcode => $branchcode,
 		branchname => $branchname,
-		limit_phrase => $limit_phrase,
+        limitType => $limitType,
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

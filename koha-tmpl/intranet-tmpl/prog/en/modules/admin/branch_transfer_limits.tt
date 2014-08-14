@@ -70,7 +70,7 @@
     </form>
 
 <p class="help">Check the boxes for the libraries you accept to checkin items from.</p>
-<fieldset>For <strong>all</strong> [% limit_phrase %]s: <a id="CheckAll" href="#">Check all</a> | <a id="UncheckAll" href="#">Uncheck all</a></fieldset>
+<fieldset>For <strong>all</strong> [% IF ( limitType == 'ccode' ) %]collection codes[% ELSE %]item types[% END %]: <a id="CheckAll" href="#">Check all</a> | <a id="UncheckAll" href="#">Uncheck all</a></fieldset>
 
 
   <div id="transferlimit_tabs" class="toptabs">
