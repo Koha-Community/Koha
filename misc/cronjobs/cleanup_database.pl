@@ -26,6 +26,7 @@ use constant DEFAULT_IMPORT_PURGEDAYS => 60;
 use constant DEFAULT_LOGS_PURGEDAYS => 180;
 use constant DEFAULT_SEARCHHISTORY_PURGEDAYS => 30;
 use constant DEFAULT_SHARE_INVITATION_EXPIRY_DAYS => 14;
+use constant DEFAULT_DEBARMENTS_PURGEDAYS => 30;
 
 BEGIN {
     # find Koha's Perl modules
@@ -43,7 +44,7 @@ use Getopt::Long;
 
 sub usage {
     print STDERR <<USAGE;
-Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS]
+Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS]
 
    -h --help          prints this help message, and exits, ignoring all
                       other options
@@ -67,6 +68,8 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
                          Defaults to 30 days if no days specified
    --list-invites  DAYS  purge (unaccepted) list share invites older than DAYS
                          days.  Defaults to 14 days if no days specified.
+   --restrictions DAYS   purge patrons restrictions expired since more than DAYS days.
+                         Defaults to 30 days if no days specified.
 USAGE
     exit $_[0];
 }
@@ -75,7 +78,7 @@ my (
     $help,            $sessions,       $sess_days,    $verbose,
     $zebraqueue_days, $mail,           $purge_merged, $pImport,
     $pLogs,           $pSearchhistory, $pZ3950,
-    $pListShareInvites,
+    $pListShareInvites, $pDebarments,
 );
 
 GetOptions(
@@ -91,6 +94,7 @@ GetOptions(
     'logs:i'       => \$pLogs,
     'searchhistory:i' => \$pSearchhistory,
     'list-invites:i'  => \$pListShareInvites,
+    'restrictions:i'    => \$pDebarments,
 ) || usage(1);
 
 $sessions=1 if $sess_days && $sess_days>0;
@@ -102,6 +106,7 @@ $zebraqueue_days= DEFAULT_ZEBRAQ_PURGEDAYS if defined($zebraqueue_days) && $zebr
 $mail= DEFAULT_MAIL_PURGEDAYS if defined($mail) && $mail==0;
 $pSearchhistory= DEFAULT_SEARCHHISTORY_PURGEDAYS if defined($pSearchhistory) && $pSearchhistory==0;
 $pListShareInvites = DEFAULT_SHARE_INVITATION_EXPIRY_DAYS if defined($pListShareInvites) && $pListShareInvites == 0;
+$pDebarments = DEFAULT_DEBARMENTS_PURGEDAYS if defined($pDebarments) && $pDebarments == 0;
 
 if ($help) {
     usage(0);
@@ -115,7 +120,8 @@ unless ( $sessions
     || $pLogs
     || $pSearchhistory
     || $pZ3950
-    || $pListShareInvites )
+    || $pListShareInvites
+    || $pDebarments )
 {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -224,6 +230,12 @@ if ($pListShareInvites) {
     print "Done with purging unaccepted list share invites.\n" if $verbose;
 }
 
+if($pDebarments) {
+    print "Expired patrons restrictions purge triggered for $pDebarments days.\n" if $verbose;
+    $count = PurgeDebarments();
+    print "$count restrictions were deleted.\nDone with restrictions purge.\n" if $verbose;
+}
+
 exit(0);
 
 sub RemoveOldSessions {
@@ -278,4 +290,18 @@ sub PurgeZ3950 {
         DELETE FROM import_batches WHERE batch_type = 'z3950'
     });
     $sth->execute() or die $dbh->errstr;
+}
+
+sub PurgeDebarments {
+    require Koha::Borrower::Debarments;
+    $count = 0;
+    $sth = $dbh->prepare(q{
+        SELECT borrower_debarment_id FROM borrower_debarments WHERE expiration < date_sub(curdate(), INTERVAL ? DAY)
+    });
+    $sth->execute($pDebarments) or die $dbh->errstr;
+    while ( my ($borrower_debarment_id) = $sth->fetchrow_array ) {
+        Koha::Borrower::Debarments::DelDebarment($borrower_debarment_id);
+        $count++;
+    }
+    return $count;
 }
