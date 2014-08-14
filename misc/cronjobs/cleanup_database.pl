@@ -128,7 +128,6 @@ unless ( $sessions
 }
 
 my $dbh = C4::Context->dbh();
-my $query;
 my $sth;
 my $sth2;
 my $count;
@@ -181,7 +180,7 @@ if ($mail) {
 
     $sth = $dbh->prepare("DELETE FROM message_queue WHERE time_queued < date_sub(curdate(), interval ? day)");
     $sth->execute($mail) or die $dbh->errstr;
-    my $count = $sth->rows;
+    $count = $sth->rows;
     $sth->finish;
 
     print "$count messages were deleted from the mail queue.\nDone with message_queue purge.\n" if ($verbose);
