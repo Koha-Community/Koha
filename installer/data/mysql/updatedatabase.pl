@@ -8603,13 +8603,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = '3.17.00.XXX';
+$DBversion = '3.17.00.014';
 if ( CheckVersion($DBversion) ) {
     $dbh->do("
         INSERT INTO systempreferences (variable,value,explanation,type) VALUES
         ('OverdueNoticeCalendar',0,'Take calendar into consideration when working out sending overdue notices','YesNo')
     ");
-    print "Upgrade to $DBversion done (Bug XXX - Adding a syspref to allow the overdue notices to consider the calendar when generating notices)\n";
+    print "Upgrade to $DBversion done (Bug 12529 - Adding a syspref to allow the overdue notices to consider the calendar when generating notices)\n";
     SetVersion($DBversion);
 }
 
