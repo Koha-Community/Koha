@@ -8489,7 +8489,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.16.02.001";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         DELETE FROM systempreferences WHERE variable = 'UseTablesortForCirc'
