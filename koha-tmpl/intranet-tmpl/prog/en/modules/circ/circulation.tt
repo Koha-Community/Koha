@@ -184,7 +184,7 @@ $(document).ready(function() {
     <li>The patron has a debt of [% DEBT %].</li>
 [% END %]
 
-[% IF ( RENTALCHARGE ) %]
+[% IF ( RENTALCHARGE > 0 ) %]
     <li>Rental charge for this item: [% RENTALCHARGE %]</li>
 [% END %]
 
