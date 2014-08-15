@@ -28,6 +28,7 @@ use C4::Form::MessagingPreferences;
 use Koha::Borrower::Modifications;
 use C4::Branch qw(GetBranchesLoop);
 use C4::Scrubber;
+use Email::Valid;
 
 my $cgi = new CGI;
 my $dbh = C4::Context->dbh;
@@ -76,10 +77,12 @@ if ( $action eq 'create' ) {
     %borrower = DelEmptyFields(%borrower);
 
     my @empty_mandatory_fields = CheckMandatoryFields( \%borrower, $action );
+    my $invalidformfields = CheckForInvalidFields(\%borrower);
 
-    if (@empty_mandatory_fields) {
+    if (@empty_mandatory_fields || @$invalidformfields) {
         $template->param(
             empty_mandatory_fields => \@empty_mandatory_fields,
+            invalid_form_fields    => $invalidformfields,
             borrower               => \%borrower
         );
     }
@@ -167,10 +170,12 @@ elsif ( $action eq 'update' ) {
     my %borrower_changes = DelEmptyFields(%borrower);
     my @empty_mandatory_fields =
       CheckMandatoryFields( \%borrower_changes, $action );
+    my $invalidformfields = CheckForInvalidFields(\%borrower);
 
-    if (@empty_mandatory_fields) {
+    if (@empty_mandatory_fields || @$invalidformfields) {
         $template->param(
             empty_mandatory_fields => \@empty_mandatory_fields,
+            invalid_form_fields    => $invalidformfields,
             borrower               => \%borrower
         );
 
@@ -288,6 +293,21 @@ sub CheckMandatoryFields {
     }
 
     return @empty_mandatory_fields;
+}
+
+sub CheckForInvalidFields {
+    my $borrower = shift;
+    my @invalidFields;
+    if ($borrower->{'email'}) {
+        push(@invalidFields, "email") if (!Email::Valid->address($borrower->{'email'}));
+    }
+    if ($borrower->{'emailpro'}) {
+        push(@invalidFields, "emailpro") if (!Email::Valid->address($borrower->{'emailpro'}));
+    }
+    if ($borrower->{'B_email'}) {
+        push(@invalidFields, "B_email") if (!Email::Valid->address($borrower->{'B_email'}));
+    }
+    return \@invalidFields;
 }
 
 sub ParseCgiForBorrower {

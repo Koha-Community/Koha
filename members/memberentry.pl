@@ -42,6 +42,7 @@ use C4::Branch; # GetBranches
 use C4::Form::MessagingPreferences;
 use Koha::Borrower::Debarments;
 use Koha::DateUtils;
+use Email::Valid;
 use Module::Load;
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     load Koha::NorwegianPatronDB, qw( NLGetSyncDataFromBorrowernumber );
@@ -325,6 +326,21 @@ if ($op eq 'save' || $op eq 'insert'){
   my $password2 = $input->param('password2');
   push @errors, "ERROR_password_mismatch" if ( $password ne $password2 );
   push @errors, "ERROR_short_password" if( $password && $minpw && $password ne '****' && (length($password) < $minpw) );
+
+  # Validate emails
+  my $emailprimary = $input->param('email');
+  my $emailsecondary = $input->param('emailpro');
+  my $emailalt = $input->param('B_email');
+
+  if ($emailprimary) {
+      push (@errors, "ERROR_bad_email") if (!Email::Valid->address($emailprimary));
+  }
+  if ($emailsecondary) {
+      push (@errors, "ERROR_bad_email_secondary") if (!Email::Valid->address($emailsecondary));
+  }
+  if ($emailalt) {
+      push (@errors, "ERROR_bad_email_alternative") if (!Email::Valid->address($emailalt));
+  }
 
   if (C4::Context->preference('ExtendedPatronAttributes')) {
     $extended_patron_attributes = parse_extended_patron_attributes($input);

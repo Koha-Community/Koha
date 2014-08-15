@@ -35,6 +35,17 @@
         [% END %]
         $("#dateofbirth").datepicker({ maxDate: "-1D" });
         $("#entryform").validate({
+            rules: {
+                email: {
+                    email: true
+                },
+                emailpro: {
+                    email: true
+                },
+                B_email: {
+                    email: true
+                }
+            },
             submitHandler: function(form) {
                 $("body, form input[type='submit'], form button[type='submit'], form a").addClass('waiting');
                 if (form.beenSubmitted)
@@ -234,6 +245,15 @@
             [% IF ( ERROR_extended_unique_id_failed ) %]
                 <li id="ERROR_extended_unique_id_failed"><strong>[% ERROR_extended_unique_id_failed_description %]</strong> attribute value <i>[% ERROR_extended_unique_id_failed_value %]</i> is already in use by another patron record.</li>
 			[% END %]
+            [% IF ERROR_bad_email %]
+                <li id="ERROR_bad_email">The primary email is invalid.</li>
+            [% END %]
+            [% IF ERROR_bad_email_secondary %]
+                <li id="ERROR_bad_email_secondary">The secondary email is invalid.</li>
+            [% END %]
+            [% IF ERROR_bad_email_alternative %]
+                <li id="ERROR_bad_email_alternative">The alternative email is invalid.</li>
+            [% END %]
 			</ul>
 		</div>
 	[% END %]

@@ -50,6 +50,19 @@
                     <div class="alert">You have not filled out all required fields. Please fill in all missing fields and resubmit.</div>
                 [% END %]
 
+                [%  IF invalid_form_fields %]
+                    <div class="alert-error"><strong>The following fields are invalid:</strong>
+                        <ul>
+                            [% FOREACH field IN invalid_form_fields %]
+                                [% IF field == "email" %]<li>Primary contact information: primary email address</li>[% END %]
+                                [% IF field == "emailpro" %]<li>Primary contact information: secondary email address</li>[% END %]
+                                [% IF field == "B_email" %]<li>Alternative contact information: email address</li>[% END %]
+                            [% END %]
+                        </ul>
+                        Please correct them.
+                    </div>
+                [% END %]
+
                 [% IF failed_captcha %]
                     <div class="alert">You typed in the wrong characters in the box before submitting. Please try again.</div>
                 [% END %]
@@ -805,6 +818,37 @@
             [% ELSE %]
                 $( "#borrower_dateofbirth" ).datepicker({ yearRange: "c-120:c" });
             [% END %]
+            $("#memberentry-form").validate({
+                rules: {
+                    borrower_email: {
+                        email: true
+                    },
+                    borrower_emailpro: {
+                        email: true
+                    },
+                    borrower_B_email: {
+                        email: true
+                    }
+                },
+                submitHandler: function(form) {
+                    if (form.beenSubmitted) {
+                        return false;
+                    }
+                    else {
+                        form.beenSubmitted = true;
+                        form.submit();
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    offset = element.offset();
+                    error.insertAfter(element)
+                    error.addClass('error');  // add a class to the wrapper
+                    error.css('position', 'absolute');
+                    error.css('left', offset.left + element.outerWidth() + 10);
+                    error.css('top', offset.top);
+                    error.css('width', 'auto');
+                }
+            });
         });
     //]]>
     </script>
