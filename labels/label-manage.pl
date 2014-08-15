@@ -98,12 +98,6 @@ $template->param(
                 element_id      => $element_id,
                 table_loop      => $table,
                 label_element   => $label_element,
-                label_element_title     => ($label_element eq 'layout' ? 'Layouts' :
-                                            $label_element eq 'template' ? 'Templates' :
-                                            $label_element eq 'profile' ? 'Profiles' :
-                                            $label_element eq 'batch' ? 'Batches' :
-                                            ''
-                                            ),
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

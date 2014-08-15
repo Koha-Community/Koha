@@ -113,7 +113,15 @@
                             <div class="hint">Current library: [% LoginBranchname %]</div>
                             [% IF ( table_loop ) %]
                             <form name="layouts" action="/cgi-bin/koha/label-manage.pl?label_element=[% label_element %]">
-                            <h2>Currently Available [% label_element_title %]</h2>
+                            [% IF    ( label_element == 'layout' ) %]
+                            <h2>Currently available layouts</h2>
+                            [% ELSIF ( label_element == 'template' ) %]
+                            <h2>Currently available templates</h2>
+                            [% ELSIF ( label_element == 'profile' ) %]
+                            <h2>Currently available profiles</h2>
+                            [% ELSIF ( label_element == 'batch' ) %]
+                            <h2>Currently available batches</h2>
+                            [% END %]
                             <table id="labels-table">
                                 [% FOREACH table_loo IN table_loop %]
                                     [% IF ( table_loo.header_fields ) %]
