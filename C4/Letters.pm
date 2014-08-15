@@ -588,7 +588,7 @@ sub _parseletter_sth {
     ($table eq 'aqbooksellers') ? "SELECT * FROM $table WHERE             id = ?"                                  :
     ($table eq 'aqorders'     ) ? "SELECT * FROM $table WHERE    ordernumber = ?"                                  :
     ($table eq 'opac_news'    ) ? "SELECT * FROM $table WHERE          idnew = ?"                                  :
-    ($table eq 'borrower_modifications') ? "SELECT * FROM $table WHERE borrowernumber = ? OR verification_token =?":
+    ($table eq 'borrower_modifications') ? "SELECT * FROM $table WHERE ( borrowernumber = 0 OR borrowernumber = ? ) AND ( verification_token = '' OR verification_token = ? ) AND ( verification_token != '' OR borrowernumber != 0 )" :
     undef ;
     unless ($query) {
         warn "ERROR: No _parseletter_sth query for table '$table'";
