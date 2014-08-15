@@ -482,9 +482,15 @@ CREATE TABLE collections (
   colId integer(11) NOT NULL auto_increment,
   colTitle varchar(100) NOT NULL DEFAULT '',
   colDesc text NOT NULL,
-  colBranchcode varchar(4) DEFAULT NULL comment 'branchcode for branch where item should be held.',
+  colBranchcode varchar(10) DEFAULT NULL, -- 'branchcode for branch where item should be held.'
   PRIMARY KEY (colId)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8;
+
+--
+-- Constraints for table `collections`
+--
+ALTER TABLE `collections`
+  ADD CONSTRAINT `collections_ibfk_1` FOREIGN KEY (`colBranchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Table: collections_tracking

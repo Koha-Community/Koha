@@ -42,6 +42,7 @@ use C4::Koha qw(
     GetKohaAuthorisedValueLib
 );
 use C4::Overdues qw(CalcFine UpdateFine);
+use C4::RotatingCollections qw(GetCollectionItemBranches);
 use Algorithm::CheckDigits;
 
 use Data::Dumper;
@@ -1903,6 +1904,7 @@ sub AddReturn {
     my ($datesent,$frombranch,$tobranch) = GetTransfers( $item->{'itemnumber'} );
 
     # if we have a transfer to do, we update the line of transfers with the datearrived
+    my $is_in_rotating_collection = 1 if C4::RotatingCollections::isItemInAnyCollection( $item->{'itemnumber'} );
     if ($datesent) {
         if ( $tobranch eq $branch ) {
             my $sth = C4::Context->dbh->prepare(
@@ -2010,7 +2012,7 @@ sub AddReturn {
     #adding message if holdingbranch is non equal a userenv branch to return the document to homebranch
     #we check, if we don't have reserv or transfert for this document, if not, return it to homebranch .
 
-    if (($doreturn or $messages->{'NotIssued'}) and !$resfound and ($branch ne $hbr) and not $messages->{'WrongTransfer'}){
+    if ( !$is_in_rotating_collection && ($doreturn or $messages->{'NotIssued'}) and !$resfound and ($branch ne $hbr) and not $messages->{'WrongTransfer'}){
         if ( C4::Context->preference("AutomaticItemReturn"    ) or
             (C4::Context->preference("UseBranchTransferLimits") and
              ! IsBranchTransferAllowed($branch, $hbr, $item->{C4::Context->preference("BranchTransferLimitsType")} )
@@ -2023,6 +2025,7 @@ sub AddReturn {
             $messages->{'NeedsTransfer'} = 1;   # TODO: instead of 1, specify branchcode that the transfer SHOULD go to, $item->{homebranch}
         }
     }
+
     return ( $doreturn, $messages, $issue, $borrower );
 }
 

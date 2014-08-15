@@ -600,20 +600,16 @@ $template->param(
     BlockReturnOfWithdrawnItems => C4::Context->preference("BlockReturnOfWithdrawnItems"),
 );
 
-### Comment out rotating collections for now to allow it a little more time to bake
-### for 3.4; in particular, must ensure that it doesn't fight with transfers required
-### to fill hold requests
-### -- Galen Charlton 2010-10-06
-#my $itemnumber = GetItemnumberFromBarcode( $query->param('barcode') );
-#if ( $itemnumber ) {
-#   my ( $holdingBranch, $collectionBranch ) = GetCollectionItemBranches( $itemnumber );
-#    if ( ! ( $holdingBranch eq $collectionBranch ) ) {
-#        $template->param(
-#          collectionItemNeedsTransferred => 1,
-#          collectionBranch => GetBranchName($collectionBranch),
-#        );
-#    }
-#}                                                                                                            
+my $itemnumber = GetItemnumberFromBarcode( $query->param('barcode') );
+if ( $itemnumber ) {
+   my ( $holdingBranch, $collectionBranch ) = GetCollectionItemBranches( $itemnumber );
+    if ( ! ( $holdingBranch eq $collectionBranch ) ) {
+        $template->param(
+          collectionItemNeedsTransferred => 1,
+          collectionBranch => GetBranchName($collectionBranch),
+        );
+    }
+}
 
 # actually print the page!
 output_html_with_http_headers $query, $cookie, $template->output;

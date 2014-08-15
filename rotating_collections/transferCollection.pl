@@ -16,9 +16,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 #
 
-use strict;
-#use warnings; FIXME - Bug 2505
-require Exporter;
+use Modern::Perl;
 
 use C4::Output;
 use C4::Auth;
@@ -30,55 +28,61 @@ use CGI;
 
 my $query = new CGI;
 
-my $colId = $query->param('colId');
+my $colId    = $query->param('colId');
 my $toBranch = $query->param('toBranch');
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "rotating_collections/transferCollection.tt",
-			     query => $query,
-			     type => "intranet",
-			     authnotrequired => 0,
-                          flagsrequired => { tools => 'rotating_collections' },
-			     debug => 1,
-			     });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "rotating_collections/transferCollection.tmpl",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { tools => 'rotating_collections' },
+        debug           => 1,
+    }
+);
 
 ## Transfer collection
 my ( $success, $errorCode, $errorMessage );
-if ( $toBranch ) {
-  ( $success, $errorCode, $errorMessage ) = TransferCollection( $colId, $toBranch );
+if ($toBranch) {
+    ( $success, $errorCode, $errorMessage ) =
+      TransferCollection( $colId, $toBranch );
 
-  if ( $success ) {
-    $template->param( transferSuccess => 1 );
-  } else {
-    $template->param( transferFailure => 1,
-                      errorCode => $errorCode,
-                      errorMessage => $errorMessage
-    );
-  }
+    if ($success) {
+        $template->param( transferSuccess => 1 );
+    }
+    else {
+        $template->param(
+            transferFailure => 1,
+            errorCode       => $errorCode,
+            errorMessage    => $errorMessage
+        );
+    }
 }
 
 ## Set up the toBranch select options
 my $branches = GetBranches();
 my @branchoptionloop;
-foreach my $br (keys %$branches) {
-  my %branch;
-  $branch{code}=$br;
-  $branch{name}=$branches->{$br}->{'branchname'};
-  push (@branchoptionloop, \%branch);
+foreach my $br ( keys %$branches ) {
+    my %branch;
+    $branch{code} = $br;
+    $branch{name} = $branches->{$br}->{'branchname'};
+    push( @branchoptionloop, \%branch );
 }
-    
+
 ## Get data about collection
-my ( $colId, $colTitle, $colDesc, $colBranchcode ) = GetCollection( $colId );                                
+my ( $colId, $colTitle, $colDesc, $colBranchcode ) = GetCollection($colId);
 $template->param(
-                intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-                intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-                IntranetNav => C4::Context->preference("IntranetNav"),
-                                  
-                colId => $colId,
-                colTitle => $colTitle,
-                colDesc => $colDesc,
-                colBranchcode => $colBranchcode,
-                branchoptionloop => \@branchoptionloop
-                );
-                                                                                                
+    intranetcolorstylesheet =>
+      C4::Context->preference("intranetcolorstylesheet"),
+    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+    IntranetNav        => C4::Context->preference("IntranetNav"),
+
+    colId            => $colId,
+    colTitle         => $colTitle,
+    colDesc          => $colDesc,
+    colBranchcode    => $colBranchcode,
+    branchoptionloop => \@branchoptionloop
+);
+
 output_html_with_http_headers $query, $cookie, $template->output;

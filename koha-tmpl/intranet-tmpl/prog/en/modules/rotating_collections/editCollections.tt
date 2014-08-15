@@ -44,13 +44,16 @@
       <div>
         [% IF ( collectionsLoop ) %]
           <table>
+           <thead>
             <tr>
               <th>Title</th>
               <th>Description</th>
               <th>Holding library</th>
-              <td></td>
-              <td></td>
+              <th>&nbsp;</th>
+              <th>&nbsp;</th>
             </tr>
+           <thead>
+           <tbody>
             [% FOREACH collectionsLoo IN collectionsLoop %]
               <tr>
                 <td>[% collectionsLoo.colTitle %]</td>
@@ -60,6 +63,7 @@
                 <td><a href="editCollections.pl?action=delete&amp;colId=[% collectionsLoo.colId %]">Delete</a></td>
               </tr>
             [% END %]
+           </tbody>
           </table>
         [% ELSE %]
           There are no collections currently defined.
@@ -99,7 +103,7 @@
                 <label for="description">Description: </label>
               </td>
               <td>
-                [% IF (editColDescription ) %]<input type="text" size="50" name="description" value="[ editColDescription %]" />
+                [% IF (editColDescription ) %]<input type="text" size="50" name="description" value="[% editColDescription %]" />
                 [% ELSE %]<input type="text" size="50" name="description" />[% END %]
               </td>
             </tr>
