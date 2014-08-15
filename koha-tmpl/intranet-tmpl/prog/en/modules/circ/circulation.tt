@@ -281,9 +281,9 @@ $(document).ready(function() {
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
     <input type="hidden" name="branch" value="[% branch %]" />
     [% IF ( RENEW_ISSUE ) %]
-    <input type="submit" class="approve" value="Yes, Renew (Y)" accesskey="y" />
+    <input type="submit" class="approve" value="Yes, renew (Y)" accesskey="y" />
     [% ELSE %]
-    <input type="submit" class="approve" value="Yes, Check Out (Y)" accesskey="y" />
+    <input type="submit" class="approve" value="Yes, check out (Y)" accesskey="y" />
     [% END %]
 </form>
 [% END %]
@@ -294,9 +294,9 @@ $(document).ready(function() {
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
     [% IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
         [% IF ( RENEW_ISSUE ) %]
-        <input type="submit" class="deny" value="No, Don't Renew (N)" accesskey="n" />
+        <input type="submit" class="deny" value="No, don't renew (N)" accesskey="n" />
         [% ELSE %]
-        <input type="submit" class="deny" value="No, Don't Check Out (N)" accesskey="n" />
+        <input type="submit" class="deny" value="No, don't check out (N)" accesskey="n" />
         [% END %]
     [% ELSE %]
         <input type="submit" class="deny" value="Continue" />
