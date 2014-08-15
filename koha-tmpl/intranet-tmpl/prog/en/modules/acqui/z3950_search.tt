@@ -149,6 +149,18 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 
 [% ELSE %]
     <h2>Search results</h2>
+
+    <p>You searched for:
+        [% IF ( title ) %]<em>Title: </em><span class=term>[% title %]</span> [% END %]
+        [% IF ( author ) %]<em>Author: </em><span class=term>[% author %]</span> [% END %]
+        [% IF ( isbn ) %]<em>ISBN: </em><span class=term>[% isbn %]</span> [% END %]
+        [% IF ( issn ) %]<em>ISSN: </em><span class=term>[% issn %]</span> [% END %]
+        [% IF ( lccall ) %]<em>LC call number: </em><span class=term>[% lccall %]</span> [% END %]
+        [% IF ( subject ) %]<em>Subject heading: </em><span class=term>[% subject %]</span> [% END %]
+        [% IF ( controlnumber ) %]<em>Control no: </em><span class=term>[% controlnumber %]</span> [% END %]
+        [% IF ( dewey ) %]<em>Dewey: </em><span class=term>[% dewey %]</span> [%END %]
+    </p>
+
     [% IF ( breeding_loop ) %]
     <table id="resultst">
 <thead>    <tr>
