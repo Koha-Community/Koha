@@ -170,9 +170,9 @@ if ( $uploadbarcodes && length($uploadbarcodes) > 0 ) {
     my $lines_read=0;
     binmode($uploadbarcodes, ":encoding(UTF-8)");
     while (my $barcode=<$uploadbarcodes>){
-        ++$lines_read;
         $barcode =~ s/\r?\n$//;
         next unless $barcode;
+        ++$lines_read;
         if (length($barcode)>$barcode_size) {
             $err_length += 1;
         }
