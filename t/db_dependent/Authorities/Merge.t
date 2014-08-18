@@ -4,7 +4,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use MARC::Record;
 use Test::MockModule;
@@ -75,6 +75,46 @@ subtest 'Test merge A1 to A2 (withing same authtype)' => sub {
     is($biblio2->subfield('609', '9'), $authid1, 'Check biblio2 609$9' );
     is($biblio2->subfield('609', 'a'), 'George Orwell',
         'Check biblio2 609$a' );
+};
+
+subtest 'Test merge A1 to modified A1' => sub {
+# Tests originate from bug 11700
+    plan tests => 4;
+
+    $dbh->do("INSERT IGNORE INTO marc_subfield_structure(tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue) VALUES('109', 'a', 'Personal name', 'Personal name', 0, 0, '', 6, '', 'TEST_PERSO', '', NULL, 0, '', '', '', NULL)");
+    $dbh->do("UPDATE marc_subfield_structure SET authtypecode = 'TEST_PERSO' WHERE tagfield='109' AND tagsubfield='a' AND frameworkcode='';");
+
+    my $auth1old = MARC::Record->new;
+    $auth1old->append_fields( MARC::Field->new( '109', '0', '0', 'a' => 'Bruce Wayne' ));
+    my $auth1new = $auth1old->clone;
+    $auth1new->field('109')->update( a => 'Batman' );
+    my $authid1 = AddAuthority( $auth1new, undef, 'TEST_PERSO' );
+
+    my $MARC1 = MARC::Record->new();
+    $MARC1->append_fields( MARC::Field->new( '245', '', '', 'a' => 'From the depths' ));
+    $MARC1->append_fields( MARC::Field->new( '109', '', '', 'a' => 'Bruce Wayne', 'b' => '2014', '9' => $authid1 ));
+    my $MARC2 = MARC::Record->new();
+    $MARC2->append_fields( MARC::Field->new( '245', '', '', 'a' => 'All the way to heaven' ));
+    $MARC2->append_fields( MARC::Field->new( '109', '', '', 'a' => 'Batman', '9' => $authid1 ));
+    my ( $biblionumber1 ) = AddBiblio( $MARC1, '');
+    my ( $biblionumber2 ) = AddBiblio( $MARC2, '');
+
+    @zebrarecords = ( $MARC1, $MARC2 );
+    $index = 0;
+
+    my $rv = C4::AuthoritiesMarc::merge( $authid1, $auth1old, $authid1, $auth1new );
+    is( $rv, 2, 'Both records are updated now' );
+
+    my $biblio1 = GetMarcBiblio($biblionumber1);
+    my $biblio2 = GetMarcBiblio($biblionumber1);
+
+    my $auth_field = $auth1new->field(109)->subfield('a');
+    is( $auth_field, $biblio1->field(109)->subfield('a'), 'Record1 values updated correctly' );
+    is( $auth_field, $biblio2->field(109)->subfield('a'), 'Record2 values updated correctly' );
+
+    # TODO Following test will change when we improve merge
+    # Will depend on a preference
+    is( $biblio1->field(109)->subfield('b'), $MARC1->field(109)->subfield('b'), 'Record not overwritten while merging');
 };
 
 sub set_mocks {
