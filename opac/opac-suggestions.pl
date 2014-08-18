@@ -19,6 +19,7 @@ use strict;
 use warnings;
 
 use CGI qw ( -utf8 );
+use Encode qw( encode );
 use C4::Auth;    # get_template_and_user
 use C4::Members;
 use C4::Branch;
@@ -91,7 +92,8 @@ if ( $op eq "add_confirm" ) {
 	else {
 		my $scrubber = C4::Scrubber->new();
 		foreach my $suggest (keys %$suggestion){
-		    $suggestion->{$suggest} = $scrubber->scrub($suggestion->{$suggest});
+            # Don't know why the encode is needed for Perl v5.10 here
+            $suggestion->{$suggest} = Encode::encode("utf8", $scrubber->scrub($suggestion->{$suggest}) );
 		}
         $suggestion->{suggesteddate} = dt_from_string;
         $suggestion->{branchcode} = $input->param('branchcode') || C4::Context->userenv->{"branch"};
