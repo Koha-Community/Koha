@@ -41,6 +41,6 @@ GetOptions(
 
 make_schema_at(
     "Koha::Schema",
-    {debug => 1, dump_directory => $path},
+    { debug => 1, dump_directory => $path, preserve_case => 1 },
     ["DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",$db_user, $db_passwd ]
 );
