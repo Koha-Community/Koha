@@ -443,6 +443,9 @@ Returns item record
 =cut
 
 my %default_values_for_mod_from_marc = (
+# DO NOT include (internal) item fields here.
+# Only fields that are related to the MARC structure used in additem.pl
+# Bug 7817 removed permanent_location.
     barcode              => undef, 
     booksellerid         => undef, 
     ccode                => undef, 
@@ -459,10 +462,9 @@ my %default_values_for_mod_from_marc = (
     itemnotes            => undef, 
     itype                => undef, 
     location             => undef, 
-#    permanent_location   => undef, # "undef" counts as "exists" which disrupts proper handling of location and permanent_location in _do_column_fixes_for_mod()
     materials            => undef, 
     notforloan           => 0,
-    paidfor              => undef, 
+    paidfor              => undef,  # should not be here: see BZ 12817
     price                => undef, 
     replacementprice     => undef, 
     replacementpricedate => undef, 
@@ -2023,7 +2025,7 @@ sub _do_column_fixes_for_mod {
         (not defined $item->{'withdrawn'} or $item->{'withdrawn'} eq '')) {
         $item->{'withdrawn'} = 0;
     }
-    if (exists $item->{'location'} && !exists $item->{'permanent_location'}) {
+    if (exists $item->{'location'} && !$item->{'permanent_location'}) {
         $item->{'permanent_location'} = $item->{'location'};
     }
     if (exists $item->{'timestamp'}) {
