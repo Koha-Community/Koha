@@ -10,6 +10,7 @@ use MARC::Record;
 use C4::Biblio;
 use C4::XISBN;
 use C4::Context;
+use C4::Search;
 use Test::MockModule;
 
 BEGIN {
@@ -113,6 +114,10 @@ sub Mock_SimpleSearch {
     }
     $record->append_fields($biblionumber_field);
 
-    push @results, $record->as_usmarc;
+    my $indexing_mode = C4::Context->config('zebra_bib_index_mode') // 'dom';
+    push @results, ( $indexing_mode eq 'dom' )
+                    ? $record->as_xml()
+                    : $record->as_usmarc() ;
+
     return ( undef, \@results, 1 );
 }
