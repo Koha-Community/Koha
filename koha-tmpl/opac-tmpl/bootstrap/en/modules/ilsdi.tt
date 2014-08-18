@@ -764,7 +764,7 @@
                                     <dt><strong>patron_id</strong> (Required)</dt>
                                     <dd>the unique patron identifier in the ILS; the same identifier returned by LookupPatron or AuthenticatePatron</dd>
                                     <dt><strong>item_id</strong> (Required)</dt>
-                                    <dd>system item identifier</dd>
+                                    <dd>system hold identifier (returned by GetRecords and GetPatronInfo into element 'reserve_id')</dd>
                                 </dl>
                                 <h4>Example call</h4>
                                 <a href="ilsdi.pl?service=CancelHold&amp;patron_id=1&amp;item_id=1">
