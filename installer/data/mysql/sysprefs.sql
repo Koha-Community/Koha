@@ -97,6 +97,9 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('decreaseLoanHighHoldsValue',NULL,'','Specifies a threshold for the minimum number of holds needed to trigger a reduction in loan duration (used with decreaseLoanHighHolds)','Integer'),
 ('DefaultClassificationSource','ddc',NULL,'Default classification scheme used by the collection. E.g., Dewey, LCC, etc.','ClassSources'),
 ('DefaultLanguageField008','','','Fill in the default language for field 008 Range 35-37 of MARC21 records (e.g. eng, nor, ger, see <a href=\"http://www.loc.gov/marc/languages/language_code.html\">MARC Code List for Languages</a>)','Free'),
+('defaultLongOverdueChargeValue', NULL, NULL, "Charge a lost item to the borrower's account when the LOST value of the item changes to n.", 'integer'),
+('defaultLongOverdueDays', NULL, NULL, "Set the LOST value of an item when the item has been overdue for more than n days.", 'integer'),
+('defaultLongOverdueLostValue', NULL, NULL, "Set the LOST value of an item to n when the item has been overdue for more than defaultlongoverduedays days.", 'integer'),
 ('defaultSortField','relevance','relevance|popularity|call_number|pubdate|acqdate|title|author','Specify the default field used for sorting','Choice'),
 ('defaultSortOrder','dsc','asc|dsc|az|za','Specify the default sort order','Choice'),
 ('delimiter',';',';|tabulation|,|/|\\|#||','Define the default separator character for exporting reports','Choice'),
@@ -111,8 +114,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('EasyAnalyticalRecords','0','','If on, display in the catalogue screens tools to easily setup analytical record relationships','YesNo'),
 ('emailLibrarianWhenHoldIsPlaced','0',NULL,'If ON, emails the librarian whenever a hold is placed','YesNo'),
 ('EnableBorrowerFiles','0',NULL,'If enabled, allows librarians to upload and attach arbitrary files to a borrower record.','YesNo'),
-('EnableSearchHistory','0','','Enable or disable search history','YesNo'),
 ('EnableOpacSearchHistory','1','YesNo','Enable or disable opac search history',''),
+('EnableSearchHistory','0','','Enable or disable search history','YesNo'),
 ('EnhancedMessagingPreferences','0','','If ON, allows patrons to select to receive additional messages about items due or nearly due.','YesNo'),
 ('expandedSearchOption','0',NULL,'If ON, set advanced search to be expanded by default','YesNo'),
 ('ExpireReservesMaxPickUpDelay','0','','Enabling this allows holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay','YesNo'),
@@ -469,8 +472,5 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('XSLTDetailsDisplay','default','','Enable XSL stylesheet control over details page display on intranet','Free'),
 ('XSLTResultsDisplay','default','','Enable XSL stylesheet control over results page display on intranet','Free'),
 ('z3950AuthorAuthFields','701,702,700',NULL,'Define the MARC biblio fields for Personal Name Authorities to fill biblio.author','free'),
-('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo'),
-('defaultlongoverduechargevalue', NULL, NULL, "Charge a lost item to the borrower's account when the LOST value of the item changes to n.", 'integer');
-('defaultlongoverduedays', NULL, NULL, "Set the LOST value of an item when the item has been overdue for more than n days.", 'integer');
-('defaultlongoverduelostvalue', NULL, NULL, "Set the LOST value of an item to n when the item has been overdue for more than defaultlongoverduedays days.", 'integer');
+('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo')
 ;
