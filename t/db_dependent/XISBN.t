@@ -53,19 +53,33 @@ $trial = C4::XISBN::_get_biblio_from_xisbn($isbn1);
 is( $trial->{biblionumber},
     $biblionumber1, "Gets biblionumber like the previous test." );
 
+## Test ThingISBN
 $context->set_preference( 'ThingISBN', 1 );
 $context->set_preference( 'XISBN', 0 );
-my $results_thingisbn = C4::XISBN::get_xisbns($isbn1);
-is( $results_thingisbn->[0]->{biblionumber},
-    $biblionumber3,
-    "Gets correct biblionumber from a book with a similar isbn using ThingISBN." );
 
+my $results_thingisbn;
+eval { $results_thingisbn = C4::XISBN::get_xisbns($isbn1); };
+SKIP: {
+    skip "Problem retrieving ThingISBN", 1
+        unless $@ eq '';
+    is( $results_thingisbn->[0]->{biblionumber},
+        $biblionumber3,
+        "Gets correct biblionumber from a book with a similar isbn using ThingISBN." );
+}
+
+## Test XISBN
 $context->set_preference( 'ThingISBN', 0 );
 $context->set_preference( 'XISBN', 1 );
-my $results_xisbn = C4::XISBN::get_xisbns($isbn1);
-is( $results_xisbn->[0]->{biblionumber},
-    $biblionumber3,
-    "Gets correct biblionumber from a book with a similar isbn using XISBN." );
+
+my $results_xisbn;
+eval { $results_xisbn = C4::XISBN::get_xisbns($isbn1); };
+SKIP: {
+    skip "Problem retrieving XISBN", 1
+        unless $@ eq '';
+    is( $results_xisbn->[0]->{biblionumber},
+        $biblionumber3,
+        "Gets correct biblionumber from a book with a similar isbn using XISBN." );
+}
 
 $dbh->rollback;
 
