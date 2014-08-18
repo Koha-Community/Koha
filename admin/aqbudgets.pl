@@ -302,7 +302,7 @@ if ( $op eq 'list' ) {
         $budget->{'budget_remaining'} = $budget->{'budget_amount'} - $budget->{'budget_spent'} - $budget->{budget_ordered};
         $budget->{'total_remaining'} = $budget->{'budget_amount'} - $budget->{'total_spent'} - $budget->{total_ordered};
         # adds to total  - only if budget is a 'top-level' budget
-        if ($budget->{depth} == 0) {
+        unless ( defined $budget->{budget_parent_id} ) {
             $period_alloc_total += $budget->{'budget_amount'};
             $spent_total += $budget->{total_spent};
             $ordered_total += $budget->{total_ordered};
