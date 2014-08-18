@@ -121,8 +121,9 @@ __PACKAGE__->table("reserves");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
-=head2 lowestpriority
+=head2 lowestPriority
 
+  accessor: 'lowest_priority'
   data_type: 'tinyint'
   is_nullable: 0
 
@@ -188,8 +189,8 @@ __PACKAGE__->add_columns(
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "expirationdate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
-  "lowestpriority",
-  { data_type => "tinyint", is_nullable => 0 },
+  "lowestPriority",
+  { accessor => "lowest_priority", data_type => "tinyint", is_nullable => 0 },
   "suspend",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "suspend_until",
@@ -285,8 +286,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ig/fobzvZf1OgAHZFtkyyQ
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-18 13:01:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jzng9D1Pns0I2PUF7Wssiw
 
 __PACKAGE__->belongs_to(
   "item",

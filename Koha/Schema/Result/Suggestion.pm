@@ -74,8 +74,9 @@ __PACKAGE__->table("suggestions");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
-=head2 status
+=head2 STATUS
 
+  accessor: 'status'
   data_type: 'varchar'
   default_value: (empty string)
   is_nullable: 0
@@ -227,8 +228,14 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "rejecteddate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
-  "status",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
+  "STATUS",
+  {
+    accessor => "status",
+    data_type => "varchar",
+    default_value => "",
+    is_nullable => 0,
+    size => 10,
+  },
   "note",
   { data_type => "mediumtext", is_nullable => 1 },
   "author",
@@ -293,8 +300,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("suggestionid");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-12-13 01:10:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LJoqZVAeoZ0ra2BKxXRQMQ
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-18 13:01:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tMbXZ1id2ls57UMp5jicFA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

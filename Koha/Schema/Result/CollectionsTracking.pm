@@ -29,8 +29,9 @@ __PACKAGE__->table("collections_tracking");
   is_auto_increment: 1
   is_nullable: 0
 
-=head2 colid
+=head2 colId
 
+  accessor: 'col_id'
   data_type: 'integer'
   default_value: 0
   is_nullable: 0
@@ -50,8 +51,13 @@ items.itemnumber
 __PACKAGE__->add_columns(
   "collections_tracking_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "colid",
-  { data_type => "integer", default_value => 0, is_nullable => 0 },
+  "colId",
+  {
+    accessor      => "col_id",
+    data_type     => "integer",
+    default_value => 0,
+    is_nullable   => 0,
+  },
   "itemnumber",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
 );
@@ -69,8 +75,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("collections_tracking_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aV5bgiXNrskXo+q+WLuwPg
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-18 13:01:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:s8ZFSmMJt313bz3XdlhITQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

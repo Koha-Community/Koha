@@ -23,20 +23,23 @@ __PACKAGE__->table("branch_transfer_limits");
 
 =head1 ACCESSORS
 
-=head2 limitid
+=head2 limitId
 
+  accessor: 'limit_id'
   data_type: 'integer'
   is_auto_increment: 1
   is_nullable: 0
 
-=head2 tobranch
+=head2 toBranch
 
+  accessor: 'to_branch'
   data_type: 'varchar'
   is_nullable: 0
   size: 10
 
-=head2 frombranch
+=head2 fromBranch
 
+  accessor: 'from_branch'
   data_type: 'varchar'
   is_nullable: 0
   size: 10
@@ -56,12 +59,27 @@ __PACKAGE__->table("branch_transfer_limits");
 =cut
 
 __PACKAGE__->add_columns(
-  "limitid",
-  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "tobranch",
-  { data_type => "varchar", is_nullable => 0, size => 10 },
-  "frombranch",
-  { data_type => "varchar", is_nullable => 0, size => 10 },
+  "limitId",
+  {
+    accessor          => "limit_id",
+    data_type         => "integer",
+    is_auto_increment => 1,
+    is_nullable       => 0,
+  },
+  "toBranch",
+  {
+    accessor => "to_branch",
+    data_type => "varchar",
+    is_nullable => 0,
+    size => 10,
+  },
+  "fromBranch",
+  {
+    accessor => "from_branch",
+    data_type => "varchar",
+    is_nullable => 0,
+    size => 10,
+  },
   "itemtype",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "ccode",
@@ -72,17 +90,17 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</limitid>
+=item * L</limitId>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("limitid");
+__PACKAGE__->set_primary_key("limitId");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HN/uEtGTNOewMCqTQZ1Vew
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-18 13:01:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XPpJwcw5PRa7Fo7PRg32zg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

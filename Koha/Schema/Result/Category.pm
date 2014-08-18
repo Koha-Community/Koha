@@ -102,8 +102,9 @@ __PACKAGE__->table("categories");
   is_nullable: 0
   size: 1
 
-=head2 blockexpiredpatronopacactions
+=head2 BlockExpiredPatronOpacActions
 
+  accessor: 'block_expired_patron_opac_actions'
   data_type: 'tinyint'
   default_value: -1
   is_nullable: 0
@@ -146,8 +147,13 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "category_type",
   { data_type => "varchar", default_value => "A", is_nullable => 0, size => 1 },
-  "blockexpiredpatronopacactions",
-  { data_type => "tinyint", default_value => -1, is_nullable => 0 },
+  "BlockExpiredPatronOpacActions",
+  {
+    accessor      => "block_expired_patron_opac_actions",
+    data_type     => "tinyint",
+    default_value => -1,
+    is_nullable   => 0,
+  },
   "default_privacy",
   {
     data_type => "enum",
@@ -247,8 +253,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-05-26 01:25:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7am0HIdPPQD5sZyKF4FipQ
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-18 13:01:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:T4i7vp1kAZFXy6DiV1dqyw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

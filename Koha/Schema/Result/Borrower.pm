@@ -134,57 +134,67 @@ __PACKAGE__->table("borrowers");
   data_type: 'text'
   is_nullable: 1
 
-=head2 b_streetnumber
+=head2 B_streetnumber
 
+  accessor: 'b_streetnumber'
   data_type: 'varchar'
   is_nullable: 1
   size: 10
 
-=head2 b_streettype
+=head2 B_streettype
 
+  accessor: 'b_streettype'
   data_type: 'varchar'
   is_nullable: 1
   size: 50
 
-=head2 b_address
+=head2 B_address
 
+  accessor: 'b_address'
   data_type: 'varchar'
   is_nullable: 1
   size: 100
 
-=head2 b_address2
+=head2 B_address2
 
+  accessor: 'b_address2'
   data_type: 'text'
   is_nullable: 1
 
-=head2 b_city
+=head2 B_city
 
+  accessor: 'b_city'
   data_type: 'mediumtext'
   is_nullable: 1
 
-=head2 b_state
+=head2 B_state
 
+  accessor: 'b_state'
   data_type: 'text'
   is_nullable: 1
 
-=head2 b_zipcode
+=head2 B_zipcode
 
+  accessor: 'b_zipcode'
   data_type: 'varchar'
   is_nullable: 1
   size: 25
 
-=head2 b_country
+=head2 B_country
 
+  accessor: 'b_country'
   data_type: 'text'
   is_nullable: 1
 
-=head2 b_email
+=head2 B_email
 
+  accessor: 'b_email'
   data_type: 'text'
   is_nullable: 1
 
-=head2 b_phone
+=head2 B_phone
 
+  accessor: 'b_phone'
   data_type: 'mediumtext'
   is_nullable: 1
 
@@ -442,26 +452,46 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "phonepro",
   { data_type => "text", is_nullable => 1 },
-  "b_streetnumber",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
-  "b_streettype",
-  { data_type => "varchar", is_nullable => 1, size => 50 },
-  "b_address",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
-  "b_address2",
-  { data_type => "text", is_nullable => 1 },
-  "b_city",
-  { data_type => "mediumtext", is_nullable => 1 },
-  "b_state",
-  { data_type => "text", is_nullable => 1 },
-  "b_zipcode",
-  { data_type => "varchar", is_nullable => 1, size => 25 },
-  "b_country",
-  { data_type => "text", is_nullable => 1 },
-  "b_email",
-  { data_type => "text", is_nullable => 1 },
-  "b_phone",
-  { data_type => "mediumtext", is_nullable => 1 },
+  "B_streetnumber",
+  {
+    accessor => "b_streetnumber",
+    data_type => "varchar",
+    is_nullable => 1,
+    size => 10,
+  },
+  "B_streettype",
+  {
+    accessor => "b_streettype",
+    data_type => "varchar",
+    is_nullable => 1,
+    size => 50,
+  },
+  "B_address",
+  {
+    accessor => "b_address",
+    data_type => "varchar",
+    is_nullable => 1,
+    size => 100,
+  },
+  "B_address2",
+  { accessor => "b_address2", data_type => "text", is_nullable => 1 },
+  "B_city",
+  { accessor => "b_city", data_type => "mediumtext", is_nullable => 1 },
+  "B_state",
+  { accessor => "b_state", data_type => "text", is_nullable => 1 },
+  "B_zipcode",
+  {
+    accessor => "b_zipcode",
+    data_type => "varchar",
+    is_nullable => 1,
+    size => 25,
+  },
+  "B_country",
+  { accessor => "b_country", data_type => "text", is_nullable => 1 },
+  "B_email",
+  { accessor => "b_email", data_type => "text", is_nullable => 1 },
+  "B_phone",
+  { accessor => "b_phone", data_type => "mediumtext", is_nullable => 1 },
   "dateofbirth",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "branchcode",
@@ -1072,8 +1102,8 @@ Composing rels: L</course_instructors> -> course
 __PACKAGE__->many_to_many("courses", "course_instructors", "course");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5cfpOojccKCoVRMj+0mWHg
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-18 13:01:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZzZiKYN4b/LuEARX4rawhA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
