@@ -10,6 +10,7 @@ use MARC::Record;
 use Test::MockModule;
 use Test::MockObject;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Biblio;
@@ -81,7 +82,7 @@ subtest 'Test merge A1 to A2 (within same authtype)' => sub {
 
 subtest 'Test merge A1 to modified A1' => sub {
 # Tests originate from bug 11700
-    plan tests => 8;
+    plan tests => 9;
 
     # Simulate modifying an authority from auth1old to auth1new
     my $auth1old = MARC::Record->new;
@@ -103,6 +104,7 @@ subtest 'Test merge A1 to modified A1' => sub {
     # Time to merge
     @zebrarecords = ( $MARC1, $MARC2 );
     $index = 0;
+    t::lib::Mocks::mock_preference('AuthorityMergeMode', 'loose');
     my $rv = C4::AuthoritiesMarc::merge( $authid1, $auth1old, $authid1, $auth1new );
     is( $rv, 2, 'Both records are updated now' );
 
@@ -117,10 +119,18 @@ subtest 'Test merge A1 to modified A1' => sub {
     compare_field_count( $MARC2, $biblio2, 1 );
     compare_field_order( $MARC2, $biblio2, 1 );
     is( $auth1new->field(109)->subfield('a'), $biblio2->field(109)->subfield('a'), 'Record2 values updated correctly' );
+    # This is only true in loose mode:
+    is( $biblio1->field(109)->subfield('b'), $MARC1->field(109)->subfield('b'), 'Subfield not overwritten in loose mode');
 
-    # TODO Following test will change when we improve merge
-    # Will depend on a preference
-    is( $biblio1->field(109)->subfield('b'), $MARC1->field(109)->subfield('b'), 'Record not overwritten while merging');
+    # Merge again in strict mode
+    t::lib::Mocks::mock_preference('AuthorityMergeMode', 'strict');
+    ModBiblio( $MARC1, $biblionumber1, '' );
+    @zebrarecords = ( $MARC1 );
+    $index = 0;
+    $rv = C4::AuthoritiesMarc::merge( $authid1, $auth1old, $authid1, $auth1new );
+    $biblio1 = GetMarcBiblio($biblionumber1);
+    is( $biblio1->field(109)->subfield('b'), undef, 'Subfield overwritten in strict mode' );
+    t::lib::Mocks::mock_preference('AuthorityMergeMode', 'loose');
 };
 
 subtest 'Test merge A1 to B1 (changing authtype)' => sub {
