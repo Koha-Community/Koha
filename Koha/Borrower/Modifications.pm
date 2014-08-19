@@ -51,16 +51,18 @@ sub AddModifications {
     if( $self->{borrowernumber} ) {
         return if( not keys %$data );
         $data->{borrowernumber} = $self->{borrowernumber};
+        $data->{verification_token} = '';
     }
     elsif( $self->{verification_token} ) {
         $data->{verification_token} = $self->{verification_token};
+        $data->{borrowernumber} = 0;
     }
     else {
         return;
     }
 
     my $rs = Koha::Database->new()->schema->resultset('BorrowerModification');
-    return $rs->update_or_create($data);
+    return $rs->update_or_create($data, { key => 'primary' } );
 }
 
 =head2 Verify
