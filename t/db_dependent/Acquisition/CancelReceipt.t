@@ -69,6 +69,7 @@ CancelReceipt($ordernumber);
 my $order = GetOrder( $ordernumber );
 is(scalar GetItemnumbersFromOrder($order->{ordernumber}), 0, "Create items on receiving: 0 item exist after cancelling a receipt");
 
+$itemnumber = AddItem({}, $biblionumber);
 t::lib::Mocks::mock_preference('AcqCreateItem', 'ordering');
 t::lib::Mocks::mock_preference('AcqItemSetSubfieldsWhenReceiptIsCancelled', '7=9'); # notforloan is mapped with 952$7
 ( undef, $ordernumber ) = C4::Acquisition::NewOrder(
