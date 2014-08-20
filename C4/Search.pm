@@ -656,7 +656,7 @@ sub getRecords {
     C4::Search::_get_facets_data_from_record( $marc_record, $facets, $facets_counter );
 
 Internal function that extracts facets information from a MARC::Record object
-and populates $facets_counter for using in getRecords.
+and populates $facets_counter and $facets_info for using in getRecords.
 
 $facets is expected to be filled with C4::Koha::getFacets output (i.e. the configured
 facets for Zebra).
@@ -673,14 +673,17 @@ sub _get_facets_data_from_record {
 
         foreach my $tag ( @{ $facet->{ tags } } ) {
 
-            # avoid first line
+            # tag number is the first three digits
             my $tag_num          = substr( $tag, 0, 3 );
+            # subfields are the remainder
             my $subfield_letters = substr( $tag, 3 );
-            # Removed when as_string fixed
-            my @subfields = $subfield_letters =~ /./sg;
 
             my @fields = $marc_record->field( $tag_num );
             foreach my $field (@fields) {
+                # If $field->indicator(1) eq 'z', it means it is a 'see from'
+                # field introduced because of IncludeSeeFromInSearches, so skip it
+                next if $field->indicator(1) eq 'z';
+
                 my $data = $field->as_string( $subfield_letters, $facet->{ sep } );
 
                 unless ( grep { /^\Q$data\E$/ } @used_datas ) {
