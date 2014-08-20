@@ -129,6 +129,8 @@ $contextmodule->mock('preference', sub {
         return '--';
     } elsif ($pref eq 'DisplayLibraryFacets') {
         return 'holding';
+    } elsif ($pref eq 'UNIMARCAuthorsFacetsSeparator') {
+        return '--';
     } else {
         warn "The syspref $pref was requested but I don't know what to say; this indicates that the test requires updating"
             unless $pref =~ m/(XSLT|item|branch|holding|image)/i;
@@ -859,7 +861,6 @@ if ( $indexing_mode eq 'dom' ) {
     
     # Test facet calculation
     my $facets_counter = {};
-    my $facets_info    = {};
     my $facets         = C4::Koha::getFacets();
     # Create a record with a 100$z field
     my $marc_record    = MARC::Record->new;
@@ -869,7 +870,7 @@ if ( $indexing_mode eq 'dom' ) {
         [ '100', 'z', ' ', a => 'Tomasito' ],
         [ '245', ' ', ' ', a => 'First try' ]
     );
-    C4::Search::_get_facets_data_from_record($marc_record, $facets, $facets_counter,$facets_info);
+    C4::Search::_get_facets_data_from_record( $marc_record, $facets, $facets_counter );
     is_deeply( { au => { 'Cohen Arazi, Tomas' => 1 } },  $facets_counter,
         "_get_facets_data_from_record doesn't count 100\$z (Bug 12788)");
     $marc_record    = MARC::Record->new;
@@ -879,9 +880,32 @@ if ( $indexing_mode eq 'dom' ) {
         [ '100', 'z', ' ', a => 'Tomasito' ],
         [ '245', ' ', ' ', a => 'Second try' ]
     );
-    C4::Search::_get_facets_data_from_record($marc_record, $facets, $facets_counter, $facets_info);
+    C4::Search::_get_facets_data_from_record( $marc_record, $facets, $facets_counter );
     is_deeply( { au => { 'Cohen Arazi, Tomas' => 2 } },  $facets_counter,
         "_get_facets_data_from_record correctly counts author facet twice");
+
+    # Test _get_facets_info
+    my $facets_info = C4::Search::_get_facets_info( $facets );
+    my $expected_facets_info_marc21 = {
+                   'au' => { 'expanded'    => undef,
+                             'label_value' => "Authors" },
+        'holdingbranch' => { 'expanded'    => undef,
+                             'label_value' => "HoldingLibrary" },
+                'itype' => { 'expanded'    => undef,
+                             'label_value' => "ItemTypes" },
+             'location' => { 'expanded'    => undef,
+                             'label_value' => "Location" },
+                   'se' => { 'expanded'    => undef,
+                             'label_value' => "Series" },
+               'su-geo' => { 'expanded'    => undef,
+                             'label_value' => "Places" },
+                'su-to' => { 'expanded'    => undef,
+                             'label_value' => "Topics" },
+                'su-ut' => { 'expanded'    => undef,
+                             'label_value' => "Titles" }
+    };
+    is_deeply( $facets_info, $expected_facets_info_marc21,
+        "_get_facets_info returns the correct data");
 
     cleanup();
 }
@@ -954,26 +978,48 @@ sub run_unimarc_search_tests {
     );
     is($count, 24, 'UNIMARC authorities: hits on any starts with "jean"');
 
+    # Test _get_facets_info
+    my $facets      = C4::Koha::getFacets();
+    my $facets_info = C4::Search::_get_facets_info( $facets );
+    my $expected_facets_info_unimarc = {
+                   'au' => { 'expanded'    => undef,
+                             'label_value' => "Authors" },
+        'holdingbranch' => { 'expanded'    => undef,
+                             'label_value' => "HoldingLibrary" },
+             'location' => { 'expanded'    => undef,
+                             'label_value' => "Location" },
+                   'se' => { 'expanded'    => undef,
+                             'label_value' => "Series" },
+               'su-geo' => { 'expanded'    => undef,
+                             'label_value' => "Places" },
+                'su-to' => { 'expanded'    => undef,
+                             'label_value' => "Topics" },
+                'su-ut' => { 'expanded'    => undef,
+                             'label_value' => "Titles" }
+    };
+    is_deeply( $facets_info, $expected_facets_info_unimarc,
+        "_get_facets_info returns the correct data");
+
     cleanup();
 }
 
 subtest 'MARC21 + GRS-1' => sub {
-    plan tests => 108;
+    plan tests => 109;
     run_marc21_search_tests('grs1');
 };
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 108;
+    plan tests => 109;
     run_marc21_search_tests('dom');
 };
 
 subtest 'UNIMARC + GRS-1' => sub {
-    plan tests => 13;
+    plan tests => 14;
     run_unimarc_search_tests('grs1');
 };
 
 subtest 'UNIMARC + DOM' => sub {
-    plan tests => 13;
+    plan tests => 14;
     run_unimarc_search_tests('dom');
 };
 
