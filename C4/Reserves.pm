@@ -181,26 +181,26 @@ sub AddReserve {
     # updates take place here
     if ( $fee > 0 ) {
         my $nextacctno = &getnextacctno( $borrowernumber );
-        my $query      = qq/
+        my $query      = qq{
         INSERT INTO accountlines
             (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
         VALUES
             (?,?,now(),?,?,'Res',?)
-    /;
+    };
         my $usth = $dbh->prepare($query);
         $usth->execute( $borrowernumber, $nextacctno, $fee,
             "Reserve Charge - $title", $fee );
     }
 
     #if ($const eq 'a'){
-    my $query = qq/
+    my $query = qq{
         INSERT INTO reserves
             (borrowernumber,biblionumber,reservedate,branchcode,constrainttype,
             priority,reservenotes,itemnumber,found,waitingdate,expirationdate)
         VALUES
              (?,?,?,?,?,
              ?,?,?,?,?,?)
-    /;
+             };
     my $sth = $dbh->prepare($query);
     $sth->execute(
         $borrowernumber, $biblionumber, $resdate, $branch,
@@ -240,12 +240,12 @@ sub AddReserve {
 
     #}
     ($const eq "o" || $const eq "e") or return;   # FIXME: why not have a useful return value?
-    $query = qq/
+    $query = qq{
         INSERT INTO reserveconstraints
             (borrowernumber,biblionumber,reservedate,biblioitemnumber)
         VALUES
             (?,?,?,?)
-    /;
+    };
     $sth = $dbh->prepare($query);    # keep prepare outside the loop!
     foreach (@$bibitems) {
         $sth->execute($borrowernumber, $biblionumber, $resdate, $_);
@@ -701,11 +701,11 @@ sub GetReserveFee {
     #check for issues;
     my $dbh   = C4::Context->dbh;
     my $const = lc substr( $constraint, 0, 1 );
-    my $query = qq/
+    my $query = qq{
       SELECT * FROM borrowers
     LEFT JOIN categories ON borrowers.categorycode = categories.categorycode
     WHERE borrowernumber = ?
-    /;
+    };
     my $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber);
     my $data = $sth->fetchrow_hashref;
@@ -1882,7 +1882,7 @@ sub _Findgroupreserve {
 
     # TODO: consolidate at least the SELECT portion of the first 2 queries to a common $select var.
     # check for exact targetted match
-    my $item_level_target_query = qq/
+    my $item_level_target_query = qq{
         SELECT reserves.biblionumber        AS biblionumber,
                reserves.borrowernumber      AS borrowernumber,
                reserves.reservedate         AS reservedate,
@@ -1905,7 +1905,7 @@ sub _Findgroupreserve {
         AND reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
         AND suspend = 0
         ORDER BY priority
-    /;
+    };
     my $sth = $dbh->prepare($item_level_target_query);
     $sth->execute($itemnumber, $lookahead||0);
     my @results;
@@ -1916,7 +1916,7 @@ sub _Findgroupreserve {
     return @results if @results;
     
     # check for title-level targetted match
-    my $title_level_target_query = qq/
+    my $title_level_target_query = qq{
         SELECT reserves.biblionumber        AS biblionumber,
                reserves.borrowernumber      AS borrowernumber,
                reserves.reservedate         AS reservedate,
@@ -1939,7 +1939,7 @@ sub _Findgroupreserve {
         AND reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
         AND suspend = 0
         ORDER BY priority
-    /;
+    };
     $sth = $dbh->prepare($title_level_target_query);
     $sth->execute($itemnumber, $lookahead||0);
     @results = ();
@@ -1949,7 +1949,7 @@ sub _Findgroupreserve {
     }
     return @results if @results;
 
-    my $query = qq/
+    my $query = qq{
         SELECT reserves.biblionumber               AS biblionumber,
                reserves.borrowernumber             AS borrowernumber,
                reserves.reservedate                AS reservedate,
@@ -1974,7 +1974,7 @@ sub _Findgroupreserve {
           AND reserves.reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
           AND suspend = 0
           ORDER BY priority
-    /;
+    };
     $sth = $dbh->prepare($query);
     $sth->execute( $biblio, $bibitem, $itemnumber, $lookahead||0);
     @results = ();
