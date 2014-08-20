@@ -23,7 +23,6 @@ use Carp;
 use C4::Context;
 use C4::Debug;
 use C4::Dates qw(format_date format_date_in_iso);
-use MARC::Record;
 use C4::Suggestions;
 use C4::Biblio;
 use C4::Contract;
@@ -33,6 +32,11 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Order;
 use Koha::Acquisition::Bookseller;
 use Koha::Number::Price;
+
+use C4::Koha qw( subfield_is_koha_internal_p );
+
+use MARC::Field;
+use MARC::Record;
 
 use Time::localtime;
 use HTML::Entities;
@@ -86,6 +90,8 @@ BEGIN {
         &GetOrderUsers
         &ModOrderUsers
         &NotifyOrderUsers
+
+        &FillWithDefaultValues
     );
 }
 
@@ -2982,6 +2988,51 @@ sub NotifyOrderUsers {
                     message_transport_type => 'email',
                 }
             ) or warn "can't enqueue letter $letter";
+        }
+    }
+}
+
+=head3 FillWithDefaultValues
+
+FillWithDefaultValues( $marc_record );
+
+This will update the record with default value defined in the ACQ framework.
+For all existing fields, if a default value exists and there are no subfield, it will be created.
+If the field does not exist, it will be created too.
+
+=cut
+
+sub FillWithDefaultValues {
+    my ($record) = @_;
+    my $tagslib = C4::Biblio::GetMarcStructure( 1, 'ACQ' );
+    if ($tagslib) {
+        my ($itemfield) =
+          C4::Biblio::GetMarcFromKohaField( 'items.itemnumber', '' );
+        for my $tag ( sort keys %$tagslib ) {
+            next unless $tag;
+            next if $tag == $itemfield;
+            for my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
+                next if ( subfield_is_koha_internal_p($subfield) );
+                my $defaultvalue = $tagslib->{$tag}{$subfield}{defaultvalue};
+                if ( defined $defaultvalue and $defaultvalue ne '' ) {
+                    my @fields = $record->field($tag);
+                    if (@fields) {
+                        for my $field (@fields) {
+                            unless ( defined $field->subfield($subfield) ) {
+                                $field->add_subfields(
+                                    $subfield => $defaultvalue );
+                            }
+                        }
+                    }
+                    else {
+                        $record->insert_fields_ordered(
+                            MARC::Field->new(
+                                $tag, '', '', $subfield => $defaultvalue
+                            )
+                        );
+                    }
+                }
+            }
         }
     }
 }

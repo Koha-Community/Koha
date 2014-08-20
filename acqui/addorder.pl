@@ -250,6 +250,8 @@ if ( $orderinfo->{quantity} ne '0' ) {
                 "biblioitems.editionstatement"=> $$orderinfo{editionstatement} ? $$orderinfo{editionstatement} : "",
             });
 
+        C4::Acquisition::FillWithDefaultValues( $record );
+
         # create the record in catalogue, with framework ''
         my ($biblionumber,$bibitemnum) = AddBiblio($record,'');
         # change suggestion status if applicable
