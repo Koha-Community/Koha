@@ -737,6 +737,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '5.61',
     },
+    'HTML:HTMLDoc' => {
+        'usage'    => 'Discharge generation',
+        'required' => '0',
+        'min_ver'  => '0.07',
+    },
 };
 
 1;
