@@ -520,7 +520,8 @@ sub getRecords {
                             next;
                         }
 
-                        _get_facets_data_from_record( $marc_record, $facets, $facets_counter, $facets_info );
+                        _get_facets_data_from_record( $marc_record, $facets, $facets_counter );
+                        $facets_info = _get_facets_info( $facets );
                     }
                 }
 
@@ -656,7 +657,7 @@ sub getRecords {
     C4::Search::_get_facets_data_from_record( $marc_record, $facets, $facets_counter );
 
 Internal function that extracts facets information from a MARC::Record object
-and populates $facets_counter and $facets_info for using in getRecords.
+and populates $facets_counter for using in getRecords.
 
 $facets is expected to be filled with C4::Koha::getFacets output (i.e. the configured
 facets for Zebra).
@@ -665,7 +666,7 @@ facets for Zebra).
 
 sub _get_facets_data_from_record {
 
-    my ( $marc_record, $facets, $facets_counter, $facets_info ) = @_;
+    my ( $marc_record, $facets, $facets_counter ) = @_;
 
     for my $facet (@$facets) {
 
@@ -692,10 +693,30 @@ sub _get_facets_data_from_record {
                 }
             }
         }
-        # update $facets_info so we know what facet categories need to be rendered
+    }
+}
+
+=head2 _get_facets_info
+
+    my $facets_info = C4::Search::_get_facets_info( $facets )
+
+Internal function that extracts facets information and properly builds
+the data structure needed to render facet labels.
+
+=cut
+
+sub _get_facets_info {
+
+    my $facets = shift;
+
+    my $facets_info = {};
+
+    for my $facet ( @$facets ) {
         $facets_info->{ $facet->{ idx } }->{ label_value } = $facet->{ label };
         $facets_info->{ $facet->{ idx } }->{ expanded }    = $facet->{ expanded };
     }
+
+    return $facets_info;
 }
 
 sub pazGetRecords {
