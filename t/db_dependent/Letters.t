@@ -21,10 +21,13 @@ use Modern::Perl;
 
 use Test::More tests => 45;
 
+use MARC::Record;
+use C4::Biblio qw( AddBiblio );
 use C4::Context;
 use C4::Letters;
 use C4::Members;
 use C4::Branch;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use t::lib::Mocks;
 
 my $dbh = C4::Context->dbh;
@@ -37,13 +40,17 @@ $dbh->do(q|DELETE FROM letter|);
 $dbh->do(q|DELETE FROM message_queue|);
 $dbh->do(q|DELETE FROM message_transport_types|);
 
+my $date = dt_from_string;
 my $borrowernumber = AddMember(
     firstname    => 'Jane',
     surname      => 'Smith',
     categorycode => 'PT',
     branchcode   => 'CPL',
+    dateofbirth  => $date,
 );
 
+my $marc_record = MARC::Record->new;
+my( $biblionumber, $biblioitemnumber ) = AddBiblio( $marc_record, '' );
 
 # GetMessageTransportTypes
 my $mtts = C4::Letters::GetMessageTransportTypes();
@@ -126,7 +133,10 @@ The following item(s) is/are currently <<status>>:
 
 <item> <<count>>. <<items.itemcallnumber>>, Barcode: <<items.barcode>> </item>
 
-Thank-you for your prompt attention to this matter.|;
+Thank-you for your prompt attention to this matter.
+Don't forget your date of birth: <<borrowers.dateofbirth>>.
+Look at this wonderful biblio timestamp: <<biblio.timestamp>>.
+|;
 
 $dbh->do( q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES ('CPL','my module','my code','my name',1,?,?,'email')|, undef, $title, $content );
 $letters = C4::Letters::GetLetters();
@@ -189,12 +199,13 @@ is( @$alerts, 0, 'delalert removes an alert' );
 # GetPreparedLetter
 t::lib::Mocks::mock_preference('OPACBaseURL', 'http://thisisatest.com');
 
-$content = 'This is a SMS for an <<status>>';
-$dbh->do( q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES ('CPL','my module','my code','my name',1,'my title',?,'sms')|, undef, $content );
+my $sms_content = 'This is a SMS for an <<status>>';
+$dbh->do( q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES ('CPL','my module','my code','my name',1,'my title',?,'sms')|, undef, $sms_content );
 
 my $tables = {
     borrowers => $borrowernumber,
     branches => 'CPL',
+    biblio => $biblionumber,
 };
 my $substitute = {
     status => 'overdue',
@@ -231,7 +242,9 @@ The following item(s) is/are currently $substitute->{status}:
 <item> 1. $repeat->[0]->{itemcallnumber}, Barcode: $repeat->[0]->{barcode} </item>
 <item> 2. $repeat->[1]->{itemcallnumber}, Barcode: $repeat->[1]->{barcode} </item>
 
-Thank-you for your prompt attention to this matter.|;
+Thank-you for your prompt attention to this matter.
+Don't forget your date of birth: | . output_pref({ dt => $date, dateonly => 1 }) . q|.
+Look at this wonderful biblio timestamp: | . output_pref({ dt => $date }) . ".\n";
 is( $prepared_letter->{title}, $my_title_letter, 'GetPreparedLetter returns the title correctly' );
 is( $prepared_letter->{content}, $my_content_letter, 'GetPreparedLetter returns the content correctly' );
 
