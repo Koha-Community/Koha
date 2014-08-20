@@ -857,6 +857,32 @@ if ( $indexing_mode eq 'dom' ) {
         getRecords('ccl=( AND )', '', ['title_az'], [ 'biblioserver' ], '20', 0, undef, \%branches, \%itemtypes, 'ccl', undef)
     } qr/WARNING: query problem with/, 'got warning instead of crash when attempting to run invalid query (bug 9578)';
     
+    # Test facet calculation
+    my $facets_counter = {};
+    my $facets_info    = {};
+    my $facets         = C4::Koha::getFacets();
+    # Create a record with a 100$z field
+    my $marc_record    = MARC::Record->new;
+    $marc_record->add_fields(
+        [ '001', '1234' ],
+        [ '100', ' ', ' ', a => 'Cohen Arazi, Tomas' ],
+        [ '100', 'z', ' ', a => 'Tomasito' ],
+        [ '245', ' ', ' ', a => 'First try' ]
+    );
+    C4::Search::_get_facets_data_from_record($marc_record, $facets, $facets_counter,$facets_info);
+    is_deeply( { au => { 'Cohen Arazi, Tomas' => 1 } },  $facets_counter,
+        "_get_facets_data_from_record doesn't count 100\$z (Bug 12788)");
+    $marc_record    = MARC::Record->new;
+    $marc_record->add_fields(
+        [ '001', '1234' ],
+        [ '100', ' ', ' ', a => 'Cohen Arazi, Tomas' ],
+        [ '100', 'z', ' ', a => 'Tomasito' ],
+        [ '245', ' ', ' ', a => 'Second try' ]
+    );
+    C4::Search::_get_facets_data_from_record($marc_record, $facets, $facets_counter, $facets_info);
+    is_deeply( { au => { 'Cohen Arazi, Tomas' => 2 } },  $facets_counter,
+        "_get_facets_data_from_record correctly counts author facet twice");
+
     cleanup();
 }
 
@@ -932,12 +958,12 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + GRS-1' => sub {
-    plan tests => 106;
+    plan tests => 108;
     run_marc21_search_tests('grs1');
 };
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 106;
+    plan tests => 108;
     run_marc21_search_tests('dom');
 };
 

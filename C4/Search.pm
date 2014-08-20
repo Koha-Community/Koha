@@ -340,8 +340,8 @@ sub getRecords {
     my $results_hashref = ();
 
     # Initialize variables for the faceted results objects
-    my $facets_counter = ();
-    my $facets_info    = ();
+    my $facets_counter = {};
+    my $facets_info    = {};
     my $facets         = getFacets();
     my $facets_maxrecs = C4::Context->preference('maxRecordsForFacets')||20;
 
@@ -499,51 +499,29 @@ sub getRecords {
                 }
                 $results_hashref->{ $servers[ $i - 1 ] } = $results_hash;
 
-# Fill the facets while we're looping, but only for the biblioserver and not for a scan
+                # Fill the facets while we're looping, but only for the
+                # biblioserver and not for a scan
                 if ( !$scan && $servers[ $i - 1 ] =~ /biblioserver/ ) {
 
-                    my $jmax =
-                      $size > $facets_maxrecs ? $facets_maxrecs : $size;
-                    for my $facet (@$facets) {
-                        for ( my $j = 0 ; $j < $jmax ; $j++ ) {
+                    my $jmax = $size > $facets_maxrecs
+                                ? $facets_maxrecs
+                                : $size;
 
-                            my $marc_record = new_record_from_zebra (
-                                    'biblioserver',
-                                    $results[ $i - 1 ]->record($j)->raw()
-                            );
+                    for ( my $j = 0 ; $j < $jmax ; $j++ ) {
 
-                            if ( ! defined $marc_record ) {
-                                warn "ERROR DECODING RECORD - $@: " .
-                                    $results[ $i - 1 ]->record($j)->raw();
-                                next;
-                            }
+                        my $marc_record = new_record_from_zebra (
+                                'biblioserver',
+                                $results[ $i - 1 ]->record($j)->raw()
+                        );
 
-                            my @used_datas = ();
+                        if ( ! defined $marc_record ) {
+                            warn "ERROR DECODING RECORD - $@: " .
+                                $results[ $i - 1 ]->record($j)->raw();
+                            next;
+                        }
 
-                            foreach my $tag ( @{ $facet->{tags} } ) {
-
-                                # avoid first line
-                                my $tag_num = substr( $tag, 0, 3 );
-                                my $subfield_letters = substr( $tag, 3 );
-                                # Removed when as_string fixed
-                                my @subfields = $subfield_letters =~ /./sg;
-
-                                my @fields = $marc_record->field($tag_num);
-                                foreach my $field (@fields) {
-                                    my $data = $field->as_string( $subfield_letters, $facet->{sep} );
-
-                                    unless ( grep { /^\Q$data\E$/ } @used_datas ) {
-                                        push @used_datas, $data;
-                                        $facets_counter->{ $facet->{idx} }->{$data}++;
-                                    }
-                                } # fields
-                            }    # field codes
-                        }    # records
-                        $facets_info->{ $facet->{idx} }->{label_value} =
-                          $facet->{label};
-                        $facets_info->{ $facet->{idx} }->{expanded} =
-                          $facet->{expanded};
-                    }    # facets
+                        _get_facets_data_from_record( $marc_record, $facets, $facets_counter, $facets_info );
+                    }
                 }
 
                 # warn "connection ", $i-1, ": $size hits";
@@ -671,6 +649,50 @@ sub getRecords {
             }
         );
     return ( undef, $results_hashref, \@facets_loop );
+}
+
+=head2 _get_facets_data_from_record
+
+    C4::Search::_get_facets_data_from_record( $marc_record, $facets, $facets_counter );
+
+Internal function that extracts facets information from a MARC::Record object
+and populates $facets_counter for using in getRecords.
+
+$facets is expected to be filled with C4::Koha::getFacets output (i.e. the configured
+facets for Zebra).
+
+=cut
+
+sub _get_facets_data_from_record {
+
+    my ( $marc_record, $facets, $facets_counter, $facets_info ) = @_;
+
+    for my $facet (@$facets) {
+
+        my @used_datas = ();
+
+        foreach my $tag ( @{ $facet->{ tags } } ) {
+
+            # avoid first line
+            my $tag_num          = substr( $tag, 0, 3 );
+            my $subfield_letters = substr( $tag, 3 );
+            # Removed when as_string fixed
+            my @subfields = $subfield_letters =~ /./sg;
+
+            my @fields = $marc_record->field( $tag_num );
+            foreach my $field (@fields) {
+                my $data = $field->as_string( $subfield_letters, $facet->{ sep } );
+
+                unless ( grep { /^\Q$data\E$/ } @used_datas ) {
+                    push @used_datas, $data;
+                    $facets_counter->{ $facet->{ idx } }->{ $data }++;
+                }
+            }
+        }
+        # update $facets_info so we know what facet categories need to be rendered
+        $facets_info->{ $facet->{ idx } }->{ label_value } = $facet->{ label };
+        $facets_info->{ $facet->{ idx } }->{ expanded }    = $facet->{ expanded };
+    }
 }
 
 sub pazGetRecords {
