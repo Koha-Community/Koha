@@ -306,13 +306,11 @@ sub SendAlerts {
         # search the biblionumber
         my $strsth =  $type eq 'claimacquisition'
             ? qq{
-            SELECT aqorders.*,aqbasket.*,biblio.*,biblioitems.*,aqbooksellers.*,
-            aqbooksellers.id AS booksellerid
+            SELECT aqorders.*,aqbasket.*,biblio.*,biblioitems.*
             FROM aqorders
             LEFT JOIN aqbasket ON aqbasket.basketno=aqorders.basketno
             LEFT JOIN biblio ON aqorders.biblionumber=biblio.biblionumber
             LEFT JOIN biblioitems ON aqorders.biblionumber=biblioitems.biblionumber
-            LEFT JOIN aqbooksellers ON aqbasket.booksellerid=aqbooksellers.id
             WHERE aqorders.ordernumber IN (
             }
             : qq{
