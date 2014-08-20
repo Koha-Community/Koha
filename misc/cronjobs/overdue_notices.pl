@@ -692,6 +692,23 @@ END_SQL
                         if ( ($mtt eq 'email' and not scalar @emails_to_use) or ($mtt eq 'sms' and not $data->{smsalertnumber}) ) {
                             # email or sms is requested but not exist, do a print.
                             $mtt = 'print';
+                            push @output_chunks,
+                              prepare_letter_for_printing(
+                              {   letter         => $letter,
+                                  borrowernumber => $borrowernumber,
+                                  firstname      => $data->{'firstname'},
+                                  lastname       => $data->{'surname'},
+                                  address1       => $data->{'address'},
+                                  address2       => $data->{'address2'},
+                                  city           => $data->{'city'},
+                                  postcode       => $data->{'zipcode'},
+                                  country        => $data->{'country'},
+                                  email          => $notice_email,
+                                  itemcount      => $itemcount,
+                                  titles         => $titles,
+                                  outputformat   => defined $csvfilename ? 'csv' : defined $htmlfilename ? 'html' : defined $text_filename ? 'text' : '',
+                                }
+                              );
                         }
                         unless ( $mtt eq 'print' and $print_sent == 1 ) {
                             # Just sent a print if not already done.
