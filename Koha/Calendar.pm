@@ -91,15 +91,15 @@ sub exception_holidays {
 sub single_holidays {
     my ( $self ) = @_;
     my $dbh = C4::Context->dbh;
-    my $branch = $self->{branchcode};
-    if ( $single_holidays ) {
-        $self->{single_holidays} = $single_holidays;
-        return $single_holidays;
+    my $branchcode = $self->{branchcode};
+    if ( $single_holidays->{$branchcode} ) {
+        $self->{single_holidays}{$branchcode} = $single_holidays->{$branchcode};
+        return $single_holidays->{$branchcode};
     }
     my $single_holidays_sth = $dbh->prepare(
 'SELECT day, month, year FROM special_holidays WHERE branchcode = ? AND isexception = 0'
     );
-    $single_holidays_sth->execute( $branch );
+    $single_holidays_sth->execute( $branchcode );
     my $dates = [];
     while ( my ( $day, $month, $year ) = $single_holidays_sth->fetchrow ) {
         push @{$dates},
@@ -110,9 +110,9 @@ sub single_holidays {
             time_zone => C4::Context->tz()
           )->truncate( to => 'day' );
     }
-    $self->{single_holidays} = DateTime::Set->from_datetimes( dates => $dates );
-    $single_holidays = $self->{single_holidays};
-    return $single_holidays;
+    $self->{single_holidays}{$branchcode} = DateTime::Set->from_datetimes( dates => $dates );
+    $single_holidays->{$branchcode} = $self->{single_holidays}{$branchcode};
+    return $single_holidays->{$branchcode};
 }
 sub addDate {
     my ( $self, $startdate, $add_duration, $unit ) = @_;
@@ -344,9 +344,10 @@ sub add_holiday {
     my $new_dt = shift;
     my @dt = $self->single_holidays->as_list;
     push @dt, $new_dt;
-    $self->{single_holidays} =
+    my $branchcode = $self->{branchcode};
+    $self->{single_holidays}{$branchcode} =
       DateTime::Set->from_datetimes( dates => \@dt );
-    $single_holidays = $self->{single_holidays};
+    $single_holidays->{$branchcode} = $self->{single_holidays}{$branchcode};
 
     return;
 }
