@@ -236,7 +236,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
             </div>
          [% END %]
     <div class="dialog message"><h3>Nothing found</h3>
-    <p><form method="gut" action="/cgi-bin/koha/cataloguing/z3950_search.pl"><input type="hidden" name="biblionumber" value="[% biblionumber %]"/><input type="hidden" name="frameworkcode" value="[% frameworkcode %]"/><input type="submit" value="Try Another Search"/></form></p>
+    <p><form method="get" action="/cgi-bin/koha/cataloguing/z3950_search.pl"><input type="hidden" name="biblionumber" value="[% biblionumber %]"/><input type="hidden" name="frameworkcode" value="[% frameworkcode %]"/><input type="submit" value="Try Another Search"/></form></p>
     [% END %]
 
 
