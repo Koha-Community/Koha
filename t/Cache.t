@@ -1,9 +1,21 @@
 #!/usr/bin/perl
 
-# Tests Koha::Cache and whichever type of cache is enabled (through Koha::Cache)
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use Test::More tests => 32;
 
@@ -16,6 +28,9 @@ BEGIN {
 }
 
 SKIP: {
+    # Set a special namespace for testing, to avoid breaking
+    # if test is run with a different user than Apache's.
+    $ENV{ MEMCACHED_NAMESPACE } = 'unit_tests';
     my $cache = Koha::Cache->get_instance();
 
     skip "Cache not enabled", 28
@@ -151,9 +166,14 @@ SKIP: {
 
 END {
   SKIP: {
+        $ENV{ MEMCACHED_NAMESPACE } = 'unit_tests';
         my $cache = Koha::Cache->get_instance();
         skip "Cache not enabled", 1
           unless ( $cache->is_cache_active() );
         is( $destructorcount, 1, 'Destructor run exactly once' );
+        # cleanup temporary file
+        my $tmp_file = $cache->{ fastmmap_cache }->{ share_file };
+        unlink $tmp_file if defined $tmp_file;
+
     }
 }
