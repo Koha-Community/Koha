@@ -160,6 +160,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('HighlightOwnItemsOnOPACWhich','PatronBranch','PatronBranch|OpacURLBranch','Decides which branch\'s items to emphasize. If PatronBranch, emphasize the logged in user\'s library\'s items. If OpacURLBranch, highlight the items of the Apache var BRANCHCODE defined in Koha\'s Apache configuration file.','Choice'),
 ('HoldFeeMode','not_always','always|not_always','Set the hold fee mode','Choice'),
 ('HoldsToPullStartDate','2',NULL,'Set the default start date for the Holds to pull list to this many days ago','Integer'),
+('HoldsQueueSkipClosed', '0', NULL, 'If enabled, any libraries that are closed when the holds queue is built will be ignored for the purpose of filling holds.', 'YesNo'),
 ('HomeOrHoldingBranch','holdingbranch','holdingbranch|homebranch','Used by Circulation to determine which branch of an item to check with independent branches on, and by search to determine which branch to choose for availability ','Choice'),
 ('HTML5MediaEnabled','not','not|opac|staff|both','Show a tab with a HTML5 media player for files catalogued in field 856','Choice'),
 ('HTML5MediaExtensions','webm|ogg|ogv|oga|vtt','','Media file extensions','free'),

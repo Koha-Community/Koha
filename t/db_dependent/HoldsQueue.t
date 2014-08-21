@@ -8,15 +8,19 @@
 
 use Modern::Perl;
 
-use C4::Context;
-
+use Test::More tests => 24;
 use Data::Dumper;
-
-use Test::More tests => 23;
 
 use C4::Branch;
 use C4::Members;
 use Koha::Database;
+
+use C4::Calendar;
+use C4::Context;
+use C4::Branch;
+use C4::ItemType;
+use C4::Members;
+use Koha::DateUtils;
 
 use t::lib::TestBuilder;
 
@@ -66,6 +70,7 @@ $itemtype or BAIL_OUT("No adequate itemtype"); #FIXME Should be $itemtype = $ite
 
 #Set up the stage
 # Sysprefs and cost matrix
+C4::Context->set_preference('HoldsQueueSkipClosed', 0);
 $dbh->do("UPDATE systempreferences SET value = ? WHERE variable = 'StaticHoldsQueueWeight'", undef,
          join( ',', @other_branches, $borrower_branchcode, $least_cost_branch_code));
 $dbh->do("UPDATE systempreferences SET value = '0' WHERE variable = 'RandomizeHoldsQueueWeight'");
@@ -300,12 +305,40 @@ is( @$holds_queue, 2, "Holds queue filling correct number for default holds poli
 is( $holds_queue->[0]->{cardnumber}, $borrower1->{cardnumber}, "Holds queue filling 1st correct hold for default holds policy 'from home library'");
 is( $holds_queue->[1]->{cardnumber}, $borrower2->{cardnumber}, "Holds queue filling 2nd correct hold for default holds policy 'from home library'");
 
+# Test skipping hold picks for closed libraries.
+# At this point in the test, we have 2 rows in the holds queue
+# 1 of which is coming from MPL. Let's enable HoldsQueueSkipClosed
+# and make today a holiday for MPL. When we run it again we should only
+# have 1 row in the holds queue
+C4::Context->set_preference('HoldsQueueSkipClosed', 1);
+my $today = dt_from_string();
+C4::Calendar->new( branchcode => 'MPL' )->insert_single_holiday(
+    day         => $today->day(),
+    month       => $today->month(),
+    year        => $today->year(),
+    title       => "$today",
+    description => "$today",
+);
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
+is( scalar( @$holds_queue ), 1, "Holds not filled with items from closed libraries" );
+C4::Context->set_preference('HoldsQueueSkipClosed', 0);
+
 $dbh->do("DELETE FROM default_circ_rules");
 $dbh->do("INSERT INTO default_circ_rules ( holdallowed ) VALUES ( 2 )");
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
 is( @$holds_queue, 3, "Holds queue filling correct number for holds for default holds policy 'from any library'" );
-#warn "HOLDS QUEUE: " . Data::Dumper::Dumper( $holds_queue );
+
+# Test skipping hold picks for closed libraries without transport cost matrix
+# At this point in the test, we have 3 rows in the holds queue
+# one of which is coming from MPL. Let's enable HoldsQueueSkipClosed
+# and use our previously created holiday for MPL.
+# When we run it again we should only have 2 rows in the holds queue
+C4::Context->set_preference( 'HoldsQueueSkipClosed', 1 );
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
+is( scalar( @$holds_queue ), 2, "Holds not filled with items from closed libraries" );
 
 # Bug 14297
 $itemtype = Koha::ItemTypes->search->next->itemtype;

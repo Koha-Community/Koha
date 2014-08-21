@@ -501,10 +501,15 @@ Circulation:
             - pref: ExpireReservesMaxPickUpDelayCharge
               class: currency
         -
-            - Satisfy holds from the libraries
+            - Satisfy holds using items from the libraries
             - pref: StaticHoldsQueueWeight
               class: multi
             - (as branchcodes, separated by commas; if empty, uses all libraries)
+            - when they are
+            - pref: HoldsQueueSkipClosed
+              choices:
+                  yes: open
+                  no: open or closed
             - pref: RandomizeHoldsQueueWeight
               choices:
                   yes: in random order.

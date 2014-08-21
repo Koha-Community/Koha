@@ -29,6 +29,8 @@ use C4::Branch;
 use C4::Circulation;
 use C4::Members;
 use C4::Biblio;
+use C4::Dates qw/format_date/;
+use Koha::DateUtils;
 
 use List::Util qw(shuffle);
 use List::MoreUtils qw(any);
@@ -63,13 +65,25 @@ sub TransportCostMatrix {
     my $dbh   = C4::Context->dbh;
     my $transport_costs = $dbh->selectall_arrayref("SELECT * FROM transport_cost",{ Slice => {} });
 
+    my $today = dt_from_string();
+    my $calendars;
     my %transport_cost_matrix;
     foreach (@$transport_costs) {
-        my $from = $_->{frombranch};
-        my $to = $_->{tobranch};
-        my $cost = $_->{cost};
+        my $from     = $_->{frombranch};
+        my $to       = $_->{tobranch};
+        my $cost     = $_->{cost};
         my $disabled = $_->{disable_transfer};
-        $transport_cost_matrix{$to}{$from} = { cost => $cost, disable_transfer => $disabled };
+        $transport_cost_matrix{$to}{$from} = {
+            cost             => $cost,
+            disable_transfer => $disabled
+        };
+
+        if ( C4::Context->preference("HoldsQueueSkipClosed") ) {
+            $calendars->{$from} ||= Koha::Calendar->new( branchcode => $from );
+            $transport_cost_matrix{$to}{$from}{disable_transfer} ||=
+              $calendars->{$from}->is_holiday( $today );
+        }
+
     }
     return \%transport_cost_matrix;
 }
@@ -601,12 +615,27 @@ sub _trim {
 }
 
 sub load_branches_to_pull_from {
-    my $static_branch_list = C4::Context->preference("StaticHoldsQueueWeight")
-      or return;
+    my @branches_to_use;
 
-    my @branches_to_use = map _trim($_), split /,/, $static_branch_list;
+    my $static_branch_list = C4::Context->preference("StaticHoldsQueueWeight");
+    @branches_to_use = map { _trim($_) } split( /,/, $static_branch_list )
+      if $static_branch_list;
 
-    @branches_to_use = shuffle(@branches_to_use) if  C4::Context->preference("RandomizeHoldsQueueWeight");
+    @branches_to_use =
+      Koha::Database->new()->schema()->resultset('Branch')
+      ->get_column('branchcode')->all()
+      unless (@branches_to_use);
+
+    @branches_to_use = shuffle(@branches_to_use)
+      if C4::Context->preference("RandomizeHoldsQueueWeight");
+
+    my $today = dt_from_string();
+    if ( C4::Context->preference('HoldsQueueSkipClosed') ) {
+        @branches_to_use = grep {
+            !Koha::Calendar->new( branchcode => $_ )
+              ->is_holiday( $today )
+        } @branches_to_use;
+    }
 
     return \@branches_to_use;
 }
