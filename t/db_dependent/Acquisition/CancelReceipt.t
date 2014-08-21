@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use C4::Context;
 use C4::Acquisition;
 use C4::Biblio;
@@ -69,7 +69,8 @@ CancelReceipt($ordernumber);
 my $order = GetOrder( $ordernumber );
 is(scalar GetItemnumbersFromOrder($order->{ordernumber}), 0, "Create items on receiving: 0 item exist after cancelling a receipt");
 
-$itemnumber = AddItem({}, $biblionumber);
+my $itemnumber1 = AddItem({}, $biblionumber);
+my $itemnumber2 = AddItem({}, $biblionumber);
 t::lib::Mocks::mock_preference('AcqCreateItem', 'ordering');
 t::lib::Mocks::mock_preference('AcqItemSetSubfieldsWhenReceiptIsCancelled', '7=9'); # notforloan is mapped with 952$7
 ( undef, $ordernumber ) = C4::Acquisition::NewOrder(
@@ -81,23 +82,27 @@ t::lib::Mocks::mock_preference('AcqItemSetSubfieldsWhenReceiptIsCancelled', '7=9
     }
 );
 
-ModReceiveOrder(
+NewOrderItem($itemnumber1, $ordernumber);
+NewOrderItem($itemnumber2, $ordernumber);
+
+my ( undef, $new_ordernumber ) = ModReceiveOrder(
     {
         biblionumber     => $biblionumber,
         ordernumber      => $ordernumber,
-        quantityreceived => 2,
-        datereceived     => dt_from_string
+        quantityreceived => 1,
+        datereceived     => dt_from_string,
+        received_items   => [ $itemnumber1 ],
     }
 );
 
-NewOrderItem($itemnumber, $ordernumber);
+CancelReceipt($new_ordernumber);
 
-CancelReceipt($ordernumber);
+is(scalar( GetItemnumbersFromOrder($ordernumber) ), 2, "Create items on ordering: items are not deleted after cancelling a receipt");
 
-$order = GetOrder( $ordernumber );
-is(scalar GetItemnumbersFromOrder($order->{ordernumber}), 1, "Create items on ordering: items are not deleted after cancelling a receipt");
+my $item1 = C4::Items::GetItem( $itemnumber1 );
+is( $item1->{notforloan}, 9, "The notforloan value has been updated with '9'" );
 
-my $item = C4::Items::GetItem( $itemnumber );
-is( $item->{notforloan}, 9, "The notforloan value has been updated with '9'" );
+my $item2 = C4::Items::GetItem( $itemnumber2 );
+is( $item2->{notforloan}, 0, "The notforloan value has been updated with '9'" );
 
 $dbh->rollback;

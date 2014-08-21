@@ -1605,6 +1605,8 @@ sub CancelReceipt {
 
     my $parent_ordernumber = $order->{'parent_ordernumber'};
 
+    my @itemnumbers = GetItemnumbersFromOrder( $ordernumber );
+
     if($parent_ordernumber == $ordernumber || not $parent_ordernumber) {
         # The order line has no parent, just mark it as not received
         $query = qq{
@@ -1668,7 +1670,6 @@ sub CancelReceipt {
     if(C4::Context->preference('AcqCreateItem') eq 'ordering') {
         my @affects = split q{\|}, C4::Context->preference("AcqItemSetSubfieldsWhenReceiptIsCancelled");
         if ( @affects ) {
-            my @itemnumbers = GetItemnumbersFromOrder( $parent_ordernumber );
             for my $in ( @itemnumbers ) {
                 my $biblionumber = C4::Biblio::GetBiblionumberFromItemnumber( $in );
                 my $frameworkcode = GetFrameworkCode($biblionumber);
