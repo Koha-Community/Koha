@@ -8766,6 +8766,16 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+
+$DBversion = '3.17.00.XXX';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(qq{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('StatisticsFields','location|itype|ccode','Define fields (from the items table) used for statistics members',NULL,'Free')
+    });
+    print "Upgrade to $DBversion done (Bug 12728: Checked syspref StatisticsFields)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
