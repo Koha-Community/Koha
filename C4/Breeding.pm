@@ -360,7 +360,10 @@ sub _create_connection {
 
     if( $server->{servertype} eq 'sru' ) {
         foreach( split ',', $server->{sru_options}//'' ) {
-            my @temp= split '=';
+            #first remove surrounding spaces at comma and equals-sign
+            s/^\s+|\s+$//g;
+            my @temp= split '=', $_, 2;
+            @temp= map { s/^\s+|\s+$//g; $_; } @temp;
             $option1->option( $temp[0] => $temp[1] ) if @temp;
         }
     } elsif( $server->{servertype} eq 'zed' ) {
