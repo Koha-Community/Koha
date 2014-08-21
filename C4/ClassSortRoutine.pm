@@ -101,7 +101,7 @@ sub GetClassSortKey {
     # should replace with some way of getting column widths from
     # the DB schema -- since doing this should ideally be
     # independent of the DBMS, deferring for the moment.
-    return substr($key, 0, 30);
+    return substr($key, 0, 255);
 }
 
 =head2 _get_class_sort_key 

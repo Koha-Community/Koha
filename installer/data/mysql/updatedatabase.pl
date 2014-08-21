@@ -8807,6 +8807,17 @@ if ( CheckVersion($DBversion) ) {
     });
     print "Upgrade to $DBversion done (Bug 12296 - search box replaceable with a system preference)\n";
     SetVersion($DBversion);
+    SetVersion ($DBversion);
+}
+
+$DBversion = "XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("ALTER TABLE  `items` CHANGE  `cn_sort`  `cn_sort` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL");
+    $dbh->do("ALTER TABLE  `deleteditems` CHANGE  `cn_sort`  `cn_sort` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL");
+    $dbh->do("ALTER TABLE  `biblioitems` CHANGE  `cn_sort`  `cn_sort` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL");
+    $dbh->do("ALTER TABLE  `deletedbiblioitems` CHANGE  `cn_sort`  `cn_sort` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL");
+    print "Upgrade to $DBversion done (Bug 12424 - ddc sorting of call numbers truncates long Cutter parts)\n";
+    SetVersion ($DBversion);
 }
 
 =head1 FUNCTIONS

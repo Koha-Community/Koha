@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: koha30test
 -- ------------------------------------------------------
--- Server version	4.1.22
+-- Server version    4.1.22
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -178,7 +178,7 @@ CREATE TABLE `biblioitems` ( -- information related to bibliographic records in 
   `cn_class` varchar(30) default NULL,
   `cn_item` varchar(10) default NULL,
   `cn_suffix` varchar(10) default NULL,
-  `cn_sort` varchar(30) default NULL, -- normalized version of the call number used for sorting
+  `cn_sort` varchar(255) default NULL, -- normalized version of the call number used for sorting
   `agerestriction` varchar(255) default NULL, -- target audience/age restriction from the bib record (MARC21 521$a)
   `totalissues` int(10),
   `marcxml` longtext NOT NULL, -- full bibliographic MARC record in MARCXML
@@ -783,7 +783,7 @@ CREATE TABLE `deletedbiblioitems` ( -- information about bibliographic records t
   `cn_class` varchar(30) default NULL,
   `cn_item` varchar(10) default NULL,
   `cn_suffix` varchar(10) default NULL,
-  `cn_sort` varchar(30) default NULL, -- normalized version of the call number used for sorting
+  `cn_sort` varchar(255) default NULL, -- normalized version of the call number used for sorting
   `agerestriction` varchar(255) default NULL, -- target audience/age restriction from the bib record (MARC21 521$a)
   `totalissues` int(10),
   `marcxml` longtext NOT NULL, -- full bibliographic MARC record in MARCXML
@@ -911,7 +911,7 @@ CREATE TABLE `deleteditems` (
   `permanent_location` varchar(80) default NULL, -- linked to the CART and PROC temporary locations feature, stores the permanent shelving location
   `onloan` date default NULL, -- defines if item is checked out (NULL for not checked out, and checkout date for checked out)
   `cn_source` varchar(10) default NULL, -- classification source used on this item (MARC21 952$2)
-  `cn_sort` varchar(30) default NULL, -- normalized form of the call number (MARC21 952$o) used for sorting
+  `cn_sort` varchar(255) default NULL, -- normalized form of the call number (MARC21 952$o) used for sorting
   `ccode` varchar(10) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
   `materials` text default NULL, -- materials specified (MARC21 952$3)
   `uri` varchar(255) default NULL, -- URL for the item (MARC21 952$u)
@@ -1209,7 +1209,7 @@ CREATE TABLE `items` ( -- holdings/item information
   `permanent_location` varchar(80) default NULL, -- linked to the CART and PROC temporary locations feature, stores the permanent shelving location
   `onloan` date default NULL, -- defines if item is checked out (NULL for not checked out, and checkout date for checked out)
   `cn_source` varchar(10) default NULL, -- classification source used on this item (MARC21 952$2)
-  `cn_sort` varchar(30) default NULL,  -- normalized form of the call number (MARC21 952$o) used for sorting
+  `cn_sort` varchar(255) default NULL,  -- normalized form of the call number (MARC21 952$o) used for sorting
   `ccode` varchar(10) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
   `materials` text default NULL, -- materials specified (MARC21 952$3)
   `uri` varchar(255) default NULL, -- URL for the item (MARC21 952$u)
@@ -2177,10 +2177,10 @@ CREATE TABLE `suggestions` ( -- purchase suggestions
    branchcode VARCHAR(10) default NULL, -- foreign key linking the suggested branch to the branches table
    collectiontitle text default NULL, -- collection name for the suggested item
    itemtype VARCHAR(30) default NULL, -- suggested item type 
-	quantity SMALLINT(6) default NULL, -- suggested quantity to be purchased
-	currency VARCHAR(3) default NULL, -- suggested currency for the suggested price
-	price DECIMAL(28,6) default NULL, -- suggested price
-	total DECIMAL(28,6) default NULL, -- suggested total cost (price*quantity updated for currency)
+   quantity SMALLINT(6) default NULL, -- suggested quantity to be purchased
+   currency VARCHAR(3) default NULL, -- suggested currency for the suggested price
+   price DECIMAL(28,6) default NULL, -- suggested price
+   total DECIMAL(28,6) default NULL, -- suggested total cost (price*quantity updated for currency)
   PRIMARY KEY  (`suggestionid`),
   KEY `suggestedby` (`suggestedby`),
   KEY `managedby` (`managedby`)
@@ -2478,12 +2478,12 @@ CREATE TABLE `permissions` (
 
 DROP TABLE IF EXISTS `serialitems`;
 CREATE TABLE `serialitems` (
-	`itemnumber` int(11) NOT NULL,
-	`serialid` int(11) NOT NULL,
-	UNIQUE KEY `serialitemsidx` (`itemnumber`),
-	KEY `serialitems_sfk_1` (`serialid`),
-	CONSTRAINT `serialitems_sfk_1` FOREIGN KEY (`serialid`) REFERENCES `serial` (`serialid`) ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT `serialitems_sfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
+    `itemnumber` int(11) NOT NULL,
+    `serialid` int(11) NOT NULL,
+    UNIQUE KEY `serialitemsidx` (`itemnumber`),
+    KEY `serialitems_sfk_1` (`serialid`),
+    CONSTRAINT `serialitems_sfk_1` FOREIGN KEY (`serialid`) REFERENCES `serial` (`serialid`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `serialitems_sfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -3464,4 +3464,3 @@ CREATE TABLE IF NOT EXISTS columns_settings (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
