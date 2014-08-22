@@ -459,7 +459,6 @@ sub CanItemBeReserved{
     return 'ageRestricted' if $daysToAgeRestriction && $daysToAgeRestriction > 0;
 
     my $controlbranch = C4::Context->preference('ReservesControlBranch');
-    my $itemtypefield = C4::Context->preference('item-level_itypes') ? "itype" : "itemtype";
 
     # we retrieve user rights on this itemtype and branchcode
     my $sth = $dbh->prepare("SELECT categorycode, itemtype, branchcode, reservesallowed
@@ -507,7 +506,14 @@ sub CanItemBeReserved{
 
     $querycount .= "AND $branchfield = ?";
     
-    $querycount .= " AND $itemtypefield = ?" if ($ruleitemtype ne "*");
+    # If using item-level itypes, fall back to the record
+    # level itemtype if the hold has no associated item
+    $querycount .=
+      C4::Context->preference('item-level_itypes')
+      ? " AND COALESCE( itype, itemtype ) = ?"
+      : " AND itemtype = ?"
+      if ( $ruleitemtype ne "*" );
+
     my $sthcount = $dbh->prepare($querycount);
     
     if($ruleitemtype eq "*"){
