@@ -6,7 +6,7 @@ use t::lib::Mocks;
 use C4::Context;
 use C4::Branch;
 
-use Test::More tests => 41;
+use Test::More tests => 51;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
@@ -34,6 +34,7 @@ my $insert_sth = $dbh->prepare('INSERT INTO itemtypes (itemtype) VALUES (?)');
 $insert_sth->execute('CAN');
 $insert_sth->execute('CANNOT');
 $insert_sth->execute('DUMMY');
+$insert_sth->execute('ONLY1');
 
 # Setup Test------------------------
 # Create a biblio instance for testing
@@ -193,19 +194,19 @@ my ($foreign_item_bibnum, $foreign_item_bibitemnum, $foreign_itemnumber)
 $dbh->do('DELETE FROM issuingrules');
 $dbh->do(
     q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
-      VALUES (?, ?, ?, ?)}, 
+      VALUES (?, ?, ?, ?)},
     {},
     '*', '*', '*', 25
 );
 $dbh->do(
     q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
-      VALUES (?, ?, ?, ?)}, 
+      VALUES (?, ?, ?, ?)},
     {},
-    '*', '*', 'CANNOT', 0 
+    '*', '*', 'CANNOT', 0
 );
 
 # make sure some basic sysprefs are set
-t::lib::Mocks::mock_preference('ReservesControlBranch', 'homebranch');
+t::lib::Mocks::mock_preference('ReservesControlBranch', 'ItemHomeLibrary');
 t::lib::Mocks::mock_preference('item-level_itypes', 1);
 
 # if IndependentBranches is OFF, a CPL patron can reserve an MPL item
@@ -404,6 +405,33 @@ $dbh->do("UPDATE reserves SET expirationdate = DATE_SUB( NOW(), INTERVAL 1 DAY )
 CancelExpiredReserves();
 $count = $dbh->selectrow_array("SELECT COUNT(*) FROM reserves WHERE reserve_id = ?", undef, $reserve_id );
 is( $count, 0, "Reserve with manual expiration date canceled correctly" );
+
+# Bug 12632
+t::lib::Mocks::mock_preference( 'item-level_itypes',     1 );
+t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'PatronLibrary' );
+
+$dbh->do('DELETE FROM reserves');
+$dbh->do('DELETE FROM issues');
+$dbh->do('DELETE FROM items');
+$dbh->do('DELETE FROM biblio');
+
+( $bibnum, $title, $bibitemnum ) = create_helper_biblio('ONLY1');
+( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem( { homebranch => 'CPL', holdingbranch => 'CPL' }, $bibnum );
+
+$dbh->do(
+    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
+      VALUES (?, ?, ?, ?)},
+    {},
+    '*', '*', 'ONLY1', 1
+);
+is( CanItemBeReserved( $borrowernumbers[0], $itemnumber ),
+    'OK', 'Patron can reserve item with hold limit of 1, no holds placed' );
+
+my $res_id = AddReserve( $branch, $borrowernumbers[0], $bibnum, 'a', '', 1, );
+
+is( CanItemBeReserved( $borrowernumbers[0], $itemnumber ),
+    'tooManyReserves', 'Patron cannot reserve item with hold limit of 1, 1 bib level hold placed' );
+
 
 # Helper method to set up a Biblio.
 sub create_helper_biblio {
