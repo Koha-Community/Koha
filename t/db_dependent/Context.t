@@ -10,8 +10,8 @@ use vars qw($debug $koha $dbh $config $ret);
 
 BEGIN {
 		$debug = $ENV{DEBUG} || 0;
-		diag("Note: The overall number of tests may vary by configuration.");
-		diag("First we need to check your environmental variables");
+        # Note: The overall number of tests may vary by configuration.
+        # First we need to check your environmental variables
 		for (qw(KOHA_CONF PERL5LIB)) {
 			ok($ret = $ENV{$_}, "ENV{$_} = $ret");
 		}
@@ -28,7 +28,6 @@ ok(
     'Final linear version is less than or equal to kohaversion.pl'
 );
 my @keys = keys %$koha;
-diag("Number of keys in \%\$koha: " . scalar @keys); 
 my $width = 0;
 if (ok(@keys)) { 
     $width = (sort {$a <=> $b} map {length} @keys)[-1];
@@ -42,8 +41,7 @@ foreach (sort @keys) {
 }
 ok($config = $koha->{config}, 'Getting $koha->{config} ');
 
-diag "Testing syspref caching.";
-
+# Testing syspref caching
 my $module = new Test::MockModule('C4::Context');
 $module->mock(
     '_new_dbh',
