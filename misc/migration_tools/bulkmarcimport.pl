@@ -121,16 +121,18 @@ if ((not defined $sourcesubfield) && (not defined $sourcetag)){
   $sourcesubfield="a";
 }
 
-#Disable the syspref cache or else the following UPDATE statements will have no effect
+
+# Disable logging for the biblios and authorities import operation. It would unnecesarily
+# slow the import
+
+# Disable the syspref cache so we can change logging settings
 C4::Context->disable_syspref_cache();
-
-# save the CataloguingLog and AuthoritiesLog properties : we don't want to log a bulkmarcimport. It will slow the import &
-# will create problems in the action_logs table, that can't handle more than 1 entry per second per user.
-my $CataloguingLog = C4::Context->preference('CataloguingLog');
-$dbh->do("UPDATE systempreferences SET value=0 WHERE variable='CataloguingLog'");
-
-my $AuthoritiesLog = C4::Context->preference('AuthoritiesLog');
-$dbh->do("UPDATE systempreferences SET value=0 WHERE variable='AuthoritiesLog'");
+# Save current CataloguingLog and AuthoritiesLog sysprefs values
+my $CataloguingLog = C4::Context->preference( 'CataloguingLog' );
+my $AuthoritiesLog = C4::Context->preference( 'AuthoritiesLog' );
+# Disable logging for both
+C4::Context->set_preference( 'CataloguingLog', 0 );
+C4::Context->set_preference( 'AuthoritiesLog', 0 );
 
 if ($fk_off) {
 	$dbh->do("SET FOREIGN_KEY_CHECKS = 0");
@@ -500,10 +502,10 @@ if ($fk_off) {
 	$dbh->do("SET FOREIGN_KEY_CHECKS = 1");
 }
 
-# restore CataloguingLog
-$dbh->do("UPDATE systempreferences SET value=$CataloguingLog WHERE variable='CataloguingLog'");
-# restore AuthoritiesLog
-$dbh->do("UPDATE systempreferences SET value=$AuthoritiesLog WHERE variable='AuthoritiesLog'");
+# Restore CataloguingLog
+C4::Context->set_preference( 'CataloguingLog', $CataloguingLog );
+# Restore AuthoritiesLog
+C4::Context->set_preference( 'AuthoritiesLog', $AuthoritiesLog );
 
 my $timeneeded = gettimeofday - $starttime;
 print "\n$i MARC records done in $timeneeded seconds\n";
