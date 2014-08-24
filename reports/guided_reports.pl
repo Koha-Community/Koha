@@ -87,12 +87,11 @@ if ( !$phase ) {
 elsif ( $phase eq 'Build new' ) {
     # build a new report
     $template->param( 'build1' => 1 );
-    my $areas = get_report_areas();
     $template->param(
-        'areas' => [map { id => $_->[0], name => $_->[1] }, @$areas],
-        'usecache' => $usecache,
+        'areas'        => get_report_areas(),
+        'usecache'     => $usecache,
         'cache_expiry' => 300,
-        'public' => '0',
+        'public'       => '0',
     );
 } elsif ( $phase eq 'Use saved' ) {
 

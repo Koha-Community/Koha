@@ -55,7 +55,7 @@ if ($phase eq 'View Dictionary'){
     # view the dictionary we use to set up abstract variables such as all borrowers over fifty who live in a certain town
     my $definitions = get_from_dictionary($area);
     $template->param(
-        'areas'=> areas(),
+        'areas'            => areas( $area ),
         'start_dictionary' => 1,
         'definitions'      => $definitions,
     );
@@ -70,7 +70,7 @@ elsif ( $phase eq 'New Term step 2' ) {
     # Choosing the area
     $template->param(
         'step_2'                 => 1,
-        'areas'                  => areas(),
+        'areas'                  => areas( $area ),
         'definition_name'        => $definition_name,
         'definition_description' => $definition_description,
     );
@@ -172,11 +172,9 @@ elsif ( $phase eq 'New Term step 5' ) {
             $query_criteria .= " AND $crit <= '$value'";
         }
     }
-    my %report_areas = map @$_, get_report_areas();
     $template->param(
         'step_5'                 => 1,
         'area'                   => $area,
-        'areaname'               => $report_areas{$area},
         'definition_name'        => $definition_name,
         'definition_description' => $definition_description,
         'query'                  => $query_criteria,
@@ -208,14 +206,17 @@ if (!$no_html){
 }
 
 sub areas {
+
+    my $selected = shift;
+
     my $areas = get_report_areas();
     my @a;
-    foreach (@$areas) {
+    foreach my $area ( @$areas ) {
         push @a, {
-            id => $_->[0],
-            name => $_->[1],
-            selected => ($_->[0] eq $area),
+            id       => $area,
+            selected => ( $area eq $selected )
         };
     }
+
     return \@a;
 }

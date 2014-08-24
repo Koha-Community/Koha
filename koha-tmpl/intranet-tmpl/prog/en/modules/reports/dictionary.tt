@@ -8,6 +8,16 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 
+[%- BLOCK area_name -%]
+    [%- SWITCH area -%]
+        [%- CASE 'CIRC' -%]Circulation
+        [%- CASE 'CAT'  -%]Catalog
+        [%- CASE 'PAT'  -%]Patrons
+        [%- CASE 'ACQ'  -%]Acquisitions
+        [%- CASE 'ACC'  -%]Accounts
+    [%- END -%]
+[%- END -%]
+
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports wizard</a>
 [% IF ( new_dictionary ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Name the new definition</strong>
 [% ELSIF ( step_2 ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Step 2: Choose the area </strong> 
@@ -36,21 +46,22 @@
         <h2>Current terms</h2>
 		<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
         <input type="hidden" name="phase" value="View Dictionary" />
-		[% IF ( areas ) %]
-			Filter by area <select name="area">
-			<option value="">All</option>
-			[% FOREACH area IN areas %]
-			    [% IF ( area.selected ) %]
-			        <option value="[% area.id %]" selected="selected" >[% area.name %]</option>
-			    [% ELSE %]
-			        <option value="[% area.id %]">[% area.name %]</option>
-			    [% END %]
-			[% END %]
-			</select>
-			<input name="submit" value="Go" type="submit" />
-			</form>
-			<br />
-		[% END %]
+  [% IF ( areas ) %]
+        Filter by area
+        <select name="area">
+          <option value="">All</option>
+        [% FOREACH area IN areas %]
+          [%- IF ( area.selected ) -%]
+          <option value="[% area.id %]" selected="selected">[%- PROCESS area_name area=area.id -%]</option>
+          [%- ELSE -%]
+          <option value="[% area.id %]">[%- PROCESS area_name area=area.id -%]</option>
+          [%- END -%]
+        [% END %]
+        </select>
+      <input name="submit" value="Go" type="submit" />
+  [% END %]
+      </form>
+      <br />
 		<table border="1" cellspacing="0" cellpadding="5">
 		<tr>
 		<th>Name</th>
@@ -99,24 +110,27 @@
 </form>
 [% END %]
 
-[% IF ( step_2 ) %]
+[%- IF ( step_2 ) -%]
 <h3>Add new definition</h3>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-<fieldset class="rows">
-<legend>Step 2 of 5: Choose the area</legend>
-<ol><li><input type="hidden" name="phase" value="New Term step 3" />
-<input type="hidden" name="definition_name" value="[% definition_name %]" />
-<input type="hidden" name="definition_description" value="[% definition_description %]" />
-<label for="area">Select table </label><select name="area" id="area">
-[% FOREACH area IN areas %]     
-<option value="[% area.id %]">[% area.name %]</option>                  
-[% END %]                
-</select></li>
-</ol>
-</fieldset>                                                                            
-<fieldset class="action"><input name="submit" value="Next" type="submit" /></fieldset>
+  <fieldset class="rows">
+    <legend>Step 2 of 5: Choose the area</legend>
+    <ol>
+      <li>
+        <input type="hidden" name="phase" value="New Term step 3" />
+        <input type="hidden" name="definition_name" value="[% definition_name %]" />
+        <input type="hidden" name="definition_description" value="[% definition_description %]" />
+        <label for="area">Select table </label><select name="area" id="area">
+      [%- FOREACH area IN areas -%]
+        <option value="[%- area.id -%]">[%- PROCESS area_name area=area.id -%]</option>
+      [%- END -%]
+        </select>
+      </li>
+    </ol>
+  </fieldset>
+  <fieldset class="action"><input name="submit" value="Next" type="submit" /></fieldset>
 </form>
-[% END %]
+[%- END -%]
 
 [% IF ( step_3 ) %]
 <h3>Add new definition</h3>
@@ -227,33 +241,34 @@
 <h3>Add new definition</h3>
 
 <fieldset class="rows">
-<legend>Step 5 of 5: Confirm details</legend>
-<ol><li>
-<span class="label">Name:</span>
-[% definition_name %]
-</li>
-<li>
-<span class="label">Description:</span>
-[% definition_description %]
-</li>
-<li>
-<span class="label">Area:</span>
-[% areaname %]
-</li>
-<li>
-<span class="label">Data:</span>
-<table>
-<tr>
-<th>Columns</th>
-<th>Values</th>
-</tr>
-[% FOREACH criteria_loo IN criteria_loop %]
-<tr>
-<td>[% criteria_loo.name %]</td>
-<td>[% criteria_loo.value %]</td>
-</tr>
-[% END %]
-</table></li></ol> </fieldset>  
+  <legend>Step 5 of 5: Confirm details</legend>
+  <ol>
+    <li>
+      <span class="label">Name:</span>[%- definition_name -%]
+    </li>
+    <li>
+      <span class="label">Description:</span>[%- definition_description -%]
+    </li>
+    <li>
+      <span class="label">Area:</span>[%- PROCESS area_name area=area -%]
+    </li>
+    <li>
+      <span class="label">Data:</span>
+      <table>
+        <tr>
+          <th>Columns</th>
+          <th>Values</th>
+        </tr>
+      [%- FOREACH criteria_loo IN criteria_loop -%]
+        <tr>
+          <td>[%- criteria_loo.name -%]</td>
+          <td>[%- criteria_loo.value -%]</td>
+        </tr>
+      [%- END -%]
+      </table>
+    </li>
+  </ol>
+</fieldset>
 
 <fieldset class="action"><input type="hidden" name="sql" value="[% query %]" />
 <input type="hidden" name="phase" value="New Term step 6" />

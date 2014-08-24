@@ -1,4 +1,15 @@
 [% USE KohaDates %]
+
+[%- BLOCK area_name -%]
+    [%- SWITCH area -%]
+        [%- CASE 'CIRC' -%]Circulation
+        [%- CASE 'CAT'  -%]Catalog
+        [%- CASE 'PAT'  -%]Patrons
+        [%- CASE 'ACQ'  -%]Acquisitions
+        [%- CASE 'ACC'  -%]Accounts
+    [%- END -%]
+[%- END -%]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Guided reports wizard
 [% IF ( saved1 ) %]&rsaquo; Saved reports
@@ -403,11 +414,15 @@ canned reports and writing custom SQL reports.</p>
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
 <fieldset class="rows">
 <legend>Step 1 of 6: Choose a module to report on,[% IF (usecache) %] Set cache expiry, [% END %] and Choose report visibility </legend>
-<ol><li><label for="area">Choose: </label><select name="area" id="area">
-[% FOREACH area IN areas %]
-<option value="[% area.id %]">[% area.name %]</option>
-[% END %]
-</select></li>
+<ol>
+  <li>
+    <label for="area">Choose: </label>
+      <select name="area" id="area">
+    [%- FOREACH area IN areas -%]
+      <option value="[% area %]">[%- PROCESS area_name area=area -%]</option>
+    [%- END -%]
+      </select>
+  </li>
 [% IF (public) %]
   <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0">No (default)</option> <option value="1" selected="selected">Yes</option> </select></li>
 [% ELSE %]

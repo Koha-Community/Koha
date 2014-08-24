@@ -83,8 +83,12 @@ my $AREA_NAME_SQL_SNIPPET
   = "CASE report_area " .
     join (" ", map "WHEN '$_->[0]' THEN '$_->[1]'", @REPORT_AREA) .
     " END AS areaname";
+
 sub get_report_areas {
-    return \@REPORT_AREA
+
+    my $report_areas = [ 'CIRC', 'CAT', 'PAT', 'ACQ', 'ACC' ];
+
+    return $report_areas;
 }
 
 my %table_areas = (
