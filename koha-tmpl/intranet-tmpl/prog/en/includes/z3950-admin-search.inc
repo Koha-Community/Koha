@@ -2,7 +2,7 @@
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin z3950 Admin Resident Search Box -->
 <div id="header_search">
     <div id="z3950_search" class="residentsearch">
-    <p class="tip">Z39.50 server search:</p>
+    <p class="tip">Z39.50/SRU server search:</p>
 	<form action="/cgi-bin/koha/admin/z3950servers.pl" method="post">
                 <input type="text" name="searchfield" size="40" value="[% searchfield %]" />
                 <input type="submit" class="submit" name="search" value="Search" />
@@ -21,7 +21,7 @@
 	</div>
 	[% END %]
 			<ul>
-            <li><a href="#z3950_search">Search Z39.50 servers</a></li>
+            <li><a href="#z3950_search">Search Z39.50/SRU servers</a></li>
             [% IF ( CAN_user_circulate ) %]<li><a href="#circ_search">Check out</a></li>[% END %]
             [% IF ( CAN_user_catalogue ) %]<li><a href="#catalog_search">Search the catalog</a></li>[% END %]
 			</ul>	

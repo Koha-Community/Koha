@@ -60,7 +60,7 @@
 
 <ul>
 	<!-- <li><a href="/cgi-bin/koha/admin/printers.pl">Network Printers</a></li> -->
-    <li><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 client targets</a></li>
+    <li><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50/SRU servers</a></li>
     <li><a href="/cgi-bin/koha/admin/didyoumean.pl">Did you mean?</a></li>
     <li><a href="/cgi-bin/koha/admin/columns_settings.pl">Columns settings</a></li>
 </ul>

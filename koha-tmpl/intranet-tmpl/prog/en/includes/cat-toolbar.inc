@@ -9,7 +9,7 @@
 		} 
 	}
     function PopupZ3950Confirmed() {
-        if (confirm(_("Please note that this Z39.50 search could replace the current record."))){
+        if (confirm(_("Please note that this external search could replace the current record."))){
             PopupZ3950();
         }
     }
@@ -194,7 +194,7 @@ CAN_user_serials_create_subscription ) %]
 
             [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
             <li><a id="duplicatebiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]&amp;frameworkcode=[% current_framework %]&amp;op=duplicate">Edit as new (duplicate)</a></li>
-            <li><a href="#" id="z3950copy">Replace record via Z39.50</a></li>
+            <li><a href="#" id="z3950copy">Replace record via Z39.50/SRU</a></li>
 
                 [% IF ( count ) %]
                     <li class="disabled"><a id="deletebiblio" data-toggle="tooltip" data-placement="left" title="[% count %] item(s) are attached to this record. You must delete all items before deleting this record." href="#">Delete record</a></li>

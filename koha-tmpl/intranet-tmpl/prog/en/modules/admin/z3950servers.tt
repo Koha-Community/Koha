@@ -8,7 +8,7 @@
     [% END %]
 [% END %]
 
-<title>Koha &rsaquo; Administration &rsaquo; Z39.50 servers
+<title>Koha &rsaquo; Administration &rsaquo; Z39.50/SRU servers
 [% IF op == 'edit' %] &rsaquo; Modify [% PROCESS ServerType %] server [% server.servername %][% END %]
 [% IF op ==  'add' %] &rsaquo; New [% PROCESS ServerType %] server[% END %]
 </title>
@@ -83,7 +83,7 @@
 [% INCLUDE 'z3950-admin-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
-<a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a>
+<a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50/SRU servers</a>
 [% IF op == 'edit' %]&rsaquo; Modify [% PROCESS ServerType %] server [% server.servername %][% END %]
 [% IF op ==  'add' %]&rsaquo; New [% PROCESS ServerType %] server[% END %]
 </div>
@@ -94,11 +94,11 @@
 <div class="yui-b">
 
 [% IF msg_deleted %]
-    <div class="dialog alert">Z39.50 server deleted ([% msg_add %])</div>
+    <div class="dialog alert">Z39.50/SRU server deleted ([% msg_add %])</div>
 [% ELSIF msg_updated %]
-    <div class="dialog message">Z39.50 server updated ([% msg_add %])</div>
+    <div class="dialog message">Z39.50/SRU server updated ([% msg_add %])</div>
 [% ELSIF msg_added %]
-    <div class="dialog message">Z39.50 server added ([% msg_add %])</div>
+    <div class="dialog message">Z39.50/SRU server added ([% msg_add %])</div>
 [% ELSIF msg_notfound %]
     <div class="dialog alert">Error: Server with id [% msg_add %] not found</div>
 [% END %]
@@ -205,7 +205,7 @@
         <a id="newserver" class="btn btn-small" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&type=zed"><i class="icon-plus"></i> New Z39.50 server</a>
         <a id="newserver" class="btn btn-small" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&type=sru"><i class="icon-plus"></i> New SRU server</a>
     </div>
-    <h3>Z39.50 servers administration</h3>
+    <h3>Z39.50/SRU servers administration</h3>
     [% IF id %]
         You searched for record [% id %]
     [% ELSIF searchfield %]

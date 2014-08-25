@@ -70,7 +70,7 @@
         });
 
         $("#z3950search").click(function(){
-            if (confirm(_("Please note that this Z39.50 search could replace the current record."))){
+            if (confirm(_("Please note that this external search could replace the current record."))){
                 PopupZ3950();
             }
         });
@@ -456,7 +456,7 @@ function Changefwk(FwkList) {
     [% END %]
 
     [% UNLESS (circborrowernumber) %][%# Hide in fast cataloging %]
-        <div class="btn-group"><a class="btn btn-small" href="#" id="z3950search"><i class="icon-search"></i> Z39.50 search</a></div>
+        <div class="btn-group"><a class="btn btn-small" href="#" id="z3950search"><i class="icon-search"></i> Z39.50/SRU search</a></div>
         [% IF (biblionumber) %]
             [% IF ( BiblioDefaultViewmarc ) %]
                 <div class="btn-group">
