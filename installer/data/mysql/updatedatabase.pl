@@ -10355,7 +10355,7 @@ if ( CheckVersion($DBversion) ) {
     |);
 
     print "Upgrade to $DBversion done (Bug 8007: Add System Preferences useDischarge, the discharge notice and the new table discharges)\n";
-    SetVersion($DBversion);
+    SetVersion ($DBversion);
 }
 
 $DBversion = "3.19.00.036";
@@ -12255,6 +12255,16 @@ if ( $column_has_been_used ) {
         SetVersion($DBversion);
 }
 
+
+$DBversion = "XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    my $installer = C4::Installer->new();
+    my $full_path = C4::Context->config('intranetdir') . "/installer/data/$installer->{dbms}/elasticsearch_mapping.sql";
+    my $error     = $installer->load_sql($full_path);
+    warn $error if $error;
+    print "Upgrade to $DBversion done (Bug 12478 - set up elasticsearch tables)\n";
+    SetVersion($DBversion);
+}
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
