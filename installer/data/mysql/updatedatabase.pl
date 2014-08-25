@@ -8728,6 +8728,20 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.17.00.XXX';
+if ( CheckVersion($DBversion) ) {
+    my @temp= $dbh->selectrow_array(qq|
+        SELECT count(*)
+        FROM marc_subfield_structure
+        WHERE kohafield='permanent_location' OR kohafield='items.permanent_location'
+    |);
+    print "Upgrade to $DBversion done (Bug 7817: Check for permanent_location)\n";
+    if( $temp[0] ) {
+        print "WARNING for Koha administrator: Your database contains one or more mappings for permanent_location to the MARC structure. This item field however is for internal use and should not be linked to a MARC (sub)field. Please correct it. See also Bugzilla reports 7817 and 12818.\n";
+    }
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
