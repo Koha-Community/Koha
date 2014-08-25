@@ -226,7 +226,7 @@ sub AddReserve {
     }
     if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
 	# Make room in reserves for this before those of a later reserve date
-	$priority = _ShiftPriorityByDateAndPriority( $biblionumber, $priority );
+    $priority = _ShiftPriority( $biblionumber, $priority );
     }
 
     my $waitingdate;
@@ -1941,9 +1941,9 @@ sub _koha_notify_reserve {
 
 }
 
-=head2 _ShiftPriorityByDateAndPriority
+=head2 _ShiftPriority
 
-  $new_priority = _ShiftPriorityByDateAndPriority( $biblionumber, $reservedate, $priority );
+  $new_priority = _ShiftPriority( $biblionumber, $priority );
 
 This increments the priority of all reserves after the one
 with either the lowest date after C<$reservedate>
@@ -1959,7 +1959,7 @@ the sub accounts for that too.
 
 =cut
 
-sub _ShiftPriorityByDateAndPriority {
+sub _ShiftPriority {
     my ( $biblio, $new_priority ) = @_;
 
     my $dbh = C4::Context->dbh;
@@ -2236,7 +2236,7 @@ priority is based on the set of holds whose start date falls before
 the parameter value.
 
 After calculation of this priority, it is recommended to call
-_ShiftPriorityByDateAndPriority. Note that this is currently done in
+_ShiftPriority. Note that this is currently done in
 AddReserves.
 
 =cut
