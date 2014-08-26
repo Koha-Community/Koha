@@ -1,35 +1,52 @@
 [% INCLUDE 'help-top.inc' %]
 
-<h1>Z39.50 Servers</h1>
+<h1>Z39.50/SRU Servers</h1>
 
-<p>Z39.50 is a client–server protocol for searching and retrieving information from remote computer databases, in short it's a tool used for copy cataloging. Using Koha you can connect to any Z39.50 target that is publicly available or that you have the log in information to and copy both bibliographic and/or authority records from that source.</p>
+<p>Z39.50 and SRU are client–server protocols for searching and retrieving information from remote computer databases, in short tools used for copy cataloging. Using Koha you can connect to any Z39.50/SRU target that is publicly available or that you have the log in information to and copy both bibliographic and/or authority records from that source. (Note that not all SRU targets will offer bibliographic information in MARC format.)</p>
 
-<p>Koha comes with a default list of Z39.50 targets set up that you can add to, edit or delete</p>
+<p>Koha comes with a default list of Z39.50/SRU targets set up that you can add to, edit or delete.</p>
 
-<p>To find additional targets you use IndexData's IRSpy: <a href="http://irspy.indexdata.com/" target="_top">http://irspy.indexdata.com</a></p>
+<p>To find additional targets you use IndexData's IRSpy: <a href="http://irspy.indexdata.com/" target="_top">http://irspy.indexdata.com</a>.</p>
 
-<h2>Add a Z39.50 Target</h2>
+<h2>Add a Z39.50/SRU Target</h2>
 
+<p>From the main Z39.50/SRU page, click 'New Z39.50 Server' or 'New SRU server'.</p>
 <ul>
-	<li>From the main Z39.50 page, click 'New Z39.50 Server'
-<ul>
-	<li>'Z39.50 server' should be populated with a name that will help you identify the source (such as the library name).</li>
-	<li>'Hostname' will be the address to the Z39.50 target.</li>
+    <li>'Server name' should be populated with a name that will help you identify the source (such as the library name).</li>
+    <li>'Hostname' will be the address to the Z39.50 target. For a SRU target, only enter the domain name here. (See example below.)</li>
 	<li>'Port' tells Koha what port to listen on to get results from this target.</li>
+    <li>'Database' is the name of the database for Z39.50 targets. For SRU targets enter the path name part of the URL (the local part following domain and port). See also example below.</li>
 	<li>'Userid' and 'Password' are only required for servers that are password protected.</li>
 	<li>Check the 'Checked' box if you want this target to always be selected by default.</li>
-	<li>'Rank' lets you enter where in the list you'd like this target to appear.
-<ul>
-	<li>If this is left blank the targets will be in alphabetical order.</li>
-</ul>
-</li>
+    <li>'Rank' lets you enter where in the list you'd like this target to appear. If this is left blank the targets will be in alphabetical order.</li>
 	<li>'Syntax' is the MARC flavor you use.</li>
 	<li>'Encoding' tells the system how to read special characters.</li>
 	<li>'Timeout' is helpful for targets that take a long while. You can set the timeout so that it doesn't keep trying the target if results aren't found in a reasonable amount of time.</li>
 	<li>'Record type' lets you define if this is a bibliographic or an authority target.</li>
+    <li>'Additional SRU options': You can enter additional options of the external server here, like sru_version=1.1 or schema=marc21, etc. Note that these options are server dependent.</li>
+    <li>'SRU Search field mapping': Click on Modify to add or update the mapping from the available fields on the Koha search form to the specific server dependent index names. For instance, a SRU server could use 'cql.anywhere' for the Any field on the Koha form. If you do not enter an index name for a specific search field, the whole record will be searched.</li>
+    <li>'XSLT file(s)': You can enter here one or more XSLT file names that you want to apply on the search results.</li>
 </ul>
-</li>
-</ul>
+
+<h2>SRU example</h2>
+<p>If you want to enter the Library of Congress SRU server, you should at least use the following information. The full URL http://lx2.loc.gov:210/LCDB must be entered as follows:</p>
+<table>
+<tr><td>Host</td><td>lx2.loc.gov</td></tr>
+<tr><td>Port</td><td>210</td></tr>
+<tr><td>Database</td><td>LCDB</td></tr>
+<tr><td>Syntax</td><td>MARC21/USMARC</td></tr>
+<tr><td>Encoding</td><td>utf8</td></tr>
+</table>
+<p>To further refine your searches, you could add the following index names to the SRU search field mappings. To do this, edit the server and click the Modify button next to this field.</p>
+<table>
+<tr><td>Title</td><td>dc.title</td></tr>
+<tr><td>ISBN</td><td>bath.isbn</td></tr>
+<tr><td>Any</td><td>cql.anywhere</td></tr>
+<tr><td>Author</td><td>dc.author</td></tr>
+<tr><td>ISSN</td><td>bath.issn</td></tr>
+<tr><td>Subject</td><td>dc.subject</td></tr>
+<tr><td>Standard ID</td><td>bath.standardIdentifier</td></tr>
+</table>
 
 <h2>Suggested Bibliographic Z39.50 Targets</h2>
 
@@ -58,6 +75,6 @@
 	<li>LIBRARY OF CONGRESS NAME AUTHORITIES lx2.loc.gov:210 NAF</li>
 	<li>LIBRARY OF CONGRESS SUBJECT AUTHORITIES lx2.loc.gov:210 SAF</li>
 </ul>
-<p><strong>See the full documentation for Z39.50 Servers in the <a href="http://manual.koha-community.org/[% helpVersion %]/en/additionaladmin.html#z3950admin">manual</a> (online).</strong></p>
+<p><strong>See the full documentation for Z39.50/SRU Servers in the <a href="http://manual.koha-community.org/[% helpVersion %]/en/additionaladmin.html#z3950admin">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
