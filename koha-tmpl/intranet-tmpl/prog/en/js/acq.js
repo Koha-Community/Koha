@@ -178,7 +178,6 @@ function messenger(X,Y,etc){    // FIXME: unused?
 function updateCosts(){
     var quantity = new Number($("#quantity").val());
     var discount = new Number($("#discount").val());
-    var applygst = new Number ($("#applygst").val());
     var listprice   =  new Number($("#listprice").val());
     var currcode = new String($("#currency").val());
     var exchangerate =  new Number($("#currency_rate_"+currcode).val());
