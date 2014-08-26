@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-23 08:15+0200\n"
-"PO-Revision-Date: 2014-07-14 07:57+0000\n"
-"Last-Translator: Josef <josef.moravec@knihovna-uo.cz>\n"
+"PO-Revision-Date: 2014-07-25 09:09+0000\n"
+"Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1405324665.0\n"
+"X-POOTLE-MTIME: 1406279389.0\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -700,7 +700,7 @@ msgstr "<br />Přesměrovat stránku s podrobným záznamem u potlačených záz
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# <br />Restrict the suppression to IP adresses outside of the IP range"
-msgstr "<br />Omezit potlačení záznamu na IP adresy mimo rozsah"
+msgstr "<br />Omezit potlačení záznamu na IP adresy mimo povolený rozsah"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# Don't hide"
@@ -716,7 +716,7 @@ msgstr "vysvětlující stránku (\"Záznam je skrytý\")."
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# items marked as suppressed from OPAC search results. Note that you must have the <code>Suppress</code> index set up in Zebra and at least one suppressed item, or your searches will be broken."
-msgstr "ve výsledcích vyhledávání v on-line katalogu jednotky označené jako odepsané. Pamatujte, že je nutné mít v indexu nástroje Zebra definované pole <code>Suppress</code> a alespoň jednu odepsanou jednotku, jinak nebude vyhledávání fungovat korektně."
+msgstr "jednotky označené ve výsledcích vyhledávání v on-line katalogu jako odepsané. Pamatujte, že je nutné mít v indexu nástroje Zebra definované pole <code>Suppress</code> a alespoň jednu odepsanou jednotku, jinak se nebudou výsledky zobrazovat správně."
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# the 404 error page ('Not found')."
@@ -880,7 +880,7 @@ msgstr "Nezobrazovat"
 
 # Cataloging > Display
 msgid "cataloguing.pref#hide_marc# MARC tag numbers, subfield codes and indicators in MARC views."
-msgstr "čísla MARC polí, kódů podpolí a indikátorů in MARC pohledu."
+msgstr "čísla MARC polí, podpolí a indikátorů v editoru MARC."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
@@ -1040,7 +1040,7 @@ msgstr "Nepovolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldDateInFuture# hold requests to be placed that do not enter the waiting list until a certain future date."
-msgstr "rezervace, které nejsou v pořadí až do určitého budoucího data."
+msgstr "rezervace, které nejsou v pořadí až do určitého data v budoucnosti."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldPolicyOverride# Allow"
@@ -1064,7 +1064,7 @@ msgstr "Nepovolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnDamagedItems# hold requests to be placed on and filled by damaged items."
-msgstr "rezervace i pro poškozené jednotky."
+msgstr "rezervace i na poškozené jednotky."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnPatronsPossessions# Allow"
@@ -1672,7 +1672,7 @@ msgstr "Nezahrnout automaticky"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ReservesNeedReturns# mark a hold as found and waiting when a hold is placed on a specific item and that item is already checked in."
-msgstr "označení rezervace jako čekající, pokud je rezervace vložena ke konkrétní jednotce a ta je zrovna vypůjčena."
+msgstr "označení rezervace jako čekající, pokud je rezervace přiřazena ke konkrétní jednotce a ta je právě vypůjčena."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ReturnBeforeExpiry# Don't require"
@@ -1885,18 +1885,6 @@ msgstr "Používat"
 # Circulation > Course Reserves
 msgid "circulation.pref#UseCourseReserves# course reserves"
 msgstr "modul Kurzy."
-
-# Circulation > Interface
-msgid "circulation.pref#UseTablesortForCirc# Don't enable"
-msgstr "Neumožnit"
-
-# Circulation > Interface
-msgid "circulation.pref#UseTablesortForCirc# Enable"
-msgstr "Umožnit"
-
-# Circulation > Interface
-msgid "circulation.pref#UseTablesortForCirc# the sorting of current patron checkouts on the circulation screen. <br/>NOTE: Enabling this function may slow down circulation time for patrons with many checkouts."
-msgstr "třídění čtenářových výpůjček na výpůjční obrazovce<br/> Pozn: Umožnění této funkce může zpomalit výpůjční dobu u mnoha výpůjček."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#UseTransportCostMatrix# Don't use"
@@ -3536,7 +3524,7 @@ msgstr "Nepovolit"
 
 # OPAC > Policy
 msgid "opac.pref#OpacAllowSharingPrivateLists# opac users to share private lists with other patrons."
-msgstr "čtenářům sdílet soukromé seznamy."
+msgstr "čtenářům sdílet jejich soukromé seznamy s ostatními uživateli."
 
 # OPAC > Features
 msgid "opac.pref#OpacAuthorities# Allow"
