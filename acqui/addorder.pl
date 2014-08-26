@@ -248,13 +248,6 @@ if ( $orderinfo->{quantity} ne '0' ) {
                 "biblio.copyrightdate"        => $$orderinfo{publicationyear} ? $$orderinfo{publicationyear}: "",
                 "biblioitems.itemtype"        => $$orderinfo{itemtype} ? $$orderinfo{itemtype} : "",
                 "biblioitems.editionstatement"=> $$orderinfo{editionstatement} ? $$orderinfo{editionstatement} : "",
-                "aqorders.branchcode"         => $$orderinfo{branchcode} ? $$orderinfo{branchcode} : "",
-                "aqorders.quantity"           => $$orderinfo{quantity} ? $$orderinfo{quantity} : "",
-                "aqorders.listprice"          => $$orderinfo{listprice} ? $$orderinfo{listprice} : "",
-                "aqorders.uncertainprice"     => $$orderinfo{uncertainprice} ? $$orderinfo{uncertainprice} : "",
-                "aqorders.rrp"                => $$orderinfo{rrp} ? $$orderinfo{rrp} : "",
-                "aqorders.ecost"              => $$orderinfo{ecost} ? $$orderinfo{ecost} : "",
-                "aqorders.discount"           => $$orderinfo{discount} ? $$orderinfo{discount} : "",
             });
 
         # create the record in catalogue, with framework ''
