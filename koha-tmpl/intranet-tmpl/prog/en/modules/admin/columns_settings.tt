@@ -87,7 +87,12 @@
             collapsible: true,
             autoHeight: false,
             header: "h3",
-            active: [% panel %]
+          [%- IF panel -%]
+            [%# we were asked to show a specific panel, usually on update %]
+            active: [%- panel -%]
+          [%- ELSE -%]
+            active: false
+          [%- END -%]
         });
     });
 </script>
