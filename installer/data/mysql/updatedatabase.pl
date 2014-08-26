@@ -8630,7 +8630,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.016";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("CREATE TABLE aqcontacts (
         id int(11) NOT NULL auto_increment,
