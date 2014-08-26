@@ -8,7 +8,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 79;
+use Test::More tests => 74;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -143,46 +143,6 @@ my ( $biblionumber1, $biblioitemnumber1 ) = AddBiblio( MARC::Record->new, '' );
 my ( $biblionumber2, $biblioitemnumber2 ) = AddBiblio( MARC::Record->new, '' );
 my ( $biblionumber3, $biblioitemnumber3 ) = AddBiblio( MARC::Record->new, '' );
 my ( $biblionumber4, $biblioitemnumber4 ) = AddBiblio( MARC::Record->new, '' );
-
-#
-# Test NewOrder
-#
-
-my ( $mandatoryparams, $return_error, $basketnum );
-
-# returns undef and croaks if basketno, quantity, biblionumber or budget_id is missing
-eval { $ordernumbers[0] = C4::Acquisition::NewOrder() };
-$return_error = $@;
-ok(
-    ( ! defined $ordernumbers[0] )
-      && ( defined $return_error ),
-    "NewOrder with no params returns undef and croaks"
-);
-
-$mandatoryparams = {
-    basketno     => $basketno,
-    quantity     => 24,
-    biblionumber => $biblionumber1,
-    budget_id    => $budget->{budget_id},
-};
-my @mandatoryparams_keys = keys %$mandatoryparams;
-foreach my $mandatoryparams_key (@mandatoryparams_keys) {
-    my %test_missing_mandatoryparams = %$mandatoryparams;
-    delete $test_missing_mandatoryparams{$mandatoryparams_key};
-    eval {
-        $ordernumbers[0] =
-          C4::Acquisition::NewOrder( \%test_missing_mandatoryparams );
-    };
-    $return_error = $@;
-    my $expected_error = "Cannot insert order: Mandatory parameter $mandatoryparams_key is missing";
-    ok(
-        ( !( defined $basketnum || defined $ordernumbers[0] ) )
-          && ( index( $return_error, $expected_error ) >= 0 ),
-"NewOrder with no $mandatoryparams_key returns undef and croaks with expected error message"
-    );
-}
-
-# FIXME to do : test the other features of NewOrder
 
 # Prepare 5 orders, and make distinction beween fields to be tested with eq and with ==
 # Ex : a price of 50.1 will be stored internally as 5.100000

@@ -1275,8 +1275,8 @@ sub NewOrder {
         croak "Cannot insert order: Mandatory parameter $key is missing" unless $orderinfo->{$key};
     }
 
-    $orderinfo->{entrydate} ||= output_pref({ dt => dt_from_string, dateformat => 'iso'});
     $orderinfo->{quantityreceived} ||= 0;
+    $orderinfo->{entrydate} ||= output_pref({ dt => dt_from_string, dateformat => 'iso'});
 
     # get only the columns of Aqorder
     my $schema = Koha::Database->new()->schema;
