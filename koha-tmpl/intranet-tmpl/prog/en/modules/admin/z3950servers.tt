@@ -27,6 +27,16 @@
                 timeout: { number: true }
             }
         });
+        $("#serverentry").submit(function( event ) {
+            // first test if show_sru_fields exists
+            if( $('#show_sru_fields').length && $('#show_sru_fields').val()=='' && !confirm( _("No SRU search field mappings have been defined. This means that all field searches will go through the whole record. Continue?"))) {
+                return false;
+            }
+            // copy show_sru_fields to hidden counterpart
+            $('#sru_fields').val( $('#show_sru_fields').val() );
+            // enable recordtype to include field in post
+            $('#recordtype').prop('disabled',false);
+        });
     });
 //]]>
 </script>
