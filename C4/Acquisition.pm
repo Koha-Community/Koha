@@ -30,6 +30,7 @@ use C4::Contract;
 use C4::Debug;
 use C4::Bookseller qw(GetBookSellerFromId);
 use C4::Templates qw(gettemplate);
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 use Time::localtime;
 use HTML::Entities;
@@ -1270,14 +1271,12 @@ sub NewOrder {
       if $orderinfo->{ordernumber};
 
     # if these parameters are missing, we can't continue
-    for my $key (qw/basketno quantity biblionumber budget_id/) {
-        croak "Mandatory parameter $key missing" unless $orderinfo->{$key};
+    for my $key ( qw( basketno quantity biblionumber budget_id ) ) {
+        croak "Cannot insert order: Mandatory parameter $key is missing" unless $orderinfo->{$key};
     }
 
-    $orderinfo->{'entrydate'} ||= C4::Dates->new()->output("iso");
-    if (!$orderinfo->{quantityreceived}) {
-        $orderinfo->{quantityreceived} = 0;
-    }
+    $orderinfo->{entrydate} ||= output_pref({ dt => dt_from_string, dateformat => 'iso'});
+    $orderinfo->{quantityreceived} ||= 0;
 
     # get only the columns of Aqorder
     my $schema = Koha::Database->new()->schema;
@@ -1285,18 +1284,16 @@ sub NewOrder {
     my $new_order = { map { $columns =~ / $_ / ? ($_ => $orderinfo->{$_}) : () } keys(%$orderinfo) };
     $new_order->{ordernumber} ||= undef;
 
-    my $rs = $schema->resultset('Aqorder');
-    my $ordernumber = $rs->create($new_order)->id;
-    if (not $new_order->{parent_ordernumber}) {
-        my $sth = $dbh->prepare("
-            UPDATE aqorders
-            SET parent_ordernumber = ordernumber
-            WHERE ordernumber = ?
-        ");
-        $sth->execute($ordernumber);
+    my $order = $schema->resultset('Aqorder')->create($new_order);
+    my $ordernumber = $order->id;
+
+    unless ( $new_order->{parent_ordernumber} ) {
+        $order->update({ parent_ordernumber => $ordernumber });
     }
-    return ( $new_order->{'basketno'}, $ordernumber );
+
+    return $ordernumber;
 }
+
 
 
 
@@ -1538,8 +1535,7 @@ q{SELECT * FROM aqorders WHERE biblionumber=? AND aqorders.ordernumber=?},
         $order->{'rrp'} = $rrp;
         $order->{ecost} = $ecost;
         $order->{'orderstatus'} = 'complete';
-        my $basketno;
-        ( $basketno, $new_ordernumber ) = NewOrder($order);
+        $new_ordernumber = NewOrder($order);
 
         if ($received_items) {
             foreach my $itemnumber (@$received_items) {
@@ -1937,7 +1933,7 @@ sub TransferOrder {
     delete $order->{parent_ordernumber};
     $order->{'basketno'} = $basketno;
     my $newordernumber;
-    (undef, $newordernumber) = NewOrder($order);
+    $newordernumber = NewOrder($order);
 
     $query = q{
         UPDATE aqorders_items

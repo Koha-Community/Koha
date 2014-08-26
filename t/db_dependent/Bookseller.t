@@ -127,9 +127,9 @@ is_deeply( \@booksellers, \@tab,
 my @bookseller1 = C4::Bookseller::GetBookSeller( $sample_supplier1->{name} );
 #FIXME : if there is 0 basket, GetBookSeller returns 1 as basketcount
 #is( $bookseller1[0]->{basketcount}, 0, 'Supplier1 has 0 basket' );
-my $sample_basket1 =
+my $basketno1 =
   C4::Acquisition::NewBasket( $id_supplier1, 'authorisedby1', 'basketname1' );
-my $sample_basket2 =
+my $basketno2 =
   C4::Acquisition::NewBasket( $id_supplier1, 'authorisedby2', 'basketname2' );
 @bookseller1 = C4::Bookseller::GetBookSeller( $sample_supplier1->{name} );
 is( $bookseller1[0]->{basketcount}, 2, 'Supplier1 has 2 baskets' );
@@ -290,22 +290,22 @@ my $id_supplier3 = C4::Bookseller::AddBookseller($sample_supplier3);
 my $id_supplier4 = C4::Bookseller::AddBookseller($sample_supplier4);
 
 #Add 2 baskets
-my $sample_basket3 =
+my $basketno3 =
   C4::Acquisition::NewBasket( $id_supplier3, 'authorisedby3', 'basketname3',
     'basketnote3' );
-my $sample_basket4 =
+my $basketno4 =
   C4::Acquisition::NewBasket( $id_supplier4, 'authorisedby4', 'basketname4',
     'basketnote4' );
 
 #Modify the basket to add a close date
 my $basket1info = {
-    basketno     => $sample_basket1,
+    basketno     => $basketno1,
     closedate    => $today,
     booksellerid => $id_supplier1
 };
 
 my $basket2info = {
-    basketno     => $sample_basket2,
+    basketno     => $basketno2,
     closedate    => $daysago5,
     booksellerid => $id_supplier2
 };
@@ -315,12 +315,12 @@ my $dur10 = DateTime::Duration->new( days => -10 );
 $dt_today2->add_duration($dur10);
 my $daysago10 = output_pref({ dt => $dt_today2, dateformat => 'iso', timeformat => '24hr', dateonly => 1 });
 my $basket3info = {
-    basketno  => $sample_basket3,
+    basketno  => $basketno3,
     closedate => $daysago10,
 };
 
 my $basket4info = {
-    basketno  => $sample_basket4,
+    basketno  => $basketno4,
     closedate => $today,
 };
 ModBasket($basket1info);
@@ -351,10 +351,9 @@ is(scalar(@subscriptions), 1, 'search for subscriptions by location');
 
 #Add 4 orders
 my ( $ordernumber1, $ordernumber2, $ordernumber3, $ordernumber4 );
-my ( $basketno1,    $basketno2,    $basketno3,    $basketno4 );
-( $basketno1, $ordernumber1 ) = C4::Acquisition::NewOrder(
+$ordernumber1 = C4::Acquisition::NewOrder(
     {
-        basketno         => $sample_basket1,
+        basketno         => $basketno1,
         quantity         => 24,
         biblionumber     => $biblionumber,
         budget_id        => $id_budget,
@@ -370,9 +369,9 @@ my ( $basketno1,    $basketno2,    $basketno3,    $basketno4 );
         datereceived     => '01-06-2013'
     }
 );
-( $basketno2, $ordernumber2 ) = C4::Acquisition::NewOrder(
+$ordernumber2 = C4::Acquisition::NewOrder(
     {
-        basketno       => $sample_basket2,
+        basketno       => $basketno2,
         quantity       => 20,
         biblionumber   => $biblionumber,
         budget_id      => $id_budget,
@@ -386,9 +385,9 @@ my ( $basketno1,    $basketno2,    $basketno3,    $basketno4 );
         ecost          => 10,
     }
 );
-( $basketno3, $ordernumber3 ) = C4::Acquisition::NewOrder(
+$ordernumber3 = C4::Acquisition::NewOrder(
     {
-        basketno       => $sample_basket3,
+        basketno       => $basketno3,
         quantity       => 20,
         biblionumber   => $biblionumber,
         budget_id      => $id_budget,
@@ -402,9 +401,9 @@ my ( $basketno1,    $basketno2,    $basketno3,    $basketno4 );
         ecost          => 11,
     }
 );
-( $basketno4, $ordernumber4 ) = C4::Acquisition::NewOrder(
+$ordernumber4 = C4::Acquisition::NewOrder(
     {
-        basketno         => $sample_basket4,
+        basketno         => $basketno4,
         quantity         => 20,
         biblionumber     => $biblionumber,
         budget_id        => $id_budget,
@@ -604,7 +603,7 @@ isnt( exists( $suppliers{$id_supplier4} ), 1, "Supplier4 hasnt late orders" );
 
 #Basket1 closedate -> $daysago10
 $basket1info = {
-    basketno  => $sample_basket1,
+    basketno  => $basketno1,
     closedate => $daysago10,
 };
 ModBasket($basket1info);

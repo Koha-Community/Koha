@@ -275,7 +275,7 @@ if ( $orderinfo->{quantity} ne '0' ) {
         ModOrder( $orderinfo);
     }
     else { # else, it's a new line
-        @$orderinfo{qw(basketno ordernumber )} = NewOrder($orderinfo);
+        $orderinfo->{ordernumber} = NewOrder($orderinfo);
     }
 
     # now, add items if applicable

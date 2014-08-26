@@ -256,7 +256,7 @@ if ($op eq ""){
 
         # remove uncertainprice flag if we have found a price in the MARC record
         $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
-        my ( $basketno, $ordernumber ) = NewOrder( \%orderinfo );
+        my $ordernumber = NewOrder( \%orderinfo );
 
         # 4th, add items if applicable
         # parse the item sent by the form, and create an item just for the import_record_id we are dealing with

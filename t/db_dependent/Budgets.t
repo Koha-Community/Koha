@@ -304,7 +304,7 @@ my $item_quantity = 2;
 my $number_of_orders_to_move = 0;
 for my $infos (@order_infos) {
     for ( 1 .. $infos->{pending_quantity} ) {
-        my ( undef, $ordernumber ) = C4::Acquisition::NewOrder(
+        my $ordernumber = C4::Acquisition::NewOrder(
             {
                 basketno           => $basketno,
                 biblionumber       => $biblionumber,
@@ -326,7 +326,7 @@ for my $infos (@order_infos) {
         $number_of_orders_to_move++;
     }
     for ( 1 .. $infos->{spent_quantity} ) {
-        my ( undef, $ordernumber ) = C4::Acquisition::NewOrder(
+        my $ordernumber = C4::Acquisition::NewOrder(
             {
                 basketno           => $basketno,
                 biblionumber       => $biblionumber,

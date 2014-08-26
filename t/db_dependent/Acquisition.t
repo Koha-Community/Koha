@@ -151,10 +151,10 @@ my ( $biblionumber4, $biblioitemnumber4 ) = AddBiblio( MARC::Record->new, '' );
 my ( $mandatoryparams, $return_error, $basketnum );
 
 # returns undef and croaks if basketno, quantity, biblionumber or budget_id is missing
-eval { ( $basketnum, $ordernumbers[0] ) = C4::Acquisition::NewOrder() };
+eval { $ordernumbers[0] = C4::Acquisition::NewOrder() };
 $return_error = $@;
 ok(
-    ( !( defined $basketnum || defined $ordernumbers[0] ) )
+    ( ! defined $ordernumbers[0] )
       && ( defined $return_error ),
     "NewOrder with no params returns undef and croaks"
 );
@@ -170,11 +170,11 @@ foreach my $mandatoryparams_key (@mandatoryparams_keys) {
     my %test_missing_mandatoryparams = %$mandatoryparams;
     delete $test_missing_mandatoryparams{$mandatoryparams_key};
     eval {
-        ( $basketnum, $ordernumbers[0] ) =
+        $ordernumbers[0] =
           C4::Acquisition::NewOrder( \%test_missing_mandatoryparams );
     };
     $return_error = $@;
-    my $expected_error = "Mandatory parameter $mandatoryparams_key missing";
+    my $expected_error = "Cannot insert order: Mandatory parameter $mandatoryparams_key is missing";
     ok(
         ( !( defined $basketnum || defined $ordernumbers[0] ) )
           && ( index( $return_error, $expected_error ) >= 0 ),
@@ -284,7 +284,7 @@ for ( 0 .. 4 ) {
       values %{ $order_content[$_]->{num} };
     @ocontent{ keys %{ $order_content[$_]->{str} } } =
       values %{ $order_content[$_]->{str} };
-    ( undef, $ordernumbers[$_] ) = C4::Acquisition::NewOrder( \%ocontent );
+    $ordernumbers[$_] = C4::Acquisition::NewOrder( \%ocontent );
     $order_content[$_]->{str}->{ordernumber} = $ordernumbers[$_];
 }
 

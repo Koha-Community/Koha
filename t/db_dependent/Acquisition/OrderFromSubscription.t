@@ -57,7 +57,7 @@ ok($basketno = NewBasket($booksellerid, 1), "NewBasket(  $booksellerid , 1  ) re
 my $cost = 42.00;
 my $subscription = GetSubscription( $subscriptionid );
 my $ordernumber;
-( $basketno, $ordernumber ) = NewOrder({
+$ordernumber = NewOrder({
     biblionumber => $subscription->{biblionumber},
     entrydate => '01-01-2013',
     quantity => 1,

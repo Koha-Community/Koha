@@ -44,7 +44,7 @@ my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
 my $itemnumber = AddItem({}, $biblionumber);
 
 t::lib::Mocks::mock_preference('AcqCreateItem', 'receiving');
-my ( undef, $ordernumber ) = C4::Acquisition::NewOrder(
+my $ordernumber = C4::Acquisition::NewOrder(
     {
         basketno => $basketno1,
         quantity => 2,
@@ -73,7 +73,7 @@ my $itemnumber1 = AddItem({}, $biblionumber);
 my $itemnumber2 = AddItem({}, $biblionumber);
 t::lib::Mocks::mock_preference('AcqCreateItem', 'ordering');
 t::lib::Mocks::mock_preference('AcqItemSetSubfieldsWhenReceiptIsCancelled', '7=9'); # notforloan is mapped with 952$7
-( undef, $ordernumber ) = C4::Acquisition::NewOrder(
+$ordernumber = C4::Acquisition::NewOrder(
     {
         basketno => $basketno1,
         quantity => 2,

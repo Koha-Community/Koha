@@ -54,7 +54,7 @@ my $budget = C4::Budgets::GetBudget( $budgetid );
 my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
 my $itemnumber = AddItem({}, $biblionumber);
 
-my ( undef, $ordernumber ) = C4::Acquisition::NewOrder(
+my $ordernumber = C4::Acquisition::NewOrder(
     {
         basketno => $basketno1,
         quantity => 2,

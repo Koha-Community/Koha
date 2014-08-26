@@ -39,7 +39,7 @@ my ($biblionumber1, $biblioitemnumber1) = AddBiblio(MARC::Record->new, '');
 my ($biblionumber2, $biblioitemnumber2) = AddBiblio(MARC::Record->new, '');
 my ($biblionumber3, $biblioitemnumber3) = AddBiblio(MARC::Record->new, '');
 
-( undef, $ordernumber1 ) = C4::Acquisition::NewOrder(
+$ordernumber1 = C4::Acquisition::NewOrder(
     {
         basketno => $basketno,
         quantity => 2,
@@ -48,7 +48,7 @@ my ($biblionumber3, $biblioitemnumber3) = AddBiblio(MARC::Record->new, '');
     }
 );
 
-( undef, $ordernumber2 ) = C4::Acquisition::NewOrder(
+$ordernumber2 = C4::Acquisition::NewOrder(
     {
         basketno => $basketno,
         quantity => 4,
