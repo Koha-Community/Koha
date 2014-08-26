@@ -2,8 +2,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 85;
+use Test::More tests => 86;
 use Test::MockModule;
+use Test::Warn;
+
 use C4::Context;
 use Koha::DateUtils;
 use DateTime::Duration;
@@ -450,8 +452,13 @@ ok( exists( $suppliers{$id_supplier3} ),
 isnt( exists( $suppliers{$id_supplier4} ), 1, "Supplier4 hasnt late orders" );
 
 #Case 3: With $delay = -1
-is( C4::Bookseller::GetBooksellersWithLateOrders( -1, undef, undef ),
-    undef, "-1 is a wrong value for a delay" );
+my $bslo;
+warning_like
+  { $bslo = C4::Bookseller::GetBooksellersWithLateOrders( -1, undef, undef ) }
+    qr/^WARNING: GetBooksellerWithLateOrders is called with a negative value/,
+    "GetBooksellerWithLateOrders prints a warning on negative values";
+
+is( $bslo, undef, "-1 is a wrong value for a delay" );
 
 #Case 4: With $delay = 0
 #    today  == now-0 -LATE- (if no deliverytime or deliverytime == 0)

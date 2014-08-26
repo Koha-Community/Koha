@@ -18,8 +18,9 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 56;
+use Test::More tests => 58;
 use Test::MockModule;
+use Test::Warn;
 
 use MARC::Record;
 
@@ -318,10 +319,10 @@ if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
 
 C4::Acquisition::CloseBasket( $basketno );
 my $err;
-eval {
-    warn "This test may issue a warning. Please ignore it.\n";
-    $err = SendAlerts( 'claimacquisition', [ $ordernumber ], 'TESTACQCLAIM' );
-};
+warning_like {
+    $err = SendAlerts( 'claimacquisition', [ $ordernumber ], 'TESTACQCLAIM' ) }
+    qr/^Bookseller .* without emails at/,
+    "SendAlerts prints a warning";
 is($err->{'error'}, 'no_email', "Trying to send an alert when there's no e-mail results in an error");
 
 my $bookseller = C4::Bookseller::GetBookSellerFromId($booksellerid);
@@ -329,11 +330,13 @@ $bookseller->{'contacts'}->[0]->email('testemail@mydomain.com');
 C4::Bookseller::ModBookseller($bookseller);
 $bookseller = C4::Bookseller::GetBookSellerFromId($booksellerid);
 
-eval {
-    $err = SendAlerts( 'claimacquisition', [ $ordernumber ], 'TESTACQCLAIM' );
-};
+warning_is {
+    $err = SendAlerts( 'claimacquisition', [ $ordernumber ], 'TESTACQCLAIM' ) }
+    "Fake sendmail",
+    "SendAlerts is using the mocked sendmail routine";
+
 is($err, 1, "Successfully sent claim");
-is($mail{'To'}, 'testemail@mydomain.com');
+is($mail{'To'}, 'testemail@mydomain.com', "mailto correct in sent claim");
 is($mail{'Message'}, 'my vendor|John Smith|<order>Ordernumber ' . $ordernumber . ' (Silence in the library) (1 ordered)</order>', 'Claim notice text constructed successfully');
 
 $dbh->rollback;
