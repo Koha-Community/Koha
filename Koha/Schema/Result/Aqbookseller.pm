@@ -97,12 +97,6 @@ __PACKAGE__->table("aqbooksellers");
   data_type: 'mediumtext'
   is_nullable: 1
 
-=head2 contact
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 100
-
 =head2 postal
 
   data_type: 'mediumtext'
@@ -113,41 +107,6 @@ __PACKAGE__->table("aqbooksellers");
   data_type: 'varchar'
   is_nullable: 1
   size: 255
-
-=head2 contpos
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 100
-
-=head2 contphone
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 100
-
-=head2 contfax
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 100
-
-=head2 contaltphone
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 100
-
-=head2 contemail
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 100
-
-=head2 contnotes
-
-  data_type: 'mediumtext'
-  is_nullable: 1
 
 =head2 active
 
@@ -237,24 +196,10 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "booksellerurl",
   { data_type => "mediumtext", is_nullable => 1 },
-  "contact",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
   "postal",
   { data_type => "mediumtext", is_nullable => 1 },
   "url",
   { data_type => "varchar", is_nullable => 1, size => 255 },
-  "contpos",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
-  "contphone",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
-  "contfax",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
-  "contaltphone",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
-  "contemail",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
-  "contnotes",
-  { data_type => "mediumtext", is_nullable => 1 },
   "active",
   { data_type => "tinyint", is_nullable => 1 },
   "listprice",
@@ -317,6 +262,21 @@ Related object: L<Koha::Schema::Result::Aqbasket>
 __PACKAGE__->has_many(
   "aqbaskets",
   "Koha::Schema::Result::Aqbasket",
+  { "foreign.booksellerid" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 aqcontacts
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Aqcontact>
+
+=cut
+
+__PACKAGE__->has_many(
+  "aqcontacts",
+  "Koha::Schema::Result::Aqcontact",
   { "foreign.booksellerid" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -392,8 +352,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Pqq5chHLUwm5Ss5CCQBL2g
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-26 11:53:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kz1tuPJihENyV6OyCwyX/A
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
