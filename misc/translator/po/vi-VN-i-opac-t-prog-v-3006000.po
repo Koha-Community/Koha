@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2014-07-15 22:34-0300\n"
-"PO-Revision-Date: 2014-07-16 04:25+0000\n"
+"PO-Revision-Date: 2014-08-18 07:33+0000\n"
 "Last-Translator: quyen_pq <thuvien7@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: vi\n"
@@ -16,17 +16,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1405484715.0\n"
+"X-POOTLE-MTIME: 1408347223.0\n"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:110
 #, c-format
 msgid "#record"
-msgstr "#biểu ghi"
+msgstr "biểu ghi"
 
 #. A
 #: opac-tmpl/prog/en/modules/opac-detail.tt:742
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
-msgstr "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
+msgstr "$[% SUBFIELD.mã %] [% SUBFIELD.value %]"
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -91,8 +91,8 @@ msgid ""
 "%s %s %s %s %s %s %s%s%sKoha online%s catalog &rsaquo; Course reserves for "
 "%s %s "
 msgstr ""
-"%s %s Search also for narrower subjects %s Search also for broader subjects "
-"%s Search also for related subjects %s"
+"%s%sSearch also for narrower subjects%s Search also for broader subjects%s "
+"Search also for related subjects%s"
 
 # done!
 #. %1$s:  END 
@@ -2770,17 +2770,17 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Cụm từ tên cá nhân"
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:81
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Subject and broader terms"
-msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Chủ đề và điều kiện rộng hơn"
+msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Chủ đề và thuật ngữ rộng hơn"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:82
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Subject and narrower terms"
-msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Chủ đề và điều kiện hẹp hơn"
+msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Chủ đề và thuật ngữ hẹp hơn"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:83
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Subject and related terms"
-msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Chủ đề và điều kiện liên quan"
+msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Chủ đề và thuật ngữ liên quan"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:80
 #, c-format
@@ -2826,7 +2826,7 @@ msgstr "(Có %s tài liệu quá hạn)"
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:124
 #, c-format
 msgid "(Checked out)"
-msgstr "(Được ghi mượn)"
+msgstr "(Đã ghi mượn)"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:718
 #: opac-tmpl/prog/en/modules/ilsdi.tt:719
@@ -3310,7 +3310,7 @@ msgstr "; Định dạng: "
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:543
 #, c-format
 msgid "; Innhold: "
-msgstr "; Innhold: "
+msgstr "; Đang mượn: "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:698
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:737
@@ -3351,7 +3351,7 @@ msgstr "; Kiểu file: "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:565
 #, c-format
 msgid "; Type of continuing resource: "
-msgstr "; Type of continuing resource: "
+msgstr "; Định dạng nguồn tài liệu tiếp tục: "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:782
 #, c-format
@@ -3386,8 +3386,8 @@ msgid ""
 "<%s controls preload=none> %s <%s src=\"%s\"%s /> %s [%s tag not supported "
 "by your browser.] "
 msgstr ""
-"<%s controls preload=none> %s <%s src=\"%s\"%s /> %s [%s tag not supported "
-"by your browser.] "
+"<%s controls preload=không có> %s <%s src=\"%s\"%s /> %s [%s Trình duyệt bạn "
+"đang sử dụng không hỗ trợ.] "
 
 #: opac-tmpl/prog/en/modules/opac-registration-email-sent.tt:16
 #, c-format
@@ -3953,7 +3953,7 @@ msgstr "Đối tượng bạn đọc: "
 #: opac-tmpl/prog/en/modules/opac-detail.tt:864
 #, c-format
 msgid "Audiovisual profile:"
-msgstr "Tài liệu âm thanh:"
+msgstr "Tài liệu nghe nhìn:"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/calendar.inc:1
