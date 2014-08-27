@@ -39,6 +39,7 @@ use C4::Dates qw( format_date_in_iso );
 
 use Koha::DateUtils;
 use Koha::Calendar;
+use Koha::Database;
 
 use List::MoreUtils qw( firstidx );
 
@@ -381,19 +382,33 @@ The routine does not look at future reserves (read: item level holds), but DOES 
 =cut
 
 sub GetReservesFromItemnumber {
-    my ( $itemnumber ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = "
-    SELECT reservedate,borrowernumber,branchcode,reserve_id,waitingdate
-    FROM   reserves
-    WHERE  itemnumber=? AND ( reservedate <= CAST(now() AS date) OR
-           waitingdate IS NOT NULL )
-    ORDER BY priority
-    ";
-    my $sth_res = $dbh->prepare($query);
-    $sth_res->execute($itemnumber);
-    my ( $reservedate, $borrowernumber,$branchcode, $reserve_id, $wait ) = $sth_res->fetchrow_array;
-    return ( $reservedate, $borrowernumber, $branchcode, $reserve_id, $wait );
+    my ($itemnumber) = @_;
+
+    my $schema = Koha::Database->new()->schema();
+
+    my $r = $schema->resultset('Reserve')->search(
+        {
+            itemnumber => $itemnumber,
+            suspend    => 0,
+            -or        => [
+                reservedate => \'<= CAST( NOW() AS DATE )',
+                waitingdate => { '!=', undef }
+            ]
+        },
+        {
+            order_by => 'priority',
+        }
+    )->first();
+
+    return unless $r;
+
+    return (
+        $r->reservedate(),
+        $r->get_column('borrowernumber'),
+        $r->get_column('branchcode'),
+        $r->reserve_id(),
+        $r->waitingdate(),
+    );
 }
 
 =head2 GetReservesFromBorrowernumber
