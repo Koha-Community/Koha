@@ -22,7 +22,7 @@ var MSG_NO_ITEMS_AVAILABLE = _("A hold cannot be requested on any of these items
 
 $(document).ready(function() {
     [% IF AutoResumeSuspendedHolds %]
-        $(".suspend_until_datepicker").datepicker("option", "minDate", 1);
+        $(".suspend_until_datepicker, .datepickerfrom, .datepickerto").datepicker("option", "minDate", 1);
     [% END %]
 });
 
