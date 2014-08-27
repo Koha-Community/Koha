@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 16;
+use Test::More tests => 17;
+use Test::Warn;
 
 use C4::Context;
 
@@ -100,11 +101,11 @@ is_deeply(
 # for next test, we want to let execute_query capture any SQL errors
 $dbh->{RaiseError} = 0;
 my $errors;
-($sth, $errors) = execute_query(
-    'SELECT surname FRM borrowers',  # error in the query is intentional
-    0,
-    10,
-);
+warning_like { ($sth, $errors) = execute_query(
+        'SELECT surname FRM borrowers',  # error in the query is intentional
+        0, 10 ) }
+        qr/^DBD::mysql::st execute failed: You have an error in your SQL syntax;/,
+        "Wrong SQL syntax raises warning";
 ok(
     defined($errors) && exists($errors->{queryerr}),
     'attempting to run a report with an SQL syntax error returns error message (Bug 12214)'
