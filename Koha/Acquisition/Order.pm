@@ -17,11 +17,10 @@ sub fetch {
     return unless $ordernumber;
     my $schema = Koha::Database->new->schema;
 
-    my $rs =
-      $schema->resultset('Aqorder')->search( { ordernumber => $ordernumber },
+    my $order =
+      $schema->resultset('Aqorder')->find( { ordernumber => $ordernumber },
         { result_class => 'DBIx::Class::ResultClass::HashRefInflator' } );
-
-    return $class->new( $rs->first );
+    return $class->new( $order );
 }
 
 sub insert {
