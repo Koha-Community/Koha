@@ -249,7 +249,9 @@ sub _build_query {
     my $zquery='';
     my $squery='';
     my $nterms=0;
-    foreach my $k ( keys %$pars ) {
+    foreach my $k ( sort keys %$pars ) {
+    #note that the sort keys forces an identical result under Perl 5.18
+    #one of the unit tests is based on that assumption
         if( ( my $val=$pars->{$k} ) && $qry_build->{$k} ) {
             $qry_build->{$k} =~ s/#term/$val/g;
             $zquery .= $qry_build->{$k};
