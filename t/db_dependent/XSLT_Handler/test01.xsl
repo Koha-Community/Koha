@@ -4,10 +4,10 @@
 >
   <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
 
-  <xsl:template match="record">
+  <xsl:template match="record|marc:record">
       <record>
       <xsl:apply-templates/>
-      <datafield tag="990">
+      <datafield tag="990" ind1='' ind2=''>
         <subfield code="a">
           <xsl:text>I saw you</xsl:text>
         </subfield>
