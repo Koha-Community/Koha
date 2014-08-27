@@ -8,6 +8,8 @@ use_ok('C4::Biblio');
 use_ok('C4::Budgets');
 use_ok('C4::Serials');
 
+use Koha::Acquisition::Order;
+
 # Start transaction
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
@@ -53,8 +55,8 @@ ok($basketno = NewBasket($booksellerid, 1), "NewBasket(  $booksellerid , 1  ) re
 
 my $cost = 42.00;
 my $subscription = GetSubscription( $subscriptionid );
-my $ordernumber;
-$ordernumber = NewOrder({
+
+my $order = Koha::Acquisition::Order->new({
     biblionumber => $subscription->{biblionumber},
     entrydate => '01-01-2013',
     quantity => 1,
@@ -68,12 +70,13 @@ $ordernumber = NewOrder({
     orderstatus => 'new',
     subscriptionid => $subscription->{subscriptionid},
     budget_id => $budget_id,
-});
+})->insert;
+my $ordernumber = $order->{ordernumber};
 
 my $is_currently_on_order = subscriptionCurrentlyOnOrder( $subscription->{subscriptionid} );
 is ( $is_currently_on_order, 1, "The subscription is currently on order");
 
-my $order = GetLastOrderNotReceivedFromSubscriptionid( $subscription->{subscriptionid} );
+$order = GetLastOrderNotReceivedFromSubscriptionid( $subscription->{subscriptionid} );
 is ( $order->{subscriptionid}, $subscription->{subscriptionid}, "test subscriptionid for the last order not received");
 ok( $order->{ecost} == $cost, "test cost for the last order not received");
 

@@ -4,11 +4,14 @@ use Modern::Perl;
 use Test::More tests => 18;
 use Data::Dumper;
 
-use C4::Acquisition qw( NewOrder NewBasket GetBasketsInfosByBookseller );
+use C4::Acquisition qw( NewBasket GetBasketsInfosByBookseller );
 use C4::Biblio qw( AddBiblio );
 use C4::Bookseller qw( AddBookseller );
 use C4::Budgets qw( AddBudget );
 use C4::Context;
+
+use Koha::Acquisition::Order;
+
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
@@ -34,28 +37,29 @@ my $budgetid = C4::Budgets::AddBudget(
 );
 my $budget = C4::Budgets::GetBudget( $budgetid );
 
-my ($ordernumber1, $ordernumber2, $ordernumber3);
 my ($biblionumber1, $biblioitemnumber1) = AddBiblio(MARC::Record->new, '');
 my ($biblionumber2, $biblioitemnumber2) = AddBiblio(MARC::Record->new, '');
 my ($biblionumber3, $biblioitemnumber3) = AddBiblio(MARC::Record->new, '');
 
-$ordernumber1 = C4::Acquisition::NewOrder(
+my $order1 = Koha::Acquisition::Order->new(
     {
         basketno => $basketno,
         quantity => 2,
         biblionumber => $biblionumber1,
         budget_id => $budget->{budget_id},
     }
-);
+)->insert;
+my $ordernumber1 = $order1->{ordernumber};
 
-$ordernumber2 = C4::Acquisition::NewOrder(
+my $order2 = Koha::Acquisition::Order->new(
     {
         basketno => $basketno,
         quantity => 4,
         biblionumber => $biblionumber2,
         budget_id => $budget->{budget_id},
     }
-);
+)->insert;
+my $ordernumber2 = $order2->{ordernumber};
 
 my $baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
 is( scalar(@$baskets), 1, 'Start: 1 basket' );

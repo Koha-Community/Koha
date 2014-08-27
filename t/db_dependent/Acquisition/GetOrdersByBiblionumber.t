@@ -7,6 +7,9 @@ use C4::Acquisition;
 use C4::Biblio;
 use C4::Bookseller;
 use C4::Budgets;
+
+use Koha::Acquisition::Order;
+
 use MARC::Record;
 
 #Start transaction
@@ -36,35 +39,37 @@ my $budgetid = C4::Budgets::AddBudget(
 
 my $budget = C4::Budgets::GetBudget( $budgetid );
 
-my ($ordernumber1, $ordernumber2, $ordernumber3);
 my ($biblionumber1, $biblioitemnumber1) = AddBiblio(MARC::Record->new, '');
 my ($biblionumber2, $biblioitemnumber2) = AddBiblio(MARC::Record->new, '');
-$ordernumber1 = C4::Acquisition::NewOrder(
+my $order1 = Koha::Acquisition::Order->new(
     {
         basketno => $basketno,
         quantity => 24,
         biblionumber => $biblionumber1,
         budget_id => $budget->{budget_id},
     }
-);
+)->insert;
+my $ordernumber1 = $order1->{ordernumber};
 
-$ordernumber2 = C4::Acquisition::NewOrder(
+my $order2 = Koha::Acquisition::Order->new(
     {
         basketno => $basketno,
         quantity => 42,
         biblionumber => $biblionumber2,
         budget_id => $budget->{budget_id},
     }
-);
+)->insert;
+my $ordernumber2 = $order1->{ordernumber};
 
-$ordernumber3 = C4::Acquisition::NewOrder(
+my $order3 = Koha::Acquisition::Order->new(
     {
         basketno => $basketno,
         quantity => 4,
         biblionumber => $biblionumber2,
         budget_id => $budget->{budget_id},
     }
-);
+)->insert;
+my $ordernumber3 = $order1->{ordernumber};
 
 my @orders = GetOrdersByBiblionumber();
 is(scalar(@orders), 0, 'GetOrdersByBiblionumber : no argument, return undef');

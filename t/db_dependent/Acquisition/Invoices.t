@@ -9,6 +9,8 @@ use warnings;
 use C4::Bookseller qw( GetBookSellerFromId );
 use C4::Biblio qw( AddBiblio );
 
+use Koha::Acquisition::Order;
+
 use Test::More tests => 22;
 
 BEGIN {
@@ -42,7 +44,6 @@ my $budgetid = C4::Budgets::AddBudget(
 );
 my $budget = C4::Budgets::GetBudget( $budgetid );
 
-my ($ordernumber1, $ordernumber2, $ordernumber3);
 my $bibrec1 = MARC::Record->new();
 $bibrec1->append_fields(
     MARC::Field->new('020', '', '', 'a' => '1234567890'),
@@ -53,25 +54,28 @@ $bibrec1->append_fields(
 my ($biblionumber1, $biblioitemnumber1) = AddBiblio($bibrec1, '');
 my ($biblionumber2, $biblioitemnumber2) = AddBiblio(MARC::Record->new, '');
 my ($biblionumber3, $biblioitemnumber3) = AddBiblio(MARC::Record->new, '');
-$ordernumber1 = C4::Acquisition::NewOrder(
+
+my $order1 = Koha::Acquisition::Order->new(
     {
         basketno => $basketno,
         quantity => 2,
         biblionumber => $biblionumber1,
         budget_id => $budget->{budget_id},
     }
-);
+)->insert;
+my $ordernumber1 = $order1->{ordernumber};
 
-$ordernumber2 = C4::Acquisition::NewOrder(
+my $order2 = Koha::Acquisition::Order->new(
     {
         basketno => $basketno,
         quantity => 1,
         biblionumber => $biblionumber2,
         budget_id => $budget->{budget_id},
     }
-);
+)->insert;
+my $ordernumber2 = $order2->{ordernumber};
 
-$ordernumber3 = C4::Acquisition::NewOrder(
+my $order3 = Koha::Acquisition::Order->new(
     {
         basketno => $basketno,
         quantity => 1,
@@ -80,7 +84,8 @@ $ordernumber3 = C4::Acquisition::NewOrder(
         ecost => 42,
         rrp => 42,
     }
-);
+)->insert;
+my $ordernumber3 = $order3->{ordernumber};
 
 my $invoiceid1 = AddInvoice(invoicenumber => 'invoice1', booksellerid => $booksellerid, unknown => "unknown");
 my $invoiceid2 = AddInvoice(invoicenumber => 'invoice2', booksellerid => $booksellerid, unknown => "unknown",

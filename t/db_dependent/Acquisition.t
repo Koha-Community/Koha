@@ -8,7 +8,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 74;
+use Test::More tests => 75;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -16,6 +16,7 @@ BEGIN {
     use_ok('C4::Biblio');
     use_ok('C4::Budgets');
     use_ok('C4::Bookseller');
+    use_ok('Koha::Acquisition::Order');
 }
 
 # Sub used for testing C4::Acquisition subs returning order(s):
@@ -25,7 +26,7 @@ BEGIN {
 # params :
 # $exp_fields             : arrayref whose elements are the keys we expect to find
 # $original_order_content : hashref whose 2 keys str and num contains hashrefs
-#                           containing content fields of the order created with NewOrder
+#                           containing content fields of the order created with Koha::Acquisition::Order
 # $order_to_check         : hashref whose keys/values are the content of an order
 #                           returned by the C4::Acquisition sub we are testing
 # returns :
@@ -244,7 +245,7 @@ for ( 0 .. 4 ) {
       values %{ $order_content[$_]->{num} };
     @ocontent{ keys %{ $order_content[$_]->{str} } } =
       values %{ $order_content[$_]->{str} };
-    $ordernumbers[$_] = C4::Acquisition::NewOrder( \%ocontent );
+    $ordernumbers[$_] = Koha::Acquisition::Order->new( \%ocontent )->insert->{ordernumber};
     $order_content[$_]->{str}->{ordernumber} = $ordernumbers[$_];
 }
 

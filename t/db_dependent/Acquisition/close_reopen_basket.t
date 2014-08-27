@@ -9,6 +9,8 @@ use C4::Bookseller;
 use C4::Budgets;
 use C4::Context;
 
+use Koha::Acquisition::Order;
+
 # Start transaction
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
@@ -43,24 +45,25 @@ my $budget = C4::Budgets::GetBudget( $budgetid );
 my ($biblionumber1, $biblioitemnumber1) = AddBiblio(MARC::Record->new, '');
 my ($biblionumber2, $biblioitemnumber2) = AddBiblio(MARC::Record->new, '');
 
-my ($ordernumber1, $ordernumber2);
-$ordernumber1 = C4::Acquisition::NewOrder(
+my $order1 = Koha::Acquisition::Order->new(
     {
         basketno => $basketno,
         quantity => 24,
         biblionumber => $biblionumber1,
         budget_id => $budget->{budget_id},
     }
-);
+)->insert;
+my $ordernumber1 = $order1->{ordernumber};
 
-$ordernumber2 = C4::Acquisition::NewOrder(
+my $order2 = Koha::Acquisition::Order->new(
     {
         basketno => $basketno,
         quantity => 42,
         biblionumber => $biblionumber2,
         budget_id => $budget->{budget_id},
     }
-);
+)->insert;
+my $ordernumber2 = $order2->{ordernumber};
 
 my $nb_biblio = C4::Acquisition::GetBiblioCountByBasketno( $basketno );
 is ( $nb_biblio, 2, "There are 2 biblio for this basket" );

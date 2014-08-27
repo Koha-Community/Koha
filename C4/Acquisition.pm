@@ -31,6 +31,7 @@ use C4::Debug;
 use C4::Bookseller qw(GetBookSellerFromId);
 use C4::Templates qw(gettemplate);
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Acquisition::Order;
 
 use Time::localtime;
 use HTML::Entities;
@@ -56,13 +57,13 @@ BEGIN {
         &ModBasketgroup &NewBasketgroup &DelBasketgroup &GetBasketgroup &CloseBasketgroup
         &GetBasketgroups &ReOpenBasketgroup
 
-        &NewOrder &DelOrder &ModOrder &GetOrder &GetOrders &GetOrdersByBiblionumber
+        &DelOrder &ModOrder &GetOrder &GetOrders &GetOrdersByBiblionumber
         &GetLateOrders &GetOrderFromItemnumber
         &SearchOrders &GetHistory &GetRecentAcqui
         &ModReceiveOrder &CancelReceipt
         &GetCancelledOrders &TransferOrder
         &GetLastOrderNotReceivedFromSubscriptionid &GetLastOrderReceivedFromSubscriptionid
-        &NewOrderItem &ModItemOrder
+        &ModItemOrder
 
         &GetParcels &GetParcel
 
@@ -1228,95 +1229,6 @@ sub GetLastOrderReceivedFromSubscriptionid {
 
 }
 
-
-#------------------------------------------------------------#
-
-=head3 NewOrder
-
-  &NewOrder(\%hashref);
-
-Adds a new order to the database. Any argument that isn't described
-below is the new value of the field with the same name in the aqorders
-table of the Koha database.
-
-=over
-
-=item $hashref->{'basketno'} is the basketno foreign key in aqorders, it is mandatory
-
-=item $hashref->{'ordernumber'} is a "minimum order number."
-
-=item $hashref->{'budgetdate'} is effectively ignored.
-If it's undef (anything false) or the string 'now', the current day is used.
-Else, the upcoming July 1st is used.
-
-=item $hashref->{'subscription'} may be either "yes", or anything else for "no".
-
-=item $hashref->{'uncertainprice'} may be 0 for "the price is known" or 1 for "the price is uncertain"
-
-=item defaults entrydate to Now
-
-The following keys are used: "biblionumber", "title", "basketno", "quantity", "order_vendornote", "order_internalnote", "rrp", "ecost", "gstrate", "unitprice", "subscription", "sort1", "sort2", "booksellerinvoicenumber", "listprice", "budgetdate", "purchaseordernumber", "branchcode", "booksellerinvoicenumber", "budget_id".
-
-=back
-
-=cut
-
-sub NewOrder {
-    my $orderinfo = shift;
-
-    my $dbh = C4::Context->dbh;
-    my @params;
-
-    croak "The ordernumber parameter should not be provided on calling NewOrder"
-      if $orderinfo->{ordernumber};
-
-    # if these parameters are missing, we can't continue
-    for my $key ( qw( basketno quantity biblionumber budget_id ) ) {
-        croak "Cannot insert order: Mandatory parameter $key is missing" unless $orderinfo->{$key};
-    }
-
-    $orderinfo->{quantityreceived} ||= 0;
-    $orderinfo->{entrydate} ||= output_pref({ dt => dt_from_string, dateformat => 'iso'});
-
-    # get only the columns of Aqorder
-    my $schema = Koha::Database->new()->schema;
-    my $columns = ' '.join(' ', $schema->source('Aqorder')->columns).' ';
-    my $new_order = { map { $columns =~ / $_ / ? ($_ => $orderinfo->{$_}) : () } keys(%$orderinfo) };
-    $new_order->{ordernumber} ||= undef;
-
-    my $order = $schema->resultset('Aqorder')->create($new_order);
-    my $ordernumber = $order->id;
-
-    unless ( $new_order->{parent_ordernumber} ) {
-        $order->update({ parent_ordernumber => $ordernumber });
-    }
-
-    return $ordernumber;
-}
-
-
-
-
-#------------------------------------------------------------#
-
-=head3 NewOrderItem
-
-  &NewOrderItem();
-
-=cut
-
-sub NewOrderItem {
-    my ($itemnumber, $ordernumber)  = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = qq|
-            INSERT INTO aqorders_items
-                (itemnumber, ordernumber)
-            VALUES (?,?)    |;
-
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $itemnumber, $ordernumber);
-}
-
 #------------------------------------------------------------#
 
 =head3 ModOrder
@@ -1535,7 +1447,7 @@ q{SELECT * FROM aqorders WHERE biblionumber=? AND aqorders.ordernumber=?},
         $order->{'rrp'} = $rrp;
         $order->{ecost} = $ecost;
         $order->{'orderstatus'} = 'complete';
-        $new_ordernumber = NewOrder($order);
+        $new_ordernumber = Koha::Acquisition::Order->new($order)->insert->{ordernumber};
 
         if ($received_items) {
             foreach my $itemnumber (@$received_items) {
@@ -1932,8 +1844,8 @@ sub TransferOrder {
     delete $order->{'ordernumber'};
     delete $order->{parent_ordernumber};
     $order->{'basketno'} = $basketno;
-    my $newordernumber;
-    $newordernumber = NewOrder($order);
+
+    my $newordernumber = Koha::Acquisition::Order->new($order)->insert->{ordernumber};
 
     $query = q{
         UPDATE aqorders_items

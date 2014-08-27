@@ -141,6 +141,7 @@ if ($quantityrec > $origquantityrec ) {
             push @{$itemhash{$itemid[$i]}->{'ind_tag'}},$ind_tag[$i];
             push @{$itemhash{$itemid[$i]}->{'indicator'}},$indicator[$i];
         }
+        my $order = Koha::Acquisition::Order->fetch({ ordernumber => $new_ordernumber });
         foreach my $item (keys %itemhash){
             my $xml = TransformHtmlToXml( $itemhash{$item}->{'tags'},
                                           $itemhash{$item}->{'subfields'},
@@ -149,7 +150,7 @@ if ($quantityrec > $origquantityrec ) {
                                           $itemhash{$item}->{'indicator'},'ITEM');
             my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
             my (undef,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$biblionumber);
-            NewOrderItem($itemnumber, $new_ordernumber);
+            $order->add_item( $itemnumber );
         }
     }
 }

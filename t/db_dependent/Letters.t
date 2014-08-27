@@ -43,6 +43,7 @@ use_ok('C4::Bookseller');
 use_ok('C4::Letters');
 use t::lib::Mocks;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Acquisition::Order;
 
 my $dbh = C4::Context->dbh;
 
@@ -295,7 +296,6 @@ my $budgetid = C4::Budgets::AddBudget({
     budget_name => "budget_name_test_letters",
 });
 
-my $ordernumber;
 my $bib = MARC::Record->new();
 if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
     $bib->append_fields(
@@ -308,14 +308,15 @@ if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
 }
 
 ($biblionumber, $biblioitemnumber) = AddBiblio($bib, '');
-$ordernumber = C4::Acquisition::NewOrder(
+my $order = Koha::Acquisition::Order->new(
     {
         basketno => $basketno,
         quantity => 1,
         biblionumber => $biblionumber,
         budget_id => $budgetid,
     }
-);
+)->insert;
+my $ordernumber = $order->{ordernumber};
 
 C4::Acquisition::CloseBasket( $basketno );
 my $err;

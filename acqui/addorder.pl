@@ -123,7 +123,7 @@ use strict;
 use warnings;
 use CGI;
 use C4::Auth;			# get_template_and_user
-use C4::Acquisition;	# NewOrder DelOrder ModOrder
+use C4::Acquisition;    # DelOrder ModOrder
 use C4::Suggestions;	# ModStatus
 use C4::Biblio;			# AddBiblio TransformKohaToMarc
 use C4::Budgets;
@@ -271,11 +271,12 @@ if ( $orderinfo->{quantity} ne '0' ) {
     $orderinfo->{unitprice} = $orderinfo->{ecost} if not defined $orderinfo->{unitprice} or $orderinfo->{unitprice} eq '';
 
     # if we already have $ordernumber, then it's an ordermodif
+    my $order = Koha::Acquisition::Order->new($orderinfo);
     if ($$orderinfo{ordernumber}) {
         ModOrder( $orderinfo);
     }
     else { # else, it's a new line
-        $orderinfo->{ordernumber} = NewOrder($orderinfo);
+        $order->insert;
     }
 
     # now, add items if applicable
@@ -314,8 +315,7 @@ if ( $orderinfo->{quantity} ne '0' ) {
                                     'ITEM');
             my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
             my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$$orderinfo{biblionumber});
-            NewOrderItem($itemnumber, $$orderinfo{ordernumber});
-
+            $order->add_item($itemnumber);
         }
     }
 

@@ -12,6 +12,7 @@ use C4::Budgets;
 use t::lib::Mocks;
 
 use Koha::DateUtils;
+use Koha::Acquisition::Order;
 use MARC::Record;
 
 my $dbh = C4::Context->dbh;
@@ -44,14 +45,15 @@ my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
 my $itemnumber = AddItem({}, $biblionumber);
 
 t::lib::Mocks::mock_preference('AcqCreateItem', 'receiving');
-my $ordernumber = C4::Acquisition::NewOrder(
+my $order = Koha::Acquisition::Order->new(
     {
         basketno => $basketno1,
         quantity => 2,
         biblionumber => $biblionumber,
         budget_id => $budget->{budget_id},
     }
-);
+)->insert;
+my $ordernumber = $order->{ordernumber};
 
 ModReceiveOrder(
     {
@@ -62,28 +64,29 @@ ModReceiveOrder(
     }
 );
 
-NewOrderItem($itemnumber, $ordernumber);
+$order->add_item( $itemnumber );
 
 CancelReceipt($ordernumber);
 
-my $order = GetOrder( $ordernumber );
+$order = GetOrder( $ordernumber );
 is(scalar GetItemnumbersFromOrder($order->{ordernumber}), 0, "Create items on receiving: 0 item exist after cancelling a receipt");
 
 my $itemnumber1 = AddItem({}, $biblionumber);
 my $itemnumber2 = AddItem({}, $biblionumber);
 t::lib::Mocks::mock_preference('AcqCreateItem', 'ordering');
 t::lib::Mocks::mock_preference('AcqItemSetSubfieldsWhenReceiptIsCancelled', '7=9'); # notforloan is mapped with 952$7
-$ordernumber = C4::Acquisition::NewOrder(
+$order = Koha::Acquisition::Order->new(
     {
         basketno => $basketno1,
         quantity => 2,
         biblionumber => $biblionumber,
         budget_id => $budget->{budget_id},
     }
-);
+)->insert;
+$ordernumber = $order->{ordernumber};
 
-NewOrderItem($itemnumber1, $ordernumber);
-NewOrderItem($itemnumber2, $ordernumber);
+$order->add_item( $itemnumber1 );
+$order->add_item( $itemnumber2 );
 
 my ( undef, $new_ordernumber ) = ModReceiveOrder(
     {

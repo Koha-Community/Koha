@@ -10,6 +10,7 @@ use C4::Items;
 use C4::Bookseller;
 use C4::Budgets;
 use Koha::DateUtils;
+use Koha::Acquisition::Order;
 use MARC::Record;
 
 my $dbh = C4::Context->dbh;
@@ -54,18 +55,18 @@ my $budget = C4::Budgets::GetBudget( $budgetid );
 my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
 my $itemnumber = AddItem({}, $biblionumber);
 
-my $ordernumber = C4::Acquisition::NewOrder(
+my $order = Koha::Acquisition::Order->new(
     {
         basketno => $basketno1,
         quantity => 2,
         biblionumber => $biblionumber,
         budget_id => $budget->{budget_id},
     }
-);
-NewOrderItem($itemnumber, $ordernumber);
+)->insert;
+my $ordernumber = $order->{ordernumber};
+$order->add_item( $itemnumber );
 
 # Begin tests
-my $order;
 is(scalar GetOrders($basketno1), 1, "1 order in basket1");
 ($order) = GetOrders($basketno1);
 is(scalar GetItemnumbersFromOrder($order->{ordernumber}), 1, "1 item in basket1's order");

@@ -14,6 +14,8 @@ use C4::Serials;
 use C4::Budgets;
 use C4::Biblio;
 
+use Koha::Acquisition::Order;
+
 BEGIN {
     use_ok('C4::Bookseller');
 }
@@ -350,8 +352,7 @@ is(scalar(@subscriptions), 1, 'search for subscriptions by call number');
 is(scalar(@subscriptions), 1, 'search for subscriptions by location');
 
 #Add 4 orders
-my ( $ordernumber1, $ordernumber2, $ordernumber3, $ordernumber4 );
-$ordernumber1 = C4::Acquisition::NewOrder(
+my $order1 = Koha::Acquisition::Order->new(
     {
         basketno         => $basketno1,
         quantity         => 24,
@@ -368,8 +369,10 @@ $ordernumber1 = C4::Acquisition::NewOrder(
         ecost            => 10,
         datereceived     => '01-06-2013'
     }
-);
-$ordernumber2 = C4::Acquisition::NewOrder(
+)->insert;
+my $ordernumber1 = $order1->{ordernumber};
+
+my $order2 = Koha::Acquisition::Order->new(
     {
         basketno       => $basketno2,
         quantity       => 20,
@@ -384,8 +387,10 @@ $ordernumber2 = C4::Acquisition::NewOrder(
         rrp            => 10,
         ecost          => 10,
     }
-);
-$ordernumber3 = C4::Acquisition::NewOrder(
+)->insert;
+my $ordernumber2 = $order2->{ordernumber};
+
+my $order3 = Koha::Acquisition::Order->new(
     {
         basketno       => $basketno3,
         quantity       => 20,
@@ -400,8 +405,10 @@ $ordernumber3 = C4::Acquisition::NewOrder(
         rrp            => 11,
         ecost          => 11,
     }
-);
-$ordernumber4 = C4::Acquisition::NewOrder(
+)->insert;
+my $ordernumber3 = $order3->{ordernumber};
+
+my $order4 = Koha::Acquisition::Order->new(
     {
         basketno         => $basketno4,
         quantity         => 20,
@@ -417,7 +424,8 @@ $ordernumber4 = C4::Acquisition::NewOrder(
         ecost            => 11,
         quantityreceived => 20
     }
-);
+)->insert;
+my $ordernumber4 = $order4->{ordernumber};
 
 #Test cases:
 # Sample datas :

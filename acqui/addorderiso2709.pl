@@ -46,6 +46,7 @@ use C4::Branch;         # GetBranches
 use C4::Members;
 
 use Koha::Number::Price;
+use Koha::Acquisition::Order;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie, $userflags) = get_template_and_user({
@@ -257,7 +258,7 @@ if ($op eq ""){
 
         # remove uncertainprice flag if we have found a price in the MARC record
         $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
-        my $ordernumber = NewOrder( \%orderinfo );
+        my $order = Koha::Acquisition::Order->new( \%orderinfo )->insert;
 
         # 4th, add items if applicable
         # parse the item sent by the form, and create an item just for the import_record_id we are dealing with
@@ -279,7 +280,7 @@ if ($op eq ""){
             my $record = MARC::Record::new_from_xml( $xml, 'UTF-8' );
             for (my $qtyloop=1;$qtyloop <= $c_quantity;$qtyloop++) {
                 my ( $biblionumber, $bibitemnum, $itemnumber ) = AddItemFromMarc( $record, $biblionumber );
-                NewOrderItem( $itemnumber, $ordernumber );
+                $order->add_item( $itemnumber );
             }
         } else {
             SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );

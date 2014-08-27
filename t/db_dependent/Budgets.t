@@ -10,6 +10,8 @@ use C4::Bookseller;
 use C4::Acquisition;
 use C4::Dates;
 
+use Koha::Acquisition::Order;
+
 use YAML;
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
@@ -304,7 +306,7 @@ my $item_quantity = 2;
 my $number_of_orders_to_move = 0;
 for my $infos (@order_infos) {
     for ( 1 .. $infos->{pending_quantity} ) {
-        my $ordernumber = C4::Acquisition::NewOrder(
+        my $order = Koha::Acquisition::Order->new(
             {
                 basketno           => $basketno,
                 biblionumber       => $biblionumber,
@@ -321,12 +323,13 @@ for my $infos (@order_infos) {
                 uncertainprice     => 0,
                 gstrate            => 0,
             }
-        );
+        )->insert;
+        my $ordernumber = $order->{ordernumber};
         push @{ $budgets{$infos->{budget_id}} }, $ordernumber;
         $number_of_orders_to_move++;
     }
     for ( 1 .. $infos->{spent_quantity} ) {
-        my $ordernumber = C4::Acquisition::NewOrder(
+        my $order = Koha::Acquisition::Order->new(
             {
                 basketno           => $basketno,
                 biblionumber       => $biblionumber,
@@ -343,7 +346,8 @@ for my $infos (@order_infos) {
                 uncertainprice     => 0,
                 gstrate            => 0,
             }
-        );
+        )->insert;
+        my $ordernumber = $order->{ordernumber};
         ModReceiveOrder({
               biblionumber     => $biblionumber,
               ordernumber      => $ordernumber,
