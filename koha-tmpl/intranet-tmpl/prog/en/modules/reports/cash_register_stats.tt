@@ -1,0 +1,307 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Reports [% IF ( do_it ) %]&rsaquo; Cash Register Statistics &rsaquo; Results[% ELSE %]&rsaquo; Cash Register Statistics[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<script type="text/javascript" id="js">$(document).ready(function() {
+ $(document).ready(function() {
+    $("#tbl_cash_register_stats").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "iDisplayLength": 50
+    }));
+ });
+}); </script>
+[% INCLUDE 'calendar.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+actTotal = "";
+
+function isNull(f,noalert) {
+    if (f.value.length > 0) {
+        return false;
+    }
+    return true;
+}
+
+$(document).ready(function() {
+
+    // http://jqueryui.com/demos/datepicker/#date-range
+    var dates = $( "#filter_date_begin, #filter_date_end" ).datepicker({
+        changeMonth: true,
+        numberOfMonths: 1,
+        onSelect: function( selectedDate ) {
+            var option = this.id == "filter_date_begin" ? "minDate" : "maxDate",
+                instance = $( this ).data( "datepicker" );
+                date = $.datepicker.parseDate(
+                    instance.settings.dateFormat ||
+                    $.datepicker._defaults.dateFormat,
+                    selectedDate, instance.settings );
+            dates.not( this ).datepicker( "option", option, date );
+        }
+    });
+
+    $('#frmCashRegister').submit(function() {
+        var isFormValid = true;
+        var alertString= _("Form not submitted because of the following problem(s)")+"\n";
+
+        alertString +="-------------------------------------------------------------------\n\n";
+
+        if ( !$('#filter_date_begin').val() || !$('#filter_date_end').val()){
+            isFormValid = false;
+            alertString += "\n- " + _("Dates cannot be empty");
+        }
+
+        if (!isFormValid) {
+           alert(alertString);
+           return false;
+        }
+
+        $(this).submit();
+    });
+});
+
+//]]>
+</script>
+
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
+    &rsaquo;
+    [% IF ( do_it ) %]
+        <a href="/cgi-bin/koha/reports/cash_register_stats.pl">Cash Register Statistics</a> &rsaquo; Results
+    [% ELSE %]
+        Cash Register Statistics
+    [% END %]
+</div>
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+    <h1>Cash register statistics</h1>
+    <form method="post" action="/cgi-bin/koha/reports/cash_register_stats.pl" id="frmCashRegister">
+        <fieldset class="rows">
+        <legend>Cash Register statistics [% beginDate %] to [% endDate %]</legend>
+        <table>
+            <thead>
+                <tr>
+                    <th>Interval</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <label for="filter_date_begin">From</label>
+                        <input type="text" size="10" id="filter_date_begin" name="filter_date_begin" value="[% beginDate %]" />
+                        <label for="filter_date_end">To</label>
+                        <input type="text" size="10" id="filter_date_end" name="filter_date_end" value="[% endDate %]" />
+                    </td>
+                </tr>
+            </tbody>
+        </table><br />
+        </fieldset>
+
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <label for="">Transaction type:</label>
+                    <select name="transaction_type" id="transaction_type">
+                        [% IF transaction_type == "ALL" %]
+                        <option value="ALL" selected="selected">All transactions</option>
+                        [% ELSE %]
+                        <option value="ALL">All transactions</option>
+                        [% END %]
+
+                        [% IF transaction_type == "ACT" %]
+                        <option value="ACT" selected="selected">Active transactions</option>
+                        [% ELSE %]
+                        <option value="ACT">Active transactions</option>
+                        [% END %]
+
+                        [% IF transaction_type == "C" %]
+                        <option value="C" selected="selected">Credit</option>
+                        [% ELSE %]
+                        <option value="C">Credit</option>
+                        [% END %]
+
+                        [% IF transaction_type == "FORW" %]
+                        <option value="FORW" selected="selected">Write off</option>
+                        [% ELSE %]
+                        <option value="FORW">Write off</option>
+                        [% END %]
+
+                        [% IF transaction_type == "F" %]
+                        <option value="F" selected="selected">Fine</option>
+                        [% ELSE %]
+                        <option value="F">Fine</option>
+                        [% END %]
+
+                        [% IF transaction_type == "FU" %]
+                        <option value="FU" selected="selected">Fine - long period</option>
+                        [% ELSE %]
+                        <option value="FU">Fine - long period</option>
+                        [% END %]
+
+                        [% IF transaction_type == "PAY" %]
+                        <option value="PAY" selected="selected">Payment</option>
+                        [% ELSE %]
+                        <option value="PAY">Payment</option>
+                        [% END %]
+
+                        [% IF transaction_type == "A" %]
+                        <option value="A" selected="selected">Account Management Fee</option>
+                        [% ELSE %]
+                        <option value="A">Account Management Fee</option>
+                        [% END %]
+
+                        [% IF transaction_type == "M" %]
+                        <option value="M" selected="selected">Sundry</option>
+                        [% ELSE %]
+                        <option value="M">Sundry</option>
+                        [% END %]
+
+                        [% IF transaction_type == "L" %]
+                        <option value="L" selected="selected">Lost item</option>
+                        [% ELSE %]
+                        <option value="L">Lost item</option>
+                        [% END %]
+
+                        [% IF transaction_type == "N" %]
+                        <option value="N" selected="selected">New card</option>
+                        [% ELSE %]
+                        <option value="N">New card</option>
+                        [% END %]
+
+                        [% FOREACH manualinv IN manualinv_types %]
+                            [% value_manualinv = manualinv.authorised_value|truncate(5, '') %]
+                            [% IF transaction_type == value_manualinv %]
+                            <option value="[% value_manualinv %]" selected="selected">[% manualinv.authorised_value %]</option>
+                            [% ELSE %]
+                            <option value="[% value_manualinv %]">[% manualinv.authorised_value %]</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                </li>
+                <li>
+                    <label>Library</label>
+                    <select name="branch" id="branch">
+                        <option value="ALL">All</option>
+                        [% FOREACH branchloo IN branchloop %]
+                            [% IF ( branchloo.selected ) %]
+                            <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
+                            [% ELSE %]
+                            <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+             </td>
+        </tr>
+                </li>
+            </ol>
+        </fieldset>
+
+        <fieldset class="rows">
+            <legend>Output</legend>
+            <ol>
+                <li>
+                    <label for="outputscreen">To screen into the browser: </label>
+                    <input type="radio" checked="checked" name="output" id="outputscreen" value="screen" />
+                </li>
+                <li>
+                    <label for="outputfile">To a file:</label>
+                    <input type="radio" name="output" value="file" id="outputfile" />
+                    <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" />
+                </li>
+            </ol>
+        </fieldset>
+
+        <fieldset class="action">
+        <input type="submit" value="Submit" name="do_it" />
+        </fieldset>
+    </form>
+
+    [% IF ( do_it ) %]
+    <div>&nbsp;</div>
+    <table id="tbl_cash_register_stats">
+        <thead>
+        <tr>
+            <th>Manager name</th>
+            <th>Borrower cardnumber</th>
+            <th>Borrower name</th>
+            <th>Branch</th>
+            <th>Transaction date</th>
+            <th>Transaction type</th>
+            <th>Amount</th>
+            <th>Biblio title</th>
+            <th>Barcode</th>
+            <th>Document type</th>
+        </tr>
+        </thead>
+        [% FOREACH loopresul IN loopresult %]
+            <tr>
+                <td>[% loopresul.mfirstname %] [% loopresul.msurname %]</td>
+                <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopresul.borrowernumber %]">[% loopresul.cardnumber %]</a></td>
+                <td>[% loopresul.bfirstname %] [% loopresul.bsurname %]</td>
+                <td>[% loopresul.branchname %]</td>
+                <td>[% loopresul.date %]</td>
+                <td>
+                    [% IF loopresul.accounttype == "ACT" %]
+                        <span>Active transactions</span>
+                    [% ELSIF loopresul.accounttype == "C" || loopresul.accounttype == "CR" %]
+                        <span>Credit</span>
+                    [% ELSIF loopresul.accounttype == "FORW" || loopresul.accounttype == "W" %]
+                        <span>Write off</span>
+                    [% ELSIF loopresul.accounttype == "F" %]
+                        <span>Fine</span>
+                    [% ELSIF loopresul.accounttype == "FU" %]
+                        <span>Fine - long period</span>
+                    [% ELSIF loopresul.accounttype == "Pay" %]
+                        <span>Payment</span>
+                    [% ELSIF loopresul.accounttype == "A" %]
+                        <span>Account management fee</span>
+                    [% ELSIF loopresul.accounttype == "M" %]
+                        <span>Sundry</span>
+                    [% ELSIF loopresul.accounttype == "L" || loopresul.accounttype == "LR" %]
+                        <span>Lost item</span>
+                    [% ELSIF loopresul.accounttype == "N" %]
+                        <span>New card</span>
+                    [% ELSE %]
+                        [% FOREACH manualinv IN manualinv_types %]
+                            [% value_manualinv = manualinv.authorised_value|truncate(5, '') %]
+                            [% IF loopresul.accounttype == value_manualinv %]
+                            <span>[% manualinv.authorised_value %]</span>
+                            [% LAST %]
+                            [% END %]
+                        [% END %]
+                    [% END %]
+                </td>
+                <td style="text-align:right;">[% loopresul.amount %]</td>
+                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopresul.biblionumber %]">[% loopresul.title %]</a></td>
+                <td>[% loopresul.barcode %]</td>
+                <td>[% loopresul.itype %]</td>
+            </tr>
+        [% END %]
+        <tfoot>
+        <tr>
+            <th colspan="6" style="text-align:right;">TOTAL</th>
+            <th style="text-align:right;">[% total %]</th>
+            <th colspan="3">&nbsp;</th>
+        </tr>
+        </tfoot>
+    </table>
+
+    [% END %] [%# do_it %]
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'reports-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
