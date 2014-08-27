@@ -363,7 +363,7 @@ sub _create_connection {
             #first remove surrounding spaces at comma and equals-sign
             s/^\s+|\s+$//g;
             my @temp= split '=', $_, 2;
-            @temp= map { s/^\s+|\s+$//g; $_; } @temp;
+            @temp= map { my $c=$_; $c=~s/^\s+|\s+$//g; $c; } @temp;
             $option1->option( $temp[0] => $temp[1] ) if @temp;
         }
     } elsif( $server->{servertype} eq 'zed' ) {
