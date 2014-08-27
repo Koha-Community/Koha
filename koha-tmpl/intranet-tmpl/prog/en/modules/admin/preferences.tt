@@ -17,7 +17,13 @@
         });[% END %]
 
     $(document).ready(function(){
-        $("select[multiple='multiple']").multipleSelect( { placeholder: _("Please select ...") } );
+        $("select[multiple='multiple']").multipleSelect( {
+            placeholder: _("Please select ..."),
+            selectAllText: _("Select all"),
+            allSelected: _("All selected"),
+            countSelected: _("# of % selected"),
+            noMatchesFound: _("No matches found")
+        } );
     });
     // This is here because of its dependence on template variables, everything else should go in js/pages/preferences.js - jpw
     var to_highlight = "[% searchfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
