@@ -212,32 +212,7 @@ $(document).ready(function() {
                [% ELSE %]
                <label>[% ite.subfield %] - [% ite.marc_lib %]</label>
                [% END %]
-
-                [% SET mv = ite.marc_value %]
-                [% IF ( mv.type == 'hidden' ) %]
-                    <input type="hidden" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />[% mv.avalue %]
-                [% ELSIF ( mv.type == 'select' ) %]
-                    <select name="[%- mv.name -%]" id="[%- mv.id -%]" size="1" class="input_marceditor">
-                    [% FOREACH aval IN mv.values %]
-                        [% IF aval == mv.default %]
-                            <option value="[%- aval -%]" selected="selected">[%- mv.labels.$aval -%]</option>
-                        [% ELSE %]
-                            <option value="[%- aval -%]">[%- mv.labels.$aval -%]</option>
-                        [% END %]
-                    [% END %]
-                    </select>
-                [% ELSIF ( mv.type == 'text1' ) %]
-                    <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
-                    <a href="#" class="buttonDot" onclick="Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=&quot;[%- mv.authtypecode -%]&quot;&index=[%- mv.id -%]','[%- mv.id -%]'); return false;" title="Tag editor">...</a>
-                [% ELSIF ( mv.type == 'text2' ) %]
-                    <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" onfocus="Focus[%- mv.function -%]([%- mv.data_random -%], '[%- mv.id -%]');" onchange="[%- mv.change -%]" onblur="Blur[%- mv.function -%]([%- mv.data_random -%], '[%- mv.id -%]');" />
-                    <a href="#" class="buttonDot" onclick="Clic[%- mv.function -%]('[%- mv.id -%]'); return false;" title="Tag editor">...</a>[% mv.javascript %]
-                [% ELSIF ( mv.type == 'text' ) %]
-                    <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
-                [% ELSIF ( mv.type == 'textarea' ) %]
-                    <textarea id="[%- mv.id -%]" name="field_value" class="input_marceditor" rows="5" cols="64" >[% mv.value %]</textarea>
-                [% END %]
-
+                [% ite.marc_value %]
                 <input type="hidden" name="tag"       value="[% ite.tag %]" />
                 <input type="hidden" name="subfield"  value="[% ite.subfield %]" />
                 <input type="hidden" name="mandatory" value="[% ite.mandatory %]" />
