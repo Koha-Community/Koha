@@ -75,17 +75,26 @@ sub send_sms {
     return unless $driver;
 
     # warn "using driver: $driver to send message to $params->{'destination'}";
-    
-    # Create a sender
-    my $sender = SMS::Send->new( $driver,
+
+    my ($sent, $sender);
+    eval {
+        # Create a sender
+        $sender = SMS::Send->new( $driver,
                                  _login    => C4::Context->preference('SMSSendUsername'),
                                  _password => C4::Context->preference('SMSSendPassword'),
                             );
     
-    # Send a message
-    my $sent = $sender->send_sms( to   => $params->{'destination'},
+        # Send a message
+        $sent = $sender->send_sms( to   => $params->{'destination'},
                                   text => $params->{'message'},
                              );
+    };
+    #We might die because SMS::Send $driver is not defined or the sms-number has a bad format
+    #Catch those errors and fail the sms-sending gracefully.
+    if ($@) {
+        warn $@;
+        return undef;
+    }
     # warn 'failure' unless $sent;
     return $sent;
 }
