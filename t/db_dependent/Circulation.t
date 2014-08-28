@@ -24,14 +24,16 @@ use C4::Items;
 use C4::Members;
 use C4::Reserves;
 use Koha::DateUtils;
+use Koha::Database;
 
-use Test::More tests => 49;
+use Test::More tests => 51;
 
 BEGIN {
     use_ok('C4::Circulation');
 }
 
 my $dbh = C4::Context->dbh;
+my $schema = Koha::Database->new()->schema();
 
 # Start transaction
 $dbh->{AutoCommit} = 0;
@@ -351,6 +353,9 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 
     LostItem( $itemnumber, 1 );
 
+    my $item = $schema->resultset('Item')->find( $itemnumber );
+    ok( !$item->onloan(), "Lost item marked as returned has false onloan value" );
+
     my $total_due = $dbh->selectrow_array(
         'SELECT SUM( amountoutstanding ) FROM accountlines WHERE borrowernumber = ?',
         undef, $renewing_borrower->{borrowernumber}
@@ -366,7 +371,10 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     C4::Overdues::UpdateFine( $itemnumber2, $renewing_borrower->{borrowernumber},
         15.00, q{}, Koha::DateUtils::output_pref($datedue) );
 
-    LostItem( $itemnumber2, 1 );
+    LostItem( $itemnumber2, 0 );
+
+    my $item2 = $schema->resultset('Item')->find( $itemnumber2 );
+    ok( $item2->onloan(), "Lost item *not* marked as returned has true onloan value" );
 
     $total_due = $dbh->selectrow_array(
         'SELECT SUM( amountoutstanding ) FROM accountlines WHERE borrowernumber = ?',
