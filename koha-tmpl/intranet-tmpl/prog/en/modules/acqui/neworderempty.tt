@@ -539,22 +539,12 @@ $(document).ready(function()
                 [% END %]
             </li>
             <li>
-                [% IF ( close ) %]
-                    <label for="ecost">Budgeted cost: </label>
-                    <input type="text" size="20" name="ecost" id="ecost" value="[% ecost %]" readonly="readonly"  /> [% IF (listincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
-                [% ELSE %]
-                    <label for="ecost">Budgeted cost: </label>
-                    <input type="text" size="20" name="ecost" id="ecost" value="[% ecost %]" /> [% IF (listincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
-                [% END %]
+                <label for="ecost">Budgeted cost: </label>
+                <input type="text" size="20" name="ecost" id="ecost" value="[% ecost %]" readonly="readonly"  /> [% IF (listincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
             </li>
             <li>
-                [% IF ( close ) %]
-                    <label for="total">Total: </label>
-                    <input type="text" id="total" size="20" name="total" value="[% total %]" readonly="readonly" />
-                [% ELSE %]
-                    <label for="total">Total: </label>
-                    <input type="text" id="total" size="20" name="total" value="[% total %]" /> (budgeted cost * quantity)
-                [% END %]
+                <label for="total">Total: </label>
+                <input type="text" id="total" size="20" name="total" value="[% total %]" readonly="readonly" /> (budgeted cost * quantity)
             </li>
             <li>
                 [% IF ( close ) %]
