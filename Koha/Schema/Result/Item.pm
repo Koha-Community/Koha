@@ -612,12 +612,6 @@ __PACKAGE__->might_have(
 # Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-10-24 09:58:16
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2slVK/FjcRDiYLeufoOFQQ
 
-sub biblioitem {
-    my ( $self ) = @_;
-    my @biblioitems = $self->biblioitemnumber;
-    return $biblioitems[0];
-}
-
 sub effective_itemtype {
     my ( $self ) = @_;
 
@@ -625,7 +619,7 @@ sub effective_itemtype {
     if ( $pref->value() ) {
         return $self->itype();
     } else {
-        return $self->biblioitem()->itemtype();
+        return $self->biblioitemnumber()->itemtype();
     }
 }
 
