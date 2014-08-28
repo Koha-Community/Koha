@@ -53,7 +53,7 @@ BEGIN {
         setlanguagecookie getlanguagecookie pagination_bar parametrized_url
     );
     push @EXPORT, qw(
-        &output_html_with_http_headers &output_ajax_with_http_headers &output_with_http_headers FormatData
+        &output_html_with_http_headers &output_ajax_with_http_headers &output_with_http_headers
     );
 
 }
@@ -66,20 +66,6 @@ C4::Output - Functions for managing output, is slowly being deprecated
 
 =over 2
 =cut
-
-=item FormatData
-
-FormatData($data_hashref)
-C<$data_hashref> is a ref to data to format
-
-Format dates of data those dates are assumed to contain date in their noun
-Could be used in order to centralize all the formatting for HTML output
-=cut
-
-sub FormatData{
-		my $data_hashref=shift;
-        $$data_hashref{$_} = format_date( $$data_hashref{$_} ) for grep{/date/} keys (%$data_hashref);
-}
 
 =item pagination_bar
 
