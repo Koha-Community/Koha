@@ -79,6 +79,15 @@ sub search {
             push @where_args, $term;
         }
 
+        if ( C4::Context->preference('ExtendedPatronAttributes') and $searchmember ) {
+            my $matching_borrowernumbers = C4::Members::Attributes::SearchIdMatchingAttribute($searchmember);
+
+            for my $borrowernumber ( @$matching_borrowernumbers ) {
+                push @where_strs_or, "borrowers.borrowernumber = ?";
+                push @where_args, $borrowernumber;
+            }
+        }
+
         push @where_strs, '('. join (' OR ', @where_strs_or) . ')'
             if @where_strs_or;
     }

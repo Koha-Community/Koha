@@ -17,16 +17,20 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 13;
 
 use C4::Context;
 use C4::Branch;
 use C4::Members;
 
+use C4::Members::Attributes;
+use C4::Members::AttributeTypes;
+
+use t::lib::Mocks;
+
 use_ok( "C4::Utils::DataTables::Members" );
 
 my $dbh = C4::Context->dbh;
-my $res;
 
 # Start transaction
 $dbh->{AutoCommit} = 0;
@@ -83,12 +87,12 @@ my %jane_doe = (
     userid       => 'jane.doe'
 );
 
-$res = AddMember( %john_doe );
-warn "Error adding John Doe, check your tests" unless $res;
-$res = AddMember( %john_smith );
-warn "Error adding John Smith, check your tests" unless $res;
-$res = AddMember( %jane_doe );
-warn "Error adding Jane Doe, check your tests" unless $res;
+$john_doe{borrowernumber} = AddMember( %john_doe );
+warn "Error adding John Doe, check your tests" unless $john_doe{borrowernumber};
+$john_smith{borrowernumber} = AddMember( %john_smith );
+warn "Error adding John Smith, check your tests" unless $john_smith{borrowernumber};
+$jane_doe{borrowernumber} = AddMember( %jane_doe );
+warn "Error adding Jane Doe, check your tests" unless $jane_doe{borrowernumber};
 
 # Set common datatables params
 my %dt_params = (
@@ -167,6 +171,39 @@ is( $search_results->{ patrons }[0]->{ cardnumber },
 is( $search_results->{ patrons }[1]->{ cardnumber },
     $jane_doe{ cardnumber },
     "Jane Doe is the second result");
+
+my $attribute_type = C4::Members::AttributeTypes->new( 'ATM_1', 'my attribute type' );
+$attribute_type->{staff_searchable} = 1;
+$attribute_type->store;
+
+
+C4::Members::Attributes::SetBorrowerAttributes(
+    $john_doe{borrowernumber}, [ { code => $attribute_type->{code}, value => 'the default value for a common user' } ]
+);
+C4::Members::Attributes::SetBorrowerAttributes(
+    $jane_doe{borrowernumber}, [ { code => $attribute_type->{code}, value => 'the default value for another common user' } ]
+);
+
+t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 1);
+$search_results = C4::Utils::DataTables::Members::search({
+    searchmember     => "common user",
+    searchfieldstype => 'standard',
+    searchtype       => 'contains',
+    branchcode       => $branchcode,
+    dt_params        => \%dt_params
+});
+
+is( $search_results->{ iTotalDisplayRecords}, 2, "There are 2 common users" );
+
+t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 0);
+$search_results = C4::Utils::DataTables::Members::search({
+    searchmember     => "common user",
+    searchfieldstype => 'standard',
+    searchtype       => 'contains',
+    branchcode       => $branchcode,
+    dt_params        => \%dt_params
+});
+is( $search_results->{ iTotalDisplayRecords}, 0, "There are still 2 common users, but the patron attribute is not searchable " );
 
 $dbh->rollback;
 
