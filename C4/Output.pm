@@ -53,7 +53,7 @@ BEGIN {
         setlanguagecookie getlanguagecookie pagination_bar parametrized_url
     );
     push @EXPORT, qw(
-        &output_html_with_http_headers &output_ajax_with_http_headers &output_with_http_headers FormatData FormatNumber
+        &output_html_with_http_headers &output_ajax_with_http_headers &output_with_http_headers FormatData
     );
 
 }
@@ -66,32 +66,6 @@ C4::Output - Functions for managing output, is slowly being deprecated
 
 =over 2
 =cut
-
-=item FormatNumber
-=cut
-sub FormatNumber{
-my $cur  =  GetCurrency;
-my $cur_format = C4::Context->preference("CurrencyFormat");
-my $num;
-
-if ( $cur_format eq 'FR' ) {
-    $num = new Number::Format(
-        'decimal_fill'      => '2',
-        'decimal_point'     => ',',
-        'int_curr_symbol'   => $cur->{symbol},
-        'mon_thousands_sep' => ' ',
-        'thousands_sep'     => ' ',
-        'mon_decimal_point' => ','
-    );
-} else {  # US by default..
-    $num = new Number::Format(
-        'int_curr_symbol'   => '',
-        'mon_thousands_sep' => ',',
-        'mon_decimal_point' => '.'
-    );
-}
-return $num;
-}
 
 =item FormatData
 
