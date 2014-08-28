@@ -543,6 +543,7 @@
 <xsl:if test="$DisplayOPACiconsXSLT!='0'">
     <span class="results_summary type">
     <xsl:if test="$typeOf008!=''">
+    <span class="results_material_type">
         <span class="label">Material type: </span>
             <xsl:choose>
                 <xsl:when test="$leader19='a'"><img src="/opac-tmpl/lib/famfamfam/silk/book_link.png" alt="book" title="book" class="materialtype"/> Set</xsl:when>
@@ -563,14 +564,18 @@
                 <xsl:when test="$leader6='i'"><img src="/opac-tmpl/lib/famfamfam/silk/sound.png" alt="sound" title="sound" class="materialtype"/> Sound</xsl:when>
                 <xsl:when test="$leader6='j'"><img src="/opac-tmpl/lib/famfamfam/silk/sound.png" alt="music" title="music" class="materialtype"/> Music</xsl:when>
             </xsl:choose>
+    </span>
     </xsl:if>
     <xsl:if test="string-length(normalize-space($physicalDescription))">
-        <span class="label">; Format: </span><xsl:copy-of select="$physicalDescription"></xsl:copy-of>
+        <span class="results_format">
+            <span class="label">; Format: </span><xsl:copy-of select="$physicalDescription"></xsl:copy-of>
+        </span>
     </xsl:if>
 
         <xsl:if test="$controlField008-21 or $controlField008-22 or $controlField008-24 or $controlField008-26 or $controlField008-29 or $controlField008-34 or $controlField008-33 or $controlField008-30-31 or $controlField008-33">
 
         <xsl:if test="$typeOf008='CR'">
+        <span class="results_typeofcontinuing">
         <xsl:if test="$controlField008-21 and $controlField008-21 !='|' and $controlField008-21 !=' '">
         <span class="label">; Type of continuing resource: </span>
         </xsl:if>
@@ -594,11 +599,12 @@
                      <img src="/opac-tmpl/lib/famfamfam/silk/world_link.png" alt="web site" title="web site" class="format"/>
                 </xsl:when>
             </xsl:choose>
+        </span>
         </xsl:if>
         <xsl:if test="$typeOf008='BK' or $typeOf008='CR'">
         <xsl:if test="contains($controlField008-24,'abcdefghijklmnopqrstvwxyz')">
+        <span class="results_natureofcontents">
         <span class="label">; Nature of contents: </span>
-        </xsl:if>
             <xsl:choose>
                 <xsl:when test="contains($controlField008-24,'a')">
                     abstract or summary
@@ -670,8 +676,11 @@
                     conference publication
                 </xsl:when>
             </xsl:choose>
+        </span>
+        </xsl:if>
         </xsl:if>
         <xsl:if test="$typeOf008='CF'">
+        <span class="results_typeofcomp">
             <xsl:if test="$controlField008-26='a' or $controlField008-26='e' or $controlField008-26='f' or $controlField008-26='g'">
             <span class="label">; Type of computer file: </span>
             </xsl:if>
@@ -689,8 +698,10 @@
                      <img src="/opac-tmpl/lib/famfamfam/silk/controller.png" alt="game" title="game" class="format"/>
                 </xsl:when>
             </xsl:choose>
+        </span>
         </xsl:if>
         <xsl:if test="$typeOf008='BK'">
+        <span class="results_contents_literary">
             <xsl:if test="(substring($controlField008,25,1)='j') or (substring($controlField008,25,1)='1') or ($controlField008-34='a' or $controlField008-34='b' or $controlField008-34='c' or $controlField008-34='d')">
             <span class="label">; Nature of contents: </span>
             </xsl:if>
@@ -742,8 +753,10 @@
                     speech
                 </xsl:when>
             </xsl:choose>
+        </span>
         </xsl:if>
         <xsl:if test="$typeOf008='MU' and $controlField008-30-31 and $controlField008-30-31!='||' and $controlField008-30-31!='  '">
+        <span class="results_literaryform">
             <span class="label">; Literary form: </span> <!-- Literary text for sound recordings -->
             <xsl:if test="contains($controlField008-30-31,'b')">
                 biography
@@ -787,8 +800,10 @@
             <xsl:if test="contains($controlField008-30-31,'l')">
                 speech
             </xsl:if>
+        </span>
         </xsl:if>
         <xsl:if test="$typeOf008='VM'">
+        <span class="results_typeofvisual">
             <span class="label">; Type of visual material: </span>
             <xsl:choose>
                 <xsl:when test="$controlField008-33='a'">
@@ -830,8 +845,7 @@
                 <xsl:when test="$controlField008-33='p'">
                     microscope slide
                 </xsl:when>
-                <xsl:when test="$controlField008-33='q' or marc:controlfield[@tag=007][substring(text(),1,1)='a'][substring(text(),2
-,1)='q']">
+                <xsl:when test="$controlField008-33='q' or marc:controlfield[@tag=007][substring(text(),1,1)='a'][substring(text(),2,1)='q']">
                     model
                 </xsl:when>
                 <xsl:when test="$controlField008-33='r'">
@@ -850,10 +864,12 @@
                     toy
                 </xsl:when>
             </xsl:choose>
+            </span>
         </xsl:if>
         </xsl:if>
 
     <xsl:if test="($typeOf008='BK' or $typeOf008='CF' or $typeOf008='MU' or $typeOf008='VM') and ($controlField008-22='a' or $controlField008-22='b' or $controlField008-22='c' or $controlField008-22='d' or $controlField008-22='e' or $controlField008-22='g' or $controlField008-22='j' or $controlField008-22='f')">
+        <span class="results_audience">
         <span class="label">; Audience: </span>
         <xsl:choose>
             <xsl:when test="$controlField008-22='a'">
@@ -880,7 +896,8 @@
             <xsl:when test="$controlField008-22='f'">
              Specialized;
             </xsl:when>
-            </xsl:choose>
+        </xsl:choose>
+        </span>
     </xsl:if>
 <xsl:text> </xsl:text> <!-- added blank space to fix font display problem, see Bug 3671 -->
 	</span>
