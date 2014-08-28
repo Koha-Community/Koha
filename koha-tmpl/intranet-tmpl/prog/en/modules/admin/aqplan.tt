@@ -1,3 +1,4 @@
+[% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Budgets &rsaquo; Funds &rsaquo; Planning for [% budget_period_description %] by [% authcat %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -132,7 +133,7 @@
             <td>
         [% END %]
         <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget_line.budget_id %]&amp;budget_period_id=[% budget_line.budget_period_id %]">[% budget_line.budget_name_indent %]</a></td>
-        <td><span id="budget_tot_formatted_[% budget_line.budget_id %]">[% budget_line.budget_amount_formatted %]&nbsp;</span>
+        <td><span id="[% budget_line.budget_amount %]">[% budget_line.budget_amount | $Price %]&nbsp;</span>
 
 
         <!-- NEXT DIV ELEMENT IS USED BY JS FOR CALC-ING AUTO-FILL AND ESTIMATED AMOUNTS -->
@@ -185,7 +186,7 @@
         [% ELSE %]
             <td id="budget_est_[% budget_line.budget_id %]">
         [% END %] 
-                [% budget_line.budget_est_remain %]&nbsp;
+                [% budget_line.budget_est_remain | $Price %]&nbsp;
             </td>
             </tr>
         </table>

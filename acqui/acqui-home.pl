@@ -54,27 +54,6 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
 my $user = GetMember( 'borrowernumber' => $loggedinuser );
 my $branchname = GetBranchName($user->{branchcode});
 
-
-my $num_formatter;
-
-my $cur_format = C4::Context->preference("CurrencyFormat");
-if ( $cur_format eq 'FR' ) {
-    $num_formatter = Number::Format->new(
-        'decimal_fill'      => '2',
-        'decimal_point'     => ',',
-        'int_curr_symbol'   => '',
-        'mon_thousands_sep' => ' ',
-        'thousands_sep'     => ' ',
-        'mon_decimal_point' => ','
-    );
-} else {    # US by default..
-    $num_formatter = Number::Format->new(
-        'int_curr_symbol'   => '',
-        'mon_thousands_sep' => ',',
-        'mon_decimal_point' => '.'
-    );
-}
-
 my $status           = $query->param('status') || "ASKED";
 my $suggestions_count       = CountSuggestion($status);
 
@@ -134,10 +113,6 @@ foreach my $budget ( @{$budget_arr} ) {
 	$totavail_active   += $budget->{'budget_avail'};    
     }
 
-    for my $field (qw( budget_amount budget_spent budget_ordered budget_avail ) ) {
-        $budget->{"formatted_$field"} = $num_formatter->format_price( $budget->{$field} );
-    }
-
     push @budget_loop, $budget;
 }
 
@@ -145,15 +120,15 @@ $template->param(
     type          => 'intranet',
     loop_budget   => \@budget_loop,
     branchname    => $branchname,
-    total         => $num_formatter->format_price($total),
-    totspent      => $num_formatter->format_price($totspent),
-    totordered    => $num_formatter->format_price($totordered),
-    totcomtd      => $num_formatter->format_price($totcomtd),
-    totavail      => $num_formatter->format_price($totavail),
-    total_active  => $num_formatter->format_price($total_active),
-    totspent_active     => $num_formatter->format_price($totspent_active),
-    totordered_active   => $num_formatter->format_price($totordered_active),
-    totavail_active     => $num_formatter->format_price($totavail_active),
+    total         => $total,
+    totspent      => $totspent,
+    totordered    => $totordered,
+    totcomtd      => $totcomtd,
+    totavail      => $totavail,
+    total_active  => $total_active,
+    totspent_active     => $totspent_active,
+    totordered_active   => $totordered_active,
+    totavail_active     => $totavail_active,
     suggestions_count   => $suggestions_count,
 );
 

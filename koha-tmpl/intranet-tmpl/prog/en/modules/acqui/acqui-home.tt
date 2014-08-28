@@ -1,3 +1,4 @@
+[% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -123,10 +124,10 @@ $(document).ready(function() {
             <th class="b_inactive">&nbsp;</th>
             <th>&nbsp;</th>
             <th>&nbsp;</th>
-            <th class="data"><span class="bu_active">[% total %]</span><span class="bu_inactive" >[% total_active %]</span></th>
-            <th class="data"><span class="bu_active">[% totordered %]</span><span class="bu_inactive" >[% totordered_active %]</span></th>
-            <th class="data"><span class="bu_active">[% totspent %]</span><span class="bu_inactive" >[% totspent_active %]</span></th>
-            <th class="data"><span class="bu_active">[% totavail %]</span><span class="bu_inactive" >[% totavail_active %]</span></th>
+            <th class="data"><span class="bu_active">[% total %]</span><span class="bu_inactive" >[% total_active | $Price %]</span></th>
+            <th class="data"><span class="bu_active">[% totordered %]</span><span class="bu_inactive" >[% totordered_active | $Price %]</span></th>
+            <th class="data"><span class="bu_active">[% totspent %]</span><span class="bu_inactive" >[% totspent_active | $Price %]</span></th>
+            <th class="data"><span class="bu_active">[% totavail %]</span><span class="bu_inactive" >[% totavail_active | $Price %]</span></th>
         </tr>
         </tfoot>
         <tbody>
@@ -149,10 +150,10 @@ $(document).ready(function() {
                     [% END %]
                 </td>
                 <td>[% loop_budge.budget_branchname %]</td>
-                <td class="data"><span title="[% loop_budge.budget_amount %]">[% loop_budge.formatted_budget_amount %]</span></td>
-                <td class="data"><span title="[% loop_budge.budget_ordered %]"><a href="ordered.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.formatted_budget_ordered %]</a></span></td>
-                <td class="data"><span title="[% loop_budge.budget_spent %]"><a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.formatted_budget_spent %]</span></a></td>
-                <td class="data"><span title="[% loop_budge.budget_avail %]">[% loop_budge.formatted_budget_avail %]</td>
+                <td class="data"><span title="[% loop_budge.budget_amount %]">[% loop_budge.budget_amount | $Price %]</span></td>
+                <td class="data"><span title="[% loop_budge.budget_ordered %]"><a href="ordered.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_ordered | $Price %]</a></span></td>
+                <td class="data"><span title="[% loop_budge.budget_spent %]"><a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_spent | $Price %]</span></a></td>
+                <td class="data"><span title="[% loop_budge.budget_avail %]">[% loop_budge.budget_avail | $Price %]</td>
             </tr>
         [% ELSE %]
             <tr class="b_inactive">
@@ -172,10 +173,10 @@ $(document).ready(function() {
                     [% END %]
                 </td>
                 <td>[% loop_budge.budget_branchname %]</td>
-                <td class="data"><span title="[% loop_budge.budget_amount %]">[% loop_budge.formatted_budget_amount %]</span></td>
-                <td class="data"><span title="[% loop_budge.budget_ordered %]"><a href="ordered.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.formatted_budget_ordered %]</a></span></td>
-                <td class="data"><span title="[% loop_budge.budget_spent %]"><a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.formatted_budget_spent %]</span></a></td>
-                <td class="data"><span title="[% loop_budge.budget_avail %]">[% loop_budge.formatted_budget_avail %]</td>
+                <td class="data"><span title="[% loop_budge.budget_amount %]">[% loop_budge.budget_amount | $Price %]</span></td>
+                <td class="data"><span title="[% loop_budge.budget_ordered %]"><a href="ordered.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_ordered | $Price %]</a></span></td>
+                <td class="data"><span title="[% loop_budge.budget_spent %]"><a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_spent | $Price %]</span></a></td>
+                <td class="data"><span title="[% loop_budge.budget_avail %]">[% loop_budge.budget_avail | $Price %]</td>
             </tr>
         [% END %]
         [% END %]

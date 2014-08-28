@@ -141,7 +141,6 @@ if ($op eq ""){
 # 3rd step = import the records
 #
 } elsif ( $op eq 'import_records' ) {
-    my $num=FormatNumber();
 #import selected lines
     $template->param('basketno' => $cgiparams->{'basketno'});
 # Budget_id is mandatory for adding an order, we just add a default, the user needs to modify this aftewards
@@ -227,7 +226,7 @@ if ($op eq ""){
             # in France, the cents separator is the , but sometimes, ppl use a .
             # in this case, the price will be x100 when unformatted ! Replace the . by a , to get a proper price calculation
             $price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
-            $price = $num->unformat_number($price);
+            $price = Koha::Number::Price->new($price)->unformat;
             $orderinfo{gstrate} = $bookseller->{gstrate};
             my $c = $c_discount ? $c_discount : $bookseller->{discount} / 100;
             if ( $bookseller->{listincgst} ) {

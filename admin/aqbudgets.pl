@@ -67,7 +67,6 @@ if (not defined $template->{VARS}->{'CAN_user_acquisition_budget_add_del'}
 {
     $op = 'list';
 }
-my $num=FormatNumber;
 
 # get only the columns of aqbudgets in budget_hash
 my @columns = Koha::Database->new()->schema->source('Aqbudget')->columns;
@@ -228,7 +227,7 @@ if ($op eq 'add_form') {
         budget_id     => $budget->{'budget_id'},
         budget_code   => $budget->{'budget_code'},
         budget_name   => $budget->{'budget_name'},
-        budget_amount => $num->format_price(  $budget->{'budget_amount'} ),
+        budget_amount => $budget->{'budget_amount'},
     );
                                                     # END $OP eq DELETE_CONFIRM
 # called by delete_confirm, used to effectively confirm deletion of data in DB
@@ -307,18 +306,9 @@ if ( $op eq 'list' ) {
             if (!defined $budget->{'budget_unalloc_sublevel'}
             or $budget->{'budget_unalloc_sublevel'} == 0);
 
-        for (grep {/total_spent|budget_spent|total_ordered|budget_ordered|budget_amount/} keys %$budget){
-            $budget->{$_}               = $num->format_price( $budget->{$_} ) if defined($budget->{$_})
-		}
-        for (qw/budget_remaining total_remaining/) {
-            if (defined $budget->{$_}) {
-                $budget->{$_.'_display'} = $num->format_price($budget->{$_});
-            }
-        }
-
         # Value of budget_spent equals 0 instead of undefined value
-        $budget->{"budget_spent"} = $num->format_price(0) unless defined($budget->{"budget_spent"});
-        $budget->{budget_ordered} = $num->format_price(0) unless defined($budget->{"budget_ordered"});
+        $budget->{budget_spent} = 0 unless defined($budget->{budget_spent});
+        $budget->{budget_ordered} = 0 unless defined($budget->{budget_ordered});
 
         #Make a list of parents of the bugdet
         my @budget_hierarchy;
@@ -336,10 +326,6 @@ if ( $op eq 'list' ) {
     }
 
     my $budget_period_total = $period->{budget_period_total};
-
-    foreach ($budget_period_total, $period_alloc_total, $spent_total, $ordered_total, $available_total) {
-        $_ = $num->format_price($_);
-    }
 
     my $periods = GetBudgetPeriods();
 

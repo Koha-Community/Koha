@@ -1,5 +1,7 @@
 [% USE KohaDates %]
 [% USE format %]
+[% USE Price %]
+
 [%- BLOCK action_menu %]
     <div class="dropdown">
         <a class="btn btn-mini dropdown-toggle" id="budgetmenu_[% block_budget_id %]" role="button" data-toggle="dropdown" href="#">
@@ -24,6 +26,7 @@
         </ul>
     </div>
 [% END -%]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
@@ -562,7 +565,7 @@
                     <span style="color:green;">Locked</span>&nbsp;
                   [% END %]
                 </td>
-                <td class="data">[% period_active.budget_period_total %]</td>
+                <td class="data">[% period_active.budget_period_total | $Price %]</td>
                 <td>
                     [% PROCESS action_menu block_budget_id=period_active.budget_period_id %]
                 </td>
@@ -595,7 +598,7 @@
                   <td><span title="[% period_loo.budget_period_startdate %]">[% period_loo.budget_period_startdate | $KohaDates %]</span></td>
                   <td><span title="[% period_loo.budget_period_enddate %]">[% period_loo.budget_period_enddate | $KohaDates %]</span></td>
                   <td> [% IF ( period_loo.budget_period_locked ) %]<span style="color:green;">Locked</span>&nbsp;[% ELSE %][% END %] </td>
-                  <td class="data">[% period_loo.budget_period_total %]</td>
+                  <td class="data">[% period_loo.budget_period_total | $Price %]</td>
                   <td>
                         [% PROCESS action_menu block_budget_id=period_loo.budget_period_id %]
                   </td>

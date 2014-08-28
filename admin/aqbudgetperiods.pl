@@ -91,30 +91,11 @@ my ($template, $borrowernumber, $cookie, $staff_flags ) = get_template_and_user(
 );
 
 
+# This is used in incbudgets-active-currency.inc
 my $cur = GetCurrency();
 $template->param( symbol => $cur->{symbol},
                   currency => $cur->{currency}
                );
-my $cur_format = C4::Context->preference("CurrencyFormat");
-my $num;
-
-if ( $cur_format eq 'US' ) {
-    $num = new Number::Format(
-        'int_curr_symbol'   => '',
-        'mon_thousands_sep' => ',',
-        'mon_decimal_point' => '.'
-    );
-} elsif ( $cur_format eq 'FR' ) {
-    $num = new Number::Format(
-        'decimal_fill'      => '2',
-        'decimal_point'     => ',',
-        'int_curr_symbol'   => '',
-        'mon_thousands_sep' => ' ',
-        'thousands_sep'     => ' ',
-        'mon_decimal_point' => ','
-    );
-}
-
 
 # ADD OR MODIFY A BUDGET PERIOD - BUILD SCREEN
 if ( $op eq 'add_form' ) {
@@ -161,7 +142,6 @@ elsif ( $op eq 'delete_confirm' ) {
     my $total = 0;
     my $data = GetBudgetPeriod( $budget_period_id);
 
-	$$data{'budget_period_total'}=$num->format_price(  $data->{'budget_period_total'});
     $template->param(
 		%$data
     );
@@ -291,7 +271,6 @@ my @period_active_loop;
 
 foreach my $result ( @{$results}[ $first .. $last ] ) {
     my $budgetperiod = $result;
-    $budgetperiod->{'budget_period_total'}     = $num->format_price( $budgetperiod->{'budget_period_total'} );
     $budgetperiod->{budget_active} = 1;
     push( @period_active_loop, $budgetperiod );
 }
@@ -310,7 +289,6 @@ $last = min( $first + $inactivepagesize - 1, scalar @{$results} - 1, );
 my @period_inactive_loop;
 foreach my $result ( @{$results}[ $first .. $last ] ) {
     my $budgetperiod = $result;
-    $budgetperiod->{'budget_period_total'} = $num->format_price( $budgetperiod->{'budget_period_total'} );
     $budgetperiod->{budget_active} = 1;
     push( @period_inactive_loop, $budgetperiod );
 }

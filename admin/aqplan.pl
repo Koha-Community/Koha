@@ -101,26 +101,6 @@ my $show_mine       = $input->param('show_mine') ;
 
 my @hide_cols      = $input->param('hide_cols');
 
-my $cur_format = C4::Context->preference("CurrencyFormat");
-my $num;
-
-if ( $cur_format eq 'FR' ) {
-    $num = new Number::Format(
-        'decimal_fill'      => '2',
-        'decimal_point'     => ',',
-        'int_curr_symbol'   => '',
-        'mon_thousands_sep' => ' ',
-        'thousands_sep'     => ' ',
-        'mon_decimal_point' => ','
-    );
-} else {  # US by default..
-    $num = new Number::Format(
-        'int_curr_symbol'   => '',
-        'mon_thousands_sep' => ',',
-        'mon_decimal_point' => '.'
-    );
-}
-
 if ( $budget_period_locked == 1  && not defined  $show_actual ) {
      $show_actual  = 1;
 }
@@ -395,7 +375,6 @@ foreach my $budget (@budgets) {
     %budget_line = (
         lines                   => \@cells_line,
         budget_name_indent      => $budget->{budget_name_indent},
-        budget_amount_formatted => $num->format_price( $budget->{budget_amount} ),
         budget_amount           => $budget->{budget_amount},
         budget_alloc            => $budget->{budget_alloc},
         budget_act_remain       => sprintf( "%.2f", $budget_act_remain ),
@@ -433,7 +412,6 @@ $template->param(
     show_actual               => $show_actual,
     show_percent              => $show_percent,
     show_mine                 => $show_mine,
-    cur_format                => $cur_format,
     CGIextChoice              => $CGIextChoice,
     CGIsepChoice              => $CGIsepChoice,
 
