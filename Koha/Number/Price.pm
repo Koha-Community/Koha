@@ -1,0 +1,85 @@
+package Koha::Number::Price;
+
+# This file is part of Koha.
+#
+# Copyright 2014 BibLibre
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+
+use Number::Format qw( format_price );
+use C4::Context;
+use C4::Budgets qw( GetCurrency );
+
+use base qw( Class::Accessor );
+__PACKAGE__->mk_accessors(qw( value ));
+
+sub new {
+    my ( $class, $value ) = @_;
+
+    my $self->{value} = $value || 0;
+
+    bless $self, $class;
+    return $self;
+}
+
+sub format {
+    my ( $self, $params ) = @_;
+    return unless defined $self->value;
+
+    my $format_params = $self->_format_params( $params );
+
+    return Number::Format->new(%$format_params)->format_price($self->value);
+}
+
+sub unformat {
+    my ( $self, $params ) = @_;
+    return unless defined $self->value;
+
+    my $format_params = $self->_format_params( $params );
+
+    return Number::Format->new(%$format_params)->unformat_number($self->value);
+}
+
+sub _format_params {
+    my ( $self, $params ) = @_;
+    my $with_symbol = $params->{with_symbol} || 0;
+    my $currency        = GetCurrency();
+    my $currency_format = C4::Context->preference("CurrencyFormat");
+
+    my $int_curr_symbol = q||;
+    my %format_params = (
+        int_curr_symbol   => $int_curr_symbol,
+        mon_thousands_sep => ',',
+        mon_decimal_point => '.'
+    );
+
+    if ( $currency_format eq 'FR' ) {
+        # FIXME This test should be done for all currencies
+        $int_curr_symbol = $currency->{symbol} if $with_symbol;
+        %format_params = (
+            decimal_fill      => '2',
+            decimal_point     => ',',
+            int_curr_symbol   => $int_curr_symbol,
+            mon_thousands_sep => ' ',
+            thousands_sep     => ' ',
+            mon_decimal_point => ','
+        );
+    }
+
+    return \%format_params;
+}
+
+1;
