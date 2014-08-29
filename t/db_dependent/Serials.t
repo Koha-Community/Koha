@@ -15,7 +15,7 @@ use C4::Bookseller;
 use C4::Biblio;
 use C4::Budgets;
 use Koha::DateUtils;
-use Test::More tests => 44;
+use Test::More tests => 43;
 
 BEGIN {
     use_ok('C4::Serials');
@@ -110,8 +110,6 @@ if (not $frequency->{unit}) {
 }
 my $expirationdate = GetExpirationDate($subscriptionid) ;
 ok( $expirationdate, "expiration date is not NULL" );
-
-is(C4::Serials::GetLateIssues(), undef, 'test getting late issues');
 
 ok(C4::Serials::GetSubscriptionHistoryFromSubscriptionId($subscriptionid), 'test getting history from sub-scription');
 

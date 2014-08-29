@@ -48,7 +48,7 @@ BEGIN {
 
       &GetNextSeq &GetSeq &NewIssue           &ItemizeSerials    &GetSerials
       &GetLatestSerials   &ModSerialStatus    &GetNextDate       &GetSerials2
-      &ReNewSubscription  &GetLateIssues      &GetLateOrMissingIssues
+      &ReNewSubscription  &GetLateOrMissingIssues
       &GetSerialInformation                   &AddItem2Serial
       &PrepareSerialsData &GetNextExpected    &ModNextExpected
 
@@ -108,64 +108,6 @@ sub GetSuppliersWithLateIssues {
         AND subscription.closed = 0
     ORDER BY name|;
     return $dbh->selectall_arrayref($query, { Slice => {} });
-}
-
-=head2 GetLateIssues
-
-@issuelist = GetLateIssues($supplierid)
-
-this function selects late issues from the database
-
-return :
-the issuelist as an array. Each element of this array contains a hashi_ref containing
-name,title,planneddate,serialseq,serial.subscriptionid from tables : subscription, serial & biblio
-
-=cut
-
-sub GetLateIssues {
-    my ($supplierid) = @_;
-
-    return unless ($supplierid);
-
-    my $dbh = C4::Context->dbh;
-    my $sth;
-    if ($supplierid) {
-        my $query = qq|
-            SELECT     name,title,planneddate,serialseq,serial.subscriptionid
-            FROM       subscription
-            LEFT JOIN  serial ON subscription.subscriptionid = serial.subscriptionid
-            LEFT JOIN  biblio ON biblio.biblionumber = subscription.biblionumber
-            LEFT JOIN  aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
-            WHERE      ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3)
-            AND        subscription.aqbooksellerid=?
-            AND        subscription.closed = 0
-            ORDER BY   title
-        |;
-        $sth = $dbh->prepare($query);
-        $sth->execute($supplierid);
-    } else {
-        my $query = qq|
-            SELECT     name,title,planneddate,serialseq,serial.subscriptionid
-            FROM       subscription
-            LEFT JOIN  serial ON subscription.subscriptionid = serial.subscriptionid
-            LEFT JOIN  biblio ON biblio.biblionumber = subscription.biblionumber
-            LEFT JOIN  aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
-            WHERE      ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3)
-            AND        subscription.closed = 0
-            ORDER BY   title
-        |;
-        $sth = $dbh->prepare($query);
-        $sth->execute;
-    }
-    my @issuelist;
-    my $last_title;
-    while ( my $line = $sth->fetchrow_hashref ) {
-        $line->{title} = "" if $last_title and $line->{title} eq $last_title;
-        $last_title = $line->{title} if ( $line->{title} );
-        $line->{planneddate} = format_date( $line->{planneddate} );
-        push @issuelist, $line;
-    }
-    return @issuelist;
 }
 
 =head2 GetSubscriptionHistoryFromSubscriptionId
