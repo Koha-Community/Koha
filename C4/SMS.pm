@@ -93,7 +93,7 @@ sub send_sms {
     #Catch those errors and fail the sms-sending gracefully.
     if ($@) {
         warn $@;
-        return undef;
+        return;
     }
     # warn 'failure' unless $sent;
     return $sent;
