@@ -9,7 +9,6 @@
 <script type="text/javascript">
 //<![CDATA[
 	 $(document).ready(function() {
-        [% UNLESS ( preview ) %]
          var sTable = $("#claimst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sDom": 't',
                 "aoColumnDefs": [
@@ -19,7 +18,6 @@
                 ],
             "bPaginate": false
         }));
-        [% END %]
 	    $('#supplierid').change(function() {
     	    $('#claims').submit();
 	    });
@@ -148,22 +146,14 @@
 	    $("table#claimst tbody tr").show();
 	}
 
-	function popup(supplierid,serialid){
-		window.open('claims.pl?supplierid='+ supplierid +'&amp;serialid='+ serialid +'&amp;op=preview' ,'popup', 'width=600,height=400,toolbar=no,scrollbars=yes');
-	}
-
 //]]>
 </script>
 </head>
 <body id="ser_claims" class="ser">
     [% INCLUDE 'header.inc' %]
-[% UNLESS ( preview ) %]
     [% INCLUDE 'serials-search.inc' %]
-[% END %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Claims</div>
-
-[% UNLESS ( preview ) %]
 
 <div id="doc3" class="yui-t2">
    
@@ -354,77 +344,11 @@
     </fieldset>
 [% END %]
 
-[% ELSE %]
-
-<div id="doc" class="yui-t7">
-   <div id="bd">
-	
-[% IF ( supplierloop ) %]
-        [% FOREACH supplierloo IN supplierloop %]
-        [% IF ( supplierloo.name ) %]
-        <p><b>[% supplierloo.name %]</b><br />
-        [% END %]
-        [% IF ( supplierloo.postal ) %]
-        [% supplierloo.postal %]<br />
-        [% END %]
-        [% IF ( supplierloo.contphone ) %]
-        Ph: [% supplierloo.contphone %]<br />
-        [% END %]
-        [% IF ( supplierloo.contfax ) %]
-        Fax: [% supplierloo.contfax %]<br />
-        [% END %]
-        [% IF ( supplierloo.contemail ) %]
-        Email: [% supplierloo.contemail %]<br />
-        [% END %]
-        [% IF ( supplierloo.accountnumber ) %]
-        A/C: [% supplierloo.accountnumber %]</p>
-        [% END %]
-        [% IF ( supplierloo.contact ) %]
-        <p>Dear [% supplierloo.contact %]</p>
-        [% ELSE %]
-        <p>To whom it may concern</p>
-        [% END %]
-        <p>The following items have not been received from you and are now considered missing:</p>
-        [% END %]
-[% END %]
-        [% IF ( missingissues ) %]
-        <h3>Missing issues</h3>
-        <table>
-            <tr>
-                <td><b>Vendor<b></td>
-                <td><b>Title</b></td>
-                <td><b>Issue number</b></td>
-                <td><b>Missing since</b></td>
-            </tr>
-            [% FOREACH missingissue IN missingissues %]
-                <tr>
-                    <td>
-                    [% missingissue.name %]
-                    </td>
-                    <td>
-                    [% missingissue.Title |html %]
-                    </td>
-                    <td>
-                    [% missingissue.serialseq %]
-                    </td>
-                    <td>
-                    [% missingissue.planneddate %]
-                    </td>
-                </tr>
-            [% END %]
-        </table>
-        [% END %]
-
-<p class="noprint"><a href="#" onclick="window.print(); return false;">Print</a> &nbsp; <a href="#" class="close">Close</a></p>
-[% END %]
-
 </div>
 </div>
 
-[% UNLESS ( preview ) %]
 <div class="yui-b">
 [% INCLUDE 'serials-menu.inc' %]
 </div>
-[% END %]
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]

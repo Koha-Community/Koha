@@ -59,30 +59,25 @@ for my $s (@{$supplierlist} ) {
 
 my $branchloop = GetBranchesLoop();
 
-my $preview=0;
-if($op && $op eq 'preview'){
-    $preview = 1;
-} else {
-    my @serialnums=$input->param('serialid');
-    if (@serialnums) { # i.e. they have been flagged to generate claims
-        my $err;
-        eval {
-            $err = SendAlerts('claimissues',\@serialnums,$input->param("letter_code"));
-            if ( not ref $err or not exists $err->{error} ) {
-               UpdateClaimdateIssues(\@serialnums);
-            }
-        };
-        if ( $@ ) {
-            $template->param(error_claim => $@);
-        } elsif ( ref $err and exists $err->{error} ) {
-            if ( $err->{error} eq "no_email" ) {
-                $template->param( error_claim => 'no_vendor_email' );
-            } elsif ( $err->{error} =~ m|Bad or missing From address| ) {
-                $template->param( error_claim => 'no_loggedin_user_email' );
-            }
-        } else {
-            $template->param( info_claim => 1 );
+my @serialnums=$input->param('serialid');
+if (@serialnums) { # i.e. they have been flagged to generate claims
+    my $err;
+    eval {
+        $err = SendAlerts('claimissues',\@serialnums,$input->param("letter_code"));
+        if ( not ref $err or not exists $err->{error} ) {
+           UpdateClaimdateIssues(\@serialnums);
         }
+    };
+    if ( $@ ) {
+        $template->param(error_claim => $@);
+    } elsif ( ref $err and exists $err->{error} ) {
+        if ( $err->{error} eq "no_email" ) {
+            $template->param( error_claim => 'no_vendor_email' );
+        } elsif ( $err->{error} =~ m|Bad or missing From address| ) {
+            $template->param( error_claim => 'no_loggedin_user_email' );
+        }
+    } else {
+        $template->param( info_claim => 1 );
     }
 }
 
@@ -100,7 +95,6 @@ $template->param(
         phone => $supplierinfo[0]->{phone},
         booksellerfax => $supplierinfo[0]->{booksellerfax},
         bookselleremail => $supplierinfo[0]->{bookselleremail},
-        preview => $preview,
         missingissues => \@missingissues,
         supplierid => $supplierid,
         claimletter => $claimletter,
