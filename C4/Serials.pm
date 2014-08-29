@@ -96,14 +96,14 @@ the array is in name order
 sub GetSuppliersWithLateIssues {
     my $dbh   = C4::Context->dbh;
     my $query = qq|
-        SELECT DISTINCT id, name
+    SELECT DISTINCT id, name
     FROM            subscription
     LEFT JOIN       serial ON serial.subscriptionid=subscription.subscriptionid
     LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
     WHERE id > 0
         AND (
             (planneddate < now() AND serial.status=1)
-            OR serial.STATUS IN (3, 4, 41, 42, 43, 44)
+            OR serial.STATUS IN (3, 4, 41, 42, 43, 44, 7)
         )
         AND subscription.closed = 0
     ORDER BY name|;
@@ -310,8 +310,12 @@ sub UpdateClaimdateIssues {
     my $dbh = C4::Context->dbh;
     $date = strftime( "%Y-%m-%d", localtime ) unless ($date);
     my $query = "
-        UPDATE serial SET claimdate = ?, status = 7
-        WHERE  serialid in (" . join( ",", map { '?' } @$serialids ) . ")";
+        UPDATE serial
+        SET claimdate = ?,
+            status = 7,
+            claims_count = claims_count + 1
+        WHERE  serialid in (" . join( ",", map { '?' } @$serialids ) . ")
+    ";
     my $rq = $dbh->prepare($query);
     $rq->execute($date, @$serialids);
     return $rq->rows;
@@ -1993,14 +1997,14 @@ sub GetLateOrMissingIssues {
             "SELECT
                 serialid,      aqbooksellerid,        name,
                 biblio.title,  biblioitems.issn,      planneddate,    serialseq,
-                serial.status, serial.subscriptionid, claimdate,
+                serial.status, serial.subscriptionid, claimdate, claims_count,
                 subscription.branchcode
-            FROM      serial 
-                LEFT JOIN subscription  ON serial.subscriptionid=subscription.subscriptionid 
+            FROM      serial
+                LEFT JOIN subscription  ON serial.subscriptionid=subscription.subscriptionid
                 LEFT JOIN biblio        ON subscription.biblionumber=biblio.biblionumber
                 LEFT JOIN biblioitems   ON subscription.biblionumber=biblioitems.biblionumber
                 LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
-                WHERE subscription.subscriptionid = serial.subscriptionid 
+                WHERE subscription.subscriptionid = serial.subscriptionid
                 AND (serial.STATUS IN (4, 41, 42, 43, 44) OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3 OR serial.STATUS = 7))
                 AND subscription.aqbooksellerid=$supplierid
                 $byserial
@@ -2008,16 +2012,16 @@ sub GetLateOrMissingIssues {
         );
     } else {
         $sth = $dbh->prepare(
-            "SELECT 
+            "SELECT
             serialid,      aqbooksellerid,         name,
             biblio.title,  planneddate,           serialseq,
-                serial.status, serial.subscriptionid, claimdate,
+                serial.status, serial.subscriptionid, claimdate, claims_count,
                 subscription.branchcode
-            FROM serial 
-                LEFT JOIN subscription ON serial.subscriptionid=subscription.subscriptionid 
+            FROM serial
+                LEFT JOIN subscription ON serial.subscriptionid=subscription.subscriptionid
                 LEFT JOIN biblio ON subscription.biblionumber=biblio.biblionumber
                 LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
-                WHERE subscription.subscriptionid = serial.subscriptionid 
+                WHERE subscription.subscriptionid = serial.subscriptionid
                         AND (serial.STATUS IN (4, 41, 42, 43, 44) OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3 OR serial.STATUS = 7))
                 $byserial
                 ORDER BY $order"
@@ -2095,12 +2099,12 @@ called from claims.pl file
 sub updateClaim {
     my ($serialid) = @_;
     my $dbh        = C4::Context->dbh;
-    my $sth        = $dbh->prepare(
-        "UPDATE serial SET claimdate = now()
-                WHERE serialid = ?
-        "
-    );
-    $sth->execute($serialid);
+    $dbh->do(q|
+        UPDATE serial
+        SET claimdate = NOW(),
+            claims_count = claims_count + 1
+        WHERE serialid = ?
+    |, {}, $serialid );
     return;
 }
 

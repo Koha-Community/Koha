@@ -37,7 +37,6 @@ my $op = $input->param('op');
 my $claimletter = $input->param('claimletter');
 my $supplierid = $input->param('supplierid');
 my $suppliername = $input->param('suppliername');
-my $order = $input->param('order');
 
 # open template first (security & userenv set here)
 my ($template, $loggedinuser, $cookie)
@@ -52,19 +51,10 @@ my ($template, $loggedinuser, $cookie)
 # supplierlist is returned in name order
 my $supplierlist = GetSuppliersWithLateIssues();
 for my $s (@{$supplierlist} ) {
-    $s->{count} = scalar  GetLateOrMissingIssues($s->{id}, q{}, $order);
+    $s->{count} = scalar  GetLateOrMissingIssues($s->{id});
     if ($supplierid && $s->{id} == $supplierid) {
         $s->{selected} = 1;
     }
-}
-
-my $letters = GetLetters({ module => 'claimissues' });
-
-my @missingissues;
-my @supplierinfo;
-if ($supplierid) {
-    @missingissues = GetLateOrMissingIssues($supplierid,$serialid,$order);
-    @supplierinfo=GetBookSeller($supplierid);
 }
 
 my $branchloop = GetBranchesLoop();
@@ -75,14 +65,37 @@ if($op && $op eq 'preview'){
 } else {
     my @serialnums=$input->param('serialid');
     if (@serialnums) { # i.e. they have been flagged to generate claims
-        SendAlerts('claimissues',\@serialnums,$input->param("letter_code"));
-        my $cntupdate=UpdateClaimdateIssues(\@serialnums);
-        ### $cntupdate SHOULD be equal to scalar(@$serialnums)
+        my $err;
+        eval {
+            $err = SendAlerts('claimissues',\@serialnums,$input->param("letter_code"));
+            if ( not ref $err or not exists $err->{error} ) {
+               UpdateClaimdateIssues(\@serialnums);
+            }
+        };
+        if ( $@ ) {
+            $template->param(error_claim => $@);
+        } elsif ( ref $err and exists $err->{error} ) {
+            if ( $err->{error} eq "no_email" ) {
+                $template->param( error_claim => 'no_vendor_email' );
+            } elsif ( $err->{error} =~ m|Bad or missing From address| ) {
+                $template->param( error_claim => 'no_loggedin_user_email' );
+            }
+        } else {
+            $template->param( info_claim => 1 );
+        }
     }
 }
 
+my $letters = GetLetters({ module => 'claimissues' });
+
+my @missingissues;
+my @supplierinfo;
+if ($supplierid) {
+    @missingissues = GetLateOrMissingIssues($supplierid);
+    @supplierinfo=GetBookSeller($supplierid);
+}
+
 $template->param(
-        order =>$order,
         suploop => $supplierlist,
         phone => $supplierinfo[0]->{phone},
         booksellerfax => $supplierinfo[0]->{booksellerfax},

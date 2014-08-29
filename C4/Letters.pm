@@ -375,12 +375,16 @@ sub SendAlerts {
             Message        => Encode::encode( "utf8", "" . $letter->{content} ),
             'Content-Type' => 'text/plain; charset="utf8"',
         );
+
         $mail{'Reply-to'} = C4::Context->preference('ReplytoDefault')
           if C4::Context->preference('ReplytoDefault');
         $mail{'Sender'} = C4::Context->preference('ReturnpathDefault')
           if C4::Context->preference('ReturnpathDefault');
 
-        sendmail(%mail) or carp $Mail::Sendmail::error;
+        unless ( sendmail(%mail) ) {
+            carp $Mail::Sendmail::error;
+            return { error => $Mail::Sendmail::error };
+        }
 
         logaction(
             "ACQUISITION",

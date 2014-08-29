@@ -1940,6 +1940,7 @@ CREATE TABLE `serial` (
   `notes` text,
   `publisheddate` date default NULL,
   `claimdate` date default NULL,
+  claims_count int(11) default 0,
   `routingnotes` text,
   PRIMARY KEY  (`serialid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

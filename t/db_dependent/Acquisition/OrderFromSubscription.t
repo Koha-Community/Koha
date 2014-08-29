@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 12;
 use Data::Dumper;
 
 use_ok('C4::Acquisition');
@@ -12,9 +12,6 @@ use_ok('C4::Serials');
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
-
-my $supplierlist=eval{GetSuppliersWithLateIssues()};
-ok(length($@)==0,"No SQL problem in GetSuppliersWithLateIssues");
 
 my $booksellerid = C4::Bookseller::AddBookseller(
     {

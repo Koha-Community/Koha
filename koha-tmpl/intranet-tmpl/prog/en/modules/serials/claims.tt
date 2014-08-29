@@ -13,11 +13,7 @@
          var sTable = $("#claimst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sDom": 't',
                 "aoColumnDefs": [
-                    [% IF ( letter ) %]
-                        { "aTargets": [ 0,1 ], "bSortable": false, "bSearchable": false },
-                    [% ELSE %]
-                        { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-                    [% END %]
+                    { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
                     { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] },
                     { 'sType': "title-string", 'aTargets' : [ 'title-string'] }
                 ],
@@ -35,7 +31,7 @@
             $("#claimst tr:visible :checkbox").attr('checked', $("#CheckAll").is(':checked'));
         });
 
-	    // Generates a dynamic link for exporting the selection's data as CSV
+	    // Generates a dynamic link for exporting the selections data as CSV
 	    $("#ExportSelected").click(function() {
                // We need to use "input[name=serialid]:checked" instead of "input:checked". Otherwise, the "check all" box will pass the value of "on" as a serialid, which produces a SQL error.
              var selected = $("input[name=serialid]:checked");
@@ -177,6 +173,19 @@
 
     <h1>Claims</h1>
 
+    [% IF error_claim %]
+        [% IF error_claim == 'no_vendor_email' %]
+            <div class="error">This vendor has no email defined for late issues.</div>
+        [% ELSIF error_claim == 'no_loggedin_user_email' %]
+            <div class="error">No email is configured for your user.</div>
+        [% ELSE %]
+            <div class="error">[% error_claim %]</div>
+        [% END %]
+    [% END %]
+    [% IF info_claim %]
+        <div class="dialog message">Email has been sent.</div>
+    [% END %]
+
 [% IF letters %][% UNLESS ( missingissues ) %][% IF ( supplierid ) %] <div class="dialog alert">No missing issues found.</div>[% ELSE %]<div class="dialog message">Please choose a vendor.</div>[% END %][% END %][% END %]
 	
 	     [% IF ( SHOWCONFIRMATION ) %]
@@ -258,40 +267,34 @@
     </form>
 
     <fieldset>
-	<form action="claims.pl" method="post" class="checkboxed" onsubmit="return checkForm()">
-        <input type="hidden" name="order" value="[% order %]" />
-         <table id="claimst">
-                <thead><tr>
-                    <th><input type="checkbox" id="CheckAll"></th>
-                    <th>Vendor</th>
-                    <th>Library</th>
-                    <th class="anti-the">Title</th>
-                    <th>ISSN</th>
-                    <th>Issue number</th>
-                    <th>Status</th>
-                    <th class="title-string">Since</th>
-                    <th class="title-string">Claim date</th>
-                </tr></thead>
+        <form action="claims.pl" method="post" class="checkboxed" onsubmit="return checkForm()">
+            <table id="claimst">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="CheckAll"></th>
+                        <th>Vendor</th>
+                        <th>Library</th>
+                        <th class="anti-the">Title</th>
+                        <th>Issue number</th>
+                        <th>Status</th>
+                        <th class="title-string">Since</th>
+                        <th>Claims count</th>
+                        <th class="title-string">Claim date</th>
+                    </tr>
+                </thead>
                 <tbody>[% FOREACH missingissue IN missingissues %]
                     <tr>
                         <td>
                             <input type="checkbox" name="serialid" value="[% missingissue.serialid %]" />
                         </td>
-                        <td>
-                        [% missingissue.name %]
-                        </td>
+                        <td>[% missingissue.name %]</td>
                         <td>
                             <span class="branch-[% missingissue.branchcode %]">[% Branches.GetName( missingissue.branchcode ) %]</span>
                         </td>
                         <td>
                         <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% missingissue.subscriptionid %]">[% missingissue.title |html %]</a>
                         </td>
-                        <td>
-                          [% missingissue.issn %]
-                        </td>
-                        <td>
-                        [% missingissue.serialseq %]
-                        </td>
+                        <td>[% missingissue.serialseq %]</td>
                         <td>
                             [% IF ( missingissue.status1 ) %]<span class="status-expected">Expected</span>[% END %]
                             [% IF ( missingissue.status3 ) %]<span class="status-late">Late</span>[% END %]
@@ -309,6 +312,7 @@
                                 <span title="0000-00-00"></span>
                             [% END %]
                         </td>
+                        <td>[% missingissue.claims_count %]</td>
                         <td>
                             [% IF ( missingissue.claimdate ) %]
                                 <span title="[% missingissue.claimdateISO %]">[% missingissue.claimdate %]</span>
@@ -320,25 +324,29 @@
                 [% END %]</tbody>
             </table>
 
-        [% IF csv_profiles %]
-          <fieldset class="action">
-            <label for="csv_code">Select CSV profile:</label>
-            <select id="csv_profile_for_export">
-              [% FOR csv IN csv_profiles %]
-                <option value="[% csv.export_format_id %]">[% csv.profile %]</option>
-               [% END %]
-            </select>
-            <span class="exportSelected"><a id="ExportSelected" href="/cgi-bin/koha/serials/claims.pl">Download selected claims</a></span>
-        [% END %]
+            [% IF csv_profiles %]
+              <fieldset class="action">
+                <label for="csv_code">Select CSV profile:</label>
+                <select id="csv_profile_for_export">
+                  [% FOR csv IN csv_profiles %]
+                    <option value="[% csv.export_format_id %]">[% csv.profile %]</option>
+                   [% END %]
+                </select>
+                <span class="exportSelected"><a id="ExportSelected" href="/cgi-bin/koha/serials/claims.pl">Download selected claims</a></span>
+            [% END %]
 
-[% IF ( letters ) %]
-        <fieldset class="action"> <label for="letter_code">Select notice:</label>
-            <select name="letter_code" id="letter_code">
-                [% FOREACH letter IN letters %]
-                    <option value="[% letter.code %]">[% letter.name %]</option>
-                [% END %]
-			</select>
-	    <input type="hidden" name="op" value="send_alert" /><input type="submit" name="submit" class="button" value="Send notification" /></fieldset>
+            [% IF letters %]
+                <fieldset class="action">
+                    <label for="letter_code">Select notice:</label>
+                    <select name="letter_code" id="letter_code">
+                        [% FOREACH letter IN letters %]
+                            <option value="[% letter.code %]">[% letter.name %]</option>
+                        [% END %]
+                    </select>
+                    <input type="hidden" name="op" value="send_alert" />
+                    <input type="hidden" name="supplierid" value="[% supplierid %]" />
+                    <input type="submit" name="submit" class="button" value="Send notification" />
+                </fieldset>
             [% END %]
         </form>
     </fieldset>

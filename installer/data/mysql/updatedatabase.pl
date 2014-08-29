@@ -8877,6 +8877,20 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        ALTER TABLE serial ADD COLUMN claims_count INT(11) DEFAULT 0 after claimdate
+    |);
+    $dbh->do(q|
+        UPDATE serial
+        SET claims_count = 1
+        WHERE claimdate IS NOT NULL
+    |);
+    print "Upgrade to $DBversion done (Bug 5342: Add claims_count field in serial table)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

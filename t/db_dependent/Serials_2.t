@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use Modern::Perl;
 
-use Test::More tests => 37;
+use Test::More tests => 36;
 
 use MARC::Record;
 
@@ -19,10 +19,6 @@ my $userenv;
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
-
-
-my $supplierlist=eval{GetSuppliersWithLateIssues()};
-ok(length($@)==0,"No SQL problem in GetSuppliersWithLateIssues");
 
 my $record = MARC::Record->new();
 $record->append_fields(
