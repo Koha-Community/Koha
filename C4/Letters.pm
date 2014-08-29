@@ -370,6 +370,9 @@ sub SendAlerts {
             want_librarian => 1,
         ) or return;
 
+        # Remove the order tag
+        $letter->{content} =~ s/<order>(.*?)<\/order>/$1/gxms;
+
         # ... then send mail
         my %mail = (
             To => join( ',', @email),
