@@ -502,7 +502,7 @@ CREATE TABLE collections (
   colDesc text NOT NULL,
   colBranchcode varchar(10) DEFAULT NULL, -- 'branchcode for branch where item should be held.'
   PRIMARY KEY (colId)
-) ENGINE=InnoDB DEFAULT CHARACTER SET utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Constraints for table `collections`
@@ -519,7 +519,7 @@ CREATE TABLE collections_tracking (
   colId integer(11) NOT NULL DEFAULT 0 comment 'collections.colId',
   itemnumber integer(11) NOT NULL DEFAULT 0 comment 'items.itemnumber',
   PRIMARY KEY (collections_tracking_id)
-) ENGINE=InnoDB DEFAULT CHARACTER SET utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `courses`
@@ -983,7 +983,7 @@ CREATE TABLE `export_format` (
   `encoding` varchar(255) NOT NULL,
   `type` varchar(255) DEFAULT 'marc',
   PRIMARY KEY  (`export_format_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Used for CSV export';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Used for CSV export';
 
 
 --
@@ -1948,7 +1948,7 @@ CREATE TABLE IF NOT EXISTS `search_history` ( -- patron's opac search history
   `time` timestamp NOT NULL default CURRENT_TIMESTAMP, -- the date and time the search was run
   KEY `userid` (`userid`),
   KEY `sessionid` (`sessionid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Opac search history results';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Opac search history results';
 
 
 --
@@ -3031,7 +3031,7 @@ CREATE TABLE `aqcontract` (
   PRIMARY KEY  (`contractnumber`),
   CONSTRAINT `booksellerid_fk1` FOREIGN KEY (`booksellerid`)
        REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 --
 -- Table structure for table `aqorders`
