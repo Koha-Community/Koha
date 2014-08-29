@@ -107,10 +107,6 @@ if ( $email ) {
 
     my $user = GetMember(borrowernumber => $borrowernumber);
 
-    if (C4::Context->preference('OPACBaseURL')){
-          $template2->param( OPACBaseURL => C4::Context->preference('OPACBaseURL') );
-    }
-
     $template2->param(
         BIBLIO_RESULTS => \@results,
         email_sender   => $email_from,
