@@ -178,10 +178,10 @@ sub GetRating {
                 borrowernumber => $borrowernumber,
             }
         );
+        return unless $rating;
         $rating_hash{'rating_value'} = $rating->rating_value();
     }
     else {
-        $rating_hash{rating_borrowernumber} = undef;
         $rating_hash{rating_value}          = undef;
     }
 
