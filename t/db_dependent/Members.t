@@ -65,7 +65,7 @@ my @USERENV = (
 my $BRANCH_IDX = 5;
 
 C4::Context->_new_userenv ('DUMMY_SESSION_ID');
-C4::Context::set_userenv ( @USERENV );
+C4::Context->set_userenv ( @USERENV );
 
 my $userenv = C4::Context->userenv
   or BAIL_OUT("No userenv");
@@ -172,7 +172,7 @@ ok (!_find_member($results), "Search (arrayref) for independent branches, differ
   or diag("Card $CARDNUMBER found in the resultset for independent branches: ".Dumper(C4::Context->preference($INDEPENDENT_BRANCHES_PREF), $results));
 
 $USERENV[$BRANCH_IDX] = $BRANCHCODE;
-C4::Context::set_userenv ( @USERENV );
+C4::Context->set_userenv ( @USERENV );
 
 $results = Search("$CHANGED_FIRSTNAME $SURNAME", "surname");
 ok (_find_member($results), "Full name  Search (string) for independent branches, same branch")
