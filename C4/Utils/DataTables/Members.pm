@@ -37,6 +37,7 @@ sub search {
         borrowers.address2, borrowers.city, borrowers.state, borrowers.zipcode,
         borrowers.country, cardnumber, borrowers.dateexpiry,
         borrowers.borrowernotes, borrowers.branchcode, borrowers.email,
+        borrowers.userid,
         categories.description AS category_description, categories.category_type,
         branches.branchname";
     my $from = "FROM borrowers

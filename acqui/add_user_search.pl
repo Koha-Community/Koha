@@ -49,46 +49,6 @@ my $search_patrons_with_acq_perm_only =
     ( $referer =~ m|acqui/basket.pl| )
         ? 1 : 0;
 
-if( $op eq "do_search" ) {
-    my $results = C4::Members::Search( $q, "surname");
-
-    my @users_loop;
-    my $nresults = 0;
-    foreach my $res (@$results) {
-        my $should_be_returned = 1;
-
-        if ( $search_patrons_with_acq_perm_only ) {
-            $should_be_returned = 0;
-            my $perms = haspermission( $res->{userid} );
-            my $subperms = get_user_subpermissions( $res->{userid} );
-
-            if( $perms->{superlibrarian} == 1
-             || $perms->{acquisition} == 1
-             || $subperms->{acquisition}->{'order_manage'} ) {
-                $should_be_returned = 1;
-            }
-        }
-        if ( $should_be_returned ) {
-            my %row = (
-                borrowernumber  => $res->{borrowernumber},
-                cardnumber      => $res->{cardnumber},
-                surname         => $res->{surname},
-                firstname       => $res->{firstname},
-                categorycode    => $res->{categorycode},
-                branchcode      => $res->{branchcode},
-            );
-            push( @users_loop, \%row );
-            $nresults ++;
-        }
-    }
-
-    $template->param(
-        q           => $q,
-        nresults    => $nresults,
-        users_loop  => \@users_loop,
-    );
-}
-
 $template->param(
     patrons_with_acq_perm_only => $search_patrons_with_acq_perm_only,
 );

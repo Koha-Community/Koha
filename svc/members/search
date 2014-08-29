@@ -20,7 +20,7 @@
 use Modern::Perl;
 use CGI;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth qw( get_template_and_user haspermission get_user_subpermissions );
 use C4::Output qw( output_with_http_headers );
 use C4::Utils::DataTables qw( dt_get_params );
 use C4::Utils::DataTables::Members qw( search );
@@ -44,6 +44,7 @@ my $categorycode = $input->param('categorycode');
 my $branchcode = $input->param('branchcode');
 my $searchtype = $input->param('searchtype');
 my $searchfieldstype = $input->param('searchfieldstype') || 'standard';
+my $has_permission = $input->param('has_permission');
 
 if ( $searchfieldstype eq "dateofbirth" ) {
     $searchmember = output_pref({dt => dt_from_string($searchmember), dateformat => 'iso', dateonly => 1});
@@ -82,9 +83,32 @@ $results = C4::Utils::DataTables::Members::search(
         searchtype => $searchtype,
         searchfieldstype => $searchfieldstype,
         dt_params => \%dt_params,
-
     }
 ) unless $results;
+
+# It is not recommanded to use the has_permission param if you use the pagination
+# The filter is done AFTER requested the data
+if ($has_permission) {
+    my ( $permission, $subpermission ) = split /\./, $has_permission;
+    my @patrons_with_permission;
+    for my $patron ( @{ $results->{patrons} } ) {
+        my $perms = haspermission( $patron->{userid} );
+        if (   $perms->{superlibrarian} == 1
+            or $perms->{$permission} == 1 )
+        {
+            push @patrons_with_permission, $patron;
+            next;
+        }
+
+        if ($subpermission) {
+            my $subperms = get_user_subpermissions( $patron->{userid} );
+            push @patrons_with_permission, $patron
+              if $subperms->{$permission}->{$subpermission};
+        }
+    }
+    $results->{patrons} = \@patrons_with_permission;
+    $results->{iTotalDisplayRecords} = scalar( @patrons_with_permission );
+}
 
 $template->param(
     sEcho => $sEcho,

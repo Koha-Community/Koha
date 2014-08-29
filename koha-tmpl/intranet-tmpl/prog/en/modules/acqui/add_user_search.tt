@@ -19,7 +19,14 @@ $(document).ready(function(){
             aoData.push({
                 'name': 'template_path',
                 'value': 'acqui/tables/members_results.tt',
-            });
+            }
+            [% IF patrons_with_acq_perm_only %]
+            ,{
+                'name': 'has_permission',
+                'value': 'acquisition.order_manage',
+            }
+            [% END %]
+            );
             $.ajax({
                 'dataType': 'json',
                 'type': 'POST',
@@ -38,9 +45,14 @@ $(document).ready(function(){
             { 'mDataProp': 'dt_action', 'bSortable': false }
         ],
         'bAutoWidth': false,
-        'sPaginationType': 'full_numbers',
-        "iDisplayLength": [% Koha.Preference('PatronsPerPage') %],
-        "bProcessing": true,
+        [% IF patrons_with_acq_perm_only %]
+            'bPaginate': false,
+        [% ELSE %]
+            'sPaginationType': 'full_numbers',
+            "iDisplayLength": [% Koha.Preference('PatronsPerPage') %],
+            "bProcessing": true,
+        [% END %]
+        'bProcessing': true,
     }));
     dtMemberResults.fnAddFilters("filter", 750);
 });
