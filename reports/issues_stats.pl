@@ -22,7 +22,6 @@ use warnings;
 
 use CGI qw ( -utf8 );
 use Date::Manip;
-use Text::Unaccent;
 
 use C4::Auth;
 use C4::Debug;
@@ -339,7 +338,7 @@ sub calculate {
         $linefilter[0] =~ s/\*/%/g;
         $strsth .= " AND $line LIKE ? ";
     }
-    $strsth .= " group by $linefield order by $lineorder ";
+    $strsth .= " group by $linefield collate utf8_bin order by $lineorder ";
     $debug and warn $strsth;
     push @loopfilter, { crit => 'SQL =', sql => 1, filter => $strsth };
     my $sth = $dbh->prepare($strsth);
@@ -428,7 +427,7 @@ sub calculate {
         $strsth2 .= " AND $column LIKE ? " ;
     }
 
-    $strsth2 .= " group by $colfield order by $colorder ";
+    $strsth2 .= " group by $colfield collate utf8_bin order by $colorder ";
     $debug and warn $strsth2;
     push @loopfilter, { crit => 'SQL =', sql => 1, filter => $strsth2 };
     my $sth2 = $dbh->prepare($strsth2);
@@ -557,6 +556,7 @@ sub calculate {
     } else {
         $strcalc .= " $colfield ";
     }
+    $strcalc .= " collate utf8_bin ";
 
     $strcalc .= " ORDER BY ";
     if($line_attribute_type) {
@@ -643,24 +643,24 @@ sub null_to_zzempty {
 sub table_set {
     my ($table, $row, $col, $val) = @_;
 
-    $row = lc(unac_string('utf-8', $row // ''));
-    $col = lc(unac_string('utf-8', $col // ''));
+    $row = $row // '';
+    $col = $col // '';
     $table->{ null_to_zzempty($row) }->{ null_to_zzempty($col) } = $val;
 }
 
 sub table_get {
     my ($table, $row, $col) = @_;
 
-    $row = lc(unac_string('utf-8', $row // ''));
-    $col = lc(unac_string('utf-8', $col // ''));
+    $row = $row // '';
+    $col = $col // '';
     return $table->{ null_to_zzempty($row) }->{ null_to_zzempty($col) };
 }
 
 sub table_inc {
     my ($table, $row, $col, $inc) = @_;
 
-    $row = lc(unac_string('utf-8', $row // ''));
-    $col = lc(unac_string('utf-8', $col // ''));
+    $row = $row // '';
+    $col = $col // '';
     $table->{ null_to_zzempty($row) }->{ null_to_zzempty($col) } += $inc;
 }
 
