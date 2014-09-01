@@ -1137,7 +1137,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('321', '6', 'Linkage', 'Linkage', 0, 0, NULL, 3, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('321', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, NULL, 3, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('321', 'a', 'Former publication frequency', 'Former publication frequency', 0, 0, NULL, 3, NULL, NULL, '', NULL, -6, '', '', '', NULL),
-		('321', 'b', 'Former publication frequency', 'Former publication frequency', 0, 0, NULL, 3, NULL, NULL, '', NULL, -6, '', '', '', NULL),
+		('321', 'b', 'Dates of former publication frequency', 'Dates of former publication frequency', 0, 0, NULL, 3, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('340', '3', 'Materials specified', 'Materials specified', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('340', '6', 'Linkage', 'Linkage', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('340', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
