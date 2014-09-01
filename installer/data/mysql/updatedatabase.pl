@@ -8577,35 +8577,6 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
-$DBversion = "3.17.00.XXX";
-if ( CheckVersion($DBversion) ) {
-    # Correct invalid recordtypes (should be very exceptional)
-    $dbh->do(q{
-        UPDATE z3950servers set recordtype='biblio' WHERE recordtype NOT IN ('authority','biblio')
-    });
-    # Correct invalid server types (should also be very exceptional)
-    $dbh->do(q{
-        UPDATE z3950servers set type='zed' WHERE type <> 'zed'
-    });
-    # Adjust table
-    $dbh->do(q{
-        ALTER TABLE z3950servers
-        DROP COLUMN icon,
-        DROP COLUMN description,
-        DROP COLUMN position,
-        MODIFY COLUMN id int NOT NULL AUTO_INCREMENT FIRST,
-        MODIFY COLUMN recordtype enum('authority','biblio') NOT NULL DEFAULT 'biblio',
-        CHANGE COLUMN name servername mediumtext NOT NULL,
-        CHANGE COLUMN type servertype enum('zed','sru') NOT NULL DEFAULT 'zed',
-        ADD COLUMN sru_options varchar(255) default NULL,
-        ADD COLUMN sru_fields mediumtext default NULL,
-        ADD COLUMN add_xslt mediumtext default NULL
-    });
-    print "Upgrade to $DBversion done (Bug 6536: Z3950 improvements)\n";
-    SetVersion ($DBversion);
-}
-
 $DBversion = "3.17.00.011";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'hr', 'language', 'Croatian','2014-07-24' )");
@@ -8698,6 +8669,33 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.17.00.017";
+if ( CheckVersion($DBversion) ) {
+    # Correct invalid recordtypes (should be very exceptional)
+    $dbh->do(q{
+        UPDATE z3950servers set recordtype='biblio' WHERE recordtype NOT IN ('authority','biblio')
+    });
+    # Correct invalid server types (should also be very exceptional)
+    $dbh->do(q{
+        UPDATE z3950servers set type='zed' WHERE type <> 'zed'
+    });
+    # Adjust table
+    $dbh->do(q{
+        ALTER TABLE z3950servers
+        DROP COLUMN icon,
+        DROP COLUMN description,
+        DROP COLUMN position,
+        MODIFY COLUMN id int NOT NULL AUTO_INCREMENT FIRST,
+        MODIFY COLUMN recordtype enum('authority','biblio') NOT NULL DEFAULT 'biblio',
+        CHANGE COLUMN name servername mediumtext NOT NULL,
+        CHANGE COLUMN type servertype enum('zed','sru') NOT NULL DEFAULT 'zed',
+        ADD COLUMN sru_options varchar(255) default NULL,
+        ADD COLUMN sru_fields mediumtext default NULL,
+        ADD COLUMN add_xslt mediumtext default NULL
+    });
+    print "Upgrade to $DBversion done (Bug 6536: Z3950 improvements)\n";
+    SetVersion ($DBversion);
+}
 
 =head1 FUNCTIONS
 
