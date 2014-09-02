@@ -62,6 +62,9 @@ my (@errors, @feedback);
 my $extended = C4::Context->preference('ExtendedPatronAttributes');
 my $set_messaging_prefs = C4::Context->preference('EnhancedMessagingPreferences');
 my @columnkeys = C4::Members::columns();
+if ($extended) {
+    push @columnkeys, 'patron_attributes';
+}
 
 my $input = CGI->new();
 our $csv  = Text::CSV->new({binary => 1});  # binary needed for non-ASCII Unicode
