@@ -66,6 +66,9 @@ sub get_syndetics_index {
     my ( $isbn,$upc,$oclc ) = @_;
 
     my $response = _fetch_syndetics_content('INDEX.XML', $isbn, $upc, $oclc);
+    unless ($response->content_type =~ /xml/) {
+        return;
+    }
 
     my $content = $response->content;
     my $xmlsimple = XML::Simple->new();
