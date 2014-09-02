@@ -19,7 +19,7 @@
     //]]>
     </script>
 [% END %]
-<script language="javascript" type="text/javascript" src="[% interface %]/lib/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript">//<![CDATA[
 var MSG_CONFIRM_DELETE_NEWS  = _("Are you sure you want to delete the selected news?");
 
@@ -138,7 +138,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             <li>
                 <label for="number">Appear in position: </label>
                 [% IF ( new_detail.number ) %]
-                    <input id="number" size="3" name="number" type="text" checked="checked" value="[% new_detail.number %]" />
+                    <input id="number" size="3" name="number" type="text" value="[% new_detail.number %]" />
                 [% ELSE %]
                     <input id="number" size="3" name="number" type="text" />
                 [% END %]
