@@ -140,33 +140,38 @@ sub SearchAuthorities {
     my $and=" \@and " ;
     my $q2;
     my $attr_cnt = 0;
-    for(my $i = 0 ; $i <= $#{$value} ; $i++)
-    {
-        if (@$value[$i]){
-            if ( @$tags[$i] eq "mainmainentry" ) {
-                $attr = " \@attr 1=Heading-Main ";
-            }
-            elsif ( @$tags[$i] eq "mainentry" ) {
-                $attr = " \@attr 1=Heading ";
-            }
-            elsif ( @$tags[$i] eq "match" ) {
-                $attr = " \@attr 1=Match ";
-            }
-            elsif ( @$tags[$i] eq "match-heading" ) {
-                $attr = " \@attr 1=Match-heading ";
-            }
-            elsif ( @$tags[$i] eq "see-from" ) {
-                $attr = " \@attr 1=Match-heading-see-from ";
-            }
-            elsif ( @$tags[$i] eq "thesaurus" ) {
-                $attr = " \@attr 1=Subject-heading-thesaurus ";
-            }
-            else { # Assume any if no index was specified
+    for ( my $i = 0 ; $i <= $#{$value} ; $i++ ) {
+        if ( @$value[$i] ) {
+            if ( @$tags[$i] ) {
+                if ( @$tags[$i] eq "mainmainentry" ) {
+                    $attr = " \@attr 1=Heading-Main ";
+                }
+                elsif ( @$tags[$i] eq "mainentry" ) {
+                    $attr = " \@attr 1=Heading ";
+                }
+                elsif ( @$tags[$i] eq "match" ) {
+                    $attr = " \@attr 1=Match ";
+                }
+                elsif ( @$tags[$i] eq "match-heading" ) {
+                    $attr = " \@attr 1=Match-heading ";
+                }
+                elsif ( @$tags[$i] eq "see-from" ) {
+                    $attr = " \@attr 1=Match-heading-see-from ";
+                }
+                elsif ( @$tags[$i] eq "thesaurus" ) {
+                    $attr = " \@attr 1=Subject-heading-thesaurus ";
+                }
+                else {    # Assume any if no index was specified
+                    $attr = " \@attr 1=Any ";
+                }
+            }         #if @$tags[$i]
+            else {    # Assume any if no index was specified
                 $attr = " \@attr 1=Any ";
             }
+
             if ( @$operator[$i] eq 'is' ) {
                 $attr .= " \@attr 4=1  \@attr 5=100 "
-                  ; ##Phrase, No truncation,all of subfield field must match
+                  ;    ##Phrase, No truncation,all of subfield field must match
             }
             elsif ( @$operator[$i] eq "=" ) {
                 $attr .= " \@attr 4=107 ";    #Number Exact match
@@ -177,24 +182,25 @@ sub SearchAuthorities {
             }
             elsif ( @$operator[$i] eq "exact" ) {
                 $attr .= " \@attr 4=1  \@attr 5=100 \@attr 6=3 "
-                  ; ##Phrase, No truncation,all of subfield field must match
+                  ;    ##Phrase, No truncation,all of subfield field must match
             }
             else {
                 $attr .= " \@attr 5=1 \@attr 4=6 "
                   ;    ## Word list, right truncated, anywhere
-                  if ($sortby eq 'Relevance') {
-                      $attr .= "\@attr 2=102 ";
-                  }
+                if ( $sortby eq 'Relevance' ) {
+                    $attr .= "\@attr 2=102 ";
+                }
             }
-            @$value[$i] =~ s/"/\\"/g; # Escape the double-quotes in the search value
-            $attr =$attr."\"".@$value[$i]."\"";
-            $q2 .=$attr;
-            $dosearch=1;
+            @$value[$i] =~
+              s/"/\\"/g;    # Escape the double-quotes in the search value
+            $attr = $attr . "\"" . @$value[$i] . "\"";
+            $q2 .= $attr;
+            $dosearch = 1;
             ++$attr_cnt;
             if ($QParser) {
                 $qpquery .= " $tags->[$i]:\"$value->[$i]\"";
             }
-        }#if value
+        }    #if value
     }
     ##Add how many queries generated
     if (defined $query && $query=~/\S+/){
