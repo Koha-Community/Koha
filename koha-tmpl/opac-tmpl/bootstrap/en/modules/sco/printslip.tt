@@ -6,6 +6,12 @@
 [% IF stylesheet %]
 <link rel="stylesheet" type="text/css" href="[% stylesheet %]" />
 [% END %]
+<script type="text/javascript">
+    function printThenClose() {
+        window.print();
+        setTimeout('window.close()', 1);
+    }
+</script>
 </head>
 
 <body id="circ_printslip" class="circ" onload="printThenClose();">
@@ -20,11 +26,5 @@
 
     </div>
 
-<script language="javascript">
-    function printThenClose() {
-        window.print();
-        setTimeout('window.close()', 1);
-    }
-</script>
 </body>
 </html>
