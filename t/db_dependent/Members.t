@@ -322,16 +322,36 @@ is( Check_Userid( C4::Context->config('user'), '' ), 0,
 
 subtest 'GetMemberAccountBalance' => sub {
 
-    plan tests => 6;
+    plan tests => 10;
 
     my $members_mock = new Test::MockModule('C4::Members');
     $members_mock->mock( 'GetMemberAccountRecords', sub {
-        my @accountlines = (
+        my ($borrowernumber) = @_;
+        if ($borrowernumber) {
+            my @accountlines = (
             { amountoutstanding => '7', accounttype => 'Rent' },
             { amountoutstanding => '5', accounttype => 'Res' },
             { amountoutstanding => '3', accounttype => 'Pay' } );
-        return ( 15, \@accountlines );
+            return ( 15, \@accountlines );
+        }
+        else {
+            my @accountlines;
+            return ( 0, \@accountlines );
+        }
     });
+
+    my $person = GetMemberDetails(undef,undef);
+    ok( !$person , 'Expected no member details from undef,undef' );
+    $person = GetMemberDetails(undef,'987654321');
+    is( $person->{amountoutstanding}, 15,
+        'Expected 15 outstanding for cardnumber.');
+    $borrowernumber = $person->{borrowernumber};
+    $person = GetMemberDetails($borrowernumber,undef);
+    is( $person->{amountoutstanding}, 15,
+        'Expected 15 outstanding for borrowernumber.');
+    $person = GetMemberDetails($borrowernumber,'987654321');
+    is( $person->{amountoutstanding}, 15,
+        'Expected 15 outstanding for both borrowernumber and cardnumber.');
 
     # do not count holds charges
     C4::Context->set_preference( 'HoldsInNoissuesCharge', '1' );
