@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha\n"
-"POT-Creation-Date: 2014-07-15 19:14-0300\n"
+"POT-Creation-Date: 2014-08-15 23:21-0300\n"
 "PO-Revision-Date: 2014-07-02 03:09+0000\n"
 "Last-Translator: dhoang <dung.hoang@dlcorp.com.vn>\n"
 "Language-Team: Koha translation team <koha-translate@lists.koha-community."
@@ -205,7 +205,7 @@ msgstr "%s %s %s %s Không có tài liệu khác. %s %s "
 #. %2$s:  IF ( subscription_LOO.letter ) 
 #. %3$s:  IF ( loggedinusername ) 
 #. %4$s:  IF ( subscription_LOO.hasalert ) 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:113
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:116
 #, fuzzy, c-format
 msgid "%s %s %s %s You have subscribed to email notification on new issues "
 msgstr "%s %s %s %s Bạn đã đăng ký để nhận thư thông báo khi có kỳ mới về. "
@@ -314,7 +314,7 @@ msgstr "%s %s %s%s%sKoha online%s  &rsaquo; Lịch sử tìm kiếm %s "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( RESERVE.intransit ) 
-#: opac-tmpl/prog/en/modules/opac-user.tt:408
+#: opac-tmpl/prog/en/modules/opac-user.tt:411
 #, c-format
 msgid "%s %s %s Item in transit from "
 msgstr "%s %s %sTài liệu đang chuyển từ "
@@ -322,7 +322,7 @@ msgstr "%s %s %sTài liệu đang chuyển từ "
 #. %1$s:  IF ( RESERVE.wait ) 
 #. %2$s:  IF ( RESERVE.atdestination ) 
 #. %3$s:  IF ( RESERVE.found ) 
-#: opac-tmpl/prog/en/modules/opac-user.tt:398
+#: opac-tmpl/prog/en/modules/opac-user.tt:401
 #, c-format
 msgid "%s %s %s Item waiting at "
 msgstr "%s %s %s Tài liệu đang chờ tại "
@@ -634,7 +634,7 @@ msgstr "%s %s %sThư Viện%s %s %sKho tài liệu%s"
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
-#: opac-tmpl/prog/en/modules/opac-user.tt:405
+#: opac-tmpl/prog/en/modules/opac-user.tt:408
 #, c-format
 msgid "%s %s Item in transit to "
 msgstr "%s %s Tài liệu đang chuyển tới "
@@ -673,7 +673,7 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #. %4$s:  END 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:124
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:127
 #, fuzzy, c-format
 msgid ""
 "%s %s You must log in if you want to subscribe to email notification on new "
@@ -1052,7 +1052,7 @@ msgstr "%s %sTác giả "
 #. %2$s:  IF ( shelvesloo.single ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:693
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:699
 #, c-format
 msgid "%s %sitem%sitem(s)%s"
 msgstr "Hiện tại có %s %s tài liệu%stài liệu%strong giá sách ảo "
@@ -1278,13 +1278,13 @@ msgstr ""
 "tới%s từ ngày %s %s Được đặt mượn %s Loại khỏi lưu thông %s %s %s %s %s %s "
 
 #. %1$s:  ELSE 
-#: opac-tmpl/prog/en/modules/opac-user.tt:403
+#: opac-tmpl/prog/en/modules/opac-user.tt:406
 #, c-format
 msgid "%s Item waiting to be pulled from "
 msgstr "%s Tài liệu chờ nhận tại "
 
 #. %1$s:  issues_count 
-#: opac-tmpl/prog/en/modules/opac-user.tt:135
+#: opac-tmpl/prog/en/modules/opac-user.tt:138
 #, c-format
 msgid "%s Item(s) checked out"
 msgstr "Hiện tại có %s tài liệu được ghi mượn cho bạn đọc"
@@ -1303,7 +1303,7 @@ msgstr "%s Di động:"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: opac-tmpl/prog/en/modules/opac-user.tt:389
+#: opac-tmpl/prog/en/modules/opac-user.tt:392
 #, fuzzy, c-format
 msgid "%s Never expires %s "
 msgstr "%s%s%sKhông có%s"
@@ -1326,7 +1326,7 @@ msgstr ""
 
 #. %1$s:  ELSE 
 #. %2$s:  IF ( ISSUE.too_many ) 
-#: opac-tmpl/prog/en/modules/opac-user.tt:192
+#: opac-tmpl/prog/en/modules/opac-user.tt:195
 #, c-format
 msgid "%s Not renewable%s "
 msgstr "%s Không thể gia hạn%s "
@@ -1458,6 +1458,16 @@ msgstr "%s Số nhà:"
 #, c-format
 msgid "%s Surname:"
 msgstr "%s Họ:"
+
+#. %1$s:  IF ( category2 && !OpacAllowPublicListCreation ) 
+#. %2$s:  END 
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:573
+#, c-format
+msgid ""
+"%s The library has disabled the ability for patrons to create new public "
+"lists. If you make your list private, you will not be able to make it public "
+"again. %s "
+msgstr ""
 
 #. %1$s:  IF holds_count.defined 
 #. %2$s:  holds_count 
@@ -1644,7 +1654,7 @@ msgstr "%s biểu ghi"
 #. %1$s:  IF ( RESERVE.waitingdate ) 
 #. %2$s:  RESERVE.waitingdate | $KohaDates 
 #. %3$s:  END 
-#: opac-tmpl/prog/en/modules/opac-user.tt:402
+#: opac-tmpl/prog/en/modules/opac-user.tt:405
 #, fuzzy, c-format
 msgid "%s since %s%s "
 msgstr "%s Sử dụng cho/ Xem từ: %s Xem thêm: %s"
@@ -1723,7 +1733,7 @@ msgstr ""
 #. %5$s:  END 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:627
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:633
 #, c-format
 msgid "%s%s %sitem%sitems%s%sEmpty%s"
 msgstr ""
@@ -1935,7 +1945,7 @@ msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: opac-tmpl/prog/en/modules/opac-user.tt:333
+#: opac-tmpl/prog/en/modules/opac-user.tt:336
 #, c-format
 msgid "%sAccount frozen %s %s"
 msgstr "%sTài khoản bị khóa %s %s"
@@ -2084,7 +2094,7 @@ msgstr ""
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/prog/en/modules/opac-user.tt:336
+#: opac-tmpl/prog/en/modules/opac-user.tt:339
 #, c-format
 msgid "%sOn hold %sNo renewals left %s "
 msgstr "%sĐược đặt mượn %sKhông thể gia hạn%s "
@@ -2094,8 +2104,8 @@ msgstr "%sĐược đặt mượn %sKhông thể gia hạn%s "
 #. %2$s:  END 
 #. %3$s:  IF ( shelveslooppri.viewcategory2 ) 
 #. %4$s:  END 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:628
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:694
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:634
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:700
 #, c-format
 msgid "%sPrivate%s %sPublic%s "
 msgstr "%sCá nhân%s %sCộng đồng%s "
@@ -2187,8 +2197,8 @@ msgstr ""
 #. %1$s:  IF ( ISSUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/prog/en/modules/opac-user.tt:198
-#: opac-tmpl/prog/en/modules/opac-user.tt:342
+#: opac-tmpl/prog/en/modules/opac-user.tt:201
+#: opac-tmpl/prog/en/modules/opac-user.tt:345
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:300
 #, c-format
 msgid "%sYes%sNo%s"
@@ -2914,17 +2924,17 @@ msgstr "(%s biểu ghi)"
 #. For the first occurrence,
 #. %1$s:  ISSUE.renewsleft 
 #. %2$s:  ISSUE.renewsallowed 
-#: opac-tmpl/prog/en/modules/opac-user.tt:192
-#: opac-tmpl/prog/en/modules/opac-user.tt:194
-#: opac-tmpl/prog/en/modules/opac-user.tt:336
+#: opac-tmpl/prog/en/modules/opac-user.tt:195
+#: opac-tmpl/prog/en/modules/opac-user.tt:197
+#: opac-tmpl/prog/en/modules/opac-user.tt:339
 #, c-format
 msgid "(%s of %s renewals remaining)"
 msgstr "(%s còn %s  lần)"
 
 #. For the first occurrence,
 #. %1$s:  overdues_count 
-#: opac-tmpl/prog/en/modules/opac-user.tt:290
-#: opac-tmpl/prog/en/modules/opac-user.tt:353
+#: opac-tmpl/prog/en/modules/opac-user.tt:293
+#: opac-tmpl/prog/en/modules/opac-user.tt:356
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:266
 #, c-format
 msgid "(%s total)"
@@ -2949,7 +2959,7 @@ msgstr "(Không được hỗ trợ bởi Koha)"
 msgid "(Not supported yet)"
 msgstr "(Không được hỗ trợ)"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:194
+#: opac-tmpl/prog/en/modules/opac-user.tt:197
 #, c-format
 msgid "(On hold)"
 msgstr "(Được đặt mượn)"
@@ -3767,9 +3777,9 @@ msgstr "Địa chỉ thay thế"
 msgid "Alternate contact"
 msgstr "Thông tin liên hệ thay thế"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:231
-#: opac-tmpl/prog/en/modules/opac-user.tt:242
-#: opac-tmpl/prog/en/modules/opac-user.tt:251
+#: opac-tmpl/prog/en/modules/opac-user.tt:234
+#: opac-tmpl/prog/en/modules/opac-user.tt:245
+#: opac-tmpl/prog/en/modules/opac-user.tt:254
 #, c-format
 msgid "Amount"
 msgstr "Số tiền"
@@ -4076,7 +4086,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:317
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:319
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:562
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:752
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:758
 #, c-format
 msgid "Author"
 msgstr "Tác giả"
@@ -4164,7 +4174,7 @@ msgstr "Sẵn sàng:"
 msgid "Availability: "
 msgstr "Sẵn sàng: "
 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:98
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:101
 #, c-format
 msgid "Available issues"
 msgstr "Ấn phẩm sẵn sàng"
@@ -4248,8 +4258,8 @@ msgstr "Quay lại kết quả tìm kiếm"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:131
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:476
-#: opac-tmpl/prog/en/modules/opac-user.tt:141
-#: opac-tmpl/prog/en/modules/opac-user.tt:296
+#: opac-tmpl/prog/en/modules/opac-user.tt:144
+#: opac-tmpl/prog/en/modules/opac-user.tt:299
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1533
 #, c-format
 msgid "Barcode"
@@ -4504,7 +4514,7 @@ msgstr "CR"
 msgid "CSV - %s"
 msgstr "CSV - %s"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:142
+#: opac-tmpl/prog/en/modules/opac-user.tt:145
 #, c-format
 msgid "Call No."
 msgstr "Ký hiệu phân loại"
@@ -4514,7 +4524,7 @@ msgstr "Ký hiệu phân loại"
 msgid "Call Number"
 msgstr "Ký hiệu phân loại"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:297
+#: opac-tmpl/prog/en/modules/opac-user.tt:300
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:269
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:60
 #, c-format
@@ -4533,7 +4543,7 @@ msgstr "Ký hiệu phân loại"
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:329
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:331
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:564
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:754
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:760
 #, c-format
 msgid "Call number"
 msgstr "Ký hiệu phân loại"
@@ -4559,7 +4569,7 @@ msgstr "Ký hiệu phân loại: %s"
 #: opac-tmpl/prog/en/modules/opac-review.tt:75
 #: opac-tmpl/prog/en/modules/opac-passwd.tt:37
 #: opac-tmpl/prog/en/modules/opac-messaging.tt:150
-#: opac-tmpl/prog/en/modules/opac-user.tt:426
+#: opac-tmpl/prog/en/modules/opac-user.tt:429
 #: opac-tmpl/prog/en/modules/opac-basket.tt:182
 #: opac-tmpl/prog/en/modules/opac-detail.tt:610
 #: opac-tmpl/prog/en/modules/opac-detail.tt:717
@@ -4567,8 +4577,8 @@ msgstr "Ký hiệu phân loại: %s"
 #: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:44
 #: opac-tmpl/prog/en/modules/opac-sendbasketform.tt:33
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:384
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:579
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:771
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:585
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:780
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:128
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:42
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:51
@@ -4578,11 +4588,11 @@ msgid "Cancel"
 msgstr "Hủy bỏ"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:118
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:121
 msgid "Cancel email notification"
 msgstr "Hủy nhận thông báo"
 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:118
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:121
 #, c-format
 msgid "Cancel email notification "
 msgstr "Hủy nhận thông báo "
@@ -4641,7 +4651,7 @@ msgid "Catalogs"
 msgstr "Mục lục"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:569
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:758
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:765
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:64
 #, c-format
 msgid "Category:"
@@ -4675,7 +4685,7 @@ msgstr "Được ghi mượn"
 msgid "Check out%s, return%s or renew an item: "
 msgstr "Ghi mượn %s, ghi trả %s hoặc gia hạn tài liệu: "
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:119
+#: opac-tmpl/prog/en/modules/opac-user.tt:122
 #, c-format
 msgid "Checked out"
 msgstr "Được ghi mượn"
@@ -4734,7 +4744,7 @@ msgstr "Bỏ tất cả"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:6
-#: opac-tmpl/prog/en/modules/opac-user.tt:446
+#: opac-tmpl/prog/en/modules/opac-user.tt:449
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:177
 #, c-format
 msgid "Clear date"
@@ -4797,8 +4807,8 @@ msgid "Click to rewind the list to"
 msgstr "Kích để quay lại giá sách để"
 
 #. DIV
-#: opac-tmpl/prog/en/modules/opac-user.tt:169
-#: opac-tmpl/prog/en/modules/opac-user.tt:313
+#: opac-tmpl/prog/en/modules/opac-user.tt:172
+#: opac-tmpl/prog/en/modules/opac-user.tt:316
 msgid "Click to view in Google Books"
 msgstr "Kích để xem trong Google Books"
 
@@ -4923,8 +4933,8 @@ msgid "Computer file"
 msgstr "Tệp tin"
 
 #. INPUT type=submit
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:647
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:711
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:653
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:717
 msgid "Confirm"
 msgstr "Xác nhận"
 
@@ -4958,8 +4968,8 @@ msgstr "Nội dung bổ sung"
 msgid "Content advice: "
 msgstr "Nội dung cố vấn: "
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:616
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:683
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:622
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:689
 #, c-format
 msgid "Contents"
 msgstr "Nội dung"
@@ -5088,7 +5098,7 @@ msgid "Courses"
 msgstr ""
 
 #. IMG
-#: opac-tmpl/prog/en/modules/opac-user.tt:167
+#: opac-tmpl/prog/en/modules/opac-user.tt:170
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:73
 msgid "Cover Image"
 msgstr "Ảnh bìa"
@@ -5098,7 +5108,7 @@ msgstr "Ảnh bìa"
 msgid "Cover image"
 msgstr "Ảnh bìa"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:736
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:742
 #, c-format
 msgid "Create a new list"
 msgstr "Tạo giá sách ảo"
@@ -5126,8 +5136,8 @@ msgstr ""
 msgid "CreativeWork"
 msgstr "Các điều ước quốc tế"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:124
-#: opac-tmpl/prog/en/modules/opac-user.tt:249
+#: opac-tmpl/prog/en/modules/opac-user.tt:127
+#: opac-tmpl/prog/en/modules/opac-user.tt:252
 #, c-format
 msgid "Credits"
 msgstr "Tài khoản trả trước"
@@ -5255,8 +5265,8 @@ msgstr ""
 
 #: opac-tmpl/prog/en/modules/opac-tags.tt:101
 #: opac-tmpl/prog/en/modules/opac-tags.tt:110
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:649
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:713
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:655
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:719
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:9
 #, c-format
 msgid "Delete"
@@ -5495,8 +5505,8 @@ msgstr "Phim hoạt hình"
 msgid "Dublin Core (XML)"
 msgstr "Dublin Core (XML)"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:139
-#: opac-tmpl/prog/en/modules/opac-user.tt:298
+#: opac-tmpl/prog/en/modules/opac-user.tt:142
+#: opac-tmpl/prog/en/modules/opac-user.tt:301
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:269
 #, c-format
 msgid "Due"
@@ -5572,8 +5582,8 @@ msgstr "Lỗi: Bạn không có quyền thao tác trong giá sách ảo %s."
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-review.tt:6
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1290
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:638
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:704
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:644
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:710
 #, c-format
 msgid "Edit"
 msgstr "Chỉnh sửa"
@@ -5844,7 +5854,7 @@ msgstr "Trích dẫn của Syndetics"
 msgid "Expecting a specific item selection."
 msgstr "Trích dẫn một bản sao cụ thể."
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:359
+#: opac-tmpl/prog/en/modules/opac-user.tt:362
 #, c-format
 msgid "Expires on"
 msgstr "Ngày hết hạn"
@@ -5957,17 +5967,17 @@ msgstr "Filmspole"
 msgid "Fine amount"
 msgstr "Số tiền phạt"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:122
-#: opac-tmpl/prog/en/modules/opac-user.tt:123
-#: opac-tmpl/prog/en/modules/opac-user.tt:147
-#: opac-tmpl/prog/en/modules/opac-user.tt:303
+#: opac-tmpl/prog/en/modules/opac-user.tt:125
+#: opac-tmpl/prog/en/modules/opac-user.tt:126
+#: opac-tmpl/prog/en/modules/opac-user.tt:150
+#: opac-tmpl/prog/en/modules/opac-user.tt:306
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:269
 #, c-format
 msgid "Fines"
 msgstr "Tiền phạt"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:229
-#: opac-tmpl/prog/en/modules/opac-user.tt:240
+#: opac-tmpl/prog/en/modules/opac-user.tt:232
+#: opac-tmpl/prog/en/modules/opac-user.tt:243
 #, c-format
 msgid "Fines and charges"
 msgstr "Tiền phạt và phí"
@@ -6397,7 +6407,7 @@ msgstr "Thoát"
 msgid "Highlight"
 msgstr "Đánh dấu"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:266
+#: opac-tmpl/prog/en/modules/opac-user.tt:269
 #, c-format
 msgid "Hold date"
 msgstr "Ngày đặt mượn"
@@ -6445,12 +6455,12 @@ msgstr "Ghi chú bản tài liệu: "
 msgid "Holdings:"
 msgstr "Bản tài liệu:"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:127
+#: opac-tmpl/prog/en/modules/opac-user.tt:130
 #, c-format
 msgid "Holds"
 msgstr "Đặt mượn"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:353
+#: opac-tmpl/prog/en/modules/opac-user.tt:356
 #, c-format
 msgid "Holds "
 msgstr "Đặt mượn "
@@ -6460,7 +6470,7 @@ msgstr "Đặt mượn "
 msgid "Holds and priority: "
 msgstr "Đặt mượn và thứ tự đặt mượn"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:263
+#: opac-tmpl/prog/en/modules/opac-user.tt:266
 #, c-format
 msgid "Holds waiting"
 msgstr "Đặt mượn đang chờ"
@@ -6538,7 +6548,7 @@ msgid "ISBN: %s "
 msgstr "Số ISBN: %s "
 
 #. %1$s:  FOREACH isbn IN BIBLIO_RESULT.ISBN 
-#. %2$s:  isbn.marcisbn 
+#. %2$s:  isbn 
 #. %3$s:  UNLESS ( loop.last ) 
 #. %4$s:  END 
 #. %5$s:  END 
@@ -6745,7 +6755,7 @@ msgstr "Số"
 msgid "Issues for a subscription"
 msgstr "ÂPĐK:"
 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:110
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:113
 #, c-format
 msgid "Issues summary"
 msgstr "Thông tin tóm tắt"
@@ -6777,8 +6787,8 @@ msgstr "Đặt mượn"
 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:42
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:474
-#: opac-tmpl/prog/en/modules/opac-user.tt:140
-#: opac-tmpl/prog/en/modules/opac-user.tt:295
+#: opac-tmpl/prog/en/modules/opac-user.tt:143
+#: opac-tmpl/prog/en/modules/opac-user.tt:298
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1523
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:59
 #, c-format
@@ -7151,7 +7161,7 @@ msgstr "Liên kết tới tài nguyên "
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:150
+#: opac-tmpl/prog/en/modules/opac-user.tt:153
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:63
 #, c-format
 msgid "Links"
@@ -7163,13 +7173,13 @@ msgstr "Liên kết"
 msgid "List %s Deleted."
 msgstr "Giá sách ảo %s đã bị xóa."
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:615
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:682
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:621
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:688
 #, c-format
 msgid "List name"
 msgstr "Tên giá sách ảo:"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:740
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:746
 #, c-format
 msgid "List name:"
 msgstr "Tên giá sách ảo:"
@@ -7189,7 +7199,7 @@ msgstr "Giá sách ảo chứa tài liệu:: "
 #: opac-tmpl/prog/en/includes/masthead.inc:128
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:299
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:550
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:587
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:593
 #, c-format
 msgid "Lists"
 msgstr "Giá sách ảo"
@@ -7255,8 +7265,8 @@ msgid "Log In to Your Account"
 msgstr "Đăng nhập"
 
 #: opac-tmpl/prog/en/modules/opac-tags.tt:73
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:663
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:677
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:669
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:683
 #, c-format
 msgid "Log in"
 msgstr "Đăng nhập"
@@ -7581,6 +7591,12 @@ msgstr "Tháng 3"
 msgid "Match:"
 msgstr "Phù hợp:"
 
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:536
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:174
+#, fuzzy, c-format
+msgid "Material type: "
+msgstr "Materialtype: "
+
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:162
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:445
 #, c-format
@@ -7677,7 +7693,7 @@ msgstr "Mo"
 msgid "Modell"
 msgstr "Modell"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:365
+#: opac-tmpl/prog/en/modules/opac-user.tt:368
 #, c-format
 msgid "Modify"
 msgstr "Chỉnh sửa"
@@ -7848,8 +7864,8 @@ msgstr "Bình luận mới trên  %s %s, %s%s"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:610
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:675
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:616
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:681
 #, c-format
 msgid "New list"
 msgstr "Tạo giá sách ảo"
@@ -7944,12 +7960,12 @@ msgstr "Nhan đề này không có bản tài liệu đính kèm."
 #: opac-tmpl/prog/en/modules/opac-results.tt:726
 #: opac-tmpl/prog/en/modules/opac-results.tt:727
 #: opac-tmpl/prog/en/modules/opac-results.tt:729
-#: opac-tmpl/prog/en/modules/opac-user.tt:167
-#: opac-tmpl/prog/en/modules/opac-user.tt:169
-#: opac-tmpl/prog/en/modules/opac-user.tt:171
-#: opac-tmpl/prog/en/modules/opac-user.tt:311
-#: opac-tmpl/prog/en/modules/opac-user.tt:313
-#: opac-tmpl/prog/en/modules/opac-user.tt:315
+#: opac-tmpl/prog/en/modules/opac-user.tt:170
+#: opac-tmpl/prog/en/modules/opac-user.tt:172
+#: opac-tmpl/prog/en/modules/opac-user.tt:174
+#: opac-tmpl/prog/en/modules/opac-user.tt:314
+#: opac-tmpl/prog/en/modules/opac-user.tt:316
+#: opac-tmpl/prog/en/modules/opac-user.tt:318
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:83
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:90
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:92
@@ -8027,12 +8043,12 @@ msgstr "Biểu ghi không có các bản tài liệu đính kèm"
 msgid "No private lists"
 msgstr "Không có giá sách ảo cá nhận"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:659
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:665
 #, c-format
 msgid "No private lists."
 msgstr "Không có giá sách ảo cá nhận."
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:723
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:729
 #, c-format
 msgid "No public lists."
 msgstr "Không có giá sách ảo cộng đồng."
@@ -8171,7 +8187,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:49
 #: opac-tmpl/prog/en/modules/opac-results.tt:407
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:145
-#: opac-tmpl/prog/en/modules/opac-user.tt:358
+#: opac-tmpl/prog/en/modules/opac-user.tt:361
 #: opac-tmpl/prog/en/modules/opac-basket.tt:272
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1531
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:38
@@ -8427,12 +8443,12 @@ msgstr "OutputRewritablePage "
 msgid "OverDrive search for '%s'"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:120
+#: opac-tmpl/prog/en/modules/opac-user.tt:123
 #, c-format
 msgid "Overdue"
 msgstr "Quá hạn"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:290
+#: opac-tmpl/prog/en/modules/opac-user.tt:293
 #, c-format
 msgid "Overdues "
 msgstr "Quá hạn "
@@ -8568,12 +8584,12 @@ msgstr "Điện thoại"
 msgid "Physical details:"
 msgstr "Mô tả vật lý:"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:267
+#: opac-tmpl/prog/en/modules/opac-user.tt:270
 #, c-format
 msgid "Pick up library"
 msgstr "Thư viện nhận"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:360
+#: opac-tmpl/prog/en/modules/opac-user.tt:363
 #, c-format
 msgid "Pick up location"
 msgstr "Thư viện nhận"
@@ -8629,7 +8645,7 @@ msgstr "Đặt mượn"
 msgid "Place hold"
 msgstr "Đặt mượn"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:357
+#: opac-tmpl/prog/en/modules/opac-user.tt:360
 #, c-format
 msgid "Placed on"
 msgstr "Ngày đặt mượn"
@@ -8871,7 +8887,7 @@ msgstr "Bản in"
 msgid "Print list"
 msgstr "In"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:362
+#: opac-tmpl/prog/en/modules/opac-user.tt:365
 #, c-format
 msgid "Priority"
 msgstr "Thứ tự đặt mượn"
@@ -8882,7 +8898,7 @@ msgid "Privacy rule"
 msgstr "Chính sách cá nhân"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:571
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:760
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:767
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:66
 #, c-format
 msgid "Private"
@@ -8930,7 +8946,7 @@ msgid "Provenance note: "
 msgstr "Provenance note: "
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:572
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:762
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:768
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:68
 #, c-format
 msgid "Public"
@@ -8942,8 +8958,8 @@ msgid "Public Lists"
 msgstr "Giá sách cộng đồng"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:157
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:597
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:599
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:603
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:605
 #, c-format
 msgid "Public lists"
 msgstr "Giá sách cộng đồng"
@@ -9205,10 +9221,10 @@ msgstr "Loại bỏ khỏi giá sách"
 msgid "Remove selected items"
 msgstr "Loại bỏ tài liệu được chọn"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:144
-#: opac-tmpl/prog/en/modules/opac-user.tt:192
-#: opac-tmpl/prog/en/modules/opac-user.tt:300
-#: opac-tmpl/prog/en/modules/opac-user.tt:336
+#: opac-tmpl/prog/en/modules/opac-user.tt:147
+#: opac-tmpl/prog/en/modules/opac-user.tt:195
+#: opac-tmpl/prog/en/modules/opac-user.tt:303
+#: opac-tmpl/prog/en/modules/opac-user.tt:339
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:269
 #, c-format
 msgid "Renew"
@@ -9217,7 +9233,7 @@ msgstr "Gia hạn"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-user.tt:8
-#: opac-tmpl/prog/en/modules/opac-user.tt:217
+#: opac-tmpl/prog/en/modules/opac-user.tt:220
 msgid "Renew all"
 msgstr "Gia hạn tất cả"
 
@@ -9232,7 +9248,7 @@ msgstr "Gia hạn tài liệu"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-user.tt:8
-#: opac-tmpl/prog/en/modules/opac-user.tt:207
+#: opac-tmpl/prog/en/modules/opac-user.tt:210
 msgid "Renew selected"
 msgstr "Gia hạn"
 
@@ -9308,7 +9324,7 @@ msgid "Results %s to %s of %s"
 msgstr "Kết quả tìm kiếm từ %s tới %s trong tổng số %s kết quả"
 
 #. INPUT type=submit name=submit
-#: opac-tmpl/prog/en/modules/opac-user.tt:452
+#: opac-tmpl/prog/en/modules/opac-user.tt:455
 msgid "Resume all suspended holds"
 msgstr "Khôi phục đặt mượn"
 
@@ -9462,8 +9478,8 @@ msgstr "Thứ 7"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:579
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:770
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:585
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:779
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:42
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:51
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:72
@@ -9644,8 +9660,8 @@ msgstr "section "
 #. IMG
 #: opac-tmpl/prog/en/includes/shelfbrowser.inc:58
 #: opac-tmpl/prog/en/modules/opac-results.tt:729
-#: opac-tmpl/prog/en/modules/opac-user.tt:171
-#: opac-tmpl/prog/en/modules/opac-user.tt:315
+#: opac-tmpl/prog/en/modules/opac-user.tt:174
+#: opac-tmpl/prog/en/modules/opac-user.tt:318
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:92
 #: opac-tmpl/prog/en/modules/opac-detail.tt:551
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:519
@@ -10154,7 +10170,7 @@ msgid "Sort by: "
 msgstr "Sắp xếp theo: "
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:559
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:749
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:755
 #, c-format
 msgid "Sort this list by: "
 msgstr "Sắp xếp theo: "
@@ -10243,7 +10259,7 @@ msgstr "Statistikker"
 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:195
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:47
-#: opac-tmpl/prog/en/modules/opac-user.tt:364
+#: opac-tmpl/prog/en/modules/opac-user.tt:367
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1212
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1530
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:181
@@ -10435,11 +10451,11 @@ msgid "Subscribe issue receive warning"
 msgstr "Đăng ký nhận thông báo ÂPĐK"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:122
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:125
 msgid "Subscribe to email notification on new issues"
 msgstr "Đăng ký nhận thông báo ÂPĐK"
 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:122
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:125
 #, c-format
 msgid "Subscribe to email notification on new issues "
 msgstr "Đăng ký nhận thông báo ÂPĐK "
@@ -10549,7 +10565,7 @@ msgid "Surveys"
 msgstr "Tài liệu điều tra"
 
 #. INPUT type=submit name=submit
-#: opac-tmpl/prog/en/modules/opac-user.tt:440
+#: opac-tmpl/prog/en/modules/opac-user.tt:443
 msgid "Suspend all holds"
 msgstr "Dừng tất cả đặt mượn"
 
@@ -10806,48 +10822,51 @@ msgstr "Giỏ tài liệu được gửi đến: %s"
 #. %13$s:  END 
 #. %14$s:  IF ( subscription_LOO.periodicity7 ) 
 #. %15$s:  END 
-#. %16$s:  IF ( subscription_LOO.periodicity13 ) 
+#. %16$s:  IF ( subscription_LOO.periodicity8 ) 
 #. %17$s:  END 
-#. %18$s:  IF ( subscription_LOO.periodicity8 ) 
+#. %18$s:  IF ( subscription_LOO.periodicity9 ) 
 #. %19$s:  END 
-#. %20$s:  IF ( subscription_LOO.periodicity9 ) 
+#. %20$s:  IF ( subscription_LOO.periodicity10 ) 
 #. %21$s:  END 
-#. %22$s:  IF ( subscription_LOO.periodicity10 ) 
+#. %22$s:  IF ( subscription_LOO.periodicity11 ) 
 #. %23$s:  END 
-#. %24$s:  IF ( subscription_LOO.periodicity11 ) 
+#. %24$s:  IF ( subscription_LOO.periodicity12 ) 
 #. %25$s:  END 
-#. %26$s:  IF ( subscription_LOO.arrival1 ) 
+#. %26$s:  IF ( subscription_LOO.periodicity13 ) 
 #. %27$s:  END 
-#. %28$s:  IF ( subscription_LOO.arrival2 ) 
+#. %28$s:  IF ( subscription_LOO.arrival1 ) 
 #. %29$s:  END 
-#. %30$s:  IF ( subscription_LOO.arrival3 ) 
+#. %30$s:  IF ( subscription_LOO.arrival2 ) 
 #. %31$s:  END 
-#. %32$s:  IF ( subscription_LOO.arrival4 ) 
+#. %32$s:  IF ( subscription_LOO.arrival3 ) 
 #. %33$s:  END 
-#. %34$s:  IF ( subscription_LOO.arrival5 ) 
+#. %34$s:  IF ( subscription_LOO.arrival4 ) 
 #. %35$s:  END 
-#. %36$s:  IF ( subscription_LOO.arrival6 ) 
+#. %36$s:  IF ( subscription_LOO.arrival5 ) 
 #. %37$s:  END 
-#. %38$s:  IF ( subscription_LOO.arrival7 ) 
+#. %38$s:  IF ( subscription_LOO.arrival6 ) 
 #. %39$s:  END 
-#. %40$s:  IF ( subscription_LOO.numberlength ) 
-#. %41$s:  subscription_LOO.numberlength 
-#. %42$s:  END 
-#. %43$s:  IF ( subscription_LOO.weeklength ) 
-#. %44$s:  subscription_LOO.weeklength 
-#. %45$s:  END 
-#. %46$s:  IF ( subscription_LOO.monthlength ) 
-#. %47$s:  subscription_LOO.monthlength 
-#. %48$s:  END 
+#. %40$s:  IF ( subscription_LOO.arrival7 ) 
+#. %41$s:  END 
+#. %42$s:  IF ( subscription_LOO.numberlength ) 
+#. %43$s:  subscription_LOO.numberlength 
+#. %44$s:  END 
+#. %45$s:  IF ( subscription_LOO.weeklength ) 
+#. %46$s:  subscription_LOO.weeklength 
+#. %47$s:  END 
+#. %48$s:  IF ( subscription_LOO.monthlength ) 
+#. %49$s:  subscription_LOO.monthlength 
+#. %50$s:  END 
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:24
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The current subscription began on %s and is issued every %s day %s %s week "
-"%s %s 2 weeks %s %s 3 weeks %s %s month %s %s 2 months %s %s 3 months %s %s "
-"4 months %s %s quarter %s %s 2 quarters %s %s year %s %s 2 years %s %s on "
-"Monday %s %s on Tuesday %s %s on Wednesday %s %s on Thursday %s %s on Friday "
-"%s %s on Saturday %s %s on Sunday %s for %s%s issues%s %s%s weeks%s %s%s "
-"months%s "
+"The current subscription began on %s and is issued %s twice per day %s %s "
+"every day %s %s three times per week %s %s every week %s %s every 2 weeks %s "
+"%s every 3 weeks %s %s every month %s %s every 2 months %s %s every quarter "
+"%s %s twice per year %s %s every year %s %s every 2 years %s %s irregularly "
+"%s %s on Monday %s %s on Tuesday %s %s on Wednesday %s %s on Thursday %s %s "
+"on Friday %s %s on Saturday %s %s on Sunday %s for %s%s issues%s %s%s weeks"
+"%s %s%s months%s "
 msgstr ""
 "Ấn phẩm định kỳ được bắt đầu phát hành vào ngày  %s với tuần xuất %s 1 ngày/"
 "số %s %s 1 tuần/số %s %s 2 tuần/số %s %s 3 tuần/số %s %s tháng/số %s %s 2 "
@@ -10868,7 +10887,7 @@ msgstr ""
 "này. Xin vui lòng báo cho thư viện để kịp thời khắc phục sự cố."
 
 #. %1$s:  subscription_LOO.histstartdate 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:88
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:91
 #, c-format
 msgid "The first subscription was started on %s"
 msgstr "Số đầu tiên thư viện nhận vào ngày %s"
@@ -10890,7 +10909,7 @@ msgid "The selected suggestions have been deleted."
 msgstr "Bạn đã xóa các đề xuất mua được chọn."
 
 #. %1$s:  subscription_LOO.histenddate 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:90
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:93
 #, c-format
 msgid "The subscription expired on %s"
 msgstr "Ngày hết hạn ÂPĐK: %s"
@@ -11161,16 +11180,16 @@ msgstr "Tidsskrift"
 #: opac-tmpl/prog/en/modules/opac-results.tt:400
 #: opac-tmpl/prog/en/modules/opac-tags.tt:101
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:138
-#: opac-tmpl/prog/en/modules/opac-user.tt:138
-#: opac-tmpl/prog/en/modules/opac-user.tt:265
-#: opac-tmpl/prog/en/modules/opac-user.tt:294
-#: opac-tmpl/prog/en/modules/opac-user.tt:356
+#: opac-tmpl/prog/en/modules/opac-user.tt:141
+#: opac-tmpl/prog/en/modules/opac-user.tt:268
+#: opac-tmpl/prog/en/modules/opac-user.tt:297
+#: opac-tmpl/prog/en/modules/opac-user.tt:359
 #: opac-tmpl/prog/en/modules/opac-basket.tt:350
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:269
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:323
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:325
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:561
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:751
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:757
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:58
 #, c-format
 msgid "Title"
@@ -11324,8 +11343,8 @@ msgstr "Thứ 3"
 msgid "Tweet"
 msgstr "Tweet"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:617
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:684
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:623
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:690
 #, c-format
 msgid "Type"
 msgstr "Kiểu giá sách"
@@ -11345,12 +11364,6 @@ msgstr "Nhập thuật ngữ tìm kiếm"
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 #, fuzzy
 msgid "Type:"
-msgstr "Kiểu: "
-
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:536
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:174
-#, c-format
-msgid "Type: "
 msgstr "Kiểu: "
 
 #. %1$s:  heading | html 
@@ -11390,7 +11403,7 @@ msgstr "Không thể thêm từ khóa nữa."
 msgid "Unavailable (lost or missing)"
 msgstr "Không sẵn sàng (mất hoặc thiếu)"
 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:104
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:107
 #, c-format
 msgid "Unavailable issues"
 msgstr "Ấn phẩm không sẵn sàng"
@@ -11581,8 +11594,8 @@ msgid "Videospole"
 msgstr "Videospole"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-user.tt:167
-#: opac-tmpl/prog/en/modules/opac-user.tt:311
+#: opac-tmpl/prog/en/modules/opac-user.tt:170
+#: opac-tmpl/prog/en/modules/opac-user.tt:314
 msgid "View at Amazon.com"
 msgstr "Xem thêm tại  Amazon.com"
 
@@ -11663,8 +11676,8 @@ msgstr "Thông tin tập"
 msgid "Volumes: "
 msgstr "Tập: "
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:126
-#: opac-tmpl/prog/en/modules/opac-user.tt:278
+#: opac-tmpl/prog/en/modules/opac-user.tt:129
+#: opac-tmpl/prog/en/modules/opac-user.tt:281
 #, c-format
 msgid "Waiting"
 msgstr "Đang chờ"
@@ -11785,7 +11798,7 @@ msgstr "Được gửi vào ngày %s từ %s"
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:352
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:563
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:753
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:759
 #, c-format
 msgid "Year"
 msgstr "Năm"
@@ -11844,8 +11857,8 @@ msgstr "Bạn không thể gia hạn tài liệu này. %s "
 msgid "You currently have nothing checked out."
 msgstr "Hiện tại bạn không ghi mượn tài liệu nào."
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:233
-#: opac-tmpl/prog/en/modules/opac-user.tt:243
+#: opac-tmpl/prog/en/modules/opac-user.tt:236
+#: opac-tmpl/prog/en/modules/opac-user.tt:246
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr "Bạn đang nợ tiền phạt và các khoản phí lên tới:"
@@ -11868,7 +11881,7 @@ msgid ""
 msgstr ""
 "Bạn nhập sai tên đăng nhập hoặc mật khẩu. Vui lòng kiểm tra và đăng nhập lại."
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:252
+#: opac-tmpl/prog/en/modules/opac-user.tt:255
 #, c-format
 msgid "You have a credit of:"
 msgstr "Tài khoản trả trước của bạn đọc:"
@@ -11896,7 +11909,7 @@ msgid ""
 "fields and resubmit."
 msgstr "Khai báo thông tin còn thiếu vào các trường bắt buộc."
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:222
+#: opac-tmpl/prog/en/modules/opac-user.tt:225
 #, c-format
 msgid "You have nothing checked out"
 msgstr "Bạn chưa mượn tài liệu nào của thư viện!"
@@ -12101,8 +12114,8 @@ msgstr "Mật khẩu mới phải có tối thiểu %s ký tự."
 msgid "Your privacy rules have been updated."
 msgstr "Chính sách cá nhân của bạn đã được cập nhật."
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:591
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:593
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:597
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:599
 #, c-format
 msgid "Your private lists"
 msgstr "Giá sách cá nhân"
@@ -12553,7 +12566,7 @@ msgstr "Bài báo"
 #. %3$s:  WAITIN.holdingbranch 
 #. %4$s:  WAITIN.branch 
 #. %5$s:  END 
-#: opac-tmpl/prog/en/modules/opac-user.tt:278
+#: opac-tmpl/prog/en/modules/opac-user.tt:281
 #, c-format
 msgid "at %s %s In transit from %s to %s %s"
 msgstr " %s %s Đang chuyển từ %s tới %s %s"
@@ -14432,7 +14445,7 @@ msgstr " của bạn không hiển thị thông tin, xin vui lòng liên hệ v�
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #. %8$s:  END 
-#: opac-tmpl/prog/en/modules/opac-user.tt:412
+#: opac-tmpl/prog/en/modules/opac-user.tt:415
 #, c-format
 msgid "since %s %s Suspended %s until %s %s %s Pending %s %s "
 msgstr "từ ngày %s %s Tạm dừng %s đến ngày %s %s %s Chờ đáp ứng %s %s "
@@ -14715,8 +14728,8 @@ msgstr "Luận án, luận văn "
 msgid "title"
 msgstr "title"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:663
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:677
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:669
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:683
 #, c-format
 msgid "to create new lists."
 msgstr "để tạo giá sách mới."
@@ -14798,7 +14811,7 @@ msgstr "uniform_title"
 msgid "unknown"
 msgstr "Không xác định"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:444
+#: opac-tmpl/prog/en/modules/opac-user.tt:447
 #, c-format
 msgid "until "
 msgstr "đến ngày "

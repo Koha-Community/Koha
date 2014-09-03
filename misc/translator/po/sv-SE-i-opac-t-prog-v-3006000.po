@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION 1\n"
-"POT-Creation-Date: 2014-07-15 19:16-0300\n"
+"POT-Creation-Date: 2014-08-15 23:23-0300\n"
 "PO-Revision-Date: 2013-08-22 10:00-0400\n"
 "Last-Translator: EICOM <da@dsa.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -199,7 +199,7 @@ msgstr "%s %s %s Inga andra objekt. %s %s "
 #. %2$s:  IF ( subscription_LOO.letter ) 
 #. %3$s:  IF ( loggedinusername ) 
 #. %4$s:  IF ( subscription_LOO.hasalert ) 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:113
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:116
 #, fuzzy, c-format
 msgid "%s %s %s %s You have subscribed to email notification on new issues "
 msgstr "%s %s %s Du prenumererar på e-postmeddelande om nya nummer/häften "
@@ -307,7 +307,7 @@ msgstr "%s %s%s%sKoha online-%s katalog &rsaquo; Din sökhistorik %s "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( RESERVE.intransit ) 
-#: opac-tmpl/prog/en/modules/opac-user.tt:408
+#: opac-tmpl/prog/en/modules/opac-user.tt:411
 #, c-format
 msgid "%s %s %s Item in transit from "
 msgstr "%s %s %s Objektet är under förflyttning från "
@@ -315,7 +315,7 @@ msgstr "%s %s %s Objektet är under förflyttning från "
 #. %1$s:  IF ( RESERVE.wait ) 
 #. %2$s:  IF ( RESERVE.atdestination ) 
 #. %3$s:  IF ( RESERVE.found ) 
-#: opac-tmpl/prog/en/modules/opac-user.tt:398
+#: opac-tmpl/prog/en/modules/opac-user.tt:401
 #, c-format
 msgid "%s %s %s Item waiting at "
 msgstr "%s %s %s Objekt väntar vid "
@@ -634,7 +634,7 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
-#: opac-tmpl/prog/en/modules/opac-user.tt:405
+#: opac-tmpl/prog/en/modules/opac-user.tt:408
 #, c-format
 msgid "%s %s Item in transit to "
 msgstr "%s %s Boken/mediet är under förflyttning och på väg till "
@@ -673,7 +673,7 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #. %4$s:  END 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:124
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:127
 #, fuzzy, c-format
 msgid ""
 "%s %s You must log in if you want to subscribe to email notification on new "
@@ -1051,7 +1051,7 @@ msgstr "%s %sav "
 #. %2$s:  IF ( shelvesloo.single ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:693
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:699
 #, c-format
 msgid "%s %sitem%sitem(s)%s"
 msgstr "%s %sartikel%sartiklar%s"
@@ -1276,13 +1276,13 @@ msgstr ""
 "%s %s Reserverad %s Artikel indragen %s %s %s %s %s %s"
 
 #. %1$s:  ELSE 
-#: opac-tmpl/prog/en/modules/opac-user.tt:403
+#: opac-tmpl/prog/en/modules/opac-user.tt:406
 #, c-format
 msgid "%s Item waiting to be pulled from "
 msgstr "%s Artikeln väntar på att tas från "
 
 #. %1$s:  issues_count 
-#: opac-tmpl/prog/en/modules/opac-user.tt:135
+#: opac-tmpl/prog/en/modules/opac-user.tt:138
 #, c-format
 msgid "%s Item(s) checked out"
 msgstr "%s Utlånade artiklar"
@@ -1301,7 +1301,7 @@ msgstr "%s Mobiltelefon:"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: opac-tmpl/prog/en/modules/opac-user.tt:389
+#: opac-tmpl/prog/en/modules/opac-user.tt:392
 #, fuzzy, c-format
 msgid "%s Never expires %s "
 msgstr "%s%s%sUpphör aldrig%s "
@@ -1323,7 +1323,7 @@ msgstr "%s Inga resultat för detta i katalogen %s. "
 
 #. %1$s:  ELSE 
 #. %2$s:  IF ( ISSUE.too_many ) 
-#: opac-tmpl/prog/en/modules/opac-user.tt:192
+#: opac-tmpl/prog/en/modules/opac-user.tt:195
 #, c-format
 msgid "%s Not renewable%s "
 msgstr "%s Lånet kan inte förlängas%s "
@@ -1457,6 +1457,16 @@ msgstr "%s Gatunummer:"
 #, c-format
 msgid "%s Surname:"
 msgstr "%s Efternamn:"
+
+#. %1$s:  IF ( category2 && !OpacAllowPublicListCreation ) 
+#. %2$s:  END 
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:573
+#, c-format
+msgid ""
+"%s The library has disabled the ability for patrons to create new public "
+"lists. If you make your list private, you will not be able to make it public "
+"again. %s "
+msgstr ""
 
 #. %1$s:  IF holds_count.defined 
 #. %2$s:  holds_count 
@@ -1644,7 +1654,7 @@ msgstr "%s poster"
 #. %1$s:  IF ( RESERVE.waitingdate ) 
 #. %2$s:  RESERVE.waitingdate | $KohaDates 
 #. %3$s:  END 
-#: opac-tmpl/prog/en/modules/opac-user.tt:402
+#: opac-tmpl/prog/en/modules/opac-user.tt:405
 #, c-format
 msgid "%s since %s%s "
 msgstr "%s sedan %s%s "
@@ -1722,7 +1732,7 @@ msgstr ""
 #. %5$s:  END 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:627
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:633
 #, c-format
 msgid "%s%s %sitem%sitems%s%sEmpty%s"
 msgstr "%s%s %sitem%sitems%s%sTom%s"
@@ -1933,7 +1943,7 @@ msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: opac-tmpl/prog/en/modules/opac-user.tt:333
+#: opac-tmpl/prog/en/modules/opac-user.tt:336
 #, c-format
 msgid "%sAccount frozen %s %s"
 msgstr "%sKontot är låst %s %s"
@@ -2082,7 +2092,7 @@ msgstr ""
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/prog/en/modules/opac-user.tt:336
+#: opac-tmpl/prog/en/modules/opac-user.tt:339
 #, c-format
 msgid "%sOn hold %sNo renewals left %s "
 msgstr "%sReserverad %sInga förnyelser kvar %s "
@@ -2092,8 +2102,8 @@ msgstr "%sReserverad %sInga förnyelser kvar %s "
 #. %2$s:  END 
 #. %3$s:  IF ( shelveslooppri.viewcategory2 ) 
 #. %4$s:  END 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:628
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:694
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:634
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:700
 #, c-format
 msgid "%sPrivate%s %sPublic%s "
 msgstr "%sPrivat%s %sOffentlig%s "
@@ -2186,8 +2196,8 @@ msgstr ""
 #. %1$s:  IF ( ISSUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/prog/en/modules/opac-user.tt:198
-#: opac-tmpl/prog/en/modules/opac-user.tt:342
+#: opac-tmpl/prog/en/modules/opac-user.tt:201
+#: opac-tmpl/prog/en/modules/opac-user.tt:345
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:300
 #, c-format
 msgid "%sYes%sNo%s"
@@ -2917,17 +2927,17 @@ msgstr "(%s biblios)"
 #. For the first occurrence,
 #. %1$s:  ISSUE.renewsleft 
 #. %2$s:  ISSUE.renewsallowed 
-#: opac-tmpl/prog/en/modules/opac-user.tt:192
-#: opac-tmpl/prog/en/modules/opac-user.tt:194
-#: opac-tmpl/prog/en/modules/opac-user.tt:336
+#: opac-tmpl/prog/en/modules/opac-user.tt:195
+#: opac-tmpl/prog/en/modules/opac-user.tt:197
+#: opac-tmpl/prog/en/modules/opac-user.tt:339
 #, c-format
 msgid "(%s of %s renewals remaining)"
 msgstr "(%s av %s återstående förnyelser)"
 
 #. For the first occurrence,
 #. %1$s:  overdues_count 
-#: opac-tmpl/prog/en/modules/opac-user.tt:290
-#: opac-tmpl/prog/en/modules/opac-user.tt:353
+#: opac-tmpl/prog/en/modules/opac-user.tt:293
+#: opac-tmpl/prog/en/modules/opac-user.tt:356
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:266
 #, c-format
 msgid "(%s total)"
@@ -2952,7 +2962,7 @@ msgstr "(Stöds inte av Koha)"
 msgid "(Not supported yet)"
 msgstr "(Stöds inte än)"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:194
+#: opac-tmpl/prog/en/modules/opac-user.tt:197
 #, c-format
 msgid "(On hold)"
 msgstr "(Reserverad)"
@@ -3781,9 +3791,9 @@ msgid "Alternate contact"
 msgstr "Alternativ kontakt"
 
 # Interpreted as monetary amount
-#: opac-tmpl/prog/en/modules/opac-user.tt:231
-#: opac-tmpl/prog/en/modules/opac-user.tt:242
-#: opac-tmpl/prog/en/modules/opac-user.tt:251
+#: opac-tmpl/prog/en/modules/opac-user.tt:234
+#: opac-tmpl/prog/en/modules/opac-user.tt:245
+#: opac-tmpl/prog/en/modules/opac-user.tt:254
 #, c-format
 msgid "Amount"
 msgstr "Belopp"
@@ -4107,7 +4117,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:317
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:319
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:562
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:752
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:758
 #, c-format
 msgid "Author"
 msgstr "Författare"
@@ -4195,7 +4205,7 @@ msgstr "Tillgänglighet:"
 msgid "Availability: "
 msgstr "Tillgänglighet: "
 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:98
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:101
 #, c-format
 msgid "Available issues"
 msgstr "Tillgängliga utgåvor"
@@ -4285,8 +4295,8 @@ msgstr "Tillbaka till resultatsöklistan"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:131
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:476
-#: opac-tmpl/prog/en/modules/opac-user.tt:141
-#: opac-tmpl/prog/en/modules/opac-user.tt:296
+#: opac-tmpl/prog/en/modules/opac-user.tt:144
+#: opac-tmpl/prog/en/modules/opac-user.tt:299
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1533
 #, c-format
 msgid "Barcode"
@@ -4562,7 +4572,7 @@ msgstr "CR"
 msgid "CSV - %s"
 msgstr "CSV - %s"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:142
+#: opac-tmpl/prog/en/modules/opac-user.tt:145
 #, c-format
 msgid "Call No."
 msgstr "Hyllsignum"
@@ -4572,7 +4582,7 @@ msgstr "Hyllsignum"
 msgid "Call Number"
 msgstr "Hyllsignum"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:297
+#: opac-tmpl/prog/en/modules/opac-user.tt:300
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:269
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:60
 #, c-format
@@ -4591,7 +4601,7 @@ msgstr "Hyllsignum"
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:329
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:331
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:564
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:754
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:760
 #, c-format
 msgid "Call number"
 msgstr "Hyllsignum"
@@ -4617,7 +4627,7 @@ msgstr "Hyllsignatur: %s"
 #: opac-tmpl/prog/en/modules/opac-review.tt:75
 #: opac-tmpl/prog/en/modules/opac-passwd.tt:37
 #: opac-tmpl/prog/en/modules/opac-messaging.tt:150
-#: opac-tmpl/prog/en/modules/opac-user.tt:426
+#: opac-tmpl/prog/en/modules/opac-user.tt:429
 #: opac-tmpl/prog/en/modules/opac-basket.tt:182
 #: opac-tmpl/prog/en/modules/opac-detail.tt:610
 #: opac-tmpl/prog/en/modules/opac-detail.tt:717
@@ -4625,8 +4635,8 @@ msgstr "Hyllsignatur: %s"
 #: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:44
 #: opac-tmpl/prog/en/modules/opac-sendbasketform.tt:33
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:384
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:579
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:771
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:585
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:780
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:128
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:42
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:51
@@ -4636,11 +4646,11 @@ msgid "Cancel"
 msgstr "Avbryt"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:118
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:121
 msgid "Cancel email notification"
 msgstr "Avbryt avisering via e-post"
 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:118
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:121
 #, c-format
 msgid "Cancel email notification "
 msgstr "Avbryt avisering via e-post "
@@ -4699,7 +4709,7 @@ msgid "Catalogs"
 msgstr "Kataloger"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:569
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:758
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:765
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:64
 #, c-format
 msgid "Category:"
@@ -4733,7 +4743,7 @@ msgstr "Utlånad"
 msgid "Check out%s, return%s or renew an item: "
 msgstr "Låna%s, återlämna%s eller förläng ett lån: "
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:119
+#: opac-tmpl/prog/en/modules/opac-user.tt:122
 #, c-format
 msgid "Checked out"
 msgstr "Utlånad"
@@ -4792,7 +4802,7 @@ msgstr "Rensa alla"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:6
-#: opac-tmpl/prog/en/modules/opac-user.tt:446
+#: opac-tmpl/prog/en/modules/opac-user.tt:449
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:177
 #, c-format
 msgid "Clear date"
@@ -4855,8 +4865,8 @@ msgid "Click to rewind the list to"
 msgstr "Klicka för att gå tillbaka i listan till"
 
 #. DIV
-#: opac-tmpl/prog/en/modules/opac-user.tt:169
-#: opac-tmpl/prog/en/modules/opac-user.tt:313
+#: opac-tmpl/prog/en/modules/opac-user.tt:172
+#: opac-tmpl/prog/en/modules/opac-user.tt:316
 msgid "Click to view in Google Books"
 msgstr "Klicka för att visa i Google Books"
 
@@ -4981,8 +4991,8 @@ msgid "Computer file"
 msgstr "Datorfil"
 
 #. INPUT type=submit
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:647
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:711
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:653
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:717
 msgid "Confirm"
 msgstr "Bekräfta"
 
@@ -5016,8 +5026,8 @@ msgstr "Content Café"
 msgid "Content advice: "
 msgstr "Vägledning för innehåll: "
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:616
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:683
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:622
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:689
 #, c-format
 msgid "Contents"
 msgstr "Innehåll"
@@ -5147,7 +5157,7 @@ msgid "Courses"
 msgstr ""
 
 #. IMG
-#: opac-tmpl/prog/en/modules/opac-user.tt:167
+#: opac-tmpl/prog/en/modules/opac-user.tt:170
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:73
 msgid "Cover Image"
 msgstr "Omslagsbild"
@@ -5157,7 +5167,7 @@ msgstr "Omslagsbild"
 msgid "Cover image"
 msgstr "Omslagsbild"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:736
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:742
 #, c-format
 msgid "Create a new list"
 msgstr "Skapa en ny lista"
@@ -5186,8 +5196,8 @@ msgid "CreativeWork"
 msgstr "fördrag, avtal"
 
 # Interpreted as credit on an account, not as e.g. author credits
-#: opac-tmpl/prog/en/modules/opac-user.tt:124
-#: opac-tmpl/prog/en/modules/opac-user.tt:249
+#: opac-tmpl/prog/en/modules/opac-user.tt:127
+#: opac-tmpl/prog/en/modules/opac-user.tt:252
 #, c-format
 msgid "Credits"
 msgstr "Krediter"
@@ -5315,8 +5325,8 @@ msgstr ""
 
 #: opac-tmpl/prog/en/modules/opac-tags.tt:101
 #: opac-tmpl/prog/en/modules/opac-tags.tt:110
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:649
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:713
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:655
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:719
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:9
 #, c-format
 msgid "Delete"
@@ -5561,8 +5571,8 @@ msgid "Dublin Core (XML)"
 msgstr "Dublin Core (XML)"
 
 # This is due date for a book, not for a fee
-#: opac-tmpl/prog/en/modules/opac-user.tt:139
-#: opac-tmpl/prog/en/modules/opac-user.tt:298
+#: opac-tmpl/prog/en/modules/opac-user.tt:142
+#: opac-tmpl/prog/en/modules/opac-user.tt:301
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:269
 #, c-format
 msgid "Due"
@@ -5639,8 +5649,8 @@ msgstr "FEL: Du saknar behörighet för den aktuella åtgärden i listan %s."
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-review.tt:6
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1290
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:638
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:704
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:644
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:710
 #, c-format
 msgid "Edit"
 msgstr "Redigera"
@@ -5919,7 +5929,7 @@ msgstr "Utdrag levererade av Syndetics"
 msgid "Expecting a specific item selection."
 msgstr "Ett särskilt exemplar förväntas."
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:359
+#: opac-tmpl/prog/en/modules/opac-user.tt:362
 #, c-format
 msgid "Expires on"
 msgstr "Upphör den"
@@ -6038,17 +6048,17 @@ msgstr "Filmspole"
 msgid "Fine amount"
 msgstr "Övertidsavgift"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:122
-#: opac-tmpl/prog/en/modules/opac-user.tt:123
-#: opac-tmpl/prog/en/modules/opac-user.tt:147
-#: opac-tmpl/prog/en/modules/opac-user.tt:303
+#: opac-tmpl/prog/en/modules/opac-user.tt:125
+#: opac-tmpl/prog/en/modules/opac-user.tt:126
+#: opac-tmpl/prog/en/modules/opac-user.tt:150
+#: opac-tmpl/prog/en/modules/opac-user.tt:306
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:269
 #, c-format
 msgid "Fines"
 msgstr "Övertidsavgifter"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:229
-#: opac-tmpl/prog/en/modules/opac-user.tt:240
+#: opac-tmpl/prog/en/modules/opac-user.tt:232
+#: opac-tmpl/prog/en/modules/opac-user.tt:243
 #, c-format
 msgid "Fines and charges"
 msgstr "Avgifter för övertid och annat"
@@ -6503,7 +6513,7 @@ msgstr "Dölj fönstret"
 msgid "Highlight"
 msgstr "Markera"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:266
+#: opac-tmpl/prog/en/modules/opac-user.tt:269
 #, c-format
 msgid "Hold date"
 msgstr "Reservationsdatum"
@@ -6551,12 +6561,12 @@ msgstr "Reservationskommentar: "
 msgid "Holdings:"
 msgstr "Bestånd:"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:127
+#: opac-tmpl/prog/en/modules/opac-user.tt:130
 #, c-format
 msgid "Holds"
 msgstr "Reservationer"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:353
+#: opac-tmpl/prog/en/modules/opac-user.tt:356
 #, c-format
 msgid "Holds "
 msgstr "Reservationer "
@@ -6566,7 +6576,7 @@ msgstr "Reservationer "
 msgid "Holds and priority: "
 msgstr "Reservationer och prioritet "
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:263
+#: opac-tmpl/prog/en/modules/opac-user.tt:266
 #, c-format
 msgid "Holds waiting"
 msgstr "Väntande reservationer"
@@ -6646,7 +6656,7 @@ msgid "ISBN: %s "
 msgstr "ISBN: %s "
 
 #. %1$s:  FOREACH isbn IN BIBLIO_RESULT.ISBN 
-#. %2$s:  isbn.marcisbn 
+#. %2$s:  isbn 
 #. %3$s:  UNLESS ( loop.last ) 
 #. %4$s:  END 
 #. %5$s:  END 
@@ -6857,7 +6867,7 @@ msgstr "Utgåva nr"
 msgid "Issues for a subscription"
 msgstr "Utgåvor för en prenumeration"
 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:110
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:113
 #, c-format
 msgid "Issues summary"
 msgstr "Sammanfattning av utgåvor"
@@ -6889,8 +6899,8 @@ msgstr "Artikelreservationer"
 
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:42
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:474
-#: opac-tmpl/prog/en/modules/opac-user.tt:140
-#: opac-tmpl/prog/en/modules/opac-user.tt:295
+#: opac-tmpl/prog/en/modules/opac-user.tt:143
+#: opac-tmpl/prog/en/modules/opac-user.tt:298
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1523
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:59
 #, c-format
@@ -7281,7 +7291,7 @@ msgstr "Länk till resurs "
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:150
+#: opac-tmpl/prog/en/modules/opac-user.tt:153
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:63
 #, c-format
 msgid "Links"
@@ -7293,13 +7303,13 @@ msgstr "Länkar"
 msgid "List %s Deleted."
 msgstr "Listan %s borttagen."
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:615
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:682
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:621
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:688
 #, c-format
 msgid "List name"
 msgstr "Listnamn"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:740
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:746
 #, c-format
 msgid "List name:"
 msgstr "Listnamn:"
@@ -7319,7 +7329,7 @@ msgstr "Listor som artikeln finns i: "
 #: opac-tmpl/prog/en/includes/masthead.inc:128
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:299
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:550
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:587
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:593
 #, c-format
 msgid "Lists"
 msgstr "Listor"
@@ -7385,8 +7395,8 @@ msgid "Log In to Your Account"
 msgstr "Logga in på ditt konto"
 
 #: opac-tmpl/prog/en/modules/opac-tags.tt:73
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:663
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:677
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:669
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:683
 #, c-format
 msgid "Log in"
 msgstr "Logga in"
@@ -7726,6 +7736,13 @@ msgid "Match:"
 msgstr "Träff:"
 
 # NO
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:536
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:174
+#, fuzzy, c-format
+msgid "Material type: "
+msgstr "Materialtyp: "
+
+# NO
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:162
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:445
 #, c-format
@@ -7830,7 +7847,7 @@ msgstr "Må"
 msgid "Modell"
 msgstr "Modell"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:365
+#: opac-tmpl/prog/en/modules/opac-user.tt:368
 #, c-format
 msgid "Modify"
 msgstr "Ändra"
@@ -8010,8 +8027,8 @@ msgstr "Ny kommentar på %s %s, %s%s"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:610
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:675
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:616
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:681
 #, c-format
 msgid "New list"
 msgstr "Ny lista"
@@ -8106,12 +8123,12 @@ msgstr "Inga tillgängliga artiklar."
 #: opac-tmpl/prog/en/modules/opac-results.tt:726
 #: opac-tmpl/prog/en/modules/opac-results.tt:727
 #: opac-tmpl/prog/en/modules/opac-results.tt:729
-#: opac-tmpl/prog/en/modules/opac-user.tt:167
-#: opac-tmpl/prog/en/modules/opac-user.tt:169
-#: opac-tmpl/prog/en/modules/opac-user.tt:171
-#: opac-tmpl/prog/en/modules/opac-user.tt:311
-#: opac-tmpl/prog/en/modules/opac-user.tt:313
-#: opac-tmpl/prog/en/modules/opac-user.tt:315
+#: opac-tmpl/prog/en/modules/opac-user.tt:170
+#: opac-tmpl/prog/en/modules/opac-user.tt:172
+#: opac-tmpl/prog/en/modules/opac-user.tt:174
+#: opac-tmpl/prog/en/modules/opac-user.tt:314
+#: opac-tmpl/prog/en/modules/opac-user.tt:316
+#: opac-tmpl/prog/en/modules/opac-user.tt:318
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:83
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:90
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:92
@@ -8189,12 +8206,12 @@ msgstr "Inga fysiska artiklar för den här posten"
 msgid "No private lists"
 msgstr "Inga privata listor"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:659
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:665
 #, c-format
 msgid "No private lists."
 msgstr "Inga privata listor."
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:723
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:729
 #, c-format
 msgid "No public lists."
 msgstr "Inga offentliga listor."
@@ -8333,7 +8350,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:49
 #: opac-tmpl/prog/en/modules/opac-results.tt:407
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:145
-#: opac-tmpl/prog/en/modules/opac-user.tt:358
+#: opac-tmpl/prog/en/modules/opac-user.tt:361
 #: opac-tmpl/prog/en/modules/opac-basket.tt:272
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1531
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:38
@@ -8597,12 +8614,12 @@ msgstr "OutputRewritablePage "
 msgid "OverDrive search for '%s'"
 msgstr ""
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:120
+#: opac-tmpl/prog/en/modules/opac-user.tt:123
 #, c-format
 msgid "Overdue"
 msgstr "Försenad"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:290
+#: opac-tmpl/prog/en/modules/opac-user.tt:293
 #, c-format
 msgid "Overdues "
 msgstr "Förseningar "
@@ -8744,12 +8761,12 @@ msgstr "Telefon"
 msgid "Physical details:"
 msgstr "Fysisk information:"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:267
+#: opac-tmpl/prog/en/modules/opac-user.tt:270
 #, c-format
 msgid "Pick up library"
 msgstr "Hämtningsbibliotek"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:360
+#: opac-tmpl/prog/en/modules/opac-user.tt:363
 #, c-format
 msgid "Pick up location"
 msgstr "Hämtningsplats"
@@ -8805,7 +8822,7 @@ msgstr "Reservera "
 msgid "Place hold"
 msgstr "Reservera"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:357
+#: opac-tmpl/prog/en/modules/opac-user.tt:360
 #, c-format
 msgid "Placed on"
 msgstr "Placerad på"
@@ -9055,7 +9072,7 @@ msgstr "Skriv ut"
 msgid "Print list"
 msgstr "Skriv ut lista"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:362
+#: opac-tmpl/prog/en/modules/opac-user.tt:365
 #, c-format
 msgid "Priority"
 msgstr "Prioritet"
@@ -9066,7 +9083,7 @@ msgid "Privacy rule"
 msgstr "Sekretessregel"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:571
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:760
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:767
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:66
 #, c-format
 msgid "Private"
@@ -9114,7 +9131,7 @@ msgid "Provenance note: "
 msgstr "Kommentar om ursprung: "
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:572
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:762
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:768
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:68
 #, c-format
 msgid "Public"
@@ -9126,8 +9143,8 @@ msgid "Public Lists"
 msgstr "Allmänna listor"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:157
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:597
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:599
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:603
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:605
 #, c-format
 msgid "Public lists"
 msgstr "Allmänna listor"
@@ -9393,10 +9410,10 @@ msgstr "Ta bort från lista"
 msgid "Remove selected items"
 msgstr "Ta bort markerade artiklar"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:144
-#: opac-tmpl/prog/en/modules/opac-user.tt:192
-#: opac-tmpl/prog/en/modules/opac-user.tt:300
-#: opac-tmpl/prog/en/modules/opac-user.tt:336
+#: opac-tmpl/prog/en/modules/opac-user.tt:147
+#: opac-tmpl/prog/en/modules/opac-user.tt:195
+#: opac-tmpl/prog/en/modules/opac-user.tt:303
+#: opac-tmpl/prog/en/modules/opac-user.tt:339
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:269
 #, c-format
 msgid "Renew"
@@ -9405,7 +9422,7 @@ msgstr "Förnya"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-user.tt:8
-#: opac-tmpl/prog/en/modules/opac-user.tt:217
+#: opac-tmpl/prog/en/modules/opac-user.tt:220
 msgid "Renew all"
 msgstr "Förnya alla"
 
@@ -9420,7 +9437,7 @@ msgstr "Förnya artikel"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-user.tt:8
-#: opac-tmpl/prog/en/modules/opac-user.tt:207
+#: opac-tmpl/prog/en/modules/opac-user.tt:210
 msgid "Renew selected"
 msgstr "Förnya markerade"
 
@@ -9496,7 +9513,7 @@ msgid "Results %s to %s of %s"
 msgstr "Resultat %s till %s av %s"
 
 #. INPUT type=submit name=submit
-#: opac-tmpl/prog/en/modules/opac-user.tt:452
+#: opac-tmpl/prog/en/modules/opac-user.tt:455
 msgid "Resume all suspended holds"
 msgstr "Återuppta alla väntande reservationer"
 
@@ -9660,8 +9677,8 @@ msgstr "Lördag"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:579
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:770
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:585
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:779
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:42
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:51
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:72
@@ -9841,8 +9858,8 @@ msgstr "avsnitt"
 #. IMG
 #: opac-tmpl/prog/en/includes/shelfbrowser.inc:58
 #: opac-tmpl/prog/en/modules/opac-results.tt:729
-#: opac-tmpl/prog/en/modules/opac-user.tt:171
-#: opac-tmpl/prog/en/modules/opac-user.tt:315
+#: opac-tmpl/prog/en/modules/opac-user.tt:174
+#: opac-tmpl/prog/en/modules/opac-user.tt:318
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:92
 #: opac-tmpl/prog/en/modules/opac-detail.tt:551
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:519
@@ -10359,7 +10376,7 @@ msgid "Sort by: "
 msgstr "Sortera efter: "
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:559
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:749
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:755
 #, c-format
 msgid "Sort this list by: "
 msgstr "Sortera den här listan efter: "
@@ -10453,7 +10470,7 @@ msgstr "Statistikker"
 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:195
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:47
-#: opac-tmpl/prog/en/modules/opac-user.tt:364
+#: opac-tmpl/prog/en/modules/opac-user.tt:367
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1212
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1530
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:181
@@ -10649,11 +10666,11 @@ msgid "Subscribe issue receive warning"
 msgstr "Prenumeration – varning"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:122
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:125
 msgid "Subscribe to email notification on new issues"
 msgstr "Prenumerera på e-postmeddelande om nya nummer/häften"
 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:122
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:125
 #, c-format
 msgid "Subscribe to email notification on new issues "
 msgstr "Prenumerera på e-postavisering om nya utgåvor "
@@ -10763,7 +10780,7 @@ msgid "Surveys"
 msgstr "Enkäter"
 
 #. INPUT type=submit name=submit
-#: opac-tmpl/prog/en/modules/opac-user.tt:440
+#: opac-tmpl/prog/en/modules/opac-user.tt:443
 msgid "Suspend all holds"
 msgstr "Skjut upp alla reservationer"
 
@@ -11038,48 +11055,51 @@ msgstr "Kundvagnen skickades till: %s"
 #. %13$s:  END 
 #. %14$s:  IF ( subscription_LOO.periodicity7 ) 
 #. %15$s:  END 
-#. %16$s:  IF ( subscription_LOO.periodicity13 ) 
+#. %16$s:  IF ( subscription_LOO.periodicity8 ) 
 #. %17$s:  END 
-#. %18$s:  IF ( subscription_LOO.periodicity8 ) 
+#. %18$s:  IF ( subscription_LOO.periodicity9 ) 
 #. %19$s:  END 
-#. %20$s:  IF ( subscription_LOO.periodicity9 ) 
+#. %20$s:  IF ( subscription_LOO.periodicity10 ) 
 #. %21$s:  END 
-#. %22$s:  IF ( subscription_LOO.periodicity10 ) 
+#. %22$s:  IF ( subscription_LOO.periodicity11 ) 
 #. %23$s:  END 
-#. %24$s:  IF ( subscription_LOO.periodicity11 ) 
+#. %24$s:  IF ( subscription_LOO.periodicity12 ) 
 #. %25$s:  END 
-#. %26$s:  IF ( subscription_LOO.arrival1 ) 
+#. %26$s:  IF ( subscription_LOO.periodicity13 ) 
 #. %27$s:  END 
-#. %28$s:  IF ( subscription_LOO.arrival2 ) 
+#. %28$s:  IF ( subscription_LOO.arrival1 ) 
 #. %29$s:  END 
-#. %30$s:  IF ( subscription_LOO.arrival3 ) 
+#. %30$s:  IF ( subscription_LOO.arrival2 ) 
 #. %31$s:  END 
-#. %32$s:  IF ( subscription_LOO.arrival4 ) 
+#. %32$s:  IF ( subscription_LOO.arrival3 ) 
 #. %33$s:  END 
-#. %34$s:  IF ( subscription_LOO.arrival5 ) 
+#. %34$s:  IF ( subscription_LOO.arrival4 ) 
 #. %35$s:  END 
-#. %36$s:  IF ( subscription_LOO.arrival6 ) 
+#. %36$s:  IF ( subscription_LOO.arrival5 ) 
 #. %37$s:  END 
-#. %38$s:  IF ( subscription_LOO.arrival7 ) 
+#. %38$s:  IF ( subscription_LOO.arrival6 ) 
 #. %39$s:  END 
-#. %40$s:  IF ( subscription_LOO.numberlength ) 
-#. %41$s:  subscription_LOO.numberlength 
-#. %42$s:  END 
-#. %43$s:  IF ( subscription_LOO.weeklength ) 
-#. %44$s:  subscription_LOO.weeklength 
-#. %45$s:  END 
-#. %46$s:  IF ( subscription_LOO.monthlength ) 
-#. %47$s:  subscription_LOO.monthlength 
-#. %48$s:  END 
+#. %40$s:  IF ( subscription_LOO.arrival7 ) 
+#. %41$s:  END 
+#. %42$s:  IF ( subscription_LOO.numberlength ) 
+#. %43$s:  subscription_LOO.numberlength 
+#. %44$s:  END 
+#. %45$s:  IF ( subscription_LOO.weeklength ) 
+#. %46$s:  subscription_LOO.weeklength 
+#. %47$s:  END 
+#. %48$s:  IF ( subscription_LOO.monthlength ) 
+#. %49$s:  subscription_LOO.monthlength 
+#. %50$s:  END 
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:24
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The current subscription began on %s and is issued every %s day %s %s week "
-"%s %s 2 weeks %s %s 3 weeks %s %s month %s %s 2 months %s %s 3 months %s %s "
-"4 months %s %s quarter %s %s 2 quarters %s %s year %s %s 2 years %s %s on "
-"Monday %s %s on Tuesday %s %s on Wednesday %s %s on Thursday %s %s on Friday "
-"%s %s on Saturday %s %s on Sunday %s for %s%s issues%s %s%s weeks%s %s%s "
-"months%s "
+"The current subscription began on %s and is issued %s twice per day %s %s "
+"every day %s %s three times per week %s %s every week %s %s every 2 weeks %s "
+"%s every 3 weeks %s %s every month %s %s every 2 months %s %s every quarter "
+"%s %s twice per year %s %s every year %s %s every 2 years %s %s irregularly "
+"%s %s on Monday %s %s on Tuesday %s %s on Wednesday %s %s on Thursday %s %s "
+"on Friday %s %s on Saturday %s %s on Sunday %s for %s%s issues%s %s%s weeks"
+"%s %s%s months%s "
 msgstr ""
 "Den nuvarande prenumerationen började %s och ges ut med intervallet %s dagar "
 "%s %s veckor %s %s 2 veckor %s %s 3 veckor %s %s månad %s %s 2 månader %s %s "
@@ -11100,7 +11120,7 @@ msgstr ""
 "felet."
 
 #. %1$s:  subscription_LOO.histstartdate 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:88
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:91
 #, c-format
 msgid "The first subscription was started on %s"
 msgstr "Den första prenumerationen startades den %s"
@@ -11122,7 +11142,7 @@ msgid "The selected suggestions have been deleted."
 msgstr "De markerade förslagen har tagits bort."
 
 #. %1$s:  subscription_LOO.histenddate 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:90
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:93
 #, c-format
 msgid "The subscription expired on %s"
 msgstr "Prenumerationen upphörde den %s"
@@ -11393,16 +11413,16 @@ msgstr "Tidsskrift"
 #: opac-tmpl/prog/en/modules/opac-results.tt:400
 #: opac-tmpl/prog/en/modules/opac-tags.tt:101
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:138
-#: opac-tmpl/prog/en/modules/opac-user.tt:138
-#: opac-tmpl/prog/en/modules/opac-user.tt:265
-#: opac-tmpl/prog/en/modules/opac-user.tt:294
-#: opac-tmpl/prog/en/modules/opac-user.tt:356
+#: opac-tmpl/prog/en/modules/opac-user.tt:141
+#: opac-tmpl/prog/en/modules/opac-user.tt:268
+#: opac-tmpl/prog/en/modules/opac-user.tt:297
+#: opac-tmpl/prog/en/modules/opac-user.tt:359
 #: opac-tmpl/prog/en/modules/opac-basket.tt:350
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:269
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:323
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:325
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:561
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:751
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:757
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:58
 #, c-format
 msgid "Title"
@@ -11562,8 +11582,8 @@ msgstr "Tisdag"
 msgid "Tweet"
 msgstr "Tweet"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:617
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:684
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:623
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:690
 #, c-format
 msgid "Type"
 msgstr "Typ"
@@ -11584,12 +11604,6 @@ msgstr "Skriv in sökbegrepp"
 #, fuzzy
 msgid "Type:"
 msgstr "Typ:"
-
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:536
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:174
-#, c-format
-msgid "Type: "
-msgstr "Typ: "
 
 # Unknown acronym
 #. %1$s:  heading | html 
@@ -11630,7 +11644,7 @@ msgstr "Det går inte att lägga till en eller flera taggar."
 msgid "Unavailable (lost or missing)"
 msgstr "Inte tillgänglig (försvunnen eller saknas)"
 
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:104
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:107
 #, c-format
 msgid "Unavailable issues"
 msgstr "Ej tillgängliga utgåvor"
@@ -11831,8 +11845,8 @@ msgid "Videospole"
 msgstr "Videotyper"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-user.tt:167
-#: opac-tmpl/prog/en/modules/opac-user.tt:311
+#: opac-tmpl/prog/en/modules/opac-user.tt:170
+#: opac-tmpl/prog/en/modules/opac-user.tt:314
 msgid "View at Amazon.com"
 msgstr "Visa på Amazon.com"
 
@@ -11917,8 +11931,8 @@ msgstr "Volyminfo"
 msgid "Volumes: "
 msgstr "Volymer: "
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:126
-#: opac-tmpl/prog/en/modules/opac-user.tt:278
+#: opac-tmpl/prog/en/modules/opac-user.tt:129
+#: opac-tmpl/prog/en/modules/opac-user.tt:281
 #, c-format
 msgid "Waiting"
 msgstr "Väntar"
@@ -12037,7 +12051,7 @@ msgstr "Skriven den %s av %s"
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:352
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:563
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:753
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:759
 #, c-format
 msgid "Year"
 msgstr "År"
@@ -12093,8 +12107,8 @@ msgstr "Det går inte att förnya lånet igen. %s "
 msgid "You currently have nothing checked out."
 msgstr "Du har inte lånat något."
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:233
-#: opac-tmpl/prog/en/modules/opac-user.tt:243
+#: opac-tmpl/prog/en/modules/opac-user.tt:236
+#: opac-tmpl/prog/en/modules/opac-user.tt:246
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr "Du är skyldig förseningsavgifter om totalt:"
@@ -12118,7 +12132,7 @@ msgstr ""
 "Du har angett fel användarnamn eller lösenord. Försök igen. Kom ihåg att "
 "användarnamn och lösenord är skiftlägeskänsliga."
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:252
+#: opac-tmpl/prog/en/modules/opac-user.tt:255
 #, c-format
 msgid "You have a credit of:"
 msgstr "Ditt aktuella tillgodobelopp är:"
@@ -12148,7 +12162,7 @@ msgstr ""
 "Du har inte fyllt i alla fält som krävs. Fyll i alla tomma fält och skicka "
 "in igen."
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:222
+#: opac-tmpl/prog/en/modules/opac-user.tt:225
 #, c-format
 msgid "You have nothing checked out"
 msgstr "Du lånar ingenting"
@@ -12352,8 +12366,8 @@ msgstr "Ditt lösenord måste innehålla minst %s tecken."
 msgid "Your privacy rules have been updated."
 msgstr "Dina sekretessinställningar har uppdaterats."
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:591
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:593
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:597
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:599
 #, c-format
 msgid "Your private lists"
 msgstr "Dina privata listor"
@@ -12802,7 +12816,7 @@ msgstr "artikel"
 #. %3$s:  WAITIN.holdingbranch 
 #. %4$s:  WAITIN.branch 
 #. %5$s:  END 
-#: opac-tmpl/prog/en/modules/opac-user.tt:278
+#: opac-tmpl/prog/en/modules/opac-user.tt:281
 #, c-format
 msgid "at %s %s In transit from %s to %s %s"
 msgstr "vid %s %s Transporteras från %s till %s %s"
@@ -14722,7 +14736,7 @@ msgstr ""
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #. %8$s:  END 
-#: opac-tmpl/prog/en/modules/opac-user.tt:412
+#: opac-tmpl/prog/en/modules/opac-user.tt:415
 #, c-format
 msgid "since %s %s Suspended %s until %s %s %s Pending %s %s "
 msgstr "sedan %s %s Spärrat %s tills %s %s %s Väntande %s %s "
@@ -14999,8 +15013,8 @@ msgstr "avhandlingar "
 msgid "title"
 msgstr "title"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:663
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:677
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:669
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:683
 #, c-format
 msgid "to create new lists."
 msgstr "för att skapa nya listor."
@@ -15084,7 +15098,7 @@ msgstr "Uniforma titlar:"
 msgid "unknown"
 msgstr "okänt"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:444
+#: opac-tmpl/prog/en/modules/opac-user.tt:447
 #, c-format
 msgid "until "
 msgstr "tills "
