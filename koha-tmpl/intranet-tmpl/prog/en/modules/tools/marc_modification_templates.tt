@@ -23,6 +23,16 @@ $(document).ready(function() {
                 alert(_("The destination should be filled."));
                 return false;
             }
+            if ( ( $("#to_field").val()   <= 10 && $("#to_subfield").val().length   > 0 ) ||
+                 ( $("#from_field").val() <= 10 && $("#from_subfield").val().length > 0 ) ) {
+                 alert(_("If the field is a control field, the subfield should be empty"));
+                 return false;
+            }
+            if ( ( $("#from_field").val() <= 10 && $("#to_subfield").val().length   == 0 ) ||
+                 ( $("#to_field").val()   <= 10 && $("#from_subfield").val().length == 0 ) ) {
+                alert(_("A control field cannot be used with a regular field."));
+                return false;
+             }
         }
         if ( action == 'update_field' ) {
             if ( $("#from_subfield").val().length <= 0 ) {
