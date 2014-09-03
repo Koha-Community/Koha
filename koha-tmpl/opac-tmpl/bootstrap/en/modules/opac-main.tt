@@ -38,14 +38,14 @@
     [% END %]
 
         [% IF ( koha_news_count ) %]
-            <div id="news">
-                <table class="table table-bordered">
-                    [% FOREACH koha_new IN koha_news %]
-                        <thead><tr><th>[% koha_new.title %]</th></tr></thead>
-                        <tbody><tr><td><p>[% koha_new.new %]</p>
-                        <p class="newsfooter"><i>(published on [% koha_new.newdate %])</i></p></td></tr></tbody>
-                    [% END %]
-                </table>
+            <div id="news" class="newscontainer">
+                [% FOREACH koha_new IN koha_news %]
+                    <div class="newsitem">
+                        <h4 class="newsheader">[% koha_new.title %]</h4>
+                        <div class="newsbody">[% koha_new.new %]</div>
+                        <div class="newsfooter">(published on [% koha_new.newdate %])</div>
+                    </div>
+                [% END %]
             </div>
         [% END %]
 
