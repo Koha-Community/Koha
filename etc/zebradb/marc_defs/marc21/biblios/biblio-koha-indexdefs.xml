@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<kohaidx:index_defs xmlns:kohaidx="http://www.koha-community.org/schemas/index-defs">
+<kohaidx:index_defs xmlns:kohaidx="http://www.koha-community.org/schemas/index-defs"
+                    xmlns="http://www.koha-community.org/schemas/index-defs">
   <!--record.abs line 40: xelm /record/leader llength:w:range(data,0,5),rtype:w:range(data,6,1),Bib-level:w:range(data,7,1)-->
   <id>marc:datafield[@tag='999']/marc:subfield[@code='c']</id>
   <index_leader xmlns="http://www.koha-community.org/schemas/index-defs" offset="0" length="5">
@@ -1284,4 +1285,42 @@
     <target_index>Note:w</target_index>
     <target_index>Note:p</target_index>
   </index_subfields>
+
+  <facet tag="100" subfields="a">
+    <target_index>au:0</target_index>
+  </facet>
+  <facet tag="110" subfields="a">
+    <target_index>au:0</target_index>
+  </facet>
+  <facet tag="440" subfields="a">
+    <target_index>se:0</target_index>
+  </facet>
+  <facet tag="490" subfields="a">
+    <target_index>se:0</target_index>
+  </facet>
+  <facet tag="630" subfields="a">
+    <target_index>su-ut:0</target_index>
+  </facet>
+  <facet tag="650" subfields="a">
+    <target_index>su-to:0</target_index>
+  </facet>
+  <facet tag="651" subfields="a">
+    <target_index>su-geo:0</target_index>
+  </facet>
+  <facet tag="700" subfields="a">
+    <target_index>au:0</target_index>
+  </facet>
+  <facet tag="942" subfields="c">
+    <target_index>itype:0</target_index>
+  </facet>
+  <facet tag="952" subfields="a">
+    <target_index>homebranch:0</target_index>
+  </facet>
+  <facet tag="952" subfields="b">
+    <target_index>holdingbranch:0</target_index>
+  </facet>
+  <facet tag="952" subfields="c">
+    <target_index>location:0</target_index>
+  </facet>
+
 </kohaidx:index_defs>
