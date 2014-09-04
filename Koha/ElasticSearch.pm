@@ -24,10 +24,15 @@ use Carp;
 use Elasticsearch;
 use Koha::Database;
 use Modern::Perl;
+use Readonly;
 
 use Data::Dumper;    # TODO remove
 
 __PACKAGE__->mk_ro_accessors(qw( index ));
+
+# Constants to refer to the standard index names
+Readonly our $BIBLIOS_INDEX     => 'biblios';
+Readonly our $AUTHORITIES_INDEX => 'authorities';
 
 =head1 NAME
 
@@ -290,7 +295,9 @@ sub _foreach_mapping {
     # TODO use a caching framework here
     my $database = Koha::Database->new();
     my $schema   = $database->schema();
-    my $rs       = $schema->resultset('ElasticsearchMapping')->search();
+    my $rs =
+      $schema->resultset('ElasticsearchMapping')
+      ->search( { indexname => $self->index } );
     for my $row ( $rs->all ) {
         $sub->(
             $row->id,

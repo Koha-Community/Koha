@@ -32,14 +32,14 @@ use List::MoreUtils q/any/;
 
 use Data::Dumper; # TODO remove
 
-use Koha::SearchEngine::Elasticsearch::QueryBuilder;
 use Koha::ElasticSearch::Search;
-use Koha::SearchEngine::Zebra::QueryBuilder;
+use Koha::SearchEngine::QueryBuilder;
 use Koha::SearchEngine::Zebra::Search;
 
 my $searchengine = C4::Context->preference("SearchEngine");
 my ($builder, $searcher);
 #$searchengine = 'Zebra'; # XXX
+$builder = Koha::SearchEngine::QueryBuilder->new();
 for ( $searchengine ) {
     when ( /^Solr$/ ) {
         warn "We use Solr";
@@ -47,14 +47,9 @@ for ( $searchengine ) {
         exit;
     }
     when ( /^Zebra$/ ) {
-        $builder=Koha::SearchEngine::Zebra::QueryBuilder->new();
         $searcher=Koha::SearchEngine::Zebra::Search->new();
     }
     when (/^Elasticsearch$/) {
-        # Should use the base QueryBuilder, but I don't have it wired up
-        # for moose yet.
-        $builder=Koha::SearchEngine::Elasticsearch::QueryBuilder->new();
-#        $builder=Koha::SearchEngine::Zebra::QueryBuilder->new();
         $searcher=Koha::ElasticSearch::Search->new({index => 'biblios'});
     }
 }
