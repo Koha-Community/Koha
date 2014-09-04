@@ -7,31 +7,39 @@ use Getopt::Long;
 
 use C4::Context;
 use C4::UsageStats;
+use POSIX qw(strftime);
 
-
-my ( $help, $verbose );
+my ( $help, $verbose, $force );
 GetOptions(
-    'h|help'                 => \$help,
-    'v|verbose'              => \$verbose,
+    'h|help'    => \$help,
+    'v|verbose' => \$verbose,
+    'f|force'   => \$force,
 ) || pod2usage(1);
 
 if ($help) {
     pod2usage(1);
 }
 
-unless( C4::Context->preference('UsageStatsShare') ) {
-  pod2usage (q|The UsageStats system preference is not set. If your library  wants to share their usage statistics with the Koha community, you have to switch on this system preference|);
-  exit 1;
+unless ( C4::Context->preference('UsageStatsShare') ) {
+    pod2usage(
+q|
+The UsageStats system preference is not set.
+If your library wants to share their usage statistics with the Koha community, you have to switch on this system preference
+|
+    );
+    exit 1;
 }
 
-my $need_update = C4::UsageStats::NeedUpdate();
+my $need_update = ($force ? 1 : C4::UsageStats::NeedUpdate() );
 
-if ( $need_update ) {
+if ($need_update) {
     say "Data need to be updated" if $verbose;
     my $report = C4::UsageStats::BuildReport();
     C4::UsageStats::ReportToCommunity($report);
-    C4::Context->set_preference('UsageStatsLastUpdateTime', strftime("%s", localtime));
-} elsif( $verbose ) {
+    C4::Context->set_preference( 'UsageStatsLastUpdateTime',
+        strftime( "%s", localtime ) );
+}
+elsif ($verbose) {
     say "Data don't need to be updated";
 }
 
@@ -53,7 +61,7 @@ Only the total number is retrieved. In no case private data will be shared!
 
 In order to know which parts of Koha modules are used, this script will collect some system preference values.
 
-If you want to tell us who you are, you can fill the UsageStatsLibraryName system preference with your library name.
+If you want to tell us who you are, you can fill the UsageStatsLibraryName system preference with your library name, UsageStatsLibraryUrl, UsageStatsLibraryType and/or UsageStatsCountry.
 
 All these data will be analysed on the http://hea.koha-community.org Koha community website.
 
@@ -71,6 +79,10 @@ Print a brief help message
 =item B<-v|--verbose>
 
 Verbose mode.
+
+=item B<-f|--force>
+
+Force the update.
 
 =back
 

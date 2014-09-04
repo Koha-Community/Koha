@@ -1,4 +1,4 @@
-package UsageStats;
+package C4::UsageStats;
 
 # This file is part of Koha.
 #
@@ -22,7 +22,6 @@ use C4::Context;
 use POSIX qw(strftime);
 use LWP::UserAgent;
 use JSON;
-use URI::Encode qw(uri_encode);
 
 =head1 NAME C4::UsageStats
 
@@ -45,7 +44,7 @@ only once a month !
 
 sub NeedUpdate {
     my $lastupdated = C4::Context->preference('UsageStatsLastUpdateTime') || 0;
-    my $now = strftime("%s", localtime);
+    my $now = strftime( "%s", localtime );
 
     # Need to launch cron.
     return 1 if $now - $lastupdated >= 2592000;
@@ -57,13 +56,19 @@ sub NeedUpdate {
 sub BuildReport {
     my $report = {
         library => {
+            id   => C4::Context->preference('UsageStatsID')          || 0,
             name => C4::Context->preference('UsageStatsLibraryName') || q||,
-            id => C4::Context->preference('UsageStatsID') || 0,
+            url => C4::Context->preference('UsageStatsLibraryUrl')   || q||,
+            type => C4::Context->preference('UsageStatsLibraryType') || q||,
+            country => C4::Context->preference('UsageStatsCountry') || q||,
         },
     };
 
     # Get database volumetry.
-    foreach (qw/biblio auth_header old_issues old_reserves borrowers aqorders subscription/) {
+    foreach (
+        qw/biblio auth_header old_issues old_reserves borrowers aqorders subscription/
+      )
+    {
         $report->{volumetry}{$_} = _count($_);
     }
 
@@ -338,18 +343,19 @@ Send to hea.koha-community.org database informations
 =cut
 
 sub ReportToCommunity {
-      my $data = shift;
-      my $json = uri_encode( to_json($data), 1 );
+    my $data = shift;
+    my $json = encode_json($data);
 
-      my $ua = LWP::UserAgent->new;
-      my $req =
-        HTTP::Request->new( POST => "http://hea.koha-community.org/upload.pl" );
-      $req->content_type('application/x-www-form-urlencoded');
-      $req->content("data=$json");
-      my $res     = $ua->request($req);
-      my $content = from_json( $res->decoded_content );
-      C4::Context->set_preference( 'UsageStatsID',
-          $content->{library}{library_id} );
+    my $url = "http://hea.koha-community.org/upload.pl";
+    my $ua = LWP::UserAgent->new;
+    my $res = $ua->post(
+        $url,
+        'Content-type' => 'application/json;charset=utf-8',
+        Content => $json,
+    );
+    my $content = decode_json( $res->decoded_content );
+    C4::Context->set_preference( 'UsageStatsID',
+        $content->{library}{id} );
 }
 
 =head2 _count
@@ -361,12 +367,12 @@ Count the number of records in $table tables
 =cut
 
 sub _count {
-      my $table = shift;
+    my $table = shift;
 
-      my $dbh = C4::Context->dbh;
-      my $sth = $dbh->prepare("SELECT count(*) from $table");
-      $sth->execute;
-      return $sth->fetchrow_array;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT count(*) from $table");
+    $sth->execute;
+    return $sth->fetchrow_array;
 }
 
 1;
