@@ -66,7 +66,7 @@ sub BuildReport {
 
     # Get database volumetry.
     foreach (
-        qw/biblio auth_header old_issues old_reserves borrowers aqorders subscription/
+        qw/biblio items auth_header old_issues old_reserves borrowers aqorders subscription/
       )
     {
         $report->{volumetry}{$_} = _count($_);
