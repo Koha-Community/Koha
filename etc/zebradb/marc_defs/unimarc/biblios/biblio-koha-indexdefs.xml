@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<kohaidx:index_defs xmlns:kohaidx="http://www.koha-community.org/schemas/index-defs">
+<kohaidx:index_defs xmlns:kohaidx="http://www.koha-community.org/schemas/index-defs"
+                    xmlns="http://www.koha-community.org/schemas/index-defs">
   <id>marc:controlfield[@tag='001']</id>
   <!--record.abs line 24: melm 001        Local-number,Local-number:n-->
   <index_control_field xmlns="http://www.koha-community.org/schemas/index-defs" tag="001">
@@ -1429,4 +1430,60 @@
     <target_index>totalissues:n</target_index>
     <target_index>totalissues:s</target_index>
   </index_subfields>
+
+  <facet tag="225" subfields="a">
+    <target_index>se:0</target_index>
+  </facet>
+  <facet tag="500" subfields="a">
+    <target_index>su-ut:0</target_index>
+  </facet>
+  <facet tag="501" subfields="a">
+    <target_index>su-ut:0</target_index>
+  </facet>
+  <facet tag="503" subfields="a">
+    <target_index>su-ut:0</target_index>
+  </facet>
+  <facet tag="600" subfields="ab">
+    <target_index>su-to:0</target_index>
+  </facet>
+  <facet tag="601" subfields="ab">
+    <target_index>su-to:0</target_index>
+  </facet>
+  <facet tag="602" subfields="a">
+    <target_index>su-to:0</target_index>
+  </facet>
+  <facet tag="604" subfields="at">
+    <target_index>su-to:0</target_index>
+  </facet>
+  <facet tag="605" subfields="a">
+    <target_index>su-to:0</target_index>
+  </facet>
+  <facet tag="606" subfields="ax">
+    <target_index>su-to:0</target_index>
+  </facet>
+  <facet tag="607" subfields="a">
+    <target_index>su-geo:0</target_index>
+  </facet>
+  <facet tag="610" subfields="a">
+    <target_index>su-to:0</target_index>
+  </facet>
+  <facet tag="700" subfields="ab">
+    <target_index>au:0</target_index>
+  </facet>
+  <facet tag="701" subfields="ab">
+    <target_index>au:0</target_index>
+  </facet>
+  <facet tag="702" subfields="ab">
+    <target_index>au:0</target_index>
+  </facet>
+  <facet tag="995" subfields="a">
+    <target_index>homebranch:0</target_index>
+  </facet>
+  <facet tag="995" subfields="b">
+    <target_index>holdingbranch:0</target_index>
+  </facet>
+  <facet tag="995" subfields="e">
+    <target_index>location:0</target_index>
+  </facet>
+
 </kohaidx:index_defs>

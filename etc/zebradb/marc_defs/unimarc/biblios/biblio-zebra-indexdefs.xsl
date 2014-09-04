@@ -12,6 +12,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template match="text()"/>
   <xslo:template match="text()" mode="index_subfields"/>
   <xslo:template match="text()" mode="index_data_field"/>
+  <xslo:template match="text()" mode="index_facets"/>
   <xslo:template match="text()" mode="index_heading"/>
   <xslo:template match="text()" mode="index_heading_conditional"/>
   <xslo:template match="text()" mode="index_match_heading"/>
@@ -27,7 +28,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     </xslo:if>
   </xslo:template>
   <xslo:template match="marc:record">
-    <xslo:variable name="idfield" select="normalize-space(marc:controlfield[@tag='001'])"/>
+    <xslo:variable name="idfield" select="normalize-space()"/>
     <z:record type="update">
       <xslo:attribute name="z:id">
         <xslo:value-of select="$idfield"/>
@@ -35,6 +36,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       <xslo:apply-templates/>
       <xslo:apply-templates mode="index_subfields"/>
       <xslo:apply-templates mode="index_data_field"/>
+      <xslo:apply-templates mode="index_facets"/>
       <xslo:apply-templates mode="index_heading"/>
       <xslo:apply-templates mode="index_heading_conditional"/>
       <xslo:apply-templates mode="index_match_heading"/>
@@ -436,8 +438,6 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
         </z:index>
       </xslo:if>
     </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='101']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('c', @code)">
         <z:index name="language-original:w">
@@ -2499,6 +2499,152 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       </xslo:variable>
       <xslo:value-of select="normalize-space($raw_heading)"/>
     </z:index>
+  </xslo:template>
+  <xslo:template mode="index_facets" match="marc:datafield[@tag='225']">
+    <xslo:if test="not(@ind1='z')">
+      <z:index name="se:0">
+        <xslo:value-of select="marc:subfield[@code='a']"/>
+      </z:index>
+    </xslo:if>
+  </xslo:template>
+  <xslo:template mode="index_facets" match="marc:datafield[@tag='500']">
+    <xslo:if test="not(@ind1='z')">
+      <z:index name="su-ut:0">
+        <xslo:value-of select="marc:subfield[@code='a']"/>
+      </z:index>
+    </xslo:if>
+  </xslo:template>
+  <xslo:template mode="index_facets" match="marc:datafield[@tag='501']">
+    <xslo:if test="not(@ind1='z')">
+      <z:index name="su-ut:0">
+        <xslo:value-of select="marc:subfield[@code='a']"/>
+      </z:index>
+    </xslo:if>
+  </xslo:template>
+  <xslo:template mode="index_facets" match="marc:datafield[@tag='503']">
+    <xslo:if test="not(@ind1='z')">
+      <z:index name="su-ut:0">
+        <xslo:value-of select="marc:subfield[@code='a']"/>
+      </z:index>
+    </xslo:if>
+  </xslo:template>
+  <xslo:template mode="index_facets" match="marc:datafield[@tag='600']">
+    <xslo:if test="not(@ind1='z')">
+      <z:index name="su-to:0">
+        <xslo:value-of select="marc:subfield[@code='a']"/>
+        <xslo:if test="marc:subfield[@code='a'] and marc:subfield[@code='b']">
+          <xslo:text>&lt;*&gt;</xslo:text>
+        </xslo:if>
+        <xslo:value-of select="marc:subfield[@code='b']"/>
+      </z:index>
+    </xslo:if>
+  </xslo:template>
+  <xslo:template mode="index_facets" match="marc:datafield[@tag='601']">
+    <xslo:if test="not(@ind1='z')">
+      <z:index name="su-to:0">
+        <xslo:value-of select="marc:subfield[@code='a']"/>
+        <xslo:if test="marc:subfield[@code='a'] and marc:subfield[@code='b']">
+          <xslo:text>&lt;*&gt;</xslo:text>
+        </xslo:if>
+        <xslo:value-of select="marc:subfield[@code='b']"/>
+      </z:index>
+    </xslo:if>
+  </xslo:template>
+  <xslo:template mode="index_facets" match="marc:datafield[@tag='602']">
+    <xslo:if test="not(@ind1='z')">
+      <z:index name="su-to:0">
+        <xslo:value-of select="marc:subfield[@code='a']"/>
+      </z:index>
+    </xslo:if>
+  </xslo:template>
+  <xslo:template mode="index_facets" match="marc:datafield[@tag='604']">
+    <xslo:if test="not(@ind1='z')">
+      <z:index name="su-to:0">
+        <xslo:value-of select="marc:subfield[@code='a']"/>
+        <xslo:if test="marc:subfield[@code='a'] and marc:subfield[@code='t']">
+          <xslo:text>&lt;*&gt;</xslo:text>
+        </xslo:if>
+        <xslo:value-of select="marc:subfield[@code='t']"/>
+      </z:index>
+    </xslo:if>
+  </xslo:template>
+  <xslo:template mode="index_facets" match="marc:datafield[@tag='605']">
+    <xslo:if test="not(@ind1='z')">
+      <z:index name="su-to:0">
+        <xslo:value-of select="marc:subfield[@code='a']"/>
+      </z:index>
+    </xslo:if>
+  </xslo:template>
+  <xslo:template mode="index_facets" match="marc:datafield[@tag='606']">
+    <xslo:if test="not(@ind1='z')">
+      <z:index name="su-to:0">
+        <xslo:value-of select="marc:subfield[@code='a']"/>
+        <xslo:if test="marc:subfield[@code='a'] and marc:subfield[@code='x']">
+          <xslo:text>&lt;*&gt;</xslo:text>
+        </xslo:if>
+        <xslo:value-of select="marc:subfield[@code='x']"/>
+      </z:index>
+    </xslo:if>
+  </xslo:template>
+  <xslo:template mode="index_facets" match="marc:datafield[@tag='607']">
+    <xslo:if test="not(@ind1='z')">
+      <z:index name="su-geo:0">
+        <xslo:value-of select="marc:subfield[@code='a']"/>
+      </z:index>
+    </xslo:if>
+  </xslo:template>
+  <xslo:template mode="index_facets" match="marc:datafield[@tag='610']">
+    <xslo:if test="not(@ind1='z')">
+      <z:index name="su-to:0">
+        <xslo:value-of select="marc:subfield[@code='a']"/>
+      </z:index>
+    </xslo:if>
+  </xslo:template>
+  <xslo:template mode="index_facets" match="marc:datafield[@tag='700']">
+    <xslo:if test="not(@ind1='z')">
+      <z:index name="au:0">
+        <xslo:value-of select="marc:subfield[@code='a']"/>
+        <xslo:if test="marc:subfield[@code='a'] and marc:subfield[@code='b']">
+          <xslo:text>&lt;*&gt;</xslo:text>
+        </xslo:if>
+        <xslo:value-of select="marc:subfield[@code='b']"/>
+      </z:index>
+    </xslo:if>
+  </xslo:template>
+  <xslo:template mode="index_facets" match="marc:datafield[@tag='701']">
+    <xslo:if test="not(@ind1='z')">
+      <z:index name="au:0">
+        <xslo:value-of select="marc:subfield[@code='a']"/>
+        <xslo:if test="marc:subfield[@code='a'] and marc:subfield[@code='b']">
+          <xslo:text>&lt;*&gt;</xslo:text>
+        </xslo:if>
+        <xslo:value-of select="marc:subfield[@code='b']"/>
+      </z:index>
+    </xslo:if>
+  </xslo:template>
+  <xslo:template mode="index_facets" match="marc:datafield[@tag='702']">
+    <xslo:if test="not(@ind1='z')">
+      <z:index name="au:0">
+        <xslo:value-of select="marc:subfield[@code='a']"/>
+        <xslo:if test="marc:subfield[@code='a'] and marc:subfield[@code='b']">
+          <xslo:text>&lt;*&gt;</xslo:text>
+        </xslo:if>
+        <xslo:value-of select="marc:subfield[@code='b']"/>
+      </z:index>
+    </xslo:if>
+  </xslo:template>
+  <xslo:template mode="index_facets" match="marc:datafield[@tag='995']">
+    <xslo:if test="not(@ind1='z')">
+      <z:index name="homebranch:0">
+        <xslo:value-of select="marc:subfield[@code='a']"/>
+      </z:index>
+      <z:index name="holdingbranch:0">
+        <xslo:value-of select="marc:subfield[@code='b']"/>
+      </z:index>
+      <z:index name="location:0">
+        <xslo:value-of select="marc:subfield[@code='e']"/>
+      </z:index>
+    </xslo:if>
   </xslo:template>
   <xslo:template mode="index_all" match="text()">
     <z:index name="Any:w Any:p">
