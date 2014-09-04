@@ -38,7 +38,7 @@ __PACKAGE__->table("elasticsearch_mapping");
 =head2 type
 
   data_type: 'varchar'
-  is_nullable: 1
+  is_nullable: 0
   size: 255
 
 =head2 facet
@@ -73,7 +73,7 @@ __PACKAGE__->add_columns(
   "mapping",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "type",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", is_nullable => 0, size => 255 },
   "facet",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
   "marc21",
@@ -97,8 +97,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07040 @ 2014-06-06 16:20:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uGRmWU0rshP6awyLMQYJeQ
+# Created by DBIx::Class::Schema::Loader v0.07040 @ 2014-07-01 15:12:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:D9WpVp24RV/MGHktgXzdkQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

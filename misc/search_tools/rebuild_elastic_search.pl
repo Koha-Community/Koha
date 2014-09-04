@@ -46,10 +46,21 @@ Higher should be faster, but will cause more RAM usage. Default is 100.
 
 Delete the index and recreate it before indexing.
 
-=item B<-b|--biblionumber>
+=item B<-a|--authorities>
+
+Index the authorities only. Combining this with B<-b> is the same as
+specifying neither and so both get indexed.
+
+=item B<-b|--biblios>
+
+Index the biblios only. Combining this with B<-a> is the same as
+specifying neither and so both get indexed.
+
+=item B<-bn|--bnumber>
 
 Only index the supplied biblionumber, mostly for testing purposes. May be
-repeated.
+repeated. This also applies to authorities via authid, so if you're using it,
+you probably only want to do one or the other at a time.
 
 =item B<-v|--verbose>
 
@@ -68,6 +79,7 @@ Full documentation.
 
 use autodie;
 use Getopt::Long;
+use Koha::Authority;
 use Koha::Biblio;
 use Koha::ElasticSearch::Indexer;
 use MARC::Field;
@@ -80,60 +92,98 @@ use Data::Dumper; # TODO remove
 my $verbose = 0;
 my $commit = 100;
 my ($delete, $help, $man);
+my ($index_biblios, $index_authorities);
 my (@biblionumbers);
 
 GetOptions(
     'c|commit=i'       => \$commit,
     'd|delete'         => \$delete,
-    'b|biblionumber=i' => \@biblionumbers,
+    'a|authorities' => \$index_authorities,
+    'b|biblios' => \$index_biblios,
+    'bn|bnumber=i' => \@biblionumbers,
     'v|verbose!'       => \$verbose,
     'h|help'           => \$help,
     'man'              => \$man,
 );
 
+# Default is to do both
+unless ($index_authorities || $index_biblios) {
+    $index_authorities = $index_biblios = 1;
+}
+
 pod2usage(1) if $help;
 pod2usage( -exitstatus => 0, -verbose => 2 ) if $man;
 
 my $next;
-if (@biblionumbers) {
-    $next = sub {
-        my $r = shift @biblionumbers;
-        return () unless defined $r;
-        return ($r, Koha::Biblio->get_marc_biblio($r, item_data => 1));
-    };
-} else {
-    my $records = Koha::Biblio->get_all_biblios_iterator();
-    $next = sub {
-        $records->next();
+if ($index_biblios) {
+    _log(1, "Indexing biblios\n");
+    if (@biblionumbers) {
+        $next = sub {
+            my $r = shift @biblionumbers;
+            return () unless defined $r;
+            return ($r, Koha::Biblio->get_marc_biblio($r, item_data => 1));
+        };
+    } else {
+        my $records = Koha::Biblio->get_all_biblios_iterator();
+        $next = sub {
+            $records->next();
+        }
     }
+    do_reindex($next, $Koha::ElasticSearch::BIBLIOS_INDEX);
 }
-my $indexer = Koha::ElasticSearch::Indexer->new({index => 'biblios' });
-if ($delete) {
-    # We know it's safe to not recreate the indexer because update_index
-    # hasn't been called yet.
-    $indexer->delete_index();
+if ($index_authorities) {
+    _log(1, "Indexing authorities\n");
+    if (@biblionumbers) {
+        $next = sub {
+            my $r = shift @biblionumbers;
+            return () unless defined $r;
+            my $a = Koha::Authority->get_from_authid($r);
+            return ($r, $a->record);
+        };
+    } else {
+        my $records = Koha::Authority->get_all_authorities_iterator();
+        $next = sub {
+            $records->next();
+        }
+    }
+    do_reindex($next, $Koha::ElasticSearch::AUTHORITIES_INDEX);
 }
 
-my $count = 0;
-my $commit_count = $commit;
-my (@bibnums_buffer, @commit_buffer);
-while (scalar(my ($bibnum, $rec) = $next->())) {
-    _log(1,"$bibnum\n");
-    $count++;
+sub do_reindex {
+    my ( $next, $index_name ) = @_;
 
-    push @bibnums_buffer, $bibnum;
-    push @commit_buffer, $rec;
-    if (!(--$commit_count)) {
-        _log(2, "Committing...\n");
-        $indexer->update_index(\@bibnums_buffer, \@commit_buffer);
-        $commit_count = $commit;
-        @bibnums_buffer = ();
-        @commit_buffer = ();
+    my $indexer = Koha::ElasticSearch::Indexer->new( { index => $index_name } );
+    if ($delete) {
+
+        # We know it's safe to not recreate the indexer because update_index
+        # hasn't been called yet.
+        $indexer->delete_index();
     }
+
+    my $count        = 0;
+    my $commit_count = $commit;
+    my ( @id_buffer, @commit_buffer );
+    while ( my $record = $next->() ) {
+        my $id     = $record->idnumber;
+        my $record = $record->record;
+        _log( 1, "$id\n" );
+        $count++;
+
+        push @id_buffer,     $id;
+        push @commit_buffer, $record;
+        if ( !( --$commit_count ) ) {
+            _log( 2, "Committing...\n" );
+            $indexer->update_index( \@id_buffer, \@commit_buffer );
+            $commit_count  = $commit;
+            @id_buffer     = ();
+            @commit_buffer = ();
+        }
+    }
+
+    # There are probably uncommitted records
+    $indexer->update_index( \@id_buffer, \@commit_buffer );
+    _log( 1, "$count records indexed.\n" );
 }
-# There are probably uncommitted records
-$indexer->update_index(\@bibnums_buffer, \@commit_buffer);
-_log(1, "$count records indexed.\n");
 
 # Output progress information.
 #
