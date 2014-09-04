@@ -12,10 +12,11 @@
     <xsl:template match="text()"/>
 
     <!-- Keys on tags referenced in the index definitions -->
-    <xsl:key name="index_control_field_tag"   match="kohaidx:index_control_field"   use="@tag"/>
-    <xsl:key name="index_subfields_tag" match="kohaidx:index_subfields" use="@tag"/>
-    <xsl:key name="index_heading_tag"   match="kohaidx:index_heading"   use="@tag"/>
-    <xsl:key name="index_data_field_tag"   match="kohaidx:index_data_field"   use="@tag"/>
+    <xsl:key name="index_control_field_tag" match="kohaidx:index_control_field" use="@tag"/>
+    <xsl:key name="index_subfields_tag"     match="kohaidx:index_subfields"     use="@tag"/>
+    <xsl:key name="index_facet_tag"         match="kohaidx:facet"               use="@tag"/>
+    <xsl:key name="index_heading_tag"       match="kohaidx:index_heading"       use="@tag"/>
+    <xsl:key name="index_data_field_tag"    match="kohaidx:index_data_field"    use="@tag"/>
     <xsl:key name="index_heading_conditional_tag" match="kohaidx:index_heading_conditional" use="@tag"/>
     <xsl:key name="index_match_heading_tag" match="kohaidx:index_match_heading" use="@tag"/>
 
@@ -33,6 +34,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
             <xslo:template match="text()"/>
             <xslo:template match="text()" mode="index_subfields"/>
             <xslo:template match="text()" mode="index_data_field"/>
+            <xslo:template match="text()" mode="index_facets"/>
             <xslo:template match="text()" mode="index_heading"/>
             <xslo:template match="text()" mode="index_heading_conditional"/>
             <xslo:template match="text()" mode="index_match_heading"/>
@@ -57,6 +59,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
                     <xslo:apply-templates/>
                     <xslo:apply-templates mode="index_subfields"/>
                     <xslo:apply-templates mode="index_data_field"/>
+                    <xslo:apply-templates mode="index_facets"/>
                     <xslo:apply-templates mode="index_heading"/>
                     <xslo:apply-templates mode="index_heading_conditional"/>
                     <xslo:apply-templates mode="index_match_heading"/>
@@ -69,6 +72,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
             <xsl:call-template name="handle-index-control-field"/>
             <xsl:call-template name="handle-index-subfields"/>
             <xsl:call-template name="handle-index-data-field"/>
+            <xsl:call-template name="handle-index-facets"/>
             <xsl:call-template name="handle-index-heading"/>
             <xsl:call-template name="handle-index-heading-conditional"/>
             <xsl:call-template name="handle-index-match-heading"/>
@@ -104,7 +108,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
         </xslo:variable>
     </xsl:template>
 
-    <xsl:template match="kohaidx:index_subject_thesaurus">   
+    <xsl:template match="kohaidx:index_subject_thesaurus">
         <xsl:variable name="tag"><xsl:value-of select="@tag"/></xsl:variable>
         <xsl:variable name="offset"><xsl:value-of select="@offset"/></xsl:variable>
         <xsl:variable name="length"><xsl:value-of select="@length"/></xsl:variable>
@@ -286,6 +290,38 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
                     </z:index>
                 </xslo:if>
             </xslo:for-each>
+    </xsl:template>
+
+    <xsl:template name="handle-index-facets">
+      <xsl:for-each select="//kohaidx:facet[generate-id() = generate-id(key('index_facet_tag', @tag)[1])]">
+          <xslo:template mode="index_facets">
+            <xsl:attribute name="match">
+            <xsl:text>marc:datafield[@tag='</xsl:text>
+            <xsl:value-of select="@tag"/>
+            <xsl:text>']</xsl:text>
+            </xsl:attribute>
+            <xslo:if>
+              <xsl:attribute name="test">
+                <xsl:text>not(@ind1='z')</xsl:text>
+              </xsl:attribute>
+              <xsl:for-each select="key('index_facet_tag', @tag)">
+                <xsl:variable name="indexes">
+                  <xsl:call-template name="get-facets-target-indexes"/>
+                </xsl:variable>
+                  <xsl:if test="not($indexes='')">
+                  <z:index>
+                  <xsl:attribute name="name">
+                    <xsl:value-of select="normalize-space($indexes)"/>
+                  </xsl:attribute>
+                  <xsl:call-template name="build-facet-value">
+                    <xsl:with-param name="subfields" select="@subfields"/>
+                  </xsl:call-template>
+                  </z:index>
+                </xsl:if>
+              </xsl:for-each>
+            </xslo:if>
+          </xslo:template>
+      </xsl:for-each>
     </xsl:template>
 
     <xsl:template name="handle-index-data-field">
@@ -475,4 +511,58 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
             <xsl:value-of select="." /><xsl:text> </xsl:text>
         </xsl:for-each>
     </xsl:template>
+
+    <xsl:template name="get-facets-target-indexes">
+        <xsl:for-each select="kohaidx:target_index">
+            <xsl:value-of select="." /><xsl:text> </xsl:text>
+        </xsl:for-each>
+    </xsl:template>
+
+    <!-- traverse subfields string character-wise -->
+    <xsl:template name="build-facet-value">
+      <xsl:param name="subfields"/>
+      <xsl:if test="string-length($subfields) &gt; 0">
+        <xslo:value-of>
+          <xsl:attribute name="select">
+              <xsl:text>marc:subfield[@code='</xsl:text>
+              <xsl:value-of select="substring($subfields,1,1)"/>
+              <xsl:text>']</xsl:text>
+          </xsl:attribute>
+        </xslo:value-of>
+        <xsl:call-template name="build-facet-value-cont">
+          <xsl:with-param name="prev" select="substring($subfields,1,1)"/>
+          <xsl:with-param name="subfields" select="substring($subfields,2)"/>
+        </xsl:call-template>
+      </xsl:if>
+    </xsl:template>
+    <!-- traverse the remainder of @subfields, with context information
+         i.e previous char. Introduces a separator character if needed -->
+    <xsl:template name="build-facet-value-cont">
+      <xsl:param name="prev"/>
+      <xsl:param name="subfields"/>
+      <xsl:if test="string-length($subfields) &gt; 0">
+        <xslo:if>
+            <xsl:attribute name="test">
+                <xsl:text>marc:subfield[@code='</xsl:text>
+                <xsl:value-of select="$prev"/>
+                <xsl:text>'] and marc:subfield[@code='</xsl:text>
+                <xsl:value-of select="substring($subfields,1,1)"/>
+                <xsl:text>']</xsl:text>
+            </xsl:attribute>
+            <xslo:text>&lt;*&gt;</xslo:text>
+        </xslo:if>
+        <xslo:value-of>
+          <xsl:attribute name="select">
+              <xsl:text>marc:subfield[@code='</xsl:text>
+              <xsl:value-of select="substring($subfields,1,1)"/>
+              <xsl:text>']</xsl:text>
+          </xsl:attribute>
+        </xslo:value-of>
+        <xsl:call-template name="build-facet-value-cont">
+          <xsl:with-param name="prev" select="substring($subfields,1,1)"/>
+          <xsl:with-param name="subfields" select="substring($subfields,2)"/>
+        </xsl:call-template>
+      </xsl:if>
+    </xsl:template>
+
 </xsl:stylesheet>
