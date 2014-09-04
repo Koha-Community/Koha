@@ -60,6 +60,7 @@ my $sql = '
     SELECT
         issuedate,
         date_due,
+        date_due < now() as date_due_overdue,
 
         biblionumber,
         biblio.title,
@@ -148,6 +149,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         biblionumber        => $c->{biblionumber},
         issuedate           => $c->{issuedate},
         date_due            => $c->{date_due},
+        date_due_overdue    => $c->{date_due_overdue} ? JSON::true : JSON::false,
         renewals_count      => $renewals_count,
         renewals_allowed    => $renewals_allowed,
         renewals_remaining  => $renewals_remaining,
