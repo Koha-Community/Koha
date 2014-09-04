@@ -115,18 +115,15 @@ Administration:
             - is the search engine used.
     Usage Stats:
         -
-            - pref: UsageStatsLastUpdateTime
-              default: 0
-            - stores the last time when cron were launch
-        -
-            - pref: UsageStatsID
-              default:
-            -
-        -
             - pref: UsageStatsShare
-              default:
-            -
+              default: 0
+              choices:
+                  yes: Share
+                  no: "Don't share"
+            - data volumetry with Koha community. You can see the data on the <a href="http://hea.koha-community.org">Hea Koha community website</a>.
         -
+            - The library name
             - pref: UsageStatsLibraryName
-              default:
-            -
+            - will be shown on <a href="http://hea.koha-community.org">Hea Koha community website</a>.
+            - If this name is empty, you will sent data anonymously
+            - Note that this value has no effect if UsageStatsShare system preference is set to "Don't share"
