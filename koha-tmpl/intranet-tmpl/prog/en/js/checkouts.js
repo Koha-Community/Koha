@@ -151,9 +151,7 @@ $(document).ready(function() {
             {
                 "iDataSort": 1, // Sort on hidden unformatted date due column
                 "mDataProp": function( oObj ) {
-                    var today = new Date();
-                    var due = new Date( oObj.date_due );
-                    if ( today > due ) {
+                    if ( oObj.date_due_overdue ) {
                         return "<span class='overdue'>" + oObj.date_due_formatted + "</span>";
                     } else {
                         return oObj.date_due_formatted;
