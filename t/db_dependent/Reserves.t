@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 39;
+use Test::More tests => 42;
 
 use MARC::Record;
 use DateTime::Duration;
@@ -401,6 +401,20 @@ AddReserve('CPL',  $requesters{'CPL'}, $item_bibnum,
            $constraint, $bibitems,  1, undef, $expdate, $notes,
            $title,      $checkitem, '');
 my (undef, $canres, undef) = CheckReserves($itemnumber);
+
+is( CanReserveBeCanceledFromOpac(), undef,
+    'CanReserveBeCanceledFromOpac should return undef if called without any parameter'
+);
+is(
+    CanReserveBeCanceledFromOpac( $canres->{resserve_id} ),
+    undef,
+    'CanReserveBeCanceledFromOpac should return undef if called without the reserve_id'
+);
+is(
+    CanReserveBeCanceledFromOpac( undef, $requesters{CPL} ),
+    undef,
+    'CanReserveBeCanceledFromOpac should return undef if called without borrowernumber'
+);
 
 my $cancancel = CanReserveBeCanceledFromOpac($canres->{reserve_id}, $requesters{'CPL'});
 is($cancancel, 1, 'Can user cancel its own reserve');

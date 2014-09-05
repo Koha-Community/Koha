@@ -571,6 +571,7 @@ sub CanItemBeReserved{
 sub CanReserveBeCanceledFromOpac {
     my ($reserve_id, $borrowernumber) = @_;
 
+    return unless $reserve_id and $borrowernumber;
     my $reserve = GetReserve($reserve_id);
 
     return 0 unless $reserve->{borrowernumber} == $borrowernumber;
