@@ -39,7 +39,7 @@ my $suspend_until = $query->param('suspend_until') || undef;
 my $reserve_id    = $query->param('reserve_id');
 
 if ($reserve_id) {
-    ToggleSuspend( $reserve_id, $suspend_until );
+    ToggleSuspend( $reserve_id, $suspend_until ) if CanReserveBeCanceledFromOpac($reserve_id, $borrowernumber);
 }
 else {
     SuspendAll(
