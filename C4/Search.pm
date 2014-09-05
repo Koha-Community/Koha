@@ -343,7 +343,6 @@ sub getRecords {
     my $facets_counter = {};
     my $facets_info    = {};
     my $facets         = getFacets();
-    my $facets_maxrecs = C4::Context->preference('maxRecordsForFacets')||20;
 
     my @facets_loop;    # stores the ref to array of hashes for template facets loop
 
@@ -502,31 +501,9 @@ sub getRecords {
                 # Fill the facets while we're looping, but only for the
                 # biblioserver and not for a scan
                 if ( !$scan && $servers[ $i - 1 ] =~ /biblioserver/ ) {
-
-                    my $jmax = $size > $facets_maxrecs
-                                ? $facets_maxrecs
-                                : $size;
-
-                    for ( my $j = 0 ; $j < $jmax ; $j++ ) {
-
-                        my $marc_record = new_record_from_zebra (
-                                'biblioserver',
-                                $results[ $i - 1 ]->record($j)->raw()
-                        );
-
-                        if ( ! defined $marc_record ) {
-                            warn "ERROR DECODING RECORD - $@: " .
-                                $results[ $i - 1 ]->record($j)->raw();
-                            next;
-                        }
-
-                        _get_facets_data_from_record( $marc_record, $facets, $facets_counter );
-                        $facets_info = _get_facets_info( $facets );
-                    }
+                    $facets_counter = GetFacets( $results[ $i - 1 ] );
+                    $facets_info    = _get_facets_info( $facets );
                 }
-
-                # warn "connection ", $i-1, ": $size hits";
-                # warn $results[$i-1]->record(0)->render() if $size > 0;
 
                 # BUILD FACETS
                 if ( $servers[ $i - 1 ] =~ /biblioserver/ ) {
@@ -652,6 +629,53 @@ sub getRecords {
     return ( undef, $results_hashref, \@facets_loop );
 }
 
+sub GetFacets {
+
+    my $rs = shift;
+    my $facets;
+
+    my $index_mode = C4::Context->config('zebra_auth_index_mode') // 'dom';
+
+    if ( $index_mode eq 'dom' ) {
+        $facets = _get_facets_from_zebra( $rs );
+    } else {
+        $facets = _get_facets_from_records( $rs );
+    }
+
+    return $facets;
+}
+
+sub _get_facets_from_records {
+
+    my $rs = shift;
+
+    my $facets_maxrecs = C4::Context->preference('maxRecordsForFacets') // 20;
+    my $facets_config  = getFacets();
+    my $facets         = {};
+    my $size           = $rs->size();
+    my $jmax           = $size > $facets_maxrecs
+                            ? $facets_maxrecs
+                            : $size;
+
+    for ( my $j = 0 ; $j < $jmax ; $j++ ) {
+
+        my $marc_record = new_record_from_zebra (
+                'biblioserver',
+                $rs->record( $j )->raw()
+        );
+
+        if ( ! defined $marc_record ) {
+            warn "ERROR DECODING RECORD - $@: " .
+                $rs->record( $j )->raw();
+            next;
+        }
+
+        _get_facets_data_from_record( $marc_record, $facets_config, $facets );
+    }
+
+    return $facets;
+}
+
 =head2 _get_facets_data_from_record
 
     C4::Search::_get_facets_data_from_record( $marc_record, $facets, $facets_counter );
@@ -694,6 +718,100 @@ sub _get_facets_data_from_record {
             }
         }
     }
+}
+
+=head2 _get_facets_from_zebra
+
+    my $facets = _get_facets_from_zebra( $result_set )
+
+Retrieves facets for a specified result set. It loops through the facets defined
+in C4::Koha::getFacets and returns a hash with the following structure:
+
+   {  facet_idx => {
+            facet_value => count
+      },
+      ...
+   }
+
+=cut
+
+sub _get_facets_from_zebra {
+
+    my $rs = shift;
+
+    # save current elementSetName
+    my $elementSetName = $rs->option( 'elementSetName' );
+
+    my $facets_loop = getFacets();
+    my $facets_data  = {};
+    # loop through defined facets and fill the facets hashref
+    foreach my $facet ( @$facets_loop ) {
+
+        my $idx = $facet->{ idx };
+        my $sep = $facet->{ sep };
+        my $facet_values = _get_facet_from_result_set( $idx, $rs, $sep );
+        if ( $facet_values ) {
+            # we've actually got a result
+            $facets_data->{ $idx } = $facet_values;
+        }
+    }
+    # set elementSetName to its previous value to avoid side effects
+    $rs->option( elementSetName => $elementSetName );
+
+    return $facets_data;
+}
+
+=head2 _get_facet_from_result_set
+
+    my $facet_values =
+        C4::Search::_get_facet_from_result_set( $facet_idx, $result_set, $sep )
+
+Internal function that extracts facet information for a specific index ($facet_idx) and
+returns a hash containing facet values and count:
+
+    {
+        $facet_value => $count ,
+        ...
+    }
+
+Warning: this function has the side effect of changing the elementSetName for the result
+set. It is a helper function for the main loop, which takes care of backing it up for
+restoring.
+
+=cut
+
+sub _get_facet_from_result_set {
+
+    my $facet_idx = shift;
+    my $rs        = shift;
+    my $sep       = shift;
+
+    my $internal_sep = '<*>';
+
+    return if ( ! defined $facet_idx || ! defined $rs );
+    # zebra's facet element, untokenized index
+    my $facet_element = 'zebra::facet::' . $facet_idx . ':0:100';
+    # configure zebra results for retrieving the desired facet
+    $rs->option( elementSetName => $facet_element );
+    # get the facet record from result set
+    my $facet = $rs->record( 0 )->raw;
+    # if the facet has no restuls...
+    return if !defined $facet;
+    # TODO: benchmark DOM vs. SAX performance
+    my $facet_dom = XML::LibXML->load_xml(
+      string => ($facet)
+    );
+    my @terms = $facet_dom->getElementsByTagName('term');
+    return if ! @terms;
+
+    my $facets = {};
+    foreach my $term ( @terms ) {
+        my $facet_value = $term->textContent;
+        $facet_value =~ s/\Q$internal_sep\E/$sep/ if defined $sep;
+        $facets->{ $facet_value } = $term->getAttribute( 'occur' );
+    }
+
+    return $facets;
 }
 
 =head2 _get_facets_info
