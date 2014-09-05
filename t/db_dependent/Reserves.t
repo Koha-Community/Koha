@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 43;
+use Test::More tests => 47;
+
 use MARC::Record;
 use DateTime::Duration;
 
@@ -413,6 +414,35 @@ is($p, 2, 'CalculatePriority should now still return priority 2');
 $p = C4::Reserves::CalculatePriority($bibnum, $resdate);
 is($p, 3, 'CalculatePriority should now return priority 3');
 # End of tests for bug 8918
+
+# Tests for cancel reserves by users from OPAC.
+$dbh->do('DELETE FROM reserves', undef, ($bibnum));
+AddReserve('CPL',  $requesters{'CPL'}, $item_bibnum,
+           $constraint, $bibitems,  1, undef, $expdate, $notes,
+           $title,      $checkitem, '');
+my (undef, $canres, undef) = CheckReserves($itemnumber);
+
+my $cancancel = CanReserveBeCanceledFromOpac($canres->{reserve_id}, $requesters{'CPL'});
+is($cancancel, 1, 'Can user cancel its own reserve');
+
+$cancancel = CanReserveBeCanceledFromOpac($canres->{reserve_id}, $requesters{'FPL'});
+is($cancancel, 0, 'Other user cant cancel reserve');
+
+ModReserveAffect($itemnumber, $requesters{'CPL'}, 1);
+$cancancel = CanReserveBeCanceledFromOpac($canres->{reserve_id}, $requesters{'CPL'});
+is($cancancel, 0, 'Reserve in transfer status cant be canceled');
+
+$dbh->do('DELETE FROM reserves', undef, ($bibnum));
+AddReserve('CPL',  $requesters{'CPL'}, $item_bibnum,
+           $constraint, $bibitems,  1, undef, $expdate, $notes,
+           $title,      $checkitem, '');
+(undef, $canres, undef) = CheckReserves($itemnumber);
+
+ModReserveAffect($itemnumber, $requesters{'CPL'}, 0);
+$cancancel = CanReserveBeCanceledFromOpac($canres->{reserve_id}, $requesters{'CPL'});
+is($cancancel, 0, 'Reserve in waiting status cant be canceled');
+
+# End of tests for bug 12876
 
 $dbh->rollback;
 
