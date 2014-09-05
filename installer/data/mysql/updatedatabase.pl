@@ -8719,7 +8719,7 @@ if(C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.021";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     my $pref = C4::Context->preference('HomeOrHoldingBranch');
     $dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type)
