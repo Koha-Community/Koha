@@ -118,6 +118,7 @@ BEGIN {
         &CheckReserves
         &CanBookBeReserved
 	&CanItemBeReserved
+        &CanReserveBeCanceledFromOpac
         &CancelReserve
         &CancelExpiredReserves
 
@@ -556,6 +557,29 @@ sub CanItemBeReserved{
 
     return 1;
 }
+
+=head2 CanReserveBeCanceledFromOpac
+
+    $number = CanReserveBeCanceledFromOpac($reserve_id, $borrowernumber);
+
+    returns 1 if reserve can be cancelled by user from OPAC.
+    First check if reserve belongs to user, next checks if reserve is not in
+    transfer or waiting status
+
+=cut
+
+sub CanReserveBeCanceledFromOpac {
+    my ($reserve_id, $borrowernumber) = @_;
+
+    my $reserve = GetReserve($reserve_id);
+
+    return 0 unless $reserve->{borrowernumber} == $borrowernumber;
+    return 0 if ( $reserve->{found} eq 'W' ) or ( $reserve->{found} eq 'T' );
+
+    return 1;
+
+}
+
 #--------------------------------------------------------------------------------
 =head2 GetReserveCount
 
