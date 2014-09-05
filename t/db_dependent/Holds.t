@@ -35,12 +35,10 @@ $insert_sth->execute('CAN');
 $insert_sth->execute('CANNOT');
 
 # Setup Test------------------------
-# Helper biblio.
-diag("Creating biblio instance for testing.");
+# Create a biblio instance for testing
 my ($bibnum, $title, $bibitemnum) = create_helper_biblio();
 
-# Helper item for that biblio.
-diag("Creating item instance for testing.");
+# Create item instance for testing.
 my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL' } , $bibnum);
 
 # Create some borrowers
