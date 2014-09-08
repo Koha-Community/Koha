@@ -843,6 +843,11 @@ sub ModMember {
   $borrowernumber = &AddMember(%borrower);
 
 insert new borrower into table
+
+(%borrower keys are database columns. Database columns could be
+different in different versions. Please look into database for correct
+column names.)
+
 Returns the borrowernumber upon success
 
 Returns as undef upon any db error without further processing
