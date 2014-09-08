@@ -195,7 +195,8 @@ my @order_content = (
             budget_id      => $budget->{budget_id},
             uncertainprice => 0,
             order_internalnote => "internal note",
-            order_vendornote   => "vendor note"
+            order_vendornote   => "vendor note",
+            ordernumber => '',
         },
         num => {
             quantity  => 24,

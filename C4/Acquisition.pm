@@ -1266,6 +1266,8 @@ sub NewOrder {
     my $dbh = C4::Context->dbh;
     my @params;
 
+    croak "The ordernumber parameter should not be provided on calling NewOrder"
+      if $orderinfo->{ordernumber};
 
     # if these parameters are missing, we can't continue
     for my $key (qw/basketno quantity biblionumber budget_id/) {
@@ -1281,6 +1283,7 @@ sub NewOrder {
     my $schema = Koha::Database->new()->schema;
     my $columns = ' '.join(' ', $schema->source('Aqorder')->columns).' ';
     my $new_order = { map { $columns =~ / $_ / ? ($_ => $orderinfo->{$_}) : () } keys(%$orderinfo) };
+    $new_order->{ordernumber} ||= undef;
 
     my $rs = $schema->resultset('Aqorder');
     my $ordernumber = $rs->create($new_order)->id;
