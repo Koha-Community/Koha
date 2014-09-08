@@ -222,6 +222,40 @@
             <td>all authority types used in the frameworks are defined</td>
         </tr>
     [% END %]
+
+    [% IF ( permanent_location_mapped ) %]
+        <tr>
+            <td style="vertical-align:top;">items.permanent_location mapped</td>
+            <td>The following mappings exist for items.permanent_location, and they shouldn't.
+                <table>
+                    <tr>
+                        <th>Framework code</th>
+                        <th>Framework description</th>
+                        <th>Tag</th>
+                        <th>Subfield</th>
+                    </tr>
+                    [% FOREACH mapped_perm_loc IN mapped_permanent_location %]
+                        <tr>
+                            <td>[% mapped_perm_loc.frameworkcode %]</td>
+                            [% IF ( mapped_perm_loc.frameworkcode ) %]
+                                <td>[% mapped_perm_loc.frameworktext %]</td>
+                            [% ELSE %]
+                                <td>Default framework</td>
+                            [% END %]
+                            <td>[% mapped_perm_loc.tagfield %]</td>
+                            <td>[% mapped_perm_loc.tagsubfield %]</td>
+                        </tr>
+                    [% END %]
+                </table>
+            </td>
+        </tr>
+    [% ELSE %]
+        <tr>
+            <td>OK</td>
+            <td>items.permanent_location is not mapped on the frameworks</td>
+        </tr>
+    [% END %]
+
 <!-- -->
 [% IF ( total ) %]
     <tr>

@@ -244,6 +244,21 @@ if (scalar(@$invalid_authtypecodes) > 0) {
     $template->param(authtypecode_info => $invalid_authtypecodes);
 }
 
+# checks items.permanent_location is not mapped
+$sth = $dbh->prepare("SELECT frameworkcode, frameworktext, tagfield, tagsubfield
+                      FROM marc_subfield_structure
+                      LEFT JOIN biblio_framework USING (frameworkcode)
+                      WHERE kohafield='permanent_location' OR
+                            kohafield='items.permanent_location'");
+$sth->execute;
+my $permanent_location_mapped = $sth->fetchall_arrayref({});
+if (scalar(@$permanent_location_mapped) > 0) {
+    $total++;
+    $template->param(permanent_location_mapped => 1);
+    $template->param(mapped_permanent_location => $permanent_location_mapped);
+}
+
+
 $template->param(total => $total,
 		);
 
