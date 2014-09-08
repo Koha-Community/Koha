@@ -8728,7 +8728,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.17.00.XXX';
+$DBversion = '3.17.00.022';
 if ( CheckVersion($DBversion) ) {
     my @temp= $dbh->selectrow_array(qq|
         SELECT count(*)
