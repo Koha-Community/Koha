@@ -5,6 +5,7 @@
 [% ELSIF ( create ) %]&rsaquo; Create from SQL
 [% ELSIF ( showsql ) %]&rsaquo; Saved reports &rsaquo; SQL view
 [% ELSIF ( execute ) %]&rsaquo; Saved reports &rsaquo; [% name %] Report
+[% ELSIF ( editsql ) %]&rsaquo; Saved reports &rsaquo; Edit SQL report
 [% ELSIF ( buildx ) %]&rsaquo; Build a report, step [% buildx %] of 6:
 [% IF ( build1 ) %]Choose a module
 [% ELSIF ( build2 ) %]Pick a report type
@@ -220,6 +221,7 @@ $(document).ready(function(){
 [% IF ( saved1 ) %]Saved reports
 [% ELSIF ( create ) %]Create from SQL
 [% ELSIF ( showsql ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; SQL view
+[% ELSIF ( editsql ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; Edit SQL report
 [% ELSIF ( execute ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; <em>[% name %]</em> Report
 [% ELSIF ( buildx ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build a report</a> &rsaquo; Step [% buildx %] of 6:
     [% IF ( build1 ) %]Choose a module
