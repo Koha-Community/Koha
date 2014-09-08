@@ -38,4 +38,4 @@ if (C4::Context->preference("OPACShelfBrowser")) {
     }
 }
 
-print $template->output;
+output_html_with_http_headers $cgi, $cookie, $template->output;
