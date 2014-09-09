@@ -84,21 +84,15 @@ if (@serialnums) { # i.e. they have been flagged to generate claims
 my $letters = GetLetters({ module => 'claimissues' });
 
 my @missingissues;
-my @supplierinfo;
 if ($supplierid) {
     @missingissues = GetLateOrMissingIssues($supplierid);
-    @supplierinfo=GetBookSeller($supplierid);
 }
 
 $template->param(
         suploop => $supplierlist,
-        phone => $supplierinfo[0]->{phone},
-        booksellerfax => $supplierinfo[0]->{booksellerfax},
-        bookselleremail => $supplierinfo[0]->{bookselleremail},
         missingissues => \@missingissues,
         supplierid => $supplierid,
         claimletter => $claimletter,
-        supplierloop => \@supplierinfo,
         branchloop   => $branchloop,
         csv_profiles => C4::Csv::GetCsvProfiles( "sql" ),
         letters => $letters,
