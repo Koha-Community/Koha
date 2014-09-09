@@ -68,13 +68,14 @@ use C4::Acquisition;
 use C4::Auth;
 use C4::Output;
 use C4::Dates qw/format_date/;
-use C4::Bookseller qw/ GetBookSellerFromId /;
 use C4::Budgets qw/ GetBudget GetBudgetHierarchy CanUserUseBudget GetBudgetPeriods /;
 use C4::Members;
 use C4::Branch;    # GetBranches
 use C4::Items;
 use C4::Biblio;
 use C4::Suggestions;
+
+use Koha::Acquisition::Bookseller;
 
 
 my $input      = new CGI;
@@ -89,7 +90,7 @@ my $ordernumber  = $input->param('ordernumber');
 
 $datereceived = $datereceived ? C4::Dates->new($datereceived, 'iso') : C4::Dates->new();
 
-my $bookseller = GetBookSellerFromId($booksellerid);
+my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 my $results;
 $results = SearchOrders({
     ordernumber => $ordernumber

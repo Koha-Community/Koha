@@ -48,9 +48,11 @@ use C4::Biblio;
 use C4::Output;
 use CGI;
 
-use C4::Bookseller qw( GetBookSellerFromId DelBookseller );
+use C4::Bookseller qw( DelBookseller );
 use C4::Bookseller::Contact;
 use C4::Budgets;
+
+use Koha::Acquisition::Bookseller;
 
 my $query    = CGI->new;
 my $op = $query->param('op') || 'display';
@@ -66,7 +68,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $booksellerid       = $query->param('booksellerid');
 my $supplier = {};
 if ($booksellerid) {
-    $supplier = GetBookSellerFromId($booksellerid);
+    $supplier = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
     foreach ( keys %{$supplier} ) {
         $template->{'VARS'}->{$_} = $supplier->{$_};
     }

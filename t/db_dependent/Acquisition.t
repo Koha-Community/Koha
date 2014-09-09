@@ -19,9 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use C4::Bookseller qw( GetBookSellerFromId );
-
-use Test::More tests => 87;
+use Test::More tests => 88;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -30,6 +28,7 @@ BEGIN {
     use_ok('C4::Budgets');
     use_ok('C4::Bookseller');
     use_ok('Koha::Acquisition::Order');
+    use_ok('Koha::Acquisition::Bookseller');
 }
 
 # Sub used for testing C4::Acquisition subs returning order(s):
@@ -132,7 +131,7 @@ my $booksellerid = C4::Bookseller::AddBookseller(
     }
 );
 
-my $booksellerinfo = C4::Bookseller::GetBookSellerFromId($booksellerid);
+my $booksellerinfo = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 
 is( $booksellerinfo->{deliverytime},
     5, 'set deliverytime when creating vendor (Bug 10556)' );

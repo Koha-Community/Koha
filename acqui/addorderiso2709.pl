@@ -39,13 +39,13 @@ use C4::Items;
 use C4::Koha;
 use C4::Budgets;
 use C4::Acquisition;
-use C4::Bookseller qw/GetBookSellerFromId/;
 use C4::Suggestions;    # GetSuggestion
 use C4::Branch;         # GetBranches
 use C4::Members;
 
 use Koha::Number::Price;
 use Koha::Acquisition::Order;
+use Koha::Acquisition::Bookseller;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie, $userflags) = get_template_and_user({
@@ -60,7 +60,7 @@ my ($template, $loggedinuser, $cookie, $userflags) = get_template_and_user({
 my $cgiparams = $input->Vars;
 my $op = $cgiparams->{'op'} || '';
 my $booksellerid  = $input->param('booksellerid');
-my $bookseller = GetBookSellerFromId($booksellerid);
+my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 my $data;
 
 $template->param(scriptname => "/cgi-bin/koha/acqui/addorderiso2709.pl",

@@ -76,7 +76,6 @@ use C4::Auth;
 use C4::Budgets;
 use C4::Input;
 
-use C4::Bookseller  qw/ GetBookSellerFromId /;
 use C4::Acquisition;
 use C4::Contract;
 use C4::Suggestions;	# GetSuggestion
@@ -91,6 +90,8 @@ use C4::Search qw/FindDuplicate/;
 
 #needed for z3950 import:
 use C4::ImportBatch qw/GetImportRecordMarc SetImportRecordStatus/;
+
+use Koha::Acquisition::Bookseller;
 
 our $input           = new CGI;
 my $booksellerid    = $input->param('booksellerid');	# FIXME: else ERROR!
@@ -131,7 +132,7 @@ if(!$basketno) {
 
 our $basket = GetBasket($basketno);
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
-my $bookseller = GetBookSellerFromId($booksellerid);
+my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 
 my $contract = GetContract({
     contractnumber => $basket->{contractnumber}

@@ -26,7 +26,6 @@ use C4::Auth;
 use C4::Output;
 use C4::Context;
 use C4::Acquisition;
-use C4::Bookseller qw/GetBookSellerFromId GetBookSeller/;
 use C4::Members;
 use C4::Dates qw/format_date_in_iso/;
 use Date::Calc qw/Today/;
@@ -55,12 +54,12 @@ if($order) {
     $bookselleridfrom = $basket->{booksellerid} if $basket;
 }
 
-my $booksellerfrom = GetBookSellerFromId($bookselleridfrom);
+my $booksellerfrom = Koha::Acquisition::Bookseller->fetch({ id => $bookselleridfrom });
 my $booksellerfromname;
 if($booksellerfrom){
     $booksellerfromname = $booksellerfrom->{name};
 }
-my $booksellerto = GetBookSellerFromId($bookselleridto);
+my $booksellerto = Koha::Acquisition::Bookseller->fetch({ id => $bookselleridto });
 my $booksellertoname;
 if($booksellerto){
     $booksellertoname = $booksellerto->{name};
@@ -70,7 +69,7 @@ if( $basketno && $ordernumber) {
     # Transfer order and exit
     my $order = GetOrder( $ordernumber );
     my $basket = GetBasket($order->{basketno});
-    my $booksellerfrom = GetBookSellerFromId($basket->{booksellerid});
+    my $booksellerfrom = Koha::Acquisition::Bookseller->fetch({ id => $basket->{booksellerid} });
     my $bookselleridfrom = $booksellerfrom->{id};
 
     TransferOrder($ordernumber, $basketno);
@@ -80,7 +79,7 @@ if( $basketno && $ordernumber) {
     # Show open baskets for this bookseller
     my $order = GetOrder( $ordernumber );
     my $basketfrom = GetBasket( $order->{basketno} );
-    my $booksellerfrom = GetBookSellerFromId( $basketfrom->{booksellerid} );
+    my $booksellerfrom = Koha::Acquisition::Bookseller->fetch({ id => $basketfrom->{booksellerid} });
     $booksellerfromname = $booksellerfrom->{name};
     my $baskets = GetBasketsByBookseller( $bookselleridto );
     my $basketscount = scalar @$baskets;
@@ -117,7 +116,7 @@ if( $basketno && $ordernumber) {
     # Search for booksellers to transfer from/to
     $op = '' unless $op;
     if( $op eq "do_search" ) {
-        my @booksellers = GetBookSeller($query);
+        my @booksellers = Koha::Acquisition::Bookseller->search({ name => $query });
         $template->param(
             query => $query,
             do_search => 1,

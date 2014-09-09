@@ -27,15 +27,16 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Dates qw/format_date format_date_in_iso/;
-use C4::Bookseller qw/GetBookSellerFromId/;
 use C4::Contract;
+
+use Koha::Acquisition::Bookseller;
 
 my $input          = new CGI;
 my $contractnumber = $input->param('contractnumber');
 my $booksellerid   = $input->param('booksellerid');
 my $op             = $input->param('op') || 'list';
 
-my $bookseller = GetBookSellerFromId($booksellerid);
+my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "admin/aqcontract.tt",

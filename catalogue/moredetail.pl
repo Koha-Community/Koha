@@ -27,7 +27,6 @@ use C4::Biblio;
 use C4::Items;
 use C4::Branch;
 use C4::Acquisition;
-use C4::Bookseller qw(GetBookSellerFromId);
 use C4::Output;
 use C4::Auth;
 use C4::Serials;
@@ -36,6 +35,8 @@ use C4::Members; # to use GetMember
 use C4::Search;		# enabled_staff_search_views
 use C4::Members qw/GetHideLostItemsPreference/;
 use C4::Reserves qw(GetReservesFromBiblionumber);
+
+use Koha::Acquisition::Bookseller;
 use Koha::DateUtils;
 
 my $query=new CGI;
@@ -161,7 +162,7 @@ foreach my $item (@items){
     $item->{'orderdate'}               = $order->{'entrydate'};
     if ($item->{'basketno'}){
 	    my $basket = GetBasket($item->{'basketno'});
-	    my $bookseller = GetBookSellerFromId($basket->{'booksellerid'});
+        my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $basket->{booksellerid} });
 	    $item->{'vendor'} = $bookseller->{'name'};
     }
     $item->{'invoiceid'}               = $order->{'invoiceid'};

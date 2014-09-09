@@ -28,7 +28,7 @@ use C4::Bookseller::Contact;
 # set the version for version checking
 our $VERSION   = 3.07.00.049;
 our @EXPORT_OK = qw(
-  GetBookSeller GetBooksellersWithLateOrders GetBookSellerFromId
+  GetBooksellersWithLateOrders
   ModBookseller
   DelBookseller
   AddBookseller
@@ -49,55 +49,6 @@ add a new bookseller, to modify it or to get some informations around
 a bookseller.
 
 =head1 FUNCTIONS
-
-=head2 GetBookSeller
-
-@results = GetBookSeller($searchstring);
-
-Looks up a book seller. C<$searchstring> is a string to look for in the
-book seller's name.
-
-C<@results> is an array of hash_refs whose keys are the fields of of the
-aqbooksellers table in the Koha database.
-
-=cut
-
-sub GetBookSeller {
-    my $searchstring = shift;
-    $searchstring = q{%} . $searchstring . q{%};
-    my $query = "
-        SELECT aqbooksellers.*, count(*) AS basketcount
-        FROM aqbooksellers
-        LEFT JOIN aqbasket ON aqbasket.booksellerid = aqbooksellers.id
-        WHERE name LIKE ? GROUP BY aqbooksellers.id ORDER BY name
-    ";
-
-    my $dbh           = C4::Context->dbh;
-    my $sth           = $dbh->prepare($query);
-    $sth->execute($searchstring);
-    my $resultset_ref = $sth->fetchall_arrayref( {} );
-    return @{$resultset_ref};
-}
-
-sub GetBookSellerFromId {
-    my $id = shift or return;
-    my $dbh = C4::Context->dbh;
-    my $vendor =
-      $dbh->selectrow_hashref( 'SELECT * FROM aqbooksellers WHERE id = ?',
-        {}, $id );
-    if ($vendor) {
-        ( $vendor->{basketcount} ) = $dbh->selectrow_array(
-            'SELECT count(*) FROM aqbasket where booksellerid = ?',
-            {}, $id );
-        ( $vendor->{subscriptioncount} ) = $dbh->selectrow_array(
-            'SELECT count(*) FROM subscription WHERE aqbooksellerid = ?',
-            {}, $id );
-        $vendor->{'contacts'} = C4::Bookseller::Contact->get_from_bookseller($id);
-    }
-    return $vendor;
-}
-
-#-----------------------------------------------------------------#
 
 =head2 GetBooksellersWithLateOrders
 
@@ -231,7 +182,7 @@ in the Koha database. It must contain entries for all of the fields.
 The entry to modify is determined by C<$bookseller-E<gt>{id}>.
 
 The easiest way to get all of the necessary fields is to look up a
-book seller with C<&GetBookseller>, modify what's necessary, then call
+book seller with C<Koha::Acquisition::Bookseller>, modify what's necessary, then call
 C<&ModBookseller> with the result.
 
 =cut

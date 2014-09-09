@@ -60,9 +60,10 @@ use C4::Output;
 use CGI;
 
 use C4::Acquisition qw/ GetBasketsInfosByBookseller CanUserManageBasket /;
-use C4::Bookseller qw/ GetBookSellerFromId GetBookSeller /;
 use C4::Members qw/GetMember/;
 use C4::Context;
+
+use Koha::Acquisition::Bookseller;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
@@ -82,9 +83,9 @@ my $allbaskets= $query->param('allbaskets')||0;
 my @suppliers;
 
 if ($booksellerid) {
-    push @suppliers, GetBookSellerFromId($booksellerid);
+    push @suppliers, Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 } else {
-    @suppliers = GetBookSeller($supplier);
+    @suppliers = Koha::Acquisition::Bookseller->search({ name => $supplier });
 }
 
 my $supplier_count = @suppliers;

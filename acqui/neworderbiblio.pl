@@ -60,13 +60,14 @@ use strict;
 
 use C4::Search;
 use CGI;
-use C4::Bookseller qw/ GetBookSellerFromId /;
 use C4::Biblio;
 use C4::Auth;
 use C4::Output;
 use C4::Koha;
 use C4::Members qw/ GetMember /;
 use C4::Budgets qw/ GetBudgetHierarchy /;
+
+use Koha::Acquisition::Bookseller;
 
 my $input = new CGI;
 
@@ -79,7 +80,7 @@ my $results_per_page = $params->{'num'} || 20;
 my $booksellerid     = $params->{'booksellerid'};
 my $basketno         = $params->{'basketno'};
 my $sub              = $params->{'sub'};
-my $bookseller = GetBookSellerFromId($booksellerid);
+my $bookseller       = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 
 # getting the template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

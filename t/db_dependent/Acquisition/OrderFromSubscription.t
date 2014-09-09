@@ -1,10 +1,10 @@
 use Modern::Perl;
 
-use Test::More tests => 12;
-use Data::Dumper;
+use Test::More tests => 13;
 
 use_ok('C4::Acquisition');
 use_ok('C4::Biblio');
+use_ok('C4::Bookseller');
 use_ok('C4::Budgets');
 use_ok('C4::Serials');
 

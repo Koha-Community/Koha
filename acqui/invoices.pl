@@ -34,7 +34,6 @@ use C4::Auth;
 use C4::Output;
 
 use C4::Acquisition qw/GetInvoices/;
-use C4::Bookseller qw/GetBookSeller/;
 use C4::Branch qw/GetBranches/;
 use C4::Budgets;
 
@@ -87,7 +86,7 @@ if ( $op and $op eq 'do_search' ) {
 }
 
 # Build suppliers list
-my @suppliers      = GetBookSeller(undef);
+my @suppliers      = Koha::Acquisition::Bookseller->search;
 my $suppliers_loop = [];
 my $suppliername;
 foreach (@suppliers) {

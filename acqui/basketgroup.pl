@@ -52,12 +52,12 @@ use C4::Auth;
 use C4::Output;
 use CGI;
 
-use C4::Bookseller qw/GetBookSellerFromId/;
 use C4::Budgets qw/ConvertCurrency/;
 use C4::Acquisition qw/CloseBasketgroup ReOpenBasketgroup GetOrders GetBasketsByBasketgroup GetBasketsByBookseller ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroups ModBasket GetBasketgroup GetBasket GetBasketGroupAsCSV/;
-use C4::Bookseller qw/GetBookSellerFromId/;
 use C4::Branch qw/GetBranches/;
 use C4::Members qw/GetMember/;
+
+use Koha::Acquisition::Bookseller;
 
 our $input=new CGI;
 
@@ -144,7 +144,7 @@ sub printbasketgrouppdf{
     }
     
     my $basketgroup = GetBasketgroup($basketgroupid);
-    my $bookseller = GetBookSellerFromId($basketgroup->{'booksellerid'});
+    my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $basketgroup->{booksellerid} });
     my $baskets = GetBasketsByBasketgroup($basketgroupid);
     
     my %orders;
@@ -255,7 +255,7 @@ if ( $op eq "add" ) {
 # else, edit (if it is open) or display (if it is close) the basketgroup basketgroupid
 # the template will know if basketgroup must be displayed or edited, depending on the value of closed key
 #
-    my $bookseller = &GetBookSellerFromId($booksellerid);
+    my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
     my $basketgroupid = $input->param('basketgroupid');
     my $billingplace;
     my $deliveryplace;
@@ -402,7 +402,7 @@ if ( $op eq "add" ) {
 }else{
 # no param : display the list of all basketgroups for a given vendor
     my $basketgroups = &GetBasketgroups($booksellerid);
-    my $bookseller = &GetBookSellerFromId($booksellerid);
+    my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
     my $baskets = &GetBasketsByBookseller($booksellerid);
 
     displaybasketgroups($basketgroups, $bookseller, $baskets);

@@ -28,10 +28,10 @@ use C4::Suggestions;
 use C4::Biblio;
 use C4::Contract;
 use C4::Debug;
-use C4::Bookseller qw(GetBookSellerFromId);
 use C4::Templates qw(gettemplate);
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Order;
+use Koha::Acquisition::Bookseller;
 
 use Time::localtime;
 use HTML::Entities;
@@ -366,7 +366,7 @@ sub GetBasketGroupAsCSV {
         my $contract   = GetContract({
             contractnumber => $basket->{contractnumber}
         });
-        my $bookseller = GetBookSellerFromId( $$basket{booksellerid} );
+        my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $basket->{booksellerid} });
         my $basketgroup = GetBasketgroup( $$basket{basketgroupid} );
 
         foreach my $order (@orders) {

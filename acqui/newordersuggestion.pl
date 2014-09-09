@@ -95,8 +95,9 @@ use CGI;
 use C4::Auth;    # get_template_and_user
 use C4::Output;
 use C4::Suggestions;
-use C4::Bookseller qw/ GetBookSellerFromId /;
 use C4::Biblio;
+
+use Koha::Acquisition::Bookseller;
 
 my $input = new CGI;
 
@@ -136,7 +137,7 @@ my $suggestions_loop = SearchSuggestion(
         STATUS        => 'ACCEPTED'
     }
 );
-my $vendor = GetBookSellerFromId($booksellerid);
+my $vendor = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 $template->param(
     suggestions_loop        => $suggestions_loop,
     basketno                => $basketno,

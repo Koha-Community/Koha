@@ -48,7 +48,8 @@ use C4::Output;
 use CGI;
 use C4::Acquisition qw( SearchOrders );
 use C4::Dates qw/format_date/;
-use C4::Bookseller qw( GetBookSeller );
+
+use Koha::Acquisition::Bookseller;
 
 my $query=new CGI;
 my ($template, $loggedinuser, $cookie)
@@ -61,7 +62,7 @@ my ($template, $loggedinuser, $cookie)
                  });
 
 my $supplier=$query->param('supplier');
-my @suppliers = GetBookSeller($supplier);
+my @suppliers = Koha::Acquisition::Bookseller->search({ name => $supplier });
 #my $count = scalar @suppliers;
 
 #build result page

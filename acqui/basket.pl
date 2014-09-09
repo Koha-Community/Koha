@@ -29,7 +29,6 @@ use CGI;
 use C4::Acquisition;
 use C4::Budgets;
 use C4::Branch;
-use C4::Bookseller qw( GetBookSellerFromId);
 use C4::Contract;
 use C4::Debug;
 use C4::Biblio;
@@ -83,7 +82,7 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
 
 my $basket = GetBasket($basketno);
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
-my ($bookseller) = GetBookSellerFromId($booksellerid);
+my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 
 unless (CanUserManageBasket($loggedinuser, $basket, $userflags)) {
     $template->param(
@@ -519,7 +518,7 @@ sub get_order_infos {
         if ($line{$key}) {
             my $order = GetOrder($line{$key});
             my $basket = GetBasket($order->{basketno});
-            my $bookseller = GetBookSellerFromId($basket->{booksellerid});
+            my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $basket->{booksellerid} });
             $line{$key} = {
                 order => $order,
                 basket => $basket,

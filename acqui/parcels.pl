@@ -74,8 +74,9 @@ use C4::Output;
 
 use C4::Dates qw/format_date/;
 use C4::Acquisition;
-use C4::Bookseller qw/ GetBookSellerFromId /;
 use C4::Budgets;
+
+use Koha::Acquisition::Bookseller;
 
 my $input          = CGI->new;
 my $booksellerid     = $input->param('booksellerid');
@@ -140,7 +141,7 @@ if ($op and $op eq 'confirm') {
     }
 }
 
-my $bookseller = GetBookSellerFromId($booksellerid);
+my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 my @parcels = GetInvoices(
     supplierid => $booksellerid,
     invoicenumber => $code,

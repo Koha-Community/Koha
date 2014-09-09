@@ -3,13 +3,13 @@
 # This Koha test module is a stub!
 # Add more tests here!!!
 
-use strict;
-use warnings;
+use Modern::Perl;
 
-use C4::Bookseller qw( GetBookSellerFromId );
 use C4::Biblio qw( AddBiblio );
+use C4::Bookseller qw( AddBookseller );
 
 use Koha::Acquisition::Order;
+use Koha::Acquisition::Bookseller;
 
 use Test::More tests => 22;
 
@@ -32,7 +32,7 @@ my $booksellerid = C4::Bookseller::AddBookseller(
     }
 );
 
-my $booksellerinfo = GetBookSellerFromId( $booksellerid );
+my $booksellerinfo = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 my $basketno = NewBasket($booksellerid, 1);
 my $basket   = GetBasket($basketno);
 

@@ -31,6 +31,9 @@ use C4::Biblio;
 use C4::Bookseller;
 use C4::Items;
 use C4::Search;
+
+use Koha::Acquisition::Bookseller;
+
 use List::MoreUtils qw/any/;
 
 my $input=new CGI;
@@ -83,7 +86,7 @@ if ($quantityrec > $origquantityrec ) {
     $order->{rrp} = $rrp;
     $order->{ecost} = $ecost;
     $order->{unitprice} = $unitprice;
-    my $bookseller = C4::Bookseller::GetBookSellerFromId($booksellerid);
+    my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
     if ( $bookseller->{listincgst} ) {
         if ( not $bookseller->{invoiceincgst} ) {
             $order->{rrp} = $order->{rrp} * ( 1 + $order->{gstrate} );

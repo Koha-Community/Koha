@@ -60,7 +60,6 @@ use warnings;
 use C4::Auth;
 use C4::Acquisition;
 use C4::Budgets;
-use C4::Bookseller qw/ GetBookSellerFromId /;
 use C4::Biblio;
 use C4::Items;
 use CGI;
@@ -68,6 +67,9 @@ use C4::Output;
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Suggestions;
 use C4::Reserves qw/GetReservesFromBiblionumber/;
+
+use Koha::Acquisition::Bookseller;
+
 use JSON;
 
 my $input=new CGI;
@@ -145,7 +147,7 @@ unless( $invoiceid and $invoice->{invoiceid} ) {
 }
 
 my $booksellerid = $invoice->{booksellerid};
-my $bookseller = GetBookSellerFromId($booksellerid);
+my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 my $gst = $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
 my $datereceived = C4::Dates->new();
 

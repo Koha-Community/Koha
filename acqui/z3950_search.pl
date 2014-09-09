@@ -28,7 +28,8 @@ use C4::Output;
 use C4::Context;
 use C4::Breeding;
 use C4::Koha;
-use C4::Bookseller qw/ GetBookSellerFromId /;
+
+use Koha::Acquisition::Bookseller;
 
 my $input           = new CGI;
 my $biblionumber    = $input->param('biblionumber')||0;
@@ -62,7 +63,7 @@ foreach my $thisframeworkcode ( keys %$frameworks ) {
     push @frameworkcodeloop, \%row;
 }
 
-my $vendor = GetBookSellerFromId($booksellerid);
+my $vendor = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

@@ -33,8 +33,9 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Acquisition;
-use C4::Bookseller qw/GetBookSellerFromId/;
 use C4::Budgets;
+
+use Koha::Acquisition::Bookseller;
 use Koha::Misc::Files;
 
 my $input = new CGI;
@@ -109,7 +110,7 @@ elsif ( $op && $op eq 'delete' ) {
 
 
 my $details = GetInvoiceDetails($invoiceid);
-my $bookseller = GetBookSellerFromId($details->{booksellerid});
+my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $details->{booksellerid} });
 my @orders_loop = ();
 my $orders = $details->{'orders'};
 my $qty_total;

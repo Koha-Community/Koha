@@ -21,11 +21,12 @@ use Modern::Perl;
 use CGI;
 use C4::Acquisition;
 use C4::Auth;
-use C4::Bookseller qw/GetBookSellerFromId/;
 use C4::Branch;
 use C4::Context;
 use C4::Output;
 use C4::Serials;
+
+use Koha::Acquisition::Bookseller;
 
 my $query        = new CGI;
 my $title        = $query->param('title_filter');
@@ -52,7 +53,7 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 
 my $basket = GetBasket($basketno);
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
-my ($bookseller) = GetBookSellerFromId($booksellerid);
+my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 
 my @subscriptions;
 if ($searched) {

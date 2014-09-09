@@ -44,6 +44,7 @@ use_ok('C4::Letters');
 use t::lib::Mocks;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Order;
+use Koha::Acquisition::Bookseller;
 
 my $dbh = C4::Context->dbh;
 
@@ -326,10 +327,10 @@ warning_like {
     "SendAlerts prints a warning";
 is($err->{'error'}, 'no_email', "Trying to send an alert when there's no e-mail results in an error");
 
-my $bookseller = C4::Bookseller::GetBookSellerFromId($booksellerid);
-$bookseller->{'contacts'}->[0]->email('testemail@mydomain.com');
+my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+$bookseller->contacts->[0]->email('testemail@mydomain.com');
 C4::Bookseller::ModBookseller($bookseller);
-$bookseller = C4::Bookseller::GetBookSellerFromId($booksellerid);
+$bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 
 warning_is {
     $err = SendAlerts( 'claimacquisition', [ $ordernumber ], 'TESTACQCLAIM' ) }

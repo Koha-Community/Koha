@@ -19,7 +19,6 @@ use Modern::Perl;
 use CGI;
 use C4::Acquisition;
 use C4::Auth;
-use C4::Bookseller qw/GetBookSellerFromId/;
 use C4::Budgets;
 use C4::Koha;
 use C4::Dates qw/format_date/;
@@ -27,6 +26,9 @@ use C4::Serials;
 use C4::Output;
 use C4::Context;
 use C4::Search qw/enabled_staff_search_views/;
+
+use Koha::Acquisition::Bookseller;
+
 use Date::Calc qw/Today Day_of_Year Week_of_Year Add_Delta_Days/;
 use Carp;
 
@@ -117,7 +119,7 @@ if ( defined $subscriptionid ) {
     my $lastOrderReceived = GetLastOrderReceivedFromSubscriptionid $subscriptionid;
     if ( defined $lastOrderNotReceived ) {
         my $basket = GetBasket $lastOrderNotReceived->{basketno};
-        my $bookseller = GetBookSellerFromId $basket->{booksellerid};
+        my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $basket->{booksellerid} });
         ( $tmpl_infos->{valuegsti_ordered}, $tmpl_infos->{valuegste_ordered} ) = get_value_with_gst_params ( $lastOrderNotReceived->{ecost}, $lastOrderNotReceived->{gstrate}, $bookseller );
         $tmpl_infos->{valuegsti_ordered} = sprintf( "%.2f", $tmpl_infos->{valuegsti_ordered} );
         $tmpl_infos->{valuegste_ordered} = sprintf( "%.2f", $tmpl_infos->{valuegste_ordered} );
@@ -127,7 +129,7 @@ if ( defined $subscriptionid ) {
     }
     if ( defined $lastOrderReceived ) {
         my $basket = GetBasket $lastOrderReceived->{basketno};
-        my $bookseller = GetBookSellerFromId $basket->{booksellerid};
+        my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $basket->{booksellerid} });
         ( $tmpl_infos->{valuegsti_spent}, $tmpl_infos->{valuegste_spent} ) = get_value_with_gst_params ( $lastOrderReceived->{unitprice}, $lastOrderReceived->{gstrate}, $bookseller );
         $tmpl_infos->{valuegsti_spent} = sprintf( "%.2f", $tmpl_infos->{valuegsti_spent} );
         $tmpl_infos->{valuegste_spent} = sprintf( "%.2f", $tmpl_infos->{valuegste_spent} );
