@@ -1,0 +1,392 @@
+#!/usr/bin/perl
+
+use Modern::Perl;
+
+## SYNOPSIS
+#
+#
+#
+
+use File::Basename;
+use Getopt::Long qw(:config no_ignore_case);
+
+my $kohaLogDirectory = "/home/koha/koha-dev/var/log/";
+my $help = 0;
+my $verbose = 0;
+my $cursive = 0;
+my $validateCrontabConfiguration = 0;
+my $checkMinutelyCronjobs = 0;
+my $checkHourlyCronjobs = 0;
+my $checkDailyCronjobs = 0;
+my $checkWeeklyCronjobs = 0;
+my $checkMonthlyCronjobs = 0;
+my $checkAnnualCronjobs = 0;
+my $debugLogwarn = ''; #Sets the logwarn flag -z active to analyze the whole logfile, instead of just the recent changes.
+
+GetOptions(
+    'h|help|?'     => \$help,
+    'V|validate'   => \$validateCrontabConfiguration,
+    'H|hourly'     => \$checkHourlyCronjobs,
+    'm|minutely'   => \$checkMinutelyCronjobs,
+    'D|daily'      => \$checkDailyCronjobs,
+    'W|weekly'     => \$checkWeeklyCronjobs,
+    'M|monthly'    => \$checkMonthlyCronjobs,
+    'A|annually'   => \$checkAnnualCronjobs,
+    'v|verbose=i'  => \$verbose,
+    'l|logdir=s'   => \$kohaLogDirectory,
+    'c|cursive'    => \$cursive,
+    'd|debuglogwarn' => \$debugLogwarn,
+);
+
+$debugLogwarn = ($debugLogwarn eq '1') ? ' -z ' : '';
+
+my $usage = << 'ENDUSAGE';
+
+REQUIREMENTS:
+install logwarn from https://code.google.com/p/logwarn/
+Read rights to the crontab file of the crontab user.
+
+SUMMARY:
+This script scans the log output of all the defined Koha cronjobs and prints to screen if any new
+errors are found or if the scripts haven't ran for some reason.
+It is important to understand logwarn's method of scanning log files:
+Logwarn, every time it is invoked, remembers the last position of the logfile it is reading. Running
+it more often than the cronjob, causes this script to warn, because it thinks the cronjob failed to run.
+Thus from the checking point of view it is important to configure the different analysis frequencies.
+
+It is safe to analyze following script types regularly at the following intervals
+  --minutely scripts once an hour
+  --hourly and daily scripts once a day
+  --weekly scripts once a week
+  --monthly scripts once a month
+  --annually scripts once a year
+
+LIMITATIONS:
+-It is important to note that if a cronjob hasn't ran atleast once before this monitoring script is triggered,
+ this script will think that there is an error in running that cronjob.
+-This script might not catch "flapping" cronjobs. Cronjobs which sometimes run and sometimes don't.
+-This script makes logwarn look for error markers. Not all error markers have been discovered and thus logwarn
+ might not catch all errors.
+
+
+This script has the following parameters :
+
+    -h --help         this message
+
+    -V --validate     Validate the crontab configuration at /var/spool/cron/crontabs/koha.
+                      Script tells you if the timing is not optimal or if you have missing
+                      cronjob definitions. This feature requires read access to the crontab file.
+                      Validation rules are defined in this script and can be changed to suit one's needs.
+
+    -A --annually     Analyze annually ran cronjobs that are ran few times a year.
+
+    -M --monthly      Analyze monthly cronjobs that are ran few times or once a month.
+
+    -W --weekly       Analyze weekly cronjobs.
+
+    -D --daily        Analyze cronjobs that are ran daily.
+
+    -H --hourly       Analyze hourly cronjobs, this means all cronjobs that are ran many times a day.
+
+    -m --minutely     Analyze minutely cronjobs, this means cronjobs that are ran many times per hour, or once a hour.
+
+    -l --logdir       Change the directory to look for Koha cronjob logs.
+                      Defaults to /home/koha/koha-dev/var/log/
+
+    -c --cursive      Output only very shy indicators of success and/or failure.
+                      Meant to be used from a remote monitoring tool.
+
+    -v --verbose      show verbose information about script internals on few levels.
+                      --verbose 1, prints basic verbose output
+                      --verbose 2, also prints more detailed internal behaviour
+
+    -d --debuglogwarn Sets the logwarn flag -p active to analyze the whole logfile,
+                      instead of just the recent changes.
+
+ENDUSAGE
+
+die $usage if $help;
+
+if (   not($validateCrontabConfiguration) && not($checkMinutelyCronjobs) && not($checkHourlyCronjobs)
+    && not($checkDailyCronjobs) && not($checkWeeklyCronjobs) && not($checkMonthlyCronjobs)
+    && not($checkAnnualCronjobs)
+   ) {
+    die "\nYou must define atleast one of the following operations! -V -D -H -M -W\n\n$usage";
+}
+
+
+## SET CRONJOB VALIDATION RULES, MARKERS AND EXPECTED VALUES
+my $cronjobs = {
+    "advance_notices.pl" => {
+        "recommendedCronschedule" => "25 0 * * *",
+        "errorMarkers" => [ "",""],
+    },
+    "cart_to_shelf.pl" => {
+        "recommendedCronschedule" => "15 0 * * *",
+        "errorMarkers" => [ "",""],
+    },
+    "check-url-quick.pl" => {
+        "recommendedCronschedule" => "0 0 2 * *",
+        "errorMarkers" => [ "",""],
+    },
+    "cleanup_database.pl" => {
+        "recommendedCronschedule" => "0 6 * * 7",
+        "errorMarkers" => [ "",""],
+    },
+    "cloud-kw.pl" => {
+        "recommendedCronschedule" => "30 1 1 * *",
+        "errorMarkers" => [ "",""],
+    },
+    "create_koc_db.pl" => {
+        "recommendedCronschedule" => "45 0 * * *",
+        "errorMarkers" => [ "",""],
+    },
+    "delete_expired_opac_registrations.pl" => {
+        "recommendedCronschedule" => "0 0 * * *",
+        "errorMarkers" => [ "",""],
+    },
+    "fines.pl" => {
+        "recommendedCronschedule" => "30 00 * * *",
+        "errorMarkers" => [ "",""],
+    },
+    "gather_print_notices.pl" => {
+        "recommendedCronschedule" => "50 23 * * *",
+        "errorMarkers" => [ "",""],
+    },
+    "j2a.pl" => {
+        "recommendedCronschedule" => "0 0 * * *",
+        "errorMarkers" => [ "",""],
+    },
+    "overdue_notices.pl" => {
+        "recommendedCronschedule" => "35 0 * * *",
+        "errorMarkers" => [ "",""],
+    },
+    "process_message_queue.pl" => {
+        "recommendedCronschedule" => "* * * * *",
+        "errorMarkers" => [ "",""],
+    },
+    "pullSelectionListsFromBookvendors.pl" => {
+        "recommendedCronschedule" => "20 0 * * *",
+        "errorMarkers" => [ "",""],
+    },
+    "purge_suggestions.pl" => {
+        "recommendedCronschedule" => "0 0 15 */6 *",
+        "errorMarkers" => [ "",""],
+    },
+    "removeShortLoanStatus.pl" => {
+        "recommendedCronschedule" => "0 0 * * 7",
+        "errorMarkers" => [ "",""],
+    },
+    "send_overdue_mail.pl" => {
+        "recommendedCronschedule" => "5 1 * * 2",
+        "errorMarkers" => [ "",""],
+    },
+    "serialsUpdate.pl" => {
+        "recommendedCronschedule" => "20 0 * * *",
+        "errorMarkers" => [ "",""],
+    },
+    "smsalertnumberFromPhone.pl" => {
+        "recommendedCronschedule" => "*/30 * * * *",
+        "errorMarkers" => [ "",""],
+    },
+    "update_totalissues.pl" => {
+        "recommendedCronschedule" => "10 1 * * *",
+        "errorMarkers" => [ "",""],
+    },
+    "auto_unsuspend_holds.pl" => {
+        "recommendedCronschedule" => "4 0 * * *",
+        "errorMarkers" => [ "",""],
+    },
+    "build_holds_queue.pl" => {
+        "recommendedCronschedule" => "0 * * * *",
+        "errorMarkers" => [ "",""],
+    },
+    "cancel_expired_holds.pl" => {
+        "recommendedCronschedule" => "5 0 * * *",
+        "errorMarkers" => [ "",""],
+    },
+};
+
+##These regexp's are passed to logwarn to check against.
+my @knownErrorRegexps = (
+    "'^BEGIN failed\-\-'",
+    "'^syntax error at'",
+    "'^Global symbol'",
+    "'^DBD\:\:'",
+    "'Permission denied'",
+    "'^Use of uninitialized value'",
+    "'^Disabled by disableCronjobsFlag'",
+    "'^Lockfile present'",
+    "'at /home/koha/kohaclone/'",
+    "'ERRORS WERE FOUND'",
+    "'Cannot determine local time zone'",
+);
+
+my @failedCronjobs; #This is needed to communicate cursively only the failed cronjobs, with no extra log output.
+
+
+main(); #Friends don't let friends write unscoped script monsters :)
+
+
+sub main {
+    open(my $KOHACRON, "<:encoding(utf8)", "/home/koha/koha-dev/etc/koha_crontab_clone") or die "Failed to open crontab file for reading: ".$!;
+
+    while (<$KOHACRON>) {
+
+#next unless $_ =~ 'process_message_queue.pl';
+        my $cronEntry = $_; chomp $cronEntry;
+        my ($schedule, $m, $h, $dom, $mon, $dow);
+        my ($jobTimingCategory);
+        my ($name, $path, $suffix);
+        next() if $cronEntry =~ /^#/; #Skip comment lines
+        next() if $cronEntry =~ /^\s*$/; #Skip empty lines
+
+        print "\nStarting processing this cron entry:\n$cronEntry\n" if ( $verbose > 1 && not($cursive) );
+
+        my $manyTimes = '^\*/?[0-9]*$';
+        my $fewTimesOrOnce  = '^\*?/?[0-9]+';
+        my $once      = '^[0-9]+$';
+        ##Extract the schedule portion
+        if ($cronEntry =~ s|^(([*/0-9]{1,4})\s+([*/0-9]{1,4})\s+([*/0-9]{1,4})\s+([*/0-9]{1,4})\s+([*/0-9]{1,4}))\s+||) {
+            $schedule = $1; $m = $2; $h = $3; $dom = $4; $mon = $5; $dow = $6;
+
+            if ($mon =~ m|$fewTimesOrOnce|) {
+                $jobTimingCategory = 'annally';
+            }
+            elsif ($dom =~ m|$fewTimesOrOnce|) {
+                $jobTimingCategory = 'Monthly'; #Monthly is capitalized to separate it from minutely
+            }
+            elsif ($dow =~ m|$fewTimesOrOnce|) {
+                $jobTimingCategory = 'weekly';
+            }
+            elsif ($m =~ m|$once| && $h =~ m|$once|) {
+                $jobTimingCategory = 'daily';
+            }
+            elsif ($h =~ m|$manyTimes| && $m =~ m|$once|) {
+                $jobTimingCategory = 'hourly';
+            }
+            elsif ( $m =~ m|$manyTimes| ) {
+                $jobTimingCategory = 'minutely';
+            }
+        }
+        else {
+            print "Couldn't parse the cronjob scheduling portion of $cronEntry\n";
+            push @failedCronjobs, $cronEntry;
+            next();
+        }
+        print "This is a $jobTimingCategory cronjob\n" if ( $verbose > 1 && not($cursive) );
+        ##Extract the basename portion to match cronjob definitions.
+        #Doesn't work with cronjobs with a space ' ' in them!
+        if ($cronEntry =~ /\$KOHA_CRONJOB_TRIGGER\s+([^# ]+)/) {
+            ($name, $path, $suffix) = File::Basename::fileparse( $1 );
+            chomp $name;
+        }
+        else {
+            print "Couldn't get the command portion of cronjob $cronEntry\n";
+            push @failedCronjobs, $cronEntry;
+            next();
+        }
+
+        validateCronjob($schedule, $name) if $validateCrontabConfiguration;
+
+        if ($checkMinutelyCronjobs && $jobTimingCategory =~ /^m/) {
+            checkCronjob($name, $path);
+        }
+        elsif ($checkHourlyCronjobs && $jobTimingCategory =~ /^h/) {
+            checkCronjob($name, $path);
+        }
+        elsif ($checkDailyCronjobs && $jobTimingCategory =~ /^d/) {
+            checkCronjob($name, $path);
+        }
+        elsif ($checkWeeklyCronjobs && $jobTimingCategory =~ /^w/) {
+            checkCronjob($name, $path);
+        }
+        elsif ($checkMonthlyCronjobs && $jobTimingCategory =~ /^M/) { #Monthly is capitalized so it wont get mixed with 'minutely'
+            checkCronjob($name, $path);
+        }
+        elsif ($checkAnnualCronjobs && $jobTimingCategory =~ /^a/) {
+            checkCronjob($name, $path);
+        }
+        else {
+            print "Doing nothing because not of the requested timing frequencey\n" if ($verbose > 1 && not($cursive));
+        }
+    }
+
+    #Check for any missing cronjobs
+    if ($validateCrontabConfiguration) {
+        foreach my $job (sort keys %$cronjobs) {
+            print "$job is not defined in the crontab!\n" unless exists $cronjobs->{$job}->{found};
+        }
+    }
+
+    #Print a report of failed cronjobs
+    if ($cursive) {
+        if (scalar(@failedCronjobs)) {
+            print "@failedCronjobs";
+            exit 2; #Signal Nagios to critical this!
+        }
+        else {
+            print "OK!";
+            exit 0; #Signal Nagios to exit OK!
+        }
+    }
+}
+
+sub validateCronjob {
+    my ($cronjobSchedule, $cronjobName) = @_;
+
+    my $cronjobRecommendation = $cronjobs->{$cronjobName};
+
+    return unless $cronjobRecommendation;
+
+    if ($cronjobSchedule eq $cronjobRecommendation->{recommendedCronschedule}) {
+        print "Validated $cronjobName\n" if $verbose;
+    }
+    else {
+        print "Not recommended cronjob schedule for $cronjobName. This is recommended:\n".$cronjobRecommendation->{recommendedCronschedule}."\n";
+    }
+    $cronjobRecommendation->{found} = 1;
+}
+
+sub checkCronjob {
+    my ($cronjob, $path) = @_;
+
+    if ($cronjobs->{$cronjob}->{checked}) {
+        #Don't check twice, because the first run already read all the fresh log entries and subsequent reads will fail!
+        print "Trying to run this $cronjob many times, skipping." if ( $verbose > 1 && not($cursive) );
+        return;
+    }
+    $cronjobs->{$cronjob}->{checked} = 1;
+
+    #Check if we even tried to run the cronjob?
+#    my $date = `date --date @\$((\$(date +%s)-3600)) -Idate`;
+#    chomp $date;
+    my $logwarnCmd = "logwarn -d /var/lib/nagios/.logwarn/ -p $debugLogwarn $kohaLogDirectory$path$cronjob.log 'Start: ' 2>&1 ";
+    open( my $LOGWARN_DIDITRUN, "$logwarnCmd |" ) or warn "Can't run '$logwarnCmd\n$!\n'";
+    my $errors = 0;
+    my $lastRuntime = 0;
+
+    while (<$LOGWARN_DIDITRUN>) {
+        $lastRuntime = $_;
+    }
+    if ($lastRuntime) {
+        print "Ran OK+ $cronjob :> $lastRuntime\n" if ( $verbose && not($cursive) );
+    }
+    else {
+        print "Run FAILed! $cronjob\n" if ( not($cursive));
+        $errors++;
+    }
+    close($LOGWARN_DIDITRUN);
+
+    #Check if we get errors from the cronjob
+    $logwarnCmd = "logwarn -d /var/lib/nagios/.logwarn/ -p $debugLogwarn $kohaLogDirectory$path$cronjob.log @knownErrorRegexps";
+    open( my $LOGWARN_ERRORS, "$logwarnCmd |" ) or warn "Can't run '$logwarnCmd\n$!\n'";
+    while (<$LOGWARN_ERRORS>) {
+        print "Error on $cronjob :> $_\n" if (not($cursive));
+        $errors++;
+        last();
+    }
+    close($LOGWARN_ERRORS);
+
+    push @failedCronjobs, $cronjob if $errors;
+}
