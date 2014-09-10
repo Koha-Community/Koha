@@ -1,6 +1,6 @@
 <tfoot>
 	<tr>
-        <td colspan="8" style="text-align: right; font-weight:bold;">Totals:</td>
+        <td colspan="9" style="text-align: right; font-weight:bold;">Totals:</td>
 		<td>[% totaldue %]</td>
 		<td>[% totalprice %]</td>
                 <td colspan="3"><div class="date-select">
