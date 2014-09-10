@@ -6,12 +6,14 @@ use t::lib::Mocks;
 use C4::Context;
 use C4::Branch;
 
-use Test::More tests => 35;
+use Test::More tests => 38;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
 use C4::Members;
 use C4::Calendar;
+
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 BEGIN {
     use FindBin;
@@ -82,6 +84,9 @@ is( scalar(@$reserves), $borrowers_count, "Test GetReserves()" );
 
 
 my ( $reservedate, $borrowernumber, $branchcode, $reserve_id ) = GetReservesFromItemnumber($itemnumber);
+is( $reservedate, output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), "GetReservesFromItemnumber should return a valid reserve date");
+is( $borrowernumber, $borrowernumbers[0], "GetReservesFromItemnumber should return a valid borrowernumber");
+is( $branchcode, 'CPL', "GetReservesFromItemnumber should return a valid branchcode");
 ok($reserve_id, "Test GetReservesFromItemnumber()");
 
 
