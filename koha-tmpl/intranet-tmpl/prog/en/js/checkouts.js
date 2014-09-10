@@ -138,6 +138,15 @@ $(document).ready(function() {
             {
                 "mDataProp": function( oObj ) {
                     if ( oObj.issued_today ) {
+                        return "0";
+                    } else {
+                        return "100";
+                    }
+                }
+            },
+            {
+                "mDataProp": function( oObj ) {
+                    if ( oObj.issued_today ) {
                         return "<strong>" + TODAYS_CHECKOUTS + "</strong>";
                     } else {
                         return "<strong>" + PREVIOUS_CHECKOUTS + "</strong>";
@@ -327,8 +336,9 @@ $(document).ready(function() {
         },
     }).rowGrouping(
         {
+            iGroupingColumnIndex: 1,
             iGroupingOrderByColumnIndex: 0,
-            sGroupingColumnSortDirection: "desc"
+            sGroupingColumnSortDirection: "asc"
         }
     );
 
