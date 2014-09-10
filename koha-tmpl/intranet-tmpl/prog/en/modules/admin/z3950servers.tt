@@ -127,7 +127,7 @@
         </li>
         <li><label for="password">Password: </label> <input type="text" name="password" id="password" value="[% server.password %]" />
         </li>
-        <li><label for="checked">Checked (searched by default): </label>
+        <li><label for="checked">Preselected (searched by default): </label>
         [% IF ( server.checked ) %]
             <input type="checkbox" name="checked" id="checked" value="1" checked="checked" />
         [% ELSE %]
@@ -212,7 +212,7 @@
         You searched for [% searchfield %]
     [% END %]
     <table id="serverst">
-        <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Checked</th><th>Rank</th><th>Syntax</th><th>Encoding</th><th>Timeout</th><th>Record type</th><th>Options</th>
+        <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Preselected</th><th>Rank</th><th>Syntax</th><th>Encoding</th><th>Timeout</th><th>Record type</th><th>Options</th>
         </tr></thead>
         <tbody>
         [% FOREACH loo IN loop %]
