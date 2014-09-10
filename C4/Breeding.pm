@@ -235,7 +235,7 @@ sub _build_query {
     my $qry_build = {
         isbn    => '@attr 1=7 @attr 5=1 "#term" ',
         issn    => '@attr 1=8 @attr 5=1 "#term" ',
-        title   => '@attr 1=4 #term ',
+        title   => '@attr 1=4 "#term" ',
         author  => '@attr 1=1003 "#term" ',
         dewey   => '@attr 1=16 "#term" ',
         subject => '@attr 1=21 "#term" ',
