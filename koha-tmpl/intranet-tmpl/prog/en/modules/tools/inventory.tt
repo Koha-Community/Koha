@@ -246,6 +246,7 @@ $(document).ready(function(){
             <th>Status</th>
             <th>Lost</th>
             <th>Damaged</th>
+            <th>Withdrawn</th>
             <th>Unseen since</th>
             <th>Problems</th>
         </tr>
@@ -276,6 +277,9 @@ $(document).ready(function(){
             </td>
             <td>
             [% result.damaged | html %]
+            </td>
+            <td>
+            [% result.withdrawn | html %]
             </td>
             <td>
             [% result.datelastseen | $KohaDates | html %]

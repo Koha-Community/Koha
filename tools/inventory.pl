@@ -345,7 +345,7 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
                       items.homebranch     items.location
                       items.itemcallnumber items.notforloan
                       items.itemlost       items.damaged
-                      items.stocknumber
+                      items.withdrawn      items.stocknumber
                       / ) {
        push @translated_keys, $columns_def_hashref->{$key};
     }
@@ -354,7 +354,7 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
     $csv->combine(@translated_keys);
     print $csv->string, "\n";
 
-    my @keys = qw / title author barcode itemnumber homebranch location itemcallnumber notforloan lost damaged stocknumber /;
+    my @keys = qw / title author barcode itemnumber homebranch location itemcallnumber notforloan lost damaged withdrawn stocknumber /;
     for my $item ( @results ) {
         my @line;
         for my $key (@keys) {

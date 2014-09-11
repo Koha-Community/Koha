@@ -1052,7 +1052,7 @@ sub GetItemsForInventory {
     my ( @bind_params, @where_strings );
 
     my $select_columns = q{
-        SELECT items.itemnumber, barcode, itemcallnumber, title, author, biblio.biblionumber, biblio.frameworkcode, datelastseen, homebranch, location, notforloan, damaged, itemlost, stocknumber
+        SELECT items.itemnumber, barcode, itemcallnumber, title, author, biblio.biblionumber, biblio.frameworkcode, datelastseen, homebranch, location, notforloan, damaged, itemlost, withdrawn, stocknumber
     };
     my $select_count = q{SELECT COUNT(*)};
     my $query = q{
