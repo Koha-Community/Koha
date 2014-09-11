@@ -1,7 +1,5 @@
 #!/usr/bin/perl
-use 5.10.0;
-use strict;
-use warnings;
+use Modern::Perl;
 use Getopt::Long;
 use C4::Context;
 use C4::Biblio;
@@ -94,8 +92,10 @@ while ( my ( $biblionumber, $biblioitemnumber, $frameworkcode ) = $sth->fetchrow
     }
 }
 
-$dbh->do("UPDATE systempreferences SET value=$CataloguingLog WHERE variable='CataloguingLog'");
-$dbh->do("UPDATE systempreferences SET value=$dontmerge where variable='dontmerge'");
+my $sthCataloguingLog = $dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='CataloguingLog'");
+$sthCataloguingLog->execute($CataloguingLog);
+my $sthdontmerge = $dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='dontmerge'");
+$sthdontmerge->execute($dontmerge);
 $dbh->commit() unless $test_parameter;
 my $timeneeded = time() - $starttime;
 print "$count MARC record done in $timeneeded seconds\n";
