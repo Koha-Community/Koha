@@ -70,7 +70,7 @@ patron.
 
 =head2 recordpayment
 
-  &recordpayment($borrowernumber, $payment, $sip_paytype);
+  &recordpayment($borrowernumber, $payment, $sip_paytype, $note);
 
 Record payment by a patron. C<$borrowernumber> is the patron's
 borrower number. C<$payment> is a floating-point number, giving the
@@ -89,7 +89,7 @@ will be credited to the next one.
 sub recordpayment {
 
     #here we update the account lines
-    my ( $borrowernumber, $data, $sip_paytype ) = @_;
+    my ( $borrowernumber, $data, $sip_paytype, $payment_note ) = @_;
     my $dbh        = C4::Context->dbh;
     my $newamtos   = 0;
     my $accdata    = "";
@@ -97,6 +97,8 @@ sub recordpayment {
     my $amountleft = $data;
     my $manager_id = 0;
     $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
+
+    $payment_note //= "";
 
     # begin transaction
     my $nextaccntno = getnextacctno($borrowernumber);
@@ -138,6 +140,7 @@ sub recordpayment {
                 accountlines_id       => $accdata->{'accountlines_id'},
                 accountno             => $accdata->{'accountno'},
                 manager_id            => $manager_id,
+                note                  => $payment_note,
             }));
             push( @ids, $accdata->{'accountlines_id'} );
         }
@@ -146,13 +149,13 @@ sub recordpayment {
     # create new line
     my $usth = $dbh->prepare(
         "INSERT INTO accountlines
-  (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding,manager_id)
-  VALUES (?,?,now(),?,'',?,?,?)"
+  (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding,manager_id, note)
+  VALUES (?,?,now(),?,'',?,?,?,?)"
     );
 
     my $paytype = "Pay";
     $paytype .= $sip_paytype if defined $sip_paytype;
-    $usth->execute( $borrowernumber, $nextaccntno, 0 - $data, $paytype, 0 - $amountleft, $manager_id );
+    $usth->execute( $borrowernumber, $nextaccntno, 0 - $data, $paytype, 0 - $amountleft, $manager_id, $payment_note );
     $usth->finish;
 
     UpdateStats({
