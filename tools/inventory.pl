@@ -109,6 +109,9 @@ for my $statfield (qw/items.notforloan items.itemlost items.withdrawn items.dama
         }
         $hash->{values} = $arr;
         push @$statuses, $hash;
+        if ( $statfield eq 'items.notforloan') {
+            @notforloans = map { $_->{'authorised_value'} } @$arr;
+        }
     }
 }
 
