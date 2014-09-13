@@ -119,8 +119,8 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                 </select>
             </li>
             <li>
-                <label for="title">Title: </label>
-                <input id="title" size="30" type="text" name="title" value="[% new_detail.title %]" />
+                <label for="title" class="required">Title: </label>
+                <input id="title" size="30" type="text" name="title" value="[% new_detail.title %]" required="required" class="required" /> <span class="required">Required</span>
             </li>
             <li>
                 <label for="from">Publication date: </label>
@@ -141,7 +141,8 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                 [% END %]
             </li>
             <li><label for="new">News: </label>
-            <textarea name="new" id="new"  cols="75" rows="10">[% new_detail.new %]</textarea></li>
+            <textarea name="new" id="new"  cols="75" rows="10">[% new_detail.new %]</textarea>
+            </li>
             </ol>
 			</fieldset>
   
