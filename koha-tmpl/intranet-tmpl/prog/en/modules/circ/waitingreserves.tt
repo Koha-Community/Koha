@@ -86,6 +86,7 @@
                <table id="holdst">
                <thead><tr>
                     <th class="title-string">Available since</th>
+                    <th>Last pickup date</th>
                     <th class="anti-the">Title</th>
                     <th>Patron</th>
                     <th>Home branch</th>
@@ -98,6 +99,7 @@
                <tbody>[% FOREACH reserveloo IN reserveloop %]
                 <tr>
                     <td><span title="[% reserveloo.waitingdate %]">[% reserveloo.waitingdate | $KohaDates %]</span></td>
+                    <td>[% reserveloo.lastpickupdate %]</td>
                     <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
                         [% reserveloo.title |html %] [% FOREACH subtitl IN reserveloo.subtitle %] [% subtitl.subfield %][% END %]
                         </a>
@@ -155,6 +157,7 @@
                <table id="holdso">
                <thead><tr>
                     <th class="title-string">Available since</th>
+                    <th>Last pickup date</th>
                     <th class="anti-the">Title</th>
                     <th>Patron</th>
                     <th>Home branch</th>
@@ -167,6 +170,7 @@
                <tbody>[% FOREACH overloo IN overloop %]
                     <tr>
                         <td><p><span title="[% overloo.waitingdate %]">[% overloo.waitingdate | $KohaDates %]</span></p></td>
+                        <td>[% overloo.lastpickupdate %]</td>
                         <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overloo.biblionumber %][% overloo.title |html %]
                             [% FOREACH subtitl IN overloo.subtitle %] [% subtitl.subfield %][% END %]
                         </a>

@@ -48,9 +48,11 @@ use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
 
+use DateTime;
 use List::MoreUtils qw( firstidx any );
 use Carp;
 use Data::Dumper;
+use YAML::XS;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -139,6 +141,8 @@ BEGIN {
         &ReserveSlip
         &ToggleSuspend
         &SuspendAll
+
+        &_reserve_last_pickup_date
 
         &GetReservesControlBranch
 
@@ -664,7 +668,7 @@ sub GetReservesForBranch {
     my $dbh = C4::Context->dbh;
 
     my $query = "
-        SELECT reserve_id,borrowernumber,reservedate,itemnumber,waitingdate, expirationdate
+        SELECT reserve_id,borrowernumber,reservedate,itemnumber,waitingdate, expirationdate,branchcode
         FROM   reserves
         WHERE   priority='0'
         AND found='W'
@@ -904,7 +908,10 @@ sub CancelExpiredReserves {
             $cancel_params->{charge_cancel_fee} = 1;
         }
 
-        CancelReserve($cancel_params);
+        my $expiration = _reserve_last_pickup_date( $res );
+        if ( $today > $expiration ) {
+            CancelReserve($cancel_params);
+        }
     }
 }
 
@@ -1793,6 +1800,50 @@ sub _Findgroupreserve {
     return @results;
 }
 
+=head2 _reserve_last_pickup_date
+
+ my $last_dt = _reserve_last_pickup_date($reserve);
+
+Returns the DateTime for the last pickup date for reserve.
+
+The datetime has a time component of 23:59:59, so the day expires as it should when comparing times as well.
+=cut
+
+sub _reserve_last_pickup_date {
+    my ($reserve) = @_;
+    my $branch = $reserve->{branchcode} ? $reserve->{branchcode} : $reserve->branchcode;
+    my $startdate = $reserve->{waitingdate} ? dt_from_string($reserve->{waitingdate}) : DateTime->now( time_zone => C4::Context->tz() );
+    my $calendar = Koha::Calendar->new( branchcode => $branch);
+    my $expiration;
+
+    # Getting the ReservesMaxPickUpDelayBranch
+    my $branches = C4::Context->preference("ReservesMaxPickUpDelayBranch");
+
+    my $yaml = YAML::XS::Load(
+                        Encode::encode(
+                            'UTF-8',
+                            $branches,
+                            Encode::FB_CROAK
+                        )
+                    );
+
+    if ($yaml->{$branch}) {
+        my $delay = $yaml->{$branch};
+        $expiration = $calendar->days_forward( $startdate, $delay );
+    }
+    else {
+        $expiration = $calendar->days_forward( $startdate, C4::Context->preference('ReservesMaxPickUpDelay') );
+    }
+       #It is necessary to set the time portion of DateTime as well, because we are actually getting the
+       #  last pickup datetime and importantly days end at 23:59:59.
+       #  Without this set, last pickup dates expire 1 day too early and frustrates patrons and staff alike!
+    $expiration->set( hour       => 23,
+                      minute     => 59,
+                      second     => 59 );
+
+    return $expiration;
+}
+
 =head2 _koha_notify_reserve
 
   _koha_notify_reserve( $hold->reserve_id );
@@ -1851,6 +1902,9 @@ sub _koha_notify_reserve {
             'biblioitems'    => $hold->biblionumber,
             'reserves'       => $hold->unblessed,
             'items'          => $hold->itemnumber,
+        },
+        substitute => { today => output_pref( { dt => dt_from_string, dateonly => 1 } ),
+                        lastpickupdate => output_pref( { dt => $hold->waiting_expires_on, dateonly => 1 })
         },
     );
 
@@ -2190,11 +2244,14 @@ sub ReserveSlip {
 #   return unless ( C4::Context->boolean_preference('printreserveslips') );
     my $patron = Koha::Patrons->find( $borrowernumber );
 
+    my $borrower = C4::Members::GetMember(borrowernumber => $borrowernumber);
+
     my $reserve_id = GetReserveId({
         biblionumber => $biblionumber,
         borrowernumber => $borrowernumber
     }) or return;
-    my $reserve = GetReserveInfo($reserve_id) or return;
+    my $reserve = Koha::Holds->find($reserve_id) or return;
+    my $library = Koha::Libraries->find( $reserve->branchcode )->unblessed;
 
     return  C4::Letters::GetPreparedLetter (
         module => 'circulation',
@@ -2202,12 +2259,15 @@ sub ReserveSlip {
         branchcode => $branch,
         lang => $patron->lang,
         tables => {
-            'reserves'    => $reserve,
-            'branches'    => $reserve->{branchcode},
-            'borrowers'   => $reserve->{borrowernumber},
-            'biblio'      => $reserve->{biblionumber},
-            'biblioitems' => $reserve->{biblionumber},
-            'items'       => $reserve->{itemnumber},
+            'branches'       => $library,
+            'borrowers'      => $borrower,
+            'biblio'         => $reserve->biblionumber,
+            'biblioitems'    => $reserve->biblionumber,
+            'reserves'       => $reserve->unblessed,
+            'items'          => $reserve->itemnumber,
+        },
+        substitute => {
+            lastpickupdate => output_pref( { dt => $reserve->waiting_expires_on, dateonly => 1 })
         },
     );
 }

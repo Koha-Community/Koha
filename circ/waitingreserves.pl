@@ -28,11 +28,7 @@ use C4::Circulation;
 use C4::Members;
 use C4::Biblio;
 use C4::Items;
-use Date::Calc qw(
-  Today
-  Add_Delta_Days
-  Date_to_Days
-);
+use DateTime;
 use C4::Reserves;
 use C4::Koha;
 use Koha::DateUtils;
@@ -85,7 +81,7 @@ my ($reservcount, $overcount);
 my @getreserves = $all_branches ? GetReservesForBranch() : GetReservesForBranch($default);
 # get reserves for the branch we are logged into, or for all branches
 
-my $today = Date_to_Days(&Today);
+my $today = DateTime->now();
 my $max_pickup_delay = C4::Context->preference('ReservesMaxPickUpDelay');
 
 foreach my $num (@getreserves) {
@@ -109,8 +105,11 @@ foreach my $num (@getreserves) {
     $getreserv{'waitingdate'} = $num->{'waitingdate'};
     my ( $expire_year, $expire_month, $expire_day ) = split (/-/, $num->{'expirationdate'});
     my $calcDate = Date_to_Days( $expire_year, $expire_month, $expire_day );
+    $num->{'branchcode'} = Koha::Holds->find($num->{'reserve_id'})->branchcode;
+    my $lastpickupdate = C4::Reserves::_reserve_last_pickup_date( $num );
 
     $getreserv{'itemtype'}       = $itemtype->description; # FIXME Should not it be translated_description?
+    $getreserv{'lastpickupdate'} = output_pref({ dt => $lastpickupdate, dateonly => 1 });
     $getreserv{'title'}          = $gettitle->{'title'};
     $getreserv{'subtitle'}       = GetRecordValue('subtitle', GetMarcBiblio($gettitle->{'biblionumber'}), GetFrameworkCode($gettitle->{'biblionumber'}));
     $getreserv{'biblionumber'}   = $gettitle->{'biblionumber'};
@@ -133,7 +132,7 @@ foreach my $num (@getreserves) {
         $getreserv{'borrowermail'}  = $borEmail;
     }
 
-    if ($today > $calcDate) {
+    if (   DateTime->compare( $today,$lastpickupdate ) == 1   ) {
         if ($cancelall) {
             my $res = cancel( $itemnumber, $borrowernum, $holdingbranch, $homebranch, !$transfer_when_cancel_all );
             push @cancel_result, $res if $res;
