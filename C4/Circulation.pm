@@ -823,8 +823,13 @@ sub CanBookBeIssued {
 	        $needsconfirmation{USERBLOCKEDOVERDUE} = $count;
 	    }
     } elsif($blocktype == 1) {
-        # patron has accrued fine days
-        $issuingimpossible{USERBLOCKEDREMAINING} = $count;
+        # patron has accrued fine days or has a restriction. $count is a date
+        if ($count eq '9999-12-31') {
+            $issuingimpossible{USERBLOCKEDNOENDDATE} = $count;
+        }
+        else {
+            $issuingimpossible{USERBLOCKEDWITHENDDATE} = $count;
+        }
     }
 
 #

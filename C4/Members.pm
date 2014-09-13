@@ -650,7 +650,8 @@ that would block circulation privileges.
 
 C<$block_status> can have the following values:
 
-1 if the patron has outstanding fine days, in which case C<$count> is the number of them
+1 if the patron has outstanding fine days or a manual debarment, in which case
+C<$count> is the expiration date (9999-12-31 for indefinite)
 
 -1 if the patron has overdue items, in which case C<$count> is the number of them
 

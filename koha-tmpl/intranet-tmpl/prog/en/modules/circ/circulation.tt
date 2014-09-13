@@ -407,12 +407,16 @@ $(document).ready(function() {
             <li>This item belongs to [% Branches.GetName( itemhomebranch ) %] and cannot be checked out from this location.</li>
         [% END %]
 
-        [% IF ( USERBLOCKEDREMAINING ) %]
-            <li>Patron has had overdue items and is blocked for [% USERBLOCKEDREMAINING %] day(s).</li>
+        [% IF ( USERBLOCKEDWITHENDDATE ) %]
+            <li>Patron has a restriction until [% USERBLOCKEDWITHENDDATE | $KohaDates %].</li>
         [% END %]
-	
-	    [% IF ( USERBLOCKEDOVERDUE ) %]
-            <li>Checkouts are BLOCKED because patron has overdue items</li>
+
+        [% IF ( USERBLOCKEDNOENDDATE ) %]
+            <li>Patron has a restriction (no expiry date).</li>
+        [% END %]
+
+        [% IF ( USERBLOCKEDOVERDUE ) %]
+            <li>Checkouts are BLOCKED because patron has overdue items.</li>
         [% END %]
         </ul>
 
