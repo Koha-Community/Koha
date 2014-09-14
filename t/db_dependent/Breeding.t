@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use FindBin;
 use Test::More tests => 3;
+use Test::Warn;
 
 use C4::Breeding;
 use Koha::XSLT_Handler;
@@ -45,7 +46,7 @@ subtest '_create_connection' => sub {
 };
 #Group 3: testing _do_xslt_proc (part of Z3950Search)
 subtest '_do_xslt_proc' => sub {
-    plan tests => 6;
+    plan tests => 7;
     test_do_xslt();
 };
 
@@ -89,9 +90,12 @@ sub test_build_translate_query {
     is( @matches == 2, 1, 'Second Z39.50 query includes two @attr 1=');
     #We should find text of both parameters in the query
     $str= $pars2->{isbn};
-    is( $queries[0] =~ /$str/, 1, 'Second query contains ISBN');
+    is( $queries[0] =~ /\"$str\"/, 1,
+        'Second query contains ISBN enclosed by double quotes');
     $str= $pars2->{title};
-    is( $queries[0] =~ /$str/, 1, 'Second query contains title');
+    is( $queries[0] =~ /\"$str\"/, 1,
+        'Second query contains title enclosed by double quotes');
+
     #SRU revisited
     $server= { sru_fields => 'isbn=nb,title=dc.title,srchany=overal' };
     $squery= C4::Breeding::_translate_query( $server, $queries[1] );
@@ -171,7 +175,10 @@ sub test_do_xslt {
 
     #forcing an error on the xslt side
     $server->{add_xslt} = 'notafile.xsl';
-    @res = C4::Breeding::_do_xslt_proc( $biblio, $server, $engine );
+    warning_like
+        { @res = C4::Breeding::_do_xslt_proc( $biblio, $server, $engine ) }
+        qr/^XSLT file not found./,
+        '_do_xslt_proc warns it XSLT_handler problem';
     is( $res[1] && $res[1] eq 'xslt_err', 1,
         'Check error code again');
     #We still expect the original record back
