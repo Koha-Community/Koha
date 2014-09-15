@@ -290,25 +290,16 @@
            </xsl:call-template>
         </xsl:if>
 
-        <a><xsl:attribute name="href">
-            <xsl:choose>
-                <xsl:when test="$IntranetBiblioDefaultView='normal'">
-                    /cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
-                </xsl:when>
-                <xsl:when test="$IntranetBiblioDefaultView='isbd'">
-                    /cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
-                </xsl:when>
-                <xsl:when test="$IntranetBiblioDefaultView='labeled_marc'">
-                    /cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
-                </xsl:when>
-                <xsl:when test="$IntranetBiblioDefaultView='marc'">
-                    /cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    /cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute><xsl:attribute name="class">title</xsl:attribute>
+    <a>
+        <xsl:attribute name="href">
+            <xsl:call-template name="buildBiblioDefaultViewURL">
+                <xsl:with-param name="IntranetBiblioDefaultView">
+                    <xsl:value-of select="$IntranetBiblioDefaultView"/>
+                </xsl:with-param>
+            </xsl:call-template>
+            <xsl:value-of select="$biblionumber"/>
+        </xsl:attribute>
+        <xsl:attribute name="class">title</xsl:attribute>
 
         <xsl:if test="marc:datafield[@tag=245]">
         <xsl:for-each select="marc:datafield[@tag=245]">
