@@ -108,6 +108,31 @@ defaults to date_due,title,author,barcode
 Other possible values come from fields in the biblios, items and
 issues tables.
 
+=item B<--date_in_history>
+
+YYYY-MM-DD of the date from which to generate advance notices.
+Used to fix failed advance_notices.pl-cronjob runs, or for debugging purposes.
+So if today is 2014-09-15 and you want to run advance_notices.pl for two days
+ago, you can run "advance_notices.pl -c --date_in_history 2014-09-13 -n"
+to generate those notifications.
+Be aware not to send advance notices after users have received overdue
+notifications!
+
+To fix a crashed advance_notices.pl-run two days ago, run the following command:
+  advance_notices.pl -c --date_in_history 2014-09-13 \
+  --exclude_days_until_due 2,0 -n
+Be aware that you have already sent the advance notices for users requesting the
+notice 2 days in advance, and also the overdue notification is sent.
+Remove -n -flag if you get the desired result.
+
+=item B<--exclude_days_until_due>
+
+An array of integers, each a duration in days in advance to NOT send advance notices.
+You can skip processing of some advance notices which have days_until_due of the
+given values. See --date_in_history for a useful usage scenario.
+
+ex. --exclude_days_until_due 0,2,3
+
 =back
 
 =head1 DESCRIPTION
@@ -173,6 +198,13 @@ my $mindays     = 0;                                                # -m: Maximu
 my $maxdays     = 30;                                               # -e: the End of the time period
 my $verbose     = 0;                                                # -v: verbose
 my $itemscontent = join(',',qw( date_due title author barcode ));
+my $exclude_days_until_due;
+
+#Defaulting $date_in_history to NOW()
+#Getting the ISO 8601 Date in the most efficient way for the computer :)
+my @t = localtime;   $t[5] += 1900;   $t[4]++;
+my $date_in_history = sprintf "%04d-%02d-%02d", @t[5,4,3];
+undef @t; #Don't pollute package namespace!
 
 my $help    = 0;
 my $man     = 0;
@@ -185,6 +217,8 @@ GetOptions(
             'm:i'            => \$maxdays,
             'v'              => \$verbose,
             'itemscontent=s' => \$itemscontent,
+            'date_in_history=s' => \$date_in_history,
+            'exclude_days_until_due=s' => \$exclude_days_until_due,
        )or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
@@ -211,7 +245,7 @@ cronlogaction();
 my @item_content_fields = split(/,/,$itemscontent);
 
 warn 'getting upcoming due issues' if $verbose;
-my $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => $maxdays } );
+my $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => $maxdays, date_in_history => $date_in_history } );
 warn 'found ' . scalar( @$upcoming_dues ) . ' issues' if $verbose;
 
 # hash of borrowernumber to number of items upcoming
@@ -227,7 +261,7 @@ SELECT biblio.*, items.*, issues.*
     AND biblio.biblionumber=items.biblionumber
     AND issues.borrowernumber = ?
     AND issues.itemnumber = ?
-    AND (TO_DAYS(date_due)-TO_DAYS(NOW()) = ?)
+    AND (TO_DAYS(date_due)-TO_DAYS(?) = ?)
 END_SQL
 
 my $admin_adress = C4::Context->preference('KohaAdminEmailAddress');
@@ -236,6 +270,12 @@ my @letters;
 UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
     @letters = ();
     warn 'examining ' . $upcoming->{'itemnumber'} . ' upcoming due items' if $verbose;
+
+    #Skip some days for --exclude_days_until_due
+    my $days_until_due = $upcoming->{'days_until_due'};
+    if (defined $exclude_days_until_due && $exclude_days_until_due =~ /(^|,)$days_until_due(,|$)/) {
+        next UPCOMINGITEM;
+    }
 
     my $from_address = $upcoming->{branchemail} || $admin_adress;
 
@@ -253,7 +293,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
         } else {
             my $biblio = C4::Biblio::GetBiblioFromItemNumber( $upcoming->{'itemnumber'} );
             my $letter_type = 'DUE';
-            $sth->execute($upcoming->{'borrowernumber'},$upcoming->{'itemnumber'},'0');
+            $sth->execute($upcoming->{'borrowernumber'},$upcoming->{'itemnumber'},$date_in_history,'0');
             my $titles = "";
             while ( my $item_info = $sth->fetchrow_hashref()) {
               my @item_info = map { $_ =~ /^date|date$/ ? format_date($item_info->{$_}) : $item_info->{$_} || '' } @item_content_fields;
@@ -287,7 +327,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
         } else {
             my $biblio = C4::Biblio::GetBiblioFromItemNumber( $upcoming->{'itemnumber'} );
             my $letter_type = 'PREDUE';
-            $sth->execute($upcoming->{'borrowernumber'},$upcoming->{'itemnumber'},$borrower_preferences->{'days_in_advance'});
+            $sth->execute($upcoming->{'borrowernumber'},$upcoming->{'itemnumber'},$date_in_history,$borrower_preferences->{'days_in_advance'});
             my $titles = "";
             while ( my $item_info = $sth->fetchrow_hashref()) {
               my @item_info = map { $_ =~ /^date|date$/ ? format_date($item_info->{$_}) : $item_info->{$_} || '' } @item_content_fields;
@@ -339,7 +379,7 @@ SELECT biblio.*, items.*, issues.*
   WHERE items.itemnumber=issues.itemnumber
     AND biblio.biblionumber=items.biblionumber
     AND issues.borrowernumber = ?
-    AND (TO_DAYS(date_due)-TO_DAYS(NOW()) = ?)
+    AND (TO_DAYS(date_due)-TO_DAYS(?) = ?)
 END_SQL
 PATRON: while ( my ( $borrowernumber, $digest ) = each %$upcoming_digest ) {
     @letters = ();
@@ -353,7 +393,7 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$upcoming_digest ) {
 
     my $letter_type = 'PREDUEDGST';
 
-    $sth->execute($borrowernumber,$borrower_preferences->{'days_in_advance'});
+    $sth->execute($borrowernumber,$date_in_history,$borrower_preferences->{'days_in_advance'});
     my $titles = "";
     while ( my $item_info = $sth->fetchrow_hashref()) {
       my @item_info = map { $_ =~ /^date|date$/ ? format_date($item_info->{$_}) : $item_info->{$_} || '' } @item_content_fields;
@@ -410,7 +450,7 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$due_digest ) {
     next PATRON unless $borrower_preferences; # how could this happen?
 
     my $letter_type = 'DUEDGST';
-    $sth->execute($borrowernumber,'0');
+    $sth->execute($borrowernumber,$date_in_history,'0');
     my $titles = "";
     while ( my $item_info = $sth->fetchrow_hashref()) {
       my @item_info = map { $_ =~ /^date|date$/ ? format_date($item_info->{$_}) : $item_info->{$_} || '' } @item_content_fields;

@@ -2617,17 +2617,36 @@ sub GetBiblioIssues {
 =head2 GetUpcomingDueIssues
 
   my $upcoming_dues = GetUpcomingDueIssues( { days_in_advance => 4 } );
+  my $upcoming_dues = GetUpcomingDueIssues( { date_in_history => '2014-09-15' } );
 
+@PARAM date_in_history must be a ISO 8601 compatible YYYY-MM-DD date string.
+       This function will behave just like if it was ran on the given date in history.
 =cut
 
 sub GetUpcomingDueIssues {
     my $params = shift;
 
     $params->{'days_in_advance'} = 7 unless exists $params->{'days_in_advance'};
+    #Define $params->{'date_to_calculate'},
+    if (exists $params->{'date_in_history'}) { #Validate YYYY-MM-DD and get it!
+        if ($params->{'date_in_history'} =~ /^(\d\d\d\d-\d\d-\d\d)[ T]?/) {
+            $params->{'date_to_calculate'} = $1;
+        }
+        else {
+            warn "Parameter 'date_in_history' ".$params->{'date_in_history'}." is not a valid ISO 8601 Date or compatible! It must match /^YYYY-MM-DD/\nreturning undef!";
+            return;
+        }
+    }
+    else { #Default to NOW()
+        #Getting the ISO 8601 Date in the most efficient way for the computer :)
+        my @t = localtime;   $t[5] += 1900;   $t[4]++;
+        $params->{'date_to_calculate'} = sprintf "%04d-%02d-%02d", @t[5,4,3];
+    }
+
     my $dbh = C4::Context->dbh;
 
     my $statement = <<END_SQL;
-SELECT issues.*, items.itype as itemtype, items.homebranch, TO_DAYS( date_due )-TO_DAYS( NOW() ) as days_until_due, branches.branchemail
+SELECT issues.*, items.itype as itemtype, items.homebranch, TO_DAYS( date_due )-TO_DAYS( ? ) as days_until_due, branches.branchemail
 FROM issues 
 LEFT JOIN items USING (itemnumber)
 LEFT OUTER JOIN branches USING (branchcode)
@@ -2635,7 +2654,8 @@ WHERE returndate is NULL
 HAVING days_until_due >= 0 AND days_until_due <= ?
 END_SQL
 
-    my @bind_parameters = ( $params->{'days_in_advance'} );
+    my @bind_parameters = ( $params->{'date_to_calculate'},
+                            $params->{'days_in_advance'});
     
     my $sth = $dbh->prepare( $statement );
     $sth->execute( @bind_parameters );
