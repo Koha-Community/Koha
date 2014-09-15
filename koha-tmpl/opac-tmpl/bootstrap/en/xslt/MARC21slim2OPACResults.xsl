@@ -403,22 +403,16 @@
            </xsl:call-template>
         </xsl:if>
 
-        <a><xsl:attribute name="href">
-            <xsl:choose>
-                <xsl:when test="$BiblioDefaultView='normal'">
-                    /cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
-                </xsl:when>
-                <xsl:when test="$BiblioDefaultView='isbd'">
-                    /cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
-                </xsl:when>
-                <xsl:when test="$BiblioDefaultView='marc'">
-                    /cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    /cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute><xsl:attribute name="class">title</xsl:attribute>
+    <a>
+        <xsl:attribute name="href">
+            <xsl:call-template name="buildBiblioDefaultViewURL">
+                <xsl:with-param name="BiblioDefaultView">
+                    <xsl:value-of select="$BiblioDefaultView"/>
+                </xsl:with-param>
+            </xsl:call-template>
+            <xsl:value-of select="$biblionumber"/>
+        </xsl:attribute>
+        <xsl:attribute name="class">title</xsl:attribute>
 
         <xsl:if test="marc:datafield[@tag=245]">
         <xsl:for-each select="marc:datafield[@tag=245]">
