@@ -162,6 +162,8 @@ The F<misc/cronjobs/overdue_notices.pl> program allows you to send
 messages to patrons when their messages are overdue.
 =cut
 
+binmode( STDOUT, ':encoding(UTF-8)' );
+
 # These are defaults for command line options.
 my $confirm;                                                        # -c: Confirm that the user has read and configured this script.
 my $nomail;                                                         # -n: No mail. Will not send any emails.
@@ -266,7 +268,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                                       substitute     => { 'items.content' => $titles },
                                       message_transport_type => $transport,
                                     } )
-                    or warn "no letter of type '$letter_type' found. Please see sample_notices.sql";
+                    or warn "no letter of type '$letter_type' found for borrowernumber ".$upcoming->{'borrowernumber'}.". Please see sample_notices.sql";
                 push @letters, $letter if $letter;
             }
         }
@@ -300,7 +302,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                                       substitute     => { 'items.content' => $titles },
                                       message_transport_type => $transport,
                                     } )
-                    or warn "no letter of type '$letter_type' found. Please see sample_notices.sql";
+                    or warn "no letter of type '$letter_type' found for borrowernumber ".$upcoming->{'borrowernumber'}.". Please see sample_notices.sql";
                 push @letters, $letter if $letter;
             }
         }
@@ -373,7 +375,7 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$upcoming_digest ) {
                 message_transport_type => $transport,
             }
           )
-          or warn "no letter of type '$letter_type' found. Please see sample_notices.sql";
+          or warn "no letter of type '$letter_type' found for borrowernumber $borrowernumber. Please see sample_notices.sql";
         push @letters, $letter if $letter;
     }
 
@@ -430,7 +432,7 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$due_digest ) {
                 message_transport_type => $transport,
             }
           )
-          or warn "no letter of type '$letter_type' found. Please see sample_notices.sql";
+          or warn "no letter of type '$letter_type' found for borrowernumber $borrowernumber. Please see sample_notices.sql";
         push @letters, $letter if $letter;
     }
 
