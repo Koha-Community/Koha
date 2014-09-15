@@ -266,7 +266,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                                       message_transport_type => $transport,
                                     } )
                     or warn "no letter of type '$letter_type' found. Please see sample_notices.sql";
-                push @letters, $letter;
+                push @letters, $letter if $letter;
             }
         }
     } else {
@@ -302,7 +302,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                                       message_transport_type => $transport,
                                     } )
                     or warn "no letter of type '$letter_type' found. Please see sample_notices.sql";
-                push @letters, $letter;
+                push @letters, $letter if $letter;
             }
         }
     }
@@ -376,8 +376,8 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$upcoming_digest ) {
                 message_transport_type => $transport,
             }
           )
-          or die "no letter of type '$letter_type' found. Please see sample_notices.sql";
-        push @letters, $letter;
+          or warn "no letter of type '$letter_type' found. Please see sample_notices.sql";
+        push @letters, $letter if $letter;
     }
 
     if ( @letters ) {
@@ -434,8 +434,8 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$due_digest ) {
                 message_transport_type => $transport,
             }
           )
-          or die "no letter of type '$letter_type' found. Please see sample_notices.sql";
-        push @letters, $letter;
+          or warn "no letter of type '$letter_type' found. Please see sample_notices.sql";
+        push @letters, $letter if $letter;
     }
 
     if ( @letters ) {
