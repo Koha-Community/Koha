@@ -25,7 +25,7 @@
    select="marc:datafield[@tag=090]/marc:subfield[@code='a']"/>
   <xsl:variable name="isbn"
    select="marc:datafield[@tag=010]/marc:subfield[@code='a']"/>
-
+  <xsl:variable name="BiblioDefaultView" select="marc:sysprefs/marc:syspref[@name='BiblioDefaultView']"/>
   <xsl:variable name="hidelostitems" select="marc:sysprefs/marc:syspref[@name='hidelostitems']"/>
   <xsl:variable name="singleBranchMode" select="marc:sysprefs/marc:syspref[@name='singleBranchMode']"/>
   <xsl:variable name="OPACURLOpenInNewWindow" select="marc:sysprefs/marc:syspref[@name='OPACURLOpenInNewWindow']"/>
@@ -41,9 +41,14 @@
                 select="translate($title, '&#x0088;&#x0089;&#x0098;&#x009C;','')"/>
               <a>
                 <xsl:attribute name="href">
-                  <xsl:text>/cgi-bin/koha/opac-detail.pl?biblionumber=</xsl:text>
+                  <xsl:call-template name="buildBiblioDefaultViewURL">
+                      <xsl:with-param name="BiblioDefaultView">
+                          <xsl:value-of select="$BiblioDefaultView"/>
+                      </xsl:with-param>
+                  </xsl:call-template>
                   <xsl:value-of select="$biblionumber"/>
                 </xsl:attribute>
+                <xsl:attribute name="class">title</xsl:attribute>
                 <xsl:value-of select="$ntitle" />
               </a>
             </xsl:when>

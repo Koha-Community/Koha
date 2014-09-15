@@ -19,6 +19,7 @@
     <xsl:template match="marc:record">
 
     <!-- System preferences -->
+    <xsl:variable name="BiblioDefaultView" select="marc:sysprefs/marc:syspref[@name='BiblioDefaultView']"/>
     <xsl:variable name="UseControlNumber" select="marc:sysprefs/marc:syspref[@name='UseControlNumber']"/>
     <xsl:variable name="DisplayOPACiconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayOPACiconsXSLT']"/>
     <xsl:variable name="singleBranchMode" select="marc:sysprefs/marc:syspref[@name='singleBranchMode']"/>
@@ -286,7 +287,17 @@
         </xsl:variable>
 
 		<!-- Tittel og ansvarsopplysninger -->
-	<a><xsl:attribute name="href">/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute>
+	<a>
+        <xsl:attribute name="href">
+            <xsl:call-template name="buildBiblioDefaultViewURL">
+                <xsl:with-param name="BiblioDefaultView">
+                    <xsl:value-of select="$BiblioDefaultView"/>
+                </xsl:with-param>
+            </xsl:call-template>
+            <xsl:value-of select="$biblionumber"/>
+        </xsl:attribute>
+        <xsl:attribute name="class">title</xsl:attribute>
+
         <xsl:if test="marc:datafield[@tag=245]">
         <xsl:for-each select="marc:datafield[@tag=245]">
             <xsl:variable name="title">
@@ -323,8 +334,8 @@
     </a>
     <p>
 
-    <xsl:choose>
-    <xsl:when test="marc:datafield[@tag=100] or marc:datafield[@tag=110] or marc:datafield[@tag=111] or marc:datafield[@tag=700] or marc:datafield[@tag=710] or marc:datafield[@tag=711]">
+    <xsl:choose
+>    <xsl:when test="marc:datafield[@tag=100] or marc:datafield[@tag=110] or marc:datafield[@tag=111] or marc:datafield[@tag=700] or marc:datafield[@tag=710] or marc:datafield[@tag=711]">
 
     av
         <xsl:for-each select="marc:datafield[(@tag=100 or @tag=700) and @ind1!='z']">
