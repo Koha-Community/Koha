@@ -51,6 +51,27 @@
 		</xsl:if>
 	</xsl:template>
 
+    <xsl:template name="buildBiblioDefaultViewURL">
+        <xsl:param name="IntranetBiblioDefaultView"/>
+        <xsl:choose>
+            <xsl:when test="$IntranetBiblioDefaultView='normal'">
+                <xsl:text>/cgi-bin/koha/catalogue/detail.pl?biblionumber=</xsl:text>
+            </xsl:when>
+            <xsl:when test="$IntranetBiblioDefaultView='isbd'">
+                <xsl:text>/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=</xsl:text>
+            </xsl:when>
+            <xsl:when test="$IntranetBiblioDefaultView='labeled_marc'">
+                <xsl:text>/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=</xsl:text>
+            </xsl:when>
+            <xsl:when test="$IntranetBiblioDefaultView='marc'">
+                <xsl:text>/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>/cgi-bin/koha/catalogue/detail.pl?biblionumber=</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
 	<xsl:template name="chopPunctuation">
 		<xsl:param name="chopString"/>
 		<xsl:variable name="length" select="string-length($chopString)"/>
