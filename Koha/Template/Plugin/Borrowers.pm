@@ -22,7 +22,8 @@ use Modern::Perl;
 
 use base qw( Template::Plugin );
 
-use Koha::Borrower::Debarments qw//;
+use Koha::Borrower::Debarments qw();
+use C4::Members qw(HasOverdues);
 
 =pod
 
@@ -47,5 +48,14 @@ sub IsDebarred {
 
     return Koha::Borrower::Debarments::IsDebarred($borrower->{borrowernumber});
 }
+
+sub HasOverdues {
+    my ( $self, $borrowernumber ) = @_;
+
+    return unless $borrowernumber;
+
+    return C4::Members::HasOverdues($borrowernumber);
+}
+
 
 1;

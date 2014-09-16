@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Borrowers %]
 [% SET NorwegianPatronDBEnable = Koha.Preference( 'NorwegianPatronDBEnable' ) %]
 <script type="text/javascript">
 //<![CDATA[
@@ -55,6 +56,11 @@ $(document).ready(function(){
     });
     $("#printquickslip").click(function(){
         printx_window("qslip");
+        $(".btn-group").removeClass("open");
+        return false;
+    });
+    $("#print_overdues").click(function(){
+        window.open("/cgi-bin/koha/members/print_overdues.pl?borrowernumber=[% borrowernumber %]", "printwindow");
         $(".btn-group").removeClass("open");
         return false;
     });
@@ -153,7 +159,10 @@ function searchToHold(){
             <ul class="dropdown-menu">
                 [% IF ( CAN_user_borrowers ) %]<li><a id="printsummary" href="#">Print summary</a></li>[% END %]
                 <li><a id="printslip" href="#">Print slip</a></li>
-                <li><a id="printquickslip" href="#">Print quick slip</a></li>
+                <li><a id="printquickslip" href="#">Print quick slip[%  Borrowers.HasOverdues( borrowernumber ) %]</a></li>
+                [% IF Borrowers.HasOverdues( borrowernumber ) %]
+                    <li><a id="print_overdues" href="#">Print overdues</a></li>
+                [% END %]
             </ul>
     </div>
     <a id="searchtohold" class="btn btn-small" href="#"><i class="fa fa-search"></i> Search to hold</a>

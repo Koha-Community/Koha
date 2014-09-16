@@ -108,6 +108,7 @@ BEGIN {
         GetBorrowersWithEmail
 
         HasOverdues
+        GetOverdues
     );
 
     #Modify data
@@ -2550,6 +2551,25 @@ DELETE FROM borrower_modifications
 WHERE borrowernumber = 0 AND DATEDIFF( NOW(), timestamp ) > ?|;
     my $cnt=$dbh->do($sql, undef, ($days) );
     return $cnt eq '0E0'? 0: $cnt;
+}
+
+sub GetOverdues {
+    my ( $borrowernumber ) = @_;
+
+    my $sql = "
+        SELECT *
+        FROM issues, items, biblio, biblioitems
+        WHERE items.itemnumber=issues.itemnumber
+          AND biblio.biblionumber   = items.biblionumber
+          AND biblio.biblionumber   = biblioitems.biblionumber
+          AND issues.borrowernumber = ?
+          AND date_due < NOW()
+    ";
+
+    my $sth = C4::Context->dbh->prepare( $sql );
+    $sth->execute( $borrowernumber );
+
+    return $sth->fetchall_arrayref({});
 }
 
 END { }    # module clean-up code here (global destructor)
