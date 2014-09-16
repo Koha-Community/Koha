@@ -982,6 +982,21 @@ CREATE TABLE `deleteditems` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
+-- Table structure for table `elasticsearch_mapping`
+--
+
+DROP TABLE IF EXISTS `elasticsearch_mapping`;
+CREATE TABLE `elasticsearch_mapping` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mapping` varchar(255) DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  `marc21` varchar(255) DEFAULT NULL,
+  `unimarc` varchar(255) DEFAULT NULL,
+  `normarc` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `export_format`
 --
 
