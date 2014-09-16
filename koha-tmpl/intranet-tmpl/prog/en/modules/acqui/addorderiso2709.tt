@@ -283,7 +283,19 @@
                                             <label>[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
                                         [% END %]
 
+                                        [% IF ( iteminformatio.marc_value.type == 'select' ) %]
+                                            <select name="field_value" size="1">
+                                            [% FOREACH value IN iteminformatio.marc_value.values %]
+                                                [% IF ( value == iteminformatio.marc_value.default ) %]
+                                                    <option value="[% value %]" selected="selected">[% iteminformatio.marc_value.labels.$value %]</option>
+                                                [% ELSE %]
+                                                    <option value="[% value %]">[% iteminformatio.marc_value.labels.$value %]</option>
+                                                [% END %]
+                                            [% END %]
+                                            </select>
+                                        [% ELSE %]
                                         [% iteminformatio.marc_value %]
+                                        [% END %]
                                         <input type="hidden" name="itemid" value="1" />
                                         <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield %]" />
                                         <input type="hidden" name="tag" value="[% iteminformatio.tag %]" />
