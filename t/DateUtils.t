@@ -3,7 +3,7 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 42;
+use Test::More tests => 44;
 use Test::MockModule;
 use Time::HiRes qw/ gettimeofday /;
 
@@ -162,3 +162,23 @@ cmp_ok $date_string, 'eq', '12/11/2013 06:35 PM', 'as_due_date with hours and ti
 
 my $now = DateTime->now;
 is( dt_from_string, $now, "Without parameter, dt_from_string should return today" );
+
+$module_context->mock(
+    'tz',
+    sub {
+        return DateTime::TimeZone->new( name => 'Europe/Lisbon' );
+    }
+);
+
+$dt = dt_from_string('1979-04-01');
+isa_ok( $dt, 'DateTime', 'dt_from_string should return a DateTime object if a DST is given' );
+
+$module_context->mock(
+    'tz',
+    sub {
+        return DateTime::TimeZone->new( name => 'Europe/Paris' );
+    }
+);
+
+$dt = dt_from_string('2014-03-30 02:00:00');
+isa_ok( $dt, 'DateTime', 'dt_from_string should return a DateTime object if a DST is given' );
