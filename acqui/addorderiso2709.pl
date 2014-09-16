@@ -45,6 +45,8 @@ use C4::Suggestions;    # GetSuggestion
 use C4::Branch;         # GetBranches
 use C4::Members;
 
+use Koha::Number::Price;
+
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie, $userflags) = get_template_and_user({
     template_name => "acqui/addorderiso2709.tt",
