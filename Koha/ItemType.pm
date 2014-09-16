@@ -1,5 +1,9 @@
 package Koha::ItemType;
 
+# This represents a single itemtype
+
+# Copyright 2014 Catalyst IT
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the

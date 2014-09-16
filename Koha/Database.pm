@@ -41,6 +41,8 @@ use vars qw($database);
 
 __PACKAGE__->mk_accessors(qw( ));
 
+our $schema; # the schema is a singleton
+
 # _new_schema
 # Internal helper function (not a method!). This creates a new
 # database connection from the data given in the current context, and
@@ -110,8 +112,7 @@ creates one, and connects to the database.
 
 This database handle is cached for future use: if you call
 C<$database-E<gt>schema> twice, you will get the same handle both
-times. If you need a second database handle, use C<&new_schema> and
-possibly C<&set_schema>.
+times. If you need a second database handle, use C<&new_schema>.
 
 =cut
 
