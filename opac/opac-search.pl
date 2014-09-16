@@ -30,6 +30,35 @@ use Modern::Perl;
 use C4::Context;
 use List::MoreUtils q/any/;
 
+use Data::Dumper; # TODO remove
+
+use Koha::SearchEngine::Elasticsearch::QueryBuilder;
+use Koha::ElasticSearch::Search;
+use Koha::SearchEngine::Zebra::QueryBuilder;
+use Koha::SearchEngine::Zebra::Search;
+
+my $searchengine = C4::Context->preference("SearchEngine");
+my ($builder, $searcher);
+#$searchengine = 'Zebra'; # XXX
+for ( $searchengine ) {
+    when ( /^Solr$/ ) {
+        warn "We use Solr";
+        require 'opac/search.pl';
+        exit;
+    }
+    when ( /^Zebra$/ ) {
+        $builder=Koha::SearchEngine::Zebra::QueryBuilder->new();
+        $searcher=Koha::SearchEngine::Zebra::Search->new();
+    }
+    when (/^Elasticsearch$/) {
+        # Should use the base QueryBuilder, but I don't have it wired up
+        # for moose yet.
+        $builder=Koha::SearchEngine::Elasticsearch::QueryBuilder->new();
+#        $builder=Koha::SearchEngine::Zebra::QueryBuilder->new();
+        $searcher=Koha::ElasticSearch::Search->new({index => 'biblios'});
+    }
+}
+
 use C4::Output;
 use C4::Auth qw(:DEFAULT get_session);
 use C4::Languages qw(getLanguages);
@@ -525,7 +554,7 @@ my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_
 my @results;
 
 ## I. BUILD THE QUERY
-( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by, 0, $lang);
+( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type) = $builder->build_query_compat(\@operators,\@operands,\@indexes,\@limits,\@sort_by, 0, $lang);
 
 sub _input_cgi_parse {
     my @elements;
@@ -605,11 +634,12 @@ if ($tag) {
     $pasarParams .= '&amp;simple_query=' . uri_escape_utf8($simple_query);
     $pasarParams .= '&amp;query_type=' . uri_escape_utf8($query_type) if ($query_type);
     eval {
-        ($error, $results_hashref, $facets) = getRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$itemtypes_nocategory,$query_type,$scan,1);
-    };
+        ($error, $results_hashref, $facets) = $searcher->search_compat($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$itemtypes,$query_type,$scan,1);
+};
 }
+
 # This sorts the facets into alphabetical order
-if ($facets) {
+if ($facets && @$facets) {
     foreach my $f (@$facets) {
         $f->{facets} = [ sort { uc($a->{facet_label_value}) cmp uc($b->{facet_label_value}) } @{ $f->{facets} } ];
     }

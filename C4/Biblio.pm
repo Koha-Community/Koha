@@ -3468,6 +3468,14 @@ sub ModBiblioMarc {
     $sth = $dbh->prepare("UPDATE biblioitems SET marc=?,marcxml=? WHERE biblionumber=?");
     $sth->execute( $record->as_usmarc(), $record->as_xml_record($encoding), $biblionumber );
     $sth->finish;
+    if ( C4::Context->preference('SearchEngine') eq 'ElasticSearch' ) {
+# shift to its on sub, so it can do it realtime or queue
+        can_load( modules => { 'Koha::ElasticSearch::Indexer' => undef } );
+        # need to get this from syspref probably biblio/authority for index
+        my $indexer = Koha::ElasticSearch::Indexer->new();
+        my $records = [$record];
+        $indexer->update_index([$biblionumber], $records);
+    }
     ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
     return $biblionumber;
 }

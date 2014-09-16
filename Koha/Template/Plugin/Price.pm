@@ -17,6 +17,7 @@ package Koha::Template::Plugin::Price;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+use base qw(Class::Accessor);
 use Modern::Perl;
 
 use Template::Plugin::Filter;
@@ -32,6 +33,12 @@ sub filter {
     return $config->{on_editing}
         ? Koha::Number::Price->new( $value )->format_for_editing
         : Koha::Number::Price->new( $value )->format;
+}
+
+sub build_query_compat {
+    # Because this passes directly on to C4::Search, we have no trouble being
+    # compatible.
+    build_query(@_);
 }
 
 1;
