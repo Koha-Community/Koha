@@ -85,8 +85,9 @@ $template->param( branches => $branches ) if ( $branches );
 # get the patron categories and pass them to the template
 my $categories = GetBorrowercategoryList();
 $template->param( categories => $categories ) if ( $categories );
-my $columns = C4::Templates::GetColumnDefs( $input );
-$template->param( borrower_fields => $columns->{borrowers} );
+my $columns = C4::Templates::GetColumnDefs( $input )->{borrowers};
+$columns = [ grep { $_->{field} ne 'borrowernumber' ? $_ : () } @$columns ];
+$template->param( borrower_fields => $columns );
 
 if ($input->param('sample')) {
     print $input->header(
