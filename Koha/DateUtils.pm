@@ -53,9 +53,14 @@ to the system preferences. If the date string is empty DateTime->now is returned
 
 sub dt_from_string {
     my ( $date_string, $date_format, $tz ) = @_;
-    if ( !$tz ) {
-        $tz = C4::Context->tz;
-    }
+
+
+    # FIXME: see bug 13242 => no TZ for dates 'infinite'
+    return DateTime::Format::DateParse->parse_datetime($date_string)
+        if $date_string and $date_string =~ /^9999-/;
+
+    my $dt;
+    $tz ||= C4::Context->tz;
     if ( !$date_format ) {
         $date_format = C4::Context->preference('dateformat');
     }
@@ -84,10 +89,21 @@ s/(\d{4})(\d{2})(\d{2})\s+(\d{2})(\d{2})(\d{2})/$1-$2-$3T$4:$5:$6/;
                 $date_string =~ s/00T/01T/;
             }
         }
-        return DateTime::Format::DateParse->parse_datetime( $date_string,
-            $tz->name() );
+
+        $dt = eval {
+            DateTime::Format::DateParse->parse_datetime( $date_string,
+                $tz->name() );
+        };
+        if ($@) {
+            $tz = DateTime::TimeZone->new( name => 'floating' );
+            $dt = DateTime::Format::DateParse->parse_datetime( $date_string,
+                $tz->name() );
+        }
+    } else {
+        $dt = DateTime->now( time_zone => $tz );
     }
-    return DateTime->now( time_zone => $tz );
+
+    return $dt;
 
 }
 
