@@ -359,6 +359,15 @@ function validate1(date) {
     </li>
     [% IF ( borrowernotes ) %]<li><span class="label">Circulation note: </span>[% borrowernotes %]</li>[% END %]
     [% IF ( opacnote ) %]<li><span class="label">OPAC note:</span>[% opacnote %]</li>[% END %]
+    [% IF Koha.Preference( 'NorwegianPatronDBEnable' ) == 1 %]
+        [% IF ( sync == 1 ) %]
+            <li><span class="label">Activate sync: </span>Yes</li>
+            [% IF ( syncstatus ) %]<li><span class="label">Sync status: </span>[% syncstatus %]</li>[% END %]
+            [% IF ( lastsync ) %]<li><span class="label">Last sync: </span>[% lastsync | $KohaDates %]</li>[% END %]
+        [% ELSE %]
+            <li><span class="label">Activate sync: </span>No</li>
+        [% END %]
+    [% END %]
 	</ol>
 	</div>
  </div>

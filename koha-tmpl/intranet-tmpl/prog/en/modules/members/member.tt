@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons [% IF ( searching ) %]&rsaquo; Search results[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -291,6 +292,11 @@ function filterByFirstLetterSurname(letter) {
             <div id="patron_list_dialog" class="dialog alert">
               Added <span class="patrons-length"></span> patrons to <a></a>.
             </div>
+          [% END %]
+
+          [% IF Koha.Preference( 'NorwegianPatronDBEnable' ) == 1 %]
+            [% SET nl_search_form_title='Search the Norwegian national patron database' %]
+            [% INCLUDE 'nl-search-form.tt' %]
           [% END %]
 
           [% INCLUDE 'patron-toolbar.inc' %]

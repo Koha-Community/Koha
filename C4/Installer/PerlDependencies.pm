@@ -717,6 +717,26 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.03',
     },
+    'SOAP::Lite' => {
+        'usage'    => 'Norwegian national library card',
+        'required' => '0',
+        'min_ver'  => '0.712',
+    },
+    'Crypt::GCrypt' => {
+        'usage'    => 'Norwegian national library card',
+        'required' => '0',
+        'min_ver'  => '1.24',
+    },
+    'Convert::BaseN' => {
+        'usage'    => 'Norwegian national library card',
+        'required' => '0',
+        'min_ver'  => '0.01',
+    },
+    'Digest::SHA' => {
+        'usage'    => 'Norwegian national library card',
+        'required' => '0',
+        'min_ver'  => '5.61',
+    },
 };
 
 1;

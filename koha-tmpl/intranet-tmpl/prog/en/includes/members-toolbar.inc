@@ -1,12 +1,32 @@
+[% USE Koha %]
+[% SET NorwegianPatronDBEnable = Koha.Preference( 'NorwegianPatronDBEnable' ) %]
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
     [% IF ( CAN_user_borrowers ) %]
-        $("#deletepatron").click(function(){
+        [% IF ( NorwegianPatronDBEnable == 1 ) %]
+            $("#deletepatronlocal").click(function(){
+                confirm_local_deletion();
+                $(".btn-group").removeClass("open");
+                return false;
+            });
+            $("#deletepatronremote").click(function(){
+                confirm_remote_deletion();
+                $(".btn-group").removeClass("open");
+                return false;
+            });
+            $("#deletepatronboth").click(function(){
+                confirm_both_deletion();
+                $(".btn-group").removeClass("open");
+                return false;
+            });
+        [% ELSE %]
+            $("#deletepatron").click(function(){
                 confirm_deletion();
                 $(".btn-group").removeClass("open");
                 return false;
             });
+        [% END %]
         $("#renewpatron").click(function(){
             confirm_reregistration();
             $(".btn-group").removeClass("open");
@@ -47,6 +67,24 @@ function confirm_deletion() {
     var is_confirmed = window.confirm(_("Are you sure you want to delete this patron? This cannot be undone."));
     if (is_confirmed) {
         window.location='/cgi-bin/koha/members/deletemem.pl?member=[% borrowernumber %]';
+    }
+}
+function confirm_local_deletion() {
+    var is_confirmed = window.confirm(_("Are you sure you want to delete this patron from the local database? This cannot be undone."));
+    if (is_confirmed) {
+        window.location='/cgi-bin/koha/members/deletemem.pl?member=[% borrowernumber %]&deletelocal=true&deleteremote=false';
+    }
+}
+function confirm_remote_deletion() {
+    var is_confirmed = window.confirm(_("Are you sure you want to delete this patron from the Norwegian national patron database? This cannot be undone."));
+    if (is_confirmed) {
+        window.location='/cgi-bin/koha/members/deletemem.pl?member=[% borrowernumber %]&deletelocal=false&deleteremote=true';
+    }
+}
+function confirm_both_deletion() {
+    var is_confirmed = window.confirm(_("Are you sure you want to delete this patron both from the local database and from the Norwegian national patron database? This cannot be undone."));
+    if (is_confirmed) {
+        window.location='/cgi-bin/koha/members/deletemem.pl?member=[% borrowernumber %]&deletelocal=true&deleteremote=true';
     }
 }
 
@@ -141,7 +179,13 @@ function searchToHold(){
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to set permissions" id="patronflags" href="#">Set permissions</a></li>
                 [% END %]
                 [% IF ( CAN_user_borrowers ) %]
-                    <li><a id="deletepatron" href="#">Delete</a></li>
+                    [% IF ( NorwegianPatronDBEnable == 1 ) %]
+                        <li><a id="deletepatronlocal" href="#">Delete local</a></li>
+                        <li><a id="deletepatronremote" href="#">Delete remote</a></li>
+                        <li><a id="deletepatronboth" href="#">Delete local and remote</a></li>
+                    [% ELSE %]
+                        <li><a id="deletepatron" href="#">Delete</a></li>
+                    [% END %]
                 [% ELSE %]
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to delete patrons" id="deletepatron" href="#">Delete</a></li>
                 [% END %]

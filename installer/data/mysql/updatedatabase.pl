@@ -8832,6 +8832,31 @@ if ( CheckVersion($DBversion) ) {
         ('UsageStats', 0, NULL, 'Share anonymous usage data on the Hea Koha community website.', 'YesNo')
     });
     print "Upgrade to $DBversion done (Bug 11926: Add UsageStats systempreferences (HEA))\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.17.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('NorwegianPatronDBEnable', '0', NULL, 'Enable communication with the Norwegian national patron database.', 'YesNo')");
+    $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('NorwegianPatronDBEndpoint', '', NULL, 'Which NL endpoint to use.', 'Free')");
+    $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('NorwegianPatronDBUsername', '', NULL, 'Username for communication with the Norwegian national patron database.', 'Free')");
+    $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('NorwegianPatronDBPassword', '', NULL, 'Password for communication with the Norwegian national patron database.', 'Free')");
+    $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('NorwegianPatronDBSearchNLAfterLocalHit','0',NULL,'Search NL if a search has already given one or more local hits?.','YesNo')");
+    $dbh->do("
+CREATE TABLE borrower_sync (
+    borrowersyncid int(11) NOT NULL AUTO_INCREMENT,
+    borrowernumber int(11) NOT NULL,
+    synctype varchar(32) NOT NULL,
+    sync tinyint(1) NOT NULL DEFAULT '0',
+    syncstatus varchar(10) DEFAULT NULL,
+    lastsync varchar(50) DEFAULT NULL,
+    hashed_pin varchar(64) DEFAULT NULL,
+    PRIMARY KEY (borrowersyncid),
+    KEY borrowernumber (borrowernumber),
+    CONSTRAINT borrower_sync_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+);
+    print "Upgrade to $DBversion done (Bug 11401 - Add support for Norwegian national library card)\n";
     SetVersion($DBversion);
 }
 

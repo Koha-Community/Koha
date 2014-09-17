@@ -1,4 +1,5 @@
 Patrons:
+    General:
      -
          - List
          - pref: AddPatronLists
@@ -138,3 +139,24 @@ Patrons:
          - pref: CardnumberLength
          - "characters long. The length can be a single number to specify an exact length, a range separated by a comma (i.e., 'Min,Max'), or a maximum with no minimum (i.e., ',Max')."
          - "If 'cardnumber' is included in the BorrowerMandatoryField list, the minimum length, if not specified here, defaults to one."
+    Norwegian patron database:
+    -
+         - pref: NorwegianPatronDBEnable
+           choices:
+               yes: Enable
+               no: Disable
+         - the ability to communicate with the Norwegian national patron database via the
+         - pref: NorwegianPatronDBEndpoint
+         - endpoint.
+    -
+         - Communicate with the Norwegian national patron database using the username
+         - pref: NorwegianPatronDBUsername
+         - and the password
+         - pref: NorwegianPatronDBPassword
+         - . You can get these from "Base Bibliotek", which is maintained by the Norwegian National Library.
+    -
+         - pref: NorwegianPatronDBSearchNLAfterLocalHit
+           choices:
+               yes: Do
+               no: "Don't"
+         - search the Norwegian national patron database after a local search result was found.

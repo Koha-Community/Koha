@@ -10,21 +10,31 @@
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
-	[% INCLUDE 'members-toolbar.inc' %]
-	<div class="dialog alert">
-    <h3>Cannot delete patron</h3>
-		<ul>[% IF ( ItemsOnIssues ) %]
-			<li>Patron has [% ItemsOnIssues %] item(s) checked out.</li>
-		[% END %]
-		[% IF ( charges ) %]
-			<li>Patron has [% charges %] in fines.</li>
-		[% END %]
-		[% IF ( guarantees ) %]
-			<li>Patron's record has guaranteed accounts attached.</li>
-		[% END %]</ul>
-	</div>
+    <div id="yui-main">
+    <div class="yui-b">
+    [% INCLUDE 'members-toolbar.inc' %]
+    [% IF ( ItemsOnIssues || charges || guarantees ) %]
+        <div class="dialog alert">
+        <h3>Cannot delete patron</h3>
+            <ul>
+            [% IF ( ItemsOnIssues ) %]
+                <li>Patron has [% ItemsOnIssues %] item(s) checked out.</li>
+            [% END %]
+            [% IF ( charges ) %]
+                <li>Patron has [% charges %] in fines.</li>
+            [% END %]
+            [% IF ( guarantees ) %]
+                <li>Patron's record has guaranteed accounts attached.</li>
+            [% END %]
+            </ul>
+    </div>
+    [% END %]
+    [% IF ( keeplocal ) %]
+        <div class="dialog message">
+        <h3>Remote record deleted, local record kept</h3>
+        <p>Patron was marked for deletion from Norwegian national patron database, but the local record was kept.</p>
+        </div>
+    [% END %]
 </div>
 </div>
 

@@ -33,15 +33,20 @@ use C4::Accounts;
 use C4::Biblio;
 use C4::Letters;
 use C4::SQLHelper qw(InsertInTable UpdateInTable SearchInTable);
-use C4::Members::Attributes qw(SearchIdMatchingAttribute);
+use C4::Members::Attributes qw(SearchIdMatchingAttribute UpdateBorrowerAttribute);
 use C4::NewsChannels; #get slip news
 use DateTime;
 use DateTime::Format::DateParse;
+use Koha::Database;
 use Koha::DateUtils;
 use Koha::Borrower::Debarments qw(IsDebarred);
 use Text::Unaccent qw( unac_string );
 use Koha::AuthUtils qw(hash_password);
 use Koha::Database;
+use Module::Load;
+if ( C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+    load Koha::NorwegianPatronDB, qw( NLUpdateHashedPIN NLEncryptPIN NLSync );
+}
 
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -784,6 +789,10 @@ sub ModMember {
         if ($data{password} eq '****' or $data{password} eq '') {
             delete $data{password};
         } else {
+            if ( C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+                # Update the hashed PIN in borrower_sync.hashed_pin, before Koha hashes it
+                NLUpdateHashedPIN( $data{'borrowernumber'}, $data{password} );
+            }
             $data{password} = hash_password($data{password});
         }
     }
@@ -802,6 +811,25 @@ sub ModMember {
         # If the patron changes to a category with enrollment fee, we add a fee
         if ( $data{categorycode} and $data{categorycode} ne $old_categorycode ) {
             AddEnrolmentFeeIfNeeded( $data{categorycode}, $data{borrowernumber} );
+        }
+
+        # If NorwegianPatronDBEnable is enabled, we set syncstatus to something that a
+        # cronjob will use for syncing with NL
+        if ( C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+            my $borrowersync = Koha::Database->new->schema->resultset('BorrowerSync')->find({
+                'synctype'       => 'norwegianpatrondb',
+                'borrowernumber' => $data{'borrowernumber'}
+            });
+            # Do not set to "edited" if syncstatus is "new". We need to sync as new before
+            # we can sync as changed. And the "new sync" will pick up all changes since
+            # the patron was created anyway.
+            if ( $borrowersync->syncstatus ne 'new' && $borrowersync->syncstatus ne 'delete' ) {
+                $borrowersync->update( { 'syncstatus' => 'edited' } );
+            }
+            # Set the value of 'sync'
+            $borrowersync->update( { 'sync' => $data{'sync'} } );
+            # Try to do the live sync
+            NLSync({ 'borrowernumber' => $data{'borrowernumber'} });
         }
 
         logaction("MEMBERS", "MODIFY", $data{'borrowernumber'}, "UPDATE (executed w/ arg: $data{'borrowernumber'})") if C4::Context->preference("BorrowersLog");
@@ -846,10 +874,24 @@ sub AddMember {
       : $patron_category->default_privacy() eq 'never'   ? 2
       : $patron_category->default_privacy() eq 'forever' ? 0
       :                                                    undef;
+    # Make a copy of the plain text password for later use
+    my $plain_text_password = $data{'password'};
 
     # create a disabled account if no password provided
     $data{'password'} = ($data{'password'})? hash_password($data{'password'}) : '!';
     $data{'borrowernumber'}=InsertInTable("borrowers",\%data);
+
+    # If NorwegianPatronDBEnable is enabled, we set syncstatus to something that a
+    # cronjob will use for syncing with NL
+    if ( exists $data{'borrowernumber'} && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+        Koha::Database->new->schema->resultset('BorrowerSync')->create({
+            'borrowernumber' => $data{'borrowernumber'},
+            'synctype'       => 'norwegianpatrondb',
+            'sync'           => 1,
+            'syncstatus'     => 'new',
+            'hashed_pin'     => NLEncryptPIN( $plain_text_password ),
+        });
+    }
 
     # mysql_insertid is probably bad.  not necessarily accurate and mysql-specific at best.
     logaction("MEMBERS", "CREATE", $data{'borrowernumber'}, "") if C4::Context->preference("BorrowersLog");

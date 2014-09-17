@@ -43,6 +43,10 @@ use C4::Branch; # GetBranches
 use C4::Form::MessagingPreferences;
 use Koha::Borrower::Debarments;
 use Koha::DateUtils;
+use Module::Load;
+if ( C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+    load Koha::NorwegianPatronDB, qw( NLGetSyncDataFromBorrowernumber );
+}
 
 use vars qw($debug);
 
@@ -416,12 +420,16 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
         if (C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs')) {
             C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template, 1, $newdata{'categorycode'});
         }
+        # Try to do the live sync with the Norwegian national patron database, if it is enabled
+        if ( exists $data{'borrowernumber'} && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+            NLSync({ 'borrowernumber' => $borrowernumber });
+        }
 	} elsif ($op eq 'save'){ 
 		if ($NoUpdateLogin) {
 			delete $newdata{'password'};
 			delete $newdata{'userid'};
 		}
-		&ModMember(%newdata) unless scalar(keys %newdata) <= 1; # bug 4508 - avoid crash if we're not
+        &ModMember(%newdata) unless scalar(keys %newdata) <= 1; # bug 4508 - avoid crash if we're not
                                                                 # updating any columns in the borrowers table,
                                                                 # which can happen if we're only editing the
                                                                 # patron attributes or messaging preferences sections
@@ -469,6 +477,15 @@ if ($op eq "modify")  {
     $template->param( step_1=>1, step_2=>1, step_3=>1, step_4=>1, step_5 => 1, step_6 => 1) unless $step;
     if ( $step == 4 ) {
         $template->param( categorycode => $borrower_data->{'categorycode'} );
+    }
+    # Add sync data to the user data
+    if ( C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+        my $sync = NLGetSyncDataFromBorrowernumber( $borrowernumber );
+        if ( $sync ) {
+            $template->param(
+                sync => $sync->sync,
+            );
+        }
     }
 }
 if ( $op eq "duplicate" ) {
