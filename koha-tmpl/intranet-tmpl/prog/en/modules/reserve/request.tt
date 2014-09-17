@@ -232,7 +232,7 @@ function checkMultiHold() {
             [% FOREACH borrower IN borrower_list %]
                 <option value="[% borrower.borrowernumber %]">
 [% borrower.surname -%], [% borrower.firstname -%]
- ... ( [% borrower.cardnumber -%] - [% borrower.categorycode -%]
+ ... ( [% borrower.cardnumber -%] - [% borrower.categorycode -%] - [% borrower.branchcode %]
 ) ... [% borrower.address %]
                 </option>
             [% END %]
