@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
 
+<script type="text/javascript" src="[% interface %]/js/autocomplete/patrons.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
@@ -21,26 +22,10 @@ $(document).ready(function() {
             "sPaginationType": "four_button"
         } ));
 
-    $( "#find_patron" ).autocomplete({
-        source: "/cgi-bin/koha/circ/ysearch.pl",
-        minLength: 3,
-        select: function( event, ui ) {
-            AddPatron( ui.item.firstname + " " + ui.item.surname, ui.item.cardnumber );
-            return false;
-        }
-    })
-    .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-        return $( "<li></li>" )
-        .data( "ui-autocomplete-item", item )
-        .append( "<a>" + item.surname + ", " + item.firstname + " (" + item.cardnumber + ") <small>" + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
-        .appendTo( ul );
-    };
-
-    $("body").on("click",".removePatron",function(e){
-        e.preventDefault();
-        var divid = $(this).parent().attr("id");
-        var cardnumber = divid.replace("borrower_","");
-        RemovePatron(cardnumber);
+    patron_autocomplete({
+        patron_container: $("#patrons_to_add"),
+        input_autocomplete: $("#find_patron"),
+        patron_input_name = 'patrons_to_add'
     });
 
     var checkBoxes = $("input[type='checkbox']","#patron-list-table");
@@ -74,22 +59,6 @@ $(document).ready(function() {
     });
 });
 
-function AddPatron( name, cardnumber ) {
-    div = "<div id='borrower_" + cardnumber + "'>" + name + " ( <a href='#' class='removePatron'> " + _("Remove") + " </a> ) <input type='hidden' name='patrons_to_add' value='" + cardnumber + "' /></div>";
-    $('#patrons_to_add').append( div );
-
-    $('#find_patron').val('').focus();
-
-    $('#patrons_to_add_fieldset').show( 800 );
-}
-
-function RemovePatron( cardnumber ) {
-    $( '#borrower_' + cardnumber ).remove();
-
-    if ( ! $('#patrons_to_add').html() ) {
-        $('#patrons_to_add_fieldset').hide( 800 );
-    }
-}
 //]]>
 </script>
 
