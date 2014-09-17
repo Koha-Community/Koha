@@ -3,7 +3,7 @@
     var CIRCULATION_RETURNED = _("Returned");
     var CIRCULATION_NOT_RETURNED = _("Unable to return");
     var CIRCULATION_RENEWED_DUE = _("Renewed, due:");
-    var CIRCULATION_RENEW_FAILED = _("Renew failed:")
+    var CIRCULATION_RENEW_FAILED = _("Renew failed:");
     var NOT_CHECKED_OUT = _("not checked out");
     var TOO_MANY_RENEWALS = _("too many renewals");
     var ON_RESERVE = _("on reserve");
