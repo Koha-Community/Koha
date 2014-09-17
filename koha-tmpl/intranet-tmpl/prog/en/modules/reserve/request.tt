@@ -136,6 +136,12 @@ function checkMultiHold() {
 		}
 	});
 
+    $(".clear-date").on("click",function(e){
+        e.preventDefault();
+        var fieldID = this.id.replace("clear-date-","");
+        $("#" + fieldID).val("");
+    });
+
     $('#hold-request-form').preventDoubleFormSubmit();
 
 [% UNLESS ( borrowernumber || borrower_list || noitems ) %]
@@ -295,7 +301,7 @@ function checkMultiHold() {
             <form action="placerequest.pl" method="post" onsubmit="return checkMultiHold();" name="form">
         [% END %]
 
-        <input type="hidden" size="10" name="borrowernumber" value="[% borrowernumber %]" />
+        <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
         <input type="hidden" name="type" value="str8" />
 
         [% IF ( multi_hold ) %]
@@ -347,14 +353,14 @@ function checkMultiHold() {
 	<li>
         <label for="from">Hold starts on date:</label>
         <input name="reserve_date" id="from" size="10" readonly="readonly" class="datepickerfrom">
-        <a href='#' onclick="document.getElementById('reserve_date').value='';">Clear date</a>
+        <a href="#" id="clear-date-from" class="clear-date">Clear date</a>
 	</li>
 	[% END %]
 
 	<li>
         <label for="to">Hold expires on date:</label>
         <input name="expiration_date" id="to" size="10" readonly="readonly" class="datepickerto" />
-        <a href='#' onclick="document.getElementById('expiration_date').value='';">Clear date</a>
+        <a href="#" id="clear-date-to" class="clear-date">Clear date</a>
 	</li>
 
         [% UNLESS ( multi_hold ) %]
@@ -483,7 +489,7 @@ function checkMultiHold() {
         </table>
     [% IF ( bibitemloo.hiddencount ) %]
         <form>
-        <p class="hiddencount"><a href="request.pl?biblionumber=[% bibitemloo.biblionumber %]&borrowernumber=[% bibitemloo.borrowernumber %]&showallitems=1">Show all items ([% bibitemloo.hiddencount %] hidden)</a></p>
+        <p class="hiddencount"><a href="request.pl?biblionumber=[% bibitemloo.biblionumber %]&amp;borrowernumber=[% bibitemloo.borrowernumber %]&amp;showallitems=1">Show all items ([% bibitemloo.hiddencount %] hidden)</a></p>
         </form>
     [% END %] <!-- hiddencount -->
     [% END %] <!-- bibitemloop -->
