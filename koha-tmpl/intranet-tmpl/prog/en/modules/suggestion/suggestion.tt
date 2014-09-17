@@ -141,16 +141,16 @@ $(document).ready(function() {
         if ( action_delete_selected ) {
             var suggestions_to_delete = $(this).find("input[name='edit_field']:checked");
             if ( suggestions_to_delete.length == 0 ) {
-                alert(_("No suggestion to delete"));
+                alert(_("Please select at least one suggestion to delete"));
                 e.preventDefault();
                 return false;
             } else if ( suggestions_to_delete.length == 1 ) {
-                if ( ! confirm(_("Are you sure you want to delete this suggestion")) ) {
+                if ( ! confirm(_("Are you sure you want to delete this suggestion?")) ) {
                     e.preventDefault();
                     return false;
                 }
             } else if ( suggestions_to_delete.length > 1 ) {
-                if ( ! confirm(_("Are you sure you want to delete these suggestions")) ) {
+                if ( ! confirm(_("Are you sure you want to delete these suggestions?")) ) {
                     e.preventDefault();
                     return false;
                 }
