@@ -76,6 +76,7 @@ my $budget                  = $input->param( 'budget' );
 my $orderstatus             = $input->param( 'orderstatus' );
 my $ordernumber             = $input->param( 'ordernumber' );
 my $search_children_too     = $input->param( 'search_children_too' );
+my @created_by              = $input->param('created_by');
 
 if ( not $input->param('from') ) {
     # FIXME Dirty but we can't sent a Date::Calc to C4::Dates ?
@@ -121,6 +122,7 @@ if ($do_search) {
         orderstatus => $orderstatus,
         ordernumber => $ordernumber,
         search_children_too => $search_children_too,
+        created_by => \@created_by,
     );
 }
 

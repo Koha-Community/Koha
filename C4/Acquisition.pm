@@ -2179,6 +2179,7 @@ sub GetHistory {
     my $get_canceled_order = $params{get_canceled_order} || 0;
     my $ordernumber = $params{ordernumber};
     my $search_children_too = $params{search_children_too} || 0;
+    my $created_by = $params{created_by} || [];
 
     my @order_loop;
     my $total_qty         = 0;
@@ -2195,6 +2196,8 @@ sub GetHistory {
             aqorders.basketno,
             aqbasket.basketname,
             aqbasket.basketgroupid,
+            aqbasket.authorisedby,
+            concat( borrowers.firstname,' ',borrowers.surname) AS authorisedbyname,
             aqbasketgroups.name as groupname,
             aqbooksellers.name,
             aqbasket.creationdate,
@@ -2223,11 +2226,8 @@ sub GetHistory {
         LEFT JOIN aqinvoices ON aqorders.invoiceid = aqinvoices.invoiceid
         LEFT JOIN deletedbiblio ON deletedbiblio.biblionumber=aqorders.biblionumber
         LEFT JOIN deletedbiblioitems ON deletedbiblioitems.biblionumber=aqorders.biblionumber
+        LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
         ";
-
-    if ( C4::Context->preference("IndependentBranches") ) {
-        $query .= " LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber";
-    }
 
     $query .= " WHERE 1 ";
 
@@ -2314,6 +2314,11 @@ sub GetHistory {
             push @query_params, $ordernumber;
         }
         $query .= ") ";
+    }
+
+    if ( @$created_by ) {
+        $query .= ' AND aqbasket.authorisedby IN ( ' . join( ',', ('?') x @$created_by ) . ')';
+        push @query_params, @$created_by;
     }
 
 

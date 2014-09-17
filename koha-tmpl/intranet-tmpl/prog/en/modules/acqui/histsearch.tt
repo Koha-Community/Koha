@@ -5,6 +5,8 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 [% INCLUDE 'datatables.inc' %]
+
+<script type="text/javascript" src="[% interface %]/js/autocomplete/patrons.pl"></script>
 <script type="text/javascript">
 //<![CDATA[
  $(document).ready(function() {
@@ -15,7 +17,16 @@
         ],
         "sPaginationType": "four_button"
     } ) );
- });
+
+
+    patron_autocomplete({
+        patron_container: $("#basket_creators"),
+        input_autocomplete: $("#find_patron"),
+        patron_input_name: 'created_by',
+        field_to_retrieve: 'borrowernumber'
+    });
+});
+
  //]]>
 </script>
 </head>
@@ -43,6 +54,12 @@
                 [% END %]
 		<li><label for="name">Vendor: </label> <input type="text" name="name" id="name" value="[% name %]" /></li>
 		<li><label for="basket">Basket: </label> <input type="text" name="basket" id="basket" value="[% basket %]" /></li>
+        <li><label for="basket_creators">Basket created by: </label>
+            <input autocomplete="off" id="find_patron" type="text" style="width:150px" class="noEnterSubmit" />
+            <div>
+                <div id="basket_creators" style="float:left;"></div>
+            </div>
+        </li>
         <li><label for="booksellerinvoicenumber ">Bookseller invoice no: </label> <input type="text" name="booksellerinvoicenumber" id="booksellerinvoicenumber" value="[% booksellerinvoicenumber %]" /></li>
         <li>
             <label for="basketgroupname">Basket group:</label>
@@ -135,6 +152,7 @@
                 <th>Order line (parent)</th>
                 <th>Status</th>
 				<th>Basket</th>
+                <th>Basket creator</th>
 				<th>Basket group</th>
                 <th>Invoice number</th>
                 <th class="anti-the">Summary</th>
@@ -164,6 +182,7 @@
                         [% END %]
                     </td>
                     <td>[% order.basketname %] (<a href="basket.pl?basketno=[% order.basketno %]">[% order.basketno %]</a>)</td>
+                    <td>[% order.authorisedbyname %]</td>
                     <td>
                         [% IF ( order.basketgroupid ) %]
                             [% order.groupname %] (<a href="basketgroup.pl?booksellerid=[% order.id %]">[% order.basketgroupid %]</a>)
