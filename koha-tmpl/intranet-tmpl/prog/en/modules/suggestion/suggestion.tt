@@ -134,6 +134,30 @@ $(document).ready(function() {
             datesAD.not( this ).datepicker( "option", option, date );
         }
     });
+
+    $("form.update_suggestions").on("submit", function(e){
+        var form = this;
+        var action_delete_selected = $(this).find("input[value='delete']").is(":checked");
+        if ( action_delete_selected ) {
+            var suggestions_to_delete = $(this).find("input[name='edit_field']:checked");
+            if ( suggestions_to_delete.length == 0 ) {
+                alert(_("No suggestion to delete"));
+                e.preventDefault();
+                return false;
+            } else if ( suggestions_to_delete.length == 1 ) {
+                if ( ! confirm(_("Are you sure you want to delete this suggestion")) ) {
+                    e.preventDefault();
+                    return false;
+                }
+            } else if ( suggestions_to_delete.length > 1 ) {
+                if ( ! confirm(_("Are you sure you want to delete these suggestions")) ) {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+        }
+        return true;
+    });
 });
 // ]]>
 </script>
@@ -460,7 +484,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
 
 [% FOREACH suggestion IN suggestions %]
 <div id="[% suggestion.suggestiontype %]">
-<form name="f[% suggestion.suggestiontype %]" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#[% suggestion.suggestiontype %]">
+<form class="update_suggestions" name="f[% suggestion.suggestiontype %]" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#[% suggestion.suggestiontype %]">
 
 [% IF ( suggestion.suggestions_loop ) %]
 <p><a id="CheckAll[% suggestion.suggestiontype %]" href="#">Check all</a> | <a id="UncheckAll[% suggestion.suggestiontype %]" href="#">Uncheck all</a></p>
