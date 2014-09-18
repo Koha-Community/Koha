@@ -128,19 +128,21 @@ if ( $op eq 'connectDuplicate' ) {
 }
 
 # getting all suggestions.
-my $suggestions_loop =
-        &SearchSuggestion( 
-                { managedby 	=> $borrowernumber, 
-                author		  	=> $author, 
-                title			=> $title, 
-                publishercode	=> $publishercode,
-                STATUS        => 'ACCEPTED'});
+my $suggestions_loop = SearchSuggestion(
+    {
+        author        => $author,
+        title         => $title,
+        publishercode => $publishercode,
+        STATUS        => 'ACCEPTED'
+    }
+);
 my $vendor = GetBookSellerFromId($booksellerid);
 $template->param(
     suggestions_loop        => $suggestions_loop,
     basketno                => $basketno,
     booksellerid              => $booksellerid,
     name					=> $vendor->{'name'},
+    loggedinuser            => $borrowernumber,
     "op_$op"                => 1,
 );
 

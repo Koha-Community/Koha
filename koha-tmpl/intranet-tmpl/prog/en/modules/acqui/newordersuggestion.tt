@@ -8,10 +8,17 @@
  $(document).ready(function() {
     var suggestionst = $("#suggestionst").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
+            { "aTargets": [ 0 ],  "bVisible": false, "bSearchable": false },
             { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
         ],
         "sPaginationType": "four_button"
     } ) );
+    $("#show_only_mine").on('click', function(){
+        suggestionst.fnFilter('^[% loggedinuser %]$', 0, true);
+    });
+    $("#show_all").on('click', function(){
+        suggestionst.fnFilter('', 0 );
+    });
  });
  //]]>
 </script>
@@ -30,9 +37,11 @@
 	
 <h1>Suggestions</h1>
     [% IF ( suggestions_loop ) %]
+    <a href="#" id="show_only_mine">Show only mine</a> | <a href="#" id="show_all">Show all suggestions</a>
     <table id="suggestionst">
         <thead>
         <tr>
+            <th>Mine</th>
             <th>Suggestion</th>
             <th>Suggested by</th>
             <th>Accepted by</th>
@@ -42,6 +51,7 @@
         <tbody>
         [% FOREACH suggestions_loo IN suggestions_loop %]
             <tr>
+                <td>[% suggestions_loo.managedby %]</td>
                 <td>
                     <p>[% suggestions_loo.title |html %] - [% suggestions_loo.author %]</p>
                     <p>
