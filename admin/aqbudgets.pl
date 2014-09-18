@@ -100,8 +100,7 @@ $template->param(
     op  => $op,
 );
 
-# retrieve branches
-my ( $budget, );
+my $budget;
 
 my $branches = GetBranches($show_mine);
 my @branchloop2;
@@ -132,7 +131,7 @@ if ($op eq 'add_form') {
         }
         $dropbox_disabled = BudgetHasChildren($budget_id);
         my $borrower = &GetMember( borrowernumber=>$budget->{budget_owner_id} );
-        $budget->{budget_owner_name} = $borrower->{'firstname'} . ' ' . $borrower->{'surname'};
+        $budget->{budget_owner_name} = ( $borrower ? $borrower->{'firstname'} . ' ' . $borrower->{'surname'} : '' );
         $$budget{$_}= sprintf("%.2f", $budget->{$_}) for grep{ /amount|encumb|expend/ } keys %$budget;
     }
 
@@ -164,7 +163,7 @@ if ($op eq 'add_form') {
             value      => $thisbranch,
             branchname => $branches->{$thisbranch}->{'branchname'},
         );
-        $row{selected} = 1 if $thisbranch eq $budget->{'budget_branchcode'};
+        $row{selected} = 1 if $budget and $thisbranch eq $budget->{'budget_branchcode'};
         push @branchloop_select, \%row;
     }
     
@@ -173,14 +172,14 @@ if ($op eq 'add_form') {
     my @auth_cats_loop1 = ();
     foreach my $category (@$categories) {
         my $entry = { category => $category,
-                        selected => $budget->{sort1_authcat} eq $category ?1:0,
+                        selected => ( $budget and $budget->{sort1_authcat} eq $category ? 1 : 0 ),
                     };
         push @auth_cats_loop1, $entry;
     }
     my @auth_cats_loop2 = ();
     foreach my $category (@$categories) {
         my $entry = { category => $category,
-                        selected => $budget->{sort2_authcat} eq $category ?1:0,
+                        selected => ( $budget and $budget->{sort2_authcat} eq $category ? 1 : 0 ),
                     };
         push @auth_cats_loop2, $entry;
     }
@@ -321,10 +320,6 @@ if ( $op eq 'list' ) {
         $budget->{"budget_spent"} = $num->format_price(0) unless defined($budget->{"budget_spent"});
         $budget->{budget_ordered} = $num->format_price(0) unless defined($budget->{"budget_ordered"});
 
-        my $borrower = &GetMember( borrowernumber=>$budget->{budget_owner_id} );
-        $budget->{"budget_owner_name"}     = $borrower->{'firstname'} . ' ' . $borrower->{'surname'};
-        $budget->{"budget_borrowernumber"} = $borrower->{'borrowernumber'};
-
         #Make a list of parents of the bugdet
         my @budget_hierarchy;
         push  @budget_hierarchy, { element_name => $budget->{"budget_name"}, element_id => $budget->{"budget_id"} };
@@ -337,7 +332,6 @@ if ( $op eq 'list' ) {
         push  @budget_hierarchy, { element_name => $period->{"budget_period_description"} };
         @budget_hierarchy = reverse(@budget_hierarchy);
 
-        $budget->{branchname} = $branches->{ $budget->{branchcode} }->{branchname};
         $budget->{budget_hierarchy} = \@budget_hierarchy;
     }
 
