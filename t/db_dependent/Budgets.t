@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 108;
+use Test::More tests => 120;
 
 BEGIN {
     use_ok('C4::Budgets')
@@ -9,6 +9,7 @@ use C4::Biblio;
 use C4::Bookseller;
 use C4::Acquisition;
 use C4::Dates;
+use C4::Members qw( AddMember );
 
 use Koha::Acquisition::Order;
 
@@ -96,6 +97,14 @@ is( @$budgetperiods, 0, 'GetBudgetPeriods returns the correct number of budget p
 #
 # Budget  :
 #
+
+# The budget hierarchy will be:
+# budget_1
+#   budget_11
+#     budget_111
+#   budget_12
+# budget_2
+#   budget_21
 
 is( AddBudget(), undef, 'AddBuget without argument returns undef' );
 my $budgets = GetBudgets();
@@ -515,6 +524,60 @@ for my $new_budget ( @new_budgets ) {
     my $new_budget_amount_should_be = $old_budget->{budget_amount} * 2 - $old_budget->{total_spent};
     is( $new_budget->{budget_amount} + 0, $new_budget_amount_should_be, "MoveOrders updated the budget amount with the previous unspent budget (for budget $new_budget->{budget_code})" );
 }
+
+# Test SetOwnerToFundHierarchy
+
+my $categorycode = 'S';
+my $branchcode = 'CPL';
+my $john_doe = C4::Members::AddMember(
+    cardnumber   => '123456',
+    firstname    => 'John',
+    surname      => 'Doe',
+    categorycode => $categorycode,
+    branchcode   => $branchcode,
+    dateofbirth  => '',
+    dateexpiry   => '9999-12-31',
+    userid       => 'john.doe'
+);
+
+C4::Budgets::SetOwnerToFundHierarchy( $budget_id1, $john_doe );
+is( C4::Budgets::GetBudget($budget_id1)->{budget_owner_id},
+    $john_doe, "SetOwnerToFundHierarchy should have set John Doe for budget 1 ($budget_id1)" );
+is( C4::Budgets::GetBudget($budget_id11)->{budget_owner_id},
+    $john_doe, "SetOwnerToFundHierarchy should have set John Doe for budget 11 ($budget_id11)" );
+is( C4::Budgets::GetBudget($budget_id111)->{budget_owner_id},
+    $john_doe, "SetOwnerToFundHierarchy should have set John Doe for budget 111 ($budget_id111)" );
+is( C4::Budgets::GetBudget($budget_id12)->{budget_owner_id},
+    $john_doe, "SetOwnerToFundHierarchy should have set John Doe for budget 12 ($budget_id12 )" );
+is( C4::Budgets::GetBudget($budget_id2)->{budget_owner_id},
+    undef, "SetOwnerToFundHierarchy should not have set an owner for budget 2 ($budget_id2)" );
+is( C4::Budgets::GetBudget($budget_id21)->{budget_owner_id},
+    undef, "SetOwnerToFundHierarchy should not have set an owner for budget 21 ($budget_id21)" );
+
+my $jane_doe = C4::Members::AddMember(
+    cardnumber   => '789012',
+    firstname    => 'Jane',
+    surname      => 'Doe',
+    categorycode => $categorycode,
+    branchcode   => $branchcode,
+    dateofbirth  => '',
+    dateexpiry   => '9999-12-31',
+    userid       => 'jane.doe'
+);
+
+C4::Budgets::SetOwnerToFundHierarchy( $budget_id11, $jane_doe );
+is( C4::Budgets::GetBudget($budget_id1)->{budget_owner_id},
+    $john_doe, "SetOwnerToFundHierarchy should have set John Doe $john_doe for budget 1 ($budget_id1)" );
+is( C4::Budgets::GetBudget($budget_id11)->{budget_owner_id},
+    $jane_doe, "SetOwnerToFundHierarchy should have set John Doe $jane_doe for budget 11 ($budget_id11)" );
+is( C4::Budgets::GetBudget($budget_id111)->{budget_owner_id},
+    $jane_doe, "SetOwnerToFundHierarchy should have set John Doe $jane_doe for budget 111 ($budget_id111)" );
+is( C4::Budgets::GetBudget($budget_id12)->{budget_owner_id},
+    $john_doe, "SetOwnerToFundHierarchy should have set John Doe $john_doe for budget 12 ($budget_id12 )" );
+is( C4::Budgets::GetBudget($budget_id2)->{budget_owner_id},
+    undef, "SetOwnerToFundHierarchy should have set John Doe $john_doe for budget 2 ($budget_id2)" );
+is( C4::Budgets::GetBudget($budget_id21)->{budget_owner_id},
+    undef, "SetOwnerToFundHierarchy should have set John Doe $john_doe for budget 21 ($budget_id21)" );
 
 sub _get_dependencies {
     my ($budget_hierarchy) = @_;

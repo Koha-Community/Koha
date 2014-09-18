@@ -474,6 +474,15 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
             onclick="ownerRemove(); return false;" />
     </li>
 
+    [% IF budget_has_children %]
+        <li>
+            <span class="label">
+                <label for="set_owner_to_children">Set this owner to all children funds:</label>
+            </span>
+            <input type="checkbox" id="set_owner_to_children" name="set_owner_to_children" value="1" />
+        </li>
+    [% END %]
+
     <li>
         <span class="label">Users:</span>
         <ul style="float:left;" id="budget_users">

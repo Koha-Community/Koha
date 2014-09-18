@@ -187,6 +187,27 @@ sub BudgetHasChildren {
     return $sum->{'sum'};
 }
 
+sub GetBudgetChildren {
+    my ( $budget_id ) = @_;
+    my $dbh = C4::Context->dbh;
+    return $dbh->selectall_arrayref(q|
+       SELECT  * FROM  aqbudgets
+        WHERE budget_parent_id = ?
+    |, { Slice => {} }, $budget_id );
+}
+
+sub SetOwnerToFundHierarchy {
+    my ( $budget_id, $borrowernumber ) = @_;
+
+    my $budget = GetBudget( $budget_id );
+    $budget->{budget_owner_id} = $borrowernumber;
+    ModBudget( $budget );
+    my $children = GetBudgetChildren( $budget_id );
+    for my $child ( @$children ) {
+        SetOwnerToFundHierarchy( $child->{budget_id}, $borrowernumber );
+    }
+}
+
 # -------------------------------------------------------------------
 sub GetBudgetsPlanCell {
     my ( $cell, $period, $budget ) = @_;

@@ -210,6 +210,7 @@ if ($op eq 'add_form') {
 
     # if no buget_id is passed then its an add
     $template->param(
+        budget_has_children => BudgetHasChildren( $budget->{budget_id} ),
         budget_parent_id    		  => $budget_parent->{'budget_id'},
         budget_parent_name    		  => $budget_parent->{'budget_name'},
         branchloop_select         => \@branchloop_select,
@@ -240,12 +241,14 @@ if ($op eq 'add_form') {
         @budgetusersid = split(':', $budget_users_ids);
     }
 
+    my $budget_modified = 0;
     if (defined $budget_id) {
         if (CanUserModifyBudget($borrowernumber, $budget_hash->{budget_id},
             $staffflags)
         ) {
             ModBudget( $budget_hash );
             ModBudgetUsers($budget_hash->{budget_id}, @budgetusersid);
+            $budget_modified = 1;
         }
         else {
             $template->param(error_not_authorised_to_modify => 1);
@@ -253,6 +256,12 @@ if ($op eq 'add_form') {
     } else {
         $budget_hash->{budget_id} = AddBudget( $budget_hash );
         ModBudgetUsers($budget_hash->{budget_id}, @budgetusersid);
+        $budget_modified = 1;
+    }
+
+    my $set_owner_to_children = $input->param('set_owner_to_children');
+    if ( $set_owner_to_children and $budget_modified ) {
+        C4::Budgets::SetOwnerToFundHierarchy( $budget_hash->{budget_id}, $budget_hash->{budget_owner_id} );
     }
     $op = 'list';
 }
