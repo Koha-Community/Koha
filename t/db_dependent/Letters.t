@@ -308,7 +308,7 @@ if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
 }
 
 ($biblionumber, $biblioitemnumber) = AddBiblio($bib, '');
-( undef, $ordernumber ) = C4::Acquisition::NewOrder(
+$ordernumber = C4::Acquisition::NewOrder(
     {
         basketno => $basketno,
         quantity => 1,
