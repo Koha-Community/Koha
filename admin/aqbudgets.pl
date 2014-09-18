@@ -251,7 +251,7 @@ if ($op eq 'add_form') {
             $template->param(error_not_authorised_to_modify => 1);
         }
     } else {
-        AddBudget( $budget_hash );
+        $budget_hash->{budget_id} = AddBudget( $budget_hash );
         ModBudgetUsers($budget_hash->{budget_id}, @budgetusersid);
     }
     $op = 'list';
