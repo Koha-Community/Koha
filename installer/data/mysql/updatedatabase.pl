@@ -8767,7 +8767,7 @@ if(CheckVersion($DBversion)) {
 }
 
 
-$DBversion = '3.17.00.XXX';
+$DBversion = '3.17.00.025';
 if ( CheckVersion($DBversion) ) {
     $dbh->do(qq{
         INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('StatisticsFields','location|itype|ccode','Define fields (from the items table) used for statistics members',NULL,'Free')
