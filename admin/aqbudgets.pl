@@ -59,7 +59,7 @@ $template->param( symbol => $cur->{symbol},
 my $op = $input->param('op') || 'list';
 
 # see if the user want to see all budgets or only owned ones by default
-my $show_mine = $input->param('show_mine') // 1;
+my $show_mine = $input->param('show_mine') // 0;
 
 # IF USER DOESNT HAVE PERM FOR AN 'ADD', THEN REDIRECT TO THE DEFAULT VIEW...
 if (not defined $template->{VARS}->{'CAN_user_acquisition_budget_add_del'}
