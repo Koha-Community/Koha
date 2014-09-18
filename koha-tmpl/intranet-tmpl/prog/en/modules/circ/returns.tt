@@ -162,6 +162,8 @@ $(document).ready(function () {
             <input type="hidden" name="WT-From" value="[% wtransfertFrom %]" />
         <input type="submit" class="approve" value="Confirm" />
             <input type="submit" value="Print slip and confirm" class="print" onclick="Dopop('hold-transfer-slip.pl?transfer=1&amp;borrowernumber=[% borrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;op=slip'); this.form.submit();" />
+        <input type="hidden" name="return_date_override" value="[% return_date_override %]" />
+        <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember %]" />
     </form>
     [% END %]</div>
 [% END %]
@@ -209,6 +211,9 @@ $(document).ready(function () {
                 <input type="hidden" name="diffBranch" value="[% destbranch %]" />
                 <input type="hidden" name="exemptfine" value="[% exemptfine %]" />
                 <input type="hidden" name="dropboxmode" value="[% dropboxmode %]" />
+
+                <input type="hidden" name="return_date_override" value="[% return_date_override %]" />
+                <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember %]" />
                 </form>
 	</div>
     [% END %]
@@ -249,6 +254,9 @@ $(document).ready(function () {
             <input type="hidden" name="exemptfine" value="[% exemptfine %]" />
             <input type="hidden" name="dropboxmode" value="[% dropboxmode %]" />
             <input type="hidden" name="barcode" value="0" />
+
+            <input type="hidden" name="return_date_override" value="[% return_date_override %]" />
+            <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember %]" />
         </form>
 		</div>
     [% END %]
@@ -286,6 +294,8 @@ $(document).ready(function () {
 	<input type="hidden" name="bn-[% inputloo.counter %]" value="[% inputloo.borrowernumber %]" />
 	[% END %]
 	<input type="hidden" name="barcode" value="0" />
+        <input type="hidden" name="return_date_override" value="[% return_date_override %]" />
+        <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember %]" />
 	</form>   </div>
     [% END %]
 
@@ -310,6 +320,10 @@ $(document).ready(function () {
                     <input type="hidden" name="bn-[% inputloo.counter %]" value="[% inputloo.borrowernumber %]" />
                 [% END %]
             [% END %]
+
+            <input type="hidden" name="return_date_override" value="[% return_date_override %]" />
+            <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember %]" />
+
             <input type="hidden" name="barcode" value="0" />
         </form>
     [% END %]
@@ -363,6 +377,8 @@ $(document).ready(function () {
             <input type="hidden" name="diffBranch" value="[% destbranch %]" />
             <input type="hidden" name="exemptfine" value="[% exemptfine %]" />
             <input type="hidden" name="dropboxmode" value="[% dropboxmode %]" />
+            <input type="hidden" name="return_date_override" value="[% return_date_override %]" />
+            <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember %]" />
         </form>
 	</div>
     [% END %]
