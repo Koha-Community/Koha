@@ -136,6 +136,8 @@ BEGIN {
         &SuspendAll
 
         &GetReservesControlBranch
+
+        IsItemOnHoldAndFound
     );
     @EXPORT_OK = qw( MergeHolds );
 }    
@@ -205,6 +207,7 @@ sub AddReserve {
         $const,          $priority,     $notes,   $checkitem,
         $found,          $waitingdate,	$expdate
     );
+    my $reserve_id = $sth->{mysql_insertid};
 
     # Send e-mail to librarian if syspref is active
     if(C4::Context->preference("emailLibrarianWhenHoldIsPlaced")){
@@ -248,7 +251,7 @@ sub AddReserve {
         $sth->execute($borrowernumber, $biblionumber, $resdate, $_);
     }
         
-    return;     # FIXME: why not have a useful return value?
+    return $reserve_id;
 }
 
 =head2 GetReserve
@@ -2409,6 +2412,30 @@ sub CalculatePriority {
     );
 
     return @row ? $row[0]+1 : 1;
+}
+
+=head2 IsItemOnHoldAndFound
+
+    my $bool = IsItemFoundHold( $itemnumber );
+
+    Returns true if the item is currently on hold
+    and that hold has a non-null found status ( W, T, etc. )
+
+=cut
+
+sub IsItemOnHoldAndFound {
+    my ($itemnumber) = @_;
+
+    my $rs = Koha::Database->new()->schema()->resultset('Reserve');
+
+    my $found = $rs->count(
+        {
+            itemnumber => $itemnumber,
+            found      => { '!=' => undef }
+        }
+    );
+
+    return $found;
 }
 
 =head1 AUTHOR

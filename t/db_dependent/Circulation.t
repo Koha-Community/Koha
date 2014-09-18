@@ -26,7 +26,7 @@ use C4::Reserves;
 use Koha::DateUtils;
 use Koha::Database;
 
-use Test::More tests => 57;
+use Test::More tests => 59;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -233,7 +233,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         $biblionumber
     );
 
-    # Create 2 borrowers
+    # Create borrowers
     my %renewing_borrower_data = (
         firstname =>  'John',
         surname => 'Renewal',
@@ -248,8 +248,16 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         branchcode => $branch,
     );
 
+    my %hold_waiting_borrower_data = (
+        firstname =>  'Kyle',
+        surname => 'Reservation',
+        categorycode => 'S',
+        branchcode => $branch,
+    );
+
     my $renewing_borrowernumber = AddMember(%renewing_borrower_data);
     my $reserving_borrowernumber = AddMember(%reserving_borrower_data);
+    my $hold_waiting_borrowernumber = AddMember(%hold_waiting_borrower_data);
 
     my $renewing_borrower = GetMember( borrowernumber => $renewing_borrowernumber );
 
@@ -282,11 +290,28 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         $title, $checkitem, $found
     );
 
+    # Testing of feature to allow the renewal of reserved items if other items on the record can fill all needed holds
     C4::Context->set_preference('AllowRenewalIfOtherItemsAvailable', 1 );
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
     is( $renewokay, 1, 'Bug 11634 - Allow renewal of item with unfilled holds if other available items can fill those holds');
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber2);
     is( $renewokay, 1, 'Bug 11634 - Allow renewal of item with unfilled holds if other available items can fill those holds');
+    # Now let's add a waiting hold on the 3rd item, it's no longer available tp check out by just anyone, so we should no longer
+    # be able to renew these items
+    my $hold = Koha::Database->new()->schema()->resultset('Reserve')->create(
+        {
+            borrowernumber => $hold_waiting_borrowernumber,
+            biblionumber   => $biblionumber,
+            itemnumber     => $itemnumber3,
+            branchcode     => $branch,
+            priority       => 0,
+            found          => 'W'
+        }
+    );
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
+    is( $renewokay, 0, 'Bug 11634 - Allow renewal of item with unfilled holds if other available items can fill those holds');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber2);
+    is( $renewokay, 0, 'Bug 11634 - Allow renewal of item with unfilled holds if other available items can fill those holds');
     C4::Context->set_preference('AllowRenewalIfOtherItemsAvailable', 0 );
 
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
