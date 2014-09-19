@@ -26,6 +26,8 @@ Koha::XSLT_Handler - Facilitate use of XSLT transformations
     use Koha::XSLT_Handler;
     my $xslt_engine = Koha::XSLT_Handler->new;
     my $output = $xslt_engine->transform($xml, $xsltfilename);
+    $output = $xslt_engine->transform({ xml => $xml, file => $file });
+    $output = $xslt_engine->transform({ xml => $xml, code => $code });
     my $err= $xslt_engine->err; # error number
     my $errstr= $xslt_engine->errstr; # error message
     $xslt_engine->refresh($xsltfilename);
@@ -129,6 +131,9 @@ __PACKAGE__->mk_accessors(qw( do_not_return_source print_warns ));
 =head2 transform
 
     my $output= $xslt_engine->transform( $xml, $xsltfilename );
+    #Alternatively:
+    #$output = $xslt_engine->transform({ xml => $xml, file => $file });
+    #$output = $xslt_engine->transform({ xml => $xml, code => $code });
     if( $xslt_engine->err ) {
         #decide what to do on failure..
     }
@@ -136,6 +141,7 @@ __PACKAGE__->mk_accessors(qw( do_not_return_source print_warns ));
 
     Pass a xml string and a fully qualified path of a XSLT file.
     Instead of a filename, you may also pass a URL.
+    You may also pass the contents of a xsl file as a string like $code above.
     If you do not pass a filename, the last file used is assumed.
     Returns the transformed string.
     Check the error number in err to know if something went wrong.
@@ -144,39 +150,43 @@ __PACKAGE__->mk_accessors(qw( do_not_return_source print_warns ));
 =cut
 
 sub transform {
-    my ( $self, $orgxml, $file ) = @_;
+    my $self = shift;
+
+    #check parameters
+    #  old style: $xml, $filename
+    #  new style: $hashref
+    my ( $xml, $filename, $xsltcode );
+    if( ref $_[0] eq 'HASH' ) {
+        $xml = $_[0]->{xml};
+        $xsltcode = $_[0]->{code};
+        $filename = $_[0]->{file} if !$xsltcode; #xsltcode gets priority
+    } else {
+        ( $xml, $filename ) = @_;
+    }
 
     #Initialized yet?
     if ( !$self->{xslt_hash} ) {
         $self->_init;
     }
     else {
-        $self->_set_error;    #clear error
+        $self->_set_error;    #clear last error
     }
-    my $retval = $self->{do_not_return_source} ? undef : $orgxml;
+    my $retval = $self->{do_not_return_source} ? undef : $xml;
 
     #check if no string passed
-    if ( !defined $orgxml ) {
+    if ( !defined $xml ) {
         $self->_set_error(7);
         return;               #always undef
     }
 
-    #If no file passed, use the last file again
-    if ( !$file ) {
-        if ( !$self->{last_xsltfile} ) {
-            $self->_set_error(1);
-            return $retval;
-        }
-        $file = $self->{last_xsltfile};
-    }
-
     #load stylesheet
-    my $stsh = $self->{xslt_hash}->{$file} // $self->_load($file);
+    my $key = $self->_load( $filename, $xsltcode );
+    my $stsh = $key? $self->{xslt_hash}->{$key}: undef;
     return $retval if $self->{err};
 
     #parse input and transform
     my $parser = XML::LibXML->new();
-    my $source = eval { $parser->parse_string($orgxml) };
+    my $source = eval { $parser->parse_string($xml) };
     if ($@) {
         $self->_set_error( 5, $@ );
         return $retval;
@@ -189,7 +199,7 @@ sub transform {
         $self->_set_error( 6, $@ );
         return $retval;
     }
-    $self->{last_xsltfile} = $file;
+    $self->{last_xsltfile} = $key;
     return $str;
 }
 
@@ -246,16 +256,42 @@ sub _init {
 # Internal routine for loading a new stylesheet.
 
 sub _load {
-    my ( $self, $file ) = @_;
+    my ( $self, $filename, $code ) = @_;
+    my ( $digest, $codelen, $salt, $rv );
+    $salt = 'AZ'; #just a constant actually
 
-    if ( !$file || ( $file !~ /^https?:\/\// && !-e $file ) ) {
+    #If no file or code passed, use the last file again
+    if ( !$filename && !$code ) {
+        my $last = $self->{last_xsltfile};
+        if ( !$last || !exists $self->{xslt_hash}->{$last} ) {
+            $self->_set_error(1);
+            return;
+        }
+        return $last;
+    }
+
+    #check if it is loaded already
+    if( $code ) {
+        $codelen = length( $code );
+        $digest = eval { crypt($code, $salt) };
+        if( $digest && exists $self->{xslt_hash}->{$digest.$codelen} ) {
+            return $digest.$codelen;
+        }
+    } elsif( $filename && exists $self->{xslt_hash}->{$filename} ) {
+          return $filename;
+    }
+
+    #Check file existence (skipping URLs)
+    if( $filename && $filename !~ /^https?:\/\// && !-e $filename ) {
         $self->_set_error(2);
         return;
     }
 
     #load sheet
     my $parser = XML::LibXML->new;
-    my $style_doc = eval { $parser->load_xml( location => $file ) };
+    my $style_doc = eval {
+        $parser->load_xml( $self->_load_xml_args($filename, $code) )
+    };
     if ($@) {
         $self->_set_error( 3, $@ );
         return;
@@ -263,13 +299,19 @@ sub _load {
 
     #parse sheet
     my $xslt = XML::LibXSLT->new;
-    $self->{xslt_hash}->{$file} = eval { $xslt->parse_stylesheet($style_doc) };
+    $rv = $code? $digest.$codelen: $filename;
+    $self->{xslt_hash}->{$rv} = eval { $xslt->parse_stylesheet($style_doc) };
     if ($@) {
         $self->_set_error( 4, $@ );
-        delete $self->{xslt_hash}->{$file};
+        delete $self->{xslt_hash}->{$rv};
         return;
     }
-    return $self->{xslt_hash}->{$file};
+    return $rv;
+}
+
+sub _load_xml_args {
+    my $self = shift;
+    return $_[1]? { 'string' => $_[1]//'' }: { 'location' => $_[0]//'' };
 }
 
 # _set_error
