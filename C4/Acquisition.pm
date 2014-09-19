@@ -32,6 +32,7 @@ use C4::Templates qw(gettemplate);
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Order;
 use Koha::Acquisition::Bookseller;
+use Koha::Number::Price;
 
 use Time::localtime;
 use HTML::Entities;
@@ -2886,6 +2887,77 @@ sub GetBiblioCountByBasketno {
     my $sth = $dbh->prepare($query);
     $sth->execute($basketno);
     return $sth->fetchrow;
+}
+
+# This is *not* the good way to calcul prices
+# But it's how it works at the moment into Koha
+# This will be fixed later.
+# Note this subroutine should be moved to Koha::Acquisition::Order
+# Will do when a DBIC decision will be taken.
+sub populate_order_with_prices {
+    my ($params) = @_;
+
+    my $order        = $params->{order};
+    my $booksellerid = $params->{booksellerid};
+    return unless $booksellerid;
+
+    my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+
+    my $receiving = $params->{receiving};
+    my $ordering  = $params->{ordering};
+    my $discount  = $order->{discount};
+    $discount /= 100 if $discount > 1;
+
+    $order->{rrp}   = Koha::Number::Price->new( $order->{rrp} )->round;
+    $order->{ecost} = Koha::Number::Price->new( $order->{ecost} )->round;
+    if ($ordering) {
+        if ( $bookseller->{listincgst} ) {
+            $order->{rrpgsti} = $order->{rrp};
+            $order->{rrpgste} = Koha::Number::Price->new(
+                $order->{rrpgsti} / ( 1 + $order->{gstrate} ) )->round;
+            $order->{ecostgsti} = $order->{ecost};
+            $order->{ecostgste} = Koha::Number::Price->new(
+                $order->{ecost} / ( 1 + $order->{gstrate} ) )->round;
+            $order->{gstvalue} = Koha::Number::Price->new(
+                ( $order->{ecostgsti} - $order->{ecostgste} ) *
+                  $order->{quantity} )->round;
+            $order->{totalgste} = $order->{ecostgste} * $order->{quantity};
+            $order->{totalgsti} = $order->{ecostgsti} * $order->{quantity};
+        }
+        else {
+            $order->{rrpgste} = $order->{rrp};
+            $order->{rrpgsti} = Koha::Number::Price->new(
+                $order->{rrp} * ( 1 + $order->{gstrate} ) )->round;
+            $order->{ecostgste} = $order->{ecost};
+            $order->{ecostgsti} = Koha::Number::Price->new(
+                $order->{ecost} * ( 1 + $order->{gstrate} ) )->round;
+            $order->{gstvalue} = Koha::Number::Price->new(
+                ( $order->{ecostgsti} - $order->{ecostgste} ) *
+                  $order->{quantity} )->round;
+            $order->{totalgste} = $order->{ecostgste} * $order->{quantity};
+            $order->{totalgsti} = $order->{ecostgsti} * $order->{quantity};
+        }
+    }
+
+    # Not used yet
+    #if ($receiving) {
+    #    if ( $bookseller->{invoiceincgst} ) {
+    #        $order->{unitpricegsti} = $order->{unitprice};
+    #        $order->{unitpricegste} =
+    #          $order->{unitpricegsti} / ( 1 + $order->{gstrate} );
+    #    }
+    #    else {
+    #        $order->{unitpricegste} = $order->{unitprice};
+    #        $order->{unitpricegsti} =
+    #          $order->{unitpricegste} * ( 1 + $order->{gstrate} );
+    #    }
+    #    $order->{gstvalue} =
+    #      $order->{quantityreceived} *
+    #      $order->{unitpricegste} *
+    #      $order->{gstrate};
+    #}
+
+    return $order;
 }
 
 1;

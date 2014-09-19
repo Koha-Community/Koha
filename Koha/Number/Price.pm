@@ -53,6 +53,15 @@ sub unformat {
     return Number::Format->new(%$format_params)->unformat_number($self->value);
 }
 
+sub round {
+    my ( $self ) = @_;
+    return unless defined $self->value;
+
+    my $format_params = $self->_format_params;
+
+    return Number::Format->new(%$format_params)->round($self->value);
+}
+
 sub _format_params {
     my ( $self, $params ) = @_;
     my $with_symbol = $params->{with_symbol} || 0;
