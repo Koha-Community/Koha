@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% UNLESS ( basketno ) %]New [% END %][% IF ( delete_confirm ) %]Delete [% END %]Basket [% basketname|html %] ([% basketno %]) for [% name|html %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -415,7 +416,7 @@
                 [% FOREACH foot_loo IN book_foot_loop %]
                     <tr>
                         <th></th>
-                        <th>Total (GST [% foot_loo.gstgsti %])</th>
+                        <th>Total (GST [% foot_loo.gstrate * 100 | $Price %])</th>
                         <th class="gste">&nbsp;</th>
                         <th class="gste">&nbsp;</th>
                         <th class="gsti">&nbsp;</th>
@@ -502,15 +503,15 @@
                         </td>
                         [% SET zero_regex = "^0{1,}\.?0{1,}[^1-9]" %] [%# 0 or 0.0 or 0.00 or 00 or 00.0 or 00.00 or 0.000 ... %]
                         [%# FIXME: use of a regexp is not ideal; bugs 9410 and 10929 suggest better way of handling this %]
-                        <td class="number gste [% IF books_loo.rrpgste.search(zero_regex) %]error[% END %]">[% books_loo.rrpgste %]</td>
-                        <td class="number gste [% IF books_loo.ecostgste.search(zero_regex) %]error[% END %]">[% books_loo.ecostgste %]</td>
-                        <td class="number gsti [% IF books_loo.rrpgsti.search(zero_regex) %]error[% END %]">[% books_loo.rrpgsti %]</td>
-                        <td class="number gsti [% IF books_loo.ecostgsti.search(zero_regex) %]error[% END %]">[% books_loo.ecostgsti %]</td>
+                        <td class="number gste [% IF books_loo.rrpgste.search(zero_regex) %]error[% END %]">[% books_loo.rrpgste | $Price %]</td>
+                        <td class="number gste [% IF books_loo.ecostgste.search(zero_regex) %]error[% END %]">[% books_loo.ecostgste | $Price%]</td>
+                        <td class="number gsti [% IF books_loo.rrpgsti.search(zero_regex) %]error[% END %]">[% books_loo.rrpgsti | $Price %]</td>
+                        <td class="number gsti [% IF books_loo.ecostgsti.search(zero_regex) %]error[% END %]">[% books_loo.ecostgsti | $Price %]</td>
                         <td class="number [% IF books_loo.quantity.search(zero_regex) %]error[% END %]">[% books_loo.quantity %]</td>
-                        <td class="number gste [% IF books_loo.totalgste.search(zero_regex) %]error[% END %]">[% books_loo.totalgste %]</td>
-                        <td class="number gsti [% IF books_loo.totalgsti.search(zero_regex) %]error[% END %]">[% books_loo.totalgsti %]</td>
-                        <td class="number [% IF books_loo.gstgsti.search(zero_regex) %]error[% END %]">[% books_loo.gstgsti %]</td>
-                        <td class="number [% IF books_loo.gstvalue.search(zero_regex) %]error[% END %]">[% books_loo.gstvalue %]</td>
+                        <td class="number gste [% IF books_loo.totalgste.search(zero_regex) %]error[% END %]">[% books_loo.totalgste | $Price %]</td>
+                        <td class="number gsti [% IF books_loo.totalgsti.search(zero_regex) %]error[% END %]">[% books_loo.totalgsti | $Price %]</td>
+                        <td class="number">[% books_loo.gstrate * 100 | $Price %]</td>
+                        <td class="number [% IF books_loo.gstvalue.search(zero_regex) %]error[% END %]">[% books_loo.gstvalue | $Price %]</td>
                         <td>[% books_loo.budget_name %]</td>
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
@@ -620,7 +621,7 @@
                     <td class="number">[% order.quantity %]</td>
                     <td class="number gste">[% order.totalgste %]</td>
                     <td class="number gsti">[% order.totalgsti %]</td>
-                    <td class="number">[% order.gstgsti %]</td>
+                    <td class="number">[% order.gstrate * 100 %]</td>
                     <td class="number">[% order.gstvalue %]</td>
                     <td>[% order.budget_name %]
                   </tr>

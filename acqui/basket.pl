@@ -334,7 +334,7 @@ if ( $op eq 'delete_confirm' ) {
     my $cur = GetCurrency();
 
 
-    my @results = GetOrders( $basketno );
+    my @orders = GetOrders( $basketno );
     my @books_loop;
 
     my @book_foot_loop;
@@ -343,7 +343,8 @@ if ( $op eq 'delete_confirm' ) {
     my $total_gste = 0;
     my $total_gsti = 0;
     my $total_gstvalue = 0;
-    for my $order (@results) {
+    for my $order (@orders) {
+        $order = C4::Acquisition::populate_order_with_prices({ order => $order, booksellerid => $booksellerid, ordering => 1 });
         my $line = get_order_infos( $order, $bookseller);
         if ( $line->{uncertainprice} ) {
             $template->param( uncertainprices => 1 );
@@ -351,7 +352,7 @@ if ( $op eq 'delete_confirm' ) {
 
         push @books_loop, $line;
 
-        $foot{$$line{gstgsti}}{gstgsti} = $$line{gstgsti};
+        $foot{$$line{gstgsti}}{gstrate} = $$line{gstrate};
         $foot{$$line{gstgsti}}{gstvalue} += $$line{gstvalue};
         $total_gstvalue += $$line{gstvalue};
         $foot{$$line{gstgsti}}{quantity}  += $$line{quantity};
@@ -365,9 +366,9 @@ if ( $op eq 'delete_confirm' ) {
     push @book_foot_loop, map {$_} values %foot;
 
     # Get cancelled orders
-    @results = GetCancelledOrders($basketno);
+    my @cancelledorders = GetCancelledOrders($basketno);
     my @cancelledorders_loop;
-    for my $order (@results) {
+    for my $order (@cancelledorders) {
         my $line = get_order_infos( $order, $bookseller);
         push @cancelledorders_loop, $line;
     }
@@ -375,7 +376,6 @@ if ( $op eq 'delete_confirm' ) {
     my $contract = GetContract({
         contractnumber => $basket->{contractnumber}
     });
-    my @orders = GetOrders($basketno);
 
     if ($basket->{basketgroupid}){
         $basketgroup = GetBasketgroup($basket->{basketgroupid});
@@ -446,28 +446,6 @@ sub get_order_infos {
     $line{order_received} = ( $qty == $order->{'quantityreceived'} );
     $line{basketno}       = $basketno;
     $line{budget_name}    = $budget->{budget_name};
-    $line{rrp} = ConvertCurrency( $order->{'currency'}, $line{rrp} ); # FIXME from comm
-    if ( $bookseller->{'listincgst'} ) {
-        $line{rrpgsti} = sprintf( "%.2f", $line{rrp} );
-        $line{gstgsti} = sprintf( "%.2f", $line{gstrate} * 100 );
-        $line{rrpgste} = sprintf( "%.2f", $line{rrp} / ( 1 + ( $line{gstgsti} / 100 ) ) );
-        $line{gstgste} = sprintf( "%.2f", $line{gstgsti} / ( 1 + ( $line{gstgsti} / 100 ) ) );
-        $line{ecostgsti} = sprintf( "%.2f", $line{ecost} );
-        $line{ecostgste} = sprintf( "%.2f", $line{ecost} / ( 1 + ( $line{gstgsti} / 100 ) ) );
-        $line{gstvalue} = sprintf( "%.2f", ( $line{ecostgsti} - $line{ecostgste} ) * $line{quantity});
-        $line{totalgste} = sprintf( "%.2f", $order->{quantity} * $line{ecostgste} );
-        $line{totalgsti} = sprintf( "%.2f", $order->{quantity} * $line{ecostgsti} );
-    } else {
-        $line{rrpgsti} = sprintf( "%.2f", $line{rrp} * ( 1 + ( $line{gstrate} ) ) );
-        $line{rrpgste} = sprintf( "%.2f", $line{rrp} );
-        $line{gstgsti} = sprintf( "%.2f", $line{gstrate} * 100 );
-        $line{gstgste} = sprintf( "%.2f", $line{gstrate} * 100 );
-        $line{ecostgsti} = sprintf( "%.2f", $line{ecost} * ( 1 + ( $line{gstrate} ) ) );
-        $line{ecostgste} = sprintf( "%.2f", $line{ecost} );
-        $line{gstvalue} = sprintf( "%.2f", ( $line{ecostgsti} - $line{ecostgste} ) * $line{quantity});
-        $line{totalgste} = sprintf( "%.2f", $order->{quantity} * $line{ecostgste} );
-        $line{totalgsti} = sprintf( "%.2f", $order->{quantity} * $line{ecostgsti} );
-    }
 
     if ( $line{uncertainprice} ) {
         $line{rrpgste} .= ' (Uncertain)';
