@@ -45,6 +45,8 @@ my $timestamp      = format_date_in_iso($cgi->param('timestamp'));
 my $number         = $cgi->param('number');
 my $lang           = $cgi->param('lang');
 my $branchcode     = $cgi->param('branch');
+my $error_message  = $cgi->param('error_message');
+
 # Foreign Key constraints work with NULL, not ''
 # NULL = All branches.
 $branchcode = undef if (defined($branchcode) && $branchcode eq '');
@@ -61,6 +63,9 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+
+# Pass error message if there is one.
+$template->param( error_message => $error_message ) if $error_message;
 
 # get lang list
 my @lang_list;
@@ -99,18 +104,23 @@ if ( $op eq 'add_form' ) {
     }
 }
 elsif ( $op eq 'add' ) {
-    add_opac_new(
-        {
-            title          => $title,
-            new            => $new,
-            lang           => $lang,
-            expirationdate => $expirationdate,
-            timestamp      => $timestamp,
-            number         => $number,
-            branchcode     => $branchcode,
-        }
-    );
-    print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl");
+    if ($title) {
+        add_opac_new(
+            {
+                title          => $title,
+                new            => $new,
+                lang           => $lang,
+                expirationdate => $expirationdate,
+                timestamp      => $timestamp,
+                number         => $number,
+                branchcode     => $branchcode,
+            }
+        );
+        print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl");
+    }
+    else {
+        print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl?error_message=ERROR:+Required+news+title+missing!");
+    }
 }
 elsif ( $op eq 'edit' ) {
     upd_opac_new(
