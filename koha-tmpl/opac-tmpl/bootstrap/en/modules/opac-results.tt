@@ -460,7 +460,7 @@
                                                         <input type="hidden" name="biblionumber"  value="[% SEARCH_RESULT.biblionumber %]" />
                                                         <input type="hidden" name="loggedinuser"  value="[% loggedinuser %]" />
 
-                                                        [% IF (  SEARCH_RESULT.rating_total ) > 0  %]
+                                                        [% IF SEARCH_RESULT.rating_total && SEARCH_RESULT.rating_total > 0  %]
                                                             <span id="rating_total_[% SEARCH_RESULT.biblionumber %]">&nbsp;&nbsp;([% SEARCH_RESULT.rating_total %] votes)</span>
                                                         [% ELSE %]
                                                             <br />
