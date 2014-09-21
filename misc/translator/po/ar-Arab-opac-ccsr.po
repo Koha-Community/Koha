@@ -13,8 +13,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Pootle 2.5.0\n"
 "X-POOTLE-MTIME: 1375395089.0\n"
 
@@ -287,14 +286,14 @@ msgstr "%s لا توجد قوائم عامة %s %s "
 #: opac-tmpl/ccsr/en/includes/masthead.inc:234
 #, c-format
 msgid "%s No results found for that in %s catalog. "
-msgstr "%s لا توجد نتائج لذلك في %s الفهرس. "
+msgstr "%s لم يتم العثور على نتائج لذلك في %s الفهرس. "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/ccsr/en/includes/masthead.inc:236
 #, c-format
 msgid "%s You did not specify any search criteria. %s "
-msgstr "%s .لم تحدد اي معيار للبحث. %s "
+msgstr "%s أنت لم تقم بتحديد أي معايير للبحث. %s "
 
 #. For the first occurrence,
 #. %1$s:  ELSE 
@@ -373,13 +372,14 @@ msgstr "&rsaquo; "
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
+#, c-format
 msgid "Add to your cart"
 msgstr "أضف إلى سلتك"
 
 #: opac-tmpl/ccsr/en/includes/masthead.inc:194
 #, c-format
 msgid "Advanced search"
-msgstr "البحث المتقدم"
+msgstr "بحث متقدم"
 
 #: opac-tmpl/ccsr/en/includes/masthead.inc:180
 #, c-format
@@ -389,17 +389,17 @@ msgstr "كل المكتبات"
 #: opac-tmpl/ccsr/en/includes/masthead.inc:105
 #, c-format
 msgid "All libraries"
-msgstr "جميع المكتبات"
+msgstr "كل المكتبات"
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "Are you sure you want to empty your cart?"
-msgstr "هل أنتَ متأكد من رغبتك بِإفراغ سلَّتك ؟"
+msgstr "هل انت متأكد أنك تريد إفراغ سلتك ؟ "
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "Are you sure you want to remove the selected items?"
-msgstr "هل أنت متأكد من رغبتك إزالة المواد المحددة ؟"
+msgstr "هل انت متأكد أنك تريد حذف المواد المختارة؟"
 
 #: opac-tmpl/ccsr/en/includes/masthead.inc:63
 #: opac-tmpl/ccsr/en/includes/masthead.inc:65
@@ -410,7 +410,7 @@ msgstr "المؤلف"
 #: opac-tmpl/ccsr/en/includes/masthead.inc:196
 #, c-format
 msgid "Authority search"
-msgstr "البحث بالمداخل المقننة"
+msgstr "بحث الاستناد"
 
 #: opac-tmpl/ccsr/en/includes/masthead.inc:195
 #, c-format
@@ -430,39 +430,33 @@ msgstr "سلة"
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/opac-bottom.inc:97
-msgid ""
-"Could not login, perhaps your Persona email does not match your Koha one"
-msgstr ""
-"لا يمكن تسجيل الدخول ، ربما بريدك الإلكتروني لا يتطابق مع الموجود في كوها"
+msgid "Could not login, perhaps your Persona email does not match your Koha one"
+msgstr "لم نتمكن من تسجيل الدخول، ربما لا يماثل بريد Persona الخاص بك بريدك الاكتروني لكوها"
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "Error! Illegal parameter"
-msgstr "خطأ! معامل غير قانوني"
+msgstr "خطأ :معامل غير مشروع"
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "Error! The add_tag operation failed on"
-msgstr "خطأ! العملية فشلت في إضافة وسم"
+msgstr "خطأ! العملية فشلت في add_tag"
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "Error! You cannot delete the tag"
-msgstr "خطأ! لا يمكنك حذف الوسم"
+msgstr "خطأ : لا يمكنك حذف الوسم "
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
-msgid ""
-"Error! Your tag was entirely markup code. It was NOT added. Please try again "
-"with plain text."
-msgstr ""
-"خطأ! الوسم الخاص بك يعد شفرة برمجية.ولم تتم اضافته. الرجاء حاول مرة ثانية "
-"بنص عادي."
+msgid "Error! Your tag was entirely markup code. It was NOT added. Please try again with plain text."
+msgstr "خطأ! الوسم المدخل هو رمز محظور. لم يتم إضافته . يرجى المحاولة مرة أخرى مع نص عادي."
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "Errors: "
-msgstr "خطأ: "
+msgstr "أخطاء: "
 
 #. INPUT type=submit
 #: opac-tmpl/ccsr/en/includes/masthead.inc:139
@@ -473,7 +467,7 @@ msgstr "اذهب"
 #. OPTGROUP
 #: opac-tmpl/ccsr/en/includes/masthead.inc:113
 msgid "Groups"
-msgstr "المجموعات"
+msgstr "مجموعات"
 
 #. A
 #: opac-tmpl/ccsr/en/includes/masthead.inc:226
@@ -485,17 +479,18 @@ msgstr "الرئيسية"
 #: opac-tmpl/ccsr/en/includes/masthead.inc:75
 #, c-format
 msgid "ISBN"
-msgstr "ISBN"
+msgstr "ردمك"
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
+#, c-format
 msgid "In your cart"
 msgstr "في سلتك"
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "Items in your cart: "
-msgstr "المواد في سلتك: "
+msgstr "مواد في سلتك:"
 
 #. IMG
 #: opac-tmpl/ccsr/en/includes/masthead.inc:14
@@ -505,7 +500,7 @@ msgstr "فهرس كوها المباشر"
 
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:3
 msgid "Koha [% Version %]"
-msgstr "كوها [% Version %]"
+msgstr "كوها [% الإصدار %]"
 
 #: opac-tmpl/ccsr/en/includes/opac-bottom.inc:44
 #, c-format
@@ -515,7 +510,7 @@ msgstr "اللغات:&nbsp;"
 #. OPTGROUP
 #: opac-tmpl/ccsr/en/includes/masthead.inc:106
 msgid "Libraries"
-msgstr "المكتبات"
+msgstr "مكتبات"
 
 #: opac-tmpl/ccsr/en/includes/masthead.inc:165
 #, c-format
@@ -536,7 +531,7 @@ msgstr "قوائم"
 #: opac-tmpl/ccsr/en/includes/top-bar.inc:44
 #, c-format
 msgid "Log in to create your own lists"
-msgstr "قم بتسجيل الدخول لانشاء قوائمك الخاصة"
+msgstr "سجل دخولك لكي تنشئ قوائمك الخاصة بك"
 
 #: opac-tmpl/ccsr/en/includes/top-bar.inc:58
 #, c-format
@@ -546,7 +541,7 @@ msgstr "تسجيل الدخول إلى حسابك"
 #: opac-tmpl/ccsr/en/includes/masthead.inc:200
 #, c-format
 msgid "Most popular"
-msgstr "الأكثر شعبيةً"
+msgstr "الأكثر شعبية"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -556,8 +551,9 @@ msgstr "الأكثر شعبيةً"
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:116
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:125
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:133
+#, c-format
 msgid "No cover image available"
-msgstr "لا تتوفر صورة الغلاف"
+msgstr "صورة الغلاف غير متوفرة"
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
@@ -568,7 +564,7 @@ msgstr "لم يتم إضافة أي مادة إلى سلتك"
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "No item was selected"
-msgstr "لم يتم اختيار المادة"
+msgstr "لم يتم اختيار أي مادة"
 
 #: opac-tmpl/ccsr/en/includes/top-bar.inc:40
 #, c-format
@@ -578,32 +574,27 @@ msgstr "لا يوجد قوائم خاصة"
 #: opac-tmpl/ccsr/en/includes/masthead.inc:233
 #, c-format
 msgid "No results found!"
-msgstr "لا توجد نتائج!"
+msgstr "لم يتم العثور على اي نتيجة!"
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "No tag was specified."
-msgstr "لم يتم تحديد الوسم."
+msgstr "لم يتم تحديد أي وسيمة."
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "Note: you can only delete your own tags."
-msgstr "ملاحظة: يمكنك فقط حذف وسومك."
+msgstr "ملاحظة: يمكنك حذف فقط الوسوم الخاصة بك"
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
-msgid ""
-"Note: you can only tag an item with a given term once. Check 'My Tags' to "
-"see your current tags."
-msgstr ""
-"ملاحظة: بإمكانك أن تَسِم مادة بالتعبيرالمُعطى لمرة واحدة فقط. راجع 'وسومي' لترى "
-"وسومك الحالية."
+msgid "Note: you can only tag an item with a given term once. Check 'My Tags' to see your current tags."
+msgstr "ملاحظة: يمكنك وضع  فقط وسيمة على المادة بمصطلح معين مرة واحدة. تحقق من 'وسيماتي' لرؤية الوسوم الحالية الخاصة بك."
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
-msgid ""
-"Note: your tag contained markup code that was removed. The tag was added as "
-msgstr "ملاحظة: الوسم الخاص بك يحتوي على شفرة برمجية تمَّ حذفُها. الوسم اضيف كـ "
+msgid "Note: your tag contained markup code that was removed. The tag was added as "
+msgstr ":ملاحظة:الوسيمة الخاصة بك تحتوي على رمز تم إزالته.  وأضيف الوسيمة كـ) "
 
 #: opac-tmpl/ccsr/en/includes/opac-bottom.inc:30
 #: opac-tmpl/ccsr/en/includes/opac-bottom.inc:32
@@ -614,18 +605,18 @@ msgstr "مدعوم بواسطة"
 #: opac-tmpl/ccsr/en/includes/top-bar.inc:17
 #, c-format
 msgid "Public lists"
-msgstr "القوائم العامة"
+msgstr "القوائم العامة:"
 
 #: opac-tmpl/ccsr/en/includes/masthead.inc:202
 #: opac-tmpl/ccsr/en/includes/masthead.inc:203
 #, c-format
 msgid "Purchase suggestions"
-msgstr "إقتراحات الشراء"
+msgstr "مقترحات الشراء"
 
 #: opac-tmpl/ccsr/en/includes/masthead.inc:197
 #, c-format
 msgid "Recent comments"
-msgstr "التعليقات الاخيرة"
+msgstr "التعليقات الأخيرة"
 
 #. A
 #: opac-tmpl/ccsr/en/includes/masthead.inc:227
@@ -643,23 +634,23 @@ msgstr "البحث"
 #: opac-tmpl/ccsr/en/includes/masthead.inc:154
 #, c-format
 msgid "Search %s %s (in %s only)%s %s "
-msgstr "البحث %s %s (في %s فقط)%s %s "
+msgstr "بحث %s %s (in %s فقط)%s %s "
 
 #: opac-tmpl/ccsr/en/includes/top-bar.inc:64
 #, c-format
 msgid "Search history"
-msgstr "تاريخ البحث"
+msgstr "تاريخ البحث:"
 
 #: opac-tmpl/ccsr/en/includes/masthead.inc:78
 #: opac-tmpl/ccsr/en/includes/masthead.inc:80
 #, c-format
 msgid "Series"
-msgstr "سلسلات"
+msgstr "الدوريات"
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "Sorry, tags are not enabled on this system."
-msgstr "عُذراً ، الوسوم غير ممكَّنة في هذا النظام."
+msgstr "عذرا ، الوسوم غير مفعلة في هذا النظام."
 
 #: opac-tmpl/ccsr/en/includes/masthead.inc:68
 #: opac-tmpl/ccsr/en/includes/masthead.inc:70
@@ -670,7 +661,7 @@ msgstr "الموضوع"
 #: opac-tmpl/ccsr/en/includes/masthead.inc:199
 #, c-format
 msgid "Subject cloud"
-msgstr "موضوع مغلق"
+msgstr "سحابة الموضوع"
 
 #. IMG
 #: opac-tmpl/ccsr/en/includes/masthead.inc:231
@@ -687,22 +678,22 @@ msgstr "سحابة الوسوم"
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "Tags added: "
-msgstr "الأوسمة أُضيفت: "
+msgstr "تمت إضافة الوسوم:"
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "This item has been added to your cart"
-msgstr "قد تمت إضــافة هذا العنصر إلى سلّة تسوّقك"
+msgstr "قد تمت إضــافة هذه المادة إلى سلتك"
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "This item has been removed from your cart"
-msgstr "هذه المادة حذفت من سلتك"
+msgstr "هذه المادة تم حذفها من سلتك"
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "This item is already in your cart"
-msgstr "هذا العنصر متواجد في سلّة تسوّقك"
+msgstr "هذه المادة متوجودة بالفعل في سلتك"
 
 #: opac-tmpl/ccsr/en/includes/masthead.inc:58
 #: opac-tmpl/ccsr/en/includes/masthead.inc:60
@@ -718,38 +709,38 @@ msgstr "غير قادر على إضافة واحد أو أكثر من العلا
 #. A
 #: opac-tmpl/ccsr/en/includes/top-bar.inc:64
 msgid "View your search history"
-msgstr "اعرض تاريخ بحثك"
+msgstr "عرض سجل بحثك"
 
 #: opac-tmpl/ccsr/en/includes/top-bar.inc:60
 #, c-format
 msgid "Welcome, "
-msgstr "أهلاً وسهلاً ، "
+msgstr "مرحـــبــا "
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "You must be logged in to add tags."
-msgstr "يجب أن تسجل دخولك ﻹضافة الوسوم."
+msgstr "يجب تسجيل دخولك لكي تضيف وسوم."
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "Your cart is currently empty"
-msgstr "سلّة تسوّقك فـــارغة"
+msgstr "سلتك فارغة حالياً"
 
 #: opac-tmpl/ccsr/en/includes/top-bar.inc:6
 #, c-format
 msgid "Your cart is empty."
-msgstr "سلتكَ فارغة."
+msgstr "سلتك فارغة"
 
 #: opac-tmpl/ccsr/en/includes/top-bar.inc:29
 #, c-format
 msgid "Your lists"
-msgstr "قائمتك"
+msgstr "قوائمك"
 
 #. %1$s:  total |html 
 #: opac-tmpl/ccsr/en/includes/masthead.inc:228
 #, c-format
 msgid "Your search returned %s results."
-msgstr "عملية البحث عادتَ بـِ %s من نتائج البحث."
+msgstr "عادت نتائج بحثك %s النتائج."
 
 #. IMG
 #: opac-tmpl/ccsr/en/includes/masthead.inc:16
@@ -765,14 +756,8 @@ msgstr "[% ms_value |html %]"
 #. %1$s:  INCLUDE 'top-bar.inc' 
 #: opac-tmpl/ccsr/en/includes/opac-bottom.inc:14
 #, c-format
-msgid ""
-"[%%# Sticking the div for the top bar here; since the top bar is positioned "
-"absolutely in this theme, it it makes the positioning of the rest of the "
-"elements easier to keep it out of the doc3 div. %%] %s "
-msgstr ""
-"[%%# Sticking the div for the top bar here; since the top bar is positioned "
-"absolutely in this theme, it it makes the positioning of the rest of the "
-"elements easier to keep it out of the doc3 div. %%] %s "
+msgid "[%%# Sticking the div for the top bar here; since the top bar is positioned absolutely in this theme, it it makes the positioning of the rest of the elements easier to keep it out of the doc3 div. %%] %s "
+msgstr "[%%# Sticking the div for the top bar here; since the top bar is positioned absolutely in this theme, it it makes the positioning of the rest of the elements easier to keep it out of the doc3 div. %%] %s "
 
 #: opac-tmpl/ccsr/en/includes/top-bar.inc:41
 #, c-format
@@ -782,32 +767,32 @@ msgstr "[قائمة جديدة]"
 #: opac-tmpl/ccsr/en/includes/top-bar.inc:23
 #, c-format
 msgid "[View All]"
-msgstr "[اعرض الكل]"
+msgstr "[عرض الكل]"
 
 #: opac-tmpl/ccsr/en/includes/top-bar.inc:36
 #, c-format
 msgid "[View all]"
-msgstr "[اعرض الكل]"
+msgstr "[عرض الكل]"
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "already in your cart"
-msgstr "متواجدة في سلّة التسوّق"
+msgstr "فعلاً موجودة في سلتك"
 
 #: opac-tmpl/ccsr/en/includes/usermenu.inc:13
 #, c-format
 msgid "change my password"
-msgstr "تغيير كلمة العبور"
+msgstr "تغيير كلمة المرور"
 
 #. SCRIPT
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:63
 msgid "item(s) added to your cart"
-msgstr "تمت إضافة المواد إلى سلتك"
+msgstr "المواد إضيفت إلى سلتك"
 
 #: opac-tmpl/ccsr/en/includes/usermenu.inc:6
 #, c-format
 msgid "my fines"
-msgstr "الغرامات الخاصة"
+msgstr "غراماتي"
 
 #: opac-tmpl/ccsr/en/includes/usermenu.inc:33
 #, c-format
@@ -817,22 +802,22 @@ msgstr "قوائمي"
 #: opac-tmpl/ccsr/en/includes/usermenu.inc:30
 #, c-format
 msgid "my messaging"
-msgstr "ارسالياتي"
+msgstr "مراسلاتي"
 
 #: opac-tmpl/ccsr/en/includes/usermenu.inc:8
 #, c-format
 msgid "my personal details"
-msgstr "تفصيلاتي الشخصية"
+msgstr "بياناتي الشخصية"
 
 #: opac-tmpl/ccsr/en/includes/usermenu.inc:21
 #, c-format
 msgid "my privacy"
-msgstr "بلدي"
+msgstr "خصوصيتي"
 
 #: opac-tmpl/ccsr/en/includes/usermenu.inc:26
 #, c-format
 msgid "my purchase suggestions"
-msgstr "اقتراحات الشراء الخاصة"
+msgstr "مقترحات الشراء خاصتي"
 
 #: opac-tmpl/ccsr/en/includes/usermenu.inc:19
 #, c-format
@@ -847,12 +832,12 @@ msgstr "تاريخ أبحاثي"
 #: opac-tmpl/ccsr/en/includes/usermenu.inc:4
 #, c-format
 msgid "my summary"
-msgstr "خلاصتى"
+msgstr "ملخص حسابي"
 
 #: opac-tmpl/ccsr/en/includes/usermenu.inc:10
 #, c-format
 msgid "my tags"
-msgstr "علاماتي"
+msgstr "وسومي"
 
 #. META http-equiv=Content-Type
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:2
@@ -865,12 +850,8 @@ msgid "unAPI"
 msgstr "unAPI"
 
 #: opac-tmpl/ccsr/en/includes/doc-head-close.inc:25
-msgid ""
-"width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,"
-"user-scalable=no"
-msgstr ""
-"width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,"
-"user-scalable=no"
+msgid "width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"
+msgstr "width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"
 
 #: opac-tmpl/ccsr/en/includes/masthead.inc:195
 #: opac-tmpl/ccsr/en/includes/masthead.inc:196
@@ -883,3 +864,4 @@ msgstr ""
 #, c-format
 msgid "| "
 msgstr "| "
+
