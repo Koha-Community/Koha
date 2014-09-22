@@ -169,28 +169,7 @@ sub printbasketgrouppdf{
                 croak $@;
             }
 
-            $ord->{rrp} = ConvertCurrency( $ord->{'currency'}, $ord->{rrp} );
-            if ( $bookseller->{'listincgst'} ) {
-                $ord->{rrpgsti} = sprintf( "%.2f", $ord->{rrp} );
-                $ord->{gstgsti} = sprintf( "%.2f", $ord->{gstrate} * 100 );
-                $ord->{rrpgste} = sprintf( "%.2f", $ord->{rrp} / ( 1 + ( $ord->{gstgsti} / 100 ) ) );
-                $ord->{gstgste} = sprintf( "%.2f", $ord->{gstgsti} / ( 1 + ( $ord->{gstgsti} / 100 ) ) );
-                $ord->{ecostgsti} = sprintf( "%.2f", $ord->{ecost} );
-                $ord->{ecostgste} = sprintf( "%.2f", $ord->{ecost} / ( 1 + ( $ord->{gstgsti} / 100 ) ) );
-                $ord->{gstvalue} = sprintf( "%.2f", ( $ord->{ecostgsti} - $ord->{ecostgste} ) * $ord->{quantity});
-                $ord->{totalgste} = sprintf( "%.2f", $ord->{quantity} * $ord->{ecostgste} );
-                $ord->{totalgsti} = sprintf( "%.2f", $ord->{quantity} * $ord->{ecostgsti} );
-            } else {
-                $ord->{rrpgsti} = sprintf( "%.2f", $ord->{rrp} * ( 1 + ( $ord->{gstrate} ) ) );
-                $ord->{rrpgste} = sprintf( "%.2f", $ord->{rrp} );
-                $ord->{gstgsti} = sprintf( "%.2f", $ord->{gstrate} * 100 );
-                $ord->{gstgste} = sprintf( "%.2f", $ord->{gstrate} * 100 );
-                $ord->{ecostgsti} = sprintf( "%.2f", $ord->{ecost} * ( 1 + ( $ord->{gstrate} ) ) );
-                $ord->{ecostgste} = sprintf( "%.2f", $ord->{ecost} );
-                $ord->{gstvalue} = sprintf( "%.2f", ( $ord->{ecostgsti} - $ord->{ecostgste} ) * $ord->{quantity});
-                $ord->{totalgste} = sprintf( "%.2f", $ord->{quantity} * $ord->{ecostgste} );
-                $ord->{totalgsti} = sprintf( "%.2f", $ord->{quantity} * $ord->{ecostgsti} );
-            }
+            $ord = C4::Acquisition::populate_order_with_prices({ order => $ord, booksellerid => $bookseller->{id}, ordering => 1 });
             my $bib = GetBiblioData($ord->{biblionumber});
             my $itemtypes = GetItemTypes();
 
@@ -212,17 +191,11 @@ sub printbasketgrouppdf{
                 }
             }
 
-            my $ba_order = {
-                isbn => ($ord->{isbn} ? $ord->{isbn} : undef),
-                itemtype => ( $ord->{itemtype} and $bib->{itemtype} ? $itemtypes->{$bib->{itemtype}}->{description} : undef ),
-                en => ( $en ? $en : undef ),
-                edition => ( $edition ? $edition : undef ),
-            };
-            for my $key ( qw/ gstrate author title itemtype publishercode copyrightdate publicationyear discount quantity rrpgsti rrpgste gstgsti gstgste ecostgsti ecostgste gstvalue totalgste totalgsti order_vendornote / ) {
-                $ba_order->{$key} = $ord->{$key};
-            }
+            $ord->{itemtype} = ( $ord->{itemtype} and $bib->{itemtype} ) ? $itemtypes->{$bib->{itemtype}}->{description} : undef;
+            $ord->{en} = $en ? $en : undef;
+            $ord->{edition} = $edition ? $edition : undef;
 
-            push(@ba_orders, $ba_order);
+            push(@ba_orders, $ord);
         }
         $orders{$basket->{basketno}} = \@ba_orders;
     }
