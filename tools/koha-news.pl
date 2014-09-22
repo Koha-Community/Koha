@@ -119,7 +119,7 @@ elsif ( $op eq 'add' ) {
         print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl");
     }
     else {
-        print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl?error_message=ERROR:+Required+news+title+missing!");
+        print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl?error_message=title_missing");
     }
 }
 elsif ( $op eq 'edit' ) {
