@@ -121,9 +121,16 @@ my $total_gste = 0;
 my $total_gsti = 0;
 my $total_gstvalue = 0;
 foreach my $order (@$orders) {
+    $order = C4::Acquisition::populate_order_with_prices(
+        {
+            order        => $order,
+            booksellerid => $bookseller->{id},
+            receiving    => 1,
+        }
+    );
     my $line = get_infos( $order, $bookseller);
 
-    $foot{$$line{gstgsti}}{gstgsti} = $$line{gstgsti};
+    $foot{$$line{gstgsti}}{gstrate} = $$line{gstrate};
     $foot{$$line{gstgsti}}{gstvalue} += $$line{gstvalue};
     $total_gstvalue += $$line{gstvalue};
     $foot{$$line{gstgsti}}{quantity}  += $$line{quantity};
@@ -193,23 +200,6 @@ sub get_infos {
     my %line = %{ $order };
     $line{order_received} = ( $qty == $order->{'quantityreceived'} );
     $line{budget_name}    = $budget->{budget_name};
-    if ( $bookseller->{'listincgst'} ) {
-        $line{gstgsti} = sprintf( "%.2f", $line{gstrate} * 100 );
-        $line{gstgste} = sprintf( "%.2f", $line{gstgsti} / ( 1 + ( $line{gstgsti} / 100 ) ) );
-        $line{actualcostgsti} = sprintf( "%.2f", $line{unitprice} );
-        $line{actualcostgste} = sprintf( "%.2f", $line{unitprice} / ( 1 + ( $line{gstgsti} / 100 ) ) );
-        $line{gstvalue} = sprintf( "%.2f", ( $line{actualcostgsti} - $line{actualcostgste} ) * $line{quantity});
-        $line{totalgste} = sprintf( "%.2f", $order->{quantity} * $line{actualcostgste} );
-        $line{totalgsti} = sprintf( "%.2f", $order->{quantity} * $line{actualcostgsti} );
-    } else {
-        $line{gstgsti} = sprintf( "%.2f", $line{gstrate} * 100 );
-        $line{gstgste} = sprintf( "%.2f", $line{gstrate} * 100 );
-        $line{actualcostgsti} = sprintf( "%.2f", $line{unitprice} * ( 1 + ( $line{gstrate} ) ) );
-        $line{actualcostgste} = sprintf( "%.2f", $line{unitprice} );
-        $line{gstvalue} = sprintf( "%.2f", ( $line{actualcostgsti} - $line{actualcostgste} ) * $line{quantity});
-        $line{totalgste} = sprintf( "%.2f", $order->{quantity} * $line{actualcostgste} );
-        $line{totalgsti} = sprintf( "%.2f", $order->{quantity} * $line{actualcostgsti} );
-    }
 
     if ( $line{uncertainprice} ) {
         $template->param( uncertainprices => 1 );

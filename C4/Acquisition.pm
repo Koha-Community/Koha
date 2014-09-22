@@ -2870,23 +2870,26 @@ sub populate_order_with_prices {
         }
     }
 
-    # Not used yet
-    #if ($receiving) {
-    #    if ( $bookseller->{invoiceincgst} ) {
-    #        $order->{unitpricegsti} = $order->{unitprice};
-    #        $order->{unitpricegste} =
-    #          $order->{unitpricegsti} / ( 1 + $order->{gstrate} );
-    #    }
-    #    else {
-    #        $order->{unitpricegste} = $order->{unitprice};
-    #        $order->{unitpricegsti} =
-    #          $order->{unitpricegste} * ( 1 + $order->{gstrate} );
-    #    }
-    #    $order->{gstvalue} =
-    #      $order->{quantityreceived} *
-    #      $order->{unitpricegste} *
-    #      $order->{gstrate};
-    #}
+    if ($receiving) {
+        # The following is completely wrong. Will be fixed later.
+        # See the unit tests to know what is wrong.
+        if ( $bookseller->{listincgst} ) {
+            $order->{unitpricegsti} = Koha::Number::Price->new( $order->{unitprice} )->round;
+            $order->{unitpricegste} = Koha::Number::Price->new(
+              $order->{unitpricegsti} / ( 1 + $order->{gstrate} ) )->round;
+        }
+        else {
+            $order->{unitpricegste} = Koha::Number::Price->new( $order->{unitprice} )->round;
+            $order->{unitpricegsti} = Koha::Number::Price->new(
+              $order->{unitpricegste} * ( 1 + $order->{gstrate} ) )->round;
+        }
+        $order->{gstvalue} = Koha::Number::Price->new(
+          ( $order->{unitpricegsti} - $order->{unitpricegste} )
+          * $order->{quantityreceived} )->round;
+
+        $order->{totalgste} = $order->{unitpricegste} * $order->{quantity};
+        $order->{totalgsti} = $order->{unitpricegsti} * $order->{quantity};
+    }
 
     return $order;
 }

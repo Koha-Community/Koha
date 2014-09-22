@@ -23,7 +23,7 @@ my $today;
 for my $currency_format ( qw( US FR ) ) {
     t::lib::Mocks::mock_preference( 'CurrencyFormat', $currency_format );
     subtest 'Configuration 1: 0 0' => sub {
-        plan tests => 7;
+        plan tests => 12;
         $bookseller_module->mock(
             'fetch',
             sub {
@@ -112,10 +112,61 @@ for my $currency_format ( qw( US FR ) ) {
                 field    => 'totalgste'
             }
         );
+
+        $order_0_0 = C4::Acquisition::populate_order_with_prices(
+            {
+                order        => $order_0_0,
+                booksellerid => 'just_something',
+                receiving    => 1,
+            }
+        );
+        # Note that this configuration is *not* correct!
+        # unitpricegsti should be 75.28
+        # totalgst should be 150.56
+        compare(
+            {
+                got      => $order_0_0->{unitpricegsti},
+                expected => 77.49,
+                conf     => '0 0',
+                field    => 'unitpricegsti'
+            }
+        );
+        compare(
+            {
+                got      => $order_0_0->{unitpricegste},
+                expected => 73.80,
+                conf     => '0 0',
+                field    => 'unitpricegste'
+            }
+        );
+        compare(
+            {
+                got      => $order_0_0->{gstvalue},
+                expected => 7.38,
+                conf     => '0 0',
+                field    => 'gstvalue'
+            }
+        );
+        compare(
+            {
+                got      => $order_0_0->{totalgsti},
+                expected => 154.98,
+                conf     => '0 0',
+                field    => 'totalgsti'
+            }
+        );
+        compare(
+            {
+                got      => $order_0_0->{totalgste},
+                expected => 147.60,
+                conf     => '0 0',
+                field    => 'totalgste'
+            }
+        );
     };
 
     subtest 'Configuration 1: 1 1' => sub {
-        plan tests => 7;
+        plan tests => 12;
         $bookseller_module->mock(
             'fetch',
             sub {
@@ -205,10 +256,60 @@ for my $currency_format ( qw( US FR ) ) {
                 field    => 'totalgste'
             }
         );
+
+        $order_1_1 = C4::Acquisition::populate_order_with_prices(
+            {
+                order        => $order_1_1,
+                booksellerid => 'just_something',
+                receiving    => 1,
+            }
+        );
+        # Note that this configuration is *not* correct!
+        # gstvalue should be 7.03
+        compare(
+            {
+                got      => $order_1_1->{unitpricegsti},
+                expected => 73.80,
+                conf     => '1 1',
+                field    => 'unitpricegsti'
+            }
+        );
+        compare(
+            {
+                got      => $order_1_1->{unitpricegste},
+                expected => 70.29,
+                conf     => '1 1',
+                field    => 'unitpricegste'
+            }
+        );
+        compare(
+            {
+                got      => $order_1_1->{gstvalue},
+                expected => 7.02,
+                conf     => '1 1',
+                field    => 'gstvalue'
+            }
+        );
+        compare(
+            {
+                got      => $order_1_1->{totalgsti},
+                expected => 147.60,
+                conf     => '1 1',
+                field    => 'totalgsti'
+            }
+        );
+        compare(
+            {
+                got      => $order_1_1->{totalgste},
+                expected => 140.58,
+                conf     => '1 1',
+                field    => 'totalgste'
+            }
+        );
     };
 
     subtest 'Configuration 1: 1 0' => sub {
-        plan tests => 7;
+        plan tests => 12;
         $bookseller_module->mock(
             'fetch',
             sub {
@@ -300,10 +401,62 @@ for my $currency_format ( qw( US FR ) ) {
                 field    => 'totalgste'
             }
         );
+
+        $order_1_0 = C4::Acquisition::populate_order_with_prices(
+            {
+                order        => $order_1_0,
+                booksellerid => 'just_something',
+                receiving    => 1,
+            }
+        );
+        # Note that this configuration is *not* correct!
+        # unitpricegsti should be 71.69
+        # totalgsti should be 143.38
+        # gstvalue should be 7.03
+        compare(
+            {
+                got      => $order_1_0->{unitpricegsti},
+                expected => 73.80,
+                conf     => '1 0',
+                field    => 'unitpricegsti'
+            }
+        );
+        compare(
+            {
+                got      => $order_1_0->{unitpricegste},
+                expected => 70.29,
+                conf     => '1 0',
+                field    => 'unitpricegste'
+            }
+        );
+        compare(
+            {
+                got      => $order_1_0->{gstvalue},
+                expected => 7.02,
+                conf     => '1 0',
+                field    => 'gstvalue'
+            }
+        );
+        compare(
+            {
+                got      => $order_1_0->{totalgsti},
+                expected => 147.60,
+                conf     => '1 0',
+                field    => 'totalgsti'
+            }
+        );
+        compare(
+            {
+                got      => $order_1_0->{totalgste},
+                expected => 140.58,
+                conf     => '1 0',
+                field    => 'totalgste'
+            }
+        );
     };
 
     subtest 'Configuration 1: 0 1' => sub {
-        plan tests => 7;
+        plan tests => 12;
         $bookseller_module->mock(
             'fetch',
             sub {
@@ -389,6 +542,55 @@ for my $currency_format ( qw( US FR ) ) {
                 got      => $order_0_1->{totalgste},
                 expected => 147.60,
                 conf     => '1 0',
+                field    => 'totalgste'
+            }
+        );
+
+        $order_0_1 = C4::Acquisition::populate_order_with_prices(
+            {
+                order        => $order_0_1,
+                booksellerid => 'just_something',
+                receiving    => 1,
+            }
+        );
+        # Note that this configuration is correct
+        compare(
+            {
+                got      => $order_0_1->{unitpricegsti},
+                expected => 77.49,
+                conf     => '0 1',
+                field    => 'unitpricegsti'
+            }
+        );
+        compare(
+            {
+                got      => $order_0_1->{unitpricegste},
+                expected => 73.80,
+                conf     => '0 1',
+                field    => 'unitpricegste'
+            }
+        );
+        compare(
+            {
+                got      => $order_0_1->{gstvalue},
+                expected => 7.38,
+                conf     => '0 1',
+                field    => 'gstvalue'
+            }
+        );
+        compare(
+            {
+                got      => $order_0_1->{totalgsti},
+                expected => 154.98,
+                conf     => '0 1',
+                field    => 'totalgsti'
+            }
+        );
+        compare(
+            {
+                got      => $order_0_1->{totalgste},
+                expected => 147.60,
+                conf     => '0 1',
                 field    => 'totalgste'
             }
         );

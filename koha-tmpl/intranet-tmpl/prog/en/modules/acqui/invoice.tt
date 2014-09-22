@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE Price %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Invoice</title>
@@ -160,13 +161,13 @@
                     [% END %]
                   </td>
                   <td><p>[% order.branchcode %]</p></td>
-                  <td class="number gste">[% order.actualcostgste %]</td>
-                  <td class="number gsti">[% order.actualcostgsti %]</td>
+                  <td class="number gste">[% order.unitpricegste | $Price %]</td>
+                  <td class="number gsti">[% order.unitpricegsti | $Price %]</td>
                   <td class="number">[% order.quantity %]</td>
-                  <td class="number gste">[% order.totalgste %]</td>
-                  <td class="number gsti">[% order.totalgsti %]</td>
-                  <td class="number">[% order.gstgsti %]</td>
-                  <td class="number">[% order.gstvalue %]</td>
+                  <td class="number gste">[% order.totalgste | $Price %]</td>
+                  <td class="number gsti">[% order.totalgsti | $Price %]</td>
+                  <td class="number">[% order.gstrate * 100 | $Price %]</td>
+                  <td class="number">[% order.gstvalue | $Price %]</td>
                   <td>[% order.budget_name %]</td>
                 </tr>
               [% END %]
@@ -174,13 +175,13 @@
             <tfoot>
               [% FOR tf IN foot_loop %]
                 <tr>
-                    <th colspan='2'>Total (GST [% tf.gstgsti %] %)</th>
+                    <th colspan='2'>Total (GST [% tf.gstrate * 100 | $Price %] %)</th>
                     <th class="gste"/><th class="gsti"/>
                     <th>[% tf.quantity %]</th>
-                    <th class="gste">[% tf.totalgste %]</th>
-                    <th class="gsti">[% tf.totalgsti %]</th>
+                    <th class="gste">[% tf.totalgste | $Price %]</th>
+                    <th class="gsti">[% tf.totalgsti | $Price %]</th>
                     <th>&nbsp;</th>
-                    <th>[% tf.gstvalue %]</th>
+                    <th>[% tf.gstvalue | $Price %]</th>
                     <th>&nbsp;</th>
                 </tr>
               [% END %]
@@ -188,10 +189,10 @@
                 <th colspan='2'>Total ([% currency %])</th>
                 <th class="gste"/><th class="gsti"/>
                 <th>[% total_quantity %]</th>
-                <th class="gste">[% total_gste %]</th>
-                <th class="gsti">[% total_gsti %]</th>
+                <th class="gste">[% total_gste | $Price %]</th>
+                <th class="gsti">[% total_gsti | $Price %]</th>
                 <th>&nbsp;</th>
-                <th>[% total_gstvalue %]</th>
+                <th>[% total_gstvalue | $Price %]</th>
                 <th>&nbsp;</th>
               </tr>
               <tr>
@@ -199,10 +200,10 @@
                 <th class="gste"></th>
                 <th class="gsti"></th>
                 <th>[% total_quantity %]</th>
-                <th class="gste">[% total_gste_shipment %]</th>
-                <th class="gsti">[% total_gsti_shipment %]</th>
+                <th class="gste">[% total_gste_shipment | $Price %]</th>
+                <th class="gsti">[% total_gsti_shipment | $Price %]</th>
                 <th>&nbsp;</th>
-                <th>[% total_gstvalue %]</th>
+                <th>[% total_gstvalue | $Price %]</th>
                 <th>&nbsp;</th>
               </tr>
             </tfoot>
