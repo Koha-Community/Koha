@@ -168,7 +168,7 @@ foreach my $subscription (@subscriptions) {
 
 # Get acquisition details
 if ( C4::Context->preference('AcquisitionDetails') ) {
-    my ( $orders, $qty, $price, $received ) = C4::Acquisition::GetHistory( biblionumber => $biblionumber, get_canceled_order => 1 );
+    my $orders = C4::Acquisition::GetHistory( biblionumber => $biblionumber, get_canceled_order => 1 );
     $template->param(
         orders => $orders,
     );

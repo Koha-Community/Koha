@@ -2186,7 +2186,7 @@ sub GetLateOrders {
 
 =head3 GetHistory
 
-  (\@order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( %params );
+  \@order_loop = GetHistory( %params );
 
 Retreives some acquisition history information
 
@@ -2226,9 +2226,6 @@ returns:
                 'quantityreceived' => undef,
                 'title'            => 'The Adventures of Huckleberry Finn'
             }
-    $total_qty is the sum of all of the quantities in $order_loop
-    $total_price is the cost of each in $order_loop times the quantity
-    $total_qtyreceived is the sum of all of the quantityreceived entries in $order_loop
 
 =cut
 
@@ -2397,18 +2394,8 @@ sub GetHistory {
         }
     }
     $query .= " ORDER BY id";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( @query_params );
-    my $cnt = 1;
-    while ( my $line = $sth->fetchrow_hashref ) {
-        $line->{count} = $cnt++;
-        $line->{toggle} = 1 if $cnt % 2;
-        push @order_loop, $line;
-        $total_qty         += ( $line->{quantity} ) ? $line->{quantity} : 0;
-        $total_qtyreceived += ( $line->{quantityreceived} ) ? $line->{quantityreceived} : 0;
-        $total_price       += ( $line->{quantity} and $line->{ecost} ) ? $line->{quantity} * $line->{ecost} : 0;
-    }
-    return \@order_loop, $total_qty, $total_price, $total_qtyreceived;
+
+    return $dbh->selectall_arrayref( $query, { Slice => {} }, @query_params );
 }
 
 =head2 GetRecentAcqui

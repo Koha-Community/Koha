@@ -834,9 +834,9 @@ is( $neworder->{'budget_id'}, $budgetid, 'Budget on new order is unchanged' );
 is( $neworder->{ordernumber}, $new_ordernumber, 'Split: test ordernumber' );
 is( $neworder->{parent_ordernumber}, $ordernumbers[1], 'Split: test parent_ordernumber' );
 
-my ( $orders ) = GetHistory( ordernumber => $ordernumbers[1] );
+my $orders = GetHistory( ordernumber => $ordernumbers[1] );
 is( scalar( @$orders ), 1, 'GetHistory with a given ordernumber returns 1 order' );
-( $orders ) = GetHistory( ordernumber => $ordernumbers[1], search_children_too => 1 );
+$orders = GetHistory( ordernumber => $ordernumbers[1], search_children_too => 1 );
 is( scalar( @$orders ), 2, 'GetHistory with a given ordernumber and search_children_too set returns 2 orders' );
 
 my $budgetid2 = C4::Budgets::AddBudget(
