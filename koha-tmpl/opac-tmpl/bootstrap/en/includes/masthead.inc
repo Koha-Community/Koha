@@ -292,7 +292,7 @@
                     <p>If you have a Shibboleth account, please <a href="[% shibbolethLoginUrl %]">click here to login</a>.</p>
                     <h4>Local Login</h4>
                     [% END %]
-		    [% END %]
+            [% END %]
                     <input type="hidden" name="koha_login_context" value="opac" />
                     <fieldset class="brief">
                         <label for="muserid">Login:</label><input type="text" id="muserid" name="userid" />

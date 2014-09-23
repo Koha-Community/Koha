@@ -1,21 +1,21 @@
 package C4::Auth_with_shibboleth;
 
-# Copyright 2011 BibLibre
+# Copyright 2014 PTFS Europe
 #
 # This file is part of Koha.
 #
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
 #
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with Koha; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use strict;
 use warnings;
@@ -29,17 +29,18 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
 
 BEGIN {
     require Exporter;
-    $VERSION = 3.03;                                                                    # set the version for version checking
+    $VERSION = 3.03;           # set the version for version checking
     $debug   = $ENV{DEBUG};
     @ISA     = qw(Exporter);
-    @EXPORT  = qw(shib_ok logout_shib login_shib_url checkpw_shib get_login_shib);
+    @EXPORT =
+      qw(shib_ok logout_shib login_shib_url checkpw_shib get_login_shib);
 }
 
 # Check that shib config is not malformed
 sub shib_ok {
     my $config = _get_shib_config();
 
-    if ( $config ) {
+    if ($config) {
         return 1;
     }
 
@@ -68,20 +69,20 @@ sub login_shib_url {
 # Returns shibboleth user login
 sub get_login_shib {
 
-    # In case of a Shibboleth authentication, we expect a shibboleth user attribute
-    # to contain the login match point of the shibboleth-authenticated user. This match
-    # point is configured in koha-conf.xml
+# In case of a Shibboleth authentication, we expect a shibboleth user attribute
+# to contain the login match point of the shibboleth-authenticated user. This match
+# point is configured in koha-conf.xml
 
-    # Shibboleth attributes are mapped into http environmement variables, so we're getting
-    # the match point of the user this way
+# Shibboleth attributes are mapped into http environmement variables, so we're getting
+# the match point of the user this way
 
     # Get shibboleth config
     my $config = _get_shib_config();
 
     my $matchAttribute = $config->{mapping}->{ $config->{matchpoint} }->{is};
-    $debug and warn $matchAttribute . " value: " . $ENV{ $matchAttribute };
+    $debug and warn $matchAttribute . " value: " . $ENV{$matchAttribute};
 
-    return $ENV{ $matchAttribute } || '';
+    return $ENV{$matchAttribute} || '';
 }
 
 # Checks for password correctness
@@ -94,18 +95,22 @@ sub checkpw_shib {
     my $config = _get_shib_config();
     $debug and warn "User Shibboleth-authenticated as: $match";
 
-    # Does the given shibboleth attribute value ($match) match a valid koha user ?
-    my $sth = $dbh->prepare("select cardnumber, userid from borrowers where $config->{matchpoint}=?");
+  # Does the given shibboleth attribute value ($match) match a valid koha user ?
+    my $sth = $dbh->prepare(
+        "select cardnumber, userid from borrowers where $config->{matchpoint}=?"
+    );
     $sth->execute($match);
     if ( $sth->rows ) {
         my @retvals = $sth->fetchrow;
         $retnumber = $retvals[0];
-        $userid = $retvals[1];
+        $userid    = $retvals[1];
         return ( 1, $retnumber, $userid );
     }
 
     # If we reach this point, the user is not a valid koha user
-    $debug and warn "User with $config->{matchpoint} of $match is not a valid Koha user";
+    $debug
+      and warn
+      "User with $config->{matchpoint} of $match is not a valid Koha user";
     return 0;
 }
 

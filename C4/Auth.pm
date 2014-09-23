@@ -305,10 +305,10 @@ sub get_template_and_user {
     }
     else {    # if this is an anonymous session, setup to display public lists...
 
-	# If shibboleth is enabled, and we're in an anonymous session, we should allow
+    # If shibboleth is enabled, and we're in an anonymous session, we should allow
     # the user to attemp login via shibboleth.
-	if ( $shib ) {
-	    $template->param( shibbolethAuthentication => $shib,
+    if ( $shib ) {
+        $template->param( shibbolethAuthentication => $shib,
                 shibbolethLoginUrl    => login_shib_url($in->{'query'}),
             );
             # If shibboleth is enabled and we have a shibboleth login attribute,
@@ -761,7 +761,7 @@ sub checkauth {
         }
         elsif ($logout) {
             # voluntary logout the user
-	    # check wether the user was using their shibboleth session or a local one
+        # check wether the user was using their shibboleth session or a local one
             my $shibSuccess = C4::Context->userenv->{'shibboleth'};
             $session->delete();
             $session->flush;
@@ -853,21 +853,21 @@ sub checkauth {
             || $persona )
         {
             my $password = $query->param('password');
-	    my $shibSuccess = 0;
+        my $shibSuccess = 0;
 
             my ( $return, $cardnumber );
-	    # If shib is enabled and we have a shib login, does the login match a valid koha user
+        # If shib is enabled and we have a shib login, does the login match a valid koha user
             if ( $shib && $shib_login && $type eq 'opac' ) {
                 my $retuserid;
-		# Do not pass password here, else shib will not be checked in checkpw.
+        # Do not pass password here, else shib will not be checked in checkpw.
                 ( $return, $cardnumber, $retuserid ) = checkpw( $dbh, $userid, undef, $query );
                 $userid = $retuserid;
-		$shibSuccess = $return;
+        $shibSuccess = $return;
                 $info{'invalidShibLogin'} = 1 unless ($return);
             }
-	    # If shib login and match were successfull, skip further login methods
-	    unless ( $shibSuccess ) {
-	    if ( $cas && $query->param('ticket') ) {
+        # If shib login and match were successfull, skip further login methods
+        unless ( $shibSuccess ) {
+        if ( $cas && $query->param('ticket') ) {
                 my $retuserid;
                 ( $return, $cardnumber, $retuserid ) =
                   checkpw( $dbh, $userid, $password, $query );
@@ -934,7 +934,7 @@ sub checkauth {
                 ( $return, $cardnumber, $retuserid ) =
                   checkpw( $dbh, $userid, $password, $query );
                 $userid = $retuserid if ( $retuserid );
-		$info{'invalid_username_or_password'} = 1 unless ($return);
+        $info{'invalid_username_or_password'} = 1 unless ($return);
         } }
         if ($return) {
                #_session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},(strftime '%c', localtime));
@@ -1023,7 +1023,7 @@ sub checkauth {
                     $session->param('emailaddress',$emailaddress);
                     $session->param('ip',$session->remote_addr());
                     $session->param('lasttime',time());
-		    $session->param('shibboleth',$shibSuccess);
+            $session->param('shibboleth',$shibSuccess);
                     $debug and printf STDERR "AUTH_4: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
                 }
                 elsif ( $return == 2 ) {
