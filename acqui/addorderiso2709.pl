@@ -24,7 +24,6 @@
 use Modern::Perl;
 use CGI;
 use Carp;
-use Number::Format qw(:all);
 use YAML qw/Load/;
 
 use C4::Context;

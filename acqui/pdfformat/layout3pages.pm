@@ -23,7 +23,6 @@
 #you can use any PDF::API2 module, all you need to do is return the stringifyed pdf object from the printpdf sub.
 package pdfformat::layout3pages;
 use vars qw($VERSION @ISA @EXPORT);
-use Number::Format qw(format_price);
 use MIME::Base64;
 use List::MoreUtils qw/uniq/;
 use strict;
@@ -31,6 +30,8 @@ use warnings;
 use utf8;
 
 use C4::Branch qw(GetBranchDetail GetBranchName);
+
+use Koha::Number::Price;
 
 BEGIN {
          use Exporter   ();
@@ -57,24 +58,6 @@ sub printorders {
     my ($pdf, $basketgroup, $baskets, $orders) = @_;
     
     my $cur_format = C4::Context->preference("CurrencyFormat");
-    my $num;
-    
-    if ( $cur_format eq 'FR' ) {
-        $num = new Number::Format(
-            'decimal_fill'      => '2',
-            'decimal_point'     => ',',
-            'int_curr_symbol'   => '',
-            'mon_thousands_sep' => ' ',
-            'thousands_sep'     => ' ',
-            'mon_decimal_point' => ','
-        );
-    } else {  # US by default..
-        $num = new Number::Format(
-            'int_curr_symbol'   => '',
-            'mon_thousands_sep' => ',',
-            'mon_decimal_point' => '.'
-        );
-    }
 
     $pdf->mediabox($height/mm, $width/mm);
     my $number = 3;
@@ -134,13 +117,13 @@ sub printorders {
             push( @$arrbasket,
                 $titleinfo. ($line->{order_vendornote} ? "\n----------------\nNote for vendor : " . $line->{order_vendornote} : '' ),
                 $line->{quantity},
-                $num->format_price($line->{rrpgste}),
-                $num->format_price($line->{rrpgsti}),
-                $num->format_price($line->{discount}).'%',
-                $num->format_price($line->{rrpgste} - $line->{ecostgste}),
-                $num->format_price($line->{gstrate} * 100).'%',
-                $num->format_price($line->{totalgste}),
-                $num->format_price($line->{totalgsti}),
+                Koha::Number::Price->new( $line->{rrpgste} )->format,
+                Koha::Number::Price->new( $line->{rrpgsti} )->format,
+                Koha::Number::Price->new( $line->{discount} )->format . '%',
+                Koha::Number::Price->new( $line->{rrpgste} - $line->{ecostgste})->format,
+                Koha::Number::Price->new( $line->{gstrate} * 100 )->format . '%',
+                Koha::Number::Price->new( $line->{totalgste} )->format,
+                Koha::Number::Price->new( $line->{totalgsti} )->format,
             );
             push(@$abaskets, $arrbasket);
         }
@@ -204,25 +187,7 @@ sub printbaskets {
     my $libraryname = C4::Context->preference("LibraryName");
     
     my $cur_format = C4::Context->preference("CurrencyFormat");
-    my $num;
-    
-    if ( $cur_format eq 'FR' ) {
-        $num = new Number::Format(
-            'decimal_fill'      => '2',
-            'decimal_point'     => ',',
-            'int_curr_symbol'   => '',
-            'mon_thousands_sep' => ' ',
-            'thousands_sep'     => ' ',
-            'mon_decimal_point' => ','
-        );
-    } else {  # US by default..
-        $num = new Number::Format(
-            'int_curr_symbol'   => '',
-            'mon_thousands_sep' => ',',
-            'mon_decimal_point' => '.'
-        );
-    }
-    
+
     $pdf->mediabox($width/mm, $height/mm);
     my $page = $pdf->openpage(2);
     # create a text
@@ -263,31 +228,39 @@ sub printbaskets {
             push @gst, $ord->{gstrate};
         }
         @gst = uniq map { $_ * 100 } @gst;
-        $totalgsti = $num->round($totalgsti);
-        $totalgste = $num->round($totalgste);
         $grandtotalrrpgste += $totalrrpgste;
         $grandtotalrrpgsti += $totalrrpgsti;
         $grandtotalgsti += $totalgsti;
         $grandtotalgste += $totalgste;
         $grandtotalgstvalue += $totalgstvalue;
         $grandtotaldiscount += $totaldiscount;
-        my @gst_string = map{$num->format_price( $_ ) . '%'} @gst;
+        my @gst_string =
+          map { Koha::Number::Price->new($_)->format . '%' } @gst;
         push(@$arrbasket,
             $basket->{contractname},
             $basket->{basketname} . ' (No. ' . $basket->{basketno} . ')',
-            $num->format_price($totalrrpgste),
-            $num->format_price($totalrrpgsti),
+            Koha::Number::Price->new( $totalrrpgste )->format,
+            Koha::Number::Price->new( $totalrrpgsti )->format,
             "@gst_string",
-            $num->format_price($totalgstvalue),
-            $num->format_price($totaldiscount),
-            $num->format_price($totalgste),
-            $num->format_price($totalgsti)
+            Koha::Number::Price->new( $totalgstvalue )->format,
+            Koha::Number::Price->new( $totaldiscount )->format,
+            Koha::Number::Price->new( $totalgste )->format,
+            Koha::Number::Price->new( $totalgsti )->format,
         );
         push(@$abaskets, $arrbasket);
     }
     # now, push total
     undef $arrbasket;
-    push @$arrbasket,'','Total', $num->format_price($grandtotalrrpgste), $num->format_price($grandtotalrrpgsti), '', $num->format_price($grandtotalgstvalue), $num->format_price($grandtotaldiscount), $num->format_price($grandtotalgste), $num->format_price($grandtotalgsti);
+    push @$arrbasket,
+      '',
+      'Total',
+      Koha::Number::Price->new( $grandtotalrrpgste )->format,
+      Koha::Number::Price->new( $grandtotalrrpgsti )->format,
+      '',
+      Koha::Number::Price->new( $grandtotalgstvalue )->format,
+      Koha::Number::Price->new( $grandtotaldiscount )->format,
+      Koha::Number::Price->new( $grandtotalgste )->format,
+      Koha::Number::Price->new( $grandtotalgsti )->format;
     push @$abaskets,$arrbasket;
     # height is width and width is height in this function, as the pdf is in landscape mode for the Tables.
 

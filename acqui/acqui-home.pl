@@ -28,7 +28,6 @@ this script is the main page for acqui
 
 use strict;
 use warnings;
-use Number::Format;
 
 use CGI;
 use C4::Auth;

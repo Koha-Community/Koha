@@ -23,7 +23,6 @@ use Modern::Perl;
 
 use CGI;
 use List::Util qw/min/;
-use Number::Format qw(format_price);
 
 use Koha::Database;
 use C4::Auth qw/get_user_subpermissions/;

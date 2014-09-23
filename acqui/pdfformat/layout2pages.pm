@@ -23,13 +23,14 @@
 #you can use any PDF::API2 module, all you need to do is return the stringifyed pdf object from the printpdf sub.
 package pdfformat::layout2pages;
 use vars qw($VERSION @ISA @EXPORT);
-use Number::Format qw(format_price);
 use MIME::Base64;
 use strict;
 use warnings;
 use utf8;
 
 use C4::Branch qw(GetBranchDetail);
+
+use Koha::Number::Price;
 
 BEGIN {
          use Exporter   ();
@@ -56,24 +57,6 @@ sub printorders {
     my ($pdf, $basketgroup, $baskets, $orders) = @_;
     
     my $cur_format = C4::Context->preference("CurrencyFormat");
-    my $num;
-    
-    if ( $cur_format eq 'FR' ) {
-        $num = new Number::Format(
-            'decimal_fill'      => '2',
-            'decimal_point'     => ',',
-            'int_curr_symbol'   => '',
-            'mon_thousands_sep' => ' ',
-            'thousands_sep'     => ' ',
-            'mon_decimal_point' => ','
-        );
-    } else {  # US by default..
-        $num = new Number::Format(
-            'int_curr_symbol'   => '',
-            'mon_thousands_sep' => ',',
-            'mon_decimal_point' => '.'
-        );
-    }
 
     $pdf->mediabox($height/mm, $width/mm);
     my $page = $pdf->page();
@@ -115,11 +98,11 @@ sub printorders {
                 $basket->{basketno},
                 $titleinfo. ($line->{order_vendornote} ? "\n----------------\nNote for vendor : " . $line->{order_vendornote} : '' ),
                 $line->{quantity},
-                $num->format_price($line->{rrpgsti}),
-                $num->format_price($line->{discount}).'%',
-                $num->format_price($line->{gstrate} * 100).'%',
-                $num->format_price($line->{totalgste}),
-                $num->format_price($line->{totalgsti}),
+                Koha::Number::Price->new( $line->{rrpgsti} )->format,
+                Koha::Number::Price->new( $line->{discount} )->format . '%',
+                Koha::Number::Price->new( $line->{gstrate} * 100 )->format . '%',
+                Koha::Number::Price->new( $line->{totalgste} )->format,
+                Koha::Number::Price->new( $line->{totalgsti} )->format,
             );
             push(@$abaskets, $arrbasket);
         }
