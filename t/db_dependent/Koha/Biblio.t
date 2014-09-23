@@ -1,5 +1,7 @@
 #!/usr/bin/perl
-
+#
+# Copyright 2014 Catalyst IT
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
