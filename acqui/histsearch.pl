@@ -103,10 +103,10 @@ if ( $d = $input->param('iso') ) {
     $to_iso = C4::Dates->new($d)->output('iso');
 }
 
-my ( $order_loop, $total_qty, $total_price, $total_qtyreceived );
+my $order_loop;
 # If we're supplied any value then we do a search. Otherwise we don't.
 if ($do_search) {
-    ( $order_loop, $total_qty, $total_price, $total_qtyreceived ) = GetHistory(
+    $order_loop = GetHistory(
         title => $title,
         author => $author,
         isbn   => $isbn,
@@ -139,9 +139,6 @@ for my $bp ( @{$budgetperiods} ) {
 
 $template->param(
     order_loop              => $order_loop,
-    total_qty               => $total_qty,
-    total_qtyreceived       => $total_qtyreceived,
-    total_price             => sprintf( "%.2f", $total_price ),
     numresults              => $order_loop ? scalar(@$order_loop) : undef,
     title                   => $title,
     author                  => $author,
