@@ -33,8 +33,8 @@
         [% IF categorycode %]
             update_category_code( "[% categorycode %]" );
         [% ELSE %]
-            if ( $("#categorycode").length > 0 ){
-                var category_code = $("#categorycode").find("option:selected").val();
+            if ( $("#categorycode_entry").length > 0 ){
+                var category_code = $("#categorycode_entry").find("option:selected").val();
                 update_category_code( category_code );
             }
         [% END %]
@@ -96,7 +96,7 @@
 
     function update_category_code(category_code) {
         if ( $(category_code).is("select") ) {
-            category_code = $("#categorycode").find("option:selected").val();
+            category_code = $("#categorycode_entry").find("option:selected").val();
         }
         var mytables = $(".attributes_table");
         $(mytables).find("li").hide();
@@ -932,8 +932,8 @@
     </li>
         [% END %]
     <li>
-        <label for="categorycode" class="required">Category: </label>
-        <select id="categorycode" name="categorycode" onchange="update_category_code(this);">
+        <label for="categorycode_entry" class="required">Category: </label>
+        <select id="categorycode_entry" name="categorycode" onchange="update_category_code(this);">
         [% FOREACH typeloo IN typeloop %]
             [% FOREACH categoryloo IN typeloo.categoryloop %]
                 [% IF ( loop.first ) %]
@@ -1341,7 +1341,7 @@
             $('#memberentry_messaging_prefs > *').change(function() {
                 message_prefs_dirty = true;
             });
-            $('#categorycode').change(function() {
+            $('#categorycode_entry').change(function() {
                 var categorycode = $(this).val();
                 if (message_prefs_dirty) {
                     if (!confirm('Change messaging preferences to default for this category?')) {
