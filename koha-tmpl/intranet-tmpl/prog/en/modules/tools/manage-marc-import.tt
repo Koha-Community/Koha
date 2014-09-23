@@ -62,9 +62,7 @@ $(document).ready(function(){
             [% END %]
 
             $('td:eq(1)', nRow).html(
-                '<a href="javascript:void(0)" onclick="show_marc('
-                + aData['import_record_id']
-                + ')">' + aData['citation'] + '</a>'
+                '<a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=' + aData['import_record_id'] + '" class="previewMARC">' + aData['citation'] + '</a>'
             );
 
             $('td:eq(2)', nRow).html(
@@ -103,29 +101,27 @@ $(document).ready(function(){
           },
       }));
     [% END %]
+    $("body").on("click",".previewMARC", function(e){
+        e.preventDefault();
+        var ltitle = $(this).text();
+        var page = $(this).attr("href");
+        $("#marcPreviewLabel").text(ltitle);
+        $("#marcPreview .modal-body").load(page + " pre");
+        $('#marcPreview').modal({show:true});
+    });
+    $("#marcPreview").on("hidden", function(){
+        $("#marcPreviewLabel").html("");
+        $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/loading-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+    });
 });
 
-function show_marc( id ) {
-    var page = "/cgi-bin/koha/catalogue/showmarc.pl?importid=" + id;
-
-    var $dialog = $('<div></div>')
-        .html('<iframe style="border: 0px; " src="' + page + '" width="100%" height="100%"></iframe>')
-        .dialog({
-            autoOpen: false,
-            modal: true,
-            height: 625,
-            width: 500,
-            title: _("MARC Preview")
-        });
-
-    $dialog.dialog('open');
-}
 //]]>
 </script>
 <style type="text/css">
 	#jobpanel,#jobstatus,#jobfailed { display : none; }
 	#jobstatus { margin:.4em; }
-    #jobprogress{ width:200px;height:10px;border:1px solid #666;background:url('[% interface %]/[% theme %]/img/progress.png') -300px 0px no-repeat; } span.change-status { font-style:italic; color:#666; display:none; }</style>
+    #jobprogress{ width:200px;height:10px;border:1px solid #666;background:url('[% interface %]/[% theme %]/img/progress.png') -300px 0px no-repeat; } span.change-status { font-style:italic; color:#666; display:none; }#marcPreview { width : 80%; margin-left : -40%; } @media (max-width: 767px) { #marcPreview { margin: 0; width : auto; } }
+</style>
 </head>
 <body id="tools_manage-marc-import" class="tools">
 [% INCLUDE 'header.inc' %]
@@ -452,6 +448,19 @@ Page
             </tr>
         </thead>
     </table>
+
+    <div id="marcPreview" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="marcPreviewLabel">MARC preview</h3>
+        </div>
+        <div class="modal-body">
+            <div id="loading"> <img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /> Loading </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+    </div>
 [% END %]
 
 </div>
