@@ -58,12 +58,12 @@ BEGIN {
     $shib        = C4::Context->config('useshibboleth') || 0;
     $caslogout   = C4::Context->preference('casLogout');
     require C4::Auth_with_cas;             # no import
-    require C4::Auth_with_shibboleth;
     if ($ldap) {
     require C4::Auth_with_ldap;
     import C4::Auth_with_ldap qw(checkpw_ldap);
     }
     if ($shib) {
+        require C4::Auth_with_shibboleth;
         import C4::Auth_with_shibboleth
           qw(shib_ok checkpw_shib logout_shib login_shib_url get_login_shib);
 
