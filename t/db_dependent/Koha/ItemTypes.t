@@ -17,49 +17,64 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-# XXX This doesn't work because I need to figure out how to do transactions
-# in a test-case with DBIx::Class
-
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 17;
 use Data::Dumper;
+use Koha::Database;
 
 BEGIN {
     use_ok('Koha::ItemTypes');
 }
 
-my $dbh = C4::Context->dbh;
+my $database = Koha::Database->new();
+my $schema   = $database->schema();
+$schema->txn_begin;
 
-# Start transaction
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
-
-my $prep = $dbh->prepare('INSERT INTO itemtypes (itemtype, description, rentalcharge, imageurl, summary, checkinmsg, checkinmsgtype) VALUES (?,?,?,?,?,?,?)');
-$prep->execute('type1', 'description', 'rentalcharge', 'imageurl', 'summary', 'checkinmsg', 'checkinmsgtype');
-$prep->execute('type2', 'description', 'rentalcharge', 'imageurl', 'summary', 'checkinmsg', 'checkinmsgtype');
-
+$schema->resultset('Itemtype')->create(
+    {
+        itemtype       => 'type1',
+        description    => 'description',
+        rentalcharge   => '0.00',
+        imageurl       => 'imageurl',
+        summary        => 'summary',
+        checkinmsg     => 'checkinmsg',
+        checkinmsgtype => 'checkinmsgtype',
+    }
+);
+$schema->resultset('Itemtype')->create(
+    {
+        itemtype       => 'type2',
+        description    => 'description',
+        rentalcharge   => '0.00',
+        imageurl       => 'imageurl',
+        summary        => 'summary',
+        checkinmsg     => 'checkinmsg',
+        checkinmsgtype => 'checkinmsgtype',
+    }
+);
 my $itypes = Koha::ItemTypes->new();
 
-my @types = $itypes->get_itemtype('type1', 'type2');
+my @types = $itypes->get_itemtype( 'type1', 'type2' );
 
-die Dumper(\@types);
 my $type = $types[0];
-ok(defined($type), 'first result');
-is( $type->code,           'type1',           'itemtype/code' );
+ok( defined($type), 'first result' );
+is( $type->code,           'type1',          'itemtype/code' );
 is( $type->description,    'description',    'description' );
-is( $type->rentalcharge,   'rentalcharge',   'rentalcharge' );
+is( $type->rentalcharge,   '0.0000',             'rentalcharge' );
 is( $type->imageurl,       'imageurl',       'imageurl' );
 is( $type->summary,        'summary',        'summary' );
 is( $type->checkinmsg,     'checkinmsg',     'checkinmsg' );
 is( $type->checkinmsgtype, 'checkinmsgtype', 'checkinmsgtype' );
 
 $type = $types[1];
-ok(defined($type), 'second result');
-is( $type->code,           'type2',           'itemtype/code' );
+ok( defined($type), 'second result' );
+is( $type->code,           'type2',          'itemtype/code' );
 is( $type->description,    'description',    'description' );
-is( $type->rentalcharge,   'rentalcharge',   'rentalcharge' );
+is( $type->rentalcharge,   '0.0000',             'rentalcharge' );
 is( $type->imageurl,       'imageurl',       'imageurl' );
 is( $type->summary,        'summary',        'summary' );
 is( $type->checkinmsg,     'checkinmsg',     'checkinmsg' );
 is( $type->checkinmsgtype, 'checkinmsgtype', 'checkinmsgtype' );
+
+$schema->txn_rollback;
