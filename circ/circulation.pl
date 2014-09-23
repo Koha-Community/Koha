@@ -27,7 +27,7 @@ use warnings;
 use CGI;
 use C4::Output;
 use C4::Print;
-use C4::Auth qw/:DEFAULT get_session/;
+use C4::Auth qw/:DEFAULT get_session haspermission/;
 use C4::Dates qw/format_date/;
 use C4::Branch; # GetBranches
 use C4::Koha;   # GetPrinter
@@ -98,6 +98,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
 my $branches = GetBranches();
 
 my $force_allow_issue = $query->param('forceallow') || 0;
+if (!C4::Auth::haspermission( C4::Context->userenv->{id} , { circulate => 'force_checkout' } )) {
+    $force_allow_issue = 0;
+}
 
 my @failedrenews = $query->param('failedrenew');    # expected to be itemnumbers
 our %renew_failed = ();
