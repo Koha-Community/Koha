@@ -14,11 +14,6 @@ dt_overwrite_html_sorting_localeCompare();
 
 $(document).ready(function() {
 
-    var inactive = $(".b_inactive,.bu_active");
-    var active = $(".bu_inactive");
-    inactive.hide();
-    active.show();
-
     var oTable = $("#accounts").dataTable($.extend(true, {}, dataTablesDefaults, {
         "fnDrawCallback": function ( oSettings ) {
             if ( oSettings.aiDisplay.length == 0 )
@@ -45,6 +40,10 @@ $(document).ready(function() {
                     sLastGroup = sGroup;
                 }
             }
+        },
+        "footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+            footer_column_sum( api, [ 6, 7, 8, 9 ] );
         },
         "aoColumnDefs": [
             { "bVisible": false, "aTargets": [ 0, 1 ] },
@@ -169,10 +168,10 @@ $(document).ready(function() {
             <th></th>
             <th></th>
             <th colspan="4">Total</th>
-            <th class="data"><span class="bu_active">[% total %]</span><span class="bu_inactive" >[% total_active | $Price %]</span></th>
-            <th class="data"><span class="bu_active">[% totordered %]</span><span class="bu_inactive" >[% totordered_active | $Price %]</span></th>
-            <th class="data"><span class="bu_active">[% totspent %]</span><span class="bu_inactive" >[% totspent_active | $Price %]</span></th>
-            <th class="data"><span class="bu_active">[% totavail %]</span><span class="bu_inactive" >[% totavail_active | $Price %]</span></th>
+            <th class="data"></th>
+            <th class="data"></th>
+            <th class="data"></th>
+            <th class="data"></th>
         </tr>
         </tfoot>
         <tbody>
@@ -200,10 +199,38 @@ $(document).ready(function() {
                     [% END %]
                 </td>
                 <td>[% loop_budge.budget_branchname %]</td>
-                <td class="data"><span title="[% loop_budge.budget_amount %]">[% loop_budge.budget_amount | $Price %]</span></td>
-                <td class="data"><span title="[% loop_budge.budget_ordered %]"><a href="ordered.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_ordered | $Price %]</a></span></td>
-                <td class="data"><span title="[% loop_budge.budget_spent %]"><a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_spent | $Price %]</span></a></td>
-                <td class="data"><span title="[% loop_budge.budget_avail %]">[% loop_budge.budget_avail | $Price %]</td>
+                <td class="data">
+                    [% IF loop_budge.budget_parent_id %]
+                        [% loop_budge.budget_amount | $Price %]
+                    [% ELSE %]
+                        <span class="total_amount">[% loop_budge.budget_amount | $Price %]</span>
+                    [% END %]
+                </td>
+                <td class="data">
+                    <a href="ordered.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">
+                    [% IF loop_budge.budget_parent_id %]
+                        [% loop_budge.budget_ordered | $Price %]
+                    [% ELSE %]
+                        <span class="total_amount">[% loop_budge.budget_ordered | $Price %]</span>
+                    [% END %]
+                    </a>
+                </td>
+                <td class="data">
+                    <a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">
+                    [% IF loop_budge.budget_parent_id %]
+                        [% loop_budge.budget_spent | $Price %]
+                    [% ELSE %]
+                        <span class="total_amount">[% loop_budge.budget_spent | $Price %]</span>
+                    [% END %]
+                    </a>
+                </td>
+                <td class="data">
+                    [% IF loop_budge.budget_parent_id %]
+                        [% loop_budge.budget_avail | $Price %]
+                    [% ELSE %]
+                        <span class="total_amount">[% loop_budge.budget_avail | $Price %]</span>
+                    [% END %]
+                </td>
             </tr>
         [% END %]
         </tbody>
