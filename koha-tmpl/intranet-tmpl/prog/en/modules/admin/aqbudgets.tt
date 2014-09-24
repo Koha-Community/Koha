@@ -153,6 +153,8 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
 //<![CDATA[
     //
     $(document).ready(function() {
+
+
         var oTable = $("#budgeth").dataTable($.extend(true, {}, dataTablesDefaults, {
             "fnDrawCallback": function ( oSettings ) {
                 if ( oSettings.aiDisplay.length == 0 )
@@ -179,6 +181,10 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
                         sLastGroup = sGroup;
                     }
                 }
+            },
+            "footerCallback": function ( row, data, start, end, display ) {
+                var api = this.api(), data;
+                footer_column_sum( api, [ 4, 6, 8, 10 ], 2 );
             },
             "aoColumnDefs": [
                 { "bVisible": false, "aTargets": [ 0, 1 ] },
@@ -214,6 +220,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
           });
           $("#hide_inactive").click();
         [% END %]
+        oTable.fnAddFilters("filter", 750);
 
         $("#filterbutton").click(function() {
             $("#fundfilters").slideToggle(0);
@@ -321,35 +328,35 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
       [% IF budget.budget_parent_id %]
         <span class="child_fund_amount">[% budget.budget_amount | $Price %]</span>
       [% ELSE %]
-        [% budget.budget_amount | $Price %]
+        <span class="total_amount">[% budget.budget_amount | $Price %]</span>
       [% END %]
     </td>
     <td class="data">
       [% IF budget.budget_parent_id %]
         <span class="child_fund_amount">[% budget.budget_ordered | $Price %]</span>
       [% ELSE %]
-        [% budget.budget_ordered | $Price %]
+        <span class="total_amount">[% budget.budget_ordered | $Price %]</span>
       [% END %]
     </td>
     <td class="data">
       [% IF budget.budget_parent_id %]
         <span class="child_fund_amount">[% budget.total_ordered | $Price %]</span>
       [% ELSE %]
-        [% budget.total_ordered | $Price %]
+        <span class="total_amount">[% budget.total_ordered | $Price %]</span>
       [% END %]
     </td>
     <td class="data">
       [% IF budget.budget_parent_id %]
         <span class="child_fund_amount">[% budget.budget_spent | $Price %]</span>
       [% ELSE %]
-        [% budget.budget_spent | $Price %]
+        <span class="total_amount">[% budget.budget_spent | $Price %]</span>
       [% END %]
     </td>
     <td class="data">
       [% IF budget.budget_parent_id %]
         <span class="child_fund_amount">[% budget.total_spent | $Price %]</span>
       [% ELSE %]
-        [% budget.total_spent | $Price %]
+        <span class="total_amount">[% budget.total_spent | $Price %]</span>
       [% END %]
     </td>
 
@@ -365,11 +372,11 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
             [% END %]
          [% ELSE %]
             [% IF (value > 0) %]
-                <span style="color: green;">
+                <span class="total_amount" style="color: green;">
             [% ELSIF (value < 0) %]
-                <span style="color: red;">
+                <span class="total_amount" style="color: red;">
             [% ELSE %]
-                <span>
+                <span class="totalamount">
             [% END %]
         [% END %]
             [% value | $Price %]
