@@ -39,6 +39,9 @@ Koha::XSLT::Base - Facilitate use of XSLT transformations
     via the err attribute.
     Reloading XSLT files can be done with the refresh method.
 
+    The module refers to a (temporary) helper module Koha::XSLT::HTTPS that
+    resolves issues in libxml2/libxslt for https references.
+
 =head1 METHODS
 
 =head2 new
@@ -117,6 +120,7 @@ Koha::XSLT::Base - Facilitate use of XSLT transformations
 use Modern::Perl;
 use XML::LibXML;
 use XML::LibXSLT;
+use Koha::XSLT::HTTPS;
 use Koha::XSLT::Security;
 
 use base qw(Class::Accessor);
@@ -349,8 +353,11 @@ sub _load {
 }
 
 sub _load_xml_args {
-    my $self = shift;
-    return $_[1]? { 'string' => $_[1]//'' }: { 'location' => $_[0]//'' };
+    my ( $self, $filename, $code ) = @_;
+    return Koha::XSLT::HTTPS->load($filename) if $filename && $filename =~ /^https/i;
+        # Workaround for current problems with https location in libxml2/libxslt
+        # Returns response like { string => SOME_CODE }
+    return $code ? { string => $code } : { location => $filename };
 }
 
 # _set_error
