@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2014-08-15 23:21-0300\n"
+"POT-Creation-Date: 2014-09-24 12:51-0300\n"
 "PO-Revision-Date: 2011-05-17 08:31+0200\n"
 "Last-Translator: Jonathan <jonathan.field@ptfs-europe.com>\n"
 "Language-Team: Koha-translate <koha-translate@lists.koha.org>\n"
@@ -621,11 +621,11 @@ msgstr "%s %s %s %s (%s) "
 msgid "%s %s A/C: %s"
 msgstr "%s %s - %s"
 
-#. %1$s:  IF (loop_receive.cannot_cancel) 
+#. %1$s:  IF (order.cannot_cancel) 
 #. %2$s:  span_title = BLOCK 
-#. %3$s:  loop_receive.parent_ordernumber 
+#. %3$s:  order.parent_ordernumber 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:415
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:420
 #, c-format
 msgid ""
 "%s %s Cannot cancel receipt of this order line because it was created from a "
@@ -1728,7 +1728,7 @@ msgstr "%s / Fax: %s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:394
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:399
 #, fuzzy, c-format
 msgid "%s 0 %s "
 msgstr "%s / %s "
@@ -2373,7 +2373,7 @@ msgstr "Barcode %s "
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  IF ( pagination_bar ) 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:313
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:369
 #, fuzzy, c-format
 msgid "%s No fund found %s %s"
 msgstr "%s results found"
@@ -2423,7 +2423,7 @@ msgid "%s No results found %s "
 msgstr "%s results found "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:421
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:477
 #, fuzzy, c-format
 msgid "%s None "
 msgstr "%s to %s "
@@ -2515,19 +2515,19 @@ msgid "%s Outstanding order (only one order per subscription is allowed) %s "
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:429
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:485
 #, fuzzy, c-format
 msgid "%s Owner "
 msgstr "Owner: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:437
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:493
 #, c-format
 msgid "%s Owner and users "
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:445
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:501
 #, fuzzy, c-format
 msgid "%s Owner, users and library "
 msgstr "From Any Library "
@@ -4584,7 +4584,7 @@ msgstr "&rsaquo; Modify tag"
 #. %5$s:  budget_name 
 #. %6$s:  budget_period_description 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:327
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:383
 #, c-format
 msgid "%sModify%sAdd%s Fund %s %s for Budget '%s' %s "
 msgstr ""
@@ -4735,7 +4735,7 @@ msgstr "There are no pending orders. "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:435
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:440
 #, fuzzy, c-format
 msgid "%sThere are no received orders.%s "
 msgstr "There are no received orders. "
@@ -7669,6 +7669,11 @@ msgstr "(There are %s subscriptions associated with this title)."
 msgid "(Unknown)"
 msgstr "Unknown"
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
+msgid "(YYYYMM; use up to 6 - for unknown <br />or | for no attempt to code)"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:206
 #, fuzzy, c-format
 msgid "(a choice list for choice (separated by |) or cols|rows for texarea)"
@@ -7772,6 +7777,11 @@ msgstr "(if empty, subscription is still active)"
 #, c-format
 msgid "(if empty, subscription is still active)"
 msgstr "(if empty, subscription is still active)"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
+msgid "(if exact bit depth known, enter; <br />otherwise use pulldown)"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:105
 #, fuzzy, c-format
@@ -8041,6 +8051,12 @@ msgstr "(su"
 #, fuzzy, c-format
 msgid "(the date of the 1st subscription)"
 msgstr "%S (the date of the 1st subscription)"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
+msgid ""
+"(three digits, pad with zero as needed, <br />or ||| for no attempt to code)"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:230
 #, fuzzy, c-format
@@ -8951,8 +8967,8 @@ msgstr "0 Holds"
 msgid "0 Norges nasjonalbibliografi, autorisert post"
 msgstr "0 Norges nasjonalbibliografi, autorisert post"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:362
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:368
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:418
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:424
 #, c-format
 msgid "0 to disable"
 msgstr ""
@@ -12147,7 +12163,7 @@ msgstr "Action:"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:375
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:250
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:287
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:250
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:252
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:251
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:297
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:566
@@ -12476,7 +12492,7 @@ msgstr "Add checked"
 msgid "Add child"
 msgstr "Add child"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:307
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:363
 #, fuzzy, c-format
 msgid "Add child fund"
 msgstr "Add a Fund"
@@ -12748,7 +12764,7 @@ msgid "Add user"
 msgstr "Add orders"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:401
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:457
 #, fuzzy
 msgid "Add users"
 msgstr "Add orders"
@@ -14076,7 +14092,7 @@ msgstr "Amount must be a valid number, or empty"
 msgid "Amount outstanding"
 msgstr "Amount Outstanding"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:355
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:411
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:72
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:48
 #, fuzzy, c-format
@@ -16028,11 +16044,24 @@ msgstr "Base of emulsion material - visual projection"
 msgid "Base of film:"
 msgstr "Base of film:"
 
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:244
+#, fuzzy, c-format
+msgid "Base-level allocated"
+msgstr "Base-level"
+
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:249
+#, fuzzy, c-format
+msgid "Base-level available"
+msgstr "Base-level"
+
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:245
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:246
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:248
-#, c-format
-msgid "Base-level"
+#, fuzzy, c-format
+msgid "Base-level ordered"
+msgstr "Base-level"
+
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:247
+#, fuzzy, c-format
+msgid "Base-level spent"
 msgstr "Base-level"
 
 #: intranet-tmpl/prog/en/modules/help/reports/borrowers_stats.tt:9
@@ -16099,7 +16128,7 @@ msgstr "Baskets"
 msgid "Basket (#)"
 msgstr "Basket :"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:466
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:471
 #, c-format
 msgid "Basket :"
 msgstr "Basket :"
@@ -16137,7 +16166,7 @@ msgstr "Basket Group Name:"
 msgid "Basket group delivery placename:"
 msgstr "Basket Group Name:"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:470
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:475
 #, fuzzy, c-format
 msgid "Basket group name :"
 msgstr "Basket Group Name:"
@@ -17824,7 +17853,7 @@ msgstr "Can be entered as a single IP, or a subnet such as 192.168.1.*"
 msgid "Can not update patron with borrowernumber %s"
 msgstr "Borrower Number"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:424
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:429
 #, c-format
 msgid "Can't cancel receipt "
 msgstr ""
@@ -17919,8 +17948,8 @@ msgstr "Can't save this record because the following field aren't filled:"
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:69
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:141
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:185
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:499
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:523
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:555
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:579
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:75
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:119
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:118
@@ -18148,7 +18177,7 @@ msgstr "Cancel notification"
 msgid "Cancel notification"
 msgstr "Cancel notification"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:428
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:433
 #, fuzzy, c-format
 msgid "Cancel receipt"
 msgstr "Fee Receipt"
@@ -18356,7 +18385,7 @@ msgstr "Caracas, Venezuela"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:193
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:172
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:266
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:409
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:414
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:142
 #: intranet-tmpl/prog/en/modules/members/member.tt:165
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:77
@@ -20637,7 +20666,7 @@ msgstr "Cleaned import batch #%s"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:264
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:324
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:227
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:488
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:493
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:696
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:503
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1285
@@ -23625,6 +23654,7 @@ msgstr "Database: "
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:158
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:160
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:200
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:157
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:175
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:118
@@ -24559,8 +24589,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:118
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:264
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:300
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:306
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:519
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:362
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:575
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:145
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:98
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:111
@@ -24742,7 +24772,7 @@ msgid "Delete framework for %s (%s)?"
 msgstr "Delete framework for %s (%s)?"
 
 #. %1$s:  budget_name 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:507
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:563
 #, fuzzy, c-format
 msgid "Delete fund %s?"
 msgstr "Delete Fund %s?"
@@ -26108,7 +26138,7 @@ msgstr "Duplicate warning"
 msgid "Duplicating records"
 msgstr "Duplicating Records"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:479
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:484
 #, fuzzy, c-format
 msgid "EAN :"
 msgstr "All"
@@ -26372,7 +26402,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:117
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:263
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:299
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:305
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:361
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:144
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:274
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:323
@@ -26457,7 +26487,7 @@ msgstr "Edit Collection"
 msgid "Edit Custom Reports"
 msgstr "Add a Custom Report"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:302
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:358
 #, fuzzy, c-format
 msgid "Edit Delete "
 msgstr "Edit Delete "
@@ -26630,7 +26660,7 @@ msgid "Edit list "
 msgstr "Edit list "
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:382
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:438
 msgid "Edit owner"
 msgstr "Edit owner"
 
@@ -27874,6 +27904,11 @@ msgstr "Everyone"
 msgid "Everything went OK, update done."
 msgstr "Everything went OK, update done."
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
+msgid "Exact bit depth 001-999"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:246
 #, c-format
 msgid "Exactly on"
@@ -28828,8 +28863,8 @@ msgstr "filmstrip"
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:87
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:208
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:227
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:459
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:487
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:464
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:492
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:78
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:105
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:155
@@ -28890,7 +28925,7 @@ msgstr "Filter results :"
 msgid "Filtered on:"
 msgstr "Filtered on:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:532
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:588
 #: intranet-tmpl/prog/en/modules/tags/review.tt:331
 #, c-format
 msgid "Filters"
@@ -29048,7 +29083,7 @@ msgid "Finish"
 msgstr "Finish"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:445
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:450
 #, fuzzy
 msgid "Finish receiving"
 msgstr "%S (Fill when receiving)"
@@ -30589,7 +30624,7 @@ msgstr ""
 msgid "Fund amount exceeds period allocation"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:510
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:566
 #, fuzzy, c-format
 msgid "Fund amount:"
 msgstr "Fund Amount:"
@@ -30600,12 +30635,12 @@ msgid "Fund code"
 msgstr "Fund code"
 
 #: intranet-tmpl/prog/en/includes/budgets-admin-search.inc:8
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:345
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:401
 #, fuzzy, c-format
 msgid "Fund code: "
 msgstr "Fund Code: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:534
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:590
 #, c-format
 msgid "Fund filters"
 msgstr "Fund filters"
@@ -30622,12 +30657,12 @@ msgstr "Fund locked"
 msgid "Fund name"
 msgstr "Fund name"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:350
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:406
 #, fuzzy, c-format
 msgid "Fund name: "
 msgstr "Fund Name: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:338
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:394
 #, fuzzy, c-format
 msgid "Fund parent: "
 msgstr "Fund Parent: "
@@ -30988,7 +31023,7 @@ msgid "Gnomic"
 msgstr ""
 
 #. INPUT type=submit name=filter
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:560
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:616
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:42
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:199
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:210
@@ -32494,7 +32529,7 @@ msgstr "ISBN/ISSN:"
 msgid "ISBN or ISSN or other standard number:"
 msgstr "ISBN or ISSN or other standard number:"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:462
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:467
 #, c-format
 msgid "ISBN, author or title :"
 msgstr "ISBN, author or title :"
@@ -40744,9 +40779,9 @@ msgstr "Library:"
 
 #: intranet-tmpl/prog/en/includes/budgets-admin-search.inc:9
 #: intranet-tmpl/prog/en/includes/patron-search.inc:55
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:289
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:406
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:537
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:345
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:462
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:593
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:228
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:107
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:111
@@ -41449,7 +41484,7 @@ msgstr "MANITOBA PUBLIC library.gov.mb.ca:210 horizon"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:172
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:82
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:266
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:409
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:414
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:332
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:394
 #, c-format
@@ -46351,8 +46386,8 @@ msgid "Notes:"
 msgstr "Notes:"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:145
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:290
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:453
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:346
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:509
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:90
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:177
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:213
@@ -48542,11 +48577,6 @@ msgstr "Order"
 msgid "Order "
 msgstr "Order "
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:339
-#, fuzzy, c-format
-msgid "Order Line"
-msgstr "Order Line"
-
 #: intranet-tmpl/prog/en/includes/patron-search.inc:50
 #, fuzzy, c-format
 msgid "Order by:"
@@ -48610,6 +48640,7 @@ msgid "Order from external source"
 msgstr "Order from an External Source"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:226
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:339
 #, fuzzy, c-format
 msgid "Order line"
 msgstr "Order Line"
@@ -48619,7 +48650,7 @@ msgstr "Order Line"
 msgid "Order line (parent)"
 msgstr "Order Line :"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:474
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:479
 #, fuzzy, c-format
 msgid "Order line :"
 msgstr "Order Line :"
@@ -48794,6 +48825,12 @@ msgstr "Organize by: "
 #, c-format
 msgid "Original alphabet or script of title"
 msgstr ""
+
+#. A
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:394
+#, fuzzy
+msgid "Original order line"
+msgstr "Order Line"
 
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:224
 #, c-format
@@ -49171,8 +49208,8 @@ msgstr "Owen Leonard"
 msgid "Owner"
 msgstr "Owner"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:288
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:372
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:344
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:428
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:434
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:461
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:56
@@ -50427,7 +50464,7 @@ msgstr "Period"
 #. %1$s:  IF ( budget_period_total ) 
 #. %2$s:  budget_period_total 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:255
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:257
 #, fuzzy, c-format
 msgid "Period allocated %s%s%s "
 msgstr "Period allocated "
@@ -52487,7 +52524,7 @@ msgstr "Publisher :%s "
 #. %2$s:  END 
 #. %3$s:  IF ( loop_order.suggestionid ) 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:253
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:402
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:407
 #, fuzzy, c-format
 msgid "Publisher :%s%s %s "
 msgstr "Publisher :%s "
@@ -53373,7 +53410,7 @@ msgstr "Remote image:"
 msgid "Remote-sensing image"
 msgstr "Remote-sensing Image"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:397
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:453
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:60
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:113
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:281
@@ -53413,7 +53450,7 @@ msgid "Remove non-local items"
 msgstr "Remove non-local items"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:384
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:440
 msgid "Remove owner"
 msgstr "Remove owner"
 
@@ -54040,7 +54077,7 @@ msgstr "Restore"
 msgid "Restrict"
 msgstr "Restricted:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:416
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:472
 #, fuzzy, c-format
 msgid "Restrict access to: "
 msgstr "Restrict access to: "
@@ -57613,7 +57650,7 @@ msgstr ""
 msgid "Show more"
 msgstr "Show More"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:549
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:605
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:258
 #, c-format
 msgid "Show my funds only"
@@ -57629,6 +57666,14 @@ msgstr "Show More "
 #, fuzzy, c-format
 msgid "Show subscriptions"
 msgstr "Search Subscriptions"
+
+#. For the first occurrence,
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_006.tt:6
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008.tt:6
+#, fuzzy
+msgid "Show values for"
+msgstr "Show volumes"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:264
 #, c-format
@@ -58721,7 +58766,7 @@ msgstr "State: "
 msgid "States of authority heading code"
 msgstr "Enter authority heading:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:458
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:514
 #, fuzzy, c-format
 msgid "Statistic 1 done on: "
 msgstr "Statistic 1 done on: "
@@ -58731,7 +58776,7 @@ msgstr "Statistic 1 done on: "
 msgid "Statistic 1: "
 msgstr "Statistic 1: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:475
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:531
 #, fuzzy, c-format
 msgid "Statistic 2 done on: "
 msgstr "Statistic 2 done on: "
@@ -59439,7 +59484,7 @@ msgstr "Subjects:"
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:148
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:197
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:68
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:499
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:555
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:75
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:281
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:294
@@ -59773,7 +59818,7 @@ msgstr "Suggested by "
 #. %3$s:  loop_order.firstnamesuggestedby 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:255
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:404
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:409
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:475
 #, fuzzy, c-format
 msgid "Suggested by: %s%s, %s %s ("
@@ -65933,7 +65978,6 @@ msgstr "a- Topical"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:335
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:374
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:244
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:173
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:104
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:121
@@ -66016,6 +66060,11 @@ msgstr "Total written off: %s"
 msgid "Total amount: "
 msgstr "Total amount "
 
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:250
+#, fuzzy, c-format
+msgid "Total available"
+msgstr "Not Available"
+
 #: intranet-tmpl/prog/en/columns.def:86
 #: intranet-tmpl/prog/en/modules/members/statistics.tt:66
 #, fuzzy, c-format
@@ -66086,6 +66135,11 @@ msgstr "Total number of rows matching the (unlimited) query is %s."
 msgid "Total number written off: %s charges"
 msgstr "Total number written off: %s charges"
 
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:246
+#, fuzzy, c-format
+msgid "Total ordered"
+msgstr "Total due"
+
 #: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:57
 #, fuzzy, c-format
 msgid "Total outstanding dues as on date : "
@@ -66107,10 +66161,10 @@ msgstr "Total paid: %s"
 msgid "Total renewals"
 msgstr "Total sublevels"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:247
-#, c-format
-msgid "Total sublevels"
-msgstr "Total sublevels"
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:248
+#, fuzzy, c-format
+msgid "Total spent"
+msgstr "Total cost"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:136
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:363
@@ -68192,7 +68246,7 @@ msgstr "Username:"
 msgid "Username: "
 msgstr "Username: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:389
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:445
 #, fuzzy, c-format
 msgid "Users:"
 msgstr "User"
@@ -68789,7 +68843,7 @@ msgstr "View funds for <!-- TMPL_VAR name=\"budget_period_description\" -->"
 msgid "View funds for [% period_loo.budget_period_description %]"
 msgstr "View funds for <!-- TMPL_VAR name=\"budget_period_description\" -->"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:440
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:445
 #, fuzzy, c-format
 msgid "View invoice"
 msgstr "Vendor Invoice"
@@ -69111,12 +69165,12 @@ msgstr ""
 msgid "Warning"
 msgstr "Warnings"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:360
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:416
 #, fuzzy, c-format
 msgid "Warning at (%%): "
 msgstr "Warnings"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:366
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:422
 #, fuzzy, c-format
 msgid "Warning at (amount): "
 msgstr "Fine Amount "
@@ -72193,7 +72247,7 @@ msgid "[% shipmentdate | $KohaDates %]"
 msgstr ""
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:424
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:429
 msgid "[% span_title | collapse %]"
 msgstr ""
 
@@ -73785,12 +73839,6 @@ msgstr "all subfields for each tag are in the same tab (or ignored)"
 #, c-format
 msgid "allegory"
 msgstr "allegory"
-
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:244
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:245
-#, c-format
-msgid "allocated"
-msgstr "allocated"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
@@ -83119,6 +83167,14 @@ msgstr "master tape"
 msgid "matches"
 msgstr "Batches"
 
+#. For the first occurrence,
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_006.tt:6
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008.tt:6
+#, fuzzy
+msgid "material type?"
+msgstr "Material Type: "
+
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:1738
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:1995
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1335
@@ -87083,11 +87139,6 @@ msgstr "w - Religious text"
 msgid "religious work"
 msgstr "religious work"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:248
-#, c-format
-msgid "remaining"
-msgstr "remaining"
-
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:940
 #, c-format
 msgid "remote"
@@ -88321,12 +88372,6 @@ msgstr "speech "
 msgid "speeches, oratory"
 msgstr "speeches, oratory"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:246
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:247
-#, c-format
-msgid "spent"
-msgstr "spent"
-
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:110
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:112
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:186
@@ -88579,7 +88624,7 @@ msgstr "suggestion"
 #. For the first occurrence,
 #. %1$s:  loop_order.suggestionid 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:257
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:406
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:411
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:337
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:477
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:158
@@ -91137,3 +91182,4 @@ msgid "﻿%s "
 msgstr "%s - "
 
 #, fuzzy
+

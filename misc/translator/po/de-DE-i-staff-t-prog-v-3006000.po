@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: German Koha Translation\n"
-"POT-Creation-Date: 2014-08-15 23:09-0300\n"
-"PO-Revision-Date: 2014-08-17 17:30+0000\n"
+"POT-Creation-Date: 2014-09-24 12:39-0300\n"
+"PO-Revision-Date: 2014-09-25 08:10+0000\n"
 "Last-Translator: Katrin <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1408296637.0\n"
+"X-POOTLE-MTIME: 1411632652.0\n"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils-MODS31.xsl:12
 #, c-format
@@ -657,11 +657,11 @@ msgstr "%s %s (geschlossen) %s %s %s %s Keine Gruppe %s %s "
 msgid "%s %s A/C: %s"
 msgstr "%s %s A/C: %s"
 
-#. %1$s:  IF (loop_receive.cannot_cancel) 
+#. %1$s:  IF (order.cannot_cancel) 
 #. %2$s:  span_title = BLOCK 
-#. %3$s:  loop_receive.parent_ordernumber 
+#. %3$s:  order.parent_ordernumber 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:415
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:420
 #, c-format
 msgid ""
 "%s %s Cannot cancel receipt of this order line because it was created from a "
@@ -1849,7 +1849,7 @@ msgstr "%s / Fax: %s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:394
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:399
 #, c-format
 msgid "%s 0 %s "
 msgstr "%s 0 %s "
@@ -2529,7 +2529,7 @@ msgstr "%s Kein Barcode %s "
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  IF ( pagination_bar ) 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:313
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:369
 #, c-format
 msgid "%s No fund found %s %s"
 msgstr "%s Kein Konto gefunden %s %s"
@@ -2581,7 +2581,7 @@ msgid "%s No results found %s "
 msgstr "%s Keine Treffer gefunden %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:421
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:477
 #, c-format
 msgid "%s None "
 msgstr "%s Keine "
@@ -2678,19 +2678,19 @@ msgstr ""
 "%s Bestehende Bestellung (nur eine Bestellung je Abonnement ist möglich) %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:429
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:485
 #, c-format
 msgid "%s Owner "
 msgstr "%s Besitzer "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:437
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:493
 #, c-format
 msgid "%s Owner and users "
 msgstr "%s Besitzer und Benutzer "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:445
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:501
 #, c-format
 msgid "%s Owner, users and library "
 msgstr "%s Besitzer, Benutzer und Bibliothek "
@@ -4812,7 +4812,7 @@ msgstr "%sTag bearbeiten%s %sNeuer Tag%s "
 #. %5$s:  budget_name 
 #. %6$s:  budget_period_description 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:327
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:383
 #, c-format
 msgid "%sModify%sAdd%s Fund %s %s for Budget '%s' %s "
 msgstr "%sÄndere%sFüge hinzu%s Konto %s %s für Etat '%s' %s "
@@ -4967,7 +4967,7 @@ msgstr "%sEs gibt keine offenen Bestellungen.%s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:435
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:440
 #, c-format
 msgid "%sThere are no received orders.%s "
 msgstr "%sEs gibt keine zugegangenen Bestellungen.%s "
@@ -8015,6 +8015,13 @@ msgstr "(Es sind %s Abonnements mit diesem Titel verbunden)."
 msgid "(Unknown)"
 msgstr "(Unbekannt)"
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
+msgid "(YYYYMM; use up to 6 - for unknown <br />or | for no attempt to code)"
+msgstr ""
+"(JJJJMM; bis zu 6 verwendbar, - für unbekannt <br />oder | für keinen "
+"Codierungsversuch)"
+
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:206
 #, c-format
 msgid "(a choice list for choice (separated by |) or cols|rows for texarea)"
@@ -8120,6 +8127,13 @@ msgstr "(falls leer, ist das Abonnement immer noch aktiv)"
 #, c-format
 msgid "(if empty, subscription is still active)"
 msgstr "(falls leer, ist das Abonnement immer noch aktiv)"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
+msgid "(if exact bit depth known, enter; <br />otherwise use pulldown)"
+msgstr ""
+"(wenn die exakte Bit-Tiefe bekannt ist, angeben; <br /> sonst Auswahlliste "
+"verwenden)"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:105
 #, c-format
@@ -8386,6 +8400,14 @@ msgstr "(su"
 #, c-format
 msgid "(the date of the 1st subscription)"
 msgstr "(Datum des 1. Abonnements)"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
+msgid ""
+"(three digits, pad with zero as needed, <br />or ||| for no attempt to code)"
+msgstr ""
+"(drei Ziffern, mit vorangestellten Nullen, wenn erforderlich, <br /> oder "
+"||| wenn kein Codierungsversuch)"
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:230
 #, c-format
@@ -9326,8 +9348,8 @@ msgstr "0 Vormerkungen"
 msgid "0 Norges nasjonalbibliografi, autorisert post"
 msgstr "0 Norges nasjonalbibliografi, autorisert post"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:362
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:368
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:418
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:424
 #, c-format
 msgid "0 to disable"
 msgstr "0 um zu deaktivieren"
@@ -12581,7 +12603,7 @@ msgstr "Aktion:"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:375
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:250
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:287
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:250
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:252
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:251
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:297
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:566
@@ -12909,7 +12931,7 @@ msgstr "Markierte hinzufügen"
 msgid "Add child"
 msgstr "Kind hinzufügen"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:307
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:363
 #, c-format
 msgid "Add child fund"
 msgstr "Neues Unterkonto"
@@ -13176,7 +13198,7 @@ msgid "Add user"
 msgstr "Benutzer hinzufügen"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:401
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:457
 msgid "Add users"
 msgstr "Benutzer hinzufügen"
 
@@ -14574,7 +14596,7 @@ msgstr "Summe muss eine gültige Nummer oder leer sein"
 msgid "Amount outstanding"
 msgstr "Offener Betrag"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:355
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:411
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:72
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:48
 #, c-format
@@ -16546,12 +16568,25 @@ msgstr "Basis des Emulsionsmaterial - Bildprojektion"
 msgid "Base of film:"
 msgstr "Filmbasis:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:245
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:246
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:248
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:244
 #, c-format
-msgid "Base-level"
-msgstr "Basis-Level"
+msgid "Base-level allocated"
+msgstr "Basis-Level zugewiesen"
+
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:249
+#, c-format
+msgid "Base-level available"
+msgstr "Basis-Level verfügbar"
+
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:245
+#, c-format
+msgid "Base-level ordered"
+msgstr "Basis-Level gebunden"
+
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:247
+#, c-format
+msgid "Base-level spent"
+msgstr "Basis-Level ausgegeben"
 
 #: intranet-tmpl/prog/en/modules/help/reports/borrowers_stats.tt:9
 #, c-format
@@ -16620,7 +16655,7 @@ msgstr "Bestellung %s (%s)"
 msgid "Basket (#)"
 msgstr "Bestellnr."
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:466
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:471
 #, c-format
 msgid "Basket :"
 msgstr "Bestellung:"
@@ -16658,7 +16693,7 @@ msgstr "Rechnungsadresse Bestellgruppe:"
 msgid "Basket group delivery placename:"
 msgstr "Lieferadresse Bestellgruppe:"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:470
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:475
 #, c-format
 msgid "Basket group name :"
 msgstr "Bestellgruppenname:"
@@ -18409,7 +18444,7 @@ msgstr ""
 msgid "Can not update patron with borrowernumber %s"
 msgstr "Der Benutzer mit Benutzernummer %s kann nicht aktualisiert werden"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:424
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:429
 #, c-format
 msgid "Can't cancel receipt "
 msgstr "Eingang kann nicht abgebrochen werden "
@@ -18516,8 +18551,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:69
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:141
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:185
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:499
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:523
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:555
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:579
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:75
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:119
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:118
@@ -18742,7 +18777,7 @@ msgstr "Änderungen rückgängig machen"
 msgid "Cancel notification"
 msgstr "Benachrichtigung löschen"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:428
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:433
 #, c-format
 msgid "Cancel receipt"
 msgstr "Zugang aufheben"
@@ -18950,7 +18985,7 @@ msgstr "Caracas, Venezuela"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:193
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:172
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:266
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:409
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:414
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:142
 #: intranet-tmpl/prog/en/modules/members/member.tt:165
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:77
@@ -21317,7 +21352,7 @@ msgstr "Importdatei #%s gelöscht"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:264
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:324
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:227
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:488
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:493
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:696
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:503
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1285
@@ -24414,6 +24449,7 @@ msgstr "Datenbank: "
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:158
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:160
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:200
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:157
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:175
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:118
@@ -25358,8 +25394,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:118
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:264
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:300
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:306
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:519
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:362
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:575
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:145
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:98
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:111
@@ -25541,7 +25577,7 @@ msgid "Delete framework for %s (%s)?"
 msgstr "Vorlage für %s (%s) löschen?"
 
 #. %1$s:  budget_name 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:507
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:563
 #, c-format
 msgid "Delete fund %s?"
 msgstr "Konto %s löschen?"
@@ -26924,7 +26960,7 @@ msgstr "Warnung: Dublette"
 msgid "Duplicating records"
 msgstr "Titel duplizieren"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:479
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:484
 #, c-format
 msgid "EAN :"
 msgstr "EAN:"
@@ -27202,7 +27238,7 @@ msgstr "Ed Summers (Code und Perl-Pakete wie z.B. MARC::Record)"
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:117
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:263
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:299
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:305
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:361
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:144
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:274
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:323
@@ -27286,7 +27322,7 @@ msgstr "Sammlung bearbeiten"
 msgid "Edit Custom Reports"
 msgstr "Benutzerdefinierte Reports bearbeiten"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:302
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:358
 #, c-format
 msgid "Edit Delete "
 msgstr "Bearbeiten Löschen "
@@ -27456,7 +27492,7 @@ msgid "Edit list "
 msgstr "Liste bearbeiten "
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:382
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:438
 msgid "Edit owner"
 msgstr "Besitzer bearbeiten"
 
@@ -28740,6 +28776,11 @@ msgstr "Jeder"
 msgid "Everything went OK, update done."
 msgstr "Es ist alles in Ordnung, das Update ist beendet."
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
+msgid "Exact bit depth 001-999"
+msgstr "Exakte Bit-Tiefe 001-999"
+
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:246
 #, c-format
 msgid "Exactly on"
@@ -29703,8 +29744,8 @@ msgstr "Filmstreifen"
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:87
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:208
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:227
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:459
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:487
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:464
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:492
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:78
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:105
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:155
@@ -29765,7 +29806,7 @@ msgstr "Ergebnisse filtern:"
 msgid "Filtered on:"
 msgstr "Gefiltert nach:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:532
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:588
 #: intranet-tmpl/prog/en/modules/tags/review.tt:331
 #, c-format
 msgid "Filters"
@@ -29936,7 +29977,7 @@ msgid "Finish"
 msgstr "Beenden"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:445
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:450
 msgid "Finish receiving"
 msgstr "Lieferung abschließen"
 
@@ -31595,7 +31636,7 @@ msgstr "Geldmittel des Kontos übersteigen verfügbare Mittel des Elternkontos"
 msgid "Fund amount exceeds period allocation"
 msgstr "Geldmittel des Kontos übersteigen verfügbare Mittel des Etats"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:510
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:566
 #, c-format
 msgid "Fund amount:"
 msgstr "Summe:"
@@ -31606,12 +31647,12 @@ msgid "Fund code"
 msgstr "Kontocode"
 
 #: intranet-tmpl/prog/en/includes/budgets-admin-search.inc:8
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:345
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:401
 #, c-format
 msgid "Fund code: "
 msgstr "Kontocode: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:534
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:590
 #, c-format
 msgid "Fund filters"
 msgstr "Kontofilter"
@@ -31628,12 +31669,12 @@ msgstr "Konto gesperrt"
 msgid "Fund name"
 msgstr "Kontoname"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:350
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:406
 #, c-format
 msgid "Fund name: "
 msgstr "Kontoname: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:338
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:394
 #, c-format
 msgid "Fund parent: "
 msgstr "Überkonto: "
@@ -31994,7 +32035,7 @@ msgid "Gnomic"
 msgstr "Gnonomisch"
 
 #. INPUT type=submit name=filter
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:560
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:616
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:42
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:199
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:210
@@ -33514,7 +33555,7 @@ msgstr "ISBN / EAN / ISSN:"
 msgid "ISBN or ISSN or other standard number:"
 msgstr "ISBN, ISSN oder andere Standardnummer:"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:462
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:467
 #, c-format
 msgid "ISBN, author or title :"
 msgstr "ISBN, Autor oder Titel:"
@@ -42348,9 +42389,9 @@ msgstr "Bibliothek:"
 
 #: intranet-tmpl/prog/en/includes/budgets-admin-search.inc:9
 #: intranet-tmpl/prog/en/includes/patron-search.inc:55
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:289
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:406
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:537
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:345
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:462
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:593
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:228
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:107
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:111
@@ -43052,7 +43093,7 @@ msgstr "MANITOBA PUBLIC library.gov.mb.ca:210 horizon"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:172
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:82
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:266
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:409
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:414
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:332
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:394
 #, c-format
@@ -47994,8 +48035,8 @@ msgid "Notes:"
 msgstr "Hinweise:"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:145
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:290
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:453
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:346
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:509
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:90
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:177
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:213
@@ -50383,11 +50424,6 @@ msgstr "Bestellung"
 msgid "Order "
 msgstr "Bestellung "
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:339
-#, c-format
-msgid "Order Line"
-msgstr "Bestellposten"
-
 #: intranet-tmpl/prog/en/includes/patron-search.inc:50
 #, c-format
 msgid "Order by:"
@@ -50451,6 +50487,7 @@ msgid "Order from external source"
 msgstr "Bestellung über Z39.50-Download"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:226
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:339
 #, c-format
 msgid "Order line"
 msgstr "Bestellposten"
@@ -50460,7 +50497,7 @@ msgstr "Bestellposten"
 msgid "Order line (parent)"
 msgstr "Bestellposten (Ursprung)"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:474
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:479
 #, c-format
 msgid "Order line :"
 msgstr "Bestellposten:"
@@ -50640,6 +50677,11 @@ msgstr "Anzeige nach: "
 #, c-format
 msgid "Original alphabet or script of title"
 msgstr "Originalalphabet oder Schrift des Titels"
+
+#. A
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:394
+msgid "Original order line"
+msgstr "Ursprünglicher Bestellposten"
 
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:224
 #, c-format
@@ -51015,8 +51057,8 @@ msgstr "Owen Leonard"
 msgid "Owner"
 msgstr "Besitzer"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:288
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:372
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:344
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:428
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:434
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:461
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:56
@@ -52277,7 +52319,7 @@ msgstr "Zeitraum"
 #. %1$s:  IF ( budget_period_total ) 
 #. %2$s:  budget_period_total 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:255
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:257
 #, c-format
 msgid "Period allocated %s%s%s "
 msgstr "Zugewiesene Mittel %s%s%s "
@@ -54346,7 +54388,7 @@ msgstr "Verlag :%s%s "
 #. %2$s:  END 
 #. %3$s:  IF ( loop_order.suggestionid ) 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:253
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:402
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:407
 #, c-format
 msgid "Publisher :%s%s %s "
 msgstr "Verleger: %s%s %s "
@@ -55240,7 +55282,7 @@ msgstr "Entferntes Bild:"
 msgid "Remote-sensing image"
 msgstr "Fernerkundungsbild"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:397
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:453
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:60
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:113
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:281
@@ -55280,7 +55322,7 @@ msgid "Remove non-local items"
 msgstr "Nicht-lokale Medien entfernen"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:384
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:440
 msgid "Remove owner"
 msgstr "Besitzer entfernen"
 
@@ -55907,7 +55949,7 @@ msgstr "Wiederherstellen"
 msgid "Restrict"
 msgstr "Sperren"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:416
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:472
 #, c-format
 msgid "Restrict access to: "
 msgstr "Zugang beschränken auf: "
@@ -59509,7 +59551,7 @@ msgstr "Zeige in Auwahlliste: "
 msgid "Show more"
 msgstr "Mehr zeigen"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:549
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:605
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:258
 #, c-format
 msgid "Show my funds only"
@@ -59525,6 +59567,13 @@ msgstr "Zeige nur verlängerte "
 #, c-format
 msgid "Show subscriptions"
 msgstr "Zeige Abonnements"
+
+#. For the first occurrence,
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_006.tt:6
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008.tt:6
+msgid "Show values for"
+msgstr "Zeige Werte für"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:264
 #, c-format
@@ -60643,7 +60692,7 @@ msgstr "Bundesland: "
 msgid "States of authority heading code"
 msgstr "Status des Ansetzungscodes"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:458
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:514
 #, c-format
 msgid "Statistic 1 done on: "
 msgstr "Kategorie Statistik 1: "
@@ -60653,7 +60702,7 @@ msgstr "Kategorie Statistik 1: "
 msgid "Statistic 1: "
 msgstr "Statistik 1: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:475
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:531
 #, c-format
 msgid "Statistic 2 done on: "
 msgstr "Kategorie Statistik 2: "
@@ -61371,7 +61420,7 @@ msgstr "Schlagwörter:"
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:148
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:197
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:68
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:499
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:555
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:75
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:281
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:294
@@ -61704,7 +61753,7 @@ msgstr "Vorgeschalgen von: "
 #. %3$s:  loop_order.firstnamesuggestedby 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:255
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:404
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:409
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:475
 #, c-format
 msgid "Suggested by: %s%s, %s %s ("
@@ -68354,7 +68403,6 @@ msgstr "Themen"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:335
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:374
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:244
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:173
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:104
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:121
@@ -68437,6 +68485,11 @@ msgstr "Zu erlassen:"
 msgid "Total amount: "
 msgstr "Gesamtsumme: "
 
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:250
+#, c-format
+msgid "Total available"
+msgstr "Insgesamt verfügbar"
+
 #: intranet-tmpl/prog/en/columns.def:86
 #: intranet-tmpl/prog/en/modules/members/statistics.tt:66
 #, c-format
@@ -68508,6 +68561,11 @@ msgstr ""
 msgid "Total number written off: %s charges"
 msgstr "Geamtzahl abgeschrieben: %s Preis"
 
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:246
+#, c-format
+msgid "Total ordered"
+msgstr "Insgesamt gebunden"
+
 #: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:57
 #, c-format
 msgid "Total outstanding dues as on date : "
@@ -68529,10 +68587,10 @@ msgstr "Bezahlt: %s"
 msgid "Total renewals"
 msgstr "Verlängerungen gesamt"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:247
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:248
 #, c-format
-msgid "Total sublevels"
-msgstr "Unterebenen"
+msgid "Total spent"
+msgstr "Insgesamt ausgegeben"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:136
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:363
@@ -70669,7 +70727,7 @@ msgstr "Benutzername:"
 msgid "Username: "
 msgstr "Benutzername: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:389
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:445
 #, c-format
 msgid "Users:"
 msgstr "Benutzer:"
@@ -71277,7 +71335,7 @@ msgstr "Zeige Konten für [% period_loo.budget_period_description %]"
 msgid "View funds for [% period_loo.budget_period_description %]"
 msgstr "Zeige Konten für [% period_loo.budget_period_description %]"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:440
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:445
 #, c-format
 msgid "View invoice"
 msgstr "Rechnung anzeigen"
@@ -71603,12 +71661,12 @@ msgstr "Ward van Wanrooij"
 msgid "Warning"
 msgstr "Warnung"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:360
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:416
 #, c-format
 msgid "Warning at (%%): "
 msgstr "Warnung bei (%%):"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:366
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:422
 #, c-format
 msgid "Warning at (amount): "
 msgstr "Warnung bei (Summe): "
@@ -74857,7 +74915,7 @@ msgid "[% shipmentdate | $KohaDates %]"
 msgstr "[% shipmentdate | $KohaDates %]"
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:424
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:429
 msgid "[% span_title | collapse %]"
 msgstr "[% span_title | collapse %]"
 
@@ -76421,12 +76479,6 @@ msgstr ""
 #, c-format
 msgid "allegory"
 msgstr "Allegorie"
-
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:244
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:245
-#, c-format
-msgid "allocated"
-msgstr "gebunden"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
@@ -81889,15 +81941,15 @@ msgid ""
 "undefined) { alreadySelected = JSON.parse(alreadySelected); "
 "$('#merge_in_progress').html(_(\"Merging with authority: \") + \""
 msgstr ""
-"function mergeAuth(authid, summary) { var alreadySelected = "
-"$.cookie('auth_to_merge'); if (alreadySelected !== undefined) { "
-"alreadySelected = JSON.parse(alreadySelected); $.cookie('auth_to_merge', '', "
-"{ 'path': '/', 'expires': -1 }); var refstring = \"\"; if (typeof "
-"alreadySelected.mergereference !== 'undefined') { refstring = "
-"\"&mergereference=\" + alreadySelected.mergereference; } window.location.href "
-"= \"/cgi-bin/koha/authorities/merge.pl?authid=\" + authid + \"&authid=\" + "
-"alreadySelected.authid + refstring; } else { $.cookie('auth_to_merge', "
-"JSON.stringify({ 'authid': authid, 'summary': summary }), { 'path' : '/' }); "
+"function mergeAuth(authid, summary) { var alreadySelected = $.cookie"
+"('auth_to_merge'); if (alreadySelected !== undefined) { alreadySelected = "
+"JSON.parse(alreadySelected); $.cookie('auth_to_merge', '', { 'path': '/', "
+"'expires': -1 }); var refstring = \"\"; if (typeof alreadySelected."
+"mergereference !== 'undefined') { refstring = \"&mergereference=\" + "
+"alreadySelected.mergereference; } window.location.href = \"/cgi-bin/koha/"
+"authorities/merge.pl?authid=\" + authid + \"&authid=\" + alreadySelected."
+"authid + refstring; } else { $.cookie('auth_to_merge', JSON.stringify"
+"({ 'authid': authid, 'summary': summary }), { 'path' : '/' }); "
 "showMergingInProgress(); } } function showMergingInProgress() { var "
 "alreadySelected = $.cookie('auth_to_merge'); if (alreadySelected !== "
 "undefined) { alreadySelected = JSON.parse(alreadySelected); "
@@ -85578,6 +85630,13 @@ msgstr "Masterband"
 #, c-format
 msgid "matches"
 msgstr "Treffer"
+
+#. For the first occurrence,
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_006.tt:6
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008.tt:6
+msgid "material type?"
+msgstr "Materialtyp?"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:1738
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:1995
@@ -89507,11 +89566,6 @@ msgstr "Religiöser Text"
 msgid "religious work"
 msgstr "religiöses Werk"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:248
-#, c-format
-msgid "remaining"
-msgstr "verbleibend"
-
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:940
 #, c-format
 msgid "remote"
@@ -90729,12 +90783,6 @@ msgstr "Rede "
 msgid "speeches, oratory"
 msgstr "Reden, Rhetorik"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:246
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:247
-#, c-format
-msgid "spent"
-msgstr "ausgegeben"
-
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:110
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:112
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:186
@@ -90986,7 +91034,7 @@ msgstr "Anschaffungsvorschlag"
 #. For the first occurrence,
 #. %1$s:  loop_order.suggestionid 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:257
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:406
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:411
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:337
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:477
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:158
