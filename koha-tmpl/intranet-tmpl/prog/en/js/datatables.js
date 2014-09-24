@@ -607,3 +607,34 @@ function parse_callnumber ( html ) {
         return "";
     }
 }
+
+// see http://www.datatables.net/examples/advanced_init/footer_callback.html
+function footer_column_sum( api, column_numbers ) {
+    // Remove the formatting to get integer data for summation
+    var intVal = function ( i ) {
+        if ( typeof i === 'number' ) {
+            if ( isNaN(i) ) return 0;
+            return i;
+        } else if ( typeof i === 'string' ) {
+            var value = i.replace(/[a-zA-Z ,.]/g, '')*1;
+            if ( isNaN(value) ) return 0;
+            return value;
+        }
+        return 0;
+    };
+
+
+    for ( var indice = 0 ; indice < column_numbers.length ; indice++ ) {
+        var column_number = column_numbers[indice];
+
+        var total = 0;
+        var cells = api.column( column_number, { page: 'current' } ).nodes().to$().find("span.total_amount");
+        $(cells).each(function(){
+            total += intVal( $(this).html() );
+        });
+        total /= 100; // Hard-coded decimal precision
+
+        // Update footer
+        $( api.column( column_number ).footer() ).html(total.format_price());
+    };
+}
