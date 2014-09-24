@@ -1,9 +1,12 @@
 [% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions</title>
-<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
+<link href="[% interface %]/lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/treetable/jquery.treetable.js"></script>
+
 <script type="text/javascript">
 //<![CDATA[
 
@@ -16,33 +19,70 @@ $(document).ready(function() {
     inactive.hide();
     active.show();
 
-    $('#showallbudgets').click(function() {
-        if ( $('#showallbudgets:checked').val() !== undefined) {
-            inactive.show();
-            active.hide();
-        }
-        else {
-            inactive.hide();
-            active.show();
-        }
-    });
-    var srlt = $("#accounts").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumns": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            { "sType": "title-numeric" },
-            { "sType": "title-numeric" },
-            { "sType": "title-numeric" },
-            { "sType": "title-numeric" }
+    var oTable = $("#accounts").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "fnDrawCallback": function ( oSettings ) {
+            if ( oSettings.aiDisplay.length == 0 )
+            {
+                return;
+            }
+
+            var nTrs = $('#accounts tbody tr');
+            var iColspan = nTrs[0].getElementsByTagName('td').length;
+            var sLastGroup = "";
+            for ( var i=0 ; i<nTrs.length ; i++ )
+            {
+                var iDisplayIndex = oSettings._iDisplayStart + i;
+                var sGroup = oSettings.aoData[ oSettings.aiDisplay[iDisplayIndex] ]._aData[1];
+                if ( sGroup != sLastGroup )
+                {
+                    var nGroup = document.createElement( 'tr' );
+                    var nCell = document.createElement( 'td' );
+                    nCell.colSpan = iColspan;
+                    nCell.className = "group";
+                    nCell.innerHTML = sGroup;
+                    nGroup.appendChild( nCell );
+                    nTrs[i].parentNode.insertBefore( nGroup, nTrs[i] );
+                    sLastGroup = sGroup;
+                }
+            }
+        },
+        "aoColumnDefs": [
+            { "bVisible": false, "aTargets": [ 0, 1 ] },
+            { "bSortable": false, "aTargets": ["_all"] }
         ],
-        'sDom': 't',
+        'bSort': true,
+        'aaSortingFixed': [[ 1, 'asc' ]],
         'bPaginate': false,
-        'bFilter': false,
-        'bInfo': false
-    } ) );
+        "bAutoWidth": false
+    }));
+
+    $(oTable).treetable({
+        expandable: true
+    });
+    $(oTable).treetable('expandAll');
+    $("#expand_all").click(function(e){
+        e.preventDefault();
+        $(oTable).treetable('expandAll');
+    });
+    $("#collapse_all").click(function(e){
+        e.preventDefault();
+        $(oTable).treetable('collapseAll');
+    });
+
+    $("#hide_inactive").click(function(e){
+        e.preventDefault();
+        oTable.fnFilter( 1, 0 ); // Show only active=1
+        inactive.hide();
+        active.show();
+    });
+    $("#show_inactive").click(function(e){
+        e.preventDefault();
+        oTable.fnFilter( '', 0 );
+        inactive.show();
+        active.hide();
+    });
+    $("#hide_inactive").click();
+
 });
 //]]>
 </script>
@@ -102,28 +142,33 @@ $(document).ready(function() {
             <h3>All available funds[% IF ( branchname ) %] for [% branchname %][% END %]</h3>
 
     <div id="BudgetsAndFunds">
-    <p><label for="showallbudgets">Show active and inactive:</label> <input type="checkbox" id="showallbudgets" /></p>
     <table id="accounts">
+        <caption>
+          <span class="actions"><a href="#" id="expand_all">Expand all</a>
+          | <a href="#" id="collapse_all">Collapse all</a>
+          | <a href="#" id="hide_inactive">Hide inactive budgets</a>
+          | <a href="#" id="show_inactive">Show inactive budgets</a></span>
+        </caption>
+
         <thead>
         <tr>
-            <th>Fund</th>
+            <th>Active</th>
+            <th>Budget period description</th>
+            <th>Fund code</th>
             <th>Fund name</th>
-            <th class="b_inactive">Active</th>
             <th>Owner</th>
             <th>Library</th>
             <th>Amount</th>
             <th>Ordered</th>
             <th>Spent</th>
-            <th>Avail</th>
+            <th>Total available</th>
         </tr>
         </thead>
         <tfoot id="funds_total">
         <tr>
-            <th>Total</th>
-            <th>&nbsp;</th>
-            <th class="b_inactive">&nbsp;</th>
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
+            <th></th>
+            <th></th>
+            <th colspan="4">Total</th>
             <th class="data"><span class="bu_active">[% total %]</span><span class="bu_inactive" >[% total_active | $Price %]</span></th>
             <th class="data"><span class="bu_active">[% totordered %]</span><span class="bu_inactive" >[% totordered_active | $Price %]</span></th>
             <th class="data"><span class="bu_active">[% totspent %]</span><span class="bu_inactive" >[% totspent_active | $Price %]</span></th>
@@ -132,8 +177,14 @@ $(document).ready(function() {
         </tfoot>
         <tbody>
         [% FOREACH loop_budge IN loop_budget %]
-        [% IF ( loop_budge.budget_period_active ) %]
-            <tr>
+            [% IF loop_budge.budget_parent_id %]
+                <tr data-tt-id="[% loop_budge.budget_id %]" data-tt-parent-id="[% loop_budge.budget_parent_id %]">
+            [% ELSE %]
+                <tr data-tt-id="[% loop_budge.budget_id %]">
+            [% END %]
+
+                <td>[% loop_budge.budget_period_active %]</td>
+                <td>Budget [% loop_budge.budget_period_description %] [id=[% loop_budge.budget_period_id %]][% UNLESS loop_budge.budget_period_active %] (inactive)[% END %]</td>
                 <td>
                     [% IF ( CAN_user_acquisition_budget_manage ) %]
                         <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% loop_budge.budget_period_id %]">[% loop_budge.budget_code %]</a>
@@ -142,7 +193,6 @@ $(document).ready(function() {
                     [% END %]
                 </td>
                 <td>[% loop_budge.budget_name %]</td>
-                <td class="b_inactive">Active</td>
                 <td>[% IF ( loop_budge.budget_owner_borrowernumber ) %]
                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loop_budge.budget_owner_borrowernumber %]">[% loop_budge.budget_owner_surname %], [% loop_budge.budget_owner_firstname %]</a>
                     [% ELSE %]
@@ -155,30 +205,6 @@ $(document).ready(function() {
                 <td class="data"><span title="[% loop_budge.budget_spent %]"><a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_spent | $Price %]</span></a></td>
                 <td class="data"><span title="[% loop_budge.budget_avail %]">[% loop_budge.budget_avail | $Price %]</td>
             </tr>
-        [% ELSE %]
-            <tr class="b_inactive">
-                <td>
-                    [% IF ( CAN_user_acquisition_budget_manage ) %]
-                        <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% loop_budge.budget_period_id %]">[% loop_budge.budget_code %]</a>
-                    [% ELSE %]
-                        [% loop_budge.budget_code %]
-                    [% END %]
-                </td>
-                <td>[% loop_budge.budget_name %]</td>
-                <td class="b_inactive">Inactive</td>
-                <td>[% IF ( loop_budge.budget_owner_borrowernumber ) %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loop_budge.budget_owner_borrowernumber %]">[% loop_budge.budget_owner_surname %], [% loop_budge.budget_owner_firstname %]</a>
-                    [% ELSE %]
-                        &nbsp;
-                    [% END %]
-                </td>
-                <td>[% loop_budge.budget_branchname %]</td>
-                <td class="data"><span title="[% loop_budge.budget_amount %]">[% loop_budge.budget_amount | $Price %]</span></td>
-                <td class="data"><span title="[% loop_budge.budget_ordered %]"><a href="ordered.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_ordered | $Price %]</a></span></td>
-                <td class="data"><span title="[% loop_budge.budget_spent %]"><a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_spent | $Price %]</span></a></td>
-                <td class="data"><span title="[% loop_budge.budget_avail %]">[% loop_budge.budget_avail | $Price %]</td>
-            </tr>
-        [% END %]
         [% END %]
         </tbody>
     </table>
