@@ -1,5 +1,20 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 
 use Test::More tests => 50;
@@ -44,8 +59,7 @@ foreach my $addcat ('S', 'PT') {
     $dbh->do("INSERT INTO categories (categorycode,hidelostitems,category_type) VALUES (?,?,?)",undef,($addcat, 0, $addcat eq 'S'? 'S': 'A')) unless GetBorrowercategory($addcat);
 }
 
-# Helper biblio.
-diag("\nCreating biblio instance for testing.");
+# Create a helper biblio
 my $bib = MARC::Record->new();
 my $title = 'Silence in the library';
 if( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
@@ -63,8 +77,7 @@ else {
 my ($bibnum, $bibitemnum);
 ($bibnum, $title, $bibitemnum) = AddBiblio($bib, '');
 
-# Helper item for that biblio.
-diag("Creating item instance for testing.");
+# Create a helper item instance for testing
 my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL' } , $bibnum);
 
 # Modify item; setting barcode.
