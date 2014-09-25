@@ -1029,11 +1029,11 @@ sub GetImportBiblios {
 
     my $dbh = C4::Context->dbh;
     my $query = "SELECT * FROM import_biblios WHERE import_record_id = ?";
-    my $sth = $dbh->prepare_cached($query);
-    $sth->execute($import_record_id);
-    my $results = $sth->fetchall_arrayref({});
-    $sth->finish();
-    return $results;
+    return $dbh->selectall_arrayref(
+        $query,
+        { Slice => {} },
+        $import_record_id
+    );
 
 }
 
