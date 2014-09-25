@@ -147,7 +147,7 @@
             [% END %]
             <table class="invis">
                 <tr>
-                    [% IF ( line.show_actual ) %]
+                    [% IF show_actual %]
                         <td    >[% line.actual_amount %]</td>
                     [% END %]
                 <td>
@@ -167,7 +167,7 @@
         <td>
         <table class="invis">
             <tr>
-       [% IF ( budget_line.show_actual ) %]
+       [% IF show_actual %]
             [% IF ( budget_line.act_negative ) %]
                 <td style="color: red;">
             [% ELSIF ( budget_line.act_positive ) %]
