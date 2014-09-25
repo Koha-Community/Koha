@@ -20,7 +20,8 @@
 use Modern::Perl;
 
 use FindBin;
-use Test::More tests => 24;
+use File::Slurp;
+use Test::More tests => 27;
 
 use Koha::XSLT_Handler;
 
@@ -96,6 +97,16 @@ $output= $engine->transform( $xml_2 );
     #note: second parameter (file) not passed again
 is( $engine->err, undef, 'Engine returned no error for xml_2' );
 is( index($output,'I saw you')>0, 1, 'Saw the expected change for xml_2' ); #Just very simple check if new datafield was added
+#Test alternative parameter passing
+my $output2;
+$output2 = $engine->transform( { file => $xsltfile_1, xml => $xml_2 } );
+is( $output, $output2, 'Try hash parameter file');
+my $code = read_file( $xsltfile_1 );
+$output2 = $engine->transform( { code => $code, xml => $xml_2 } );
+is( $output, $output2, 'Try hash parameter code');
+#Check rerun on last code
+$output2 = $engine->transform( $xml_2 );
+is( $output, $output2, 'Rerun on previous passed code');
 
 #The second test xsl contains bad code
 my $xsltfile_2 = 'test02.xsl';
@@ -114,6 +125,6 @@ exit if !-e $path.$xsltfile_3;
 $xsltfile_3= $path.$xsltfile_3;
 $output= $engine->transform( $xml_2, $xsltfile_3 );
 is( $engine->err, undef, 'Unexpected error on transform with third xsl' );
-is( $engine->refresh, 2, 'Final test on clearing cache' );
+is( $engine->refresh, 3, 'Final test on clearing cache' );
 
 #End of tests
