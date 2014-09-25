@@ -422,10 +422,10 @@
                         <th class="gsti">&nbsp;</th>
                         <th class="gsti">&nbsp;</th>
                         <th>[% foot_loo.quantity %]</th>
-                        <th class="gste">[% foot_loo.totalgste %]</th>
-                        <th class="gsti">[% foot_loo.totalgsti %]</th>
+                        <th class="gste">[% foot_loo.totalgste | $Price%]</th>
+                        <th class="gsti">[% foot_loo.totalgsti | $Price %]</th>
                         <th>&nbsp;</th>
-                        <th>[% foot_loo.gstvalue %]</th>
+                        <th>[% foot_loo.gstvalue | $Price %]</th>
                         <th>&nbsp;</th>
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
@@ -443,10 +443,10 @@
                     <th class="gsti">&nbsp;</th>
                     <th class="gsti">&nbsp;</th>
                     <th>[% total_quantity %]</th>
-                    <th class="gste">[% total_gste %]</th>
-                    <th class="gsti">[% total_gsti %]</th>
+                    <th class="gste">[% total_gste | $Price %]</th>
+                    <th class="gsti">[% total_gsti | $Price %]</th>
                     <th>&nbsp;</th>
-                    <th>[% total_gstvalue %]</th>
+                    <th>[% total_gstvalue | $Price %]</th>
                     <th>&nbsp;</th>
                     [% IF ( active ) %]
                         [% UNLESS ( closedate ) %]
