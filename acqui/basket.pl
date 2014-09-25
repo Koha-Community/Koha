@@ -369,6 +369,7 @@ if ( $op eq 'delete_confirm' ) {
     my @cancelledorders = GetCancelledOrders($basketno);
     my @cancelledorders_loop;
     for my $order (@cancelledorders) {
+        $order = C4::Acquisition::populate_order_with_prices({ order => $order, booksellerid => $booksellerid, ordering => 1 });
         my $line = get_order_infos( $order, $bookseller);
         push @cancelledorders_loop, $line;
     }

@@ -614,15 +614,15 @@
                         </p>
                       [% END %]
                     </td>
-                    <td class="number gste">[% order.rrpgste %]</td>
-                    <td class="number gste">[% order.ecostgste %]</td>
-                    <td class="number gsti">[% order.rrpgsti %]</td>
-                    <td class="number gsti">[% order.ecostgsti %]</td>
+                    <td class="number gste">[% order.rrpgste | $Price %]</td>
+                    <td class="number gste">[% order.ecostgste | $Price %]</td>
+                    <td class="number gsti">[% order.rrpgsti | $Price %]</td>
+                    <td class="number gsti">[% order.ecostgsti | $Price %]</td>
                     <td class="number">[% order.quantity %]</td>
-                    <td class="number gste">[% order.totalgste %]</td>
-                    <td class="number gsti">[% order.totalgsti %]</td>
-                    <td class="number">[% order.gstrate * 100 %]</td>
-                    <td class="number">[% order.gstvalue %]</td>
+                    <td class="number gste">[% order.totalgste | $Price %]</td>
+                    <td class="number gsti">[% order.totalgsti | $Price %]</td>
+                    <td class="number">[% order.gstrate * 100 | $Price %]</td>
+                    <td class="number">[% order.gstvalue | $Price %]</td>
                     <td>[% order.budget_name %]
                   </tr>
                 [% END %]
