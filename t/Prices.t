@@ -67,7 +67,7 @@ for my $currency_format ( qw( US FR ) ) {
                 got      => $order_0_0->{rrpgste},
                 expected => 82.00,
                 conf     => '0 0',
-                field    => 'rrpgsti'
+                field    => 'rrpgste'
             }
         );
         compare(
@@ -160,7 +160,7 @@ for my $currency_format ( qw( US FR ) ) {
                 got      => $order_1_1->{rrpgste},
                 expected => 78.10,
                 conf     => '1 1',
-                field    => 'rrpgsti'
+                field    => 'rrpgste'
             }
         );
         compare(
@@ -255,7 +255,7 @@ for my $currency_format ( qw( US FR ) ) {
                 got      => $order_1_0->{rrpgste},
                 expected => 78.10,
                 conf     => '1 0',
-                field    => 'rrpgsti'
+                field    => 'rrpgste'
             }
         );
         compare(
@@ -347,7 +347,7 @@ for my $currency_format ( qw( US FR ) ) {
                 got      => $order_0_1->{rrpgste},
                 expected => 82.00,
                 conf     => '1 0',
-                field    => 'rrpgsti'
+                field    => 'rrpgste'
             }
         );
         compare(
