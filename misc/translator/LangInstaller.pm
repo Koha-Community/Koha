@@ -172,7 +172,7 @@ sub add_prefs {
                     }
                 }
             }
-            elsif ( $element && $pref_name ) {
+            elsif ( $element ) {
                 $self->po_append( $self->{file} . "#$pref_name# $element", $comment );
             }
         }
@@ -214,7 +214,7 @@ sub update_tab_prefs {
                     }
                 }
             }
-            elsif ( $element && $pref_name ) {
+            elsif ( $element ) {
                 my $id = $self->{file} . "#$pref_name# $element";
                 my $text = $self->get_trans_text( $id );
                 $p->[$i] = $text if $text;
