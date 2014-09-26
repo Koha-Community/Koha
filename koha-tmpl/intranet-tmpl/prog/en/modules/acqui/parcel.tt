@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Price %]
 [% USE currency = format('%.2f') -%]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( date ) %]
@@ -275,8 +276,8 @@
                 </td>
                 <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
                 <td>[% loop_order.quantity %]</td>
-                <td>[% loop_order.ecost %]</td>
-                <td>[% loop_order.ordertotal %]</td>
+                <td>[% loop_order.ecost | $Price %]</td>
+                <td>[% loop_order.total | $Price %]</td>
                 <td>[% loop_order.budget_name %]</td>
 				<td>
                               <a href="orderreceive.pl?ordernumber=[% loop_order.ordernumber %]&amp;invoiceid=[% invoiceid %]">Receive</a>
@@ -366,27 +367,27 @@
             <tr>
                 <td colspan="6" class="total">(Tax exc.)</td>
                 <td colspan="2"><i>Subtotal for</i> [% funds.$key.budget_name %]</td>
-                <td>[% currency( funds.$key.estimated ) %]</td>
-                <td>[% currency( funds.$key.actual ) %]</td>
+                <td>[% funds.$key.estimated | $Price %]</td>
+                <td>[% funds.$key.actual | $Price  %]</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
             </tr>
         [% END %]
         <tr>
             <th colspan="10" class="total">Total tax exc.</th>
-            <th>[% total_gste %]</th>
+            <th>[% total_gste | $Price %]</th>
             <th></th>
         </tr>
         [% FOREACH book_foot IN book_foot_loop %]
             <tr>
-                <th colspan="10">Total (GST [% book_foot.gstrate * 100 | format ("%.1f") %]%)</th>
-                <th>[% book_foot.value %]</th>
+                <th colspan="10">Total (GST [% book_foot.gstrate * 100 | $Price %]%)</th>
+                <th>[% book_foot.gstvalue | $Price %]</th>
                 <th></th>
             </tr>
         [% END %]
         <tr>
             <th colspan="10" class="total">Total tax inc.</th>
-            <th>[% total_gsti %]</th>
+            <th>[% total_gsti | $Price %]</th>
             <th></th>
         </tr>
     </tfoot>
@@ -427,9 +428,9 @@
                 <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
                 <td>[% order.quantityreceived %]</td>
                 <td>[% order.budget.budget_name %]</td>
-                <td>[% order.ecost %]</td>
-                <td>[% order.unitprice %]</td>
-                <td>[% order.total %]</td>
+                <td>[% order.ecost | $Price %]</td>
+                <td>[% order.unitprice | $Price %]</td>
+                <td>[% order.total | $Price %]</td>
                 <td>
                     [% IF loop_receive.cannot_cancel or ( Koha.Preference("AcqCreateItem") == "receiving" and loop_receive.holds > 0 ) %]
                       [% IF loop_receive.cannot_cancel %]
