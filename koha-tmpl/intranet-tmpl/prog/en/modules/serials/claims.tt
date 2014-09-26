@@ -31,7 +31,7 @@
             $("#claimst tr:visible :checkbox").attr('checked', $("#CheckAll").is(':checked'));
         });
 
-	    // Generates a dynamic link for exporting the selections data as CSV
+        // Generates a dynamic link for exporting the selections data as CSV
 	    $("#ExportSelected").click(function() {
                // We need to use "input[name=serialid]:checked" instead of "input:checked". Otherwise, the "check all" box will pass the value of "on" as a serialid, which produces a SQL error.
              var selected = $("input[name=serialid]:checked");
@@ -64,7 +64,7 @@
 	// Checks if the form can be sent (at least one checkbox must be checked)
 	function checkForm() {
 	    if ($("input:checked").length == 0) {
-		alert(_("Please select at least one item."));
+        alert(_("Please select at least one issue."));
 		return false;
 	    }
 	}
@@ -275,6 +275,7 @@
                         <th>Vendor</th>
                         <th>Library</th>
                         <th class="anti-the">Title</th>
+                        <th>ISSN</th>
                         <th>Issue number</th>
                         <th>Status</th>
                         <th class="title-string">Since</th>
@@ -294,6 +295,7 @@
                         <td>
                         <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% missingissue.subscriptionid %]">[% missingissue.title |html %]</a>
                         </td>
+                        <td>[% missingissue.issn %]</td>
                         <td>[% missingissue.serialseq %]</td>
                         <td>
                             [% IF ( missingissue.status1 ) %]<span class="status-expected">Expected</span>[% END %]

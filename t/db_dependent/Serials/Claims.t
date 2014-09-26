@@ -11,6 +11,8 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
+$dbh->do(q|DELETE FROM issues|);
+
 my $branchcode = 'CPL';
 my $bpid = AddBudgetPeriod({
     budget_period_startdate   => '2015-01-01',
