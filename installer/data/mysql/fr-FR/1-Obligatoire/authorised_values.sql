@@ -24,12 +24,12 @@ INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES 
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('DAMAGED','1','Endommagé');
 -- Status codes
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '0', 'Empruntable');
-INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '1', 'Exclu du prêt');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '1', 'Prêt restreint');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '3', 'En reliure');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '4', 'Indisponible');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '5', 'En traitement');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '6', 'Non communicable');
-INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '7', 'En commande');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '-1', 'En commande');
 -- location qualification for an item, departments are linked by default to items.location
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'LOC', 'Magasin', ' Magasin');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'LOC', 'Salle de lecture', 'Salle de lecture');
@@ -700,3 +700,7 @@ INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MED
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '008', 'Livre avec disquette');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '009', 'Livre avec CD');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '010', 'Livre avec cassette audio');
+
+-- Autres
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('WITHDRAWN','1','Pilon');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('RESTRICTED','1','Exclu du prêt');
