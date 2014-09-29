@@ -2198,7 +2198,6 @@ CREATE TABLE `suggestions` ( -- purchase suggestions
   `publicationyear` smallint(6) default 0,
   `place` varchar(255) default NULL, -- publication place of the suggested item
   `isbn` varchar(30) default NULL, -- isbn of the suggested item
-  `mailoverseeing` smallint(1) default 0,
   `biblionumber` int(11) default NULL, -- foreign key linking the suggestion to the biblio table after the suggestion has been ordered
   `reason` text, -- reason for accepting or rejecting the suggestion
   `patronreason` text, -- reason for making the suggestion
