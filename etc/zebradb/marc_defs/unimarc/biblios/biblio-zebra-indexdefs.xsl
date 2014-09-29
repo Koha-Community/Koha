@@ -295,13 +295,6 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       </xslo:if>
     </xslo:for-each>
     <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('d', @code)">
-        <z:index name="holdingbranch:w Record-Source:w item:w">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-    <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('e', @code)">
         <z:index name="location:w location:p item:w">
           <xslo:value-of select="."/>
@@ -318,13 +311,6 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('h', @code)">
         <z:index name="ccode:w ccode:p item:w">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('j', @code)">
-        <z:index name="LC-card-number:s item:w">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
