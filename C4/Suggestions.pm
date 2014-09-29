@@ -426,13 +426,10 @@ Insert a new suggestion on database with value given on input arg.
 sub NewSuggestion {
     my ($suggestion) = @_;
 
-    my $new_suggestion = { %$suggestion };
     $suggestion->{STATUS} = "ASKED" unless $suggestion->{STATUS};
-    $new_suggestion->{status} = $suggestion->{STATUS};
-    delete $new_suggestion->{STATUS};
 
     my $rs = Koha::Database->new->schema->resultset('Suggestion');
-    return $rs->create($new_suggestion)->id;
+    return $rs->create($suggestion)->id;
 }
 
 =head2 ModSuggestion
@@ -452,19 +449,14 @@ sub ModSuggestion {
     my ($suggestion) = @_;
     return unless( $suggestion and defined($suggestion->{suggestionid}) );
 
-    my $mod_suggestion = { %$suggestion };
-    my $status = $suggestion->{STATUS};
-    delete $mod_suggestion->{STATUS};
-    $mod_suggestion->{status} = $status;
-
     my $rs = Koha::Database->new->schema->resultset('Suggestion')->find($suggestion->{suggestionid});
     my $status_update_table = 1;
     eval {
-        $rs->update($mod_suggestion);
+        $rs->update($suggestion);
     };
     $status_update_table = 0 if( $@ );
 
-    if ( $status ) {
+    if ( $suggestion->{STATUS} ) {
 
         # fetch the entire updated suggestion so that we can populate the letter
         my $full_suggestion = GetSuggestion( $suggestion->{suggestionid} );
