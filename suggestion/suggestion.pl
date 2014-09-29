@@ -98,7 +98,7 @@ my $suggestion_ref  = $input->Vars;
 # get only the columns of Suggestion
 my $schema = Koha::Database->new()->schema;
 my $columns = ' '.join(' ', $schema->source('Suggestion')->columns).' ';
-my $suggestion_only = { map { $columns =~ / $_ / ? ($_ => $suggestion_ref->{$_}) : () } keys($suggestion_ref) };
+my $suggestion_only = { map { $columns =~ / $_ / ? ($_ => $suggestion_ref->{$_}) : () } keys %$suggestion_ref };
 $suggestion_only->{STATUS} = $suggestion_ref->{STATUS};
 
 delete $$suggestion_ref{$_} foreach qw( suggestedbyme op displayby tabcode edit_field );
