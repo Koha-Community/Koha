@@ -2212,7 +2212,8 @@ CREATE TABLE `suggestions` ( -- purchase suggestions
    total DECIMAL(28,6) default NULL, -- suggested total cost (price*quantity updated for currency)
   PRIMARY KEY  (`suggestionid`),
   KEY `suggestedby` (`suggestedby`),
-  KEY `managedby` (`managedby`)
+  KEY `managedby` (`managedby`),
+  CONSTRAINT `suggestions_budget_id_fk` FOREIGN KEY (`budgetid`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --

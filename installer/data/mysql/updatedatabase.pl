@@ -9732,6 +9732,26 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        UPDATE suggestions s SET s.budgetid = NULL
+        WHERE NOT EXISTS (
+            SELECT NULL
+            FROM aqbudgets b
+            WHERE b.budget_id = s.budgetid
+        );
+    |);
+
+    $dbh->do(q|
+        ALTER TABLE suggestions
+        ADD CONSTRAINT suggestions_budget_id_fk FOREIGN KEY (budgetid) REFERENCES aqbudgets(budget_id) ON DELETE SET NULL ON UPDATE CASCADE
+    |);
+
+    print "Upgrade to $DBversion done (Bug 13007 - Add new foreign key suggestions.budgetid)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

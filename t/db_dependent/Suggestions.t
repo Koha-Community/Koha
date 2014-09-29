@@ -25,7 +25,7 @@ use C4::Budgets;
 
 use Koha::DateUtils qw( dt_from_string );
 
-use Test::More tests => 101;
+use Test::More tests => 102;
 use Test::Warn;
 
 BEGIN {
@@ -148,6 +148,8 @@ is( $suggestion->{biblionumber}, $my_suggestion->{biblionumber}, 'NewSuggestion 
 is( $suggestion->{STATUS}, 'ASKED', 'NewSuggestion stores a suggestion with the status ASKED by default' );
 is( $suggestion->{managedby}, undef, 'NewSuggestion stores empty string as undef for non existent foreign key (integer)' );
 is( $suggestion->{manageddate}, undef, 'NewSuggestion stores empty string as undef for date' );
+is( $suggestion->{budgetid}, undef, 'NewSuggestion should set budgetid to NULL if not given' );
+
 is( CountSuggestion('ASKED'), 2, 'CountSuggestion returns the correct number of suggestions' );
 
 
