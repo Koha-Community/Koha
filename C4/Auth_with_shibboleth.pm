@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use C4::Debug;
 use C4::Context;
+use Koha::Database;
 use Carp;
 use CGI;
 
@@ -89,21 +90,16 @@ sub get_login_shib {
 sub checkpw_shib {
     $debug and warn "checkpw_shib";
 
-    my ( $dbh, $match ) = @_;
-    my ( $retnumber, $userid );
+    my ( $match ) = @_;
     my $config = _get_shib_config();
     $debug and warn "User Shibboleth-authenticated as: $match";
 
-  # Does the given shibboleth attribute value ($match) match a valid koha user ?
-    my $sth = $dbh->prepare(
-        "select cardnumber, userid from borrowers where $config->{matchpoint}=?"
-    );
-    $sth->execute($match);
-    if ( $sth->rows ) {
-        my @retvals = $sth->fetchrow;
-        $retnumber = $retvals[0];
-        $userid    = $retvals[1];
-        return ( 1, $retnumber, $userid );
+    # Does the given shibboleth attribute value ($match) match a valid koha user ?
+    my $borrower =
+      Koha::Database->new()->schema()->resultset('Borrower')
+      ->find( { $config->{matchpoint} => $match } );
+    if ( defined($borrower) ) {
+        return ( 1, $borrower->get_column('cardnumber'), $borrower->get_column('userid') );
     }
 
     # If we reach this point, the user is not a valid koha user
@@ -265,7 +261,7 @@ Returns the shibboleth login attribute should it be found present in the http se
 
 Given a database handle and a shib_login attribute, this routine checks for a matching local user and if found returns true, their cardnumber and their userid.  If a match is not found, then this returns false.
 
-  my ( $retval, $retcard, $retuserid ) = C4::Auth_with_shibboleth::checkpw_shib( $dbh, $shib_login );
+  my ( $retval, $retcard, $retuserid ) = C4::Auth_with_shibboleth::checkpw_shib( $shib_login );
 
 =head1 SEE ALSO
 

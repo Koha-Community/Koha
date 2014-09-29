@@ -7,7 +7,7 @@ use Modern::Perl;
 use Test::More tests => 6;
 use Test::MockModule;
 use Test::Warn;
-use DBD::Mock;
+use Test::DBIx::Class {schema_class => 'Koha::Schema', connect_info => ['dbi:SQLite:dbname=:memory:','','']};
 
 use CGI;
 use C4::Context;
@@ -17,24 +17,9 @@ my $matchpoint = 'userid';
 my %mapping = ( 'userid' => { 'is' => 'uid' }, );
 $ENV{'uid'} = "test1234";
 
-#my %shibboleth = (
-#    'matchpoint' => $matchpoint,
-#    'mapping'    => \%mapping
-#);
-
 # Setup Mocks
 ## Mock Context
 my $context = new Test::MockModule('C4::Context');
-
-### Mock ->dbh
-$context->mock(
-    '_new_dbh',
-    sub {
-        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-          || die "Cannot create handle: $DBI::errstr\n";
-        return $dbh;
-    }
-);
 
 ### Mock ->config
 $context->mock( 'config', \&mockedConfig );
@@ -64,8 +49,17 @@ sub mockedPref {
     return $return;
 }
 
-# Convenience methods
-## Reset Context
+## Mock Database
+my $database = new Test::MockModule('Koha::Database');
+
+### Mock ->schema
+$database->mock( 'schema', \&mockedSchema );
+
+sub mockedSchema {
+    return Schema();
+}
+
+## Convenience method to reset config
 sub reset_config {
     $matchpoint = 'userid';
     %mapping    = ( 'userid' => { 'is' => 'uid' }, );
@@ -75,7 +69,7 @@ sub reset_config {
 }
 
 # Tests
-my $dbh = C4::Context->dbh();
+##############################################################
 
 # Can module load
 use_ok('C4::Auth_with_shibboleth');
@@ -155,21 +149,27 @@ subtest "get_login_shib tests" => sub {
 
 ## checkpw_shib
 subtest "checkpw_shib tests" => sub {
-    plan tests => 12;
+    plan tests => 13;
 
-    my $shib_login = 'test1234';
-    my @borrower_results =
-      ( [ 'cardnumber', 'userid' ], [ 'testcardnumber', 'test1234' ], );
-    $dbh->{mock_add_resultset} = \@borrower_results;
-
+    my $shib_login;
     my ( $retval, $retcard, $retuserid );
+
+    # Setup Mock Database Data
+    fixtures_ok [
+        'Borrower' => [
+            [qw/cardnumber userid surname address city/],
+            [qw/testcardnumber test1234 renvoize myaddress johnston/],
+        ],
+      ],
+      'Installed some custom fixtures via the Populate fixture class';
 
     # debug off
     $C4::Auth_with_shibboleth::debug = '0';
 
     # good user
+    $shib_login = "test1234";
     warnings_are {
-        ( $retval, $retcard, $retuserid ) = checkpw_shib( $dbh, $shib_login );
+        ( $retval, $retcard, $retuserid ) = checkpw_shib( $shib_login );
     }
     [], "good user with no debug";
     is( $retval,    "1",              "user authenticated" );
@@ -177,21 +177,20 @@ subtest "checkpw_shib tests" => sub {
     is( $retuserid, "test1234",       "expected userid returned" );
 
     # bad user
+    $shib_login = 'martin';
     warnings_are {
-        ( $retval, $retcard, $retuserid ) = checkpw_shib( $dbh, $shib_login );
+        ( $retval, $retcard, $retuserid ) = checkpw_shib( $shib_login );
     }
     [], "bad user with no debug";
     is( $retval, "0", "user not authenticated" );
-
-    # reset db mock
-    $dbh->{mock_add_resultset} = \@borrower_results;
 
     # debug on
     $C4::Auth_with_shibboleth::debug = '1';
 
     # good user
+    $shib_login = "test1234";
     warnings_exist {
-        ( $retval, $retcard, $retuserid ) = checkpw_shib( $dbh, $shib_login );
+        ( $retval, $retcard, $retuserid ) = checkpw_shib( $shib_login );
     }
     [ qr/checkpw_shib/, qr/User Shibboleth-authenticated as:/ ],
       "good user with debug enabled";
@@ -200,8 +199,9 @@ subtest "checkpw_shib tests" => sub {
     is( $retuserid, "test1234",       "expected userid returned" );
 
     # bad user
+    $shib_login = "martin";
     warnings_exist {
-        ( $retval, $retcard, $retuserid ) = checkpw_shib( $dbh, $shib_login );
+        ( $retval, $retcard, $retuserid ) = checkpw_shib( $shib_login );
     }
     [
         qr/checkpw_shib/,
@@ -218,3 +218,4 @@ is( C4::Auth_with_shibboleth::_get_uri(),
     "https://testopac.com", "https opac uri returned" );
 
 ## _get_shib_config
+# Internal helper function, covered in tests above

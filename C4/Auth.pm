@@ -1639,7 +1639,7 @@ sub checkpw {
 
         # Then, we check if it matches a valid koha user
         if ($shib_login) {
-            my ( $retval, $retcard, $retuserid ) = C4::Auth_with_shibboleth::checkpw_shib( $dbh, $shib_login );    # EXTERNAL AUTH
+            my ( $retval, $retcard, $retuserid ) = C4::Auth_with_shibboleth::checkpw_shib( $shib_login );    # EXTERNAL AUTH
             ($retval) and return ( $retval, $retcard, $retuserid );
             return 0;
         }
