@@ -28,7 +28,6 @@ use C4::Koha; #GetItemTypes
 use C4::Branch;
 use C4::Budgets;
 use C4::Search;
-use C4::Dates qw(format_date);
 use C4::Members;
 use C4::Debug;
 
@@ -41,21 +40,13 @@ sub Init{
     # "Managed by" is used only when a suggestion is being edited (not when created)
     if ($suggestion->{'suggesteddate'} eq "0000-00-00" ||$suggestion->{'suggesteddate'} eq "") {
         # new suggestion
-        $suggestion->{'suggesteddate'} = C4::Dates->today;
+        $suggestion->{suggesteddate} = dt_from_string;
         $suggestion->{'suggestedby'} = C4::Context->userenv->{"number"} unless ($suggestion->{'suggestedby'});
     }
     else {
         # editing of an existing suggestion
-        $suggestion->{'manageddate'} = C4::Dates->today;
+        $suggestion->{manageddate} = dt_from_string;
         $suggestion->{'managedby'} = C4::Context->userenv->{"number"} unless ($suggestion->{'managedby'});
-        # suggesteddate, when coming from the DB, needs to be formated
-        $suggestion->{'suggesteddate'} = format_date($suggestion->{'suggesteddate'});
-    }
-    foreach my $date ( qw(rejecteddate accepteddate) ){
-    $suggestion->{$date}=(($suggestion->{$date} eq "0000-00-00" ||$suggestion->{$date} eq "")?
-                                "":
-                                format_date($suggestion->{$date}) 
-                              );
     }
     $suggestion->{'branchcode'}=C4::Context->userenv->{"branch"} unless ($suggestion->{'branchcode'});
 }
@@ -257,13 +248,6 @@ if ($op=~/else/) {
             if ($suggestion->{budgetid}){
                 my $bud = GetBudget( $suggestion->{budgetid} );
                 $suggestion->{budget_name} = $bud->{budget_name} if $bud;
-            }
-            foreach my $date (qw(suggesteddate manageddate accepteddate)) {
-                if ($suggestion->{$date} and $suggestion->{$date} ne "0000-00-00") {
-                    $suggestion->{$date} = format_date( $suggestion->{$date} );
-                } else {
-                    $suggestion->{$date} = "";
-                }
             }
         }
         push @allsuggestions,{
