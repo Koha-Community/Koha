@@ -29,6 +29,8 @@ use C4::Koha;
 use C4::Dates;
 use C4::Scrubber;
 
+use Koha::DateUtils qw( dt_from_string );
+
 my $input           = new CGI;
 my $allsuggestions  = $input->param('showall');
 my $op              = $input->param('op');
@@ -91,7 +93,7 @@ if ( $op eq "add_confirm" ) {
 		foreach my $suggest (keys %$suggestion){
 		    $suggestion->{$suggest} = $scrubber->scrub($suggestion->{$suggest});
 		}
-		$$suggestion{'suggesteddate'}=C4::Dates->today;
+        $suggestion->{suggesteddate} = dt_from_string;
 		$$suggestion{'branchcode'}= $input->param('branch') || C4::Context->userenv->{"branch"};
 
 		&NewSuggestion($suggestion);

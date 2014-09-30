@@ -31,6 +31,9 @@ use C4::Search;
 use C4::Dates qw(format_date);
 use C4::Members;
 use C4::Debug;
+
+use Koha::DateUtils qw( dt_from_string );
+
 use URI::Escape;
 
 sub Init{
@@ -123,10 +126,10 @@ $template->param('borrowernumber' => $borrowernumber);
 if ( $op =~ /save/i ) {
         if ( $suggestion_only->{"STATUS"} ) {
         if ( my $tmpstatus = lc( $suggestion_only->{"STATUS"} ) =~ /ACCEPTED|REJECTED/i ) {
-            $suggestion_only->{ lc( $suggestion_only->{"STATUS"}) . "date" } = C4::Dates->today;
+            $suggestion_only->{ lc( $suggestion_only->{"STATUS"}) . "date" } = dt_from_string;
             $suggestion_only->{ lc( $suggestion_only->{"STATUS"}) . "by" }   = C4::Context->userenv->{number};
         }
-        $suggestion_only->{"manageddate"} = C4::Dates->today;
+        $suggestion_only->{manageddate} = dt_from_string;
         $suggestion_only->{"managedby"}   = C4::Context->userenv->{number};
     }
     if ( $suggestion_only->{'suggestionid'} > 0 ) {
@@ -167,14 +170,14 @@ elsif ($op eq "change" ) {
     # set accepted/rejected/managed informations if applicable
     # ie= if the librarian has choosen some action on the suggestions
     if ($suggestion_only->{"STATUS"} eq "ACCEPTED"){
-        $suggestion_only->{"accepteddate"}=C4::Dates->today;
+        $suggestion_only->{accepteddate} = dt_from_string;
         $suggestion_only->{"acceptedby"}=C4::Context->userenv->{number};
     } elsif ($suggestion_only->{"STATUS"} eq "REJECTED"){
-        $suggestion_only->{"rejecteddate"}=C4::Dates->today;
+        $suggestion_only->{rejecteddate} = dt_from_string;
         $suggestion_only->{"rejectedby"}=C4::Context->userenv->{number};
     }
     if ($suggestion_only->{"STATUS"}){
-        $suggestion_only->{"manageddate"}=C4::Dates->today;
+        $suggestion_only->{manageddate} = dt_from_string;
         $suggestion_only->{"managedby"}=C4::Context->userenv->{number};
     }
     if ( my $reason = $$suggestion_ref{"reason$tabcode"}){
