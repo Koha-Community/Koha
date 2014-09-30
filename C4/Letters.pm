@@ -204,12 +204,12 @@ sub getalert {
 
 =head2 findrelatedto($type, $externalid)
 
-	parameters :
-	- $type : the type of alert
-	- $externalid : the id of the "object" to query
-	
-	In the table alert, a "id" is stored in the externalid field. This "id" is related to another table, depending on the type of the alert.
-	When type=issue, the id is related to a subscriptionid and this sub returns the name of the biblio.
+    parameters :
+    - $type : the type of alert
+    - $externalid : the id of the "object" to query
+
+    In the table alert, a "id" is stored in the externalid field. This "id" is related to another table, depending on the type of the alert.
+    When type=issue, the id is related to a subscriptionid and this sub returns the name of the biblio.
 
 =cut
     
@@ -266,7 +266,7 @@ sub SendAlerts {
             my $borinfo = C4::Members::GetMember('borrowernumber' => $_->{'borrowernumber'});
             my $email = $borinfo->{email} or next;
 
-#            		warn "sending issues...";
+#                    warn "sending issues...";
             my $userenv = C4::Context->userenv;
             my $branchdetails = GetBranchDetail($_->{'branchcode'});
             my $letter = GetPreparedLetter (
