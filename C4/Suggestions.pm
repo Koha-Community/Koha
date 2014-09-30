@@ -49,6 +49,7 @@ our @EXPORT  = qw(
   NewSuggestion
   SearchSuggestion
   DelSuggestionsOlderThan
+  GetUnprocessedSuggestions
 );
 
 =head1 NAME
@@ -596,6 +597,23 @@ sub DelSuggestionsOlderThan {
     }
     );
     $sth->execute("-$days");
+}
+
+sub GetUnprocessedSuggestions {
+    my ( $number_of_days_since_the_last_modification ) = @_;
+
+    $number_of_days_since_the_last_modification ||= 0;
+
+    my $dbh = C4::Context->dbh;
+
+    my $s = $dbh->selectall_arrayref(q|
+        SELECT *
+        FROM suggestions
+        WHERE STATUS = 'ASKED'
+            AND budgetid IS NOT NULL
+            AND CAST(NOW() AS DATE) - INTERVAL ? DAY = CAST(suggesteddate AS DATE)
+    |, { Slice => {} }, $number_of_days_since_the_last_modification );
+    return $s;
 }
 
 1;

@@ -21,11 +21,12 @@ use C4::Context;
 use C4::Members;
 use C4::Letters;
 use C4::Branch;
-use C4::Budgets;
+use C4::Budgets qw( AddBudgetPeriod AddBudget );
 
 use Koha::DateUtils qw( dt_from_string );
 
-use Test::More tests => 104;
+use DateTime::Duration;
+use Test::More tests => 105;
 use Test::Warn;
 
 BEGIN {
@@ -362,3 +363,34 @@ $my_suggestion->{budgetid} = ''; # If budgetid == '', NULL should be set in DB
 ModSuggestion( $my_suggestion );
 $suggestion = GetSuggestion($my_suggestionid_test_budgetid);
 is( $suggestion->{budgetid}, undef, 'NewSuggestion Should set budgetid to NULL if equals an empty string' );
+
+subtest 'GetUnprocessedSuggestions' => sub {
+    plan tests => 9;
+    $dbh->do(q|DELETE FROM suggestions|);
+    my $my_suggestionid         = NewSuggestion($my_suggestion);
+    my $unprocessed_suggestions = C4::Suggestions::GetUnprocessedSuggestions;
+    is( scalar(@$unprocessed_suggestions), 0, 'GetUnprocessedSuggestions should return 0 if a suggestion has been processed but not linked to a fund' );
+    my $status     = ModSuggestion($mod_suggestion1);
+    my $suggestion = GetSuggestion($my_suggestionid);
+    is( $suggestion->{budgetid}, undef, 'ModSuggestion should set budgetid to NULL if not given' );
+    ModSuggestion( { suggestionid => $my_suggestionid, budgetid => $budget_id } );
+    $suggestion = GetSuggestion($my_suggestionid);
+    is( $suggestion->{budgetid}, $budget_id, 'ModSuggestion should modify budgetid if given' );
+
+    $unprocessed_suggestions = C4::Suggestions::GetUnprocessedSuggestions;
+    is( scalar(@$unprocessed_suggestions), 1, 'GetUnprocessedSuggestions should return the suggestion if the suggestion is linked to a fund and has not been processed yet' );
+
+    ModSuggestion( { suggestionid => $my_suggestionid, STATUS => 'REJECTED' } );
+    $unprocessed_suggestions = C4::Suggestions::GetUnprocessedSuggestions;
+    is( scalar(@$unprocessed_suggestions), 0, 'GetUnprocessedSuggestions should return the suggestion if the suggestion is linked to a fund and has not been processed yet' );
+
+    ModSuggestion( { suggestionid => $my_suggestionid, STATUS => 'ASKED', suggesteddate => dt_from_string->add_duration( DateTime::Duration->new( days => -4 ) ) } );
+    $unprocessed_suggestions = C4::Suggestions::GetUnprocessedSuggestions;
+    is( scalar(@$unprocessed_suggestions), 0, 'GetUnprocessedSuggestions should use 0 as default value for days' );
+    $unprocessed_suggestions = C4::Suggestions::GetUnprocessedSuggestions(4);
+    is( scalar(@$unprocessed_suggestions), 1, 'GetUnprocessedSuggestions should return the suggestion suggested 4 days ago' );
+    $unprocessed_suggestions = C4::Suggestions::GetUnprocessedSuggestions(3);
+    is( scalar(@$unprocessed_suggestions), 0, 'GetUnprocessedSuggestions should not return the suggestion, it has not been suggested 3 days ago' );
+    $unprocessed_suggestions = C4::Suggestions::GetUnprocessedSuggestions(5);
+    is( scalar(@$unprocessed_suggestions), 0, 'GetUnprocessedSuggestions should not return the suggestion, it has not been suggested 5 days ago' );
+};
