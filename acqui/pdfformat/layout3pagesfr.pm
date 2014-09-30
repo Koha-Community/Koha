@@ -117,13 +117,13 @@ sub printorders {
             push( @$arrbasket,
                 $titleinfo. ($line->{order_vendornote} ? "\n----------------\nNote pour le fournisseur : ". $line->{order_vendornote} : '' ),
                 $line->{quantity},
-                Koha::Number::Price->new( $line->{rrpgste}),
-                Koha::Number::Price->new( $line->{rrpgsti}),
-                Koha::Number::Price->new( $line->{discount}).'%',
-                Koha::Number::Price->new( $line->{rrpgste} - $line->{ecostgste}),
-                Koha::Number::Price->new( $line->{gstrate} * 100).'%',
-                Koha::Number::Price->new( $line->{totalgste}),
-                Koha::Number::Price->new( $line->{totalgsti}),
+                Koha::Number::Price->new( $line->{rrpgste})->format,
+                Koha::Number::Price->new( $line->{rrpgsti})->format,
+                Koha::Number::Price->new( $line->{discount})->format.'%',
+                Koha::Number::Price->new( $line->{rrpgste} - $line->{ecostgste})->format,
+                Koha::Number::Price->new( $line->{gstrate} * 100)->format.'%',
+                Koha::Number::Price->new( $line->{totalgste})->format,
+                Koha::Number::Price->new( $line->{totalgsti})->format,
             );
             push(@$abaskets, $arrbasket);
         }
