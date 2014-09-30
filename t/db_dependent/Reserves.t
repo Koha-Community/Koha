@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 56;
+use Test::More tests => 58;
 
 use MARC::Record;
 use DateTime::Duration;
@@ -27,6 +27,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Members;
 use C4::Circulation;
+use Koha::Holds;
 use t::lib::Mocks;
 
 use Koha::DateUtils;
@@ -240,6 +241,10 @@ my @reserves = sort { $a->{reserve_id} <=> $b->{reserve_id} } @$title_reserves;
 is($reserves[0]{priority}, 0, 'Item is correctly waiting');
 is($reserves[1]{priority}, 1, 'Item is correctly priority 1');
 is($reserves[2]{priority}, 2, 'Item is correctly priority 2');
+
+@reserves = Koha::Holds->search({ borrowernumber => $requesters{'RPL'} })->waiting();
+is( @reserves, 1, 'GetWaiting got only the waiting reserve' );
+is( $reserves[0]->borrowernumber(), $requesters{'RPL'}, 'GetWaiting got the reserve for the correct borrower' );
 
 
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum2));

@@ -2,6 +2,7 @@
 [% USE Branches %]
 [% USE KohaDates %]
 [% USE ColumnsSettings %]
+[% USE ItemTypes %]
 [% IF Koha.Preference('ExportRemoveFields') OR Koha.Preference('ExportWithCsvProfile') %]
    [% SET exports_enabled = 1 %]
 [% END %]
@@ -781,20 +782,28 @@ No patron matched <span class="ex">[% message %]</span>
 			</ul>
         </div>
 
-			[% IF ( WaitingReserveLoop ) %]
-			<div id="holdswaiting" class="circmessage">
-		    <h4>Holds waiting:</h4>
-			        [% FOREACH WaitingReserveLoo IN WaitingReserveLoop %]
-			            <ul>
-			                <li> <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% WaitingReserveLoo.biblionumber %]">[% WaitingReserveLoo.title |html %]</a> ([% WaitingReserveLoo.itemtype %]), [% IF ( WaitingReserveLoo.author ) %]by [% WaitingReserveLoo.author %][% END %] [% IF ( WaitingReserveLoo.itemcallnumber ) %][[% WaitingReserveLoo.itemcallnumber %]] [% END %]Hold placed on [% WaitingReserveLoo.reservedate %].
-			            [% IF ( WaitingReserveLoo.waitingat ) %]
-			                <br />[% IF ( WaitingReserveLoo.waitinghere ) %]<strong class="waitinghere">[% ELSE %]<strong>[% END %]Waiting at [% WaitingReserveLoo.waitingat %]</strong>
-			            [% END %]
-			                </li>
-			            </ul>
-			    [% END %]
-			</div>
-			<!-- /If WaitingReserveLoop -->[% END %]
+            [% IF ( WaitingHolds ) %]
+                <div id="holdswaiting" class="circmessage">
+                    <h4>Holds waiting:</h4>
+                    [% FOREACH w IN WaitingHolds %]
+                        <ul>
+                            <li>
+                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% w.biblio.biblionumber %]">[% w.biblio.title | html %]</a>
+                                ([% ItemTypes.GetDescription( w.item.effective_itemtype ) %]),
+                                [% IF ( w.biblio.author ) %] by [% w.biblio.author | html %] [% END %]
+                                [% IF ( w.item.itemcallnumber ) %] [[% w.item.itemcallnumber %]] [% END %]
+                                Hold placed on [% w.reservedate | $KohaDates %].
+
+                                <br/>
+                                [% IF ( w.branch.branchcode == Branches.GetLoggedInBranchcode()  ) %]<strong class="waitinghere">[% ELSE %]<strong>[% END %]
+                                    Waiting at [% w.branch.branchname | html %]
+                                </strong>
+                            </li>
+                        </ul>
+                    [% END %]
+                </div>
+            [% END %]
+
 	[% IF ( notes ) %]
 			<div id="circnotes" class="circmessage">
 			<h4>Notes:</h4>
