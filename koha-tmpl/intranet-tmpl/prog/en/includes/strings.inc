@@ -6,7 +6,7 @@
     var CIRCULATION_RENEW_FAILED = _("Renew failed:");
     var NOT_CHECKED_OUT = _("not checked out");
     var TOO_MANY_RENEWALS = _("too many renewals");
-    var ON_RESERVE = _("on reserve");
+    var ON_RESERVE = _("on hold");
     var REASON_UNKNOWN = _("reason unkown");
     var TODAYS_CHECKOUTS = _("Today's checkouts");
     var PREVIOUS_CHECKOUTS = _("Previous checkouts");
@@ -19,7 +19,8 @@
     var RENEWALS_REMAINING = _("%s of %s renewals remaining");
     var HOLD_IS_SUSPENDED = _("Hold is <strong>suspended</strong>");
     var UNTIL = _("until %s");
-    var ITEM_IS_WAITING = _("Item is <strong>waiting</strong>"); //
+    var ITEM_IS_WAITING = _("Item is <strong>waiting</strong>");
+    var ITEM_IS_WAITING_HERE = _("Item is <strong>waiting here</strong>");
     var AT = _("at %s");
     var ITEM_IS_IN_TRANSIT = _("Item is <strong>in transit</strong> from %s since %s");
     var FROM = _("from");

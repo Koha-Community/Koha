@@ -64,11 +64,14 @@ $(document).ready(function() {
                             if ( oObj.barcode ) {
                                 data += "<em>";
                                 if ( oObj.found == "W" ) {
-                                    data += ITEM_IS_WAITING;
 
-                                    if ( ! oObj.waiting_here ) {
+                                    if ( oObj.waiting_here ) {
+                                        data += ITEM_IS_WAITING_HERE;
+                                    } else {
+                                        data += ITEM_IS_WAITING;
                                         data += " " + AT.format( oObj.waiting_at );
                                     }
+
                                 } else if ( oObj.transferred ) {
                                     data += ITEM_IS_IN_TRANSIT.format( oObj.from_branch, oObj.date_sent );
                                 } else if ( oObj.not_transferred ) {
@@ -88,6 +91,11 @@ $(document).ready(function() {
                             }
 
                             return data;
+                        }
+                    },
+                    {
+                        "mDataProp": function( oObj ) {
+                            return oObj.branchcode || "";
                         }
                     },
                     { "mDataProp": "expirationdate_formatted" },

@@ -79,6 +79,7 @@ while ( my $h = $holds_rs->next() ) {
         title          => $h->biblio()->title(),
         author         => $h->biblio()->author(),
         reserve_id     => $h->reserve_id(),
+        branchcode     => $h->branchcode()->branchname(),
         reservedate    => $h->reservedate(),
         expirationdate => $h->expirationdate(),
         suspend        => $h->suspend(),
