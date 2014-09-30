@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-08-26 14:05-0300\n"
+"POT-Creation-Date: 2014-09-23 19:11-0300\n"
 "PO-Revision-Date: 2013-12-13 06:12+0000\n"
 "Last-Translator: khdw <khaidaw@yahoo.com>\n"
 "Language-Team: Institute of Informatics, MAS <nyam@hotmail.com>\n"
@@ -487,7 +487,7 @@ msgstr "%s %s %s %s (%s) "
 #. %2$s:  savedreport.report_name 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:311
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:316
 #, fuzzy, c-format
 msgid "%s %s %s [ no name ] %s "
 msgstr "%s %s %s %s (%s) "
@@ -1061,7 +1061,7 @@ msgstr "Авагдахаар хүлээгдэж байгаа барилтууд"
 
 #. %1$s:  borrower.firstname 
 #. %2$s:  borrower.surname 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:159
+#: intranet-tmpl/prog/en/modules/members/pay.tt:167
 #, c-format
 msgid "%s %s has no outstanding fines."
 msgstr "%s %s-д төлөгдөөгүй торгууль алга байна."
@@ -1332,22 +1332,31 @@ msgstr "%s %s %s %s (%s)"
 #. %9$s:  CASE 'M' 
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
-#. %12$s:  CASE 
-#. %13$s:  line.accounttype 
-#. %14$s: - END -
-#. %15$s: - IF line.description 
-#. %16$s:  line.description 
-#. %17$s:  END 
-#. %18$s:  IF line.title 
-#. %19$s:  line.title |html_entity 
-#. %20$s:  END 
+#. %12$s:  CASE 'FU' 
+#. %13$s:  CASE 'Rent' 
+#. %14$s:  CASE 'FOR' 
+#. %15$s:  CASE 'LR' 
+#. %16$s:  CASE 'PAY' 
+#. %17$s:  CASE 'WO' 
+#. %18$s:  CASE 'C' 
+#. %19$s:  CASE 'CR' 
+#. %20$s:  CASE 
+#. %21$s:  line.accounttype 
+#. %22$s: - END -
+#. %23$s: - IF line.description 
+#. %24$s:  line.description 
+#. %25$s:  END 
+#. %26$s:  IF line.title 
+#. %27$s:  line.title |html_entity 
+#. %28$s:  END 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:116
 #, c-format
 msgid ""
-"%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
-"via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
-"%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s %s"
-"(%s)%s "
+"%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
+"(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
+"%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
+"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
+"%sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
 
 #. %1$s:  SWITCH account.accounttype 
@@ -1361,20 +1370,29 @@ msgstr ""
 #. %9$s:  CASE 'M' 
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
-#. %12$s:  CASE 
-#. %13$s:  account.accounttype 
-#. %14$s: - END -
-#. %15$s: - IF account.description 
-#. %16$s:  account.description 
-#. %17$s:  END 
-#. %18$s:  IF ( account.itemnumber ) 
+#. %12$s:  CASE 'FU' 
+#. %13$s:  CASE 'Rent' 
+#. %14$s:  CASE 'FOR' 
+#. %15$s:  CASE 'LR' 
+#. %16$s:  CASE 'PAY' 
+#. %17$s:  CASE 'WO' 
+#. %18$s:  CASE 'C' 
+#. %19$s:  CASE 'CR' 
+#. %20$s:  CASE 
+#. %21$s:  account.accounttype 
+#. %22$s: - END -
+#. %23$s: - IF account.description 
+#. %24$s:  account.description 
+#. %25$s:  END 
+#. %26$s:  IF ( account.itemnumber ) 
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:47
 #, c-format
 msgid ""
-"%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
-"via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
-"%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s "
-"&nbsp;%s"
+"%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
+"(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
+"%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
+"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
+"%sCredit %s%s %s %s, %s%s &nbsp;%s"
 msgstr ""
 
 #. %1$s:  IF ( suggestion.suggestiontypelabel ) 
@@ -1422,7 +1440,7 @@ msgstr "MARC дэд талбаруудын хязгаарлалтуудыг за
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:979
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
 #, c-format
 msgid "%s %sThis report contains the SQL keyword "
 msgstr ""
@@ -4434,7 +4452,7 @@ msgstr "Анхдагч бүтэц "
 #. %2$s:  ELSE 
 #. %3$s:  value.availablevalues |html 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:554
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:559
 #, fuzzy, c-format
 msgid "%sDefault%s%s%s"
 msgstr "Анхдагч"
@@ -5366,7 +5384,7 @@ msgstr "&lt;&lt; Өмнөх "
 msgid "&lt;a href=\"[856u]\"&gt;open site&lt;/a&gt;"
 msgstr "&lt;a href=&quot;[856u]&quot;&gt;open site&lt;/a&gt;"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:885
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:890
 #, fuzzy, c-format
 msgid "&nbsp; Sub report:"
 msgstr "Тайлан:"
@@ -5875,7 +5893,7 @@ msgstr "&rsaquo; Бичлэг тааруулах дүрмийг нэмэх"
 #. %1$s:  IF ( saved1 ) 
 #. %2$s:  ELSIF ( create ) 
 #. %3$s:  ELSIF ( showsql ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:213
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
 #, fuzzy, c-format
 msgid "&rsaquo; %sSaved reports %sCreate from SQL %s"
 msgstr ""
@@ -6761,7 +6779,7 @@ msgid "&rsaquo; Rotating collections"
 msgstr "Цуглуулга"
 
 #. %1$s:  ELSIF ( execute ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:217
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:222
 #, fuzzy, c-format
 msgid "&rsaquo; SQL view %s"
 msgstr "&rsaquo; %s"
@@ -6898,7 +6916,7 @@ msgstr "&rsaquo; Үйлчлүүлэгчдийн статистикүүд"
 #. %7$s:  ELSIF ( build6 ) 
 #. %8$s:  END 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:219
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:224
 #, c-format
 msgid ""
 "&rsaquo; Step %s of 6: %sChoose a module %sPick a report type %sSelect "
@@ -7275,8 +7293,8 @@ msgstr ""
 msgid "(Indonesian)"
 msgstr "(Индонези)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1052
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1074
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1057
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1079
 #, fuzzy, c-format
 msgid "(None)"
 msgstr "Нэг ч үгүй"
@@ -7589,8 +7607,8 @@ msgid ") renewed for %s %s ( "
 msgstr ""
 "Коха &rsaquo; Үйлчлүүлэгчид &rsaquo; Дараахийн торгуулиудыг төлөх %s %s"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:699
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:742
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:747
 #, fuzzy, c-format
 msgid ") you selected does not exist. "
 msgstr "Үйлчлүүлэгч алга байна "
@@ -8231,7 +8249,7 @@ msgstr "10; url=/cgi-bin/koha/mainpage.pl"
 #: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:231
 #: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:268
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:503
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:934
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:926
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl:173
 #, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=an:"
@@ -8251,7 +8269,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:347
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:362
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:384
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:937
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:929
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=au:\""
 msgstr "10; url=/cgi-bin/koha/mainpage.pl"
@@ -10164,16 +10182,16 @@ msgid ""
 msgstr ""
 
 #. INPUT type=button name=back
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:446
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:505
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:577
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:608
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:451
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:510
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:582
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:613
 #, fuzzy
 msgid "<< Back"
 msgstr "Буцах"
 
 #. INPUT type=button name=delete
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:494
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:499
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:152
 #, fuzzy
 msgid "<< Delete"
@@ -10613,7 +10631,7 @@ msgstr "Хүлээж авагдсан"
 msgid "Accepted payment (%s) from "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:969
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:974
 #, fuzzy, c-format
 msgid "Access this report from the: "
 msgstr ""
@@ -10905,7 +10923,7 @@ msgstr "Үйлдлүүд"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:388
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:142
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:334
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:339
 #, fuzzy, c-format
 msgid "Actions "
 msgstr "Үйлдлүүд "
@@ -10990,7 +11008,7 @@ msgstr "Адам Дик"
 #: intranet-tmpl/prog/en/modules/acqui/aqbasketuser_search.tt:69
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:409
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:178
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:493
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:498
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:152
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:98
 #: intranet-tmpl/prog/en/modules/labels/result.tt:96
@@ -11520,7 +11538,7 @@ msgstr "Дараах хүмүүст талархаж байна:"
 msgid "Additional attributes and identifiers"
 msgstr "Нэмэгдэл шинж тэмдэгтүүд ба хувьсагчид"
 
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:929
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:921
 #, fuzzy, c-format
 msgid "Additional author(s): "
 msgstr "Нэмэгдэл зохиолчид: "
@@ -11865,8 +11883,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:90
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:99
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:109
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:274
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:283
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:28
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:279
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:288
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:209
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:41
 #, c-format
@@ -12609,7 +12628,7 @@ msgstr "Шүүр хэрэглэх"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:266
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1015
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1020
 #, fuzzy
 msgid "Apply filter"
 msgstr "Шүүр хэрэглэх"
@@ -13220,7 +13239,7 @@ msgstr "Зох утга:"
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:74
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:32
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:77
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:298
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:303
 #: intranet-tmpl/prog/en/modules/labels/search.tt:29
 #: intranet-tmpl/prog/en/modules/labels/search.tt:30
 #, c-format
@@ -13264,7 +13283,7 @@ msgstr "Зохиогч: "
 msgid "Author(s)"
 msgstr "Зохиогчид"
 
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:928
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:920
 #, fuzzy, c-format
 msgid "Author(s): "
 msgstr "Зохиогч: "
@@ -13294,7 +13313,7 @@ msgstr "%s %s %s %s (%s) "
 #: intranet-tmpl/prog/en/includes/suggestions-add-search.inc:9
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:150
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:312
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1011
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1016
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:186
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:309
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:636
@@ -14975,24 +14994,24 @@ msgstr "Төсвүүд"
 msgid "Budgets administration"
 msgstr "Мөнгөний төрлүүдийн захиргаа"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:430
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:435
 #, c-format
 msgid "Build A Report"
 msgstr "Тайлан хийх"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:367
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:372
 #, fuzzy
 msgid "Build a new report"
 msgstr "Тайлангуудыг хийгээд ажиллуулах"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:381
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:386
 #, fuzzy, c-format
 msgid "Build a new report?"
 msgstr "Тайлангуудыг хийгээд ажиллуулах"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:219
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:395
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:224
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:400
 #, fuzzy, c-format
 msgid "Build a report"
 msgstr "Тайлангуудыг хийгээд ажиллуулах"
@@ -15007,13 +15026,13 @@ msgstr ""
 msgid "Build and manage batches of patron cards"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:242
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:247
 #, fuzzy, c-format
 msgid "Build and run reports"
 msgstr "Тайлангуудыг хийгээд ажиллуулах"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:246
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:251
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:20
 #, c-format
 msgid "Build new"
@@ -15210,14 +15229,14 @@ msgstr "Дараахийг хайсан "
 msgid "CX encoded"
 msgstr "CX кодчлогдсон"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:301
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:306
 #, c-format
 msgid "Cache expiry (seconds)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:415
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:853
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:945
 #, fuzzy, c-format
 msgid "Cache expiry:"
 msgstr "Хугацаа дуусалтыг шалгах"
@@ -15619,9 +15638,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:193
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:221
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:51
-#: intranet-tmpl/prog/en/modules/members/pay.tt:155
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:874
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:954
+#: intranet-tmpl/prog/en/modules/members/pay.tt:163
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:879
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:959
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:92
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:535
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:93
@@ -15661,7 +15680,7 @@ msgid "Cancel and return to order"
 msgstr "Үл тооцоод дамжуулалтууд руу буцах:"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:374
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:379
 #, fuzzy
 msgid "Cancel filter"
 msgstr "Цуцлах"
@@ -17158,8 +17177,8 @@ msgstr ""
 msgid "Choose your library:"
 msgstr "Номын санг сонгох:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:399
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:436
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:404
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:441
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:176
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:183
 #, fuzzy, c-format
@@ -18023,8 +18042,8 @@ msgstr "Зохиогч"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:167
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:398
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:62
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1065
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1070
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1097
 #, c-format
 msgid "Code"
 msgstr "Код"
@@ -18269,7 +18288,7 @@ msgstr "%s-с ирж байна"
 msgid "Comma (,)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:815
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:820
 #, fuzzy, c-format
 msgid "Comma separated text"
 msgstr "Таслалаар тусгаарлагдсан текст"
@@ -18534,7 +18553,7 @@ msgstr ": Тохируулга OK! "
 msgid "Confirm"
 msgstr "Батлах"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:646
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:651
 #, fuzzy, c-format
 msgid "Confirm custom report"
 msgstr "Хэвшмэл тайланг батлах"
@@ -19486,8 +19505,8 @@ msgid "Create printable patron cards"
 msgstr "Үйлчлүүлэгчийн бичлэгүүдийг арилгах"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:258
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:834
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:263
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:839
 #, c-format
 msgid "Create report from SQL"
 msgstr "SQL-с тайлан үүсгэх"
@@ -19529,7 +19548,7 @@ msgstr "Дараахаар үүсгэгдсэн "
 #: intranet-tmpl/prog/en/columns.def:116
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:208
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:853
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:299
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:304
 #, fuzzy, c-format
 msgid "Creation date"
 msgstr "Хугацаа дуусах огноо"
@@ -20343,7 +20362,7 @@ msgstr "Огноо/Цаг"
 msgid "Date/time"
 msgstr "Огноо/цаг"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1007
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1012
 #, c-format
 msgid "Date:"
 msgstr "Огноо:"
@@ -20444,9 +20463,9 @@ msgid "Day: "
 msgstr "Өдөр: "
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:243
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:415
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:853
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:945
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:420
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:858
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:950
 #, fuzzy, c-format
 msgid "Days"
 msgstr "Өдөр"
@@ -20863,7 +20882,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/files.tt:46
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:264
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:439
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:351
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:136
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:155
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:179
@@ -21066,7 +21085,7 @@ msgstr "Каталог болон нөөцийг хайх:"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:250
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:356
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:361
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:579
 #, fuzzy, c-format
 msgid "Delete selected"
@@ -21180,7 +21199,7 @@ msgid "Delete this printer"
 msgstr "Энэ серверийг устгах"
 
 #. A
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:351
 msgid "Delete this saved report"
 msgstr "Энэ хадгалагдсан тайланг устгах"
 
@@ -21602,7 +21621,7 @@ msgstr "Толь бичиг"
 msgid "Dictionary "
 msgstr "Толь бичиг "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:567
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:572
 #, fuzzy, c-format
 msgid "Dictionary definitions"
 msgstr "Толь бичгийн тодорхойлолтууд"
@@ -22047,7 +22066,7 @@ msgid "Doug Dearden"
 msgstr "Болзолт огноо"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:821
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:826
 msgid "Download"
 msgstr "Татах"
 
@@ -22137,7 +22156,7 @@ msgstr "Бичлэгийг татах"
 msgid "Download selected claims"
 msgstr "Сонгогдсоныг устгах"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:813
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:818
 #, fuzzy, c-format
 msgid "Download the report: "
 msgstr "Энэ тайланг татах: "
@@ -22214,7 +22233,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:118
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:26
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:341
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
 #, c-format
 msgid "Duplicate"
 msgstr "Хуулбар"
@@ -22247,7 +22266,7 @@ msgid "Duplicate record suspected"
 msgstr "Хуулбар бичлэг байж болзошгүй"
 
 #. A
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:341
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
 #, fuzzy
 msgid "Duplicate this saved report"
 msgstr "Энэ хадгалагдсан тайланг устгах"
@@ -22459,7 +22478,7 @@ msgstr "Эд Суммерз (Зарим кодууд ба MARC шиг Перл �
 #: intranet-tmpl/prog/en/modules/members/member.tt:205
 #: intranet-tmpl/prog/en/modules/members/member.tt:208
 #: intranet-tmpl/prog/en/modules/members/member.tt:210
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:340
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:345
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:154
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:178
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:143
@@ -22505,13 +22524,13 @@ msgid "Edit Items"
 msgstr "Зүйлсийг засварлах"
 
 #. INPUT type=button name=back
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:726
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:747
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:731
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:752
 #, fuzzy
 msgid "Edit SQL"
 msgstr "Засварлах"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:930
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
 #, fuzzy, c-format
 msgid "Edit SQL report"
 msgstr "Бичлэгийг засварлах"
@@ -23101,7 +23120,7 @@ msgid "Enter item barcode: "
 msgstr "Зүйлийн бар кодыг оруулах: "
 
 #. %1$s:  name 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:750
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:755
 #, fuzzy, c-format
 msgid "Enter parameters for report %s:"
 msgstr "Үйлчлүүлэгчийн картын дугаар эсвэл товчилсон нэрийг оруулах:"
@@ -23358,8 +23377,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  name 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:696
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:739
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:701
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:744
 #, fuzzy, c-format
 msgid "Errors found when processing parameters for report: %s"
 msgstr "Үйлчлүүлэгчийн картын дугаар эсвэл товчилсон нэрийг оруулах:"
@@ -24365,7 +24384,7 @@ msgstr "2 зурааст өнгө"
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:105
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:155
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:111
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1005
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1010
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:122
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:73
 #, c-format
@@ -24482,7 +24501,7 @@ msgstr "Буцаагдсан зүйлсийн торгуулийг тооцох�
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:149
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:640
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:645
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:189
 msgid "Finish"
 msgstr "Дуусгах"
@@ -25828,7 +25847,7 @@ msgid "Groove width:"
 msgstr "Ховилын өргөн:"
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:39
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:295
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:300
 #, c-format
 msgid "Group"
 msgstr "Бүлэг"
@@ -25841,13 +25860,13 @@ msgid ""
 msgstr ""
 
 #. INPUT type=text name=group
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1065
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1070
 #, fuzzy
 msgid "Group code"
 msgstr "Код"
 
 #. INPUT type=text name=groupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1071
 #, fuzzy
 msgid "Group name"
 msgstr "Бүлэг"
@@ -25901,14 +25920,14 @@ msgstr "Замчлах хайрцгуудыг зурах:"
 
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:1
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:3
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:237
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:971
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:242
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:976
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:17
 #, fuzzy, c-format
 msgid "Guided reports"
 msgstr "Замчлагдсан тайлангууд"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:213
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:19
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:11
 #, fuzzy, c-format
@@ -26706,7 +26725,7 @@ msgstr "Өнгө"
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:43
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:29
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:9
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:211
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:216
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:9
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:43
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:14
@@ -26854,9 +26873,9 @@ msgid "Hour"
 msgstr "Цагууд:"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:244
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:414
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:852
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:944
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:419
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:857
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:949
 #, fuzzy, c-format
 msgid "Hours"
 msgstr "Цагууд:"
@@ -26927,7 +26946,7 @@ msgid "IBERMARC"
 msgstr "IBERMARC"
 
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:217
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:292
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:297
 #, c-format
 msgid "ID"
 msgstr "ID"
@@ -29240,7 +29259,7 @@ msgstr "Гишүүнийг хайх"
 msgid "Keyword to MARC mapping"
 msgstr "Коха%  MARC-н харгалзуулал"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1012
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1017
 #, fuzzy, c-format
 msgid "Keyword:"
 msgstr "Түлхүүр үг"
@@ -33889,7 +33908,7 @@ msgstr "Үйлчлүүлэгчийн нэр"
 msgid "Masses"
 msgstr "Бассе"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:880
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:885
 #, fuzzy, c-format
 msgid "Master: "
 msgstr "Мастер: "
@@ -34049,8 +34068,8 @@ msgstr "Материал 1 "
 msgid "Mathieu Saby"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:440
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:861
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:445
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:866
 #, fuzzy, c-format
 msgid "Matrix"
 msgstr "Матриц:"
@@ -34471,9 +34490,9 @@ msgstr "Минут:"
 msgid "Minute (complete with 0):"
 msgstr "Минут(0-р төгссөн):"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:413
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:851
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:943
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:418
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:856
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:948
 #, fuzzy, c-format
 msgid "Minutes"
 msgstr "Минут:"
@@ -35381,8 +35400,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/guarantor_search.tt:80
 #: intranet-tmpl/prog/en/modules/members/member.tt:166
 #: intranet-tmpl/prog/en/modules/reports/reservereport.tt:18
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1071
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1098
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:56
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:78
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:64
@@ -36011,11 +36030,11 @@ msgstr "Дараагийн &gt;&gt;"
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:299
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:611
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:107
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:422
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:447
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:506
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:578
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:609
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:427
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:452
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:511
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:583
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:614
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:44
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:51
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:29
@@ -36099,7 +36118,7 @@ msgstr "Нимбус"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:120
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:123
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:277
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:327
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:332
 #, c-format
 msgid "No"
 msgstr "Үгүй"
@@ -36109,12 +36128,12 @@ msgstr "Үгүй"
 msgid "No "
 msgstr "Үгүй "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:843
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:845
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
 #, fuzzy, c-format
 msgid "No (default)"
 msgstr "Анхдагч"
@@ -36361,7 +36380,7 @@ msgid "No claims notice defined. "
 msgstr "Тодорхойлогдсон принтерүүд алга "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1024
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1029
 #, fuzzy
 msgid "No columns selected!"
 msgstr "Байршил сонгогдсон"
@@ -36855,7 +36874,7 @@ msgstr ""
 "Таны хэлэнд загвар өгөгдөл болон тохиргоонууд алга байна. Англи хэлэнд "
 "зориулсан загваруудыг анхдагч байдлаар авлаа"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:368
 #, fuzzy, c-format
 msgid "No saved reports match your criteria. "
 msgstr "Таны хайлтанд тохирох үр дүнгүүд алга "
@@ -37405,7 +37424,7 @@ msgstr "Санамж:"
 msgid "Note: "
 msgstr "Санамж: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:463
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:468
 #, c-format
 msgid ""
 "Note: Be careful selecting when selecting columns. If your choice is too "
@@ -37456,7 +37475,7 @@ msgstr "Санамж: танд дараахь анхдагч утгуудыг ө
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:390
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:64
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:42
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:297
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:302
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:82
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:592
 #, c-format
@@ -37489,10 +37508,10 @@ msgstr "Санамжууд/Сэтгэгдлүүд"
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:149
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:46
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:610
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:675
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:856
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:919
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:948
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:680
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:861
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:924
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:953
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:323
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:204
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:326
@@ -38807,7 +38826,7 @@ msgstr "Нээх"
 msgid "Open (%s)"
 msgstr "Дараахьд нээх:%s"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:817
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:822
 #, fuzzy, c-format
 msgid "Open Document Spreadsheet"
 msgstr "1- Индекс үзүүлэх"
@@ -40328,7 +40347,7 @@ msgid "Pay"
 msgstr "Өдөр:"
 
 #. INPUT type=submit name=paycollect
-#: intranet-tmpl/prog/en/modules/members/pay.tt:152
+#: intranet-tmpl/prog/en/modules/members/pay.tt:160
 #, fuzzy
 msgid "Pay amount"
 msgstr "Төлбөрийн хэмжээ"
@@ -40372,7 +40391,7 @@ msgstr ""
 "Коха &rsaquo; Үйлчлүүлэгчид &rsaquo; Дараахийн торгуулиудыг төлөх %s %s"
 
 #. INPUT type=submit name=payselected
-#: intranet-tmpl/prog/en/modules/members/pay.tt:154
+#: intranet-tmpl/prog/en/modules/members/pay.tt:162
 #, fuzzy
 msgid "Pay selected"
 msgstr "Устгагдсан өгөгдөл"
@@ -40988,14 +41007,14 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
 #, fuzzy, c-format
 msgid ""
 "Please check the log for further details. %sPlease select a cache expiry "
 "less than 30 days. %s %s %s "
 msgstr "Нэмэлт дэлгэрэнгүй мэдээллийг архиваас үзнэ үү. "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:392
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:397
 #, c-format
 msgid "Please choose a cache_expiry less than 30 days "
 msgstr ""
@@ -41291,7 +41310,7 @@ msgid "Please return to %s"
 msgstr "%s рүү буцаана уу"
 
 #. %1$s:  ELSIF ( error.queryerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:983
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
 #, fuzzy, c-format
 msgid ""
 "Please return to the &quot;Saved Reports&quot; screen and delete this report "
@@ -41895,8 +41914,8 @@ msgstr "Үндсэн тэнхлэг 2:"
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:104
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:381
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:39
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:77
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:79
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:85
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:87
 #, c-format
 msgid "Print"
 msgstr "Хэвлэх"
@@ -42266,7 +42285,7 @@ msgstr "Холбоо барих санамж: "
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:478
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:480
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:505
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:300
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:305
 #, c-format
 msgid "Public"
 msgstr "Нийтийн"
@@ -43515,7 +43534,7 @@ msgid "Replacement price:"
 msgstr "Орлуулгын үнэ:"
 
 #. %1$s:  ELSIF ( buildx ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:223
 #, fuzzy, c-format
 msgid "Report %s"
 msgstr "Тайлангууд"
@@ -43526,33 +43545,33 @@ msgstr "Тайлангууд"
 msgid "Report Plugins"
 msgstr "Тайлангууд"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1047
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1052
 #, fuzzy, c-format
 msgid "Report group:"
 msgstr "SQL-с тайлан үүсгэх"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:843
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:845
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
 #, fuzzy, c-format
 msgid "Report is public:"
 msgstr "Энэ ном зүйг импортлох"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:293
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:298
 #, fuzzy, c-format
 msgid "Report name"
 msgstr "Тайлангийн нэр"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:836
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:932
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:841
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
 #, fuzzy, c-format
 msgid "Report name:"
 msgstr "Тайлангийн нэр:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:673
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:678
 #, fuzzy, c-format
 msgid "Report name: "
 msgstr "Тайлангийн нэр: "
@@ -43562,7 +43581,7 @@ msgstr "Тайлангийн нэр: "
 msgid "Report number: "
 msgstr "Тайлангийн нэр: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1069
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1074
 #, fuzzy, c-format
 msgid "Report subgroup:"
 msgstr "SQL-с тайлан үүсгэх"
@@ -43606,7 +43625,7 @@ msgstr "Захиалж байна"
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:43
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:29
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:9
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:212
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:217
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:16
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:43
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:14
@@ -43616,7 +43635,7 @@ msgstr "Захиалж байна"
 msgid "Reports"
 msgstr "Тайлангууд"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:261
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:266
 #, c-format
 msgid "Reports Dictionary"
 msgstr "Тайлангуудын толь бичиг"
@@ -43995,7 +44014,7 @@ msgstr ""
 msgid "Return to tools"
 msgstr "Хэрэгслүүд рүү буцах"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:971
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:976
 #, fuzzy, c-format
 msgid "Return to: "
 msgstr "Буцаах огноо "
@@ -44011,7 +44030,7 @@ msgstr "Буцаалтууд"
 msgid "Returns"
 msgstr "Буцаалтууд"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:69
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:77
 #, fuzzy, c-format
 msgid "Reverse"
 msgstr "Шүүмжүүд"
@@ -44241,7 +44260,7 @@ msgstr "Замчлал"
 msgid "Row"
 msgstr "Мөр"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:786
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:791
 #, fuzzy, c-format
 msgid "Rows per page: "
 msgstr "Хуудас болгоны үр дүнгүүд : "
@@ -44260,7 +44279,7 @@ msgstr "Хугацаа хэтрэлийн үйлдлүүдийн дүрмүүд:
 msgid "Rull (pianorull/orgelrull)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:343
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:348
 #, fuzzy, c-format
 msgid "Run"
 msgstr "Буцаах"
@@ -44281,12 +44300,12 @@ msgid "Run reports"
 msgstr "Энэ тайланг ажиллуулах"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:767
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:772
 #, fuzzy
 msgid "Run the report"
 msgstr "Энэ тайланг ажиллуулах"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:967
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:972
 #, fuzzy, c-format
 msgid "Run this report"
 msgstr "Энэ тайланг ажиллуулах"
@@ -44394,7 +44413,7 @@ msgstr "SMS дугаар:"
 msgid "SQL"
 msgstr "SQL:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:867
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:872
 #, c-format
 msgid "SQL:"
 msgstr "SQL:"
@@ -44558,7 +44577,7 @@ msgstr "Бямба"
 #: intranet-tmpl/prog/en/modules/members/member.tt:152
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:89
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:74
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:659
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:664
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:260
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:534
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:157
@@ -44590,8 +44609,8 @@ msgid "Save Record"
 msgstr "Бичлэгийг хадгалах"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:678
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:874
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:683
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:879
 msgid "Save Report"
 msgstr "Тайланг хадгалах"
 
@@ -44625,8 +44644,8 @@ msgid "Save and view record"
 msgstr "Үгүй: Шинэ бичлэгээр хадгалах"
 
 #. INPUT type=submit name=save_anyway
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:717
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:721
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:722
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:726
 #, fuzzy
 msgid "Save anyway"
 msgstr "Хадгалах"
@@ -44653,7 +44672,7 @@ msgid "Save changes"
 msgstr "Өөрчлөлтүүдийг хадгалах"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:894
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:899
 #, fuzzy
 msgid "Save compound"
 msgstr "Нэгдлийг хадгалах"
@@ -44678,7 +44697,7 @@ msgstr "Захиалгыг хадгалах"
 msgid "Save subscription history"
 msgstr "Захиалгын түүхийг хадгалах"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:671
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:676
 #, fuzzy, c-format
 msgid "Save your custom report"
 msgstr "Таны хэвшмэл тайланг хадгалах"
@@ -44689,26 +44708,26 @@ msgstr "Таны хэвшмэл тайланг хадгалах"
 msgid "Saved preference"
 msgstr "Шинэ эрхэмлэл"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:905
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:910
 #, fuzzy, c-format
 msgid "Saved report results"
 msgstr "Хадгалагдсан тайлангийн үр дүнгүүд"
 
 #: intranet-tmpl/prog/en/includes/guided-reports-view.inc:3
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:217
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:270
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:222
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:223
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:275
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:996
 #, fuzzy, c-format
 msgid "Saved reports"
 msgstr "Хадгалагдсан тайлангууд"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:969
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:974
 #, fuzzy, c-format
 msgid "Saved reports page"
 msgstr "Хадгалагдсан тайлангууд"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:302
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:307
 #, fuzzy, c-format
 msgid "Saved results"
 msgstr "Хадгалагдсан үр дүнгүүд"
@@ -44762,7 +44781,7 @@ msgstr "Хайлтын индекс:"
 msgid "Scan indexes"
 msgstr "Шалгах индексүүд"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:344
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:349
 #, fuzzy, c-format
 msgid "Schedule"
 msgstr "Гүйцэтгэх ажлуудын хуваарийг гаргах"
@@ -44772,14 +44791,14 @@ msgstr "Гүйцэтгэх ажлуудын хуваарийг гаргах"
 msgid "Schedule tasks to run"
 msgstr "Гүйцэтгэх ажлуудын хуваарийг гаргах"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:970
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:975
 #, fuzzy, c-format
 msgid "Schedule this report to run using the: "
 msgstr ""
 "Дараахийг ашиглан энэ тайлангийн хуваарийг гаргах: <a1>Хуваарь гаргагч "
 "хэрэгсэл</a> "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:970
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:975
 #, fuzzy, c-format
 msgid "Scheduler tool"
 msgstr "Гүйцэтгэх ажлуудын хуваарийг гаргах"
@@ -45365,9 +45384,9 @@ msgstr "Хоёрдогч тусламжийн материал"
 msgid "Secondary support material - visual projection"
 msgstr "Хоёрдогч хавсралт материал - дүрсэн проекцлол"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:417
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:855
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:947
 #, fuzzy, c-format
 msgid "Seconds (default)"
 msgstr "Анхдагч"
@@ -45426,8 +45445,8 @@ msgstr "Сон. &amp; хаах"
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:54
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:452
 #: intranet-tmpl/prog/en/modules/members/guarantor_search.tt:109
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1050
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1072
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1055
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1077
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:189
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:76
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:230
@@ -46291,7 +46310,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:345
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:338
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:343
 #, fuzzy, c-format
 msgid "Show"
 msgstr "Мөрнүүд:"
@@ -47557,7 +47576,7 @@ msgstr ""
 
 #. %1$s:  IF (usecache) 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:398
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:403
 #, fuzzy, c-format
 msgid ""
 "Step 1 of 6: Choose a module to report on,%s Set cache expiry, %s and Choose "
@@ -47571,7 +47590,7 @@ msgstr ""
 msgid "Step 2 of 5: Choose the area"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:435
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:440
 #, fuzzy, c-format
 msgid "Step 2 of 6: Pick a report type"
 msgstr " 'Шинэ замын төрөл'-г сонгох"
@@ -47588,7 +47607,7 @@ msgstr ""
 msgid "Step 3 of 5: Choose columns"
 msgstr "Багануудын дугаар:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:462
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:467
 #, fuzzy, c-format
 msgid "Step 3 of 6: Select columns for display"
 msgstr "Баганууд"
@@ -47603,7 +47622,7 @@ msgstr "Баганууд "
 msgid "Step 4 of 5: Specify a value"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:520
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:525
 #, fuzzy, c-format
 msgid "Step 4 of 6: Select criteria to limit on"
 msgstr "Импортлох файлаа сонгох:"
@@ -47618,7 +47637,7 @@ msgstr "Гарчгийг заана уу "
 msgid "Step 5 of 5: Confirm details"
 msgstr ": Тохируулга OK!"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:584
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:589
 #, c-format
 msgid "Step 5 of 6: Pick which columns to total"
 msgstr ""
@@ -47628,7 +47647,7 @@ msgstr ""
 msgid "Step 5: Confirm definition"
 msgstr ": Тохируулга OK!"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:615
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:620
 #, c-format
 msgid "Step 6 of 6: Choose how you want the report ordered"
 msgstr ""
@@ -47801,7 +47820,7 @@ msgstr "Ангилал"
 msgid "Sub total "
 msgstr "<a1>Нийтl</a>: "
 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:144
+#: intranet-tmpl/prog/en/modules/members/pay.tt:152
 #, fuzzy, c-format
 msgid "Sub total:"
 msgstr "<a1>Нийтl</a>:"
@@ -47863,24 +47882,24 @@ msgstr "Дэд талбаруудыг засварлах"
 msgid "Subfields: "
 msgstr "Дэд талбаруудыг засварлах "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:296
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:301
 #, fuzzy, c-format
 msgid "Subgroup"
 msgstr "Бүлэг"
 
 #. INPUT type=text name=subgroup
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1097
 #, fuzzy
 msgid "Subgroup code"
 msgstr "Бүлэг"
 
 #. INPUT type=text name=subgroupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1098
 #, fuzzy
 msgid "Subgroup name"
 msgstr "Бүлэг"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:281
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:286
 #, fuzzy, c-format
 msgid "Subgroup:"
 msgstr "Бүлэг"
@@ -48420,8 +48439,8 @@ msgstr "Зүйл"
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:364
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:44
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:37
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:439
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:860
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:444
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:865
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:185
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:225
 #, fuzzy, c-format
@@ -48754,7 +48773,7 @@ msgstr ""
 msgid "TOTAL"
 msgstr "ДЭДНИЙЛБЭР"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:816
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:821
 #, fuzzy, c-format
 msgid "Tab separated text"
 msgstr "Таслалаар тусгаарлагдсан текст"
@@ -48798,8 +48817,8 @@ msgstr ""
 msgid "Tabs in use"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:438
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:859
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:443
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:864
 #, c-format
 msgid "Tabular"
 msgstr ""
@@ -49454,8 +49473,8 @@ msgstr ""
 msgid "The authority record you requested does not exist (%s)."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:699
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:742
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:747
 #, fuzzy, c-format
 msgid "The authorized value category ("
 msgstr "Эрх олгогдсон утгын ангилал:"
@@ -49597,7 +49616,7 @@ msgstr ": бар код олдсонгүй "
 msgid "The following error occurred while importing the database structure:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:979
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
 #, c-format
 msgid "The following error was encountered:"
 msgstr ""
@@ -49983,7 +50002,7 @@ msgstr "Бичлэг тааруулах дүрмийг устгах"
 msgid "There are no saved patron attribute types."
 msgstr "Үйлчлүүлэгчийн шинж тэмдгийн төрлийг устгах"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:379
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:384
 #, fuzzy, c-format
 msgid "There are no saved reports. "
 msgstr "Үйлчлүүлэгчийн ангилалуудыг тодорхойлох. "
@@ -51303,7 +51322,7 @@ msgstr "Бодит өртөг"
 msgid "Total current checkouts allowed"
 msgstr "Одоогийн авалтууд зөвшөөрөгдсөн"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:87
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:95
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:114
 #, fuzzy, c-format
 msgid "Total due"
@@ -51337,7 +51356,7 @@ msgid "Total must be a number"
 msgstr "SMS дугаар:"
 
 #. %1$s:  unlimited_total 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:775
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:780
 #, c-format
 msgid "Total number of rows matching the (unlimited) query is %s."
 msgstr ""
@@ -51833,7 +51852,7 @@ msgstr "2-хэмжээст"
 #: intranet-tmpl/prog/en/modules/members/files.tt:32
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1218
 #: intranet-tmpl/prog/en/modules/members/notices.tt:48
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:294
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:299
 #, fuzzy, c-format
 msgid "Type"
 msgstr "Зүйлийн төрөл"
@@ -51927,7 +51946,7 @@ msgstr "Материалын төрөл:"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:210
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:92
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:857
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:862
 #, fuzzy, c-format
 msgid "Type:"
 msgstr "Зүйлийн төрөл:"
@@ -52865,13 +52884,13 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:343
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:110
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:228
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:798
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:803
 #, fuzzy
 msgid "Update"
 msgstr "Сүүлд шинэчлэгдсэн:"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:954
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:959
 #, fuzzy
 msgid "Update SQL"
 msgstr "SQL-г засварлах"
@@ -53158,7 +53177,7 @@ msgstr "Одоо байгаа бичлэгээс:"
 msgid "Use for iso2709 exports"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:982
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:987
 #, c-format
 msgid ""
 "Use of this keyword is not allowed in Koha reports due to security and data "
@@ -53171,7 +53190,7 @@ msgid "Use restrictions"
 msgstr "Захиргаа"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:252
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:257
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:21
 #, fuzzy, c-format
 msgid "Use saved"
@@ -53187,7 +53206,7 @@ msgstr ""
 msgid "Use the dictionary to define custom criteria for reporting."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:238
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:243
 #, c-format
 msgid ""
 "Use the guided reports engine to create non standard reports. This feature "
@@ -53195,7 +53214,7 @@ msgid ""
 "writing custom SQL reports."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:262
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:267
 #, c-format
 msgid ""
 "Use the reports dictionary to define custom criteria to use in your reports"
@@ -53727,7 +53746,7 @@ msgid "View analytics"
 msgstr "Алдааны шинжилгээ:"
 
 #: intranet-tmpl/prog/en/includes/guided-reports-view.inc:7
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:265
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:270
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:27
 #, fuzzy, c-format
 msgid "View dictionary"
@@ -53760,7 +53779,7 @@ msgstr "<!-- TMPL_VAR name=\"marc_value\" -->-д хайх"
 msgid "View invoice"
 msgstr "Нэхэмжлэл"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:62
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:70
 #, fuzzy, c-format
 msgid "View item"
 msgstr "Шинэ зүйл"
@@ -54489,7 +54508,7 @@ msgid "Write off"
 msgstr "Айтофф"
 
 #. INPUT type=submit name=woall
-#: intranet-tmpl/prog/en/modules/members/pay.tt:153
+#: intranet-tmpl/prog/en/modules/members/pay.tt:161
 #, fuzzy
 msgid "Write off all"
 msgstr "Айтофф"
@@ -54605,13 +54624,13 @@ msgstr "Давтагдах боломжтой баярын өдрүүд"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:122
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:276
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:325
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:843
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:845
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:330
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
 #, c-format
 msgid "Yes"
 msgstr ""
@@ -55105,7 +55124,7 @@ msgid ""
 "the phone templates."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:657
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:662
 #, c-format
 msgid "You will need to save the report before you can execute it"
 msgstr ""
@@ -55217,12 +55236,12 @@ msgstr "Үзүүлэгдсэн бичлэгүүд алга."
 msgid "Your patron lists"
 msgstr "Жагсаалтууд"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:963
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:968
 #, fuzzy, c-format
 msgid "Your report has been saved"
 msgstr "Үзүүлэгдсэн бичлэгүүд алга."
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:647
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:652
 #, c-format
 msgid "Your report will be generated with the following SQL statement."
 msgstr ""
@@ -56981,6 +57000,12 @@ msgstr ""
 msgid "abcdjpvxyz"
 msgstr ""
 
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:887
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:854
+#, c-format
+msgid "abcdn"
+msgstr ""
+
 #: intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl:109
 #: intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl:117
 #: intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl:125
@@ -57203,10 +57228,10 @@ msgstr "Бар код"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:2167
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:759
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:901
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:898
 #: intranet-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:121
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:420
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:873
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:865
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:2402
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1645
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:1967
@@ -59534,11 +59559,9 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:2141
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:752
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:894
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MADS.xsl:368
 #: intranet-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:114
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:413
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:866
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:2378
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1623
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:1943
@@ -62224,8 +62247,8 @@ msgstr "1- Дурсамж "
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MADS.xsl:332
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:440
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:447
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:882
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:889
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:874
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:881
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1478
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1485
 #, c-format
@@ -62500,8 +62523,8 @@ msgstr "Бүтцийн код"
 msgid "from"
 msgstr " %S-с "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:536
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:543
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:541
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:548
 #, fuzzy, c-format
 msgid "from "
 msgstr " %S-с "
@@ -67642,8 +67665,8 @@ msgstr "MARC талбарууд"
 msgid "or any available"
 msgstr "Дурын бэлэн хуулбар"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1064
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1091
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1069
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1096
 #, fuzzy, c-format
 msgid "or create"
 msgstr "Үүсгэх"
@@ -71696,8 +71719,8 @@ msgid "title bands/intertitle rolls"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:113
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:537
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:544
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:542
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:549
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:24
 #, fuzzy, c-format
 msgid "to "
@@ -73442,35 +73465,3 @@ msgstr ""
 #, fuzzy, c-format
 msgid "﻿%s "
 msgstr "%s - "
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy

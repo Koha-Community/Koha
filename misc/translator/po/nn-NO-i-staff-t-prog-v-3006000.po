@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nn-NO-i-staff-prog-v-3000000\n"
-"POT-Creation-Date: 2014-08-26 13:54-0300\n"
+"POT-Creation-Date: 2014-09-23 19:00-0300\n"
 "PO-Revision-Date: 2011-11-04 09:04+0200\n"
 "Last-Translator: gangagiri <amsvrama@gmail.com>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.pping.uio.no>\n"
@@ -493,7 +493,7 @@ msgstr "%s %s %s %s (%s) "
 #. %2$s:  savedreport.report_name 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:311
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:316
 #, fuzzy, c-format
 msgid "%s %s %s [ no name ] %s "
 msgstr "%s %s %s %s (%s) "
@@ -1067,7 +1067,7 @@ msgstr "Reserveringar som ventar på å verta henta av lånaren"
 
 #. %1$s:  borrower.firstname 
 #. %2$s:  borrower.surname 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:159
+#: intranet-tmpl/prog/en/modules/members/pay.tt:167
 #, c-format
 msgid "%s %s has no outstanding fines."
 msgstr "%s %s har ingen uteståande gebyr"
@@ -1337,22 +1337,31 @@ msgstr "%s %s %s %s (%s)"
 #. %9$s:  CASE 'M' 
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
-#. %12$s:  CASE 
-#. %13$s:  line.accounttype 
-#. %14$s: - END -
-#. %15$s: - IF line.description 
-#. %16$s:  line.description 
-#. %17$s:  END 
-#. %18$s:  IF line.title 
-#. %19$s:  line.title |html_entity 
-#. %20$s:  END 
+#. %12$s:  CASE 'FU' 
+#. %13$s:  CASE 'Rent' 
+#. %14$s:  CASE 'FOR' 
+#. %15$s:  CASE 'LR' 
+#. %16$s:  CASE 'PAY' 
+#. %17$s:  CASE 'WO' 
+#. %18$s:  CASE 'C' 
+#. %19$s:  CASE 'CR' 
+#. %20$s:  CASE 
+#. %21$s:  line.accounttype 
+#. %22$s: - END -
+#. %23$s: - IF line.description 
+#. %24$s:  line.description 
+#. %25$s:  END 
+#. %26$s:  IF line.title 
+#. %27$s:  line.title |html_entity 
+#. %28$s:  END 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:116
 #, c-format
 msgid ""
-"%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
-"via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
-"%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s %s"
-"(%s)%s "
+"%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
+"(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
+"%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
+"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
+"%sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
 
 #. %1$s:  SWITCH account.accounttype 
@@ -1366,20 +1375,29 @@ msgstr ""
 #. %9$s:  CASE 'M' 
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
-#. %12$s:  CASE 
-#. %13$s:  account.accounttype 
-#. %14$s: - END -
-#. %15$s: - IF account.description 
-#. %16$s:  account.description 
-#. %17$s:  END 
-#. %18$s:  IF ( account.itemnumber ) 
+#. %12$s:  CASE 'FU' 
+#. %13$s:  CASE 'Rent' 
+#. %14$s:  CASE 'FOR' 
+#. %15$s:  CASE 'LR' 
+#. %16$s:  CASE 'PAY' 
+#. %17$s:  CASE 'WO' 
+#. %18$s:  CASE 'C' 
+#. %19$s:  CASE 'CR' 
+#. %20$s:  CASE 
+#. %21$s:  account.accounttype 
+#. %22$s: - END -
+#. %23$s: - IF account.description 
+#. %24$s:  account.description 
+#. %25$s:  END 
+#. %26$s:  IF ( account.itemnumber ) 
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:47
 #, c-format
 msgid ""
-"%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
-"via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
-"%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s "
-"&nbsp;%s"
+"%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
+"(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
+"%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
+"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
+"%sCredit %s%s %s %s, %s%s &nbsp;%s"
 msgstr ""
 
 #. %1$s:  IF ( suggestion.suggestiontypelabel ) 
@@ -1428,7 +1446,7 @@ msgstr "Felt %s avgrensingar for delfelt "
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:979
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
 #, c-format
 msgid "%s %sThis report contains the SQL keyword "
 msgstr ""
@@ -4443,7 +4461,7 @@ msgstr "Standard rammeverk "
 #. %2$s:  ELSE 
 #. %3$s:  value.availablevalues |html 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:554
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:559
 #, fuzzy, c-format
 msgid "%sDefault%s%s%s"
 msgstr "Standard"
@@ -5373,7 +5391,7 @@ msgstr ""
 "<b>&lt;a href=\"[856u]\"&gt;open site&lt;/a&gt;</b> vil visa lenka rett "
 "under tittelen"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:885
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:890
 #, fuzzy, c-format
 msgid "&nbsp; Sub report:"
 msgstr "Delrapport:"
@@ -5878,7 +5896,7 @@ msgstr "&rsaquo; Legg til ein regel for samanfall mellom postar"
 #. %1$s:  IF ( saved1 ) 
 #. %2$s:  ELSIF ( create ) 
 #. %3$s:  ELSIF ( showsql ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:213
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
 #, fuzzy, c-format
 msgid "&rsaquo; %sSaved reports %sCreate from SQL %s"
 msgstr "&rsaquo; Rapportvegvisar &rsaquo; Lag frå SQL"
@@ -6761,7 +6779,7 @@ msgid "&rsaquo; Rotating collections"
 msgstr "&rsaquo; Stadfest sletting"
 
 #. %1$s:  ELSIF ( execute ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:217
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:222
 #, fuzzy, c-format
 msgid "&rsaquo; SQL view %s"
 msgstr "&rsaquo; %s"
@@ -6896,7 +6914,7 @@ msgstr "&rsaquo; Lånarstatistikk"
 #. %7$s:  ELSIF ( build6 ) 
 #. %8$s:  END 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:219
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:224
 #, c-format
 msgid ""
 "&rsaquo; Step %s of 6: %sChoose a module %sPick a report type %sSelect "
@@ -7275,8 +7293,8 @@ msgstr ""
 msgid "(Indonesian)"
 msgstr "Indonesisk"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1052
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1074
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1057
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1079
 #, fuzzy, c-format
 msgid "(None)"
 msgstr "Ingen"
@@ -7586,8 +7604,8 @@ msgstr "%s - %s "
 msgid ") renewed for %s %s ( "
 msgstr "Koha &rsaquo; Lånarar &rsaquo; Gebyr for %s %s"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:699
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:742
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:747
 #, fuzzy, c-format
 msgid ") you selected does not exist. "
 msgstr "Lånaren finst ikkje. "
@@ -8218,7 +8236,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:231
 #: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:268
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:503
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:934
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:926
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl:173
 #, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=an:"
@@ -8238,7 +8256,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:347
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:362
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:384
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:937
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:929
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=au:\""
 msgstr "10; url=/cgi-bin/koha/mainpage.pl"
@@ -10146,16 +10164,16 @@ msgid ""
 msgstr ""
 
 #. INPUT type=button name=back
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:446
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:505
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:577
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:608
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:451
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:510
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:582
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:613
 #, fuzzy
 msgid "<< Back"
 msgstr "Tilbake"
 
 #. INPUT type=button name=delete
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:494
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:499
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:152
 #, fuzzy
 msgid "<< Delete"
@@ -10595,7 +10613,7 @@ msgstr "Godteke"
 msgid "Accepted payment (%s) from "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:969
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:974
 #, fuzzy, c-format
 msgid "Access this report from the: "
 msgstr "Gå til denne rapporten via sida <a1>Lagra rapportar</a> "
@@ -10886,7 +10904,7 @@ msgstr "Handlingar"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:388
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:142
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:334
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:339
 #, fuzzy, c-format
 msgid "Actions "
 msgstr "Handlingar "
@@ -10971,7 +10989,7 @@ msgstr "Adam Thick"
 #: intranet-tmpl/prog/en/modules/acqui/aqbasketuser_search.tt:69
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:409
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:178
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:493
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:498
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:152
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:98
 #: intranet-tmpl/prog/en/modules/labels/result.tt:96
@@ -11500,7 +11518,7 @@ msgstr "I tillegg takk til"
 msgid "Additional attributes and identifiers"
 msgstr "Ekstra eigenskapar og identifiserande element"
 
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:929
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:921
 #, fuzzy, c-format
 msgid "Additional author(s): "
 msgstr "Medforfattarar: "
@@ -11845,8 +11863,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:90
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:99
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:109
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:274
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:283
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:28
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:279
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:288
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:209
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:41
 #, c-format
@@ -12590,7 +12609,7 @@ msgstr "Bruk filter"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:266
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1015
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1020
 #, fuzzy
 msgid "Apply filter"
 msgstr "Bruk filter"
@@ -13201,7 +13220,7 @@ msgstr "Aut. verdi:"
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:74
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:32
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:77
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:298
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:303
 #: intranet-tmpl/prog/en/modules/labels/search.tt:29
 #: intranet-tmpl/prog/en/modules/labels/search.tt:30
 #, c-format
@@ -13245,7 +13264,7 @@ msgstr "Forfattar: "
 msgid "Author(s)"
 msgstr "Forfattarar"
 
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:928
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:920
 #, fuzzy, c-format
 msgid "Author(s): "
 msgstr "Forfattar: "
@@ -13275,7 +13294,7 @@ msgstr "%s %s %s %s (%s) "
 #: intranet-tmpl/prog/en/includes/suggestions-add-search.inc:9
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:150
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:312
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1011
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1016
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:186
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:309
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:636
@@ -14953,24 +14972,24 @@ msgstr "Budsjett"
 msgid "Budgets administration"
 msgstr "Budsjettadministrasjon"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:430
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:435
 #, fuzzy, c-format
 msgid "Build A Report"
 msgstr "Lag rapport"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:367
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:372
 #, fuzzy
 msgid "Build a new report"
 msgstr "Lag og køyr rapportar"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:381
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:386
 #, fuzzy, c-format
 msgid "Build a new report?"
 msgstr "Lag og køyr rapportar"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:219
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:395
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:224
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:400
 #, fuzzy, c-format
 msgid "Build a report"
 msgstr "Lag og køyr rapportar"
@@ -14985,13 +15004,13 @@ msgstr ""
 msgid "Build and manage batches of patron cards"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:242
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:247
 #, fuzzy, c-format
 msgid "Build and run reports"
 msgstr "Lag og køyr rapportar"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:246
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:251
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:20
 #, c-format
 msgid "Build new"
@@ -15188,14 +15207,14 @@ msgstr ""
 msgid "CX encoded"
 msgstr "Data registrert"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:301
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:306
 #, c-format
 msgid "Cache expiry (seconds)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:415
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:853
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:945
 #, fuzzy, c-format
 msgid "Cache expiry:"
 msgstr "Kontroller utløpsdato"
@@ -15597,9 +15616,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:193
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:221
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:51
-#: intranet-tmpl/prog/en/modules/members/pay.tt:155
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:874
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:954
+#: intranet-tmpl/prog/en/modules/members/pay.tt:163
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:879
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:959
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:92
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:535
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:93
@@ -15639,7 +15658,7 @@ msgid "Cancel and return to order"
 msgstr "Ignorer og gå tilbake til overføringar:"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:374
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:379
 #, fuzzy
 msgid "Cancel filter"
 msgstr "Avbryt reservering"
@@ -17138,8 +17157,8 @@ msgstr ""
 msgid "Choose your library:"
 msgstr "Vel bibliotek:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:399
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:436
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:404
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:441
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:176
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:183
 #, fuzzy, c-format
@@ -18004,8 +18023,8 @@ msgstr "Forfattar"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:167
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:398
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:62
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1065
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1070
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1097
 #, fuzzy, c-format
 msgid "Code"
 msgstr "Kode"
@@ -18250,7 +18269,7 @@ msgstr "Kjem frå %s"
 msgid "Comma (,)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:815
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:820
 #, fuzzy, c-format
 msgid "Comma separated text"
 msgstr "Kommaseparert tekst"
@@ -18515,7 +18534,7 @@ msgstr "oppsettfil. "
 msgid "Confirm"
 msgstr "Stadfest"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:646
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:651
 #, fuzzy, c-format
 msgid "Confirm custom report"
 msgstr "Stadfest tilpassa rapport"
@@ -19466,8 +19485,8 @@ msgid "Create printable patron cards"
 msgstr "Vask lånarregisteret"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:258
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:834
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:263
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:839
 #, c-format
 msgid "Create report from SQL"
 msgstr "Lag rapport frå SQL"
@@ -19509,7 +19528,7 @@ msgstr "Laga av "
 #: intranet-tmpl/prog/en/columns.def:116
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:208
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:853
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:299
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:304
 #, fuzzy, c-format
 msgid "Creation date"
 msgstr "Forfallsdato:"
@@ -20323,7 +20342,7 @@ msgstr "Dato/klokkeslett"
 msgid "Date/time"
 msgstr "Dato/klokkeslett"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1007
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1012
 #, c-format
 msgid "Date:"
 msgstr "Dato:"
@@ -20424,9 +20443,9 @@ msgid "Day: "
 msgstr "Dag: "
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:243
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:415
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:853
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:945
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:420
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:858
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:950
 #, fuzzy, c-format
 msgid "Days"
 msgstr "Dag"
@@ -20841,7 +20860,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/files.tt:46
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:264
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:439
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:351
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:136
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:155
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:179
@@ -21043,7 +21062,7 @@ msgstr "Lagre postar i brønnen"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:250
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:356
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:361
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:579
 #, c-format
 msgid "Delete selected"
@@ -21158,7 +21177,7 @@ msgid "Delete this printer"
 msgstr "Slett denne skrivaren"
 
 #. A
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:351
 #, fuzzy
 msgid "Delete this saved report"
 msgstr "slett denne lagra rapporten"
@@ -21581,7 +21600,7 @@ msgstr "Ordliste"
 msgid "Dictionary "
 msgstr "Ordliste "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:567
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:572
 #, fuzzy, c-format
 msgid "Dictionary definitions"
 msgstr "Ordlistedefinisjonar"
@@ -22027,7 +22046,7 @@ msgid "Doug Dearden"
 msgstr "Forfallsdato"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:821
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:826
 msgid "Download"
 msgstr "Last ned"
 
@@ -22114,7 +22133,7 @@ msgstr "Last ned post"
 msgid "Download selected claims"
 msgstr "Slett den/dei valde"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:813
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:818
 #, fuzzy, c-format
 msgid "Download the report: "
 msgstr "Last ned rapport: "
@@ -22191,7 +22210,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:118
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:26
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:341
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
 #, c-format
 msgid "Duplicate"
 msgstr "Dublett"
@@ -22224,7 +22243,7 @@ msgid "Duplicate record suspected"
 msgstr "Mistanke om dublett"
 
 #. A
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:341
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
 #, fuzzy
 msgid "Duplicate this saved report"
 msgstr "slett denne lagra rapporten"
@@ -22436,7 +22455,7 @@ msgstr "Ed Summers (Litt kode og Perl-pakkar som til dømes MARC::Record)"
 #: intranet-tmpl/prog/en/modules/members/member.tt:205
 #: intranet-tmpl/prog/en/modules/members/member.tt:208
 #: intranet-tmpl/prog/en/modules/members/member.tt:210
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:340
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:345
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:154
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:178
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:143
@@ -22482,13 +22501,13 @@ msgid "Edit Items"
 msgstr "Endre eksemplar"
 
 #. INPUT type=button name=back
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:726
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:747
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:731
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:752
 #, fuzzy
 msgid "Edit SQL"
 msgstr "Endre"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:930
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
 #, fuzzy, c-format
 msgid "Edit SQL report"
 msgstr "Endre post"
@@ -23079,7 +23098,7 @@ msgid "Enter item barcode: "
 msgstr "Legg inn strekkode for eksemplaret: "
 
 #. %1$s:  name 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:750
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:755
 #, fuzzy, c-format
 msgid "Enter parameters for report %s:"
 msgstr "Skriv inn lånarnummeret til ein brukar eller ein del av namnet:"
@@ -23336,8 +23355,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  name 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:696
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:739
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:701
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:744
 #, fuzzy, c-format
 msgid "Errors found when processing parameters for report: %s"
 msgstr "Skriv inn lånarnummeret til ein brukar eller ein del av namnet:"
@@ -24343,7 +24362,7 @@ msgstr "filter"
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:105
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:155
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:111
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1005
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1010
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:122
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:73
 #, c-format
@@ -24460,7 +24479,7 @@ msgstr "Gebyra for de innleverte eksemplarene vert ettergjeve."
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:149
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:640
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:645
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:189
 msgid "Finish"
 msgstr "Fullfør"
@@ -25805,7 +25824,7 @@ msgid "Groove width:"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:39
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:295
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:300
 #, fuzzy, c-format
 msgid "Group"
 msgstr "Gruppe:"
@@ -25818,13 +25837,13 @@ msgid ""
 msgstr ""
 
 #. INPUT type=text name=group
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1065
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1070
 #, fuzzy
 msgid "Group code"
 msgstr "Postnummer:"
 
 #. INPUT type=text name=groupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1071
 #, fuzzy
 msgid "Group name"
 msgstr "Gruppe:"
@@ -25878,14 +25897,14 @@ msgstr "Teikn vegleiingsboksar:"
 
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:1
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:3
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:237
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:971
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:242
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:976
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:17
 #, fuzzy, c-format
 msgid "Guided reports"
 msgstr "Hjelp til rapportar"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:213
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:19
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:11
 #, fuzzy, c-format
@@ -26684,7 +26703,7 @@ msgstr "Colore"
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:43
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:29
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:9
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:211
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:216
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:9
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:43
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:14
@@ -26832,9 +26851,9 @@ msgid "Hour"
 msgstr "Jour:"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:244
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:414
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:852
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:944
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:419
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:857
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:949
 #, fuzzy, c-format
 msgid "Hours"
 msgstr "Jour:"
@@ -26905,7 +26924,7 @@ msgid "IBERMARC"
 msgstr "IBERMARC"
 
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:217
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:292
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:297
 #, c-format
 msgid "ID"
 msgstr "ID"
@@ -29216,7 +29235,7 @@ msgstr "Søk etter leverandør"
 msgid "Keyword to MARC mapping"
 msgstr "MARC-lenker"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1012
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1017
 #, fuzzy, c-format
 msgid "Keyword:"
 msgstr "Søk i alle felt"
@@ -33846,7 +33865,7 @@ msgstr "Lånarnamn"
 msgid "Masses"
 msgstr "Basse"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:880
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:885
 #, fuzzy, c-format
 msgid "Master: "
 msgstr "Mal: "
@@ -34006,8 +34025,8 @@ msgstr "Periodikatype "
 msgid "Mathieu Saby"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:440
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:861
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:445
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:866
 #, fuzzy, c-format
 msgid "Matrix"
 msgstr "Matrise:"
@@ -34428,9 +34447,9 @@ msgstr "Minutt:"
 msgid "Minute (complete with 0):"
 msgstr "Minutes (completer avec des 0):"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:413
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:851
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:943
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:418
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:856
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:948
 #, fuzzy, c-format
 msgid "Minutes"
 msgstr "Minutt:"
@@ -35338,8 +35357,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/guarantor_search.tt:80
 #: intranet-tmpl/prog/en/modules/members/member.tt:166
 #: intranet-tmpl/prog/en/modules/reports/reservereport.tt:18
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1071
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1098
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:56
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:78
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:64
@@ -35967,11 +35986,11 @@ msgstr "Neste &gt;&gt;"
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:299
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:611
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:107
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:422
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:447
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:506
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:578
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:609
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:427
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:452
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:511
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:583
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:614
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:44
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:51
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:29
@@ -36055,7 +36074,7 @@ msgstr "Nimbus"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:120
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:123
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:277
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:327
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:332
 #, c-format
 msgid "No"
 msgstr "Nei"
@@ -36065,12 +36084,12 @@ msgstr "Nei"
 msgid "No "
 msgstr "Nei "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:843
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:845
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
 #, fuzzy, c-format
 msgid "No (default)"
 msgstr "Standard"
@@ -36317,7 +36336,7 @@ msgid "No claims notice defined. "
 msgstr "Ingen skrivarar er oppgjevne. "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1024
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1029
 #, fuzzy
 msgid "No columns selected!"
 msgstr "Vald plassering"
@@ -36808,7 +36827,7 @@ msgstr ""
 "Ingen testdata og innstillingar er tilgjengelege på ditt språk. Bruker difor "
 "testdata på engelsk."
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:368
 #, fuzzy, c-format
 msgid "No saved reports match your criteria. "
 msgstr "Ingen treff på søket "
@@ -37359,7 +37378,7 @@ msgstr "Merk:"
 msgid "Note: "
 msgstr "Merk: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:463
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:468
 #, c-format
 msgid ""
 "Note: Be careful selecting when selecting columns. If your choice is too "
@@ -37409,7 +37428,7 @@ msgstr "Merk: Du bør ikkje endra følgjande standardverdiar"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:390
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:64
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:42
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:297
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:302
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:82
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:592
 #, c-format
@@ -37442,10 +37461,10 @@ msgstr "Note"
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:149
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:46
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:610
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:675
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:856
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:919
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:948
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:680
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:861
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:924
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:953
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:323
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:204
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:326
@@ -38758,7 +38777,7 @@ msgstr "Open"
 msgid "Open (%s)"
 msgstr "Opna: %s"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:817
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:822
 #, c-format
 msgid "Open Document Spreadsheet"
 msgstr ""
@@ -40277,7 +40296,7 @@ msgid "Pay"
 msgstr "Dag"
 
 #. INPUT type=submit name=paycollect
-#: intranet-tmpl/prog/en/modules/members/pay.tt:152
+#: intranet-tmpl/prog/en/modules/members/pay.tt:160
 #, fuzzy
 msgid "Pay amount"
 msgstr "Sum"
@@ -40320,7 +40339,7 @@ msgid "Pay fines for %s %s"
 msgstr "Koha &rsaquo; Lånarar &rsaquo; Gebyr for %s %s"
 
 #. INPUT type=submit name=payselected
-#: intranet-tmpl/prog/en/modules/members/pay.tt:154
+#: intranet-tmpl/prog/en/modules/members/pay.tt:162
 #, fuzzy
 msgid "Pay selected"
 msgstr "Felt sletta"
@@ -40936,14 +40955,14 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
 #, fuzzy, c-format
 msgid ""
 "Please check the log for further details. %sPlease select a cache expiry "
 "less than 30 days. %s %s %s "
 msgstr "Sjå feilloggen for meir informasjon. "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:392
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:397
 #, c-format
 msgid "Please choose a cache_expiry less than 30 days "
 msgstr ""
@@ -41237,7 +41256,7 @@ msgid "Please return to %s"
 msgstr "Send tilbake til %s"
 
 #. %1$s:  ELSIF ( error.queryerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:983
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
 #, c-format
 msgid ""
 "Please return to the &quot;Saved Reports&quot; screen and delete this report "
@@ -41834,8 +41853,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:104
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:381
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:39
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:77
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:79
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:85
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:87
 #, fuzzy, c-format
 msgid "Print"
 msgstr "Skriv ut"
@@ -42204,7 +42223,7 @@ msgstr "Kontaktmelding: "
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:478
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:480
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:505
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:300
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:305
 #, c-format
 msgid "Public"
 msgstr "Offentleg"
@@ -43453,7 +43472,7 @@ msgid "Replacement price:"
 msgstr "Erstatningspris:"
 
 #. %1$s:  ELSIF ( buildx ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:223
 #, fuzzy, c-format
 msgid "Report %s"
 msgstr "Rapportar"
@@ -43464,33 +43483,33 @@ msgstr "Rapportar"
 msgid "Report Plugins"
 msgstr "Rapportar"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1047
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1052
 #, fuzzy, c-format
 msgid "Report group:"
 msgstr "Lag rapport frå SQL"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:843
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:845
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
 #, fuzzy, c-format
 msgid "Report is public:"
 msgstr "Importer denne posten"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:293
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:298
 #, fuzzy, c-format
 msgid "Report name"
 msgstr "Rapportnamn"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:836
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:932
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:841
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
 #, fuzzy, c-format
 msgid "Report name:"
 msgstr "Rapportnamn:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:673
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:678
 #, fuzzy, c-format
 msgid "Report name: "
 msgstr "Rapportnamn: "
@@ -43500,7 +43519,7 @@ msgstr "Rapportnamn: "
 msgid "Report number: "
 msgstr "Rapportnamn: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1069
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1074
 #, fuzzy, c-format
 msgid "Report subgroup:"
 msgstr "Lag rapport frå SQL"
@@ -43544,7 +43563,7 @@ msgstr "Rapportar"
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:43
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:29
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:9
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:212
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:217
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:16
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:43
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:14
@@ -43554,7 +43573,7 @@ msgstr "Rapportar"
 msgid "Reports"
 msgstr "Rapportar"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:261
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:266
 #, c-format
 msgid "Reports Dictionary"
 msgstr "Ordliste for rapportar"
@@ -43933,7 +43952,7 @@ msgstr ""
 msgid "Return to tools"
 msgstr "Gå tilbake til lista over budsjettpostar"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:971
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:976
 #, fuzzy, c-format
 msgid "Return to: "
 msgstr "Dato for tilbakelevering "
@@ -43949,7 +43968,7 @@ msgstr "Tilbakeleveringar"
 msgid "Returns"
 msgstr "Tilbakeleveringar"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:69
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:77
 #, fuzzy, c-format
 msgid "Reverse"
 msgstr "Bokmeldingar"
@@ -44179,7 +44198,7 @@ msgstr "Sirkulasjon"
 msgid "Row"
 msgstr "Rad"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:786
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:791
 #, fuzzy, c-format
 msgid "Rows per page: "
 msgstr "Treff per side: "
@@ -44198,7 +44217,7 @@ msgstr "Reglar for lån som har gått over tida:"
 msgid "Rull (pianorull/orgelrull)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:343
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:348
 #, fuzzy, c-format
 msgid "Run"
 msgstr "Lever inn"
@@ -44219,12 +44238,12 @@ msgid "Run reports"
 msgstr "Køyr denne rapporten"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:767
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:772
 #, fuzzy
 msgid "Run the report"
 msgstr "Køyr denne rapporten"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:967
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:972
 #, fuzzy, c-format
 msgid "Run this report"
 msgstr "Køyr denne rapporten"
@@ -44332,7 +44351,7 @@ msgstr "SMS-nummer: %S"
 msgid "SQL"
 msgstr "SQL:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:867
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:872
 #, c-format
 msgid "SQL:"
 msgstr "SQL:"
@@ -44496,7 +44515,7 @@ msgstr "Laurdag"
 #: intranet-tmpl/prog/en/modules/members/member.tt:152
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:89
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:74
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:659
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:664
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:260
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:534
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:157
@@ -44528,8 +44547,8 @@ msgid "Save Record"
 msgstr "Lagre post"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:678
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:874
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:683
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:879
 msgid "Save Report"
 msgstr "Lagre rapport"
 
@@ -44563,8 +44582,8 @@ msgid "Save and view record"
 msgstr "Nei: Lagra som ny post"
 
 #. INPUT type=submit name=save_anyway
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:717
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:721
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:722
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:726
 #, fuzzy
 msgid "Save anyway"
 msgstr "Lagre"
@@ -44590,7 +44609,7 @@ msgid "Save changes"
 msgstr "Lagre endringar"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:894
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:899
 #, fuzzy
 msgid "Save compound"
 msgstr "Lagre samansetjing"
@@ -44615,7 +44634,7 @@ msgstr "Lagre abonnement"
 msgid "Save subscription history"
 msgstr "Lagra abonnementshistorikk"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:671
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:676
 #, fuzzy, c-format
 msgid "Save your custom report"
 msgstr "Lagre tilpassa rapport"
@@ -44626,26 +44645,26 @@ msgstr "Lagre tilpassa rapport"
 msgid "Saved preference"
 msgstr "Ny innstilling"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:905
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:910
 #, fuzzy, c-format
 msgid "Saved report results"
 msgstr "Lagra rapportresultat"
 
 #: intranet-tmpl/prog/en/includes/guided-reports-view.inc:3
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:217
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:270
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:222
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:223
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:275
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:996
 #, fuzzy, c-format
 msgid "Saved reports"
 msgstr "Lagra rapportar"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:969
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:974
 #, fuzzy, c-format
 msgid "Saved reports page"
 msgstr "Lagra rapportar"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:302
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:307
 #, fuzzy, c-format
 msgid "Saved results"
 msgstr "Lagra resultat"
@@ -44699,7 +44718,7 @@ msgstr "Vis i samanheng:"
 msgid "Scan indexes"
 msgstr "Søk i indeks"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:344
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:349
 #, fuzzy, c-format
 msgid "Schedule"
 msgstr "Oppgåveplanleggjar"
@@ -44709,13 +44728,13 @@ msgstr "Oppgåveplanleggjar"
 msgid "Schedule tasks to run"
 msgstr "Planlegg oppgåver for køyring"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:970
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:975
 #, fuzzy, c-format
 msgid "Schedule this report to run using the: "
 msgstr ""
 "Denne rapporten skal køyrast ved bruk av: <a1>Oppgåvaplanleggjaren</a> "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:970
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:975
 #, fuzzy, c-format
 msgid "Scheduler tool"
 msgstr "Oppgåveplanleggjar"
@@ -45301,9 +45320,9 @@ msgstr "00 Materialkategori"
 msgid "Secondary support material - visual projection"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:417
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:855
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:947
 #, fuzzy, c-format
 msgid "Seconds (default)"
 msgstr "Send brev"
@@ -45362,8 +45381,8 @@ msgstr "Vel og lukk"
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:54
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:452
 #: intranet-tmpl/prog/en/modules/members/guarantor_search.tt:109
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1050
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1072
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1055
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1077
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:189
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:76
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:230
@@ -46224,7 +46243,7 @@ msgstr "s- Forkorta"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:345
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:338
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:343
 #, c-format
 msgid "Show"
 msgstr "Vis"
@@ -47486,7 +47505,7 @@ msgstr ""
 
 #. %1$s:  IF (usecache) 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:398
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:403
 #, fuzzy, c-format
 msgid ""
 "Step 1 of 6: Choose a module to report on,%s Set cache expiry, %s and Choose "
@@ -47498,7 +47517,7 @@ msgstr "Steg 1 av 6: Vel ein modul å rapportera frå "
 msgid "Step 2 of 5: Choose the area"
 msgstr "Steg 1 av 6: Vel ein modul å rapportera frå"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:435
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:440
 #, fuzzy, c-format
 msgid "Step 2 of 6: Pick a report type"
 msgstr "Steg 2 av 6: Vel ein rapporttype"
@@ -47513,7 +47532,7 @@ msgstr "Steg 2: Område "
 msgid "Step 3 of 5: Choose columns"
 msgstr "Steg 3: Kolonner"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:462
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:467
 #, fuzzy, c-format
 msgid "Step 3 of 6: Select columns for display"
 msgstr "Steg 3 av 6: Vel kva kolonner som skal visast"
@@ -47528,7 +47547,7 @@ msgstr "Steg 3: Kolonner "
 msgid "Step 4 of 5: Specify a value"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:520
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:525
 #, fuzzy, c-format
 msgid "Step 4 of 6: Select criteria to limit on"
 msgstr "Steg 4 av 6: Vel kva kriterium du vil avgrensa til"
@@ -47543,7 +47562,7 @@ msgstr "Steg 4: Verdiar "
 msgid "Step 5 of 5: Confirm details"
 msgstr "Skrivaroppsett"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:584
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:589
 #, c-format
 msgid "Step 5 of 6: Pick which columns to total"
 msgstr "Steg 5 av 6: Vel kva kolonner du vil summera"
@@ -47553,7 +47572,7 @@ msgstr "Steg 5 av 6: Vel kva kolonner du vil summera"
 msgid "Step 5: Confirm definition"
 msgstr "Skrivaroppsett"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:615
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:620
 #, fuzzy, c-format
 msgid "Step 6 of 6: Choose how you want the report ordered"
 msgstr "Steg 6 av 6: Vel korleis du vil at rapporten skal sorterast"
@@ -47728,7 +47747,7 @@ msgstr "Klassifikasjon"
 msgid "Sub total "
 msgstr "Delsum "
 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:144
+#: intranet-tmpl/prog/en/modules/members/pay.tt:152
 #, fuzzy, c-format
 msgid "Sub total:"
 msgstr "Delsum"
@@ -47790,24 +47809,24 @@ msgstr "Delfelt"
 msgid "Subfields: "
 msgstr "Delfelt: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:296
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:301
 #, fuzzy, c-format
 msgid "Subgroup"
 msgstr "Grupper etter"
 
 #. INPUT type=text name=subgroup
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1097
 #, fuzzy
 msgid "Subgroup code"
 msgstr "Grupper etter"
 
 #. INPUT type=text name=subgroupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1098
 #, fuzzy
 msgid "Subgroup name"
 msgstr "Grupper etter"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:281
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:286
 #, fuzzy, c-format
 msgid "Subgroup:"
 msgstr "Grupper etter"
@@ -48344,8 +48363,8 @@ msgstr "Suites"
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:364
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:44
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:37
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:439
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:860
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:444
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:865
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:185
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:225
 #, fuzzy, c-format
@@ -48678,7 +48697,7 @@ msgstr ""
 msgid "TOTAL"
 msgstr "TOTAL"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:816
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:821
 #, fuzzy, c-format
 msgid "Tab separated text"
 msgstr "Tabulatorseparert tekst"
@@ -48722,8 +48741,8 @@ msgstr ""
 msgid "Tabs in use"
 msgstr "Faner i bruk"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:438
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:859
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:443
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:864
 #, fuzzy, c-format
 msgid "Tabular"
 msgstr "Tabellform:"
@@ -49379,8 +49398,8 @@ msgstr "Verdien til eigenskapen %s er allereide i bruk i ein annan lånarpost."
 msgid "The authority record you requested does not exist (%s)."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:699
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:742
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:747
 #, fuzzy, c-format
 msgid "The authorized value category ("
 msgstr "Godkjend verdikategori:"
@@ -49531,7 +49550,7 @@ msgstr "Strekkoden vart ikkje funnen "
 msgid "The following error occurred while importing the database structure:"
 msgstr "Følgjande feil oppstod under import av databasestrukturen:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:979
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
 #, c-format
 msgid "The following error was encountered:"
 msgstr ""
@@ -49923,7 +49942,7 @@ msgstr "Ingen reglar for samanfall er lagra"
 msgid "There are no saved patron attribute types."
 msgstr "Ingen typar lånareigenskapar er lagra"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:379
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:384
 #, fuzzy, c-format
 msgid "There are no saved reports. "
 msgstr "Det finst ingen forseinka bestilliingar. "
@@ -51252,7 +51271,7 @@ msgstr "Totalkostnad"
 msgid "Total current checkouts allowed"
 msgstr "Makstal på kor mykje som kan lånast samtidig"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:87
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:95
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:114
 #, c-format
 msgid "Total due"
@@ -51286,7 +51305,7 @@ msgid "Total must be a number"
 msgstr "Til hyllesignaturen:"
 
 #. %1$s:  unlimited_total 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:775
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:780
 #, c-format
 msgid "Total number of rows matching the (unlimited) query is %s."
 msgstr ""
@@ -51781,7 +51800,7 @@ msgstr "k - Todimensjonalt grafisk materiale som er ugjennomtrengjeleg for lys"
 #: intranet-tmpl/prog/en/modules/members/files.tt:32
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1218
 #: intranet-tmpl/prog/en/modules/members/notices.tt:48
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:294
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:299
 #, c-format
 msgid "Type"
 msgstr "Type"
@@ -51875,7 +51894,7 @@ msgstr "0 Materialtypar"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:210
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:92
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:857
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:862
 #, fuzzy, c-format
 msgid "Type:"
 msgstr "Type"
@@ -52814,12 +52833,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:343
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:110
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:228
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:798
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:803
 msgid "Update"
 msgstr "Oppdater"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:954
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:959
 #, fuzzy
 msgid "Update SQL"
 msgstr "Oppdater"
@@ -53105,7 +53124,7 @@ msgstr "Frå ein eksisterande post:"
 msgid "Use for iso2709 exports"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:982
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:987
 #, c-format
 msgid ""
 "Use of this keyword is not allowed in Koha reports due to security and data "
@@ -53118,7 +53137,7 @@ msgid "Use restrictions"
 msgstr "skjønnlitteratur"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:252
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:257
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:21
 #, fuzzy, c-format
 msgid "Use saved"
@@ -53134,7 +53153,7 @@ msgstr "Bruk «Stadfest» for å sletta. "
 msgid "Use the dictionary to define custom criteria for reporting."
 msgstr "Bruk ordlista for å oppgje eigne rapporteringskriterium."
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:238
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:243
 #, c-format
 msgid ""
 "Use the guided reports engine to create non standard reports. This feature "
@@ -53145,7 +53164,7 @@ msgstr ""
 "funksjonen er meint å vera ein middelveg mellom dei innebygde rapportane og "
 "det å skriva rapportar direkte i SQL sjølv."
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:262
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:267
 #, c-format
 msgid ""
 "Use the reports dictionary to define custom criteria to use in your reports"
@@ -53678,7 +53697,7 @@ msgid "View analytics"
 msgstr "Cor anglais"
 
 #: intranet-tmpl/prog/en/includes/guided-reports-view.inc:7
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:265
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:270
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:27
 #, fuzzy, c-format
 msgid "View dictionary"
@@ -53709,7 +53728,7 @@ msgstr ""
 msgid "View invoice"
 msgstr "Leverandørfaktura:"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:62
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:70
 #, fuzzy, c-format
 msgid "View item"
 msgstr "Vis"
@@ -54442,7 +54461,7 @@ msgid "Write off"
 msgstr "Avskriving"
 
 #. INPUT type=submit name=woall
-#: intranet-tmpl/prog/en/modules/members/pay.tt:153
+#: intranet-tmpl/prog/en/modules/members/pay.tt:161
 #, fuzzy
 msgid "Write off all"
 msgstr "Avskriving"
@@ -54558,13 +54577,13 @@ msgstr "Repeterbare fridagar"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:122
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:276
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:325
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:843
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:845
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:330
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
 #, fuzzy, c-format
 msgid "Yes"
 msgstr "Ja"
@@ -55067,7 +55086,7 @@ msgid ""
 "the phone templates."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:657
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:662
 #, c-format
 msgid "You will need to save the report before you can execute it"
 msgstr "Du må lagra rapporten før du kan køyra den"
@@ -55181,12 +55200,12 @@ msgstr "Rapporten er lagra"
 msgid "Your patron lists"
 msgstr "Topplister"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:963
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:968
 #, c-format
 msgid "Your report has been saved"
 msgstr "Rapporten er lagra"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:647
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:652
 #, c-format
 msgid "Your report will be generated with the following SQL statement."
 msgstr "Rapporten vert lagra med følgjande SQL-uttrykk."
@@ -56949,6 +56968,12 @@ msgstr ""
 msgid "abcdjpvxyz"
 msgstr ""
 
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:887
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:854
+#, c-format
+msgid "abcdn"
+msgstr ""
+
 #: intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl:109
 #: intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl:117
 #: intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl:125
@@ -57171,10 +57196,10 @@ msgstr "Strekkode"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:2167
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:759
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:901
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:898
 #: intranet-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:121
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:420
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:873
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:865
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:2402
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1645
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:1967
@@ -59507,11 +59532,9 @@ msgstr "Catechisme"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:2141
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:752
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:894
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MADS.xsl:368
 #: intranet-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:114
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:413
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:866
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:2378
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1623
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:1943
@@ -62209,8 +62232,8 @@ msgstr "1 Festskrift "
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MADS.xsl:332
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:440
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:447
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:882
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:889
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:874
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:881
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1478
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1485
 #, c-format
@@ -62485,8 +62508,8 @@ msgstr "rammeverkverdiar"
 msgid "from"
 msgstr "frå "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:536
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:543
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:541
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:548
 #, fuzzy, c-format
 msgid "from "
 msgstr "frå "
@@ -67648,8 +67671,8 @@ msgstr "eksemplarfelt"
 msgid "or any available"
 msgstr "tilgjengeleg"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1064
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1091
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1069
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1096
 #, fuzzy, c-format
 msgid "or create"
 msgstr "Lag"
@@ -71703,8 +71726,8 @@ msgid "title bands/intertitle rolls"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:113
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:537
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:544
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:542
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:549
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:24
 #, fuzzy, c-format
 msgid "to "
@@ -73449,34 +73472,3 @@ msgstr ""
 #, fuzzy, c-format
 msgid "﻿%s "
 msgstr "%s - "
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-

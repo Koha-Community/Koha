@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.2.0\n"
-"POT-Creation-Date: 2014-08-26 13:54-0300\n"
+"POT-Creation-Date: 2014-09-23 18:59-0300\n"
 "PO-Revision-Date: 2014-06-27 13:21+1300\n"
 "Last-Translator: chrisc <chrisc@catalyst.net.nz>\n"
 "Language-Team: Koha Community\n"
@@ -1227,22 +1227,31 @@ msgstr ""
 #. %9$s:  CASE 'M' 
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
-#. %12$s:  CASE 
-#. %13$s:  ACCOUNT_LINE.accounttype 
-#. %14$s: - END -
-#. %15$s: - IF ACCOUNT_LINE.description 
-#. %16$s:  ACCOUNT_LINE.description 
-#. %17$s:  END 
-#. %18$s:  IF ACCOUNT_LINE.title 
-#. %19$s:  ACCOUNT_LINE.title 
-#. %20$s:  END 
+#. %12$s:  CASE 'FU' 
+#. %13$s:  CASE 'Rent' 
+#. %14$s:  CASE 'FOR' 
+#. %15$s:  CASE 'LR' 
+#. %16$s:  CASE 'PAY' 
+#. %17$s:  CASE 'WO' 
+#. %18$s:  CASE 'C' 
+#. %19$s:  CASE 'CR' 
+#. %20$s:  CASE 
+#. %21$s:  ACCOUNT_LINE.accounttype 
+#. %22$s: - END -
+#. %23$s: - IF ACCOUNT_LINE.description 
+#. %24$s:  ACCOUNT_LINE.description 
+#. %25$s:  END 
+#. %26$s:  IF ACCOUNT_LINE.title 
+#. %27$s:  ACCOUNT_LINE.title 
+#. %28$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:51
 #, c-format
 msgid ""
-"%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
-"via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
-"%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s %s"
-"(%s)%s "
+"%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
+"(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
+"%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
+"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
+"%sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
 
 #. %1$s:  shelvesloo.count 
@@ -12620,7 +12629,7 @@ msgstr "You have already reserved this title."
 msgid "You have checked out too many items and can't check out any more. %s "
 msgstr "You have borrowed too many items and can't borrow any more. %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:76
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:84
 #, c-format
 msgid "You have no fines or charges"
 msgstr "You have no fines or charges"
@@ -13149,6 +13158,12 @@ msgstr "abcdgo"
 msgid "abcdjpvxyz"
 msgstr "abcdjpvxyz"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1202
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1078
+#, fuzzy, c-format
+msgid "abcdn"
+msgstr "abcd"
+
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:403
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:417
 #, c-format
@@ -13224,8 +13239,8 @@ msgstr "acdef"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:122
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:475
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1216
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1097
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1213
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1089
 #, c-format
 msgid "acdeq"
 msgstr "acdeq"
@@ -13534,8 +13549,6 @@ msgstr "catalogue"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:115
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:468
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1209
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1090
 #, c-format
 msgid "cdn"
 msgstr "cdn"
@@ -13886,8 +13899,8 @@ msgstr "festschrift "
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:609
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:495
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:502
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1106
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1113
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1098
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1105
 #, c-format
 msgid "fghkdlmor"
 msgstr "fghkdlmor"

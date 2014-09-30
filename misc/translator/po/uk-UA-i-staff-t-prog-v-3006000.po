@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: uk-UA-i-staff-t-prog-v-3002000\n"
-"POT-Creation-Date: 2014-08-26 13:48-0300\n"
-"PO-Revision-Date: 2014-08-26 09:24+0000\n"
+"POT-Creation-Date: 2014-09-23 18:54-0300\n"
+"PO-Revision-Date: 2014-09-11 06:00+0000\n"
 "Last-Translator: Serhij <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -21,7 +21,7 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.5.0\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1409045047.0\n"
+"X-POOTLE-MTIME: 1410415258.0\n"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils-MODS31.xsl:12
 #, c-format
@@ -157,13 +157,14 @@ msgstr ""
 #. %18$s:  END 
 #. %19$s:  END 
 #: intranet-tmpl/prog/en/includes/authorities-search-results.inc:129
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %sHebrew "
 "%sArabic %sGreek (modern) %sGreek (to 1453) %s%s %s %s "
 msgstr ""
-"%s %s %s %s %s %s %s %s %%]англійською %s %%]французькою %s %%]італійською "
-"%s %%]німецькою %s %%]іспанською %s%s %s %s "
+"%s %s %s %s %s %s %s англійська %s французька %s італійська %s німецька %s "
+"іспанська %s іврит %s арабська %s грецька (сучасна) %s грецька (до 1453) %s"
+"%s %s %s "
 
 #. %1$s:  INCLUDE 'header.inc' 
 #. %2$s:  INCLUDE 'serials-search.inc' 
@@ -514,7 +515,7 @@ msgstr "%s %s %s %s (%s)"
 #. %2$s:  savedreport.report_name 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:311
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:316
 #, fuzzy, c-format
 msgid "%s %s %s [ no name ] %s "
 msgstr "%s %s %s %s (%s)"
@@ -1106,7 +1107,7 @@ msgstr "резервування, що очікують та отримання 
 
 #. %1$s:  borrower.firstname 
 #. %2$s:  borrower.surname 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:159
+#: intranet-tmpl/prog/en/modules/members/pay.tt:167
 #, c-format
 msgid "%s %s has no outstanding fines."
 msgstr "%s %s не має несплачених штрафів."
@@ -1181,7 +1182,7 @@ msgstr "%s %s %s %s (%s)"
 #. %12$s:  END 
 #. %13$s:  END 
 #: intranet-tmpl/prog/en/includes/authorities-search-results.inc:36
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s(Earlier heading) %s(Later heading) %s(Acronym) %s(Musical composition) "
 "%s(Broader heading) %s(Narrower heading) %s(Immediate parent body) %s%s(%s) "
@@ -1189,7 +1190,7 @@ msgid ""
 msgstr ""
 "%s %s(Колишній заголовок) %s(Подальший заголовок) %s(Акронім) %s(Музична "
 "композиція) %s(Більш широкий термін) %s(Більш вузький термін) %s"
-"(Безпосередній вищестоящий орган суб’єкта) %s%s(%s)%s %s"
+"(Безпосередній вищестоящий орган суб’єкта) %s%s(%s)%s %s "
 
 #. %1$s:  listprice 
 #. %2$s:  IF (listincgst == 1) 
@@ -1381,22 +1382,31 @@ msgstr "%s %s не застосовується"
 #. %9$s:  CASE 'M' 
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
-#. %12$s:  CASE 
-#. %13$s:  line.accounttype 
-#. %14$s: - END -
-#. %15$s: - IF line.description 
-#. %16$s:  line.description 
-#. %17$s:  END 
-#. %18$s:  IF line.title 
-#. %19$s:  line.title |html_entity 
-#. %20$s:  END 
+#. %12$s:  CASE 'FU' 
+#. %13$s:  CASE 'Rent' 
+#. %14$s:  CASE 'FOR' 
+#. %15$s:  CASE 'LR' 
+#. %16$s:  CASE 'PAY' 
+#. %17$s:  CASE 'WO' 
+#. %18$s:  CASE 'C' 
+#. %19$s:  CASE 'CR' 
+#. %20$s:  CASE 
+#. %21$s:  line.accounttype 
+#. %22$s: - END -
+#. %23$s: - IF line.description 
+#. %24$s:  line.description 
+#. %25$s:  END 
+#. %26$s:  IF line.title 
+#. %27$s:  line.title |html_entity 
+#. %28$s:  END 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:116
 #, c-format
 msgid ""
-"%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
-"via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
-"%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s %s"
-"(%s)%s "
+"%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
+"(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
+"%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
+"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
+"%sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
 
 #. %1$s:  SWITCH account.accounttype 
@@ -1410,20 +1420,29 @@ msgstr ""
 #. %9$s:  CASE 'M' 
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
-#. %12$s:  CASE 
-#. %13$s:  account.accounttype 
-#. %14$s: - END -
-#. %15$s: - IF account.description 
-#. %16$s:  account.description 
-#. %17$s:  END 
-#. %18$s:  IF ( account.itemnumber ) 
+#. %12$s:  CASE 'FU' 
+#. %13$s:  CASE 'Rent' 
+#. %14$s:  CASE 'FOR' 
+#. %15$s:  CASE 'LR' 
+#. %16$s:  CASE 'PAY' 
+#. %17$s:  CASE 'WO' 
+#. %18$s:  CASE 'C' 
+#. %19$s:  CASE 'CR' 
+#. %20$s:  CASE 
+#. %21$s:  account.accounttype 
+#. %22$s: - END -
+#. %23$s: - IF account.description 
+#. %24$s:  account.description 
+#. %25$s:  END 
+#. %26$s:  IF ( account.itemnumber ) 
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:47
 #, c-format
 msgid ""
-"%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
-"via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
-"%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s "
-"&nbsp;%s"
+"%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
+"(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
+"%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
+"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
+"%sCredit %s%s %s %s, %s%s &nbsp;%s"
 msgstr ""
 
 #. %1$s:  IF ( suggestion.suggestiontypelabel ) 
@@ -1473,7 +1492,7 @@ msgstr "%s %s Вказівки на підполя ознаки „%s“ %s %s %
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:979
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
 #, fuzzy, c-format
 msgid "%s %sThis report contains the SQL keyword "
 msgstr "Це повідомлення містить SQL ключове слово %s."
@@ -2595,6 +2614,8 @@ msgid ""
 "%s Number of records provided for merging: %s. Currently only 2 records can "
 "be merged at a time. %s %s %s "
 msgstr ""
+"%s Кількість записів, передбачених злиття: %s. На даний час лише 2 записи "
+"можуть бути об’єднані за один раз. %s %s %s "
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1033
@@ -3244,6 +3265,9 @@ msgid ""
 "'seefrom' or 'seealso', controls the label for the entry type: authid: if it "
 "is a linked authority, its authid %%] %s %s %s %s %s "
 msgstr ""
+"%s [%%# Параметри: heading: сам заголовок linkType: на даний час „seefrom“ "
+"або „seealso“, контролює мітку для входження type: authid: якщо це є "
+"пов’язане авторитетне джерело, то це є authid %%] %s %s %s %s %s "
 
 #. %1$s:  USE AuthorisedValues 
 #. %2$s:  SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) 
@@ -3257,6 +3281,11 @@ msgid ""
 "input (generated if the authorised value category does not exist). %%] %s "
 "[%% DEFAULT class = '' size = 20 %%] %s "
 msgstr ""
+"%s [%%# Параметри: name: назва вибираного елементаcategory: категорія "
+"авторитетного значенняdefault: типове авторитетне значення для вибору class: "
+"CSS-класs вибираного елемента size: розмір, що використовується для вводу "
+"(генерується якщо категорія авторитетного значення не існує). %%] %s [%% "
+"DEFAULT class = '' size = 20 %%] %s "
 
 #. %1$s:  ELSIF ( rule.hardduedateafter ) 
 #. %2$s:  rule.hardduedate 
@@ -4555,7 +4584,7 @@ msgstr "Структура за умовчанням"
 #. %2$s:  ELSE 
 #. %3$s:  value.availablevalues |html 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:554
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:559
 #, c-format
 msgid "%sDefault%s%s%s"
 msgstr "%sПо умовчанню%s%s%s"
@@ -5514,7 +5543,7 @@ msgstr "&lt;&lt; Попередні"
 msgid "&lt;a href=\"[856u]\"&gt;open site&lt;/a&gt;"
 msgstr "&lt;a href=&quot;[856u]&quot;&gt;відкрити сайт&lt;/a&gt; "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:885
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:890
 #, fuzzy, c-format
 msgid "&nbsp; Sub report:"
 msgstr "звітів"
@@ -6045,7 +6074,7 @@ msgstr "&rsaquo; Додавання правила відповідності з
 #. %1$s:  IF ( saved1 ) 
 #. %2$s:  ELSIF ( create ) 
 #. %3$s:  ELSIF ( showsql ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:213
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
 #, c-format
 msgid "&rsaquo; %sSaved reports %sCreate from SQL %s"
 msgstr "&rsaquo; %s Збережені звіти %s Створити з SQL %s"
@@ -6618,15 +6647,15 @@ msgid "&rsaquo; Manual credit"
 msgstr "&rsaquo; Кредит вручну"
 
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:17
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; Manual invoice"
-msgstr "&rsaquo; Ручний рахунок"
+msgstr "&rsaquo; Рахунок вручну"
 
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:49
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:45
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; Merging records"
-msgstr "Об’єднуємо записи"
+msgstr "&rsaquo; Об’єднання записів"
 
 #. %1$s:  spec 
 #. %2$s:  ELSE 
@@ -6934,7 +6963,7 @@ msgid "&rsaquo; Rotating collections"
 msgstr "Почергово переміщувані зібрання"
 
 #. %1$s:  ELSIF ( execute ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:217
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:222
 #, c-format
 msgid "&rsaquo; SQL view %s"
 msgstr "&rsaquo; Перегляд SQL %s"
@@ -7073,7 +7102,7 @@ msgstr "Статистика відвідувачів"
 #. %7$s:  ELSIF ( build6 ) 
 #. %8$s:  END 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:219
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:224
 #, c-format
 msgid ""
 "&rsaquo; Step %s of 6: %sChoose a module %sPick a report type %sSelect "
@@ -7465,8 +7494,8 @@ msgid "(Indonesian)"
 msgstr "(індонезійська мова)"
 
 # Нічого (?)
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1052
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1074
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1057
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1079
 #, c-format
 msgid "(None)"
 msgstr "(немає)"
@@ -7775,8 +7804,8 @@ msgstr "%s - %s"
 msgid ") renewed for %s %s ( "
 msgstr "&rsaquo; Оплатити штрафи — %s %s"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:699
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:742
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:747
 #, fuzzy, c-format
 msgid ") you selected does not exist. "
 msgstr "Запис, який Ви запросили, не існує (%s)."
@@ -8454,7 +8483,7 @@ msgstr "/cgi-bin/koha/catalogue/search.pl?q=Host-item:"
 #: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:231
 #: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:268
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:503
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:934
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:926
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl:173
 #, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=an:"
@@ -8474,7 +8503,7 @@ msgstr "/cgi-bin/koha/catalogue/search.pl?q=au:"
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:347
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:362
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:384
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:937
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:929
 #, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=au:\""
 msgstr "/cgi-bin/koha/catalogue/search.pl?q=au:\""
@@ -10406,15 +10435,15 @@ msgstr ""
 "поддерживается вашим браузером.] "
 
 #. INPUT type=button name=back
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:446
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:505
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:577
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:608
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:451
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:510
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:582
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:613
 msgid "<< Back"
 msgstr "&lt;&lt; Назад"
 
 #. INPUT type=button name=delete
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:494
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:499
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:152
 msgid "<< Delete"
 msgstr "&lt;&lt; Вилучити"
@@ -10923,7 +10952,7 @@ msgstr "Прийнято коли: "
 msgid "Accepted payment (%s) from "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:969
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:974
 #, c-format
 msgid "Access this report from the: "
 msgstr "Доступитися до звіту зі: "
@@ -11225,7 +11254,7 @@ msgstr "Дії"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:388
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:142
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:334
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:339
 #, c-format
 msgid "Actions "
 msgstr "Дії "
@@ -11309,7 +11338,7 @@ msgstr "Адам Тік {Adam Thick}"
 #: intranet-tmpl/prog/en/modules/acqui/aqbasketuser_search.tt:69
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:409
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:178
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:493
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:498
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:152
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:98
 #: intranet-tmpl/prog/en/modules/labels/result.tt:96
@@ -11835,7 +11864,7 @@ msgstr "Додаткова подяка…"
 msgid "Additional attributes and identifiers"
 msgstr "Додаткові атрибути та ідентифікатори"
 
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:929
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:921
 #, fuzzy, c-format
 msgid "Additional author(s): "
 msgstr "Додаткові автори:"
@@ -12182,8 +12211,9 @@ msgstr "Олександра Хорсман {Alexandra Horsman}"
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:90
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:99
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:109
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:274
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:283
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:28
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:279
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:288
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:209
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:41
 #, c-format
@@ -12934,7 +12964,7 @@ msgstr "Застосувати фільтр"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:266
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1015
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1020
 msgid "Apply filter"
 msgstr "Застосувати фільтр"
 
@@ -13556,7 +13586,7 @@ msgstr "Авторитетне джерело: "
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:74
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:32
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:77
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:298
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:303
 #: intranet-tmpl/prog/en/modules/labels/search.tt:29
 #: intranet-tmpl/prog/en/modules/labels/search.tt:30
 #, c-format
@@ -13600,7 +13630,7 @@ msgstr "Автор: "
 msgid "Author(s)"
 msgstr "Автор: "
 
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:928
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:920
 #, fuzzy, c-format
 msgid "Author(s): "
 msgstr "Автор: "
@@ -13630,7 +13660,7 @@ msgstr "%s %s %s%s %s — %s%s %s — %s%s %s, %s%s %s, %s%s %s, %s%s "
 #: intranet-tmpl/prog/en/includes/suggestions-add-search.inc:9
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:150
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:312
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1011
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1016
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:186
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:309
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:636
@@ -15340,23 +15370,23 @@ msgstr "Кошториси"
 msgid "Budgets administration"
 msgstr "Керування кошторисами"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:430
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:435
 #, c-format
 msgid "Build A Report"
 msgstr "Побудова звіту"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:367
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:372
 msgid "Build a new report"
 msgstr "Побудова нового звіту"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:381
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:386
 #, c-format
 msgid "Build a new report?"
 msgstr "Сформувати новий звіт?"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:219
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:395
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:224
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:400
 #, c-format
 msgid "Build a report"
 msgstr "Побудова звіту"
@@ -15371,13 +15401,13 @@ msgstr "Створення та керування партіями наклей
 msgid "Build and manage batches of patron cards"
 msgstr "Створення та керування партіями квитків відвідуваів"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:242
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:247
 #, c-format
 msgid "Build and run reports"
 msgstr "Побудова та виконання звітів"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:246
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:251
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:20
 #, c-format
 msgid "Build new"
@@ -15578,14 +15608,14 @@ msgstr "Розділювач для CSV-файлу: "
 msgid "CX encoded"
 msgstr "Дані збережено"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:301
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:306
 #, c-format
 msgid "Cache expiry (seconds)"
 msgstr "Актуальність кешу (секунди)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:415
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:853
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:945
 #, c-format
 msgid "Cache expiry:"
 msgstr "Актуальність кешу: "
@@ -15982,9 +16012,9 @@ msgstr "Неможливо зберегти цей запис, бо наступ
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:193
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:221
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:51
-#: intranet-tmpl/prog/en/modules/members/pay.tt:155
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:874
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:954
+#: intranet-tmpl/prog/en/modules/members/pay.tt:163
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:879
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:959
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:92
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:535
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:93
@@ -16024,7 +16054,7 @@ msgid "Cancel and return to order"
 msgstr "Ігнорувати та повернутися до переміщень: "
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:374
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:379
 msgid "Cancel filter"
 msgstr "Скасування фільтрації"
 
@@ -16059,9 +16089,8 @@ msgstr "Скасувати позначені резервування"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/authorities_js.inc:1
-#, fuzzy
 msgid "Cancel merge"
-msgstr "Скасування фільтрації"
+msgstr "Скасувати злиття"
 
 #. INPUT type=button
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:819
@@ -17528,8 +17557,8 @@ msgstr ""
 msgid "Choose your library:"
 msgstr "Виберіть Вашу бібліотеку: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:399
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:436
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:404
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:441
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:176
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:183
 #, c-format
@@ -18092,9 +18121,9 @@ msgstr "Клацніть по кнопці «Далі», щоб продовжи
 
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:77
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:71
-#, fuzzy, c-format
+#, c-format
 msgid "Click here to see the merged record."
-msgstr "Створення профілю друкарки"
+msgstr "Натисніть тут, щоб побачити об’єднаний запис."
 
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:185
 #, c-format
@@ -18442,8 +18471,8 @@ msgstr "Альтернативний автор-особа"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:167
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:398
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:62
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1065
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1070
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1097
 #, c-format
 msgid "Code"
 msgstr "Код"
@@ -18694,7 +18723,7 @@ msgstr "Прибуває з %s"
 msgid "Comma (,)"
 msgstr "кома (,)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:815
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:820
 #, c-format
 msgid "Comma separated text"
 msgstr "Текст, відокремлений комами"
@@ -18981,7 +19010,7 @@ msgstr "Налаштування "
 msgid "Confirm"
 msgstr "Підтвердити"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:646
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:651
 #, fuzzy, c-format
 msgid "Confirm custom report"
 msgstr "Підтвердіть запис"
@@ -19689,6 +19718,8 @@ msgid ""
 "Could not read the history.txt file. Please make sure &lt;docdir&gt; is "
 "correctly defined in koha-conf.xml. "
 msgstr ""
+"Не вдалося прочитати файл history.txt.  Будь ласка, переконайтеся, що тека "
+"&lt;docdir&gt; коректно означена у файлі koha-conf.xml. "
 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:406
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:38
@@ -19945,8 +19976,8 @@ msgid "Create printable patron cards"
 msgstr "Створення придатних для видруку квитків відвідувачів"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:258
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:834
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:263
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:839
 #, c-format
 msgid "Create report from SQL"
 msgstr "Створюємо звіт з коду SQL"
@@ -19988,7 +20019,7 @@ msgstr "Створено"
 #: intranet-tmpl/prog/en/columns.def:116
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:208
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:853
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:299
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:304
 #, c-format
 msgid "Creation date"
 msgstr "Дата створення"
@@ -20810,7 +20841,7 @@ msgstr "Дата/час"
 msgid "Date/time"
 msgstr "Дата/час"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1007
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1012
 #, c-format
 msgid "Date:"
 msgstr "Дата:"
@@ -20914,9 +20945,9 @@ msgid "Day: "
 msgstr "День: "
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:243
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:415
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:853
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:945
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:420
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:858
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:950
 #, c-format
 msgid "Days"
 msgstr "дні"
@@ -21341,7 +21372,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/files.tt:46
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:264
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:439
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:351
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:136
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:155
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:179
@@ -21546,7 +21577,7 @@ msgstr "Заготовлюємо записи у сховище"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:250
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:356
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:361
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:579
 #, c-format
 msgid "Delete selected"
@@ -21656,7 +21687,7 @@ msgid "Delete this printer"
 msgstr "Вилучити цю друкарку"
 
 #. A
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:351
 msgid "Delete this saved report"
 msgstr "Вилучити цей збережений звіт"
 
@@ -21965,9 +21996,9 @@ msgid "Destination library: "
 msgstr "Бібліотека-призначення: "
 
 #: intranet-tmpl/prog/en/includes/merge-record.inc:61
-#, fuzzy, c-format
+#, c-format
 msgid "Destination record"
-msgstr "Бібліотека-призначення: "
+msgstr "Цільовий запис"
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:9
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:365
@@ -22081,7 +22112,7 @@ msgstr "Словник"
 msgid "Dictionary "
 msgstr " Словник "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:567
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:572
 #, fuzzy, c-format
 msgid "Dictionary definitions"
 msgstr "Визначення"
@@ -22529,7 +22560,7 @@ msgid "Doug Dearden"
 msgstr "Дуг Дирда {Doug Dearden}"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:821
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:826
 msgid "Download"
 msgstr "Звантаження"
 
@@ -22616,7 +22647,7 @@ msgstr "Звантажити запис"
 msgid "Download selected claims"
 msgstr "Вилучити позначене"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:813
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:818
 #, c-format
 msgid "Download the report: "
 msgstr "Звантажити звіт: "
@@ -22694,7 +22725,7 @@ msgstr "Дункан Тайлер {Duncan Tyler}"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:118
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:26
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:341
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
 #, c-format
 msgid "Duplicate"
 msgstr "Здублювати"
@@ -22727,7 +22758,7 @@ msgid "Duplicate record suspected"
 msgstr "Здублювати"
 
 #. A
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:341
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
 msgid "Duplicate this saved report"
 msgstr "Здублювати цей збережений звіт"
 
@@ -22943,7 +22974,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/member.tt:205
 #: intranet-tmpl/prog/en/modules/members/member.tt:208
 #: intranet-tmpl/prog/en/modules/members/member.tt:210
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:340
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:345
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:154
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:178
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:143
@@ -22989,13 +23020,13 @@ msgid "Edit Items"
 msgstr "Редагувати примірники"
 
 #. INPUT type=button name=back
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:726
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:747
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:731
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:752
 #, fuzzy
 msgid "Edit SQL"
 msgstr "Редагувати "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:930
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
 #, c-format
 msgid "Edit SQL report"
 msgstr "Редагуємо звіт з коду SQL"
@@ -23589,7 +23620,7 @@ msgid "Enter item barcode: "
 msgstr "Вводимо штрих-код одиниці: "
 
 #. %1$s:  name 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:750
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:755
 #, c-format
 msgid "Enter parameters for report %s:"
 msgstr "Введіть параметри для звіту „%s“: "
@@ -23847,8 +23878,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  name 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:696
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:739
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:701
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:744
 #, fuzzy, c-format
 msgid "Errors found when processing parameters for report: %s"
 msgstr "Введіть параметри для звіту „%s“: "
@@ -24872,7 +24903,7 @@ msgstr "діафільм"
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:105
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:155
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:111
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1005
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1010
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:122
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:73
 #, c-format
@@ -24989,7 +25020,7 @@ msgstr "Штрафи для повернених елементів пробач
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:149
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:640
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:645
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:189
 msgid "Finish"
 msgstr "Завершити"
@@ -25491,9 +25522,9 @@ msgid "Framework:"
 msgstr "Структура: "
 
 #: intranet-tmpl/prog/en/modules/about.tt:554
-#, fuzzy, c-format
+#, c-format
 msgid "Fran&ccedil;ais (French) "
-msgstr "Fran&ccedil;ais (французька мова)"
+msgstr "Fran&ccedil;ais (французька мова) "
 
 #: intranet-tmpl/prog/en/modules/about.tt:352
 #, c-format
@@ -25585,7 +25616,7 @@ msgstr "Фрідолін Сомерс {Fridolin Somers} (координатор 
 #: intranet-tmpl/prog/en/modules/about.tt:393
 #, c-format
 msgid "Fridolyn Somers"
-msgstr ""
+msgstr "Фрідолін Сомерс {Fridolin Somers}"
 
 #: intranet-tmpl/prog/en/modules/about.tt:298
 #, c-format
@@ -26347,7 +26378,7 @@ msgid "Groove width:"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:39
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:295
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:300
 #, c-format
 msgid "Group"
 msgstr "Група"
@@ -26362,12 +26393,12 @@ msgstr ""
 "значень „PA_CLASS“)"
 
 #. INPUT type=text name=group
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1065
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1070
 msgid "Group code"
 msgstr "Код групи"
 
 #. INPUT type=text name=groupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1071
 msgid "Group name"
 msgstr "Назва групи"
 
@@ -26421,14 +26452,14 @@ msgstr "Малювати напрямні рамки: "
 
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:1
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:3
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:237
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:971
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:242
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:976
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:17
 #, c-format
 msgid "Guided reports"
 msgstr "Керовані звіти"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:213
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:19
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:11
 #, c-format
@@ -27232,7 +27263,7 @@ msgstr "Колір"
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:43
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:29
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:9
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:211
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:216
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:9
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:43
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:14
@@ -27382,9 +27413,9 @@ msgid "Hour"
 msgstr "години"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:244
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:414
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:852
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:944
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:419
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:857
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:949
 #, c-format
 msgid "Hours"
 msgstr "години"
@@ -27455,7 +27486,7 @@ msgid "IBERMARC"
 msgstr "IBERMARC"
 
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:217
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:292
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:297
 #, c-format
 msgid "ID"
 msgstr "Ідентифікатор"
@@ -29598,7 +29629,7 @@ msgstr "Хуан Ромей Сієра {Juan Romay Sieira}"
 #: intranet-tmpl/prog/en/modules/about.tt:386
 #, c-format
 msgid "Juhani Seppälä"
-msgstr ""
+msgstr "Юхані Сеппала {Juhani Seppälä}"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/calendar.inc:1
@@ -29789,7 +29820,7 @@ msgstr "Пошук за ключовим словом"
 msgid "Keyword to MARC mapping"
 msgstr "Відображення ключових слів у МАРК-поля"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1012
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1017
 #, c-format
 msgid "Keyword:"
 msgstr "Ключове слово: "
@@ -32168,7 +32199,7 @@ msgstr "проекту Koha Bugzilla"
 #: intranet-tmpl/prog/en/modules/about.tt:240
 #, c-format
 msgid "Koha SAB CINECA"
-msgstr ""
+msgstr "Koha SAB CINECA"
 
 #: intranet-tmpl/prog/en/modules/about.tt:30
 #, c-format
@@ -32322,9 +32353,9 @@ msgid "KohaAloha, New Zealand"
 msgstr "KohaAloha, Нова Зеландія"
 
 #: intranet-tmpl/prog/en/modules/about.tt:554
-#, fuzzy, c-format
+#, c-format
 msgid "Kohala"
-msgstr "Коха"
+msgstr "Kohala"
 
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:85
 #, fuzzy, c-format
@@ -34470,9 +34501,9 @@ msgid "Manual history: "
 msgstr "Історія вручну: "
 
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:43
-#, fuzzy, c-format
+#, c-format
 msgid "Manual invoice"
-msgstr "Ручний рахунок"
+msgstr "Рахунок вручну"
 
 #: intranet-tmpl/prog/en/modules/serials/serials-recieve.tt:218
 #, fuzzy, c-format
@@ -34664,7 +34695,7 @@ msgstr "Джеймс Мейсон {Mason James}"
 msgid "Masses"
 msgstr "бас"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:880
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:885
 #, fuzzy, c-format
 msgid "Master: "
 msgstr "Бер."
@@ -34824,8 +34855,8 @@ msgstr "Тип матеріалу"
 msgid "Mathieu Saby"
 msgstr "Матьє Сабі {Mathieu Saby}"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:440
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:861
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:445
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:866
 #, fuzzy, c-format
 msgid "Matrix"
 msgstr "Бер."
@@ -34944,7 +34975,7 @@ msgstr "Нова категорія"
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:192
 #, c-format
 msgid "Merge"
-msgstr ""
+msgstr "Злити"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:167
 #, fuzzy, c-format
@@ -34953,9 +34984,9 @@ msgstr "Накладна постачальника"
 
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:86
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:80
-#, fuzzy, c-format
+#, c-format
 msgid "Merge reference"
-msgstr "Новий параметр"
+msgstr "Основа для злиття"
 
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:294
 #, c-format
@@ -34980,9 +35011,8 @@ msgstr "Об’єднуємо записи"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/authorities_js.inc:1
-#, fuzzy
 msgid "Merging with authority: "
-msgstr "Нове авторитетне джерело "
+msgstr "Злити з авторитетним джерелом:  "
 
 #: intranet-tmpl/prog/en/modules/about.tt:336
 #, c-format
@@ -35246,9 +35276,9 @@ msgstr "хвилини"
 msgid "Minute (complete with 0):"
 msgstr "Хвилини (2 цифрових символи, що вирівнюються праворуч нулями): "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:413
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:851
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:943
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:418
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:856
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:948
 #, c-format
 msgid "Minutes"
 msgstr "хвилини"
@@ -36156,8 +36186,8 @@ msgstr "Науель Анджелінетті {Nahuel Angelinetti}"
 #: intranet-tmpl/prog/en/modules/members/guarantor_search.tt:80
 #: intranet-tmpl/prog/en/modules/members/member.tt:166
 #: intranet-tmpl/prog/en/modules/reports/reservereport.tt:18
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1071
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1098
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:56
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:78
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:64
@@ -36789,11 +36819,11 @@ msgstr "Далі &gt;&gt;"
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:299
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:611
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:107
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:422
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:447
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:506
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:578
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:609
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:427
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:452
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:511
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:583
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:614
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:44
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:51
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:29
@@ -36878,7 +36908,7 @@ msgstr "Nimbus"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:120
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:123
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:277
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:327
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:332
 #, c-format
 msgid "No"
 msgstr "ні"
@@ -36889,12 +36919,12 @@ msgstr "ні"
 msgid "No "
 msgstr "ні "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:843
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:845
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
 #, c-format
 msgid "No (default)"
 msgstr "ні (типово)"
@@ -37145,7 +37175,7 @@ msgid "No claims notice defined. "
 msgstr "Не знайдено жодної одиниці"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1024
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1029
 msgid "No columns selected!"
 msgstr "Не вибрано жодного стовпчика!"
 
@@ -37640,7 +37670,7 @@ msgstr ""
 "Зразкові дані та параметри налаштування не доступні для Вашої мови. "
 "Використовуватимуться зразки, що йдуть з англійською мовою (en)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:368
 #, c-format
 msgid "No saved reports match your criteria. "
 msgstr "Немає збережених звітів, що відповідають Вашим критеріям. "
@@ -38203,7 +38233,7 @@ msgstr "Примітка: "
 msgid "Note: "
 msgstr "Примітка: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:463
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:468
 #, c-format
 msgid ""
 "Note: Be careful selecting when selecting columns. If your choice is too "
@@ -38257,7 +38287,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:390
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:64
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:42
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:297
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:302
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:82
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:592
 #, c-format
@@ -38290,10 +38320,10 @@ msgstr "Нотатки/коментарі"
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:149
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:46
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:610
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:675
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:856
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:919
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:948
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:680
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:861
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:924
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:953
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:323
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:204
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:326
@@ -39610,7 +39640,7 @@ msgstr "Відкрита"
 msgid "Open (%s)"
 msgstr "Електронний каталог (%s)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:817
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:822
 #, fuzzy, c-format
 msgid "Open Document Spreadsheet"
 msgstr "експорт у формат електронної таблиці OpenDocument"
@@ -41136,7 +41166,7 @@ msgid "Pay"
 msgstr "День"
 
 #. INPUT type=submit name=paycollect
-#: intranet-tmpl/prog/en/modules/members/pay.tt:152
+#: intranet-tmpl/prog/en/modules/members/pay.tt:160
 #, fuzzy
 msgid "Pay amount"
 msgstr "Тип: "
@@ -41179,7 +41209,7 @@ msgid "Pay fines for %s %s"
 msgstr "&rsaquo; Оплатити штрафи — %s %s"
 
 #. INPUT type=submit name=payselected
-#: intranet-tmpl/prog/en/modules/members/pay.tt:154
+#: intranet-tmpl/prog/en/modules/members/pay.tt:162
 #, fuzzy
 msgid "Pay selected"
 msgstr "Вибір"
@@ -41798,7 +41828,7 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
 #, fuzzy, c-format
 msgid ""
 "Please check the log for further details. %sPlease select a cache expiry "
@@ -41807,7 +41837,7 @@ msgstr ""
 "Будь ласка, перегляньте протокол реєстрації помилок для більш детальнішої "
 "інформації."
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:392
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:397
 #, c-format
 msgid "Please choose a cache_expiry less than 30 days "
 msgstr "Будь ласка, виберіть термін актуальності кешу меншим за 30 днів "
@@ -41853,6 +41883,8 @@ msgid ""
 "Please choose which record will be the reference for the merge. The record "
 "chosen as reference will be kept, and the other will be deleted."
 msgstr ""
+"Будь ласка, виберіть, який запис буде базовим для злиття.  Запис обраний як "
+"базовий буде збережений, а інший буде вилучено."
 
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:62
 #, c-format
@@ -42040,6 +42072,11 @@ msgid ""
 "account, create a library, a patron category 'Staff' and add a new patron. "
 "Then give this patron permissions from 'More' in the toolbar."
 msgstr ""
+"Будь ласка, увійдіть натомість із звичайного облікового запису персоналу "
+"бібліотеки.  Щоб створити обліковий запис персоналу бібліотеки, створіть "
+"спершу бібліотеку, категорію відвідувачів „персонал бібліотеки“ та додайте "
+"нового відвідувача. Опісля надайте цьому відвідувачу привілеї через меню "
+"„Більше“ на панелі інструментів."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
@@ -42102,7 +42139,7 @@ msgid "Please return to %s"
 msgstr "Будь ласка, поверніться до %s"
 
 #. %1$s:  ELSIF ( error.queryerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:983
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
 #, fuzzy, c-format
 msgid ""
 "Please return to the &quot;Saved Reports&quot; screen and delete this report "
@@ -42471,9 +42508,9 @@ msgid "Preference"
 msgstr "Параметр"
 
 #: intranet-tmpl/prog/en/modules/about.tt:109
-#, fuzzy, c-format
+#, c-format
 msgid "Preferences and parameters"
-msgstr "Грошові одиниці та обмінні курси"
+msgstr "Налаштування та параметри"
 
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:381
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:794
@@ -42705,8 +42742,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:104
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:381
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:39
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:77
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:79
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:85
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:87
 #, c-format
 msgid "Print"
 msgstr "Друк"
@@ -43077,7 +43114,7 @@ msgstr "Примітки щодо походження:"
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:478
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:480
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:505
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:300
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:305
 #, c-format
 msgid "Public"
 msgstr "Спільний"
@@ -44075,9 +44112,8 @@ msgstr "Вилучити дублікати"
 
 #. A
 #: intranet-tmpl/prog/en/includes/facets.inc:36
-#, fuzzy
 msgid "Remove facet [% facet.facet_title_value | html %]"
-msgstr "Шукати за „[% subfiel.marc_value |html %]“"
+msgstr "Вилучити грань „[% facet.facet_title_value | html %]“"
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:49
 #, fuzzy, c-format
@@ -44349,7 +44385,7 @@ msgid "Replacement price:"
 msgstr "Ціна для заміни: "
 
 #. %1$s:  ELSIF ( buildx ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:223
 #, c-format
 msgid "Report %s"
 msgstr " — звітування %s"
@@ -44360,33 +44396,33 @@ msgstr " — звітування %s"
 msgid "Report Plugins"
 msgstr "Додатки звітування"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1047
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1052
 #, c-format
 msgid "Report group:"
 msgstr "Група звітів: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:843
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:845
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
 #, c-format
 msgid "Report is public:"
 msgstr "За&shy;галь&shy;но&shy;дос&shy;туп&shy;ність зві&shy;ту: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:293
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:298
 #, c-format
 msgid "Report name"
 msgstr "Назва звіту"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:836
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:932
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:841
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
 #, c-format
 msgid "Report name:"
 msgstr "Назва звіту: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:673
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:678
 #, c-format
 msgid "Report name: "
 msgstr "Назва звіту: "
@@ -44396,7 +44432,7 @@ msgstr "Назва звіту: "
 msgid "Report number: "
 msgstr "Назва звіту: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1069
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1074
 #, c-format
 msgid "Report subgroup:"
 msgstr "Підгрупа звітів: "
@@ -44440,7 +44476,7 @@ msgstr "звіти"
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:43
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:29
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:9
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:212
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:217
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:16
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:43
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:14
@@ -44450,7 +44486,7 @@ msgstr "звіти"
 msgid "Reports"
 msgstr "Звіти"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:261
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:266
 #, c-format
 msgid "Reports Dictionary"
 msgstr "Словник звітів"
@@ -44829,7 +44865,7 @@ msgstr ""
 msgid "Return to tools"
 msgstr "Назад до інструментів"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:971
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:976
 #, c-format
 msgid "Return to: "
 msgstr "Повернутися до: "
@@ -44845,7 +44881,7 @@ msgstr "Повернення"
 msgid "Returns"
 msgstr "Повернення"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:69
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:77
 #, c-format
 msgid "Reverse"
 msgstr "Скасування оплати"
@@ -45075,7 +45111,7 @@ msgstr "Маршрутизація"
 msgid "Row"
 msgstr "Рядок"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:786
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:791
 #, c-format
 msgid "Rows per page: "
 msgstr "Рядків на сторінку: "
@@ -45094,7 +45130,7 @@ msgstr "Правила для дій, що запізнилися:"
 msgid "Rull (pianorull/orgelrull)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:343
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:348
 #, c-format
 msgid "Run"
 msgstr "Виконати"
@@ -45115,11 +45151,11 @@ msgid "Run reports"
 msgstr "Виконання звітів"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:767
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:772
 msgid "Run the report"
 msgstr "Виконати звіт"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:967
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:972
 #, c-format
 msgid "Run this report"
 msgstr "Виконати цей звіт"
@@ -45229,7 +45265,7 @@ msgstr "Номер для SMS:"
 msgid "SQL"
 msgstr "SQL: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:867
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:872
 #, c-format
 msgid "SQL:"
 msgstr "SQL: "
@@ -45390,7 +45426,7 @@ msgstr "По суботах"
 #: intranet-tmpl/prog/en/modules/members/member.tt:152
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:89
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:74
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:659
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:664
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:260
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:534
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:157
@@ -45422,8 +45458,8 @@ msgid "Save Record"
 msgstr "Зберегти запис"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:678
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:874
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:683
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:879
 msgid "Save Report"
 msgstr "Зберегти звіт"
 
@@ -45457,8 +45493,8 @@ msgid "Save and view record"
 msgstr "Зберегти та переглянути запис"
 
 #. INPUT type=submit name=save_anyway
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:717
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:721
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:722
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:726
 #, fuzzy
 msgid "Save anyway"
 msgstr "Зберегти зміни"
@@ -45484,7 +45520,7 @@ msgid "Save changes"
 msgstr "Зберегти зміни"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:894
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:899
 #, fuzzy
 msgid "Save compound"
 msgstr "Зберегти код"
@@ -45509,7 +45545,7 @@ msgstr "Зберегти підписку"
 msgid "Save subscription history"
 msgstr "Зберегти історію підписки"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:671
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:676
 #, fuzzy, c-format
 msgid "Save your custom report"
 msgstr "Збережіть Своє Замовлене Повідомлення"
@@ -45519,26 +45555,26 @@ msgstr "Збережіть Своє Замовлене Повідомлення"
 msgid "Saved preference"
 msgstr "Збережено параметр "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:905
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:910
 #, fuzzy, c-format
 msgid "Saved report results"
 msgstr "Результати пошуку"
 
 #: intranet-tmpl/prog/en/includes/guided-reports-view.inc:3
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:217
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:270
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:222
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:223
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:275
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:996
 #, c-format
 msgid "Saved reports"
 msgstr "Збережені звіти"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:969
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:974
 #, c-format
 msgid "Saved reports page"
 msgstr " Сторінка збережених звітів"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:302
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:307
 #, c-format
 msgid "Saved results"
 msgstr "Збережені результати"
@@ -45591,7 +45627,7 @@ msgstr "Огляд покажчика: "
 msgid "Scan indexes"
 msgstr "Переглядати покажчики"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:344
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:349
 #, c-format
 msgid "Schedule"
 msgstr "Запланувати"
@@ -45601,12 +45637,12 @@ msgstr "Запланувати"
 msgid "Schedule tasks to run"
 msgstr "Планування задач до виконання"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:970
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:975
 #, c-format
 msgid "Schedule this report to run using the: "
 msgstr "Запланувати виконання цього звіту  за допомогою: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:970
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:975
 #, c-format
 msgid "Scheduler tool"
 msgstr " Інструмент планування задач"
@@ -46195,9 +46231,9 @@ msgstr "Матеріал вторинної основи"
 msgid "Secondary support material - visual projection"
 msgstr "Матеріал оправи: візуально-проекційні матеріали"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:417
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:855
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:947
 #, c-format
 msgid "Seconds (default)"
 msgstr "секунди (типово)"
@@ -46257,8 +46293,8 @@ msgstr "Вибрати &amp; Зачинити"
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:54
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:452
 #: intranet-tmpl/prog/en/modules/members/guarantor_search.tt:109
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1050
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1072
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1055
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1077
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:189
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:76
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:230
@@ -47132,7 +47168,7 @@ msgstr "s — скорочений запис"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:345
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:338
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:343
 #, c-format
 msgid "Show"
 msgstr "Показати"
@@ -47269,9 +47305,9 @@ msgid "Show subscriptions"
 msgstr "Пошук підписки"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:397
-#, fuzzy, c-format
+#, c-format
 msgid "Show tags"
-msgstr "Нова ознака"
+msgstr "показувати ознаки"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -47713,9 +47749,9 @@ msgid "Source of classification / shelving scheme"
 msgstr "Класифікація"
 
 #: intranet-tmpl/prog/en/includes/merge-record.inc:50
-#, fuzzy, c-format
+#, c-format
 msgid "Source records"
-msgstr "%s записів імпортовано"
+msgstr "Джерельні записи"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:806
 #, fuzzy, c-format
@@ -48411,7 +48447,7 @@ msgstr ""
 
 #. %1$s:  IF (usecache) 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:398
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:403
 #, c-format
 msgid ""
 "Step 1 of 6: Choose a module to report on,%s Set cache expiry, %s and Choose "
@@ -48425,7 +48461,7 @@ msgstr ""
 msgid "Step 2 of 5: Choose the area"
 msgstr "Крок 1 з 6: Виберіть Модуль, щоб Повідомити"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:435
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:440
 #, c-format
 msgid "Step 2 of 6: Pick a report type"
 msgstr "Крок 2 з 6: вказуємо тип звіту"
@@ -48440,7 +48476,7 @@ msgstr "Крок 2: Область"
 msgid "Step 3 of 5: Choose columns"
 msgstr "Крок 3 з 5: вибираємо стовпці "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:462
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:467
 #, c-format
 msgid "Step 3 of 6: Select columns for display"
 msgstr "Крок 3 з 6: вибираємо стовпці для відображення"
@@ -48455,7 +48491,7 @@ msgstr "Крок 3: вибираємо стовпці "
 msgid "Step 4 of 5: Specify a value"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:520
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:525
 #, c-format
 msgid "Step 4 of 6: Select criteria to limit on"
 msgstr "Крок 4 з 6: вибираємо критерії для обмеження за наступним"
@@ -48470,7 +48506,7 @@ msgstr "Крок 4: Значення"
 msgid "Step 5 of 5: Confirm details"
 msgstr "Налаштування друкарки"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:584
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:589
 #, c-format
 msgid "Step 5 of 6: Pick which columns to total"
 msgstr "Крок 5 з 6: вказуємо стовпці для підсумовування"
@@ -48480,7 +48516,7 @@ msgstr "Крок 5 з 6: вказуємо стовпці для підсумов
 msgid "Step 5: Confirm definition"
 msgstr "Налаштування друкарки"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:615
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:620
 #, c-format
 msgid "Step 6 of 6: Choose how you want the report ordered"
 msgstr "Крок 6 з 6: вибираємо як бажано відсортувати звіт"
@@ -48658,7 +48694,7 @@ msgstr "Класифікація"
 msgid "Sub total "
 msgstr "Часткова сума"
 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:144
+#: intranet-tmpl/prog/en/modules/members/pay.tt:152
 #, fuzzy, c-format
 msgid "Sub total:"
 msgstr "Часткова сума"
@@ -48720,22 +48756,22 @@ msgstr "Підполя"
 msgid "Subfields: "
 msgstr "Підполя: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:296
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:301
 #, c-format
 msgid "Subgroup"
 msgstr "Підгрупа"
 
 #. INPUT type=text name=subgroup
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1097
 msgid "Subgroup code"
 msgstr "Код підгрупи"
 
 #. INPUT type=text name=subgroupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1098
 msgid "Subgroup name"
 msgstr "Назва підгрупи"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:281
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:286
 #, c-format
 msgid "Subgroup:"
 msgstr "Підгрупа: "
@@ -49273,8 +49309,8 @@ msgstr "cюіти"
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:364
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:44
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:37
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:439
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:860
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:444
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:865
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:185
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:225
 #, c-format
@@ -49521,6 +49557,8 @@ msgid ""
 "System preference 'AutoCreateAuthorities' set, but needs "
 "'BiblioAddsAuthorities' set as well."
 msgstr ""
+"Системний параметр „AutoCreateAuthorities“ задіяно, однак ще потрібно "
+"увімкнути „BiblioAddsAuthorities."
 
 #: intranet-tmpl/prog/en/modules/about.tt:114
 #, c-format
@@ -49605,7 +49643,7 @@ msgstr ""
 msgid "TOTAL"
 msgstr "ЗАГАЛОМ"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:816
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:821
 #, c-format
 msgid "Tab separated text"
 msgstr "Текст, відокремлений знаками табуляції"
@@ -49651,8 +49689,8 @@ msgstr ""
 msgid "Tabs in use"
 msgstr "Використовуються вкладки"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:438
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:859
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:443
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:864
 #, fuzzy, c-format
 msgid "Tabular"
 msgstr "Табличний"
@@ -50115,9 +50153,9 @@ msgid "Testing..."
 msgstr "на"
 
 #: intranet-tmpl/prog/en/modules/about.tt:582
-#, fuzzy, c-format
+#, c-format
 msgid "Tetun (Tetum) Karen Myers"
-msgstr "Тетум (тетун)"
+msgstr "Tetun (мова тетум) Карен Майерс {Karen Myers}"
 
 # для /marc21_field_007.tmpl можна з маленької
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:148
@@ -50327,8 +50365,8 @@ msgstr ""
 msgid "The authority record you requested does not exist (%s)."
 msgstr "Авторитетного запису, який Ви запросили, не існує (%s)."
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:699
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:742
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:747
 #, fuzzy, c-format
 msgid "The authorized value category ("
 msgstr "Категорія авторитетного значення: "
@@ -50433,6 +50471,8 @@ msgid ""
 "The field is non-repeatable and already exists in the destination record. "
 "Therefore, you cannot add it."
 msgstr ""
+"Це поле не повторюване і вже існує у цільовому записі.  Тому, Ви не можете "
+"додати його."
 
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:29
 #, fuzzy, c-format
@@ -50491,7 +50531,7 @@ msgstr "З наступною помилкою стикається:"
 msgid "The following error occurred while importing the database structure:"
 msgstr "При імпорті структури бази даних трапилася наступна помилка: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:979
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
 #, fuzzy, c-format
 msgid "The following error was encountered:"
 msgstr "З наступною помилкою стикається:"
@@ -50580,9 +50620,9 @@ msgstr "Відвідувач має борг: %s"
 
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:77
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:71
-#, fuzzy, c-format
+#, c-format
 msgid "The merging was successful. "
-msgstr "%s відвідувачів було успішно вилучено"
+msgstr "Злиття було успішним. "
 
 #. %1$s:  profile_name 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:64
@@ -50888,7 +50928,7 @@ msgstr "Немає збережених правил відповідності.
 msgid "There are no saved patron attribute types."
 msgstr "Немає збережених видів атрибутів відвідувачів."
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:379
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:384
 #, c-format
 msgid "There are no saved reports. "
 msgstr "Ще немає збережених звітів. "
@@ -51285,9 +51325,8 @@ msgstr "Цей сценарій не може створити/писати до
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/merge-record-strings.inc:2
-#, fuzzy
 msgid "This subfield cannot be added: there is no"
-msgstr "Здається, завантажений файл порожній."
+msgstr "Це підполе не може бути додане: немає "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:10
@@ -52244,7 +52283,7 @@ msgstr "Повна вартість"
 msgid "Total current checkouts allowed"
 msgstr "Загальна поточна дозволена кількість видач"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:87
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:95
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:114
 #, c-format
 msgid "Total due"
@@ -52278,7 +52317,7 @@ msgid "Total must be a number"
 msgstr "До шифру замовлення примірника: "
 
 #. %1$s:  unlimited_total 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:775
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:780
 #, c-format
 msgid "Total number of rows matching the (unlimited) query is %s."
 msgstr ""
@@ -52773,7 +52812,7 @@ msgstr "k — двовимірна непроектована графіка"
 #: intranet-tmpl/prog/en/modules/members/files.tt:32
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1218
 #: intranet-tmpl/prog/en/modules/members/notices.tt:48
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:294
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:299
 #, c-format
 msgid "Type"
 msgstr "Тип "
@@ -52867,7 +52906,7 @@ msgstr "Вид матеріалу"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:210
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:92
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:857
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:862
 #, c-format
 msgid "Type:"
 msgstr "Тип: "
@@ -53823,12 +53862,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:343
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:110
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:228
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:798
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:803
 msgid "Update"
 msgstr "Оновити"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:954
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:959
 msgid "Update SQL"
 msgstr "Поновити SQL"
 
@@ -54112,7 +54151,7 @@ msgstr "на основі існуючого бібліотечного запи
 msgid "Use for iso2709 exports"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:982
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:987
 #, fuzzy, c-format
 msgid ""
 "Use of this keyword is not allowed in Koha reports due to security and data "
@@ -54127,7 +54166,7 @@ msgid "Use restrictions"
 msgstr "Переглянути обмеження"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:252
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:257
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:21
 #, c-format
 msgid "Use saved"
@@ -54145,7 +54184,7 @@ msgid "Use the dictionary to define custom criteria for reporting."
 msgstr ""
 "Використовуйте словник для визначення користувацьких критеріїв звітності."
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:238
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:243
 #, c-format
 msgid ""
 "Use the guided reports engine to create non standard reports. This feature "
@@ -54156,7 +54195,7 @@ msgstr ""
 "покликана забезпечити деяке проміжне положення між вбудованими фіксованими "
 "звітами та написанням користувацьких звітів з коду SQL."
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:262
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:267
 #, c-format
 msgid ""
 "Use the reports dictionary to define custom criteria to use in your reports"
@@ -54697,7 +54736,7 @@ msgid "View analytics"
 msgstr "показати аналітичний опис"
 
 #: intranet-tmpl/prog/en/includes/guided-reports-view.inc:7
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:265
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:270
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:27
 #, c-format
 msgid "View dictionary"
@@ -54732,7 +54771,7 @@ msgstr ""
 msgid "View invoice"
 msgstr "Накладна постачальника"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:62
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:70
 #, c-format
 msgid "View item"
 msgstr "Переглянути примірник"
@@ -55018,9 +55057,9 @@ msgid "Warning at (amount): "
 msgstr "Увага: дублікат відвідувача"
 
 #: intranet-tmpl/prog/en/modules/about.tt:102
-#, fuzzy, c-format
+#, c-format
 msgid "Warning regarding current user"
-msgstr "<b>Попередження: виявлена нерегулярність</b><br />"
+msgstr "Попередження щодо поточного користувача"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorder.tt:24
 #, c-format
@@ -55474,7 +55513,7 @@ msgid "Write off"
 msgstr "Автор"
 
 #. INPUT type=submit name=woall
-#: intranet-tmpl/prog/en/modules/members/pay.tt:153
+#: intranet-tmpl/prog/en/modules/members/pay.tt:161
 #, fuzzy
 msgid "Write off all"
 msgstr "Автор"
@@ -55593,13 +55632,13 @@ msgstr "Щорічно — повторювані свята"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:122
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:276
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:325
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:843
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:845
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:330
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
 #, c-format
 msgid "Yes"
 msgstr "так"
@@ -55730,6 +55769,9 @@ msgid ""
 "recommended because some parts of Koha will not function as expected when "
 "using this account."
 msgstr ""
+"Ви зайшли в систему як користувач-адміністратор бази даних.  Це не "
+"рекомендується, тому що деякі частини Koha не працюватимуть належним чином "
+"при використанні цього облікового запису."
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:173
 #, fuzzy, c-format
@@ -56110,7 +56152,7 @@ msgid ""
 "the phone templates."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:657
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:662
 #, c-format
 msgid "You will need to save the report before you can execute it"
 msgstr "Вам потрібно буде зберегти звіт перед тим, як Ви зможете виконати його"
@@ -56224,12 +56266,12 @@ msgstr "Ваше повідомлення було збережене"
 msgid "Your patron lists"
 msgstr "Ваші списки відвідувачів"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:963
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:968
 #, c-format
 msgid "Your report has been saved"
 msgstr "Ваш звіт збережений"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:647
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:652
 #, c-format
 msgid "Your report will be generated with the following SQL statement."
 msgstr "Ваше повідомлення генеруватиметься з наступною інструкцією SQL."
@@ -57059,6 +57101,8 @@ msgid ""
 "[%% PROCESS showreference heading=seeals.heading linkType='seealso' "
 "type=seeals.type authid=seeals.authid %%] "
 msgstr ""
+"[%% PROCESS showreference heading=seeals.heading linkType='seealso' "
+"type=seeals.type authid=seeals.authid %%] "
 
 #: intranet-tmpl/prog/en/includes/authorities-search-results.inc:105
 #, c-format
@@ -57066,6 +57110,8 @@ msgid ""
 "[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
 "type=seefro.type authid=seefro.authid %%] "
 msgstr ""
+"[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
+"type=seefro.type authid=seefro.authid %%] "
 
 #. %1$s:  IF borrower 
 #: intranet-tmpl/prog/en/includes/circ-menu.tt:1
@@ -58039,6 +58085,12 @@ msgstr "abcd"
 msgid "abcdjpvxyz"
 msgstr "abcdjpvxyz"
 
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:887
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:854
+#, fuzzy, c-format
+msgid "abcdn"
+msgstr "abcd"
+
 #: intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl:109
 #: intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl:117
 #: intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl:125
@@ -58265,10 +58317,10 @@ msgstr "acdeq"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:2167
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:759
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:901
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:898
 #: intranet-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:121
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:420
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:873
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:865
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:2402
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1645
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:1967
@@ -60686,11 +60738,9 @@ msgstr "катехізис"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:2141
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:752
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:894
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MADS.xsl:368
 #: intranet-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:114
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:413
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:866
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:2378
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1623
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:1943
@@ -63514,8 +63564,8 @@ msgstr "ювілейне чи пам’ятне видання"
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MADS.xsl:332
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:440
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:447
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:882
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:889
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:874
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:881
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1478
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1485
 #, c-format
@@ -63569,9 +63619,8 @@ msgstr " підполе "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/merge-record-strings.inc:2
-#, fuzzy
 msgid "field in the destination record."
-msgstr "Бібліотека-призначення: "
+msgstr " поля у цільовому записі."
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:432
 #, fuzzy, c-format
@@ -63803,8 +63852,8 @@ msgstr "значення структури"
 msgid "from"
 msgstr "від "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:536
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:543
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:541
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:548
 #, c-format
 msgid "from "
 msgstr "від "
@@ -65910,7 +65959,7 @@ msgstr "jpxyz"
 #: intranet-tmpl/prog/en/modules/about.tt:533
 #, c-format
 msgid "jquery.dataTables.grouping.js"
-msgstr ""
+msgstr "jquery.dataTables.grouping.js"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:1031
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:1204
@@ -69182,8 +69231,8 @@ msgstr "МАРК-підполе"
 msgid "or any available"
 msgstr "Доступно"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1064
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1091
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1069
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1096
 #, c-format
 msgid "or create"
 msgstr "або ж створити"
@@ -70200,9 +70249,11 @@ msgid "please note your reason here..."
 msgstr "будь ласка, зазначте свою причину тут…"
 
 #: intranet-tmpl/prog/en/modules/about.tt:533
-#, fuzzy, c-format
+#, c-format
 msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
-msgstr " від Бінні В.А. {Binny V A} та поширюється на умовах ліцензії BSD."
+msgstr ""
+" — додаток від Йована Поповича {Jovan Popovic} на умовах ліцензій BSD та GPL "
+"вер. 2."
 
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:82
 #, c-format
@@ -71867,7 +71918,7 @@ msgstr "розділ, секція"
 #: intranet-tmpl/prog/en/includes/authorities-search-results.inc:118
 #, c-format
 msgid "see also:"
-msgstr ""
+msgstr "див. також: "
 
 #. %1$s:  seflag 
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:419
@@ -73228,7 +73279,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/about.tt:540
 #, c-format
 msgid "the Arabic Koha support team"
-msgstr ""
+msgstr " з арабської команди розробників Коха"
 
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:68
 #, c-format
@@ -73407,8 +73458,8 @@ msgid "title bands/intertitle rolls"
 msgstr "стрічки чи ролики з титрами"
 
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:113
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:537
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:544
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:542
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:549
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:24
 #, c-format
 msgid "to "
@@ -73955,7 +74006,7 @@ msgstr "urn:tcn:"
 #: intranet-tmpl/prog/en/includes/authorities-search-results.inc:103
 #, c-format
 msgid "used for/see from:"
-msgstr ""
+msgstr "використовується для / див. також: "
 
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:23
 #, c-format
@@ -75227,13 +75278,3 @@ msgstr "• "
 #, c-format
 msgid "﻿%s "
 msgstr "﻿%s "
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy
-
-#, fuzzy

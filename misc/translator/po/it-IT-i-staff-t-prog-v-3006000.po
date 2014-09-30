@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha Staff\n"
-"POT-Creation-Date: 2014-08-26 13:56-0300\n"
-"PO-Revision-Date: 2014-06-13 13:35+0000\n"
-"Last-Translator: Zeno <z.tajoli@cineca.it>\n"
+"POT-Creation-Date: 2014-09-23 19:02-0300\n"
+"PO-Revision-Date: 2014-09-29 15:25+0000\n"
+"Last-Translator: bargioni <bargioni@pusc.it>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1402666547.0\n"
+"X-POOTLE-MTIME: 1412004342.0\n"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils-MODS31.xsl:12
 #, c-format
@@ -514,7 +514,7 @@ msgstr "%s %s %s Sconosciuto %s "
 #. %2$s:  savedreport.report_name 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:311
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:316
 #, c-format
 msgid "%s %s %s [ no name ] %s "
 msgstr "%s %s %s [ Nessuno ] %s "
@@ -1141,7 +1141,7 @@ msgstr "%s %s ha %s prenotazione(i) in attesa da prelevare."
 
 #. %1$s:  borrower.firstname 
 #. %2$s:  borrower.surname 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:159
+#: intranet-tmpl/prog/en/modules/members/pay.tt:167
 #, c-format
 msgid "%s %s has no outstanding fines."
 msgstr "%s %s non ha multe pendenti."
@@ -1429,22 +1429,31 @@ msgstr "%s %sNessuna definizione"
 #. %9$s:  CASE 'M' 
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
-#. %12$s:  CASE 
-#. %13$s:  line.accounttype 
-#. %14$s: - END -
-#. %15$s: - IF line.description 
-#. %16$s:  line.description 
-#. %17$s:  END 
-#. %18$s:  IF line.title 
-#. %19$s:  line.title |html_entity 
-#. %20$s:  END 
+#. %12$s:  CASE 'FU' 
+#. %13$s:  CASE 'Rent' 
+#. %14$s:  CASE 'FOR' 
+#. %15$s:  CASE 'LR' 
+#. %16$s:  CASE 'PAY' 
+#. %17$s:  CASE 'WO' 
+#. %18$s:  CASE 'C' 
+#. %19$s:  CASE 'CR' 
+#. %20$s:  CASE 
+#. %21$s:  line.accounttype 
+#. %22$s: - END -
+#. %23$s: - IF line.description 
+#. %24$s:  line.description 
+#. %25$s:  END 
+#. %26$s:  IF line.title 
+#. %27$s:  line.title |html_entity 
+#. %28$s:  END 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:116
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
-"via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
-"%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s %s"
-"(%s)%s "
+"%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
+"(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
+"%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
+"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
+"%sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
 "%s %sPagamento, grazie %sPagamento, grazie (in contanti via SIP2) "
 "%sPagamento, grazie (VISA via SIP2) %sPagamento, grazie (carta di credito "
@@ -1462,20 +1471,29 @@ msgstr ""
 #. %9$s:  CASE 'M' 
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
-#. %12$s:  CASE 
-#. %13$s:  account.accounttype 
-#. %14$s: - END -
-#. %15$s: - IF account.description 
-#. %16$s:  account.description 
-#. %17$s:  END 
-#. %18$s:  IF ( account.itemnumber ) 
+#. %12$s:  CASE 'FU' 
+#. %13$s:  CASE 'Rent' 
+#. %14$s:  CASE 'FOR' 
+#. %15$s:  CASE 'LR' 
+#. %16$s:  CASE 'PAY' 
+#. %17$s:  CASE 'WO' 
+#. %18$s:  CASE 'C' 
+#. %19$s:  CASE 'CR' 
+#. %20$s:  CASE 
+#. %21$s:  account.accounttype 
+#. %22$s: - END -
+#. %23$s: - IF account.description 
+#. %24$s:  account.description 
+#. %25$s:  END 
+#. %26$s:  IF ( account.itemnumber ) 
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:47
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
-"via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
-"%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s "
-"&nbsp;%s"
+"%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
+"(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
+"%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
+"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
+"%sCredit %s%s %s %s, %s%s &nbsp;%s"
 msgstr ""
 "%s %sPagamento, grazie %sPagamento, grazie (in contanti via SIP2) "
 "%sPagamento, grazie (VISA via SIP2) %sPagamento, grazie (carta di credito "
@@ -1529,7 +1547,7 @@ msgstr "%s %sTag %s Vincoli dei sottocampi per il campo%s %s %s %s "
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:979
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
 #, c-format
 msgid "%s %sThis report contains the SQL keyword "
 msgstr "%s %sQuesto report contiene la parola chiave SQL "
@@ -3777,9 +3795,8 @@ msgstr "%s di %s"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "%s of %s renewals remaining"
-msgstr "(%s di %s rinnovi rimasti)"
+msgstr "%s di %s rinnovi rimasti"
 
 #. For the first occurrence,
 #. %1$s:  IF ( subscription_LOO.arrival1 ) 
@@ -4641,7 +4658,7 @@ msgstr "%sGriglia di catalogazione di default %s %s %s %s "
 #. %2$s:  ELSE 
 #. %3$s:  value.availablevalues |html 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:554
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:559
 #, c-format
 msgid "%sDefault%s%s%s"
 msgstr "%sDefault%s%s%s"
@@ -5612,7 +5629,7 @@ msgstr "&lt;&lt; Precedente "
 msgid "&lt;a href=\"[856u]\"&gt;open site&lt;/a&gt;"
 msgstr "&lt;a href=\"[856u]\"&gt;apri sito&lt;/a&gt;"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:885
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:890
 #, c-format
 msgid "&nbsp; Sub report:"
 msgstr "&nbsp; Sottoreport:"
@@ -6137,7 +6154,7 @@ msgstr "&rsaquo; %sRegole di corrispondenza tra record%s"
 #. %1$s:  IF ( saved1 ) 
 #. %2$s:  ELSIF ( create ) 
 #. %3$s:  ELSIF ( showsql ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:213
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
 #, c-format
 msgid "&rsaquo; %sSaved reports %sCreate from SQL %s"
 msgstr "&rsaquo; %sReports salvati %sCrea da SQL %s"
@@ -7022,7 +7039,7 @@ msgid "&rsaquo; Rotating collections"
 msgstr "&rsaquo; Collezioni a rotazione"
 
 #. %1$s:  ELSIF ( execute ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:217
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:222
 #, c-format
 msgid "&rsaquo; SQL view %s"
 msgstr "&rsaquo; Vista SQL %s"
@@ -7159,7 +7176,7 @@ msgstr "&rsaquo; Statistiche del catalogo"
 #. %7$s:  ELSIF ( build6 ) 
 #. %8$s:  END 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:219
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:224
 #, c-format
 msgid ""
 "&rsaquo; Step %s of 6: %sChoose a module %sPick a report type %sSelect "
@@ -7548,8 +7565,8 @@ msgstr ""
 msgid "(Indonesian)"
 msgstr "(Indonesiano)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1052
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1074
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1057
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1079
 #, c-format
 msgid "(None)"
 msgstr "(Nessuno)"
@@ -7862,8 +7879,8 @@ msgstr ") il "
 msgid ") renewed for %s %s ( "
 msgstr ") rinnovato per %s %s ( "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:699
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:742
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:747
 #, c-format
 msgid ") you selected does not exist. "
 msgstr ") selezionato non esiste. "
@@ -8503,7 +8520,7 @@ msgstr "/cgi-bin/koha/catalogue/search.pl?q=Host-item:"
 #: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:231
 #: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:268
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:503
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:934
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:926
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl:173
 #, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=an:"
@@ -8523,7 +8540,7 @@ msgstr "/cgi-bin/koha/catalogue/search.pl?q=au:"
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:347
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:362
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:384
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:937
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:929
 #, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=au:\""
 msgstr "/cgi-bin/koha/catalogue/search.pl?q=au:\""
@@ -10406,15 +10423,15 @@ msgstr ""
 "tuo browser.] "
 
 #. INPUT type=button name=back
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:446
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:505
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:577
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:608
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:451
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:510
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:582
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:613
 msgid "<< Back"
 msgstr "&lt;&lt; Indietro"
 
 #. INPUT type=button name=delete
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:494
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:499
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:152
 msgid "<< Delete"
 msgstr "&lt;&lt; Cancella"
@@ -10776,7 +10793,7 @@ msgstr "È stato applicato un rimborso all'account dell'utente."
 #: intranet-tmpl/prog/en/modules/about.tt:382
 #, c-format
 msgid "A. Sassmannshausen"
-msgstr ""
+msgstr "A. Sassmannshausen"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tags/review.tt:16
@@ -10923,7 +10940,7 @@ msgstr "Accettato il:"
 msgid "Accepted payment (%s) from "
 msgstr "Accettato il pagamento (%s) da "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:969
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:974
 #, c-format
 msgid "Access this report from the: "
 msgstr "Accedi a questo report da: "
@@ -11222,7 +11239,7 @@ msgstr "Azioni"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:388
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:142
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:334
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:339
 #, c-format
 msgid "Actions "
 msgstr "Azioni  "
@@ -11306,7 +11323,7 @@ msgstr "Adam Thick"
 #: intranet-tmpl/prog/en/modules/acqui/aqbasketuser_search.tt:69
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:409
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:178
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:493
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:498
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:152
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:98
 #: intranet-tmpl/prog/en/modules/labels/result.tt:96
@@ -11825,7 +11842,7 @@ msgstr "Ringraziamenti anche a..."
 msgid "Additional attributes and identifiers"
 msgstr "Parametri aggiuntivi"
 
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:929
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:921
 #, c-format
 msgid "Additional author(s): "
 msgstr "Altri autori: "
@@ -12170,8 +12187,9 @@ msgstr "Alexandra Horsman"
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:90
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:99
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:109
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:274
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:283
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:28
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:279
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:288
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:209
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:41
 #, c-format
@@ -12922,7 +12940,7 @@ msgstr "Carica direttamente"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:266
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1015
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1020
 msgid "Apply filter"
 msgstr "Applica filtro"
 
@@ -13516,7 +13534,7 @@ msgstr "Valore autorizzato:"
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:74
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:32
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:77
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:298
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:303
 #: intranet-tmpl/prog/en/modules/labels/search.tt:29
 #: intranet-tmpl/prog/en/modules/labels/search.tt:30
 #, c-format
@@ -13560,7 +13578,7 @@ msgstr "Autore (personale): "
 msgid "Author(s)"
 msgstr "Autori"
 
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:928
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:920
 #, c-format
 msgid "Author(s): "
 msgstr "Autore(i): "
@@ -13590,7 +13608,7 @@ msgstr "Autore/i: %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 #: intranet-tmpl/prog/en/includes/suggestions-add-search.inc:9
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:150
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:312
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1011
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1016
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:186
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:309
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:636
@@ -15277,23 +15295,23 @@ msgstr "Budgets"
 msgid "Budgets administration"
 msgstr "Gestione dei budgets"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:430
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:435
 #, c-format
 msgid "Build A Report"
 msgstr "Crea un report"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:367
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:372
 msgid "Build a new report"
 msgstr "Crea un nuovo report"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:381
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:386
 #, c-format
 msgid "Build a new report?"
 msgstr "Crea un nuovo report ?"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:219
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:395
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:224
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:400
 #, c-format
 msgid "Build a report"
 msgstr "Crea un nuovo report"
@@ -15308,13 +15326,13 @@ msgstr "Costruisci e gestisci batch di etichette"
 msgid "Build and manage batches of patron cards"
 msgstr "Costruisci e gestisci batch di schede utenti"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:242
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:247
 #, c-format
 msgid "Build and run reports"
 msgstr "Crea ed esegui reports"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:246
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:251
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:20
 #, c-format
 msgid "Build new"
@@ -15528,14 +15546,14 @@ msgstr "Separatore CSV: "
 msgid "CX encoded"
 msgstr "Codifica CX"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:301
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:306
 #, c-format
 msgid "Cache expiry (seconds)"
 msgstr "Vita della cache (secondi)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:415
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:853
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:945
 #, c-format
 msgid "Cache expiry:"
 msgstr "Vita della cache:"
@@ -15947,9 +15965,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:193
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:221
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:51
-#: intranet-tmpl/prog/en/modules/members/pay.tt:155
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:874
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:954
+#: intranet-tmpl/prog/en/modules/members/pay.tt:163
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:879
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:959
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:92
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:535
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:93
@@ -15991,7 +16009,7 @@ msgid "Cancel and return to order"
 msgstr "Ignora e ritorna agli ordini"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:374
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:379
 msgid "Cancel filter"
 msgstr "Cancella filtro"
 
@@ -17485,8 +17503,8 @@ msgstr ""
 msgid "Choose your library:"
 msgstr "Scegli la tua biblioteca:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:399
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:436
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:404
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:441
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:176
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:183
 #, c-format
@@ -18367,8 +18385,8 @@ msgstr "Coautore"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:167
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:398
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:62
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1065
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1070
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1097
 #, c-format
 msgid "Code"
 msgstr "Codice"
@@ -18613,7 +18631,7 @@ msgstr "Proveniente da %s"
 msgid "Comma (,)"
 msgstr "Virgola (,)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:815
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:820
 #, c-format
 msgid "Comma separated text"
 msgstr "Testo separato da virgole"
@@ -18879,7 +18897,7 @@ msgstr "Configurazione "
 msgid "Confirm"
 msgstr "Conferma"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:646
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:651
 #, c-format
 msgid "Confirm custom report"
 msgstr "Conferma il report"
@@ -19835,8 +19853,8 @@ msgid "Create printable patron cards"
 msgstr "Crea tessere stampabili"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:258
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:834
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:263
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:839
 #, c-format
 msgid "Create report from SQL"
 msgstr "Crea un report da SQL"
@@ -19877,7 +19895,7 @@ msgstr "Creato da: "
 #: intranet-tmpl/prog/en/columns.def:116
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:208
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:853
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:299
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:304
 #, c-format
 msgid "Creation date"
 msgstr "Data di creazione"
@@ -20699,7 +20717,7 @@ msgstr "Data/ora"
 msgid "Date/time"
 msgstr "Data/ora"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1007
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1012
 #, c-format
 msgid "Date:"
 msgstr "Data:"
@@ -20799,9 +20817,9 @@ msgid "Day: "
 msgstr "Giorno: "
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:243
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:415
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:853
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:945
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:420
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:858
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:950
 #, c-format
 msgid "Days"
 msgstr "Giorni"
@@ -21226,7 +21244,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/files.tt:46
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:264
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:439
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:351
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:136
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:155
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:179
@@ -21427,7 +21445,7 @@ msgstr "Cancella i records se non restano copie."
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:250
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:356
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:361
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:579
 #, c-format
 msgid "Delete selected"
@@ -21535,7 +21553,7 @@ msgid "Delete this printer"
 msgstr "Cancella questa stampante"
 
 #. A
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:351
 msgid "Delete this saved report"
 msgstr "Cancella questo report salvato"
 
@@ -21954,7 +21972,7 @@ msgstr "Dizionario"
 msgid "Dictionary "
 msgstr "Dizionario "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:567
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:572
 #, c-format
 msgid "Dictionary definitions"
 msgstr "Definizioni del dizionario"
@@ -22400,7 +22418,7 @@ msgid "Doug Dearden"
 msgstr "Doug Dearden"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:821
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:826
 msgid "Download"
 msgstr "Scarica"
 
@@ -22485,7 +22503,7 @@ msgstr "Scarica i record"
 msgid "Download selected claims"
 msgstr "Scarica i reclami selezionati"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:813
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:818
 #, c-format
 msgid "Download the report: "
 msgstr "Scarica il report: "
@@ -22553,7 +22571,7 @@ msgstr "Data di restituzione"
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:723
 #, c-format
 msgid "Due date (unformatted, hidden)"
-msgstr ""
+msgstr "Data scadenza (non formatta, nascosta)"
 
 #: intranet-tmpl/prog/en/modules/about.tt:411
 #, c-format
@@ -22562,7 +22580,7 @@ msgstr "Duncan Tyler"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:118
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:26
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:341
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
 #, c-format
 msgid "Duplicate"
 msgstr "Duplica"
@@ -22595,7 +22613,7 @@ msgid "Duplicate record suspected"
 msgstr "Possibile duplicazione del record"
 
 #. A
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:341
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
 msgid "Duplicate this saved report"
 msgstr "Duplica questo report salvato"
 
@@ -22807,7 +22825,7 @@ msgstr "Ed Summers (alcuni codici e pacchetti Perl come MARC::Record)"
 #: intranet-tmpl/prog/en/modules/members/member.tt:205
 #: intranet-tmpl/prog/en/modules/members/member.tt:208
 #: intranet-tmpl/prog/en/modules/members/member.tt:210
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:340
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:345
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:154
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:178
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:143
@@ -22853,12 +22871,12 @@ msgid "Edit Items"
 msgstr "Modifica le copie"
 
 #. INPUT type=button name=back
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:726
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:747
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:731
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:752
 msgid "Edit SQL"
 msgstr "Modifica SQL"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:930
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
 #, c-format
 msgid "Edit SQL report"
 msgstr "Modifica report SQL"
@@ -23445,7 +23463,7 @@ msgid "Enter item barcode: "
 msgstr "Inserisci il codice a barre della copia: "
 
 #. %1$s:  name 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:750
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:755
 #, c-format
 msgid "Enter parameters for report %s:"
 msgstr "Inserisci i parametri per il report %s:"
@@ -23699,8 +23717,8 @@ msgstr "Errore; i tuoi dati non dovrebbero essere stati salvati, controlla."
 
 #. For the first occurrence,
 #. %1$s:  name 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:696
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:739
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:701
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:744
 #, c-format
 msgid "Errors found when processing parameters for report: %s"
 msgstr "Trovati errori nel registrare i parametri per il report %s:"
@@ -24709,7 +24727,7 @@ msgstr "Filmina"
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:105
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:155
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:111
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1005
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1010
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:122
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:73
 #, c-format
@@ -24826,7 +24844,7 @@ msgstr "Le multe per le copie restituite sono annullate."
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:149
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:640
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:645
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:189
 msgid "Finish"
 msgstr "Completa"
@@ -26173,7 +26191,7 @@ msgid "Groove width:"
 msgstr "Larghezza scanalata:"
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:39
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:295
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:300
 #, c-format
 msgid "Group"
 msgstr "Gruppo"
@@ -26188,12 +26206,12 @@ msgstr ""
 "lista di valori 'PA_CLASS')"
 
 #. INPUT type=text name=group
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1065
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1070
 msgid "Group code"
 msgstr "Codice gruppo"
 
 #. INPUT type=text name=groupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1071
 msgid "Group name"
 msgstr "Nome gruppo"
 
@@ -26246,14 +26264,14 @@ msgstr "Box guida:"
 
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:1
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:3
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:237
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:971
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:242
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:976
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:17
 #, c-format
 msgid "Guided reports"
 msgstr "Reports guidati"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:213
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:19
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:11
 #, c-format
@@ -26631,7 +26649,7 @@ msgstr "Prenotazione trovata: "
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
 msgid "Hold is <strong>suspended</strong>"
-msgstr ""
+msgstr "La prenotazione è <strong>sospesa</strong>"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:221
 #, c-format
@@ -27055,7 +27073,7 @@ msgstr "Hologram"
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:43
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:29
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:9
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:211
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:216
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:9
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:43
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:14
@@ -27202,9 +27220,9 @@ msgid "Hour"
 msgstr "Orario:"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:244
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:414
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:852
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:944
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:419
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:857
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:949
 #, c-format
 msgid "Hours"
 msgstr "Ore:"
@@ -27275,7 +27293,7 @@ msgid "IBERMARC"
 msgstr "IBERMARC"
 
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:217
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:292
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:297
 #, c-format
 msgid "ID"
 msgstr "ID"
@@ -28871,12 +28889,12 @@ msgstr "Informazioni sulla copia %s%s%s "
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
 msgid "Item is <strong>in transit</strong> from %s"
-msgstr ""
+msgstr "La copia è <strong>in transito</strong> da %s"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
 msgid "Item is <strong>waiting</strong>"
-msgstr ""
+msgstr "La copia è <strong>in attesa</strong>"
 
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:479
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:892
@@ -29421,7 +29439,7 @@ msgstr "Juan Romay Sieira"
 #: intranet-tmpl/prog/en/modules/about.tt:386
 #, c-format
 msgid "Juhani Seppälä"
-msgstr ""
+msgstr "Juhani Seppälä"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/calendar.inc:1
@@ -29607,7 +29625,7 @@ msgstr "Ricerca per parole chiave"
 msgid "Keyword to MARC mapping"
 msgstr "Mappatura da keyword a MARC"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1012
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1017
 #, c-format
 msgid "Keyword:"
 msgstr "Parola chiave:"
@@ -31995,7 +32013,7 @@ msgstr "Koha Project Bugzilla"
 #: intranet-tmpl/prog/en/modules/about.tt:240
 #, c-format
 msgid "Koha SAB CINECA"
-msgstr ""
+msgstr "Koha SAB CINECA"
 
 #: intranet-tmpl/prog/en/modules/about.tt:30
 #, c-format
@@ -34467,7 +34485,7 @@ msgstr "Mason James"
 msgid "Masses"
 msgstr "Messe"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:880
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:885
 #, c-format
 msgid "Master: "
 msgstr "Master: "
@@ -34623,8 +34641,8 @@ msgstr "Materialtype: "
 msgid "Mathieu Saby"
 msgstr "Mathieu Saby"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:440
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:861
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:445
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:866
 #, c-format
 msgid "Matrix"
 msgstr "Matrice:"
@@ -35042,9 +35060,9 @@ msgstr "Minuti"
 msgid "Minute (complete with 0):"
 msgstr "Minuti (completare con degli 0):"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:413
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:851
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:943
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:418
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:856
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:948
 #, c-format
 msgid "Minutes"
 msgstr "Minuti"
@@ -35944,8 +35962,8 @@ msgstr "Nahuel Angelinetti"
 #: intranet-tmpl/prog/en/modules/members/guarantor_search.tt:80
 #: intranet-tmpl/prog/en/modules/members/member.tt:166
 #: intranet-tmpl/prog/en/modules/reports/reservereport.tt:18
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1071
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1098
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:56
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:78
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:64
@@ -36571,11 +36589,11 @@ msgstr "Successivo &gt;&gt;"
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:299
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:611
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:107
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:422
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:447
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:506
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:578
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:609
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:427
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:452
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:511
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:583
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:614
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:44
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:51
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:29
@@ -36657,7 +36675,7 @@ msgstr "Nimbus"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:120
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:123
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:277
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:327
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:332
 #, c-format
 msgid "No"
 msgstr "No"
@@ -36667,12 +36685,12 @@ msgstr "No"
 msgid "No "
 msgstr "No "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:843
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:845
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
 #, c-format
 msgid "No (default)"
 msgstr "No (default)"
@@ -36926,7 +36944,7 @@ msgid "No claims notice defined. "
 msgstr "Nessun avviso di sollecito definito. "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1024
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1029
 msgid "No columns selected!"
 msgstr "Nessuna colonna selezionata!"
 
@@ -37363,9 +37381,8 @@ msgstr "Non rinnovare prima"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "No renewal before %s"
-msgstr "Non rinnovare prima"
+msgstr "Non rinnovare prima di %s"
 
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:117
 #, c-format
@@ -37417,7 +37434,7 @@ msgstr ""
 "Nessun esempio di dati e impostazioni è disponibile nella tua lingua. Fai "
 "riferimento agli esempi forniti in inglese (en)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:368
 #, c-format
 msgid "No saved reports match your criteria. "
 msgstr "Nessun risultato corrispondente alla tua ricerca "
@@ -37866,9 +37883,8 @@ msgstr "Non pubblicato"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "Not renewable"
-msgstr "Totale rinnovi"
+msgstr "Non rinnovabile"
 
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:585
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:615
@@ -37960,7 +37976,7 @@ msgstr "Nota:"
 msgid "Note: "
 msgstr "Nota: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:463
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:468
 #, c-format
 msgid ""
 "Note: Be careful selecting when selecting columns. If your choice is too "
@@ -38011,7 +38027,7 @@ msgstr "Nota: non dovresti aver motivo di modificare i seguenti valori"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:390
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:64
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:42
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:297
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:302
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:82
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:592
 #, c-format
@@ -38044,10 +38060,10 @@ msgstr "Note/commenti"
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:149
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:46
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:610
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:675
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:856
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:919
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:948
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:680
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:861
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:924
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:953
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:323
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:204
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:326
@@ -39455,7 +39471,7 @@ msgstr "Apri"
 msgid "Open (%s)"
 msgstr "Apri (%s)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:817
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:822
 #, c-format
 msgid "Open Document Spreadsheet"
 msgstr "Esporta in formato .ods"
@@ -40272,7 +40288,7 @@ msgstr "Indicatore di parti:"
 #: intranet-tmpl/prog/en/modules/about.tt:323
 #, c-format
 msgid "Pasi Kallinen"
-msgstr ""
+msgstr "Pasi Kallinen"
 
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:382
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:795
@@ -40965,7 +40981,7 @@ msgid "Pay"
 msgstr "Paga"
 
 #. INPUT type=submit name=paycollect
-#: intranet-tmpl/prog/en/modules/members/pay.tt:152
+#: intranet-tmpl/prog/en/modules/members/pay.tt:160
 msgid "Pay amount"
 msgstr "Importo del pagamento"
 
@@ -41007,7 +41023,7 @@ msgid "Pay fines for %s %s"
 msgstr "Paga multe per %s %s"
 
 #. INPUT type=submit name=payselected
-#: intranet-tmpl/prog/en/modules/members/pay.tt:154
+#: intranet-tmpl/prog/en/modules/members/pay.tt:162
 msgid "Pay selected"
 msgstr "Paga"
 
@@ -41624,7 +41640,7 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
 #, c-format
 msgid ""
 "Please check the log for further details. %sPlease select a cache expiry "
@@ -41633,7 +41649,7 @@ msgstr ""
 "Per favore, rivedi il log di errore per maggiori dettagli. %sPer favore "
 "selezionea uba scadenza della cache minore di 30 days. %s %s %s "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:392
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:397
 #, c-format
 msgid "Please choose a cache_expiry less than 30 days "
 msgstr ""
@@ -41926,7 +41942,7 @@ msgid "Please return to %s"
 msgstr "Per favore, rinvia a %s"
 
 #. %1$s:  ELSIF ( error.queryerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:983
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
 #, c-format
 msgid ""
 "Please return to the &quot;Saved Reports&quot; screen and delete this report "
@@ -42524,8 +42540,8 @@ msgstr "Meridiano principale 2:"
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:104
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:381
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:39
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:77
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:79
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:85
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:87
 #, c-format
 msgid "Print"
 msgstr "Stampa"
@@ -42887,7 +42903,7 @@ msgstr "Nota di provenienza: "
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:478
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:480
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:505
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:300
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:305
 #, c-format
 msgid "Public"
 msgstr "Pubblico"
@@ -43961,9 +43977,8 @@ msgstr "Rinnova tutto"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "Renew failed:"
-msgstr "Rinnovo non riuscito"
+msgstr "Rinnovo non riuscito:"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:710
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:441
@@ -44014,9 +44029,8 @@ msgstr "Rinnovato "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "Renewed, due:"
-msgstr "Rinnovato "
+msgstr "Rinnovato, scadenza:"
 
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:242
 #, c-format
@@ -44133,7 +44147,7 @@ msgid "Replacement price:"
 msgstr "Costo di sostituzione:"
 
 #. %1$s:  ELSIF ( buildx ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:223
 #, c-format
 msgid "Report %s"
 msgstr "Reports %s"
@@ -44144,33 +44158,33 @@ msgstr "Reports %s"
 msgid "Report Plugins"
 msgstr "Plugins (Report)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1047
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1052
 #, c-format
 msgid "Report group:"
 msgstr "Gruppo di report:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:843
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:845
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
 #, c-format
 msgid "Report is public:"
 msgstr "Il report è pubblico:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:293
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:298
 #, c-format
 msgid "Report name"
 msgstr "Nome del report"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:836
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:932
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:841
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
 #, c-format
 msgid "Report name:"
 msgstr "Nome del report:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:673
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:678
 #, c-format
 msgid "Report name: "
 msgstr "Nome del report: "
@@ -44180,7 +44194,7 @@ msgstr "Nome del report: "
 msgid "Report number: "
 msgstr "Numero del report: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1069
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1074
 #, c-format
 msgid "Report subgroup:"
 msgstr "Sottogruppo di report:"
@@ -44224,7 +44238,7 @@ msgstr "Cronache"
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:43
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:29
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:9
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:212
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:217
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:16
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:43
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:14
@@ -44234,7 +44248,7 @@ msgstr "Cronache"
 msgid "Reports"
 msgstr "Reports"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:261
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:266
 #, c-format
 msgid "Reports Dictionary"
 msgstr "Dizionario dei reports"
@@ -44614,23 +44628,22 @@ msgstr "Torna agli Strumenti"
 
 # Stefano Bargioni data?
 # Tajoli: era un errore
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:971
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:976
 #, c-format
 msgid "Return to: "
 msgstr "Ritorna a: "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "Returned"
-msgstr "Restituzioni"
+msgstr "Restituito"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:131
 #, c-format
 msgid "Returns"
 msgstr "Restituzioni"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:69
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:77
 #, c-format
 msgid "Reverse"
 msgstr "Inverti"
@@ -44860,7 +44873,7 @@ msgstr "Routing:"
 msgid "Row"
 msgstr "Riga"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:786
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:791
 #, c-format
 msgid "Rows per page: "
 msgstr "Risultati per pagina: "
@@ -44879,7 +44892,7 @@ msgstr "Regole per le azioni sui ritardi:%s%s%s biblioteca di default %s"
 msgid "Rull (pianorull/orgelrull)"
 msgstr "Rull (pianorull/orgelrull)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:343
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:348
 #, c-format
 msgid "Run"
 msgstr "Esegui"
@@ -44900,11 +44913,11 @@ msgid "Run reports"
 msgstr "Elabora i report"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:767
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:772
 msgid "Run the report"
 msgstr "Elabora il report:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:967
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:972
 #, c-format
 msgid "Run this report"
 msgstr "Elabora il report"
@@ -45012,7 +45025,7 @@ msgstr "Numero per SMS:"
 msgid "SQL"
 msgstr "SQL"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:867
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:872
 #, c-format
 msgid "SQL:"
 msgstr "SQL:"
@@ -45173,7 +45186,7 @@ msgstr "Sabato"
 #: intranet-tmpl/prog/en/modules/members/member.tt:152
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:89
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:74
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:659
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:664
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:260
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:534
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:157
@@ -45205,8 +45218,8 @@ msgid "Save Record"
 msgstr "Salva record"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:678
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:874
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:683
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:879
 msgid "Save Report"
 msgstr "Salva report"
 
@@ -45239,8 +45252,8 @@ msgid "Save and view record"
 msgstr "Salve e guarda il record"
 
 #. INPUT type=submit name=save_anyway
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:717
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:721
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:722
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:726
 msgid "Save anyway"
 msgstr "Salva"
 
@@ -45264,7 +45277,7 @@ msgid "Save changes"
 msgstr "Salva modifiche"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:894
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:899
 msgid "Save compound"
 msgstr "Salva"
 
@@ -45288,7 +45301,7 @@ msgstr "Salva abbonamento"
 msgid "Save subscription history"
 msgstr "Salva storico dell'abbonamento"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:671
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:676
 #, c-format
 msgid "Save your custom report"
 msgstr "Salva il tuo report personalizzato"
@@ -45298,26 +45311,26 @@ msgstr "Salva il tuo report personalizzato"
 msgid "Saved preference"
 msgstr "Preferenza salvata"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:905
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:910
 #, c-format
 msgid "Saved report results"
 msgstr "Risultati del report salvati"
 
 #: intranet-tmpl/prog/en/includes/guided-reports-view.inc:3
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:217
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:270
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:222
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:223
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:275
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:996
 #, c-format
 msgid "Saved reports"
 msgstr "Reports salvati"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:969
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:974
 #, c-format
 msgid "Saved reports page"
 msgstr "Pagina reports salvati"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:302
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:307
 #, c-format
 msgid "Saved results"
 msgstr "Risultati salvati"
@@ -45370,7 +45383,7 @@ msgstr "Scorri indice:"
 msgid "Scan indexes"
 msgstr "Scorri indici"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:344
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:349
 #, c-format
 msgid "Schedule"
 msgstr "Pianifica"
@@ -45380,12 +45393,12 @@ msgstr "Pianifica"
 msgid "Schedule tasks to run"
 msgstr "Pianifica l'esecuzione di report"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:970
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:975
 #, c-format
 msgid "Schedule this report to run using the: "
 msgstr "Pianifica l'esecuzione di questo report usando "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:970
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:975
 #, c-format
 msgid "Scheduler tool"
 msgstr "Pianificatore"
@@ -45964,9 +45977,9 @@ msgstr "Materiale di supporto secondario"
 msgid "Secondary support material - visual projection"
 msgstr "Materiale di supporto secondario - proiezione visiva"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:417
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:855
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:947
 #, c-format
 msgid "Seconds (default)"
 msgstr "Secondi (default)"
@@ -46026,8 +46039,8 @@ msgstr "Deselezionare"
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:54
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:452
 #: intranet-tmpl/prog/en/modules/members/guarantor_search.tt:109
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1050
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1072
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1055
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1077
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:189
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:76
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:230
@@ -46893,7 +46906,7 @@ msgstr "Abbreviato"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:345
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:338
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:343
 #, c-format
 msgid "Show"
 msgstr "Mostra"
@@ -48156,7 +48169,7 @@ msgstr "Passo 1 di 5: nome della nuova definizione"
 
 #. %1$s:  IF (usecache) 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:398
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:403
 #, c-format
 msgid ""
 "Step 1 of 6: Choose a module to report on,%s Set cache expiry, %s and Choose "
@@ -48170,7 +48183,7 @@ msgstr ""
 msgid "Step 2 of 5: Choose the area"
 msgstr "Passo 2 of 5: Scegli l'area"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:435
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:440
 #, c-format
 msgid "Step 2 of 6: Pick a report type"
 msgstr "Passo 2 di 6: Scegli un tipo di report"
@@ -48185,7 +48198,7 @@ msgstr "Passo 2: Sceglia l'area "
 msgid "Step 3 of 5: Choose columns"
 msgstr "Passo 3 di 5: Scegli le colonne"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:462
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:467
 #, c-format
 msgid "Step 3 of 6: Select columns for display"
 msgstr "Passo 3 di 6: Seleziona le colonne per la visualizzazione"
@@ -48200,7 +48213,7 @@ msgstr "Passo 3: Scegli colonne "
 msgid "Step 4 of 5: Specify a value"
 msgstr "Passo 4 di 5: specifica un valore"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:520
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:525
 #, c-format
 msgid "Step 4 of 6: Select criteria to limit on"
 msgstr "Passo 4 di 6: Scegli i criteri di selezione"
@@ -48215,7 +48228,7 @@ msgstr "Passo 4: Specifica un valore "
 msgid "Step 5 of 5: Confirm details"
 msgstr "Passo 5 di 5: conferma dettagli"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:584
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:589
 #, c-format
 msgid "Step 5 of 6: Pick which columns to total"
 msgstr "Passo 5 di 6: Scegli quali colonne sommare"
@@ -48225,7 +48238,7 @@ msgstr "Passo 5 di 6: Scegli quali colonne sommare"
 msgid "Step 5: Confirm definition"
 msgstr "Passo 5: conferma definizione"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:615
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:620
 #, c-format
 msgid "Step 6 of 6: Choose how you want the report ordered"
 msgstr "Passo 6 di 6: Scegli come vuoi ordinare il report"
@@ -48399,7 +48412,7 @@ msgstr "Sotto classificazione"
 msgid "Sub total "
 msgstr "Subtotale "
 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:144
+#: intranet-tmpl/prog/en/modules/members/pay.tt:152
 #, c-format
 msgid "Sub total:"
 msgstr "Subtotale:"
@@ -48461,22 +48474,22 @@ msgstr "Sottocampi"
 msgid "Subfields: "
 msgstr "Sottocampi: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:296
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:301
 #, c-format
 msgid "Subgroup"
 msgstr "Sottogruppo"
 
 #. INPUT type=text name=subgroup
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1097
 msgid "Subgroup code"
 msgstr "Codice sottogruppo"
 
 #. INPUT type=text name=subgroupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1098
 msgid "Subgroup name"
 msgstr "Nome sottogruppo"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:281
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:286
 #, c-format
 msgid "Subgroup:"
 msgstr "Sottogruppo:"
@@ -49009,8 +49022,8 @@ msgstr "Suite"
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:364
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:44
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:37
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:439
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:860
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:444
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:865
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:185
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:225
 #, c-format
@@ -49354,7 +49367,7 @@ msgstr ""
 msgid "TOTAL"
 msgstr "TOTALE"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:816
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:821
 #, c-format
 msgid "Tab separated text"
 msgstr "Testo separato da caratteri di tabulazione"
@@ -49400,8 +49413,8 @@ msgstr ""
 msgid "Tabs in use"
 msgstr "Schede utilizzate"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:438
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:859
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:443
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:864
 #, c-format
 msgid "Tabular"
 msgstr "Tabulare"
@@ -50068,8 +50081,8 @@ msgstr ""
 msgid "The authority record you requested does not exist (%s)."
 msgstr "Il record di autorità richiesto non esiste (%s)."
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:699
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:742
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:747
 #, c-format
 msgid "The authorized value category ("
 msgstr "La categoria di valori autorizzati ("
@@ -50231,7 +50244,7 @@ msgstr ""
 "Si sono verificati i seguenti errori nell'importazione della struttura del "
 "database:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:979
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
 #, c-format
 msgid "The following error was encountered:"
 msgstr "Si è verificato il seguente errore:"
@@ -50638,7 +50651,7 @@ msgstr "Non ci sono regole di corrispondenza salvate."
 msgid "There are no saved patron attribute types."
 msgstr "Non ci sono attributi utente salvati."
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:379
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:384
 #, c-format
 msgid "There are no saved reports. "
 msgstr "Non ci sono reports salvati. "
@@ -51996,7 +52009,7 @@ msgstr "Costo totale"
 msgid "Total current checkouts allowed"
 msgstr "Totale prestiti attualmente autorizzati:"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:87
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:95
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:114
 #, c-format
 msgid "Total due"
@@ -52029,7 +52042,7 @@ msgid "Total must be a number"
 msgstr "Il totale deve essere un numero"
 
 #. %1$s:  unlimited_total 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:775
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:780
 #, c-format
 msgid "Total number of rows matching the (unlimited) query is %s."
 msgstr "Il numero totale di righe corrispondenti alla query (illimitata) è %s."
@@ -52530,7 +52543,7 @@ msgstr "Grafica bidimensionale non proiettabile"
 #: intranet-tmpl/prog/en/modules/members/files.tt:32
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1218
 #: intranet-tmpl/prog/en/modules/members/notices.tt:48
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:294
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:299
 #, c-format
 msgid "Type"
 msgstr "Tipo"
@@ -52624,7 +52637,7 @@ msgstr "Tipo di materiale visivo"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:210
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:92
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:857
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:862
 #, c-format
 msgid "Type:"
 msgstr "Tipo:"
@@ -52996,9 +53009,8 @@ msgstr "Non abilitato a cancellare l'utente staff"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "Unable to return"
-msgstr "Non abilitato a cancellare l'utente"
+msgstr "Non abilitato a restituire"
 
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:52
 #, c-format
@@ -53595,12 +53607,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:343
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:110
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:228
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:798
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:803
 msgid "Update"
 msgstr "Aggiorna"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:954
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:959
 msgid "Update SQL"
 msgstr "Aggiorna SQL"
 
@@ -53882,7 +53894,7 @@ msgstr "Usa il record esistente"
 msgid "Use for iso2709 exports"
 msgstr "Usa per export iso2709"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:982
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:987
 #, c-format
 msgid ""
 "Use of this keyword is not allowed in Koha reports due to security and data "
@@ -53898,7 +53910,7 @@ msgid "Use restrictions"
 msgstr "Usa restrizioni"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:252
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:257
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:21
 #, c-format
 msgid "Use saved"
@@ -53917,7 +53929,7 @@ msgstr ""
 "Usa il dizionario dei reports per definire criteri personalizzati da usare "
 "nei reports."
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:238
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:243
 #, c-format
 msgid ""
 "Use the guided reports engine to create non standard reports. This feature "
@@ -53928,7 +53940,7 @@ msgstr ""
 "funzionalità fornisce un intermediario tra i reports pre-definiti e la "
 "scrittura di comandi SQL."
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:262
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:267
 #, c-format
 msgid ""
 "Use the reports dictionary to define custom criteria to use in your reports"
@@ -54465,7 +54477,7 @@ msgid "View analytics"
 msgstr "Mosta analitici"
 
 #: intranet-tmpl/prog/en/includes/guided-reports-view.inc:7
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:265
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:270
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:27
 #, c-format
 msgid "View dictionary"
@@ -54496,7 +54508,7 @@ msgstr "Guarda fondi per [% period_loo.budget_period_description %]"
 msgid "View invoice"
 msgstr "Vedi fattura"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:62
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:70
 #, c-format
 msgid "View item"
 msgstr "Visualizza"
@@ -54531,7 +54543,7 @@ msgstr "Guarda l'etichetta per il dorso"
 #: intranet-tmpl/prog/en/modules/about.tt:381
 #, c-format
 msgid "Viktor Sarge"
-msgstr ""
+msgstr "Viktor Sarge"
 
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:402
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:815
@@ -55244,7 +55256,7 @@ msgid "Write off"
 msgstr "Cancella"
 
 #. INPUT type=submit name=woall
-#: intranet-tmpl/prog/en/modules/members/pay.tt:153
+#: intranet-tmpl/prog/en/modules/members/pay.tt:161
 msgid "Write off all"
 msgstr "Cancella tutto"
 
@@ -55358,13 +55370,13 @@ msgstr "Chiusure annuali: %s"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:122
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:276
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:325
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:843
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:845
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:330
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
 #, c-format
 msgid "Yes"
 msgstr "Si"
@@ -55465,7 +55477,7 @@ msgstr "SìNo"
 #: intranet-tmpl/prog/en/modules/about.tt:260
 #, c-format
 msgid "Yohann Dufour"
-msgstr ""
+msgstr "Yohann Dufour"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/member.tt:5
@@ -55885,7 +55897,7 @@ msgstr ""
 "Devi abilitare la preferenza TalkingTechItivaPhoneNotification per usare i "
 "template del telefono."
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:657
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:662
 #, c-format
 msgid "You will need to save the report before you can execute it"
 msgstr "Devi salvare il report prima di eseguirlo"
@@ -56001,12 +56013,12 @@ msgstr "La tua notifica è stata mandata"
 msgid "Your patron lists"
 msgstr "Le tue liste utenti"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:963
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:968
 #, c-format
 msgid "Your report has been saved"
 msgstr "Il tuo report è stato salvato"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:647
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:652
 #, c-format
 msgid "Your report will be generated with the following SQL statement."
 msgstr "Il tuo report sarà generato con il seguente statement SQL."
@@ -57728,6 +57740,12 @@ msgstr "abcdgo"
 msgid "abcdjpvxyz"
 msgstr "abcdjpvxyz"
 
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:887
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:854
+#, c-format
+msgid "abcdn"
+msgstr "abcdn"
+
 #: intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl:109
 #: intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl:117
 #: intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl:125
@@ -57951,10 +57969,10 @@ msgstr "acdenq"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:2167
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:759
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:901
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:898
 #: intranet-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:121
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:420
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:873
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:865
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:2402
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1645
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:1967
@@ -58475,9 +58493,8 @@ msgstr "as- carta del posto"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "at %s"
-msgstr "Raccoglitore %s"
+msgstr "presso %s"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:192
 #, c-format
@@ -59541,8 +59558,9 @@ msgstr "by Binny V A è distribuito con la licenza BSD."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
+#, fuzzy
 msgid "by _AUTHOR_"
-msgstr ""
+msgstr "per _AUTHOR_"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121a.tt:51
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121a.tt:53
@@ -60239,11 +60257,9 @@ msgstr "Catechismo"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:2141
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:752
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:894
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MADS.xsl:368
 #: intranet-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:114
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:413
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:866
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:2378
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1623
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:1943
@@ -62899,8 +62915,8 @@ msgstr "festschrift (studi in onore) "
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MADS.xsl:332
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:440
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:447
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:882
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:889
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:874
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:881
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1478
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1485
 #, c-format
@@ -63170,12 +63186,11 @@ msgstr "valori della griglia di catalogazione"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "from"
 msgstr "da "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:536
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:543
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:541
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:548
 #, c-format
 msgid "from "
 msgstr "da "
@@ -65143,7 +65158,7 @@ msgstr "jpxyz"
 #: intranet-tmpl/prog/en/modules/about.tt:533
 #, c-format
 msgid "jquery.dataTables.grouping.js"
-msgstr ""
+msgstr "jquery.dataTables.grouping.js"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:1031
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:1204
@@ -67862,7 +67877,6 @@ msgstr "non è una biografia"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "not checked out"
 msgstr "Non in prestito."
 
@@ -68188,9 +68202,8 @@ msgstr "olio"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "on reserve"
-msgstr "Aggiungi testi"
+msgstr "tra i testi per i corsi"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:250
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:530
@@ -68272,8 +68285,8 @@ msgstr "o sottocampo MARC."
 msgid "or any available"
 msgstr "oppure ogni copia disponibile"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1064
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1091
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1069
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1096
 #, c-format
 msgid "or create"
 msgstr "o crea"
@@ -69263,9 +69276,9 @@ msgid "please note your reason here..."
 msgstr "per favore annota qui la tua motivazione..."
 
 #: intranet-tmpl/prog/en/modules/about.tt:533
-#, fuzzy, c-format
+#, c-format
 msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
-msgstr "by Binny V A è distribuito con la licenza BSD."
+msgstr "plugin di Jovan Popovic con licenza  BSD e GPL v2."
 
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:82
 #, c-format
@@ -70028,9 +70041,8 @@ msgstr "realia "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "reason unkown"
-msgstr "Date sconosciute"
+msgstr "ragione sconosciuta"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_141.tt:189
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_141.tt:191
@@ -72319,8 +72331,8 @@ msgid "title bands/intertitle rolls"
 msgstr "strisce di titolo/rotoli di intertitolo"
 
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:113
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:537
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:544
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:542
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:549
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:24
 #, c-format
 msgid "to "
@@ -72377,9 +72389,8 @@ msgstr "oggi"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "too many renewals"
-msgstr "Totale rinnovi"
+msgstr "troppi rinnovi"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:66
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:68
@@ -72809,9 +72820,8 @@ msgstr "fino a"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "until %s"
-msgstr "fino a"
+msgstr "fino a %s"
 
 #. INPUT type=text name=cardnumber
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:905
@@ -74051,6 +74061,3 @@ msgstr "• "
 #, c-format
 msgid "﻿%s "
 msgstr "%s "
-
-# femminile se si tratta di prenotazione- Stefano Bargioni
-

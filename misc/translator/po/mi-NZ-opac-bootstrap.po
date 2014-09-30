@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-08-26 13:48-0300\n"
+"POT-Creation-Date: 2014-09-23 18:53-0300\n"
 "PO-Revision-Date: 2013-06-18 02:31+0000\n"
 "Last-Translator: chrisc <chris@bigballofwax.co.nz>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
@@ -1166,22 +1166,31 @@ msgstr ""
 #. %9$s:  CASE 'M' 
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
-#. %12$s:  CASE 
-#. %13$s:  ACCOUNT_LINE.accounttype 
-#. %14$s: - END -
-#. %15$s: - IF ACCOUNT_LINE.description 
-#. %16$s:  ACCOUNT_LINE.description 
-#. %17$s:  END 
-#. %18$s:  IF ACCOUNT_LINE.title 
-#. %19$s:  ACCOUNT_LINE.title 
-#. %20$s:  END 
+#. %12$s:  CASE 'FU' 
+#. %13$s:  CASE 'Rent' 
+#. %14$s:  CASE 'FOR' 
+#. %15$s:  CASE 'LR' 
+#. %16$s:  CASE 'PAY' 
+#. %17$s:  CASE 'WO' 
+#. %18$s:  CASE 'C' 
+#. %19$s:  CASE 'CR' 
+#. %20$s:  CASE 
+#. %21$s:  ACCOUNT_LINE.accounttype 
+#. %22$s: - END -
+#. %23$s: - IF ACCOUNT_LINE.description 
+#. %24$s:  ACCOUNT_LINE.description 
+#. %25$s:  END 
+#. %26$s:  IF ACCOUNT_LINE.title 
+#. %27$s:  ACCOUNT_LINE.title 
+#. %28$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:51
 #, c-format
 msgid ""
-"%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
-"via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
-"%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s %s"
-"(%s)%s "
+"%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
+"(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
+"%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
+"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
+"%sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
 
 #. %1$s:  shelvesloo.count 
@@ -9514,7 +9523,7 @@ msgstr "tukunga"
 #. %2$s:  to 
 #. %3$s:  total 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:65
-#, c-format
+#, fuzzy, c-format
 msgid "Results %s to %s of %s"
 msgstr "Otinga mai i te %s ki te %s"
 
@@ -11095,7 +11104,7 @@ msgstr ""
 
 #. %1$s:  email_add 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:16
-#, c-format
+#, fuzzy, c-format
 msgid "The cart was sent to: %s"
 msgstr "I tukuna te kāta ki:"
 
@@ -12262,7 +12271,7 @@ msgstr ""
 msgid "You have checked out too many items and can't check out any more. %s "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:76
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:84
 #, fuzzy, c-format
 msgid "You have no fines or charges"
 msgstr "Kāore ō Whaina, Utu ranei"
@@ -12529,7 +12538,7 @@ msgstr "Kua hurihia tō kupuhipa "
 
 #. %1$s:  minpasslen 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:48
-#, c-format
+#, fuzzy, c-format
 msgid "Your password must be at least %s characters long."
 msgstr " Kia 6, neke atu rānei, ngā pū o tō kupuhipa hōu"
 
@@ -12783,6 +12792,12 @@ msgstr "Waehere Pae"
 msgid "abcdjpvxyz"
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1202
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1078
+#, fuzzy, c-format
+msgid "abcdn"
+msgstr "Waehere Pae"
+
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:403
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:417
 #, c-format
@@ -12858,8 +12873,8 @@ msgstr "Waehere Pae"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:122
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:475
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1216
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1097
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1213
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1089
 #, fuzzy, c-format
 msgid "acdeq"
 msgstr "Waehere Pae"
@@ -13169,8 +13184,6 @@ msgstr "putumōhio"
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:115
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:468
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1209
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1090
 #, c-format
 msgid "cdn"
 msgstr ""
@@ -13523,8 +13536,8 @@ msgstr "Feschrift Ind. "
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:609
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:495
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:502
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1106
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1113
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1098
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1105
 #, c-format
 msgid "fghkdlmor"
 msgstr ""

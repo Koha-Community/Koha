@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-staff-t-prog-v-3004000\n"
-"POT-Creation-Date: 2014-08-26 14:03-0300\n"
-"PO-Revision-Date: 2014-08-20 05:27+0000\n"
+"POT-Creation-Date: 2014-09-23 19:09-0300\n"
+"PO-Revision-Date: 2014-09-25 08:29+0000\n"
 "Last-Translator: Anthony <mao@lins.fju.edu.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1408512429.0\n"
+"X-POOTLE-MTIME: 1411633780.0\n"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils-MODS31.xsl:12
 #, c-format
@@ -507,7 +507,7 @@ msgstr "%s %s %s 不明 %s "
 #. %2$s:  savedreport.report_name 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:311
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:316
 #, c-format
 msgid "%s %s %s [ no name ] %s "
 msgstr "%s %s %s [ 無名稱 ] %s "
@@ -1120,7 +1120,7 @@ msgstr "%s %s 有 %s 本預約書(s)到館等待提取。"
 
 #. %1$s:  borrower.firstname 
 #. %2$s:  borrower.surname 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:159
+#: intranet-tmpl/prog/en/modules/members/pay.tt:167
 #, c-format
 msgid "%s %s has no outstanding fines."
 msgstr "%s %s 沒有待繳罰款。"
@@ -1399,26 +1399,36 @@ msgstr "%s %s沒有指定"
 #. %9$s:  CASE 'M' 
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
-#. %12$s:  CASE 
-#. %13$s:  line.accounttype 
-#. %14$s: - END -
-#. %15$s: - IF line.description 
-#. %16$s:  line.description 
-#. %17$s:  END 
-#. %18$s:  IF line.title 
-#. %19$s:  line.title |html_entity 
-#. %20$s:  END 
+#. %12$s:  CASE 'FU' 
+#. %13$s:  CASE 'Rent' 
+#. %14$s:  CASE 'FOR' 
+#. %15$s:  CASE 'LR' 
+#. %16$s:  CASE 'PAY' 
+#. %17$s:  CASE 'WO' 
+#. %18$s:  CASE 'C' 
+#. %19$s:  CASE 'CR' 
+#. %20$s:  CASE 
+#. %21$s:  line.accounttype 
+#. %22$s: - END -
+#. %23$s: - IF line.description 
+#. %24$s:  line.description 
+#. %25$s:  END 
+#. %26$s:  IF line.title 
+#. %27$s:  line.title |html_entity 
+#. %28$s:  END 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:116
 #, c-format
+#, fuzzy, c-format
 msgid ""
-"%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
-"via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
-"%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s %s"
-"(%s)%s "
+"%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
+"(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
+"%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
+"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
+"%sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
-"%s %s收到，謝謝 %s收到，謝謝 (經由SIP2的現金) %s收到，謝謝 (經由SIP2的VISA) "
-"%s收到，謝謝 (經由SIP2的信用卡)%s新增讀者證 %s罰款 %s帳戶管理費 %s雜費 %s遺失"
-"館藏 %s註銷 %s%s %s %s, %s%s %s(%s)%s "
+"%s %s付款，謝謝 %s付款，謝謝 (經由SIP2的現金) %s付款，謝謝 (經由SIP2的VISA) %s付款，謝謝 (經由SIP2的信用卡)%"
+"s新增讀者證 %s罰款 %s帳戶管理費 %s雜費 %s遺失館藏 %s續增罰款 %s租金 %s豁免 %s遺失館藏賠償金 %s付款 %s豁免 %s額度 %"
+"s額度 %s%s %s %s, %s%s %s(%s)%s "
 
 #. %1$s:  SWITCH account.accounttype 
 #. %2$s:  CASE 'Pay' 
@@ -1431,24 +1441,33 @@ msgstr ""
 #. %9$s:  CASE 'M' 
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
-#. %12$s:  CASE 
-#. %13$s:  account.accounttype 
-#. %14$s: - END -
-#. %15$s: - IF account.description 
-#. %16$s:  account.description 
-#. %17$s:  END 
-#. %18$s:  IF ( account.itemnumber ) 
+#. %12$s:  CASE 'FU' 
+#. %13$s:  CASE 'Rent' 
+#. %14$s:  CASE 'FOR' 
+#. %15$s:  CASE 'LR' 
+#. %16$s:  CASE 'PAY' 
+#. %17$s:  CASE 'WO' 
+#. %18$s:  CASE 'C' 
+#. %19$s:  CASE 'CR' 
+#. %20$s:  CASE 
+#. %21$s:  account.accounttype 
+#. %22$s: - END -
+#. %23$s: - IF account.description 
+#. %24$s:  account.description 
+#. %25$s:  END 
+#. %26$s:  IF ( account.itemnumber ) 
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:47
 #, c-format
 msgid ""
-"%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
-"via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
-"%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s "
-"&nbsp;%s"
+"%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
+"(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
+"%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
+"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
+"%sCredit %s%s %s %s, %s%s &nbsp;%s"
 msgstr ""
-"%s %s收到，謝謝 %s收到，謝謝 (經由SIP2的現金) %s收到，謝謝 (經由SIP2的VISA)  "
-"%s收到，謝謝 (經由SIP2的信用卡) %s新增讀者證 %s罰款 %s帳戶管理費 %s雜費 %s遺"
-"失館藏%s註銷 %s%s %s %s, %s%s &nbsp;%s"
+"%s %s付款，謝謝 %s付款，謝謝 (經由SIP2的現金) %s付款，謝謝 (經由SIP2的VISA)  %s付款，謝謝 (經由SIP2的信用卡) %"
+"s新增讀者證 %s罰款 %s帳戶管理費 %s雜費 %s遺失館藏%s豁免%s續增罰款 %s租金 %s豁免 %s遺失館藏賠償金 %s付款 %s豁免 %s額度 "
+"%s額度 %s%s %s %s, %s%s &nbsp;%s"
 
 #. %1$s:  IF ( suggestion.suggestiontypelabel ) 
 #. %2$s:  IF (suggestion.suggestiontypelabel == "Pending") 
@@ -1497,7 +1516,7 @@ msgstr "%s %s欄位 %s 的分欄被限制%s %s %s %s "
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:979
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
 #, c-format
 msgid "%s %sThis report contains the SQL keyword "
 msgstr "%s %s此報表包含 SQL 關鍵字 "
@@ -2379,8 +2398,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:331
 #, c-format
 msgid "%s Item returns to issuing library "
-msgstr ""
-"%s類型的館藏通常不外借，%s %s館藏通常不外借 %s(%s)%s。%s %s 仍要外借嗎？ %s "
+msgstr "%s 館藏還至借出圖書館 "
 
 #. %1$s:  IF ( itemtype_notforloan ) 
 #. %2$s:  ELSIF ( item_notforloan ) 
@@ -3669,9 +3687,8 @@ msgstr "%s 裡的%s"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "%s of %s renewals remaining"
-msgstr "(%s 的 %s 續借提醒)"
+msgstr "%s 裡的 %s 仍在續借中"
 
 #. For the first occurrence,
 #. %1$s:  IF ( subscription_LOO.arrival1 ) 
@@ -4522,7 +4539,7 @@ msgstr "%s預設框架%s %s %s %s "
 #. %2$s:  ELSE 
 #. %3$s:  value.availablevalues |html 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:554
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:559
 #, c-format
 msgid "%sDefault%s%s%s"
 msgstr "%s預設%s%s%s"
@@ -5477,7 +5494,7 @@ msgstr "&lt;&lt; 前一個 "
 msgid "&lt;a href=\"[856u]\"&gt;open site&lt;/a&gt;"
 msgstr "&lt;a href=\"[856u]\"&gt;開啟網站&lt;/a&gt;"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:885
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:890
 #, c-format
 msgid "&nbsp; Sub report:"
 msgstr "&nbsp; 次報表："
@@ -5987,7 +6004,7 @@ msgstr "&rsaquo; %s紀錄匹配規則%s"
 #. %1$s:  IF ( saved1 ) 
 #. %2$s:  ELSIF ( create ) 
 #. %3$s:  ELSIF ( showsql ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:213
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
 #, c-format
 msgid "&rsaquo; %sSaved reports %sCreate from SQL %s"
 msgstr "&rsaquo; %s儲存報表 %s從SQL新增 %s"
@@ -6870,7 +6887,7 @@ msgid "&rsaquo; Rotating collections"
 msgstr "&rsaquo; 巡迴館藏"
 
 #. %1$s:  ELSIF ( execute ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:217
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:222
 #, c-format
 msgid "&rsaquo; SQL view %s"
 msgstr "&rsaquo; 檢視SQL %s"
@@ -7005,7 +7022,7 @@ msgstr "&rsaquo; 統計"
 #. %7$s:  ELSIF ( build6 ) 
 #. %8$s:  END 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:219
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:224
 #, c-format
 msgid ""
 "&rsaquo; Step %s of 6: %sChoose a module %sPick a report type %sSelect "
@@ -7379,8 +7396,8 @@ msgstr "(內含，預設 %s 天之前到 %s%s 在 %s今天%s，必要時可設�
 msgid "(Indonesian)"
 msgstr "(印尼)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1052
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1074
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1057
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1079
 #, c-format
 msgid "(None)"
 msgstr "(無)"
@@ -7683,8 +7700,8 @@ msgstr ") 在 "
 msgid ") renewed for %s %s ( "
 msgstr ") %s %s 的續借( "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:699
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:742
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:747
 #, c-format
 msgid ") you selected does not exist. "
 msgstr ") 您的選項不存在。 "
@@ -8304,7 +8321,7 @@ msgstr "/cgi-bin/koha/catalogue/search.pl?q=Host-item:"
 #: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:231
 #: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:268
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:503
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:934
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:926
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl:173
 #, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=an:"
@@ -8324,7 +8341,7 @@ msgstr "/cgi-bin/koha/catalogue/search.pl?q=au:"
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:347
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:362
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:384
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:937
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:929
 #, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=au:\""
 msgstr "/cgi-bin/koha/catalogue/search.pl?q=au:\""
@@ -10193,15 +10210,15 @@ msgstr ""
 "器。] "
 
 #. INPUT type=button name=back
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:446
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:505
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:577
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:608
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:451
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:510
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:582
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:613
 msgid "<< Back"
 msgstr "<< 前一頁"
 
 #. INPUT type=button name=delete
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:494
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:499
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:152
 msgid "<< Delete"
 msgstr "<< 刪除"
@@ -10561,7 +10578,7 @@ msgstr "已退還給借閱讀者帳戶。"
 #: intranet-tmpl/prog/en/modules/about.tt:382
 #, c-format
 msgid "A. Sassmannshausen"
-msgstr ""
+msgstr "A. Sassmannshausen"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tags/review.tt:16
@@ -10706,7 +10723,7 @@ msgstr "接受於："
 msgid "Accepted payment (%s) from "
 msgstr "接受付款(%s)，來自 "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:969
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:974
 #, c-format
 msgid "Access this report from the: "
 msgstr "近用此報表來自："
@@ -11001,7 +11018,7 @@ msgstr "動作"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:388
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:142
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:334
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:339
 #, c-format
 msgid "Actions "
 msgstr "動作 "
@@ -11085,7 +11102,7 @@ msgstr "Adam Thick"
 #: intranet-tmpl/prog/en/modules/acqui/aqbasketuser_search.tt:69
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:409
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:178
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:493
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:498
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:152
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:98
 #: intranet-tmpl/prog/en/modules/labels/result.tt:96
@@ -11602,7 +11619,7 @@ msgstr "特別感謝......"
 msgid "Additional attributes and identifiers"
 msgstr "其他屬性與辨識碼"
 
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:929
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:921
 #, c-format
 msgid "Additional author(s): "
 msgstr "其他作者："
@@ -11947,8 +11964,9 @@ msgstr "Alexandra Horsman"
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:90
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:99
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:109
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:274
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:283
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:28
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:279
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:288
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:209
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:41
 #, c-format
@@ -11973,7 +11991,7 @@ msgstr "所有圖書館"
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:142
 #, c-format
 msgid "All authority types"
-msgstr "所有權威類型"
+msgstr "所有容許值類型"
 
 #. %1$s:  IF ( branchname ) 
 #. %2$s:  branchname 
@@ -12685,7 +12703,7 @@ msgstr "直接應用"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:266
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1015
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1020
 msgid "Apply filter"
 msgstr "使用篩選器"
 
@@ -13254,7 +13272,7 @@ msgstr "容許值："
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:74
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:32
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:77
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:298
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:303
 #: intranet-tmpl/prog/en/modules/labels/search.tt:29
 #: intranet-tmpl/prog/en/modules/labels/search.tt:30
 #, c-format
@@ -13298,7 +13316,7 @@ msgstr "著者(個人)："
 msgid "Author(s)"
 msgstr "著者"
 
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:928
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:920
 #, c-format
 msgid "Author(s): "
 msgstr "著者："
@@ -13328,7 +13346,7 @@ msgstr "著者：%s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 #: intranet-tmpl/prog/en/includes/suggestions-add-search.inc:9
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:150
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:312
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1011
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1016
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:186
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:309
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:636
@@ -13467,7 +13485,7 @@ msgstr "權威類型："
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:29
 #, c-format
 msgid "Authority types"
-msgstr "權威類型"
+msgstr "容許值類型"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:233
 #, c-format
@@ -14996,23 +15014,23 @@ msgstr "預算"
 msgid "Budgets administration"
 msgstr "預算管理"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:430
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:435
 #, c-format
 msgid "Build A Report"
 msgstr "建立報表"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:367
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:372
 msgid "Build a new report"
 msgstr "建立新報表"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:381
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:386
 #, c-format
 msgid "Build a new report?"
 msgstr "建立新報表嗎？"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:219
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:395
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:224
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:400
 #, c-format
 msgid "Build a report"
 msgstr "建立報表"
@@ -15027,13 +15045,13 @@ msgstr "建立與管理批次書標"
 msgid "Build and manage batches of patron cards"
 msgstr "建立與管理批次讀者證"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:242
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:247
 #, c-format
 msgid "Build and run reports"
 msgstr "建立與管理報表"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:246
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:251
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:20
 #, c-format
 msgid "Build new"
@@ -15245,14 +15263,14 @@ msgstr "CSV 區隔碼："
 msgid "CX encoded"
 msgstr "CX 編碼"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:301
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:306
 #, c-format
 msgid "Cache expiry (seconds)"
 msgstr "快取到期時間(秒)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:415
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:853
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:945
 #, c-format
 msgid "Cache expiry:"
 msgstr "快取到期時間："
@@ -15653,9 +15671,9 @@ msgstr "不能儲存此紀錄，因為以下欄位尚未填入資料："
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:193
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:221
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:51
-#: intranet-tmpl/prog/en/modules/members/pay.tt:155
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:874
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:954
+#: intranet-tmpl/prog/en/modules/members/pay.tt:163
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:879
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:959
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:92
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:535
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:93
@@ -15695,7 +15713,7 @@ msgid "Cancel and return to order"
 msgstr "取消並返回訂單"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:374
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:379
 msgid "Cancel filter"
 msgstr "取消篩選"
 
@@ -17166,8 +17184,8 @@ msgstr "選擇供讀者與館員建議搜尋用的外掛程式。"
 msgid "Choose your library:"
 msgstr "選擇您的圖書館："
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:399
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:436
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:404
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:441
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:176
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:183
 #, c-format
@@ -18032,8 +18050,8 @@ msgstr "合著者"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:167
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:398
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:62
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1065
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1070
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1097
 #, c-format
 msgid "Code"
 msgstr "代碼"
@@ -18276,7 +18294,7 @@ msgstr "來自%s"
 msgid "Comma (,)"
 msgstr "逗點(，)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:815
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:820
 #, c-format
 msgid "Comma separated text"
 msgstr "逗點分隔的文字"
@@ -18539,7 +18557,7 @@ msgstr "組態 "
 msgid "Confirm"
 msgstr "確認"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:646
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:651
 #, c-format
 msgid "Confirm custom report"
 msgstr "確認客製化報表"
@@ -19476,8 +19494,8 @@ msgid "Create printable patron cards"
 msgstr "新增可列印的讀者證"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:258
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:834
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:263
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:839
 #, c-format
 msgid "Create report from SQL"
 msgstr "從SQL新增報表"
@@ -19518,7 +19536,7 @@ msgstr "新增者："
 #: intranet-tmpl/prog/en/columns.def:116
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:208
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:853
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:299
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:304
 #, c-format
 msgid "Creation date"
 msgstr "登記日期"
@@ -20332,7 +20350,7 @@ msgstr "日期/時間"
 msgid "Date/time"
 msgstr "日期/時間"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1007
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1012
 #, c-format
 msgid "Date:"
 msgstr "日期："
@@ -20432,9 +20450,9 @@ msgid "Day: "
 msgstr "天："
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:243
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:415
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:853
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:945
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:420
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:858
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:950
 #, c-format
 msgid "Days"
 msgstr "日"
@@ -20567,8 +20585,8 @@ msgid ""
 "define itemtypes and biblio MARC tag structure. Authority values are managed "
 "through plugins"
 msgstr ""
-"設定權威類型，然後以同樣的方式設定館藏類型與書目機讀編目格式欄號結構。容許值"
-"由外掛程式管理。"
+"設定容許值類型，然後在機讀編目格式結構的容許值內，設定館藏類型與書目機讀編目"
+"格式欄號結構。容許值由外掛程式管理。"
 
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:38
 #, c-format
@@ -20831,7 +20849,7 @@ msgstr "延遲是逾期後天數，屆時才啟發逾期通知。 "
 #: intranet-tmpl/prog/en/modules/members/files.tt:46
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:264
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:439
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:351
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:136
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:155
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:179
@@ -21032,7 +21050,7 @@ msgstr "若無館藏附屬，則刪除該筆紀錄。"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:250
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:356
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:361
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:579
 #, c-format
 msgid "Delete selected"
@@ -21140,7 +21158,7 @@ msgid "Delete this printer"
 msgstr "刪除此列表機"
 
 #. A
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:351
 msgid "Delete this saved report"
 msgstr "刪除此儲存的報表"
 
@@ -21558,7 +21576,7 @@ msgstr "字典"
 msgid "Dictionary "
 msgstr "字典 "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:567
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:572
 #, c-format
 msgid "Dictionary definitions"
 msgstr "字典定義"
@@ -21999,7 +22017,7 @@ msgid "Doug Dearden"
 msgstr "Doug Dearden"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:821
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:826
 msgid "Download"
 msgstr "下載"
 
@@ -22084,7 +22102,7 @@ msgstr "下載紀錄"
 msgid "Download selected claims"
 msgstr "刪除選定的要求"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:813
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:818
 #, c-format
 msgid "Download the report: "
 msgstr "下載 "
@@ -22152,7 +22170,7 @@ msgstr "到期日"
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:723
 #, c-format
 msgid "Due date (unformatted, hidden)"
-msgstr ""
+msgstr "到期日 (未格式化，隱藏)"
 
 #: intranet-tmpl/prog/en/modules/about.tt:411
 #, c-format
@@ -22161,7 +22179,7 @@ msgstr "Duncan Tyler"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:118
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:26
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:341
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
 #, c-format
 msgid "Duplicate"
 msgstr "複製"
@@ -22194,7 +22212,7 @@ msgid "Duplicate record suspected"
 msgstr "可能為複製紀錄"
 
 #. A
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:341
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
 msgid "Duplicate this saved report"
 msgstr "複製此儲存報表"
 
@@ -22403,7 +22421,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/members/member.tt:205
 #: intranet-tmpl/prog/en/modules/members/member.tt:208
 #: intranet-tmpl/prog/en/modules/members/member.tt:210
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:340
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:345
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:154
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:178
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:143
@@ -22449,12 +22467,12 @@ msgid "Edit Items"
 msgstr "編輯館藏"
 
 #. INPUT type=button name=back
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:726
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:747
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:731
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:752
 msgid "Edit SQL"
 msgstr "編輯 SQL"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:930
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
 #, c-format
 msgid "Edit SQL report"
 msgstr "編輯SQL報表"
@@ -23033,7 +23051,7 @@ msgid "Enter item barcode: "
 msgstr "鍵入館藏條碼 "
 
 #. %1$s:  name 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:750
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:755
 #, c-format
 msgid "Enter parameters for report %s:"
 msgstr "鍵入報表的參數%s："
@@ -23287,8 +23305,8 @@ msgstr "錯誤：可能不能儲存您的資料"
 
 #. For the first occurrence,
 #. %1$s:  name 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:696
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:739
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:701
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:744
 #, c-format
 msgid "Errors found when processing parameters for report: %s"
 msgstr "處理報表參數時，發生錯誤：%s"
@@ -24292,7 +24310,7 @@ msgstr "幻燈捲片"
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:105
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:155
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:111
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1005
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1010
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:122
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:73
 #, c-format
@@ -24409,7 +24427,7 @@ msgstr "還入的館藏將豁免罰款。"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:149
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:640
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:645
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:189
 msgid "Finish"
 msgstr "最後"
@@ -25741,7 +25759,7 @@ msgid "Groove width:"
 msgstr "溝紋寬度："
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:39
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:295
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:300
 #, c-format
 msgid "Group"
 msgstr "群組"
@@ -25754,12 +25772,12 @@ msgid ""
 msgstr "群組屬性類型含禁用題名(根據容許值類型 'PA_CLASS')"
 
 #. INPUT type=text name=group
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1065
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1070
 msgid "Group code"
 msgstr "群組代碼"
 
 #. INPUT type=text name=groupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1071
 msgid "Group name"
 msgstr "群組名稱"
 
@@ -25812,14 +25830,14 @@ msgstr "指引盒："
 
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:1
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:3
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:237
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:971
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:242
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:976
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:17
 #, c-format
 msgid "Guided reports"
 msgstr "報表精靈"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:213
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:19
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:11
 #, c-format
@@ -26193,7 +26211,7 @@ msgstr "預約找到："
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
 msgid "Hold is <strong>suspended</strong>"
-msgstr ""
+msgstr "預約被 <strong>中止</strong>"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:221
 #, c-format
@@ -26615,7 +26633,7 @@ msgstr "全像"
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:43
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:29
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:9
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:211
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:216
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:9
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:43
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:14
@@ -26760,9 +26778,9 @@ msgid "Hour"
 msgstr "小時"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:244
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:414
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:852
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:944
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:419
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:857
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:949
 #, c-format
 msgid "Hours"
 msgstr "時間"
@@ -26833,7 +26851,7 @@ msgid "IBERMARC"
 msgstr "IBERMARC"
 
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:217
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:292
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:297
 #, c-format
 msgid "ID"
 msgstr "帳號"
@@ -28382,12 +28400,12 @@ msgstr "館藏資訊 %s%s %s "
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
 msgid "Item is <strong>in transit</strong> from %s"
-msgstr ""
+msgstr "館藏 <strong>轉移</strong> 自 %s"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
 msgid "Item is <strong>waiting</strong>"
-msgstr ""
+msgstr "館藏 <strong>等待中</strong>"
 
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:479
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:892
@@ -28926,7 +28944,7 @@ msgstr "Juan Romay Sieira"
 #: intranet-tmpl/prog/en/modules/about.tt:386
 #, c-format
 msgid "Juhani Seppälä"
-msgstr ""
+msgstr "Juhani Seppälä"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/calendar.inc:1
@@ -29112,7 +29130,7 @@ msgstr "鍵詞搜尋"
 msgid "Keyword to MARC mapping"
 msgstr "鍵詞對映至機讀編目格式"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1012
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1017
 #, c-format
 msgid "Keyword:"
 msgstr "鍵詞："
@@ -29711,8 +29729,8 @@ msgid ""
 "authority type%sNew authority type%s %s &rsaquo; Confirm deletion of "
 "authority type %s "
 msgstr ""
-"Koha &rsaquo; 管理 &rsaquo; 權威類型 %s &rsaquo; %s修改權威類型%s 新增權威類"
-"型 %s %s &rsaquo; 確認刪除權威紀錄類型 %s "
+"Koha &rsaquo; 管理 &rsaquo; 容許值類型 %s &rsaquo; %s修改容許值類型%s 新增容"
+"許值類型 %s %s &rsaquo; 確認刪除容許值類型 %s "
 
 #. %1$s:  IF ( add_form ) 
 #. %2$s:  IF ( action_modify ) 
@@ -31367,7 +31385,7 @@ msgstr "Koha 除錯計畫"
 #: intranet-tmpl/prog/en/modules/about.tt:240
 #, c-format
 msgid "Koha SAB CINECA"
-msgstr ""
+msgstr "Koha SAB CINECA"
 
 #: intranet-tmpl/prog/en/modules/about.tt:30
 #, c-format
@@ -33804,7 +33822,7 @@ msgstr "Mason James"
 msgid "Masses"
 msgstr "彌撒"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:880
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:885
 #, c-format
 msgid "Master: "
 msgstr "主要："
@@ -33960,8 +33978,8 @@ msgstr "資料類型："
 msgid "Mathieu Saby"
 msgstr "Mathieu Saby"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:440
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:861
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:445
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:866
 #, c-format
 msgid "Matrix"
 msgstr "矩陣"
@@ -34379,9 +34397,9 @@ msgstr "分"
 msgid "Minute (complete with 0):"
 msgstr "分(補零)："
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:413
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:851
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:943
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:418
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:856
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:948
 #, c-format
 msgid "Minutes"
 msgstr "分"
@@ -35273,8 +35291,8 @@ msgstr "Nahuel Angelinetti"
 #: intranet-tmpl/prog/en/modules/members/guarantor_search.tt:80
 #: intranet-tmpl/prog/en/modules/members/member.tt:166
 #: intranet-tmpl/prog/en/modules/reports/reservereport.tt:18
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1071
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1098
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:56
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:78
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:64
@@ -35900,11 +35918,11 @@ msgstr "下一個&gt;&gt;"
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:299
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:611
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:107
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:422
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:447
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:506
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:578
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:609
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:427
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:452
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:511
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:583
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:614
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:44
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:51
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:29
@@ -35986,7 +36004,7 @@ msgstr "Nimbus"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:120
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:123
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:277
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:327
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:332
 #, c-format
 msgid "No"
 msgstr "不"
@@ -35996,12 +36014,12 @@ msgstr "不"
 msgid "No "
 msgstr "不 "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:843
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:845
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
 #, c-format
 msgid "No (default)"
 msgstr "不(預設值)"
@@ -36246,7 +36264,7 @@ msgid "No claims notice defined. "
 msgstr "未定義催缺說明。 "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1024
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1029
 msgid "No columns selected!"
 msgstr "未選擇欄！"
 
@@ -36675,9 +36693,8 @@ msgstr "不能續借於此之前"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "No renewal before %s"
-msgstr "不能續借於此之前"
+msgstr "無法在 %s 之前續借"
 
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:117
 #, c-format
@@ -36727,7 +36744,7 @@ msgid ""
 "the samples supplied for English (en)"
 msgstr "您的語系無可用的範例資料與設定，預設為英文(en)資料"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:368
 #, c-format
 msgid "No saved reports match your criteria. "
 msgstr "無儲存的紀錄匹配您的範疇。 "
@@ -37172,9 +37189,8 @@ msgstr "未出版"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "Not renewable"
-msgstr "總計續借"
+msgstr "不可續借"
 
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:585
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:615
@@ -37263,7 +37279,7 @@ msgstr "說明："
 msgid "Note: "
 msgstr "說明："
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:463
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:468
 #, c-format
 msgid ""
 "Note: Be careful selecting when selecting columns. If your choice is too "
@@ -37309,7 +37325,7 @@ msgstr "說明：應沒有理由修改以下的預設值"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:390
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:64
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:42
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:297
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:302
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:82
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:592
 #, c-format
@@ -37342,10 +37358,10 @@ msgstr "說明/評論"
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:149
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:46
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:610
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:675
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:856
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:919
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:948
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:680
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:861
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:924
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:953
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:323
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:204
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:326
@@ -38679,7 +38695,7 @@ msgstr "開啟"
 msgid "Open (%s)"
 msgstr "開啟 (%s)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:817
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:822
 #, c-format
 msgid "Open Document Spreadsheet"
 msgstr "開放檔案試算表格式"
@@ -39494,7 +39510,7 @@ msgstr "部件指標："
 #: intranet-tmpl/prog/en/modules/about.tt:323
 #, c-format
 msgid "Pasi Kallinen"
-msgstr ""
+msgstr "Pasi Kallinen"
 
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:382
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:795
@@ -40179,7 +40195,7 @@ msgid "Pay"
 msgstr "支付"
 
 #. INPUT type=submit name=paycollect
-#: intranet-tmpl/prog/en/modules/members/pay.tt:152
+#: intranet-tmpl/prog/en/modules/members/pay.tt:160
 msgid "Pay amount"
 msgstr "支付總額"
 
@@ -40221,7 +40237,7 @@ msgid "Pay fines for %s %s"
 msgstr "為 %s %s 支付罰款"
 
 #. INPUT type=submit name=payselected
-#: intranet-tmpl/prog/en/modules/members/pay.tt:154
+#: intranet-tmpl/prog/en/modules/members/pay.tt:162
 msgid "Pay selected"
 msgstr "支付指定的"
 
@@ -40832,14 +40848,14 @@ msgstr "請勾選不出版的期數(不規則)"
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
 #, c-format
 msgid ""
 "Please check the log for further details. %sPlease select a cache expiry "
 "less than 30 days. %s %s %s "
 msgstr "檢查紀錄取得詳情。%s請選擇快取少於 30 天。%s %s %s "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:392
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:397
 #, c-format
 msgid "Please choose a cache_expiry less than 30 days "
 msgstr "請選擇cache_expiry小於30天 "
@@ -41120,7 +41136,7 @@ msgid "Please return to %s"
 msgstr "請送回至 %s"
 
 #. %1$s:  ELSIF ( error.queryerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:983
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
 #, c-format
 msgid ""
 "Please return to the &quot;Saved Reports&quot; screen and delete this report "
@@ -41707,8 +41723,8 @@ msgstr "本初子午線2："
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:104
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:381
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:39
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:77
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:79
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:85
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:87
 #, c-format
 msgid "Print"
 msgstr "列印"
@@ -42070,7 +42086,7 @@ msgstr "說明："
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:478
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:480
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:505
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:300
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:305
 #, c-format
 msgid "Public"
 msgstr "公開"
@@ -43140,9 +43156,8 @@ msgstr "全部續訂"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "Renew failed:"
-msgstr "續借失敗"
+msgstr "續借失敗："
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:710
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:441
@@ -43193,9 +43208,8 @@ msgstr "續借 "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "Renewed, due:"
-msgstr "續借 "
+msgstr "續借到期日："
 
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:242
 #, c-format
@@ -43312,7 +43326,7 @@ msgid "Replacement price:"
 msgstr "重置價格："
 
 #. %1$s:  ELSIF ( buildx ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:223
 #, c-format
 msgid "Report %s"
 msgstr "報表 %s"
@@ -43323,33 +43337,33 @@ msgstr "報表 %s"
 msgid "Report Plugins"
 msgstr "報表外掛程式"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1047
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1052
 #, c-format
 msgid "Report group:"
 msgstr "報表群組："
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:843
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:845
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
 #, c-format
 msgid "Report is public:"
 msgstr "公開報表："
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:293
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:298
 #, c-format
 msgid "Report name"
 msgstr "報表名稱"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:836
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:932
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:841
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
 #, c-format
 msgid "Report name:"
 msgstr "報表名稱："
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:673
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:678
 #, c-format
 msgid "Report name: "
 msgstr "報表名稱："
@@ -43359,7 +43373,7 @@ msgstr "報表名稱："
 msgid "Report number: "
 msgstr "報表編號："
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1069
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1074
 #, c-format
 msgid "Report subgroup:"
 msgstr "報表次群組："
@@ -43403,7 +43417,7 @@ msgstr "回報"
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:43
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:29
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:9
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:212
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:217
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:16
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:43
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:14
@@ -43413,7 +43427,7 @@ msgstr "回報"
 msgid "Reports"
 msgstr "報表"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:261
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:266
 #, c-format
 msgid "Reports Dictionary"
 msgstr "報表字典"
@@ -43789,23 +43803,22 @@ msgstr "回到採購籃不必新增訂單。"
 msgid "Return to tools"
 msgstr "回到工具"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:971
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:976
 #, c-format
 msgid "Return to: "
 msgstr "回到："
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "Returned"
-msgstr "回到"
+msgstr "還入"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:131
 #, c-format
 msgid "Returns"
 msgstr "回到"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:69
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:77
 #, c-format
 msgid "Reverse"
 msgstr "復原"
@@ -44034,7 +44047,7 @@ msgstr "傳閱："
 msgid "Row"
 msgstr "列"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:786
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:791
 #, c-format
 msgid "Rows per page: "
 msgstr "每頁列數："
@@ -44053,7 +44066,7 @@ msgstr "逾期規則：%s%s%s 預設圖書館 %s"
 msgid "Rull (pianorull/orgelrull)"
 msgstr "打洞紙卷(鋼琴紙卷/音樂盒紙卷)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:343
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:348
 #, c-format
 msgid "Run"
 msgstr "執行"
@@ -44074,11 +44087,11 @@ msgid "Run reports"
 msgstr "執行報表"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:767
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:772
 msgid "Run the report"
 msgstr "執行報表"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:967
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:972
 #, c-format
 msgid "Run this report"
 msgstr "執行此報表"
@@ -44186,7 +44199,7 @@ msgstr "簡訊號碼："
 msgid "SQL"
 msgstr "SQL"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:867
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:872
 #, c-format
 msgid "SQL:"
 msgstr "SQL："
@@ -44347,7 +44360,7 @@ msgstr "星期六"
 #: intranet-tmpl/prog/en/modules/members/member.tt:152
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:89
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:74
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:659
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:664
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:260
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:534
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:157
@@ -44379,8 +44392,8 @@ msgid "Save Record"
 msgstr "儲存紀錄"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:678
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:874
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:683
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:879
 msgid "Save Report"
 msgstr "儲存報表"
 
@@ -44413,8 +44426,8 @@ msgid "Save and view record"
 msgstr "儲存並預視紀錄"
 
 #. INPUT type=submit name=save_anyway
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:717
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:721
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:722
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:726
 msgid "Save anyway"
 msgstr "任要儲存"
 
@@ -44438,7 +44451,7 @@ msgid "Save changes"
 msgstr "儲存改變"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:894
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:899
 msgid "Save compound"
 msgstr "儲存組合"
 
@@ -44462,7 +44475,7 @@ msgstr "儲存訂閱"
 msgid "Save subscription history"
 msgstr "儲存訂閱紀錄"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:671
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:676
 #, c-format
 msgid "Save your custom report"
 msgstr "儲存您的客製化報表"
@@ -44472,26 +44485,26 @@ msgstr "儲存您的客製化報表"
 msgid "Saved preference"
 msgstr "儲存參照"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:905
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:910
 #, c-format
 msgid "Saved report results"
 msgstr "儲存報表結果"
 
 #: intranet-tmpl/prog/en/includes/guided-reports-view.inc:3
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:217
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:218
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:270
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:222
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:223
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:275
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:996
 #, c-format
 msgid "Saved reports"
 msgstr "儲存報表"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:969
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:974
 #, c-format
 msgid "Saved reports page"
 msgstr "儲存報表頁面"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:302
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:307
 #, c-format
 msgid "Saved results"
 msgstr "儲存結果"
@@ -44544,7 +44557,7 @@ msgstr "掃瞄索引："
 msgid "Scan indexes"
 msgstr "掃瞄索引"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:344
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:349
 #, c-format
 msgid "Schedule"
 msgstr "工作"
@@ -44554,12 +44567,12 @@ msgstr "工作"
 msgid "Schedule tasks to run"
 msgstr "執行排定工作"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:970
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:975
 #, c-format
 msgid "Schedule this report to run using the: "
 msgstr "排定執行此報表："
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:970
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:975
 #, c-format
 msgid "Scheduler tool"
 msgstr "排程工具"
@@ -45137,9 +45150,9 @@ msgstr "次要支援材料"
 msgid "Secondary support material - visual projection"
 msgstr "次要支援材料 - 視覺投射"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:417
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:855
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:947
 #, c-format
 msgid "Seconds (default)"
 msgstr "次要(預設)"
@@ -45198,8 +45211,8 @@ msgstr "選擇&amp;關閉"
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:54
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:452
 #: intranet-tmpl/prog/en/modules/members/guarantor_search.tt:109
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1050
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1072
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1055
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1077
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:189
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:76
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:230
@@ -46053,7 +46066,7 @@ msgstr "縮短"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:345
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:338
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:343
 #, c-format
 msgid "Show"
 msgstr "顯示"
@@ -47313,7 +47326,7 @@ msgstr "步驟1之5：為新定義命名"
 
 #. %1$s:  IF (usecache) 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:398
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:403
 #, c-format
 msgid ""
 "Step 1 of 6: Choose a module to report on,%s Set cache expiry, %s and Choose "
@@ -47325,7 +47338,7 @@ msgstr "步驟1之6：選擇報表使用的模組，%s 設定快取有效期，%
 msgid "Step 2 of 5: Choose the area"
 msgstr "步驟2之5：選擇區塊"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:435
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:440
 #, c-format
 msgid "Step 2 of 6: Pick a report type"
 msgstr "步驟2之5：選擇報表類型"
@@ -47340,7 +47353,7 @@ msgstr "步驟2：選擇區塊 "
 msgid "Step 3 of 5: Choose columns"
 msgstr "步驟3之5：選擇欄位"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:462
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:467
 #, c-format
 msgid "Step 3 of 6: Select columns for display"
 msgstr "步驟3之6：選擇顯示的欄位"
@@ -47355,7 +47368,7 @@ msgstr "步驟3：選擇欄位 "
 msgid "Step 4 of 5: Specify a value"
 msgstr "步驟4之5：指定值"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:520
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:525
 #, c-format
 msgid "Step 4 of 6: Select criteria to limit on"
 msgstr "步驟4之6：選擇限制範圍"
@@ -47370,7 +47383,7 @@ msgstr "步驟4：指定值 "
 msgid "Step 5 of 5: Confirm details"
 msgstr "步驟5之5：確認詳情"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:584
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:589
 #, c-format
 msgid "Step 5 of 6: Pick which columns to total"
 msgstr "步驟5之6：選取總計的欄"
@@ -47380,7 +47393,7 @@ msgstr "步驟5之6：選取總計的欄"
 msgid "Step 5: Confirm definition"
 msgstr "步驟5：確認定義"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:615
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:620
 #, c-format
 msgid "Step 6 of 6: Choose how you want the report ordered"
 msgstr "步驟6之6：選擇報表的排序方式"
@@ -47552,7 +47565,7 @@ msgstr "次分類法"
 msgid "Sub total "
 msgstr "小計 "
 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:144
+#: intranet-tmpl/prog/en/modules/members/pay.tt:152
 #, c-format
 msgid "Sub total:"
 msgstr "小計："
@@ -47614,22 +47627,22 @@ msgstr "分欄"
 msgid "Subfields: "
 msgstr "分欄："
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:296
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:301
 #, c-format
 msgid "Subgroup"
 msgstr "次群組"
 
 #. INPUT type=text name=subgroup
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1097
 msgid "Subgroup code"
 msgstr "次群組代碼"
 
 #. INPUT type=text name=subgroupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1093
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1098
 msgid "Subgroup name"
 msgstr "次群組名稱"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:281
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:286
 #, c-format
 msgid "Subgroup:"
 msgstr "次群組："
@@ -48162,8 +48175,8 @@ msgstr "套裝軟體"
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:364
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:44
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:37
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:439
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:860
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:444
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:865
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:185
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:225
 #, c-format
@@ -48504,7 +48517,7 @@ msgstr ""
 msgid "TOTAL"
 msgstr "總計"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:816
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:821
 #, c-format
 msgid "Tab separated text"
 msgstr "定位區隔符號"
@@ -48550,8 +48563,8 @@ msgstr ""
 msgid "Tabs in use"
 msgstr "使用中的分頁"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:438
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:859
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:443
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:864
 #, c-format
 msgid "Tabular"
 msgstr "表單"
@@ -49207,8 +49220,8 @@ msgstr "屬性值 %s 已被另個讀者記錄使用。"
 msgid "The authority record you requested does not exist (%s)."
 msgstr "您要求的權威紀錄不存在(%s)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:699
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:742
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:747
 #, c-format
 msgid "The authorized value category ("
 msgstr "容許值範圍 ("
@@ -49355,7 +49368,7 @@ msgstr "找到以下的條碼："
 msgid "The following error occurred while importing the database structure:"
 msgstr "匯入資料庫結構時，發生以下錯誤："
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:979
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
 #, c-format
 msgid "The following error was encountered:"
 msgstr "碰到以下的錯誤："
@@ -49741,7 +49754,7 @@ msgstr "無儲存的對映規則。"
 msgid "There are no saved patron attribute types."
 msgstr "無儲存的讀者屬性類型。"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:379
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:384
 #, c-format
 msgid "There are no saved reports. "
 msgstr "無儲存的報表。 "
@@ -51049,7 +51062,7 @@ msgstr "成本總計"
 msgid "Total current checkouts allowed"
 msgstr "借出總數"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:87
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:95
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:114
 #, c-format
 msgid "Total due"
@@ -51082,7 +51095,7 @@ msgid "Total must be a number"
 msgstr "總額必須是數字"
 
 #. %1$s:  unlimited_total 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:775
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:780
 #, c-format
 msgid "Total number of rows matching the (unlimited) query is %s."
 msgstr "符合此詢問的列數是 %s."
@@ -51575,7 +51588,7 @@ msgstr "二度空間非投影圖像"
 #: intranet-tmpl/prog/en/modules/members/files.tt:32
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1218
 #: intranet-tmpl/prog/en/modules/members/notices.tt:48
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:294
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:299
 #, c-format
 msgid "Type"
 msgstr "類型"
@@ -51669,7 +51682,7 @@ msgstr "視覺資料類型"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:210
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:92
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:857
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:862
 #, c-format
 msgid "Type:"
 msgstr "類型："
@@ -52039,9 +52052,8 @@ msgstr "不能刪除館員讀者"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "Unable to return"
-msgstr "不能刪除讀者"
+msgstr "不能還入"
 
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:52
 #, c-format
@@ -52618,12 +52630,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:343
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:110
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:228
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:798
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:803
 msgid "Update"
 msgstr "更新"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:954
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:959
 msgid "Update SQL"
 msgstr "更新SQL"
 
@@ -52903,7 +52915,7 @@ msgstr "使用既有紀錄"
 msgid "Use for iso2709 exports"
 msgstr "供ISO 2709匯出之用"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:982
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:987
 #, c-format
 msgid ""
 "Use of this keyword is not allowed in Koha reports due to security and data "
@@ -52918,7 +52930,7 @@ msgid "Use restrictions"
 msgstr "使用限制"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:252
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:257
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:21
 #, c-format
 msgid "Use saved"
@@ -52934,7 +52946,7 @@ msgstr "在確認刪除下有個\"確認\"鈕。 "
 msgid "Use the dictionary to define custom criteria for reporting."
 msgstr "以字典定義報表客製化的範圍。"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:238
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:243
 #, c-format
 msgid ""
 "Use the guided reports engine to create non standard reports. This feature "
@@ -52944,7 +52956,7 @@ msgstr ""
 "使用報表精靈產生非標準的報表。此功能針對中段使用者，介於預設的報表與客製化SQL"
 "報表。"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:262
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:267
 #, c-format
 msgid ""
 "Use the reports dictionary to define custom criteria to use in your reports"
@@ -53475,7 +53487,7 @@ msgid "View analytics"
 msgstr "檢視分析"
 
 #: intranet-tmpl/prog/en/includes/guided-reports-view.inc:7
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:265
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:270
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:27
 #, c-format
 msgid "View dictionary"
@@ -53506,7 +53518,7 @@ msgstr "檢視[% period_loo.budget_period_description %]的基金"
 msgid "View invoice"
 msgstr "檢視發票"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:62
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:70
 #, c-format
 msgid "View item"
 msgstr "檢視館藏"
@@ -53541,7 +53553,7 @@ msgstr "檢視書標"
 #: intranet-tmpl/prog/en/modules/about.tt:381
 #, c-format
 msgid "Viktor Sarge"
-msgstr ""
+msgstr "Viktor Sarge"
 
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:402
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:815
@@ -54227,7 +54239,7 @@ msgid "Write off"
 msgstr "豁免"
 
 #. INPUT type=submit name=woall
-#: intranet-tmpl/prog/en/modules/members/pay.tt:153
+#: intranet-tmpl/prog/en/modules/members/pay.tt:161
 msgid "Write off all"
 msgstr "全部豁免"
 
@@ -54340,13 +54352,13 @@ msgstr "每年重複的假日：%s"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:122
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:276
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:325
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:407
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:843
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:845
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:330
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:410
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:848
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:850
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:940
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:942
 #, c-format
 msgid "Yes"
 msgstr "是的"
@@ -54447,7 +54459,7 @@ msgstr "YesNo"
 #: intranet-tmpl/prog/en/modules/about.tt:260
 #, c-format
 msgid "Yohann Dufour"
-msgstr ""
+msgstr "Yohann Dufour"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/member.tt:5
@@ -54821,7 +54833,7 @@ msgid ""
 "the phone templates."
 msgstr "應啟用 TalkingTechItivaPhoneNotification 偏好才能使用電話模板。"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:657
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:662
 #, c-format
 msgid "You will need to save the report before you can execute it"
 msgstr "執行前，應先儲存報表"
@@ -54931,12 +54943,12 @@ msgstr "將送出您的通知。"
 msgid "Your patron lists"
 msgstr "您的讀者清單"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:963
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:968
 #, c-format
 msgid "Your report has been saved"
 msgstr "已儲存您的報表"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:647
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:652
 #, c-format
 msgid "Your report will be generated with the following SQL statement."
 msgstr "以下列SQL敘述產生您的報表"
@@ -56656,6 +56668,12 @@ msgstr "abcdgo"
 msgid "abcdjpvxyz"
 msgstr "abcdjpvxyz"
 
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:887
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:854
+#, c-format
+msgid "abcdn"
+msgstr "abcdn"
+
 #: intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl:109
 #: intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl:117
 #: intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl:125
@@ -56878,10 +56896,10 @@ msgstr "acdenq"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:2167
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:759
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:901
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:898
 #: intranet-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:121
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:420
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:873
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:865
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:2402
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1645
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:1967
@@ -57107,7 +57125,7 @@ msgstr "所有"
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:222
 #, c-format
 msgid "all authority types used in the frameworks are defined"
-msgstr "框架裡的權威類型都已設定"
+msgstr "框架裡的容許值類型都已設定"
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:30
 #, c-format
@@ -57400,9 +57418,8 @@ msgstr "as- 座位牌"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "at %s"
-msgstr "借出籃 %s"
+msgstr "在 %s"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:192
 #, c-format
@@ -58462,7 +58479,7 @@ msgstr "Binny V A 採用 BSD 授權條款。"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
 msgid "by _AUTHOR_"
-msgstr ""
+msgstr "by _AUTHOR_"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121a.tt:51
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121a.tt:53
@@ -59159,11 +59176,9 @@ msgstr "慕道"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:2141
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:752
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:894
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MADS.xsl:368
 #: intranet-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:114
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:413
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:866
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:2378
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1623
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:1943
@@ -61809,8 +61824,8 @@ msgstr "紀念文集 "
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MADS.xsl:332
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:440
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:447
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:882
-#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:889
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:874
+#: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:881
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1478
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1485
 #, c-format
@@ -62080,12 +62095,11 @@ msgstr "框架值"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "from"
-msgstr "來自 "
+msgstr "來自"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:536
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:543
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:541
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:548
 #, c-format
 msgid "from "
 msgstr "來自 "
@@ -63578,7 +63592,7 @@ msgstr "訪問"
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:193
 #, c-format
 msgid "invalid authority types"
-msgstr "無效的權威類型"
+msgstr "無效的容許值類型"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:171
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:183
@@ -64040,7 +64054,7 @@ msgstr "jpxyz"
 #: intranet-tmpl/prog/en/modules/about.tt:533
 #, c-format
 msgid "jquery.dataTables.grouping.js"
-msgstr ""
+msgstr "jquery.dataTables.grouping.js"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:1031
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:1204
@@ -66748,9 +66762,8 @@ msgstr "非地理複分"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "not checked out"
-msgstr "未借出。"
+msgstr "未借出"
 
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:84
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:87
@@ -67072,9 +67085,8 @@ msgstr "油"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "on reserve"
-msgstr "新增指定參考書課程"
+msgstr "在指定參考書"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:250
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:530
@@ -67156,8 +67168,8 @@ msgstr "或機讀編目格式分欄。"
 msgid "or any available"
 msgstr "或任何可取得"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1064
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1091
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1069
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1096
 #, c-format
 msgid "or create"
 msgstr "或新增"
@@ -68145,9 +68157,9 @@ msgid "please note your reason here..."
 msgstr "請注意您的理由在這裡..."
 
 #: intranet-tmpl/prog/en/modules/about.tt:533
-#, fuzzy, c-format
+#, c-format
 msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
-msgstr "Binny V A 採用 BSD 授權條款。"
+msgstr "Jovan Popovic 的外掛程式採取 BSD 與 GPL v2 許可證。"
 
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:82
 #, c-format
@@ -68904,9 +68916,8 @@ msgstr "教具 "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "reason unkown"
-msgstr "日期不明"
+msgstr "理由不明"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_141.tt:189
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_141.tt:191
@@ -71174,8 +71185,8 @@ msgid "title bands/intertitle rolls"
 msgstr "題名幅/標題字幕捲"
 
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:113
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:537
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:544
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:542
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:549
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:24
 #, c-format
 msgid "to "
@@ -71231,9 +71242,8 @@ msgstr "今天"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "too many renewals"
-msgstr "總計續借"
+msgstr "續借過多"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:66
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:68
@@ -71663,9 +71673,8 @@ msgstr "直到"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "until %s"
-msgstr "直到"
+msgstr "直到 %s"
 
 #. INPUT type=text name=cardnumber
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:905
@@ -72904,4 +72913,3 @@ msgstr "• "
 #, c-format
 msgid "﻿%s "
 msgstr "%s "
-
