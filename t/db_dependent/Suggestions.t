@@ -21,7 +21,9 @@ use C4::Context;
 use C4::Members;
 use C4::Letters;
 
-use Test::More tests => 91;
+use Koha::DateUtils qw( dt_from_string );
+
+use Test::More tests => 97;
 use Test::Warn;
 
 BEGIN {
@@ -57,6 +59,10 @@ my $my_suggestion = {
     publishercode => 'my publishercode',
     suggestedby   => $borrowernumber,
     biblionumber  => $biblionumber1,
+    managedby     => '',
+    manageddate   => '',
+    accepteddate  => dt_from_string,
+    note          => 'my note',
 };
 
 
@@ -65,7 +71,6 @@ is( CountSuggestion('ASKED'), 0, 'CountSuggestion returns the correct number of 
 is( CountSuggestion('CHECKED'), 0, 'CountSuggestion returns the correct number of suggestions' );
 is( CountSuggestion('ACCEPTED'), 0, 'CountSuggestion returns the correct number of suggestions' );
 is( CountSuggestion('REJECTED'), 0, 'CountSuggestion returns the correct number of suggestions' );
-
 
 my $my_suggestionid = NewSuggestion($my_suggestion);
 isnt( $my_suggestionid, 0, 'NewSuggestion returns an not null id' );
@@ -78,7 +83,8 @@ is( $suggestion->{publishercode}, $my_suggestion->{publishercode}, 'NewSuggestio
 is( $suggestion->{suggestedby}, $my_suggestion->{suggestedby}, 'NewSuggestion stores the borrower number correctly' );
 is( $suggestion->{biblionumber}, $my_suggestion->{biblionumber}, 'NewSuggestion stores the biblio number correctly' );
 is( $suggestion->{STATUS}, 'ASKED', 'NewSuggestion stores a suggestion with the status ASKED by default' );
-
+is( $suggestion->{managedby}, undef, 'NewSuggestion stores empty string as undef for non existent foreign key (integer)' );
+is( $suggestion->{manageddate}, undef, 'NewSuggestion stores empty string as undef for date' );
 is( CountSuggestion('ASKED'), 1, 'CountSuggestion returns the correct number of suggestions' );
 
 
@@ -87,6 +93,8 @@ my $mod_suggestion1 = {
     title         => 'my modified title',
     author        => 'my modified author',
     publishercode => 'my modified publishercode',
+    managedby     => '',
+    manageddate   => '',
 };
 my $status = ModSuggestion($mod_suggestion1);
 is( $status, undef, 'ModSuggestion without the suggestion id returns undef' );
@@ -98,6 +106,11 @@ $suggestion = GetSuggestion($my_suggestionid);
 is( $suggestion->{title}, $mod_suggestion1->{title}, 'ModSuggestion modifies the title  correctly' );
 is( $suggestion->{author}, $mod_suggestion1->{author}, 'ModSuggestion modifies the author correctly' );
 is( $suggestion->{publishercode}, $mod_suggestion1->{publishercode}, 'ModSuggestion modifies the publishercode correctly' );
+is( $suggestion->{managedby}, undef, 'ModSuggestion stores empty string as undef for non existent foreign key (integer)' );
+is( $suggestion->{manageddate}, undef, 'ModSuggestion stores empty string as undef for date' );
+isnt( $suggestion->{accepteddate}, undef, 'ModSuggestion does not update a non given date value' );
+is( $suggestion->{note}, 'my note', 'ModSuggestion should not erase data if not given' );
+
 my $messages = C4::Letters::GetQueuedMessages({
     borrowernumber => $borrowernumber,
 });

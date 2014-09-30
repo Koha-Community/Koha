@@ -28,6 +28,8 @@ use C4::Output;
 use C4::Dates qw(format_date format_date_in_iso);
 use C4::Debug;
 use C4::Letters;
+use Koha::DateUtils qw( dt_from_string );
+
 use List::MoreUtils qw(any);
 use C4::Dates qw(format_date_in_iso);
 use base qw(Exporter);
@@ -426,7 +428,22 @@ Insert a new suggestion on database with value given on input arg.
 sub NewSuggestion {
     my ($suggestion) = @_;
 
+    for my $field ( qw(
+        suggestedby
+        managedby
+        manageddate
+        acceptedby
+        accepteddate
+        rejectedby
+        rejecteddate
+    ) ) {
+        # Set the fields to NULL if not given.
+        $suggestion->{$field} ||= undef;
+    }
+
     $suggestion->{STATUS} = "ASKED" unless $suggestion->{STATUS};
+
+    $suggestion->{suggesteddate} = dt_from_string unless $suggestion->{suggesteddate};
 
     my $rs = Koha::Database->new->schema->resultset('Suggestion');
     return $rs->create($suggestion)->id;
@@ -448,6 +465,22 @@ Note that there is no function to modify a suggestion.
 sub ModSuggestion {
     my ($suggestion) = @_;
     return unless( $suggestion and defined($suggestion->{suggestionid}) );
+
+    for my $field ( qw(
+        suggestedby
+        managedby
+        manageddate
+        acceptedby
+        accepteddate
+        rejectedby
+        rejecteddate
+    ) ) {
+        # Set the fields to NULL if not given.
+        $suggestion->{$field} = undef
+          if exists $suggestion->{$field}
+          and ($suggestion->{$field} eq '0'
+            or $suggestion->{$field} eq '' );
+    }
 
     my $rs = Koha::Database->new->schema->resultset('Suggestion')->find($suggestion->{suggestionid});
     my $status_update_table = 1;

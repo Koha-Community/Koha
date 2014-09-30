@@ -115,7 +115,10 @@ $template->param('borrowernumber' => $borrowernumber);
 ##  Operations
 ##
 if ( $op =~ /save/i ) {
-        if ( $suggestion_only->{"STATUS"} ) {
+    $suggestion_only->{suggesteddate} = dt_from_string( $suggestion_only->{suggesteddate} )
+        if $suggestion_only->{suggesteddate};
+
+    if ( $suggestion_only->{"STATUS"} ) {
         if ( my $tmpstatus = lc( $suggestion_only->{"STATUS"} ) =~ /ACCEPTED|REJECTED/i ) {
             $suggestion_only->{ lc( $suggestion_only->{"STATUS"}) . "date" } = dt_from_string;
             $suggestion_only->{ lc( $suggestion_only->{"STATUS"}) . "by" }   = C4::Context->userenv->{number};
