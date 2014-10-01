@@ -655,9 +655,16 @@ sub GetFine {
     my $dbh   = C4::Context->dbh();
     my $query = q|SELECT sum(amountoutstanding) as fineamount FROM accountlines
     where accounttype like 'F%'
-  AND amountoutstanding > 0 AND itemnumber = ? AND borrowernumber=?|;
+  AND amountoutstanding > 0 AND borrowernumber=?|;
+    my @query_param;
+    push @query_param, $borrowernumber;
+    if (defined $itemnum )
+    {
+        $query .= " AND itemnumber=?";
+        push @query_param, $itemnum;
+    }
     my $sth = $dbh->prepare($query);
-    $sth->execute( $itemnum, $borrowernumber );
+    $sth->execute( @query_param );
     my $fine = $sth->fetchrow_hashref();
     if ($fine->{fineamount}) {
         return $fine->{fineamount};

@@ -196,7 +196,7 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
     $amount = $catamounts{$borrower->{'categorycode'}} if (defined $catamounts{$borrower->{'categorycode'}});
 
     # We check if there is already a fine for the given borrower
-    my $fine = GetFine($data->[$i]->{'borrowernumber'});
+    my $fine = GetFine(undef, $data->[$i]->{'borrowernumber'});
     if ($fine > 0) {
         $debug and warn "There is already a fine for borrower " . $data->[$i]->{'borrowernumber'} . ". Nothing to do here. Skipping this borrower";
         next;
