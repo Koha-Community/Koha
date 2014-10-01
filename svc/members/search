@@ -60,7 +60,8 @@ foreach (grep {$_ =~ /^mDataProp/} keys %dt_params) {
 my $results;
 # If the user filled a term, maybe it's a cardnumber.
 # This cannot be the case if a first letter is given.
-if (    not $firstletter
+if ( $searchmember
+    and not $firstletter
     and $searchfieldstype
     and $searchfieldstype eq 'standard' )
 {
