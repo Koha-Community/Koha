@@ -51,5 +51,6 @@ my $search_patrons_with_acq_perm_only =
 
 $template->param(
     patrons_with_acq_perm_only => $search_patrons_with_acq_perm_only,
+    view => ( $input->request_method() eq "GET" ) ? "show_form" : "show_results",
 );
 output_html_with_http_headers( $input, $cookie, $template->output );
