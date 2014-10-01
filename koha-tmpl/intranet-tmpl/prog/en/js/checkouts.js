@@ -161,9 +161,9 @@ $(document).ready(function() {
                 {
                     "mDataProp": function( oObj ) {
                         if ( oObj.issued_today ) {
-                            return "0";
+                            return "1" + oObj.timestamp;
                         } else {
-                            return "100";
+                            return "0" + oObj.date_due;
                         }
                     }
                 },
@@ -375,7 +375,7 @@ $(document).ready(function() {
             {
                 iGroupingColumnIndex: 1,
                 iGroupingOrderByColumnIndex: 0,
-                sGroupingColumnSortDirection: "asc"
+                sGroupingColumnSortDirection: "desc"
             }
         );
 
