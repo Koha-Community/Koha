@@ -128,6 +128,11 @@ $(document).ready(function() {
 
     $('#issues-table').hide();
     $('#issues-table-actions').hide();
+    $('#issues-table-load-immediately').change(function(){
+        if ( this.checked && typeof issuesTable === 'undefined') {
+            $('#issues-table-load-now-button').click();
+        }
+    });
     $('#issues-table-load-now-button').click(function(){
         LoadIssuesTable();
         return false;
