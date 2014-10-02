@@ -71,14 +71,10 @@ $(document).ready(function() {
     $("#hide_inactive").click(function(e){
         e.preventDefault();
         oTable.fnFilter( 1, 0 ); // Show only active=1
-        inactive.hide();
-        active.show();
     });
     $("#show_inactive").click(function(e){
         e.preventDefault();
         oTable.fnFilter( '', 0 );
-        inactive.show();
-        active.hide();
     });
     $("#hide_inactive").click();
 
