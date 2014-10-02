@@ -217,6 +217,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('maxoutstanding','5','','maximum amount withstanding to be able make holds','Integer'),
 ('maxRecordsForFacets','20',NULL,NULL,'Integer'),
 ('maxreserves','50','','Define maximum number of holds a patron can place','Integer'),
+('MaxSearchResultsItemsPerRecordStatusCheck','20','','Max number of items per record for which to check transit and hold status','Integer'),
 ('MembershipExpiryDaysNotice',NULL,'Send an account expiration notice that a patron\'s card is about to expire after',NULL,'Integer'),
 ('MergeReportFields','',NULL,'Displayed fields for deleted MARC records after merge','Free'),
 ('minPasswordLength','3',NULL,'Specify the minimum length of a patron/staff password','free'),

@@ -2136,7 +2136,7 @@ sub searchResults {
                         || $item->{itemlost}
                         || $item->{damaged}
                         || $item->{notforloan}
-                        || $items_count > 20) {
+                        || $items_count > C4::Context->preference('MaxSearchResultsItemsPerRecordStatusCheck') ) {
 
                     # A couple heuristics to limit how many times
                     # we query the database for item transfer information, sacrificing
