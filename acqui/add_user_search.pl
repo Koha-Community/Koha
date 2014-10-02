@@ -29,7 +29,7 @@ my $input = new CGI;
 my $dbh = C4::Context->dbh;
 
 my ( $template, $loggedinuser, $cookie, $staff_flags ) = get_template_and_user(
-    {   template_name   => "acqui/add_user_search.tt",
+    {   template_name   => "common/patron_search.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
