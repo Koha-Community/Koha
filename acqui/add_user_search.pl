@@ -52,5 +52,8 @@ my $search_patrons_with_acq_perm_only =
 $template->param(
     patrons_with_acq_perm_only => $search_patrons_with_acq_perm_only,
     view => ( $input->request_method() eq "GET" ) ? "show_form" : "show_results",
+    columns => ['cardnumber', 'name', 'branch', 'category', 'action'],
+    json_template => 'acqui/tables/members_results.tt',
+    selection_type => 'add',
 );
 output_html_with_http_headers( $input, $cookie, $template->output );

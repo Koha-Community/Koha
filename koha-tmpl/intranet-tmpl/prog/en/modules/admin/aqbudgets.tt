@@ -31,13 +31,13 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
         );
     }
 
-    function edit_owner(borrowernumber, surname, firstname) {
+    function edit_owner(borrowernumber, borrowername) {
         $('#budget_owner_name').empty();
         $('#budget_owner_id').val('');
         if (borrowernumber) {
             var ownerlink = '<a href="/cgi-bin/koha/members/moremember.pl'
                 + '?borrowernumber=' + borrowernumber + '">'
-                + firstname + ' ' + surname + '</a>';
+                + borrowername + '</a>';
             $('#budget_owner_name').html(ownerlink);
             $('#budget_owner_id').val(borrowernumber);
         }
@@ -47,12 +47,12 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
         edit_owner(0);
     }
 
-    function add_user(borrowernumber, surname, firstname) {
+    function add_user(borrowernumber, borrowername) {
         var ids = $("#budget_users_id").val().split(':');
         if(borrowernumber && ids.indexOf(borrowernumber) == -1) {
             var li = '<li id="user_' + borrowernumber + '">'
                 + '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber='
-                + borrowernumber + '">' + firstname + ' ' + surname
+                + borrowernumber + '">' + borrowername
                 + '</a> [<a style="cursor:pointer"'
                 + 'onclick="del_user(' + borrowernumber +')">Remove</a>]</li>';
             $(li).insertBefore("li#add_user_button");

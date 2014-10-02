@@ -22,12 +22,12 @@
     //<![CDATA[
 
     // modify parent window owner element
-    function add_user(borrowernumber, surname, firstname) {
+    function add_user(borrowernumber, borrowername) {
         [% IF (type == 'owner') %]
-            top.opener.edit_owner(borrowernumber, surname, firstname);
+            top.opener.edit_owner(borrowernumber, borrowername);
             window.close();
         [% ELSE %]
-            var ret = top.opener.add_user(borrowernumber, surname, firstname);
+            var ret = top.opener.add_user(borrowernumber, borrowername);
             if (ret != 0) {
                 alert(_("This user is already in the list."));
             }

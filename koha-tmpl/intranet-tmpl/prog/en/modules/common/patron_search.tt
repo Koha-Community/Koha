@@ -35,7 +35,7 @@ $(document).ready(function(){
             },
             {
                 'name': 'template_path',
-                'value': 'acqui/tables/members_results.tt',
+                'value': '[% json_template %]',
             }
             [% IF patrons_with_acq_perm_only %]
             ,{
@@ -55,11 +55,14 @@ $(document).ready(function(){
             });
         },
         'aoColumns':[
-            { 'mDataProp': 'dt_cardnumber' },
-            { 'mDataProp': 'dt_name' },
-            { 'mDataProp': 'dt_branch' },
-            { 'mDataProp': 'dt_category' },
-            { 'mDataProp': 'dt_action', 'bSortable': false }
+            [% FOR column IN columns %]
+                [% IF column == 'action' %]
+                    { 'mDataProp': 'dt_action', 'bSortable': false }
+                [% ELSE %]
+                    { 'mDataProp': 'dt_[% column %]' }
+                [% END %]
+                [% UNLESS loop.last %],[% END %]
+            [% END %]
         ],
         'bAutoWidth': false,
         [% IF patrons_with_acq_perm_only %]
@@ -97,19 +100,27 @@ function filter() {
 }
 
     // modify parent window owner element
-    function add_user(borrowernumber, borrowername) {
-        var p = window.opener;
-        $("#info").hide();
-        $("#error").hide();
-        if ( p.add_user(borrowernumber, borrowername) < 0 ) {
-            $("#error").html(_("Borrower '%s' is already in the list.").format(borrowername));
-            $("#error").show();
-        } else {
-            $("#info").html(_("Borrower '%s' added.").format(borrowername));
-            $("#info").show();
-
+    [% IF selection_type == 'add' %]
+        [%# Note that add_user could sent data instead of borrowername too %]
+        function add_user(borrowernumber, borrowername) {
+            var p = window.opener;
+            $("#info").hide();
+            $("#error").hide();
+            if ( p.add_user(borrowernumber, borrowername) < 0 ) {
+                $("#error").html(_("Borrower '%s' is already in the list.").format(borrowername));
+                $("#error").show();
+            } else {
+                $("#info").html(_("Borrower '%s' added.").format(borrowername));
+                $("#info").show();
+            }
         }
-    }
+    [% ELSIF selection_type == 'select' %]
+        function select_user(borrowernumber, data) {
+            var p = window.opener;
+            p.select_user(borrowernumber, data);
+            window.close();
+        }
+    [% END %]
 //]]>
 </script>
 
@@ -135,11 +146,17 @@ function filter() {
             <table id="memberresultst">
                 <thead>
                     <tr>
-                        <th>Card</th>
-                        <th>Name</th>
-                        <th>Library</th>
-                        <th>Category</th>
-                        <th>&nbsp;</th>
+                        [% FOR column IN columns %]
+                            [% SWITCH column %]
+                                [% CASE 'cardnumber' %]<th>Card</th>
+                                [% CASE 'dateofbirth' %]<th>Date of birth</th>
+                                [% CASE 'address' %]<th>Address</th>
+                                [% CASE 'name' %]<th>Name</th>
+                                [% CASE 'branch' %]<th>Library</th>
+                                [% CASE 'category' %]<th>Category</th>
+                                [% CASE 'action' %]<th>&nbsp;</th>
+                            [% END %]
+                        [% END %]
                     </tr>
                   </thead>
                 <tbody></tbody>

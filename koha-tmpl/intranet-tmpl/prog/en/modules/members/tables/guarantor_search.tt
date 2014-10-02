@@ -1,0 +1,21 @@
+[% USE To %]
+[% USE KohaDates %]
+{
+    "sEcho": [% sEcho %],
+    "iTotalRecords": [% iTotalRecords %],
+    "iTotalDisplayRecords": [% iTotalDisplayRecords %],
+    "aaData": [
+        [% FOREACH data IN aaData %]
+            {
+                "dt_cardnumber":
+                    "[% data.cardnumber %]",
+                "dt_dateofbirth":
+                    "[% data.dateofbirth | $KohaDates %]",
+                "dt_address":
+                    "[% data.streetnumber %] [% data.address | html %] [% data.address2 | html %] [% data.city | html %] [% data.state | html %] [% data.zipcode | html %] [% data.country | html %] [% data.branchcode %]",
+                "dt_action":
+                    "<a style='cursor:pointer' onclick='select_user(\"[% data.borrowernumber %]\", [% To.json(data) | html %] );'>Select</a>"
+            }[% UNLESS loop.last %],[% END %]
+        [% END %]
+    ]
+}

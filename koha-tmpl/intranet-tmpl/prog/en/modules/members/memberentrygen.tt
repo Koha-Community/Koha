@@ -99,6 +99,43 @@
         $(mytables).find(" li[data-category_code='']").show();
     }
 
+    function select_user(borrowernumber, borrower) {
+        var form = $('#entryform').get(0);
+        if (form.guarantorid.value) {
+            $("#contact-details").find('a').remove();
+            $("#contactname, #contactfirstname").parent().find('span').remove();
+        }
+
+        var id = borrower.borrowernumber;
+        form.guarantorid.value = id;
+        $('#contact-details')
+            .show()
+            .find('span')
+            .after('<a target="blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' + id + '">' + id + '</a>');
+
+        $(form.contactname)
+            .val(borrower.surname)
+            .before('<span>' + borrower.surname + '</span>').get(0).type = 'hidden';
+        $(form.contactfirstname)
+            .val(borrower.firstname)
+            .before('<span>' + borrower.firstname + '</span>').get(0).type = 'hidden';
+
+        form.streetnumber.value = borrower.streetnumber;
+        form.address.value = borrower.address;
+        form.address2.value = borrower.address2;
+        form.city.value = borrower.city;
+        form.state.value = borrower.state;
+        form.zipcode.value = borrower.zipcode;
+        form.country.value = borrower.country;
+        form.branchcode.value = borrower.branchcode;
+
+        form.guarantorsearch.value = 'Change';
+
+        return 0;
+    }
+
+
+
         var MSG_SEPARATOR = _("Separator must be / in field %s");
         var MSG_INCORRECT_DAY = _("Invalid day entered in field %s");
         var MSG_INCORRECT_MONTH = _("Invalid month entered in field %s");
