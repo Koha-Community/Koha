@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2014-08-15 23:15-0300\n"
+"POT-Creation-Date: 2014-09-24 12:46-0300\n"
 "PO-Revision-Date: 2011-06-21 08:16+0200\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Koha Translation Team\n"
@@ -617,11 +617,11 @@ msgstr "%s %s %s %s (%s) "
 msgid "%s %s A/C: %s"
 msgstr "%s. %s %s"
 
-#. %1$s:  IF (loop_receive.cannot_cancel) 
+#. %1$s:  IF (order.cannot_cancel) 
 #. %2$s:  span_title = BLOCK 
-#. %3$s:  loop_receive.parent_ordernumber 
+#. %3$s:  order.parent_ordernumber 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:415
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:420
 #, c-format
 msgid ""
 "%s %s Cannot cancel receipt of this order line because it was created from a "
@@ -1720,7 +1720,7 @@ msgstr "%s  /  %s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:394
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:399
 #, fuzzy, c-format
 msgid "%s 0 %s "
 msgstr "%s / %s "
@@ -2366,7 +2366,7 @@ msgstr "Barkod %s "
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  IF ( pagination_bar ) 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:313
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:369
 #, fuzzy, c-format
 msgid "%s No fund found %s %s"
 msgstr "%s sonuç bulundu"
@@ -2416,7 +2416,7 @@ msgid "%s No results found %s "
 msgstr "%s sonuç bulundu "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:421
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:477
 #, fuzzy, c-format
 msgid "%s None "
 msgstr "%s - "
@@ -2508,19 +2508,19 @@ msgid "%s Outstanding order (only one order per subscription is allowed) %s "
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:429
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:485
 #, fuzzy, c-format
 msgid "%s Owner "
 msgstr "Sahibi: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:437
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:493
 #, c-format
 msgid "%s Owner and users "
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:445
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:501
 #, fuzzy, c-format
 msgid "%s Owner, users and library "
 msgstr "Herhangi Bir Kütüphane "
@@ -4576,7 +4576,7 @@ msgstr "&rsaquo; Alan kodunda değişiklik yap"
 #. %5$s:  budget_name 
 #. %6$s:  budget_period_description 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:327
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:383
 #, c-format
 msgid "%sModify%sAdd%s Fund %s %s for Budget '%s' %s "
 msgstr ""
@@ -4727,7 +4727,7 @@ msgstr "Geç kalan sipariş yok. "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:435
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:440
 #, fuzzy, c-format
 msgid "%sThere are no received orders.%s "
 msgstr "Geç kalan sipariş yok. "
@@ -7613,6 +7613,11 @@ msgstr "(Bu eser adı ile bağlantılı %s aboneliğimiz var)."
 msgid "(Unknown)"
 msgstr "Bilinmeyen"
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
+msgid "(YYYYMM; use up to 6 - for unknown <br />or | for no attempt to code)"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:206
 #, fuzzy, c-format
 msgid "(a choice list for choice (separated by |) or cols|rows for texarea)"
@@ -7718,6 +7723,11 @@ msgstr "(eğer boşsa, abonelik hala aktiftir)"
 #, c-format
 msgid "(if empty, subscription is still active)"
 msgstr "(eğer boşsa, abonelik hala aktiftir)"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
+msgid "(if exact bit depth known, enter; <br />otherwise use pulldown)"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:105
 #, fuzzy, c-format
@@ -7985,6 +7995,12 @@ msgstr "(%s"
 #, fuzzy, c-format
 msgid "(the date of the 1st subscription)"
 msgstr "%S (İlk abonentliyin tarixi)"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
+msgid ""
+"(three digits, pad with zero as needed, <br />or ||| for no attempt to code)"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:230
 #, fuzzy, c-format
@@ -8912,8 +8928,8 @@ msgstr "0 Ayırtılanlar"
 msgid "0 Norges nasjonalbibliografi, autorisert post"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:362
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:368
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:418
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:424
 #, c-format
 msgid "0 to disable"
 msgstr ""
@@ -12045,7 +12061,7 @@ msgstr "Eylem:"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:375
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:250
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:287
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:250
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:252
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:251
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:297
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:566
@@ -12375,7 +12391,7 @@ msgstr "İşaretliyi ekle"
 msgid "Add child"
 msgstr "Çocuk ekle"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:307
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:363
 #, fuzzy, c-format
 msgid "Add child fund"
 msgstr "Ödenek Ekleme"
@@ -12647,7 +12663,7 @@ msgid "Add user"
 msgstr "Sipariş ekle"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:401
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:457
 #, fuzzy
 msgid "Add users"
 msgstr "Sipariş ekle"
@@ -13929,7 +13945,7 @@ msgstr ""
 msgid "Amount outstanding"
 msgstr "Ödenmemiş miktar"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:355
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:411
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:72
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:48
 #, fuzzy, c-format
@@ -15239,7 +15255,6 @@ msgstr "Otorite MARC Çerçevesi için"
 #. %1$s:  tagfield 
 #. %2$s:  authtypecode 
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:192
-#, c-format
 #, fuzzy, c-format
 msgid "Authority MARC subfield structure admin for %s (authority: %s)"
 msgstr "%s (otorite: &s) için otorite MARC alt alan yapısı yönetimi"
@@ -15838,11 +15853,24 @@ msgstr "Emulsiyon materyal tabanı - görsel tasarım"
 msgid "Base of film:"
 msgstr "Temel film:"
 
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:244
+#, fuzzy, c-format
+msgid "Base-level allocated"
+msgstr "balad"
+
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:249
+#, fuzzy, c-format
+msgid "Base-level available"
+msgstr "Bir sonraki kullanılabilir materyal"
+
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:245
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:246
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:248
+#, fuzzy, c-format
+msgid "Base-level ordered"
+msgstr "Kaydı Sil"
+
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:247
 #, c-format
-msgid "Base-level"
+msgid "Base-level spent"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/reports/borrowers_stats.tt:9
@@ -15909,7 +15937,7 @@ msgstr "Sepet"
 msgid "Basket (#)"
 msgstr "Sepet"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:466
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:471
 #, fuzzy, c-format
 msgid "Basket :"
 msgstr "Sepet"
@@ -15947,7 +15975,7 @@ msgstr "Kullanıcı Adı"
 msgid "Basket group delivery placename:"
 msgstr "Kullanıcı Adı"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:470
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:475
 #, fuzzy, c-format
 msgid "Basket group name :"
 msgstr "Kullanıcı Adı"
@@ -17597,7 +17625,7 @@ msgstr "Tek bir IP veya 192.168.1* gibi bir alt ağ olarak girilebilir"
 msgid "Can not update patron with borrowernumber %s"
 msgstr "Üye Numarası"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:424
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:429
 #, c-format
 msgid "Can't cancel receipt "
 msgstr ""
@@ -17698,8 +17726,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:69
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:141
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:185
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:499
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:523
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:555
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:579
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:75
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:119
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:118
@@ -17931,7 +17959,7 @@ msgstr "Uyarıyı iptal et"
 msgid "Cancel notification"
 msgstr "Uyarıyı iptal et"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:428
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:433
 #, fuzzy, c-format
 msgid "Cancel receipt"
 msgstr "Danışma"
@@ -18140,7 +18168,7 @@ msgstr "Karakas, Venezuela"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:193
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:172
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:266
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:409
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:414
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:142
 #: intranet-tmpl/prog/en/modules/members/member.tt:165
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:77
@@ -20394,7 +20422,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:264
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:324
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:227
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:488
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:493
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:696
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:503
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1285
@@ -23355,6 +23383,7 @@ msgstr "Veri tabanı: "
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:158
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:160
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:200
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:157
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:175
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:118
@@ -24283,8 +24312,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:118
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:264
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:300
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:306
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:519
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:362
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:575
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:145
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:98
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:111
@@ -24467,7 +24496,7 @@ msgid "Delete framework for %s (%s)?"
 msgstr "%s (%s) için çerçeve silinsin mi?"
 
 #. %1$s:  budget_name 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:507
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:563
 #, fuzzy, c-format
 msgid "Delete fund %s?"
 msgstr "Bütçeyi Sil?"
@@ -25831,7 +25860,7 @@ msgstr "Çift Barkod"
 msgid "Duplicating records"
 msgstr "Çift Kayıt"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:479
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:484
 #, fuzzy, c-format
 msgid "EAN :"
 msgstr "Tümü"
@@ -26080,7 +26109,7 @@ msgstr "Ed Summers (Bazı kodlar ve MARC::Kayıt gibi Perl paketleri)"
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:117
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:263
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:299
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:305
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:361
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:144
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:274
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:323
@@ -26166,7 +26195,7 @@ msgstr "Koleksiyon"
 msgid "Edit Custom Reports"
 msgstr "Özel Raporunu Kaydet"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:302
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:358
 #, fuzzy, c-format
 msgid "Edit Delete "
 msgstr "d- Silindi "
@@ -26340,7 +26369,7 @@ msgid "Edit list "
 msgstr "Listeyi Düzenle "
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:382
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:438
 #, fuzzy
 msgid "Edit owner"
 msgstr "Basımlar"
@@ -27571,6 +27600,11 @@ msgstr "çok"
 msgid "Everything went OK, update done."
 msgstr "Her şey yolunda gitti, güncelleme tamamlandı."
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
+msgid "Exact bit depth 001-999"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:246
 #, fuzzy, c-format
 msgid "Exactly on"
@@ -28509,8 +28543,8 @@ msgstr "Filtre"
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:87
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:208
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:227
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:459
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:487
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:464
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:492
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:78
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:105
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:155
@@ -28571,7 +28605,7 @@ msgstr "Süzme sonuçları:"
 msgid "Filtered on:"
 msgstr "Süzülen:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:532
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:588
 #: intranet-tmpl/prog/en/modules/tags/review.tt:331
 #, c-format
 msgid "Filters"
@@ -28723,7 +28757,7 @@ msgid "Finish"
 msgstr "Bitir"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:445
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:450
 #, fuzzy
 msgid "Finish receiving"
 msgstr "%S (Gələnd doldurun)"
@@ -30208,7 +30242,7 @@ msgstr ""
 msgid "Fund amount exceeds period allocation"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:510
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:566
 #, fuzzy, c-format
 msgid "Fund amount:"
 msgstr "Ceza Miktarı"
@@ -30219,12 +30253,12 @@ msgid "Fund code"
 msgstr "Ödenek eklendi"
 
 #: intranet-tmpl/prog/en/includes/budgets-admin-search.inc:8
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:345
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:401
 #, fuzzy, c-format
 msgid "Fund code: "
 msgstr "Planlanan Maliyet: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:534
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:590
 #, fuzzy, c-format
 msgid "Fund filters"
 msgstr "Bütçe Tarihi"
@@ -30242,12 +30276,12 @@ msgstr "Ödenek eklendi"
 msgid "Fund name"
 msgstr "Ödenek eklendi"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:350
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:406
 #, fuzzy, c-format
 msgid "Fund name: "
 msgstr "Bütçe Tarihi "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:338
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:394
 #, fuzzy, c-format
 msgid "Fund parent: "
 msgstr "Bütçe tutarı: "
@@ -30607,7 +30641,7 @@ msgid "Gnomic"
 msgstr ""
 
 #. INPUT type=submit name=filter
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:560
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:616
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:42
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:199
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:210
@@ -32120,7 +32154,7 @@ msgstr "ISBN/ISSN:"
 msgid "ISBN or ISSN or other standard number:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:462
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:467
 #, c-format
 msgid "ISBN, author or title :"
 msgstr ""
@@ -39996,9 +40030,9 @@ msgstr "Kütüphane:"
 
 #: intranet-tmpl/prog/en/includes/budgets-admin-search.inc:9
 #: intranet-tmpl/prog/en/includes/patron-search.inc:55
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:289
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:406
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:537
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:345
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:462
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:593
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:228
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:107
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:111
@@ -40690,7 +40724,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:172
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:82
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:266
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:409
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:414
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:332
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:394
 #, c-format
@@ -45564,8 +45598,8 @@ msgid "Notes:"
 msgstr "Notlar:"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:145
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:290
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:453
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:346
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:509
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:90
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:177
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:213
@@ -47656,11 +47690,6 @@ msgstr "Sipariş"
 msgid "Order "
 msgstr "Sipariş "
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:339
-#, fuzzy, c-format
-msgid "Order Line"
-msgstr " Sipariş"
-
 #: intranet-tmpl/prog/en/includes/patron-search.inc:50
 #, fuzzy, c-format
 msgid "Order by:"
@@ -47724,6 +47753,7 @@ msgid "Order from external source"
 msgstr "Varolan bir kayıttan:"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:226
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:339
 #, fuzzy, c-format
 msgid "Order line"
 msgstr " Sipariş"
@@ -47733,7 +47763,7 @@ msgstr " Sipariş"
 msgid "Order line (parent)"
 msgstr "Sipariş veren:"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:474
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:479
 #, fuzzy, c-format
 msgid "Order line :"
 msgstr "Sipariş veren:"
@@ -47903,6 +47933,12 @@ msgstr "Kurum "
 #, c-format
 msgid "Original alphabet or script of title"
 msgstr ""
+
+#. A
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:394
+#, fuzzy
+msgid "Original order line"
+msgstr " Sipariş"
 
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:224
 #, c-format
@@ -48280,8 +48316,8 @@ msgstr ""
 msgid "Owner"
 msgstr "Sahibi"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:288
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:372
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:344
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:428
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:434
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:461
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:56
@@ -49522,7 +49558,7 @@ msgstr "Dönem"
 #. %1$s:  IF ( budget_period_total ) 
 #. %2$s:  budget_period_total 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:255
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:257
 #, fuzzy, c-format
 msgid "Period allocated %s%s%s "
 msgstr "Periodicite "
@@ -51584,7 +51620,7 @@ msgstr "Yayıncı :%s "
 #. %2$s:  END 
 #. %3$s:  IF ( loop_order.suggestionid ) 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:253
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:402
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:407
 #, fuzzy, c-format
 msgid "Publisher :%s%s %s "
 msgstr "Yayıncı :%s "
@@ -52461,7 +52497,7 @@ msgstr "Uzak görüntü:"
 msgid "Remote-sensing image"
 msgstr "Uzak-algılamalı Görüntü:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:397
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:453
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:60
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:113
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:281
@@ -52501,7 +52537,7 @@ msgid "Remove non-local items"
 msgstr "Yerel olmayan materyalleri Çıkar"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:384
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:440
 #, fuzzy
 msgid "Remove owner"
 msgstr "Eleştirmen"
@@ -53126,7 +53162,7 @@ msgstr "Geri yükle"
 msgid "Restrict"
 msgstr "Sınırlandırıldı:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:416
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:472
 #, fuzzy, c-format
 msgid "Restrict access to: "
 msgstr "Sınırlandırıldı: "
@@ -56690,7 +56726,7 @@ msgstr ""
 msgid "Show more"
 msgstr "Daha Fazlasını Göster"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:549
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:605
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:258
 #, fuzzy, c-format
 msgid "Show my funds only"
@@ -56706,6 +56742,14 @@ msgstr "Daha Fazlasını Göster "
 #, fuzzy, c-format
 msgid "Show subscriptions"
 msgstr "Abonelikleri Tarama"
+
+#. For the first occurrence,
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_006.tt:6
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008.tt:6
+#, fuzzy
+msgid "Show values for"
+msgstr "Daha Fazlasını Göster"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:264
 #, fuzzy, c-format
@@ -57783,7 +57827,7 @@ msgstr "İşlem sırasına konuldu "
 msgid "States of authority heading code"
 msgstr "Otorite başlığı girin:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:458
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:514
 #, fuzzy, c-format
 msgid "Statistic 1 done on: "
 msgstr "İstatistik "
@@ -57793,7 +57837,7 @@ msgstr "İstatistik "
 msgid "Statistic 1: "
 msgstr "İstatistik "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:475
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:531
 #, fuzzy, c-format
 msgid "Statistic 2 done on: "
 msgstr "İstatistik "
@@ -58501,7 +58545,7 @@ msgstr "Konular:"
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:148
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:197
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:68
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:499
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:555
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:75
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:281
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:294
@@ -58834,7 +58878,7 @@ msgstr "Tarafından önerilen "
 #. %3$s:  loop_order.firstnamesuggestedby 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:255
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:404
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:409
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:475
 #, fuzzy, c-format
 msgid "Suggested by: %s%s, %s %s ("
@@ -64633,7 +64677,6 @@ msgstr "a- Konulu"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:335
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:374
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:244
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:173
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:104
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:121
@@ -64716,6 +64759,11 @@ msgstr "Toplam silinen(borç) : %s"
 msgid "Total amount: "
 msgstr "Ödenen toplam miktar : %s YTL "
 
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:250
+#, fuzzy, c-format
+msgid "Total available"
+msgstr "Mevcut Değil"
+
 #: intranet-tmpl/prog/en/columns.def:86
 #: intranet-tmpl/prog/en/modules/members/statistics.tt:66
 #, fuzzy, c-format
@@ -64787,6 +64835,11 @@ msgstr "(Sınırsız) sorgu ile eşleşen satır sayısı toplamı %s."
 msgid "Total number written off: %s charges"
 msgstr "Toplam silinen borçların sayısı : %s borç"
 
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:246
+#, fuzzy, c-format
+msgid "Total ordered"
+msgstr "Toplam borç"
+
 #: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:57
 #, c-format
 msgid "Total outstanding dues as on date : "
@@ -64808,10 +64861,10 @@ msgstr "Toplam ödenen : %s"
 msgid "Total renewals"
 msgstr "Ödenecek toplam miktar"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:247
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:248
 #, fuzzy, c-format
-msgid "Total sublevels"
-msgstr "Ödenecek toplam miktar"
+msgid "Total spent"
+msgstr "Toplam maliyet"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:136
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:363
@@ -66887,7 +66940,7 @@ msgstr "Kullanıcı adı:"
 msgid "Username: "
 msgstr "Kullanıcı adı: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:389
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:445
 #, fuzzy, c-format
 msgid "Users:"
 msgstr "Kullanıcı"
@@ -67463,7 +67516,7 @@ msgstr ""
 msgid "View funds for [% period_loo.budget_period_description %]"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:440
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:445
 #, fuzzy, c-format
 msgid "View invoice"
 msgstr "Sağlayıcı Faturası"
@@ -67784,12 +67837,12 @@ msgstr ""
 msgid "Warning"
 msgstr "Uyarılar"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:360
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:416
 #, fuzzy, c-format
 msgid "Warning at (%%): "
 msgstr "Uyarılar"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:366
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:422
 #, fuzzy, c-format
 msgid "Warning at (amount): "
 msgstr "Ceza Miktarı "
@@ -70701,7 +70754,7 @@ msgid "[% shipmentdate | $KohaDates %]"
 msgstr ""
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:424
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:429
 msgid "[% span_title | collapse %]"
 msgstr ""
 
@@ -72287,12 +72340,6 @@ msgstr "Her bir alan kodunun alt alanları aynı sekmededir (veya yok sayılır)
 #, c-format
 msgid "allegory"
 msgstr "kinaye"
-
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:244
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:245
-#, fuzzy, c-format
-msgid "allocated"
-msgstr "balad"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
@@ -81538,6 +81585,14 @@ msgstr "master teyp"
 msgid "matches"
 msgstr "Küme"
 
+#. For the first occurrence,
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_006.tt:6
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008.tt:6
+#, fuzzy
+msgid "material type?"
+msgstr "Materyal Türü "
+
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:1738
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:1995
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1335
@@ -85492,11 +85547,6 @@ msgstr "dini eser"
 msgid "religious work"
 msgstr "dini eser"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:248
-#, fuzzy, c-format
-msgid "remaining"
-msgstr "Mesajlaşma"
-
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:940
 #, fuzzy, c-format
 msgid "remote"
@@ -86734,12 +86784,6 @@ msgstr "s- Konuşmalar "
 msgid "speeches, oratory"
 msgstr "konuşmalar, hitabet"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:246
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:247
-#, fuzzy, c-format
-msgid "spent"
-msgstr "Harcanmış"
-
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:110
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:112
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:186
@@ -86993,7 +87037,7 @@ msgstr "Öneri"
 #. For the first occurrence,
 #. %1$s:  loop_order.suggestionid 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:257
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:406
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:411
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:337
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:477
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:158
@@ -89543,3 +89587,11 @@ msgstr "› "
 #, fuzzy, c-format
 msgid "﻿%s "
 msgstr "%s - "
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy
+
+#, fuzzy

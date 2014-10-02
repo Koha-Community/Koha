@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-staff-t-prog-v-3004000\n"
-"POT-Creation-Date: 2014-08-15 23:16-0300\n"
+"POT-Creation-Date: 2014-09-24 12:46-0300\n"
 "PO-Revision-Date: 2014-01-17 23:13-0300\n"
 "Last-Translator: Anthony <maolins@gmail.com>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
@@ -642,11 +642,11 @@ msgstr "%s %s (关闭) %s %s %s %s 无群组 %s %s "
 msgid "%s %s A/C: %s"
 msgstr "%s %s 帐户: %s"
 
-#. %1$s:  IF (loop_receive.cannot_cancel) 
+#. %1$s:  IF (order.cannot_cancel) 
 #. %2$s:  span_title = BLOCK 
-#. %3$s:  loop_receive.parent_ordernumber 
+#. %3$s:  order.parent_ordernumber 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:415
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:420
 #, c-format
 msgid ""
 "%s %s Cannot cancel receipt of this order line because it was created from a "
@@ -1795,7 +1795,7 @@ msgstr "%s / 传真: %s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:394
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:399
 #, c-format
 msgid "%s 0 %s "
 msgstr "%s 0 %s "
@@ -2446,7 +2446,7 @@ msgstr "%s 无条码号 %s "
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  IF ( pagination_bar ) 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:313
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:369
 #, c-format
 msgid "%s No fund found %s %s"
 msgstr "%s未找到%s %s"
@@ -2496,7 +2496,7 @@ msgid "%s No results found %s "
 msgstr "%s 未找到结果 %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:421
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:477
 #, c-format
 msgid "%s None "
 msgstr "%s 无 "
@@ -2589,19 +2589,19 @@ msgid "%s Outstanding order (only one order per subscription is allowed) %s "
 msgstr "%s 订购中(每笔订单祗允许一笔订购) %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:429
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:485
 #, c-format
 msgid "%s Owner "
 msgstr "%s 拥有者："
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:437
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:493
 #, c-format
 msgid "%s Owner and users "
 msgstr "%s 拥有者与用户 "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:445
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:501
 #, c-format
 msgid "%s Owner, users and library "
 msgstr "%s 拥有者、用户与图书馆 "
@@ -4683,7 +4683,7 @@ msgstr "%s %s修改书标%s %s新书标%s %s%s%s "
 #. %5$s:  budget_name 
 #. %6$s:  budget_period_description 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:327
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:383
 #, c-format
 msgid "%sModify%sAdd%s Fund %s %s for Budget '%s' %s "
 msgstr "%s修改%s新增%s 基金 %s %s 供预算 '%s' %s "
@@ -4834,7 +4834,7 @@ msgstr "%s没有待决的订单。%s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:435
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:440
 #, c-format
 msgid "%sThere are no received orders.%s "
 msgstr "%s没有收到订单。%s "
@@ -7739,6 +7739,11 @@ msgstr "(与此题名有关的 %s 笔订阅)。"
 msgid "(Unknown)"
 msgstr "(不明)"
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
+msgid "(YYYYMM; use up to 6 - for unknown <br />or | for no attempt to code)"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:206
 #, c-format
 msgid "(a choice list for choice (separated by |) or cols|rows for texarea)"
@@ -7842,6 +7847,11 @@ msgstr "(若空白，则订阅持续中)"
 #, c-format
 msgid "(if empty, subscription is still active)"
 msgstr "(若空白，则订阅持续中)"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
+msgid "(if exact bit depth known, enter; <br />otherwise use pulldown)"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:105
 #, fuzzy, c-format
@@ -8108,6 +8118,12 @@ msgstr "(su"
 #, c-format
 msgid "(the date of the 1st subscription)"
 msgstr "(设置第一次订阅的日期)"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
+msgid ""
+"(three digits, pad with zero as needed, <br />or ||| for no attempt to code)"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:230
 #, c-format
@@ -9017,8 +9033,8 @@ msgstr "0 预约"
 msgid "0 Norges nasjonalbibliografi, autorisert post"
 msgstr "0 Norges nasjonalbibliografi, autorisert post"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:362
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:368
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:418
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:424
 #, c-format
 msgid "0 to disable"
 msgstr "0 表示停用"
@@ -12191,7 +12207,7 @@ msgstr "动作："
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:375
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:250
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:287
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:250
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:252
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:251
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:297
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:566
@@ -12517,7 +12533,7 @@ msgstr "新增检查"
 msgid "Add child"
 msgstr "新增儿童"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:307
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:363
 #, c-format
 msgid "Add child fund"
 msgstr "新增儿童基金"
@@ -12782,7 +12798,7 @@ msgid "Add user"
 msgstr "新增用户"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:401
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:457
 msgid "Add users"
 msgstr "新增用户"
 
@@ -14092,7 +14108,7 @@ msgstr "总计必须是数字，或空白"
 msgid "Amount outstanding"
 msgstr "待付总计"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:355
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:411
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:72
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:48
 #, c-format
@@ -15968,11 +15984,24 @@ msgstr "感光乳剂基底 - 视觉投影"
 msgid "Base of film:"
 msgstr "影片基底："
 
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:244
+#, fuzzy, c-format
+msgid "Base-level allocated"
+msgstr "基底层级"
+
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:249
+#, fuzzy, c-format
+msgid "Base-level available"
+msgstr "基底层级"
+
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:245
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:246
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:248
-#, c-format
-msgid "Base-level"
+#, fuzzy, c-format
+msgid "Base-level ordered"
+msgstr "基底层级"
+
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:247
+#, fuzzy, c-format
+msgid "Base-level spent"
 msgstr "基底层级"
 
 #: intranet-tmpl/prog/en/modules/help/reports/borrowers_stats.tt:9
@@ -16041,7 +16070,7 @@ msgstr "借出篮 %s (%s)"
 msgid "Basket (#)"
 msgstr "借出篮 (#)"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:466
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:471
 #, c-format
 msgid "Basket :"
 msgstr "借出篮："
@@ -16079,7 +16108,7 @@ msgstr "借出篮群组帐单地址："
 msgid "Basket group delivery placename:"
 msgstr "借出篮群组送达地名："
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:470
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:475
 #, c-format
 msgid "Basket group name :"
 msgstr "借出篮群组名称："
@@ -17751,7 +17780,7 @@ msgstr "可以键入一个 IP 或次网段，如192.168.1.*？"
 msgid "Can not update patron with borrowernumber %s"
 msgstr "不能更新此读者号的读者 %s"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:424
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:429
 #, c-format
 msgid "Can't cancel receipt "
 msgstr "不能取消收条 "
@@ -17850,8 +17879,8 @@ msgstr "不能存储此纪录，因为以下字段尚未填入数据："
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:69
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:141
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:185
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:499
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:523
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:555
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:579
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:75
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:119
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:118
@@ -18074,7 +18103,7 @@ msgstr "取消修改"
 msgid "Cancel notification"
 msgstr "取消通知"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:428
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:433
 #, c-format
 msgid "Cancel receipt"
 msgstr "取消收条"
@@ -18282,7 +18311,7 @@ msgstr "卡拉卡斯，委内瑞拉"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:193
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:172
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:266
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:409
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:414
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:142
 #: intranet-tmpl/prog/en/modules/members/member.tt:165
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:77
@@ -20528,7 +20557,7 @@ msgstr "清除批次输入#%s"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:264
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:324
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:227
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:488
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:493
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:696
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:503
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1285
@@ -23479,6 +23508,7 @@ msgstr "数据库："
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:158
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:160
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:200
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:157
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:175
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:118
@@ -24386,8 +24416,8 @@ msgstr "延迟是逾期后天数，届时才启发逾期通知。 "
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:118
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:264
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:300
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:306
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:519
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:362
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:575
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:145
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:98
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:111
@@ -24569,7 +24599,7 @@ msgid "Delete framework for %s (%s)?"
 msgstr "删除框架%s (%s)吗？"
 
 #. %1$s:  budget_name 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:507
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:563
 #, c-format
 msgid "Delete fund %s?"
 msgstr "删除基金%s 吗？"
@@ -25920,7 +25950,7 @@ msgstr "复制警语"
 msgid "Duplicating records"
 msgstr "复制纪录"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:479
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:484
 #, c-format
 msgid "EAN :"
 msgstr "EAN："
@@ -26169,7 +26199,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:117
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:263
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:299
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:305
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:361
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:144
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:274
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:323
@@ -26253,7 +26283,7 @@ msgstr "编辑馆藏"
 msgid "Edit Custom Reports"
 msgstr "编辑客制化报表"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:302
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:358
 #, c-format
 msgid "Edit Delete "
 msgstr "编辑删除 "
@@ -26421,7 +26451,7 @@ msgid "Edit list "
 msgstr "编辑虚拟书架 "
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:382
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:438
 msgid "Edit owner"
 msgstr "编辑拥有者"
 
@@ -27647,6 +27677,11 @@ msgstr "每个人"
 msgid "Everything went OK, update done."
 msgstr "一切顺利，更新完成。"
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
+msgid "Exact bit depth 001-999"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:246
 #, c-format
 msgid "Exactly on"
@@ -28592,8 +28627,8 @@ msgstr "幻灯卷片"
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:87
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:208
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:227
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:459
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:487
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:464
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:492
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:78
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:105
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:155
@@ -28654,7 +28689,7 @@ msgstr "筛选结果："
 msgid "Filtered on:"
 msgstr "筛选位置"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:532
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:588
 #: intranet-tmpl/prog/en/modules/tags/review.tt:331
 #, c-format
 msgid "Filters"
@@ -28808,7 +28843,7 @@ msgid "Finish"
 msgstr "最后"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:445
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:450
 msgid "Finish receiving"
 msgstr "最后收到"
 
@@ -30293,7 +30328,7 @@ msgstr "基金超过上层的配置额度"
 msgid "Fund amount exceeds period allocation"
 msgstr "基金超过年度的配置额度"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:510
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:566
 #, c-format
 msgid "Fund amount:"
 msgstr "基金总额："
@@ -30304,12 +30339,12 @@ msgid "Fund code"
 msgstr "基金代码"
 
 #: intranet-tmpl/prog/en/includes/budgets-admin-search.inc:8
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:345
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:401
 #, c-format
 msgid "Fund code: "
 msgstr "基金代码："
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:534
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:590
 #, c-format
 msgid "Fund filters"
 msgstr "基金筛选器"
@@ -30326,12 +30361,12 @@ msgstr "锁定基金"
 msgid "Fund name"
 msgstr "基金名称"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:350
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:406
 #, c-format
 msgid "Fund name: "
 msgstr "基金名称："
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:338
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:394
 #, c-format
 msgid "Fund parent: "
 msgstr "上层基金："
@@ -30688,7 +30723,7 @@ msgid "Gnomic"
 msgstr "Gnomic"
 
 #. INPUT type=submit name=filter
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:560
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:616
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:42
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:199
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:210
@@ -32182,7 +32217,7 @@ msgstr "ISBN / EAN / ISSN："
 msgid "ISBN or ISSN or other standard number:"
 msgstr "国际标准书号或国际标准集丛号或其它标准号码："
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:462
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:467
 #, c-format
 msgid "ISBN, author or title :"
 msgstr "国际标准书号、着者或题名："
@@ -40229,9 +40264,9 @@ msgstr "图书馆："
 
 #: intranet-tmpl/prog/en/includes/budgets-admin-search.inc:9
 #: intranet-tmpl/prog/en/includes/patron-search.inc:55
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:289
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:406
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:537
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:345
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:462
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:593
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:228
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:107
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:111
@@ -40922,7 +40957,7 @@ msgstr "MANITOBA PUBLIC library.gov.mb.ca:210 horizon"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:172
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:82
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:266
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:409
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:414
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:332
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:394
 #, c-format
@@ -45735,8 +45770,8 @@ msgid "Notes:"
 msgstr "说明："
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:145
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:290
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:453
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:346
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:509
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:90
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:177
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:213
@@ -47879,11 +47914,6 @@ msgstr "订单"
 msgid "Order "
 msgstr "订单 "
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:339
-#, c-format
-msgid "Order Line"
-msgstr "订单顺序"
-
 #: intranet-tmpl/prog/en/includes/patron-search.inc:50
 #, c-format
 msgid "Order by:"
@@ -47947,6 +47977,7 @@ msgid "Order from external source"
 msgstr "取自外部来源的订单"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:226
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:339
 #, c-format
 msgid "Order line"
 msgstr "订单顺序"
@@ -47956,7 +47987,7 @@ msgstr "订单顺序"
 msgid "Order line (parent)"
 msgstr "订单顺序(上层)"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:474
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:479
 #, c-format
 msgid "Order line :"
 msgstr "订单顺序："
@@ -48127,6 +48158,12 @@ msgstr "组织者："
 #, c-format
 msgid "Original alphabet or script of title"
 msgstr "题名的原始字母或字体"
+
+#. A
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:394
+#, fuzzy
+msgid "Original order line"
+msgstr "订单顺序"
 
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:224
 #, c-format
@@ -48502,8 +48539,8 @@ msgstr "Owen Leonard"
 msgid "Owner"
 msgstr "拥有者"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:288
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:372
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:344
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:428
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:434
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:461
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:56
@@ -49733,7 +49770,7 @@ msgstr "期间"
 #. %1$s:  IF ( budget_period_total ) 
 #. %2$s:  budget_period_total 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:255
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:257
 #, c-format
 msgid "Period allocated %s%s%s "
 msgstr "期间配置为 %s%s%s "
@@ -51752,7 +51789,7 @@ msgstr "出版者：%s%s "
 #. %2$s:  END 
 #. %3$s:  IF ( loop_order.suggestionid ) 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:253
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:402
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:407
 #, c-format
 msgid "Publisher :%s%s %s "
 msgstr "出版者：%s%s %s "
@@ -52631,7 +52668,7 @@ msgstr "遥测图像："
 msgid "Remote-sensing image"
 msgstr "遥测感应图像"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:397
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:453
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:60
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:113
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:281
@@ -52671,7 +52708,7 @@ msgid "Remove non-local items"
 msgstr "删除非本地馆藏"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:384
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:440
 msgid "Remove owner"
 msgstr "删除拥有者"
 
@@ -53292,7 +53329,7 @@ msgstr "恢复"
 msgid "Restrict"
 msgstr "限制"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:416
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:472
 #, c-format
 msgid "Restrict access to: "
 msgstr "限制近用至："
@@ -56810,7 +56847,7 @@ msgstr "显示在寻找下拉："
 msgid "Show more"
 msgstr "显示更多"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:549
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:605
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:258
 #, c-format
 msgid "Show my funds only"
@@ -56826,6 +56863,14 @@ msgstr "祗显示续借 "
 #, c-format
 msgid "Show subscriptions"
 msgstr "显示订阅"
+
+#. For the first occurrence,
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_006.tt:6
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008.tt:6
+#, fuzzy
+msgid "Show values for"
+msgstr "显示册数"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:264
 #, c-format
@@ -57905,7 +57950,7 @@ msgstr "州："
 msgid "States of authority heading code"
 msgstr "键入权威标题："
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:458
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:514
 #, c-format
 msgid "Statistic 1 done on: "
 msgstr "统计1完成于："
@@ -57915,7 +57960,7 @@ msgstr "统计1完成于："
 msgid "Statistic 1: "
 msgstr "统计1："
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:475
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:531
 #, c-format
 msgid "Statistic 2 done on: "
 msgstr "统计2完成于："
@@ -58623,7 +58668,7 @@ msgstr "主题："
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:148
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:197
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:68
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:499
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:555
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:75
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:281
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:294
@@ -58953,7 +58998,7 @@ msgstr "推荐者："
 #. %3$s:  loop_order.firstnamesuggestedby 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:255
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:404
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:409
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:475
 #, c-format
 msgid "Suggested by: %s%s, %s %s ("
@@ -64814,7 +64859,6 @@ msgstr "主题"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:335
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:374
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:244
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:173
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:104
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:121
@@ -64897,6 +64941,11 @@ msgstr "豁免的总额："
 msgid "Total amount: "
 msgstr "总计："
 
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:250
+#, fuzzy, c-format
+msgid "Total available"
+msgstr "不可得"
+
 #: intranet-tmpl/prog/en/columns.def:86
 #: intranet-tmpl/prog/en/modules/members/statistics.tt:66
 #, c-format
@@ -64967,6 +65016,11 @@ msgstr "符合此询问的列数是 %s."
 msgid "Total number written off: %s charges"
 msgstr "总共注销：%s 收取"
 
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:246
+#, fuzzy, c-format
+msgid "Total ordered"
+msgstr "总计欠款"
+
 #: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:57
 #, c-format
 msgid "Total outstanding dues as on date : "
@@ -64988,10 +65042,10 @@ msgstr "总共支付：%s"
 msgid "Total renewals"
 msgstr "小计"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:247
-#, c-format
-msgid "Total sublevels"
-msgstr "小计"
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:248
+#, fuzzy, c-format
+msgid "Total spent"
+msgstr "成本总计"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:136
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:363
@@ -67070,7 +67124,7 @@ msgstr "用户名称："
 msgid "Username: "
 msgstr "用户名称："
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:389
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:445
 #, c-format
 msgid "Users:"
 msgstr "用户："
@@ -67653,7 +67707,7 @@ msgstr "查看 [% period_active.budget_period_description %]的基金"
 msgid "View funds for [% period_loo.budget_period_description %]"
 msgstr "查看[% period_loo.budget_period_description %]的基金"
 
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:440
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:445
 #, c-format
 msgid "View invoice"
 msgstr "查看发票"
@@ -67971,12 +68025,12 @@ msgstr "Ward van Wanrooij"
 msgid "Warning"
 msgstr "报警"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:360
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:416
 #, c-format
 msgid "Warning at (%%): "
 msgstr "报警(%%)："
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:366
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:422
 #, c-format
 msgid "Warning at (amount): "
 msgstr "报警(金额)："
@@ -70888,7 +70942,7 @@ msgid "[% shipmentdate | $KohaDates %]"
 msgstr "[% shipmentdate | $KohaDates %]"
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:424
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:429
 msgid "[% span_title | collapse %]"
 msgstr "[% span_title | collapse %]"
 
@@ -72445,12 +72499,6 @@ msgstr "所有分栏的栏号都在同一个分页(或忽略)"
 #, c-format
 msgid "allegory"
 msgstr "寓言"
-
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:244
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:245
-#, c-format
-msgid "allocated"
-msgstr "配置"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
@@ -81527,6 +81575,14 @@ msgstr "母带"
 msgid "matches"
 msgstr "匹配"
 
+#. For the first occurrence,
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_006.tt:6
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008.tt:6
+#, fuzzy
+msgid "material type?"
+msgstr "数据类型："
+
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:1738
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:1995
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:1335
@@ -85433,11 +85489,6 @@ msgstr "宗教文字"
 msgid "religious work"
 msgstr "宗教作品"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:248
-#, c-format
-msgid "remaining"
-msgstr "剩下"
-
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:940
 #, c-format
 msgid "remote"
@@ -86654,12 +86705,6 @@ msgstr "演讲 "
 msgid "speeches, oratory"
 msgstr "演讲，致词"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:246
-#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:247
-#, c-format
-msgid "spent"
-msgstr "花费"
-
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:110
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:112
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:186
@@ -86911,7 +86956,7 @@ msgstr "推荐"
 #. For the first occurrence,
 #. %1$s:  loop_order.suggestionid 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:257
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:406
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:411
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:337
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:477
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:158
