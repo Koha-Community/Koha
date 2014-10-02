@@ -1,3 +1,4 @@
+[% INCLUDE 'format_price.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
