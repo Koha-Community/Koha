@@ -10142,6 +10142,14 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = '3.19.00.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE items ADD COLUMN itemnotes_nonpublic MEDIUMTEXT AFTER itemnotes");
+    $dbh->do("ALTER TABLE deleteditems ADD COLUMN itemnotes_nonpublic MEDIUMTEXT AFTER itemnotes");
+    print "Upgrade to $DBversion done (Bug 4222: Nonpublic note not appearing in the staff client) <b>Please check each of your frameworks to ensure your non-public item notes are mapped to items.itemnotes_nonpublic. After doing so please have your administrator run misc/batchRebuildItemsTables.pl </b>)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
