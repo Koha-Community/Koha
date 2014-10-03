@@ -80,7 +80,7 @@
                 [% END %]
                 [% IF CAN_user_serials_edit_subscription %]
                     [% IF closed %]
-                        <div class="btn-group"><a id="reopen" class="btn btn-small" href="#">Reopen</a></div>
+                        <div class="btn-group"><a id="reopen" class="btn btn-small" href="#"><i class="icon-repeat"></i> Reopen</a></div>
                     [% ELSE %]
                         <div class="btn-group"><a id="close" class="btn btn-small" href="#"><i class="icon-remove-circle"></i> Close</a></div>
                     [% END %]

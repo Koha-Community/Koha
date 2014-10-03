@@ -11,34 +11,24 @@
 //<![CDATA[
  $(document).ready(function() {
     var osrlt = $("#osrlt").dataTable($.extend(true, {}, dataTablesDefaults, {
-        [% IF ( routing && CAN_user_serials_routing ) %]
-            "aoColumnDefs": [
-                { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
-            ],
-        [% ELSE %]
-            "aoColumnDefs": [
-                { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
-            ],
-        [% END %]
-        "aoColumns": [
-            null,{ "sType": "anti-the" },null,null,null,null,{ "sType": "title-string" }
-            [% IF ( routing && CAN_user_serials_routing ) %],null[% END %],null,null
-        ],
-        "sPaginationType": "four_button"
+        "sPaginationType": "four_button",
+        "aoColumnDefs": [
+            { 'bSortable': false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+            { "sType": "title-string", "aTargets" : [ "title-string" ] },
+            { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] }
+        ]
     } ) );
 
     var csrlt = $("#csrlt").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "sPaginationType": "four_button",
         "aoColumnDefs": [
-            { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
-        ],
-        "aoColumns": [
-            null,{ "sType": "anti-the" },null,null,null,null,null,null
-        ],
-        "sPaginationType": "four_button"
+            { 'bSortable': false, 'aTargets': [ 'NoSort' ] },
+            { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] }
+        ]
     } ) );
 
-    osrlt.fnAddFilters("filter", 750);
-    csrlt.fnAddFilters("filter", 750);
+    osrlt.fnAddFilters("dt-filter", 750);
+    csrlt.fnAddFilters("dt-filter", 750);
 
     $('#serialstabs').tabs();
     $("#reopensub").click(function(){
@@ -47,6 +37,7 @@
  });
  //]]>
 </script>
+<style type="text/css">input.dt-filter { width : 100%; font-size : 85%; }</style>
 </head>
 <body id="ser_serials-home" class="ser">
 [% INCLUDE 'header.inc' %]
@@ -147,30 +138,24 @@
                   <thead>
                     <tr>
                         <th>ISSN</th>
-                        <th>Title</th>
-                        <th> Notes </th>
+                        <th class="anti-the">Title</th>
+                        <th>Notes</th>
                         <th>Library</th>
                         <th>Location</th>
                         <th>Call number</th>
-                        <th>Expiration date</th>
-                        [% IF ( routing && CAN_user_serials_routing ) %]
-                          <th>Routing list</th>
-                        [% END %]
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
+                        <th class="title-string">Expiration date</th>
+                        <th class="NoSort">Actions</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
-                      <td><input type="text" class="filter" data-column_num="0" placeholder="Search ISSN" /></td>
-                      <td><input type="text" class="filter" data-column_num="1" placeholder="Search title" /></td>
-                      <td><input type="text" class="filter" data-column_num="2" placeholder="Search notes" /></td>
-                      <td><input type="text" class="filter" data-column_num="3" placeholder="Search library" /></td>
-                      <td><input type="text" class="filter" data-column_num="4" placeholder="Search location" /></td>
-                      <td><input type="text" class="filter" data-column_num="5" placeholder="Search callnumber" /></td>
-                      <td><input type="text" class="filter" data-column_num="6" placeholder="Search expiration date" /></td>
-                      [% IF ( routing && CAN_user_serials_routing ) %]<td></td>[% END %]
-                      <td></td>
+                      <td><input type="text" class="dt-filter" data-column_num="0" placeholder="Search ISSN" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="1" placeholder="Search title" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="2" placeholder="Search notes" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="3" placeholder="Search library" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="4" placeholder="Search location" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="5" placeholder="Search callnumber" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="6" placeholder="Search expiration date" /></td>
                       <td></td>
                     </tr>
                   </tfoot>
@@ -203,27 +188,41 @@
                                 <span title="0000-00-00"></span>
                             [% END %]
                         </td>
-                        [% IF ( routing && CAN_user_serials_routing ) %]
+
                         <td>
-                          [% IF ( subscription.cannotedit ) %]
-                            &nbsp;
-                          [% ELSE %]
-                            [% IF ( subscription.routingedit ) %]
-                              <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]">Edit</a>
-                              ([% subscription.routingedit %])
-                            [% ELSE %]
-                              <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=new">New</a>
-                            [% END %]
-                          [% END %]
+                            <div class="dropdown">
+                                <a class="btn btn-mini dropdown-toggle" id="subactions[% subscription.subscriptionid %]" role="button" data-toggle="dropdown" href="#">
+                                   Actions <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="subactions[% subscription.subscriptionid %]">
+
+                                    [% IF ( routing && CAN_user_serials_routing ) %]
+                                        [% IF ( subscription.cannotedit ) %]
+                                        [% ELSE %]
+                                            [% IF ( subscription.routingedit ) %]
+                                                <li>
+                                                    <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]"><i class="icon-pencil"></i> Edit routing list ([% subscription.routingedit %])</a>
+                                                </li>
+                                            [% ELSE %]
+                                                <li>
+                                                    <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=new"> <i class="icon-plus"></i> New routing list</a>
+                                                </li>
+                                            [% END %]
+                                        [% END %]
+                                    [% END # IF ( routing && CAN_user_serials_routing ) %]
+
+                                    <li>
+                                        <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]"><i class="icon-list-alt"></i> Issue history</a>
+                                    </li>
+                                    [% IF ( CAN_user_serials_receive_serials ) %]
+                                        <li>
+                                            <a href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscription.subscriptionid %]&amp;serstatus=1,3,7"> <i class="icon-inbox"></i> Serial receive</a>
+                                        </li>
+                                    [% END %]
+                                </ul>
+                            </div>
                         </td>
-                        [% END %]
-                        <td><a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]">Issue history</a>
-                        </td>
-                        <td>
-                        [% IF ( CAN_user_serials_receive_serials ) %]
-                          <a href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscription.subscriptionid %]&amp;serstatus=1,3,7">Serial receive</a>
-                        [% END %]
-                        </td>
+
                       </tr>
                       [% END %]
                     [% END %]
@@ -241,24 +240,22 @@
                   <thead>
                     <tr>
                         <th>ISSN</th>
-                        <th>Title</th>
-                        <th> Notes </th>
+                        <th class="anti-the">Title</th>
+                        <th>Notes</th>
                         <th>Library</th>
                         <th>Location</th>
                         <th>Call number</th>
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
+                        <th class="NoSort">Actions</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
-                      <td><input type="text" class="filter" data-column_num="0" placeholder="Search ISSN" /></td>
-                      <td><input type="text" class="filter" data-column_num="1" placeholder="Search title" /></td>
-                      <td><input type="text" class="filter" data-column_num="2" placeholder="Search notes" /></td>
-                      <td><input type="text" class="filter" data-column_num="3" placeholder="Search library" /></td>
-                      <td><input type="text" class="filter" data-column_num="4" placeholder="Search location" /></td>
-                      <td><input type="text" class="filter" data-column_num="5" placeholder="Search callnumber" /></td>
-                      <td></td>
+                      <td><input type="text" class="dt-filter" data-column_num="0" placeholder="Search ISSN" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="1" placeholder="Search title" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="2" placeholder="Search notes" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="3" placeholder="Search library" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="4" placeholder="Search location" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="5" placeholder="Search callnumber" /></td>
                       <td></td>
                     </tr>
                   </tfoot>
@@ -288,14 +285,26 @@
                           [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
                         </td>
                         <td>
-                          [% UNLESS subscription.cannotedit %]
-                            <a href="/cgi-bin/koha/serials/serials-search.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=reopen&amp;routing=[% subscription.routing %]&amp;searched=1&amp;title_filter=[% title_filter %]&amp;ISSN_filter=[% ISSN_filter %]&amp;EAN_filter=[% EAN_filter %]&amp;published_filter=[% publisher_filter %]&amp;bookseller_filter=[% bookseller_filter %]&amp;branch_filter=[% branch_filter %]" id="reopensub">Reopen</a>
-                          [% ELSE %]
-                            Cannot edit
-                          [% END %]
-                        </td>
-                        <td>
-                          <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]">Issue history</a>
+                            <div class="dropdown">
+                                <a class="btn btn-mini dropdown-toggle" id="closedsubactions[% subscription.subscriptionid %]" role="button" data-toggle="dropdown" href="#">
+                                   Actions <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="closedsubactions[% subscription.subscriptionid %]">
+
+                                    [% IF ( routing && CAN_user_serials_routing ) %]
+                                        [% UNLESS ( subscription.cannotedit ) %]
+                                            <li>
+                                                <a href="/cgi-bin/koha/serials/serials-search.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=reopen&amp;routing=[% subscription.routing %]&amp;searched=1&amp;title_filter=[% title_filter %]&amp;ISSN_filter=[% ISSN_filter %]&amp;EAN_filter=[% EAN_filter %]&amp;published_filter=[% publisher_filter %]&amp;bookseller_filter=[% bookseller_filter %]&amp;branch_filter=[% branch_filter %]" id="reopensub"> <i class="icon-repeat"></i> Reopen</a>
+                                            </li>
+                                        [% END %]
+                                    [% END # IF ( routing && CAN_user_serials_routing ) %]
+
+                                    <li>
+                                        <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]"><i class="icon-list-alt"></i> Issue history</a>
+                                    </li>
+
+                                </ul>
+                            </div>
                         </td>
                       </tr>
                     [% END %]
