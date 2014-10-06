@@ -234,7 +234,7 @@ sub DeleteOnePref {
 sub CheckVersionPref {    #additional precaution
                           #if there are versions, compare them
     my ($hash) = @_;
-    my $hv = $hash->{version}->{value};
+    my $hv = exists $hash->{version}? $hash->{version}->{value}: undef;
     return if !defined $hv;
     my ($dv) = $dbh->selectrow_array(
         'SELECT value FROM systempreferences
