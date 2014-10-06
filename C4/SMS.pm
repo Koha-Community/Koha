@@ -36,6 +36,7 @@ use strict;
 use warnings;
 
 use C4::Context;
+use File::Spec;
 
 
 
@@ -70,21 +71,39 @@ sub send_sms {
     my $driver = exists $params->{'driver'} ? $params->{'driver'} : $self->driver();
     return unless $driver;
 
-    # warn "using driver: $driver to send message to $params->{'destination'}";
 
     my ($sent, $sender);
+
+    my $subpath = $driver;
+    $subpath =~ s|::|/|;
+
+    my $conf_file = File::Spec->catfile(
+        C4::Context->config('installdir'),
+        'etc', 'sms', 'driver', $subpath
+    ) . q{.yaml};
+    my %args;
+    if ( -f $conf_file ) {
+        require YAML;
+        my $conf = YAML::LoadFile( $conf_file );
+        %args = map { q{_} . $_ => $conf->{$_} } keys %$conf;
+    }
+
     eval {
         # Create a sender
-        $sender = SMS::Send->new( $driver,
-                                 _login    => C4::Context->preference('SMSSendUsername'),
-                                 _password => C4::Context->preference('SMSSendPassword'),
-                            );
-    
+        $sender = SMS::Send->new(
+            $driver,
+            _login    => C4::Context->preference('SMSSendUsername'),
+            _password => C4::Context->preference('SMSSendPassword'),
+            %args,
+        );
+
         # Send a message
-        $sent = $sender->send_sms( to   => $params->{'destination'},
-                                  text => $params->{'message'},
-                             );
+        $sent = $sender->send_sms(
+            to   => $params->{destination},
+            text => $params->{message},
+        );
     };
+
     #We might die because SMS::Send $driver is not defined or the sms-number has a bad format
     #Catch those errors and fail the sms-sending gracefully.
     if ($@) {
