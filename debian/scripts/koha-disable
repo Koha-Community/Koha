@@ -29,19 +29,16 @@ fi
 
 disable_instance()
 {
-    local site=$1
-    local instancefile=$(get_apache_config_for $site)
+    local instancename=$1
+    local instancefile=$(get_apache_config_for "$instancename")
 
-    if [ "$instancefile" = ""]; then
-        return 2
-    fi
-
-    if is_enabled $instancename; then
-        sed -i 's:^\s*#\(\s*Include /etc/koha/apache-shared-disable.conf\)$:\1:' \
-          "$instancefile"
-        return 0
+    if [ "$instancefile" = "" ]; then
+        echo 2
+    elif is_enabled $instancename; then
+        sed -i 's:^\s*#\(\s*Include /etc/koha/apache-shared-disable.conf\)$:\1:' "$instancefile"
+        echo 0
     else
-        return 1
+        echo 1
     fi
 }
 
@@ -60,7 +57,6 @@ EOF
 [ $# -ge 1 ] || ( usage ; die "Missing instance name..." )
 
 restart_apache="no"
-
 for name in "$@"
 do
     if is_instance $name ; then
