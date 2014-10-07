@@ -18,10 +18,9 @@ $(document).ready(function() {
         'bFilter': false,
         'bInfo': false,
         "aaSorting": [[ 1, "asc" ]],
-        "aoColumns": [
-            null,null,null,null,null,null,{ "sType": "title-string" },null,{ "sType": "title-string" },null
-        ],
-        'aoColumnDefs': [
+        "aoColumnDefs": [
+            { "sType": "title-string", "aTargets" : [ "title-string" ] },
+            { "sType": "title-numeric", "aTargets" : [ "title-numeric" ] },
             { 'aTargets': [-1], 'bSortable': false }
         ]
     }));
@@ -97,13 +96,13 @@ $(document).ready(function() {
                                 <tr>
                                     <th>No.</th>
                                     <th>Name</th>
-                                    <th>Item count</th>
-                                    <th>Biblio count</th>
+                                    <th class="title-numeric">Item count</th>
+                                    <th class="title-numeric">Biblio count</th>
                                     <th>Items expected</th>
                                     <th>Created by</th>
-                                    <th>Date</th>
+                                    <th class="title-string">Date</th>
                                     <th>Basket group</th>
-                                    <th>Closed</th>
+                                    <th class="title-string">Closed</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
@@ -117,16 +116,18 @@ $(document).ready(function() {
                                         <td>[% basket.basketno %]</td>
                                         <td>[% basket.basketname %]</td>
                                         <td>
-                                            [% basket.total_items %]
-                                            [% IF basket.total_items_cancelled %]
-                                                ([% basket.total_items_cancelled %] cancelled)
-                                            [% END %]
+                                            <span title="[% basket.total_items %]">[% basket.total_items %]
+                                                [% IF basket.total_items_cancelled %]
+                                                    ([% basket.total_items_cancelled %] cancelled)
+                                                [% END %]
+                                            </span>
                                         </td>
                                         <td>
-                                            [% basket.total_biblios %]
-                                            [% IF basket.total_biblios_cancelled %]
-                                                ([% basket.total_biblios_cancelled %] cancelled)
-                                            [% END %]
+                                            <span title="[% basket.total_biblios %]">[% basket.total_biblios %]
+                                                [% IF basket.total_biblios_cancelled %]
+                                                    ([% basket.total_biblios_cancelled %] cancelled)
+                                                [% END %]
+                                            </span>
                                         </td>
                                         <td>[% basket.expected_items %]</td>
                                         <td>
@@ -140,7 +141,7 @@ $(document).ready(function() {
                                             [% IF basketgroup.closed %]
                                               [% basketgroup.name %] (closed)
                                             [% ELSE %]
-                                              <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=[% basket.booksellerid %]&basketgroupid=[% basketgroup.id %]">[% basketgroup.name %]</a>
+                                              <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% basket.booksellerid %]&amp;basketgroupid=[% basketgroup.id %]">[% basketgroup.name %]</a>
                                             [% END %]
                                           [% END %]
                                         </td>
