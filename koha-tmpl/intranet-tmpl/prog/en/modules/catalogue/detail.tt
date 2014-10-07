@@ -205,24 +205,23 @@ function verify_images() {
     browser.show();
 
     function activate_filters(id) {
-        table = $("#" + id + " table");
+        var table = $("#" + id + " table");
         if (table.length == 1) {
             filters_row = table.find('thead tr.filters_row');
 
-            [% IF StaffDetailItemSelection %]
                 var aoColumns = [];
                 filters_row.find('th').each(function() {
-                    aoColumns.push('text');
+                    if(this.className === "NoSort"){
+                        aoColumns.push(null);
+                    } else {
+                        aoColumns.push('text');
+                    }
                 });
-                aoColumns[0] = null;
-            [% END %]
 
             if (table.find('thead tr.columnFilter').length == 0) {
                 table.dataTable().columnFilter({
                     'sPlaceHolder': 'head:after'
-                    [% IF StaffDetailItemSelection %]
                     ,   'aoColumns': aoColumns
-                    [% END %]
                 });
                 filters_row.addClass('columnFilter');
             }
@@ -260,23 +259,22 @@ function verify_images() {
         var ids = ['holdings', 'otherholdings'];
         for (var i in ids) {
             var id = ids[i];
-            table = $('#' + id + ' table');
+            var table = $('#' + id + ' table');
 
             // Duplicate the table header row for columnFilter
             thead_row = table.find('thead tr');
             clone = thead_row.clone().addClass('filters_row');
+            clone.find("th.NoSort").html('');
             thead_row.before(clone);
 
             // Enable sorting
             table.dataTable($.extend(true, {}, dataTablesDefaults, {
                 'sDom': 't',
                 'bPaginate': false,
-                'bAutoWidth': false
-                [% IF StaffDetailItemSelection %]
-                ,   "aoColumnDefs": [
-                        { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false }
-                    ]
-                [% END %]
+                'bAutoWidth': false,
+                "aoColumnDefs": [
+                    { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] }
+                ]
             }));
 
             // Show a link to activate filtering
@@ -551,7 +549,7 @@ function verify_images() {
     <table class="items_table">
         <thead>
             <tr>
-                [% IF (StaffDetailItemSelection) %]<th></th>[% END %]
+                [% IF (StaffDetailItemSelection) %]<th class="NoSort"></th>[% END %]
                 [% IF ( item_level_itypes ) %]<th>Item type</th>[% END %]
                 <th>Current location</th>
                 <th>Home library</th>
@@ -569,7 +567,7 @@ function verify_images() {
                 [% IF ( hostrecords ) %]<th>Host records</th>[% END %]
                 [% IF ( analyze ) %]<th>Used in</th><th></th>[% END %]
                 [% IF ( ShowCourseReserves ) %]<th>Course Reserves</th>[% END %]
-                [% IF ( CAN_user_editcatalogue_edit_items ) %]<th>Edit</th>[% END %]
+                [% IF ( CAN_user_editcatalogue_edit_items ) %]<th class="NoSort">Edit</th>[% END %]
             </tr>
         </thead>
         <tbody>
