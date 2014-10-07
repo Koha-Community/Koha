@@ -82,14 +82,15 @@ function batchDelete(){
 	        return false;
 	    });
         $(".holdsep").text("| ");
-        $(".hold").text(_("Place Hold"));
+        $(".hold").text(_("Place hold"));
         $("#downloadcartc").empty();
 
         $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sDom": 't',
             "aoColumnDefs": [
-                { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-                { "aTargets": [ 3 ], "sType": 'callnumbers' },
+                { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                { "sType": "callnumbers", "aTargets" : [ "callnumbers"] }
             ],
             "aaSorting": [[ 1, "asc" ]],
             "bPaginate": false
@@ -321,8 +322,8 @@ function batchDelete(){
 </p>
     <table id="itemst">
 	<thead><tr>
-	    [% UNLESS ( print_basket ) %]<th>&nbsp;</th>[% END %]
-	    <th>Title</th>
+        [% UNLESS ( print_basket ) %]<th class="NoSort">&nbsp;</th>[% END %]
+        <th class="anti-the">Title</th>
         <th>Item type</th>
         <th><a id="items-popover" href="#" data-trigger="hover" data-toggle="popover" data-placement="top" title="Item sorting" data-content="Items are sorted by the highest or lowest callnumber in a group of items respectively.">Items</a></th>
         </tr></thead>
@@ -350,7 +351,7 @@ function batchDelete(){
 
 						</td>
             <td>[% BIBLIO_RESULT.description %]</td>
-            <td>
+            <td class="callnumbers">
                 [% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]
                     [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
                         <div><span class="nowrap"><strong><span class="callnumber">[% ITEM_RESULT.itemcallnumber %]</span></strong> [% ITEM_RESULT.branchname %] <span class="shelvingloc inline">[% ITEM_RESULT.location_description %]</span></span></div>
