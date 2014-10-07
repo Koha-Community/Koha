@@ -510,6 +510,8 @@ END_SQL
             my $borrowernumber;
             while ( my $data = $sth->fetchrow_hashref ) {
 
+                next unless ( DateTime->compare( $date_to_run,  dt_from_string($data->{date_due})) ) == 1;
+
                 # check the borrower has at least one item that matches
                 my $days_between;
                 if ( C4::Context->preference('OverdueNoticeCalendar') )
