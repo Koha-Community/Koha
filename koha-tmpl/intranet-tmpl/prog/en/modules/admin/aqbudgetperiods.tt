@@ -1,5 +1,29 @@
 [% USE KohaDates %]
 [% USE format %]
+[%- BLOCK action_menu %]
+    <div class="dropdown">
+        <a class="btn btn-mini dropdown-toggle" id="budgetmenu_[% block_budget_id %]" role="button" data-toggle="dropdown" href="#">
+           Actions <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="budgetmenu_[% block_budget_id %]">
+              <li>
+                  <a href="[% script_name %]?op=add_form&amp;budget_period_id=[% block_budget_id |html %]"><i class="icon-pencil"></i> Edit</a>
+              </li>
+              <li>
+                  <a href="[% script_name %]?op=delete_confirm&amp;budget_period_id=[% block_budget_id %]"><i class="icon-remove"></i> Delete</a>
+              </li>
+              <li>
+                  <a href="[% script_name %]?op=duplicate_form&amp;budget_period_id=[% block_budget_id %]"><i class="icon-copy"></i> Duplicate</a>
+              </li>
+              <li>
+                  <a href="[% script_name %]?op=close_form&amp;budget_period_id=[% block_budget_id %]"><i class="icon-remove-sign"></i> Close</a>
+              </li>
+              <li>
+                  <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% block_budget_id %]"><i class="icon-plus"></i> Add fund</a>
+              </li>
+        </ul>
+    </div>
+[% END -%]
 [% INCLUDE 'doc-head-open.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
@@ -540,11 +564,7 @@
                 </td>
                 <td class="data">[% period_active.budget_period_total %]</td>
                 <td>
-                  <a href="[% script_name %]?op=add_form&amp;budget_period_id=[% period_active.budget_period_id |html %]">Edit</a>
-                  <a href="[% script_name %]?op=delete_confirm&amp;budget_period_id=[% period_active.budget_period_id %]">Delete</a>
-                  <a href="[% script_name %]?op=duplicate_form&amp;budget_period_id=[% period_active.budget_period_id %]">Duplicate</a>
-                  <a href="[% script_name %]?op=close_form&amp;budget_period_id=[% period_active.budget_period_id %]">Close</a>
-                  <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% period_active.budget_period_id %]">Add fund</a>
+                    [% PROCESS action_menu block_budget_id=period_active.budget_period_id %]
                 </td>
                 </tr>
               [% END %]
@@ -577,11 +597,7 @@
                   <td> [% IF ( period_loo.budget_period_locked ) %]<span style="color:green;">Locked</span>&nbsp;[% ELSE %][% END %] </td>
                   <td class="data">[% period_loo.budget_period_total %]</td>
                   <td>
-                      <a href="[% script_name %]?op=add_form&amp;budget_period_id=[% period_loo.budget_period_id |html %]">Edit</a>
-                      <a href="[% script_name %]?op=delete_confirm&amp;budget_period_id=[% period_loo.budget_period_id %]">Delete</a>
-                      <a href="[% script_name %]?op=duplicate_form&amp;budget_period_id=[% period_loo.budget_period_id %]">Duplicate</a>
-                      <a href="[% script_name %]?op=close_form&amp;budget_period_id=[% period_loo.budget_period_id %]">Close</a>
-                  <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% period_loo.budget_period_id %]">Add fund</a>
+                        [% PROCESS action_menu block_budget_id=period_loo.budget_period_id %]
                   </td>
                   </tr>
               [% END %]
