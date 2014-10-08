@@ -15,21 +15,10 @@
             function () { $(this).toggleClass("ulined") }
         );
         $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aaSorting": [ [0,'desc'], [3,'asc'] ],
+            "aaSorting": [ [2,'desc'], [3,'asc'] ],
             "aoColumnDefs": [
-                { "aTargets": [ 8 ], "sType": "natural" },
-                { "aTargets": [ 3 ], "sType": "anti-the" }
-            ],
-            "aoColumns": [
-                null,
-                null,
-                null,
-                { "sType": "anti-the" },
-                null,
-                null,
-                null,
-                null,
-                null
+                { "aTargets": [ 0,1,2,8 ], "sType": "natural" },
+                { "aTargets": [ 3 ], "sType": "anti-the" },
             ],
             "sPaginationType": "four_button"
         }));
