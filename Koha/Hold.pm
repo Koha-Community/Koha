@@ -21,9 +21,11 @@ use Modern::Perl;
 
 use Carp;
 
+use C4::Context qw(preference);
 use Koha::Branches;
 use Koha::Biblios;
 use Koha::Items;
+use Koha::DateUtils qw(dt_from_string);
 
 use base qw(Koha::Object);
 
@@ -36,6 +38,29 @@ Koha::Hold - Koha Hold object class
 =head2 Class Methods
 
 =cut
+
+=head3 waiting_expires_on
+
+Returns a DateTime for the date a waiting holds expires on.
+Returns undef if the system peference ReservesMaxPickUpDelay is not set.
+Returns undef if the hold is not waiting ( found = 'W' ).
+
+=cut
+
+sub waiting_expires_on {
+    my ($self) = @_;
+
+    return unless $self->found() eq 'W';
+
+    my $ReservesMaxPickUpDelay = C4::Context->preference('ReservesMaxPickUpDelay');
+    return unless $ReservesMaxPickUpDelay;
+
+    my $dt = dt_from_string( $self->waitingdate() );
+
+    $dt->add( days => $ReservesMaxPickUpDelay );
+
+    return $dt;
+}
 
 =head3 biblio
 
