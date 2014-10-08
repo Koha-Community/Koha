@@ -33,7 +33,7 @@ use Pod::Usage;
 use C4::Context;
 my $dbh = C4::Context->dbh;
 
-my ( $help, $cmd, $filename, $override, $compare_add, $compare_del, $compare_upd, $ignore_opt );
+my ( $help, $cmd, $filename, $override, $compare_add, $compare_del, $compare_upd, $ignore_opt, $partial );
 GetOptions(
     'help'    => \$help,
     'cmd:s'   => \$cmd,
@@ -42,6 +42,7 @@ GetOptions(
     'del'     => \$compare_del,
     'upd'     => \$compare_upd,
     'ign-opt' => \$ignore_opt,
+    'partial' => \$partial,
 );
 
 if ( $filename && !-e $filename && $cmd !~ /^b/ ) {
@@ -98,6 +99,7 @@ sub PrintCompare {
     my ( $ch, $s1, $s2 ) = @_;
     foreach ( sort keys %$ch ) {
         my $v = $ch->{$_};
+        next if $v eq '1' && $partial;
         print "$_: ";
         if    ( $v eq '1' ) { print "Not in $s2"; }
         elsif ( $v eq '2' ) { print "Not in $s1"; }
@@ -307,6 +309,10 @@ Command: backup, compare, restore or test.
 =item B<-file>
 
 Name of the file used in command.
+
+=item B<-partial>
+
+Only for partial compares: skip 'not present in file'-messages.
 
 =item B<-add>
 
