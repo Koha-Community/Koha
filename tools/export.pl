@@ -134,13 +134,17 @@ my $limit_ind_branch =
       && !C4::Context->IsSuperLibrarian()
       && C4::Context->userenv->{branch} ) ? 1 : 0;
 
-my $branch = $query->param("branch") || '';
+my @branch = $query->param("branch");
 if (   C4::Context->preference("IndependentBranches")
     && C4::Context->userenv
     && !C4::Context->IsSuperLibrarian() )
 {
-    $branch = C4::Context->userenv->{'branch'};
+    @branch = ( C4::Context->userenv->{'branch'} );
 }
+# if stripping nonlocal items, use loggedinuser's branch
+my $localbranch = C4::Context->userenv->{'branch'};
+
+my %branchmap = map { $_ => 1 } @branch; # for quick lookups
 
 my $backupdir = C4::Context->config('backupdir');
 
@@ -246,7 +250,7 @@ if ( $op eq "export" ) {
                         itemstable           => $itemstable,
                         StartingBiblionumber => $StartingBiblionumber,
                         EndingBiblionumber   => $EndingBiblionumber,
-                        branch               => $branch,
+                        branch               => \@branch,
                         start_callnumber     => $start_callnumber,
                         end_callnumber       => $end_callnumber,
                         start_accession      => $start_accession,
@@ -323,7 +327,6 @@ if ( $op eq "export" ) {
             # Someone is trying to mess us up
             exit;
         }
-
         unless (@biblionumbers) {
             my $sth = $dbh->prepare($sql_query);
             $sth->execute(@sql_params);
@@ -364,14 +367,10 @@ if ( $op eq "export" ) {
                         my ( $homebranchfield, $homebranchsubfield ) =
                           GetMarcFromKohaField( 'items.homebranch', '' );
                         for my $itemfield ( $record->field($homebranchfield) ) {
-
-# if stripping nonlocal items, use loggedinuser's branch if they didn't select one
-                            $branch = C4::Context->userenv->{'branch'}
-                              unless $branch;
                             $record->delete_field($itemfield)
                               if ( $dont_export_items
-                                || $itemfield->subfield($homebranchsubfield) ne
-                                $branch );
+                                || $localbranch ne $itemfield->subfield(
+                                        $homebranchsubfield) );
                         }
                     }
                 }
@@ -472,7 +471,7 @@ else {
         push @branchloop,
           {
             value      => $thisbranch,
-            selected   => $thisbranch eq $branch,
+            selected   => %branchmap ? $branchmap{$thisbranch} : 1,
             branchname => $branches->{$thisbranch}->{'branchname'},
           };
     }
@@ -547,14 +546,14 @@ sub construct_query {
             my $itemstable           = $params->{itemstable};
             my $StartingBiblionumber = $params->{StartingBiblionumber};
             my $EndingBiblionumber   = $params->{EndingBiblionumber};
-            my $branch               = $params->{branch};
+            my @branch               = @{ $params->{branch} };
             my $start_callnumber     = $params->{start_callnumber};
             my $end_callnumber       = $params->{end_callnumber};
             my $start_accession      = $params->{start_accession};
             my $end_accession        = $params->{end_accession};
             my $itemtype             = $params->{itemtype};
             my $items_filter =
-                 $branch
+                 @branch
               || $start_callnumber
               || $end_callnumber
               || $start_accession
@@ -576,9 +575,9 @@ sub construct_query {
                 push @sql_params, $EndingBiblionumber;
             }
 
-            if ($branch) {
-                $sql_query .= " AND homebranch = ? ";
-                push @sql_params, $branch;
+            if (@branch) {
+                $sql_query .= " AND homebranch IN (".join(',',map({'?'} @branch)).")";
+                push @sql_params, @branch;
             }
 
             if ($start_callnumber) {

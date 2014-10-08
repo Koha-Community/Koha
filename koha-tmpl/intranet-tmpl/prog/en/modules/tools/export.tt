@@ -65,16 +65,9 @@ $(document).ready(function() {
         </li>
         
         <li>
-            <label for="branch">Library: </label>
-            <select id="branch" name="branch">
-            <option value="">-- All --</option>
-                [% FOREACH branchloo IN branchloop %]
-                    [% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
-				[% ELSE %]
-				<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
-				[% END %]
-                    [% END %]
-                </select>
+            <label>Library: </label>
+            [% INCLUDE 'branch-selector.inc'
+                branches = branchloop %]
         </li>
         <li>
             <label for="startcn">From item call number: </label>
