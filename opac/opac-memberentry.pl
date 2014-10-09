@@ -115,8 +115,7 @@ if ( $action eq 'create' ) {
                 module      => 'members',
                 letter_code => 'OPAC_REG_VERIFY',
                 tables      => {
-                    borrower_modifications =>
-                      [ $verification_token, $verification_token ],
+                    borrower_modifications => $verification_token,
                 },
             );
 

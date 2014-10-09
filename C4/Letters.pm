@@ -559,7 +559,6 @@ sub _substitute_tables {
             $values = $param;
         }
         else {
-            my @pk;
             my $sth = _parseletter_sth($table);
             unless ($sth) {
                 warn "_parseletter_sth('$table') failed to return a valid sth.  No substitution will be done for that table.";
@@ -599,7 +598,7 @@ sub _parseletter_sth {
     ($table eq 'aqbooksellers') ? "SELECT * FROM $table WHERE             id = ?"                                  :
     ($table eq 'aqorders'     ) ? "SELECT * FROM $table WHERE    ordernumber = ?"                                  :
     ($table eq 'opac_news'    ) ? "SELECT * FROM $table WHERE          idnew = ?"                                  :
-    ($table eq 'borrower_modifications') ? "SELECT * FROM $table WHERE ( borrowernumber = 0 OR borrowernumber = ? ) AND ( verification_token = '' OR verification_token = ? ) AND ( verification_token != '' OR borrowernumber != 0 )" :
+    ($table eq 'borrower_modifications') ? "SELECT * FROM $table WHERE verification_token = ?" :
     undef ;
     unless ($query) {
         warn "ERROR: No _parseletter_sth query for table '$table'";
