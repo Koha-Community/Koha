@@ -672,9 +672,7 @@ sub AUTOLOAD
 
   $Zconn = C4::Context->Zconn
 
-Returns a connection to the Zebra database for the current
-context. If no connection has yet been made, this method 
-creates one and connects.
+Returns a connection to the Zebra database
 
 C<$self> 
 
@@ -682,32 +680,18 @@ C<$server> one of the servers defined in the koha-conf.xml file
 
 C<$async> whether this is a asynchronous connection
 
-C<$auth> whether this connection has rw access (1) or just r access (0 or NULL)
-
-
 =cut
 
 sub Zconn {
-    my ($self, $server, $async, $auth, $piggyback, $syntax) = @_;
-    #TODO: We actually just ignore the auth and syntax parameter
-    #It also looks like we are not passing auth, piggyback, syntax anywhere
-
-    my $cache_key = join ('::', (map { $_ // '' } ($server, $async, $auth, $piggyback, $syntax)));
-    if ( defined($context->{"Zconn"}->{$cache_key}) && (0 == $context->{"Zconn"}->{$cache_key}->errcode()) ) {
-        return $context->{"Zconn"}->{$cache_key};
-    # No connection object or it died. Create one.
-    }else {
-        # release resources if we're closing a connection and making a new one
-        # FIXME: this needs to be smarter -- an error due to a malformed query or
-        # a missing index does not necessarily require us to close the connection
-        # and make a new one, particularly for a batch job.  However, at
-        # first glance it does not look like there's a way to easily check
-        # the basic health of a ZOOM::Connection
-        $context->{"Zconn"}->{$cache_key}->destroy() if defined($context->{"Zconn"}->{$cache_key});
-
-        $context->{"Zconn"}->{$cache_key} = &_new_Zconn( $server, $async, $piggyback );
+    my ($self, $server, $async ) = @_;
+    my $cache_key = join ('::', (map { $_ // '' } ($server, $async )));
+    if ( (!defined($ENV{GATEWAY_INTERFACE})) && defined($context->{"Zconn"}->{$cache_key}) && (0 == $context->{"Zconn"}->{$cache_key}->errcode()) ) {
+        # if we are running the script from the commandline, lets try to use the caching
         return $context->{"Zconn"}->{$cache_key};
     }
+    $context->{"Zconn"}->{$cache_key}->destroy() if defined($context->{"Zconn"}->{$cache_key}); #destroy old connection before making a new one
+    $context->{"Zconn"}->{$cache_key} = &_new_Zconn( $server, $async );
+    return $context->{"Zconn"}->{$cache_key};
 }
 
 =head2 _new_Zconn
@@ -725,7 +709,7 @@ C<$auth> whether this connection has rw access (1) or just r access (0 or NULL)
 =cut
 
 sub _new_Zconn {
-    my ( $server, $async, $piggyback ) = @_;
+    my ( $server, $async ) = @_;
 
     my $tried=0; # first attempt
     my $Zconn; # connection object
@@ -761,7 +745,6 @@ sub _new_Zconn {
         $o->option(user => $user) if $user && $password;
         $o->option(password => $password) if $user && $password;
         $o->option(async => 1) if $async;
-        $o->option(count => $piggyback) if $piggyback;
         $o->option(cqlfile=> $context->{"server"}->{$server}->{"cql2rpn"});
         $o->option(cclfile=> $context->{"serverinfo"}->{$server}->{"ccl2rpn"});
         $o->option(preferredRecordSyntax => $syntax);
