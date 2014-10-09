@@ -255,7 +255,8 @@ $(document).ready(function() {
                               + onsite_checkout;
 
                         return title;
-                    }
+                    },
+                    "sType": "anti-the"
                 },
                 { "mDataProp": "itemtype_description" },
                 { "mDataProp": "issuedate_formatted" },
