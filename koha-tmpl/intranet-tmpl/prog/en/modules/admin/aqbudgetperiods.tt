@@ -182,7 +182,7 @@
 
     [% IF ( add_form ) %]&rsaquo;
         [% IF ( budget_period_id ) %]
-            Modify budget'[% budget_period_id %]'
+            Modify budget [% budget_period_description %]
         [% ELSE %]
             Add budget
         [% END %]
@@ -221,9 +221,9 @@
     <!-- add or modify a budget period -->
     <!-- ####################################### -->
     [% IF ( add_form ) %]
-        <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budget</a> &rsaquo;
+        <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo;
         [% IF ( budget_period_id ) %]
-            Modify budget [% budget_period_description %]
+            Modify budget <i>[% budget_period_description %]</i>
 
         [% ELSE %]
             Add budget
@@ -323,7 +323,7 @@
     <!--  add or modify a budget period   -->
 
     [% IF ( budget_period_id ) %]
-        <h3>Modify budget</h3>
+        <h3>Modify budget <i>[% budget_period_description %]</i></h3>
     [% ELSE %]
         <h3>Add budget</h3>
 	[% END %]
