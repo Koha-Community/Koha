@@ -69,14 +69,29 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
    --restrictions DAYS   purge patrons restrictions expired since more than DAYS days.
                          Defaults to 30 days if no days specified.
     --all-restrictions   purge all expired patrons restrictions.
+   --del-exp-selfreg  Delete expired self registration accounts
+   --del-unv-selfreg DAYS  Delete unverified self registrations older than DAYS
 USAGE
     exit $_[0];
 }
 
 my (
-    $help,   $sessions,          $sess_days, $verbose, $zebraqueue_days,
-    $mail,   $purge_merged,      $pImport,   $pLogs,   $pSearchhistory,
-    $pZ3950, $pListShareInvites, $pDebarments, $allDebarments,
+    $help,
+    $sessions,
+    $sess_days,
+    $verbose,
+    $zebraqueue_days,
+    $mail,
+    $purge_merged,
+    $pImport,
+    $pLogs,
+    $pSearchhistory,
+    $pZ3950,
+    $pListShareInvites,
+    $pDebarments,
+    $allDebarments,
+    $pExpSelfReg,
+    $pUnvSelfReg,
 );
 
 GetOptions(
@@ -94,6 +109,8 @@ GetOptions(
     'list-invites:i'  => \$pListShareInvites,
     'restrictions:i'  => \$pDebarments,
     'all-restrictions' => \$allDebarments,
+    'del-exp-selfreg' => \$pExpSelfReg,
+    'del-unv-selfreg' => \$pUnvSelfReg,
 ) || usage(1);
 
 # Use default values
@@ -120,8 +137,10 @@ unless ( $sessions
     || $pZ3950
     || $pListShareInvites
     || $pDebarments
-    || $allDebarments )
-{
+    || $allDebarments
+    || $pExpSelfReg
+    || $pUnvSelfReg
+) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
 }
@@ -253,6 +272,13 @@ if($allDebarments) {
     print "$count restrictions were deleted.\nDone with all restrictions purge.\n" if $verbose;
 }
 
+if( $pExpSelfReg ) {
+    DeleteExpiredSelfRegs();
+}
+if( $pUnvSelfReg ) {
+    DeleteUnverifiedSelfRegs( $pUnvSelfReg );
+}
+
 exit(0);
 
 sub RemoveOldSessions {
@@ -339,4 +365,14 @@ sub PurgeDebarments {
         $count++;
     }
     return $count;
+}
+
+sub DeleteExpiredSelfRegs {
+    my $cnt= C4::Members::DeleteExpiredOpacRegistrations();
+    print "Removed $cnt expired self-registered borrowers\n" if $verbose;
+}
+
+sub DeleteUnverifiedSelfRegs {
+    my $cnt= C4::Members::DeleteUnverifiedOpacRegistrations( $_[0] );
+    print "Removed $cnt unverified self-registrations\n" if $verbose;
 }

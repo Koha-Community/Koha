@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 61;
+use Test::More tests => 62;
 use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
@@ -311,6 +311,28 @@ subtest 'GetMemberAccountBalance' => sub {
     is( $total_minus_charges, 10, "Holds charges are count if HoldsInNoissuesCharge=0");
     is( $other_charges, 5, "Holds charges are considered if HoldsInNoissuesCharge=1");
 
+    $dbh->rollback();
+};
+
+subtest 'purgeSelfRegistration' => sub {
+    plan tests => 2;
+
+    #purge unverified
+    my $d=360;
+    C4::Members::DeleteUnverifiedOpacRegistrations($d);
+    foreach(1..3) {
+        $dbh->do("INSERT INTO borrower_modifications (timestamp, borrowernumber, verification_token) VALUES ('2014-01-01 01:02:03',0,?)", undef, (scalar localtime)."_$_");
+    }
+    is( C4::Members::DeleteUnverifiedOpacRegistrations($d), 3, 'Test for DeleteUnverifiedOpacRegistrations' );
+
+    #purge members in temporary category
+    my $c= 'XYZ';
+    $dbh->do("INSERT IGNORE INTO categories (categorycode) VALUES ('$c')");
+    C4::Context->set_preference('PatronSelfRegistrationDefaultCategory', $c );
+    C4::Context->set_preference('PatronSelfRegistrationExpireTemporaryAccountsDelay', 360);
+    C4::Members::DeleteExpiredOpacRegistrations();
+    $dbh->do("INSERT INTO borrowers (surname, address, city, branchcode, categorycode, dateenrolled) VALUES ('Testaabbcc', 'Street 1', 'CITY', 'CPL', '$c', '2014-01-01 01:02:03')");
+    is( C4::Members::DeleteExpiredOpacRegistrations(), 1, 'Test for DeleteExpiredOpacRegistrations');
     $dbh->rollback();
 };
 

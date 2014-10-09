@@ -43,6 +43,9 @@ GetOptions(
 );
 my $usage = << 'ENDUSAGE';
 
+IMPORTANT: You should no longer call this script. Please use
+cleanup_database.pl with parameter --del-unv-selfreg.
+
 This script removes unconfirmed OPAC based patron registrations
 that have not been confirmed within the required time period.
 
@@ -60,14 +63,6 @@ if ( $help || !$confirm ) {
     exit;
 }
 
-cronlogaction();
-
-my $dbh = C4::Context->dbh;
-
-$dbh->do( "
-         DELETE FROM borrower_modifications
-         WHERE
-             borrowernumber = 0
-           AND
-             TIME_TO_SEC( TIMEDIFF( NOW(), timestamp )) / 3600 > ?
-", undef, $hours );
+my $d= $hours>=24? int($hours/24): 1;
+my $c= "$FindBin::Bin/cleanup_database.pl -del-unv-selfreg $d";
+system($c);

@@ -43,6 +43,9 @@ GetOptions(
 );
 my $usage = << 'ENDUSAGE';
 
+IMPORTANT: You should no longer call this script. Please use
+cleanup_database.pl with parameter --del-exp-selfreg.
+
 This script removes confirmed OPAC based patron registrations
 that have not been changed from the patron category specified
 in the system preference PatronSelfRegistrationDefaultCategory
@@ -64,33 +67,6 @@ if ( $help || !$confirm ) {
     exit;
 }
 
-cronlogaction();
-
-# Delete accounts that haven't been upgraded from the 'temporary' category code
-my $delay =
-  C4::Context->preference('PatronSelfRegistrationExpireTemporaryAccountsDelay');
-my $category_code =
-  C4::Context->preference('PatronSelfRegistrationDefaultCategory');
-
-die "PatronSelfRegistrationExpireTemporaryAccountsDelay and PatronSelfRegistrationDefaultCategory should be filled to use this script!"
-    if not $category_code or not defined $delay or $delay eq q||;
-
-my $query = "
-    SELECT borrowernumber
-    FROM borrowers
-    WHERE
-        categorycode = ?
-      AND
-        DATEDIFF( NOW(), dateenrolled ) > ?
-";
-
-my $dbh = C4::Context->dbh;
-my $sth = $dbh->prepare($query);
-$sth->execute( $category_code, $delay );
-
-my $cnt=0;
-while ( my ($borrowernumber) = $sth->fetchrow_array() ) {
-    DelMember($borrowernumber);
-    $cnt++;
-}
-print "Removed $cnt expired self-registered borrowers in category $category_code\n" if $verbose;
+my $c= "$FindBin::Bin/cleanup_database.pl --del-exp-selfreg";
+$c.= " -v" if $verbose;
+system($c);

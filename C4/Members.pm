@@ -2459,6 +2459,10 @@ sub GetBorrowersWithEmail {
     return @result;
 }
 
+=head2 AddMember_Opac
+
+=cut
+
 sub AddMember_Opac {
     my ( %borrower ) = @_;
 
@@ -2505,6 +2509,10 @@ sub AddEnrolmentFeeIfNeeded {
     }
 }
 
+=head2 HasOverdues
+
+=cut
+
 sub HasOverdues {
     my ( $borrowernumber ) = @_;
 
@@ -2514,6 +2522,53 @@ sub HasOverdues {
     my ( $count ) = $sth->fetchrow_array();
 
     return $count;
+}
+
+=head2 DeleteExpiredOpacRegistrations
+
+    Delete accounts that haven't been upgraded from the 'temporary' category
+    Returns the number of removed patrons
+
+=cut
+
+sub DeleteExpiredOpacRegistrations {
+
+    my $delay = C4::Context->preference('PatronSelfRegistrationExpireTemporaryAccountsDelay');
+    my $category_code = C4::Context->preference('PatronSelfRegistrationDefaultCategory');
+
+    return 0 if not $category_code or not defined $delay or $delay eq q||;
+
+    my $query = qq|
+SELECT borrowernumber
+FROM borrowers
+WHERE categorycode = ? AND DATEDIFF( NOW(), dateenrolled ) > ? |;
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $category_code, $delay );
+    my $cnt=0;
+    while ( my ($borrowernumber) = $sth->fetchrow_array() ) {
+        DelMember($borrowernumber);
+        $cnt++;
+    }
+    return $cnt;
+}
+
+=head2 DeleteUnverifiedOpacRegistrations
+
+    Delete all unverified self registrations in borrower_modifications,
+    older than the specified number of days.
+
+=cut
+
+sub DeleteUnverifiedOpacRegistrations {
+    my ( $days ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sql=qq|
+DELETE FROM borrower_modifications
+WHERE borrowernumber = 0 AND DATEDIFF( NOW(), timestamp ) > ?|;
+    my $cnt=$dbh->do($sql, undef, ($days) );
+    return $cnt eq '0E0'? 0: $cnt;
 }
 
 END { }    # module clean-up code here (global destructor)
