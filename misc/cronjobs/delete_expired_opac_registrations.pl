@@ -33,22 +33,29 @@ use C4::Members qw/ DelMember /;
 
 my $help;
 my $confirm;
+my $verbose;
 
 GetOptions(
     'h|help'    => \$help,
     'c|confirm' => \$confirm,
+    'v|verbose' => \$verbose,
 );
 my $usage = << 'ENDUSAGE';
 
-This script remove confirmed OPAC based patron registrations
+This script removes confirmed OPAC based patron registrations
 that have not been changed from the patron category specified
 in the system preference PatronSelfRegistrationDefaultCategory
 within the required time period.
 
-This script has the following parameters :
-    -h --help:    This message
+NOTE: If you do not use self registration, do NOT run this script.
+If you use self registration, but you do not use a temporary
+category for new registrations, do NOT run this script too.
 
+This script has the following parameters :
     -c --confirm: Without this flag set, this script will do nothing.
+    -h --help:    Print this message.
+    -v --verbose: Print number of removed patrons.
+
 ENDUSAGE
 
 if ( $help || !$confirm ) {
@@ -56,7 +63,7 @@ if ( $help || !$confirm ) {
     exit;
 }
 
-## Delete accounts that haven't been upgraded from the 'temporary' category code'
+# Delete accounts that haven't been upgraded from the 'temporary' category code
 my $delay =
   C4::Context->preference('PatronSelfRegistrationExpireTemporaryAccountsDelay');
 my $category_code =
@@ -68,13 +75,16 @@ my $query = "
     WHERE
         categorycode = ?
       AND
-        DATEDIFF( DATE( NOW() ), DATE(dateenrolled) ) = ? )
+        DATEDIFF( NOW(), dateenrolled ) > ?
 ";
 
 my $dbh = C4::Context->dbh;
 my $sth = $dbh->prepare($query);
 $sth->execute( $category_code, $delay );
 
+my $cnt=0;
 while ( my ($borrowernumber) = $sth->fetchrow_array() ) {
     DelMember($borrowernumber);
+    $cnt++;
 }
+print "Removed $cnt expired self-registered borrowers in category $category_code\n" if $verbose;
