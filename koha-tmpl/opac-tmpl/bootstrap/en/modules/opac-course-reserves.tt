@@ -4,7 +4,10 @@
 [% INCLUDE 'doc-head-open.inc' %]
 [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Courses
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% END %]
+
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-main' %]
 [% INCLUDE 'masthead.inc' %]
@@ -20,16 +23,6 @@
             <div class="span12">
 
                     <h1>Courses</h1>
-                    <div id="search-toolbar">
-                        <form action="/cgi-bin/koha/opac-course-reserves.pl" method="get" id="search_courses_form" class="form-inline">
-
-                               <fieldset><div class="input-append">
-                                                                   <label for="search_on">Search courses:</label> <input type="text" name="search_on" id="search_on" />
-                                                                  <input type="submit" class="btn" value="Search" />
-                                                              </div></fieldset>
-
-                        </form>
-                    </div><!-- /search-toolbar -->
 
                     <table id="course_reserves_table" class="table table-bordered table-striped table-condensed">
                         <thead>
@@ -67,4 +60,12 @@
 </div> <!-- / .main -->
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $("#course_reserves_table").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sDom": '<"bottom"flp>rt<"clear">',
+        }));
+    });
+    </script>
 [% END %]

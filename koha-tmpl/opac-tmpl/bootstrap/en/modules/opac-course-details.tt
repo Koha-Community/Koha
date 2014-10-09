@@ -6,7 +6,10 @@
 [% INCLUDE 'doc-head-open.inc' %]
 [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Course reserves for [% course.course_name %]
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% END %]
+
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-main' %]
 [% INCLUDE 'masthead.inc' %]
@@ -43,7 +46,7 @@
                 </div>
 
                 [% IF ( course_reserves ) %]
-                    <table class="table table-bordered table-striped table-condensed">
+                    <table id="course-items-table" class="table table-bordered table-striped table-condensed">
                         <thead>
                             <tr>
                                 <th>Title</th>
@@ -86,4 +89,12 @@
 </div> <!-- / .main -->
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $("#course-items-table").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sDom": '<"bottom"flp>rt<"clear">',
+        }));
+    });
+    </script>
 [% END %]

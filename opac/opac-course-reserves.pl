@@ -38,13 +38,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $search_on = $cgi->param('search_on');
+my $courses = SearchCourses( enabled => 'yes' );
 
-my $courses = SearchCourses( term => $search_on, enabled => 'yes' );
-
-if ( @$courses == 1 ) {
-    print $cgi->redirect( "/cgi-bin/koha/opac-course-details.pl?course_id=" . $courses->[0]->{'course_id'} );
-} else {
-    $template->param( courses => $courses );
-    output_html_with_http_headers $cgi, $cookie, $template->output;
-}
+$template->param( courses => $courses );
+output_html_with_http_headers $cgi, $cookie, $template->output;
