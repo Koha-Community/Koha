@@ -7988,7 +7988,6 @@ if ( CheckVersion($DBversion) ) {
         $dbh->selectcol_arrayref(q|SELECT COUNT(*) FROM roadtype|);
     };
     unless ( $@ ) {
-        warn "pas erreur";
         my $av_added = $dbh->do(q|
             INSERT INTO authorised_values(category, authorised_value, lib, lib_opac)
                 SELECT 'ROADTYPE', roadtypeid, road_type, road_type
