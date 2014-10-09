@@ -103,11 +103,6 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/amazonimages.js"></script>
 [% END %]
 
-[% IF Koha.Preference( 'opacbookbag' ) == 1 %]<script type="text/javascript" src="[% interface %]/[% theme %]/js/basket.js">
-[% ELSIF ( Koha.Preference( 'virtualshelves' ) == 1 ) %]<script type="text/javascript" src="[% interface %]/[% theme %]/js/basket.js">
-[% ELSE %]<script type="text/javascript"> var readCookie;[% END %]
-</script>
-
 <script type="text/javascript">
     //<![CDATA[
     var MSG_CONFIRM_AGAIN = _("Warning: Cannot be undone. Please confirm once again")
@@ -153,6 +148,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
     [% IF ( opacuserjs ) %][% opacuserjs %][% END %]
     //]]>
 </script>
+
 [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
     <script type="text/javascript" src="[% interface %]/[% theme %]/js/basket.js"></script>
 [% ELSIF ( Koha.Preference( 'virtualshelves' ) == 1 ) %]
@@ -160,6 +156,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 [% ELSE %]
     <script type="text/javascript">var readCookie;</script>
 [% END %]
+
 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %][% IF Koha.Preference( 'TagsEnabled' ) == 1 %]<script type="text/javascript" src="[% interface %]/[% theme %]/js/tags.js"></script>[% END %][% ELSE %][% END %]
 [% IF ( GoogleJackets ) %]
     <script type="text/javascript" src="[% interface %]/[% theme %]/js/google-jackets.js"></script>
