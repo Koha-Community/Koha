@@ -72,17 +72,19 @@ This will return a list of all the available report areas
 
 =cut
 
-my @REPORT_AREA = (
-    [CIRC => "Circulation"],
-    [CAT  => "Catalogue"],
-    [PAT  => "Patrons"],
-    [ACQ  => "Acquisition"],
-    [ACC  => "Accounts"],
-);
-my $AREA_NAME_SQL_SNIPPET
-  = "CASE report_area " .
+sub get_area_name_sql_snippet {
+    my @REPORT_AREA = (
+        [CIRC => "Circulation"],
+        [CAT  => "Catalogue"],
+        [PAT  => "Patrons"],
+        [ACQ  => "Acquisition"],
+        [ACC  => "Accounts"],
+    );
+
+    return "CASE report_area " .
     join (" ", map "WHEN '$_->[0]' THEN '$_->[1]'", @REPORT_AREA) .
     " END AS areaname";
+}
 
 sub get_report_areas {
 
@@ -91,48 +93,14 @@ sub get_report_areas {
     return $report_areas;
 }
 
-my %table_areas = (
+sub get_table_areas {
+    return (
     CIRC => [ 'borrowers', 'statistics', 'items', 'biblioitems' ],
     CAT  => [ 'items', 'biblioitems', 'biblio' ],
     PAT  => ['borrowers'],
     ACQ  => [ 'aqorders', 'biblio', 'items' ],
     ACC  => [ 'borrowers', 'accountlines' ],
-);
-my %keys = (
-    CIRC => [ 'statistics.borrowernumber=borrowers.borrowernumber',
-              'items.itemnumber = statistics.itemnumber',
-              'biblioitems.biblioitemnumber = items.biblioitemnumber' ],
-    CAT  => [ 'items.biblioitemnumber=biblioitems.biblioitemnumber',
-              'biblioitems.biblionumber=biblio.biblionumber' ],
-    PAT  => [],
-    ACQ  => [ 'aqorders.biblionumber=biblio.biblionumber',
-              'biblio.biblionumber=items.biblionumber' ],
-    ACC  => ['borrowers.borrowernumber=accountlines.borrowernumber'],
-);
-
-# have to do someting here to know if its dropdown, free text, date etc
-my %criteria = (
-    CIRC => [ 'statistics.type', 'borrowers.categorycode', 'statistics.branch',
-              'biblioitems.publicationyear|date', 'items.dateaccessioned|date' ],
-    CAT  => [ 'items.itemnumber|textrange', 'items.biblionumber|textrange',
-              'items.barcode|textrange', 'biblio.frameworkcode',
-              'items.holdingbranch', 'items.homebranch',
-              'biblio.datecreated|daterange', 'biblio.timestamp|daterange',
-              'items.onloan|daterange', 'items.ccode',
-              'items.itemcallnumber|textrange', 'items.itype', 'items.itemlost',
-              'items.location' ],
-    PAT  => [ 'borrowers.branchcode', 'borrowers.categorycode' ],
-    ACQ  => ['aqorders.datereceived|date'],
-    ACC  => [ 'borrowers.branchcode', 'borrowers.categorycode' ],
-);
-
-# Adds itemtypes to criteria, according to the syspref
-if ( C4::Context->preference('item-level_itypes') ) {
-    unshift @{ $criteria{'CIRC'} }, 'items.itype';
-    unshift @{ $criteria{'CAT'} }, 'items.itype';
-} else {
-    unshift @{ $criteria{'CIRC'} }, 'biblioitems.itemtype';
-    unshift @{ $criteria{'CAT'} }, 'biblioitems.itemtype';
+    );
 }
 
 =head2 get_report_types
@@ -216,6 +184,7 @@ sub get_columns {
 
     # this calls the internal fucntion _get_columns
     my ( $area, $cgi ) = @_;
+    my %table_areas = get_table_areas;
     my $tables = $table_areas{$area}
       or die qq{Unsuported report area "$area"};
 
@@ -260,8 +229,23 @@ This is what get_columns returns.
 
 sub build_query {
     my ( $columns, $criteria, $orderby, $area, $totals, $definition ) = @_;
+
+    my %keys = (
+        CIRC => [ 'statistics.borrowernumber=borrowers.borrowernumber',
+                  'items.itemnumber = statistics.itemnumber',
+                  'biblioitems.biblioitemnumber = items.biblioitemnumber' ],
+        CAT  => [ 'items.biblioitemnumber=biblioitems.biblioitemnumber',
+                  'biblioitems.biblionumber=biblio.biblionumber' ],
+        PAT  => [],
+        ACQ  => [ 'aqorders.biblionumber=biblio.biblionumber',
+                  'biblio.biblionumber=items.biblionumber' ],
+        ACC  => ['borrowers.borrowernumber=accountlines.borrowernumber'],
+    );
+
+
 ### $orderby
     my $keys   = $keys{$area};
+    my %table_areas = get_table_areas;
     my $tables = $table_areas{$area};
 
     my $sql =
@@ -331,6 +315,33 @@ Returns an arraref to hashrefs suitable for using in a tmpl_loop. With the crite
 sub get_criteria {
     my ($area,$cgi) = @_;
     my $dbh    = C4::Context->dbh();
+
+    # have to do someting here to know if its dropdown, free text, date etc
+    my %criteria = (
+        CIRC => [ 'statistics.type', 'borrowers.categorycode', 'statistics.branch',
+                  'biblioitems.publicationyear|date', 'items.dateaccessioned|date' ],
+        CAT  => [ 'items.itemnumber|textrange', 'items.biblionumber|textrange',
+                  'items.barcode|textrange', 'biblio.frameworkcode',
+                  'items.holdingbranch', 'items.homebranch',
+                  'biblio.datecreated|daterange', 'biblio.timestamp|daterange',
+                  'items.onloan|daterange', 'items.ccode',
+                  'items.itemcallnumber|textrange', 'items.itype', 'items.itemlost',
+                  'items.location' ],
+        PAT  => [ 'borrowers.branchcode', 'borrowers.categorycode' ],
+        ACQ  => ['aqorders.datereceived|date'],
+        ACC  => [ 'borrowers.branchcode', 'borrowers.categorycode' ],
+    );
+
+    # Adds itemtypes to criteria, according to the syspref
+    if ( C4::Context->preference('item-level_itypes') ) {
+        unshift @{ $criteria{'CIRC'} }, 'items.itype';
+        unshift @{ $criteria{'CAT'} }, 'items.itype';
+    } else {
+        unshift @{ $criteria{'CIRC'} }, 'biblioitems.itemtype';
+        unshift @{ $criteria{'CAT'} }, 'biblioitems.itemtype';
+    }
+
+
     my $crit   = $criteria{$area};
     my $column_defs = _get_column_defs($cgi);
     my @criteria_array;
@@ -627,8 +638,11 @@ sub delete_report {
     return $sth->execute(@ids);
 }
 
-my $SAVED_REPORTS_BASE_QRY = <<EOQ;
-SELECT s.*, r.report, r.date_run, $AREA_NAME_SQL_SNIPPET, av_g.lib AS groupname, av_sg.lib AS subgroupname,
+sub get_saved_reports_base_query {
+
+    my $area_name_sql_snippet = get_area_name_sql_snippet;
+    return <<EOQ;
+SELECT s.*, r.report, r.date_run, $area_name_sql_snippet, av_g.lib AS groupname, av_sg.lib AS subgroupname,
 b.firstname AS borrowerfirstname, b.surname AS borrowersurname
 FROM saved_sql s
 LEFT JOIN saved_reports r ON r.report_id = s.id
@@ -636,7 +650,8 @@ LEFT OUTER JOIN authorised_values av_g ON (av_g.category = 'REPORT_GROUP' AND av
 LEFT OUTER JOIN authorised_values av_sg ON (av_sg.category = 'REPORT_SUBGROUP' AND av_sg.lib_opac = s.report_group AND av_sg.authorised_value = s.report_subgroup)
 LEFT OUTER JOIN borrowers b USING (borrowernumber)
 EOQ
-my $DATE_FORMAT = "%d/%m/%Y";
+}
+
 sub get_saved_reports {
 # $filter is either { date => $d, author => $a, keyword => $kw, }
 # or $keyword. Optional.
@@ -645,7 +660,7 @@ sub get_saved_reports {
     my ($group, $subgroup) = @_;
 
     my $dbh   = C4::Context->dbh();
-    my $query = $SAVED_REPORTS_BASE_QRY;
+    my $query = get_saved_reports_base_query;
     my (@cond,@args);
     if ($filter) {
         if (my $date = $filter->{date}) {
@@ -797,14 +812,15 @@ sub save_dictionary {
     return 1;
 }
 
-my $DICTIONARY_BASE_QRY = <<EOQ;
-SELECT d.*, $AREA_NAME_SQL_SNIPPET
-FROM reports_dictionary d
-EOQ
 sub get_from_dictionary {
     my ( $area, $id ) = @_;
     my $dbh   = C4::Context->dbh();
-    my $query = $DICTIONARY_BASE_QRY;
+    my $area_name_sql_snippet = get_area_name_sql_snippet;
+    my $query = <<EOQ;
+SELECT d.*, $area_name_sql_snippet
+FROM reports_dictionary d
+EOQ
+
     if ($area) {
         $query .= " WHERE report_area = ?";
     } elsif ($id) {
