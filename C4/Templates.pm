@@ -59,12 +59,14 @@ sub new {
         push @includes, "$htdocs/$_/$lang/includes";
         push @includes, "$htdocs/$_/en/includes" unless $lang eq 'en';
     }
+    # Do not use template cache if script is called from commandline
+    my $use_template_cache = C4::Context->config('template_cache_dir') && defined $ENV{GATEWAY_INTERFACE};
     my $template = Template->new(
         {   EVAL_PERL    => 1,
             ABSOLUTE     => 1,
             PLUGIN_BASE => 'Koha::Template::Plugin',
-            COMPILE_EXT => C4::Context->config('template_cache_dir')?'.ttc':'',
-            COMPILE_DIR => C4::Context->config('template_cache_dir')?C4::Context->config('template_cache_dir'):'',,
+            COMPILE_EXT => $use_template_cache ? '.ttc' : '',
+            COMPILE_DIR => $use_template_cache ? C4::Context->config('template_cache_dir') : '',
             INCLUDE_PATH => \@includes,
             FILTERS => {},
         }
