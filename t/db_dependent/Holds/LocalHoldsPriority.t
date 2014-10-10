@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use t::lib::Mocks;
 use C4::Context;
@@ -83,7 +82,7 @@ my ($status, $reserve, $all_reserves);
 
 t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 0 );
 ($status, $reserve, $all_reserves) = CheckReserves($itemnumber);
-ok( $reserve->{borrowernumber} eq $borrowernumbers[0], "Recieved expected results with LocalHoldsPriority disabled" );
+ok( $reserve->{borrowernumber} eq $borrowernumbers[0], "Received expected results with LocalHoldsPriority disabled" );
 
 t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 1 );
 

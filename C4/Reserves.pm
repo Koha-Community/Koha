@@ -976,13 +976,10 @@ sub CheckReserves {
             if ( $res->{'itemnumber'} == $itemnumber && $res->{'priority'} == 0) {
                 return ( "Waiting", $res, \@reserves ); # Found it
             } else {
-                # Lazy fetch for borrower and item. We only need to know about the patron and item
-                # each and every time if we are using LocalHoldsPriority. This is a great place to
-                # leverage the inherent lazy fetching of DBIx::Class.
                 my $borrowerinfo;
                 my $iteminfo;
-
                 my $local_hold_match;
+
                 if ($LocalHoldsPriority) {
                     $borrowerinfo = C4::Members::GetMember( borrowernumber => $res->{'borrowernumber'} );
                     $iteminfo = C4::Items::GetItem($itemnumber);
