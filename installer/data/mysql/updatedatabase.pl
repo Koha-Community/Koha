@@ -9449,7 +9449,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     });
 
     $dbh->do(q{
-        INSERT INTO permissions (module_bit, code, description) VALUES ('13', 'items_batchmod_restricted', 'Limit batch item modification to subfields defined in the SubfieldsToAllowForRestrictedBatchmod preferenec (pplease note that items_batchmod is still required)');
+        INSERT INTO permissions (module_bit, code, description) VALUES ('13', 'items_batchmod_restricted', 'Limit batch item modification to subfields defined in the SubfieldsToAllowForRestrictedBatchmod preference (please note that items_batchmod is still required)');
     });
 
     # The delete_all_items permission should be added to users having the edit_items permission.
