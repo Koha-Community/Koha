@@ -702,6 +702,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '5.836',
     },
+    'Test::DBIx::Class' => {
+        'usage'    => 'Testing modules utilising DBIx::Class',
+        'required' => '0',
+        'min_ver'  => '0.42',
+    },
 };
 
 1;
