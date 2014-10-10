@@ -73,6 +73,7 @@ unless ( @templates ) {
         errors => ['no_template_defined'],
     );
     output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
 }
 
 if ( $mmtid ) {
