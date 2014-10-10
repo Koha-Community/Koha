@@ -1,5 +1,6 @@
 <icu_chain locale="">
-  <transform rule="[:Control:] Any-Remove"/>
+  <!-- Remove control characters except \t\n\r -->
+  <transform rule="[\x00-\x08\x0B\x0C\x0E-\x1F\x7F] Any-Remove"/>
   <tokenize rule="l"/>
   <transform rule="[:Punctuation:] Remove"/>
   <transform rule="NFD"/>
