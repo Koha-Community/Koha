@@ -56,6 +56,8 @@ sub unformat {
 sub _format_params {
     my ( $self, $params ) = @_;
     my $with_symbol = $params->{with_symbol} || 0;
+    my $p_cs_precedes = $params->{p_cs_precedes};
+    my $p_sep_by_space = $params->{p_sep_by_space};
     my $currency        = GetCurrency();
     my $currency_format = C4::Context->preference("CurrencyFormat");
 
@@ -78,6 +80,9 @@ sub _format_params {
             mon_decimal_point => ','
         );
     }
+
+    $format_params{p_cs_precedes}  = $p_cs_precedes  if defined $p_cs_precedes;
+    $format_params{p_sep_by_space} = $p_sep_by_space if defined $p_sep_by_space;
 
     return \%format_params;
 }

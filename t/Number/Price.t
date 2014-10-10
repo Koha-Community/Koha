@@ -11,6 +11,10 @@ my $currency;
 $budget_module->mock( 'GetCurrency', sub { return $currency; } );
 use_ok('Koha::Number::Price');
 
+my $format = {
+    p_cs_precedes => 1, # Force to place the symbol at the beginning
+    p_sep_by_space => 0, # Force to not add a space between the symbol and the number
+};
 t::lib::Mocks::mock_preference( 'CurrencyFormat', 'US' );
 $currency = {
     currency => 'USD',
@@ -19,19 +23,19 @@ $currency = {
     active   => 1,
 };
 
-is( Koha::Number::Price->new->format,    '0.00', 'US: format 0' );
-is( Koha::Number::Price->new(3)->format, '3.00', 'US: format 3' );
-is( Koha::Number::Price->new(1234567890)->format,
+is( Koha::Number::Price->new->format( $format ),    '0.00', 'US: format 0' );
+is( Koha::Number::Price->new(3)->format( $format ), '3.00', 'US: format 3' );
+is( Koha::Number::Price->new(1234567890)->format( $format ),
     '1,234,567,890.00', 'US: format 1234567890' );
 
 # FIXME This should be display symbol, but it was the case before the creation of this module
-is( Koha::Number::Price->new->format( { with_symbol => 1 } ),
+is( Koha::Number::Price->new->format( { %$format, with_symbol => 1 } ),
     '0.00', 'US: format 0 with symbol' );
-is( Koha::Number::Price->new(3)->format( { with_symbol => 1 } ),
+is( Koha::Number::Price->new(3)->format( { %$format, with_symbol => 1 } ),
     '3.00', 'US: format 3 with symbol' );
 is(
     Koha::Number::Price->new(1234567890)
-      ->format( { with_symbol => 1 }, 'US: format 1234567890 with symbol' ),
+      ->format( { %$format, with_symbol => 1 }, 'US: format 1234567890 with symbol' ),
     '1,234,567,890.00'
 );
 
@@ -50,20 +54,20 @@ $currency = {
 
 # Actually,the price formating for France is 3,00€
 # How put the symbol at the end with Number::Format?
-is( Koha::Number::Price->new->format,    '0,00', 'FR: format 0' );
-is( Koha::Number::Price->new(3)->format, '3,00', 'FR: format 3' );
+is( Koha::Number::Price->new->format( $format ),    '0,00', 'FR: format 0' );
+is( Koha::Number::Price->new(3)->format( $format ), '3,00', 'FR: format 3' );
 is(
-    Koha::Number::Price->new(1234567890)->format,
+    Koha::Number::Price->new(1234567890)->format( $format ),
     '1 234 567 890,00',
     'FR: format 1234567890'
 );
-is( Koha::Number::Price->new->format( { with_symbol => 1 } ),
+is( Koha::Number::Price->new->format( { %$format, with_symbol => 1 } ),
     '€0,00', 'FR: format 0 with symbol' );
-is( Koha::Number::Price->new(3)->format( { with_symbol => 1 } ),
+is( Koha::Number::Price->new(3)->format( { %$format, with_symbol => 1 } ),
     '€3,00', 'FR: format 3 with symbol' );
 is(
     Koha::Number::Price->new(1234567890)
-      ->format( { with_symbol => 1 }, 'FR: format 123567890 with symbol' ),
+      ->format( { %$format, with_symbol => 1 }, 'FR: format 123567890 with symbol' ),
     '€1 234 567 890,00'
 );
 
