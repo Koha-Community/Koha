@@ -42,7 +42,6 @@ use warnings;
 use CGI;
 use C4::Context;
 use C4::Auth;
-use C4::Dates qw(format_date);
 use C4::Output;
 use C4::Budgets qw/GetCurrency GetCurrencies/;
 
@@ -103,9 +102,6 @@ sub default_path {
     }
     $end_of_page--;
     my @display_curr = @currencies[ $offset .. $end_of_page ];
-    for my $c (@display_curr) {
-        $c->{timestamp} = format_date( $c->{timestamp} );
-    }
     my $activecurrency = GetCurrency();
 
     $template->param(
@@ -171,9 +167,6 @@ sub add_form {
             if($_ eq "timestamp"){ $date = $curr_rec->{$_}; }
             $template->param( $_ => $curr_rec->{$_} );
         }
-    }
-    if ($date) {
-        $template->param( 'timestamp' => format_date($date) );
     }
 
     return;
