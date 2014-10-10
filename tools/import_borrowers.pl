@@ -62,6 +62,7 @@ my (@errors, @feedback);
 my $extended = C4::Context->preference('ExtendedPatronAttributes');
 my $set_messaging_prefs = C4::Context->preference('EnhancedMessagingPreferences');
 my @columnkeys = C4::Members::columns();
+@columnkeys = map { $_ ne 'borrowernumber' ? $_ : () } @columnkeys;
 if ($extended) {
     push @columnkeys, 'patron_attributes';
 }
