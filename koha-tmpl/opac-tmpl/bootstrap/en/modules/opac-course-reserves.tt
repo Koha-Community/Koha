@@ -5,7 +5,7 @@
 [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Courses
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
-    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% END %]
 
 </head>
@@ -64,7 +64,7 @@
     <script type="text/javascript">
     $(document).ready(function() {
         $("#course_reserves_table").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sDom": '<"bottom"flp>rt<"clear">',
+            "sDom": '<"top"flp>rt<"clear">',
         }));
     });
     </script>
