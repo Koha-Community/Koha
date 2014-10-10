@@ -160,13 +160,18 @@ sub generate_subfield_form {
 
         # Getting list of subfields to keep when restricted edition is enabled
         my $subfieldsToAllowForRestrictedEdition = C4::Context->preference('SubfieldsToAllowForRestrictedEdition');
+        my $allowAllSubfields = (
+            not defined $subfieldsToAllowForRestrictedEdition
+              or $subfieldsToAllowForRestrictedEdition == q||
+        ) ? 1 : 0;
         my @subfieldsToAllow = split(/ /, $subfieldsToAllowForRestrictedEdition);
 
         # If we're on restricted edition, and our field is not in the list of subfields to allow,
         # then it is read-only
         $attributes_no_value .= 'readonly="readonly" '
             if (
-                $restrictededition
+                not $allowAllSubfields
+                and $restrictededition
                 and !grep { $tag . '$' . $subfieldtag  eq $_ } @subfieldsToAllow
             );
 
@@ -246,7 +251,8 @@ sub generate_subfield_form {
                 # then it is read-only
                 push @scrparam, (-readonly => "readonly"), (-disabled => "disabled")
                     if (
-                        $restrictededition
+                        not $allowAllSubfields
+                        and $restrictededition
                         and !grep { $tag . '$' . $subfieldtag  eq $_ } @subfieldsToAllow
                     );
                 $subfield_data{marc_value} =CGI::scrolling_list(@scrparam);

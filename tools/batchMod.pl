@@ -301,13 +301,17 @@ my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
 
 # Getting list of subfields to keep when restricted batchmod edit is enabled
 my $subfieldsToAllowForBatchmod = C4::Context->preference('SubfieldsToAllowForRestrictedBatchmod');
+my $allowAllSubfields = (
+    not defined $subfieldsToAllowForBatchmod
+      or $subfieldsToAllowForBatchmod == q||
+) ? 1 : 0;
 my @subfieldsToAllow = split(/ /, $subfieldsToAllowForBatchmod);
 
 foreach my $tag (sort keys %{$tagslib}) {
     # loop through each subfield
     foreach my $subfield (sort keys %{$tagslib->{$tag}}) {
      	next if subfield_is_koha_internal_p($subfield);
-        next if ($restrictededition && !grep { $tag . '$' . $subfield eq $_ } @subfieldsToAllow );
+        next if (not $allowAllSubfields and $restrictededition && !grep { $tag . '$' . $subfield eq $_ } @subfieldsToAllow );
     	next if ($tagslib->{$tag}->{$subfield}->{'tab'} ne "10");
         # barcode and stocknumber are not meant to be batch-modified
     	next if $tagslib->{$tag}->{$subfield}->{'kohafield'} eq 'items.barcode';
