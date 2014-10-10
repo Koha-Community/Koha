@@ -216,7 +216,7 @@ my $counter = 0;
 for my $status ( @statuses ) {
     my $serialseq = "No.".$counter;
     my ( $expected_serial ) = GetSerials2( $subscriptionid, [1] );
-    C4::Serials::ModSerialStatus( $expected_serial->{serialid}, $serialseq, $publisheddate, $publisheddate, $statuses[$counter], 'an useless note' );
+    C4::Serials::ModSerialStatus( $expected_serial->{serialid}, $serialseq, $publisheddate, $publisheddate, $publisheddate, $statuses[$counter], 'an useless note' );
     $counter++;
 }
 # Here we have 15 serials with statuses : 2*2 + 5*3 + 2*4 + 1*41 + 1*42 + 1*43 + 1*44 + 1*5 + 1*1
