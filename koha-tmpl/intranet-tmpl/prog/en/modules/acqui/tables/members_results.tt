@@ -14,7 +14,7 @@
                 "dt_category":
                     "[% data.category_description |html %] ([% data.category_type |html %])",
                 "dt_action":
-                    "<a style=\"cursor:pointer\" onclick=\"add_user('[% data.borrowernumber %]', '[% data.surname %]', '[% data.firstname %]');\">Add</a>"
+                    "<a style=\"cursor:pointer\" onclick=\"add_user('[% data.borrowernumber %]', '[% data.firstname %] [% data.surname %]');\">Add</a>"
             }[% UNLESS loop.last %],[% END %]
         [% END %]
     ]
