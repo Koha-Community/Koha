@@ -223,8 +223,8 @@
 <input type="hidden" name="updtype" value="[% updtype %]" />
 <input type="hidden" name="destination" value="[% destination %]" />
 <input type="hidden" name="check_member" value="[% check_member %]" />
-<input type="hidden" name="borrowernumber" value="[% IF ( opduplicate ) %][% ELSE %][% borrowernumber %][% END %]" />
-<input type="hidden" name="nodouble"  value="[% IF ( opduplicate ) %][% ELSE %][% nodouble %][% END %]" />
+<input type="hidden" name="borrowernumber" value="[% UNLESS opduplicate %][% borrowernumber %][% END %]" />
+<input type="hidden" name="nodouble"  value="[% UNLESS opduplicate %][% nodouble %][% END %]" />
 [% IF ( step ) %]<input type="hidden" name="step"  value="[% step %]" />[% END %]
 [% IF ( opadd ) %]<input type="hidden" name="op" value="insert" />
 [% ELSIF ( opduplicate ) %]
@@ -285,7 +285,7 @@
                 <label for="firstname">
                 [% END %]
                 First name: </label>
-                <input type="text" id="firstname" name="firstname" size="20"  value="[% IF ( opduplicate ) %][% ELSE %][% firstname %][% END %]" />
+                <input type="text" id="firstname" name="firstname" size="20"  value="[% UNLESS opduplicate %][% firstname %][% END %]" />
                 [% IF ( mandatoryfirstname ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -299,9 +299,9 @@
                 Date of birth: </label>
 
         [% IF ( dateformat == "metric" ) %]
-                <input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="CheckDate(document.form.dateofbirth);" value="[% IF ( opduplicate ) %][% ELSE %][% dateofbirth %][% END %]" />
+                <input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="CheckDate(document.form.dateofbirth);" value="[% UNLESS opduplicate %][% dateofbirth %][% END %]" />
         [% ELSE %]
-                <input type="text" id="dateofbirth" name="dateofbirth" size="20" value="[% IF ( opduplicate ) %][% ELSE %][% dateofbirth %][% END %]" />
+                <input type="text" id="dateofbirth" name="dateofbirth" size="20" value="[% UNLESS opduplicate %][% dateofbirth %][% END %]" />
         [% END %]
 
         [% IF ( mandatorydateofbirth ) %]<span class="required">Required</span>[% END %]
@@ -317,7 +317,7 @@
                     <label for="initials">
                 [% END %]
                 Initials: </label>
-                <input type="text" id="initials" name="initials" size="20"  value="[% IF ( opduplicate ) %][% ELSE %][% initials %][% END %]" class="[% focusAction %]" />
+                <input type="text" id="initials" name="initials" size="20"  value="[% UNLESS opduplicate %][% initials %][% END %]" class="[% focusAction %]" />
                 [% IF ( mandatoryinitials ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -330,7 +330,7 @@
 			<label for="othernames">
 			[% END %]
             Other name: </label>
-            <input type="text" id="othernames" name="othernames" size="20"  value="[% IF ( opduplicate ) %][% ELSE %][% othernames %][% END %]" class="[% focusAction %]" />
+            <input type="text" id="othernames" name="othernames" size="20"  value="[% UNLESS opduplicate %][% othernames %][% END %]" class="[% focusAction %]" />
 [% IF ( mandatoryothernames ) %]<span class="required">Required</span>[% END %]
 		[% IF ( I ) %]<input type="hidden" name="sex" value="N" />[% END %]
 		</li>
@@ -358,7 +358,7 @@
             [% ELSE %]
                 <label for="sex-female">Female </label><input type="radio" name="sex" id="sex-female" value="F" />
                 <label for="sex-male">Male </label><input type="radio" name="sex" id="sex-male" value="M" />
-                <label for="sex-none">N/A </label><input type="radio" name="sex" id="sex-none" value="" />
+                <label for="sex-none">N/A </label><input type="radio" name="sex" id="sex-none" value="" checked="checked" />
             [% END %]
 
        	</li>
@@ -1029,13 +1029,13 @@
 			Expiry date (leave blank for auto calc) </label>
             [% IF ( dateformat == "metric" ) %]
 				[% UNLESS ( opadd ) %]
-                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="[% IF ( opduplicate ) %][% ELSE %][% dateexpiry %][% END %]" class="datepickerto" />
+                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="[% UNLESS opduplicate %][% dateexpiry %][% END %]" class="datepickerto" />
 				[% ELSE %]
                     <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" class="datepickerto" />
 				[% END %]
 			[% ELSE %]
 				[% UNLESS ( opadd ) %]
-                <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% IF ( opduplicate ) %][% ELSE %][% dateexpiry %][% END %]" class="datepickerto" />
+                <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% UNLESS opduplicate %][% dateexpiry %][% END %]" class="datepickerto" />
 				[% ELSE %]
                 <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" class="datepickerto" />
 				[% END %]
@@ -1052,7 +1052,7 @@
 				<label for="opacnote">
 			[% END %]	
 			OPAC note: </label>
-            <textarea id="opacnote" name="opacnote" cols="55" rows="5">[% IF ( opduplicate ) %][% ELSE %][% opacnote %][% END %]</textarea>
+            <textarea id="opacnote" name="opacnote" cols="55" rows="5">[% UNLESS opduplicate %][% opacnote %][% END %]</textarea>
 			<div class="hint">This message appears on this patron's user page in the OPAC</div>
 	  [% IF ( mandatoryopacnote ) %]<span class="required">Required</span>[% END %]
 		</li>
@@ -1065,7 +1065,7 @@
 				<label for="borrowernotes">
 			[% END %]
 			Circulation note: </label>
-            <textarea id="borrowernotes" name="borrowernotes" cols="55" rows="5">[% IF ( opduplicate ) %][% ELSE %][% borrowernotes %][% END %]</textarea>
+            <textarea id="borrowernotes" name="borrowernotes" cols="55" rows="5">[% UNLESS opduplicate %][% borrowernotes %][% END %]</textarea>
 			<div class="hint">This message displays when checking out to this patron</div>
 	  [% IF ( mandatoryborrowernotes ) %]<span class="required">Required</span>[% END %]
 		</li>
