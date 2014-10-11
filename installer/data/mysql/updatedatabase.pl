@@ -8780,7 +8780,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.026";
 if ( CheckVersion($DBversion) ) {
     if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
         $dbh->do("UPDATE marc_subfield_structure SET liblibrarian = 'Encoded bitrate', libopac = 'Encoded bitrate' WHERE tagfield = '347' AND tagsubfield = 'f'");
