@@ -69,6 +69,9 @@ my $delay =
 my $category_code =
   C4::Context->preference('PatronSelfRegistrationDefaultCategory');
 
+die "PatronSelfRegistrationExpireTemporaryAccountsDelay and PatronSelfRegistrationDefaultCategory should be filled to use this script!"
+    if not $category_code or not defined $delay or $delay eq q||;
+
 my $query = "
     SELECT borrowernumber
     FROM borrowers
