@@ -709,7 +709,7 @@ our $PERL_DEPS = {
     },
     'Text::Bidi'   => {
         'usage'    => 'Label batch PDF',
-        'required' => '0',
+        'required' => '1',
         'min_ver'  => '0.03',
     },
 };
