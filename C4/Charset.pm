@@ -179,6 +179,7 @@ Sample code :
 
 sub NormalizeString{
 	my ($string,$nfd,$transform)=@_;
+    return $string unless defined($string); # force scalar context return.
 	utf8::decode($string) unless (utf8::is_utf8($string));
 	if ($nfd){
 		$string= NFD($string);

@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 16;
 use MARC::Record;
 
 use utf8;
@@ -26,6 +26,15 @@ use open ':std', ':encoding(utf8)';
 BEGIN {
     use_ok('C4::Charset');
 }
+
+my $string;
+ok(!defined(NormalizeString($string,undef,1)),'Uninitialized string case 1 normalizes to uninitialized string.');
+
+$string = 'Sample';
+ok(defined(NormalizeString($string,undef,0)), 'Initialized string case 1 normalizes to some string.');
+ok(defined(NormalizeString($string,undef,1)), 'Initialized string case 2 normalizes to some string.');
+ok(defined(NormalizeString($string,1,0)),     'Initialized string case 3 normalizes to some string.');
+ok(defined(NormalizeString($string,1,1)),     'Initialized string case 4 normalizes to some string.');
 
 my $octets = "abc";
 ok(IsStringUTF8ish($octets), "verify octets are valid UTF-8 (ASCII)");
