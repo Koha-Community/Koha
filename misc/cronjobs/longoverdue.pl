@@ -84,7 +84,7 @@ This script takes the following parameters :
     Would set LOST=1 after 30 days (up to one year), but not charge the account.
     This would be suitable for the Koha default LOST authorized value of 1 -> 'Lost'.
 
-  $PERL5LIB/misc/cronjobs/longoverdue.pl --lost 60=2 --charge 1
+  $PERL5LIB/misc/cronjobs/longoverdue.pl --lost 60=2 --charge 2
     Would set LOST=2 after 60 days (up to one year), and charge the account when setting LOST=2.
     This would be suitable for the Koha default LOST authorized value of 2 -> 'Long Overdue' 
 
