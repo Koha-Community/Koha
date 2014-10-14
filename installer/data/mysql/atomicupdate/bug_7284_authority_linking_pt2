@@ -1,9 +1,0 @@
-#! /usr/bin/perl
-use strict;
-use warnings;
-use C4::Context;
-my $dbh = C4::Context->dbh;
-$dbh->do(
-"INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('CatalogModuleRelink',0,'If OFF the linker will never replace the authids that are set in the cataloging module.',NULL,'YesNo');"
-);
-print "Upgrade done (Configured bug 7284, added the )\n";
