@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 56;
+use Test::More tests => 58;
 use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
@@ -84,6 +84,20 @@ my %data = (
 
 my $addmem=AddMember(%data);
 ok($addmem, "AddMember()");
+
+# It's not really a Move, it's a Copy.
+my $result = MoveMemberToDeleted($addmem);
+ok($result,"MoveMemberToDeleted()");
+
+my $sth = $dbh->prepare("SELECT * from borrowers WHERE borrowernumber=?");
+$sth->execute($addmem);
+my $MemberAdded = $sth->fetchrow_hashref;
+
+$sth = $dbh->prepare("SELECT * from deletedborrowers WHERE borrowernumber=?");
+$sth->execute($addmem);
+my $MemberMoved = $sth->fetchrow_hashref;
+
+is_deeply($MemberMoved,$MemberAdded,"Confirm MoveMemberToDeleted.");
 
 my $member=GetMemberDetails("",$CARDNUMBER)
   or BAIL_OUT("Cannot read member with card $CARDNUMBER");
