@@ -1808,11 +1808,9 @@ sub GetSortDetails {
   $result = &MoveMemberToDeleted($borrowernumber);
 
 Copy the record from borrowers to deletedborrowers table.
+The routine returns 1 for success, undef for failure.
 
 =cut
-
-# FIXME: should do it in one SQL statement w/ subquery
-# Otherwise, we should return the @data on success
 
 sub MoveMemberToDeleted {
     my ($member) = shift or return;
@@ -1822,13 +1820,22 @@ sub MoveMemberToDeleted {
           WHERE borrowernumber=?|;
     my $sth = $dbh->prepare($query);
     $sth->execute($member);
-    my @data = $sth->fetchrow_array;
-    (@data) or return;  # if we got a bad borrowernumber, there's nothing to insert
-    $sth =
-      $dbh->prepare( "INSERT INTO deletedborrowers VALUES ("
-          . ( "?," x ( scalar(@data) - 1 ) )
-          . "?)" );
-    $sth->execute(@data);
+    my $data = $sth->fetchrow_hashref;
+    return if !$data;  # probably bad borrowernumber
+
+    #now construct a insert query that does not depend on the same order of
+    #columns in borrowers and deletedborrowers (see BZ 13084)
+    my $insertq = "INSERT INTO deletedborrowers (";
+    my @values;
+    foreach my $key ( keys %$data ) {
+        $insertq.= $key.",";
+        push @values, $data->{$key};
+    }
+    $insertq =~ s/,$//; #remove last comma
+    $insertq .= ") VALUES (" . ( "?," x ( scalar(@values) - 1 ) ) . "?)";
+    $sth = $dbh->prepare( $insertq );
+    $sth->execute(@values);
+    return $sth->err? undef: 1;
 }
 
 =head2 DelMember
