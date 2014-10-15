@@ -206,7 +206,7 @@ if ( $op eq "export" ) {
         my $authtype        = $query->param('authtype');
         my $filefh;
         if ($commandline) {
-            open $filefh,"<", $id_list_file or die "cannot open $id_list_file: $!";
+            open $filefh,"<", $id_list_file or die "cannot open $id_list_file: $!" if $id_list_file;
         } else {
             $filefh = $query->upload("id_list_file");
         }
