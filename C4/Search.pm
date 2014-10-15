@@ -634,9 +634,11 @@ sub GetFacets {
     my $rs = shift;
     my $facets;
 
-    my $index_mode = C4::Context->config('zebra_auth_index_mode') // 'dom';
+    my $indexing_mode    = C4::Context->config('zebra_bib_index_mode') // 'dom';
+    my $use_zebra_facets = C4::Context->config('use_zebra_facets') // 0;
 
-    if ( $index_mode eq 'dom' ) {
+    if ( $indexing_mode eq 'dom' &&
+         $use_zebra_facets ) {
         $facets = _get_facets_from_zebra( $rs );
     } else {
         $facets = _get_facets_from_records( $rs );
