@@ -228,8 +228,10 @@ if ($loggedinuser) {
 	$my_tags = get_tag_rows({borrowernumber=>$loggedinuser});
 	foreach (@$my_tags) {
 		my $biblio = GetBiblioData($_->{biblionumber});
-		$_->{bib_summary} = $biblio->{title}; 
-		($biblio->{author}) and $_->{bib_summary} .= " by " . $biblio->{author};
+        my $record = &GetMarcBiblio( $_->{biblionumber} );
+        $_->{subtitle} = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $_->{biblionumber} ) );
+        $_->{title} = $biblio->{title};
+        $_->{author} = $biblio->{author};
 		my $date = $_->{date_created} || '';
 		$date =~ /\s+(\d{2}\:\d{2}\:\d{2})/;
 		$_->{time_created_display} = $1;

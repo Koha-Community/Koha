@@ -126,7 +126,7 @@
                                             <td>
                                                 <span class="tdlabel">Title:</span>
                                                 <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% MY_TAG.biblionumber %]">
-                                                [% MY_TAG.bib_summary |html %]</a></td>
+                                                [% MY_TAG.title |html %][% IF ( MY_TAG.subtitle ) %][% FOREACH subtitle IN MY_TAG.subtitle %] [% subtitle.subfield |html %][% END %][% END %]</a> [% IF ( MY_TAG.author ) %]by [% MY_TAG.author %][% END %]</td>
                                             <td>
                                                 <span title="[% MY_TAG.date_created %]">
                                                     <span class="tdlabel">Date added:</span>
