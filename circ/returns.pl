@@ -217,7 +217,7 @@ if ($dotransfer){
 # An item has been returned to a branch other than the homebranch, and the librarian has chosen to initiate a transfer
     my $transferitem = $query->param('transferitem');
     my $tobranch     = $query->param('tobranch');
-    ModItemTransfer($transferitem, $userenv_branch, $tobranch); 
+    ModItemTransfer($transferitem, $userenv_branch, $tobranch);
 }
 
 if ($canceltransfer){
@@ -276,7 +276,7 @@ if ($barcode) {
         itembarcode      => $biblio->{'barcode'},
         itemtype         => $biblio->{'itemtype'},
         ccode            => $biblio->{'ccode'},
-        itembiblionumber => $biblio->{'biblionumber'},    
+        itembiblionumber => $biblio->{'biblionumber'},
         borrower         => $borrower,
         additional_materials => $biblio->{'materials'},
     );
@@ -305,7 +305,7 @@ if ($barcode) {
                 $template->param( fineborrowernumber => $borrower->{'borrowernumber'} );
             }
         }
-        
+
         if (C4::Context->preference("WaitingNotifyAtCheckin") ) {
             #Check for waiting holds
             my @reserves = GetReservesFromBorrowernumber($borrower->{'borrowernumber'});
@@ -314,7 +314,7 @@ if ($barcode) {
                 if ( $num_res->{'found'} eq 'W' && $num_res->{'branchcode'} eq $userenv_branch) {
                     $waiting_holds++;
                 }
-            } 
+            }
             if ($waiting_holds > 0) {
                 $template->param(
                     waiting_holds       => $waiting_holds,
@@ -600,7 +600,7 @@ $template->param(
     BlockReturnOfWithdrawnItems => C4::Context->preference("BlockReturnOfWithdrawnItems"),
 );
 
-my $itemnumber = GetItemnumberFromBarcode( $query->param('barcode') );
+$itemnumber = GetItemnumberFromBarcode( $query->param('barcode') );
 if ( $itemnumber ) {
    my ( $holdingBranch, $collectionBranch ) = GetCollectionItemBranches( $itemnumber );
     if ( ! ( $holdingBranch eq $collectionBranch ) ) {
