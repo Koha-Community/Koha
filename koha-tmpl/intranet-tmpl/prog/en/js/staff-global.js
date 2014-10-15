@@ -55,10 +55,8 @@ $.fn.selectTabByID = function (tabID) {
 function checkEnter(e){ //e is event object passed from function invocation
     var characterCode; // literal character code will be stored in this variable
     if(e && e.which){ //if which property of event object is supported (NN4)
-        e = e;
         characterCode = e.which; //character code is contained in NN4's which property
     } else {
-        e = window.event;
         characterCode = e.keyCode; //character code is contained in IE's keyCode property
     }
 
