@@ -128,7 +128,7 @@ while ( my $h = $holds_rs->next() ) {
             $h->branchcode()->branchcode() )
         {
             $hold->{not_transferred}    = 1;
-            $hold->{not_transferred_by} = $h->branchcode()->branchname();
+            $hold->{not_transferred_by} = $h->item()->holdingbranch()->branchname();
         }
     }
 
