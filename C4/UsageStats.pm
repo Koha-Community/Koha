@@ -23,7 +23,9 @@ use POSIX qw(strftime);
 use LWP::UserAgent;
 use JSON;
 
-=head1 NAME C4::UsageStats
+=head1 NAME
+
+C4::UsageStats
 
 =head1 DESCRIPTION
 
