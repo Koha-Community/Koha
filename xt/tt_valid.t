@@ -1,21 +1,21 @@
 #!/usr/bin/perl
 
-# Copyright (C) 2011 Tamil s.a.r.l.
-#
 # This file is part of Koha.
 #
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
+# Copyright (C) 2011 Tamil s.a.r.l.
 #
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
 #
-# You should have received a copy of the GNU General Public License along
-# with Koha; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use warnings;
 use strict;
@@ -24,6 +24,23 @@ use File::Find;
 use Cwd;
 use C4::TTParser;
 
+my @themes;
+
+# OPAC themes
+my $opac_dir  = 'koha-tmpl/opac-tmpl';
+opendir ( my $dh, $opac_dir ) or die "can't opendir $opac_dir: $!";
+for my $theme ( grep { not /^\.|lib|js/ } readdir($dh) ) {
+    push @themes, "$opac_dir/$theme/en";
+}
+close $dh;
+
+# STAFF themes
+my $staff_dir = 'koha-tmpl/intranet-tmpl';
+opendir ( $dh, $staff_dir ) or die "can't opendir $staff_dir: $!";
+for my $theme ( grep { not /^\.|lib|js/ } readdir($dh) ) {
+    push @themes, "$staff_dir/$theme/en";
+}
+close $dh;
 
 my @files_with_directive_in_tag = do {
     my @files;
@@ -42,8 +59,7 @@ my @files_with_directive_in_tag = do {
         }
         ($dir) = $dir =~ /koha-tmpl\/(.*)$/;
         push @files, { name => "$dir/$name", lines => \@lines } if @lines;
-      }, ( "./koha-tmpl/opac-tmpl/prog/en",
-           "./koha-tmpl/intranet-tmpl/prog/en" )
+      }, @themes
     );
     @files;
 };

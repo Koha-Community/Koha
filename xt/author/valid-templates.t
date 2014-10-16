@@ -1,21 +1,21 @@
 #!/usr/bin/perl
 
-# Copyright 2011 Catalyst IT
-# 
 # This file is part of Koha.
 #
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
+# Copyright 2011 Catalyst IT
 #
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
 #
-# You should have received a copy of the GNU General Public License along
-# with Koha; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use strict;
 use warnings;
@@ -35,32 +35,55 @@ use File::Find;
 use File::Spec;
 use Template;
 use Test::More;
-# use FindBin;
-# use IPC::Open3;
 
-print "Testing intranet prog templates\n";
-run_template_test(
-    'koha-tmpl/intranet-tmpl/prog/en/modules',
-    'koha-tmpl/intranet-tmpl/prog/en/includes'
-);
+my @themes;
 
-print "Testing opac bootstrap templates\n";
-run_template_test(
-    'koha-tmpl/opac-tmpl/bootstrap/en/modules',
-    'koha-tmpl/opac-tmpl/bootstrap/en/includes',
-    # templates to exclude from testing because
-    # they cannot stand alone
-    'doc-head-close.inc',
-    'opac-bottom.inc',
-);
+# OPAC themes
+my $opac_dir  = 'koha-tmpl/opac-tmpl';
+opendir ( my $dh, $opac_dir ) or die "can't opendir $opac_dir: $!";
+for my $theme ( grep { not /^\.|lib|js/ } readdir($dh) ) {
+    push @themes, {
+        type     => "opac",
+        theme    => $theme,
+        modules  => "$opac_dir/$theme/en/modules",
+        includes => "$opac_dir/$theme/en/includes",
+    }
+}
+close $dh;
 
-print "Testing opac prog templates\n";
-run_template_test(
-    'koha-tmpl/opac-tmpl/prog/en/modules',
-    'koha-tmpl/opac-tmpl/prog/en/includes'
-);
+# STAFF themes
+my $staff_dir = 'koha-tmpl/intranet-tmpl';
+opendir ( $dh, $staff_dir ) or die "can't opendir $staff_dir: $!";
+for my $theme ( grep { not /^\.|lib|js/ } readdir($dh) ) {
+    push @themes, {
+        type     => "staff",
+        theme    => $theme,
+        modules  => "$staff_dir/$theme/en/modules",
+        includes => "$staff_dir/$theme/en/includes",
+    }
+}
+close $dh;
 
-# TODO add test of opac ccsr templates
+# Tests
+foreach my $theme ( @themes ) {
+    print "Testing $theme->{'type'} $theme->{'theme'} templates\n";
+    if ( $theme->{'theme'} eq 'bootstrap' ) {
+        run_template_test(
+            $theme->{'modules'},
+            $theme->{'includes'},
+            # templates to exclude from testing because
+            # they cannot stand alone
+            'doc-head-close.inc',
+            'opac-bottom.inc',
+        );
+    }
+    else {
+        run_template_test(
+            $theme->{'modules'},
+            $theme->{'includes'},
+        );
+    }
+}
 
 done_testing();
 
@@ -94,8 +117,10 @@ sub create_template_test {
         }
         my $vars;
         my $output;
-        if ( !ok( $tt->process( $_, $vars, \$output ), $_ ) ) {
-            diag( $tt->error );
+        if ( ! -d $_ ) {    # skip dirs
+            if ( !ok( $tt->process( $_, $vars, \$output ), $_ ) ) {
+                diag( $tt->error );
+            }
         }
     }
 }

@@ -1,5 +1,20 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use strict;
 use warnings;
 
@@ -12,7 +27,7 @@ construct that the extractor cannot parse.
 
 =cut
 
-use Test::More tests => 2;
+use Test::More;
 use File::Temp qw/tempdir/;
 use IPC::Open3;
 use File::Spec;
@@ -21,9 +36,29 @@ use utf8;
 
 my $po_dir = tempdir(CLEANUP => 1);
 
+# Find OPAC themes
+my $opac_dir  = 'koha-tmpl/opac-tmpl';
+opendir ( my $dh, $opac_dir ) or die "can't opendir $opac_dir: $!";
+my @opac_themes = grep { not /^\.|lib|js/ } readdir($dh);
+close $dh;
+
+# Find STAFF themes
+my $staff_dir = 'koha-tmpl/intranet-tmpl';
+opendir ( $dh, $staff_dir ) or die "can't opendir $staff_dir: $!";
+my @staff_themes = grep { not /^\.|lib|js/ } readdir($dh);
+close $dh;
+
 chdir "misc/translator"; # for now, tmpl_process3.pl works only if run from its directory
-test_string_extraction("opac",     "../../koha-tmpl/opac-tmpl/prog/en",     $po_dir);
-test_string_extraction("intranet", "../../koha-tmpl/intranet-tmpl/prog/en", $po_dir);
+
+# Check translatable of OPAC themes
+for my $theme ( @opac_themes ) {
+    test_string_extraction("opac_$theme",     "../../koha-tmpl/opac-tmpl/$theme/en",     $po_dir);
+}
+
+# Check translatable of STAFF themes
+for my $theme ( @staff_themes ) {
+    test_string_extraction("staff_$theme",     "../../koha-tmpl/intranet-tmpl/$theme/en",     $po_dir);
+}
 
 sub test_string_extraction {
     my $module       = shift;
@@ -53,3 +88,5 @@ sub test_string_extraction {
 
     ok($#warnings == -1, "$module templates are translatable") or diag join("\n", @warnings, '');
 }
+
+done_testing();
