@@ -17,8 +17,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use MARC::Record;
+
+use utf8;
+use open ':std', ':encoding(utf8)';
 
 BEGIN {
     use_ok('C4::Charset');
@@ -54,5 +57,7 @@ SetUTF8Flag($record);
 ok( utf8::is_utf8($record->subfield('100','a')) &&
     utf8::is_utf8($record->subfield('245','a')),
     'SetUTF8Flag sets the UTF-8 flag to all subfields' );
+
+is( nsb_clean("Le Moyen Âge"), "Le Moyen Âge", "nsb_clean removes  and " );
 
 1;
