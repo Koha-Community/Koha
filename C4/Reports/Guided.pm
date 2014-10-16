@@ -983,7 +983,7 @@ sub IsAuthorisedValueValid {
     my $reserved_authorised_values = GetReservedAuthorisedValues();
 
     if ( exists $reserved_authorised_values->{$authorised_value} ||
-         IsAuthorisedValueCategory($authorised_value)   ) {
+         C4::Koha::IsAuthorisedValueCategory($authorised_value)   ) {
         return 1;
     }
 
