@@ -357,7 +357,9 @@ function filterByFirstLetterSurname(letter) {
             <table id="memberresultst">
               <thead>
                 <tr>
+                [% IF CAN_user_tools_manage_patron_lists %]
                   <th>&nbsp;</th>
+                [% END %]
                   <th>Card</th>
                   <th>Name</th>
                   <th>Category</th>
