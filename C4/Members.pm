@@ -1749,6 +1749,49 @@ sub GetAge{
     return $age;
 }    # sub get_age
 
+=head2 SetAge
+
+  $borrower = C4::Members::SetAge($borrower, $datetimeduration);
+  $borrower = C4::Members::SetAge($borrower, '0015-12-10');
+  $borrower = C4::Members::SetAge($borrower, $datetimeduration, $datetime_reference);
+
+  eval { $borrower = C4::Members::SetAge($borrower, '015-1-10'); };
+  if ($@) {print $@;} #Catch a bad ISO Date or kill your script!
+
+This function sets the borrower's dateofbirth to match the given age.
+Optionally relative to the given $datetime_reference.
+
+@PARAM1 koha.borrowers-object
+@PARAM2 DateTime::Duration-object as the desired age
+        OR a ISO 8601 Date. (To make the API more pleasant)
+@PARAM3 DateTime-object as the relative date, defaults to now().
+RETURNS The given borrower reference @PARAM1.
+DIES    If there was an error with the ISO Date handling.
+
+=cut
+
+#'
+sub SetAge{
+    my ( $borrower, $datetimeduration, $datetime_ref ) = @_;
+    $datetime_ref = DateTime->now() unless $datetime_ref;
+
+    if ($datetimeduration && ref $datetimeduration ne 'DateTime::Duration') {
+        if ($datetimeduration =~ /^(\d{4})-(\d{2})-(\d{2})/) {
+            $datetimeduration = DateTime::Duration->new(years => $1, months => $2, days => $3);
+        }
+        else {
+            die "C4::Members::SetAge($borrower, $datetimeduration), datetimeduration not a valid ISO 8601 Date!\n";
+        }
+    }
+
+    my $new_datetime_ref = $datetime_ref->clone();
+    $new_datetime_ref->subtract_duration( $datetimeduration );
+
+    $borrower->{dateofbirth} = $new_datetime_ref->ymd();
+
+    return $borrower;
+}    # sub SetAge
+
 =head2 GetCities
 
   $cityarrayref = GetCities();

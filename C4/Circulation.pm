@@ -998,29 +998,14 @@ sub CanBookBeIssued {
     }
 
     ## CHECK AGE RESTRICTION
-    # get $marker from preferences. Could be something like "FSK|PEGI|Alter|Age:"
-    my $markers         = C4::Context->preference('AgeRestrictionMarker');
-    my $bibvalues       = $biblioitem->{'agerestriction'};
-    my $restriction_age = GetAgeRestriction( $bibvalues );
-
-    if ( $restriction_age > 0 ) {
-        if ( $borrower->{'dateofbirth'} ) {
-            my @alloweddate = split /-/, $borrower->{'dateofbirth'};
-            $alloweddate[0] += $restriction_age;
-
-            #Prevent runime eror on leap year (invalid date)
-            if ( ( $alloweddate[1] == 2 ) && ( $alloweddate[2] == 29 ) ) {
-                $alloweddate[2] = 28;
-            }
-
-            if ( Date_to_Days(Today) < Date_to_Days(@alloweddate) - 1 ) {
-                if ( C4::Context->preference('AgeRestrictionOverride') ) {
-                    $needsconfirmation{AGE_RESTRICTION} = "$bibvalues";
-                }
-                else {
-                    $issuingimpossible{AGE_RESTRICTION} = "$bibvalues";
-                }
-            }
+    my $agerestriction  = $biblioitem->{'agerestriction'};
+    my ($restriction_age, $daysToAgeRestriction) = GetAgeRestriction( $agerestriction, $borrower );
+    if ( $daysToAgeRestriction && $daysToAgeRestriction > 0 ) {
+        if ( C4::Context->preference('AgeRestrictionOverride') ) {
+            $needsconfirmation{AGE_RESTRICTION} = "$agerestriction";
+        }
+        else {
+            $issuingimpossible{AGE_RESTRICTION} = "$agerestriction";
         }
     }
 
@@ -3761,8 +3746,23 @@ sub IsItemIssued {
     return $sth->fetchrow;
 }
 
+=head2 GetAgeRestriction
+
+  my ($ageRestriction, $daysToAgeRestriction) = GetAgeRestriction($record_restrictions, $borrower);
+  my ($ageRestriction, $daysToAgeRestriction) = GetAgeRestriction($record_restrictions);
+
+  if($daysToAgeRestriction <= 0) { #Borrower is allowed to access this material, as he is older or as old as the agerestriction }
+  if($daysToAgeRestriction > 0) { #Borrower is this many days from meeting the agerestriction }
+
+@PARAM1 the koha.biblioitems.agerestriction value, like K18, PEGI 13, ...
+@PARAM2 a borrower-object with koha.borrowers.dateofbirth. (OPTIONAL)
+@RETURNS The age restriction age in years and the days to fulfill the age restriction for the given borrower.
+         Negative days mean the borrower has gone past the age restriction age.
+
+=cut
+
 sub GetAgeRestriction {
-    my ($record_restrictions) = @_;
+    my ($record_restrictions, $borrower) = @_;
     my $markers = C4::Context->preference('AgeRestrictionMarker');
 
     # Split $record_restrictions to something like FSK 16 or PEGI 6
@@ -3796,7 +3796,25 @@ sub GetAgeRestriction {
         last if ( $restriction_year > 0 );
     }
 
-    return $restriction_year;
+    #Check if the borrower is age restricted for this material and for how long.
+    if ($restriction_year && $borrower) {
+        if ( $borrower->{'dateofbirth'} ) {
+            my @alloweddate = split /-/, $borrower->{'dateofbirth'};
+            $alloweddate[0] += $restriction_year;
+
+            #Prevent runime eror on leap year (invalid date)
+            if ( ( $alloweddate[1] == 2 ) && ( $alloweddate[2] == 29 ) ) {
+                $alloweddate[2] = 28;
+            }
+
+            #Get how many days the borrower has to reach the age restriction
+            my $daysToAgeRestriction = Date_to_Days(@alloweddate) - Date_to_Days(Today);
+            #Negative days means the borrower went past the age restriction age
+            return ($restriction_year, $daysToAgeRestriction);
+        }
+    }
+
+    return ($restriction_year);
 }
 
 1;
