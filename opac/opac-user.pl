@@ -35,6 +35,7 @@ use C4::Items;
 use C4::Letters;
 use C4::Branch; # GetBranches
 use Koha::DateUtils;
+use Koha::Borrower::Debarments qw(IsDebarred);
 
 use constant ATTRIBUTE_SHOW_BARCODE => 'SHOW_BCODE';
 
@@ -84,7 +85,7 @@ my ($warning_year, $warning_month, $warning_day) = split /-/, $borr->{'dateexpir
 
 $borr->{'ethnicity'} = fixEthnicity( $borr->{'ethnicity'} );
 
-my $debar = $borr->{'debarred'};
+my $debar = IsDebarred($borrowernumber);
 my $userdebarred;
 
 if ($debar) {
