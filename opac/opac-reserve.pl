@@ -35,6 +35,7 @@ use C4::Branch; # GetBranches
 use C4::Overdues;
 use C4::Debug;
 use Koha::DateUtils;
+use Koha::Borrower::Debarments qw(IsDebarred);
 use Date::Calc qw/Today Date_to_Days/;
 # use Data::Dumper;
 
@@ -320,7 +321,7 @@ if ( $borr->{lost} && ($borr->{lost} == 1) ) {
         lost    => 1
     );
 }
-if ( $borr->{'debarred'} ) {
+if ( IsDebarred($borrowernumber) ) {
     $noreserves = 1;
     $template->param(
         message  => 1,
