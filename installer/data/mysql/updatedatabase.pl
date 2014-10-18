@@ -8810,7 +8810,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "XXX";
+$DBversion = "3.17.00.029";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("ALTER TABLE  `items` CHANGE  `cn_sort`  `cn_sort` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL");
     $dbh->do("ALTER TABLE  `deleteditems` CHANGE  `cn_sort`  `cn_sort` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL");
