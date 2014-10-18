@@ -449,4 +449,3 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('z3950AuthorAuthFields','701,702,700',NULL,'Define the MARC biblio fields for Personal Name Authorities to fill biblio.author','free'),
 ('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo')
 ;
-INSERT INTO systempreferences (variable,value) VALUES);
