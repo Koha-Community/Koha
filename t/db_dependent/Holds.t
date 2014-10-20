@@ -210,7 +210,7 @@ t::lib::Mocks::mock_preference('item-level_itypes', 1);
 # if IndependentBranches is OFF, a CPL patron can reserve an MPL item
 t::lib::Mocks::mock_preference('IndependentBranches', 0);
 ok(
-    CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber),
+    CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber) eq 'OK',
     'CPL patron allowed to reserve MPL item with IndependentBranches OFF (bug 2394)'
 );
 
@@ -218,14 +218,14 @@ ok(
 t::lib::Mocks::mock_preference('IndependentBranches', 1);
 t::lib::Mocks::mock_preference('canreservefromotherbranches', 0);
 ok(
-    ! CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber),
+    CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber) eq 'cannotReserveFromOtherBranches',
     'CPL patron NOT allowed to reserve MPL item with IndependentBranches ON ... (bug 2394)'
 );
 
 # ... unless canreservefromotherbranches is ON
 t::lib::Mocks::mock_preference('canreservefromotherbranches', 1);
 ok(
-    CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber),
+    CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber) eq 'OK',
     '... unless canreservefromotherbranches is ON (bug 2394)'
 );
 
@@ -294,10 +294,10 @@ is( $reserve3->{priority}, 1, "After ModReserve, the 3rd reserve becomes the fir
 
 ModItem({ damaged => 1 }, $item_bibnum, $itemnumber);
 C4::Context->set_preference( 'AllowHoldsOnDamagedItems', 1 );
-ok( CanItemBeReserved( $borrowernumbers[0], $itemnumber), "Patron can reserve damaged item with AllowHoldsOnDamagedItems enabled" );
+ok( CanItemBeReserved( $borrowernumbers[0], $itemnumber) eq 'OK', "Patron can reserve damaged item with AllowHoldsOnDamagedItems enabled" );
 ok( defined( ( CheckReserves($itemnumber) )[1] ), "Hold can be trapped for damaged item with AllowHoldsOnDamagedItems enabled" );
 C4::Context->set_preference( 'AllowHoldsOnDamagedItems', 0 );
-ok( !CanItemBeReserved( $borrowernumbers[0], $itemnumber), "Patron cannot reserve damaged item with AllowHoldsOnDamagedItems disabled" );
+ok( CanItemBeReserved( $borrowernumbers[0], $itemnumber) eq 'damaged', "Patron cannot reserve damaged item with AllowHoldsOnDamagedItems disabled" );
 ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for damaged item with AllowHoldsOnDamagedItems disabled" );
 
 # Regression test for bug 9532
@@ -312,19 +312,19 @@ AddReserve(
     1,
 );
 ok(
-    !CanItemBeReserved( $borrowernumbers[0], $itemnumber),
+    CanItemBeReserved( $borrowernumbers[0], $itemnumber) eq 'tooManyReserves',
     "cannot request item if policy that matches on item-level item type forbids it"
 );
 ModItem({ itype => 'CAN' }, $item_bibnum, $itemnumber);
 ok(
-    CanItemBeReserved( $borrowernumbers[0], $itemnumber),
+    CanItemBeReserved( $borrowernumbers[0], $itemnumber) eq 'OK',
     "can request item if policy that matches on item type allows it"
 );
 
 t::lib::Mocks::mock_preference('item-level_itypes', 0);
 ModItem({ itype => undef }, $item_bibnum, $itemnumber);
 ok(
-    !CanItemBeReserved( $borrowernumbers[0], $itemnumber),
+    CanItemBeReserved( $borrowernumbers[0], $itemnumber) eq 'tooManyReserves',
     "cannot request item if policy that matches on bib-level item type forbids it (bug 9532)"
 );
 

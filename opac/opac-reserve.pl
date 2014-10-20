@@ -252,7 +252,7 @@ if ( $query->param('place_reserve') ) {
       # holdingbranch, force the value $rank and $found.
         my $rank = $biblioData->{rank};
         if ( $itemNum ne '' ) {
-            $canreserve = 1 if CanItemBeReserved( $borrowernumber, $itemNum );
+            $canreserve = 1 if CanItemBeReserved( $borrowernumber, $itemNum ) eq 'OK';
             $rank = '0' unless C4::Context->preference('ReservesNeedReturns');
             my $item = GetItem($itemNum);
             if ( $item->{'holdingbranch'} eq $branch ) {
@@ -261,7 +261,7 @@ if ( $query->param('place_reserve') ) {
             }
         }
         else {
-            $canreserve = 1 if CanBookBeReserved( $borrowernumber, $biblioNum );
+            $canreserve = 1 if CanBookBeReserved( $borrowernumber, $biblioNum ) eq 'OK';
 
             # Inserts a null into the 'itemnumber' field of 'reserves' table.
             $itemNum = undef;
@@ -524,7 +524,7 @@ foreach my $biblioNum (@biblionumbers) {
             $policy_holdallowed = 0;
         }
 
-        if (IsAvailableForItemLevelRequest($itemNum) and $policy_holdallowed and CanItemBeReserved($borrowernumber,$itemNum) and ($itemLoopIter->{already_reserved} ne 1)) {
+        if (IsAvailableForItemLevelRequest($itemNum) and $policy_holdallowed and CanItemBeReserved($borrowernumber,$itemNum) eq 'OK' and ($itemLoopIter->{already_reserved} ne 1)) {
             $itemLoopIter->{available} = 1;
             $numCopiesAvailable++;
         }
@@ -548,9 +548,14 @@ foreach my $biblioNum (@biblionumbers) {
     if ($biblioLoopIter{already_reserved}) {
         $biblioLoopIter{holdable} = undef;
     }
-    if(not CanBookBeReserved($borrowernumber,$biblioNum)){
-        $biblioLoopIter{holdable} = undef;
-    }
+	my $canReserve = CanBookBeReserved($borrowernumber,$biblioNum);
+	if ($canReserve eq 'OK') {
+		#All is OK!
+	}
+	else {
+		$biblioLoopIter{holdable} = undef;
+		$biblioLoopIter{ $canReserve } = 1;
+	}
     if(not C4::Context->preference('AllowHoldsOnPatronsPossessions') and CheckIfIssuedToPatron($borrowernumber,$biblioNum)) {
         $biblioLoopIter{holdable} = undef;
         $biblioLoopIter{already_patron_possession} = 1;

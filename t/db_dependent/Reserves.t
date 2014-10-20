@@ -488,20 +488,20 @@ my ( $ageres_tagid, $ageres_subfieldid ) = GetMarcFromKohaField( "biblioitems.ag
 $record->append_fields(  MARC::Field->new($ageres_tagid, '', '', $ageres_subfieldid => 'PEGI 16')  );
 C4::Biblio::ModBiblio( $record, $bibnum, '' );
 
-is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber) , 1, "Reserving an ageRestricted Biblio without a borrower dateofbirth succeeds" );
+is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber) , 'OK', "Reserving an ageRestricted Biblio without a borrower dateofbirth succeeds" );
 
 #Set the dateofbirth for the Borrower making him "too young".
 my $now = DateTime->now();
 C4::Members::SetAge( $borrower, '0015-00-00' );
 C4::Members::ModMember( borrowernumber => $borrowernumber, dateofbirth => $borrower->{dateofbirth} );
 
-is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber) , 0, "Reserving a 'PEGI 16' Biblio by a 15 year old borrower fails");
+is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber) , 'ageRestricted', "Reserving a 'PEGI 16' Biblio by a 15 year old borrower fails");
 
 #Set the dateofbirth for the Borrower making him "too old".
 C4::Members::SetAge( $borrower, '0030-00-00' );
 C4::Members::ModMember( borrowernumber => $borrowernumber, dateofbirth => $borrower->{dateofbirth} );
 
-is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber) , 1, "Reserving a 'PEGI 16' Biblio by a 30 year old borrower succeeds");
+is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber) , 'OK', "Reserving a 'PEGI 16' Biblio by a 30 year old borrower succeeds");
        ####
 ####### EO Bug 13113 <<<
        ####

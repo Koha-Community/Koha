@@ -448,7 +448,10 @@ sub GetReservesFromBorrowernumber {
 #-------------------------------------------------------------------------------------
 =head2 CanBookBeReserved
 
-  $error = &CanBookBeReserved($borrowernumber, $biblionumber)
+  $canReserve = &CanBookBeReserved($borrowernumber, $biblionumber)
+  if ($canReserve eq 'OK') { #We can reserve this Item! }
+
+See CanItemBeReserved() for possible return values.
 
 =cut
 
@@ -462,17 +465,24 @@ sub CanBookBeReserved{
     push (@$items,@hostitems);
     }
 
+	my $canReserve;
     foreach my $item (@$items){
-        return 1 if CanItemBeReserved($borrowernumber, $item);
+		$canReserve = CanItemBeReserved($borrowernumber, $item);
+        return 'OK' if $canReserve eq 'OK';
     }
-    return 0;
+    return $canReserve;
 }
 
 =head2 CanItemBeReserved
 
-  $error = &CanItemBeReserved($borrowernumber, $itemnumber)
+  $canReserve = &CanItemBeReserved($borrowernumber, $itemnumber)
+  if ($canReserve eq 'OK') { #We can reserve this Item! }
 
-This function return 1 if an item can be issued by this borrower.
+@RETURNS OK,              if the Item can be reserved.
+         ageRestricted,   if the Item is age restricted for this borrower.
+         damaged,         if the Item is damaged.
+         cannotReserveFromOtherBranches, if syspref 'canreservefromotherbranches' is OK.
+         tooManyReserves, if the borrower has exceeded his maximum reserve amount.
 
 =cut
 
@@ -490,11 +500,11 @@ sub CanItemBeReserved{
     my $borrower = C4::Members::GetMember('borrowernumber'=>$borrowernumber);
 
     # If an item is damaged and we don't allow holds on damaged items, we can stop right here
-    return 0 if ( $item->{damaged} && !C4::Context->preference('AllowHoldsOnDamagedItems') );
+    return 'damaged' if ( $item->{damaged} && !C4::Context->preference('AllowHoldsOnDamagedItems') );
 
     #Check for the age restriction
     my ($ageRestriction, $daysToAgeRestriction) = C4::Circulation::GetAgeRestriction( $biblioData->{agerestriction}, $borrower );
-    return 0 if $daysToAgeRestriction && $daysToAgeRestriction > 0;
+    return 'ageRestricted' if $daysToAgeRestriction && $daysToAgeRestriction > 0;
 
     my $controlbranch = C4::Context->preference('ReservesControlBranch');
     my $itemtypefield = C4::Context->preference('item-level_itypes') ? "itype" : "itemtype";
@@ -561,7 +571,7 @@ sub CanItemBeReserved{
     
     # we check if it's ok or not
     if( $reservecount >= $allowedreserves ){
-        return 0;
+        return 'tooManyReserves';
     }
 
     # If reservecount is ok, we check item branch if IndependentBranches is ON
@@ -571,11 +581,11 @@ sub CanItemBeReserved{
     {
         my $itembranch = $item->{homebranch};
         if ($itembranch ne $borrower->{branchcode}) {
-            return 0;
+            return 'cannotReserveFromOtherBranches';
         }
     }
 
-    return 1;
+    return 'OK';
 }
 
 =head2 CanReserveBeCanceledFromOpac

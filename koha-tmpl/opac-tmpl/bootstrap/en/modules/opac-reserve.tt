@@ -143,6 +143,9 @@
                                         </p>
 
                                         [% UNLESS ( bibitemloo.holdable ) %]
+                                            [% IF ( bibitemloo.ageRestricted ) %]
+                                                <div class="alert">Sorry, you are too young to reserve this material.</div>
+                                            [% END %]
                                             [% IF ( bibitemloo.already_reserved ) %]
                                                 <div class="alert">You have already requested this title.</div>
                                             [% ELSE %]
