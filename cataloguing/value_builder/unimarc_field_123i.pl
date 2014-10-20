@@ -72,7 +72,7 @@ my ($input) = @_;
 	my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_123i.tt",
+    = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_123i_j.tt",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -84,7 +84,7 @@ my ($template, $loggedinuser, $cookie)
 	my $f3 = substr($result,4,2);
 	my $f4 = substr($result,6,2);
 	$template->param(index => $index,
-			 "f1$f1" => 1,
+             "f1".($f1 eq '-'?'s':'n') => 1,
 			 f2 => $f2,
 			 f3 => $f3,
 			 f4 => $f4);

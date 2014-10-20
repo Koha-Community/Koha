@@ -36,8 +36,6 @@ It need :
   if the biblio has no isbn, then the search if done on editor only
   If the biblio ha an isbn, the search is done on isbn and editor. It's faster.
 
-=over 2
-
 =cut
 
 use strict;
@@ -50,7 +48,9 @@ use C4::Context;
 use C4::AuthoritiesMarc;
 use C4::Output;
 
-=head1
+=head1 FUNCTIONS
+
+=head2 plugin_parameters
 
 plugin_parameters : other parameters added when the plugin is called by the dopop function
 
@@ -89,7 +89,6 @@ sub plugin {
     my $result       = $input->param('result');
     my $editor_found = $input->param('editor_found');
     my $AuthoritySeparator = C4::Context->preference("AuthoritySeparator");
-    warn Data::Dumper::Dumper $index;
 
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {   template_name   => "cataloguing/value_builder/unimarc_field_210c_bis.tt",
