@@ -788,11 +788,12 @@ sub _get_facet_from_result_set {
     my $rs        = shift;
     my $sep       = shift;
 
-    my $internal_sep = '<*>';
+    my $internal_sep  = '<*>';
+    my $facetMaxCount = C4::Context->preference('FacetMaxCount') // 20;
 
     return if ( ! defined $facet_idx || ! defined $rs );
     # zebra's facet element, untokenized index
-    my $facet_element = 'zebra::facet::' . $facet_idx . ':0:100';
+    my $facet_element = 'zebra::facet::' . $facet_idx . ':0:' . $facetMaxCount;
     # configure zebra results for retrieving the desired facet
     $rs->option( elementSetName => $facet_element );
     # get the facet record from result set
