@@ -3684,16 +3684,26 @@ sub UpdateTotalIssues {
     my ($biblionumber, $increase, $value) = @_;
     my $totalissues;
 
+    my $record = GetMarcBiblio($biblionumber);
+    unless ($record) {
+        carp "UpdateTotalIssues could not get biblio record";
+        return;
+    }
     my $data = GetBiblioData($biblionumber);
+    unless ($data) {
+        carp "UpdateTotalIssues could not get datas of biblio";
+        return;
+    }
+    my ($totalissuestag, $totalissuessubfield) = GetMarcFromKohaField('biblioitems.totalissues', $data->{'frameworkcode'});
+    unless ($totalissuestag) {
+        return 1; # There is nothing to do
+    }
 
     if (defined $value) {
         $totalissues = $value;
     } else {
         $totalissues = $data->{'totalissues'} + $increase;
     }
-     my ($totalissuestag, $totalissuessubfield) = GetMarcFromKohaField('biblioitems.totalissues', $data->{'frameworkcode'});
-
-     my $record = GetMarcBiblio($biblionumber);
 
      my $field = $record->field($totalissuestag);
      if (defined $field) {
@@ -3704,8 +3714,7 @@ sub UpdateTotalIssues {
          $record->insert_grouped_field($field);
      }
 
-     ModBiblio($record, $biblionumber, $data->{'frameworkcode'});
-     return;
+     return ModBiblio($record, $biblionumber, $data->{'frameworkcode'});
 }
 
 =head2 RemoveAllNsb

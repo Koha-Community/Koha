@@ -98,6 +98,7 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 
 my $num_bibs_processed = 0;
+my $num_bibs_error = 0;
 
 my $starttime = time();
 
@@ -169,11 +170,16 @@ sub process_query {
         print "Processing bib $biblionumber ($totalissues issues)\n"
           if $verbose;
         if ( not $test_only ) {
+            my $ret;
             if ( $incremental && $totalissues > 0 ) {
-                UpdateTotalIssues( $biblionumber, $totalissues );
+                $ret = UpdateTotalIssues( $biblionumber, $totalissues );
             }
             else {
-                UpdateTotalIssues( $biblionumber, 0, $totalissues );
+                $ret = UpdateTotalIssues( $biblionumber, 0, $totalissues );
+            }
+            unless ($ret) {
+                print "Error while processing bib $biblionumber\n" if $verbose;
+                $num_bibs_error++;
             }
         }
         if ( not $test_only and ( $num_bibs_processed % $commit ) == 0 ) {
@@ -198,6 +204,7 @@ Run started at:                         $starttime
 Run ended at:                           $endtime
 Total run time:                         $totaltime ms
 Number of bibs modified:                $num_bibs_processed
+Number of bibs with error:              $num_bibs_error
 _SUMMARY_
     $summary .= "\n****  Ran in test mode only  ****\n" if $test_only;
     print $summary;
