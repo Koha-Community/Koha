@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 42;
+use Test::More tests => 44;
 use Test::Warn;
 
 BEGIN {
@@ -154,5 +154,11 @@ warning_is { $ret = RemoveAllNsb() }
            "RemoveAllNsb returns carped warning on undef record";
 
 ok( !defined $ret, 'RemoveAllNsb returns undef if not passed rec');
+
+warning_is { $ret = UpdateTotalIssues() }
+           { carped => 'UpdateTotalIssues could not get biblio record'},
+           "UpdateTotalIssues returns carped warning if biblio record does not exist";
+
+ok( !defined $ret, 'UpdateTotalIssues returns carped warning if biblio record does not exist');
 
 1;
