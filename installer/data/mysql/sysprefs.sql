@@ -119,6 +119,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ExpireReservesOnHolidays', '1', NULL, 'If false, reserves at a library will not be canceled on days the library is not open.', 'YesNo'),
 ('ExtendedPatronAttributes','0',NULL,'Use extended patron IDs and attributes','YesNo'),
 ('FacetLabelTruncationLength','20',NULL,'Specify the facet max length in OPAC','Integer'),
+('FacetMaxCount','20',NULL,'Specify the max facet count for each category','Integer'),
 ('FilterBeforeOverdueReport','0','','Do not run overdue report until filter selected','YesNo'),
 ('FineNotifyAtCheckin','0',NULL,'If ON notify librarians of overdue fines on the items they are checking in.','YesNo'),
 ('finesCalendar','noFinesWhenClosed','ignoreCalendar|noFinesWhenClosed','Specify whether to use the Calendar in calculating duedates and fines','Choice'),

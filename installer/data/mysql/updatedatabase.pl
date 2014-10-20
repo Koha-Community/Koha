@@ -8806,7 +8806,6 @@ if ( CheckVersion($DBversion) ) {
     });
     print "Upgrade to $DBversion done (Bug 12296 - search box replaceable with a system preference)\n";
     SetVersion($DBversion);
-    SetVersion ($DBversion);
 }
 
 $DBversion = "3.17.00.029";
@@ -8855,6 +8854,16 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do("ALTER TABLE branches ADD branchreplyto mediumtext AFTER branchemail");
     $dbh->do("ALTER TABLE branches ADD branchreturnpath mediumtext AFTER branchreplyto");
     print "Upgrade to $DBversion done (Bug 9530: Adding replyto and returnpath addresses.)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type)
+        VALUES('FacetMaxCount', '20','Specify the max facet count for each category',NULL,'Integer')
+    });
+    print "Upgrade to $DBversion done (Bug 13088 - Allow the user to specify a max amount of facets to show)\n";
     SetVersion($DBversion);
 }
 
