@@ -708,7 +708,7 @@ sub checkauth {
     # Finally, after those tests, we can assume (although if it would be better with
     # a syspref) that if we get a REMOTE_USER, that's from basic authentication,
     # and we can affect it to $userid.
-    if ( !$shib and $ENV{'REMOTE_USER'} ne '' and $userid = $ENV{'REMOTE_USER'} ) {
+    if ( !$shib and defined($ENV{'REMOTE_USER'}) and $ENV{'REMOTE_USER'} ne '' and $userid = $ENV{'REMOTE_USER'} ) {
 
         # Using Basic Authentication, no cookies required
         $cookie = $query->cookie(
