@@ -3022,21 +3022,24 @@ sub PrepareItemrecordDisplay {
                         labels  => \%authorised_lib,
                     };
                 } elsif ( $tagslib->{$tag}->{$subfield}->{value_builder} ) {
-                        # opening plugin
-                        my $plugin = C4::Context->intranetdir . "/cataloguing/value_builder/" . $tagslib->{$tag}->{$subfield}->{'value_builder'};
-                        if (do $plugin) {
-                            my $extended_param = plugin_parameters( $dbh, undef, $tagslib, $subfield_data{id}, undef );
-                            my ( $function_name, $javascript ) = plugin_javascript( $dbh, undef, $tagslib, $subfield_data{id}, undef );
-                            $subfield_data{random}     = int(rand(1000000));    # why do we need 2 different randoms?
-                            $subfield_data{marc_value} = qq[<input type="text" tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="255"
-                                onfocus="Focus$function_name($subfield_data{random}, '$subfield_data{id}');"
-                                 onblur=" Blur$function_name($subfield_data{random}, '$subfield_data{id}');" />
-                                <a href="#" class="buttonDot" onclick="Clic$function_name('$subfield_data{id}'); return false;" title="Tag Editor">...</a>
-                                $javascript];
-                        } else {
-                            warn "Plugin Failed: $plugin";
-                            $subfield_data{marc_value} = qq(<input type="text" tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="255" />); # supply default input form
-                        }
+                # it is a plugin
+                    require Koha::FrameworkPlugin;
+                    my $plugin = Koha::FrameworkPlugin->new({
+                        name => $tagslib->{$tag}->{$subfield}->{value_builder},
+                        item_style => 1,
+                    });
+                    my $pars = { dbh => $dbh, record => undef, tagslib =>$tagslib, id => $subfield_data{id}, tabloop => undef };
+                    $plugin->build( $pars );
+                    if( !$plugin->errstr ) {
+                        #TODO Move html to template; see report 12176/13397
+                        my $tab= $plugin->noclick? '-1': '';
+                        my $class= $plugin->noclick? ' disabled': '';
+                        my $title= $plugin->noclick? 'No popup': 'Tag editor';
+                        $subfield_data{marc_value} = qq[<input type="text" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="255" /><a href="#" id="buttonDot_$subfield_data{id}" tabindex="$tab" class="buttonDot $class" title="$title">...</a>\n].$plugin->javascript;
+                    } else {
+                        warn $plugin->errstr;
+                        $subfield_data{marc_value} = qq(<input type="text" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="255" />); # supply default input form
+                    }
                 }
                 elsif ( $tag eq '' ) {       # it's an hidden field
                     $subfield_data{marc_value} = qq(<input type="hidden" tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="255" value="$defaultvalue" />);

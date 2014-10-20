@@ -626,7 +626,15 @@ function Changefwk(FwkList) {
                     <span class="subfield_controls"><a href="#" class="buttonDot tag_editor" onclick="openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'[%- mv.authtype -%]','biblio'); return false;" tabindex="1" title="Tag editor">Tag editor</a></span>
                     [% END %]
                 [% ELSIF ( mv.type == 'text_complex' ) %]
-                    <input type="text" id="[%- mv.id -%]" name="[%- mv.name -%]" value="[%- mv.value -%]" class="input_marceditor" tabindex="1" size="[%- mv.size -%]" maxlength="[%- mv.maxlength -%]" onfocus="Focus[%- mv.function_name -%]([%- mv.index_tag -%])" onblur="Blur[%- mv.function_name -%]([%- mv.index_tag -%])" /><span class="subfield_controls"><a href="#" class="buttonDot tag_editor" onclick="Clic[%- mv.function_name -%]('[%- mv.id -%]'); return false;" tabindex="1" title="Tag editor">Tag editor</a></span>[% mv.javascript %]
+                    <input type="text" id="[%- mv.id -%]" name="[%- mv.name -%]" value="[%- mv.value -%]" class="input_marceditor framework_plugin" tabindex="1" size="[%- mv.size -%]" maxlength="[%- mv.maxlength -%]" />
+                    <span class="subfield_controls">
+                        [% IF mv.noclick %]
+                            <a href="#" class="buttonDot tag_editor disabled" tabindex="-1" title="No popup"></a>
+                        [% ELSE %]
+                            <a href="#" id="buttonDot_[% mv.id %]" class="buttonDot tag_editor framework_plugin" tabindex="1" title="Tag editor">Tag editor</a>
+                        [% END %]
+                    </span>
+                    [% mv.javascript %]
                 [% ELSIF ( mv.type == 'hidden' ) %]
                     <input tabindex="1" type="hidden" id="[%- mv.id -%]" name="[%- mv.name -%]" size="[%- mv.size -%]" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
                 [% ELSIF ( mv.type == 'textarea' ) %]

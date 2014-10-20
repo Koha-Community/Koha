@@ -130,6 +130,10 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                     textaeras[0].setAttribute('name',textaeras[0].getAttribute('name')+new_key);
                 }
             }
+            if( $(inputs[1]).hasClass('framework_plugin') ) {
+                var oldcontrol= original.getElementsByTagName('input')[1];
+                AddEventHandlers( oldcontrol,inputs[1],id_input );
+            }
 
             if (advancedMARCEditor == '0') {
                 // when cloning a subfield, re set its label too.
@@ -172,13 +176,9 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                     if(buttonDot){
                         // 2 possibilities :
                         try{
-                            var buttonDotOnClick = buttonDot.getAttribute('onclick');
-                            if(buttonDotOnClick.match('Clictag')){   // -1- It s a plugin
-                                var re = /\('.*'\)/i;
-                                buttonDotOnClick = buttonDotOnClick.replace(re,"('"+inputs[1].getAttribute('id')+"')");
-                                if(buttonDotOnClick){
-                                    buttonDot.setAttribute('onclick',buttonDotOnClick);
-                                }
+                            if( $(buttonDot).hasClass('framework_plugin') ) {
+                                var oldcontrol= original.getElementsByTagName('a')[0];
+                                AddEventHandlers(oldcontrol,buttonDot,id_input);
                             } else {
                                 if(buttonDotOnClick.match('Dopop')) {  // -2- It's a auth value
                                     var re1 = /&index=.*',/;
@@ -267,6 +267,11 @@ function CloneSubfield(index, advancedMARCEditor){
         inputs[i].setAttribute('name',inputs[i].getAttribute('name')+new_key);
         linkid = id_input;
     }
+    // Plugin input
+    if( $(inputs[1]).hasClass('framework_plugin') ) {
+        var oldcontrol= original.getElementsByTagName('input')[1];
+        AddEventHandlers( oldcontrol, inputs[1], linkid );
+    }
 
     // select
     for(var i=0,len=selects.length; i<len ; i++ ){
@@ -282,16 +287,11 @@ function CloneSubfield(index, advancedMARCEditor){
         textareas[i].setAttribute('name',textareas[i].getAttribute('name')+new_key);
     }
 
-    // Changing the "..." link's onclick attribute for plugin callback
+    // Handle click event on buttonDot for plugin
     var links  = clone.getElementsByTagName('a');
-    var link = links[0];
-    var buttonDotOnClick = link.getAttribute('onclick');
-    if(buttonDotOnClick.match('Clictag')){   // -1- It s a plugin
-    var re = /\('.*'\)/i;
-        buttonDotOnClick = buttonDotOnClick.replace(re,"('"+linkid+"')");
-        if(buttonDotOnClick){
-        link.setAttribute('onclick',buttonDotOnClick);
-        }
+    if( $(links[0]).hasClass('framework_plugin') ) {
+        var oldcontrol= original.getElementsByTagName('a')[0];
+        AddEventHandlers( oldcontrol, links[0], linkid );
     }
 
     if(advancedMARCEditor == '0') {
@@ -323,6 +323,23 @@ function CloneSubfield(index, advancedMARCEditor){
     }
     // insert this line on the page
     original.parentNode.insertBefore(clone,original.nextSibling);
+}
+
+function AddEventHandlers (oldcontrol, newcontrol, newinputid ) {
+// This function is a helper for CloneField and CloneSubfield.
+// It adds the event handlers from oldcontrol to newcontrol.
+// newinputid is the id attribute of the cloned controlling input field
+// Note: This code depends on the jQuery data for events; this structure
+// is moved to _data as of jQuery 1.8.
+    var ev= $(oldcontrol).data('events');
+    if(typeof ev != 'undefined') {
+        $.each(ev, function(prop,val) {
+            $.each(val, function(prop2,val2) {
+                $(newcontrol).off( val2.type );
+                $(newcontrol).on( val2.type, {id: newinputid}, val2.handler );
+            });
+        });
+    }
 }
 
  /**

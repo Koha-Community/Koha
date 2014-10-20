@@ -326,8 +326,6 @@ foreach my $tag (sort keys %{$tagslib}) {
 	}
 	$subfield_data{tag}        = $tag;
 	$subfield_data{subfield}   = $subfield;
-	$subfield_data{random}     = int(rand(1000000));    # why do we need 2 different randoms?
-    #   $subfield_data{marc_lib}   = $tagslib->{$tag}->{$subfield}->{lib};
 	$subfield_data{marc_lib}   ="<span id=\"error$i\" title=\"".$tagslib->{$tag}->{$subfield}->{lib}."\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
 	$subfield_data{mandatory}  = $tagslib->{$tag}->{$subfield}->{mandatory};
 	$subfield_data{repeatable} = $tagslib->{$tag}->{$subfield}->{repeatable};
@@ -411,26 +409,28 @@ foreach my $tag (sort keys %{$tagslib}) {
             value        => $value,
             authtypecode => $tagslib->{$tag}->{$subfield}->{authtypecode},
         }
-    # it's a plugin field
     }
-    elsif ( $tagslib->{$tag}->{$subfield}->{value_builder} ) {
-        # opening plugin
-        my $plugin = C4::Context->intranetdir . "/cataloguing/value_builder/" . $tagslib->{$tag}->{$subfield}->{'value_builder'};
-        if (do $plugin) {
-			my $temp;
-            my $extended_param = plugin_parameters( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
-            my ( $function_name, $javascript ) = plugin_javascript( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
+    elsif ( $tagslib->{$tag}->{$subfield}->{value_builder} ) { # plugin
+        require Koha::FrameworkPlugin;
+        my $plugin = Koha::FrameworkPlugin->new( {
+            name => $tagslib->{$tag}->{$subfield}->{'value_builder'},
+            item_style => 1,
+        });
+        my $temp;
+        my $pars= { dbh => $dbh, record => $temp, tagslib => $tagslib,
+            id => $subfield_data{id}, tabloop => \@loop_data };
+        $plugin->build( $pars );
+        if( !$plugin->errstr ) {
             $subfield_data{marc_value} = {
                 type       => 'text2',
                 id         => $subfield_data{id},
                 value      => $value,
-                function   => $function_name,
-                random     => $subfield_data{random},
-                javascript => $javascript,
+                javascript => $plugin->javascript,
+                noclick    => $plugin->noclick,
             };
         } else {
-            warn "Plugin Failed: $plugin";
-            $subfield_data{marc_value} = {                                      # supply default input form
+            warn $plugin->errstr;
+            $subfield_data{marc_value} = { # supply default input form
                 type       => 'text',
                 id         => $subfield_data{id},
                 value      => $value,

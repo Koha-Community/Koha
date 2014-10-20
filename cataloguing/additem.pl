@@ -120,7 +120,6 @@ sub generate_subfield_form {
         
         $subfield_data{tag}        = $tag;
         $subfield_data{subfield}   = $subfieldtag;
-        $subfield_data{random}     = int(rand(1000000));    # why do we need 2 different randoms?
         $subfield_data{marc_lib}   ="<span id=\"error$i\" title=\"".$subfieldlib->{lib}."\">".$subfieldlib->{lib}."</span>";
         $subfield_data{mandatory}  = $subfieldlib->{mandatory};
         $subfield_data{repeatable} = $subfieldlib->{repeatable};
@@ -267,25 +266,24 @@ sub generate_subfield_form {
             ";
         }
             # it's a plugin field
-        elsif ( $subfieldlib->{value_builder} ) {
-                # opening plugin
-                my $plugin = C4::Context->intranetdir . "/cataloguing/value_builder/" . $subfieldlib->{'value_builder'};
-                if (do $plugin) {
-                    my $extended_param = plugin_parameters( $dbh, $temp, $tagslib, $subfield_data{id}, $loop_data );
-                    my ( $function_name, $javascript ) = plugin_javascript( $dbh, $temp, $tagslib, $subfield_data{id}, $loop_data );
-		    my $change = index($javascript, 'function Change') > -1 ?
-		        "return Change$function_name($subfield_data{random}, '$subfield_data{id}');" :
-		        'return 1;';
-                    $subfield_data{marc_value} = qq[<input type="text" $attributes
-                        onfocus="Focus$function_name($subfield_data{random}, '$subfield_data{id}');"
-			onchange=" $change"
-                         onblur=" Blur$function_name($subfield_data{random}, '$subfield_data{id}');" />
-                        <a href="#" class="buttonDot" onclick="Clic$function_name('$subfield_data{id}'); return false;" title="Tag Editor">...</a>
-                        $javascript];
-                } else {
-                    warn "Plugin Failed: $plugin";
-                    $subfield_data{marc_value} = "<input type=\"text\" $attributes />"; # supply default input form
-                }
+        elsif ( $subfieldlib->{value_builder} ) { # plugin
+            require Koha::FrameworkPlugin;
+            my $plugin = Koha::FrameworkPlugin->new({
+                name => $subfieldlib->{'value_builder'},
+                item_style => 1,
+            });
+            my $pars=  { dbh => $dbh, record => $temp, tagslib =>$tagslib,
+                id => $subfield_data{id}, tabloop => $loop_data };
+            $plugin->build( $pars );
+            if( !$plugin->errstr ) {
+                #TODO Report 12176 will make this even better !
+                my $class= 'buttonDot'. ( $plugin->noclick? ' disabled': '' );
+                my $title= $plugin->noclick? 'No popup': 'Tag editor';
+                $subfield_data{marc_value} = qq[<input type="text" $attributes /><a href="#" id="buttonDot_$subfield_data{id}" class="$class" title="$title">...</a>\n].$plugin->javascript;
+            } else {
+                warn $plugin->errstr;
+                $subfield_data{marc_value} = "<input type=\"text\" $attributes />"; # supply default input form
+            }
         }
         elsif ( $tag eq '' ) {       # it's an hidden field
             $subfield_data{marc_value} = qq(<input type="hidden" $attributes />);

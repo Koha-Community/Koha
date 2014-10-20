@@ -212,37 +212,37 @@ sub create_input {
             value        => $value,
             authtypecode => $tagslib->{$tag}->{$subfield}->{authtypecode},
         };
-    # it's a plugin field
     }
-    elsif ( $tagslib->{$tag}->{$subfield}->{'value_builder'} ) {
-
-        # opening plugin. Just check whether we are on a developer computer on a production one
-        # (the cgidir differs)
-        my $cgidir = C4::Context->intranetdir . "/cgi-bin/cataloguing/value_builder";
-        unless (-r $cgidir and -d $cgidir) {
-            $cgidir = C4::Context->intranetdir . "/cataloguing/value_builder";
+    elsif ( $tagslib->{$tag}->{$subfield}->{'value_builder'} ) { # plugin
+        require Koha::FrameworkPlugin;
+        my $plugin = Koha::FrameworkPlugin->new({
+            name => $tagslib->{$tag}->{$subfield}->{'value_builder'},
+        });
+        my $pars=  { dbh => $dbh, record => $rec, tagslib =>$tagslib,
+            id => $subfield_data{id}, tabloop => $tabloop };
+        $plugin->build( $pars );
+        if( !$plugin->errstr ) {
+            $subfield_data{marc_value} = {
+                type       => 'text2',
+                id        => $subfield_data{id},
+                name      => $subfield_data{id},
+                value     => $value,
+                maxlength => $max_length,
+                javascript => $plugin->javascript,
+                noclick    => $plugin->noclick,
+            };
+        } else { # warn and supply default field
+            warn $plugin->errstr;
+            $subfield_data{marc_value} = {
+                type      => 'text',
+                id        => $subfield_data{id},
+                name      => $subfield_data{id},
+                value     => $value,
+                maxlength => $max_length,
+            };
         }
-        my $plugin = $cgidir . "/" . $tagslib->{$tag}->{$subfield}->{'value_builder'};
-        do $plugin || die "Plugin Failed: ".$plugin;
-        my $extended_param;
-        eval{
-            $extended_param = plugin_parameters( $dbh, $rec, $tagslib, $subfield_data{id}, $tabloop );
-        };
-        my ( $function_name, $javascript ) = plugin_javascript( $dbh, $rec, $tagslib, $subfield_data{id}, $tabloop );
-#         my ( $function_name, $javascript,$extended_param );
-        
-        $subfield_data{marc_value} = {
-            type       => 'text2',
-            id         => $subfield_data{id},
-            name       => $subfield_data{id},
-            value      => $value,
-            maxlength  => $max_length,
-            function   => $function_name,
-            index_tag  => $index_tag,
-            javascript => $javascript,
-        };
-        # it's an hidden field
     }
+    # it's an hidden field
     elsif ( $tag eq '' ) {
         $subfield_data{marc_value} = {
             type      => 'hidden',

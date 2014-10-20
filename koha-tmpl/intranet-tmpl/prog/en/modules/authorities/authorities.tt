@@ -357,8 +357,12 @@ function confirmnotdup(redirect){
                     <input type="text" id="[%- mv.id -%]" name="[%- mv.id -%]" value="[%- mv.value -%]" class="input_marceditor" tabindex="1" />
                     <a href="#" class="buttonDot" onclick="openAuth(this.parentNode.getElementsByTagName('input')[1].id,'[%- mv.authtypecode -%]','auth'); return false;" tabindex="1" title="Tag editor">...</a>
                 [% ELSIF ( mv.type == 'text2' ) %]
-                    <input tabindex="1" type="text" id="[%- mv.id -%]" size="67" maxlength="[%- mv.maxlength -%]" name="[%- mv.id -%]" value="[%- mv.value -%]" class="input_marceditor" onfocus="Focus[%- mv.function -%]([%- mv.index_tag -%])" onblur="Blur[%- mv.function -%]([%- mv.index_tag -%]);" />
-                    <a href="#" class="buttonDot" onclick="Clic[%- mv.function -%]('[%- mv.id -%]'); return false;" title="Tag editor">...</a>
+                    <input type="text" id="[%- mv.id -%]" size="67" maxlength="[%- mv.maxlength -%]" name="[%- mv.name -%]" value="[%- mv.value -%]" class="input_marceditor" />
+                    [% IF mv.noclick %]
+                        <a href="#" class="buttonDot tag_editor disabled" tabindex="-1" title="No popup">...</a>
+                    [% ELSE %]
+                        <a href="#" id="buttonDot_[% mv.id %]" class="buttonDot tag_editor" title="Tag editor">...</a>
+                    [% END %]
                     [% mv.javascript %]
                 [% ELSIF ( mv.type == 'text' ) %]
                     <input type="text" id="[%- mv.id -%]" name="[%- mv.name -%]" value="[%- mv.value -%]" class="input_marceditor" tabindex="1" size="67" maxlength="[%- mv.maxlength -%]" />

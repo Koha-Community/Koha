@@ -193,8 +193,12 @@ $(document).ready(function(){
                     <input type="text" tabindex="1" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value -%]" />
                     <a href="#" class="buttonDot" onclick="Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=[%- mv.authtypecode -%]&index=[%- mv.id -%]','[%- mv.id -%]'); return false;" title="Tag editor">...</a>
                 [% ELSIF ( mv.type == 'text2' ) %]
-                    <input type="text" tabindex="1" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value -%]"  onfocus="Focus[%- mv.function -%]([%- mv.random -%], '[%- mv.id -%]');" onblur=" Blur[%- mv.function -%]([%- mv.random -%], '[%- mv.id -%]');" />
-                    <a href="#" class="buttonDot" onclick="Clic[%- mv.function -%]('[%- mv.id -%]'); return false;" title="Tag editor">...</a>
+                    <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value -%]" />
+                    [% IF mv.noclick %]
+                        <a href="#" class="buttonDot disabled" title="No popup">...</a>
+                    [% ELSE %]
+                        <a href="#" id="buttonDot_[% mv.id %]" class="buttonDot" title="Tag editor">...</a>
+                    [% END %]
                     [% mv.javascript %]
                 [% ELSIF ( mv.type == 'text' ) %]
                     <input type="text" tabindex="1" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value -%]" />
