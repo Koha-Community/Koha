@@ -128,21 +128,21 @@
                         </dt>
                         [% FOREACH sublanguages_loo IN language.sublanguages_loop %]
                         <dd>
-                            <label for="[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])</label>
+                            <label for="pref_[% CHUNK.name %]_[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])</label>
                             [% IF ( sublanguages_loo.enabled ) %]
-                            <input value="[% sublanguages_loo.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" class="preference preference-checkbox"/>
+                            <input value="[% sublanguages_loo.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]_[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" class="preference preference-checkbox"/>
                             [% ELSE %]
-                            <input value="[% sublanguages_loo.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" class="preference preference-checkbox"/>
+                            <input value="[% sublanguages_loo.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]_[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" class="preference preference-checkbox"/>
                             [% END %]
                         </dd>
                         [% END %]
                         [% ELSE %]
                         <dt>
-                            <label for="[% language.rfc4646_subtag %]">[% language.native_description %]([% language.rfc4646_subtag %])</label>
+                            <label for="pref_[% CHUNK.name %]_[% language.rfc4646_subtag %]">[% language.native_description %]([% language.rfc4646_subtag %])</label>
                             [% IF ( language.group_enabled ) %]
-                            <input value="[% language.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="[% language.rfc4646_subtag %]" type="checkbox" checked="checked" class="preference preference-checkbox"/>
+                            <input value="[% language.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]_[% language.rfc4646_subtag %]" type="checkbox" checked="checked" class="preference preference-checkbox"/>
                             [% ELSE %]
-                            <input value="[% language.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="[% language.rfc4646_subtag %]" type="checkbox" class="preference preference-checkbox"/>
+                            <input value="[% language.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]_[% language.rfc4646_subtag %]" type="checkbox" class="preference preference-checkbox"/>
                             [% END %]
                         </dt>
                         [% END %]
