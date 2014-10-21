@@ -416,9 +416,10 @@ if ( $op eq "export" ) {
                     print "\n";
                 }
                 else {
-                    my (@result_build_tag) = MARC::File::USMARC::_build_tag_directory($record);
-                    if ($result_build_tag[2] > 99999) {
-                        warn "record (number $recordid) length ".$result_build_tag[2]." is larger than the MARC spec allows (99999 bytes)";
+                    my $errorcount_on_decode = eval { scalar(MARC::File::USMARC->decode( $record->as_usmarc )->warnings()) };
+                    if ($errorcount_on_decode or $@){
+                        warn $@ if $@;
+                        warn "record (number $recordid) is invalid and therefore not exported because its reopening generates warnings above";
                         next;
                     }
                     print $record->as_usmarc();
