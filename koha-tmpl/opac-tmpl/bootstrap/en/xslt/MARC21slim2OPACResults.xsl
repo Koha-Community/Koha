@@ -1188,7 +1188,7 @@
                </span>
     <xsl:choose>
         <xsl:when test="($OPACItemLocation='location' or $OPACItemLocation='ccode') and (count(key('item-by-status', 'available'))!=0 or count(key('item-by-status', 'reference'))!=0)">
-            <span class="results_summary" id="location">
+            <span class="results_summary location">
                 <span class="label">Location(s): </span>
                 <xsl:choose>
                 <xsl:when test="count(key('item-by-status', 'available'))>0">
