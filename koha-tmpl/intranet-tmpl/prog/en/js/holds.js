@@ -64,7 +64,7 @@ $(document).ready(function() {
                                         data += " " + AT.format( oObj.waiting_at );
                                     }
                                 } else if ( oObj.transferred ) {
-                                    data += ITEM_IS_IN_TRANSIT.format( oObj.from_branch );
+                                    data += ITEM_IS_IN_TRANSIT.format( oObj.from_branch, oObj.date_sent );
                                 } else if ( oObj.not_transferred ) {
                                     data += NOT_TRANSFERRED_YET.format( oObj.not_transferred_by );
                                 }

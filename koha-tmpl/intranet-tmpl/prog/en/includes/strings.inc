@@ -19,7 +19,7 @@
     var UNTIL = _("until %s");
     var ITEM_IS_WAITING = _("Item is <strong>waiting</strong>"); //
     var AT = _("at %s");
-    var ITEM_IS_IN_TRANSIT = _("Item is <strong>in transit</strong> from %s");
+    var ITEM_IS_IN_TRANSIT = _("Item is <strong>in transit</strong> from %s since %s");
     var FROM = _("from");
     var NOT_TRANSFERRED_YET = _("Item hasn't been transferred yet from %s");
     var NO = _("No");
