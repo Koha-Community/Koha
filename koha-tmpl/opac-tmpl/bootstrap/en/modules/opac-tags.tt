@@ -113,7 +113,7 @@
 
                         [% IF ( MY_TAGS ) %]
                         <form method="post" action="opac-tags.pl">
-                            <h2>My Tags</h2>
+                            <h2>Your tags</h2>
                             <table id="mytagst" class="table table-bordered table-striped">
                                 <thead><tr><th>Term</th><th>Title</th><th>Date added</th><th>Delete</th></tr></thead>
                                 <tbody>
@@ -124,9 +124,23 @@
                                                 <a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |url %]&amp;q=[% MY_TAG.term |url %]">
                                             [% MY_TAG.term |html %]</a></td>
                                             <td>
-                                                <span class="tdlabel">Title:</span>
-                                                <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% MY_TAG.biblionumber %]">
-                                                [% MY_TAG.title |html %][% IF ( MY_TAG.subtitle ) %][% FOREACH subtitle IN MY_TAG.subtitle %] [% subtitle.subfield |html %][% END %][% END %]</a> [% IF ( MY_TAG.author ) %]by [% MY_TAG.author %][% END %]</td>
+                                                [% IF ( MY_TAG.XSLTBloc ) %]
+                                                    [% MY_TAG.XSLTBloc %]
+                                                [% ELSE %]
+                                                    <span class="tdlabel">Title:</span>
+                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% MY_TAG.biblionumber %]">
+                                                        [% MY_TAG.title |html %]
+                                                        [% IF ( MY_TAG.subtitle ) %]
+                                                            [% FOREACH subtitle IN MY_TAG.subtitle %]
+                                                                [% subtitle.subfield |html %]
+                                                            [% END %]
+                                                        [% END %]
+                                                    </a>
+                                                    [% IF ( MY_TAG.author ) %]
+                                                        by [% MY_TAG.author %]
+                                                    [% END %]
+                                                [% END # /IF MY_TAG.XSLTBloc %]
+                                            </td>
                                             <td>
                                                 <span title="[% MY_TAG.date_created %]">
                                                     <span class="tdlabel">Date added:</span>

@@ -42,6 +42,7 @@ use C4::Output qw(:html :ajax pagination_bar);
 use C4::Scrubber;
 use C4::Biblio;
 use C4::Tags qw(add_tag get_approval_rows get_tag_rows remove_tag stratify_tags);
+use C4::XSLT;
 
 use Data::Dumper;
 
@@ -232,6 +233,9 @@ if ($loggedinuser) {
         $_->{subtitle} = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $_->{biblionumber} ) );
         $_->{title} = $biblio->{title};
         $_->{author} = $biblio->{author};
+        if (C4::Context->preference("OPACXSLTResultsDisplay")) {
+            $_->{XSLTBloc} = XSLTParse4Display($_->{biblionumber}, $record, "OPACXSLTResultsDisplay");
+        }
 		my $date = $_->{date_created} || '';
 		$date =~ /\s+(\d{2}\:\d{2}\:\d{2})/;
 		$_->{time_created_display} = $1;
