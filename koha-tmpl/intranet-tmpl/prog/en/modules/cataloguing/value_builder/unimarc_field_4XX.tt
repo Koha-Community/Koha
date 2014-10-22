@@ -25,46 +25,46 @@
                         var subfield = subfields[i+1];
                         
                         if(code.value == '9'){
-                                subfield.value = "[% subfield_value_9 %]";
+                                subfield.value = "[% subfield_value_9 |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
                         }
                         if(code.value == '0'){
-                                subfield.value = "[% subfield_value_0 %]";
+                                subfield.value = "[% subfield_value_0 |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
                         }
                         if(code.value == 'a'){
-                                subfield.value = "[% subfield_value_a %]";
+                                subfield.value = "[% subfield_value_a |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
                         }
                         if(code.value == 'c'){
-                                subfield.value = "[% subfield_value_c %]";
+                                subfield.value = "[% subfield_value_c |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
                         }
                         if(code.value == 'd'){
-                                subfield.value = "[% subfield_value_d %]";
+                                subfield.value = "[% subfield_value_d |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
                         }
                         if(code.value == 'e'){
-                                subfield.value = "[% subfield_value_e %]";
+                                subfield.value = "[% subfield_value_e |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
                         }
                         if(code.value == 'h'){
-                                subfield.value = "[% subfield_value_h %]";
+                                subfield.value = "[% subfield_value_h |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
                         }
                         if(code.value == 'i'){
-                                subfield.value = "[% subfield_value_i %]";
+                                subfield.value = "[% subfield_value_i |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
                         }
                         if(code.value == 'p'){
-                                subfield.value = "[% subfield_value_p %]";
+                                subfield.value = "[% subfield_value_p |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
                         }
                         if(code.value == 't'){
-                                subfield.value = "[% subfield_value_t %]";
+                                subfield.value = "[% subfield_value_t |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
                         }
                         if(code.value == 'u'){
-                                subfield.value = "[% subfield_value_u %]";
+                                subfield.value = "[% subfield_value_u |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
                         }
                         if(code.value == 'v'){
-                                subfield.value = "[% subfield_value_v %]";
+                                subfield.value = "[% subfield_value_v |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
                         }
                         if(code.value == 'x'){
-                                subfield.value = "[% subfield_value_x %]";
+                                subfield.value = "[% subfield_value_x |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
                         }
                         if(code.value == 'y'){
-                                subfield.value = "[% subfield_value_y %]";
+                                subfield.value = "[% subfield_value_y |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
                         }
                     }
                 }
@@ -121,9 +121,9 @@
                 <option value="">All item types</option>
 				[% FOREACH itypeloo IN itypeloop %]
 				[% IF ( itypeloo.selected ) %]
-				<option value="[% itypeloo.itemtype %]" selected="selected">[% itypeloo.description %]</option>
+                <option value="[% itypeloo.itemtype %]" selected="selected">[% itypeloo.description |html %]</option>
 				[% ELSE %]
-				<option value="[% itypeloo.itemtype %]">[% itypeloo.description %]</option>
+                <option value="[% itypeloo.itemtype %]">[% itypeloo.description |html %]</option>
 				[% END %]
 				[% END %]
 				</select>
@@ -140,14 +140,14 @@
 
 		<h2>Search results</h2>
 		<div id="UNIMARC_Field_4XX_resultnumber">
-			<p>[% IF ( displayprev ) %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% startfromprev %]&amp;search=[% search %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">&lt;&lt; Previous</a>[% END %]
+            <p>[% IF ( displayprev ) %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% startfromprev %]&amp;search=[% search |uri %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">&lt;&lt; Previous</a>[% END %]
 				[% FOREACH number IN numbers %]
                                 [% IF ( number.highlight ) %] <span class="highlight">[% number.number %]</span>
-                                [% ELSE %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% number.startfrom %]&amp;search=[% number.search |url %]&amp;resultsperpage=[% number.resultsperpage %]&amp;type=intranet&amp;op=do_search">[% number.number %]</a>
+                                [% ELSE %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% number.startfrom %]&amp;search=[% number.search |uri %]&amp;resultsperpage=[% number.resultsperpage %]&amp;type=intranet&amp;op=do_search">[% number.number %]</a>
                                 [% END %]
                                 [% END %]
                                 [% IF ( displaynext ) %]
-                                  <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% startfromnext %]&amp;search=[% search %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a>
+                                  <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% startfromnext %]&amp;search=[% search |uri %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a>
                                 [% END %]</p>
 			<p class="resultcount">
                           [% IF ( total ) %]Results [% from %] to [% to %] of [% total %]
@@ -167,24 +167,24 @@
                                     [% IF ( resul.even ) %]<td class="hilighted">
                                     [% ELSE %]<td>[% END %]
                                                             [% IF ( resul.MARC_ON ) %]
-                                                                    <a_class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title |html %]</a>
+                                                                    <a_class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resul.biblionumber |uri %]">[% resul.title |html %]</a>
                                                             [% ELSE %]
-                                                                    <a_class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title |html %]</a>				[% END %]
-                                                    <p>[% resul.author %]
-                                                    [% IF ( resul.publishercode ) %]- [% resul.publishercode %][% END %]
-                                                    [% IF ( resul.place ) %] ; [% resul.place %][% END %]
-                                                    [% IF ( resul.pages ) %] - [% resul.pages %][% END %]
-                                                    [% IF ( resul.notes ) %] : [% resul.notes %][% END %]
-                                                    [% IF ( resul.size ) %] ; [% resul.size %][% END %]
+                                                                    <a_class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% resul.biblionumber |uri %]">[% resul.title |html %]</a>   [% END %]
+                                                    <p>[% resul.author |html %]
+                                                    [% IF ( resul.publishercode ) %]- [% resul.publishercode |html %][% END %]
+                                                    [% IF ( resul.place ) %] ; [% resul.place |html %][% END %]
+                                                    [% IF ( resul.pages ) %] - [% resul.pages |html %][% END %]
+                                                    [% IF ( resul.notes ) %] : [% resul.notes |html %][% END %]
+                                                    [% IF ( resul.item('size') ) %] ; [% resul.item('size') |html %][% END %]
                                             </p>
 					</td>
                     [% IF ( resul.even ) %]<td align="center" class="hilighted">
                     [% ELSE %]<td align="center">[% END %]
-						[% resul.totitem %]
+                        [% resul.totitem |html %]
 					</td>
                     [% IF ( resul.even ) %]<td class="hilighted">
                     [% ELSE %]<td>[% END %]
-						[% resul.CN %]
+                        [% resul.CN |html %]
 					</td>
 					<td>
                       [% IF ( resul.biblionumber ) %]
@@ -201,7 +201,7 @@
 		<div id="resultnumber">
 			<p>
 				[% IF ( displayprev ) %]
-				<a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;amp;index=[% index %]&amp;amp;startfrom=[% startfromprev %]&amp;amp;search=[% search |url %]&amp;amp;resultsperpage=[% resultsperpage %]&amp;amp;type=intranet&amp;amp;op=do_search">
+                <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;amp;index=[% index %]&amp;amp;startfrom=[% startfromprev %]&amp;amp;search=[% search |uri %]&amp;amp;resultsperpage=[% resultsperpage %]&amp;amp;type=intranet&amp;amp;op=do_search">
 					&lt;&lt; Previous
 				</a>
 				[% END %]
@@ -212,14 +212,14 @@
 							[% number.number %]
 						</span>
 					[% ELSE %]
-						<a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% number.startfrom %]&amp;search=[% number.search %]&amp;resultsperpage=[% number.resultsperpage %]&amp;type=intranet&amp;op=do_search">
+                        <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% number.startfrom %]&amp;search=[% number.search |uri %]&amp;resultsperpage=[% number.resultsperpage %]&amp;type=intranet&amp;op=do_search">
 							[% number.number %]
 						</a>
 					[% END %]
 				[% END %]
 
 				[% IF ( displaynext ) %]
-				<a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% startfromnext %]&amp;search=[% search %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">
+                <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% startfromnext %]&amp;search=[% search |uri %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">
 					Next&gt;&gt;
 				</a>
 				[% END %]
