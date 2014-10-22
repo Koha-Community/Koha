@@ -6,16 +6,23 @@
 use strict;
 use warnings;
 
-use Test::More tests => 30;
+use Test::More tests => 32;
 
 BEGIN {
         use_ok('C4::Tags');
 }
 
+# Check no tags case.
+my @tagsarray;
+my $tags = \@tagsarray;
+my ($min, $max) = C4::Tags::stratify_tags(0, $tags);
+is($min, 0, 'Empty array min');
+is($max, 0, 'Empty array max');
+
 # Simple 'sequential 5' test
-my $tags = make_tags(1,2,3,4,5);
+$tags = make_tags(1,2,3,4,5);
 my @strata = (0,1,2,3,4);
-my ($min, $max) = C4::Tags::stratify_tags(5, $tags);
+($min, $max) = C4::Tags::stratify_tags(5, $tags);
 check_tag_strata($tags, \@strata, 'Sequential 5');
 is($min, 0, 'Sequential 5 min');
 is($max, 4, 'Sequential 5 max');
