@@ -20,7 +20,7 @@ if ($help) {
     pod2usage(1);
 }
 
-unless ( C4::Context->preference('UsageStatsShare') ) {
+unless ( C4::Context->preference('UsageStats') ) {
     pod2usage(
 q|
 The UsageStats system preference is not set.
@@ -51,19 +51,21 @@ share_usage_with_koha_community.pl - Share your library's usage with the Koha co
 
 share_usage_with_koha_community.pl [-h|--help] [-v|--verbose]
 
-If the UsageStatsShare system preference is set, you can launch this script to share your usage with the Koha community.
+If the UsageStats system preference is set, you can launch this script to share your usage data
+anonymously with the Koha community.
 
-Collecting Koha usage statistics will help developpers to know how Koha is used across the world.
+Collecting Koha usage statistics will help developers to know how Koha is used across the world.
 
-This script will sent the volumetry for the biblio and authority records, issues, reserves, orders and subscription.
+This script will send the usage data for the bibliographic and authority records, checkouts, holds, orders,
+and subscriptions.
 
-Only the total number is retrieved. In no case private data will be shared!
+Only the total number is retrieved. In no case will private data be shared!
 
 In order to know which parts of Koha modules are used, this script will collect some system preference values.
 
 If you want to tell us who you are, you can fill the UsageStatsLibraryName system preference with your library name, UsageStatsLibraryUrl, UsageStatsLibraryType and/or UsageStatsCountry.
 
-All these data will be analysed on the http://hea.koha-community.org Koha community website.
+All these data will be analyzed on the http://hea.koha-community.org Koha community website.
 
 IMPORTANT : please do NOT run the cron on the 1st, but on another day. The idea is to avoid all
 Koha libraries sending their data at the same time ! So choose any day between 1 and 28 !

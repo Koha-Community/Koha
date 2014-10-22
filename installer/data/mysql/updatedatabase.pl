@@ -8826,13 +8826,13 @@ if ( CheckVersion($DBversion) ) {
         q{
        INSERT INTO systempreferences (variable, value, options, explanation, type )
        VALUES
-        ('UsageStatsCountry', '', NULL, 'The country where your library is to show on hea Koha community website', 'YesNo'),
-        ('UsageStatsID', '', NULL, 'This pref is part of Koha but it should not be deleted or updated manually.',  'Free'),
-        ('UsageStatsLastUpdateTime', '', NULL, 'This pref is part of Koha but it should not be deleted or updated manually.', 'Free'),
-        ('UsageStatsLibraryName', '', NULL, 'The library name to show on hea Koha community website', 'Free'),
-        ('UsageStatsLibraryType', 'public', 'public|university', 'The library type to show on hea Koha community website', 'Choice'),
-        ('UsageStatsLibraryUrl', '', NULL, 'The library url to show on hea Koha community website', 'Free'),
-        ('UsageStatsShare', 0, NULL, 'Share data volumetry with Koha community (HEA).', 'YesNo')
+        ('UsageStatsCountry', '', NULL, 'The country where your library is located, to be shown on the Hea Koha community website', 'YesNo'),
+        ('UsageStatsID', '', NULL, 'This preference is part of Koha but it should not be deleted or updated manually.',  'Free'),
+        ('UsageStatsLastUpdateTime', '', NULL, 'This preference is part of Koha but it should not be deleted or updated manually.', 'Free'),
+        ('UsageStatsLibraryName', '', NULL, 'The library name to be shown on Hea Koha community website', 'Free'),
+        ('UsageStatsLibraryType', 'public', 'public|university', 'The library type to be shown on the Hea Koha community website', 'Choice'),
+        ('UsageStatsLibraryUrl', '', NULL, 'The library URL to be shown on Hea Koha community website', 'Free'),
+        ('UsageStats', 0, NULL, 'Share anonymous usage data on the Hea Koha community website.', 'YesNo')
     });
     print "Upgrade to $DBversion done (Bug 11926: Add UsageStats systempreferences (HEA))\n";
     SetVersion($DBversion);
