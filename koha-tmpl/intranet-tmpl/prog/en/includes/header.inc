@@ -1,3 +1,4 @@
+[% USE Branches %]
 <div id="header" class="navbar navbar-static-top">
     <div class="navbar-inner">
         <ul id="toplevelmenu" class="nav">
@@ -42,9 +43,7 @@
             <li class="dropdown">
                 <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">
                     [% IF ( loggedinusername ) %]
-                    <span class="loggedinusername">
-                        [% loggedinusername %]
-                    </span>
+                    <span class="loggedinusername">[% loggedinusername %]</span>
                     <span class="separator">|</span>
                     [% IF ( AutoLocation ) %]
                     <brand>
@@ -55,7 +54,8 @@
                     [% IF ( LoginBranchname == 'NO_LIBRARY_SET' ) %]
                         NO LIBRARY SET
                     [% ELSE %]
-                        [% LoginBranchname %]
+                        <span id="logged-in-branch-name">[% LoginBranchname %]</span>
+                        <span id="logged-in-branch-code" class="content_hidden">[% Branches.GetLoggedInBranchcode %]</span>
                     [% END %]
                     </strong>
                     [% END %]
