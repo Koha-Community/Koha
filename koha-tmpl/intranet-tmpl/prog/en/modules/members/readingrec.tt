@@ -21,8 +21,8 @@
             var id = $(ui.tab).attr("id");
             if ( id == "tab_checkout" ) {
                 table.fnFilter("checkout", 0);
-            } else if ( id == "tab_inhouse_use" ) {
-                table.fnFilter("inhouse_use", 0);
+            } else if ( id == "tab_onsite_checkout" ) {
+                table.fnFilter("onsite_checkout", 0);
             } else { // all
                 table.fnFilter('', 0);
             }
@@ -58,7 +58,7 @@
   <ul>
     <li><a href="#readingrec" id="tab_all">All</a></li>
     <li><a href="#readingrec" id="tab_checkout">Checkouts</a></li>
-    <li><a href="#readingrec" id="tab_inhouse_use">In-house use</a></li>
+    <li><a href="#readingrec" id="tab_onsite_checkout">On-site checkout</a></li>
   </ul>
   <div id="readingrec" style="overflow:hidden">
     <table id="table_readingrec">
@@ -79,8 +79,8 @@
       [% FOREACH issue IN loop_reading %]
         [% IF  issue.returndate  %]<tr>[% ELSE %]<tr class="onissue">[% END %]
           <td style="display:none;">
-            [% IF issue.inhouse_use %]
-              inhouse_use
+            [% IF issue.onsite_checkout %]
+              onsite_checkout
             [% ELSE %]
               checkout
             [% END %]

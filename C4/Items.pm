@@ -1300,8 +1300,8 @@ sub GetItemsInfo {
            holding.opac_info as holding_branch_opac_info,
            home.opac_info as home_branch_opac_info
     ";
-    $query .= ", issues.inhouse_use"
-        if C4::Context->preference("In-House Use");
+    $query .= ", issues.onsite_checkout"
+        if C4::Context->preference("On-site checkouts");
     $query .= "
      FROM items
      LEFT JOIN branches AS holding ON items.holdingbranch = holding.branchcode
@@ -1311,7 +1311,7 @@ sub GetItemsInfo {
      LEFT JOIN itemtypes   ON   itemtypes.itemtype         = "
      . (C4::Context->preference('item-level_itypes') ? 'items.itype' : 'biblioitems.itemtype');
     $query .= " LEFT JOIN issues ON issues.itemnumber = items.itemnumber"
-        if C4::Context->preference("In-House Use");
+        if C4::Context->preference("On-site checkouts");
     $query .= " WHERE items.biblionumber = ? ORDER BY home.branchname, items.enumchron, LPAD( items.copynumber, 8, '0' ), items.dateaccessioned DESC" ;
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);

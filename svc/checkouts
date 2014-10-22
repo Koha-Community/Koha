@@ -63,7 +63,7 @@ my $sql = '
         date_due < now() as date_due_overdue,
         issues.timestamp,
 
-        inhouse_use,
+        onsite_checkout,
 
         biblionumber,
         biblio.title,
@@ -154,7 +154,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         date_due            => $c->{date_due},
         date_due_overdue    => $c->{date_due_overdue} ? JSON::true : JSON::false,
         timestamp           => $c->{timestamp},
-        inhouse_use         => $c->{inhouse_use},
+        onsite_checkout         => $c->{onsite_checkout},
         renewals_count      => $renewals_count,
         renewals_allowed    => $renewals_allowed,
         renewals_remaining  => $renewals_remaining,

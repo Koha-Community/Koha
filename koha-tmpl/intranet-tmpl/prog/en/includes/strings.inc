@@ -26,6 +26,6 @@
     var NOT_TRANSFERRED_YET = _("Item hasn't been transferred yet from %s");
     var NO = _("No");
     var YES = _("Yes");
-    var INHOUSE_USE = _("In-house use");
+    var INHOUSE_USE = _("On-site checkout");
 //]]>
 </script>

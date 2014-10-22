@@ -56,9 +56,9 @@ $(document).ready(function() {
     [% END %]
 });
 
-// In-house use
-function toggle_inhouse_use(){
-    if ( $("#inhouse_use").attr('checked') ) {
+// On-site checkout
+function toggle_onsite_checkout(){
+    if ( $("#onsite_checkout").attr('checked') ) {
         $("#duedatespec").val("[% todaysdate | $KohaDates with_hours => 1%]")
         $("#duedatespec").datetimepicker('destroy');
     } else {
@@ -304,7 +304,7 @@ function toggle_inhouse_use(){
     [% ELSE %]
     <input type="submit" class="approve" value="Yes, check out (Y)" accesskey="y" />
     [% END %]
-    <input type="hidden" name="inhouse_use" value="[% inhouse_use %]" />
+    <input type="hidden" name="onsite_checkout" value="[% onsite_checkout %]" />
 </form>
 [% END %]
 
@@ -499,7 +499,7 @@ No patron matched <span class="ex">[% message %]</span>
 
 [% IF ( borrowernumber ) %]
 <div class="yui-g">
-[% IF !noissues || inhouse_use_forced %]
+[% IF !noissues || onsite_checkout_forced %]
 [% IF ( flagged ) %]
 <div class="yui-u first">
 [% ELSE %]
@@ -549,13 +549,13 @@ No patron matched <span class="ex">[% message %]</span>
           <button class="btn btn-small action" id="cleardate" name="cleardate" onclick="this.checked = false; this.form.duedatespec.value = ''; this.form.stickyduedate.checked = false; this.form.barcode.focus(); return false;" >Clear</button>
 </div>[% END %]
 
-      [% IF inhouse_use_feature %]
-        <div class="inhouse_use-select">
+      [% IF onsite_checkout_feature %]
+        <div class="onsite_checkout-select">
           [% IF noissues %]
-            <input type="checkbox" id="inhouse_use" name="inhouse_use_forced" checked="checked" disabled="disabled" /> <label for="inhouse_use">In-house use</label>
-            <input type="hidden" name="inhouse_use" checked="checked" value="1" />
+            <input type="checkbox" id="onsite_checkout" name="onsite_checkout_forced" checked="checked" disabled="disabled" /> <label for="onsite_checkout">On-site checkout</label>
+            <input type="hidden" name="onsite_checkout" checked="checked" value="1" />
           [% ELSE %]
-            <input type="checkbox" id="inhouse_use" name="inhouse_use" /> <label for="inhouse_use">In-house use</label>
+            <input type="checkbox" id="onsite_checkout" name="onsite_checkout" /> <label for="onsite_checkout">On-site checkout</label>
           [% END %]
         </div>
       [% END %]
@@ -575,7 +575,7 @@ No patron matched <span class="ex">[% message %]</span>
 [% IF ( noissues ) %]<div>[% ELSE %]<div class="yui-u">[% END %]
 
     [% IF flagged %]
-      [% IF NOT noissues || ( noissues && inhouse_use_forced ) %]
+      [% IF NOT noissues || ( noissues && onsite_checkout_forced ) %]
         <div id="circmessages" class="circmessage attention">
       [% ELSE %]
         <h4>Checking out to [% INCLUDE 'patron-title.inc' %]</h4>
@@ -584,8 +584,8 @@ No patron matched <span class="ex">[% message %]</span>
       <h3>
         [% IF noissues %]
           Cannot check out!
-          [% IF inhouse_use_forced %]
-            <span style="color:red;">Only in-house use is allowed</span>
+          [% IF onsite_checkout_forced %]
+            <span style="color:red;">Only on-site checkouts is allowed</span>
           [% END %]
         [% ELSE %]
           Attention:

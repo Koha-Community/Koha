@@ -215,9 +215,9 @@ $(document).ready(function() {
                             title += " - <span class='" + span_class + "'>" + oObj.itemnotes + "</span>"
                         }
 
-                        var inhouse_use = '';
-                        if ( oObj.inhouse_use == 1 ) {
-                            inhouse_use += " <span class='inhouse_use'>(" + INHOUSE_USE + ")</span>";
+                        var onsite_checkout = '';
+                        if ( oObj.onsite_checkout == 1 ) {
+                            onsite_checkout += " <span class='onsite_checkout'>(" + INHOUSE_USE + ")</span>";
                         }
 
                         title += " "
@@ -230,7 +230,7 @@ $(document).ready(function() {
                               + "'>"
                               + oObj.barcode
                               + "</a>"
-                              + inhouse_use;
+                              + onsite_checkout;
 
                         return title;
                     }
@@ -311,7 +311,7 @@ $(document).ready(function() {
                                 +  "<input type='checkbox' class='renew' id='renew_" + oObj.itemnumber + "' name='renew' value='" + oObj.itemnumber +"'/>"
                                 +  "</span>";
 
-                        if ( oObj.renewals_remaining && inhouse_use == 0 ) {
+                        if ( oObj.renewals_remaining && onsite_checkout == 0 ) {
                             content += "<span class='renewals'>("
                                     + RENEWALS_REMAINING.format( oObj.renewals_remaining, oObj.renewals_allowed )
                                     + ")</span>";
@@ -442,9 +442,9 @@ $(document).ready(function() {
                                 title += " - <span class='" + span_class + "'>" + oObj.itemnotes + "</span>"
                             }
 
-                            var inhouse_use = '';
-                            if ( oObj.inhouse_use == 1 ) {
-                                inhouse_use += " <span class='inhouse_use'>("+INHOUSE_USE+")</span>";
+                            var onsite_checkout = '';
+                            if ( oObj.onsite_checkout == 1 ) {
+                                onsite_checkout += " <span class='onsite_checkout'>("+INHOUSE_USE+")</span>";
                             }
 
                             title += " "
@@ -457,7 +457,7 @@ $(document).ready(function() {
                                   + "'>"
                                   + oObj.barcode
                                   + "</a>"
-                                  + inhouse_use;
+                                  + onsite_checkout;
 
                             return title;
                         }

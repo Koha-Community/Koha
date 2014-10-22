@@ -336,7 +336,7 @@ if ($barcode) {
         }
     }
 
-    unless( $query->param('inhouse_use') and C4::Context->preference("In-House Use Force") ) {
+    unless( $query->param('onsite_checkout') and C4::Context->preference("On-site checkouts Force") ) {
         delete $question->{'DEBT'} if ($debt_confirmed);
         foreach my $impossible ( keys %$error ) {
             $template->param(
@@ -361,14 +361,14 @@ if ($barcode) {
                     getTitleMessageIteminfo => $getmessageiteminfo->{'title'},
                     getBarcodeMessageIteminfo => $getmessageiteminfo->{'barcode'},
                     NEEDSCONFIRMATION  => 1,
-                    inhouse_use => $query->param('inhouse_use'),
+                    onsite_checkout => $query->param('onsite_checkout'),
                 );
                 $confirm_required = 1;
             }
         }
         unless($confirm_required) {
-            my $inhouse_use = $query->param('inhouse_use');
-            AddIssue( $borrower, $barcode, $datedue, $cancelreserve, undef, undef, { inhouse_use => $inhouse_use, auto_renew => $session->param('auto_renew') } );
+            my $onsite_checkout = $query->param('onsite_checkout');
+            AddIssue( $borrower, $barcode, $datedue, $cancelreserve, undef, undef, { onsite_checkout => $onsite_checkout, auto_renew => $session->param('auto_renew') } );
             $session->clear('auto_renew');
             $inprocess = 1;
         }
@@ -601,8 +601,6 @@ $template->param(
     canned_bor_notes_loop     => $canned_notes,
     debarments                => GetDebarments({ borrowernumber => $borrowernumber }),
     todaysdate                => dt_from_string()->set(hour => 23)->set(minute => 59),
-    inhouse_use_feature       => C4::Context->preference("In-House Use"),
-    inhouse_use_forced        => C4::Context->preference("In-House Use Force"),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

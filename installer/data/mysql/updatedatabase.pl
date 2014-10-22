@@ -8957,20 +8957,20 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(q{
         INSERT IGNORE INTO systempreferences
             (variable,value,explanation,options,type)
-            VALUES('In-House use','0','Enable/Disable the in-house use feature','','YesNo');
+            VALUES('On-site checkouts','0','Enable/Disable the on-site checkouts feature','','YesNo');
     });
     $dbh->do(q{
         INSERT IGNORE INTO systempreferences
             (variable,value,explanation,options,type)
-            VALUES('In-House use Force','0','Enable/Disable the in-house for all cases (Even if a user is debarred, etc.)','','YesNo');
+            VALUES('On-site checkouts Force','0','Enable/Disable the on-site for all cases (Even if a user is debarred, etc.)','','YesNo');
     });
     $dbh->do(q{
-        ALTER TABLE issues ADD COLUMN inhouse_use INT(1) NOT NULL DEFAULT 0 AFTER issuedate;
+        ALTER TABLE issues ADD COLUMN onsite_checkout INT(1) NOT NULL DEFAULT 0 AFTER issuedate;
     });
     $dbh->do(q{
-        ALTER TABLE old_issues ADD COLUMN inhouse_use INT(1) NOT NULL DEFAULT 0 AFTER issuedate;
+        ALTER TABLE old_issues ADD COLUMN onsite_checkout INT(1) NOT NULL DEFAULT 0 AFTER issuedate;
     });
-    print "Upgrade to $DBversion done (Bug 10860: Add new system preference In-House use + fields [old_]issues.inhouse_use)\n";
+    print "Upgrade to $DBversion done (Bug 10860: Add new system preference On-site checkouts + fields [old_]issues.onsite_checkout)\n";
     SetVersion($DBversion);
 }
 

@@ -46,9 +46,9 @@ $(document).ready(function() {
         return false;
     });
 
-    toggle_inhouse_use();
-    $("#inhouse_use").click(function(){
-        toggle_inhouse_use();
+    toggle_onsite_checkout();
+    $("#onsite_checkout").click(function(){
+        toggle_onsite_checkout();
     });
 });
 
