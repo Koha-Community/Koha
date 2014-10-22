@@ -155,6 +155,20 @@
                         file. <strong>[% config_entry.file %]</strong> is used as a fallback.
                     </td>
                 </tr>
+                [% ELSIF config_entry.error == 'use_zebra_facets_entry_missing' %]
+                <tr>
+                    <th scope="row"><b>Warning</b></th>
+                    <td>The &lt;use_zebra_facets&gt; entry is missing in your configuration file. Falling back
+                        to legacy facet calculation.
+                    </td>
+                </tr>
+                [% ELSIF config_entry.error == 'use_zebra_facets_needs_dom' %]
+                <tr>
+                    <th scope="row"><b>Warning</b></th>
+                    <td>You have set &lt;use_zebra_facets&gt; but the &lt;zebra_bib_index_mode&gt; is not set to <strong>dom</strong>. Falling back
+                        to legacy facet calculation.
+                    </td>
+                </tr>
                 [% END %]
             [% END %]
             </table>

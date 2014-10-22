@@ -121,6 +121,19 @@ if ( C4::Context->preference( 'UseQueryParser' ) ) {
     }
 }
 
+# Test Zebra facets configuration
+if ( !defined C4::Context->config('use_zebra_facets') ) {
+    push @xml_config_warnings, { error => 'use_zebra_facets_entry_missing' };
+} else {
+    if ( C4::Context->config('use_zebra_facets') &&
+         C4::Context->config('zebra_bib_index_mode') ) {
+        # use_zebra_facets works with DOM
+        push @xml_config_warnings, {
+            error => 'use_zebra_facets_needs_dom'
+        } if C4::Context->config('zebra_bib_index_mode') ne 'dom' ;
+    }
+}
+
 $template->param(
     kohaVersion   => $kohaVersion,
     osVersion     => $osVersion,
