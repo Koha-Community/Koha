@@ -338,7 +338,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         $biblionumber
     );
 
-    AddIssue( $renewing_borrower, $barcode4, undef, undef, undef, undef, 1 );
+    AddIssue( $renewing_borrower, $barcode4, undef, undef, undef, undef, { auto_renew => 1 } );
     ( $renewokay, $error ) =
       CanBookBeRenewed( $renewing_borrowernumber, $itemnumber4 );
     is( $renewokay, 0, 'Cannot renew, renewal is automatic' );

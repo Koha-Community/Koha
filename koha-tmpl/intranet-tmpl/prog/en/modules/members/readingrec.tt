@@ -17,11 +17,11 @@
         ]
     }));
     var tabs = $("#tabs").tabs({
-        select: function(e, ui) {
-            var id = $(ui.tab).attr("id");
-            if ( id == "tab_checkout" ) {
-                table.fnFilter("checkout", 0);
-            } else if ( id == "tab_onsite_checkout" ) {
+        activate: function(e, ui) {
+            var active = tabs.tabs("option", "active" );
+            if ( active == 1 ) {
+                table.fnFilter("standard_checkout", 0);
+            } else if ( active == 2 ) {
                 table.fnFilter("onsite_checkout", 0);
             } else { // all
                 table.fnFilter('', 0);
@@ -82,7 +82,7 @@
             [% IF issue.onsite_checkout %]
               onsite_checkout
             [% ELSE %]
-              checkout
+              standard_checkout
             [% END %]
           </td>
           <td>
@@ -105,7 +105,6 @@
           <td>
             <span title="[% issue.issuedate %]">[% issue.issuedate | $KohaDates %]</span></td>
           </td>
-          <td>[% issue.issuedate | $KohaDates %]</td>
           <td>[% issue.issuingbranch %]</td>
           <td>
             [% IF issue.date_due %]

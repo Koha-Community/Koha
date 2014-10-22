@@ -307,11 +307,11 @@ $(document).ready(function() {
                             span_class = "renewals-allowed";
                         }
 
-                        content += "<span class='" + span_class + "' style='" + span_style + "'>"
-                                +  "<input type='checkbox' class='renew' id='renew_" + oObj.itemnumber + "' name='renew' value='" + oObj.itemnumber +"'/>"
-                                +  "</span>";
+                        if ( oObj.renewals_remaining && oObj.onsite_checkout == 0 ) {
+                            content += "<span class='" + span_class + "' style='" + span_style + "'>"
+                                    +  "<input type='checkbox' class='renew' id='renew_" + oObj.itemnumber + "' name='renew' value='" + oObj.itemnumber +"'/>"
+                                    +  "</span>";
 
-                        if ( oObj.renewals_remaining && onsite_checkout == 0 ) {
                             content += "<span class='renewals'>("
                                     + RENEWALS_REMAINING.format( oObj.renewals_remaining, oObj.renewals_allowed )
                                     + ")</span>";
@@ -444,7 +444,7 @@ $(document).ready(function() {
 
                             var onsite_checkout = '';
                             if ( oObj.onsite_checkout == 1 ) {
-                                onsite_checkout += " <span class='onsite_checkout'>("+INHOUSE_USE+")</span>";
+                                onsite_checkout += " <span class='onsite_checkout'>(" + INHOUSE_USE + ")</span>";
                             }
 
                             title += " "

@@ -1189,11 +1189,10 @@ AddIssue does the following things :
 
 sub AddIssue {
     my ( $borrower, $barcode, $datedue, $cancelreserve, $issuedate, $sipmode, $params ) = @_;
-    my $onsite_checkout = $params->{onsite_checkout};
-    my $auto_renew = $params->{auto_renew};
+    my $onsite_checkout = $params && $params->{onsite_checkout} ? 1 : 0;
+    my $auto_renew = $params && $params->{auto_renew};
     my $dbh = C4::Context->dbh;
     my $barcodecheck=CheckValidBarcode($barcode);
-    $onsite_checkout = ( $onsite_checkout ? 1 : 0 );
 
     if ($datedue && ref $datedue ne 'DateTime') {
         $datedue = dt_from_string($datedue);
