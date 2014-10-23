@@ -51,15 +51,15 @@
                 [% END %]
 
                 [%  IF invalid_form_fields %]
-                    <div class="alert-error"><strong>The following fields are invalid:</strong>
+                    <div class="alert alert-error"><strong>The following fields contain invalid information:</strong>
                         <ul>
                             [% FOREACH field IN invalid_form_fields %]
-                                [% IF field == "email" %]<li>Primary contact information: primary email address</li>[% END %]
-                                [% IF field == "emailpro" %]<li>Primary contact information: secondary email address</li>[% END %]
-                                [% IF field == "B_email" %]<li>Alternative contact information: email address</li>[% END %]
+                                [% IF field == "email" %]<li>Contact information: <a href="#borrower_email">primary email address</a></li>[% END %]
+                                [% IF field == "emailpro" %]<li>Contact information: <a href="#borrower_emailpro">secondary email address</a></li>[% END %]
+                                [% IF field == "B_email" %]<li>Alternate address information: <a href="#borrower_B_email">email address</a></li>[% END %]
                             [% END %]
                         </ul>
-                        Please correct them.
+                        Please correct the errors and resubmit.
                     </div>
                 [% END %]
 
@@ -805,6 +805,7 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.validate.min.js"></script>
     <script type="text/javascript">
         //<![CDATA[
         $(document).ready(function() {
