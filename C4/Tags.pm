@@ -588,7 +588,7 @@ sub add_tag {	# biblionumber,term,[borrowernumber,approvernumber]
 # value.
 sub stratify_tags {
     my ( $strata, $tags ) = @_;
-
+    return (0,0) if !@$tags;
     my ( $min, $max );
     foreach (@$tags) {
         my $w = $_->{weight_total};
