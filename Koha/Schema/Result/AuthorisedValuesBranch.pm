@@ -27,22 +27,22 @@ __PACKAGE__->table("authorised_values_branches");
 
   data_type: 'integer'
   is_foreign_key: 1
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 branchcode
 
   data_type: 'varchar'
   is_foreign_key: 1
-  is_nullable: 1
+  is_nullable: 0
   size: 10
 
 =cut
 
 __PACKAGE__->add_columns(
   "av_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "branchcode",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 10 },
 );
 
 =head1 RELATIONS
@@ -59,12 +59,7 @@ __PACKAGE__->belongs_to(
   "av",
   "Koha::Schema::Result::AuthorisedValue",
   { id => "av_id" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "RESTRICT",
-  },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
 
 =head2 branchcode
@@ -79,18 +74,13 @@ __PACKAGE__->belongs_to(
   "branchcode",
   "Koha::Schema::Result::Branch",
   { branchcode => "branchcode" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "RESTRICT",
-  },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FlVw5Eu4bXF2ygD0QkwwCg
+# Created by DBIx::Class::Schema::Loader v0.07040 @ 2014-10-23 10:48:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cjPAyQSK7F7sEkiWjCUE7Q
 
+__PACKAGE__->set_primary_key(__PACKAGE__->columns);
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

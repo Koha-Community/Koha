@@ -98,8 +98,8 @@ If the object is new, it will be created.
 If the object previously existed, it will be updated.
 
 Returns:
-    1  if the store was a success
-    0  if the store failed
+    $self  if the store was a success
+    undef  if the store failed
 
 =cut
 
