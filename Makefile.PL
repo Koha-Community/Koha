@@ -960,10 +960,10 @@ Primary language for Zebra indexing);
 Koha can use one of  two different indexing modes
 for the MARC bibliographic records:
 
-grs1 - uses the Zebra GRS-1 filter, available
-       for legacy support
 dom  - uses the DOM XML filter; offers improved
        functionality.
+grs1 - [DEPRECATED] uses the Zebra GRS-1 filter,
+       available for legacy support
 
 Bibliographic indexing mode);
     $msg .= _add_valid_values_disp('BIB_INDEX_MODE', $valid_values);
@@ -974,10 +974,10 @@ Bibliographic indexing mode);
 Koha can use one of  two different indexing modes
 for the MARC authorities records:
 
-grs1 - uses the Zebra GRS-1 filter, available
-       for legacy support
 dom  - uses the DOM XML filter; offers improved
        functionality.
+grs1 - [DEPRECATED] uses the Zebra GRS-1 filter,
+       available for legacy support
 
 Authorities indexing mode);
     $msg .= _add_valid_values_disp('AUTH_INDEX_MODE', $valid_values);

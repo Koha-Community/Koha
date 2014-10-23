@@ -152,8 +152,8 @@ my $biblioserverdir = C4::Context->zebraconfig('biblioserver')->{directory};
 my $authorityserverdir = C4::Context->zebraconfig('authorityserver')->{directory};
 
 my $kohadir = C4::Context->config('intranetdir');
-my $bib_index_mode = C4::Context->config('zebra_bib_index_mode') || 'grs1';
-my $auth_index_mode = C4::Context->config('zebra_auth_index_mode') || 'dom';
+my $bib_index_mode  = C4::Context->config('zebra_bib_index_mode')  // 'dom';
+my $auth_index_mode = C4::Context->config('zebra_auth_index_mode') // 'dom';
 
 my $dbh = C4::Context->dbh;
 my ($biblionumbertagfield,$biblionumbertagsubfield) = &GetMarcFromKohaField("biblio.biblionumber","");

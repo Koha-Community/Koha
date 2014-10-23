@@ -2593,7 +2593,7 @@ sub new_record_from_zebra {
     my $raw_data = shift;
     # Set the default indexing modes
     my $index_mode = ( $server eq 'biblioserver' )
-                        ? C4::Context->config('zebra_bib_index_mode') // 'grs1'
+                        ? C4::Context->config('zebra_bib_index_mode') // 'dom'
                         : C4::Context->config('zebra_auth_index_mode') // 'dom';
 
     my $marc_record =  eval {

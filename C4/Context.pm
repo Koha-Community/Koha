@@ -720,7 +720,7 @@ sub _new_Zconn {
     $server //= "biblioserver";
 
     if ( $server eq 'biblioserver' ) {
-        $index_mode = $context->{'config'}->{'zebra_bib_index_mode'} // 'grs1';
+        $index_mode = $context->{'config'}->{'zebra_bib_index_mode'} // 'dom';
     } elsif ( $server eq 'authorityserver' ) {
         $index_mode = $context->{'config'}->{'zebra_auth_index_mode'} // 'dom';
     }
