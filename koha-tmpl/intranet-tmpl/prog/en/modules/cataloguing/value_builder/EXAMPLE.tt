@@ -1,0 +1,37 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Cataloguing &rsaquo; Framework plugin example</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="EXAMPLE" class="cat" style="padding:1em;">
+<form name="f_pop" onsubmit="report()" action="">
+
+<h1>EXAMPLE plugin</h1>
+<p>Hi, you are looking at the result of launching the EXAMPLE plugin.</p>
+<p>I received this from you:</p>
+<input type="text" id="received" value="[% result %]" disabled />
+<p/>
+<p>I will pass back what you type here, if you press OK.</p>
+<input type="text" id="return" value="[% result %]" />
+<p>
+    <input type="button" value="OK"  onclick="submitMyForm();" />
+    <a href="#" class="cancel close">Cancel</a>
+</p>
+</form>
+
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function () {
+        $('#return').focus();
+    });
+
+    // The following function just puts back the value of the input #return
+    // into the caller's field, referenced by index. And closes the popup.
+    function submitMyForm() {
+        $(window.opener.document).find('#[% index %]').val($('#return').val() );
+        window.close();
+    }
+//]]>
+</script>
+
+[% INCLUDE 'popup-bottom.inc' %]
