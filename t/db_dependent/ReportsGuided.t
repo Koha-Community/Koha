@@ -44,7 +44,8 @@ $koha->mock(
         'branches' => 1,
         'itemtypes' => 1,
         'cn_source' => 1,
-        'categorycode' => 1
+        'categorycode' => 1,
+        'biblio_framework' => 1,
     );
 
     my $reserved_authorised_values = GetReservedAuthorisedValues();

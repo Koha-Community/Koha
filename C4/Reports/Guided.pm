@@ -962,7 +962,8 @@ sub GetReservedAuthorisedValues {
                               'branches',
                               'itemtypes',
                               'cn_source',
-                              'categorycode' );
+                              'categorycode',
+                              'biblio_framework' );
 
    return \%reserved_authorised_values;
 }

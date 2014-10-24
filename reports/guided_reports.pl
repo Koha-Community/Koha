@@ -29,7 +29,7 @@ use C4::Output;
 use C4::Dates qw/format_date/;
 use C4::Debug;
 use C4::Branch; # XXX subfield_is_koha_internal_p
-use C4::Koha qw/IsAuthorisedValueCategory/;
+use C4::Koha qw/IsAuthorisedValueCategory GetFrameworksLoop/;
 
 =head1 NAME
 
@@ -642,6 +642,16 @@ elsif ($phase eq 'Run this report'){
                         while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
                             push @authorised_values, $itemtype;
                             $authorised_lib{$itemtype} = $description;
+                        }
+                    }
+                    elsif ( $authorised_value eq "biblio_framework" ) {
+                        my $frameworks = GetFrameworksLoop();
+                        my $default_source = '';
+                        push @authorised_values,$default_source;
+                        $authorised_lib{$default_source} = 'Default';
+                        foreach my $framework (@$frameworks) {
+                            push @authorised_values, $framework->{value};
+                            $authorised_lib{$framework->{value}} = $framework->{description};
                         }
                     }
                     elsif ( $authorised_value eq "cn_source" ) {
