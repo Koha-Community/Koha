@@ -194,7 +194,7 @@ __PACKAGE__->table("deletedbiblioitems");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 30
+  size: 255
 
 =head2 agerestriction
 
@@ -281,7 +281,7 @@ __PACKAGE__->add_columns(
   "cn_suffix",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "cn_sort",
-  { data_type => "varchar", is_nullable => 1, size => 30 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "agerestriction",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "totalissues",
@@ -303,8 +303,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("biblioitemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-05-05 17:59:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:S84dl2XESjQXVLR8mnjwTw
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-10-24 09:58:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ObIMBOrm2gbpPRMA0yRpLw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

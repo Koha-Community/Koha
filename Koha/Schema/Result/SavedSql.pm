@@ -60,7 +60,8 @@ __PACKAGE__->table("saved_sql");
 =head2 report_name
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 255
 
 =head2 type
@@ -132,7 +133,7 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
   },
   "report_name",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "type",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "notes",
@@ -162,8 +163,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:laD/JwzxzYnUhBABofprEA
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-10-24 09:58:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eGWRRzpe1+EBialePAIhMQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -221,7 +221,7 @@ __PACKAGE__->table("items");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 30
+  size: 255
 
 =head2 ccode
 
@@ -356,7 +356,7 @@ __PACKAGE__->add_columns(
   "cn_source",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "cn_sort",
-  { data_type => "varchar", is_nullable => 1, size => 30 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "ccode",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "materials",
@@ -609,8 +609,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Rc89LTrsDtt8Y6yXVUdhMA
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-10-24 09:58:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2slVK/FjcRDiYLeufoOFQQ
 
 __PACKAGE__->belongs_to(
     "biblio",
