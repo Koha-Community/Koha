@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::MockModule;
 use DBD::Mock;
 
@@ -55,7 +55,7 @@ $koha->mock(
 
 SKIP: {
 
-    skip "DBD::Mock is too old", 7
+    skip "DBD::Mock is too old", 8
         unless $DBD::Mock::VERSION >= 1.45;
 
     ok( IsAuthorisedValueValid('LOC'),
