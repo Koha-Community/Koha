@@ -23,7 +23,7 @@ use C4::Biblio;
 use C4::Branch;
 use Koha::Database;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 BEGIN {
     use_ok('C4::Items');
