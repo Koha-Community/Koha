@@ -8838,7 +8838,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.031";
 if ( CheckVersion($DBversion) ) {
    $dbh->do("ALTER TABLE saved_sql CHANGE report_name report_name VARCHAR( 255 ) NOT NULL DEFAULT '' ");
    print "Upgrade to $DBversion done (Bug 2969: Report Name should be mandatory for saved reports)\n";
