@@ -84,12 +84,18 @@ if ( ! defined C4::Context->config('zebra_bib_index_mode') ) {
     push @xml_config_warnings, {
         error => 'zebra_bib_index_mode_warn'
     };
+} else {
+    push @xml_config_warnings, { error => 'zebra_bib_grs_warn' }
+        if C4::Context->config('zebra_bib_index_mode') eq 'grs1';
 }
 
 if ( ! defined C4::Context->config('zebra_auth_index_mode') ) {
     push @xml_config_warnings, {
         error => 'zebra_auth_index_mode_warn'
     };
+} else {
+    push @xml_config_warnings, { error => 'zebra_auth_grs_warn' }
+        if C4::Context->config('zebra_auth_index_mode') eq 'grs1';
 }
 
 # Test QueryParser configuration sanity
