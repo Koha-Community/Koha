@@ -268,7 +268,7 @@
           </xsl:if>
         </xsl:for-each>
       </xsl:when>
-      <xsl:when test="marc:subfield[@code=a]">
+      <xsl:when test="marc:subfield[@code='a']">
         <a>
           <xsl:attribute name="href">
             <xsl:text>/cgi-bin/koha/opac-search.pl?q=su:</xsl:text>
