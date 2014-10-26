@@ -9415,7 +9415,7 @@ if ( CheckVersion($DBversion) ) {
         INSERT INTO permissions (module_bit, code, description) VALUES
           (13, 'records_batchdel', 'Perform batch deletion of records (biblios or authorities)')
     |);
-    print "Upgrade to $DBversion done (Bug 12403: Add permission tools_records_batchdelitem)\n";
+    print "Upgrade to $DBversion done (Bug 12403: Add permission tools_records_batchdel)\n";
     SetVersion($DBversion);
 }
 

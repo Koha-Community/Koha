@@ -38,7 +38,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
         query => $input,
         type => "intranet",
         authnotrequired => 0,
-        flagsrequired => { tools => 'biblio_batchdel' },
+        flagsrequired => { tools => 'records_batchdel' },
 });
 
 my @records;

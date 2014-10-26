@@ -7,7 +7,7 @@
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-var MSG_CANNOT_BE_DELETED = _("This record cannot be deleted, at least one item is currently issued");
+var MSG_CANNOT_BE_DELETED = _("This record cannot be deleted, at least one item is currently checked out.");
 $(document).ready(function() {
   $("#selectall").click(function(e){
     e.preventDefault();
@@ -145,10 +145,10 @@ $(document).ready(function() {
     [% IF records %]
       [% IF recordtype == 'biblio' %]
         <div id="toolbar">
-          <a id="selectall" href="#">Select All</a>
-          | <a id="clearall" href="#">Clear All</a>
+          <a id="selectall" href="#">Select all</a>
+          | <a id="clearall" href="#">Clear all</a>
           | <a id="selectwithoutitems" href="#">Select without items</a>
-          | <a id="selectnotreserved" href="#">Select not reserved</a>
+          | <a id="selectnotreserved" href="#">Select without holds</a>
         </div>
         <form action="/cgi-bin/koha/tools/batch_delete_records.pl" method="post">
           <table id="biblios" class="records">
@@ -158,7 +158,7 @@ $(document).ready(function() {
                 <th>Biblionumber</th>
                 <th>Title</th>
                 <th>Items</th>
-                <th>Reserves</th>
+                <th>Holds</th>
                 <th>Issues</th>
               </tr>
             </thead>
@@ -178,9 +178,9 @@ $(document).ready(function() {
           <div class="note">Reminder: this action will delete all selected biblios, attached subscriptions, existing holds and items!</div>
       [% ELSE %]
         <div id="toolbar">
-          <a id="selectall" href="#">Select All</a>
-          | <a id="clearall" href="#">Clear All</a>
-          | <a id="clearlinkedtobiblio" href="#">Clear linked to biblio </a>
+          <a id="selectall" href="#">Select all</a>
+          | <a id="clearall" href="#">Clear all</a>
+          | <a id="clearlinkedtobiblio" href="#">Clear used authorities</a>
         </div>
         <form action="/cgi-bin/koha/tools/batch_delete_records.pl" method="post">
           <table id="authorities" class="records">
