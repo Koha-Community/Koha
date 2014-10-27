@@ -8779,21 +8779,6 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 12728: Checked syspref StatisticsFields)\n";
 }
 
-$DBversion = "3.17.00.XXX";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do(
-"INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('ReplytoDefault',  '',  NULL,  'The default email address to be set as replyto.',  'Free')"
-    );
-    $dbh->do(
-"INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('ReturnpathDefault',  '',  NULL,  'The default email address to be set as return-path',  'Free')"
-    );
-    $dbh->do("ALTER TABLE branches ADD branchreplyto mediumtext AFTER branchemail");
-    $dbh->do("ALTER TABLE branches ADD branchreturnpath mediumtext AFTER branchreplyto");
-    print
-"Upgrade to $DBversion done (Bug XXX Adding replyto and returnpath addresses.)\n";
-    SetVersion($DBversion);
-}
-
 $DBversion = "3.17.00.026";
 if ( CheckVersion($DBversion) ) {
     if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
@@ -8857,6 +8842,20 @@ if ( CheckVersion($DBversion) ) {
    $dbh->do("ALTER TABLE saved_sql CHANGE report_name report_name VARCHAR( 255 ) NOT NULL DEFAULT '' ");
    print "Upgrade to $DBversion done (Bug 2969: Report Name should be mandatory for saved reports)\n";
    SetVersion ($DBversion);
+}
+
+$DBversion = "3.17.00.032";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(
+"INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('ReplytoDefault',  '',  NULL,  'The default email address to be set as replyto.',  'Free')"
+    );
+    $dbh->do(
+"INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('ReturnpathDefault',  '',  NULL,  'The default email address to be set as return-path',  'Free')"
+    );
+    $dbh->do("ALTER TABLE branches ADD branchreplyto mediumtext AFTER branchemail");
+    $dbh->do("ALTER TABLE branches ADD branchreturnpath mediumtext AFTER branchreplyto");
+    print "Upgrade to $DBversion done (Bug 9530: Adding replyto and returnpath addresses.)\n";
+    SetVersion($DBversion);
 }
 
 =head1 FUNCTIONS
