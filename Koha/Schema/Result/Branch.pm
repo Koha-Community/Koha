@@ -86,6 +86,16 @@ __PACKAGE__->table("branches");
   data_type: 'mediumtext'
   is_nullable: 1
 
+=head2 branchreplyto
+
+  data_type: 'mediumtext'
+  is_nullable: 1
+
+=head2 branchreturnpath
+
+  data_type: 'mediumtext'
+  is_nullable: 1
+
 =head2 branchurl
 
   data_type: 'mediumtext'
@@ -144,6 +154,10 @@ __PACKAGE__->add_columns(
   "branchfax",
   { data_type => "mediumtext", is_nullable => 1 },
   "branchemail",
+  { data_type => "mediumtext", is_nullable => 1 },
+  "branchreplyto",
+  { data_type => "mediumtext", is_nullable => 1 },
+  "branchreturnpath",
   { data_type => "mediumtext", is_nullable => 1 },
   "branchurl",
   { data_type => "mediumtext", is_nullable => 1 },
@@ -484,8 +498,8 @@ Composing rels: L</branchrelations> -> categorycode
 __PACKAGE__->many_to_many("categorycodes", "branchrelations", "categorycode");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-04-08 22:40:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1RVlM6TXiG4B7szUQSN64Q
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-10-27 10:44:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WRCu1ThkQVx+o7/ECe0j2A
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
