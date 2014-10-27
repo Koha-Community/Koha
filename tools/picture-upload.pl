@@ -74,8 +74,8 @@ $debug and warn "Operation requested: $op";
 
 my ( $total, $handled, @counts, $tempfile, $tfh, %errors );
 
+# Case is important in these operational values as the template must use case to be visually pleasing!
 if ( ( $op eq 'Upload' ) && $uploadfile ) {
-    # Case is important in these operational values as the template must use case to be visually pleasing!
     my $dirname = File::Temp::tempdir( CLEANUP => 1 );
     $debug and warn "dirname = $dirname";
     my $filesuffix;
@@ -129,11 +129,11 @@ if ( ( $op eq 'Upload' ) && $uploadfile ) {
         #if ($filetype eq 'zip' )
         $results = handle_dir( $dirname, $filesuffix, $template, $cardnumber,
             $tempfile );
-        $handled = 1;
+        $handled++ if $results == 1;
         $total   = 1;
     }
 
-    if ( %$results || %errors ) {
+    if ( $results!=1 || %errors ) {
         $template->param( ERRORS => [$results] );
     }
     else {
