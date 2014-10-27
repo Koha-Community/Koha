@@ -430,7 +430,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('UsageStatsID', '', 'This preference is part of Koha but it should not be deleted or updated manually.', '', 'Free'),
 ('UsageStatsLastUpdateTime', '', 'This preference is part of Koha but it should not be deleted or updated manually.', '', 'Free'),
 ('UsageStatsLibraryName', '', 'The library name to be shown on Hea Koha community website', NULL, 'Free'),
-('UsageStatsLibraryType', 'public', 'public|university', 'The library type to be shown on the Hea Koha community website', NULL, 'Choice'),
+('UsageStatsLibraryType', 'public', 'public|university', 'The library type to be shown on the Hea Koha community website', 'Choice'),
 ('UsageStatsLibraryUrl', '', 'The library URL to be shown on Hea Koha community website', NULL, 'Free'),
 ('UseAuthoritiesForTracings','1','0','Use authority record numbers for subject tracings instead of heading strings.','YesNo'),
 ('UseBranchTransferLimits','0','','If ON, Koha will will use the rules defined in branch_transfer_limits to decide if an item transfer should be allowed.','YesNo'),
