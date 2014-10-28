@@ -2054,10 +2054,12 @@ sub _koha_notify_reserve {
     };
 
     while ( my ( $mtt, $letter_code ) = each %{ $messagingprefs->{transports} } ) {
-        if ( ($mtt eq 'email' and not $to_address) or ($mtt eq 'sms' and not $borrower->{smsalertnumber}) ) {
-            # email or sms is requested but not exist
-            next;
-        }
+        next if (
+               ( $mtt eq 'email' and not $to_address ) # No email address
+            or ( $mtt eq 'sms'   and not $borrower->{smsalertnumber} ) # No SMS number
+            or ( $mtt eq 'phone' and C4::Context->preference('TalkingTechItivaPhoneNotification') ) # Notice is handled by TalkingTech_itiva_outbound.pl
+        );
+
         &$send_notification($mtt, $letter_code);
         $notification_sent++;
     }
