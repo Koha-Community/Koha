@@ -79,6 +79,12 @@ __PACKAGE__->table("serial");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 claims_count
+
+  data_type: 'integer'
+  default_value: 0
+  is_nullable: 1
+
 =head2 routingnotes
 
   data_type: 'text'
@@ -105,6 +111,8 @@ __PACKAGE__->add_columns(
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "claimdate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "claims_count",
+  { data_type => "integer", default_value => 0, is_nullable => 1 },
   "routingnotes",
   { data_type => "text", is_nullable => 1 },
 );
@@ -139,8 +147,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xloe1BJrVD7sU07AnA4P2g
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-10-28 10:10:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xscBtY2sJRoXXw7hVPTqCQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
