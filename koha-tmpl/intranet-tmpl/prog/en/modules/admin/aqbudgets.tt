@@ -448,13 +448,13 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
     <li>
       <label for="budget_encumb">Warning at (%): </label>
       <input type="text" name="budget_encumb" id="budget_encumb" value="[% budget_encumb %]" size="10" />
-      <span style="color:grey">0 to disable</span>
+      <span class="hint">0 to disable</span>
     </li>
 
     <li>
       <label for="budget_expend">Warning at (amount): </label>
       <input type="text" name="budget_expend" id="budget_expend" value="[% budget_expend %]" size="10" />
-      <span style="color:grey">0 to disable</span>
+      <span class="hint">0 to disable</span>
     </li>
 
     <li>
@@ -475,11 +475,12 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
     </li>
 
     [% IF budget_has_children %]
-        <li>
-            <span class="label">
-                <label for="set_owner_to_children">Set this owner to all children funds:</label>
-            </span>
-            <input type="checkbox" id="set_owner_to_children" name="set_owner_to_children" value="1" />
+        <li class="radio">
+            <label>
+                <input type="checkbox" id="set_owner_to_children" name="set_owner_to_children" value="1" />
+                Update all child funds with this owner
+            </label>
+            <span class="hint">Selecting this option will overwrite existing fund owners, if any</span>
         </li>
     [% END %]
 
