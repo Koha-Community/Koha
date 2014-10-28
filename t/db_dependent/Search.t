@@ -121,6 +121,8 @@ $contextmodule->mock('preference', sub {
         return 20;
     } elsif ($pref eq 'FacetLabelTruncationLength') {
         return 20;
+    } elsif ($pref eq 'FacetMaxCount') {
+        return 20;
     } elsif ($pref eq 'OpacHiddenItems') {
         return '';
     } elsif ($pref eq 'AlternateHoldingsField') {
