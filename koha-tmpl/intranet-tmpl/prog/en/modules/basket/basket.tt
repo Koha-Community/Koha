@@ -40,7 +40,27 @@ function placeHold () {
     window.opener.location = newloc;
     window.close();
 }
+[% IF CAN_user_tools_records_batchdel %]
+function batchDelete(){
+    var checkedItems = $("input:checkbox:checked");
+    if ($(checkedItems).size() == 0) {
+        alert(MSG_NO_RECORD_SELECTED);
+        return false;
+    }
+    var newloc;
 
+    var bibs = "";
+    $(checkedItems).each(function() {
+        var bib = $(this).val();
+        bibs += bib + "/";
+    });
+
+    newloc = "/cgi-bin/koha/tools/batch_delete_records.pl?op=list&type=biblio&bib_list=" + bibs;
+
+    window.opener.location = newloc;
+    window.close();
+}
+[% END %]
 	$(document).ready(function(){
                 $("#items-popover").popover();
 		$("#CheckAll").click(function(){
@@ -101,12 +121,6 @@ function placeHold () {
         [% END %]
         </ul>
     </div>
-    <div class="btn-group">
-        <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#" id="actioncart"><i class="icon-play"></i> Actions <span class="caret"></span> </a>
-        <ul class="dropdown-menu">
-            <li><a href="/cgi-bin/koha/tools/batch_delete_records.pl?op=list&amp;bib_list=[% bib_list %]&amp;type=biblio">Delete</a></li>
-        </ul>
-    </div>
     <a class="btn btn-small" href="basket.pl" onclick="printBasket(); return false;"><i class="icon-print"></i> Print</a>
     <a class="btn btn-small" href="basket.pl" onclick="delBasket('popup'); return false;"><i class="icon-trash"></i> Empty and close</a>
     <a class="btn btn-small close" href="basket.pl"><i class="icon-remove-sign"></i> Hide window</a>
@@ -124,6 +138,10 @@ function placeHold () {
 
 [% IF ( CAN_user_reserveforothers ) %]
      | <a href="#" onclick="placeHold(); return false;">Place hold</a>
+[% END %]
+
+[% IF CAN_user_tools_records_batchdel %]
+    | <a href="#" onclick="batchDelete(); return false;">Batch delete</a>
 [% END %]
 
 </p>[% END %]
@@ -292,6 +310,10 @@ function placeHold () {
 
 [% IF ( CAN_user_reserveforothers ) %]
      | <a href="#" onclick="placeHold(); return false;">Place hold</a>
+[% END %]
+
+[% IF CAN_user_tools_records_batchdel %]
+    | <a href="#" onclick="batchDelete(); return false;">Batch delete</a>
 [% END %]
 
 [% END %]

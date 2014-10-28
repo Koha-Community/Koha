@@ -9413,9 +9413,9 @@ $DBversion = "3.15.00.XXX";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         INSERT INTO permissions (module_bit, code, description) VALUES
-          (13, 'records_batchdel', 'Perform batch deletion of records (biblios or authorities)')
+          (13, 'records_batchdel', 'Perform batch deletion of records (bibliographic or authority)')
     |);
-    print "Upgrade to $DBversion done (Bug 12403: Add permission tools_records_batchdel)\n";
+    print "Upgrade to $DBversion done (Bug 12403: Add permission tools_records_batchdelitem)\n";
     SetVersion($DBversion);
 }
 

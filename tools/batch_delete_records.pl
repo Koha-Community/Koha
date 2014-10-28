@@ -77,6 +77,8 @@ if ( $op eq 'form' ) {
                 };
                 next;
             }
+            my $record = &GetMarcBiblio( $record_id );
+            $biblio->{subtitle} = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $record_id ) );
             $biblio->{itemnumbers} = C4::Items::GetItemnumbersForBiblio( $record_id );
             $biblio->{reserves} = C4::Reserves::GetReservesFromBiblionumber({ biblionumber => $record_id });
             $biblio->{issues_count} = C4::Biblio::CountItemsIssued( $record_id );
