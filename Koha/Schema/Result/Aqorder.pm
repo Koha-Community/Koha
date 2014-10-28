@@ -94,12 +94,6 @@ __PACKAGE__->table("aqorders");
   default_value: 0
   is_nullable: 0
 
-=head2 cancelledby
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 10
-
 =head2 datecancellationprinted
 
   data_type: 'date'
@@ -265,8 +259,6 @@ __PACKAGE__->add_columns(
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "quantityreceived",
   { data_type => "smallint", default_value => 0, is_nullable => 0 },
-  "cancelledby",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
   "datecancellationprinted",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "order_internalnote",
@@ -467,8 +459,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:u5KHnXS5hMmqpqufIEkPig
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-10-28 09:34:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YrxYJV7I7KfUs3+cWpZy9A
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
