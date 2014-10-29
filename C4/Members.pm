@@ -610,7 +610,8 @@ sub GetMember {
 
  C<GetMemberRelatives> returns a borrowersnumber's list of guarantor/guarantees of the member given in parameter
 
-=cut 
+=cut
+
 sub GetMemberRelatives {
     my $borrowernumber = shift;
     my $dbh = C4::Context->dbh;
@@ -1676,6 +1677,7 @@ sub GetBorrowercategory {
     $categorycode = &GetBorrowerCategoryCode( $borrowernumber );
 
 Given the borrowernumber, the function returns the corresponding categorycode
+
 =cut
 
 sub GetBorrowerCategorycode {
@@ -2267,16 +2269,12 @@ sub GetBorrowersNamesAndLatestIssue {
 
 =head2 ModPrivacy
 
-=over 4
-
-my $success = ModPrivacy( $borrowernumber, $privacy );
+  my $success = ModPrivacy( $borrowernumber, $privacy );
 
 Update the privacy of a patron.
 
 return :
 true on success, false on failure
-
-=back
 
 =cut
 
