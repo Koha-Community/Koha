@@ -388,7 +388,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('StaticHoldsQueueWeight','0',NULL,'Specify a list of library location codes separated by commas -- the list of codes will be traversed and weighted with first values given higher weight for holds fulfillment -- alternatively, if RandomizeHoldsQueueWeight is set, the list will be randomly selective','Integer'),
 ('StatisticsFields','location|itype|ccode', NULL, 'Define Fields (from the items table) used for statistics members','Free'),
 ('SubfieldsToAllowForRestrictedBatchmod','','Define a list of subfields for which edition is authorized when items_batchmod_restricted permission is enabled, separated by spaces. Example: 995\$f 995\$h 995\$j',NULL,'Free');
-('SubfieldsToAllowForRestrictedEdition','','Define a list of subfields for which edition is authorized when edit_items_restricted permission is enabled, separated by spaces. Example: 995\$f 995\$h 995\$j',NULL,'Free'),
+('SubfieldsToAllowForRestrictedEditing','','Define a list of subfields for which edition is authorized when edit_items_restricted permission is enabled, separated by spaces. Example: 995\$f 995\$h 995\$j',NULL,'Free'),
 ('SubfieldsToUseWhenPrefill','','','Define a list of subfields to use when prefilling items (separated by space)','Free'),
 ('SubscriptionDuplicateDroppedInput','','','List of fields which must not be rewritten when a subscription is duplicated (Separated by pipe |)','Free'),
 ('SubscriptionHistory','simplified','simplified|full','Define the display preference for serials issue history in OPAC','Choice'),

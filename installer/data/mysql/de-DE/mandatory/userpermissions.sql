@@ -11,7 +11,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 9, 'edit_catalogue', 'Katalogdaten bearbeiten (Titel- und Exemplardaten ändern)'),
    ( 9, 'fast_cataloging', 'Schnellaufnahmen anlegen'),
    ( 9, 'edit_items', 'Exemplare bearbeiten'),
-   ( 9, 'edit_items_restricted', 'Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEdition preference (please note that edit_item is still required)'),
+   ( 9, 'edit_items_restricted', 'Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEditing preference (please note that edit_item is still required)'),
    ( 9, 'delete_all_items', 'Delete all items at once'),
    (10, 'writeoff', 'Gebühren erlassen'),
    (10, 'remaining_permissions', 'Verbleibende Berechtigungen für die Verwaltung von Gebühren'),

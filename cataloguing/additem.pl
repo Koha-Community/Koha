@@ -158,15 +158,15 @@ sub generate_subfield_form {
         my $attributes_no_value = qq(id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$subfield_data{maxlength}" );
         my $attributes_no_value_textarea = qq(id="$subfield_data{id}" name="field_value" class="input_marceditor" rows="5" cols="64" );
 
-        # Getting list of subfields to keep when restricted edition is enabled
-        my $subfieldsToAllowForRestrictedEdition = C4::Context->preference('SubfieldsToAllowForRestrictedEdition');
+        # Getting list of subfields to keep when restricted editing is enabled
+        my $subfieldsToAllowForRestrictedEditing = C4::Context->preference('SubfieldsToAllowForRestrictedEditing');
         my $allowAllSubfields = (
-            not defined $subfieldsToAllowForRestrictedEdition
-              or $subfieldsToAllowForRestrictedEdition == q||
+            not defined $subfieldsToAllowForRestrictedEditing
+              or $subfieldsToAllowForRestrictedEditing == q||
         ) ? 1 : 0;
-        my @subfieldsToAllow = split(/ /, $subfieldsToAllowForRestrictedEdition);
+        my @subfieldsToAllow = split(/ /, $subfieldsToAllowForRestrictedEditing);
 
-        # If we're on restricted edition, and our field is not in the list of subfields to allow,
+        # If we're on restricted editing, and our field is not in the list of subfields to allow,
         # then it is read-only
         $attributes_no_value .= 'readonly="readonly" '
             if (
@@ -247,7 +247,7 @@ sub generate_subfield_form {
                     -class    => "input_marceditor",
                 );
 
-                # If we're on restricted edition, and our field is not in the list of subfields to allow,
+                # If we're on restricted editing, and our field is not in the list of subfields to allow,
                 # then it is read-only
                 push @scrparam, (-readonly => "readonly"), (-disabled => "disabled")
                     if (
@@ -374,12 +374,12 @@ my ($template, $loggedinuser, $cookie)
                  });
 
 
-# Does the user have a restricted item edition permission?
+# Does the user have a restricted item editing permission?
 my $uid = $loggedinuser ? GetMember( borrowernumber => $loggedinuser )->{userid} : undef;
 my $restrictededition = $uid ? haspermission($uid,  {'editcatalogue' => 'edit_items_restricted'}) : undef;
-# In case user is a superlibrarian, edition is not restricted
+# In case user is a superlibrarian, editing is not restricted
 $restrictededition = 0 if ($restrictededition != 0 &&  C4::Context->IsSuperLibrarian());
-# In case user has fast cataloging permission (and we're in fast cataloging), edition is not restricted
+# In case user has fast cataloging permission (and we're in fast cataloging), editing is not restricted
 $restrictededition = 0 if ($restrictededition != 0 && $frameworkcode eq 'FA' && haspermission($uid, {'editcatalogue' => 'fast_cataloging'}));
 
 my $today_iso = C4::Dates->today('iso');

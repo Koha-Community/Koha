@@ -31,7 +31,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 9, 'edit_catalogue', 'Endre katalogen (Endre bibliografiske poster og eksemplaropplysninger)'),
    ( 9, 'fast_cataloging', 'Hurtigkatalogisering'),
    ( 9, 'edit_items', 'Endre eksmeplarer'),
-   ( 9, 'edit_items_restricted', 'Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEdition preference (please note that edit_item is still required)'),
+   ( 9, 'edit_items_restricted', 'Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEditing preference (please note that edit_item is still required)'),
    ( 9, 'delete_all_items', 'Delete all items at once'),
    (10, 'writeoff', 'Write off fines and fees'),
    (10, 'remaining_permissions', 'Remaining permissions for managing fines and fees'),

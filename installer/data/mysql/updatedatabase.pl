@@ -9441,7 +9441,7 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.17.00.XXX";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(q{
-        INSERT INTO permissions (module_bit, code, description) VALUES ('9', 'edit_items_restricted', 'Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEdition preference (please note that edit_item is still required)');
+        INSERT INTO permissions (module_bit, code, description) VALUES ('9', 'edit_items_restricted', 'Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEditing preference (please note that edit_item is still required)');
     });
 
     $dbh->do(q{
@@ -9459,14 +9459,14 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 
     # Add 2 new prefs
     $dbh->do(q{
-        INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SubfieldsToAllowForRestrictedEdition','','Define a list of subfields for which edition is authorized when edit_items_restricted permission is enabled, separated by spaces. Example: 995\$f 995\$h 995\$j','','Free');
+        INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SubfieldsToAllowForRestrictedEditing','','Define a list of subfields for which edition is authorized when edit_items_restricted permission is enabled, separated by spaces. Example: 995\$f 995\$h 995\$j','','Free');
     });
 
     $dbh->do(q{
         INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SubfieldsToAllowForRestrictedBatchmod','','Define a list of subfields for which edition is authorized when items_batchmod_restricted permission is enabled, separated by spaces. Example: 995\$f 995\$h 995\$j','','Free');
     });
 
-    print "Upgrade to $DBversion done (Bug 7673: Adds 2 new prefs (SubfieldsToAllowForRestrictedEdition and SubfieldsToAllowForRestrictedBatchmod) and 3 new permissions (edit_items_restricted and delete_all_items and items_batchmod_restricted))\n";
+    print "Upgrade to $DBversion done (Bug 7673: Adds 2 new prefs (SubfieldsToAllowForRestrictedEditing and SubfieldsToAllowForRestrictedBatchmod) and 3 new permissions (edit_items_restricted and delete_all_items and items_batchmod_restricted))\n";
     SetVersion($DBversion);
 }
 
