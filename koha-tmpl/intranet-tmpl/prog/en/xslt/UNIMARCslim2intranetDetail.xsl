@@ -159,19 +159,22 @@
     </li>
   </xsl:if>
 
-  <xsl:if test="marc:datafield[@tag=011]">
+  <!-- Build ISSN -->
+  <xsl:if test="marc:datafield[@tag=011]/marc:subfield[@code='a']">
     <li>
-      <strong>ISSN: </strong>
-      <xsl:for-each select="marc:datafield[@tag=011]">
-        <xsl:value-of select="marc:subfield[@code='a']"/>
-        <xsl:choose>
-          <xsl:when test="position()=last()">
-            <xsl:text>.</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:text>; </xsl:text>
-          </xsl:otherwise>
-        </xsl:choose>
+    <strong>ISSN: </strong>
+      <xsl:for-each select="marc:datafield[@tag=011]/marc:subfield[@code='a']">
+        <span property="issn">
+          <xsl:value-of select="."/>
+          <xsl:choose>
+            <xsl:when test="position()=last()">
+              <xsl:text>.</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>; </xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </span>
       </xsl:for-each>
     </li>
   </xsl:if>
