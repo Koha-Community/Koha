@@ -856,8 +856,8 @@ $(document).ready(function() {
 <legend>Create report from SQL</legend>
 <ol>
     <li><label for="reportname" class="required">Report name:</label>
-        [% IF ( reportname ) %]<input type="text" class="required" required="required" id="reportname" name="reportname" value="[% reportname %]" />
-        [% ELSE %]<input type="text" class="required" required="required" id="reportname" name="reportname" />[% END %] <span class="required">Required</span>
+        [% IF ( reportname ) %]<input type="text" class="required" required="required" id="reportname" name="reportname" value="[% reportname %]" size="50"/>
+        [% ELSE %]<input type="text" class="required" required="required" id="reportname" name="reportname" size="50" />[% END %] <span class="required">Required</span>
     </li>
     [% PROCESS group_and_subgroup_selection %]
 
@@ -876,13 +876,6 @@ $(document).ready(function() {
 </select>
 </li>[% END %]
     <li><label for="notes">Notes:</label> <textarea id="notes" name="notes" cols="50" rows="2">[% notes %]</textarea></li>
-    <li><label for="types">Type:</label>
-        <select id="types" name="types">
-            <option value="1">Tabular</option>
-            <option value="2" disabled="disabled">Summary</option>
-            <option value="3" disabled="disabled">Matrix</option>
-        </select>
-    </li>
 </ol>
 </fieldset>
 <fieldset class="rows">
@@ -945,13 +938,13 @@ Sub report:<select name="subreport">
 [% END %]
 
 [% IF ( editsql ) %]
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" class="validated">
 <input type="hidden" name="phase" value="Update SQL" />
 <input type="hidden" name="id" value="[% id %]"/>
 <fieldset class="rows">
 <legend>Edit SQL report</legend>
 <ol>
-<li><label for="reportname">Report name:</label><input type="text" id="reportname" name="reportname" value="[% reportname %]" size="50" /></li>
+<li><label for="reportname" class="required">Report name: </label><input type="text" id="reportname" name="reportname" value="[% reportname %]" size="50" class="required" required="required" /> <span class="required">Required</span></li>
 [% PROCESS group_and_subgroup_selection %]
 [% IF (public) %]
   <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0">No (default)</option> <option value="1" selected="selected">Yes</option> </select></li>
@@ -968,8 +961,14 @@ Sub report:<select name="subreport">
 </select>
 </li>[% END %]
 <li><label for="notes">Notes:</label><textarea id="notes" name="notes" cols="50" rows="2">[% notes %]</textarea></li>
-<li><textarea id="sql" name="sql" rows="10" cols="60">[% sql %]</textarea></li>
 </ol>
+</fieldset>
+
+<fieldset class="rows">
+    <legend>SQL:</legend>
+    <div style="margin:1em;">
+        <textarea id="sql" name="sql" class="required" required="required" cols="50" rows="10">[% sql %]</textarea> <span class="required">Required</span>
+    </div>
 </fieldset>
 
 <fieldset class="action">
