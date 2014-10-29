@@ -28,14 +28,13 @@ ensures that they are.
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use lib qw( .. );
 
 use Data::Dumper;
 use File::Find;
-use Test::More tests => 6;
+use Test::More tests => 3;
 
 # hardcoded OPAC & STAFF dirs
 my $opac_dir  = 'koha-tmpl/opac-tmpl';
@@ -92,3 +91,4 @@ for my $staff_theme ( @staff_themes ) {
     }
 }
 
+1;
