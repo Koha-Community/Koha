@@ -2571,10 +2571,7 @@ sub GetAnalyticsCount {
 
 =head2 GetItemHolds
 
-=over 4
-$holds = &GetItemHolds($biblionumber, $itemnumber);
-
-=back
+  $holds = &GetItemHolds($biblionumber, $itemnumber);
 
 This function return the count of holds with $biblionumber and $itemnumber
 

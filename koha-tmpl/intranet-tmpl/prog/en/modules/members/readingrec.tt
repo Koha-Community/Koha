@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Circulation History for [% INCLUDE 'patron-title.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -55,11 +56,13 @@
 
 
 <div id="tabs" class="toptabs">
+  [% IF Koha.Preference('On-site checkouts') %]
   <ul>
     <li><a href="#readingrec" id="tab_all">All</a></li>
     <li><a href="#readingrec" id="tab_checkout">Checkouts</a></li>
-    <li><a href="#readingrec" id="tab_onsite_checkout">On-site checkout</a></li>
+    <li><a href="#readingrec" id="tab_onsite_checkout">On-site checkouts</a></li>
   </ul>
+  [% END %]
   <div id="readingrec" style="overflow:hidden">
     <table id="table_readingrec">
       <thead>
@@ -117,7 +120,7 @@
             [% IF  issue.returndate %]
               <span title="[% issue.returndate %]">[% issue.returndate | $KohaDates %]</span>
             [% ELSE %]
-              <span title="Checked Out"><small>Checked Out</small></span>
+              <span title="Checked out"><small>Checked out</small></span>
             [% END %]
           </td>
         </tr>
