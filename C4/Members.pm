@@ -44,7 +44,7 @@ use Text::Unaccent qw( unac_string );
 use Koha::AuthUtils qw(hash_password);
 use Koha::Database;
 use Module::Load;
-if ( C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     load Koha::NorwegianPatronDB, qw( NLUpdateHashedPIN NLEncryptPIN NLSync );
 }
 
@@ -790,7 +790,7 @@ sub ModMember {
         if ($data{password} eq '****' or $data{password} eq '') {
             delete $data{password};
         } else {
-            if ( C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+            if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
                 # Update the hashed PIN in borrower_sync.hashed_pin, before Koha hashes it
                 NLUpdateHashedPIN( $data{'borrowernumber'}, $data{password} );
             }
@@ -816,7 +816,7 @@ sub ModMember {
 
         # If NorwegianPatronDBEnable is enabled, we set syncstatus to something that a
         # cronjob will use for syncing with NL
-        if ( C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+        if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
             my $borrowersync = Koha::Database->new->schema->resultset('BorrowerSync')->find({
                 'synctype'       => 'norwegianpatrondb',
                 'borrowernumber' => $data{'borrowernumber'}
@@ -884,7 +884,7 @@ sub AddMember {
 
     # If NorwegianPatronDBEnable is enabled, we set syncstatus to something that a
     # cronjob will use for syncing with NL
-    if ( exists $data{'borrowernumber'} && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+    if ( exists $data{'borrowernumber'} && C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
         Koha::Database->new->schema->resultset('BorrowerSync')->create({
             'borrowernumber' => $data{'borrowernumber'},
             'synctype'       => 'norwegianpatrondb',

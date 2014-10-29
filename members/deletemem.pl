@@ -32,7 +32,7 @@ use C4::Members;
 use C4::Branch; # GetBranches
 use C4::VirtualShelves (); #no import
 use Module::Load;
-if ( C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     load Koha::NorwegianPatronDB, qw( NLMarkForDeletion NLSync );
 }
 
@@ -56,7 +56,7 @@ my $member       = $input->param('member');
 # out. If "deletelocal" is set to "true", or not set to anything normal
 # deletion will be done.
 my $deletelocal  = $input->param('deletelocal')  eq 'false' ? 0 : 1; # Deleting locally is the default
-if ( C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     if ( $input->param('deleteremote') eq 'true' ) {
         # Mark for deletion, then try a live sync
         NLMarkForDeletion( $member );

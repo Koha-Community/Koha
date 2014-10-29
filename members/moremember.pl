@@ -54,7 +54,7 @@ use List::MoreUtils qw/uniq/;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Borrower::Debarments qw(GetDebarments IsDebarred);
 use Module::Load;
-if ( C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     load Koha::NorwegianPatronDB, qw( NLGetSyncDataFromBorrowernumber );
 }
 #use Smart::Comments;
@@ -295,7 +295,7 @@ else {
 }
 
 # Add sync data to the user data
-if ( C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     my $sync = NLGetSyncDataFromBorrowernumber( $borrowernumber );
     if ( $sync ) {
         $data->{'sync'}       = $sync->sync;

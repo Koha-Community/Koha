@@ -44,7 +44,7 @@ use C4::Form::MessagingPreferences;
 use Koha::Borrower::Debarments;
 use Koha::DateUtils;
 use Module::Load;
-if ( C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     load Koha::NorwegianPatronDB, qw( NLGetSyncDataFromBorrowernumber );
 }
 
@@ -421,7 +421,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template, 1, $newdata{'categorycode'});
         }
         # Try to do the live sync with the Norwegian national patron database, if it is enabled
-        if ( exists $data{'borrowernumber'} && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+        if ( exists $data{'borrowernumber'} && C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
             NLSync({ 'borrowernumber' => $borrowernumber });
         }
 	} elsif ($op eq 'save'){ 
@@ -479,7 +479,7 @@ if ($op eq "modify")  {
         $template->param( categorycode => $borrower_data->{'categorycode'} );
     }
     # Add sync data to the user data
-    if ( C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+    if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
         my $sync = NLGetSyncDataFromBorrowernumber( $borrowernumber );
         if ( $sync ) {
             $template->param(

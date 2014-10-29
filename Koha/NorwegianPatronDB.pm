@@ -39,7 +39,7 @@ But in scripts that are also used by others (like e.g. moremember.pl), it will
 be polite to only load the module at runtime, if it is needed:
 
   use Module::Load;
-  if ( C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+  if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
       load Koha::NorwegianPatronDB, qw( NLGetSyncDataFromBorrowernumber );
   }
 

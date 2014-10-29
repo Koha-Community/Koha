@@ -46,6 +46,8 @@ This script performs the following steps:
 
 =head2 Check sysprefs
 
+Check that the necessary sysprefs are set before proceeding.
+
 =cut
 
 my $check_result = NLCheckSysprefs();
@@ -62,6 +64,18 @@ unless ( $run ) {
 
 =head2 Find patrons that need to be synced
 
+Patrons with either of these statuses:
+
+=over 4
+
+=item * edited
+
+=item * new
+
+=item * deleted
+
+=back
+
 =cut
 
 my @needs_sync = Koha::Database->new->schema->resultset('BorrowerSync')->search({
@@ -77,6 +91,8 @@ my @needs_sync = Koha::Database->new->schema->resultset('BorrowerSync')->search(
 });
 
 =head2 Do the actual sync
+
+Data is synced to NL with NLSync.
 
 =cut
 
@@ -105,6 +121,8 @@ foreach my $borrower ( @needs_sync ) {
 }
 
 =head2 Summarize if verbose mode is enabled
+
+Specify -v on the command line to get a summary of the syncing operations.
 
 =cut
 
