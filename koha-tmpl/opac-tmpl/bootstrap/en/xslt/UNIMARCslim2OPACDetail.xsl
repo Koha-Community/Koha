@@ -190,20 +190,22 @@
 
   <xsl:call-template name="tag_215" />
 
+  <!-- Build ISBN -->
   <xsl:if test="marc:datafield[@tag=010]/marc:subfield[@code='a']">
     <span class="results_summary isbn"><span class="label">ISBN: </span>
-    <xsl:for-each select="marc:datafield[@tag=010]">
-      <xsl:variable name="isbn" select="marc:subfield[@code='a']"/>
-      <xsl:value-of select="marc:subfield[@code='a']"/>
-      <xsl:choose>
-        <xsl:when test="position()=last()">
-          <xsl:text>.</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text> ; </xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:for-each>
+      <xsl:for-each select="marc:datafield[@tag=010]/marc:subfield[@code='a']">
+        <span property="isbn">
+          <xsl:value-of select="."/>
+          <xsl:choose>
+            <xsl:when test="position()=last()">
+              <xsl:text>.</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>; </xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </span>
+      </xsl:for-each>
     </span>
   </xsl:if>
 

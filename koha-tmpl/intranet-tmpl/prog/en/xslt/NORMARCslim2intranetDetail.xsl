@@ -306,14 +306,23 @@
 
        <abbr class="unapi-id" title="koha:biblionumber:{marc:datafield[@tag=999]/marc:subfield[@code='c']}" ><!-- unAPI --></abbr>
 
-       <xsl:if test="marc:datafield[@tag=020]">
-        <span class="results_summary"><span class="label">ISBN: </span>
-        <xsl:for-each select="marc:datafield[@tag=020]">
-        <xsl:variable name="isbn" select="marc:subfield[@code='a']"/>
-                <xsl:value-of select="marc:subfield[@code='a']"/>
-                <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
-        </xsl:for-each>
-        </span>
+        <!-- Build ISBN -->
+        <xsl:if test="marc:datafield[@tag=020]/marc:subfield[@code='a']">
+          <span class="results_summary isbn"><span class="label">ISBN: </span>
+            <xsl:for-each select="marc:datafield[@tag=020]/marc:subfield[@code='a']">
+              <span property="isbn">
+                <xsl:value-of select="."/>
+                <xsl:choose>
+                  <xsl:when test="position()=last()">
+                    <xsl:text>.</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:text>; </xsl:text>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </span>
+            </xsl:for-each>
+          </span>
         </xsl:if>
 
         <!-- Build ISSN -->
