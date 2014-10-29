@@ -26,18 +26,18 @@
 <table>
   <thead>
     <tr>
-      [% INCLUDE itemsearch_header name='title' label='title' text='Bibliographic reference' %]
+      [% INCLUDE itemsearch_header name='title' label='title' text='Title' %]
       [% INCLUDE itemsearch_header name='publicationyear' label='publication date' text='Publication date' %]
       [% INCLUDE itemsearch_header name='publishercode' label='publisher' text='Publisher' %]
       [% INCLUDE itemsearch_header name='collectiontitle' label='collection' text='Collection' %]
       [% INCLUDE itemsearch_header name='barcode' label='barcode' text='Barcode' %]
-      [% INCLUDE itemsearch_header name='itemcallnumber' label='callnumber' text='Callnumber' %]
-      [% INCLUDE itemsearch_header name='homebranch' label='home branch' text='Home branch' %]
-      [% INCLUDE itemsearch_header name='holdingbranch' label='holding branch' text='Holding branch' %]
-      [% INCLUDE itemsearch_header name='location' label='location' text='Location' %]
+      [% INCLUDE itemsearch_header name='itemcallnumber' label='callnumber' text='Call number' %]
+      [% INCLUDE itemsearch_header name='homebranch' label='home branch' text='Home library' %]
+      [% INCLUDE itemsearch_header name='holdingbranch' label='holding branch' text='Current location' %]
+      [% INCLUDE itemsearch_header name='location' label='location' text='Shelving location' %]
       [% INCLUDE itemsearch_header name='stocknumber' label='stock number' text='Stock number' %]
       [% INCLUDE itemsearch_header name='notforloan' label='status' text='Status' %]
-      [% INCLUDE itemsearch_header name='issues' label='issues' text='Issues' %]
+      [% INCLUDE itemsearch_header name='issues' label='issues' text='Checkouts' %]
       <th></th>
     </tr>
   </thead>

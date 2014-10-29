@@ -59,7 +59,7 @@
     [% END %]
     <select name="f" class="form-field-column">
       [% INCLUDE form_field_select_option value='barcode' label='Barcode' %]
-      [% INCLUDE form_field_select_option value='itemcallnumber' label='Callnumber' %]
+      [% INCLUDE form_field_select_option value='itemcallnumber' label='Call number' %]
       [% INCLUDE form_field_select_option value='stocknumber' label='Stock number' %]
       [% INCLUDE form_field_select_option value='title' label='Title' %]
       [% INCLUDE form_field_select_option value='author' label='Author' %]
@@ -117,9 +117,9 @@
 
 [% BLOCK form_field_radio_yes_no %]
   <div class="form-field">
-    <label class="form-field-label" for="[% name %]">[% label %]:</label>
+    <label class="form-field-label">[% label %]:</label>
     <input type="radio" name="[% name %]" id="[% name %]_indifferent" value="" checked="checked"/>
-    <label for="[% name %]_indifferent">Indifferent</label>
+    <label for="[% name %]_indifferent">Ignore</label>
     <input type="radio" name="[% name %]" id="[% name %]_yes" value="yes" />
     <label for="[% name %]_yes">Yes</label>
     <input type="radio" name="[% name %]" id="[% name %]_no" value="no" />
@@ -130,11 +130,11 @@
 [%# Page starts here %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-  <title>Koha &rsaquo; Catalog &rsaquo; Advanced search</title>
+  <title>Koha &rsaquo; Catalog &rsaquo; Item search</title>
   [% INCLUDE 'doc-head-close.inc' %]
+  <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
   [% INCLUDE 'datatables.inc' %]
   <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
-  <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
   <link rel="stylesheet" type="text/css" href="[% themelang %]/css/itemsearchform.css" />
   <script type="text/javascript">
     //<![CDATA[
@@ -178,18 +178,18 @@
     function submitForm($form) {
       var tr = ''
         + '    <tr>'
-        + '      <th>' + _("Bibliographic reference") + '</th>'
+        + '      <th>' + _("Title") + '</th>'
         + '      <th>' + _("Publication date") + '</th>'
         + '      <th>' + _("Publisher") + '</th>'
         + '      <th>' + _("Collection") + '</th>'
         + '      <th>' + _("Barcode") + '</th>'
-        + '      <th>' + _("Callnumber") + '</th>'
-        + '      <th>' + _("Home branch") + '</th>'
-        + '      <th>' + _("Holding branch") + '</th>'
-        + '      <th>' + _("Location") + '</th>'
+        + '      <th>' + _("Call number") + '</th>'
+        + '      <th>' + _("Home library") + '</th>'
+        + '      <th>' + _("Current location") + '</th>'
+        + '      <th>' + _("Shelving location") + '</th>'
         + '      <th>' + _("Stock number") + '</th>'
         + '      <th>' + _("Status") + '</th>'
-        + '      <th>' + _("Issues") + '</th>'
+        + '      <th>' + _("Checkouts") + '</th>'
         + '      <th></th>'
         + '    </tr>'
       var table = ''
@@ -197,7 +197,10 @@
         + '  <thead>' + tr + tr + '</thead>'
         + '  <tbody></tbody>'
         + '</table>';
-      $('#results-wrapper').empty().html(table);
+      var results_heading = "<h1>" + _("Item search results") + "</h1>";
+      results_heading += "<p><a href=\"/cgi-bin/koha/catalogue/search.pl\">" + _("Go to advanced search") + "</a></p>";
+      results_heading += "<p><a class=\"editsearchlink\" href=\"#\">" + _("Edit search") + "</a></p>";
+      $('#results-wrapper').empty().html(results_heading + table);
 
       var params = [];
       $form.find('select,input[type="text"],input[type="hidden"]').not('[disabled]').each(function () {
@@ -254,9 +257,9 @@
       });
     }
 
-    function hideForm($form) {
-      $form.hide();
-      $('#editsearchlink').show();
+    function hideForm() {
+      $("#item-search-block").hide();
+      $('.editsearchlink').show();
     }
 
     $(document).ready(function () {
@@ -289,16 +292,18 @@
       });
 
       $('#itemsearchform').submit(function() {
-        var format = $(this).find('input[name="format"]:checked').val();
+        var searchform = $(this);
+        var format = searchform.find('input[name="format"]:checked').val();
         if (format == 'html') {
-          submitForm($(this));
-          hideForm($(this));
+          submitForm(searchform);
+          hideForm();
           return false;
         }
       });
 
-      $('#editsearchlink').click(function() {
-        $('#itemsearchform').show();
+      $("body").on("click",".editsearchlink",function(e) {
+        e.preventDefault();
+        $('#item-search-block').show();
         $(this).hide();
         return false;
       });
@@ -309,26 +314,24 @@
 <body id="catalog_itemsearch" class="catalog">
   [% INCLUDE 'header.inc' %]
   <div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Item search
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo; Item search
   </div>
 
   <div id="doc" class="yui-t7">
-    <div id="bd">
+    <div id="item-search-block">
       <h1>Item search</h1>
-      <a href="/cgi-bin/koha/catalogue/search.pl">Go to advanced search</a>
-      <form action="" method="get" id="itemsearchform">
-        <fieldset>
-          <legend>Item search</legend>
+      <p><a href="/cgi-bin/koha/catalogue/search.pl">Go to advanced search</a></p>
+      <form action="/cgi-bin/koha/catalogue/itemsearch.pl" method="get" id="itemsearchform">
           <fieldset>
             [% INCLUDE form_field_select
               name="homebranch"
-              label="Home branch"
+              label="Home library"
               options = branches
-              empty_option = "All branches"
+              empty_option = "All libraries"
             %]
             [% INCLUDE form_field_select
               name="location"
-              label="Location"
+              label="Shelving location"
               options = locations
               empty_option = "All locations"
             %]
@@ -375,7 +378,7 @@
             [% INCLUDE form_field_radio_yes_no name="damaged" label="Damaged" %]
             [% INCLUDE form_field_radio_yes_no name="itemlost" label="Lost" %]
             <div class="form-field">
-              <label class="form-field-label" for="issues">Issues count:</label>
+              <label class="form-field-label" for="issues_op">Checkout count:</label>
               <select id="issues_op" name="issues_op">
                 <option value=">">&gt;</option>
                 <option value="<">&lt;</option>
@@ -385,14 +388,14 @@
               <input type="text" name="issues" />
             </div>
             <div class="form-field">
-              <label class="form-field-label" for="datelastborrowed">Last issue date:</label>
+              <label class="form-field-label" for="datelastborrowed_op">Last checkout date:</label>
               <select id="datelastborrowed_op" name="datelastborrowed_op">
                 <option value=">">After</option>
                 <option value="<">Before</option>
                 <option value="=">On</option>
               </select>
               <input type="text" name="datelastborrowed" />
-              <span class="hint">ISO Format (AAAA-MM-DD)</span>
+              <span class="hint">ISO Format (YYYY-MM-DD)</span>
             </div>
           </fieldset>
           <fieldset>
@@ -405,14 +408,14 @@
               <input type="submit" value="Search" />
             </div>
           </fieldset>
-        </fieldset>
       </form>
 
       <p><a id="editsearchlink" href="#" style="display:none">Edit search</a></p>
-
+    </div>
+  </div>
+  <div id="doc3" class="yui-t7">
       <div id="results-wrapper">
         [% IF search_done %]
-
           [% IF total_rows > 0 %]
             <p>Found [% total_rows %] results.</p>
           [% ELSE %]
@@ -429,6 +432,5 @@
 
         [% END %]
       </div>
-    </div>
 
     [% INCLUDE 'intranet-bottom.inc' %]
