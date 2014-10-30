@@ -247,6 +247,7 @@ sub GetItemsInCollection {
     my $sth = $dbh->prepare(
         "SELECT
                              biblio.title,
+                             biblio.biblionumber,
                              items.itemcallnumber,
                              items.barcode
                            FROM collections, collections_tracking, items, biblio

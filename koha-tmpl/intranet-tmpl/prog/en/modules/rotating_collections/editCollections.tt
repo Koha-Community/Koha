@@ -1,28 +1,39 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo; Edit collections</title>
+<title>Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo;
+    [%- IF ( action == "new" ) %]
+        Add a new collection
+    [% ELSE %]
+        Edit collection [% editColTitle %]
+    [% END -%]
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="rcoll_editCollections" class="tools rcoll">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a> &rsaquo; Edit collections</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a> &rsaquo;
+    [%- IF ( action == "new" ) %]
+        Add a new collection
+    [% ELSE %]
+        <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% editColId %]">Collection <i>[% editColTitle %]</i></a> &rsaquo; Edit
+    [% END -%]
+</div>
 
 <div id="doc3" class="yui-t2">
     <div id="bd">
-        <div class="yui-b">
-           [% INCLUDE 'tools-menu.inc' %]
-        </div>
-
-        <div class="yui-main">
-            <div class="yui-bd">
+        <div id="yui-main">
+            <div class="yui-b">
 
               [% IF ( previousActionCreate ) %]
                 [% IF ( createSuccess ) %]
-                  <div class="alert">Collection <i>[% createdTitle %]</i> created successfully!</div>
+                    <div class="dialog message">
+                        <p>Collection <i>[% createdTitle %]</i> added successfully</p>
+                        <p><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Return to rotating collections home</a></p>
+                    </div>
                 [% ELSE %]
-                  <div class="alert">
-                    <p>Collection <i>[% createdTitle %]</i> failed to be created!</p>
+                  <div class="dialog alert">
+                    <p>Collection <i>[% createdTitle %]</i> failed to be added</p>
                     <p>
                         [% IF failureMessage == "NO_TITLE" %]
                             No title entered.
@@ -38,18 +49,24 @@
 
               [% IF ( previousActionDelete ) %]
                 [% IF ( deleteSuccess ) %]
-                  <div class="alert">Collection deleted successfully!</div>
+                  <div class="dialog message">
+                    <p>Collection deleted successfully</p>
+                    <p><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Return to rotating collections home</a></p>
+                  </div>
                 [% ELSE %]
-                  <div class="alert">Collection failed to be deleted!</div>
+                  <div class="dialog alert">Collection failed to be deleted</div>
                 [% END %]
               [% END %]
 
               [% IF ( previousActionUpdate ) %]
                 [% IF ( updateSuccess ) %]
-                  <div class="alert">Collection <i>[% updatedTitle %]</i> updated successfully!</div>
+                  <div class="dialog message">
+                      <p>Collection <i>[% updatedTitle %]</i> updated successfully</p>
+                      <p><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Return to rotating collections home</a></p>
+                  </div>
                 [% ELSE %]
-                  <div class="alert">
-                    <p>Collection <i>[% updatedTitle %]</i> failed to be updated!</p>
+                  <div class="dialog alert">
+                    <p>Collection <i>[% updatedTitle %]</i> failed to be updated</p>
                     <p>
                         [% IF failureMessage == "NO_ID" %]
                             No collection id given.
@@ -62,64 +79,57 @@
               [% END %]
 
               <div>
-                <br />
 
                 [% IF action == "new" || action == "edit" %]
                     [% IF ( previousActionEdit ) %]
                       <h1>Edit collection <i>[% editColTitle %]</i></h1>
                     [% ELSE %]
-                      <h1>Create new collection</h1>
+                      <h1>Add new collection</h1>
                     [% END %]
 
-                    <form action="editCollections.pl" method="post">
-                      [% IF ( previousActionEdit ) %]
-                        <input type="hidden" name="action" value="update" />
-                        <input type="hidden" name="colId" value="[% editColId %]" />
-                      [% ELSE %]
-                        <input type="hidden" name="action" value="create" />
-                      [% END %]
+                    <form action="editCollections.pl" method="post" class="validated">
+                        [% IF ( previousActionEdit ) %]
+                            <input type="hidden" name="action" value="update" />
+                            <input type="hidden" name="colId" value="[% editColId %]" />
+                        [% ELSE %]
+                            <input type="hidden" name="action" value="create" />
+                        [% END %]
 
-                      <table>
-                        <tr>
-                          <td>
-                            <label class="required" for="title">Title: </label>
-                          </td>
-                          <td>
-                            [% IF ( editColTitle ) %]<input type="text" name="title" value="[% editColTitle %]" />
-                            [% ELSE %]<input type="text" name="title" />[% END %]
-                          </td>
-                        </tr>
-
-                        <tr>
-                          <td>
-                            <label class="required" for="description">Description: </label>
-                          </td>
-                          <td>
-                            [% IF (editColDescription ) %]<input type="text" size="50" name="description" value="[% editColDescription %]" />
-                            [% ELSE %]<input type="text" size="50" name="description" />[% END %]
-                          </td>
-                        </tr>
-
-                        <tr>
-                          <td colspan="2">
-                            [% IF ( previousActionEdit ) %]
-                              <input class="btn" type="submit" value="Update" />
-                            [% ELSE %]
-                              <input class="btn" type="submit" value="Create" />
-                            [% END %]
-                          </td>
-                        </tr>
-                      </table>
+                        <fieldset class="rows">
+                            <ol>
+                                <li>
+                                    <label class="required" for="title">Title: </label>
+                                    [% IF ( editColTitle ) %]
+                                        <input type="text" name="title" value="[% editColTitle %]" required="required" />
+                                        <span class="required">Required</span>
+                                    [% ELSE %]
+                                        <input type="text" name="title" required="required" />
+                                        <span class="required">Required</span>
+                                    [% END %]
+                                </li>
+                                <li>
+                                    <label class="required" for="description">Description: </label>
+                                    [% IF (editColDescription ) %]
+                                        <input type="text" size="50" name="description" value="[% editColDescription %]" required="required" />
+                                        <span class="required">Required</span>
+                                    [% ELSE %]
+                                        <input type="text" size="50" name="description" required="required" />
+                                        <span class="required">Required</span>
+                                    [% END %]
+                                </li>
+                            </ol>
+                        </fieldset>
+                        <fieldset class="action">
+                            <p><input type="submit" value="Submit" /> <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl" class="cancel">Cancel</a></p>
+                        </fieldset>
                     </form>
                 [% END %]
               </div>
 
-              <p>
-                <a class="btn" href="rotatingCollections.pl">Return to rotating collections home</a>
-              </p>
-
-            </div>
+            </div> <!-- /.yui-b -->
+        </div> <!-- /#yui-main -->
+        <div class="yui-b">
+            [% INCLUDE 'tools-menu.inc' %]
         </div>
-    </div>
+    </div> <!-- /#bd -->
 [% INCLUDE 'intranet-bottom.inc' %]
-

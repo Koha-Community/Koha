@@ -73,11 +73,6 @@ foreach my $br ( keys %$branches ) {
 ## Get data about collection
 my ( $colId, $colTitle, $colDesc, $colBranchcode ) = GetCollection($colId);
 $template->param(
-    intranetcolorstylesheet =>
-      C4::Context->preference("intranetcolorstylesheet"),
-    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-    IntranetNav        => C4::Context->preference("IntranetNav"),
-
     colId            => $colId,
     colTitle         => $colTitle,
     colDesc          => $colDesc,

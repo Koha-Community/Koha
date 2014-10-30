@@ -95,11 +95,6 @@ if ($collectionItems) {
 }
 
 $template->param(
-    intranetcolorstylesheet =>
-      C4::Context->preference("intranetcolorstylesheet"),
-    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-    IntranetNav        => C4::Context->preference("IntranetNav"),
-
     colId          => $colId,
     colTitle       => $colTitle,
     colDescription => $colDescription,
