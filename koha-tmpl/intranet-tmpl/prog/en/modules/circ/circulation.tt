@@ -549,7 +549,7 @@ No patron matched <span class="ex">[% message %]</span>
           <button class="btn btn-small action" id="cleardate" name="cleardate" onclick="this.checked = false; this.form.duedatespec.value = ''; this.form.stickyduedate.checked = false; this.form.barcode.focus(); return false;" >Clear</button>
 </div>[% END %]
 
-      [% IF Koha.Preference('On-site checkouts') %]
+      [% IF Koha.Preference('OnSiteCheckouts') %]
         <div class="onsite_checkout-select">
           [% IF noissues %]
             <input type="checkbox" id="onsite_checkout" name="onsite_checkout_forced" checked="checked" disabled="disabled" /> <label for="onsite_checkout">On-site checkout</label>

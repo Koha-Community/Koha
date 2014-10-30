@@ -336,7 +336,7 @@ if ($barcode) {
         }
     }
 
-    unless( $query->param('onsite_checkout') and C4::Context->preference("On-site checkouts Force") ) {
+    unless( $query->param('onsite_checkout') and C4::Context->preference("OnSiteCheckoutsForce") ) {
         delete $question->{'DEBT'} if ($debt_confirmed);
         foreach my $impossible ( keys %$error ) {
             $template->param(
