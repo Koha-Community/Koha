@@ -165,6 +165,7 @@
                         <xsl:with-param name="authorfield" select="marc:datafield[@tag=100 or @tag=110 or @tag=111 or @tag=700 or @tag=710 or @tag=711]"/>
                         <xsl:with-param name="UseAuthoritiesForTracings" select="$UseAuthoritiesForTracings"/>
                         <xsl:with-param name="materialTypeLabel" select="$materialTypeLabel"/>
+                        <xsl:with-param name="theme" select="$theme"/>
                     </xsl:call-template>
                 </h5>
             </xsl:when>
@@ -1007,6 +1008,7 @@
         <xsl:param name="authorfield" />
         <xsl:param name="UseAuthoritiesForTracings" />
         <xsl:param name="materialTypeLabel" />
+        <xsl:param name="theme" />
         <xsl:for-each select="$authorfield">
             <xsl:choose><xsl:when test="position()!=1"><xsl:text>; </xsl:text></xsl:when></xsl:choose>
             <xsl:choose>
