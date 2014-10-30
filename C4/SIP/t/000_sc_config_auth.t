@@ -5,11 +5,13 @@
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
 
 use Test::More tests => 15;
 
 BEGIN {
-	use_ok('Sip::Constants', qw(:all));
+	use_ok('C4::SIP::Sip::Constants', qw(:all));
 	use_ok('SIPtest', qw(:basic :user1 :auth));
 	use_ok('C4::Auth', qw(&check_api_auth));
 	use_ok('C4::Context');

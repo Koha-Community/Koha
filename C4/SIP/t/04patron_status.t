@@ -3,9 +3,11 @@
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
 use Clone qw(clone);
 
-use Sip::Constants qw(:all);
+use C4::SIP::Sip::Constants qw(:all);
 use SIPtest qw(:user1 :basic);
 
 my $patron_status_test_template = {

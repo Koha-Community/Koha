@@ -5,7 +5,7 @@
 # system
 #
 
-package ILS::Patron;
+package C4::SIP::ILS::Patron;
 
 use strict;
 use warnings;

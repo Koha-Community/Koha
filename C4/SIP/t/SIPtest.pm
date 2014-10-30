@@ -41,9 +41,9 @@ use Test::More;
 use CGI qw ( -utf8 );
 
 use IO::Socket::INET;
-use Sip qw(:all);
-use Sip::Checksum qw(verify_cksum);
-use Sip::Constants qw(:all);
+use C4::SIP::Sip qw(:all);
+use C4::SIP::Sip::Checksum qw(verify_cksum);
+use C4::SIP::Sip::Constants qw(:all);
 
 use C4::Auth qw(&check_api_auth);
 use C4::Context;

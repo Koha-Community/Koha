@@ -7,7 +7,7 @@
 # in Sip::Configuration.pm
 #
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 use English;
 
 use XML::Simple qw(:strict);

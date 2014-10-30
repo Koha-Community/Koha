@@ -1,18 +1,18 @@
 #
 # RenewAll: class to manage status of "Renew All" transaction
 
-package ILS::Transaction::RenewAll;
+package C4::SIP::ILS::Transaction::RenewAll;
 
 use strict;
 use warnings;
 
 use Sys::Syslog qw(syslog);
 
-use ILS::Item;
+use C4::SIP::ILS::Item;
 
 use C4::Members qw( GetMember );
 
-use parent qw(ILS::Transaction::Renew);
+use parent qw(C4::SIP::ILS::Transaction::Renew);
 
 my %fields = (
     renewed   => [],
@@ -40,7 +40,7 @@ sub do_renew_all {
     $self->{unrenewed} = [];
     foreach my $itemx ( @{ $patron->{items} } ) {
         my $item_id = $itemx->{barcode};
-        my $item    = ILS::Item->new($item_id);
+        my $item    = C4::SIP::ILS::Item->new($item_id);
         if ( !defined($item) ) {
             syslog(
                 'LOG_WARNING',

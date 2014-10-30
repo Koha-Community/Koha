@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-package SIPServer;
+package C4::SIP::SIPServer;
 
 use strict;
 use warnings;
@@ -11,10 +11,11 @@ use IO::Socket::INET;
 use Socket qw(:DEFAULT :crlf);
 require UNIVERSAL::require;
 
-use Sip::Constants qw(:all);
-use Sip::Configuration;
-use Sip::Checksum qw(checksum verify_cksum);
-use Sip::MsgType;
+use C4::SIP::Sip::Constants qw(:all);
+use C4::SIP::Sip::Configuration;
+use C4::SIP::Sip::Checksum qw(checksum verify_cksum);
+use C4::SIP::Sip::MsgType qw( handle login_core );
+use C4::SIP::Sip qw( read_SIP_packet );
 
 use base qw(Net::Server::PreFork);
 
@@ -35,7 +36,7 @@ my %transports = (
 #
 # Read configuration
 #
-my $config = new Sip::Configuration $ARGV[0];
+my $config = C4::SIP::Sip::Configuration->new( $ARGV[0] );
 my @parms;
 
 #
@@ -129,14 +130,14 @@ sub raw_transport {
     while (!$self->{account}) {
     local $SIG{ALRM} = sub { die "raw_transport Timed Out!\n"; };
     syslog("LOG_DEBUG", "raw_transport: timeout is %d", $service->{timeout});
-    $input = Sip::read_SIP_packet(*STDIN);
+    $input = read_SIP_packet(*STDIN);
     if (!$input) {
         # EOF on the socket
         syslog("LOG_INFO", "raw_transport: shutting down: EOF during login");
         return;
     }
     $input =~ s/[\r\n]+$//sm;	# Strip off trailing line terminator(s)
-    last if Sip::MsgType::handle($input, $self, LOGIN);
+    last if C4::SIP::Sip::MsgType::handle($input, $self, LOGIN);
     }
 
     syslog("LOG_DEBUG", "raw_transport: uname/inst: '%s/%s'",
@@ -206,7 +207,9 @@ sub telnet_transport {
 	    if (exists ($config->{accounts}->{$uid})
 		&& ($pwd eq $config->{accounts}->{$uid}->password())) {
 			$account = $config->{accounts}->{$uid};
-			Sip::MsgType::login_core($self,$uid,$pwd) and last;
+			if ( C4::SIP::Sip::MsgType::login_core($self,$uid,$pwd) ) {
+                last;
+            }
 	    }
 		syslog("LOG_WARNING", "Invalid login attempt: '%s'", ($uid||''));
 		print("Invalid login$CRLF");
@@ -259,7 +262,7 @@ sub sip_protocol_loop {
     my $expect = '';
     while (1) {
         alarm $timeout;
-        $input = Sip::read_SIP_packet(*STDIN);
+        $input = read_SIP_packet(*STDIN);
         unless ($input) {
             return;		# EOF
         }
@@ -273,7 +276,7 @@ sub sip_protocol_loop {
             next;
 		}
 		# end cheap input hacks
-		my $status = Sip::MsgType::handle($input, $self, $expect);
+		my $status = handle($input, $self, $expect);
 		if (!$status) {
 			syslog("LOG_ERR", "sip_protocol_loop: failed to handle %s",substr($input,0,2));
 		}

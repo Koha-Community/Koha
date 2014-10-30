@@ -39,10 +39,11 @@ find({
     wanted => sub {
         my $m = $_;
         return unless $m =~ s/[.]pm$//;
+
         $m =~ s{^.*/C4/}{C4/};
         $m =~ s{/}{::}g;
         return if $m =~ /Auth_with_ldap/; # Dont test this, it will fail on use
-        return if $m =~ /SIP/; # SIP modules will not load clean
+        return if $m =~ /SIPServer/; # SIP Server module has old package usage
         use_ok($m) || BAIL_OUT("***** PROBLEMS LOADING FILE '$m'");
     },
 }, $lib);

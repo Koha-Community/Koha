@@ -4,8 +4,10 @@
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
 
-use Sip::Constants qw(:all);
+use C4::SIP::Sip::Constants qw(:all);
 use SIPtest qw($datepat $instid $currency :user1);
 
 my @tests = (
@@ -73,6 +75,6 @@ my @tests = (
 			  ], },
 	     );
 
-SIPtest::run_sip_tests(@tests);
+         SIPtest::run_sip_tests(@tests);
 
 1;

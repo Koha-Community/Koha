@@ -3,7 +3,7 @@
 #
 #
 
-package Sip::Configuration::Account;
+package C4::SIP::Sip::Configuration::Account;
 
 use strict;
 use warnings;

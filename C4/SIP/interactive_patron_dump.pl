@@ -4,7 +4,7 @@
 use warnings;
 use strict;
 
-use ILS::Patron;
+use C4::SIP::ILS::Patron;
 use Data::Dumper;
 
 while (1) {
@@ -13,6 +13,6 @@ while (1) {
 	defined($in) or last;
 	chomp($in);
 	last unless $in;
-	my $patron = ILS::Patron->new($in);
+	my $patron = C4::SIP::ILS::Patron->new($in);
 	print "Patron ($in):\n", Dumper($patron);
 }

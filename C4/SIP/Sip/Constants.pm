@@ -5,7 +5,7 @@
 # Protocol for communication between a library's Automated
 # Checkout System (ACS) and stand-alone Self-Check (SC) units
 
-package Sip::Constants;
+package C4::SIP::Sip::Constants;
 
 use strict;
 use warnings;

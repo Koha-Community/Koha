@@ -3,11 +3,13 @@
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
 use Clone qw(clone);
 
 use CGI qw ( -utf8 );
 
-use Sip::Constants qw(:all);
+use C4::SIP::Sip::Constants qw(:all);
 use SIPtest qw(
 		:basic
 		$user_barcode

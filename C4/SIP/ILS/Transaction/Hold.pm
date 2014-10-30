@@ -1,18 +1,17 @@
 #
 # status of a Hold transaction
 
-package ILS::Transaction::Hold;
+package C4::SIP::ILS::Transaction::Hold;
 
 use warnings;
 use strict;
 
-use ILS;
-use ILS::Transaction;
+use C4::SIP::ILS::Transaction;
 
 use C4::Reserves;	# AddReserve
 use C4::Members;	# GetMember
 use C4::Biblio;		# GetBiblioFromItemNumber GetBiblioItemByBiblioNumber
-use parent qw(ILS::Transaction);
+use parent qw(C4::SIP::ILS::Transaction);
 
 
 our $VERSION = 3.07.00.049;

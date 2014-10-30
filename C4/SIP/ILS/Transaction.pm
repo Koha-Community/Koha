@@ -2,7 +2,7 @@
 # Transaction: Superclass of all the transactional status objects
 #
 
-package ILS::Transaction;
+package C4::SIP::ILS::Transaction;
 
 use Carp;
 use strict;

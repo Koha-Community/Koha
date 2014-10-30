@@ -2,21 +2,22 @@
 # ILS.pm: Koha ILS interface module
 #
 
-package ILS;
+package C4::SIP::ILS;
 
 use warnings;
 use strict;
 use Sys::Syslog qw(syslog);
+use Data::Dumper;
 
-use ILS::Item;
-use ILS::Patron;
-use ILS::Transaction;
-use ILS::Transaction::Checkout;
-use ILS::Transaction::Checkin;
-use ILS::Transaction::FeePayment;
-use ILS::Transaction::Hold;
-use ILS::Transaction::Renew;
-use ILS::Transaction::RenewAll;
+use C4::SIP::ILS::Item;
+use C4::SIP::ILS::Patron;
+use C4::SIP::ILS::Transaction;
+use C4::SIP::ILS::Transaction::Checkout;
+use C4::SIP::ILS::Transaction::Checkin;
+use C4::SIP::ILS::Transaction::FeePayment;
+use C4::SIP::ILS::Transaction::Hold;
+use C4::SIP::ILS::Transaction::Renew;
+use C4::SIP::ILS::Transaction::RenewAll;
 
 my $debug = 0;
 
@@ -45,7 +46,6 @@ sub new {
     my ($class, $institution) = @_;
     my $type = ref($class) || $class;
     my $self = {};
-	use Data::Dumper;
 	$debug and warn "new ILS: INSTITUTION: " . Dumper($institution);
     syslog("LOG_DEBUG", "new ILS '%s'", $institution->{id});
     $self->{institution} = $institution;
@@ -55,13 +55,13 @@ sub new {
 sub find_patron {
     my $self = shift;
  	$debug and warn "ILS: finding patron";
-    return ILS::Patron->new(@_);
+    return C4::SIP::ILS::Patron->new(@_);
 }
 
 sub find_item {
     my $self = shift;
 	$debug and warn "ILS: finding item";
-    return ILS::Item->new(@_);
+    return C4::SIP::ILS::Item->new(@_);
 }
 
 sub institution {
@@ -129,10 +129,10 @@ sub checkout {
     my ($self, $patron_id, $item_id, $sc_renew) = @_;
     my ($patron, $item, $circ);
 
-    $circ = new ILS::Transaction::Checkout;
+    $circ = C4::SIP::ILS::Transaction::Checkout->new();
     # BEGIN TRANSACTION
-    $circ->patron($patron = new ILS::Patron $patron_id);
-    $circ->item($item = new ILS::Item $item_id);
+    $circ->patron($patron = C4::SIP::ILS::Patron->new( $patron_id));
+    $circ->item($item = C4::SIP::ILS::Item->new( $item_id));
 
     if (!$patron) {
 		$circ->screen_msg("Invalid Patron");
@@ -176,9 +176,9 @@ sub checkin {
 	$current_loc, $item_props, $cancel) = @_;
     my ($patron, $item, $circ);
 
-    $circ = new ILS::Transaction::Checkin;
+    $circ = C4::SIP::ILS::Transaction::Checkin->new();
     # BEGIN TRANSACTION
-    $circ->item($item = new ILS::Item $item_id);
+    $circ->item($item = C4::SIP::ILS::Item->new( $item_id));
 
     if ($item) {
         $circ->do_checkin($current_loc, $return_date);
@@ -194,7 +194,7 @@ sub checkin {
 		$circ->screen_msg("Item not checked out");
 	} else {
 		if ($circ->ok) {
-			$circ->patron($patron = new ILS::Patron $item->{patron});
+			$circ->patron($patron = C4::SIP::ILS::Patron->new( $item->{patron}));
 			delete $item->{patron};
 			delete $item->{due_date};
 			$patron->{items} = [ grep {$_ ne $item_id} @{$patron->{items}} ];
@@ -219,12 +219,12 @@ sub pay_fee {
 	$pay_type, $fee_id, $trans_id, $currency) = @_;
     my $trans;
 
-    $trans = ILS::Transaction::FeePayment->new();
+    $trans = C4::SIP::ILS::Transaction::FeePayment->new();
 
 
     $trans->transaction_id($trans_id);
     my $patron;
-    $trans->patron($patron = ILS::Patron->new($patron_id));
+    $trans->patron($patron = C4::SIP::ILS::Patron->new($patron_id));
     if (!$patron) {
         $trans->screen_msg('Invalid patron barcode.');
         return $trans;
@@ -240,16 +240,16 @@ sub add_hold {
 	$expiry_date, $pickup_location, $hold_type, $fee_ack) = @_;
     my ($patron, $item);
 
-	my $trans = new ILS::Transaction::Hold;
+	my $trans = C4::SIP::ILS::Transaction::Hold->new();
 
-    $patron = new ILS::Patron $patron_id;
+    $patron = C4::SIP::ILS::Patron->new( $patron_id);
     if (!$patron
 	|| (defined($patron_pwd) && !$patron->check_password($patron_pwd))) {
 		$trans->screen_msg("Invalid Patron.");
 		return $trans;
     }
 
-	unless ($item = new ILS::Item ($item_id || $title_id)) {
+	unless ($item = C4::SIP::ILS::Item->new($item_id || $title_id)) {
 		$trans->screen_msg("No such item.");
 		return $trans;
 	}
@@ -287,9 +287,9 @@ sub cancel_hold {
     my ($self, $patron_id, $patron_pwd, $item_id, $title_id) = @_;
     my ($patron, $item, $hold);
 
-	my $trans = new ILS::Transaction::Hold;
+	my $trans = C4::SIP::ILS::Transaction::Hold->new();
 
-    $patron = new ILS::Patron $patron_id;
+    $patron = C4::SIP::ILS::Patron->new( $patron_id );
     if (!$patron) {
 		$trans->screen_msg("Invalid patron barcode.");
 		return $trans;
@@ -298,7 +298,7 @@ sub cancel_hold {
 		return $trans;
     }
 
-    unless ($item = new ILS::Item ($item_id || $title_id)) {
+    unless ($item = C4::SIP::ILS::Item->new($item_id || $title_id)) {
 		$trans->screen_msg("No such item.");
 		return $trans;
     }
@@ -345,10 +345,10 @@ sub alter_hold {
     my $hold;
     my $trans;
 
-    $trans = new ILS::Transaction::Hold;
+    $trans = C4::SIP::ILS::Transaction::Hold->new();
 
     # BEGIN TRANSACTION
-    $patron = new ILS::Patron $patron_id;
+    $patron = C4::SIP::ILS::Patron->new( $patron_id );
     unless ($patron) {
 		$trans->screen_msg("Invalid patron barcode: '$patron_id'.");
 		return $trans;
@@ -366,7 +366,7 @@ sub alter_hold {
 	    # $trans->ok(1);
 	    $trans->screen_msg("Hold updated.");
 	    $trans->patron($patron);
-	    $trans->item(new ILS::Item $hold->{item_id});
+	    $trans->item(C4::SIP::ILS::Item->new( $hold->{item_id}));
 	    last;
 	}
     }
@@ -390,8 +390,8 @@ sub renew {
     my ($patron, $item);
     my $trans;
 
-    $trans = new ILS::Transaction::Renew;
-    $trans->patron($patron = new ILS::Patron $patron_id);
+    $trans = C4::SIP::ILS::Transaction::Renew->new();
+    $trans->patron($patron = C4::SIP::ILS::Patron->new( $patron_id ));
 
     if (!$patron) {
 		$trans->screen_msg("Invalid patron barcode.");
@@ -421,7 +421,7 @@ sub renew {
             syslog("LOG_DEBUG", "checking item %s of %s: $item_id vs. %s", ++$j, $count, $i->{barcode});
             if ($i->{barcode} eq $item_id) {
 				# We have it checked out
-				$item = new ILS::Item $item_id;
+				$item = C4::SIP::ILS::Item->new( $item_id );
 				last;
 			}
 		}
@@ -448,9 +448,9 @@ sub renew_all {
     my ($patron, $item_id);
     my $trans;
 
-    $trans = new ILS::Transaction::RenewAll;
+    $trans = C4::SIP::ILS::Transaction::RenewAll->new();
 
-    $trans->patron($patron = new ILS::Patron $patron_id);
+    $trans->patron($patron = C4::SIP::ILS::Patron->new( $patron_id ));
     if (defined $patron) {
         syslog("LOG_DEBUG", "ILS::renew_all: patron '%s': renew_ok: %s", $patron->name, $patron->renew_ok);
     } else {

@@ -4,16 +4,16 @@
 # A Class for handing SIP messages
 #
 
-package Sip::MsgType;
+package C4::SIP::Sip::MsgType;
 
 use strict;
 use warnings;
 use Exporter;
 use Sys::Syslog qw(syslog);
 
-use Sip qw(:all);
-use Sip::Constants qw(:all);
-use Sip::Checksum qw(verify_cksum);
+use C4::SIP::Sip qw(:all);
+use C4::SIP::Sip::Constants qw(:all);
+use C4::SIP::Sip::Checksum qw(verify_cksum);
 
 use Data::Dumper;
 use CGI qw ( -utf8 );
@@ -26,7 +26,7 @@ use vars qw(@ISA $VERSION @EXPORT_OK);
 BEGIN {
     $VERSION = 3.07.00.049;
 	@ISA = qw(Exporter);
-	@EXPORT_OK = qw(handle);
+	@EXPORT_OK = qw(handle login_core);
 }
 
 # Predeclare handler subroutines
@@ -373,7 +373,7 @@ sub handle {
     if ($msg eq REQUEST_ACS_RESEND_CKSUM) {
 		# Special case
 		$error_detection = 1;
-		$self = new Sip::MsgType ((REQUEST_ACS_RESEND), 0);
+		$self = C4::SIP::Sip::MsgType->new((REQUEST_ACS_RESEND), 0);
     } elsif((length($msg) > 11) && (substr($msg, -9, 2) eq "AY")) {
 		$error_detection = 1;
 
@@ -386,7 +386,7 @@ sub handle {
 	} else {
 	    # Save the sequence number, then strip off the
 	    # error detection data to process the message
-	    $self = new Sip::MsgType (substr($msg, 0, -9), substr($msg, -7, 1));
+	    $self = C4::SIP::Sip::MsgType->new(substr($msg, 0, -9), substr($msg, -7, 1));
 	}
     } elsif ($error_detection) {
 	# We received a non-ED message when ED is supposed to be active.
@@ -394,9 +394,9 @@ sub handle {
 		syslog("LOG_WARNING",
 	       "Received message without error detection: '%s'", $msg);
 		$error_detection = 0;
-		$self = new Sip::MsgType ($msg, 0);
+		$self = C4::SIP::Sip::MsgType->new($msg, 0);
     } else {
-		$self = new Sip::MsgType ($msg, 0);
+		$self = C4::SIP::Sip::MsgType->new($msg, 0);
     }
 
 	if ((substr($msg, 0, 2) ne REQUEST_ACS_RESEND) &&
@@ -438,7 +438,7 @@ sub build_patron_status {
 
     if ($patron) {
 	$resp .= patron_status_string($patron);
-	$resp .= $lang . Sip::timestamp();
+	$resp .= $lang . timestamp();
 	$resp .= add_field(FID_PERSONAL_NAME, $patron->name);
 
 	# while the patron ID we got from the SC is valid, let's
@@ -460,7 +460,7 @@ sub build_patron_status {
     } else {
 	# Invalid patron id.  Report that the user has no privs.,
 	# no personal name, and is invalid (if we're using 2.00)
-	$resp .= 'YYYY' . (' ' x 10) . $lang . Sip::timestamp();
+	$resp .= 'YYYY' . (' ' x 10) . $lang . timestamp();
 	$resp .= add_field(FID_PERSONAL_NAME, '');
 
 	# the patron ID is invalid, but it's a required field, so
@@ -543,7 +543,7 @@ sub handle_checkout {
 	}
 	# We never return the obsolete 'U' value for 'desensitize'
 	$resp .= sipbool($status->desensitize);
-	$resp .= Sip::timestamp;
+	$resp .= timestamp;
 
 	# Now for the variable fields
 	$resp .= add_field(FID_INST_ID, $inst);
@@ -551,7 +551,7 @@ sub handle_checkout {
 	$resp .= add_field(FID_ITEM_ID, $item_id);
 	$resp .= add_field(FID_TITLE_ID, $item->title_id);
     if ($item->due_date) {
-        $resp .= add_field(FID_DUE_DATE, Sip::timestamp($item->due_date));
+        $resp .= add_field(FID_DUE_DATE, timestamp($item->due_date));
     } else {
         $resp .= add_field(FID_DUE_DATE, q{});
     }
@@ -581,7 +581,7 @@ sub handle_checkout {
 	# Checkout failed
 	# Checkout Response: not ok, no renewal, don't know mag. media,
 	# no desensitize
-	$resp = sprintf("120NUN%s", Sip::timestamp);
+	$resp = sprintf("120NUN%s", timestamp);
 	$resp .= add_field(FID_INST_ID, $inst);
 	$resp .= add_field(FID_PATRON_ID, $patron_id);
 	$resp .= add_field(FID_ITEM_ID, $item_id);
@@ -663,7 +663,7 @@ sub handle_checkin {
         }
     }
     $resp .= $status->alert ? 'Y' : 'N';
-    $resp .= Sip::timestamp;
+    $resp .= timestamp;
     $resp .= add_field(FID_INST_ID, $inst_id);
     $resp .= add_field(FID_ITEM_ID, $item_id);
 
@@ -832,6 +832,10 @@ sub login_core  {
 			#
 			my $module = $server->{config}->{institutions}->{$inst}->{implementation};
 			syslog("LOG_DEBUG", 'login_core: ' . Dumper($module));
+            # Suspect this is always ILS but so we dont break any eccentic install (for now)
+            if ($module eq 'ILS') {
+                $module = 'C4::SIP::ILS';
+            }
 			$module->use;
 			if ($@) {
 				syslog("LOG_ERR", "%s: Loading ILS implementation '%s' for institution '%s' failed",
@@ -938,7 +942,7 @@ sub handle_patron_info {
     if ($patron) {
         $resp .= patron_status_string($patron);
         $resp .= (defined($lang) and length($lang) ==3) ? $lang : $patron->language;
-        $resp .= Sip::timestamp();
+        $resp .= timestamp();
 
         $resp .= add_count('patron_info/hold_items',
             scalar @{$patron->hold_items});
@@ -1006,7 +1010,7 @@ sub handle_patron_info {
         # Invalid patron ID:
         # no privileges, no items associated,
         # no personal name, and is invalid (if we're using 2.00)
-        $resp .= 'YYYY' . (' ' x 10) . $lang . Sip::timestamp();
+        $resp .= 'YYYY' . (' ' x 10) . $lang . timestamp();
         $resp .= '0000' x 6;
 
         $resp .= add_field(FID_INST_ID,       ($ils->institution_id || 'SIP2'));
@@ -1038,7 +1042,7 @@ sub handle_end_patron_session {
     ($status, $screen_msg, $print_line) = $ils->end_patron_session($fields->{(FID_PATRON_ID)});
 
     $resp .= $status ? 'Y' : 'N';
-    $resp .= Sip::timestamp();
+    $resp .= timestamp();
 
     $resp .= add_field(FID_INST_ID, $server->{ils}->institution);
     $resp .= add_field(FID_PATRON_ID, $fields->{(FID_PATRON_ID)});
@@ -1073,7 +1077,7 @@ sub handle_fee_paid {
     $status = $ils->pay_fee($patron_id, $patron_pwd, $fee_amt, $fee_type,
 			   $pay_type, $fee_id, $trans_id, $currency);
 
-    $resp .= ($status->ok ? 'Y' : 'N') . Sip::timestamp;
+    $resp .= ($status->ok ? 'Y' : 'N') . timestamp;
     $resp .= add_field(FID_INST_ID, $inst_id);
     $resp .= add_field(FID_PATRON_ID, $patron_id);
     $resp .= maybe_add(FID_TRANSACTION_ID, $status->transaction_id);
@@ -1104,7 +1108,7 @@ sub handle_item_information {
 	# Invalid Item ID
 	# "Other" circ stat, "Other" security marker, "Unknown" fee type
 	$resp .= "010101";
-	$resp .= Sip::timestamp;
+	$resp .= timestamp;
 	# Just echo back the invalid item id
 	$resp .= add_field(FID_ITEM_ID, $fields->{(FID_ITEM_ID)});
 	# title id is required, but we don't have one
@@ -1114,7 +1118,7 @@ sub handle_item_information {
 	$resp .= $item->sip_circulation_status;
 	$resp .= $item->sip_security_marker;
 	$resp .= $item->sip_fee_type;
-	$resp .= Sip::timestamp;
+	$resp .= timestamp;
 
 	$resp .= add_field(FID_ITEM_ID,  $item->id);
 	$resp .= add_field(FID_TITLE_ID, $item->title_id);
@@ -1134,13 +1138,13 @@ sub handle_item_information {
 	    $resp .= add_field(FID_HOLD_QUEUE_LEN, $i);
 	}
 	if ($item->due_date) {
-	    $resp .= add_field(FID_DUE_DATE, Sip::timestamp($item->due_date));
+	    $resp .= add_field(FID_DUE_DATE, timestamp($item->due_date));
 	}
 	if (($i = $item->recall_date) != 0) {
-	    $resp .= add_field(FID_RECALL_DATE, Sip::timestamp($i));
+	    $resp .= add_field(FID_RECALL_DATE, timestamp($i));
 	}
 	if (($i = $item->hold_pickup_date) != 0) {
-	    $resp .= add_field(FID_HOLD_PICKUP_DATE, Sip::timestamp($i));
+	    $resp .= add_field(FID_HOLD_PICKUP_DATE, timestamp($i));
 	}
 
     $resp .= maybe_add(FID_SCREEN_MSG, $item->screen_msg, $server);
@@ -1178,7 +1182,7 @@ sub handle_item_status_update {
     if (!$item) {
 	# Invalid Item ID
 	$resp .= '0';
-	$resp .= Sip::timestamp;
+	$resp .= timestamp;
 	$resp .= add_field(FID_ITEM_ID, $item_id);
     } else {
 	# Valid Item ID
@@ -1186,7 +1190,7 @@ sub handle_item_status_update {
 	$status = $item->status_update($item_props);
 
 	$resp .= $status->ok ? '1' : '0';
-	$resp .= Sip::timestamp;
+	$resp .= timestamp;
 
 	$resp .= add_field(FID_ITEM_ID, $item->id);
 	$resp .= add_field(FID_TITLE_ID, $item->title_id);
@@ -1220,7 +1224,7 @@ sub handle_patron_enable {
 
     if (!defined($patron)) {
 	# Invalid patron ID
-	$resp .= 'YYYY' . (' ' x 10) . '000' . Sip::timestamp();
+	$resp .= 'YYYY' . (' ' x 10) . '000' . timestamp();
 	$resp .= add_field(FID_PATRON_ID, $patron_id);
 	$resp .= add_field(FID_PERSONAL_NAME, '');
 	$resp .= add_field(FID_VALID_PATRON, 'N');
@@ -1232,7 +1236,7 @@ sub handle_patron_enable {
 	    $status = $patron->enable;
 	}
 	$resp .= patron_status_string($patron);
-	$resp .= $patron->language . Sip::timestamp();
+	$resp .= $patron->language . timestamp();
 
 	$resp .= add_field(FID_PATRON_ID, $patron->id);
 	$resp .= add_field(FID_PERSONAL_NAME, $patron->name);
@@ -1292,14 +1296,14 @@ sub handle_hold {
 
     $resp .= $status->ok;
     $resp .= sipbool($status->item  &&  $status->item->available($patron_id));
-    $resp .= Sip::timestamp;
+    $resp .= timestamp;
 
     if ($status->ok) {
 	$resp .= add_field(FID_PATRON_ID,   $status->patron->id);
 
 	($status->expiration_date) and
 	$resp .= maybe_add(FID_EXPIRATION,
-			             Sip::timestamp($status->expiration_date));
+			             timestamp($status->expiration_date));
 	$resp .= maybe_add(FID_QUEUE_POS,   $status->queue_position);
 	$resp .= maybe_add(FID_PICKUP_LOCN, $status->pickup_location);
 	$resp .= maybe_add(FID_ITEM_ID,     $status->item->id);
@@ -1362,12 +1366,12 @@ sub handle_renew {
 	    $resp .= 'U';
 	}
 	$resp .= sipbool($status->desensitize);
-	$resp .= Sip::timestamp;
+	$resp .= timestamp;
 	$resp .= add_field(FID_PATRON_ID, $patron->id);
 	$resp .= add_field(FID_ITEM_ID,  $item->id);
 	$resp .= add_field(FID_TITLE_ID, $item->title_id);
     if ($item->due_date) {
-        $resp .= add_field(FID_DUE_DATE, Sip::timestamp($item->due_date));
+        $resp .= add_field(FID_DUE_DATE, timestamp($item->due_date));
     } else {
         $resp .= add_field(FID_DUE_DATE, q{});
     }
@@ -1381,7 +1385,7 @@ sub handle_renew {
 	# renew failed for some reason
 	# not OK, renewal not OK, Unknown media type (why bother checking?)
 	$resp .= '0NUN';
-	$resp .= Sip::timestamp;
+	$resp .= timestamp;
 	# If we found the patron or the item, the return the ILS
 	# information, otherwise echo back the infomation we received
 	# from the terminal
@@ -1443,7 +1447,7 @@ sub handle_renew_all {
 		$resp .= add_count("renew_all/unrenewed_count", scalar @unrenewed);
 	}
 
-    $resp .= Sip::timestamp;
+    $resp .= timestamp;
     $resp .= add_field(FID_INST_ID, $ils->institution);
 
     $resp .= join('', map(add_field(FID_RENEWED_ITEMS  , $_), @renewed  ));
@@ -1516,7 +1520,7 @@ sub send_acs_status {
 
     $msg .= "$online_status$checkin_ok$checkout_ok$ACS_renewal_policy";
     $msg .= "$status_update_ok$offline_ok$timeout$retries";
-    $msg .= Sip::timestamp();
+    $msg .= timestamp();
 
     if ($protocol_version == 1) {
 	$msg .= '1.00';
@@ -1538,9 +1542,9 @@ sub send_acs_status {
 
 	foreach my $msg_name (@message_type_names) {
 	    if ($msg_name eq 'request sc/acs resend') {
-		$supported_msgs .= Sip::sipbool(1);
+		$supported_msgs .= sipbool(1);
 	    } else {
-		$supported_msgs .= Sip::sipbool($ils->supports($msg_name));
+		$supported_msgs .= sipbool($ils->supports($msg_name));
 	    }
 	}
 	if (length($supported_msgs) < 16) {

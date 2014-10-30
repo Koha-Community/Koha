@@ -4,15 +4,15 @@
 # structure.
 #
 
-package Sip::Configuration;
+package C4::SIP::Sip::Configuration;
 
 use strict;
 use warnings;
 use XML::Simple qw(:strict);
 
-use Sip::Configuration::Institution;
-use Sip::Configuration::Account;
-use Sip::Configuration::Service;
+use C4::SIP::Sip::Configuration::Institution;
+use C4::SIP::Sip::Configuration::Account;
+use C4::SIP::Sip::Configuration::Service;
 
 my $parser = new XML::Simple( KeyAttr   => { login => '+id',
 					     institution => '+id',
@@ -33,7 +33,7 @@ sub new {
     my %listeners;
 
     foreach my $acct (values %{$cfg->{accounts}}) {
-		new Sip::Configuration::Account $acct;
+		C4::SIP::Sip::Configuration::Account->new( $acct );
     }
 
     # The key to the listeners hash is the 'port' component of the
@@ -43,13 +43,13 @@ sub new {
     # find_server() when building the keys to search the hash.
 
     foreach my $service (values %{$cfg->{listeners}}) {
-		new Sip::Configuration::Service $service;
+		C4::SIP::Sip::Configuration::Service->new( $service );
 		$listeners{lc $service->{port}} = $service;
     }
     $cfg->{listeners} = \%listeners;
 
     foreach my $inst (values %{$cfg->{institutions}}) {
-		new Sip::Configuration::Institution $inst;
+        C4::SIP::Sip::Configuration::Institution->new( $inst );
     }
     return bless $cfg, $class;
 }
