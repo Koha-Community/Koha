@@ -40,10 +40,6 @@ override_dh_auto_install:
 	sed -i $(TMP)/usr/share/koha/koha-conf.xml.in \
 		-e '/^ <user>/s/>.*</>_DBC_DBUSER_</' \
 		-e '/^ <pass>/s/>.*</>_DBC_DBPASS_</'
-	sed -i -e 's:url(.*/reset-fonts-grids.css.*):url("/opac-tmpl/lib/yui/reset-fonts-grids/reset-fonts-grids.css"):' \
-		   -e 's:url(.*/skin.css.*):url("/opac-tmpl/lib/yui/assets/skins/sam/skin.css"):' \
-		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/*/en/css/opac.css \
-		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/*/en/css/sco.css
 	mkdir -p $(TMP)/debian/tmp_docbook
 	xt/verify-debian-docbook.t
 	xsltproc --output $(TMP)/debian/tmp_docbook/ \
