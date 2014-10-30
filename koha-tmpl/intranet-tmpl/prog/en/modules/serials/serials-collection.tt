@@ -253,16 +253,11 @@ $(document).ready(function() {
                     </span>
                 </td>
                 <td>
-                    [% publisheddatetext = serial.publisheddatetext || serial.publisheddate %]
-                    <span title="[% publisheddatetext %]">
-                      [% IF serial.publisheddatetext %]
-                        [% publisheddatetext %]
-                      [% ELSIF serial.publisheddate %]
-                        [% serial.publisheddate | $KohaDates %]
-                      [% ELSE %]
-                        Unknown
-                      [% END %]
-                    </span>
+                   [% IF serial.publisheddatetext %]
+                      <span title="[% serial.publisheddatetext %]">
+                        [% serial.publisheddatetext %]
+                      </span>
+                   [% END %]
                 </td>
                 <td>
                     <span title="[% serial.planneddate %]">
