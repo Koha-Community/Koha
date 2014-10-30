@@ -8935,7 +8935,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.042";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("DELETE FROM systempreferences WHERE variable='yuipath'");
     print "Upgrade to $DBversion done (Bug 12494: Remove yuipath system preference)\n";
