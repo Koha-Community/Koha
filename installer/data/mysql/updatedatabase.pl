@@ -9070,13 +9070,9 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.17.00.XXX";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-        ALTER TABLE collections CHANGE colBranchcode colBranchcode VARCHAR( 10 ) NULL DEFAULT NULL
-    });
-    $dbh->do(q{
-        ALTER TABLE collections ADD INDEX ( colBranchcode )
-    });
-    $dbh->do(q{
         ALTER TABLE collections
+            CHANGE colBranchcode colBranchcode VARCHAR( 10 ) NULL DEFAULT NULL,
+            ADD INDEX ( colBranchcode ),
             ADD CONSTRAINT collections_ibfk_1 FOREIGN KEY (colBranchcode) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE
     });
     print "Upgrade to $DBversion done (Bug 8836 - Resurrect Rotating Collections)\n";

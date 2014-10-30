@@ -15,83 +15,107 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a> &rsaquo; Add/Remove items</div>
 
-<div id="doc3">
-<div id="bd">
-        <div class="yui-gb">
+<div id="doc3" class="yui-t2">
+    <div id="bd">
+        <div class="yui-b">
+            [% INCLUDE 'tools-menu.inc' %]
+        </div>
 
-      <h1>Rotating collections: Add/Remove items</h1>
+        <div class="yui-main">
+            <div class="yui-db">
 
-      <div>
-          <br />
-          [% IF ( previousActionAdd ) %]
-            [% IF ( addSuccess ) %]
-              <div>Item with barcode '[% addedBarcode %]' Added successfully!</div>
-            [% ELSE %]
-              <div>Failed to add item with barcode '[% addedBarcode %]'!</div>
-              <div>Reason: <strong>[% failureMessage %]</strong></div>
-            [% END %]
-          [% END %]
+              <h1>Rotating collections: Add/Remove items</h1>
 
-          [% IF ( previousActionRemove ) %]
-            [% IF ( removeSuccess ) %]
-              <div>Item with barcode '[% addedBarcode %]' Removed successfully!</div>
-            [% ELSE %]
-              <div>Failed to remove item with barcode '[% removedBarcode %]'!</div>
-              <div>Reason: <strong>[% failureMessage %]</strong></div>
-            [% END %]
-          [% END %]
+              <div>
+                  <br />
+                  [% IF ( previousActionAdd ) %]
+                    [% IF ( addSuccess ) %]
+                      <div class="alert">Item with barcode '[% barcode %]' added successfully!</div>
+                    [% ELSE %]
+                      <div class="alert">
+                        <p>Failed to add item with barcode <i>[% barcode %]</i>:
+                        <p>
+                            [% IF failureMessage == "NO_ITEM" %]
+                                No item with matching barcode found!
+                            [% ELSIF failureMessage == "IN_COLLECTION_OTHER" %]
+                                Item is already in a different rotating collection!
+                            [% ELSE %]
+                                [% failureMessage %]
+                            [% END %]
+                        </p>
+                    </div>
+                    [% END %]
+                  [% END %]
 
-          <h3>Add item to <i>[% colTitle %]</i></h3>
-      </div>
+                  [% IF ( previousActionRemove ) %]
+                    [% IF ( removeSuccess ) %]
+                      <div class="alert">Item with barcode <i>[% barcode %]</i> removed successfully!</div>
+                    [% ELSE %]
+                      <div class="alert">
+                        Failed to remove item with barcode <i>[% barcode %]</i>:
+                        <p>
+                            [% IF failureMessage == "NO_ITEM" %]
+                                No item with matching barcode found!
+                            [% ELSE %]
+                                [% failureMessage %]
+                            [% END %]
+                        </p>
+                    </div>
+                    [% END %]
+                  [% END %]
 
-      <div>
-        <form action="addItems.pl" method="post">
-        <table>
-          <tr>
-            <th><label for="barcode">Barcode: </label></td>
-            <td><input type="text" id="barcode" name="barcode" /></td>
-            <td>
-              [% IF ( removeChecked ) %]<input type="checkbox" name="removeItem" checked="checked" />
-              [% ELSE %]<input type="checkbox" name="removeItem" />[% END %]
-              <label for="removeItem">Remove item from collection</label>
-            </td>
-          </tr>
+                  <h3>Add item to <i>[% colTitle %]</i></h3>
+              </div>
 
-          <input type="hidden" id="colId" name="colId" value="[% colId %]" />
-          <input type="hidden" name="action" value="addItem" />
-          <tr><td align="right" colspan="99"><input type="submit" value="Submit" /></td></tr>
-        </table>
-        </form>
-      </div>
+              <div>
+                <form action="addItems.pl" method="post">
+                <table>
+                  <tr>
+                    <th><label for="barcode">Barcode: </label></td>
+                    <td><input type="text" id="barcode" name="barcode" /></td>
+                    <td>
+                      [% IF ( removeChecked ) %]<input type="checkbox" name="removeItem" checked="checked" />
+                      [% ELSE %]<input type="checkbox" name="removeItem" />[% END %]
+                      <label for="removeItem">Remove item from collection</label>
+                    </td>
+                  </tr>
 
-      <div>
-        <h2>Items in this collection</h2>
-        [% IF ( collectionItemsLoop ) %]
-          <table>
-            <tr>
-              <th>Title</th>
-              <th>Call number</th>
-              <th>Barcode</th>
-            </tr>
-            [% FOREACH collectionItemsLoo IN collectionItemsLoop %]
-              <tr>
-                <td>[% collectionItemsLoo.title |html %]</td>
-                <td>[% collectionItemsLoo.itemcallnumber %]</td>
-                <td>[% collectionItemsLoo.barcode %]</td>
-              </tr>
-            [% END %]
-          </table>
-        [% ELSE %]
-          There are no items in this collection.
-        [% END %]
-      </div>
+                  <input type="hidden" id="colId" name="colId" value="[% colId %]" />
+                  <input type="hidden" name="action" value="addItem" />
+                  <tr><td align="right" colspan="99"><input class="btn" type="submit" value="Submit" /></td></tr>
+                </table>
+                </form>
+              </div>
 
-      <div>
-        <br/>
-        <input type="button" value="Return to rotating collections home" onclick="window.location.href='rotatingCollections.pl'">
-      </div>
+              <div>
+                <h2>Items in this collection</h2>
+                [% IF ( collectionItemsLoop ) %]
+                  <table>
+                    <tr>
+                      <th>Title</th>
+                      <th>Call number</th>
+                      <th>Barcode</th>
+                    </tr>
+                    [% FOREACH collectionItemsLoo IN collectionItemsLoop %]
+                      <tr>
+                        <td>[% collectionItemsLoo.title |html %]</td>
+                        <td>[% collectionItemsLoo.itemcallnumber %]</td>
+                        <td>[% collectionItemsLoo.barcode %]</td>
+                      </tr>
+                    [% END %]
+                  </table>
+                [% ELSE %]
+                  There are no items in this collection.
+                [% END %]
+              </div>
 
-</div>
-</div>
+              <div>
+                <br/>
+                <input type="button" value="Return to rotating collections home" onclick="window.location.href='rotatingCollections.pl'">
+              </div>
+
+            </div>
+        </div>
+    </div>
+
 [% INCLUDE 'intranet-bottom.inc' %]
-

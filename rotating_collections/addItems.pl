@@ -48,13 +48,14 @@ if ( $query->param('action') eq 'addItem' ) {
 
     my ( $success, $errorCode, $errorMessage );
 
+    $template->param( barcode => $barcode );
+
     if ( !$removeItem ) {
         ( $success, $errorCode, $errorMessage ) =
           AddItemToCollection( $colId, $itemnumber );
 
         $template->param(
             previousActionAdd => 1,
-            addedBarcode      => $barcode,
         );
 
         if ($success) {
@@ -72,7 +73,6 @@ if ( $query->param('action') eq 'addItem' ) {
 
         $template->param(
             previousActionRemove => 1,
-            removedBarcode       => $barcode,
             removeChecked        => 1,
         );
 

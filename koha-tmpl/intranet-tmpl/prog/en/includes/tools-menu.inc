@@ -66,11 +66,9 @@
 	<li><a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a></li>
 	<li><a href="/cgi-bin/koha/labels/spinelabel-home.pl">Quick spine label creator</a></li>
     [% END %]
-<!--
     [% IF ( CAN_user_tools_rotating_collections ) %]
     <li><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a></li>
     [% END %]
--->
     [% IF ( CAN_user_tools_marc_modification_templates ) %]
         <li><a href="/cgi-bin/koha/tools/marc_modification_templates.pl">Manage MARC modification templates</a></li>
     [% END %]

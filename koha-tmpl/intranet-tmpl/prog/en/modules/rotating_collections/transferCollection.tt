@@ -7,42 +7,50 @@
 [% INCLUDE 'cat-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a> &rsaquo; Transfer collection</div>
-<div id="doc3">
-<div id="bd">
-        <div class="yui-gb">
-      <h1>Rotating collections: Transfer collection</h1>
-    <br />
-      [% IF ( transferSuccess ) %]
-        <div>Collection transferred successfully</div>
-      [% END %]
 
-      [% IF ( transferFailure ) %]
-        <div>Failed to transfer collection!</div>
-        <div>Reason: <strong>[% errorMessage %]</strong></div>
-      [% END %]
-
-      [% IF ( transferSuccess ) %]
-      [% ELSE %]
-        <div>
-          <form action="transferCollection.pl" method="post">
-            <input type="hidden" name="colId" value="[% colId %]">
-  
-            <label for="toBranch">Choose your library:</label>
-            <select name="toBranch">
-              [% FOREACH branchoptionloo IN branchoptionloop %]
-                [% IF ( branchoptionloo.selected ) %]<option value="[% branchoptionloo.code %]" selected="selected">[% branchoptionloo.name %]</option>[% ELSE %]<option value="[% branchoptionloo.code %]">[% branchoptionloo.name %]</option>[% END %]
-              [% END %]
-            </select>
-            <INPUT type="submit" value="Transfer collection">
-          </form>
+<div id="doc3" class="yui-t2">
+    <div id="bd">
+        <div class="yui-b">
+            [% INCLUDE 'tools-menu.inc' %]
         </div>
-      [% END %]
 
-      <div>
-        <br/>
-        <input type="button" value="Return to rotating collections home" onclick="window.location.href='rotatingCollections.pl'">
-      </div>
+        <div class="yui-main">
+            <div class="yui-bd">
+                <h1>Rotating collections: Transfer collection</h1>
 
-</div>
-</div>
+                [% IF ( transferSuccess ) %]
+                    <div class="alert">Collection transferred successfully</div>
+                [% ELSIF ( transferFailure ) %]
+                    <div class="alert">Failed to transfer collection!</div>
+                [% END %]
+
+                [% IF ( transferSuccess ) %]
+                [% ELSE %]
+                    <div>
+                        <form action="transferCollection.pl" method="post">
+                            <input type="hidden" name="colId" value="[% colId %]">
+
+                            <label for="toBranch">Choose your library:</label>
+                            <select name="toBranch">
+                                [% FOREACH branchoptionloo IN branchoptionloop %]
+                                    [% IF ( branchoptionloo.selected ) %]
+                                        <option value="[% branchoptionloo.code %]" selected="selected">[% branchoptionloo.name %]</option>
+                                    [% ELSE %]
+                                        <option value="[% branchoptionloo.code %]">[% branchoptionloo.name %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+
+                            <input class="btn" type="submit" value="Transfer collection">
+                        </form>
+                    </div>
+                [% END %]
+
+                <p>
+                    <a class="btn" href="rotatingCollections.pl">Return to rotating collections home</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
 [% INCLUDE 'intranet-bottom.inc' %]

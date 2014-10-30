@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Rotating collections</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -8,40 +9,50 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Rotating collections</div>
 
-<div id="doc3">
-<div id="bd">
-        <div class="yui-gb">
+<div id="doc3" class="yui-t2">
+    <div id="bd">
+        <div class="yui-b">
+            [% INCLUDE 'tools-menu.inc' %]
+        </div>
 
-      <h1>Rotating collections</h1>
-      <div>
-        [% IF ( collectionsLoop ) %]
-          <table>
-            <tr>
-              <th><strong>Title</strong></th>
-              <th>Description</strong></th>
-              <th>Current location</th>
-              <th>Add/Remove items</th>
-              <th>Transfer collection</th>
-            </tr>
-            [% FOREACH collectionsLoo IN collectionsLoop %]
-              <tr>
-                <td>[% collectionsLoo.colTitle %]</td>
-                <td>[% collectionsLoo.colDesc %]</td>
-                <td>[% collectionsLoo.colBranchcode %]</td>
-                <td><a href="addItems.pl?colId=[% collectionsLoo.colId %]">Add/Remove Items</a></td>
-                <td><a href="transferCollection.pl?colId=[% collectionsLoo.colId %]">Transfer Collection</a></td>
-              </tr>
-            [% END %]
-          </table>
-        [% ELSE %]
-          There are no collections currently defined.
-        [% END %]
-      </div>
+        <div class="yui-main">
+            <div class="yui-bd">
 
-      <div>
-	<br/>
-    <input type="button" value="Edit collections" onclick="window.location.href='editCollections.pl'">
-      </div>    
-</div>
-</div>
+                <h1>Rotating collections</h1>
+                <div>
+                    [% IF ( collectionsLoop ) %]
+                        <table>
+                            <tr>
+                                <th><strong>Title</strong></th>
+                                <th>Description</strong></th>
+                                <th>Current location</th>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                            </tr>
+
+                            [% FOREACH collectionsLoo IN collectionsLoop %]
+                                <tr>
+                                    <td>[% collectionsLoo.colTitle %]</td>
+                                    <td>[% collectionsLoo.colDesc %]</td>
+                                    <td>[% Branches.GetName( collectionsLoo.colBranchcode ) %]</td>
+                                    <td><a href="addItems.pl?colId=[% collectionsLoo.colId %]">Add/remove items</a></td>
+                                    <td><a href="transferCollection.pl?colId=[% collectionsLoo.colId %]">Transfer</a></td>
+                                    <td><a href="editCollections.pl?action=edit&colId=[% collectionsLoo.colId %]">Edit</a></td>
+                                    <td><a href="editCollections.pl?action=delete&colId=[% collectionsLoo.colId %]">Delete</a></td>
+                                </tr>
+                            [% END %]
+                        </table>
+                    [% ELSE %]
+                        There are no collections currently defined.
+                    [% END %]
+                </div>
+
+                <p>
+                    <a class="btn" href="editCollections.pl?action=new">Create collection</a>
+                </p>
+            </div>
+        </div>
+    </div>
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -26,7 +26,7 @@ use Modern::Perl;
 
 use C4::Context;
 use C4::Circulation;
-use C4::Reserves qw(GetReserveStatus);
+use C4::Reserves qw(CheckReserves);
 
 use DBI;
 
@@ -86,10 +86,10 @@ sub CreateCollection {
 
     ## Check for all neccessary parameters
     if ( !$title ) {
-        return ( 0, 1, "No Title Given" );
+        return ( 0, 1, "NO_TITLE" );
     }
     if ( !$description ) {
-        return ( 0, 2, "No Description Given" );
+        return ( 0, 2, "NO_DESCRIPTION" );
     }
 
     my $success = 1;
@@ -130,13 +130,13 @@ sub UpdateCollection {
 
     ## Check for all neccessary parameters
     if ( !$colId ) {
-        return ( 0, 1, "No Id Given" );
+        return ( 0, 1, "NO_ID" );
     }
     if ( !$title ) {
-        return ( 0, 2, "No Title Given" );
+        return ( 0, 2, "NO_TITLE" );
     }
     if ( !$description ) {
-        return ( 0, 3, "No Description Given" );
+        return ( 0, 3, "NO_DESCRIPTION" );
     }
 
     my $dbh = C4::Context->dbh;
@@ -175,7 +175,7 @@ sub DeleteCollection {
 
     ## Paramter check
     if ( !$colId ) {
-        return ( 0, 1, "No Collection Id Given" );
+        return ( 0, 1, "NO_ID" );
     }
 
     my $dbh = C4::Context->dbh;
@@ -239,7 +239,7 @@ sub GetItemsInCollection {
 
     ## Paramter check
     if ( !$colId ) {
-        return ( 0, 0, 1, "No Collection Id Given" );
+        return ( 0, 0, 1, "NO_ID" );
     }
 
     my $dbh = C4::Context->dbh;
@@ -317,17 +317,17 @@ sub AddItemToCollection {
 
     ## Check for all neccessary parameters
     if ( !$colId ) {
-        return ( 0, 1, "No Collection Given" );
+        return ( 0, 1, "NO_ID" );
     }
     if ( !$itemnumber ) {
-        return ( 0, 2, "No Itemnumber Given" );
+        return ( 0, 2, "NO_ITEM" );
     }
 
     if ( isItemInThisCollection( $itemnumber, $colId ) ) {
-        return ( 0, 2, "Item is already in the collection!" );
+        return ( 0, 2, "IN_COLLECTION" );
     }
     elsif ( isItemInAnyCollection($itemnumber) ) {
-        return ( 0, 3, "Item is already in a different collection!" );
+        return ( 0, 3, "IN_COLLECTION_OTHER" );
     }
 
     my $dbh = C4::Context->dbh;
@@ -367,11 +367,11 @@ sub RemoveItemFromCollection {
 
     ## Check for all neccessary parameters
     if ( !$itemnumber ) {
-        return ( 0, 2, "No Itemnumber Given" );
+        return ( 0, 2, "NO_ITEM" );
     }
 
     if ( !isItemInThisCollection( $itemnumber, $colId ) ) {
-        return ( 0, 2, "Item is not in the collection!" );
+        return ( 0, 2, "NOT_IN_COLLECTION" );
     }
 
     my $dbh = C4::Context->dbh;
@@ -408,10 +408,10 @@ sub TransferCollection {
 
     ## Check for all neccessary parameters
     if ( !$colId ) {
-        return ( 0, 1, "No Id Given" );
+        return ( 0, 1, "NO_ID" );
     }
     if ( !$colBranchcode ) {
-        return ( 0, 2, "No Branchcode Given" );
+        return ( 0, 2, "NO_BRANCHCODE" );
     }
 
     my $dbh = C4::Context->dbh;
@@ -435,9 +435,8 @@ sub TransferCollection {
     $sth->execute($colId) or return ( 0, 4, $sth->errstr );
     my @results;
     while ( my $item = $sth->fetchrow_hashref ) {
-        transferbook( $colBranchcode, $item->{barcode},
-            my $ignore_reserves = 1 )
-          unless ( GetReserveStatus( $item->{itemnumber} ) eq "Waiting" );
+        my ($status) = CheckReserves( $item->{itemnumber} );
+        transferbook( $colBranchcode, $item->{barcode}, my $ignore_reserves = 1 ) unless ( $status eq 'Waiting' );
     }
 
     return 1;

@@ -39,8 +39,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $action = $query->param('action');
+$template->param( action => $action );
+
 # Create new Collection
-if ( $query->param('action') eq 'create' ) {
+if ( $action eq 'create' ) {
     my $title       = $query->param('title');
     my $description = $query->param('description');
 
@@ -62,7 +65,7 @@ if ( $query->param('action') eq 'create' ) {
 }
 
 ## Delete a club or service
-elsif ( $query->param('action') eq 'delete' ) {
+elsif ( $action eq 'delete' ) {
     my $colId = $query->param('colId');
     my ( $success, $errorCode, $errorMessage ) = DeleteCollection($colId);
 
@@ -77,9 +80,8 @@ elsif ( $query->param('action') eq 'delete' ) {
 }
 
 ## Edit a club or service: grab data, put in form.
-elsif ( $query->param('action') eq 'edit' ) {
-    my $colId = $query->param('colId');
-    my ( $colId, $colTitle, $colDesc, $colBranchcode ) = GetCollection($colId);
+elsif ( $action eq 'edit' ) {
+    my ( $colId, $colTitle, $colDesc, $colBranchcode ) = GetCollection( $query->param('colId') );
 
     $template->param(
         previousActionEdit => 1,
@@ -90,7 +92,7 @@ elsif ( $query->param('action') eq 'edit' ) {
 }
 
 # Update a Club or Service
-elsif ( $query->param('action') eq 'update' ) {
+elsif ( $action eq 'update' ) {
     my $colId       = $query->param('colId');
     my $title       = $query->param('title');
     my $description = $query->param('description');
@@ -112,15 +114,11 @@ elsif ( $query->param('action') eq 'update' ) {
     }
 }
 
-my $collections = GetCollections();
-
 $template->param(
     intranetcolorstylesheet =>
       C4::Context->preference("intranetcolorstylesheet"),
     intranetstylesheet => C4::Context->preference("intranetstylesheet"),
     IntranetNav        => C4::Context->preference("IntranetNav"),
-
-    collectionsLoop => $collections,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

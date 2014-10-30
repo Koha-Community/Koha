@@ -1904,7 +1904,7 @@ sub AddReturn {
     my ($datesent,$frombranch,$tobranch) = GetTransfers( $item->{'itemnumber'} );
 
     # if we have a transfer to do, we update the line of transfers with the datearrived
-    my $is_in_rotating_collection = 1 if C4::RotatingCollections::isItemInAnyCollection( $item->{'itemnumber'} );
+    my $is_in_rotating_collection = C4::RotatingCollections::isItemInAnyCollection( $item->{'itemnumber'} );
     if ($datesent) {
         if ( $tobranch eq $branch ) {
             my $sth = C4::Context->dbh->prepare(
