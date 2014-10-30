@@ -1,4 +1,4 @@
-package Sip::Checksum;
+package C4::SIP::Sip::Checksum;
 
 use Exporter;
 use strict;

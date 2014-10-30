@@ -3,9 +3,11 @@
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
 use Clone qw(clone);
 
-use Sip::Constants qw(:all);
+use C4::SIP::Sip::Constants qw(:all);
 
 use SIPtest qw(:basic :user1);
 
@@ -40,6 +42,6 @@ my @tests = (
 	     clone($block_patron_test_template),
 	     );
 
-SIPtest::run_sip_tests(@tests);
+         SIPtest::run_sip_tests(@tests);
 
 1;

@@ -3,9 +3,11 @@
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
 use Clone qw(clone);
 
-use Sip::Constants qw(:all);
+use C4::SIP::Sip::Constants qw(:all);
 use SIPtest qw(:basic :user1 :item1);
 
 my $item_info_test_template = {

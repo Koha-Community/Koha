@@ -1,4 +1,4 @@
-package ILS::Transaction::FeePayment;
+package C4::SIP::ILS::Transaction::FeePayment;
 
 use warnings;
 use strict;
@@ -21,8 +21,7 @@ use strict;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use C4::Accounts qw(recordpayment);
-use ILS;
-use parent qw(ILS::Transaction);
+use parent qw(C4::SIP::ILS::Transaction);
 
 
 our $debug   = 0;

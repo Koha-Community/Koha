@@ -2,17 +2,15 @@
 # Status of a Renew Transaction
 #
 
-package ILS::Transaction::Renew;
+package C4::SIP::ILS::Transaction::Renew;
 
 use warnings;
 use strict;
 
-use ILS;
-
 use C4::Circulation;
 use C4::Members;
 
-use parent qw(ILS::Transaction);
+use parent qw(C4::SIP::ILS::Transaction);
 
 my %fields = (
     renewal_ok => 0,

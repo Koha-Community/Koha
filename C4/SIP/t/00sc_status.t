@@ -6,6 +6,8 @@
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
 
 use SIPtest qw($datepat $username $password $login_test $sc_status_test);
 

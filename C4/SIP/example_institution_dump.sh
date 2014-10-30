@@ -2,11 +2,11 @@
 
 perl -I ./ -e '
 use Data::Dumper;
-use ILS;
-use Sip::Configuration;
+use C4::SIP::ILS;
+use C4::SIP::Sip::Configuration;
 my $code = "MAIN";
-my $conf = Sip::Configuration->new("SIPconfig.xml");
-my $ils  = ILS->new($conf->{institutions}->{$code});
+my $conf = C4::SIP::Sip::Configuration->new("SIPconfig.xml");
+my $ils  = C4::SIP::ILS->new($conf->{institutions}->{$code});
 print "XML for $code: ", Dumper($conf->{institutions}->{$code}), "\n";
 print "ILS for $code: ", Dumper($ils), "\n";
 print "\$ils->checkout_ok(): ", ($ils->checkout_ok() ? "Y" : "N"), "\n";
