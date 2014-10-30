@@ -601,6 +601,7 @@ $template->param(
     canned_bor_notes_loop     => $canned_notes,
     debarments                => GetDebarments({ borrowernumber => $borrowernumber }),
     todaysdate                => dt_from_string()->set(hour => 23)->set(minute => 59),
+    onsite_checkout_forced    => C4::Context->preference("OnSiteCheckoutsForce"),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

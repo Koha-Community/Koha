@@ -19,7 +19,7 @@ not use an API to fetch items that populates item.datedue.
         [% END %]
     [% END %]
 [% ELSIF ( item.datedue || issue.date_due ) %]
-  [% IF onsite_checkout %]
+  [% IF item.onsite_checkout %]
     [% IF ( OPACShowCheckoutName ) %]
         Currently in local use by [% item.cardnumber %] [% item.firstname %] [% item.surname %]
     [% ELSE %]
