@@ -43,7 +43,7 @@ use Getopt::Long;
 
 sub usage {
     print STDERR <<USAGE;
-Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS]
+Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS] [--all-restrictions]
 
    -h --help          prints this help message, and exits, ignoring all
                       other options
@@ -69,6 +69,7 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
                          days.  Defaults to 14 days if no days specified.
    --restrictions DAYS   purge patrons restrictions expired since more than DAYS days.
                          Defaults to 30 days if no days specified.
+    --all-restrictions   purge all expired patrons restrictions.
 USAGE
     exit $_[0];
 }
@@ -76,7 +77,7 @@ USAGE
 my (
     $help,   $sessions,          $sess_days, $verbose, $zebraqueue_days,
     $mail,   $purge_merged,      $pImport,   $pLogs,   $pSearchhistory,
-    $pZ3950, $pListShareInvites, $pDebarments,
+    $pZ3950, $pListShareInvites, $pDebarments, $allDebarments,
 );
 
 GetOptions(
@@ -93,6 +94,7 @@ GetOptions(
     'searchhistory:i' => \$pSearchhistory,
     'list-invites:i'  => \$pListShareInvites,
     'restrictions:i'  => \$pDebarments,
+    'all-restrictions' => \$allDebarments,
 ) || usage(1);
 
 # Use default values
@@ -118,9 +120,15 @@ unless ( $sessions
     || $pSearchhistory
     || $pZ3950
     || $pListShareInvites
-    || $pDebarments )
+    || $pDebarments
+    || $allDebarments )
 {
     print "You did not specify any cleanup work for the script to do.\n\n";
+    usage(1);
+}
+
+if ($pDebarments && $allDebarments) {
+    print "You can not specify both --restrictions and --all-restrictions.\n\n";
     usage(1);
 }
 
@@ -234,8 +242,14 @@ if ($pListShareInvites) {
 
 if ($pDebarments) {
     print "Expired patrons restrictions purge triggered for $pDebarments days.\n" if $verbose;
-    $count = PurgeDebarments();
+    $count = PurgeDebarments($pDebarments);
     print "$count restrictions were deleted.\nDone with restrictions purge.\n" if $verbose;
+}
+
+if($allDebarments) {
+    print "All expired patrons restrictions purge triggered.\n" if $verbose;
+    $count = PurgeDebarments(0);
+    print "$count restrictions were deleted.\nDone with all restrictions purge.\n" if $verbose;
 }
 
 exit(0);
@@ -309,6 +323,7 @@ sub PurgeZ3950 {
 
 sub PurgeDebarments {
     require Koha::Borrower::Debarments;
+    my $days = shift;
     $count = 0;
     $sth   = $dbh->prepare(
         q{
@@ -317,7 +332,7 @@ sub PurgeDebarments {
             WHERE expiration < date_sub(curdate(), INTERVAL ? DAY)
         }
     );
-    $sth->execute($pDebarments) or die $dbh->errstr;
+    $sth->execute($days) or die $dbh->errstr;
     while ( my ($borrower_debarment_id) = $sth->fetchrow_array ) {
         Koha::Borrower::Debarments::DelDebarment($borrower_debarment_id);
         $count++;
