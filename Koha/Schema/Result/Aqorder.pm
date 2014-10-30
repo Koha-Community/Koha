@@ -100,6 +100,11 @@ __PACKAGE__->table("aqorders");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 cancellationreason
+
+  data_type: 'text'
+  is_nullable: 1
+
 =head2 order_internalnote
 
   data_type: 'mediumtext'
@@ -261,6 +266,8 @@ __PACKAGE__->add_columns(
   { data_type => "smallint", default_value => 0, is_nullable => 0 },
   "datecancellationprinted",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "cancellationreason",
+  { data_type => "text", is_nullable => 1 },
   "order_internalnote",
   { data_type => "mediumtext", is_nullable => 1 },
   "order_vendornote",
@@ -459,8 +466,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-10-28 09:34:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YrxYJV7I7KfUs3+cWpZy9A
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-10-30 01:04:01
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:M+R6T+KIk4lqzdYjbYvg9w
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
