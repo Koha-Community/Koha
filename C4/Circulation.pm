@@ -1279,8 +1279,8 @@ sub AddIssue {
         $sth->execute(
             $borrower->{'borrowernumber'},      # borrowernumber
             $item->{'itemnumber'},              # itemnumber
-            $issuedate->strftime('%Y-%m-%d %H:%M:00'), # issuedate
-            $datedue->strftime('%Y-%m-%d %H:%M:00'),   # date_due
+            $issuedate->strftime('%Y-%m-%d %H:%M:%S'), # issuedate
+            $datedue->strftime('%Y-%m-%d %H:%M:%S'),   # date_due
             C4::Context->userenv->{'branch'},   # branchcode
             $onsite_checkout,
             $auto_renew ? 1 : 0                 # automatic renewal
