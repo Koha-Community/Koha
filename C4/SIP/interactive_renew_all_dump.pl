@@ -4,7 +4,7 @@
 use warnings;
 use strict;
 
-use ILS::Transaction::RenewAll;
+use C4::SIP::ILS::Transaction::RenewAll;
 use Data::Dumper;
 
 while (1) {
@@ -15,7 +15,7 @@ while (1) {
 	last unless $in;
 	my $patron = ILS::Patron->new($in);
 	print "Patron before: \n " . Dumper($patron);
-	my $action = ILS::Transaction::RenewAll->new();
+	my $action = C4::SIP::ILS::Transaction::RenewAll->new();
 	$action->do_renew_all();
 	print "\n\nTransaction::RenewAll: " . Dumper($action);
 	print "\n", "=" x 35, "\n";

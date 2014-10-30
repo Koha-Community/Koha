@@ -3,7 +3,7 @@
 #
 #
 
-package Sip::Configuration::Service;
+package C4::SIP::Sip::Configuration::Service;
 
 use strict;
 use warnings;

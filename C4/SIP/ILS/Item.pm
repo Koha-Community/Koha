@@ -4,7 +4,7 @@
 # A Class for hiding the ILS's concept of the item from OpenSIP
 #
 
-package ILS::Item;
+package C4::SIP::ILS::Item;
 
 use strict;
 use warnings;
@@ -12,7 +12,7 @@ use warnings;
 use Sys::Syslog qw(syslog);
 use Carp;
 
-use ILS::Transaction;
+use C4::SIP::ILS::Transaction;
 
 use C4::Debug;
 use C4::Context;
@@ -233,7 +233,7 @@ sub AUTOLOAD {
 
 sub status_update {     # FIXME: this looks unimplemented
     my ($self, $props) = @_;
-    my $status = new ILS::Transaction;
+    my $status = C4::SIP::ILS::Transaction->new();
     $self->{sip_item_properties} = $props;
     $status->{ok} = 1;
     return $status;

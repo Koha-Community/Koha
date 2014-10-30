@@ -2,22 +2,21 @@
 # An object to handle checkin status
 #
 
-package ILS::Transaction::Checkin;
+package C4::SIP::ILS::Transaction::Checkin;
 
 use warnings;
 use strict;
 
 # use POSIX qw(strftime);
 
-use ILS;
-use ILS::Transaction;
+use C4::SIP::ILS::Transaction;
 
 use C4::Circulation;
 use C4::Reserves qw( ModReserveAffect );
 use C4::Items qw( ModItemTransfer );
 use C4::Debug;
 
-use parent qw(ILS::Transaction);
+use parent qw(C4::SIP::ILS::Transaction);
 
 my %fields = (
     magnetic => 0,

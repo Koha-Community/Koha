@@ -2,7 +2,7 @@
 # An object to handle checkout status
 #
 
-package ILS::Transaction::Checkout;
+package C4::SIP::ILS::Transaction::Checkout;
 
 use warnings;
 use strict;
@@ -12,8 +12,7 @@ use Sys::Syslog qw(syslog);
 use Data::Dumper;
 use CGI;
 
-use ILS;
-use ILS::Transaction;
+use C4::SIP::ILS::Transaction;
 
 use C4::Context;
 use C4::Circulation;

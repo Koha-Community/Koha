@@ -2,7 +2,7 @@
 # Sip.pm: General Sip utility functions
 #
 
-package Sip;
+package C4::SIP::Sip;
 
 use strict;
 use warnings;
@@ -13,8 +13,8 @@ use POSIX qw(strftime);
 use Socket qw(:crlf);
 use IO::Handle;
 
-use Sip::Constants qw(SIP_DATETIME FID_SCREEN_MSG);
-use Sip::Checksum qw(checksum);
+use C4::SIP::Sip::Constants qw(SIP_DATETIME FID_SCREEN_MSG);
+use C4::SIP::Sip::Checksum qw(checksum);
 
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
 

@@ -1,4 +1,4 @@
-package ILS::Transaction::FeePayment;
+package C4::SIP::ILS::Transaction::FeePayment;
 
 use warnings;
 use strict;
@@ -21,8 +21,7 @@ use strict;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use C4::Accounts qw(recordpayment);
-use ILS;
-use parent qw(ILS::Transaction);
+use parent qw(C4::SIP::ILS::Transaction);
 
 
 our $debug   = 0;

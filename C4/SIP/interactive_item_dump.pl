@@ -4,7 +4,7 @@
 use warnings;
 use strict;
 
-use ILS::Item;
+use C4::SIP::ILS::Item;
 use Data::Dumper;
 
 my $compare = (@ARGV) ? shift : 0;
@@ -14,7 +14,7 @@ while (1) {
 	defined($in) or last;
 	chomp($in);
 	last unless $in;
-	my $item = ILS::Item->new($in);
+	my $item = C4::SIP::ILS::Item->new($in);
     unless ($item) {
         print "No item ($in)";
         next;
