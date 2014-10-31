@@ -45,7 +45,11 @@ EOF
 for name in "$@"
 do
     if is_instance $name ; then
-    xmlstarlet sel -t -v 'yazgfs/config/pass' /etc/koha/sites/$name/koha-conf.xml
+    passwd=$(xmlstarlet sel -t -v 'yazgfs/config/pass' /etc/koha/sites/$name/koha-conf.xml);
+    echo "Password for $name: $passwd"
+    echo "Press any key to clear the screen..."
+    read anykey
+    clear
     else
         warn "Unknown instance $name."
     fi
