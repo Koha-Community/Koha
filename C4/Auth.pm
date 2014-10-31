@@ -189,6 +189,7 @@ sub get_template_and_user {
 
         # user info
         $template->param( loggedinusername => $user );
+        $template->param( loggedinusernumber => $borrowernumber );
         $template->param( sessionID        => $sessionID );
 
         my ($total, $pubshelves, $barshelves) = C4::VirtualShelves::GetSomeShelfNames($borrowernumber, 'MASTHEAD');

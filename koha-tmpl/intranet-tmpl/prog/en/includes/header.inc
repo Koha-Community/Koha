@@ -78,6 +78,14 @@
                         <a class="toplinks" href="/cgi-bin/koha/catalogue/search-history.pl">Search history</a>
                     </li>
                     [% END %]
+                    [% IF loggedinusernumber %]
+                        <li class ="toplinks-myaccount">
+                            <a class="toplinks" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loggedinusernumber %]">My account</a>
+                        </li>
+                        <li class="toplinks-mycheckouts">
+                            <a class="toplinks" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% loggedinusernumber %]">My checkouts</a>
+                        </li>
+                    [% END %]
                     <li>
                         <a id="logout" class="toplinks" href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log out</a>
                     </li>
