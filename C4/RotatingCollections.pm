@@ -435,7 +435,8 @@ sub TransferCollection {
     my @results;
     while ( my $item = $sth->fetchrow_hashref ) {
         my ($status) = CheckReserves( $item->{itemnumber} );
-        transferbook( $colBranchcode, $item->{barcode}, my $ignore_reserves = 1 ) unless ( $status eq 'Waiting' );
+        my @transfers = GetTransfers( $item->{itemnumber} );
+        transferbook( $colBranchcode, $item->{barcode}, my $ignore_reserves = 1 ) unless ( $status eq 'Waiting' || @transfers );
     }
 
     return 1;
