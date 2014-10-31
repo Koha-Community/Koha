@@ -66,9 +66,10 @@ files telling Koha what fields to insert data into.
 
 =head2 GetModificationTemplates
 
-  my @templates = GetModificationTemplates( [ $template_id ] );
+  my @templates = GetModificationTemplates( $template_id );
 
-  Passing a $template_id will mark the given id as the selected template.
+  Passing optional $template_id marks it as the selected template.
+
 =cut
 
 sub GetModificationTemplates {
@@ -81,7 +82,8 @@ sub GetModificationTemplates {
 
   my @templates;
   while ( my $template = $sth->fetchrow_hashref() ) {
-    $template->{'selected'} = 1 if ( $template->{'template_id'} eq $template_id );
+    $template->{'selected'} = 1
+        if $template_id && $template->{'template_id'} eq $template_id;
     push( @templates, $template );
   }
 
