@@ -15,36 +15,29 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-use warnings;
-
-# FIXME - Generates a warning from C4/Context.pm (uninitilized value).
+use Modern::Perl;
 
 use CGI;
 use C4::Auth;
 use C4::Output;
+use C4::Templates qw/gettemplate/;
 
-my $input = new CGI;
-
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {
-        template_name   => "maintenance.tt",
-        type            => "opac",
-        query           => $input,
-        authnotrequired => 1,
-        flagsrequired   => { borrow => 1 },
-    }
-);
+my $query = new CGI;
+my $template = C4::Templates::gettemplate( 'maintenance.tt', 'opac', $query, 0 );
 
 my $koha_db_version = C4::Context->preference('Version');
 my $kohaversion     = C4::Context::KOHAVERSION;
-$kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+# Strip dots from version
+$kohaversion     =~ s/\.//g if defined $kohaversion;
+$koha_db_version =~ s/\.//g if defined $koha_db_version;
 
-#warn "db: $koha_db_version, koha: $kohaversion";
-
-if ( $kohaversion > $koha_db_version or C4::Context->preference('OpacMaintenance') ) {
-    output_html_with_http_headers $input, '', $template->output;
+if ( !defined $koha_db_version || # DB not populated
+     $kohaversion > $koha_db_version || # Update needed
+     C4::Context->preference('OpacMaintenance') ) { # Maintenance mode enabled
+    output_html_with_http_headers $query, '', $template->output;
 }
 else {
-    print $input->redirect("/cgi-bin/koha/opac-main.pl");
+    print $query->redirect("/cgi-bin/koha/opac-main.pl");
 }
+
+1;
