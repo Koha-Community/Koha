@@ -186,7 +186,7 @@ my $record = new_record();
 ModifyRecordWithTemplate( $template_id, $record );
 
 my $expected_record = expected_record();
-is_deeply( $record, $expected_record );
+is_deeply( $record, $expected_record, "Record modification as expected");
 
 done_testing;
 
