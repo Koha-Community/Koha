@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Carp;
 use CGI;
-use List::MoreUtils qw/any/;
+use List::MoreUtils qw/any uniq/;
 
 # Copyright 2009 Chris Cormack and The Koha Dev Team
 #
@@ -250,9 +250,20 @@ sub gettemplate {
 }
 
 
-#---------------------------------------------------------------------------------------------------------
-# FIXME - POD
-# FIXME - Rewritten to remove hardcoded theme with minimal changes, need to be rethinked
+=head2 themelanguage
+
+    my ($theme,$lang,\@themes) = themelanguage($htdocs,$tmpl,$interface,query);
+
+This function returns the theme and language to be used for rendering the UI.
+It also returns the list of themes that should be applied as a fallback. This is
+used for the theme overlay feature (i.e. if a file doesn't exist on the requested
+theme, fallback to the configured fallback).
+
+Important: this function is used on the webinstaller too, so always consider
+the use case where the DB is not populated already when rewriting/fixing.
+
+=cut
+
 sub themelanguage {
     my ($htdocs, $tmpl, $interface, $query) = @_;
     ($query) or warn "no query in themelanguage";
@@ -261,20 +272,31 @@ sub themelanguage {
     my $lang = C4::Languages::getlanguage($query);
 
     # Get theme
-    my @themes   = ( C4::Context->preference( ($interface eq 'intranet') ? 'template' : 'opacthemes' ) );
-    my $fallback =   C4::Context->preference( ($interface eq 'intranet') ? 'template' : 'OPACFallback' );
-    push @themes, $fallback;
+    my @themes;
+    my $theme_syspref    = ($interface eq 'intranet') ? 'template' : 'opacthemes';
+    my $fallback_syspref = ($interface eq 'intranet') ? 'template' : 'OPACFallback';
+    # Yeah, hardcoded, last resort if the DB is not populated
+    my $hardcoded_theme = ($interface eq 'intranet') ? 'prog' : 'bootstrap';
+
+    # Configured theme is the first one
+    push @themes, C4::Context->preference( $theme_syspref )
+        if C4::Context->preference( $theme_syspref );
+    # Configured fallback next
+    push @themes, C4::Context->preference( $fallback_syspref )
+        if C4::Context->preference( $fallback_syspref );
+    # The hardcoded fallback theme is the last one
+    push @themes, $hardcoded_theme;
 
     # Try to find first theme for the selected theme/lang, then for fallback/lang
     for my $theme (@themes) {
         if ( -e "$htdocs/$theme/$lang/modules/$tmpl" ) {
-            return ($theme, $lang, \@themes);
+            return ( $theme, $lang, uniq( \@themes ) );
         }
     }
     # Otherwise return theme/'en', last resort fallback/'en'
     for my $theme (@themes) {
         if ( -e "$htdocs/$theme/en/modules/$tmpl" ) {
-            return ($theme, 'en', \@themes);
+            return ( $theme, 'en', uniq( \@themes ) );
         }
     }
 }
