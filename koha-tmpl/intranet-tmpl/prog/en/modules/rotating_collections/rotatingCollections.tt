@@ -2,6 +2,19 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Rotating collections</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".confirmdelete").click(function(){
+            $(this).parents('tr').addClass("warn");
+            if(confirm(_("Are you sure you want to delete this collection?"))){
+                return true;
+            } else {
+                $(this).parents('tr').removeClass("warn");
+                return false;
+            }
+        });
+    });
+</script>
 </head>
 <body id="rcoll_rotatingCollections" class="tools rcoll">
 [% INCLUDE 'header.inc' %]
@@ -38,7 +51,7 @@
                                     <td><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId %]">Add or remove items</a></td>
                                     <td><a href="/cgi-bin/koha/rotating_collections/transferCollection.pl?colId=[% collectionsLoo.colId %]">Transfer</a></td>
                                     <td><a href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=edit&amp;colId=[% collectionsLoo.colId %]">Edit</a></td>
-                                    <td><a href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=delete&amp;colId=[% collectionsLoo.colId %]">Delete</a></td>
+                                    <td><a class="confirmdelete" href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=delete&amp;colId=[% collectionsLoo.colId %]">Delete</a></td>
                                 </tr>
                             [% END %]
                         </table>
