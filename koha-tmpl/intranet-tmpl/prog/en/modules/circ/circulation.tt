@@ -499,7 +499,7 @@ No patron matched <span class="ex">[% message %]</span>
 
 [% IF ( borrowernumber ) %]
 <div class="yui-g">
-[% IF !noissues || onsite_checkout_forced %]
+[% IF !noissues || Koha.Preference('OnSiteCheckoutsForce') %]
 [% IF ( flagged ) %]
 <div class="yui-u first">
 [% ELSE %]
@@ -575,7 +575,7 @@ No patron matched <span class="ex">[% message %]</span>
 [% IF ( noissues ) %]<div>[% ELSE %]<div class="yui-u">[% END %]
 
     [% IF flagged %]
-      [% IF NOT noissues || ( noissues && onsite_checkout_forced ) %]
+      [% IF NOT noissues || ( noissues && Koha.Preference('OnSiteCheckoutsForce') ) %]
         <div id="circmessages" class="circmessage attention">
       [% ELSE %]
         <h4>Checking out to [% INCLUDE 'patron-title.inc' %]</h4>
@@ -584,7 +584,7 @@ No patron matched <span class="ex">[% message %]</span>
       <h3>
         [% IF noissues %]
           Cannot check out!
-          [% IF onsite_checkout_forced %]
+          [% IF Koha.Preference('OnSiteCheckoutsForce') %]
             <span style="color:red;">Only on-site checkouts are allowed</span>
           [% END %]
         [% ELSE %]
