@@ -499,7 +499,7 @@ No patron matched <span class="ex">[% message %]</span>
 
 [% IF ( borrowernumber ) %]
 <div class="yui-g">
-[% IF !noissues || Koha.Preference('OnSiteCheckoutsForce') %]
+[% IF ( !noissues ) || ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') )%]
 [% IF ( flagged ) %]
 <div class="yui-u first">
 [% ELSE %]
@@ -573,7 +573,7 @@ No patron matched <span class="ex">[% message %]</span>
 </form></div>[% END %]<!-- /unless noissues -->
 
 [% IF ( noissues ) %]
-    [% IF ( Koha.Preference('OnSiteCheckoutsForce') ) %]
+    [% IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) %]
         <div class="yui-u">
     [% ELSE %]
         <div>
@@ -583,22 +583,23 @@ No patron matched <span class="ex">[% message %]</span>
 [% END %]
 
     [% IF flagged %]
-      [% IF NOT noissues || ( noissues && Koha.Preference('OnSiteCheckoutsForce') ) %]
-        <div id="circmessages" class="circmessage attention">
-      [% ELSE %]
-        <h4>Checking out to [% INCLUDE 'patron-title.inc' %]</h4>
-        <div id="circmessages" class="circmessage warning">
-      [% END %]
-      <h3>
-        [% IF noissues %]
-          Cannot check out!
-          [% IF Koha.Preference('OnSiteCheckoutsForce') %]
-            <span class="circ-hlt">Only on-site checkouts are allowed</span>
-          [% END %]
+        [% IF ( noissues ) %]
+            [% IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) %]
+                <div id="circmessages" class="circmessage attention">
+            [% ELSE %]
+                <h4>Checking out to [% INCLUDE 'patron-title.inc' %]</h4>
+                <div id="circmessages" class="circmessage warning">
+            [% END %]
+            <h3>
+                Cannot check out!
+                [% IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) %]
+                    <span class="circ-hlt">Only on-site checkouts are allowed</span>
+                [% END %]
+            </h3>
         [% ELSE %]
-          Attention:
+            <div id="circmessages" class="circmessage attention">
+                <h3>Attention:</h3>
         [% END %]
-      </h3>
 
 		<ul>
 
