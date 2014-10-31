@@ -88,9 +88,8 @@ sub CreateCollection {
     if ( !$title ) {
         return ( 0, 1, "NO_TITLE" );
     }
-    if ( !$description ) {
-        return ( 0, 2, "NO_DESCRIPTION" );
-    }
+
+    $description ||= q{};
 
     my $success = 1;
 
@@ -135,11 +134,10 @@ sub UpdateCollection {
     if ( !$title ) {
         return ( 0, 2, "NO_TITLE" );
     }
-    if ( !$description ) {
-        return ( 0, 3, "NO_DESCRIPTION" );
-    }
 
     my $dbh = C4::Context->dbh;
+
+    $description ||= q{};
 
     my $sth;
     $sth = $dbh->prepare(

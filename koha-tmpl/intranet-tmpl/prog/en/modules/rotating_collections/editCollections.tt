@@ -108,13 +108,11 @@
                                     [% END %]
                                 </li>
                                 <li>
-                                    <label class="required" for="description">Description: </label>
+                                    <label for="description">Description: </label>
                                     [% IF (editColDescription ) %]
-                                        <input type="text" size="50" name="description" value="[% editColDescription %]" required="required" />
-                                        <span class="required">Required</span>
+                                        <input type="text" size="50" name="description" value="[% editColDescription %]" />
                                     [% ELSE %]
-                                        <input type="text" size="50" name="description" required="required" />
-                                        <span class="required">Required</span>
+                                        <input type="text" size="50" name="description" />
                                     [% END %]
                                 </li>
                             </ol>
