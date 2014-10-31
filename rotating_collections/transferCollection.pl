@@ -69,6 +69,7 @@ foreach my $br ( keys %$branches ) {
     $branch{name} = $branches->{$br}->{'branchname'};
     push( @branchoptionloop, \%branch );
 }
+@branchoptionloop = sort {$a->{name} cmp $b->{name}} @branchoptionloop;
 
 ## Get data about collection
 my ( $colId, $colTitle, $colDesc, $colBranchcode ) = GetCollection($colId);
