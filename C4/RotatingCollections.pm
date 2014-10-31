@@ -27,6 +27,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Circulation;
 use C4::Reserves qw(CheckReserves);
+use Koha::Database;
 
 use DBI;
 
@@ -84,9 +85,14 @@ BEGIN {
 sub CreateCollection {
     my ( $title, $description ) = @_;
 
+    my $schema = Koha::Database->new()->schema();
+    my $duplicate_titles = $schema->resultset('Collection')->count({ colTitle => $title });
+
     ## Check for all neccessary parameters
     if ( !$title ) {
         return ( 0, 1, "NO_TITLE" );
+    } elsif ( $duplicate_titles ) {
+        return ( 0, 2, "DUPLICATE_TITLE" );
     }
 
     $description ||= q{};
@@ -127,12 +133,18 @@ Updates a collection
 sub UpdateCollection {
     my ( $colId, $title, $description ) = @_;
 
+    my $schema = Koha::Database->new()->schema();
+    my $duplicate_titles = $schema->resultset('Collection')->count({ colTitle => $title,  -not => { colId => $colId } });
+
     ## Check for all neccessary parameters
     if ( !$colId ) {
         return ( 0, 1, "NO_ID" );
     }
     if ( !$title ) {
         return ( 0, 2, "NO_TITLE" );
+    }
+    if ( $duplicate_titles ) {
+        return ( 0, 3, "DUPLICATE_TITLE" );
     }
 
     my $dbh = C4::Context->dbh;

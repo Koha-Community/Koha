@@ -37,6 +37,8 @@
                     <p>
                         [% IF failureMessage == "NO_TITLE" %]
                             No title entered.
+                        [% ELSIF failureMessage == "DUPLICATE_TITLE" %]
+                            Title already in use.
                         [% ELSIF failureMessage == "NO_DESCRIPTION" %]
                             No description entered.
                         [% ELSE %]
@@ -70,6 +72,8 @@
                     <p>
                         [% IF failureMessage == "NO_ID" %]
                             No collection id given.
+                        [% ELSIF failureMessage == "DUPLICATE_TITLE" %]
+                            Title already in use.
                         [% ELSE %]
                             [% failureMessage %]
                         [% END %]
