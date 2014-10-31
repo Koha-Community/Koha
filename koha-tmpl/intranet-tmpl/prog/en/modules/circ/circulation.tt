@@ -572,7 +572,15 @@ No patron matched <span class="ex">[% message %]</span>
 </fieldset>
 </form></div>[% END %]<!-- /unless noissues -->
 
-[% IF ( noissues ) %]<div>[% ELSE %]<div class="yui-u">[% END %]
+[% IF ( noissues ) %]
+    [% IF ( Koha.Preference('OnSiteCheckoutsForce') ) %]
+        <div class="yui-u">
+    [% ELSE %]
+        <div>
+    [% END %]
+[% ELSE %]
+    <div class="yui-u">
+[% END %]
 
     [% IF flagged %]
       [% IF NOT noissues || ( noissues && Koha.Preference('OnSiteCheckoutsForce') ) %]
@@ -585,7 +593,7 @@ No patron matched <span class="ex">[% message %]</span>
         [% IF noissues %]
           Cannot check out!
           [% IF Koha.Preference('OnSiteCheckoutsForce') %]
-            <span style="color:red;">Only on-site checkouts are allowed</span>
+            <span class="circ-hlt">Only on-site checkouts are allowed</span>
           [% END %]
         [% ELSE %]
           Attention:
