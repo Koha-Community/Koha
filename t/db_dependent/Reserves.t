@@ -47,6 +47,9 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
+# Somewhat arbitrary field chosen for age restriction unit tests. Must be added to db before the framework is cached
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.agerestriction' where tagfield='521' and tagsubfield='a'");
+
 # Setup Test------------------------
 
 # Add branches if not existing
@@ -481,7 +484,7 @@ C4::Context->set_preference( 'AgeRestrictionMarker', 'FSK|PEGI|Age|K' );
 
 #Set the ageRestriction for the Biblio
 my $record = GetMarcBiblio( $bibnum );
-my ( $ageres_tagid, $ageres_subfieldid ) = GetMarcFromKohaField( "biblioitems.agerestriction", '' );
+my ( $ageres_tagid, $ageres_subfieldid ) = GetMarcFromKohaField( "biblioitems.agerestriction" );
 $record->append_fields(  MARC::Field->new($ageres_tagid, '', '', $ageres_subfieldid => 'PEGI 16')  );
 C4::Biblio::ModBiblio( $record, $bibnum, '' );
 
