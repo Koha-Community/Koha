@@ -465,9 +465,9 @@ sub CanBookBeReserved{
     push (@$items,@hostitems);
     }
 
-	my $canReserve;
-    foreach my $item (@$items){
-		$canReserve = CanItemBeReserved($borrowernumber, $item);
+    my $canReserve;
+    foreach my $item (@$items) {
+        $canReserve = CanItemBeReserved( $borrowernumber, $item );
         return 'OK' if $canReserve eq 'OK';
     }
     return $canReserve;

@@ -191,20 +191,21 @@ foreach my $biblionumber (@biblionumbers) {
 
     my $dat = GetBiblioData($biblionumber);
 
-	my $canReserve = CanBookBeReserved($borrowerinfo->{borrowernumber}, $biblionumber);
-	if ($canReserve eq 'OK') {
-		#All is OK and we can continue
-	}
-	elsif ( $canReserve eq 'tooManyReserves' ) {
-		$maxreserves = 1;
+    my $canReserve = CanBookBeReserved( $borrowerinfo->{borrowernumber}, $biblionumber );
+    if ( $canReserve eq 'OK' ) {
+
+        #All is OK and we can continue
     }
-	elsif ( $canReserve eq 'ageRestricted' ) {
-		$template->param( $canReserve => 1 );
-		$biblioloopiter{ $canReserve } = 1;
-	}
-	else {
-		$biblioloopiter{ $canReserve } = 1;
-	}
+    elsif ( $canReserve eq 'tooManyReserves' ) {
+        $maxreserves = 1;
+    }
+    elsif ( $canReserve eq 'ageRestricted' ) {
+        $template->param( $canReserve => 1 );
+        $biblioloopiter{$canReserve} = 1;
+    }
+    else {
+        $biblioloopiter{$canReserve} = 1;
+    }
 
     my $alreadypossession;
     if (not C4::Context->preference('AllowHoldsOnPatronsPossessions') and CheckIfIssuedToPatron($borrowerinfo->{borrowernumber},$biblionumber)) {
