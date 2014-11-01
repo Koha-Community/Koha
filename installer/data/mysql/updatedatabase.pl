@@ -9026,6 +9026,388 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'am', 'language', 'Amharic','2014-10-29')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'am','amh')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'am', 'language', 'am', 'አማርኛ')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'am', 'language', 'en', 'Amharic')");
+
+    $dbh->do("UPDATE language_descriptions SET description = 'لعربية' WHERE subtag = 'ar' AND type = 'language' AND lang = 'ar'");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'az', 'language', 'Azerbaijani','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'az','aze')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'az', 'language', 'az', 'Azərbaycan dili')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'az', 'language', 'en', 'Azerbaijani')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'be', 'language', 'Byelorussian','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'be','bel')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'be', 'language', 'be', 'Беларуская мова')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'be', 'language', 'en', 'Byelorussian')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'bn', 'language', 'Bengali','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'bn','ben')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'bn', 'language', 'bn', 'বাংলা')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'bn', 'language', 'en', 'Bengali')");
+
+    $dbh->do("UPDATE language_descriptions SET description = 'Български' WHERE subtag = 'bg' AND type = 'language' AND lang = 'bg'");
+    $dbh->do("UPDATE language_descriptions SET description = 'Ceština' WHERE subtag = 'cs' AND type = 'language' AND lang = 'cs'");
+    $dbh->do("UPDATE language_descriptions SET description = 'Ελληνικά' WHERE subtag = 'el' AND type = 'language' AND lang = 'el'");
+    $dbh->do("UPDATE language_descriptions SET description = 'Español' WHERE subtag = 'es' AND type = 'language' AND lang = 'es'");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'eu', 'language', 'Basque','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'eu','eus')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'eu', 'language', 'eu', 'Euskera')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'eu', 'language', 'en', 'Basque')");
+
+    $dbh->do("UPDATE language_descriptions SET description = 'فارسى' WHERE subtag = 'fa' AND type = 'language' AND lang = 'fa'");
+    $dbh->do("UPDATE language_descriptions SET description = 'Suomi' WHERE subtag = 'fi' AND type = 'language' AND lang = 'fi'");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'fo', 'language', 'Faroese','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'fo','fao')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'fo', 'language', 'fo', 'Føroyskt')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'fo', 'language', 'en', 'Faroese')");
+
+    $dbh->do("UPDATE language_descriptions SET description = 'Français' WHERE subtag = 'fr' AND type = 'language' AND lang = 'fr'");
+    $dbh->do("UPDATE language_descriptions SET description = 'עִבְרִית' WHERE subtag = 'he' AND type = 'language' AND lang = 'he'");
+    $dbh->do("UPDATE language_descriptions SET description = 'हिन्दी' WHERE subtag = 'hi' AND type = 'language' AND lang = 'hi'");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'is', 'language', 'Icelandic','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'is','ice')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'is', 'language', 'is', 'Íslenska')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'is', 'language', 'en', 'Icelandic')");
+
+    $dbh->do("UPDATE language_descriptions SET description = '日本語' WHERE subtag = 'ja' AND type = 'language' AND lang = 'ja'");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'ka', 'language', 'Kannada','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'ka','kan')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'ka', 'language', 'ka', 'ಕನ್ನಡ')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'ka', 'language', 'en', 'Kannada')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'km', 'language', 'Khmer','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES( 'km','khm')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'km', 'language', 'km', 'ភាសាខ្មែរ')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES( 'km', 'language', 'en', 'Khmer')");
+
+    $dbh->do("UPDATE language_descriptions SET description = '한국어' WHERE subtag = 'ko' AND type = 'language' AND lang = 'ko'");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'ku', 'language', 'Kurdish','2014-05-13')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'ku','kur')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'ku', 'language', 'ku', 'کوردی')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'ku', 'language', 'en', 'Kurdish')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'ku', 'language', 'fr', 'Kurde')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'ku', 'language', 'de', 'Kurdisch')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'ku', 'language', 'es', 'Kurdo')");
+
+    $dbh->do("UPDATE language_descriptions SET description = 'ພາສາລາວ' WHERE subtag = 'lo' AND type = 'language' AND lang = 'lo'");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'mi', 'language', 'Maori','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'mi','mri')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'mi', 'language', 'mi', 'Te Reo Māori')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'mi', 'language', 'en', 'Maori')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'mn', 'language', 'Mongolian','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'mn','mon')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'mn', 'language', 'mn', 'Mонгол')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'mn', 'language', 'en', 'Mongolian')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'mr', 'language', 'Marathi','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'mr','mar')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'mr', 'language', 'mr', 'मराठी')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'mr', 'language', 'en', 'Marathi')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'ms', 'language', 'Malay','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'ms','may')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'ms', 'language', 'ms', 'Bahasa melayu')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'ms', 'language', 'en', 'Malay')");
+
+    $dbh->do("UPDATE language_descriptions SET description = 'Norsk bokmål' WHERE subtag = 'nb' AND type = 'language' AND lang = 'nb'");
+    $dbh->do("UPDATE language_descriptions SET description = 'Norwegian bokmål' WHERE subtag = 'nb' AND type = 'language' AND lang = 'en'");
+    $dbh->do("UPDATE language_descriptions SET description = 'Norvégien bokmål' WHERE subtag = 'nb' AND type = 'language' AND lang = 'fr'");
+    $dbh->do("UPDATE language_descriptions SET description = 'Norwegisch bokmål' WHERE subtag = 'nb' AND type = 'language' AND lang = 'de'");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'ne', 'language', 'Nepali','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'ne','nep')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description)VALUES ( 'ne', 'language', 'ne', 'नेपाली')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'ne', 'language', 'en', 'Nepali')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'pbr', 'language', 'Pangwa','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'pbr','pbr')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'pbr', 'language', 'pbr', 'Ekipangwa')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'pbr', 'language', 'en', 'Pangwa')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'prs', 'language', 'Dari','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'prs','prs')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'prs', 'language', 'prs', 'درى')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'prs', 'language', 'en', 'Dari')");
+
+    $dbh->do("UPDATE language_descriptions SET description = 'Português' WHERE subtag = 'pt' AND type = 'language' AND lang = 'pt'");
+    $dbh->do("UPDATE language_descriptions SET description = 'Român' WHERE subtag = 'ro' AND type = 'language' AND lang = 'ro'");
+    $dbh->do("UPDATE language_descriptions SET description = 'Русский' WHERE subtag = 'ru' AND type = 'language' AND lang = 'ru'");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'rw', 'language', 'Kinyarwanda','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'rw','kin')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'rw', 'language', 'rw', 'Ikinyarwanda')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'rw', 'language', 'en', 'Kinyarwanda')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'sd', 'language', 'Sindhi','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'sd','snd')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'sd', 'language', 'sd', 'سنڌي')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'sd', 'language', 'en', 'Sindhi')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'sk', 'language', 'Slovak','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'sk','slk')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'sk', 'language', 'sk', 'Slovenčina')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'sk', 'language', 'en', 'Slovak')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'sl', 'language', 'Slovene','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'sl','slv')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'sl', 'language', 'sl', 'Slovenščina')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'sl', 'language', 'en', 'Slovene')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'sq', 'language', 'Albanian','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'sq','sqi')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'sq', 'language', 'sq', 'Shqip')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'sq', 'language', 'en', 'Albanian')");
+
+    $dbh->do("UPDATE language_descriptions SET description = 'Cрпски' WHERE subtag = 'sr' AND type = 'language' AND lang = 'sr'");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'sw', 'language', 'Swahili','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'sw','swa')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'sw', 'language', 'sw', 'Kiswahili')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'sw', 'language', 'en', 'Swahili')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'ta', 'language', 'Tamil','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'ta','tam')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'ta', 'language', 'ta', 'தமிழ்')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'ta', 'language', 'en', 'Tamil')");
+
+    $dbh->do("UPDATE language_descriptions SET description = 'Tetun' WHERE subtag = 'tet' AND type = 'language' AND lang = 'tet'");
+    $dbh->do("UPDATE language_descriptions SET description = 'ภาษาไทย' WHERE subtag = 'th' AND type = 'language' AND lang = 'th'");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'tl', 'language', 'Tagalog','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'tl','tgl')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'tl', 'language', 'tl', 'Tagalog')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'tl', 'language', 'en', 'Tagalog')");
+
+    $dbh->do("UPDATE language_descriptions SET description = 'Türkçe' WHERE subtag = 'tr' AND type = 'language' AND lang = 'tr'");
+    $dbh->do("UPDATE language_descriptions SET description = 'Українська' WHERE subtag = 'uk' AND type = 'language' AND lang = 'uk'");
+    $dbh->do("UPDATE language_descriptions SET description = 'اردو' WHERE subtag = 'ur' AND type = 'language' AND lang = 'ur'");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'vi', 'language', 'Vietnamese','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'vi','vie')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'vi', 'language', 'vi', '㗂越')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'vi', 'language', 'en', 'Vietnamese')");
+
+    $dbh->do("UPDATE language_descriptions SET description = '中文' WHERE subtag = 'zh' AND type = 'language' AND lang = 'zh'");
+    $dbh->do("UPDATE language_descriptions SET description = '' WHERE subtag = 'Arab,script' AND type = 'Arab' AND lang = 'العربية'");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'Armn', 'script', 'Armenian','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'Armn', 'script', 'Armn', 'Հայոց այբուբեն')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES( 'Armn', 'script', 'en', 'Armenian')");
+
+    $dbh->do("UPDATE language_descriptions SET description = 'Кирилица' WHERE subtag = 'Cyrl' AND type = 'script' AND lang = 'Cyrl'");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'Ethi', 'script', 'Ethiopic','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'Ethi', 'script', 'Ethi', 'ግዕዝ')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES( 'Ethi', 'script', 'en', 'Ethiopic')");
+
+    $dbh->do("UPDATE language_descriptions SET description = 'Ελληνικό αλφάβητο' WHERE subtag = 'Grek' AND type = 'script' AND lang = 'Grek'");
+    $dbh->do("UPDATE language_descriptions SET description = '简体字' WHERE subtag = 'Hans' AND type = 'script' AND lang = 'Hans'");
+    $dbh->do("UPDATE language_descriptions SET description = '繁體字' WHERE subtag = 'Hant' AND type = 'script' AND lang = 'Hant'");
+    $dbh->do("UPDATE language_descriptions SET description = 'אָלֶף־בֵּית עִבְרִי' WHERE subtag = 'Hebr' AND type = 'script' AND lang = 'Hebr'");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'Jpan', 'script', 'Japanese','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'Jpan', 'script', 'Jpan', '漢字')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES( 'Jpan', 'script', 'en', 'Japanese')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'Knda', 'script', 'Kannada','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'Knda', 'script', 'Knda', 'ಕನ್ನಡ ಲಿಪಿ')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES( 'Knda', 'script', 'en', 'Kannada')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'Kore', 'script', 'Korean','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'Kore', 'script', 'Kore', '한글')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES( 'Kore', 'script', 'en', 'Korean')");
+
+    $dbh->do("UPDATE language_descriptions SET description = 'ອັກສອນລາວ' WHERE subtag = 'Laoo' AND type = 'script' AND lang = 'Laoo'");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'AL', 'region', 'Albania','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'AL', 'region', 'en', 'Albania')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'AL', 'region', 'sq', 'Shqipërisë')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'AZ', 'region', 'Azerbaijan','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'AZ', 'region', 'en', 'Azerbaijan')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'AZ', 'region', 'az', 'Azərbaycan')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'BE', 'region', 'Belgium','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'BE', 'region', 'en', 'Belgium')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'BE', 'region', 'nl', 'België')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'BR', 'region', 'Brazil','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'BR', 'region', 'en', 'Brazil')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'BR', 'region', 'pt', 'Brasil')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'BY', 'region', 'Belarus','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'BY', 'region', 'en', 'Belarus')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'BY', 'region', 'be', 'Беларусь')");
+
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'CA', 'region', 'fr', 'Canada')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'CH', 'region', 'Switzerland','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'CH', 'region', 'en', 'Switzerland')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'CH', 'region', 'de', 'Schweiz')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'CN', 'region', 'China','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'CN', 'region', 'en', 'China')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'CN', 'region', 'zh', '中国')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'CZ', 'region', 'Czech Republic','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'CZ', 'region', 'en', 'Czech Republic')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'CZ', 'region', 'cs', 'Česká republika')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'DE', 'region', 'Germany','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'DE', 'region', 'en', 'Germany')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'DE', 'region', 'de', 'Deutschland')");
+
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'DK', 'region', 'en', 'Denmark')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'ES', 'region', 'Spain','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'ES', 'region', 'en', 'Spain')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'ES', 'region', 'es', 'España')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'FI', 'region', 'Finland','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'FI', 'region', 'en', 'Finland')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'FI', 'region', 'fi', 'Suomi')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'FO', 'region', 'Faroe Islands','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'FO', 'region', 'en', 'Faroe Islands')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'FO', 'region', 'fo', 'Føroyar')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'GR', 'region', 'Greece','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'GR', 'region', 'en', 'Greece')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'GR', 'region', 'el', 'Ελλάδα')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'HR', 'region', 'Croatia','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'HR', 'region', 'en', 'Croatia')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'HR', 'region', 'hr', 'Hrvatska')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'HU', 'region', 'Hungary','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'HU', 'region', 'en', 'Hungary')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'HU', 'region', 'hu', 'Magyarország')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'ID', 'region', 'Indonesia','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'ID', 'region', 'en', 'Indonesia')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'ID', 'region', 'id', 'Indonesia')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'IS', 'region', 'Iceland','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'IS', 'region', 'en', 'Iceland')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'IS', 'region', 'is', 'Ísland')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'IT', 'region', 'Italy','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'IT', 'region', 'en', 'Italy')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'IT', 'region', 'it', 'Italia')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'JP', 'region', 'Japan','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'JP', 'region', 'en', 'Japan')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'JP', 'region', 'ja', '日本')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'KE', 'region', 'Kenya','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'KE', 'region', 'en', 'Kenya')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'KE', 'region', 'rw', 'Kenya')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'KH', 'region', 'Cambodia','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'KH', 'region', 'en', 'Cambodia')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'KH', 'region', 'km', 'កម្ពុជា')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'KP', 'region', 'North Korea','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'KP', 'region', 'en', 'North Korea')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'KP', 'region', 'ko', '조선민주주의인민공화국')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'LK', 'region', 'Sri Lanka','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'LK', 'region', 'en', 'Sri Lanka')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'LK', 'region', 'ta', 'இலங்கை')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'MY', 'region', 'Malaysia','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'MY', 'region', 'en', 'Malaysia')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'MY', 'region', 'ms', 'Malaysia')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'NE', 'region', 'Niger','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'NE', 'region', 'en', 'Niger')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'NE', 'region', 'ne', 'Niger')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'NL', 'region', 'Netherlands','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'NL', 'region', 'en', 'Netherlands')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'NL', 'region', 'nl', 'Nederland')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'NO', 'region', 'Norway','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'NO', 'region', 'en', 'Norway')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'NO', 'region', 'ne', 'Noreg')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'NO', 'region', 'nn', 'Noreg')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'PH', 'region', 'Philippines','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'PH', 'region', 'en', 'Philippines')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'PH', 'region', 'tl', 'Pilipinas')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'PK', 'region', 'Pakistan','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'PK', 'region', 'en', 'Pakistan')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'PK', 'region', 'sd', 'پاكستان')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'PL', 'region', 'Poland','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'PL', 'region', 'en', 'Poland')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'PL', 'region', 'pl', 'Polska')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'PT', 'region', 'Portugal','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'PT', 'region', 'en', 'Portugal')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'PT', 'region', 'pt', 'Portugal')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'RO', 'region', 'Romania','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'RO', 'region', 'en', 'Romania')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'RO', 'region', 'ro', 'România')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'RU', 'region', 'Russia','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'RU', 'region', 'en', 'Russia')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'RU', 'region', 'ru', 'Россия')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'RW', 'region', 'Rwanda','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'RW', 'region', 'en', 'Rwanda')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'RW', 'region', 'rw', 'Rwanda')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'SE', 'region', 'Sweden','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'SE', 'region', 'en', 'Sweden')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'SE', 'region', 'sv', 'Sverige')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'SI', 'region', 'Slovenia','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'SI', 'region', 'en', 'Slovenia')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'SI', 'region', 'sl', 'Slovenija')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'SK', 'region', 'Slovakia','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'SK', 'region', 'en', 'Slovakia')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'SK', 'region', 'sk', 'Slovensko')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'TH', 'region', 'Thailand','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'TH', 'region', 'en', 'Thailand')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'TH', 'region', 'th', 'ประเทศไทย')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'TR', 'region', 'Turkey','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'TR', 'region', 'en', 'Turkey')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'TR', 'region', 'tr', 'Türkiye')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'TW', 'region', 'Taiwan','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'TW', 'region', 'en', 'Taiwan')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'TW', 'region', 'zh', '台灣')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'UA', 'region', 'Ukraine','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'UA', 'region', 'en', 'Ukraine')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'UA', 'region', 'uk', 'Україна')");
+
+    $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'VN', 'region', 'Vietnam','2014-10-30')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'VN', 'region', 'en', 'Vietnam')");
+    $dbh->do("INSERT IGNORE INTO language_descriptions(subtag, type, lang, description) VALUES ( 'VN', 'region', 'vi', 'Việt Nam')");
+
+    print "Upgrade to $DBversion done (Bug 12250: Update descriptions for languages, scripts and regions)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
