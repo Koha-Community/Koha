@@ -101,6 +101,7 @@ sub SearchSuggestion {
             B1.branchname       AS branchnamesuggestedby,
             U1.surname          AS surnamesuggestedby,
             U1.firstname        AS firstnamesuggestedby,
+            U1.cardnumber       AS cardnumbersuggestedby,
             U1.email            AS emailsuggestedby,
             U1.borrowernumber   AS borrnumsuggestedby,
             U1.categorycode     AS categorycodesuggestedby,
