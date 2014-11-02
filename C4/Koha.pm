@@ -1680,6 +1680,7 @@ sub NormalizeISBN {
         elsif ( $format eq 'ISBN-13' ) {
             $isbn = $isbn->as_isbn13();
         }
+        return unless $isbn;
 
         if ($strip_hyphens) {
             $string = $isbn->as_string( [] );
