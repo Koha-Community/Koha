@@ -288,14 +288,15 @@ sub themelanguage {
     push @themes, $hardcoded_theme;
 
     # Try to find first theme for the selected theme/lang, then for fallback/lang
+    my $where = $tmpl =~ /xsl$/ ? 'xslt' : 'modules';
     for my $theme (@themes) {
-        if ( -e "$htdocs/$theme/$lang/modules/$tmpl" ) {
+        if ( -e "$htdocs/$theme/$lang/$where/$tmpl" ) {
             return ( $theme, $lang, uniq( \@themes ) );
         }
     }
     # Otherwise return theme/'en', last resort fallback/'en'
     for my $theme (@themes) {
-        if ( -e "$htdocs/$theme/en/modules/$tmpl" ) {
+        if ( -e "$htdocs/$theme/en/$where/$tmpl" ) {
             return ( $theme, 'en', uniq( \@themes ) );
         }
     }

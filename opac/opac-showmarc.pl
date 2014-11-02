@@ -31,6 +31,7 @@ use C4::Auth;
 use C4::Biblio;
 use C4::ImportBatch;
 use C4::XSLT ();
+use C4::Templates;
 
 my $input       = new CGI;
 my $biblionumber = $input->param('id');
@@ -52,26 +53,13 @@ if(!ref $record) {
 }
 
 if ($view eq 'card' || $view eq 'html') {
-    my $xmlrecord= $importid? $record->as_xml(): GetXmlBiblio($biblionumber);
-    my $xslfile;
-    my $xslfilename;
-    my $htdocs  = C4::Context->config('opachtdocs');
-    my $theme   = C4::Context->preference("opacthemes");
-    my $lang = C4::Languages::getlanguage($input);
-
-    if ($view eq 'card'){
-        $xslfile = "compact.xsl";
-    }
-    else { # must be html
-        $xslfile = 'plainMARC.xsl';
-    }
-    $xslfilename = "$htdocs/$theme/$lang/xslt/$xslfile";
-    $xslfilename = "$htdocs/$theme/en/xslt/$xslfile" unless ( $lang ne 'en' && -f $xslfilename );
-    $xslfilename = "$htdocs/prog/$lang/xslt/$xslfile" unless ( -f $xslfile );
-    $xslfilename = "$htdocs/prog/en/xslt/$xslfile" unless ( $lang ne 'en' && -f $xslfilename );
-
-    my $newxmlrecord = C4::XSLT::engine->transform($xmlrecord, $xslfilename);
-    print $input->header(-charset => 'UTF-8'), Encode::encode_utf8($newxmlrecord);
+    my $xml = $importid ? $record->as_xml(): GetXmlBiblio($biblionumber);
+    my $xsl =  $view eq 'card' ? 'compact.xsl' : 'plainMARC.xsl';
+    my $htdocs = C4::Context->config('opachtdocs');
+    my ($theme, $lang) = C4::Templates::themelanguage($htdocs, $xsl, 'opac', $input);
+    $xsl = "$htdocs/$theme/$lang/xslt/$xsl";
+    print $input->header(-charset => 'UTF-8'),
+          Encode::encode_utf8(C4::XSLT::engine->transform($xml, $xsl));
 }
 else { #view eq marc
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
