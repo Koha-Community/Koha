@@ -2625,7 +2625,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
         <xslo:value-of select="marc:subfield[@code='a']"/>
       </z:index>
       <z:index name="holdingbranch:0">
-        <xslo:value-of select="marc:subfield[@code='b']"/>
+        <xslo:value-of select="marc:subfield[@code='c']"/>
       </z:index>
       <z:index name="location:0">
         <xslo:value-of select="marc:subfield[@code='e']"/>

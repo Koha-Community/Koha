@@ -785,7 +785,7 @@ sub getFacets {
                         {
                             idx   => 'holdingbranch',
                             label => 'HoldingLibrary',
-                            tags  => [qw / 995b /],
+                            tags  => [qw / 995c /],
                         }
                     );
                 }
