@@ -855,7 +855,8 @@ sub AddMember {
     my $dbh = C4::Context->dbh;
 
     # generate a proper login if none provided
-    $data{'userid'} = Generate_Userid($data{'borrowernumber'}, $data{'firstname'}, $data{'surname'}) if $data{'userid'} eq '';
+    $data{'userid'} = Generate_Userid( $data{'borrowernumber'}, $data{'firstname'}, $data{'surname'} )
+      if ( $data{'userid'} eq '' || Check_Userid( $data{'userid'} ) );
 
     # add expiration date if it isn't already there
     unless ( $data{'dateexpiry'} ) {
@@ -917,19 +918,21 @@ sub AddMember {
 =cut
 
 sub Check_Userid {
-    my ($uid,$member) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-        "SELECT * FROM borrowers WHERE userid=? AND borrowernumber != ?");
-    $sth->execute( $uid, $member );
-    if ( (( $uid ne '' ) && ( my $row = $sth->fetchrow_hashref    )) or
-         (( $uid ne '' ) && ( $uid eq C4::Context->config('user') )) ) {
-        return 0;
-    }
-    else {
-        return 1;
-    }
+    my ( $uid, $borrowernumber ) = @_;
+
+    return 1 unless ($uid);
+
+    return 0 if ( $uid eq C4::Context->config('user') );
+
+    my $rs = Koha::Database->new()->schema()->resultset('Borrower');
+
+    my $params;
+    $params->{userid} = $uid;
+    $params->{borrowernumber} = { '!=' => $borrowernumber } if ($borrowernumber);
+
+    my $count = $rs->count( $params );
+
+    return $count ? 0 : 1;
 }
 
 =head2 Generate_Userid
