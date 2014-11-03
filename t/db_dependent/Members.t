@@ -276,15 +276,14 @@ ok (!_find_member($results), "Delete member")
     branchcode   => "MPL",
     dateofbirth  => '',
     dateexpiry   => '9999-12-31',
-    userid       => 'tomasito'
 );
 # Add a new borrower
 my $borrowernumber = AddMember( %data );
-is( Check_Userid( 'tomasito', $borrowernumber ), 1,
+is( Check_Userid( 'tomasito.non', $borrowernumber ), 1,
     'recently created userid -> unique (borrowernumber passed)' );
 is( Check_Userid( 'tomasitoxxx', $borrowernumber ), 1,
     'non-existent userid -> unique (borrowernumber passed)' );
-is( Check_Userid( 'tomasito', '' ), 0,
+is( Check_Userid( 'tomasito.none', '' ), 0,
     'userid exists (blank borrowernumber)' );
 is( Check_Userid( 'tomasitoxxx', '' ), 1,
     'non-existent userid -> unique (blank borrowernumber)' );
@@ -292,12 +291,12 @@ is( Check_Userid( 'tomasitoxxx', '' ), 1,
 # Add a new borrower with the same userid but different cardnumber
 $data{ cardnumber } = "987654321";
 my $new_borrowernumber = AddMember( %data );
-is( Check_Userid( 'tomasito', '' ), 0,
+is( Check_Userid( 'tomasito.none', '' ), 0,
     'userid not unique (blank borrowernumber)' );
-is( Check_Userid( 'tomasito', $borrowernumber ), 0,
-    'userid not unique (first borrowernumber passed)' );
-is( Check_Userid( 'tomasito', $new_borrowernumber ), 0,
+is( Check_Userid( 'tomasito.none', $new_borrowernumber ), 0,
     'userid not unique (second borrowernumber passed)' );
+my $borrower = GetMember( borrowernumber => $new_borrowernumber );
+ok( $borrower->{userid} ne 'tomasito', "Borrower with duplicate userid has new userid generated" );
 
 # Regression tests for BZ12226
 is( Check_Userid( C4::Context->config('user'), '' ), 0,
