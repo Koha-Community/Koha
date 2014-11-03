@@ -35,6 +35,7 @@ my $resultsperpage = $cgi->param('resultsperpage')||C4::Context->preference("Pat
 my $category = $cgi->param('category') || undef;
 my $member = $cgi->param('member') || '';
 my $orderby = $cgi->param('orderby') || undef;
+my $not_attributes = $cgi->param('not_attributes') || undef;
 
 my @categories=C4::Category->all;
 my %categories_display;
@@ -72,8 +73,8 @@ $member =~ s/,//g;   #remove any commas from search string
 $member =~ s/\*/%/g;
 
 if ($member || $category) {
-    my $results = $category ? Search({''=>$member, categorycode=>$category}, $orderby)
-                            : Search($member, $orderby);
+    my $results = $category ? Search({''=>$member, categorycode=>$category}, $orderby, undef, undef, undef, undef, $not_attributes )
+                            : Search($member, $orderby, undef, undef, undef, undef, $not_attributes);
     my $count = $results ? @$results : 0;
 
     my @resultsdata = ();

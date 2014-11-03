@@ -203,7 +203,7 @@ sub _express_member_find {
 }
 
 sub Search {
-    my ( $filter, $orderby, $limit, $columns_out, $search_on_fields, $searchtype ) = @_;
+    my ( $filter, $orderby, $limit, $columns_out, $search_on_fields, $searchtype, $not_attributes ) = @_;
 
     my $search_string;
     my $found_borrower;
@@ -237,7 +237,7 @@ sub Search {
         }
     }
 
-    if ( !$found_borrower && C4::Context->preference('ExtendedPatronAttributes') && $search_string ) {
+    if ( !$found_borrower && C4::Context->preference('ExtendedPatronAttributes') && $search_string && !$not_attributes ) {
         my $matching_records = C4::Members::Attributes::SearchIdMatchingAttribute($search_string);
         if(scalar(@$matching_records)>0) {
             if ( my $fr = ref $filter ) {

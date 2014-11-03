@@ -50,7 +50,7 @@ function add_item(borrowernum,batch_id,type_id){
 <div class="browse">
     Browse by last name:
     [% FOREACH letter IN alphabet.split(' ') %]
-        <a href="/cgi-bin/koha/patroncards/members-search.pl?member=[% letter %]&amp;batch_id=[% batch_id %]">[% letter %]</a>
+        <a href="/cgi-bin/koha/patroncards/members-search.pl?not_attributes=1&amp;member=[% letter %]&amp;batch_id=[% batch_id %]">[% letter %]</a>
     [% END %]
 </div>
 
