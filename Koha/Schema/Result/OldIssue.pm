@@ -95,6 +95,12 @@ __PACKAGE__->table("old_issues");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 onsite_checkout
+
+  data_type: 'integer'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -143,6 +149,8 @@ __PACKAGE__->add_columns(
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
   },
+  "onsite_checkout",
+  { data_type => "integer", default_value => 0, is_nullable => 0 },
 );
 
 =head1 RELATIONS
@@ -188,8 +196,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-09-17 21:06:58
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/ofcOgd+0YhWqMTWEDdaCw
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-11-03 10:40:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lNB9CDFcwG4DjD0pl14mvQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
