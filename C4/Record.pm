@@ -374,6 +374,7 @@ C<$itemnumbers> - a list of itemnumbers to export
 
 sub marc2csv {
     my ($biblios, $id, $itemnumbers) = @_;
+    $itemnumbers ||= [];
     my $output;
     my $csv = Text::CSV::Encoded->new();
 
@@ -388,7 +389,7 @@ sub marc2csv {
     eval $preprocess if ($preprocess);
 
     my $firstpass = 1;
-    if ( $itemnumbers ) {
+    if ( @$itemnumbers ) {
         for my $itemnumber ( @$itemnumbers) {
             my $biblionumber = GetBiblionumberFromItemnumber $itemnumber;
             $output .= marcrecord2csv( $biblionumber, $id, $firstpass, $csv, $fieldprocessing, [$itemnumber] );
