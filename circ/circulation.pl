@@ -621,8 +621,6 @@ $template->param(
     SpecifyDueDate            => $duedatespec_allow,
     CircAutocompl             => C4::Context->preference("CircAutocompl"),
     AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
-    export_remove_fields      => C4::Context->preference("ExportRemoveFields"),
-    export_with_csv_profile   => C4::Context->preference("ExportWithCsvProfile"),
     canned_bor_notes_loop     => $canned_notes,
     debarments                => GetDebarments({ borrowernumber => $borrowernumber }),
     todaysdate                => dt_from_string()->set(hour => 23)->set(minute => 59),

@@ -1,5 +1,8 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% IF Koha.Preference('ExportRemoveFields') OR Koha.Preference('ExportWithCsvProfile') %]
+   [% SET exports_enabled = 1 %]
+[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo;
 [% IF ( unknowuser ) %]
@@ -17,6 +20,7 @@
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min.js"></script>
 [% INCLUDE 'timepicker.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.rowGrouping.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/pages/circulation.js"></script>
 <script type="text/javascript" src="[% themelang %]/js/checkouts.js"></script>
 <script type="text/javascript" src="[% themelang %]/js/holds.js"></script>
 <script type="text/JavaScript">
@@ -33,6 +37,9 @@ var relatives_borrowernumbers = new Array();
 [% FOREACH b IN relatives_borrowernumbers %]
     relatives_borrowernumbers.push("[% b %]");
 [% END %]
+
+var MSG_ADD_MESSAGE = _("Add a new message");
+var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
 
 $(document).ready(function() {
     $('#finesholdsissues').tabs({
@@ -459,18 +466,18 @@ function validate1(date) {
 
                         [% IF ( exports_enabled ) %]
                             <fieldset>
-                                <label for="export_formats"><b>Export checkouts using format:</b></label>
-                                <select name="export_formats" id="export_formats">
+                                <label for="output_format"><b>Export checkouts using format:</b></label>
+                                <select name="output_format" id="output_format">
                                     <option value="iso2709_995">ISO2709 with items</option>
                                     <option value="iso2709">ISO2709 without items</option>
-                                    [% IF ( export_with_csv_profile ) %]
+                                    [% IF Koha.Preference('ExportWithCsvProfile') %]
                                         <option value="csv">CSV</option>
                                     [% END %]
                                 </select>
 
                                <label for="export_remove_fields">Don't export fields:</label> <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% export_remove_fields %]" title="Use for iso2709 exports" />
                                 <input type="hidden" name="op" value="export" />
-                                <input type="hidden" id="export_format" name="format" value="iso2709" />
+                                <input type="hidden" id="output_format" name="output_format" value="iso2709" />
                                 <input type="hidden" id="dont_export_item" name="dont_export_item" value="0" />
                                 <input type="hidden" id="record_type" name="record_type" value="bibs" />
                                 <button class="btn btn-small" id="export_submit"><i class="icon-download-alt"></i> Export</button>
