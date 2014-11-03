@@ -8952,7 +8952,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.044";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(q{
         INSERT IGNORE INTO systempreferences
