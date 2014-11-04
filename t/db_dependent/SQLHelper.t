@@ -10,7 +10,7 @@ use YAML;
 use C4::Debug;
 use C4::SQLHelper qw(:all);
 
-use Test::More tests => 21;
+use Test::More tests => 20;
 
 use_ok('C4::SQLHelper');
 
