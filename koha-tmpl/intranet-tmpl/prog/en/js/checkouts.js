@@ -126,21 +126,45 @@ $(document).ready(function() {
 
     var ymd = $.datepicker.formatDate('yy-mm-dd', new Date());
 
-    var issuesTable;
-    var drawn = 0;
-    issuesTable = $("#issues-table").dataTable({
-        "oLanguage": {
-            "sEmptyTable" : MSG_DT_LOADING_RECORDS,
-        },
-        "bAutoWidth": false,
-        "sDom": "<'row-fluid'<'span6'><'span6'>r>t<'row-fluid'>t",
-        "aoColumns": [
-            {
-                "mDataProp": function( oObj ) {
-                    if ( oObj.issued_today ) {
-                        return "0";
-                    } else {
-                        return "100";
+    $('#issues-table').hide();
+    $('#issues-table-actions').hide();
+    $('#issues-table-load-immediately').change(function(){
+        if ( this.checked && typeof issuesTable === 'undefined') {
+            $('#issues-table-load-now-button').click();
+        }
+    });
+    $('#issues-table-load-now-button').click(function(){
+        LoadIssuesTable();
+        return false;
+    });
+
+    if ( $.cookie("issues-table-load-immediately-" + script) == "true" ) {
+        LoadIssuesTable();
+        $('#issues-table-load-immediately').prop('checked', true);
+    }
+    $('#issues-table-load-immediately').on( "change", function(){
+        $.cookie("issues-table-load-immediately-" + script, $(this).is(':checked'), { expires: 365 });
+    });
+
+    function LoadIssuesTable() {
+        $('#issues-table-loading-message').hide();
+        $('#issues-table').show();
+        $('#issues-table-actions').show();
+
+        issuesTable = $("#issues-table").dataTable({
+            "oLanguage": {
+                "sEmptyTable" : MSG_DT_LOADING_RECORDS,
+            },
+            "bAutoWidth": false,
+            "sDom": "<'row-fluid'<'span6'><'span6'>r>t<'row-fluid'>t",
+            "aoColumns": [
+                {
+                    "mDataProp": function( oObj ) {
+                        if ( oObj.issued_today ) {
+                            return "1" + oObj.timestamp;
+                        } else {
+                            return "0" + oObj.date_due;
+                        }
                     }
                 }
             },
