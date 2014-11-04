@@ -18,13 +18,14 @@
         "sPaginationType": "four_button"
     } ) );
 
-
-    patron_autocomplete({
-        patron_container: $("#basket_creators"),
-        input_autocomplete: $("#find_patron"),
-        patron_input_name: 'created_by',
-        field_to_retrieve: 'borrowernumber'
-    });
+    [% UNLESS order_loop %]
+        patron_autocomplete({
+            patron_container: $("#basket_creators"),
+            input_autocomplete: $("#find_patron"),
+            patron_input_name: 'created_by',
+            field_to_retrieve: 'borrowernumber'
+        });
+    [% END %]
 });
 
  //]]>
