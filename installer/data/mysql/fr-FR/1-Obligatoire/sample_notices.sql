@@ -18,7 +18,108 @@ VALUES
 ('suggestions','AVAILABLE','Suggestion disponible', 'Suggestion d\'achat disponible','cher(e) <<borrowers.firstname>> <<borrowers.surname>>,\n\nVous avez effectué une suggestion d\'achat pour le docuement  <<suggestions.title>> de <<suggestions.author>>.\n\nNous sommes heureux de vous informer que le document que vous aviez demandé est maintenant disponible dans nos collections.\n\nSi vous avez des questions, merci de nous contacter par courriel à l\'adresse <<branches.branchemail>>.\n\nMerci,\n\n<<branches.branchname>>', 'email'),
 ('suggestions','ORDERED','Suggestion commandée', 'Suggestion commandée','Cher(e) <<borrowers.firstname>> <<borrowers.surname>>,\n\nVous avez effectué une demande de suggestion d\'achat sur le docuement <<suggestions.title>> de <<suggestions.author>>.\n\nNous sommes heureux de vous informer que le document que vous avez demandé est maintenant en commande. Le document devrait arriver rapidement dans nos collections.\n\nVous serez averti quand le docuement sera disponible.\n\nSi vous avez des questions, merci de nous contacter à l\'adresse <<branches.branchemail>>\n\nMerci,\n\n<<branches.branchname>>', 'email'),
 ('suggestions','REJECTED','Suggestion rejetée', 'Suggestion d\'achat rejeté','Cher(e) <<borrowers.firstname>> <<borrowers.surname>>,\n\nVous avez fait la demande du document <<suggestions.title>> de <<suggestions.author>>.\n\nla Bibliothèque a examiné votre demande ce jour, et a décidé de ne pas retenir la suggestion pour l\'instant.\n\nLa raison est la suivante: <<suggestions.reason>>\n\nSi vous avez des questions, merci de nous contacter à l\'adresse <<branches.branchemail>>.\n\nMerci,\n\n<<branches.branchname>>', 'email');
-INSERT INTO `letter` (module, code, name, title, content) VALUES ('circulation','RENEWAL','Item Renewal','Renewals','Les documents suivants ont été renouvelés\r\n----\r\n<<biblio.title>>\r\n----\r\nMerci, <<branches.branchname>>.');
+INSERT INTO `letter` (module, code, name, title, content, is_html)
+VALUES ('circulation','ISSUESLIP','Ticket de de prêt','Ticket de prêt', '<h3><<branches.branchname>></h3>
+Prêts à <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
+(<<borrowers.cardnumber>>) <br />
+
+<<today>><br />
+
+<h4>Emprunts</h4>
+<checkedout>
+<p>
+<<biblio.title>> <br />
+Code à barres : <<items.barcode>><br />
+Retour le : <<issues.date_due>><br />
+</p>
+</checkedout>
+
+<h4>Retards</h4>
+<overdue>
+<p>
+<<biblio.title>> <br />
+Codes à barres : <<items.barcode>><br />
+Retour le : <<issues.date_due>><br />
+</p>
+</overdue>
+
+<hr>
+
+<h4 style="text-align: center; font-style:italic;">Nouvelles</h4>
+<news>
+<div class="newsitem">
+<h5 style="margin-bottom: 1px; margin-top: 1px"><b><<opac_news.title>></b></h5>
+<p style="margin-bottom: 1px; margin-top: 1px"><<opac_news.new>></p>
+<p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px">Posted on <<opac_news.timestamp>></p>
+<hr />
+</div>
+</news>', 1),
+('circulation','ISSUEQSLIP','Ticket rapide','Ticket rapide', '<h3><<branches.branchname>></h3>
+Prêts à <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
+(<<borrowers.cardnumber>>) <br />
+
+<<today>><br />
+
+<h4>Emprunts du jour</h4>
+<checkedout>
+<p>
+<<biblio.title>> <br />
+Code à barres : <<items.barcode>><br />
+Retour le : <<issues.date_due>><br />
+</p>
+</checkedout>', 1),
+('circulation','RESERVESLIP','Ticket de réservation','Ticket de réservation', '<h5>Date : <<today>></h5>
+
+<h3> Transfert vers/Réservé à <<branches.branchname>></h3>
+
+<h3><<borrowers.surname>>, <<borrowers.firstname>></h3>
+
+<ul>
+    <li><<borrowers.cardnumber>></li>
+    <li><<borrowers.phone>></li>
+    <li> <<borrowers.address>><br />
+         <<borrowers.address2>><br />
+         <<borrowers.city >>  <<borrowers.zipcode>>
+    </li>
+    <li><<borrowers.email>></li>
+</ul>
+<br />
+<h3>RESERVATIONS</h3>
+<h4><<biblio.title>></h4>
+<h5><<biblio.author>></h5>
+<ul>
+   <li><<items.barcode>></li>
+   <li><<items.itemcallnumber>></li>
+   <li><<reserves.waitingdate>></li>
+</ul>
+<p>Notes :
+<pre><<reserves.reservenotes>></pre>
+</p>
+', 1),
+('circulation','TRANSFERSLIP','Ticket de transfer','Ticket de transfert', '<h5>Date : <<today>></h5>
+
+<h3>Transfert à <<branches.branchname>></h3>
+
+<h3>Titres</h3>
+<h4><<biblio.title>></h4>
+<h5><<biblio.author>></h5>
+<ul>
+   <li><<items.barcode>></li>
+   <li><<items.itemcallnumber>></li>
+</ul>', 1);
+
+INSERT INTO `letter` (`module`,`code`,`branchcode`,`name`,`is_html`,`title`,`content`)
+VALUES (
+'members',  'OPAC_REG_VERIFY',  '',  'Vérification de l''email donné à l''auto-inscription OPAC',  '1',  'Vérification de votre compte',  'Bonjour,
+
+Votre compte de bibliothèque a été créé. Veuillez valider votre adresse email et le processus d''inscription en cliquant sur ce lien:
+
+http://<<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>
+
+Si vous n''êtes pas à l''origine de cette inscription, vous pouvez ignorer ce message.'
+);
+
+INSERT INTO `letter` (module, code, name, title, content) VALUES ('circulation','RENEWAL','Renouvellements','Renouvellements','Les documents suivants ont été renouvelés\r\n----\r\n<<biblio.title>>\r\n----\r\nMerci, <<branches.branchname>>.');
 
 INSERT INTO  letter (module, code, branchcode, name, is_html, title, content)
 VALUES ('members', 'SHARE_INVITE', '', 'Invitation for sharing a list', '0', 'Share list <<listname>>', 'Dear patron,
