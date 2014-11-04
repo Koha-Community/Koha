@@ -40,7 +40,6 @@ subtest 'General Add, Get and Del tests' => sub {
     $dbh->{RaiseError} = 1;
 
     # Create a biblio instance for testing
-    diag("Creating biblio instance for testing.");
     C4::Context->set_preference('marcflavour', 'MARC21');
     my ($bibnum, $bibitemnum) = get_biblio();
 
