@@ -223,7 +223,7 @@ END_SQL
 
 =head2 SetMessagingPreferencesFromDefaults
 
-  C4::Members::Messaging::SetMessagingPreferenceFromDefaults( { borrowernumber => $borrower->{'borrowernumber'}
+  C4::Members::Messaging::SetMessagingPreferencesFromDefaults( { borrowernumber => $borrower->{'borrowernumber'}
                                                                 categorycode   => 'CPL' } );
 
 Given a borrowernumber and a patron category code (from the C<borrowernumber> and C<categorycode> keys
