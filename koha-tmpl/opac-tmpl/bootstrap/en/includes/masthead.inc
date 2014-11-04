@@ -197,9 +197,9 @@
                                     <div class="input-append nolibrarypulldown">
                                 [% END %]
                                 [% IF ( ms_value ) %]
-                                    <input type="text" title="Type search term" class="transl1" name="q" value="[% ms_value |html %]" /><span id="translControl"></span>
+                                    <input type="text" title="Type search term" class="transl1" id = "translControl1" name="q" value="[% ms_value |html %]" /><span id="translControl"></span>
                                 [% ELSE %]
-                                    <input type="text" title="Type search term" class="transl1" name="q" /><span id="translControl"></span>
+                                    <input type="text" title="Type search term" class="transl1" id = "translControl1" name="q" /><span id="translControl"></span>
                                 [% END # /ms_value %]
 
                                 [% UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]

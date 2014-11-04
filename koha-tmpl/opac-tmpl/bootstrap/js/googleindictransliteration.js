@@ -8,7 +8,7 @@
           sourceLanguage: 'en',
           destinationLanguage: ['hi','kn','ml','ta','te'],
           shortcutKey: 'ctrl+g',
-          transliterationEnabled: true
+          transliterationEnabled: false
         };
 
         // Create an instance on TransliterationControl with the required
@@ -17,7 +17,7 @@
             new google.elements.transliteration.TransliterationControl(options);
 
         // Enable transliteration in the textfields with the given ids.
-        var ids = [ "transl1" ];
+        var ids = [ "translControl1" ];
         control.makeTransliteratable(ids);
 
         // Show the transliteration control which can be used to toggle between
