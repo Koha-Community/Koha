@@ -3927,6 +3927,7 @@ sub GetPendingOnSiteCheckouts {
           items.location,
           issues.date_due,
           issues.branchcode,
+          issues.date_due < NOW() AS is_overdue,
           biblio.author,
           biblio.title,
           borrowers.firstname,

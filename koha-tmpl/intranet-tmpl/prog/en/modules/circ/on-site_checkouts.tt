@@ -52,7 +52,11 @@ $(document).ready(function(){
             <tbody>
               [% FOREACH item IN pending_onsite_checkouts %]
                 <tr>
-                  <td><span title="[% item.date_due %]">[% item.date_due | $KohaDates %]</span></td>
+                  <td>
+                    [% IF item.is_overdue %]<span class="overdue">[% END %]
+                    <span title="[% item.date_due %]">[% item.date_due | $KohaDates %]</span>
+                    [% IF item.is_overdue %]</span>[% END %]
+                  </td>
                   <td>
                     <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.borrowernumber %]">[%item.firstname %] [% item.surname %]</a>
                   </td>
