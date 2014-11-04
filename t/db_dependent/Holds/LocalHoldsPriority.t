@@ -26,20 +26,15 @@ $dbh->{RaiseError} = 1;
 
 my $borrowers_count = 5;
 
-# Setup Test------------------------
-# Helper biblio.
-diag("Creating biblio instance for testing.");
+# Create a helper biblio
 my ( $bibnum, $title, $bibitemnum ) = create_helper_biblio();
-
-# Helper item for that biblio.
-diag("Creating item instance for testing.");
+# Create a helper item for the biblio.
 my ( $item_bibnum, $item_bibitemnum, $itemnumber ) =
   AddItem( { homebranch => 'MPL', holdingbranch => 'CPL' }, $bibnum );
 
 my @branchcodes = qw{XXX RPL CPL MPL CPL MPL};
 
 # Create some borrowers
-diag("Creating borrowers.");
 my @borrowernumbers;
 foreach ( 1 .. $borrowers_count ) {
     my $borrowernumber = AddMember(
@@ -57,7 +52,6 @@ my @branches = GetBranchesLoop();
 my $branch   = $branches[0][0]{value};
 
 # Create five item level holds
-diag("Creating holds.");
 my $i = 1;
 foreach my $borrowernumber (@borrowernumbers) {
     AddReserve(
