@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:30+0200\n"
-"PO-Revision-Date: 2014-07-21 12:15+0000\n"
-"Last-Translator: Tiago <trmurakami@gmail.com>\n"
+"PO-Revision-Date: 2014-10-31 23:20+0000\n"
+"Last-Translator: Rafael <rafafernan@uol.com.br>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1405944920.0\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1414797625.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -45,6 +45,8 @@ msgstr "recebendo um pedido."
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqItemSetSubfieldsWhenReceived# Upon receiving items, update their subfields if they were created when placing an order (e.g. o=5|a=\"foo bar\")."
 msgstr ""
+"Ao receber exemplares, atualize seus subcampos caso eles tenham sido criados "
+"ao fazer o pedido (ex. o=5|a=\"foo bar\")."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqViewBaskets# Show baskets"
@@ -105,10 +107,14 @@ msgstr "<br/>Por exemplo:<br/>preço: 947$a|947$c<br/>quantidade: 969$h<br/>cód
 # Acquisitions > Policy
 msgid "acquisitions.pref#MarcFieldsToOrder# Set the mapping values for a new order line created from a MARC record in a staged file."
 msgstr ""
+"Configure o mapeamento de valores para uma nova linha de pedido a partir do "
+"registro MARC no arquivo carregado."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#MarcFieldsToOrder# You can use the following fields: price, quantity, budget_code, discount, sort1, sort2"
 msgstr ""
+"Você pode usar os seguintes campos: price, quantity, budget_code, discount, "
+"sort1, sort2"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# English 2-page"
@@ -505,10 +511,14 @@ msgstr "relink cabeçalhos que foram anteriormente linkados para registros de au
 # Authorities > General
 msgid "authorities.pref#MARCAuthorityControlField008# Use the following text for the contents of MARC21 authority control field 008 position 06-39 (fixed length data elements). Do NOT include the date (position 00-05)."
 msgstr ""
+"Utilize o texto a seguir para o campo MARC (autoridades) de controle 008, "
+"posição 06-39 (dados de comprimento fixo). NÃO inclua a data (posição 00-05)."
 
 # Authorities > General
 msgid "authorities.pref#UNIMARCAuthorityField100# Use the following text for the contents of UNIMARC authority field 100 position 08-35 (fixed length data elements). Do NOT include the date (position 00-07)."
 msgstr ""
+"Utilize o texto a seguir para o campo UNIMARC (autoridades) de controle 100, "
+"posição 08-35 (dados de comprimento fixo). NÃO inclua a data (posição 00-07)."
 
 # Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Don't use"
@@ -577,6 +587,11 @@ msgstr "Quando coincidir o ISBN com a ferramenta de importação de registros,"
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISBN# attempt to match aggressively by trying all variations of the ISBNs in the imported record as a phrase in the ISBN fields of already cataloged records.  Note that this preference has no effect if UseQueryParser is on."
 msgstr ""
+"forçar correspondência através de tentativas de variação no ISBN dos "
+"registros importados. O sistema procura por partes do ISBN que sejam "
+"compatíveis como uma forma de aumentar as possibilidades de encontrar "
+"correspondência. Esta preferência não tem efeito se UseQueryParser estiver "
+"ativada."
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISBN# do"
@@ -700,7 +715,7 @@ msgstr "Redirecionar a página de detalhes do OPAC de registros suprimidos para"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# <br />Restrict the suppression to IP adresses outside of the IP range"
-msgstr ""
+msgstr "Restringir a proibição a endereços IP fora do intervalo definido"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# Don't hide"
@@ -905,6 +920,12 @@ msgstr "Mapear o subcampo MARC"
 # Cataloging > Record Structure
 msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)<br />Examples (for MARC21 records): <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
 msgstr ""
+"para o número de chamada de um exemplar. (Isso pode envolver diferentes "
+"subcampos, por exemplo <code>082ab</code> aparecerá nos subcampos a and b do "
+"082.)<br />Exemplos (para registros MARC21): <strong>Dewey</strong>: "
+"<code>082ab</code> ou <code>092ab</code>; <strong>LOC</strong>: "
+"<code>050ab</code> ou <code>090ab</code>; <strong>do registro do "
+"exemplar</strong>: <code>852hi</code>"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
@@ -1064,7 +1085,7 @@ msgstr "Não permitir"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnDamagedItems# hold requests to be placed on and filled by damaged items."
-msgstr ""
+msgstr "que reservas sejam feitas para exemplares danificados."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnPatronsPossessions# Allow"
@@ -1101,6 +1122,8 @@ msgstr "Não permitir"
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowMultipleIssuesOnABiblio# patrons to check out multiple items from the same record, except for records with subscriptions."
 msgstr ""
+"que usuários emprestem mais de um exemplar do mesmo registro, exceto "
+"periódicos."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowNotForLoanOverride# Allow"
@@ -1149,6 +1172,9 @@ msgstr "Não permitir"
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowRenewalLimitOverride# staff to manually override renewal blocks and renew a checkout when it would go over the renewal limit or be premature with respect to the \"no renew before\" setting in the circulation policy."
 msgstr ""
+"que os funcionários façam renovações que vão além do limite de renovação ou "
+"que contrariem a regra de 'não renovar antes de' definida na política de "
+"circulação."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowReturnToBranch# Allow materials to be returned to"
@@ -1673,6 +1699,8 @@ msgstr "Não automaticamente"
 # Circulation > Holds Policy
 msgid "circulation.pref#ReservesNeedReturns# mark a hold as found and waiting when a hold is placed on a specific item and that item is already checked in."
 msgstr ""
+"marcar uma reserva como encontrada e aguardando quando uma reserva for feita "
+"para um exemplar específico e este exemplar for devolvido."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ReturnBeforeExpiry# Don't require"
@@ -1720,7 +1748,7 @@ msgstr "Exibir"
 
 # Circulation > Self Checkout
 msgid "circulation.pref#SelfCheckReceiptPrompt# the print receipt popup dialog when self checkout is finished"
-msgstr ""
+msgstr "tela para impressão de comprovante quando o empréstimo for realizado"
 
 # Circulation > Self Checkout
 msgid "circulation.pref#SelfCheckTimeout# Time out the current patron's web-based self checkout system login after"
@@ -1777,6 +1805,7 @@ msgstr "Não permitir"
 # Circulation > Interface
 msgid "circulation.pref#SpecifyReturnDate# staff to specify a return date for a check in."
 msgstr ""
+"que funcionários especifiquem uma data de devolução no momento do empréstimo."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# (as branchcodes, separated by commas; if empty, uses all libraries)"
@@ -3153,6 +3182,9 @@ msgstr "Não bloquear"
 # OPAC > Policy
 msgid "opac.pref#BlockExpiredPatronOpacActions# expired patrons from OPAC actions such as placing a hold or renewing.  Note that the setting for a patron category takes priority over this system preference."
 msgstr ""
+"que usuários com carteirinha vencida realizem reserva e renovações via OPAC. "
+"Lembre-se que a configuração de categoria de usuário tem prioridade sobre "
+"esta preferência do sistema."
 
 # OPAC > Appearance
 msgid "opac.pref#COinSinOPACResults# COinS / OpenURL / Z39.88 in OPAC search results.  <br/>Warning: Enabling this feature will slow OPAC search response times."
@@ -3225,6 +3257,8 @@ msgstr "como nome da biblioteca no OPAC."
 # OPAC > Appearance
 msgid "opac.pref#NoLoginInstructions# Show the following HTML on the OPAC login form when a patron is not logged in:"
 msgstr ""
+"Exibir o HTML a seguir na tela de login do OPAC quando um usuário não "
+"estiver logado:"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACBaseURL# . Do not include a trailing slash in the URL. (This must be filled in correctly for RSS, unAPI, and search plugins to work.)"
@@ -3305,6 +3339,8 @@ msgstr "Incluir uma coluna \"Links\" nas abas \"Meu Sumário\" e \"Meu históric
 # OPAC > Appearance
 msgid "opac.pref#OPACMySummaryNote# Note to display on the patron summary page. This note only appears if the patron is logged in:"
 msgstr ""
+"Nota a ser exibida na página de dados do usuário. Esta nota só aparecerá se "
+"o usuário estiver logado:"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACNoResultsFound# <br />Note: You can insert placeholders {QUERY_KW} that will be replaced with the keywords of the query."
@@ -3525,6 +3561,7 @@ msgstr "Não permitir"
 # OPAC > Policy
 msgid "opac.pref#OpacAllowSharingPrivateLists# opac users to share private lists with other patrons."
 msgstr ""
+"usuário do OPAC de compartilhar suas listas privadas com outros usuários."
 
 # OPAC > Features
 msgid "opac.pref#OpacAuthorities# Allow"
@@ -3680,11 +3717,14 @@ msgstr "um aviso no OPAC de que o sistema está em manutenção no lugar da pró
 
 # OPAC > Appearance
 msgid "opac.pref#OpacMaxItemsToDisplay# Display up to"
-msgstr ""
+msgstr "Exibir até"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacMaxItemsToDisplay# items on the biblio detail page (if the biblio has more items than this, a link is displayed instead that allows the user to choose to display all items)."
 msgstr ""
+"exemplares na página de detalhes do registro (caso o registro tenha mais "
+"exemplares que isso, a tela exibirá um link a partir do qual o usuário "
+"poderá escolher exibir todos os exemplares)."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacNav# Show the following HTML on the left hand column of the main page and patron account on the OPAC (generally navigation links):"
@@ -3852,7 +3892,7 @@ msgstr "Exibir"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacSuggestionManagedBy# the name of the staff member who managed a suggestion in OPAC."
-msgstr ""
+msgstr "o nome do funcionário que gerenciou a sugestão no OPAC."
 
 # OPAC > Features
 msgid "opac.pref#OpacTopissue# Allow"
@@ -4309,10 +4349,15 @@ msgstr "Números do cartão dos usuários precisam ser"
 # Patrons
 msgid "patrons.pref#CardnumberLength# If 'cardnumber' is included in the BorrowerMandatoryField list, the minimum length, if not specified here, defaults to one."
 msgstr ""
+"Se o número da carteirinha estiver incluído na lista BorrowerMandatoryField, "
+"o comprimento máximo, caso não seja especificado aqui, será por padrão um."
 
 # Patrons
 msgid "patrons.pref#CardnumberLength# characters long. The length can be a single number to specify an exact length, a range separated by a comma (i.e., 'Min,Max'), or a maximum with no minimum (i.e., ',Max')."
 msgstr ""
+"de comprimento. O comprimento pode ser um único número para especificar um "
+"comprimento exato, um intervalo separado por vírgula (ex. 'min,máx') ou um "
+"máximo sem mínimo (ex. ',máx')."
 
 # Patrons
 msgid "patrons.pref#EnableBorrowerFiles# Do"
@@ -4365,6 +4410,8 @@ msgstr "[% local_currency %]."
 # Patrons
 msgid "patrons.pref#NotifyBorrowerDeparture# Show a notice if the patron is about to expire or has expired"
 msgstr ""
+"Exibir um aviso caso a carteirinha do usuário esteja vencida ou próxima do "
+"vencimento"
 
 # Patrons
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
@@ -4501,14 +4548,16 @@ msgstr "Formulário de Busca"
 # Searching > Search Form
 msgid "searching.pref#AdvancedSearchLanguages# For example, to limit listing to French and Italian, enter <em>ita|fre</em>."
 msgstr ""
+"Por exemplo, para limitar a listagem a apenas francês e italiano, insira "
+"<em>ita|fre</em>."
 
 # Searching > Search Form
 msgid "searching.pref#AdvancedSearchLanguages# ISO 639-2 language codes (separate values with | or ,)."
-msgstr ""
+msgstr "códigos de idiomas ISO 639-2 (separar valores com | ou ,)."
 
 # Searching > Search Form
 msgid "searching.pref#AdvancedSearchLanguages# Limit the languages listed in the advanced search drop-down to the"
-msgstr ""
+msgstr "Limitar os idiomas listados na caixa suspensa da busca avançada a"
 
 # Searching > Search Form
 msgid "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: Item types (<strong>itemtypes</strong>), Collection Codes (<strong>ccode</strong>) and Shelving Location (<strong>loc</strong>)."
@@ -4524,19 +4573,19 @@ msgstr "campos (separar os valores por |). As abas irão aparecer na ordem lista
 
 # Searching > Results Display
 msgid "searching.pref#DisplayLibraryFacets# Show facets for"
-msgstr ""
+msgstr "Exibir facetas para"
 
 # Searching > Results Display
 msgid "searching.pref#DisplayLibraryFacets# both home and holding library"
-msgstr ""
+msgstr "tanto biblioteca de origem como de reserva"
 
 # Searching > Results Display
 msgid "searching.pref#DisplayLibraryFacets# holding library"
-msgstr ""
+msgstr "biblioteca da reserva"
 
 # Searching > Results Display
 msgid "searching.pref#DisplayLibraryFacets# home library"
-msgstr ""
+msgstr "biblioteca de origem"
 
 # Searching > Features
 msgid "searching.pref#EnableSearchHistory# Don't keep"
@@ -4548,7 +4597,7 @@ msgstr "Manter"
 
 # Searching > Features
 msgid "searching.pref#EnableSearchHistory# patron search history in the staff client."
-msgstr ""
+msgstr "histórico de pesquisa do usuário na interface administrativa."
 
 # Searching > Results Display
 msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
@@ -5236,11 +5285,11 @@ msgstr "tools.pref"
 
 # Tools
 msgid "tools.pref#MaxItemsForBatch# Process up to"
-msgstr ""
+msgstr "Processar no máximo"
 
 # Tools
 msgid "tools.pref#MaxItemsForBatch# items in a single modification or deletion batch."
-msgstr ""
+msgstr "exemplares em uma mesma ação de modificação ou exclusão em lote."
 
 # Web services
 msgid "web_services.pref"
@@ -5272,11 +5321,13 @@ msgstr "serviços ILS-DI para todos os usuários do OPAC"
 
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI:AuthorizedIPs# Allow IP addresses"
-msgstr ""
+msgstr "Permitir endereços IP"
 
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI:AuthorizedIPs# to use the ILS-DI services (when enabled). Separate the IP addresses with commas and without spaces. Leave the field blank to allow any IP address."
 msgstr ""
+"utilizarem os serviços ILS-DI (quando ativado). Separar os endereços IP com "
+"vírgulas e sem espaços. Deixe em branco para permitir qualquer endereço IP."
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH# <a href=\"http://www.openarchives.org/pmh/\">OAI-PMH</a> server."
@@ -5309,10 +5360,15 @@ msgstr "atualização automática dos conjuntos OAI-PMH quando um registro é cr
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:ConfFile# . If empty, Koha OAI Server operates in normal mode, otherwise it operates in extended mode. In extended mode, it's possible to parameter other formats than marcxml or Dublin Core. OAI-PMH:ConfFile specify a YAML configuration file which list available metadata formats and XSL file used to create them from marcxml records."
 msgstr ""
+". Se vazio, o servidor OAI Koha irá operar em modo normal. Caso contrário, "
+"será operado em mode avançado. No modo avançado, é possível parametrizar "
+"outros formatos além de marxxml e Dublin Core. OAI-PHH: ConfFile especifica "
+"uma arquivo YAML que lista formatos de metadados disponíveis e arquivos XSL "
+"utilizados para criar a partir dos registros marcxml."
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:ConfFile# YAML OAI Koha server configuration file:"
-msgstr ""
+msgstr "Arquivo de configuração do servidor YAML OAI Koha:"
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:MaxCount# Only return"
@@ -5337,4 +5393,3 @@ msgstr "Retornar somente"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "linhas de um relatório solicitado através dos relatórios do serviço web."
-
