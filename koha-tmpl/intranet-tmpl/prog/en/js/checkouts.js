@@ -147,7 +147,7 @@ $(document).ready(function() {
         $('#issues-table-load-immediately').prop('checked', true);
     }
     $('#issues-table-load-immediately').on( "change", function(){
-        $.cookie("issues-table-load-immediately-" + script, $(this).is(':checked'));
+        $.cookie("issues-table-load-immediately-" + script, $(this).is(':checked'), { expires: 365 });
     });
 
     function LoadIssuesTable() {
