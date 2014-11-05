@@ -26,7 +26,7 @@ use Getopt::Long;
 use Pod::Usage;
 
 my ( $help, $verbose, $confirm, $biblionumbers, $reindex, $filename,
-    $auto_search );
+    $auto_search, $fix_ampersand );
 my $result = GetOptions(
     'h|help'          => \$help,
     'v|verbose'       => \$verbose,
@@ -35,7 +35,12 @@ my $result = GetOptions(
     'reindex'         => \$reindex,
     'f|filename:s'    => \$filename,
     'auto-search'     => \$auto_search,
+    'fix-ampersand'   => \$fix_ampersand,
 ) || pod2usage(1);
+
+# This script only fix ampersand at the moment.
+# It is enabled by default.
+$fix_ampersand = 1;
 
 if ($help) {
     pod2usage(0);
@@ -154,13 +159,13 @@ sub biblios_to_sanitize {
 
 =head1 NAME
 
-batch_sanitize_biblios - This script sanitizes a biblio, replacing '&amp;amp;amp;etc.' with '&amp;' in it.
+sanitize_records - This script sanitizes a record.
 
 =head1 SYNOPSIS
 
-batch_sanitize_biblios.pl [-h|--help] [-v|--verbose] [-c|--confirm] [--biblionumbers=BIBLIONUMBER_LIST] [-f|--filename=FILENAME] [--auto-search] [--reindex]
+sanitize_records.pl [-h|--help] [-v|--verbose] [-c|--confirm] [--biblionumbers=BIBLIONUMBER_LIST] [-f|--filename=FILENAME] [--auto-search] [--reindex] [--fix-ampersand]
 
-Replace '&amp;' by '&' in a record. You can either give some biblionumbers or a file with biblionumbers or ask for an auto-search.
+You can either give some biblionumbers or a file with biblionumbers or ask for an auto-search.
 
 =head1 OPTIONS
 
@@ -192,6 +197,11 @@ Give a biblionumber list using a filename. One biblionumber by line or separate 
 =item B<--auto_search>
 
 Automatically search records containing "&amp;" in biblioitems.marcxml or in the specified fields.
+
+=item B<--fix-ampersand>
+
+Replace '&amp;' by '&' in the records.
+Replace '&amp;amp;amp;etc.' with '&amp;' in the records.
 
 =item B<--reindex>
 

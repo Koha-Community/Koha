@@ -429,7 +429,7 @@ sub nsb_clean {
 SanitizeRecord($marcrecord);
 
 Sanitize a record
-This routine is called in the maintenance script misc/maintenance/batch_sanitize_records.pl.
+This routine is called in the maintenance script misc/maintenance/sanitize_records.pl.
 It cleans any string with '&amp;amp;...', replacing it by '&'
 
 =cut
@@ -444,7 +444,7 @@ sub SanitizeRecord {
     foreach my $field ( $record->fields() ) {
         if ( $field->is_control_field() ) {
             my $value           = $field->data();
-            my $sanitized_value = _entity_clean($value);
+            my $sanitized_value = _clean_ampersand($value);
             $record_modified = 1 if $sanitized_value ne $value;
             $field->update($sanitized_value);
         }
@@ -456,7 +456,7 @@ sub SanitizeRecord {
                   if $url_field eq $field->tag()
                       and $url_subfield eq $subfield->[0];
                 my $value           = $subfield->[1];
-                my $sanitized_value = _entity_clean($value);
+                my $sanitized_value = _clean_ampersand($value);
                 push @new_subfields, $subfield->[0] => $sanitized_value;
                 $record_modified = 1 if $sanitized_value ne $value;
             }
@@ -481,7 +481,7 @@ sub SanitizeRecord {
     return $record, $record_modified;
 }
 
-sub _entity_clean {
+sub _clean_ampersand {
     my ($string) = @_;
     $string =~ s/(&)(amp;)+/$1/g;
     return $string;
