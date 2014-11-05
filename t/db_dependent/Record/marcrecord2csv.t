@@ -1,7 +1,7 @@
 #!/usr/bin/perl;
 
 use Modern::Perl;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::MockModule;
 use MARC::Record;
 use MARC::Field;
@@ -78,6 +78,15 @@ $csv_output = C4::Record::marcrecord2csv( $biblionumber, $csv_profile_id_6, 1, $
 is( $csv_output, q[Title
 "The art of computer programming"
 ], q|TT way: display first subfield a for first field 245 if indicator 1 for field 100 is set| );
+
+$csv_content = q|Title=[% IF fields.100.0.indicator.1 == 1 %][% fields.245.0.a.0 %][% END %]|;
+my $csv_profile_id_7 = insert_csv_profile({ csv_content => $csv_content });
+
+$csv_output = C4::Record::marcrecord2csv( $biblionumber, $csv_profile_id_7, 1, $csv );
+is( $csv_output, q[Title
+"The art of computer programming"
+], q|TT way: display first subfield a for first field 245 if indicator 1 == 1 for field 100 is set| );
+
 
 sub insert_csv_profile {
     my ( $params ) = @_;

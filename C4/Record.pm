@@ -462,7 +462,7 @@ sub marcrecord2csv {
    # Separating the marcfields from the user-supplied headers
     my @csv_structures;
     foreach (@marcfieldsarray) {
-        my @result = split('=', $_);
+        my @result = split('=', $_, 2);
         my $content = ( @result == 2 )
             ? $result[1]
             : $result[0];
@@ -516,7 +516,7 @@ sub marcrecord2csv {
                 my $tag = $tags->[0];
                 if ( $tag->{subfieldtag} ) {
                     my $query = "SELECT liblibrarian FROM marc_subfield_structure WHERE tagfield=? AND tagsubfield=?";
-                    my @results = $dbh->selectrow_array( $query, {}, $tag->{subfieldtag} );
+                    my @results = $dbh->selectrow_array( $query, {}, $tag->{fieldtag}, $tag->{subfieldtag} );
                     push @marcfieldsheaders, $results[0];
                 } else {
                     my $query = "SELECT liblibrarian FROM marc_tag_structure WHERE tagfield=?";
