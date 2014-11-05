@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 69;
+use Test::More tests => 75;
 use Test::MockModule;
 use Test::Warn;
 
@@ -517,6 +517,31 @@ is($p, 2, 'CalculatePriority should now still return priority 2');
 $p = C4::Reserves::CalculatePriority($bibnum, $resdate);
 is($p, 3, 'CalculatePriority should now return priority 3');
 # End of tests for bug 8918
+
+# regression test for bug 12630
+# Now there are 2 reserves on $bibnum
+t::lib::Mocks::mock_preference('AllowHoldDateInFuture', 1);
+my $borrowernumber_tmp_1 = AddMember(
+    firstname =>  'my firstname tmp 1',
+    surname => 'my surname tmp 1',
+    categorycode => 'S',
+    branchcode => 'CPL',
+);
+my $borrowernumber_tmp_2 = AddMember(
+    firstname =>  'my firstname tmp 2',
+    surname => 'my surname tmp 2',
+    categorycode => 'S',
+    branchcode => 'CPL',
+);
+my $date_in_future = dt_from_string();
+$date_in_future = $date_in_future->add_duration(DateTime::Duration->new(days => 1));
+AddReserve('CPL', $borrowernumber_tmp_1, $bibnum, undef, undef, 3, output_pref($date_in_future));
+AddReserve('CPL', $borrowernumber_tmp_2, $bibnum, undef, undef, 4);
+my @r1 = GetReservesFromBorrowernumber( $borrowernumber_tmp_1 );
+my @r2 = GetReservesFromBorrowernumber( $borrowernumber_tmp_2 );
+is( $r1[0]->{priority}, 3, 'priority for hold in future should be correct');
+is( $r2[0]->{priority}, 4, 'priority for hold not in future should be correct');
+# end of tests for bug 12630
 
 # Tests for cancel reserves by users from OPAC.
 $dbh->do('DELETE FROM reserves', undef, ($bibnum));
