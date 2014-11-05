@@ -390,8 +390,33 @@ if ($borrowernumber) {
     $template->param(
         holds_count => Koha::Database->new()->schema()->resultset('Reserve')
           ->count( { borrowernumber => $borrowernumber } ) );
+    my @borrowerreserv = GetReservesFromBorrowernumber($borrowernumber);
 
-    $template->param( adultborrower => 1 ) if ( $borrower->{'category_type'} eq 'A' );
+    my @WaitingReserveLoop;
+    foreach my $num_res (@borrowerreserv) {
+        if ( $num_res->{'found'} && $num_res->{'found'} eq 'W' ) {
+            my $getiteminfo  = GetBiblioFromItemNumber( $num_res->{'itemnumber'} );
+            my $itemtypeinfo = getitemtypeinfo( (C4::Context->preference('item-level_itypes')) ? $getiteminfo->{'itype'} : $getiteminfo->{'itemtype'} );
+            my %getWaitingReserveInfo;
+            $getWaitingReserveInfo{title} = $getiteminfo->{'title'};
+            $getWaitingReserveInfo{biblionumber} =
+              $getiteminfo->{'biblionumber'};
+            $getWaitingReserveInfo{itemtype} = $itemtypeinfo->{'description'};
+            $getWaitingReserveInfo{author}   = $getiteminfo->{'author'};
+            $getWaitingReserveInfo{itemcallnumber} =
+              $getiteminfo->{'itemcallnumber'};
+            $getWaitingReserveInfo{reservedate} =
+              format_date( $num_res->{'reservedate'} );
+            $getWaitingReserveInfo{waitingat} =
+              GetBranchName( $num_res->{'branchcode'} );
+            $getWaitingReserveInfo{waitinghere} = 1
+              if $num_res->{'branchcode'} eq $branch;
+            push( @WaitingReserveLoop, \%getWaitingReserveInfo );
+        }
+    }
+    $template->param( WaitingReserveLoop => \@WaitingReserveLoop );
+    $template->param( adultborrower => 1 )
+      if ( $borrower->{'category_type'} eq 'A' );
 }
 
 my @values;
