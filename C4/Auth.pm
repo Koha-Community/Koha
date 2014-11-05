@@ -467,7 +467,6 @@ sub get_template_and_user {
             OpacCloud                 => C4::Context->preference("OpacCloud"),
             OpacKohaUrl               => C4::Context->preference("OpacKohaUrl"),
             OpacMainUserBlock         => "" . C4::Context->preference("OpacMainUserBlock"),
-            OpacMainUserBlockMobile   => "" . C4::Context->preference("OpacMainUserBlockMobile"),
             OpacNav                   => "" . C4::Context->preference("OpacNav"),
             OpacNavRight              => "" . C4::Context->preference("OpacNavRight"),
             OpacNavBottom             => "" . C4::Context->preference("OpacNavBottom"),
