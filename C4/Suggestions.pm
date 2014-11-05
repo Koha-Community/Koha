@@ -201,9 +201,9 @@ sub SearchSuggestion {
 
 =head2 GetSuggestion
 
-\%sth = &GetSuggestion($ordernumber)
+\%sth = &GetSuggestion($suggestionid)
 
-this function get the detail of the suggestion $ordernumber (input arg)
+this function get the detail of the suggestion $suggestionid (input arg)
 
 return :
     the result of the SQL query as a hash : $sth->fetchrow_hashref.
@@ -211,7 +211,7 @@ return :
 =cut
 
 sub GetSuggestion {
-    my ($ordernumber) = @_;
+    my ($suggestionid) = @_;
     my $dbh           = C4::Context->dbh;
     my $query         = q{
         SELECT *
@@ -219,7 +219,7 @@ sub GetSuggestion {
         WHERE  suggestionid=?
     };
     my $sth = $dbh->prepare($query);
-    $sth->execute($ordernumber);
+    $sth->execute($suggestionid);
     return ( $sth->fetchrow_hashref );
 }
 
