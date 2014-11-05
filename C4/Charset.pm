@@ -113,7 +113,7 @@ sub IsStringUTF8ish {
     my $str = shift;
 
     return 1 if Encode::is_utf8($str);
-    return Encode::decode('UTF-8', $str);
+    return utf8::decode( $str );
 }
 
 =head2 SetUTF8Flag
