@@ -1278,16 +1278,25 @@ sub get_hostitemnumbers_of {
 
 =head2 GetHiddenItemnumbers
 
-    my @itemnumbers_to_hide = GetHiddenItemnumbers(@items);
+    my @itemnumbers_to_hide = GetHiddenItemnumbers({ items => \@items, borcat => $category });
 
 Given a list of items it checks which should be hidden from the OPAC given
 the current configuration. Returns a list of itemnumbers corresponding to
-those that should be hidden.
+those that should be hidden. Optionally takes a borcat parameter for certain borrower types
+to be excluded
 
 =cut
 
 sub GetHiddenItemnumbers {
-    my (@items) = @_;
+    my $params = shift;
+    my $items = $params->{items};
+    if (my $exceptions = C4::Context->preference('OpacHiddenItemsExceptions') and $params->{'borcat'}){
+        foreach my $except (split(/\|/, $exceptions)){
+            if ($params->{'borcat'} eq $except){
+                return; # we dont hide anything for this borrower category
+            }
+        }
+    }
     my @resultitems;
 
     my $yaml = C4::Context->preference('OpacHiddenItems');
@@ -1304,7 +1313,7 @@ sub GetHiddenItemnumbers {
     my $dbh = C4::Context->dbh;
 
     # For each item
-    foreach my $item (@items) {
+    foreach my $item (@$items) {
 
         # We check each rule
         foreach my $field (keys %$hidingrules) {

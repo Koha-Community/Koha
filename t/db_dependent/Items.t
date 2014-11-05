@@ -198,20 +198,20 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     push @items, GetItem( $item2_itemnumber );
 
     # Empty OpacHiddenItems
-    t::lib::Mocks::mock_preference('OpacHiddenItems','');
-    ok( !defined( GetHiddenItemnumbers( @items ) ),
+    C4::Context->set_preference('OpacHiddenItems','');
+    ok( !defined( GetHiddenItemnumbers( { items => \@items } ) ),
         "Hidden items list undef if OpacHiddenItems empty");
 
     # Blank spaces
-    t::lib::Mocks::mock_preference('OpacHiddenItems','  ');
-    ok( scalar GetHiddenItemnumbers( @items ) == 0,
+    C4::Context->set_preference('OpacHiddenItems','  ');
+    ok( scalar GetHiddenItemnumbers( { items => \@items } ) == 0,
         "Hidden items list empty if OpacHiddenItems only contains blanks");
 
     # One variable / value
     $opachiddenitems = "
         withdrawn: [1]";
     t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
-    @hidden = GetHiddenItemnumbers( @items );
+    @hidden = GetHiddenItemnumbers( { items => \@items } );
     ok( scalar @hidden == 1, "Only one hidden item");
     is( $hidden[0], $item1_itemnumber, "withdrawn=1 is hidden");
 
@@ -219,7 +219,8 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     $opachiddenitems = "
         withdrawn: [1,0]";
     t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
-    @hidden = GetHiddenItemnumbers( @items );
+    C4::Context->set_preference( 'OpacHiddenItems', $opachiddenitems );
+    @hidden = GetHiddenItemnumbers( { items => \@items } );
     ok( scalar @hidden == 2, "Two items hidden");
     is_deeply( \@hidden, \@itemnumbers, "withdrawn=1 and withdrawn=0 hidden");
 
@@ -229,13 +230,13 @@ subtest 'GetHiddenItemnumbers tests' => sub {
         homebranch: [$library2->{branchcode}]
     ";
     t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
-    @hidden = GetHiddenItemnumbers( @items );
+    @hidden = GetHiddenItemnumbers( { items => \@items } );
     ok( scalar @hidden == 2, "Two items hidden");
     is_deeply( \@hidden, \@itemnumbers, "withdrawn=1 and homebranch library2 hidden");
 
     # Valid OpacHiddenItems, empty list
     @items = ();
-    @hidden = GetHiddenItemnumbers( @items );
+    @hidden = GetHiddenItemnumbers( { items => \@items } );
     ok( scalar @hidden == 0, "Empty items list, no item hidden");
 
     $schema->storage->txn_rollback;

@@ -85,7 +85,14 @@ if ( ! $record ) {
 my @all_items = GetItemsInfo($biblionumber);
 my @items2hide;
 if (scalar @all_items >= 1) {
-    push @items2hide, GetHiddenItemnumbers(@all_items);
+    my $borcat;
+    if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
+
+        # we need to fetch the borrower info here, so we can pass the category
+        my $borrower = GetMember( borrowernumber => $borrowernumber );
+        $borcat = $borrower->{categorycode};
+    }
+    push @items2hide, GetHiddenItemnumbers({ items => \@all_items, borcat => $botcat });
 
     if (scalar @items2hide == scalar @all_items ) {
         print $query->redirect("/cgi-bin/koha/errors/404.pl");

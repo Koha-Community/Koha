@@ -83,8 +83,17 @@ $biblionumber = int($biblionumber);
 
 my @all_items = GetItemsInfo($biblionumber);
 my @hiddenitems;
-if (scalar @all_items >= 1) {
-    push @hiddenitems, GetHiddenItemnumbers(@all_items);
+if ( scalar @all_items >= 1 ) {
+    my $borcat;
+    if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
+
+        # we need to fetch the borrower info here, so we can pass the category
+        my $borrower = GetMember( borrowernumber => $borrowernumber );
+        $borcat = $borrower->{categorycode};
+    }
+
+    push @hiddenitems,
+      GetHiddenItemnumbers( { items => \@all_items, borcat => $borcat } );
 
     if (scalar @hiddenitems == scalar @all_items ) {
         print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
@@ -233,7 +242,7 @@ if ($session->param('busc')) {
         for (my $i=0;$i<@servers;$i++) {
             my $server = $servers[$i];
             $hits = $results_hashref->{$server}->{"hits"};
-            @newresults = searchResults('opac', '', $hits, $results_per_page, $offset, $arrParamsBusc->{'scan'}, $results_hashref->{$server}->{"RECORDS"});
+            @newresults = searchResults({ 'interface' => 'opac' }, '', $hits, $results_per_page, $offset, $arrParamsBusc->{'scan'}, $results_hashref->{$server}->{"RECORDS"});
         }
         return \@newresults;
     }#searchAgain

@@ -1856,9 +1856,9 @@ sub searchResults {
 
     require C4::Items;
 
-    $search_context = 'opac' if !$search_context || $search_context ne 'intranet';
+    $search_context->{'interface'} = 'opac' if !$search_context->{'interface'} || $search_context->{'interface'} ne 'intranet';
     my ($is_opac, $hidelostitems);
-    if ($search_context eq 'opac') {
+    if ($search_context->{'interface'} eq 'opac') {
         $hidelostitems = C4::Context->preference('hidelostitems');
         $is_opac       = 1;
     }
@@ -1948,6 +1948,7 @@ sub searchResults {
         # add imageurl to itemtype if there is one
         $oldbiblio->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} );
 
+        $oldbiblio->{'authorised_value_images'}  = ($search_context->{'interface'} eq 'opac' && C4::Context->preference('AuthorisedValueImages')) || ($search_context->{'interface'} eq 'intranet' && C4::Context->preference('StaffAuthorisedValueImages')) ? C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $oldbiblio->{'biblionumber'}, $marcrecord ) ) : [];
 		$oldbiblio->{normalized_upc}  = GetNormalizedUPC(       $marcrecord,$marcflavour);
 		$oldbiblio->{normalized_ean}  = GetNormalizedEAN(       $marcrecord,$marcflavour);
 		$oldbiblio->{normalized_oclc} = GetNormalizedOCLCNumber($marcrecord,$marcflavour);
@@ -2079,7 +2080,7 @@ sub searchResults {
                     next;
                 }
                 # hidden based on OpacHiddenItems syspref
-                my @hi = C4::Items::GetHiddenItemnumbers($item);
+                my @hi = C4::Items::GetHiddenItemnumbers({ items=> [ $item ], borcat => $search_context->{category} });
                 if (scalar @hi) {
                     push @hiddenitems, @hi;
                     $hideatopac_count++;
@@ -2208,7 +2209,7 @@ sub searchResults {
 					$other_items->{$key}->{count}++ if $item->{$hbranch};
 					$other_items->{$key}->{location} = $shelflocations->{ $item->{location} };
 					$other_items->{$key}->{description} = $item->{description};
-					$other_items->{$key}->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
+                    $other_items->{$key}->{imageurl} = getitemtypeimagelocation( $search_context->{'interface'}, $itemtypes{ $item->{itype} }->{imageurl} );
                 }
                 # item is available
                 else {
@@ -2219,7 +2220,7 @@ sub searchResults {
                     	$available_items->{$prefix}->{$_} = $item->{$_};
 					}
 					$available_items->{$prefix}->{location} = $shelflocations->{ $item->{location} };
-					$available_items->{$prefix}->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
+                    $available_items->{$prefix}->{imageurl} = getitemtypeimagelocation( $search_context->{'interface'}, $itemtypes{ $item->{itype} }->{imageurl} );
                 }
             }
         }    # notforloan, item level and biblioitem level
@@ -2245,9 +2246,9 @@ sub searchResults {
 
         # XSLT processing of some stuff
         # we fetched the sysprefs already before the loop through all retrieved record!
+        my $interface = $search_context->{'interface'} eq 'opac' ? 'OPAC' : '';
         if (!$scan && $xslfile) {
             $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, $xslsyspref, 1, \@hiddenitems, $sysxml, $xslfile, $lang);
-        # the last parameter tells Koha to clean up the problematic ampersand entities that Zebra outputs
         }
 
         # if biblio level itypes are used and itemtype is notforloan, it can't be reserved either

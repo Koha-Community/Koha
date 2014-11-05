@@ -541,7 +541,7 @@ for (my $i=0;$i<@servers;$i++) {
     if ($server =~/biblioserver/) { # this is the local bibliographic server
         my $hits = $results_hashref->{$server}->{"hits"} // 0;
         my $page = $cgi->param('page') || 0;
-        my @newresults = searchResults('intranet', $query_desc, $hits, $results_per_page, $offset, $scan,
+        my @newresults = searchResults({ 'interface' => 'intranet' }, $query_desc, $hits, $results_per_page, $offset, $scan,
                                        $results_hashref->{$server}->{"RECORDS"});
         $total = $total + $hits;
 

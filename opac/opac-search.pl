@@ -51,6 +51,7 @@ use C4::Koha;
 use C4::Tags qw(get_tags);
 use C4::SocialData;
 use C4::External::OverDrive;
+use C4::Borrowers qw(GetMember);
 
 use Koha::ItemTypes;
 use Koha::Ratings;
@@ -621,6 +622,14 @@ if (not $tag and ( $@ || $error)) {
 # At this point, each server has given us a result set
 # now we build that set for template display
 my @sup_results_array;
+my $search_context = {};
+$search_context->{'interface'} = 'opac';
+if (C4::Context->preference('OpacHiddenItemsExceptions')){
+    # we need to fetch the borrower info here, so we can pass the category
+    my $borrower = GetMember( borrowernumber => $borrowernumber );
+    $search_context->{'category'} = $borrower->{'categorycode'};
+}
+
 for (my $i=0;$i<@servers;$i++) {
     my $server = $servers[$i];
     if ($server && $server =~/biblioserver/) { # this is the local bibliographic server
@@ -632,12 +641,12 @@ for (my $i=0;$i<@servers;$i++) {
                 # because pazGetRecords handles retieving only the records
                 # we want as specified by $offset and $results_per_page,
                 # we need to set the offset parameter of searchResults to 0
-                my @group_results = searchResults( 'opac', $query_desc, $group->{'group_count'},$results_per_page, 0, $scan,
+                my @group_results = searchResults( $search_context, $query_desc, $group->{'group_count'},$results_per_page, 0, $scan,
                                                    $group->{"RECORDS"});
                 push @newresults, { group_label => $group->{'group_label'}, GROUP_RESULTS => \@group_results };
             }
         } else {
-            @newresults = searchResults('opac', $query_desc, $hits, $results_per_page, $offset, $scan,
+            @newresults = searchResults( $search_context, $query_desc, $hits, $results_per_page, $offset, $scan,
                                         $results_hashref->{$server}->{"RECORDS"});
         }
         $hits = 0 unless @newresults;

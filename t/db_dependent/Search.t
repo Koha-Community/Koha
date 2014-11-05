@@ -373,7 +373,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 19, "getRecords generated keyword search for 'salud' matched right number of records");
 
-    my @newresults = searchResults('opac', $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 18, 0, 0,
+    my @newresults = searchResults({'interface' => 'opac'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 18, 0, 0,
         $results_hashref->{'biblioserver'}->{"RECORDS"});
     is(scalar @newresults,18, "searchResults returns requested number of hits");
 
@@ -455,7 +455,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 26, "getRecords generated availability-limited search matched right number of records");
 
-    @newresults = searchResults('opac', $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
+    @newresults = searchResults({'interface'=>'opac'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
         $results_hashref->{'biblioserver'}->{"RECORDS"});
     my $allavailable = 'true';
     foreach my $result (@newresults) {
@@ -593,7 +593,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     # Let's just test a few other bits and bobs, just for fun
 
     ($error, $results_hashref, $facets_loop) = getRecords("Godzina pąsowej róży","Godzina pąsowej róży",[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
-    @newresults = searchResults('intranet', $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
+    @newresults = searchResults({'interface'=>'intranet'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
         $results_hashref->{'biblioserver'}->{"RECORDS"});
     is($newresults[0]->{'alternateholdings_count'}, 1, 'Alternate holdings filled in correctly');
 
@@ -612,7 +612,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     });
 
     ($error, $results_hashref, $facets_loop) = getRecords("TEST12121212","TEST12121212",[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
-    @newresults = searchResults('intranet', $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
+    @newresults = searchResults({'interface'=>'intranet'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
         $results_hashref->{'biblioserver'}->{"RECORDS"});
     ok(!exists($newresults[0]->{norequests}), 'presence of a transit does not block hold request action (bug 10741)');
 
@@ -620,7 +620,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     ( undef, $results_hashref, $facets_loop ) =
         getRecords('ti:punctuation', 'punctuation', [], [ 'biblioserver' ], '19', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
     is($results_hashref->{biblioserver}->{hits}, 1, "search for ti:punctuation returned expected number of records");
-    warning_like { @newresults = searchResults('intranet', $query_desc,
+    warning_like { @newresults = searchResults({'intranet' => 'intranet'}, $query_desc,
                     $results_hashref->{'biblioserver'}->{'hits'}, 20, 0, 0,
                     $results_hashref->{'biblioserver'}->{"RECORDS"}) }
                 qr/^ERROR DECODING RECORD - Tag "50%" is not a valid tag/,
@@ -763,7 +763,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     ( undef, $results_hashref, $facets_loop ) =
         getRecords('ti:marc the large record', '', [], [ 'biblioserver' ], '20', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
     is($results_hashref->{biblioserver}->{hits}, 1, "Can do a search that retrieves an over-large bib record (bug 11096)");
-    @newresults = searchResults('opac', $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 10, 0, 0,
+    @newresults = searchResults({'interface' =>'opac'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 10, 0, 0,
         $results_hashref->{'biblioserver'}->{"RECORDS"});
     is($newresults[0]->{title}, 'Marc the Large Record', 'Able to render the title for over-large bib record (bug 11096)');
     is($newresults[0]->{biblionumber}, '300', 'Over-large bib record has the correct biblionumber (bug 11096)');

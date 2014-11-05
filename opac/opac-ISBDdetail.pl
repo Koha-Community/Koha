@@ -85,7 +85,15 @@ my $marcflavour      = C4::Context->preference("marcflavour");
 
 my @items = GetItemsInfo($biblionumber);
 if (scalar @items >= 1) {
-    my @hiddenitems = GetHiddenItemnumbers(@items);
+    my $borcat;
+    if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
+
+        # we need to fetch the borrower info here, so we can pass the category
+        my $borrower = GetMember( borrowernumber => $borrowernumber );
+        $borcat = $borrower->{categorycode};
+    }
+
+    my @hiddenitems = GetHiddenItemnumbers( { items => \@items, borcat => $borcat });
 
     if (scalar @hiddenitems == scalar @items ) {
         print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
