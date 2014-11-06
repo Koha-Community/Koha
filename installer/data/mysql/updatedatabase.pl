@@ -10630,6 +10630,18 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        INSERT INTO letter (module, code, name, title, content, message_transport_type)
+        VALUES
+        ('suggestions','TO_PROCESS','Notify budget owner', 'A suggestion is ready to be processed','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nA new suggestion is ready to be processed: <<suggestions.title>> by <<suggestions.autho    r>>.\n\nThank you,\n\n<<branches.branchname>>', 'email')
+    |);
+    print "Upgrade to $DBversion done (Bug 13014: Add the TO_PROCESS letter code)\n";
+    SetVersion($DBversion);
+}
+
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
