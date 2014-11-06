@@ -201,7 +201,12 @@ if ($op eq 'save') {
 }
 my $branchloop = GetBranchesLoop($branch);
 
-my $letters = GetLetters({ module => "circulation" });
+my $letters = C4::Letters::GetLettersAvailableForALibrary(
+    {
+        branchcode => $branch,
+        module => "circulation",
+    }
+);
 
 my @line_loop;
 

@@ -50,34 +50,6 @@ use C4::Branch; # GetBranches
 use C4::Letters;
 use C4::Members::Attributes;
 
-# _letter_from_where($branchcode,$module, $code, $mtt)
-# - return FROM WHERE clause and bind args for a letter
-sub _letter_from_where {
-    my ($branchcode, $module, $code, $mtt) = @_;
-    my $sql = q{FROM letter WHERE branchcode = ? AND module = ? AND code = ?};
-    $sql .= q{ AND message_transport_type = ?} if $mtt ne '*';
-    my @args = ( $branchcode || '', $module, $code, ($mtt ne '*' ? $mtt : ()) );
-# Mysql is retarded. cause branchcode is part of the primary key it cannot be null. How does that
-# work with foreign key constraint I wonder...
-
-#   if ($branchcode) {
-#       $sql .= " AND branchcode = ?";
-#       push @args, $branchcode;
-#   } else {
-#       $sql .= " AND branchcode IS NULL";
-#   }
-
-    return ($sql, \@args);
-}
-
-# get_letters($branchcode,$module, $code, $mtt)
-# - return letters with the given $branchcode, $module, $code and $mtt exists
-sub get_letters {
-    my ($sql, $args) = _letter_from_where(@_);
-    my $dbh = C4::Context->dbh;
-    my $letter = $dbh->selectall_hashref("SELECT * $sql", 'message_transport_type', undef, @$args);
-    return $letter;
-}
 # $protected_letters = protected_letters()
 # - return a hashref of letter_codes representing letters that should never be deleted
 sub protected_letters {
@@ -127,13 +99,11 @@ if ( $op eq 'add_validate' or $op eq 'copy_validate' ) {
 if ($op eq 'copy_form') {
     my $oldbranchcode = $input->param('oldbranchcode') || q||;
     my $branchcode = $input->param('branchcode') || q||;
-    my $oldcode = $input->param('oldcode') || $input->param('code');
     add_form($oldbranchcode, $module, $code);
     $template->param(
         oldbranchcode => $oldbranchcode,
         branchcode => $branchcode,
         branchloop => _branchloop($branchcode),
-        oldcode => $oldcode,
         copying => 1,
         modify => 0,
     );
@@ -145,8 +115,7 @@ elsif ( $op eq 'delete_confirm' ) {
     delete_confirm($branchcode, $module, $code);
 }
 elsif ( $op eq 'delete_confirmed' ) {
-    my $mtt = $input->param('message_transport_type');
-    delete_confirmed($branchcode, $module, $code, $mtt);
+    delete_confirmed($branchcode, $module, $code);
     $op = q{}; # next operation is to return to default screen
 }
 else {
@@ -168,7 +137,13 @@ sub add_form {
     my $letters;
     # if code has been passed we can identify letter and its an update action
     if ($code) {
-        $letters = get_letters($branchcode,$module, $code, '*');
+        $letters = C4::Letters::GetLetterTemplates(
+            {
+                branchcode => $branchcode,
+                module     => $module,
+                code       => $code,
+            }
+        );
     }
 
     my $message_transport_types = GetMessageTransportTypes();
@@ -278,8 +253,9 @@ sub add_validate {
         my $is_html = $input->param("is_html_$mtt");
         my $title   = shift @title;
         my $content = shift @content;
-        my $letter = get_letters($branchcode,$oldmodule, $code, $mtt);
+        my $letter = C4::Letters::getletter( $oldmodule, $code, $branchcode, $mtt);
         unless ( $title and $content ) {
+            # Delete this mtt if no title or content given
             delete_confirmed( $branchcode, $oldmodule, $code, $mtt );
             next;
         }
@@ -310,7 +286,7 @@ sub add_validate {
 sub delete_confirm {
     my ($branchcode, $module, $code) = @_;
     my $dbh = C4::Context->dbh;
-    my $letter = get_letters($branchcode, $module, $code, '*');
+    my $letter = C4::Letters::getletter($module, $code, $branchcode);
     my @values = values %$letter;
     $template->param(
         branchcode => $branchcode,
@@ -324,9 +300,14 @@ sub delete_confirm {
 
 sub delete_confirmed {
     my ($branchcode, $module, $code, $mtt) = @_;
-    my ($sql, $args) = _letter_from_where($branchcode, $module, $code, $mtt);
-    my $dbh    = C4::Context->dbh;
-    $dbh->do("DELETE $sql", undef, @$args);
+    C4::Letters::DelLetter(
+        {
+            branchcode => $branchcode,
+            module     => $module,
+            code       => $code,
+            mtt        => $mtt
+        }
+    );
     # setup default display for screen
     default_display($branchcode);
     return;

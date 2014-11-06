@@ -53,7 +53,7 @@ Used to get letters with a given letter code.
 our ( $query, $response ) = C4::Service->init( tools => 'edit_notices' );
 
 sub get_letters {
-    my $letters = GetLetters({ code => $query->param('code') });
+    my $letters = GetLetters({ code => $query->param('code'), branchcode => $query->param('branchcode') });
     $response->param( letters => $letters );
     C4::Service->return_success( $response );
 }

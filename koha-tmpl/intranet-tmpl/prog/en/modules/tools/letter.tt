@@ -53,23 +53,21 @@ $(document).ready(function() {
 
         // Test if code already exists in DB
         var new_lettercode = $("#code").val();
-        [% IF copy_form %]
-          if ( new_lettercode == '[% code %]' ) {
-            alert( _("Please change the code.") );
-            return false;
-          }
-        [% END %]
-
+        var new_branchcode = $("#branch").val();
         [% IF ( add_form and code ) # IF edit %]
           if ( new_lettercode != '[% code %]' ) {
         [% END %]
           $.ajax({
-            data: { code: new_lettercode },
+            data: { code: new_lettercode, branchcode: new_branchcode },
             type: 'GET',
             url: '/cgi-bin/koha/svc/letters/',
             success: function (data) {
               if ( data.letters.length > 0 ) {
-                alert( _("This letter code is already used for another letter.") );
+                if( new_branchcode == '' ) {
+                    alert( _("A default letter with the code '%s' already exists.").format(new_lettercode) );
+                } else {
+                    alert( _("A letter with the code '%s' already exists for '%s'.").format(new_lettercode, new_branchcode) );
+                }
                 return false;
               } else {
                 $("#add_notice").submit();
@@ -333,13 +331,15 @@ $(document).ready(function() {
                 </select>
             </li>
             <li>
-              <label for="code" class="required">Code:</label>
-              <input type="text" id="code" name="code" size="20" maxlength="20" value="[% code %]" required="required"/>
-              <span class="required">Required</span>
-              [% IF copying %]
-                You must change this code to reflect the copy.
+              [% IF adding %]
+                  <label for="code" class="required">Code:</label>
+                  <input type="text" id="code" name="code" size="20" maxlength="20" value="" required="required"/>
+                  <span class="required">Required</span>
+              [% ELSE %]
+                  <label for="code">Code:</label>
+                  <input type="hidden" id="code" name="code" size="20" maxlength="20" value="[% code %]" required="required"/>
+                  [% code %]
               [% END %]
-              <input type="hidden" name="oldcode" value="[% oldcode %]" />
             </li>
             <li>
               <label for="name" class="required">Name:</label>
@@ -448,7 +448,6 @@ $(document).ready(function() {
 		<input type="hidden" name="branchcode" value="[% branchcode %]" />
 		<input type="hidden" name="code" value="[% code %]" />
 		<input type="hidden" name="module" value="[% module %]" />
-        <input type="hidden" name="message_transport_type" value="*" />
                 <input type="submit" value="Yes, delete" class="approve" />
 				</form>
 

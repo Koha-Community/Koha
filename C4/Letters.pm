@@ -44,7 +44,7 @@ BEGIN {
     $VERSION = 3.07.00.049;
     @ISA = qw(Exporter);
     @EXPORT = qw(
-        &GetLetters &GetPreparedLetter &GetWrappedLetter &addalert &getalert &delalert &findrelatedto &SendAlerts &GetPrintMessages &GetMessageTransportTypes
+        &GetLetters &GetLettersAvailableForALibrary &GetLetterTemplates &DelLetter &GetPreparedLetter &GetWrappedLetter &addalert &getalert &delalert &findrelatedto &SendAlerts &GetPrintMessages &GetMessageTransportTypes
     );
 }
 
@@ -75,6 +75,7 @@ sub GetLetters {
     my ($filters) = @_;
     my $module    = $filters->{module};
     my $code      = $filters->{code};
+    my $branchcode = $filters->{branchcode};
     my $dbh       = C4::Context->dbh;
     my $letters   = $dbh->selectall_arrayref(
         q|
@@ -84,12 +85,118 @@ sub GetLetters {
         |
           . ( $module ? q| AND module = ?| : q|| )
           . ( $code   ? q| AND code = ?|   : q|| )
+          . ( defined $branchcode   ? q| AND branchcode = ?|   : q|| )
           . q| GROUP BY code ORDER BY name|, { Slice => {} }
         , ( $module ? $module : () )
         , ( $code ? $code : () )
+        , ( defined $branchcode ? $branchcode : () )
     );
 
     return $letters;
+}
+
+=head2 GetLetterTemplates
+
+    my $letter_templates = GetLetterTemplates(
+        {
+            module => 'circulation',
+            code => 'my code',
+            branchcode => 'CPL', # '' for default,
+        }
+    );
+
+    Return a hashref of letter templates.
+    The key will be the message transport type.
+
+=cut
+
+sub GetLetterTemplates {
+    my ( $params ) = @_;
+
+    my $module    = $params->{module};
+    my $code      = $params->{code};
+    my $branchcode = $params->{branchcode};
+    my $dbh       = C4::Context->dbh;
+    my $letters   = $dbh->selectall_hashref(
+        q|
+            SELECT module, code, branchcode, name, is_html, title, content, message_transport_type
+            FROM letter
+            WHERE module = ?
+            AND code = ?
+            and branchcode = ?
+        |
+        , 'message_transport_type'
+        , undef
+        , $module, $code, $branchcode
+    );
+
+    return $letters;
+}
+
+=head2 GetLettersAvailableForALibrary
+
+    my $letters = GetLettersAvailableForALibrary(
+        {
+            branchcode => 'CPL', # '' for default
+            module => 'circulation',
+        }
+    );
+
+    Return an arrayref of letters, sorted by name.
+    If a specific letter exist for the given branchcode, it will be retrieve.
+    Otherwise the default letter will be.
+
+=cut
+
+sub GetLettersAvailableForALibrary {
+    my ($filters)  = @_;
+    my $branchcode = $filters->{branchcode};
+    my $module     = $filters->{module};
+
+    croak "module should be provided" unless $module;
+
+    my $dbh             = C4::Context->dbh;
+    my $default_letters = $dbh->selectall_arrayref(
+        q|
+            SELECT module, code, branchcode, name
+            FROM letter
+            WHERE 1
+        |
+          . q| AND branchcode = ''|
+          . ( $module ? q| AND module = ?| : q|| )
+          . q| ORDER BY name|, { Slice => {} }
+        , ( $module ? $module : () )
+    );
+
+    my $specific_letters;
+    if ($branchcode) {
+        $specific_letters = $dbh->selectall_arrayref(
+            q|
+                SELECT module, code, branchcode, name
+                FROM letter
+                WHERE 1
+            |
+              . q| AND branchcode = ?|
+              . ( $module ? q| AND module = ?| : q|| )
+              . q| ORDER BY name|, { Slice => {} }
+            , $branchcode
+            , ( $module ? $module : () )
+        );
+    }
+
+    my %letters;
+    for my $l (@$default_letters) {
+        $letters{ $l->{code} } = $l;
+    }
+    for my $l (@$specific_letters) {
+        # Overwrite the default letter with the specific one.
+        $letters{ $l->{code} } = $l;
+    }
+
+    return [ map { $letters{$_} }
+          sort { $letters{$a}->{name} cmp $letters{$b}->{name} }
+          keys %letters ];
+
 }
 
 # FIXME: using our here means that a Plack server will need to be
@@ -128,6 +235,38 @@ sub getletter {
     $line->{'content-type'} = 'text/html; charset="UTF-8"' if $line->{is_html};
     $letter{$module}{$code}{$branchcode}{$message_transport_type} = $line;
     return { %$line };
+}
+
+=head2 DelLetter
+
+    DelLetter(
+        {
+            branchcode => 'CPL',
+            module => 'circulation',
+            code => 'my code',
+            [ mtt => 'email', ]
+        }
+    );
+
+    Delete the letter. The mtt parameter is facultative.
+    If not given, all templates mathing the other parameters will be removed.
+
+=cut
+
+sub DelLetter {
+    my ($params)   = @_;
+    my $branchcode = $params->{branchcode};
+    my $module     = $params->{module};
+    my $code       = $params->{code};
+    my $mtt        = $params->{mtt};
+    my $dbh        = C4::Context->dbh;
+    $dbh->do(q|
+        DELETE FROM letter
+        WHERE branchcode = ?
+          AND module = ?
+          AND code = ?
+    | . ( $mtt ? q| AND message_transport_type = ?| : q|| )
+    , undef, $branchcode, $module, $code, ( $mtt ? $mtt : () ) );
 }
 
 =head2 addalert ($borrowernumber, $type, $externalid)
