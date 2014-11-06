@@ -128,6 +128,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('finesMode','test','off|test|production','Choose the fines mode, \'off\', \'test\' (emails admin report) or \'production\' (accrue overdue fines).  Requires accruefines cronjob.','Choice'),
 ('FRBRizeEditions','0','','If ON, Koha will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages','YesNo'),
 ('gist','0','','Default Goods and Services tax rate NOT in %, but in numeric form (0.12 for 12%), set to 0 to disable GST','Integer'),
+('GoogleIndicTransliteration','0','','GoogleIndicTransliteration on the OPAC Masthead.','YesNo'),
 ('GoogleJackets','0',NULL,'if ON, displays jacket covers from Google Books API','YesNo'),
 ('hidelostitems','0','','If ON, disables display of\"lost\" items in OPAC.','YesNo'),
 ('HidePatronName','0','','If this is switched on, patron\'s cardnumber will be shown instead of their name on the holds and catalog screens','YesNo'),
