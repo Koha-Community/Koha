@@ -48,10 +48,9 @@ __PACKAGE__->table("collections");
 
   accessor: 'col_branchcode'
   data_type: 'varchar'
+  is_foreign_key: 1
   is_nullable: 1
-  size: 4
-
-branchcode for branch where item should be held.
+  size: 10
 
 =cut
 
@@ -77,8 +76,9 @@ __PACKAGE__->add_columns(
   {
     accessor => "col_branchcode",
     data_type => "varchar",
+    is_foreign_key => 1,
     is_nullable => 1,
-    size => 4,
+    size => 10,
   },
 );
 
@@ -94,9 +94,31 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("colId");
 
+=head1 RELATIONS
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-18 13:01:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4QFGZYwbv0aj6eXdn7vO9A
+=head2 col_branchcode
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Branch>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "col_branchcode",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "colBranchcode" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-11-06 15:26:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gb7EYny5ULsZw8rYQQ/hjA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
