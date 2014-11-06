@@ -102,7 +102,7 @@ my $b = Koha::Acquisition::Bookseller->fetch({id => $id_supplier1});
 is( $b,
     undef, "Supplier1  has been deleted - id_supplier1 $id_supplier1 doesnt exist anymore" );
 
-#Test GetBookSeller
+#Test get bookseller
 my @bookseller2 = Koha::Acquisition::Bookseller->search({name => $sample_supplier2->{name} });
 is( scalar(@bookseller2), 1, "Get only  Supplier2" );
 $bookseller2[0] = field_filter( $bookseller2[0] );
@@ -140,7 +140,7 @@ is( $bookseller1fromid, undef,
 $bookseller1fromid = Koha::Acquisition::Bookseller->fetch({ id => $id_supplier1});
 $bookseller1fromid = field_filter($bookseller1fromid);
 is_deeply( $bookseller1fromid, $sample_supplier1,
-    "Get Supplier1 (GetBookSellerFromId)" );
+    "Get Supplier1 (fetch a bookseller by id)" );
 
 #Test basket_count
 $bookseller1fromid = Koha::Acquisition::Bookseller->fetch({ id => $id_supplier1});
