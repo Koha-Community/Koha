@@ -9005,68 +9005,6 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.17.00.036";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do("DELETE FROM systempreferences WHERE variable='OpacShowLibrariesPulldownMobile'");
-    print "Upgrade to $DBversion done ( Bug 12513 - PROG/CCSR deprecation: Remove OpacShowLibrariesPulldownMobile system preference )\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.17.00.037";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do("DELETE FROM systempreferences WHERE variable='OpacMainUserBlockMobile'");
-    print "Upgrade to $DBversion done ( Bug 12246 - PROG/CCSR deprecation: Remove OpacMainUserBlockMobile system preference )\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.17.00.038";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do("DELETE FROM systempreferences WHERE variable='OPACMobileUserCSS'");
-    print "Upgrade to $DBversion done ( Bug 12245 - PROG/CCSR deprecation: Remove OPACMobileUserCSS system preference )\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.17.00.039";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do("INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES
-    ('OPACFallback', 'prog', 'bootstrap|prog', 'Define the fallback theme for the OPAC interface.', 'Themes')");
-    print "Upgrade to $DBversion done (Bug 12539 - PROG/CCSR deprecation: Remove hardcoded theme from C4/Templates.pm)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.17.00.040";
-if ( CheckVersion($DBversion) ) {
-    my $opac_theme = C4::Context->preference( 'opacthemes' );
-    if ( $opac_theme eq 'prog' || $opac_theme eq 'ccsr' ) {
-        $dbh->do("UPDATE systempreferences SET value='bootstrap' WHERE variable='opacthemes'");
-    }
-    print "Upgrade to $DBversion done (Bug 12223: 'prog' and 'ccsr' themes removed)\n";
-    SetVersion($DBversion);
-}
-
-$DBversion = "3.17.00.041";
-if ( CheckVersion($DBversion) ) {
-    print "Upgrade to $DBversion done (Bug 11346: Deprecate the 'prog' and 'CCSR' themes)\n";
-    SetVersion($DBversion);
-}
-
-$DBversion = "3.17.00.042";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do("DELETE FROM systempreferences WHERE variable='yuipath'");
-    print "Upgrade to $DBversion done (Bug 12494: Remove yuipath system preference)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.17.00.043";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do("
-        ALTER TABLE aqorders
-        ADD COLUMN cancellationreason TEXT DEFAULT NULL AFTER datecancellationprinted
-    ");
-    print "Upgrade to $DBversion done (Bug 7162: Add aqorders.cancellationreason)\n";
-    SetVersion ($DBversion);
-}
-
 $DBversion = "3.17.00.XXX";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
