@@ -4,18 +4,18 @@
 #
 # This file is part of Koha.
 #
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
 #
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with Koha; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
 use Test::More qw(no_plan);
@@ -35,7 +35,7 @@ my @trans_notices_files = qw(
 );
 
 ok(
-    open( my $ref_fh, "<$root_dir/$base_notices_file" ),
+    open( my $ref_fh, "<", "$root_dir/$base_notices_file" ),
     "Open reference sample notices file $root_dir/$base_notices_file" );
 my $ref_notice = get_notices_from_file( $ref_fh );
 my @ref_notices = sort { lc $a cmp lc $b } keys %$ref_notice;
@@ -66,7 +66,7 @@ sub get_notices_from_file {
 sub compare_notices {
     my $trans_file = shift;
     ok(
-       open( my $trans_fh, "<$root_dir/$trans_file" ),
+       open( my $trans_fh,"<", "$root_dir/$trans_file" ),
        "Open translated sample notices file $root_dir/$trans_file" );
     my $trans_notice = get_notices_from_file( $trans_fh );
     use YAML;
