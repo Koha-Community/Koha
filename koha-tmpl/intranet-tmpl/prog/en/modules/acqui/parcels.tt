@@ -70,7 +70,7 @@
             <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
             <input type="hidden" name="op" value="confirm" />
             <input type="hidden" name="invoice" value="[% invoicenumber %]" />
-            <input type="hidden" name="shipmentdate" value="[% shipmentdate %]" />
+            <input type="hidden" name="shipmentdate" value="[% shipmentdate | $KohaDates %]" />
             <input type="hidden" name="shipmentcost" value="[% shipmentcost %]" />
             <input type="hidden" name="shipmentcost_budgetid" value="[% shipmentcost_budgetid %]" />
             <input type="submit" class="button" value="Create new invoice anyway" />
