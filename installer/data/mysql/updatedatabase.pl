@@ -9408,8 +9408,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
-$DBversion = "3.15.00.XXX";
+$DBversion = "3.17.00.050";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         INSERT INTO permissions (module_bit, code, description) VALUES
@@ -9418,10 +9417,6 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 12403: Add permission tools_records_batchdelitem)\n";
     SetVersion($DBversion);
 }
-
-
-
-
 
 =head1 FUNCTIONS
 
