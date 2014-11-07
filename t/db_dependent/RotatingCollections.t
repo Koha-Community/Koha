@@ -1,8 +1,23 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 
-use Test::More tests => 41;
+use Test::More tests => 52;
 use C4::Context;
 use C4::Branch;
 use C4::Biblio;
@@ -48,34 +63,43 @@ $dbh->do(q|DELETE FROM branchcategories|);
 my $collections     = GetCollections();
 my $countcollection = scalar(@$collections);
 
-is( CreateCollection( 'Collection1', 'Description1' ),
-    1, "All parameters have been given - Collection 1 added" );
+my ($success,$errorCode,$errorMessage);
+
+($success,$errorCode,$errorMessage) = CreateCollection( 'Collection1', 'Description1' );
+is( $success, 1, "All parameters have been given - Collection 1 added" );
+ok( !defined $errorCode && !defined $errorMessage,
+    "Collection added, no error code or message");
 my $collection_id1 = $dbh->last_insert_id( undef, undef, 'collections', undef );
-is( CreateCollection( 'Collection2', 'Description2' ),
-    1, "All parameters have been given - Collection 2 added" );
+
+($success,$errorCode,$errorMessage) = CreateCollection( 'Collection2', 'Description2' );
+is( $success, 1, "All parameters have been given - Collection 2 added" );
+ok( !defined $errorCode && !defined $errorMessage,
+    "Collection added, no error code or message");
 my $collection_id2 = $dbh->last_insert_id( undef, undef, 'collections', undef );
+
 $collections = GetCollections();
-is(
-    scalar(@$collections),
-    $countcollection + 2,
-    "Collection1 and Collection2 have been added"
-);
-my $collection = CreateCollection('Collection');
-is( $collection, 'No Description Given', "The field description is missing" );
-$collection = CreateCollection();
-is(
-    $collection,
-    'No Title Given',
-    "The field description and title is missing"
-);
+is( scalar(@$collections), $countcollection + 2,
+    "Collection1 and Collection2 have been added" );
+
+($success,$errorCode,$errorMessage) = CreateCollection('Collection3');
+is( $success, 1, "Collections can be created without description" );
+ok( !defined $errorCode && !defined $errorMessage,
+    "Collection added, no error code or message");
+my $collection_id3 = $dbh->last_insert_id( undef, undef, 'collections', undef );
+
+($success,$errorCode,$errorMessage) = CreateCollection();
+is( $success, 0, "Title missing, fails to create collection" );
+is( $errorCode, 1, "Title missing, error code is 1" );
+is( $errorMessage, 'NO_TITLE', "Title missing, error message is NO_TITLE" );
+
 $collections = GetCollections();
-is( scalar(@$collections), $countcollection + 2, "No collection added" );
+is( scalar(@$collections), $countcollection + 3, "Only one collection added" );
 
 #FIXME, as the id is auto incremented, two similar Collections (same title /same description) can be created
 #$collection1 = CreateCollection('Collection1','Description1');
 
 #Test GetCollections
-$collection = GetCollections();
+my $collection = GetCollections();
 is_deeply(
     $collections,
     [
@@ -90,37 +114,36 @@ is_deeply(
             colTitle      => 'Collection2',
             colDesc       => 'Description2',
             colBranchcode => undef
+        },
+        {
+            colId         => $collection_id3,
+            colTitle      => 'Collection3',
+            colDesc       => '',
+            colBranchcode => undef
         }
+
     ],
     'All Collections'
 );
 
 #Test UpdateCollection
-is(
-    UpdateCollection(
-        $collection_id2,
-        'Collection2 modified',
-        'Description2 modified'
-    ),
-    1,
-    "Collection2 has been modified"
-);
+($success,$errorCode,$errorMessage) =
+    UpdateCollection( $collection_id2, 'Collection2bis', undef );
+is( $success, 1, "UpdateCollection succeeds without description");
 
-#FIXME : The following test should pass, currently, with a wrong id UpdateCollection returns 1 even if nothing has been modified
-#is(UpdateCollection(-1,'Collection2 modified','Description2 modified'),
-#   0,
-#   "UpdateCollection with a wrong id");
-is(
-    UpdateCollection( 'Collection', 'Description' ),
-    'No Description Given',
-    "UpdateCollection without description"
-);
-is(
-    UpdateCollection( 'Description' ),
-    'No Title Given',
-    "UpdateCollection without title"
-);
-is( UpdateCollection(), 'No Id Given', "UpdateCollection without params" );
+($success,$errorCode,$errorMessage) =
+    UpdateCollection( $collection_id2, 'Collection2 modified', 'Description2 modified' );
+is( $success, 1, "Collection2 has been modified" );
+ok( !defined $errorCode && !defined $errorMessage,
+    "Collection2 modified, no error code or message");
+
+($success,$errorCode,$errorMessage) =
+    UpdateCollection( $collection_id2, undef, 'Description' ),
+ok( !$success, "UpdateCollection fails without title" );
+is( $errorCode, 2, "Title missing, error code is 2");
+is( $errorMessage, 'NO_TITLE', "Title missing, error message is NO_TITLE");
+
+is( UpdateCollection(), 'NO_ID', "UpdateCollection without params" );
 
 #Test GetCollection
 my @collection1 = GetCollection($collection_id1);
@@ -181,10 +204,10 @@ is_deeply(
     ],
     "Collection1 belongs to the sample branch (SAB)"
 );
-is( TransferCollection, "No Id Given", "TransferCollection without ID" );
+is( TransferCollection, "NO_ID", "TransferCollection without ID" );
 is(
     TransferCollection($collection_id1),
-    "No Branchcode Given",
+    'NO_BRANCHCODE',
     "TransferCollection without branchcode"
 );
 
@@ -224,7 +247,8 @@ is( AddItemToCollection( $collection_id1, $item_id2 ),
     1, "Sampleitem2 has been added to Collection1" );
 
 #Test GetItemsInCollection
-my $itemsincollection1 = GetItemsInCollection($collection_id1);
+my $itemsincollection1;
+($itemsincollection1,$success,$errorCode,$errorMessage) = GetItemsInCollection($collection_id1);
 is( scalar @$itemsincollection1, 2, "Collection1 has 2 items" );
 is_deeply(
     $itemsincollection1,
@@ -232,16 +256,22 @@ is_deeply(
         {
             title          => undef,
             itemcallnumber => 'callnumber1',
+            biblionumber   => $biblionumber,
             barcode        => 1
         },
         {
             title          => undef,
             itemcallnumber => 'callnumber2',
+            biblionumber   => $biblionumber,
             barcode        => 2
         }
     ],
     "Collection1 has Item1 and Item2"
 );
+($itemsincollection1,$success,$errorCode,$errorMessage) = GetItemsInCollection();
+ok( !$success, "GetItemsInCollection fails without a collection ID" );
+is( $errorCode, 1, "Title missing, error code is 2");
+is( $errorMessage, 'NO_ID', "Collection ID missing, error message is NO_ID");
 
 #Test RemoveItemFromCollection
 is( RemoveItemFromCollection( $collection_id1, $item_id2 ),
@@ -293,15 +323,17 @@ is( DeleteCollection($collection_id2), 1, "Collection2 deleted" );
 is( DeleteCollection($collection_id1), 1, "Collection1 deleted" );
 is(
     DeleteCollection(),
-    'No Collection Id Given',
+    'NO_ID',
     "DeleteCollection without id"
 );
 $collections = GetCollections();
 is(
     scalar(@$collections),
-    $countcollection + 0,
+    $countcollection + 1,
     "Two Collections have been deleted"
 );
 
 #End transaction
 $dbh->rollback;
+
+1;
