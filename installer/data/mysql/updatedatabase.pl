@@ -8953,7 +8953,7 @@ if ( CheckVersion($DBversion) ) {
 }
 
 $DBversion = "3.17.00.044";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         INSERT IGNORE INTO systempreferences
             (variable,value,explanation,options,type)
@@ -9017,9 +9017,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
-
-$DBversion = "XXX";
+$DBversion = "3.17.00.048";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('RentalFeesCheckoutConfirmation', '0', NULL , 'Allow user to confirm when checking out an item with rental fees.', 'YesNo')
