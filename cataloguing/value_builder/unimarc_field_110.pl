@@ -20,6 +20,8 @@
 
 use strict;
 #use warnings; FIXME - Bug 2505
+
+use Koha::Util::FrameworkPlugin qw(wrapper);
 use C4::Auth;
 use CGI;
 use C4::Context;
@@ -63,12 +65,6 @@ sub plugin_javascript {
     return ($field_number,$res);
 }
 
-sub wrapper {
-    my ($char) = @_;
-    return "space" if $char eq " ";
-    return "pipe" if $char eq "|";
-    return $char;
-}
 
 sub plugin {
 my ($input) = @_;

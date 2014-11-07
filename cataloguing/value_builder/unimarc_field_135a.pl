@@ -20,6 +20,8 @@
 
 use strict;
 #use warnings; FIXME - Bug 2505
+
+use Koha::Util::FrameworkPlugin qw(wrapper);
 use C4::Auth;
 use CGI;
 use C4::Context;
@@ -64,12 +66,6 @@ function Clic$function_name(i) {
 return ($function_name,$res);
 }
 
-sub wrapper {
-    my ($char) = @_;
-    return "space" if $char eq " ";
-    return "pipe" if $char eq "|";
-    return $char;
-}
 
 sub plugin {
 my ($input) = @_;
