@@ -41,9 +41,6 @@
         <xsl:if test="@tag='200'">
           <span class="title"><xsl:value-of select="."/></span>
         </xsl:if>
-        <xsl:if test="@tag='200'">
-          <span class="titlemain"><xsl:value-of select="."/></span><br/>
-        </xsl:if>
         <xsl:if test="@tag='205'">
           <xsl:value-of select="."/>
         </xsl:if>

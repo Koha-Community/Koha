@@ -55,15 +55,14 @@ if(!ref $record) {
 }
 
 if($view eq 'card') {
-    my $themelang =  '/' . C4::Languages::getlanguage($input);
-    my $xmlrecord= $importid? $record->as_xml(): GetXmlBiblio($biblionumber);
-    my $xslfile =
-      C4::Context->config('intrahtdocs') . '/prog' . $themelang . "/xslt/compact.xsl";
-    if ( ! -f $xslfile && $themelang ne '/en' ) {
-        $xslfile=~s#$themelang#/en#;
-    }
-    my $newxmlrecord = C4::XSLT::engine->transform($xmlrecord, $xslfile);
-    print $input->header(-charset => 'UTF-8'), Encode::encode_utf8($newxmlrecord);
+    my $xml = $importid ? $record->as_xml(): GetXmlBiblio($biblionumber);
+    my $xsl = C4::Context->preference('marcflavour') eq 'UNIMARC'
+              ? 'UNIMARC_compact.xsl' : 'compact.xsl';
+    my $htdocs = C4::Context->config('intrahtdocs');
+    my ($theme, $lang) = C4::Templates::themelanguage($htdocs, $xsl, 'intranet', $input);
+    $xsl = "$htdocs/$theme/$lang/xslt/$xsl";
+    print $input->header(-charset => 'UTF-8'),
+          Encode::encode_utf8(C4::XSLT::engine->transform($xml, $xsl));
 }
 else {
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
