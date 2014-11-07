@@ -2,7 +2,7 @@ TRUNCATE z3950servers;
 
 INSERT INTO `z3950servers`
 (`host`, `port`, `db`, `userid`, `password`, `servername`, `id`, `checked`, `rank`, `syntax`, `servertype`, `encoding`) VALUES
-('z3950.bnf.fr', 2211, 'TOUT', 'Z3950', 'Z3950_BNF', 'BNF2', 2, 1, 1, 'UNIMARC', 'zed', 'utf8'),
+('z3950.bnf.fr', 2211, 'TOUT-UTF8', 'Z3950', 'Z3950_BNF', 'BNF2', 2, 1, 1, 'UNIMARC', 'zed', 'utf8'),
 ('62.76.8.149', 210, 'books', '', '', 'НАУЧНАЯ БИБЛИОТЕКА БАШКИРСКОГО ГОСУДАРСТВЕННОГО УНИВЕРСИТЕТА', 3, 1, 1, 'UNIMARC', 'zed', 'utf8'),
 ('81.30.205.34', 210, 'books', '', '', 'НАЦИОНАЛЬНАЯ БИБЛИОТЕКА ИМ. АХМЕТ-ЗАКИ ВАЛИДИ (БД BOOKS)', 4, 1, 1, 'UNIMARC', 'zed', 'utf8'),
 ('libor.pstu.ru', 210, 'books', '', '', 'ПЕРМСКИЙ ГОСУДАРСТВЕННЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ (БД BOOKS)', 5, 1, 1, 'UNIMARC', 'zed', 'utf8'),
