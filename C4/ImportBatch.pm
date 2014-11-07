@@ -1328,7 +1328,7 @@ sub SetImportRecordOverlayStatus {
 
 =head2 GetImportRecordStatus
 
-  my $overlay_status = GetImportRecordStatus($import_record_id);
+  my $status = GetImportRecordStatus($import_record_id);
 
 =cut
 
@@ -1338,25 +1338,25 @@ sub GetImportRecordStatus {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT status FROM import_records WHERE import_record_id = ?");
     $sth->execute($import_record_id);
-    my ($overlay_status) = $sth->fetchrow_array();
+    my ($status) = $sth->fetchrow_array();
     $sth->finish();
-    return $overlay_status;
+    return $status;
 
 }
 
 
 =head2 SetImportRecordStatus
 
-  SetImportRecordStatus($import_record_id, $new_overlay_status);
+  SetImportRecordStatus($import_record_id, $new_status);
 
 =cut
 
 sub SetImportRecordStatus {
-    my ($import_record_id, $new_overlay_status) = @_;
+    my ($import_record_id, $new_status) = @_;
 
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("UPDATE import_records SET status = ? WHERE import_record_id = ?");
-    $sth->execute($new_overlay_status, $import_record_id);
+    $sth->execute($new_status, $import_record_id);
     $sth->finish();
 
 }
