@@ -9026,7 +9026,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.049";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'am', 'language', 'Amharic','2014-10-29')");
     $dbh->do("INSERT IGNORE INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES ( 'am','amh')");
