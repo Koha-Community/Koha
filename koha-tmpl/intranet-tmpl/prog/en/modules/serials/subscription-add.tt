@@ -482,15 +482,15 @@ $(document).ready(function() {
                                     <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="[% aqbooksellerid %]" size="8" /> (<input type="text" name="aqbooksellername" value="[% aqbooksellername %]" disabled="disabled" readonly="readonly" />) <a href="#" onclick="FindAcqui(f)">Search for a vendor</a>
                                 </li>
                                 <li>
-                                    <label for="biblionumber" class="required" title="Subscriptions must be associated with a bibliographic record">Biblio:</label>
+                                    <label for="biblionumber" class="required" title="Subscriptions must be associated with a bibliographic record">Record:</label>
                                     <input type="text" name="biblionumber" id="biblionumber" value="[% bibnum %]" size="8" />
                                     (<input type="text" name="title" value="[% bibliotitle %]" disabled="disabled" readonly="readonly" />) <span class="required" title="Subscriptions must be associated with a bibliographic record">Required</span>
-                                    <div class="inputnote"> <a href="#" onclick="Plugin(f)">Search for Biblio</a>
+                                    <div class="inputnote"> <a href="#" onclick="Plugin(f)">Search for record</a>
                                         [% IF ( CAN_user_editcatalogue ) %]
                                             [% IF ( modify ) %]
-                                            | <a href="#" onclick="addbiblioPopup([% bibnum %]); return false;">Edit biblio</a>
+                                            | <a href="#" onclick="addbiblioPopup([% bibnum %]); return false;">Edit record</a>
                                             [% ELSE %]
-                                            | <a href="#" onclick="addbiblioPopup(); return false;">Create Biblio</a>
+                                            | <a href="#" onclick="addbiblioPopup(); return false;">Create record</a>
                                             [% END %]
                                         [% END %]
                                     </div>
