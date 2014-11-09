@@ -31,7 +31,7 @@ do
     chown "${name}-koha:${name}-koha" /var/run/koha/${name}
     export KOHA_CONF PERL5LIB
     KOHA_CONF=/etc/koha/sites/${name}/koha-conf.xml
-    PERL5LIB="/usr/share/koha/lib:/usr/share/koha/lib/C4/SIP"
+    PERL5LIB="/usr/share/koha/lib"
     daemon \
         --name="$name-koha-sip" \
         --errlog="/var/log/koha/$name/sip-error.log" \
