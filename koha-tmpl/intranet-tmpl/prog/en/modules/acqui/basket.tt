@@ -293,16 +293,16 @@
                     </form>
                 </li>
                 <li id="branch">
-                    <span class="label">Branch:</span>
+                    <span class="label">Library:</span>
                     [% IF basketbranchname %]
                         [% basketbranchname %]
                     [% ELSE %]
-                        No branch
+                        No library
                     [% END %]
                     [% IF branches_loop.size %]
                         <form action="" method="post">
                             <select id="branch" name="branch">
-                                <option value="">(no branch)</option>
+                                <option value="">(no library)</option>
                                 [% FOREACH branch IN branches_loop %]
                                     [% IF (branch.selected) %]
                                         <option selected="selected" value="[% branch.branchcode %]"> [% branch.branchname %]</option>
