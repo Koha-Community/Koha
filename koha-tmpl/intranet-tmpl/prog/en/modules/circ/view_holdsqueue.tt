@@ -3,6 +3,7 @@
 [% USE Branches %]
 [% USE AuthorisedValues %]
 [% USE ColumnsSettings %]
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Holds queue</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -173,12 +174,19 @@ $(document).ready(function() {
             <td class="hq-enumchron">[% itemsloo.enumchron %]</td>
             <td class="hq-barcode">
                 [% IF ( itemsloo.item_level_request ) %]
-			<em>Only Item:</em> <strong>[% itemsloo.barcode %]</strong>
+                    <em>Only item:</em> <strong>[% itemsloo.barcode %]</strong>
                 [% ELSE %]
                     <strong>[% itemsloo.barcode %]</strong> <em>or any available</em>
                 [% END %]
             </td>
-			<td class="hq-patron"><p><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% itemsloo.cardnumber %]#reserves">[% itemsloo.surname %], [% itemsloo.firstname %] ([% itemsloo.cardnumber %])</a></p> <p>[% itemsloo.phone %]</p></td>
+            <td class="hq-patron">
+              [% IF Koha.Preference('HidePatronName') %]
+                <p><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% itemsloo.borrowernumber %]#reserves">[% itemsloo.cardnumber %]</a></p>
+              [% ELSE %]
+                <p><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% itemsloo.borrowernumber %]#reserves">[% itemsloo.surname %], [% itemsloo.firstname %] ([% itemsloo.cardnumber %])</a></p>
+                <p>[% itemsloo.phone %]</p>
+              [% END %]
+            </td>
             <td class="hq-sendto">[% Branches.GetName( itemsloo.pickbranch ) %]</td>
             <td class="hq-date"><span title="[% itemsloo.reservedate %]">[% itemsloo.reservedate | $KohaDates %]</span></td>
             <td class="hq-notes">[% itemsloo.notes %]</td>
