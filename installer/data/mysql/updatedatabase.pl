@@ -9641,6 +9641,28 @@ if ( CheckVersion($DBversion) ) {
 }
 
 
+$DBversion = "3.18.00.001";
+if ( CheckVersion($DBversion) ) {
+    my $orphan_budgets = $dbh->selectall_arrayref(q|
+        SELECT budget_id, budget_name, budget_code
+        FROM aqbudgets
+        WHERE   budget_parent_id IS NOT NULL
+            AND budget_parent_id NOT IN (
+                SELECT DISTINCT budget_id FROM aqbudgets
+            )
+    |, { Slice => {} } );
+
+    if ( @$orphan_budgets ) {
+        for my $b ( @$orphan_budgets ) {
+            print "Fund $b->{budget_name} (code:$b->{budget_code}, id:$b->{budget_id}) does not have a parent, it may cause problem\n";
+        }
+        print "Upgrade to $DBversion done (Bug 12905: Check budget integrity: FAIL)\n";
+    } else {
+        print "Upgrade to $DBversion done (Bug 12905: Check budget integrity: OK)\n";
+    }
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
