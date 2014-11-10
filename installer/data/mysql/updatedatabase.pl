@@ -9418,7 +9418,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.051";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('GoogleIndicTransliteration','0','','GoogleIndicTransliteration on the OPAC.','YesNo')");
     print "Upgrade to $DBversion done (Bug 13211: Added system preferences GoogleIndicTransliteration on the OPAC)\n";
