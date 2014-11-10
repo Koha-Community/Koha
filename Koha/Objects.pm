@@ -48,7 +48,7 @@ This class must be subclassed.
 
 =head3 Koha::Objects->new();
 
-my $object = Koha::Object->new();
+my $object = Koha::Objects->new();
 
 =cut
 
@@ -61,7 +61,7 @@ sub new {
 
 =head3 Koha::Objects->new_from_dbic();
 
-my $object = Koha::Object->new_from_dbic( $resultset );
+my $object = Koha::Objects->new_from_dbic( $resultset );
 
 =cut
 
@@ -74,8 +74,8 @@ sub new_from_dbic {
 
 =head3 Koha::Objects->find();
 
-my $object = Koha::Object->find($id);
-my $object = Koha::Object->find( { keypart1 => $keypart1, keypart2 => $keypart2 } );
+my $object = Koha::Objects->find($id);
+my $object = Koha::Objects->find( { keypart1 => $keypart1, keypart2 => $keypart2 } );
 
 =cut
 
@@ -91,7 +91,7 @@ sub find {
 
 =head3 Koha::Objects->search();
 
-my @objects = Koha::Object->search($params);
+my @objects = Koha::Objects->search($params);
 
 =cut
 
@@ -114,7 +114,7 @@ sub search {
 
 =head3 Koha::Objects->count();
 
-my @objects = Koha::Object->count($params);
+my @objects = Koha::Objects->count($params);
 
 =cut
 

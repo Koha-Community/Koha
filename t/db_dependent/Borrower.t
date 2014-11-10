@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::Warn;
 
 use C4::Context;
@@ -45,12 +45,16 @@ $object->branchcode( $branchcode );
 $object->surname("Test Surname");
 $object->store();
 
-my $borrower = Koha::Database->new()->schema()->resultset('Borrower')->find( $object->borrowernumber() );
-is( $borrower->surname(), "Test Surname", "Object found in database" );
-
 is( $object->in_storage, 1, "Object is now stored" );
 
+my $borrowernumber = $object->borrowernumber;
+
+my $borrower = Koha::Database->new()->schema()->resultset('Borrower')->find( $borrowernumber );
+is( $borrower->surname(), "Test Surname", "Object found in database" );
+
 is( $object->is_changed(), 0, "Object is unchanged" );
+$object->surname("Test Surname");
+is( $object->is_changed(), 0, "Object is still unchanged" );
 $object->surname("Test Surname 2");
 is( $object->is_changed(), 1, "Object is changed" );
 
@@ -63,7 +67,7 @@ $object->store();
 is( $object->is_changed(), 0, "Object no longer marked as changed after being stored" );
 
 $object->delete();
-$borrower = Koha::Database->new()->schema()->resultset('Borrower')->find( $object->borrowernumber() );
+$borrower = Koha::Database->new()->schema()->resultset('Borrower')->find( $borrowernumber );
 ok( ! $borrower, "Object no longer found in database" );
 is( $object->in_storage, 0, "Object is not in storage" );
 

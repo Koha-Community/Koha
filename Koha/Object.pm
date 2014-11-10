@@ -48,6 +48,8 @@ This class must always be subclassed.
 my $object = Koha::Object->new();
 my $object = Koha::Object->new($attributes);
 
+Note that this cannot be used to retrieve record from the DB.
+
 =cut
 
 sub new {
@@ -183,7 +185,7 @@ sub set {
     my @columns = @{$self->_columns()};
 
     foreach my $p ( keys %$properties ) {
-        unless ( $p ~~ @columns ) {
+        unless ( grep {/^$p$/} @columns ) {
             carp("No property $p!");
             return 0;
         }
@@ -252,7 +254,7 @@ sub AUTOLOAD {
 
     my @columns = @{$self->_columns()};
     # Using direct setter/getter like $item->barcode() or $item->barcode($barcode);
-    if ( $method ~~ @columns ) {
+    if ( grep {/^$method$/} @columns ) {
         if ( @_ ) {
             return $self->_result()->set_column( $method, @_ );
         } else {
