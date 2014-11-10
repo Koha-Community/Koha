@@ -9425,7 +9425,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.052";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacAdvSearchOptions','pubdate|itemtype|language|sorting|location','Show search options','pubdate|itemtype|language|subtype|sorting|location','multiple');
