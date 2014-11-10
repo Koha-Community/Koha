@@ -25,8 +25,32 @@
 	<li>'Record type' lets you define if this is a bibliographic or an authority target.</li>
     <li>'Additional SRU options': You can enter additional options of the external server here, like sru_version=1.1 or schema=marc21, etc. Note that these options are server dependent.</li>
     <li>'SRU Search field mapping': Click on Modify to add or update the mapping from the available fields on the Koha search form to the specific server dependent index names. For instance, a SRU server could use 'cql.anywhere' for the Any field on the Koha form. If you do not enter an index name for a specific search field, the whole record will be searched.</li>
-    <li>'XSLT file(s)': You can enter here one or more XSLT file names that you want to apply on the search results.</li>
+    <li>'XSLT file(s)': You can enter here one or more (comma-separated) XSLT file names that you want to apply on the search results.</li>
 </ul>
+
+<h2>Using XSLT file(s) to transform the imported records</h2>
+<p>When retrieving records from external targets you may wish to automate some
+   changes to those records. XSLT's allow you to do this. Koha ships with some
+   sample XSLT files ready for use.</p>
+<ul>
+    <li>Del952.xsl: Remove items (MARC21/NORMARC)</li>
+    <li>Del995.xsl: Remove items (UNIMARC)</li>
+    <li>Del9LinksExcept952.xsl: Remove $9 links. Skip item fields (MARC21/NORMARC).</li>
+    <li>Del9LinksExcept995.xsl: Remove $9 links. Skip item fields (UNIMARC).</li>
+</ul>
+
+<h3>Example</h3>
+<p>If you want to remove both holdings data and $9 links when importing, you can use:</p>
+<table>
+    <thead><tr>
+        <th>Syntax</th>
+        <th>XSLT configuration</th>
+    </tr></thead>
+    <tbody>
+        <tr><td>MARC21/NORMARC</td><td>Del9LinksExcept952.xsl, Del952.xsl</td></tr>
+        <tr><td>UNIMARC</td><td>Del9LinksExcept995.xsl, Del995.xsl</td></tr>
+    </tbody>
+</table>
 
 <h2>SRU example</h2>
 <p>If you want to enter the Library of Congress SRU server, you should at least use the following information. The full URL http://lx2.loc.gov:210/LCDB must be entered as follows:</p>
