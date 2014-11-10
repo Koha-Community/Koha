@@ -69,7 +69,7 @@ $(document).ready(function() {
 	   [% IF ( action_add_category ) %]New category[% END %]
 	</h1>
 
-    [% IF ( action_modify ) %]<div class="note"><strong>NOTE:</strong> If you change an authorized value, existing records using it won't be updated.</div>[% END %]
+    [% IF ( action_modify ) %]<div class="note"><strong>NOTE:</strong> If you change an authorized value code, existing records using it won't be updated. Changes to value descriptions will show immediately.</div>[% END %]
 
 	<form action="[% script_name %]" name="Aform" method="post">
 	<input type="hidden" name="op" value="add_validate" />
@@ -188,7 +188,7 @@ $(document).ready(function() {
 </div>
 
 <h1>Authorized values</h1>
-<div class="note"><strong>NOTE:</strong> If you change an authorized value, existing records using it won't be updated.</div>
+<div class="note"><strong>NOTE:</strong> If you change an authorized value code, existing records using it won't be updated. Changes to value descriptions will show immediately.</div>
 
 [% IF ( duplicate_category ) %]
 <div class="dialog alert">Could not add value &quot;[% duplicate_value %]&quot; for category &quot;[% duplicate_category %]&quot; &mdash; value already present.
