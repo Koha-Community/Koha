@@ -9522,7 +9522,7 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.17.00.057";
 if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Koha 3.18 beta)\n";
-    SetVersion($DBversion);
+    SetVersion ($DBversion);
 }
 
 $DBversion = "3.17.00.058";
@@ -9532,6 +9532,15 @@ if( CheckVersion($DBversion) ){
     $dbh->do("INSERT INTO systempreferences (variable, explanation, type) VALUES('DefaultLongOverdueDays', 'Set the LOST value of an item when the item has been overdue for more than n days.',  'integer')");
     print "Upgrade to $DBversion done (Bug 8337: System preferences for longoverdue cron)\n";
     SetVersion($DBversion);
+}
+
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE permissions SET description = "Add and delete budgets (but can't modifiy budgets)" WHERE description = "Add and delete budgets (but cant modify budgets)";
+    });
+    print "Upgrade to $DBversion done (Bug 10749: Fix typo in budget_add_del permission description)\n";
+    SetVersion ($DBversion);
 }
 
 =head1 FUNCTIONS
