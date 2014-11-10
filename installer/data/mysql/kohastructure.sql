@@ -618,6 +618,7 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `sms_provider_id` int(11) DEFAULT NULL, -- the provider of the mobile phone number defined in smsalertnumber
   `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their reading history  KEY `borrowernumber` (`borrowernumber`),
   `privacy_guarantor_checkouts` tinyint(1) NOT NULL DEFAULT '0', -- controls if relatives can see this patron's checkouts
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- time of last change could be useful for synchronization with external systems (among others)
   KEY borrowernumber (borrowernumber),
   KEY `cardnumber` (`cardnumber`),
   KEY `sms_provider_id` (`sms_provider_id`)
@@ -1623,6 +1624,7 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `sms_provider_id` int(11) DEFAULT NULL, -- the provider of the mobile phone number defined in smsalertnumber
   `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their reading history
   `privacy_guarantor_checkouts` tinyint(1) NOT NULL DEFAULT '0', -- controls if relatives can see this patron's checkouts
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- time of last change could be useful for synchronization with external systems (among others)
   UNIQUE KEY `cardnumber` (`cardnumber`),
   PRIMARY KEY `borrowernumber` (`borrowernumber`),
   KEY `categorycode` (`categorycode`),
