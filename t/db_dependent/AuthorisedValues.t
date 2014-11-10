@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More;    # tests => 25;
+use Test::More tests => 14;
 
 use C4::Context;
 use Koha::AuthorisedValue;
@@ -44,9 +44,20 @@ my $av3 = Koha::AuthorisedValue->new(
     }
 )->store();
 
+my $av4 = Koha::AuthorisedValue->new(
+    {
+        category         => 'aaav_for_testing',
+        authorised_value => 'value 4',
+        lib              => 'display value 4',
+        lib_opac         => 'opac display value 4',
+        imageurl         => 'image4.png',
+    }
+)->store();
+
 ok( $av1->id(), 'AV 1 is inserted' );
 ok( $av2->id(), 'AV 2 is inserted' );
 ok( $av3->id(), 'AV 3 is inserted' );
+ok( $av4->id(), 'AV 4 is inserted' );
 
 is( $av3->opac_description, 'opac display value 3', 'Got correction opac description if lib_opac is set' );
 $av3->lib_opac('');
@@ -80,4 +91,7 @@ $av1->branch_limitations( [ $branchcode1, $branchcode2 ] );
 my $limits = $av1->branch_limitations;
 is( @$limits, 2, 'branch_limitations functions correctly both as setter and getter' );
 
-done_testing;
+my @categories = Koha::AuthorisedValues->new->categories;
+is( @categories, 2, 'There should have 2 categories inserted' );
+is( $categories[0], $av4->category, 'The first category should be correct (ordered by category name)' );
+is( $categories[1], $av1->category, 'The second category should be correct (ordered by category name)' );

@@ -1,9 +1,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Authorized values [% IF ( add_form ) %] &rsaquo; [% IF ( action_modify ) %]Modify authorized value[% END %]
-	   [% IF ( action_add_value ) %] &rsaquo;  New authorized value[% END %]
-	   [% IF ( action_add_category ) %] &rsaquo; New category[% END %][% END %]
-[% IF ( delete_confirm ) %] &rsaquo; Confirm deletion[% END %]
-[% IF ( else ) %]Authorized values[% END %]</title>
+<title>Koha &rsaquo; Administration &rsaquo; Authorized values
+[% IF op == 'add_form' %]
+  [% IF ( action_modify ) %] &rsaquo; Modify authorized value[% END %]
+  [% IF ( action_add_value ) %] &rsaquo;  New authorized value[% END %]
+  [% IF ( action_add_category ) %] &rsaquo; New category[% END %]
+[% END %]
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -23,11 +25,15 @@
         $("#branches option:first").attr("selected", "selected");
     }
     $('#icons').tabs();
+
+    $("a.delete").click(function(){
+        return confirm(_("Are you sure you want to delete this authorised value?"));
+    });
 });
 //]]>
 </script>
 
-[% IF ( else ) %]
+[% IF op == 'list' %]
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
@@ -50,11 +56,10 @@ $(document).ready(function() {
 <body id="admin_authorised_values" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a> &rsaquo; [% IF ( action_modify ) %]Modify authorized value[% END %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF op == 'add_form' %] <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a> &rsaquo; [% IF ( action_modify ) %]Modify authorized value[% END %]
 	   [% IF ( action_add_value ) %]New authorized value[% END %]
 	   [% IF ( action_add_category ) %]New category[% END %][% END %]
-[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a> &rsaquo; Confirm deletion[% END %]
-[% IF ( else ) %]Authorized values[% END %]</div>
+[% IF op == 'list' %]Authorized values[% END %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -62,7 +67,7 @@ $(document).ready(function() {
 	<div id="yui-main">
 	<div class="yui-b">
 
-[% IF ( add_form ) %]
+[% IF op == 'add_form' %]
 	<h1>
 	   [% IF ( action_modify ) %]Modify authorized value[% END %]
 	   [% IF ( action_add_value ) %]New authorized value[% END %]
@@ -71,9 +76,8 @@ $(document).ready(function() {
 
     [% IF ( action_modify ) %]<div class="note"><strong>NOTE:</strong> If you change an authorized value code, existing records using it won't be updated. Changes to value descriptions will show immediately.</div>[% END %]
 
-	<form action="[% script_name %]" name="Aform" method="post">
-	<input type="hidden" name="op" value="add_validate" />
-    <input type="hidden" name="offset" value="[% offset %]" />
+ <form action="/cgi-bin/koha/admin/authorised_values.pl" name="Aform" method="post">
+    <input type="hidden" name="op" value="add" />
         <fieldset class="rows"><ol>
         <li>
         [% IF ( action_add_category ) %]<label for="category">Category: </label>
@@ -155,32 +159,7 @@ $(document).ready(function() {
 [% END %]
 
 
-[% IF ( delete_confirm ) %]
-	<div class="dialog alert">
-<h3>Confirm deletion</h3>
-<table>
-	<tr>
-		<th>Category</th>
-		<th>Value</th>
-		<th>Description</th>
-		<th>Description (OPAC)</th>
-	</tr>
-	<tr>
-	    <td>[% searchfield %]</td>
-	    <td>[% Tvalue %]</td>
-	    <td>[% Tlib %]</td>
-	    <td>[% Tlib_opac %]</td>
-	</tr>
-	</table>
-	<form action="[% script_name %]" method="post">
-		<input type="hidden" name="op" value="delete_confirmed" />
-		<input type="hidden" name="id" value="[% id %]" />
-        <input type="hidden" name="searchfield" value="[% searchfield %]" /><fieldset class="action"><input type="submit" value="Yes, delete" class="approve" /></form>
-<form action="[% script_name %]" method="get"><input type="hidden" name="searchfield" value="[% searchfield %]" /><input type="submit" value="No, do not delete" class="deny" /></form>
-</div>
-[% END %]
-
-[% IF ( else ) %]
+[% IF op == 'list' %]
 
 <div id="toolbar" class="btn-toolbar">
     <a id="addauth" class="btn btn-small" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category %]"><i class="icon-plus"> </i> New authorized value for [% category %]</a>
@@ -190,22 +169,38 @@ $(document).ready(function() {
 <h1>Authorized values</h1>
 <div class="note"><strong>NOTE:</strong> If you change an authorized value code, existing records using it won't be updated. Changes to value descriptions will show immediately.</div>
 
-[% IF ( duplicate_category ) %]
-<div class="dialog alert">Could not add value &quot;[% duplicate_value %]&quot; for category &quot;[% duplicate_category %]&quot; &mdash; value already present.
-</div>
+[% FOR m IN messages %]
+    <div class="dialog [% m.type %]">
+        [% SWITCH m.code %]
+        [% CASE 'error_on_update' %]
+            An error occurred when updating this authorised values. Perhaps the value already exists.
+        [% CASE 'error_on_insert' %]
+            An error occurred when inserting this authorised values. Perhaps the value or the category already exists.
+        [% CASE 'error_on_delete' %]
+            An error occurred when deleteing this authorised values. Check the logs.
+        [% CASE 'success_on_update' %]
+            Authorised value updated with success.
+        [% CASE 'success_on_insert' %]
+            Authorised value inserted with success.
+        [% CASE 'success_on_delete' %]
+            Authorised value deleted with success.
+        [% CASE %]
+            [% m.code %]
+        [% END %]
+    </div>
 [% END %]
+
 <form action="/cgi-bin/koha/admin/authorised_values.pl" method="post" id="category">
-    <label for="searchfield">Show category: </label>
-    <select name="searchfield" id="searchfield" size="1">
-    [% FOREACH value IN tab_list.values %]
-    [% IF ( value == tab_list.default ) %]
-        <option value="[% value %]" selected="selected">[% value %]</option>
+  <label for="searchfield">Show category: </label>
+  <select name="searchfield" id="searchfield" size="1">
+  [% FOR c IN categories %]
+    [% IF c == searchfield %]
+      <option value="[% c %]" selected="selected">[% c %]</option>
     [% ELSE %]
-        <option value="[% value %]">[% value %]</option>
+      <option value="[% c %]">[% c %]</option>
     [% END %]
-    [% END %]
-    </select>
-    <input type="submit" value="Submit" />
+  [% END %]
+  <input type="submit" value="Submit" />
 </form>
 [% IF ( category == 'Bsort1' ) %]
     <p>An authorized value attached to patrons, that can be used for stats purposes</p>
@@ -285,8 +280,8 @@ $(document).ready(function() {
             No limitation
         [% END %]
     </td>
-	<td><a href="[% loo.edit %]">Edit</a></td>
-	<td><a href="[% loo.delete %]">Delete</a></td>
+    <td><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;id=[% loo.id %]">Edit</a></td>
+    <td><a class="delete" href="/cgi-bin/koha/admin/authorised_values.pl?op=delete&amp;searchfield=[% searchfield %]&amp;id=[% loo.id %]">Delete</a></td>
 </tr>
 [% END %]
 </tbody></table>[% ELSE %]
@@ -294,8 +289,8 @@ $(document).ready(function() {
 [% END %]
 
 [% IF ( isprevpage ) %]
-<form class="inline" action="[% script_name %]" method="post">
-<input type="hidden" name="offset" value="[% prevpage %]" /><input type="hidden" name="searchfield" value="[% searchfield %]" />
+<form class="inline" action="/cgi-bin/koha/admin/authorised_values.pl" method="post">
+<input type="hidden" name="searchfield" value="[% searchfield %]" />
 	<input type="submit" value="&lt;&lt; Previous" /></form>
 [% END %] 
 

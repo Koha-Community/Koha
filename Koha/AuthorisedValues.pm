@@ -23,7 +23,7 @@ use Carp;
 
 use Koha::Database;
 
-use Koha::Borrower;
+use Koha::AuthorisedValue;
 
 use base qw(Koha::Objects);
 
@@ -46,25 +46,37 @@ my @objects = Koha::AuthorisedValues->search($params);
 sub search {
     my ( $self, $params ) = @_;
 
-    carp("No branchcode passed in for authorised values search!")
-      unless $params->{branchcode};
-
     my $branchcode = $params->{branchcode};
     delete( $params->{branchcode} );
 
-    my $rs = $self->_resultset()->search(
-        {
-            %$params,
-            -or => [
-                'authorised_values_branches.branchcode' => undef,
-                'authorised_values_branches.branchcode' => $branchcode,
-            ],
-        },
-        { join => 'authorised_values_branches' }
-    );
+    my $or =
+      $branchcode
+      ? {
+        '-or' => [
+            'authorised_values_branches.branchcode' => undef,
+            'authorised_values_branches.branchcode' => $branchcode,
+        ]
+      }
+      : {};
+    my $join = $branchcode ? { join => 'authorised_values_branches' } : {};
+    my $rs = $self->_resultset()
+      ->search( { %$params, %$or, }, $join );
 
     my $class = ref($self);
     return wantarray ? $self->_wrap( $rs->all() ) : $class->new_from_dbic($rs);
+}
+
+sub categories {
+    my ( $self ) = @_;
+    my $rs = $self->_resultset->search(
+        undef,
+        {
+            select => ['category'],
+            distinct => 1,
+            order_by => 'category',
+        },
+    );
+    return map $_->get_column('category'), $rs->all;
 }
 
 =head3 type
