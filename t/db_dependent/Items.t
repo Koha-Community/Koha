@@ -165,7 +165,7 @@ subtest 'GetItemsInfo tests' => sub {
     my $holdingbranch = 'MPL';
 
     # Add a biblio
-    my $biblionumber = get_biblio();
+    my ($biblionumber) = get_biblio();
     # Add an item
     my ($item_bibnum, $item_bibitemnum, $itemnumber)
         = AddItem({
