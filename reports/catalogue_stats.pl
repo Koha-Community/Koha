@@ -59,6 +59,12 @@ if(C4::Context->preference('item-level_itypes')) {
 } else {
 	$item_itype = "itemtype";
 }
+if(C4::Context->preference('marcflavour') ne "UNIMARC" && ($line=~ /publicationyear/ )) {
+    $line = "copyrightdate";
+}
+if(C4::Context->preference('marcflavour') ne "UNIMARC" && ($column =~ /publicationyear/ )) {
+    $column = "copyrightdate";
+}
 
 my ($template, $borrowernumber, $cookie)
 	= get_template_and_user({template_name => $fullreportname,
@@ -284,7 +290,8 @@ if($barcodefilter){
 	}
 
 	my $strsth = "SELECT DISTINCTROW $linefield FROM biblioitems 
-	                INNER JOIN items USING (biblioitemnumber)
+                    INNER JOIN items USING (biblioitemnumber)
+                    INNER JOIN biblio ON (biblioitems.biblionumber = biblio.biblionumber)
 	              WHERE $line IS NOT NULL ";
     $strsth .= " AND barcode $not LIKE ? " if ($barcodefilter);
 	if ( @linefilter ) {
@@ -337,6 +344,8 @@ if($barcodefilter){
 	FROM   biblioitems
 	INNER JOIN items
 		USING (biblioitemnumber)
+    INNER JOIN biblio
+        ON (biblioitems.biblionumber = biblio.biblionumber)
 	WHERE $column IS NOT NULL ";
 	$strsth2 .= " AND barcode $not LIKE ?" if $barcodefilter;
 	
@@ -386,7 +395,12 @@ if($barcodefilter){
 	}
 
 # preparing calculation
-	my $strcalc = "SELECT $linefield, $colfield, count(*) FROM biblioitems INNER JOIN  items ON (items.biblioitemnumber = biblioitems.biblioitemnumber) WHERE 1 ";
+    my $strcalc = "
+        SELECT $linefield, $colfield, count(*)
+        FROM biblioitems
+        INNER JOIN items ON (items.biblioitemnumber = biblioitems.biblioitemnumber)
+        INNER JOIN biblio ON (biblioitems.biblionumber = biblio.biblionumber)
+        WHERE 1 ";
 	$strcalc .= "AND barcode $not like ? " if ($barcodefilter); 
 	
 	if (@$filters[0]){
@@ -429,11 +443,15 @@ if($barcodefilter){
 	}
 	if (@$filters[8]){
 		@$filters[8]=~ s/\*/%/g;
-		$strcalc .= " AND publicationyear >" . @$filters[8];
+        $strcalc .= " AND " .
+        (C4::Context->preference('marcflavour') eq 'UNIMARC' ? 'publicationyear' : 'copyrightdate')
+        . ">" . @$filters[8];
 	}
 	if (@$filters[9]){
 		@$filters[9]=~ s/\*/%/g;
-		$strcalc .= " AND publicationyear <" . @$filters[9];
+        $strcalc .= " AND " .
+        (C4::Context->preference('marcflavour') eq 'UNIMARC' ? 'publicationyear' : 'copyrightdate')
+        . "<" . @$filters[9];
 	}
 	if (@$filters[10]){
 		@$filters[10]=~ s/\*/%/g;
@@ -457,7 +475,6 @@ if($barcodefilter){
 	   $dbcalc->execute();
 	}
 #	warn "filling table";
-	
 	my $emptycol; 
 	while (my ($row, $col, $value) = $dbcalc->fetchrow) {
 #		warn "filling table $row / $col / $value ";
