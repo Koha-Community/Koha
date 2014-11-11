@@ -1,18 +1,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2013-12-25 10:27+0000\n"
-"Last-Translator: Anthony <maolins@gmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: zh_TW\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: Pasi Kallinen <pasi.kallinen@pttk.fi>\n"
+"Language-Team: Koha Translate List <koha-translate@lists.koha-community.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1387621645.0\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -43,8 +39,24 @@ msgid "acquisitions.pref#AcqCreateItem# receiving an order."
 msgstr "收到订单。"
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#AcqItemSetSubfieldsWhenReceived# Upon receiving items, update their subfields if they were created when placing an order (e.g. o=5|a=\"foo bar\")."
+msgid "acquisitions.pref#AcqEnableFiles# Do"
 msgstr ""
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#AcqEnableFiles# Don't"
+msgstr ""
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#AcqEnableFiles# enable the ability to upload and attach arbitrary files to invoices."
+msgstr ""
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#AcqItemSetSubfieldsWhenReceiptIsCancelled# Upon cancelling a receipt, update the item's subfields if they were created when placing an order (e.g. o=5|a=\"bar foo\"\")."
+msgstr ""
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#AcqItemSetSubfieldsWhenReceived# Upon receiving items, update their subfields if they were created when placing an order (e.g. o=5|a=\"foo bar\")."
+msgstr "收到馆藏后，若其馆藏数据系延续订阅数据而来(如o=5|a=\"foo bar\")，则更新其分栏。"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqViewBaskets# Show baskets"
@@ -100,39 +112,39 @@ msgstr "使用下列格式显示金额"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#MarcFieldsToOrder# <br/>For example:<br/>price: 947$a|947$c<br/>quantity: 969$h<br/>budget_code: 922$a"
-msgstr ""
+msgstr "<br/>例如：<br/>价格：947$a|947$c<br/>数量：969$h<br/>budget_code: 922$a"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#MarcFieldsToOrder# Set the mapping values for a new order line created from a MARC record in a staged file."
-msgstr ""
+msgstr "设置来自待输入文件MARC新记录的匹配值。"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#MarcFieldsToOrder# You can use the following fields: price, quantity, budget_code, discount, sort1, sort2"
-msgstr ""
+msgstr "您可使用下列字段：price, quantity, budget_code, discount, sort1, sort2"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# English 2-page"
-msgstr ""
+msgstr "英文 2-页"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# English 3-page"
-msgstr ""
+msgstr "英文 3-页"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# French 3-page"
-msgstr ""
+msgstr "法文 3-页"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# German 2-page"
-msgstr ""
+msgstr "德文 2-页"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# Use the"
-msgstr ""
+msgstr "使用"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# layout when printing basket groups."
-msgstr ""
+msgstr "打印借出篮群组布局时。"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#UniqueItemFields# (separated by a space)"
@@ -170,9 +182,9 @@ msgstr "登录选项"
 msgid "admin.pref Mozilla Persona"
 msgstr "Mozilla Persona"
 
-# Administration > Search Engine
-msgid "admin.pref Search Engine"
-msgstr "寻找引擎"
+# Administration > Share anonymous usage statistics
+msgid "admin.pref Share anonymous usage statistics"
+msgstr ""
 
 # Administration > CAS Authentication
 msgid "admin.pref#AllowPkiAuth# Use"
@@ -258,17 +270,21 @@ msgstr "不允许"
 msgid "admin.pref#Persona# Mozilla persona for login"
 msgstr "Mozilla persona for login"
 
-# Administration > Search Engine
-msgid "admin.pref#SearchEngine# Solr"
-msgstr "Solr"
+# Administration > Interface options
+msgid "admin.pref#ReplytoDefault# Use"
+msgstr ""
 
-# Administration > Search Engine
-msgid "admin.pref#SearchEngine# Zebra"
-msgstr "Zebra"
+# Administration > Interface options
+msgid "admin.pref#ReplytoDefault# as the email address that will be set as the replyto in emails"
+msgstr ""
 
-# Administration > Search Engine
-msgid "admin.pref#SearchEngine# is the search engine used."
-msgstr "供寻找引擎使用。"
+# Administration > Interface options
+msgid "admin.pref#ReturnpathDefault# Use"
+msgstr ""
+
+# Administration > Interface options
+msgid "admin.pref#ReturnpathDefault# as the email address set as the return path, if you leave this empty the admin address will be used."
+msgstr ""
 
 # Administration > Login options
 msgid "admin.pref#SessionStorage# Store login session information"
@@ -289,6 +305,78 @@ msgstr "在 MySQL 数据库。"
 # Administration > Login options
 msgid "admin.pref#SessionStorage# in the PostgreSQL database (not supported)."
 msgstr "在 PostgreSQL 数据库(不支持)。"
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# Don't share"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# Share"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# anonymous Koha usage data with the Koha community. You can see the data on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsCountry# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsCountry# The country where your library is located:"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsCountry# This will be shown on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryName# If this field is empty data will be sent anonymously."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryName# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryName# The library name"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryName# will be shown on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# The library type"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# public"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# university"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# will be shown on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryUrl# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryUrl# The library URL"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryUrl# will be shown on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
+msgstr ""
 
 # Administration > CAS Authentication
 msgid "admin.pref#casAuthentication# CAS for login authentication."
@@ -504,11 +592,11 @@ msgstr "再连结曾经连结至权威记录者的标目。"
 
 # Authorities > General
 msgid "authorities.pref#MARCAuthorityControlField008# Use the following text for the contents of MARC21 authority control field 008 position 06-39 (fixed length data elements). Do NOT include the date (position 00-05)."
-msgstr ""
+msgstr "在 MARC21 权威记录的字段 008 地址 06-39 (固定长度数据细目)使用以下的文字。不要包括曰期 (地址 00-05)。"
 
 # Authorities > General
 msgid "authorities.pref#UNIMARCAuthorityField100# Use the following text for the contents of UNIMARC authority field 100 position 08-35 (fixed length data elements). Do NOT include the date (position 00-07)."
-msgstr ""
+msgstr "在 MARC21 权威记录的字段 100 地址 08-35 (固定长度数据细目)使用以下的文字。不要包括曰期 (地址 00-07)。"
 
 # Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Don't use"
@@ -544,7 +632,7 @@ msgstr "显示"
 
 # Cataloging > Importing
 msgid "cataloguing.pref Importing"
-msgstr ""
+msgstr "输入"
 
 # Cataloging > Interface
 msgid "cataloguing.pref Interface"
@@ -560,31 +648,31 @@ msgstr "书标"
 
 # Cataloging > Display
 msgid "cataloguing.pref#AcquisitionDetails# Display"
-msgstr ""
+msgstr "显示"
 
 # Cataloging > Display
 msgid "cataloguing.pref#AcquisitionDetails# Don't display"
-msgstr ""
+msgstr "不显示"
 
 # Cataloging > Display
 msgid "cataloguing.pref#AcquisitionDetails# acquisition details on the biblio detail page."
-msgstr ""
+msgstr "于书目详情页面的采访详情。"
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISBN# When matching on ISBN with the record import tool,"
-msgstr ""
+msgstr "以记录输入工具匹配ISBN时，"
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISBN# attempt to match aggressively by trying all variations of the ISBNs in the imported record as a phrase in the ISBN fields of already cataloged records.  Note that this preference has no effect if UseQueryParser is on."
-msgstr ""
+msgstr "将输入记录里的ISBN当为符串与既有记录的ISBN字段匹配。 此首选对 UseQueryParser 无影响。"
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISBN# do"
-msgstr ""
+msgstr "做"
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISBN# don't"
-msgstr ""
+msgstr "不做"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#AlternateHoldingsField# ."
@@ -597,6 +685,14 @@ msgstr "显示机读编目格式分栏"
 # Cataloging > Record Structure
 msgid "cataloguing.pref#AlternateHoldingsField# as holdings information for records that do not have items (This can contain multiple subfields to look in; for instance <code>852abhi</code> would look in 852 subfields a, b, h, and i.), with the subfields separated by"
 msgstr "无馆藏信息的书目记录(可能在 <code>852abhi</code> 等处有多个分栏，查看852的分栏a b h i，即可发现它)，以符号分隔这些分栏"
+
+# Cataloging > Display
+msgid "cataloguing.pref#AuthoritySeparator# ."
+msgstr ""
+
+# Cataloging > Display
+msgid "cataloguing.pref#AuthoritySeparator# Separate multiple displayed authors, series or subjects with "
+msgstr ""
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
@@ -612,7 +708,7 @@ msgstr "清空缺省为英文"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#DefaultLanguageField008# Fill in the default language for field 008 Range 35-37 of MARC21 records (e.g. eng, nor, ger, see <a href=\"http://www.loc.gov/marc/languages/language_code.html\">MARC Code List for Languages</a>)"
-msgstr ""
+msgstr "在 MARC21 记录的字段 008 地址Range 35-37 填入缺省语系(如：chi, eng, nor, ger, 见 <a href=\"http://www.loc.gov/marc/languages/language_code.html\">MARC Code List for Languages</a>)"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
@@ -668,7 +764,7 @@ msgstr "填写<a href=\"http://www.loc.gov/marc/organizations/orgshome.html\">�
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#MARCOrgCode# by default in new MARC21 records (leave blank to disable)."
-msgstr ""
+msgstr "缺省在新的MARC21记录(空白则不启用)。"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or blank to disable)."
@@ -692,15 +788,15 @@ msgstr "(不用时保持空白。设置范围如<code>192.168.</code>。)"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# <br />Display the following message on the redirect page for suppressed biblios"
-msgstr ""
+msgstr "<br />在处理书目记录的转换页显示以下消息"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# <br />Redirect the opac detail page for suppressed records to"
-msgstr ""
+msgstr "<br />将联机公共目录详情页面转换至"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# <br />Restrict the suppression to IP adresses outside of the IP range"
-msgstr ""
+msgstr "<br />将IP位置转换至IP范围外"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# Don't hide"
@@ -712,7 +808,7 @@ msgstr "隐藏"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# an explanatory page ('This record is blocked')."
-msgstr ""
+msgstr "说明页面('此记录被封锁')。"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# items marked as suppressed from OPAC search results. Note that you must have the <code>Suppress</code> index set up in Zebra and at least one suppressed item, or your searches will be broken."
@@ -720,7 +816,7 @@ msgstr "若该馆藏被置标为隐藏，必须在 Zebra 设置<code>隐藏</cod
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# the 404 error page ('Not found')."
-msgstr ""
+msgstr "错讯代码 404 (未找到)。"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#PrefillItem# When a new item is added,"
@@ -795,6 +891,54 @@ msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# buttons on the bib deta
 msgstr "书目细节页面的按钮，以打印馆藏书标"
 
 # Cataloging > Record Structure
+msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# Define a list of subfields for which editing is authorized when items_batchmod_restricted permission is enabled, separated by spaces."
+msgstr ""
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# Examples:"
+msgstr ""
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# If the pref is empty, no fields are restricted."
+msgstr ""
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# MARC21: \"952$a 952$b 952$c\""
+msgstr ""
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# Note that the FA framework is excluded from the permission."
+msgstr ""
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# UNIMARC: \"995$f 995$h 995$j\""
+msgstr ""
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# Define a list of subfields for which editing is authorized when edit_items_restricted permission is enabled, separated by spaces."
+msgstr ""
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# Examples:"
+msgstr ""
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# If the pref is empty, no fields are restricted."
+msgstr ""
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# MARC21: \"952$a 952$b 952$c\""
+msgstr ""
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# Note that the FA framework is excluded from the permission."
+msgstr ""
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# UNIMARC: \"995$f 995$h 995$j\""
+msgstr ""
+
+# Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToUseWhenPrefill# Define a list of subfields to use when prefilling items (separated by space)"
 msgstr "当事先填入馆藏时，设置使用的分栏清单(以空格区隔)"
 
@@ -837,14 +981,6 @@ msgstr "不显示"
 # Cataloging > Interface
 msgid "cataloguing.pref#advancedMARCeditor# descriptions of fields and subfields in the MARC editor."
 msgstr "机读编目格式编辑器里的字段及分栏说明。"
-
-# Cataloging > Display
-msgid "cataloguing.pref#authoritysep# ."
-msgstr " ."
-
-# Cataloging > Display
-msgid "cataloguing.pref#authoritysep# Separate multiple displayed authors, series or subjects with "
-msgstr "以此符号区别多个作者、集丛或主题 "
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# Barcodes are"
@@ -904,7 +1040,7 @@ msgstr "对眏至机读编目格式分栏"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)<br />Examples (for MARC21 records): <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
-msgstr ""
+msgstr "至馆藏的索书号。(可以包括多个分栏；如<code>082ab</code> 可查看 082 的分栏 a 与 b。)<br />如(MARC21记录)：<strong>杜威分类法</strong>: <code>082ab</code> 或 <code>092ab</code>; <strong>美国国会图书馆分类法</strong>: <code>050ab</code> 或 <code>090ab</code>; <strong>来自此馆藏记录</strong>: <code>852hi</code>"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
@@ -1064,7 +1200,7 @@ msgstr "不允许"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnDamagedItems# hold requests to be placed on and filled by damaged items."
-msgstr ""
+msgstr "预约破坏的馆藏。"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnPatronsPossessions# Allow"
@@ -1092,14 +1228,14 @@ msgstr "把已经被预约的馆藏借给其它读者，若允许这么做，不
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowMultipleIssuesOnABiblio# Allow"
-msgstr ""
+msgstr "允许"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowMultipleIssuesOnABiblio# Don't allow"
-msgstr ""
+msgstr "不允许"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AllowMultipleIssuesOnABiblio# patrons to check out multiple items from the same record, except for records with subscriptions."
+msgid "circulation.pref#AllowMultipleIssuesOnABiblio# patrons to check out multiple items from the same record.  (NOTE: This will only effect records without a subscription attached.)"
 msgstr ""
 
 # Circulation > Checkout Policy
@@ -1147,7 +1283,7 @@ msgid "circulation.pref#AllowRenewalLimitOverride# Don't allow"
 msgstr "不允许"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AllowRenewalLimitOverride# staff to manually override renewal blocks and renew a checkout when it would go over the renewal limit or be premature with respect to the \"no renew before\" setting in the circulation policy."
+msgid "circulation.pref#AllowRenewalLimitOverride# staff to manually override renewal blocks and renew a checkout when it would go over the renewal limit or be premature with respect to the \"No renewal before\" setting in the circulation policy or has been scheduled for automatic renewal."
 msgstr ""
 
 # Circulation > Checkout Policy
@@ -1376,7 +1512,19 @@ msgstr "未在 ReservesMaxPickUpDelay 设置的时间内，提取预约到馆的
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of"
-msgstr " 设置 ExpireReservesMaxPickUpDelay 后，预约失效时，读者可以付费保留预约。"
+msgstr "设置 ExpireReservesMaxPickUpDelay 后，向预约到馆逾期取件的读者收取"
+
+# Circulation > Holds Policy
+msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#ExpireReservesOnHolidays# Don't allow"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#ExpireReservesOnHolidays# expired holds to be canceled on days the library is closed."
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#ExportRemoveFields# (separate fields with space, e.g. 100a 200b 300c)"
@@ -1429,6 +1577,18 @@ msgstr "包括"
 # Circulation > Fines Policy
 msgid "circulation.pref#FinesIncludeGracePeriod# the grace period when calculating the fine for an overdue item."
 msgstr "计算逾期罚款的宽限期。"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#HoldsInNoissuesCharge# Don't include"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#HoldsInNoissuesCharge# Include"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#HoldsInNoissuesCharge# hold charges when summing up charges for noissuescharge."
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#HoldsToPullStartDate# Set the default start date for the Holds to pull list to"
@@ -1506,6 +1666,35 @@ msgstr "禁止"
 msgid "circulation.pref#IssuingInProcess# patrons from checking out an item whose rental charge would take them over the limit."
 msgstr "读者借出馆藏，当租金超过限额时。"
 
+# Circulation > Holds Policy
+msgid "circulation.pref#LocalHoldsPriority# Don't give"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#LocalHoldsPriority# Give"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#LocalHoldsPriority# holding library"
+msgstr ""
+
+# Circulation > Holds Policy
+# Circulation > Holds Policy
+msgid "circulation.pref#LocalHoldsPriority# home library"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#LocalHoldsPriority# matches the item's"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#LocalHoldsPriority# pickup library"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#LocalHoldsPriority# priority for filling holds to patrons whose"
+msgstr ""
+
 # Circulation > Checkout Policy
 msgid "circulation.pref#ManInvInNoissuesCharge# Don't include"
 msgstr "不包括"
@@ -1548,11 +1737,47 @@ msgstr "不允许"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# a user to choose the library to pick up a hold from."
-msgstr "读者选择提取预约数据的图书馆。"
+msgstr "读者选择提取预约馆藏的图书馆。"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OnSiteCheckouts# Disable"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OnSiteCheckouts# Enable"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OnSiteCheckouts# the on-site checkouts feature."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OnSiteCheckoutsForce# Disable"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OnSiteCheckoutsForce# Enable"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OnSiteCheckoutsForce# the on-site for all cases (Even if a user is debarred, etc.)."
+msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OverdueNoticeBcc# Send all notices as a BCC to this email address"
 msgstr "以密件副本方式，将所有的通知寄送到这个 email。"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OverdueNoticeCalendar# Ignore Calendar"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OverdueNoticeCalendar# Use Calendar"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OverdueNoticeCalendar# when working out the period for overdue notices"
+msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OverduesBlockCirc# Ask for confirmation"
@@ -1627,6 +1852,22 @@ msgid "circulation.pref#RenewalSendNotice# a renewal notice according to patron 
 msgstr "根据读者借出报警首选记录续借通知。"
 
 # Circulation > Checkout Policy
+msgid "circulation.pref#RentalFeesCheckoutConfirmation# When checking out an item with rental fees, "
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#RentalFeesCheckoutConfirmation# ask"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#RentalFeesCheckoutConfirmation# do not ask"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#RentalFeesCheckoutConfirmation# for confirmation."
+msgstr ""
+
+# Circulation > Checkout Policy
 msgid "circulation.pref#RentalsInNoissuesCharge# Don't include"
 msgstr "不包括"
 
@@ -1652,7 +1893,7 @@ msgstr "读者所属图书馆"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ReservesControlBranch# to see if the patron can place a hold on the item."
-msgstr "确定读者有权预约。"
+msgstr "允许读者有权预约。"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ReservesMaxPickUpDelay# Mark a hold as problematic if it has been waiting for more than"
@@ -1672,7 +1913,7 @@ msgstr "不自动"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ReservesNeedReturns# mark a hold as found and waiting when a hold is placed on a specific item and that item is already checked in."
-msgstr ""
+msgstr "找到已被借出的馆藏，并预约它。"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ReturnBeforeExpiry# Don't require"
@@ -1712,15 +1953,15 @@ msgstr "在自助借出系统的说明里，有下列的 HTML 内容："
 
 # Circulation > Self Checkout
 msgid "circulation.pref#SelfCheckReceiptPrompt# Don't show"
-msgstr ""
+msgstr "不显示"
 
 # Circulation > Self Checkout
 msgid "circulation.pref#SelfCheckReceiptPrompt# Show"
-msgstr ""
+msgstr "显示"
 
 # Circulation > Self Checkout
 msgid "circulation.pref#SelfCheckReceiptPrompt# the print receipt popup dialog when self checkout is finished"
-msgstr ""
+msgstr "自助借出完成后，弹出打印收条的对话"
 
 # Circulation > Self Checkout
 msgid "circulation.pref#SelfCheckTimeout# Time out the current patron's web-based self checkout system login after"
@@ -1752,7 +1993,7 @@ msgstr "显示"
 
 # Circulation > Self Checkout
 msgid "circulation.pref#ShowPatronImageInWebBasedSelfCheck# the patron's picture (if one has been added) when they use the web-based self checkout."
-msgstr "使用自助借出系统时，显示读者照片(若已输入)。"
+msgstr "读者照片(若已输入)，使用自助借出系统时。"
 
 # Circulation > Interface
 msgid "circulation.pref#SpecifyDueDate# Allow"
@@ -1768,14 +2009,26 @@ msgstr "馆员指定到期日。"
 
 # Circulation > Interface
 msgid "circulation.pref#SpecifyReturnDate# Allow"
-msgstr ""
+msgstr "允许"
 
 # Circulation > Interface
 msgid "circulation.pref#SpecifyReturnDate# Don't allow"
-msgstr ""
+msgstr "不允许"
 
 # Circulation > Interface
 msgid "circulation.pref#SpecifyReturnDate# staff to specify a return date for a check in."
+msgstr "还入时由馆员指定还入的日期。"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#StaffSearchResultsDisplayBranch# For search results in the staff client, display the branch of"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#StaffSearchResultsDisplayBranch# the library the item is from."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#StaffSearchResultsDisplayBranch# the library the item is held by."
 msgstr ""
 
 # Circulation > Holds Policy
@@ -1804,7 +2057,7 @@ msgstr "不允许"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#SuspendHoldsIntranet# holds to be suspended from the intranet."
-msgstr "暂停网络预约"
+msgstr "暂停从馆员界面的预约的功能。"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#SuspendHoldsOpac# Allow"
@@ -1816,7 +2069,7 @@ msgstr "不允许"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#SuspendHoldsOpac# holds to be suspended from the OPAC."
-msgstr "暂停从联机公共目录预约"
+msgstr "暂停从联机公共目录预约的功能。"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#TransferWhenCancelAllWaitingHolds# Don't transfer"
@@ -1837,6 +2090,18 @@ msgstr "在 \"转出给它馆\" 画面显示警语，若转出馆藏尚未被接
 # Circulation > Checkout Policy
 msgid "circulation.pref#TransfersMaxDaysWarning# days after it was sent."
 msgstr "天，送出后。"
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#UpdateNotForLoanStatusOnCheckin# Each pair of values should be on a separate line."
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#UpdateNotForLoanStatusOnCheckin# This is a list of value pairs. When an item is checked in, if the not for loan value on the left matches the items not for loan value"
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#UpdateNotForLoanStatusOnCheckin# it will be updated to the right-hand value. E.g. '-1: 0' will cause an item that was set to 'Ordered' to now be available for loan."
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#UpdateTotalIssuesOnCirc# Do"
@@ -1885,18 +2150,6 @@ msgstr "使用"
 # Circulation > Course Reserves
 msgid "circulation.pref#UseCourseReserves# course reserves"
 msgstr "指定参考书"
-
-# Circulation > Interface
-msgid "circulation.pref#UseTablesortForCirc# Don't enable"
-msgstr "停用"
-
-# Circulation > Interface
-msgid "circulation.pref#UseTablesortForCirc# Enable"
-msgstr "启用"
-
-# Circulation > Interface
-msgid "circulation.pref#UseTablesortForCirc# the sorting of current patron checkouts on the circulation screen. <br/>NOTE: Enabling this function may slow down circulation time for patrons with many checkouts."
-msgstr "排序功能，在流通画面排序读者的借出数据。<br/>说明：启用此功能，可能拖累流通速度。"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#UseTransportCostMatrix# Don't use"
@@ -1980,7 +2233,7 @@ msgstr "启用"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#decreaseLoanHighHolds# days for items with more than"
-msgstr "days for items with more than"
+msgstr "天，当该馆藏已有"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#decreaseLoanHighHolds# holds."
@@ -2100,7 +2353,7 @@ msgstr "还入时，显示"
 
 # Circulation > Interface
 msgid "circulation.pref#numReturnedItemsToShow# last returned items on the checkin screen."
-msgstr "还入时，显示上次还入的馆藏。"
+msgstr "次稍早还入的馆藏。"
 
 # Circulation > Interface
 msgid "circulation.pref#previousIssuesDefaultSortOrder# Sort previous checkouts on the circulation page from"
@@ -2161,22 +2414,6 @@ msgstr "遇闭馆日，顺延至下个开馆日"
 # Circulation > Checkout Policy
 msgid "circulation.pref#useDaysMode# the calendar to skip all days the library is closed."
 msgstr "不含闭馆日。"
-
-# Creators
-msgid "creators.pref"
-msgstr "新增"
-
-# Creators > Patron Cards
-msgid "creators.pref Patron Cards"
-msgstr "读者证"
-
-# Creators > Patron Cards
-msgid "creators.pref#ImageLimit# Limit the number of creator images stored in the database to"
-msgstr "限制存储在数据库的照片数"
-
-# Creators > Patron Cards
-msgid "creators.pref#ImageLimit# images."
-msgstr "照片。"
 
 # Enhanced Content
 msgid "enhanced_content.pref"
@@ -2245,6 +2482,10 @@ msgstr "Syndetics "
 # Enhanced Content > Tagging
 msgid "enhanced_content.pref Tagging"
 msgstr "标签"
+
+# Enhanced Content > All
+msgid "enhanced_content.pref## <strong>NOTE:</strong> you can only choose one source of cover images from below, otherwise Koha will show the images from all sources selected."
+msgstr ""
 
 # Enhanced Content > Local Cover Images
 msgid "enhanced_content.pref#AllowMultipleCovers# Allow"
@@ -2516,7 +2757,7 @@ msgstr "."
 
 # Enhanced Content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectProfile# Access Novelist Select using user profile"
-msgstr "以用户帐号近用EBSCO 公司的 Novelist Select"
+msgstr "以用户配置文件近用EBSCO 公司的 Novelist Select"
 
 # Enhanced Content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectProfile# and password"
@@ -2848,11 +3089,11 @@ msgstr "ThingISBN 服务，显示其它版本(当 FRBRizeEditions 或 OPACFRBRiz
 
 # Enhanced Content > Plugins
 msgid "enhanced_content.pref#UseKohaPlugins# Don't enable"
-msgstr "enhanced_content.pref#UseKohaPlugins# 不启用"
+msgstr "停用"
 
 # Enhanced Content > Plugins
 msgid "enhanced_content.pref#UseKohaPlugins# Enable"
-msgstr "enhanced_content.pref#UseKohaPlugins# 启用"
+msgstr "启用"
 
 # Enhanced Content > Plugins
 msgid "enhanced_content.pref#UseKohaPlugins# the ability to use Koha Plugins. Note, the plugin system must also be enabled in the Koha configuration file to be fully enabled."
@@ -2899,8 +3140,8 @@ msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# as the first day of week in the ca
 msgstr "做为行事历每周的第一天。"
 
 # I18N/L10N
-msgid "i18n_l10n.pref#TimeFormat# ."
-msgstr " 。"
+msgid "i18n_l10n.pref#TimeFormat# . <b>Note:</b> Do not change this preference on a production server with overdue items that are accruing fines. Doing so will result in duplicate fines!"
+msgstr ""
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -2923,8 +3164,8 @@ msgid "i18n_l10n.pref#alphabet# for lists of browsable letters. This should be a
 msgstr "可浏览的字母清单，此清单应为空格区隔的大写字母清单。"
 
 # I18N/L10N
-msgid "i18n_l10n.pref#dateformat# ."
-msgstr "。"
+msgid "i18n_l10n.pref#dateformat# . <b>Note:</b> Do not change this preference on a production server with overdue items that are accruing fines. Doing so will result in duplicate fines!"
+msgstr ""
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -2965,6 +3206,10 @@ msgstr "读者更改其联机公共目录界面的语文。"
 # Local Use
 msgid "local_use.pref"
 msgstr "在地使用"
+
+# Local Use
+msgid "local_use.pref## Nothing defined yet."
+msgstr ""
 
 # Logging
 msgid "logs.pref"
@@ -3070,6 +3315,10 @@ msgstr "当新增、删除或修改期刊。"
 msgid "opac.pref"
 msgstr "联机公共目录"
 
+# OPAC > Advanced Search Options
+msgid "opac.pref Advanced Search Options"
+msgstr ""
+
 # OPAC > Appearance
 msgid "opac.pref Appearance"
 msgstr "外观"
@@ -3156,15 +3405,15 @@ msgstr "机读编目格式。"
 
 # OPAC > Policy
 msgid "opac.pref#BlockExpiredPatronOpacActions# Block"
-msgstr ""
+msgstr "封锁"
 
 # OPAC > Policy
 msgid "opac.pref#BlockExpiredPatronOpacActions# Don't block"
-msgstr ""
+msgstr "不封锁"
 
 # OPAC > Policy
 msgid "opac.pref#BlockExpiredPatronOpacActions# expired patrons from OPAC actions such as placing a hold or renewing.  Note that the setting for a patron category takes priority over this system preference."
-msgstr ""
+msgstr "失效读者在联机公共目录的作为，如：预约或续借。  对读者类型的设置优先于在系统首选的设置。"
 
 # OPAC > Appearance
 msgid "opac.pref#COinSinOPACResults# COinS / OpenURL / Z39.88 in OPAC search results.  <br/>Warning: Enabling this feature will slow OPAC search response times."
@@ -3203,6 +3452,18 @@ msgid "opac.pref#EnableOpacSearchHistory# patron search history in the OPAC."
 msgstr "在联机公共目录的读者检索记录。"
 
 # OPAC > Appearance
+msgid "opac.pref#GoogleIndicTransliteration# Don't show"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#GoogleIndicTransliteration# GoogleIndicTransliteration on the OPAC."
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#GoogleIndicTransliteration# Show"
+msgstr ""
+
+# OPAC > Appearance
 msgid "opac.pref#HighlightOwnItemsOnOPAC#  by moving the results to the front and increasing the size or highlighting the rows for those results. (Non-XSLT Only)"
 msgstr "移动结果至前方，并加大字体或强调结果列。(祗限 Non-XSLT)"
 
@@ -3236,6 +3497,18 @@ msgstr "做为联机公共目录显示的图书馆名称。"
 
 # OPAC > Appearance
 msgid "opac.pref#NoLoginInstructions# Show the following HTML on the OPAC login form when a patron is not logged in:"
+msgstr "读者未登录时，在联机公共目录的登录表单显示以下的HTML："
+
+# OPAC > Features
+msgid "opac.pref#OPACAcquisitionDetails# Display"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#OPACAcquisitionDetails# Don't display"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#OPACAcquisitionDetails# the acquisition details on OPAC detail pages."
 msgstr ""
 
 # OPAC > Appearance
@@ -3270,6 +3543,22 @@ msgstr "说明：必须打开对应的 OPACXSLT 选项。"
 msgid "opac.pref#OPACDisplay856uAsImage# Results page only"
 msgstr "祗显示结果"
 
+# OPAC > Appearance
+msgid "opac.pref#OPACFallback# Use the"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OPACFallback# bootstrap"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OPACFallback# prog"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OPACFallback# theme as the fallback theme on the OPAC."
+msgstr ""
+
 # OPAC > Policy
 msgid "opac.pref#OPACFineNoRenewals# Only allow patrons to renew their own books on the OPAC if they have less than"
 msgstr "读者可从联机公共目录续借，如果罚款少于"
@@ -3299,16 +3588,16 @@ msgid "opac.pref#OPACItemHolds# Don't allow"
 msgstr "不允许"
 
 # OPAC > Policy
-msgid "opac.pref#OPACItemHolds# patrons to place holds on specific items in the OPAC. If this is disabled, users can only put a hold on the next available item."
-msgstr "读者从联机公共目录预约馆藏。若停用此功能，读者祗能预约可用的馆藏。"
+msgid "opac.pref#OPACItemHolds# Force"
+msgstr ""
 
-# OPAC > Appearance
-msgid "opac.pref#OPACMobileUserCSS# Include the following CSS for the mobile view on all pages in the OPAC:"
-msgstr "包括以下的 CSS 供联机公共目录所有的页面之用："
+# OPAC > Policy
+msgid "opac.pref#OPACItemHolds# patrons to place holds on specific items in the OPAC. If this is disabled, users can only put a hold on the next available item. If this is forced, users must put a hold on a specific item."
+msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACMySummaryHTML# <br />Note: The placeholders {BIBLIONUMBER}, {TITLE}, {ISBN} and {AUTHOR} will be replaced with information from the displayed record."
-msgstr "<br />说明：预约信息 {BIBLIONUMBER}、{TITLE}、{ISBN} 及 {AUTHOR} 将取代显示的记录。"
+msgstr "<br />说明：占位符 {BIBLIONUMBER}、{TITLE}、{ISBN} 及 {AUTHOR} 代表的字段将填入系统相关字段信息。"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACMySummaryHTML# Include a \"Links\" column on the \"my summary\" and \"my reading history\" tabs when a user is logged in to the OPAC, with the following HTML (leave blank to disable):"
@@ -3316,11 +3605,11 @@ msgstr "当读者使用以下的 HTML (空白即停用)登录联机公共目录�
 
 # OPAC > Appearance
 msgid "opac.pref#OPACMySummaryNote# Note to display on the patron summary page. This note only appears if the patron is logged in:"
-msgstr ""
+msgstr "显示在读者摘要页面的说明，此说明祗在读者登录后才显示："
 
 # OPAC > Appearance
 msgid "opac.pref#OPACNoResultsFound# <br />Note: You can insert placeholders {QUERY_KW} that will be replaced with the keywords of the query."
-msgstr "opac.pref#OPACNoResultsFound# <br/>说明：可插入馆藏地 {QUERY_KW} 取代询问的键词。"
+msgstr "opac.pref#OPACNoResultsFound# <br/>说明：可插入占位符 {QUERY_KW}暂代 , 之后QUERY_KW将填入读者实际查询的关键词。"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACNoResultsFound# Display this HTML when no results are found for a search in the OPAC:"
@@ -3368,7 +3657,7 @@ msgstr "在联机公共目录的检索结果里，包括下列的 HTML："
 
 # OPAC > Appearance
 msgid "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, {CONTROLNUMBER}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be replaced with information from the displayed record."
-msgstr "<br />说明：代理者{BIBLIONUMBER}、{CONTROLNUMBER}、{TITLE}、{ISBN}、{ISSN} 与 {AUTHOR} 将被显示记录的信息取代。"
+msgstr "<br />说明：有设置占位符{BIBLIONUMBER}、{CONTROLNUMBER}、{TITLE}、{ISBN}、{ISSN} 与 {AUTHOR} 的内容将被系统相对字段的信息(如ISBN号)取代以连结至其它系统查询。"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACSearchForTitleIn# Include a \"More Searches\" box on the detail pages of items on the OPAC, with the following HTML (leave blank to disable):"
@@ -3514,6 +3803,14 @@ msgstr "不新增"
 msgid "opac.pref#OpacAddMastheadLibraryPulldown# a library select pulldown menu on the OPAC masthead."
 msgstr "图书馆下拉选单，在联机公共目录的标题列。"
 
+# OPAC > Advanced Search Options
+msgid "opac.pref#OpacAdvSearchMoreOptions# Show search options for the expanded view"
+msgstr ""
+
+# OPAC > Advanced Search Options
+msgid "opac.pref#OpacAdvSearchOptions# Show search options"
+msgstr ""
+
 # OPAC > Policy
 msgid "opac.pref#OpacAllowPublicListCreation# Allow"
 msgstr "允许"
@@ -3536,7 +3833,7 @@ msgstr "不允许"
 
 # OPAC > Policy
 msgid "opac.pref#OpacAllowSharingPrivateLists# opac users to share private lists with other patrons."
-msgstr ""
+msgstr "与其它读者共享私人虚拟书架。"
 
 # OPAC > Features
 msgid "opac.pref#OpacAuthorities# Allow"
@@ -3587,6 +3884,10 @@ msgid "opac.pref#OpacCloud# a subject cloud on OPAC (run misc/cronjobs/build_bro
 msgstr "联机公共目录的主题云(执行 misc/cronjobs/build_browser_and_cloud.pl to build)"
 
 # OPAC > Appearance
+msgid "opac.pref#OpacCustomSearch# Replace the search box at the top of OPAC pages with the following HTML:"
+msgstr ""
+
+# OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# <br />Note: Available options are: BIBTEX (<code>bibtex</code>), Dublin Core (<code>dc</code>),"
 msgstr "<br />说明：可用的选项是：BIBTEX (<code>bibtex</code>)、Dublin Core (<code>dc</code>),"
 
@@ -3615,6 +3916,10 @@ msgid "opac.pref#OpacHiddenItems# Allows to define custom rules for hiding speci
 msgstr "允许设置客制化规则，于联机公共目录隐藏特定馆藏，详情请见 docs/opac/OpacHiddenItems.txt"
 
 # OPAC > Appearance
+msgid "opac.pref#OpacHighlightedWords# (separate columns with |)"
+msgstr ""
+
+# OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# Don't highlight"
 msgstr "不强调"
 
@@ -3623,8 +3928,8 @@ msgid "opac.pref#OpacHighlightedWords# Highlight"
 msgstr "强调"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacHighlightedWords# words the patron searched for in their search results and detail pages."
-msgstr "读者寻找的字词显示寻找结果与详情页面。"
+msgid "opac.pref#OpacHighlightedWords# words the patron searched for in their search results and detail pages; To prevent certain words from ever being highlighted, enter a list of stopwords here"
+msgstr ""
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Allow"
@@ -3671,12 +3976,48 @@ msgid "opac.pref#OpacKohaUrl# Show"
 msgstr "显示"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacMainUserBlock# Show the following HTML in its own column on the main page of the OPAC:"
-msgstr "在联机公共目录主页，显示以下的HTML内容："
+msgid "opac.pref#OpacLocationBranchToDisplay# Display the"
+msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OpacMainUserBlockMobile# Show the following HTML in its own column on the main page of the OPAC (mobile version):"
-msgstr "在联机公共目录主页，显示以下的 HTML 内容(行动版)："
+msgid "opac.pref#OpacLocationBranchToDisplay# for items on the OPAC record details page."
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacLocationBranchToDisplay# holding library"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacLocationBranchToDisplay# home and holding libraries"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacLocationBranchToDisplay# home library"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacLocationBranchToDisplayShelving# Display the shelving location under the"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacLocationBranchToDisplayShelving# for items on the OPAC record details page."
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacLocationBranchToDisplayShelving# holding library"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacLocationBranchToDisplayShelving# home and holding libraries"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacLocationBranchToDisplayShelving# home library"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacMainUserBlock# Show the following HTML in its own column on the main page of the OPAC:"
+msgstr "在联机公共目录主页，显示以下的HTML内容："
 
 # OPAC > Appearance
 msgid "opac.pref#OpacMaintenance# Don't show"
@@ -3692,11 +4033,11 @@ msgstr "警语，联机公共目录维修时。注意：数据库升级时，也
 
 # OPAC > Appearance
 msgid "opac.pref#OpacMaxItemsToDisplay# Display up to"
-msgstr ""
+msgstr "显示最多"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacMaxItemsToDisplay# items on the biblio detail page (if the biblio has more items than this, a link is displayed instead that allows the user to choose to display all items)."
-msgstr ""
+msgstr "书目详情页面的馆藏(若有多个馆藏，显示连结而非允许读者选择显示的全部馆藏)。"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacNav# Show the following HTML on the left hand column of the main page and patron account on the OPAC (generally navigation links):"
@@ -3799,30 +4140,6 @@ msgid "opac.pref#OpacSeparateHoldings# items display into two tabs, where the fi
 msgstr "馆藏显示为两个分页，第一个分页包括馆藏是"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacShowFiltersPulldownMobile# Don't show"
-msgstr "不显示"
-
-# OPAC > Appearance
-msgid "opac.pref#OpacShowFiltersPulldownMobile# Show"
-msgstr "显示"
-
-# OPAC > Appearance
-msgid "opac.pref#OpacShowFiltersPulldownMobile# the search filters pulldown on the mobile version of the OPAC."
-msgstr "行动版联机公共目录的寻找筛选下拉选单。"
-
-# OPAC > Appearance
-msgid "opac.pref#OpacShowLibrariesPulldownMobile# Don't show"
-msgstr "不显示"
-
-# OPAC > Appearance
-msgid "opac.pref#OpacShowLibrariesPulldownMobile# Show"
-msgstr "显示"
-
-# OPAC > Appearance
-msgid "opac.pref#OpacShowLibrariesPulldownMobile# the libraries pulldown on the mobile version of the OPAC."
-msgstr "行动版联机公共目录的图书馆下拉选单。"
-
-# OPAC > Appearance
 msgid "opac.pref#OpacShowRecentComments# Don't show"
 msgstr "不显示"
 
@@ -3856,15 +4173,15 @@ msgstr "结果与详情"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacSuggestionManagedBy# Don't show"
-msgstr ""
+msgstr "不显示"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacSuggestionManagedBy# Show"
-msgstr ""
+msgstr "显示"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacSuggestionManagedBy# the name of the staff member who managed a suggestion in OPAC."
-msgstr ""
+msgstr "管理联机公共目录推荐的馆员名称。"
 
 # OPAC > Features
 msgid "opac.pref#OpacTopissue# Allow"
@@ -4151,14 +4468,6 @@ msgid "opac.pref#opacreadinghistory# patrons to see what books they have checked
 msgstr "读者查看自己的借出记录。"
 
 # OPAC > Appearance
-msgid "opac.pref#opacsmallimage# Use the image at"
-msgstr "使用此照片"
-
-# OPAC > Appearance
-msgid "opac.pref#opacsmallimage# in the OPAC header, instead of the Koha logo. If this image is a different size than the Koha logo, you will need to customize the CSS. (This should be a complete URL, starting with <code>http://</code>.)"
-msgstr "于联机公共目录的标头，取代原来的 Koha 图示，可以客制化。(必须是完整的网址，以 <code>http://</code> 开始。)"
-
-# OPAC > Appearance
 msgid "opac.pref#opacthemes# Use the"
 msgstr "使用"
 
@@ -4316,15 +4625,15 @@ msgstr "读者的称谓如下："
 
 # Patrons
 msgid "patrons.pref#CardnumberLength# Card numbers for patrons must be"
-msgstr ""
+msgstr "读者证号码必须"
 
 # Patrons
 msgid "patrons.pref#CardnumberLength# If 'cardnumber' is included in the BorrowerMandatoryField list, the minimum length, if not specified here, defaults to one."
-msgstr ""
+msgstr "若在BorrowerMandatoryField 字段把'cardnumber'纳入，若没有指明，则最小长度为 1。"
 
 # Patrons
 msgid "patrons.pref#CardnumberLength# characters long. The length can be a single number to specify an exact length, a range separated by a comma (i.e., 'Min,Max'), or a maximum with no minimum (i.e., ',Max')."
-msgstr ""
+msgstr "字符长度。长度可以是一个数字至指定的长度，以逗号区隔(如，'最少，最多')，或指定最多但没有最少(如，'，最多')。"
 
 # Patrons
 msgid "patrons.pref#EnableBorrowerFiles# Do"
@@ -4376,7 +4685,7 @@ msgstr " [% local_currency %]。"
 
 # Patrons
 msgid "patrons.pref#NotifyBorrowerDeparture# Show a notice if the patron is about to expire or has expired"
-msgstr ""
+msgstr "若读者将失效则显示说明"
 
 # Patrons
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
@@ -4512,15 +4821,15 @@ msgstr "检索表格"
 
 # Searching > Search Form
 msgid "searching.pref#AdvancedSearchLanguages# For example, to limit listing to French and Italian, enter <em>ita|fre</em>."
-msgstr ""
+msgstr "如，限制列出法文与意大利文，键入<em>ita|fre</em>。"
 
 # Searching > Search Form
 msgid "searching.pref#AdvancedSearchLanguages# ISO 639-2 language codes (separate values with | or ,)."
-msgstr ""
+msgstr "ISO 639-2 语系代码(以 | 或 , 区隔)。"
 
 # Searching > Search Form
 msgid "searching.pref#AdvancedSearchLanguages# Limit the languages listed in the advanced search drop-down to the"
-msgstr ""
+msgstr "限制列在高级寻找下拉选单里的语系"
 
 # Searching > Search Form
 msgid "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: Item types (<strong>itemtypes</strong>), Collection Codes (<strong>ccode</strong>) and Shelving Location (<strong>loc</strong>)."
@@ -4536,31 +4845,31 @@ msgstr "(以 | 区隔)，依序显示标签。<br/>"
 
 # Searching > Results Display
 msgid "searching.pref#DisplayLibraryFacets# Show facets for"
-msgstr ""
+msgstr "显示层面"
 
 # Searching > Results Display
 msgid "searching.pref#DisplayLibraryFacets# both home and holding library"
-msgstr ""
+msgstr "所属图书馆与馆藏图书馆"
 
 # Searching > Results Display
 msgid "searching.pref#DisplayLibraryFacets# holding library"
-msgstr ""
+msgstr "馆藏图书馆"
 
 # Searching > Results Display
 msgid "searching.pref#DisplayLibraryFacets# home library"
-msgstr ""
+msgstr "所属图书馆"
 
 # Searching > Features
 msgid "searching.pref#EnableSearchHistory# Don't keep"
-msgstr ""
+msgstr "不保留"
 
 # Searching > Features
 msgid "searching.pref#EnableSearchHistory# Keep"
-msgstr ""
+msgstr "保留"
 
 # Searching > Features
 msgid "searching.pref#EnableSearchHistory# patron search history in the staff client."
-msgstr ""
+msgstr "馆员界面里的读者寻找记录。"
 
 # Searching > Results Display
 msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
@@ -4569,6 +4878,14 @@ msgstr "截切长度"
 # Searching > Results Display
 msgid "searching.pref#FacetLabelTruncationLength# characters, in OPAC/staff interface."
 msgstr "字符，在联机公共目录/馆员界面。"
+
+# Searching > Results Display
+msgid "searching.pref#FacetMaxCount# Show up to"
+msgstr ""
+
+# Searching > Results Display
+msgid "searching.pref#FacetMaxCount# facets for each category."
+msgstr ""
 
 # Searching > Features
 msgid "searching.pref#IncludeSeeFromInSearches# <i>see from</i> (non-preferred form) headings in bibliographic searches. Please note: you will need to reindex your bibliographic database when changing this preference."
@@ -5230,29 +5547,33 @@ msgstr "不允许"
 msgid "staff_client.pref#viewMARC# staff to view records in plain MARC form on the staff client."
 msgstr "馆员从馆员界面浏览纯机读编目格式。"
 
-# Staff Client > Appearance
-msgid "staff_client.pref#yuipath# Use the Yahoo UI libraries"
-msgstr "使用雅虎 UI 图书馆时，"
-
-# Staff Client > Appearance
-msgid "staff_client.pref#yuipath# from Yahoo's own servers (less demand on your servers)."
-msgstr "从雅虎本身的服务器(少有图书馆使用它)。"
-
-# Staff Client > Appearance
-msgid "staff_client.pref#yuipath# included with Koha (faster, will work if internet goes down)."
-msgstr "纳入 Koha(较快，即使没有国际互联网也能运作)。"
-
 # Tools
 msgid "tools.pref"
+msgstr "tools.pref"
+
+# Tools > Batch item modification
+msgid "tools.pref Batch item modification"
 msgstr ""
 
-# Tools
+# Tools > Patron cards
+msgid "tools.pref Patron cards"
+msgstr ""
+
+# Tools > Patron cards
+msgid "tools.pref#ImageLimit# Limit the number of creator images stored in the database to"
+msgstr ""
+
+# Tools > Patron cards
+msgid "tools.pref#ImageLimit# images."
+msgstr ""
+
+# Tools > Batch item modification
 msgid "tools.pref#MaxItemsForBatch# Process up to"
-msgstr ""
+msgstr "处理至"
 
-# Tools
+# Tools > Batch item modification
 msgid "tools.pref#MaxItemsForBatch# items in a single modification or deletion batch."
-msgstr ""
+msgstr "在修订或删除批次的馆藏。"
 
 # Web services
 msgid "web_services.pref"
@@ -5284,11 +5605,11 @@ msgstr "供联机公共目录读者使用之整合图书馆系统发掘界面服
 
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI:AuthorizedIPs# Allow IP addresses"
-msgstr ""
+msgstr "允许以IP寻址"
 
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI:AuthorizedIPs# to use the ILS-DI services (when enabled). Separate the IP addresses with commas and without spaces. Leave the field blank to allow any IP address."
-msgstr ""
+msgstr "使用ILS-DI服务(启用时)。以无空格的逗号区隔多个IP。空白则允许任意IP使用。"
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH# <a href=\"http://www.openarchives.org/pmh/\">OAI-PMH</a> server."
@@ -5320,11 +5641,11 @@ msgstr "新增或更新书目记录时，自动更新捕获后设数据之开放
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:ConfFile# . If empty, Koha OAI Server operates in normal mode, otherwise it operates in extended mode. In extended mode, it's possible to parameter other formats than marcxml or Dublin Core. OAI-PMH:ConfFile specify a YAML configuration file which list available metadata formats and XSL file used to create them from marcxml records."
-msgstr ""
+msgstr "若空白，Koha OAI服务器以标准模式运作，否则以扩展模式运作。在扩展模式里，可使用 marcxml 或 Doblin Core以外的格式。OAI-PMH:ConfFile 指定 YAML 组态档，列出可用的元数据格式与 XSL 文件，供新增 marcxml 记录之用。"
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:ConfFile# YAML OAI Koha server configuration file:"
-msgstr ""
+msgstr "YAML Koha服务器组态档："
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:MaxCount# Only return"
