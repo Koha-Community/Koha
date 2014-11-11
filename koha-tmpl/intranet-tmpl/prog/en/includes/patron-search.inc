@@ -56,7 +56,7 @@
 
       <script type="text/javascript">
           [% SET dateformat = Koha.Preference('dateformat') %]
-          $("#searchfields").change(function() {
+          $("#searchfieldstype").change(function() {
               if ( $(this).val() == 'dateofbirth' ) {
                   [% IF dateformat == 'us' %]
                       var MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'MM/DD/YYYY'");
