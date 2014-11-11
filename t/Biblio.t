@@ -18,11 +18,23 @@
 use Modern::Perl;
 
 use Test::More tests => 44;
+use Test::MockModule;
 use Test::Warn;
+use DBD::Mock;
 
 BEGIN {
         use_ok('C4::Biblio');
 }
+
+my $context = new Test::MockModule('C4::Context');
+$context->mock(
+    '_new_dbh',
+    sub {
+        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
+          || die "Cannot create handle: $DBI::errstr\n";
+        return $dbh;
+    }
+);
 
 my @arr;
 my $ret;
