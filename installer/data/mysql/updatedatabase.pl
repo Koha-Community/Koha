@@ -9438,7 +9438,7 @@ if ( CheckVersion($DBversion) ) {
    SetVersion ($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.053";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(q{
         INSERT INTO permissions (module_bit, code, description) VALUES ('9', 'edit_items_restricted', 'Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEditing preference (please note that edit_item is still required)');
