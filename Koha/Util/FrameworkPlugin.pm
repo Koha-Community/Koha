@@ -32,7 +32,7 @@ BEGIN {
 
 =head1 NAME
 
-Koha::Util::Plugin - utility class with routines for framework plugins
+Koha::Util::FrameworkPlugin - utility class with routines for framework plugins
 
 =head1 FUNCTIONS
 
