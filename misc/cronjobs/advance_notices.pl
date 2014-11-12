@@ -228,7 +228,6 @@ my @letters;
 UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
     @letters = ();
     warn 'examining ' . $upcoming->{'itemnumber'} . ' upcoming due items' if $verbose;
-    # warn( Data::Dumper->Dump( [ $upcoming ], [ 'overdue' ] ) );
 
     my $from_address = $upcoming->{branchemail} || $admin_adress;
 
@@ -237,7 +236,6 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
         # This item is due today. Send an 'item due' message.
         $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $upcoming->{'borrowernumber'},
                                                                                    message_name   => 'item_due' } );
-        # warn( Data::Dumper->Dump( [ $borrower_preferences ], [ 'borrower_preferences' ] ) );
         next unless $borrower_preferences;
         
         if ( $borrower_preferences->{'wants_digest'} ) {
@@ -271,7 +269,6 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
     } else {
         $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $upcoming->{'borrowernumber'},
                                                                                    message_name   => 'advance_notice' } );
-        # warn( Data::Dumper->Dump( [ $borrower_preferences ], [ 'borrower_preferences' ] ) );
         next UPCOMINGITEM unless $borrower_preferences && exists $borrower_preferences->{'days_in_advance'};
         next UPCOMINGITEM unless $borrower_preferences->{'days_in_advance'} == $upcoming->{'days_until_due'};
 
@@ -325,7 +322,6 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
 }
 
 
-# warn( Data::Dumper->Dump( [ $upcoming_digest ], [ 'upcoming_digest' ] ) );
 
 # Now, run through all the people that want digests and send them
 
@@ -344,7 +340,6 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$upcoming_digest ) {
 
     my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrowernumber,
                                                                                   message_name   => 'advance_notice' } );
-    # warn( Data::Dumper->Dump( [ $borrower_preferences ], [ 'borrower_preferences' ] ) );
     next PATRON unless $borrower_preferences; # how could this happen?
 
 
@@ -404,7 +399,6 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$due_digest ) {
 
     my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrowernumber,
                                                                                   message_name   => 'item_due' } );
-    # warn( Data::Dumper->Dump( [ $borrower_preferences ], [ 'borrower_preferences' ] ) );
     next PATRON unless $borrower_preferences; # how could this happen?
 
     my $letter_type = 'DUEDGST';
