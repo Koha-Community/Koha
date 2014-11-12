@@ -279,17 +279,24 @@ $(document).ready(function() {
                             +  "<input type='checkbox' class='renew' id='renew_" + oObj.itemnumber + "' name='renew' value='" + oObj.itemnumber +"'/>"
                             +  "</span>";
 
-                    if ( oObj.renewals_remaining ) {
-                        content += "<span class='renewals'>("
-                                + RENEWALS_REMAINING.format( oObj.renewals_remaining, oObj.renewals_allowed )
-                                + ")</span>";
+                    if ( oObj.renewals_remaining && oObj.onsite_checkout == 0 ) {
+                            content += "<span class='" + span_class + "' style='" + span_style + "'>"
+                                    +  "<input type='checkbox' ";
+                            if ( oObj.date_due_overdue ) {
+                                content += "checked='checked' ";
+                            }
+                            content += "class='renew' id='renew_" + oObj.itemnumber + "' name='renew' value='" + oObj.itemnumber +"'/>"
+                                    +  "</span>";
+
+                            content += "<span class='renewals'>("
+                                    + RENEWALS_REMAINING.format( oObj.renewals_remaining, oObj.renewals_allowed )
+                                    + ")</span>";
+                        }
+
+                        content += "</span>";
+
+                        return content;
                     }
-
-                    content += "</span>";
-
-
-                    return content;
-                }
             },
             {
                 "bSortable": false,
