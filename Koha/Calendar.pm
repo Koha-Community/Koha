@@ -167,6 +167,8 @@ sub addDays {
     my ( $self, $startdate, $days_duration ) = @_;
     my $base_date = $startdate->clone();
 
+    $self->{days_mode} ||= q{};
+
     if ( $self->{days_mode} eq 'Calendar' ) {
         # use the calendar to skip all days the library is closed
         # when adding

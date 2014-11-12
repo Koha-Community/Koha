@@ -291,6 +291,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     );
 
     # Testing of feature to allow the renewal of reserved items if other items on the record can fill all needed holds
+    C4::Context->set_preference('AllowOnShelfHolds', 1 );
     C4::Context->set_preference('AllowRenewalIfOtherItemsAvailable', 1 );
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
     is( $renewokay, 1, 'Bug 11634 - Allow renewal of item with unfilled holds if other available items can fill those holds');

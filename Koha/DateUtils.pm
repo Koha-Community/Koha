@@ -128,7 +128,7 @@ sub output_pref {
     my $pref =
       defined $force_pref ? $force_pref : C4::Context->preference('dateformat');
 
-    my $time_format = $force_time || C4::Context->preference('TimeFormat');
+    my $time_format = $force_time || C4::Context->preference('TimeFormat') || q{};
     my $time = ( $time_format eq '12hr' ) ? '%I:%M %p' : '%H:%M';
     my $date;
     if ( $pref =~ m/^iso/ ) {
