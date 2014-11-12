@@ -58,7 +58,12 @@ foreach (grep {$_ =~ /^mDataProp/} keys %dt_params) {
 }
 
 my $results;
-if ( $searchfieldstype and $searchfieldstype eq 'standard' ) {
+# If the user filled a term, maybe it's a cardnumber.
+# This cannot be the case if a first letter is given.
+if (    not $firstletter
+    and $searchfieldstype
+    and $searchfieldstype eq 'standard' )
+{
     my $member = C4::Members::GetMember( cardnumber => $searchmember );
     $results = {
         iTotalRecords        => 1,
