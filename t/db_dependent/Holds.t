@@ -33,10 +33,11 @@ $dbh->do('DELETE FROM itemtypes');
 my $insert_sth = $dbh->prepare('INSERT INTO itemtypes (itemtype) VALUES (?)');
 $insert_sth->execute('CAN');
 $insert_sth->execute('CANNOT');
+$insert_sth->execute('DUMMY');
 
 # Setup Test------------------------
 # Create a biblio instance for testing
-my ($bibnum, $title, $bibitemnum) = create_helper_biblio();
+my ($bibnum, $title, $bibitemnum) = create_helper_biblio('DUMMY');
 
 # Create item instance for testing.
 my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL' } , $bibnum);
@@ -186,7 +187,7 @@ ok( $reserve->{'priority'} eq '5', "Test AlterPriority(), move to bottom" );
 # Note that canreservefromotherbranches has no effect if
 # IndependentBranches is OFF.
 
-my ($foreign_bibnum, $foreign_title, $foreign_bibitemnum) = create_helper_biblio();
+my ($foreign_bibnum, $foreign_title, $foreign_bibitemnum) = create_helper_biblio('DUMMY');
 my ($foreign_item_bibnum, $foreign_item_bibitemnum, $foreign_itemnumber)
   = AddItem({ homebranch => 'MPL', holdingbranch => 'MPL' } , $foreign_bibnum);
 $dbh->do('DELETE FROM issuingrules');
@@ -230,7 +231,7 @@ ok(
 );
 
 # Regression test for bug 11336
-($bibnum, $title, $bibitemnum) = create_helper_biblio();
+($bibnum, $title, $bibitemnum) = create_helper_biblio('DUMMY');
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL' } , $bibnum);
 AddReserve(
     $branch,
