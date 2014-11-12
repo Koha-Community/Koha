@@ -139,7 +139,6 @@ for(qw(AmazonCoverImages GoogleJackets)) {	# BakerTaylorEnabled handled above
 $template->param(
     READING_RECORD => $issues,
     limit          => $limit,
-    showfulllink   => 1,
     readingrecview => 1,
     OPACMySummaryHTML => $opac_summary_html ? 1 : 0,
 );

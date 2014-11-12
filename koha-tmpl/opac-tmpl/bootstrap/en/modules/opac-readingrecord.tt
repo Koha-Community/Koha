@@ -31,7 +31,7 @@
                     [% IF READING_RECORD.size == 0 %]
                         You have never borrowed anything from this library.
                     [% ELSE %]
-                        <div id="opac-user-readingrec" class="statictabs">
+                        <div id="opac-user-readingrec" class="statictabs2">
                             <div class="resultscontrol resort">
                                 <form id="sortform" action="/cgi-bin/koha/opac-readingrecord.pl" method="get">
                                     [% UNLESS ( limit ) %]<input type="hidden" name="limit" value="full" />[% END %]
@@ -43,32 +43,43 @@
                                 </form>
                             </div>
 
-                            <ul>
-                                [% IF ( showfulllink ) %]
-                                    [% IF ( limit ) %]
-                                        <li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=full[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show all items</a></li><li class="active"><a href="#readingrec">Showing last 50 items</a></li>
-                                    [% ELSE %]
-                                        <li class="active"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing all items</a></li><li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=50[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show last 50 items only</a></li>
-                                    [% END %]
-                                [% ELSE %]
-                                    <li class="active"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing all items</a></li>
-                                [% END %]
-                            </ul>
+                            [% IF limit %]
+                                <a href="/cgi-bin/koha/opac-readingrecord.pl?limit=full[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show all items</a>
+                            [% ELSE %]
+                                <a href="/cgi-bin/koha/opac-readingrecord.pl?limit=50[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Showing last 50 items</a>
+                            [% END %]
 
-                            <div class="tabs-container">
-                                <table id="readingrec" class="table table-bordered table-striped">
-                                    <tr>
-                                    <th colspan="2">Title</th>
-                                    <th>Item type</th>
-                                    <th>Call no.</th>
-                                    <th>Date</th>
-                                    [% IF ( OPACMySummaryHTML ) %]
-                                    <th>Links</th>
-                                    [% END %]
-                                    </tr>
-
+                            <div id="tabs" class="toptabs">
+                                <ul>
+                                    <li><a href="#tabs-container" id="tab_all">All</a></li>
+                                    <li><a href="#tabs-container" id="tab_checkout">Checkouts</a></li>
+                                    <li><a href="#tabs-container" id="tab_onsite_checkout">On-site checkouts</a></li>
+                                </ul>
+                                <div id="tabs-container" style="overflow:hidden">
+                                    <table id="readingrec" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th style="display:none;">Type</th>
+                                                <th></th>
+                                                <th>Title</th>
+                                                <th>Item type</th>
+                                                <th>Call no.</th>
+                                                <th>Date</th>
+                                                [% IF ( OPACMySummaryHTML ) %]
+                                                    <th>Links</th>
+                                                [% END %]
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                     [% FOREACH issue IN READING_RECORD %]
-                                        [% IF loop.even  %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+                                        <tr>
+                                            <td style="display:none;">
+                                              [% IF issue.onsite_checkout %]
+                                                onsite
+                                              [% ELSE %]
+                                                checkout
+                                              [% END %]
+                                            </td>
                                         <td>
                                             [% IF  OPACAmazonCoverImages %]
                                                 [% IF  issue.normalized_isbn %]
@@ -101,8 +112,8 @@
                                                 <img src="http://www.syndetics.com/index.aspx?isbn=[% issue.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% issue.normalized_upc %]&amp;oclc=[% issue.normalized_oclc %]" alt="" class="item-thumbnail" />
                                            [% END %]
                                         [% END %]
-                                    </td>
-                                    <td>
+                                        </td>
+                                        <td>
                                         [% IF  issue.BiblioDefaultViewmarc %]
                                              <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF  issue.subtitle  %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
                                         [% ELSIF issue.BiblioDefaultViewisbd %]
@@ -111,8 +122,8 @@
                                              <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
                                         [% END %]
                                         <span class="item-details">[% issue.author %]</span>
-                                    </td>
-                                    <td>
+                                        </td>
+                                        <td>
                                         [% UNLESS ( noItemTypeImages ) %]
                                             [% IF ( issue.imageurl ) %]
                                                 <img src="[% issue.imageurl %]" alt="" />
@@ -120,23 +131,24 @@
                                         [% END %]
                                         <span class="tdlabel">Item type:</span>
                                         [% issue.description %]</td>
-                                    <td>
+                                        <td>
                                         <span class="tdlabel">Call number:</span>
                                         [% issue.itemcallnumber %]
-                                    </td>
-                                    <td>
+                                        </td>
+                                        <td>
                                         [% IF issue.returndate %]
                                             <span class="tdlabel">Check-in date:</span>
                                             [% issue.returndate | $KohaDates %]
                                         [% ELSE %]
                                             <em>(Checked out)</em>
                                         [% END %]
-                                    </td>
-                                    [% IF OPACMySummaryHTML %]
-                                        <td>[% issue.MySummaryHTML %]</td>
+                                        </td>
+                                        [% IF OPACMySummaryHTML %]
+                                            <td>[% issue.MySummaryHTML %]</td>
+                                        [% END %]
+                                        </tr>
                                     [% END %]
-                                    </tr>
-                                [% END %]
+                                </tbody>
                             </table>
                         </div> <!-- / .tabs-container -->
                     </div> <!-- / .opac-user-readingrec -->
@@ -149,6 +161,7 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
     $(document).ready(function(){
@@ -156,6 +169,22 @@
             $('#sortsubmit').hide();
         $('#order').change(function() {
             $('#sortform').submit();
+        });
+
+        var table = $("#readingrec").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sPaginationType": "four_button",
+        }));
+        var tabs = $("#tabs").tabs({
+            select: function(e, ui) {
+                var id = $(ui.tab).attr("id");
+                if ( id == "tab_checkout" ) {
+                    table.fnFilter("checkout", 0);
+                } else if ( id == "tab_onsite_checkout" ) {
+                    table.fnFilter("onsite", 0);
+                } else { // all
+                    table.fnFilter('', 0);
+                }
+            }
         });
     });
 //]]>
