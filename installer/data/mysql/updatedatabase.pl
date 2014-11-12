@@ -9470,7 +9470,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.054";
 if (CheckVersion($DBversion)) {
     $dbh->do(q{
         INSERT INTO systempreferences ( variable, value, options, explanation, type ) VALUES
