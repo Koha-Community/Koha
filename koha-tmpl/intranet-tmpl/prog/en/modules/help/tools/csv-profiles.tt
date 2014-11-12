@@ -115,7 +115,7 @@
   <li>Display all 245$a and 245$c into the same column:
     <p>
     [% FOREACH field IN fields.245 %]
-        [% field.a %] [% field.c %]
+        [% field.a.join(' ') %] [% field.c.join(' ') %]
     [% END %]
     </p>
   </li>
