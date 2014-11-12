@@ -31,7 +31,7 @@
                     [% IF READING_RECORD.size == 0 %]
                         You have never borrowed anything from this library.
                     [% ELSE %]
-                        <div id="opac-user-readingrec" class="statictabs2">
+                        <div id="opac-user-readingrec">
                             <div class="resultscontrol resort">
                                 <form id="sortform" action="/cgi-bin/koha/opac-readingrecord.pl" method="get">
                                     [% UNLESS ( limit ) %]<input type="hidden" name="limit" value="full" />[% END %]
@@ -44,115 +44,124 @@
                             </div>
 
                             [% IF limit %]
-                                <a href="/cgi-bin/koha/opac-readingrecord.pl?limit=full[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show all items</a>
+                                <p>
+                                    Showing last 50 items. <a href="/cgi-bin/koha/opac-readingrecord.pl?limit=full[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show all items</a>
+                                </p>
                             [% ELSE %]
-                                <a href="/cgi-bin/koha/opac-readingrecord.pl?limit=50[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Showing last 50 items</a>
+                                <p>
+                                    Showing all items. <a href="/cgi-bin/koha/opac-readingrecord.pl?limit=50[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show last 50 items</a>
+                                </p>
                             [% END %]
 
+                            [% IF Koha.Preference( 'OnSiteCheckouts' ) == 1 %]
                             <div id="tabs" class="toptabs">
                                 <ul>
                                     <li><a href="#tabs-container" id="tab_all">All</a></li>
                                     <li><a href="#tabs-container" id="tab_checkout">Checkouts</a></li>
                                     <li><a href="#tabs-container" id="tab_onsite_checkout">On-site checkouts</a></li>
                                 </ul>
+                            [% END %]
                                 <div id="tabs-container" style="overflow:hidden">
                                     <table id="readingrec" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
                                                 <th style="display:none;">Type</th>
-                                                <th></th>
-                                                <th>Title</th>
+                                                <th class="nosort"></th>
+                                                <th class="anti-the">Title</th>
                                                 <th>Item type</th>
                                                 <th>Call no.</th>
-                                                <th>Date</th>
+                                                <th class="title-string">Date</th>
                                                 [% IF ( OPACMySummaryHTML ) %]
                                                     <th>Links</th>
                                                 [% END %]
                                             </tr>
                                         </thead>
                                         <tbody>
-                                    [% FOREACH issue IN READING_RECORD %]
-                                        <tr>
-                                            <td style="display:none;">
-                                              [% IF issue.onsite_checkout %]
-                                                onsite
-                                              [% ELSE %]
-                                                checkout
-                                              [% END %]
-                                            </td>
-                                        <td>
-                                            [% IF  OPACAmazonCoverImages %]
-                                                [% IF  issue.normalized_isbn %]
-                                                    <a href="http://www.amazon.com/gp/reader/[% issue.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% issue.normalized_isbn %].01.THUMBZZZ.jpg" alt="" class="item-thumbnail" /></a>
-                                                [% ELSE %]
-                                                     <span class="no-image">No cover image available</span>
+                                            [% FOREACH issue IN READING_RECORD %]
+                                                <tr>
+                                                    <td style="display:none;">
+                                                      [% IF issue.onsite_checkout %]
+                                                        onsite
+                                                      [% ELSE %]
+                                                        checkout
+                                                      [% END %]
+                                                    </td>
+                                                <td>
+                                                    [% IF  OPACAmazonCoverImages %]
+                                                        [% IF  issue.normalized_isbn %]
+                                                            <a href="http://www.amazon.com/gp/reader/[% issue.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% issue.normalized_isbn %].01.THUMBZZZ.jpg" alt="" class="item-thumbnail" /></a>
+                                                        [% ELSE %]
+                                                             <span class="no-image">No cover image available</span>
+                                                        [% END %]
+                                                    [% END %]
+
+                                                [% IF GoogleJackets %]
+                                                    [% IF  issue.normalized_isbn %]
+                                                        <div title="[% issue.biblionumber |url %]" class="[% issue.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>
+                                                    [% ELSE %]
+                                                       <span class="no-image">No cover image available</span>
+                                                    [% END %]
                                                 [% END %]
-                                            [% END %]
 
-                                        [% IF GoogleJackets %]
-                                            [% IF  issue.normalized_isbn %]
-                                                <div title="[% issue.biblionumber |url %]" class="[% issue.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>
-                                            [% ELSE %]
-                                               <span class="no-image">No cover image available</span>
-                                            [% END %]
-                                        [% END %]
+                                                [% IF BakerTaylorEnabled %]
+                                                    [% IF issue.normalized_isbn %]
+                                                      <a href="https://[% BakerTaylorBookstoreURL |html %][% issue.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% issue.normalized_isbn %]" /></a>
+                                                    [% ELSE %]
+                                                       <span class="no-image">No cover image available</span>
+                                                    [% END %]
+                                                [% END %]
 
-                                        [% IF BakerTaylorEnabled %]
-                                            [% IF issue.normalized_isbn %]
-                                              <a href="https://[% BakerTaylorBookstoreURL |html %][% issue.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% issue.normalized_isbn %]" /></a>
-                                            [% ELSE %]
-                                               <span class="no-image">No cover image available</span>
-                                            [% END %]
-                                        [% END %]
-
-                                        [% IF SyndeticsEnabled && SyndeticsCoverImages %]
-                                            [% IF  using_https  %]
-                                                <img src="https://secure.syndetics.com/index.aspx?isbn=[% issue.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% issue.normalized_upc %]&amp;oclc=[% issue.normalized_oclc %]" alt="" class="item-thumbnail" />
-                                           [% ELSE %]
-                                                <img src="http://www.syndetics.com/index.aspx?isbn=[% issue.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% issue.normalized_upc %]&amp;oclc=[% issue.normalized_oclc %]" alt="" class="item-thumbnail" />
-                                           [% END %]
-                                        [% END %]
-                                        </td>
-                                        <td>
-                                        [% IF  issue.BiblioDefaultViewmarc %]
-                                             <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF  issue.subtitle  %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
-                                        [% ELSIF issue.BiblioDefaultViewisbd %]
-                                             <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
-                                        [% ELSE %]
-                                             <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
-                                        [% END %]
-                                        <span class="item-details">[% issue.author %]</span>
-                                        </td>
-                                        <td>
-                                        [% UNLESS ( noItemTypeImages ) %]
-                                            [% IF ( issue.imageurl ) %]
-                                                <img src="[% issue.imageurl %]" alt="" />
-                                            [% END %]
-                                        [% END %]
-                                        <span class="tdlabel">Item type:</span>
-                                        [% issue.description %]</td>
-                                        <td>
-                                        <span class="tdlabel">Call number:</span>
-                                        [% issue.itemcallnumber %]
-                                        </td>
-                                        <td>
-                                        [% IF issue.returndate %]
-                                            <span class="tdlabel">Check-in date:</span>
-                                            [% issue.returndate | $KohaDates %]
-                                        [% ELSE %]
-                                            <em>(Checked out)</em>
-                                        [% END %]
-                                        </td>
-                                        [% IF OPACMySummaryHTML %]
-                                            <td>[% issue.MySummaryHTML %]</td>
-                                        [% END %]
-                                        </tr>
-                                    [% END %]
-                                </tbody>
-                            </table>
-                        </div> <!-- / .tabs-container -->
-                    </div> <!-- / .opac-user-readingrec -->
-                [% END %]
+                                                [% IF SyndeticsEnabled && SyndeticsCoverImages %]
+                                                    [% IF  using_https  %]
+                                                        <img src="https://secure.syndetics.com/index.aspx?isbn=[% issue.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% issue.normalized_upc %]&amp;oclc=[% issue.normalized_oclc %]" alt="" class="item-thumbnail" />
+                                                   [% ELSE %]
+                                                        <img src="http://www.syndetics.com/index.aspx?isbn=[% issue.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% issue.normalized_upc %]&amp;oclc=[% issue.normalized_oclc %]" alt="" class="item-thumbnail" />
+                                                   [% END %]
+                                                [% END %]
+                                                </td>
+                                                <td>
+                                                [% IF  issue.BiblioDefaultViewmarc %]
+                                                     <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF  issue.subtitle  %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
+                                                [% ELSIF issue.BiblioDefaultViewisbd %]
+                                                     <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
+                                                [% ELSE %]
+                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
+                                                [% END %]
+                                                <span class="item-details">[% issue.author %]</span>
+                                                </td>
+                                                <td>
+                                                [% UNLESS ( noItemTypeImages ) %]
+                                                    [% IF ( issue.imageurl ) %]
+                                                        <img src="[% issue.imageurl %]" alt="" />
+                                                    [% END %]
+                                                [% END %]
+                                                <span class="tdlabel">Item type:</span>
+                                                [% issue.description %]</td>
+                                                <td>
+                                                <span class="tdlabel">Call number:</span>
+                                                [% issue.itemcallnumber %]
+                                                </td>
+                                                <td>
+                                                    [% IF issue.returndate %]
+                                                        <span class="tdlabel">Check-in date:</span>
+                                                        <span title="[% issue.returndate %]">[% issue.returndate | $KohaDates %]</span>
+                                                    [% ELSE %]
+                                                        <span title="Checked out"><em>(Checked out)</em></span>
+                                                    [% END %]
+                                                </td>
+                                                [% IF OPACMySummaryHTML %]
+                                                    <td>[% issue.MySummaryHTML %]</td>
+                                                [% END %]
+                                                </tr>
+                                            [% END # / FOREACH issue %]
+                                        </tbody>
+                                    </table>
+                                </div> <!-- / .tabs-container -->
+                            [% IF ( Koha.Preference( 'OnSiteCheckouts' ) == 1 ) %]
+                                </div> <!-- /#tabs -->
+                            [% END %]
+                        </div> <!-- / .opac-user-readingrec -->
+                    [% END # / IF READING_RECORD.size %]
                 </div> <!-- / .userreadingrecord -->
             </div> <!-- / .span10 -->
         </div> <!-- / .row-fluid -->
@@ -173,6 +182,11 @@
 
         var table = $("#readingrec").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sPaginationType": "four_button",
+            "aoColumnDefs": [
+                { "aTargets": [ "nosort" ],"bSortable": false,"bSearchable": false },
+                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                { "sType": "title-string", "aTargets" : [ "title-string" ] }
+            ]
         }));
         var tabs = $("#tabs").tabs({
             select: function(e, ui) {
