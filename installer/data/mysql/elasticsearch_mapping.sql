@@ -146,7 +146,7 @@ INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `m
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','itemnumber',FALSE,'number','9529','9959','9529');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','issues',FALSE,'sum','952l',NULL,'952l'); -- Apparently not tracked in unimarc
 
---- Authorities: incomplete
+-- Authorities: incomplete
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('authorities','Local-Number',FALSE,'string','001',NULL,'001');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('authorities','authtype',FALSE,'','942a',NULL,'942a');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('authorities','Kind-of-record',FALSE,'','008_/9',NULL,'008_/9');
