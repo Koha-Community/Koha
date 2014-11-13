@@ -62,7 +62,7 @@ BEGIN {
         &GetLateOrders &GetOrderFromItemnumber
         &SearchOrders &GetHistory &GetRecentAcqui
         &ModReceiveOrder &CancelReceipt
-        &GetCancelledOrders &TransferOrder
+        &TransferOrder
         &GetLastOrderNotReceivedFromSubscriptionid &GetLastOrderReceivedFromSubscriptionid
         &ModItemOrder
 
@@ -1036,43 +1036,75 @@ sub GetBasketgroups {
 
 =head3 GetOrders
 
-  @orders = &GetOrders($basketnumber, $orderby);
+  @orders = &GetOrders( $basketno, { orderby => 'biblio.title', cancelled => 0|1 } );
 
 Looks up the pending (non-cancelled) orders with the given basket
-number. If C<$booksellerID> is non-empty, only orders from that seller
-are returned.
+number.
 
-return :
-C<&basket> returns a two-element array. C<@orders> is an array of
-references-to-hash, whose keys are the fields from the aqorders,
-biblio, and biblioitems tables in the Koha database.
+If cancelled is set, only cancelled orders will be returned.
 
 =cut
 
 sub GetOrders {
-    my ( $basketno, $orderby ) = @_;
+    my ( $basketno, $params ) = @_;
+
     return () unless $basketno;
+
+    my $orderby = $params->{orderby};
+    my $cancelled = $params->{cancelled} || 0;
+
     my $dbh   = C4::Context->dbh;
-    my $query  ="
+    my $query = q|
         SELECT biblio.*,biblioitems.*,
                 aqorders.*,
                 aqbudgets.*,
+        |;
+    $query .= $cancelled
+      ? q|
+                aqorders_transfers.ordernumber_from AS transferred_to,
+                aqorders_transfers.timestamp AS transferred_to_timestamp
+    |
+      : q|
                 aqorders_transfers.ordernumber_from AS transferred_from,
                 aqorders_transfers.timestamp AS transferred_from_timestamp
+    |;
+    $query .= q|
         FROM    aqorders
             LEFT JOIN aqbudgets        ON aqbudgets.budget_id = aqorders.budget_id
             LEFT JOIN biblio           ON biblio.biblionumber = aqorders.biblionumber
             LEFT JOIN biblioitems      ON biblioitems.biblionumber =biblio.biblionumber
+    |;
+    $query .= $cancelled
+      ? q|
+            LEFT JOIN aqorders_transfers ON aqorders_transfers.ordernumber_from = aqorders.ordernumber
+    |
+      : q|
             LEFT JOIN aqorders_transfers ON aqorders_transfers.ordernumber_to = aqorders.ordernumber
-        WHERE   basketno=?
-            AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
-    ";
 
-    $orderby = "biblioitems.publishercode,biblio.title" unless $orderby;
+    |;
+    $query .= q|
+        WHERE   basketno=?
+    |;
+
+    if ($cancelled) {
+        $orderby ||= q|biblioitems.publishercode, biblio.title|;
+        $query .= q|
+            AND (datecancellationprinted IS NOT NULL
+               AND datecancellationprinted <> '0000-00-00')
+        |;
+    }
+    else {
+        $orderby ||=
+          q|aqorders.datecancellationprinted desc, aqorders.timestamp desc|;
+        $query .= q|
+            AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
+        |;
+    }
+
     $query .= " ORDER BY $orderby";
-    my $result_set =
+    my $orders =
       $dbh->selectall_arrayref( $query, { Slice => {} }, $basketno );
-    return @{$result_set};
+    return @{$orders};
 
 }
 
@@ -1305,51 +1337,6 @@ sub ModItemOrder {
     my $sth = $dbh->prepare($query);
     return $sth->execute($ordernumber, $itemnumber);
 }
-
-#------------------------------------------------------------#
-
-=head3 GetCancelledOrders
-
-  my @orders = GetCancelledOrders($basketno, $orderby);
-
-Returns cancelled orders for a basket
-
-=cut
-
-sub GetCancelledOrders {
-    my ( $basketno, $orderby ) = @_;
-
-    return () unless $basketno;
-
-    my $dbh   = C4::Context->dbh;
-    my $query = "
-        SELECT
-            biblio.*,
-            biblioitems.*,
-            aqorders.*,
-            aqbudgets.*,
-            aqorders_transfers.ordernumber_to AS transferred_to,
-            aqorders_transfers.timestamp AS transferred_to_timestamp
-        FROM aqorders
-          LEFT JOIN aqbudgets   ON aqbudgets.budget_id = aqorders.budget_id
-          LEFT JOIN biblio      ON biblio.biblionumber = aqorders.biblionumber
-          LEFT JOIN biblioitems ON biblioitems.biblionumber = biblio.biblionumber
-          LEFT JOIN aqorders_transfers ON aqorders_transfers.ordernumber_from = aqorders.ordernumber
-        WHERE basketno = ?
-          AND (datecancellationprinted IS NOT NULL
-               AND datecancellationprinted <> '0000-00-00')
-    ";
-
-    $orderby = "aqorders.datecancellationprinted desc, aqorders.timestamp desc"
-        unless $orderby;
-    $query .= " ORDER BY $orderby";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($basketno);
-    my $results = $sth->fetchall_arrayref( {} );
-
-    return @$results;
-}
-
 
 #------------------------------------------------------------#
 

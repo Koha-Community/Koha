@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 88;
+use Test::More tests => 87;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -525,14 +525,12 @@ ok(
 );
 
 #
-# Test GetCancelledOrders
+# Test GetOrders { cancelled => 1 }
 #
 
 @expectedfields =
   ( @base_expectedfields, ( 'transferred_to_timestamp', 'transferred_to' ) );
-is( GetCancelledOrders(), undef,
-    "GetCancelledOrders with no params returns undef" );
-@get_orders = GetCancelledOrders($basketno);
+@get_orders = GetOrders($basketno, { cancelled => 1 });
 (
     $test_missing_fields,   $test_extra_fields,
     $test_different_fields, $test_nbr_fields
@@ -541,21 +539,21 @@ is( GetCancelledOrders(), undef,
 is(
     $$test_nbr_fields[0],
     scalar @expectedfields,
-    "GetCancelledOrders gets orders with the right number of fields"
+    "GetOrders { cancelled => 1 } gets orders with the right number of fields"
 );
 is( join( " ", @$test_missing_fields ),
-    '', "GetCancelledOrders gets orders with no missing fields" );
+    '', "GetOrders { cancelled => 1 } gets orders with no missing fields" );
 is( join( " ", @$test_extra_fields ),
-    '', "GetCancelledOrders gets orders with no unexpected fields" );
+    '', "GetOrders { cancelled => 1 } gets orders with no unexpected fields" );
 is( join( " ", @$test_different_fields ),
     '',
-    "GetCancelledOrders gets orders with the right content in every fields" );
+    "GetOrders { cancelled => 1 } gets orders with the right content in every fields" );
 ok(
     (
         ( scalar @get_orders == 1 )
           and grep ( $_->{ordernumber} eq $ordernumbers[3], @get_orders )
     ),
-    "GetCancelledOrders only gets cancelled orders"
+    "GetOrders { cancelled => 1 } only gets cancelled orders"
 );
 
 #

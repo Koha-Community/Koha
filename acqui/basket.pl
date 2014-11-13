@@ -366,7 +366,7 @@ if ( $op eq 'delete_confirm' ) {
     push @book_foot_loop, map {$_} values %foot;
 
     # Get cancelled orders
-    my @cancelledorders = GetCancelledOrders($basketno);
+    my @cancelledorders = GetOrders($basketno, { cancelled => 1 });
     my @cancelledorders_loop;
     for my $order (@cancelledorders) {
         $order = C4::Acquisition::populate_order_with_prices({ order => $order, booksellerid => $booksellerid, ordering => 1 });
