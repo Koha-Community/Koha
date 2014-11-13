@@ -175,18 +175,29 @@ $(document).ready(function() {
 
                         return due;
                     }
-                }
-            },
-            {
-                "mDataProp": function ( oObj ) {
-                    title = "<span class='strong'><a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
-                          + oObj.biblionumber
-                          + "'>"
-                          + oObj.title;
-
-                    $.each(oObj.subtitle, function( index, value ) {
-                              title += " " + value.subfield;
-                    });
+                },
+                { "mDataProp": "itemtype_description" },
+                { "mDataProp": "issuedate_formatted" },
+                { "mDataProp": "branchname" },
+                { "mDataProp": "itemcallnumber" },
+                {
+                    "mDataProp": function ( oObj ) {
+                        if ( ! oObj.charge ) oObj.charge = 0;
+                        return parseFloat(oObj.charge).toFixed(2);
+                    }
+                },
+                {
+                    "mDataProp": function ( oObj ) {
+                        if ( ! oObj.price ) oObj.price = 0;
+                        return parseFloat(oObj.price).toFixed(2);
+                    }
+                },
+                {
+                    "bSortable": false,
+                    "mDataProp": function ( oObj ) {
+                        var content = "";
+                        var span_style = "";
+                        var span_class = "";
 
                     title += "</a></span>";
 
