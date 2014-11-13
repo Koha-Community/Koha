@@ -56,7 +56,6 @@ use constant MISSING_STATUSES => (
     MISSING_LOST
 );
 
-
 BEGIN {
     $VERSION = 3.07.00.049;    # set version for version checking
     require Exporter;
@@ -278,12 +277,12 @@ sub UpdateClaimdateIssues {
     my $query = "
         UPDATE serial
         SET claimdate = ?,
-            status = 7,
+            status = ?,
             claims_count = claims_count + 1
         WHERE  serialid in (" . join( ",", map { '?' } @$serialids ) . ")
     ";
     my $rq = $dbh->prepare($query);
-    $rq->execute($date, @$serialids);
+    $rq->execute($date, @$serialids, CLAIMED);
     return $rq->rows;
 }
 
@@ -714,23 +713,27 @@ sub GetSerials {
 
 =head2 GetSerials2
 
-@serials = GetSerials2($subscriptionid,$status);
+@serials = GetSerials2($subscriptionid,$statuses);
 this function returns every serial waited for a given subscription
 as well as the number of issues registered in the database (all types)
 this number is used to see if a subscription can be deleted (=it must have only 1 issue)
 
+$statuses is an arrayref of statuses.
+
 =cut
 
 sub GetSerials2 {
-    my ( $subscription, $status ) = @_;
+    my ( $subscription, $statuses ) = @_;
 
-    return unless ($subscription and $status);
+    return unless ($subscription and @$statuses);
+
+    my $statuses_string = join ',', @$statuses;
 
     my $dbh   = C4::Context->dbh;
     my $query = qq|
                  SELECT   serialid,serialseq, status, planneddate, publisheddate,notes, routingnotes
                  FROM     serial 
-                 WHERE    subscriptionid=$subscription AND status IN ($status)
+                 WHERE    subscriptionid=$subscription AND status IN ($statuses_string)
                  ORDER BY publisheddate,serialid DESC
                     |;
     $debug and warn "GetSerials2 query: $query";
@@ -770,11 +773,11 @@ sub GetLatestSerials {
 
     my $dbh = C4::Context->dbh;
 
-    # status = 2 is "arrived"
+    my $statuses = join( ',', ( ARRIVED, MISSING_STATUSES ) );
     my $strsth = "SELECT   serialid,serialseq, status, planneddate, publisheddate, notes
                         FROM     serial
                         WHERE    subscriptionid = ?
-                        AND      status IN (2, 4, 41, 42, 43, 44)
+                        AND      status IN ($statuses)
                         ORDER BY publisheddate DESC LIMIT 0,$limit
                 ";
     my $sth = $dbh->prepare($strsth);
@@ -1082,7 +1085,7 @@ sub ModSerialStatus {
 
     # change status & update subscriptionhistory
     my $val;
-    if ( $status == 6 ) {
+    if ( $status == DELETED ) {
         DelIssue( { 'serialid' => $serialid, 'subscriptionid' => $subscriptionid, 'serialseq' => $serialseq } );
     } else {
 
@@ -1099,21 +1102,20 @@ sub ModSerialStatus {
             $sth->execute($subscriptionid);
             my ( $missinglist, $recievedlist ) = $sth->fetchrow;
 
-            if ( $status == 2 || ($oldstatus == 2 && $status != 2) ) {
+            if ( $status == ARRIVED || ($oldstatus == ARRIVED && $status != ARRIVED) ) {
                 $recievedlist .= "; $serialseq"
                     if ($recievedlist !~ /(^|;)\s*$serialseq(?=;|$)/);
             }
 
             # in case serial has been previously marked as missing
-            if (grep /$status/, (1,2,3,7)) {
+            if (grep /$status/, (EXPECTED, ARRIVED, LATE, CLAIMED)) {
                 $missinglist=~ s/(^|;)\s*$serialseq(?=;|$)//g;
             }
 
-            my @missing_statuses = qw( 4 41 42 43 44 );
             $missinglist .= "; $serialseq"
-                if ( ( grep { $_ == $status } @missing_statuses ) && ( $missinglist !~/(^|;)\s*$serialseq(?=;|$)/ ) );
+                if ( ( grep { $_ == $status } ( MISSING_STATUSES ) ) && ( $missinglist !~/(^|;)\s*$serialseq(?=;|$)/ ) );
             $missinglist .= "; not issued $serialseq"
-                if ( $status == 5 && $missinglist !~ /(^|;)\s*$serialseq(?=;|$)/ );
+                if ( $status == NOT_ISSUED && $missinglist !~ /(^|;)\s*$serialseq(?=;|$)/ );
 
             $query = "UPDATE subscriptionhistory SET recievedlist=?, missinglist=? WHERE  subscriptionid=?";
             $sth   = $dbh->prepare($query);
@@ -1124,7 +1126,7 @@ sub ModSerialStatus {
     }
 
     # create new waited entry if needed (ie : was a "waited" and has changed)
-    if ( $oldstatus == 1 && $status != 1 ) {
+    if ( $oldstatus == EXPECTED && $status != EXPECTED ) {
         my $subscription = GetSubscription($subscriptionid);
         my $pattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subscription->{numberpattern});
 
@@ -1145,7 +1147,7 @@ sub ModSerialStatus {
         $sth->execute( $newlastvalue1, $newlastvalue2, $newlastvalue3, $newinnerloop1, $newinnerloop2, $newinnerloop3, $subscriptionid );
 
         # check if an alert must be sent... (= a letter is defined & status became "arrived"
-        if ( $subscription->{letter} && $status == 2 && $oldstatus != 2 ) {
+        if ( $subscription->{letter} && $status == ARRIVED && $oldstatus != ARRIVED ) {
             require C4::Letters;
             C4::Letters::SendAlerts( 'issue', $subscription->{subscriptionid}, $subscription->{letter} );
         }
@@ -1182,8 +1184,8 @@ sub GetNextExpected {
     };
     my $sth = $dbh->prepare($query);
 
-    # Each subscription has only one 'expected' issue, with serial.status==1.
-    $sth->execute( $subscriptionid, 1 );
+    # Each subscription has only one 'expected' issue.
+    $sth->execute( $subscriptionid, EXPECTED );
     my $nextissue = $sth->fetchrow_hashref;
     if ( !$nextissue ) {
         $query = qq{
@@ -1230,8 +1232,8 @@ sub ModNextExpected {
     #FIXME: Would expect to only set planneddate, but we set both on new issue creation, so updating it here
     my $sth = $dbh->prepare('UPDATE serial SET planneddate=?,publisheddate=? WHERE subscriptionid=? AND status=?');
 
-    # Each subscription has only one 'expected' issue, with serial.status==1.
-    $sth->execute( $date, $date, $subscriptionid, 1 );
+    # Each subscription has only one 'expected' issue.
+    $sth->execute( $date, $date, $subscriptionid, EXPECTED );
     return 0;
 
 }
@@ -1401,7 +1403,7 @@ sub NewSubscription {
         VALUES (?,?,?,?,?,?)
     |;
     $sth = $dbh->prepare($query);
-    $sth->execute( $serialseq, $subscriptionid, $biblionumber, 1, $firstacquidate, $firstacquidate );
+    $sth->execute( $serialseq, $subscriptionid, $biblionumber, EXPECTED, $firstacquidate, $firstacquidate );
 
     logaction( "SERIAL", "ADD", $subscriptionid, "" ) if C4::Context->preference("SubscriptionLog");
 
@@ -1516,13 +1518,13 @@ sub NewIssue {
     $sth->execute($subscriptionid);
     my ( $missinglist, $recievedlist ) = $sth->fetchrow;
 
-    if ( $status == 2 ) {
+    if ( $status == ARRIVED ) {
       ### TODO Add a feature that improves recognition and description.
       ### As such count (serialseq) i.e. : N18,2(N19),N20
       ### Would use substr and index But be careful to previous presence of ()
         $recievedlist .= "; $serialseq" unless (index($recievedlist,$serialseq)>0);
     }
-    if ( $status == 4 ) {
+    if ( grep {/^$status$/} ( MISSING_STATUSES ) ) {
         $missinglist .= "; $serialseq" unless (index($missinglist,$serialseq)>0);
     }
     $query = qq|
@@ -1861,7 +1863,7 @@ sub DelIssue {
 
 @issuelist = GetLateMissingIssues($supplierid,$serialid)
 
-this function selects missing issues on database - where serial.status = 4 or serial.status=3 or planneddate<now
+this function selects missing issues on database - where serial.status = MISSING* or serial.status = LATE or planneddate<now
 
 return :
 the issuelist as an array of hash refs. Each element of this array contains 
@@ -1885,6 +1887,7 @@ sub GetLateOrMissingIssues {
     } else {
         $order = "title";
     }
+    my $missing_statuses_string = join ',', (MISSING_STATUSES);
     if ($supplierid) {
         $sth = $dbh->prepare(
             "SELECT
@@ -1898,7 +1901,7 @@ sub GetLateOrMissingIssues {
                 LEFT JOIN biblioitems   ON subscription.biblionumber=biblioitems.biblionumber
                 LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
                 WHERE subscription.subscriptionid = serial.subscriptionid
-                AND (serial.STATUS IN (4, 41, 42, 43, 44) OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3 OR serial.STATUS = 7))
+                AND (serial.STATUS IN ($missing_statuses_string) OR ((planneddate < now() AND serial.STATUS = ?) OR serial.STATUS = ? OR serial.STATUS = ?))
                 AND subscription.aqbooksellerid=$supplierid
                 $byserial
                 ORDER BY $order"
@@ -1915,12 +1918,12 @@ sub GetLateOrMissingIssues {
                 LEFT JOIN biblio ON subscription.biblionumber=biblio.biblionumber
                 LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
                 WHERE subscription.subscriptionid = serial.subscriptionid
-                        AND (serial.STATUS IN (4, 41, 42, 43, 44) OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3 OR serial.STATUS = 7))
+                        AND (serial.STATUS IN ($missing_statuses_string) OR ((planneddate < now() AND serial.STATUS = ?) OR serial.STATUS = ? OR serial.STATUS = ?))
                 $byserial
                 ORDER BY $order"
         );
     }
-    $sth->execute;
+    $sth->execute( EXPECTED, LATE, CLAIMED );
     my @issuelist;
     while ( my $line = $sth->fetchrow_hashref ) {
 
@@ -2629,7 +2632,7 @@ sub CloseSubscription {
     my ( $subscriptionid ) = @_;
     return unless $subscriptionid;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( qq{
+    my $sth = $dbh->prepare( q{
         UPDATE subscription
         SET closed = 1
         WHERE subscriptionid = ?
@@ -2637,13 +2640,13 @@ sub CloseSubscription {
     $sth->execute( $subscriptionid );
 
     # Set status = missing when status = stopped
-    $sth = $dbh->prepare( qq{
+    $sth = $dbh->prepare( q{
         UPDATE serial
-        SET status = 8
+        SET status = ?
         WHERE subscriptionid = ?
-        AND status = 1
+        AND status = ?
     } );
-    $sth->execute( $subscriptionid );
+    $sth->execute( STOPPED, $subscriptionid, EXPECTED );
 }
 
 =head2 ReopenSubscription
@@ -2653,7 +2656,7 @@ sub ReopenSubscription {
     my ( $subscriptionid ) = @_;
     return unless $subscriptionid;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( qq{
+    my $sth = $dbh->prepare( q{
         UPDATE subscription
         SET closed = 0
         WHERE subscriptionid = ?
@@ -2661,13 +2664,13 @@ sub ReopenSubscription {
     $sth->execute( $subscriptionid );
 
     # Set status = expected when status = stopped
-    $sth = $dbh->prepare( qq{
+    $sth = $dbh->prepare( q{
         UPDATE serial
-        SET status = 1
+        SET status = ?
         WHERE subscriptionid = ?
-        AND status = 8
+        AND status = ?
     } );
-    $sth->execute( $subscriptionid );
+    $sth->execute( EXPECTED, $subscriptionid, STOPPED );
 }
 
 =head2 subscriptionCurrentlyOnOrder

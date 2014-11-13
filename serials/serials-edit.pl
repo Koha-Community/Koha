@@ -95,9 +95,10 @@ my @errseq;
 # If user comes from subscription details
 unless (@serialids) {
     my $serstatus = $query->param('serstatus');
+    my @statuses = split ',', $serstatus;
     if ($serstatus) {
         foreach my $subscriptionid (@subscriptionids) {
-            my @tmpser = GetSerials2( $subscriptionid, $serstatus );
+            my @tmpser = GetSerials2( $subscriptionid, \@statuses );
             push @serialids, map { $_->{serialid} } @tmpser;
         }
     }
