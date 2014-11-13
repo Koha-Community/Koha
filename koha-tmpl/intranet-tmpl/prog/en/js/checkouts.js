@@ -217,7 +217,7 @@ $(document).ready(function() {
                     return title;
                 }
             },
-            { "mDataProp": "itemtype" },
+            { "mDataProp": "itemtype_description" },
             { "mDataProp": "issuedate_formatted" },
             { "mDataProp": "branchname" },
             { "mDataProp": "itemcallnumber" },
