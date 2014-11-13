@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More;
+use Test::More tests => 73;
 use Test::MockModule;
 use t::lib::Mocks;
 use Data::Dumper;
@@ -113,10 +113,16 @@ Relevant sysprefs:
 
 =cut
 
+BEGIN {
+    t::lib::Mocks::mock_config('nlkey',        'key');
+    t::lib::Mocks::mock_config('nlvendoruser', 'user');
+    t::lib::Mocks::mock_config('nlvendorpass', 'pass');
+}
 t::lib::Mocks::mock_preference('NorwegianPatronDBEnable',   0);
 t::lib::Mocks::mock_preference('NorwegianPatronDBEndpoint', '');
 t::lib::Mocks::mock_preference('NorwegianPatronDBUsername', '');
 t::lib::Mocks::mock_preference('NorwegianPatronDBPassword', '');
+
 ok( my $result = NLCheckSysprefs(), 'call NLCheckSysprefs() ok' );
 is( $result->{ 'error' },     1, 'error detected' );
 is( $result->{ 'nlenabled' }, 0, 'NL is not enabled' );
@@ -297,8 +303,6 @@ ok( $res = NLGetChanged(), 'successfull call to NLGetChanged - 0 results' );
 is( $res->{'melding'}, 'ingen treff', 'got "ingen treff"' );
 is( $res->{'antall_poster_returnert'}, 0, 'got 0 records' );
 is( $res->{'antall_treff'}, 0, 'got 0 records' );
-
-done_testing();
 
 =head1 SAMPLE SOAP XML RESPONSES
 

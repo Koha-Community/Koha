@@ -79,7 +79,6 @@ our %EXPORT_TAGS = ( all => [qw(
 Exporter::export_ok_tags('all');
 
 my $nl_uri   = 'http://lanekortet.no';
-my $nl_proxy =  C4::Context->preference("NorwegianPatronDBEndpoint");
 
 =head2 SOAP::Transport::HTTP::Client::get_basic_credentials
 
@@ -156,7 +155,7 @@ sub NLSearch {
     my $client = SOAP::Lite
         ->on_action( sub { return '""';})
         ->uri( $nl_uri )
-        ->proxy( $nl_proxy );
+        ->proxy( C4::Context->preference("NorwegianPatronDBEndpoint") );
 
     my $id = SOAP::Data->type('string');
     $id->name('identifikator');
@@ -236,7 +235,7 @@ sub NLSync {
     my $client = SOAP::Lite
         ->on_action( sub { return '""';})
         ->uri( $nl_uri )
-        ->proxy( $nl_proxy );
+        ->proxy( C4::Context->preference("NorwegianPatronDBEndpoint") );
 
     my $cardnumber = SOAP::Data->name( 'lnr' => $patron->cardnumber );
 
@@ -289,7 +288,7 @@ sub NLGetChanged {
     my $client = SOAP::Lite
         ->on_action( sub { return '""';})
         ->uri( $nl_uri )
-        ->proxy( $nl_proxy );
+        ->proxy( C4::Context->preference("NorwegianPatronDBEndpoint") );
 
     my $from_string;
     if ( $from_arg && $from_arg ne '' ) {
