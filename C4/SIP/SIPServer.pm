@@ -88,8 +88,16 @@ sub process_request {
     $self->{config} = $config;
 
     my $sockname = getsockname(STDIN);
-    ($port, $sockaddr) = sockaddr_in($sockname);
-    $sockaddr = inet_ntoa($sockaddr);
+
+    # Check if socket connection is IPv6 before resolving address
+    my $family = Socket::sockaddr_family($sockname);
+    if ($family == AF_INET6) {
+      ($port, $sockaddr) = sockaddr_in6($sockname);
+      $sockaddr = Socket::inet_ntop(AF_INET6, $sockaddr);
+    } else {
+      ($port, $sockaddr) = sockaddr_in($sockname);
+      $sockaddr = inet_ntoa($sockaddr);
+    }
     $proto = $self->{server}->{client}->NS_proto();
 
     $self->{service} = $config->find_service($sockaddr, $port, $proto);
