@@ -324,6 +324,12 @@ sub SendAlerts {
             LEFT JOIN aqbooksellers ON subscription.aqbooksellerid=aqbooksellers.id
             WHERE serial.serialid IN (
             };
+
+        if (!@$externalid){
+            carp "No Order seleted";
+            return { error => "no_order_seleted" };
+        }
+
         $strsth .= join( ",", @$externalid ) . ")";
         my $sthorders = $dbh->prepare($strsth);
         $sthorders->execute;
