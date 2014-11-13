@@ -183,11 +183,21 @@ $(document).ready(function() {
                 {
                     "iDataSort": 1, // Sort on hidden unformatted date due column
                     "mDataProp": function( oObj ) {
+                        var due = oObj.date_due_formatted;
+
                         if ( oObj.date_due_overdue ) {
-                            return "<span class='overdue'>" + oObj.date_due_formatted + "</span>";
-                        } else {
-                            return oObj.date_due_formatted;
+                            due = "<span class='overdue'>" + due + "</span>";
                         }
+
+                        if ( oObj.lost ) {
+                            due += "<span class='lost'>" + oObj.lost + "</span>";
+                        }
+
+                        if ( oObj.damaged ) {
+                            due += "<span class='dmg'>" + oObj.damaged + "</span>";
+                        }
+
+                        return due;
                     }
                 },
                 {
