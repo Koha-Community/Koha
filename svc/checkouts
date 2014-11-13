@@ -46,9 +46,12 @@ my @sort_columns = qw/date_due title itype issuedate branchcode itemcallnumber/;
 my @borrowernumber   = $input->param('borrowernumber');
 my $offset           = $input->param('iDisplayStart');
 my $results_per_page = $input->param('iDisplayLength') || -1;
-my $sorting_column   = $sort_columns[ $input->param('iSortCol_0') ]
-  || 'issuedate';
-my $sorting_direction = $input->param('sSortDir_0') eq 'asc' ? 'asc' : 'desc';
+
+my $sorting_column = $input->param('iSortCol_0') || q{};
+$sorting_column = ( $sorting_column && $sort_columns[$sorting_column] ) ? $sort_columns[$sorting_column] : 'issuedate';
+
+my $sorting_direction = $input->param('sSortDir_0') || q{};
+$sorting_direction = $sorting_direction eq 'asc' ? 'asc' : 'desc';
 
 $results_per_page = undef if ( $results_per_page == -1 );
 
@@ -78,8 +81,10 @@ my $sql = '
         issues.branchcode,
         branchname,
 
-        itype,
-        itemtype,
+        items.itype,
+        itemtype_item.description AS itype_description,
+        biblioitems.itemtype,
+        itemtype_bib.description AS itemtype_description,
 
         borrowernumber,
         surname,
@@ -96,6 +101,8 @@ my $sql = '
         LEFT JOIN biblioitems USING ( biblionumber )
         LEFT JOIN borrowers USING ( borrowernumber )
         LEFT JOIN branches ON ( issues.branchcode = branches.branchcode )
+        LEFT JOIN itemtypes itemtype_bib ON ( biblioitems.itemtype = itemtype_bib.itemtype )
+        LEFT JOIN itemtypes itemtype_item ON ( items.itype = itemtype_item.itemtype )
     WHERE borrowernumber
 ';
 
@@ -123,7 +130,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
     my ( $can_renew, $can_renew_error ) =
       CanBookBeRenewed( $c->{borrowernumber}, $c->{itemnumber} );
     my $can_renew_date =
-      $can_renew_error eq 'too_soon'
+      $can_renew_error && $can_renew_error eq 'too_soon'
       ? output_pref(
         {
             dt => GetSoonestRenewDate( $c->{borrowernumber}, $c->{itemnumber} ),
@@ -141,6 +148,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         author     => $c->{author},
         barcode    => $c->{barcode},
         itemtype   => $item_level_itypes ? $c->{itype} : $c->{itemtype},
+        itemtype_description => $item_level_itypes ? $c->{itype_description} : $c->{itemtype_description},
         itemnotes  => $c->{itemnotes},
         branchcode => $c->{branchcode},
         branchname => $c->{branchname},
