@@ -54,10 +54,16 @@ if(!ref $record) {
     exit;
 }
 
-if($view eq 'card') {
+if($view eq 'card' || $view eq 'html') {
     my $xml = $importid ? $record->as_xml(): GetXmlBiblio($biblionumber);
-    my $xsl = C4::Context->preference('marcflavour') eq 'UNIMARC'
+    my $xsl;
+    if ( $view eq 'card' ){
+        $xsl = C4::Context->preference('marcflavour') eq 'UNIMARC'
               ? 'UNIMARC_compact.xsl' : 'compact.xsl';
+    }
+    else {
+        $xsl = 'plainMARC.xsl';
+    }
     my $htdocs = C4::Context->config('intrahtdocs');
     my ($theme, $lang) = C4::Templates::themelanguage($htdocs, $xsl, 'intranet', $input);
     $xsl = "$htdocs/$theme/$lang/xslt/$xsl";
