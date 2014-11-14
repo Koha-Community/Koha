@@ -199,7 +199,7 @@ CAN_user_serials_create_subscription ) %]
                 [% IF ( count ) %]
                     <li class="disabled"><a id="deletebiblio" data-toggle="tooltip" data-placement="left" title="[% count %] item(s) are attached to this record. You must delete all items before deleting this record." href="#">Delete record</a></li>
                 [% ELSE %]
-                    <li><a id="deletebiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&amp;biblionumber=[% biblionumber %]">Delete record</a></li>
+                    <li><a id="deletebiblio" href="#">Delete record</a></li>
                 [% END %]
             [% END %]
 
