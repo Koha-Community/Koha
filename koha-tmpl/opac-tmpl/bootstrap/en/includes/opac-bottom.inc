@@ -145,7 +145,6 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
             verify_images();
          });
     [% END %]
-    [% IF ( opacuserjs ) %][% opacuserjs %][% END %]
     //]]>
 </script>
 
@@ -238,5 +237,12 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 [% END #  / IF persona %]
 [% PROCESS jsinclude %]
 
+[% IF ( opacuserjs ) %]
+    <script type="text/javascript">
+        //<![CDATA[
+        [% opacuserjs %]
+        //]]>
+    </script>
+[% END %]
 </body>
 </html>
