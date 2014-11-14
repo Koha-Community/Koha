@@ -374,19 +374,19 @@
         [% END %]
         <tr>
             <th colspan="10" class="total">Total tax exc.</th>
-            <th>[% total_gste | $Price %]</th>
+            <th>[% total_tax_excluded | $Price %]</th>
             <th></th>
         </tr>
         [% FOREACH book_foot IN book_foot_loop %]
             <tr>
-                <th colspan="10">Total (GST [% book_foot.gstrate * 100 | $Price %]%)</th>
-                <th>[% book_foot.gstvalue | $Price %]</th>
+                <th colspan="10">Total (GST [% book_foot.tax_rate * 100 | $Price %]%)</th>
+                <th>[% book_foot.tax_value | $Price %]</th>
                 <th></th>
             </tr>
         [% END %]
         <tr>
             <th colspan="10" class="total">Total tax inc.</th>
-            <th>[% total_gsti | $Price %]</th>
+            <th>[% total_tax_included | $Price %]</th>
             <th></th>
         </tr>
     </tfoot>

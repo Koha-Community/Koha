@@ -96,11 +96,11 @@ sub printorders {
                 $basket->{basketno},
                 $titleinfo. ($line->{order_vendornote} ? "\n----------------\nNote for vendor : " . $line->{order_vendornote} : '' ),
                 $line->{quantity},
-                Koha::Number::Price->new( $line->{rrpgsti} )->format,
+                Koha::Number::Price->new( $line->{rrp_tax_included} )->format,
                 Koha::Number::Price->new( $line->{discount} )->format . '%',
-                Koha::Number::Price->new( $line->{gstrate} * 100 )->format . '%',
-                Koha::Number::Price->new( $line->{totalgste} )->format,
-                Koha::Number::Price->new( $line->{totalgsti} )->format,
+                Koha::Number::Price->new( $line->{tax_rate} * 100 )->format . '%',
+                Koha::Number::Price->new( $line->{total_tax_excluded} )->format,
+                Koha::Number::Price->new( $line->{total_tax_included} )->format,
             );
             push(@$abaskets, $arrbasket);
         }

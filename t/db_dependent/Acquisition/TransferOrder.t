@@ -95,11 +95,12 @@ $orders = SearchOrders({ ordernumber => $ordernumber });
 is ( scalar( @$orders ), 1, 'SearchOrders returns 1 order with [old]ordernumber' );
 is ( $orders->[0]->{ordernumber}, $newordernumber, 'SearchOrders returns newordernumber if [old]ordernumber is given' );
 
+my $neworder = GetOrder( $newordernumber );
+
 ModReceiveOrder({
     biblionumber => $biblionumber,
-    ordernumber => $newordernumber,
+    order       => $neworder,
     quantityreceived => 2, 
-    datereceived => dt_from_string(),
 });
 CancelReceipt( $newordernumber );
 $order = GetOrder( $newordernumber );

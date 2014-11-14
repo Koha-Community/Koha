@@ -317,6 +317,7 @@ my @order_infos = (
 
 my %budgets;
 my $invoiceid = AddInvoice(invoicenumber => 'invoice_test_clone', booksellerid => $booksellerid, unknown => "unknown");
+my $invoice = GetInvoice( $invoiceid );
 my $item_price = 10;
 my $item_quantity = 2;
 my $number_of_orders_to_move = 0;
@@ -337,7 +338,7 @@ for my $infos (@order_infos) {
                 rrp                => $item_price,
                 discount           => 0,
                 uncertainprice     => 0,
-                gstrate            => 0,
+                tax_rate            => 0,
             }
         )->insert;
         my $ordernumber = $order->{ordernumber};
@@ -360,19 +361,16 @@ for my $infos (@order_infos) {
                 rrp                => $item_price,
                 discount           => 0,
                 uncertainprice     => 0,
-                gstrate            => 0,
+                tax_rate            => 0,
             }
         )->insert;
         my $ordernumber = $order->{ordernumber};
         ModReceiveOrder({
               biblionumber     => $biblionumber,
-              ordernumber      => $ordernumber,
+              order            => $order,
               budget_id        => $infos->{budget_id},
               quantityreceived => $item_quantity,
-              cost             => $item_price,
-              ecost            => $item_price,
-              invoiceid        => $invoiceid,
-              rrp              => $item_price,
+              invoice          => $invoice,
               received_items   => [],
         } );
     }

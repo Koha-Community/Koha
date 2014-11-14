@@ -1334,58 +1334,42 @@ sub ModItemOrder {
 
 =head3 ModReceiveOrder
 
-  &ModReceiveOrder({
-    biblionumber => $biblionumber,
-    ordernumber => $ordernumber,
-    quantityreceived => $quantityreceived,
-    user => $user,
-    cost => $cost,
-    ecost => $ecost,
-    invoiceid => $invoiceid,
-    rrp => $rrp,
-    budget_id => $budget_id,
-    datereceived => $datereceived,
-    received_itemnumbers => \@received_itemnumbers,
-    order_internalnote => $order_internalnote,
-    order_vendornote => $order_vendornote,
-   });
+    my ( $date_received, $new_ordernumber ) = ModReceiveOrder(
+        {
+            biblionumber         => $biblionumber,
+            order                => $order,
+            quantityreceived     => $quantityreceived,
+            user                 => $user,
+            invoice              => $invoice,
+            budget_id            => $budget_id,
+            received_itemnumbers => \@received_itemnumbers,
+            order_internalnote   => $order_internalnote,
+        }
+    );
 
 Updates an order, to reflect the fact that it was received, at least
-in part. All arguments not mentioned below update the fields with the
-same name in the aqorders table of the Koha database.
+in part.
 
 If a partial order is received, splits the order into two.
 
-Updates the order with bibilionumber C<$biblionumber> and ordernumber
-C<$ordernumber>.
+Updates the order with biblionumber C<$biblionumber> and ordernumber
+C<$order->{ordernumber}>.
 
 =cut
 
 
 sub ModReceiveOrder {
-    my ( $params ) = @_;
-    my $biblionumber = $params->{biblionumber};
-    my $ordernumber = $params->{ordernumber};
-    my $quantrec = $params->{quantityreceived};
-    my $user = $params->{user};
-    my $cost = $params->{cost};
-    my $ecost = $params->{ecost};
-    my $invoiceid = $params->{invoiceid};
-    my $rrp = $params->{rrp};
-    my $budget_id = $params->{budget_id};
-    my $datereceived = $params->{datereceived};
+    my ($params)       = @_;
+    my $biblionumber   = $params->{biblionumber};
+    my $order          = { %{ $params->{order} } }; # Copy the order, we don't want to modify it
+    my $invoice        = $params->{invoice};
+    my $quantrec       = $params->{quantityreceived};
+    my $user           = $params->{user};
+    my $budget_id      = $params->{budget_id};
     my $received_items = $params->{received_items};
-    my $order_internalnote = $params->{order_internalnote};
-    my $order_vendornote = $params->{order_vendornote};
 
     my $dbh = C4::Context->dbh;
-    $datereceived = output_pref(
-        {
-            dt => ( $datereceived ? dt_from_string( $datereceived ) : dt_from_string ),
-            dateformat => 'iso',
-            dateonly => 1,
-        }
-    );
+    my $datereceived = ( $invoice and $invoice->{datereceived} ) ? $invoice->{datereceived} : dt_from_string;
     my $suggestionid = GetSuggestionFromBiblionumber( $biblionumber );
     if ($suggestionid) {
         ModSuggestion( {suggestionid=>$suggestionid,
@@ -1394,16 +1378,8 @@ sub ModReceiveOrder {
                         );
     }
 
-    my $result_set = $dbh->selectall_arrayref(
-q{SELECT *, aqbasket.is_standing FROM aqorders LEFT JOIN aqbasket USING (basketno) WHERE biblionumber=? AND aqorders.ordernumber=?},
-        { Slice => {} }, $biblionumber, $ordernumber
-    );
-
-    # we assume we have a unique order
-    my $order = $result_set->[0];
-
-    my $new_ordernumber = $ordernumber;
-    if ( $order->{is_standing} || $order->{quantity} > $quantrec ) {
+    my $new_ordernumber = $order->{ordernumber};
+    if ( $order->{quantity} > $quantrec ) {
         # Split order line in two parts: the first is the original order line
         # without received items (the quantity is decreased),
         # the second part is a new order line with quantity=quantityrec
@@ -1412,28 +1388,23 @@ q{SELECT *, aqbasket.is_standing FROM aqorders LEFT JOIN aqbasket USING (basketn
             UPDATE aqorders
             SET quantity = ?,
                 orderstatus = 'partial'|;
-        $query .= q|, order_internalnote = ?| if defined $order_internalnote;
-        $query .= q|, order_vendornote = ?| if defined $order_vendornote;
+        $query .= q|, order_internalnote = ?| if defined $order->{order_internalnote};
         $query .= q| WHERE ordernumber = ?|;
         my $sth = $dbh->prepare($query);
 
         $sth->execute(
-            ( $order->{is_standing} ? 1 : ( $order->{quantity} - $quantrec ) ),
-            ( defined $order_internalnote ? $order_internalnote : () ),
-            ( defined $order_vendornote ? $order_vendornote : () ),
-            $ordernumber
+            $order->{quantity} - $quantrec,
+            ( defined $order->{order_internalnote} ? $order->{order_internalnote} : () ),
+            $order->{ordernumber}
         );
 
-        delete $order->{'ordernumber'};
-        $order->{'budget_id'} = ( $budget_id || $order->{'budget_id'} );
-        $order->{'quantity'} = $quantrec;
-        $order->{'quantityreceived'} = $quantrec;
-        $order->{'datereceived'} = $datereceived;
-        $order->{'invoiceid'} = $invoiceid;
-        $order->{'unitprice'} = $cost;
-        $order->{'rrp'} = $rrp;
-        $order->{ecost} = $ecost;
-        $order->{'orderstatus'} = 'complete';
+        delete $order->{ordernumber};
+        $order->{budget_id} = ( $budget_id || $order->{budget_id} );
+        $order->{quantity} = $quantrec;
+        $order->{quantityreceived} = $quantrec;
+        $order->{datereceived} = $datereceived;
+        $order->{invoiceid} = $invoice->{invoiceid};
+        $order->{orderstatus} = 'complete';
         $new_ordernumber = Koha::Acquisition::Order->new($order)->insert->{ordernumber};
 
         if ($received_items) {
@@ -1443,29 +1414,54 @@ q{SELECT *, aqbasket.is_standing FROM aqorders LEFT JOIN aqbasket USING (basketn
         }
     } else {
         my $query = q|
-            update aqorders
-            set quantityreceived=?,datereceived=?,invoiceid=?,
-                unitprice=?,rrp=?,ecost=?,budget_id=?,orderstatus='complete'|;
-        $query .= q|, order_internalnote = ?| if defined $order_internalnote;
-        $query .= q|, order_vendornote = ?| if defined $order_vendornote;
+            UPDATE aqorders
+            SET quantityreceived = ?,
+                datereceived = ?,
+                invoiceid = ?,
+                budget_id = ?,
+                orderstatus = 'complete'
+        |;
+
+        $query .= q|
+            , unitprice = ?, unitprice_tax_included = ?, unitprice_tax_excluded = ?
+        | if defined $order->{unitprice};
+
+        $query .= q|
+            , rrp = ?, rrp_tax_included = ?, rrp_tax_excluded = ?
+        | if defined $order->{rrp};
+
+        $query .= q|
+            , ecost = ?, ecost_tax_included = ?, ecost_tax_excluded = ?
+        | if defined $order->{ecost};
+
+        $query .= q|
+            , order_internalnote = ?
+        | if defined $order->{order_internalnote};
+
         $query .= q| where biblionumber=? and ordernumber=?|;
+
         my $sth = $dbh->prepare( $query );
-        $sth->execute(
-            $quantrec,
-            $datereceived,
-            $invoiceid,
-            $cost,
-            $rrp,
-            $ecost,
-            ( $budget_id ? $budget_id : $order->{budget_id} ),
-            ( defined $order_internalnote ? $order_internalnote : () ),
-            ( defined $order_vendornote ? $order_vendornote : () ),
-            $biblionumber,
-            $ordernumber
-        );
+        my @params = ( $quantrec, $datereceived, $invoice->{invoiceid}, $budget_id );
+
+        if ( defined $order->{unitprice} ) {
+            push @params, $order->{unitprice}, $order->{unitprice_tax_included}, $order->{unitprice_tax_excluded};
+        }
+        if ( defined $order->{rrp} ) {
+            push @params, $order->{rrp}, $order->{rrp_tax_included}, $order->{rrp_tax_excluded};
+        }
+        if ( defined $order->{ecost} ) {
+            push @params, $order->{ecost}, $order->{ecost_tax_included}, $order->{ecost_tax_excluded};
+        }
+        if ( defined $order->{order_internalnote} ) {
+            push @params, $order->{order_internalnote};
+        }
+
+        push @params, ( $biblionumber, $order->{ordernumber} );
+
+        $sth->execute( @params );
 
         # All items have been received, sent a notification to users
-        NotifyOrderUsers( $ordernumber );
+        NotifyOrderUsers( $order->{ordernumber} );
 
     }
     return ($datereceived, $new_ordernumber);
@@ -2850,50 +2846,44 @@ sub populate_order_with_prices {
     $order->{ecost} = Koha::Number::Price->new( $order->{ecost} )->round;
     if ($ordering) {
         if ( $bookseller->{listincgst} ) {
-            $order->{rrpgsti} = $order->{rrp};
-            $order->{rrpgste} = Koha::Number::Price->new(
-                $order->{rrpgsti} / ( 1 + $order->{gstrate} ) )->round;
-            $order->{ecostgsti} = $order->{ecost};
-            $order->{ecostgste} = Koha::Number::Price->new(
-                $order->{ecost} / ( 1 + $order->{gstrate} ) )->round;
-            $order->{gstvalue} = Koha::Number::Price->new(
-                ( $order->{ecostgsti} - $order->{ecostgste} ) *
+            $order->{rrp_tax_included} = $order->{rrp};
+            $order->{rrp_tax_excluded} = Koha::Number::Price->new(
+                $order->{rrp_tax_included} / ( 1 + $order->{tax_rate} ) )->round;
+            $order->{ecost_tax_included} = $order->{ecost};
+            $order->{ecost_tax_excluded} = Koha::Number::Price->new(
+                $order->{ecost} / ( 1 + $order->{tax_rate} ) )->round;
+            $order->{tax_value} = Koha::Number::Price->new(
+                ( $order->{ecost_tax_included} - $order->{ecost_tax_excluded} ) *
                   $order->{quantity} )->round;
-            $order->{totalgste} = $order->{ecostgste} * $order->{quantity};
-            $order->{totalgsti} = $order->{ecostgsti} * $order->{quantity};
         }
         else {
-            $order->{rrpgste} = $order->{rrp};
-            $order->{rrpgsti} = Koha::Number::Price->new(
-                $order->{rrp} * ( 1 + $order->{gstrate} ) )->round;
-            $order->{ecostgste} = $order->{ecost};
-            $order->{ecostgsti} = Koha::Number::Price->new(
-                $order->{ecost} * ( 1 + $order->{gstrate} ) )->round;
-            $order->{gstvalue} = Koha::Number::Price->new(
-                ( $order->{ecostgsti} - $order->{ecostgste} ) *
+            $order->{rrp_tax_excluded} = $order->{rrp};
+            $order->{rrp_tax_included} = Koha::Number::Price->new(
+                $order->{rrp} * ( 1 + $order->{tax_rate} ) )->round;
+            $order->{ecost_tax_excluded} = $order->{ecost};
+            $order->{ecost_tax_included} = Koha::Number::Price->new(
+                $order->{ecost} * ( 1 + $order->{tax_rate} ) )->round;
+            $order->{tax_value} = Koha::Number::Price->new(
+                ( $order->{ecost_tax_included} - $order->{ecost_tax_excluded} ) *
                   $order->{quantity} )->round;
-            $order->{totalgste} = $order->{ecostgste} * $order->{quantity};
-            $order->{totalgsti} = $order->{ecostgsti} * $order->{quantity};
         }
     }
 
     if ($receiving) {
         if ( $bookseller->{listincgst} ) {
-            $order->{unitpricegsti} = Koha::Number::Price->new( $order->{unitprice} )->round;
-            $order->{unitpricegste} = Koha::Number::Price->new(
-              $order->{unitpricegsti} / ( 1 + $order->{gstrate} ) )->round;
+            $order->{unitprice_tax_included} = Koha::Number::Price->new( $order->{unitprice} )->round;
+            $order->{unitprice_tax_excluded} = Koha::Number::Price->new(
+              $order->{unitprice_tax_included} / ( 1 + $order->{tax_rate} ) )->round;
         }
         else {
-            $order->{unitpricegste} = Koha::Number::Price->new( $order->{unitprice} )->round;
-            $order->{unitpricegsti} = Koha::Number::Price->new(
-              $order->{unitpricegste} * ( 1 + $order->{gstrate} ) )->round;
+            $order->{unitprice_tax_excluded} = Koha::Number::Price->new( $order->{unitprice} )->round;
+            $order->{unitprice_tax_included} = Koha::Number::Price->new(
+              $order->{unitprice_tax_excluded} * ( 1 + $order->{tax_rate} ) )->round;
         }
-        $order->{gstvalue} = Koha::Number::Price->new(
-          ( $order->{unitpricegsti} - $order->{unitpricegste} )
+        $order->{tax_value} = Koha::Number::Price->new(
+          ( $order->{unitprice_tax_included} - $order->{unitprice_tax_excluded} )
           * $order->{quantityreceived} )->round;
 
-        $order->{totalgste} = $order->{unitpricegste} * $order->{quantity};
-        $order->{totalgsti} = $order->{unitpricegsti} * $order->{quantity};
     }
 
     return $order;

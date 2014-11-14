@@ -117,13 +117,13 @@ sub printorders {
             push( @$arrbasket,
                 $titleinfo. ($line->{order_vendornote} ? "\n----------------\nNote pour le fournisseur : ". $line->{order_vendornote} : '' ),
                 $line->{quantity},
-                Koha::Number::Price->new( $line->{rrpgste})->format,
-                Koha::Number::Price->new( $line->{rrpgsti})->format,
+                Koha::Number::Price->new( $line->{rrp_tax_excluded})->format,
+                Koha::Number::Price->new( $line->{rrp_tax_included})->format,
                 Koha::Number::Price->new( $line->{discount})->format.'%',
-                Koha::Number::Price->new( $line->{rrpgste} - $line->{ecostgste})->format,
-                Koha::Number::Price->new( $line->{gstrate} * 100)->format.'%',
-                Koha::Number::Price->new( $line->{totalgste})->format,
-                Koha::Number::Price->new( $line->{totalgsti})->format,
+                Koha::Number::Price->new( $line->{rrp_tax_excluded} - $line->{ecost_tax_excluded})->format,
+                Koha::Number::Price->new( $line->{tax_rate} * 100)->format.'%',
+                Koha::Number::Price->new( $line->{total_tax_excluded})->format,
+                Koha::Number::Price->new( $line->{total_tax_included})->format,
             );
             push(@$abaskets, $arrbasket);
         }
@@ -209,43 +209,43 @@ sub printbaskets {
     for my $bkey (@keys) {
         push(@$arrbasket, $bkey);
     }
-    my ($grandtotalrrpgsti, $grandtotalrrpgste, $grandtotalgsti, $grandtotalgste, $grandtotalgstvalue, $grandtotaldiscount);
+    my ($grandtotal_rrp_tax_included, $grandtotal_rrp_tax_excluded, $grandtotal_tax_included, $grandtotal_tax_excluded, $grandtotaltax_value, $grandtotaldiscount);
     # calculate each basket total
     push(@$abaskets, $arrbasket);
     for my $basket (@$hbaskets) {
         my @gst;
         $arrbasket = undef;
-        my ($totalrrpgste, $totalrrpgsti, $totalgste, $totalgsti, $totalgstvalue, $totaldiscount);
+        my ($total_rrp_tax_excluded, $total_rrp_tax_included, $total_tax_excluded, $total_tax_included, $totaltax_value, $totaldiscount);
         my $ords = $orders->{$basket->{basketno}};
         my $ordlength = @$ords;
         foreach my $ord (@$ords) {
-            $totalgste += $ord->{totalgste};
-            $totalgsti += $ord->{totalgsti};
-            $totalgstvalue += $ord->{gstvalue};
-            $totaldiscount += ($ord->{rrpgste} - $ord->{ecostgste} ) * $ord->{quantity};
-            $totalrrpgste += $ord->{rrpgste} * $ord->{quantity};
-            $totalrrpgsti += $ord->{rrpgsti} * $ord->{quantity};
-            push @gst, $ord->{gstrate};
+            $total_tax_excluded += $ord->{total_tax_excluded};
+            $total_tax_included += $ord->{total_tax_included};
+            $totaltax_value += $ord->{tax_value};
+            $totaldiscount += ($ord->{rrp_tax_excluded} - $ord->{ecost_tax_excluded} ) * $ord->{quantity};
+            $total_rrp_tax_excluded += $ord->{rrp_tax_excluded} * $ord->{quantity};
+            $total_rrp_tax_included += $ord->{rrp_tax_included} * $ord->{quantity};
+            push @gst, $ord->{tax_rate};
         }
         @gst = uniq map { $_ * 100 } @gst;
-        $grandtotalrrpgste += $totalrrpgste;
-        $grandtotalrrpgsti += $totalrrpgsti;
-        $grandtotalgsti += $totalgsti;
-        $grandtotalgste += $totalgste;
-        $grandtotalgstvalue += $totalgstvalue;
+        $grandtotal_rrp_tax_excluded += $total_rrp_tax_excluded;
+        $grandtotal_rrp_tax_included += $total_rrp_tax_included;
+        $grandtotal_tax_included += $total_tax_included;
+        $grandtotal_tax_excluded += $total_tax_excluded;
+        $grandtotaltax_value += $totaltax_value;
         $grandtotaldiscount += $totaldiscount;
         my @gst_string =
           map { Koha::Number::Price->new($_)->format . '%' } @gst;
         push(@$arrbasket,
             $basket->{contractname},
             $basket->{basketname} . ' (No. ' . $basket->{basketno} . ')',
-            Koha::Number::Price->new( $totalrrpgste )->format,
-            Koha::Number::Price->new( $totalrrpgsti )->format,
+            Koha::Number::Price->new( $total_rrp_tax_excluded )->format,
+            Koha::Number::Price->new( $total_rrp_tax_included )->format,
             "@gst_string",
-            Koha::Number::Price->new( $totalgstvalue )->format,
+            Koha::Number::Price->new( $totaltax_value )->format,
             Koha::Number::Price->new( $totaldiscount )->format,
-            Koha::Number::Price->new( $totalgste )->format,
-            Koha::Number::Price->new( $totalgsti )->format,
+            Koha::Number::Price->new( $total_tax_excluded )->format,
+            Koha::Number::Price->new( $total_tax_included )->format,
         );
         push(@$abaskets, $arrbasket);
     }
@@ -254,13 +254,13 @@ sub printbaskets {
     push @$arrbasket,
       '',
       'Total',
-      Koha::Number::Price->new( $grandtotalrrpgste )->format,
-      Koha::Number::Price->new( $grandtotalrrpgsti )->format,
+      Koha::Number::Price->new( $grandtotal_rrp_tax_excluded )->format,
+      Koha::Number::Price->new( $grandtotal_rrp_tax_included )->format,
       '',
-      Koha::Number::Price->new( $grandtotalgstvalue )->format,
+      Koha::Number::Price->new( $grandtotaltax_value )->format,
       Koha::Number::Price->new( $grandtotaldiscount )->format,
-      Koha::Number::Price->new( $grandtotalgste )->format,
-      Koha::Number::Price->new( $grandtotalgsti )->format;
+      Koha::Number::Price->new( $grandtotal_tax_excluded )->format,
+      Koha::Number::Price->new( $grandtotal_tax_included )->format;
     push @$abaskets,$arrbasket;
     # height is width and width is height in this function, as the pdf is in landscape mode for the Tables.
 

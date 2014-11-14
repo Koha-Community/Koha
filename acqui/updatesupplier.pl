@@ -39,7 +39,7 @@ Here is the list :
 supplier, id, company, company_postal, physical, company_phone,
 physical, company_phone, company_fax, website, company_email, notes,
 status, publishers_imprints, list_currency, gst, list_gst, invoice_gst,
-discount, gstrate, contact_name, contact_position, contact_phone,
+discount, tax_rate, contact_name, contact_position, contact_phone,
 contact_altphone, contact_fax, contact_email, contact_notes,
 contact_claimacquisition, contact_claimissues, contact_acqprimary,
 contact_serialsprimary.
@@ -90,7 +90,7 @@ $data{'gstreg'}=$input->param('gst');
 $data{'listincgst'}=$input->param('list_gst');
 $data{'invoiceincgst'}=$input->param('invoice_gst');
 #have to transform this into fraction so it's easier to use
-$data{'gstrate'} = $input->param('gstrate');
+$data{'tax_rate'} = $input->param('tax_rate');
 $data{'discount'} = $input->param('discount');
 $data{deliverytime} = $input->param('deliverytime');
 $data{'active'}=$input->param('status');

@@ -287,10 +287,10 @@ function delete_contact(ev) {
             [% IF gst_values %]
                 <ol>
                   <li>
-                    <label for="gstrate">Tax rate: </label>
-                    <select name="gstrate" id="gstrate">
+                    <label for="tax_rate">Tax rate: </label>
+                    <select name="tax_rate" id="tax_rate">
                     [% FOREACH gst IN gst_values %]
-                      [% IF ( gstrate == gst.option ) %]
+                      [% IF ( tax_rate == gst.option ) %]
                         <option value="[% gst.option %]" selected="selected">[% gst.option * 100 | format ("%.1f") %] %</option>
                       [% ELSE %]
                         <option value="[% gst.option %]">[% gst.option * 100 | format ("%.1f") %] %</option>
@@ -300,7 +300,7 @@ function delete_contact(ev) {
                   </li>
                 </ol>
             [% ELSE %]
-                <input type="hidden" name="gstrate" value="0" />
+                <input type="hidden" name="tax_rate" value="0" />
             [% END %]
             <ol>
             <li><label for="discount">Discount: </label>
@@ -344,7 +344,7 @@ function delete_contact(ev) {
                         [% END %]</p>
                 <p><strong>List prices are: </strong>[% listprice %]</p>
                 <p><strong>Invoice prices are: </strong>[% invoiceprice %]</p>
-                [% IF ( gstrate ) %]<p><strong>Tax number registered: </strong>
+                [% IF ( tax_rate ) %]<p><strong>Tax number registered: </strong>
                         [% IF ( gstreg ) %]Yes[% ELSE %]No[% END %]</p>
                 <p><strong>List item price includes tax: </strong>
                         [% IF ( listincgst ) %]Yes[% ELSE %]No[% END %]</p>
@@ -353,7 +353,7 @@ function delete_contact(ev) {
                 <p><strong>Discount: </strong>
                     [% discount | format("%.1f") %] %</p>
                 <p><strong>Tax rate: </strong>
-                    [% 0 + gstrate * 100 | format("%.1f") %] %</p>
+                    [% 0 + tax_rate * 100 | format("%.1f") %] %</p>
                 [% IF deliverytime.defined %]
                     <p><strong>Delivery time: </strong>
                         [% deliverytime %] days</p>

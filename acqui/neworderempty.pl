@@ -265,7 +265,7 @@ if ( defined $subscriptionid ) {
         $budget_id              = $lastOrderReceived->{budgetid};
         $data->{listprice}      = $lastOrderReceived->{listprice};
         $data->{uncertainprice} = $lastOrderReceived->{uncertainprice};
-        $data->{gstrate}        = $lastOrderReceived->{gstrate};
+        $data->{tax_rate}        = $lastOrderReceived->{tax_rate};
         $data->{discount}       = $lastOrderReceived->{discount};
         $data->{rrp}            = $lastOrderReceived->{rrp};
         $data->{ecost}          = $lastOrderReceived->{ecost};
@@ -350,7 +350,7 @@ $template->param(
     quantityrec      => $quantity,
     rrp              => $data->{'rrp'},
     gst_values       => \@gst_values,
-    gstrate          => $data->{gstrate} ? $data->{gstrate}+0.0 : $bookseller->{gstrate} ? $bookseller->{gstrate}+0.0 : 0,
+    tax_rate          => $data->{tax_rate} ? $data->{tax_rate}+0.0 : $bookseller->{tax_rate} ? $bookseller->{tax_rate}+0.0 : 0,
     listprice        => sprintf( "%.2f", $data->{listprice} || $data->{price} || $listprice),
     total            => sprintf( "%.2f", ($data->{ecost} || 0) * ($data->{'quantity'} || 0) ),
     ecost            => sprintf( "%.2f", $data->{ecost} || 0),

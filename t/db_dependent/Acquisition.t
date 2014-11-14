@@ -189,7 +189,7 @@ my @order_content = (
             ecost     => 38.15,
             rrp       => 40.15,
             discount  => 5.1111,
-            gstrate   => 0.0515
+            tax_rate   => 0.0515
         }
     },
     {
@@ -217,7 +217,7 @@ my @order_content = (
             ecost     => 38.1,
             rrp       => 11.0,
             discount  => 5.1,
-            gstrate   => 0.1
+            tax_rate   => 0.1
         }
     },
     {
@@ -237,7 +237,7 @@ my @order_content = (
             rrp            => 11.00,
             discount       => 0,
             uncertainprice => 0,
-            gstrate        => 0
+            tax_rate        => 0
         }
     },
     {
@@ -257,7 +257,7 @@ my @order_content = (
             rrp            => 10,
             discount       => 0,
             uncertainprice => 0,
-            gstrate        => 0
+            tax_rate        => 0
         }
     }
 );
@@ -347,16 +347,23 @@ my @expectedfields = qw(
   invoiceid
   freight
   unitprice
+  unitprice_tax_included
+  unitprice_tax_excluded
   quantityreceived
   datecancellationprinted
   purchaseordernumber
   basketno
   timestamp
   rrp
+  rrp_tax_included
+  rrp_tax_excluded
   ecost
+  ecost_tax_included
+  ecost_tax_excluded
   unitpricesupplier
   unitpricelib
-  gstrate
+  tax_rate
+  tax_value
   discount
   budget_id
   budgetdate
@@ -424,6 +431,8 @@ my @base_expectedfields = qw(
   notes
   ordernumber
   ecost
+  ecost_tax_included
+  ecost_tax_excluded
   uncertainprice
   url
   isbn
@@ -453,6 +462,8 @@ my @base_expectedfields = qw(
   budget_parent_id
   publishercode
   unitprice
+  unitprice_tax_included
+  unitprice_tax_excluded
   collectionvolume
   budget_amount
   budget_owner_id
@@ -474,7 +485,8 @@ my @base_expectedfields = qw(
   suppliers_report
   agerestriction
   budget_branchcode
-  gstrate
+  tax_rate
+  tax_value
   listprice
   budget_code
   budgetdate
@@ -497,6 +509,8 @@ my @base_expectedfields = qw(
   sort2_authcat
   budget_expend
   rrp
+  rrp_tax_included
+  rrp_tax_excluded
   cn_sort
   lccn
   sort1
@@ -584,6 +598,8 @@ ok(
   firstname
   biblioitemnumber
   ecost
+  ecost_tax_included
+  ecost_tax_excluded
   uncertainprice
   creationdate
   datereceived
@@ -594,7 +610,8 @@ ok(
   suppliers_report
   isbn
   copyrightdate
-  gstrate
+  tax_rate
+  tax_value
   serial
   listprice
   budgetdate
@@ -620,7 +637,11 @@ ok(
   unititle
   sort2_authcat
   rrp
+  rrp_tax_included
+  rrp_tax_excluded
   unitprice
+  unitprice_tax_included
+  unitprice_tax_excluded
   sort1
   ordernumber
   datecreated
@@ -646,15 +667,14 @@ my $invoiceid = AddInvoice(
     unknown       => "unknown"
 );
 
+my $invoice = GetInvoice( $invoiceid );
+
 my ($datereceived, $new_ordernumber) = ModReceiveOrder(
     {
         biblionumber      => $biblionumber4,
-        ordernumber       => $ordernumbers[4],
+        order             => GetOrder( $ordernumbers[4] ),
         quantityreceived  => 1,
-        cost              => 10,
-        ecost             => 10,
-        invoiceid         => $invoiceid,
-        rrp               => 10,
+        invoice           => $invoice,
         budget_id          => $order_content[4]->{str}->{budget_id},
     }
 );
@@ -812,20 +832,18 @@ is(
     "AddClaim : Check claimed_date"
 );
 
+my $order2 = GetOrder( $ordernumbers[1] );
+$order2->{order_internalnote} = "my notes";
 ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {
         biblionumber     => $biblionumber2,
-        ordernumber      => $ordernumbers[1],
+        order            => $order2,
         quantityreceived => 2,
-        cost             => 12,
-        ecost            => 12,
-        invoiceid        => $invoiceid,
-        rrp              => 42,
-        order_internalnote => "my notes",
-        order_vendornote   => "my vendor notes",
+        invoice          => $invoice,
     }
-);
-my $order2 = GetOrder( $ordernumbers[1] );
+)
+;
+$order2 = GetOrder( $ordernumbers[1] );
 is( $order2->{'quantityreceived'},
     0, 'Splitting up order did not receive any on original order' );
 is( $order2->{'quantity'}, 40, '40 items on original order' );
@@ -833,8 +851,6 @@ is( $order2->{'budget_id'}, $budgetid,
     'Budget on original order is unchanged' );
 is( $order2->{order_internalnote}, "my notes",
     'ModReceiveOrder and GetOrder deal with internal notes' );
-is( $order2->{order_vendornote}, "my vendor notes",
-    'ModReceiveOrder and GetOrder deal with vendor notes' );
 
 $neworder = GetOrder($new_ordernumber);
 is( $neworder->{'quantity'}, 2, '2 items on new order' );
@@ -857,21 +873,19 @@ my $budgetid2 = C4::Budgets::AddBudget(
     }
 );
 
+my $order3 = GetOrder( $ordernumbers[2] );
+$order3->{order_internalnote} = "my other notes";
 ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {
         biblionumber     => $biblionumber2,
-        ordernumber      => $ordernumbers[2],
+        order            => $order3,
         quantityreceived => 2,
-        cost             => 12,
-        ecost            => 12,
-        invoiceid        => $invoiceid,
-        rrp              => 42,
+        invoice          => $invoice,
         budget_id        => $budgetid2,
-        order_internalnote => "my other notes",
     }
 );
 
-my $order3 = GetOrder( $ordernumbers[2] );
+$order3 = GetOrder( $ordernumbers[2] );
 is( $order3->{'quantityreceived'},
     0, 'Splitting up order did not receive any on original order' );
 is( $order3->{'quantity'}, 2, '2 items on original order' );
@@ -886,17 +900,15 @@ is( $neworder->{'quantityreceived'},
     2, 'Splitting up order received items on new order' );
 is( $neworder->{'budget_id'}, $budgetid2, 'Budget on new order is changed' );
 
+$order3 = GetOrder( $ordernumbers[2] );
+$order3->{order_internalnote} = "my third notes";
 ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {
         biblionumber     => $biblionumber2,
-        ordernumber      => $ordernumbers[2],
+        order            => $order3,
         quantityreceived => 2,
-        cost             => 12,
-        ecost            => 12,
-        invoiceid        => $invoiceid,
-        rrp              => 42,
+        invoice          => $invoice,
         budget_id        => $budgetid2,
-        order_internalnote => "my third notes",
     }
 );
 

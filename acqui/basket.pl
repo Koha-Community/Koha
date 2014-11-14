@@ -320,27 +320,29 @@ if ( $op eq 'list' ) {
     my @book_foot_loop;
     my %foot;
     my $total_quantity = 0;
-    my $total_gste = 0;
-    my $total_gsti = 0;
-    my $total_gstvalue = 0;
+    my $total_tax_excluded = 0;
+    my $total_tax_included = 0;
+    my $total_tax_value = 0;
     for my $order (@orders) {
-        $order = C4::Acquisition::populate_order_with_prices({ order => $order, booksellerid => $booksellerid, ordering => 1 });
         my $line = get_order_infos( $order, $bookseller);
         if ( $line->{uncertainprice} ) {
             $template->param( uncertainprices => 1 );
         }
 
+        $line->{total_tax_excluded} = Koha::Number::Price->new( $line->{ecost_tax_excluded} * $line->{quantity} )->format;
+        $line->{total_tax_included} = Koha::Number::Price->new( $line->{ecost_tax_included} * $line->{quantity} )->format;
+
         push @books_loop, $line;
 
-        $foot{$$line{gstrate}}{gstrate} = $$line{gstrate};
-        $foot{$$line{gstrate}}{gstvalue} += $$line{gstvalue};
-        $total_gstvalue += $$line{gstvalue};
-        $foot{$$line{gstrate}}{quantity}  += $$line{quantity};
+        $foot{$$line{tax_rate}}{tax_rate} = $$line{tax_rate};
+        $foot{$$line{tax_rate}}{tax_value} += $$line{tax_value};
+        $total_tax_value += $$line{tax_value};
+        $foot{$$line{tax_rate}}{quantity}  += $$line{quantity};
         $total_quantity += $$line{quantity};
-        $foot{$$line{gstrate}}{totalgste} += $$line{totalgste};
-        $total_gste += $$line{totalgste};
-        $foot{$$line{gstrate}}{totalgsti} += $$line{totalgsti};
-        $total_gsti += $$line{totalgsti};
+        $foot{$$line{tax_rate}}{total_tax_excluded} += $$line{total_tax_excluded};
+        $total_tax_excluded += $$line{total_tax_excluded};
+        $foot{$$line{tax_rate}}{total_tax_included} += $$line{total_tax_included};
+        $total_tax_included += $$line{total_tax_included};
     }
 
     push @book_foot_loop, map {$_} values %foot;
@@ -349,7 +351,6 @@ if ( $op eq 'list' ) {
     my @cancelledorders = GetOrders($basketno, { cancelled => 1 });
     my @cancelledorders_loop;
     for my $order (@cancelledorders) {
-        $order = C4::Acquisition::populate_order_with_prices({ order => $order, booksellerid => $booksellerid, ordering => 1 });
         my $line = get_order_infos( $order, $bookseller);
         push @cancelledorders_loop, $line;
     }
@@ -401,9 +402,9 @@ if ( $op eq 'list' ) {
         book_foot_loop       => \@book_foot_loop,
         cancelledorders_loop => \@cancelledorders_loop,
         total_quantity       => $total_quantity,
-        total_gste           => sprintf( "%.2f", $total_gste ),
-        total_gsti           => sprintf( "%.2f", $total_gsti ),
-        total_gstvalue       => sprintf( "%.2f", $total_gstvalue ),
+        total_tax_excluded   => $total_tax_excluded,
+        total_tax_included   => $total_tax_included,
+        total_tax_value      => $total_tax_value,
         currency             => $active_currency->currency,
         listincgst           => $bookseller->{listincgst},
         basketgroups         => $basketgroups,
@@ -440,7 +441,7 @@ sub get_order_infos {
     $line{budget_name}    = $budget->{budget_name};
 
     if ( $line{uncertainprice} ) {
-        $line{rrpgste} .= ' (Uncertain)';
+        $line{rrp_tax_excluded} .= ' (Uncertain)';
     }
     if ( $line{'title'} ) {
         my $volume      = $order->{'volume'};

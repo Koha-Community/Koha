@@ -136,7 +136,7 @@ sub AddBookseller {
                 name,      address1,      address2,     address3, address4,
                 postal,    phone,         accountnumber,fax,      url,
                 active,    listprice,     invoiceprice, gstreg,
-                listincgst,invoiceincgst, gstrate,      discount, notes,
+                listincgst,invoiceincgst, tax_rate,      discount, notes,
                 deliverytime
             )
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) |
@@ -151,7 +151,7 @@ sub AddBookseller {
         $data->{'active'},       $data->{'listprice'},
         $data->{'invoiceprice'}, $data->{'gstreg'},
         $data->{'listincgst'},   $data->{'invoiceincgst'},
-        $data->{'gstrate'},      $data->{'discount'},
+        $data->{'tax_rate'},      $data->{'discount'},
         $data->{notes},          $data->{deliverytime},
     );
 
@@ -194,7 +194,7 @@ sub ModBookseller {
             postal=?,phone=?,accountnumber=?,fax=?,url=?,
             active=?,listprice=?, invoiceprice=?,
             gstreg=?,listincgst=?,invoiceincgst=?,
-            discount=?,notes=?,gstrate=?,deliverytime=?
+            discount=?,notes=?,tax_rate=?,deliverytime=?
         WHERE id=?';
     my $sth = $dbh->prepare($query);
     my $cnt = $sth->execute(
@@ -207,7 +207,7 @@ sub ModBookseller {
         $data->{'invoiceprice'}, $data->{'gstreg'},
         $data->{'listincgst'},   $data->{'invoiceincgst'},
         $data->{'discount'},     $data->{'notes'},
-        $data->{'gstrate'},      $data->{deliverytime},
+        $data->{'tax_rate'},      $data->{deliverytime},
         $data->{'id'}
     );
     $contacts ||= $data->{'contacts'};

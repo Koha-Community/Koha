@@ -67,7 +67,7 @@ for my $currency_format ( qw( US FR ) ) {
             invoiceid        => $invoiceid_0_0,
             rrp              => 82.00,
             ecost            => 73.80,
-            gstrate          => 0.0500,
+            tax_rate         => 0.0500,
             discount         => 10.0000,
             datereceived     => $today
         };
@@ -82,58 +82,58 @@ for my $currency_format ( qw( US FR ) ) {
         # Note that this configuration is correct \o/
         compare(
             {
-                got      => $order_0_0->{rrpgsti},
+                got      => $order_0_0->{rrp_tax_included},
                 expected => 86.10,
                 conf     => '0 0',
-                field    => 'rrpgsti'
+                field    => 'rrp_tax_included'
             }
         );
         compare(
             {
-                got      => $order_0_0->{rrpgste},
+                got      => $order_0_0->{rrp_tax_excluded},
                 expected => 82.00,
                 conf     => '0 0',
-                field    => 'rrpgste'
+                field    => 'rrp_tax_excluded'
             }
         );
         compare(
             {
-                got      => $order_0_0->{ecostgsti},
+                got      => $order_0_0->{ecost_tax_included},
                 expected => 77.49,
                 conf     => '0 0',
-                field    => 'ecostgsti'
+                field    => 'ecost_tax_included'
             }
         );
         compare(
             {
-                got      => $order_0_0->{ecostgste},
+                got      => $order_0_0->{ecost_tax_excluded},
                 expected => 73.80,
                 conf     => '0 0',
-                field    => 'ecostgste'
+                field    => 'ecost_tax_excluded'
             }
         );
         compare(
             {
-                got      => $order_0_0->{gstvalue},
+                got      => $order_0_0->{tax_value},
                 expected => 7.38,
                 conf     => '0 0',
-                field    => 'gstvalue'
+                field    => 'tax_value'
             }
         );
         compare(
             {
-                got      => $order_0_0->{totalgsti},
+                got      => $order_0_0->{total_tax_included},
                 expected => 154.98,
                 conf     => '0 0',
-                field    => 'totalgsti'
+                field    => 'total_tax_included'
             }
         );
         compare(
             {
-                got      => $order_0_0->{totalgste},
+                got      => $order_0_0->{total_tax_excluded},
                 expected => 147.60,
                 conf     => '0 0',
-                field    => 'totalgste'
+                field    => 'total_tax_excluded'
             }
         );
 
@@ -148,42 +148,42 @@ for my $currency_format ( qw( US FR ) ) {
         # Note that this configuration is correct \o/
         compare(
             {
-                got      => $order_0_0->{unitpricegsti},
+                got      => $order_0_0->{unitprice_tax_included},
                 expected => 77.49,
                 conf     => '0 0',
-                field    => 'unitpricegsti'
+                field    => 'unitprice_tax_included'
             }
         );
         compare(
             {
-                got      => $order_0_0->{unitpricegste},
+                got      => $order_0_0->{unitprice_tax_excluded},
                 expected => 73.80,
                 conf     => '0 0',
-                field    => 'unitpricegste'
+                field    => 'unitprice_tax_excluded'
             }
         );
         compare(
             {
-                got      => $order_0_0->{gstvalue},
+                got      => $order_0_0->{tax_value},
                 expected => 7.38,
                 conf     => '0 0',
-                field    => 'gstvalue'
+                field    => 'tax_value'
             }
         );
         compare(
             {
-                got      => $order_0_0->{totalgsti},
+                got      => $order_0_0->{total_tax_included},
                 expected => 154.98,
                 conf     => '0 0',
-                field    => 'totalgsti'
+                field    => 'total_tax_included'
             }
         );
         compare(
             {
-                got      => $order_0_0->{totalgste},
+                got      => $order_0_0->{total_tax_excluded},
                 expected => 147.60,
                 conf     => '0 0',
-                field    => 'totalgste'
+                field    => 'total_tax_excluded'
             }
         );
     };
@@ -208,7 +208,7 @@ for my $currency_format ( qw( US FR ) ) {
             invoiceid        => $invoiceid_1_1,
             rrp              => 82.00,
             ecost            => 73.80,
-            gstrate          => 0.0500,
+            tax_rate         => 0.0500,
             discount         => 10.0000,
             datereceived     => $today
         };
@@ -222,61 +222,61 @@ for my $currency_format ( qw( US FR ) ) {
         );
 
         # Note that this configuration is *not* correct
-        # gstvalue should be 7.03 instead of 7.02
+        # tax_value should be 7.03 instead of 7.02
         compare(
             {
-                got      => $order_1_1->{rrpgsti},
+                got      => $order_1_1->{rrp_tax_included},
                 expected => 82.00,
                 conf     => '1 1',
-                field    => 'rrpgsti'
+                field    => 'rrp_tax_included'
             }
         );
         compare(
             {
-                got      => $order_1_1->{rrpgste},
+                got      => $order_1_1->{rrp_tax_excluded},
                 expected => 78.10,
                 conf     => '1 1',
-                field    => 'rrpgste'
+                field    => 'rrp_tax_excluded'
             }
         );
         compare(
             {
-                got      => $order_1_1->{ecostgsti},
+                got      => $order_1_1->{ecost_tax_included},
                 expected => 73.80,
                 conf     => '1 1',
-                field    => 'ecostgsti'
+                field    => 'ecost_tax_included'
             }
         );
         compare(
             {
-                got      => $order_1_1->{ecostgste},
+                got      => $order_1_1->{ecost_tax_excluded},
                 expected => 70.29,
                 conf     => '1 1',
-                field    => 'ecostgste'
+                field    => 'ecost_tax_excluded'
             }
         );
         compare(
             {
-                got      => $order_1_1->{gstvalue},
+                got      => $order_1_1->{tax_value},
                 expected => 7.02,
                 conf     => '1 1',
-                field    => 'gstvalue'
+                field    => 'tax_value'
             }
         );
         compare(
             {
-                got      => $order_1_1->{totalgsti},
+                got      => $order_1_1->{total_tax_included},
                 expected => 147.60,
                 conf     => '1 1',
-                field    => 'totalgsti'
+                field    => 'total_tax_included'
             }
         );
         compare(
             {
-                got      => $order_1_1->{totalgste},
+                got      => $order_1_1->{total_tax_excluded},
                 expected => 140.58,
                 conf     => '1 1',
-                field    => 'totalgste'
+                field    => 'total_tax_excluded'
             }
         );
 
@@ -288,45 +288,45 @@ for my $currency_format ( qw( US FR ) ) {
             }
         );
         # Note that this configuration is *not* correct!
-        # gstvalue should be 7.03
+        # tax_value should be 7.03
         compare(
             {
-                got      => $order_1_1->{unitpricegsti},
+                got      => $order_1_1->{unitprice_tax_included},
                 expected => 73.80,
                 conf     => '1 1',
-                field    => 'unitpricegsti'
+                field    => 'unitprice_tax_included'
             }
         );
         compare(
             {
-                got      => $order_1_1->{unitpricegste},
+                got      => $order_1_1->{unitprice_tax_excluded},
                 expected => 70.29,
                 conf     => '1 1',
-                field    => 'unitpricegste'
+                field    => 'unitprice_tax_excluded'
             }
         );
         compare(
             {
-                got      => $order_1_1->{gstvalue},
+                got      => $order_1_1->{tax_value},
                 expected => 7.02,
                 conf     => '1 1',
-                field    => 'gstvalue'
+                field    => 'tax_value'
             }
         );
         compare(
             {
-                got      => $order_1_1->{totalgsti},
+                got      => $order_1_1->{total_tax_included},
                 expected => 147.60,
                 conf     => '1 1',
-                field    => 'totalgsti'
+                field    => 'total_tax_included'
             }
         );
         compare(
             {
-                got      => $order_1_1->{totalgste},
+                got      => $order_1_1->{total_tax_excluded},
                 expected => 140.58,
                 conf     => '1 1',
-                field    => 'totalgste'
+                field    => 'total_tax_excluded'
             }
         );
     };
@@ -351,7 +351,7 @@ for my $currency_format ( qw( US FR ) ) {
             invoiceid        => $invoiceid_1_1,
             rrp              => 82.01,
             ecost            => 73.80,
-            gstrate          => 0.0500,
+            tax_rate         => 0.0500,
             discount         => 10.0000,
             datereceived     => $today
         };
@@ -365,64 +365,63 @@ for my $currency_format ( qw( US FR ) ) {
         );
 
         # Note that this configuration is *not* correct!
-        # rrp gsti should be 82 (what we inserted!)
-        # => Actually we need to fix the inserted value (here we have 82.01 in DB)
-        # gstvalue should be 7.03 instead of 7.02
+        # rrp_tax_included should be 82 (what we inserted!)
+        # tax_value should be 7.03 instead of 7.02
 
         compare(
             {
-                got      => $order_1_0->{rrpgsti},
+                got      => $order_1_0->{rrp_tax_included},
                 expected => 82.01,
                 conf     => '1 0',
-                field    => 'rrpgsti'
+                field    => 'rrp_tax_included'
             }
         );
         compare(
             {
-                got      => $order_1_0->{rrpgste},
+                got      => $order_1_0->{rrp_tax_excluded},
                 expected => 78.10,
                 conf     => '1 0',
-                field    => 'rrpgste'
+                field    => 'rrp_tax_excluded'
             }
         );
         compare(
             {
-                got      => $order_1_0->{ecostgsti},
+                got      => $order_1_0->{ecost_tax_included},
                 expected => 73.80,
                 conf     => '1 0',
-                field    => 'ecostgsti'
+                field    => 'ecost_tax_included'
             }
         );
         compare(
             {
-                got      => $order_1_0->{ecostgste},
+                got      => $order_1_0->{ecost_tax_excluded},
                 expected => 70.29,
                 conf     => '1 0',
-                field    => 'ecostgste'
+                field    => 'ecost_tax_excluded'
             }
         );
         compare(
             {
-                got      => $order_1_0->{gstvalue},
+                got      => $order_1_0->{tax_value},
                 expected => 7.02,
                 conf     => '1 0',
-                field    => 'gstvalue'
+                field    => 'tax_value'
             }
         );
         compare(
             {
-                got      => $order_1_0->{totalgsti},
+                got      => $order_1_0->{total_tax_included},
                 expected => 147.60,
                 conf     => '1 0',
-                field    => 'totalgsti'
+                field    => 'total_tax_included'
             }
         );
         compare(
             {
-                got      => $order_1_0->{totalgste},
+                got      => $order_1_0->{total_tax_excluded},
                 expected => 140.58,
                 conf     => '1 0',
-                field    => 'totalgste'
+                field    => 'total_tax_excluded'
             }
         );
 
@@ -437,42 +436,42 @@ for my $currency_format ( qw( US FR ) ) {
         # gstvalue should be 7.03
         compare(
             {
-                got      => $order_1_0->{unitpricegsti},
+                got      => $order_1_0->{unitprice_tax_included},
                 expected => 73.80,
                 conf     => '1 0',
-                field    => 'unitpricegsti'
+                field    => 'unitprice_tax_included'
             }
         );
         compare(
             {
-                got      => $order_1_0->{unitpricegste},
+                got      => $order_1_0->{unitprice_tax_excluded},
                 expected => 70.29,
                 conf     => '1 0',
-                field    => 'unitpricegste'
+                field    => 'unitprice_tax_excluded'
             }
         );
         compare(
             {
-                got      => $order_1_0->{gstvalue},
+                got      => $order_1_0->{tax_value},
                 expected => 7.02,
                 conf     => '1 0',
-                field    => 'gstvalue'
+                field    => 'tax_value'
             }
         );
         compare(
             {
-                got      => $order_1_0->{totalgsti},
+                got      => $order_1_0->{total_tax_included},
                 expected => 147.60,
                 conf     => '1 0',
-                field    => 'totalgsti'
+                field    => 'total_tax_included'
             }
         );
         compare(
             {
-                got      => $order_1_0->{totalgste},
+                got      => $order_1_0->{total_tax_excluded},
                 expected => 140.58,
                 conf     => '1 0',
-                field    => 'totalgste'
+                field    => 'total_tax_excluded'
             }
         );
     };
@@ -497,7 +496,7 @@ for my $currency_format ( qw( US FR ) ) {
             invoiceid        => $invoiceid_1_1,
             rrp              => 82.00,
             ecost            => 73.80,
-            gstrate          => 0.0500,
+            tax_rate         => 0.0500,
             discount         => 10.0000,
             datereceived     => $today
         };
@@ -513,58 +512,58 @@ for my $currency_format ( qw( US FR ) ) {
         # Note that this configuration is correct \o/
         compare(
             {
-                got      => $order_0_1->{rrpgsti},
+                got      => $order_0_1->{rrp_tax_included},
                 expected => 86.10,
                 conf     => '1 0',
-                field    => 'rrpgsti'
+                field    => 'rrp_tax_included'
             }
         );
         compare(
             {
-                got      => $order_0_1->{rrpgste},
+                got      => $order_0_1->{rrp_tax_excluded},
                 expected => 82.00,
                 conf     => '1 0',
-                field    => 'rrpgste'
+                field    => 'rrp_tax_excluded'
             }
         );
         compare(
             {
-                got      => $order_0_1->{ecostgsti},
+                got      => $order_0_1->{ecost_tax_included},
                 expected => 77.49,
                 conf     => '1 0',
-                field    => 'ecostgsti'
+                field    => 'ecost_tax_included'
             }
         );
         compare(
             {
-                got      => $order_0_1->{ecostgste},
+                got      => $order_0_1->{ecost_tax_excluded},
                 expected => 73.80,
                 conf     => '1 0',
-                field    => 'ecostgste'
+                field    => 'ecost_tax_excluded'
             }
         );
         compare(
             {
-                got      => $order_0_1->{gstvalue},
+                got      => $order_0_1->{tax_value},
                 expected => 7.38,
                 conf     => '1 0',
-                field    => 'gstvalue'
+                field    => 'tax_value'
             }
         );
         compare(
             {
-                got      => $order_0_1->{totalgsti},
+                got      => $order_0_1->{total_tax_included},
                 expected => 154.98,
                 conf     => '1 0',
-                field    => 'totalgsti'
+                field    => 'total_tax_included'
             }
         );
         compare(
             {
-                got      => $order_0_1->{totalgste},
+                got      => $order_0_1->{total_tax_excluded},
                 expected => 147.60,
                 conf     => '1 0',
-                field    => 'totalgste'
+                field    => 'total_tax_excluded'
             }
         );
 
@@ -578,42 +577,42 @@ for my $currency_format ( qw( US FR ) ) {
         # Note that this configuration is correct
         compare(
             {
-                got      => $order_0_1->{unitpricegsti},
+                got      => $order_0_1->{unitprice_tax_included},
                 expected => 77.49,
                 conf     => '0 1',
-                field    => 'unitpricegsti'
+                field    => 'unitprice_tax_included'
             }
         );
         compare(
             {
-                got      => $order_0_1->{unitpricegste},
+                got      => $order_0_1->{unitprice_tax_excluded},
                 expected => 73.80,
                 conf     => '0 1',
-                field    => 'unitpricegste'
+                field    => 'unitprice_tax_excluded'
             }
         );
         compare(
             {
-                got      => $order_0_1->{gstvalue},
+                got      => $order_0_1->{tax_value},
                 expected => 7.38,
                 conf     => '0 1',
-                field    => 'gstvalue'
+                field    => 'tax_value'
             }
         );
         compare(
             {
-                got      => $order_0_1->{totalgsti},
+                got      => $order_0_1->{total_tax_included},
                 expected => 154.98,
                 conf     => '0 1',
-                field    => 'totalgsti'
+                field    => 'total_tax_included'
             }
         );
         compare(
             {
-                got      => $order_0_1->{totalgste},
+                got      => $order_0_1->{total_tax_excluded},
                 expected => 147.60,
                 conf     => '0 1',
-                field    => 'totalgste'
+                field    => 'total_tax_excluded'
             }
         );
     };

@@ -123,9 +123,9 @@ if ( defined $subscriptionid ) {
     if ( defined $lastOrderNotReceived ) {
         my $basket = GetBasket $lastOrderNotReceived->{basketno};
         my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $basket->{booksellerid} });
-        ( $tmpl_infos->{valuegsti_ordered}, $tmpl_infos->{valuegste_ordered} ) = get_value_with_gst_params ( $lastOrderNotReceived->{ecost}, $lastOrderNotReceived->{gstrate}, $bookseller );
-        $tmpl_infos->{valuegsti_ordered} = sprintf( "%.2f", $tmpl_infos->{valuegsti_ordered} );
-        $tmpl_infos->{valuegste_ordered} = sprintf( "%.2f", $tmpl_infos->{valuegste_ordered} );
+        ( $tmpl_infos->{value_tax_included_ordered}, $tmpl_infos->{value_tax_excluded_ordered} ) = get_value_with_gst_params ( $lastOrderNotReceived->{ecost}, $lastOrderNotReceived->{tax_rate}, $bookseller );
+        $tmpl_infos->{value_tax_included_ordered} = sprintf( "%.2f", $tmpl_infos->{value_tax_included_ordered} );
+        $tmpl_infos->{value_tax_excluded_ordered} = sprintf( "%.2f", $tmpl_infos->{value_tax_excluded_ordered} );
         $tmpl_infos->{budget_name_ordered} = GetBudgetName $lastOrderNotReceived->{budget_id};
         $tmpl_infos->{basketno} = $lastOrderNotReceived->{basketno};
         $tmpl_infos->{ordered_exists} = 1;
@@ -133,9 +133,9 @@ if ( defined $subscriptionid ) {
     if ( defined $lastOrderReceived ) {
         my $basket = GetBasket $lastOrderReceived->{basketno};
         my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $basket->{booksellerid} });
-        ( $tmpl_infos->{valuegsti_spent}, $tmpl_infos->{valuegste_spent} ) = get_value_with_gst_params ( $lastOrderReceived->{unitprice}, $lastOrderReceived->{gstrate}, $bookseller );
-        $tmpl_infos->{valuegsti_spent} = sprintf( "%.2f", $tmpl_infos->{valuegsti_spent} );
-        $tmpl_infos->{valuegste_spent} = sprintf( "%.2f", $tmpl_infos->{valuegste_spent} );
+        ( $tmpl_infos->{value_tax_included_spent}, $tmpl_infos->{value_tax_excluded_spent} ) = get_value_with_gst_params ( $lastOrderReceived->{unitprice}, $lastOrderReceived->{tax_rate}, $bookseller );
+        $tmpl_infos->{value_tax_included_spent} = sprintf( "%.2f", $tmpl_infos->{value_tax_included_spent} );
+        $tmpl_infos->{value_tax_excluded_spent} = sprintf( "%.2f", $tmpl_infos->{value_tax_excluded_spent} );
         $tmpl_infos->{budget_name_spent} = GetBudgetName $lastOrderReceived->{budget_id};
         $tmpl_infos->{invoiceid} = $lastOrderReceived->{invoiceid};
         $tmpl_infos->{spent_exists} = 1;
@@ -191,21 +191,21 @@ sub get_default_view {
 
 sub get_value_with_gst_params {
     my $value = shift;
-    my $gstrate = shift;
+    my $tax_rate = shift;
     my $bookseller = shift;
     if ( $bookseller->{listincgst} ) {
-        return ( $value, $value / ( 1 + $gstrate ) );
+        return ( $value, $value / ( 1 + $tax_rate ) );
     } else {
-        return ( $value * ( 1 + $gstrate ), $value );
+        return ( $value * ( 1 + $tax_rate ), $value );
     }
 }
 
-sub get_gste {
+sub get_tax_excluded {
     my $value = shift;
-    my $gstrate = shift;
+    my $tax_rate = shift;
     my $bookseller = shift;
     if ( $bookseller->{invoiceincgst} ) {
-        return $value / ( 1 + $gstrate );
+        return $value / ( 1 + $tax_rate );
     } else {
         return $value;
     }
@@ -213,11 +213,11 @@ sub get_gste {
 
 sub get_gst {
     my $value = shift;
-    my $gstrate = shift;
+    my $tax_rate = shift;
     my $bookseller = shift;
     if ( $bookseller->{invoiceincgst} ) {
-        return $value / ( 1 + $gstrate ) * $gstrate;
+        return $value / ( 1 + $tax_rate ) * $tax_rate;
     } else {
-        return $value * ( 1 + $gstrate ) - $value;
+        return $value * ( 1 + $tax_rate ) - $value;
     }
 }

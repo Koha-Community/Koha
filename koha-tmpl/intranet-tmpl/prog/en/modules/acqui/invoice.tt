@@ -12,12 +12,12 @@
 //<![CDATA[
     function updateColumnsVisibility(visible) {
         if ( visible ) {
-            $("table .gste, .gsti").show();
+            $("table .tax_excluded, .tax_included").show();
         } else {
             [% IF ( invoiceincgst ) %]
-                $("table .gste").hide();
+                $("table .tax_excluded").hide();
             [% ELSE %]
-                $("table .gsti").hide();
+                $("table .tax_included").hide();
             [% END %]
         }
     }
@@ -142,11 +142,11 @@
               <tr>
                 <th class="anti-the">Summary</th>
                 <th>Library</th>
-                <th class="gste">Actual cost tax exc.</th>
-                <th class="gsti">Actual cost tax inc.</th>
+                <th class="tax_excluded">Actual cost tax exc.</th>
+                <th class="tax_included">Actual cost tax inc.</th>
                 <th>Qty.</th>
-                <th class="gste">Total tax exc. ([% currency.symbol %])</th>
-                <th class="gsti">Total tax inc. ([% currency.symbol %])</th>
+                <th class="tax_excluded">Total tax exc. ([% currency.symbol %])</th>
+                <th class="tax_included">Total tax inc. ([% currency.symbol %])</th>
                 <th>GST %</th>
                 <th>GST</th>
                 <th>Fund</th>
@@ -174,13 +174,13 @@
                     [% END %]
                   </td>
                   <td><p>[% order.branchcode %]</p></td>
-                  <td class="number gste">[% order.unitpricegste | $Price %]</td>
-                  <td class="number gsti">[% order.unitpricegsti | $Price %]</td>
+                  <td class="number tax_excluded">[% order.unitprice_tax_excluded | $Price %]</td>
+                  <td class="number tax_included">[% order.unitprice_tax_included | $Price %]</td>
                   <td class="number">[% order.quantity %]</td>
-                  <td class="number gste">[% order.totalgste | $Price %]</td>
-                  <td class="number gsti">[% order.totalgsti | $Price %]</td>
-                  <td class="number">[% order.gstrate * 100 | $Price %]</td>
-                  <td class="number">[% order.gstvalue | $Price %]</td>
+                  <td class="number tax_excluded">[% order.total_tax_excluded | $Price %]</td>
+                  <td class="number tax_included">[% order.total_tax_included | $Price %]</td>
+                  <td class="number">[% order.tax_rate * 100 | $Price %]</td>
+                  <td class="number">[% order.tax_value | $Price %]</td>
                   <td>[% order.budget_name %]</td>
                 </tr>
               [% END %]
@@ -188,35 +188,35 @@
             <tfoot>
               [% FOR tf IN foot_loop %]
                 <tr>
-                    <th colspan='2'>Total (GST [% tf.gstrate * 100 | $Price %] %)</th>
-                    <th class="gste"/><th class="gsti"/>
+                    <th colspan='3'>Total (GST [% tf.tax_rate * 100 | $Price %] %)</th>
+                    <th class="tax_excluded"/><th class="tax_included"/>
                     <th>[% tf.quantity %]</th>
-                    <th class="gste">[% tf.totalgste | $Price %]</th>
-                    <th class="gsti">[% tf.totalgsti | $Price %]</th>
+                    <th class="tax_excluded">[% tf.total_tax_excluded | $Price %]</th>
+                    <th class="tax_included">[% tf.total_tax_included | $Price %]</th>
                     <th>&nbsp;</th>
-                    <th>[% tf.gstvalue | $Price %]</th>
+                    <th>[% tf.tax_value | $Price %]</th>
                     <th>&nbsp;</th>
                 </tr>
               [% END %]
               <tr>
                 <th colspan='2'>Total ([% currency.symbol %])</th>
-                <th class="gste"/><th class="gsti"/>
+                <th class="tax_excluded"/><th class="tax_included"/>
                 <th>[% total_quantity %]</th>
-                <th class="gste">[% total_gste | $Price %]</th>
-                <th class="gsti">[% total_gsti | $Price %]</th>
+                <th class="tax_excluded">[% total_tax_excluded | $Price %]</th>
+                <th class="tax_included">[% total_tax_included | $Price %]</th>
                 <th>&nbsp;</th>
-                <th>[% total_gstvalue | $Price %]</th>
+                <th>[% total_tax_value | $Price %]</th>
                 <th>&nbsp;</th>
               </tr>
               <tr>
                 <th colspan="2">Total + Shipment cost ([% currency.symbol %])</th>
-                <th class="gste"></th>
-                <th class="gsti"></th>
+                <th class="tax_excluded"></th>
+                <th class="tax_included"></th>
                 <th>[% total_quantity %]</th>
-                <th class="gste">[% total_gste_shipment | $Price %]</th>
-                <th class="gsti">[% total_gsti_shipment | $Price %]</th>
+                <th class="tax_excluded">[% total_tax_excluded_shipment | $Price %]</th>
+                <th class="tax_included">[% total_tax_included_shipment | $Price %]</th>
                 <th>&nbsp;</th>
-                <th>[% total_gstvalue | $Price %]</th>
+                <th>[% total_tax_value | $Price %]</th>
                 <th>&nbsp;</th>
               </tr>
             </tfoot>

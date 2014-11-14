@@ -13,12 +13,12 @@
 //<![CDATA[
     function updateColumnsVisibility(visible) {
         if ( visible ) {
-            $("table .gste, .gsti").show();
+            $("table .tax_excluded, .tax_included").show();
         } else {
             [% IF ( listincgst ) %]
-                $("table .gste").hide();
+                $("table .tax_excluded").hide();
             [% ELSE %]
-                $("table .gsti").hide();
+                $("table .tax_included").hide();
             [% END %]
         }
     }
@@ -458,13 +458,13 @@
                     <tr>
                         <th>No.</th>
                         <th class="anti-the">Order</th>
-                        <th class="gste">RRP tax exc.</th>
-                        <th class="gste">Ecost tax exc.</th>
-                        <th class="gsti">RRP tax inc.</th>
-                        <th class="gsti">ecost tax inc.</th>
+                        <th class="tax_excluded">RRP tax exc.</th>
+                        <th class="tax_excluded">ecost tax exc.</th>
+                        <th class="tax_included">RRP tax inc.</th>
+                        <th class="tax_included">ecost tax inc.</th>
                         <th>Qty.</th>
-                        <th class="gste">Total tax exc. ([% currency %])</th>
-                        <th class="gsti">Total tax inc. ([% currency %])</th>
+                        <th class="tax_excluded">Total tax exc. ([% currency %])</th>
+                        <th class="tax_included">Total tax inc. ([% currency %])</th>
                         <th>GST %</th>
                         <th>GST</th>
                         <th>Fund</th>
@@ -481,16 +481,16 @@
                 [% FOREACH foot_loo IN book_foot_loop %]
                     <tr>
                         <th></th>
-                        <th>Total (GST [% foot_loo.gstrate * 100 | $Price %])</th>
-                        <th class="gste">&nbsp;</th>
-                        <th class="gste">&nbsp;</th>
-                        <th class="gsti">&nbsp;</th>
-                        <th class="gsti">&nbsp;</th>
+                        <th>Total (GST [% foot_loo.tax_rate * 100 | $Price %])</th>
+                        <th class="tax_excluded">&nbsp;</th>
+                        <th class="tax_excluded">&nbsp;</th>
+                        <th class="tax_included">&nbsp;</th>
+                        <th class="tax_included">&nbsp;</th>
                         <th>[% foot_loo.quantity %]</th>
-                        <th class="gste">[% foot_loo.totalgste | $Price%]</th>
-                        <th class="gsti">[% foot_loo.totalgsti | $Price %]</th>
+                        <th class="tax_excluded">[% foot_loo.total_tax_excluded | $Price%]</th>
+                        <th class="tax_included">[% foot_loo.total_tax_included | $Price %]</th>
                         <th>&nbsp;</th>
-                        <th>[% foot_loo.gstvalue | $Price %]</th>
+                        <th>[% foot_loo.tax_value | $Price %]</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
                         [% IF ( active ) %]
@@ -504,15 +504,15 @@
                 <tr>
                     <th></th>
                     <th>Total ([% currency %])</th>
-                    <th class="gste">&nbsp;</th>
-                    <th class="gste">&nbsp;</th>
-                    <th class="gsti">&nbsp;</th>
-                    <th class="gsti">&nbsp;</th>
+                    <th class="tax_excluded">&nbsp;</th>
+                    <th class="tax_excluded">&nbsp;</th>
+                    <th class="tax_included">&nbsp;</th>
+                    <th class="tax_included">&nbsp;</th>
                     <th>[% total_quantity %]</th>
-                    <th class="gste">[% total_gste | $Price %]</th>
-                    <th class="gsti">[% total_gsti | $Price %]</th>
+                    <th class="tax_excluded">[% total_tax_excluded | $Price %]</th>
+                    <th class="tax_included">[% total_tax_included | $Price %]</th>
                     <th>&nbsp;</th>
-                    <th>[% total_gstvalue | $Price %]</th>
+                    <th>[% total_tax_value | $Price %]</th>
                     <th>&nbsp;</th>
                     <th>&nbsp;</th>
                     [% IF ( active ) %]
@@ -578,15 +578,15 @@
                         </td>
                         [% SET zero_regex = "^0{1,}\.?0{1,}[^1-9]" %] [%# 0 or 0.0 or 0.00 or 00 or 00.0 or 00.00 or 0.000 ... %]
                         [%# FIXME: use of a regexp is not ideal; bugs 9410 and 10929 suggest better way of handling this %]
-                        <td class="number gste [% IF books_loo.rrpgste.search(zero_regex) %]error[% END %]">[% books_loo.rrpgste | $Price %]</td>
-                        <td class="number gste [% IF books_loo.ecostgste.search(zero_regex) %]error[% END %]">[% books_loo.ecostgste | $Price%]</td>
-                        <td class="number gsti [% IF books_loo.rrpgsti.search(zero_regex) %]error[% END %]">[% books_loo.rrpgsti | $Price %]</td>
-                        <td class="number gsti [% IF books_loo.ecostgsti.search(zero_regex) %]error[% END %]">[% books_loo.ecostgsti | $Price %]</td>
+                        <td class="number tax_excluded [% IF books_loo.rrp_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_excluded | $Price %]</td>
+                        <td class="number tax_excluded [% IF books_loo.ecost_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_excluded | $Price%]</td>
+                        <td class="number tax_included [% IF books_loo.rrp_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_included | $Price %]</td>
+                        <td class="number tax_included [% IF books_loo.ecost_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_included | $Price %]</td>
                         <td class="number [% IF books_loo.quantity.search(zero_regex) %]error[% END %]">[% books_loo.quantity %]</td>
-                        <td class="number gste [% IF books_loo.totalgste.search(zero_regex) %]error[% END %]">[% books_loo.totalgste | $Price %]</td>
-                        <td class="number gsti [% IF books_loo.totalgsti.search(zero_regex) %]error[% END %]">[% books_loo.totalgsti | $Price %]</td>
-                        <td class="number">[% books_loo.gstrate * 100 | $Price %]</td>
-                        <td class="number [% IF books_loo.gstvalue.search(zero_regex) %]error[% END %]">[% books_loo.gstvalue | $Price %]</td>
+                        <td class="number tax_excluded [% IF books_loo.total_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_excluded | $Price %]</td>
+                        <td class="number tax_included [% IF books_loo.total_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_included | $Price %]</td>
+                        <td class="number">[% books_loo.tax_rate * 100 | $Price %]</td>
+                        <td class="number [% IF books_loo.tax_value.search(zero_regex) %]error[% END %]">[% books_loo.tax_value | $Price %]</td>
                         <td>[% books_loo.budget_name %]</td>
                         <td>[% books_loo.suppliers_report %]</td>
                         [% IF ( active ) %]
@@ -640,13 +640,13 @@
                 <tr>
                   <th>No.</th>
                   <th>Order</th>
-                  <th class="gste">RRP tax exc.</th>
-                  <th class="gste">ecost tax exc.</th>
-                  <th class="gsti">RRP tax inc.</th>
-                  <th class="gsti">ecost tax inc.</th>
+                  <th class="tax_excluded">RRP tax exc.</th>
+                  <th class="tax_excluded">ecost tax exc.</th>
+                  <th class="tax_included">RRP tax inc.</th>
+                  <th class="tax_included">ecost tax inc.</th>
                   <th>Qty.</th>
-                  <th class="gste">Total tax exc. ([% currency %])</th>
-                  <th class="gsti">Total tax inc. ([% currency %])</th>
+                  <th class="tax_excluded">Total tax exc. ([% currency %])</th>
+                  <th class="tax_included">Total tax inc. ([% currency %])</th>
                   <th>GST %</th>
                   <th>GST</th>
                   <th>Fund</th>
@@ -691,15 +691,15 @@
                         </p>
                       [% END %]
                     </td>
-                    <td class="number gste">[% order.rrpgste | $Price %]</td>
-                    <td class="number gste">[% order.ecostgste | $Price %]</td>
-                    <td class="number gsti">[% order.rrpgsti | $Price %]</td>
-                    <td class="number gsti">[% order.ecostgsti | $Price %]</td>
+                    <td class="number tax_excluded">[% order.rrp_tax_excluded | $Price %]</td>
+                    <td class="number tax_excluded">[% order.ecost_tax_excluded | $Price %]</td>
+                    <td class="number tax_included">[% order.rrp_tax_included | $Price %]</td>
+                    <td class="number tax_included">[% order.ecost_tax_included | $Price %]</td>
                     <td class="number">[% order.quantity %]</td>
-                    <td class="number gste">[% order.totalgste | $Price %]</td>
-                    <td class="number gsti">[% order.totalgsti | $Price %]</td>
-                    <td class="number">[% order.gstrate * 100 | $Price %]</td>
-                    <td class="number">[% order.gstvalue | $Price %]</td>
+                    <td class="number tax_excluded">[% order.total_tax_excluded | $Price %]</td>
+                    <td class="number tax_included">[% order.total_tax_included | $Price %]</td>
+                    <td class="number">[% order.tax_rate * 100 | $Price %]</td>
+                    <td class="number">[% order.tax_value | $Price %]</td>
                     <td>[% order.budget_name %]
                   </tr>
                 [% END %]

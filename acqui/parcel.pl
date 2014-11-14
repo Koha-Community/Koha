@@ -111,28 +111,30 @@ unless( $invoiceid and $invoice->{invoiceid} ) {
 
 my $booksellerid = $invoice->{booksellerid};
 my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
-my $gst = $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
+my $gst = $bookseller->{tax_rate} // C4::Context->preference("gist") // 0;
 
 my @orders        = @{ $invoice->{orders} };
 my $countlines    = scalar @orders;
 my @loop_received = ();
 my @book_foot_loop;
 my %foot;
-my $total_gste = 0;
-my $total_gsti = 0;
+my $total_tax_excluded = 0;
+my $total_tax_included = 0;
 
 my $subtotal_for_funds;
 for my $order ( @orders ) {
-    $order = C4::Acquisition::populate_order_with_prices({ order => $order, booksellerid => $bookseller->{id}, receiving => 1, ordering => 1 });
     $order->{'unitprice'} += 0;
 
     if ( $bookseller->{listincgst} and not $bookseller->{invoiceincgst} ) {
-        $order->{ecost}     = $order->{ecostgste};
-        $order->{unitprice} = $order->{unitpricegste};
+        $order->{ecost}     = $order->{ecost_tax_excluded};
+        $order->{unitprice} = $order->{unitprice_tax_excluded};
     }
     elsif ( not $bookseller->{listinct} and $bookseller->{invoiceincgst} ) {
-        $order->{ecost}     = $order->{ecostgsti};
-        $order->{unitprice} = $order->{unitpricegsti};
+        $order->{ecost}     = $order->{ecost_tax_included};
+        $order->{unitprice} = $order->{unitprice_tax_included};
+    } else {
+        $order->{ecost} = $order->{ecost_tax_excluded};
+        $order->{unitprice} = $order->{unitprice_tax_excluded};
     }
     $order->{total} = $order->{unitprice} * $order->{quantity};
 
@@ -145,10 +147,10 @@ for my $order ( @orders ) {
         $line{holds} += scalar( @$holds );
     }
     $line{budget} = GetBudgetByOrderNumber( $line{ordernumber} );
-    $foot{$line{gstrate}}{gstrate} = $line{gstrate};
-    $foot{$line{gstrate}}{gstvalue} += $line{gstvalue};
-    $total_gste += $line{totalgste};
-    $total_gsti += $line{totalgsti};
+    $foot{$line{tax_rate}}{tax_rate} = $line{tax_rate};
+    $foot{$line{tax_rate}}{tax_value} += $line{tax_value};
+    $total_tax_excluded += Koha::Number::Price->new( $line{ecost_tax_excluded} * $line{quantity} )->format;
+    $total_tax_included += Koha::Number::Price->new( $line{ecost_tax_included} * $line{quantity} )->format;
 
     my $suggestion   = GetSuggestionInfoFromBiblionumber($line{biblionumber});
     $line{suggestionid}         = $suggestion->{suggestionid};
@@ -219,12 +221,13 @@ unless( defined $invoice->{closedate} ) {
 
     for (my $i = 0 ; $i < $countpendings ; $i++) {
         my $order = $pendingorders->[$i];
-        $order = C4::Acquisition::populate_order_with_prices({ order => $order, booksellerid => $bookseller->{id}, receiving => 1, ordering => 1 });
 
         if ( $bookseller->{listincgst} and not $bookseller->{invoiceincgst} ) {
-            $order->{ecost} = $order->{ecostgste};
+            $order->{ecost} = $order->{ecost_tax_excluded};
         } elsif ( not $bookseller->{listinct} and $bookseller->{invoiceincgst} ) {
-            $order->{ecost} = $order->{ecostgsti};
+            $order->{ecost} = $order->{ecost_tax_included};
+        } else {
+            $order->{ecost} = $order->{ecost_tax_excluded};
         }
         $order->{total} = $order->{ecost} * $order->{quantity};
 
@@ -288,8 +291,8 @@ $template->param(
     loop_orders           => \@loop_orders,
     book_foot_loop        => \@book_foot_loop,
     (uc(C4::Context->preference("marcflavour"))) => 1,
-    total_gste           => $total_gste,
-    total_gsti           => $total_gsti,
+    total_tax_excluded    => $total_tax_excluded,
+    total_tax_included    => $total_tax_included,
     subtotal_for_funds    => $subtotal_for_funds,
     sticky_filters       => $sticky_filters,
 );

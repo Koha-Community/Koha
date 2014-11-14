@@ -68,7 +68,7 @@ my $order = Koha::Acquisition::Order->new({
     basketno => $basketno,
     rrp => $cost,
     ecost => $cost,
-    gstrate => 0.0500,
+    tax_rate => 0.0500,
     orderstatus => 'new',
     subscriptionid => $subscription->{subscriptionid},
     budget_id => $budget_id,
@@ -85,16 +85,16 @@ ok( $order->{ecost} == $cost, "test cost for the last order not received");
 $dbh->do(q{DELETE FROM aqinvoices});
 my $invoiceid = AddInvoice(invoicenumber => 'invoice1', booksellerid => $booksellerid, unknown => "unknown");
 
+my $invoice = GetInvoice( $invoiceid );
+$invoice->{datereceived} = '02-01-2013';
+
 my ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {
         biblionumber     => $biblionumber,
-        ordernumber      => $ordernumber,
+        order            => $order,
         quantityreceived => 1,
-        cost             => $cost,
-        ecost            => $cost,
-        rrp              => $cost,
         budget_id        => $budget_id,
-        invoiceid        => $invoiceid,
+        invoice          => $invoice,
     }
 );
 

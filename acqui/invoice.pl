@@ -118,28 +118,24 @@ my $orders = $details->{'orders'};
 my @foot_loop;
 my %foot;
 my $total_quantity = 0;
-my $total_gste = 0;
-my $total_gsti = 0;
-my $total_gstvalue = 0;
+my $total_tax_excluded = 0;
+my $total_tax_included = 0;
+my $total_tax_value = 0;
 foreach my $order (@$orders) {
-    $order = C4::Acquisition::populate_order_with_prices(
-        {
-            order        => $order,
-            booksellerid => $bookseller->{id},
-            receiving    => 1,
-        }
-    );
     my $line = get_infos( $order, $bookseller);
 
-    $foot{$$line{gstrate}}{gstrate} = $$line{gstrate};
-    $foot{$$line{gstrate}}{gstvalue} += $$line{gstvalue};
-    $total_gstvalue += $$line{gstvalue};
-    $foot{$$line{gstrate}}{quantity}  += $$line{quantity};
+    $line->{total_tax_excluded} = Koha::Number::Price->new( $line->{unitprice_tax_excluded} * $line->{quantity} )->format;
+    $line->{total_tax_included} = Koha::Number::Price->new( $line->{unitprice_tax_included} * $line->{quantity} )->format;
+
+    $foot{$$line{tax_rate}}{tax_rate} = $$line{tax_rate};
+    $foot{$$line{tax_rate}}{tax_value} += $$line{tax_value};
+    $total_tax_value += $$line{tax_value};
+    $foot{$$line{tax_rate}}{quantity}  += $$line{quantity};
     $total_quantity += $$line{quantity};
-    $foot{$$line{gstrate}}{totalgste} += $$line{totalgste};
-    $total_gste += $$line{totalgste};
-    $foot{$$line{gstrate}}{totalgsti} += $$line{totalgsti};
-    $total_gsti += $$line{totalgsti};
+    $foot{$$line{tax_rate}}{total_tax_excluded} += $$line{total_tax_excluded};
+    $total_tax_excluded += $$line{total_tax_excluded};
+    $foot{$$line{tax_rate}}{total_tax_included} += $$line{total_tax_included};
+    $total_tax_included += $$line{total_tax_included};
 
     $line->{orderline} = $line->{parent_ordernumber};
     push @orders_loop, $line;
@@ -174,11 +170,11 @@ $template->param(
     orders_loop      => \@orders_loop,
     foot_loop        => \@foot_loop,
     total_quantity   => $total_quantity,
-    total_gste       => sprintf( $format, $total_gste ),
-    total_gsti       => sprintf( $format, $total_gsti ),
-    total_gstvalue   => sprintf( $format, $total_gstvalue ),
-    total_gste_shipment => sprintf( $format, $total_gste + $details->{shipmentcost}),
-    total_gsti_shipment => sprintf( $format, $total_gsti + $details->{shipmentcost}),
+    total_tax_excluded       => sprintf( $format, $total_tax_excluded ),
+    total_tax_included       => sprintf( $format, $total_tax_included ),
+    total_tax_value   => sprintf( $format, $total_tax_value ),
+    total_tax_excluded_shipment => sprintf( $format, $total_tax_excluded + $details->{shipmentcost}),
+    total_tax_included_shipment => sprintf( $format, $total_tax_included + $details->{shipmentcost}),
     invoiceincgst    => $bookseller->{invoiceincgst},
     currency         => Koha::Acquisition::Currencies->get_active,
     budgets_loop     => \@budgets_loop,

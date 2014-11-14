@@ -91,26 +91,24 @@ my $invoiceid2 = AddInvoice(invoicenumber => 'invoice2', booksellerid => $bookse
                             shipmentdate => '2012-12-24',
                            );
 
+my $invoice1 = GetInvoice( $invoiceid1 );
+my $invoice2 = GetInvoice( $invoiceid2 );
+
 my ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {
         biblionumber     => $biblionumber1,
-        ordernumber      => $ordernumber1,
+        order            => $order1,
         quantityreceived => 2,
-        cost             => 12,
-        ecost            => 12,
-        invoiceid        => $invoiceid1,
-        rrp              => 42
+        invoice          => $invoice1,
     }
 );
 
 ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {
         biblionumber     => $biblionumber2,
-        ordernumber      => $ordernumber2,
+        order            => $order2,
         quantityreceived => 1,
-        cost             => 5,
-        ecost            => 5,
-        invoiceid        => $invoiceid2,
+        invoice          => $invoice2,
         rrp              => 42
     }
 );
@@ -118,17 +116,14 @@ my ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
 ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {
         biblionumber     => $biblionumber3,
-        ordernumber      => $ordernumber3,
+        order            => $order3,
         quantityreceived => 1,
-        cost             => 12,
-        ecost            => 12,
-        invoiceid        => $invoiceid2,
-        rrp              => 42
+        invoice          => $invoice2,
     }
 );
 
-my $invoice1 = GetInvoiceDetails($invoiceid1);
-my $invoice2 = GetInvoiceDetails($invoiceid2);
+$invoice1 = GetInvoiceDetails($invoiceid1);
+$invoice2 = GetInvoiceDetails($invoiceid2);
 
 is(scalar @{$invoice1->{'orders'}}, 1, 'Invoice1 has only one order');
 is(scalar @{$invoice2->{'orders'}}, 2, 'Invoice2 has only two orders');

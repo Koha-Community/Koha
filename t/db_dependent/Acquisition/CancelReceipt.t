@@ -60,9 +60,8 @@ my $ordernumber = $order->{ordernumber};
 ModReceiveOrder(
     {
         biblionumber     => $biblionumber,
-        ordernumber      => $ordernumber,
+        order            => $order,
         quantityreceived => 2,
-        datereceived     => dt_from_string
     }
 );
 
@@ -70,8 +69,7 @@ $order->add_item( $itemnumber );
 
 CancelReceipt($ordernumber);
 
-$order = GetOrder( $ordernumber );
-is(scalar GetItemnumbersFromOrder($order->{ordernumber}), 0, "Create items on receiving: 0 item exist after cancelling a receipt");
+is(scalar GetItemnumbersFromOrder($ordernumber), 0, "Create items on receiving: 0 item exist after cancelling a receipt");
 
 my $itemnumber1 = AddItem({}, $biblionumber);
 my $itemnumber2 = AddItem({}, $biblionumber);
@@ -103,9 +101,8 @@ is(
 my ( undef, $new_ordernumber ) = ModReceiveOrder(
     {
         biblionumber     => $biblionumber,
-        ordernumber      => $ordernumber,
+        order            => $order,
         quantityreceived => 1,
-        datereceived     => dt_from_string,
         received_items   => [ $itemnumber1 ],
     }
 );

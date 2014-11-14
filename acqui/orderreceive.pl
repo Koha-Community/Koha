@@ -163,15 +163,15 @@ if ( $bookseller->{listincgst} ) {
         $ecost = $order->{ecost};
         $unitprice = $order->{unitprice};
     } else {
-        $rrp = $order->{rrp} / ( 1 + $order->{gstrate} );
-        $ecost = $order->{ecost} / ( 1 + $order->{gstrate} );
-        $unitprice = $order->{unitprice} / ( 1 + $order->{gstrate} );
+        $rrp = $order->{rrp} / ( 1 + $order->{tax_rate} );
+        $ecost = $order->{ecost} / ( 1 + $order->{tax_rate} );
+        $unitprice = $order->{unitprice} / ( 1 + $order->{tax_rate} );
     }
 } else {
     if ( $bookseller->{invoiceincgst} ) {
-        $rrp = $order->{rrp} * ( 1 + $order->{gstrate} );
-        $ecost = $order->{ecost} * ( 1 + $order->{gstrate} );
-        $unitprice = $order->{unitprice} * ( 1 + $order->{gstrate} );
+        $rrp = $order->{rrp} * ( 1 + $order->{tax_rate} );
+        $ecost = $order->{ecost} * ( 1 + $order->{tax_rate} );
+        $unitprice = $order->{unitprice} * ( 1 + $order->{tax_rate} );
     } else {
         $rrp = $order->{rrp};
         $ecost = $order->{ecost};
