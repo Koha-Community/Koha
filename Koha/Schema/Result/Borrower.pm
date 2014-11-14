@@ -726,6 +726,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 borrower_syncs
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::BorrowerSync>
+
+=cut
+
+__PACKAGE__->has_many(
+  "borrower_syncs",
+  "Koha::Schema::Result::BorrowerSync",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 branchcode
 
 Type: belongs_to
@@ -1102,8 +1117,8 @@ Composing rels: L</course_instructors> -> course
 __PACKAGE__->many_to_many("courses", "course_instructors", "course");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-18 13:01:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZzZiKYN4b/LuEARX4rawhA
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-11-14 09:56:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UGa+abq4uilkf0nImxun/w
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
