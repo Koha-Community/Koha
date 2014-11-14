@@ -133,7 +133,7 @@ $(document).ready(function() {
             "sEmptyTable" : MSG_DT_LOADING_RECORDS,
         },
         "bAutoWidth": false,
-        "sDom": "<'row-fluid'<'span6'><'span6'>r>t<'row-fluid'>t",
+        "sDom": "rt",
         "aoColumns": [
             {
                 "mDataProp": function( oObj ) {
@@ -355,7 +355,7 @@ $(document).ready(function() {
         if ( ! relativesIssuesTable ) {
             relativesIssuesTable = $("#relatives-issues-table").dataTable({
                 "bAutoWidth": false,
-                "sDom": "<'row-fluid'<'span6'><'span6'>r>t<'row-fluid'>t",
+                "sDom": "rt",
                 "aaSorting": [],
                 "aoColumns": [
                     {
