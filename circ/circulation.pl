@@ -104,6 +104,8 @@ if (!C4::Auth::haspermission( C4::Context->userenv->{id} , { circulate => 'force
     $force_allow_issue = 0;
 }
 
+my $onsite_checkout = $query->param('onsite_checkout');
+
 my @failedrenews = $query->param('failedrenew');    # expected to be itemnumbers
 our %renew_failed = ();
 for (@failedrenews) { $renew_failed{$_} = 1; }
@@ -158,7 +160,10 @@ else {
 my ($datedue,$invalidduedate);
 
 my $duedatespec_allow = C4::Context->preference('SpecifyDueDate');
-if($duedatespec_allow){
+if( $onsite_checkout ) {
+    $datedue = output_pref({ dt => dt_from_string, dateonly => 1, dateformat => 'iso' });
+    $datedue .= ' 23:59:00';
+} elsif( $duedatespec_allow ) {
     if ($duedatespec) {
         if ($duedatespec =~ C4::Dates->regexp('syspref')) {
                 $datedue = dt_from_string($duedatespec);
@@ -336,7 +341,7 @@ if ($barcode) {
         }
     }
 
-    unless( $query->param('onsite_checkout') and C4::Context->preference("OnSiteCheckoutsForce") ) {
+    unless( $onsite_checkout and C4::Context->preference("OnSiteCheckoutsForce") ) {
         delete $question->{'DEBT'} if ($debt_confirmed);
         foreach my $impossible ( keys %$error ) {
             $template->param(
@@ -361,13 +366,12 @@ if ($barcode) {
                     getTitleMessageIteminfo => $getmessageiteminfo->{'title'},
                     getBarcodeMessageIteminfo => $getmessageiteminfo->{'barcode'},
                     NEEDSCONFIRMATION  => 1,
-                    onsite_checkout => $query->param('onsite_checkout'),
+                    onsite_checkout => $onsite_checkout,
                 );
                 $confirm_required = 1;
             }
         }
         unless($confirm_required) {
-            my $onsite_checkout = $query->param('onsite_checkout');
             AddIssue( $borrower, $barcode, $datedue, $cancelreserve, undef, undef, { onsite_checkout => $onsite_checkout, auto_renew => $session->param('auto_renew') } );
             $session->clear('auto_renew');
             $inprocess = 1;
