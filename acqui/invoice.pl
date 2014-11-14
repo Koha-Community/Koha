@@ -130,14 +130,14 @@ foreach my $order (@$orders) {
     );
     my $line = get_infos( $order, $bookseller);
 
-    $foot{$$line{gstgsti}}{gstrate} = $$line{gstrate};
-    $foot{$$line{gstgsti}}{gstvalue} += $$line{gstvalue};
+    $foot{$$line{gstrate}}{gstrate} = $$line{gstrate};
+    $foot{$$line{gstrate}}{gstvalue} += $$line{gstvalue};
     $total_gstvalue += $$line{gstvalue};
-    $foot{$$line{gstgsti}}{quantity}  += $$line{quantity};
+    $foot{$$line{gstrate}}{quantity}  += $$line{quantity};
     $total_quantity += $$line{quantity};
-    $foot{$$line{gstgsti}}{totalgste} += $$line{totalgste};
+    $foot{$$line{gstrate}}{totalgste} += $$line{totalgste};
     $total_gste += $$line{totalgste};
-    $foot{$$line{gstgsti}}{totalgsti} += $$line{totalgsti};
+    $foot{$$line{gstrate}}{totalgsti} += $$line{totalgsti};
     $total_gsti += $$line{totalgsti};
 
     $line->{orderline} = $line->{parent_ordernumber};
