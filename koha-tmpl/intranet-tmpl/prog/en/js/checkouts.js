@@ -1,6 +1,8 @@
 $(document).ready(function() {
     $.ajaxSetup ({ cache: false });
 
+    var barcodefield = $("#barcode");
+
     // Handle the select all/none links for checkouts table columns
     $("#CheckAllRenewals").on("click",function(){
         $("#UncheckAllCheckins").click();
@@ -132,9 +134,11 @@ $(document).ready(function() {
         if ( this.checked && typeof issuesTable === 'undefined') {
             $('#issues-table-load-now-button').click();
         }
+        barcodefield.focus();
     });
     $('#issues-table-load-now-button').click(function(){
         LoadIssuesTable();
+        barcodefield.focus();
         return false;
     });
 
