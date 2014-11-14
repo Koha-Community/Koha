@@ -103,6 +103,14 @@ if ($quantityrec > $origquantityrec ) {
         }
     }
 
+    $order = C4::Acquisition::populate_order_with_prices(
+        {
+            order => $order,
+            booksellerid => $booksellerid,
+            receiving => 1
+        }
+    );
+
     # save the quantity received.
     if ( $quantityrec > 0 ) {
         ( $datereceived, $new_ordernumber ) = ModReceiveOrder(

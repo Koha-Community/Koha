@@ -233,6 +233,18 @@ if ($op eq ""){
 
         # remove uncertainprice flag if we have found a price in the MARC record
         $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
+
+        %orderinfo = %{
+            C4::Acquisition::populate_order_with_prices(
+                {
+                    order        => \%orderinfo,
+                    booksellerid => $booksellerid,
+                    ordering     => 1,
+                    receiving    => 1,
+                }
+            )
+        };
+
         my $order = Koha::Acquisition::Order->new( \%orderinfo )->insert;
 
         # 4th, add items if applicable

@@ -268,6 +268,14 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
 
     $orderinfo->{unitprice} = $orderinfo->{ecost} if not defined $orderinfo->{unitprice} or $orderinfo->{unitprice} eq '';
 
+    $orderinfo = C4::Acquisition::populate_order_with_prices(
+        {
+            order        => $orderinfo,
+            booksellerid => $orderinfo->{booksellerid},
+            ordering     => 1,
+        }
+    );
+
     # if we already have $ordernumber, then it's an ordermodif
     my $order = Koha::Acquisition::Order->new($orderinfo);
     if ( $orderinfo->{ordernumber} ) {
