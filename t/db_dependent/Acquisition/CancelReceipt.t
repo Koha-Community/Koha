@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 12;
 use C4::Context;
 use C4::Acquisition;
 use C4::Biblio;
@@ -85,8 +85,18 @@ $order = Koha::Acquisition::Order->new(
 )->insert;
 $ordernumber = $order->{ordernumber};
 
+is( $order->{parent_ordernumber}, $order->{ordernumber},
+    "Insert an order should set parent_order=ordernumber, if no parent_ordernumber given"
+);
+
 $order->add_item( $itemnumber1 );
 $order->add_item( $itemnumber2 );
+
+is(
+    scalar( GetItemnumbersFromOrder( $order->{ordernumber} ) ),
+    2,
+    "Create items on ordering: 2 items should be linked to the order before receiving"
+);
 
 my ( undef, $new_ordernumber ) = ModReceiveOrder(
     {
@@ -98,9 +108,39 @@ my ( undef, $new_ordernumber ) = ModReceiveOrder(
     }
 );
 
+my $new_order = GetOrder( $new_ordernumber );
+
+is( $new_order->{ordernumber}, $new_ordernumber,
+    "ModReceiveOrder should return a correct ordernumber" );
+isnt( $new_ordernumber, $ordernumber,
+    "ModReceiveOrder should return a different ordernumber" );
+is( $new_order->{parent_ordernumber}, $ordernumber,
+    "The new order created by ModReceiveOrder should be linked to the parent order"
+);
+
+is(
+    scalar( GetItemnumbersFromOrder( $order->{ordernumber} ) ),
+    1,
+    "Create items on ordering: 1 item should still be linked to the original order after receiving"
+);
+is(
+    scalar( GetItemnumbersFromOrder($new_ordernumber) ),
+    1,
+    "Create items on ordering: 1 item should be linked to new order after receiving"
+);
+
 CancelReceipt($new_ordernumber);
 
-is(scalar( GetItemnumbersFromOrder($ordernumber) ), 2, "Create items on ordering: items are not deleted after cancelling a receipt");
+is(
+    scalar( GetItemnumbersFromOrder($new_ordernumber) ),
+    0,
+    "Create items on ordering: no item should be linked to the cancelled order"
+);
+is(
+    scalar( GetItemnumbersFromOrder( $order->{ordernumber} ) ),
+    2,
+    "Create items on ordering: items are not deleted after cancelling a receipt"
+);
 
 my $item1 = C4::Items::GetItem( $itemnumber1 );
 is( $item1->{notforloan}, 9, "The notforloan value has been updated with '9'" );

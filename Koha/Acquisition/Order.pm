@@ -51,7 +51,8 @@ sub insert {
     $self->{ordernumber} = $rs->id;
 
     unless ( $self->{parent_ordernumber} ) {
-        $rs->update( { parent_ordernumber => $self->{ordernumber} } );
+        $self->{parent_ordernumber} = $self->{ordernumber};
+        $rs->update( { parent_ordernumber => $self->{parent_ordernumber} } );
     }
 
     return $self;
