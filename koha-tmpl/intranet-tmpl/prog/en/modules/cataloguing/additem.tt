@@ -82,12 +82,12 @@ function Check(f) {
 function CheckMultipleAdd(f) {
 
     if (!f || isNaN(f) || !parseInt(f) == f || f <= 0) {
-	alert(_("Please enter a number of items to create."));
-	return false;
+        alert(_("Please enter a number of items to create."));
+        return false;
     }
     <!-- Add a soft-limit of 99 with a reminder about potential data entry error -->
     if (f>99) {
-        return confirm(_("More than 99 copies will be added. Should they be added?"));
+        return confirm(_("You are about to add %s items. Continue?").format(f));
     }
 }
 function Dopop(link,i) {
