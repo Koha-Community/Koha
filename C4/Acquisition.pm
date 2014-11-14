@@ -66,7 +66,7 @@ BEGIN {
         &GetLastOrderNotReceivedFromSubscriptionid &GetLastOrderReceivedFromSubscriptionid
         &ModItemOrder
 
-        &GetParcels &GetParcel
+        &GetParcels
 
         &GetInvoices
         &GetInvoice
@@ -1895,77 +1895,6 @@ sub TransferOrder {
 }
 
 =head2 FUNCTIONS ABOUT PARCELS
-
-=cut
-
-#------------------------------------------------------------#
-
-=head3 GetParcel
-
-  @results = &GetParcel($booksellerid, $code, $date);
-
-Looks up all of the received items from the supplier with the given
-bookseller ID at the given date, for the given code (bookseller Invoice number). Ignores cancelled and completed orders.
-
-C<@results> is an array of references-to-hash. The keys of each element are fields from
-the aqorders, biblio, and biblioitems tables of the Koha database.
-
-C<@results> is sorted alphabetically by book title.
-
-=cut
-
-sub GetParcel {
-    #gets all orders from a certain supplier, orders them alphabetically
-    my ( $supplierid, $code, $datereceived ) = @_;
-    my $dbh     = C4::Context->dbh;
-    my @results = ();
-    $code .= '%'
-    if $code;  # add % if we search on a given code (otherwise, let him empty)
-    my $strsth ="
-        SELECT  authorisedby,
-                creationdate,
-                aqbasket.basketno,
-                closedate,surname,
-                firstname,
-                aqorders.biblionumber,
-                aqorders.ordernumber,
-                aqorders.parent_ordernumber,
-                aqorders.quantity,
-                aqorders.quantityreceived,
-                aqorders.unitprice,
-                aqorders.listprice,
-                aqorders.rrp,
-                aqorders.ecost,
-                aqorders.gstrate,
-                biblio.title
-        FROM aqorders
-        LEFT JOIN aqbasket ON aqbasket.basketno=aqorders.basketno
-        LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
-        LEFT JOIN biblio ON aqorders.biblionumber=biblio.biblionumber
-        LEFT JOIN aqinvoices ON aqorders.invoiceid = aqinvoices.invoiceid
-        WHERE
-            aqbasket.booksellerid = ?
-            AND aqinvoices.invoicenumber LIKE ?
-            AND aqorders.datereceived = ? ";
-
-    my @query_params = ( $supplierid, $code, $datereceived );
-    if ( C4::Context->preference("IndependentBranches") ) {
-        unless ( C4::Context->IsSuperLibrarian() ) {
-            $strsth .= " and (borrowers.branchcode = ?
-                        or borrowers.branchcode  = '')";
-            push @query_params, C4::Context->userenv->{branch};
-        }
-    }
-    $strsth .= " ORDER BY aqbasket.basketno";
-    my $result_set = $dbh->selectall_arrayref(
-        $strsth,
-        { Slice => {} },
-        @query_params);
-
-    return @{$result_set};
-}
-
-#------------------------------------------------------------#
 
 =head3 GetParcels
 
