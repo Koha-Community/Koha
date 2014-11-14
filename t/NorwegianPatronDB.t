@@ -16,43 +16,48 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 73;
+use Test::More;
 use Test::MockModule;
 use t::lib::Mocks;
 use Data::Dumper;
 
 # Check that all the modules we need are installed, or bail out
 BEGIN {
+    my $missing_lib;
     eval {
         require Test::DBIx::Class;
         1;
     } or do {
-        plan skip_all => "Test::DBIx::Class is not available";
+        $missing_lib = "Test::DBIx::Class";
     };
-}
-BEGIN {
+
     eval {
         require SOAP::Lite;
         1;
     } or do {
-        plan skip_all => "SOAP::Lite is not available";
+        $missing_lib = "SOAP::Lite";
     };
-}
-BEGIN {
+
     eval {
         require Crypt::GCrypt;
         1;
     } or do {
-        plan skip_all => "Crypt::GCrypt is not available";
+        $missing_lib = "Crypt::GCrypt";
     };
-}
-BEGIN {
+
     eval {
         require Convert::BaseN;
         1;
     } or do {
-        plan skip_all => "Convert::BaseN is not available";
+        $missing_lib = "Convert::BaseN";
     };
+
+    if ( $missing_lib ) {
+        plan skip_all => $missing_lib . " is not available.";
+    } else {
+        # Everything good
+        plan tests => 73;
+    }
 }
 
 use Test::DBIx::Class {
