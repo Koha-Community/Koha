@@ -1,12 +1,11 @@
-use strict;
-use warnings;
-use 5.010;
+use Modern::Perl;
 use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 34;
+use Test::More tests => 41;
 use Test::MockModule;
+use Time::HiRes qw/ gettimeofday /;
 
 BEGIN { use_ok('Koha::DateUtils'); }
 
@@ -77,6 +76,17 @@ isa_ok( $new_dt, 'DateTime', 'Create DateTime with different timezone' );
 cmp_ok( $new_dt->ymd(), 'eq', $testdate_iso,
     'Returned Dublin object matches input' );
 
+for ( qw/ 2014-01-01 2100-01-01 9999-01-01 / ) {
+    my $duration = gettimeofday();
+    $new_dt = dt_from_string($_, 'iso', $dear_dirty_dublin);
+    $duration = gettimeofday() - $duration;
+    cmp_ok $duration, '<', 1, "Create DateTime with dt_from_string() for $_ with TZ in less than 1s";
+    $duration = gettimeofday();
+    output_pref( { dt => $new_dt } );
+    $duration = gettimeofday() - $duration;
+    cmp_ok $duration, '<', 1, "Create DateTime with output_pref() for $_ with TZ in less than 1s";
+}
+
 $new_dt = dt_from_string( '2011-06-16 12:00', 'sql' );
 isa_ok( $new_dt, 'DateTime', 'Create DateTime from (mysql) sql' );
 cmp_ok( $new_dt->ymd(), 'eq', $testdate_iso, 'sql returns correct date' );
@@ -105,6 +115,10 @@ cmp_ok( $dt0->ymd(), 'eq', $ymd, 'Returned object corrects iso day 0' );
 # Return undef if passed mysql 0 dates
 $dt0 = dt_from_string( '0000-00-00', 'iso' );
 is( $dt0, undef, "undefined returned for 0 iso date" );
+
+# Return undef if passed mysql 9999-* date
+my $dt9999 = dt_from_string( '9999-12-31' );
+is( $dt9999->ymd(), '9999-12-31', "dt_from_string should return a DateTime object for 9999-12-31" );
 
 my $formatted = format_sqldatetime( '2011-06-16 12:00:07', 'metric', '24hr' );
 cmp_ok( $formatted, 'eq', '16/06/2011 12:00', 'format_sqldatetime conversion' );
