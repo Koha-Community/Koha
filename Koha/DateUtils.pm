@@ -53,6 +53,11 @@ to the system preferences. If the date string is empty DateTime->now is returned
 
 sub dt_from_string {
     my ( $date_string, $date_format, $tz ) = @_;
+
+    # FIXME: see bug 13242 => no TZ for dates 'infinite'
+    return DateTime::Format::DateParse->parse_datetime($date_string)
+        if $date_string =~ /^9999-/;
+
     if ( !$tz ) {
         $tz = C4::Context->tz;
     }
@@ -123,7 +128,8 @@ sub output_pref {
 
     return unless defined $dt;
 
-    $dt->set_time_zone( C4::Context->tz );
+    # FIXME: see bug 13242 => no TZ for dates 'infinite'
+    $dt->set_time_zone( C4::Context->tz ) if $dt->ymd !~ /^9999/;
 
     my $pref =
       defined $force_pref ? $force_pref : C4::Context->preference('dateformat');
