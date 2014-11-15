@@ -1946,11 +1946,15 @@ sub AddReturn {
             }
         # there's no overdue on the item but borrower had been previously debarred
         } elsif ( $issue->{date_due} and $borrower->{'debarred'} ) {
-             my $borrower_debar_dt = dt_from_string( $borrower->{debarred} );
-             $borrower_debar_dt->truncate(to => 'day');
-             my $today_dt = $today->clone()->truncate(to => 'day');
-             if ( DateTime->compare( $borrower_debar_dt, $today_dt ) != -1 ) {
-                 $messages->{'PrevDebarred'} = $borrower->{'debarred'};
+             if ( $borrower->{debarred} eq "9999-12-31") {
+                $messages->{'ForeverDebarred'} = $borrower->{'debarred'};
+             } else {
+                  my $borrower_debar_dt = dt_from_string( $borrower->{debarred} );
+                  $borrower_debar_dt->truncate(to => 'day');
+                  my $today_dt = $today->clone()->truncate(to => 'day');
+                  if ( DateTime->compare( $borrower_debar_dt, $today_dt ) != -1 ) {
+                      $messages->{'PrevDebarred'} = $borrower->{'debarred'};
+                  }
              }
         }
     }

@@ -423,6 +423,10 @@ $(document).ready(function () {
                     [% IF ( errmsgloo.prevdebarred ) %]
                         <p class="problem"><b>Reminder: </b>Patron was earlier restricted until [% errmsgloo.prevdebarred | $KohaDates %]</p>
                     [% END %]
+                    [% IF ( errmsgloo.foreverdebarred ) %]
+                        <p class="problem"><b>Reminder: </b>Patron has an indefinite restriction</p>
+                    [% END %]
+
             [% END %]
 [% IF ( soundon ) %]
 <audio src="[% interface %]/[% theme %]/sound/critical.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>

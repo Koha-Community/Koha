@@ -440,7 +440,7 @@ $(document).ready(function() {
         [% END %]
 
         [% IF ( USERBLOCKEDNOENDDATE ) %]
-            <li>Patron has a restriction (no expiry date).</li>
+            <li>Patron has an indefinite restriction.</li>
         [% END %]
 
         [% IF ( USERBLOCKEDOVERDUE ) %]
@@ -449,7 +449,7 @@ $(document).ready(function() {
         </ul>
 
         [% IF (forceallow) %]
-            <li>Restriction overridden temporarily</li>
+            <li>Restriction overridden temporarily.</li>
         [% END %]
 
 </div></div>

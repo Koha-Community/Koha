@@ -506,6 +506,9 @@ foreach my $code ( keys %$messages ) {
     elsif ( $code eq 'PrevDebarred' ) {
         $err{prevdebarred}        = $messages->{'PrevDebarred'};
     }
+    elsif ( $code eq 'ForeverDebarred' ) {
+        $err{foreverdebarred}        = $messages->{'ForeverDebarred'};
+    }
     elsif ( $code eq 'NotForLoanStatusUpdated' ) {
         $err{NotForLoanStatusUpdated} = $messages->{NotForLoanStatusUpdated};
     }
