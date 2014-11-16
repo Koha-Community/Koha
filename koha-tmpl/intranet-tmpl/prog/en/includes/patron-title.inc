@@ -8,7 +8,9 @@
             [%- borrower.firstname %] [% IF borrower.othernames %] ([% borrower.othernames %]) [% END %] [% borrower.surname %]
         [%- END -%]
     [%- END -%]
-    ([% borrower.cardnumber %])
+    [% IF ( borrower.cardnumber ) %]
+        ([% borrower.cardnumber %])
+    [% END %]
 [%- ELSIF ( borrowernumber ) %]
     [%- IF category_type == 'I' %]
         [%- surname %] [% IF othernames %] ([% othernames %]) [% END %]
@@ -19,5 +21,7 @@
             [%- firstname %] [% IF othernames %] ([% othernames %]) [% END %] [% surname %]
         [%- END %]
     [%- END -%]
-    ([% cardnumber -%])
+    [% IF ( cardnumber ) %]
+        ([% cardnumber %])
+    [% END %]
 [%- END -%]
