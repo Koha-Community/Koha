@@ -2871,8 +2871,6 @@ sub populate_order_with_prices {
     }
 
     if ($receiving) {
-        # The following is completely wrong. Will be fixed later.
-        # See the unit tests to know what is wrong.
         if ( $bookseller->{listincgst} ) {
             $order->{unitpricegsti} = Koha::Number::Price->new( $order->{unitprice} )->round;
             $order->{unitpricegste} = Koha::Number::Price->new(

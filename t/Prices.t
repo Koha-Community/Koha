@@ -120,9 +120,8 @@ for my $currency_format ( qw( US FR ) ) {
                 receiving    => 1,
             }
         );
-        # Note that this configuration is *not* correct!
-        # unitpricegsti should be 75.28
-        # totalgst should be 150.56
+
+        # Note that this configuration is correct \o/
         compare(
             {
                 got      => $order_0_0->{unitpricegsti},
@@ -343,6 +342,7 @@ for my $currency_format ( qw( US FR ) ) {
 
         # Note that this configuration is *not* correct!
         # rrp gsti should be 82 (what we inserted!)
+        # => Actually we need to fix the inserted value (here we have 82.01 in DB)
         # gstvalue should be 7.03 instead of 7.02
 
         compare(
@@ -410,8 +410,6 @@ for my $currency_format ( qw( US FR ) ) {
             }
         );
         # Note that this configuration is *not* correct!
-        # unitpricegsti should be 71.69
-        # totalgsti should be 143.38
         # gstvalue should be 7.03
         compare(
             {
