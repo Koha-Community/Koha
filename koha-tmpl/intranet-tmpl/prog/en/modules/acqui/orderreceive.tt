@@ -330,7 +330,9 @@
             <input type="text" size="20" name="cost" id="cost" value="[% ecost %]" />
         [% END %]</li>
         <li><label for="order_internalnote">Internal note: </label><textarea name="order_internalnote" width="40" rows="8" >[% order_internalnote %]</textarea></li>
-        <li><label for="order_vendornote">Vendor note: </label><span>[% order_vendornote %]</span></li>
+        [% IF order_vendornote %]
+            <li><label for="order_vendornote">Vendor note: </label><span>[% order_vendornote %]</span></li>
+        [% END %]
         </ol>
     </fieldset>
 
