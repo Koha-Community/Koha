@@ -121,7 +121,7 @@
                         [% IF ( resultsloo.edition ) %]Edition: [% resultsloo.edition %][% END %]
                         [% IF ( resultsloo.place ) %] ; [% resultsloo.place %][% END %]
                         [% IF ( resultsloo.pages ) %] - [% resultsloo.pages %][% END %]
-                        [% IF ( resultsloo.size ) %] ; [% resultsloo.size %][% END %]
+                        [% IF ( resultsloo.item('size') ) %] ; [% resultsloo.item('size') %][% END %]
                         [% IF ( resultsloo.timestamp ) %] <i>(modified on [% resultsloo.timestamp %])</i>[% END %]
                     </p>
                 [% END %]

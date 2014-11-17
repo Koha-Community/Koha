@@ -73,7 +73,7 @@ $(document).ready(function() {
                                                                                  [% IF ( itemsloo.publicationyear ) %], [% itemsloo.publicationyear %]
                                                                                  [% ELSIF ( itemsloo.copyrightdate ) %], [% itemsloo.copyrightdate %][% END %]
                                          [% IF ( itemsloo.pages ) %]: [% itemsloo.pages %] [% END %]
-                                         [% IF ( itemsloo.size ) %][% itemsloo.size %][% END %] [% IF ( itemsloo.isbn ) %]ISBN: [% itemsloo.isbn %][% END %]</p>
+                                         [% IF ( itemsloo.item('size') ) %][% itemsloo.item('size') %][% END %] [% IF ( itemsloo.isbn ) %]ISBN: [% itemsloo.isbn %][% END %]</p>
 			</div>
 			</td>
             <td class="hq-collection">[% AuthorisedValues.GetByCode( 'CCODE', itemsloo.ccode ) %]</td>
