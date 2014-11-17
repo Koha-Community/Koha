@@ -1,121 +1,103 @@
 [% USE Koha %]
+[% USE Branches %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Summary for [% firstname %] [% surname %] ([% cardnumber %])</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="[% themelang %]/css/print.css" />
-[% INCLUDE 'slip-print.inc' #printThenClose %]
-<body id="pat_moremember-print" class="pat" onload="printThenClose();">
-
+    <title>Summary for [% firstname %] [% surname %] ([% cardnumber %])</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/print.css" />
+    [% INCLUDE 'slip-print.inc' #printThenClose %]
 </head>
-<body>
+<body id="pat_moremember-print" class="pat" onload="printThenClose();">
+    <div id="main">
+        <h3><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% cardnumber %]">Account summary: [% firstname %] [% surname %] ([% cardnumber %])</a></h3>
 
-<div id="main">
+        <ul>
+            <li>[% address %]<br />[% address2 %]</li>
+            <li>[% city %], [% zipcode %]</li>
+            <li>[% IF ( phone ) %][% phone %][% ELSE %](no phone number on file)[% END %]</li>
+            <li>[% IF ( email ) %][% email %][% ELSE %](no primary email on file)[% END %]</li>
+            [% IF ( emailpro ) %]
+                <li>[% emailpro %]</li>
+            [% END %]
+            <li>Registration date: [% dateenrolled | $KohaDates %]</li>
+            <li>Expiration date: [% dateexpiry | $KohaDates %]</li>
+            <li>Library: [% Branches.GetName( branchcode ) %]</li>
+            <li>Category: [% description %]</li>
+        </ul>
 
-<h3><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% cardnumber %]">Account summary: [% firstname %] [% surname %] ([% cardnumber %])</a></h3>
+        [% IF ( issues ) %]
+            <table>
+                <caption>Items checked out</caption>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Call no</th>
+                    <th>Item type</th>
+                    <th>Date due</th>
+                    <th>Barcode</th>
+                    <th>Charge</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                </tr>
 
-<ul><li>[% address %]<br />[% address2 %]</li><li>[% city %], [% zipcode %]</li>
-<li>[% IF ( phone ) %][% phone %][% ELSE %](no phone number on file)[% END %]</li>
-<li>[% IF ( email ) %][% email %][% ELSE %](no primary email on file)[% END %]</li>
-[% IF ( emailpro ) %]<li>[% emailpro %]</li>[% END %]
-<li>Registration date: [% dateenrolled %]</li>
-<li>Expiration date: [% dateexpiry %]</li>
-<li>Library: [% branchname %]</li>
-<li>Category: [% description %]</li>
-</ul>
+                [% FOREACH issueloo IN issues %]
+                    [% IF ( issueloo.red ) %]<tr class="overdue">[% ELSE %]<tr>[% END %]
+                        <td>
+                            [% issueloo.title |html %]
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?item=[% issueloo.itemnumber %]&amp;biblionumber=[% issueloo.biblionumber %]&amp;bi=[% issueloo.biblioitemnumber %]"></a>
+                        </td>
+                        <td>[% issueloo.author %]</td>
+                        <td>[% issueloo.itemcallnumber %]</td>
+                        <td>[% issueloo.itemtype_description %]</td>
+                        <td>[% issueloo.date_due %]</td>
+                        <td>[% issueloo.barcode %]</td>
+                        <td>[% issueloo.charge %]</td>
+                        <td>[% issueloo.replacementprice %]</td>
+                        <td>[% IF ( issueloo.red ) %]Overdue![% ELSE %]&nbsp;[% END %]</td>
+                    </tr>
+                [% END %]
 
-[% IF ( issueloop ) %]
-<table>
-    <caption>Items checked out</caption>
-	<tr>
-		<th>Title</th>
-		<th>Author</th>
-                <th>Call no</th>
-        <th>Item type</th>
-        <th>Date due</th>
-        <th>Barcode</th>
-		<th>Charge</th>
-		<th>Price</th>
-		<th>Status</th>
-	</tr>
-
-	[% FOREACH issueloo IN issueloop %]
-	[% IF ( issueloo.red ) %]<tr class="overdue">[% ELSE %]<tr>[% END %]
-		<td>
-		[% issueloo.title |html %]
-		<a href="/cgi-bin/koha/catalogue/detail.pl?item=[% issueloo.itemnumber %]&amp;biblionumber=[% issueloo.biblionumber %]&amp;bi=[% issueloo.biblioitemnumber %]">
-		</a>
-		</td>
-		<td>[% issueloo.author %]</td>
-                <td>[% issueloo.itemcallnumber %]</td>
-		<td>[% issueloo.itemtype_description %]</td>
-		<td>[% issueloo.date_due %]</td>
-                <td>[% issueloo.barcode %]</td>
-		<td>[% issueloo.charge %]</td>
-		<td>[% issueloo.replacementprice %]</td>
-		<td>[% IF ( issueloo.red ) %]Overdue![% ELSE %]&nbsp;[% END %]</td>
-	</tr>
-	[% END %]
-	<tr>
-            <td colspan="6" style="text-align: right; font-weight:bold;">Totals:</td>
-            <td>[% totaldue %]</td>
-            <td>[% totalprice %]</td>
-            <td colspan="3">&nbsp;</td>
-        </tr>
-	</table>
-	[% END %]
-	
-[% IF ( reserveloop ) %]
-<table>
-	<caption>Items on Reserve</caption>
-	<tr>
-		<th>Title</th>
-		<th>Author</th>
-		<th>Format</th>
-		<th>Requested</th>
-	</tr>
-
-[% FOREACH reserveloo IN reserveloop %]
-	<tr>
-		<td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% reserveloo.biblionumber %]">[% reserveloo.btitle %]</a></td>
-		<td>[% reserveloo.author %]</td>
-		<td>[% reserveloo.description %]</td>
-		<td>[% reserveloo.reservedate2 %]</td>
-	</tr>
-	[% END %]
-</table>
-[% END %]
-
-[% IF ( accounts && ( totaldue != '0.00' ) ) %]
-<table>
-    <caption>Account fines and payments</caption>
-    <tr>
-        <th>Description of charges</th>
-        <th>Date</th>
-        <th>Amount</th>
-        <th>Outstanding</th>
-    </tr>
-    [% FOREACH account IN accounts %]
-    [% NEXT IF account.amountoutstanding == '0.00' %]
-    <tr>
-        <td>
-            [% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">[% END %]
-            [% account.description %]&nbsp;[% IF ( account.printtitle ) %] [% account.title |html %][% END %]
-            [% IF ( account.itemnumber ) %]</a>[% END %]
-        </td>
-        <td>[% account.date | $KohaDates %]</td>
-        <td>[% account.amount %]</td>
-        <td>[% account.amountoutstanding %]</td>
-    </tr>
+            <tr>
+                <td colspan="6" style="text-align: right; font-weight:bold;">Totals:</td>
+                <td>[% totaldue %]</td>
+                <td>[% totalprice %]</td>
+                <td colspan="3">&nbsp;</td>
+            </tr>
+        </table>
     [% END %]
-    <tfoot>
-        <tr>
-            <td colspan="3">Total due</td>
-            <td colspan="2">[% totaldue %]</td>
-        </tr>
-    </tfoot>
-</table>
-[% END %]
+
+    [% IF ( accounts && ( totaldue != '0.00' ) ) %]
+        <table>
+            <caption>Account fines and payments</caption>
+            <tr>
+                <th>Description of charges</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Outstanding</th>
+            </tr>
+
+            [% FOREACH account IN accounts %]
+                [% NEXT IF account.amountoutstanding == '0.00' %]
+                <tr>
+                    <td>
+                        [% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">[% END %]
+                        [% account.description %]&nbsp;[% IF ( account.printtitle ) %] [% account.title |html %][% END %]
+                        [% IF ( account.itemnumber ) %]</a>[% END %]
+                    </td>
+                    <td>[% account.date | $KohaDates %]</td>
+                    <td>[% account.amount %]</td>
+                    <td>[% account.amountoutstanding %]</td>
+                </tr>
+            [% END %]
+
+            <tfoot>
+                <tr>
+                    <td colspan="3">Total due</td>
+                    <td colspan="2">[% totaldue %]</td>
+                </tr>
+            </tfoot>
+        </table>
+    [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
