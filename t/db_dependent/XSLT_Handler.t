@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use FindBin;
 use File::Slurp;
-use Test::More tests => 37;
+use Test::More tests => 40;
 use Test::Warn;
 
 use Koha::XSLT_Handler;
@@ -156,4 +156,27 @@ $output= $engine->transform( $xml_2, $xsltfile_3 );
 is( $engine->err, undef, 'Unexpected error on transform with third xsl' );
 is( $engine->refresh, 3, 'Final test on clearing cache' );
 
+my $xsltfile_4 = 'test04.xsl';
+is( -e $path.$xsltfile_4, 1, "Found my test stylesheet $xsltfile_4" );
+exit if !-e $path.$xsltfile_4;
+$xsltfile_4 = $path.$xsltfile_4;
+
+my $parameters = { injected_variable => "'this is a test'",};
+$output = $engine->transform({
+            xml => $xml_1,
+            file => $xsltfile_4,
+            parameters => $parameters,
+        });
+require XML::LibXML;
+my $dom = XML::LibXML->load_xml(string => $output);
+my $result = $dom->find( '/just_a_tagname' );
+is ( $result->to_literal(), 'this is a test', "Successfully injected string into XSLT parameter/variable");
+
+$output = $engine->transform({
+            xml => $xml_1,
+            file => $xsltfile_4,
+        });
+my $dom = XML::LibXML->load_xml(string => $output);
+my $result = $dom->find( '/just_a_tagname' );
+is ( $result->to_literal(), '', "As expected, no XSLT parameters/variables were added");
 #End of tests

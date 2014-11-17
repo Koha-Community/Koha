@@ -132,8 +132,8 @@ __PACKAGE__->mk_accessors(qw( do_not_return_source print_warns ));
 
     my $output= $xslt_engine->transform( $xml, $xsltfilename );
     #Alternatively:
-    #$output = $xslt_engine->transform({ xml => $xml, file => $file });
-    #$output = $xslt_engine->transform({ xml => $xml, code => $code });
+    #$output = $xslt_engine->transform({ xml => $xml, file => $file, [parameters => $parameters] });
+    #$output = $xslt_engine->transform({ xml => $xml, code => $code, [parameters => $parameters] });
     if( $xslt_engine->err ) {
         #decide what to do on failure..
     }
@@ -156,10 +156,12 @@ sub transform {
     #  old style: $xml, $filename
     #  new style: $hashref
     my ( $xml, $filename, $xsltcode );
+    my $parameters = {};
     if( ref $_[0] eq 'HASH' ) {
         $xml = $_[0]->{xml};
         $xsltcode = $_[0]->{code};
         $filename = $_[0]->{file} if !$xsltcode; #xsltcode gets priority
+        $parameters = $_[0]->{parameters} if ref $_[0]->{parameters} eq 'HASH';
     } else {
         ( $xml, $filename ) = @_;
     }
@@ -192,7 +194,15 @@ sub transform {
         return $retval;
     }
     my $str = eval {
-        my $result = $stsh->transform($source);
+        #$parameters is an optional hashref that contains
+        #key-value pairs to be sent to the XSLT.
+        #Numbers may be bare but strings must be double quoted
+        #(e.g. "'string'" or '"string"'). See XML::LibXSLT for
+        #more details.
+
+        #NOTE: Parameters are not cached. They are provided for
+        #each different transform.
+        my $result = $stsh->transform($source, %$parameters);
         $stsh->output_as_chars($result);
     };
     if ($@) {
