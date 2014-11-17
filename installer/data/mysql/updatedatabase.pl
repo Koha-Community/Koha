@@ -9505,7 +9505,7 @@ CREATE TABLE borrower_sync (
     SetVersion($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.056";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(q{
         UPDATE systempreferences SET value = 'pubdate,itemtype,language,sorting,location' WHERE variable='OpacAdvSearchOptions'
