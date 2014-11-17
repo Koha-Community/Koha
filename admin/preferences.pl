@@ -106,7 +106,7 @@ sub _get_chunk {
             keys %{ $options{'choices'} }
         ];
     } elsif ( $options{'multiple'} ) {
-        my @values = split /\|/, $value;
+        my @values = split /,/, $value;
         $chunk->{type}    = 'multiple';
         $chunk->{CHOICES} = [
             sort { $a->{'text'} cmp $b->{'text'} }

@@ -307,8 +307,8 @@ if ( $template_type && $template_type eq 'advsearch' ) {
 
     }
 
-    my @advsearch_limits = split /\|/, C4::Context->preference('OpacAdvSearchOptions');
-    my @advsearch_more_limits = split /\|/,
+    my @advsearch_limits = split /,/, C4::Context->preference('OpacAdvSearchOptions');
+    my @advsearch_more_limits = split /,/,
       C4::Context->preference('OpacAdvSearchMoreOptions');
     $template->param(
         uc( C4::Context->preference("marcflavour") ) => 1,    # we already did this for UNIMARC

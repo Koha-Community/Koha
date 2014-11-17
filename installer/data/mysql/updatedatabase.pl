@@ -9505,6 +9505,20 @@ CREATE TABLE borrower_sync (
     SetVersion($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{
+        UPDATE systempreferences SET value = 'pubdate,itemtype,language,sorting,location' WHERE variable='OpacAdvSearchOptions'
+    });
+
+    $dbh->do(q{
+        UPDATE systempreferences SET value = 'pubdate,itemtype,language,subtype,sorting,location' WHERE variable='OpacAdvSearchMoreOptions'
+    });
+
+    print "Upgrade to $DBversion done (Bug 9043 - Update the values for OpacAdvSearchOptions and OpacAdvSearchOptions)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
