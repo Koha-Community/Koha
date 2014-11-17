@@ -77,7 +77,7 @@ function export_barcodes() {
 }
 var slip_re = /slip/;
 function printx_window(print_type) {
-    var handler = print_type.match(slip_re) ? "printslip" : "moremember";
+    var handler = print_type.match(slip_re) ? "printslip" : "summary-print";
     window.open("/cgi-bin/koha/members/" + handler + ".pl?borrowernumber=[% borrowernumber %]&amp;print=" + print_type, "printwindow");
     return false;
 }
