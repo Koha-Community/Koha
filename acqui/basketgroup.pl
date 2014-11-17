@@ -80,10 +80,6 @@ sub BasketTotal {
         } else {
             $total = $total + ( $order->{ecost_tax_excluded} * $order->{quantity} );
         }
-        if ($bookseller->{invoiceincgst} && ! $bookseller->{listincgst} && ( $bookseller->{tax_rate} // C4::Context->preference("gist") )) {
-            my $gst = $bookseller->{tax_rate} // C4::Context->preference("gist");
-            $total = $total * ( $gst / 100 +1);
-        }
     }
     $total .= " " . ($bookseller->{invoiceprice} // 0);
     return $total;

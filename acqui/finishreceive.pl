@@ -54,8 +54,6 @@ my $invoice          = GetInvoice($invoiceid);
 my $invoiceno        = $invoice->{invoicenumber};
 my $booksellerid     = $input->param('booksellerid');
 my $cnt              = 0;
-my $ecost            = $input->param('ecost');
-my $rrp              = $input->param('rrp');
 my $bookfund         = $input->param("bookfund");
 my $order            = GetOrder($ordernumber);
 my $new_ordernumber  = $ordernumber;
@@ -83,25 +81,9 @@ if ($quantityrec > $origquantityrec ) {
     }
 
     $order->{order_internalnote} = $input->param("order_internalnote");
-    $order->{rrp} = $rrp;
-    $order->{ecost} = $ecost;
     $order->{unitprice} = $unitprice;
 
-    # FIXME is it still useful?
     my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
-    if ( $bookseller->{listincgst} ) {
-        if ( not $bookseller->{invoiceincgst} ) {
-            $order->{rrp} = $order->{rrp} * ( 1 + $order->{tax_rate} );
-            $order->{ecost} = $order->{ecost} * ( 1 + $order->{tax_rate} );
-            $order->{unitprice} = $order->{unitprice} * ( 1 + $order->{tax_rate} );
-        }
-    } else {
-        if ( $bookseller->{invoiceincgst} ) {
-            $order->{rrp} = $order->{rrp} / ( 1 + $order->{tax_rate} );
-            $order->{ecost} = $order->{ecost} / ( 1 + $order->{tax_rate} );
-            $order->{unitprice} = $order->{unitprice} / ( 1 + $order->{tax_rate} );
-        }
-    }
 
     $order = C4::Acquisition::populate_order_with_prices(
         {
@@ -171,7 +153,7 @@ ModItem(
         booksellerid         => $booksellerid,
         dateaccessioned      => $datereceived,
         price                => $unitprice,
-        replacementprice     => $rrp,
+        replacementprice     => $order->{rrp},
         replacementpricedate => $datereceived,
     },
     $biblionumber,

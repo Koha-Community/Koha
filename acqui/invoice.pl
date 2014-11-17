@@ -143,7 +143,6 @@ foreach my $order (@$orders) {
 
 push @foot_loop, map {$_} values %foot;
 
-my $format = "%.2f";
 my $budgets = GetBudgets();
 my @budgets_loop;
 my $shipmentcost_budgetid = $details->{shipmentcost_budgetid};
@@ -170,11 +169,11 @@ $template->param(
     orders_loop      => \@orders_loop,
     foot_loop        => \@foot_loop,
     total_quantity   => $total_quantity,
-    total_tax_excluded       => sprintf( $format, $total_tax_excluded ),
-    total_tax_included       => sprintf( $format, $total_tax_included ),
-    total_tax_value   => sprintf( $format, $total_tax_value ),
-    total_tax_excluded_shipment => sprintf( $format, $total_tax_excluded + $details->{shipmentcost}),
-    total_tax_included_shipment => sprintf( $format, $total_tax_included + $details->{shipmentcost}),
+    total_tax_excluded => $total_tax_excluded,
+    total_tax_included => $total_tax_included,
+    total_tax_value  => $total_tax_value,
+    total_tax_excluded_shipment => $total_tax_excluded + $details->{shipmentcost},
+    total_tax_included_shipment => $total_tax_included + $details->{shipmentcost},
     invoiceincgst    => $bookseller->{invoiceincgst},
     currency         => Koha::Acquisition::Currencies->get_active,
     budgets_loop     => \@budgets_loop,

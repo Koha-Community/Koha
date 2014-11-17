@@ -149,8 +149,8 @@ for my $order ( @orders ) {
     $line{budget} = GetBudgetByOrderNumber( $line{ordernumber} );
     $foot{$line{tax_rate}}{tax_rate} = $line{tax_rate};
     $foot{$line{tax_rate}}{tax_value} += $line{tax_value};
-    $total_tax_excluded += Koha::Number::Price->new( $line{ecost_tax_excluded} * $line{quantity} )->format;
-    $total_tax_included += Koha::Number::Price->new( $line{ecost_tax_included} * $line{quantity} )->format;
+    $total_tax_excluded += $line{unitprice_tax_excluded} * $line{quantity};
+    $total_tax_included += $line{unitprice_tax_included} * $line{quantity};
 
     my $suggestion   = GetSuggestionInfoFromBiblionumber($line{biblionumber});
     $line{suggestionid}         = $suggestion->{suggestionid};

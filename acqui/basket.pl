@@ -329,9 +329,6 @@ if ( $op eq 'list' ) {
             $template->param( uncertainprices => 1 );
         }
 
-        $line->{total_tax_excluded} = Koha::Number::Price->new( $line->{ecost_tax_excluded} * $line->{quantity} )->format;
-        $line->{total_tax_included} = Koha::Number::Price->new( $line->{ecost_tax_included} * $line->{quantity} )->format;
-
         push @books_loop, $line;
 
         $foot{$$line{tax_rate}}{tax_rate} = $$line{tax_rate};
@@ -439,6 +436,9 @@ sub get_order_infos {
     $line{order_received} = ( $qty == $order->{'quantityreceived'} && ( $basket->{is_standing} ? $qty : 1 ) );
     $line{basketno}       = $basketno;
     $line{budget_name}    = $budget->{budget_name};
+
+    $line{total_tax_included} = $line{ecost_tax_included} * $line{quantity};
+    $line{total_tax_excluded} = $line{ecost_tax_excluded} * $line{quantity};
 
     if ( $line{uncertainprice} ) {
         $line{rrp_tax_excluded} .= ' (Uncertain)';

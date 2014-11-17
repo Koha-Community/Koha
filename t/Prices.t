@@ -47,7 +47,7 @@ my $today;
 for my $currency_format ( qw( US FR ) ) {
     t::lib::Mocks::mock_preference( 'CurrencyFormat', $currency_format );
     subtest 'Configuration 1: 0 0' => sub {
-        plan tests => 12;
+        plan tests => 8;
         $bookseller_module->mock(
             'fetch',
             sub {
@@ -79,7 +79,6 @@ for my $currency_format ( qw( US FR ) ) {
             }
         );
 
-        # Note that this configuration is correct \o/
         compare(
             {
                 got      => $order_0_0->{rrp_tax_included},
@@ -120,22 +119,6 @@ for my $currency_format ( qw( US FR ) ) {
                 field    => 'tax_value'
             }
         );
-        compare(
-            {
-                got      => $order_0_0->{total_tax_included},
-                expected => 154.98,
-                conf     => '0 0',
-                field    => 'total_tax_included'
-            }
-        );
-        compare(
-            {
-                got      => $order_0_0->{total_tax_excluded},
-                expected => 147.60,
-                conf     => '0 0',
-                field    => 'total_tax_excluded'
-            }
-        );
 
         $order_0_0 = C4::Acquisition::populate_order_with_prices(
             {
@@ -145,7 +128,6 @@ for my $currency_format ( qw( US FR ) ) {
             }
         );
 
-        # Note that this configuration is correct \o/
         compare(
             {
                 got      => $order_0_0->{unitprice_tax_included},
@@ -170,26 +152,10 @@ for my $currency_format ( qw( US FR ) ) {
                 field    => 'tax_value'
             }
         );
-        compare(
-            {
-                got      => $order_0_0->{total_tax_included},
-                expected => 154.98,
-                conf     => '0 0',
-                field    => 'total_tax_included'
-            }
-        );
-        compare(
-            {
-                got      => $order_0_0->{total_tax_excluded},
-                expected => 147.60,
-                conf     => '0 0',
-                field    => 'total_tax_excluded'
-            }
-        );
     };
 
     subtest 'Configuration 1: 1 1' => sub {
-        plan tests => 12;
+        plan tests => 8;
         $bookseller_module->mock(
             'fetch',
             sub {
@@ -221,8 +187,6 @@ for my $currency_format ( qw( US FR ) ) {
             }
         );
 
-        # Note that this configuration is *not* correct
-        # tax_value should be 7.03 instead of 7.02
         compare(
             {
                 got      => $order_1_1->{rrp_tax_included},
@@ -258,25 +222,9 @@ for my $currency_format ( qw( US FR ) ) {
         compare(
             {
                 got      => $order_1_1->{tax_value},
-                expected => 7.02,
+                expected => 7.03,
                 conf     => '1 1',
                 field    => 'tax_value'
-            }
-        );
-        compare(
-            {
-                got      => $order_1_1->{total_tax_included},
-                expected => 147.60,
-                conf     => '1 1',
-                field    => 'total_tax_included'
-            }
-        );
-        compare(
-            {
-                got      => $order_1_1->{total_tax_excluded},
-                expected => 140.58,
-                conf     => '1 1',
-                field    => 'total_tax_excluded'
             }
         );
 
@@ -287,8 +235,7 @@ for my $currency_format ( qw( US FR ) ) {
                 receiving    => 1,
             }
         );
-        # Note that this configuration is *not* correct!
-        # tax_value should be 7.03
+
         compare(
             {
                 got      => $order_1_1->{unitprice_tax_included},
@@ -308,31 +255,15 @@ for my $currency_format ( qw( US FR ) ) {
         compare(
             {
                 got      => $order_1_1->{tax_value},
-                expected => 7.02,
+                expected => 7.03,
                 conf     => '1 1',
                 field    => 'tax_value'
-            }
-        );
-        compare(
-            {
-                got      => $order_1_1->{total_tax_included},
-                expected => 147.60,
-                conf     => '1 1',
-                field    => 'total_tax_included'
-            }
-        );
-        compare(
-            {
-                got      => $order_1_1->{total_tax_excluded},
-                expected => 140.58,
-                conf     => '1 1',
-                field    => 'total_tax_excluded'
             }
         );
     };
 
     subtest 'Configuration 1: 1 0' => sub {
-        plan tests => 12;
+        plan tests => 8;
         $bookseller_module->mock(
             'fetch',
             sub {
@@ -345,11 +276,11 @@ for my $currency_format ( qw( US FR ) ) {
             biblionumber     => $biblionumber_1_0,
             quantity         => 2,
             listprice        => 82.000000,
-            unitprice        => 73.804500,
+            unitprice        => 70.290000,
             quantityreceived => 2,
             basketno         => $basketno_1_1,
             invoiceid        => $invoiceid_1_1,
-            rrp              => 82.01,
+            rrp              => 82.00,
             ecost            => 73.80,
             tax_rate         => 0.0500,
             discount         => 10.0000,
@@ -364,14 +295,10 @@ for my $currency_format ( qw( US FR ) ) {
             }
         );
 
-        # Note that this configuration is *not* correct!
-        # rrp_tax_included should be 82 (what we inserted!)
-        # tax_value should be 7.03 instead of 7.02
-
         compare(
             {
                 got      => $order_1_0->{rrp_tax_included},
-                expected => 82.01,
+                expected => 82,
                 conf     => '1 0',
                 field    => 'rrp_tax_included'
             }
@@ -403,25 +330,9 @@ for my $currency_format ( qw( US FR ) ) {
         compare(
             {
                 got      => $order_1_0->{tax_value},
-                expected => 7.02,
+                expected => 7.03,
                 conf     => '1 0',
                 field    => 'tax_value'
-            }
-        );
-        compare(
-            {
-                got      => $order_1_0->{total_tax_included},
-                expected => 147.60,
-                conf     => '1 0',
-                field    => 'total_tax_included'
-            }
-        );
-        compare(
-            {
-                got      => $order_1_0->{total_tax_excluded},
-                expected => 140.58,
-                conf     => '1 0',
-                field    => 'total_tax_excluded'
             }
         );
 
@@ -432,8 +343,7 @@ for my $currency_format ( qw( US FR ) ) {
                 receiving    => 1,
             }
         );
-        # Note that this configuration is *not* correct!
-        # gstvalue should be 7.03
+
         compare(
             {
                 got      => $order_1_0->{unitprice_tax_included},
@@ -453,31 +363,15 @@ for my $currency_format ( qw( US FR ) ) {
         compare(
             {
                 got      => $order_1_0->{tax_value},
-                expected => 7.02,
+                expected => 7.03,
                 conf     => '1 0',
                 field    => 'tax_value'
-            }
-        );
-        compare(
-            {
-                got      => $order_1_0->{total_tax_included},
-                expected => 147.60,
-                conf     => '1 0',
-                field    => 'total_tax_included'
-            }
-        );
-        compare(
-            {
-                got      => $order_1_0->{total_tax_excluded},
-                expected => 140.58,
-                conf     => '1 0',
-                field    => 'total_tax_excluded'
             }
         );
     };
 
     subtest 'Configuration 1: 0 1' => sub {
-        plan tests => 12;
+        plan tests => 8;
         $bookseller_module->mock(
             'fetch',
             sub {
@@ -490,7 +384,7 @@ for my $currency_format ( qw( US FR ) ) {
             biblionumber     => $biblionumber_0_1,
             quantity         => 2,
             listprice        => 82.000000,
-            unitprice        => 73.800000,
+            unitprice        => 77.490000,
             quantityreceived => 2,
             basketno         => $basketno_1_1,
             invoiceid        => $invoiceid_1_1,
@@ -509,12 +403,11 @@ for my $currency_format ( qw( US FR ) ) {
             }
         );
 
-        # Note that this configuration is correct \o/
         compare(
             {
                 got      => $order_0_1->{rrp_tax_included},
                 expected => 86.10,
-                conf     => '1 0',
+                conf     => '0 1',
                 field    => 'rrp_tax_included'
             }
         );
@@ -522,7 +415,7 @@ for my $currency_format ( qw( US FR ) ) {
             {
                 got      => $order_0_1->{rrp_tax_excluded},
                 expected => 82.00,
-                conf     => '1 0',
+                conf     => '0 1',
                 field    => 'rrp_tax_excluded'
             }
         );
@@ -530,7 +423,7 @@ for my $currency_format ( qw( US FR ) ) {
             {
                 got      => $order_0_1->{ecost_tax_included},
                 expected => 77.49,
-                conf     => '1 0',
+                conf     => '0 1',
                 field    => 'ecost_tax_included'
             }
         );
@@ -538,7 +431,7 @@ for my $currency_format ( qw( US FR ) ) {
             {
                 got      => $order_0_1->{ecost_tax_excluded},
                 expected => 73.80,
-                conf     => '1 0',
+                conf     => '0 1',
                 field    => 'ecost_tax_excluded'
             }
         );
@@ -546,24 +439,8 @@ for my $currency_format ( qw( US FR ) ) {
             {
                 got      => $order_0_1->{tax_value},
                 expected => 7.38,
-                conf     => '1 0',
+                conf     => '0 1',
                 field    => 'tax_value'
-            }
-        );
-        compare(
-            {
-                got      => $order_0_1->{total_tax_included},
-                expected => 154.98,
-                conf     => '1 0',
-                field    => 'total_tax_included'
-            }
-        );
-        compare(
-            {
-                got      => $order_0_1->{total_tax_excluded},
-                expected => 147.60,
-                conf     => '1 0',
-                field    => 'total_tax_excluded'
             }
         );
 
@@ -574,7 +451,7 @@ for my $currency_format ( qw( US FR ) ) {
                 receiving    => 1,
             }
         );
-        # Note that this configuration is correct
+
         compare(
             {
                 got      => $order_0_1->{unitprice_tax_included},
@@ -597,22 +474,6 @@ for my $currency_format ( qw( US FR ) ) {
                 expected => 7.38,
                 conf     => '0 1',
                 field    => 'tax_value'
-            }
-        );
-        compare(
-            {
-                got      => $order_0_1->{total_tax_included},
-                expected => 154.98,
-                conf     => '0 1',
-                field    => 'total_tax_included'
-            }
-        );
-        compare(
-            {
-                got      => $order_0_1->{total_tax_excluded},
-                expected => 147.60,
-                conf     => '0 1',
-                field    => 'total_tax_excluded'
             }
         );
     };

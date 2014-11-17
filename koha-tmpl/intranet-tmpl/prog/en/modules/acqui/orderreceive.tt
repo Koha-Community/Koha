@@ -328,13 +328,14 @@
             </div>
           [% END %][%# IF (AcqCreateItemReceiving) %]
 		</li>
-        <li><label for="rrp">Replacement cost: </label><input type="text" size="20" name="rrp" id="rrp" value="[% rrp %]" /></li>
-        <li><label for="ecost">Budgeted cost: </label><input type="text" size="20" name="ecost" id="ecost" value="[% ecost %]" /></li>
+
+        <li><label for="rrp">Replacement cost: </label>[% rrp | $Price %]</li>
+        <li><label for="ecost">Budgeted cost: </label>[% ecost | $Price %]</li>
         <li><label for="cost">Actual cost:</label>
         [% IF ( unitprice ) %]
-         <input type="text" size="20" name="cost" id="cost" value="[% unitprice %]" />
+             <input type="text" size="20" name="cost" id="cost" value="[% unitprice | $Price %]" />
         [% ELSE %]
-            <input type="text" size="20" name="cost" id="cost" value="[% ecost %]" />
+             <input type="text" size="20" name="cost" id="cost" value="[% ecost | $Price %]" />
         [% END %]</li>
         <li><label for="order_internalnote">Internal note: </label><textarea name="order_internalnote" width="40" rows="8" >[% order_internalnote %]</textarea></li>
         [% IF order_vendornote %]

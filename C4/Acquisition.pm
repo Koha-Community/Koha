@@ -2823,9 +2823,6 @@ sub GetBiblioCountByBasketno {
     return $sth->fetchrow;
 }
 
-# This is *not* the good way to calcul prices
-# But it's how it works at the moment into Koha
-# This will be fixed later.
 # Note this subroutine should be moved to Koha::Acquisition::Order
 # Will do when a DBIC decision will be taken.
 sub populate_order_with_prices {
@@ -2842,48 +2839,59 @@ sub populate_order_with_prices {
     my $discount  = $order->{discount};
     $discount /= 100 if $discount > 1;
 
-    $order->{rrp}   = Koha::Number::Price->new( $order->{rrp} )->round;
-    $order->{ecost} = Koha::Number::Price->new( $order->{ecost} )->round;
     if ($ordering) {
         if ( $bookseller->{listincgst} ) {
+            # The user entered the rrp tax included
             $order->{rrp_tax_included} = $order->{rrp};
-            $order->{rrp_tax_excluded} = Koha::Number::Price->new(
-                $order->{rrp_tax_included} / ( 1 + $order->{tax_rate} ) )->round;
-            $order->{ecost_tax_included} = $order->{ecost};
-            $order->{ecost_tax_excluded} = Koha::Number::Price->new(
-                $order->{ecost} / ( 1 + $order->{tax_rate} ) )->round;
-            $order->{tax_value} = Koha::Number::Price->new(
-                ( $order->{ecost_tax_included} - $order->{ecost_tax_excluded} ) *
-                  $order->{quantity} )->round;
+
+            # rrp tax excluded = rrp tax included / ( 1 + tax rate )
+            $order->{rrp_tax_excluded} = $order->{rrp_tax_included} / ( 1 + $order->{tax_rate} );
+
+            # ecost tax excluded = rrp tax excluded * ( 1 - discount )
+            $order->{ecost_tax_excluded} = $order->{rrp_tax_excluded} * ( 1 - $discount );
+
+            # ecost tax included = rrp tax included  ( 1 - discount )
+            $order->{ecost_tax_included} = $order->{rrp_tax_included} * ( 1 - $discount );
         }
         else {
+            # The user entered the rrp tax excluded
             $order->{rrp_tax_excluded} = $order->{rrp};
-            $order->{rrp_tax_included} = Koha::Number::Price->new(
-                $order->{rrp} * ( 1 + $order->{tax_rate} ) )->round;
-            $order->{ecost_tax_excluded} = $order->{ecost};
-            $order->{ecost_tax_included} = Koha::Number::Price->new(
-                $order->{ecost} * ( 1 + $order->{tax_rate} ) )->round;
-            $order->{tax_value} = Koha::Number::Price->new(
-                ( $order->{ecost_tax_included} - $order->{ecost_tax_excluded} ) *
-                  $order->{quantity} )->round;
+
+            # rrp tax included = rrp tax excluded * ( 1 - tax rate )
+            $order->{rrp_tax_included} = $order->{rrp_tax_excluded} * ( 1 + $order->{tax_rate} );
+
+            # ecost tax excluded = rrp tax excluded * ( 1 - discount )
+            $order->{ecost_tax_excluded} = $order->{rrp_tax_excluded} * ( 1 - $discount );
+
+            # ecost tax included = rrp tax excluded * ( 1 - tax rate ) * ( 1 - discount )
+            $order->{ecost_tax_included} =
+                $order->{rrp_tax_excluded} *
+                ( 1 + $order->{tax_rate} ) *
+                ( 1 - $discount );
         }
+
+        # tax value = quantity * ecost tax excluded * tax rate
+        $order->{tax_value} = $order->{quantity} * $order->{ecost_tax_excluded} * $order->{tax_rate};
     }
 
     if ($receiving) {
-        if ( $bookseller->{listincgst} ) {
-            $order->{unitprice_tax_included} = Koha::Number::Price->new( $order->{unitprice} )->round;
-            $order->{unitprice_tax_excluded} = Koha::Number::Price->new(
-              $order->{unitprice_tax_included} / ( 1 + $order->{tax_rate} ) )->round;
+        if ( $bookseller->{invoiceincgst} ) {
+            # The user entered the unit price tax included
+            $order->{unitprice_tax_included} = $order->{unitprice};
+
+            # unit price tax excluded = unit price tax included / ( 1 + tax rate )
+            $order->{unitprice_tax_excluded} = $order->{unitprice_tax_included} / ( 1 + $order->{tax_rate} );
         }
         else {
-            $order->{unitprice_tax_excluded} = Koha::Number::Price->new( $order->{unitprice} )->round;
-            $order->{unitprice_tax_included} = Koha::Number::Price->new(
-              $order->{unitprice_tax_excluded} * ( 1 + $order->{tax_rate} ) )->round;
-        }
-        $order->{tax_value} = Koha::Number::Price->new(
-          ( $order->{unitprice_tax_included} - $order->{unitprice_tax_excluded} )
-          * $order->{quantityreceived} )->round;
+            # The user entered the unit price tax excluded
+            $order->{unitprice_tax_excluded} = $order->{unitprice};
 
+            # unit price tax included = unit price tax included * ( 1 + tax rate )
+            $order->{unitprice_tax_included} = $order->{unitprice_tax_excluded} * ( 1 + $order->{tax_rate} );
+        }
+
+        # tax value = quantity * unit price tax excluded * tax rate
+        $order->{tax_value} = $order->{quantity} * $order->{unitprice_tax_excluded} * $order->{tax_rate};
     }
 
     return $order;
