@@ -437,6 +437,7 @@ sub NewSuggestion {
         accepteddate
         rejectedby
         rejecteddate
+        budgetid
     ) ) {
         # Set the fields to NULL if not given.
         $suggestion->{$field} ||= undef;
@@ -475,6 +476,7 @@ sub ModSuggestion {
         accepteddate
         rejectedby
         rejecteddate
+        budgetid
     ) ) {
         # Set the fields to NULL if not given.
         $suggestion->{$field} = undef

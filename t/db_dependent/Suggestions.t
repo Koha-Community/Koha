@@ -25,7 +25,7 @@ use C4::Budgets;
 
 use Koha::DateUtils qw( dt_from_string );
 
-use Test::More tests => 102;
+use Test::More tests => 104;
 use Test::Warn;
 
 BEGIN {
@@ -352,6 +352,13 @@ is(@$itemtypes2, 8, "Purchase suggestion itemtypes collected, default AdvancedSe
 
 is_deeply($itemtypes1, $itemtypes2, 'same set of purchase suggestion formats retrieved');
 
-$dbh->rollback;
+# Test budgetid fk
+$my_suggestion->{budgetid} = ''; # If budgetid == '', NULL should be set in DB
+my $my_suggestionid_test_budgetid = NewSuggestion($my_suggestion);
+$suggestion = GetSuggestion($my_suggestionid_test_budgetid);
+is( $suggestion->{budgetid}, undef, 'NewSuggestion Should set budgetid to NULL if equals an empty string' );
 
-done_testing;
+$my_suggestion->{budgetid} = ''; # If budgetid == '', NULL should be set in DB
+ModSuggestion( $my_suggestion );
+$suggestion = GetSuggestion($my_suggestionid_test_budgetid);
+is( $suggestion->{budgetid}, undef, 'NewSuggestion Should set budgetid to NULL if equals an empty string' );
