@@ -76,7 +76,7 @@ output_html_with_http_headers $input, $cookie, $template->output;
 sub build_issue_data {
     my $issues = shift;
 
-    my $return;
+    my $return = [];
 
     my $today = DateTime->now( time_zone => C4::Context->tz );
     $today->truncate( to => 'day' );
