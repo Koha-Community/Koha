@@ -27,6 +27,13 @@ use C4::Output;
 use C4::Dates;
 
 my $query = new CGI;
+
+# if OPACPrivacy is disabled, leave immediately
+if ( ! C4::Context->preference('OPACPrivacy') || ! C4::Context->preference('opacreadinghistory') ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
 my $dbh   = C4::Context->dbh;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
