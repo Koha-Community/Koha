@@ -63,8 +63,11 @@ $(document).ready(function() {
                 content = "";
                 if ( data.returned ) {
                     content = CIRCULATION_RETURNED;
+                    $(id).parent().parent().addClass('ok');
+                    $('#date_due_' + data.itemnumber).html(_("Returned"));
                 } else {
                     content = CIRCULATION_NOT_RETURNED;
+                    $(id).parent().parent().addClass('warn');
                 }
 
                 $(id).replaceWith( content );
