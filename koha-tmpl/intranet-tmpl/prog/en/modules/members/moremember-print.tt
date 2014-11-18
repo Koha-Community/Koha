@@ -41,20 +41,20 @@
                     <th>Status</th>
                 </tr>
 
-                [% FOREACH issueloo IN issues %]
-                    [% IF ( issueloo.red ) %]<tr class="overdue">[% ELSE %]<tr>[% END %]
+                [% FOREACH issue IN issues %]
+                    [% IF ( issue.overdue ) %]<tr class="overdue">[% ELSE %]<tr>[% END %]
                         <td>
-                            [% issueloo.title |html %]
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?item=[% issueloo.itemnumber %]&amp;biblionumber=[% issueloo.biblionumber %]&amp;bi=[% issueloo.biblioitemnumber %]"></a>
+                            [% issue.title |html %]
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?item=[% issue.itemnumber %]&amp;biblionumber=[% issue.biblionumber %]&amp;bi=[% issue.biblioitemnumber %]"></a>
                         </td>
-                        <td>[% issueloo.author %]</td>
-                        <td>[% issueloo.itemcallnumber %]</td>
-                        <td>[% issueloo.itemtype_description %]</td>
-                        <td>[% issueloo.date_due %]</td>
-                        <td>[% issueloo.barcode %]</td>
-                        <td>[% issueloo.charge %]</td>
-                        <td>[% issueloo.replacementprice %]</td>
-                        <td>[% IF ( issueloo.red ) %]Overdue![% ELSE %]&nbsp;[% END %]</td>
+                        <td>[% issue.author %]</td>
+                        <td>[% issue.itemcallnumber %]</td>
+                        <td>[% issue.itemtype_description %]</td>
+                        <td>[% issue.date_due | $KohaDates %]</td>
+                        <td>[% issue.barcode %]</td>
+                        <td>[% issue.charge %]</td>
+                        <td>[% issue.replacementprice %]</td>
+                        <td>[% IF ( issue.overdue ) %]Overdue![% ELSE %]&nbsp;[% END %]</td>
                     </tr>
                 [% END %]
 
