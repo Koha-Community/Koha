@@ -154,7 +154,7 @@
                                             </ul>
                                         </div>
                                         <div class="modal-footer">
-                                            <a href="#" class="btn btn-primary">Search</a>
+                                            <a id="validAuthorSearch" href="#" class="btn btn-primary">Search</a>
                                             <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
                                         </div>
                                     </div>
@@ -164,9 +164,14 @@
                                     [% authorsloop = loop %]
                                     [% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %]
                                         [% MARCAUTHOR_SUBFIELDS_LOO.separator %]
-                                        <a role="button" data-toggle="modal" title="‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value %]"
+                                        [% IF Koha.Preference( 'OPACPopupAuthorsSearch' ) == 1 %]
+                                            <a role="button" data-toggle="modal" title="‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value %]"
                                             class="showauthors" data-count="[% authorsloop.count %]"
                                             href="/cgi-bin/koha/opac-search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit |url %]:[% link_loo.link |url %][% END %]#authorSearch">[% MARCAUTHOR_SUBFIELDS_LOO.value %]</a>
+                                        [% ELSE %]
+                                            <a title="‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value %]"
+                                            class="showauthors" href="/cgi-bin/koha/opac-search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit |url %]:[% link_loo.link |url %][% END %]">[% MARCAUTHOR_SUBFIELDS_LOO.value %]</a>
+                                        [% END %]
                                     [% END %]
                                     [% IF (MARCAUTHOR.authoritylink) %]
                                         <a class='authlink' href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% MARCAUTHOR.authoritylink %]"><img style="vertical-align:middle" height="15" width="15" src="[% interface %]/[% theme %]/images/filefind.png"></a>
@@ -281,7 +286,11 @@
                                     [% subjectsloop = loop %]
                                     [% FOREACH SUBFIELD IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %]
                                         [% SUBFIELD.separator %]
-                                        <a role="button" data-toggle="modal" title="$[% SUBFIELD.code %] [% SUBFIELD.value %]" href="/cgi-bin/koha/opac-search.pl?q=[% FOREACH link_loo IN SUBFIELD.link_loop %][% link_loo.operator |url %][% link_loo.limit |url %]:[% link_loo.link |url %][% END %]#subjectSearch" onclick="showSubjects(this, [% subjectsloop.count %], [% loop.count %]); return false;">[% SUBFIELD.value %]</a>
+                                        [% IF Koha.Preference( 'OPACPopupAuthorsSearch' ) == 1 %]
+                                            <a role="button" data-toggle="modal" title="$[% SUBFIELD.code %] [% SUBFIELD.value %]" href="/cgi-bin/koha/opac-search.pl?q=[% FOREACH link_loo IN SUBFIELD.link_loop %][% link_loo.operator |url %][% link_loo.limit |url %]:[% link_loo.link |url %][% END %]#subjectSearch" onclick="showSubjects(this, [% subjectsloop.count %], [% loop.count %]); return false;">[% SUBFIELD.value %]</a>
+                                        [% ELSE %]
+                                            <a title="$[% SUBFIELD.code %] [% SUBFIELD.value %]" href="/cgi-bin/koha/opac-search.pl?q=[% FOREACH link_loo IN SUBFIELD.link_loop %][% link_loo.operator |url %][% link_loo.limit |url %]:[% link_loo.link |url %][% END %]">[% SUBFIELD.value %]</a>
+                                        [% END %]
                                     [% END %]
                                     [% IF (MARCSUBJCT.authoritylink) %]
                                         <a class="authlink" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% MARCSUBJCT.authoritylink %]"><img style="vertical-align:middle" height="15" width="15" src="[% interface %]/[% theme %]/images/filefind.png" /></a>
@@ -1745,25 +1754,12 @@
     //<![CDATA[
         function showAuthors(element){
             var authornumber = $(element).attr("data-count");
-            // Hide subjects menu if displayed
-            hideMenu(".subjectSearch");
 
             // Check checkbox related to the clicked link
             $("#authorsList input[type='checkbox']").attr('checked', false);
             $("#author_"+authornumber).attr('checked', true);
 
             makeAuthorRequest();
-
-            // Display menu
-            var left = element.offsetLeft || 0;
-            var top = element.offsetTop || 0;
-            $('.authorSearch').css('display', 'block');
-            $('.authorSearch').css('left', left);
-            $('.authorSearch').css('top', top + 15);
-        }
-
-        function hideMenu(elem) {
-            $(elem).css('display', 'none');
         }
 
         function checkAll(checkbox, elem) {
@@ -1826,7 +1822,7 @@
             }
         }
         $(document).ready(function() {
-            $("a.showauthors").click(function(){
+            $("a.showauthors").click(function(e){
                 e.preventDefault();
                 showAuthors(this);
             });
