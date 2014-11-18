@@ -20,8 +20,8 @@ use Modern::Perl;
 use Test::More;
 use File::Spec;
 use File::Find;
-use Test::MockModule;
-use DBD::Mock;
+
+use t::lib::Mocks;
 
 =head1 DESCRIPTION
 
@@ -29,13 +29,7 @@ use DBD::Mock;
 
 =cut
 
-# Mock the DB connexion and C4::Context
-my $context = new Test::MockModule('C4::Context');
-$context->mock( '_new_dbh', sub {
-        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-          || die "Cannot create handle: $DBI::errstr\n";
-        return $dbh;
-});
+my $context_module = t::lib::Mocks::mock_dbh;
 
 # Loop through the C4:: modules
 my $lib = File::Spec->rel2abs('C4');
