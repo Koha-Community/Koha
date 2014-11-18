@@ -20,18 +20,13 @@ use Modern::Perl;
 use Test::More tests => 8;
 use File::Temp;
 use File::Path qw/make_path/;
-use Test::MockModule;
-use DBD::Mock;
 
-# Mock the DB connexion and C4::Context
-my $context = new Test::MockModule('C4::Context');
-$context->mock( '_new_dbh', sub {
-        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-          || die "Cannot create handle: $DBI::errstr\n";
-        return $dbh;
-});
+use t::lib::Mocks;
 
-use_ok('C4::XSLT');
+BEGIN {
+    my $context_module = t::lib::Mocks::mock_dbh;
+    use_ok('C4::XSLT');
+};
 
 my $dir = File::Temp->newdir();
 my @themes = ('prog', 'test');
