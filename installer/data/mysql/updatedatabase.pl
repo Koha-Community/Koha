@@ -8922,7 +8922,7 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.17.00.040";
 if ( CheckVersion($DBversion) ) {
     my $opac_theme = C4::Context->preference( 'opacthemes' );
-    if ( $opac_theme eq 'prog' || $opac_theme eq 'ccsr' ) {
+    if ( !defined $opac_theme || $opac_theme eq 'prog' || $opac_theme eq 'ccsr' ) {
         $dbh->do("UPDATE systempreferences SET value='bootstrap' WHERE variable='opacthemes'");
     }
     print "Upgrade to $DBversion done (Bug 12223: 'prog' and 'ccsr' themes removed)\n";
