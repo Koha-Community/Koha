@@ -33,6 +33,13 @@ use C4::Output;
 use C4::Charset qw(StripNonXmlChars);
 
 my $query = new CGI;
+
+# if opacreadinghistory is disabled, leave immediately
+if ( ! C4::Context->preference('opacreadinghistory') ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-readingrecord.tt",
