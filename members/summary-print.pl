@@ -97,5 +97,8 @@ sub build_issue_data {
 
         push( @{$return}, \%row );
     }
+
+    @{$return} = sort { $a->{date_due} <=> $b->{date_due} } @{$return};
+
     return $return;
 }
