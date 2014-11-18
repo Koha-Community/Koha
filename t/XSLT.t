@@ -1,18 +1,37 @@
 #!/usr/bin/perl
-#
-# This Koha test module is a stub!  
-# Add more tests here!!!
 
-use strict;
-use warnings;
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
 
 use Test::More tests => 8;
 use File::Temp;
 use File::Path qw/make_path/;
+use Test::MockModule;
+use DBD::Mock;
 
-BEGIN {
-        use_ok('C4::XSLT');
-}
+# Mock the DB connexion and C4::Context
+my $context = new Test::MockModule('C4::Context');
+$context->mock( '_new_dbh', sub {
+        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
+          || die "Cannot create handle: $DBI::errstr\n";
+        return $dbh;
+});
+
+use_ok('C4::XSLT');
 
 my $dir = File::Temp->newdir();
 my @themes = ('prog', 'test');
@@ -47,3 +66,5 @@ is(find_and_slurp($dir, 'prog', 'es-ES'), 'Theme prog, language es-ES', 'Found t
 is(find_and_slurp($dir, 'test', 'fr-FR'), 'Theme test, language en',    'Fell back to test/en for test/fr-FR');
 is(find_and_slurp($dir, 'nope', 'es-ES'), 'Theme prog, language es-ES', 'Fell back to prog/es-ES for nope/es-ES');
 is(find_and_slurp($dir, 'nope', 'fr-FR'), 'Theme prog, language en',    'Fell back to prog/en for nope/fr-FR');
+
+1;
