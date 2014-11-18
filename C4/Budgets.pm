@@ -212,7 +212,7 @@ sub GetBudgetsPlanCell {
         # get the actual amount
         $sth = $dbh->prepare( qq|
 
-            SELECT SUM(ecost) AS actual FROM aqorders
+            SELECT SUM(ecost_tax_included) AS actual FROM aqorders
                 WHERE    budget_id = ? AND
                 entrydate like "$cell->{'authvalue'}%"  |
         );
@@ -221,7 +221,7 @@ sub GetBudgetsPlanCell {
         # get the actual amount
         $sth = $dbh->prepare( qq|
 
-            SELECT SUM(ecost) FROM aqorders
+            SELECT SUM(ecost_tax_included) FROM aqorders
                 LEFT JOIN aqorders_items
                 ON (aqorders.ordernumber = aqorders_items.ordernumber)
                 LEFT JOIN items
@@ -233,7 +233,7 @@ sub GetBudgetsPlanCell {
         # get the actual amount
         $sth = $dbh->prepare(  qq|
 
-            SELECT SUM( ecost *  quantity) AS actual
+            SELECT SUM( ecost_tax_included *  quantity) AS actual
                 FROM aqorders JOIN biblioitems
                 ON (biblioitems.biblionumber = aqorders.biblionumber )
                 WHERE aqorders.budget_id = ? and itemtype  = ? |
@@ -246,7 +246,7 @@ sub GetBudgetsPlanCell {
         # get the actual amount
         $sth = $dbh->prepare( qq|
 
-        SELECT  SUM(ecost * quantity) AS actual
+        SELECT  SUM(ecost_tax_included * quantity) AS actual
             FROM aqorders
             JOIN aqbudgets ON (aqbudgets.budget_id = aqorders.budget_id )
             WHERE  aqorders.budget_id = ? AND
@@ -325,10 +325,12 @@ sub ModBudgetPlan {
 
 # -------------------------------------------------------------------
 sub GetBudgetSpent {
-	my ($budget_id) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare(qq|
-        SELECT SUM( COALESCE(unitprice, ecost) * quantity ) AS sum FROM aqorders
+    my ($budget_id) = @_;
+    my $dbh = C4::Context->dbh;
+    # unitprice_tax_included should always been set here
+    # we should not need to retrieve ecost_tax_included
+    my $sth = $dbh->prepare(qq|
+        SELECT SUM( COALESCE(unitprice_tax_included, ecost_tax_included) * quantity ) AS sum FROM aqorders
             WHERE budget_id = ? AND
             quantityreceived > 0 AND
             datecancellationprinted IS NULL
@@ -354,7 +356,7 @@ sub GetBudgetOrdered {
 	my ($budget_id) = @_;
 	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare(qq|
-        SELECT SUM(ecost *  quantity) AS sum FROM aqorders
+        SELECT SUM(ecost_tax_included *  quantity) AS sum FROM aqorders
             WHERE budget_id = ? AND
             quantityreceived = 0 AND
             datecancellationprinted IS NULL
