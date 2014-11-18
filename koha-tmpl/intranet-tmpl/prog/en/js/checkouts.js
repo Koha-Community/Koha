@@ -92,6 +92,7 @@ $(document).ready(function() {
                 var content = "";
                 if ( data.renew_okay ) {
                     content = CIRCULATION_RENEWED_DUE + " " + data.date_due;
+                    $('#date_due_' + data.itemnumber).replaceWith( data.date_due );
                 } else {
                     content = CIRCULATION_RENEW_FAILED + " ";
                     if ( data.error == "no_checkout" ) {
@@ -173,6 +174,8 @@ $(document).ready(function() {
                         if ( oObj.damaged ) {
                             due += "<span class='dmg'>" + oObj.damaged + "</span>";
                         }
+
+                        due = "<span id='date_due_" + oObj.itemnumber + "' class='date_due'>" + due + "</span>";
 
                         return due;
                 }
