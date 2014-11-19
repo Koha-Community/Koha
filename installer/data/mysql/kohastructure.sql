@@ -3143,8 +3143,12 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `ecost` decimal(13,2) DEFAULT NULL, -- the replacement cost for this line item
   `ecost_tax_excluded` decimal(28,6) default NULL, -- the estimated cost excluding tax
   `ecost_tax_included` decimal(28,6) default NULL, -- the estimated cost including tax
-  `tax_rate` decimal(6,4) DEFAULT NULL, -- the tax rate for this line item (%)
-  `tax_value` decimal(28,6) default NULL, -- the tax value for this line item
+  `tax_rate_bak` decimal(6,4) DEFAULT NULL, -- the tax rate for this line item (%)
+  `tax_rate_on_ordering` decimal(6,4) DEFAULT NULL, -- the tax rate on ordering for this line item (%)
+  `tax_rate_on_receiving` decimal(6,4) DEFAULT NULL, -- the tax rate on receiving for this line item (%)
+  `tax_value_bak` decimal(28,6) default NULL, -- the tax value for this line item
+  `tax_value_on_ordering` decimal(28,6) DEFAULT NULL, -- the tax value on ordering for this line item
+  `tax_value_on_receiving` decimal(28,6) DEFAULT NULL, -- the tax value on receiving for this line item
   `discount` float(6,4) default NULL, -- the discount for this line item (%)
   `budget_id` int(11) NOT NULL, -- the fund this order goes against (aqbudgets.budget_id)
   `budgetdate` date default NULL, -- not used? always NULL
