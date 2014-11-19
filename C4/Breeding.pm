@@ -373,6 +373,9 @@ sub ImportBreedingAuth {
     my $searchbreeding = $dbh->prepare("select import_record_id from import_auths where control_number=? and authorized_heading=?");
 
 #     $encoding = C4::Context->preference("marcflavour") unless $encoding;
+    my $marc_type = C4::Context->preference('marcflavour');
+    $marc_type .= 'AUTH' if ($marc_type eq 'UNIMARC');
+
     # fields used for import results
     my $imported=0;
     my $alreadyindb = 0;
@@ -382,7 +385,7 @@ sub ImportBreedingAuth {
     for (my $i=0;$i<=$#marcarray;$i++) {
         my ($marcrecord, $charset_result, $charset_errors);
         ($marcrecord, $charset_result, $charset_errors) =
-            MarcToUTF8Record($marcarray[$i]."\x1D", C4::Context->preference("marcflavour"), $encoding);
+            MarcToUTF8Record($marcarray[$i]."\x1D", $marc_type, $encoding);
 
         # Normalize the record so it doesn't have separated diacritics
         SetUTF8Flag($marcrecord);
@@ -483,6 +486,9 @@ sub Z3950SearchAuth {
     my $s = 0;
     my $query;
     my $nterms=0;
+
+    my $marc_type = C4::Context->preference('marcflavour');
+    $marc_type .= 'AUTH' if ($marc_type eq 'UNIMARC');
 
     if ($nameany) {
         $query .= " \@attr 1=1002 \"$nameany\" "; #Any name (this includes personal, corporate, meeting/conference authors, and author names in subject headings)
@@ -597,7 +603,7 @@ sub Z3950SearchAuth {
                             $marcdata   = $rec->raw();
 
                             my ($charset_result, $charset_errors);
-                            ($marcrecord, $charset_result, $charset_errors)= MarcToUTF8Record($marcdata, C4::Context->preference('marcflavour'), $encoding[$k]);
+                            ($marcrecord, $charset_result, $charset_errors)= MarcToUTF8Record($marcdata, $marc_type, $encoding[$k]);
 
                             my $heading;
                             my $heading_authtype_code;
