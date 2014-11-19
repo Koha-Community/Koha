@@ -3125,8 +3125,10 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `listprice` decimal(28,6) default NULL, -- the vendor price for this line item
   `datereceived` date default NULL, -- the date this order was received
   invoiceid int(11) default NULL, -- id of invoice
-  `freight` decimal(28,6) default NULL, -- shipping costs (not used)
-  `unitprice` decimal(28,6) default NULL, -- the actual cost entered when receiving this line item
+  `freight` decimal(28,6) DEFAULT NULL, -- shipping costs (not used)
+  `unitprice` decimal(28,6) DEFAULT NULL, -- the actual cost entered when receiving this line item
+  `unitprice_tax_excluded` decimal(28,6) default NULL, -- the unit price excluding tax (on receiving)
+  `unitprice_tax_included` decimal(28,6) default NULL, -- the unit price including tax (on receiving)
   `quantityreceived` smallint(6) NOT NULL default 0, -- the quantity that have been received so far
   `datecancellationprinted` date default NULL, -- the date the line item was deleted
   `cancellationreason` text default NULL, -- reason of cancellation
@@ -3135,10 +3137,15 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `purchaseordernumber` mediumtext, -- not used? always NULL
   `basketno` int(11) default NULL, -- links this order line to a specific basket (aqbasket.basketno)
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this order line was last modified
-  `rrp` decimal(13,2) default NULL, -- the replacement cost for this line item
-  `ecost` decimal(13,2) default NULL, -- the estimated cost for this line item
-  `gstrate` decimal(6,4) default NULL, -- the tax rate for this line item
-  `discount` float(6,4) default NULL, -- the discount for this line item
+  `rrp` decimal(13,2) DEFAULT NULL, -- the replacement cost for this line item
+  `rrp_tax_excluded` decimal(28,6) default NULL, -- the replacement cost excluding tax
+  `rrp_tax_included` decimal(28,6) default NULL, -- the replacement cost including tax
+  `ecost` decimal(13,2) DEFAULT NULL, -- the replacement cost for this line item
+  `ecost_tax_excluded` decimal(28,6) default NULL, -- the estimated cost excluding tax
+  `ecost_tax_included` decimal(28,6) default NULL, -- the estimated cost including tax
+  `tax_rate` decimal(6,4) DEFAULT NULL, -- the tax rate for this line item (%)
+  `tax_value` decimal(28,6) default NULL, -- the tax value for this line item
+  `discount` float(6,4) default NULL, -- the discount for this line item (%)
   `budget_id` int(11) NOT NULL, -- the fund this order goes against (aqbudgets.budget_id)
   `budgetdate` date default NULL, -- not used? always NULL
   `sort1` varchar(80) default NULL, -- statistical field
