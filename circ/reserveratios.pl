@@ -33,9 +33,10 @@ use C4::Biblio qw/GetMarcBiblio GetRecordValue GetFrameworkCode/;
 use C4::Acquisition qw/GetOrdersByBiblionumber/;
 
 my $input = new CGI;
-my $startdate = $input->param('from');
-my $enddate   = $input->param('to');
-my $ratio     = $input->param('ratio');
+my $startdate       = $input->param('from');
+my $enddate         = $input->param('to');
+my $ratio           = $input->param('ratio');
+my $include_ordered = $input->param('include_ordered');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -90,6 +91,7 @@ if ($enddate) {
     push @query_params, format_date_in_iso($enddate);
 }
 
+my $nfl_comparison = $include_ordered ? '<=' : '=';
 my $strsth =
 "SELECT reservedate,
         reserves.borrowernumber as borrowernumber,
@@ -116,7 +118,7 @@ my $strsth =
  LEFT JOIN items ON items.biblionumber=reserves.biblionumber 
  LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
  WHERE
- notforloan = 0 AND damaged = 0 AND itemlost = 0 AND withdrawn = 0
+ notforloan $nfl_comparison 0 AND damaged = 0 AND itemlost = 0 AND withdrawn = 0
  $sqldatewhere
 ";
 
@@ -177,6 +179,7 @@ $template->param(
     from            => $startdate,
     to              => $enddate,
     ratio           => $ratio,
+    include_ordered => $include_ordered,
     reserveloop     => \@reservedata,
 );
 

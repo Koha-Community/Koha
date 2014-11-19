@@ -89,20 +89,31 @@
 <form action="/cgi-bin/koha/circ/reserveratios.pl" method="post" >
 <fieldset class="brief">
 <h4>Refine results:</h4>
-<ol><li><label for="ratio">
-    Hold ratio:
-</label>
-<input type="text" size="5" id="ratio" name="ratio" value="[% ratio %]" /></li>
-<li><label for="from">
-    Start date:
-</label>
-<input type="text" size="10" id="from" name="from" value="[% from %]" class="datepickerfrom" />
-</li>
-<li><label for="to">
-    End date:
-</label>
-<input size="10" id="to" name="to" value="[% to %]" type="text" class="datepickerto" />
-</li></ol>
+<ol>
+    <li>
+        <label for="ratio">Hold ratio:</label>
+        <input type="text" size="5" id="ratio" name="ratio" value="[% ratio %]" />
+    <li>
+
+    <li>
+        <label for="include_ordered">Included ordered:</label>
+        [% IF include_ordered %]
+            <input id="include_ordered" name="include_ordered" type="checkbox" checked="checked"/>
+        [% ELSE %]
+            <input id="include_ordered" name="include_ordered" type="checkbox"/>
+        [% END %]
+    <li>
+
+    <li>
+        <label for="from">Start date:</label>
+        <input type="text" size="10" id="from" name="from" value="[% from %]" class="datepickerfrom" />
+    </li>
+
+    <li>
+        <label for="to">End date:</label>
+        <input size="10" id="to" name="to" value="[% to %]" type="text" class="datepickerto" />
+    </li>
+</ol>
 (inclusive)
 
 <fieldset class="action"><input type="submit" value="Go" class="submit"/></fieldset>
