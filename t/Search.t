@@ -18,16 +18,10 @@
 use Modern::Perl;
 
 use Test::More tests => 3;
-use Test::MockModule;
-use DBD::Mock;
+use t::lib::Mocks;
 
 # Mock the DB connexion and C4::Context
-my $context = new Test::MockModule('C4::Context');
-$context->mock( '_new_dbh', sub {
-        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-          || die "Cannot create handle: $DBI::errstr\n";
-        return $dbh;
-});
+my $context =  t::lib::Mocks::mock_dbh;
 
 use_ok('C4::Search');
 can_ok('C4::Search',
