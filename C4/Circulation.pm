@@ -1774,6 +1774,18 @@ sub AddReturn {
     }
 
     my $item = GetItem($itemnumber) or die "GetItem($itemnumber) failed";
+
+    if ( $item->{'location'} eq 'PROC' ) {
+        if ( C4::Context->preference("InProcessingToShelvingCart") ) {
+            $item->{'location'} = 'CART';
+        }
+        else {
+            $item->{location} = $item->{permanent_location};
+        }
+
+        ModItem( $item, $item->{'biblionumber'}, $item->{'itemnumber'} );
+    }
+
         # full item data, but no borrowernumber or checkout info (no issue)
         # we know GetItem should work because GetItemnumberFromBarcode worked
     my $hbr      = GetBranchItemRule($item->{'homebranch'}, $item->{'itype'})->{'returnbranch'} || "homebranch";

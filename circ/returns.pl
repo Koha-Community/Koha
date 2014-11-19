@@ -237,14 +237,6 @@ if ($barcode) {
     $barcode = barcodedecode($barcode) if C4::Context->preference('itemBarcodeInputFilter');
     $itemnumber = GetItemnumberFromBarcode($barcode);
 
-    if ( C4::Context->preference("InProcessingToShelvingCart") ) {
-        my $item = GetItem( $itemnumber );
-        if ( $item->{'location'} eq 'PROC' ) {
-            $item->{'location'} = 'CART';
-            ModItem( $item, $item->{'biblionumber'}, $item->{'itemnumber'} );
-        }
-    }
-
 #
 # save the return
 #
