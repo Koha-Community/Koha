@@ -55,6 +55,7 @@
           <th>Items</th>
           <th>Hold ratio</th>
           <th>Title</th>
+          <th>Home libraries</th>
           <th>Holding libraries</th>
           <th>Location</th>
           <th>Itype</th>
@@ -70,7 +71,8 @@
             <td><p class="ratiolimit">[% reserveloo.thisratio %]</p></td>
             <td> [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %][% reserveloo.title |html %] [% IF ( reserveloo.subtitle ) %][% FOREACH subtitl IN reserveloo.subtitle %][% subtitl.subfield %][% END %][% END %]</a>[% IF ( reserveloo.author ) %] by [% reserveloo.author %][% END %]
             </td>
-            <td><p>[% reserveloo.listbranch %]</p></td>
+            <td><p>[% reserveloo.homebranch_list %]</p></td>
+            <td><p>[% reserveloo.holdingbranch_list %]</p></td>
             <td><p>[% reserveloo.location %]</p></td>
             <td><p>[% reserveloo.itype %]</p></td>
             <td><p>[% reserveloo.listcall %]</p></td>

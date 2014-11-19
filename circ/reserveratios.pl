@@ -102,8 +102,10 @@ my $strsth =
         items.itemnumber,
         GROUP_CONCAT(DISTINCT items.itemcallnumber 
         		ORDER BY items.itemnumber SEPARATOR '<br/>') as listcall,
+        GROUP_CONCAT(DISTINCT homebranch
+            ORDER BY items.itemnumber SEPARATOR '<br/>') as homebranch_list,
         GROUP_CONCAT(DISTINCT holdingbranch 
-        		ORDER BY items.itemnumber SEPARATOR '<br/>') as listbranch,
+            ORDER BY items.itemnumber SEPARATOR '<br/>') as holdingbranch_list,
         GROUP_CONCAT(DISTINCT items.location 
         		ORDER BY items.itemnumber SEPARATOR '<br/>') as l_location,
         GROUP_CONCAT(DISTINCT items.itype 
@@ -144,26 +146,27 @@ while ( my $data = $sth->fetchrow_hashref ) {
     push(
         @reservedata,
         {
-            reservedate      => format_date( $data->{reservedate} ),
-            priority         => $data->{priority},
-            name             => $data->{borrower},
-            title            => $data->{title},
-            subtitle            => $data->{subtitle},
-            author           => $data->{author},
-            itemnum          => $data->{itemnumber},
-            biblionumber     => $data->{biblionumber},
-            holdingbranch    => $data->{holdingbranch},
-            listbranch       => $data->{listbranch},
-            branch           => $data->{branch},
-            itemcallnumber   => $data->{itemcallnumber},
-            location         => $data->{l_location},
-            itype            => $data->{l_itype},
-            reservecount     => $data->{reservecount},
-            itemcount        => $data->{itemcount},
-            ratiocalc        => sprintf("%.0d", $ratio_atleast1 ? ($thisratio / $ratio) : $thisratio),
-            thisratio        => sprintf("%.2f", $thisratio),
-            thisratio_atleast1 => ($thisratio >= 1) ? 1 : 0,
-            listcall         => $data->{listcall}    
+            reservedate        => format_date( $data->{reservedate} ),
+            priority           => $data->{priority},
+            name               => $data->{borrower},
+            title              => $data->{title},
+            subtitle           => $data->{subtitle},
+            author             => $data->{author},
+            itemnum            => $data->{itemnumber},
+            biblionumber       => $data->{biblionumber},
+            holdingbranch      => $data->{holdingbranch},
+            homebranch_list    => $data->{homebranch_list},
+            holdingbranch_list => $data->{holdingbranch_list},
+            branch             => $data->{branch},
+            itemcallnumber     => $data->{itemcallnumber},
+            location           => $data->{l_location},
+            itype              => $data->{l_itype},
+            reservecount       => $data->{reservecount},
+            itemcount          => $data->{itemcount},
+            ratiocalc          => sprintf( "%.0d", $ratio_atleast1 ? ( $thisratio / $ratio ) : $thisratio ),
+            thisratio => sprintf( "%.2f", $thisratio ),
+            thisratio_atleast1 => ( $thisratio >= 1 ) ? 1 : 0,
+            listcall => $data->{listcall}
         }
     );
 }
