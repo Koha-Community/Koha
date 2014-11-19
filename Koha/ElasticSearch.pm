@@ -86,8 +86,9 @@ sub get_elasticsearch_params {
     my ($self) = @_;
 
     # Copy the hash so that we're not modifying the original
-    my $es = { %{ C4::Context->config('elasticsearch') } };
-    die "No 'elasticsearch' block is defined in koha-conf.xml.\n" if ( !$es );
+    my $conf = C4::Context->config('elasticsearch');
+    die "No 'elasticsearch' block is defined in koha-conf.xml.\n" if ( !$conf );
+    my $es = { %{ $conf } };
 
     # Helpfully, the multiple server lines end up in an array for us anyway
     # if there are multiple ones, but not if there's only one.
