@@ -50,6 +50,7 @@ sub new {
     my $file = "Koha/SearchEngine/${engine}/QueryBuilder.pm";
     my $class = "Koha::SearchEngine::${engine}::QueryBuilder";
     require $file;
+    shift @_;
     return $class->new(@_);
 }
 
