@@ -113,13 +113,14 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_0_0->{tax_value},
+                got      => $order_0_0->{tax_value_on_ordering},
                 expected => 7.38,
                 conf     => '0 0',
                 field    => 'tax_value'
             }
         );
 
+        #
         $order_0_0 = C4::Acquisition::populate_order_with_prices(
             {
                 order        => $order_0_0,
@@ -146,7 +147,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_0_0->{tax_value},
+                got      => $order_0_0->{tax_value_on_receiving},
                 expected => 7.38,
                 conf     => '0 0',
                 field    => 'tax_value'
@@ -221,7 +222,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_1->{tax_value},
+                got      => $order_1_1->{tax_value_on_ordering},
                 expected => 7.03,
                 conf     => '1 1',
                 field    => 'tax_value'
@@ -254,7 +255,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_1->{tax_value},
+                got      => $order_1_1->{tax_value_on_receiving},
                 expected => 7.03,
                 conf     => '1 1',
                 field    => 'tax_value'
@@ -329,7 +330,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_0->{tax_value},
+                got      => $order_1_0->{tax_value_on_ordering},
                 expected => 7.03,
                 conf     => '1 0',
                 field    => 'tax_value'
@@ -362,7 +363,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_0->{tax_value},
+                got      => $order_1_0->{tax_value_on_receiving},
                 expected => 7.03,
                 conf     => '1 0',
                 field    => 'tax_value'
@@ -437,7 +438,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_0_1->{tax_value},
+                got      => $order_0_1->{tax_value_on_ordering},
                 expected => 7.38,
                 conf     => '0 1',
                 field    => 'tax_value'
@@ -470,7 +471,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_0_1->{tax_value},
+                got      => $order_0_1->{tax_value_on_receiving},
                 expected => 7.38,
                 conf     => '0 1',
                 field    => 'tax_value'

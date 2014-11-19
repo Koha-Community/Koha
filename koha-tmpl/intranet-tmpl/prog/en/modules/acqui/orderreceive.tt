@@ -263,7 +263,6 @@
     <input type="hidden" name="invoiceid" value="[% invoiceid %]" />
     <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
     <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
-    <input type="hidden" name="tax_rate" value="[% tax_rate %]" />
 	</div>
 	<div class="yui-u">
     <fieldset class="rows">
@@ -330,14 +329,29 @@
           [% END %][%# IF (AcqCreateItemReceiving) %]
 		</li>
 
+        [% IF ( gst_values ) %]
+            <li>
+                <label for="tax_rate">Tax rate: </label>
+                <select name="tax_rate" id="tax_rate">
+                [% FOREACH gst IN gst_values %]
+                    [% IF gst.option == tax_rate %]
+                        <option value="[% gst.option %]" selected="selected">[% gst.option * 100 | format("%.1f") %]%</option>
+                    [% ELSE %]
+                        <option value="[% gst.option %]">[% gst.option * 100 | format("%.1f") %]%</option>
+                    [% END %]
+                [% END %]
+                </select>
+            </li>
+        [% ELSE %]
+            <input type="hidden" name="tax_rate" value="0" />
+        [% END %]
+
         <li><label for="rrp">Replacement cost: </label>[% rrp | $Price %]</li>
         <li><label for="ecost">Budgeted cost: </label>[% ecost | $Price %]</li>
-        <li><label for="cost">Actual cost:</label>
-        [% IF ( unitprice ) %]
-             <input type="text" size="20" name="cost" id="cost" value="[% unitprice | $Price %]" />
-        [% ELSE %]
-             <input type="text" size="20" name="cost" id="cost" value="[% ecost | $Price %]" />
-        [% END %]</li>
+        <li>
+            <label for="unitprice">Actual cost:</label>
+            <input type="text" size="20" name="unitprice" id="unitprice" value="[% unitprice | $Price %]" />
+        </li>
         <li><label for="order_internalnote">Internal note: </label><textarea name="order_internalnote" width="40" rows="8" >[% order_internalnote %]</textarea></li>
         [% IF order_vendornote %]
             <li><label for="order_vendornote">Vendor note: </label><span>[% order_vendornote %]</span></li>

@@ -47,7 +47,7 @@ my $ordernumber      = $input->param('ordernumber');
 my $origquantityrec  = $input->param('origquantityrec');
 my $quantityrec      = $input->param('quantityrec');
 my $quantity         = $input->param('quantity');
-my $unitprice        = $input->param('cost');
+my $unitprice        = $input->param('unitprice');
 my $datereceived     = $input->param('datereceived'),
 my $invoiceid        = $input->param('invoiceid');
 my $invoice          = GetInvoice($invoiceid);
@@ -81,6 +81,7 @@ if ($quantityrec > $origquantityrec ) {
     }
 
     $order->{order_internalnote} = $input->param("order_internalnote");
+    $order->{tax_rate_on_receiving} = $input->param("tax_rate");
     $order->{unitprice} = $unitprice;
 
     my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });

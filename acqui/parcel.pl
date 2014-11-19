@@ -111,7 +111,6 @@ unless( $invoiceid and $invoice->{invoiceid} ) {
 
 my $booksellerid = $invoice->{booksellerid};
 my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
-my $gst = $bookseller->{tax_rate} // C4::Context->preference("gist") // 0;
 
 my @orders        = @{ $invoice->{orders} };
 my $countlines    = scalar @orders;
@@ -147,6 +146,9 @@ for my $order ( @orders ) {
         $line{holds} += scalar( @$holds );
     }
     $line{budget} = GetBudgetByOrderNumber( $line{ordernumber} );
+
+    $line{tax_value} = $line{tax_value_on_receiving};
+    $line{tax_rate} = $line{tax_rate_on_receiving};
     $foot{$line{tax_rate}}{tax_rate} = $line{tax_rate};
     $foot{$line{tax_rate}}{tax_value} += $line{tax_value};
     $total_tax_excluded += $line{unitprice_tax_excluded} * $line{quantity};

@@ -1443,12 +1443,12 @@ sub ModReceiveOrder {
         | if defined $order->{unitprice};
 
         $query .= q|
-            , rrp = ?, rrp_tax_included = ?, rrp_tax_excluded = ?
-        | if defined $order->{rrp};
+            ,tax_value_on_receiving = ?
+        | if defined $order->{tax_value_on_receiving};
 
         $query .= q|
-            , ecost = ?, ecost_tax_included = ?, ecost_tax_excluded = ?
-        | if defined $order->{ecost};
+            ,tax_rate_on_receiving = ?
+        | if defined $order->{tax_rate_on_receiving};
 
         $query .= q|
             , order_internalnote = ?
@@ -1462,12 +1462,15 @@ sub ModReceiveOrder {
         if ( defined $order->{unitprice} ) {
             push @params, $order->{unitprice}, $order->{unitprice_tax_included}, $order->{unitprice_tax_excluded};
         }
-        if ( defined $order->{rrp} ) {
-            push @params, $order->{rrp}, $order->{rrp_tax_included}, $order->{rrp_tax_excluded};
+
+        if ( defined $order->{tax_value_on_receiving} ) {
+            push @params, $order->{tax_value_on_receiving};
         }
-        if ( defined $order->{ecost} ) {
-            push @params, $order->{ecost}, $order->{ecost_tax_included}, $order->{ecost_tax_excluded};
+
+        if ( defined $order->{tax_rate_on_receiving} ) {
+            push @params, $order->{tax_rate_on_receiving};
         }
+
         if ( defined $order->{order_internalnote} ) {
             push @params, $order->{order_internalnote};
         }
@@ -2864,12 +2867,13 @@ sub populate_order_with_prices {
     $discount /= 100 if $discount > 1;
 
     if ($ordering) {
+        $order->{tax_rate_on_ordering} //= $order->{tax_rate};
         if ( $bookseller->{listincgst} ) {
             # The user entered the rrp tax included
             $order->{rrp_tax_included} = $order->{rrp};
 
             # rrp tax excluded = rrp tax included / ( 1 + tax rate )
-            $order->{rrp_tax_excluded} = $order->{rrp_tax_included} / ( 1 + $order->{tax_rate} );
+            $order->{rrp_tax_excluded} = $order->{rrp_tax_included} / ( 1 + $order->{tax_rate_on_ordering} );
 
             # ecost tax excluded = rrp tax excluded * ( 1 - discount )
             $order->{ecost_tax_excluded} = $order->{rrp_tax_excluded} * ( 1 - $discount );
@@ -2882,7 +2886,7 @@ sub populate_order_with_prices {
             $order->{rrp_tax_excluded} = $order->{rrp};
 
             # rrp tax included = rrp tax excluded * ( 1 - tax rate )
-            $order->{rrp_tax_included} = $order->{rrp_tax_excluded} * ( 1 + $order->{tax_rate} );
+            $order->{rrp_tax_included} = $order->{rrp_tax_excluded} * ( 1 + $order->{tax_rate_on_ordering} );
 
             # ecost tax excluded = rrp tax excluded * ( 1 - discount )
             $order->{ecost_tax_excluded} = $order->{rrp_tax_excluded} * ( 1 - $discount );
@@ -2890,15 +2894,17 @@ sub populate_order_with_prices {
             # ecost tax included = rrp tax excluded * ( 1 - tax rate ) * ( 1 - discount )
             $order->{ecost_tax_included} =
                 $order->{rrp_tax_excluded} *
-                ( 1 + $order->{tax_rate} ) *
+                ( 1 + $order->{tax_rate_on_ordering} ) *
                 ( 1 - $discount );
         }
 
         # tax value = quantity * ecost tax excluded * tax rate
-        $order->{tax_value} = $order->{quantity} * $order->{ecost_tax_excluded} * $order->{tax_rate};
+        $order->{tax_value_on_ordering} =
+            $order->{quantity} * $order->{ecost_tax_excluded} * $order->{tax_rate_on_ordering};
     }
 
     if ($receiving) {
+        $order->{tax_rate_on_receiving} //= $order->{tax_rate};
         if ( $bookseller->{invoiceincgst} ) {
             # Trick for unitprice. If the unit price rounded value is the same as the ecost rounded value
             # we need to keep the exact ecost value
@@ -2910,7 +2916,7 @@ sub populate_order_with_prices {
             $order->{unitprice_tax_included} = $order->{unitprice};
 
             # unit price tax excluded = unit price tax included / ( 1 + tax rate )
-            $order->{unitprice_tax_excluded} = $order->{unitprice_tax_included} / ( 1 + $order->{tax_rate} );
+            $order->{unitprice_tax_excluded} = $order->{unitprice_tax_included} / ( 1 + $order->{tax_rate_on_receiving} );
         }
         else {
             # Trick for unitprice. If the unit price rounded value is the same as the ecost rounded value
@@ -2922,12 +2928,13 @@ sub populate_order_with_prices {
             # The user entered the unit price tax excluded
             $order->{unitprice_tax_excluded} = $order->{unitprice};
 
+
             # unit price tax included = unit price tax included * ( 1 + tax rate )
-            $order->{unitprice_tax_included} = $order->{unitprice_tax_excluded} * ( 1 + $order->{tax_rate} );
+            $order->{unitprice_tax_included} = $order->{unitprice_tax_excluded} * ( 1 + $order->{tax_rate_on_receiving} );
         }
 
         # tax value = quantity * unit price tax excluded * tax rate
-        $order->{tax_value} = $order->{quantity} * $order->{unitprice_tax_excluded} * $order->{tax_rate};
+        $order->{tax_value_on_receiving} = $order->{quantity} * $order->{unitprice_tax_excluded} * $order->{tax_rate_on_receiving};
     }
 
     return $order;

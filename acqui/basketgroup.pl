@@ -168,6 +168,8 @@ sub printbasketgrouppdf{
                 croak $@;
             }
 
+            $ord->{tax_value} = $ord->{tax_value_on_ordering};
+            $ord->{tax_rate} = $ord->{tax_rate_on_ordering};
             $ord->{total_tax_included} = $ord->{ecost_tax_included} * $ord->{quantity};
             $ord->{total_tax_excluded} = $ord->{ecost_tax_excluded} * $ord->{quantity};
 

@@ -152,32 +152,29 @@ if ($AcqCreateItem eq 'receiving') {
 }
 
 $order->{quantityreceived} = '' if $order->{quantityreceived} == 0;
-$order->{unitprice} = '' if $order->{unitprice} == 0;
 
-my $rrp;
-my $ecost;
-my $unitprice;
-if ( $bookseller->{listincgst} ) {
-    if ( $bookseller->{invoiceincgst} ) {
-        $rrp = $order->{rrp};
-        $ecost = $order->{ecost};
-        $unitprice = $order->{unitprice};
-    } else {
-        $rrp = $order->{rrp} / ( 1 + $order->{tax_rate} );
-        $ecost = $order->{ecost} / ( 1 + $order->{tax_rate} );
-        $unitprice = $order->{unitprice} / ( 1 + $order->{tax_rate} );
+my $unitprice = $order->{unitprice};
+my ( $rrp, $ecost );
+if ( $bookseller->{invoiceincgst} ) {
+    $rrp = $order->{rrp_tax_included};
+    $ecost = $order->{ecost_tax_included};
+    unless ( $unitprice != 0 and defined $unitprice) {
+        $unitprice = $order->{ecost_tax_included};
     }
 } else {
-    if ( $bookseller->{invoiceincgst} ) {
-        $rrp = $order->{rrp} * ( 1 + $order->{tax_rate} );
-        $ecost = $order->{ecost} * ( 1 + $order->{tax_rate} );
-        $unitprice = $order->{unitprice} * ( 1 + $order->{tax_rate} );
-    } else {
-        $rrp = $order->{rrp};
-        $ecost = $order->{ecost};
-        $unitprice = $order->{unitprice};
+    $rrp = $order->{rrp_tax_excluded};
+    $ecost = $order->{ecost_tax_excluded};
+    unless ( $unitprice != 0 and defined $unitprice) {
+        $unitprice = $order->{ecost_tax_excluded};
     }
- }
+}
+
+my $tax_rate;
+if( defined $order->{tax_rate_on_receiving} ) {
+    $tax_rate = $order->{tax_rate_on_receiving} + 0.0;
+} else {
+    $tax_rate = $order->{tax_rate_on_ordering} + 0.0;
+}
 
 my $suggestion = GetSuggestionInfoFromBiblionumber($order->{biblionumber});
 
@@ -187,6 +184,11 @@ my $member = GetMember( borrowernumber => $authorisedby );
 my $budget = GetBudget( $order->{budget_id} );
 
 my $datereceived = $order->{datereceived} ? dt_from_string( $order->{datereceived} ) : dt_from_string;
+
+# get option values for gist syspref
+my @gst_values = map {
+    option => $_ + 0.0
+}, split( '\|', C4::Context->preference("gist") );
 
 $template->param(
     AcqCreateItem         => $AcqCreateItem,
@@ -206,8 +208,10 @@ $template->param(
     quantity              => $order->{'quantity'},
     quantityreceivedplus1 => $order->{'quantityreceived'} + 1,
     quantityreceived      => $order->{'quantityreceived'},
-    rrp                   => sprintf( "%.2f", $rrp ),
-    ecost                 => sprintf( "%.2f", $ecost ),
+    rrp                   => $rrp,
+    ecost                 => $ecost,
+    unitprice             => $unitprice,
+    tax_rate              => $tax_rate,
     memberfirstname       => $member->{firstname} || "",
     membersurname         => $member->{surname} || "",
     invoiceid             => $invoice->{invoiceid},
@@ -218,6 +222,7 @@ $template->param(
     suggestionid          => $suggestion->{suggestionid},
     surnamesuggestedby    => $suggestion->{surnamesuggestedby},
     firstnamesuggestedby  => $suggestion->{firstnamesuggestedby},
+    gst_values            => \@gst_values,
 );
 
 my $borrower = GetMember( 'borrowernumber' => $loggedinuser );
@@ -254,15 +259,6 @@ foreach my $period (@$periods) {
 }
 
 $template->{'VARS'}->{'budget_loop'} = \@budget_loop;
-
-# regardless of the content of $unitprice e.g 0 or '' or any string will return in these cases 0.00
-# and the 'IF' in the .tt will show 0.00 and not 'ecost' (see BZ 7129)
-# So if $unitprice == 0 we don't create unitprice
-if ( $unitprice != 0) {
-    $template->param(
-        unitprice             => sprintf( "%.2f", $unitprice),
-    );
-}
 
 my $op = $input->param('op');
 if ($op and $op eq 'edit'){

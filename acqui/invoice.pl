@@ -127,6 +127,9 @@ foreach my $order (@$orders) {
     $line->{total_tax_excluded} = Koha::Number::Price->new( $line->{unitprice_tax_excluded} * $line->{quantity} )->format;
     $line->{total_tax_included} = Koha::Number::Price->new( $line->{unitprice_tax_included} * $line->{quantity} )->format;
 
+    $line->{tax_value} = $line->{tax_value_on_receiving};
+    $line->{tax_rate} = $line->{tax_rate_on_receiving};
+
     $foot{$$line{tax_rate}}{tax_rate} = $$line{tax_rate};
     $foot{$$line{tax_rate}}{tax_value} += $$line{tax_value};
     $total_tax_value += $$line{tax_value};
