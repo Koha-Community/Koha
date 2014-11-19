@@ -134,7 +134,7 @@ for my $order ( @orders ) {
         $order->{ecost}     = $order->{ecostgsti};
         $order->{unitprice} = $order->{unitpricegsti};
     }
-    $order->{total} = $order->{ecost} * $order->{quantity};
+    $order->{total} = $order->{unitprice} * $order->{quantity};
 
     my %line = %{ $order };
     $line{invoice} = $invoice->{invoicenumber};
