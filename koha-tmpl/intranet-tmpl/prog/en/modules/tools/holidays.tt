@@ -157,6 +157,10 @@
         $("#branch").change(function(){
             changeBranch();
         });
+        $("#holidayweeklyrepeatable>tbody>tr").each(function(){
+            var first_td = $(this).find('td').first();
+            first_td.html(weekdays[first_td.html()]);
+        });
         $("#holidayweeklyrepeatable").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sDom": 't',
             "bPaginate": false
@@ -463,10 +467,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 <tbody>
   [% FOREACH WEEK_DAYS_LOO IN WEEK_DAYS_LOOP %]
   <tr>
-  <td>
-<script type="text/javascript">
-  document.write(weekdays[ [% WEEK_DAYS_LOO.KEY %]]);
-</script>
+  <td>[% WEEK_DAYS_LOO.KEY %]</td>
   </td> 
   <td>[% WEEK_DAYS_LOO.TITLE %]</td> 
   <td>[% WEEK_DAYS_LOO.DESCRIPTION %]</td> 
