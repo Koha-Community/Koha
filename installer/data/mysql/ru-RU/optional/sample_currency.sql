@@ -1,5 +1,3 @@
-TRUNCATE currency;
-
 INSERT INTO `currency` (`currency`, `symbol`, `timestamp`, `rate`, active) VALUES ('CAD','$','2009-01-23 08:15:20',6.157690, 0);
 
 INSERT INTO `currency` (`currency`, `symbol`, `timestamp`, `rate`, active) VALUES ('EUR','€','2009-01-23 08:15:20',9.852920, 0);
