@@ -92,43 +92,34 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 	<div class="yui-g">
     <div class="yui-u first">
 	    <fieldset class="rows">
-         <ol><li><label for="searchtitle">Title: </label> <input type="text" id="searchtitle"  name="title" value="[% title |html %]" class="focus" /></li>
-		 <li><label for="isbn">ISBN: </label> <input type="text" id="isbn" name="isbn" value="[% isbn %]" /></li>
-         <li><label for="lccall">LC call number: </label> <input type="text" id="lccall" name="lccall" value="" /></li>
-         <li><label for="controlnumber">Control no.: </label> <input type="text" id="controlnumber" name="controlnumber" value="" /></li>
-</ol>
-		</fieldset>
-	    </div>
-    <div class="yui-u">
-    <fieldset class="rows">
-        <ol>
-        <li><label for="author">Author: </label> <input type="text" id="author" name="author" value="[% author %]" /></li>
-         <li><label for="issn">ISSN: </label> <input type="text" id="issn" name="issn" value="[% issn %]" /></li>
-         <li> <label for="subject">Subject heading: </label> <input type="text" id="subject" name="subject" value="" /></li>
-		 <li><label for="dewey">Dewey: </label> <input type="text" id="dewey" name="dewey" value="" /></li></ol></fieldset>
-	     <fieldset class="rows" >
-                 <ol>
-                     <li>
-                         <label for="frameworkcode" >Select used MARC framework:</label>
-                         <select id="frameworkcode" name="frameworkcode" >
-                             <option value="">Default</option>
-                         [% FOREACH frameworkcodeloo IN frameworkcodeloop %]
-                             [% IF ( frameworkcodeloo.active ) %]
-                                 <option value="[% frameworkcodeloo.value %]" selected="selected" >[% frameworkcodeloo.frameworktext %]</option>
-                             [% ELSE %]
-                                 <option value="[% frameworkcodeloo.value %]" >[% frameworkcodeloo.frameworktext %]</option>
-                             [% END %]
-                         [% END %]
-                         </select>
-                     </li>
-                 </ol>
-             </fieldset>
+         <ol>
+             <li><label for="searchtitle">Title: </label> <input type="text" id="searchtitle"  name="title" value="[% title |html %]" class="focus" /></li>
+	     <li><label for="isbn">ISBN: </label> <input type="text" id="isbn" name="isbn" value="[% isbn %]" /></li>
+             <li><label for="lccall">LC call number: </label> <input type="text" id="lccall" name="lccall" value="" /></li>
+             <li><label for="controlnumber">Control no.: </label> <input type="text" id="controlnumber" name="controlnumber" value="" /></li>
+             <li><label for="author">Author: </label> <input type="text" id="author" name="author" value="[% author %]" /></li>
+             <li><label for="issn">ISSN: </label> <input type="text" id="issn" name="issn" value="[% issn %]" /></li>
+             <li> <label for="subject">Subject heading: </label> <input type="text" id="subject" name="subject" value="" /></li>
+	     <li><label for="dewey">Dewey: </label> <input type="text" id="dewey" name="dewey" value="" /></li>
+             <li><label for="frameworkcode" >Select MARC framework:</label>
+             <select id="frameworkcode" name="frameworkcode" >
+             <option value="">Default</option>
+                 [% FOREACH frameworkcodeloo IN frameworkcodeloop %]
+                    [% IF ( frameworkcodeloo.active ) %]
+                        <option value="[% frameworkcodeloo.value %]" selected="selected" >[% frameworkcodeloo.frameworktext %]</option>
+                    [% ELSE %]
+                        <option value="[% frameworkcodeloo.value %]" >[% frameworkcodeloo.frameworktext %]</option>
+                    [% END %]
+                 [% END %]
+              </select>
+              </li>
+         </ol>
+    </fieldset>
     <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
     <input type="hidden" name="basketno" value="[% basketno %]" />
     <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
 	    </div>
-</div>
-<div class="yui-g">
+<div class="yui-u second">
 <h2>Search targets <span style="display: inline; font-size: 70%; padding-left: 1em;"><span class="checkall"><a id="CheckAll" href="#">Select all</a></span><span class="clearall"><a id="CheckNone" href="#">Clear all</a></span></span></h2>
 
     [% FOREACH serverloo IN serverloop %]
@@ -142,8 +133,10 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 
         </p>
     [% END %]
-    <fieldset class="action"><input type="submit"  class="submit" value="Search" onclick="cursor :'wait'"/> <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Cancel</a></fieldset>
     </div>
+    <fieldset class="action"><input type="submit"  class="submit" value="Search" onclick="cursor :'wait'"/> <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Cancel</a></fieldset>
+
+</div>
     </form>
 
 
