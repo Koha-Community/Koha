@@ -9616,17 +9616,21 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.19.00.XXX";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do(q{
-        UPDATE borrowers SET userid = NULL where userid = ""
-    });
+    my ($count) = $dbh->selectrow_array("SELECT COUNT(*) FROM borrowers GROUP BY userid HAVING COUNT(userid) > 1");
 
-    $dbh->do(q{
-        ALTER TABLE borrowers
-            DROP INDEX userid ,
-            ADD UNIQUE userid (userid)
-    });
+    if ( $count ) {
+        print "Upgrade to $DBversion done (Bug 1861 - Unique patrons logins not (totally) enforced) FAILED!\n";
+        print "Your database has users with duplicate user logins. Please have your administrator deduplicate your user logins.\n";
+        print "Afterward, your Koha administrator should execute the following database query: ALTER TABLE borrowers DROP INDEX userid, ADD UNIQUE userid (userid)";
+    } else {
+        $dbh->do(q{
+            ALTER TABLE borrowers
+                DROP INDEX userid ,
+                ADD UNIQUE userid (userid)
+        });
+        print "Upgrade to $DBversion done (Bug 1861 - Unique patrons logins not (totally) enforced)\n";
+    }
 
-    print "Upgrade to $DBversion done (Bug 1861 - Unique patrons logins not (totally) enforced)\n";
     SetVersion($DBversion);
 }
 
