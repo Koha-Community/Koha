@@ -271,11 +271,13 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $checkitem      = undef;
     my $found          = undef;
 
-    my $datedue = AddIssue( $renewing_borrower, $barcode);
-    is (defined $datedue, 1, "Item 1 checked out, due date: $datedue");
+    my $issue = AddIssue( $renewing_borrower, $barcode);
+    my $datedue = dt_from_string( $issue->date_due() );
+    is (defined $issue->date_due(), 1, "Item 1 checked out, due date: " . $issue->date_due() );
 
-    my $datedue2 = AddIssue( $renewing_borrower, $barcode2);
-    is (defined $datedue2, 1, "Item 2 checked out, due date: $datedue2");
+    my $issue2 = AddIssue( $renewing_borrower, $barcode2);
+    $datedue = dt_from_string( $issue->date_due() );
+    is (defined $issue2, 1, "Item 2 checked out, due date: " . $issue2->date_due());
 
     my $borrowing_borrowernumber = GetItemIssue($itemnumber)->{borrowernumber};
     is ($borrowing_borrowernumber, $renewing_borrowernumber, "Item checked out to $renewing_borrower->{firstname} $renewing_borrower->{surname}");
@@ -495,8 +497,10 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $two_days_ahead = DateTime->today(time_zone => C4::Context->tz())->add( days => 2 );
     my $today = DateTime->today(time_zone => C4::Context->tz());
 
-    my $datedue  = AddIssue( $a_borrower, $barcode, $yesterday );
-    my $datedue2 = AddIssue( $a_borrower, $barcode2, $two_days_ahead );
+    my $issue = AddIssue( $a_borrower, $barcode, $yesterday );
+    my $datedue = dt_from_string( $issue->date_due() );
+    my $issue2 = AddIssue( $a_borrower, $barcode2, $two_days_ahead );
+    my $datedue2 = dt_from_string( $issue->date_due() );
 
     my $upcoming_dues;
 
@@ -518,7 +522,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 
     # Bug 11218 - Due notices not generated - GetUpcomingDueIssues needs to select due today items as well
 
-    my $datedue3 = AddIssue( $a_borrower, $barcode3, $today );
+    my $issue3 = AddIssue( $a_borrower, $barcode3, $today );
 
     $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => -1 } );
     is ( scalar ( @$upcoming_dues), 0, "Overdues can not be selected" );

@@ -754,6 +754,10 @@ No patron matched <span class="ex">[% message %]</span>
 
 </div>
 </div>
+[% IF ( issue ) %]
+    <div class="dialog message">[% issue.item.biblio.title %] ([% issue.item.barcode %]) due on [% issue.date_due | $KohaDates %]</div>
+[% END %]
+
 
 <div class="yui-g"><div id="patronlists" class="toptabs">
 
