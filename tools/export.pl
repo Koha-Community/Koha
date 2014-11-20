@@ -33,7 +33,6 @@ use C4::Record;
 my $query = new CGI;
 
 my $clean;
-my $output_format;
 my $dont_export_items;
 my $deleted_barcodes;
 my $timestamp;
@@ -44,7 +43,7 @@ my $op       = $query->param("op")       || '';
 my $filename = $query->param("filename") || 'koha.mrc';
 my $dbh      = C4::Context->dbh;
 my $marcflavour = C4::Context->preference("marcflavour");
-my $format = $query->param("format") || $query->param("output_format") || 'iso2709';
+my $output_format = $query->param("format") || $query->param("output_format") || 'iso2709';
 
 # Checks if the script is called from commandline
 my $commandline = not defined $ENV{GATEWAY_INTERFACE};
@@ -94,7 +93,6 @@ _USAGE_
     }
 
     # Default parameters values :
-    $output_format     ||= 'marc';
     $timestamp         ||= '';
     $dont_export_items ||= 0;
     $deleted_barcodes  ||= 0;
@@ -113,6 +111,11 @@ else {
     $filename =~ s/(\r|\n)//;
 
 }
+
+# Default value for output_format is 'iso2709'
+$output_format ||= 'iso2709';
+# Retrocompatibility for the format parameter
+$output_format = 'iso2709' if $output_format eq 'marc';
 
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
@@ -142,7 +145,7 @@ if (   C4::Context->preference("IndependentBranches")
 my $backupdir = C4::Context->config('backupdir');
 
 if ( $op eq "export" ) {
-    if ( $format eq "iso2709" or $format eq "xml" ) {
+    if ( $output_format eq "iso2709" or $output_format eq "xml" ) {
         my $charset  = 'utf-8';
         my $mimetype = 'application/octet-stream';
         binmode STDOUT, ':encoding(UTF-8)';
@@ -163,8 +166,6 @@ if ( $op eq "export" ) {
         ) unless ($commandline);
 
         $record_type = $query->param("record_type") unless ($commandline);
-        $output_format = $query->param("output_format") || 'marc'
-          unless ($commandline);
         my $export_remove_fields = $query->param("export_remove_fields");
         my @biblionumbers      = $query->param("biblionumbers");
         my @itemnumbers        = $query->param("itemnumbers");
@@ -433,7 +434,7 @@ if ( $op eq "export" ) {
 
         exit;
     }
-    elsif ( $format eq "csv" ) {
+    elsif ( $output_format eq "csv" ) {
         my @biblionumbers = uniq $query->param("biblionumbers");
         my @itemnumbers   = $query->param("itemnumbers");
         my $output =
