@@ -19,6 +19,8 @@ use C4::Circulation;
 use C4::Members;
 use C4::Reserves qw(ModReserveFill);
 use C4::Debug;
+use Koha::DateUtils;
+
 use parent qw(C4::SIP::ILS::Transaction);
 
 our $debug;
@@ -137,7 +139,8 @@ sub do_checkout {
 	$debug and warn "do_checkout: calling AddIssue(\$borrower,$barcode, $overridden_duedate, 0)\n"
 		# . "w/ \$borrower: " . Dumper($borrower)
 		. "w/ C4::Context->userenv: " . Dumper(C4::Context->userenv);
-	my $due_dt  = AddIssue($borrower, $barcode, $overridden_duedate, 0);
+    my $issue = AddIssue( $borrower, $barcode, $overridden_duedate, 0 );
+    my $due_dt = dt_from_string( $issue->date_due() );
     if ($due_dt) {
         $self->{due} = $due_dt->clone();
     } else {

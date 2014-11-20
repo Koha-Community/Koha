@@ -6,6 +6,7 @@ use C4::Context;
 use C4::Circulation;
 use C4::Members;
 use C4::Items;
+use Koha::DateUtils;
 
 use Test::More tests => 8;
 C4::Context->_new_userenv(1234567);
@@ -42,8 +43,8 @@ sub try_issue {
     my $issuedate = '2011-05-16';
     my $borrower = GetMemberDetails(0, $cardnumber);
     my ($issuingimpossible,$needsconfirmation) = CanBookBeIssued( $borrower, $item );
-	my $due_date = AddIssue($borrower, $item, undef, 0, $issuedate);
-    return $due_date;
+    my $issue = AddIssue($borrower, $item, undef, 0, $issuedate);
+    return dt_from_string( $issue->due_date() );
 }
 
 sub try_return {
