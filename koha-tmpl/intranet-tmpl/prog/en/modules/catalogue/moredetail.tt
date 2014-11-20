@@ -117,7 +117,7 @@
                         </select>
                         <input type="hidden" name="withdrawn" value="[% ITEM_DAT.withdrawn %]" />
                         <input type="hidden" name="damaged" value="[% ITEM_DAT.damaged %]" />
-                        <input type="submit" name="submit" class="submit" value="Set Status" /></form>
+                        <input type="submit" name="submit" class="submit" value="Set status" /></form>
                     [% ELSE %]
                         [% FOREACH itemlostloo IN ITEM_DAT.itemlostloop %]
                             [% IF ( itemlostloo.selected ) %]
@@ -150,7 +150,7 @@
                     </select>
                     <input type="hidden" name="withdrawn" value="[% ITEM_DAT.withdrawn %]" />
                     <input type="hidden" name="itemlost" value="[% ITEM_DAT.itemlost %]" />
-                    <input type="submit" name="submit" class="submit" value="Set Status" /></form>
+                    <input type="submit" name="submit" class="submit" value="Set status" /></form>
                 [% ELSE %]
                     [% FOREACH itemdamagedloo IN ITEM_DAT.itemdamagedloop %]
                         [% IF ( itemdamagedloo.selected ) %]
