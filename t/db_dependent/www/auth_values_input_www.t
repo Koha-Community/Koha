@@ -1,22 +1,22 @@
 #!/usr/bin/perl
 
-# Copyright 2012 C & P Bibliography Services
+# This file is part of Koha.
 #
-# This is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
 #
-# This is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
-#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use utf8;
 use Test::More;
 use Test::WWW::Mechanize;
@@ -44,13 +44,6 @@ if ($@) {
 my $user     = $ENV{KOHA_USER} || $xml->{config}->{user};
 my $password = $ENV{KOHA_PASS} || $xml->{config}->{pass};
 my $intranet = $ENV{KOHA_INTRANET_URL};
-
-my $mysql_on = ProgProcesses('mysql');
-
-
-if ($mysql_on < 2) {
-    plan skip_all => "Tests skip. You must start Mysql to do those tests\n";
-}
 
 if (not defined $intranet) {
     plan skip_all => "Tests skip. You must set env. variable KOHA_INTRANET_URL to do tests\n";
@@ -107,6 +100,4 @@ if ($id_to_del) {
 
 done_testing();
 
-sub ProgProcesses {
-   return scalar grep /$_[0]/, (split /\n/, `ps -aef`);
-}
+1;
