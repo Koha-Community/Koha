@@ -519,12 +519,12 @@ $(document).ready(function () {
 
 [% IF ( riloop ) %]
     <h2>Checked-in items</h2>
-    <table>
-    <tr><th>Due date</th><th>Title</th>	<th>Author</th>	<th>Barcode</th><th>Home library</th><th>Holding library</th><th>Shelving location</th><th>Call number</th><th>Type</th>	<th>Patron</th><th>Note</th></tr>
+    <table id="checkedintable">
+    <tr><th class="ci-duedate">Due date</th><th class="ci-title">Title</th><th class="ci-author">Author</th><th class="ci-barcode">Barcode</th><th class="ci-homelibrary">Home library</th><th class="ci-holdinglibrary">Holding library</th><th class="ci-shelvinglocation">Shelving location</th><th class="ci-callnumber">Call number</th><th class="ci-type">Type</th><th class="ci-patron">Patron</th><th class="ci-note">Note</th></tr>
 
         [% FOREACH riloo IN riloop %]
             <tr>
-            <td>[% IF ( riloo.duedate ) %]
+            <td class="ci-duedate">[% IF ( riloo.duedate ) %]
                     [% IF ( riloo.return_overdue ) %]
                         <span class="overdue">[% riloo.duedate %] (overdue)</span>
                     [% ELSE %][% riloo.duedate %]
@@ -532,21 +532,21 @@ $(document).ready(function () {
                 [% ELSE %]Not checked out
                 [% END %]
             </td>
-            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% riloo.itembiblionumber %]">
+            <td class="ci-title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% riloo.itembiblionumber %]">
                     [% riloo.itemtitle |html %]</a></td>
-			<td>[% riloo.itemauthor %]</td>
-            <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% riloo.itembiblionumber %]&amp;itemnumber=[% riloo.itemnumber %]#item[% riloo.itemnumber %]">[% riloo.barcode %]</a></td>
-            <td>[% riloo.homebranch %]</td>
-            <td>[% riloo.holdingbranch %]</td>
-            <td>[% riloo.location %]</td>
-            <td>[% riloo.itemcallnumber %]</td>
-            <td>[% riloo.itemtype %] [% riloo.ccode %]</td>
-			<td>[% IF ( riloo.duedate ) %]
+            <td class="ci-author">[% riloo.itemauthor %]</td>
+            <td class="ci-barcode"><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% riloo.itembiblionumber %]&amp;itemnumber=[% riloo.itemnumber %]#item[% riloo.itemnumber %]">[% riloo.barcode %]</a></td>
+            <td class="ci-homelibrary">[% riloo.homebranch %]</td>
+            <td class="ci-holdinglibrary">[% riloo.holdingbranch %]</td>
+            <td class="ci-shelvinglocation">[% riloo.location %]</td>
+            <td class="ci-callnumber">[% riloo.itemcallnumber %]</td>
+            <td class="ci-type">[% riloo.itemtype %] [% riloo.ccode %]</td>
+            <td class="ci-patron">[% IF ( riloo.duedate ) %]
                 <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% riloo.borrowernumber %]">
                     [% riloo.borsurname %], [% riloo.borfirstname %] ([% riloo.borcategorycode %])
                 </a>
             [% ELSE %]Not checked out[% END %]</td>
-            <td>[% IF ( riloo.bornote ) %]<span class="circ-hlt">[% riloo.bornote %]<br /></span>[% END %]
+            <td class="ci-note">[% IF ( riloo.bornote ) %]<span class="circ-hlt">[% riloo.bornote %]<br /></span>[% END %]
             [% IF ( riloo.itemnote ) %]<span class="circ-hlt">[% riloo.itemnote %]</span>[% END %]
             </td>
            </tr>
