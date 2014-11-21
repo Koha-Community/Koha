@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Notices[% IF ( add_form or copy_form ) %][% IF ( modify ) %] &rsaquo; Modify notice[% ELSE %] &rsaquo; Add notice[% END %][% END %][% IF ( add_validate or copy_validate) %] &rsaquo; Notice added[% END %][% IF ( delete_confirm ) %] &rsaquo; Confirm deletion[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -424,40 +425,40 @@ $(document).ready(function() {
 	<input type="submit" value="OK" />
 	</form>
 [% END %]
-	
+
 [% IF ( delete_confirm ) %]
-    <div class="dialog alert"><h3>Delete notice?</h3>
-	<table>
-        <thead>
-		<tr>
-			<th>Library</th>
-			<th>Module</th>
-			<th>Code</th>
-			<th>Name</th>
-		</tr>
-        </thead>
-		<tr>
-			<td>[% branchname %]</td>
-			<td>[% module %]</td>
-            <td>[% code %]</td>
-			<td>[% name %]</td>
-		</tr>
-	</table>
-		<form action="[% action %]" method="post">
-		<input type="hidden" name="op" value="delete_confirmed">
-		<input type="hidden" name="branchcode" value="[% branchcode %]" />
-		<input type="hidden" name="code" value="[% code %]" />
-		<input type="hidden" name="module" value="[% module %]" />
-                <input type="submit" value="Yes, delete" class="approve" />
-				</form>
+    <div class="dialog alert">
+        <h3>Delete notice?</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Library</th>
+                <th>Module</th>
+                <th>Code</th>
+                <th>Name</th>
+            </tr>
+            </thead>
+            <tr>
+                <td>[% Branches.GetName( letter.branchcode ) %]</td>
+                <td>[% letter.module %]</td>
+                <td>[% letter.code %]</td>
+                <td>[% letter.name %]</td>
+            </tr>
+        </table>
+            <form action="[% action %]" method="post">
+            <input type="hidden" name="op" value="delete_confirmed">
+            <input type="hidden" name="branchcode" value="[% letter.branchcode %]" />
+            <input type="hidden" name="code" value="[% letter.code %]" />
+            <input type="hidden" name="module" value="[% letter.module %]" />
+            <input type="submit" value="Yes, delete" class="approve" />
+        </form>
 
-				<form action="[% action %]" method="get">
-                    <input type="submit" value="No, do not delete" class="deny" />
-				</form>
-		</div>
-
+        <form action="[% action %]" method="get">
+            <input type="submit" value="No, do not delete" class="deny" />
+        </form>
+    </div>
 [% END %]
-	
+
 [% IF ( delete_confirmed ) %]
 	Data deleted
 	<form action="[% action %]" method="post">

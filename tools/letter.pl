@@ -289,11 +289,7 @@ sub delete_confirm {
     my $letter = C4::Letters::getletter($module, $code, $branchcode);
     my @values = values %$letter;
     $template->param(
-        branchcode => $branchcode,
-        branchname => GetBranchName($branchcode),
-        code => $code,
-        module => $module,
-        name => $values[0]->{name},
+        letter => $letter,
     );
     return;
 }
