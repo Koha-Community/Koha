@@ -66,13 +66,13 @@ my $b3 = Koha::Borrower->new(
 );
 $b3->store();
 
-my $b1_new = Koha::Borrowers->new()->find( $b1->borrowernumber() );
+my $b1_new = Koha::Borrowers->find( $b1->borrowernumber() );
 is( $b1->surname(), $b1_new->surname(), "Found matching borrower" );
 
-my @borrowers = Koha::Borrowers->new()->search( { branchcode => $branchcode } );
+my @borrowers = Koha::Borrowers->search( { branchcode => $branchcode } );
 is( @borrowers, 3, "Found 3 borrowers with Search" );
 
-my $borrowers = Koha::Borrowers->new()->search( { branchcode => $branchcode } );
+my $borrowers = Koha::Borrowers->search( { branchcode => $branchcode } );
 is( $borrowers->count( { branchcode => $branchcode } ), 3, "Counted 3 borrowers with Count" );
 
 my $b = $borrowers->next();

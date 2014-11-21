@@ -105,7 +105,7 @@ sub search {
 
     }
     else {
-        my $class = ref( $self );
+        my $class = ref($self) ? ref($self) : $self;
         my $rs = $self->_resultset()->search($params);
 
         return $class->new_from_dbic($rs);
@@ -202,10 +202,15 @@ Returns the internal resultset or creates it if undefined
 sub _resultset {
     my ($self) = @_;
 
-    $self->{_resultset} ||=
-      Koha::Database->new()->schema()->resultset( $self->type() );
+    if ( ref($self) ) {
+        $self->{_resultset} ||=
+          Koha::Database->new()->schema()->resultset( $self->type() );
 
-    $self->{_resultset};
+        return $self->{_resultset};
+    }
+    else {
+        return Koha::Database->new()->schema()->resultset( $self->type() );
+    }
 }
 
 =head3 type
