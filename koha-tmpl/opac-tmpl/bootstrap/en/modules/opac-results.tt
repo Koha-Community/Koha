@@ -46,6 +46,11 @@
                                 You did not specify any search criteria.
                             [% END %]
                         </p>
+                        [% IF ( ReturnPath ) %]
+                           <div class="returntosearch">
+                                <p><a href="[% ReturnPath %]">Return to the last advanced search</a></p>
+                            </div>
+                        [% END %]
                         [% IF ( OPACNoResultsFound ) %]
                             <div id="noresultsfound">
                                 [% OPACNoResultsFound %]
@@ -102,7 +107,13 @@
                             [% END %]
                         </ul>
                     [% END # / IF koha_spsuggest%]
-
+                    [% IF ( total ) %]
+                        [% IF ( ReturnPath ) %]
+                            <div class="returntosearch">
+                                <p><a href="[% ReturnPath %]">Return to the last advanced search</a></p>
+                            </div>
+                        [% END %]
+                    [% END %]
                     [% IF ( query_error ) %]
                         <div class="dialog alert">
                             <h4>Error:</h4>

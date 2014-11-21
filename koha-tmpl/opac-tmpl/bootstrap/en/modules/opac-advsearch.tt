@@ -254,7 +254,7 @@
                                     <div class="span3">
                                         <fieldset>
                                             <legend>Audience</legend>
-                                            <select name="limit" class="subtype">
+                                            <select id="subtype_audience" name="limit" class="subtype">
                                             <option value="" selected="selected" class="menuheader">Any audience</option>
                                                 <option value="aud:a">Preschool</option>
                                                 <option value="aud:b">Primary</option>
@@ -271,7 +271,7 @@
                                     <div class="span3">
                                         <fieldset>
                                             <legend>Content</legend>
-                                            <select name="limit" class="subtype">
+                                            <select id="subtype_content"  name="limit" class="subtype">
                                                 <option value="" selected="selected" class="menuheader">Any content</option>
                                                 <option value="fic:1">Fiction</option>
                                                 <option value="fic:0">Non fiction</option>
@@ -285,7 +285,7 @@
                                     <div class="span3">
                                         <fieldset>
                                             <legend>Format</legend>
-                                            <select name="limit" class="subtype">
+                                            <select id="subtype_format" name="limit" class="subtype">
                                                 <option value="" selected="selected" class="menuheader">Any format</option>
                                                 <option value="l-format:ta">Regular print</option>
                                                 <option value="l-format:tb">Large print</option>
@@ -304,7 +304,7 @@
                                     <div class="span3">
                                         <fieldset>
                                             <legend>Additional content types for books/printed materials</legend>
-                                            <select name="limit" class="subtype">
+                                            <select id="subtype_additional" name="limit" class="subtype">
                                                 <option value="">Any</option>
                                                 <option value="ctype:a">Abstracts/summaries</option>
                                                 <option value="ctype:b">Bibliographies</option>
@@ -379,10 +379,60 @@
 [% END %]
 
 [% BLOCK jsinclude %]
+<script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.deserialize.min.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
 <script type="text/javascript">//<![CDATA[
-    $(document).ready(function() {
-        $('#advsearches').tabs();
+$(document).ready(function() {
+    $('#advsearches').tabs();
+    jQuery.cookie.json = true;
+    //$('#advsearches > ul').tabs();
+
+    [% IF ( ReturnToSearch ) %]
+        if (form_serialized = jQuery.cookie("form_serialized")) {
+            $('#advsearch form').deserialize(form_serialized);
+        }
+        if (form_serialized_limits = jQuery.cookie("form_serialized_limits")) {
+            $('#language-limit')     .val(form_serialized_limits[0]);
+            $('#branchloop')         .val(form_serialized_limits[1]);
+            $('#subtype_audience')   .val(form_serialized_limits[2]);
+            $('#subtype_content')    .val(form_serialized_limits[3]);
+            $('#subtype_format')     .val(form_serialized_limits[4]);
+            $('#subtype_additional') .val(form_serialized_limits[5]);
+            $('#locloop')            .val(form_serialized_limits[6]);
+        }
+    [% ELSE %]
+        //Clear all form cookies
+        jQuery.removeCookie("form_serialized", { path: '/'});
+        jQuery.removeCookie("form_serialized_itype", { path: '/'});
+        jQuery.removeCookie("form_serialized_limits", { path: '/'});
+        jQuery.removeCookie("num_paragraph", { path: '/'});
+        jQuery.removeCookie("search_path_code", { path: '/'});
+    [% END %]
+    $('#advsearch form').submit(function() {
+        form_serialized = $(this).serialize();
+        jQuery.cookie("form_serialized", form_serialized,{ path: '/'});
+        form_serialized_limits = [
+            $('#language-limit').val(),   $('#branchloop').val(),
+            $('#subtype_audience').val(), $('#subtype_content').val(),
+            $('#subtype_format').val(),   $('#subtype_additional').val(),
+            $('#locloop').val()
+        ];
+        jQuery.cookie("form_serialized_limits", form_serialized_limits,{ path: '/'});
+        [% IF ( expanded_options ) %]
+        var numPar = $("#booleansearch fieldset p").size();
+        if (numPar > [% search_boxes_count %]){
+            jQuery.cookie("num_paragraph", numPar,{ path: '/'});
+        }else{
+            jQuery.cookie("num_paragraph", null,{ path: '/'});
+        }
+        jQuery.cookie("search_path_code", 'exs',{ path: '/'});
+        [% ELSE %]
+        jQuery.cookie("search_path_code", 'ads',{ path: '/'});
+        jQuery.cookie("num_paragraph", null,{ path: '/'});
+        [% END %]
     });
+
+});
     /* This function allows to display a new field to search.
     */
     $(document).on("click", '.ButtonPlus', function(e) {

@@ -184,6 +184,21 @@ if (C4::Context->preference('TagsEnabled')) {
 
 # load the branches
 
+if ($cgi->param("returntosearch")) {
+    $template->param('ReturnToSearch' => 1);
+}
+if ($cgi->cookie("search_path_code")) {
+    my $pathcode = $cgi->cookie("search_path_code");
+    given ($pathcode)
+    {
+        when ('"ads"') { $template->param('ReturnPath' => '/cgi-bin/koha/opac-search.pl?returntosearch=1'); }
+        when ('"exs"') {
+            $template->param('ReturnPath' => '/cgi-bin/koha/opac-search.pl?expanded_options=1&returntosearch=1');
+        }
+        default {warn "ReturnPath swith error";}
+    }
+}
+
 my $branches = GetBranches();   # used later in *getRecords, probably should be internalized by those functions after caching in C4::Branch is established
 $template->param(
     searchdomainloop => GetBranchCategories('searchdomain'),
@@ -281,6 +296,12 @@ if ( $template_type && $template_type eq 'advsearch' ) {
     # box should only appear on the last, etc.
     my @search_boxes_array;
     my $search_boxes_count = 3; # begin whith 3 boxes
+    $template->param( search_boxes_count => $search_boxes_count );
+
+    if ($cgi->cookie("num_paragraph")){
+        $search_boxes_count = $cgi->cookie("num_paragraph");
+    }
+
     for (my $i=1;$i<=$search_boxes_count;$i++) {
         # if it's the first one, don't display boolean option, but show scan indexes
         if ($i==1) {

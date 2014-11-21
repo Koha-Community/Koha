@@ -245,6 +245,21 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 
     </script>
 [% END #  / IF persona %]
+
+<script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    if($('#searchsubmit').length) {
+        $(document).on("click", '#searchsubmit', function(e) {
+            jQuery.removeCookie("form_serialized", { path: '/'});
+            jQuery.removeCookie("form_serialized_itype", { path: '/'});
+            jQuery.removeCookie("form_serialized_limits", { path: '/'});
+            jQuery.removeCookie("num_paragraph", { path: '/'});
+            jQuery.removeCookie("search_path_code", { path: '/'});
+        });
+    }
+});
+</script>
 [% PROCESS jsinclude %]
 
 [% IF ( opacuserjs ) %]
