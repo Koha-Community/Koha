@@ -189,9 +189,12 @@ my $webpage = $agent->{content};
 
 $webpage =~ /(.*<title>.*?)(\d{1,})(.*<\/title>)/sx;
 my $id_batch = $2;
+my $id_bib_number = GetBiblionumberFromImport($id_batch);
 
 # wait enough time for the indexer
 sleep 10;
+
+
 
 # -------------------------------------------------- TEST ON OPAC
 
@@ -218,6 +221,8 @@ ok ($text =~  m/学協会. μμ/, 'UTF-8 chars are correctly present. Good');
 $agent->get_ok( "$intranet/cgi-bin/koha/tools/manage-marc-import.pl", 'view and clean batch' );
 $agent->form_name('clean_batch_'.$id_batch);
 $agent->click();
+$agent->get_ok( "$intranet/cgi-bin/koha/catalogue/detail.pl?biblionumber=$id_bib_number", 'biblio on intranet' );
+$agent->get_ok( "$intranet/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&biblionumber=$id_bib_number", 'biblio deleted' );
 
 # clean
 cleanup();
@@ -260,6 +265,13 @@ sub cleanup {
 
 }
 
+sub GetBiblionumberFromImport{
+    my ( $batch_id) = @_;
+    use C4::ImportBatch;
+    my $data = C4::ImportBatch::GetImportRecordsRange($batch_id, '', '', undef,
+                    { order_by => 'import_record_id', order_by_direction => 'DESC' });
+    my $biblionumber = $data->[0]->{'matched_biblionumber'};
 
-
+    return $biblionumber;
+}
 1;
