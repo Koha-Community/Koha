@@ -9525,7 +9525,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.058";
 if( CheckVersion($DBversion) ){
     $dbh->do("INSERT INTO systempreferences (variable, explanation, type) VALUES('DefaultLongOverdueChargeValue','Charge a lost item to the borrower account when the LOST value of the item changes to n',  'integer')");
     $dbh->do("INSERT INTO systempreferences (variable, explanation, type) VALUES('DefaultLongOverdueLostValue', 'Set the LOST value of an item to n when the item has been overdue for more than defaultlongoverduedays days.', 'integer')");
