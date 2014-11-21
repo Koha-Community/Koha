@@ -259,7 +259,7 @@ sub add_validate {
             delete_confirmed( $branchcode, $oldmodule, $code, $mtt );
             next;
         }
-        elsif ( exists $letter->{$mtt} ) {
+        elsif ( $letter->{message_transport_type} eq $mtt ) {
             $dbh->do(
                 q{
                     UPDATE letter
