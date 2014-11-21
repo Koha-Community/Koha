@@ -9439,7 +9439,7 @@ if ( CheckVersion($DBversion) ) {
 }
 
 $DBversion = "3.17.00.053";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         INSERT INTO permissions (module_bit, code, description) VALUES ('9', 'edit_items_restricted', 'Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEditing preference (please note that edit_item is still required)');
     });
@@ -9481,7 +9481,7 @@ if (CheckVersion($DBversion)) {
 }
 
 $DBversion = "3.17.00.055";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('NorwegianPatronDBEnable', '0', NULL, 'Enable communication with the Norwegian national patron database.', 'YesNo')");
     $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('NorwegianPatronDBEndpoint', '', NULL, 'Which NL endpoint to use.', 'Free')");
     $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('NorwegianPatronDBUsername', '', NULL, 'Username for communication with the Norwegian national patron database.', 'Free')");
@@ -9506,7 +9506,7 @@ CREATE TABLE borrower_sync (
 }
 
 $DBversion = "3.17.00.056";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         UPDATE systempreferences SET value = 'pubdate,itemtype,language,sorting,location' WHERE variable='OpacAdvSearchOptions'
     });
@@ -9527,9 +9527,9 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.17.00.XXX";
 if( CheckVersion($DBversion) ){
-    $dbh->do("INSERT INTO systempreferences (variable, explanation, type) VALUES('defaultlongoverduechargevalue','Charge a lost item to the borrower account when the LOST value of the item changes to n',  'integer')");
-    $dbh->do("INSERT INTO systempreferences (variable, explanation, type) VALUES('defaultlongoverduelostvalue', 'Set the LOST value of an item to n when the item has been overdue for more than defaultlongoverduedays days.', 'integer')");
-    $dbh->do("INSERT INTO systempreferences (variable, explanation, type) VALUES('defaultlongoverduedays', 'Set the LOST value of an item when the item has been overdue for more than n days.',  'integer')");
+    $dbh->do("INSERT INTO systempreferences (variable, explanation, type) VALUES('DefaultLongOverdueChargeValue','Charge a lost item to the borrower account when the LOST value of the item changes to n',  'integer')");
+    $dbh->do("INSERT INTO systempreferences (variable, explanation, type) VALUES('DefaultLongOverdueLostValue', 'Set the LOST value of an item to n when the item has been overdue for more than defaultlongoverduedays days.', 'integer')");
+    $dbh->do("INSERT INTO systempreferences (variable, explanation, type) VALUES('DefaultLongOverdueDays', 'Set the LOST value of an item when the item has been overdue for more than n days.',  'integer')");
     print "Upgrade to $DBversion done (Bug 8337: System preferences for longoverdue cron)\n";
     SetVersion($DBversion);
 }
@@ -9537,7 +9537,6 @@ if( CheckVersion($DBversion) ){
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
-a
 
 =cut
 
