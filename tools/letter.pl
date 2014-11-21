@@ -254,12 +254,18 @@ sub add_validate {
         my $title   = shift @title;
         my $content = shift @content;
         my $letter = C4::Letters::getletter( $oldmodule, $code, $branchcode, $mtt);
+
+        # getletter can return the default letter even if we pass a branchcode
+        # If we got the default one and we needed the specific one, we didn't get the one we needed!
+        if ( $letter and $branchcode ne $letter->{branchcode} ) {
+            $letter = undef;
+        }
         unless ( $title and $content ) {
             # Delete this mtt if no title or content given
             delete_confirmed( $branchcode, $oldmodule, $code, $mtt );
             next;
         }
-        elsif ( $letter->{message_transport_type} eq $mtt ) {
+        elsif ( $letter and $letter->{message_transport_type} eq $mtt ) {
             $dbh->do(
                 q{
                     UPDATE letter
