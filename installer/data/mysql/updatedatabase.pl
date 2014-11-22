@@ -10048,6 +10048,115 @@ while ( my $file = readdir $dirh ) {
     my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
 }
 
+
+$DBversion = "3.19.00.XXX";
+if(CheckVersion($DBversion)) {
+    if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value) VALUES
+        ('', '388', 'TIME PERIOD OF CREATION', 'TIME PERIOD OF CREATION', 1, 0, NULL);
+    });
+
+    $dbh->do(q{
+        INSERT IGNORE INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable,
+        mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid, kohafield, frameworkcode) VALUES
+        ('', '388', '0', 'Authority record control number or standard number', 'Authority record control number or standard number', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '388', '2', 'Source of term', 'Source of term', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '388', '3', 'Materials specified', 'Materials specified', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '388', '6', 'Linkage', 'Linkage', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '388', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '388', 'a', 'Time period of creation term', 'Time period of creation term', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', '');
+    });
+
+    $dbh->do(q{
+        UPDATE IGNORE auth_subfield_structure SET repeatable = 1 WHERE tagsubfield = 'g' AND tagfield IN
+        ('100','110','111','130','400','410','411','430','500','510','511','530','700','710','730');
+    });
+
+    $dbh->do(q{
+        INSERT IGNORE INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable,
+        mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid, kohafield, frameworkcode) VALUES
+        ('', '150', 'g', 'Miscellaneous information', 'Miscellaneous information', 1, 0, 1, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '151', 'g', 'Miscellaneous information', 'Miscellaneous information', 1, 0, 1, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '450', 'g', 'Miscellaneous information', 'Miscellaneous information', 1, 0, 4, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '451', 'g', 'Miscellaneous information', 'Miscellaneous information', 1, 0, 4, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '550', 'g', 'Miscellaneous information', 'Miscellaneous information', 1, 0, 5, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '551', 'g', 'Miscellaneous information', 'Miscellaneous information', 1, 0, 5, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '750', 'g', 'Miscellaneous information', 'Miscellaneous information', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '751', 'g', 'Miscellaneous information', 'Miscellaneous information', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '748', 'i', 'Relationship information', 'Relationship information', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '755', 'i', 'Relationship information', 'Relationship information', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '780', 'i', 'Relationship information', 'Relationship information', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '781', 'i', 'Relationship information', 'Relationship information', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '782', 'i', 'Relationship information', 'Relationship information', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '785', 'i', 'Relationship information', 'Relationship information', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '710', '4', 'Relationship code', 'Relationship code', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '730', '4', 'Relationship code', 'Relationship code', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '748', '4', 'Relationship code', 'Relationship code', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '750', '4', 'Relationship code', 'Relationship code', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '751', '4', 'Relationship code', 'Relationship code', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '755', '4', 'Relationship code', 'Relationship code', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '762', '4', 'Relationship code', 'Relationship code', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '780', '4', 'Relationship code', 'Relationship code', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '781', '4', 'Relationship code', 'Relationship code', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '782', '4', 'Relationship code', 'Relationship code', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '785', '4', 'Relationship code', 'Relationship code', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', ''),
+        ('', '788', '4', 'Relationship code', 'Relationship code', 1, 0, 7, NULL, NULL, NULL, 0, 0, '', '', '');
+    });
+
+    $dbh->do(q{
+        UPDATE IGNORE auth_subfield_structure SET liblibrarian = 'Relationship information', libopac = 'Relationship information'
+        WHERE tagsubfield = 'i' AND tagfield IN ('700','710','730','750','751','762');
+    });
+
+    $dbh->do(q{
+        UPDATE IGNORE auth_subfield_structure SET liblibrarian = 'Relationship code', libopac = 'Relationship code'
+        WHERE tagsubfield = '4' AND tagfield IN ('700','710');
+    });
+
+    $dbh->do(q{
+        INSERT IGNORE INTO marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode) VALUES
+        ('370', 'ASSOCIATED PLACE', 'ASSOCIATED PLACE', 1, 0, NULL, ''),
+        ('388', 'TIME PERIOD OF CREATION', 'TIME PERIOD OF CREATION', 1, 0, NULL, '');
+    });
+
+    $dbh->do(q{
+        INSERT IGNORE INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory,
+        kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue) VALUES
+        ('370', '0', 'Authority record control number or standard number', 'Authority record control number or standard number', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('370', '2', 'Source of term', 'Source of term', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('370', '6', 'Linkage', 'Linkage', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('370', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('370', 'c', 'Associated country', 'Associated country', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('370', 'f', 'Other associated place', 'Other associated place', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('370', 'g', 'Place of origin of work', 'Place of origin of work', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('370', 's', 'Start period', 'Start period', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('370', 't', 'End period', 'End period', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('370', 'u', 'Uniform Resource Identifier', 'Uniform Resource Identifier', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('370', 'v', 'Source of information', 'Source of information', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('377', 'l', 'Language term', 'Language term', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('382', 's', 'Total number of performers', 'Total number of performers', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('388', '0', 'Authority record control number or standard number', 'Authority record control number or standard number', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('388', '2', 'Source of term', 'Source of term', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('388', '3', ' Materials specified', ' Materials specified', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('388', '6', ' Linkage', ' Linkage', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('388', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('388', 'a', 'Time period of creation term', 'Time period of creation term', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('650', 'g', 'Miscellaneous information', 'Miscellaneous information', 1, 0, '', 6, '', '', '', 0, -1, '', '', '', NULL),
+        ('651', 'g', 'Miscellaneous information', 'Miscellaneous information', 1, 0, '', 6, '', '', '', 0, -1, '', '', '', NULL);
+    });
+
+    $dbh->do(q{
+        UPDATE IGNORE marc_subfield_structure SET repeatable = 1 WHERE tagsubfield = 'g' AND
+        tagfield IN ('100','110','111','130','240','243','246','247','600','610','611','630','700','710','711','730','800','810','811','830');
+    });
+    }
+
+    print "Upgrade to $DBversion done (Bug 13322 - Update MARC21 frameworks to Update No. 19 - October 2014)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
