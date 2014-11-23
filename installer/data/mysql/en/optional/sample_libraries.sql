@@ -16,4 +16,3 @@ INSERT INTO branches ( `branchcode`,`branchname`,`branchaddress1`) VALUES
 ('UPL','Union','Chestnut Hollow')
 ;
 
--- INSERT INTO branchrelations ( `branchcode`,`categorycode`) VALUES
