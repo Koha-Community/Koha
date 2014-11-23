@@ -2622,7 +2622,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template mode="index_facets" match="marc:datafield[@tag='995']">
     <xslo:if test="not(@ind1='z')">
       <z:index name="homebranch:0">
-        <xslo:value-of select="marc:subfield[@code='a']"/>
+        <xslo:value-of select="marc:subfield[@code='b']"/>
       </z:index>
       <z:index name="holdingbranch:0">
         <xslo:value-of select="marc:subfield[@code='c']"/>

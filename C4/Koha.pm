@@ -798,7 +798,7 @@ sub getFacets {
                     {
                         idx   => 'homebranch',
                         label => 'HomeLibrary',
-                        tags  => [qw / 995a /],
+                        tags  => [qw / 995b /],
                     }
                 );
                 }
