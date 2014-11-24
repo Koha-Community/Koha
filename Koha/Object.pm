@@ -20,7 +20,6 @@ package Koha::Object;
 use Modern::Perl;
 
 use Carp;
-use Encode qw{encode};
 
 use Koha::Database;
 
@@ -259,7 +258,7 @@ sub AUTOLOAD {
             return $self->_result()->set_column( $method, @_ );
         } else {
             my $value = $self->_result()->get_column( $method );
-            return encode( 'UTF-8', $value );
+            return $value;
         }
     }
 
