@@ -145,8 +145,19 @@ sub checkpw_ldap {
         # Perform a LDAP bind for the given username using the matched DN
         my $res = $db->bind( $principal_name, password => $password );
         if ( $res->code ) {
-            warn "LDAP bind failed as kohauser $userid: " . description($res);
-            return -1;
+            if ( $ldap->{anonymous_bind} ) {
+                # With anonymous_bind approach we can be sure we have found the correct user
+                # and that any 'code' response indicates a 'bad' user (be that blocked, banned
+                # or password changed). We should not fall back to local accounts in this case.
+                warn "LDAP bind failed as kohauser $userid: " . description($res);
+                return -1;
+            } else {
+                # Without a anonymous_bind, we cannot be sure we are looking at a valid ldap user
+                # at all, and thus we should fall back to local logins to restore previous behaviour
+                # see bug 12831
+                warn "LDAP bind failed as kohauser $userid: " . description($res);
+                return 0;
+            }
         }
         if ( !defined($userldapentry)
             && ( $config{update} or $config{replicate} ) )
