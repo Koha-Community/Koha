@@ -55,9 +55,9 @@
 	    <tr>
 		<td>
             <a class="notice-title" href="#">[% QUEUED_MESSAGE.subject %]</a>
-            <p class="notice">
+            <div class="notice">
                 [% QUEUED_MESSAGE.content FILTER html_line_break %]
-            </p>
+            </div>
         </td>
 		<td>
             [% IF ( QUEUED_MESSAGE.message_transport_type == 'email' ) %]email
