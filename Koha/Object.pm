@@ -69,13 +69,13 @@ sub new {
 
 }
 
-=head3 Koha::Object->new_from_dbic();
+=head3 Koha::Object->_new_from_dbic();
 
-my $object = Koha::Object->new_from_dbic($dbic_row);
+my $object = Koha::Object->_new_from_dbic($dbic_row);
 
 =cut
 
-sub new_from_dbic {
+sub _new_from_dbic {
     my ( $class, $dbic_row ) = @_;
     my $self = {};
 

@@ -17,8 +17,6 @@ package Koha::Objects;
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use overload "0+" => "count", "<>" => "next", fallback => 1;
-
 use Modern::Perl;
 
 use Carp;
@@ -59,13 +57,13 @@ sub new {
     bless( $self, $class );
 }
 
-=head3 Koha::Objects->new_from_dbic();
+=head3 Koha::Objects->_new_from_dbic();
 
-my $object = Koha::Objects->new_from_dbic( $resultset );
+my $object = Koha::Objects->_new_from_dbic( $resultset );
 
 =cut
 
-sub new_from_dbic {
+sub _new_from_dbic {
     my ( $class, $resultset ) = @_;
     my $self = { _resultset => $resultset };
 
@@ -84,7 +82,7 @@ sub find {
 
     my $result = $self->_resultset()->find($id);
 
-    my $object = $self->object_class()->new_from_dbic( $result );
+    my $object = $self->object_class()->_new_from_dbic( $result );
 
     return $object;
 }
@@ -108,7 +106,7 @@ sub search {
         my $class = ref($self) ? ref($self) : $self;
         my $rs = $self->_resultset()->search($params);
 
-        return $class->new_from_dbic($rs);
+        return $class->_new_from_dbic($rs);
     }
 }
 
@@ -126,7 +124,7 @@ sub count {
 
 =head3 Koha::Objects->next();
 
-my $object = Koha::Object->next();
+my $object = Koha::Objects->next();
 
 Returns the next object that is part of this set.
 Returns undef if there are no more objects to return.
@@ -134,12 +132,12 @@ Returns undef if there are no more objects to return.
 =cut
 
 sub next {
-    my ( $self, $id ) = @_;
+    my ( $self ) = @_;
 
     my $result = $self->_resultset()->next();
     return unless $result;
 
-    my $object = $self->object_class()->new_from_dbic( $result );
+    my $object = $self->object_class()->_new_from_dbic( $result );
 
     return $object;
 }
@@ -154,7 +152,7 @@ with the first object in a set.
 =cut
 
 sub reset {
-    my ( $self, $id ) = @_;
+    my ( $self ) = @_;
 
     $self->_resultset()->reset();
 
@@ -170,7 +168,7 @@ Returns an arrayref of the objects in this set.
 =cut
 
 sub as_list {
-    my ( $self, $id ) = @_;
+    my ( $self ) = @_;
 
     my @dbic_rows = $self->_resultset()->all();
 
@@ -181,14 +179,14 @@ sub as_list {
 
 =head3 Koha::Objects->_wrap
 
-wraps the DBIC object in a corrosponding Koha object
+wraps the DBIC object in a corresponding Koha object
 
 =cut
 
 sub _wrap {
     my ( $self, @dbic_rows ) = @_;
 
-    my @objects = map { $self->object_class()->new_from_dbic( $_ ) } @dbic_rows;
+    my @objects = map { $self->object_class()->_new_from_dbic( $_ ) } @dbic_rows;
 
     return @objects;
 }

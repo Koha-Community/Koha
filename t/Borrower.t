@@ -27,8 +27,7 @@ BEGIN {
     use_ok('Koha::Borrower');
 }
 
-my $result = Koha::Database->new()->schema()->resultset('Borrower')->new({ surname => 'Test Borrower' });
-my $object = Koha::Borrower->new_from_dbic( $result );
+my $object = Koha::Borrower->new( { surname => 'Test Borrower' } );
 
 is( $object->surname(), 'Test Borrower', "Accessor returns correct value" );
 
