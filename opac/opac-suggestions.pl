@@ -94,7 +94,7 @@ if ( $op eq "add_confirm" ) {
 		    $suggestion->{$suggest} = $scrubber->scrub($suggestion->{$suggest});
 		}
         $suggestion->{suggesteddate} = dt_from_string;
-		$$suggestion{'branchcode'}= $input->param('branch') || C4::Context->userenv->{"branch"};
+        $suggestion->{branchcode} = $input->param('branchcode') || C4::Context->userenv->{"branch"};
 
 		&NewSuggestion($suggestion);
 		# empty fields, to avoid filter in "SearchSuggestion"
@@ -149,10 +149,10 @@ if ( C4::Context->preference("AllowPurchaseSuggestionBranchChoice") ) {
     if (C4::Context->userenv && C4::Context->userenv->{'branch'}) {
         $userbranch = C4::Context->userenv->{'branch'};
     }
-    my $branch = $input->param('branch') || $borr->{'branchcode'} || $userbranch || '' ;
+    my $branchcode = $input->param('branchcode') || $borr->{'branchcode'} || $userbranch || '' ;
 
 # make branch selection options...
-    my $branchloop = GetBranchesLoop($branch);
+    my $branchloop = GetBranchesLoop($branchcode);
     $template->param( branchloop => $branchloop );
 }
 
