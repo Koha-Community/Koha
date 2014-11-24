@@ -47,6 +47,10 @@ my $exempt_fine    = $input->param('exempt_fine');
 my $branchcode     = $input->param('branchcode')
   || C4::Context->userenv->{'branch'};
 
+# Expect these inputs to come in as JSON boolean values
+$override_limit = $override_limit ? $override_limit eq 'true' : undef;
+$exempt_fine    = $exempt_fine    ? $exempt_fine eq 'true'    : undef;
+
 my $barcode = GetBarcodeFromItemnumber($itemnumber);
 
 my $data;
