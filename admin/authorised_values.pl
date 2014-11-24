@@ -101,7 +101,7 @@ if ($op eq 'add_form') {
     my $imageurl     = $input->param( 'imageurl' ) || '';
     $imageurl = '' if $imageurl =~ /removeImage/;
     my $duplicate_entry = 0;
-    my @branches = $input->param('branches');
+    my @branches = grep { $_ ne q{} } $input->param('branches');
 
     if ( $id ) { # Update
         my $av = Koha::AuthorisedValues->new->find( $id );
@@ -113,7 +113,7 @@ if ($op eq 'add_form') {
         $av->imageurl( $imageurl );
         eval{
             $av->store;
-            $av->branch_limitations( \@branches );
+            $av->replace_branch_limitations( \@branches );
         };
         if ( $@ ) {
             push @messages, {type => 'error', code => 'error_on_update' };
@@ -129,10 +129,12 @@ if ($op eq 'add_form') {
             lib_opac => $input->param('lib_opac') || undef,
             imageurl => $imageurl,
         } );
+
         eval {
             $av->store;
-            $av->branch_limitations( \@branches );
+            $av->replace_branch_limitations( \@branches );
         };
+
         if ( $@ ) {
             push @messages, {type => 'error', code => 'error_on_insert' };
         } else {

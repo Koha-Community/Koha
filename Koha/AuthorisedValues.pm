@@ -63,7 +63,7 @@ sub search {
       ->search( { %$params, %$or, }, $join );
 
     my $class = ref($self);
-    return wantarray ? $self->_wrap( $rs->all() ) : $class->new_from_dbic($rs);
+    return wantarray ? $self->_wrap( $rs->all() ) : $class->_new_from_dbic($rs);
 }
 
 sub categories {
