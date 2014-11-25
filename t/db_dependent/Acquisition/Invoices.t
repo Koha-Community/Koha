@@ -1,7 +1,4 @@
 #!/usr/bin/perl
-#
-# This Koha test module is a stub!
-# Add more tests here!!!
 
 use strict;
 use warnings;
@@ -9,7 +6,7 @@ use warnings;
 use C4::Bookseller qw( GetBookSellerFromId );
 use C4::Biblio qw( AddBiblio );
 
-use Test::More tests => 22;
+use Test::More tests => 24;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -128,6 +125,10 @@ my $invoice2 = GetInvoiceDetails($invoiceid2);
 
 is(scalar @{$invoice1->{'orders'}}, 1, 'Invoice1 has only one order');
 is(scalar @{$invoice2->{'orders'}}, 2, 'Invoice2 has only two orders');
+
+my $orders = $invoice1->{orders};
+ok( exists( @$orders[0]->{basketgroupid} ), "GetInvoiceDetails: The basketgroupid key exists" );
+ok( exists( @$orders[0]->{basketgroupname} ), "GetInvoiceDetails: The basketgroupname key exists" );
 
 my @invoices = GetInvoices();
 cmp_ok(scalar @invoices, '>=', 2, 'GetInvoices returns at least two invoices');
