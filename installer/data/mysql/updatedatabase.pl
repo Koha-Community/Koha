@@ -9534,7 +9534,7 @@ if( CheckVersion($DBversion) ){
     SetVersion($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.059";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         UPDATE permissions SET description = "Add and delete budgets (but can't modifiy budgets)" WHERE description = "Add and delete budgets (but cant modify budgets)";
