@@ -29,7 +29,7 @@ use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Borrower - Koha Borrower Object class
+Koha::AuthorisedValues - Koha AuthorisedValue Object set class
 
 =head1 API
 

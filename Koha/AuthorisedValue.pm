@@ -145,7 +145,7 @@ sub opac_description {
     return $self->lib_opac() || $self->lib();
 }
 
-=head3 Koha::Objects->_resultset
+=head3 Koha::Objects->_avb_resultset
 
 Returns the internal resultset or creates it if undefined
 
@@ -175,4 +175,3 @@ Kyle M Hall <kyle@bywatersolutions.com>
 =cut
 
 1;
-## Please see file perltidy.ERR
