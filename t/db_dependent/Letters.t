@@ -338,6 +338,6 @@ warning_is {
 
 is($err, 1, "Successfully sent claim");
 is($mail{'To'}, 'testemail@mydomain.com', "mailto correct in sent claim");
-is($mail{'Message'}, 'my vendor|John Smith|<order>Ordernumber ' . $ordernumber . ' (Silence in the library) (1 ordered)</order>', 'Claim notice text constructed successfully');
+is($mail{'Message'}, 'my vendor|John Smith|Ordernumber ' . $ordernumber . ' (Silence in the library) (1 ordered)', 'Claim notice text constructed successfully');
 
 $dbh->rollback;
