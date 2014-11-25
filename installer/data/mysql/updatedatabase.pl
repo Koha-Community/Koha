@@ -9543,7 +9543,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.17.00.060";
 if ( CheckVersion($DBversion) ) {
     my $count_l = $dbh->selectcol_arrayref(q|
         SELECT COUNT(*) FROM letter WHERE message_transport_type='feed'
