@@ -157,7 +157,7 @@ subtest 'GetHiddenItemnumbers tests' => sub {
 
 subtest 'GetItemsInfo tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     # Start transaction
     $dbh->{AutoCommit} = 0;
@@ -186,6 +186,8 @@ subtest 'GetItemsInfo tests' => sub {
         'GetItemsInfo returns the correct home branch OPAC info notice' );
     is( $results[0]->{ holding_branch_opac_info }, "holdingbranch OPAC info",
         'GetItemsInfo returns the correct holding branch OPAC info notice' );
+    is( exists( $results[0]->{ onsite_checkout } ), 1,
+        'GetItemsInfo returns a onsite_checkout key' );
 
     $dbh->rollback;
 };
