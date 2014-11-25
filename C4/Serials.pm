@@ -282,7 +282,7 @@ sub UpdateClaimdateIssues {
         WHERE  serialid in (" . join( ",", map { '?' } @$serialids ) . ")
     ";
     my $rq = $dbh->prepare($query);
-    $rq->execute($date, @$serialids, CLAIMED);
+    $rq->execute($date, CLAIMED, @$serialids);
     return $rq->rows;
 }
 
