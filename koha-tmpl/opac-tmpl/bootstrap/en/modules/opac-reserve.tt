@@ -173,12 +173,18 @@
                                                         </li>
                                                     [% END %]
 
-                                                    [% IF showholds || showpriority %]
+                                                    [% SET OPACShowHoldQueueDetails = Koha.Preference('OPACShowHoldQueueDetails') %]
+                                                    [% IF OPACShowHoldQueueDetails == 'holds_priority' || OPACShowHoldQueueDetails == 'priority' %]
                                                         <li class="priority">
-                                                            <span class="label">Holds and priority: </span>
-                                                            [% IF showpriority %] [% bibitemloo.rank %] [% END %]
-                                                            [% IF showholds && showpriority %] out of [% END %]
-                                                            [% IF showholds %] [% bibitemloo.reservecount %] [% END %]
+                                                            <span class="label">Your priority: </span>
+                                                            [% bibitemloo.rank %]
+                                                        </li>
+                                                    [% END %]
+
+                                                    [% IF OPACShowHoldQueueDetails == 'holds_priority' || OPACShowHoldQueueDetails == 'holds' %]
+                                                        <li class="holds-count">
+                                                            <span class="label">Number of holds: </span>
+                                                            [% bibitemloo.reservecount %]
                                                         </li>
                                                     [% END %]
 
