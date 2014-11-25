@@ -115,7 +115,7 @@ sub GetLetterTemplates {
 
     my $module    = $params->{module};
     my $code      = $params->{code};
-    my $branchcode = $params->{branchcode};
+    my $branchcode = $params->{branchcode} // '';
     my $dbh       = C4::Context->dbh;
     my $letters   = $dbh->selectall_hashref(
         q|

@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use C4::Context;
 use C4::Letters qw( GetLetterTemplates );
@@ -123,3 +123,8 @@ is( scalar( keys %$letter_templates ),
     1, '1 template should exist for circulation CPL code1' );
 is( exists( $letter_templates->{email} ),
     1, 'The mtt should be email for circulation CPL code1' );
+
+$letter_templates = C4::Letters::GetLetterTemplates(
+    { module => 'circulation', code => 'code1' } );
+is( scalar( keys %$letter_templates ),
+    2, '2 default templates should exist for circulation code1 (even if branchcode is not given)' );
