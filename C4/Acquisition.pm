@@ -2644,13 +2644,17 @@ sub GetInvoiceDetails {
     my $invoice = $sth->fetchrow_hashref;
 
     $query = q{
-        SELECT aqorders.*, biblio.*,
-        biblio.copyrightdate,
-        biblioitems.publishercode,
-        biblioitems.publicationyear,
-        aqbasket.basketname
+        SELECT aqorders.*,
+                biblio.*,
+                biblio.copyrightdate,
+                biblioitems.publishercode,
+                biblioitems.publicationyear,
+                aqbasket.basketname,
+                aqbasketgroups.id AS basketgroupid,
+                aqbasketgroups.name AS basketgroupname
         FROM aqorders
           LEFT JOIN aqbasket ON aqorders.basketno = aqbasket.basketno
+          LEFT JOIN aqbasketgroups ON aqbasket.basketgroupid = aqbasketgroups.id
           LEFT JOIN biblio ON aqorders.biblionumber = biblio.biblionumber
           LEFT JOIN biblioitems ON aqorders.biblionumber = biblioitems.biblionumber
         WHERE invoiceid = ?
