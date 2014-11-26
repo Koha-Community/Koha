@@ -3,7 +3,7 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 41;
+use Test::More tests => 42;
 use Test::MockModule;
 use Time::HiRes qw/ gettimeofday /;
 
@@ -159,3 +159,6 @@ $date_string = output_pref({ dt => $dt, dateformat => 'metric', timeformat => '2
 cmp_ok $date_string, 'eq', '11/12/2013 18:35', 'as_due_date with hours and timeformat 24hr (non-midnight time)';
 $date_string = output_pref({ dt => $dt, dateformat => 'us', timeformat => '12hr', as_due_date => 1 });
 cmp_ok $date_string, 'eq', '12/11/2013 06:35 PM', 'as_due_date with hours and timeformat 12hr (non-midnight time)';
+
+my $now = DateTime->now;
+is( dt_from_string, $now, "Without parameter, dt_from_string should return today" );

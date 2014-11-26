@@ -56,7 +56,7 @@ sub dt_from_string {
 
     # FIXME: see bug 13242 => no TZ for dates 'infinite'
     return DateTime::Format::DateParse->parse_datetime($date_string)
-        if $date_string =~ /^9999-/;
+        if $date_string and $date_string =~ /^9999-/;
 
     if ( !$tz ) {
         $tz = C4::Context->tz;
