@@ -75,7 +75,7 @@ if ( $email_add ) {
         $template2->param( biblionumber => $biblionumber );
 
         my $dat              = GetBiblioData($biblionumber);
-        my $record           = GetMarcBiblio($biblionumber);
+        my $record           = GetMarcBiblio($biblionumber, 1);
         my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
         my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
