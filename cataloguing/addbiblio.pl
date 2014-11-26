@@ -665,8 +665,8 @@ sub build_tabs {
                 foreach my $subfield ( sort( keys %{ $tagslib->{$tag} } ) ) {
                     next if ( length $subfield != 1 );
                     next
-                      if ( ( $tagslib->{$tag}->{$subfield}->{hidden} <= -5 )
-                        or ( $tagslib->{$tag}->{$subfield}->{hidden} >= 4 ) )
+                      if ( ( $tagslib->{$tag}->{$subfield}->{hidden} <= -4 )
+                        or ( $tagslib->{$tag}->{$subfield}->{hidden} >= 5 ) )
                       and not ( $subfield eq "9" and
                                 exists($tagslib->{$tag}->{'a'}->{authtypecode}) and
                                 defined($tagslib->{$tag}->{'a'}->{authtypecode}) and
