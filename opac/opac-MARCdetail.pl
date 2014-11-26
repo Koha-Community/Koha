@@ -314,11 +314,6 @@ if(C4::Context->preference("ISBD")) {
 	$template->param(ISBD => 1);
 }
 
-#Export options
-my $OpacExportOptions=C4::Context->preference("OpacExportOptions");
-my @export_options = split(/\|/,$OpacExportOptions);
-$template->{VARS}->{'export_options'} = \@export_options;
-
 #Search for title in links
 my $marcflavour  = C4::Context->preference("marcflavour");
 my $dat = TransformMarcToKoha( $dbh, $record );

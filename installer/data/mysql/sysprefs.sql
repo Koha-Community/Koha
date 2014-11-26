@@ -252,7 +252,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OPACdefaultSortOrder','dsc','asc|dsc|za|az','Specify the default sort order','Choice'),
 ('OPACdidyoumean',NULL,NULL,'Did you mean? configuration for the OPAC. Do not change, as this is controlled by /cgi-bin/koha/admin/didyoumean.pl.','Free'),
 ('OPACDisplay856uAsImage','OFF','OFF|Details|Results|Both','Display the URI in the 856u field as an image, the corresponding OPACXSLT option must be on','Choice'),
-('OpacExportOptions','bibtex|dc|marcxml|marc8|utf8|marcstd|mods|ris','','Define export options available on OPAC detail page.','free'),
+('OpacExportOptions','bibtex,dc,marcxml,marc8,utf8,marcstd,mods,ris','','Define export options available on OPAC detail page.','multiple'),
 ('OPACFallback', 'prog', 'bootstrap|prog', 'Define the fallback theme for the OPAC interface.', 'Themes'),
 ('OpacFavicon','','','Enter a complete URL to an image to replace the default Koha favicon on the OPAC','free'),
 ('OPACFineNoRenewals','100','','Fine limit above which user cannot renew books via OPAC','Integer'),

@@ -275,10 +275,15 @@ OPAC:
         -
             - 'List export options that should be available from OPAC detail page separated by |:'
             - pref: OpacExportOptions
-              class: multi
-            - '<br />Note: Available options are: BIBTEX (<code>bibtex</code>), Dublin Core (<code>dc</code>),'
-            - 'MARCXML (<code>marcxml</code>), MARC-8 encoded MARC (<code>marc8</code>), Unicode/UTF-8 encoded MARC (<code>utf8</code>),'
-            - 'Unicode/UTF-8 encoded MARC without local use -9xx, x9x, xx9- fields and subfields (<code>marcstd</code>), MODS (<code>mods</code>), RIS (<code>ris</code>)'
+              multiple:
+                bibtex: BibTeX
+                dc: Dublin Core
+                marcxml: MARCXML
+                marc8: MARC-8 encoded MARC
+                utf8: Unicode/UTF-8 encoded MARC
+                marcstd: Unicode/UTF-8 encoded MARC without local use -9xx, x9x, xx9- fields and subfields
+                mods: MODS
+                ris: RIS
         -
             - pref: OpacSeparateHoldings
               choices:

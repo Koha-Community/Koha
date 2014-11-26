@@ -34,7 +34,8 @@
     </li>
     [% END %]
 
-    [% IF ( export_options.size ) %]
+    [% SET export_options = Koha.Preference('OpacExportOptions').split(',') %]
+    [% IF export_options.size %]
         <li>
             <div id="export">
                 <div class="dropdown">
