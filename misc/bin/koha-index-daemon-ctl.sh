@@ -41,9 +41,8 @@ OUTPUT=$LOGDIR/koha-index-daemon-output.log
 export KOHA_CONF
 export PERL5LIB
 
-INDEXDAEMON="koha-index-daemon"
-INDEXDAEMON_OPTS="--timeout 30 --conf $KOHA_CONF \
-                  --directory /var/tmp/koha-index-daemon-$DBNAME"
+INDEXDAEMON="$PERL5LIB/misc/migration_tools/rebuild_zebra.pl --daemon"
+INDEXDAEMON_OPTS=""
 
 DAEMONOPTS="--name=$NAME \
             --errlog=$ERRLOG \
