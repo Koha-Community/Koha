@@ -76,7 +76,7 @@
     <form action="/cgi-bin/koha/admin/preferences.pl" method="post">
         [% UNLESS ( searchfield ) %]<div id="toolbar"><button class="save-all submit" type="submit">Save all [% TAB.tab_title %] preferences</button></div>[% END %]
         <input type="hidden" name="op" value="save" />
-        <input type="hidden" name="tab" value="[% TAB.tab %]" />
+        <input type="hidden" name="tab" value="[% TAB.tab_id %]" />
 
             [% FOREACH LINE IN TAB.LINES %]
             [% IF ( LINE.is_group_title ) %]

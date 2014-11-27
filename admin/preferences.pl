@@ -262,7 +262,7 @@ sub SearchPrefs {
         if ( $matched_groups ) {
             my ( $title, $LINES ) = TransformPrefsToHTML( { $title => $matched_groups }, $searchfield );
 
-            push @tabs, { tab => $tab, tab_title => $title, LINES => $LINES, };
+            push @tabs, { tab => $tab, tab_title => $title, LINES => $LINES, tab_id => $tab_name };
         }
     }
 
@@ -346,7 +346,7 @@ if ( $op eq 'search' ) {
 if ( $tab ) {
     my ( $tab_title, $LINES ) = TransformPrefsToHTML( GetTab( $input, $tab ), $highlighted );
 
-    push @TABS, { tab_title => $tab_title, LINES => $LINES };
+    push @TABS, { tab_title => $tab_title, LINES => $LINES, tab_id => $tab };
     $template->param(
         $tab => 1,
         tab => $tab,
