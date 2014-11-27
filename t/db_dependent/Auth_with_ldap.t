@@ -84,7 +84,7 @@ subtest "checkpw_ldap tests" => sub {
 
     subtest "auth_by_bind = 1 tests" => sub {
 
-        plan tests => 5;
+        plan tests => 7;
 
         $auth_by_bind          = 1;
 
@@ -119,6 +119,22 @@ subtest "checkpw_ldap tests" => sub {
                     qr/LDAP bind failed as kohauser hola: LDAP error #1: error_name/,
                     "checkpw_ldap prints correct warning if LDAP bind fails";
         is ( $ret, -1, "checkpw_ldap returns -1 LDAP bind fails for user (Bug 8148)");
+
+        # regression tests for bug 12831
+        $desired_authentication_result = 'error';
+        $anonymous_bind        = 0;
+        $desired_bind_result   = 'error';
+        $desired_search_result = 'success';
+        $desired_count_result  = 0; # user auth problem
+        $non_anonymous_bind_result = 'error';
+        reload_ldap_module();
+
+        warning_like { $ret = C4::Auth_with_ldap::checkpw_ldap(
+                               $dbh, 'hola', password => 'hey' ) }
+                    qr/LDAP bind failed as kohauser hola: LDAP error #1: error_name/,
+                    "checkpw_ldap prints correct warning if LDAP bind fails";
+        is ( $ret, 0, "checkpw_ldap returns 0 LDAP bind fails for user (Bug 12831)");
+
     };
 
     subtest "auth_by_bind = 0 tests" => sub {
