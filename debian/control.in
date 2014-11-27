@@ -25,7 +25,7 @@ Depends: ${misc:Depends}, ${koha:Depends},
  idzebra-2.0,
  libjs-jquery,
  libjs-yui,
- mysql-client,
+ mysql-client | virtual-mysql-client,
  perl-doc,
  pwgen,
  sudo,
@@ -34,7 +34,7 @@ Depends: ${misc:Depends}, ${koha:Depends},
  unzip,
  xmlstarlet,
  yaz
-Suggests: mysql-server,
+Suggests: mysql-server | virtual-mysql-server,
  memcached
 Homepage: http://koha-community.org/
 Description: integrated (physical) library management system
@@ -49,7 +49,7 @@ Architecture: all
 Depends: ${shlib:Depends}, ${misc:Depends},
  koha-common,
  dbconfig-common,
- mysql-server
+ mysql-server | virtual-mysql-server
 Homepage: http://koha-community.org/
 Description: integrated (physical) library management system
  Koha is an Integrated Library Managment system for real-world libraries
@@ -73,8 +73,8 @@ Depends: ${misc:Depends},
  idzebra-2.0,
  libjs-jquery,
  libjs-yui,
- mysql-client,
- mysql-server,
+ mysql-client | virtual-mysql-client,
+ mysql-server | virtual-mysql-server,
  perl-doc,
  pwgen,
  sudo,
