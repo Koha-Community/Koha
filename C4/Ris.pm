@@ -62,6 +62,7 @@ package C4::Ris;
 #use strict;
 #use warnings;
 
+use List::MoreUtils qw/uniq/;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -218,31 +219,28 @@ sub marc2ris {
 	}
 
 	## 6XX fields contain KW candidates. We add all of them to a
-	## hash to eliminate duplicates
-	my %kwpool;
 
-	if ($intype eq "unimarc") {
-	    foreach ('600', '601', '602', '604', '605', '606','607', '608', '610', '615', '620', '660'. '661', '670', '675', '676', '680', '686') {
-		&get_keywords(\%kwpool, "$_",$record->field($_));
-	    }
-	}
-	elsif ($intype eq "ukmarc") {
-	    foreach ('600', '610', '611', '630', '650', '651','653', '655', '660', '661', '668', '690', '691', '692', '695') {
-		&get_keywords(\%kwpool, "$_",$record->field($_));
-	    }
-	}
-	else { ## assume marc21
-	    foreach ('600', '610', '611', '630', '650', '651','653', '654', '655', '656', '657', '658') {
-		&get_keywords(\%kwpool, "$_",$record->field($_));
-	    }
-	}
+    my @field_list;
+    if ($intype eq "unimarc") {
+        @field_list = ('600', '601', '602', '604', '605', '606','607', '608', '610', '615', '620', '660'. '661', '670', '675', '676', '680', '686');
+    } elsif ($intype eq "ukmarc") {
+        @field_list = ('600', '610', '611', '630', '650', '651','653', '655', '660', '661', '668', '690', '691', '692', '695');
+    } else { ## assume marc21
+        @field_list = ('600', '610', '611', '630', '650', '651','653', '654', '655', '656', '657', '658');
+    }
 
-	## print all keywords found in the hash. The value of each hash
-	## entry is the number of occurrences, but we're not really interested
-	## in that and rather print the key
-	while (my ($key, $value) = each %kwpool) {
-	    print "KW  - ", &charconv($key), "\r\n";
-	}
+    my @kwpool;
+    for my $f ( @field_list ) {
+        my @fields = $record->field($f);
+        push @kwpool, ( get_keywords("$f",$record->field($f)) );
+    }
+
+    # Remove duplicate
+    @kwpool = uniq @kwpool;
+
+    for my $kw ( @kwpool ) {
+        print "KW  - ", &charconv($kw), "\r\n";
+    }
 
 	## 5XX have various candidates for notes and abstracts. We pool
 	## all notes-like stuff in one list.
@@ -762,8 +760,9 @@ sub print_pubinfo {
 ## Arguments: list of fields (6XX)
 ##********************************************************************
 sub get_keywords {
-    my($href, $fieldname, @keywords) = @_;
+    my($fieldname, @keywords) = @_;
 
+    my @kw;
     ## a list of all possible subfields
     my @subfields = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'x', 'y', 'z', '2', '3', '4');
 
@@ -773,7 +772,7 @@ sub get_keywords {
 	    ## authornames get special treatment
 	    if ($fieldname eq "600") {
 		my $val = normalize_author($kwfield->subfield('a'), $kwfield->subfield('b'), $kwfield->subfield('c'), $kwfield->indicator('1'));
-		${$href}{$val} += 1;
+        push @kw, $val;
 		print "<marc>Field $kwfield subfield a:", $kwfield->subfield('a'), "\r\n<marc>Field $kwfield subfield b:", $kwfield->subfield('b'), "\r\n<marc>Field $kwfield subfield c:", $kwfield->subfield('c'), "\r\n" if $marcprint;
 	    }
 	    else {
@@ -789,8 +788,7 @@ sub get_keywords {
 			    ## [1] contains value, remove trailing separators
 			    @$kwtuple[1] =~ s% *[,;.:/]*$%%;
 			    if (length(@$kwtuple[1]) > 0) {
-				## add to hash
-				${$href}{@$kwtuple[1]} += 1;
+                push @kw, @$kwtuple[1];
 				print "<marc>Field $fieldname subfield $subfield:", @$kwtuple[1], "\r\n" if $marcprint;
 			    }
 			    ## we can leave the subfields loop here
@@ -801,6 +799,7 @@ sub get_keywords {
 	    }
 	}
     }
+    return @kw;
 }
 
 ##********************************************************************
