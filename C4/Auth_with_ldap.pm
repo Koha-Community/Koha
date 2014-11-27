@@ -311,11 +311,12 @@ sub _do_changepassword {
         my $sth = C4::Context->dbh->prepare(
             'SELECT cardnumber FROM borrowers WHERE borrowernumber=?');
         $sth->execute($borrowerid);
-        die
-"Unable to access borrowernumber with userid=$userid, borrowernumber=$borrowerid"
+        die "Unable to access borrowernumber "
+            . "with userid=$userid, "
+            . "borrowernumber=$borrowerid"
           if !$sth->rows;
         my ($cardnum) = $sth->fetchrow;
-        my $sth = C4::Context->dbh->prepare(
+        $sth = C4::Context->dbh->prepare(
             'UPDATE borrowers SET password = null WHERE borrowernumber=?');
         $sth->execute($borrowerid);
         return $cardnum;
