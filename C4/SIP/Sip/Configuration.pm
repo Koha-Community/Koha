@@ -71,7 +71,7 @@ sub accounts {
 sub find_service {
     my ($self, $sockaddr, $port, $proto) = @_;
     my $portstr;
-	foreach my $addr ('', '*:', "$sockaddr:") {
+	foreach my $addr ('', '*:', "$sockaddr:", "[$sockaddr]:") {
 		$portstr = sprintf("%s%s/%s", $addr, $port, lc $proto);
 		Sys::Syslog::syslog("LOG_DEBUG", "Configuration::find_service: Trying $portstr");
 		last if (exists(($self->{listeners})->{$portstr}));
