@@ -371,7 +371,6 @@ sub update_tmpl {
             "    To  : $self->{path_po}/$self->{lang}$trans->{suffix}\n"
                 if $self->{verbose};
         my $lang_dir = "$trans->{dir}/$self->{lang}";
-        mkdir $lang_dir unless -d $lang_dir;
 
         my $trans_dir = ( $trans->{name} =~ /help/ )?"$trans->{dir}":"$trans->{dir}/en/";
         my $excludes  = ( $trans->{name} =~ /UI/   )?"-x 'help'":"";
