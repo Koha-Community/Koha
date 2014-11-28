@@ -1,9 +1,36 @@
 [% USE CGI %]
 [% USE JSON.Escape %]
 
+[% BLOCK form_label %]
+  [% SWITCH label %]
+    [% CASE 'barcode' %]<span>Barcode</span>
+    [% CASE 'itemcallnumber' %]<span>Call number</span>
+    [% CASE 'stocknumber' %]<span>Stock number</span>
+    [% CASE 'title' %]<span>Title</span>
+    [% CASE 'author' %]<span>Author</span>
+    [% CASE 'publishercode' %]<span>Publisher</span>
+    [% CASE 'publicationdate' %]<span>Publication date</span>
+    [% CASE 'collectiontitle' %]<span>Collection</span>
+    [% CASE 'isbn' %]<span>ISBN</span>
+    [% CASE 'issn' %]<span>ISSN</span>
+    [% CASE 'homebranch' %]<span>Home library</span>
+    [% CASE 'All libraries' %]<span>All libraries</span>
+    [% CASE 'location' %]<span>Shelving location</span>
+    [% CASE 'All locations' %]<span>All locations</span>
+    [% CASE 'itype' %]<span>Item type</span>
+    [% CASE 'All item types' %]<span>All item types</span>
+    [% CASE 'ccode' %]<span>Collection code</span>
+    [% CASE 'All collection codes' %]<span>All collection codes</span>
+    [% CASE 'notforloan' %]<span>Status</span>
+    [% CASE 'All statuses' %]<span>All statuses</span>
+    [% CASE 'damaged' %]<span>Damaged</span>
+    [% CASE 'itemlost' %]<span>Lost</span>
+  [% END %]
+[% END %]
+
 [% BLOCK form_field_select %]
   <div class="form-field form-field-select">
-    <label class="form-field-label" for="[% name %]">[% label %]</label>
+    <label class="form-field-label" for="[% name %]">[% INCLUDE form_label label=name %]</label>
     <select id="[% name %]_op" name="[% name %]_op">
       <option value="=">is</option>
       [% IF CGI.param(name _ '_op') == '!=' %]
@@ -19,7 +46,7 @@
       [% ELSE %]
         <option value="">
       [% END %]
-        [% empty_option || "All" %]
+        [% IF (empty_option) %][% INCLUDE form_label label=empty_option %][% ELSE %]<span>All</span>[% END %]
       </option>
       [% FOREACH option IN options %]
         [% IF values != '' && values.grep(option.value).size %]
@@ -34,9 +61,9 @@
 
 [% BLOCK form_field_select_option %]
   [% IF params.f == value %]
-    <option value="[% value %]" selected="selected">[% label %]</option>
+    <option value="[% value %]" selected="selected">[% INCLUDE form_label label=value %]</option>
   [% ELSE %]
-    <option value="[% value %]">[% label %]</option>
+    <option value="[% value %]">[% INCLUDE form_label label=value %]</option>
   [% END %]
 [% END %]
 
@@ -58,16 +85,16 @@
       </select>
     [% END %]
     <select name="f" class="form-field-column">
-      [% INCLUDE form_field_select_option value='barcode' label='Barcode' %]
-      [% INCLUDE form_field_select_option value='itemcallnumber' label='Call number' %]
-      [% INCLUDE form_field_select_option value='stocknumber' label='Stock number' %]
-      [% INCLUDE form_field_select_option value='title' label='Title' %]
-      [% INCLUDE form_field_select_option value='author' label='Author' %]
-      [% INCLUDE form_field_select_option value='publishercode' label='Publisher' %]
-      [% INCLUDE form_field_select_option value='publicationdate' label='Publication date' %]
-      [% INCLUDE form_field_select_option value='collectiontitle' label='Collection' %]
-      [% INCLUDE form_field_select_option value='isbn' label='ISBN' %]
-      [% INCLUDE form_field_select_option value='issn' label='ISSN' %]
+      [% INCLUDE form_field_select_option value='barcode' %]
+      [% INCLUDE form_field_select_option value='itemcallnumber' %]
+      [% INCLUDE form_field_select_option value='stocknumber' %]
+      [% INCLUDE form_field_select_option value='title' %]
+      [% INCLUDE form_field_select_option value='author' %]
+      [% INCLUDE form_field_select_option value='publishercode' %]
+      [% INCLUDE form_field_select_option value='publicationdate' %]
+      [% INCLUDE form_field_select_option value='collectiontitle' %]
+      [% INCLUDE form_field_select_option value='isbn' %]
+      [% INCLUDE form_field_select_option value='issn' %]
       [% IF items_search_fields.size %]
         <optgroup label="Custom search fields">
           [% FOREACH field IN items_search_fields %]
@@ -117,7 +144,7 @@
 
 [% BLOCK form_field_radio_yes_no %]
   <div class="form-field">
-    <label class="form-field-label">[% label %]:</label>
+    <label class="form-field-label">[% INCLUDE form_label label=name %]:</label>
     <input type="radio" name="[% name %]" id="[% name %]_indifferent" value="" checked="checked"/>
     <label for="[% name %]_indifferent">Ignore</label>
     <input type="radio" name="[% name %]" id="[% name %]_yes" value="yes" />
@@ -274,7 +301,8 @@
     $(document).ready(function () {
       // Add the "New field" link.
       var form_field = $('div.form-field-select-text').last()
-      var button_field_new = $('<a href="#" class="button-field-new" title="Add a new field">New field</a>');
+      var NEW_FIELD = _("New field");
+      var button_field_new = $('<a href="#" class="button-field-new" title="Add a new field">' + NEW_FIELD + '</a>');
       button_field_new.click(function() {
         addNewField();
         return false;
@@ -334,13 +362,11 @@
           <fieldset>
             [% INCLUDE form_field_select
               name="homebranch"
-              label="Home library"
               options = branches
               empty_option = "All libraries"
             %]
             [% INCLUDE form_field_select
               name="location"
-              label="Shelving location"
               options = locations
               empty_option = "All locations"
             %]
@@ -348,19 +374,16 @@
           <fieldset>
             [% INCLUDE form_field_select
               name="itype"
-              label="Item type"
               options = itemtypes
               empty_option = "All item types"
             %]
             [% INCLUDE form_field_select
               name="ccode"
-              label="Collection code"
               options = ccodes
               empty_option = "All collection codes"
             %]
             [% INCLUDE form_field_select
               name="notforloan"
-              label="Status"
               options = notforloans
               empty_option = "All statuses"
             %]
@@ -384,8 +407,8 @@
               <input type="text" id="itemcallnumber_to" name="itemcallnumber_to" value="[% value %]" />
               <span class="hint">(inclusive)</span>
             </div>
-            [% INCLUDE form_field_radio_yes_no name="damaged" label="Damaged" %]
-            [% INCLUDE form_field_radio_yes_no name="itemlost" label="Lost" %]
+            [% INCLUDE form_field_radio_yes_no name="damaged" %]
+            [% INCLUDE form_field_radio_yes_no name="itemlost" %]
             <div class="form-field">
               <label class="form-field-label" for="issues_op">Checkout count:</label>
               <select id="issues_op" name="issues_op">
