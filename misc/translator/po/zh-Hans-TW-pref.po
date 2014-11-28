@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: zh-Hans-TW-pref\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2014-09-11 02:01+0000\n"
+"PO-Revision-Date: 2014-11-28 07:11+0000\n"
 "Last-Translator: Anthony <mao@lins.fju.edu.tw>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: zh_TW\n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1410400887.0\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1417158693.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -44,19 +44,19 @@ msgstr "收到訂單。"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqEnableFiles# Do"
-msgstr ""
+msgstr "做"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqEnableFiles# Don't"
-msgstr ""
+msgstr "不做"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqEnableFiles# enable the ability to upload and attach arbitrary files to invoices."
-msgstr ""
+msgstr "啟用上傳與附加檔案至發票的功能。"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqItemSetSubfieldsWhenReceiptIsCancelled# Upon cancelling a receipt, update the item's subfields if they were created when placing an order (e.g. o=5|a=\"bar foo\"\")."
-msgstr ""
+msgstr "發出訂單時(如：o=5|a=\"bar foo\"\")已新增收條，若要求取消該收條，則更新館藏的分欄。"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqItemSetSubfieldsWhenReceived# Upon receiving items, update their subfields if they were created when placing an order (e.g. o=5|a=\"foo bar\")."
@@ -188,7 +188,7 @@ msgstr "Mozilla Persona"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref Share anonymous usage statistics"
-msgstr ""
+msgstr "共享匿名使用統計"
 
 # Administration > CAS Authentication
 msgid "admin.pref#AllowPkiAuth# Use"
@@ -276,19 +276,19 @@ msgstr "Mozilla persona for login"
 
 # Administration > Interface options
 msgid "admin.pref#ReplytoDefault# Use"
-msgstr ""
+msgstr "使用"
 
 # Administration > Interface options
 msgid "admin.pref#ReplytoDefault# as the email address that will be set as the replyto in emails"
-msgstr ""
+msgstr "做為回覆的電子郵件地址"
 
 # Administration > Interface options
 msgid "admin.pref#ReturnpathDefault# Use"
-msgstr ""
+msgstr "使用"
 
 # Administration > Interface options
 msgid "admin.pref#ReturnpathDefault# as the email address set as the return path, if you leave this empty the admin address will be used."
-msgstr ""
+msgstr "做為退回的電子郵件地址，若空白則使用管理者的電子郵件地址。"
 
 # Administration > Login options
 msgid "admin.pref#SessionStorage# Store login session information"
@@ -312,27 +312,30 @@ msgstr "在 PostgreSQL 資料庫(不支援)。"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# Don't share"
-msgstr ""
+msgstr "不共享"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# Share"
-msgstr ""
+msgstr "共享"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# anonymous Koha usage data with the Koha community. You can see the data on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
 msgstr ""
+"匿名使用 Koha 社群。可在<a href=\"http://hea.koha-community.org\">Hea Koha community "
+"website</a>網站使用它。"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr ""
+msgstr "若 UsageStats 系統偏好設為 \"不共享\"，則此值沒有影響"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# The country where your library is located:"
-msgstr ""
+msgstr "您的圖書館位在此國家："
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# This will be shown on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
 msgstr ""
+"此資料將顯示在<a href=\"http://hea.koha-community.org\">Hea Koha community</a>網站。"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryName# If this field is empty data will be sent anonymously."
@@ -1278,6 +1281,18 @@ msgstr "不允許"
 msgid "circulation.pref#AllowOnShelfHolds# hold requests to be placed on items that are not checked out."
 msgstr "預約尚未借出的館藏。"
 
+# Circulation > Holds Policy
+msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Allow"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Don't allow"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# a patron to renew an item with unfilled holds if other available items can fill that hold."
+msgstr ""
+
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowRenewalLimitOverride# Allow"
 msgstr "允許"
@@ -1477,6 +1492,42 @@ msgstr "確認未來的預約需求(不能晚於"
 # Circulation > Holds Policy
 msgid "circulation.pref#ConfirmFutureHolds# days from now) at checkin time. Note that this number of days will be used too in calculating the default end date for the Holds to pull-report. But it does not interfere with issuing, renewing or transferring books."
 msgstr "天前)。注意，此天數將用於計算預約終止日，但不影響借出、續借或轉移圖書。"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the longoverdue.pl script is called without the --charge parameter)"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>Leave this field empty if you don't want to charge the user for lost items."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# Charge a lost item to the borrower's account when the LOST value of the item changes to :"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br>(Used when the longoverdue.pl script is called without the --lost parameter)"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br>Example: [1] [30] Sets an item to the LOST value 1 when it has been overdue for more than 30 days."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br>WARNING — These preferences will activate the automatic item loss process. Leave these fields empty if you don't want to activate this feature."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# By default, set the LOST value of an item to"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# days."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# when the item has been overdue for more than"
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
@@ -3524,28 +3575,28 @@ msgid "opac.pref#OPACBaseURL# The OPAC is located at http://"
 msgstr "線上公用目錄的網址為 http://"
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Both Details and Results pages"
-msgstr "顯示詳細內容與結果"
+msgid "opac.pref#OPACDisplay856uAsImage# . Note: The corresponding OPACXSLT option must be turned on."
+msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Details page only"
-msgstr "祗顯示詳細內容"
+msgid "opac.pref#OPACDisplay856uAsImage# Both detail and result pages"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OPACDisplay856uAsImage# Detail page only"
+msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# Display the URI in the 856u field as an image on: "
 msgstr "顯示欄位 856u 連結的影像： "
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Neither Details or Results pages"
-msgstr "不顯示詳細內容與結果"
+msgid "opac.pref#OPACDisplay856uAsImage# Neither detail or result pages"
+msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Note: The corresponding OPACXSLT option must be turned on."
-msgstr "說明：必須打開對應的 OPACXSLT 選項。"
-
-# OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Results page only"
-msgstr "祗顯示結果"
+msgid "opac.pref#OPACDisplay856uAsImage# Result page only"
+msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACFallback# Use the"
@@ -4535,275 +4586,323 @@ msgstr "讀者從線上公用目錄推薦購買。"
 msgid "patrons.pref"
 msgstr "讀者"
 
-# Patrons
+# Patrons > General
+msgid "patrons.pref General"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref Norwegian patron database"
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# List"
 msgstr "虛擬書架"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# general patron types"
 msgstr "一般讀者類型"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# specific categories"
 msgstr "特定讀者類型"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# under the new patron menu."
 msgstr "在新的讀者清單之下。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# Don't send"
 msgstr "不送出"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# Send"
 msgstr "送出"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# an email to newly created patrons with their account details."
 msgstr "將新增讀者的帳號詳情，以電子郵件寄給對方"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# Use"
 msgstr "使用"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# alternate"
 msgstr "其他"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# cardnumber as"
 msgstr "讀者號"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# first valid"
 msgstr "第一個有效的"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# home"
 msgstr "住家"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# patron email address for sending out emails."
 msgstr "讀者的電子郵件帳號，用於接收圖書館發送的通知。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# work"
 msgstr "工作"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# (separate columns with |)"
 msgstr "(以直線 | 區隔各欄)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr "以下的 <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'> 資料庫欄位</a>必須填入資料："
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# When renewing borrowers, base the new expiry date on"
 msgstr "更新讀者時，以新的到期日為準"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current date."
 msgstr "現在日期。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current membership expiry date."
 msgstr "讀者證到期日。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerUnwantedField# (separate columns with |)"
 msgstr "(以直線 | 區隔各欄)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerUnwantedField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
 msgstr "以下 <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>資料庫欄位</a> 必須填入資料："
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowersTitles# (separate multiple choices with |)"
 msgstr "(以直線 | 區隔各欄)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowersTitles# Borrowers can have the following titles:"
 msgstr "讀者的稱謂如下："
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#CardnumberLength# Card numbers for patrons must be"
 msgstr "讀者證號碼必須"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#CardnumberLength# If 'cardnumber' is included in the BorrowerMandatoryField list, the minimum length, if not specified here, defaults to one."
 msgstr "若在BorrowerMandatoryField 欄位把'cardnumber'納入，若沒有指明，則最小長度為 1。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#CardnumberLength# characters long. The length can be a single number to specify an exact length, a range separated by a comma (i.e., 'Min,Max'), or a maximum with no minimum (i.e., ',Max')."
 msgstr "字元長度。長度可以是一個數字至指定的長度，以逗點區隔(如，'最少，最多')，或指定最多但沒有最少(如，'，最多')。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
 msgstr "做"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Don't"
 msgstr "不做"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# enable the ability to upload and attach arbitrary files to a borrower record."
 msgstr "啟用上傳與附加檔案至借閱者記錄功能。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# Allow"
 msgstr "允許"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# Don't allow"
 msgstr "不允許"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# patrons to choose which notices they receive and when they receive them. Note that this only applies to certain kinds of notices."
 msgstr "讀者選擇收取訊息的種類與時間。此選項祗適用於特定的訊息。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# Don't enable"
 msgstr "停用"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# Enable"
 msgstr "啟用"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# searching, editing and display of custom attributes on patrons."
 msgstr "檢索、編輯與顯示讀者屬性。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#MaxFine# Empty value means no limit. Single item caps are specified in the circulation rules matrix."
 msgstr "清空值表示沒有限制。單一館藏的限制顯示在流通規則矩陣裡。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#MaxFine# The late fine for all checkouts will only go up to"
 msgstr "罰款的總額不超過"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#MaxFine# [% local_currency %]."
 msgstr " [% local_currency %]。"
 
-# Patrons
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# Disable"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# Enable"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# endpoint."
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# the ability to communicate with the Norwegian national patron database via the"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# Do"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# Don't"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# search the Norwegian national patron database after a local search result was found."
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBUsername# . You can get these from \"Base Bibliotek\", which is maintained by the Norwegian National Library."
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBUsername# Communicate with the Norwegian national patron database using the username"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBUsername# and the password"
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#NotifyBorrowerDeparture# Show a notice if the patron is about to expire or has expired"
 msgstr "若讀者將失效則顯示說明"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
 msgstr "天前，提示讀者。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#PatronsPerPage# By default, show"
 msgstr "預設，顯示"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#PatronsPerPage# results per page in the staff client."
 msgstr "個檢索結果，在館員介面的每頁。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#SMSSendDriver# Use the SMS::Send::"
 msgstr "使用 SMS::Send::"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#SMSSendDriver# driver to send SMS messages."
 msgstr "發送簡訊的驅動程式。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#StatisticsFields# (separate fields with |)"
 msgstr "(以直線 | 區隔各欄)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#StatisticsFields# Show the following fields from the items database table as columns on the statistics tab on the patron record: "
 msgstr "從館藏表取得資料，讀者記錄的統計分頁顯示以下各欄位： "
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# Disable"
 msgstr "停用"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# Enable"
 msgstr "啟用"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# patron phone notifications using Talking Tech i-tiva (overdues, predues and holds notices currently supported)."
 msgstr "以 Talking Tech i-tiva (支持逾期、產生與預約通知)電話通知讀者。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#autoMemberNum# Do"
 msgstr "採用"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#autoMemberNum# Don't"
 msgstr "不採用"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#autoMemberNum# default the card number field on the patron addition screen to the next available card number (for example, if the largest currently used card number is 26345000012941, then this field will default to 26345000012942)."
 msgstr "預設的讀者證號碼，新增至下個可用的號碼(如：最新的讀者證號碼為26345000012941，則下個號碼自動為26345000012942)。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#borrowerRelationship# (input multiple choices separated by |). Leave empty to deactivate"
 msgstr "(輸入多個選擇，以 | 區隔)。空白則停用"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#borrowerRelationship# Guarantors can be the following of those they guarantee:"
 msgstr "法定代理人與被代理人的關係為："
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#checkdigit# Do"
 msgstr "要"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#checkdigit# Don't"
 msgstr "不要"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#checkdigit# check and construct borrower card numbers in the Katipo style. This overrides <code>autoMemberNum</code> if on."
 msgstr "檢查與建構讀者證號碼，採用 Katipo 格式；以此參數取代<code>autoMemberNum</code>。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#intranetreadinghistory# Allow"
 msgstr "允許"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#intranetreadinghistory# Don't allow"
 msgstr "不允許"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#intranetreadinghistory# staff to access a patron's checkout history (it is stored regardless)."
 msgstr "館員近用讀者的借出記錄(與儲存無關)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#minPasswordLength# Login passwords for staff and patrons must be at least"
 msgstr "館員與讀者的密碼長度，至少應有"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#minPasswordLength# characters long."
 msgstr "個字元。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#patronimages# Allow"
 msgstr "允許"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#patronimages# Don't allow"
 msgstr "不允許"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#patronimages# images to be uploaded and shown for patrons on the staff client."
 msgstr "讀者上傳照片，並顯示在館員介面。"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#uppercasesurnames# Do"
 msgstr "要"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#uppercasesurnames# Don't"
 msgstr "不要"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#uppercasesurnames# store and display surnames in upper case."
 msgstr "以大寫儲存與顯示姓。"
 
@@ -5340,28 +5439,28 @@ msgid "staff_client.pref Options"
 msgstr "選項"
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Both Results and Details pages (for future use, Results XSLT not functional at this time)."
-msgstr "結果與細節頁面(保留給未來之用，現在還不能用 XSLT 功能)。"
+msgid "staff_client.pref#Display856uAsImage# . Note: The corresponding XSLT option must be turned on."
+msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Details page only"
-msgstr "祗在詳細頁面"
+msgid "staff_client.pref#Display856uAsImage# Both result and detail pages"
+msgstr ""
+
+# Staff Client > Appearance
+msgid "staff_client.pref#Display856uAsImage# Detail page only"
+msgstr ""
 
 # Staff Client > Appearance
 msgid "staff_client.pref#Display856uAsImage# Display the URI in the 856u field as an image on: "
 msgstr "在 856u 欄位的網址，以圖片顯示在： "
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Neither Details or Results pages"
-msgstr "沒有詳細頁面與結果頁面"
+msgid "staff_client.pref#Display856uAsImage# Neither detail or result pages"
+msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Note: The corresponding XSLT option must be turned on."
-msgstr "說明：必須打開對應的 XSLT 選項。"
-
-# Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Results page (for future use, Results XSLT not functional at this time)."
-msgstr "結果頁面(保留給未來之用，現在還不能用 XSLT 功能)。"
+msgid "staff_client.pref#Display856uAsImage# Result page"
+msgstr ""
 
 # Staff Client > Appearance
 msgid "staff_client.pref#DisplayIconsXSLT# Don't show"
@@ -5674,4 +5773,3 @@ msgstr "祗送回"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "經由報表頁面服務指定報表的列數。"
-

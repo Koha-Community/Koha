@@ -1277,6 +1277,18 @@ msgstr "Não permitir"
 msgid "circulation.pref#AllowOnShelfHolds# hold requests to be placed on items that are not checked out."
 msgstr "pedidos de reserva em exemplares que não estão emprestados."
 
+# Circulation > Holds Policy
+msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Allow"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Don't allow"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# a patron to renew an item with unfilled holds if other available items can fill that hold."
+msgstr ""
+
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowRenewalLimitOverride# Allow"
 msgstr "Permitir"
@@ -1476,6 +1488,42 @@ msgstr "Confirmar futuros pedidos de reserva (a começar antes de"
 # Circulation > Holds Policy
 msgid "circulation.pref#ConfirmFutureHolds# days from now) at checkin time. Note that this number of days will be used too in calculating the default end date for the Holds to pull-report. But it does not interfere with issuing, renewing or transferring books."
 msgstr "dias a partir de hoje) na altura da devolução. Note que este número de dias será usado também para calcular a data final por omissão para o relatório de reservas a levantar. Mas não interfere com o empréstimo, renovação ou transferência de livros."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the longoverdue.pl script is called without the --charge parameter)"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>Leave this field empty if you don't want to charge the user for lost items."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# Charge a lost item to the borrower's account when the LOST value of the item changes to :"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br>(Used when the longoverdue.pl script is called without the --lost parameter)"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br>Example: [1] [30] Sets an item to the LOST value 1 when it has been overdue for more than 30 days."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br>WARNING — These preferences will activate the automatic item loss process. Leave these fields empty if you don't want to activate this feature."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# By default, set the LOST value of an item to"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# days."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# when the item has been overdue for more than"
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
@@ -3523,28 +3571,28 @@ msgid "opac.pref#OPACBaseURL# The OPAC is located at http://"
 msgstr "O OPAC está localizado em http://"
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Both Details and Results pages"
-msgstr "nas páginas de detalhes e resultados"
+msgid "opac.pref#OPACDisplay856uAsImage# . Note: The corresponding OPACXSLT option must be turned on."
+msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Details page only"
-msgstr "apenas na página de detalhes"
+msgid "opac.pref#OPACDisplay856uAsImage# Both detail and result pages"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OPACDisplay856uAsImage# Detail page only"
+msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# Display the URI in the 856u field as an image on: "
 msgstr "Mostrar o URI no campo 856u como uma imagem: "
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Neither Details or Results pages"
-msgstr "em nenhuma das páginas"
+msgid "opac.pref#OPACDisplay856uAsImage# Neither detail or result pages"
+msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Note: The corresponding OPACXSLT option must be turned on."
-msgstr "Nota: A opção correspondente OPACXSLT deve estar activa."
-
-# OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Results page only"
-msgstr "apenas na página de resultados"
+msgid "opac.pref#OPACDisplay856uAsImage# Result page only"
+msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACFallback# Use the"
@@ -4534,275 +4582,323 @@ msgstr "aos leitores adicionar sugestões de aquisição no OPAC."
 msgid "patrons.pref"
 msgstr "Leitores -"
 
-# Patrons
+# Patrons > General
+msgid "patrons.pref General"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref Norwegian patron database"
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# List"
 msgstr "Listar"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# general patron types"
 msgstr "os tipos gerais de leitor"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# specific categories"
 msgstr "as categorias específicas"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# under the new patron menu."
 msgstr "por debaixo do menu de novo leitor."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# Don't send"
 msgstr "Não enviar"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# Send"
 msgstr "Enviar"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# an email to newly created patrons with their account details."
 msgstr "um email ao leitores recentemente criados com os detalhes da sua conta."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# Use"
 msgstr "Usar"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# alternate"
 msgstr "o email alternativo do leitor"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# cardnumber as"
 msgstr "o número de cartão como email de leitor"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# first valid"
 msgstr "o primeiro email válido do leitor"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# home"
 msgstr "o email pessoal do leitor"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# patron email address for sending out emails."
 msgstr "para o envio de emails."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# work"
 msgstr "o email de trabalho do leitor"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# (separate columns with |)"
 msgstr "(colunas separadas com |)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr "As seguintes <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>colunas da base de dados</a> devem ser preenchidas no ecrã de adição de leitores:"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# When renewing borrowers, base the new expiry date on"
 msgstr "Quando renovar leitores, basear a nova data de expiração na"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current date."
 msgstr "data corrente."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current membership expiry date."
 msgstr "data de expiração corrente do leitor."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerUnwantedField# (separate columns with |)"
 msgstr "(colunas separadas por |)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerUnwantedField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
 msgstr "As seguintes <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>colunas da base de dados</a> não devem aparecer no ecrã de adição de leitores:"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowersTitles# (separate multiple choices with |)"
 msgstr "(múltiplas escolhas separadas com |)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowersTitles# Borrowers can have the following titles:"
 msgstr "O leitores podem ter os seguintes títulos:"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#CardnumberLength# Card numbers for patrons must be"
 msgstr "Números de cartão dos leitores devem"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#CardnumberLength# If 'cardnumber' is included in the BorrowerMandatoryField list, the minimum length, if not specified here, defaults to one."
 msgstr "Se 'cardnumber' está na lista da preferência BorrowerMandatoryField, o tamanho mínimo, se não for especificado aqui, é colocado por omissão em um caractere."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#CardnumberLength# characters long. The length can be a single number to specify an exact length, a range separated by a comma (i.e., 'Min,Max'), or a maximum with no minimum (i.e., ',Max')."
 msgstr "caracteres. O tamanho pode ser um único número para especificar um tamanho exato, um intervalo separado por vírgula ('Min,Max') ou um máximo sem mínimo (',Max')."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
 msgstr "Activar"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Don't"
 msgstr "Não activar"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# enable the ability to upload and attach arbitrary files to a borrower record."
 msgstr "a capacidade de carregar e associar ficheiros arbitrários a um registo de leitor."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# Allow"
 msgstr "Permitir"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# Don't allow"
 msgstr "Não permitir"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# patrons to choose which notices they receive and when they receive them. Note that this only applies to certain kinds of notices."
 msgstr "ao leitores escolherem quais os avisos que desejam receber e quando querem receber. Note que esta preferência só afecta certos tipos de avisos."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# Don't enable"
 msgstr "Não activar"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# Enable"
 msgstr "Activar"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# searching, editing and display of custom attributes on patrons."
 msgstr "a pesquisa, edição e exibição de atributos personalizados para os leitores."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#MaxFine# Empty value means no limit. Single item caps are specified in the circulation rules matrix."
 msgstr "Valor vazio significa sem limite. Limites únicos de exemplares são definidos na table das regras de circulação."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#MaxFine# The late fine for all checkouts will only go up to"
 msgstr "A multa de atraso para todos os empréstimo vai ao máximo até"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#MaxFine# [% local_currency %]."
 msgstr "[% local_currency %]."
 
-# Patrons
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# Disable"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# Enable"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# endpoint."
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# the ability to communicate with the Norwegian national patron database via the"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# Do"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# Don't"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# search the Norwegian national patron database after a local search result was found."
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBUsername# . You can get these from \"Base Bibliotek\", which is maintained by the Norwegian National Library."
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBUsername# Communicate with the Norwegian national patron database using the username"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBUsername# and the password"
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#NotifyBorrowerDeparture# Show a notice if the patron is about to expire or has expired"
 msgstr "Mostrar um aviso ao leitor se a sua conta está a expirar ou expirou"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
 msgstr "dias de antecedência."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#PatronsPerPage# By default, show"
 msgstr "Por omissão, mostrar"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#PatronsPerPage# results per page in the staff client."
 msgstr "resultados por página no interface dos técnicos."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#SMSSendDriver# Use the SMS::Send::"
 msgstr "Usar o driver SMS::Enviar::"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#SMSSendDriver# driver to send SMS messages."
 msgstr "para enviar mensagens SMS."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#StatisticsFields# (separate fields with |)"
 msgstr "(separa campos com |)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#StatisticsFields# Show the following fields from the items database table as columns on the statistics tab on the patron record: "
 msgstr "Mostrar os campos seguintes da tabela dos exemplares da base de dados como colunas no separador de estatísticas no registo do leitor: "
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# Disable"
 msgstr "Não activar"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# Enable"
 msgstr "Activar"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# patron phone notifications using Talking Tech i-tiva (overdues, predues and holds notices currently supported)."
 msgstr "notificações por telefone ao leitor usando o Talking Tech i-tiva (avisos de atrasos, pré-avisos de atrasos e reservas são suportados)."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#autoMemberNum# Do"
 msgstr "Preencher"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#autoMemberNum# Don't"
 msgstr "Não preencher"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#autoMemberNum# default the card number field on the patron addition screen to the next available card number (for example, if the largest currently used card number is 26345000012941, then this field will default to 26345000012942)."
 msgstr "o campo do número de cartão na adição do leitor com o próximo número de cartão disponível (por exemplo, se o maior número de cartão usado for 26345000012941, então o campo será preenchido com 26345000012942)."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#borrowerRelationship# (input multiple choices separated by |). Leave empty to deactivate"
 msgstr "(insira os múltiplos valores separados por |). Deixe vazio para não activar"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#borrowerRelationship# Guarantors can be the following of those they guarantee:"
 msgstr "Fiadores podem ser o seguinte daqueles que garantem:"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#checkdigit# Do"
 msgstr "Fazer"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#checkdigit# Don't"
 msgstr "Não fazer"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#checkdigit# check and construct borrower card numbers in the Katipo style. This overrides <code>autoMemberNum</code> if on."
 msgstr "a verificação e construção dos números de cartão de leitor ao estilo Katipo. Se isto estiver activo sobrepõe <code>autoMemberNum</code>."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#intranetreadinghistory# Allow"
 msgstr "Permitir"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#intranetreadinghistory# Don't allow"
 msgstr "Não permitir"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#intranetreadinghistory# staff to access a patron's checkout history (it is stored regardless)."
 msgstr "aos técnicos aceder ao histórico de empréstimo dos leitores (é guardado na mesma)."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#minPasswordLength# Login passwords for staff and patrons must be at least"
 msgstr "As palavras-passe dos leitores e técnicos devem ter pelo menos"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#minPasswordLength# characters long."
 msgstr "caracteres."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#patronimages# Allow"
 msgstr "Permitir"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#patronimages# Don't allow"
 msgstr "Não permitir"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#patronimages# images to be uploaded and shown for patrons on the staff client."
 msgstr "que as imagens sejam carregadas e mostradas para os leitores no interface dos técnicos."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#uppercasesurnames# Do"
 msgstr "Fazer"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#uppercasesurnames# Don't"
 msgstr "Não fazer"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#uppercasesurnames# store and display surnames in upper case."
 msgstr "o armazenamento e a visualização dos sobrenomes em letras maiúsculas."
 
@@ -5339,28 +5435,28 @@ msgid "staff_client.pref Options"
 msgstr "Opções"
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Both Results and Details pages (for future use, Results XSLT not functional at this time)."
-msgstr "nas páginas de resultados e detalhes (para uso futuro, XSLT para os resultados ainda não está funcional)."
+msgid "staff_client.pref#Display856uAsImage# . Note: The corresponding XSLT option must be turned on."
+msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Details page only"
-msgstr "apenas na página de detalhes"
+msgid "staff_client.pref#Display856uAsImage# Both result and detail pages"
+msgstr ""
+
+# Staff Client > Appearance
+msgid "staff_client.pref#Display856uAsImage# Detail page only"
+msgstr ""
 
 # Staff Client > Appearance
 msgid "staff_client.pref#Display856uAsImage# Display the URI in the 856u field as an image on: "
 msgstr "Mostrar o URI do campo 856u como imagem: "
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Neither Details or Results pages"
-msgstr "nenhuma das páginas"
+msgid "staff_client.pref#Display856uAsImage# Neither detail or result pages"
+msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Note: The corresponding XSLT option must be turned on."
-msgstr "Nota: A opção XSLT correspondente deve estar activa."
-
-# Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Results page (for future use, Results XSLT not functional at this time)."
-msgstr "na página de resultados (para uso futuro, XSLT para os resultados ainda não está funcional)."
+msgid "staff_client.pref#Display856uAsImage# Result page"
+msgstr ""
 
 # Staff Client > Appearance
 msgid "staff_client.pref#DisplayIconsXSLT# Don't show"

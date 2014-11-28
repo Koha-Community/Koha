@@ -1278,6 +1278,18 @@ msgstr "Να μην επιτρέπεται"
 msgid "circulation.pref#AllowOnShelfHolds# hold requests to be placed on items that are not checked out."
 msgstr "να γίνονται αιτήματα κράτησης σε τεκμήρια που δεν είναι δανεισμένα."
 
+# Circulation > Holds Policy
+msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Allow"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Don't allow"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# a patron to renew an item with unfilled holds if other available items can fill that hold."
+msgstr ""
+
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowRenewalLimitOverride# Allow"
 msgstr "Να επιτρέπεται"
@@ -1477,6 +1489,42 @@ msgstr "circulation.pref#ConfirmFutureHolds# Επιβεβαιώστε τα με�
 # Circulation > Holds Policy
 msgid "circulation.pref#ConfirmFutureHolds# days from now) at checkin time. Note that this number of days will be used too in calculating the default end date for the Holds to pull-report. But it does not interfere with issuing, renewing or transferring books."
 msgstr "circulation.pref#ConfirmFutureHolds# days from now) τη στιγμή της επιστροφής. Σημειώστε ότι αυτός ο αριθμός ημερών θα χρησιμοποιείται και για τον υπολογισμό της προεπιλεγμένης ημερομηνίας λήξης των Κρατήσεων, για το pull-report. Δεν παρεμβάλλεται, πάντως, στην έκδοση, ανανέωση ή τη μεταφορά βιβλίων."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the longoverdue.pl script is called without the --charge parameter)"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>Leave this field empty if you don't want to charge the user for lost items."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# Charge a lost item to the borrower's account when the LOST value of the item changes to :"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br>(Used when the longoverdue.pl script is called without the --lost parameter)"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br>Example: [1] [30] Sets an item to the LOST value 1 when it has been overdue for more than 30 days."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br>WARNING — These preferences will activate the automatic item loss process. Leave these fields empty if you don't want to activate this feature."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# By default, set the LOST value of an item to"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# days."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# when the item has been overdue for more than"
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
@@ -3524,28 +3572,28 @@ msgid "opac.pref#OPACBaseURL# The OPAC is located at http://"
 msgstr "Ο OPAC βρίσκεται στο http://"
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Both Details and Results pages"
-msgstr "Και στη σελίδα Στοιχείων και στη σελίδα Αναζήτησης"
+msgid "opac.pref#OPACDisplay856uAsImage# . Note: The corresponding OPACXSLT option must be turned on."
+msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Details page only"
-msgstr "Στη σελίδα Στοιχείων μόνο"
+msgid "opac.pref#OPACDisplay856uAsImage# Both detail and result pages"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OPACDisplay856uAsImage# Detail page only"
+msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# Display the URI in the 856u field as an image on: "
 msgstr "Να εμφανίζεται το URI στο πεδίο 856u σαν εικόνα: "
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Neither Details or Results pages"
-msgstr "Ούτε στη σελίδα Στοιχείων ούτε στη σελίδα Αποτελεσμάτων"
+msgid "opac.pref#OPACDisplay856uAsImage# Neither detail or result pages"
+msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Note: The corresponding OPACXSLT option must be turned on."
-msgstr "Σημείωση: Η αντίστοιχη OPACXSLT επιλογή πρέπει να ενεργοποιηθεί."
-
-# OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Results page only"
-msgstr "Στη σελίδα αποτελεσμάτων μόνο"
+msgid "opac.pref#OPACDisplay856uAsImage# Result page only"
+msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACFallback# Use the"
@@ -4535,275 +4583,323 @@ msgstr "στα μέλη να κάνουν προτάσεις αγοράς στο
 msgid "patrons.pref"
 msgstr "Μέλη"
 
-# Patrons
+# Patrons > General
+msgid "patrons.pref General"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref Norwegian patron database"
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# List"
 msgstr "Να υπάρχει λίστα"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# general patron types"
 msgstr "με τους γενικούς τύπους μελών"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# specific categories"
 msgstr "με συγκεκριμένες κατηγορίες"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# under the new patron menu."
 msgstr "κάτω από το μενού νέου μέλους."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# Don't send"
 msgstr "Να μην αποστέλλεται"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# Send"
 msgstr "Να αποστέλλεται"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# an email to newly created patrons with their account details."
 msgstr "email στα νέα μέλη με τα στοιχεία του λογαριασμού τους."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# Use"
 msgstr "Να χρησιμοποιείται"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# alternate"
 msgstr "το εναλλακτικό"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# cardnumber as"
 msgstr "die Ausweisnummer"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# first valid"
 msgstr "το πρώτο έγκυρο"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# home"
 msgstr "του σπιτιού το"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# patron email address for sending out emails."
 msgstr "email μέλους για την αποστολή μηνυμάτων."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# work"
 msgstr "της δουλειάς το"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# (separate columns with |)"
 msgstr " (διαχωρισμός των στηλών με |)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr "patrons.pref#BorrowerMandatoryField# Les <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>champs de la base de données</a> suivants doivent être remplis dans le formulaire de saisie des adhérents:"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# When renewing borrowers, base the new expiry date on"
 msgstr "patrons.pref#BorrowerRenewalPeriodBase# Lors du renouvellement des adhérents, calculer la nouvelle date d'expiration à partir de la"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current date."
 msgstr "patrons.pref#BorrowerRenewalPeriodBase# date du jour."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current membership expiry date."
 msgstr "patrons.pref#BorrowerRenewalPeriodBase# date d'expiration actuelle de l'adhérent."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerUnwantedField# (separate columns with |)"
 msgstr "patrons.pref#BorrowerUnwantedField# (separer les colonnes par |)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerUnwantedField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
 msgstr "patrons.pref#BorrowerUnwantedField# Les <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>champs de la base de données</a> suivants ne seront pas affichés dans le formulaire de saisie des adhérents:"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowersTitles# (separate multiple choices with |)"
 msgstr "(διαχωρισμός των πολλαπλών επιλογών με |)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowersTitles# Borrowers can have the following titles:"
 msgstr "Τα μέλη μπορούν να έχουν τους ακόλουθους τίτλους:"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#CardnumberLength# Card numbers for patrons must be"
 msgstr ""
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#CardnumberLength# If 'cardnumber' is included in the BorrowerMandatoryField list, the minimum length, if not specified here, defaults to one."
 msgstr ""
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#CardnumberLength# characters long. The length can be a single number to specify an exact length, a range separated by a comma (i.e., 'Min,Max'), or a maximum with no minimum (i.e., ',Max')."
 msgstr ""
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
 msgstr ""
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Don't"
 msgstr ""
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# enable the ability to upload and attach arbitrary files to a borrower record."
 msgstr ""
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# Allow"
 msgstr "Να επιτρέπεται"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# Don't allow"
 msgstr "Να μην επιτρέπεται"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# patrons to choose which notices they receive and when they receive them. Note that this only applies to certain kinds of notices."
 msgstr "στα μέλη να επιλέξουν ποιες ειδοποιήσεις θα παραλαμβάνουν και πότε. Σημειώστε ότι αυτό εφαρμόζεται μόνο σε συγκεκριμένα είδη ειδοποιήσεων."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# Don't enable"
 msgstr "Να μην είναι δυνατή"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# Enable"
 msgstr "Να είναι δυνατή"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# searching, editing and display of custom attributes on patrons."
 msgstr "η αναζήτηση, επεξεργασία και εμφάνιση προσαρμοσμένων αποδόσεων στα μέλη."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#MaxFine# Empty value means no limit. Single item caps are specified in the circulation rules matrix."
 msgstr ""
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#MaxFine# The late fine for all checkouts will only go up to"
 msgstr ""
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#MaxFine# [% local_currency %]."
 msgstr "[% local_currency %]."
 
-# Patrons
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# Disable"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# Enable"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# endpoint."
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# the ability to communicate with the Norwegian national patron database via the"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# Do"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# Don't"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# search the Norwegian national patron database after a local search result was found."
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBUsername# . You can get these from \"Base Bibliotek\", which is maintained by the Norwegian National Library."
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBUsername# Communicate with the Norwegian national patron database using the username"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBUsername# and the password"
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#NotifyBorrowerDeparture# Show a notice if the patron is about to expire or has expired"
 msgstr ""
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
 msgstr "ημέρες πριν."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#PatronsPerPage# By default, show"
 msgstr "Εξ ορισμού, να εμφανίζονται"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#PatronsPerPage# results per page in the staff client."
 msgstr "αποτελέσματα ανά σελίδα στη διεπαφή προσωπικού."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#SMSSendDriver# Use the SMS::Send::"
 msgstr "Να χρησιμοποιείται ο SMS::Send::"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#SMSSendDriver# driver to send SMS messages."
 msgstr "οδηγός για την αποστολή μηνυμάτων SMS."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#StatisticsFields# (separate fields with |)"
 msgstr ""
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#StatisticsFields# Show the following fields from the items database table as columns on the statistics tab on the patron record: "
 msgstr ""
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# Disable"
 msgstr ""
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# Enable"
 msgstr ""
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# patron phone notifications using Talking Tech i-tiva (overdues, predues and holds notices currently supported)."
 msgstr ""
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#autoMemberNum# Do"
 msgstr "Να είναι"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#autoMemberNum# Don't"
 msgstr "Να μην είναι"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#autoMemberNum# default the card number field on the patron addition screen to the next available card number (for example, if the largest currently used card number is 26345000012941, then this field will default to 26345000012942)."
 msgstr "εξ ορισμού το πεδίο αριθμού κάρτας στην οθόνη προσθήκης μέλους ο αμέσως επόμενες διαθέσιμος αριθμός κάρτας (για παράδειγμα, αν ο μεγαλύτερος αριθμός κάρτας που χρησιμοποιείται είναι 26345000012941, τότε το πεδίο αυτό θα συμπληρωθεί εξ ορισμού με 26345000012942),"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#borrowerRelationship# (input multiple choices separated by |). Leave empty to deactivate"
 msgstr "patrons.pref#borrowerRelationship# (entrer des chois multiples séparés par |). Laisser vide pour désactiver"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#borrowerRelationship# Guarantors can be the following of those they guarantee:"
 msgstr "Οι εγγυητές μπορούν να είναι οι ακόλουθοι αυτών που εγγυούνται:"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#checkdigit# Do"
 msgstr "Να γίνεται"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#checkdigit# Don't"
 msgstr "Να μη γίνεται"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#checkdigit# check and construct borrower card numbers in the Katipo style. This overrides <code>autoMemberNum</code> if on."
 msgstr "έλεγχος και δημιουργία αριθμών καρτών μελών σύμφωνα με το στυλ Katipo. Αυτό παραβλέπει το <code>autoMemberNum</code) αν είναι ενεργοποιημένο."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#intranetreadinghistory# Allow"
 msgstr "Να επιτρέπεται"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#intranetreadinghistory# Don't allow"
 msgstr "Να μην επιτρέπεται"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#intranetreadinghistory# staff to access a patron's checkout history (it is stored regardless)."
 msgstr "στο προσωπικό να έχει πρόσβαση στο ιστορικό δανεισμών των μελών (αποθηκεύεται ανεξάρτητα από την επιλογή)."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#minPasswordLength# Login passwords for staff and patrons must be at least"
 msgstr "Οι κωδικοί πρόσβασης για το προσωπικό και τα μέλη πρέπει να αποτελούνται το λιγότερο από"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#minPasswordLength# characters long."
 msgstr "χαρακτήρες."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#patronimages# Allow"
 msgstr "Να επιτρέπεται"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#patronimages# Don't allow"
 msgstr "Να μην επιτρέπεται"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#patronimages# images to be uploaded and shown for patrons on the staff client."
 msgstr "οι εικόνες μελών να φορτώνονται και στη συνέχεια ν εμφανίζονται στη διεπαφή προσωπικού."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#uppercasesurnames# Do"
 msgstr "Να γίνεται"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#uppercasesurnames# Don't"
 msgstr "Να μη γίνεται"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#uppercasesurnames# store and display surnames in upper case."
 msgstr "αποθήκευση και εμφάνιση των επωνύμων σε κεφαλαία."
 
@@ -5340,28 +5436,28 @@ msgid "staff_client.pref Options"
 msgstr "Επιλογές"
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Both Results and Details pages (for future use, Results XSLT not functional at this time)."
-msgstr "Και στη σελίδα Αποτελεσμάτων και στη σελίδα Στοιχείων (για μελλοντική χρήση, τα XSLT αποτελέσματα δε λειτουργούν αυτή τη στιγμή)."
+msgid "staff_client.pref#Display856uAsImage# . Note: The corresponding XSLT option must be turned on."
+msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Details page only"
-msgstr "Στη σελίδα Στοιχείων μόνο"
+msgid "staff_client.pref#Display856uAsImage# Both result and detail pages"
+msgstr ""
+
+# Staff Client > Appearance
+msgid "staff_client.pref#Display856uAsImage# Detail page only"
+msgstr ""
 
 # Staff Client > Appearance
 msgid "staff_client.pref#Display856uAsImage# Display the URI in the 856u field as an image on: "
 msgstr "Να εμφανίζεται το URI στο πεδίο 856u σαν εικόνα: "
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Neither Details or Results pages"
-msgstr "Ούτε στη σελίδα Στοιχείων ούτε στη σελίδα Αποτελεσμάτων"
+msgid "staff_client.pref#Display856uAsImage# Neither detail or result pages"
+msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Note: The corresponding XSLT option must be turned on."
-msgstr "Σημείωση: Η ανάλογη XSLT επιλογή πρέπει να είναι ενεργοποιημένη."
-
-# Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Results page (for future use, Results XSLT not functional at this time)."
-msgstr "Στη σελίδα Αποτελεσμάτων (για μελλοντική χρήση, τα XSLT αποτελέσματα δε λειτουργούν αυτή τη στιγμή)."
+msgid "staff_client.pref#Display856uAsImage# Result page"
+msgstr ""
 
 # Staff Client > Appearance
 msgid "staff_client.pref#DisplayIconsXSLT# Don't show"

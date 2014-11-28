@@ -5,18 +5,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-11-11 19:23-0300\n"
-"PO-Revision-Date: 2014-10-31 22:01+0000\n"
+"POT-Creation-Date: 2014-11-22 09:27-0300\n"
+"PO-Revision-Date: 2014-11-27 20:43+0000\n"
 "Last-Translator: m23 <black23@gmail.com>\n"
-"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
-">\n"
+"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1414792913.000000\n"
+"X-POOTLE-MTIME: 1417121020.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:83
 #, c-format
@@ -119,6 +119,9 @@ msgid ""
 "server here, like sru_version=1.1 or schema=marc21, etc. Note that these "
 "options are server dependent."
 msgstr ""
+"'Rozšířené možnosti SRU': Zde můžete zadat rozšířené parametry pro vzdálený "
+"server, jako například sru_version=1.1 nebo schema=marc21, atd. Podpora "
+"takovýchto parametrů závisí na konkrétním serveru."
 
 #: intranet-tmpl/prog/en/modules/help/tools/koha-news.tt:15
 #, c-format
@@ -235,6 +238,9 @@ msgid ""
 "enter the path name part of the URL (the local part following domain and "
 "port). See also example below."
 msgstr ""
+"'Databáze' je název databáze, kterou daný Z39.50 serveru poskytuje. Pro SRU "
+"servery zde vložte cestu v rámci serveru (část URL za doménou a portem). Viz "
+"příklady níže."
 
 #: intranet-tmpl/prog/en/modules/help/admin/auth_subfields_structure.tt:26
 #, c-format
@@ -340,6 +346,8 @@ msgid ""
 "'Hostname' will be the address to the Z39.50 target. For a SRU target, only "
 "enter the domain name here. (See example below.)"
 msgstr ""
+"'Hostitel' je adresa Z39.50 serveru. Pro SRU server vyplňte pouze doménu. "
+"Viz příklady níže."
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:27
 #, c-format
@@ -534,11 +542,13 @@ msgstr ""
 "'ROADTYPE' lze použít jako předdefinované typy ulice v adresách čtenářů"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:21
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'Rank' lets you enter where in the list you'd like this target to appear. If "
 "this is left blank the targets will be in alphabetical order."
-msgstr "'Pořadí' určuje pořadí v seznamu serverů. "
+msgstr ""
+"'Pořadí' určuje pořadí v seznamu serverů. Pokud necháte prázdné, budou "
+"servery řazeny abecedně."
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:25
 #, c-format
@@ -596,6 +606,10 @@ msgid ""
 "for the Any field on the Koha form. If you do not enter an index name for a "
 "specific search field, the whole record will be searched."
 msgstr ""
+"'Mapování vyhledávacích polí SRU': Kliknutím na 'Změnit' můžete přidávat a "
+"upravovat mapování mezi poli Kohy a poli poskytovanými serverem. Příklad: "
+"SRU server může používat 'cql.anywhere'  pro Libovolné pole. Pokud "
+"nevyplníte některé mapování, bude toto pole namapováno na celý záznam."
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:40
 #, c-format
@@ -627,12 +641,12 @@ msgstr ""
 "a říká, jaká data má indexování v MARC datech hledat."
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'Server name' should be populated with a name that will help you identify "
 "the source (such as the library name)."
 msgstr ""
-"'Z39.50 server' by měl obsahovat název, podle kterého dovedete při "
+"'Název serveru' by měl obsahovat název, podle kterého dovedete při "
 "katalogizaci snadno rozpoznat o který zdroj se jedná."
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:80
@@ -726,9 +740,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:28
 #, c-format
 msgid ""
-"'XSLT file(s)': You can enter here one or more XSLT file names that you want "
-"to apply on the search results."
+"'XSLT file(s)': You can enter here one or more (comma-separated) XSLT file "
+"names that you want to apply on the search results."
 msgstr ""
+"'XSLT soubor pro transformaci výsledků': Zde můžete zadat jeden nebo více "
+"XSLT souborů, které se použijí pro transformaci výsledků hledání na daném "
+"serveru."
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:42
 #, c-format
@@ -759,7 +776,7 @@ msgstr "(! znamená 'neviditelný' nebo v případě zhrouceno 'nezhrouceno')"
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:90
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:78
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:95
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:73
@@ -1585,8 +1602,8 @@ msgid ""
 "Accept the deletion and the records will be removed from the reservoir and "
 "the status will be changed to 'cleaned'"
 msgstr ""
-"Potvrďte odstranění a záznam bude ostraněn ze zásobníku a status se změní na "
-"'vyčistěný'"
+"Potvrďte odstranění a záznam bude ostraněn ze zásobníku a jeho stav se změní "
+"na 'vyčistěný'"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:23
 #, c-format
@@ -1816,9 +1833,9 @@ msgid "Add a Vendor"
 msgstr "Přidat dodavatele"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:11
-#, fuzzy, c-format
+#, c-format
 msgid "Add a Z39.50/SRU Target"
-msgstr "Přidat cílový Z39.50 server"
+msgstr "Přidat Z39.50/SRU server"
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:9
 #, c-format
@@ -2031,7 +2048,7 @@ msgid ""
 "invoice number, a shipment received date, a shipping cost and a budget to "
 "subtract that shipping amount from."
 msgstr ""
-"Po kliknutí na 'Přijmout dodávku' budete požádáni o vložení čísla faktury "
+"Po kliknutí na 'Přijmout dodávku' budete požádáni o vložení čísla dokladu "
 "dodavatele, data přijetí dodávky, ceny poštovného a rozpočtu do kterého "
 "dodávka patří."
 
@@ -2484,7 +2501,7 @@ msgid ""
 "And it is case sensitive : a record having 999$9 = 'xxx' will not belong to "
 "a set where condition is 999$9 = 'XXX'."
 msgstr ""
-"A rozlišuje velikost písmen : záznam 999$9 = 'xxx' nebude patřit k sadě, kde "
+"A rozlišuje velikost písmen: záznam 999$9 = 'xxx' nebude patřit k sadě, kde "
 "je podmínka 999$9 = 'XXX'."
 
 #: intranet-tmpl/prog/en/modules/help/circ/offline.tt:11
@@ -2530,10 +2547,10 @@ msgstr "Odpověď"
 msgid "Answer:"
 msgstr "Odpověď:"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:44
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:68
 #, c-format
 msgid "Any"
-msgstr ""
+msgstr "Libovolný"
 
 #: intranet-tmpl/prog/en/modules/help/mainpage.tt:25
 #, c-format
@@ -2679,10 +2696,10 @@ msgstr "V tuto chvíli je jediné používané klíčové slovo 'podtitul'."
 msgid "Audience"
 msgstr "Uživatelské určení"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:45
-#, fuzzy, c-format
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:69
+#, c-format
 msgid "Author"
-msgstr "Autority"
+msgstr "Autor"
 
 #: intranet-tmpl/prog/en/modules/help/authorities/detail.tt:3
 #: intranet-tmpl/prog/en/modules/help/authorities/authorities-home.tt:3
@@ -3214,7 +3231,7 @@ msgstr "Profily CSV definují způsob exportu košíku a seznamů."
 msgid "CSV profiles"
 msgstr "Profily CSV"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:55
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:79
 #, c-format
 msgid "CUYAHOGA COUNTY PUBLIC webcat.cuyahoga.lib.oh.us:210 INNOPAC"
 msgstr "CUYAHOGA COUNTY PUBLIC webcat.cuyahoga.lib.oh.us:210 INNOPAC"
@@ -3306,7 +3323,7 @@ msgstr ""
 "dalších stránkách čtenáře"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Check 'Preselected (searched by default)' if you want this target to always "
 "be selected by default."
@@ -4018,7 +4035,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/paycollect.tt:43
 #, c-format
 msgid "Click \"Writeoff\" next to the fine you wish to writeoff."
-msgstr "Klikněte na \"Odepsat\" vedle pokuty, kterou si přejete odepsat."
+msgstr "Klikněte na \"Prominout\" vedle poplatku, který si přejete prominout."
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:18
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:32
@@ -4229,7 +4246,7 @@ msgstr "Klikněte na tlačítko \"Zaplatit částku\""
 #: intranet-tmpl/prog/en/modules/help/members/paycollect.tt:49
 #, c-format
 msgid "Click the \"Writeoff All\" button"
-msgstr "Klikněte na tlačítko \"Odepsat vše\""
+msgstr "Klikněte na tlačítko \"Prominout vše\""
 
 #: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:20
 #, c-format
@@ -4644,7 +4661,7 @@ msgstr "Ručně vytvořit kredit"
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:3
 #, c-format
 msgid "Create manual invoice"
-msgstr "Ručně vytvořit fakturu"
+msgstr "Další poplatky"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:412
 #, c-format
@@ -4718,10 +4735,10 @@ msgstr "DUE "
 msgid "DUEDGST "
 msgstr "DUEDGST "
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:36
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:60
 #, c-format
 msgid "Database"
-msgstr ""
+msgstr "Databáze"
 
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:38
 #: intranet-tmpl/prog/en/modules/help/members/members-home.tt:40
@@ -4809,6 +4826,41 @@ msgstr ""
 #, c-format
 msgid "Defining a mapping"
 msgstr "Definice mapování"
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:36
+#, c-format
+msgid "Del952.xsl: Remove items (MARC21/NORMARC)"
+msgstr "Del952.xsl: Odstraní jednotky (MARC21/NORMARC)"
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:37
+#, c-format
+msgid "Del995.xsl: Remove items (UNIMARC)"
+msgstr "Del995.xsl: Odstraní jednotky (UNIMARC)"
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:50
+#, c-format
+msgid "Del9LinksExcept952.xsl, Del952.xsl"
+msgstr "Del9LinksExcept952.xsl, Del952.xsl"
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:38
+#, c-format
+msgid ""
+"Del9LinksExcept952.xsl: Remove $9 links. Skip item fields (MARC21/NORMARC)."
+msgstr ""
+"Del9LinksExcept952.xsl: Odstraní odkazovací podpole $9 ve všech polích kromě "
+"polí pro jednotky. (MARC21/NORMARC)."
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:51
+#, c-format
+msgid "Del9LinksExcept995.xsl, Del995.xsl"
+msgstr "Del9LinksExcept995.xsl, Del995.xsl"
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:39
+#, c-format
+msgid "Del9LinksExcept995.xsl: Remove $9 links. Skip item fields (UNIMARC)."
+msgstr ""
+"Del9LinksExcept995.xsl: Odstraní odkazovací podpole $9 ve všech polích kromě "
+"polí pro jednotky. (UNIMARC)."
 
 #: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:12
 #, c-format
@@ -5223,10 +5275,10 @@ msgstr "Editor"
 msgid "Email: "
 msgstr "E-mail: "
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:38
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:62
 #, c-format
 msgid "Encoding"
-msgstr ""
+msgstr "Kódování"
 
 #: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:23
 #, c-format
@@ -5535,6 +5587,11 @@ msgstr ""
 "Pokaždé když vytvoříte nový vzorec číslování v sériích může ho uložit pro "
 "pozdější využití. Tyto vzorce jsou dostupné přes stránku Správa číslovacích "
 "vzorců."
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:42
+#, c-format
+msgid "Example"
+msgstr "Příklad"
 
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:30
 #: intranet-tmpl/prog/en/modules/help/members/members-home.tt:32
@@ -5850,7 +5907,7 @@ msgstr "První výběr typu kreditní karty, kterou chcete používat"
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:7
 #, c-format
 msgid "First choose the type of invoice you would like to create "
-msgstr "Nejprve vyberte typ faktury, kterou chcete vytvořit "
+msgstr "Nejprve vyberte typ dokladu, který chcete vytvořit "
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:31
 #, c-format
@@ -5909,7 +5966,7 @@ msgstr "Označeno"
 #: intranet-tmpl/prog/en/modules/help/acqui/supplier.tt:27
 #, c-format
 msgid "For List Prices and Invoice Prices, choose the currency. "
-msgstr "Vyberte měnu pro vypisy cen a fakturační ceny. "
+msgstr "Vyberte měnu pro vypisy cen a ceny na dokladech. "
 
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:57
 #, c-format
@@ -6037,8 +6094,8 @@ msgid ""
 "For fees that are not automatically charged, librarians can create a manual "
 "invoice"
 msgstr ""
-"Pro poplatky, které nejsou účtovány automaticky, mohou knihovníci vytvořit "
-"fakturu ručně"
+"Pro poplatky, které nejsou účtovány automaticky, mohou knihovníci zaplatit "
+"služby přes Další poplatky"
 
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:9
 #, c-format
@@ -6381,10 +6438,12 @@ msgstr ""
 "nebo méně než dvě, objeví se chyba"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "From the main Z39.50/SRU page, click 'New Z39.50 Server' or 'New SRU server'."
-msgstr "Na hlavní stránce Z39.50 klikněte na 'Nový server Z39.50' "
+msgstr ""
+"Na hlavní stránce Z39.50/SRU klikněte na 'Nový server Z39.50'  nebo 'Nový "
+"SRU server'"
 
 #: intranet-tmpl/prog/en/modules/help/course_reserves/course.tt:7
 #, c-format
@@ -6459,8 +6518,8 @@ msgid ""
 "From the results you can click the 'Details' link to see the full invoice or "
 "'Close' to note that the invoice is closed/paid for."
 msgstr ""
-"Ve výsledcích můžete kliknout na odkaz 'Podrobnosti' pro zobrazení celé "
-"faktury, nebo na 'Uzavřeno' pro oznámení, že faktura je uzavřena/zaplacena."
+"Ve výsledcích můžete kliknout na odkaz 'Podrobnosti' pro zobrazení celého "
+"dokladu, nebo na 'Uzavřeno' pro oznámení, že doklad je uzavřený/zaplacený."
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:26
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbooks.tt:23
@@ -6673,6 +6732,8 @@ msgid ""
 "From this page you will see your bibliographic search history and your "
 "authority search history."
 msgstr ""
+"Na této stránce můžete vidět historii vašich hledání v bibliografických "
+"záznamech a autoritách."
 
 #: intranet-tmpl/prog/en/modules/help/authorities/merge.tt:5
 #, c-format
@@ -6703,7 +6764,7 @@ msgstr "Fondy lze přiřadit k rozpočtu."
 msgid "Future developments will include additional keyword assigned fields."
 msgstr "Budoucí verze budou obsahovat pole přidělená dalším klíčovým slovům."
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:56
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:80
 #, c-format
 msgid "GREATER SUDBURY PUBLIC 216.223.90.51:210 INNOPAC"
 msgstr "GREATER SUDBURY PUBLIC 216.223.90.51:210 INNOPAC"
@@ -6822,12 +6883,12 @@ msgstr "Podrobná přístupová práva k nástrojům"
 msgid "Guided report wizard"
 msgstr "Průvodce vlastními výstupy"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:57
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:81
 #, c-format
 msgid "HALIFAX PUBLIC catalogue.halifaxpubliclibraries.ca:210 horizon"
 msgstr "HALIFAX PUBLIC catalogue.halifaxpubliclibraries.ca:210 horizon"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:58
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:82
 #, c-format
 msgid "HALTON HILLS PUBLIC cat.hhpl.on.ca:210 halton_hills"
 msgstr "HALTON HILLS PUBLIC cat.hhpl.on.ca:210 halton_hills"
@@ -6926,10 +6987,10 @@ msgstr "Rezervace k vyzvednutí"
 msgid "Holidays calendar"
 msgstr "Kalendář uzavírek"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:34
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:58
 #, c-format
 msgid "Host"
-msgstr ""
+msgstr "Hostitel"
 
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:13
 #, c-format
@@ -6962,15 +7023,15 @@ msgstr ""
 "DŮLEŽITÉ: Mnohá z nastaveních se navzájem ovlivňují. Aktivace jednoho "
 "nastavení může vyžadovat nastavení dalšího."
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:43
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:67
 #, c-format
 msgid "ISBN"
-msgstr ""
+msgstr "ISBN"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:46
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:70
 #, c-format
 msgid "ISSN"
-msgstr ""
+msgstr "ISSN"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:270
 #, c-format
@@ -7072,6 +7133,9 @@ msgid ""
 "information the 'Default accounting details' tab can be used to apply values "
 "related to the accounting."
 msgstr ""
+"Pokud se v importovaných MARC záznamech nenacházejí informace vztahující se "
+"k rozpočtu, můžete použít záložku \"Výchozí podrobnosti účtování\" pro "
+"nastavení požadovaných hodnot."
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:42
 #, c-format
@@ -8266,6 +8330,9 @@ msgid ""
 "history then you can access this information by clicking on your username in "
 "the top right of the staff client and choosing 'Search history'."
 msgstr ""
+"Pokud máte zapnuto nastavení EnableSearchHistory, dostanete se k historii "
+"hledání kliknutím na Vaše jméno vpravo nahoře a zvolením položky \"Historie "
+"hledání\"."
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:21
 #, c-format
@@ -8412,13 +8479,16 @@ msgstr ""
 "Chcete-li katalogizovat záznam na základě existujícího záznamu v jiné "
 "knihovně"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:32
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:56
 #, c-format
 msgid ""
 "If you want to enter the Library of Congress SRU server, you should at least "
 "use the following information. The full URL http://lx2.loc.gov:210/LCDB must "
 "be entered as follows:"
 msgstr ""
+"Pokud chcete vložit SRU server Library of Congressr, měli byste zadat "
+"alespoň tyto informace. Úplná URL ( http://lx2.loc.gov:210/LCDB)  musí být "
+"zadána takto:"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/moveitem.tt:11
 #, c-format
@@ -8437,6 +8507,15 @@ msgid ""
 msgstr ""
 "Pokud chcete umístit rezervaci na více výtisků, jednoduše zaškrtněte políčka "
 "nalevo od nich, a klepněte na šipku vpravo od tlačítka \"Zadat rezervaci\"."
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:43
+#, c-format
+msgid ""
+"If you want to remove both holdings data and $9 links when importing, you "
+"can use:"
+msgstr ""
+"Pokud chcete odstranit informace o jednotkách i odkazy v podpolích $9, "
+"můžete použít toto nastavení:"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/z3950_search.tt:5
 #, c-format
@@ -8618,6 +8697,9 @@ msgid ""
 "your hide_marc system preference or each user can check the box next to "
 "'Show tags' at the top of the editor."
 msgstr ""
+"Pokud nechcete při katalogizaci vidět čísla polí MARC, můžete nastavit "
+"jejich skrytí pomocí nastavení hide_marc, nebo během katalogizace přepnutím "
+"zaškrtávacího políčka \"Zobrazit čísla polí\"."
 
 #: intranet-tmpl/prog/en/modules/help/tools/export.tt:50
 #, c-format
@@ -8669,6 +8751,9 @@ msgid ""
 "If you're allowing renewals you can control how long the renewal loan period "
 "will be (in the units you have chosen) in the 'Renewal period' box"
 msgstr ""
+"Pokud je povolené prodlužování, můžete nastavit o jak dlouho se mají "
+"výpůjčky prodlužovat (v jednotkách, které si zvolíte) ve sloupci \""
+"Prodlužovat o\"."
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:60
 #, c-format
@@ -8676,6 +8761,9 @@ msgid ""
 "If you're allowing renewals you can control how soon before the due date "
 "patrons can renew their materials with the 'No renewals before' box. "
 msgstr ""
+"Pokud je povolené prodlužování, můžete nastavit jak dlouho před vypršením "
+"výpůjční lhůty lze prodloužení provést ve sloupci \"Prodloužit lze X dní "
+"před\"."
 
 #: intranet-tmpl/prog/en/modules/help/circ/returns.tt:44
 #, c-format
@@ -8712,6 +8800,8 @@ msgid ""
 "If you're using the TalkingTechItivaPhoneNotification service you can set up "
 "a Phone notification"
 msgstr ""
+"Pokud používáte službu TalkingTechItivaPhoneNotification můžete nastavit "
+"Upozornění telefonem"
 
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:7
 #, c-format
@@ -9142,13 +9232,13 @@ msgid "Important: Requires the borrowers permission above"
 msgstr "Důležité: Je nutné nastavit také oprávnění \"borrowers - čtenáři\""
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Important: The 'password' value should be stored in plain text, and will be "
 "converted to a Bcrypt hash (which is an encrypted version of the password)."
 msgstr ""
 "Důležité: \"password\" (heslo) by mělo být uloženo jako čistý text a bude "
-"zakódováno pomocí MD5 (funkce používaná pro kódování hesel)."
+"zakódováno pomocí Bcrypt (funkce používaná pro kódování hesel)."
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:99
 #, c-format
@@ -9306,6 +9396,9 @@ msgid ""
 "each branch to have a unique code. Think about using the branch code in "
 "front of the notice code for each branch."
 msgstr ""
+"Důležité: Pokud pracujete s různými upomínkami pro více poboček/knihoven, "
+"mělo by každé znění upomínky mít unikátní identifikátor. Můžete třeba přidat "
+"kód knihovny na začátek identifikátoru upomínky."
 
 #: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:13
 #, c-format
@@ -9474,6 +9567,9 @@ msgid ""
 "to every ordered item such as item type, collection code and not for loan "
 "status."
 msgstr ""
+"V záložce \"Jednotky\" můžete vložit informace, které budou zapsány ke všem "
+"vytvořeným jednotkám, může to být například typ jednotky, kód části fondu, "
+"atd."
 
 #: intranet-tmpl/prog/en/modules/help/admin/itemtypes.tt:14
 #, c-format
@@ -9654,7 +9750,7 @@ msgstr "Revize"
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:3
 #, c-format
 msgid "Invoices"
-msgstr "Faktury"
+msgstr "Doklady"
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:50
 #, c-format
@@ -9862,6 +9958,8 @@ msgid ""
 "items can only be renewed if the item is before the number in units (days/"
 "hours) entered in this box."
 msgstr ""
+"Pokud tento sloupec necháte prázdný, bude možné výpůjčku prodloužit "
+"kdykoliv. Jinak pouze v období definovaném v tomto sloupci."
 
 #: intranet-tmpl/prog/en/modules/help/admin/itemtypes.tt:30
 #, c-format
@@ -9940,13 +10038,13 @@ msgstr ""
 "zůstalo nezměněno"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha comes with a default list of Z39.50/SRU targets set up that you can add "
 "to, edit or delete."
 msgstr ""
 "Součástí instalace systému Koha je (volitelně) i několik přednastavených "
-"serveru Z39.50, které můžete upravovat, odstranit je, nebo k nim přidat "
+"serveru Z39.50/SRU, které můžete upravovat, odstranit je, nebo k nim přidat "
 "další."
 
 # fondových?
@@ -10159,12 +10257,12 @@ msgstr "L = Ztracený výtisk"
 msgid "LCC"
 msgstr "LCC (Třídění kongresové knihovny)"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:36
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:60
 #, c-format
 msgid "LCDB"
-msgstr ""
+msgstr "LCDB"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:74
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:98
 #, c-format
 msgid ""
 "LIBRARIESAUSTRALIA AUTHORITIES z3950-test.librariesaustralia.nla.gov.au:210 "
@@ -10173,22 +10271,22 @@ msgstr ""
 "LIBRARIESAUSTRALIA AUTHORITIES z3950-test.librariesaustralia.nla.gov.au:210 "
 "AuthTraining Userid: ANLEZ / Password: z39.50"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:75
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:99
 #, c-format
 msgid "LIBRARY OF CONGRESS NAME AUTHORITIES lx2.loc.gov:210 NAF"
 msgstr "LIBRARY OF CONGRESS NAME AUTHORITIES lx2.loc.gov:210 NAF"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:76
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:100
 #, c-format
 msgid "LIBRARY OF CONGRESS SUBJECT AUTHORITIES lx2.loc.gov:210 SAF"
 msgstr "LIBRARY OF CONGRESS SUBJECT AUTHORITIES lx2.loc.gov:210 SAF"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:59
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:83
 #, c-format
 msgid "LIBRARY OF CONGRESS lx2.loc.gov: 210 LCDB"
 msgstr "LIBRARY OF CONGRESS lx2.loc.gov: 210 LCDB"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:60
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:84
 #, c-format
 msgid "LONDON PUBLIC LIBRARY catalogue.londonpubliclibrary.ca:210 INNOPAC"
 msgstr "LONDON PUBLIC LIBRARY catalogue.londonpubliclibrary.ca:210 INNOPAC"
@@ -10420,7 +10518,7 @@ msgstr "Ztracené jednotky"
 msgid "M = Sundry"
 msgstr "M = Různé"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:61
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:85
 #, c-format
 msgid "MANITOBA PUBLIC library.gov.mb.ca:210 horizon"
 msgstr "MANITOBA PUBLIC library.gov.mb.ca:210 horizon"
@@ -10465,12 +10563,17 @@ msgstr "Export do formátu MARC"
 msgid "MARC import"
 msgstr "Importovat MARC"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:37
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:50
+#, c-format
+msgid "MARC21/NORMARC"
+msgstr "MARC21/NORMARC"
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:61
 #, c-format
 msgid "MARC21/USMARC"
-msgstr ""
+msgstr "MARC21/USMARC"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:62
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:86
 #, c-format
 msgid "MILTON PL cat.mpl.on.ca:210 horizon"
 msgstr "MILTON PL cat.mpl.on.ca:210 horizont"
@@ -10789,7 +10892,7 @@ msgstr "Přesouvání jednotek"
 msgid "N = New card"
 msgstr "N = Nová karta"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:63
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:87
 #, c-format
 msgid "NATIONAL LIBRARY OF WALES cat.llgc.org.uk:210 default"
 msgstr "NATIONAL LIBRARY OF WALES cat.llgc.org.uk:210 default"
@@ -10909,6 +11012,11 @@ msgid ""
 "the relevant Quantity, Price, Fund, Statistic 1, and Statistic 2 found "
 "within the staged file."
 msgstr ""
+"U každého titulu se nachází zaškrtávací políčko, jehož zaškrtnutím přidáte "
+"záznam k objednávce. Můžete také využít možnosti \"Označit vše\". V "
+"závislosti na nastavení MarcFieldsToOrder v dalším kroku Koha doplní "
+"parametry množství, ceny, fondu a statistik podle údajů nalezených v "
+"importovaném záznamu."
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:11
 #, c-format
@@ -10944,6 +11052,9 @@ msgid ""
 "choose from Email, Feed, Phone (if you are using the iTiva Talking Tech "
 "service), Print and SMS (if you have set your SMSSendDriver). "
 msgstr ""
+"Můžete také zvolit způsob doručení upomínky. Vybírat můžete mezi e-mailem, "
+"RSS, telefonem (pokud jste uživatelem služby iTiva Talking Tech), tiskem a "
+"SMS (musíte mít správně nastavený SMSSendDriver). "
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:22
 #, c-format
@@ -10965,6 +11076,7 @@ msgstr ""
 #, c-format
 msgid "Next you can customize the notice for every possible delivery method "
 msgstr ""
+"Můžete přizpůsobit upozornění podle potřeby pro všechny metody doručení "
 
 #: intranet-tmpl/prog/en/modules/help/tools/stage-marc-import.tt:9
 #, c-format
@@ -10997,7 +11109,7 @@ msgstr "Dále, sekce Nastavení knihovny zahrnuje dodatečná nastavení knihovn
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:32
 #, c-format
 msgid "Next, you can set up a Feed template"
-msgstr ""
+msgstr "Můžete také nastavit šablonu pro RSS kanál."
 
 #: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:28
 #, c-format
@@ -11038,6 +11150,8 @@ msgid ""
 "Note that the version number between parentheses following the module name "
 "is the required version; the installed version is in the next column."
 msgstr ""
+"Číslo verze uvedené v závorkách vedle názvu modulu je minimální požadovaná "
+"verze. Aktuálně nainstalovaná verze je zobrazena ve vedlejším sloupci."
 
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:57
 #: intranet-tmpl/prog/en/modules/help/acqui/lateorders.tt:9
@@ -11152,7 +11266,7 @@ msgid ""
 "invoices."
 msgstr ""
 "Z těchto polí je vyžadováno pouze jméno dodavatele. Je ale vhodné vyplnit i "
-"další informace pro usnadnění generování pohledávek a faktur."
+"další informace pro usnadnění generování pohledávek a dokladů."
 
 #: intranet-tmpl/prog/en/modules/help/circ/offline.tt:3
 #, c-format
@@ -12027,12 +12141,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:193
 #, c-format
 msgid "PREDUE "
-msgstr ""
+msgstr "PREDUE "
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:209
 #, c-format
 msgid "PREDUEDGST "
-msgstr ""
+msgstr "PREDUEDGST "
 
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:3
 #, c-format
@@ -12314,7 +12428,7 @@ msgstr "Zaplatit "
 #: intranet-tmpl/prog/en/modules/help/members/paycollect.tt:3
 #, c-format
 msgid "Pay and Writeoff Fines"
-msgstr "Zaplatit a odepsat pokuty"
+msgstr "Zaplatit a prominout pokuty"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:400
 #, c-format
@@ -12416,10 +12530,10 @@ msgstr "Zásuvný modul "
 msgid "Plugins"
 msgstr "Zásuvné moduly"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:35
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:59
 #, c-format
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 #: intranet-tmpl/prog/en/modules/help/tools/quotes-upload.tt:19
 #, c-format
@@ -12434,7 +12548,7 @@ msgstr "Tisknoucí košíky"
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:18
 #, c-format
 msgid "Printing Invoices"
-msgstr "Tisk faktur"
+msgstr "Tisk dokladů"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:38
 #, c-format
@@ -12443,7 +12557,7 @@ msgstr "Tisk potvrzení"
 
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:14
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:28
-#, fuzzy, c-format
+#, c-format
 msgid "Private list: Is managed by you and can be seen only by you"
 msgstr "Soukromý seznam může být zobrazován i upravován pouze Vámi"
 
@@ -12487,7 +12601,7 @@ msgstr "Zadejte popis abyste mohli identifikovat tuto akci později"
 
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:15
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:29
-#, fuzzy, c-format
+#, c-format
 msgid "Public list: Can be seen by everybody, but managed only by you"
 msgstr "Veřejný seznam může vidět kdokoli, ale upravovat ho můžete pouze vy."
 
@@ -12545,7 +12659,7 @@ msgstr "Načtení denních citátů"
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:225
 #, c-format
 msgid "RENEWAL "
-msgstr ""
+msgstr "RENEWAL "
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:282
 #, c-format
@@ -12759,7 +12873,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:262
 #, c-format
 msgid "Requires that you set OpacAllowSharingPrivateLists to 'Allow'"
-msgstr ""
+msgstr "Je nutné nastavit OpacAllowSharingPrivateLists na 'Povoleno'"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:190
 #, c-format
@@ -12815,17 +12929,17 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:253
 #, c-format
 msgid "SHARE_ACCEPT "
-msgstr ""
+msgstr "SHARE_ACCEPT "
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:259
 #, c-format
 msgid "SHARE_INVITE "
-msgstr ""
+msgstr "SHARE_INVITE "
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:31
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:55
 #, c-format
 msgid "SRU example"
-msgstr ""
+msgstr "příklad SRU"
 
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:29
 #, c-format
@@ -12896,9 +13010,9 @@ msgid "Search for the item you would like to catalog "
 msgstr "Hledat položku, kterou byste rádi zkatalogizovali "
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search-history.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Search history"
-msgstr "Hledání"
+msgstr "Historie hledání"
 
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:35
 #, c-format
@@ -13105,7 +13219,7 @@ msgstr "Viz úplnou dokumentaci pro Tvorbu ručních úvěrů v "
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:17
 #, c-format
 msgid "See the full documentation for Creating Manual Invoices in the "
-msgstr "Viz úplnou dokumentaci pro Tvorbu ručních faktur v "
+msgstr "Viz úplnou dokumentaci pro Tvorbu Dalších plateb v "
 
 #: intranet-tmpl/prog/en/modules/help/admin/currency.tt:13
 #, c-format
@@ -13171,7 +13285,7 @@ msgstr "Viz úplnou dokumentaci pro sklady v "
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #, c-format
 msgid "See the full documentation for Invoices in the "
-msgstr "Viz úplnou dokumentaci pro faktury v "
+msgstr "Viz úplnou dokumentaci pro doklady v "
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/issuehistory.tt:9
 #, c-format
@@ -13422,9 +13536,9 @@ msgid "See the full documentation for Routing Lists in the "
 msgstr "Viz úplnou dokumentaci pro Kolovací seznamy v "
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search-history.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid "See the full documentation for Search History in the "
-msgstr "Viz úplnou dokumentaci pro Vyhledání v "
+msgstr "Viz úplnou dokumentaci pro Historii hledání v "
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:81
 #, c-format
@@ -13516,10 +13630,10 @@ msgstr "Viz úplnou dokumentaci pro Načítání souboru offline výpůjček v "
 msgid "See the full documentation for Vendor Contracts in the "
 msgstr "Viz úplnou dokumentaci pro Dodavatelské smlouvy "
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:78
-#, fuzzy, c-format
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
+#, c-format
 msgid "See the full documentation for Z39.50/SRU Servers in the "
-msgstr "Viz úplnou dokumentaci pro Z39.50 servery v "
+msgstr "Viz úplnou dokumentaci pro Z39.50/SRU servery v  "
 
 #: intranet-tmpl/prog/en/modules/help/course_reserves/course.tt:17
 #, c-format
@@ -13557,9 +13671,9 @@ msgid "See the full documentation for the Calendar in the "
 msgstr "Viz úplnou dokumentaci pro kalendář v "
 
 #: intranet-tmpl/prog/en/modules/help/reports/manager.tt:11
-#, fuzzy, c-format
+#, c-format
 msgid "See the full documentation for the Catalog by Item type report in the "
-msgstr "Viz úplnou dokumentaci pro katalog podle typu zpráv o výtiscích v "
+msgstr "Viz úplnou dokumentaci pro výstupy z katalogu podle typu jednotky v "
 
 #: intranet-tmpl/prog/en/modules/help/admin/didyoumean.tt:20
 #, c-format
@@ -13876,7 +13990,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:7
 #, c-format
 msgid "Some tips"
-msgstr ""
+msgstr "Nějaké tipy"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:85
 #, c-format
@@ -14000,10 +14114,10 @@ msgstr "Povolit zaměstnancům vyhledávání v katalogu přes intranet "
 msgid "Stage MARC records into the reservoir"
 msgstr "Příprava MARC záznamů do zásobníku."
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:48
-#, fuzzy, c-format
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:72
+#, c-format
 msgid "Standard ID"
-msgstr "Standard: "
+msgstr "Standard ID"
 
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:12
 #: intranet-tmpl/prog/en/modules/help/members/members-home.tt:14
@@ -14132,10 +14246,10 @@ msgstr "Klasifikace SuDOC"
 msgid "Subfields: a"
 msgstr "Podpole: a"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:47
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:71
 #, c-format
 msgid "Subject"
-msgstr ""
+msgstr "Téma"
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/help/edithelp.tt:36
@@ -14163,20 +14277,21 @@ msgstr ""
 "bibliografickém záznamu. Případně navštívením modulu Periodika a kliknutím "
 "na 'Nové předplatné'"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:69
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:93
 #, c-format
 msgid "Suggested Authority Z39.50 Targets"
 msgstr "Doporučené Z39.50 servery pro autoritní záznamy"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:51
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:75
 #, c-format
 msgid "Suggested Bibliographic Z39.50 Targets"
 msgstr "Doporučené Z39.50 servery pro bibliografické záznamy"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:37
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:46
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:61
 #, c-format
 msgid "Syntax"
-msgstr ""
+msgstr "Syntaxe"
 
 #: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:3
 #, c-format
@@ -14234,7 +14349,7 @@ msgstr ""
 "nepůjčují se, jako referenční výtisky, magazíny, atd. Z této karty pak "
 "můžete spustit sestavu na sebrání statistických údajů."
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:64
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:88
 #, c-format
 msgid "TORONTO PUBLIC symphony.torontopubliclibrary.ca:2200 unicorn"
 msgstr "TORONTO PUBLIC symphony.torontopubliclibrary.ca:2200 unicorn"
@@ -14244,7 +14359,7 @@ msgstr "TORONTO PUBLIC symphony.torontopubliclibrary.ca:2200 unicorn"
 msgid "TRANSFERSLIP "
 msgstr "TRANSFERSLIP "
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:65
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:89
 #, c-format
 msgid "TRI-UNI 129.97.129.194:7090 voyager"
 msgstr "TRI-UNI 129.97.129.194:7090 voyager"
@@ -15256,7 +15371,7 @@ msgstr "Následující položka/položky jsou po termínu:"
 msgid "The following item(s) is/are currently overdue:"
 msgstr "U následujících výpůjček byl překročen termín pro vrácení:"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:53
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:77
 #, c-format
 msgid ""
 "The following targets have been used successfully by other Koha libraries "
@@ -15264,7 +15379,7 @@ msgid ""
 msgstr ""
 "Následující cíle jsou (v USA) úspěšně využívány jinými Koha knihovnami:"
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:71
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:95
 #, c-format
 msgid ""
 "The following targets have been used successfully by other Koha libraries:"
@@ -16100,6 +16215,8 @@ msgstr ""
 #, c-format
 msgid "This notice is sent as the 'Advanced notice' for all items that are due"
 msgstr ""
+"Toto upozornění je odesláno jako 'Rozšířené upozornění' ke všem jednotkám, "
+"které jsou po termínu vrácení"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:195
 #, c-format
@@ -16686,7 +16803,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/about.tt:34
 #, c-format
 msgid "Timeline"
-msgstr ""
+msgstr "Časová osa"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:24
 #, c-format
@@ -16899,10 +17016,10 @@ msgstr ""
 "Tip: Musíte dát \"%%\" do textového pole \"nechat prázdné.\" Jinak doslova "
 "hledá \"\" (prázdný řetězec) jako hodnotu pro pole."
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:42
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:66
 #, c-format
 msgid "Title"
-msgstr ""
+msgstr "Název"
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:9
 #, c-format
@@ -17060,7 +17177,7 @@ msgid ""
 "To add additional values to the manual invoice type pull down menu, add them "
 "to the MANUAL_INV Authorized Value"
 msgstr ""
-"Chcete-li přidat další hodnoty do druhu faktury v rozbalovacím menu, "
+"Chcete-li přidat další hodnoty do druhu dokladu v rozbalovacím menu, "
 "přidejte je do MANUAL_INV Authorizovaných hodnot"
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:57
@@ -17392,7 +17509,7 @@ msgstr ""
 "výsledky pomocí menu filtrů na levé straně, nebo pomocí záložek s "
 "jednotlivými skupinami výstupů."
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:40
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:64
 #, c-format
 msgid ""
 "To further refine your searches, you could add the following index names to "
@@ -17760,7 +17877,7 @@ msgid ""
 "description of the line item along with the total outstanding on the account."
 msgstr ""
 "Na pravé straně každého rádku účtu je zde odkaz Tisk. Kliknutím na tento "
-"odkaz se vytiskne faktura pro výtisk na řádku, který obsahuje datum a popis "
+"odkaz se vytiskne doklad pro výtisk na řádku, který obsahuje datum a popis "
 "výtisku na řádku spolu se sumou nesplacenou na účtu."
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgets.tt:32
@@ -17919,6 +18036,11 @@ msgstr "Náklady na přesuny"
 msgid "Troubleshooting"
 msgstr "Řešení problémů"
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:51
+#, c-format
+msgid "UNIMARC"
+msgstr "UNIMARC"
+
 #: intranet-tmpl/prog/en/modules/help/acqui/uncertainprice.tt:3
 #, c-format
 msgid "Uncertain prices"
@@ -18074,6 +18196,7 @@ msgid ""
 "Used to notify a patron that another patron would like to share a list with "
 "them."
 msgstr ""
+"Používá se k informování čtenáři, že nekdo jiný s ním chce sdílet seznam."
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:255
 #, c-format
@@ -18105,6 +18228,11 @@ msgstr "Používáno k tisku rychlých výpůjčních lístků"
 #, c-format
 msgid "Using CSV Profiles"
 msgstr "Používání CSV profilů"
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:31
+#, c-format
+msgid "Using XSLT file(s) to transform the imported records"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:11
 #, c-format
@@ -18243,7 +18371,7 @@ msgstr ""
 "Pomocí tohoto nástroje můžete říci Koha, aby tiskla pravé pole jako titulek "
 "při sledování bibliografického záznamu v OPACu."
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:66
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:90
 #, c-format
 msgid "VANCOUVER PUBLIC LIBRARY z3950.vpl.ca:210 Horizon"
 msgstr "VANCOUVER PUBLIC LIBRARY z3950.vpl.ca:210 Horizon"
@@ -18342,7 +18470,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:126
 #, c-format
 msgid "W = Writeoff"
-msgstr "W = Odepsat"
+msgstr "W = Prominout"
 
 #: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:32
 #, c-format
@@ -18536,8 +18664,16 @@ msgid ""
 "When orders are received invoices are generated. Invoices can be searched by "
 "clicking on 'Invoices' in the left of the Acquisitions page."
 msgstr ""
-"Pokud jsou přijímány objednávky, jsou generovány faktury. Faktury lze "
-"vyhledávat kliknutím na \"faktury\" v levé části stránky akvizic."
+"Pokud jsou přijímány objednávky, jsou generovány doklady. Doklady lze "
+"vyhledávat kliknutím na \"fdoklady\" v levé části stránky akvizice."
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:32
+#, c-format
+msgid ""
+"When retrieving records from external targets you may wish to automate some "
+"changes to those records. XSLT's allow you to do this. Koha ships with some "
+"sample XSLT files ready for use."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/suggestion/suggestion.tt:21
 #, c-format
@@ -18853,18 +18989,23 @@ msgstr "Novinky pro on-line katalog a intranet"
 #: intranet-tmpl/prog/en/modules/help/members/paycollect.tt:47
 #, c-format
 msgid "Writeoff All fines "
-msgstr "Odepsat všechny pokuty "
+msgstr "Prominout všechny poplatky "
 
 #: intranet-tmpl/prog/en/modules/help/members/pay.tt:41
 #: intranet-tmpl/prog/en/modules/help/members/paycollect.tt:41
 #, c-format
 msgid "Writeoff a single fine "
-msgstr "Odepsat jednotlivou pokutu "
+msgstr "Prominout jednotlivý poplatek  "
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:17
 #, c-format
 msgid "XML - Included as an alternate export format"
 msgstr "XML - Zahrnuto jako alternativní formát pro export"
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:47
+#, c-format
+msgid "XSLT configuration"
+msgstr "Konfigurace XSLT"
 
 #: intranet-tmpl/prog/en/modules/help/admin/classsources.tt:25
 #, c-format
@@ -19703,7 +19844,7 @@ msgstr ""
 "přijetí nebo odmítnutí. (naleznete pod \"Status\")."
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Z39.50 and SRU are client–server protocols for searching and retrieving "
 "information from remote computer databases, in short tools used for copy "
@@ -19712,16 +19853,18 @@ msgid ""
 "bibliographic and/or authority records from that source. (Note that not all "
 "SRU targets will offer bibliographic information in MARC format.)"
 msgstr ""
-"Z39.50 je protokol typu klient-server, který umožňuje vyhledávat a získávat "
-"informace ze vzdálené databáze. Je to nástroj pro sdílenou katalogizaci. V "
-"systému Koha se můžete připojit k jakémukoliv Z39.50 serveru, který je "
-"veřejně dostupný, nebo ke kterému máte přihlašovací údaje. Z39.50 můžete "
-"využít pro stahování bibliografických i autoritních záznamů."
+"Z39.50 a SRU jsou protokoly typu klient-server, které umožňují vyhledávat a "
+"získávat informace ze vzdálené databáze. Je to nástroj pro sdílenou "
+"katalogizaci. V systému Koha se můžete připojit k jakémukoliv Z39.50/SRU "
+"serveru, který je veřejně dostupný, nebo ke kterému máte přihlašovací údaje. "
+"Z39.50/SRU můžete využít pro stahování bibliografických i autoritních "
+"záznamů. (Poznámka: Některé SRU servery nemusejí poskytovat bibliografické "
+"informace ve formátu MARC.)"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Z39.50/SRU Servers"
-msgstr "Z39.50 Servery"
+msgstr "Z39.50/SRU Servery"
 
 #: intranet-tmpl/prog/en/modules/help/tools/picture-upload.tt:14
 #, c-format
@@ -19813,20 +19956,20 @@ msgstr "b - Část fondu"
 msgid "batch_upload_patron_images "
 msgstr "hromadné_načítání_obrázků_čtenářů "
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:43
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:67
 #, c-format
 msgid "bath.isbn"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:46
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:70
 #, c-format
 msgid "bath.issn"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:48
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:72
 #, c-format
 msgid "bath.standardIdentifier"
-msgstr ""
+msgstr "bath.standardIdentifier"
 
 #: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:21
 #, c-format
@@ -19926,7 +20069,7 @@ msgstr "reklamovat_časopisy "
 msgid "contracts_manage "
 msgstr "zpracovat_smlouvy "
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:44
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:68
 #, c-format
 msgid "cql.anywhere"
 msgstr ""
@@ -20064,17 +20207,17 @@ msgid ""
 "customize the staff client by editing the stylesheet and navigation menu."
 msgstr "přizpůsobit intranet prostřednictvím úpravy Stylu a navigačního menu."
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:45
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:69
 #, c-format
 msgid "dc.author"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:47
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:71
 #, c-format
 msgid "dc.subject"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:42
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:66
 #, c-format
 msgid "dc.title"
 msgstr ""
@@ -20437,7 +20580,7 @@ msgstr "zobrazí výstupy napsané uživateli systému Koha z celého světa."
 msgid "localuse "
 msgstr "localuse "
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:34
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:58
 #, c-format
 msgid "lx2.loc.gov"
 msgstr ""
@@ -20477,7 +20620,7 @@ msgstr "management (správa) "
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:90
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:78
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:95
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:73
@@ -20955,10 +21098,10 @@ msgstr "updatecharges (upravovat poplatky a upomínky) "
 msgid "upload_local_cover_images "
 msgstr "nahrávat_místní_obrázky_obálek "
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:38
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:62
 #, c-format
 msgid "utf8"
-msgstr ""
+msgstr "utf8"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:17
 #, c-format

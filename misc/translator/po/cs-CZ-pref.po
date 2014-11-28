@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-23 08:15+0200\n"
-"PO-Revision-Date: 2014-11-11 08:14+0000\n"
+"PO-Revision-Date: 2014-11-25 14:18+0000\n"
 "Last-Translator: Josef <josef.moravec@knihovna-uo.cz>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: cs\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1415693666.000000\n"
+"X-POOTLE-MTIME: 1416925099.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -52,7 +52,7 @@ msgstr "Nepovolovat"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqEnableFiles# enable the ability to upload and attach arbitrary files to invoices."
-msgstr "možnost nahrát a připojit k fakturám libovolné soubory."
+msgstr "možnost nahrát a připojit k dokladu libovolné soubory."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqItemSetSubfieldsWhenReceiptIsCancelled# Upon cancelling a receipt, update the item's subfields if they were created when placing an order (e.g. o=5|a=\"bar foo\"\")."
@@ -88,7 +88,7 @@ msgstr "Upozornit"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqWarnOnDuplicateInvoice# when the librarian tries to create an invoice with a duplicate number."
-msgstr "při pokusu o vytvoření faktury s již použitým číslem."
+msgstr "při pokusu vytvořit doklad s již použitým číslem."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#BasketConfirmations# When closing or reopening a basket,"
@@ -896,51 +896,51 @@ msgstr "tlačítka na stránce bibliografického detailu pro tisk hřbetních š
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# Define a list of subfields for which editing is authorized when items_batchmod_restricted permission is enabled, separated by spaces."
-msgstr ""
+msgstr "Seznam podpolí, které je povolen měnit, pokud má uživatel právo items_batchmod_restricted. Jednotlivá podpole oddělte mezerou."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# Examples:"
-msgstr ""
+msgstr "Příklady:"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# If the pref is empty, no fields are restricted."
-msgstr ""
+msgstr "Pokud toto pole necháte prázdné, nebude omezena úprava žádného podpole."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# MARC21: \"952$a 952$b 952$c\""
-msgstr ""
+msgstr "MARC21: \"952$a 952$b 952$c\""
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# Note that the FA framework is excluded from the permission."
-msgstr ""
+msgstr "Poznámka: na dokumenty zkatalogizované pomocí Rychlé katalogizace se toto oprávnění nevztahuje."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# UNIMARC: \"995$f 995$h 995$j\""
-msgstr ""
+msgstr "UNIMARC: \"995$f 995$h 995$j\""
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# Define a list of subfields for which editing is authorized when edit_items_restricted permission is enabled, separated by spaces."
-msgstr ""
+msgstr "Seznam podpolí, jejichž úprava je povolena, pokud má užiatel právo edit_items_restricted. Jednotlivá podpole oddělte mezerou."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# Examples:"
-msgstr ""
+msgstr "Příklady:"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# If the pref is empty, no fields are restricted."
-msgstr ""
+msgstr "Pokud toto pole necháte prázdné, nebude omezena úprava žádného podpole."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# MARC21: \"952$a 952$b 952$c\""
-msgstr ""
+msgstr "MARC21: \"952$a 952$b 952$c\""
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# Note that the FA framework is excluded from the permission."
-msgstr ""
+msgstr "Poznámka: na dokumenty zkatalogizované pomocí Rychlé katalogizace se toto oprávnění nevztahuje. "
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# UNIMARC: \"995$f 995$h 995$j\""
-msgstr ""
+msgstr "UNIMARC: \"995$f 995$h 995$j\""
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToUseWhenPrefill# Define a list of subfields to use when prefilling items (separated by space)"
@@ -1278,6 +1278,20 @@ msgstr "Nepovolit"
 msgid "circulation.pref#AllowOnShelfHolds# hold requests to be placed on items that are not checked out."
 msgstr "rezervaci na výtisky, které nejsou vypůjčené."
 
+# Circulation > Holds Policy
+msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Allow"
+msgstr "Povolit"
+
+# Circulation > Holds Policy
+msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Don't allow"
+msgstr "Nepovolit"
+
+# Circulation > Holds Policy
+msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# a patron to renew an item with unfilled holds if other available items can fill that hold."
+msgstr ""
+"čtenáři prodloužit výpůjčku, na kterou je rezervace, pokud je k dispozici "
+"jiná jednotka daného titulu."
+
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowRenewalLimitOverride# Allow"
 msgstr "Povolit"
@@ -1478,6 +1492,51 @@ msgstr "Vyřizovat při vracení i rezervace, které mají platnost v budoucnost
 msgid "circulation.pref#ConfirmFutureHolds# days from now) at checkin time. Note that this number of days will be used too in calculating the default end date for the Holds to pull-report. But it does not interfere with issuing, renewing or transferring books."
 msgstr "dní). Poznámka: Tento počet dní bude použit i ve výchozím filtru, při vyhledávání rezervací, které je třeba najít na regále. Toto nastavení nemá vliv na půjčování, prodlužování ani přesun jendotek."
 
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the longoverdue.pl script is called without the --charge parameter)"
+msgstr ""
+"<br>(Používá se, pokud je skript longoverdue.pl spouštěn bez parametru "
+"--charge)"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>Leave this field empty if you don't want to charge the user for lost items."
+msgstr ""
+" <br>Nechte pole prázdné pokud nechcete vybírat náhradu za ztrátu dokumentů."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# Charge a lost item to the borrower's account when the LOST value of the item changes to :"
+msgstr "Naúčtovat čtenáři poplatek, pokud se hodnota LOST změní na :"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br>(Used when the longoverdue.pl script is called without the --lost parameter)"
+msgstr ""
+"<br>(Používá se, pokud je skript longoverdue.pl spouštěn bez parametru "
+"--lost)"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br>Example: [1] [30] Sets an item to the LOST value 1 when it has been overdue for more than 30 days."
+msgstr ""
+"<br>Například: [1] [30] Nastaví hodnotu LOST statusu jednotky na 1, pokud je "
+"výpůjční lhůta překročena o více než 30 dní."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br>WARNING — These preferences will activate the automatic item loss process. Leave these fields empty if you don't want to activate this feature."
+msgstr ""
+"<br>Varování — Tato nastavení aktivují automatické zpracování ztracených "
+"jednotek. Nechte tato pole prázdná, pokud nechcete tuto funkci používat."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# By default, set the LOST value of an item to"
+msgstr "Nastavit LOST status jednotky na"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# days."
+msgstr "dní."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# when the item has been overdue for more than"
+msgstr "pokud není jednotka vrácena za více než"
+
 # Circulation > Interface
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
 msgstr "Nezobrazit"
@@ -1672,32 +1731,32 @@ msgstr "čtenáři výpůjčkám, u nichž by poplatky mohly překročit limit."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#LocalHoldsPriority# Don't give"
-msgstr ""
+msgstr "Neupřednostňovat"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#LocalHoldsPriority# Give"
-msgstr ""
+msgstr "Upřednostňovat"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#LocalHoldsPriority# holding library"
-msgstr ""
+msgstr "aktuální knihovna"
 
 # Circulation > Holds Policy
 # Circulation > Holds Policy
 msgid "circulation.pref#LocalHoldsPriority# home library"
-msgstr ""
+msgstr "domovská knihovna"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#LocalHoldsPriority# matches the item's"
-msgstr ""
+msgstr "je stejná jako knihovna jednotky"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#LocalHoldsPriority# pickup library"
-msgstr ""
+msgstr "knihovna k vyzvednutí rezervace"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#LocalHoldsPriority# priority for filling holds to patrons whose"
-msgstr ""
+msgstr "rezervace pro čtenáře, jejichž"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ManInvInNoissuesCharge# Don't include"
@@ -1745,27 +1804,27 @@ msgstr "čtenáři volbu, kde si vyzvedne rezervace."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OnSiteCheckouts# Disable"
-msgstr ""
+msgstr "Zakázat"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OnSiteCheckouts# Enable"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OnSiteCheckouts# the on-site checkouts feature."
-msgstr ""
+msgstr "prezenční výpůjčky."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OnSiteCheckoutsForce# Disable"
-msgstr ""
+msgstr "Zakázat"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OnSiteCheckoutsForce# Enable"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OnSiteCheckoutsForce# the on-site for all cases (Even if a user is debarred, etc.)."
-msgstr ""
+msgstr "prezenční výpůjčky vždycky a bez výjimky."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OverdueNoticeBcc# Send all notices as a BCC to this email address"
@@ -1857,23 +1916,23 @@ msgstr "zprávu o prodloužení podle výpůjčních pravidel."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#RentalFeesCheckoutConfirmation# When checking out an item with rental fees, "
-msgstr ""
+msgstr "Při půjčování jednotky, u které je účtován poplatek za půjčení: "
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#RentalFeesCheckoutConfirmation# ask"
-msgstr ""
+msgstr "Ptát se"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#RentalFeesCheckoutConfirmation# do not ask"
-msgstr ""
+msgstr "Neptat se"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#RentalFeesCheckoutConfirmation# for confirmation."
-msgstr ""
+msgstr ", zdali opravdu půjčit."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#RentalsInNoissuesCharge# Don't include"
-msgstr "Nazahrnovat"
+msgstr "Nezahrnovat"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#RentalsInNoissuesCharge# Include"
@@ -3321,7 +3380,7 @@ msgstr "On-line katalog"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref Advanced Search Options"
-msgstr ""
+msgstr "Možnosti pokročilého vyhledávání"
 
 # OPAC > Appearance
 msgid "opac.pref Appearance"
@@ -3457,15 +3516,15 @@ msgstr "historie hledání čtenáře v OPACu."
 
 # OPAC > Appearance
 msgid "opac.pref#GoogleIndicTransliteration# Don't show"
-msgstr ""
+msgstr "Nezobrazovat"
 
 # OPAC > Appearance
 msgid "opac.pref#GoogleIndicTransliteration# GoogleIndicTransliteration on the OPAC."
-msgstr ""
+msgstr "přepis do indického písma v on-line katalogu."
 
 # OPAC > Appearance
 msgid "opac.pref#GoogleIndicTransliteration# Show"
-msgstr ""
+msgstr "Zobrazit"
 
 # OPAC > Appearance
 msgid "opac.pref#HighlightOwnItemsOnOPAC#  by moving the results to the front and increasing the size or highlighting the rows for those results. (Non-XSLT Only)"
@@ -3524,28 +3583,28 @@ msgid "opac.pref#OPACBaseURL# The OPAC is located at http://"
 msgstr "OPAC je umístěn na http://"
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Both Details and Results pages"
-msgstr "Stránce s podrobným záznamem i s výsledky hledání"
+msgid "opac.pref#OPACDisplay856uAsImage# . Note: The corresponding OPACXSLT option must be turned on."
+msgstr ". Poznámka: volba OPACXSLT musí být povolena."
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Details page only"
-msgstr "Stránce s podrobným záznamem"
+msgid "opac.pref#OPACDisplay856uAsImage# Both detail and result pages"
+msgstr "Stránka s podrobnostmi i přehled výsledků"
+
+# OPAC > Appearance
+msgid "opac.pref#OPACDisplay856uAsImage# Detail page only"
+msgstr "Pouze stránka s podrobnostmi"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# Display the URI in the 856u field as an image on: "
 msgstr "Zobrazit URI v poli 856u jako obrázek na: "
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Neither Details or Results pages"
+msgid "opac.pref#OPACDisplay856uAsImage# Neither detail or result pages"
 msgstr "Nikde"
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Note: The corresponding OPACXSLT option must be turned on."
-msgstr "Pozn: Odpovídající OPACXSLT volba musí být být aktivní."
-
-# OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Results page only"
-msgstr "Stránce s výsledky hledání"
+msgid "opac.pref#OPACDisplay856uAsImage# Result page only"
+msgstr "Pouze stránka s výsledky"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACFallback# Use the"
@@ -3809,11 +3868,11 @@ msgstr "roletové menu pro výběr knihovny v záhlaví na OPACu."
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Show search options for the expanded view"
-msgstr ""
+msgstr "V rozšířeném zobrazení formuláře pro pokročilé vyhledávání zobrazit tyto položky"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchOptions# Show search options"
-msgstr ""
+msgstr "Ve formuláři pro pokročilé vyhledávání zobrazit tyto položky"
 
 # OPAC > Policy
 msgid "opac.pref#OpacAllowPublicListCreation# Allow"
@@ -4535,275 +4594,329 @@ msgstr "čtenářům dělat návrhy na nákupy na OPACu."
 msgid "patrons.pref"
 msgstr "Čtenáři"
 
-# Patrons
+# Patrons > General
+msgid "patrons.pref General"
+msgstr "Základní"
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref Norwegian patron database"
+msgstr "Norská databáze uživatelů knihoven"
+
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# List"
 msgstr "Zobrazit seznam"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# general patron types"
 msgstr "obecných čtenářských typů"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# specific categories"
 msgstr "konkrétních kategorií"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# under the new patron menu."
 msgstr "v nabídce \"nový čtenář\""
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# Don't send"
 msgstr "Neposílat"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# Send"
 msgstr "Posílat"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# an email to newly created patrons with their account details."
 msgstr "e-mail nově založenému čtenáři s detaily jeho účtu."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# Use"
 msgstr "Používat"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# alternate"
 msgstr "alternativní"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# cardnumber as"
 msgstr "číslo karty jako"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# first valid"
 msgstr "první platnou"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# home"
 msgstr "domovskou"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# patron email address for sending out emails."
 msgstr "e-mail adresu čtenáře pro posílání mailů."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# work"
 msgstr "Zpracovat"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# (separate columns with |)"
 msgstr "(oddělit sloupce svislítkem |)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr "Následující <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>databázové sloupce</a> musí být vyplněny na vstupní obrazovce čtenáře:"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# When renewing borrowers, base the new expiry date on"
 msgstr "Při prodloužování, nový výpůjční termín odvodit z"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current date."
 msgstr "aktuálního data."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current membership expiry date."
 msgstr "datumu ukončení registrace."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerUnwantedField# (separate columns with |)"
 msgstr "(oddělit sloupce svislítkem |)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerUnwantedField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
 msgstr "Následující <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>databázové sloupce</a> nezobrazovat na úvodní obrazovce čtenáře:"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowersTitles# (separate multiple choices with |)"
 msgstr "(oddělit více možností svislítkem |)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowersTitles# Borrowers can have the following titles:"
 msgstr "Čtenáři si mohou vypůjčit následující tituly:"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#CardnumberLength# Card numbers for patrons must be"
 msgstr "Čísla čtenářských průkazů musí být"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#CardnumberLength# If 'cardnumber' is included in the BorrowerMandatoryField list, the minimum length, if not specified here, defaults to one."
 msgstr "Pokud je pole \"cardnumber\" zapsáno v nastavení BorrowerMandatoryField, a toto nastavení zůstane nevyplněno, použije se jako výchozí minimální délka \"1\"."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#CardnumberLength# characters long. The length can be a single number to specify an exact length, a range separated by a comma (i.e., 'Min,Max'), or a maximum with no minimum (i.e., ',Max')."
 msgstr "znaků dlouhá. Je-li vyplněno jedno číslo, musí být počet znaků přesně odpovídat tomuto číslu. Je možné také vyplnit rozsah (ve tvaru \"min,max\"), nebo je minimální či maximální počet znaků (např.: \",max\")."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
 msgstr "Umožnit"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Don't"
 msgstr "Neumožnit"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# enable the ability to upload and attach arbitrary files to a borrower record."
 msgstr "přiložit libovolné soubory k záznamu čtenáře."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# Allow"
 msgstr "Povolit"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# Don't allow"
 msgstr "Nepovolit"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# patrons to choose which notices they receive and when they receive them. Note that this only applies to certain kinds of notices."
 msgstr "čtenářům vybrat, které upozornění mají obdržet a kdy. Pozn: toto se vztahuje pouze na některé typy upozornění."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# Don't enable"
 msgstr "Neumožnit"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# Enable"
 msgstr "Umožnit"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# searching, editing and display of custom attributes on patrons."
 msgstr "vyhledávání, editaci a zobrazení uživatelských vlastností čtenářů."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#MaxFine# Empty value means no limit. Single item caps are specified in the circulation rules matrix."
 msgstr "Prázdná hodnota znamená Bez omezení. Písmena pro jednotlivé jednotky jsou specifikována v matici pravidel výpůjček."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#MaxFine# The late fine for all checkouts will only go up to"
 msgstr "Zpozdné pro všechny výpůjčky půjdou až do"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#MaxFine# [% local_currency %]."
 msgstr "[% local_currency %]."
 
-# Patrons
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# Disable"
+msgstr "Zakázat"
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# Enable"
+msgstr "Povolit"
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# endpoint."
+msgstr "server."
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# the ability to communicate with the Norwegian national patron database via the"
+msgstr "možnost komunikovat s Norskou národní databází uživatelů knihoven přes"
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# Do"
+msgstr "Provádět"
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# Don't"
+msgstr "Neprovádět"
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# search the Norwegian national patron database after a local search result was found."
+msgstr ""
+"hledání v Norské národní databázi uživatelů knihoven, pokud hledání ve "
+"vlastní bázi nepřineslo výsledky."
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBUsername# . You can get these from \"Base Bibliotek\", which is maintained by the Norwegian National Library."
+msgstr ""
+". Tyto údaje získáte z \"Base Bibliotek\", kterou spravuje Norská národní "
+"knihovna."
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBUsername# Communicate with the Norwegian national patron database using the username"
+msgstr ""
+"Komunikace s Norskou národní databízí uživatelů knihovne s použitím "
+"uživatelského jména"
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBUsername# and the password"
+msgstr "a hesla"
+
+# Patrons > General
 msgid "patrons.pref#NotifyBorrowerDeparture# Show a notice if the patron is about to expire or has expired"
 msgstr "Zobrazovat upozornění na blížíce se termín vypršení registrace."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
 msgstr "dní předem."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#PatronsPerPage# By default, show"
 msgstr "Defaultně zobrazuj"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#PatronsPerPage# results per page in the staff client."
 msgstr "výsledků vyhledání na stránku v intranetu."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#SMSSendDriver# Use the SMS::Send::"
 msgstr "Používat SMS::Send::"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#SMSSendDriver# driver to send SMS messages."
 msgstr "driver pro posílání SMS zpráv."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#StatisticsFields# (separate fields with |)"
 msgstr "(oddělit pole svislítkem |)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#StatisticsFields# Show the following fields from the items database table as columns on the statistics tab on the patron record: "
 msgstr "Zobrazit následující pole z databáze výtisků jako sloupce v záložce statistiky v záznamu čtenáře: "
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# Disable"
 msgstr "Neumožnit"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# Enable"
 msgstr "Umožnit"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# patron phone notifications using Talking Tech i-tiva (overdues, predues and holds notices currently supported)."
 msgstr "telefonické upozorňování čtenářům pomocí Talking Tech i-tiva (upomínky, předupomínky a rezervace)."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#autoMemberNum# Do"
 msgstr "Použít"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#autoMemberNum# Don't"
 msgstr "Nepoužít"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#autoMemberNum# default the card number field on the patron addition screen to the next available card number (for example, if the largest currently used card number is 26345000012941, then this field will default to 26345000012942)."
 msgstr "jako výchozí číslo karty na čtenářově stránce následující volné číslo (např. jestliže nejvyšší použité číslo karty je 26345000012941, tak toto pole bude defaultně 26345000012942)."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#borrowerRelationship# (input multiple choices separated by |). Leave empty to deactivate"
 msgstr "(vstup více výběrů, oddělených svislítkem |). Ponechat prázdné, pro deaktivaci"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#borrowerRelationship# Guarantors can be the following of those they guarantee:"
 msgstr "Ručitelé mohou být následující z těch, kteří zaručují:"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#checkdigit# Do"
 msgstr "Vytvářet"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#checkdigit# Don't"
 msgstr "Nevytvářet"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#checkdigit# check and construct borrower card numbers in the Katipo style. This overrides <code>autoMemberNum</code> if on."
 msgstr "číslo karty čtenáře ve stylu Katipo. Toto má prioritu před <code>autoMemberNum</code>."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#intranetreadinghistory# Allow"
 msgstr "Povolit"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#intranetreadinghistory# Don't allow"
 msgstr "Nepovolit"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#intranetreadinghistory# staff to access a patron's checkout history (it is stored regardless)."
 msgstr "obsluze přístup k historii výpůjček čtenáře (stejně se pamatuje)."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#minPasswordLength# Login passwords for staff and patrons must be at least"
 msgstr "Přihlašovací heslo pro obsluhu a čtenáře musí být minimálně"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#minPasswordLength# characters long."
 msgstr "znaků dlouhé."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#patronimages# Allow"
 msgstr "Povolit"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#patronimages# Don't allow"
 msgstr "Nepovolit"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#patronimages# images to be uploaded and shown for patrons on the staff client."
 msgstr "aby obrázky čtenářů byly uloženy a zobrazovány v intranetu."
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#uppercasesurnames# Do"
 msgstr "Ukládat a zobrazovat"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#uppercasesurnames# Don't"
 msgstr "Neukládat a nezobrazovat"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#uppercasesurnames# store and display surnames in upper case."
 msgstr "příjmení velkými písmeny."
 
@@ -5340,28 +5453,28 @@ msgid "staff_client.pref Options"
 msgstr "Volby"
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Both Results and Details pages (for future use, Results XSLT not functional at this time)."
-msgstr "Na stránce s podrobným záznamem i s výsledky hledání (pro budoucí užití, Results XSLT v současnosti není funkční)."
+msgid "staff_client.pref#Display856uAsImage# . Note: The corresponding XSLT option must be turned on."
+msgstr "Poznámka: Musí být povoleno také odpovídají nastavení XSLT šablon."
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Details page only"
-msgstr "Na stránce s podrobným záznamem"
+msgid "staff_client.pref#Display856uAsImage# Both result and detail pages"
+msgstr "Stránky s výsledky i podrobnostmi"
+
+# Staff Client > Appearance
+msgid "staff_client.pref#Display856uAsImage# Detail page only"
+msgstr "Pouze stránku s podrobnostmi"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#Display856uAsImage# Display the URI in the 856u field as an image on: "
 msgstr "Zobrazit URI v poli 856u jako obrázek: "
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Neither Details or Results pages"
+msgid "staff_client.pref#Display856uAsImage# Neither detail or result pages"
 msgstr "Nikde"
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Note: The corresponding XSLT option must be turned on."
-msgstr "Poznámka: Musí být zapnuto odpovídající nastavení XSLT."
-
-# Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Results page (for future use, Results XSLT not functional at this time)."
-msgstr "Na stránce s výsledky hledání (pro budoucí užití, Results XSLT v současnosti není funkční)."
+msgid "staff_client.pref#Display856uAsImage# Result page"
+msgstr "Stránku s výsledky"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#DisplayIconsXSLT# Don't show"
@@ -5674,4 +5787,3 @@ msgstr "Vracet maximálně"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "řádků z výstupů vyžádaných pomocí webové služby."
-

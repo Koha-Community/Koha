@@ -1278,6 +1278,18 @@ msgstr "circulation.pref#AllowOnShelfHolds# Մի թույլատրի"
 msgid "circulation.pref#AllowOnShelfHolds# hold requests to be placed on items that are not checked out."
 msgstr "circulation.pref#AllowOnShelfHolds# պահման առաջարկներ որ պետք է դրվեն նյութերի վրա որոնք չեն սպասարկվել։"
 
+# Circulation > Holds Policy
+msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Allow"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Don't allow"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# a patron to renew an item with unfilled holds if other available items can fill that hold."
+msgstr ""
+
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowRenewalLimitOverride# Allow"
 msgstr "circulation.pref#AllowRenewalLimitOverride# Թույլատրի"
@@ -1477,6 +1489,42 @@ msgstr "circulation.pref#ConfirmFutureHolds# Հաստատիր ապագայի պ�
 # Circulation > Holds Policy
 msgid "circulation.pref#ConfirmFutureHolds# days from now) at checkin time. Note that this number of days will be used too in calculating the default end date for the Holds to pull-report. But it does not interfere with issuing, renewing or transferring books."
 msgstr "circulation.pref#ConfirmFutureHolds# օրեր այսօրվանից) հետ ընդունման ժամանակից։ Նկատի առ որ այս օրերի քանակը կօգտագործվի Պահման ավարտի ամսաթվի լռակյաց արժեքի հաշվման համար։ Սակայն սա չի խառնվում գրքերի տրման, թարմացման կամ տեղափոխման հետ։"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the longoverdue.pl script is called without the --charge parameter)"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>Leave this field empty if you don't want to charge the user for lost items."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# Charge a lost item to the borrower's account when the LOST value of the item changes to :"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br>(Used when the longoverdue.pl script is called without the --lost parameter)"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br>Example: [1] [30] Sets an item to the LOST value 1 when it has been overdue for more than 30 days."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br>WARNING — These preferences will activate the automatic item loss process. Leave these fields empty if you don't want to activate this feature."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# By default, set the LOST value of an item to"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# days."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# when the item has been overdue for more than"
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
@@ -3524,28 +3572,28 @@ msgid "opac.pref#OPACBaseURL# The OPAC is located at http://"
 msgstr "opac.pref#OPACBaseURL# ՀՕԱՔ-ը տեղակայված է http://"
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Both Details and Results pages"
-msgstr "opac.pref#OPACDisplay856uAsImage# Մանրամսների և Արդյունքների էջեր"
+msgid "opac.pref#OPACDisplay856uAsImage# . Note: The corresponding OPACXSLT option must be turned on."
+msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Details page only"
-msgstr "opac.pref#OPACDisplay856uAsImage# Միայն մանրամասների էջ"
+msgid "opac.pref#OPACDisplay856uAsImage# Both detail and result pages"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OPACDisplay856uAsImage# Detail page only"
+msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# Display the URI in the 856u field as an image on: "
 msgstr "opac.pref#OPACDisplay856uAsImage# Արտածիր URI-ը 856u դաշտում որպես պատկեր: "
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Neither Details or Results pages"
-msgstr "opac.pref#OPACDisplay856uAsImage# Ոչ Մանրամասների և ոչ էլ Արդյունքների էջեր"
+msgid "opac.pref#OPACDisplay856uAsImage# Neither detail or result pages"
+msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Note: The corresponding OPACXSLT option must be turned on."
-msgstr "opac.pref#OPACDisplay856uAsImage# Նկատի առ։: Կապակցված OPACXSLT հնարավորությունը պետք է միացված լինի։"
-
-# OPAC > Appearance
-msgid "opac.pref#OPACDisplay856uAsImage# Results page only"
-msgstr "opac.pref#OPACDisplay856uAsImage# Միայն արդյունքների էջ"
+msgid "opac.pref#OPACDisplay856uAsImage# Result page only"
+msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACFallback# Use the"
@@ -4535,275 +4583,323 @@ msgstr "opac.pref#suggestion# ընթերցողներ որ ՀՕԱՔ-ից պետք
 msgid "patrons.pref"
 msgstr "patrons.pref"
 
-# Patrons
+# Patrons > General
+msgid "patrons.pref General"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref Norwegian patron database"
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# List"
 msgstr "patrons.pref#AddPatronLists# Ցուցակ"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# general patron types"
 msgstr "patrons.pref#AddPatronLists# ընդհանուր ընթերցողի տեսակ"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# specific categories"
 msgstr "patrons.pref#AddPatronLists# որոշակի դասեր"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AddPatronLists# under the new patron menu."
 msgstr "patrons.pref#AddPatronLists# նոր ընթերցողի ընտրացանկի ներքո։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# Don't send"
 msgstr "patrons.pref#AutoEmailOpacUser# Մի ուղարկիր"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# Send"
 msgstr "patrons.pref#AutoEmailOpacUser# Ուղարկիր"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# an email to newly created patrons with their account details."
 msgstr "patrons.pref#AutoEmailOpacUser# էլ. փոստի հաղորդագրություն հենց նոր ստեղծված ընթերցողներին, իրենց հաշվի մանրամասներով։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# Use"
 msgstr "patrons.pref#AutoEmailPrimaryAddress# Օգտագործիր"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# alternate"
 msgstr "patrons.pref#AutoEmailPrimaryAddress# այլընտրանք"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# cardnumber as"
 msgstr "رقم البطاقة"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# first valid"
 msgstr "patrons.pref#AutoEmailPrimaryAddress# առաջին իրավական"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# home"
 msgstr "patrons.pref#AutoEmailPrimaryAddress# տուն"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# patron email address for sending out emails."
 msgstr "patrons.pref#AutoEmailPrimaryAddress# ընթերցողի էլ. փոստի հասցեն, դուրս հաղորդումներ ուղարկելու համար։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#AutoEmailPrimaryAddress# work"
 msgstr "patrons.pref#AutoEmailPrimaryAddress# աշխատանք"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# (separate columns with |)"
 msgstr "patrons.pref#BorrowerMandatoryField# (բաժանիր սյունակները ըստ |)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr "patrons.pref#BorrowerMandatoryField# Հետևյալ <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>շտեմարանի սյունակներ</a> պետք է լրացվի ընթերցողի մուտքային պաստառից։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# When renewing borrowers, base the new expiry date on"
 msgstr "patrons.pref#BorrowerRenewalPeriodBase# երբ թարմացվում են ընթերցողները, տեղադրի ժամկետը լրանալու նոր ամսաթիվը"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current date."
 msgstr "patrons.pref#BorrowerRenewalPeriodBase# ընթացիկ ամսաթիվ։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current membership expiry date."
 msgstr "patrons.pref#BorrowerRenewalPeriodBase# ընթացիկ անդամակցության ժամկետի լրանալը։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerUnwantedField# (separate columns with |)"
 msgstr "patrons.pref#BorrowerUnwantedField# (բաժանիր սյունակները ըստ |)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowerUnwantedField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
 msgstr "patrons.pref#BorrowerUnwantedField# Հետևյալ <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>շտեմարանի սյունակները</a> չեն հայտնվի ընթերցողի մուտքային պաստառում։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowersTitles# (separate multiple choices with |)"
 msgstr "patrons.pref#BorrowersTitles# (բաժանիր բազմակի ընտրությունները ըստ |)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#BorrowersTitles# Borrowers can have the following titles:"
 msgstr "patrons.pref#BorrowersTitles# Ընթերցողները կարող են ունենալ հետևյալ վերնագրերը:"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#CardnumberLength# Card numbers for patrons must be"
 msgstr "patrons.pref#CardnumberLength# Օգտատերերի քարտերի համարները պետք է"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#CardnumberLength# If 'cardnumber' is included in the BorrowerMandatoryField list, the minimum length, if not specified here, defaults to one."
 msgstr "patrons.pref#CardnumberLength# Եթե 'cardnumber' ներառված է BorrowerMandatoryField ցուցակում, նվազագույն երկարությունը եթե սահմանված չէ այստեղ հավասար է մեկի։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#CardnumberLength# characters long. The length can be a single number to specify an exact length, a range separated by a comma (i.e., 'Min,Max'), or a maximum with no minimum (i.e., ',Max')."
 msgstr "patrons.pref#CardnumberLength# նիշ։ Երկարությունը կարող է լինել մեկ թիվ որ սահմանում է ճշգրիտ երկարությունը, տիրույթ՝ բաժանված ստորակետով (այսինքն, 'Min,Max'), կամ մեծագույն առանց նվազագույնի (այսինքն, ',Max')։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
 msgstr "patrons.pref#EnableBorrowerFiles# Արա"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Don't"
 msgstr "patrons.pref#EnableBorrowerFiles# Մի արա"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# enable the ability to upload and attach arbitrary files to a borrower record."
 msgstr "patrons.pref#EnableBorrowerFiles# թույլատրի հնարավորությունը բեռնավորելու և կցելու ֆայլեր ընթերցողի գրառմանը։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# Allow"
 msgstr "patrons.pref#EnhancedMessagingPreferences# Թույլատրի"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# Don't allow"
 msgstr "patrons.pref#EnhancedMessagingPreferences# Մի թույլատրի"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# patrons to choose which notices they receive and when they receive them. Note that this only applies to certain kinds of notices."
 msgstr "patrons.pref#EnhancedMessagingPreferences# ընթերցողները թող ընտրեն թե որ նշումենրն են ուզում ստանալ և երբ։ Նկատի առ որ սա կիրառվում է որոշակի տեսակի նշումների վրա։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# Don't enable"
 msgstr "patrons.pref#ExtendedPatronAttributes# Մի թույլատրի"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# Enable"
 msgstr "patrons.pref#ExtendedPatronAttributes# Թույլատրի"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# searching, editing and display of custom attributes on patrons."
 msgstr "patrons.pref#ExtendedPatronAttributes# ընթերցողների վերաբերյալ մանրամասների որոնում, խմբագրում և արտածում։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#MaxFine# Empty value means no limit. Single item caps are specified in the circulation rules matrix."
 msgstr "patrons.pref#MaxFine# Դատարկ արժեքը նշանակում է որ չկան սահմանափակումներ։ Միայնակ նյութի որսումները բնորոշված են տացքի օրենքի մատրիցայում։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#MaxFine# The late fine for all checkouts will only go up to"
 msgstr "patrons.pref#MaxFine# Ուշացած տուգանքը բոլոր դուրս տրումների համար պարզապես կգնա վեր"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#MaxFine# [% local_currency %]."
 msgstr "patrons.pref#MaxFine# [% local_currency %]."
 
-# Patrons
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# Disable"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# Enable"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# endpoint."
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBEnable# the ability to communicate with the Norwegian national patron database via the"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# Do"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# Don't"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# search the Norwegian national patron database after a local search result was found."
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBUsername# . You can get these from \"Base Bibliotek\", which is maintained by the Norwegian National Library."
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBUsername# Communicate with the Norwegian national patron database using the username"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#NorwegianPatronDBUsername# and the password"
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#NotifyBorrowerDeparture# Show a notice if the patron is about to expire or has expired"
 msgstr "patrons.pref#NotifyBorrowerDeparture# Ցույց տուր նշումը եթե օգտվողի ժամկետը լրանում է կամ արդեն լրացել է։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
 msgstr "patrons.pref#NotifyBorrowerDeparture# օրեր ժամկետից շուտ։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#PatronsPerPage# By default, show"
 msgstr "patrons.pref#PatronsPerPage# Որպես լռակյաց, ցույց տուր"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#PatronsPerPage# results per page in the staff client."
 msgstr "patrons.pref#PatronsPerPage# աշխատակազմի հաճախորդում արդյունքներ ըստ էջի։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#SMSSendDriver# Use the SMS::Send::"
 msgstr "patrons.pref#SMSSendDriver# Օգտագործիր SMS::Send::"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#SMSSendDriver# driver to send SMS messages."
 msgstr "patrons.pref#SMSSendDriver# վարորդ որ ուղարկի SMS հաղորդագրություն։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#StatisticsFields# (separate fields with |)"
 msgstr "patrons.pref#StatisticsFields# (բաժանիր դաշտերը ըստ |)"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#StatisticsFields# Show the following fields from the items database table as columns on the statistics tab on the patron record: "
 msgstr "patrons.pref#StatisticsFields# Ցույց տուր հետևյալ դաշտերը նյութերի շտեմարանի աղյուսակից որպես սյունակներ ընթերցողի գրառման վիճակագրության տաբից։ "
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# Disable"
 msgstr "patrons.pref#TalkingTechItivaPhoneNotification# Արգելի"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# Enable"
 msgstr "patrons.pref#TalkingTechItivaPhoneNotification# Թույլատրի"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# patron phone notifications using Talking Tech i-tiva (overdues, predues and holds notices currently supported)."
 msgstr "patrons.pref#TalkingTechItivaPhoneNotification# ընթերցողի հեռախոսային զգուշացումներ օգտագործելով Talking Tech i-tiva (ժամկետանցներ, պահումների զգուշացումներ)։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#autoMemberNum# Do"
 msgstr "patrons.pref#autoMemberNum# Արա"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#autoMemberNum# Don't"
 msgstr "patrons.pref#autoMemberNum# Մի արա"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#autoMemberNum# default the card number field on the patron addition screen to the next available card number (for example, if the largest currently used card number is 26345000012941, then this field will default to 26345000012942)."
 msgstr "patrons.pref#autoMemberNum# լռակյաց քարտի համարի դաշտ ընթերցողի հավելումների պաստառում, հաջորդ մատչելի քարտի համար (օրինակ, եթե ամենաշատ օգտագործված քարտի համարն է 26345000012941, ապա այս դաշտի կռակյացն է 26345000012942)։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#borrowerRelationship# (input multiple choices separated by |). Leave empty to deactivate"
 msgstr "patrons.pref#borrowerRelationship# (մուտք արա բազմակի հնարավորությունները բաժանված ըստ |)։ Թող դատարկ կազմալուծելու համար"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#borrowerRelationship# Guarantors can be the following of those they guarantee:"
 msgstr "patrons.pref#borrowerRelationship# Երաշխավորողները կարող են լինել հետևայլը նրանց համար ում համար որ երաշխավորում են։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#checkdigit# Do"
 msgstr "patrons.pref#checkdigit# Արա"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#checkdigit# Don't"
 msgstr "patrons.pref#checkdigit# Մի արա"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#checkdigit# check and construct borrower card numbers in the Katipo style. This overrides <code>autoMemberNum</code> if on."
 msgstr "patrons.pref#checkdigit# ստուգի և կառուցի ընթերցողի քարտի համար Katipo ոճով։ Սա վերագրում է <code>autoMemberNum</code> եթե միացված է։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#intranetreadinghistory# Allow"
 msgstr "patrons.pref#intranetreadinghistory# Թույլատրի"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#intranetreadinghistory# Don't allow"
 msgstr "patrons.pref#intranetreadinghistory# Մի թույլատրի"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#intranetreadinghistory# staff to access a patron's checkout history (it is stored regardless)."
 msgstr "patrons.pref#intranetreadinghistory# աշխատակազմը որ կարողանա մուտք ունենալ ընթերցողի դուրս տրումների պատմությունը (այն պահված է անկախ ամեն ինչից)։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#minPasswordLength# Login passwords for staff and patrons must be at least"
 msgstr "patrons.pref#minPasswordLength# Աշխատակազմի և ընթերցողների համար մուտքի գաղտնաբառերը պետք է առնվազն լինեն"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#minPasswordLength# characters long."
 msgstr "patrons.pref#minPasswordLength# նիշ երկարությամբ։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#patronimages# Allow"
 msgstr "patrons.pref#patronimages# Թույլատրի"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#patronimages# Don't allow"
 msgstr "patrons.pref#patronimages# Մի թույլատրի"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#patronimages# images to be uploaded and shown for patrons on the staff client."
 msgstr "patrons.pref#patronimages# ընթերցողների համար աշխատակազմի հաճախորդից պատկերներ բեռնավորման և ցուցադրման համար։"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#uppercasesurnames# Do"
 msgstr "patrons.pref#uppercasesurnames# Արա"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#uppercasesurnames# Don't"
 msgstr "patrons.pref#uppercasesurnames# Մի արա"
 
-# Patrons
+# Patrons > General
 msgid "patrons.pref#uppercasesurnames# store and display surnames in upper case."
 msgstr "patrons.pref#uppercasesurnames# պահիր և արտածիր ազգանունները մեծատառերով։"
 
@@ -5340,28 +5436,28 @@ msgid "staff_client.pref Options"
 msgstr "staff_client.pref Հնարավորություններ"
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Both Results and Details pages (for future use, Results XSLT not functional at this time)."
-msgstr "staff_client.pref#Display856uAsImage# Երկուսն էլ՝ Արդյունքների և Մանրամասների էջեր (ապագայի օգտագործման համար։ Արդյունքների XSLT այս պահին չի աշխատում)։"
+msgid "staff_client.pref#Display856uAsImage# . Note: The corresponding XSLT option must be turned on."
+msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Details page only"
-msgstr "staff_client.pref#Display856uAsImage# Միայն մանրամասների էջ"
+msgid "staff_client.pref#Display856uAsImage# Both result and detail pages"
+msgstr ""
+
+# Staff Client > Appearance
+msgid "staff_client.pref#Display856uAsImage# Detail page only"
+msgstr ""
 
 # Staff Client > Appearance
 msgid "staff_client.pref#Display856uAsImage# Display the URI in the 856u field as an image on: "
 msgstr "staff_client.pref#Display856uAsImage# Արտածիր URI-ն 856u դաշտում որպես պատկեր: "
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Neither Details or Results pages"
-msgstr "staff_client.pref#Display856uAsImage# Ոչ Մանրամասների կամ Արդյունքների էջեր"
+msgid "staff_client.pref#Display856uAsImage# Neither detail or result pages"
+msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Note: The corresponding XSLT option must be turned on."
-msgstr "staff_client.pref#Display856uAsImage# Նշում: Ուղեկցող XSLT ընտրությունը պետք է միացված լինի։"
-
-# Staff Client > Appearance
-msgid "staff_client.pref#Display856uAsImage# Results page (for future use, Results XSLT not functional at this time)."
-msgstr "staff_client.pref#Display856uAsImage# Արդյունքների էջ (ապագայի օգտագործման համար, Results XSLT այս պահին գործարկված չէ)։"
+msgid "staff_client.pref#Display856uAsImage# Result page"
+msgstr ""
 
 # Staff Client > Appearance
 msgid "staff_client.pref#DisplayIconsXSLT# Don't show"

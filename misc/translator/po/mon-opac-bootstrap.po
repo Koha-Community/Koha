@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: kooha\n"
-"POT-Creation-Date: 2014-11-11 19:31-0300\n"
+"POT-Creation-Date: 2014-11-22 11:15-0300\n"
 "PO-Revision-Date: 2010-02-02 15:41+1300\n"
 "Last-Translator: Gantulga <cybermon@gmail.com>\n"
 "Language-Team: Institute of Informatics, MAS <nyam@hotmail.com>\n"
@@ -101,7 +101,7 @@ msgstr "Каталог &rsaquo; Дараахьд зориулсан мэдээл
 #. %8$s:  ITEM_RESULT.priority 
 #. %9$s:  END 
 #. %10$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1272
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1273
 #, fuzzy, c-format
 msgid "%s %s %s %s %s (priority %s) %s %s %s %s "
 msgstr "%s %s %s %s (%s) "
@@ -274,7 +274,7 @@ msgstr "Шинэ дугаарын анхааруулгыг цахим шууда
 #. %6$s:  IF showholds 
 #. %7$s:  bibitemloo.reservecount 
 #. %8$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:178
 #, fuzzy, c-format
 msgid "%s %s %s %s out of %s %s %s %s "
 msgstr "%s %s %s %s (%s) "
@@ -1723,7 +1723,7 @@ msgstr ""
 #. %12$s:  itemLoo.reservedate 
 #. %13$s:  END 
 #. %14$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:352
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
 #, fuzzy, c-format
 msgid ""
 "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s %s "
@@ -1877,6 +1877,14 @@ msgstr "%s, %s"
 #, c-format
 msgid "%s more than "
 msgstr ""
+
+#. %1$s:  IF issue.onsite_checkout 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:82
+#, fuzzy, c-format
+msgid "%s onsite %s checkout %s "
+msgstr "%s Авагдсан зүйлс"
 
 #. For the first occurrence,
 #. %1$s:  count 
@@ -2707,7 +2715,7 @@ msgstr "(%s н %s шинэчлэл үлдсэн байна)"
 msgid "(%s total)"
 msgstr "(нийт %s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:132
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:149
 #, c-format
 msgid "(Checked out)"
 msgstr "(Авагдсан)"
@@ -3332,7 +3340,7 @@ msgstr "Жагсаалтын нэр "
 msgid "A record matching barcode "
 msgstr "<b>%s</b>-тэй ижил бар кодтой бичлэг аль хэдийн нэмэгдсэн байна. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:261
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:264
 #, fuzzy, c-format
 msgid "A specific item"
 msgstr "Тусгай хуулбарт барилт хийх "
@@ -3545,6 +3553,7 @@ msgstr "Насанд хүрэгчдийн "
 msgid "Advanced search"
 msgstr "Ахисан түвшний хайлт"
 
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:132
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:253
 #, fuzzy, c-format
@@ -4119,22 +4128,22 @@ msgstr "ISBN: %s"
 msgid "Back to lists"
 msgstr "Ном судлал руу буцах"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1058
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1059
 #, fuzzy, c-format
 msgid "Back to results"
 msgstr "Ном судлал руу буцах"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1058
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1059
 #, fuzzy
 msgid "Back to the results search list"
 msgstr "Ном судлал руу буцах"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:288
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:291
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:133
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:379
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1161
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1162
 #, c-format
 msgid "Barcode"
 msgstr "Бар код"
@@ -4360,8 +4369,8 @@ msgstr "Манай каталогийг гйүлгэн үзэх"
 msgid "Browse results"
 msgstr "(<a1>Тавиураас эрж олохf</a>)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1245
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1247
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1246
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
 #, fuzzy, c-format
 msgid "Browse shelf"
 msgstr "(<a1>Тавиураас эрж олохf</a>)"
@@ -4423,7 +4432,7 @@ msgstr "Ярих дугаар."
 msgid "Call Number"
 msgstr "Ярих дугаар"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:63
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:72
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:380
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #, fuzzy, c-format
@@ -4434,7 +4443,7 @@ msgstr "Ярих дугаар."
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:185
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:189
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:191
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:293
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:296
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:214
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:216
@@ -4443,7 +4452,7 @@ msgstr "Ярих дугаар."
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:776
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:60
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1154
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1155
 #, fuzzy, c-format
 msgid "Call number"
 msgstr "Ярих дугаар"
@@ -4460,7 +4469,7 @@ msgstr "Ярих дугаар (Зохиол-бус 0-9  Зохиол A-Z)"
 msgid "Call number (Z-A to 9-0)"
 msgstr "Ярих дугаар(Зохиол Z-A  Зохиол-бус 9-0)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:124
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:141
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:220
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:448
 #, fuzzy, c-format
@@ -4531,7 +4540,7 @@ msgid "Cancels an active hold request for the patron."
 msgstr ""
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:308
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:311
 #, fuzzy
 msgid "Cannot be put on hold"
 msgstr "Авагдаагүй"
@@ -4615,12 +4624,13 @@ msgstr "Авагдсан"
 msgid "Check out%s, return%s or renew an item: "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:129
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:146
 #, fuzzy, c-format
 msgid "Check-in date:"
 msgstr "Зүйлийг шинэчлэх"
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:37
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:149
 #, fuzzy, c-format
 msgid "Checked out"
 msgstr "(Авагдсан)"
@@ -4653,6 +4663,7 @@ msgstr "Авагдсан"
 msgid "Checkout history"
 msgstr "Авагдсан түүх"
 
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:59
 #, c-format
 msgid "Checkouts"
@@ -4705,7 +4716,7 @@ msgstr "Бүгдийг арилгах"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:400
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:170
 #, fuzzy, c-format
 msgid "Clear date"
@@ -4753,7 +4764,7 @@ msgid "Click to add to cart"
 msgstr "Сагсанд нэмэхээр дарах"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1319
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1320
 #, fuzzy
 msgid "Click to forward the list to"
 msgstr "Сагсанд нэмэхээр дарах"
@@ -4771,7 +4782,7 @@ msgid "Click to open in new window"
 msgstr "Google Books-д харахаар дарах"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1319
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1320
 #, fuzzy
 msgid "Click to rewind the list to"
 msgstr "Google Books-д харахаар дарах"
@@ -4782,7 +4793,7 @@ msgstr "Google Books-д харахаар дарах"
 msgid "Click to view in Google Books"
 msgstr "Google Books-д харахаар дарах"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1070
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1071
 #, fuzzy, c-format
 msgid "Close"
 msgstr "Каталогууд"
@@ -4824,7 +4835,7 @@ msgstr "наамал урлаг"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:127
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1154
 #, c-format
 msgid "Collection"
 msgstr "Цуглуулга"
@@ -4982,9 +4993,9 @@ msgstr "Материалууд"
 msgid "Continuing Resource"
 msgstr "Онлайн нөөцүүд:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:284
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:287
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1157
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
 #, fuzzy, c-format
 msgid "Copy number"
 msgstr "Ярих дугаар"
@@ -5029,7 +5040,7 @@ msgid "Corporate Author (Secondary)"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:204
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:203
 msgid ""
 "Could not login, perhaps your Persona email does not match your Koha one"
 msgstr ""
@@ -5056,7 +5067,7 @@ msgstr "Картын дугаар:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:257
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:20
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1167
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1168
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:18
 #, c-format
 msgid "Course reserves"
@@ -5120,7 +5131,7 @@ msgstr "Зээлүүд"
 msgid "Credits (%s)"
 msgstr "Зээлүүд"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1146
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1147
 #, fuzzy, c-format
 msgid "Current location"
 msgstr "Одоогийн нууц үг:"
@@ -5178,7 +5189,7 @@ msgstr "Гэмтэлтэй (%s),"
 msgid "Database"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:64
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:73
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:34
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:814
@@ -5201,7 +5212,7 @@ msgid "Date added:"
 msgstr "Нэмэгдсэн огноо"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:59
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1161
 #, fuzzy, c-format
 msgid "Date due"
 msgstr "Буцааж өгөх огноо"
@@ -5337,7 +5348,7 @@ msgstr "Дараахийн хайх:"
 msgid "Delete your search history"
 msgstr "Дараахийн хайх:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1102
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1103
 #, c-format
 msgid "Delicious"
 msgstr ""
@@ -5576,7 +5587,7 @@ msgid "Due"
 msgstr "Буцааж өгөх хугацаа"
 
 #. %1$s:  itemLoo.dateDue 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:338
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:341
 #, c-format
 msgid "Due %s"
 msgstr "Буцааж өгөх хугацаа %s"
@@ -5724,7 +5735,7 @@ msgid "Elever på ungdomstrinnet;"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:33
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1103
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1104
 #, fuzzy, c-format
 msgid "Email"
 msgstr "Цахим шуудан:"
@@ -5948,7 +5959,7 @@ msgid "Excerpt provided by Syndetics"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:400
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
 msgid "Expecting a specific item selection."
 msgstr ""
 
@@ -5979,7 +5990,7 @@ msgstr ""
 msgid "FV"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1100
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1101
 #, fuzzy, c-format
 msgid "Facebook"
 msgstr "Номнууд"
@@ -6406,7 +6417,7 @@ msgstr "Эхлүүлэх"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1319
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1320
 #, fuzzy
 msgid "Go to detail"
 msgstr "Холбоо барих дэлгэрэнгүй мэдээлэл"
@@ -6518,7 +6529,7 @@ msgid "Hi,"
 msgstr ", %s"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:400
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
 #, fuzzy
 msgid "Hide options"
 msgstr "[Илүү олон сонголборууд]"
@@ -6546,17 +6557,17 @@ msgstr "Авсан огноо"
 msgid "Hold date:"
 msgstr "Авсан огноо"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:227
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:230
 #, fuzzy, c-format
 msgid "Hold not needed after:"
 msgstr "Авсан огноо"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:235
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:238
 #, fuzzy, c-format
 msgid "Hold notes:"
 msgstr "Авсан зүйлс  ( %s )"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:220
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:223
 #, fuzzy, c-format
 msgid "Hold starts on date:"
 msgstr "Авсан огноо"
@@ -6607,7 +6618,7 @@ msgstr "Авсан зүйлс "
 msgid "Holds (%s)"
 msgstr "Авсан зүйлс "
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:178
 #, fuzzy, c-format
 msgid "Holds and priority: "
 msgstr "Авсан зүйлс  ( %s ) "
@@ -6680,8 +6691,8 @@ msgstr ""
 msgid "Home libraries"
 msgstr "Гэрийн номын сан"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:290
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1150
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:293
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1151
 #, fuzzy, c-format
 msgid "Home library"
 msgstr "Гэрийн номын сан"
@@ -6915,7 +6926,7 @@ msgstr "Шилжүүлэлтэнд  (%s),"
 #. %2$s:  item.transfertto 
 #. %3$s:  item.transfertwhen | $KohaDates 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:44
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:340
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:343
 #, fuzzy, c-format
 msgid "In transit from %s to %s since %s"
 msgstr "%s-с %s рүү шилжүүлэлтэнд, %s-с хойш"
@@ -6950,7 +6961,7 @@ msgstr "Дараахьд индекслэгдсэн:"
 msgid "Indexes"
 msgstr "Индексүүд"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:297
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:300
 #, c-format
 msgid "Information"
 msgstr "Мэдээлэл"
@@ -7016,12 +7027,12 @@ msgstr "Зүйлийг хэвлэж болохгүй байна."
 msgid "Item damaged"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1165
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1166
 #, c-format
 msgid "Item hold queue priority"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1163
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1164
 #, fuzzy, c-format
 msgid "Item holds"
 msgstr "Барилт тавих"
@@ -7031,24 +7042,24 @@ msgstr "Барилт тавих"
 msgid "Item lost"
 msgstr "Барилт тавих"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:286
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:71
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:289
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:378
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1144
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1145
 #, c-format
 msgid "Item type"
 msgstr "Зүйлийн төрөл"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:121
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:138
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:44
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:207
 #, fuzzy, c-format
 msgid "Item type:"
 msgstr "Зүйлийн төрөл:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:170
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:304
 #, fuzzy, c-format
 msgid "Item type: "
@@ -7317,7 +7328,7 @@ msgstr "Томоор хэвлэх"
 msgid "Last"
 msgstr "Оройтсон"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:291
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:294
 #, fuzzy, c-format
 msgid "Last location"
 msgstr "Сүүлийн байршил"
@@ -7415,17 +7426,17 @@ msgstr "Хуулбарууд дараахьд бэлэн байгаа:"
 msgid "Limit to: "
 msgstr "Дараахьд зөвшөөрөх: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1259
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1260
 #, fuzzy, c-format
 msgid "Link to resource "
 msgstr "Онлайн нөөцүүд: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1101
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1102
 #, fuzzy, c-format
 msgid "LinkedIn"
 msgstr "Торгууль"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:66
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:143
 #, fuzzy, c-format
 msgid "Links"
@@ -8215,7 +8226,7 @@ msgstr "Сонин"
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:1
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1063
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1064
 #, c-format
 msgid "Next"
 msgstr "Дараагийн"
@@ -8227,12 +8238,12 @@ msgid "Next &gt;&gt;"
 msgstr "Дараагийн&gt;&gt;"
 
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:15
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1061
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1062
 #, fuzzy, c-format
 msgid "Next &raquo;"
 msgstr "Каталог &rsaquo;"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:246
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:249
 #, fuzzy, c-format
 msgid "Next available item"
 msgstr "Хуулбарууд дараахьд бэлэн байгаа:"
@@ -8243,7 +8254,7 @@ msgstr "Хуулбарууд дараахьд бэлэн байгаа:"
 msgid "No"
 msgstr "Үгүй"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:153
 #, fuzzy, c-format
 msgid "No available items."
 msgstr "Хуулбарууд дараахьд бэлэн байгаа:"
@@ -8253,13 +8264,13 @@ msgstr "Хуулбарууд дараахьд бэлэн байгаа:"
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:53
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:60
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:99
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:163
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:171
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:180
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:189
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:77
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:85
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:93
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:162
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:170
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:179
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:188
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:94
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:110
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:135
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
@@ -8448,12 +8459,12 @@ msgid "Not for loan %s"
 msgstr "Зээллэгт зориулагдаагүй(%s)"
 
 #. %1$s:  itemLoo.notforloanvalue 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:348
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "Зээллэгт зориулагдаагүй(%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:374
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:377
 #, c-format
 msgid "Not on hold"
 msgstr "Авагдаагүй"
@@ -8530,7 +8541,7 @@ msgstr "Санамж: таны тааг арилгагдсан тэмдэглэ�
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:151
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1159
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:111
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:36
 #, c-format
@@ -8575,7 +8586,7 @@ msgstr "Үгүй"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:580
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1017
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1085
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1086
 #, c-format
 msgid "Novelist Select"
 msgstr ""
@@ -8650,6 +8661,11 @@ msgstr "Захилгатай (%s),"
 #, fuzzy, c-format
 msgid "On order ("
 msgstr "Захилгатай (%s),"
+
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
+#, fuzzy, c-format
+msgid "On-site checkouts"
+msgstr "Өнөөдрийн дугаарууд"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1002
 #, fuzzy, c-format
@@ -8957,7 +8973,7 @@ msgstr "Номын санг сонгох"
 msgid "Pick up location"
 msgstr "Байршлыг сонгох"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:186
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:189
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:549
 #, fuzzy, c-format
 msgid "Pick up location:"
@@ -8975,7 +8991,7 @@ msgid "Piece-Analytic Level"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:400
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
 #, fuzzy
 msgid "Place a hold on"
 msgstr "Барилт тавих"
@@ -8986,14 +9002,14 @@ msgid "Place a hold on "
 msgstr "Барилт тавих"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:400
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
 #, fuzzy
 msgid "Place a hold on: "
 msgstr "Барилт тавих"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:9
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:389
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:392
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:232
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:235
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:422
@@ -10100,7 +10116,7 @@ msgstr "Зохиол"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:58
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:91
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:141
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:330
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:170
@@ -10118,7 +10134,7 @@ msgid "See also:"
 msgstr "Жагсаалтыг сонгох"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1319
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1320
 #, fuzzy
 msgid "See biblio"
 msgstr "%s ном судлалууд"
@@ -10129,7 +10145,7 @@ msgid "See the most popular titles"
 msgstr "Хамгийн түгээмэл гарчгуудыг харна уу"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1061
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1062
 msgid ""
 "See: [% IF ( nextTitle ) %][% nextTitle |html %][% ELSE %]next biblio[% END "
 "%]"
@@ -10147,7 +10163,7 @@ msgstr ""
 msgid "Select a list"
 msgstr "Жагсаалтыг сонгох"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:282
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:285
 #, fuzzy, c-format
 msgid "Select a specific item:"
 msgstr "Тусгай хуулбарт барилт хийх"
@@ -10346,7 +10362,7 @@ msgid "Settings updated"
 msgstr "Тохиргоонууд шинэчлэгдсэн"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:665
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1099
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1100
 #, fuzzy, c-format
 msgid "Share"
 msgstr "Хадгалах"
@@ -10362,7 +10378,7 @@ msgid "Share a list with another patron"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1103
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1104
 #, fuzzy
 msgid "Share by email"
 msgstr "Цахим шуудан:"
@@ -10373,17 +10389,17 @@ msgid "Share list"
 msgstr "Таны жагсаалтууд "
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1102
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1103
 msgid "Share on Delicious"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1100
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1101
 msgid "Share on Facebook"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1101
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1102
 msgid "Share on LinkedIn"
 msgstr ""
 
@@ -10409,7 +10425,7 @@ msgid "Show _MENU_ entries"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:9
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:49
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:48
 #, fuzzy, c-format
 msgid "Show all items"
 msgstr "Бүх зүйлийг үзүүлэх"
@@ -10421,18 +10437,18 @@ msgstr "Бүх зүйлийг үзүүлэх"
 msgid "Show analytics"
 msgstr "Зөвхөн дөрөөхийг үзүүлж байна"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:51
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:52
 #, fuzzy, c-format
-msgid "Show last 50 items only"
-msgstr "Зөвхөн сүүлийн 50 зүйлийг үзүүлэх"
+msgid "Show last 50 items"
+msgstr "Сүүлийн 50 зүйлийг үзүүлэх"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:58
 #, fuzzy, c-format
 msgid "Show more"
 msgstr "Илүү ихийг үзүүлэх"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:213
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:400
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
 #, fuzzy, c-format
 msgid "Show more options"
 msgstr "[Илүү олон сонголборууд]"
@@ -10472,14 +10488,13 @@ msgid "Showing _START_ to _END_ of _TOTAL_"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:51
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:54
 #, fuzzy, c-format
-msgid "Showing all items"
+msgid "Showing all items. "
 msgstr "Бүх зүйлийг үзүүлэх"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:49
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:47
 #, fuzzy, c-format
-msgid "Showing last 50 items"
+msgid "Showing last 50 items. "
 msgstr "Сүүлийн 50 зүйлийг үзүүлэх"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:174
@@ -10621,6 +10636,11 @@ msgstr ""
 "Уучлаарай, Энэ өөрөө авалтын станц нь танилтгүй болсон байна. Энэ асуудлыг "
 "шийдэхээр системийн зохицуулагчтай холбоо барина уу."
 
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:147
+#, fuzzy, c-format
+msgid "Sorry, you are too young to reserve this material."
+msgstr "Та сонгогдсон зүйлсийг арилгахыг хүсэж байна уу?"
+
 #. %1$s:  too_much_oweing 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:44
 #, fuzzy, c-format
@@ -10747,7 +10767,7 @@ msgstr "Статистик"
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:159
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:505
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:815
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1159
 #, c-format
 msgid "Status"
 msgstr "Төлөв"
@@ -11641,8 +11661,8 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:551
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:554
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1115
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1119
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1116
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1120
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -11660,18 +11680,18 @@ msgstr "Энэ бичлэгт зүйл алга. "
 msgid "This subscription is closed."
 msgstr "Энэ захиалга %s-д хугацаа нь дуусна"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:153
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:156
 #, c-format
 msgid "This title cannot be requested because it's already in your possession."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:155
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:158
 #, c-format
 msgid "This title cannot be requested."
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:400
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
 msgid ""
 "This title consists of multiple volumes/parts. Please indicate which part "
 "you need. Clicking on specific item information may be helpful."
@@ -11717,7 +11737,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:60
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:157
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:159
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:70
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:208
@@ -11893,11 +11913,12 @@ msgstr "Буцааж өгөх хугацаа"
 msgid "Tuesday"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1105
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1106
 #, c-format
 msgid "Tweet"
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:68
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:632
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:707
 #, c-format
@@ -11954,7 +11975,7 @@ msgstr ""
 msgid "Unable to add one or more tags."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:344
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:347
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "Бэлэн биш (алдагдсан)"
@@ -12228,8 +12249,8 @@ msgstr ""
 msgid "Voksne;"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:295
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1155
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1156
 #, fuzzy, c-format
 msgid "Vol info"
 msgstr "Ботийн мэдээлэл"
@@ -12495,7 +12516,7 @@ msgstr ""
 msgid "You have a credit of:"
 msgstr "Та дараах зээлтэй байна:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:150
 #, c-format
 msgid "You have already requested this title."
 msgstr ""
@@ -12599,7 +12620,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1319
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1320
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
@@ -12884,7 +12905,7 @@ msgid "[% facet.facet_title_value |html %]"
 msgstr ""
 
 #. DIV
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:83
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:100
 msgid "[% issue.biblionumber |url %]"
 msgstr ""
 
@@ -13268,7 +13289,7 @@ msgid "available online "
 msgstr "бэлэн "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1319
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1320
 #, fuzzy
 msgid "average rating: "
 msgstr "Таны жагсаалтууд "
@@ -13367,7 +13388,7 @@ msgstr "бристол самбар"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1319
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1320
 #, fuzzy
 msgid "by"
 msgstr "%s-р"
@@ -13931,10 +13952,21 @@ msgstr "Хатуу самбар"
 msgid "has already been added."
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:650
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1055
+#, c-format
+msgid "height:100px"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1020
+#, c-format
+msgid "height:100px;"
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:551
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:554
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1116
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1117
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1122
 #, fuzzy, c-format
 msgid "here"
 msgstr "Бусад"
@@ -15432,7 +15464,7 @@ msgstr "Өсвөр үеийн "
 msgid "up to "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1156
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1157
 #, c-format
 msgid "url"
 msgstr ""
@@ -15527,7 +15559,7 @@ msgid "visual projection"
 msgstr "дүрсэн буулгалт"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1319
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1320
 #, fuzzy
 msgid "votes"
 msgstr "Санамжууд"
@@ -15590,7 +15622,7 @@ msgid "wire recording "
 msgstr "дүрс бичлэг "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1319
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1320
 msgid "with biblionumber"
 msgstr ""
 
@@ -15664,7 +15696,7 @@ msgid "your purchase suggestions"
 msgstr "миний худалдаж авах санал"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1319
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1320
 #, fuzzy
 msgid "your rating: "
 msgstr "Таны жагсаалтууд "
