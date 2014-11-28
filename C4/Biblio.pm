@@ -72,6 +72,7 @@ BEGIN {
       GetBiblioItemByBiblioNumber
       GetBiblioFromItemNumber
       GetBiblionumberFromItemnumber
+      &GetBiblionumberSlice
 
       &GetRecordValue
 
@@ -786,6 +787,42 @@ sub GetBiblionumberFromItemnumber {
     $sth->execute($itemnumber);
     my ($result) = $sth->fetchrow;
     return ($result);
+}
+
+=head2 GetBiblionumberSlice
+
+    my $biblionumbers = C4::Biblio::GetBiblionumberSlice( 100, 450 ); #Get 100 biblionumbers after skipping 450 oldest biblionumbers.
+    my $biblionumbers = C4::Biblio::GetBiblionumberSlice( 100, undef, 110004347 ); #Get 100 biblionumbers after biblionumber 110004347
+
+@PARAM1 Long, maximum amount of biblio-rows to return. Same as the SQL LIMIT-clause.
+              Defaults to 0.
+@PARAM2 Long, how many biblio-rows to skip starting from the first row. Same as the SQL OFFSET-clause.
+              Defaults to 500.
+@PARAM3 Long, the biblionumber (inclusive) from which to start (ascending) getting the slice. Overrides @PARAM2.
+@RETURN Array of Long, a slice of biblionumbers starting from the offset and no more rows than the limit-parameter.
+=cut
+
+sub GetBiblionumberSlice {
+    my ($limit, $offset, $biblionumber) = @_;
+    $limit = ($limit) ? $limit : 500 ;
+    $offset = ($offset) ? $offset : 0;
+
+    my $dbh            = C4::Context->dbh;
+    my $sth;
+    if ($biblionumber) {
+        $sth = $dbh->prepare("SELECT biblionumber FROM biblio WHERE biblionumber >= ? LIMIT ?");
+        $sth->execute($biblionumber, $limit);
+    }
+    else {
+        $sth = $dbh->prepare("SELECT biblionumber FROM biblio LIMIT ? OFFSET ?");
+        $sth->execute($limit, $offset);
+    }
+
+    my @biblionumbers;
+    while(my $bn = $sth->fetchrow()) {
+        push @biblionumbers, $bn;
+    }
+    return \@biblionumbers;
 }
 
 =head2 GetBiblioFromItemNumber

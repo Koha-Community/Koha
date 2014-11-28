@@ -208,6 +208,8 @@ sub run_tests {
     is( scalar @$issns, 4,
         'GetMARCISSN skips empty ISSN fields (Bug 12674)');
 
+    testGetBiblionumberSlice($marcflavour);
+
     ## Testing GetMarcControlnumber
     my $controlnumber;
     $controlnumber = GetMarcControlnumber( $marc_record, $marcflavour );
@@ -251,7 +253,7 @@ sub run_tests {
 
     is( GetMarcPrice( $record_for_isbn, $marcflavour ), 100,
         "GetMarcPrice returns the correct value");
-    my $newincbiblioitemnumber=$biblioitemnumber+1;
+    my $newincbiblioitemnumber=$biblioitemnumber;
     $dbh->do("UPDATE biblioitems SET biblioitemnumber = ? WHERE biblionumber = ?;", undef, $newincbiblioitemnumber, $biblionumber );
     my $updatedrecord = GetMarcBiblio($biblionumber, 0);
     my $frameworkcode = GetFrameworkCode($biblionumber);
@@ -284,6 +286,20 @@ sub run_tests {
     like( $marcurl->[0]->{MARCURL}, qr/^https/, 'GetMarcUrls did not stumble over a preceding space' );
     ok( $marcflavour ne 'MARC21' || $marcurl->[1]->{MARCURL} =~ /^http:\/\//,
         'GetMarcUrls prefixed a MARC21 URL with http://' );
+}
+
+sub addMockBiblio {
+    my $isbn = shift;
+    my $marcflavour = shift;
+
+    # Generate a record with just the ISBN
+    my $marc_record = MARC::Record->new;
+    my $isbn_field  = create_isbn_field( $isbn, $marcflavour );
+    $marc_record->append_fields( $isbn_field );
+
+    # Add the record to the DB
+    my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $marc_record, '' );
+    return ( $biblionumber, $biblioitemnumber );
 }
 
 sub get_title_field {
@@ -338,21 +354,21 @@ sub create_issn_field {
 }
 
 subtest 'MARC21' => sub {
-    plan tests => 34;
+    plan tests => 40;
     run_tests('MARC21');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;
 };
 
 subtest 'UNIMARC' => sub {
-    plan tests => 34;
+    plan tests => 40;
     run_tests('UNIMARC');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;
 };
 
 subtest 'NORMARC' => sub {
-    plan tests => 34;
+    plan tests => 40;
     run_tests('NORMARC');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;
@@ -388,5 +404,71 @@ subtest 'deletedbiblio_metadata' => sub {
     ( $moved ) = $dbh->selectrow_array(q|SELECT biblionumber FROM deletedbiblio_metadata WHERE biblionumber=?|, undef, $biblionumber);
     is( $moved, $biblionumber, 'Found in deletedbiblio_metadata' );
 };
+
+##Testing C4::Biblio::GetBiblionumberSlice(), runs 6 tests
+sub testGetBiblionumberSlice() {
+    my $marcflavour = shift;
+
+    #Get all biblionumbers.
+    my $biblionumbers = C4::Biblio::GetBiblionumberSlice(999999999999);
+    my $initialCount = scalar(@$biblionumbers);
+    is( ($initialCount > 0), 1, 'C4::Biblio::GetBiblionumberSlice(), Get all biblionumbers.');
+
+    #Add a bunch of mock biblios.
+    my ($bn1) = addMockBiblio('0120344506', $marcflavour);
+    my ($bn2) = addMockBiblio('0230455607', $marcflavour);
+    my ($bn3) = addMockBiblio('0340566708', $marcflavour);
+    my ($bn4) = addMockBiblio('0450677809', $marcflavour);
+    my ($bn5) = addMockBiblio('0560788900', $marcflavour);
+
+    #Get all biblionumbers again, but now we should have 5 more.
+    $biblionumbers = C4::Biblio::GetBiblionumberSlice(999999999999);
+    is( $initialCount+5, scalar(@$biblionumbers), 'C4::Biblio::GetBiblionumberSlice(), Get all biblionumbers after appending 5 biblios more.');
+
+    #Get 3 biblionumbers.
+    $biblionumbers = C4::Biblio::GetBiblionumberSlice(3);
+    is( 3, scalar(@$biblionumbers), 'C4::Biblio::GetBiblionumberSlice(), Get 3 biblionumbers.');
+
+    #Get 3 biblionumbers, all of whom must be of the recently added.
+    $biblionumbers = C4::Biblio::GetBiblionumberSlice(3, $initialCount);
+    my $testOK = 1;
+    foreach (@$biblionumbers) {
+        if ($_ == $bn1 || $_ == $bn2 || $_ == $bn3) {
+            #The result is part of us!
+        }
+        else {
+            $testOK = 0; #Fail the test because we got some biblionumbers we were not meant to get.
+        }
+    }
+    is( $testOK, 1, 'C4::Biblio::GetBiblionumberSlice(), Get 3 specific biblionumbers.');
+
+    #Get 3 biblionumbers, all of whom must be $bn3 or added right after it.
+    $biblionumbers = C4::Biblio::GetBiblionumberSlice(3, undef, $bn3);
+    $testOK = 1;
+    foreach (@$biblionumbers) {
+        if ($_ == $bn3 || $_ == $bn4 || $_ == $bn5) {
+            #The result is part of us!
+        }
+        else {
+            $testOK = 0; #Fail the test because we got some biblionumbers we were not meant to get.
+        }
+    }
+    is( $testOK, 1, 'C4::Biblio::GetBiblionumberSlice(), Get 3 specific biblionumbers after a specific biblionumber.');
+
+    #Same test as the previous one, but test for offset-parameter overriding by the biblionumber-parameter.
+    $biblionumbers = C4::Biblio::GetBiblionumberSlice(3, $initialCount, $bn3);
+    $testOK = 1;
+    foreach (@$biblionumbers) {
+        if ($_ == $bn3 || $_ == $bn4 || $_ == $bn5) {
+            #The result is part of us!
+        }
+        else {
+            #Fail the test because we got some biblionumbers we were not meant to get.
+            #These biblionumbers are probably $bn1 and $bn2.
+            $testOK = 0;
+        }
+    }
+    is( $testOK, 1, 'C4::Biblio::GetBiblionumberSlice(), offset-parameter overriding.');
+}
 
 1;

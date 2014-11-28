@@ -1,0 +1,160 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Cataloging &rsaquo; Deduplicator</title>
+[% INCLUDE 'greybox.inc' %]
+[% INCLUDE 'doc-head-close.inc' %]
+<style type="text/css">
+    /* Prevent floating the main form */
+    fieldset.rows { float:none; }
+
+    .mergeReference { color: #161; font-weight: bold; }
+    .cell { float: left; padding-left: 1em; }
+    .matchSource { background-color: #f1e8f6; }
+    input[type=checkbox] { vertical-align: bottom; }
+
+    #duplicatesContainer li { padding-bottom: 0px; margin-bottom: 0em; }
+    #duplicatesContainer li:last-of-type { padding-bottom: 0px; margin-bottom: 1em; }
+    #duplicatesContainer li.sourceContainer { padding-bottom: 0px; margin-bottom: 1em; }
+</style>
+<script type="text/javascript">
+//<![CDATA[
+
+    function updateMergereference(self) {
+        var matchContainer = $(self).parents(".matchContainer");
+        var checkboxes = $(matchContainer).find('input[id^="checkbox"]');
+        var mergeReferenceInput = $(matchContainer).parents("form").children("input.mergeReference");
+        var checkedBoxes = 0;
+        $(checkboxes).each(function() {
+            if($(this).attr('checked') === 'checked' ) {
+                checkedBoxes++;
+            }
+        });
+
+        if (checkedBoxes == 1  &&  $(self).attr('checked') === 'checked') {
+            $(self).parent().find("span.matchDescription").addClass('mergeReference');
+            $(mergeReferenceInput).val( $(self).val() ); //Save the biblionumber as the mergereference
+        }
+        else if (checkedBoxes == 0) {
+            $(matchContainer).find("span.matchDescription").removeClass('mergeReference');
+            $(mergeReferenceInput).val( 0 );
+        }
+
+        return 1;
+    }
+//]]>
+</script>
+</head>
+<body id="deduplicator">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cataloging-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Deduplicator</div>
+
+<div id="doc" class="yui-t7">
+<div id="bd">
+    <div id="yui-main">
+
+
+        <h1>Deduplicator</h1>
+
+        <div id="deduplicatorForm">
+            <form name="deduplicationForm" action="/cgi-bin/koha/cataloguing/deduplicator.pl" method="post">
+                <input type="hidden" name="op" value="deduplicate"/>
+                <fieldset class="rows">
+                    <legend>Configure the deduplication search!</legend>
+                    <ol>
+                        <li>
+                            <label>Limit</label><input type="number" name="limit" value="[% limit %]"/><i>How many bibliographic records to deduplicate? Hint: less than 1000.</i>
+                        </li>
+                        <li>
+                            <label>Offset</label><input type="number" name="offset" value="[% offset %]"/><i>How many bibliographic records to skip from the start? Hint: increment this by the limit of previous deduplication run. If limit = 200, then first offset is 0, then 200, then 400... This is useful for manual deduplication of the whole database.</i>
+                        </li>
+                        <li>
+                            <label>Biblionumber</label><input type="number" name="biblionumber" value="[% biblionumber %]"/><i>From which bibliographic record to start? Obsoletes "Offset". Hint: If you know for certain that after a given biblionumber you have several duplicates, it is easier to target those new duplicate entries using this.</i>
+                        </li>
+                        <li>
+                            <label>Matcher</label>
+                            <select name="matcher_id" size="1" id="matchers">
+                            [% FOREACH matcher IN matchers %]
+                                [% IF ( matcher.selected ) %]
+                                    <option value="[% matcher.matcher_id %]" selected="selected">[% matcher.code %] - [% matcher.description %]</option>
+                                [% ELSE %]
+                                    <option value="[% matcher.matcher_id %]">[% matcher.code %] - [% matcher.description %]</option>
+                                [% END %]
+                            [% END %]
+                            </select>
+                            <i>The matcher to use to find duplicates. Hint: one can <a href="/cgi-bin/koha/admin/matching-rules.pl">define matchers</a> from the administration menu. For more information see the Koha manual at <a href="koha-community.org/documentation/">koha-community.org/documentation/</a></i>
+                        </li>
+                        <li>
+                            <input type="submit" value="Deduplicate!"/>
+                        </li>
+                    </ol>
+                </fieldset>
+            </form>
+        </div>
+
+[% IF errors %]
+    <h5>Something bad hapened!<br/>[% errors %]</h5>
+[% END %]
+[% IF no_duplicates %]
+    <h5>No duplicates found for limit: [% limit %], offset: [% offset %], biblionumber: [% biblionumber %]</h5>
+[% END %]
+[% IF duplicates %]
+        <p>
+            <i>
+                -To deduplicate a found match group, first select the biblio to merge to. The target of the merge is colored. Then select the biblios to merge to the colored target. To reset the merge target, simply remove all checks under one match group.<br/>
+                -The original match source is distinguished from the list of matches by a beautiful pastel color.<br/>
+                -Each matched row starts with the biblionumber, separated by a dash, then the matching score configurable in the Matcher, then the amount of items this biblio has. The named identifier consists of the title, enumeration, part name, publication year and author.<br/>
+                -All merge requests always open to a new tab.
+            </i>
+        </p>
+        <div id="duplicatesContainer">
+            <fieldset class="rows">
+                <legend>
+                    List of duplicates
+                </legend>
+
+                <!--<label>Matches - Score - Items count</label>
+                <label>Title</label>
+                <label>Author</label>-->
+
+                <ol>
+                [% FOREACH duplicate IN duplicates %]
+                    <form target="_blank" name="form[% duplicate.biblionumber %]" action="/cgi-bin/koha/cataloguing/merge.pl" method="post">
+                        <input type="hidden" class="mergeReference" name="mergereference" value=""/>
+                        <li class="sourceContainer">
+                            <b>
+                                <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% duplicate.biblionumber %]">[% duplicate.biblionumber %]</a>
+                                [% duplicate.title %] &nbsp;
+                                [% duplicate.author %]
+                            </b>
+                            <input type="submit" value="Merge!"/>
+                        </li>
+                        <span class="matchContainer">
+                            [% FOREACH match IN duplicate.matches %]
+                                <li>
+                                    <span  class="[% match.matchSource %]">
+                                    <input id="checkbox[% match.record_id %]" name="biblionumber" value="[% match.record_id %]" type="checkbox" onclick="updateMergereference(this)"/>
+                                    <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% match.record_id %]">
+                                        <span class="matchDescription">
+                                            [% match.record_id %] - <i>[% match.score %]</i>
+                                        </span>
+                                    </a>
+                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% match.record_id %]">
+                                        &nbsp;[[% match.itemsCount %]]
+                                    </a>
+                                    [% match.title %] &nbsp;
+                                    [% match.author %]
+                                    </span>
+                                </li>
+                            [% END %]
+                        </span>
+                    </form>
+                [% END %]
+                </ol>
+            </fieldset>
+        </div><!--<div id="duplicatesContainer">%-->
+[% END %]
+    </div>
+</div> <!--EO <div id="bd"> -->
+
+
+[% INCLUDE 'intranet-bottom.inc' %]
