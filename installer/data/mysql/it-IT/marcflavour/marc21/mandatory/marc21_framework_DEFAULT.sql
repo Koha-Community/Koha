@@ -60,7 +60,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('942', '6', 'Class. Normalizzata per ordinamento', 'Class. Normalizzata per ordinamento', 0, 0, 'biblioitems.cn_sort', -1, '', '', '', 0, 7, '', '', '', NULL),
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, '', '', '', NULL),
 		('942', 'c', 'Tipo copia default (Koha)', 'Tipo copia default (Koha)', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, '', '', '', NULL),
-		('942', 'e', 'Edizione', 'Edizione', 0, 0, 'biblioitems.cn_edition', 9, 'CN_EDITION', '', '', NULL, 0, '', '', '', NULL),
+		('942', 'e', 'Edizione', 'Edizione', 0, 0, NULL, 9, '', '', '', NULL, 0, '', '', '', NULL),
 		('942', 'h', 'Parte della classificazione', 'Parte della classificazione', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, '', '', '', NULL),
 		('942', 'i', 'Parte dell\'item', 'Parte dell\'item', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 0, '', '', '', NULL),
 		('942', 'k', 'Prefisso del numero di chiamata (collocazione)', 'Prefisso del numero di chiamata (collocazione)', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, '', '', '', NULL),

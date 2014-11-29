@@ -522,7 +522,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '942', '6', 0, 0, 'Нормализованная классификация Коха для сортировки', '', -1, 7, 'biblioitems.cn_sort', '', '', 0, '', '', NULL),
  ('', '', '942', 'a', 0, 0, 'Institution code (устаревшее)', '',        9, -5, '', '', '', NULL, '', '', NULL),
  ('', '', '942', 'c', 1, 0, 'Тип единицы (уровень записи)', '',         9, 0, 'biblioitems.itemtype', 'itemtypes', '', NULL, '', '', NULL),
- ('', '', '942', 'e', 0, 0, 'Издание /часть шифра/', '',                9, 0, 'biblioitems.cn_edition', 'CN_EDITION', '', NULL, '', '', NULL),
+ ('', '', '942', 'e', 0, 0, 'Издание /часть шифра/', '',                9, 0, NULL, '', '', NULL, '', '', NULL),
  ('', '', '942', 'h', 0, 0, 'Классификационная часть шифра хранения', '', 9, 0, 'biblioitems.cn_class', '', '', NULL, '', '', NULL),
  ('', '', '942', 'i', 0, 1, 'Экземплярная часть шифра хранения', '',    9, 0, 'biblioitems.cn_item', '', '', NULL, '', '', NULL),
  ('', '', '942', 'k', 0, 0, 'Префикс шифра хранения', '',               9, 0, 'biblioitems.cn_prefix', '', '', NULL, '', '', NULL),

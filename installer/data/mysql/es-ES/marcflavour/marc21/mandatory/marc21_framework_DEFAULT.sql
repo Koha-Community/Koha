@@ -60,7 +60,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('942', '6', 'Koha clasificación normalizada para ordenar', 'Koha clasificación normalizada para ordenar', 0, 0, 'biblioitems.cn_sort', -1, '', '', '', 0, 7, '', '', '', NULL),
 		('942', 'a', 'Código de la institución [OBSOLETO]', 'Código de la institución [OBSOLETO]', 0, 0, '', 9, '', '', '', NULL, -5, '', '', '', NULL),
 		('942', 'c', 'Tipo de ítem Koha', 'Tipo de ítem Koha', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, '', '', '', NULL),
-		('942', 'e', 'Edición', 'Edición', 0, 0, 'biblioitems.cn_edition', 9, 'CN_EDITION', '', '', NULL, 0, '', '', '', NULL),
+		('942', 'e', 'Edición', 'Edición', 0, 0, NULL, 9, '', '', '', NULL, 0, '', '', '', NULL),
 		('942', 'h', 'Parte de la signatura que corresponde a la clasificación (Parte de la clasificación)', 'Parte de la signatura que corresponde a la clasificación (Parte de la clasificación)', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, '', '', '', NULL),
 		('942', 'i', 'Parte de la signatura que identifica el ejemplar (Parte del ítem)', 'Parte de la signatura que identifica el ejemplar (Parte del ítem)', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 0, '', '', '', NULL),
 		('942', 'k', 'Prefijo de la signatura', 'Prefijo de la signatura', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, '', '', '', NULL),

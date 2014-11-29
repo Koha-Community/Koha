@@ -239,8 +239,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '942', 't', 0, 0, 'Номер комплекта/экземпляра', '',            9, -5,'biblioitems.cn_item', '', '', 0, '', '', NULL),
  ('', '', '942', 'v', 0, 0, 'Авторский (кеттеровский) знак, даты или срок, которые прилагаются к классификационному индексу', '', 9, -5, '', '', '', 0, '', '', NULL),
  ('', '', '942', 'z', 0, 0, 'Внутренний № биб-записи в старой системе', '',9,4, '', '', '', 0, '', '', NULL);
-# next 2 is obsolete (not found biblioitems.cn_edition, biblioitems.cn_prefix, CN_EDITION)
-#  ('', '', '942', 'e', 0, 0, 'Издание /часть шифра/ (?)', '',            9, 0, 'biblioitems.cn_edition', 'CN_EDITION', '', 0, '', '', NULL),
+ ('', '', '942', 'e', 0, 0, 'Издание /часть шифра/ (?)', '',            9, 0, NULL, '', '', 0, '', '', NULL),
 #  ('', '', '942', 'k', 0, 0, 'Префикс шифра хранения (?)', '',           9, 0, 'biblioitems.cn_prefix', '', '', 0, '', '', NULL),
 #****************** biblioitems.COLUMNS and it connect to 942,090
 # biblioitemnumber			090^a		Внутренний № биб-экземп-записи  (biblioitems.biblioitemnumber)

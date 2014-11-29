@@ -60,7 +60,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('942', '6', 'Normalisierte Klassifikation für Sortierung (Koha)', 'Normalisierte Klassifikation für Sortierung (Koha)', 0, 0, 'biblioitems.cn_sort', -1, '', '', '', 0, 7, '', '', '', NULL),
 		('942', 'a', 'Institutionscode [OBSOLETE]', 'Institutionscode [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, '', '', '', NULL),
 		('942', 'c', 'Koha-Medientyp', 'Koha-Medientyp', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, '', '', '', NULL),
-		('942', 'e', 'Ausgabe', 'Ausgabe', 0, 0, 'biblioitems.cn_edition', 9, 'CN_EDITION', '', '', NULL, 0, '', '', '', NULL),
+		('942', 'e', 'Ausgabe', 'Ausgabe', 0, 0, NULL, 9, '', '', '', NULL, 0, '', '', '', NULL),
 		('942', 'h', 'Klassifikationsteil', 'Klassifikationsteil', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, '', '', '', NULL),
 		('942', 'i', 'Exemplarteil', 'Exemplarteil', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 0, '', '', '', NULL),
 		('942', 'k', 'Signatur-Präfix', 'Signatur-Präfix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, '', '', '', NULL),

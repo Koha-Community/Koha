@@ -498,7 +498,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('SER', '', '942', '6', 0, 0, 'Нормалізована класифікація Коха для сортування', '', -1, 7, 'biblioitems.cn_sort', '', '', 0, '', '', NULL),
  ('SER', '', '942', 'a', 0, 0, 'Institution code (застаріло)', '',      9, -5, '', '', '', NULL, '', '', NULL),
  ('SER', '', '942', 'c', 1, 0, 'Тип одиниці (рівень запису)', '',       9, 0, 'biblioitems.itemtype', 'itemtypes', '', NULL, '', '', NULL),
- ('SER', '', '942', 'e', 0, 0, 'Видання /частина шифру/', '',           9, 0, 'biblioitems.cn_edition', 'CN_EDITION', '', NULL, '', '', NULL),
+ ('SER', '', '942', 'e', 0, 0, 'Видання /частина шифру/', '',           9, 0, NULL, '', '', NULL, '', '', NULL),
  ('SER', '', '942', 'h', 0, 0, 'Класифікаційна частина шифру збереження', '', 9, 0, 'biblioitems.cn_class', '', '', NULL, '', '', NULL),
  ('SER', '', '942', 'i', 0, 1, 'Примірникова частина шифру збереження', '', 9, 9, 'biblioitems.cn_item', '', '', NULL, '', '', NULL),
  ('SER', '', '942', 'k', 0, 0, 'Префікс шифру зберігання', '',          9, 0, 'biblioitems.cn_prefix', '', '', NULL, '', '', NULL),

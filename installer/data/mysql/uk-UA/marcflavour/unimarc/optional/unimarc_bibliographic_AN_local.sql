@@ -209,8 +209,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('AN', '', '942', 't', 0, 0, 'Номер комплекту/примірника', '',            9, -5,'biblioitems.cn_item', '', '', 0, '', '', NULL),
  ('AN', '', '942', 'v', 0, 0, 'Авторський (кеттерівський) знак, дати чи термін, що додаються до класифікаційного індексу', '', 9, -5, '', '', '', 0, '', '', NULL),
  ('AN', '', '942', 'z', 0, 0, 'Внутрішній № біб-запису в старій системі', '',9,4, '', '', '', 0, '', '', NULL);
-# next 2 is obsoete (not found biblioitems.cn_edition, biblioitems.cn_prefix, CN_EDITION)
-#  ('AN', '', '942', 'e', 0, 0, 'Видання /частина шифру/ (?)', '',            9, 0, 'biblioitems.cn_edition', 'CN_EDITION', '', 0, '', '', NULL),
+ ('AN', '', '942', 'e', 0, 0, 'Видання /частина шифру/ (?)', '',            9, 0, NULL, '', '', 0, '', '', NULL),
 #  ('AN', '', '942', 'k', 0, 0, 'Префікс шифру зберігання (?)', '',          9, 0, 'biblioitems.cn_prefix', '', '', 0, '', '', NULL),
 #****************** biblioitems.COLUMNS and it connect to 942,090
 # biblioitemnumber			090^a		Внутрішній № біб-прим-запису (biblioitems.biblioitemnumber)
