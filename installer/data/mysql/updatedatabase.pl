@@ -7205,7 +7205,7 @@ $DBversion = "3.13.00.029";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         INSERT IGNORE INTO export_format( profile, description, content, csv_separator, type )
-        VALUES ( "issues to claim", "efault CSV export for serial issue claims",
+        VALUES ( "issues to claim", "Default CSV export for serial issue claims",
                 "SUPPLIER=aqbooksellers.name|TITLE=subscription.title|ISSUE NUMBER=serial.serialseq|LATE SINCE=serial.planneddate",
                 ",", "sql" )
     });
