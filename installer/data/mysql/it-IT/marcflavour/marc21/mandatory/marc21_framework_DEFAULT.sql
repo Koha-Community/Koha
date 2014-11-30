@@ -986,7 +986,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('240', '6', 'Collegamento', 'Collegamento', 0, 0, '', 2, '', '', '', 0, -6, '', '', '', NULL),
 		('240', '8', 'Numero di collegamento e di sequenza di campi', 'Numero di collegamento e di sequenza di campi', 1, 0, '', 2, '', '', '', 0, -6, '', '', '', NULL),
 		('240', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 2, '', '', '', 0, -5, '', '', '', NULL),
-		('240', 'a', 'Titolo uniforme', 'Titolo uniforme', 0, 0, 'biblio.unititle', 2, '', '', '', 1, -1, '', '', '', NULL),
+		('240', 'a', 'Titolo uniforme', 'Titolo uniforme', 0, 0, 'biblio.unititle', 2, '', '', '', 0, -1, '', '', '', NULL),
 		('240', 'd', 'Data di firma del trattato', 'Data di firma del trattato', 1, 0, '', 2, '', '', '', 0, -6, '', '', '', NULL),
 		('240', 'f', 'Data dell\'opera', 'Data dell\'opera', 0, 0, '', 2, '', '', '', 0, -6, '', '', '', NULL),
 		('240', 'g', 'Informazione miscellanea', 'Informazione miscellanea', 0, 0, '', 2, '', '', '', 0, -6, '', '', '', NULL),

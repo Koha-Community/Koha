@@ -706,7 +706,7 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('KT', '', '240', '6', 0, 0, 'Элемент связи', '',                      2, -6, '', '', '', 0, '', '', NULL),
  ('KT', '', '240', '8', 0, 1, 'Связь поля и ее порядковый номер', '',   2, -6, '', '', '', 0, '', '', NULL),
- ('KT', '', '240', 'a', 0, 0, 'Условное заглавие', '',                  2, -1, 'biblio.unititle', '', '', 1, '', '', NULL),
+ ('KT', '', '240', 'a', 0, 0, 'Условное заглавие', '',                  2, -1, 'biblio.unititle', '', '', 0, '', '', NULL),
  ('KT', '', '240', 'd', 0, 1, 'Дата подписания договора', '',           2, -6, '', '', '', 0, '', '', NULL),
  ('KT', '', '240', 'f', 0, 0, 'Дата публикации', '',                    2, -6, '', '', '', 0, '', '', NULL),
  ('KT', '', '240', 'g', 0, 0, 'Прочие сведения', '',                    2, -6, '', '', '', 0, '', '', NULL),
