@@ -714,7 +714,7 @@ function verify_images() {
                                     <span class="serialseq">[% item.serialseq %]</span>
                                 [% END %]
                                 [% IF ( item.publisheddate ) %]
-                                    <span class="pubdate">([% item.publisheddate %])</span>
+                                    <span class="pubdate">([% item.publisheddate | $KohaDates %])</span>
                                 [% END %]
                             [% END %]
                         </td>
