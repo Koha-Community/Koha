@@ -241,8 +241,20 @@ span.filter_column > input.text_filter {
 }
 
 /* Row grouping */
-td.group {
+td.group,
+table.group td.group {
     background-color: #D1CFD0;
     border-bottom: 2px solid #A19B9E;
     border-top: 2px solid #A19B9E;
+}
+
+table.group tr.odd td {
+    background-color : #F3F3F3;
+    border : 1px solid #BCBCBC;
+    border-right : 1px solid #BCBCBC;
+}
+
+table.group tr.even td {
+    background-color: #FFF;
+    border-right : 1px solid #BCBCBC;
 }
