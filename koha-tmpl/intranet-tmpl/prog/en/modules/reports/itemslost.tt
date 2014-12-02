@@ -1,6 +1,29 @@
+[% USE Branches %]
+[% USE ColumnsSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Lost items</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'columns_settings.inc' %]
+<script type='text/javascript'>
+//<![CDATA[
+    $(document).ready(function() {
+        var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ) %];
+        var lostitems_table = KohaTable("#lostitems-table", {
+            "sDom": 'C<"clearfix">t',
+            "aaSorting": [],
+            "aoColumnDefs": [
+                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                { "sType": "title-string", "aTargets" : [ "title-string" ] }
+            ],
+            "bPaginate": false,
+        }, columns_settings);
+
+    });
+//]]>
+</script>
+
 </head>
 <body id="rep_itemslost" class="rep">
 [% INCLUDE 'header.inc' %]
@@ -26,47 +49,50 @@
     [% END %]
 </div>
 
-    [% IF ( itemsloop ) %]<table>
-    <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Lost code</th>
-        <th>Barcode</th>
-        <th>Date last seen</th>
-        <th>Price</th>
-        <th>Rep.price</th>
-        <th>Library</th>
-        <th>Item type</th>
-        <th>Current location</th>
-        <th>Location</th>
-        <th>Notes</th>
-    </tr>
-     [% FOREACH itemsloo IN itemsloop %]
-        [% UNLESS ( loop.odd ) %]
-        <tr class="highlight">
-        [% ELSE %]
-        <tr>
-        [% END %]
-            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itemsloo.biblionumber %]" title="[% itemsloo.itemnotes %]">
-						  [% itemsloo.title |html %]
-					 </a></td>
-            <td>[% itemsloo.author %]</td>
-            <td>[% itemsloo.lib %]</td>
-            <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% itemsloo.biblionumber %]" title="[% itemsloo.itemnotes %]">
-                    [% itemsloo.barcode %]
-                </a></td>
-            <td>[% itemsloo.datelastseen %]</td>
-            <td>[% itemsloo.price %]</td>
-            <td>[% itemsloo.replacementprice %]</td>
-            <td>[% itemsloo.homebranch %]</td>
-            <td>[% IF ( itemsloo.itype_level ) %][% itemsloo.itype %][% ELSE %][% itemsloo.itemtype %][% END %]</td>
-            <td>[% itemsloo.holdingbranch %]</td>
-            <td>[% itemsloo.location %]</td>
-            <td>[% itemsloo.itemnotes %]</td>
-        </tr>
+    [% IF itemsloop %]
+        <table id="lostitems-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Lost code</th>
+                    <th>Barcode</th>
+                    <th>Call number</th>
+                    <th>Date last seen</th>
+                    <th>Price</th>
+                    <th>Rep.price</th>
+                    <th>Library</th>
+                    <th>Item type</th>
+                    <th>Current location</th>
+                    <th>Location</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                [% FOREACH itemsloo IN itemsloop %]
+                    <tr>
+                        <td>
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itemsloo.biblionumber %]" title="[% itemsloo.itemnotes %]">[% itemsloo.title |html %]</a>
+                        </td>
+                        <td>[% itemsloo.author %]</td>
+                        <td>[% itemsloo.lib %]</td>
+                        <td>
+                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% itemsloo.biblionumber %]" title="[% itemsloo.itemnotes %]">[% itemsloo.barcode %]</a>
+                        </td>
+                        <td>[% itemsloo.itemcallnumber %]</td>
+                        <td>[% itemsloo.datelastseen %]</td>
+                        <td>[% itemsloo.price %]</td>
+                        <td>[% itemsloo.replacementprice %]</td>
+                        <td>[% Branches.GetName(itemsloo.homebranch) %]</td>
+                        <td>[% IF ( itemsloo.itype_level ) %][% itemsloo.itype %][% ELSE %][% itemsloo.itemtype %][% END %]</td>
+                        <td>[% Branches.GetName(itemsloo.holdingbranch) %]</td>
+                        <td>[% itemsloo.location %]</td>
+                        <td>[% itemsloo.itemnotes %]</td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
     [% END %]
-    </table>
-	[% END %] 
 	[% ELSE %]
 	
 	<form name="f" action="/cgi-bin/koha/reports/itemslost.pl" method="post">

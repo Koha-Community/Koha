@@ -1000,7 +1000,7 @@ sub GetLostItems {
 
     my $query   = "
         SELECT title, author, lib, itemlost, authorised_value, barcode, datelastseen, price, replacementprice, homebranch,
-               itype, itemtype, holdingbranch, location, itemnotes, items.biblionumber as biblionumber
+               itype, itemtype, holdingbranch, location, itemnotes, items.biblionumber as biblionumber, itemcallnumber
         FROM   items
             LEFT JOIN biblio ON (items.biblionumber = biblio.biblionumber)
             LEFT JOIN biblioitems ON (items.biblionumber = biblioitems.biblionumber)
