@@ -5,13 +5,13 @@ INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SUGGEST
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SUGGEST','AVILL','Available via ILL');
 
 -- availability statuses
-INSERT INTO `authorised_values`  (category, authorised_value, lib) VALUES ('LOST','2','Long Overdue (Lost)');
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOST','1','Lost');
-INSERT INTO `authorised_values`  (category, authorised_value, lib ) VALUES ('LOST','3','Lost and Paid For');
-INSERT INTO `authorised_values`  (category, authorised_value, lib )VALUES ('LOST','4','Missing');
+INSERT INTO `authorised_values`  (category, authorised_value, lib) VALUES ('LOST','2','Długo przetrzymywany (Zagubiony)');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOST','1','Zagubiony');
+INSERT INTO `authorised_values`  (category, authorised_value, lib ) VALUES ('LOST','3','Zagubiony i opłacony');
+INSERT INTO `authorised_values`  (category, authorised_value, lib )VALUES ('LOST','4','Zaginiony');
 
 -- damaged status of an item
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('DAMAGED','1','Damaged');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('DAMAGED','1','Uszkodzony');
 
 -- location qualification for an item, departments are linked by default to items.location
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','FIC','Fiction');
@@ -22,6 +22,8 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC',
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','GEN','General Stacks');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','AV','Audio Visual');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','REF','Reference');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','CART','Book Cart');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','PROC','Processing Center');
 
 -- collection codes for an item
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE','FIC','Fiction');
@@ -29,15 +31,32 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE','NFIC','Non Fiction');
 
 -- withdrawn status of an item, linked to items.withdrawn
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('WITHDRAWN','1','Withdrawn');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('WITHDRAWN','1','Wycofany');
 
 -- loanability status of an item, linked to items.notforloan
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','-1','Ordered');
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','1','Not For Loan');
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','2','Staff Collection');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','-1','Zamówiony');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','1','Nie do wypożyczenia');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','2','Zasób pracowniczy');
 
 -- restricted status of an item, linked to items.restricted
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('RESTRICTED','1','Restricted Access');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('RESTRICTED','1','Ograniczony dostęp');
+
+-- manual invoice types
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('MANUAL_INV','Opłata za ksero','.25');
+
+-- custom borrower notes
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('BOR_NOTES','ADDR','Uwagi do adresu');
+
+-- OPAC Suggestions reasons
+INSERT INTO authorised_values (category,authorised_value,lib,lib_opac) VALUES ('OPAC_SUG','damaged','The copy on the shelf is damaged','The copy on the shelf is damaged');
+INSERT INTO authorised_values (category,authorised_value,lib,lib_opac) VALUES ('OPAC_SUG','bestseller','Upcoming title by popular author','Upcoming title by popular author');
+
+-- Report groups
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'CIRC', 'Udostępnianie');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'CAT', 'Katalog');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'PAT', 'Uzytkownicy');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'ACQ', 'Gromadzenie');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'ACC', 'Konta');
 
 -- SIP2 media types
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '000', 'Other');

@@ -1,5 +1,14 @@
-INSERT INTO `z3950servers`
-(`host`, `port`, `db`, `userid`, `password`, `servername`, `id`, `checked`, `rank`, `syntax`, `encoding`) VALUES
-('193.59.172.100',210,'INNOPAC','','','BIBLIOTEKA NARODOWA',1,1,1,'MARC21','UTF8'),
-('62.181.1.243',4321,'bilbo','','','BP BEMOWO',2,1,1,'MARC21','UTF8'),
-('lx2.loc.gov',210,'LCDB','','','LIBRARY OF CONGRESS',3,0,1,'USMARC','utf8');
+INSERT INTO z3950servers
+(host, port, db, userid, password, servername, checked, rank, syntax, encoding,recordtype) VALUES
+('alpha.bn.org.pl',210,'INNOPAC','','','BIBLIOTEKA NARODOWA',1,1,'MARC21','utf8', 'biblio'),
+('lx2.loc.gov',210,'LCDB','','','LIBRARY OF CONGRESS',1,1,'USMARC','utf8','biblio'),
+('lx2.loc.gov',210,'NAF','','','LIBRARY OF CONGRESS NAMES',1,1,'USMARC','utf8','authority'),
+('lx2.loc.gov',210,'SAF','','','LIBRARY OF CONGRESS SUBJECTS',1,2,'USMARC','utf8','authority'),
+('clio-db.cc.columbia.edu',7090,'voyager','','','COLUMBIA UNIVERSITY',0,0,'USMARC','MARC-8','biblio'),
+('siris-libraries.si.edu',210,'Default','','','SMITHSONIAN INSTITUTION LIBRARIES',0,0,'USMARC','MARC-8','biblio');
+
+#Insert SRU server
+INSERT INTO z3950servers
+(host, port, db, servername, syntax, encoding, servertype, sru_fields)
+VALUES
+('lx2.loc.gov',210,'LCDB','LIBRARY OF CONGRESS SRU','USMARC','utf8','sru','title=dc.title,isbn=bath.isbn,srchany=cql.anywhere,author=dc.author,issn=bath.issn,subject=dc.subject,stdid=bath.standardIdentifier');
