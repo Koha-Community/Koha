@@ -20,10 +20,11 @@ use Modern::Perl;
 use C4::Context;
 use C4::Members;
 use C4::Letters;
+use C4::Budgets;
 
 use Koha::DateUtils qw( dt_from_string );
 
-use Test::More tests => 97;
+use Test::More tests => 101;
 use Test::Warn;
 
 BEGIN {
@@ -65,6 +66,33 @@ my $my_suggestion = {
     note          => 'my note',
 };
 
+my $budgetperiod_id = AddBudgetPeriod({
+    budget_period_startdate   => '2008-01-01',
+    budget_period_enddate     => '2008-12-31',
+    budget_period_description => 'MAPERI',
+    budget_period_active      => 1,
+});
+
+my $budget_id = AddBudget({
+    budget_code      => 'ABCD',
+    budget_amount    => '123.132000',
+    budget_name      => 'ABCD',
+    budget_notes     => 'This is a note',
+    budget_period_id => $budgetperiod_id,
+});
+my $my_suggestion_with_budget = {
+    title         => 'my title 2',
+    author        => 'my author 2',
+    publishercode => 'my publishercode 2',
+    suggestedby   => $borrowernumber,
+    biblionumber  => $biblionumber1,
+    managedby     => '',
+    manageddate   => '',
+    accepteddate  => dt_from_string,
+    note          => 'my note',
+    budgetid      => $budget_id,
+};
+
 
 is( CountSuggestion(), 0, 'CountSuggestion without the status returns 0' );
 is( CountSuggestion('ASKED'), 0, 'CountSuggestion returns the correct number of suggestions' );
@@ -74,6 +102,7 @@ is( CountSuggestion('REJECTED'), 0, 'CountSuggestion returns the correct number 
 
 my $my_suggestionid = NewSuggestion($my_suggestion);
 isnt( $my_suggestionid, 0, 'NewSuggestion returns an not null id' );
+my $my_suggestionid_with_budget = NewSuggestion($my_suggestion_with_budget);
 
 is( GetSuggestion(), undef, 'GetSuggestion without the suggestion id returns undef' );
 my $suggestion = GetSuggestion($my_suggestionid);
@@ -85,7 +114,7 @@ is( $suggestion->{biblionumber}, $my_suggestion->{biblionumber}, 'NewSuggestion 
 is( $suggestion->{STATUS}, 'ASKED', 'NewSuggestion stores a suggestion with the status ASKED by default' );
 is( $suggestion->{managedby}, undef, 'NewSuggestion stores empty string as undef for non existent foreign key (integer)' );
 is( $suggestion->{manageddate}, undef, 'NewSuggestion stores empty string as undef for date' );
-is( CountSuggestion('ASKED'), 1, 'CountSuggestion returns the correct number of suggestions' );
+is( CountSuggestion('ASKED'), 2, 'CountSuggestion returns the correct number of suggestions' );
 
 
 is( ModSuggestion(), undef, 'ModSuggestion without the suggestion returns undef' );
@@ -201,9 +230,8 @@ is( $connect_suggestion_and_biblio, '1', 'ConnectSuggestionAndBiblio returns 1' 
 $suggestion = GetSuggestion($my_suggestionid);
 is( $suggestion->{biblionumber}, $biblionumber2, 'ConnectSuggestionAndBiblio updates the biblio number correctly' );
 
-
 my $search_suggestion = SearchSuggestion();
-is( @$search_suggestion, 1, 'SearchSuggestion without arguments returns all suggestions' );
+is( @$search_suggestion, 2, 'SearchSuggestion without arguments returns all suggestions' );
 
 $search_suggestion = SearchSuggestion({
     title => $mod_suggestion1->{title},
@@ -224,7 +252,7 @@ $search_suggestion = SearchSuggestion({
 is( @$search_suggestion, 0, 'SearchSuggestion returns the correct number of suggestions' );
 
 $search_suggestion = SearchSuggestion({
-    publishercode => $mod_suggestion3->{publishercode},
+    publishercode => $mod_suggestion1->{publishercode},
 });
 is( @$search_suggestion, 1, 'SearchSuggestion returns the correct number of suggestions' );
 $search_suggestion = SearchSuggestion({
@@ -241,6 +269,22 @@ $search_suggestion = SearchSuggestion({
 });
 is( @$search_suggestion, 0, 'SearchSuggestion returns the correct number of suggestions' );
 
+$search_suggestion = SearchSuggestion({
+    budgetid => '',
+});
+is( @$search_suggestion, 2, 'SearchSuggestion (budgetid = "") returns the correct number of suggestions' );
+$search_suggestion = SearchSuggestion({
+    budgetid => $budget_id,
+});
+is( @$search_suggestion, 1, 'SearchSuggestion (budgetid = $budgetid) returns the correct number of suggestions' );
+$search_suggestion = SearchSuggestion({
+    budgetid => '__NONE__',
+});
+is( @$search_suggestion, 1, 'SearchSuggestion (budgetid = "__NONE__") returns the correct number of suggestions' );
+$search_suggestion = SearchSuggestion({
+    budgetid => '__ANY__',
+});
+is( @$search_suggestion, 2, 'SearchSuggestion (budgetid = "__ANY__") returns the correct number of suggestions' );
 
 my $del_suggestion = {
     title => 'my deleted title',
@@ -273,3 +317,5 @@ is(@$itemtypes2, 8, "Purchase suggestion itemtypes collected, default AdvancedSe
 is_deeply($itemtypes1, $itemtypes2, 'same set of purchase suggestion formats retrieved');
 
 $dbh->rollback;
+
+done_testing;
