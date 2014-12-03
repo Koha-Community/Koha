@@ -1,4 +1,6 @@
 [% USE KohaDates %]
+[% USE AuthorisedValues %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% UNLESS ( basketno ) %]New [% END %][% IF ( delete_confirm ) %]Delete [% END %]Basket [% basketname|html %] ([% basketno %]) for [% name|html %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -597,7 +599,7 @@
                         [% IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement %][% END %]
                         [% IF ( order.cancellationreason ) %]
                           <br />
-                          Cancellation reason: [% order.cancellationreason %]
+                          Cancellation reason: [% AuthorisedValues.GetByCode( 'ORDER_CANCELLATION_REASON', order.cancellationreason ) %]
                         [% END %]
                       </p>
                       [% IF order.transferred_to %]

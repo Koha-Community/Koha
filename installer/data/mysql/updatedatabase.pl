@@ -9690,6 +9690,41 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.18.04.002";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q{
+        INSERT INTO authorised_values (category, authorised_value, lib) VALUES
+         ('ORDER_CANCELLATION_REASON', 0, 'No reason'),
+         ('ORDER_CANCELLATION_REASON', 1, 'Sold out'),
+         ('ORDER_CANCELLATION_REASON', 2, 'Restocking')
+    });
+
+    my $already_existing_reasons = $dbh->selectcol_arrayref(q{
+        SELECT DISTINCT( cancellationreason )
+        FROM aqorders;
+    }, { Slice => {} });
+
+    my $update_orders_sth = $dbh->prepare(q{
+        UPDATE aqorders
+        SET cancellationreason = ?
+        WHERE cancellationreason = ?
+    });
+
+    my $insert_av_sth = $dbh->prepare(q{
+        INSERT INTO authorised_values (category, authorised_value, lib) VALUES
+         ('ORDER_CANCELLATION_REASON', ?, ?)
+    });
+    my $i = 3;
+    for my $reason ( @$already_existing_reasons ) {
+        next unless $reason;
+        $insert_av_sth->execute( $i, $reason );
+        $update_orders_sth->execute( $i, $reason );
+        $i++;
+    }
+    print "Upgrade to $DBversion done (Bug 13380: Add the ORDER_CANCELLATION_REASON authorised value)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
