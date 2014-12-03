@@ -25,7 +25,7 @@
             [% END %]
           </p>
           <p>
-            <textarea name="reason" placeholder="Reason of cancellation"></textarea>
+            [% PROCESS 'av-build-dropbox.inc' name="reason", category="ORDER_CANCELLATION_REASON" default="0" %]
           </p>
           <input type="hidden" name="action" value="confirmcancel" />
           <input type="hidden" value="[% ordernumber %]" name="ordernumber" />
