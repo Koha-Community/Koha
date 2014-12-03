@@ -1,0 +1,149 @@
+    [% INCLUDE 'doc-head-open.inc' %]
+    <title>Koha &rsaquo; Cataloguing &rsaquo; Batch Overlay</title>
+    [% INCLUDE 'doc-head-close.inc' %]
+    [% INCLUDE 'greybox.inc' %]
+
+</head>
+<body id="labels_label-batch-overlay" class="cataloguing batchOverlay" onload="dofocus();">
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+    <div id="breadcrumbs">
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+        <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a> &rsaquo;
+        Batch Overlay
+    </div>
+    <div id="doc3" class="yui-t2">
+        <div id="bd">
+            <div class="yui-gb">
+                [% IF batchOverlayErrors %]
+                    <div class="alert">
+                        <b>The following errors were detected when trying to find the requested MARC-records from external sources.</b>
+                        [% FOREACH error IN batchOverlayErrors %]
+                            [% IF error.errcode == 'UNKNOWN_BATCHOVERLAY_RULE' %]<br />
+                                For record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% error.biblionumber %]" target="_blank">[% error.biblioname %]</a>. Couldn't find the batch overlay rule with name [% error.term %].
+                            [% END %]
+                            [% IF error.errcode == 'UNKNOWN_MATCHER' %]<br />
+                                Couldn't find the merging matcher or a component part matcher with ids' [% error.term %]. Extremely unsafe to proceed, thus halting.
+                            [% END %]
+                            [% IF error.errcode == 'UNKNOWN_REMOTE_ID' %]<br />
+                                For record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% error.biblionumber %]" target="_blank">[% error.biblioname %]</a>. Couldn't find the correct bibliographic record source based on the field 003 [% error.term %].
+                            [% END %]
+                            [% IF error.errcode == 'REMOTE_SEARCH_TOOMANY' %]<br />
+                                [% IF error.biblionumber %]For record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% error.biblionumber %]" target="_blank">[% error.biblioname %]</a>. [% END %]Too many [% error.remotename %] search results for this search! [% error.term %]
+                            [% END %]
+                            [% IF error.errcode == 'REMOTE_SEARCH_NOTFOUND' %]<br />
+                                [% IF error.biblionumber %]For record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% error.biblionumber %]" target="_blank">[% error.biblioname %]</a>. [% END %]No [% error.remotename %] search results for this search! [% error.term %]
+                            [% END %]
+                            [% IF error.errcode == 'BAD_ENCODING' %]<br />
+                                For record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% error.biblionumber %]" target="_blank">[% error.biblioname %]</a>. Bad encoding [% error.term %], should be UTF-8!
+                            [% END %]
+                        [% END %]
+                    </div>
+                [% END %]
+                [% IF duplicateSearchTerms %]
+                    <div class="alert">
+                        The following searches were given atleast twice. Extra searches are automatically removed.
+                        <br />
+                        <b>
+                        [% FOREACH term IN duplicateSearchTerms %]
+                            [% term %]<br />
+                        [% END %]
+                        </b>
+                        <br />
+                        This means that you probably accidentally entered the same biblio twice.
+                    </div>
+                [% END %]
+                [% IF ambiguousSearchTerms %]
+                    <div class="alert">
+                        The following codes returned more than one biblio to overlay.
+                        <br />
+                        <b>
+                        [% FOREACH term IN ambiguousSearchTerms %]
+                            [% term %]<br />
+                        [% END %]
+                        </b>
+                        <br />
+                        Please specify your search code by adding more search terms to narrow it down, or maybe the same biblio is duplicated in your database?
+                    </div>
+                [% END %]
+                [% IF localSearchErrors %]
+                    <div class="alert">
+                        The following search terms returned no results.
+                        <br />
+                        <b>
+                        [% FOREACH error IN localSearchErrors %]
+                            [% IF error.searcherror %][% error.searcherror %][% END %]<br />
+                        [% END %]
+                        </b>
+                        <br />
+                        Try another standard number, or simply use the title, author, publication date and/or some identifying information. Separate search elements with spaces.<br />
+                    </div>
+                [% END %]
+                [% IF reports %]
+                    [% FOREACH report IN reports %]
+                    <div class="report">
+                        <h3>+ [% report.header %][% IF report.similarity %] ([% report.similarity %])[% END %]</h3><br />
+                        <pre class="report_content [% IF report.similarity && report.similarity < 0.3 %]report_hidden[% END %]"><code>[% report.diff FILTER html %]</code></pre>
+                    </div>
+                    [% END %]
+                [% END %]
+
+                <h4 class="hint">&nbsp;&nbsp;See "Help" for usage instructions!</h4>
+                <div class="yui-u first" id="collect-batch-overlay">
+
+                    <form name="overlay_by_code" action="/cgi-bin/koha/cataloguing/batchOverlay.pl" method="post">
+                        <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
+                            <ol><li>
+                                <label for="codes">Overlay by search term(s):<br/>
+                                    <span class="hint">One search term per line.<br/>
+                                    Search term should be the EAN, ISSN, ISBN, ISMN, Koha biblionumber or Koha barcode, but it can be anything searchable.<br/></span>
+                                </label>
+                                <textarea rows="25" id="codes" name="codesString" tabindex="1" class="focus">[% codesString %]</textarea>
+                                <label for="skipLocalBiblios">Skip local biblios checking: </label>
+                                <input type="checkbox" name="skipLocalBiblios" value="1" style="vertical-align: bottom;"/><br/>
+                                <span class="hint">
+                                    Check this to disable local catalog searches and search directly from the remote repositories. WARNING! This feature doesn't do any deduplication checks and can easily bring duplicate records to the local catalog. One can use the deduplicator to find duplicates.
+                                </span>
+
+                                <br /> <input type="submit" name="overlay" id="overlay" value="Overlay us!">
+                            </li></ol>
+                        </fieldset>
+
+<!--INACTIVE SINCE WAITING FOR ENABLING THE z3950 REMOTE TARGET SEARCHING IN BATCHOVERLAY<div>
+    <h2>Search targets <span style="display: inline; font-size: 70%; padding-left: 1em;"><span class="checkall"><a id="CheckAll" href="#">Select all</a></span><span class="clearall"><a id="CheckNone" href="#">Clear all</a></span></span></h2>
+    [% FOREACH serverloo IN serverloop %]
+        <p>
+            [% IF ( serverloo.checked ) %]
+                <input type="checkbox" name="id" id="z3950_[% serverloo.id %]" value="[% serverloo.id %]" checked="checked" />
+            [% ELSE %]
+                <input type="checkbox" name="id" id="z3950_[% serverloo.id %]" value="[% serverloo.id %]" />
+            [% END %]
+            <label for="z3950_[% serverloo.id %]">[% serverloo.name %]</label>
+
+        </p>
+    [% END %]
+</div>
+<fieldset class="action"><input type="submit"  class="submit" value="Search" onclick="cursor :'wait'"/> <a class="cancel close" href="#">Cancel</a></fieldset>
+-->
+                </div>
+                <div class="yui-u middle">
+<!--                    <h4 class="hint">Hint: Click us!</h4> -->
+                </div>
+
+            </div>
+        </div>
+
+<script type="text/javascript">
+    $(".report > h3").click(function() {$(this).siblings(".report_content").toggle()});
+    $(".report > h3").siblings(".report_hidden").toggle();
+    $(".toggler").click(function() {$(this).siblings().toggle()});
+    $(".toggler").siblings().toggle();
+</script>
+<style type="text/css">
+    div.report:nth-child(odd) {background-color: #EEEEEE;}
+    .yui-u.middle {width : 66%;}
+    fieldset.rows label {float: none;}
+    #codes {width: 100%;}
+</style>
+
+    [% INCLUDE 'intranet-bottom.inc' %]

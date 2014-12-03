@@ -1,0 +1,54 @@
+[% INCLUDE 'help-top.inc' %]
+
+<h1>Cataloging</h1>
+
+<p>
+    <h4>A short introduction to batch overlaying</h4>
+    <span>
+        <p>This tools helps you to overlay large amounts of items quickly with the fully catalogued counterpart.</p>
+        <p>Simply read barcodes into the large white text area on the left. The barcode can be anything in the item you are holding,
+            but it must be present in the MARC-record. Each row represents a separate overlaying action so separate barcodes with new lines.
+            Actually this should happen automatically when you read a barcode.</p>
+        <p>Click "Overlay us!" to start the overlaying process.</p>
+        <p>A report is generated and possible errors are shown on the top of the page. You can click the report titles to open and close
+            the verbose MARCXML difference display. On the right side of the report title you can find a difference-score. The bigger the number,
+            the larger the difference between the old bibliographic record and the new merged record. This is a good indication of how much
+            the record changed during merging. You can also directly open a MARC-editing view by clicking the report title biblionumbers.</p>
+        <b>A permission "tools => stage_marc_import" is needed to use this tool.</b>
+    </span>
+</p>
+<p>
+    <h4>Typical error scenarios</h4>
+    <ul>
+        <li>The record you are looking for doesn't exist in the Koha database (or you get too many results), try using a different query
+            and test the results using basic keyword searching.</li>
+        <li>You have found the record from your Koha database, but not from the external repository. Try an alternate way of accessing the
+            repository (eg. z39.50 search) and searching with title + author.</li>
+        <li>The standard identifier (EAN,ISBN,ISSN,...) is not correct. This is hard to fix, as the issue can be in our Koha database
+            our in the external repository. Verify the standard identifier in our catalogue or try finding the record using title/author search.</li>
+    </ul>
+</p>
+<p>
+    <h4>How this all actually works?</h4>
+    <ol>
+        <li>Each line in the text box represents a basic keyword query, it is actually equivalent to searching straight from the search toolbar.
+            The point of these searches is to find the correct bibliographic records from the Koha database for automatic overlaying.</li>
+        <li>These searches should return only one result per row (query). From this result the cataloguing source(external repository)
+            is decided based on the value in the field 003. Also the overlaying matcher and the possible component part matcher are decided
+            based on preconfigured BatchOverlayRules.</li>
+        <li>Then a search is performed on the external repository. Query is performed usually (in this order) EAN, ISBN or ISSN until a
+            matching MARC record is found. If no record is found (or too many are found), then the cataloguer needs to take action to find
+            the proper cataloguing resource.</li>
+        <li>The parent record overlaying is based on the preselected Matcher, which defines the (sub)fields to preserve from the old record.
+            The Matcher can be easily configured from <a href="/cgi-bin/koha/admin/matching-rules.pl" target="_blank">here</a> if you have
+            proper permissions.</li>
+        <li>After the parent record is overlayed, a new search for component parts begins. We search for records containing the same field 003
+            as the parent and which have the parents field 001 as their subfield 77Xw value, from the parent's external repository. These are
+            confirmed component parts and are selected for importing.</li>
+        <li>Another Matcher, component part Matcher makes sure that the selected component part records don't already exists in the database
+            and thus are not imported twice (which could make a real mess).</li>
+        <li>Finally a report is generated about the actions taken and for easy verification of correctness.</li>
+    </ol>
+</p>
+
+[% INCLUDE 'help-bottom.inc' %]

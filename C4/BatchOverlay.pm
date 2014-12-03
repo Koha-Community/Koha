@@ -19,6 +19,8 @@ package C4::BatchOverlay;
 
 use Modern::Perl;
 
+use MARC::Field;
+
 use C4::Context;
 use C4::BatchOverlay::BatchOverlayRule;
 use C4::BatchOverlay::BatchOverlayErrors;
@@ -44,13 +46,26 @@ use C4::Breeding;
 use C4::ImportBatch;
 use C4::Matcher;
 
+my $batchOverlayrulesCache = {};
+
 sub batchOverlayBiblios {
     my ($biblionumbers, $mergeMatcher, $componentMatcher) = @_;
 
     my $reports = [];
     my $errorsBuilder = C4::BatchOverlay::BatchOverlayErrors->new();
     foreach my $biblionumber (@$biblionumbers) {
-        my ($report, $errorsBuilder) = overlayBiblio( $biblionumber, $mergeMatcher, $componentMatcher, $reports, $errorsBuilder );
+        my ($report, $errorsBuilder) = overlayBiblio( undef, $biblionumber, $mergeMatcher, $componentMatcher, $reports, $errorsBuilder );
+    }
+
+    return ($reports, $errorsBuilder);
+}
+sub batchImportBiblios {
+    my ($searchTermsBatch, $mergeMatcher, $componentMatcher) = @_;
+
+    my $reports = [];
+    my $errorsBuilder = C4::BatchOverlay::BatchOverlayErrors->new();
+    foreach my $searchTerm (@$searchTermsBatch) {
+        my ($report, $errorsBuilder) = overlayBiblio( $searchTerm, undef, $mergeMatcher, $componentMatcher, $reports, $errorsBuilder );
     }
 
     return ($reports, $errorsBuilder);
@@ -58,7 +73,7 @@ sub batchOverlayBiblios {
 
 #Returns $report-hash that is printable using C4::BatchOverlay::generateReport(); and a $error-string.
 sub overlayBiblio {
-    my ($oldBiblionumber, $mergeMatcher, $componentMatcher, $reports, $errorsBuilder) = @_;
+    my ($searchTerm, $oldBiblionumber, $mergeMatcher, $componentMatcher, $reports, $errorsBuilder) = @_;
 
     my $commit = 1; #Should we write the modifications to DB?
     my $ok = 0; #a temporary boolean for sharing
@@ -69,37 +84,30 @@ sub overlayBiblio {
     $reports = [] unless $reports; #Collect merging, importing, etc reports here HASHes. keys( oldRecordXML, newRecordXML, mergedRecordXML, operation )
 
     # 1 # Firstly, get Biblio to be merged. # 1 #
-    my $oldBiblio = C4::Biblio::GetBiblio( $oldBiblionumber );
-    my $oldRecord = C4::Biblio::GetMarcBiblio( $oldBiblionumber );
+    my $oldBiblio = C4::Biblio::GetBiblio( $oldBiblionumber ) if $oldBiblionumber;
+    my $oldRecord = C4::Biblio::GetMarcBiblio( $oldBiblionumber ) if $oldBiblionumber;
+    $errorsBuilder->setActiveBiblio($oldBiblio, $oldRecord);
 
     my $newRecord;
 
-    my $f003 = '';
+    #Overlay these records from BTJ if there is a semi-intelligent field 003.
+    #Currently BTJ is our only cataloguing record vendor but we could extend to Melinda.
+    my $f003 = 'BTJ'; #Default to BTJ if nothing else available
     eval { $f003 = $oldRecord->field('003')->data(); }; #Not all records for some reason have 003 ? We dont want to crash Koha because of that.
-
-    if ($f003 =~ /BTJ/i || $f003 =~ /KIVA/i) { #Overlay these records from BTJ
-        my $overlayRule = C4::BatchOverlay::BatchOverlayRule->getBatchOverlayRule(undef,'BTJ');
-
-        ##Decide the Matcher-object to use
-        $mergeMatcher = C4::Matcher->fetch( $overlayRule->{matcher_id} ) unless $mergeMatcher;
-        $componentMatcher = C4::Matcher->fetch( $overlayRule->{component_matcher_id} ) unless $componentMatcher;
-
-        if (not($mergeMatcher) || not($componentMatcher) ) {
-            $errorsBuilder->addUNKNOWN_MATCHERerror($overlayRule);
-        }
-        else {
-            ## Decide the external target to use ##
-            my $z3950_id = $overlayRule->getSource();
-            push @z3950targets, $z3950_id;
-
-            $newRecord = _fetchFromBTJ($oldBiblio, $oldRecord, \@z3950targets, $errorsBuilder);
-        }
+    my ($overlayRule) = _selectMatcherRule($f003, $errorsBuilder);
+    if (not( ref $overlayRule eq 'C4::BatchOverlay::BatchOverlayRule' )) {
+        return;
     }
-    else {
-        $errorsBuilder->addUNKNOWN_REMOTE_IDerror($oldRecord, $oldBiblionumber, $f003);
-    }
+    $mergeMatcher = $overlayRule->{mergeMatcher} unless $mergeMatcher;
+    $componentMatcher = $overlayRule->{componentMatcher} unless $componentMatcher;
 
-    if ($newRecord) {
+    ## Decide the external target to use ##
+    my ($type, $id) = $overlayRule->getSource();
+    push @z3950targets, $id;
+
+    $newRecord = _fetchFromRemote($searchTerm, $oldBiblio, $oldRecord, \@z3950targets, $overlayRule->{remoteName}, $errorsBuilder);
+
+    if ($oldRecord && $newRecord) {
         # 4 # Merge records with given merging rules # 4 #
         my $mergedRecord = $newRecord->clone(); #Preserve newRecord unchanged for reporting purposes.
         $mergeMatcher->overlayRecord($oldRecord, $mergedRecord); #Makes modifications directly to the $mergedRecord-object
@@ -110,7 +118,7 @@ sub overlayBiblio {
             push (@$reports, {oldRecordXML => $oldRecord->as_xml_record($marcflavour),
                              newRecordXML => $newRecord->as_xml_record($marcflavour),
                              mergedRecordXML => $mergedRecord->as_xml_record($marcflavour),
-                             operation => 'parent record merging '.$mergedRecord->author().' - '.$mergedRecord->title().' ('.$oldBiblionumber.')',
+                             operation => 'parent record merging :'.$mergedRecord->author().' - '.$mergedRecord->title().' ('.$oldBiblionumber.')',
                              });
             #All is ok and that is kewlö!
         }
@@ -118,25 +126,53 @@ sub overlayBiblio {
             push (@$reports, {oldRecordXML => $oldRecord->as_xml_record($marcflavour),
                              newRecordXML => $newRecord->as_xml_record($marcflavour),
                              mergedRecordXML => $mergedRecord->as_xml_record($marcflavour),
-                             operation => '!FAILED!: parent record merging '.$mergedRecord->author().' - '.$mergedRecord->title().' ('.$oldBiblionumber.')',
+                             operation => '!FAILED!: parent record merging :'.$mergedRecord->author().' - '.$mergedRecord->title().' ('.$oldBiblionumber.')',
                              });
         }
 
         _importChildBiblios( $mergedRecord, $oldBiblio, $componentMatcher, \@z3950targets, $commit, $reports, $errorsBuilder );
     }
+    elsif ($searchTerm && $newRecord) {
+        ### Build a biblio-record and save it ###
+        my ($biblionumber, $biblioitemnumber) = C4::Biblio::AddBiblio($newRecord, '') if $commit;
+        my $newBiblio = C4::Biblio::GetBiblio( $biblionumber ) if $commit;
+
+        if ($biblionumber || not($commit)) {
+            push (@$reports, {oldRecordXML => '',
+                             newRecordXML => $newRecord->as_xml_record($marcflavour),
+                             mergedRecordXML => '',
+                             operation => 'importing a new record :'.$newRecord->author().' - '.$newRecord->title().' ('.$biblionumber.')',
+                             });
+            #All is ok and that is kewlö!
+        }
+        else {
+            push (@$reports, {oldRecordXML => '',
+                             newRecordXML => $newRecord->as_xml_record($marcflavour),
+                             mergedRecordXML => '',
+                             operation => '!FAILED!: importing a new record :'.$newRecord->author().' - '.$newRecord->title().' ('.$biblionumber.')',
+                             });
+        }
+
+        _importChildBiblios( $newRecord, $newBiblio, $componentMatcher, \@z3950targets, $commit, $reports, $errorsBuilder );
+    }
     return ($reports, $errorsBuilder);
 }
 
-sub _fetchFromBTJ {
-    my ($oldBiblio, $oldRecord, $z3950targets, $errorsBuilder) = @_;
+sub _fetchFromRemote {
+    my ($searchTerm, $oldBiblio, $oldRecord, $z3950targets, $remoteName, $errorsBuilder) = @_;
 
-    my $remoteName = 'BTJ z39.50'; #Identify this remote search source
     ##Decide the search terms to use
-    my $title = getTitle($oldRecord, $oldBiblio);
-    my $author = getAuthor($oldRecord, $oldBiblio);
-    my $stdid = getEAN($oldRecord, $oldBiblio); #Standard ID
-    $stdid = getISBN($oldRecord, $oldBiblio) unless $stdid;
-    $stdid = getISSN($oldRecord, $oldBiblio) unless $stdid;
+    #my $title = getTitle($oldRecord, $oldBiblio);
+    #my $author = getAuthor($oldRecord, $oldBiblio);
+    my $stdid;
+    if ($oldRecord) {
+        $stdid = getEAN($oldRecord, $oldBiblio); #Standard ID
+        $stdid = getISBN($oldRecord, $oldBiblio) unless $stdid;
+        $stdid = getISSN($oldRecord, $oldBiblio) unless $stdid;
+    }
+    if ($searchTerm) {
+        $stdid = $searchTerm;
+    }
 
     # 2 # Secondly, look for fully catalogued Records from z39.50-targets. # 2 #
     ##Basic EAN-based search
@@ -192,10 +228,10 @@ sub _z3950Wrapper {
         return $searchResults;
     }
     elsif (@$searchResults > 1) {
-        $errorsBuilder->addREMOTE_SEARCH_TOOMANYerror($remoteName, $oldRecord, $oldBiblio, $searchParameters);
+        $errorsBuilder->addREMOTE_SEARCH_TOOMANYerror($searchParameters, $remoteName, $oldRecord, $oldBiblio);
     }
     else {
-        $errorsBuilder->addREMOTE_SEARCH_NOTFOUNDerror($remoteName, $oldRecord, $oldBiblio, $searchParameters);
+        $errorsBuilder->addREMOTE_SEARCH_NOTFOUNDerror($searchParameters, $remoteName, $oldRecord, $oldBiblio);
     }
 
     return 0;
@@ -236,7 +272,9 @@ sub _importChildBiblios {
 
 
     my $searchResults = $z3950results->{breeding_loop};
-    for ( my $i=scalar(@$searchResults)-1 ; $i>=0 ; $i--) { #Reverse the array, because component parts end up in reverse order in Koha.
+    #Unreversing the reversal because something changed in the BTJ's end?? Initially BTJ sent their component parts in a reverse order.
+    #    for ( my $i=scalar(@$searchResults)-1 ; $i>=0 ; $i--) { #Reverse the array, because component parts end up in reverse order to Koha.
+    for ( my $i=0 ; $i<scalar(@$searchResults) ; $i++) { #Reverse the array, because component parts end up in reverse order to Koha.
         my $componentBreedingResult = $searchResults->[$i];
         my ($componentRecord, $componentEncoding) = MARCfindbreeding( $componentBreedingResult->{breedingid} );
 
@@ -246,13 +284,15 @@ sub _importChildBiblios {
 
         my @matches = $matcher->get_matches( $componentRecord, 5 );
         unless (@matches) { #We don't want to add the component part if a match exists!
+
+            _populateComponentPartFieldsFromParent($componentRecord, $parentRecord);
             my ($componentBiblionumber, $componentBiblioitemnumber) = ('',''); #Prevent undef errors when concatenating.
             ($componentBiblionumber, $componentBiblioitemnumber) = C4::Biblio::AddBiblio( $componentRecord, $parentBiblio->{frameworkcode} ) if $commit;
             if (($componentBiblionumber && $componentBiblioitemnumber) || not($commit)) {
                 push (@$reports, {oldRecordXML => undef,
                              newRecordXML => $componentRecord->as_xml_record($marcflavour),
                              mergedRecordXML => undef,
-                             operation => 'component record addition '.$componentRecord->author().' - '.$componentRecord->title().' ('.$componentBiblionumber.') for ('.$parentBiblio->{biblionumber}.')',
+                             operation => 'component record addition :'.$componentRecord->author().' - '.$componentRecord->title().' ('.$componentBiblionumber.') for ('.$parentBiblio->{biblionumber}.')',
                              });
                 #All is ok and that is kewlö!
             }
@@ -260,7 +300,7 @@ sub _importChildBiblios {
                 push (@$reports, {oldRecordXML => undef,
                              newRecordXML => $componentRecord->as_xml_record($marcflavour),
                              mergedRecordXML => undef,
-                             operation => '!FAILED!: component record addition '.$componentRecord->author().' - '.$componentRecord->title().' ('.$componentBiblionumber.') for ('.$parentBiblio->{biblionumber}.')',
+                             operation => '!FAILED!: component record addition :'.$componentRecord->author().' - '.$componentRecord->title().' ('.$componentBiblionumber.') for ('.$parentBiblio->{biblionumber}.')',
                              });
             }
         }
@@ -268,7 +308,7 @@ sub _importChildBiblios {
             push (@$reports, {oldRecordXML => undef,
                              newRecordXML => $componentRecord->as_xml_record($marcflavour),
                              mergedRecordXML => undef,
-                             operation => 'component record already present '.$componentRecord->author().' - '.$componentRecord->title().' using matcher '.$matcher->code(),
+                             operation => 'component record already present :'.$componentRecord->author().' - '.$componentRecord->title().' using matcher '.$matcher->code(),
                              });
         }
     }
@@ -352,6 +392,73 @@ sub _checkSimilarityWarning {
 }
 
 
+sub _selectMatcherRule {
+    my ($f003, $errorsBuilder) = (@_);
+
+    my $overlayRule; #Go get the rule!
+
+    if ($f003 && $f003 =~ /MELINDA/i) {
+        $f003 = 'MELINDA';
+    }
+    elsif ($f003 && $f003 =~ /BTJ/i || $f003 =~ /KIVA/i || $f003 =~ /.+/) {
+        $f003 = 'BTJ';
+    }
+    else {
+        $errorsBuilder->addUNKNOWN_REMOTE_IDerror($f003);
+    }
+
+    unless ($batchOverlayrulesCache->{$f003}) {
+        $overlayRule = C4::BatchOverlay::BatchOverlayRule->getBatchOverlayRule(undef,$f003);
+        $batchOverlayrulesCache->{$f003} = $overlayRule if $overlayRule;
+    }
+    else {
+        $overlayRule = $batchOverlayrulesCache->{$f003};
+    }
+
+    unless ($overlayRule) {
+        $errorsBuilder->addUNKNOWN_BATCHOVERLAY_RULEerror($f003);
+        return;
+    }
+
+    ##Decide the Matcher-object to use
+    $overlayRule->{mergeMatcher} = C4::Matcher->fetch( $overlayRule->{matcher_id} );
+    $overlayRule->{componentMatcher} = C4::Matcher->fetch( $overlayRule->{component_matcher_id} );
+    my ($type, $id) = $overlayRule->getSource();
+    $overlayRule->{remoteName} = _getRemoteSourceName($id);
+
+    if (not($overlayRule->{mergeMatcher}) || not($overlayRule->{componentMatcher}) ) {
+        $errorsBuilder->addUNKNOWN_MATCHERerror($overlayRule);
+    }
+
+    return $overlayRule;
+}
+
+sub _getRemoteSourceName {
+    my $id = shift;
+    my $dbh = C4::Context->dbh();
+    my $sth = $dbh->prepare("SELECT id,host,name,checked FROM z3950servers WHERE id = ?");
+    $sth->execute($id);
+    my $remoteSearchtarget = $sth->fetchrow_hashref();
+    return $remoteSearchtarget->{name};
+}
+
+sub _populateComponentPartFieldsFromParent {
+    my ($componentRecord, $parentRecord) = @_;
+
+    ##Set the parents #952c to the component part.
+    my $parent_f942c = $parentRecord->subfield('942','c');
+    my $child_f942c = $componentRecord->subfield('942','c');
+    my $child_f942 = $componentRecord->field('942');
+
+    if ($child_f942c) {
+        my $child_f942 = $componentRecord->field('942');
+        $child_f942->update( 'a' => $parent_f942c);
+    }
+    else {
+        my $new_f942 = MARC::Field->new( '942', '', '', 'c' => $parent_f942c);
+        $componentRecord->append_fields( $new_f942 );
+    }
+}
 
 sub getTitle {
     my ($record, $biblio) = @_;
@@ -384,7 +491,6 @@ sub getISSN {
     my $issn = $record->subfield('022','a');
     return $issn;
 }
-
 
 =head2 MARCfindbreeding
 
