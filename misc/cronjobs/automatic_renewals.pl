@@ -1,3 +1,5 @@
+#!/usr/bin/perl
+
 # This file is part of Koha.
 #
 # Copyright (C) 2014 Hochschule für Gesundheit (hsg), Germany
