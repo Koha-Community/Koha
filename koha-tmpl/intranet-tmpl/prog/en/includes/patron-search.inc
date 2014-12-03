@@ -7,8 +7,8 @@
     <form action="/cgi-bin/koha/members/member.pl" method="post">
     <input id="searchmember" data-toggle="tooltip" size="25" class="focus" name="searchmember" type="text" value="[% searchmember %]"/>
     <input type="hidden" name="quicksearch" value="1" />
-    <span class="filteraction" id="filteraction_off"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').toggle();">[-]</a></span>
-    <span class="filteraction" id="filteraction_on"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').toggle();">[+]</a></span>
+    <span class="filteraction" id="filteraction_off"> <a href="#">[-]</a></span>
+    <span class="filteraction" id="filteraction_on"> <a href="#">[+]</a></span>
 
     <input value="Search" class="submit" type="submit" />
 
@@ -126,6 +126,11 @@
 </div><!-- /gradient -->
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
+    $("#filteraction_off, #filteraction_on").on('click', function(e) {
+        e.preventDefault();
+        $('#filters').toggle();
+        $('.filteraction').toggle();
+    });
     [% IF ( advsearch ) %]$("#filteraction_on").toggle();
     [% ELSE %]$("#filters").toggle();
     $("#filteraction_off").toggle();[% END %]
