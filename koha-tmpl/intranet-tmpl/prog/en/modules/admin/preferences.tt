@@ -110,7 +110,7 @@
                         [% END %]
                     </code>
                 </td>
-                <td>
+                <td><div>
                     [% FOREACH CHUNK IN LINE.CHUNKS %]
                     [% IF ( CHUNK.type_text ) %]
                     [% CHUNK.contents %]
@@ -166,7 +166,7 @@
                     </dl>
                     [% END %]
                     [% END %]
-                </td>
+                </div></td>
             </tr>
             [% IF ( loop.last ) %]</tbody></table>[% END %]
             [% END %]
