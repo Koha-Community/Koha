@@ -9731,6 +9731,21 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.18.05.001";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q{
+        ALTER TABLE authorised_values MODIFY COLUMN category VARCHAR(32) NOT NULL DEFAULT ''
+    });
+
+    $dbh->do(q{
+        ALTER TABLE borrower_attribute_types MODIFY COLUMN authorised_value_category VARCHAR(32) DEFAULT NULL
+    });
+
+    print "Upgrade to $DBversion done (Bug 13379 - Modify authorised_values.category to varchar(32))\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
