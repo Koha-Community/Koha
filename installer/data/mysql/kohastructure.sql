@@ -98,7 +98,7 @@ CREATE TABLE `auth_types` (
 DROP TABLE IF EXISTS `authorised_values`;
 CREATE TABLE `authorised_values` ( -- stores values for authorized values categories and values
   `id` int(11) NOT NULL auto_increment, -- unique key, used to identify the authorized value
-  `category` varchar(16) NOT NULL default '', -- key used to identify the authorized value category
+  `category` varchar(32) NOT NULL default '', -- key used to identify the authorized value category
   `authorised_value` varchar(80) NOT NULL default '', -- code use to identify the authorized value
   `lib` varchar(200) default NULL, -- authorized value description as printed in the staff client
   `lib_opac` varchar(200) default NULL, -- authorized value description as printed in the OPAC
@@ -291,7 +291,7 @@ CREATE TABLE `borrower_attribute_types` ( -- definitions for custom patron field
   `opac_display` tinyint(1) NOT NULL default 0, -- defines if this field is visible to patrons on their account in the OPAC (1 for yes, 0 for no)
   `password_allowed` tinyint(1) NOT NULL default 0, -- defines if it is possible to associate a password with this custom field (1 for yes, 0 for no)
   `staff_searchable` tinyint(1) NOT NULL default 0, -- defines if this field is searchable via the patron search in the staff client (1 for yes, 0 for no)
-  `authorised_value_category` varchar(10) default NULL, -- foreign key from authorised_values that links this custom field to an authorized value category
+  `authorised_value_category` varchar(32) default NULL, -- foreign key from authorised_values that links this custom field to an authorized value category
   `display_checkout` tinyint(1) NOT NULL default 0,-- defines if this field displays in checkout screens
   `category_code` VARCHAR(10) NULL DEFAULT NULL,-- defines a category for an attribute_type
   `class` VARCHAR(255) NOT NULL DEFAULT '',-- defines a class for an attribute_type
@@ -3495,7 +3495,7 @@ CREATE TABLE items_search_fields (
   label VARCHAR(255) NOT NULL,
   tagfield CHAR(3) NOT NULL,
   tagsubfield CHAR(1) NULL DEFAULT NULL,
-  authorised_values_category VARCHAR(16) NULL DEFAULT NULL,
+  authorised_values_category VARCHAR(32) NULL DEFAULT NULL,
   PRIMARY KEY(name),
   CONSTRAINT items_search_fields_authorised_values_category
     FOREIGN KEY (authorised_values_category) REFERENCES authorised_values (category)
