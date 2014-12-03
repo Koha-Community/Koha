@@ -423,12 +423,12 @@ $(document).ready(function() {
         if (numPar > [% search_boxes_count %]){
             jQuery.cookie("num_paragraph", numPar,{ path: '/'});
         }else{
-            jQuery.cookie("num_paragraph", null,{ path: '/'});
+		jQuery.removeCookie("num_paragraph", { path: '/'});
         }
         jQuery.cookie("search_path_code", 'exs',{ path: '/'});
         [% ELSE %]
         jQuery.cookie("search_path_code", 'ads',{ path: '/'});
-        jQuery.cookie("num_paragraph", null,{ path: '/'});
+        jQuery.removeCookie("num_paragraph", { path: '/'});
         [% END %]
     });
 
