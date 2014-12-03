@@ -77,6 +77,10 @@
 <!-- JavaScript includes -->
 <script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/jquery-ui.js"></script>
+<script type="text/javascript">
+// Resolve name collision between jQuery UI and Twitter Bootstrap
+$.widget.bridge('uitooltip', $.ui.tooltip);
+</script>
 <script type="text/javascript" src="[% interface %]/[% theme %]/lib/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/global.js"></script>
 <script type="text/javascript">
