@@ -1,12 +1,12 @@
-# Generic search equivanence character map for Latin languages (English, French, etc.)
+# Generic character map for Latin and Greek characters.
 
 # Define the basic value-set. *Beware* of changing this without re-indexing
 # your databases.
 encoding utf-8
 
 # basic character set
-lowercase {0-9}{a-z}
-uppercase {0-9}{A-Z}
+lowercase {0-9}{a-z}αβγδεζηθικλμνξοπρστυφχψω
+uppercase {0-9}{A-Z}ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ
 
 # Breaking characters
 space {\001-\040}!"#$%&'\()*+,-./:;<=>?@\[\\]^_`\{|}~’{\x88-\x89}{\x98-\x9C}
@@ -26,6 +26,14 @@ equivalent ëē(ee)
 equivalent oóòõôŏǫȯőǒȍȏ
 equivalent Œœöø(oe)
 equivalent ō(oo)
+equivalent αάΑΆ(α΄)(Α΄)
+equivalent εέΕΈ(ε΄)(Ε΄)
+equivalent ιίϊΙΊΪ(ι΄)(Ι΄)
+equivalent ηήΗΉ(η΄)(Η΄)
+equivalent οόΟΌ(ο΄)(Ο΄)
+equivalent υύϋΥΎΫ(υ΄)(Υ΄)
+equivalent ωώΩΏ(ω΄)(Ω΄)
+equivalent Σσς
 
 # Supplemental mappings
 # mapping diacritics to plain ASCII
@@ -283,6 +291,24 @@ map ý			y
 map Ý			y
 map ɏ			y
 map Ɏ			y
+
+## mapping diacritics to plain on greek characters
+map ά           α
+map Ά           α
+map έ           ε
+map Έ           ε
+map ί           ι
+map Ί           ι
+map ή           η
+map Ή           η
+map ό           ο
+map Ό           ο
+map ύ           υ
+map Ύ           υ
+map ώ           ω
+map Ώ           ω
+map Σ           σ
+map Σ           ς
 
 # mapping blank string
 map (^impr\s)       @
