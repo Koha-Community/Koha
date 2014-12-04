@@ -168,13 +168,13 @@ if ($session->param('busc')) {
             if ($_ =~ /^(?:query|listBiblios|newlistBiblios|query_type|simple_query|total|offset|offsetSearch|next|previous|count|expand|scan)/) {
                 if (defined($arrParamsBusc->{$_})) {
                     $pasarParams .= '&amp;' if ($j);
-                    $pasarParams .= $_ . '=' . uri_escape( $arrParamsBusc->{$_} );
+                    $pasarParams .= $_ . '=' . Encode::decode('UTF-8', uri_escape_utf8( $arrParamsBusc->{$_} ));
                     $j++;
                 }
             } else {
                 for my $value (@{$arrParamsBusc->{$_}}) {
                     $pasarParams .= '&amp;' if ($j);
-                    $pasarParams .= $_ . '=' . uri_escape($value);
+                    $pasarParams .= $_ . '=' . Encode::decode('UTF-8', uri_escape_utf8($value));
                     $j++;
                 }
             }

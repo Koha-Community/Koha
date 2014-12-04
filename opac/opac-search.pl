@@ -356,7 +356,7 @@ for (keys %$params) {
     my @pasarParam = $cgi->param($_);
     for my $paramValue(@pasarParam) {
         $pasarParams .= '&amp;' if ($j > 0);
-        $pasarParams .= $_ . '=' . uri_escape($paramValue);
+        $pasarParams .= $_ . '=' . uri_escape_utf8($paramValue);
         $j++;
     }
 }
@@ -544,10 +544,10 @@ if ($tag) {
         ($error, $results_hashref, $facets) = C4::Search::pazGetRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
 } else {
-    $pasarParams .= '&amp;query=' . uri_escape($query);
-    $pasarParams .= '&amp;count=' . uri_escape($results_per_page);
-    $pasarParams .= '&amp;simple_query=' . uri_escape($simple_query);
-    $pasarParams .= '&amp;query_type=' . uri_escape($query_type) if ($query_type);
+    $pasarParams .= '&amp;query=' . uri_escape_utf8($query);
+    $pasarParams .= '&amp;count=' . uri_escape_utf8($results_per_page);
+    $pasarParams .= '&amp;simple_query=' . uri_escape_utf8($simple_query);
+    $pasarParams .= '&amp;query_type=' . uri_escape_utf8($query_type) if ($query_type);
     eval {
         ($error, $results_hashref, $facets) = getRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$itemtypes,$query_type,$scan,1);
     };
@@ -699,12 +699,12 @@ for (my $i=0;$i<@servers;$i++) {
                 my $j = 0;
                 foreach (@newresults) {
                     my $bibnum = ($_->{biblionumber})?$_->{biblionumber}:0;
-                    $pasarParams .= uri_escape($bibnum) . ',';
+                    $pasarParams .= uri_escape_utf8($bibnum) . ',';
                     $j++;
                     last if ($j == $results_per_page);
                 }
                 chop $pasarParams if ($pasarParams =~ /,$/);
-                $pasarParams .= '&amp;total=' . uri_escape( int($total) ) if ($pasarParams !~ /total=(?:[0-9]+)?/);
+                $pasarParams .= '&amp;total=' . uri_escape_utf8( int($total) ) if ($pasarParams !~ /total=(?:[0-9]+)?/);
                 if ($pasarParams) {
                     my $session = get_session($cgi->cookie("CGISESSID"));
                     $session->param('busc' => $pasarParams);
