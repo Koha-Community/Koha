@@ -18,14 +18,14 @@
 use Modern::Perl;
 
 use utf8;
-use Test::More;
+use Test::More tests => 15;
 use Test::WWW::Mechanize;
-use Data::Dumper;
 use XML::Simple;
 use JSON;
 use File::Basename;
 use File::Spec;
 use POSIX;
+use URI::Escape;
 use Encode;
 
 my $testdir = File::Spec->rel2abs( dirname(__FILE__) );
@@ -39,7 +39,6 @@ eval{
 if ($@) {
     plan skip_all => "Tests skip. You must have a working Context\n";
 }
-
 
 my $user     = $ENV{KOHA_USER} || $xml->{config}->{user};
 my $password = $ENV{KOHA_PASS} || $xml->{config}->{pass};
@@ -57,6 +56,7 @@ my $jsonresponse;
 
 # -------------------------------------------------- LOAD RECORD
 
+my $category = '学協会μμ';
 $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'connect to intranet' );
 $agent->form_name('loginform');
 $agent->field( 'password', $password );
@@ -71,15 +71,29 @@ $agent->form_name('Aform');
 $agent->field('authorised_value', 'επιμεq');
 $agent->field('lib_opac', 'autdesc2');
 $agent->field('lib', 'desc1');
-$agent->field('category', '学協会μμ');
+$agent->field('category', $category);
 $agent->field('branches', '');
 $agent->click_ok( '', "Create new auth category and value" );
+
+my $expected_base = q|authorised_values.pl\?searchfield=| . uri_escape_utf8( $category );
+$agent->base_like(qr|$expected_base|, "check base");
+my $add_form_link_exists = 0;
+my $delete_form_link_exists = 0;
+for my $link ( $agent->links() ) {
+    if ( $link->url =~ m|authorised_values.pl\?op=add_form&category=$category| ) {
+        $add_form_link_exists = 1;
+    }elsif( $link->url =~ m|authorised_values.pl\?op=delete_confirm&searchfield=$category| ) {
+        $delete_form_link_exists = 1;
+    }
+}
+is( $add_form_link_exists, 1, );
+is( $delete_form_link_exists, 1, );
 
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl", 'Return to Authorized values page' );
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?searchfield=学協会μμ&offset=0", 'Search the values inserted' );
 my $text = $agent->text() ;
 #Tests on UTF-8
-ok ( ( length(Encode::encode_utf8($text)) != length($text) ) , 'UTF-8 are multi-byte. Good') ;
+ok ( ( length(Encode::encode('UTF-8', $text)) != length($text) ) , 'UTF-8 are multi-byte. Good') ;
 ok ($text =~  m/学協会μμ/, 'UTF-8 (Asia) chars are correctly present. Good');
 ok ($text =~  m/επιμεq/, 'UTF-8 (Greek) chars are correctly present. Good');
 my @links = $agent->links;
@@ -97,7 +111,5 @@ if ($id_to_del) {
 }else{
     ok($id_to_del ne undef, "error, link to delete nor working");
 }
-
-done_testing();
 
 1;
