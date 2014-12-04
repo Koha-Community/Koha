@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use utf8;
-use Test::More;
+use Test::More tests => 32;
 use Test::WWW::Mechanize;
 use Data::Dumper;
 use XML::Simple;
@@ -29,6 +29,7 @@ use File::Spec;
 use File::Temp qw/ tempdir /;
 use POSIX;
 use Encode;
+use URI::Escape;
 
 use C4::Context;
 
@@ -196,20 +197,51 @@ sleep 10;
 
 # --------------------------------- TEST INTRANET SEARCH
 
+my $publisher = 'Αθήνα';
 $agent->get_ok( "$intranet/cgi-bin/koha/catalogue/search.pl" , "got search on intranet");
 $agent->form_number(1);
 $agent->field('idx', 'kw');
 $agent->field('q', 'deuteros');
 $agent->click();
+my $intra_text = $agent->text() ;
+like( $intra_text, qr|Publisher: $publisher|, );
 
-my $text = $agent->text() ;
+$agent->get_ok( "$intranet/cgi-bin/koha/catalogue/search.pl" , "got search on intranet");
+$agent->form_number(1);
+$agent->field('idx', 'kw');
+$agent->field('q', Encode::encode('UTF-8', $publisher));
+$agent->click();
+$intra_text = $agent->text();
 
-#Tests on UTF-8
+like( $intra_text, qr|Publisher: $publisher|, );
+my $expected_base = q|search.pl\?idx=kw&q=| . uri_escape_utf8( Encode::encode('UTF-8', $publisher ) );
+$agent->base_like(qr|$expected_base|, );
 
-ok ( ( length(Encode::encode_utf8($text)) != length($text) ) , 'UTF-8 are multi-byte. Goog') ;
-ok ($text =~  m/学協会. μμ/, 'UTF-8 chars are correctly present. Good');
+ok ( ( length(Encode::encode('UTF-8', $intra_text)) != length($intra_text) ) , 'UTF-8 are multi-byte. Goog') ;
+ok ($intra_text =~  m/学協会. μμ/, 'UTF-8 chars are correctly present. Good');
+# -------------------------------------------------- TEST ON OPAC
 
+$agent->get_ok( "$opac" , "got opac");
+$agent->form_name('searchform');
+$agent->field( 'q',   'deuteros' );
+$agent->field( 'idx',   '' );
+$agent->click( );
+my $opac_text = $agent->text() ;
+like( $opac_text, qr|Publisher: $publisher|, );
 
+$agent->get_ok( "$opac" , "got opac");
+$agent->form_name('searchform');
+$agent->field('q', $publisher);
+$agent->field( 'idx',   '' );
+$agent->click();
+$opac_text = $agent->text();
+
+like( $opac_text, qr|Publisher: $publisher|, );
+$expected_base = q|opac-search.pl\?q=| . uri_escape_utf8( $publisher );
+$agent->base_like(qr|$expected_base|, );
+
+ok ( ( length(Encode::encode('UTF-8', $opac_text)) != length($opac_text) ) , 'UTF-8 are multi-byte. Goog') ;
+ok ($opac_text =~  m/学協会. μμ/, 'UTF-8 chars are correctly present. Good');
 
 #-------------------------------------------------- REVERT
 
@@ -221,8 +253,6 @@ $agent->get_ok( "$intranet/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&bibli
 
 # clean
 cleanup();
-
-done_testing();
 
 # function that launches the zebra daemon
 sub launch_zebra {
