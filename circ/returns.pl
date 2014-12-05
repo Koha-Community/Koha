@@ -249,7 +249,7 @@ if ($barcode) {
 # save the return
 #
     ( $returned, $messages, $issueinformation, $borrower ) =
-      AddReturn( $barcode, $userenv_branch, $exemptfine, $dropboxmode, $return_date_override );
+      AddReturn( $barcode, $userenv_branch, $exemptfine, $dropboxmode, $return_date_override, $dropboxdate );
     my $homeorholdingbranchreturn = C4::Context->preference('HomeOrHoldingBranchReturn');
     $homeorholdingbranchreturn ||= 'homebranch';
 
@@ -295,7 +295,11 @@ if ($barcode) {
         $riduedate{0}          = $duedate;
         $input{borrowernumber} = $borrower->{'borrowernumber'};
         $input{duedate}        = $duedate;
-        $input{return_overdue} = 1 if (DateTime->compare($issueinformation->{date_due}, $time_now) == -1);
+        unless ( $dropboxmode ) {
+            $input{return_overdue} = 1 if (DateTime->compare($issueinformation->{date_due}, DateTime->now()) == -1);
+        } else {
+            $input{return_overdue} = 1 if (DateTime->compare($issueinformation->{date_due}, $dropboxdate) == -1);
+        }
         push( @inputloop, \%input );
 
         if ( C4::Context->preference("FineNotifyAtCheckin") ) {
@@ -533,7 +537,11 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             $ri{minute}   = $duedate->minute();
             $ri{duedate} = output_pref($duedate);
             my ($b)      = GetMemberDetails( $riborrowernumber{$_}, 0 );
-            $ri{return_overdue} = 1 if (DateTime->compare($duedate, DateTime->now()) == -1 );
+            unless ( $dropboxmode ) {
+                $ri{return_overdue} = 1 if (DateTime->compare($duedate, DateTime->now()) == -1);
+            } else {
+                $ri{return_overdue} = 1 if (DateTime->compare($duedate, $dropboxdate) == -1);
+            }
             $ri{borrowernumber} = $b->{'borrowernumber'};
             $ri{borcnum}        = $b->{'cardnumber'};
             $ri{borfirstname}   = $b->{'firstname'};
