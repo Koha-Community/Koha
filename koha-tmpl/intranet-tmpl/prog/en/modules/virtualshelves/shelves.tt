@@ -1,6 +1,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; [% IF ( viewshelf ) %]Lists &rsaquo; Contents of [% shelfname | html %][% ELSE %]Lists[% END %][% IF ( shelves ) %] &rsaquo; Create new list[% END %][% IF ( edit ) %] &rsaquo; Edit list [% shelfname | html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
 [% IF ( viewshelf ) %]
     <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
     <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
@@ -11,6 +13,66 @@
 var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
 var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");
 var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to remove this list?");
+
+[% IF op == 'list' %]
+$(document).ready(function(){
+    var type = 1;
+    var dtListResults = $("#listresultst").dataTable($.extend(true, {}, dataTablesDefaults, {
+        'bServerSide': true,
+        'sAjaxSource': "/cgi-bin/koha/svc/virtualshelves/search",
+        'fnServerData': function(sSource, aoData, fnCallback) {
+            aoData.push({
+                'name': 'type',
+                'value': type,
+            },
+            {
+                'name': 'template_path',
+                'value': 'virtualshelves/tables/shelves_results.tt',
+            });
+            $.ajax({
+                'dataType': 'json',
+                'type': 'POST',
+                'url': sSource,
+                'data': aoData,
+                'success': function(json){
+                    fnCallback(json);
+                }
+            });
+        },
+        'aoColumns':[
+            { 'mDataProp': 'dt_type' },
+            { 'mDataProp': 'dt_shelfname' },
+            { 'mDataProp': 'dt_count' },
+            { 'mDataProp': 'dt_owner' },
+            { 'mDataProp': 'dt_sortby' },
+            { 'mDataProp': 'dt_action', 'bSortable': false }
+        ],
+        "aoColumnDefs": [
+            { "bVisible": false, "aTargets": [ 'NoVisible' ] }
+        ],
+        'bAutoWidth': false,
+        'sPaginationType': 'full_numbers',
+        "bProcessing": true,
+        'bFilter': false
+    }));
+
+    dtListResults.fnAddFilters("filter", 750);
+
+    var tabs = $("#tabs").tabs({
+        activate: function(e, ui) {
+            var active = tabs.tabs("option", "active" );
+            if ( active == 0 ) {
+                type = 1; // private
+                dtListResults.fnDraw();
+            } else if ( active == 1 ) {
+                type = 2; // public
+                dtListResults.fnDraw();
+            }
+        }
+    });
+});
+[% END %]
+
 [% IF ( viewshelf ) %]
 $(document).ready(function(){
     [% IF ( itemsloop ) %]$('#searchheader').fixFloat();[% END %]
@@ -514,123 +576,30 @@ function placeHold () {
 </div>
 [% END %]<!-- /seflag -->
 
-[% UNLESS ( vseflag ) %]
-        <h2>Lists</h2>
-        <div class="statictabs">
+[% IF op == 'list' %]
+    <h2>Lists</h2>
+    <div id="tabs" class="toptabs">
         <ul>
-        [% IF ( showprivateshelves ) %]
-            <li id="privateshelves_tab" class="active"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your lists</a></li>
-        [% ELSE %]
-            <li id="privateshelves_tab" class=""><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your lists</a></li>
-        [% END %]
-        [% IF ( showpublicshelves ) %]
-            <li id="publicshelves_tab" class="active"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public lists</a></li>
-        [% ELSE %]
-            <li id="publicshelves_tab" class=""><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public lists</a></li>
-        [% END %]
+            <li id="privateshelves_tab" class="active"><a href="#tab_content">Your lists</a></li>
+            <li id="publicshelves_tab" class="active"><a href="#tab_content">Public lists</a></li>
         </ul>
-        [% IF ( showprivateshelves ) %]
-        <div id="privateshelves" class="tabs-container" style="display:block;">
-		[% ELSE %]
-        <div id="privateshelves" class="tabs-container" style="display:none;">
-		[% END %]
-            [% IF ( shelveslooppriv ) %]
-			<div class="pages">[% pagination_bar %]</div>
-        		<table>
-        		<tr><th>List Name</th><th>Contents</th><th>Sort by</th><th>Type</th><th>Options</th></tr>
-                [% FOREACH shelveslooppri IN shelveslooppriv %]
-                    [% IF ( shelveslooppri.toggle ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
-        <td><a href="shelves.pl?[% IF ( shelveslooppri.showprivateshelves ) %]display=privateshelves&amp;[% END %]viewshelf=[% shelveslooppri.shelf %]&amp;shelfoff=[% shelfoff %]">[% shelveslooppri.shelfname |html %]</a></td>
-        <td>[% shelveslooppri.count %] item(s)</td>
-        <td>[% IF ( shelveslooppri.sortfield == "author" ) %]Author[% ELSIF ( shelveslooppri.sortfield == "copyrightdate" ) %]Year[% ELSIF (shelveslooppri.sortfield == "itemcallnumber") %]Call number[% ELSE %]Title[% END %]</td>
-        <td>[% IF ( shelveslooppri.viewcategory1 ) %][% IF !shelveslooppri.shares %]Private[% ELSE %]Shared[% END %][% END %]
-			[% IF ( shelveslooppri.viewcategory2 ) %]Public[% END %]
-		</td>
-        <td>
-            [% IF ( shelveslooppri.mine ) %]
-				<form action="merge.pl" method="get">
-					<input type="hidden" name="shelf" value="[% shelveslooppri.shelf %]" />
-				</form>
-				<form action="shelves.pl" method="get">
-					<input type="hidden" name="shelfnumber" value="[% shelveslooppri.shelf %]" />
-					<input type="hidden" name="op" value="modif" />
-                    <input type="hidden" name="display" value="privateshelves" />
-					<input type="submit" class="editshelf" value="Edit" />
-				</form>
-				<form action="shelves.pl" method="post">
-				    <input type="hidden" name="shelfoff" value="[% shelfoff %]" />
-					<input type="hidden" name="shelves" value="1" />
-                    <input type="hidden" name="display" value="privateshelves" />
-					<input type="hidden" name="DEL-[% shelveslooppri.shelf %]" value="1" />
-					[% IF ( shelveslooppri.confirm ) %]
-					<input type="hidden" name="CONFIRM-[% shelveslooppri.confirm %]" value="1" />
-					<input type="submit" class="approve" value="Confirm" />
-					[% ELSE %]
-                    <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);" value="Delete" />
-					[% END %]
-				</form>
-			[% ELSE %]
-				None
-			[% END %]
-		</td>
-		</tr>
-                [% END %]
-        </table>
-            [% ELSE %]
-            <p>No private lists.</p>
-            [% END %]<!-- /shelveslooppriv -->
-		</div><!-- /privateshelves -->
 
-        [% IF ( showpublicshelves ) %]
-        <div id="publicshelves" class="tabs-container" style="display:block;">
-		[% ELSE %]
-        <div id="publicshelves" class="tabs-container" style="display:none;">
-		[% END %]
-        [% IF ( shelvesloop ) %]
-		<div class="pages">[% pagination_bar %]</div>
-        <table>
-        <tr><th>List Name</th><th>Created by</th><th>Contents</th><th>Sort By</th><th>Type</th><th>Options</th></tr>
-            [% FOREACH shelvesloo IN shelvesloop %]
-                [% IF ( shelvesloo.toggle ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
-		<td><a href="shelves.pl?viewshelf=[% shelvesloo.shelf %]">[% shelvesloo.shelfname |html %]</a></td>
-        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% shelvesloo.owner %]">[% shelvesloo.ownername %]</td>
-		<td>[% shelvesloo.count %] item(s)</td>
-        <td>[% IF ( shelvesloo.sortfield == "author" ) %]Author[% ELSIF ( shelvesloo.sortfield == "copyrightdate" ) %]Year[% ELSIF (shelvesloo.sortfield == "itemcallnumber") %]Call number[% ELSE %]Title[% END %]</td>
-        <td>[% IF ( shelvesloo.viewcategory1 ) %]Private[% END %]
-			[% IF ( shelvesloo.viewcategory2 ) %]Public[% END %]
-		</td>
-        <td>
-            [% IF shelvesloo.manageshelf %]
-				<form action="shelves.pl" method="get">
-					<input type="hidden" name="shelfnumber" value="[% shelvesloo.shelf %]" />
-					<input type="hidden" name="op" value="modif" />
-					<input type="submit" class="editshelf" value="Edit" />
-				</form>
-            [% END %]
-            [% IF shelvesloo.manageshelf OR shelvesloo.allowdeletingshelf %]
-				<form action="shelves.pl" method="post">
-				        <input type="hidden" name="shelfoff" value="[% shelfoff %]" />
-					<input type="hidden" name="shelves" value="1" />
-					<input type="hidden" name="DEL-[% shelvesloo.shelf %]" value="1" />
-					[% IF ( shelvesloo.confirm ) %]
-					<input type="hidden" name="CONFIRM-[% shelvesloo.confirm %]" value="1" />
-					<input type="submit" class="approve" value="Confirm" />
-					[% ELSE %]
-                    <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);" value="Delete" />
-					[% END %]
-				</form>
-			[% ELSE %]
-				None
-			[% END %]
-		</td>
-		</tr>
-            [% END %]
-        </table>
-        [% ELSE %]
-            [% IF ( showpublicshelves ) %]<p>No public lists.</p>[% END %]
-        [% END %]<!-- /shelvesloop -->
-        </div><!-- /publicshelves -->
-		</div>
+        <div id="tab_content">
+            <table id="listresultst">
+                <thead>
+                    <tr>
+                        <th class="NoVisible">Type</th>
+                        <th>List name</th>
+                        <th>Contents</th>
+                        <th>Owner</th>
+                        <th>Sort by</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
 [% END %]
 
 <form id="hold_form" method="get" action="/cgi-bin/koha/reserve/request.pl">

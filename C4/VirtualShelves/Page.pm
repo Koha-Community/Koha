@@ -473,11 +473,12 @@ sub shelfpage {
         "BiblioDefaultView" . C4::Context->preference("BiblioDefaultView") => 1,
         csv_profiles                                                       => GetCsvProfilesLoop('marc')
     );
-    if (   $shelfnumber
-        or $shelves
-        or $edit ) {
-        $template->param( vseflag => 1 );
+
+    unless( $shelfnumber or $shelves or $edit ) {
+        # Only used for intranet
+        $template->param( op => 'list' );
     }
+
     if ($shelves or    # note: this part looks duplicative, but is intentional
         $edit
       ) {

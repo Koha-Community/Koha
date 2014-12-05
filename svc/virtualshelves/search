@@ -1,0 +1,88 @@
+#!/usr/bin/perl
+
+use Modern::Perl;
+use CGI;
+
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_with_http_headers );
+use C4::Utils::DataTables qw( dt_get_params );
+use C4::Utils::DataTables::VirtualShelves qw( search );
+
+my $input = new CGI;
+
+exit unless $input->param('template_path');
+
+my ($template, $user, $cookie) = get_template_and_user({
+    template_name   => $input->param('template_path'),
+    query           => $input,
+    type            => "intranet",
+    authnotrequired => 0,
+    flagsrequired   => { borrowers => 1 }
+});
+
+my $shelfname = $input->param('shelfname');
+my $count = $input->param('count');
+my $owner = $input->param('owner');
+my $type = $input->param('type');
+my $sortby = $input->param('sortby');
+
+# variable information for DataTables (id)
+my $sEcho = $input->param('sEcho');
+
+my %dt_params = dt_get_params($input);
+foreach (grep {$_ =~ /^mDataProp/} keys %dt_params) {
+    $dt_params{$_} =~ s/^dt_//;
+}
+
+my $results = C4::Utils::DataTables::VirtualShelves::search(
+    {
+        shelfname => $shelfname,
+        count => $count,
+        owner => $owner,
+        type => $type,
+        sortby => $sortby,
+        dt_params => \%dt_params,
+    }
+);
+
+$template->param(
+    sEcho => $sEcho,
+    iTotalRecords => $results->{iTotalRecords},
+    iTotalDisplayRecords => $results->{iTotalDisplayRecords},
+    aaData => $results->{shelves}
+);
+
+output_with_http_headers $input, $cookie, $template->output, 'json';
+
+__END__
+
+=head1 NAME
+
+search - a search script for finding virtual shelves
+
+=head1 SYNOPSIS
+
+This script provides a service for template for virtual shelves search using DataTables
+
+=cut
+
+=back
+
+=head1 LICENSE
+
+Copyright 2014 BibLibre
+
+This file is part of Koha.
+
+Koha is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+
+Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with Koha; if not, write to the Free Software Foundation, Inc.,
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
