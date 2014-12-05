@@ -9759,6 +9759,20 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
+        (20, 'shelves', 'Virtual shelves', 0)
+    |);
+    $dbh->do(q|
+        INSERT INTO permissions (module_bit, code, description) VALUES
+        (20, 'manage_shelves', 'Manage shelves')
+    |);
+    print "Upgrade to $DBversion done (Bug 13417: Add permission to manage shelves)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

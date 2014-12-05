@@ -17,4 +17,6 @@ INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
 (16,'reports','Allow access to the reports module',0),
 (17,'staffaccess','Allow staff members to modify permissions for other staff members',0),
 (18,'coursereserves','Course reserves',0),
-(19, 'plugins', 'Koha plugins', '0');
+(19, 'plugins', 'Koha plugins', '0'),
+(20, 'shelves', 'Virtual shelves', 0)
+;

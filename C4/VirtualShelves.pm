@@ -21,8 +21,10 @@ use strict;
 use warnings;
 
 use Carp;
+use C4::Auth;
 use C4::Context;
 use C4::Debug;
+use C4::Members;
 
 use constant SHELVES_MASTHEAD_MAX => 10; #number under Lists button in masthead
 use constant SHELVES_COMBO_MAX => 10; #add to combo in search
@@ -460,6 +462,12 @@ sub ShelfPossibleAction {
     }
 
     return 0 unless defined($shelfnumber);
+
+    if ( $user > 0 ) {
+        my $borrower = C4::Members::GetMember( borrowernumber => $user );
+        return 1
+            if C4::Auth::haspermission( $borrower->{userid}, { shelves => 'manage_shelves' } );
+    }
 
     my $dbh = C4::Context->dbh;
     my $query = qq/
