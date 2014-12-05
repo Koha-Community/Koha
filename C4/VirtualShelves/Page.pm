@@ -75,14 +75,6 @@ sub shelfpage {
     my ( $shelflimit, $shelfoffset, $shelveslimit, $shelvesoffset );
     my $marcflavour = C4::Context->preference("marcflavour");
 
-    # get biblionumbers stored in the cart
-    my @cart_list;
-    my $cart_cookie = ( $type eq 'opac' ? "bib_list" : "intranet_bib_list" );
-    if($query->cookie($cart_cookie)){
-        my $cart_list = $query->cookie($cart_cookie);
-        @cart_list = split(/\//, $cart_list);
-    }
-
     $shelflimit = ( $type eq 'opac' ? C4::Context->preference('OPACnumSearchResults') : C4::Context->preference('numSearchResults') );
     $shelflimit = $shelflimit || ShelvesMax('MGRPAGE');
     $shelfoffset   = ( $itemoff - 1 ) * $shelflimit;     # Sets the offset to begin retrieving items at
@@ -93,11 +85,6 @@ sub shelfpage {
     my $shelflist = GetShelves( $category, $shelveslimit, $shelvesoffset, $loggedinuser );
     my $totshelves = C4::VirtualShelves::GetShelfCount( $loggedinuser, $category );
 
-    #Get a list of private shelves for possible deletion. Only do this when we've defaulted to public shelves
-    my ( $privshelflist, $privtotshelves );
-    if ( $category == 2 ) {
-        ( $privshelflist, $privtotshelves ) = GetShelves( 1, $shelveslimit, $shelvesoffset, $loggedinuser );
-    }
     my $op = $query->param('op');
 
     # the format of this is unindented for ease of diff comparison to the old script
@@ -260,6 +247,16 @@ sub shelfpage {
                     direction => $direction,
                 );
                 ( $items, $totitems ) = GetShelfContents( $shelfnumber, $shelflimit, $shelfoffset, $sortfield, $direction );
+
+                # get biblionumbers stored in the cart
+                # Note that it's not use at the intranet
+                my @cart_list;
+                my $cart_cookie = ( $type eq 'opac' ? "bib_list" : "intranet_bib_list" );
+                if($query->cookie($cart_cookie)){
+                    my $cart_list = $query->cookie($cart_cookie);
+                    @cart_list = split(/\//, $cart_list);
+                }
+
                 for my $this_item (@$items) {
                     my $biblionumber = $this_item->{'biblionumber'};
                     my $record = GetMarcBiblio($biblionumber);
@@ -366,7 +363,7 @@ sub shelfpage {
                 /(DEL|REMSHR)-(\d+)/ or next;
                 $delflag = 1;
                 my $number = $2;
-                unless ( defined $shelflist->{$number} || defined $privshelflist->{$number} ) {
+                unless ( defined $shelflist->{$number} ) {
                     push( @paramsloop, { unrecognized => $number } );
                     last;
                 }
@@ -374,7 +371,6 @@ sub shelfpage {
                 if(/REMSHR/) {
                     RemoveShare($loggedinuser, $number);
                     delete $shelflist->{$number} if exists $shelflist->{$number};
-                    delete $privshelflist->{$number} if exists $privshelflist->{$number};
                     $stay=0;
                     next;
                 }
@@ -390,9 +386,6 @@ sub shelfpage {
                         if ( defined $shelflist->{$number} ) {
                             push( @paramsloop, { need_confirm => $shelflist->{$number}->{shelfname}, count => $totshelves, single => ($totshelves eq 1 ? 1:0) } );
                             $shelflist->{$number}->{confirm} = $number;
-                        } else {
-                            push( @paramsloop, { need_confirm => $privshelflist->{$number}->{shelfname}, count => $totshelves } );
-                            $privshelflist->{$number}->{confirm} = $number;
                         }
                         $stay = 0;
                         next;
@@ -402,9 +395,6 @@ sub shelfpage {
                 if ( defined $shelflist->{$number} ) {
                     $name = $shelflist->{$number}->{'shelfname'};
                     delete $shelflist->{$number};
-                } else {
-                    $name = $privshelflist->{$number}->{'shelfname'};
-                    delete $privshelflist->{$number};
                 }
                 unless ( DelShelf($number) ) {
                     push( @paramsloop, { delete_fail => $name } );
