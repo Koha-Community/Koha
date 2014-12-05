@@ -85,11 +85,11 @@ if ($op eq 'add_form') {
     my $branches = GetBranches;
     my @branches_loop;
 
-    foreach my $branch (sort keys %$branches) {
-        my $selected = ( grep {$_->{branchcode} eq $branch} @selected_branches ) ? 1 : 0;
+    foreach my $branchcode ( sort { uc($branches->{$a}->{branchname}) cmp uc($branches->{$b}->{branchname}) } keys %$branches ) {
+        my $selected = ( grep {$_->{branchcode} eq $branchcode} @selected_branches ) ? 1 : 0;
         push @branches_loop, {
-            branchcode => $branches->{$branch}{branchcode},
-            branchname => $branches->{$branch}{branchname},
+            branchcode => $branchcode,
+            branchname => $branches->{$branchcode}->{branchname},
             selected => $selected,
         };
     }
