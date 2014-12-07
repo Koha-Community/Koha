@@ -80,22 +80,68 @@ my $warnIsRootUser   = (! $loggedinuser);
 my $warnNoActiveCurrency = (! defined C4::Budgets->GetCurrency());
 my @xml_config_warnings;
 
+my $context = new C4::Context;
+
 if ( ! defined C4::Context->config('zebra_bib_index_mode') ) {
     push @xml_config_warnings, {
         error => 'zebra_bib_index_mode_warn'
     };
+    if ($context->{'server'}->{'biblioserver'}->{'config'} !=~ /zebra-biblios-dom.cfg/) {
+        push @xml_config_warnings, {
+            error => 'zebra_bib_mode_seems_grs1'
+        };
+    }
+    else {
+        push @xml_config_warnings, {
+            error => 'zebra_bib_mode_seems_dom'
+        };
+    }
 } else {
     push @xml_config_warnings, { error => 'zebra_bib_grs_warn' }
         if C4::Context->config('zebra_bib_index_mode') eq 'grs1';
+}
+
+if ( (C4::Context->config('zebra_bib_index_mode') eq 'dom') && ($context->{'server'}->{'biblioserver'}->{'config'} !=~ /zebra-biblios-dom.cfg/) ) {
+    push @xml_config_warnings, {
+        error => 'zebra_bib_index_mode_mismatch_warn'
+    };
+}
+
+if ( (C4::Context->config('zebra_auth_index_mode') eq 'grs1') && ($context->{'server'}->{'biblioserver'}->{'config'} =~ /zebra-biblios-dom.cfg/) ) {
+    push @xml_config_warnings, {
+        error => 'zebra_bib_index_mode_mismatch_warn'
+    };
 }
 
 if ( ! defined C4::Context->config('zebra_auth_index_mode') ) {
     push @xml_config_warnings, {
         error => 'zebra_auth_index_mode_warn'
     };
+    if ($context->{'server'}->{'authorityserver'}->{'config'} !=~ /zebra-authorities-dom.cfg/) {
+        push @xml_config_warnings, {
+            error => 'zebra_auth_mode_seems_grs1'
+        };
+    }
+    else {
+        push @xml_config_warnings, {
+            error => 'zebra_auth_mode_seems_dom'
+        };
+    }
 } else {
     push @xml_config_warnings, { error => 'zebra_auth_grs_warn' }
         if C4::Context->config('zebra_auth_index_mode') eq 'grs1';
+}
+
+if ( (C4::Context->config('zebra_auth_index_mode') eq 'dom') && ($context->{'server'}->{'authorityserver'}->{'config'} !=~ /zebra-authorities-dom.cfg/) ) {
+    push @xml_config_warnings, {
+        error => 'zebra_auth_index_mode_mismatch_warn'
+    };
+}
+
+if ( (C4::Context->config('zebra_auth_index_mode') eq 'grs1') && ($context->{'server'}->{'authorityserver'}->{'config'} =~ /zebra-authorities-dom.cfg/) ) {
+    push @xml_config_warnings, {
+        error => 'zebra_auth_index_mode_mismatch_warn'
+    };
 }
 
 # Test QueryParser configuration sanity
