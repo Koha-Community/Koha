@@ -5,8 +5,7 @@
 <script type="text/javascript" >
 //<![CDATA[
 function confirm_deletion(id) {
-    
-    var is_confirmed = confirm('Are you sure you want to delete this authority?');
+    var is_confirmed = confirm(_('Are you sure you want to delete this authority?'));
     if (is_confirmed) {
       window.location="authorities-home.pl?op=delete"
           + "&authid=" + id
