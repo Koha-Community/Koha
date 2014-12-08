@@ -44,11 +44,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-#die Data::Dumper::Dumper( $cgi );
 
 my $codesString = $cgi->param('codesString'); #Could be anything, like EAN, barcode, ISSN, ISBN, ISMN
 $template->param( codesString => $codesString );
-my $operation = ($cgi->param('overlay')) ? 'overlay' : undef;
+my $operation = $cgi->param('op');
 my $skipLocalBiblios = $cgi->param('skipLocalBiblios');
 
 $template->param(
@@ -56,8 +55,20 @@ $template->param(
 );
 
 my (@localSearchErrors, @ambiguousSearchTerms);
-if ($codesString && $operation eq 'overlay') {
-    my ( $tagid_biblionumber, $subfieldid_biblionumber ) = GetMarcFromKohaField( "biblio.biblionumber" );
+
+if ( $operation eq 'encodingLevelReport' ) {
+    my $encodingLevel = $cgi->param('encodingLevel');
+    $template->param( encodingLevel => $encodingLevel );
+
+    my $encodingSearchLimit = $cgi->param('encodingLevelLimit');
+    $encodingSearchLimit = 5000 unless $encodingSearchLimit;
+    $template->param( encodingLevelLimit => $encodingSearchLimit );
+
+    my ($biblioResults, $resultSetSize) = C4::BatchOverlay::searchByEncodingLevel( $encodingLevel, \@localSearchErrors, $encodingSearchLimit );
+    $template->param( biblioResults => $biblioResults );
+    $template->param( biblioResultsSize => $resultSetSize );
+}
+elsif ($codesString && $operation eq 'overlay') {
 
     my @biblioNumbers;
 
@@ -79,36 +90,7 @@ if ($codesString && $operation eq 'overlay') {
     }
 
     if( not($skipLocalBiblios) ) {
-        for(my $i=0 ; $i<@$codes ; $i++){
-            my $code = $codes->[$i];
-            next() unless $code;
-
-            #Find the biblios by the given code! There should be only 1!
-            my ($error, $results, $resultSetSize) = C4::Search::SimpleSearch( $code );
-            unless ($resultSetSize) { #EAN is a bitch and often in our catalog we have an extra 0.
-                $code = '0'.$code;
-                ($error, $results, $resultSetSize) = C4::Search::SimpleSearch( $code );
-            }
-            if ($resultSetSize && $resultSetSize == 1 && !$error) {
-                foreach my $result (@$results) {
-
-                    #Get the biblionumber!
-                    if ($result =~ /<(data|control)field tag="$tagid_biblionumber".*?>(.*?)<\/(data|control)field>/s) {
-                        my $fieldStr = $2;
-                        if ($fieldStr =~ /<subfield code="$subfieldid_biblionumber">(.*?)<\/subfield>/) {
-                            push @biblioNumbers, $1;
-                        }
-                    }
-                }
-            }
-            elsif ($resultSetSize && $resultSetSize > 1) { #Wow, an ambiguous search term, which result do we choose!!
-                push @ambiguousSearchTerms, $code;
-            }
-            else {
-                my $msg = $error ? "$code : $error" : $code; #Prevent undef concatenation error
-                push @localSearchErrors, {searcherror => $msg};
-            }
-        }
+        C4::BatchOverlay::searchLocalRecords( $codes, \@biblioNumbers, \@localSearchErrors, \@ambiguousSearchTerms );
     }
 
     unless  (@ambiguousSearchTerms || @localSearchErrors) {
@@ -120,10 +102,11 @@ if ($codesString && $operation eq 'overlay') {
         $template->param('reports' => $reports);
         $template->param('batchOverlayErrors' => \@{$batchOverlayErrorBuilder->{errors}});
     }
+
+    $template->param('ambiguousSearchTerms' => \@ambiguousSearchTerms);
+    $template->param('localSearchErrors' => \@localSearchErrors);
 }
 
-$template->param('ambiguousSearchTerms' => \@ambiguousSearchTerms);
-$template->param('localSearchErrors' => \@localSearchErrors);
 output_html_with_http_headers $cgi, undef, $template->output;
 
 =head _getRemoteSearchTargets

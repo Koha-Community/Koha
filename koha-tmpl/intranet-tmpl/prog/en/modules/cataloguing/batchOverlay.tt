@@ -91,12 +91,13 @@
                 <h4 class="hint">&nbsp;&nbsp;See "Help" for usage instructions!</h4>
                 <div class="yui-u first" id="collect-batch-overlay">
 
-                    <form name="overlay_by_code" action="/cgi-bin/koha/cataloguing/batchOverlay.pl" method="post">
-                        <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
+                    <form name="overlay_by_code" action="/cgi-bin/koha/cataloguing/batchOverlay.pl" method="post" id="asfasfasf">
+                        <input type="hidden" name="op" value="overlay"/>
+                        <fieldset class="rows">
+                            <legend>Overlay by search term(s):</legend>
                             <ol><li>
-                                <label for="codes">Overlay by search term(s):<br/>
-                                    <span class="hint">One search term per line.<br/>
-                                    Search term should be the EAN, ISSN, ISBN, ISMN, Koha biblionumber or Koha barcode, but it can be anything searchable.<br/></span>
+                                    <p class="hint">One search term per line.<br/>
+                                    Search term should be the EAN, ISSN, ISBN, ISMN, Koha biblionumber or Koha barcode, but it can be anything searchable.</p>
                                 </label>
                                 <textarea rows="25" id="codes" name="codesString" tabindex="1" class="focus">[% codesString %]</textarea>
                                 <label for="skipLocalBiblios">Skip local biblios checking: </label>
@@ -105,9 +106,10 @@
                                     Check this to disable local catalog searches and search directly from the remote repositories. WARNING! This feature doesn't do any deduplication checks and can easily bring duplicate records to the local catalog. One can use the deduplicator to find duplicates.
                                 </span>
 
-                                <br /> <input type="submit" name="overlay" id="overlay" value="Overlay us!">
+                                <br /> <input type="submit" value="Overlay us!">
                             </li></ol>
                         </fieldset>
+                    </form>
 
 <!--INACTIVE SINCE WAITING FOR ENABLING THE z3950 REMOTE TARGET SEARCHING IN BATCHOVERLAY<div>
     <h2>Search targets <span style="display: inline; font-size: 70%; padding-left: 1em;"><span class="checkall"><a id="CheckAll" href="#">Select all</a></span><span class="clearall"><a id="CheckNone" href="#">Clear all</a></span></span></h2>
@@ -127,8 +129,52 @@
 -->
                 </div>
                 <div class="yui-u middle">
-<!--                    <h4 class="hint">Hint: Click us!</h4> -->
+                    <form name="encodingLevelReportForm" action="/cgi-bin/koha/cataloguing/batchOverlay.pl" method="get" id="ffasdafas">
+                        <input type="hidden" name="op" value="encodingLevelReport" />
+
+                        <fieldset class="rows">
+                            <legend>Get bibliographic records by the encoding level</legend>
+                            <ol><li>
+                                <span class="hint">One can easily find records pending fully catalogued content using this report and batch overlay them.</span>
+                            </li><li>
+                                <label for="encodingLevel">Encoding level:</label><input name="encodingLevel" type="text" size="1" maxlength="1" value="[% encodingLevel %]"/>
+                            </li><li>
+                                <label for="encodingLevelLimit">Limit results:</label><input name="encodingLevelLimit" type="text" size="5" value="[% encodingLevelLimit %]"/>
+                            </li><li>
+                                <input type="submit" />
+                            </li></ol>
+
+                            [% IF biblioResults %]
+                                <div id="encodingLevelReportContainer">
+                                    <h4 style="margin-left: 1em;">We found [% biblioResultsSize %] records using the encoding level [% encodingLevel %]</h4>
+                                    <p class="hint">You can copy the standard identifier [between brackets] from results to the overlay textarea on the left column by clicking the "+"-sign.<br/>
+                                    See <a href="http://www.loc.gov/marc/bibliographic/bdleader.html" target="_blank">the MARC21 Manual</a> for valid search values.</p>
+                                    <table>
+                                    [% FOREACH result IN biblioResults %]
+                                        <tr>
+                                            <td>
+                                                <button type="button" class="btn btn-small importStdIdButton" value="[% result.stdId %]" onclick="importResult(this)"><i class="icon-plus"></i></button>
+                                            </td>
+                                            <td>
+                                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% result.biblionumber %]">
+                                                    [% result.title %] &nbsp;
+                                                    [% result.author %]
+                                                </a>
+                                            </td>
+                                            <td>
+                                                [% IF result.stdId %]
+                                                    [[% result.stdId %]]
+                                                [% END %]
+                                            </td>
+                                        </tr>
+                                    [% END %]
+                                    </table>
+                                </div>
+                            [% END %]
+                        </fieldset>
+                    </form>
                 </div>
+
 
             </div>
         </div>
@@ -138,6 +184,13 @@
     $(".report > h3").siblings(".report_hidden").toggle();
     $(".toggler").click(function() {$(this).siblings().toggle()});
     $(".toggler").siblings().toggle();
+
+    function importResult( button ) {
+        var stdId = $(button).val();
+        var codesText = $("#codes").val();
+        codesText = codesText + stdId + "\n";
+        $("#codes").val( codesText );
+    }
 </script>
 <style type="text/css">
     div.report:nth-child(odd) {background-color: #EEEEEE;}

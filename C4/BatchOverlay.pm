@@ -20,6 +20,7 @@ package C4::BatchOverlay;
 use Modern::Perl;
 
 use MARC::Field;
+use MARC::Record;
 
 use C4::Context;
 use C4::BatchOverlay::BatchOverlayRule;
@@ -490,6 +491,172 @@ sub getISSN {
     my ($record, $biblio) = @_;
     my $issn = $record->subfield('022','a');
     return $issn;
+}
+
+=head searchLocalRecords
+
+    my (@searches, @biblioNumbers, @localSearchErrors, @ambiguousSearchTerms);
+    C4::BatchOverlay::searchLocalRecords( \@searches, \@biblioNumbers, \@localSearchErrors, \@ambiguousSearchTerms );
+
+    #We got the biblionumbers the local searches match and no errors! Yay!
+    assert(    scalar(@biblioNumbers) > 0 && scalar(@localSearchErrors) == 0 && scalar(@ambiguousSearchTerms) == 0    );
+
+Uses the @searches-array to make a SimpleSearch for each element from our own catalog. The idea is to transform any barcode on the
+physical item to a biblio match for the BatchOverlay-mechanism. This makes overlaying records super easy for the user.
+If there is only one search result, then pushes the biblionumber of the result to the @biblioNumbers-array.
+If there are multiple results for the SimpleSearch, then push the $search-words to @ambiguousSearchTerms-array to notify the user
+  that the $search-words needs more details to provide only one result.
+If there are no results or an error hapened, push the message + $error to @localSearchErrors.
+
+@RETURNS Nothing. All values are pushed to the given arrays.
+=cut
+
+sub searchLocalRecords {
+    my ( $searches, $biblioNumbers, $localSearchErrors, $ambiguousSearchTerms ) = @_;
+
+    for(my $i=0 ; $i<@$searches ; $i++){
+        my $search = $searches->[$i];
+        next() unless $search;
+
+        #Find the biblios by the given code! There should be only 1!
+        my ($error, $results, $resultSetSize) = C4::Search::SimpleSearch( $search );
+        unless ($resultSetSize) { #EAN is a bitch and often in our catalog we have an extra 0.
+            $search = '0'.$search;
+            ($error, $results, $resultSetSize) = C4::Search::SimpleSearch( $search );
+        }
+        if ($resultSetSize && $resultSetSize == 1 && !$error) {
+            foreach my $result (@$results) {
+                push @$biblioNumbers, _getBiblionumberFromXML($result);
+            }
+        }
+        elsif ($resultSetSize && $resultSetSize > 1) { #Wow, an ambiguous search term, which result do we choose!!
+            push @$ambiguousSearchTerms, $search;
+        }
+        else {
+            my $msg = $error ? "$search : $error" : $search; #Prevent undef concatenation error
+            push @$localSearchErrors, {searcherror => $msg};
+        }
+    }
+}
+
+=head searchByEncodingLevel
+
+    my ($searchResultBiblios, $resultSetSize) = C4::BatchOverlay::searchByEncodingLevel($encodingLevel, $searchErrors, $limit);
+    $searchResultBiblios->[1]->{marc}->subfield('021','a');
+    assert(    $searchResultBiblios->[1]->{stdId} =~ /^\d+$/    ); #Get the standard identifier. Either 020a or 024a or 028a.
+    assert(    $searchResultBiblios->[1]->{title} =~ /^\S+$/    ); #Get the title.
+
+Makes a 'Enc-level=?' -search using the @PARAM1 and returns a pre-processed list of slim biblio objects having the
+given encoding level from MARC21 leader position 17.
+
+The returning slim biblio has the following keys:
+  title, author, stdId, marc, biblionumber
+
+@PARAM1 Char, a single character to look from MARC21 leader, location 17.
+@PARAM2 Array of Strings, All found errors are collected here.
+@PARAM3 Integer, OPTIONAL, Limit of how many results to return. With encoding level 8 we have hundreds of thousands of results :)
+@RETURNS1 Array of Hashes, All found slim biblios and a reference to a MARC::Record.
+@RETURNS2 Integer, The sum of results found.
+=cut
+
+sub searchByEncodingLevel {
+    my ($encodingLevel, $searchErrors, $limit) = (@_);
+
+    require MARC::Record;
+
+    my ($error, $results, $resultSetSize) = C4::Search::SimpleSearch( 'Enc-level='.$encodingLevel, undef, $limit );
+    unless ($resultSetSize) {
+        push @$searchErrors, {searcherror => 'Nothing found using '.$encodingLevel};
+    }
+    if ($resultSetSize && !$error) {
+        for (my $i=0 ; $i<scalar(@$results) ; $i++) {
+            my $record = MARC::Record->new_from_xml( $results->[$i], 'utf8', C4::Context->preference("marcflavour") );
+            $results->[$i] = _buildSlimBiblio( undef, undef, $record );
+        }
+    }
+    else {
+        my $msg = $error ? "$encodingLevel : $error" : $encodingLevel; #Prevent undef concatenation error
+        push @$searchErrors, {searcherror => $msg};
+    }
+    return ($results, $resultSetSize) if $resultSetSize;
+    return (undef, undef);
+}
+
+=head _buildSlimBiblio
+
+This is just a method of producing a template-digestable representation of a MARC::Record, because the cpan implementation
+and the koha.biblios-table don't store the often needed values.
+
+=cut
+
+sub _buildSlimBiblio {
+    my ($biblionumber, $biblio, $marc) = @_;
+
+    if (not($marc)) {
+        warn "batchOverlay.pl::_buildSlimBiblio(), No MARC::Record for bn:$biblionumber";
+        return $biblio;
+    }
+    unless ($biblionumber) {
+        my ( $tagid_biblionumber, $subfieldid_biblionumber ) = GetMarcFromKohaField( "biblio.biblionumber" );
+        $biblionumber = $marc->subfield( $tagid_biblionumber, $subfieldid_biblionumber );
+    }
+    unless ($biblionumber) {
+        warn 'batchOverlay.pl::_buildSlimBiblio(), No Biblionumber for record '.$marc->title().' - '.$marc->author();
+        return $biblio;
+    }
+
+    if ($biblio) {
+        $biblio->{biblionumber} = $biblionumber;
+    }
+    else {
+        $biblio = {biblionumber => $biblionumber};
+    }
+
+    $biblio->{marc} = $marc;
+
+    my $title = $marc->subfield('245','a');
+    my $titleField;
+    my @titles;
+    if ($title) {
+        $titleField = '245';
+    }
+    else {
+        $titleField = '240';
+        $title = $marc->subfield('240','a');
+    }
+    my $enumeration = $marc->subfield( $titleField ,'n');
+    my $partName = $marc->subfield( $titleField ,'p');
+    my $publicationYear = $marc->subfield( '260' ,'c');
+    push @titles, $title if $title;
+    push @titles, $enumeration if $enumeration;
+    push @titles, $partName if $partName;
+    push @titles, $publicationYear if $publicationYear;
+
+    my $author = $marc->subfield('100','a');
+    $author = $marc->subfield('110','a') unless $author;
+
+    $biblio->{author} = $author;
+    $biblio->{title} = join(' ', @titles);
+    my $stdId = $marc->subfield('020','a');
+    $stdId = $marc->subfield('024','a') unless $stdId;
+    $stdId = $marc->subfield('028','a') unless $stdId;
+    $biblio->{stdId} = $stdId;
+
+    return $biblio;
+}
+
+sub _getBiblionumberFromXML {
+    my $marcxml = shift;
+
+    my ( $tagid_biblionumber, $subfieldid_biblionumber ) = GetMarcFromKohaField( "biblio.biblionumber" );
+
+    #Get the biblionumber!
+    if ($marcxml =~ /<(data|control)field tag="$tagid_biblionumber".*?>(.*?)<\/(data|control)field>/s) {
+        my $fieldStr = $2;
+        if ($fieldStr =~ /<subfield code="$subfieldid_biblionumber">(.*?)<\/subfield>/) {
+            return $1;
+        }
+    }
 }
 
 =head2 MARCfindbreeding
