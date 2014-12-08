@@ -54,6 +54,8 @@ $(document).ready(function(){
             { 'mDataProp': 'dt_count' },
             { 'mDataProp': 'dt_owner' },
             { 'mDataProp': 'dt_sortby' },
+            { 'mDataProp': 'dt_creation_time' },
+            { 'mDataProp': 'dt_modification_time' },
             { 'mDataProp': 'dt_action', 'bSortable': false }
         ],
         "aoColumnDefs": [
@@ -603,6 +605,8 @@ function placeHold () {
                         <th>Contents</th>
                         <th>Owner</th>
                         <th>Sort by</th>
+                        <th>Creation date</th>
+                        <th>Modification date</th>
                         <th>Actions</th>
                     </tr>
                     <tr class="filters_row">
@@ -619,6 +623,8 @@ function placeHold () {
                                 <option value="itemcallnumber">Call number</option>
                             </select>
                         </th>
+                        <th></th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </thead>

@@ -317,9 +317,10 @@ sub AddShelf {
 
     return -1 unless _CheckShelfName($hashref->{shelfname}, $hashref->{category}, $owner, 0);
 
-    my $query = qq(INSERT INTO virtualshelves
-        (shelfname,owner,category,sortfield,allow_add,allow_delete_own,allow_delete_other)
-        VALUES (?,?,?,?,?,?,?));
+    my $query = q|INSERT INTO virtualshelves
+        (shelfname,owner,category,sortfield,allow_add,allow_delete_own,allow_delete_other, creation_time)
+        VALUES (?,?,?,?,?,?,?, NOW())
+    |;
 
     my $sth = $dbh->prepare($query);
     $sth->execute(
@@ -470,13 +471,13 @@ sub ShelfPossibleAction {
     }
 
     my $dbh = C4::Context->dbh;
-    my $query = qq/
+    my $query = q{
         SELECT COALESCE(owner,0) AS owner, category, allow_add, allow_delete_own, allow_delete_other, COALESCE(sh.borrowernumber,0) AS borrowernumber
         FROM virtualshelves vs
         LEFT JOIN virtualshelfshares sh ON sh.shelfnumber=vs.shelfnumber
         AND sh.borrowernumber=?
         WHERE vs.shelfnumber=?
-    /;
+        };
     my $sth = $dbh->prepare($query);
     $sth->execute($user, $shelfnumber);
     my $shelf= $sth->fetchrow_hashref;

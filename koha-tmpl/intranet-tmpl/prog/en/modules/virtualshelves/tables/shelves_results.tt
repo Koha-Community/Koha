@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 {
     "sEcho": [% sEcho %],
     "iTotalRecords": [% iTotalRecords %],
@@ -15,6 +16,10 @@
                     "<a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.owner %]'>[% data.firstname %] [% data.surname %]</a>",
                 "dt_sortby":
                     [% IF data.sortby == "author" %]"Author"[% ELSIF data.sortby == "copyrightdate" %]"Year"[% ELSIF data.sortby == "itemcallnumber" %]"Call number"[% ELSE %]"Title"[% END %],
+                "dt_creation_time":
+                    "[% data.creation_time | $KohaDates %]",
+                "dt_modification_time":
+                    "[% data.modification_time | $KohaDates %]",
                 "dt_action":
                     "<a style=\"cursor:pointer\">[% PROCESS action_form shelfnumber=data.shelfnumber can_manage_shelf=data.can_manage_shelf can_delete_shelf=data.can_delete_shelf type=data.type %]</a>"
             }[% UNLESS loop.last %],[% END %]

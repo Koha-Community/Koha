@@ -2311,6 +2311,7 @@ CREATE TABLE `virtualshelves` ( -- information about lists (or virtual shelves)
   `category` varchar(1) default NULL, -- type of list (private [1], public [2])
   `sortfield` varchar(16) default NULL, -- the field this list is sorted on
   `lastmodified` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time the list was last modified
+  `creation_time` TIMESTAMP NOT NULL, -- creation time
   `allow_add` tinyint(1) default 0, -- permission for adding entries to list
   `allow_delete_own` tinyint(1) default 1, -- permission for deleting entries frm list that you added yourself
   `allow_delete_other` tinyint(1) default 0, -- permission for deleting entries from list that another person added

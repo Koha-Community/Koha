@@ -10373,6 +10373,37 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
+        (20, 'shelves', 'Virtual shelves', 0)
+    |);
+    $dbh->do(q|
+        INSERT INTO permissions (module_bit, code, description) VALUES
+        (20, 'manage_shelves', 'Manage shelves')
+    |);
+    print "Upgrade to $DBversion done (Bug XXXXX: Add permission for shelves)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        ALTER TABLE virtualshelves
+        ADD COLUMN creation_time TIMESTAMP NOT NULL AFTER lastmodified
+    |);
+    # Set creation_time = lastmodified
+    # I would say it's better than 0000-00-00
+    # Set modified to the existing value (do not get the current ts!)
+    $dbh->do(q|
+        UPDATE virtualshelves
+        SET creation_time = lastmodified, lastmodified = lastmodified
+    |);
+    print "Upgrade to $DBversion done (Bug XXXXX: Add DB field virtualshelves.creation_time)\n";
+    SetVersion ($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.

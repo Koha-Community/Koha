@@ -32,6 +32,7 @@ sub search {
     # But the code is too dirty to refactor...
     my $select = q|
         SELECT vs.shelfnumber, vs.shelfname, vs.owner, vs.category AS type,
+        vs.creation_time, vs.lastmodified as modification_time,
         bo.surname, bo.firstname, vs.sortfield as sortby,
         count(vc.biblionumber) as count
     |;
@@ -65,9 +66,6 @@ sub search {
         push @args, "%$shelfname%";
     }
     if ( defined $owner and $owner ne '' ) {
-        #push @where_strs, 'owner LIKE ?';
-        #push @args, "$owner%";
-        # WHERE category=1 AND (vs.owner=? OR sh.borrowernumber=?);
         push @where_strs, '( bo.firstname LIKE ? OR bo.surname LIKE ? )';
         push @args, "%$owner%", "%$owner%";
     }
