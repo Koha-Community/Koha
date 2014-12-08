@@ -17,10 +17,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 72;
+use Test::More tests => 74;
 use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
+use C4::Members::Attributes qw( SetBorrowerAttributes );
+use C4::Members::AttributeTypes;
 
 BEGIN {
         use_ok('C4::Members');
@@ -182,6 +184,16 @@ ok (_find_member($results), "Full name  Search (string) for independent branches
 $results = Search(\@searchstring);
 ok (_find_member($results), "Search (arrayref) for independent branches, same branch")
   or diag("Card $CARDNUMBER not found in the resultset for independent branches: ".Dumper(C4::Context->preference($INDEPENDENT_BRANCHES_PREF), $results));
+
+C4::Context->set_preference('ExtendedPatronAttributes', 1);
+my $attr_type = C4::Members::AttributeTypes->new("TEST", "Test Description");
+$attr_type->staff_searchable(1);
+$attr_type->store();
+SetBorrowerAttributes($addmem, [ { code => 'TEST', value => 'XYZZYX' } ] );
+$results = Search( "XYZZYX", undef, undef, undef, undef, undef, 1 );
+is( @$results, 0, "Search without extended attributes returns no results" );
+$results = Search( "XYZZYX", undef, undef, undef, undef, undef, 0 );
+is( @$results, 1, "Search with extended attributes returns results" );
 
 C4::Context->set_preference( 'CardnumberLength', '' );
 C4::Context->clear_syspref_cache();
