@@ -130,6 +130,9 @@ jQuery.fn.dataTableExt.oApi.fnAddFilters = function ( oSettings, sClass, iDelay 
         }, iDelay);
       }
     });
+    $(table).find("select."+sClass).on('change', function() {
+        table.fnFilter($(this).val(), $(this).attr('data-column_num'));
+    });
 }
 
 // Useful if you want to filter on dates with 2 inputs (start date and end date)

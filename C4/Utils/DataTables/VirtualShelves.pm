@@ -62,23 +62,19 @@ sub search {
 
     if ( defined $shelfname and $shelfname ne '' ) {
         push @where_strs, 'shelfname LIKE ?';
-        push @args, 'shelfname%';
-    }
-    if ( defined $count and $count ne '' ) {
-        push @where_strs, 'count = ?';
-        push @args, $count;
+        push @args, "%$shelfname%";
     }
     if ( defined $owner and $owner ne '' ) {
-        push @where_strs, 'owner LIKE ?';
-        push @args, 'owner%';
-        # FIXME search borronumber by name??
+        #push @where_strs, 'owner LIKE ?';
+        #push @args, "$owner%";
         # WHERE category=1 AND (vs.owner=? OR sh.borrowernumber=?);
+        push @where_strs, '( bo.firstname LIKE ? OR bo.surname LIKE ? )';
+        push @args, "%$owner%", "%$owner%";
     }
     if ( defined $sortby and $sortby ne '' ) {
         push @where_strs, 'sortfield = ?';
-        push @args, 'sortfield';
+        push @args, $sortby;
     }
-
 
     push @where_strs, 'category = ?';
     push @args, $type;
@@ -91,7 +87,7 @@ sub search {
     my $where;
     $where = " WHERE " . join (" AND ", @where_strs) if @where_strs;
     my $orderby = dt_build_orderby($dt_params);
-    $orderby =~ s|shelfnumber|vs.shelfnumber|;
+    $orderby =~ s|shelfnumber|vs.shelfnumber| if $orderby;
 
     my $limit;
     # If iDisplayLength == -1, we want to display all shelves
@@ -115,10 +111,7 @@ sub search {
         ($orderby ? $orderby : ""),
         ($limit ? $limit : "")
     );
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@args);
-
-    my $shelves = $sth->fetchall_arrayref({});
+    my $shelves = $dbh->selectall_arrayref( $query, { Slice => {} }, @args );
 
     # Get the iTotalDisplayRecords DataTable variable
     $query = "SELECT COUNT(vs.shelfnumber) " . $from_total . ($where ? $where : "");

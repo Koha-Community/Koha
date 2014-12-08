@@ -3,6 +3,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
 [% IF ( viewshelf ) %]
     <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
     <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
@@ -24,8 +25,16 @@ $(document).ready(function(){
             aoData.push({
                 'name': 'type',
                 'value': type,
-            },
-            {
+            },{
+                'name': 'shelfname',
+                'value': $("#searchshelfname_filter").val(),
+            },{
+                'name': 'owner',
+                'value': $("#searchowner_filter").val(),
+            },{
+                'name': 'sortby',
+                'value': $("#searchsortby_filter").val(),
+            },{
                 'name': 'template_path',
                 'value': 'virtualshelves/tables/shelves_results.tt',
             });
@@ -52,8 +61,9 @@ $(document).ready(function(){
         ],
         'bAutoWidth': false,
         'sPaginationType': 'full_numbers',
+        'bFilter': false,
         "bProcessing": true,
-        'bFilter': false
+        "bSortCellsTop": true
     }));
 
     dtListResults.fnAddFilters("filter", 750);
@@ -594,6 +604,22 @@ function placeHold () {
                         <th>Owner</th>
                         <th>Sort by</th>
                         <th>Actions</th>
+                    </tr>
+                    <tr class="filters_row">
+                        <th></th>
+                        <th><input class="filter text_filter" id="searchshelfname_filter" placeholder="List name"></th>
+                        <th></th>
+                        <th><input class="filter text_filter" id="searchowner_filter" placeholder="Owner"></th>
+                        <th>
+                            <select class="filter text_filter" id="searchsortby_filter">
+                                <option value=""></option>
+                                <option value="title">Title</option>
+                                <option value="author">Author</option>
+                                <option value="copyrightdate">Copyrightdate</option>
+                                <option value="itemcallnumber">Call number</option>
+                            </select>
+                        </th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody></tbody>
