@@ -1173,6 +1173,7 @@ sub getIndexes{
                     'diss',
                     'dtlm',
                     'EAN',
+                    'Enc-level',
                     'extent',
                     'Edition',
                     'fic',

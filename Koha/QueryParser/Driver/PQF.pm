@@ -686,6 +686,7 @@ sub TEST_SETUP {
     $self->add_search_field_alias( 'keyword' => 'local-classification' => 'callnum' );
     $self->add_bib1_field_map('keyword' => 'bib-level' => 'biblioserver' => { '1' => '1021' } );
     $self->add_bib1_field_map('keyword' => 'code-institution' => 'biblioserver' => { '1' => '56' } );
+    $self->add_bib1_field_map('keyword' => 'Enc-level' => 'biblioserver' => { '1' => '9016' } );
     $self->add_bib1_field_map('keyword' => 'language' => 'biblioserver' => { '1' => '54' } );
     $self->add_search_field_alias( 'keyword' => 'language' => 'ln' );
     $self->add_bib1_field_map('keyword' => 'record-type' => 'biblioserver' => { '1' => '1001' } );
