@@ -132,6 +132,7 @@ $(document).ready(function() {
     issuesTable = $("#issues-table").dataTable({
         "oLanguage": {
             "sEmptyTable" : MSG_DT_LOADING_RECORDS,
+            "sProcessing": MSG_DT_LOADING_RECORDS,
         },
         "bAutoWidth": false,
         "sDom": "rt",
