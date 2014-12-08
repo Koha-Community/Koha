@@ -71,7 +71,7 @@ bibs to and from virtual shelves.
 
 =head2 GetShelves
 
-  ($shelflist, $totshelves) = &GetShelves($category, $row_count, $offset, $owner);
+  $shelflist = &GetShelves($category, $row_count, $offset, $owner);
   ($shelfnumber, $shelfhash) = each %{$shelflist};
 
 Returns the number of shelves specified by C<$row_count> and C<$offset> as well as the total
@@ -90,18 +90,14 @@ and the values (C<$shelfhash>, above) are themselves references-to-hash, with th
 
 A string. The name of the shelf.
 
-=item C<$shelfhash-E<gt>{count}>
-
-The number of virtuals on that virtualshelves.
-
 =back
 
 =cut
 
 sub GetShelves {
     my ($category, $row_count, $offset, $owner) = @_;
-    my @params;
-    my $total = _shelf_count($owner, $category);
+    $offset ||= 0;
+    my @params = ( $offset, $row_count );
     my $dbh = C4::Context->dbh;
     my $query = qq{
         SELECT vs.shelfnumber, vs.shelfname,vs.owner,
@@ -115,11 +111,10 @@ sub GetShelves {
             LEFT JOIN virtualshelfshares sh ON sh.shelfnumber=vs.shelfnumber
             AND sh.borrowernumber=?
         WHERE category=1 AND (vs.owner=? OR sh.borrowernumber=?) };
-        @params= ($owner, $owner, $owner, $offset||0, $row_count);
+        push @params, ($owner) x 3;
     }
     else {
         $query.= 'WHERE category=2 ';
-        @params= ($offset||0, $row_count);
     }
     $query.= qq{
         GROUP BY vs.shelfnumber
@@ -139,7 +134,7 @@ sub GetShelves {
         $shelflist{$shelfnumber}->{'surname'}   = $surname;
         $shelflist{$shelfnumber}->{'firstname'} = $firstname;
     }
-    return ( \%shelflist, $total );
+    return \%shelflist;
 }
 
 =head2 GetAllShelves
@@ -751,9 +746,8 @@ WHERE borrowernumber=? AND shelfnumber=?
     return 1;
 }
 
-# internal subs
 
-sub _shelf_count {
+sub GetShelfCount {
     my ($owner, $category) = @_;
     my @params;
     # Find out how many shelves total meet the submitted criteria...
@@ -777,6 +771,7 @@ sub _shelf_count {
     return $total;
 }
 
+# internal subs
 sub _CheckShelfName {
     my ($name, $cat, $owner, $number)= @_;
 

@@ -90,7 +90,8 @@ sub shelfpage {
     $shelvesoffset = ( $shelfoff - 1 ) * $shelflimit;    # Sets the offset to begin retrieving shelves at (offset)
                                                 # getting the Shelves list
     my $category = ( ( $displaymode eq 'privateshelves' ) ? 1 : 2 );
-    my ( $shelflist, $totshelves ) = GetShelves( $category, $shelveslimit, $shelvesoffset, $loggedinuser );
+    my $shelflist = GetShelves( $category, $shelveslimit, $shelvesoffset, $loggedinuser );
+    my $totshelves = C4::VirtualShelves::GetShelfCount( $loggedinuser, $category );
 
     #Get a list of private shelves for possible deletion. Only do this when we've defaulted to public shelves
     my ( $privshelflist, $privtotshelves );
@@ -429,7 +430,8 @@ sub shelfpage {
     my $numberCanManage = 0;
 
     # rebuild shelflist in case a shelf has been added
-    ( $shelflist, $totshelves ) = GetShelves( $category, $shelveslimit, $shelvesoffset, $loggedinuser ) unless $delflag;
+    $shelflist = GetShelves( $category, $shelveslimit, $shelvesoffset, $loggedinuser ) unless $delflag;
+    $totshelves = C4::VirtualShelves::GetShelfCount( $loggedinuser, $category ) unless $delflag;
     foreach my $element ( sort { lc( $shelflist->{$a}->{'shelfname'} ) cmp lc( $shelflist->{$b}->{'shelfname'} ) } keys %$shelflist ) {
         my %line;
         $shelflist->{$element}->{shelf} = $element;
