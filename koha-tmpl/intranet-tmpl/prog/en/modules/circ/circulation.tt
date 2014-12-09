@@ -60,6 +60,17 @@ function toggle_onsite_checkout(){
 }
 
 $(document).ready(function() {
+    [% IF !NEEDSCONFIRMATION %]
+        $('#barcode').prop('disabled', false).focus();
+    [% END %]
+    $('#mainform').bind('submit',function() {
+        $('#barcode').on('keypress',function(event) {
+            $('#barcodeSubmittedModal').modal();
+            event.preventDefault(); }
+        );
+    });
+
+
     [% IF !( CircAutoPrintQuickSlip == 'clear' ) %]
         // listen submit to trigger qslip on empty checkout
         $('#mainform').bind('submit',function() {
@@ -528,11 +539,7 @@ No patron matched <span class="ex">[% message %]</span>
 
 	<div class="hint">Enter item barcode:</div>
 
-    [% IF NEEDSCONFIRMATION %]
-	    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" disabled="disabled" />
-    [% ELSE %]
-	    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" />
-    [% END %]
+    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" disabled="disabled" />
     <button type="submit" class="btn">Check out</button>
 
     <div class="date-select">
@@ -870,5 +877,15 @@ No patron matched <span class="ex">[% message %]</span>
 [% UNLESS ( selectborrower ) %][% IF ( borrowernumber ) %]<div class="yui-b">
 [% INCLUDE 'circ-menu.inc' %]
 </div>[% END %][% END %]
+</div>
+<!-- Modal -->
+<div id="barcodeSubmittedModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="barcodeSubmittedModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <h3 id="barcodeSubmittedModalLabel">Barcode submitted</h3>
+    </div>
+
+    <div class="modal-body">
+        <p>You have already submitted a barcode, please wait for the checkout to process...</p>
+    </div>
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
