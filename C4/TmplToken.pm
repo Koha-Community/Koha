@@ -92,7 +92,7 @@ sub set_children {
 # FIXME: DIRECTIVE is not necessarily TMPL_VAR !!
 sub parameters_and_fields {
     my $this = shift;
-    return map { $_->type == C4::TmplTokenType::DIRECTIVE? $_:
+    return map { $_->type == C4::TmplTokenType::DIRECTIVE() ? $_:
 		($_->type == C4::TmplTokenType::TAG
 			&& $_->string =~ /^<input\b/is)? $_: ()}
 	    @{$this->{'_kids'}};
