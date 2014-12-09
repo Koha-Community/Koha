@@ -3,7 +3,7 @@
 <div id="search-facets">
 <h4>Refine your search</h4>
 <ul>
-    <li id="availability_facet">Availability<ul><li>[% IF ( available ) %]Showing only <strong>available</strong> items. <a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi_not_availablity %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by %][% END %]">Show all items</a>[% ELSE %]Limit to <a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi |html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by %][% END %]&amp;limit=available">currently available items.</a>[% END %]</li></ul>
+    <li id="availability_facet">Availability<ul><li>[% IF ( available ) %]Showing only <strong>available</strong> items. <a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi_not_availablity %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]">Show all items</a>[% ELSE %]Limit to <a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi |html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]&amp;limit=available">currently available items.</a>[% END %]</li></ul>
 	[% IF ( related ) %] <li>(related searches: [% FOREACH relate IN related %][% relate.related_search %][% END %])</li>[% END %]
 	</li>
 
@@ -33,7 +33,7 @@
       [% IF facet.active %]
         [% SET url = url _ "&amp;nolimit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
         <span class="facet-label">[% facet.facet_label_value %]</span>
-        [<a href="[% url %]" title="Remove facet [% facet.facet_title_value | html %]">x</a>]
+        [<a href="[% url |url%]" title="Remove facet [% facet.facet_title_value | html %]">x</a>]
       [% ELSE %]
         [% SET url = url _ "&amp;limit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
         <span class="facet-label"><a href="[% url |url%]" title="[% facet.facet_title_value |html %]">[% facet.facet_label_value %]</a></span>
@@ -44,7 +44,7 @@
     </li>
   [% END %]
   [% IF ( facets_loo.expandable ) %]
-    <li class="showmore"><a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi |html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by %][% END %][% IF ( offset ) %]&amp;offset=[% offset %][% END %]&amp;expand=[% facets_loo.expand %]#[% facets_loo.type_id %]">Show more</a></li>
+    <li class="showmore"><a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi |html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url%][% END %][% IF ( offset ) %]&amp;offset=[% offset %][% END %]&amp;expand=[% facets_loo.expand %]#[% facets_loo.type_id %]">Show more</a></li>
   [% END %]
 </ul></li>
 [% END %]
