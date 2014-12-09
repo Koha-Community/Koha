@@ -519,7 +519,11 @@ No patron matched <span class="ex">[% message %]</span>
 
 
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
-<fieldset id="circ_circulation_issue">
+[% IF ( issue ) %]
+    <fieldset id="circ_circulation_issue" class="lastchecked">
+[% ELSE %]
+    <fieldset id="circ_circulation_issue">
+[% END %]
     [% IF ( DisplayClearScreenButton ) %]
         <span id="clearscreen"><a href="/cgi-bin/koha/circ/circulation.pl" title="Clear screen">x</a></span>
     [% END %]
@@ -590,7 +594,14 @@ No patron matched <span class="ex">[% message %]</span>
                         <input type="hidden" name="oldamount" value="[% amountold %]" />
                 [% END %]
 </fieldset>
-</form></div>[% END %]<!-- /unless noissues -->
+[% IF ( issue ) %]
+    <div class="lastchecked">
+        <p><strong>Checked out: </strong>[% issue.item.biblio.title %] ([% issue.item.barcode %]). Due on [% issue.date_due | $KohaDates %]</p>
+    </div>
+[% END %]
+</form></div>
+
+[% END %]<!-- /unless noissues -->
 
 [% IF ( noissues ) %]
     [% IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) %]
@@ -754,10 +765,6 @@ No patron matched <span class="ex">[% message %]</span>
 
 </div>
 </div>
-[% IF ( issue ) %]
-    <div class="dialog message">[% issue.item.biblio.title %] ([% issue.item.barcode %]) due on [% issue.date_due | $KohaDates %]</div>
-[% END %]
-
 
 <div class="yui-g"><div id="patronlists" class="toptabs">
 
