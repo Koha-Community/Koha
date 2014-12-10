@@ -170,6 +170,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
     <script type="text/javascript">
     //<![CDATA[
     var NO_OL_JACKET = _("No cover image available");
+    var OL_PREVIEW = _("Preview");
     //]]>
     </script>
 [% END %]
