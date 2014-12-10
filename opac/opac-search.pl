@@ -420,10 +420,11 @@ if ($operands[0] && !$operands[1]) {
 
 # limits are use to limit to results to a pre-defined category such as branch or language
 my @limits = $cgi->param('limit');
+@limits = map { uri_unescape($_) } @limits;
 my @nolimits = $cgi->param('nolimit');
+@nolimits = map { uri_unescape($_) } @nolimits;
 my %is_nolimit = map { $_ => 1 } @nolimits;
 @limits = grep { not $is_nolimit{$_} } @limits;
-@limits = map { uri_unescape($_) } @limits;
 
 if($params->{'multibranchlimit'}) {
     my $multibranch = '('.join( " or ", map { "branch: $_ " } @{ GetBranchesInCategory( $params->{'multibranchlimit'} ) } ).')';
