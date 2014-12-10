@@ -230,6 +230,7 @@ sub sip_protocol_loop {
 	my $self = shift;
 	my $service = $self->{service};
 	my $config  = $self->{config};
+    my $timeout = $self->{service}->{timeout} || $config->{timeout} || 30;
 	my $input;
 
     # The spec says the first message will be:
@@ -246,8 +247,10 @@ sub sip_protocol_loop {
 	# 
 	# In short, we'll take any valid message here.
 	#my $expect = SC_STATUS;
+    local $SIG{ALRM} = sub { die "SIP Timed Out!\n"; };
     my $expect = '';
     while (1) {
+        alarm $timeout;
         $input = Sip::read_SIP_packet(*STDIN);
         unless ($input) {
             return;		# EOF
@@ -273,6 +276,7 @@ sub sip_protocol_loop {
 		}
 		# We successfully received and processed what we were expecting
 		$expect = '';
+    alarm 0;
 	}
 }
 
