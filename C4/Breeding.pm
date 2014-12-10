@@ -372,9 +372,8 @@ sub ImportBreedingAuth {
     my $batch_id = GetZ3950BatchId($filename);
     my $searchbreeding = $dbh->prepare("select import_record_id from import_auths where control_number=? and authorized_heading=?");
 
-#     $encoding = C4::Context->preference("marcflavour") unless $encoding;
-    my $marc_type = C4::Context->preference('marcflavour');
-    $marc_type .= 'AUTH' if ($marc_type eq 'UNIMARC');
+    my $marcflavour = C4::Context->preference('marcflavour');
+    my $marc_type = $marcflavour eq 'UNIMARC' ? 'UNIMARCAUTH' : $marcflavour;
 
     # fields used for import results
     my $imported=0;
@@ -487,8 +486,8 @@ sub Z3950SearchAuth {
     my $query;
     my $nterms=0;
 
-    my $marc_type = C4::Context->preference('marcflavour');
-    $marc_type .= 'AUTH' if ($marc_type eq 'UNIMARC');
+    my $marcflavour = C4::Context->preference('marcflavour');
+    my $marc_type = $marcflavour eq 'UNIMARC' ? 'UNIMARCAUTH' : $marcflavour;
 
     if ($nameany) {
         $query .= " \@attr 1=1002 \"$nameany\" "; #Any name (this includes personal, corporate, meeting/conference authors, and author names in subject headings)
