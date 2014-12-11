@@ -1711,7 +1711,7 @@ sub buildQuery {
             if ( $k !~ /mc-i(tem)?type/ ) {
                 # in case the mc-ccode value has complicating chars like ()'s inside it we wrap in quotes
                 $this_limit =~ tr/"//d;
-                $this_limit = $k.":\"".$v."\"";
+                $this_limit = $k.":'".$v."'";
             }
 
             $group_OR_limits{$k} .= " or " if $group_OR_limits{$k};
