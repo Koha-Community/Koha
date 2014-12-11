@@ -24,7 +24,7 @@ CREATE TABLE `auth_header` (
   `authid` bigint(20) unsigned NOT NULL auto_increment,
   `authtypecode` varchar(10) NOT NULL default '',
   `datecreated` date default NULL,
-  `datemodified` date default NULL,
+  `modification_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `origincode` varchar(20) default NULL,
   `authtrees` mediumtext,
   `marc` blob,

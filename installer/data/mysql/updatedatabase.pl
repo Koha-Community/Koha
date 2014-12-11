@@ -10277,6 +10277,20 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        ALTER TABLE auth_header
+        CHANGE COLUMN datemodified modification_time TIMESTAMP NOT NULL default CURRENT_TIMESTAMP
+    |);
+    $dbh->do(q|
+        ALTER TABLE auth_header
+        CHANGE COLUMN modification_time modification_time TIMESTAMP NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
+    |);
+    print "Upgrade to $DBversion done (Bug 11165: Update auth_header.datemodified when updated)\n";
+    SetVersion ($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
