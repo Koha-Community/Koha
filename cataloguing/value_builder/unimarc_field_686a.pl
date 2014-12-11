@@ -26,22 +26,6 @@ use C4::Context;
 use C4::Search;
 use C4::Output;
 
-=head1 NAME
-
-plugin unimarc_field_686a
-
-=head1 SYNOPSIS
-
-This plug-in deals with unimarc field 686a (
-
-=head1 DESCRIPTION
-
-=head1 FUNCTIONS
-
-=over 2
-
-=cut
-
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
 my $function_name= $field_number;
