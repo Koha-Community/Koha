@@ -304,6 +304,7 @@ my $target_map = {
   './reviews'                   => 'INTRANET_CGI_DIR',
   './rewrite-config.PL'         => 'NONE',
   './reviews'                   => 'INTRANET_CGI_DIR',
+  './rotating_collections'      => 'INTRANET_CGI_DIR',
   './serials'                   => 'INTRANET_CGI_DIR',
   './services'                  => 'INTRANET_CGI_DIR',
   './skel'                      => 'NONE',
