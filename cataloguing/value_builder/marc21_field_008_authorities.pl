@@ -43,11 +43,6 @@ $year +=1900; $mon +=1;
 my $dateentered = substr($year,2,2).sprintf ("%0.2d", $mon).sprintf ("%0.2d",$mday);
 my $defaultval = Field008();
 
-sub plugin_parameters {
-    my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
-    return "";
-}
-
 sub plugin_javascript {
     my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
     my $function_name= $field_number;
@@ -64,10 +59,6 @@ function Focus$function_name(subfield_managed) {
     }
         document.getElementById(\"$field_number\").value=fieldval;
     }
-    return 1;
-}
-
-function Blur$function_name(subfield_managed) {
     return 1;
 }
 
@@ -130,5 +121,3 @@ sub Field008 {
   }
   return substr($pref,0,34);  #ignore remainder
 }
-
-1;

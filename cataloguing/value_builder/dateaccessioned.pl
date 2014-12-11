@@ -21,32 +21,6 @@ use Modern::Perl;
 
 no warnings 'redefine';
 
-=head1
-
-plugin_parameters : useless here
-
-=cut
-
-sub plugin_parameters {
-	# my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
-	return "";
-}
-
-=head1
-
-plugin_javascript : the javascript function called when the user enters the subfield.
-contain 3 javascript functions :
-* one called when the   field  is entered (OnFocus) named FocusXXX
-* one called when the   field  is  left   (onBlur ) named BlurXXX
-* one called when the ... link is clicked (onClick) named ClicXXX
-
-returns :
-* XXX
-* a variable containing the 3 scripts.
-the 3 scripts are inserted after the <input> in the html code
-
-=cut
-
 sub plugin_javascript {
 	# my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
 	my $function_name = "dateaccessioned".(int(rand(100000))+1);
@@ -61,10 +35,6 @@ sub plugin_javascript {
 //<![CDATA[
 //  
 // from: cataloguing/value_builder/dateaccessioned.pl
-
-function Blur$function_name(index) {
-    //date validation could go here
-}
 
 function Focus$function_name(subfield_managed, id, force) {
     //var summary = "";
@@ -92,16 +62,3 @@ function set_to_today(id, force) {
 END_OF_JS
 	return ($function_name, $res);
 }
-
-=head1
-
-plugin: useless here.
-
-=cut
-
-sub plugin {
-#    my ($input) = @_;
-    return "";
-}
-
-1;

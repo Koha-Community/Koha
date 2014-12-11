@@ -39,21 +39,10 @@ CCC QW - returns first unused number CCC QWxx starting with CCC QW01
 
 =cut
 
-sub plugin_parameters {
-}
-
 sub plugin_javascript {
     my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
     my $res="
     <script type='text/javascript'>
-        function Focus$field_number() {
-            return 1;
-        }
-
-        function Blur$field_number() {
-                return 1;
-        }
-
         function Clic$field_number() {
                 var code = document.getElementById('$field_number');
                 var url = '../cataloguing/plugin_launcher.pl?plugin_name=callnumber-KU.pl&code=' + code.value;
@@ -128,5 +117,3 @@ sub plugin {
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
-
-1;

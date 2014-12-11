@@ -25,27 +25,10 @@ use CGI qw ( -utf8 );
 use C4::Context;
 
 
-=head1 FUNCTIONS
-
-=head2 plugin_parameters
-
-other parameters added when the plugin is called by the dopop function
-
-=cut
-
-sub plugin_parameters {
-    my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
-    return "";
-}
-
 sub plugin_javascript {
     my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
     my $res="
     <script type='text/javascript'>
-        function Focus$field_number() {
-            return 1;
-        }
-
         function Blur$field_number() {
                 var isbn = document.getElementById('$field_number');
                 var url = '../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_010.pl&isbn=' + isbn.value;
@@ -63,9 +46,6 @@ sub plugin_javascript {
                 return 1;
         }
 
-        function Clic$field_number() {
-            return 1;
-        }
     </script>
     ";
 
@@ -149,4 +129,3 @@ sub plugin {
     }
     output_html_with_http_headers $input, $cookie, $template->output;
 }
-1;

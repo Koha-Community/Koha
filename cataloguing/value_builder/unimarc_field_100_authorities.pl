@@ -26,31 +26,10 @@ use C4::Context;
 use C4::Output;
 
 
-=head1 FUNCTIONS
-
-=head2 plugin_parameters
-
-Other parameters added when the plugin is called by the dopop function
-
-=cut
-
-sub plugin_parameters {
-    my ( $dbh, $record, $tagslib, $i, $tabloop ) = @_;
-    return "";
-}
-
 sub plugin_javascript {
     my ( $dbh, $record, $tagslib, $field_number, $tabloop ) = @_;
     my $res           = "
         <script type='text/javascript'>
-            function Focus$field_number() {
-                return 1;
-            }
-
-            function Blur$field_number() {
-                return 1;
-            }
-
             function Clic$field_number(i) {
                 var defaultvalue;
                 try {
@@ -118,5 +97,3 @@ sub plugin {
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
-
-1;

@@ -32,34 +32,6 @@ use C4::Koha;
 
 ###TODO To rewrite in order to use SearchAuthorities
 
-=head1 FUNCTIONS
-
-=head2 plugin_parameters
-
-Other parameters added when the plugin is called by the dopop function
-
-=cut
-
-sub plugin_parameters {
-my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
-return "";
-}
-
-=head2 plugin_javascript
-
-The javascript function called when the user enters the subfield.
-contain 3 javascript functions :
-* one called when the field is entered (OnFocus). Named FocusXXX
-* one called when the field is leaved (onBlur). Named BlurXXX
-* one called when the ... link is clicked (<a href="javascript:function">) named ClicXXX
-
-returns :
-* XXX
-* a variable containing the 3 scripts.
-the 3 scripts are inserted after the <input> in the html code
-
-=cut
-
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
 my $function_name= $field_number;
@@ -73,14 +45,6 @@ my $function_name= $field_number;
 
 my $res  = "
 <script type=\"text/javascript\">
-function Focus$function_name(index) {
-
-}
-
-function Blur$function_name(subfield_managed) {
-    return 1;
-}
-
 function Clic$function_name(subfield_managed) {
     defaultvalue=escape(document.getElementById(\"$field_number\").value);
     newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&index=\"+subfield_managed,\"unimarc_225a\",'width=500,height=600,toolbar=false,scrollbars=yes');
@@ -89,12 +53,6 @@ function Clic$function_name(subfield_managed) {
 ";
 return ($function_name,$res);
 }
-
-=head2 plugin
-
-The true value_builded. The screen that is open in the popup window.
-
-=cut
 
 sub plugin {
 my ($input) = @_;
@@ -234,5 +192,3 @@ my ($input) = @_;
     # Print the page
     output_html_with_http_headers $query, $cookie, $template->output;
 }
-
-1;

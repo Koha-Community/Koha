@@ -48,31 +48,12 @@ use C4::Context;
 use C4::AuthoritiesMarc;
 use C4::Output;
 
-=head1 FUNCTIONS
-
-=head2 plugin_parameters
-
-plugin_parameters : other parameters added when the plugin is called by the dopop function
-
-=cut
-
-sub plugin_parameters {
-    my ( $dbh, $record, $tagslib, $i, $tabloop ) = @_;
-    return "";
-}
-
 sub plugin_javascript {
     my ( $dbh, $record, $tagslib, $field_number, $tabloop ) = @_;
     my $function_name = $field_number;
     my $res           = "
     <script type=\"text/javascript\">
-        function Focus$function_name(subfield_managed) {
-            return 1;
-        }
     
-        function Blur$function_name(subfield_managed) {
-            return 1;
-        }
     
         function Clic$function_name(index) {
             window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_210c_bis.pl&index=\"+index,\"unimarc210c\",'width=500,height=400,toolbar=false,scrollbars=no');
@@ -105,5 +86,3 @@ sub plugin {
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
-
-1;

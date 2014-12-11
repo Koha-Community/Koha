@@ -29,31 +29,10 @@ use C4::Context;
 use C4::Search;
 use C4::Output;
 
-=head1 FUNCTIONS
-
-=head2 plugin_parameters
-
-Other parameters added when the plugin is called by the dopop function
-
-=cut
-
-sub plugin_parameters {
-    my ( $dbh, $record, $tagslib, $i, $tabloop ) = @_;
-    return "";
-}
-
 sub plugin_javascript {
     my ( $dbh, $record, $tagslib, $field_number, $tabloop ) = @_;
     my $res = "
 <script>
-function Focus$field_number(subfield_managed) {
-    return 1;
-}
-
-function Blur$field_number(subfield_managed) {
-    return 1;
-}
-
 function Clic$field_number(i) {
 	defaultvalue=document.getElementById(\"$field_number\").value;
 	window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_116.pl&index=$field_number&result=\"+defaultvalue,\"unimarc_field_116\",'width=1200,height=600,toolbar=false,scrollbars=yes');
@@ -113,5 +92,3 @@ sub plugin {
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
-
-1;

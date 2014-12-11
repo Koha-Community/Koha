@@ -34,25 +34,12 @@ plugin_parameters : other parameters added when the plugin is called by the dopo
 
 =cut
 
-sub plugin_parameters {
-    my ($dbh, $record, $tagslib, $i, $tabloop) = @_;
-    return "";
-}
-
 sub plugin_javascript {
     my ($dbh, $record, $tagslib, $field_number, $tabloop) = @_;
     my $function_name = $field_number;
     my $res           = "
 <script type=\"text/javascript\">
 //<![CDATA[
-
-function Focus$function_name(subfield_managed) {
-return 1;
-}
-
-function Blur$function_name(subfield_managed) {
-	return 1;
-}
 
 function Clic$function_name(i) {
 	defaultvalue=document.getElementById(\"$field_number\").value;
@@ -106,5 +93,3 @@ sub plugin {
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
-
-1;

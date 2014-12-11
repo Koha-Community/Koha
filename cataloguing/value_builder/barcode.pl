@@ -29,32 +29,6 @@ use Algorithm::CheckDigits;
 
 my $DEBUG = 0;
 
-=head1
-
-plugin_parameters : other parameters added when the plugin is called by the dopop function
-
-=cut
-
-sub plugin_parameters {
-#   my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
-    return "";
-}
-
-=head1
-
-plugin_javascript : the javascript function called when the user enters the subfield.
-contain 3 javascript functions :
-* one called when the field is entered (OnFocus). Named FocusXXX
-* one called when the field is leaved (onBlur). Named BlurXXX
-* one called when the ... link is clicked (<a href="javascript:function">) named ClicXXX
-
-returns :
-* XXX
-* a variable containing the 3 scripts.
-the 3 scripts are inserted after the <input> in the html code
-
-=cut
-
 sub plugin_javascript {
 	my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
 	my $function_name= "barcode".(int(rand(100000))+1);
@@ -121,10 +95,6 @@ END_OF_JS
 <script type="text/javascript">
 //<![CDATA[
 
-function Blur$function_name(index) {
-    //barcode validation might go here
-}
-
 function Focus$function_name(subfield_managed, id, force) {
 $scr
     return 0;
@@ -138,16 +108,3 @@ function Clic$function_name(id) {
 END_OF_JS
     return ($function_name, $js);
 }
-
-=head1
-
-plugin: useless here
-
-=cut
-
-sub plugin {
-    # my ($input) = @_;
-    return "";
-}
-
-1;

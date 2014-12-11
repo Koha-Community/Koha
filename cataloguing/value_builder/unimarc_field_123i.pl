@@ -27,32 +27,11 @@ use C4::Context;
 use C4::Search;
 use C4::Output;
 
-=head1 FUNCTIONS
-
-=head2 plugin_parameters
-
-Other parameters added when the plugin is called by the dopop function
-
-=cut
-
-sub plugin_parameters {
-my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
-return "";
-}
-
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
 my $function_name= $field_number;
 my $res="
 <script>
-function Focus$function_name(subfield_managed) {
-return 1;
-}
-
-function Blur$function_name(subfield_managed) {
-	return 1;
-}
-
 function Clic$function_name(i) {
 	defaultvalue=document.getElementById(\"$field_number\").value;
 	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_123i.pl&index=$field_number&result=\"+defaultvalue,\"unimarc_field_123i\",'width=800,height=400,toolbar=false,scrollbars=yes');
@@ -90,5 +69,3 @@ my ($template, $loggedinuser, $cookie)
 			 f4 => $f4);
         output_html_with_http_headers $input, $cookie, $template->output;
 }
-
-1;

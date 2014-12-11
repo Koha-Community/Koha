@@ -31,31 +31,12 @@ use vars qw( $authorised_values_sth);
 use vars qw( $is_a_modif );
 use utf8;
 
-=head1
-
-plugin_parameters : other parameters added when the plugin is called by the dopop function
-
-=cut
-
-sub plugin_parameters {
-my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
-return "";
-}
-
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
 my $function_name= "macles".(int(rand(100000))+1);
 my $res="
 <script type=\"text/javascript\">
 //<![CDATA[
-
-function Focus$function_name(subfield_managed) {
-return 1;
-}
-
-function Blur$function_name(subfield_managed) {
-	return 1;
-}
 
 function Clic$function_name(i) {
 	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=macles.pl&index=\"+i,\"MACLES\",',toolbar=false,scrollbars=yes');
@@ -202,6 +183,3 @@ my ($input) = @_;
 	$template->param("index"=>$index);
 	output_html_with_http_headers $input, $cookie, $template->output;
 }
-1;
-
-

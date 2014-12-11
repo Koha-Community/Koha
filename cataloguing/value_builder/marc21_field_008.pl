@@ -41,11 +41,6 @@ $year += 1900;
 $mon  += 1;
 my $dateentered = substr($year, 2, 2) . sprintf("%0.2d", $mon) . sprintf("%0.2d", $mday);
 
-sub plugin_parameters {
-    my ($dbh, $record, $tagslib, $i, $tabloop) = @_;
-    return "";
-}
-
 sub plugin_javascript {
     my $lang = C4::Context->preference('DefaultLanguageField008' );
     $lang = "eng" unless $lang;
@@ -64,10 +59,6 @@ function Focus$function_name(subfield_managed) {
         document.getElementById(\"$field_number\").value='$dateentered' + 'b        xxu||||| |||| 00| 0 $lang d';
 	}
     return 1;
-}
-
-function Blur$function_name(subfield_managed) {
-	return 1;
 }
 
 function Clic$function_name(i) {
@@ -182,5 +173,3 @@ sub plugin {
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
-
-1;

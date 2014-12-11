@@ -33,24 +33,11 @@ use MARC::Record;
 use C4::Branch;
 use C4::ItemType;
 
-sub plugin_parameters {
- my ( $dbh, $record, $tagslib, $i, $tabloop ) = @_;
-     return "";
-}
-
 sub plugin_javascript {
   my ( $dbh, $record, $tagslib, $field_number, $tabloop ) = @_;
   my $function_name = $field_number;
      my $res           = "
   <script type='text/javascript'>
-                function Focus$function_name(subfield_managed) {
-                       return 1;
-              }
-
-             function Blur$function_name(subfield_managed) {
-                        return 1;
-              }
-
              function Clic$function_name(i) {
                        defaultvalue=document.getElementById(\"$field_number\").value;
                  window.open(\"/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&index=\" + i + \"&result=\"+defaultvalue,\"marc21_field_7\"+i+\"\",'width=900,height=700,toolbar=false,scrollbars=yes');
@@ -345,5 +332,3 @@ sub plugin {
      }
       output_html_with_http_headers $query, $cookie, $template->output;
 }
-
-1;
