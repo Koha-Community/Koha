@@ -419,7 +419,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
     <fieldset class="rows"> <legend>Acquisition information</legend><ol>
         <li><label for="branchcode">Library:</label>
             <select name="branchcode" id="branchcode">
-                <option value="__ANY__">Any</option>[% FOREACH branchloo IN branchloop %]
+                <option value="">Any</option>[% FOREACH branchloo IN branchloop %]
                 [% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %][% END %]
             </select>
         </li>

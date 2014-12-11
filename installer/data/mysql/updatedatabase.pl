@@ -9605,6 +9605,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        UPDATE suggestions SET branchcode="" WHERE branchcode="__ANY__"
+    |);
+    print "upgrade to $DBversion done (Bug 10753: replace __ANY__ with empty string in suggestions.branchcode)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
