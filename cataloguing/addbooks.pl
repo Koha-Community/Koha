@@ -95,9 +95,6 @@ if ($query) {
     # SimpleSearch() give the results per page we want, so 0 offet here
     my $total = @{$marcresults};
     my @newresults = searchResults( 'intranet', $query, $total, $results_per_page, 0, 0, $marcresults );
-    foreach my $line (@newresults) {
-        if ( not exists $line->{'size'} ) { $line->{'size'} = "" }
-    }
     $template->param(
         total          => $total_hits,
         query          => $query,
