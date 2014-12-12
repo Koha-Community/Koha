@@ -60,10 +60,7 @@ function toggle_onsite_checkout(){
 }
 
 $(document).ready(function() {
-    [% IF !NEEDSCONFIRMATION %]
-        $('#barcode').prop('disabled', false).focus();
-    [% END %]
-    $('#mainform').bind('submit',function() {
+    $('#mainform').on('submit',function() {
         $('#barcode').on('keypress',function(event) {
             $('#barcodeSubmittedModal').modal();
             event.preventDefault(); }
@@ -539,7 +536,11 @@ No patron matched <span class="ex">[% message %]</span>
 
 	<div class="hint">Enter item barcode:</div>
 
-    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" disabled="disabled" />
+    [% IF NEEDSCONFIRMATION %]
+        <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" disabled="disabled" />
+    [% ELSE %]
+        <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" />
+    [% END %]
     <button type="submit" class="btn">Check out</button>
 
     <div class="date-select">
