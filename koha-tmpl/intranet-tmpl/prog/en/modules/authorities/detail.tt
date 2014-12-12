@@ -32,10 +32,10 @@
 	 });
 
 function confirm_deletion() {
-	var is_confirmed = confirm(_('Are you sure you want to delete this authority?'));
-	if (is_confirmed) {
-		window.location="authorities-home.pl?op=delete&authid=[% authid %]";
-	}
+    var is_confirmed = confirm(_("Are you sure you want to delete this authority?"));
+    if (is_confirmed) {
+        window.location="authorities-home.pl?op=delete&authid=[% authid %]";
+    }
 }
 function Dopop(link) {
 	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
