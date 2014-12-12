@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Update patron records</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -78,7 +79,7 @@
                     <div id="pending_updates">
                             [% FOREACH pm IN PendingModifications %]
                                 [% SET borrowernumber = pm.borrowernumber %]
-                                <h3><a href="#panel_modify_[% pm.borrowernumber %]">[% borrowers.$borrowernumber.surname %], [% borrowers.$borrowernumber.firstname %]. Library: [% borrowers.$borrowernumber.branchcode %]</a></h3>
+                                <h3><a href="#panel_modify_[% pm.borrowernumber %]">[% borrowers.$borrowernumber.surname %], [% borrowers.$borrowernumber.firstname %] ([% Branches.GetName( borrowers.$borrowernumber.branchcode ) %])</a></h3>
                                 <div id="panel_modify_[% pm.borrowernumber %]">
                                     <div style="background-color:#E6F0F2;padding:.5em;margin:.3em 0;">
                                         <input type="radio" id="approve_modify_[% pm.borrowernumber %]" name="modify_[% pm.borrowernumber %]" value="approve" />
