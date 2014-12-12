@@ -269,12 +269,13 @@ foreach my $report_id (@ARGV) {
         my %mail;
         if ($format eq 'html') {
                 $message = "<html><head><style>tr:nth-child(2n+1) { background-color: #ccc;}</style></head><body>$message</body></html>";
-           %mail = (
-              To      => $to,
-              From    => $from,
-              'Content-Type' => 'text/html',
-              Subject => encode('utf8', $subject ),
-              Message => encode('utf8', $message )
+           %mail = $email->create_message_headers({
+              to      => $to,
+              from    => $from,
+              contenttype => 'text/html',
+              subject => encode('utf8', $subject ),
+              message => encode('utf8', $message )
+           }
           );
         } else {
           %mail = (
