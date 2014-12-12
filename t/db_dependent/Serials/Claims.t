@@ -12,6 +12,7 @@ $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM issues|);
+$dbh->do(q|DELETE FROM subscription|);
 
 my $branchcode = 'CPL';
 my $bpid = AddBudgetPeriod({
