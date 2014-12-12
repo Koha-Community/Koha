@@ -276,7 +276,7 @@ foreach my $report_id (@ARGV) {
               from    => $from,
               contenttype => 'text/html',
               subject => encode('utf8', $subject ),
-              messsage => encode('utf8', $message )
+              message => encode('utf8', $message )
            }
           );
         } else {
