@@ -38,6 +38,19 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
+# Reset item types to only the default ones
+$dbh->do(q|DELETE FROM itemtypes;|);
+my $sql = "
+INSERT INTO itemtypes (itemtype, description, rentalcharge, notforloan, imageurl, summary) VALUES
+('BK', 'Books',5,0,'bridge/book.gif',''),
+('MX', 'Mixed Materials',5,0,'bridge/kit.gif',''),
+('CF', 'Computer Files',5,0,'bridge/computer_file.gif',''),
+('MP', 'Maps',5,0,'bridge/map.gif',''),
+('VM', 'Visual Materials',5,1,'bridge/dvd.gif',''),
+('MU', 'Music',5,0,'bridge/sound.gif',''),
+('CR', 'Continuing Resources',5,0,'bridge/periodical.gif',''),
+('REF', 'Reference',0,1,'bridge/reference.gif','');";
+$dbh->do($sql);
 $dbh->do(q|DELETE FROM suggestions|);
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM borrowers|);
