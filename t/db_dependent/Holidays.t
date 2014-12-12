@@ -7,6 +7,7 @@ use DateTime::TimeZone;
 use C4::Context;
 use Koha::DateUtils;
 use Test::More tests => 12;
+use C4::Branch;
 
 BEGIN { use_ok('Koha::Calendar'); }
 BEGIN { use_ok('C4::Calendar'); }
@@ -15,6 +16,38 @@ my $dbh = C4::Context->dbh();
 # Start transaction
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
+
+# Add branches if they don't exist
+if (not defined GetBranchDetail('CPL')) {
+    ModBranch({add => 1, branchcode => 'CPL', branchname => 'Centerville'});
+}
+if (not defined GetBranchDetail('MPL')) {
+    ModBranch({add => 1, branchcode => 'MPL', branchname => 'Midway'});
+}
+
+# Make the repeatable_holidays table ONLY the default data.
+$dbh->do("DELETE FROM repeatable_holidays");
+C4::Calendar->new( branchcode => 'MPL' )->insert_week_day_holiday(
+    weekday     => 0,
+    title       => '',
+    description => 'Sundays',
+);
+my $holiday2add = dt_from_string("2015-01-01");
+C4::Calendar->new( branchcode => 'MPL' )->insert_day_month_holiday(
+    day         => $holiday2add->day(),
+    month       => $holiday2add->month(),
+    year        => $holiday2add->year(),
+    title       => '',
+    description => "New Year's Day",
+);
+$holiday2add = dt_from_string("2014-12-25");
+C4::Calendar->new( branchcode => 'MPL' )->insert_day_month_holiday(
+    day         => $holiday2add->day(),
+    month       => $holiday2add->month(),
+    year        => $holiday2add->year(),
+    title       => '',
+    description => 'Christmas',
+);
 
 my $branchcode = 'MPL';
 
@@ -72,3 +105,5 @@ C4::Calendar->new( branchcode => 'CPL' )->insert_single_holiday(
 );
 is( Koha::Calendar->new( branchcode => 'CPL' )->is_holiday( $today ), 1, "Today is a holiday for CPL" );
 is( Koha::Calendar->new( branchcode => 'MPL' )->is_holiday( $today ), 0, "Today is not a holiday for MPL");
+
+$dbh->rollback;
