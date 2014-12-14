@@ -928,7 +928,7 @@ sub CanBookBeIssued {
 
     if ( $rentalConfirmation ){
         my ($rentalCharge) = GetIssuingCharges( $item->{'itemnumber'}, $borrower->{'borrowernumber'} );
-        if ( $rentalCharge ){
+        if ( $rentalCharge > 0 ){
             $rentalCharge = sprintf("%.02f", $rentalCharge);
             $needsconfirmation{RENTALCHARGE} = $rentalCharge;
         }
