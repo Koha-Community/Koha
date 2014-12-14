@@ -1,6 +1,7 @@
 [% USE Branches %]
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
+[% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions  &rsaquo;
     [% IF ( op_save ) %]
@@ -294,10 +295,10 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
           <span class="label">Currency:</span>[% currency %]
         </li>
         <li>
-          <span class="label">Price:</span>[% price %]
+          <span class="label">Price:</span>[% price | $Price %]
         </li>
         <li>
-          <span class="label">Total</span>[% total %]
+          <span class="label">Total</span>[% total | $Price %]
         </li>
       </ol>
     </fieldset>
