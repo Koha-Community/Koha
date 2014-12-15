@@ -960,7 +960,7 @@ sub GetItemLocation {
 
 =head2 GetLostItems
 
-  $items = GetLostItems( $where, $orderby );
+  $items = GetLostItems( $where );
 
 This function gets a list of lost items.
 
@@ -974,9 +974,6 @@ and the value to match as value. For example:
 { barcode    => 'abc123',
   homebranch => 'CPL',    }
 
-C<$orderby> is a field of the items table by which the resultset
-should be orderd.
-
 =item return:
 
 C<$items> is a reference to an array full of hashrefs with columns
@@ -985,7 +982,7 @@ from the "items" table as keys.
 =item usage in the perl script:
 
   my $where = { barcode => '0001548' };
-  my $items = GetLostItems( $where, "homebranch" );
+  my $items = GetLostItems( $where );
   $template->param( itemsloop => $items );
 
 =back
@@ -995,7 +992,6 @@ from the "items" table as keys.
 sub GetLostItems {
     # Getting input args.
     my $where   = shift;
-    my $orderby = shift;
     my $dbh     = C4::Context->dbh;
 
     my $query   = "
@@ -1014,11 +1010,6 @@ sub GetLostItems {
     foreach my $key (keys %$where) {
         $query .= " AND $key LIKE ?";
         push @query_parameters, "%$where->{$key}%";
-    }
-    my @ordervalues = qw/title author homebranch itype barcode price replacementprice lib datelastseen location/;
-    
-    if ( defined $orderby && grep($orderby, @ordervalues)) {
-        $query .= ' ORDER BY '.$orderby;
     }
 
     my $sth = $dbh->prepare($query);

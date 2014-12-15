@@ -53,7 +53,6 @@ my $params = $query->Vars;
 my $get_items = $params->{'get_items'};
 
 if ( $get_items ) {
-    my $orderbyfilter    = $params->{'orderbyfilter'}   || undef;
     my $branchfilter     = $params->{'branchfilter'}    || undef;
     my $barcodefilter    = $params->{'barcodefilter'}   || undef;
     my $itemtypesfilter  = $params->{'itemtypesfilter'} || undef;
@@ -63,11 +62,11 @@ if ( $get_items ) {
     $where{'homebranch'}       = $branchfilter    if defined $branchfilter;
     $where{'barcode'}          = $barcodefilter   if defined $barcodefilter;
     $where{'authorised_value'} = $loststatusfilter if defined $loststatusfilter;
-    
+
     my $itype = C4::Context->preference('item-level_itypes') ? "itype" : "itemtype";
     $where{$itype}            = $itemtypesfilter if defined $itemtypesfilter;
 
-    my $items = GetLostItems( \%where, $orderbyfilter ); 
+    my $items = GetLostItems( \%where );
     foreach my $it (@$items) {
         $it->{'datelastseen'} = format_date($it->{'datelastseen'});
     }
