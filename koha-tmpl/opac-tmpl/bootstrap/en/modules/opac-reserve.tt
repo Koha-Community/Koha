@@ -279,10 +279,11 @@
                                                         [% IF ( OpacHoldNotes ) %]
                                                             <li>
                                                                 <div class="notesrow" id="notesrow_[% bibitemloo.biblionumber %]">
-                                                                    <label for="holdnotes[% bibitemloo.biblionumber %]">Hold notes:</label>
-                                                                    <span id="forcenotesreason_[% bibitemloo.biblionumber %]" class="forcenotesreason"></span>
-                                                                    <textarea id="holdnotes[% bibitemloo.biblionumber %]" rows="2" cols="30" name="notes_[% bibitemloo.biblionumber %]">[% bibitemloo.holdnotes %]</textarea>
-                                                                    <input type="hidden" id="notesmandatory_[% bibitemloo.biblionumber %]" value="[% bibitemloo.mandatorynotes %]"/>
+                                                                    <label for="holdnotes_[% bibitemloo.biblionumber %]">Hold notes:</label>
+                                                                    [% IF bibitemloo.reqholdnotes %]
+                                                                        <span id="reqholdnotes_[% bibitemloo.biblionumber %]">Please enter additional information about the requested item:</span>
+                                                                    [% END %]
+                                                                    <textarea id="holdnotes_[% bibitemloo.biblionumber %]" rows="2" cols="30" name="notes_[% bibitemloo.biblionumber %]" >[% bibitemloo.holdnotes %]</textarea>
                                                                 </div>
                                                             </li>
                                                         [% END # / IF OpacHoldNotes %]
@@ -432,10 +433,6 @@
 <script type="text/javascript">
 // <![CDATA[
     var MSG_NO_ITEM_SELECTED = _("Expecting a specific item selection.");
-    var ForceHoldNotesReasons=new Array(
-       _("This title consists of multiple volumes/parts. Please indicate which part you need. Clicking on specific item information may be helpful."),
-       "*** Add a new reason above this line ***" );
-       // NOTE: Do not renumber reasons; this will affect use of existing ones.
 
         // Clear the contents of an input field
         $(".clearfield").on("click",function(e){
@@ -495,16 +492,10 @@
             $("#reqspecific_[% bibitemloo.biblionumber %]").click();
             $("#copiesrow_[% bibitemloo.biblionumber %]").show();
           [% END %]
+          [% IF bibitemloo.reqholdnotes %]
+              $("#holdnotes_[% bibitemloo.biblionumber %]").attr( 'required', true );
+          [% END %]
         [% END %]
-
-        // Insert reasons for forced hold notes
-        $(".forcenotesreason").each(function(){
-            biblioNum = suffixOf($(this).attr("id"), "_");
-            var j=$("#notesmandatory_"+biblioNum).val();
-            if(j>0) {
-                $(this).html(ForceHoldNotesReasons[j-1]);
-            }
-        });
 
         $(".date-format").each(function(){
             if($(this).hasClass("to")){ var op = "to"; }
@@ -615,11 +606,19 @@
                 biblionumbers += biblioNum + "/";
                 selections += biblioNum + "/";
 
+                // If required hold note is empty, make it visible
+                if( $("#holdnotes_"+biblioNum).attr( 'required' ) && $("#holdnotes_"+biblioNum).val() == '' ) {
+                    if( !$("#hold-options-"+biblioNum).is(':visible')) {
+                        $("#toggle-hold-options-"+biblioNum).click();
+                    }
+                }
+
                 // If the 'specific copy' radio button is checked
                 if ($("#reqspecific_" + biblioNum + ":checked").size() > 0) {
                     // Find the selected copy
                     var item = $(".checkitem_" + biblioNum + ":checked");
                     if ($(item).size() == 0) {
+                        alert(MSG_NO_ITEM_SELECTED);
                         badBib = biblioNum;
                         return false;
                     } else {
@@ -637,8 +636,7 @@
                 return true;
             });
 
-            if (badBib) {
-                alert(MSG_NO_ITEM_SELECTED);
+            if (badBib) { // alert has been raised already
                 return false;
             }
 
