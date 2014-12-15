@@ -134,7 +134,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('952', 'u', 'URL', 'URL', 0, 0, 'items.uri', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
 		('952', 'v', 'Preis bei Buchersatz', 'Preis bei Buchersatz', 0, 0, 'items.replacementprice', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
 		('952', 'w', 'Preis gültig von', 'Preis gültig von', 0, 0, 'items.replacementpricedate', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'x', 'Interne Notiz', 'Interne Notiz', 1, 0, 'items.paidfor', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
+		('952', 'x', 'Interne Notiz', 'Interne Notiz', 1, 0, 'items.itemnotes_nonpublic', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
 		('952', 'y', 'Koha-Medientyp', 'Koha-Medientyp', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, 0, 'FA', '', NULL, NULL),
 		('952', 'z', 'OPAC-Notiz', 'OPAC-Notiz', 0, 0, 'items.itemnotes', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
 		('999', 'c', 'Koha-Biblionummer', 'Koha-Biblionummer', 0, 0, 'biblio.biblionumber', -1, NULL, NULL, '', NULL, -5, 'FA', '', '', NULL),

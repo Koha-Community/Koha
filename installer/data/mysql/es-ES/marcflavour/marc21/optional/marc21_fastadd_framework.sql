@@ -134,7 +134,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('952', 'u', 'Identificador Uniforme del Recurso', 'Identificador Uniforme del Recurso', 0, 0, 'items.uri', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
 		('952', 'v', 'Coste, precio de reemplazo', 'Coste, precio de reemplazo', 0, 0, 'items.replacementprice', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
 		('952', 'w', 'Precio válido a partir de', 'Precio válido a partir de', 0, 0, 'items.replacementpricedate', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'x', 'Nota no pública', 'Nota no pública', 1, 0, 'items.paidfor', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
+		('952', 'x', 'Nota no pública', 'Nota no pública', 1, 0, 'items.itemnotes_nonpublic', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
 		('952', 'y', 'Tipo de ítem Koha', 'Tipo de ítem Koha', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, 0, 'FA', '', NULL, NULL),
 		('952', 'z', 'Nota pública', 'Nota pública', 0, 0, 'items.itemnotes', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
 		('999', 'c', 'Koha biblionumber', 'Koha biblionumber', 0, 0, 'biblio.biblionumber', -1, NULL, NULL, '', NULL, -5, 'FA', '', '', NULL),

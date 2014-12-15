@@ -119,7 +119,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('952', 'u', 'URI (Uniform Resource Identifier)', 'URI (Uniform Resource Identifier)', 0, 0, 'items.uri', 10, '', '', '', 1, 0, '', '', '', NULL),
 		('952', 'v', 'Costo, costo di riacquisto', 'Costo, costo di riacquisto', 0, 0, 'items.replacementprice', 10, '', '', '', 0, 0, '', '', '', NULL),
 		('952', 'w', 'Prezzo in vigore dal', 'Prezzo in vigore dal', 0, 0, 'items.replacementpricedate', 10, '', '', '', 0, 0, '', '', '', NULL),
-		('952', 'x', 'Nota non pubblica', 'Nota non pubblica', 0, 0, '', 10, '', '', '', NULL, 1, '', '', '', NULL),
+		('952', 'x', 'Nota non pubblica', 'Nota non pubblica', 0, 0, 'items.itemnotes_nonpublic', 10, '', '', '', NULL, 1, '', '', '', NULL),
 		('952', 'y', 'Tipo copia default (Koha)', 'Tipo copia default (Koha)', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, 0, '', '', '', NULL),
 		('952', 'z', 'Nota pubblica', 'Nota pubblica', 0, 0, 'items.itemnotes', 10, '', '', '', NULL, 0, '', '', '', NULL);
 

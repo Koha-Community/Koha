@@ -2130,7 +2130,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 ('995', 'w', 'Nombre de prêts', '', 0, 0, 'items.issues', 10, '', '', '', 0, 7, '', NULL, '', ''),
 ('995', 'x', 'Nombre de renouvellements', '', 0, 0, 'items.renewals', 10, '', '', '', 0, -6, '', NULL, '', ''),
 ('995', 'y', 'Date derniere lecture cb/inventaire', '', 0, 0, 'items.datelastseen', 10, '', '', '', 0, 7, '', NULL, '', ''),
-('995', 'z', 'Note interne', '', 0, 0, 'items.nonpublicnote', 10, '', '', '', 0, 0, '', NULL, '', '');
+('995', 'z', 'Note interne', '', 0, 0, 'items.itemnotes_nonpublic', 10, '', '', '', 0, 0, '', NULL, '', '');
 
 
 UPDATE `marc_subfield_structure` SET maxlength=24 WHERE tagfield='000';
