@@ -621,8 +621,17 @@ END_SQL
                         }
                     }
                     else {
-                        unless ($days_between >=$mindays && $days_between <= $maxdays){
-                            next;
+                        if ($triggered) {
+                            if ( $mindays != $days_between ) {
+                                next;
+                            }
+                        }
+                        else {
+                            unless ( $days_between >= $mindays
+                                && $days_between <= $maxdays )
+                            {
+                                next;
+                            }
                         }
                     }
 
