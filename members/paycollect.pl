@@ -149,6 +149,7 @@ $template->param(
     total         => $total_due,
     activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
     RoutingSerials => C4::Context->preference('RoutingSerials'),
+    ExtendedPatronAttributes => C4::Context->preference('ExtendedPatronAttributes'),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
@@ -179,9 +180,6 @@ sub borrower_add_additional_fields {
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {
         $b_ref->{extendedattributes} = GetBorrowerAttributes($borrowernumber);
-        $template->param(
-            ExtendedPatronAttributes => 1,
-        );
     }
 
     # Computes full borrower address
