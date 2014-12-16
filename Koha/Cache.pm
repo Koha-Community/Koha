@@ -41,6 +41,7 @@ use warnings;
 use Carp;
 use Module::Load::Conditional qw(can_load);
 use Koha::Cache::Object;
+use C4::Context;
 
 use base qw(Class::Accessor);
 
@@ -74,10 +75,11 @@ sub new {
         }
     }
 
-    if ( can_load( modules => { 'Cache::FastMmap' => undef } ) ) {
+    if ( $self->{'default_type'} eq 'fastmmap'
+      && defined( $ENV{GATEWAY_INTERFACE} )
+      && can_load( modules => { 'Cache::FastMmap' => undef } ) ) {
         _initialize_fastmmap($self);
-        if ( $self->{'default_type'} eq 'fastmmap'
-            && defined( $self->{'fastmmap_cache'} ) )
+        if ( defined( $self->{'fastmmap_cache'} ) )
         {
             $self->{'cache'} = $self->{'fastmmap_cache'};
         }
@@ -131,9 +133,13 @@ sub _initialize_memcached {
 
 sub _initialize_fastmmap {
     my ($self) = @_;
+    my $share_file = join( '-',
+        "/tmp/sharefile-koha", $self->{'namespace'},
+        C4::Context->config('hostname'), C4::Context->config('database'),
+        "" . getpwuid($>) );
 
     $self->{'fastmmap_cache'} = Cache::FastMmap->new(
-        'share_file'  => "/tmp/sharefile-koha-$self->{'namespace'}",
+        'share_file'  => $share_file,
         'expire_time' => $self->{'timeout'},
         'unlink_on_exit' => 0,
     );
