@@ -289,6 +289,11 @@ $(document).ready(function() {
                 [% ELSE %]
                   <select name="module" id="module">
                 [% END %]
+                                    [% IF ( module == "acquisition" ) %]
+                                      <option value="acquisition" selected="selected">Acquisition</option>
+                                    [% ELSE %]
+                                      <option value="acquisition" >Acquisition</option>
+                                    [% END %]
                                     [% IF ( module == "catalogue" ) %]
                                       <option value="catalogue" selected="selected">Catalog</option>
                                     [% ELSE %]
