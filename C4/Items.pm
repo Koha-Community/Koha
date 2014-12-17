@@ -482,11 +482,12 @@ sub _build_default_values_for_mod_marc {
         withdrawn                => 0,
     };
     while ( my ( $field, $default_value ) = each %$default_values ) {
-        $field =~ s|[^\.]*\.?(.*)|items.$1|;
+        my $kohafield = $field;
+        $kohafield =~ s|^([^\.]+)$|items.$1|;
         $default_values_for_mod_from_marc{$frameworkcode}{$field} =
           $default_value
           if C4::Koha::IsKohaFieldLinked(
-            { kohafield => $field, frameworkcode => $frameworkcode } );
+            { kohafield => $kohafield, frameworkcode => $frameworkcode } );
     }
     return $default_values_for_mod_from_marc{$frameworkcode};
 }
