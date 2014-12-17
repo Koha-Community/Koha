@@ -463,10 +463,10 @@ sub ShelfPossibleAction {
 
     return 0 unless defined($shelfnumber);
 
-    if ( $user > 0 ) {
+    if ( $user > 0 and $action eq 'delete_shelf' ) {
         my $borrower = C4::Members::GetMember( borrowernumber => $user );
         return 1
-            if C4::Auth::haspermission( $borrower->{userid}, { shelves => 'manage_shelves' } );
+            if C4::Auth::haspermission( $borrower->{userid}, { shelves => 'delete_shelves' } );
     }
 
     my $dbh = C4::Context->dbh;
@@ -520,7 +520,7 @@ sub ShelfPossibleAction {
             return (0, 5); # code 5: should be private list
         }
     }
-    elsif($action eq 'manage') {
+    elsif($action eq 'manage' or $action eq 'delete_shelf') {
         return 1 if $user && $shelf->{owner}==$user;
     }
     return 0;

@@ -600,12 +600,14 @@ function placeHold () {
 			[% IF ( shelvesloo.viewcategory2 ) %]Public[% END %]
 		</td>
         <td>
-            [% IF ( shelvesloo.manageshelf ) %]
+            [% IF shelvesloo.manageshelf %]
 				<form action="shelves.pl" method="get">
 					<input type="hidden" name="shelfnumber" value="[% shelvesloo.shelf %]" />
 					<input type="hidden" name="op" value="modif" />
 					<input type="submit" class="editshelf" value="Edit" />
 				</form>
+            [% END %]
+            [% IF shelvesloo.manageshelf OR shelvesloo.allowdeletingshelf %]
 				<form action="shelves.pl" method="post">
 				        <input type="hidden" name="shelfoff" value="[% shelfoff %]" />
 					<input type="hidden" name="shelves" value="1" />

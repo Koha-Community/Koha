@@ -310,6 +310,7 @@ sub shelfpage {
                 $showadd = 1;
                 my $i = 0;
                 my $manageshelf = ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' );
+                my $can_delete_shelf = ShelfPossibleAction( $loggedinuser, $shelfnumber, 'delete_shelf' );
                 $template->param(
                     shelfname           => $shelfname,
                     shelfnumber         => $shelfnumber,
@@ -318,6 +319,7 @@ sub shelfpage {
                     manageshelf         => $manageshelf,
                     allowremovingitems  => ShelfPossibleAction( $loggedinuser, $shelfnumber, 'delete'),
                     allowaddingitem     => ShelfPossibleAction( $loggedinuser, $shelfnumber, 'add'),
+                    allowdeletingshelf  => $can_delete_shelf,
                     "category$category" => 1,
                     category            => $category,
                     itemsloop           => $items,
@@ -374,8 +376,10 @@ sub shelfpage {
                     $stay=0;
                     next;
                 }
-                #
-                unless ( ShelfPossibleAction( $loggedinuser, $number, 'manage' ) ) {
+
+                my $can_manage = ShelfPossibleAction( $loggedinuser, $number, 'manage' );
+                my $can_delete = ShelfPossibleAction( $loggedinuser, $number, 'delete_shelf' );
+                unless ( $can_manage or $can_delete ) {
                     push( @paramsloop, { nopermission => $shelfnumber } );
                     last;
                 }
@@ -428,8 +432,10 @@ sub shelfpage {
         my $category  = $shelflist->{$element}->{'category'};
         my $owner     = $shelflist->{$element}->{'owner'}||0;
         my $canmanage = ShelfPossibleAction( $loggedinuser, $element, 'manage' );
+        my $candelete = ShelfPossibleAction( $loggedinuser, $element, 'delete_shelf' );
         $shelflist->{$element}->{"viewcategory$category"} = 1;
         $shelflist->{$element}->{manageshelf} = $canmanage;
+        $shelflist->{$element}->{allowdeletingshelf} = $candelete;
         if($canmanage || ($loggedinuser && $owner==$loggedinuser)) {
             $shelflist->{$element}->{'mine'} = 1;
         }

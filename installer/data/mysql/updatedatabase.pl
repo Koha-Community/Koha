@@ -9767,9 +9767,9 @@ if ( CheckVersion($DBversion) ) {
     |);
     $dbh->do(q|
         INSERT INTO permissions (module_bit, code, description) VALUES
-        (20, 'manage_shelves', 'Manage shelves')
+        (20, 'delete_shelves', 'Delete shelves')
     |);
-    print "Upgrade to $DBversion done (Bug 13417: Add permission to manage shelves)\n";
+    print "Upgrade to $DBversion done (Bug 13417: Add permission to delete shelves)\n";
     SetVersion ($DBversion);
 }
 
