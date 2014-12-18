@@ -121,7 +121,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 	    </div>
 <div class="yui-u second">
 <h2>Search targets <span style="display: inline; font-size: 70%; padding-left: 1em;"><span class="checkall"><a id="CheckAll" href="#">Select all</a></span><span class="clearall"><a id="CheckNone" href="#">Clear all</a></span></span></h2>
-
+    <div id="z3950_search_targets_acq">
     [% FOREACH serverloo IN serverloop %]
         <p>
             [% IF ( serverloo.checked ) %]
@@ -134,10 +134,11 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         </p>
     [% END %]
     </div>
-    <fieldset class="action"><input type="submit"  class="submit" value="Search" onclick="cursor :'wait'"/> <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Cancel</a></fieldset>
-
+  </div>
 </div>
-    </form>
+
+    <fieldset class="action"><input type="submit"  class="submit" value="Search" onclick="cursor :'wait'"/> <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Cancel</a></fieldset>
+</form>
 
 
 [% ELSE %]

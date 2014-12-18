@@ -121,10 +121,10 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         </ol>
     <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
     <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
-</div>
-<div class="yui-g">
-<h2>Search targets <span style="display: inline; font-size: 70%; padding-left: 1em;"><span class="checkall"><a id="CheckAll" href="#">Select all</a></span><span class="clearall"><a id="CheckNone" href="#">Clear all</a></span></span></h2>
-
+    </div>
+    <div class="yui-g">
+      <h2>Search targets <span style="display: inline; font-size: 70%; padding-left: 1em;"><span class="checkall"><a id="CheckAll" href="#">Select all</a></span><span class="clearall"><a id="CheckNone" href="#">Clear all</a></span></span></h2>
+      <div id="z3950_search_targets">
     [% FOREACH serverloo IN serverloop %]
         <p> 
             [% IF ( serverloo.checked ) %]
@@ -136,7 +136,8 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 
         </p>
     [% END %]
-        </div>
+      </div>
+    </div>
     <fieldset class="action"><input type="submit"  class="submit" value="Search" onclick="cursor :'wait'"/> <a class="cancel close" href="#">Cancel</a></fieldset>
     </form>
 
