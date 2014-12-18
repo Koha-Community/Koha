@@ -3,7 +3,7 @@ package Koha::Borrower::Discharge;
 use Modern::Perl;
 use CGI;
 use File::Temp qw( :POSIX );
-use HTML::HTMLDoc;
+use PDF::FromHTML;
 
 use C4::Members qw( GetPendingIssues );
 use C4::Reserves qw( GetReservesFromBorrowernumber CancelReserve );
@@ -108,10 +108,16 @@ sub generate_as_pdf {
         messages   => [$letter],
     );
 
-    my $pdf_path = tmpnam();
-    my $htmldoc  = new HTML::HTMLDoc();
-    $htmldoc->set_html_content($tmpl->output);
-    $htmldoc->generate_pdf()->to_file($pdf_path);
+    my $html_path = tmpnam() . '.html';
+    my $pdf_path = tmpnam() . '.pdf';
+    my $html_content = $tmpl->output;
+    open my $html_fh, '>', $html_path;
+    say $html_fh $html_content;
+    close $html_fh;
+    my $pdf = PDF::FromHTML->new( encoding => 'utf-8' );
+    $pdf->load_file( $html_path );
+    $pdf->convert;
+    $pdf->write_file( $pdf_path );
 
     return $pdf_path;
 }
