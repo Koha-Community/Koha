@@ -29,7 +29,7 @@ Allows librarian to edit and/or manage borrowers' discharges
 
 use Modern::Perl;
 
-use CGI;
+use CGI qw( -utf8 );
 use C4::Auth;
 use C4::Output;
 use C4::Members;
@@ -78,6 +78,7 @@ if ( $input->param('borrowernumber') ) {
         my $pdf_path = Koha::Borrower::Discharge::generate_as_pdf(
             { borrowernumber => $borrowernumber, } );
 
+        binmode(STDOUT);
         print $input->header(
             -type       => 'application/pdf',
             -charset    => 'utf-8',

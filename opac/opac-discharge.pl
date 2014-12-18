@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use C4::Auth qw(:DEFAULT get_session);
-use CGI;
+use CGI qw( -utf8 );
 use C4::Context;
 use C4::Output;
 use C4::Log;
@@ -59,6 +59,7 @@ elsif ( $op eq 'get' ) {
         borrowernumber => $loggedinuser
     });
 
+    binmode(STDOUT);
     print $input->header(
         -type       => 'application/pdf',
         -charset    => 'utf-8',

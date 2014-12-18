@@ -111,7 +111,7 @@ sub generate_as_pdf {
     my $html_path = tmpnam() . '.html';
     my $pdf_path = tmpnam() . '.pdf';
     my $html_content = $tmpl->output;
-    open my $html_fh, '>', $html_path;
+    open my $html_fh, '>:encoding(utf8)', $html_path;
     say $html_fh $html_content;
     close $html_fh;
     my $pdf = PDF::FromHTML->new( encoding => 'utf-8' );
