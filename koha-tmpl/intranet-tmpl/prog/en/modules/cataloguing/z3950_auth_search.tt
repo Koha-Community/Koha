@@ -120,23 +120,23 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
                 </ol>
                 </fieldset>
             </div>
-        <div class="yui-g">
-            <h2>Search targets <span style="display: inline; font-size: 70%; padding-left: 1em;"><span class="checkall"><a id="CheckAll" href="#">Select all</a></span><span class="clearall"><a id="CheckNone" href="#">Clear all</a></span></span></h2>
-            [% FOREACH serverloo IN serverloop %]
-                <p>
-                [% IF ( serverloo.checked ) %]
-                    <input type="checkbox" name="id" id="z3950_[% serverloo.id %]" value="[% serverloo.id %]" checked="checked" />
-                [% ELSE %]
-                    <input type="checkbox" name="id" id="z3950_[% serverloo.id %]" value="[% serverloo.id %]" />
+            <div class="yui-g">
+                <h2>Search targets <span style="display: inline; font-size: 70%; padding-left: 1em;"><span class="checkall"><a id="CheckAll" href="#">Select all</a></span><span class="clearall"><a id="CheckNone" href="#">Clear all</a></span></span></h2>
+                <div id="z3950_search_targets_auth">
+                [% FOREACH serverloo IN serverloop %]
+                    <p>
+                    [% IF ( serverloo.checked ) %]
+                        <input type="checkbox" name="id" id="z3950_[% serverloo.id %]" value="[% serverloo.id %]" checked="checked" />
+                    [% ELSE %]
+                        <input type="checkbox" name="id" id="z3950_[% serverloo.id %]" value="[% serverloo.id %]" />
+                    [% END %]
+                    <label for="z3950_[% serverloo.id %]">[% serverloo.servername %]</label>
+                    </p>
                 [% END %]
-                <label for="z3950_[% serverloo.id %]">[% serverloo.servername %]</label>
-                </p>
-            [% END %]
-        </div>
+                </div>
+            </div>
         <fieldset class="action"><input type="submit"  class="submit" value="Search" onclick="cursor :'wait'"/> <a class="cancel close" href="#">Cancel</a></fieldset>
         </form>
-
-
 [% ELSE %]
     <h2>Results for Authority Records</h2>
     [% IF ( breeding_loop ) %]
