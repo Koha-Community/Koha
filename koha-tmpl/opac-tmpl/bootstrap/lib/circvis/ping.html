@@ -1,0 +1,101 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<style type="text/css">
+    div.ping {
+        width: 32px;
+        height: 32px;
+        background-repeat: repeat-x;
+        background-position: 0px 0px;
+        position: absolute;
+    }
+    div.ping_red {
+        background-image:url('ping_red.png');
+    }
+    div.ping_green {
+        background-image:url('ping_green.png');
+    }
+    div.ping_blue {
+        background-image:url('ping_blue.png');
+    }
+    div#pkar {
+        width: 798px;
+        height: 792px;
+        /*background-image:url('pkar.png');*/
+        position: relative;
+    }
+</style>
+</head>
+<body>
+<div id="pkar">
+<img src="pkar.png" border="0" width="798" height="792" orgWidth="798" orgHeight="792" usemap="#map1" alt=""/>
+<map name="map1">
+<area id="JOE_ENO" href="#" onclick="showPing(this);" shape="circle" coords="513,257,10"/>
+<area id="JOE_KON" href="#" onclick="showPing(this);" shape="circle" coords="405,290,10"/>
+<area id="JOE_LEH" href="#" onclick="showPing(this);" shape="circle" coords="392,377,10"/>
+<area id="JOE_JOE" href="#" onclick="showPing(this);" shape="circle" coords="369,418,10"/>
+<area id="JOE_YMY" href="#" onclick="showPing(this);" shape="circle" coords="298,414,10"/>
+<area id="JOE_LIP" href="#" onclick="showPing(this);" shape="circle" coords="237,483,10"/>
+<area id="JOE_VII" href="#" onclick="showPing(this);" shape="circle" coords="180,387,10"/>
+<area id="JOE_OKU" href="#" onclick="showPing(this);" shape="circle" coords="103,328,10"/>
+<area id="JOE_KII" href="#" onclick="showPing(this);" shape="circle" coords="549,508,10"/>
+<area id="JOE_REI" href="#" onclick="showPing(this);" shape="circle" coords="402,466,10"/>
+<area id="JOE_POL" href="#" onclick="showPing(this);" shape="circle" coords="231,221,10"/>
+<area id="JOE_KAR" href="#" onclick="showPing(this);" shape="circle" coords="393,422,10"/>
+<area id="JOE_NII" href="#" onclick="showPing(this);" shape="circle" coords="376,435,10"/>
+<area id="JOE_HEI" href="#" onclick="showPing(this);" shape="circle" coords="520,456,10"/>
+<area id="JOE_JUU" href="#" onclick="showPing(this);" shape="circle" coords="315,22,10"/>
+<area id="JOE_PYH" href="#" onclick="showPing(this);" shape="circle" coords="449,552,10"/>
+<area id="JOE_RAN" href="#" onclick="showPing(this);" shape="circle" coords="409,406,10"/>
+<area id="VAL_VAL" href="#" onclick="showPing(this);" shape="circle" coords="276,21,10"/>
+<area id="JOE_UIM" href="#" onclick="showPing(this);" shape="circle" coords="552,173,10"/>
+<area id="JOE_TUU" href="#" onclick="showPing(this);" shape="circle" coords="683,513,10"/>
+
+
+
+</map>
+    <div id="pingParentRed" class="ping ping_red"></div>
+    <div id="pingParentGreen" class="ping ping_green"></div>
+    <div id="pingParentBlue" class="ping ping_blue"></div>
+</div>
+<script type="text/javascript" src="jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="jquery.spritely.js"></script>
+<script type="text/javascript">
+
+function setPosition(area, newPing) {
+    var coords = $(area).attr('coords');
+    var coordAry = coords.split(',');
+    var left = parseInt(coordAry[0],10)+Math.floor(Math.random()*50)-25;
+    var top = parseInt(coordAry[1],10)+Math.floor(Math.random()*50)-25;
+    $(newPing).offset({'top': top-16, 'left': left-16});
+}
+
+function showPing(area) {
+    var i = Math.floor(Math.random()*3);
+    var color;
+    if (i == 1)      {color = 'Red';}
+    else if (i == 2) {color = 'Green';}
+    else             {color = 'Blue';}
+
+    var newPing = $("div#pingParent"+color).clone();
+    newPing.attr("id",'ping'+color+Math.floor(Math.random()*1000));
+    newPing.click(function(){showPing(area)});
+    setPosition(area, newPing);
+    $("div#pkar map").append(newPing);
+    startPing(newPing);
+
+}
+function startPing(newPing) {
+    $(newPing).sprite({
+        fps: 48,
+        no_of_frames: 64,
+        on_last_frame: function(obj) {
+            obj.spStop(); // stop the animation on the last frame
+            $(obj).remove();
+        },
+    });
+}
+</script>
+
+</body>
+</html>

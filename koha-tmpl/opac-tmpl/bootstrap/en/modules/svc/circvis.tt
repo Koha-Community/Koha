@@ -1,0 +1,218 @@
+<html>
+<head>
+    <title>Circulation Visualizer</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+    div.ping {
+        width: 32px;
+        height: 32px;
+        background-repeat: repeat-x;
+        background-position: 0px 0px;
+        position: absolute;
+    }
+    div.ping_red {
+        background-image:url('[% interface %]/[% theme %]/lib/circvis/ping_red.png');
+    }
+    div.ping_green {
+        background-image:url('[% interface %]/[% theme %]/lib/circvis/ping_green.png');
+    }
+    div.ping_blue {
+        background-image:url('[% interface %]/[% theme %]/lib/circvis/ping_blue.png');
+    }
+    div.ping_yellow {
+        background-image:url('[% interface %]/[% theme %]/lib/circvis/ping_yellow.png');
+    }
+    div#pkar {
+        width: 798px;
+        height: 792px;
+        /*background-image:url('pkar.png');*/
+        position: relative;
+    }
+
+    div.legend {
+        height: 32px;
+    }
+    div.legend div {
+        float: left;
+    }
+    div.legend div.ping {
+        background-position: -256px 0px;
+        position: inherit;
+    }
+    div.legendText {
+        margin-top: 7px;
+    }
+</style>
+</head>
+<body>
+<div class="legend">
+    <div><div class="ping ping_red"></div><div class="legendText">Payments</div></div>
+    <div><div class="ping ping_green"></div><div class="legendText">Check-outs</div></div>
+    <div><div class="ping ping_blue"></div><div class="legendText">Check-ins</div></div>
+    <div><div class="ping ping_yellow"></div><div class="legendText">Renewals</div></div>
+</div>
+<div id="pkar">
+    <img src="[% interface %]/[% theme %]/lib/circvis/pkar.png" border="0" width="798" height="792" orgWidth="798" orgHeight="792" usemap="#map1" alt=""/>
+    <map name="map1">
+        <area id="JOE_ENO" onclick="showPing(this);" shape="circle" coords="513,257,10"/>
+        <area id="JOE_KON" onclick="showPing(this);" shape="circle" coords="405,290,10"/>
+        <area id="JOE_LEH" onclick="showPing(this);" shape="circle" coords="392,377,10"/>
+        <area id="JOE_JOE" onclick="showPing(this);" shape="circle" coords="369,418,10"/>
+        <area id="JOE_YMY" onclick="showPing(this);" shape="circle" coords="298,414,10"/>
+        <area id="JOE_LIP" onclick="showPing(this);" shape="circle" coords="237,483,10"/>
+        <area id="JOE_VII" onclick="showPing(this);" shape="circle" coords="180,387,10"/>
+        <area id="JOE_OKU" onclick="showPing(this);" shape="circle" coords="103,328,10"/>
+        <area id="JOE_KII" onclick="showPing(this);" shape="circle" coords="549,508,10"/>
+        <area id="JOE_REI" onclick="showPing(this);" shape="circle" coords="402,466,10"/>
+        <area id="JOE_POL" onclick="showPing(this);" shape="circle" coords="231,221,10"/>
+        <area id="JOE_KAR" onclick="showPing(this);" shape="circle" coords="393,422,10"/>
+        <area id="JOE_NII" onclick="showPing(this);" shape="circle" coords="376,435,10"/>
+        <area id="JOE_HEI" onclick="showPing(this);" shape="circle" coords="520,456,10"/>
+        <area id="JOE_JUU" onclick="showPing(this);" shape="circle" coords="315,22,10"/>
+        <area id="JOE_PYH" onclick="showPing(this);" shape="circle" coords="449,552,10"/>
+        <area id="JOE_RAN" onclick="showPing(this);" shape="circle" coords="409,406,10"/>
+        <area id="VAL_VAL" onclick="showPing(this);" shape="circle" coords="276,21,10"/>
+        <area id="JOE_UIM" onclick="showPing(this);" shape="circle" coords="552,173,10"/>
+        <area id="JOE_TUU" onclick="showPing(this);" shape="circle" coords="683,513,10"/>
+    </map>
+    <div id="pingParentRed" class="ping ping_red"></div>
+    <div id="pingParentGreen" class="ping ping_green"></div>
+    <div id="pingParentBlue" class="ping ping_blue"></div>
+    <div id="pingParentYellow" class="ping ping_yellow"></div>
+</div>
+
+
+
+<!-- JavaScript includes -->
+<script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/jquery-ui.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.spritely.js"></script>
+<script type="text/javascript">
+
+    $.wait = function(ms) {
+        var defer = $.Deferred();
+        setTimeout(function() { defer.resolve(); }, ms);
+        return defer;
+    };
+
+    var eventChunks = [];
+    var minutes = [% minutes ? minutes : 1 %];
+    var localTime = Math.round((new Date()).getTime() / 1000);
+    var serverTime = [% serverTime ? serverTime : 0 %];
+    if (!serverTime) {serverTime = localTime}
+    eventChunks.push([% eventsChunk %]);
+
+
+
+
+    $(document).ready(function() {
+
+
+        start();
+
+
+    });
+
+    function start() {
+        queueEvents(serverTime);
+        setTimeout( getCirculationEventChunk, minutes*60000);
+    }
+
+    function getCirculationEventChunk() {
+        $.ajax('/cgi-bin/koha/svc/circvis.pl',{
+            data: {
+                op: 'getChunk',
+                clientTime: new Date().getTime(),
+                minutes: minutes,
+            },
+            dataType: 'json',
+            success: function(data, textStatus, jqXHR) {
+                eventChunks.push(data.eventsChunk);
+                serverTime = data.serverTime;
+                queueEvents(serverTime);
+                setTimeout( getCirculationEventChunk, minutes*60000 );
+            },
+            error: function(jqXHR, textStatus, errorThrown ) {
+                alert(errorThrown);
+            },
+        });
+    }
+
+    function queueEvents(serverTime) {
+        localTime = Math.round((new Date()).getTime() / 1000);
+        var eventChunk = eventChunks.pop();
+        while (eventChunk) {
+
+
+            var event = eventChunk.pop();
+            while (event) {
+                var waitingTime = event.time - localTime;
+                if (waitingTime < 0) {
+                    waitingTime = 0;
+                }
+                waitingTime = Math.random()*minutes*60000;
+
+                setTimeout(displayEvent, waitingTime, event);
+
+
+                event = eventChunk.pop();
+            }
+
+
+            eventChunk = eventChunks.pop();
+        }
+    }
+
+    function displayEvent(event) {
+        var area = $("area#"+event.branch); //Get the html map area to receive this event.
+        showPing(area, event);
+    }
+
+//-------------------------------------//
+//!!!!! FUNCTIONS FOR GUI ACTIONS !!!!!//
+//-------------------------------------//
+    function setPosition(area, newPing) {
+        var coords = $(area).attr('coords');
+        var coordAry = coords.split(',');
+        var left = parseInt(coordAry[0],10)+Math.floor(Math.random()*50)-25;
+        var top = parseInt(coordAry[1],10)+Math.floor(Math.random()*50)-25;
+        $(newPing).offset({'top': top-16, 'left': left-16});
+    }
+
+    function showPing(area, event) {
+        var color;
+        if (event) {
+            if (event.type == 'payment')     {color = 'Red';}
+            else if (event.type == 'issue')  {color = 'Green';}
+            else if (event.type == 'return') {color = 'Yellow';}
+            else                             {color = 'Blue';} //event.type == 'renew' and others
+        }
+        else { //This function is directly called without an event-object, which is ok. Randomly get the color.
+            var i = Math.floor(Math.random()*4);
+            if (i == 1)      {color = 'Red';}
+            else if (i == 2) {color = 'Green';}
+            else if (i == 3) {color = 'Yellow';}
+            else             {color = 'Blue';}
+        }
+
+        var newPing = $("div#pingParent"+color).clone();
+        newPing.attr("id",'ping'+color+Math.floor(Math.random()*1000));
+        newPing.click(function(){showPing(area)});
+        setPosition(area, newPing);
+        $("div#pkar map").append(newPing);
+        startPing(newPing);
+
+    }
+    function startPing(newPing) {
+        $(newPing).sprite({
+            fps: 48,
+            no_of_frames: 64,
+            on_last_frame: function(obj) {
+                obj.spStop(); // stop the animation on the last frame
+                $(obj).remove();
+            },
+        });
+    }
+</script>
+</body>
+</html>
