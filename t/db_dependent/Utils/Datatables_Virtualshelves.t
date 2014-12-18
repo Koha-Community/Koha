@@ -34,6 +34,8 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
+$dbh->do(q|DELETE FROM virtualshelves|);
+
 # Pick a categorycode from the DB
 my @categories   = C4::Category->all;
 my $categorycode = $categories[0]->categorycode;
