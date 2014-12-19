@@ -601,6 +601,21 @@ OPAC:
                   track: "Track"
                   no: "Don't track"
             - links that patrons click on
+    Restricted page:
+        -
+            - "Access from IP addresses beginning with"
+            - pref: RestrictedPageLocalIPs
+            - "do not need to be authenticated (comma separated - ex: '127.0.0,127.0.1')"
+        -
+            - "HTML content of your restricted page"
+            - pref: RestrictedPageContent
+              type: textarea
+              class: HTML
+        -
+            - Use
+            - pref: RestrictedPageTitle
+              class: long
+            - "as title of your restricted page (appears in the breadcrumb and on the top of the restricted page)"
 
     Shelf Browser:
         -
