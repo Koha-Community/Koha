@@ -1545,7 +1545,7 @@ sub IsAvailableForItemLevelRequest {
         $notforloan_per_itemtype ||
         $item->{itemlost}        ||
         $item->{notforloan} > 0  ||
-        $item->{wthdrawn}        ||
+        $item->{withdrawn}        ||
         ($item->{damaged} && !C4::Context->preference('AllowHoldsOnDamagedItems'));
 
 

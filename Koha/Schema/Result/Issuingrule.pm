@@ -161,6 +161,19 @@ __PACKAGE__->table("issuingrules");
   is_nullable: 1
   size: [28,6]
 
+=head2 onshelfholds
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+=head2 opacitemholds
+
+  data_type: 'char'
+  default_value: 'N'
+  is_nullable: 0
+  size: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -217,6 +230,10 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
   "overduefinescap",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
+  "onshelfholds",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "opacitemholds",
+  { data_type => "char", default_value => "N", is_nullable => 0, size => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -236,8 +253,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("branchcode", "categorycode", "itemtype");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-09-17 21:06:58
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vmlv13CeQ99RO0VsviRABg
+# Created by DBIx::Class::Schema::Loader v0.07040 @ 2014-12-19 07:00:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CE8yuYC5QgPHI2GOjiT28w
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

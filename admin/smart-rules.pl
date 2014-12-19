@@ -27,6 +27,7 @@ use C4::Koha;
 use C4::Debug;
 use C4::Branch; # GetBranches
 use C4::Dates qw/format_date format_date_in_iso/;
+use Koha::Database;
 
 my $input = CGI->new;
 my $dbh = C4::Context->dbh;
@@ -100,10 +101,6 @@ elsif ($op eq 'delete-branch-item') {
 }
 # save the values entered
 elsif ($op eq 'add') {
-    my $sth_search = $dbh->prepare('SELECT COUNT(*) AS total FROM issuingrules WHERE branchcode=? AND categorycode=? AND itemtype=?');
-    my $sth_insert = $dbh->prepare('INSERT INTO issuingrules (branchcode, categorycode, itemtype, maxissueqty, renewalsallowed, reservesallowed, norenewalbefore, auto_renew, reservesallowed, issuelength, lengthunit, hardduedate, hardduedatecompare, fine, finedays, maxsuspensiondays, firstremind, chargeperiod,rentaldiscount, onshelfholds, opacitemholds, overduefinescap) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
-    my $sth_update=$dbh->prepare("UPDATE issuingrules SET fine=?, finedays=?, maxsuspensiondays=?, firstremind=?, chargeperiod=?, maxissueqty=?, renewalsallowed=?, renewalperiod=?, norenewalbefore=?, auto_renew=?, reservesallowed=?, issuelength=?, lengthunit=?, hardduedate=?, hardduedatecompare=?, rentaldiscount=?, onshelfholds=?, opacitemholds=?, overduefinescap=? WHERE branchcode=? AND categorycode=? AND itemtype=?");
-    
     my $br = $branch; # branch
     my $bor  = $input->param('categorycode'); # borrower category
     my $itemtype  = $input->param('itemtype');     # item type
@@ -133,14 +130,37 @@ elsif ($op eq 'add') {
     my $overduefinescap = $input->param('overduefinescap') || undef;
     $debug and warn "Adding $br, $bor, $itemtype, $fine, $maxissueqty";
 
-    $sth_search->execute($br,$bor,$itemtype);
-    my $res = $sth_search->fetchrow_hashref();
-    if ($res->{total}) {
-        $sth_update->execute($fine, $finedays, $maxsuspensiondays, $firstremind, $chargeperiod, $maxissueqty, $renewalsallowed, $renewalperiod, $norenewalbefore, $auto_renew, $reservesallowed, $issuelength,$lengthunit, $hardduedate,$hardduedatecompare,$rentaldiscount, $onshelfholds, $opacitemholds, $overduefinescap, $br,$bor,$itemtype);
-    } else {
-        $sth_insert->execute($br,$bor,$itemtype,$maxissueqty,$renewalsallowed, $renewalperiod, $norenewalbefore, $auto_renew, $reservesallowed,$issuelength,$lengthunit,$hardduedate,$hardduedatecompare,$fine,$finedays, $maxsuspensiondays, $firstremind,$chargeperiod,$rentaldiscount,$onshelfholds,$opacitemholds,$overduefinescap);
-    }
-} 
+    my $schema = Koha::Database->new()->schema();
+    my $rs = $schema->resultset('Issuingrule');
+
+    my $params = {
+        branchcode         => $br,
+        categorycode       => $bor,
+        itemtype           => $itemtype,
+        fine               => $fine,
+        finedays           => $finedays,
+        maxsuspensiondays  => $maxsuspensiondays,
+        firstremind        => $firstremind,
+        chargeperiod       => $chargeperiod,
+        maxissueqty        => $maxissueqty,
+        renewalsallowed    => $renewalsallowed,
+        renewalperiod      => $renewalperiod,
+        norenewalbefore    => $norenewalbefore,
+        auto_renew         => $auto_renew,
+        reservesallowed    => $reservesallowed,
+        issuelength        => $issuelength,
+        lengthunit         => $lengthunit,
+        hardduedate        => $hardduedate,
+        hardduedatecompare => $hardduedatecompare,
+        rentaldiscount     => $rentaldiscount,
+        onshelfholds       => $onshelfholds,
+        opacitemholds      => $opacitemholds,
+        overduefinescap    => $overduefinescap,
+    };
+
+    $rs->update_or_create($params);
+
+}
 elsif ($op eq "set-branch-defaults") {
     my $categorycode  = $input->param('categorycode');
     my $maxissueqty   = $input->param('maxissueqty');
@@ -413,7 +433,7 @@ if ($branch eq "*") {
         SELECT default_borrower_circ_rules.*, categories.description AS humancategorycode
         FROM default_borrower_circ_rules
         JOIN categories USING (categorycode)
-        
+
     ");
     $sth_branch_cat->execute();
 } else {
@@ -507,7 +527,7 @@ $template->param(categoryloop => \@category_loop,
                         branchloop => \@branchloop,
                         humanbranch => ($branch ne '*' ? $branches->{$branch}->{branchname} : ''),
                         current_branch => $branch,
-                        definedbranch => scalar(@sorted_row_loop)>0 
+                        definedbranch => scalar(@sorted_row_loop)>0
                         );
 output_html_with_http_headers $input, $cookie, $template->output;
 
