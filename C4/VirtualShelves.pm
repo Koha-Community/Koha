@@ -318,7 +318,7 @@ sub AddShelf {
     return -1 unless _CheckShelfName($hashref->{shelfname}, $hashref->{category}, $owner, 0);
 
     my $query = q|INSERT INTO virtualshelves
-        (shelfname,owner,category,sortfield,allow_add,allow_delete_own,allow_delete_other, creation_time)
+        (shelfname,owner,category,sortfield,allow_add,allow_delete_own,allow_delete_other, created_on)
         VALUES (?,?,?,?,?,?,?, NOW())
     |;
 

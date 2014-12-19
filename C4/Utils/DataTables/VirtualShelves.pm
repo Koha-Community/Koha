@@ -32,7 +32,7 @@ sub search {
     # But the code is too dirty to refactor...
     my $select = q|
         SELECT vs.shelfnumber, vs.shelfname, vs.owner, vs.category AS type,
-        vs.creation_time, vs.lastmodified as modification_time,
+        vs.created_on, vs.lastmodified as modification_time,
         bo.surname, bo.firstname, vs.sortfield as sortby,
         count(vc.biblionumber) as count
     |;

@@ -16,8 +16,8 @@
                     "<a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.owner %]'>[% data.firstname %] [% data.surname %]</a>",
                 "dt_sortby":
                     [% IF data.sortby == "author" %]"Author"[% ELSIF data.sortby == "copyrightdate" %]"Year"[% ELSIF data.sortby == "itemcallnumber" %]"Call number"[% ELSE %]"Title"[% END %],
-                "dt_creation_time":
-                    "[% data.creation_time | $KohaDates %]",
+                "dt_created_on":
+                    "[% data.created_on | $KohaDates %]",
                 "dt_modification_time":
                     "[% data.modification_time | $KohaDates %]",
                 "dt_action":

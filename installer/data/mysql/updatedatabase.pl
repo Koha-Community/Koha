@@ -10391,16 +10391,16 @@ $DBversion = "3.19.00.XXX";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         ALTER TABLE virtualshelves
-        ADD COLUMN creation_time TIMESTAMP NOT NULL AFTER lastmodified
+        ADD COLUMN created_on TIMESTAMP NOT NULL AFTER lastmodified
     |);
-    # Set creation_time = lastmodified
+    # Set created_on = lastmodified
     # I would say it's better than 0000-00-00
     # Set modified to the existing value (do not get the current ts!)
     $dbh->do(q|
         UPDATE virtualshelves
-        SET creation_time = lastmodified, lastmodified = lastmodified
+        SET created_on = lastmodified, lastmodified = lastmodified
     |);
-    print "Upgrade to $DBversion done (Bug XXXXX: Add DB field virtualshelves.creation_time)\n";
+    print "Upgrade to $DBversion done (Bug XXXXX: Add DB field virtualshelves.created_on)\n";
     SetVersion ($DBversion);
 }
 
