@@ -9591,7 +9591,19 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
+$DBversion = "3.18.02.001";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("
+        UPDATE systempreferences
+        SET options = 'public|school|academic|research|private|societyAssociation|corporate|government|religiousOrg|subscription'
+        WHERE variable = 'UsageStatsLibraryType'
+    ");
+    if ( C4::Context->preference("UsageStatsLibraryType") eq "university" ) {
+        C4::Context->set_preference("UsageStatsLibraryType", "academic")
+    }
+    print "Upgrade to $DBversion done (Bug 13436: Add more options to UsageStatsLibraryType)\n";
+    SetVersion ($DBversion);
+}
 
 =head1 FUNCTIONS
 
