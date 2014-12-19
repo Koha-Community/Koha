@@ -215,11 +215,20 @@
         'bServerSide': true,
         'bProcessing': true,
         'sAjaxSource': '/cgi-bin/koha/catalogue/itemsearch.pl',
-        'fnServerParams': function(aoData) {
+        'fnServerData': function(sSource, aoData, fnCallback) {
           aoData.push( { 'name': 'format', 'value': 'json' } );
           for (i in params) {
             aoData.push(params[i]);
           }
+          $.ajax({
+              'dataType': 'json',
+              'type': 'POST',
+              'url': sSource,
+              'data': aoData,
+              'success': function(json){
+                  fnCallback(json);
+              }
+          });
         },
         'sDom': '<"top pager"ilp>t<"bottom pager"ip>r',
         'aoColumns': [
