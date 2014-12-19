@@ -718,7 +718,7 @@ this function returns every serial waited for a given subscription
 as well as the number of issues registered in the database (all types)
 this number is used to see if a subscription can be deleted (=it must have only 1 issue)
 
-$statuses is an arrayref of statuses.
+$statuses is an arrayref of statuses and is mandatory.
 
 =cut
 
