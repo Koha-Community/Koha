@@ -20,6 +20,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Members;
 use C4::Letters;
+use C4::Branch;
 use C4::Budgets;
 
 use Koha::DateUtils qw( dt_from_string );
@@ -33,6 +34,7 @@ BEGIN {
 }
 
 my $dbh = C4::Context->dbh;
+my $sql;
 
 # Start transaction
 $dbh->{AutoCommit} = 0;
@@ -40,7 +42,7 @@ $dbh->{RaiseError} = 1;
 
 # Reset item types to only the default ones
 $dbh->do(q|DELETE FROM itemtypes;|);
-my $sql = "
+$sql = "
 INSERT INTO itemtypes (itemtype, description, rentalcharge, notforloan, imageurl, summary) VALUES
 ('BK', 'Books',5,0,'bridge/book.gif',''),
 ('MX', 'Mixed Materials',5,0,'bridge/kit.gif',''),
@@ -57,6 +59,25 @@ $dbh->do(q|DELETE FROM borrowers|);
 $dbh->do(q|DELETE FROM letter|);
 $dbh->do(q|DELETE FROM message_queue|);
 $dbh->do(q|INSERT INTO letter(module, code, content) VALUES ('suggestions', 'CHECKED', 'my content')|);
+
+# Add CPL if missing.
+if (not defined GetBranchDetail('CPL')) {
+    ModBranch({add => 1, branchcode => 'CPL', branchname => 'Centerville'});
+}
+
+my $sth = $dbh->prepare("SELECT * FROM categories WHERE categorycode='S';");
+$sth->execute();
+if (!$sth->fetchrow_hashref) {
+    $sql = "INSERT INTO categories
+                (categorycode,description,enrolmentperiod,upperagelimit,
+                 dateofbirthrequired,finetype,bulk,enrolmentfee,
+                 overduenoticerequired,issuelimit,reservefee,category_type)
+            VALUES
+                ('S','Staff',99,999,
+                 18,NULL,NULL,'0.000000',
+                 0,NULL,'0.000000','S');";
+    $dbh->do($sql);
+}
 
 my $member = {
     firstname => 'my firstname',
