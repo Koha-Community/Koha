@@ -11,12 +11,13 @@ the kohaversion is divided in 4 parts :
  - #4 : the developer version. The 4th number is the database subversion.
         used by developers when the database changes. updatedatabase take care of the changes itself
         and is automatically called by Auth.pm when needed.
+
 =cut
 
 use strict;
 
 sub kohaversion {
-    our $VERSION = '3.19.00.000';
+    our $VERSION = '3.19.00.001';
     # version needs to be set this way
     # so that it can be picked up by Makefile.PL
     # during install
