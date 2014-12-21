@@ -60,7 +60,7 @@ my $bib_heading_fields = {
     },
     '111' => {
         auth_type  => 'MEETI_NAME',
-        subfields  => 'acdfghjklnpqst',
+        subfields  => 'acdefghklnpqst',
         main_entry => 1
     },
     '130' => {
@@ -127,7 +127,7 @@ my $bib_heading_fields = {
     },
     '611' => {
         auth_type => 'MEETI_NAME',
-        subfields => 'acdfghjklnpqstvxyz',
+        subfields => 'acdefghklnpqstvxyz',
         subject   => 1
     },
     '630' => {
@@ -147,7 +147,7 @@ my $bib_heading_fields = {
     '699' => { auth_type => 'UNIF_TITLE', subfields => 'adfghklmnoprst' },
     '700' => { auth_type => 'PERSO_NAME', subfields => 'abcdfghjklmnopqrst' },
     '710' => { auth_type => 'CORPO_NAME', subfields => 'abcdfghklmnoprst' },
-    '711' => { auth_type => 'MEETI_NAME', subfields => 'acdfghjklnpqst' },
+    '711' => { auth_type => 'MEETI_NAME', subfields => 'acdefghklnpqst' },
     '730' => { auth_type => 'UNIF_TITLE', subfields => 'adfghklmnoprst' },
     '800' => {
         auth_type => 'PERSO_NAME',
@@ -160,7 +160,7 @@ my $bib_heading_fields = {
         series    => 1
     },
     '811' =>
-      { auth_type => 'MEETI_NAME', subfields => 'acdfghjklnpqst', series => 1 },
+      { auth_type => 'MEETI_NAME', subfields => 'acdefghklnpqst', series => 1 },
     '830' =>
       { auth_type => 'UNIF_TITLE', subfields => 'adfghklmnoprst', series => 1 },
 };
@@ -168,12 +168,12 @@ my $bib_heading_fields = {
 my $auth_heading_fields = {
     '100' => {
         auth_type  => 'PERSO_NAME',
-        subfields  => 'abcdefghjklmnopqrstvxyz68',
+        subfields  => 'abcdfghjklmnopqrstvxyz68',
         main_entry => 1
     },
     '110' => {
         auth_type  => 'CORPO_NAME',
-        subfields  => 'abcdefghklmnoprstvxyz68',
+        subfields  => 'abcdfghklmnoprstvxyz68',
         main_entry => 1
     },
     '111' => {
