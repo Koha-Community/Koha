@@ -1,0 +1,303 @@
+RELEASE NOTES FOR KOHA 3.18.2
+22 Dec 2014
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.18.2 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.18.02.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+
+Koha 3.18.2 is a security and bugfix/maintenance release.
+
+
+Security bugs fixed in 3.18.2
+=============================
+
+Staff client
+------------
+    13425   critical    XSS vulnerability in the staff catalogue search
+
+
+
+Critical bugs fixed in 3.18.2
+=============================
+
+Cataloguing
+----------
+	13296	critical	Error when using z3950 with UNIMARC authorities
+	13465	critical	Fields controlled by authorized values cannot be unset (Lost, damaged, not for loan status, ...)
+
+Circulation
+----------
+	13461	major	Circ always asking for confirmation if RentalFeesCheckoutConfirmation is used
+
+Notices
+----------
+	13468	major	Overdue notice lists all checked out books
+
+Packaging
+----------
+	13398	critical	Perl files for rotating collections are missing in installations
+
+Patrons
+----------
+	13470	critical	Pay fines with extended borrower attributes result in application error
+
+Searching
+----------
+	13428	major	Fix facet deletion
+	13476	major	Item Search feature gets datatables error and doesn't complete search
+
+
+Other bugs fixed in 3.18.2
+======================
+
+
+Cataloguing
+----------
+	13331	normal	Subfield does not show in cataloging editor - if subfield is disabled in OPAC/enabled in Staff, via frameworks
+
+Circulation
+----------
+	10051	trivial	Surname and first name should have comma in overdues report
+
+Database
+----------
+	11706	trivial	Typo "efault" in updatedatabase.pl
+
+Hold requests
+----------
+	13368	normal	Checking out an item not on loan, but with a hold, busts the holds priority
+
+I18N/L10N
+----------
+	13362	minor	Translate script creates dirs on update
+
+OPAC
+----------
+	13449	minor	Syndetics TOC will not display in some cases
+	13469	minor	Unapi path to XSLTs is wrong in OPAC
+
+Staff Client
+----------
+	13460	trivial	Use price template toolkit plugin across all of intranet
+
+Templates
+----------
+	13355	normal	System preferences tab value wrong in templates
+	12084	minor	Published date for serial items not formatted according to dateformat system preference
+	13375	minor	Syspref search highlight styling broken in Chrome
+
+Test Suite
+----------
+	13451	minor	Holidays.t assumes default data
+	13456	minor	Serials/Claims.t expects no subscriptions
+
+
+New sysprefs in 3.18.2
+======================
+
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+The Koha manual is maintained in DocBook.The home page for Koha 
+documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.18/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+  * Arabic (99%)
+  * Armenian (100%)
+  * Czech (99%)
+  * Danish (81%)
+  * French (96%)
+  * German (100%)
+  * Italian (100%)
+  * Kurdish (64%)
+  * Polish (82%)
+  * Portuguese (94%)
+  * Slovak (100%)
+  * Spanish (100%)
+  * Swedish (82%)
+  * Turkish (100%)
+  * Vietnamese (91%)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.18.2 is
+
+  Release Manager:       Tomás Cohen Arazi <tomascohen@gmail.com>
+  Documentation Manager: Nicole C Engard <nengard@gmail.com>
+  Translation Manager:   Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>
+  QA Team:               Galen Charlton <gmc@esilibrary.com>
+                         Jonathan Druart <jonathan.druart@biblibre.com>
+                         Brendan Gallagher <brendan@bywatersolutions.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+                         Julian Maurice <julian.maurice@biblibre.com>
+                         Paul Poulain <paul.poulain@biblibre.com>
+                         Martin Renvoize <martin.renvoize@ptfs-europe.com>
+                         Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>
+  Bug Wranglers:         Alex Sassmannshausen <alex.sassmannshausen@ptfs-europe.com>
+                         Zeno Tajoli <z.tajoli@cineca.it>
+  Packaging Manager:     Robin Sheat <robin@catalyst.net.nz>
+
+  Release Maintainer (3.16.x): Galen Charlton <gmc@esilibrary.com>
+  Release Maintainer (3.14.x): Fridolin Somers <fridolin.somers@biblibre.com>
+  Release Maintainer (3.12.x): Kyle Hall <kyle@bywatersolutions.com>
+
+Credits
+======================
+
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.18.2:
+
+We thank the following individuals who contributed patches to Koha 3.18.2.
+
+  * Alexander Cheeseman (1)
+  * Tomás Cohen Arazi (2)
+  * David Cook (1)
+  * Chris Cormack (2)
+  * Jonathan Druart (4)
+  * Katrin Fischer (4)
+  * Bernardo González Kriegel (1)
+  * Mason James (1)
+  * Owen Leonard (1)
+  * Kyle M Hall (1)
+  * Dobrica Pavlinusic (1)
+  * Martin Renvoize (1)
+  * Fridolin Somers (1)
+  * Mark Tompsett (2)
+
+
+We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 3.18.2
+
+
+  * ACPL (1)
+  * BSZ BW (4)
+  * BibLibre (5)
+  * ByWater-Solutions (1)
+  * Catalyst (2)
+  * KohaAloha (1)
+  * PTFS-Europe (1)
+  * Prosentient Systems (1)
+  * Universidad Nacional de Córdoba (3)
+  * msd.govt.nz (1)
+  * rot13.org (1)
+  * unidentified (2)
+
+We also especially thank the following individuals who tested patches
+for Koha 3.18.2.
+
+  * Aleisha (1)
+  * Chris Cormack (25)
+  * Christopher Brannon (1)
+  * David Roberts (1)
+  * Frederic Demians (1)
+  * Jonathan Druart (7)
+  * Julius Fleschner (1)
+  * Katrin Fischer (10)
+  * Marc Véron (1)
+  * Martin Renvoize (1)
+  * Mason James (1)
+  * Mirko Tietgen (2)
+  * Nick Clemens (1)
+  * Owen Leonard (1)
+  * Paola Rossi (3)
+  * wajasu (2)
+  * Tomas Cohen Arazi (23)
+  * Kyle M Hall (7)
+  * Bernardo Gonzalez Kriegel (1)
+  * Marcel de Rooy (1)
+
+We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is 3.18.x.
+
+The last Koha release was 3.14.10, which was released on September 4, 2014.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+He rau ringa e oti ai.
+(Many hands finish the work)
+
+##### Autogenerated release notes updated last on 21 Dec 2014 21:03:27 Z #####
