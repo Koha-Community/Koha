@@ -1569,6 +1569,13 @@ sub buildQuery {
                         $remove_stopwords
                     ) = ( 0, 0, 0, 0, 0 );
 
+                    if ( $index eq 'nb' ) {
+                        if ( C4::Context->preference("SearchWithISBNVariations") ) {
+                            my @isbns = C4::Koha::GetVariationsOfISBN( $operand );
+                            $operands[$i] = $operand =  '(nb=' . join(' OR nb=', @isbns) . ')';
+                            $indexes[$i] = $index = '';
+                        }
+                    }
                 }
 
                 if(not $index){

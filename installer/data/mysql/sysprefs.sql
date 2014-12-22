@@ -367,6 +367,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SCOUserCSS','',NULL,'Add CSS to be included in the SCO module in an embedded <style> tag.','free'),
 ('SCOUserJS','',NULL,'Define custom javascript for inclusion in the SCO module','free'),
 ('SearchMyLibraryFirst','0',NULL,'If ON, OPAC searches return results limited by the user\'s library by default if they are logged in','YesNo'),
+('SearchWithISBNVariations','0',NULL,'If enabled, search on all variations of the ISBN','YesNo'),
 ('SelfCheckHelpMessage','','70|10','Enter HTML to include under the basic Web-based Self Checkout instructions on the Help page','Textarea'),
 ('SelfCheckReceiptPrompt','1','NULL','If ON, print receipt dialog pops up when self checkout is finished','YesNo'),
 ('SelfCheckTimeout','120','','Define the number of seconds before the Web-based Self Checkout times out a patron','Integer'),

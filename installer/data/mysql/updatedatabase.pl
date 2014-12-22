@@ -10025,6 +10025,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        INSERT INTO systempreferences ( variable, value, options, explanation, type ) VALUES
+        ('SearchWithISBNVariations','0',NULL,'If enabled, search on all variations of the ISBN','YesNo')
+    |);
+    print "Upgrade to $DBversion done (Bug 13528 - Add the SearchWithISBNVariations syspref)\n";
+    SetVersion ($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
