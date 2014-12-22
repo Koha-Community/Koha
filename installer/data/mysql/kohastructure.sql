@@ -3581,6 +3581,20 @@ CREATE TABLE `localization` (
       UNIQUE KEY `entity_code_lang` (`entity`,`code`,`lang`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Table structure for table 'audio_alerts'
+--
+
+DROP TABLE IF EXISTS audio_alerts;
+CREATE TABLE audio_alerts (
+  audio_alert_id int(11) NOT NULL AUTO_INCREMENT,
+  precedence smallint(5) unsigned NOT NULL,
+  selector varchar(255) NOT NULL,
+  sound varchar(255) NOT NULL,
+  PRIMARY KEY (audio_alert_id),
+  KEY precedence (precedence)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8  COLLATE=utf8_unicode_ci;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

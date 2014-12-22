@@ -9669,7 +9669,32 @@ if ( CheckVersion($DBversion) ) {
         });
         print "Upgrade to $DBversion done (Bug 1861: Unique patrons logins not (totally) enforced)\n";
     }
+    SetVersion ($DBversion);
+}
 
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{UPDATE systempreferences SET variable = 'AudioAlerts' WHERE variable = 'soundon'});
+
+    $dbh->do(q{
+        CREATE TABLE audio_alerts (
+            audio_alert_id int(11) NOT NULL AUTO_INCREMENT,
+            precedence smallint(5) unsigned NOT NULL,
+            selector varchar(255) NOT NULL,
+            sound varchar(255) NOT NULL,
+            PRIMARY KEY (audio_alert_id),
+            KEY precedence (precedence)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    });
+
+    $dbh->do(q{
+        INSERT INTO audio_alerts VALUES
+        (1, 1, '.audio-alert-action', 'opening.ogg'),
+        (2, 2, '.audio-alert-warning', 'critical.ogg'),
+        (3, 3, '.audio-alert-success', 'beep.ogg');
+    });
+
+    print "Upgrade to $DBversion done (Bug 11431 - Add additional sound options for warnings)\n";
     SetVersion($DBversion);
 }
 
