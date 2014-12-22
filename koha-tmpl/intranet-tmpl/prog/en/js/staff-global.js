@@ -120,3 +120,11 @@ function toUC(f) {
 function confirmDelete(message) {
     return (confirm(message) ? true : false);
 }
+
+function playSound( sound ) {
+    // This is way faster than substring
+    if ( ! ( sound.charAt(4) == ':' && sound.charAt(5) == '/' && sound.charAt(6) == '/' ) ) {
+        sound = AUDIO_ALERT_PATH + sound;
+    }
+    document.getElementById("audio-alert").innerHTML = '<audio src="' + sound + '" autoplay="autoplay" autobuffer="autobuffer"></audio>';
+}

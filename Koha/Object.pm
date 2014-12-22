@@ -255,7 +255,8 @@ sub AUTOLOAD {
     # Using direct setter/getter like $item->barcode() or $item->barcode($barcode);
     if ( grep {/^$method$/} @columns ) {
         if ( @_ ) {
-            return $self->_result()->set_column( $method, @_ );
+            $self->_result()->set_column( $method, @_ );
+            return $self;
         } else {
             my $value = $self->_result()->get_column( $method );
             return $value;

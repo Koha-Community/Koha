@@ -1,0 +1,131 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Audio alerts</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<script type="text/javascript">
+$( document ).ready(function() {
+    $.ajax({
+        //This will retrieve the contents of the folder if the folder is configured as 'browsable'
+        url: AUDIO_ALERT_PATH,
+        success: function (data) {
+            $("#fileNames").html('<ul>');
+            //List all png or jpg or gif file names in the page
+            $(data).find('a:contains("ogg")').each(function () {
+                var filename = this.href.split('/').pop();
+                $('#koha-sounds').append($('<option>', { value : filename }).text(filename));
+            });
+        }
+    });
+
+    $('#koha-sounds').on('change', function() {
+        $('#sound').val( this.value );
+    });
+
+    $('#koha-sounds').on('change', function() {
+        $('#sound').val( this.value );
+    });
+
+    $('#play-sound').on('click', function() {
+        playSound( $('#sound').val() );
+        return false;
+    });
+
+    $('#new-alert-form').on('submit', function() {
+        if ( ! $('#selector').val() ) {
+            alert(_("You must enter a selector!"));
+            return false;
+        } else if ( ! $('#sound').val() ) {
+            alert(_("You must choose a sound!"));
+            return false;
+        } else {
+            return true;
+        }
+    });
+
+    $('#delete-alert-form').on('submit', function() {
+        return confirm(_("Are you sure you want to delete the selected audio alerts?"));
+    });
+});
+</script>
+
+</head>
+<body id="admin_audio_alerts" class="admin">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'patrons-admin-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Audio alerts</div>
+
+<div id="doc3" class="yui-t2">
+    <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b">
+                <form id="new-alert-form" action="audio_alerts.pl" method="post">
+                    <fieldset class="form-inline">
+                        <legend>Add new alert</legend>
+
+                        <input id="selector" name="selector" type="text" class="input-large" placeholder="selector" />
+                        <input id="sound" name="sound" type="text" class="input-large" placeholder="sound" />
+
+                        <button id="play-sound" class="btn"><i class="icon-play"></i> Play sound</button>
+
+                        <br/>
+
+                        <select id="koha-sounds">
+                            <option value="">Select built-in sound</option>
+                        </select>
+
+                        <button id="save-alert" type="submit" class="btn"><i class="icon-hdd"></i> Save alert</button>
+                    </fieldset>
+                </form>
+
+                <form id="delete-alert-form" action="audio_alerts.pl" method="post">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Precedence</th>
+                                <th>&nbsp;</th>
+                                <th>Selector</th>
+                                <th>Sound</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            [% FOREACH a IN audio_alerts %]
+                                <tr>
+                                    <td><input type="checkbox" name="delete" value="[% a.id %]" /></td>
+                                    <td>[% a.precedence %]</td>
+                                    <td style="white-space:nowrap;">
+                                        <a title="Move alert up" href="audio_alerts.pl?action=move&amp;where=up&amp;id=[% a.id %]">
+                                            <img src="[% interface %]/[% theme %]/img/go-up.png" border="0" alt="Go up" />
+                                        </a>
+
+                                        <a title="Move alert to top" href="audio_alerts.pl?action=move&amp;where=top&amp;id=[% a.id %]">
+                                            <img src="[% interface %]/[% theme %]/img/go-top.png" border="0" alt="Go top" />
+                                        </a>
+
+                                        <a title="Move alert to bottom" href="audio_alerts.pl?action=move&amp;where=bottom&amp;id=[% a.id %]">
+                                            <img src="[% interface %]/[% theme %]/img/go-bottom.png" border="0" alt="Go bottom" />
+                                        </a>
+
+                                        <a title="Move alert down" href="audio_alerts.pl?action=move&amp;where=down&amp;id=[% a.id %]">
+                                            <img src="[% interface %]/[% theme %]/img/go-down.png" border="0" alt="Go down" />
+                                        </a>
+                                    </td>
+                                    <td>[% a.selector %]</td>
+                                    <td>[% a.sound %]</td>
+                                </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+
+                    <p/>
+                    <button id="delete-alerts" type="submit" class="btn"><i class="icon-trash"></i> Delete selected alerts</button>
+                </form>
+            </div>
+        </div>
+    <div class="yui-b">
+[% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -105,6 +105,7 @@ $(document).ready(function () {
 </script>
 </head>
 <body id="circ_returns" class="circ">
+<span class="audio-alert-success"></span>
 
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'checkin-search.inc' %]
@@ -199,11 +200,7 @@ $(document).ready(function () {
     [% IF ( waiting ) %]
 	<!-- waiting -->
 
-[% IF ( soundon ) %]
-<audio src="[% interface %]/[% theme %]/sound/ending.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
-[% END %]
-
-<div id="hold-found1" class="dialog message">
+    <div id="hold-found1" class="dialog message audio-alert-action">
         <h3>Hold found (item is already waiting):  <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber %]">[% title |html %]</a></h3>
         [% IF ( reservenotes ) %]<h4>Notes: [% reservenotes %]</h4>[% END %]
         <h4>Hold for:</h4>
@@ -251,10 +248,7 @@ $(document).ready(function () {
 
     [% IF ( diffbranch ) %]
 		<!-- diffbranch -->
-        [% IF ( soundon ) %]
-        <audio src="[% interface %]/[% theme %]/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
-        [% END %]
-        <div id="transfer-needed" class="dialog message">
+        <div id="transfer-needed" class="dialog message audio-alert-action">
 		<h3>Hold needing transfer found: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber %]">[% title |html %]</a></h3>
                 <h4>Hold for: </h4>
                     <ul>
@@ -298,20 +292,14 @@ $(document).ready(function () {
 
     [% IF ( transfer ) %]
     <!-- transfer: item with no reservation, must be returned according to home library circulation rules -->
-	<div id="return1" class="dialog message">
+	<div id="return1" class="dialog message audio-alert-action">
             <h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title or "item" |html %]</a> to [% Branches.GetName( returnbranch ) %]<br/>( <a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;branchcode=[% returnbranch %]&amp;op=slip'); return true;">Print slip</a> )</h3>
         </div>
-        [% IF ( soundon ) %]
-        <audio src="[% interface %]/[% theme %]/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
-        [% END %]
     [% END %]
 
     [% IF ( needstransfer ) %]
 	<!-- needstransfer -->
-        [% IF ( soundon ) %]
-        <audio src="[% interface %]/[% theme %]/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
-        [% END %]
-    <div id="item-transfer" class="dialog message"><h3> This item needs to be transferred to [% Branches.GetName( returnbranch ) %]</h3>
+    <div id="item-transfer" class="dialog message audio-alert-action"><h3> This item needs to be transferred to [% Branches.GetName( returnbranch ) %]</h3>
     Transfer now?<br />
     <form method="post" action="returns.pl" name="mainform" id="mainform">
     [% IF itemnumber %]
@@ -337,10 +325,7 @@ $(document).ready(function () {
 
     [% IF ( diffbranch ) %]
 	<!-- diffbranch -->
-        [% IF ( soundon ) %]
-        <audio src="[% interface %]/[% theme %]/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
-        [% END %]
-        <h3>Item consigned:</h3>
+        <h3 class="audio-alert-action">Item consigned:</h3>
         <table>
         <caption><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title |html %]</a></caption>
         <tr>
@@ -369,11 +354,7 @@ $(document).ready(function () {
     [% IF ( reserved ) %]
 	<!--  reserved  -->
 
-        [% IF ( soundon ) %]
-        <audio src="[% interface %]/[% theme %]/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
-        [% END %]
-
-	<div id="hold-found2" class="dialog message">
+    <div id="hold-found2" class="dialog message audio-alert-action">
       <h3>Hold found: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber %]">[% title |html %]</a></h3>
         [% IF ( reservenotes ) %]<h4>Notes: [% reservenotes %]</h4>[% END %]
         <h5>Hold for:</h5>
@@ -424,7 +405,7 @@ $(document).ready(function () {
 [% END %]
 
 [% IF ( errmsgloop ) %]
-    <div class="dialog alert">
+    <div class="dialog alert audio-alert-warning">
         <h3>Check in message</h3>
         [% FOREACH errmsgloo IN errmsgloop %]
                     [% IF ( errmsgloo.NotForLoanStatusUpdated ) %]
@@ -483,13 +464,7 @@ $(document).ready(function () {
                     [% END %]
 
             [% END %]
-[% IF ( soundon ) %]
-<audio src="[% interface %]/[% theme %]/sound/critical.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
-[% END %]
         [% ELSE %]
-[% IF ( soundon ) %]
-<audio src="[% interface %]/[% theme %]/sound/beep.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
-[% END %]
         [% END %]
     </div>
 

@@ -1,14 +1,16 @@
+[% USE Koha %]
+[% USE String %]
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
+
 <link rel="stylesheet" type="text/css" href="[% interface %]/lib/jquery/jquery-ui.css" />
 <link rel="stylesheet" type="text/css" href="[% interface %]/lib/bootstrap/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="[% interface %]/lib/font-awesome/css/font-awesome.min.css" />
 <link rel="stylesheet" type="text/css" media="print" href="[% themelang %]/css/print.css" />
 [% INCLUDE intranetstylesheet.inc %]
-[% IF ( bidi ) %]
-   <link rel="stylesheet" type="text/css" href="[% themelang %]/css/right-to-left.css" />
-[% END %]
+[% IF ( bidi )            %]<link rel="stylesheet" type="text/css" href="[% themelang %]/css/right-to-left.css" />[% END %]
 [% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS %]</style>[% END %]
+
 <script type="text/javascript" src="[% interface %]/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/jquery-ui.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/shortcut/shortcut.js"></script>
@@ -23,6 +25,7 @@
 
 <!-- koha core js -->
 <script type="text/javascript" src="[% themelang %]/js/staff-global.js"></script>
+
 [% INCLUDE 'validator-strings.inc' %]
 [% IF ( IntranetUserJS ) %]
     <script type="text/javascript">
@@ -31,6 +34,7 @@
     //]]>
     </script>
 [% END %]
+
 [% IF ( virtualshelves || intranetbookbag ) %]
 <script type="text/javascript">
     //<![CDATA[
@@ -47,15 +51,38 @@
         var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be reserved.");
     //]]>
     </script>
-<script type="text/javascript" src="[% themelang %]/js/basket.js"></script>
+
+    <script type="text/javascript" src="[% themelang %]/js/basket.js"></script>
 [% END %]
+
 [% IF LocalCoverImages %]
-<script type="text/javascript" src="[% themelang %]/js/localcovers.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-var NO_LOCAL_JACKET = _("No cover image available");
-//]]>
-</script>
+    <script type="text/javascript" src="[% themelang %]/js/localcovers.js"></script>
+    <script type="text/javascript">
+        //<![CDATA[
+            var NO_LOCAL_JACKET = _("No cover image available");
+        //]]>
+    </script>
+[% END %]
+
+[% IF Koha.Preference('AudioAlerts') %]
+    <script type="text/javascript">
+        //<![CDATA[
+            var AUDIO_ALERT_PATH = '[% interface %]/[% theme %]/sound/';
+            var AUDIO_ALERTS = JSON.parse( '[% Koha.AudioAlerts | replace( "'", "\\'" ) %]' );
+        //]]>
+
+        $( document ).ready(function() {
+            if ( AUDIO_ALERTS ) {
+                for ( var k in AUDIO_ALERTS ) {
+                    var alert = AUDIO_ALERTS[k];
+                    if ( $( alert.selector ).length ) {
+                        playSound( alert.sound );
+                        break;
+                    }
+                }
+            }
+        });
+    </script>
 [% END %]
 
 <!-- For keeping the text when navigating the search tabs -->

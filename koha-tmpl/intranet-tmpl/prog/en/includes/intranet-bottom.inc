@@ -65,5 +65,6 @@
         </div>
     [% END %]
 [% END %]
+    <span id="audio-alert"></span>
     </body>
 </html>

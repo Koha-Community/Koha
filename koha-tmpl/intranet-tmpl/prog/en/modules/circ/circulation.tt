@@ -209,7 +209,7 @@ $(document).ready(function() {
 [% IF ( NEEDSCONFIRMATION ) %]
 <div class="yui-g">
 
-<div id="circ_needsconfirmation" class="dialog alert">
+<div id="circ_needsconfirmation" class="dialog alert audio-alert-action">
 [% IF CAN_user_circulate_force_checkout %]
   <h3>Please confirm checkout</h3>
 [% ELSE %]
@@ -403,12 +403,8 @@ $(document).ready(function() {
 
         [% IF ( IMPOSSIBLE ) %]
 
-[% IF ( soundon ) %]
-<audio src="[% interface %]/[% theme %]/sound/critical.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
-[% END %]        
-
 <div class="yui-g">
-<div id="circ_impossible" class="dialog alert">
+<div id="circ_impossible" class="dialog alert audio-alert-warning">
 <!-- RESULT OF ISSUING REQUEST -->
         <ul>
         [% IF ( STATS ) %]
@@ -524,15 +520,12 @@ $(document).ready(function() {
 
 </div></div>
 [% ELSE %]
-[% IF ( soundon ) %]
-<audio src="[% interface %]/[% theme %]/sound/beep.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
-[% END %]
-
   [% IF (forceallow) %]
       <div id="overridden_debarment" class="dialog alert">Restriction overridden temporarily</div>
   [% END %]
+[% END %] <!-- /impossible -->
 
-    [% END %] <!-- /impossible -->
+<span class="audio-alert-success"></span>
 
 [% IF ( issued ) %]
 <p>Item checked out</p>

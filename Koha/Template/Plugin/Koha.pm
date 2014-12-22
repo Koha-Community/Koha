@@ -18,6 +18,8 @@ package Koha::Template::Plugin::Koha;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use Encode qw( encode );
+use JSON;
 
 use base qw( Template::Plugin );
 
@@ -47,16 +49,20 @@ sub Preference {
 
 sub Version {
     my $version_string = Koha::version();
-    my ($major,$minor,$maintenance,$development) = split('\.',$version_string);
+    my ( $major, $minor, $maintenance, $development ) = split( '\.', $version_string );
 
     return {
         major       => $major,
         release     => $major . "." . $minor,
         maintenance => $major . "." . $minor . "." . $maintenance,
-        development => ( $development ne '000' )
-                            ? $development
-                            : undef
+        development => ( $development ne '000' ) ? $development : undef,
     };
+}
+
+sub AudioAlerts {
+    my $dbh = C4::Context->dbh;
+    my $audio_alerts = $dbh->selectall_arrayref( 'SELECT * FROM audio_alerts ORDER BY precedence', { Slice => {} } );
+    return encode_json($audio_alerts);
 }
 
 1;
