@@ -68,17 +68,21 @@ div.dataTables_paginate {
 }
 
 .paging_full_numbers a.paginate_button,
-.paging_full_numbers a.paginate_active {
+.paging_full_numbers a.paginate_active,
+.paging_full_numbers > span > span {
     border-right : 1px solid #AAA;
     border-left : 1px solid #FFF;
     display : block;
     float : left;
     line-height:1.9em;
     padding : 0.4em 0.7em;
+}
+.paging_full_numbers a.paginate_button,
+.paging_full_numbers a.paginate_active {
     cursor: pointer;
 }
-
-.paging_full_numbers a.paginate_button {
+.paging_full_numbers a.paginate_button,
+.paging_full_numbers > span > span {
     background-color : #FFF;
     background-repeat: no-repeat;
     color : #0000CC;
