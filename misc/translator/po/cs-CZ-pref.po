@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-23 08:15+0200\n"
-"PO-Revision-Date: 2014-11-25 14:18+0000\n"
+"PO-Revision-Date: 2014-12-17 13:59+0000\n"
 "Last-Translator: Josef <josef.moravec@knihovna-uo.cz>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: cs\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1416925099.000000\n"
+"X-POOTLE-MTIME: 1418824772.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -1036,7 +1036,7 @@ msgstr "bibliografický záznam"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#item-level_itypes# specific item"
-msgstr "holdingový záznam"
+msgstr "záznam jednotky"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#itemcallnumber# Map the MARC subfield"
@@ -1180,7 +1180,7 @@ msgstr "Nepovolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldDateInFuture# hold requests to be placed that do not enter the waiting list until a certain future date."
-msgstr "rezervace, které nejsou v pořadí až do určitého data v budoucnosti."
+msgstr "vytvářet rezervace s počátečním datem platnosti v budoucnu"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldPolicyOverride# Allow"
@@ -1288,9 +1288,7 @@ msgstr "Nepovolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# a patron to renew an item with unfilled holds if other available items can fill that hold."
-msgstr ""
-"čtenáři prodloužit výpůjčku, na kterou je rezervace, pokud je k dispozici "
-"jiná jednotka daného titulu."
+msgstr "čtenáři prodloužit výpůjčku, na kterou je rezervace, pokud je k dispozici jiná jednotka daného titulu."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowRenewalLimitOverride# Allow"
@@ -1494,14 +1492,11 @@ msgstr "dní). Poznámka: Tento počet dní bude použit i ve výchozím filtru,
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the longoverdue.pl script is called without the --charge parameter)"
-msgstr ""
-"<br>(Používá se, pokud je skript longoverdue.pl spouštěn bez parametru "
-"--charge)"
+msgstr "<br>(Používá se, pokud je skript longoverdue.pl spouštěn bez parametru --charge)"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>Leave this field empty if you don't want to charge the user for lost items."
-msgstr ""
-" <br>Nechte pole prázdné pokud nechcete vybírat náhradu za ztrátu dokumentů."
+msgstr " <br>Nechte pole prázdné pokud nechcete vybírat náhradu za ztrátu dokumentů."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# Charge a lost item to the borrower's account when the LOST value of the item changes to :"
@@ -1509,21 +1504,15 @@ msgstr "Naúčtovat čtenáři poplatek, pokud se hodnota LOST změní na :"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>(Used when the longoverdue.pl script is called without the --lost parameter)"
-msgstr ""
-"<br>(Používá se, pokud je skript longoverdue.pl spouštěn bez parametru "
-"--lost)"
+msgstr "<br>(Používá se, pokud je skript longoverdue.pl spouštěn bez parametru --lost)"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>Example: [1] [30] Sets an item to the LOST value 1 when it has been overdue for more than 30 days."
-msgstr ""
-"<br>Například: [1] [30] Nastaví hodnotu LOST statusu jednotky na 1, pokud je "
-"výpůjční lhůta překročena o více než 30 dní."
+msgstr "<br>Například: [1] [30] Nastaví hodnotu LOST statusu jednotky na 1, pokud je výpůjční lhůta překročena o více než 30 dní."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>WARNING — These preferences will activate the automatic item loss process. Leave these fields empty if you don't want to activate this feature."
-msgstr ""
-"<br>Varování — Tato nastavení aktivují automatické zpracování ztracených "
-"jednotek. Nechte tato pole prázdná, pokud nechcete tuto funkci používat."
+msgstr "<br>Varování — Tato nastavení aktivují automatické zpracování ztracených jednotek. Nechte tato pole prázdná, pokud nechcete tuto funkci používat."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# By default, set the LOST value of an item to"
@@ -1788,7 +1777,9 @@ msgstr "Nepovolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACAllowHoldDateInFuture# patrons to place holds that don't enter the waiting list until a certain future date. (AllowHoldDateInFuture must also be enabled)."
-msgstr "čtenářům dávat rezervace, které nemají omezený zájem až do určitého budoucího data. (parameter AllowHoldDateInFuture musí být povolen)."
+msgstr ""
+"čtenářům vytvářet rezervaci s počátečním datem platnosti v budoucnu. ("
+"parametr AllowHoldDateInFuture musí být povolen)."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
@@ -1832,11 +1823,11 @@ msgstr "Poslat všechny zprávy ve skryté kopii na email adresu"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OverdueNoticeCalendar# Ignore Calendar"
-msgstr "circulation.pref#OverdueNoticeCalendar# Ignorovat kalendář"
+msgstr "Ignorovat kalendář"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OverdueNoticeCalendar# Use Calendar"
-msgstr "circulation.pref#OverdueNoticeCalendar# Použít kalendář"
+msgstr "Použít kalendář"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OverdueNoticeCalendar# when working out the period for overdue notices"
@@ -3448,7 +3439,10 @@ msgstr "Zobrazovat"
 
 # OPAC > Appearance
 msgid "opac.pref#AuthorisedValueImages# images for <a href=\"/cgi-bin/koha/admin/authorised_values.pl\">authorized values</a> (such as lost statuses and locations) in search results and item detail pages on the OPAC."
-msgstr "obrázky pro <a href=\"/cgi-bin/koha/admin/authorised_values.pl\">ovšřené hodnoty</a> (jako status ztracené nebo lokace) ve výsledcích vyhledávání nebo v detailech výtisku na OPACu."
+msgstr ""
+"obrázky pro <a href=\"/cgi-bin/koha/admin/authorised_values.pl\">ověřené "
+"hodnoty</a> (jako status ztracené nebo lokace) ve výsledcích vyhledávání "
+"nebo v detailech výtisku na OPACu."
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# By default, show bib records"
@@ -4272,7 +4266,9 @@ msgstr "čtenáři knihovny registrovat svůj účet pomocí OPACu."
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
-msgstr "Zborazit následující doplňující pokyny pro čtenáře, jkterý se samoobslužně registruje pomocí OPACu. (HTML je povoleno):"
+msgstr ""
+"Zobrazit následující doplňující pokyny pro čtenáře, který se při "
+"předregeistraci pomocí on-line katalogu. (HTML je povoleno):"
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# (separate columns with |)"
@@ -4692,7 +4688,7 @@ msgstr "(oddělit více možností svislítkem |)"
 
 # Patrons > General
 msgid "patrons.pref#BorrowersTitles# Borrowers can have the following titles:"
-msgstr "Čtenáři si mohou vypůjčit následující tituly:"
+msgstr "Čtenáři mohou mít následující tituly:"
 
 # Patrons > General
 msgid "patrons.pref#CardnumberLength# Card numbers for patrons must be"
@@ -4780,21 +4776,15 @@ msgstr "Neprovádět"
 
 # Patrons > Norwegian patron database
 msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# search the Norwegian national patron database after a local search result was found."
-msgstr ""
-"hledání v Norské národní databázi uživatelů knihoven, pokud hledání ve "
-"vlastní bázi nepřineslo výsledky."
+msgstr "hledání v Norské národní databázi uživatelů knihoven, pokud hledání ve vlastní bázi nepřineslo výsledky."
 
 # Patrons > Norwegian patron database
 msgid "patrons.pref#NorwegianPatronDBUsername# . You can get these from \"Base Bibliotek\", which is maintained by the Norwegian National Library."
-msgstr ""
-". Tyto údaje získáte z \"Base Bibliotek\", kterou spravuje Norská národní "
-"knihovna."
+msgstr ". Tyto údaje získáte z \"Base Bibliotek\", kterou spravuje Norská národní knihovna."
 
 # Patrons > Norwegian patron database
 msgid "patrons.pref#NorwegianPatronDBUsername# Communicate with the Norwegian national patron database using the username"
-msgstr ""
-"Komunikace s Norskou národní databízí uživatelů knihovne s použitím "
-"uživatelského jména"
+msgstr "Komunikace s Norskou národní databízí uživatelů knihovne s použitím uživatelského jména"
 
 # Patrons > Norwegian patron database
 msgid "patrons.pref#NorwegianPatronDBUsername# and the password"
@@ -4802,7 +4792,7 @@ msgstr "a hesla"
 
 # Patrons > General
 msgid "patrons.pref#NotifyBorrowerDeparture# Show a notice if the patron is about to expire or has expired"
-msgstr "Zobrazovat upozornění na blížíce se termín vypršení registrace."
+msgstr "Zobrazovat upozornění na blížící se termín vypršení registrace."
 
 # Patrons > General
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
@@ -5438,7 +5428,7 @@ msgstr "záložku odběrů"
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# as default tab for serials in OPAC. Please note that the Serial Collection tab is currently available only for UNIMARC."
-msgstr "jako výchozí záložku pro seriály v OPACu. Pozn.: záložka fondu periodika je nyní dostupná pouze pro UNIMARC."
+msgstr "jako výchozí záložku pro periodika v OPACu. Pozn.: záložka fondu periodika je nyní dostupná pouze pro UNIMARC."
 
 # Staff Client
 msgid "staff_client.pref"
