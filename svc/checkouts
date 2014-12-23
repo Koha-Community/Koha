@@ -94,6 +94,7 @@ my $sql = '
 
         itemlost,
         damaged,
+        location,
 
         DATEDIFF( issuedate, CURRENT_DATE() ) AS not_issued_today
     FROM issues
@@ -151,6 +152,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         barcode    => $c->{barcode},
         itemtype   => $item_level_itypes ? $c->{itype} : $c->{itemtype},
         itemtype_description => $item_level_itypes ? $c->{itype_description} : $c->{itemtype_description},
+        location   => $c->{location} ? GetAuthorisedValueByCode( 'LOC', $c->{location} ) : q{},
         itemnotes  => $c->{itemnotes},
         branchcode => $c->{branchcode},
         branchname => $c->{branchname},

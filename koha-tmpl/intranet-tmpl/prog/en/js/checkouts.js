@@ -259,6 +259,7 @@ $(document).ready(function() {
                     "sType": "anti-the"
                 },
                 { "mDataProp": "itemtype_description" },
+                { "mDataProp": "location" },
                 { "mDataProp": "issuedate_formatted" },
                 { "mDataProp": "branchname" },
                 { "mDataProp": "itemcallnumber" },
@@ -503,6 +504,7 @@ $(document).ready(function() {
                         "sType": "anti-the"
                     },
                     { "mDataProp": "itemtype" },
+                    { "mDataProp": "location" },
                     { "mDataProp": "issuedate_formatted" },
                     { "mDataProp": "branchname" },
                     { "mDataProp": "itemcallnumber" },
