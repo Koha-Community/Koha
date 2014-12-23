@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE ColumnsSettings %]
 [% IF Koha.Preference('ExportRemoveFields') OR Koha.Preference('ExportWithCsvProfile') %]
    [% SET exports_enabled = 1 %]
 [% END %]
@@ -15,6 +16,7 @@
 [% INCLUDE 'calendar.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/en/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'columns_settings.inc' %]
 [% INCLUDE 'strings.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min.js"></script>
@@ -40,6 +42,8 @@ var relatives_borrowernumbers = new Array();
 
 var MSG_ADD_MESSAGE = _("Add a new message");
 var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
+
+columns_settings = [% ColumnsSettings.GetColumns( 'member', 'moremember', 'issues-table', 'json' ) %]
 
 $(document).ready(function() {
     $('#finesholdsissues').tabs({

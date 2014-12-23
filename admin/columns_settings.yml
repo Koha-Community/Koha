@@ -111,6 +111,52 @@ modules:
           cannot_be_toggled: 1
           cannot_be_modified: 1
 
+    moremember:
+      issues-table:
+        -
+          columnname: sort_order
+          cannot_be_toggled: 1
+          cannot_be_modified: 1
+          is_hidden: 1
+        -
+          columnname: todays_or_previous_checkouts
+          cannot_be_toggled: 1
+          cannot_be_modified: 1
+          is_hidden: 1
+        -
+          columnname: due_date_unformatted
+          cannot_be_toggled: 1
+          cannot_be_modified: 1
+          is_hidden: 1
+        -
+          columnname: due_date
+        -
+          columnname: title
+        -
+          columnname: item_type
+        -
+          columnname: checkout_on
+        -
+          columnname: checkout_from
+        -
+          columnname: callno
+        -
+          columnname: charge
+        -
+          columnname: price
+        -
+          columnname: renew
+          cannot_be_toggled: 1
+          cannot_be_modified: 1
+        -
+          columnname: checkin
+          cannot_be_toggled: 1
+          cannot_be_modified: 1
+        -
+          columnname: export
+          cannot_be_toggled: 1
+          cannot_be_modified: 1
+
   reports:
     lostitems:
       lostitems-table:
@@ -147,12 +193,12 @@ modules:
     circulation:
       issues-table:
         -
-          columnname: un
+          columnname: sort_order
           cannot_be_toggled: 1
           cannot_be_modified: 1
           is_hidden: 1
         -
-          columnname: deux
+          columnname: todays_or_previous_checkouts
           cannot_be_toggled: 1
           cannot_be_modified: 1
           is_hidden: 1
