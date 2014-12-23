@@ -432,7 +432,7 @@ sub SendAlerts {
                     subject => Encode::encode( "utf8", "" . $letter->{title} ),
                     message =>
                       Encode::encode( "utf8", "" . $letter->{content} ),
-                    contenttype => 'text/plain; charset="utf8"',
+                    contenttype => 'text/plain; charset="utf-8"',
 
                 }
             );
@@ -519,7 +519,7 @@ sub SendAlerts {
             From           => $userenv->{emailaddress},
             Subject        => Encode::encode( "utf8", "" . $letter->{title} ),
             Message        => Encode::encode( "utf8", "" . $letter->{content} ),
-            'Content-Type' => 'text/plain; charset="utf8"',
+            'Content-Type' => 'text/plain; charset="utf-8"',
         );
 
         $mail{'Reply-to'} = C4::Context->preference('ReplytoDefault')
@@ -568,7 +568,7 @@ sub SendAlerts {
                 sender  => $branchdetails->{'branchreturnpath'},
                 subject => Encode::encode( "utf8", "" . $letter->{'title'} ),
                 message => Encode::encode( "utf8", "" . $letter->{'content'} ),
-                contenttype => 'text/plain; charset="utf8"'
+                contenttype => 'text/plain; charset="utf-8"'
             }
         );
         sendmail(%mail) or carp $Mail::Sendmail::error;
