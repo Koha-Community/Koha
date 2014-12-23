@@ -2444,7 +2444,8 @@ sub _get_next_date_month {
         $day = $fa_day <= $days_in_month ? $fa_day : $days_in_month;
     } else {
         # Try to guess the next day in month
-        my $delta_days = int((28 - ($fa_day - 1)) / $freqdata->{issuesperunit});
+        my $days_in_month = Days_in_Month($year, $month);
+        my $delta_days = int(($days_in_month - ($fa_day - 1)) / $freqdata->{issuesperunit});
         ($year,$month,$day) = Add_Delta_Days($year, $month, $day, $delta_days);
         $subscription->{countissuesperunit}++;
     }
@@ -2465,7 +2466,8 @@ sub _get_next_date_year {
         $day = $fa_day <= $days_in_month ? $fa_day : $days_in_month;
     } else {
         # Try to guess the next day in year
-        my $delta_days = int((365 - ($fa_day - 1)) / $freqdata->{issuesperunit});
+        my $days_in_year = Days_in_Year($year,12); #Sum the days of all the months of this year
+        my $delta_days = int(($days_in_year - ($fa_day - 1)) / $freqdata->{issuesperunit});
         ($year,$month,$day) = Add_Delta_Days($year, $month, $day, $delta_days);
         $subscription->{countissuesperunit}++;
     }

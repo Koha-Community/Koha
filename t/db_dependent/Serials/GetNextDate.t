@@ -371,11 +371,11 @@ $subscription = {
 };
 $publisheddate = $subscription->{firstacquidate};
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-01-15');
+is($publisheddate, '1970-01-16', 'January has 31 days');
 $publisheddate = GetNextDate($subscription, $publisheddate);
 is($publisheddate, '1970-02-01');
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-02-15');
+is($publisheddate, '1970-02-15', 'February has only 28 days');
 $publisheddate = GetNextDate($subscription, $publisheddate);
 is($publisheddate, '1970-03-01');
 
@@ -388,13 +388,13 @@ $subscription = {
 };
 $publisheddate = $subscription->{firstacquidate};
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-01-15');
+is($publisheddate, '1970-01-16', 'January has 31 days');
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-02-15');
+is($publisheddate, '1970-02-15', 'February has only 28 days');
 $publisheddate = GetNextDate($subscription, $publisheddate);
 is($publisheddate, '1970-04-01');
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-04-15');
+is($publisheddate, '1970-04-16', 'April has 30 days');
 $publisheddate = GetNextDate($subscription, $publisheddate);
 is($publisheddate, '1970-05-01');
 
