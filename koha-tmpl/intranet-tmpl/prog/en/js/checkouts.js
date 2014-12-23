@@ -164,13 +164,13 @@ $(document).ready(function() {
         $('#issues-table').show();
         $('#issues-table-actions').show();
 
-        issuesTable = $("#issues-table").dataTable({
+        issuesTable = KohaTable("#issues-table", {
             "oLanguage": {
                 "sEmptyTable" : MSG_DT_LOADING_RECORDS,
                 "sProcessing": MSG_DT_LOADING_RECORDS,
             },
             "bAutoWidth": false,
-            "sDom": "rt",
+            "sDom": 'C<"clearfix">rt',
             "aoColumns": [
                 {
                     "mDataProp": function( oObj ) {
@@ -386,10 +386,9 @@ $(document).ready(function() {
                     total_fine += aaData[i]['fine'] * 1;
                     total_price  += aaData[i]['price'] * 1;
                 }
-                var nCells = nRow.getElementsByTagName('td');
-                nCells[1].innerHTML = total_charge.toFixed(2);
-                nCells[2].innerHTML = total_fine.toFixed(2);
-                nCells[3].innerHTML = total_price.toFixed(2);
+                $("#totaldue").html(total_charge.toFixed(2));
+                $("#totalfine").html(total_fine.toFixed(2));
+                $("#totalprice").html(total_price.toFixed(2));
             },
             "bPaginate": false,
             "bProcessing": true,
@@ -416,7 +415,7 @@ $(document).ready(function() {
 
                 oSettings.aaSortingFixed = null;
             },
-        }).rowGrouping(
+        }, columns_settings).rowGrouping(
             {
                 iGroupingColumnIndex: 1,
                 iGroupingOrderByColumnIndex: 0,
