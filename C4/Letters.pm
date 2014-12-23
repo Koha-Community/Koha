@@ -430,10 +430,8 @@ sub SendAlerts {
                     replyto => $branchdetails->{'branchreplyto'},
                     sender  => $branchdetails->{'branchreturnpath'},
                     subject => Encode::encode( "utf8", "" . $letter->{title} ),
-                    message =>
-                      Encode::encode( "utf8", "" . $letter->{content} ),
-                    contenttype => 'text/plain; charset="utf-8"',
-
+                    message => $letter->{'is_html'} ? _wrap_html( Encode::encode( "utf8", $letter->{'content'} ), Encode::encode( "utf8", "" . $letter->{'title'}  ) ) : Encode::encode( "utf8", "" . $letter->{'content'} ),
+                    contenttype => $letter->{'is_html'} ? 'text/html; charset="utf-8"' : 'text/plain; charset="utf-8"',
                 }
             );
             sendmail(%mail) or carp $Mail::Sendmail::error;
@@ -518,8 +516,8 @@ sub SendAlerts {
             Cc             => join( ',', @cc),
             From           => $userenv->{emailaddress},
             Subject        => Encode::encode( "utf8", "" . $letter->{title} ),
-            Message        => Encode::encode( "utf8", "" . $letter->{content} ),
-            'Content-Type' => 'text/plain; charset="utf-8"',
+            Message => $letter->{'is_html'} ? _wrap_html( Encode::encode( "utf8", $letter->{'content'} ), Encode::encode( "utf8", "" . $letter->{'title'}  ) ) : Encode::encode( "utf8", "" . $letter->{'content'} ),
+            'Content-Type' => $letter->{'is_html'} ? 'text/html; charset="utf-8"' : 'text/plain; charset="utf-8"',
         );
 
         $mail{'Reply-to'} = C4::Context->preference('ReplytoDefault')
@@ -567,8 +565,8 @@ sub SendAlerts {
                 replyto => $branchdetails->{'branchreplyto'},
                 sender  => $branchdetails->{'branchreturnpath'},
                 subject => Encode::encode( "utf8", "" . $letter->{'title'} ),
-                message => Encode::encode( "utf8", "" . $letter->{'content'} ),
-                contenttype => 'text/plain; charset="utf-8"'
+                message => $letter->{'is_html'} ? _wrap_html( Encode::encode( "utf8", $letter->{'content'} ), Encode::encode( "utf8", "" . $letter->{'title'}  ) ) : Encode::encode( "utf8", "" . $letter->{'content'} ),
+                contenttype => $letter->{'is_html'} ? 'text/html; charset="utf-8"' : 'text/plain; charset="utf-8"',
             }
         );
         sendmail(%mail) or carp $Mail::Sendmail::error;
