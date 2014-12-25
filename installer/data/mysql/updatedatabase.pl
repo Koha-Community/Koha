@@ -9605,7 +9605,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.19.00.XXX";
+$DBversion = "3.18.02.002";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         UPDATE suggestions SET branchcode="" WHERE branchcode="__ANY__"
