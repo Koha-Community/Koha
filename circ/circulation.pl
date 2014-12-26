@@ -207,9 +207,6 @@ my $message;
 if ($findborrower) {
     my $borrowers = Search($findborrower, 'cardnumber') || [];
     if (C4::Context->preference("AddPatronLists")) {
-        $template->param(
-            "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
-        );
         if (C4::Context->preference("AddPatronLists")=~/code/){
             my $categories = GetBorrowercategoryList;
             $categories->[0]->{'first'} = 1;
