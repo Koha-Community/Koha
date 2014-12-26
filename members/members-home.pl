@@ -95,7 +95,6 @@ my $pending_borrower_modifications =
   Koha::Borrower::Modifications->GetPendingModificationsCount( $branch );
 
 $template->param( 
-        "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
         no_add => $no_add,
         pending_borrower_modifications => $pending_borrower_modifications,
             );
