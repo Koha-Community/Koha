@@ -209,12 +209,12 @@ like( $intra_text, qr|Publisher: $publisher|, );
 $agent->get_ok( "$intranet/cgi-bin/koha/catalogue/search.pl" , "got search on intranet");
 $agent->form_number(1);
 $agent->field('idx', 'kw');
-$agent->field('q', Encode::encode('UTF-8', $publisher));
+$agent->field('q', $publisher);
 $agent->click();
 $intra_text = $agent->text();
 
 like( $intra_text, qr|Publisher: $publisher|, );
-my $expected_base = q|search.pl\?idx=kw&q=| . uri_escape_utf8( Encode::encode('UTF-8', $publisher ) );
+my $expected_base = q|search.pl\?idx=kw&q=| . uri_escape_utf8( $publisher );
 $agent->base_like(qr|$expected_base|, );
 
 ok ( ( length(Encode::encode('UTF-8', $intra_text)) != length($intra_text) ) , 'UTF-8 are multi-byte. Goog') ;
@@ -237,7 +237,7 @@ $agent->click();
 $opac_text = $agent->text();
 
 like( $opac_text, qr|Publisher: $publisher|, );
-$expected_base = q|opac-search.pl\?q=| . uri_escape_utf8( $publisher );
+$expected_base = q|opac-search.pl\?idx=&q=| . uri_escape_utf8( $publisher );
 $agent->base_like(qr|$expected_base|, );
 
 ok ( ( length(Encode::encode('UTF-8', $opac_text)) != length($opac_text) ) , 'UTF-8 are multi-byte. Goog') ;
