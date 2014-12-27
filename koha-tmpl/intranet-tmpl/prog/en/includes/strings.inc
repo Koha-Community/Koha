@@ -1,7 +1,7 @@
 <script type="text/javascript">
 //<![CDATA[
-    var CIRCULATION_RETURNED = _("Returned");
-    var CIRCULATION_NOT_RETURNED = _("Unable to return");
+    var CIRCULATION_RETURNED = _("Checked in");
+    var CIRCULATION_NOT_RETURNED = _("Unable to check in");
     var CIRCULATION_RENEWED_DUE = _("Renewed, due:");
     var CIRCULATION_RENEW_FAILED = _("Renew failed:");
     var NOT_CHECKED_OUT = _("not checked out");
