@@ -45,4 +45,18 @@ sub Preference {
     return encode('UTF-8', C4::Context->preference( $pref ) );
 }
 
+sub Version {
+    my $version_string = C4::Context::KOHAVERSION;
+    my ($major,$minor,$maintenance,$development) = split('\.',$version_string);
+
+    return {
+        major       => $major,
+        release     => $major . "." . $minor,
+        maintenance => $major . "." . $minor . "." . $maintenance,
+        development => ( $development ne '000' )
+                            ? $development
+                            : undef
+    };
+}
+
 1;
