@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; 
     [% IF ( nopermission ) %]Access denied[% END %]
@@ -9,7 +10,7 @@
 
 [% INCLUDE 'installer-doc-head-close.inc' %]
 <div id="login">
-<h1><a>Koha 3.0 Installer</a></h1>
+<h1><a>Koha [%- Koha.Version.release -%] installer</a></h1>
 [% IF ( nopermission ) %]
 <div id="login_error"><strong>Error: </strong>Unauthorized user <a href="/cgi-bin/koha/mainpage.pl?logout.x=1">click to log out</a></div>
 [% END %]
