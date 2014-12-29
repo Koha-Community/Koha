@@ -1,8 +1,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons &rsaquo; 
-[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] [% IF ( categoryname ) %] [% categoryname %] patron[% ELSE %][% IF ( I ) %] Organization patron[% END %][% IF ( A ) %] Adult patron[% END %][% IF ( C ) %] Child patron[% END %][% IF ( P ) %] Professional patron[% END %][% IF ( S ) %] Staff patron[% END %][% END %][% UNLESS ( opadd ) %] [% surname %], [% firstname %][% END %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo; [% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
@@ -118,12 +117,9 @@
 [% INCLUDE 'patron-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; 
-[% IF ( opadd ) %]
-		Add[% IF ( categoryname ) %] [% categoryname %] patron[% ELSE %][% IF ( I ) %] Organization patron[% END %][% IF ( A ) %] Adult patron[% END %][% IF ( C ) %] Child patron[% END %][% IF ( P ) %] Professional patron[% END %][% IF ( S ) %] Staff patron[% END %][% END %]
-[% surname %] [% firstname %]
-[% ELSE %] 
-<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% firstname %] [% surname %]</a> &rsaquo; <strong>[% IF ( opduplicate ) %]Duplicate[% ELSE %]Modify[% END %][% IF ( categoryname ) %] [% categoryname %] patron[% ELSE %][% IF ( I ) %] Organization patron[% END %][% IF ( A ) %] Adult patron[% END %][% IF ( C ) %] Child patron[% END %][% IF ( P ) %] Professional patron[% END %][% IF ( S ) %] Staff patron[% END %][% END %]
-</strong>[% END %]</div>
+[% IF (firstname || surname ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]</a>  &rsaquo;[% END %]
+<strong>[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron ([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</strong>
+</div>
 [% IF ( opadd ) %]<div id="doc" class="yui-t7">[% ELSE %]<div id="doc3" class="yui-t2">[% END %]
    
    <div id="bd">
@@ -145,16 +141,7 @@
 		[% IF ( no_categories ) %]<p>There are <strong>no patron categories defined</strong>. [% IF ( CAN_user_parameters ) %]Please <a href="/cgi-bin/koha/admin/categorie.pl">add a patron category</a>.[% ELSE %]An administrator must define at least one patron category.</p>[% END %][% END %]</div>[% END %]
 
 	[% UNLESS ( no_add ) %]
-	[% IF ( opadd ) %]
-	<h1>
-		Add[% IF ( categoryname ) %] [% categoryname %] patron[% ELSE %][% IF ( I ) %] Organization patron[% END %][% IF ( A ) %] Adult patron[% END %][% IF ( C ) %] Child patron[% END %][% IF ( P ) %] Professional patron[% END %][% IF ( S ) %] Staff patron[% END %][% END %] [% firstname %] [% surname %] 
-	</h1>
-	[% ELSE %]
-	<h1>
-		[% IF ( opduplicate ) %]Duplicate[% ELSE %]Modify[% END %][% IF ( categoryname ) %] [% categoryname %] patron[% ELSE %][% IF ( I ) %] Organization patron[% END %][% IF ( A ) %] Adult patron[% END %][% IF ( C ) %] Child patron[% END %][% IF ( P ) %] Professional patron[% END %][% IF ( S ) %] Staff patron[% END %][% END %]
-[% firstname %] [% surname %] 
-	</h1>
-	[% END %]
+	<h1>[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</h1>
   
 	[% IF ( check_member ) %]
 			<div class="dialog alert">
