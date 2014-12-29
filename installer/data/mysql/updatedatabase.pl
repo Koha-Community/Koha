@@ -9614,7 +9614,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.19.00.XXX";
+$DBversion = "3.18.02.003";
 if ( CheckVersion($DBversion) ) {
     my ($count) = $dbh->selectrow_array("SELECT COUNT(*) FROM borrowers GROUP BY userid HAVING COUNT(userid) > 1");
 
