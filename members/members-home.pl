@@ -67,7 +67,6 @@ if ( C4::Branch::onlymine ) {
 }
 
 my @categories;
-my $no_categories;
 my $no_add = 0;
 if(scalar(@branchloop) < 1){
     $no_add = 1;
@@ -78,14 +77,10 @@ else {
 }
 
 @categories=C4::Category->all;
-if(scalar(@categories) < 1){ 
-    $no_categories = 1; 
-}
-
-if($no_categories && C4::Context->preference("AddPatronLists")=~/code/){
+if(scalar(@categories) < 1){
     $no_add = 1;
     $template->param(no_categories => 1);
-} 
+}
 else {
     $template->param(categories=>\@categories);
 }

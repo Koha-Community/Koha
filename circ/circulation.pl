@@ -206,13 +206,10 @@ my $borrowerslist;
 my $message;
 if ($findborrower) {
     my $borrowers = Search($findborrower, 'cardnumber') || [];
-    if (C4::Context->preference("AddPatronLists")) {
-        if (C4::Context->preference("AddPatronLists")=~/code/){
-            my $categories = GetBorrowercategoryList;
-            $categories->[0]->{'first'} = 1;
-            $template->param(categories=>$categories);
-        }
-    }
+    my $categories = GetBorrowercategoryList;
+    $categories->[0]->{first} = 1;
+    $template->param( categories => $categories );
+
     if ( @$borrowers == 0 ) {
         $query->param( 'findborrower', '' );
         $message = "'$findborrower'";

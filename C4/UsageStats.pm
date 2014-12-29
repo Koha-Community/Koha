@@ -276,7 +276,6 @@ sub BuildReport {
         TrackClicks
         PatronSelfRegistration
         OPACShelfBrowser
-        AddPatronLists
         AutoEmailOpacUser
         AutoEmailPrimaryAddress
         autoMemberNum
