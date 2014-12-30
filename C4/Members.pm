@@ -856,7 +856,7 @@ sub AddMember {
 
     # generate a proper login if none provided
     $data{'userid'} = Generate_Userid( $data{'borrowernumber'}, $data{'firstname'}, $data{'surname'} )
-      if ( $data{'userid'} eq '' || Check_Userid( $data{'userid'} ) );
+      if ( $data{'userid'} eq '' || !Check_Userid( $data{'userid'} ) );
 
     # add expiration date if it isn't already there
     unless ( $data{'dateexpiry'} ) {
