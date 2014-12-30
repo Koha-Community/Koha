@@ -41,7 +41,6 @@ use warnings;
 use Carp;
 use Module::Load::Conditional qw(can_load);
 use Koha::Cache::Object;
-use C4::Context;
 
 use base qw(Class::Accessor);
 
@@ -133,16 +132,28 @@ sub _initialize_memcached {
 
 sub _initialize_fastmmap {
     my ($self) = @_;
-    my $share_file = join( '-',
-        "/tmp/sharefile-koha", $self->{'namespace'},
-        C4::Context->config('hostname'), C4::Context->config('database'),
-        "" . getpwuid($>) );
+    my ($cache, $share_file);
 
-    $self->{'fastmmap_cache'} = Cache::FastMmap->new(
-        'share_file'  => $share_file,
-        'expire_time' => $self->{'timeout'},
-        'unlink_on_exit' => 0,
-    );
+    # Temporary workaround to catch fatal errors when: C4::Context module
+    # is not loaded beforehand, or Cache::FastMmap init fails for whatever
+    # other reason (e.g. due to permission issues - see Bug 13431)
+    eval {
+        $share_file = join( '-',
+            "/tmp/sharefile-koha", $self->{'namespace'},
+            C4::Context->config('hostname'), C4::Context->config('database') );
+
+        $cache = Cache::FastMmap->new(
+            'share_file'  => $share_file,
+            'expire_time' => $self->{'timeout'},
+            'unlink_on_exit' => 0,
+        );
+    };
+    if ( $@ ) {
+        warn "FastMmap cache initialization failed: $@";
+        return;
+    }
+    return unless defined $cache;
+    $self->{'fastmmap_cache'} = $cache;
     return $self;
 }
 
