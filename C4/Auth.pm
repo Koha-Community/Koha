@@ -966,7 +966,10 @@ sub checkauth {
                       checkpw( $dbh, $userid, $password, $query );
                     $userid = $retuserid if ($retuserid);
                     $info{'invalid_username_or_password'} = 1 unless ($return);
-                } }
+                }
+            }
+
+            # $return: 1 = valid user, 2 = superlibrarian
             if ($return) {
 
                 #_session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},(strftime '%c', localtime));
@@ -1090,13 +1093,17 @@ sub checkauth {
                 );
 
             }
+            # $return: 0 = invalid user
+            # reset to anonymous session
             else {
+                $debug and warn "Login failed, resetting anonymous session...";
                 if ($userid) {
                     $info{'invalid_username_or_password'} = 1;
                     C4::Context->_unset_userenv($sessionID);
                 }
                 $session->param( 'lasttime', time() );
                 $session->param( 'ip',       $session->remote_addr() );
+                $session->param( 'sessiontype', 'anon' );
             }
         }    # END if ( $userid    = $query->param('userid') )
         elsif ( $type eq "opac" ) {
