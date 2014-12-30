@@ -43,6 +43,14 @@ $(document).ready(function(){
 <![endif]-->
 <style type="text/css">input[type=checkbox]{ margin : 0 .5em; }</style>
 <link type="text/css" rel="stylesheet" href="[% interface %]/[% theme %]/css/addbiblio.css" />
+
+[% INCLUDE 'select2.inc' %]
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.subfield_line select').select2();
+  });
+</script>
+
 </head>
 <body id="tools_batchMod-edit" class="tools">
 [% INCLUDE 'header.inc' %]

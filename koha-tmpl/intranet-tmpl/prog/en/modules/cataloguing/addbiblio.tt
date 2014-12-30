@@ -380,6 +380,14 @@ function Changefwk(FwkList) {
 //]]>
 </script>
 <link type="text/css" rel="stylesheet" href="[% interface %]/[% theme %]/css/addbiblio.css" />
+
+[% INCLUDE 'select2.inc' %]
+<script>
+  $(document).ready(function() {
+    $('.subfield_line select').select2();
+  });
+</script>
+
 [% IF ( bidi ) %]
    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/right-to-left.css" />
 [% END %]
