@@ -920,7 +920,7 @@ sub AddMember {
 sub Check_Userid {
     my ( $uid, $borrowernumber ) = @_;
 
-    return 1 unless ($uid);
+    return 0 unless ($uid); # userid is a unique column, we should assume NULL is not unique
 
     return 0 if ( $uid eq C4::Context->config('user') );
 
