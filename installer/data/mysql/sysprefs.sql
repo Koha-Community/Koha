@@ -372,6 +372,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SelfCheckTimeout','120','','Define the number of seconds before the Web-based Self Checkout times out a patron','Integer'),
 ('SeparateHoldings','0',NULL,'Separate current branch holdings from other holdings','YesNo'),
 ('SeparateHoldingsBranch','homebranch','homebranch|holdingbranch','Branch used to separate holdings','Choice'),
+('SessionRestrictionByIP','1','Check for change in remote IP address for session security. Disable only when remote IP address changes frequently.','','YesNo'),
 ('SessionStorage','mysql','mysql|Pg|tmp','Use database or a temporary file for storing session data','Choice'),
 ('ShelfBrowserUsesCcode','1','0','Use the item collection code when finding items for the shelf browser.','YesNo'),
 ('ShelfBrowserUsesHomeBranch','1','1','Use the item home branch when finding items for the shelf browser.','YesNo'),
@@ -472,6 +473,5 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('XSLTDetailsDisplay','default','','Enable XSL stylesheet control over details page display on intranet','Free'),
 ('XSLTResultsDisplay','default','','Enable XSL stylesheet control over results page display on intranet','Free'),
 ('z3950AuthorAuthFields','701,702,700',NULL,'Define the MARC biblio fields for Personal Name Authorities to fill biblio.author','free'),
-('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo'),
-('SessionRestrictionByIP','1','Check for Change in Remote IP address for Session Security . Disable when remote ip address changes frequently.','','YesNo');
+('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo')
 ;
