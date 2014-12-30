@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 69;
+use Test::More tests => 70;
 use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
@@ -297,6 +297,12 @@ is( Check_Userid( 'tomasito.none', $new_borrowernumber ), 0,
     'userid not unique (second borrowernumber passed)' );
 my $borrower = GetMember( borrowernumber => $new_borrowernumber );
 ok( $borrower->{userid} ne 'tomasito', "Borrower with duplicate userid has new userid generated" );
+
+$data{ cardnumber } = "234567890";
+$data{userid} = 'a_user_id';
+$borrowernumber = AddMember( %data );
+$borrower = GetMember( borrowernumber => $borrowernumber );
+is( $borrower->{userid}, $data{userid}, 'AddMember should insert the given userid' );
 
 # Regression tests for BZ12226
 is( Check_Userid( C4::Context->config('user'), '' ), 0,
