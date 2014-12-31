@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 70;
+use Test::More tests => 72;
 use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
@@ -303,6 +303,18 @@ $data{userid} = 'a_user_id';
 $borrowernumber = AddMember( %data );
 $borrower = GetMember( borrowernumber => $borrowernumber );
 is( $borrower->{userid}, $data{userid}, 'AddMember should insert the given userid' );
+
+# Regression tests for BZ13502
+## Remove all entries with userid='' (should be only 1 max)
+$dbh->do(q|DELETE FROM borrowers WHERE userid = ''|);
+## And create a patron with a userid=''
+$borrowernumber = AddMember( categorycode => 'S', branchcode => 'MPL' );
+$dbh->do(q|UPDATE borrowers SET userid = '' WHERE borrowernumber = ?|, undef, $borrowernumber);
+# Create another patron and verify the userid has been generated
+$borrowernumber = AddMember( categorycode => 'S', branchcode => 'MPL' );
+ok( $borrowernumber > 0, 'AddMember should have inserted the patron even if no userid is given' );
+$borrower = GetMember( borrowernumber => $borrowernumber );
+ok( $borrower->{userid},  'A userid should have been generated correctly' );
 
 # Regression tests for BZ12226
 is( Check_Userid( C4::Context->config('user'), '' ), 0,
