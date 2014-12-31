@@ -604,6 +604,18 @@ __PACKAGE__->set_primary_key("borrowernumber");
 
 __PACKAGE__->add_unique_constraint("cardnumber", ["cardnumber"]);
 
+=head2 C<userid>
+
+=over 4
+
+=item * L</userid>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("userid", ["userid"]);
+
 =head1 RELATIONS
 
 =head2 accountlines
@@ -1117,8 +1129,8 @@ Composing rels: L</course_instructors> -> course
 __PACKAGE__->many_to_many("courses", "course_instructors", "course");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-11-14 09:56:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UGa+abq4uilkf0nImxun/w
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-12-31 14:08:18
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mOTD/GsDpo3RPjUjTHrLRQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
