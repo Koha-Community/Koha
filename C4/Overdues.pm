@@ -57,7 +57,7 @@ BEGIN {
       &RemoveNotifyLine
       &AddNotifyLine
       &GetOverdueMessageTransportTypes
-      &parse_letter
+      &parse_overdues_letter
     );
 
     # subs to remove
@@ -955,7 +955,7 @@ sub GetOverdueMessageTransportTypes {
     return \@mtts;
 }
 
-=head2 parse_letter
+=head2 parse_overdues_letter
 
 parses the letter template, replacing the placeholders with data
 specific to this patron, biblio, or item for overdues
@@ -971,7 +971,7 @@ substituted keys and values.
 
 =cut
 
-sub parse_letter {
+sub parse_overdues_letter {
     my $params = shift;
     foreach my $required (qw( letter_code borrowernumber )) {
         return unless ( exists $params->{$required} && $params->{$required} );

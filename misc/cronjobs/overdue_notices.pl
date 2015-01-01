@@ -672,7 +672,7 @@ END_SQL
                 my $print_sent = 0; # A print notice is not yet sent for this patron
                 for my $mtt ( @message_transport_types ) {
 
-                    my $letter = parse_letter(
+                    my $letter = parse_overdues_letter(
                         {   letter_code     => $overdue_rules->{"letter$i"},
                             borrowernumber  => $borrowernumber,
                             branchcode      => $branchcode,
