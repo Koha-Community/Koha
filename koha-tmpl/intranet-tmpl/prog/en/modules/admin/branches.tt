@@ -24,6 +24,18 @@
             "iDisplayLength": 10,
             "sPaginationType": "four_button"
         }));
+
+        [% IF ( heading_branches_add_branch_p ) %]
+            $("#Aform").on("submit", function( event ) {
+                if ( $("#branchcode").val().match(/\s/) ) {
+                    event.preventDefault();
+                    alert(_("The library code entered contains whitespace characters. Please remove any whitespace characters from the library code"));
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+        [% END %]
     });
 tinyMCE.init({
     mode : "textareas",
@@ -62,7 +74,7 @@ tinyMCE.init({
 </div>
 
 <div id="doc3" class="yui-t2">
-   
+
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
@@ -247,7 +259,7 @@ tinyMCE.init({
 	[% ELSE %]
 	<div class="dialog message">There are no libraries defined. <a href="/cgi-bin/koha/admin/branches.pl?op=add">Start defining libraries</a>.</div>
 	[% END %]
-    
+
    [% IF ( branchcategories ) %]
    [% FOREACH branchcategorie IN branchcategories %]
     <h3>Group(s):  [% IF ( branchcategorie.properties ) %]Properties[% ELSE %][% IF ( branchcategorie.searchdomain ) %]Search domain[% END %][% END %]</h3>
@@ -297,7 +309,7 @@ tinyMCE.init({
 	<input type="hidden" name="add" value="1">
 	[% END %]
     <fieldset class="rows">
-        
+
         <ol><li>
                 [% IF ( categorycode ) %]
 				<span class="label">Category code: </span>
@@ -344,7 +356,7 @@ tinyMCE.init({
 
 [% IF ( delete_category ) %]
     [% UNLESS ( MESSAGE8 ) %]
-    <div class="dialog message"> 
+    <div class="dialog message">
     Confirm delete:
     <form action="[% action %]" method="post">
         <input type="hidden" name="op" value="categorydelete_confirmed" />
