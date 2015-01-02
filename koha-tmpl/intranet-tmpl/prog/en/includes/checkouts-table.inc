@@ -39,7 +39,7 @@
                             <input type="checkbox" name="override_limit" id="override_limit" value="1" />
                         [% END %]
                     [% END %]
-                    <button class="btn" id="RenewCheckinChecked"><i class="icon-check"></i> Renew or return checked items</button>
+                    <button class="btn" id="RenewCheckinChecked"><i class="icon-check"></i> Renew or check in selected items</button>
                     <button class="btn" id="RenewAll"><i class="icon-book"></i> Renew all</button>
                 </fieldset>
 
