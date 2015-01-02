@@ -68,10 +68,33 @@
 
 <p class="submit"><input id="submit" type="submit" value="Login" tabindex="4" /></p>
 </form>
+[% IF ( casAuthentication ) %]
+<h4>Cas login</h4>
+
+[% IF ( invalidCasLogin ) %]
+<!-- This is what is displayed if cas login has failed -->
+<p>Sorry, the CAS login failed.</p>
+[% END %]
+
+<p>If you have a <acronym title="Central Authentication Service">CAS</acronym> account,
+[% IF ( casServerUrl ) %]
+    please <a href="[% casServerUrl %]">click here to login</a>.<p>
+[% END %]
+
+[% IF ( casServersLoop ) %]
+please choose against which one you would like to authenticate: </p>
+<ul>
+    [% FOREACH casServer IN casServersLoop %]
+        <li><a href="[% casServer.value %]">[% casServer.name %]</a></li>
+    [% END %]
+[% END %]
+[% END %]
+
 [% IF ( nopermission ) %]
     <p><a href="javascript:window.history.back()">[Previous page]</a>
     <a href="/">[Main page]</a></p>
 [% END %]
+
 
 <!--<ul> -->
 <!--	<li><a href="/cgi-bin/koha/lostpassword.pl" title="Password lost and found">Lost your password?</a></li> -->

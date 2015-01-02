@@ -25,6 +25,7 @@ use C4::Context;
 use Authen::CAS::Client;
 use CGI qw ( -utf8 );
 use FindBin;
+use YAML;
 
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
@@ -39,12 +40,12 @@ BEGIN {
 my $context = C4::Context->new() or die 'C4::Context->new failed';
 my $defaultcasserver;
 my $casservers;
-my $yamlauthfile = "../C4/Auth_cas_servers.yaml";
+my $yamlauthfile = C4::Context->config('intranetdir') . "/C4/Auth_cas_servers.yaml";
 
 
 # If there's a configuration for multiple cas servers, then we get it
 if (multipleAuth()) {
-    ($defaultcasserver, $casservers) = YAML::LoadFile(qq($FindBin::Bin/$yamlauthfile));
+    ($defaultcasserver, $casservers) = YAML::LoadFile($yamlauthfile);
     $defaultcasserver = $defaultcasserver->{'default'};
 } else {
 # Else, we fall back to casServerUrl syspref
@@ -54,7 +55,7 @@ if (multipleAuth()) {
 
 # Is there a configuration file for multiple cas servers?
 sub multipleAuth {
-    return (-e qq($FindBin::Bin/$yamlauthfile));
+    return (-e qq($yamlauthfile));
 }
 
 # Returns configured CAS servers' list if multiple authentication is enabled
@@ -64,23 +65,23 @@ sub getMultipleAuth {
 
 # Logout from CAS
 sub logout_cas {
-    my ($query) = @_;
-    my ( $cas, $uri ) = _get_cas_and_service($query);
+    my ($query, $type) = @_;
+    my ( $cas, $uri ) = _get_cas_and_service($query, undef, $type);
     print $query->redirect( $cas->logout_url($uri));
     print $query->redirect( $cas->logout_url(url => $uri));
 }
 
 # Login to CAS
 sub login_cas {
-    my ($query) = @_;
-    my ( $cas, $uri ) = _get_cas_and_service($query);
+    my ($query, $type) = @_;
+    my ( $cas, $uri ) = _get_cas_and_service($query, undef, $type);
     print $query->redirect( $cas->login_url($uri));
 }
 
 # Returns CAS login URL with callback to the requesting URL
 sub login_cas_url {
-    my ( $query, $key ) = @_;
-    my ( $cas, $uri ) = _get_cas_and_service( $query, $key );
+    my ( $query, $key, $type ) = @_;
+    my ( $cas, $uri ) = _get_cas_and_service( $query, $key, $type );
     return $cas->login_url($uri);
 }
 
@@ -88,9 +89,9 @@ sub login_cas_url {
 # In our case : is there a ticket, is it valid and does it match one of our users ?
 sub checkpw_cas {
     $debug and warn "checkpw_cas";
-    my ($dbh, $ticket, $query) = @_;
+    my ($dbh, $ticket, $query, $type) = @_;
     my $retnumber;
-    my ( $cas, $uri ) = _get_cas_and_service($query);
+    my ( $cas, $uri ) = _get_cas_and_service($query, undef, $type);
 
     # If we got a ticket
     if ($ticket) {
@@ -136,9 +137,9 @@ sub checkpw_cas {
 # Proxy CAS auth
 sub check_api_auth_cas {
     $debug and warn "check_api_auth_cas";
-    my ($dbh, $PT, $query) = @_;
+    my ($dbh, $PT, $query, $type) = @_;
     my $retnumber;
-    my ( $cas, $uri ) = _get_cas_and_service($query);
+    my ( $cas, $uri ) = _get_cas_and_service($query, undef, $type);
 
     # If we have a Proxy Ticket
     if ($PT) {
@@ -184,8 +185,9 @@ sub check_api_auth_cas {
 sub _get_cas_and_service {
     my $query = shift;
     my $key   = shift;    # optional
+    my $type  = shift;
 
-    my $uri = _url_with_get_params($query);
+    my $uri = _url_with_get_params($query, $type);
 
     my $casparam = $defaultcasserver;
     $casparam = $query->param('cas') if defined $query->param('cas');
@@ -199,8 +201,12 @@ sub _get_cas_and_service {
 # This method replaces $query->url() which will give both GET and POST params
 sub _url_with_get_params {
     my $query = shift;
+    my $type = shift;
 
-    my $uri_base_part = C4::Context->preference('OPACBaseURL') . $query->script_name();
+    my $uri_base_part = ($type eq 'opac') ?
+                        C4::Context->preference('OPACBaseURL') . $query->script_name():
+                        C4::Context->preference('staffClientBaseURL');
+
     my $uri_params_part = '';
     foreach ( $query->url_param() ) {
         # url_param() always returns parameters that were deleted by delete()

@@ -799,8 +799,8 @@ sub checkauth {
             $sessionID = undef;
             $userid    = undef;
 
-            if ( $cas and $caslogout ) {
-                logout_cas($query);
+            if ($cas and $caslogout) {
+                logout_cas($query, $type);
             }
 
             # If we are in a shibboleth session (shibboleth is enabled, a shibboleth match attribute is set and matches koha matchpoint)
@@ -907,7 +907,7 @@ sub checkauth {
                 if ( $cas && $query->param('ticket') ) {
                     my $retuserid;
                     ( $return, $cardnumber, $retuserid ) =
-                      checkpw( $dbh, $userid, $password, $query );
+                      checkpw( $dbh, $userid, $password, $query, $type );
                     $userid = $retuserid;
                     $info{'invalidCasLogin'} = 1 unless ($return);
                 }
@@ -968,7 +968,7 @@ sub checkauth {
                 else {
                     my $retuserid;
                     ( $return, $cardnumber, $retuserid ) =
-                      checkpw( $dbh, $userid, $password, $query );
+                      checkpw( $dbh, $userid, $password, $query, $type );
                     $userid = $retuserid if ($retuserid);
                     $info{'invalid_username_or_password'} = 1 unless ($return);
                 }
@@ -1222,14 +1222,14 @@ sub checkauth {
             my $casservers = C4::Auth_with_cas::getMultipleAuth();
             my @tmplservers;
             foreach my $key ( keys %$casservers ) {
-                push @tmplservers, { name => $key, value => login_cas_url( $query, $key ) . "?cas=$key" };
+                push @tmplservers, { name => $key, value => login_cas_url( $query, $key, $type ) . "?cas=$key" };
             }
             $template->param(
                 casServersLoop => \@tmplservers
             );
         } else {
             $template->param(
-                casServerUrl => login_cas_url($query),
+                casServerUrl => login_cas_url($query, undef, $type),
             );
         }
 
@@ -1676,7 +1676,8 @@ sub get_session {
 }
 
 sub checkpw {
-    my ( $dbh, $userid, $password, $query ) = @_;
+    my ( $dbh, $userid, $password, $query, $type ) = @_;
+    $type = 'opac' unless $type;
     if ($ldap) {
         $debug and print STDERR "## checkpw - checking LDAP\n";
         my ( $retval, $retcard, $retuserid ) = checkpw_ldap(@_);    # EXTERNAL AUTH
@@ -1690,7 +1691,7 @@ sub checkpw {
         # In case of a CAS authentication, we use the ticket instead of the password
         my $ticket = $query->param('ticket');
         $query->delete('ticket');                                   # remove ticket to come back to original URL
-        my ( $retval, $retcard, $retuserid ) = checkpw_cas( $dbh, $ticket, $query );    # EXTERNAL AUTH
+        my ( $retval, $retcard, $retuserid ) = checkpw_cas( $dbh, $ticket, $query, $type );    # EXTERNAL AUTH
         ($retval) and return ( $retval, $retcard, $retuserid );
         return 0;
     }
