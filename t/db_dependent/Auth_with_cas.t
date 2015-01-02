@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use CGI;
 
 use C4::Context;
@@ -39,8 +39,10 @@ $dbh->{ AutoCommit } = 0;
 $dbh->{ RaiseError } = 1;
 
 C4::Context->set_preference('OPACBaseURL','localhost');
+C4::Context->set_preference('staffClientBaseURL','localhost:8080');
 
 my $opac_base_url = C4::Context->preference('OpacBaseURL');
+my $staff_base_url = C4::Context->preference('staffClientBaseURL');
 my $query_string = 'ticket=foo&bar=baz';
 
 $ENV{QUERY_STRING} = $query_string;
@@ -50,9 +52,16 @@ my $cgi = new CGI($query_string);
 $cgi->delete('ticket');
 
 # _url_with_get_params tests
-is(C4::Auth_with_cas::_url_with_get_params($cgi),
+is(C4::Auth_with_cas::_url_with_get_params($cgi, 'opac'),
     "$opac_base_url/cgi-bin/koha/opac-user.pl?bar=baz",
    "_url_with_get_params should return URL without deleted parameters (Bug 12398)");
+
+# intranet url test
+is(C4::Auth_with_cas::_url_with_get_params($cgi, 'intranet'),
+    "$staff_base_url?bar=baz",
+   "Intranet URL should be returned when using intranet login (Bug 13507)");
+
+
 
 $dbh->rollback;
 
