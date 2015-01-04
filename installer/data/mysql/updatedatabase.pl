@@ -9628,7 +9628,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.19.00.XXX";
+$DBversion = "3.19.00.004";
 if ( CheckVersion($DBversion) ) {
     my $pref_value = C4::Context->preference('OpacExportOptions');
     $pref_value =~ s/\|/,/g; # multiple is separated by ,
@@ -9638,7 +9638,7 @@ if ( CheckVersion($DBversion) ) {
                 type = 'multiple'
         WHERE variable = 'OpacExportOptions'
     }, {}, $pref_value );
-    print "Upgrade to $DBversion done (Bug XXXXX: OpacExportOptions is now multiple)\n";
+    print "Upgrade to $DBversion done (Bug 13346: OpacExportOptions is now multiple)\n";
     SetVersion ($DBversion);
 }
 
