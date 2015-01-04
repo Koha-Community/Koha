@@ -9642,7 +9642,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.19.00.XXX";
+$DBversion = "3.19.00.005";
 if(CheckVersion($DBversion)) {
     $dbh->do(q{
         ALTER TABLE authorised_values MODIFY COLUMN category VARCHAR(32) NOT NULL DEFAULT ''
@@ -9655,8 +9655,6 @@ if(CheckVersion($DBversion)) {
     print "Upgrade to $DBversion done (Bug 13379 - Modify authorised_values.category to varchar(32))\n";
     SetVersion($DBversion);
 }
-
-
 
 =head1 FUNCTIONS
 
