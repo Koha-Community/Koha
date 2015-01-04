@@ -2,6 +2,7 @@ use Modern::Perl;
 use Test::More tests => 13;
 
 use C4::Acquisition;
+use C4::Bookseller;
 use C4::Budgets;
 use_ok('C4::Serials');
 
