@@ -466,7 +466,7 @@ sub ShelfPossibleAction {
     if ( $user > 0 and $action eq 'delete_shelf' ) {
         my $borrower = C4::Members::GetMember( borrowernumber => $user );
         return 1
-            if C4::Auth::haspermission( $borrower->{userid}, { shelves => 'delete_shelves' } );
+            if C4::Auth::haspermission( $borrower->{userid}, { shelves => 'delete_public_lists' } );
     }
 
     my $dbh = C4::Context->dbh;
