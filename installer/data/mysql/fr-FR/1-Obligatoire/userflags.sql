@@ -19,3 +19,4 @@ INSERT INTO `userflags` VALUES(16,'reports','Accès aux statistiques',0);
 INSERT INTO `userflags` VALUES(17,'staffaccess','Autorise les bibliothécaires à modifier les permissions d''autres bibliothécaires',0);
 INSERT INTO `userflags` VALUES(18,'coursereserves','Course Reserves',0);
 INSERT INTO `userflags` VALUES(19, 'plugins', 'Koha plugins', '0');
+INSERT INTO `userflags` VALUES(20,'lists', 'Lists', '0');

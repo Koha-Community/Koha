@@ -19,7 +19,8 @@ INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
    (16,'reports',         'Дозвіл на доступ до модуля звітів',0),
    (17,'staffaccess',     'Зміна імені(логіну)/привілеїв для працівників бібліотеки',0),
    (18,'coursereserves',  'Course Reserves',0),
-   (19,'plugins',         'Koha plugins', '0')
+   (19,'plugins',         'Koha plugins', '0'),
+   (20,'lists',           'Lists', '0')
 ;
 
 TRUNCATE permissions;
@@ -97,6 +98,6 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (19, 'manage', 'Manage plugins ( install / uninstall )'),
    (19, 'tool', 'Use tool plugins'),
    (19, 'report', 'Use report plugins'),
-   (19, 'configure', 'Configure plugins')
+   (19, 'configure', 'Configure plugins'),
+   (20, 'delete_public_lists', 'Delete public lists')
 ;
-

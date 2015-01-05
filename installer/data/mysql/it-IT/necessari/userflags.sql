@@ -19,5 +19,6 @@ INSERT INTO `userflags` VALUES(16,'reports','autorizza accesso al modulo dei rep
 INSERT INTO `userflags` VALUES(17,'staffaccess','modifica la login o i permessi degli staff users',0);
 INSERT INTO `userflags` VALUES(18,'coursereserves','Modulo \'Testi per i corsi\'',0);
 INSERT INTO `userflags` VALUES(19, 'plugins', 'Gestisci i plugins di Koha', '0');
+INSERT INTO `userflags` VALUES(20,'lists', 'Lists', '0');
 
 SET FOREIGN_KEY_CHECKS=1;

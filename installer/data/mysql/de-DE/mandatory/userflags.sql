@@ -17,3 +17,4 @@ INSERT INTO `userflags` VALUES(16,'reports','Zugriff auf Reports',0);
 INSERT INTO `userflags` VALUES(17,'staffaccess','Berechtigungen/Logins für Bibliotheksmitarbeiter vergeben',0);
 INSERT INTO `userflags` VALUES(18,'coursereserves','Semesterapparate',0);
 INSERT INTO `userflags` VALUES(19,'plugins', 'Koha Plugins', '0');
+INSERT INTO `userflags` VALUES(20,'lists', 'Lists', '0');

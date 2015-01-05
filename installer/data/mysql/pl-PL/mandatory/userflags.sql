@@ -17,4 +17,5 @@ INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
 (16,'reports','Zezwól na dostęp do modułu raportów',0),
 (17,'staffaccess','Pozwolenie na modyfikacje uprawnień innych pracowników',0),
 (18,'coursereserves','Kursy',0),
-(19, 'plugins', 'Wtyczki Koha', '0');
+(19, 'plugins', 'Wtyczki Koha', '0'),
+(20,'lists', 'Lists', '0');

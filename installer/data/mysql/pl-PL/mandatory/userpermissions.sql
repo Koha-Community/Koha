@@ -71,5 +71,6 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (19, 'manage', 'Zarządzanie wtyczkami ( instalacja / deinstalacja )'),
    (19, 'tool', 'Użyuwanie wtyczek narzędzi'),
    (19, 'report', 'Używanie wtyczek raportów'),
-   (19, 'configure', 'Konfiguracja wtyczek')
+   (19, 'configure', 'Konfiguracja wtyczek'),
+   (20, 'delete_public_lists', 'Delete public lists')
 ;

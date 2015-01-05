@@ -71,5 +71,6 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (19, 'manage', 'Gestisci plugins ( installa / disinstalla )'),
    (19, 'tool', 'Usa i plugins di tipo strumento'),
    (19, 'report', 'Usa i plugins di tipo report'),
-   (19, 'configure', 'Configura i plugins')
+   (19, 'configure', 'Configura i plugins'),
+   (20, 'delete_public_lists', 'Delete public lists')
 ;

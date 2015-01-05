@@ -38,3 +38,4 @@ INSERT INTO `userflags` VALUES(16,'reports','Tilgang til rapportmodulen',0);
 INSERT INTO `userflags` VALUES(17,'staffaccess','Endre innlogging og rettigheter for bibliotekansatte',0);
 INSERT INTO `userflags` VALUES(18,'coursereserves','Course Reserves',0);
 INSERT INTO `userflags` VALUES(19, 'plugins', 'Koha plugins', '0');
+INSERT INTO `userflags` VALUES(20,'lists', 'Lists', '0');

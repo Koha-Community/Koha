@@ -17,3 +17,4 @@ INSERT INTO `userflags` VALUES(16,'reports','Allow to access to the reports modu
 INSERT INTO `userflags` VALUES(17,'staffaccess','Modify login / permissions for staff users',0);
 INSERT INTO `userflags` VALUES(18,'coursereserves','Course Reserves',0);
 INSERT INTO `userflags` VALUES(19, 'plugins', 'Koha plugins', '0');
+INSERT INTO `userflags` VALUES(20,'lists', 'Lists', '0');
