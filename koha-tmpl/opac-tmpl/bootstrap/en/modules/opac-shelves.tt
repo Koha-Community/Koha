@@ -156,10 +156,10 @@
                             <div id="toolbar" class="toolbar clearfix">
                                 <div class="list-actions">
                                     <a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?shelves=1">New list</a> <span class="sep">|</span>
-                                    <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfid=[% shelfnumber %]" class="download" onclick="open(CGIBIN+'opac-downloadshelf.pl?shelfid=[% shelfnumber %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false;">Download list</a>
+                                    <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfid=[% shelfnumber | html %]&amp;showprivateshelves=[% showprivateshelves | html %]" class="download" data-toggle="modal" data-target="#modalWin">Download list</a>
 
                                     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                        <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber %]" class="send" onclick="open(CGIBIN+'opac-sendshelf.pl?shelfid=[% shelfnumber %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send list</a></span>
+                                        <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber | html %]" class="send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber | html %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send list</a></span>
                                     [% END %]
 
                                     <a class="print-small" href="/cgi-bin/koha/opac-shelves.pl" onclick="print(); return false;">Print list</a>
@@ -169,30 +169,30 @@
                                         <form method="get" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
                                             <input type="hidden" name="op" value="modif" />
                                             <input type="hidden" name="display" value="viewshelf" />
-                                            <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
+                                            <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]" />
                                             <input type="submit" class="editshelf" value="Edit list" />
                                         </form>
 
                                         <form method="post" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
                                             <input type="hidden" value="1" name="shelves"/>
-                                            <input type="hidden" value="1" name="DEL-[% shelfnumber %]"/>
+                                            <input type="hidden" value="1" name="DEL-[% shelfnumber | html %]"/>
                                             [% IF ( showprivateshelves ) %]
                                                 <input type="hidden" name="display" value="privateshelves"/>
                                             [% END %]
                                             <input type="submit" class="deleteshelf" value="Delete list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
                                         </form>
                                         [% IF showprivateshelves && Koha.Preference('OpacAllowSharingPrivateLists') %]
-                                            <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelfnumber %]" class="">Share list</a>
+                                            <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelfnumber | html %]" class="">Share list</a>
                                         [% END %]
                                     [% ELSIF showprivateshelves # not manageshelf and private means shared %]
                                         [% INCLUDE remove_share %]
-                                            <input type="hidden" name="REMSHR-[% shelfnumber %]" value="1" />
+                                            <input type="hidden" name="REMSHR-[% shelfnumber | html %]" value="1" />
                                         </form>
                                     [% END # / IF manageshelf %]
                                 </div>
 
                                 <form action="/cgi-bin/koha/opac-shelves.pl" id="sorting-form" class="form-inline sort_by pull-right">
-                                    <input type="hidden" name="viewshelf" value="[% shelfnumber %]" />
+                                    <input type="hidden" name="viewshelf" value="[% shelfnumber | html %]" />
 
                                     <label for="sort">Sort by: </label>
                                     <select name="sort" id="sort" class="resort" onchange="$('#sorting-form').submit()">
@@ -268,7 +268,7 @@
 
                             <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="myform" name="myform" class="checkboxed">
                                 [% IF ( manageshelf ) %]
-                                    <input type="hidden" name="viewshelf" value="[% shelfnumber %]" />
+                                    <input type="hidden" name="viewshelf" value="[% shelfnumber | html %]" />
                                     <input type="hidden" name="modifyshelfcontents" value="1" />
                                 [% END %]
                                 <div class="searchresults">
@@ -485,13 +485,13 @@
                                         <form method="get" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
                                             <input type="hidden" name="op" value="modif" />
                                             <input type="hidden" name="display" value="viewshelf" />
-                                            <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
+                                            <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]" />
                                             <input type="submit" class="editshelf" value="Edit list" />
                                         </form>
 
                                         <form method="post" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
                                             <input type="hidden" value="1" name="shelves"/>
-                                            <input type="hidden" value="1" name="DEL-[% shelfnumber %]"/>
+                                            <input type="hidden" value="1" name="DEL-[% shelfnumber | html  %]"/>
                                             [% IF ( showprivateshelves ) %]
                                                 <input type="hidden" name="display" value="privateshelves"/>
                                             [% END %]
@@ -511,13 +511,13 @@
                     [% END # / IF viewshelf %]
 
                     [% IF ( itemsloop && allowremovingitems ) %]
-                        <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
+                        <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]" />
                         <input type="hidden" name="modifyshelfcontents" value="1" />
-                        <input type="hidden" name="viewshelf" value="[% shelfnumber %]" /><input type="submit" value="Remove selected items" id="remove-selected" class="btn btn-danger"/>
+                        <input type="hidden" name="viewshelf" value="[% shelfnumber | html %]" /><input type="submit" value="Remove selected items" id="remove-selected" class="btn btn-danger"/>
                         </form>
                     [% ELSIF ( !itemsloop && manageshelf ) %]
                         <form method="post" action="opac-shelves.pl">
-                        <input type="hidden" name="DEL-[% shelfnumber %]" value="1" />
+                        <input type="hidden" name="DEL-[% shelfnumber | html %]" value="1" />
                         <input type="hidden" name="shelves" value="1" />
                         <input type="hidden" name="shelfoff" value="[% shelfoff %]" />
                         <input type="submit" class="btn btn-danger" value="Delete this list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST)" />
@@ -528,7 +528,7 @@
                         <form method="post" action="/cgi-bin/koha/opac-shelves.pl">
                             <input type="hidden" name="op" value="modifsave" />
                             <input type="hidden" name="display" value="[% display %]" />
-                            <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
+                            <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]" />
                             <fieldset class="rows">
                                 <legend>Editing <em>[% shelfname |html %]</em></legend>
                                 <ol>
@@ -588,9 +588,9 @@
                             <fieldset class="action">
                                 <input type="submit" value="Save" class="btn" />
                                 [% IF ( showprivateshelves ) %]
-                                    <a class="cancel" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=[% shelfnumber %]&amp;display=privateshelves">Cancel</a>
+                                    <a class="cancel" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=[% shelfnumber | html %]&amp;display=privateshelves">Cancel</a>
                                 [% ELSE %]
-                                    <a class="cancel" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=[% shelfnumber %]">Cancel</a>
+                                    <a class="cancel" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=[% shelfnumber | html %]">Cancel</a>
                                 [% END %]
                             </fieldset>
                         </form>
@@ -644,7 +644,7 @@
                                                                     <td>
                                                                         [% IF ( shelveslooppri.mine ) %]
                                                                         <form action="/cgi-bin/koha/opac-shelves.pl" method="get" class="form-inline">
-                                                                            <input type="hidden" name="shelfnumber" value="[% shelveslooppri.shelf %]" />
+                                                                            <input type="hidden" name="shelfnumber" value="[% shelveslooppri.shelf |html %]" />
                                                                             <input type="hidden" name="display" value="privateshelves" />
                                                                             <input type="hidden" name="op" value="modif" />
                                                                             <input type="submit" class="editshelf" value="Edit" />
@@ -652,22 +652,22 @@
                                                                         <form action="opac-shelves.pl" method="post" class="form-inline">
                                                                             <input type="hidden" name="shelves" value="1" />
                                                                             <input type="hidden" name="display" value="privateshelves" />
-                                                                            <input type="hidden" name="DEL-[% shelveslooppri.shelf %]" value="1" />
-                                                                            <input type="hidden" name="shelfoff" value="[% shelfoff %]" />
+                                                                            <input type="hidden" name="DEL-[% shelveslooppri.shelf |html %]" value="1" />
+                                                                            <input type="hidden" name="shelfoff" value="[% shelfoff |html %]" />
                                                                             [% IF ( shelveslooppri.confirm ) %]
-                                                                                <input type="hidden" name="CONFIRM-[% shelveslooppri.confirm %]" value="1" />
+                                                                                <input type="hidden" name="CONFIRM-[% shelveslooppri.confirm |html %]" value="1" />
                                                                                 <input type="submit" class="btn btn-danger confirm" value="Confirm" />
                                                                             [% ELSE %]
                                                                                 <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);" value="Delete" />
                                                                             [% END %]
                                                                         </form>
                                                                             [% IF Koha.Preference('OpacAllowSharingPrivateLists') %]
-                                                                                <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelveslooppri.shelf %]" class="">Share</a>
+                                                                                <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelveslooppri.shelf |html %]" class="">Share</a>
                                                                             [% END %]
                                                                         [% ELSE # not shelveslooppri.mine, so shared %]
                                                                             [% INCLUDE remove_share  # if pref is off, you should still be able to remove shares %]
-                                                                            <input type="hidden" name="shelfoff" value="[% shelfoff %]" />
-                                                                            <input type="hidden" name="REMSHR-[% shelveslooppri.shelf %]" value="1" />
+                                                                            <input type="hidden" name="shelfoff" value="[% shelfoff |html %]" />
+                                                                            <input type="hidden" name="REMSHR-[% shelveslooppri.shelf |html %]" value="1" />
                                                                             </form>
                                                                         [% END %]&nbsp;
                                                                     </td>
