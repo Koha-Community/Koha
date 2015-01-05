@@ -2096,21 +2096,26 @@ sub searchResults {
 			my $prefix = $item->{$hbranch} . '--' . $item->{location} . $item->{itype} . $item->{itemcallnumber};
 # For each grouping of items (onloan, available, unavailable), we build a key to store relevant info about that item
             my $userenv = C4::Context->userenv;
-            if ( $item->{onloan} && !(C4::Members::GetHideLostItemsPreference($userenv->{'number'}) && $item->{itemlost}) ) {
+            if ( $item->{onloan}
+                && !( C4::Members::GetHideLostItemsPreference( $userenv->{'number'} ) && $item->{itemlost} ) )
+            {
                 $onloan_count++;
-				my $key = $prefix . $item->{onloan} . $item->{barcode};
-				$onloan_items->{$key}->{due_date} = format_date($item->{onloan});
-				$onloan_items->{$key}->{count}++ if $item->{$hbranch};
-				$onloan_items->{$key}->{branchname} = $item->{branchname};
-				$onloan_items->{$key}->{location} = $shelflocations->{ $item->{location} };
-				$onloan_items->{$key}->{itemcallnumber} = $item->{itemcallnumber};
-				$onloan_items->{$key}->{description} = $item->{description};
-				$onloan_items->{$key}->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
+                my $key = $prefix . $item->{onloan} . $item->{barcode};
+                $onloan_items->{$key}->{due_date} = format_date( $item->{onloan} );
+                $onloan_items->{$key}->{count}++ if $item->{$hbranch};
+                $onloan_items->{$key}->{branchname}     = $item->{branchname};
+                $onloan_items->{$key}->{location}       = $shelflocations->{ $item->{location} };
+                $onloan_items->{$key}->{itemcallnumber} = $item->{itemcallnumber};
+                $onloan_items->{$key}->{description}    = $item->{description};
+                $onloan_items->{$key}->{imageurl} =
+                  getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
+
                 # if something's checked out and lost, mark it as 'long overdue'
                 if ( $item->{itemlost} ) {
                     $onloan_items->{$prefix}->{longoverdue}++;
                     $longoverdue_count++;
-                } else {	# can place holds as long as item isn't lost
+                }
+                else {    # can place holds as long as item isn't lost
                     $can_place_holds = 1;
                 }
             }
