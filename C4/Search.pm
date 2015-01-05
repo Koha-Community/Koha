@@ -2115,7 +2115,7 @@ sub searchResults {
 
                 # if something's checked out and lost, mark it as 'long overdue'
                 if ( $item->{itemlost} ) {
-                    $onloan_items->{$prefix}->{longoverdue}++;
+                    $onloan_items->{$key}->{longoverdue}++;
                     $longoverdue_count++;
                 }
                 else {    # can place holds as long as item isn't lost
