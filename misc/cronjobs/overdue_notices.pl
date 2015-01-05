@@ -168,7 +168,7 @@ Choose list-all to include all overdue items in the list (limited by B<-max> set
 
 =item B<-date>
 
-use it in order to send overdues on a specific date and not Now.
+use it in order to send overdues on a specific date and not Now. Format: YYYY-MM-DD.
 
 =item B<-email>
 
@@ -364,7 +364,7 @@ if ( $date_input ){
     eval {
         $date_to_run = dt_from_string( $date_input );
     };
-    die "$date_input is not a valid date, aborting!"
+    die "$date_input is not a valid date, aborting! Use a date in format YYYY-MM-DD."
         if $@ or not $date_to_run;
 
 }
