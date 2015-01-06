@@ -360,13 +360,15 @@ if (@branchcodes) {
 my $date_to_run;
 my $date;
 if ( $date_input ){
-    $date = $dbh->quote($date);
     eval {
-        $date_to_run = dt_from_string( $date_input );
+        $date_to_run = dt_from_string( $date_input, 'iso' );
     };
     die "$date_input is not a valid date, aborting! Use a date in format YYYY-MM-DD."
         if $@ or not $date_to_run;
 
+    # It's certainly useless to escape $date_input
+    # dt_from_string should not return something if $date_input is not correctly set.
+    $date = $dbh->quote( $date_input );
 }
 else {
     $date="NOW()";
