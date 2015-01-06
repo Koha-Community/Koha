@@ -72,11 +72,11 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 
-use C4::Dates qw/format_date/;
 use C4::Acquisition;
 use C4::Budgets;
 
 use Koha::Acquisition::Bookseller;
+use Koha::DateUtils qw( output_pref dt_from_string );
 
 my $input          = CGI->new;
 my $booksellerid     = $input->param('booksellerid');
@@ -145,8 +145,8 @@ my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 my @parcels = GetInvoices(
     supplierid => $booksellerid,
     invoicenumber => $code,
-    shipmentdatefrom => $datefrom,
-    shipmentdateto => $dateto,
+    ( $datefrom ? ( shipmentdatefrom => output_pref({ dt => dt_from_string($datefrom), dateformat => 'iso' }) ) : () ),
+    ( $dateto   ? ( shipmentdateto   => output_pref({ dt => dt_from_string($dateto),   dateformat => 'iso' }) )    : () ),
     order_by => $order
 );
 my $count_parcels = @parcels;
