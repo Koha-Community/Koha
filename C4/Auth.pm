@@ -306,8 +306,8 @@ sub get_template_and_user {
         }
      }
 
-    if(C4::Context->preference('dateformat')){
-        $template->param(dateformat => C4::Context->preference('dateformat'))
+    if ( C4::Context->preference('dateformat') ) {
+        $template->param( dateformat => C4::Context->preference('dateformat') );
     }
 
     # these template parameters are set the same regardless of $in->{'type'}
