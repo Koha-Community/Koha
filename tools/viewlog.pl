@@ -211,7 +211,7 @@ if ($do_it) {
 
             # First line with heading
             # Exporting bd id seems useless
-            my @headings = grep { $_ ne 'action_id' } sort keys $data[0];
+            my @headings = grep { $_ ne 'action_id' } sort keys %{$data[0]};
             if ( $csv->combine(@headings) ) {
                 $content .= $csv->string() . "\n";
             }
