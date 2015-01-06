@@ -686,7 +686,7 @@ sub _timeout_syspref {
     # value in days, convert in seconds
     if ( $timeout =~ /(\d+)[dD]/ ) {
         $timeout = $1 * 86400;
-    };
+    }
     return $timeout;
 }
 
