@@ -642,6 +642,13 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   </xslo:template>
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='700']">
     <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('3', @code)">
+        <z:index name="Identifier-standard:w">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
+    <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('9', @code)">
         <z:index name="Koha-Auth-Number:w Koha-Auth-Number:n">
           <xslo:value-of select="."/>
@@ -658,6 +665,13 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   </xslo:template>
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='701']">
     <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('3', @code)">
+        <z:index name="Identifier-standard:w">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
+    <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('9', @code)">
         <z:index name="Koha-Auth-Number:w Koha-Auth-Number:n">
           <xslo:value-of select="."/>
@@ -666,6 +680,13 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     </xslo:for-each>
   </xslo:template>
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='702']">
+    <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('3', @code)">
+        <z:index name="Identifier-standard:w">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('9', @code)">
         <z:index name="Koha-Auth-Number:w Koha-Auth-Number:n">
@@ -676,6 +697,13 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   </xslo:template>
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='710']">
     <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('3', @code)">
+        <z:index name="Identifier-standard:w">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
+    <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('9', @code)">
         <z:index name="Koha-Auth-Number:w Koha-Auth-Number:n">
           <xslo:value-of select="."/>
@@ -685,6 +713,13 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   </xslo:template>
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='711']">
     <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('3', @code)">
+        <z:index name="Identifier-standard:w">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
+    <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('9', @code)">
         <z:index name="Koha-Auth-Number:w Koha-Auth-Number:n">
           <xslo:value-of select="."/>
@@ -693,6 +728,13 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     </xslo:for-each>
   </xslo:template>
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='712']">
+    <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('3', @code)">
+        <z:index name="Identifier-standard:w">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('9', @code)">
         <z:index name="Koha-Auth-Number:w Koha-Auth-Number:n">
