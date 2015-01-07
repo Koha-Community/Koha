@@ -2943,12 +2943,13 @@ sub EmbedItemsInMarcBiblio {
     require C4::Items;
     while ( my ($itemnumber) = $sth->fetchrow_array ) {
         next if @$itemnumbers and not grep { $_ == $itemnumber } @$itemnumbers;
-        my $i = C4::Items::GetItem($itemnumber) if $opachiddenitems;
+        my $i = $opachiddenitems ? C4::Items::GetItem($itemnumber) : undef;
         push @items, { itemnumber => $itemnumber, item => $i };
     }
     my @hiddenitems =
-      C4::Items::GetHiddenItemnumbers( map { $_->{item} } @items )
-      if $opachiddenitems;
+      $opachiddenitems
+      ? C4::Items::GetHiddenItemnumbers( map { $_->{item} } @items )
+      : ();
     # Convert to a hash for quick searching
     my %hiddenitems = map { $_ => 1 } @hiddenitems;
     foreach my $itemnumber ( map { $_->{itemnumber} } @items ) {
