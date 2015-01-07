@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Account for [% INCLUDE 'patron-title.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -10,7 +11,10 @@ $(document).ready(function() {
     var table_account_fines = $("#table_account_fines").dataTable($.extend(true, {}, dataTablesDefaults, {
         "sPaginationType": "four_button",
         'aaSorting': [[0, 'desc']],
-        "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>'
+        "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
+        "aoColumnDefs": [
+            { "sType": "title-string", "aTargets" : [ "title-string" ] }
+        ]
     }));
     $("#filter_c").html('<p><a href="#" id="filter_transacs">'+txtActivefilter+'</a>');
     $('#filter_transacs').click(function(e) {
@@ -55,7 +59,7 @@ $(document).ready(function() {
 <table id="table_account_fines">
     <thead>
       <tr>
-          <th>Date</th>
+          <th class="title-string">Date</th>
           <th>Description of charges</th>
           <th>Note</th>
           <th>Amount</th>
@@ -71,7 +75,7 @@ $(document).ready(function() {
   [% FOREACH account IN accounts %]
 
    [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
-      <td>[% account.date %]</td>
+   <td><span title="[% account.date %]">[% account.date |$KohaDates %]</span></td>
       <td>
         [% SWITCH account.accounttype %]
           [% CASE 'Pay' %]Payment, thanks

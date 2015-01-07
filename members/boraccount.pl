@@ -27,7 +27,6 @@ use warnings;
 
 use C4::Auth;
 use C4::Output;
-use C4::Dates qw/format_date/;
 use CGI;
 use C4::Members;
 use C4::Branch;
@@ -84,7 +83,6 @@ foreach my $accountline ( @{$accts}) {
         $accountline->{amountoutstandingcredit} = 1;
     }
 
-    $accountline->{date} = format_date($accountline->{date});
     $accountline->{amount} = sprintf '%.2f', $accountline->{amount};
     $accountline->{amountoutstanding} = sprintf '%.2f', $accountline->{amountoutstanding};
     if ($accountline->{accounttype} =~ /^Pay/) {
