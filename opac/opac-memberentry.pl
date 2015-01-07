@@ -56,10 +56,13 @@ if ( $action eq q{} ) {
     }
 }
 
+my $mandatory = GetMandatoryFields($action);
+my $hidden = GetHiddenFields($mandatory);
+
 $template->param(
     action            => $action,
-    hidden            => GetHiddenFields(),
-    mandatory         => GetMandatoryFields($action),
+    hidden            => $hidden,
+    mandatory         => $mandatory,
     member_titles     => GetTitles() || undef,
     branches          => GetBranchesLoop(),
     OPACPatronDetails => C4::Context->preference('OPACPatronDetails'),
@@ -229,6 +232,7 @@ $template->param(
 output_html_with_http_headers $cgi, $cookie, $template->output;
 
 sub GetHiddenFields {
+    my ($mandatory) = @_;
     my %hidden_fields;
 
     my $BorrowerUnwantedField =
@@ -237,6 +241,8 @@ sub GetHiddenFields {
     my @fields = split( /\|/, $BorrowerUnwantedField );
     foreach (@fields) {
         next unless m/\w/o;
+        #Don't hide mandatory fields
+        next if $mandatory->{$_};
         $hidden_fields{$_} = 1;
     }
 
