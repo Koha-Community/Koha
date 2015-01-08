@@ -115,6 +115,11 @@ $(document).ready(function() {
             }, "json")
         });
 
+        // Refocus on barcode field if it exists
+        if ( $("#barcode").length ) {
+            $("#barcode").focus();
+        }
+
         // Prevent form submit
         return false;
     });
