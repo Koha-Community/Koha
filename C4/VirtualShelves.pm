@@ -21,7 +21,6 @@ use strict;
 use warnings;
 
 use Carp;
-use C4::Auth;
 use C4::Context;
 use C4::Debug;
 use C4::Members;
@@ -465,6 +464,7 @@ sub ShelfPossibleAction {
 
     if ( $user > 0 and $action eq 'delete_shelf' ) {
         my $borrower = C4::Members::GetMember( borrowernumber => $user );
+        require C4::Auth;
         return 1
             if C4::Auth::haspermission( $borrower->{userid}, { shelves => 'delete_public_lists' } );
     }
