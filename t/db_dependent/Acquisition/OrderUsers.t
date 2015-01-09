@@ -3,7 +3,7 @@ use Test::More tests => 3;
 
 use C4::Acquisition;
 use C4::Biblio;
-use C4::Bookseller qw( GetBookSellerFromId );
+use C4::Bookseller;
 use C4::Letters;
 
 use Koha::Acquisition::Order;
