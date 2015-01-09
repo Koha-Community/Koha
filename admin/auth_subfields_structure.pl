@@ -99,7 +99,7 @@ if ($op eq 'add_form') {
         push @$authorised_values, 'itemtypes';
 
         # build thesaurus categories list
-        my @authtypes = (sort keys getauthtypes);
+        my @authtypes = (sort keys %{C4::Koha::getauthtypes()});
 
 	# build value_builder list
 	my @value_builder=('');
