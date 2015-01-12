@@ -71,7 +71,7 @@ my $repository = C4::OAI::Repository->new();
 # - from
 # - until
 # - offset
-# 
+#
 package C4::OAI::ResumptionToken;
 
 use strict;
@@ -314,6 +314,7 @@ sub new {
     if(defined $token->{'set'}) {
         $set = GetOAISetBySpec($token->{'set'});
     }
+    my $max = $repository->{koha_max_count};
     my $sql = "
         SELECT biblioitems.biblionumber, biblioitems.timestamp
         FROM biblioitems
@@ -322,32 +323,35 @@ sub new {
     $sql .= " WHERE DATE(timestamp) >= ? AND DATE(timestamp) <= ? ";
     $sql .= " AND oai_sets_biblios.set_id = ? " if defined $set;
     $sql .= "
-        LIMIT $repository->{'koha_max_count'}
-        OFFSET $token->{'offset'}
+        LIMIT " . ($max+1) . "
+        OFFSET $token->{offset}
     ";
     my $sth = $dbh->prepare( $sql );
     my @bind_params = ($token->{'from'}, $token->{'until'});
     push @bind_params, $set->{'id'} if defined $set;
     $sth->execute( @bind_params );
 
-    my $pos = $token->{offset};
+    my $count = 0;
     while ( my ($biblionumber, $timestamp) = $sth->fetchrow ) {
+        $count++;
+        if ( $count > $max ) {
+            $self->resumptionToken(
+                new C4::OAI::ResumptionToken(
+                    metadataPrefix  => $token->{metadata_prefix},
+                    from            => $token->{from},
+                    until           => $token->{until},
+                    offset          => $token->{offset} + $max,
+                    set             => $token->{set}
+                )
+            );
+            last;
+        }
         $timestamp =~ s/ /T/, $timestamp .= 'Z';
         $self->identifier( new HTTP::OAI::Header(
             identifier => $repository->{ koha_identifier} . ':' . $biblionumber,
             datestamp  => $timestamp,
         ) );
-        $pos++;
     }
-    $self->resumptionToken(
-        new C4::OAI::ResumptionToken(
-            metadataPrefix  => $token->{metadata_prefix},
-            from            => $token->{from},
-            until           => $token->{until},
-            offset          => $pos,
-            set             => $token->{set}
-        )
-    ) if ($pos > $token->{offset});
 
     return $self;
 }
@@ -467,6 +471,7 @@ sub new {
     if(defined $token->{'set'}) {
         $set = GetOAISetBySpec($token->{'set'});
     }
+    my $max = $repository->{koha_max_count};
     my $sql = "
         SELECT biblioitems.biblionumber, biblioitems.marcxml, biblioitems.timestamp
         FROM biblioitems
@@ -475,8 +480,8 @@ sub new {
     $sql .= " WHERE DATE(timestamp) >= ? AND DATE(timestamp) <= ? ";
     $sql .= " AND oai_sets_biblios.set_id = ? " if defined $set;
     $sql .= "
-        LIMIT $repository->{'koha_max_count'}
-        OFFSET $token->{'offset'}
+        LIMIT " . ($max + 1) . "
+        OFFSET $token->{offset}
     ";
 
     my $sth = $dbh->prepare( $sql );
@@ -484,8 +489,21 @@ sub new {
     push @bind_params, $set->{'id'} if defined $set;
     $sth->execute( @bind_params );
 
-    my $pos = $token->{offset};
+    my $count = 0;
     while ( my ($biblionumber, $marcxml, $timestamp) = $sth->fetchrow ) {
+        $count++;
+        if ( $count > $max ) {
+            $self->resumptionToken(
+                new C4::OAI::ResumptionToken(
+                    metadataPrefix  => $token->{metadata_prefix},
+                    from            => $token->{from},
+                    until           => $token->{until},
+                    offset          => $token->{offset} + $max,
+                    set             => $token->{set}
+                )
+            );
+            last;
+        }
         my $oai_sets = GetOAISetsBiblio($biblionumber);
         my @setSpecs;
         foreach (@$oai_sets) {
@@ -496,17 +514,7 @@ sub new {
             identifier      => $repository->{ koha_identifier } . ':' . $biblionumber,
             metadataPrefix  => $token->{metadata_prefix}
         ) );
-        $pos++;
     }
-    $self->resumptionToken(
-        new C4::OAI::ResumptionToken(
-            metadataPrefix  => $token->{metadata_prefix},
-            from            => $token->{from},
-            until           => $token->{until},
-            offset          => $pos,
-            set             => $token->{set}
-        )
-    ) if ($pos > $token->{offset});
 
     return $self;
 }
@@ -639,7 +647,7 @@ C4::OAI::Repository - Handles OAI-PMH requests for a Koha database.
 This object extend HTTP::OAI::Repository object.
 It accepts OAI-PMH HTTP requests and returns result.
 
-This OAI-PMH server can operate in a simple mode and extended one. 
+This OAI-PMH server can operate in a simple mode and extended one.
 
 In simple mode, repository configuration comes entirely from Koha system
 preferences (OAI-PMH:archiveID and OAI-PMH:MaxCount) and the server returns
