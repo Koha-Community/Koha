@@ -1,14 +1,16 @@
 use Modern::Perl;
-use Test::More tests => 8;
+use Test::More tests => 12;
 use Test::MockModule;
 
-use C4::Acquisition;
-use C4::Bookseller;
-use C4::Context;
-
-use Koha::Number::Price;
-
 use t::lib::Mocks;
+
+BEGIN {
+    my $context_module = t::lib::Mocks::mock_dbh;
+    use_ok('C4::Acquisition');
+    use_ok('C4::Bookseller');
+    use_ok('C4::Context');
+    use_ok('Koha::Number::Price');
+};
 
 t::lib::Mocks::mock_preference( 'gist', '0.02|0.05|0.196' );
 
