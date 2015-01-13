@@ -69,7 +69,7 @@ __PACKAGE__->table("borrower_attribute_types");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 10
+  size: 32
 
 =head2 display_checkout
 
@@ -108,7 +108,7 @@ __PACKAGE__->add_columns(
   "staff_searchable",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "authorised_value_category",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "varchar", is_nullable => 1, size => 32 },
   "display_checkout",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "category_code",
@@ -162,8 +162,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xFtIJw7nKVVk6dzBVDO60A
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-01-13 13:14:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9fLFZ/u89xmeCollneyUIg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
