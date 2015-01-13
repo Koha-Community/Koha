@@ -98,6 +98,7 @@ BEGIN {
 }
 
 use DBI;
+use Encode;
 use ZOOM;
 use XML::Simple;
 use C4::Boolean;
