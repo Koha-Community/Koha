@@ -45,6 +45,12 @@ if ($negcaptcha ) {
     exit;
 }
 
+#If suggestions are turned off we redirect to 404 error. This will also redirect guest suggestions
+if ( ! C4::Context->preference('suggestion') ) {
+    print $input->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
 delete $$suggestion{$_} foreach qw<op suggestedbyme>;
 $op = 'else' unless $op;
 
