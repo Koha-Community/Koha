@@ -9579,19 +9579,6 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.19.00.XXX";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do(q|SET foreign_key_checks = 0|);;
-    my @tables = $dbh->tables();
-    for my $table ( @tables ) {
-        $dbh->do(qq|ALTER TABLE $table CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci|);
-    }
-    $dbh->do(q|SET foreign_key_checks = 1|);;
-
-    print "Upgrade to $DBversion done (Bug 11944 - Convert DB tables to utf8_unicode_ci)\n";
-    SetVersion ($DBversion);
-}
-
 $DBversion = "3.19.00.000";
 if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (there's life after 3.18)\n";
@@ -9667,6 +9654,19 @@ if(CheckVersion($DBversion)) {
 
     print "Upgrade to $DBversion done (Bug 13379 - Modify authorised_values.category to varchar(32))\n";
     SetVersion($DBversion);
+}
+
+$DBversion = "3.19.00.006";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|SET foreign_key_checks = 0|);;
+    my @tables = $dbh->tables();
+    for my $table ( @tables ) {
+        $dbh->do(qq|ALTER TABLE $table CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci|);
+    }
+    $dbh->do(q|SET foreign_key_checks = 1|);;
+
+    print "Upgrade to $DBversion done (Bug 11944 - Convert DB tables to utf8_unicode_ci)\n";
+    SetVersion ($DBversion);
 }
 
 =head1 FUNCTIONS
