@@ -49,7 +49,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'items_batchdel', 'Stapellöschung von Exemplaren durchführen'),
    (13, 'manage_csv_profiles', 'CSV-Profile für Export verwalten'),
    (13, 'moderate_tags', 'Von Benutzern vergebene Tags moderieren'),
-   (13, 'rotating_collections', 'Wandernde Sammlungen verwalten'),
+   (13, 'rotating_collections', 'Rotationsbestände verwalten'),
    (13, 'upload_local_cover_images', 'Eigene Coverbilder hochladen'),
    (13, 'manage_patron_lists', 'Benutzerlisten anlegen, bearbeiten und löschen'),
    (13, 'marc_modification_templates', 'Templates für MARC-Modifikationen verwalten'),
