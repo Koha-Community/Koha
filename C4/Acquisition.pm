@@ -2878,6 +2878,12 @@ sub populate_order_with_prices {
 
     if ($receiving) {
         if ( $bookseller->{invoiceincgst} ) {
+            # Trick for unitprice. If the unit price rounded value is the same as the ecost rounded value
+            # we need to keep the exact ecost value
+            if ( Koha::Number::Price->new( $order->{unitprice} )->round == Koha::Number::Price->new( $order->{ecost_tax_included} )->round ) {
+                $order->{unitprice} = $order->{ecost_tax_included};
+            }
+
             # The user entered the unit price tax included
             $order->{unitprice_tax_included} = $order->{unitprice};
 
@@ -2885,6 +2891,12 @@ sub populate_order_with_prices {
             $order->{unitprice_tax_excluded} = $order->{unitprice_tax_included} / ( 1 + $order->{tax_rate} );
         }
         else {
+            # Trick for unitprice. If the unit price rounded value is the same as the ecost rounded value
+            # we need to keep the exact ecost value
+            if ( Koha::Number::Price->new( $order->{unitprice} )->round == Koha::Number::Price->new( $order->{ecost_tax_excluded} )->round ) {
+                $order->{unitprice} = $order->{ecost_tax_excluded};
+            }
+
             # The user entered the unit price tax excluded
             $order->{unitprice_tax_excluded} = $order->{unitprice};
 
