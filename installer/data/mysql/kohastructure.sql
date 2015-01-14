@@ -371,7 +371,7 @@ CREATE TABLE borrower_sync (
   PRIMARY KEY (borrowersyncid),
   KEY borrowernumber (borrowernumber),
   CONSTRAINT borrower_sync_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 --
@@ -3014,7 +3014,7 @@ CREATE TABLE aqcontacts (
   PRIMARY KEY  (id),
   CONSTRAINT booksellerid_aqcontacts_fk FOREIGN KEY (booksellerid)
        REFERENCES aqbooksellers (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
 
 --
 -- Table structure for table 'aqcontract'
@@ -3483,7 +3483,7 @@ CREATE TABLE IF NOT EXISTS columns_settings (
     cannot_be_toggled int(1) NOT NULL DEFAULT 0,
     is_hidden int(1) NOT NULL DEFAULT 0,
     PRIMARY KEY(module, page, tablename, columnname)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table 'items_search_fields'
@@ -3500,7 +3500,7 @@ CREATE TABLE items_search_fields (
   CONSTRAINT items_search_fields_authorised_values_category
     FOREIGN KEY (authorised_values_category) REFERENCES authorised_values (category)
     ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
