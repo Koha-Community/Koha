@@ -61,7 +61,7 @@ my $encoded_latin_name    = Encode::encode('UTF-8', 'Frédéric Demians');
 my $encoded_cyrillic_name = Encode::encode('UTF-8', 'Сергій Дубик');
 my $history_page          = Encode::encode('UTF-8', $agent->text());
 
-ok( $history_page =~ m/$encoded_latin_name/, "Latin characters with umlauts show correctly on the history page." );
-ok( $history_page =~ m/$encoded_cyrillic_name/, "Cyrillic characters with umlauts show correctly on the history page." );
+like( $history_page, qr/$encoded_latin_name/, "Latin characters with umlauts show correctly on the history page." );
+like( $history_page, qr/$encoded_cyrillic_name/, "Cyrillic characters with umlauts show correctly on the history page." );
 
 1;
