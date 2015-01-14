@@ -223,7 +223,7 @@ if ( defined C4::Context->config('docdir') ) {
     $docdir = C4::Context->config('intranetdir') . '/docs';
 }
 
-if ( open( my $file, "<", "$docdir" . "/history.txt" ) ) {
+if ( open( my $file, "<:encoding(UTF-8)", "$docdir" . "/history.txt" ) ) {
 
     my $i = 0;
 
