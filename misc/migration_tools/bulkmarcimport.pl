@@ -272,7 +272,7 @@ RECORD: while (  ) {
         # changed to warn so able to continue with one broken record
         if ( defined $error ) {
             warn "unable to search the database for duplicates : $error";
-            next;
+            next RECORD;
         }
         $debug && warn "$query $server : $totalhits";
         if ( $results && scalar(@$results) == 1 ) {
