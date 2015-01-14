@@ -276,6 +276,7 @@ __END_SRU_PUBLICSERVER__
  <!-- <pazpar2url>http://__PAZPAR2_HOST__:__PAZPAR2_PORT__/search.pz2</pazpar2url> -->
  <install_log>/usr/share/koha/misc/koha-install-log</install_log>
  <useldapserver>0</useldapserver><!-- see C4::Auth_with_ldap for extra configs you must add if you want to turn this on -->
+<useshibboleth>0</useshibboleth><!-- see C4::Auth_with_shibboleth for extra configs you must do to turn this on -->
  <memcached_servers>__MEMCACHED_SERVERS__</memcached_servers>
  <memcached_namespace>__MEMCACHED_NAMESPACE__</memcached_namespace>
  <zebra_bib_index_mode>__BIBLIOS_INDEXING_MODE__</zebra_bib_index_mode>
@@ -283,6 +284,22 @@ __END_SRU_PUBLICSERVER__
  <zebra_lockdir>/var/lock/koha/__KOHASITE__</zebra_lockdir>
  <use_zebra_facets>1</use_zebra_facets>
  <queryparser_config>/etc/koha/searchengine/queryparser.yaml</queryparser_config>
-</config>
 
+<!-- true type font mapping accoding to type from $font_types in C4/Creators/Lib.pm -->
+ <ttf>
+    <font type="TR" >/usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf</font>
+    <font type="TB" >/usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif-Bold.ttf</font>
+    <font type="TI" >/usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif-Italic.ttf</font>
+    <font type="TBI">/usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif-BoldItalic.ttf</font>
+    <font type="C"  >/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf</font>
+    <font type="CB" >/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono-Bold.ttf</font>
+    <font type="CO" >/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono-Oblique.ttf</font>
+    <font type="CBO">/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono-BoldOblique.ttf</font>
+    <font type="H"  >/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf</font>
+    <font type="HO" >/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans-Oblique.ttf</font>
+    <font type="HB" >/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans-Bold.ttf</font>
+    <font type="HBO">/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans-BoldOblique.ttf</font>
+ </ttf>
+
+</config>
 </yazgfs>
