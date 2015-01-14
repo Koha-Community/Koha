@@ -2599,6 +2599,8 @@ sub SearchItemsByField {
 sub _SearchItems_build_where_fragment {
     my ($filter) = @_;
 
+    my $dbh = C4::Context->dbh;
+
     my $where_fragment;
     if (exists($filter->{conjunction})) {
         my (@where_strs, @where_args);
@@ -2635,13 +2637,33 @@ sub _SearchItems_build_where_fragment {
             if ($field =~ /^marc:(\d{3})(?:\$(\w))?$/) {
                 my $marcfield = $1;
                 my $marcsubfield = $2;
-                my $xpath;
-                if ($marcfield < 10) {
-                    $xpath = "//record/controlfield[\@tag=\"$marcfield\"]";
+                my ($kohafield) = $dbh->selectrow_array(q|
+                    SELECT kohafield FROM marc_subfield_structure
+                    WHERE tagfield=? AND tagsubfield=? AND frameworkcode=''
+                |, undef, $marcfield, $marcsubfield);
+
+                if ($kohafield) {
+                    $column = $kohafield;
                 } else {
-                    $xpath = "//record/datafield[\@tag=\"$marcfield\"]/subfield[\@code=\"$marcsubfield\"]";
+                    # MARC field is not linked to a DB field so we need to use
+                    # ExtractValue on biblioitems.marcxml or
+                    # items.more_subfields_xml, depending on the MARC field.
+                    my $xpath;
+                    my $sqlfield;
+                    my ($itemfield) = GetMarcFromKohaField('items.itemnumber');
+                    if ($marcfield eq $itemfield) {
+                        $sqlfield = 'more_subfields_xml';
+                        $xpath = '//record/datafield/subfield[@code="' . $marcsubfield . '"]';
+                    } else {
+                        $sqlfield = 'marcxml';
+                        if ($marcfield < 10) {
+                            $xpath = "//record/controlfield[\@tag=\"$marcfield\"]";
+                        } else {
+                            $xpath = "//record/datafield[\@tag=\"$marcfield\"]/subfield[\@code=\"$marcsubfield\"]";
+                        }
+                    }
+                    $column = "ExtractValue($sqlfield, '$xpath')";
                 }
-                $column = "ExtractValue(marcxml, '$xpath')";
             } else {
                 $column = $field;
             }
