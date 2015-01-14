@@ -214,8 +214,6 @@ elsif ( $phase eq 'Update SQL'){
                 'group' => $group,
                 'subgroup' => $subgroup,
                 'notes' => $notes,
-                'cache_expiry' => $cache_expiry,
-                'cache_expiry_units' => $cache_expiry_units,
                 'public' => $public,
                 'problematic_authvals' => $problematic_authvals,
                 'warn_authval_problem' => 1,
@@ -230,13 +228,18 @@ elsif ( $phase eq 'Update SQL'){
                     group => $group,
                     subgroup => $subgroup,
                     notes => $notes,
-                    cache_expiry => $cache_expiry,
                     public => $public,
                 } );
             $template->param(
                 'save_successful'       => 1,
                 'reportname'            => $reportname,
                 'id'                    => $id,
+            );
+        }
+        if ( $usecache ) {
+            $template->param(
+                cache_expiry => $cache_expiry,
+                cache_expiry_units => $cache_expiry_units,
             );
         }
     }
@@ -311,6 +314,7 @@ elsif ( $phase eq 'Choose these columns' ) {
     my $type    = $input->param('type');
     my @columns = $input->param('columns');
     my $column  = join( ',', @columns );
+
     $template->param(
         'build4' => 1,
         'area'   => $area,
@@ -318,10 +322,15 @@ elsif ( $phase eq 'Choose these columns' ) {
         'column' => $column,
         definitions => get_from_dictionary($area),
         criteria    => get_criteria($area,$input),
-        'cache_expiry' => $input->param('cache_expiry'),
-        'cache_expiry_units' => $input->param('cache_expiry_units'),
         'public' => $input->param('public'),
     );
+    if ( $usecache ) {
+        $template->param(
+            cache_expiry => $input->param('cache_expiry'),
+            cache_expiry_units => $input->param('cache_expiry_units'),
+        );
+    }
+
 }
 
 elsif ( $phase eq 'Choose these criteria' ) {
@@ -372,10 +381,14 @@ elsif ( $phase eq 'Choose these criteria' ) {
         'column'         => $column,
         'definition'     => $definition,
         'criteriastring' => $query_criteria,
-        'cache_expiry' => $input->param('cache_expiry'),
-        'cache_expiry_units' => $input->param('cache_expiry_units'),
         'public' => $input->param('public'),
     );
+    if ( $usecache ) {
+        $template->param(
+            cache_expiry => $input->param('cache_expiry'),
+            cache_expiry_units => $input->param('cache_expiry_units'),
+        );
+    }
 
     # get columns
     my @columns = split( ',', $column );
@@ -554,13 +567,17 @@ elsif ( $phase eq 'Save Report' ) {
                 'reportname' => $name,
                 'type' => $type,
                 'notes' => $notes,
-                'cache_expiry' => $cache_expiry,
-                'cache_expiry_units' => $cache_expiry_units,
                 'public' => $public,
                 'problematic_authvals' => $problematic_authvals,
                 'warn_authval_problem' => 1,
                 'phase_save' => 1
             );
+            if ( $usecache ) {
+                $template->param(
+                    cache_expiry => $cache_expiry,
+                    cache_expiry_units => $cache_expiry_units,
+                );
+            }
         } else {
             # No params problem found or asked to save anyway
             my $id = save_report( {
