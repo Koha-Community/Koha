@@ -228,7 +228,7 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
 };
 
 subtest 'SearchItems test' => sub {
-    plan tests => 10;
+    plan tests => 13;
 
     # Start transaction
     $dbh->{AutoCommit} = 0;
@@ -336,6 +336,52 @@ subtest 'SearchItems test' => sub {
         }
     }
     ok($found, "item1 found");
+
+    my ($itemfield) = GetMarcFromKohaField('items.itemnumber', '');
+
+    # Create item subfield 'z' without link
+    $dbh->do('DELETE FROM marc_subfield_structure WHERE tagfield=? AND tagsubfield="z" AND frameworkcode=""', undef, $itemfield);
+    $dbh->do('INSERT INTO marc_subfield_structure (tagfield, tagsubfield, frameworkcode) VALUES (?, "z", "")', undef, $itemfield);
+
+    # Clear cache
+    $C4::Context::context->{marcfromkohafield} = undef;
+    $C4::Biblio::inverted_field_map = undef;
+
+    my $item3_record = new MARC::Record;
+    $item3_record->append_fields(
+        new MARC::Field($itemfield, '', '', 'z' => 'foobar')
+    );
+    my (undef, undef, $item3_itemnumber) = AddItemFromMarc($item3_record,
+        $biblionumber);
+
+    # Search item where item subfield z is "foobar"
+    $filter = {
+        field => 'marc:' . $itemfield . '$z',
+        query => 'foobar',
+        operator => 'like',
+    };
+    ($items, $total_results) = SearchItems($filter);
+    ok(scalar @$items == 1, 'found 1 item with $z = "foobar"');
+
+    # Link $z to items.itemnotes (and make sure there is no other subfields
+    # linked to it)
+    $dbh->do('DELETE FROM marc_subfield_structure WHERE kohafield="items.itemnotes" AND frameworkcode=""', undef, $itemfield);
+    $dbh->do('UPDATE marc_subfield_structure SET kohafield="items.itemnotes" WHERE tagfield=? AND tagsubfield="z" AND frameworkcode=""', undef, $itemfield);
+
+    # Clear cache
+    $C4::Context::context->{marcfromkohafield} = undef;
+    $C4::Biblio::inverted_field_map = undef;
+
+    ModItemFromMarc($item3_record, $biblionumber, $item3_itemnumber);
+
+    # Make sure the link is used
+    my $item3 = GetItem($item3_itemnumber);
+    ok($item3->{itemnotes} eq 'foobar', 'itemnotes eq "foobar"');
+
+    # Do the same search again.
+    # This time it will search in items.itemnotes
+    ($items, $total_results) = SearchItems($filter);
+    ok(scalar @$items == 1, 'found 1 item with itemnotes = "foobar"');
 
     $dbh->rollback;
 };
