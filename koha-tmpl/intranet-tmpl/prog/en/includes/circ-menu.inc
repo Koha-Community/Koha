@@ -70,7 +70,8 @@
         [% IF ( finesview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrowernumber %]">Fines</a></li>
     [% END %]
     [% IF ( RoutingSerials ) %][% IF ( routinglistview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/routing-lists.pl?borrowernumber=[% borrowernumber %]">Routing lists</a></li>[% END %]
-    [% IF ( intranetreadinghistory ) %]
+    <!-- Added check for borrowers permission as this is needed to access Cirulation History -->
+    [% IF ( intranetreadinghistory && CAN_user_borrowers ) %]
         [% IF ( readingrecordview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/readingrec.pl?borrowernumber=[% borrowernumber %]">Circulation history</a></li>
     [% END %]
     [% IF ( CAN_user_parameters ) %]
