@@ -169,18 +169,19 @@ sub SearchAuthorities {
                 $attr = " \@attr 1=Any ";
             }
 
-            if ( @$operator[$i] eq 'is' ) {
+            my $operator = @$operator[$i];
+            if ( $operator and $operator eq 'is' ) {
                 $attr .= " \@attr 4=1  \@attr 5=100 "
                   ;    ##Phrase, No truncation,all of subfield field must match
             }
-            elsif ( @$operator[$i] eq "=" ) {
+            elsif ( $operator and $operator eq "=" ) {
                 $attr .= " \@attr 4=107 ";    #Number Exact match
             }
-            elsif ( @$operator[$i] eq "start" ) {
+            elsif ( $operator and $operator eq "start" ) {
                 $attr .= " \@attr 3=2 \@attr 4=1 \@attr 5=1 "
                   ;    #Firstinfield Phrase, Right truncated
             }
-            elsif ( @$operator[$i] eq "exact" ) {
+            elsif ( $operator and $operator eq "exact" ) {
                 $attr .= " \@attr 4=1  \@attr 5=100 \@attr 6=3 "
                   ;    ##Phrase, No truncation,all of subfield field must match
             }
