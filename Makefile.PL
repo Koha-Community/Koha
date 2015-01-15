@@ -451,13 +451,7 @@ my %config_defaults = (
 
 warn "Your platform appears to be $^O.\n" if $DEBUG;
 
-if ( $^O eq 'MSWin32' ) {
-	# Most Unix2Win32 ports seem to poke everything into the Program Files directory
-	# this could be changed to put some files (ie. libraries) into system32, etc.
-	$config_defaults{'INSTALL_MODE'} = 'single';
-	$config_defaults{'INSTALL_BASE'} = 'c:/progra~1/koha';	# Use 8.3 names to be safe...
-}
-elsif ( $^O eq 'cygwin' ) {
+if ( $^O eq 'cygwin' ) {
 	# Most Unix2Win32 ports seem to poke everything into the Program Files directory
 	# this could be changed to put some files (ie. libraries) into system32, etc.
 	$config_defaults{'INSTALL_MODE'} = 'single';
@@ -1208,9 +1202,7 @@ sub get_target_directories {
 
     my @basedir = File::Spec->splitdir($directories);
 
-	# for Win32 we need to prepend the volume to the directory path
-	if ( $^O eq 'MSWin32' ) { shift @basedir; unshift @basedir, $volume; }
-	elsif ( $^O eq 'cygwin' ) { shift @basedir; unshift @basedir, 'c:'; }   # in a cygwin environment, $volume is returned empty
+	if ( $^O eq 'cygwin' ) { shift @basedir; unshift @basedir, 'c:'; }   # in a cygwin environment, $volume is returned empty
 
     my $package = pop @basedir;
 
@@ -1299,7 +1291,7 @@ sub get_target_directories {
 
     _get_env_overrides(\%dirmap);
     _get_argv_overrides(\%dirmap);
-    _add_destdir(\%dirmap) unless ($^O eq 'MSWin32');
+    _add_destdir(\%dirmap);
 
     return \%dirmap, \%skipdirs;
 }
@@ -1481,9 +1473,8 @@ install :: all install_koha set_koha_ownership set_koha_permissions warn_koha_en
           unless exists $skip_directories->{$key};
 			}
 	}
-	elsif ($^O eq 'MSWin32' ) {	# On Win32, the install probably needs to be done under the user account koha will be running as...
 								# We can attempt some creative things with command line utils such as CACLS which allows permission
-								# management from Win32 cmd.exe, but permissions really only apply to NTFS.
+
 	    foreach my $key (sort keys %$target_directories) {
 		    $install .= qq(
 KOHA_INST_$key = blib/$key
@@ -1500,7 +1491,7 @@ install :: all install_koha warn_koha_env_vars
 			$install .= "\t\t\$(KOHA_INST_$key) \$(KOHA_DEST_$key) \\\n"
         unless exists $skip_directories->{$key};
 		}
-	}
+
 	$install .= "\n";
 
     $install .= "warn_koha_env_vars ::\n";
@@ -1535,10 +1526,10 @@ sub _update_zebra_conf_target {
     my $target = "\nupdate_zebra_conf ::\n";
     $target .= "\tumask 022; \$(MOD_INSTALL) \\\n";
     $target .= "\t\t\$(KOHA_INST_ZEBRA_CONF_DIR) \$(KOHA_DEST_ZEBRA_CONF_DIR) \n";
-    $target .= "\t\$(NOECHO) chmod -R u+w \$(KOHA_DEST_ZEBRA_CONF_DIR)\n" unless $^O eq "MSWin32";
+    $target .= "\t\$(NOECHO) chmod -R u+w \$(KOHA_DEST_ZEBRA_CONF_DIR)\n";
     $target .= "\tumask 022; \$(MOD_INSTALL) \\\n";
     $target .= "\t\t\$(KOHA_INST_PAZPAR2_CONF_DIR) \$(KOHA_DEST_PAZPAR2_CONF_DIR) \n";
-    $target .= "\t\$(NOECHO) chmod -R u+w \$(KOHA_DEST_PAZPAR2_CONF_DIR)\n" unless $^O eq "MSWin32";
+    $target .= "\t\$(NOECHO) chmod -R u+w \$(KOHA_DEST_PAZPAR2_CONF_DIR)\n";
 
     return $target;
 }
@@ -1573,7 +1564,6 @@ make_upgrade_backup ::
 
     return $upgrade;
 }
-
 sub postamble {
     # put directory mappings into Makefile
     # so that Make will export as environment
@@ -1582,13 +1572,7 @@ sub postamble {
 
     my $env;
 	# Hereagain, we must alter syntax per platform...
-	if ( $^O eq 'MSWin32' ) {
-		# NOTE: it is imperative that there be no whitespaces in ENV=value...
-		$env = join("\n", map { "__${_}__=$target_directories->{$_}" } keys %$target_directories);
-		$env .= "\n\n";
-		$env .= join("\n", map { "__${_}__=$config{$_}" } keys %config);
-	}
-    else {
+        {
 		$env = join("\n", map { "export __${_}__ := $target_directories->{$_}" } keys %$target_directories);
 		$env .= "\n\n";
 		$env .= join("\n", map { "export __${_}__ := $config{$_}" } keys %config);
