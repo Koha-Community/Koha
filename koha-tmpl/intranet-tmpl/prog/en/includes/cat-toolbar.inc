@@ -152,7 +152,7 @@ CAN_user_serials_create_subscription ) %]
             [% IF ( EasyAnalyticalRecords && CAN_user_editcatalogue_edit_catalogue ) %]
                 <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]&amp;analyze=1">Analyze items</a></li>
             [% END %]
-            [% IF CAN_user_editcatalogue_edit_catalogue %]
+            [% IF CAN_user_editcatalogue_edit_catalogue && ! EasyAnalyticalRecords %]
                 <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?parentbiblionumber=[% biblionumber %]">New child record</a></li>
             [% END %]
     </ul>
