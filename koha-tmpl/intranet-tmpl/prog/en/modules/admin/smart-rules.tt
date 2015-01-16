@@ -148,6 +148,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <th>Hard due date</th>
                 <th>Fine amount</th>
                 <th>Fine charging interval</th>
+                <th>Charge when?</th>
                 <th>Fine grace period</th>
                 <th>Overdue fines cap (amount)</th>
                 <th>Suspension in days (day)</th>
@@ -212,6 +213,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                             </td>
 							<td>[% rule.fine %]</td>
 							<td>[% rule.chargeperiod %]</td>
+                <td>[% IF rule.chargeperiod_charge_at %]Start of interval[% ELSE %]End of interval[% END %]</td>
 							<td>[% rule.firstremind %]</td>
                             <td>[% rule.overduefinescap FILTER format("%.2f") %]</td>
 							<td>[% rule.finedays %]</td>
@@ -273,6 +275,12 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     </td>
                     <td><input type="text" name="fine" id="fine" size="4" /></td>
                     <td><input type="text" name="chargeperiod" id="chargeperiod" size="2" /></td>
+                    <td>
+                        <select name="chargeperiod_charge_at" id="chargeperiod_charge_at">
+                           <option value="0">End of interval</option>
+                           <option value="1">Start of interval</option>
+                        </select>
+                    </td>
                     <td><input type="text" name="firstremind" id="firstremind" size="2" /> </td>
                     <td><input type="text" name="overduefinescap" id="overduefinescap" size="6" /> </td>
                     <td><input type="text" name="finedays" id="fined" size="3" /> </td>

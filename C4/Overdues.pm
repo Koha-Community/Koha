@@ -24,6 +24,7 @@ use strict;
 use Date::Calc qw/Today Date_to_Days/;
 use Date::Manip qw/UnixDate/;
 use List::MoreUtils qw( uniq );
+use POSIX qw( floor ceil );
 
 use C4::Circulation;
 use C4::Context;
@@ -34,45 +35,47 @@ use C4::Debug;
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
-	# set the version for version checking
+    # set the version for version checking
     $VERSION = 3.07.00.049;
-	require Exporter;
-	@ISA    = qw(Exporter);
-	# subs to rename (and maybe merge some...)
-	push @EXPORT, qw(
-        &CalcFine
-        &Getoverdues
-        &checkoverdues
-        &NumberNotifyId
-        &AmountNotify
-        &UpdateFine
-        &GetFine
-        &get_chargeable_units
-        &CheckItemNotify
-        &GetOverduesForBranch
-        &RemoveNotifyLine
-        &AddNotifyLine
-        &GetOverdueMessageTransportTypes
-	);
-	# subs to remove
-	push @EXPORT, qw(
-        &BorType
-	);
+    require Exporter;
+    @ISA = qw(Exporter);
 
-	# check that an equivalent don't exist already before moving
+    # subs to rename (and maybe merge some...)
+    push @EXPORT, qw(
+      &CalcFine
+      &Getoverdues
+      &checkoverdues
+      &NumberNotifyId
+      &AmountNotify
+      &UpdateFine
+      &GetFine
+      &get_chargeable_units
+      &CheckItemNotify
+      &GetOverduesForBranch
+      &RemoveNotifyLine
+      &AddNotifyLine
+      &GetOverdueMessageTransportTypes
+    );
 
-	# subs to move to Circulation.pm
-	push @EXPORT, qw(
-        &GetIssuesIteminfo
-	);
+    # subs to remove
+    push @EXPORT, qw(
+      &BorType
+    );
 
-     # &GetIssuingRules - delete.
-   # use C4::Circulation::GetIssuingRule instead.
+    # check that an equivalent don't exist already before moving
 
-	# subs to move to Biblio.pm
-	push @EXPORT, qw(
-        &GetItems
-	);
+    # subs to move to Circulation.pm
+    push @EXPORT, qw(
+      &GetIssuesIteminfo
+    );
+
+    # &GetIssuingRules - delete.
+    # use C4::Circulation::GetIssuingRule instead.
+
+    # subs to move to Biblio.pm
+    push @EXPORT, qw(
+      &GetItems
+    );
 }
 
 =head1 NAME
@@ -251,15 +254,15 @@ sub CalcFine {
     my $chargeable_units = get_chargeable_units($fine_unit, $start_date, $end_date, $branchcode);
     my $units_minus_grace = $chargeable_units - $data->{firstremind};
     my $amount = 0;
-    if ($data->{'chargeperiod'}  && ($units_minus_grace > 0)  ) {
-        if ( C4::Context->preference('FinesIncludeGracePeriod') ) {
-            $amount = int($chargeable_units / $data->{'chargeperiod'}) * $data->{'fine'};# TODO fine calc should be in cents
-        } else {
-            $amount = int($units_minus_grace / $data->{'chargeperiod'}) * $data->{'fine'};
-        }
-    } else {
-        # a zero (or null) chargeperiod or negative units_minus_grace value means no charge.
-    }
+    if ( $data->{'chargeperiod'} && ( $units_minus_grace > 0 ) ) {
+        my $units = C4::Context->preference('FinesIncludeGracePeriod') ? $chargeable_units : $units_minus_grace;
+        my $charge_periods = $units / $data->{'chargeperiod'};
+        # If chargeperiod_charge_at = 1, we charge a fine at the start of each charge period
+        # if chargeperiod_charge_at = 0, we charge at the end of each charge period
+        $charge_periods = $data->{'chargeperiod_charge_at'} == 1 ? ceil($charge_periods) : floor($charge_periods);
+        $amount = $charge_periods * $data->{'fine'};
+    } # else { # a zero (or null) chargeperiod or negative units_minus_grace value means no charge. }
+
     $amount = $data->{overduefinescap} if $data->{overduefinescap} && $amount > $data->{overduefinescap};
     $debug and warn sprintf("CalcFine returning (%s, %s, %s, %s)", $amount, $data->{'chargename'}, $units_minus_grace, $chargeable_units);
     return ($amount, $data->{'chargename'}, $units_minus_grace, $chargeable_units);

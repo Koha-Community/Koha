@@ -110,6 +110,7 @@ elsif ($op eq 'add') {
     $maxsuspensiondays = undef if $maxsuspensiondays eq q||;
     my $firstremind  = $input->param('firstremind');
     my $chargeperiod = $input->param('chargeperiod');
+    my $chargeperiod_charge_at = $input->param('chargeperiod_charge_at');
     my $maxissueqty  = $input->param('maxissueqty');
     my $maxonsiteissueqty  = $input->param('maxonsiteissueqty');
     my $renewalsallowed  = $input->param('renewalsallowed');
@@ -137,29 +138,30 @@ elsif ($op eq 'add') {
     my $rs = $schema->resultset('Issuingrule');
 
     my $params = {
-        branchcode         => $br,
-        categorycode       => $bor,
-        itemtype           => $itemtype,
-        fine               => $fine,
-        finedays           => $finedays,
-        maxsuspensiondays  => $maxsuspensiondays,
-        firstremind        => $firstremind,
-        chargeperiod       => $chargeperiod,
-        maxissueqty        => $maxissueqty,
-        maxonsiteissueqty  => $maxonsiteissueqty,
-        renewalsallowed    => $renewalsallowed,
-        renewalperiod      => $renewalperiod,
-        norenewalbefore    => $norenewalbefore,
-        auto_renew         => $auto_renew,
-        reservesallowed    => $reservesallowed,
-        issuelength        => $issuelength,
-        lengthunit         => $lengthunit,
-        hardduedate        => $hardduedate,
-        hardduedatecompare => $hardduedatecompare,
-        rentaldiscount     => $rentaldiscount,
-        onshelfholds       => $onshelfholds,
-        opacitemholds      => $opacitemholds,
-        overduefinescap    => $overduefinescap,
+        branchcode             => $br,
+        categorycode           => $bor,
+        itemtype               => $itemtype,
+        fine                   => $fine,
+        finedays               => $finedays,
+        maxsuspensiondays      => $maxsuspensiondays,
+        firstremind            => $firstremind,
+        chargeperiod           => $chargeperiod,
+        chargeperiod_charge_at => $chargeperiod_charge_at,
+        maxissueqty            => $maxissueqty,
+        maxonsiteissueqty      => $maxonsiteissueqty,
+        renewalsallowed        => $renewalsallowed,
+        renewalperiod          => $renewalperiod,
+        norenewalbefore        => $norenewalbefore,
+        auto_renew             => $auto_renew,
+        reservesallowed        => $reservesallowed,
+        issuelength            => $issuelength,
+        lengthunit             => $lengthunit,
+        hardduedate            => $hardduedate,
+        hardduedatecompare     => $hardduedatecompare,
+        rentaldiscount         => $rentaldiscount,
+        onshelfholds           => $onshelfholds,
+        opacitemholds          => $opacitemholds,
+        overduefinescap        => $overduefinescap,
     };
 
     $rs->update_or_create($params);

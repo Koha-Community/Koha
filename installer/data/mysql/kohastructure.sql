@@ -1172,6 +1172,7 @@ CREATE TABLE `issuingrules` ( -- circulation and fine rules
   `maxsuspensiondays` int(11) default NULL, -- max suspension days
   `firstremind` int(11) default NULL, -- fine grace period
   `chargeperiod` int(11) default NULL, -- how often the fine amount is charged
+  `chargeperiod_charge_at` tinyint(1) NOT NULL DEFAULT '0', -- Should fine be given at the start ( 1 ) or the end ( 0 ) of the period
   `accountsent` int(11) default NULL, -- not used? always NULL
   `chargename` varchar(100) default NULL, -- not used? always NULL
   `maxissueqty` int(4) default NULL, -- total number of checkouts allowed

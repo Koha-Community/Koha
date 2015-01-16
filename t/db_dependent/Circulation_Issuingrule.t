@@ -121,6 +121,7 @@ my $sampleissuingrule1 = {
     auto_renew         => 0,
     issuelength        => 5,
     chargeperiod       => 0,
+    chargeperiod_charge_at => 0,
     rentaldiscount     => '2.000000',
     reservesallowed    => 0,
     hardduedate        => '2013-01-01',
@@ -155,6 +156,7 @@ my $sampleissuingrule2 = {
     finedays           => 'Null',
     firstremind        => 'Null',
     chargeperiod       => 'Null',
+    chargeperiod_charge_at => 0,
     rentaldiscount     => 2.00,
     overduefinescap    => 'Null',
     accountsent        => 'Null',
@@ -184,6 +186,7 @@ my $sampleissuingrule3 = {
     finedays           => 'Null',
     firstremind        => 'Null',
     chargeperiod       => 'Null',
+    chargeperiod_charge_at => 0,
     rentaldiscount     => 3.00,
     overduefinescap    => 'Null',
     accountsent        => 'Null',
@@ -194,6 +197,7 @@ my $sampleissuingrule3 = {
     onshelfholds       => 1,
     opacitemholds      => 'F',
 };
+
 $query = 'INSERT INTO issuingrules (
                 branchcode,
                 categorycode,
@@ -213,6 +217,7 @@ $query = 'INSERT INTO issuingrules (
                 finedays,
                 firstremind,
                 chargeperiod,
+                chargeperiod_charge_at,
                 rentaldiscount,
                 overduefinescap,
                 accountsent,
@@ -220,7 +225,7 @@ $query = 'INSERT INTO issuingrules (
                 chargename,
                 restrictedtype,
                 maxsuspensiondays
-                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 my $sth = $dbh->prepare($query);
 $sth->execute(
     $sampleissuingrule1->{branchcode},
@@ -241,6 +246,7 @@ $sth->execute(
     $sampleissuingrule1->{finedays},
     $sampleissuingrule1->{firstremind},
     $sampleissuingrule1->{chargeperiod},
+    $sampleissuingrule1->{chargeperiod_charge_at},
     $sampleissuingrule1->{rentaldiscount},
     $sampleissuingrule1->{overduefinescap},
     $sampleissuingrule1->{accountsent},
@@ -268,6 +274,7 @@ $sth->execute(
     $sampleissuingrule2->{finedays},
     $sampleissuingrule2->{firstremind},
     $sampleissuingrule2->{chargeperiod},
+    $sampleissuingrule2->{chargeperiod_charge_at},
     $sampleissuingrule2->{rentaldiscount},
     $sampleissuingrule2->{overduefinescap},
     $sampleissuingrule2->{accountsent},
@@ -295,6 +302,7 @@ $sth->execute(
     $sampleissuingrule3->{finedays},
     $sampleissuingrule3->{firstremind},
     $sampleissuingrule3->{chargeperiod},
+    $sampleissuingrule3->{chargeperiod_charge_at},
     $sampleissuingrule3->{rentaldiscount},
     $sampleissuingrule3->{overduefinescap},
     $sampleissuingrule3->{accountsent},
