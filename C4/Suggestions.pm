@@ -157,17 +157,16 @@ sub SearchSuggestion {
         qw( STATUS itemtype suggestedby managedby acceptedby budgetid biblionumber )
       )
     {
-        if ( exists $suggestion->{$field}
-                and defined $suggestion->{$field}
-                and $suggestion->{$field} ne '__ANY__'
-                and $suggestion->{$field} ne q||
-        ) {
-            if ( $suggestion->{$field} eq '__NONE__' ) {
-                push @query, qq{ AND (suggestions.$field = '' OR suggestions.$field IS NULL) };
+        if ( exists $suggestion->{$field} ) {
+            if ( defined $suggestion->{$field} and $suggestion->{$field} ne '' )
+            {
+                push @sql_params, $suggestion->{$field};
+                push @query,      qq{ AND suggestions.$field=? };
             }
             else {
-                push @sql_params, $suggestion->{$field};
-                push @query, qq{ AND suggestions.$field = ? };
+                push @query, qq{
+                    AND (suggestions.$field='' OR suggestions.$field IS NULL)
+                };
             }
         }
     }
