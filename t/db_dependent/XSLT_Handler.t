@@ -21,19 +21,23 @@ use Modern::Perl;
 
 use FindBin;
 use File::Slurp;
-use Test::More tests => 27;
+use Test::More tests => 37;
+use Test::Warn;
 
 use Koha::XSLT_Handler;
 
 my $engine=Koha::XSLT_Handler->new;
 is( ref $engine, 'Koha::XSLT_Handler', 'Testing creation of handler object' );
 
-$engine->transform(''); #we passed no file at first time
+warning_is { $engine->transform('') } #we passed no file at first time
+            "No XSLT file passed.",
+            "No XSLT warning correctly displayed";
 is( $engine->err, 1, 'Engine returns error on no file' );
 
-$engine->transform( '', 'thisfileshouldnotexist.%$#@' );
+warning_is { $engine->transform( '', 'thisfileshouldnotexist.%$#@' ) }
+            "XSLT file not found.",
+            "No XSLT warning correctly displayed";
 is( $engine->err, 2, 'Engine returns error on bad file' );
-
 is( $engine->refresh( 'asdjhaskjh'), 0, 'Test on invalid refresh' );
 
 #check first test xsl
@@ -44,13 +48,30 @@ exit if !-e $path.$xsltfile_1;
 $xsltfile_1= $path.$xsltfile_1;
 
 #Testing not-xml strings (undef, empty, some text, malformed xml
-my $output= $engine->transform( undef, $xsltfile_1 );
+my $output;
+
+# Undefined text tests
+warning_is { $output = $engine->transform( undef, $xsltfile_1 ) }
+           "No string to transform.",
+           "No string warning correctly displayed";
 is( $engine->err, 7, 'Engine returns error on undefined text' );
-$output= $engine->transform( '', $xsltfile_1 );
+
+# Empty string tests
+warning_is { $output = $engine->transform( '', $xsltfile_1 ) }
+           "Error while parsing input: Empty String",
+           "Empty string warning correctly displayed";
 is( $engine->err, 5, 'Engine returns error on empty string' );
-$output= $engine->transform( 'abcdef', $xsltfile_1 );
+
+# Non-XML tests
+warning_like { $output = $engine->transform( 'abcdef', $xsltfile_1 ) }
+           qr{^Error while parsing input: :1: parser error : Start tag expected, '<' not found},
+           "Non-XML warning correctly displayed";
 is( $engine->err, 5, 'Engine returns error on non-xml' );
-$output= $engine->transform( '<a></b>', $xsltfile_1 );
+
+# Malformed XML tests
+warning_like { $output = $engine->transform( '<a></b>', $xsltfile_1 ) }
+             qr{^Error while parsing input: :1: parser error : Opening and ending tag mismatch: a line 1 and b},
+             "Malformed XML warning correctly displayed";
 is( $engine->err, 5, 'Engine returns error on malformed xml' );
 
 #Test not returning source on failure when asked for
@@ -60,13 +81,19 @@ my $secondengine=Koha::XSLT_Handler->new( {
     some_unknown_attrib  => 'just_for_fun',
 });
 $engine->do_not_return_source(1);
-$output= $engine->transform( '<a></b>', $xsltfile_1 );
+warning_like { $output = $engine->transform( '<a></b>', $xsltfile_1 ) }
+             qr{^Error while parsing input: :1: parser error : Opening and ending tag mismatch: a line 1 and b},
+             "Malformed XML warning correctly displayed";
 is( defined $output? 1: 0, 0, 'Engine respects do_not_return_source==1');
-$output= $secondengine->transform( '<a></b>', $xsltfile_1 );
+warning_like { $output = $secondengine->transform( '<a></b>', $xsltfile_1 ) }
+             qr{^Error while parsing input: :1: parser error : Opening and ending tag mismatch: a line 1 and b},
+             "Malformed XML warning correctly displayed";
 is( defined $output? 1: 0, 0, 'Second engine respects it too');
 undef $secondengine; #bye
 $engine->do_not_return_source(0);
-$output= $engine->transform( '<a></b>', $xsltfile_1 );
+warning_like { $output = $engine->transform( '<a></b>', $xsltfile_1 ) }
+             qr{^Error while parsing input: :1: parser error : Opening and ending tag mismatch: a line 1 and b},
+             "Malformed XML warning correctly displayed";
 is( defined $output? 1: 0, 1, 'Engine respects do_not_return_source==0');
 
 #Testing valid refresh now
@@ -114,7 +141,9 @@ is( -e $path.$xsltfile_2, 1, "Found my test stylesheet $xsltfile_2" );
 exit if !-e $path.$xsltfile_2;
 $xsltfile_2= $path.$xsltfile_2;
 
-$output= $engine->transform( $xml_2, $xsltfile_2 );
+warning_like { $output = $engine->transform( $xml_2, $xsltfile_2 ) }
+             qr{^Error while parsing stylesheet:},
+             "Bad XSL warning correctly displayed";
 is( $engine->err, 4, 'Engine returned error for parsing bad xsl' );
 is( defined($engine->errstr), 1, 'Error string contains text');
 
