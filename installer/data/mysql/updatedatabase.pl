@@ -9658,10 +9658,16 @@ if(CheckVersion($DBversion)) {
 
 $DBversion = "3.19.00.006";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do(q|SET foreign_key_checks = 0|);;
-    my @tables = $dbh->tables();
-    for my $table ( @tables ) {
-        $dbh->do(qq|ALTER TABLE $table CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci|);
+    $dbh->do(q|SET foreign_key_checks = 0|);
+    my $sth = $dbh->table_info( '','','','TABLE' );
+    my ( $cat, $schema, $name, $type, $remarks );
+    while ( ( $cat, $schema, $name, $type, $remarks ) = $sth->fetchrow_array ) {
+        my $table_sth = $dbh->prepare(qq|SHOW CREATE TABLE $name|);
+        $table_sth->execute;
+        my @table = $table_sth->fetchrow_array;
+        unless ( $table[1] =~ /COLLATE=utf8mb4_unicode_ci/ ) { #catches utf8mb4 collated tables
+            $dbh->do(qq|ALTER TABLE $name CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci|);
+        }
     }
     $dbh->do(q|SET foreign_key_checks = 1|);;
 
