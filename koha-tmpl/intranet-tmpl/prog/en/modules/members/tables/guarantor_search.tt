@@ -9,6 +9,8 @@
             {
                 "dt_cardnumber":
                     "[% data.cardnumber %]",
+                "dt_name":
+                    "[% INCLUDE 'patron-title.inc' borrowernumber = data.borrowernumber category_type = data.category_type firstname = data.firstname surname = data.surname othernames = data.othernames cardnumber = data.cardnumber invert_name = 1%]",
                 "dt_dateofbirth":
                     "[% data.dateofbirth | $KohaDates %]",
                 "dt_address":

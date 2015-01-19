@@ -44,7 +44,7 @@ my $referer = $input->referer();
 
 $template->param(
     view => ( $input->request_method() eq "GET" ) ? "show_form" : "show_results",
-    columns => ['cardnumber', 'dateofbirth', 'address', 'action' ],
+    columns => ['cardnumber', 'name', 'dateofbirth', 'address', 'action' ],
     json_template => 'members/tables/guarantor_search.tt',
     selection_type => 'select',
 );
