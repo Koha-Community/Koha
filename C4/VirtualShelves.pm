@@ -111,7 +111,7 @@ sub GetShelves {
             LEFT JOIN virtualshelfshares sh ON sh.shelfnumber=vs.shelfnumber
             AND sh.borrowernumber=?
         WHERE category=1 AND (vs.owner=? OR sh.borrowernumber=?) };
-        push @params, ($owner) x 3;
+        unshift @params, ($owner) x 3;
     }
     else {
         $query.= 'WHERE category=2 ';
