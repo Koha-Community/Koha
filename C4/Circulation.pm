@@ -1261,7 +1261,6 @@ sub AddIssue {
             $issuedate->strftime('%Y-%m-%d %H:%M:%S'), # issuedate
             $datedue->strftime('%Y-%m-%d %H:%M:%S'),   # date_due
             C4::Context->userenv->{'branch'},   # branchcode
-            $auto_renew ? 1 : 0                 # automatic renewal
         );
         if ( C4::Context->preference('ReturnToShelvingCart') ) { ## ReturnToShelvingCart is on, anything issued should be taken off the cart.
           CartToShelf( $item->{'itemnumber'} );
