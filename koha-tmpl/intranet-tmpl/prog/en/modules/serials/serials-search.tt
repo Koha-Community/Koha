@@ -323,7 +323,7 @@
                         </td>
                         [% FOR field IN additional_fields_for_subscription %]
                           [% IF field.authorised_value_category %]
-                            <td>[% KohaAuthorisedValues.GetByCode( field.authorised_value_category, subscription.additional_fields.${field.name} ) %]</td>
+                            <td>[% AuthorisedValues.GetByCode( field.authorised_value_category, subscription.additional_fields.${field.name} ) %]</td>
                           [% ELSE %]
                             <td>[% subscription.additional_fields.${field.name} %]</td>
                           [% END %]
