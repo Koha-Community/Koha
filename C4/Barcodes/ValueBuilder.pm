@@ -44,19 +44,20 @@ my $DEBUG = 0;
 
 sub get_barcode {
     my ($args) = @_;
-    my $nextnum;
+    my $nextnum = 0;
     my $year = substr($args->{year}, -2);
+    my $month = $args->{mon};
     my $query = "SELECT MAX(CAST(SUBSTRING(barcode,-4) AS signed)) AS number FROM items WHERE barcode REGEXP ?";
     my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute("^[-a-zA-Z]{1,}$year");
+    $sth->execute("^[-a-zA-Z]{1,}$year$month");
     while (my ($count)= $sth->fetchrow_array) {
         $nextnum = $count if $count;
-        $nextnum = 0 if $nextnum == 9999; # this sequence only allows for cataloging 10000 books per month
+        $nextnum = 0 if $nextnum == 9999; # this sequence only allows for cataloging 9999 items per month
             warn "Existing incremental number = $nextnum" if $DEBUG;
     }
     $nextnum++;
     $nextnum = sprintf("%0*d", "4",$nextnum);
-    $nextnum = $year . $args->{mon} . $nextnum;
+    $nextnum = $year . $month . $nextnum;
     warn "New hbyymmincr Barcode = $nextnum" if $DEBUG;
     my $scr = "
         for (i=0 ; i<document.f.field_value.length ; i++) {
