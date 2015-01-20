@@ -66,6 +66,16 @@ sub dt_from_string {
     }
 
     my $regex;
+
+    # The fallback format is sql/iso
+    my $fallback_re = qr|
+        (?<year>\d{4})
+        -
+        (?<month>\d{2})
+        -
+        (?<day>\d{2})
+    |xms;
+
     if ( $date_format eq 'metric' ) {
         # metric format is "dd/mm/yyyy[ hh:mm:ss]"
         $regex = qr|
@@ -87,14 +97,8 @@ sub dt_from_string {
         |xms;
     }
     elsif ( $date_format eq 'iso' or $date_format eq 'sql' ) {
-        # iso format is yyyy-dd-mm[ hh:mm:ss]"
-        $regex = qr|
-            (?<year>\d{4})
-            -
-            (?<month>\d{2})
-            -
-            (?<day>\d{2})
-        |xms;
+        # iso or sql format are yyyy-dd-mm[ hh:mm:ss]"
+        $regex = $fallback_re;
     }
     else {
         die "Invalid dateformat parameter ($date_format)";
@@ -116,6 +120,15 @@ sub dt_from_string {
 
     my %dt_params;
     if ( $date_string =~ $regex ) {
+        %dt_params = (
+            year   => $+{year},
+            month  => $+{month},
+            day    => $+{day},
+            hour   => $+{hour},
+            minute => $+{minute},
+            second => $+{second},
+        );
+    } elsif ( $date_string =~ $fallback_re ) {
         %dt_params = (
             year   => $+{year},
             month  => $+{month},
