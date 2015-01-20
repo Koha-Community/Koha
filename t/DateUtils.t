@@ -3,9 +3,10 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 44;
+use Test::More tests => 54;
 use Test::MockModule;
 use Time::HiRes qw/ gettimeofday /;
+use t::lib::Mocks;
 
 BEGIN { use_ok('Koha::DateUtils'); }
 
@@ -26,12 +27,8 @@ $dt->set_minute(0);
 my $date_string;
 
 my $module_context = new Test::MockModule('C4::Context');
-$module_context->mock(
-    'preference',
-    sub {
-        return 'us';
-    }
-);
+
+t::lib::Mocks::mock_preference('dateformat', 'us');
 
 my $dateformat = C4::Context->preference('dateformat');
 cmp_ok  output_pref({ dt => $dt, dateformat => $dateformat }),
@@ -117,7 +114,7 @@ $dt0 = dt_from_string( '0000-00-00', 'iso' );
 is( $dt0, undef, "undefined returned for 0 iso date" );
 
 # Return undef if passed mysql 9999-* date
-my $dt9999 = dt_from_string( '9999-12-31' );
+my $dt9999 = dt_from_string( '9999-12-31', 'sql' );
 is( $dt9999->ymd(), '9999-12-31', "dt_from_string should return a DateTime object for 9999-12-31" );
 
 my $formatted = format_sqldatetime( '2011-06-16 12:00:07', 'metric', '24hr' );
@@ -182,3 +179,35 @@ $module_context->mock(
 
 $dt = dt_from_string('2014-03-30 02:00:00');
 isa_ok( $dt, 'DateTime', 'dt_from_string should return a DateTime object if a DST is given' );
+
+# Test dt_from_string
+t::lib::Mocks::mock_preference('dateformat', 'metric');
+t::lib::Mocks::mock_preference('TimeFormat', '24hr');
+
+# dt_from_string should take into account the dateformat pref, or the given parameter
+$dt = dt_from_string('31/01/2015');
+is( ref($dt), 'DateTime', '31/01/2015 is a correct date in metric format' );
+is( output_pref( { dt => $dt, dateonly => 1 } ), '31/01/2015' );
+$dt = eval { dt_from_string( '31/01/2015', 'iso' ); };
+is( ref($dt), '', '31/01/2015 is not a correct date in iso format' );
+$dt = eval { dt_from_string( '01/01/2015', 'iso' ); };
+is( ref($dt), '', '01/01/2015 is not a correct date in iso format' );
+$dt = eval { dt_from_string( '31/01/2015', 'us' ); };
+is( ref($dt), '', '31/01/2015 is not a correct date in us format' );
+$dt = dt_from_string( '01/01/2015', 'us' );
+is( ref($dt), 'DateTime', '01/01/2015 is a correct date in us format' );
+
+
+# default value for hh and mm is 00:00
+$dt = dt_from_string('31/01/2015');
+is( output_pref( { dt => $dt } ), '31/01/2015 00:00', 'dt_from_string should generate a DT object with 00:00 as default hh:mm' );
+
+$dt = dt_from_string('31/01/2015 12:34');
+is( output_pref( { dt => $dt } ), '31/01/2015 12:34', 'dt_from_string should match hh:mm' );
+
+$dt = dt_from_string('31/01/2015 12:34:56');
+is( output_pref( { dt => $dt } ), '31/01/2015 12:34', 'dt_from_string should match hh:mm:ss' );
+
+# date before 1900
+$dt = dt_from_string('01/01/1900');
+is( output_pref( { dt => $dt, dateonly => 1 } ), '01/01/1900', 'dt_from_string should manage date < 1900' );
