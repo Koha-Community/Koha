@@ -118,7 +118,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('952','f','Coded location qualifier','Coded location qualifier',0,0,'items.coded_location_qualifier',10,'','','',NULL,0,'FA','',NULL,NULL),
 		('952','g','Cost, normal purchase price','Cost, normal purchase price',0,0,'items.price',10,'','','',NULL,0,'FA','',NULL,NULL),
 		('952','h','Serial Enumeration / chronology','Serial Enumeration / chronology',0,0,'items.enumchron',10,'','','',NULL,0,'FA','',NULL,NULL),
-        ('952','i','Inventory number','Inventory number',0,0,'items.stocknumber',10,'','','',0,0,'CF','',NULL,NULL),
+        ('952','i','Inventory number','Inventory number',0,0,'items.stocknumber',10,'','','',0,0,'FA','',NULL,NULL),
 		('952','j','Shelving control number','Shelving control number',0,0,'items.stack',10,'STACK','','',NULL,0,'FA','',NULL,NULL),
 		('952','l','Koha issues (times borrowed)','Koha issues (times borrowed)',0,0,'items.issues',10,'','','',NULL,0,'FA','',NULL,NULL),
 		('952','m','Koha renewals','Koha renewals',0,0,'items.renewals',10,'','','',NULL,0,'FA','',NULL,NULL),
