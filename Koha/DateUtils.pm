@@ -20,7 +20,6 @@ use strict;
 use warnings;
 use 5.010;
 use DateTime;
-use DateTime::Format::DateParse;
 use C4::Context;
 
 use base 'Exporter';
@@ -54,56 +53,106 @@ to the system preferences. If the date string is empty DateTime->now is returned
 sub dt_from_string {
     my ( $date_string, $date_format, $tz ) = @_;
 
-    # FIXME: see bug 13242 => no TZ for dates 'infinite'
-    return DateTime::Format::DateParse->parse_datetime($date_string)
-        if $date_string and $date_string =~ /^9999-/;
+    return if $date_string and $date_string =~ m|^0000-0|;
 
-    my $dt;
-    $tz ||= C4::Context->tz;
-    if ( !$date_format ) {
-        $date_format = C4::Context->preference('dateformat');
-    }
-    if ($date_string) {
-        if ( ref($date_string) eq 'DateTime' ) {    # already a dt return it
-            return $date_string;
-        }
+    $tz = C4::Context->tz unless $tz;;
 
-        if ( $date_format eq 'metric' ) {
-            $date_string =~ s#-#/#g;
-            $date_string =~ s/^00/01/;    # system allows the 0th of the month
-            $date_string =~ s#^(\d{1,2})/(\d{1,2})#$2/$1#;
-        } else {
-            if ( $date_format eq 'iso' ) {
-                $date_string =~ s/-00/-01/;
-                if ( $date_string =~ m/^0000-0/ ) {
-                    return;               # invalid date in db
-                }
-            } elsif ( $date_format eq 'us' ) {
-                $date_string =~ s#-#/#g;
-                $date_string =~ s[/00/][/01/];
-            } elsif ( $date_format eq 'sql' ) {
-                $date_string =~
-s/(\d{4})(\d{2})(\d{2})\s+(\d{2})(\d{2})(\d{2})/$1-$2-$3T$4:$5:$6/;
-                return if ($date_string =~ /^0000-00-00/);
-                $date_string =~ s/00T/01T/;
-            }
-        }
+    return DateTime->now( time_zone => $tz ) unless $date_string;
 
-        $dt = eval {
-            DateTime::Format::DateParse->parse_datetime( $date_string,
-                $tz->name() );
-        };
-        if ($@) {
-            $tz = DateTime::TimeZone->new( name => 'floating' );
-            $dt = DateTime::Format::DateParse->parse_datetime( $date_string,
-                $tz->name() );
-        }
-    } else {
-        $dt = DateTime->now( time_zone => $tz );
+    $date_format = C4::Context->preference('dateformat') unless $date_format;
+
+    if ( ref($date_string) eq 'DateTime' ) {    # already a dt return it
+        return $date_string;
     }
 
+    my $regex;
+    if ( $date_format eq 'metric' ) {
+        # metric format is "dd/mm/yyyy[ hh:mm:ss]"
+        $regex = qr|
+            (?<day>\d{2})
+            /
+            (?<month>\d{2})
+            /
+            (?<year>\d{4})
+        |xms;
+    }
+    elsif ( $date_format eq 'us' ) {
+        # us format is "mm/dd/yyyy[ hh:mm:ss]"
+        $regex = qr|
+            (?<month>\d{2})
+            /
+            (?<day>\d{2})
+            /
+            (?<year>\d{4})
+        |xms;
+    }
+    elsif ( $date_format eq 'iso' or $date_format eq 'sql' ) {
+        # iso format is yyyy-dd-mm[ hh:mm:ss]"
+        $regex = qr|
+            (?<year>\d{4})
+            -
+            (?<month>\d{2})
+            -
+            (?<day>\d{2})
+        |xms;
+    }
+    else {
+        die "Invalid dateformat parameter ($date_format)";
+    }
+
+    # Add the faculative time part [hh:mm[:ss]]
+    $regex .= qr|
+            (
+                \s*
+                (?<hour>\d{2})
+                :
+                (?<minute>\d{2})
+                (
+                    :
+                    (?<second>\d{2})
+                )?
+            )?
+    |xms;
+
+    my %dt_params;
+    if ( $date_string =~ $regex ) {
+        %dt_params = (
+            year   => $+{year},
+            month  => $+{month},
+            day    => $+{day},
+            hour   => $+{hour},
+            minute => $+{minute},
+            second => $+{second},
+        );
+    }
+    else {
+        die "The given date ($date_string) does not match the date format ($date_format)";
+    }
+
+    # system allows the 0th of the month
+    $dt_params{day} = '01' if $dt_params{day} eq '00';
+
+    # Set default hh:mm:ss to 00:00:00
+    $dt_params{hour}   = 00 unless defined $dt_params{hour};
+    $dt_params{minute} = 00 unless defined $dt_params{minute};
+    $dt_params{second} = 00 unless defined $dt_params{second};
+
+    my $dt = eval {
+        DateTime->new(
+            %dt_params,
+            # No TZ for dates 'infinite' => see bug 13242
+            ( $dt_params{year} < 9999 ? ( time_zone => $tz->name ) : () ),
+        );
+    };
+    if ($@) {
+        $tz = DateTime::TimeZone->new( name => 'floating' );
+        $dt = DateTime->new(
+            %dt_params,
+            # No TZ for dates 'infinite' => see bug 13242
+            ( $dt_params{year} < 9999 ? ( time_zone => $tz->name ) : () ),
+        );
+    }
     return $dt;
-
 }
 
 =head2 output_pref
