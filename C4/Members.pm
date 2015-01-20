@@ -36,7 +36,6 @@ use C4::SQLHelper qw(InsertInTable UpdateInTable SearchInTable);
 use C4::Members::Attributes qw(SearchIdMatchingAttribute UpdateBorrowerAttribute);
 use C4::NewsChannels; #get slip news
 use DateTime;
-use DateTime::Format::DateParse;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Borrower::Debarments qw(IsDebarred);
@@ -1195,14 +1194,13 @@ sub GetPendingIssues {
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute(@borrowernumbers);
     my $data = $sth->fetchall_arrayref({});
-    my $tz = C4::Context->tz();
-    my $today = DateTime->now( time_zone => $tz);
+    my $today = dt_from_string;
     foreach (@{$data}) {
         if ($_->{issuedate}) {
             $_->{issuedate} = dt_from_string($_->{issuedate}, 'sql');
         }
         $_->{date_due} or next;
-        $_->{date_due} = DateTime::Format::DateParse->parse_datetime($_->{date_due}, $tz->name());
+        $_->{date_due} = dt_from_string($_->{date_due}, 'sql');
         if ( DateTime->compare($_->{date_due}, $today) == -1 ) {
             $_->{overdue} = 1;
         }
