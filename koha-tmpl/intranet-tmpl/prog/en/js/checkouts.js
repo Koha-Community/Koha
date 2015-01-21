@@ -417,7 +417,7 @@ $(document).ready(function() {
                             title += "</a></span>";
 
                             if ( oObj.author ) {
-                                title += " " + BY + " " + oObj.author;
+                                title += " " + BY.replace( "_AUTHOR_", " " + oObj.author );
                             }
 
                             if ( oObj.itemnotes ) {
