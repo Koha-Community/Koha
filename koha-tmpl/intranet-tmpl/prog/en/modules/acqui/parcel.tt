@@ -324,26 +324,7 @@
 <div id="acqui_receive_receivelist">
     <h3>Already received</h3>
 
-
    [% IF ( loop_received ) %]
-       [% SET funds = {} %]
-       [% SET estimated_total = 0 %]
-
-       [% FOREACH loop_receive IN loop_received %]
-           [% SET index = loop.count %]
-           [% SET funds.${ index }.budget_name = loop_receive.budget.budget_name %]
-           [% IF (funds.${ index }.estimated == '') %]
-              [% SET funds.${ index }.estimated = 0 %]
-           [% END %]
-           [% IF (funds.${ index }.actual == '') %]
-              [% SET funds.${ index }.actual = 0 %]
-           [% END %]
-           [% SET estimated_total = estimated_total + ( loop_receive.ecost * loop_receive.quantityreceived ) %]
-           [% SET funds.${ index }.estimated = funds.${ index }.estimated + ( loop_receive.ecost * loop_receive.quantityreceived )%]
-
-           [% SET funds.${ index }.actual = funds.${ loop_receive.budget.budget_name }.actual + loop_receive.total %]
-       [% END %]
-
    <form action="/cgi-bin/koha/acqui/parcel.pl" method="get" name="orderform">
     <table id="receivedt">
       <thead>
@@ -363,12 +344,12 @@
         </tr>
       </thead>
     <tfoot>
-        [% FOREACH key IN funds.keys.sort %]
+        [% FOREACH key IN subtotal_for_funds.keys.sort %]
             <tr>
                 <td colspan="6" class="total">(Tax exc.)</td>
                 <td colspan="2"><i>Subtotal for</i> [% funds.$key.budget_name %]</td>
-                <td>[% funds.$key.estimated | $Price %]</td>
-                <td>[% funds.$key.actual | $Price  %]</td>
+                <td>[% subtotal_for_funds.$key.ecost | $Price %]</td>
+                <td>[% subtotal_for_funds.$key.unitprice | $Price  %]</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
             </tr>

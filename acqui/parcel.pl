@@ -122,6 +122,7 @@ my %foot;
 my $total_gste = 0;
 my $total_gsti = 0;
 
+my $subtotal_for_funds;
 for my $order ( @orders ) {
     $order = C4::Acquisition::populate_order_with_prices({ order => $order, booksellerid => $bookseller->{id}, receiving => 1, ordering => 1 });
     $order->{'unitprice'} += 0;
@@ -164,8 +165,11 @@ for my $order ( @orders ) {
         }
     }
 
-    my $budget = GetBudget( $line{budget_id} );
-    $line{budget_name} = $budget->{'budget_name'};
+    my $budget_name = GetBudgetName( $line{budget_id} );
+    $line{budget_name} = $budget_name;
+
+    $subtotal_for_funds->{ $line{budget_name} }{ecost} += $order->{ecost} * $order->{quantity};
+    $subtotal_for_funds->{ $line{budget_name} }{unitprice} += $order->{total};
 
     push @loop_received, \%line;
 }
@@ -263,8 +267,8 @@ unless( defined $invoice->{closedate} ) {
         $line{holds}                = $holds;
         $line{holds_on_order}       = $itemholds?$itemholds:$holds if $line{left_holds_on_order};
 
-        my $budget = GetBudget( $line{budget_id} );
-        $line{budget_name} = $budget->{'budget_name'};
+        my $budget_name = GetBudgetName( $line{budget_id} );
+        $line{budget_name} = $budget_name;
 
         push @loop_orders, \%line;
     }
@@ -289,6 +293,7 @@ $template->param(
     (uc(C4::Context->preference("marcflavour"))) => 1,
     total_gste           => $total_gste,
     total_gsti           => $total_gsti,
+    subtotal_for_funds    => $subtotal_for_funds,
     sticky_filters       => $sticky_filters,
 );
 output_html_with_http_headers $input, $cookie, $template->output;
