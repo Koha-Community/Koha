@@ -10183,6 +10183,15 @@ if( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+         ALTER TABLE sessions CHANGE COLUMN a_session a_session MEDIUMTEXT
+    |);
+    print "Upgrade to $DBversion done (Bug 13606: Upgrade sessions.a_session to MEDIUMTEXT)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.

@@ -1969,7 +1969,7 @@ CREATE TABLE `serial` ( -- issues related to subscriptions
 DROP TABLE IF EXISTS sessions;
 CREATE TABLE sessions (
   `id` varchar(32) NOT NULL,
-  `a_session` text NOT NULL,
+  `a_session` mediumtext NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
