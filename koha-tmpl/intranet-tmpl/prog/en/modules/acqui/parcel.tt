@@ -346,7 +346,11 @@
     <tfoot>
         [% FOREACH key IN subtotal_for_funds.keys.sort %]
             <tr>
-                <td colspan="6" class="total">(Tax exc.)</td>
+                [% IF invoiceincgst %]
+                    <td colspan="6" class="total">(Tax inc.)</td>
+                [% ELSE %]
+                    <td colspan="6" class="total">(Tax exc.)</td>
+                [% END %]
                 <td colspan="2"><i>Subtotal for</i> [% funds.$key.budget_name %]</td>
                 <td>[% subtotal_for_funds.$key.ecost | $Price %]</td>
                 <td>[% subtotal_for_funds.$key.unitprice | $Price  %]</td>
